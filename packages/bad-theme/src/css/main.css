@@ -1,0 +1,30 @@
+@import url("https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@300&display=swap");
+
+body {
+  font-family: "Red Hat Mono", monospace;
+}
+
+.home-title {
+  font-size: 40px;
+  font-weight: 400;
+  color: rgb(52, 190, 130);
+}
+
+a {
+  display: block;
+  margin: 6px 0;
+  font-size: 1.2em;
+  text-decoration: none;
+}
+
+.content-container {
+  max-width: 1000px;
+  padding: 1em;
+  margin: auto;
+}
+
+@media screen and (max-width: 800px) {
+  .main-container {
+    width: 100%;
+  }
+}

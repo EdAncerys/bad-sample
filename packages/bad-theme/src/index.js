@@ -1,21 +1,42 @@
-const Root = () => {
-  return (
-    <>
-      You can edit your package in:
-      <pre>packages/bad-theme/src/index.js</pre>
-    </>
-  );
-};
+import Root from "./screens/index";
 
-export default {
-  name: "bad-theme",
+const myFirstTheme = {
+  name: "event-theme",
   roots: {
-    theme: Root
+    theme: Root,
   },
   state: {
-    theme: {}
+    theme: {
+      jwt: null,
+      isLoggedIn: false,
+    },
   },
   actions: {
-    theme: {}
-  }
+    theme: {
+      beforeCSR: async ({ state, actions }) => {
+        // console.log("beforeCSR triggered"); // debug
+        // if (document.cookie) state.theme.isLoggedIn = true;
+        // await Promise.all([actions.source.fetch("/events")]);
+      },
+      afterCSR: async ({ state, actions }) => {
+        //   setInterval(async () => {
+        //     console.log("refresh cycle");
+        //     // determine if there is an update between frontiy state and wp rest api info
+        //     // if true do something
+        //   }, 1000);
+      },
+      setLogin:
+        ({ state }) =>
+        (value) => {
+          state.theme.isLoggedIn = value;
+        },
+      setTaken:
+        ({ state }) =>
+        (value) => {
+          state.theme.jwt = value;
+        },
+    },
+  },
 };
+
+export default myFirstTheme;
