@@ -3,19 +3,29 @@ import { connect } from "frontity";
 import Link from "@frontity/components/link";
 import Image from "@frontity/components/image";
 import Loading from "../components/loading";
-
+// CONTEXT ----------------------------------------------------------------
+import { useAppDispatch, useAppState, setLoadingAction } from "../context";
 import { colors } from "../config/colors";
 
 const home = ({ state, actions }) => {
+  const dispatch = useAppDispatch();
+  const { isLoading } = useAppState();
   const data = state.source.get(state.router.link);
 
-  if (false) return <Loading />;
+  const handleSetLoading = () => {
+    setLoadingAction({ dispatch, isLoading: true });
+  };
+
+  if (isLoading) return <Loading />;
 
   return (
     <div>
       <div>
         <p style={styles.title}>BAD</p>
       </div>
+      <button className="btn btn-warning" onClick={handleSetLoading}>
+        Toggle State
+      </button>
     </div>
   );
 };
