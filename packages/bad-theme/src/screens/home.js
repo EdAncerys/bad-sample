@@ -23,9 +23,6 @@ const home = ({ state, actions }) => {
       <div>
         <p style={styles.title}>BAD</p>
       </div>
-      <button className="btn btn-warning" onClick={handleSetLoading}>
-        Toggle State
-      </button>
     </div>
   );
 };

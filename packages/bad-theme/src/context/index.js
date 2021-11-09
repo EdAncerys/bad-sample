@@ -1,4 +1,10 @@
 import { AppProvider, useAppDispatch, useAppState } from "./context";
-import { setLoadingAction } from "./auth/actions";
+import { setLoadingAction, setLoginAction } from "./auth/actions";
 
-export { AppProvider, useAppDispatch, useAppState, setLoadingAction };
+export {
+  AppProvider,
+  useAppDispatch,
+  useAppState,
+  setLoadingAction,
+  setLoginAction,
+};

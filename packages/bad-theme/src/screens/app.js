@@ -8,6 +8,7 @@ import Page from "./page";
 import Login from "./login";
 import Home from "./home";
 import CreateAccount from "./createAccount";
+import LoginModal from "../components/loginModal";
 // SCREEN HELPERS ---------------------------------------------------------
 import Loading from "../components/loading";
 import Error from "./error";
@@ -16,17 +17,16 @@ import { useAppDispatch, useAppState } from "../context";
 
 const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
-  const { isLoading } = useAppState();
+  const { isLoading, setLogin } = useAppState();
 
   const endPoint = state.router.link;
   const data = state.source.get(endPoint);
-  console.log("index data ", isLoading); // debug
+  console.log("index data----", data); // debug
 
   return (
     <div>
       <Header />
-
-      <h2>{isLoading}</h2>
+      <LoginModal />
 
       <div className="content-container">
         <Switch>

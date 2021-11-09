@@ -5,13 +5,20 @@ import HeadComponent from "./headComponent";
 import bootStrapCSS from "../css/bootstrap.min.css";
 import globalCSS from "../css/main.css";
 import { handleSetCookie } from "../helpers/cookie";
-
+// CONTEXT ----------------------------------------------------------------
+import { useAppDispatch, useAppState, setLoginAction } from "../context";
 import { colors } from "../config/colors";
 
 const Header = ({ state, actions }) => {
+  const dispatch = useAppDispatch();
+  const { setLogin } = useAppState();
   const data = state.source.get(state.router.link);
 
-  // HELPERS --------------------------------
+  // HELPERS ----------------------------------------------------
+  const handleLogin = () => {
+    setLoginAction({ dispatch, setLogin: !setLogin });
+  };
+
   const handleLogOut = () => {
     actions.theme.setTaken(null);
     actions.theme.setLogin(false);
@@ -22,6 +29,9 @@ const Header = ({ state, actions }) => {
     if (!state.theme.isLoggedIn)
       return (
         <div>
+          <button className="btn btn-warning m-2" onClick={handleLogin}>
+            Login Module
+          </button>
           <Link className="btn btn-primary m-2" link="/login">
             Login
           </Link>
