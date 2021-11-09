@@ -24,6 +24,7 @@
     "bad-theme": "file:packages/bad-theme",
     "bcryptjs": "^2.4.3",
     "frontity": "^1.17.1",
+    "js-cookie": "^3.0.1",
     "react-bootstrap": "^2.0.2"
   }
 }

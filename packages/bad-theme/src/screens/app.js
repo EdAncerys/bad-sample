@@ -21,7 +21,7 @@ const App = ({ state, actions }) => {
 
   const endPoint = state.router.link;
   const data = state.source.get(endPoint);
-  console.log("index data----", data); // debug
+  // console.log("index data----", data); // debug
 
   return (
     <div>

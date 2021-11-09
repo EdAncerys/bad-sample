@@ -1,5 +1,5 @@
-import { useContext, createContext, useReducer } from 'react';
-import { initialState, AppReducer } from './reducer';
+import { useContext, createContext, useReducer } from "react";
+import { initialState, AppReducer } from "./reducer";
 
 const AppStateContext = createContext();
 const AppDispatchContext = createContext();
@@ -7,7 +7,7 @@ const AppDispatchContext = createContext();
 export function useAppState() {
   const context = useContext(AppStateContext);
   if (context === undefined) {
-    throw new Error('useAppState must be used within a AppProvider');
+    throw new Error("useAppState must be used within a AppProvider");
   }
   return context;
 }
@@ -15,7 +15,7 @@ export function useAppState() {
 export function useAppDispatch() {
   const context = useContext(AppDispatchContext);
   if (context === undefined) {
-    throw new Error('useAppDispatch must be used within a AppProvider');
+    throw new Error("useAppDispatch must be used within a AppProvider");
   }
   return context;
 }

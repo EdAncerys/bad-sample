@@ -3,6 +3,7 @@ import { connect } from "frontity";
 import Link from "@frontity/components/link";
 import Image from "@frontity/components/image";
 import Loading from "../components/loading";
+import Carousel from "../components/carusel";
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, useAppState, setLoadingAction } from "../context";
 import { colors } from "../config/colors";
@@ -20,6 +21,7 @@ const home = ({ state, actions }) => {
 
   return (
     <div>
+      <Carousel />
       <div>
         <p style={styles.title}>BAD</p>
       </div>
