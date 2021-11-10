@@ -31,6 +31,9 @@ a {
 .flex-col {
   flex-direction: column;
 }
+.pointer {
+  cursor: pointer;
+}
 
 /* Carousel styling */
 .carousel-indicators {
