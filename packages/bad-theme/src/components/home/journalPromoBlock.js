@@ -61,7 +61,6 @@ const styles = {
     display: "flex",
     flexDirection: "row",
     margin: `0 10px`,
-    // width: "30%",
   },
   cardWrapper: {
     display: "flex",
