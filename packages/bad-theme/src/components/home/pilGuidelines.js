@@ -35,7 +35,7 @@ const PilGuidelines = ({ state, actions }) => {
 
 const styles = {
   container: {
-    padding: "50px 20px",
+    padding: "50px 5%",
     backgroundColor: colors.silver,
   },
 };

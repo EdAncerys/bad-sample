@@ -6,7 +6,7 @@ import { useAppDispatch, useAppState, setLoadingAction } from "../context";
 // COMPONENTS ----------------------------------------------------------------
 import HomeBannerCarousel from "../components/home/homeBannerCarousel";
 import PilGuidelines from "../components/home/pilGuidelines";
-import JournalInfo from "../components/home/journalInfo";
+import JournalPromoBlock from "../components/home/journalPromoBlock";
 
 const home = ({ state, actions }) => {
   const dispatch = useAppDispatch();
@@ -22,9 +22,9 @@ const home = ({ state, actions }) => {
       <div>
         <p style={styles.title}>BAD</p>
       </div>
-      <HomeBannerCarousel />
+      {/* <HomeBannerCarousel /> */}
       {/* <PilGuidelines /> */}
-      {/* <JournalInfo /> */}
+      <JournalPromoBlock />
     </div>
   );
 };

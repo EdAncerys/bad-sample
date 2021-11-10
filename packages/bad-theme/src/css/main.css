@@ -4,12 +4,6 @@ body {
   font-family: "Red Hat Mono", monospace;
 }
 
-.home-title {
-  font-size: 40px;
-  font-weight: 400;
-  color: rgb(52, 190, 130);
-}
-
 a {
   display: block;
   margin: 6px 0;
@@ -19,16 +13,23 @@ a {
 
 .content-container {
   max-width: 1000px;
-  padding: 1em;
   margin: auto;
 }
-.super-colors {
-  background: rgb(34, 193, 195);
-  background: linear-gradient(
-    0deg,
-    rgba(34, 193, 195, 1) 0%,
-    rgba(253, 187, 45, 1) 100%
-  );
+
+/* Cuttom classes */
+.flex-col,
+.flex-row {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.flex-row {
+  flex-direction: row;
+}
+.flex-col {
+  flex-direction: column;
 }
 
 /* Carousel styling */
@@ -40,6 +41,9 @@ a {
 /* Test css */
 .pink {
   background-color: pink;
+}
+.tom {
+  background-color: tomato;
 }
 
 /* Media Queries */

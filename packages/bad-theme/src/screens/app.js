@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "frontity";
 import Switch from "@frontity/components/switch";
+import { colors } from "../config/colors";
 
 import Header from "../components/header/header";
 import Post from "./post";
@@ -24,11 +25,11 @@ const App = ({ state, actions }) => {
   // console.log("index data----", data); // debug
 
   return (
-    <div>
+    <div className="content-container" style={styles.container}>
       <Header />
       <LoginModal />
 
-      <div className="content-container">
+      <div>
         <Switch>
           <Loading when={data.isFetching} />
           <Error when={data.isError} />
@@ -43,6 +44,12 @@ const App = ({ state, actions }) => {
       </div>
     </div>
   );
+};
+
+const styles = {
+  container: {
+    backgroundColor: colors.silver,
+  },
 };
 
 export default connect(App);
