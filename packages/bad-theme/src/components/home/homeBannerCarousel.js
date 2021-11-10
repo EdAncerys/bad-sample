@@ -3,14 +3,21 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Carousel } from "react-bootstrap";
 
-const CarouselComponent = ({ state, actions }) => {
+const HomeBannerCarousel = ({ state, actions }) => {
   const IMAGE_HEIGHT = 300;
+  const imgOne =
+    "https://www.skinhealthinfo.org.uk/wp-content/uploads/2018/11/Skin-cancer-press-release-28-11-18-cropped.jpg";
+  const imgTwo =
+    "https://www.skinhealthinfo.org.uk/wp-content/uploads/2021/04/Copy-of-SAW-1-Twitter.png";
+  const imgThree =
+    "https://www.skinhealthinfo.org.uk/wp-content/uploads/2020/12/pexels-polina-tankilevitch-3735747-scaled-e1607434622754.jpg";
+
   return (
     <Carousel>
       <Carousel.Item>
         <Image
           className="d-block w-100"
-          src="https://www.skinhealthinfo.org.uk/wp-content/uploads/2018/11/Skin-cancer-press-release-28-11-18-cropped.jpg"
+          src={imgOne}
           alt="Title"
           height={IMAGE_HEIGHT}
         />
@@ -22,7 +29,7 @@ const CarouselComponent = ({ state, actions }) => {
       <Carousel.Item>
         <Image
           className="d-block w-100"
-          src="https://www.skinhealthinfo.org.uk/wp-content/uploads/2021/04/Copy-of-SAW-1-Twitter.png"
+          src={imgTwo}
           alt="Title"
           height={IMAGE_HEIGHT}
         />
@@ -34,7 +41,7 @@ const CarouselComponent = ({ state, actions }) => {
       <Carousel.Item>
         <Image
           className="d-block w-100"
-          src="https://www.skinhealthinfo.org.uk/wp-content/uploads/2020/12/pexels-polina-tankilevitch-3735747-scaled-e1607434622754.jpg"
+          src={imgThree}
           alt="Title"
           height={IMAGE_HEIGHT}
         />
@@ -49,4 +56,4 @@ const CarouselComponent = ({ state, actions }) => {
   );
 };
 
-export default connect(CarouselComponent);
+export default connect(HomeBannerCarousel);

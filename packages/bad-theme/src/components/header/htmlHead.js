@@ -1,6 +1,6 @@
 import { connect, Head } from "frontity";
 
-const HeadComponent = ({ state }) => {
+const HTMLHead = ({ state }) => {
   return (
     <Head>
       <title>BAD</title>
@@ -13,4 +13,4 @@ const HeadComponent = ({ state }) => {
   );
 };
 
-export default connect(HeadComponent);
+export default connect(HTMLHead);

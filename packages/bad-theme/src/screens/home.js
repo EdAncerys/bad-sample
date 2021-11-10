@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "frontity";
-import Link from "@frontity/components/link";
-import Image from "@frontity/components/image";
-import Loading from "../components/loading";
-import Carousel from "../components/carusel";
+import { colors } from "../config/colors";
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, useAppState, setLoadingAction } from "../context";
-import { colors } from "../config/colors";
+// COMPONENTS ----------------------------------------------------------------
+import CarouselMainOne from "../components/home/homeBannerCarousel";
+import PilGuidelines from "../components/home/pilGuidelines";
+import JournalInfo from "../components/home/journalInfo";
 
 const home = ({ state, actions }) => {
   const dispatch = useAppDispatch();
@@ -17,14 +17,14 @@ const home = ({ state, actions }) => {
     setLoadingAction({ dispatch, isLoading: true });
   };
 
-  if (isLoading) return <Loading />;
-
   return (
     <div>
-      <Carousel />
       <div>
         <p style={styles.title}>BAD</p>
       </div>
+      {/* <CarouselMainOne /> */}
+      {/* <PilGuidelines /> */}
+      {/* <JournalInfo /> */}
     </div>
   );
 };
