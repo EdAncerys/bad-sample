@@ -4,7 +4,7 @@ import { colors } from "../config/colors";
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, useAppState, setLoadingAction } from "../context";
 // COMPONENTS ----------------------------------------------------------------
-import CarouselMainOne from "../components/home/homeBannerCarousel";
+import HomeBannerCarousel from "../components/home/homeBannerCarousel";
 import PilGuidelines from "../components/home/pilGuidelines";
 import JournalInfo from "../components/home/journalInfo";
 
@@ -22,7 +22,7 @@ const home = ({ state, actions }) => {
       <div>
         <p style={styles.title}>BAD</p>
       </div>
-      {/* <CarouselMainOne /> */}
+      <HomeBannerCarousel />
       {/* <PilGuidelines /> */}
       {/* <JournalInfo /> */}
     </div>

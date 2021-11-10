@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Carousel } from "react-bootstrap";
+import { colors } from "../../config/colors";
 
 const HomeBannerCarousel = ({ state, actions }) => {
   const IMAGE_HEIGHT = 300;
@@ -21,7 +22,13 @@ const HomeBannerCarousel = ({ state, actions }) => {
           alt="Title"
           height={IMAGE_HEIGHT}
         />
-        <Carousel.Caption>
+        <Carousel.Caption style={styles.caption}>
+          <button
+            className="btn btn-primary top-0"
+            style={{ marginBottom: 100 }}
+          >
+            Click Me
+          </button>
           <h3>First slide label</h3>
           <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
         </Carousel.Caption>
@@ -33,7 +40,7 @@ const HomeBannerCarousel = ({ state, actions }) => {
           alt="Title"
           height={IMAGE_HEIGHT}
         />
-        <Carousel.Caption>
+        <Carousel.Caption style={styles.caption}>
           <h3>Second slide label</h3>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </Carousel.Caption>
@@ -45,7 +52,7 @@ const HomeBannerCarousel = ({ state, actions }) => {
           alt="Title"
           height={IMAGE_HEIGHT}
         />
-        <Carousel.Caption>
+        <Carousel.Caption style={styles.caption}>
           <h3>Third slide label</h3>
           <p>
             Praesent commodo cursus magna, vel scelerisque nisl consectetur.
@@ -54,6 +61,17 @@ const HomeBannerCarousel = ({ state, actions }) => {
       </Carousel.Item>
     </Carousel>
   );
+};
+
+const styles = {
+  caption: {
+    // textAlign: "center",
+    // fontSize: 40,
+    // fontWeight: "500",
+    left: 0,
+    textAlign: "left",
+    color: colors.primary,
+  },
 };
 
 export default connect(HomeBannerCarousel);
