@@ -3,7 +3,9 @@ import { connect } from "frontity";
 import { colors } from "../config/colors";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
-const RowButton = ({ state, actions, title, url }) => {
+const RowButton = ({ state, actions, title, url, themeColor }) => {
+  const THEME = themeColor || colors.primary;
+
   // HELPERS ---------------------------------------------
   const handleGoToPath = () => {
     actions.router.set(`${url}`);
@@ -15,7 +17,7 @@ const RowButton = ({ state, actions, title, url }) => {
     return (
       <div
         style={{
-          backgroundColor: colors.primary,
+          backgroundColor: THEME,
           height: 5,
           width: "100%",
         }}
@@ -24,21 +26,20 @@ const RowButton = ({ state, actions, title, url }) => {
   };
 
   return (
-    <div className="card" style={styles.card}>
-      <div className="card-body flex-center-col">
-        <div className="flex-center-row pointer" onClick={handleGoToPath}>
-          <span>
+    <div className="card" style={styles.container}>
+      <div className="card-body flex-col" style={{ margin: "5px 0" }}>
+        <div className="flex-row pointer" onClick={handleGoToPath}>
+          <div className="flex">
             <p className="card-text">{title}</p>
-          </span>
-          <span
+          </div>
+          <div
             style={{
-              backgroundColor: colors.lightSilver,
-              margin: 2,
+              backgroundColor: THEME,
               borderRadius: "50%",
             }}
           >
-            <KeyboardArrowRightIcon />
-          </span>
+            <KeyboardArrowRightIcon style={{ fill: colors.white }} />
+          </div>
         </div>
       </div>
       <ServeFooter />
@@ -47,11 +48,11 @@ const RowButton = ({ state, actions, title, url }) => {
 };
 
 const styles = {
-  card: {
+  container: {
     display: "flex",
     flexDirection: "column",
     margin: `0 10px`,
-    width: "30%",
+    width: "25%",
   },
 };
 

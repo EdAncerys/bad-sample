@@ -3,14 +3,15 @@ import { connect } from "frontity";
 
 import RowButton from "./rowButton";
 
-const ButtonsRow = ({ state, actions }) => {
+const ButtonsRow = ({ state, actions, style }) => {
   const array = [1, 2, 3, 4]; // TBD
+  const PROPS = style || {};
 
   return (
-    <div style={styles.container}>
-      <div className="d-flex" style={{ justifyContent: "space-around" }}>
+    <div>
+      <div className="flex" style={{ ...PROPS }}>
         {array.map((item) => {
-          return <RowButton title="Education" url />;
+          return <RowButton key={item} title="Education" url />;
         })}
       </div>
     </div>

@@ -5,7 +5,12 @@
 body {
   font-family: "Lato", monospace;
 }
-
+/* Hide scrollbar for Chrome, Safari and Opera */
+::-webkit-scrollbar {
+  display: none;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
 a {
   display: block;
   margin: 6px 0;

@@ -9,6 +9,7 @@ import PilGuidelines from "../components/home/pilGuidelines";
 import JournalPromoBlock from "../components/home/journalPromoBlock";
 import ButtonsRow from "../components/buttonsRow";
 import MultiPostBlock from "../components/multiPostBlock";
+import HeroBanner from "../components/heroBanner";
 
 const home = ({ state, actions }) => {
   const dispatch = useAppDispatch();
@@ -28,6 +29,7 @@ const home = ({ state, actions }) => {
       {/* <PilGuidelines /> */}
       {/* <JournalPromoBlock /> */}
       {/* <ButtonsRow /> */}
+      <HeroBanner />
       <MultiPostBlock />
     </div>
   );
