@@ -29,7 +29,7 @@ const home = ({ state, actions }) => {
       {/* <PilGuidelines /> */}
       {/* <JournalPromoBlock /> */}
       {/* <ButtonsRow /> */}
-      <HeroBanner />
+      {/* <HeroBanner /> */}
       <MultiPostBlock />
     </div>
   );
