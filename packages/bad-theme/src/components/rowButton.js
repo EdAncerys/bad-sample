@@ -25,8 +25,8 @@ const RowButton = ({ state, actions, title, url }) => {
 
   return (
     <div className="card" style={styles.card}>
-      <div className="card-body flex-col">
-        <div className="flex-row pointer" onClick={handleGoToPath}>
+      <div className="card-body flex-center-col">
+        <div className="flex-center-row pointer" onClick={handleGoToPath}>
           <span>
             <p className="card-text">{title}</p>
           </span>

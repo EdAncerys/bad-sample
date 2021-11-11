@@ -25,14 +25,19 @@ const RowButton = ({ state, actions, cardTitle, title, body, url }) => {
 
   const ServeCardHeader = () => {
     return (
-      <div
-        style={{
-          backgroundColor: colors.lightSilver,
-          padding: `2px 5px`,
-          borderRadius: 5,
-        }}
-      >
-        {cardTitle}
+      <div>
+        <div className="flex">
+          <div
+            style={{
+              backgroundColor: colors.lightSilver,
+              padding: `2px 5px`,
+              borderRadius: 5,
+              textTransform: "uppercase",
+            }}
+          >
+            {cardTitle}
+          </div>
+        </div>
       </div>
     );
   };
@@ -40,14 +45,18 @@ const RowButton = ({ state, actions, cardTitle, title, body, url }) => {
   const ServeFooterActions = () => {
     return (
       <div>
-        <div
-          className="flex-row pointer"
-          style={{ borderBottom: `1px solid ${colors.black}` }}
-          onClick={handleGoToPath}
-        >
-          <span>
-            <p className="card-text">Read More</p>
-          </span>
+        <div className="flex-row" style={{ justifyContent: "space-between" }}>
+          <div onClick={handleGoToPath}>
+            <div style={styles.footerActionTitle}>
+              <p className="card-text">Read More</p>
+            </div>
+          </div>
+
+          <div onClick={handleGoToPath}>
+            <div style={styles.footerActionTitle}>
+              <p className="card-text">Read More</p>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -55,18 +64,23 @@ const RowButton = ({ state, actions, cardTitle, title, body, url }) => {
 
   const ServeCardBody = () => {
     return (
-      <div className="flex-col pink" style={{ paddingTop: 10, flex: 1 }}>
-        <h5 className="card-text fw-100" style={{ color: colors.black }}>
-          {title}
-        </h5>
-        <p className="card-text">{body}</p>
+      <div className="flex-col mt-4">
+        <div>
+          <h5 className="card-text fw-100" style={{ color: colors.black }}>
+            {title}
+          </h5>
+        </div>
+        <div className="flex mt-2">
+          <p className="card-text">{body}</p>
+        </div>
       </div>
     );
   };
 
+  // RETURN ----------------------------------------------------
   return (
-    <div className="card" style={styles.card}>
-      <div className="card-body flex-col" style={{ alignItems: "start" }}>
+    <div className="card m-2" style={styles.card}>
+      <div className="card-body flex-col">
         <ServeCardHeader />
         <ServeCardBody />
         <ServeFooterActions />
@@ -80,9 +94,11 @@ const styles = {
   card: {
     display: "flex",
     flexDirection: "column",
-    margin: `0 10px`,
     minWidth: "30%",
     minHeight: 200,
+  },
+  footerActionTitle: {
+    borderBottom: `1px solid ${colors.black}`,
   },
 };
 

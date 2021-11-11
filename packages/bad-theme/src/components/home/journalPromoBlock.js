@@ -13,7 +13,7 @@ const JournalPromoBlock = ({ state, actions }) => {
       <div>
         <div className="card" style={styles.card}>
           <div
-            className="card-body flex-col"
+            className="card-body flex-center-col"
             style={{
               borderRight: `2px solid ${colors.lightSilver}`,
               margin: `15px 0`,
@@ -21,9 +21,9 @@ const JournalPromoBlock = ({ state, actions }) => {
           >
             <Image className="d-block" src={url} alt={title} width="100%" />
           </div>
-          <div className="card-body flex-col">
+          <div className="card-body flex-center-col">
             <h5 className="card-title">{title}</h5>
-            <div className="flex-row">
+            <div className="flex-center-row">
               <span>
                 <p className="card-text">Read More</p>
               </span>

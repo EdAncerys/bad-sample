@@ -19,18 +19,26 @@ a {
 }
 
 /* Cuttom classes */
+.flex,
 .flex-col,
-.flex-row {
+.flex-row,
+.flex-center-col,
+.flex-center-row {
   display: flex;
   flex: 1;
+}
+.flex-center-col,
+.flex-center-row {
   justify-content: center;
   align-items: center;
   text-align: center;
 }
-.flex-row {
+.flex-row,
+.flex-center-row {
   flex-direction: row;
 }
-.flex-col {
+.flex-col,
+.flex-center-col {
   flex-direction: column;
 }
 .pointer {
