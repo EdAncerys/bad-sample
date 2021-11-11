@@ -23,7 +23,7 @@ const RowButton = ({ state, actions, cardTitle, title, body, url }) => {
     );
   };
 
-  const ServeCardTitle = () => {
+  const ServeCardHeader = () => {
     return (
       <div
         style={{
@@ -53,14 +53,22 @@ const RowButton = ({ state, actions, cardTitle, title, body, url }) => {
     );
   };
 
-  return (
-    <div className="card" style={styles.card}>
-      <div className="card-body flex-col" style={{ alignItems: "start" }}>
-        <ServeCardTitle />
-        <h5 className="card-text fw-100" style={styles.title}>
+  const ServeCardBody = () => {
+    return (
+      <div className="flex-col pink" style={{ paddingTop: 10, flex: 1 }}>
+        <h5 className="card-text fw-100" style={{ color: colors.black }}>
           {title}
         </h5>
         <p className="card-text">{body}</p>
+      </div>
+    );
+  };
+
+  return (
+    <div className="card" style={styles.card}>
+      <div className="card-body flex-col" style={{ alignItems: "start" }}>
+        <ServeCardHeader />
+        <ServeCardBody />
         <ServeFooterActions />
       </div>
       <ServeFooter />
@@ -73,7 +81,8 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     margin: `0 10px`,
-    maxWidth: "30%",
+    minWidth: "30%",
+    minHeight: 200,
   },
 };
 

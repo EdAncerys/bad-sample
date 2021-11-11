@@ -12,6 +12,7 @@ const MultiPostBlock = ({ state, actions }) => {
         {array.map((item) => {
           return (
             <Card
+              key={item}
               cardTitle="Officers Of The BAD"
               title="Education"
               body="Card Body"

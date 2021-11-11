@@ -1,3 +1,7 @@
+import { config } from "dotenv";
+// Launch dot-env.
+config();
+
 const settings = {
   name: "bad-org",
   state: {
@@ -6,6 +10,9 @@ const settings = {
       title: "British Association of Dermatologists (BAD)",
       description:
         "Frontity WEb App for professional membership body for dermatologists in the UK and abroad",
+    },
+    env: {
+      myVariable: process.env.MY_VARIABLE,
     },
   },
   packages: [

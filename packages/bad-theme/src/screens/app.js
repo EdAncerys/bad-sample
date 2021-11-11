@@ -20,6 +20,9 @@ const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { isLoading, setLogin } = useAppState();
 
+  // env file access
+  // console.log(".env variables", state.theme.myVariable);
+
   const endPoint = state.router.link;
   const data = state.source.get(endPoint);
   // console.log("index data----", data); // debug

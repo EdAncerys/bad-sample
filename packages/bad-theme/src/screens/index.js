@@ -1,11 +1,15 @@
 import { connect } from "frontity";
 import { AppProvider } from "../context";
+import SSRProvider from "react-bootstrap/SSRProvider";
+
 import App from "./app";
 
 const Root = () => {
   return (
     <AppProvider>
-      <App />
+      <SSRProvider>
+        <App />
+      </SSRProvider>
     </AppProvider>
   );
 };

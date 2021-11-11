@@ -9,6 +9,7 @@ const myFirstTheme = {
     theme: {
       jwt: null,
       isLoggedIn: false,
+      myVariable: process.env.MY_VARIABLE,
     },
   },
   actions: {
