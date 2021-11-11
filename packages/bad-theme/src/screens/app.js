@@ -48,7 +48,8 @@ const App = ({ state, actions }) => {
 
 const styles = {
   container: {
-    backgroundColor: colors.silver,
+    backgroundColor: colors.lightSilver,
+    color: colors.textMain,
   },
 };
 

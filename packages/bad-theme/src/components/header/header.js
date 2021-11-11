@@ -37,7 +37,7 @@ const styles = {
     flex: 1,
     flexDirection: "column",
     backgroundColor: `${colors.white}`,
-    borderBottom: `2px solid ${colors.silver}`,
+    borderBottom: `2px solid ${colors.lightSilver}`,
   },
 };
 

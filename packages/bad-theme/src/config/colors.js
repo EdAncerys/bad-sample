@@ -1,12 +1,16 @@
 export const colors = {
-  primary: "#2F86A6",
+  primary: "#1F335E",
   secondary: "#34BE82",
   blue: "#6166B3",
   yellow: "#F2F013",
   white: "#FFFF",
   black: "#090910",
   danger: "#A9333A",
-  silver: "#EEEEEE",
+  silver: "#8F99AE",
+  lightSilver: "#F5F5F5",
+  darkSilver: "#707070",
+  textMain: "#505050",
+  textBlack: "#171717",
   shade: "rgba(0, 0, 0, 0.25)",
   shadeIntense: "rgba(0, 0, 0, 0.5)",
 };

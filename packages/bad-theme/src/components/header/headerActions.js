@@ -27,7 +27,7 @@ const HeaderActions = ({ state, actions }) => {
           margin: "0.5em 2em",
           width: 250,
           height: 100,
-          backgroundColor: colors.silver,
+          backgroundColor: colors.lightSilver,
         }}
       >
         <Image

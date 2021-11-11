@@ -15,7 +15,7 @@ const JournalPromoBlock = ({ state, actions }) => {
           <div
             className="card-body flex-col"
             style={{
-              borderRight: `2px solid ${colors.silver}`,
+              borderRight: `2px solid ${colors.lightSilver}`,
               margin: `15px 0`,
             }}
           >

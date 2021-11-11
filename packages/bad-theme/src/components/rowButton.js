@@ -10,6 +10,19 @@ const RowButton = ({ state, actions, title, url }) => {
     console.log("url", url);
   };
 
+  // SERVERS ----------------------------------------------------------------
+  const ServeFooter = () => {
+    return (
+      <div
+        style={{
+          backgroundColor: colors.primary,
+          height: 5,
+          width: "100%",
+        }}
+      />
+    );
+  };
+
   return (
     <div className="card" style={styles.card}>
       <div className="card-body flex-col">
@@ -19,7 +32,7 @@ const RowButton = ({ state, actions, title, url }) => {
           </span>
           <span
             style={{
-              backgroundColor: colors.silver,
+              backgroundColor: colors.lightSilver,
               margin: 2,
               borderRadius: "50%",
             }}
@@ -28,13 +41,7 @@ const RowButton = ({ state, actions, title, url }) => {
           </span>
         </div>
       </div>
-      <div
-        style={{
-          backgroundColor: colors.primary,
-          height: 10,
-          width: "100%",
-        }}
-      />
+      <ServeFooter />
     </div>
   );
 };

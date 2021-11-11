@@ -8,6 +8,7 @@ import HomeBannerCarousel from "../components/home/homeBannerCarousel";
 import PilGuidelines from "../components/home/pilGuidelines";
 import JournalPromoBlock from "../components/home/journalPromoBlock";
 import ButtonsRow from "../components/buttonsRow";
+import MultiPostBlock from "../components/multiPostBlock";
 
 const home = ({ state, actions }) => {
   const dispatch = useAppDispatch();
@@ -25,8 +26,9 @@ const home = ({ state, actions }) => {
       </div>
       {/* <HomeBannerCarousel /> */}
       {/* <PilGuidelines /> */}
-      <JournalPromoBlock />
-      <ButtonsRow />
+      {/* <JournalPromoBlock /> */}
+      {/* <ButtonsRow /> */}
+      <MultiPostBlock />
     </div>
   );
 };
