@@ -3,7 +3,7 @@ import { connect } from "frontity";
 import { colors } from "../config/colors";
 import Image from "@frontity/components/image";
 
-const RowButton = ({
+const Card = ({
   state,
   actions,
   cardTitle,
@@ -14,7 +14,7 @@ const RowButton = ({
   cardWidth,
   cardHeight,
   themeColor,
-  headerImgUrl,
+  imgUrl,
 }) => {
   const TEXT_ALIGN = textAlign || "start";
   const CARD_WIDTH = cardWidth || "30%";
@@ -22,7 +22,7 @@ const RowButton = ({
   const MIN_CARD_HEIGHT = 200;
   const THEME = themeColor || colors.primary;
   const URL =
-    headerImgUrl ||
+    imgUrl ||
     "https://www.skinhealthinfo.org.uk/wp-content/uploads/2020/12/pexels-polina-tankilevitch-3735747-scaled-e1607434622754.jpg";
 
   // Manage max string Length
@@ -57,7 +57,7 @@ const RowButton = ({
   };
 
   const ServeCardHeader = () => {
-    if (!headerImgUrl) return <ServeCardImage />;
+    if (!imgUrl) return <ServeCardImage />;
     if (!cardTitle) return null;
 
     return (
@@ -164,4 +164,4 @@ const styles = {
   },
 };
 
-export default connect(RowButton);
+export default connect(Card);

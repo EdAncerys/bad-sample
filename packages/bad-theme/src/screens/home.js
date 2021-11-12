@@ -27,10 +27,10 @@ const home = ({ state, actions }) => {
       </div>
       {/* <HomeBannerCarousel /> */}
       {/* <PilGuidelines /> */}
-      {/* <JournalPromoBlock /> */}
+      <JournalPromoBlock />
       {/* <ButtonsRow /> */}
       {/* <HeroBanner /> */}
-      <MultiPostBlock />
+      {/* <MultiPostBlock /> */}
     </div>
   );
 };

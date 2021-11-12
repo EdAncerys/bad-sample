@@ -23,7 +23,7 @@ a {
   margin: auto;
 }
 
-/* Cuttom classes */
+/* Custom classes */
 .flex,
 .flex-col,
 .flex-row,
@@ -48,6 +48,9 @@ a {
 }
 .pointer {
   cursor: pointer;
+}
+.shadow {
+  box-shadow: 0 8px 8px -4px;
 }
 
 /* Carousel styling */
