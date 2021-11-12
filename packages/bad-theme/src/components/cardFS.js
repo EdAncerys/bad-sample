@@ -3,7 +3,7 @@ import { connect } from "frontity";
 import { colors } from "../config/colors";
 import Image from "@frontity/components/image";
 
-import Template from "../img/template.png";
+import Template from "../img/svg/template.svg";
 
 const CardFS = ({
   state,
@@ -21,8 +21,9 @@ const CardFS = ({
   const URL = imgUrl || Template;
 
   // Manage max string Length
-  let titlePreview = `${title.substring(0, 60)}...`;
-  if (title.length < 60) titlePreview = title;
+  const MAX_LENGTH = 60;
+  let titlePreview = `${title.substring(0, MAX_LENGTH)}...`;
+  if (title.length < MAX_LENGTH) titlePreview = title;
 
   // HELPERS ---------------------------------------------
   const handleGoToPath = () => {

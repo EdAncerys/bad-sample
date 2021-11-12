@@ -6,7 +6,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import CardFS from "../cardFS";
 import CardBlockHeader from "../cardBlockHeader";
-import Template from "../../img/template.png";
+import Template from "../../img/svg/template.svg";
 
 const JournalPromoBlock = ({ state, actions }) => {
   const array = [1, 2, 3]; // TBD

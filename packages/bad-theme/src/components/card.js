@@ -18,15 +18,11 @@ const Card = ({
 }) => {
   const TEXT_ALIGN = textAlign || "start";
   const CARD_WIDTH = cardWidth || "30%";
-  const CARD_HEIGHT = cardHeight || "75%";
+  const CARD_HEIGHT = cardHeight || "85%";
   const THEME = themeColor || colors.primary;
   const URL =
     imgUrl ||
     "https://www.skinhealthinfo.org.uk/wp-content/uploads/2020/12/pexels-polina-tankilevitch-3735747-scaled-e1607434622754.jpg";
-
-  // Manage max string Length
-  let titlePreview = `${title.substring(0, 35)}...`;
-  if (title.length < 35) titlePreview = title;
 
   // HELPERS ---------------------------------------------
   const handleGoToPath = () => {
@@ -40,7 +36,7 @@ const Card = ({
       <div
         style={{
           backgroundColor: THEME,
-          height: 5,
+          height: 8,
           width: "100%",
         }}
       />
@@ -77,32 +73,48 @@ const Card = ({
   };
 
   const ServeFooterActions = () => {
-    return (
-      <div className="flex-row mt-4">
+    const ServeMoreAction = () => {
+      return (
         <div onClick={handleGoToPath}>
           <div style={styles.footerActionTitle}>
             <p className="card-text">Read More</p>
           </div>
         </div>
+      );
+    };
 
+    const ServeFromAction = () => {
+      if (imgUrl) return null;
+
+      return (
         <div onClick={handleGoToPath}>
           <div style={styles.footerActionTitle}>
             <p className="card-text">Nomination Form</p>
           </div>
         </div>
+      );
+    };
+
+    return (
+      <div className="flex-row mt-2">
+        <ServeMoreAction />
+        <ServeFromAction />
       </div>
     );
   };
 
   const ServeCardBody = () => {
-    if (imgUrl) return null;
-
     const ServeTitle = () => {
       if (!title) return null;
 
+      // Manage max string Length
+      const MAX_LENGTH = 60;
+      let titlePreview = `${title.substring(0, MAX_LENGTH)}...`;
+      if (title.length < MAX_LENGTH) titlePreview = title;
+
       return (
         <div>
-          <h5 className="card-text" style={{ color: colors.black }}>
+          <h5 className="flex card-text" style={{ color: colors.black }}>
             {titlePreview}
           </h5>
         </div>
@@ -110,11 +122,17 @@ const Card = ({
     };
 
     const ServeBody = () => {
+      if (imgUrl) return null;
       if (!body) return null;
 
+      // Manage max string Length
+      const MAX_LENGTH = 150;
+      let bodyPreview = `${body.substring(0, MAX_LENGTH)}...`;
+      if (title.length < MAX_LENGTH) bodyPreview = body;
+
       return (
-        <div className="flex" style={{ maxHeight: 100, overflow: "auto" }}>
-          <p className="card-text">{body}</p>
+        <div className="flex mt-2" style={{ overflow: "auto" }}>
+          <p className="card-text">{bodyPreview}</p>
         </div>
       );
     };
@@ -129,7 +147,7 @@ const Card = ({
 
   const ServeContent = () => {
     return (
-      <div>
+      <div className="flex-col">
         <ServeCardBody />
         <ServeFooterActions />
       </div>
@@ -143,7 +161,7 @@ const Card = ({
       style={{
         ...styles.card,
         width: `${CARD_WIDTH}`,
-        maxHeight: `${CARD_HEIGHT}`,
+        height: `${CARD_HEIGHT}`,
       }}
     >
       {imgUrl && <ServeCardImage />}
@@ -161,6 +179,7 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     overflow: "hidden",
+    border: "none",
   },
   footerActionTitle: {
     marginRight: 25,

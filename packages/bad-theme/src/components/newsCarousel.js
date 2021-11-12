@@ -5,104 +5,77 @@ import { Carousel } from "react-bootstrap";
 import { colors } from "../config/colors";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
+import CardBlockHeader from "./cardBlockHeader";
+import Card from "./card";
+import LeftIcon from "../img/svg/leftIcon.svg";
+import RightIcon from "../img/svg/rightIcon.svg";
+import IndicatorActive from "../img/svg/indicatorActive.svg";
+import IndicatorInactive from "../img/svg/indicatorInactive.svg";
+
+import { DATA } from "../config/data.js";
+
 const NewsCarousel = ({ state, actions, data }) => {
   const CAROUSEL_HEIGHT = 400;
-  const array = data || [
-    {
-      imgUrl:
-        "https://www.skinhealthinfo.org.uk/wp-content/uploads/2018/11/Skin-cancer-press-release-28-11-18-cropped.jpg",
-      title:
-        "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it",
-    },
-    {
-      imgUrl:
-        "https://www.skinhealthinfo.org.uk/wp-content/uploads/2021/04/Copy-of-SAW-1-Twitter.png",
-      title:
-        "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it",
-    },
-    {
-      imgUrl:
-        "https://www.skinhealthinfo.org.uk/wp-content/uploads/2020/12/pexels-polina-tankilevitch-3735747-scaled-e1607434622754.jpg",
-      title:
-        "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it",
-    },
-  ];
+  const array = data || DATA;
 
   // SERVERS ----------------------------------------------------------------
-  const ServeOverlay = () => {
+  const ServeIcon = ({ icon, left, right }) => {
+    if (!icon) return null;
+
     return (
       <div
         style={{
           position: "absolute",
-          bottom: 0,
-          left: 0,
-          width: "100%",
-          height: CAROUSEL_HEIGHT,
-          background: `linear-gradient(90deg, rgba(31,51,94,1) 0%, rgba(133,133,148,0.1) 80%)`,
+          zIndex: 1,
+          width: 25,
+          height: 40,
+          cursor: "pointer",
+          top: CAROUSEL_HEIGHT / 2,
+          right: right ? 0 : "",
+          marginLeft: left ? "1.5em" : "",
+          marginRight: right ? "1.5em" : "",
         }}
-      />
+      >
+        <Image className="d-block w-100" src={icon} />
+      </div>
     );
   };
 
   return (
     <div>
-      <Carousel>
+      <CardBlockHeader
+        title="Latest News & Media"
+        urlTitle="View All"
+        url="/learn-more"
+      />
+      <Carousel className="news-carousel">
         {array.map((item) => {
           const { imgUrl, url, title } = item;
 
-          // HELPERS ----------------------------------------------------
-          const handleGoToAction = () => {
-            actions.router.set(`${url}`);
-          };
-
-          // SERVERS ----------------------------------------------------------------
-          const ServeFindOutMoreAction = () => {
-            return (
-              <button
-                className="btn btn-outline-light flex-center-row mt-4"
-                style={{ textTransform: "uppercase" }}
-                onClick={handleGoToAction}
-              >
-                <div>Find out more</div>
-                <div>
-                  <KeyboardArrowRightIcon style={{ fill: colors.white }} />
-                </div>
-              </button>
-            );
-          };
-
-          const ServeEventAction = () => {
-            return (
-              <button
-                className="btn btn-outline-light flex-center-row mb-4"
-                onClick={handleGoToAction}
-              >
-                <div>Event</div>
-              </button>
-            );
-          };
-
           return (
-            <Carousel.Item>
+            <Carousel.Item key={item.id}>
+              <ServeIcon icon={LeftIcon} left />
+              <ServeIcon icon={RightIcon} right />
               <div
+                className="flex-row"
                 style={{
                   position: "relative",
+                  justifyContent: "center",
                   height: CAROUSEL_HEIGHT,
                 }}
               >
-                <Image className="d-block w-100" src={imgUrl} alt="Title" />
-                <ServeOverlay />
-                <div style={{ paddingLeft: "2em" }}>
-                  <Carousel.Caption>
-                    <ServeEventAction />
-                    <div style={{ maxWidth: "75%" }}>
-                      <h3 style={{ fontSize: "2em", textAlign: "start" }}>
-                        {title}
-                      </h3>
-                    </div>
-                    <ServeFindOutMoreAction />
-                  </Carousel.Caption>
-                </div>
+                <Card
+                  cardWidth="40%"
+                  title={item.title}
+                  body={item.body}
+                  imgUrl={imgUrl}
+                />
+                <Card
+                  cardWidth="40%"
+                  title={item.title}
+                  body={item.body}
+                  imgUrl={imgUrl}
+                />
               </div>
             </Carousel.Item>
           );

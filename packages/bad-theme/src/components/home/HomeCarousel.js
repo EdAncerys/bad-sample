@@ -5,28 +5,11 @@ import { Carousel } from "react-bootstrap";
 import { colors } from "../../config/colors";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
+import { DATA } from "../../config/data";
+
 const NewsCarousel = ({ state, actions, data }) => {
   const CAROUSEL_HEIGHT = 400;
-  const array = data || [
-    {
-      imgUrl:
-        "https://www.skinhealthinfo.org.uk/wp-content/uploads/2018/11/Skin-cancer-press-release-28-11-18-cropped.jpg",
-      title:
-        "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it",
-    },
-    {
-      imgUrl:
-        "https://www.skinhealthinfo.org.uk/wp-content/uploads/2021/04/Copy-of-SAW-1-Twitter.png",
-      title:
-        "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it",
-    },
-    {
-      imgUrl:
-        "https://www.skinhealthinfo.org.uk/wp-content/uploads/2020/12/pexels-polina-tankilevitch-3735747-scaled-e1607434622754.jpg",
-      title:
-        "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it",
-    },
-  ];
+  const array = data || DATA;
 
   // SERVERS ----------------------------------------------------------------
   const ServeOverlay = () => {
@@ -83,7 +66,7 @@ const NewsCarousel = ({ state, actions, data }) => {
           };
 
           return (
-            <Carousel.Item>
+            <Carousel.Item key={item.id}>
               <div
                 style={{
                   position: "relative",

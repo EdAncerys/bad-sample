@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import Card from "./card";
+import { DATA } from "../config/data.js";
 
 const MultiPostBlock = ({ state, actions, data }) => {
-  const array = data || [1, 2, 3]; // data to iterate
+  const array = data || DATA; // data to iterate
 
   return (
     <div style={styles.container}>
@@ -12,7 +13,7 @@ const MultiPostBlock = ({ state, actions, data }) => {
         {array.map((item) => {
           return (
             <Card
-              key={item}
+              key={item.id}
               cardTitle="Officers Of The BAD"
               title="Education"
               body="Card Body"

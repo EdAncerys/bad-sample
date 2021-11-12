@@ -4,8 +4,9 @@ import { connect } from "frontity";
 import CardBlockHeader from "./cardBlockHeader";
 import MultiPostBlock from "./multiPostBlock";
 
+import { DATA } from "../config/data.js";
+
 const FeaturedEvents = ({ state, actions }) => {
-  const data = [1, 2]; // TBD
 
   return (
     <div style={styles.container}>
@@ -14,7 +15,7 @@ const FeaturedEvents = ({ state, actions }) => {
         urlTitle="View All"
         url="/learn-more"
       />
-      <MultiPostBlock data={data} />
+      <MultiPostBlock data={DATA} />
     </div>
   );
 };
