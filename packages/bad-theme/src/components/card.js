@@ -18,8 +18,7 @@ const Card = ({
 }) => {
   const TEXT_ALIGN = textAlign || "start";
   const CARD_WIDTH = cardWidth || "30%";
-  const CARD_HEIGHT = cardHeight || "";
-  const MIN_CARD_HEIGHT = 200;
+  const CARD_HEIGHT = cardHeight || "75%";
   const THEME = themeColor || colors.primary;
   const URL =
     imgUrl ||
@@ -50,14 +49,14 @@ const Card = ({
 
   const ServeCardImage = () => {
     return (
-      <div className="flex" style={{ maxHeight: "35%" }}>
-        <Image className="d-block w-100" src={URL} alt="BAD" />
+      <div style={{ overflow: "hidden" }}>
+        <Image src={URL} className="d-block w-100" alt="BAD" />
       </div>
     );
   };
 
   const ServeCardHeader = () => {
-    if (!imgUrl) return <ServeCardImage />;
+    if (imgUrl) return null;
     if (!cardTitle) return null;
 
     return (
@@ -66,7 +65,6 @@ const Card = ({
           <div
             style={{
               backgroundColor: colors.lightSilver,
-              padding: `2px 5px`,
               borderRadius: 5,
               textTransform: "uppercase",
             }}
@@ -80,18 +78,16 @@ const Card = ({
 
   const ServeFooterActions = () => {
     return (
-      <div>
-        <div className="flex-row">
-          <div onClick={handleGoToPath}>
-            <div style={styles.footerActionTitle}>
-              <p className="card-text">Read More</p>
-            </div>
+      <div className="flex-row mt-4">
+        <div onClick={handleGoToPath}>
+          <div style={styles.footerActionTitle}>
+            <p className="card-text">Read More</p>
           </div>
+        </div>
 
-          <div onClick={handleGoToPath}>
-            <div style={styles.footerActionTitle}>
-              <p className="card-text">Nomination Form</p>
-            </div>
+        <div onClick={handleGoToPath}>
+          <div style={styles.footerActionTitle}>
+            <p className="card-text">Nomination Form</p>
           </div>
         </div>
       </div>
@@ -99,6 +95,8 @@ const Card = ({
   };
 
   const ServeCardBody = () => {
+    if (imgUrl) return null;
+
     const ServeTitle = () => {
       if (!title) return null;
 
@@ -129,6 +127,15 @@ const Card = ({
     );
   };
 
+  const ServeContent = () => {
+    return (
+      <div>
+        <ServeCardBody />
+        <ServeFooterActions />
+      </div>
+    );
+  };
+
   // RETURN ----------------------------------------------------
   return (
     <div
@@ -136,16 +143,13 @@ const Card = ({
       style={{
         ...styles.card,
         width: `${CARD_WIDTH}`,
-        height: `${CARD_HEIGHT}`,
-        minHeight: `${CARD_HEIGHT || MIN_CARD_HEIGHT}`,
+        maxHeight: `${CARD_HEIGHT}`,
       }}
     >
-      <div className="card-body flex-col" style={{ padding: 0 }}>
+      {imgUrl && <ServeCardImage />}
+      <div className="flex-col mt-4" style={{ padding: "0 1em 1em" }}>
         <ServeCardHeader />
-        <div style={{ padding: "1em" }}>
-          <ServeCardBody />
-          <ServeFooterActions />
-        </div>
+        <ServeContent />
       </div>
       <ServeFooter />
     </div>

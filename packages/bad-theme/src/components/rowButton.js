@@ -51,6 +51,7 @@ const styles = {
   container: {
     display: "flex",
     flexDirection: "column",
+    overflow: "hidden",
     margin: `0 10px`,
     width: "25%",
   },
