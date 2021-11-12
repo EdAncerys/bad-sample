@@ -24,6 +24,8 @@ const Card = ({
     imgUrl ||
     "https://www.skinhealthinfo.org.uk/wp-content/uploads/2020/12/pexels-polina-tankilevitch-3735747-scaled-e1607434622754.jpg";
 
+  console.log("URL", imgUrl === true);
+
   // Manage max string Length
   let titlePreview = `${title.substring(0, 35)}...`;
   if (title.length < 35) titlePreview = title;

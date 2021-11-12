@@ -5,40 +5,11 @@ import { colors } from "../../config/colors";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import CardFS from "../cardFS";
+import CardBlockHeader from "../cardBlockHeader";
 import Template from "../../img/template.png";
 
 const JournalPromoBlock = ({ state, actions }) => {
   const array = [1, 2, 3]; // TBD
-
-  // HELPERS ---------------------------------------------
-  const handleGoToPath = () => {
-    actions.router.set(`${url}`);
-    console.log("url", url);
-  };
-
-  // SERVERS ---------------------------------------------
-  const ServeHeader = () => {
-    return (
-      <div>
-        <div className="flex-row mt-4 mb-2">
-          <div className="flex">
-            <h5
-              className="card-title"
-              style={{ paddingLeft: 15, fontSize: "1.75em" }}
-            >
-              Journal Information
-            </h5>
-          </div>
-
-          <div onClick={handleGoToPath}>
-            <div style={styles.footerActionTitle}>
-              <p className="card-text">Learn More</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
 
   const ServeJournalCards = () => {
     return (
@@ -115,7 +86,11 @@ const JournalPromoBlock = ({ state, actions }) => {
 
   return (
     <div>
-      <ServeHeader />
+      <CardBlockHeader
+        title="Journal Information"
+        urlTitle="Learn More"
+        url="/learn-more"
+      />
       <ServeJournalCards />
       <CardFS
         title="It is a long established fact that a reader will be distracted by the readable"
@@ -135,12 +110,6 @@ const styles = {
     display: "flex",
     flexDirection: "row",
     overflow: "hidden",
-  },
-  footerActionTitle: {
-    marginRight: 25,
-    borderBottom: `1px solid ${colors.black}`,
-    textTransform: "uppercase",
-    fontSize: "0.75em",
   },
 };
 

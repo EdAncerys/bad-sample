@@ -10,6 +10,7 @@ import JournalPromoBlock from "../components/home/journalPromoBlock";
 import ButtonsRow from "../components/buttonsRow";
 import MultiPostBlock from "../components/multiPostBlock";
 import HeroBanner from "../components/heroBanner";
+import FeaturedEvents from "../components/featuredEvents";
 
 const home = ({ state, actions }) => {
   const dispatch = useAppDispatch();
@@ -28,9 +29,10 @@ const home = ({ state, actions }) => {
       {/* <HomeBannerCarousel /> */}
       {/* <PilGuidelines /> */}
       {/* <ButtonsRow /> */}
-      <HeroBanner />
-      {/* <JournalPromoBlock /> */}
+      {/* <HeroBanner /> */}
+      <JournalPromoBlock />
       {/* <MultiPostBlock /> */}
+      <FeaturedEvents />
     </div>
   );
 };

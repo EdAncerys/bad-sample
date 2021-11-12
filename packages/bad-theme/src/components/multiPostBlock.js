@@ -3,8 +3,8 @@ import { connect } from "frontity";
 
 import Card from "./card";
 
-const MultiPostBlock = ({ state, actions }) => {
-  const array = [1, 2, 3]; // TBD
+const MultiPostBlock = ({ state, actions, data }) => {
+  const array = data || [1, 2, 3]; // data to iterate
 
   return (
     <div style={styles.container}>
