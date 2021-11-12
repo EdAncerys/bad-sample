@@ -50,7 +50,8 @@ const NewsCarousel = ({ state, actions, data }) => {
       />
       <Carousel className="news-carousel">
         {array.map((item) => {
-          const { imgUrl, url, title } = item;
+          console.log(item);
+          const { imgUrl, body, title } = item;
 
           return (
             <Carousel.Item key={item.id}>
@@ -66,14 +67,14 @@ const NewsCarousel = ({ state, actions, data }) => {
               >
                 <Card
                   cardWidth="40%"
-                  title={item.title}
-                  body={item.body}
+                  title={title}
+                  body={body}
                   imgUrl={imgUrl}
                 />
                 <Card
                   cardWidth="40%"
-                  title={item.title}
-                  body={item.body}
+                  title={title}
+                  body={body}
                   imgUrl={imgUrl}
                 />
               </div>

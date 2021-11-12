@@ -13,6 +13,7 @@ import HeroBanner from "../components/heroBanner";
 import FeaturedEvents from "../components/featuredEvents";
 import Banner from "../components/banner";
 import NewsCarousel from "../components/newsCarousel";
+import Footer from "../components/footer";
 
 const home = ({ state, actions }) => {
   const dispatch = useAppDispatch();
@@ -40,7 +41,8 @@ const home = ({ state, actions }) => {
         urlTitle="Find out More"
         url="https://www.skinhealthinfo.org.uk/wp-content/uploads/2019/01/No.58O-1.jpg"
       /> */}
-      <NewsCarousel />
+      {/* <NewsCarousel /> */}
+      <Footer />
     </div>
   );
 };

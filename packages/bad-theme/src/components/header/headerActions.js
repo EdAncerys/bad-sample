@@ -4,6 +4,8 @@ import Image from "@frontity/components/image";
 import { colors } from "../../config/colors";
 import { Dropdown } from "react-bootstrap";
 
+import BADLogo from "../../img/svg/badLogoHeader.svg";
+
 const HeaderActions = ({ state, actions }) => {
   // HELPERS ----------------------------------------------------
   const handleLogin = () => {
@@ -22,20 +24,11 @@ const HeaderActions = ({ state, actions }) => {
       <div
         style={{
           display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          margin: "0.5em 2em",
-          width: 250,
-          height: 100,
-          backgroundColor: colors.lightSilver,
         }}
       >
-        <Image
-          className="d-block w-100"
-          src="https://www.skinhealthinfo.org.uk/wp-content/themes/construct/assets/images/logo.svg"
-          alt="Title"
-          height={100}
-        />
+        <div style={{ width: 385, height: 90 }}>
+          <Image src={BADLogo} className="d-block w-100" alt="BAD" />
+        </div>
       </div>
     );
   };
