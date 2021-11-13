@@ -22,7 +22,7 @@ const SCREEN_NAME = ({ state, actions }) => {
       >
         <div className="flex" style={{ flex: 3 }}>
           <div style={{ width: 235, height: 70 }}>
-            <Image src={BADLogo} className="d-block w-100" alt="BAD" />
+            <Image src={BADLogo} className="d-block h-100" alt="BAD" />
           </div>
         </div>
         <div
@@ -37,13 +37,13 @@ const SCREEN_NAME = ({ state, actions }) => {
         </div>
         <div className="flex" style={{ justifyContent: "space-around" }}>
           <div style={{ width: 25, height: 25 }}>
-            <Image src={Facebook} className="d-block w-100" alt="BAD" />
+            <Image src={Facebook} className="d-block h-100" alt="BAD" />
           </div>
           <div style={{ width: 25, height: 25 }}>
-            <Image src={Twitter} className="d-block w-100" alt="BAD" />
+            <Image src={Twitter} className="d-block h-100" alt="BAD" />
           </div>
           <div style={{ width: 25, height: 25 }}>
-            <Image src={Instagram} className="d-block w-100" alt="BAD" />
+            <Image src={Instagram} className="d-block h-100" alt="BAD" />
           </div>
         </div>
       </div>

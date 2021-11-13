@@ -47,7 +47,7 @@ const Card = ({
 
     return (
       <div style={{ width: "100%", height: 125, overflow: "hidden" }}>
-        <Image src={imgUrl} className="d-block w-100" alt={alt} />
+        <Image src={imgUrl} className="d-block h-100" alt={alt} />
       </div>
     );
   };

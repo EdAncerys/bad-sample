@@ -47,7 +47,7 @@ const CardFS = ({
   const ServeCardImage = () => {
     return (
       <div className="flex" style={{ maxWidth: "40%" }}>
-        <Image className="d-block w-100" src={URL} alt="BAD" />
+        <Image className="d-block h-100" src={URL} alt="BAD" />
       </div>
     );
   };

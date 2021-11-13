@@ -73,7 +73,7 @@ const NewsCarousel = ({ state, actions, data }) => {
                   height: CAROUSEL_HEIGHT,
                 }}
               >
-                <Image className="d-block w-100" src={imgUrl} alt="Title" />
+                <Image className="d-block h-100" src={imgUrl} alt="Title" />
                 <ServeOverlay />
                 <div style={{ paddingLeft: "2em" }}>
                   <Carousel.Caption>

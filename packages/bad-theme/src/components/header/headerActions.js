@@ -28,7 +28,7 @@ const HeaderActions = ({ state, actions }) => {
         }}
       >
         <div style={{ width: 385, height: 90 }}>
-          <Image src={BADLogo} className="d-block w-100" alt="BAD" />
+          <Image src={BADLogo} className="d-block h-100" alt="BAD" />
         </div>
       </div>
     );

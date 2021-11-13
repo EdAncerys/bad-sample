@@ -59,7 +59,7 @@ const Banner = ({ state, actions, title, urlTitle, url }) => {
           overflow: "hidden",
         }}
       >
-        <Image src={url} className="d-block w-100" alt="BAD" />
+        <Image src={url} className="d-block h-100" alt="BAD" />
       </div>
     );
   };

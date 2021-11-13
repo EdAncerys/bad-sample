@@ -9,7 +9,7 @@ const ProfilesBlock = ({ state, actions, style, data }) => {
 
   return (
     <div>
-      <div className="flex" style={{ ...style }}>
+      <div className="flex" style={styles.container}>
         {array.map((item) => {
           return <Profile key={item.id} item={item} />;
         })}
@@ -19,7 +19,10 @@ const ProfilesBlock = ({ state, actions, style, data }) => {
 };
 
 const styles = {
-  container: {},
+  container: {
+    justifyContent: "space-around",
+    flexWrap: "wrap",
+  },
 };
 
 export default connect(ProfilesBlock);

@@ -36,7 +36,7 @@ const NewsCarousel = ({ state, actions, data }) => {
           marginRight: right ? "1.5em" : "",
         }}
       >
-        <Image className="d-block w-100" src={icon} />
+        <Image className="d-block h-100" src={icon} />
       </div>
     );
   };

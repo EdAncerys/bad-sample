@@ -9,8 +9,11 @@ const RowButton = ({ state, actions, item }) => {
 
   // Manage max string Length
   const MAX_LENGTH = 24;
-  let titlePreview = `${title.substring(0, MAX_LENGTH)}...`;
-  if (title.length < MAX_LENGTH) titlePreview = title;
+  let titlePreview;
+  if (title) {
+    titlePreview = `${title.substring(0, MAX_LENGTH)}...`;
+    if (title.length < MAX_LENGTH) titlePreview = title;
+  }
 
   // HELPERS ---------------------------------------------
   const handleGoToPath = () => {

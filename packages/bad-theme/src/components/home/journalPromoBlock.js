@@ -69,7 +69,7 @@ const JournalPromoBlock = ({ state, actions }) => {
               height: 75,
             }}
           >
-            <Image className="d-block w-100" src={URL} alt="BAD" />
+            <Image className="d-block h-100" src={URL} alt="BAD" />
           </div>
         </div>
       );
