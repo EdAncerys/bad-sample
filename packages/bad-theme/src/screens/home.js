@@ -44,8 +44,8 @@ const home = ({ state, actions }) => {
       {/* <NewsCarousel item={DATA} /> */}
       {/* <Footer /> */}
       {/* <ProfilesBlock item={DATA} /> */}
-      {/* <TextBanner item={DATA[2]} alignContent="center" /> */}
-      {/* <PromoBlock item={DATA[2]} /> */}
+      <TextBanner item={DATA[2]} alignContent="center" />
+      <PromoBlock item={DATA[2]} reverse />
     </div>
   );
 };

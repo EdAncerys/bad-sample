@@ -4,12 +4,16 @@ import Image from "@frontity/components/image";
 
 import Loading from "./loading";
 import TextBanner from "./textBanner";
+import { colors } from "../config/colors";
 
-const PromoBlock = ({ state, actions, item }) => {
+const PromoBlock = ({ state, actions, item, reverse }) => {
   if (!item) return <Loading />;
 
   const BANNER_HEIGHT = 550;
   const { imgUrl, title } = item;
+
+  let MAIN_AXIS = "flex-row"; // define alignment with main axis
+  if (reverse) MAIN_AXIS = "flex-row row-reverse";
 
   // SERVERS ----------------------------------------------------------------
   const ServeCardImage = () => {
@@ -33,7 +37,7 @@ const PromoBlock = ({ state, actions, item }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div className="flex-row" style={styles.container}>
+    <div className={MAIN_AXIS} style={styles.container}>
       <TextBanner item={item} alignContent="start" />
       <ServeCardImage />
     </div>
@@ -41,7 +45,9 @@ const PromoBlock = ({ state, actions, item }) => {
 };
 
 const styles = {
-  container: {},
+  container: {
+    backgroundColor: colors.lightSilver,
+  },
 };
 
 export default connect(PromoBlock);

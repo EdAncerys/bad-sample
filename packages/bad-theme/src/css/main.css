@@ -46,6 +46,12 @@ a {
 .flex-center-col {
   flex-direction: column;
 }
+.row-reverse {
+  flex-direction: row-reverse;
+}
+.col-reverse {
+  flex-direction: column-reverse;
+}
 .pointer {
   cursor: pointer;
 }

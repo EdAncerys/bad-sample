@@ -20,7 +20,7 @@ const Banner = ({ state, actions, item, alignContent }) => {
     if (!title) return null;
 
     // Manage max string Length
-    const MAX_LENGTH = 60;
+    const MAX_LENGTH = 40;
     let titlePreview = `${title.substring(0, MAX_LENGTH)}...`;
     if (title.length < MAX_LENGTH) titlePreview = title;
 
@@ -40,18 +40,29 @@ const Banner = ({ state, actions, item, alignContent }) => {
     if (!body) return null;
 
     // Manage max string Length
-    const MAX_LENGTH = 1400;
+    const MAX_LENGTH = 200;
     let bodyPreview = `${body.substring(0, MAX_LENGTH)}...`;
     if (body.length < MAX_LENGTH) bodyPreview = body;
 
     return (
-      <div className="flex-col" style={{ fontSize: 16, margin: `2em 0` }}>
+      <div
+        className="flex-col"
+        style={{
+          fontSize: 16,
+          margin: `2em 0`,
+          // limit container height
+          // maxHeight: BANNER_HEIGHT / 1.25,
+          // overflow: "auto",
+        }}
+      >
         <h5 className="flex card-text">{bodyPreview}</h5>
       </div>
     );
   };
 
   const ServeActions = () => {
+    if (!url) return null;
+
     // HELPERS ----------------------------------------------------
     const handleGoToAction = () => {
       actions.router.set(`${url}`);
@@ -80,7 +91,7 @@ const Banner = ({ state, actions, item, alignContent }) => {
   // RETURN ---------------------------------------------------
   return (
     <div
-      className="card flex"
+      className="flex"
       style={{
         border: "none",
         textAlign: ALIGNMENT,
