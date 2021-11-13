@@ -34,9 +34,9 @@ const home = ({ state, actions }) => {
       {/* <PilGuidelines /> */}
       {/* <ButtonsRow /> */}
       {/* <HeroBanner /> */}
-      {/* <JournalPromoBlock /> */}
-      {/* <MultiPostBlock /> */}
-      {/* <FeaturedEvents /> */}
+      <JournalPromoBlock />
+      <MultiPostBlock />
+      <FeaturedEvents />
       {/* <Banner
         title="Title of the banner"
         urlTitle="Find out More"
@@ -44,7 +44,7 @@ const home = ({ state, actions }) => {
       /> */}
       {/* <NewsCarousel /> */}
       {/* <Footer /> */}
-      <ProfilesBlock />
+      {/* <ProfilesBlock /> */}
     </div>
   );
 };

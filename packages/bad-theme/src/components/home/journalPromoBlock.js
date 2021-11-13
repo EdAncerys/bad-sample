@@ -1,85 +1,22 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import Image from "@frontity/components/image";
-import { colors } from "../../config/colors";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import CardFS from "../cardFS";
 import CardBlockHeader from "../cardBlockHeader";
-import Template from "../../img/svg/template.svg";
+import JournalCard from "./journalCard";
+import { DATA } from "../../config/data";
 
 const JournalPromoBlock = ({ state, actions }) => {
-  const array = [1, 2, 3]; // TBD
+  const array = DATA; // TBD
 
   const ServeJournalCards = () => {
     return (
-      <div className="flex" style={{ justifyContent: "space-around" }}>
-        {array.map((item) => {
-          return <RowCard key={item} title="British Journal of Dermatology" />;
-        })}
-      </div>
-    );
-  };
-
-  const RowCard = ({ url, title, imgUrl }) => {
-    const URL = imgUrl || Template;
-
-    // HELPERS ---------------------------------------------
-    const handleGoToPath = () => {
-      actions.router.set(`${url}`);
-      console.log("url", url);
-    };
-
-    // SERVERS ---------------------------------------------
-    const ServeCardActions = () => {
-      return (
-        <div className="card-body flex-col" style={{ margin: "5px 0" }}>
-          <div className="flex mb-2" style={{ textAlign: "start" }}>
-            <p className="card-text">{title}</p>
-          </div>
-          <div
-            className="flex-row pointer"
-            style={{ alignItems: "center" }}
-            onClick={handleGoToPath}
-          >
-            <div style={{ textTransform: "uppercase", fontSize: "0.75em" }}>
-              <p className="card-text">Read More</p>
-            </div>
-            <div>
-              <KeyboardArrowRightIcon style={{ fill: colors.darkSilver }} />
-            </div>
-          </div>
+      <div>
+        <div className="flex" style={styles.container}>
+          {array.map((item) => {
+            return <JournalCard key={item} item={item} />;
+          })}
         </div>
-      );
-    };
-
-    const ServeCardLogo = () => {
-      return (
-        <div
-          className="flex-center-col"
-          style={{
-            borderRight: `2px solid ${colors.silver}`,
-          }}
-        >
-          <div
-            style={{
-              borderRadius: "50%",
-              overflow: "hidden",
-              width: 75,
-              height: 75,
-            }}
-          >
-            <Image className="d-block h-100" src={URL} alt="BAD" />
-          </div>
-        </div>
-      );
-    };
-
-    // RETURN ----------------------------------------------------------------
-    return (
-      <div className="card flex-center-row shadow" style={styles.journalCard}>
-        <ServeCardLogo />
-        <ServeCardActions />
       </div>
     );
   };
@@ -101,15 +38,9 @@ const JournalPromoBlock = ({ state, actions }) => {
 };
 
 const styles = {
-  journalCard: {
-    display: "flex",
-    margin: `0 10px`,
-    width: "30%",
-  },
-  cardWrapper: {
-    display: "flex",
-    flexDirection: "row",
-    overflow: "hidden",
+  container: {
+    justifyContent: "space-between",
+    flexWrap: "wrap",
   },
 };
 
