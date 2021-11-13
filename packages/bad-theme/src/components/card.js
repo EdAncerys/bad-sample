@@ -162,7 +162,7 @@ const Card = ({
   // RETURN ----------------------------------------------------
   return (
     <div
-      className="card m-2"
+      className="card m-2 shadow"
       style={{
         ...styles.card,
         width: cardWidth || "30%",
