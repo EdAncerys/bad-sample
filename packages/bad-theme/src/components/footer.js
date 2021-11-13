@@ -66,12 +66,14 @@ const SCREEN_NAME = ({ state, actions }) => {
   };
 
   return (
-    <div className="flex-col" style={styles.container}>
-      <div className="flex-col" style={{ padding: "1em" }}>
-        <ServeFooterTopRow />
-        <ServeFooterBottomRow />
+    <div>
+      <div className="flex-col" style={styles.container}>
+        <div className="flex-col" style={{ padding: "1em" }}>
+          <ServeFooterTopRow />
+          <ServeFooterBottomRow />
+        </div>
+        <div style={{ height: "20px", backgroundColor: colors.blue }} />
       </div>
-      <div style={{ height: "20px", backgroundColor: colors.blue }} />
     </div>
   );
 };

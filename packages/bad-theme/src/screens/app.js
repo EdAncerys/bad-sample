@@ -10,6 +10,7 @@ import Login from "./login";
 import Home from "./home";
 import CreateAccount from "./createAccount";
 import LoginModal from "../components/loginModal";
+import Footer from "../components/footer";
 // SCREEN HELPERS ---------------------------------------------------------
 import Loading from "../components/loading";
 import Error from "./error";
@@ -28,11 +29,11 @@ const App = ({ state, actions }) => {
   // console.log("index data----", data); // debug
 
   return (
-    <div className="content-container" style={styles.container}>
+    <div className="content-container flex-col" style={styles.container}>
       <Header />
       <LoginModal />
 
-      <div>
+      <div className="flex-col">
         <Switch>
           <Loading when={data.isFetching} />
           <Error when={data.isError} />
@@ -45,6 +46,7 @@ const App = ({ state, actions }) => {
           <Page when={data.isPage} />
         </Switch>
       </div>
+      <Footer />
     </div>
   );
 };

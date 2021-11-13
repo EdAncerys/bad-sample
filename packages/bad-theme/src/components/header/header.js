@@ -23,9 +23,11 @@ const Header = ({ state, actions }) => {
         `}
       />
       <HTMLHead />
-      <div className="flex-col" style={styles.container}>
-        <HeaderActions />
-        <NavigationActions />
+      <div>
+        <div className="flex-col" style={styles.container}>
+          <HeaderActions />
+          <NavigationActions />
+        </div>
       </div>
     </>
   );

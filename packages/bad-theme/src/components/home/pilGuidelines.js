@@ -23,9 +23,9 @@ const PilGuidelines = ({ state, actions }) => {
 
   return (
     <div style={styles.container}>
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">PIL & Guidelines Quicklinks</h5>
+      <div className="card">
+        <div className="card-body">
+          <h5 className="card-title">PIL & Guidelines Quicklinks</h5>
           <ServeSearchContainer />
         </div>
       </div>
