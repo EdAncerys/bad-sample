@@ -14,6 +14,7 @@ import FeaturedEvents from "../components/featuredEvents";
 import Banner from "../components/banner";
 import NewsCarousel from "../components/newsCarousel";
 import Footer from "../components/footer";
+import ProfilesBlock from "../components/profilesBlock";
 
 const home = ({ state, actions }) => {
   const dispatch = useAppDispatch();
@@ -43,6 +44,7 @@ const home = ({ state, actions }) => {
       /> */}
       {/* <NewsCarousel /> */}
       {/* <Footer /> */}
+      <ProfilesBlock />
     </div>
   );
 };

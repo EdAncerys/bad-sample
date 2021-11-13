@@ -11,13 +11,16 @@ const MultiPostBlock = ({ state, actions, data }) => {
     <div style={styles.container}>
       <div className="d-flex" style={{ justifyContent: "space-around" }}>
         {array.map((item) => {
+          const { id, title, body, url, imgUrl } = item;
+
           return (
             <Card
-              key={item.id}
+              key={id}
               cardTitle="Officers Of The BAD"
-              title="Education"
-              body="Card Body"
-              url
+              title={title}
+              body={body}
+              url={url}
+              imgUrl={imgUrl}
             />
           );
         })}

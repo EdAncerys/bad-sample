@@ -15,14 +15,12 @@ const Card = ({
   cardHeight,
   themeColor,
   imgUrl,
+  formUrl,
 }) => {
   const TEXT_ALIGN = textAlign || "start";
   const CARD_WIDTH = cardWidth || "30%";
   const CARD_HEIGHT = cardHeight || "85%";
   const THEME = themeColor || colors.primary;
-  const URL =
-    imgUrl ||
-    "https://www.skinhealthinfo.org.uk/wp-content/uploads/2020/12/pexels-polina-tankilevitch-3735747-scaled-e1607434622754.jpg";
 
   // HELPERS ---------------------------------------------
   const handleGoToPath = () => {
@@ -44,9 +42,12 @@ const Card = ({
   };
 
   const ServeCardImage = () => {
+    if (!imgUrl) return null;
+    const alt = title || "BAD";
+
     return (
-      <div style={{ overflow: "hidden" }}>
-        <Image src={URL} className="d-block w-100" alt="BAD" />
+      <div style={{ width: "100%", height: 125, overflow: "hidden" }}>
+        <Image src={imgUrl} className="d-block w-100" alt={alt} />
       </div>
     );
   };
@@ -56,18 +57,15 @@ const Card = ({
     if (!cardTitle) return null;
 
     return (
-      <div>
-        <div className="flex mb-2">
-          <div
-            style={{
-              backgroundColor: colors.lightSilver,
-              borderRadius: 5,
-              textTransform: "uppercase",
-            }}
-          >
-            {cardTitle}
-          </div>
-        </div>
+      <div
+        className="flex"
+        style={{
+          backgroundColor: colors.lightSilver,
+          borderRadius: 5,
+          textTransform: "uppercase",
+        }}
+      >
+        <span>{cardTitle}</span>
       </div>
     );
   };
@@ -84,7 +82,12 @@ const Card = ({
     };
 
     const ServeFromAction = () => {
-      if (imgUrl) return null;
+      if (!formUrl) return null;
+
+      // HELPERS -------------------------
+      const handleGoToPath = () => {
+        actions.router.set(`${formUrl}`);
+      };
 
       return (
         <div onClick={handleGoToPath}>
@@ -147,7 +150,7 @@ const Card = ({
 
   const ServeContent = () => {
     return (
-      <div className="flex-col">
+      <div className="flex-col mt-2">
         <ServeCardBody />
         <ServeFooterActions />
       </div>
@@ -165,7 +168,7 @@ const Card = ({
       }}
     >
       {imgUrl && <ServeCardImage />}
-      <div className="flex-col mt-4" style={{ padding: "0 1em 1em" }}>
+      <div className="flex-col m-3">
         <ServeCardHeader />
         <ServeContent />
       </div>
