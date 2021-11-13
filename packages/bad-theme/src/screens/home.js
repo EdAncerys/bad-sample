@@ -17,6 +17,7 @@ import NewsCarousel from "../components/newsCarousel";
 import Footer from "../components/footer";
 import ProfilesBlock from "../components/profilesBlock";
 import TextBanner from "../components/textBanner";
+import PromoBlock from "../components/promoBlock";
 
 const home = ({ state, actions }) => {
   const dispatch = useAppDispatch();
@@ -43,7 +44,8 @@ const home = ({ state, actions }) => {
       {/* <NewsCarousel item={DATA} /> */}
       {/* <Footer /> */}
       {/* <ProfilesBlock item={DATA} /> */}
-      <TextBanner item={DATA[2]} />
+      {/* <TextBanner item={DATA[2]} alignContent="center" /> */}
+      {/* <PromoBlock item={DATA[2]} /> */}
     </div>
   );
 };

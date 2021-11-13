@@ -1,14 +1,19 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/colors";
-import Image from "@frontity/components/image";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import Loading from "./loading";
 
-const Banner = ({ state, actions, item }) => {
-  const BANNER_HEIGHT = 550;
+const Banner = ({ state, actions, item, alignContent }) => {
+  // alignContent value can be set to 'center' | 'start' | 'end'
+
+  if (!item) return <Loading />;
+
+  const BANNER_HEIGHT = 300;
   const { title, body, url } = item;
+  let ALIGNMENT = "start";
+  if (alignContent === "center") ALIGNMENT = "center";
+  if (alignContent === "end") ALIGNMENT = "end";
 
   // SERVERS ----------------------------------------------------------------
   const ServeTitle = () => {
@@ -54,7 +59,7 @@ const Banner = ({ state, actions, item }) => {
 
     return (
       <div>
-        <div className="flex-center-row">
+        <div className="flex" style={{ justifyContent: ALIGNMENT }}>
           <button
             className="btn"
             style={{
@@ -72,21 +77,26 @@ const Banner = ({ state, actions, item }) => {
     );
   };
 
-  if (!item) return <Loading />;
   // RETURN ---------------------------------------------------
   return (
     <div
-      className="card flex-center-col"
+      className="card flex"
       style={{
-        position: "relative",
-        minHeight: BANNER_HEIGHT,
         border: "none",
-        padding: `3em 20%`,
+        textAlign: ALIGNMENT,
       }}
     >
-      <ServeTitle />
-      <ServeCardBody />
-      <ServeActions />
+      <div
+        style={{
+          minHeight: BANNER_HEIGHT,
+          border: "none",
+          padding: `3em 20%`,
+        }}
+      >
+        <ServeTitle />
+        <ServeCardBody />
+        <ServeActions />
+      </div>
     </div>
   );
 };

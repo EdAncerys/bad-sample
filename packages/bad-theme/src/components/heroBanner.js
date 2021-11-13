@@ -7,6 +7,8 @@ import Loading from "./loading";
 import ButtonsRow from "./buttonsRow";
 
 const HeroBanner = ({ state, actions, item }) => {
+  if (!item) return <Loading />;
+
   const CARD_WIDTH = "50%";
   const BANNER_HEIGHT = 400;
   const OFFSET_BOTTOM = 50;
@@ -106,7 +108,6 @@ const HeroBanner = ({ state, actions, item }) => {
     );
   };
 
-  if (!item) return <Loading />;
   // RETURN ---------------------------------------------------
   return (
     <div className="flex-col" style={styles.container}>

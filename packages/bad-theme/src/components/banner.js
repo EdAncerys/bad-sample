@@ -7,6 +7,8 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import Loading from "./loading";
 
 const Banner = ({ state, actions, item }) => {
+  if (!item) return <Loading />;
+
   const BANNER_HEIGHT = 350;
   const { title, urlTitle, url, imgUrl } = item;
 
@@ -81,7 +83,6 @@ const Banner = ({ state, actions, item }) => {
     );
   };
 
-  if (!item) return <Loading />;
   // RETURN ---------------------------------------------------
   return (
     <div

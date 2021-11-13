@@ -6,6 +6,8 @@ import { colors } from "../config/colors";
 import Loading from "./loading";
 
 const ProfilesBlock = ({ state, actions, item }) => {
+  if (!item) return <Loading />;
+
   // SERVERS ------------------------------------------------------
   const ServeActions = () => {
     // HELPERS ----------------------------------------------------
@@ -31,7 +33,6 @@ const ProfilesBlock = ({ state, actions, item }) => {
     );
   };
 
-  if (!item) return <Loading />;
   // RETURN ---------------------------------------------------
   return (
     <div>
