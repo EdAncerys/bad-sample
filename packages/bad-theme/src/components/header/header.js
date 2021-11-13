@@ -23,7 +23,7 @@ const Header = ({ state, actions }) => {
         `}
       />
       <HTMLHead />
-      <div style={styles.container}>
+      <div className="flex-col" style={styles.container}>
         <HeaderActions />
         <NavigationActions />
       </div>
@@ -33,9 +33,7 @@ const Header = ({ state, actions }) => {
 
 const styles = {
   container: {
-    display: "flex",
-    flex: 1,
-    flexDirection: "column",
+    height: 245,
     backgroundColor: `${colors.white}`,
     borderBottom: `2px solid ${colors.lightSilver}`,
   },

@@ -31,7 +31,7 @@ const home = ({ state, actions }) => {
       </div>
       {/* <HomeCarousel /> */}
       {/* <PilGuidelines /> */}
-      {/* <ButtonsRow /> */}
+      <ButtonsRow />
       {/* <HeroBanner /> */}
       {/* <JournalPromoBlock /> */}
       {/* <MultiPostBlock /> */}
@@ -42,7 +42,7 @@ const home = ({ state, actions }) => {
         url="https://www.skinhealthinfo.org.uk/wp-content/uploads/2019/01/No.58O-1.jpg"
       /> */}
       {/* <NewsCarousel /> */}
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

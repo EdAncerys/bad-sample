@@ -5,6 +5,7 @@ import { colors } from "../../config/colors";
 import { Dropdown } from "react-bootstrap";
 
 import BADLogo from "../../img/svg/badLogoHeader.svg";
+import SearchIcon from "@mui/icons-material/Search";
 
 const HeaderActions = ({ state, actions }) => {
   // HELPERS ----------------------------------------------------
@@ -35,15 +36,15 @@ const HeaderActions = ({ state, actions }) => {
 
   const ServeSearchContainer = () => {
     return (
-      <div className="d-none d-lg-block">
-        <div className="input-group lg" style={{ display: "flex", flex: 1.5 }}>
+      <div className="flex d-none d-lg-block">
+        <div className="input-group">
           <input
             type="text"
             className="form-control"
             placeholder="Enter your search..."
           />
           <span className="input-group-text" id="basic-addon2">
-            @
+            <SearchIcon />
           </span>
         </div>
       </div>
@@ -53,7 +54,7 @@ const HeaderActions = ({ state, actions }) => {
   const ServeAuthAction = () => {
     if (!state.theme.isLoggedIn)
       return (
-        <div style={{ display: "flex", justifyContent: "center" }}>
+        <div>
           <button className="btn btn-warning m-2" onClick={handleLogin}>
             Login
           </button>
@@ -65,7 +66,7 @@ const HeaderActions = ({ state, actions }) => {
 
   const ServeDropDownMenu = () => {
     return (
-      <div className="dropdown" style={{ display: "flex", flex: 1 }}>
+      <div className="dropdown">
         <div>
           <Dropdown>
             <Dropdown.Toggle
@@ -86,16 +87,16 @@ const HeaderActions = ({ state, actions }) => {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={{ display: "flex", flex: 1 }}>
+    <div className="flex" style={{ alignItems: "center" }}>
+      <div>
         <ServeLogoContainer />
       </div>
       <div
+        className="flex-row"
         style={{
-          display: "flex",
-          flex: 1.5,
-          justifyContent: "space-between",
+          justifyContent: "space-around",
           alignItems: "center",
+          paddingLeft: `1em`,
         }}
       >
         <ServeSearchContainer />
@@ -107,10 +108,7 @@ const HeaderActions = ({ state, actions }) => {
 };
 
 const styles = {
-  container: {
-    display: "flex",
-    alignItems: "center",
-  },
+  container: {},
 };
 
 export default connect(HeaderActions);
