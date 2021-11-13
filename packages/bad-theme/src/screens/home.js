@@ -16,6 +16,7 @@ import Banner from "../components/banner";
 import NewsCarousel from "../components/newsCarousel";
 import Footer from "../components/footer";
 import ProfilesBlock from "../components/profilesBlock";
+import TextBanner from "../components/textBanner";
 
 const home = ({ state, actions }) => {
   const dispatch = useAppDispatch();
@@ -42,6 +43,7 @@ const home = ({ state, actions }) => {
       {/* <NewsCarousel item={DATA} /> */}
       {/* <Footer /> */}
       {/* <ProfilesBlock item={DATA} /> */}
+      <TextBanner item={DATA[2]} />
     </div>
   );
 };
