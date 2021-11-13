@@ -1,19 +1,17 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
+import Loading from "../components/loading";
 import RowButton from "./rowButton";
-import { DATA } from "../config/data";
 
-const ButtonsRow = ({ state, actions, style, data }) => {
-  const array = data || DATA; // TBD
-
+const ButtonsRow = ({ state, actions, style, item }) => {
+  if (!item) return <Loading />;
+  // RETURN ---------------------------------------------------
   return (
-    <div>
-      <div className="flex" style={{ ...style }}>
-        {array.map((item) => {
-          return <RowButton key={item.id} item={item} />;
-        })}
-      </div>
+    <div className="flex" style={{ ...style }}>
+      {item.map((item) => {
+        return <RowButton key={item.id} item={item} />;
+      })}
     </div>
   );
 };

@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { colors } from "../../config/colors";
 
+import Loading from "../loading";
+import SearchIcon from "@mui/icons-material/Search";
+
 const PilGuidelines = ({ state, actions }) => {
   // SERVERS ---------------------------------------------
   const ServeSearchContainer = () => {
@@ -14,13 +17,15 @@ const PilGuidelines = ({ state, actions }) => {
             placeholder="Enter your search..."
           />
           <span className="input-group-text" id="basic-addon2">
-            @
+            <SearchIcon />
           </span>
         </div>
       </div>
     );
   };
 
+  if (!item) return <Loading />;
+  // RETURN ---------------------------------------------------
   return (
     <div style={styles.container}>
       <div className="card">

@@ -28,6 +28,7 @@ export const DATA = [
       "President in The Chair July 2020 - July 2022 University Hospitals of Derby and Burton",
     profileUrl:
       "https://www.skinhealthinfo.org.uk/wp-content/uploads/2018/12/Image_62_Text__Image.jpg",
+    cardTitle: "This is a tile",
   },
   {
     id: 3,
@@ -43,6 +44,7 @@ export const DATA = [
       "President in The Chair July 2020 - July 2022 University Hospitals of Derby and Burton",
     profileUrl:
       "https://www.skinhealthinfo.org.uk/wp-content/uploads/2018/12/Image_62_Text__Image.jpg",
+    cardTitle: "This is a tile",
   },
   {
     id: 4,
@@ -58,5 +60,6 @@ export const DATA = [
       "President in The Chair July 2020 - July 2022 University Hospitals of Derby and Burton",
     profileUrl:
       "https://www.skinhealthinfo.org.uk/wp-content/uploads/2018/12/Image_62_Text__Image.jpg",
+    cardTitle: "This is a tile",
   },
 ];

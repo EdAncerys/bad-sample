@@ -73,7 +73,7 @@ const JournalCard = ({ state, actions, item }) => {
             height: 75,
           }}
         >
-          <Image className="d-block w-100" src={imgUrl} alt="BAD" />
+          <Image className="d-block w-100" src={imgUrl} alt="BAD Logo" />
         </div>
       </div>
     );

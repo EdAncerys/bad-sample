@@ -4,8 +4,11 @@ import { colors } from "../config/colors";
 import Image from "@frontity/components/image";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
-const Banner = ({ state, actions, title, urlTitle, url }) => {
+import Loading from "./loading";
+
+const Banner = ({ state, actions, item }) => {
   const BANNER_HEIGHT = 350;
+  const { title, urlTitle, url, imgUrl } = item;
 
   // HELPERS ----------------------------------------------------
   const handleGoToAction = () => {
@@ -53,13 +56,12 @@ const Banner = ({ state, actions, title, urlTitle, url }) => {
   };
 
   const ServeCardImage = () => {
+    if (!imgUrl) return null;
+    const alt = title || "BAD";
+
     return (
-      <div
-        style={{
-          overflow: "hidden",
-        }}
-      >
-        <Image src={url} className="d-block h-100" alt="BAD" />
+      <div style={{ width: "100%", height: BANNER_HEIGHT, overflow: "hidden" }}>
+        <Image src={imgUrl} className="d-block h-100" alt={alt} />
       </div>
     );
   };
@@ -79,6 +81,8 @@ const Banner = ({ state, actions, title, urlTitle, url }) => {
     );
   };
 
+  if (!item) return <Loading />;
+  // RETURN ---------------------------------------------------
   return (
     <div
       className="flex-col"

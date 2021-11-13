@@ -3,8 +3,6 @@ import { connect } from "frontity";
 import { colors } from "../config/colors";
 import Image from "@frontity/components/image";
 
-import Template from "../img/svg/template.svg";
-
 const CardFS = ({
   state,
   actions,
@@ -18,12 +16,6 @@ const CardFS = ({
   const TEXT_ALIGN = textAlign || "start";
   const MIN_CARD_HEIGHT = 100;
   const THEME = themeColor || colors.primary;
-  const URL = imgUrl || Template;
-
-  // Manage max string Length
-  const MAX_LENGTH = 60;
-  let titlePreview = `${title.substring(0, MAX_LENGTH)}...`;
-  if (title.length < MAX_LENGTH) titlePreview = title;
 
   // HELPERS ---------------------------------------------
   const handleGoToPath = () => {
@@ -45,14 +37,24 @@ const CardFS = ({
   };
 
   const ServeCardImage = () => {
+    if (!imgUrl) return null;
+    const alt = title || "BAD";
+
     return (
-      <div className="flex" style={{ maxWidth: "40%" }}>
-        <Image className="d-block h-100" src={URL} alt="BAD" />
+      <div style={{ width: 160, height: 160, overflow: "hidden" }}>
+        <Image src={imgUrl} className="d-block h-100" alt={alt} />
       </div>
     );
   };
 
   const ServeCardInfo = () => {
+    if (!title) return null;
+
+    // Manage max string Length
+    const MAX_LENGTH = 60;
+    let titlePreview = `${title.substring(0, MAX_LENGTH)}...`;
+    if (title.length < MAX_LENGTH) titlePreview = title;
+
     return (
       <div className="flex-center-row p-2">
         <ServeCardImage />
@@ -62,6 +64,7 @@ const CardFS = ({
               marginLeft: "1em",
               textAlign: "start",
               fontSize: "1.75em",
+              fontWeight: "bold",
             }}
           >
             {titlePreview}

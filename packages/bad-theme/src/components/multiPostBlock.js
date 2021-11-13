@@ -2,15 +2,15 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import Card from "./card";
-import { DATA } from "../config/data.js";
+import Loading from "./loading";
 
-const MultiPostBlock = ({ state, actions, data }) => {
-  const array = data || DATA; // data to iterate
-
+const MultiPostBlock = ({ state, actions, item }) => {
+  if (!item) return <Loading />;
+  // RETURN ---------------------------------------------------
   return (
     <div style={styles.container}>
       <div className="d-flex" style={{ justifyContent: "space-around" }}>
-        {array.map((item) => {
+        {item.map((item) => {
           const { id, title, body, url, imgUrl } = item;
 
           return (

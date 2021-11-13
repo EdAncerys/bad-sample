@@ -5,11 +5,10 @@ import { Carousel } from "react-bootstrap";
 import { colors } from "../../config/colors";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
-import { DATA } from "../../config/data";
+import Loading from "../loading";
 
-const NewsCarousel = ({ state, actions, data }) => {
+const NewsCarousel = ({ state, actions, item }) => {
   const CAROUSEL_HEIGHT = 400;
-  const array = data || DATA;
 
   // SERVERS ----------------------------------------------------------------
   const ServeOverlay = () => {
@@ -27,10 +26,12 @@ const NewsCarousel = ({ state, actions, data }) => {
     );
   };
 
+  if (!item) return <Loading />;
+  // RETURN ---------------------------------------------------
   return (
     <div>
       <Carousel>
-        {array.map((item) => {
+        {item.map((item) => {
           const { imgUrl, url, title } = item;
 
           // HELPERS ----------------------------------------------------

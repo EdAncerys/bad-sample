@@ -6,24 +6,22 @@ import Image from "@frontity/components/image";
 const Profile = ({ state, actions, item }) => {
   const PROFILE_PICTURE_WIDTH = 190;
   const { name, theme, about, profileUrl, url } = item;
-  const THEME = colors[theme] || colors.primary;
 
   // SERVERS ----------------------------------------------------------------
   const ServeProfilePicture = () => {
+    if (!profileUrl) return null;
     const alt = name || "BAD";
 
     return (
-      <div className="flex-center-row m-2">
-        <div
-          style={{
-            width: PROFILE_PICTURE_WIDTH,
-            height: PROFILE_PICTURE_WIDTH,
-            overflow: "hidden",
-            borderRadius: "50%",
-          }}
-        >
-          <Image src={profileUrl} className="d-block h-100" alt={alt} />
-        </div>
+      <div
+        style={{
+          width: PROFILE_PICTURE_WIDTH,
+          height: PROFILE_PICTURE_WIDTH,
+          borderRadius: "50%",
+          overflow: "hidden",
+        }}
+      >
+        <Image src={profileUrl} className="d-block h-100" alt={alt} />
       </div>
     );
   };
@@ -73,6 +71,7 @@ const Profile = ({ state, actions, item }) => {
         border: "none",
         width: "30%",
         minWidth: PROFILE_PICTURE_WIDTH,
+        backgroundColor: "transparent",
       }}
     >
       <div className="flex-center-col">

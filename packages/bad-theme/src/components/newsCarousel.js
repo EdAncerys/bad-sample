@@ -12,11 +12,8 @@ import RightIcon from "../img/svg/rightIcon.svg";
 import IndicatorActive from "../img/svg/indicatorActive.svg";
 import IndicatorInactive from "../img/svg/indicatorInactive.svg";
 
-import { DATA } from "../config/data.js";
-
-const NewsCarousel = ({ state, actions, data }) => {
+const NewsCarousel = ({ state, actions, item }) => {
   const CAROUSEL_HEIGHT = 400;
-  const array = data || DATA;
 
   // SERVERS ----------------------------------------------------------------
   const ServeIcon = ({ icon, left, right }) => {
@@ -49,8 +46,7 @@ const NewsCarousel = ({ state, actions, data }) => {
         url="/learn-more"
       />
       <Carousel className="news-carousel">
-        {array.map((item) => {
-          console.log(item);
+        {item.map((item) => {
           const { imgUrl, body, title } = item;
 
           return (
@@ -67,12 +63,14 @@ const NewsCarousel = ({ state, actions, data }) => {
               >
                 <Card
                   cardWidth="40%"
+                  cardHeight="85%"
                   title={title}
                   body={body}
                   imgUrl={imgUrl}
                 />
                 <Card
                   cardWidth="40%"
+                  cardHeight="85%"
                   title={title}
                   body={body}
                   imgUrl={imgUrl}

@@ -3,11 +3,9 @@ import { connect } from "frontity";
 
 import Profile from "./profile";
 import { colors } from "../config/colors";
-import { DATA } from "../config/data";
+import Loading from "./loading";
 
-const ProfilesBlock = ({ state, actions, style, data }) => {
-  const array = data || DATA; // TBD
-
+const ProfilesBlock = ({ state, actions, item }) => {
   // SERVERS ------------------------------------------------------
   const ServeActions = () => {
     // HELPERS ----------------------------------------------------
@@ -33,10 +31,12 @@ const ProfilesBlock = ({ state, actions, style, data }) => {
     );
   };
 
+  if (!item) return <Loading />;
+  // RETURN ---------------------------------------------------
   return (
     <div>
       <div className="flex" style={styles.container}>
-        {array.map((item) => {
+        {item.map((item) => {
           return <Profile key={item.id} item={item} />;
         })}
       </div>

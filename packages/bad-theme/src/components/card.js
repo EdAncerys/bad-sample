@@ -11,15 +11,13 @@ const Card = ({
   body,
   url,
   textAlign,
-  cardWidth,
-  cardHeight,
   themeColor,
   imgUrl,
   formUrl,
+  cardWidth,
+  cardHeight,
 }) => {
   const TEXT_ALIGN = textAlign || "start";
-  const CARD_WIDTH = cardWidth || "30%";
-  const CARD_HEIGHT = cardHeight || "85%";
   const THEME = themeColor || colors.primary;
 
   // HELPERS ---------------------------------------------
@@ -28,7 +26,7 @@ const Card = ({
     console.log("url", url);
   };
 
-  // SERVERS ----------------------------------------------------------------
+  // SERVERS ----------------------------------------------
   const ServeFooter = () => {
     return (
       <div
@@ -57,15 +55,17 @@ const Card = ({
     if (!cardTitle) return null;
 
     return (
-      <div
-        className="flex"
-        style={{
-          backgroundColor: colors.lightSilver,
-          borderRadius: 5,
-          textTransform: "uppercase",
-        }}
-      >
-        <span>{cardTitle}</span>
+      <div>
+        <div
+          className="flex"
+          style={{
+            backgroundColor: colors.lightSilver,
+            borderRadius: 5,
+            textTransform: "uppercase",
+          }}
+        >
+          <span>{cardTitle}</span>
+        </div>
       </div>
     );
   };
@@ -99,9 +99,11 @@ const Card = ({
     };
 
     return (
-      <div className="flex-row mt-2">
-        <ServeMoreAction />
-        <ServeFromAction />
+      <div>
+        <div className="flex-row mt-2">
+          <ServeMoreAction />
+          <ServeFromAction />
+        </div>
       </div>
     );
   };
@@ -163,8 +165,8 @@ const Card = ({
       className="card m-2"
       style={{
         ...styles.card,
-        width: `${CARD_WIDTH}`,
-        height: `${CARD_HEIGHT}`,
+        width: cardWidth || "30%",
+        height: cardHeight || "100%",
       }}
     >
       {imgUrl && <ServeCardImage />}

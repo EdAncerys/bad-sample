@@ -21,7 +21,7 @@ const RowButton = ({ state, actions, item }) => {
     console.log("url", url);
   };
 
-  // SERVERS ----------------------------------------------------------------
+  // SERVERS --------------------------------------------
   const ServeFooter = () => {
     return (
       <div
@@ -36,8 +36,12 @@ const RowButton = ({ state, actions, item }) => {
 
   return (
     <div className="card" style={styles.container}>
-      <div className="card-body flex-col" style={{ margin: "5px 0" }}>
-        <div className="flex-row pointer" onClick={handleGoToPath}>
+      <div className="card-body flex-col">
+        <div
+          className="flex-row pointer"
+          style={{ margin: "5px 0", alignItems: "center" }}
+          onClick={handleGoToPath}
+        >
           <div
             className="flex"
             style={{ textTransform: "uppercase", fontSize: "13px" }}

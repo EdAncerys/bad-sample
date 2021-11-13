@@ -3,11 +3,11 @@ import { connect } from "frontity";
 
 import CardBlockHeader from "./cardBlockHeader";
 import MultiPostBlock from "./multiPostBlock";
+import Loading from "./loading";
 
-import { DATA } from "../config/data.js";
-
-const FeaturedEvents = ({ state, actions }) => {
-
+const FeaturedEvents = ({ state, actions, item }) => {
+  if (!item) return <Loading />;
+  // RETURN ---------------------------------------------------
   return (
     <div style={styles.container}>
       <CardBlockHeader
@@ -15,7 +15,7 @@ const FeaturedEvents = ({ state, actions }) => {
         urlTitle="View All"
         url="/learn-more"
       />
-      <MultiPostBlock data={DATA} />
+      <MultiPostBlock item={item} />
     </div>
   );
 };

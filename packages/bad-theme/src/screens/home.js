@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/colors";
+import { DATA } from "../config/data";
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, useAppState, setLoadingAction } from "../context";
 // COMPONENTS ----------------------------------------------------------------
@@ -30,21 +31,17 @@ const home = ({ state, actions }) => {
       <div>
         <p style={styles.title}>BAD</p>
       </div>
-      {/* <HomeCarousel /> */}
-      {/* <PilGuidelines /> */}
-      {/* <ButtonsRow /> */}
-      {/* <HeroBanner /> */}
-      <JournalPromoBlock />
-      <MultiPostBlock />
-      <FeaturedEvents />
-      {/* <Banner
-        title="Title of the banner"
-        urlTitle="Find out More"
-        url="https://www.skinhealthinfo.org.uk/wp-content/uploads/2019/01/No.58O-1.jpg"
-      /> */}
-      {/* <NewsCarousel /> */}
+      {/* <HomeCarousel item={DATA} /> */}
+      {/* <PilGuidelines item={DATA} /> */}
+      {/* <ButtonsRow item={DATA} /> */}
+      {/* <HeroBanner item={DATA} /> */}
+      {/* <JournalPromoBlock item={DATA} /> */}
+      {/* <MultiPostBlock item={DATA} /> */}
+      {/* <FeaturedEvents item={DATA} /> */}
+      {/* <Banner item={DATA[0]} /> */}
+      {/* <NewsCarousel item={DATA} /> */}
       {/* <Footer /> */}
-      {/* <ProfilesBlock /> */}
+      {/* <ProfilesBlock item={DATA} /> */}
     </div>
   );
 };
