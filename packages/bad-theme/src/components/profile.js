@@ -5,14 +5,8 @@ import Image from "@frontity/components/image";
 
 const Profile = ({ state, actions, item }) => {
   const PROFILE_PICTURE_WIDTH = 190;
-  const { name, theme, about, profileUrl } = item;
+  const { name, theme, about, profileUrl, url } = item;
   const THEME = colors[theme] || colors.primary;
-
-  // HELPERS ---------------------------------------------
-  const handleGoToPath = () => {
-    actions.router.set(`${url}`);
-    console.log("url", url);
-  };
 
   // SERVERS ----------------------------------------------------------------
   const ServeProfilePicture = () => {
@@ -63,6 +57,15 @@ const Profile = ({ state, actions, item }) => {
     );
   };
 
+  const ServeProfile = () => {
+    return (
+      <div style={{ padding: "1em 2em" }}>
+        <ServeName />
+        <ServeAbout />
+      </div>
+    );
+  };
+
   return (
     <div
       className="card m-2"
@@ -74,10 +77,7 @@ const Profile = ({ state, actions, item }) => {
     >
       <div className="flex-center-col">
         <ServeProfilePicture />
-        <div style={{ padding: "1em 2em" }}>
-          <ServeName />
-          <ServeAbout />
-        </div>
+        <ServeProfile />
       </div>
     </div>
   );
