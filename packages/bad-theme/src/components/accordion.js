@@ -18,19 +18,21 @@ const Card = ({ state, actions, item }) => {
   const ServeDivider = () => {
     return (
       <div
-        className="bad-divider d-none"
+        className="flex"
         style={{
-          position: "absolute",
-          zIndex: 1,
-          bottom: 2,
+          position: "relative",
+          zIndex: 9,
           width: "100%",
         }}
       >
         <div
           style={{
-            backgroundColor: colors.blue,
+            position: "absolute",
+            top: -20,
+            left: 0,
+            backgroundColor: colors.silver,
             height: 1,
-            margin: `0 1.25em`,
+            width: "100%",
           }}
         />
       </div>
@@ -52,7 +54,6 @@ const Card = ({ state, actions, item }) => {
       return (
         <div style={{ position: "relative" }}>
           <Accordion.Header>{titlePreview}</Accordion.Header>
-          <ServeDivider />
         </div>
       );
     };
@@ -65,7 +66,12 @@ const Card = ({ state, actions, item }) => {
       let bodyPreview = `${body.substring(0, MAX_LENGTH)}...`;
       if (body.length < MAX_LENGTH) bodyPreview = body;
 
-      return <Accordion.Body>{bodyPreview}</Accordion.Body>;
+      return (
+        <Accordion.Body>
+          <ServeDivider />
+          {bodyPreview}
+        </Accordion.Body>
+      );
     };
 
     return (

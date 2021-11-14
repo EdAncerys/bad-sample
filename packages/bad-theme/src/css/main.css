@@ -106,12 +106,6 @@ a {
 [type="button"]:not(:disabled) {
   box-shadow: none;
 }
-.accordion-header::after {
-  display: flex;
-  content: "";
-  border-bottom: 2px solid currentColor;
-  margin: 0 0.75em;
-}
 
 /* Test css */
 .pink {
