@@ -40,7 +40,7 @@ const home = ({ state, actions }) => {
       {/* <ButtonsRow item={DATA} /> */}
       {/* <HeroBanner item={DATA} /> */}
       {/* <JournalPromoBlock item={DATA} /> */}
-      <MultiPostBlock item={DATA} />
+      {/* <MultiPostBlock item={DATA} /> */}
       {/* <FeaturedEvents item={DATA} /> */}
       {/* <Banner item={DATA[0]} /> */}
       {/* <NewsCarousel item={DATA} /> */}
@@ -49,7 +49,7 @@ const home = ({ state, actions }) => {
       {/* <TextBanner item={DATA[2]} alignContent="center" /> */}
       {/* <PromoBlock item={DATA[2]} reverse /> */}
       {/* <CardList item={DATA} /> */}
-      {/* <Accordion item={DATA} /> */}
+      <Accordion item={DATA} />
     </div>
   );
 };

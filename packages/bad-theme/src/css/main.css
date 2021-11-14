@@ -6,6 +6,12 @@ body {
   font-family: "Lato", monospace;
   color: #505050;
 }
+/* main content container config */
+.content-container {
+  max-width: 1000px;
+  margin: auto;
+}
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 ::-webkit-scrollbar {
   display: none;
@@ -17,11 +23,6 @@ a {
   margin: 6px 0;
   font-size: 1.2em;
   text-decoration: none;
-}
-/* main content container config */
-.content-container {
-  max-width: 1000px;
-  margin: auto;
 }
 
 /* Custom classes */
@@ -63,53 +64,6 @@ a {
 .post-block::after {
   content: "";
   flex: auto;
-}
-
-/* Carousel styling */
-.carousel-indicators {
-  /* bottom indicators */
-  justify-content: flex-start;
-  margin-left: 15%;
-}
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
-  width: 3.5em;
-  height: 3.5em;
-}
-.news-carousel .carousel-control-prev-icon,
-.news-carousel .carousel-control-next-icon {
-  background-image: none;
-}
-
-.news-carousel .carousel-indicators [data-bs-target] {
-  background-color: #3580cd;
-}
-.news-carousel .carousel-indicators {
-  /* bottom indicators */
-  justify-content: center;
-}
-
-/* accordion config  */
-.accordion-button::after {
-  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='%23333' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill-rule='evenodd' d='M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z' clip-rule='evenodd'/%3e%3c/svg%3e");
-  transform: scale(0.8) !important;
-}
-.accordion-button:not(.collapsed)::after {
-  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='%23333' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill-rule='evenodd' d='M0 8a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1z' clip-rule='evenodd'/%3e%3c/svg%3e");
-}
-.accordion-button,
-.accordion-button:not(.collapsed) {
-  background-color: #ffff;
-  box-shadow: none;
-}
-.accordion-button:not(.collapsed) {
-  color: #505050;
-}
-.underline {
-  border-bottom: 2px solid currentColor;
-}
-[type="button"]:not(:disabled) {
-  box-shadow: none;
 }
 
 /* Test css */

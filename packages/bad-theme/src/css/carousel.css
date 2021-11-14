@@ -1,0 +1,23 @@
+/* Carousel styling */
+.carousel-indicators {
+  /* bottom indicators */
+  justify-content: flex-start;
+  margin-left: 15%;
+}
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  width: 3.5em;
+  height: 3.5em;
+}
+.news-carousel .carousel-control-prev-icon,
+.news-carousel .carousel-control-next-icon {
+  background-image: none;
+}
+
+.news-carousel .carousel-indicators [data-bs-target] {
+  background-color: #3580cd;
+}
+.news-carousel .carousel-indicators {
+  /* bottom indicators */
+  justify-content: center;
+}

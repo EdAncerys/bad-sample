@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { connect, Global, css } from "frontity";
 import bootStrapCSS from "../../css/bootstrap.min.css";
-import globalCSS from "../../css/main.css";
 import { colors } from "../../config/colors";
+// css imports ------------------------------------------------------------
+import globalCSS from "../../css/main.css";
+import carousel from "../../css/carousel.css";
+import accordion from "../../css/accordion.css";
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, useAppState, setLoginAction } from "../../context";
-// COMPONENTS ----------------------------------------------------------------
+// COMPONENTS -------------------------------------------------------------
 import HTMLHead from "./htmlHead";
 import NavigationActions from "./navigationActions";
 import HeaderActions from "./headerActions";
@@ -19,7 +22,7 @@ const Header = ({ state, actions }) => {
     <>
       <Global
         styles={css`
-          ${bootStrapCSS}, ${globalCSS}
+          ${bootStrapCSS}, ${globalCSS}, ${carousel}, ${accordion}
         `}
       />
       <HTMLHead />
