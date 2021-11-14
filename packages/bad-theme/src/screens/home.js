@@ -19,6 +19,7 @@ import ProfilesBlock from "../components/profilesBlock";
 import TextBanner from "../components/textBanner";
 import PromoBlock from "../components/promoBlock";
 import CardList from "../components/cardList";
+import Accordion from "../components/accordion";
 
 const home = ({ state, actions }) => {
   const dispatch = useAppDispatch();
@@ -47,7 +48,8 @@ const home = ({ state, actions }) => {
       {/* <ProfilesBlock item={DATA} /> */}
       {/* <TextBanner item={DATA[2]} alignContent="center" /> */}
       {/* <PromoBlock item={DATA[2]} reverse /> */}
-      <CardList item={DATA} />
+      {/* <CardList item={DATA} /> */}
+      <Accordion item={DATA} />
     </div>
   );
 };
