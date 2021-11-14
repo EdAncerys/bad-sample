@@ -49,7 +49,7 @@ const home = ({ state, actions }) => {
       {/* <TextBanner item={DATA[2]} alignContent="center" /> */}
       {/* <PromoBlock item={DATA[2]} reverse /> */}
       {/* <CardList item={DATA} /> */}
-      <Accordion item={DATA} />
+      {/* <Accordion item={DATA} /> */}
     </div>
   );
 };

@@ -10,7 +10,7 @@ const ButtonsRow = ({ state, actions, style, item }) => {
   return (
     <div className="flex" style={{ ...style }}>
       {item.map((item) => {
-        return <RowButton key={item.id} item={item} />;
+        return <RowButton key={item.id} item={item} buttonWidth="100%" />;
       })}
     </div>
   );

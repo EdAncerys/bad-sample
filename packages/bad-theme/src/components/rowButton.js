@@ -3,7 +3,7 @@ import { connect } from "frontity";
 import { colors } from "../config/colors";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
-const RowButton = ({ state, actions, item }) => {
+const RowButton = ({ state, actions, item, buttonWidth }) => {
   const { title, theme, url } = item;
   const THEME = colors[theme] || colors.primary;
 
@@ -35,7 +35,10 @@ const RowButton = ({ state, actions, item }) => {
   };
 
   return (
-    <div className="card" style={styles.container}>
+    <div
+      className="card m-2 shadow"
+      style={{ ...styles.container, width: buttonWidth || "25%" }}
+    >
       <div className="card-body flex-col">
         <div
           className="flex-row pointer"
@@ -71,8 +74,6 @@ const styles = {
     flexDirection: "column",
     overflow: "hidden",
     border: "none",
-    margin: `0 10px`,
-    width: "25%",
   },
 };
 
