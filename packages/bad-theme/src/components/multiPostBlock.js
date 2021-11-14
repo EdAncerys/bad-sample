@@ -8,8 +8,8 @@ const MultiPostBlock = ({ state, actions, item }) => {
   if (!item) return <Loading />;
   // RETURN ---------------------------------------------------
   return (
-    <div style={styles.container}>
-      <div className="d-flex" style={{ justifyContent: "space-around" }}>
+    <div>
+      <div className="flex post-block" style={styles.container}>
         {item.map((item) => {
           const { id, title, body, url, imgUrl } = item;
 
@@ -20,7 +20,8 @@ const MultiPostBlock = ({ state, actions, item }) => {
               title={title}
               body={body}
               url={url}
-              imgUrl={imgUrl}
+              // cardWidth="45%" // optional param
+              // imgUrl={imgUrl} // optional param
             />
           );
         })}
@@ -30,7 +31,10 @@ const MultiPostBlock = ({ state, actions, item }) => {
 };
 
 const styles = {
-  container: {},
+  container: {
+    justifyContent: "space-around",
+    flexWrap: "wrap",
+  },
 };
 
 export default connect(MultiPostBlock);
