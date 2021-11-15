@@ -13,6 +13,10 @@ const HeaderActions = ({ state, actions }) => {
     setLoginAction({ dispatch, setLogin: !setLogin });
   };
 
+  const handleGoToLink = () => {
+    actions.router.set(`/`);
+  };
+
   const handleLogOut = () => {
     actions.theme.setTaken(null);
     actions.theme.setLogin(false);
@@ -23,7 +27,10 @@ const HeaderActions = ({ state, actions }) => {
   const ServeLogoContainer = () => {
     return (
       <div className="flex">
-        <div style={{ width: 385, height: 90 }}>
+        <div
+          style={{ width: 385, height: 90, cursor: "pointer" }}
+          onClick={handleGoToLink}
+        >
           <Image src={BADLogo} className="d-block h-100" alt="BAD Logo" />
         </div>
       </div>

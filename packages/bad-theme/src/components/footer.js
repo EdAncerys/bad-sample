@@ -2,13 +2,18 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/colors";
 import Image from "@frontity/components/image";
+import Link from "@frontity/components/link";
 
 import BADLogo from "../img/svg/badLogoFooter.svg";
 import Facebook from "../img/svg/facebook.svg";
 import Twitter from "../img/svg/twitter.svg";
 import Instagram from "../img/svg/instagram.svg";
+import { style } from "@mui/system";
 
-const SCREEN_NAME = ({ state, actions }) => {
+const Footer = ({ state, actions }) => {
+  const date = new Date();
+  const year = date.getFullYear();
+
   // SERVERS ---------------------------------------------
   const ServeFooterTopRow = () => {
     return (
@@ -36,14 +41,24 @@ const SCREEN_NAME = ({ state, actions }) => {
           <div style={styles.footerTitle}>+44 (0)207 383 0266</div>
         </div>
         <div className="flex" style={{ justifyContent: "space-around" }}>
-          <div style={{ width: 25, height: 25 }}>
-            <Image src={Facebook} className="d-block h-100" alt="Facebook" />
+          <div style={styles.socials}>
+            <Link link={`https://www.facebook.com/`} target="_blank">
+              <Image src={Facebook} className="d-block h-100" alt="Facebook" />
+            </Link>
           </div>
-          <div style={{ width: 25, height: 25 }}>
-            <Image src={Twitter} className="d-block h-100" alt="Twitter" />
+          <div style={styles.socials}>
+            <Link link={`https://www.twitter.com/`} target="_blank">
+              <Image src={Twitter} className="d-block h-100" alt="Twitter" />
+            </Link>
           </div>
-          <div style={{ width: 25, height: 25 }}>
-            <Image src={Instagram} className="d-block h-100" alt="Instagram" />
+          <div style={styles.socials}>
+            <Link link={`https://www.instagram.com/`} target="_blank">
+              <Image
+                src={Instagram}
+                className="d-block h-100"
+                alt="Instagram"
+              />
+            </Link>
           </div>
         </div>
       </div>
@@ -53,7 +68,9 @@ const SCREEN_NAME = ({ state, actions }) => {
   const ServeFooterBottomRow = () => {
     return (
       <div className="flex-row" style={{ alignItems: "center", fontSize: 9 }}>
-        <div className="flex">©2021 British Association of Dermatologists</div>
+        <div className="flex">
+          ©{`${year}`} British Association of Dermatologists
+        </div>
         <div className="flex" style={{ flex: 2, justifyContent: "flex-end" }}>
           <div style={styles.footerTitle}>Registered Charity No. 25847 |</div>
           <div style={styles.footerTitle}>Equal Opportunities Policy |</div>
@@ -87,6 +104,11 @@ const styles = {
   footerTitle: {
     marginRight: 10,
   },
+  socials: {
+    width: 25,
+    height: 25,
+    cursor: "pointer",
+  },
 };
 
-export default connect(SCREEN_NAME);
+export default connect(Footer);

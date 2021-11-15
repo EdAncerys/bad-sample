@@ -12,7 +12,6 @@ const SCREEN_NAME = ({ state, actions }) => {
   const directionLength = directions.length;
   const MARGIN = 10;
   let KEY = 0;
-  console.log(directions);
 
   // SERVERS ---------------------------------------------
   const ServePatchDirections = ({ item, nextKey }) => {
