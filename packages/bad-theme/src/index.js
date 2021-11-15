@@ -1,23 +1,28 @@
 import Root from "./screens/index";
 
-const myFirstTheme = {
-  name: "event-theme",
+import image from "@frontity/html2react/processors/image";
+import iframe from "@frontity/html2react/processors/iframe";
+import link from "@frontity/html2react/processors/link";
+import menuHandler from "./components/handlers/menu-handler";
+
+const BADTheme = {
+  name: "bad-theme",
   roots: {
     theme: Root,
   },
   state: {
     theme: {
-      jwt: null,
-      isLoggedIn: false,
       myVariable: process.env.MY_VARIABLE,
+      menuUrl: "/menu/primary-menu",
+      postTypes: [],
     },
   },
   actions: {
     theme: {
       beforeCSR: async ({ state, actions }) => {
         // console.log("beforeCSR triggered"); // debug
-        // if (document.cookie) state.theme.isLoggedIn = true;
-        // await Promise.all([actions.source.fetch("/events")]);
+        // await Promise.all([actions.source.fetch("/")]);
+        await actions.source.fetch(`${state.theme.menuUrl}`);
       },
       afterCSR: async ({ state, actions }) => {
         //   setInterval(async () => {
@@ -38,6 +43,19 @@ const myFirstTheme = {
         },
     },
   },
+  libraries: {
+    html2react: {
+      /**
+       * Add a processor to `html2react` so it processes the `<img>` tags
+       * and internal link inside the content HTML.
+       * You can add your own processors too.
+       */
+      processors: [image, iframe, link],
+    },
+    source: {
+      handlers: [menuHandler],
+    },
+  },
 };
 
-export default myFirstTheme;
+export default BADTheme;

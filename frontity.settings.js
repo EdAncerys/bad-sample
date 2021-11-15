@@ -35,9 +35,26 @@ const settings = {
         },
         postTypes: [
           {
-            type: "CUSTOM",
-            endpoint: "CUSTOM",
-            archive: "CUSTOM",
+            type: "guidelines_standards",
+            endpoint: "guidelines-standards",
+            archive: "guidelines-standards",
+          },
+          {
+            type: "research_journals",
+            endpoint: "research-journals",
+            archive: "research-journals",
+          },
+          {
+            type: "education-training",
+            endpoint: "education-training",
+            archive: "education-training",
+          },
+        ],
+        taxonomies: [
+          {
+            taxonomy: "record",
+            endpoint: "record",
+            postTypeEndpoint: "record",
           },
         ],
       },

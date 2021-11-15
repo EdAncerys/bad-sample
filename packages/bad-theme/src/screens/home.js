@@ -21,9 +21,12 @@ import PromoBlock from "../components/promoBlock";
 import CardList from "../components/cardList";
 import Accordion from "../components/accordion";
 
-const Home = ({ state, actions }) => {
+const Home = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { isLoading } = useAppState();
+
+  const Html2React = libraries.html2react.Components; // to render html contentment
+  // <Html2React html={rendered} /> // get html content from state
 
   const data = state.source.get(state.router.link);
   const home = state.source[data.type];
