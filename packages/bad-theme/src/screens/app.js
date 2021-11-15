@@ -32,11 +32,11 @@ const App = ({ state, actions }) => {
   return (
     <div className="content-container" style={styles.container}>
       <Header />
+      <Directions />
       <LoginModal />
 
       <div className="flex-col">
         <Switch>
-          <Directions when={data.isReady} />
           <Loading when={data.isFetching} />
           <Error when={data.isError} />
 

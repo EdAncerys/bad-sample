@@ -6,8 +6,6 @@ import Loading from "../loading";
 import SearchIcon from "@mui/icons-material/Search";
 
 const PilGuidelines = ({ state, actions }) => {
-  if (!item) return <Loading />;
-
   // SERVERS ---------------------------------------------
   const ServeSearchContainer = () => {
     return (

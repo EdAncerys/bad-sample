@@ -60,6 +60,7 @@ const styles = {
     fontSize: 40,
     fontWeight: "500",
     color: colors.primary,
+    backgroundColor: "#66806A",
   },
 };
 
