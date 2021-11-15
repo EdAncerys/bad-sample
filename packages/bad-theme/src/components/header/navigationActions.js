@@ -6,51 +6,70 @@ import { Dropdown, DropdownButton, NavDropdown } from "react-bootstrap";
 import { colors } from "../../config/colors";
 
 const NavigationActions = ({ state, actions }) => {
-  // HELPERS ---------------------------------------------
+  // SERVERS ---------------------------------------------
+  const ServeDropDownMenu = () => {
+    return (
+      <div className="dropdown">
+        <div>
+          <Dropdown>
+            <Dropdown.Toggle variant="warning btn-m" style={styles.dropDownBtn}>
+              Quick Links
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu style={{ backgroundColor: colors.blue }}>
+              <Dropdown.Item href="#">Arabic</Dropdown.Item>
+              <Dropdown.Item href="#">English</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div style={styles.container}>
-      <Link className="m-2" link="/" style={styles.link}>
-        Guidance & Standards
-      </Link>
-      <Link className="m-2" link="/" style={styles.link}>
-        Clinical Services
-      </Link>
-      <Link className="m-2" link="/" style={styles.link}>
-        Education & Training
-      </Link>
-      <Link className="m-2" link="/" style={styles.link}>
-        Events
-      </Link>
-      <Link className="m-2" link="/" style={styles.link}>
-        Journal & Research
-      </Link>
-      <Link className="m-2" link="/" style={styles.link}>
-        Membership
-      </Link>
-      <NavDropdown title="More" style={styles.link}>
-        <NavDropdown.Item href="#action/3.1" style={styles.link}>
-          Action
-        </NavDropdown.Item>
-        <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-        <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-        <NavDropdown.Divider />
-        <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-      </NavDropdown>
+      <div className="flex-row" style={styles.container}>
+        <Link className="m-2" link="/" style={styles.link}>
+          Guidance & Standards
+        </Link>
+        <Link className="m-2" link="/" style={styles.link}>
+          Clinical Services
+        </Link>
+        <Link className="m-2" link="/" style={styles.link}>
+          Education & Training
+        </Link>
+        <Link className="m-2" link="/" style={styles.link}>
+          Events
+        </Link>
+        <Link className="m-2" link="/" style={styles.link}>
+          Journal & Research
+        </Link>
+        <Link className="m-2" link="/" style={styles.link}>
+          Membership
+        </Link>
+
+        <ServeDropDownMenu />
+      </div>
     </div>
   );
 };
 
 const styles = {
   container: {
-    display: "flex",
-    flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
+    minHeight: 67,
+  },
+  dropDownBtn: {
+    color: colors.textMain,
+    fontSize: 15,
+    backgroundColor: "transparent",
+    textTransform: "capitalize",
+    border: "none",
   },
   link: {
-    fontSize: "0.8em",
-    color: colors.black,
+    color: colors.textMain,
+    fontSize: 15,
     fontTransform: "capitalize",
   },
 };

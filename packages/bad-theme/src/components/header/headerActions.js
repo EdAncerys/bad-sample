@@ -22,11 +22,7 @@ const HeaderActions = ({ state, actions }) => {
   // SERVERS ----------------------------------------------------
   const ServeLogoContainer = () => {
     return (
-      <div
-        style={{
-          display: "flex",
-        }}
-      >
+      <div className="flex">
         <div style={{ width: 385, height: 90 }}>
           <Image src={BADLogo} className="d-block h-100" alt="BAD" />
         </div>
@@ -55,7 +51,11 @@ const HeaderActions = ({ state, actions }) => {
     if (!state.theme.isLoggedIn)
       return (
         <div>
-          <button className="btn btn-warning m-2" onClick={handleLogin}>
+          <button
+            className="btn btn-warning m-2"
+            onClick={handleLogin}
+            style={styles.loginBtn}
+          >
             Login
           </button>
         </div>
@@ -69,14 +69,11 @@ const HeaderActions = ({ state, actions }) => {
       <div className="dropdown">
         <div>
           <Dropdown>
-            <Dropdown.Toggle
-              variant="warning btn-m"
-              style={{ textTransform: "uppercase" }}
-            >
+            <Dropdown.Toggle variant="warning btn-m" style={styles.dropDownBtn}>
               Quick Links
             </Dropdown.Toggle>
 
-            <Dropdown.Menu style={{ backgroundColor: "#73a47" }}>
+            <Dropdown.Menu style={{ backgroundColor: colors.blue }}>
               <Dropdown.Item href="#">Arabic</Dropdown.Item>
               <Dropdown.Item href="#">English</Dropdown.Item>
             </Dropdown.Menu>
@@ -87,16 +84,16 @@ const HeaderActions = ({ state, actions }) => {
   };
 
   return (
-    <div className="flex" style={{ alignItems: "center" }}>
-      <div>
-        <ServeLogoContainer />
-      </div>
+    <div
+      className="flex"
+      style={{ alignItems: "center", borderBottom: `1px solid ${colors.blue}` }}
+    >
+      <ServeLogoContainer />
       <div
         className="flex-row"
         style={{
           justifyContent: "space-around",
           alignItems: "center",
-          paddingLeft: `1em`,
         }}
       >
         <ServeSearchContainer />
@@ -109,6 +106,19 @@ const HeaderActions = ({ state, actions }) => {
 
 const styles = {
   container: {},
+  dropDownBtn: {
+    fontSize: 16,
+    backgroundColor: colors.lightSilver,
+    textTransform: "capitalize",
+    border: "none",
+  },
+  loginBtn: {
+    fontSize: 16,
+    color: colors.white,
+    backgroundColor: colors.blue,
+    textTransform: "capitalize",
+    border: "none",
+  },
 };
 
 export default connect(HeaderActions);

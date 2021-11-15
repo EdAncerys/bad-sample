@@ -37,7 +37,7 @@ const home = ({ state, actions }) => {
       </div>
       {/* <HomeCarousel item={DATA} /> */}
       {/* <PilGuidelines item={DATA} /> */}
-      <ButtonsRow item={DATA} />
+      {/* <ButtonsRow item={DATA} /> */}
       {/* <HeroBanner item={DATA} /> */}
       {/* <JournalPromoBlock item={DATA} /> */}
       {/* <MultiPostBlock item={DATA} /> */}
