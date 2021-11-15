@@ -29,7 +29,7 @@ const App = ({ state, actions }) => {
   // console.log("index data----", data); // debug
 
   return (
-    <div className="content-container flex-col" style={styles.container}>
+    <div className="content-container" style={styles.container}>
       <Header />
       <LoginModal />
 
@@ -55,6 +55,10 @@ const styles = {
   container: {
     backgroundColor: colors.lightSilver,
     color: colors.textMain,
+    // apply full height to viewport
+    display: "flex",
+    flexDirection: "column",
+    minHeight: "100vh",
   },
 };
 
