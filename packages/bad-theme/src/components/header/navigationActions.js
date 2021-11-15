@@ -29,22 +29,22 @@ const NavigationActions = ({ state, actions }) => {
   return (
     <div style={styles.container}>
       <div className="flex-row" style={styles.container}>
-        <Link className="m-2" link="/" style={styles.link}>
+        <Link link="/" style={styles.link}>
           Guidance & Standards
         </Link>
-        <Link className="m-2" link="/" style={styles.link}>
+        <Link link="/" style={styles.link}>
           Clinical Services
         </Link>
-        <Link className="m-2" link="/" style={styles.link}>
+        <Link link="/" style={styles.link}>
           Education & Training
         </Link>
-        <Link className="m-2" link="/" style={styles.link}>
+        <Link link="/" style={styles.link}>
           Events
         </Link>
-        <Link className="m-2" link="/" style={styles.link}>
+        <Link link="/" style={styles.link}>
           Journal & Research
         </Link>
-        <Link className="m-2" link="/" style={styles.link}>
+        <Link link="/" style={styles.link}>
           Membership
         </Link>
 
@@ -56,7 +56,7 @@ const NavigationActions = ({ state, actions }) => {
 
 const styles = {
   container: {
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     alignItems: "center",
     minHeight: 67,
   },

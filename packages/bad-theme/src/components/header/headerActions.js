@@ -24,7 +24,7 @@ const HeaderActions = ({ state, actions }) => {
     return (
       <div className="flex">
         <div style={{ width: 385, height: 90 }}>
-          <Image src={BADLogo} className="d-block h-100" alt="BAD" />
+          <Image src={BADLogo} className="d-block h-100" alt="BAD Logo" />
         </div>
       </div>
     );
