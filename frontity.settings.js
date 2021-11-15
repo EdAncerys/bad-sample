@@ -31,7 +31,7 @@ const settings = {
       name: "@frontity/wp-source",
       state: {
         source: {
-          url: "http://localhost:8888/bad/",
+          url: "http://3.9.193.188/",
         },
         postTypes: [
           {

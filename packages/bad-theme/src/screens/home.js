@@ -21,10 +21,13 @@ import PromoBlock from "../components/promoBlock";
 import CardList from "../components/cardList";
 import Accordion from "../components/accordion";
 
-const home = ({ state, actions }) => {
+const Home = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { isLoading } = useAppState();
+
   const data = state.source.get(state.router.link);
+  const home = state.source[data.type];
+  console.log("home data: ", home); // debug
 
   const handleSetLoading = () => {
     setLoadingAction({ dispatch, isLoading: true });
@@ -33,7 +36,7 @@ const home = ({ state, actions }) => {
   return (
     <div>
       <div>
-        <p style={styles.title}>BAD</p>
+        <p style={styles.title}>BAD Home</p>
       </div>
       {/* <HomeCarousel item={DATA} /> */}
       {/* <PilGuidelines item={DATA} /> */}
@@ -64,4 +67,4 @@ const styles = {
   },
 };
 
-export default connect(home);
+export default connect(Home);

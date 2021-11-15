@@ -5,9 +5,9 @@ import { colors } from "../config/colors";
 
 const Post = ({ state }) => {
   const data = state.source.get(state.router.link);
-  const post = state.source[data.type][data.id];
-  const author = state.source.author[post.author];
-  // console.log("data ", data); // debug
+  const page = state.source[data.type][data.id];
+  const author = state.source.author[page.author];
+  console.log("page data: ", page); // debug
 
   return (
     <div>
