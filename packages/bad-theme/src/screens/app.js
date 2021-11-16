@@ -12,6 +12,7 @@ import CreateAccount from "./createAccount";
 import LoginModal from "../components/loginModal";
 import Footer from "../components/footer";
 import Directions from "../components/directions";
+import BlocksPage from "../Test/blocksPage";
 // SCREEN HELPERS ---------------------------------------------------------
 import Loading from "../components/loading";
 import Error from "./error";
@@ -27,7 +28,7 @@ const App = ({ state, actions }) => {
 
   const endPoint = state.router.link;
   const data = state.source.get(endPoint);
-  console.log("index data----", data); // debug
+  // console.log("INDEX data", data); // debug
 
   return (
     <div className="content-container" style={styles.container}>
@@ -39,6 +40,8 @@ const App = ({ state, actions }) => {
         <Switch>
           <Loading when={data.isFetching} />
           <Error when={data.isError} />
+
+          <BlocksPage when={data.route === "/blocks-page/"} />
 
           <Login when={endPoint === "/login/"} />
           <CreateAccount when={endPoint === "/create-account/"} />

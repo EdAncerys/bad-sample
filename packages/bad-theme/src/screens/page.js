@@ -7,7 +7,7 @@ const Post = ({ state }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
   const author = state.source.author[page.author];
-  // console.log("page data: ", page); // debug
+  console.log("page data: ", data); // debug
 
   return (
     <div>

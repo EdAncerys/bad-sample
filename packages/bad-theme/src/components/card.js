@@ -14,6 +14,7 @@ const Card = ({
   themeColor,
   imgUrl,
   formUrl,
+  bodyLength,
   cardWidth,
   cardHeight,
 }) => {
@@ -129,11 +130,11 @@ const Card = ({
     const ServeBody = () => {
       if (imgUrl) return null;
       if (!body) return null;
-
+      console.log(bodyLength);
       // Manage max string Length
-      const MAX_LENGTH = 150;
+      const MAX_LENGTH = bodyLength || 400;
       let bodyPreview = `${body.substring(0, MAX_LENGTH)}...`;
-      if (title.length < MAX_LENGTH) bodyPreview = body;
+      if (body.length < MAX_LENGTH) bodyPreview = body;
 
       return (
         <div className="flex mt-2" style={{ overflow: "auto" }}>

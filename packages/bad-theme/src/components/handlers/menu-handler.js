@@ -3,7 +3,7 @@ const menuHandler = {
   priority: 10,
   pattern: "/menu/:slug",
   func: async ({ link, params, state, libraries }) => {
-    console.log("PARAMS:", params);
+    // console.log("PARAMS:", params);
     const { slug } = params;
 
     // Fetch the menu data from the endpoint
@@ -16,7 +16,7 @@ const menuHandler = {
 
     // Add the menu items to source.data
     const menu = state.source.data[link];
-    console.log("link", link); //debug
+    // console.log("link", link); //debug
 
     Object.assign(menu, {
       items: menuData.items,

@@ -4,7 +4,7 @@ import { colors } from "../config/colors";
 
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
-const SCREEN_NAME = ({ state, actions }) => {
+const Directions = ({ state, actions }) => {
   const endPoint = state.router.link;
   const data = state.source.get(endPoint);
 
@@ -95,4 +95,4 @@ const styles = {
   },
 };
 
-export default connect(SCREEN_NAME);
+export default connect(Directions);

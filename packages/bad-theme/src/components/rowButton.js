@@ -3,22 +3,22 @@ import { connect } from "frontity";
 import { colors } from "../config/colors";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
-const RowButton = ({ state, actions, item, buttonWidth }) => {
-  const { title, theme, url } = item;
+const RowButton = ({ state, actions, block, buttonWidth }) => {
+  const { label, theme, link } = block;
   const THEME = colors[theme] || colors.primary;
 
   // Manage max string Length
   const MAX_LENGTH = 24;
   let titlePreview;
-  if (title) {
-    titlePreview = `${title.substring(0, MAX_LENGTH)}...`;
-    if (title.length < MAX_LENGTH) titlePreview = title;
+  if (label) {
+    titlePreview = `${label.substring(0, MAX_LENGTH)}...`;
+    if (label.length < MAX_LENGTH) titlePreview = label;
   }
 
   // HELPERS ---------------------------------------------
   const handleGoToPath = () => {
-    actions.router.set(`${url}`);
-    console.log("url", url);
+    actions.router.set(`${link}`);
+    // console.log("link", link); // debug
   };
 
   // SERVERS --------------------------------------------
