@@ -7,7 +7,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import Loading from "../loading";
 
-const NewsCarousel = ({ state, actions, block }) => {
+const HomeBannerCarousel = ({ state, actions, block }) => {
   const CAROUSEL_HEIGHT = 400;
 
   // SERVERS ----------------------------------------------------------------
@@ -52,7 +52,7 @@ const NewsCarousel = ({ state, actions, block }) => {
             actions.router.set(`${link}`);
           };
 
-          // SERVERS ----------------------------------------------------------------
+          // SERVERS ----------------------------------------------------
           const ServeFindOutMoreAction = () => {
             return (
               <button
@@ -137,4 +137,4 @@ const styles = {
   container: {},
 };
 
-export default connect(NewsCarousel);
+export default connect(HomeBannerCarousel);

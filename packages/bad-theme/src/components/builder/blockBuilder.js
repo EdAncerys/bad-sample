@@ -15,7 +15,7 @@ import Banner from "../../components/banner";
 import NewsCarousel from "../../components/newsCarousel";
 import Footer from "../../components/footer";
 import ProfilesBlock from "../../components/profilesBlock";
-import TextBanner from "../../components/textBanner";
+import FullWidthContentBlock from "../fullWidthContentBlock";
 import PromoBlock from "../../components/promoBlock";
 import CardList from "../../components/cardList";
 import Accordion from "../../components/accordion";
@@ -25,7 +25,7 @@ const Home = ({ state, actions, libraries, blocks }) => {
   const { isLoading } = useAppState();
   // console.log("BLOCKS: ", blocks); // debug
 
-  const Html2React = libraries.html2react.Components; // to render html contentment
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   // <Html2React html={rendered} /> // get html content from state
 
   const handleSetLoading = () => {
@@ -40,11 +40,15 @@ const Home = ({ state, actions, libraries, blocks }) => {
       <div>
         {blocks.map((block, key) => {
           const { acf_fc_layout } = block;
-          if (acf_fc_layout === "home_banner_carousel")
+          // console.log("CONTENT BLOCK", block);
+          if (acf_fc_layout === "full_width_content-block")
             console.log("CONTENT BLOCK", block);
 
-          if (acf_fc_layout === "home_banner_carousel")
-            return <HomeBannerCarousel key={key} block={block} />;
+          if (acf_fc_layout === "full_width_content-block")
+            return <FullWidthContentBlock key={key} block={block} />;
+
+          // if (acf_fc_layout === "home_banner_carousel")
+          //   return <HomeBannerCarousel key={key} block={block} />;
 
           // if (acf_fc_layout === "hero_banner")
           //   return <HeroBanner key={key} block={block} />;

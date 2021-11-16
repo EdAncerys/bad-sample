@@ -4,16 +4,29 @@ import { colors } from "../config/colors";
 
 import Loading from "./loading";
 
-const Banner = ({ state, actions, item, alignContent }) => {
-  // alignContent value can be set to 'center' | 'start' | 'end'
+const FullWidthContentBlock = ({ state, actions, libraries, block }) => {
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  if (!item) return <Loading />;
+  if (!block) return <Loading />;
 
   const BANNER_HEIGHT = 300;
-  const { title, body, url } = item;
+  const {
+    add_button,
+    background_colour,
+    body,
+    label,
+    link,
+    padding,
+    text_align,
+    title,
+  } = block;
+
+  let PADDING = `0 20%`;
   let ALIGNMENT = "start";
-  if (alignContent === "center") ALIGNMENT = "center";
-  if (alignContent === "end") ALIGNMENT = "end";
+  if (text_align === "centre") ALIGNMENT = "center";
+  if (text_align === "right") ALIGNMENT = "end";
+  if (padding === "small") PADDING = `0 10%`;
+  if (padding === "large") PADDING = `0 25%`;
 
   // SERVERS ----------------------------------------------------------------
   const ServeTitle = () => {
@@ -39,11 +52,6 @@ const Banner = ({ state, actions, item, alignContent }) => {
   const ServeCardBody = () => {
     if (!body) return null;
 
-    // Manage max string Length
-    const MAX_LENGTH = 200;
-    let bodyPreview = `${body.substring(0, MAX_LENGTH)}...`;
-    if (body.length < MAX_LENGTH) bodyPreview = body;
-
     return (
       <div
         className="flex-col"
@@ -55,17 +63,19 @@ const Banner = ({ state, actions, item, alignContent }) => {
           // overflow: "auto",
         }}
       >
-        <h5 className="flex card-text">{bodyPreview}</h5>
+        <div className="card-text">
+          <Html2React html={body} />
+        </div>
       </div>
     );
   };
 
   const ServeActions = () => {
-    if (!url) return null;
+    if (!add_button) return null;
 
     // HELPERS ----------------------------------------------------
     const handleGoToAction = () => {
-      actions.router.set(`${url}`);
+      actions.router.set(`${link}`);
     };
 
     return (
@@ -81,7 +91,7 @@ const Banner = ({ state, actions, item, alignContent }) => {
             }}
             onClick={handleGoToAction}
           >
-            <span>Find out more</span>
+            <span>{label}</span>
           </button>
         </div>
       </div>
@@ -91,19 +101,16 @@ const Banner = ({ state, actions, item, alignContent }) => {
   // RETURN ---------------------------------------------------
   return (
     <div
-      className="flex"
+      className="flex-col"
       style={{
-        border: "none",
+        justifyContent: "center",
         textAlign: ALIGNMENT,
+        backgroundColor: background_colour || "transparent",
+        minHeight: BANNER_HEIGHT,
+        padding: `2em 0`,
       }}
     >
-      <div
-        style={{
-          minHeight: BANNER_HEIGHT,
-          border: "none",
-          padding: `3em 20%`,
-        }}
-      >
+      <div style={{ margin: PADDING }}>
         <ServeTitle />
         <ServeCardBody />
         <ServeActions />
@@ -116,4 +123,4 @@ const styles = {
   container: {},
 };
 
-export default connect(Banner);
+export default connect(FullWidthContentBlock);

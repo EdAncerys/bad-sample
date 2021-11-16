@@ -3,7 +3,7 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
 import Loading from "./loading";
-import TextBanner from "./textBanner";
+import FullWidthContentBlock from "./fullWidthContentBlock";
 import { colors } from "../config/colors";
 
 const PromoBlock = ({ state, actions, item, reverse }) => {
@@ -38,7 +38,7 @@ const PromoBlock = ({ state, actions, item, reverse }) => {
   // RETURN ---------------------------------------------------
   return (
     <div className={MAIN_AXIS} style={styles.container}>
-      <TextBanner item={item} alignContent="start" />
+      <FullWidthContentBlock item={item} alignContent="start" />
       <ServeCardImage />
     </div>
   );

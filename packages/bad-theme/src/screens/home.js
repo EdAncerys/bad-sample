@@ -16,7 +16,7 @@ import Banner from "../components/banner";
 import NewsCarousel from "../components/newsCarousel";
 import Footer from "../components/footer";
 import ProfilesBlock from "../components/profilesBlock";
-import TextBanner from "../components/textBanner";
+import FullWidthContentBlock from "../components/fullWidthContentBlock";
 import PromoBlock from "../components/promoBlock";
 import CardList from "../components/cardList";
 import Accordion from "../components/accordion";
@@ -52,7 +52,7 @@ const Home = ({ state, actions, libraries }) => {
       {/* <NewsCarousel item={DATA} /> */}
       {/* <Footer /> */}
       {/* <ProfilesBlock item={DATA} /> */}
-      {/* <TextBanner item={DATA[2]} alignContent="center" /> */}
+      {/* <FullWidthContentBlock item={DATA[2]} alignContent="center" /> */}
       {/* <PromoBlock item={DATA[2]} reverse /> */}
       {/* <CardList item={DATA} /> */}
       {/* <Accordion item={DATA} /> */}

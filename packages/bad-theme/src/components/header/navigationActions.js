@@ -5,7 +5,8 @@ import { Dropdown, DropdownButton, NavDropdown } from "react-bootstrap";
 
 import { colors } from "../../config/colors";
 
-const NavigationActions = ({ state, actions }) => {
+const NavigationActions = ({ state, actions, libraries }) => {
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const [wpMainMenu, setWpMainMenu] = useState([]);
   const [wpMoreMenu, setWpMoreMenu] = useState([]);
   const NAV_DIVIDER = 8;
@@ -25,7 +26,7 @@ const NavigationActions = ({ state, actions }) => {
     return (
       <div>
         <Dropdown.Item key={ID} href={`${slug}`}>
-          {title}
+          <Html2React html={title} />
         </Dropdown.Item>
         {child_items.map((item) => {
           const { ID, title, slug } = item;
@@ -38,7 +39,9 @@ const NavigationActions = ({ state, actions }) => {
                 backgroundColor: colors.lightSilver,
               }}
             >
-              <Dropdown.Item href={`${slug}`}>{title}</Dropdown.Item>
+              <Dropdown.Item href={`${slug}`}>
+                <Html2React html={title} />
+              </Dropdown.Item>
             </div>
           );
         })}
@@ -65,7 +68,9 @@ const NavigationActions = ({ state, actions }) => {
 
               return (
                 <div key={ID}>
-                  <Dropdown.Item href={`${slug}`}>{title}</Dropdown.Item>
+                  <Dropdown.Item href={`${slug}`}>
+                    <Html2React html={title} />
+                  </Dropdown.Item>
                 </div>
               );
             })}
@@ -82,7 +87,7 @@ const NavigationActions = ({ state, actions }) => {
       <div className="dropdown">
         <Dropdown>
           <Dropdown.Toggle variant="btn-m" style={styles.dropDownBtn}>
-            {title}
+            <Html2React html={title} />
           </Dropdown.Toggle>
 
           <Dropdown.Menu style={styles.dropDown}>
@@ -91,7 +96,9 @@ const NavigationActions = ({ state, actions }) => {
 
               return (
                 <div key={ID}>
-                  <Dropdown.Item href={`${slug}`}>{title}</Dropdown.Item>
+                  <Dropdown.Item href={`${slug}`}>
+                    <Html2React html={title} />
+                  </Dropdown.Item>
                 </div>
               );
             })}
@@ -109,7 +116,7 @@ const NavigationActions = ({ state, actions }) => {
     return (
       <div>
         <Link link={`${slug}`} style={styles.link}>
-          {title}
+          <Html2React html={title} />
         </Link>
       </div>
     );
