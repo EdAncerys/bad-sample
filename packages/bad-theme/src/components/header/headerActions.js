@@ -6,8 +6,13 @@ import { Dropdown } from "react-bootstrap";
 
 import BADLogo from "../../img/svg/badLogoHeader.svg";
 import SearchIcon from "@mui/icons-material/Search";
+// CONTEXT ----------------------------------------------------------------
+import { useAppDispatch, useAppState, setLoginAction } from "../../context";
 
 const HeaderActions = ({ state, actions }) => {
+  const dispatch = useAppDispatch();
+  const { setLogin } = useAppState();
+
   // HELPERS ----------------------------------------------------
   const handleLogin = () => {
     setLoginAction({ dispatch, setLogin: !setLogin });
@@ -59,7 +64,7 @@ const HeaderActions = ({ state, actions }) => {
       return (
         <div>
           <button
-            className="btn btn-warning m-2"
+            className="btn shadow-none m-2"
             onClick={handleLogin}
             style={styles.loginBtn}
           >
@@ -76,11 +81,14 @@ const HeaderActions = ({ state, actions }) => {
       <div className="dropdown">
         <div>
           <Dropdown>
-            <Dropdown.Toggle variant="warning btn-m" style={styles.dropDownBtn}>
+            <Dropdown.Toggle
+              variant="shadow-none btn-m"
+              style={styles.dropDownBtn}
+            >
               Quick Links
             </Dropdown.Toggle>
 
-            <Dropdown.Menu style={{ backgroundColor: colors.blue }}>
+            <Dropdown.Menu style={styles.dropDown}>
               <Dropdown.Item href="#">Arabic</Dropdown.Item>
               <Dropdown.Item href="#">English</Dropdown.Item>
             </Dropdown.Menu>
@@ -118,6 +126,9 @@ const styles = {
     backgroundColor: colors.lightSilver,
     textTransform: "capitalize",
     border: "none",
+  },
+  dropDown: {
+    backgroundColor: colors.lightSilver,
   },
   loginBtn: {
     fontSize: 16,

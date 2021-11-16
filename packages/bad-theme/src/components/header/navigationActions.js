@@ -85,7 +85,7 @@ const NavigationActions = ({ state, actions }) => {
             {title}
           </Dropdown.Toggle>
 
-          <Dropdown.Menu style={{ backgroundColor: colors.lightSilver }}>
+          <Dropdown.Menu style={styles.dropDown}>
             {child_items.map((item) => {
               const { ID, title, slug } = item;
 
@@ -142,6 +142,9 @@ const styles = {
     backgroundColor: "transparent",
     textTransform: "capitalize",
     border: "none",
+  },
+  dropDown: {
+    backgroundColor: colors.lightSilver,
   },
   link: {
     color: colors.textMain,
