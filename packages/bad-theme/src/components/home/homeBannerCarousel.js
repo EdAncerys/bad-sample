@@ -7,7 +7,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import Loading from "../loading";
 
-const NewsCarousel = ({ state, actions, item }) => {
+const NewsCarousel = ({ state, actions, block }) => {
   const CAROUSEL_HEIGHT = 400;
 
   // SERVERS ----------------------------------------------------------------
@@ -26,17 +26,30 @@ const NewsCarousel = ({ state, actions, item }) => {
     );
   };
 
-  if (!item) return <Loading />;
+  if (!block) return <Loading />;
   // RETURN ---------------------------------------------------
   return (
     <div>
       <Carousel>
-        {item.map((item) => {
-          const { imgUrl, url, title } = item;
+        {block.slides.map((block, index) => {
+          const {
+            add_button,
+            background_image,
+            category,
+            label,
+            link,
+            selected_page,
+            selected_post,
+            slide_type,
+            title,
+          } = block;
+
+          let THEME_COLOR = colors.white;
+          if (!background_image) THEME_COLOR = colors.danger;
 
           // HELPERS ----------------------------------------------------
           const handleGoToAction = () => {
-            actions.router.set(`${url}`);
+            actions.router.set(`${link}`);
           };
 
           // SERVERS ----------------------------------------------------------------
@@ -44,21 +57,28 @@ const NewsCarousel = ({ state, actions, item }) => {
             return (
               <button
                 className="btn btn-outline-light flex-center-row mt-4"
-                style={{ textTransform: "uppercase" }}
+                style={{
+                  textTransform: "uppercase",
+                  color: THEME_COLOR,
+                  borderColor: THEME_COLOR,
+                }}
                 onClick={handleGoToAction}
               >
-                <div>Find out more</div>
+                <div>{label}</div>
                 <div>
-                  <KeyboardArrowRightIcon style={{ fill: colors.white }} />
+                  <KeyboardArrowRightIcon style={{ fill: THEME_COLOR }} />
                 </div>
               </button>
             );
           };
 
           const ServeEventAction = () => {
+            if (!add_button) return null;
+
             return (
               <button
                 className="btn btn-outline-light flex-center-row mb-4"
+                style={{ color: THEME_COLOR, borderColor: THEME_COLOR }}
                 onClick={handleGoToAction}
               >
                 <div>Event</div>
@@ -66,18 +86,35 @@ const NewsCarousel = ({ state, actions, item }) => {
             );
           };
 
+          const ServeCardImage = () => {
+            if (!background_image) return null;
+            const alt = title || "BAD";
+
+            return (
+              <div
+                style={{ width: "100%", height: "100%", overflow: "hidden" }}
+              >
+                <Image
+                  src={background_image.url}
+                  className="d-block h-100"
+                  alt={alt}
+                />
+                <ServeOverlay />
+              </div>
+            );
+          };
+
           return (
-            <Carousel.Item key={item.id}>
+            <Carousel.Item key={index}>
               <div
                 style={{
                   position: "relative",
                   height: CAROUSEL_HEIGHT,
                 }}
               >
-                <Image className="d-block h-100" src={imgUrl} alt="Title" />
-                <ServeOverlay />
+                <ServeCardImage />
                 <div style={{ paddingLeft: "2em" }}>
-                  <Carousel.Caption>
+                  <Carousel.Caption style={{ color: THEME_COLOR }}>
                     <ServeEventAction />
                     <div style={{ maxWidth: "75%" }}>
                       <h3 style={{ fontSize: "2em", textAlign: "start" }}>

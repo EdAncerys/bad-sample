@@ -4,7 +4,7 @@ import { colors } from "../../config/colors";
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, useAppState, setLoadingAction } from "../../context";
 // COMPONENTS ----------------------------------------------------------------
-import HomeCarousel from "../../components/home/HomeCarousel";
+import HomeBannerCarousel from "../home/homeBannerCarousel";
 import PilGuidelines from "../../components/home/pilGuidelines";
 import JournalPromoBlock from "../../components/home/journalPromoBlock";
 import ButtonsRow from "../../components/buttonsRow";
@@ -40,10 +40,14 @@ const Home = ({ state, actions, libraries, blocks }) => {
       <div>
         {blocks.map((block, key) => {
           const { acf_fc_layout } = block;
+          if (acf_fc_layout === "home_banner_carousel")
+            console.log("CONTENT BLOCK", block);
 
-          // if (acf_fc_layout === "hero_banner") console.log(block);
-          if (acf_fc_layout === "hero_banner")
-            return <HeroBanner key={key} block={block} />;
+          if (acf_fc_layout === "home_banner_carousel")
+            return <HomeBannerCarousel key={key} block={block} />;
+
+          // if (acf_fc_layout === "hero_banner")
+          //   return <HeroBanner key={key} block={block} />;
 
           return null;
         })}

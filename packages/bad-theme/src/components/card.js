@@ -130,7 +130,7 @@ const Card = ({
     const ServeBody = () => {
       if (imgUrl) return null;
       if (!body) return null;
-      console.log(bodyLength);
+
       // Manage max string Length
       const MAX_LENGTH = bodyLength || 400;
       let bodyPreview = `${body.substring(0, MAX_LENGTH)}...`;

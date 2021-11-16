@@ -5,7 +5,7 @@ import { DATA } from "../config/data";
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, useAppState, setLoadingAction } from "../context";
 // COMPONENTS ----------------------------------------------------------------
-import HomeCarousel from "../components/home/HomeCarousel";
+import HomeBannerCarousel from "../components/home/homeBannerCarousel";
 import PilGuidelines from "../components/home/pilGuidelines";
 import JournalPromoBlock from "../components/home/journalPromoBlock";
 import ButtonsRow from "../components/buttonsRow";
@@ -41,7 +41,7 @@ const Home = ({ state, actions, libraries }) => {
       <div>
         <p style={styles.title}>BAD Home</p>
       </div>
-      {/* <HomeCarousel item={DATA} /> */}
+      {/* <HomeBannerCarousel item={DATA} /> */}
       {/* <PilGuidelines item={DATA} /> */}
       {/* <ButtonsRow item={DATA} /> */}
       {/* <HeroBanner item={DATA} /> */}

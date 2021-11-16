@@ -7,7 +7,7 @@ import Loading from "./loading";
 import ButtonsRow from "./buttonsRow";
 
 const HeroBanner = ({ state, actions, libraries, block }) => {
-  console.log("HeroBanner Triggered", block); //debug
+  // console.log("HeroBanner Triggered"); //debug
   const [image, setImage] = useState(null);
 
   if (!block) return <Loading />;
@@ -118,7 +118,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
 
     return (
       <div
-        className="flex tom"
+        className="flex"
         style={{ width: "100%", height: BANNER_HEIGHT, overflow: "hidden" }}
       >
         <Image src={background_image} className="d-block h-100" alt={alt} />
