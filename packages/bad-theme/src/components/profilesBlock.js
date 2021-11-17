@@ -37,8 +37,8 @@ const ProfilesBlock = ({ state, actions, item }) => {
   return (
     <div>
       <div className="flex" style={styles.container}>
-        {item.map((item) => {
-          return <Profile key={item.id} item={item} />;
+        {item.map((item, key) => {
+          return <Profile key={key} item={item} />;
         })}
       </div>
       <ServeActions />

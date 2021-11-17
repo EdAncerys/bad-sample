@@ -5,8 +5,10 @@ import Accordion from "react-bootstrap/Accordion";
 
 import Loading from "./loading";
 
-const Card = ({ state, actions, item }) => {
-  if (!item) return <Loading />;
+const Card = ({ state, actions, libraries, block }) => {
+  if (!block) return <Loading />;
+
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   // HELPERS ---------------------------------------------
   const handleGoToPath = () => {
@@ -39,21 +41,18 @@ const Card = ({ state, actions, item }) => {
     );
   };
 
-  const ServeCardBody = ({ item }) => {
-    const { title, body } = item;
+  const ServeCardBody = ({ block, eventKey }) => {
+    const { title, body } = block;
     if (!title) return null;
 
     const ServeTitle = () => {
       if (!title) return null;
 
-      // Manage max string Length
-      const MAX_LENGTH = 100;
-      let titlePreview = `${title.substring(0, MAX_LENGTH)}...`;
-      if (title.length < MAX_LENGTH) titlePreview = title;
-
       return (
         <div style={{ position: "relative" }}>
-          <Accordion.Header>{titlePreview}</Accordion.Header>
+          <Accordion.Header>
+            <Html2React html={title} />
+          </Accordion.Header>
         </div>
       );
     };
@@ -61,22 +60,17 @@ const Card = ({ state, actions, item }) => {
     const ServeBody = () => {
       if (!body) return null;
 
-      // Manage max string Length
-      const MAX_LENGTH = 300;
-      let bodyPreview = `${body.substring(0, MAX_LENGTH)}...`;
-      if (body.length < MAX_LENGTH) bodyPreview = body;
-
       return (
         <Accordion.Body>
           <ServeDivider />
-          {bodyPreview}
+          <Html2React html={body} />
         </Accordion.Body>
       );
     };
 
     return (
       <Accordion.Item
-        eventKey={item.id}
+        eventKey={eventKey}
         className="shadow"
         style={{ margin: "10px 0" }}
       >
@@ -90,8 +84,8 @@ const Card = ({ state, actions, item }) => {
   return (
     <div>
       <Accordion>
-        {item.map((item) => {
-          return <ServeCardBody key={item.id} item={item} />;
+        {block.accordion_item.map((block, key) => {
+          return <ServeCardBody key={key} eventKey={key} block={block} />;
         })}
       </Accordion>
     </div>

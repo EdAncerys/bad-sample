@@ -41,8 +41,13 @@ const Home = ({ state, actions, libraries, blocks }) => {
       <div>
         {blocks.map((block, key) => {
           const { acf_fc_layout } = block;
+          console.log("CONTENT BLOCK", block); // debug
+
           // if (acf_fc_layout === "journal_promo_block")
           //   console.log("CONTENT BLOCK", block);
+
+          if (acf_fc_layout === "accordion")
+            return <Accordion key={key} block={block} />;
 
           if (acf_fc_layout === "journal_promo_block")
             return <JournalPromoBlock key={key} block={block} />;
@@ -56,7 +61,6 @@ const Home = ({ state, actions, libraries, blocks }) => {
           if (acf_fc_layout === "hero_banner")
             return <HeroBanner key={key} block={block} />;
 
-          console.log("CONTENT BLOCK", block); // debug
           return null;
         })}
       </div>

@@ -87,8 +87,8 @@ const Card = ({ state, actions, item, themeColor, cardWidth, cardHeight }) => {
           >
             Our values
           </li>
-          {item.map((item) => {
-            return <ServeCardBody key={item.id} item={item} />;
+          {item.map((item, key) => {
+            return <ServeCardBody key={key} item={item} />;
           })}
         </ul>
       </div>

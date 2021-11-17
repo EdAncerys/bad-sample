@@ -46,11 +46,11 @@ const NewsCarousel = ({ state, actions, item }) => {
         url="/learn-more"
       />
       <Carousel className="news-carousel">
-        {item.map((item) => {
+        {item.map((item, key) => {
           const { imgUrl, body, title } = item;
 
           return (
-            <Carousel.Item key={item.id}>
+            <Carousel.Item key={key}>
               <ServeIcon icon={LeftIcon} left />
               <ServeIcon icon={RightIcon} right />
               <div

@@ -56,7 +56,7 @@ const Home = ({ state, actions, libraries }) => {
       {/* <FullWidthContentBlock item={DATA[2]} alignContent="center" /> */}
       <PromoBlock item={DATA[2]} reverse />
       <CardList item={DATA} />
-      <Accordion item={DATA} />
+      {/* <Accordion item={DATA} /> */}
       <CardFS
         title={`${DATA.title}`}
         body={`${DATA.body}`}
