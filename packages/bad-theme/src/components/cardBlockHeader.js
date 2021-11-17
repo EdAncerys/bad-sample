@@ -11,12 +11,9 @@ const CardBlockHeader = ({ state, actions, title, urlTitle, url }) => {
 
   return (
     <div>
-      <div className="flex-row mt-4 mb-2">
+      <div className="flex-row">
         <div className="flex">
-          <h5
-            className="card-title"
-            style={{ paddingLeft: 15, fontSize: "1.75em" }}
-          >
+          <h5 className="card-title" style={{ fontSize: "1.75em" }}>
             {title}
           </h5>
         </div>

@@ -26,7 +26,7 @@ const MultiPostBlock = ({ state, actions, item }) => {
                 cardTitle="Officers Of The BAD"
                 title={title}
                 body={body}
-                url={url}
+                link={url}
                 cardWidth="90%" // optional param
                 // imgUrl={imgUrl} // optional param
                 shadow // optional param

@@ -6,10 +6,11 @@ import Image from "@frontity/components/image";
 const Card = ({
   state,
   actions,
+  color,
   cardTitle,
   title,
   body,
-  url,
+  link,
   textAlign,
   themeColor,
   imgUrl,
@@ -20,13 +21,13 @@ const Card = ({
   cardHeight,
 }) => {
   const TEXT_ALIGN = textAlign || "start";
-  const THEME = themeColor || colors.primary;
+  const THEME = color || colors.primary;
   const SHADOW = shadow ? "shadow" : "";
 
   // HELPERS ---------------------------------------------
   const handleGoToPath = () => {
-    actions.router.set(`${url}`);
-    console.log("url", url);
+    actions.router.set(`${link}`);
+    // console.log("link", link); // debug
   };
 
   // SERVERS ----------------------------------------------
@@ -47,7 +48,9 @@ const Card = ({
     const alt = title || "BAD";
 
     return (
-      <div style={{ width: "100%", height: 125, overflow: "hidden" }}>
+      <div
+        style={{ width: "100%", height: body ? 125 : 200, overflow: "hidden" }}
+      >
         <Image src={imgUrl} className="d-block h-100" alt={alt} />
       </div>
     );
@@ -192,6 +195,7 @@ const styles = {
   footerActionTitle: {
     marginRight: 25,
     borderBottom: `1px solid ${colors.black}`,
+    cursor: "pointer",
   },
 };
 

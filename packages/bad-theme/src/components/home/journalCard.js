@@ -103,7 +103,7 @@ const JournalCard = ({ state, actions, block }) => {
       className="flex shadow"
       style={{
         minWidth: CARD_WIDTH,
-        margin: `1em auto`,
+        margin: `0 auto 1em`,
         width: "90%",
       }}
     >

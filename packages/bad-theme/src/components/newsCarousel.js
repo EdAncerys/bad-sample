@@ -3,17 +3,26 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Carousel } from "react-bootstrap";
 import { colors } from "../config/colors";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+
+import Loading from "./loading";
 
 import CardBlockHeader from "./cardBlockHeader";
 import Card from "./card";
 import LeftIcon from "../img/svg/leftIcon.svg";
 import RightIcon from "../img/svg/rightIcon.svg";
-import IndicatorActive from "../img/svg/indicatorActive.svg";
-import IndicatorInactive from "../img/svg/indicatorInactive.svg";
 
-const NewsCarousel = ({ state, actions, item }) => {
-  const CAROUSEL_HEIGHT = 400;
+const NewsCarousel = ({ state, actions, libraries, block }) => {
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
+  if (!block) return <Loading />;
+
+  const BLOCK_PAIRS = block.news_card.flatMap((_, i, a) =>
+    i % 2 ? [] : [a.slice(i, i + 2)]
+  ); // split data in array of pairs
+
+  console.log("BLOCK_PAIRS", BLOCK_PAIRS);
+
+  const BANNER_HEIGHT = state.theme.bannerHeight;
 
   // SERVERS ----------------------------------------------------------------
   const ServeIcon = ({ icon, left, right }) => {
@@ -27,7 +36,7 @@ const NewsCarousel = ({ state, actions, item }) => {
           width: 25,
           height: 40,
           cursor: "pointer",
-          top: CAROUSEL_HEIGHT / 2,
+          top: BANNER_HEIGHT / 2,
           right: right ? 0 : "",
           marginLeft: left ? "1.5em" : "",
           marginRight: right ? "1.5em" : "",
@@ -41,40 +50,41 @@ const NewsCarousel = ({ state, actions, item }) => {
   return (
     <div>
       <CardBlockHeader
-        title="Latest News & Media"
+        title={block.title}
         urlTitle="View All"
-        url="/learn-more"
+        url={block.link.url}
       />
-      <Carousel className="news-carousel">
-        {item.map((item, key) => {
-          const { imgUrl, body, title } = item;
 
+      <Carousel className="news-carousel">
+        {BLOCK_PAIRS.map((block, key) => {
           return (
             <Carousel.Item key={key}>
               <ServeIcon icon={LeftIcon} left />
               <ServeIcon icon={RightIcon} right />
-              <div
-                className="flex-row"
-                style={{
-                  position: "relative",
-                  justifyContent: "center",
-                  height: CAROUSEL_HEIGHT,
-                }}
-              >
-                <Card
-                  cardWidth="40%"
-                  cardHeight="85%"
-                  title={title}
-                  body={body}
-                  imgUrl={imgUrl}
-                />
-                <Card
-                  cardWidth="40%"
-                  cardHeight="85%"
-                  title={title}
-                  body={body}
-                  imgUrl={imgUrl}
-                />
+              <div className="flex" style={{ padding: `0 4em` }}>
+                {block.map((block, key) => {
+                  const { background_image, color, date, link, title } = block;
+
+                  return (
+                    <div
+                      className="flex"
+                      style={{
+                        position: "relative",
+                        justifyContent: "center",
+                        height: BANNER_HEIGHT,
+                      }}
+                    >
+                      <Card
+                        cardWidth="95%"
+                        cardHeight="85%"
+                        title={title}
+                        imgUrl={background_image.url}
+                        color={color}
+                        link={link.url}
+                      />
+                    </div>
+                  );
+                })}
               </div>
             </Carousel.Item>
           );

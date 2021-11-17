@@ -4,7 +4,7 @@ import { colors } from "../config/colors";
 
 import Loading from "./loading";
 
-const Card = ({ state, actions, item, themeColor, cardWidth, cardHeight }) => {
+const CardList = ({ state, actions, item, themeColor, cardWidth, cardHeight }) => {
   if (!item) return <Loading />;
 
   // HELPERS ---------------------------------------------
@@ -109,4 +109,4 @@ const styles = {
   },
 };
 
-export default connect(Card);
+export default connect(CardList);

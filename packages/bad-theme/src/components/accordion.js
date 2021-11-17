@@ -5,7 +5,7 @@ import Accordion from "react-bootstrap/Accordion";
 
 import Loading from "./loading";
 
-const Card = ({ state, actions, libraries, block }) => {
+const AccordionComponent = ({ state, actions, libraries, block }) => {
   if (!block) return <Loading />;
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -96,4 +96,4 @@ const styles = {
   container: {},
 };
 
-export default connect(Card);
+export default connect(AccordionComponent);

@@ -13,7 +13,10 @@
 .news-carousel .carousel-control-next-icon {
   background-image: none;
 }
-
+.carousel-control-prev,
+.carousel-control-next {
+  width: 7%;
+}
 .news-carousel .carousel-indicators [data-bs-target] {
   background-color: #3580cd;
 }
