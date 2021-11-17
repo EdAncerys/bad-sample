@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import CardFS from "../cardFS";
 import CardBlockHeader from "../cardBlockHeader";
 import JournalCard from "./journalCard";
 
@@ -26,16 +25,11 @@ const JournalPromoBlock = ({ state, actions, block }) => {
   return (
     <div>
       <CardBlockHeader
-        title="Journal Information"
+        title={`${block.title}`}
         urlTitle="Learn More"
         url={`${block.link}`}
       />
       <ServeJournalCards />
-      {/* <CardFS
-        title={block[0].title}
-        body={block[0].body}
-        imgUrl={block[0].imgUrl}
-      /> */}
     </div>
   );
 };
@@ -44,6 +38,7 @@ const styles = {
   container: {
     display: "grid",
     gridTemplateColumns: `repeat(3, 1fr)`,
+    justifyContent: "space-around",
   },
 };
 

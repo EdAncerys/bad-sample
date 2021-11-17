@@ -100,10 +100,11 @@ const JournalCard = ({ state, actions, block }) => {
   // RETURN ----------------------------------------------------------------
   return (
     <div
-      className="shadow"
+      className="flex shadow"
       style={{
         minWidth: CARD_WIDTH,
-        margin: `1em 0`,
+        margin: `1em auto`,
+        width: "90%",
       }}
     >
       <div className="flex-row m-2">

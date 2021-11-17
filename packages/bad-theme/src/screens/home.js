@@ -20,6 +20,7 @@ import FullWidthContentBlock from "../components/fullWidthContentBlock";
 import PromoBlock from "../components/promoBlock";
 import CardList from "../components/cardList";
 import Accordion from "../components/accordion";
+import CardFS from "../components/cardFs";
 
 const Home = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
@@ -56,6 +57,11 @@ const Home = ({ state, actions, libraries }) => {
       <PromoBlock item={DATA[2]} reverse />
       <CardList item={DATA} />
       <Accordion item={DATA} />
+      <CardFS
+        title={`${DATA.title}`}
+        body={`${DATA.body}`}
+        url={`${DATA.imgUrl}`}
+      />
     </div>
   );
 };
