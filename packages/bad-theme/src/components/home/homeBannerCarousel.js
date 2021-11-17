@@ -31,7 +31,7 @@ const HomeBannerCarousel = ({ state, actions, block }) => {
   return (
     <div>
       <Carousel>
-        {block.slides.map((block, index) => {
+        {block.slides.map((block, key) => {
           const {
             add_button,
             background_image,
@@ -105,7 +105,7 @@ const HomeBannerCarousel = ({ state, actions, block }) => {
           };
 
           return (
-            <Carousel.Item key={index}>
+            <Carousel.Item key={key}>
               <div
                 style={{
                   position: "relative",

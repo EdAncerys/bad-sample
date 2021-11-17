@@ -14,9 +14,9 @@ const JournalPromoBlock = ({ state, actions, block }) => {
   const ServeJournalCards = () => {
     return (
       <div>
-        <div className="flex" style={styles.container}>
-          {block.thumbnails.map((block, index) => {
-            return <JournalCard key={index} block={block} />;
+        <div style={styles.container}>
+          {block.thumbnails.map((block, key) => {
+            return <JournalCard key={key} block={block} />;
           })}
         </div>
       </div>
@@ -42,8 +42,9 @@ const JournalPromoBlock = ({ state, actions, block }) => {
 
 const styles = {
   container: {
-    justifyContent: "space-between",
-    flexWrap: "wrap",
+    display: "grid",
+    gridTemplateColumns: `repeat(3, 1fr)`,
+    gap: 10,
   },
 };
 

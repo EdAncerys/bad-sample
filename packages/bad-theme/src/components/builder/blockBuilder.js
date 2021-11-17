@@ -28,6 +28,7 @@ const Home = ({ state, actions, libraries, blocks }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   // <Html2React html={rendered} /> // get html content from state
 
+  // HANDLERS --------------------------------------------------------
   const handleSetLoading = () => {
     setLoadingAction({ dispatch, isLoading: true });
   };
@@ -40,22 +41,36 @@ const Home = ({ state, actions, libraries, blocks }) => {
       <div>
         {blocks.map((block, key) => {
           const { acf_fc_layout } = block;
-          // console.log("CONTENT BLOCK", block);
-          if (acf_fc_layout === "journal_promo_block")
-            console.log("CONTENT BLOCK", block);
+          // if (acf_fc_layout === "journal_promo_block")
+          //   console.log("CONTENT BLOCK", block);
 
           if (acf_fc_layout === "journal_promo_block")
             return <JournalPromoBlock key={key} block={block} />;
+          // return (
+          //   <div class="box">
+          //     <div>One</div>
+          //     <div>Two</div>
+          //     <div>Three</div>
+          //     <div>Four</div>
+          //     <div>Five</div>
+          //     <div>Six</div>
+          //     <div>Seven</div>
+          //     <div>Eight</div>
+          //     <div>Nine</div>
+          //     <div>Ten</div>
+          //   </div>
+          // );
 
-          // if (acf_fc_layout === "full_width_content_block")
-          //   return <FullWidthContentBlock key={key} block={block} />;
+          if (acf_fc_layout === "full_width_content_block")
+            return <FullWidthContentBlock key={key} block={block} />;
 
-          // if (acf_fc_layout === "home_banner_carousel")
-          //   return <HomeBannerCarousel key={key} block={block} />;
+          if (acf_fc_layout === "home_banner_carousel")
+            return <HomeBannerCarousel key={key} block={block} />;
 
-          // if (acf_fc_layout === "hero_banner")
-          //   return <HeroBanner key={key} block={block} />;
+          if (acf_fc_layout === "hero_banner")
+            return <HeroBanner key={key} block={block} />;
 
+          console.log("CONTENT BLOCK", block); // debug
           return null;
         })}
       </div>

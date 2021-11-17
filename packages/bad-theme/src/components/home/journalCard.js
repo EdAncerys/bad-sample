@@ -8,6 +8,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 const JournalCard = ({ state, actions, block }) => {
   const CARD_WIDTH = "30%";
   const { image, link, title } = block;
+  if (!image && !title) return null; // do not render card if content not provided
 
   // HELPERS ---------------------------------------------
   const handleGoToPath = () => {
@@ -100,10 +101,8 @@ const JournalCard = ({ state, actions, block }) => {
   // RETURN ----------------------------------------------------------------
   return (
     <div
-      className="card shadow"
+      className="shadow"
       style={{
-        border: "none",
-        width: "30%",
         minWidth: CARD_WIDTH,
         margin: `1em 0`,
       }}

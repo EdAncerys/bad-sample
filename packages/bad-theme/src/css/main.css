@@ -70,7 +70,7 @@ a {
   box-shadow: 0 8px 8px -4px;
 }
 /* positioning of post block elements left*/
-.post-block::after {
+.test-block::after {
   content: "";
   flex: auto;
 }
