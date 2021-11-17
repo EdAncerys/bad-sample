@@ -111,11 +111,16 @@ const NavigationActions = ({ state, actions, libraries }) => {
   const ServeMainNavigation = ({ item }) => {
     const { title, slug } = item;
 
+    const TEST_BLOCK =
+      title === "blocks Page"
+        ? { color: colors.danger, fontWeight: "bold", fontSize: 20 }
+        : {};
+
     if (item.child_items) return <ServeDropDownMenu item={item} />;
 
     return (
       <div>
-        <Link link={`${slug}`} style={styles.link}>
+        <Link link={`${slug}`} style={{ ...styles.link, ...TEST_BLOCK }}>
           <Html2React html={title} />
         </Link>
       </div>

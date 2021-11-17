@@ -14,7 +14,7 @@ const BADTheme = {
     theme: {
       myVariable: process.env.MY_VARIABLE,
       menuUrl: "/menu/primary-menu",
-      postTypes: [],
+      bannerHeight: 425,
     },
   },
   actions: {

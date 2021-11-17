@@ -11,7 +11,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
 
   if (!block) return <Loading />;
 
-  const BANNER_HEIGHT = 400;
+  const BANNER_HEIGHT = state.theme.bannerHeight;
   const OFFSET_BOTTOM = 50;
   let OVERLAY_WIDTH = "200%";
   let CARD_WIDTH = "50%";

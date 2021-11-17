@@ -27,7 +27,7 @@ const JournalPromoBlock = ({ state, actions, block }) => {
       <CardBlockHeader
         title={`${block.title}`}
         urlTitle="Learn More"
-        url={`${block.link}`}
+        url={`${block.link.url}`}
       />
       <ServeJournalCards />
     </div>

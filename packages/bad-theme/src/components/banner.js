@@ -6,19 +6,35 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import Loading from "./loading";
 
-const Banner = ({ state, actions, item }) => {
-  if (!item) return <Loading />;
+const Banner = ({ state, actions, block }) => {
+  if (!block) return <Loading />;
 
-  const BANNER_HEIGHT = 350;
-  const { title, urlTitle, url, imgUrl } = item;
+  const BANNER_HEIGHT = state.theme.bannerHeight;
+  const { background_image, label, link, title } = block;
 
   // HELPERS ----------------------------------------------------
   const handleGoToAction = () => {
-    actions.router.set(`${url}`);
+    actions.router.set(`${link.url}`);
   };
 
   // SERVERS ----------------------------------------------------------------
   const ServeFooter = () => {
+    const ServeActions = () => {
+      return (
+        <div className="mr-5">
+          <button
+            className="btn btn-outline-light flex-center-row"
+            onClick={handleGoToAction}
+          >
+            <div>{label}</div>
+            <div>
+              <KeyboardArrowRightIcon style={{ fill: colors.white }} />
+            </div>
+          </button>
+        </div>
+      );
+    };
+
     return (
       <div
         className="flex-row"
@@ -27,7 +43,7 @@ const Banner = ({ state, actions, item }) => {
           bottom: 0,
           left: 0,
           width: "100%",
-          padding: `2em 4em`,
+          padding: `3em 5em`,
         }}
       >
         <div className="flex">
@@ -42,28 +58,18 @@ const Banner = ({ state, actions, item }) => {
             {title}
           </h5>
         </div>
-        <div className="mr-5">
-          <button
-            className="btn btn-outline-light flex-center-row"
-            onClick={handleGoToAction}
-          >
-            <div>{urlTitle}</div>
-            <div>
-              <KeyboardArrowRightIcon style={{ fill: colors.white }} />
-            </div>
-          </button>
-        </div>
+        <ServeActions />
       </div>
     );
   };
 
   const ServeCardImage = () => {
-    if (!imgUrl) return null;
+    if (!background_image) return null;
     const alt = title || "BAD";
 
     return (
       <div style={{ width: "100%", height: BANNER_HEIGHT, overflow: "hidden" }}>
-        <Image src={imgUrl} className="d-block h-100" alt={alt} />
+        <Image src={background_image.url} className="d-block h-100" alt={alt} />
       </div>
     );
   };

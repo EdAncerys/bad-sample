@@ -8,7 +8,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import Loading from "../loading";
 
 const HomeBannerCarousel = ({ state, actions, block }) => {
-  const CAROUSEL_HEIGHT = 400;
+  const BANNER_HEIGHT = state.theme.bannerHeight;
 
   // SERVERS ----------------------------------------------------------------
   const ServeOverlay = () => {
@@ -19,7 +19,7 @@ const HomeBannerCarousel = ({ state, actions, block }) => {
           bottom: 0,
           left: 0,
           width: "100%",
-          height: CAROUSEL_HEIGHT,
+          height: BANNER_HEIGHT,
           background: `linear-gradient(90deg, rgba(31,51,94,1) 0%, rgba(133,133,148,0.1) 80%)`,
         }}
       />
@@ -49,7 +49,7 @@ const HomeBannerCarousel = ({ state, actions, block }) => {
 
           // HELPERS ----------------------------------------------------
           const handleGoToAction = () => {
-            actions.router.set(`${link}`);
+            actions.router.set(`${link.url}`);
           };
 
           // SERVERS ----------------------------------------------------
@@ -109,7 +109,7 @@ const HomeBannerCarousel = ({ state, actions, block }) => {
               <div
                 style={{
                   position: "relative",
-                  height: CAROUSEL_HEIGHT,
+                  height: BANNER_HEIGHT,
                 }}
               >
                 <ServeCardImage />

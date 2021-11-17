@@ -12,7 +12,7 @@ const JournalCard = ({ state, actions, block }) => {
 
   // HELPERS ---------------------------------------------
   const handleGoToPath = () => {
-    actions.router.set(`${link}`);
+    actions.router.set(`${link.url}`);
     // console.log("url", url); // debug
   };
 

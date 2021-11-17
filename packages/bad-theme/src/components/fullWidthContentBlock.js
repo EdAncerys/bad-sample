@@ -9,7 +9,7 @@ const FullWidthContentBlock = ({ state, actions, libraries, block }) => {
 
   if (!block) return <Loading />;
 
-  const BANNER_HEIGHT = 300;
+  const BANNER_HEIGHT = state.theme.bannerHeight;
   const {
     add_button,
     background_colour,
@@ -75,7 +75,7 @@ const FullWidthContentBlock = ({ state, actions, libraries, block }) => {
 
     // HELPERS ----------------------------------------------------
     const handleGoToAction = () => {
-      actions.router.set(`${link}`);
+      actions.router.set(`${link.url}`);
     };
 
     return (

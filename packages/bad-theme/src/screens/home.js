@@ -43,13 +43,13 @@ const Home = ({ state, actions, libraries }) => {
         <p style={styles.title}>BAD Home</p>
       </div>
       {/* <HomeBannerCarousel item={DATA} /> */}
-      <PilGuidelines item={DATA} />
+      {/* <PilGuidelines item={DATA} /> */}
       {/* <ButtonsRow item={DATA} /> */}
       {/* <HeroBanner item={DATA} /> */}
       {/* <JournalPromoBlock item={DATA} /> */}
       <MultiPostBlock item={DATA} />
       <FeaturedEvents item={DATA} />
-      <Banner item={DATA[0]} />
+      {/* <Banner item={DATA[0]} /> */}
       <NewsCarousel item={DATA} />
       {/* <Footer /> */}
       <ProfilesBlock item={DATA} />

@@ -46,6 +46,9 @@ const Home = ({ state, actions, libraries, blocks }) => {
           // if (acf_fc_layout === "journal_promo_block")
           //   console.log("CONTENT BLOCK", block);
 
+          if (acf_fc_layout === "banner")
+            return <Banner key={key} block={block} />;
+
           if (acf_fc_layout === "buttons_row")
             return <ButtonsRow key={key} block={block} />;
 
@@ -67,6 +70,10 @@ const Home = ({ state, actions, libraries, blocks }) => {
           return null;
         })}
       </div>
+      <div>
+        <p style={styles.title}>STATIC COMPONENTS</p>
+      </div>
+      <PilGuidelines />
     </div>
   );
 };
