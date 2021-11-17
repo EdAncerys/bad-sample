@@ -6,6 +6,7 @@ import RowButton from "./rowButton";
 
 const ButtonsRow = ({ state, actions, style, block }) => {
   if (!block) return <Loading />;
+
   let KEY = 0;
 
   // RETURN ---------------------------------------------------

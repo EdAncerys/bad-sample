@@ -3,17 +3,10 @@ import { connect } from "frontity";
 import { colors } from "../config/colors";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
-const RowButton = ({ state, actions, block, buttonWidth }) => {
-  const { label, theme, link } = block;
-  const THEME = colors[theme] || colors.primary;
-
-  // Manage max string Length
-  const MAX_LENGTH = 24;
-  let titlePreview;
-  if (label) {
-    titlePreview = `${label.substring(0, MAX_LENGTH)}...`;
-    if (label.length < MAX_LENGTH) titlePreview = label;
-  }
+const RowButton = ({ state, actions, libraries, block, buttonWidth }) => {
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  const { title, color, link } = block;
+  const THEME = color || colors.primary;
 
   // HELPERS ---------------------------------------------
   const handleGoToPath = () => {
@@ -54,7 +47,7 @@ const RowButton = ({ state, actions, block, buttonWidth }) => {
             className="flex"
             style={{ textTransform: "uppercase", fontSize: "13px" }}
           >
-            <p className="card-text">{titlePreview}</p>
+            <p className="card-text">{title}</p>
           </div>
           <div>
             <KeyboardArrowRightIcon

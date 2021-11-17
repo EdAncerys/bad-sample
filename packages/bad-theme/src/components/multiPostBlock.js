@@ -15,6 +15,7 @@ const MultiPostBlock = ({ state, actions, item }) => {
 
           return (
             <div
+              key={id}
               style={{
                 display: "flex",
                 justifyContent: "center",
@@ -22,7 +23,6 @@ const MultiPostBlock = ({ state, actions, item }) => {
               }}
             >
               <Card
-                key={id}
                 cardTitle="Officers Of The BAD"
                 title={title}
                 body={body}

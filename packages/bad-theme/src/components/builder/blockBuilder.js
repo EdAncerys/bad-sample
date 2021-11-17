@@ -46,6 +46,9 @@ const Home = ({ state, actions, libraries, blocks }) => {
           // if (acf_fc_layout === "journal_promo_block")
           //   console.log("CONTENT BLOCK", block);
 
+          if (acf_fc_layout === "buttons_row")
+            return <ButtonsRow key={key} block={block} />;
+
           if (acf_fc_layout === "accordion")
             return <Accordion key={key} block={block} />;
 

@@ -44,14 +44,14 @@ const Home = ({ state, actions, libraries }) => {
       </div>
       {/* <HomeBannerCarousel item={DATA} /> */}
       <PilGuidelines item={DATA} />
-      <ButtonsRow item={DATA} />
+      {/* <ButtonsRow item={DATA} /> */}
       {/* <HeroBanner item={DATA} /> */}
       {/* <JournalPromoBlock item={DATA} /> */}
       <MultiPostBlock item={DATA} />
       <FeaturedEvents item={DATA} />
       <Banner item={DATA[0]} />
       <NewsCarousel item={DATA} />
-      <Footer />
+      {/* <Footer /> */}
       <ProfilesBlock item={DATA} />
       {/* <FullWidthContentBlock item={DATA[2]} alignContent="center" /> */}
       <PromoBlock item={DATA[2]} reverse />
