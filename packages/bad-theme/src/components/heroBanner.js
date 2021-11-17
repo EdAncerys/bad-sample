@@ -8,7 +8,6 @@ import ButtonsRow from "./buttonsRow";
 
 const HeroBanner = ({ state, actions, libraries, block }) => {
   // console.log("HeroBanner Triggered"); //debug
-  const [image, setImage] = useState(null);
 
   if (!block) return <Loading />;
 

@@ -63,7 +63,6 @@ const JournalCard = ({ state, actions, block }) => {
       <div
         className="flex-col"
         style={{
-          // textAlign: "start",
           borderLeft: `2px solid ${colors.silver}`,
         }}
       >

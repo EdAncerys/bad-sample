@@ -9,20 +9,29 @@ const MultiPostBlock = ({ state, actions, item }) => {
   // RETURN ---------------------------------------------------
   return (
     <div>
-      <div className="flex post-block" style={styles.container}>
+      <div style={styles.container}>
         {item.map((item) => {
           const { id, title, body, url, imgUrl } = item;
 
           return (
-            <Card
-              key={id}
-              cardTitle="Officers Of The BAD"
-              title={title}
-              body={body}
-              url={url}
-              // cardWidth="45%" // optional param
-              // imgUrl={imgUrl} // optional param
-            />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                margin: `1em 0`,
+              }}
+            >
+              <Card
+                key={id}
+                cardTitle="Officers Of The BAD"
+                title={title}
+                body={body}
+                url={url}
+                cardWidth="90%" // optional param
+                // imgUrl={imgUrl} // optional param
+                shadow // optional param
+              />
+            </div>
           );
         })}
       </div>
@@ -32,8 +41,9 @@ const MultiPostBlock = ({ state, actions, item }) => {
 
 const styles = {
   container: {
+    display: "grid",
+    gridTemplateColumns: `repeat(3, 1fr)`,
     justifyContent: "space-around",
-    flexWrap: "wrap",
   },
 };
 

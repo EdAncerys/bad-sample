@@ -14,12 +14,14 @@ const Card = ({
   themeColor,
   imgUrl,
   formUrl,
+  shadow,
   bodyLength,
   cardWidth,
   cardHeight,
 }) => {
   const TEXT_ALIGN = textAlign || "start";
   const THEME = themeColor || colors.primary;
+  const SHADOW = shadow ? "shadow" : "";
 
   // HELPERS ---------------------------------------------
   const handleGoToPath = () => {
@@ -163,10 +165,11 @@ const Card = ({
   // RETURN ----------------------------------------------------
   return (
     <div
-      className="card m-2 shadow"
+      className={SHADOW}
       style={{
         ...styles.card,
-        width: cardWidth || "30%",
+        backgroundColor: colors.white,
+        width: cardWidth || "100%",
         height: cardHeight || "100%",
       }}
     >
@@ -185,7 +188,6 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     overflow: "hidden",
-    border: "none",
   },
   footerActionTitle: {
     marginRight: 25,

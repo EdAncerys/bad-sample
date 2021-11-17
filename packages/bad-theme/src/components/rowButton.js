@@ -36,8 +36,13 @@ const RowButton = ({ state, actions, block, buttonWidth }) => {
 
   return (
     <div
-      className="card m-2 shadow"
-      style={{ ...styles.container, width: buttonWidth || "25%" }}
+      className="shadow"
+      style={{
+        ...styles.container,
+        backgroundColor: colors.white,
+        marginRight: "10px",
+        width: buttonWidth || "25%",
+      }}
     >
       <div className="card-body flex-col">
         <div
@@ -73,7 +78,6 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     overflow: "hidden",
-    border: "none",
   },
 };
 

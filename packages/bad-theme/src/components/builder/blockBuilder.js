@@ -46,20 +46,6 @@ const Home = ({ state, actions, libraries, blocks }) => {
 
           if (acf_fc_layout === "journal_promo_block")
             return <JournalPromoBlock key={key} block={block} />;
-          // return (
-          //   <div class="box">
-          //     <div>One</div>
-          //     <div>Two</div>
-          //     <div>Three</div>
-          //     <div>Four</div>
-          //     <div>Five</div>
-          //     <div>Six</div>
-          //     <div>Seven</div>
-          //     <div>Eight</div>
-          //     <div>Nine</div>
-          //     <div>Ten</div>
-          //   </div>
-          // );
 
           if (acf_fc_layout === "full_width_content_block")
             return <FullWidthContentBlock key={key} block={block} />;
