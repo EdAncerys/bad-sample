@@ -4,16 +4,19 @@ import { connect } from "frontity";
 import CardFS from "../cardFS";
 import CardBlockHeader from "../cardBlockHeader";
 import JournalCard from "./journalCard";
-import { DATA } from "../../config/data";
 
-const JournalPromoBlock = ({ state, actions, item }) => {
+import Loading from "../loading";
+
+const JournalPromoBlock = ({ state, actions, block }) => {
+  if (!block) return <Loading />;
+
   // SERVERS ----------------------------------------------
   const ServeJournalCards = () => {
     return (
       <div>
         <div className="flex" style={styles.container}>
-          {item.map((item) => {
-            return <JournalCard key={item} item={item} />;
+          {block.thumbnails.map((block, index) => {
+            return <JournalCard key={index} block={block} />;
           })}
         </div>
       </div>
@@ -25,14 +28,14 @@ const JournalPromoBlock = ({ state, actions, item }) => {
       <CardBlockHeader
         title="Journal Information"
         urlTitle="Learn More"
-        url="/learn-more"
+        url={`${block.link}`}
       />
       <ServeJournalCards />
-      <CardFS
-        title={item[0].title}
-        body={item[0].body}
-        imgUrl={item[0].imgUrl}
-      />
+      {/* <CardFS
+        title={block[0].title}
+        body={block[0].body}
+        imgUrl={block[0].imgUrl}
+      /> */}
     </div>
   );
 };

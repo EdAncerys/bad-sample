@@ -41,11 +41,14 @@ const Home = ({ state, actions, libraries, blocks }) => {
         {blocks.map((block, key) => {
           const { acf_fc_layout } = block;
           // console.log("CONTENT BLOCK", block);
-          if (acf_fc_layout === "full_width_content-block")
+          if (acf_fc_layout === "journal_promo_block")
             console.log("CONTENT BLOCK", block);
 
-          if (acf_fc_layout === "full_width_content-block")
-            return <FullWidthContentBlock key={key} block={block} />;
+          if (acf_fc_layout === "journal_promo_block")
+            return <JournalPromoBlock key={key} block={block} />;
+
+          // if (acf_fc_layout === "full_width_content_block")
+          //   return <FullWidthContentBlock key={key} block={block} />;
 
           // if (acf_fc_layout === "home_banner_carousel")
           //   return <HomeBannerCarousel key={key} block={block} />;
