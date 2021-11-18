@@ -6,18 +6,15 @@ import RowButton from "./rowButton";
 
 const ButtonsRow = ({ state, actions, style, block }) => {
   if (!block) return <Loading />;
-
-  let KEY = 0;
+  if (!block.add_buttons) return null; // if toggle set to false
 
   // RETURN ---------------------------------------------------
   return (
-    <div className="flex" style={{ ...style }}>
-      {block.buttons.map((block) => {
-        KEY += 1;
-
+    <div style={styles.container}>
+      {block.buttons.map((block, key) => {
         return (
           <RowButton
-            key={KEY}
+            key={key}
             block={block}
             // buttonWidth="100%"
           />
@@ -28,7 +25,12 @@ const ButtonsRow = ({ state, actions, style, block }) => {
 };
 
 const styles = {
-  container: {},
+  container: {
+    display: "grid",
+    gridTemplateColumns: `repeat(4, 1fr)`,
+    justifyContent: "space-between",
+    gap: 10,
+  },
 };
 
 export default connect(ButtonsRow);

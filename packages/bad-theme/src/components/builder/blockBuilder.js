@@ -13,11 +13,10 @@ import HeroBanner from "../../components/heroBanner";
 import HeaderBlock from "../headerBlock";
 import Banner from "../../components/banner";
 import NewsCarousel from "../../components/newsCarousel";
-import Footer from "../../components/footer";
 import ProfilesBlock from "../../components/profilesBlock";
 import FullWidthContentBlock from "../fullWidthContentBlock";
 import PromoBlock from "../../components/promoBlock";
-import CardList from "../../components/cardList";
+import IndexCard from "../indexCard";
 import Accordion from "../../components/accordion";
 
 const Home = ({ state, actions, libraries, blocks }) => {

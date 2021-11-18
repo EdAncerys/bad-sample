@@ -88,7 +88,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
 
     return (
       <div
-        className="flex-col"
+        // className="flex-col"
         style={{
           position: "absolute",
           zIndex: 1,
@@ -96,7 +96,6 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
         }}
       >
         <div
-          className="flex"
           style={{
             marginLeft: PADDING,
             marginTop: BANNER_HEIGHT - FOOTER_HEIGHT,

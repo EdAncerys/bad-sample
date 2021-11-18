@@ -5,6 +5,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 const RowButton = ({ state, actions, libraries, block, buttonWidth }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
   const { title, colour, link } = block;
   const THEME = colour || colors.primary;
 
@@ -33,8 +34,7 @@ const RowButton = ({ state, actions, libraries, block, buttonWidth }) => {
       style={{
         ...styles.container,
         backgroundColor: colors.white,
-        marginRight: "10px",
-        width: buttonWidth || "25%",
+        width: buttonWidth || "100%",
       }}
     >
       <div className="card-body flex-col">
