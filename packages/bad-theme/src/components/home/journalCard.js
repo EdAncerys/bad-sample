@@ -103,8 +103,7 @@ const JournalCard = ({ state, actions, block }) => {
       className="flex shadow"
       style={{
         minWidth: CARD_WIDTH,
-        margin: `0 auto 1em`,
-        width: "90%",
+        width: "100%",
       }}
     >
       <div className="flex-row m-2">

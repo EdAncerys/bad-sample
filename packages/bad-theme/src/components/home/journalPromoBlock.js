@@ -38,7 +38,8 @@ const styles = {
   container: {
     display: "grid",
     gridTemplateColumns: `repeat(3, 1fr)`,
-    justifyContent: "space-around",
+    justifyContent: "space-between",
+    gap: 15,
   },
 };
 

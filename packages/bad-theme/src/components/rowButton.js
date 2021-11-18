@@ -5,8 +5,8 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 const RowButton = ({ state, actions, libraries, block, buttonWidth }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-  const { title, color, link } = block;
-  const THEME = color || colors.primary;
+  const { title, colour, link } = block;
+  const THEME = colour || colors.primary;
 
   // HELPERS ---------------------------------------------
   const handleGoToPath = () => {

@@ -7,15 +7,16 @@ import Loading from "./loading";
 import ButtonsRow from "./buttonsRow";
 
 const HeroBanner = ({ state, actions, libraries, block }) => {
-  // console.log("HeroBanner Triggered"); //debug
+  console.log("HeroBanner Triggered", block); //debug
 
   if (!block) return <Loading />;
 
   const BANNER_HEIGHT = state.theme.bannerHeight;
-  const OFFSET_BOTTOM = 50;
+  const PADDING = state.theme.mainPadding;
+  const FOOTER_HEIGHT = 50;
   let OVERLAY_WIDTH = "200%";
   let CARD_WIDTH = "50%";
-  let CARD_HEIGHT = BANNER_HEIGHT - OFFSET_BOTTOM * 2;
+  let CARD_HEIGHT = BANNER_HEIGHT - FOOTER_HEIGHT * 2;
   let BODY_LENGTH = 400;
 
   const {
@@ -31,7 +32,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
 
   if (!buttons) {
     BODY_LENGTH = 450;
-    CARD_HEIGHT = BANNER_HEIGHT - OFFSET_BOTTOM;
+    CARD_HEIGHT = BANNER_HEIGHT - FOOTER_HEIGHT;
   }
   if (layout !== "50-50") {
     CARD_WIDTH = "100%";
@@ -44,7 +45,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
     return (
       <div
         style={{
-          height: OFFSET_BOTTOM,
+          height: FOOTER_HEIGHT,
           width: "100%",
         }}
       />
@@ -65,8 +66,8 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
         <div
           className="flex"
           style={{
-            marginLeft: OFFSET_BOTTOM,
-            marginTop: OFFSET_BOTTOM / 2,
+            marginLeft: PADDING,
+            marginTop: FOOTER_HEIGHT / 2,
           }}
         >
           <Card
@@ -97,8 +98,8 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
         <div
           className="flex"
           style={{
-            marginLeft: OFFSET_BOTTOM,
-            marginTop: BANNER_HEIGHT - OFFSET_BOTTOM,
+            marginLeft: PADDING,
+            marginTop: BANNER_HEIGHT - FOOTER_HEIGHT,
           }}
         >
           <ButtonsRow block={block} />
