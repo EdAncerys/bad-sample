@@ -49,6 +49,7 @@ const HomeBannerCarousel = ({ state, actions, block }) => {
 
           // HELPERS ----------------------------------------------------
           const handleGoToAction = () => {
+            if (!link.url) return null;
             actions.router.set(`${link.url}`);
           };
 

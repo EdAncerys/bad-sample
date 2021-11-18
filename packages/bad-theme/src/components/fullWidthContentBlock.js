@@ -10,16 +10,8 @@ const FullWidthContentBlock = ({ state, actions, libraries, block }) => {
   if (!block) return <Loading />;
 
   const BANNER_HEIGHT = state.theme.bannerHeight;
-  const {
-    add_button,
-    background_colour,
-    body,
-    label,
-    link,
-    padding,
-    text_align,
-    title,
-  } = block;
+  const { background_colour, body, label, link, padding, text_align, title } =
+    block;
 
   let PADDING = `0 20%`;
   let ALIGNMENT = "start";
@@ -71,10 +63,11 @@ const FullWidthContentBlock = ({ state, actions, libraries, block }) => {
   };
 
   const ServeActions = () => {
-    if (!add_button) return null;
+    if (!label) return null;
 
     // HELPERS ----------------------------------------------------
     const handleGoToAction = () => {
+      if (!link.url) return null;
       actions.router.set(`${link.url}`);
     };
 

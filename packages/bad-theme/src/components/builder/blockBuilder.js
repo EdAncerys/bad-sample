@@ -5,19 +5,19 @@ import { colors } from "../../config/colors";
 import { useAppDispatch, useAppState, setLoadingAction } from "../../context";
 // COMPONENTS ----------------------------------------------------------------
 import HomeBannerCarousel from "../home/homeBannerCarousel";
-import PilGuidelines from "../../components/home/pilGuidelines";
-import JournalPromoBlock from "../../components/home/journalPromoBlock";
-import ButtonsRow from "../../components/buttonsRow";
-import MultiPostBlock from "../../components/multiPostBlock";
-import HeroBanner from "../../components/heroBanner";
-import HeaderBlock from "../headerBlock";
-import Banner from "../../components/banner";
-import NewsCarousel from "../../components/newsCarousel";
-import ProfilesBlock from "../../components/profilesBlock";
+import PilGuidelines from "../home/pilGuidelines";
+import JournalPromoBlock from "../home/journalPromoBlock";
+import ButtonsRow from "../buttonsRow";
+import MultiPostBlock from "../multiPostBlock";
+import HeroBanner from "../heroBanner";
+import TitleBlock from "../titleBlock";
+import Banner from "../banner";
+import NewsCarousel from "../newsCarousel";
+import ProfilesBlock from "../profilesBlock";
 import FullWidthContentBlock from "../fullWidthContentBlock";
-import PromoBlock from "../../components/promoBlock";
+import PromoBlock from "../promoBlock";
 import IndexCard from "../indexCard";
-import Accordion from "../../components/accordion";
+import Accordion from "../accordion";
 
 const Home = ({ state, actions, libraries, blocks }) => {
   const dispatch = useAppDispatch();
@@ -45,14 +45,17 @@ const Home = ({ state, actions, libraries, blocks }) => {
           // if (acf_fc_layout === "journal_promo_block")
           //   console.log("CONTENT BLOCK", block);
 
+          if (acf_fc_layout === "promotional_block")
+            return <PromoBlock key={key} block={block} />;
+
           if (acf_fc_layout === "profiles_block")
             return <ProfilesBlock key={key} block={block} />;
 
           if (acf_fc_layout === "index_card")
             return <IndexCard key={key} block={block} />;
 
-          if (acf_fc_layout === "header_block")
-            return <HeaderBlock key={key} block={block} />;
+          if (acf_fc_layout === "title_block")
+            return <TitleBlock key={key} block={block} />;
 
           if (acf_fc_layout === "multi_post_block")
             return <MultiPostBlock key={key} block={block} />;

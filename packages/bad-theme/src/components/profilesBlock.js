@@ -14,6 +14,7 @@ const ProfilesBlock = ({ state, actions, block }) => {
   const ServeActions = () => {
     // HELPERS ----------------------------------------------------
     const handleGoToAction = () => {
+      if (!link.url) return null;
       actions.router.set(`${link.url}`);
     };
 

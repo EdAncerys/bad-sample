@@ -6,18 +6,18 @@ import Loading from "./loading";
 import FullWidthContentBlock from "./fullWidthContentBlock";
 import { colors } from "../config/colors";
 
-const PromoBlock = ({ state, actions, item, reverse }) => {
-  if (!item) return <Loading />;
+const PromoBlock = ({ state, actions, block, reverse }) => {
+  if (!block) return <Loading />;
 
-  const BANNER_HEIGHT = 550;
-  const { imgUrl, title } = item;
+  const BANNER_HEIGHT = state.theme.bannerHeight;
+  const { background_image, image_align, title } = block;
 
   let MAIN_AXIS = "flex-row"; // define alignment with main axis
-  if (reverse) MAIN_AXIS = "flex-row row-reverse";
+  if (image_align === "left") MAIN_AXIS = "flex-row row-reverse";
 
   // SERVERS ----------------------------------------------------------------
   const ServeCardImage = () => {
-    if (!imgUrl) return null;
+    if (!background_image) return null;
     const alt = title || "BAD";
 
     return (
@@ -29,7 +29,11 @@ const PromoBlock = ({ state, actions, item, reverse }) => {
             overflow: "hidden",
           }}
         >
-          <Image src={imgUrl} className="d-block h-100" alt={alt} />
+          <Image
+            src={background_image.url}
+            className="d-block h-100"
+            alt={alt}
+          />
         </div>
       </div>
     );
@@ -38,7 +42,7 @@ const PromoBlock = ({ state, actions, item, reverse }) => {
   // RETURN ---------------------------------------------------
   return (
     <div className={MAIN_AXIS} style={styles.container}>
-      <FullWidthContentBlock item={item} alignContent="start" />
+      <FullWidthContentBlock block={block} />
       <ServeCardImage />
     </div>
   );

@@ -4,7 +4,7 @@ import { colors } from "../config/colors";
 
 import Loading from "./loading";
 
-const HeaderBlock = ({ state, actions, block }) => {
+const TitleBlock = ({ state, actions, block }) => {
   if (!block) return <Loading />;
 
   const { label, link, title } = block;
@@ -12,6 +12,7 @@ const HeaderBlock = ({ state, actions, block }) => {
   // HELPERS ---------------------------------------------
   const handleGoToPath = () => {
     // console.log("url", url); // debug
+    if (!link.url) return null;
     actions.router.set(`${link.url}`);
   };
 
@@ -44,4 +45,4 @@ const styles = {
   },
 };
 
-export default connect(HeaderBlock);
+export default connect(TitleBlock);

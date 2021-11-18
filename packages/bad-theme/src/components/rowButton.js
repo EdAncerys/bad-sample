@@ -11,8 +11,9 @@ const RowButton = ({ state, actions, libraries, block, buttonWidth }) => {
 
   // HELPERS ---------------------------------------------
   const handleGoToPath = () => {
-    actions.router.set(`${link.url}`);
     // console.log("link", link); // debug
+    if (!link.url) return null;
+    actions.router.set(`${link.url}`);
   };
 
   // SERVERS --------------------------------------------

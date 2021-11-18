@@ -30,6 +30,7 @@ const IndexCard = ({ state, actions, block, cardWidth, cardHeight }) => {
     // HELPERS ---------------------------------------------
     const handleGoToPath = () => {
       // console.log("url", url); // debug
+      if (!link.url) return null;
       actions.router.set(`${link.url}`);
     };
 
