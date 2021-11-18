@@ -52,7 +52,7 @@ const Home = ({ state, actions, libraries }) => {
       {/* <Banner item={DATA[0]} /> */}
       {/* <NewsCarousel item={DATA} /> */}
       {/* <Footer /> */}
-      <ProfilesBlock item={DATA} />
+      {/* <ProfilesBlock item={DATA} /> */}
       {/* <FullWidthContentBlock item={DATA[2]} alignContent="center" /> */}
       <PromoBlock item={DATA[2]} reverse />
       {/* <IndexCard item={DATA} /> */}

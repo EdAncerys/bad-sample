@@ -3,14 +3,14 @@ import { connect } from "frontity";
 import { colors } from "../config/colors";
 import Image from "@frontity/components/image";
 
-const Profile = ({ state, actions, item }) => {
+const Profile = ({ state, actions, block }) => {
   const PROFILE_PICTURE_WIDTH = 190;
-  const { name, theme, about, profileUrl, url } = item;
+  const { background_image, body, title } = block;
 
   // SERVERS ----------------------------------------------------------------
   const ServeProfilePicture = () => {
-    if (!profileUrl) return null;
-    const alt = name || "BAD";
+    if (!background_image) return null;
+    const alt = title || "BAD";
 
     return (
       <div
@@ -19,28 +19,26 @@ const Profile = ({ state, actions, item }) => {
           height: PROFILE_PICTURE_WIDTH,
           borderRadius: "50%",
           overflow: "hidden",
+          margin: `0 auto`,
         }}
       >
-        <Image src={profileUrl} className="d-block h-100" alt={alt} />
+        <Image src={background_image.url} className="d-block h-100" alt={alt} />
       </div>
     );
   };
 
-  const ServeName = () => {
+  const ServeTitle = () => {
+    if (!title) return null;
+
     return (
-      <div style={{ fontSize: 20, fontWeight: "bold", marginBottom: "1em" }}>
-        <span>{name}</span>
+      <div style={{ fontSize: 20, fontWeight: "bold", margin: `0.75em 0` }}>
+        <div>{title}</div>
       </div>
     );
   };
 
-  const ServeAbout = () => {
-    if (!about) return null;
-
-    // Manage max string Length
-    const MAX_LENGTH = 80;
-    let aboutPreview = `${about.substring(0, MAX_LENGTH)}...`;
-    if (about.length < MAX_LENGTH) aboutPreview = about;
+  const ServeBody = () => {
+    if (!body) return null;
 
     return (
       <div
@@ -50,31 +48,23 @@ const Profile = ({ state, actions, item }) => {
           color: colors.silver,
         }}
       >
-        <span>{aboutPreview}</span>
+        <div>{body}</div>
       </div>
     );
   };
 
   const ServeProfile = () => {
     return (
-      <div style={{ padding: "1em 2em" }}>
-        <ServeName />
-        <ServeAbout />
+      <div style={{ textAlign: "center" }}>
+        <ServeTitle />
+        <ServeBody />
       </div>
     );
   };
 
   return (
-    <div
-      className="card m-2"
-      style={{
-        border: "none",
-        width: "30%",
-        minWidth: PROFILE_PICTURE_WIDTH,
-        backgroundColor: "transparent",
-      }}
-    >
-      <div className="flex-center-col">
+    <div style={{ width: "85%", margin: `2em auto` }}>
+      <div className="flex-col">
         <ServeProfilePicture />
         <ServeProfile />
       </div>

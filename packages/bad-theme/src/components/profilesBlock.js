@@ -5,20 +5,22 @@ import Profile from "./profile";
 import { colors } from "../config/colors";
 import Loading from "./loading";
 
-const ProfilesBlock = ({ state, actions, item }) => {
-  if (!item) return <Loading />;
+const ProfilesBlock = ({ state, actions, block }) => {
+  if (!block) return <Loading />;
+
+  const { label, link, title } = block;
 
   // SERVERS ------------------------------------------------------
   const ServeActions = () => {
     // HELPERS ----------------------------------------------------
     const handleGoToAction = () => {
-      actions.router.set(`/go-to-url`);
+      actions.router.set(`${link.url}`);
     };
 
     return (
       <div className="flex-center-row">
         <button
-          className="btn m-4"
+          className="btn"
           style={{
             fontSize: 16,
             textTransform: "capitalize",
@@ -27,18 +29,35 @@ const ProfilesBlock = ({ state, actions, item }) => {
           }}
           onClick={handleGoToAction}
         >
-          <span>View Team</span>
+          <div>{label}</div>
         </button>
+      </div>
+    );
+  };
+
+  const ServeTitle = () => {
+    return (
+      <div className="flex">
+        <div
+          style={{
+            fontSize: 36,
+            fontWeight: "bold",
+            textTransform: "capitalize",
+          }}
+        >
+          {title}
+        </div>
       </div>
     );
   };
 
   // RETURN ---------------------------------------------------
   return (
-    <div>
-      <div className="flex" style={styles.container}>
-        {item.map((item, key) => {
-          return <Profile key={key} item={item} />;
+    <div className="flex-col">
+      <ServeTitle />
+      <div style={styles.container}>
+        {block.profile_card.map((block, key) => {
+          return <Profile key={key} block={block} />;
         })}
       </div>
       <ServeActions />
@@ -48,8 +67,10 @@ const ProfilesBlock = ({ state, actions, item }) => {
 
 const styles = {
   container: {
-    justifyContent: "space-around",
-    flexWrap: "wrap",
+    display: "grid",
+    gridTemplateColumns: `repeat(3, 1fr)`,
+    justifyContent: "space-between",
+    gap: 15,
   },
 };
 
