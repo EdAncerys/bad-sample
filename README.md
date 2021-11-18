@@ -1,4 +1,10 @@
-# bad-org
+# bad-org 😈
+
+## README TBD 
+
+### Deployment to Versel
+#### Deploy Frontity using the vercel command (from the root of your project):
+`> npx vercel`
 
 This project was bootstrapped with [Frontity](https://frontity.org/).
 

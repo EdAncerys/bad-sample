@@ -42,26 +42,13 @@ const Home = ({ state, actions, libraries }) => {
       <div>
         <p style={styles.title}>BAD Home</p>
       </div>
-      {/* <HomeBannerCarousel item={DATA} /> */}
-      {/* <PilGuidelines item={DATA} /> */}
-      {/* <ButtonsRow item={DATA} /> */}
-      {/* <HeroBanner item={DATA} /> */}
-      {/* <JournalPromoBlock item={DATA} /> */}
-      {/* <MultiPostBlock item={DATA} /> */}
-      {/* <FeaturedEvents item={DATA} /> */}
-      {/* <Banner item={DATA[0]} /> */}
-      {/* <NewsCarousel item={DATA} /> */}
-      {/* <Footer /> */}
-      {/* <ProfilesBlock item={DATA} /> */}
-      {/* <FullWidthContentBlock item={DATA[2]} alignContent="center" /> */}
-      <PromoBlock item={DATA[2]} reverse />
-      {/* <IndexCard item={DATA} /> */}
-      {/* <Accordion item={DATA} /> */}
+
+      {/* <PromoBlock item={DATA[2]} reverse />
       <CardFS
         title={`${DATA.title}`}
         body={`${DATA.body}`}
         url={`${DATA.imgUrl}`}
-      />
+      /> */}
     </div>
   );
 };
