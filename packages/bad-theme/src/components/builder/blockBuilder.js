@@ -10,7 +10,7 @@ import JournalPromoBlock from "../../components/home/journalPromoBlock";
 import ButtonsRow from "../../components/buttonsRow";
 import MultiPostBlock from "../../components/multiPostBlock";
 import HeroBanner from "../../components/heroBanner";
-import HeaderBlock from "../../components/headerBlock";
+import HeaderBlock from "../headerBlock";
 import Banner from "../../components/banner";
 import NewsCarousel from "../../components/newsCarousel";
 import Footer from "../../components/footer";

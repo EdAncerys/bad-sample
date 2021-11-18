@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import HeaderBlock from "./HeaderBlock";
+import HeaderBlock from "./headerBlock";
 import MultiPostBlock from "./multiPostBlock";
 import Loading from "./loading";
 
