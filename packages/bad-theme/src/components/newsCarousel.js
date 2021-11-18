@@ -57,16 +57,36 @@ const NewsCarousel = ({ state, actions, libraries, block }) => {
 
       <Carousel className="news-carousel">
         {BLOCK_PAIRS.map((block, key) => {
+          const isSingleBlock = block.length === 1;
+
           return (
             <Carousel.Item key={key}>
               <ServeIcon icon={LeftIcon} left />
               <ServeIcon icon={RightIcon} right />
-              <div className="flex" style={{ padding: `0 4em` }}>
+              <div
+                className="flex"
+                style={{ padding: `0 ${state.theme.mainPadding}px` }}
+              >
                 {block.map((block, key) => {
                   const { background_image, color, date, link, title } = block;
 
+                  const ServeDivider = ({ i }) => {
+                    if (isSingleBlock) return null;
+                    if (key !== i) return null;
+
+                    return (
+                      <div
+                        style={{
+                          display: "flex",
+                          width: 10,
+                        }}
+                      />
+                    );
+                  };
+
                   return (
                     <div
+                      key={key}
                       className="flex"
                       style={{
                         position: "relative",
@@ -74,14 +94,16 @@ const NewsCarousel = ({ state, actions, libraries, block }) => {
                         height: BANNER_HEIGHT,
                       }}
                     >
+                      <ServeDivider i={1} />
                       <Card
-                        cardWidth="95%"
+                        cardWidth={isSingleBlock ? "80" : "100%"}
                         cardHeight="85%"
                         title={title}
                         imgUrl={background_image.url}
                         color={color}
                         link={link.url}
                       />
+                      <ServeDivider i={0} />
                     </div>
                   );
                 })}
