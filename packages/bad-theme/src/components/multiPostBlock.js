@@ -4,31 +4,40 @@ import { connect } from "frontity";
 import Card from "./card";
 import Loading from "./loading";
 
-const MultiPostBlock = ({ state, actions, item }) => {
-  if (!item) return <Loading />;
+const MultiPostBlock = ({ state, actions, block }) => {
+  if (!block) return <Loading />;
   // RETURN ---------------------------------------------------
   return (
     <div>
       <div style={styles.container}>
-        {item.map((item) => {
-          const { id, title, body, url, imgUrl } = item;
+        {block.card.map((block, key) => {
+          const {
+            background_image,
+            body,
+            card_title,
+            colour,
+            form_link,
+            link,
+            title,
+          } = block;
 
           return (
             <div
-              key={id}
+              key={key}
               style={{
                 display: "flex",
                 justifyContent: "center",
-                margin: `1em 0`,
               }}
             >
               <Card
-                cardTitle="Officers Of The BAD"
+                cardTitle={card_title}
                 title={title}
                 body={body}
-                link={url}
-                cardWidth="90%" // optional param
-                // imgUrl={imgUrl} // optional param
+                colour={colour}
+                link={link.url}
+                url={background_image.url} // optional param
+                form_link={form_link.url} // optional param
+                // cardWidth="90%" // optional param
                 shadow // optional param
               />
             </div>
@@ -43,7 +52,8 @@ const styles = {
   container: {
     display: "grid",
     gridTemplateColumns: `repeat(3, 1fr)`,
-    justifyContent: "space-around",
+    justifyContent: "space-between",
+    gap: 10,
   },
 };
 

@@ -68,7 +68,7 @@ const NewsCarousel = ({ state, actions, libraries, block }) => {
                 style={{ padding: `0 ${state.theme.mainPadding}px` }}
               >
                 {block.map((block, key) => {
-                  const { background_image, color, date, link, title } = block;
+                  const { background_image, colour, date, link, title } = block;
 
                   const ServeDivider = ({ i }) => {
                     if (isSingleBlock) return null;
@@ -99,8 +99,8 @@ const NewsCarousel = ({ state, actions, libraries, block }) => {
                         cardWidth={isSingleBlock ? "80" : "100%"}
                         cardHeight="85%"
                         title={title}
-                        imgUrl={background_image.url}
-                        color={color}
+                        url={background_image.url}
+                        colour={colour}
                         link={link.url}
                       />
                       <ServeDivider i={0} />

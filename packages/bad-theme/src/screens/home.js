@@ -47,7 +47,7 @@ const Home = ({ state, actions, libraries }) => {
       {/* <ButtonsRow item={DATA} /> */}
       {/* <HeroBanner item={DATA} /> */}
       {/* <JournalPromoBlock item={DATA} /> */}
-      <MultiPostBlock item={DATA} />
+      {/* <MultiPostBlock item={DATA} /> */}
       <FeaturedEvents item={DATA} />
       {/* <Banner item={DATA[0]} /> */}
       <NewsCarousel item={DATA} />

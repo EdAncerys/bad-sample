@@ -6,28 +6,32 @@ import Image from "@frontity/components/image";
 const Card = ({
   state,
   actions,
-  color,
+  colour,
   cardTitle,
   title,
   body,
   link,
   textAlign,
-  themeColor,
-  imgUrl,
-  formUrl,
+  url,
+  form_link,
   shadow,
   bodyLength,
   cardWidth,
   cardHeight,
 }) => {
-  const TEXT_ALIGN = textAlign || "start";
-  const THEME = color || colors.primary;
+  const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
+  const THEME = colour || colors.primary;
   const SHADOW = shadow ? "shadow" : "";
 
   // HELPERS ---------------------------------------------
-  const handleGoToPath = () => {
-    actions.router.set(`${link}`);
+  const handleReadMorePath = () => {
     // console.log("link", link); // debug
+    actions.router.set(`${link}`);
+  };
+
+  const handleFormPath = () => {
+    // console.log("link", link); // debug
+    actions.router.set(`${form_link}`);
   };
 
   // SERVERS ----------------------------------------------
@@ -44,20 +48,20 @@ const Card = ({
   };
 
   const ServeCardImage = () => {
-    if (!imgUrl) return null;
+    if (!url) return null;
     const alt = title || "BAD";
 
     return (
       <div
         style={{ width: "100%", height: body ? 125 : 200, overflow: "hidden" }}
       >
-        <Image src={imgUrl} className="d-block h-100" alt={alt} />
+        <Image src={url} className="d-block h-100" alt={alt} />
       </div>
     );
   };
 
   const ServeCardHeader = () => {
-    if (imgUrl) return null;
+    if (url) return null;
     if (!cardTitle) return null;
 
     return (
@@ -77,9 +81,11 @@ const Card = ({
   };
 
   const ServeFooterActions = () => {
-    const ServeMoreAction = () => {
+    const ServeReadMoreAction = () => {
+      if (!link) return null;
+
       return (
-        <div onClick={handleGoToPath}>
+        <div onClick={handleReadMorePath}>
           <div style={styles.footerActionTitle}>
             <p className="card-text">Read More</p>
           </div>
@@ -88,15 +94,15 @@ const Card = ({
     };
 
     const ServeFromAction = () => {
-      if (!formUrl) return null;
+      if (!form_link) return null;
 
       // HELPERS -------------------------
-      const handleGoToPath = () => {
-        actions.router.set(`${formUrl}`);
+      const handleReadMorePath = () => {
+        actions.router.set(`${form_link}`);
       };
 
       return (
-        <div onClick={handleGoToPath}>
+        <div onClick={handleFormPath}>
           <div style={styles.footerActionTitle}>
             <p className="card-text">Nomination Form</p>
           </div>
@@ -106,8 +112,11 @@ const Card = ({
 
     return (
       <div>
-        <div className="flex-row mt-2">
-          <ServeMoreAction />
+        <div
+          className="flex-row mt-4"
+          style={{ justifyContent: "space-between" }}
+        >
+          <ServeReadMoreAction />
           <ServeFromAction />
         </div>
       </div>
@@ -125,7 +134,7 @@ const Card = ({
 
       return (
         <div>
-          <h5 className="flex card-text" style={{ color: colors.black }}>
+          <h5 className="flex card-text" style={{ colour: colors.black }}>
             {titlePreview}
           </h5>
         </div>
@@ -133,7 +142,7 @@ const Card = ({
     };
 
     const ServeBody = () => {
-      if (imgUrl) return null;
+      if (url) return null;
       if (!body) return null;
 
       // Manage max string Length
@@ -176,7 +185,7 @@ const Card = ({
         height: cardHeight || "100%",
       }}
     >
-      {imgUrl && <ServeCardImage />}
+      {url && <ServeCardImage />}
       <div className="flex-col m-3">
         <ServeCardHeader />
         <ServeContent />
@@ -193,7 +202,6 @@ const styles = {
     overflow: "hidden",
   },
   footerActionTitle: {
-    marginRight: 25,
     borderBottom: `1px solid ${colors.black}`,
     cursor: "pointer",
   },
