@@ -55,7 +55,7 @@ const Home = ({ state, actions, libraries }) => {
       <ProfilesBlock item={DATA} />
       {/* <FullWidthContentBlock item={DATA[2]} alignContent="center" /> */}
       <PromoBlock item={DATA[2]} reverse />
-      <IndexCard item={DATA} />
+      {/* <IndexCard item={DATA} /> */}
       {/* <Accordion item={DATA} /> */}
       <CardFS
         title={`${DATA.title}`}

@@ -4,21 +4,17 @@ import { colors } from "../config/colors";
 
 import Loading from "./loading";
 
-const IndexCard = ({ state, actions, item, themeColor, cardWidth, cardHeight }) => {
-  if (!item) return <Loading />;
+const IndexCard = ({ state, actions, block, cardWidth, cardHeight }) => {
+  if (!block) return <Loading />;
 
-  // HELPERS ---------------------------------------------
-  const handleGoToPath = () => {
-    actions.router.set(`${url}`);
-    console.log("url", url);
-  };
+  const { colour, subtitle, title } = block;
 
   // SERVERS ----------------------------------------------
   const ServeFooter = () => {
     return (
       <div
         style={{
-          backgroundColor: themeColor || colors.primary,
+          backgroundColor: colour || colors.primary,
           height: 8,
           width: "100%",
         }}
@@ -26,32 +22,32 @@ const IndexCard = ({ state, actions, item, themeColor, cardWidth, cardHeight }) 
     );
   };
 
-  const ServeCardBody = ({ item }) => {
-    const { title } = item;
+  const ServeCardBody = ({ block }) => {
+    const { title, link } = block;
+
     if (!title) return null;
 
-    const ServeTitle = () => {
-      // Manage max string Length
-      const MAX_LENGTH = 30;
-      let titlePreview = `${title.substring(0, MAX_LENGTH)}...`;
-      if (title.length < MAX_LENGTH) titlePreview = title;
+    // HELPERS ---------------------------------------------
+    const handleGoToPath = () => {
+      // console.log("url", url); // debug
+      actions.router.set(`${link.url}`);
+    };
 
+    const ServeTitle = () => {
       return (
-        <div>
-          <li
-            className="list-group-item"
+        <div
+          className="list-group-block"
+          style={{ padding: `0.5em 0`, cursor: "pointer" }}
+          onClick={handleGoToPath}
+        >
+          <div
             style={{
-              border: "none",
+              borderBottom: `1px dotted ${colors.silver}`,
+              fontTransform: "uppercase",
             }}
           >
-            <div
-              style={{
-                borderBottom: `1px dotted ${colors.silver}`,
-              }}
-            >
-              {titlePreview}
-            </div>
-          </li>
+            {title}
+          </div>
         </div>
       );
     };
@@ -66,7 +62,7 @@ const IndexCard = ({ state, actions, item, themeColor, cardWidth, cardHeight }) 
   // RETURN ----------------------------------------------------
   return (
     <div
-      className="card m-2 shadow"
+      className="shadow"
       style={{
         ...styles.card,
         width: cardWidth || "30%",
@@ -74,23 +70,23 @@ const IndexCard = ({ state, actions, item, themeColor, cardWidth, cardHeight }) 
       }}
     >
       <div className="flex-col m-3">
-        <ul className="list-group">
-          <li
-            className="list-group-item"
-            style={{ fontSize: 20, fontWeight: "bold", border: "none" }}
+        <div className="list-group">
+          <div
+            className="list-group-block"
+            style={{ fontSize: 20, fontWeight: "bold" }}
           >
-            An active item
-          </li>
-          <li
-            className="list-group-item"
-            style={{ fontSize: 16, fontWeight: "bold", border: "none" }}
+            {title}
+          </div>
+          <div
+            className="list-group-block"
+            style={{ fontSize: 16, fontWeight: "bold", padding: `1em 0` }}
           >
-            Our values
-          </li>
-          {item.map((item, key) => {
-            return <ServeCardBody key={key} item={item} />;
+            {subtitle}
+          </div>
+          {block.index_title.map((block, key) => {
+            return <ServeCardBody key={key} block={block} />;
           })}
-        </ul>
+        </div>
       </div>
       <ServeFooter />
     </div>
@@ -101,11 +97,8 @@ const styles = {
   card: {
     display: "flex",
     flexDirection: "column",
+    backgroundColor: colors.white,
     overflow: "hidden",
-    border: "none",
-  },
-  listItem: {
-    fontSize: 16,
   },
 };
 

@@ -45,6 +45,9 @@ const Home = ({ state, actions, libraries, blocks }) => {
           // if (acf_fc_layout === "journal_promo_block")
           //   console.log("CONTENT BLOCK", block);
 
+          if (acf_fc_layout === "index_card")
+            return <IndexCard key={key} block={block} />;
+
           if (acf_fc_layout === "header_block")
             return <HeaderBlock key={key} block={block} />;
 
