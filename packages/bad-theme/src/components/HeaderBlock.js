@@ -2,11 +2,17 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/colors";
 
-const CardBlockHeader = ({ state, actions, title, urlTitle, url }) => {
+import Loading from "./loading";
+
+const HeaderBlock = ({ state, actions, block }) => {
+  if (!block) return <Loading />;
+
+  const { label, link, title } = block;
+
   // HELPERS ---------------------------------------------
   const handleGoToPath = () => {
     // console.log("url", url); // debug
-    actions.router.set(`${url}`);
+    actions.router.set(`${link.url}`);
   };
 
   return (
@@ -20,7 +26,7 @@ const CardBlockHeader = ({ state, actions, title, urlTitle, url }) => {
 
         <div onClick={handleGoToPath}>
           <div style={styles.footerActionTitle}>
-            <p className="card-text">{urlTitle}</p>
+            <p className="card-text">{label}</p>
           </div>
         </div>
       </div>
@@ -38,4 +44,4 @@ const styles = {
   },
 };
 
-export default connect(CardBlockHeader);
+export default connect(HeaderBlock);

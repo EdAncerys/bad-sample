@@ -6,7 +6,6 @@ import { colors } from "../config/colors";
 
 import Loading from "./loading";
 
-import CardBlockHeader from "./cardBlockHeader";
 import Card from "./card";
 import LeftIcon from "../img/svg/leftIcon.svg";
 import RightIcon from "../img/svg/rightIcon.svg";
@@ -49,12 +48,6 @@ const NewsCarousel = ({ state, actions, libraries, block }) => {
 
   return (
     <div>
-      <CardBlockHeader
-        title={block.title}
-        urlTitle="View All"
-        url={block.link.url}
-      />
-
       <Carousel className="news-carousel">
         {BLOCK_PAIRS.map((block, key) => {
           const isSingleBlock = block.length === 1;

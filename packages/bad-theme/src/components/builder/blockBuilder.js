@@ -10,7 +10,7 @@ import JournalPromoBlock from "../../components/home/journalPromoBlock";
 import ButtonsRow from "../../components/buttonsRow";
 import MultiPostBlock from "../../components/multiPostBlock";
 import HeroBanner from "../../components/heroBanner";
-import FeaturedEvents from "../../components/featuredEvents";
+import HeaderBlock from "../../components/headerBlock";
 import Banner from "../../components/banner";
 import NewsCarousel from "../../components/newsCarousel";
 import Footer from "../../components/footer";
@@ -45,6 +45,9 @@ const Home = ({ state, actions, libraries, blocks }) => {
 
           // if (acf_fc_layout === "journal_promo_block")
           //   console.log("CONTENT BLOCK", block);
+
+          if (acf_fc_layout === "header_block")
+            return <HeaderBlock key={key} block={block} />;
 
           if (acf_fc_layout === "multi_post_block")
             return <MultiPostBlock key={key} block={block} />;

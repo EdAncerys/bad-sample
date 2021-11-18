@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import CardBlockHeader from "./cardBlockHeader";
+import HeaderBlock from "./HeaderBlock";
 import MultiPostBlock from "./multiPostBlock";
 import Loading from "./loading";
 
@@ -10,7 +10,7 @@ const FeaturedEvents = ({ state, actions, item }) => {
   // RETURN ---------------------------------------------------
   return (
     <div style={styles.container}>
-      <CardBlockHeader
+      <HeaderBlock
         title="Featured Events"
         urlTitle="View All"
         url="/learn-more"

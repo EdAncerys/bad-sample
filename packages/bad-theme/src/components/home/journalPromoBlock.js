@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import CardBlockHeader from "../cardBlockHeader";
 import JournalCard from "./journalCard";
 
 import Loading from "../loading";
@@ -24,11 +23,6 @@ const JournalPromoBlock = ({ state, actions, block }) => {
 
   return (
     <div>
-      <CardBlockHeader
-        title={`${block.title}`}
-        urlTitle="Learn More"
-        url={`${block.link.url}`}
-      />
       <ServeJournalCards />
     </div>
   );
