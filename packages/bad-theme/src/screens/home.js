@@ -5,22 +5,8 @@ import { DATA } from "../config/data";
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, useAppState, setLoadingAction } from "../context";
 // COMPONENTS ----------------------------------------------------------------
-import HomeBannerCarousel from "../components/home/homeBannerCarousel";
-import PilGuidelines from "../components/home/pilGuidelines";
-import JournalPromoBlock from "../components/home/journalPromoBlock";
-import ButtonsRow from "../components/buttonsRow";
-import MultiPostBlock from "../components/multiPostBlock";
-import HeroBanner from "../components/heroBanner";
-import FeaturedEvents from "../components/featuredEvents";
-import Banner from "../components/banner";
-import NewsCarousel from "../components/newsCarousel";
-import Footer from "../components/footer";
-import ProfilesBlock from "../components/profilesBlock";
-import FullWidthContentBlock from "../components/fullWidthContentBlock";
 import PromoBlock from "../components/promoBlock";
-import IndexCard from "../components/indexCard";
-import Accordion from "../components/accordion";
-import CardFS from "../components/cardFs";
+// import CardFS from "../components/cardFS";
 
 const Home = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
@@ -43,12 +29,7 @@ const Home = ({ state, actions, libraries }) => {
         <p style={styles.title}>BAD Home</p>
       </div>
 
-      {/* <PromoBlock item={DATA[2]} reverse />
-      <CardFS
-        title={`${DATA.title}`}
-        body={`${DATA.body}`}
-        url={`${DATA.imgUrl}`}
-      /> */}
+      {/* <PromoBlock item={DATA[2]} reverse /> */}
     </div>
   );
 };

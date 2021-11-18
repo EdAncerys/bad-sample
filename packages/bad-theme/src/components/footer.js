@@ -8,7 +8,6 @@ import BADLogo from "../img/svg/badLogoFooter.svg";
 import Facebook from "../img/svg/facebook.svg";
 import Twitter from "../img/svg/twitter.svg";
 import Instagram from "../img/svg/instagram.svg";
-import { style } from "@mui/system";
 
 const Footer = ({ state, actions }) => {
   const date = new Date();

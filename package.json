@@ -22,6 +22,7 @@
     "@frontity/tiny-router": "^1.4.4",
     "@frontity/wp-source": "^1.11.6",
     "@mui/icons-material": "^5.1.0",
+    "@mui/material": "^5.1.1",
     "bad-theme": "file:packages/bad-theme",
     "bcryptjs": "^2.4.3",
     "dotenv": "^10.0.0",
