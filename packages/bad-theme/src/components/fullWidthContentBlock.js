@@ -106,7 +106,7 @@ const FullWidthContentBlock = ({
       style={{
         justifyContent: "center",
         textAlign: ALIGNMENT,
-        backgroundColor: "pink" || "transparent",
+        backgroundColor: background_colour || "transparent",
         minHeight: BANNER_HEIGHT,
         margin: disableMargin
           ? ``

@@ -1,22 +1,19 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
-import { colors } from "../../config/colors";
 import { Dropdown } from "react-bootstrap";
 
+import { colors } from "../../config/colors";
 import BADLogo from "../../img/svg/badLogoHeader.svg";
 import SearchIcon from "@mui/icons-material/Search";
+import { setLoginAction } from "../../helpers/context";
 
 const HeaderActions = ({ state, actions }) => {
   // HELPERS ----------------------------------------------------
-  const handleLogin = () => {
-  };
-
   const handleGoToLink = () => {
     actions.router.set(`/`);
   };
 
-  
   // SERVERS ----------------------------------------------------
   const ServeLogoContainer = () => {
     return (
@@ -54,7 +51,7 @@ const HeaderActions = ({ state, actions }) => {
         <div>
           <button
             className="btn shadow-none m-2"
-            onClick={handleLogin}
+            onClick={() => setLoginAction({ state })}
             style={styles.loginBtn}
           >
             Login

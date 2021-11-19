@@ -1,25 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "frontity";
-import Link from "@frontity/components/link";
-import Image from "@frontity/components/image";
 import { Modal } from "react-bootstrap";
 
 import { colors } from "../config/colors";
+import { setLoginAction } from "../helpers/context";
 
 const loginModal = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
-  const loginAction = state.context.loginAction
+  const loginAction = state.context.loginAction;
 
-  // HELPERS ----------------------------------------------------
-  const handleSetLoading = () => {
-    console.log(loginAction)
-  };
-
+  // RETURN ---------------------------------------------------
   return (
     <div>
       <Modal
         show={loginAction}
-        onHide={handleSetLoading}
+        onHide={() => setLoginAction({ state })}
         dialogClassName="modal-90w"
       >
         <Modal.Header closeButton>
