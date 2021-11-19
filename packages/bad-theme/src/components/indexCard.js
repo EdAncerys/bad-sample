@@ -8,6 +8,8 @@ const IndexCard = ({ state, actions, block, cardWidth, cardHeight }) => {
   if (!block) return <Loading />;
 
   const { colour, subtitle, title } = block;
+  const marginHorizontal = state.theme.marginHorizontal;
+  const marginVertical = state.theme.marginVertical;
 
   // SERVERS ----------------------------------------------
   const ServeFooter = () => {
@@ -68,6 +70,7 @@ const IndexCard = ({ state, actions, block, cardWidth, cardHeight }) => {
         ...styles.card,
         width: cardWidth || "30%",
         height: cardHeight || "100%",
+        margin: `${marginVertical}px ${marginHorizontal}px`,
       }}
     >
       <div className="flex-col m-3">

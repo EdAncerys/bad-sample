@@ -8,6 +8,9 @@ import Loading from "../loading";
 const JournalPromoBlock = ({ state, actions, block }) => {
   if (!block) return <Loading />;
 
+  const marginHorizontal = state.theme.marginHorizontal;
+  const marginVertical = state.theme.marginVertical;
+
   // SERVERS ----------------------------------------------
   const ServeJournalCards = () => {
     return (
@@ -22,7 +25,7 @@ const JournalPromoBlock = ({ state, actions, block }) => {
   };
 
   return (
-    <div>
+    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
       <ServeJournalCards />
     </div>
   );

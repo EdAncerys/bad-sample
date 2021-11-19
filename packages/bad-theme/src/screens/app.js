@@ -21,7 +21,7 @@ import { useAppDispatch, useAppState } from "../context";
 
 const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
-  const { isLoading, setLogin } = useAppState();
+  const {} = useAppState();
 
   // env file access
   // console.log(".env variables", state.theme.myVariable);

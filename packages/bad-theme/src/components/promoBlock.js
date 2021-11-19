@@ -9,9 +9,11 @@ import { colors } from "../config/colors";
 const PromoBlock = ({ state, actions, block, reverse }) => {
   if (!block) return <Loading />;
 
-  const BANNER_HEIGHT = state.theme.bannerHeight;
   const { background_image, image_align, title } = block;
 
+  const BANNER_HEIGHT = state.theme.bannerHeight;
+  const marginHorizontal = state.theme.marginHorizontal;
+  const marginVertical = state.theme.marginVertical;
   let MAIN_AXIS = "flex-row"; // define alignment with main axis
   if (image_align === "left") MAIN_AXIS = "flex-row row-reverse";
 
@@ -41,8 +43,14 @@ const PromoBlock = ({ state, actions, block, reverse }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div className={MAIN_AXIS} style={styles.container}>
-      <FullWidthContentBlock block={block} />
+    <div
+      className={MAIN_AXIS}
+      style={{
+        ...styles.container,
+        margin: `${marginVertical}px ${marginHorizontal}px`,
+      }}
+    >
+      <FullWidthContentBlock block={block} disableMargin />
       <ServeCardImage />
     </div>
   );

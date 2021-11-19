@@ -12,12 +12,14 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
   if (!block) return <Loading />;
 
   const BANNER_HEIGHT = state.theme.bannerHeight;
-  const PADDING = state.theme.mainPadding;
+  const PADDING = state.theme.marginHorizontal;
   const FOOTER_HEIGHT = 50;
   let OVERLAY_WIDTH = "200%";
   let CARD_WIDTH = "50%";
   let CARD_HEIGHT = BANNER_HEIGHT - FOOTER_HEIGHT * 2;
   let BODY_LENGTH = 400;
+  const marginHorizontal = state.theme.marginHorizontal;
+  const marginVertical = state.theme.marginVertical;
 
   const {
     add_background_image,
@@ -101,7 +103,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
             marginTop: BANNER_HEIGHT - FOOTER_HEIGHT,
           }}
         >
-          <ButtonsRow block={block} />
+          <ButtonsRow block={block} disableMargin />
         </div>
       </div>
     );
@@ -139,7 +141,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div className="flex-col">
+    <div className="flex-col" style={{ margin: `${marginVertical}px 0` }}>
       <div className="flex-row">
         <ServeOverLay />
         <ServeCardImage />

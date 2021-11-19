@@ -6,28 +6,17 @@ import { Dropdown } from "react-bootstrap";
 
 import BADLogo from "../../img/svg/badLogoHeader.svg";
 import SearchIcon from "@mui/icons-material/Search";
-// CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setLoginAction } from "../../context";
 
 const HeaderActions = ({ state, actions }) => {
-  const dispatch = useAppDispatch();
-  const { setLogin } = useAppState();
-
   // HELPERS ----------------------------------------------------
   const handleLogin = () => {
-    setLoginAction({ dispatch, setLogin: !setLogin });
   };
 
   const handleGoToLink = () => {
     actions.router.set(`/`);
   };
 
-  const handleLogOut = () => {
-    actions.theme.setTaken(null);
-    actions.theme.setLogin(false);
-    actions.router.set("/login");
-  };
-
+  
   // SERVERS ----------------------------------------------------
   const ServeLogoContainer = () => {
     return (

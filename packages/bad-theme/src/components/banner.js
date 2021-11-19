@@ -9,8 +9,10 @@ import Loading from "./loading";
 const Banner = ({ state, actions, block }) => {
   if (!block) return <Loading />;
 
-  const BANNER_HEIGHT = state.theme.bannerHeight;
   const { background_image, label, link, title } = block;
+  const BANNER_HEIGHT = state.theme.bannerHeight;
+  const marginHorizontal = state.theme.marginHorizontal;
+  const marginVertical = state.theme.marginVertical;
 
   // HELPERS ----------------------------------------------------
   const handleGoToAction = () => {
@@ -94,7 +96,11 @@ const Banner = ({ state, actions, block }) => {
   return (
     <div
       className="flex-col"
-      style={{ position: "relative", height: BANNER_HEIGHT }}
+      style={{
+        position: "relative",
+        height: BANNER_HEIGHT,
+        margin: `${marginVertical}px ${marginHorizontal}px`,
+      }}
     >
       <ServeCardImage />
       <ServeOverlay />

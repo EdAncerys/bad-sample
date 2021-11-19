@@ -32,6 +32,7 @@ const settings = {
       state: {
         source: {
           url: "http://3.9.193.188/",
+          // url: "https://test.frontity.org", // tets url
         },
         postTypes: [
           {

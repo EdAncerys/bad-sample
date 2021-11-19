@@ -15,7 +15,11 @@ const BADTheme = {
       myVariable: process.env.MY_VARIABLE,
       menuUrl: "/menu/primary-menu",
       bannerHeight: 425, // px units
-      mainPadding: 100, // px units
+      marginHorizontal: 100, // px units
+      marginVertical: 20, // px units
+    },
+    context: {
+      loginAction: false,
     },
   },
   actions: {
@@ -32,16 +36,9 @@ const BADTheme = {
         //     // if true do something
         //   }, 1000);
       },
-      setLogin:
-        ({ state }) =>
-        (value) => {
-          state.theme.isLoggedIn = value;
-        },
-      setTaken:
-        ({ state }) =>
-        (value) => {
-          state.theme.jwt = value;
-        },
+    },
+    context: {
+      seLoginAction: false,
     },
   },
   libraries: {

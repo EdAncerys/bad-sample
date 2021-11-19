@@ -9,6 +9,8 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
   if (!block) return <Loading />;
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  const marginHorizontal = state.theme.marginHorizontal;
+  const marginVertical = state.theme.marginVertical;
 
   // HELPERS ---------------------------------------------
   const handleGoToPath = () => {
@@ -82,7 +84,7 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
 
   // RETURN ----------------------------------------------------
   return (
-    <div>
+    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
       <Accordion>
         {block.accordion_item.map((block, key) => {
           return <ServeCardBody key={key} eventKey={key} block={block} />;

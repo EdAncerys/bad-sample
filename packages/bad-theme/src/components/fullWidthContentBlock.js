@@ -4,15 +4,23 @@ import { colors } from "../config/colors";
 
 import Loading from "./loading";
 
-const FullWidthContentBlock = ({ state, actions, libraries, block }) => {
+const FullWidthContentBlock = ({
+  state,
+  actions,
+  libraries,
+  block,
+  disableMargin,
+}) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
 
-  const BANNER_HEIGHT = state.theme.bannerHeight;
   const { background_colour, body, label, link, padding, text_align, title } =
     block;
 
+  const BANNER_HEIGHT = state.theme.bannerHeight;
+  const marginHorizontal = state.theme.marginHorizontal;
+  const marginVertical = state.theme.marginVertical;
   let PADDING = `0 20%`;
   let ALIGNMENT = "start";
   if (text_align === "centre") ALIGNMENT = "center";
@@ -98,9 +106,11 @@ const FullWidthContentBlock = ({ state, actions, libraries, block }) => {
       style={{
         justifyContent: "center",
         textAlign: ALIGNMENT,
-        backgroundColor: background_colour || "transparent",
+        backgroundColor: "pink" || "transparent",
         minHeight: BANNER_HEIGHT,
-        padding: `2em 0`,
+        margin: disableMargin
+          ? ``
+          : `${marginVertical}px ${marginHorizontal}px`,
       }}
     >
       <div style={{ margin: PADDING }}>

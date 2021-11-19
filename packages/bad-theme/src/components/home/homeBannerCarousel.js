@@ -9,6 +9,8 @@ import Loading from "../loading";
 
 const HomeBannerCarousel = ({ state, actions, block }) => {
   const BANNER_HEIGHT = state.theme.bannerHeight;
+  const marginHorizontal = state.theme.marginHorizontal;
+  const marginVertical = state.theme.marginVertical;
 
   // SERVERS ----------------------------------------------------------------
   const ServeOverlay = () => {
@@ -29,7 +31,7 @@ const HomeBannerCarousel = ({ state, actions, block }) => {
   if (!block) return <Loading />;
   // RETURN ---------------------------------------------------
   return (
-    <div>
+    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
       <Carousel>
         {block.slides.map((block, key) => {
           const {

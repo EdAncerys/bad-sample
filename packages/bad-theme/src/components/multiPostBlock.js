@@ -6,9 +6,13 @@ import Loading from "./loading";
 
 const MultiPostBlock = ({ state, actions, block }) => {
   if (!block) return <Loading />;
+
+  const marginHorizontal = state.theme.marginHorizontal;
+  const marginVertical = state.theme.marginVertical;
+
   // RETURN ---------------------------------------------------
   return (
-    <div>
+    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
       <div style={styles.container}>
         {block.card.map((block, key) => {
           const {

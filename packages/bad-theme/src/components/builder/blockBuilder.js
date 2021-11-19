@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { colors } from "../../config/colors";
-// CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setLoadingAction } from "../../context";
+
 // COMPONENTS ----------------------------------------------------------------
 import HomeBannerCarousel from "../home/homeBannerCarousel";
 import PilGuidelines from "../home/pilGuidelines";
@@ -20,8 +19,6 @@ import IndexCard from "../indexCard";
 import Accordion from "../accordion";
 
 const Home = ({ state, actions, libraries, blocks }) => {
-  const dispatch = useAppDispatch();
-  const { isLoading } = useAppState();
   // console.log("BLOCKS: ", blocks); // debug
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.

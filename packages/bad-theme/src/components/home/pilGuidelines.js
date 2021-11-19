@@ -6,6 +6,9 @@ import Loading from "../loading";
 import SearchIcon from "@mui/icons-material/Search";
 
 const PilGuidelines = ({ state, actions }) => {
+  const marginHorizontal = state.theme.marginHorizontal;
+  const marginVertical = state.theme.marginVertical;
+
   // SERVERS ---------------------------------------------
   const ServeSearchContainer = () => {
     return (
@@ -26,7 +29,12 @@ const PilGuidelines = ({ state, actions }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div style={styles.container}>
+    <div
+      style={{
+        ...styles.container,
+        margin: `${marginVertical}px ${marginHorizontal}px`,
+      }}
+    >
       <div className="card">
         <div className="card-body">
           <h5 className="card-title">PIL & Guidelines Quicklinks</h5>
@@ -39,7 +47,6 @@ const PilGuidelines = ({ state, actions }) => {
 
 const styles = {
   container: {
-    padding: "50px 5%",
     backgroundColor: colors.lightSilver,
   },
 };

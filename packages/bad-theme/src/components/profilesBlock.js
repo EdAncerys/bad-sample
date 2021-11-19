@@ -9,6 +9,8 @@ const ProfilesBlock = ({ state, actions, block }) => {
   if (!block) return <Loading />;
 
   const { label, link, title } = block;
+  const marginHorizontal = state.theme.marginHorizontal;
+  const marginVertical = state.theme.marginVertical;
 
   // SERVERS ------------------------------------------------------
   const ServeActions = () => {
@@ -54,7 +56,10 @@ const ProfilesBlock = ({ state, actions, block }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div className="flex-col">
+    <div
+      className="flex-col"
+      style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}
+    >
       <ServeTitle />
       <div style={styles.container}>
         {block.profile_card.map((block, key) => {

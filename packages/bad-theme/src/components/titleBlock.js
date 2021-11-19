@@ -8,6 +8,8 @@ const TitleBlock = ({ state, actions, block }) => {
   if (!block) return <Loading />;
 
   const { label, link, title } = block;
+  const marginHorizontal = state.theme.marginHorizontal;
+  const marginVertical = state.theme.marginVertical;
 
   // HELPERS ---------------------------------------------
   const handleGoToPath = () => {
@@ -17,7 +19,7 @@ const TitleBlock = ({ state, actions, block }) => {
   };
 
   return (
-    <div>
+    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
       <div className="flex-row">
         <div className="flex">
           <h5 className="card-title" style={{ fontSize: "1.75em" }}>

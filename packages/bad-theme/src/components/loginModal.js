@@ -3,24 +3,22 @@ import { connect } from "frontity";
 import Link from "@frontity/components/link";
 import Image from "@frontity/components/image";
 import { Modal } from "react-bootstrap";
-// CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setLoginAction } from "../context";
+
 import { colors } from "../config/colors";
 
 const loginModal = ({ state, actions }) => {
-  const dispatch = useAppDispatch();
-  const { setLogin } = useAppState();
   const data = state.source.get(state.router.link);
+  const loginAction = state.context.loginAction
 
   // HELPERS ----------------------------------------------------
   const handleSetLoading = () => {
-    setLoginAction({ dispatch, setLogin: false });
+    console.log(loginAction)
   };
 
   return (
     <div>
       <Modal
-        show={setLogin}
+        show={loginAction}
         onHide={handleSetLoading}
         dialogClassName="modal-90w"
       >

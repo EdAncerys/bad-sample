@@ -18,10 +18,9 @@ const NewsCarousel = ({ state, actions, libraries, block }) => {
   const BLOCK_PAIRS = block.news_card.flatMap((_, i, a) =>
     i % 2 ? [] : [a.slice(i, i + 2)]
   ); // split data in array of pairs
-
-  console.log("BLOCK_PAIRS", BLOCK_PAIRS);
-
   const BANNER_HEIGHT = state.theme.bannerHeight;
+  const marginHorizontal = state.theme.marginHorizontal;
+  const marginVertical = state.theme.marginVertical;
 
   // SERVERS ----------------------------------------------------------------
   const ServeIcon = ({ icon, left, right }) => {
@@ -47,7 +46,7 @@ const NewsCarousel = ({ state, actions, libraries, block }) => {
   };
 
   return (
-    <div>
+    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
       <Carousel className="news-carousel">
         {BLOCK_PAIRS.map((block, key) => {
           const isSingleBlock = block.length === 1;
@@ -58,7 +57,7 @@ const NewsCarousel = ({ state, actions, libraries, block }) => {
               <ServeIcon icon={RightIcon} right />
               <div
                 className="flex"
-                style={{ padding: `0 ${state.theme.mainPadding}px` }}
+                style={{ padding: `0 ${state.theme.marginHorizontal}px` }}
               >
                 {block.map((block, key) => {
                   const { background_image, colour, date, link, title } = block;

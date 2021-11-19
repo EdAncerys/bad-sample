@@ -6,16 +6,13 @@ import { colors } from "../../config/colors";
 import globalCSS from "../../css/main.css";
 import carousel from "../../css/carousel.css";
 import accordion from "../../css/accordion.css";
-// CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setLoginAction } from "../../context";
+
 // COMPONENTS -------------------------------------------------------------
 import HTMLHead from "./htmlHead";
 import NavigationActions from "./navigationActions";
 import HeaderActions from "./headerActions";
 
 const Header = ({ state, actions }) => {
-  const dispatch = useAppDispatch();
-  const { setLogin } = useAppState();
   const data = state.source.get(state.router.link);
 
   return (

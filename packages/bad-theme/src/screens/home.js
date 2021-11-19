@@ -2,16 +2,12 @@ import React, { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/colors";
 import { DATA } from "../config/data";
-// CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setLoadingAction } from "../context";
+
 // COMPONENTS ----------------------------------------------------------------
 import PromoBlock from "../components/promoBlock";
 // import CardFS from "../components/cardFS";
 
 const Home = ({ state, actions, libraries }) => {
-  const dispatch = useAppDispatch();
-  const { isLoading } = useAppState();
-
   const Html2React = libraries.html2react.Components; // to render html contentment
   // <Html2React html={rendered} /> // get html content from state
 
