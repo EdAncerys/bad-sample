@@ -4,16 +4,21 @@ import { Modal } from "react-bootstrap";
 
 import { colors } from "../../config/colors";
 import Form from "./form";
+import ContactPreferences from "./contactPreferences";
 
 const loginModal = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
+  const [formComplete, setFormComplete] = useState(false);
+
   const createAccountAction = state.context.createAccountAction;
 
   // SERVERS --------------------------------------------------
   const ServeModalContent = () => {
+    if (formComplete) return null;
+
     const ServeFormInfo = () => {
       return (
-        <div>
+        <div style={{ marginTop: `3em` }}>
           <div className="mb-4">
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -53,7 +58,7 @@ const loginModal = ({ state, actions }) => {
             type="submit"
             className="btn"
             style={{ backgroundColor: colors.primary, color: colors.white }}
-            onClick={actions.context.setCreateAccountAction}
+            onClick={() => setFormComplete(true)}
           >
             Confirm
           </button>
@@ -64,7 +69,7 @@ const loginModal = ({ state, actions }) => {
     return (
       <div className="flex m-4" style={{ flex: 2, paddingRight: `2em` }}>
         <div className="flex-col">
-          <Modal.Body>
+          <Modal.Body style={{ padding: 0 }}>
             <ServeFormInfo />
             <Form />
           </Modal.Body>
@@ -87,7 +92,7 @@ const loginModal = ({ state, actions }) => {
             style={{
               borderBottom: `1px solid ${colors.darkSilver}`,
               padding: `1em 1em 1em 0`,
-              margin: `1em`,
+              margin: `3em 1em`,
             }}
           >
             <h4>Register with the BAD website</h4>
@@ -104,6 +109,10 @@ const loginModal = ({ state, actions }) => {
         <div className="flex-row">
           <ServeModalInfo />
           <ServeModalContent />
+          <ContactPreferences
+            formComplete={formComplete}
+            setFormComplete={setFormComplete}
+          />
         </div>
       </Modal>
     </div>

@@ -45,7 +45,7 @@ const loginModal = ({ state, actions }) => {
 
     const ServeFormInfo = () => {
       return (
-        <div>
+        <div style={{ marginTop: `3em` }}>
           <div className="mb-4">
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -118,7 +118,7 @@ const loginModal = ({ state, actions }) => {
             style={{
               borderBottom: `1px solid ${colors.darkSilver}`,
               padding: `1em 1em 1em 0`,
-              margin: `1em`,
+              margin: `3em 1em`,
             }}
           >
             <h4>Login</h4>

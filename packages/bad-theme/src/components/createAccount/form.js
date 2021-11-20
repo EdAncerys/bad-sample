@@ -47,11 +47,13 @@ const Form = ({ state, actions }) => {
 
       <div className="flex mb-3 form-check">
         <div className="flex">
-          <input
-            type="checkbox"
-            className="form-check-input"
-            style={{ borderRadius: "50%", marginRight: 10 }}
-          />
+          <div>
+            <input
+              type="checkbox"
+              className="form-check-input"
+              style={styles.checkBox}
+            />
+          </div>
           <div>
             <label className="form-check-label">
               I Agree with the{" "}
@@ -67,11 +69,13 @@ const Form = ({ state, actions }) => {
       </div>
       <div className="flex mb-3 form-check">
         <div className="flex">
-          <input
-            type="checkbox"
-            className="form-check-input"
-            style={{ borderRadius: "50%", marginRight: 10 }}
-          />
+          <div>
+            <input
+              type="checkbox"
+              className="form-check-input"
+              style={styles.checkBox}
+            />
+          </div>
           <div>
             <label className="form-check-label">
               I Agree with the{" "}
@@ -101,6 +105,12 @@ const styles = {
     textDecoration: "underline",
     textUnderlineOffset: 5,
     cursor: "pointer",
+  },
+  checkBox: {
+    borderRadius: "50%",
+    width: 20,
+    height: 20,
+    marginRight: 10,
   },
 };
 
