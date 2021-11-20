@@ -5,16 +5,19 @@ import { Modal } from "react-bootstrap";
 import { colors } from "../../config/colors";
 import Form from "./form";
 import ContactPreferences from "./contactPreferences";
+import FormSubmitted from "./formSubmitted";
 
 const loginModal = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const [formComplete, setFormComplete] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   const createAccountAction = state.context.createAccountAction;
 
   // SERVERS --------------------------------------------------
   const ServeModalContent = () => {
     if (formComplete) return null;
+    if (formSubmitted) return null;
 
     const ServeFormInfo = () => {
       return (
@@ -112,6 +115,11 @@ const loginModal = ({ state, actions }) => {
           <ContactPreferences
             formComplete={formComplete}
             setFormComplete={setFormComplete}
+            setFormSubmitted={setFormSubmitted}
+          />
+          <FormSubmitted
+            formSubmitted={formSubmitted}
+            setFormSubmitted={setFormSubmitted}
           />
         </div>
       </Modal>

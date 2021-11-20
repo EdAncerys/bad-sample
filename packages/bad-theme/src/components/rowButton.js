@@ -23,8 +23,8 @@ const RowButton = ({
   // HELPERS ---------------------------------------------
   const handleGoToPath = () => {
     // console.log("link", link); // debug
-    if (!link.url) return null;
     if (onClick) onClick();
+    if (!link) return null;
     actions.router.set(`${link.url}`);
   };
 

@@ -60,7 +60,7 @@ const loginModal = ({ state, actions }) => {
           <RowButton
             block={{
               title: "Not yet registered? Register here",
-              link: { url: "hello" },
+              // link: { url: "hello" },
             }}
             onClick={actions.context.setActionFlipper}
             buttonWidth="60%"

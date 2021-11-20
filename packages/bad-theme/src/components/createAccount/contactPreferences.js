@@ -3,12 +3,14 @@ import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 
 import { colors } from "../../config/colors";
+import { setCreateAccountAction } from "../../helpers/context";
 
 const ContactPreferences = ({
   state,
   actions,
   formComplete,
   setFormComplete,
+  setFormSubmitted,
 }) => {
   if (!formComplete) return null;
 
@@ -28,7 +30,14 @@ const ContactPreferences = ({
           type="submit"
           className="btn"
           style={{ backgroundColor: colors.primary, color: colors.white }}
-          onClick={actions.context.setCreateAccountAction}
+          onClick={() => {
+            setFormComplete(false);
+            setFormSubmitted(true);
+            setTimeout(() => {
+              setCreateAccountAction({ state });
+              setFormSubmitted(false);
+            }, 2000);
+          }}
         >
           Confirm
         </button>
