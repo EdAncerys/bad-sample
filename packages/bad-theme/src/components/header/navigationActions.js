@@ -12,7 +12,8 @@ const NavigationActions = ({ state, actions, libraries }) => {
   const NAV_DIVIDER = 8;
 
   useEffect(() => {
-    const data = state.source.data[`/menu/primary-menu/`].items;
+    // const data = state.source.data[`/menu/primary-menu/`].items;
+    const data = state.theme.menu;
     const dataLength = data.length;
 
     setWpMainMenu(data.slice(0, NAV_DIVIDER));

@@ -16,6 +16,7 @@ const BADTheme = {
     theme: {
       myVariable: process.env.MY_VARIABLE,
       menuUrl: "/menu/primary-menu",
+      menu: null,
       bannerHeight: 425, // px units
       marginHorizontal: 100, // px units
       marginVertical: 20, // px units
@@ -27,9 +28,19 @@ const BADTheme = {
   actions: {
     theme: {
       beforeCSR: async ({ state, actions }) => {
-        // console.log("beforeCSR triggered"); // debug
+        console.log("beforeCSR triggered"); // debug
         // await Promise.all([actions.source.fetch("/")]);
-        await actions.source.fetch(`${state.theme.menuUrl}`);
+
+        const menu = sessionStorage.getItem("badMenu"); // checking if menu already fetched from wp
+        // console.log(menu);
+        if (!menu) {
+          console.log("feching new menu");
+          await actions.source.fetch(`${state.theme.menuUrl}`);
+          const badMenu = await state.source.data["/menu/primary-menu/"].items;
+
+          sessionStorage.setItem("badMenu", JSON.stringify(badMenu));
+        }
+        if (menu) state.theme.menu = JSON.parse(menu);
       },
       afterCSR: async ({ state, actions }) => {
         //   setInterval(async () => {
