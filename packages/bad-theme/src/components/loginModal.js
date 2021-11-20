@@ -3,48 +3,149 @@ import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 
 import { colors } from "../config/colors";
-import { setLoginAction } from "../helpers/context";
+import RowButton from "./rowButton";
 
 const loginModal = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const loginAction = state.context.loginAction;
 
+  // SERVERS --------------------------------------------------
+  const ServeModalContent = () => {
+    const ServeForm = () => {
+      return (
+        <form>
+          <div style={{ margin: `2em 0` }}>
+            <label className="form-label">Email address</label>
+            <input type="email" className="form-control" />
+            <div className="form-text">
+              We'll never share your email with anyone else.
+            </div>
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Password</label>
+            <input type="password" className="form-control" />
+          </div>
+          <div className="flex mb-3 form-check">
+            <div className="flex">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                style={{ borderRadius: "50%", marginRight: 10 }}
+              />
+              <label className="form-check-label">Remember Me</label>
+            </div>
+            <div
+              type="submit"
+              onClick={actions.context.setLoginAction}
+              style={{ textDecoration: "underline", textUnderlineOffset: 5 }}
+            >
+              Forgotten Password?
+            </div>
+          </div>
+        </form>
+      );
+    };
+
+    const ServeFormInfo = () => {
+      return (
+        <div>
+          <div className="mb-4">
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+          </div>
+          <RowButton
+            block={{
+              title: "Not yet registered",
+              link: { url: "hello" },
+            }}
+            onClick={actions.context.setLoginAction}
+            buttonWidth="60%"
+          />
+        </div>
+      );
+    };
+
+    const ServeActions = () => {
+      return (
+        <Modal.Footer>
+          <button
+            type="submit"
+            className="btn btn-outline-secondary"
+            onClick={() => actions.context.setLoginAction}
+          >
+            Exit
+          </button>
+
+          <button
+            type="submit"
+            className="btn"
+            style={{ backgroundColor: colors.primary, color: colors.white }}
+            onClick={actions.context.setLoginAction}
+          >
+            Login
+          </button>
+        </Modal.Footer>
+      );
+    };
+
+    return (
+      <div className="flex m-4" style={{ flex: 2, paddingRight: `2em` }}>
+        <div className="flex-col">
+          <Modal.Body>
+            <ServeFormInfo />
+            <ServeForm />
+          </Modal.Body>
+          <ServeActions />
+        </div>
+      </div>
+    );
+  };
+
+  const ServeModalInfo = () => {
+    return (
+      <div
+        className="flex"
+        style={{
+          backgroundColor: colors.lightSilver,
+        }}
+      >
+        <Modal.Body>
+          <div
+            style={{
+              borderBottom: `1px solid ${colors.darkSilver}`,
+              padding: `1em`,
+              margin: `1em`,
+            }}
+          >
+            <h4>Login</h4>
+          </div>
+        </Modal.Body>
+      </div>
+    );
+  };
+
   // RETURN ---------------------------------------------------
   return (
     <div>
-      <Modal
-        show={loginAction}
-        onHide={() => setLoginAction({ state })}
-        dialogClassName="modal-90w"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="example-custom-modal-styling-title">
-            Custom Modal Styling
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>
-            Ipsum molestiae natus adipisci modi eligendi? Debitis amet quae unde
-            commodi aspernatur enim, consectetur. Cumque deleniti temporibus
-            ipsam atque a dolores quisquam quisquam adipisci possimus
-            laboriosam. Quibusdam facilis doloribus debitis! Sit quasi quod
-            accusamus eos quod. Ab quos consequuntur eaque quo rem! Mollitia
-            reiciendis porro quo magni incidunt dolore amet atque facilis ipsum
-            deleniti rem!
-          </p>
-        </Modal.Body>
+      <Modal show={loginAction} size="xl" centered>
+        <div className="flex-row">
+          <ServeModalInfo />
+          <ServeModalContent />
+        </div>
       </Modal>
     </div>
   );
 };
 
 const styles = {
-  title: {
-    textAlign: "center",
-    fontSize: 40,
-    fontWeight: "500",
-    color: colors.primary,
-  },
+  container: {},
 };
 
 export default connect(loginModal);

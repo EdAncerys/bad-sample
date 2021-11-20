@@ -28,7 +28,7 @@ const ProfilesBlock = ({ state, actions, block }) => {
             fontSize: 16,
             textTransform: "capitalize",
             color: colors.white,
-            backgroundColor: colors.blue,
+            backgroundColor: colors.primary,
           }}
           onClick={handleGoToAction}
         >

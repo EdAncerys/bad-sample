@@ -6,7 +6,6 @@ import { Dropdown } from "react-bootstrap";
 import { colors } from "../../config/colors";
 import BADLogo from "../../img/svg/badLogoHeader.svg";
 import SearchIcon from "@mui/icons-material/Search";
-import { setLoginAction } from "../../helpers/context";
 
 const HeaderActions = ({ state, actions }) => {
   // HELPERS ----------------------------------------------------
@@ -51,7 +50,7 @@ const HeaderActions = ({ state, actions }) => {
         <div>
           <button
             className="btn shadow-none m-2"
-            onClick={() => setLoginAction({ state })}
+            onClick={actions.context.setLoginAction}
             style={styles.loginBtn}
           >
             Login
@@ -87,7 +86,10 @@ const HeaderActions = ({ state, actions }) => {
   return (
     <div
       className="flex"
-      style={{ alignItems: "center", borderBottom: `1px solid ${colors.blue}` }}
+      style={{
+        alignItems: "center",
+        borderBottom: `1px solid ${colors.primary}`,
+      }}
     >
       <ServeLogoContainer />
       <div
@@ -119,7 +121,7 @@ const styles = {
   loginBtn: {
     fontSize: 16,
     color: colors.white,
-    backgroundColor: colors.blue,
+    backgroundColor: colors.primary,
     textTransform: "capitalize",
     border: "none",
   },

@@ -31,10 +31,8 @@ const BADTheme = {
         console.log("beforeCSR triggered"); // debug
         // await Promise.all([actions.source.fetch("/")]);
 
-        const menu = sessionStorage.getItem("badMenu"); // checking if menu already fetched from wp
-        // console.log(menu);
+        const menu = sessionStorage.getItem("badMenu"); // checking if menu already pre fetched from wp
         if (!menu) {
-          console.log("feching new menu");
           await actions.source.fetch(`${state.theme.menuUrl}`);
           const badMenu = await state.source.data["/menu/primary-menu/"].items;
 
@@ -51,7 +49,7 @@ const BADTheme = {
       },
     },
     context: {
-      seLoginAction: ({ state }) => loginAction({ state }),
+      setLoginAction: ({ state }) => setLoginAction({ state }),
     },
   },
   libraries: {

@@ -88,7 +88,7 @@ const Footer = ({ state, actions }) => {
           <ServeFooterTopRow />
           <ServeFooterBottomRow />
         </div>
-        <div style={{ height: "20px", backgroundColor: colors.blue }} />
+        <div style={{ height: "20px", backgroundColor: colors.primary }} />
       </div>
     </div>
   );

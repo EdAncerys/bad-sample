@@ -3,7 +3,18 @@ import { connect } from "frontity";
 import { colors } from "../config/colors";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
-const RowButton = ({ state, actions, libraries, block, buttonWidth }) => {
+const RowButton = ({
+  state,
+  actions,
+  libraries,
+  block,
+  buttonWidth,
+  onClick,
+}) => {
+  // block: object
+  // buttonWidth: % value
+  // onClick action
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { title, colour, link } = block;
@@ -13,6 +24,7 @@ const RowButton = ({ state, actions, libraries, block, buttonWidth }) => {
   const handleGoToPath = () => {
     // console.log("link", link); // debug
     if (!link.url) return null;
+    if (onClick) onClick();
     actions.router.set(`${link.url}`);
   };
 

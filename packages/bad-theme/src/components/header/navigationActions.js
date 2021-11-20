@@ -12,13 +12,14 @@ const NavigationActions = ({ state, actions, libraries }) => {
   const NAV_DIVIDER = 8;
 
   useEffect(() => {
-    // const data = state.source.data[`/menu/primary-menu/`].items;
+    // getting wp menu from state
     const data = state.theme.menu;
+    if (!data) return;
     const dataLength = data.length;
 
-    setWpMainMenu(data.slice(0, NAV_DIVIDER));
-    setWpMoreMenu(data.slice(NAV_DIVIDER, dataLength));
-  }, []);
+    setWpMainMenu(data.slice(0, NAV_DIVIDER)); // main menu to display
+    setWpMoreMenu(data.slice(NAV_DIVIDER, dataLength)); // more menu into dropdown
+  }, [state.theme.menu]);
 
   // SERVERS ---------------------------------------------
   const ServeNestedMenu = ({ item }) => {
