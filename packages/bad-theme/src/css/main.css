@@ -26,6 +26,9 @@ body {
   border-radius: 10px;
   min-width: 140px;
 }
+.divider {
+  border-bottom: 1px solid #a2a2a2;
+}
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 ::-webkit-scrollbar {

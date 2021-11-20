@@ -17,9 +17,6 @@ const loginModal = ({ state, actions }) => {
           <div style={{ margin: `2em 0` }}>
             <label className="form-label">Email address</label>
             <input type="email" className="form-control" />
-            <div className="form-text">
-              We'll never share your email with anyone else.
-            </div>
           </div>
           <div className="mb-3">
             <label className="form-label">Password</label>
@@ -62,10 +59,10 @@ const loginModal = ({ state, actions }) => {
           </div>
           <RowButton
             block={{
-              title: "Not yet registered",
+              title: "Not yet registered? Register here",
               link: { url: "hello" },
             }}
-            onClick={actions.context.setLoginAction}
+            onClick={actions.context.setActionFlipper}
             buttonWidth="60%"
           />
         </div>
@@ -78,7 +75,7 @@ const loginModal = ({ state, actions }) => {
           <button
             type="submit"
             className="btn btn-outline-secondary"
-            onClick={() => actions.context.setLoginAction}
+            onClick={actions.context.setLoginAction}
           >
             Exit
           </button>
@@ -120,7 +117,7 @@ const loginModal = ({ state, actions }) => {
           <div
             style={{
               borderBottom: `1px solid ${colors.darkSilver}`,
-              padding: `1em`,
+              padding: `1em 1em 1em 0`,
               margin: `1em`,
             }}
           >

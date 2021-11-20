@@ -10,6 +10,7 @@ import Login from "./login";
 import Home from "./home";
 import CreateAccount from "./createAccount";
 import LoginModal from "../components/loginModal";
+import CreateAccountModal from "../components/createAccountModal";
 import Footer from "../components/footer";
 import Directions from "../components/directions";
 import BlocksPage from "../Test/blocksPage";
@@ -35,6 +36,7 @@ const App = ({ state, actions }) => {
       <Header />
       <Directions />
       <LoginModal />
+      <CreateAccountModal />
 
       <div className="flex-col">
         <Switch>

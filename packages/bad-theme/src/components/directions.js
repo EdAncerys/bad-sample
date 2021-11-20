@@ -91,7 +91,7 @@ const styles = {
     cursor: "pointer",
   },
   linkValue: {
-    color: colors.lightBlue,
+    color: colors.blue,
   },
 };
 

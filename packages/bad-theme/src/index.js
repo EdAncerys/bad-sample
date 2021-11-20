@@ -5,7 +5,11 @@ import iframe from "@frontity/html2react/processors/iframe";
 import link from "@frontity/html2react/processors/link";
 import menuHandler from "./components/handlers/menu-handler";
 
-import { setLoginAction } from "./helpers/context";
+import {
+  setLoginAction,
+  setCreateAccountAction,
+  setActionFlipper,
+} from "./helpers/context";
 
 const BADTheme = {
   name: "bad-theme",
@@ -23,6 +27,7 @@ const BADTheme = {
     },
     context: {
       loginAction: false,
+      createAccountAction: false,
     },
   },
   actions: {
@@ -50,6 +55,8 @@ const BADTheme = {
     },
     context: {
       setLoginAction: ({ state }) => setLoginAction({ state }),
+      setCreateAccountAction: ({ state }) => setCreateAccountAction({ state }),
+      setActionFlipper: ({ state }) => setActionFlipper({ state }),
     },
   },
   libraries: {
