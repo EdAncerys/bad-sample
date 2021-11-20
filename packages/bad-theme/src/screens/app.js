@@ -10,7 +10,7 @@ import Login from "./login";
 import Home from "./home";
 import CreateAccount from "./createAccount";
 import LoginModal from "../components/loginModal";
-import CreateAccountModal from "../components/createAccountModal";
+import CreateAccountModal from "../components/createAccount/createAccountModal";
 import Footer from "../components/footer";
 import Directions from "../components/directions";
 import BlocksPage from "../Test/blocksPage";
