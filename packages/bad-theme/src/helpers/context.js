@@ -8,6 +8,11 @@ export const setCreateAccountAction = ({ state }) => {
   state.context.createAccountAction = !createAccountAction;
 };
 
+export const setEnquireAction = ({ state }) => {
+  const enquireAction = state.context.enquireAction;
+  state.context.enquireAction = !enquireAction;
+};
+
 export const setActionFlipper = ({ state }) => {
   setLoginAction({ state });
   setCreateAccountAction({ state });

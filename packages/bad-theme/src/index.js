@@ -9,6 +9,7 @@ import {
   setLoginAction,
   setCreateAccountAction,
   setActionFlipper,
+  setEnquireAction,
 } from "./helpers/context";
 
 const BADTheme = {
@@ -28,6 +29,7 @@ const BADTheme = {
     context: {
       loginAction: false,
       createAccountAction: false,
+      enquireAction: false,
     },
   },
   actions: {
@@ -57,6 +59,7 @@ const BADTheme = {
       setLoginAction: ({ state }) => setLoginAction({ state }),
       setCreateAccountAction: ({ state }) => setCreateAccountAction({ state }),
       setActionFlipper: ({ state }) => setActionFlipper({ state }),
+      setEnquireAction: ({ state }) => setEnquireAction({ state }),
     },
   },
   libraries: {

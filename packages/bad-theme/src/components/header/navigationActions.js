@@ -163,7 +163,7 @@ const styles = {
   link: {
     color: colors.textMain,
     fontSize: 15,
-    fontTransform: "capitalize",
+    textTransform: "capitalize",
   },
 };
 

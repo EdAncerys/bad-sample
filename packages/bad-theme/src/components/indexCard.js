@@ -46,7 +46,7 @@ const IndexCard = ({ state, actions, block, cardWidth, cardHeight }) => {
           <div
             style={{
               borderBottom: `1px dotted ${colors.silver}`,
-              fontTransform: "uppercase",
+              textTransform: "uppercase",
             }}
           >
             {title}

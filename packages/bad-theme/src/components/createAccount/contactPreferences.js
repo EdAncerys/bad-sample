@@ -33,10 +33,14 @@ const ContactPreferences = ({
           onClick={() => {
             setFormComplete(false);
             setFormSubmitted(true);
+
+            // resetting the state & closing the module with time out
             setTimeout(() => {
               setCreateAccountAction({ state });
-              setFormSubmitted(false);
             }, 2000);
+            setTimeout(() => {
+              setFormSubmitted(false);
+            }, 2500);
           }}
         >
           Confirm

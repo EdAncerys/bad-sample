@@ -77,7 +77,9 @@ const HeaderActions = ({ state, actions }) => {
               <Dropdown.Item onClick={actions.context.setCreateAccountAction}>
                 Create Account
               </Dropdown.Item>
-              <Dropdown.Item href="#">English</Dropdown.Item>
+              <Dropdown.Item onClick={actions.context.setEnquireAction}>
+                Enquire
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </div>

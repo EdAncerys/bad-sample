@@ -5,7 +5,7 @@ import { Modal } from "react-bootstrap";
 import { colors } from "../config/colors";
 import RowButton from "./rowButton";
 
-const loginModal = ({ state, actions }) => {
+const LoginModal = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const loginAction = state.context.loginAction;
 
@@ -145,4 +145,4 @@ const styles = {
   container: {},
 };
 
-export default connect(loginModal);
+export default connect(LoginModal);
