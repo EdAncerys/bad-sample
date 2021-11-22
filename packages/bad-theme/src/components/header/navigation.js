@@ -29,6 +29,11 @@ const Navigation = ({ state, actions, libraries }) => {
     setWpMoreMenu(data.slice(NAV_DIVIDER, dataLength)); // more menu into dropdown
   }, [state.theme.menu]);
 
+  // HELPERS ---------------------------------------------
+  const handleGoToPath = ({ slug }) => {
+    actions.router.set(`/${slug}`);
+  };
+
   // SERVERS ----------------------------------------------------------
   const ServeMoreMenu = ({ title, menu }) => {
     if (!menu) return null;
@@ -43,7 +48,7 @@ const Navigation = ({ state, actions, libraries }) => {
 
           return (
             <div key={ID} className="flex-row">
-              <NavDropdown.Item href={`${slug}`}>
+              <NavDropdown.Item onClick={() => handleGoToPath({ slug })}>
                 <Html2React html={title} />
               </NavDropdown.Item>
             </div>
@@ -76,8 +81,8 @@ const Navigation = ({ state, actions, libraries }) => {
           return (
             <div key={ID}>
               <Nav.Link
-                href={`${slug}`}
                 style={{ ...styles.link, ...TEST_BLOCK }}
+                onClick={() => handleGoToPath({ slug })}
               >
                 <Html2React html={title} />
               </Nav.Link>
