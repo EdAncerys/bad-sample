@@ -64,10 +64,9 @@ const Navigation = ({ state, actions, libraries }) => {
         {wpMainMenu.map((item) => {
           const { ID, title, slug } = item;
 
-          const TEST_BLOCK =
-            title === "blocks Page"
-              ? { color: colors.danger, fontWeight: "bold", fontSize: 20 }
-              : {};
+          const TEST_BLOCK = slug.includes("blocks-page")
+            ? { color: colors.danger, fontWeight: "bold", fontSize: 20 }
+            : {};
 
           if (item.child_items)
             return (
