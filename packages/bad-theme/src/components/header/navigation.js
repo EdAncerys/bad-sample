@@ -10,30 +10,82 @@ import {
   Nav,
   NavDropdown,
   DropdownButton,
-  Dropdown,
   Button,
 } from "react-bootstrap";
 
-const Navigation = ({ state, actions }) => {
-  // HELPERS ---------------------------------------------
-  const ServeDropDown = () => {
+const Navigation = ({ state, actions, libraries }) => {
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  const [wpMainMenu, setWpMainMenu] = useState([]);
+  const [wpMoreMenu, setWpMoreMenu] = useState([]);
+  const NAV_DIVIDER = 8;
+
+  useEffect(() => {
+    // getting wp menu from state
+    const data = state.theme.menu;
+    if (!data) return;
+    const dataLength = data.length;
+
+    setWpMainMenu(data.slice(0, NAV_DIVIDER)); // main menu to display
+    setWpMoreMenu(data.slice(NAV_DIVIDER, dataLength)); // more menu into dropdown
+  }, [state.theme.menu]);
+
+  // SERVERS ----------------------------------------------------------
+  const ServeMoreMenu = ({ title, menu }) => {
+    if (!menu) return null;
+
     return (
       <NavDropdown
-        title="Dropdown btn-block"
-        id="collasible-nav-dropdown"
+        title={title || "Menu Title"}
         style={{ position: "static" }} // static position adding ability for dropdown to move up the scope
       >
-        <NavDropdown.Item
-          href="#action/3.1"
-          style={{ backgroundColor: colors.secondary }}
-        >
-          Action
-        </NavDropdown.Item>
-        <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-        <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-        <NavDropdown.Divider />
-        <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+        {menu.map((item) => {
+          const { ID, title, slug } = item;
+
+          return (
+            <div key={ID} className="flex-row">
+              <NavDropdown.Item href={`${slug}`}>
+                <Html2React html={title} />
+              </NavDropdown.Item>
+            </div>
+          );
+        })}
       </NavDropdown>
+    );
+  };
+
+  const ServeMenu = () => {
+    return (
+      <div className="flex" style={styles.container}>
+        {wpMainMenu.map((item) => {
+          const { ID, title, slug } = item;
+
+          const TEST_BLOCK =
+            title === "blocks Page"
+              ? { color: colors.danger, fontWeight: "bold", fontSize: 20 }
+              : {};
+
+          if (item.child_items)
+            return (
+              <ServeMoreMenu
+                key={ID}
+                title={<Html2React html={title} />}
+                menu={item.child_items}
+              />
+            );
+
+          return (
+            <div key={ID}>
+              <Nav.Link
+                href={`${slug}`}
+                style={{ ...styles.link, ...TEST_BLOCK }}
+              >
+                <Html2React html={title} />
+              </Nav.Link>
+            </div>
+          );
+        })}
+        <ServeMoreMenu title="More" menu={wpMoreMenu} />
+      </div>
     );
   };
 
@@ -43,17 +95,9 @@ const Navigation = ({ state, actions }) => {
         <Navbar collapseOnSelect expand="lg">
           <Container>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-            <Navbar.Collapse id="responsive-navbar-nav">
-              <Nav className="me-auto">
-                <Nav.Link href="#features">Features</Nav.Link>
-                <Nav.Link href="#pricing">Pricing</Nav.Link>
-                <ServeDropDown />
-              </Nav>
-              <Nav>
-                <Nav.Link href="#deets">More deets</Nav.Link>
-                <Nav.Link eventKey={2} href="#memes">
-                  Dank memes
-                </Nav.Link>
+            <Navbar.Collapse>
+              <Nav className="flex">
+                <ServeMenu />
               </Nav>
             </Navbar.Collapse>
           </Container>
@@ -64,7 +108,17 @@ const Navigation = ({ state, actions }) => {
 };
 
 const styles = {
-  container: {},
+  container: {
+    justifyContent: "space-between",
+    alignItems: "center",
+    minHeight: 67,
+    flexWrap: "wrap",
+  },
+  link: {
+    color: colors.textMain,
+    fontSize: 15,
+    textTransform: "capitalize",
+  },
 };
 
 export default connect(Navigation);

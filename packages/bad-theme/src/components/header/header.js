@@ -29,7 +29,7 @@ const Header = ({ state, actions }) => {
         <div className="flex-col" style={styles.container}>
           <HeaderActions />
           <Navigation />
-          <NavigationActions />
+          {/* <NavigationActions /> // secondary inactive nav */}
         </div>
       </div>
     </>
