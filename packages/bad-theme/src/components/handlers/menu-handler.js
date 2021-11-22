@@ -3,7 +3,7 @@ const menuHandler = {
   priority: 10,
   pattern: "/menu/:slug",
   func: async ({ link, params, state, libraries }) => {
-    // console.log("PARAMS:", params);
+    // console.log("PARAMS:", params); // debug
     const { slug } = params;
 
     // Fetch the menu data from the endpoint
@@ -13,6 +13,7 @@ const menuHandler = {
 
     // Parse the JSON to get the object
     const menuData = await response.json();
+    // console.log("menuData:", menuData.items); // debug
 
     // Add the menu items to source.data
     const menu = state.source.data[link];

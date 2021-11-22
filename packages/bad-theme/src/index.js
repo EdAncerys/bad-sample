@@ -58,11 +58,7 @@ const BADTheme = {
         }
       },
       afterCSR: async ({ state, actions }) => {
-        //   setInterval(async () => {
-        //     console.log("refresh cycle");
-        //     // determine if there is an update between frontiy state and wp rest api info
-        //     // if true do something
-        //   }, 1000);
+        console.log("afterCSR triggered"); // debug
       },
     },
     context: {

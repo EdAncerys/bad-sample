@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
-import { Dropdown } from "react-bootstrap";
 
 import { colors } from "../../config/colors";
 import BADLogo from "../../img/svg/badLogoHeader.svg";
 import SearchIcon from "@mui/icons-material/Search";
+import QuickLinksDropDown from "./quickLinksDropDown";
 
 const HeaderActions = ({ state, actions }) => {
   // HELPERS ----------------------------------------------------
@@ -61,32 +61,6 @@ const HeaderActions = ({ state, actions }) => {
     return null;
   };
 
-  const ServeDropDownMenu = () => {
-    return (
-      <div className="dropdown">
-        <div>
-          <Dropdown align="end">
-            <Dropdown.Toggle
-              variant="shadow-none btn-m"
-              style={styles.dropDownBtn}
-            >
-              Quick Links
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu style={styles.dropDown}>
-              <Dropdown.Item onClick={actions.context.setCreateAccountAction}>
-                Create Account
-              </Dropdown.Item>
-              <Dropdown.Item onClick={actions.context.setEnquireAction}>
-                Enquire
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div
       className="flex"
@@ -105,24 +79,13 @@ const HeaderActions = ({ state, actions }) => {
       >
         <ServeSearchContainer />
         <ServeAuthAction />
-        <ServeDropDownMenu />
+        <QuickLinksDropDown />
       </div>
     </div>
   );
 };
 
 const styles = {
-  container: {},
-  dropDownBtn: {
-    fontSize: 16,
-    backgroundColor: colors.lightSilver,
-    textTransform: "capitalize",
-    border: "none",
-  },
-  dropDown: {
-    backgroundColor: colors.lightSilver,
-    border: "none",
-  },
   loginBtn: {
     fontSize: 16,
     color: colors.white,

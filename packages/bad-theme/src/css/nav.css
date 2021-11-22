@@ -7,6 +7,10 @@
   top: 100%;
   margin-top: 0;
 }
+.dropdown-menu.show {
+  margin-top: 20px;
+}
+
 .navbar {
   padding: 0;
 }
