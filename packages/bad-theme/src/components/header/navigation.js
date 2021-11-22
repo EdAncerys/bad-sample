@@ -5,11 +5,15 @@ import { colors } from "../../config/colors";
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
+import NavBarDropDownContent from "./navDropDownContent";
+
 const Navigation = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const [wpMainMenu, setWpMainMenu] = useState([]);
   const [wpMoreMenu, setWpMoreMenu] = useState([]);
+
   const NAV_DIVIDER = 8;
+  const BANNER_HEIGHT = state.theme.bannerHeight;
 
   useEffect(() => {
     // getting wp menu from state
@@ -50,7 +54,7 @@ const Navigation = ({ state, actions, libraries }) => {
     );
   };
 
-  const ServeMainMenuDropDown = ({ title, menu }) => {
+  const ServeMainMenuDropDown = ({ title, menu, slugPrefix }) => {
     if (!menu) return null;
 
     return (
@@ -62,20 +66,20 @@ const Navigation = ({ state, actions, libraries }) => {
           className="flex"
           style={{
             padding: `2em 4em`,
-            height: 580,
-            backgroundColor: colors.lightSilver,
-            // backgroundColor: "pink",
+            height: BANNER_HEIGHT,
+            backgroundColor: colors.lightSilver, // nav bar dropdown background color
+            border: `1px solid ${colors.darkSilver}`,
           }}
         >
           <div
             style={{
               overflow: "auto",
               width: `30%`,
-              // backgroundColor: "blue",
             }}
           >
             {menu.map((item) => {
               const { ID, title, slug } = item;
+              const SLUG_PATH = slugPrefix + "/" + slug; // combining parent & child path
 
               return (
                 <div key={ID} className="flex-row">
@@ -86,7 +90,7 @@ const Navigation = ({ state, actions, libraries }) => {
                       padding: `1em 0 1em`,
                       borderBottom: `1px dotted ${colors.silver}`,
                     }}
-                    onClick={() => handleGoToPath({ slug })}
+                    onClick={() => handleGoToPath({ slug: SLUG_PATH })}
                   >
                     <div className="flex-row">
                       <div
@@ -108,7 +112,9 @@ const Navigation = ({ state, actions, libraries }) => {
               );
             })}
           </div>
-          <div className="flex">CONTENT</div>
+          <div className="flex" style={{ justifyContent: "center" }}>
+            <NavBarDropDownContent />
+          </div>
         </div>
       </NavDropdown>
     );
@@ -129,6 +135,7 @@ const Navigation = ({ state, actions, libraries }) => {
               <ServeMainMenuDropDown
                 key={ID}
                 title={<Html2React html={title} />}
+                slugPrefix={slug}
                 menu={item.child_items}
               />
             );

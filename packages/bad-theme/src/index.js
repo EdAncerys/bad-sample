@@ -38,6 +38,7 @@ const BADTheme = {
         console.log("beforeCSR triggered"); // debug
         // await Promise.all([actions.source.fetch("/")]);
 
+        // pre fetch WP MENU ----------------------------------------------------------------------
         const menu = sessionStorage.getItem("badMenu"); // checking if menu already pre fetched from wp
         if (!menu) {
           try {
@@ -49,6 +50,9 @@ const BADTheme = {
             console.log("error: " + error);
           }
         }
+
+        // pre fetch WP CONTENT ----------------------------------------------------------------------
+        await actions.source.fetch(`/bad-constitution`);
       },
       afterCSR: async ({ state, actions }) => {
         console.log("afterCSR triggered"); // debug

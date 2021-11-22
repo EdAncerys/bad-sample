@@ -19,23 +19,19 @@ import IndexCard from "../indexCard";
 import Accordion from "../accordion";
 
 const BlocksBuilder = ({ state, actions, libraries, blocks }) => {
-  console.log("BLOCKS: ", blocks); // debug
+  // console.log("BLOCKS: ", blocks); // debug
 
   if (!blocks) return null; // if no block content provided
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   // <Html2React html={rendered} /> // get html content from state
 
-  // HANDLERS --------------------------------------------------------
-  const handleSetLoading = () => {
-    setLoadingAction({ dispatch, isLoading: true });
-  };
-
   return (
     <div>
       <div>
         <p style={styles.title}>BLOCK BUILDER 😈 </p>
       </div>
+
       <div>
         {blocks.map((block, key) => {
           const { acf_fc_layout } = block;
