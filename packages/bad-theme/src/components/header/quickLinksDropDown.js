@@ -32,10 +32,6 @@ const QuickLinksDropDown = ({ state, actions }) => {
           </Dropdown.Toggle>
 
           <Dropdown.Menu style={styles.dropDown}>
-            <div className="flex-col pink" style={{ height: 20 }}>
-              <div className="flex pink" />
-              <div className="flex tom" style={{ height: 20 }} />
-            </div>
             <Dropdown.Item onClick={actions.context.setCreateAccountAction}>
               Create Account
             </Dropdown.Item>

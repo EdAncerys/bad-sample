@@ -11,6 +11,10 @@
   margin-top: 20px;
 }
 
+.navbar-expand-lg .navbar-nav .nav-link {
+  padding-right: 0rem;
+  padding-left: 0rem;
+}
 .navbar {
   padding: 0;
 }
