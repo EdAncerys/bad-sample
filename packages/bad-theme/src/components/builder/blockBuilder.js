@@ -18,8 +18,10 @@ import PromoBlock from "../promoBlock";
 import IndexCard from "../indexCard";
 import Accordion from "../accordion";
 
-const Home = ({ state, actions, libraries, blocks }) => {
-  // console.log("BLOCKS: ", blocks); // debug
+const BlocksBuilder = ({ state, actions, libraries, blocks }) => {
+  console.log("BLOCKS: ", blocks); // debug
+
+  if (!blocks) return null; // if no block content provided
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   // <Html2React html={rendered} /> // get html content from state
@@ -38,9 +40,6 @@ const Home = ({ state, actions, libraries, blocks }) => {
         {blocks.map((block, key) => {
           const { acf_fc_layout } = block;
           console.log("CONTENT BLOCK", block); // debug
-
-          // if (acf_fc_layout === "journal_promo_block")
-          //   console.log("CONTENT BLOCK", block);
 
           if (acf_fc_layout === "promotional_block")
             return <PromoBlock key={key} block={block} />;
@@ -102,4 +101,4 @@ const styles = {
   },
 };
 
-export default connect(Home);
+export default connect(BlocksBuilder);

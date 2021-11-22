@@ -1,6 +1,6 @@
 /* navigation config */
-
-.dropdown-menu {
+/* add to drop down full width */
+.BAD-menu .dropdown-menu {
   width: 100%;
 }
 .dropdown-menu[data-bs-popper] {

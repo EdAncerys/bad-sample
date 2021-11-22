@@ -100,7 +100,7 @@ const Navigation = ({ state, actions, libraries }) => {
           <Container>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse>
-              <Nav className="flex">
+              <Nav className="flex BAD-menu">
                 <ServeMenu />
               </Nav>
             </Navbar.Collapse>
