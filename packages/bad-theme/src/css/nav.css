@@ -2,6 +2,8 @@
 /* add to drop down full width */
 .BAD-menu .dropdown-menu {
   width: 100%;
+  padding: 0;
+  border: none;
 }
 .dropdown-menu[data-bs-popper] {
   top: 100%;

@@ -1,17 +1,9 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import Image from "@frontity/components/image";
 
 import { colors } from "../../config/colors";
-
-import {
-  Navbar,
-  Container,
-  Nav,
-  NavDropdown,
-  DropdownButton,
-  Button,
-} from "react-bootstrap";
+import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 const Navigation = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -58,6 +50,70 @@ const Navigation = ({ state, actions, libraries }) => {
     );
   };
 
+  const ServeMainMenuDropDown = ({ title, menu }) => {
+    if (!menu) return null;
+
+    return (
+      <NavDropdown
+        title={title || "Menu Title"}
+        style={{ position: "static" }} // static position adding ability for dropdown to move up the scope
+      >
+        <div
+          className="flex"
+          style={{
+            padding: `2em 4em`,
+            height: 580,
+            backgroundColor: colors.lightSilver,
+            // backgroundColor: "pink",
+          }}
+        >
+          <div
+            style={{
+              overflow: "auto",
+              width: `30%`,
+              // backgroundColor: "blue",
+            }}
+          >
+            {menu.map((item) => {
+              const { ID, title, slug } = item;
+
+              return (
+                <div key={ID} className="flex-row">
+                  <NavDropdown.Item
+                    className="pointer"
+                    style={{
+                      alignItems: "center",
+                      padding: `1em 0 1em`,
+                      borderBottom: `1px dotted ${colors.silver}`,
+                    }}
+                    onClick={() => handleGoToPath({ slug })}
+                  >
+                    <div className="flex-row">
+                      <div
+                        className="flex"
+                        style={{ textTransform: "capitalize" }}
+                      >
+                        <Html2React html={title} />
+                      </div>
+                      <KeyboardArrowRightIcon
+                        style={{
+                          fill: colors.darkSilver,
+                          borderRadius: "50%",
+                          padding: 0,
+                        }}
+                      />
+                    </div>
+                  </NavDropdown.Item>
+                </div>
+              );
+            })}
+          </div>
+          <div className="flex">CONTENT</div>
+        </div>
+      </NavDropdown>
+    );
+  };
+
   const ServeMenu = () => {
     return (
       <div className="flex" style={styles.container}>
@@ -70,7 +126,7 @@ const Navigation = ({ state, actions, libraries }) => {
 
           if (item.child_items)
             return (
-              <ServeMoreMenu
+              <ServeMainMenuDropDown
                 key={ID}
                 title={<Html2React html={title} />}
                 menu={item.child_items}
@@ -117,6 +173,10 @@ const styles = {
     alignItems: "center",
     minHeight: 67,
     flexWrap: "wrap",
+  },
+  dropDown: {
+    backgroundColor: colors.lightSilver,
+    border: "none",
   },
   link: {
     color: colors.textMain,
