@@ -8,8 +8,6 @@ const EnquireModal = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const enquireAction = state.context.enquireAction;
 
-  console.log("enquireAction", enquireAction);
-
   // SERVERS --------------------------------------------------
   const ServeModalContent = () => {
     const ServeForm = () => {

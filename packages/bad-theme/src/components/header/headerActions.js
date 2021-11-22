@@ -65,7 +65,7 @@ const HeaderActions = ({ state, actions }) => {
     return (
       <div className="dropdown">
         <div>
-          <Dropdown>
+          <Dropdown align="end">
             <Dropdown.Toggle
               variant="shadow-none btn-m"
               style={styles.dropDownBtn}
@@ -121,6 +121,7 @@ const styles = {
   },
   dropDown: {
     backgroundColor: colors.lightSilver,
+    border: "none",
   },
   loginBtn: {
     fontSize: 16,

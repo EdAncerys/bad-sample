@@ -1,0 +1,23 @@
+/* navigation config */
+
+.dropdown-menu {
+  width: 100%;
+}
+.dropdown-menu[data-bs-popper] {
+  top: 100%;
+  margin-top: 0;
+}
+.navbar {
+  padding: 0;
+}
+.navbar > .container {
+  justify-content: flex-end;
+  padding: 0;
+  max-width: 1350px;
+}
+
+@media screen and (max-width: 992px) {
+  .container {
+    /* width: 100%; */
+  }
+}

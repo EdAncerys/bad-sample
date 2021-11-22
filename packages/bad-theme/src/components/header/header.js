@@ -6,11 +6,13 @@ import { colors } from "../../config/colors";
 import globalCSS from "../../css/main.css";
 import carousel from "../../css/carousel.css";
 import accordion from "../../css/accordion.css";
+import nav from "../../css/nav.css";
 
 // COMPONENTS -------------------------------------------------------------
 import HTMLHead from "./htmlHead";
 import NavigationActions from "./navigationActions";
 import HeaderActions from "./headerActions";
+import Navigation from "./navigation";
 
 const Header = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
@@ -19,13 +21,14 @@ const Header = ({ state, actions }) => {
     <>
       <Global
         styles={css`
-          ${bootStrapCSS}, ${globalCSS}, ${carousel}, ${accordion}
+          ${bootStrapCSS}, ${globalCSS}, ${carousel}, ${accordion}, ${nav}
         `}
       />
       <HTMLHead />
       <div>
         <div className="flex-col" style={styles.container}>
           <HeaderActions />
+          <Navigation />
           <NavigationActions />
         </div>
       </div>
@@ -35,7 +38,7 @@ const Header = ({ state, actions }) => {
 
 const styles = {
   container: {
-    height: 245,
+    minHeight: 245,
     backgroundColor: `${colors.white}`,
     borderBottom: `2px solid ${colors.lightSilver}`,
   },

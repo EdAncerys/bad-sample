@@ -12,6 +12,8 @@ import Instagram from "../img/svg/instagram.svg";
 const Footer = ({ state, actions }) => {
   const date = new Date();
   const year = date.getFullYear();
+  const marginHorizontal = state.theme.marginHorizontal;
+  const marginVertical = state.theme.marginVertical;
 
   // SERVERS ---------------------------------------------
   const ServeFooterTopRow = () => {
@@ -83,8 +85,17 @@ const Footer = ({ state, actions }) => {
 
   return (
     <div>
-      <div className="flex-col" style={styles.container}>
-        <div className="flex-col" style={{ padding: "1em" }}>
+      <div
+        className="flex-col"
+        style={{
+          ...styles.container,
+          margin: `${marginVertical}px 0 0`,
+        }}
+      >
+        <div
+          className="flex-col"
+          style={{ padding: `0 ${marginHorizontal / 2}px` }}
+        >
           <ServeFooterTopRow />
           <ServeFooterBottomRow />
         </div>

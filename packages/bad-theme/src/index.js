@@ -39,13 +39,23 @@ const BADTheme = {
         // await Promise.all([actions.source.fetch("/")]);
 
         const menu = sessionStorage.getItem("badMenu"); // checking if menu already pre fetched from wp
+        console.log("-------------", menu);
         if (!menu) {
-          await actions.source.fetch(`${state.theme.menuUrl}`);
-          const badMenu = await state.source.data["/menu/primary-menu/"].items;
-
-          sessionStorage.setItem("badMenu", JSON.stringify(badMenu));
+          try {
+            await actions.source.fetch(`${state.theme.menuUrl}`);
+            const badMenu = await state.source.data["/menu/primary-menu/"]
+              .items;
+            sessionStorage.setItem("badMenu", JSON.stringify(badMenu));
+          } catch (error) {
+            console.log("error: " + error);
+          }
         }
-        if (menu) state.theme.menu = JSON.parse(menu);
+
+        try {
+          if (menu) state.theme.menu = JSON.parse(menu); // replacing menu stored in sessions with state var
+        } catch (error) {
+          console.log("error: " + error);
+        }
       },
       afterCSR: async ({ state, actions }) => {
         //   setInterval(async () => {
