@@ -1,6 +1,7 @@
-/* fetching fonts from url */
-/* @import url("https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@300&display=swap"); */
-@import url("../config/fonts/Lato-Regular.ttf");
+@font-face {
+  font-family: "Lato";
+  src: url("../config/fonts/Lato-Regular.ttf") format("truetype");
+}
 
 * {
   padding: 0;
@@ -15,7 +16,7 @@
   user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
 body {
-  font-family: "Lato", monospace;
+  font-family: "Lato";
 }
 /* main content container config */
 .content-container {
@@ -39,6 +40,12 @@ body {
 a {
   display: block;
   text-decoration: none;
+}
+a:active,
+a:focus {
+  outline: 0;
+  border: none;
+  -moz-outline-style: none;
 }
 
 /* Custom classes */

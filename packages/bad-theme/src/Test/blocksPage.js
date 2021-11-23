@@ -20,11 +20,11 @@ const BlocksPage = ({ state }) => {
 
       <BlockBuilder blocks={wpBlocks} />
 
-      <div>
+      {/* <div>
         <p style={styles.title}>STATIC COMPONENTS</p>
-      </div>
+      </div> */}
 
-      <PilGuidelines />
+      {/* <PilGuidelines /> */}
     </div>
   );
 };
