@@ -10,7 +10,7 @@ import Card from "./card";
 import LeftIcon from "../img/svg/leftIcon.svg";
 import RightIcon from "../img/svg/rightIcon.svg";
 
-const NewsCarousel = ({ state, actions, libraries, block }) => {
+const NewsCarousel = ({ state, actions, libraries, block, isMenu }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
@@ -19,7 +19,7 @@ const NewsCarousel = ({ state, actions, libraries, block }) => {
     i % 2 ? [] : [a.slice(i, i + 2)]
   ); // split data in array of pairs
   const BANNER_HEIGHT = state.theme.bannerHeight;
-  const marginHorizontal = state.theme.marginHorizontal;
+  const marginHorizontal = isMenu ? 0 : state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
   // SERVERS ----------------------------------------------------------------

@@ -16,6 +16,10 @@ const Footer = ({ state, actions }) => {
   const marginVertical = state.theme.marginVertical;
 
   // SERVERS ---------------------------------------------
+  const ServeDivider = () => {
+    return <div style={{ padding: `0 10px` }}>|</div>;
+  };
+
   const ServeFooterTopRow = () => {
     return (
       <div
@@ -36,9 +40,13 @@ const Footer = ({ state, actions }) => {
           style={{ flex: 4, fontSize: 11, justifyContent: "flex-end" }}
         >
           <div style={styles.footerTitle}>
-            Willan House, 4 Fitzroy Square, London, W1T 5HQ |
+            <div>Willan House, 4 Fitzroy Square, London, W1T 5HQ</div>
+            <ServeDivider />
           </div>
-          <div style={styles.footerTitle}>admin@bad.org.uk |</div>
+          <div style={styles.footerTitle}>
+            <div>admin@bad.org.uk</div>
+            <ServeDivider />
+          </div>
           <div style={styles.footerTitle}>+44 (0)207 383 0266</div>
         </div>
         <div className="flex" style={{ justifyContent: "space-around" }}>
@@ -73,10 +81,22 @@ const Footer = ({ state, actions }) => {
           ©{`${year}`} British Association of Dermatologists
         </div>
         <div className="flex" style={{ flex: 2, justifyContent: "flex-end" }}>
-          <div style={styles.footerTitle}>Registered Charity No. 25847 |</div>
-          <div style={styles.footerTitle}>Equal Opportunities Policy |</div>
-          <div style={styles.footerTitle}>Privacy Policy |</div>
-          <div style={styles.footerTitle}>Terms & Conditions |</div>
+          <div style={styles.footerTitle}>
+            <div>Registered Charity No. 25847</div>
+            <ServeDivider />
+          </div>
+          <div style={styles.footerTitle}>
+            <div>Equal Opportunities Policy</div>
+            <ServeDivider />
+          </div>
+          <div style={styles.footerTitle}>
+            <div>Privacy Policy</div>
+            <ServeDivider />
+          </div>
+          <div style={styles.footerTitle}>
+            <div>Terms & Conditions</div>
+            <ServeDivider />
+          </div>
           <div style={styles.footerTitle}>Site produced by Skylark</div>
         </div>
       </div>
@@ -112,7 +132,7 @@ const styles = {
     color: colors.white,
   },
   footerTitle: {
-    marginRight: 10,
+    display: "flex",
   },
   socials: {
     width: 25,

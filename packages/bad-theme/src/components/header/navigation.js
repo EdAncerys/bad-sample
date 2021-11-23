@@ -55,7 +55,7 @@ const Navigation = ({ state, actions, libraries }) => {
     );
   };
 
-  const ServeMainMenuDropDown = ({ title, menu, slugPrefix }) => {
+  const ServeMenuDropDown = ({ title, menu, slugPrefix }) => {
     if (!menu.length) return null;
 
     return (
@@ -75,12 +75,13 @@ const Navigation = ({ state, actions, libraries }) => {
           <div
             style={{
               overflow: "auto",
-              width: `30%`,
+              width: 400,
             }}
           >
             {menu.map((item) => {
               const { ID, title, slug } = item;
-              const SLUG_PATH = slugPrefix + "/" + slug; // combining parent & child path
+              let SLUG_PATH = slug; // combining parent & child path
+              if (slugPrefix) SLUG_PATH = slugPrefix + "/" + slug;
 
               return (
                 <div key={ID} className="flex-row">
@@ -113,7 +114,10 @@ const Navigation = ({ state, actions, libraries }) => {
               );
             })}
           </div>
-          <div className="flex" style={{ justifyContent: "center" }}>
+          <div className="flex pink" style={{}}>
+            MENU2
+          </div>
+          <div className="flex" style={{ flex: 2 }}>
             <NavBarDropDownContent />
           </div>
         </div>
@@ -133,7 +137,7 @@ const Navigation = ({ state, actions, libraries }) => {
 
           if (item.child_items)
             return (
-              <ServeMainMenuDropDown
+              <ServeMenuDropDown
                 key={ID}
                 title={<Html2React html={title} />}
                 slugPrefix={slug}
@@ -152,7 +156,7 @@ const Navigation = ({ state, actions, libraries }) => {
             </div>
           );
         })}
-        <ServeMoreMenu title="More" menu={wpMoreMenu} />
+        <ServeMenuDropDown title="More" menu={wpMoreMenu} />
       </div>
     );
   };

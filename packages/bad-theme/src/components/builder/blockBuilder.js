@@ -17,7 +17,7 @@ import PromoBlock from "../promoBlock";
 import IndexCard from "../indexCard";
 import Accordion from "../accordion";
 
-const BlocksBuilder = ({ state, actions, libraries, blocks }) => {
+const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   // console.log("BLOCKS: ", blocks); // debug
 
   if (!blocks) return null; // if no block content provided
@@ -45,7 +45,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks }) => {
             return <MultiPostBlock key={key} block={block} />;
 
           if (acf_fc_layout === "news_carousel")
-            return <NewsCarousel key={key} block={block} />;
+            return <NewsCarousel key={key} block={block} isMenu />;
 
           if (acf_fc_layout === "banner")
             return <Banner key={key} block={block} />;

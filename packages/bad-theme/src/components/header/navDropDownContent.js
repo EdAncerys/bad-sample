@@ -12,7 +12,7 @@ const NavBarDropDownContent = ({ state, actions }) => {
 
   return (
     <div style={styles.container}>
-      <BlockBuilder blocks={wpBlocks} />
+      <BlockBuilder blocks={wpBlocks} isMenu />
     </div>
   );
 };
