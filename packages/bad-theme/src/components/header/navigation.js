@@ -7,6 +7,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import NavBarDropDownContent from "./navDropDownContent";
 import ChildMenu from "./childMenu";
+import { ConstructionOutlined } from "@mui/icons-material";
 
 const Navigation = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -28,35 +29,12 @@ const Navigation = ({ state, actions, libraries }) => {
     setWpMoreMenu(data.slice(NAV_DIVIDER, dataLength)); // more menu into dropdown
   }, [state.theme.menu]);
 
-  // HELPERS ---------------------------------------------
+  // HELPERS -----------------------------------------------------
   const handleGoToPath = ({ slug }) => {
     actions.router.set(`/${slug}`);
   };
 
-  // SERVERS ----------------------------------------------------------
-  const ServeMoreMenu = ({ title, menu }) => {
-    if (!menu.length) return null;
-
-    return (
-      <NavDropdown
-        title={title || "Menu Title"}
-        style={{ position: "static" }} // static position adding ability for dropdown to move up the scope
-      >
-        {menu.map((item) => {
-          const { ID, title, slug } = item;
-
-          return (
-            <div key={ID} className="flex-row">
-              <NavDropdown.Item onClick={() => handleGoToPath({ slug })}>
-                <Html2React html={title} />
-              </NavDropdown.Item>
-            </div>
-          );
-        })}
-      </NavDropdown>
-    );
-  };
-
+  // SERVERS -----------------------------------------------------
   const ServeMenuDropDown = ({ title, menu, slugPrefix }) => {
     if (!menu.length) return null;
 
@@ -80,13 +58,13 @@ const Navigation = ({ state, actions, libraries }) => {
               width: 400,
             }}
           >
-            {menu.map((item) => {
-              const { ID, title, slug } = item;
+            {menu.map((item, key) => {
+              const { title, slug } = item;
               let SLUG_PATH = slug; // combining parent & child path
               if (slugPrefix) SLUG_PATH = slugPrefix + "/" + slug;
 
               return (
-                <div key={ID} className="flex-row">
+                <div key={key} className="flex-row">
                   <NavDropdown.Item
                     className="pointer"
                     style={{
@@ -102,7 +80,11 @@ const Navigation = ({ state, actions, libraries }) => {
                         onClick={() => handleGoToPath({ slug: SLUG_PATH })}
                         onMouseOver={(e) => {
                           reference.current = e.target.innerText;
-                          state.theme.childMenuRef = reference.current;
+                          const title = {
+                            slug: SLUG_PATH,
+                            title: reference.current,
+                          };
+                          state.theme.childMenuRef = title;
                         }}
                         // onMouseLeave={(e) => (state.theme.childMenuRef = "")} // clear value on mouseleave
                       >
@@ -121,7 +103,9 @@ const Navigation = ({ state, actions, libraries }) => {
               );
             })}
           </div>
-          <ChildMenu reference={reference.current} />
+          {menu.map((menu, key) => {
+            return <ChildMenu key={key} menu={menu} />;
+          })}
           <NavBarDropDownContent />
         </div>
       </NavDropdown>

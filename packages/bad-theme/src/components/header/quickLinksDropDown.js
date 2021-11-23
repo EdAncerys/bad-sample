@@ -100,14 +100,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
   return (
     <div className="dropdown">
       <div>
-        <Dropdown
-          align="end"
-          // onClick={(e) => {
-          //   if (e.target.id === "dropdown-basic") {
-          //     console.log("toggle");
-          //   }
-          // }}
-        >
+        <Dropdown align="end">
           <Dropdown.Toggle
             variant="shadow-none btn-m"
             style={styles.dropDownBtn}
