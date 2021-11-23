@@ -9,6 +9,7 @@ import NavBarDropDownContent from "./navDropDownContent";
 
 const Navigation = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  const data = state.theme.menu;
   const [wpMainMenu, setWpMainMenu] = useState([]);
   const [wpMoreMenu, setWpMoreMenu] = useState([]);
 
@@ -32,7 +33,7 @@ const Navigation = ({ state, actions, libraries }) => {
 
   // SERVERS ----------------------------------------------------------
   const ServeMoreMenu = ({ title, menu }) => {
-    if (!menu) return null;
+    if (!menu.length) return null;
 
     return (
       <NavDropdown
@@ -55,7 +56,7 @@ const Navigation = ({ state, actions, libraries }) => {
   };
 
   const ServeMainMenuDropDown = ({ title, menu, slugPrefix }) => {
-    if (!menu) return null;
+    if (!menu.length) return null;
 
     return (
       <NavDropdown

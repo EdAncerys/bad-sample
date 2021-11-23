@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { colors } from "../../config/colors";
 
 // COMPONENTS ----------------------------------------------------------------
 import HomeBannerCarousel from "../home/homeBannerCarousel";
-import PilGuidelines from "../home/pilGuidelines";
 import JournalPromoBlock from "../home/journalPromoBlock";
 import ButtonsRow from "../buttonsRow";
 import MultiPostBlock from "../multiPostBlock";
@@ -23,15 +22,8 @@ const BlocksBuilder = ({ state, actions, libraries, blocks }) => {
 
   if (!blocks) return null; // if no block content provided
 
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-  // <Html2React html={rendered} /> // get html content from state
-
   return (
     <div>
-      <div>
-        <p style={styles.title}>BLOCK BUILDER 😈 </p>
-      </div>
-
       <div>
         {blocks.map((block, key) => {
           const { acf_fc_layout } = block;
@@ -79,22 +71,12 @@ const BlocksBuilder = ({ state, actions, libraries, blocks }) => {
           return null;
         })}
       </div>
-      <div>
-        <p style={styles.title}>STATIC COMPONENTS</p>
-      </div>
-      <PilGuidelines />
     </div>
   );
 };
 
 const styles = {
-  title: {
-    textAlign: "center",
-    fontSize: 40,
-    fontWeight: "500",
-    color: colors.primary,
-    backgroundColor: "#66806A",
-  },
+  component: {},
 };
 
 export default connect(BlocksBuilder);
