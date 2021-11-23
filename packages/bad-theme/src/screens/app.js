@@ -33,29 +33,35 @@ const App = ({ state, actions }) => {
   // console.log("INDEX data", data); // debug
 
   return (
-    <div className="content-container" style={styles.container}>
-      <Header />
-      <Directions />
-      <LoginModal />
-      <CreateAccountModal />
-      <EnquireModal />
+    <div
+      onClick={() => {
+        state.theme.childMenuRef = ""; // reset child menu ref value
+      }}
+    >
+      <div className="content-container" style={styles.container}>
+        <Header />
+        <Directions />
+        <LoginModal />
+        <CreateAccountModal />
+        <EnquireModal />
 
-      <div className="flex-col">
-        <Switch>
-          <Loading when={data.isFetching} />
-          <Error when={data.isError} />
+        <div className="flex-col">
+          <Switch>
+            <Loading when={data.isFetching} />
+            <Error when={data.isError} />
 
-          <BlocksPage when={data.route.includes("blocks-page")} />
+            <BlocksPage when={data.route.includes("blocks-page")} />
 
-          <Login when={endPoint === "/login/"} />
-          <CreateAccount when={endPoint === "/create-account/"} />
-          <Home when={data.isHome} />
+            <Login when={endPoint === "/login/"} />
+            <CreateAccount when={endPoint === "/create-account/"} />
+            <Home when={data.isHome} />
 
-          <Post when={data.isPost} />
-          <Page when={data.isPage} />
-        </Switch>
+            <Post when={data.isPost} />
+            <Page when={data.isPage} />
+          </Switch>
+        </div>
+        <Footer />
       </div>
-      <Footer />
     </div>
   );
 };

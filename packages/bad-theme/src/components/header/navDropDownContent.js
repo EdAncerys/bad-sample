@@ -11,7 +11,7 @@ const NavBarDropDownContent = ({ state, actions }) => {
   // HELPERS ---------------------------------------------
 
   return (
-    <div style={styles.container}>
+    <div className="flex" style={{ flex: 2, overflow: "auto" }}>
       <BlockBuilder blocks={wpBlocks} isMenu />
     </div>
   );

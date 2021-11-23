@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/colors";
@@ -6,12 +6,14 @@ import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import NavBarDropDownContent from "./navDropDownContent";
+import ChildMenu from "./childMenu";
 
 const Navigation = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-  const data = state.theme.menu;
   const [wpMainMenu, setWpMainMenu] = useState([]);
   const [wpMoreMenu, setWpMoreMenu] = useState([]);
+
+  const reference = useRef("");
 
   const NAV_DIVIDER = 8;
   const BANNER_HEIGHT = state.theme.bannerHeight;
@@ -92,12 +94,17 @@ const Navigation = ({ state, actions, libraries }) => {
                       padding: `1em 0 1em`,
                       borderBottom: `1px dotted ${colors.silver}`,
                     }}
-                    onClick={() => handleGoToPath({ slug: SLUG_PATH })}
                   >
                     <div className="flex-row">
                       <div
                         className="flex"
                         style={{ textTransform: "capitalize" }}
+                        onClick={() => handleGoToPath({ slug: SLUG_PATH })}
+                        onMouseOver={(e) => {
+                          reference.current = e.target.innerText;
+                          state.theme.childMenuRef = reference.current;
+                        }}
+                        // onMouseLeave={(e) => (state.theme.childMenuRef = "")} // clear value on mouseleave
                       >
                         <Html2React html={title} />
                       </div>
@@ -114,12 +121,8 @@ const Navigation = ({ state, actions, libraries }) => {
               );
             })}
           </div>
-          <div className="flex pink" style={{}}>
-            MENU2
-          </div>
-          <div className="flex" style={{ flex: 2 }}>
-            <NavBarDropDownContent />
-          </div>
+          <ChildMenu reference={reference.current} />
+          <NavBarDropDownContent />
         </div>
       </NavDropdown>
     );
