@@ -7,7 +7,7 @@ import RowButton from "./rowButton";
 const ButtonsRow = ({ state, actions, style, block, disableMargin }) => {
   if (!block) return <Loading />;
   if (!block.buttons) return null;
-  
+
   // if (!block.add_buttons) return null; // if toggle set to false
 
   const marginHorizontal = state.theme.marginHorizontal;

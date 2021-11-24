@@ -7,7 +7,7 @@ import Loading from "./loading";
 
 const AccordionComponent = ({ state, actions, libraries, block }) => {
   if (!block) return <Loading />;
-  if(!block.accordion_item) return null;
+  if (!block.accordion_item) return null;
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const marginHorizontal = state.theme.marginHorizontal;
