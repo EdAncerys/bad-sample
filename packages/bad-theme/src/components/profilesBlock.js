@@ -7,6 +7,7 @@ import Loading from "./loading";
 
 const ProfilesBlock = ({ state, actions, block }) => {
   if (!block) return <Loading />;
+  if (!block.profile_card) return null;
 
   const { label, link, title } = block;
   const marginHorizontal = state.theme.marginHorizontal;

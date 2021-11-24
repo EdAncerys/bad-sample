@@ -31,7 +31,6 @@ const settings = {
       name: "@frontity/wp-source",
       state: {
         source: {
-          // url: "http://3.9.193.188/",
           url: "https://badadmin.skylarkdev.co/", // production url
         },
         postTypes: [

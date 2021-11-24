@@ -6,6 +6,7 @@ import Loading from "./loading";
 
 const IndexCard = ({ state, actions, block, cardWidth, cardHeight }) => {
   if (!block) return <Loading />;
+  if (!block.index_title) return null;
 
   const { colour, subtitle, title } = block;
   const marginHorizontal = state.theme.marginHorizontal;

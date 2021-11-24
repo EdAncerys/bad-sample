@@ -6,6 +6,7 @@ import Loading from "./loading";
 
 const MultiPostBlock = ({ state, actions, block }) => {
   if (!block) return <Loading />;
+  if (!block.card) return null;
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;

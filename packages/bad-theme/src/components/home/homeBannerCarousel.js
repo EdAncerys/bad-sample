@@ -12,6 +12,8 @@ const HomeBannerCarousel = ({ state, actions, block }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
+  if (!block.slides) return null;
+
   // SERVERS ----------------------------------------------------------------
   const ServeOverlay = () => {
     return (

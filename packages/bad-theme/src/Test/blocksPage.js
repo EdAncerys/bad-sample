@@ -10,17 +10,17 @@ const BlocksPage = ({ state }) => {
   const page = state.source[data.type][data.id];
   const wpBlocks = page.acf.blocks;
 
-  // console.log("page data: ", wpBlocks); // debug
+  console.log("page data: ", page); // debug
 
   return (
     <div>
-      {/* <div>
+      <div>
         <p style={styles.title}>BLOCK BUILDER 😈 </p>
-      </div> */}
+      </div>
 
       <BlockBuilder blocks={wpBlocks} />
 
-      {/* <PilGuidelines /> */}
+      <PilGuidelines />
     </div>
   );
 };

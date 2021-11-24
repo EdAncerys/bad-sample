@@ -114,7 +114,16 @@ const Navigation = ({ state, actions, libraries }) => {
 
   const ServeMenu = () => {
     return (
-      <div className="flex" id="BAD-menu-container" style={styles.container}>
+      <div
+        className="flex"
+        id="BAD-menu-container"
+        style={styles.container}
+        // style={{
+        //   display: "grid",
+        //   gridTemplateColumns: `repeat(${NAV_DIVIDER + 1}, 1fr)`,
+        //   gap: 10,
+        // }}
+      >
         {wpMainMenu.map((item) => {
           const { ID, title, slug } = item;
 

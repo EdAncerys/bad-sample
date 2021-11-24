@@ -7,6 +7,7 @@ import Loading from "../loading";
 
 const JournalPromoBlock = ({ state, actions, block }) => {
   if (!block) return <Loading />;
+  if (!block.thumbnails) return null;
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;

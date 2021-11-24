@@ -1,43 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "frontity";
-import { colors } from "../config/colors";
-import { DATA } from "../config/data";
 
+import { colors } from "../config/colors";
 // COMPONENTS ----------------------------------------------------------------
-import PromoBlock from "../components/promoBlock";
+import BlockBuilder from "../components/builder/blockBuilder";
+import Loading from "../components/loading";
 // import CardFS from "../components/cardFS";
 
 const Home = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Components; // to render html contentment
-  // <Html2React html={rendered} /> // get html content from state
+  const [wpBlocks, setWpBlocks] = useState(null);
 
-  const data = state.source.get(state.router.link);
-  const home = state.source[data.type];
-  console.log("home data: ", home); // debug
+  useEffect(async () => {
+    const home = await state.source["page"][22];
+    // console.log("home data: ", home); // debug
+    setWpBlocks(home.acf.blocks);
+  }, []);
 
-  const handleSetLoading = () => {
-    setLoadingAction({ dispatch, isLoading: true });
-  };
+  if (!wpBlocks) return <Loading />;
 
   return (
     <div>
-      <div>
-        <p style={styles.title}>BAD Home</p>
-      </div>
-
-      {/* <PromoBlock item={DATA[2]} reverse /> */}
+      <BlockBuilder blocks={wpBlocks} />
     </div>
   );
 };
 
 const styles = {
-  title: {
-    textAlign: "center",
-    fontSize: 40,
-    fontWeight: "500",
-    color: colors.primary,
-    backgroundColor: "#66806A",
-  },
+  container: {},
 };
 
 export default connect(Home);

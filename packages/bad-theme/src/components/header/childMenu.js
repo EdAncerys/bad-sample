@@ -9,6 +9,7 @@ const ChildMenu = ({ state, actions, libraries, slugPrefix, menu }) => {
 
   if (!state.theme.childMenuRef) return null;
   if (!menu.child_items) return null;
+  
   const parentTitle = state.theme.childMenuRef.title;
 
   if (menu.title !== parentTitle) return null;
