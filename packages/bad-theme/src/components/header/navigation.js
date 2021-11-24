@@ -114,7 +114,7 @@ const Navigation = ({ state, actions, libraries }) => {
 
   const ServeMenu = () => {
     return (
-      <div className="flex" style={styles.container}>
+      <div className="flex" id="BAD-menu-container" style={styles.container}>
         {wpMainMenu.map((item) => {
           const { ID, title, slug } = item;
 
@@ -153,7 +153,10 @@ const Navigation = ({ state, actions, libraries }) => {
       <div className="col-md-12">
         <Navbar collapseOnSelect expand="lg">
           <Container>
-            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Toggle
+              aria-controls="responsive-navbar-nav"
+              className="m-2"
+            />
             <Navbar.Collapse>
               <Nav className="flex BAD-menu">
                 <ServeMenu />

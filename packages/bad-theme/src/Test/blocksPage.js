@@ -14,15 +14,11 @@ const BlocksPage = ({ state }) => {
 
   return (
     <div>
-      <div>
+      {/* <div>
         <p style={styles.title}>BLOCK BUILDER 😈 </p>
-      </div>
+      </div> */}
 
       <BlockBuilder blocks={wpBlocks} />
-
-      {/* <div>
-        <p style={styles.title}>STATIC COMPONENTS</p>
-      </div> */}
 
       {/* <PilGuidelines /> */}
     </div>

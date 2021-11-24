@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import BlockBuilder from "../../components/builder/blockBuilder";
+import { colors } from "../../config/colors";
 
 const NavBarDropDownContent = ({ state, actions }) => {
   const data = state.source.get("/bad-constitution");
@@ -11,8 +12,12 @@ const NavBarDropDownContent = ({ state, actions }) => {
   // HELPERS ---------------------------------------------
 
   return (
-    <div className="flex" style={{ flex: 2, overflow: "auto" }}>
-      <BlockBuilder blocks={wpBlocks} isMenu />
+    <div
+      className="flex-center-row"
+      style={{ flex: 2, overflow: "auto", backgroundColor: colors.darkSilver }}
+    >
+      BAD MENU CONTENT
+      {/* <BlockBuilder blocks={wpBlocks} isMenu /> */}
     </div>
   );
 };
