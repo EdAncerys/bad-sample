@@ -5,6 +5,7 @@ import Image from "@frontity/components/image";
 import Card from "./card";
 import Loading from "./loading";
 import ButtonsRow from "./buttonsRow";
+import FullWidthContentBlock from "./fullWidthContentBlock";
 
 const HeroBanner = ({ state, actions, libraries, block }) => {
   // console.log("HeroBanner Triggered", block); //debug
@@ -56,6 +57,8 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
   };
 
   const ServeBannerOverLay = () => {
+    if (!pop_out_text) return null;
+
     return (
       <div
         className="flex-col"
@@ -110,6 +113,12 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
     );
   };
 
+  const ServeCardContent = () => {
+    if (pop_out_text) return null;
+
+    return <FullWidthContentBlock block={block} disableMargin />;
+  };
+
   const ServeCardImage = () => {
     if (!background_image && layout === "50-50")
       return <div className="flex" />;
@@ -134,6 +143,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
         className="flex"
         style={{ height: BANNER_HEIGHT, position: "relative" }}
       >
+        <ServeCardContent />
         <ServeBannerOverLay />
         <ServeButtonsOverLay />
       </div>
