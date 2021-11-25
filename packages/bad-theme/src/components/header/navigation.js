@@ -72,21 +72,21 @@ const Navigation = ({ state, actions, libraries }) => {
                       padding: `1em 0 1em`,
                       borderBottom: `1px dotted ${colors.silver}`,
                     }}
+                    onClick={() => handleGoToPath({ slug: SLUG_PATH })}
+                    onMouseOver={(e) => {
+                      reference.current = e.target.innerText;
+                      const title = {
+                        slug: SLUG_PATH,
+                        title: reference.current,
+                      };
+                      state.theme.childMenuRef = title;
+                    }}
+                    // onMouseLeave={(e) => (state.theme.childMenuRef = "")} // clear value on mouseleave
                   >
                     <div className="flex-row">
                       <div
                         className="flex"
                         style={{ textTransform: "capitalize" }}
-                        onClick={() => handleGoToPath({ slug: SLUG_PATH })}
-                        onMouseOver={(e) => {
-                          reference.current = e.target.innerText;
-                          const title = {
-                            slug: SLUG_PATH,
-                            title: reference.current,
-                          };
-                          state.theme.childMenuRef = title;
-                        }}
-                        // onMouseLeave={(e) => (state.theme.childMenuRef = "")} // clear value on mouseleave
                       >
                         <Html2React html={title} />
                       </div>
