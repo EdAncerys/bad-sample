@@ -24,6 +24,8 @@ const Banner = ({ state, actions,libraries, block }) => {
   // SERVERS ----------------------------------------------------------------
   const ServeFooter = () => {
     const ServeActions = () => {
+      if (!label.length) return null;
+      
       return (
         <div className="mr-5">
           <button

@@ -60,6 +60,8 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
 
           // SERVERS ----------------------------------------------------
           const ServeFindOutMoreAction = () => {
+            if (!label.length) return null;
+            
             return (
               <button
                 className="btn btn-outline-light flex-center-row mt-4"

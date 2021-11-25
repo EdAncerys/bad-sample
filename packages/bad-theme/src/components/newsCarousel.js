@@ -88,7 +88,7 @@ const NewsCarousel = ({ state, actions, libraries, block, isMenu }) => {
                     >
                       <ServeDivider i={1} />
                       <Card
-                        cardWidth={isSingleBlock ? "80" : "100%"}
+                        cardWidth={isSingleBlock ? "60%" : "100%"}
                         cardHeight="85%"
                         title={title}
                         url={background_image.url}

@@ -16,12 +16,13 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const PADDING = state.theme.marginHorizontal;
   const FOOTER_HEIGHT = 50;
-  let OVERLAY_WIDTH = "200%";
+  let OVERLAY_WIDTH = "100%";
   let CARD_WIDTH = "50%";
   let CARD_HEIGHT = BANNER_HEIGHT - FOOTER_HEIGHT * 2;
   let BODY_LENGTH = 400;
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+  const CONTENT_WIDTH = state.theme.contentContainer;
 
   const {
     add_background_image,
@@ -39,10 +40,12 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
     CARD_HEIGHT = BANNER_HEIGHT - FOOTER_HEIGHT;
   }
   if (layout !== "50-50") {
-    CARD_WIDTH = "100%";
-    OVERLAY_WIDTH = "100%";
-    BODY_LENGTH = 800;
+    // CARD_WIDTH = "100%";
+    // OVERLAY_WIDTH = "100%";
+    // BODY_LENGTH = 800;
   }
+
+  if (!background_image && layout === "full-width") return null; // defaults to null based on config
 
   // SERVERS -----------------------------------------------------------
   const ServeFooter = () => {
@@ -57,6 +60,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
   };
 
   const ServeBannerOverLay = () => {
+    if (layout === "full-width") return null;
     if (!pop_out_text) return null;
 
     return (
@@ -83,6 +87,8 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
             cardWidth={CARD_WIDTH}
             cardHeight={CARD_HEIGHT}
             bodyLength={BODY_LENGTH}
+            colour={block.colour}
+            shadow
           />
         </div>
       </div>
@@ -94,7 +100,6 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
 
     return (
       <div
-        // className="flex-col"
         style={{
           position: "absolute",
           zIndex: 1,
@@ -103,7 +108,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
       >
         <div
           style={{
-            marginLeft: PADDING,
+            margin: `0 ${PADDING}px`,
             marginTop: BANNER_HEIGHT - FOOTER_HEIGHT,
           }}
         >
@@ -114,25 +119,43 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
   };
 
   const ServeCardContent = () => {
-    if (pop_out_text) return null;
+    if (layout === "full-width") return null;
+    if (pop_out_text) return <div className="flex" />;
 
-    return <FullWidthContentBlock block={block} disableMargin />;
+    return (
+      <div className="flex">
+        <FullWidthContentBlock block={block} disableMargin />
+      </div>
+    );
   };
 
   const ServeCardImage = () => {
-    if (!background_image && layout === "50-50")
-      return <div className="flex" />;
-    if (!background_image) return null;
-    if (layout !== "50-50") return null;
+    if (!background_image) return <div className="flex" />;
 
     const alt = { title } || "BAD";
+    const isFullWidth = layout === "full-width";
+    const CARD_STYLES = isFullWidth
+      ? {
+          height: BANNER_HEIGHT,
+          overflow: "hidden",
+          paddingLeft: `${marginHorizontal}px`,
+        }
+      : { width: "100%", height: BANNER_HEIGHT, overflow: "hidden" };
 
     return (
-      <div
-        className="flex"
-        style={{ width: "100%", height: BANNER_HEIGHT, overflow: "hidden" }}
-      >
-        <Image src={background_image} className="d-block h-100" alt={alt} />
+      <div className="flex">
+        <div style={CARD_STYLES}>
+          <Image
+            src={background_image}
+            alt={alt}
+            style={{
+              backgroundPosition: "center",
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              width: "100%",
+            }}
+          />
+        </div>
       </div>
     );
   };
@@ -140,10 +163,13 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
   const ServeOverLay = () => {
     return (
       <div
-        className="flex"
-        style={{ height: BANNER_HEIGHT, position: "relative" }}
+        style={{
+          height: BANNER_HEIGHT,
+          width: CONTENT_WIDTH,
+          position: "absolute",
+          zIndex: 1,
+        }}
       >
-        <ServeCardContent />
         <ServeBannerOverLay />
         <ServeButtonsOverLay />
       </div>
@@ -153,7 +179,8 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
   // RETURN ---------------------------------------------------
   return (
     <div className="flex-col" style={{ margin: `${marginVertical}px 0` }}>
-      <div className="flex-row">
+      <div className="flex-row relative">
+        <ServeCardContent />
         <ServeOverLay />
         <ServeCardImage />
       </div>

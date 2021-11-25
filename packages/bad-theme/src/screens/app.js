@@ -22,8 +22,7 @@ import Error from "./error";
 import { useAppDispatch, useAppState } from "../context";
 
 const App = ({ state, actions }) => {
-  const dispatch = useAppDispatch();
-  const {} = useAppState();
+  const CONTENT_WIDTH = state.theme.contentContainer;
 
   // env file access
   // console.log(".env variables", state.theme.myVariable);
@@ -38,7 +37,7 @@ const App = ({ state, actions }) => {
         state.theme.childMenuRef = ""; // reset child menu ref value
       }}
     >
-      <div className="content-container" style={styles.container}>
+      <div style={{ ...styles.container, maxWidth: CONTENT_WIDTH }}>
         <Header />
         <Directions />
         <LoginModal />
@@ -74,6 +73,7 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     minHeight: "100vh",
+    margin: "auto",
   },
 };
 

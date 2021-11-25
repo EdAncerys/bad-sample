@@ -9,7 +9,11 @@ const TitleBlock = ({ state, actions,libraries, block }) => {
 
   if (!block) return <Loading />;
 
+  
   const { label, link, title } = block;
+  if (!title.length) return null;
+  if (!label.length) return null;
+
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 

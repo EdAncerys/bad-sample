@@ -54,7 +54,9 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
       return (
         <div style={{ position: "relative" }}>
           <Accordion.Header>
-            <Html2React html={title} />
+            <div style={{ fontWeight: "bold" }}>
+              <Html2React html={title} />
+            </div>
           </Accordion.Header>
         </div>
       );

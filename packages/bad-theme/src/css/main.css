@@ -18,11 +18,6 @@
 body {
   font-family: "Lato";
 }
-/* main content container config */
-.content-container {
-  max-width: 1350px;
-  margin: auto;
-}
 .btn {
   border-radius: 10px;
   min-width: 140px;

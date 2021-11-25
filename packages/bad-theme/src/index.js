@@ -22,6 +22,7 @@ const BADTheme = {
       myVariable: process.env.MY_VARIABLE,
       menuUrl: "/menu/primary-menu",
       menu: null,
+      contentContainer: 1350, // px units
       childMenuRef: null,
       bannerHeight: 425, // px units
       marginHorizontal: 100, // px units

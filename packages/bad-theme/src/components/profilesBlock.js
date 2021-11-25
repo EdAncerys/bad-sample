@@ -5,7 +5,7 @@ import Profile from "./profile";
 import { colors } from "../config/colors";
 import Loading from "./loading";
 
-const ProfilesBlock = ({ state, actions,libraries, block }) => {
+const ProfilesBlock = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
@@ -17,6 +17,8 @@ const ProfilesBlock = ({ state, actions,libraries, block }) => {
 
   // SERVERS ------------------------------------------------------
   const ServeActions = () => {
+    if (!label.length) return null;
+
     // HELPERS ----------------------------------------------------
     const handleGoToAction = () => {
       if (!link.url) return null;
@@ -35,7 +37,7 @@ const ProfilesBlock = ({ state, actions,libraries, block }) => {
           }}
           onClick={handleGoToAction}
         >
-         <Html2React html={label} />
+          <Html2React html={label} />
         </button>
       </div>
     );
@@ -51,7 +53,7 @@ const ProfilesBlock = ({ state, actions,libraries, block }) => {
             textTransform: "capitalize",
           }}
         >
-        <Html2React html={title} />
+          <Html2React html={title} />
         </div>
       </div>
     );
