@@ -104,7 +104,7 @@ const FullWidthContentBlock = ({
         backgroundColor: background_colour || "transparent",
         minHeight: BANNER_HEIGHT,
         margin: disableMargin
-          ? ``
+          ? `0`
           : `${marginVertical}px ${marginHorizontal}px`,
       }}
     >

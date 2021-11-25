@@ -14,8 +14,7 @@ const PromoBlock = ({ state, actions, block, reverse }) => {
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-  let MAIN_AXIS = "flex-row"; // define alignment with main axis
-  if (image_align === "left") MAIN_AXIS = "flex-row row-reverse";
+  const IMG_ALIGNMENT = image_align === "left";
 
   // SERVERS ----------------------------------------------------------------
   const ServeCardImage = () => {
@@ -23,20 +22,31 @@ const PromoBlock = ({ state, actions, block, reverse }) => {
     const alt = title || "BAD";
 
     return (
-      <div className="flex">
-        <div
+      <div
+        className="flex"
+        style={{
+          width: BANNER_HEIGHT,
+          height: BANNER_HEIGHT,
+        }}
+      >
+        <Image
+          src={background_image.url}
+          alt={alt}
           style={{
-            width: "100%",
-            minHeight: BANNER_HEIGHT,
-            overflow: "hidden",
+            backgroundPosition: "center",
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            height: "100%",
           }}
-        >
-          <Image
-            src={background_image.url}
-            className="d-block h-100"
-            alt={alt}
-          />
-        </div>
+        />
+      </div>
+    );
+  };
+
+  const ServeCardContent = () => {
+    return (
+      <div className="flex">
+        <FullWidthContentBlock block={block} disableMargin />
       </div>
     );
   };
@@ -44,22 +54,32 @@ const PromoBlock = ({ state, actions, block, reverse }) => {
   // RETURN ---------------------------------------------------
   return (
     <div
-      className={MAIN_AXIS}
       style={{
-        ...styles.container,
+        display: "flex",
+        backgroundColor: colors.lightSilver,
+        height: BANNER_HEIGHT,
+        overflow: "hidden",
         margin: `${marginVertical}px ${marginHorizontal}px`,
       }}
     >
-      <FullWidthContentBlock block={block} disableMargin />
-      <ServeCardImage />
+      {IMG_ALIGNMENT && (
+        <div className="flex">
+          <ServeCardImage />
+          <ServeCardContent />
+        </div>
+      )}
+      {!IMG_ALIGNMENT && (
+        <div className="flex">
+          <ServeCardContent />
+          <ServeCardImage />
+        </div>
+      )}
     </div>
   );
 };
 
 const styles = {
-  container: {
-    backgroundColor: colors.lightSilver,
-  },
+  container: {},
 };
 
 export default connect(PromoBlock);

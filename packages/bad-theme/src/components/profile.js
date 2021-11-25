@@ -23,7 +23,16 @@ const Profile = ({ state, actions, libraries, block }) => {
           margin: `0 auto`,
         }}
       >
-        <Image src={background_image.url} className="d-block h-100" alt={alt} />
+        <Image
+          src={background_image.url}
+          alt={alt}
+          style={{
+            backgroundPosition: "center",
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            height: "100%",
+          }}
+        />
       </div>
     );
   };
@@ -49,7 +58,7 @@ const Profile = ({ state, actions, libraries, block }) => {
           color: colors.silver,
         }}
       >
-       <Html2React html={body} />
+        <Html2React html={body} />
       </div>
     );
   };
@@ -64,8 +73,8 @@ const Profile = ({ state, actions, libraries, block }) => {
   };
 
   return (
-    <div style={{ width: "85%", margin: `2em auto` }}>
-      <div className="flex-col">
+    <div style={{ margin: `2em auto` }}>
+      <div>
         <ServeProfilePicture />
         <ServeProfile />
       </div>
