@@ -5,7 +5,8 @@ import Image from "@frontity/components/image";
 import { colors } from "../../config/colors";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
-const JournalCard = ({ state, actions, block }) => {
+const JournalCard = ({ state, actions, libraries, block }) => {
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const CARD_WIDTH = "30%";
   const { image, link, title } = block;
   if (!image && !title) return null; // do not render card if content not provided
@@ -20,11 +21,6 @@ const JournalCard = ({ state, actions, block }) => {
   // SERVERS ---------------------------------------------
   const ServeCardActions = () => {
     if (!title) return null;
-
-    // Manage max string Length
-    const MAX_LENGTH = 25;
-    let titlePreview = `${title.substring(0, MAX_LENGTH)}...`;
-    if (title.length < MAX_LENGTH) titlePreview = title;
 
     // SERVERS ------------------------------
     const ServeActions = () => {
@@ -55,7 +51,7 @@ const JournalCard = ({ state, actions, block }) => {
             fontWeight: "bold",
           }}
         >
-          <p className="card-text">{titlePreview}</p>
+          <Html2React html={title} />
         </div>
       );
     };

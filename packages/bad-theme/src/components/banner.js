@@ -6,7 +6,8 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import Loading from "./loading";
 
-const Banner = ({ state, actions, block }) => {
+const Banner = ({ state, actions,libraries, block }) => {
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
 
   const { background_image, label, link, title } = block;
@@ -29,7 +30,7 @@ const Banner = ({ state, actions, block }) => {
             className="btn btn-outline-light flex-center-row"
             onClick={handleGoToAction}
           >
-            <div>{label}</div>
+            <Html2React html={label} />
             <div>
               <KeyboardArrowRightIcon style={{ fill: colors.white }} />
             </div>
@@ -58,7 +59,7 @@ const Banner = ({ state, actions, block }) => {
               textTransform: "capitalize",
             }}
           >
-            {title}
+           <Html2React html={title} />
           </h5>
         </div>
         <ServeActions />

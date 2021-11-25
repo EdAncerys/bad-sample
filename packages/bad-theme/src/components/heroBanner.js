@@ -7,7 +7,8 @@ import Loading from "./loading";
 import ButtonsRow from "./buttonsRow";
 
 const HeroBanner = ({ state, actions, libraries, block }) => {
-  console.log("HeroBanner Triggered", block); //debug
+  // console.log("HeroBanner Triggered", block); //debug
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
 
@@ -115,7 +116,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
     if (!background_image) return null;
     if (layout !== "50-50") return null;
 
-    const alt = title || "BAD";
+    const alt = { title } || "BAD";
 
     return (
       <div

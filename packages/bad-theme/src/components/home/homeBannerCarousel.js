@@ -7,7 +7,8 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import Loading from "../loading";
 
-const HomeBannerCarousel = ({ state, actions, block }) => {
+const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -69,7 +70,7 @@ const HomeBannerCarousel = ({ state, actions, block }) => {
                 }}
                 onClick={handleGoToAction}
               >
-                <div>{label}</div>
+                <Html2React html={label} />
                 <div>
                   <KeyboardArrowRightIcon style={{ fill: THEME_COLOR }} />
                 </div>
@@ -123,7 +124,7 @@ const HomeBannerCarousel = ({ state, actions, block }) => {
                     <ServeEventAction />
                     <div style={{ maxWidth: "75%" }}>
                       <h3 style={{ fontSize: "2em", textAlign: "start" }}>
-                        {title}
+                        <Html2React html={title} />
                       </h3>
                     </div>
                     <ServeFindOutMoreAction />

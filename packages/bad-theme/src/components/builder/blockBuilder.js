@@ -40,7 +40,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
           if (acf_fc_layout === "promotional_block")
             return (
-              <div>
+              <div key={key + 1}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
                 <PromoBlock key={key} block={block} />
               </div>
@@ -48,7 +48,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
           if (acf_fc_layout === "profiles_block")
             return (
-              <div>
+              <div key={key + 1}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
                 <ProfilesBlock key={key} block={block} />
               </div>
@@ -56,7 +56,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
           if (acf_fc_layout === "index_card")
             return (
-              <div>
+              <div key={key + 1}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
                 <IndexCard key={key} block={block} />
               </div>
@@ -64,7 +64,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
           if (acf_fc_layout === "title_block")
             return (
-              <div>
+              <div key={key + 1}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
                 <TitleBlock key={key} block={block} />
               </div>
@@ -72,7 +72,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
           if (acf_fc_layout === "multi_post_block")
             return (
-              <div>
+              <div key={key + 1}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
                 <MultiPostBlock key={key} block={block} />
               </div>
@@ -80,7 +80,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
           if (acf_fc_layout === "news_carousel")
             return (
-              <div>
+              <div key={key + 1}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
                 <NewsCarousel key={key} block={block} isMenu />
               </div>
@@ -88,7 +88,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
           if (acf_fc_layout === "banner")
             return (
-              <div>
+              <div key={key + 1}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
                 <Banner key={key} block={block} />
               </div>
@@ -96,7 +96,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
           if (acf_fc_layout === "buttons_row")
             return (
-              <div>
+              <div key={key + 1}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
                 <ButtonsRow key={key} block={block} />
               </div>
@@ -104,7 +104,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
           if (acf_fc_layout === "accordion")
             return (
-              <div>
+              <div key={key + 1}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
                 <Accordion key={key} block={block} />
               </div>
@@ -112,7 +112,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
           if (acf_fc_layout === "journal_promo_block")
             return (
-              <div>
+              <div key={key + 1}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
                 <JournalPromoBlock key={key} block={block} />
               </div>
@@ -120,7 +120,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
           if (acf_fc_layout === "full_width_content_block")
             return (
-              <div>
+              <div key={key + 1}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
                 <FullWidthContentBlock key={key} block={block} />
               </div>
@@ -128,7 +128,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
           if (acf_fc_layout === "home_banner_carousel")
             return (
-              <div>
+              <div key={key + 1}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
                 <HomeBannerCarousel key={key} block={block} />
               </div>
@@ -136,7 +136,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
           if (acf_fc_layout === "hero_banner")
             return (
-              <div>
+              <div key={key + 1}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
                 <HeroBanner key={key} block={block} />
               </div>

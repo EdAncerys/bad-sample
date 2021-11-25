@@ -4,7 +4,16 @@ import { colors } from "../config/colors";
 
 import Loading from "./loading";
 
-const IndexCard = ({ state, actions, block, cardWidth, cardHeight }) => {
+const IndexCard = ({
+  state,
+  actions,
+  libraries,
+  block,
+  cardWidth,
+  cardHeight,
+}) => {
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
   if (!block) return <Loading />;
   if (!block.index_title) return null;
 
@@ -47,10 +56,10 @@ const IndexCard = ({ state, actions, block, cardWidth, cardHeight }) => {
           <div
             style={{
               borderBottom: `1px dotted ${colors.silver}`,
-              textTransform: "uppercase",
+              textTransform: "capitalize",
             }}
           >
-            {title}
+            <Html2React html={title} />
           </div>
         </div>
       );
@@ -80,13 +89,13 @@ const IndexCard = ({ state, actions, block, cardWidth, cardHeight }) => {
             className="list-group-block"
             style={{ fontSize: 20, fontWeight: "bold" }}
           >
-            {title}
+            <Html2React html={title} />
           </div>
           <div
             className="list-group-block"
             style={{ fontSize: 16, fontWeight: "bold", padding: `1em 0` }}
           >
-            {subtitle}
+            <Html2React html={subtitle} />
           </div>
           {block.index_title.map((block, key) => {
             return <ServeCardBody key={key} block={block} />;

@@ -21,6 +21,7 @@ const Card = ({
   cardHeight,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  // <Html2React html={body} />
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
   const THEME = colour || colors.primary;
   const SHADOW = shadow ? "shadow" : "";
@@ -76,7 +77,7 @@ const Card = ({
             textTransform: "uppercase",
           }}
         >
-          <span>{cardTitle}</span>
+          <Html2React html={cardTitle} />
         </div>
       </div>
     );
@@ -136,9 +137,7 @@ const Card = ({
 
       return (
         <div>
-          <h5 className="flex card-text" style={{ colour: colors.black }}>
-            {titlePreview}
-          </h5>
+          <Html2React html={title} />
         </div>
       );
     };

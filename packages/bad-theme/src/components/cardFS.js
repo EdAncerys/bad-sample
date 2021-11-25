@@ -6,6 +6,7 @@ import Image from "@frontity/components/image";
 const CardFS = ({
   state,
   actions,
+  libraries,
   title,
   body,
   url,
@@ -13,6 +14,7 @@ const CardFS = ({
   themeColor,
   imgUrl,
 }) => {
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start";
   const MIN_CARD_HEIGHT = 100;
   const THEME = themeColor || colors.primary;
@@ -101,7 +103,7 @@ const CardFS = ({
 
       return (
         <div className="flex" style={{ minHeight: 100, overflow: "auto" }}>
-          <p className="card-text">{body}</p>
+         <Html2React html={body} />
         </div>
       );
     };

@@ -14,7 +14,6 @@ const RowButton = ({
   // block: object
   // buttonWidth: % value
   // onClick action
-
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { title, colour, link } = block;
@@ -60,7 +59,7 @@ const RowButton = ({
             className="flex"
             style={{ textTransform: "uppercase", fontSize: "13px" }}
           >
-            <p className="card-text">{title}</p>
+           <Html2React html={title} />
           </div>
           <div>
             <KeyboardArrowRightIcon

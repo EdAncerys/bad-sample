@@ -3,7 +3,8 @@ import { connect } from "frontity";
 import { colors } from "../config/colors";
 import Image from "@frontity/components/image";
 
-const Profile = ({ state, actions, block }) => {
+const Profile = ({ state, actions, libraries, block }) => {
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const PROFILE_PICTURE_WIDTH = 190;
   const { background_image, body, title } = block;
 
@@ -32,7 +33,7 @@ const Profile = ({ state, actions, block }) => {
 
     return (
       <div style={{ fontSize: 20, fontWeight: "bold", margin: `0.75em 0` }}>
-        <div>{title}</div>
+        <Html2React html={title} />
       </div>
     );
   };
@@ -48,7 +49,7 @@ const Profile = ({ state, actions, block }) => {
           color: colors.silver,
         }}
       >
-        <div>{body}</div>
+       <Html2React html={body} />
       </div>
     );
   };

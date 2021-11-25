@@ -4,7 +4,9 @@ import { colors } from "../config/colors";
 
 import Loading from "./loading";
 
-const TitleBlock = ({ state, actions, block }) => {
+const TitleBlock = ({ state, actions,libraries, block }) => {
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
   if (!block) return <Loading />;
 
   const { label, link, title } = block;
@@ -23,13 +25,13 @@ const TitleBlock = ({ state, actions, block }) => {
       <div className="flex-row">
         <div className="flex">
           <h5 className="card-title" style={{ fontSize: "1.75em" }}>
-            {title}
+          <Html2React html={title} />
           </h5>
         </div>
 
         <div onClick={handleGoToPath}>
           <div style={styles.footerActionTitle}>
-            <p className="card-text">{label}</p>
+          <Html2React html={label} />
           </div>
         </div>
       </div>

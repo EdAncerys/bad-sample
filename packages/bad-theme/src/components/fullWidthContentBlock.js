@@ -32,18 +32,13 @@ const FullWidthContentBlock = ({
   const ServeTitle = () => {
     if (!title) return null;
 
-    // Manage max string Length
-    const MAX_LENGTH = 40;
-    let titlePreview = `${title.substring(0, MAX_LENGTH)}...`;
-    if (title.length < MAX_LENGTH) titlePreview = title;
-
     return (
       <div>
         <h5
           className="card-text"
           style={{ fontSize: 36, fontWeight: "bold", color: colors.black }}
         >
-          {titlePreview}
+          <Html2React html={title} />
         </h5>
       </div>
     );
@@ -92,7 +87,7 @@ const FullWidthContentBlock = ({
             }}
             onClick={handleGoToAction}
           >
-            <span>{label}</span>
+            <Html2React html={label} />
           </button>
         </div>
       </div>
