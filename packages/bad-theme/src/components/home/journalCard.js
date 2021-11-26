@@ -60,7 +60,7 @@ const JournalCard = ({ state, actions, libraries, block }) => {
       <div
         className="flex-col"
         style={{
-          borderLeft: `2px solid ${colors.silver}`,
+          borderLeft: image ? `2px solid ${colors.silver}` : 0,
         }}
       >
         <div className="flex-col" style={{ paddingLeft: `10px` }}>
@@ -79,13 +79,18 @@ const JournalCard = ({ state, actions, libraries, block }) => {
       <div
         className="flex"
         style={{
-          flex: 0.7,
+          flex: 0.55,
           justifyContent: "center",
-          width: 75,
-          height: 75,
         }}
       >
-        <div>
+        <div
+          style={{
+            width: 75,
+            height: 75,
+            borderRadius: "50%",
+            overflow: "hidden",
+          }}
+        >
           <Image
             src={image.url}
             alt={alt}
@@ -107,6 +112,7 @@ const JournalCard = ({ state, actions, libraries, block }) => {
       style={{
         minWidth: CARD_WIDTH,
         width: "100%",
+        padding: `1em 0`,
       }}
     >
       <div className="flex-row m-2">
