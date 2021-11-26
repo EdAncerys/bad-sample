@@ -53,7 +53,7 @@ const Banner = ({ state, actions, libraries, block }) => {
         }}
       >
         <div className="flex">
-          <h5
+          <div
             className="card-text"
             style={{
               color: colors.white,
@@ -62,7 +62,7 @@ const Banner = ({ state, actions, libraries, block }) => {
             }}
           >
             <Html2React html={title} />
-          </h5>
+          </div>
         </div>
         <ServeActions />
       </div>

@@ -14,7 +14,7 @@ const PromoBlock = ({ state, actions, block, reverse }) => {
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-  const IMG_ALIGNMENT = image_align === "left";
+  const isAlignLeft = image_align === "left";
 
   // SERVERS ----------------------------------------------------------------
   const ServeCardImage = () => {
@@ -55,24 +55,15 @@ const PromoBlock = ({ state, actions, block, reverse }) => {
     <div
       style={{
         display: "flex",
+        flexDirection: isAlignLeft ? "row-reverse" : "inherit",
         backgroundColor: colors.lightSilver,
         height: BANNER_HEIGHT,
         overflow: "hidden",
         margin: `${marginVertical}px ${marginHorizontal}px`,
       }}
     >
-      {IMG_ALIGNMENT && (
-        <div className="flex">
-          <ServeCardImage />
-          <ServeCardContent />
-        </div>
-      )}
-      {!IMG_ALIGNMENT && (
-        <div className="flex">
-          <ServeCardContent />
-          <ServeCardImage />
-        </div>
-      )}
+      <ServeCardContent />
+      <ServeCardImage />
     </div>
   );
 };

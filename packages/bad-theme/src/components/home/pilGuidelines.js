@@ -37,7 +37,7 @@ const PilGuidelines = ({ state, actions }) => {
     >
       <div className="card">
         <div className="card-body">
-          <h5 className="card-title">PIL & Guidelines Quicklinks</h5>
+          <div className="card-title">PIL & Guidelines Quicklinks</div>
           <ServeSearchContainer />
         </div>
       </div>

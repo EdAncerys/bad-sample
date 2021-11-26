@@ -34,12 +34,12 @@ const FullWidthContentBlock = ({
 
     return (
       <div>
-        <h5
+        <div
           className="card-text"
           style={{ fontSize: 36, fontWeight: "bold", color: colors.black }}
         >
           <Html2React html={title} />
-        </h5>
+        </div>
       </div>
     );
   };

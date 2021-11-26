@@ -28,9 +28,9 @@ const TitleBlock = ({ state, actions,libraries, block }) => {
     <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
       <div className="flex-row">
         <div className="flex">
-          <h5 className="card-title" style={{ fontSize: "1.75em" }}>
+          <div className="card-title" style={{ fontSize: "1.75em" }}>
           <Html2React html={title} />
-          </h5>
+          </div>
         </div>
 
         <div onClick={handleGoToPath}>
