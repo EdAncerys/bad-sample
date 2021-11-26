@@ -6,7 +6,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import Loading from "./loading";
 
-const Banner = ({ state, actions,libraries, block }) => {
+const Banner = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
 
@@ -25,7 +25,7 @@ const Banner = ({ state, actions,libraries, block }) => {
   const ServeFooter = () => {
     const ServeActions = () => {
       if (!label.length) return null;
-      
+
       return (
         <div className="mr-5">
           <button
@@ -61,7 +61,7 @@ const Banner = ({ state, actions,libraries, block }) => {
               textTransform: "capitalize",
             }}
           >
-           <Html2React html={title} />
+            <Html2React html={title} />
           </h5>
         </div>
         <ServeActions />
@@ -75,7 +75,15 @@ const Banner = ({ state, actions,libraries, block }) => {
 
     return (
       <div style={{ width: "100%", height: BANNER_HEIGHT, overflow: "hidden" }}>
-        <Image src={background_image.url} className="d-block h-100" alt={alt} />
+        <Image
+          src={background_image.url}
+          alt={alt}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+          }}
+        />
       </div>
     );
   };

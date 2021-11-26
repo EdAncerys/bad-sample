@@ -43,8 +43,16 @@ const CardFS = ({
     const alt = title || "BAD";
 
     return (
-      <div style={{ width: 160, height: 160, overflow: "hidden" }}>
-        <Image src={imgUrl} className="d-block h-100" alt={alt} />
+      <div style={{ width: 160, height: 160 }}>
+        <Image
+          src={imgUrl}
+          alt={alt}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+          }}
+        />
       </div>
     );
   };
@@ -103,7 +111,7 @@ const CardFS = ({
 
       return (
         <div className="flex" style={{ minHeight: 100, overflow: "auto" }}>
-         <Html2React html={body} />
+          <Html2React html={body} />
         </div>
       );
     };

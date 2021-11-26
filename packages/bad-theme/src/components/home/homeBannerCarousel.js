@@ -61,7 +61,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
           // SERVERS ----------------------------------------------------
           const ServeFindOutMoreAction = () => {
             if (!label.length) return null;
-            
+
             return (
               <button
                 className="btn btn-outline-light flex-center-row mt-4"
@@ -99,13 +99,15 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
             const alt = title || "BAD";
 
             return (
-              <div
-                style={{ width: "100%", height: "100%", overflow: "hidden" }}
-              >
+              <div style={{ width: "100%", height: "100%" }}>
                 <Image
                   src={background_image.url}
-                  className="d-block h-100"
                   alt={alt}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
                 />
                 <ServeOverlay />
               </div>

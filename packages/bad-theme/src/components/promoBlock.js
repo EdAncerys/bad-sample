@@ -33,10 +33,9 @@ const PromoBlock = ({ state, actions, block, reverse }) => {
           src={background_image.url}
           alt={alt}
           style={{
-            backgroundPosition: "center",
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
+            width: "100%",
             height: "100%",
+            objectFit: "cover",
           }}
         />
       </div>

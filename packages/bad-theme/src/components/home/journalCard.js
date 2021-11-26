@@ -79,16 +79,22 @@ const JournalCard = ({ state, actions, libraries, block }) => {
       <div
         className="flex"
         style={{
-          flex: 0.75,
+          flex: 0.7,
           justifyContent: "center",
-          overflow: "hidden",
           width: 75,
           height: 75,
-          margin: `0 1em`,
         }}
       >
         <div>
-          <Image src={image.url} className="d-block h-100" alt={alt} />
+          <Image
+            src={image.url}
+            alt={alt}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
+          />
         </div>
       </div>
     );

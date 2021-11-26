@@ -140,7 +140,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           overflow: "hidden",
           paddingLeft: `${marginHorizontal}px`,
         }
-      : { width: "100%", height: BANNER_HEIGHT, overflow: "hidden" };
+      : { width: "100%", height: BANNER_HEIGHT };
 
     return (
       <div className="flex">
@@ -149,10 +149,9 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
             src={background_image}
             alt={alt}
             style={{
-              backgroundPosition: "center",
-              backgroundSize: "cover",
-              backgroundRepeat: "no-repeat",
               width: "100%",
+              height: "100%",
+              objectFit: "cover",
             }}
           />
         </div>
