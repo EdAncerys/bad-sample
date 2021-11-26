@@ -1,5 +1,5 @@
-/* Carousel styling */
-.carousel-indicators {
+/* home-banner-carousel Carousel styling */
+.home-banner-carousel .carousel-indicators {
   /* bottom indicators */
   justify-content: flex-start;
   margin-left: 15%;
@@ -17,10 +17,15 @@
 .carousel-control-next {
   width: 7%;
 }
-.news-carousel .carousel-indicators [data-bs-target] {
+.home-banner-carousel .carousel-indicators [data-bs-target] {
   background-color: #3580cd;
 }
 .news-carousel .carousel-indicators {
   /* bottom indicators */
   justify-content: center;
+}
+
+/* quotation-carousel Carousel styling */
+.quotation-carousel .carousel-indicators [data-bs-target] {
+  background-color: #a2a2a2;
 }

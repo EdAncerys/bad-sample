@@ -35,7 +35,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
   // RETURN ---------------------------------------------------
   return (
     <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
-      <Carousel>
+      <Carousel className='home-banner-carousel'>
         {block.slides.map((block, key) => {
           const {
             add_button,
@@ -127,9 +127,9 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
                   <Carousel.Caption style={{ color: THEME_COLOR }}>
                     <ServeEventAction />
                     <div style={{ maxWidth: "75%" }}>
-                      <h3 style={{ fontSize: "2em", textAlign: "start" }}>
+                      <div style={{ fontSize: "2em", textAlign: "start" }}>
                         <Html2React html={title} />
-                      </h3>
+                      </div>
                     </div>
                     <ServeFindOutMoreAction />
                   </Carousel.Caption>
