@@ -48,7 +48,7 @@ const Navigation = ({ state, actions, libraries }) => {
           style={{
             alignItems: "center",
             padding: `1em 0 1em`,
-            borderBottom: `1px dotted ${colors.silver}`,
+            borderBottom: `1px dotted ${colors.darkSilver}`,
           }}
           onClick={() => handleGoToPath({ slug: SLUG_PATH })}
           onMouseOver={(e) => {
@@ -85,7 +85,8 @@ const Navigation = ({ state, actions, libraries }) => {
         style={{
           position: "static", // static position adding ability for dropdown to move up the scope
           padding: `0 1em`,
-          borderBottom: activeDropDown ? `5px solid ${colors.danger}` : "none",
+          borderBottom: `5px solid ${colors.danger}`,
+          // borderBottom: activeDropDown ? `5px solid ${colors.danger}` : "none",
         }}
         // onClick={(e) => {
         //   const title = {

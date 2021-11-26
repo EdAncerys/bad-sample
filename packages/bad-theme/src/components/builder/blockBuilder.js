@@ -17,6 +17,7 @@ import PromoBlock from "../promoBlock";
 import IndexCard from "../indexCard";
 import Accordion from "../accordion";
 import QuotationCarousel from "../quotationCarousel";
+import BenefitsGrid from "../benefitsGrid";
 
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   // console.log("BLOCKS: ", blocks); // debug
@@ -38,6 +39,14 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
         {blocks.map((block, key) => {
           const { acf_fc_layout } = block;
           console.log("CONTENT BLOCK", block); // debug
+
+          if (acf_fc_layout === "benefits_grid")
+            return (
+              <div key={key + 1}>
+                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                <BenefitsGrid key={key} block={block} />
+              </div>
+            );
 
           if (acf_fc_layout === "quotation_carousel")
             return (

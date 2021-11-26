@@ -60,7 +60,7 @@ const JournalCard = ({ state, actions, libraries, block }) => {
       <div
         className="flex-col"
         style={{
-          borderLeft: image ? `2px solid ${colors.silver}` : 0,
+          borderLeft: image ? `2px solid ${colors.darkSilver}` : 0,
         }}
       >
         <div className="flex-col" style={{ paddingLeft: `10px` }}>

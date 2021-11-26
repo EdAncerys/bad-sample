@@ -55,7 +55,7 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
           <div
             style={{
               margin: `0 1.25em`,
-              borderTop: `1px solid ${colors.silver}`,
+              borderTop: `1px solid ${colors.darkSilver}`,
             }}
           />
         );
@@ -66,7 +66,7 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
         if (active) return null;
 
         // Manage max string Length
-        const MAX_LENGTH = 170;
+        const MAX_LENGTH = 155;
         let bodyPreview = `${body.substring(0, MAX_LENGTH)}...`;
         if (body.length < MAX_LENGTH) bodyPreview = body;
 
@@ -78,7 +78,7 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
                 fontSize: 16,
                 margin: `0 1.25em`,
                 padding: `1em 0`,
-                color: colors.silver,
+                color: colors.darkSilver,
               }}
             >
               <Html2React html={bodyPreview} />
@@ -130,7 +130,7 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
           <div
             style={{
               fontSize: 16,
-              color: colors.silver,
+              color: colors.darkSilver,
             }}
           >
             <Html2React html={body} />

@@ -27,7 +27,7 @@ const ChildMenu = ({ state, actions, libraries, slugPrefix, menu }) => {
         style={{
           alignItems: "center",
           padding: `0 0 1em 0`,
-          borderBottom: `1px dotted ${colors.silver}`,
+          borderBottom: `1px dotted ${colors.darkSilver}`,
         }}
         onClick={() => handleGoToPath({ SLUG_PATH: menu.slug })}
       >

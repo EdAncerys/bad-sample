@@ -55,7 +55,7 @@ const IndexCard = ({
         >
           <div
             style={{
-              borderBottom: `1px dotted ${colors.silver}`,
+              borderBottom: `1px dotted ${colors.darkSilver}`,
               textTransform: "capitalize",
             }}
           >

@@ -26,7 +26,7 @@ const FormSubmitted = ({ state, actions, formSubmitted }) => {
         <Modal.Body style={{ padding: 0 }}>
           <div className="flex-center-col">
             <ServeCardImage />
-            <div style={{ color: colors.silver, margin: `1em 0` }}>
+            <div style={{ color: colors.darkSilver, margin: `1em 0` }}>
               We have sent a confirmation email for your response. Please ensure
               to check your spam box incase you can’t find it your inbox.
             </div>

@@ -16,7 +16,7 @@ const Directions = ({ state, actions }) => {
   // SERVERS ---------------------------------------------
   const ServePatchDirections = ({ item, nextKey }) => {
     let chevron = (
-      <ChevronRightIcon style={{ fontSize: 16, color: colors.silver }} />
+      <ChevronRightIcon style={{ fontSize: 16, color: colors.darkSilver }} />
     );
     if (nextKey === directionLength) chevron = null;
 

@@ -85,7 +85,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
                 onClick={() => handleGoToPath({ slug })}
                 style={{
                   padding: `0 0 1em`,
-                  borderBottom: `1px dotted ${colors.silver}`,
+                  borderBottom: `1px dotted ${colors.darkSilver}`,
                 }}
               >
                 <Html2React html={title} />

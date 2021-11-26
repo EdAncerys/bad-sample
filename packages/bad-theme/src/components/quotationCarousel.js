@@ -34,7 +34,10 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
   // RETURN ---------------------------------------------------
   return (
     <div style={{ margin: `${marginVertical}px 0` }}>
-      <Carousel className="quotation-carousel" style={{ color: colors.silver }}>
+      <Carousel
+        className="quotation-carousel"
+        style={{ color: colors.darkSilver }}
+      >
         {block.slides.map((block, key) => {
           const { label, title } = block;
 

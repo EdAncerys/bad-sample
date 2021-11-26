@@ -3,33 +3,49 @@ import { connect } from "frontity";
 import { colors } from "../config/colors";
 import Image from "@frontity/components/image";
 
-const Profile = ({ state, actions, libraries, block }) => {
+import Journal from "../img/svg/journal.svg";
+import Education from "../img/svg/education.svg";
+import ClinicalServices from "../img/svg/clinicalServices.svg";
+import Events from "../img/svg/events.svg";
+import Newsletters from "../img/svg/newsletters.svg";
+import Fellowships from "../img/svg/fellowships.svg";
+import Library from "../img/svg/library.svg";
+import HireDiscounts from "../img/svg/hireDiscounts.svg";
+
+const Benefit = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-  const PROFILE_PICTURE_WIDTH = 190;
-  const { background_image, body, title } = block;
+  const ICON_WIDTH = 100;
+  const { icon, body, title } = block;
+
+  let serveIcon = Journal;
+  if (icon === "Education") serveIcon = Education;
+  if (icon === "Clinical Services") serveIcon = ClinicalServices;
+  if (icon === "Newsletters") serveIcon = Newsletters;
+  if (icon === "Events") serveIcon = Events;
+  if (icon === "Fellowships") serveIcon = Fellowships;
+  if (icon === "Willan Library") serveIcon = Library;
+  if (icon === "Room Hire Discount") serveIcon = HireDiscounts;
 
   // SERVERS ----------------------------------------------------------------
   const ServeProfilePicture = () => {
-    if (!background_image) return null;
+    if (!icon) return null;
     const alt = title || "BAD";
 
     return (
       <div
         style={{
-          width: PROFILE_PICTURE_WIDTH,
-          height: PROFILE_PICTURE_WIDTH,
-          borderRadius: "50%",
-          overflow: "hidden",
+          width: ICON_WIDTH,
+          height: ICON_WIDTH,
           margin: `0 auto`,
         }}
       >
         <Image
-          src={background_image.url}
+          src={serveIcon}
           alt={alt}
           style={{
             width: "100%",
             height: "100%",
-            objectFit: "cover",
+            // objectFit: "cover",
           }}
         />
       </div>
@@ -85,4 +101,4 @@ const styles = {
   container: {},
 };
 
-export default connect(Profile);
+export default connect(Benefit);

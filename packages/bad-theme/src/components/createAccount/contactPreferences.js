@@ -55,7 +55,7 @@ const ContactPreferences = ({
         <div style={{ fontSize: 20, fontWeight: "bold" }}>
           Contact Preferences:
         </div>
-        <div style={{ color: colors.silver, margin: `1em 0` }}>
+        <div style={{ color: colors.darkSilver, margin: `1em 0` }}>
           You can change these preferences at any time via your Members
           Dashboard
         </div>

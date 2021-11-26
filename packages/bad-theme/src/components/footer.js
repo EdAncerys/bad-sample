@@ -27,7 +27,7 @@ const Footer = ({ state, actions }) => {
         style={{
           flex: 2,
           alignItems: "center",
-          borderBottom: `1px solid ${colors.silver}`,
+          borderBottom: `1px solid ${colors.darkSilver}`,
         }}
       >
         <div className="flex" style={{ flex: 3 }}>
