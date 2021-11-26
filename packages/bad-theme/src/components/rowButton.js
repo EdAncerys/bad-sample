@@ -3,16 +3,8 @@ import { connect } from "frontity";
 import { colors } from "../config/colors";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
-const RowButton = ({
-  state,
-  actions,
-  libraries,
-  block,
-  buttonWidth,
-  onClick,
-}) => {
+const RowButton = ({ state, actions, libraries, block, onClick }) => {
   // block: object
-  // buttonWidth: % value
   // onClick action
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -46,7 +38,7 @@ const RowButton = ({
       style={{
         ...styles.container,
         backgroundColor: colors.white,
-        width: buttonWidth || "100%",
+        width: "100%",
       }}
     >
       <div className="card-body flex-col">
@@ -59,7 +51,7 @@ const RowButton = ({
             className="flex"
             style={{ textTransform: "uppercase", fontSize: "13px" }}
           >
-           <Html2React html={title} />
+            <Html2React html={title} />
           </div>
           <div>
             <KeyboardArrowRightIcon
