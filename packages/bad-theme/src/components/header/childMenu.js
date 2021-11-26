@@ -9,11 +9,11 @@ const ChildMenu = ({ state, actions, libraries, slugPrefix, menu }) => {
 
   if (!state.theme.childMenuRef) return null;
   if (!menu.child_items) return null;
-  
+
   const parentTitle = state.theme.childMenuRef.title;
 
   if (menu.title !== parentTitle) return null;
-  console.log(menu);
+  // console.log(menu); // debug
 
   // HELPERS -----------------------------------------------------
   const handleGoToPath = ({ SLUG_PATH }) => {
@@ -38,7 +38,7 @@ const ChildMenu = ({ state, actions, libraries, slugPrefix, menu }) => {
         const { title, slug } = item;
 
         const SLUG_PATH = menu.slug + "/" + slug; // combining parent & child path
-        
+
         return (
           <div key={key} className="flex" style={{ overflow: "auto" }}>
             <NavDropdown.Item onClick={() => handleGoToPath({ SLUG_PATH })}>

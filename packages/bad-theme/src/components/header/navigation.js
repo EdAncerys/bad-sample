@@ -7,7 +7,6 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import NavBarDropDownContent from "./navDropDownContent";
 import ChildMenu from "./childMenu";
-import { ConstructionOutlined } from "@mui/icons-material";
 
 const Navigation = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -37,10 +36,51 @@ const Navigation = ({ state, actions, libraries }) => {
   // SERVERS -----------------------------------------------------
   const ServeMenuDropDown = ({ title, menu, slugPrefix }) => {
     if (!menu.length) return null;
+    const isMoreMenu = title === "More";
+
+    const ServeTitle = ({ title, SLUG_PATH }) => {
+      if (!title || !SLUG_PATH) return null;
+
+      return (
+        <NavDropdown.Item
+          className="pointer"
+          style={{
+            alignItems: "center",
+            padding: `1em 0 1em`,
+            borderBottom: `1px dotted ${colors.silver}`,
+          }}
+          onClick={() => handleGoToPath({ slug: SLUG_PATH })}
+          onMouseOver={(e) => {
+            if (!e.target.innerText) return null; // prevents passing empty title object
+
+            reference.current = e.target.innerText;
+            const title = {
+              slug: SLUG_PATH,
+              title: reference.current,
+            };
+            state.theme.childMenuRef = title;
+          }}
+          // onMouseLeave={(e) => (state.theme.childMenuRef = "")} // clear value on mouseleave
+        >
+          <div className="flex-row">
+            <div className="flex" style={{ textTransform: "capitalize" }}>
+              <Html2React html={title} />
+            </div>
+            <KeyboardArrowRightIcon
+              style={{
+                fill: colors.darkSilver,
+                borderRadius: "50%",
+                padding: 0,
+              }}
+            />
+          </div>
+        </NavDropdown.Item>
+      );
+    };
 
     return (
       <NavDropdown
-        title={title || "Menu Title"}
+        title={<Html2React html={title} /> || "Menu Title"}
         style={{ position: "static" }} // static position adding ability for dropdown to move up the scope
       >
         <div
@@ -58,47 +98,19 @@ const Navigation = ({ state, actions, libraries }) => {
               width: 400,
             }}
           >
+            <ServeTitle title={title} SLUG_PATH={slugPrefix} />
             {menu.map((item, key) => {
               const { title, slug } = item;
               let SLUG_PATH = slug; // combining parent & child path
               if (slugPrefix) SLUG_PATH = slugPrefix + "/" + slug;
 
               return (
-                <div key={key} className="flex-row">
-                  <NavDropdown.Item
-                    className="pointer"
-                    style={{
-                      alignItems: "center",
-                      padding: `1em 0 1em`,
-                      borderBottom: `1px dotted ${colors.silver}`,
-                    }}
-                    onClick={() => handleGoToPath({ slug: SLUG_PATH })}
-                    onMouseOver={(e) => {
-                      reference.current = e.target.innerText;
-                      const title = {
-                        slug: SLUG_PATH,
-                        title: reference.current,
-                      };
-                      state.theme.childMenuRef = title;
-                    }}
-                    // onMouseLeave={(e) => (state.theme.childMenuRef = "")} // clear value on mouseleave
-                  >
-                    <div className="flex-row">
-                      <div
-                        className="flex"
-                        style={{ textTransform: "capitalize" }}
-                      >
-                        <Html2React html={title} />
-                      </div>
-                      <KeyboardArrowRightIcon
-                        style={{
-                          fill: colors.darkSilver,
-                          borderRadius: "50%",
-                          padding: 0,
-                        }}
-                      />
-                    </div>
-                  </NavDropdown.Item>
+                <div
+                  key={key}
+                  className="flex-row"
+                  style={{ marginLeft: isMoreMenu ? 0 : 20 }}
+                >
+                  <ServeTitle title={title} SLUG_PATH={SLUG_PATH} />
                 </div>
               );
             })}
@@ -124,8 +136,8 @@ const Navigation = ({ state, actions, libraries }) => {
         //   gap: 10,
         // }}
       >
-        {wpMainMenu.map((item) => {
-          const { ID, title, slug } = item;
+        {wpMainMenu.map((item, key) => {
+          const { title, slug } = item;
 
           const TEST_BLOCK = slug.includes("blocks-page")
             ? { color: colors.danger, fontWeight: "bold", fontSize: 20 }
@@ -134,15 +146,15 @@ const Navigation = ({ state, actions, libraries }) => {
           if (item.child_items)
             return (
               <ServeMenuDropDown
-                key={ID}
-                title={<Html2React html={title} />}
+                key={key}
+                title={title}
                 slugPrefix={slug}
                 menu={item.child_items}
               />
             );
 
           return (
-            <div key={ID}>
+            <div key={key}>
               <Nav.Link
                 style={{ ...styles.link, ...TEST_BLOCK }}
                 onClick={() => handleGoToPath({ slug })}
