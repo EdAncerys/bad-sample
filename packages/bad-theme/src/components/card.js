@@ -55,10 +55,16 @@ const Card = ({
     const alt = title || "BAD";
 
     return (
-      <div
-        style={{ width: "100%", height: body ? 125 : 200, overflow: "hidden" }}
-      >
-        <Image src={url} className="d-block h-100" alt={alt} />
+      <div style={{ width: "100%", height: body ? "35%" : "50%" }}>
+        <Image
+          src={url}
+          alt={alt}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+          }}
+        />
       </div>
     );
   };
