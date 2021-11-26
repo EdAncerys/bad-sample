@@ -17,6 +17,7 @@ const Navigation = ({ state, actions, libraries }) => {
 
   const NAV_DIVIDER = 8;
   const BANNER_HEIGHT = state.theme.bannerHeight;
+  const activeDropDown = state.theme.activeDropDown;
 
   useEffect(() => {
     // getting wp menu from state
@@ -81,7 +82,19 @@ const Navigation = ({ state, actions, libraries }) => {
     return (
       <NavDropdown
         title={<Html2React html={title} /> || "Menu Title"}
-        style={{ position: "static" }} // static position adding ability for dropdown to move up the scope
+        style={{
+          position: "static", // static position adding ability for dropdown to move up the scope
+          padding: `0 1em`,
+          borderBottom: activeDropDown ? `5px solid ${colors.danger}` : "none",
+        }}
+        // onClick={(e) => {
+        //   const title = {
+        //     color: `5px solid ${colors.danger}`,
+        //     title: e.target.innerText,
+        //   };
+        //   if (!activeDropDown) state.theme.activeDropDown = title;
+        //   if (activeDropDown) state.theme.activeDropDown = null;
+        // }} // handle menu underline
       >
         <div
           className="flex"
@@ -128,13 +141,8 @@ const Navigation = ({ state, actions, libraries }) => {
     return (
       <div
         className="flex"
-        id="BAD-menu-container"
+        id="BAD-menu-container pink"
         style={styles.container}
-        // style={{
-        //   display: "grid",
-        //   gridTemplateColumns: `repeat(${NAV_DIVIDER + 1}, 1fr)`,
-        //   gap: 10,
-        // }}
       >
         {wpMainMenu.map((item, key) => {
           const { title, slug } = item;
@@ -194,7 +202,7 @@ const styles = {
   container: {
     justifyContent: "space-between",
     alignItems: "center",
-    minHeight: 67,
+    paddingTop: 20,
     flexWrap: "wrap",
   },
   dropDown: {

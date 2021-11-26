@@ -10,6 +10,7 @@ const FullWidthContentBlock = ({
   libraries,
   block,
   disableMargin,
+  disablePadding,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -27,6 +28,7 @@ const FullWidthContentBlock = ({
   if (text_align === "right") ALIGNMENT = "end";
   if (padding === "small") PADDING = `0 10%`;
   if (padding === "large") PADDING = `0 25%`;
+  if (disablePadding) PADDING = `0 0 0 ${marginHorizontal}px`;
 
   // SERVERS ----------------------------------------------------------------
   const ServeTitle = () => {

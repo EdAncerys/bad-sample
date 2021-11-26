@@ -39,11 +39,6 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
     BODY_LENGTH = 450;
     CARD_HEIGHT = BANNER_HEIGHT - FOOTER_HEIGHT;
   }
-  if (layout !== "50-50") {
-    // CARD_WIDTH = "100%";
-    // OVERLAY_WIDTH = "100%";
-    // BODY_LENGTH = 800;
-  }
 
   if (!background_image && layout === "full-width") return null; // defaults to null based on config
 
@@ -81,7 +76,6 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           }}
         >
           <Card
-            cardTitle="Card Header Title"
             title={title}
             body={body}
             cardWidth={CARD_WIDTH}
@@ -89,6 +83,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
             bodyLength={BODY_LENGTH}
             colour={block.colour}
             shadow
+            heroBanner
           />
         </div>
       </div>
@@ -123,8 +118,20 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
     if (pop_out_text) return <div className="flex" />;
 
     return (
-      <div className="flex">
-        <FullWidthContentBlock block={block} disableMargin />
+      <div className="flex relative">
+        <div
+          style={{
+            position: "absolute",
+            zIndex: 2,
+            width: !background_image ? CONTENT_WIDTH / 1.5 : CONTENT_WIDTH / 2, // if no img provided defaults to diff width
+          }}
+        >
+          <FullWidthContentBlock
+            block={block}
+            disableMargin
+            disablePadding={!background_image || false}
+          />
+        </div>
       </div>
     );
   };
@@ -137,6 +144,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
     const CARD_STYLES = isFullWidth
       ? {
           height: BANNER_HEIGHT,
+          width: "100%",
           overflow: "hidden",
           paddingLeft: `${marginHorizontal}px`,
         }
@@ -177,7 +185,10 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div className="flex-col" style={{ margin: `${marginVertical}px 0` }}>
+    <div
+      className="flex-col"
+      style={{ margin: `${marginVertical}px 0`, height: BANNER_HEIGHT }}
+    >
       <div className="flex-row relative">
         <ServeCardContent />
         <ServeOverLay />

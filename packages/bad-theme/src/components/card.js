@@ -19,6 +19,7 @@ const Card = ({
   bodyLength,
   cardWidth,
   cardHeight,
+  heroBanner,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   // <Html2React html={body} />
@@ -136,13 +137,8 @@ const Card = ({
     const ServeTitle = () => {
       if (!title) return null;
 
-      // Manage max string Length
-      const MAX_LENGTH = 60;
-      let titlePreview = `${title.substring(0, MAX_LENGTH)}...`;
-      if (title.length < MAX_LENGTH) titlePreview = title;
-
       return (
-        <div>
+        <div style={{ fontSize: heroBanner ? 36 : 20, fontWeight: "bold" }}>
           <Html2React html={title} />
         </div>
       );
