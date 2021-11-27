@@ -14,7 +14,6 @@ import NewsCarousel from "../newsCarousel";
 import ProfilesBlock from "../profilesBlock";
 import FullWidthContentBlock from "../fullWidthContentBlock";
 import PromoBlock from "../promoBlock";
-import IndexCard from "../indexCard";
 import Accordion from "../accordion";
 import QuotationCarousel from "../quotationCarousel";
 import BenefitsGrid from "../benefitsGrid";
@@ -22,6 +21,7 @@ import DownloadFileBlock from "../downloadFileBlock";
 import Tweets from "../tweets";
 import FundingPromo from "../fundingPromo";
 import VenueHireGallery from "../venueHireGallery";
+import SplitContentAndIndexCard from "../splitContentAndIndexCard";
 
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   // console.log("BLOCKS: ", blocks); // debug
@@ -43,6 +43,14 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
         {blocks.map((block, key) => {
           const { acf_fc_layout } = block;
           console.log("CONTENT BLOCK", block); // debug
+
+          if (acf_fc_layout === "split_content_and_index_card_block")
+            return (
+              <div key={key + 1}>
+                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                <SplitContentAndIndexCard key={key} block={block} />
+              </div>
+            );
 
           if (acf_fc_layout === "venue_hire_gallery")
             return (
@@ -105,14 +113,6 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
               <div key={key + 1}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
                 <ProfilesBlock key={key} block={block} />
-              </div>
-            );
-
-          if (acf_fc_layout === "index_card")
-            return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <IndexCard key={key} block={block} />
               </div>
             );
 
