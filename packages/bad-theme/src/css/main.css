@@ -36,6 +36,11 @@ body {
 a {
   display: block;
   text-decoration: none;
+  color: inherit;
+}
+a:hover {
+  text-decoration: none;
+  color: inherit;
 }
 p {
   margin: 0;

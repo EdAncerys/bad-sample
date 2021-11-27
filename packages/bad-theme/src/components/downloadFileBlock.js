@@ -25,6 +25,7 @@ const DownloadFileBlock = ({
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
   const ICON_WIDTH = 35;
+  const baseURL = `https://badadmin.skylarkdev.co/`;
 
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
@@ -37,17 +38,11 @@ const DownloadFileBlock = ({
           textTransform: "uppercase",
           fontSize: 12,
           cursor: "pointer",
-          marginLeft: `2em`,
+          marginLeft: `1em`,
         }}
       >
-        <Link link={file.url} target="_blank" download>
-          {/* <Html2React html={title} /> */}
-          Link Download
-        </Link>
-
         <a href={file.url} target="_blank" download>
-          {/* <Html2React html={title} /> */}
-          HTML Download
+          <Html2React html={title} />
         </a>
       </div>
     );
@@ -59,7 +54,7 @@ const DownloadFileBlock = ({
         margin: disableMargin ? 0 : `${marginVertical}px ${marginHorizontal}px`,
       }}
     >
-      <div className="flex-row pink" style={{ alignItems: "center" }}>
+      <div className="flex-row" style={{ alignItems: "center" }}>
         <div
           style={{
             width: ICON_WIDTH,
