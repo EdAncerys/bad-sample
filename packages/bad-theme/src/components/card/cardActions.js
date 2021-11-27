@@ -14,6 +14,7 @@ const CardActions = ({
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
+  if (!link && !form_link && !downloadFile) return null;
   // HELPERS ---------------------------------------------
   const handleGoToPath = ({ path }) => {
     // console.log("link", link); // debug
@@ -55,7 +56,11 @@ const CardActions = ({
     <div>
       <div
         className="flex-row"
-        style={{ justifyContent: "space-between", marginTop: `2em` }}
+        style={{
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginTop: `2em`,
+        }}
       >
         <ServeFileAction />
         <ServeReadMoreAction />

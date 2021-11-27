@@ -7,6 +7,8 @@ import CardBody from "./carBody";
 import CardActions from "./cardActions";
 import JournalCard from "../home/journalCard";
 import PromoHeader from "./promoHeader";
+import GalleryCarousel from "./galleryCarousel";
+import VenueInfo from "./venueInfo";
 
 const Card = ({
   state,
@@ -18,6 +20,8 @@ const Card = ({
   body,
   link,
   downloadFile,
+  gallery,
+  venueInfo,
   fundingPromo,
   textAlign,
   url,
@@ -32,11 +36,6 @@ const Card = ({
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
   const THEME = colour || colors.primary;
   const SHADOW = shadow ? "shadow" : "";
-
-  const handleFormPath = () => {
-    // console.log("link", link); // debug
-    actions.router.set(`${form_link}`);
-  };
 
   // SERVERS ----------------------------------------------
   const ServeFooter = () => {
@@ -106,7 +105,7 @@ const Card = ({
 
   const ServeContent = () => {
     return (
-      <div className="flex-col" style={{ padding: `2em` }}>
+      <div className="flex-col" style={{ padding: `1em 2em` }}>
         <ServeCardHeader />
         <ServeJournalCard />
         <CardBody
@@ -116,6 +115,7 @@ const Card = ({
           heroBanner={heroBanner}
           TEXT_ALIGN={TEXT_ALIGN}
         />
+        <VenueInfo venueInfo={venueInfo} />
         <CardActions
           link={link}
           form_link={form_link}
@@ -137,6 +137,7 @@ const Card = ({
       }}
     >
       <PromoHeader fundingPromo={fundingPromo} />
+      <GalleryCarousel gallery={gallery} />
       <ServeCardImage />
       <ServeContent />
       <ServeFooter />
