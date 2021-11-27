@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import JournalCard from "./journalCard";
-
 import Loading from "../loading";
+import JournalCard from "./journalCard";
 
 const JournalPromoBlock = ({ state, actions, block }) => {
   if (!block) return <Loading />;
@@ -18,7 +17,11 @@ const JournalPromoBlock = ({ state, actions, block }) => {
       <div>
         <div style={styles.container}>
           {block.thumbnails.map((block, key) => {
-            return <JournalCard key={key} block={block} />;
+            const { image, link, title } = block;
+
+            return (
+              <JournalCard key={key} image={image} title={title} link={link} shadow />
+            );
           })}
         </div>
       </div>

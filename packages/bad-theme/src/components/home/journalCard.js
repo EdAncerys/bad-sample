@@ -5,10 +5,21 @@ import Image from "@frontity/components/image";
 import { colors } from "../../config/colors";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
-const JournalCard = ({ state, actions, libraries, block }) => {
+const JournalCard = ({
+  state,
+  actions,
+  libraries,
+  image,
+  title,
+  user,
+  link,
+  shadow,
+  tweet,
+}) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const CARD_WIDTH = "30%";
-  const { image, link, title } = block;
+  const IMG_WIDTH = 75;
+
   if (!image && !title) return null; // do not render card if content not provided
 
   // HELPERS ---------------------------------------------
@@ -19,11 +30,17 @@ const JournalCard = ({ state, actions, libraries, block }) => {
   };
 
   // SERVERS ---------------------------------------------
-  const ServeCardActions = () => {
+  const ServeCardContent = () => {
     if (!title) return null;
+
+    let BORDER = `none`;
+    if (image) BORDER = `2px solid ${colors.darkSilver}`;
+    if (tweet) BORDER = `none`;
 
     // SERVERS ------------------------------
     const ServeActions = () => {
+      if (!link) return null;
+
       return (
         <div>
           <div
@@ -43,6 +60,8 @@ const JournalCard = ({ state, actions, libraries, block }) => {
     };
 
     const ServeTitle = () => {
+      if (!title) return null;
+
       return (
         <div
           className="flex"
@@ -56,15 +75,33 @@ const JournalCard = ({ state, actions, libraries, block }) => {
       );
     };
 
+    const ServeUser = () => {
+      if (!user) return null;
+
+      return (
+        <div
+          className="flex"
+          style={{
+            fontSize: 20,
+            color: colors.darkSilver,
+          }}
+        >
+          <Html2React html={user} />
+        </div>
+      );
+    };
+
     return (
       <div
-        className="flex-col"
+        className="flex"
         style={{
-          borderLeft: image ? `2px solid ${colors.darkSilver}` : 0,
+          borderLeft: BORDER,
+          minHeight: IMG_WIDTH,
         }}
       >
-        <div className="flex-col" style={{ paddingLeft: `10px` }}>
+        <div className="flex-col" style={{ paddingLeft: `1em` }}>
           <ServeTitle />
+          <ServeUser />
           <ServeActions />
         </div>
       </div>
@@ -77,30 +114,23 @@ const JournalCard = ({ state, actions, libraries, block }) => {
 
     return (
       <div
-        className="flex"
         style={{
-          flex: 0.55,
-          justifyContent: "center",
+          width: IMG_WIDTH,
+          height: IMG_WIDTH,
+          borderRadius: "50%",
+          overflow: "hidden",
+          marginRight: `1em`,
         }}
       >
-        <div
+        <Image
+          src={image.url}
+          alt={alt}
           style={{
-            width: 75,
-            height: 75,
-            borderRadius: "50%",
-            overflow: "hidden",
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
           }}
-        >
-          <Image
-            src={image.url}
-            alt={alt}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-            }}
-          />
-        </div>
+        />
       </div>
     );
   };
@@ -108,16 +138,22 @@ const JournalCard = ({ state, actions, libraries, block }) => {
   // RETURN ----------------------------------------------------------------
   return (
     <div
-      className="flex shadow"
+      className={`${shadow ? "shadow" : ""}`}
       style={{
         minWidth: CARD_WIDTH,
         width: "100%",
-        padding: `1em 0`,
+        padding: tweet ? `1em 0` : 0,
+        borderBottom: tweet ? `2px solid ${colors.darkSilver}` : 0,
       }}
     >
-      <div className="flex-row m-2">
+      <div
+        className="flex-row"
+        style={{
+          padding: !tweet ? `1em` : 0,
+        }}
+      >
         <ServeCardImage />
-        <ServeCardActions />
+        <ServeCardContent />
       </div>
     </div>
   );

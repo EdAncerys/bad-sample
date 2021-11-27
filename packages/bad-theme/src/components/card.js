@@ -3,6 +3,8 @@ import { connect } from "frontity";
 import { colors } from "../config/colors";
 import Image from "@frontity/components/image";
 
+import JournalCard from "./home/journalCard";
+
 const Card = ({
   state,
   actions,
@@ -20,6 +22,7 @@ const Card = ({
   cardWidth,
   cardHeight,
   heroBanner,
+  journalCard,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   // <Html2React html={body} />
@@ -47,6 +50,19 @@ const Card = ({
           height: 8,
           width: "100%",
         }}
+      />
+    );
+  };
+
+  const ServeJournalCard = () => {
+    if (!journalCard) return null;
+
+    return (
+      <JournalCard
+        image={journalCard.image}
+        title={journalCard.title}
+        user={journalCard.user}
+        tweet
       />
     );
   };
@@ -82,6 +98,7 @@ const Card = ({
             backgroundColor: colors.lightSilver,
             borderRadius: 5,
             textTransform: "uppercase",
+            marginBottom: `1em`,
           }}
         >
           <Html2React html={cardTitle} />
@@ -90,7 +107,7 @@ const Card = ({
     );
   };
 
-  const ServeFooterActions = () => {
+  const ServeActions = () => {
     const ServeReadMoreAction = () => {
       if (!link) return null;
 
@@ -170,9 +187,11 @@ const Card = ({
 
   const ServeContent = () => {
     return (
-      <div className="flex-col mt-2">
+      <div className="flex-col" style={{ padding: `2em` }}>
+        <ServeCardHeader />
+        <ServeJournalCard />
         <ServeCardBody />
-        <ServeFooterActions />
+        <ServeActions />
       </div>
     );
   };
@@ -188,11 +207,8 @@ const Card = ({
         height: cardHeight || "100%",
       }}
     >
-      {url && <ServeCardImage />}
-      <div className="flex-col m-3">
-        <ServeCardHeader />
-        <ServeContent />
-      </div>
+      <ServeCardImage />
+      <ServeContent />
       <ServeFooter />
     </div>
   );

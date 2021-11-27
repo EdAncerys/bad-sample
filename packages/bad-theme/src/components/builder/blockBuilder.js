@@ -19,6 +19,7 @@ import Accordion from "../accordion";
 import QuotationCarousel from "../quotationCarousel";
 import BenefitsGrid from "../benefitsGrid";
 import DownloadFileBlock from "../downloadFileBlock";
+import Tweets from "../tweets";
 
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   // console.log("BLOCKS: ", blocks); // debug
@@ -40,6 +41,14 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
         {blocks.map((block, key) => {
           const { acf_fc_layout } = block;
           console.log("CONTENT BLOCK", block); // debug
+
+          if (acf_fc_layout === "latest_tweets")
+            return (
+              <div key={key + 1}>
+                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                <Tweets key={key} block={block} />
+              </div>
+            );
 
           if (acf_fc_layout === "download_file_block")
             return (

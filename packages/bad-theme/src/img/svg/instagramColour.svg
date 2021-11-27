@@ -1,0 +1,22 @@
+<svg id="_1164349_circle_instagram_logo_media_network_icon" data-name="1164349_circle_instagram_logo_media_network_icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="77" height="77" viewBox="0 0 77 77">
+  <defs>
+    <linearGradient id="linear-gradient" y1="1" x2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ffb900"/>
+      <stop offset="1" stop-color="#9100eb"/>
+    </linearGradient>
+  </defs>
+  <g id="Group_1059" data-name="Group 1059">
+    <circle id="Ellipse_10" data-name="Ellipse 10" cx="38.5" cy="38.5" r="38.5" fill="url(#linear-gradient)"/>
+  </g>
+  <g id="Group_1063" data-name="Group 1063" transform="translate(14.382 14.382)">
+    <g id="Group_1060" data-name="Group 1060">
+      <path id="Path_1255" data-name="Path 1255" d="M58.955,71.939H36.984A13,13,0,0,1,24,58.955V36.984A13,13,0,0,1,36.984,24H58.955A13,13,0,0,1,71.939,36.984V58.956A13,13,0,0,1,58.955,71.939ZM36.984,28A9,9,0,0,0,28,36.984V58.956a9,9,0,0,0,8.989,8.989H58.955a9,9,0,0,0,8.989-8.989V36.984A9,9,0,0,0,58.955,28Z" transform="translate(-24 -24)" fill="#fff"/>
+    </g>
+    <g id="Group_1061" data-name="Group 1061" transform="translate(11.985 11.985)">
+      <path id="Path_1256" data-name="Path 1256" d="M55.985,67.97A11.985,11.985,0,1,1,67.97,55.985,12,12,0,0,1,55.985,67.97Zm0-19.974a7.99,7.99,0,1,0,7.99,7.99A8,8,0,0,0,55.985,48Z" transform="translate(-44 -44)" fill="#fff"/>
+    </g>
+    <g id="Group_1062" data-name="Group 1062" transform="translate(33.957 8.489)">
+      <circle id="Ellipse_11" data-name="Ellipse 11" cx="2.746" cy="2.746" r="2.746" fill="#fff"/>
+    </g>
+  </g>
+</svg>
