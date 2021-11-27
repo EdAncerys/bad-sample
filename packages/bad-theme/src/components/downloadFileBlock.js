@@ -4,7 +4,6 @@ import { colors } from "../config/colors";
 import Link from "@frontity/components/link";
 import Image from "@frontity/components/image";
 
-import Loading from "./loading";
 import PDF from "../img/svg/pdf.svg";
 
 const DownloadFileBlock = ({
@@ -16,11 +15,9 @@ const DownloadFileBlock = ({
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  if (!block) return <Loading />;
+  if (!block || !block.file || !block.title) return null;
 
   const { file, title } = block;
-  if (!title.length) return null;
-  if (!file) return null;
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -29,7 +26,7 @@ const DownloadFileBlock = ({
 
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
-    if (!title) return null;
+    if (!file) return null;
 
     return (
       <div

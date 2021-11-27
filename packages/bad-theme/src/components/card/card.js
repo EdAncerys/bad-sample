@@ -6,6 +6,7 @@ import Image from "@frontity/components/image";
 import CardBody from "./carBody";
 import CardActions from "./cardActions";
 import JournalCard from "../home/journalCard";
+import PromoHeader from "./promoHeader";
 
 const Card = ({
   state,
@@ -16,18 +17,18 @@ const Card = ({
   title,
   body,
   link,
+  downloadFile,
+  fundingPromo,
   textAlign,
   url,
   form_link,
   shadow,
-  bodyLength,
   cardWidth,
   cardHeight,
   heroBanner,
   journalCard,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-  // <Html2React html={body} />
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
   const THEME = colour || colors.primary;
   const SHADOW = shadow ? "shadow" : "";
@@ -115,7 +116,11 @@ const Card = ({
           heroBanner={heroBanner}
           TEXT_ALIGN={TEXT_ALIGN}
         />
-        <CardActions link={link} form_link={form_link} />
+        <CardActions
+          link={link}
+          form_link={form_link}
+          downloadFile={downloadFile}
+        />
       </div>
     );
   };
@@ -131,6 +136,7 @@ const Card = ({
         height: cardHeight || "100%",
       }}
     >
+      <PromoHeader fundingPromo={fundingPromo} />
       <ServeCardImage />
       <ServeContent />
       <ServeFooter />

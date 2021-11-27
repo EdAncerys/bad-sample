@@ -2,7 +2,16 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
-const CardActions = ({ state, actions, libraries, link, form_link }) => {
+import DownloadFileBlock from "../downloadFileBlock";
+
+const CardActions = ({
+  state,
+  actions,
+  libraries,
+  link,
+  form_link,
+  downloadFile,
+}) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   // HELPERS ---------------------------------------------
@@ -36,12 +45,19 @@ const CardActions = ({ state, actions, libraries, link, form_link }) => {
     );
   };
 
+  const ServeFileAction = () => {
+    if (!downloadFile) return null;
+
+    return <DownloadFileBlock block={downloadFile} disableMargin />;
+  };
+
   return (
     <div>
       <div
-        className="flex-row mt-4"
-        style={{ justifyContent: "space-between" }}
+        className="flex-row"
+        style={{ justifyContent: "space-between", marginTop: `2em` }}
       >
+        <ServeFileAction />
         <ServeReadMoreAction />
         <ServeFromAction />
       </div>

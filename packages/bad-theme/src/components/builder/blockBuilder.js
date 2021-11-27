@@ -20,6 +20,7 @@ import QuotationCarousel from "../quotationCarousel";
 import BenefitsGrid from "../benefitsGrid";
 import DownloadFileBlock from "../downloadFileBlock";
 import Tweets from "../tweets";
+import FundingPromo from "../fundingPromo";
 
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   // console.log("BLOCKS: ", blocks); // debug
@@ -41,6 +42,14 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
         {blocks.map((block, key) => {
           const { acf_fc_layout } = block;
           console.log("CONTENT BLOCK", block); // debug
+
+          if (acf_fc_layout === "funding_promo")
+            return (
+              <div key={key + 1}>
+                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                <FundingPromo key={key} block={block} />
+              </div>
+            );
 
           if (acf_fc_layout === "latest_tweets")
             return (
