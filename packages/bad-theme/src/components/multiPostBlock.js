@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import Card from "./card";
+import Card from "./card/card";
 import Loading from "./loading";
 
 const MultiPostBlock = ({ state, actions, block }) => {

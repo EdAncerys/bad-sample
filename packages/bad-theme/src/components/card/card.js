@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import { colors } from "../config/colors";
+import { colors } from "../../config/colors";
 import Image from "@frontity/components/image";
 
-import JournalCard from "./home/journalCard";
+import CardBody from "./carBody";
+import CardActions from "./cardActions";
+import JournalCard from "../home/journalCard";
 
 const Card = ({
   state,
@@ -29,12 +31,6 @@ const Card = ({
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
   const THEME = colour || colors.primary;
   const SHADOW = shadow ? "shadow" : "";
-
-  // HELPERS ---------------------------------------------
-  const handleReadMorePath = () => {
-    // console.log("link", link); // debug
-    actions.router.set(`${link}`);
-  };
 
   const handleFormPath = () => {
     // console.log("link", link); // debug
@@ -107,91 +103,19 @@ const Card = ({
     );
   };
 
-  const ServeActions = () => {
-    const ServeReadMoreAction = () => {
-      if (!link) return null;
-
-      return (
-        <div onClick={handleReadMorePath}>
-          <div style={styles.footerActionTitle}>
-            <p className="card-text">Read More</p>
-          </div>
-        </div>
-      );
-    };
-
-    const ServeFromAction = () => {
-      if (!form_link) return null;
-
-      // HELPERS -------------------------
-      const handleReadMorePath = () => {
-        actions.router.set(`${form_link}`);
-      };
-
-      return (
-        <div onClick={handleFormPath}>
-          <div style={styles.footerActionTitle}>
-            <p className="card-text">Nomination Form</p>
-          </div>
-        </div>
-      );
-    };
-
-    return (
-      <div>
-        <div
-          className="flex-row mt-4"
-          style={{ justifyContent: "space-between" }}
-        >
-          <ServeReadMoreAction />
-          <ServeFromAction />
-        </div>
-      </div>
-    );
-  };
-
-  const ServeCardBody = () => {
-    const ServeTitle = () => {
-      if (!title) return null;
-
-      return (
-        <div style={{ fontSize: heroBanner ? 36 : 20, fontWeight: "bold" }}>
-          <Html2React html={title} />
-        </div>
-      );
-    };
-
-    const ServeBody = () => {
-      if (url) return null;
-      if (!body) return null;
-
-      // Manage max string Length
-      const MAX_LENGTH = bodyLength || 400;
-      let bodyPreview = `${body.substring(0, MAX_LENGTH)}...`;
-      if (body.length < MAX_LENGTH) bodyPreview = body;
-
-      return (
-        <div className="flex mt-2" style={{ overflow: "auto" }}>
-          <Html2React html={body} />
-        </div>
-      );
-    };
-
-    return (
-      <div className="flex-col" style={{ textAlign: `${TEXT_ALIGN}` }}>
-        <ServeTitle />
-        <ServeBody />
-      </div>
-    );
-  };
-
   const ServeContent = () => {
     return (
       <div className="flex-col" style={{ padding: `2em` }}>
         <ServeCardHeader />
         <ServeJournalCard />
-        <ServeCardBody />
-        <ServeActions />
+        <CardBody
+          title={title}
+          body={body}
+          url={url}
+          heroBanner={heroBanner}
+          TEXT_ALIGN={TEXT_ALIGN}
+        />
+        <CardActions link={link} form_link={form_link} />
       </div>
     );
   };

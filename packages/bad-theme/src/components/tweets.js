@@ -5,7 +5,7 @@ import Image from "@frontity/components/image";
 import Link from "@frontity/components/link";
 
 import Loading from "./loading";
-import Card from "./card";
+import Card from "./card/card";
 import Facebook from "../img/svg/facebookColour.svg";
 import Twitter from "../img/svg/twitterColour.svg";
 import Instagram from "../img/svg/instagramColour.svg";

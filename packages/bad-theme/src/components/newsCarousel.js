@@ -6,7 +6,7 @@ import { colors } from "../config/colors";
 
 import Loading from "./loading";
 
-import Card from "./card";
+import Card from "./card/card";
 import LeftIcon from "../img/svg/leftIcon.svg";
 import RightIcon from "../img/svg/rightIcon.svg";
 
