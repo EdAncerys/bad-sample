@@ -45,7 +45,6 @@ const Benefit = ({ state, actions, libraries, block }) => {
           style={{
             width: "100%",
             height: "100%",
-            // objectFit: "cover",
           }}
         />
       </div>
