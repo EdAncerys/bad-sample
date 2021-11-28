@@ -19,6 +19,8 @@ const IndexCard = ({
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
+  if (!index_title) return null;
+
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
   const SHADOW = shadow ? "shadow" : "";

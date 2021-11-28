@@ -69,7 +69,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
         }}
       >
         <div
-          className="flex"
+        className="flex"
           style={{
             marginLeft: PADDING,
             marginTop: FOOTER_HEIGHT / 2,

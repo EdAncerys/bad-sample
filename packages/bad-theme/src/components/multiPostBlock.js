@@ -29,9 +29,11 @@ const MultiPostBlock = ({ state, actions, block }) => {
           return (
             <div
               key={key}
+              className="flex"
               style={{
-                display: "flex",
-                justifyContent: "center",
+                // add custom wrapping to card elements
+                // width: "30%",
+                // margin: `0 1em 1em`,
               }}
             >
               <Card
@@ -42,7 +44,6 @@ const MultiPostBlock = ({ state, actions, block }) => {
                 link={link.url}
                 url={background_image.url} // optional param
                 form_link={form_link.url} // optional param
-                // cardWidth="90%" // optional param
                 shadow // optional param
               />
             </div>
@@ -58,7 +59,12 @@ const styles = {
     display: "grid",
     gridTemplateColumns: `repeat(3, 1fr)`,
     justifyContent: "space-between",
-    gap: 10,
+    gap: 20,
+
+    // add custom wrapping to card elements
+    // display: "flex",
+    // flexWrap: "wrap",
+    // justifyContent: "center",
   },
 };
 

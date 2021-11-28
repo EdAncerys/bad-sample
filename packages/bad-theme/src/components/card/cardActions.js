@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
+import { colors } from "../../config/colors";
 import DownloadFileBlock from "../downloadFileBlock";
 
 const CardActions = ({
   state,
   actions,
   libraries,
+  label,
   link,
   form_link,
   downloadFile,
@@ -24,11 +26,21 @@ const CardActions = ({
   // SERVERS ---------------------------------------------
   const ServeReadMoreAction = () => {
     if (!link) return null;
+    let GO_TO_LABEL = "Read More";
+    if (label) GO_TO_LABEL = <Html2React html={label} />;
 
     return (
       <div onClick={() => handleGoToPath({ path: link })}>
         <div style={styles.footerActionTitle}>
-          <p className="card-text">Read More</p>
+          <div
+            style={{
+              borderBottom: `4px solid ${colors.darkSilver}`,
+              paddingBottom: 5,
+              textTransform: "capitalize",
+            }}
+          >
+            {GO_TO_LABEL}
+          </div>
         </div>
       </div>
     );
@@ -40,7 +52,15 @@ const CardActions = ({
     return (
       <div onClick={() => handleGoToPath({ path: form_link })}>
         <div style={styles.footerActionTitle}>
-          <p className="card-text">Nomination Form</p>
+          <div
+            style={{
+              borderBottom: `4px solid ${colors.darkSilver}`,
+              paddingBottom: 5,
+              textTransform: "capitalize",
+            }}
+          >
+            Nomination Form
+          </div>
         </div>
       </div>
     );

@@ -59,7 +59,7 @@ const PromoHeader = ({ state, actions, libraries, fundingPromo }) => {
     <div
       style={{
         width: "100%",
-        minHeight: "30%",
+        minHeight: 150,
         padding: `2em`,
         backgroundColor: colors.lightSilver,
         overflow: "auto",

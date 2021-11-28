@@ -14,17 +14,18 @@ import HireDiscounts from "../img/svg/hireDiscounts.svg";
 
 const Benefit = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-  const ICON_WIDTH = 100;
+
   const { icon, body, title } = block;
 
-  let serveIcon = Journal;
-  if (icon === "Education") serveIcon = Education;
-  if (icon === "Clinical Services") serveIcon = ClinicalServices;
-  if (icon === "Newsletters") serveIcon = Newsletters;
-  if (icon === "Events") serveIcon = Events;
-  if (icon === "Fellowships") serveIcon = Fellowships;
-  if (icon === "Willan Library") serveIcon = Library;
-  if (icon === "Room Hire Discount") serveIcon = HireDiscounts;
+  const ICON_WIDTH = 100;
+  let SERVE_ICON = Journal;
+  if (icon === "Education") SERVE_ICON = Education;
+  if (icon === "Clinical Services") SERVE_ICON = ClinicalServices;
+  if (icon === "Newsletters") SERVE_ICON = Newsletters;
+  if (icon === "Events") SERVE_ICON = Events;
+  if (icon === "Fellowships") SERVE_ICON = Fellowships;
+  if (icon === "Willan Library") SERVE_ICON = Library;
+  if (icon === "Room Hire Discount") SERVE_ICON = HireDiscounts;
 
   // SERVERS ----------------------------------------------------------------
   const ServeProfilePicture = () => {
@@ -40,7 +41,7 @@ const Benefit = ({ state, actions, libraries, block }) => {
         }}
       >
         <Image
-          src={serveIcon}
+          src={SERVE_ICON}
           alt={alt}
           style={{
             width: "100%",

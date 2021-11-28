@@ -74,13 +74,7 @@ const Tweets = ({ state, actions, libraries, block }) => {
             const { background_image, body, colour, user, title } = block;
 
             return (
-              <div
-                key={key}
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
+              <div key={key} className="flex">
                 <Card
                   journalCard={{
                     image: background_image,

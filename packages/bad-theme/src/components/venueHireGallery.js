@@ -19,13 +19,7 @@ const VenueHireGallery = ({ state, actions, block }) => {
           const { capacity, gallery, colour, title } = block;
 
           return (
-            <div
-              key={key}
-              style={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
+            <div key={key} className="flex">
               <Card
                 gallery={gallery}
                 venueInfo={{ capacity, title }}

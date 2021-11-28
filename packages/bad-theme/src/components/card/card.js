@@ -9,6 +9,7 @@ import JournalCard from "../home/journalCard";
 import PromoHeader from "./promoHeader";
 import GalleryCarousel from "./galleryCarousel";
 import VenueInfo from "./venueInfo";
+import NewsArticleHeader from "./newsArticleHeader";
 
 const Card = ({
   state,
@@ -18,6 +19,7 @@ const Card = ({
   cardTitle,
   title,
   body,
+  label,
   link,
   downloadFile,
   gallery,
@@ -28,9 +30,9 @@ const Card = ({
   form_link,
   shadow,
   cardWidth,
-  cardHeight,
   heroBanner,
   journalCard,
+  newsArticle,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
@@ -117,6 +119,7 @@ const Card = ({
         />
         <VenueInfo venueInfo={venueInfo} />
         <CardActions
+          label={label}
           link={link}
           form_link={form_link}
           downloadFile={downloadFile}
@@ -133,11 +136,11 @@ const Card = ({
         ...styles.card,
         backgroundColor: colors.white,
         width: cardWidth || "100%",
-        height: cardHeight || "100%",
       }}
     >
       <PromoHeader fundingPromo={fundingPromo} />
       <GalleryCarousel gallery={gallery} />
+      <NewsArticleHeader newsArticle={newsArticle} />
       <ServeCardImage />
       <ServeContent />
       <ServeFooter />

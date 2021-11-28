@@ -70,13 +70,7 @@ const FundingPromo = ({ state, actions, libraries, block }) => {
           const { amount, body, colour, deadline, file, label, title } = block;
 
           return (
-            <div
-              key={key}
-              style={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
+            <div key={key} className="flex">
               <Card
                 fundingPromo={{ title, amount, deadline }}
                 body={body}

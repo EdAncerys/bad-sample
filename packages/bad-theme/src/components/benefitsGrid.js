@@ -8,7 +8,6 @@ import Loading from "./loading";
 const BenefitsGrid = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  console.log("block------", block);
   if (!block) return <Loading />;
   if (!block.benefits_card) return null;
 
