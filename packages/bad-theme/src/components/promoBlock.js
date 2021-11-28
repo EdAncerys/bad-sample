@@ -9,12 +9,16 @@ import { colors } from "../config/colors";
 const PromoBlock = ({ state, actions, block, reverse }) => {
   if (!block) return <Loading />;
 
-  const { background_image, image_align, title } = block;
+  const { background_image, image_align, title, horizontal_padding } = block;
 
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
   const isAlignLeft = image_align === "left";
+  const HORIZONTAL_PADDING = horizontal_padding === "True";
+  const MARGIN = HORIZONTAL_PADDING
+    ? `${marginVertical}px ${marginHorizontal}px`
+    : `${marginVertical}px 0`;
 
   // SERVERS ----------------------------------------------------------------
   const ServeCardImage = () => {
@@ -59,7 +63,7 @@ const PromoBlock = ({ state, actions, block, reverse }) => {
         backgroundColor: colors.lightSilver,
         height: BANNER_HEIGHT,
         overflow: "hidden",
-        margin: `${marginVertical}px ${marginHorizontal}px`,
+        margin: MARGIN,
       }}
     >
       <ServeCardContent />
