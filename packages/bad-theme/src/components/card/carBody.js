@@ -8,7 +8,6 @@ const CardBody = ({
   libraries,
   title,
   body,
-  url,
   heroBanner,
   TEXT_ALIGN,
 }) => {
@@ -26,7 +25,6 @@ const CardBody = ({
   };
 
   const ServeBody = () => {
-    if (url) return null;
     if (!body) return null;
 
     return (

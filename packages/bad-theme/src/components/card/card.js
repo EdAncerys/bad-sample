@@ -72,7 +72,7 @@ const Card = ({
     const alt = title || "BAD";
 
     return (
-      <div style={{ width: "100%", height: "50%" }}>
+      <div style={{ width: "100%", maxHeight: 300 }}>
         <Image
           src={url}
           alt={alt}
@@ -115,7 +115,6 @@ const Card = ({
         <CardBody
           title={title}
           body={body}
-          url={url}
           heroBanner={heroBanner}
           TEXT_ALIGN={TEXT_ALIGN}
         />
