@@ -22,8 +22,16 @@ const VenueInfo = ({ state, actions, libraries, venueInfo }) => {
     if (!capacity) return null;
 
     return (
-      <div style={{ fontSize: 14, textTransform: "uppercase" }}>
-        <Html2React html={capacity} />
+      <div>
+        <div
+          className="flex-row"
+          style={{ fontSize: 14, textTransform: "capitalize" }}
+        >
+          <div style={{ textTransform: "uppercase", paddingRight: 5 }}>
+            Capacity:
+          </div>
+          <Html2React html={capacity} />
+        </div>
       </div>
     );
   };

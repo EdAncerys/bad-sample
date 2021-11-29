@@ -10,6 +10,7 @@ import PromoHeader from "./promoHeader";
 import GalleryCarousel from "./galleryCarousel";
 import VenueInfo from "./venueInfo";
 import NewsArticleHeader from "./newsArticleHeader";
+import VideoGalleryInfo from "./videoGalleryInfo";
 
 const Card = ({
   state,
@@ -24,6 +25,7 @@ const Card = ({
   downloadFile,
   gallery,
   venueInfo,
+  videoGalleryInfo,
   fundingPromo,
   textAlign,
   url,
@@ -118,6 +120,7 @@ const Card = ({
           TEXT_ALIGN={TEXT_ALIGN}
         />
         <VenueInfo venueInfo={venueInfo} />
+        <VideoGalleryInfo videoGalleryInfo={videoGalleryInfo} />
         <CardActions
           label={label}
           link={link}

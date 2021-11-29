@@ -2,9 +2,9 @@ import React from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Carousel } from "react-bootstrap";
-import { colors } from "../../config/colors";
+import ReactPlayer from "react-player";
 
-import Loading from "../loading";
+import { colors } from "../../config/colors";
 
 const GalleryCarousel = ({ state, actions, libraries, gallery }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -17,10 +17,12 @@ const GalleryCarousel = ({ state, actions, libraries, gallery }) => {
     <div>
       <Carousel className="gallery-carousel">
         {gallery.map((block, key) => {
-          const { url, title } = block;
+          const { subtype, url, title } = block;
+
+          console.log("........", block);
 
           const ServeCardImage = () => {
-            if (!url) return null;
+            if (!url || subtype !== "jpeg") return null;
             const alt = title || "BAD";
 
             return (
@@ -38,6 +40,28 @@ const GalleryCarousel = ({ state, actions, libraries, gallery }) => {
             );
           };
 
+          const ServeCardVideo = () => {
+            if (!url || subtype !== "mp4") return null;
+            const alt = title || "BAD";
+
+            return (
+              <div style={{ width: "100%", height: "100%" }}>
+                <ReactPlayer
+                  url={url}
+                  alt={alt}
+                  width="100%"
+                  height="100%"
+                  style={{
+                    objectFit: "cover",
+                  }}
+                  playing
+                  muted
+                  controls
+                />
+              </div>
+            );
+          };
+
           return (
             <Carousel.Item key={key}>
               <div
@@ -47,6 +71,7 @@ const GalleryCarousel = ({ state, actions, libraries, gallery }) => {
                 }}
               >
                 <ServeCardImage />
+                <ServeCardVideo />
               </div>
             </Carousel.Item>
           );

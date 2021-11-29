@@ -29,6 +29,7 @@
     "frontity": "^1.17.1",
     "js-cookie": "^3.0.1",
     "react-bootstrap": "^2.0.2",
+    "react-player": "^2.9.0",
     "styled-components": "^5.3.3"
   }
 }

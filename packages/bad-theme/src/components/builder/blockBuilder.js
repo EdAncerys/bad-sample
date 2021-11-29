@@ -25,6 +25,7 @@ import SplitContentAndIndexCard from "../splitContentAndIndexCard";
 import NewsArticles from "../newsArticles";
 import UpcomingEvents from "../upcomingEvents";
 import HistoryTimeline from "../historyTimeline";
+import VideoGallery from "../videoGallery";
 
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   // console.log("BLOCKS: ", blocks); // debug
@@ -46,6 +47,14 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
         {blocks.map((block, key) => {
           const { acf_fc_layout } = block;
           console.log("CONTENT BLOCK", block); // debug
+
+          if (acf_fc_layout === "video_gallery_block")
+            return (
+              <div key={key + 1}>
+                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                <VideoGallery key={key} block={block} />
+              </div>
+            );
 
           if (acf_fc_layout === "history_timeline")
             return (
