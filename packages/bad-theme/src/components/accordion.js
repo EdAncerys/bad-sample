@@ -2,10 +2,12 @@ import { connect } from "frontity";
 import { useState, useEffect } from "react";
 import { colors } from "../config/colors";
 import Accordion from "react-bootstrap/Accordion";
+import Image from "@frontity/components/image";
 
 import Loading from "./loading";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import DownloadFileBlock from "./downloadFileBlock";
 
 const AccordionComponent = ({ state, actions, libraries, block }) => {
   if (!block) return <Loading />;
@@ -15,18 +17,13 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  // HELPERS ---------------------------------------------
-  const handleGoToPath = () => {
-    actions.router.set(`${url}`);
-    console.log("url", url);
-  };
-
   // SERVERS ---------------------------------------------
   const ServeAccordion = ({ block, eventKey }) => {
     const [active, setActive] = useState(null);
     const hasPreview = block.preview === "true";
+    console.log("hasPreview", hasPreview);
 
-    const { title, body } = block;
+    const { title, body, logo, downloads } = block;
     if (!title) return null;
 
     const ServeTitle = () => {
@@ -39,11 +36,10 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
             style={{
               fontSize: 20,
               fontWeight: "bold",
+              alignItems: "center",
             }}
           >
-            <div className="flex">
-              <Html2React html={title} />
-            </div>
+            <Html2React html={title} />
           </div>
         );
       };
@@ -62,11 +58,11 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
       };
 
       const ServePreview = () => {
-        if (hasPreview) return null;
+        if (!hasPreview) return null;
         if (active) return null;
 
         // Manage max string Length
-        const MAX_LENGTH = 155;
+        const MAX_LENGTH = 140;
         let bodyPreview = `${body.substring(0, MAX_LENGTH)}...`;
         if (body.length < MAX_LENGTH) bodyPreview = body;
 
@@ -87,22 +83,71 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
         );
       };
 
+      const ServeLogo = () => {
+        if (!logo) return null;
+        const alt = logo.title || "BAD";
+
+        return (
+          <div
+            style={{
+              width: 120,
+              height: 60,
+              padding: `0.25em`,
+              margin: `0 4em 0 1em`,
+            }}
+          >
+            <Image
+              src={logo.url}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
+            />
+          </div>
+        );
+      };
+
       const ServeIcon = () => {
-        if (hasPreview) {
-          if (!active) return <AddIcon style={{ fill: colors.textMain }} />;
-          if (active) return <RemoveIcon style={{ fill: colors.textMain }} />;
-        }
         if (!hasPreview) {
           if (!active)
+            return <AddIcon style={{ fontSize: 48, fill: colors.textMain }} />;
+          if (active)
             return (
-              <div style={{ fontSize: 12, textTransform: "uppercase" }}>
-                See More
+              <RemoveIcon style={{ fontSize: 48, fill: colors.textMain }} />
+            );
+        }
+        if (hasPreview) {
+          if (!active)
+            return (
+              <div>
+                <div
+                  className="flex"
+                  style={{
+                    fontSize: 12,
+                    textTransform: "uppercase",
+                    alignItems: "center",
+                    height: "100%",
+                  }}
+                >
+                  See More
+                </div>
               </div>
             );
           if (active)
             return (
-              <div style={{ fontSize: 12, textTransform: "uppercase" }}>
-                Less
+              <div>
+                <div
+                  className="flex"
+                  style={{
+                    fontSize: 12,
+                    textTransform: "uppercase",
+                    alignItems: "center",
+                    height: "100%",
+                  }}
+                >
+                  Less
+                </div>
               </div>
             );
         }
@@ -111,13 +156,44 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
       return (
         <div style={{ position: "relative" }}>
           <Accordion.Header>
-            <div className="flex" style={{ paddingTop: `1em` }}>
+            <div className="flex" style={{ padding: `0.5em 0` }}>
               <ServeTitle />
+              <ServeLogo />
               <ServeIcon />
             </div>
           </Accordion.Header>
           <ServeDivider active={active} />
           <ServePreview />
+        </div>
+      );
+    };
+
+    const ServeDownloads = () => {
+      if (!downloads) return null;
+
+      return (
+        <div className="flex-col" style={{ width: "70%" }}>
+          <div
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+              padding: `1em 0`,
+            }}
+          >
+            Downloads:
+          </div>
+          <div className="flex" style={{ flexWrap: "wrap" }}>
+            {downloads.map((block, key) => {
+              return (
+                <div
+                  key={key}
+                  style={{ minWidth: "33%", padding: `1em 1em 1em 0` }}
+                >
+                  <DownloadFileBlock block={block} disableMargin />
+                </div>
+              );
+            })}
+          </div>
         </div>
       );
     };
@@ -135,6 +211,7 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
           >
             <Html2React html={body} />
           </div>
+          <ServeDownloads />
         </Accordion.Body>
       );
     };
@@ -144,7 +221,7 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
         <Accordion.Item
           eventKey={eventKey}
           className="shadow"
-          style={{ margin: "10px 0" }}
+          style={{ padding: `0 1em`, margin: `1em 0` }}
           onClick={() => setActive(!active)}
         >
           <ServeTitle />

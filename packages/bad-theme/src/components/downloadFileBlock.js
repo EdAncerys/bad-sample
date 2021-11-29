@@ -15,14 +15,15 @@ const DownloadFileBlock = ({
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  if (!block || !block.file || !block.title) return null;
+  if (!block || !block.file) return null;
+  const { file, label } = block;
 
-  const { file, title } = block;
+  let LABEL = "Download file";
+  if (label) LABEL = label;
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
   const ICON_WIDTH = 35;
-  const baseURL = `https://badadmin.skylarkdev.co/`;
 
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
@@ -39,7 +40,7 @@ const DownloadFileBlock = ({
         }}
       >
         <a href={file.url} target="_blank" download>
-          <Html2React html={title} />
+          <Html2React html={LABEL} />
         </a>
       </div>
     );
