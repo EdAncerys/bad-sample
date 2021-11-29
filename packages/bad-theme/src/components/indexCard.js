@@ -12,7 +12,7 @@ const IndexCard = ({
   colour,
   index_title,
   subtitle,
-  link,
+  link_id,
   shadow,
   cardWidth,
   cardHeight,
@@ -69,23 +69,17 @@ const IndexCard = ({
   };
 
   const ServeIndexTitle = ({ block }) => {
-    const { title, link } = block;
+    const { title, link_id } = block;
+
+    console.log("link_id", link_id);
 
     if (!title) return null;
-
-    // HELPERS ---------------------------------------------
-    const handleGoToPath = () => {
-      // console.log("url", url); // debug
-      if (!link.url) return null;
-      actions.router.set(`${link.url}`);
-    };
 
     const ServeTitle = () => {
       return (
         <div
           className="list-group-block"
           style={{ padding: `0.5em 0`, cursor: "pointer" }}
-          onClick={handleGoToPath}
         >
           <div
             style={{
@@ -93,7 +87,9 @@ const IndexCard = ({
               textTransform: "capitalize",
             }}
           >
-            <Html2React html={title} />
+            <a href={`#${link_id}`}>
+              <Html2React html={title} />
+            </a>
           </div>
         </div>
       );
@@ -135,6 +131,9 @@ const styles = {
     flexDirection: "column",
     backgroundColor: colors.white,
     overflow: "hidden",
+
+    position: "sticky",
+    top: 0,
   },
 };
 

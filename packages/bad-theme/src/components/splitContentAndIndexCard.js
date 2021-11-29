@@ -68,6 +68,9 @@ const ServeBlockTitle = ({ state, actions, libraries, block }) => {
                 display: "flex",
                 justifyContent: "center",
                 paddingBottom: `1em`,
+                // add sticky config to side component
+                position: "sticky",
+                top: 0,
               }}
             >
               <IndexCard

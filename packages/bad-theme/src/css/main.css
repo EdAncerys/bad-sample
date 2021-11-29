@@ -19,6 +19,11 @@ body {
   font-family: lato, sans-serif;
   font-style: normal;
 }
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
 .btn {
   border-radius: 10px;
   min-width: 140px;
