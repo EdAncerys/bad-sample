@@ -96,7 +96,7 @@ const PromoBlock = ({ state, actions, libraries, block, reverse }) => {
             };
 
             const ServeActions = () => {
-              if (!body) return null;
+              if (!condition && !procedure && !service) return null;
 
               return (
                 <div className="flex-row" style={{ flexWrap: "wrap" }}>
