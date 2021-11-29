@@ -10,11 +10,22 @@ const MultiPostBlock = ({ state, actions, block }) => {
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+  let CARD_NUMBER = 3;
+  if (block.cards_per_row === "One") CARD_NUMBER = 1;
+  if (block.cards_per_row === "Two") CARD_NUMBER = 2;
+  if (block.cards_per_row === "Four") CARD_NUMBER = 4;
 
   // RETURN ---------------------------------------------------
   return (
     <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
-      <div style={styles.container}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: `repeat(${CARD_NUMBER}, 1fr)`,
+          justifyContent: "space-between",
+          gap: 20,
+        }}
+      >
         {block.card.map((block, key) => {
           const {
             background_image,
@@ -30,11 +41,13 @@ const MultiPostBlock = ({ state, actions, block }) => {
             <div
               key={key}
               className="flex"
-              style={{
-                // add custom wrapping to card elements
-                // width: "30%",
-                // margin: `0 1em 1em`,
-              }}
+              style={
+                {
+                  // add custom wrapping to card elements
+                  // width: "30%",
+                  // margin: `0 1em 1em`,
+                }
+              }
             >
               <Card
                 cardTitle={card_title}
@@ -56,11 +69,6 @@ const MultiPostBlock = ({ state, actions, block }) => {
 
 const styles = {
   container: {
-    display: "grid",
-    gridTemplateColumns: `repeat(3, 1fr)`,
-    justifyContent: "space-between",
-    gap: 20,
-
     // add custom wrapping to card elements
     // display: "flex",
     // flexWrap: "wrap",
