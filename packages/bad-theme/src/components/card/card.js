@@ -29,9 +29,11 @@ const Card = ({
   fundingPromo,
   textAlign,
   url,
+  isFrom4Col,
   form_link,
   shadow,
   cardWidth,
+  cardHeight,
   heroBanner,
   journalCard,
   newsArticle,
@@ -117,6 +119,7 @@ const Card = ({
           body={body}
           heroBanner={heroBanner}
           TEXT_ALIGN={TEXT_ALIGN}
+          isFrom4Col={isFrom4Col}
         />
         <VenueInfo venueInfo={venueInfo} />
         <VideoGalleryInfo videoGalleryInfo={videoGalleryInfo} />
@@ -138,6 +141,7 @@ const Card = ({
         ...styles.card,
         backgroundColor: colors.white,
         width: cardWidth || "100%",
+        height: cardHeight || "100%",
       }}
     >
       <PromoHeader fundingPromo={fundingPromo} />

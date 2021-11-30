@@ -15,6 +15,8 @@ const MultiPostBlock = ({ state, actions, block }) => {
   if (block.cards_per_row === "Two") CARD_NUMBER = 2;
   if (block.cards_per_row === "Four") CARD_NUMBER = 4;
 
+  const isFrom4Col = CARD_NUMBER === 4;
+
   // RETURN ---------------------------------------------------
   return (
     <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
@@ -23,7 +25,7 @@ const MultiPostBlock = ({ state, actions, block }) => {
           display: "grid",
           gridTemplateColumns: `repeat(${CARD_NUMBER}, 1fr)`,
           justifyContent: "space-between",
-          gap: 20,
+          gap: isFrom4Col ? 10 : 20,
         }}
       >
         {block.card.map((block, key) => {
@@ -38,25 +40,17 @@ const MultiPostBlock = ({ state, actions, block }) => {
           } = block;
 
           return (
-            <div
-              key={key}
-              className="flex"
-              style={
-                {
-                  // add custom wrapping to card elements
-                  // width: "30%",
-                  // margin: `0 1em 1em`,
-                }
-              }
-            >
+            <div key={key} className="flex">
               <Card
-                cardTitle={card_title}
+                cardTitle={isFrom4Col ? null : card_title}
                 title={title}
                 body={body}
                 colour={colour}
                 link={link.url}
-                url={background_image.url} // optional param
+                url={isFrom4Col ? null : background_image.url} // optional param
                 form_link={form_link.url} // optional param
+                cardHeight={isFrom4Col ? 290 : null}
+                isFrom4Col={isFrom4Col ? true : null}
                 shadow // optional param
               />
             </div>

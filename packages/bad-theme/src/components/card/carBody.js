@@ -12,6 +12,7 @@ const CardBody = ({
   body,
   heroBanner,
   TEXT_ALIGN,
+  isFrom4Col,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -34,10 +35,16 @@ const CardBody = ({
 
   const ServeBody = () => {
     if (!body) return null;
+    console.log("isFrom4Col", isFrom4Col);
+
+    let bodyPreview = body;
+    const MAX_CHAR = 120;
+    if (body.length > MAX_CHAR && isFrom4Col)
+      bodyPreview = `${body.slice(0, MAX_CHAR)}...`;
 
     return (
       <div className="flex mt-2" style={{ overflow: "auto" }}>
-        <Html2React html={body} />
+        <Html2React html={bodyPreview} />
       </div>
     );
   };
