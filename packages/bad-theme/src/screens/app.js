@@ -3,20 +3,24 @@ import { connect } from "frontity";
 import Switch from "@frontity/components/switch";
 import { colors } from "../config/colors";
 
+// COMPONENTS ---------------------------------------------------------
 import Header from "../components/header/header";
+import Footer from "../components/footer";
+import LoginModal from "../components/loginModal";
+import EnquireModal from "../components/enquireModal";
+import CreateAccountModal from "../components/createAccount/createAccountModal";
+import Directions from "../components/directions";
+import CreateAccount from "./createAccount";
+// SCREENS --------------------------------------------------------------
 import Post from "./post";
 import Page from "./page";
 import Login from "./login";
 import Home from "./home";
 import PilsArchive from "./pilsArchive";
 import Pils from "./pils";
-import CreateAccount from "./createAccount";
-import LoginModal from "../components/loginModal";
-import CreateAccountModal from "../components/createAccount/createAccountModal";
-import EnquireModal from "../components/enquireModal";
-import Footer from "../components/footer";
-import Directions from "../components/directions";
 import BlocksPage from "../Test/blocksPage";
+import Registration from "./registration/registration";
+import RegistrationStepOne from "./registration/registrationStepOne";
 // SCREEN HELPERS ---------------------------------------------------------
 import Loading from "../components/loading";
 import Error from "./error";
@@ -55,6 +59,11 @@ const App = ({ state, actions }) => {
             <BlocksPage when={data.route.includes("blocks-page")} />
             <Login when={endPoint === "/login/"} />
             <CreateAccount when={endPoint === "/create-account/"} />
+            <Registration when={endPoint === "/registration/"} />
+            <RegistrationStepOne
+              when={endPoint === "/registration/step-1-the-process/"}
+            />
+
             <PilsArchive when={data.isPilsArchive} />
             <Pils when={data.isPils} />
 

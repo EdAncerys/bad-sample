@@ -3,7 +3,8 @@ import { connect, styled } from "frontity";
 
 import { colors } from "../config/colors";
 
-const Post = ({ state }) => {
+const Post = ({ state, actions, libraries }) => {
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
   console.log("post data: ", post); // debug

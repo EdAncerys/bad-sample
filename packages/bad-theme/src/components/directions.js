@@ -91,7 +91,10 @@ const styles = {
     cursor: "pointer",
   },
   linkValue: {
+    fontSize: 14,
+    fontWeight: "bold",
     color: colors.blue,
+    textTransform: "capitalize",
   },
 };
 
