@@ -9,6 +9,7 @@ import Page from "./page";
 import Login from "./login";
 import Home from "./home";
 import PilsArchive from "./pilsArchive";
+import Pils from "./pils";
 import CreateAccount from "./createAccount";
 import LoginModal from "../components/loginModal";
 import CreateAccountModal from "../components/createAccount/createAccountModal";
@@ -55,6 +56,7 @@ const App = ({ state, actions }) => {
             <Login when={endPoint === "/login/"} />
             <CreateAccount when={endPoint === "/create-account/"} />
             <PilsArchive when={data.isPilsArchive} />
+            <Pils when={data.isPils} />
 
             <Home when={data.isHome} />
 
