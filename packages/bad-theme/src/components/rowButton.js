@@ -49,7 +49,12 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
         >
           <div
             className="flex"
-            style={{ textTransform: "uppercase", fontSize: "13px" }}
+            style={{
+              fontWeight: "bold",
+              fontSize: "13px",
+              textTransform: "uppercase",
+              justifyContent: "center",
+            }}
           >
             <Html2React html={title} />
           </div>

@@ -71,8 +71,6 @@ const IndexCard = ({
   const ServeIndexTitle = ({ block }) => {
     const { title, link_id } = block;
 
-    console.log("link_id", link_id);
-
     if (!title) return null;
 
     const ServeTitle = () => {

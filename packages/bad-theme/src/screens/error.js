@@ -8,9 +8,9 @@ const Error = ({ state }) => {
     <div style={styles.container}>
       <div>
         <h2 style={styles.title}>404 Error</h2>
-        <p>
+        <div>
           The path <em>{state.router.link}</em> cannot be found.
-        </p>
+        </div>
       </div>
     </div>
   );

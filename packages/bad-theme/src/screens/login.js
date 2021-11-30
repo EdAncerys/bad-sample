@@ -79,7 +79,7 @@ const login = ({ state, actions }) => {
       </button>
 
       <div style={{ display: "flex", flexDirection: "column", marginTop: 50 }}>
-        <p>Dev panel</p>
+        <div>Dev panel</div>
         <button
           type="submit"
           className="btn btn-warning"

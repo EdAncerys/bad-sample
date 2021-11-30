@@ -86,6 +86,7 @@ const FullWidthContentBlock = ({
               textTransform: "capitalize",
               color: colors.white,
               backgroundColor: colors.primary,
+              marginBottom: `2em`,
             }}
             onClick={handleGoToAction}
           >

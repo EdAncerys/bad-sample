@@ -39,13 +39,10 @@ body {
   scrollbar-width: none; /* Firefox */
 }
 a {
-  display: block;
   text-decoration: none;
-  color: inherit;
 }
 a:hover {
   text-decoration: none;
-  color: inherit;
 }
 p {
   margin: 0;

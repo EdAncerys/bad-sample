@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
+import { colors } from "../../config/colors";
+
 const CardBody = ({
   state,
   actions,
@@ -18,7 +20,13 @@ const CardBody = ({
     if (!title) return null;
 
     return (
-      <div style={{ fontSize: heroBanner ? 36 : 20, fontWeight: "bold" }}>
+      <div
+        style={{
+          fontSize: heroBanner ? 36 : 20,
+          fontWeight: "bold",
+          color: colors.black,
+        }}
+      >
         <Html2React html={title} />
       </div>
     );
