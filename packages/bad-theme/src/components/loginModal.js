@@ -84,7 +84,7 @@ const LoginModal = ({ state, actions }) => {
             type="submit"
             className="btn"
             style={{ backgroundColor: colors.primary, color: colors.white }}
-            onClick={actions.context.setLoginAction}
+            onClick={actions.context.setIsLoggedInAction}
           >
             Login
           </button>

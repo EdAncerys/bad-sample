@@ -17,3 +17,18 @@ export const setActionFlipper = ({ state }) => {
   setLoginAction({ state });
   setCreateAccountAction({ state });
 };
+
+export const setIsLoggedInAction = ({ state }) => {
+  const isLoggedIn = state.context.isLoggedIn;
+  const loginAction = state.context.loginAction;
+
+  state.context.loginAction = !loginAction;
+  state.context.isLoggedIn = !isLoggedIn;
+};
+
+export const setActiveDropDownRef = ({ state, actions }) => {
+  // if (!actions) state.theme.activeDropDownRef = null;
+  // if (actions) state.theme.activeDropDownRef = actions;
+  state.theme.activeDropDownRef = null;
+  console.log("activeDropDownRef", actions); // debug
+};

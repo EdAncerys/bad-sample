@@ -35,26 +35,16 @@ const settings = {
         },
         postTypes: [
           {
-            type: "guidelines_standards",
-            endpoint: "guidelines-standards",
-            archive: "guidelines-standards",
-          },
-          {
-            type: "research_journals",
-            endpoint: "research-journals",
-            archive: "research-journals",
-          },
-          {
-            type: "education-training",
-            endpoint: "education-training",
-            archive: "education-training",
+            type: "pils",
+            endpoint: "pils",
+            archive: "/pils",
           },
         ],
         taxonomies: [
           {
-            taxonomy: "record",
-            endpoint: "record",
-            postTypeEndpoint: "record",
+            taxonomy: "pils",
+            endpoint: "pils",
+            postTypeEndpoint: "pils",
           },
         ],
       },

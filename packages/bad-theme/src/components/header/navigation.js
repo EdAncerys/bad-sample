@@ -5,6 +5,7 @@ import { colors } from "../../config/colors";
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
+import { setActiveDropDownRef } from "../../helpers/context";
 import NavBarDropDownContent from "./navDropDownContent";
 import ChildMenu from "./childMenu";
 
@@ -12,12 +13,13 @@ const Navigation = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const [wpMainMenu, setWpMainMenu] = useState([]);
   const [wpMoreMenu, setWpMoreMenu] = useState([]);
+  const [activeMenu, setActiveMenu] = useState("");
 
-  const reference = useRef("");
+  const childMenuRef = useRef("");
+  const menuRef = useRef("");
 
   const NAV_DIVIDER = 8;
   const BANNER_HEIGHT = state.theme.bannerHeight;
-  const activeDropDown = state.theme.activeDropDown;
 
   useEffect(() => {
     // getting wp menu from state
@@ -44,24 +46,24 @@ const Navigation = ({ state, actions, libraries }) => {
 
       return (
         <NavDropdown.Item
-          className="pointer"
+          className="flex pointer"
           style={{
             alignItems: "center",
             padding: `1em 0 1em`,
             borderBottom: `1px dotted ${colors.darkSilver}`,
+            whiteSpace: "normal",
           }}
           onClick={() => handleGoToPath({ slug: SLUG_PATH })}
           onMouseOver={(e) => {
             if (!e.target.innerText) return null; // prevents passing empty title object
 
-            reference.current = e.target.innerText;
+            childMenuRef.current = e.target.innerText;
             const title = {
               slug: SLUG_PATH,
-              title: reference.current,
+              title: childMenuRef.current,
             };
             state.theme.childMenuRef = title;
           }}
-          // onMouseLeave={(e) => (state.theme.childMenuRef = "")} // clear value on mouseleave
         >
           <div className="flex-row">
             <div className="flex" style={{ textTransform: "capitalize" }}>
@@ -85,17 +87,15 @@ const Navigation = ({ state, actions, libraries }) => {
         style={{
           position: "static", // static position adding ability for dropdown to move up the scope
           padding: `0 1em`,
-          borderBottom: `5px solid ${colors.danger}`,
-          // borderBottom: activeDropDown ? `5px solid ${colors.danger}` : "none",
+          // borderBottom: `5px solid ${colors.danger}`,
         }}
-        // onClick={(e) => {
-        //   const title = {
-        //     color: `5px solid ${colors.danger}`,
-        //     title: e.target.innerText,
-        //   };
-        //   if (!activeDropDown) state.theme.activeDropDown = title;
-        //   if (activeDropDown) state.theme.activeDropDown = null;
-        // }} // handle menu underline
+        onClick={(e) => {
+          const title = {
+            color: `5px solid ${colors.danger}`,
+            title: e.target.innerHTML,
+          };
+          setActiveDropDownRef({ state, actions: title });
+        }}
       >
         <div
           className="flex"

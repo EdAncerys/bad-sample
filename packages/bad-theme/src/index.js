@@ -10,6 +10,8 @@ import {
   setCreateAccountAction,
   setActionFlipper,
   setEnquireAction,
+  setIsLoggedInAction,
+  setActiveDropDownRef,
 } from "./helpers/context";
 
 const BADTheme = {
@@ -22,14 +24,15 @@ const BADTheme = {
       myVariable: process.env.MY_VARIABLE,
       menuUrl: "/menu/primary-menu",
       menu: null,
-      activeDropDown: null,
-      contentContainer: 1350, // px units
+      activeDropDownRef: "hello",
       childMenuRef: null,
+      contentContainer: 1350, // px units
       bannerHeight: 425, // px units
       marginHorizontal: 100, // px units
       marginVertical: 20, // px units
     },
     context: {
+      isLoggedIn: false,
       loginAction: false,
       createAccountAction: false,
       enquireAction: false,
@@ -62,12 +65,14 @@ const BADTheme = {
         const menu = sessionStorage.getItem("badMenu"); // checking if menu already pre fetched from wp
         if (menu) state.theme.menu = JSON.parse(menu); // replacing menu stored in sessions with state var
       },
+      setActiveDropDownRef: ({ state }) => setActiveDropDownRef({ state }),
     },
     context: {
       setLoginAction: ({ state }) => setLoginAction({ state }),
       setCreateAccountAction: ({ state }) => setCreateAccountAction({ state }),
       setActionFlipper: ({ state }) => setActionFlipper({ state }),
       setEnquireAction: ({ state }) => setEnquireAction({ state }),
+      setIsLoggedInAction: ({ state }) => setIsLoggedInAction({ state }),
     },
   },
   libraries: {

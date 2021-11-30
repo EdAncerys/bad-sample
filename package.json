@@ -20,7 +20,7 @@
     "@frontity/core": "^1.14.3",
     "@frontity/html2react": "^1.7.0",
     "@frontity/tiny-router": "^1.4.4",
-    "@frontity/wp-source": "^1.11.6",
+    "@frontity/wp-source": "^1.11.7",
     "@mui/icons-material": "^5.1.0",
     "@mui/material": "^5.1.1",
     "bad-theme": "file:packages/bad-theme",

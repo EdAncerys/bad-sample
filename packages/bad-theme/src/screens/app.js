@@ -29,12 +29,13 @@ const App = ({ state, actions }) => {
 
   const endPoint = state.router.link;
   const data = state.source.get(endPoint);
-  // console.log("INDEX data", data); // debug
+  console.log("INDEX data", data); // debug
 
   return (
     <div
       onClick={() => {
         state.theme.childMenuRef = ""; // reset child menu ref value
+        state.theme.activeDropDownRef = "menu reset"; // reset menu ref value
       }}
     >
       <div style={{ ...styles.container, maxWidth: CONTENT_WIDTH }}>

@@ -8,6 +8,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import QuickLinksDropDown from "./quickLinksDropDown";
 
 const HeaderActions = ({ state, actions }) => {
+  const isLoggedIn = state.context.isLoggedIn;
+  console.log("isLoggedIn", isLoggedIn);
+
   // HELPERS ----------------------------------------------------
   const handleGoToLink = () => {
     actions.router.set(`/`);
@@ -44,21 +47,36 @@ const HeaderActions = ({ state, actions }) => {
     );
   };
 
-  const ServeAuthAction = () => {
-    if (!state.theme.isLoggedIn)
-      return (
-        <div>
-          <button
-            className="btn shadow-none m-2"
-            onClick={actions.context.setLoginAction}
-            style={styles.loginBtn}
-          >
-            Login
-          </button>
-        </div>
-      );
+  const ServeLoginAction = () => {
+    if (isLoggedIn) return null;
 
-    return null;
+    return (
+      <div>
+        <button
+          className="btn shadow-none m-2"
+          onClick={actions.context.setLoginAction}
+          style={styles.loginBtn}
+        >
+          Login
+        </button>
+      </div>
+    );
+  };
+
+  const ServeDashboardAction = () => {
+    if (!isLoggedIn) return null;
+
+    return (
+      <div>
+        <button
+          className="btn shadow-none m-2"
+          // onClick={actions.context.setLoginAction}
+          style={styles.loginBtn}
+        >
+          Dashboard
+        </button>
+      </div>
+    );
   };
 
   return (
@@ -78,7 +96,8 @@ const HeaderActions = ({ state, actions }) => {
         }}
       >
         <ServeSearchContainer />
-        <ServeAuthAction />
+        <ServeLoginAction />
+        <ServeDashboardAction />
         <QuickLinksDropDown />
       </div>
     </div>
