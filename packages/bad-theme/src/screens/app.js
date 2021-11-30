@@ -8,6 +8,7 @@ import Post from "./post";
 import Page from "./page";
 import Login from "./login";
 import Home from "./home";
+import Pils from "./pils";
 import CreateAccount from "./createAccount";
 import LoginModal from "../components/loginModal";
 import CreateAccountModal from "../components/createAccount/createAccountModal";
@@ -51,9 +52,10 @@ const App = ({ state, actions }) => {
             <Error when={data.isError} />
 
             <BlocksPage when={data.route.includes("blocks-page")} />
-
             <Login when={endPoint === "/login/"} />
             <CreateAccount when={endPoint === "/create-account/"} />
+            <Pils when={data.isPilsArchive} />
+
             <Home when={data.isHome} />
 
             <Post when={data.isPost} />

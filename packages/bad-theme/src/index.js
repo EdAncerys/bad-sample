@@ -59,6 +59,8 @@ const BADTheme = {
             console.log("error: " + error);
           }
         }
+
+        // await actions.source.fetch(`/pils`); // pre fetch pils
       },
       afterCSR: async ({ state, actions }) => {
         console.log("afterCSR triggered"); // debug

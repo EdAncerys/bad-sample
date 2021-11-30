@@ -12,8 +12,8 @@ const HeaderActions = ({ state, actions }) => {
   console.log("isLoggedIn", isLoggedIn);
 
   // HELPERS ----------------------------------------------------
-  const handleGoToLink = () => {
-    actions.router.set(`/`);
+  const handleGoToLink = ({ path }) => {
+    actions.router.set(path);
   };
 
   // SERVERS ----------------------------------------------------
@@ -22,7 +22,7 @@ const HeaderActions = ({ state, actions }) => {
       <div className="flex">
         <div
           style={{ width: 385, height: 90, cursor: "pointer" }}
-          onClick={handleGoToLink}
+          onClick={() => handleGoToLink({ path: "/" })}
         >
           <Image src={BADLogo} className="d-block h-100" alt="BAD Logo" />
         </div>
@@ -70,7 +70,7 @@ const HeaderActions = ({ state, actions }) => {
       <div>
         <button
           className="btn shadow-none m-2"
-          // onClick={actions.context.setLoginAction}
+          onClick={() => handleGoToLink({ path: "/dashboard" })}
           style={styles.loginBtn}
         >
           Dashboard

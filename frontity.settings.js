@@ -8,8 +8,7 @@ const settings = {
     frontity: {
       url: "https://skylarkcreative.co.uk/",
       title: "British Association of Dermatologists (BAD)",
-      description:
-        "Frontity WEb App for professional membership body for dermatologists in the UK and abroad",
+      description: "British Association of Dermatologists (BAD) WebApp",
     },
     env: {
       myVariable: process.env.MY_VARIABLE,
@@ -32,21 +31,25 @@ const settings = {
       state: {
         source: {
           url: "https://badadmin.skylarkdev.co/", // production url
+          // api: "https://app-5efddb43c1ac181508283e93.closte.com/wp-json", // frontity example api
+          params: {
+            per_page: 100, // limit per page fetch request
+          },
+          postTypes: [
+            {
+              type: "pils",
+              endpoint: "pils",
+              archive: "/pils",
+            },
+          ],
+          taxonomies: [
+            {
+              taxonomy: "record_cat",
+              endpoint: "record_cat",
+              postTypeEndpoint: "record",
+            },
+          ],
         },
-        postTypes: [
-          {
-            type: "pils",
-            endpoint: "pils",
-            archive: "/pils",
-          },
-        ],
-        taxonomies: [
-          {
-            taxonomy: "pils",
-            endpoint: "pils",
-            postTypeEndpoint: "pils",
-          },
-        ],
       },
     },
     "@frontity/tiny-router",
