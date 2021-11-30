@@ -54,6 +54,7 @@ const TitleBlock = ({ state, actions, libraries, block }) => {
           style={{
             fontSize: 27,
             fontWeight: "bold",
+            textAlign: ALIGNMENT,
             justifyContent: ALIGNMENT,
           }}
         >

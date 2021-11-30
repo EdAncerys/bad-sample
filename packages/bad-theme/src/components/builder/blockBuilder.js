@@ -27,6 +27,7 @@ import UpcomingEvents from "../upcomingEvents";
 import HistoryTimeline from "../historyTimeline";
 import VideoGallery from "../videoGallery";
 import SocialIcons from "../socialIcons";
+import TitleAndBodyBlock from "../titleAndBodyBlock";
 
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   // console.log("BLOCKS: ", blocks); // debug
@@ -48,6 +49,14 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
         {blocks.map((block, key) => {
           const { acf_fc_layout } = block;
           console.log("CONTENT BLOCK", block); // debug
+
+          if (acf_fc_layout === "title_and_body_block")
+            return (
+              <div key={key + 1}>
+                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                <TitleAndBodyBlock key={key} block={block} />
+              </div>
+            );
 
           if (acf_fc_layout === "social_icons")
             return (
