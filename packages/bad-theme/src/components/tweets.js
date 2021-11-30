@@ -6,6 +6,7 @@ import Link from "@frontity/components/link";
 
 import Loading from "./loading";
 import Card from "./card/card";
+import SocialIcons from "../components/socialIcons";
 import Facebook from "../img/svg/facebookColour.svg";
 import Twitter from "../img/svg/twitterColour.svg";
 import Instagram from "../img/svg/instagramColour.svg";
@@ -37,33 +38,6 @@ const Tweets = ({ state, actions, libraries, block }) => {
     );
   };
 
-  const ServeSocials = () => {
-    if (!block.title) return null;
-
-    return (
-      <div
-        className="flex"
-        style={{ justifyContent: "center", padding: `2em 0` }}
-      >
-        <div style={styles.socials}>
-          <Link link={`https://www.facebook.com/`} target="_blank">
-            <Image src={Facebook} className="d-block h-100" alt="Facebook" />
-          </Link>
-        </div>
-        <div style={styles.socials}>
-          <Link link={`https://www.twitter.com/`} target="_blank">
-            <Image src={Twitter} className="d-block h-100" alt="Twitter" />
-          </Link>
-        </div>
-        <div style={styles.socials}>
-          <Link link={`https://www.instagram.com/`} target="_blank">
-            <Image src={Instagram} className="d-block h-100" alt="Instagram" />
-          </Link>
-        </div>
-      </div>
-    );
-  };
-
   // RETURN ---------------------------------------------------
   return (
     <div style={{ backgroundColor: colors.white }}>
@@ -90,7 +64,7 @@ const Tweets = ({ state, actions, libraries, block }) => {
             );
           })}
         </div>
-        <ServeSocials />
+        <SocialIcons />
       </div>
     </div>
   );
