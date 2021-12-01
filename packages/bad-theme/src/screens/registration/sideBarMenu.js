@@ -21,6 +21,13 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   if (slug.includes("step-3")) stepThree = activeStyle;
   if (slug.includes("step-4")) stepFour = activeStyle;
 
+  // HELPERS ---------------------------------------------
+  const handleGoToPath = ({ path }) => {
+    if (slug === "/registration/registration-thank-you/") return null;
+
+    actions.router.set(path);
+  };
+
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
     return (
@@ -41,14 +48,44 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   const ServeContent = () => {
     return (
       <div style={{ ...styles.titleWrapper, padding: `2em 0` }}>
-        <div style={{ ...styles.title, ...stepOne }}>Step 1 - The Process</div>
-        <div style={{ ...styles.title, ...stepTwo }}>
+        <div
+          style={{ ...styles.title, ...stepOne }}
+          onClick={() =>
+            handleGoToPath({
+              path: `/registration/step-1-the-process/`,
+            })
+          }
+        >
+          Step 1 - The Process
+        </div>
+        <div
+          style={{ ...styles.title, ...stepTwo }}
+          onClick={() =>
+            handleGoToPath({
+              path: `/registration/step-2-personal-information/`,
+            })
+          }
+        >
           Step 2 - Personal Information
         </div>
-        <div style={{ ...styles.title, ...stepThree }}>
+        <div
+          style={{ ...styles.title, ...stepThree }}
+          onClick={() =>
+            handleGoToPath({
+              path: `/registration/step-3-category-selection/`,
+            })
+          }
+        >
           Step 3 - Category Selection
         </div>
-        <div style={{ ...styles.title, ...stepFour }}>
+        <div
+          style={{ ...styles.title, ...stepFour }}
+          onClick={() =>
+            handleGoToPath({
+              path: `/registration/step-4-professional-details/`,
+            })
+          }
+        >
           Step 4 - Professional Details
         </div>
       </div>
@@ -75,6 +112,7 @@ const styles = {
   },
   title: {
     padding: `0.5em 0`,
+    cursor: "pointer",
   },
 };
 
