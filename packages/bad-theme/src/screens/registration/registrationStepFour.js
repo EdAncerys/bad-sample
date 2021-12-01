@@ -65,7 +65,7 @@ const RegistrationStepFour = ({ state, actions }) => {
               alignItems: "center",
             }}
           >
-            Profile Photo
+            Upload Your CV
           </div>
           <ServeImage />
         </label>
@@ -93,7 +93,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             borderBottom: `1px solid ${colors.darkSilver}`,
           }}
         >
-          <label style={style.subtitle}>
+          <label style={styles.subTitle}>
             GMC Number <SMF />
           </label>
           <input
@@ -103,7 +103,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             placeholder="GMC Number"
             style={styles.input}
           />
-          <label style={style.subtitle}>
+          <label style={styles.subTitle}>
             Regulatory Body Registration Number
           </label>
           <input
@@ -113,7 +113,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             placeholder="Regulatory Body Registration Number"
             style={styles.input}
           />
-          <label style={style.subtitle}>NTN Number</label>
+          <label style={styles.subTitle}>NTN Number</label>
           <input
             onChange={(e) => setPassword(e.target.value)}
             type="text"
@@ -121,7 +121,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             placeholder="NTN Number"
             style={styles.input}
           />
-          <label style={style.subtitle}>
+          <label style={styles.subTitle}>
             Current job title <SMF />
           </label>
           <input
@@ -131,7 +131,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             placeholder="Current job title"
             style={styles.input}
           />
-          <label style={style.subtitle}>
+          <label style={styles.subTitle}>
             GP Practice/Hospital <SMF />
           </label>
           <Form.Select aria-label="Default select example" style={styles.input}>
@@ -141,7 +141,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             <option value="3">Hospital Three</option>
             <option value="3">Hospital Four</option>
           </Form.Select>
-          <label style={style.subtitle}>Medical School</label>
+          <label style={styles.subTitle}>Medical School</label>
           <input
             onChange={(e) => setPassword(e.target.value)}
             type="text"
@@ -170,10 +170,10 @@ const RegistrationStepFour = ({ state, actions }) => {
               gap: 5,
             }}
           >
-            <label style={style.subtitle}>
+            <label style={styles.subTitle}>
               Supporting Member 1<SMF />:
             </label>
-            <label style={style.subtitle}>First Name</label>
+            <label style={styles.subTitle}>First Name</label>
             <input
               onChange={(e) => setPassword(e.target.value)}
               type="text"
@@ -181,7 +181,7 @@ const RegistrationStepFour = ({ state, actions }) => {
               placeholder="First Name"
               style={styles.input}
             />
-            <label style={style.subtitle}>Last Name</label>
+            <label style={styles.subTitle}>Last Name</label>
             <input
               onChange={(e) => setPassword(e.target.value)}
               type="text"
@@ -189,7 +189,7 @@ const RegistrationStepFour = ({ state, actions }) => {
               placeholder="Last Name"
               style={styles.input}
             />
-            <label style={style.subtitle}>E-mail Address</label>
+            <label style={styles.subTitle}>E-mail Address</label>
             <input
               onChange={(e) => setPassword(e.target.value)}
               type="email"
@@ -197,7 +197,7 @@ const RegistrationStepFour = ({ state, actions }) => {
               placeholder="E-mail Address"
               style={styles.input}
             />
-            <label style={style.subtitle}>Confirm Their E-mail Address</label>
+            <label style={styles.subTitle}>Confirm Their E-mail Address</label>
             <input
               onChange={(e) => setPassword(e.target.value)}
               type="email"
@@ -212,10 +212,10 @@ const RegistrationStepFour = ({ state, actions }) => {
               gap: 5,
             }}
           >
-            <label style={style.subtitle}>
+            <label style={styles.subTitle}>
               Supporting Member 2<SMF />:
             </label>
-            <label style={style.subtitle}>First Name</label>
+            <label style={styles.subTitle}>First Name</label>
             <input
               onChange={(e) => setPassword(e.target.value)}
               type="text"
@@ -223,7 +223,7 @@ const RegistrationStepFour = ({ state, actions }) => {
               placeholder="First Name"
               style={styles.input}
             />
-            <label style={style.subtitle}>Last Name</label>
+            <label style={styles.subTitle}>Last Name</label>
             <input
               onChange={(e) => setPassword(e.target.value)}
               type="text"
@@ -231,7 +231,7 @@ const RegistrationStepFour = ({ state, actions }) => {
               placeholder="Last Name"
               style={styles.input}
             />
-            <label style={style.subtitle}>E-mail Address</label>
+            <label style={styles.subTitle}>E-mail Address</label>
             <input
               onChange={(e) => setPassword(e.target.value)}
               type="email"
@@ -239,7 +239,7 @@ const RegistrationStepFour = ({ state, actions }) => {
               placeholder="E-mail Address"
               style={styles.input}
             />
-            <label style={style.subtitle}>Confirm Their E-mail Address</label>
+            <label style={styles.subTitle}>Confirm Their E-mail Address</label>
             <input
               onChange={(e) => setPassword(e.target.value)}
               type="email"
@@ -258,13 +258,13 @@ const RegistrationStepFour = ({ state, actions }) => {
           className="form-group"
           style={{
             display: "grid",
-            gap: 5,
+            gap: 20,
             padding: `1em 0 2em`,
             borderTop: `1px solid ${colors.darkSilver}`,
             borderBottom: `1px solid ${colors.darkSilver}`,
           }}
         >
-          <label style={style.subtitle}>
+          <label style={styles.subTitle}>
             MRCP
             <SMF />
           </label>
@@ -275,6 +275,10 @@ const RegistrationStepFour = ({ state, actions }) => {
             placeholder="MRCP"
             style={styles.input}
           />
+          <label style={styles.subTitle}>
+            Upload Your CV
+            <SMF />
+          </label>
           <ServeFileUploadInput />
         </div>
       );
@@ -317,7 +321,7 @@ const RegistrationStepFour = ({ state, actions }) => {
           className="btn"
           style={{ backgroundColor: colors.primary, color: colors.white }}
           onClick={() =>
-            handleGoToPath({ path: `/registration/step-3-category-selection/` })
+            handleGoToPath({ path: `/registration/registration-thank-you/` })
           }
         >
           Next
