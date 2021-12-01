@@ -1,11 +1,13 @@
 import React from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
-import { Form } from "react-bootstrap";
+import { Form, InputGroup, FormControl } from "react-bootstrap";
 
 import { colors } from "../../config/colors";
 import SideBarMenu from "./sideBarMenu";
 import Avatar from "../../img/svg/profile.svg";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import FileUpload from "../../img/svg/fileUpload.svg";
 
 const RegistrationStepOne = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
@@ -17,6 +19,55 @@ const RegistrationStepOne = ({ state, actions }) => {
   // HELPERS ---------------------------------------------
   const handleGoToPath = ({ path }) => {
     actions.router.set(path);
+  };
+
+  const ServeFileUploadInput = () => {
+    const ServeImage = () => {
+      const alt = "Upload";
+
+      return (
+        <div style={{ width: 30, height: 30, padding: `5px 10px 0 0` }}>
+          <Image
+            src={FileUpload}
+            alt={alt}
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        </div>
+      );
+    };
+    return (
+      <div>
+        <label
+          for="fileUpload"
+          className="flex"
+          style={{
+            backgroundColor: colors.white,
+            border: `1px solid ${colors.darkSilver}`,
+            borderRadius: 10,
+            cursor: "pointer",
+          }}
+        >
+          <div
+            className="flex"
+            style={{ color: colors.darkSilver, padding: `0.5em 1em` }}
+          >
+            Profile Photo
+          </div>
+          <ServeImage />
+        </label>
+        <input
+          id="fileUpload"
+          type="file"
+          className="form-control"
+          placeholder="Profile Photo"
+          accept="image/*"
+          style={{ display: "none" }}
+        />
+      </div>
+    );
   };
 
   const ServeCardImage = () => {
@@ -36,12 +87,18 @@ const RegistrationStepOne = ({ state, actions }) => {
           />
         </div>
         <div style={styles.subTitle}>Upload A Profile Photo</div>
-        <input
-          type="file"
-          className="form-control"
-          placeholder="Profile Photo"
-          style={styles.input}
-        />
+
+        <div style={styles.subTitle}>
+          <input
+            type="file"
+            className="form-control"
+            placeholder="Profile Photo"
+            accept="image/*"
+            style={styles.input}
+          />
+        </div>
+
+        <ServeFileUploadInput />
       </div>
     );
   };
@@ -147,7 +204,9 @@ const RegistrationStepOne = ({ state, actions }) => {
         <button
           type="submit"
           className="btn btn-outline-secondary"
-          onClick={actions.context.setLoginAction}
+          onClick={() =>
+            handleGoToPath({ path: `/registration/step-1-the-process/` })
+          }
         >
           Back
         </button>
@@ -155,7 +214,7 @@ const RegistrationStepOne = ({ state, actions }) => {
           type="submit"
           className="btn btn-outline-secondary"
           style={{ margin: `0 1em` }}
-          onClick={actions.context.setIsLoggedInAction}
+          onClick={() => handleGoToPath({ path: `/` })}
         >
           Save & Exit
         </button>

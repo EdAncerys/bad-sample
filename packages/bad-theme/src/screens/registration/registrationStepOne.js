@@ -27,7 +27,7 @@ const RegistrationStepOne = ({ state, actions }) => {
         <button
           type="submit"
           className="btn btn-outline-secondary"
-          onClick={actions.context.setLoginAction}
+          onClick={() => handleGoToPath({ path: `/` })}
         >
           Back
         </button>
@@ -35,7 +35,7 @@ const RegistrationStepOne = ({ state, actions }) => {
           type="submit"
           className="btn btn-outline-secondary"
           style={{ margin: `0 1em` }}
-          onClick={actions.context.setIsLoggedInAction}
+          onClick={() => handleGoToPath({ path: `/` })}
         >
           Save & Exit
         </button>
@@ -43,7 +43,11 @@ const RegistrationStepOne = ({ state, actions }) => {
           type="submit"
           className="btn"
           style={{ backgroundColor: colors.primary, color: colors.white }}
-          onClick={actions.context.setIsLoggedInAction}
+          onClick={() =>
+            handleGoToPath({
+              path: `/registration/step-2-personal-information`,
+            })
+          }
         >
           Next
         </button>
