@@ -3,6 +3,7 @@ import { connect } from "frontity";
 
 import { colors } from "../../config/colors";
 import SideBarMenu from "./sideBarMenu";
+import { style } from "@mui/system";
 
 const RegistrationStepOne = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
@@ -11,10 +12,18 @@ const RegistrationStepOne = ({ state, actions }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
+  // HELPERS ---------------------------------------------
+  const handleGoToPath = ({ path }) => {
+    actions.router.set(path);
+  };
+
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
     return (
-      <div className="flex tom" style={{ justifyContent: "flex-end" }}>
+      <div
+        className="flex"
+        style={{ justifyContent: "flex-end", padding: `1em 0` }}
+      >
         <button
           type="submit"
           className="btn btn-outline-secondary"
@@ -24,8 +33,8 @@ const RegistrationStepOne = ({ state, actions }) => {
         </button>
         <button
           type="submit"
-          className="btn"
-          style={{ backgroundColor: colors.primary, color: colors.white }}
+          className="btn btn-outline-secondary"
+          style={{ margin: `0 1em` }}
           onClick={actions.context.setIsLoggedInAction}
         >
           Save & Exit
@@ -47,7 +56,7 @@ const RegistrationStepOne = ({ state, actions }) => {
       <div>
         <div style={styles.wrapper}>
           <div style={styles.title}>The Process</div>
-          <div>
+          <div style={{ paddingTop: `0.75em` }}>
             How it works dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut
             tellus elementum sagittis vitae et. Justo donec enim diam vulputate
@@ -56,13 +65,8 @@ const RegistrationStepOne = ({ state, actions }) => {
             vitae tempus quam. Ac auctor augue
           </div>
           <div
-            style={{
-              fontSize: 22,
-              fontWeight: "bold",
-              color: colors.black,
-              borderBottom: `1px solid ${colors.darkSilver}`,
-              padding: `0 1em 1em 0`,
-            }}
+            style={styles.link}
+            onClick={() => handleGoToPath({ path: `/` })}
           >
             Memberships Page
           </div>
@@ -109,7 +113,7 @@ const RegistrationStepOne = ({ state, actions }) => {
         margin: `${marginVertical}px ${marginHorizontal}px`,
       }}
     >
-      <div className="pink" style={styles.container}>
+      <div style={styles.container}>
         <SideBarMenu />
         <ServeContent />
       </div>
@@ -129,8 +133,20 @@ const styles = {
     padding: `0 1em 0`,
   },
   title: { fontSize: 22, fontWeight: "bold", color: colors.black },
-  subTitle: { fontSize: 16, fontWeight: "bold", color: colors.black },
-  link: {},
+  subTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: colors.black,
+    padding: `0.75em 0`,
+  },
+  link: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: colors.blue,
+    textDecoration: "underline",
+    cursor: "pointer",
+    padding: `0.75em 0`,
+  },
 };
 
 export default connect(RegistrationStepOne);
