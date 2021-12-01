@@ -3,8 +3,9 @@ import { connect } from "frontity";
 
 import { colors } from "../../config/colors";
 import SideBarMenu from "./sideBarMenu";
+import { Form } from "react-bootstrap";
 
-const RegistrationStepOne = ({ state, actions }) => {
+const RegistrationStepThree = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
 
@@ -26,7 +27,11 @@ const RegistrationStepOne = ({ state, actions }) => {
         <button
           type="submit"
           className="btn btn-outline-secondary"
-          onClick={() => handleGoToPath({ path: `/` })}
+          onClick={() =>
+            handleGoToPath({
+              path: `/registration/step-2-personal-information/`,
+            })
+          }
         >
           Back
         </button>
@@ -44,7 +49,7 @@ const RegistrationStepOne = ({ state, actions }) => {
           style={{ backgroundColor: colors.primary, color: colors.white }}
           onClick={() =>
             handleGoToPath({
-              path: `/registration/step-2-personal-information`,
+              path: `/registration/step-4-professional-details/`,
             })
           }
         >
@@ -54,11 +59,34 @@ const RegistrationStepOne = ({ state, actions }) => {
     );
   };
 
+  const ServeForm = () => {
+    return (
+      <div
+        className="form-group"
+        style={{
+          display: "grid",
+          gap: 5,
+          padding: `1em 0 2em`,
+          borderTop: `1px solid ${colors.darkSilver}`,
+        }}
+      >
+        <label style={styles.subTitle}>Title</label>
+        <Form.Select aria-label="Default select example" style={styles.input}>
+          <option style={styles.option}>Membership Category</option>
+          <option value="1">Category one</option>
+          <option value="2">Category Two</option>
+          <option value="3">Category Three</option>
+          <option value="3">Category Four</option>
+        </Form.Select>
+      </div>
+    );
+  };
+
   const ServeContent = () => {
     return (
       <div>
         <div style={styles.wrapper}>
-          <div style={styles.title}>The Process</div>
+          <div style={styles.title}>Category Selection</div>
           <div style={{ paddingTop: `0.75em` }}>
             How it works dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut
@@ -71,39 +99,9 @@ const RegistrationStepOne = ({ state, actions }) => {
             style={styles.link}
             onClick={() => handleGoToPath({ path: `/` })}
           >
-            Memberships Page
+            Memberships Categories
           </div>
-          <div style={styles.title}>You Will Need:</div>
-          <div style={styles.subTitle}>Personal Details:</div>
-          <div>
-            <ul>
-              <li>CV</li>
-              <li>
-                Main Hospital details - please note that you cannot change this
-                after application without a request to the BAD.
-              </li>
-              <li>GMC</li>
-              <li>
-                Current Post - please note that you cannot change this after
-                application without a request to the BAD.
-              </li>
-              <li>Medical School (for student category only)</li>
-              <li>Do you hold MRCP? (for student category only)</li>
-              <li>
-                Supporting Member Details (2 x members for all categories except
-                Medical Students who require only 1)
-              </li>
-            </ul>
-          </div>
-          <div style={styles.subTitle}>Professional Details:</div>
-          <div>
-            <ul>
-              <li>Coffee</li>
-              <li>Tea</li>
-              <li>Milk</li>
-            </ul>
-          </div>
-          <div style={styles.subTitle}>Payment Details</div>
+          <ServeForm />
         </div>
         <ServeActions />
       </div>
@@ -150,6 +148,10 @@ const styles = {
     cursor: "pointer",
     padding: `0.75em 0`,
   },
+  input: {
+    borderRadius: 10,
+    color: colors.darkSilver,
+  },
 };
 
-export default connect(RegistrationStepOne);
+export default connect(RegistrationStepThree);

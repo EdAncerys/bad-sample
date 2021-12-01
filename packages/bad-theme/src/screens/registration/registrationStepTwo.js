@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
-import { Form, InputGroup, FormControl } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 
 import { colors } from "../../config/colors";
 import SideBarMenu from "./sideBarMenu";
@@ -26,7 +26,7 @@ const RegistrationStepOne = ({ state, actions }) => {
       const alt = "Upload";
 
       return (
-        <div style={{ width: 30, height: 30, padding: `5px 10px 0 0` }}>
+        <div style={{ width: 30, height: 30, padding: `7px 10px 0 0` }}>
           <Image
             src={FileUpload}
             alt={alt}
@@ -52,7 +52,11 @@ const RegistrationStepOne = ({ state, actions }) => {
         >
           <div
             className="flex"
-            style={{ color: colors.darkSilver, padding: `0.5em 1em` }}
+            style={{
+              fontSize: 12,
+              color: colors.darkSilver,
+              padding: `1em 1.5em`,
+            }}
           >
             Profile Photo
           </div>
@@ -134,6 +138,7 @@ const RegistrationStepOne = ({ state, actions }) => {
         </div>
       );
     };
+
     const ServeAddressInput = () => {
       return (
         <div
@@ -222,7 +227,9 @@ const RegistrationStepOne = ({ state, actions }) => {
           type="submit"
           className="btn"
           style={{ backgroundColor: colors.primary, color: colors.white }}
-          onClick={actions.context.setIsLoggedInAction}
+          onClick={() =>
+            handleGoToPath({ path: `/registration/step-3-category-selection/` })
+          }
         >
           Next
         </button>
@@ -285,7 +292,7 @@ const styles = {
   },
   wrapper: {
     borderBottom: `1px solid ${colors.darkSilver}`,
-    padding: `0 1em 0`,
+    margin: `0 1em 0`,
   },
   title: { fontSize: 22, fontWeight: "bold", color: colors.black },
   subTitle: {
