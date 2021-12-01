@@ -6,10 +6,9 @@ import { Form } from "react-bootstrap";
 import { colors } from "../../config/colors";
 import SideBarMenu from "./sideBarMenu";
 import Avatar from "../../img/svg/profile.svg";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import FileUpload from "../../img/svg/fileUpload.svg";
 
-const RegistrationStepOne = ({ state, actions }) => {
+const RegistrationStepTwo = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
 
@@ -19,6 +18,11 @@ const RegistrationStepOne = ({ state, actions }) => {
   // HELPERS ---------------------------------------------
   const handleGoToPath = ({ path }) => {
     actions.router.set(path);
+  };
+
+  // SERVERS ---------------------------------------------
+  const SMF = () => {
+    return <span style={{ color: colors.danger }}>*</span>;
   };
 
   const ServeFileUploadInput = () => {
@@ -111,7 +115,9 @@ const RegistrationStepOne = ({ state, actions }) => {
     const ServePersonalDetailsInput = () => {
       return (
         <div className="form-group" style={{ display: "grid", gap: 5 }}>
-          <label>Title</label>
+          <label>
+            Title <SMF />
+          </label>
           <Form.Select aria-label="Default select example" style={styles.input}>
             <option style={styles.option}>Professor, Dr, Mr, Miss, Ms</option>
             <option value="1">Dr.</option>
@@ -127,10 +133,13 @@ const RegistrationStepOne = ({ state, actions }) => {
             <option value="3">Transgender</option>
             <option value="3">Prefer not to say</option>
           </Form.Select>
-          <label>Gender</label>
+          <label>
+            Mobile Number <SMF />
+          </label>
           <input
             onChange={(e) => setPassword(e.target.value)}
-            type="phone"
+            type="tel"
+            pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
             className="form-control"
             placeholder="Eg 07999999999"
             style={styles.input}
@@ -145,7 +154,9 @@ const RegistrationStepOne = ({ state, actions }) => {
           className="form-group"
           style={{ display: "grid", gap: 5, padding: `1em 0` }}
         >
-          <label>Home Address</label>
+          <label>
+            Home Address <SMF />
+          </label>
           <input
             onChange={(e) => setPassword(e.target.value)}
             type="text"
@@ -199,7 +210,6 @@ const RegistrationStepOne = ({ state, actions }) => {
     );
   };
 
-  // SERVERS ---------------------------------------------
   const ServeActions = () => {
     return (
       <div
@@ -250,7 +260,9 @@ const RegistrationStepOne = ({ state, actions }) => {
             diam donec adipiscing tristique risus. A cras semper auctor neque
             vitae tempus quam. Ac auctor augue
           </div>
-          <div style={styles.mandatory}>*Mandatory fields</div>
+          <div style={styles.mandatory}>
+            <SMF /> Mandatory fields
+          </div>
 
           <div style={styles.inputContainer}>
             <ServeCardImage />
@@ -263,14 +275,16 @@ const RegistrationStepOne = ({ state, actions }) => {
   };
 
   return (
-    <div
-      style={{
-        margin: `${marginVertical}px ${marginHorizontal}px`,
-      }}
-    >
-      <div style={styles.container}>
-        <SideBarMenu />
-        <ServeContent />
+    <div style={{ backgroundColor: colors.white }}>
+      <div
+        style={{
+          margin: `${marginVertical}px ${marginHorizontal}px`,
+        }}
+      >
+        <div style={styles.container}>
+          <SideBarMenu />
+          <ServeContent />
+        </div>
       </div>
     </div>
   );
@@ -311,4 +325,4 @@ const styles = {
   },
 };
 
-export default connect(RegistrationStepOne);
+export default connect(RegistrationStepTwo);

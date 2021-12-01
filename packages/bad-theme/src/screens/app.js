@@ -23,6 +23,7 @@ import Registration from "./registration/registration";
 import RegistrationStepOne from "./registration/registrationStepOne";
 import RegistrationStepTwo from "./registration/registrationStepTwo";
 import RegistrationStepThree from "./registration/registrationStepThree";
+import RegistrationStepFour from "./registration/registrationStepFour";
 // SCREEN HELPERS ---------------------------------------------------------
 import Loading from "../components/loading";
 import Error from "./error";
@@ -70,6 +71,9 @@ const App = ({ state, actions }) => {
             />
             <RegistrationStepThree
               when={endPoint === "/registration/step-3-category-selection/"}
+            />
+            <RegistrationStepFour
+              when={endPoint === "/registration/step-4-professional-details/"}
             />
 
             <PilsArchive when={data.isPilsArchive} />

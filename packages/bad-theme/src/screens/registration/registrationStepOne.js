@@ -111,14 +111,16 @@ const RegistrationStepOne = ({ state, actions }) => {
   };
 
   return (
-    <div
-      style={{
-        margin: `${marginVertical}px ${marginHorizontal}px`,
-      }}
-    >
-      <div style={styles.container}>
-        <SideBarMenu />
-        <ServeContent />
+    <div style={{ backgroundColor: colors.white }}>
+      <div
+        style={{
+          margin: `${marginVertical}px ${marginHorizontal}px`,
+        }}
+      >
+        <div style={styles.container}>
+          <SideBarMenu />
+          <ServeContent />
+        </div>
       </div>
     </div>
   );

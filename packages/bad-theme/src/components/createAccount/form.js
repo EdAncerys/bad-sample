@@ -110,7 +110,7 @@ const styles = {
     borderRadius: "50%",
     width: 20,
     height: 20,
-    marginRight: 10,
+    margin: `0 10px 0 0`,
   },
 };
 

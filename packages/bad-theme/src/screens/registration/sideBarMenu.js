@@ -9,8 +9,8 @@ const SideBarMenu = ({ state, actions, libraries }) => {
 
   const defaultStyle = { fontWight: "normal" };
   const activeStyle = {
-    fontWeight: slug.includes("Step 1") ? "bold" : "normal",
-    color: slug.includes("step-1") ? colors.blue : colors.danger,
+    fontWeight: "bold",
+    color: colors.black,
   };
   let stepOne,
     stepTwo,
