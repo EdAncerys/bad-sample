@@ -37,7 +37,13 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   // SERVERS -----------------------------------------------------
   const ServeBlockTitle = ({ acf_fc_layout }) => {
     return (
-      <div style={{ color: colors.danger, textTransform: "uppercase" }}>
+      <div
+        style={{
+          backgroundColor: `#F2DDC1`,
+          color: colors.danger,
+          textTransform: "uppercase",
+        }}
+      >
         {acf_fc_layout}
       </div>
     );

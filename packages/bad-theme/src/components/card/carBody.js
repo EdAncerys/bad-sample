@@ -35,7 +35,6 @@ const CardBody = ({
 
   const ServeBody = () => {
     if (!body) return null;
-    console.log("isFrom4Col", isFrom4Col);
 
     let bodyPreview = body;
     const MAX_CHAR = 120;

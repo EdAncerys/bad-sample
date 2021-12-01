@@ -29,7 +29,7 @@ const BADTheme = {
       contentContainer: 1350, // px units
       bannerHeight: 425, // px units
       marginHorizontal: 100, // px units
-      marginVertical: 20, // px units
+      marginVertical: 40, // px units
     },
     context: {
       isLoggedIn: false,
