@@ -17,6 +17,9 @@ const SideBarMenu = ({ state, actions, libraries }) => {
     stepThree,
     stepFour = defaultStyle;
   if (slug.includes("step-1")) stepOne = activeStyle;
+  if (slug.includes("step-2")) stepTwo = activeStyle;
+  if (slug.includes("step-3")) stepThree = activeStyle;
+  if (slug.includes("step-4")) stepFour = activeStyle;
 
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {

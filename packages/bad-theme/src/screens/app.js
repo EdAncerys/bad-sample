@@ -21,6 +21,7 @@ import Pils from "./pils";
 import BlocksPage from "../Test/blocksPage";
 import Registration from "./registration/registration";
 import RegistrationStepOne from "./registration/registrationStepOne";
+import RegistrationStepTwo from "./registration/registrationStepTwo";
 // SCREEN HELPERS ---------------------------------------------------------
 import Loading from "../components/loading";
 import Error from "./error";
@@ -62,6 +63,9 @@ const App = ({ state, actions }) => {
             <Registration when={endPoint === "/registration/"} />
             <RegistrationStepOne
               when={endPoint === "/registration/step-1-the-process/"}
+            />
+            <RegistrationStepTwo
+              when={endPoint === "/registration/step-2-personal-information/"}
             />
 
             <PilsArchive when={data.isPilsArchive} />

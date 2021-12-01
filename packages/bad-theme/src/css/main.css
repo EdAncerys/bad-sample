@@ -48,6 +48,9 @@ ul,
 p {
   margin: 0;
 }
+input[type="text"]::-webkit-input-placeholder {
+  color: #a2a2a2;
+}
 
 /* Custom classes */
 .flex,
