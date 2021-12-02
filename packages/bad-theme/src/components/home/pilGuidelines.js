@@ -6,14 +6,30 @@ import Loading from "../loading";
 import SearchIcon from "@mui/icons-material/Search";
 
 const PilGuidelines = ({ state, actions }) => {
+  const BANNER_HEIGHT = state.theme.bannerHeight * 1.25;
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
   // SERVERS ---------------------------------------------
+  const ServeFooter = () => {
+    return (
+      <div
+        style={{
+          backgroundColor: colors.primary,
+          height: 5,
+          width: "100%",
+        }}
+      />
+    );
+  };
+
   const ServeSearchContainer = () => {
     return (
       <div className="d-none d-lg-block">
-        <div className="input-group lg" style={{ display: "flex", flex: 1.5 }}>
+        <div
+          className="input-group lg"
+          style={{ display: "flex", padding: `0.75em 0` }}
+        >
           <input
             type="text"
             className="form-control"
@@ -35,12 +51,25 @@ const PilGuidelines = ({ state, actions }) => {
         margin: `${marginVertical}px ${marginHorizontal}px`,
       }}
     >
-      <div className="card">
-        <div className="card-body">
-          <div className="card-title">PIL & Guidelines Quicklinks</div>
+      <div
+        className="flex"
+        style={{
+          height: BANNER_HEIGHT / 3,
+          backgroundColor: colors.white,
+          alignItems: "center",
+        }}
+      >
+        <div className="flex-col" style={{ padding: `1em 2em` }}>
+          <div
+            className="card-title"
+            style={{ fontSize: 36, fontWeight: "bold", color: colors.black }}
+          >
+            PIL & Guidelines Quicklinks
+          </div>
           <ServeSearchContainer />
         </div>
       </div>
+      <ServeFooter />
     </div>
   );
 };
