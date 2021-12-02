@@ -29,7 +29,7 @@ const RegistrationStepThree = ({ state, actions }) => {
           className="btn btn-outline-secondary"
           onClick={() =>
             handleGoToPath({
-              path: `/registration/step-2-personal-information/`,
+              path: `/membership/register/step-2-personal-information/`,
             })
           }
         >
@@ -49,7 +49,7 @@ const RegistrationStepThree = ({ state, actions }) => {
           style={{ backgroundColor: colors.primary, color: colors.white }}
           onClick={() =>
             handleGoToPath({
-              path: `/registration/step-4-professional-details/`,
+              path: `/membership/register/step-4-professional-details/`,
             })
           }
         >
@@ -71,7 +71,11 @@ const RegistrationStepThree = ({ state, actions }) => {
         }}
       >
         <label style={styles.subTitle}>Title</label>
-        <Form.Select aria-label="Default select example" style={styles.input}>
+        <Form.Select
+          id="category"
+          aria-label="Default select example"
+          style={styles.input}
+        >
           <option style={styles.option}>Membership Category</option>
           <option value="1">Category one</option>
           <option value="2">Category Two</option>

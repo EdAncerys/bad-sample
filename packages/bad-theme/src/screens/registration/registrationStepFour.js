@@ -47,7 +47,7 @@ const RegistrationStepFour = ({ state, actions }) => {
     return (
       <div>
         <label
-          for="fileUpload"
+          htmlFor="fileUpload"
           className="flex"
           style={{
             backgroundColor: colors.white,
@@ -97,7 +97,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             GMC Number <SMF />
           </label>
           <input
-            onChange={(e) => setPassword(e.target.value)}
+            id="gmcNumber"
             type="text"
             className="form-control"
             placeholder="GMC Number"
@@ -107,7 +107,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             Regulatory Body Registration Number
           </label>
           <input
-            onChange={(e) => setPassword(e.target.value)}
+            id="registrationNumber"
             type="text"
             className="form-control"
             placeholder="Regulatory Body Registration Number"
@@ -115,7 +115,7 @@ const RegistrationStepFour = ({ state, actions }) => {
           />
           <label style={styles.subTitle}>NTN Number</label>
           <input
-            onChange={(e) => setPassword(e.target.value)}
+            id="ntnNumber"
             type="text"
             className="form-control"
             placeholder="NTN Number"
@@ -125,7 +125,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             Current job title <SMF />
           </label>
           <input
-            onChange={(e) => setPassword(e.target.value)}
+            id="jobTitle"
             type="text"
             className="form-control"
             placeholder="Current job title"
@@ -134,7 +134,11 @@ const RegistrationStepFour = ({ state, actions }) => {
           <label style={styles.subTitle}>
             GP Practice/Hospital <SMF />
           </label>
-          <Form.Select aria-label="Default select example" style={styles.input}>
+          <Form.Select
+            id="hospital"
+            aria-label="Default select example"
+            style={styles.input}
+          >
             <option style={styles.option}>GP Practice/Hospital</option>
             <option value="1">Hospital One</option>
             <option value="2">Hospital Two</option>
@@ -143,7 +147,7 @@ const RegistrationStepFour = ({ state, actions }) => {
           </Form.Select>
           <label style={styles.subTitle}>Medical School</label>
           <input
-            onChange={(e) => setPassword(e.target.value)}
+            id="medicalSchool"
             type="text"
             className="form-control"
             placeholder="Medical School"
@@ -175,7 +179,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             </label>
             <label style={styles.subTitle}>First Name</label>
             <input
-              onChange={(e) => setPassword(e.target.value)}
+              id="supportMemberOneFirstName"
               type="text"
               className="form-control"
               placeholder="First Name"
@@ -183,7 +187,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             />
             <label style={styles.subTitle}>Last Name</label>
             <input
-              onChange={(e) => setPassword(e.target.value)}
+              id="supportMemberOneLastName"
               type="text"
               className="form-control"
               placeholder="Last Name"
@@ -191,7 +195,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             />
             <label style={styles.subTitle}>E-mail Address</label>
             <input
-              onChange={(e) => setPassword(e.target.value)}
+              id="supportMemberOneEmail"
               type="email"
               className="form-control"
               placeholder="E-mail Address"
@@ -199,7 +203,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             />
             <label style={styles.subTitle}>Confirm Their E-mail Address</label>
             <input
-              onChange={(e) => setPassword(e.target.value)}
+              id="supportMemberOneConfirmEmail"
               type="email"
               className="form-control"
               placeholder="E-mail Address"
@@ -217,7 +221,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             </label>
             <label style={styles.subTitle}>First Name</label>
             <input
-              onChange={(e) => setPassword(e.target.value)}
+              id="supportMemberTwoFirstName"
               type="text"
               className="form-control"
               placeholder="First Name"
@@ -225,7 +229,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             />
             <label style={styles.subTitle}>Last Name</label>
             <input
-              onChange={(e) => setPassword(e.target.value)}
+              id="supportMemberTwoLastName"
               type="text"
               className="form-control"
               placeholder="Last Name"
@@ -233,7 +237,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             />
             <label style={styles.subTitle}>E-mail Address</label>
             <input
-              onChange={(e) => setPassword(e.target.value)}
+              id="supportMemberTwoEmail"
               type="email"
               className="form-control"
               placeholder="E-mail Address"
@@ -241,7 +245,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             />
             <label style={styles.subTitle}>Confirm Their E-mail Address</label>
             <input
-              onChange={(e) => setPassword(e.target.value)}
+              id="supportMemberTwoConfirmEmail"
               type="email"
               className="form-control"
               placeholder="E-mail Address"
@@ -269,7 +273,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             <SMF />
           </label>
           <input
-            onChange={(e) => setPassword(e.target.value)}
+            id="mrcp"
             type="text"
             className="form-control"
             placeholder="MRCP"
@@ -303,7 +307,9 @@ const RegistrationStepFour = ({ state, actions }) => {
           type="submit"
           className="btn btn-outline-secondary"
           onClick={() =>
-            handleGoToPath({ path: `/registration/step-3-category-selection/` })
+            handleGoToPath({
+              path: `/membership/register/step-3-category-selection/`,
+            })
           }
         >
           Back
@@ -321,7 +327,9 @@ const RegistrationStepFour = ({ state, actions }) => {
           className="btn"
           style={{ backgroundColor: colors.primary, color: colors.white }}
           onClick={() =>
-            handleGoToPath({ path: `/registration/registration-thank-you/` })
+            handleGoToPath({
+              path: `/membership/register/registration-thank-you/`,
+            })
           }
         >
           Next

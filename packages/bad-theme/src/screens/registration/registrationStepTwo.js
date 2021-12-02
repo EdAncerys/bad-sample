@@ -158,42 +158,46 @@ const RegistrationStepTwo = ({ state, actions }) => {
             Home Address <SMF />
           </label>
           <input
-            onChange={(e) => setPassword(e.target.value)}
+            id="addressLineOne"
             type="text"
             className="form-control"
             placeholder="Address Line 1"
             style={styles.input}
           />
           <input
-            onChange={(e) => setPassword(e.target.value)}
+            id="addressLineTwo"
             type="text"
             className="form-control"
             placeholder="Address Line 2"
             style={styles.input}
           />
           <input
-            onChange={(e) => setPassword(e.target.value)}
+            id="city"
             type="text"
             className="form-control"
             placeholder="City"
             style={styles.input}
           />
           <input
-            onChange={(e) => setPassword(e.target.value)}
+            id="country"
             type="text"
             className="form-control"
             placeholder="Country"
             style={styles.input}
           />
           <input
-            onChange={(e) => setPassword(e.target.value)}
+            id="postcode"
             type="text"
             className="form-control"
             placeholder="Postcode"
             style={styles.input}
           />
-          <Form.Select aria-label="Default select example" style={styles.input}>
-            <option style={styles.option}>Open this select menu</option>
+          <Form.Select
+            id="country"
+            aria-label="Default select example"
+            style={styles.input}
+          >
+            <option style={styles.option}>Country</option>
             <option value="1">One</option>
             <option value="2">Two</option>
             <option value="3">Three</option>
@@ -220,7 +224,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
           type="submit"
           className="btn btn-outline-secondary"
           onClick={() =>
-            handleGoToPath({ path: `/registration/step-1-the-process/` })
+            handleGoToPath({ path: `/membership/register/step-1-the-process/` })
           }
         >
           Back
@@ -238,7 +242,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
           className="btn"
           style={{ backgroundColor: colors.primary, color: colors.white }}
           onClick={() =>
-            handleGoToPath({ path: `/registration/step-3-category-selection/` })
+            handleGoToPath({ path: `/membership/register/step-3-category-selection/` })
           }
         >
           Next

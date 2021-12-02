@@ -44,7 +44,7 @@ const RegistrationStepOne = ({ state, actions }) => {
           style={{ backgroundColor: colors.primary, color: colors.white }}
           onClick={() =>
             handleGoToPath({
-              path: `/registration/step-2-personal-information`,
+              path: `/membership/register/step-2-personal-information`,
             })
           }
         >

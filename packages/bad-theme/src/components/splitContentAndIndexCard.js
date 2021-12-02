@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
+import { colors } from "../config/colors";
 import IndexCard from "./indexCard";
 import Loading from "./loading";
 
@@ -13,6 +14,11 @@ const ServeBlockTitle = ({ state, actions, libraries, block }) => {
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+
+  // HELPERS ---------------------------------------------
+  const handleGoToPath = ({ path }) => {
+    actions.router.set(path);
+  };
 
   // SERVERS -----------------------------------------------------
   const ServeContent = () => {
@@ -45,10 +51,38 @@ const ServeBlockTitle = ({ state, actions, libraries, block }) => {
       );
     };
 
+    const ServeLink = () => {
+      if (!label && !link) return null;
+
+      return (
+        <div
+          style={{
+            fontSize: 24,
+            fontWeight: "bold",
+            paddingTop: `1em`,
+          }}
+        >
+          <button
+            type="submit"
+            className="btn"
+            style={{ backgroundColor: colors.primary, color: colors.white }}
+            onClick={() =>
+              handleGoToPath({
+                path: link.url,
+              })
+            }
+          >
+            <Html2React html={label} />
+          </button>
+        </div>
+      );
+    };
+
     return (
       <div className="flex-col">
         <ServeTitle />
         <ServeBody />
+        <ServeLink />
       </div>
     );
   };
