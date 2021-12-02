@@ -34,6 +34,7 @@ const MultiPostBlock = ({ state, actions, block }) => {
             body,
             card_title,
             colour,
+            form_label,
             form_link,
             link,
             title,
@@ -48,6 +49,7 @@ const MultiPostBlock = ({ state, actions, block }) => {
                 colour={colour}
                 link={link.url}
                 url={isFrom4Col ? null : background_image.url} // optional param
+                form_label={form_label} // optional param
                 form_link={form_link.url} // optional param
                 cardHeight={isFrom4Col ? 290 : null}
                 isFrom4Col={isFrom4Col ? true : null}

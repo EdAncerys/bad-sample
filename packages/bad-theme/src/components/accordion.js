@@ -21,7 +21,6 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
   const ServeAccordion = ({ block, eventKey }) => {
     const [active, setActive] = useState(null);
     const hasPreview = block.preview === "true";
-    console.log("hasPreview", hasPreview);
 
     const { title, body, logo, downloads } = block;
     if (!title) return null;

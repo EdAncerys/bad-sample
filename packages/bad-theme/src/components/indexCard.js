@@ -26,7 +26,7 @@ const IndexCard = ({
       <div
         style={{
           backgroundColor: THEME,
-          height: 8,
+          height: 5,
           width: "100%",
         }}
       />

@@ -30,6 +30,7 @@ const Card = ({
   textAlign,
   url,
   isFrom4Col,
+  form_label,
   form_link,
   shadow,
   cardWidth,
@@ -49,7 +50,7 @@ const Card = ({
       <div
         style={{
           backgroundColor: THEME,
-          height: 8,
+          height: 5,
           width: "100%",
         }}
       />
@@ -126,6 +127,7 @@ const Card = ({
         <CardActions
           label={label}
           link={link}
+          form_label={form_label}
           form_link={form_link}
           downloadFile={downloadFile}
         />

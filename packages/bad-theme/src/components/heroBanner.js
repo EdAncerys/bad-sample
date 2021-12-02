@@ -69,7 +69,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
         }}
       >
         <div
-        className="flex"
+          className="flex"
           style={{
             marginLeft: PADDING,
             marginTop: FOOTER_HEIGHT / 2,
@@ -185,10 +185,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div
-      className="flex-col"
-      style={{ margin: `${marginVertical}px 0`, height: BANNER_HEIGHT }}
-    >
+    <div className="flex-col" style={{ height: BANNER_HEIGHT }}>
       <div className="flex-row relative">
         <ServeCardContent />
         <ServeOverLay />

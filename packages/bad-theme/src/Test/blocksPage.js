@@ -9,8 +9,7 @@ const BlocksPage = ({ state }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
   const wpBlocks = page.acf.blocks;
-
-  console.log("page data: ", page); // debug
+  // console.log("page data: ", page); // debug
 
   return (
     <div>

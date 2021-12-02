@@ -49,7 +49,7 @@ const App = ({ state, actions }) => {
         state.theme.activeDropDownRef = "menu reset"; // reset menu ref value
       }}
     >
-      <div style={{ ...styles.container, maxWidth: CONTENT_WIDTH }}>
+      <div style={{ ...styles.container, width: CONTENT_WIDTH }}>
         <Header />
         <Directions />
         <LoginModal />
@@ -111,7 +111,7 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     minHeight: "100vh",
-    margin: "auto",
+    margin: "0 auto",
   },
 };
 

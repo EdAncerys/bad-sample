@@ -11,6 +11,7 @@ const CardActions = ({
   libraries,
   label,
   link,
+  form_label,
   form_link,
   downloadFile,
 }) => {
@@ -37,6 +38,7 @@ const CardActions = ({
               borderBottom: `4px solid ${colors.darkSilver}`,
               paddingBottom: 5,
               textTransform: "capitalize",
+              cursor: "pointer",
             }}
           >
             {GO_TO_LABEL}
@@ -49,18 +51,23 @@ const CardActions = ({
   const ServeFromAction = () => {
     if (!form_link) return null;
 
+    let LABEL = "Nomination Form";
+    if (form_label) LABEL = form_label;
+
     return (
-      <div onClick={() => handleGoToPath({ path: form_link })}>
-        <div style={styles.footerActionTitle}>
-          <div
-            style={{
-              borderBottom: `4px solid ${colors.darkSilver}`,
-              paddingBottom: 5,
-              textTransform: "capitalize",
-            }}
-          >
-            Nomination Form
-          </div>
+      <div style={styles.footerActionTitle}>
+        <div
+          style={{
+            borderBottom: `4px solid ${colors.darkSilver}`,
+            paddingBottom: 5,
+            textTransform: "capitalize",
+            cursor: "pointer",
+          }}
+          onClick={() => console.log(form_link)}
+        >
+          <a href={form_link} target="_blank" download>
+            <Html2React html={LABEL} />
+          </a>
         </div>
       </div>
     );
@@ -77,6 +84,7 @@ const CardActions = ({
       <div
         className="flex-row"
         style={{
+          fontSize: 12,
           justifyContent: "space-between",
           alignItems: "center",
           marginTop: `2em`,
