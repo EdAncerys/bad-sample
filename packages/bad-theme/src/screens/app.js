@@ -25,6 +25,7 @@ import RegistrationStepTwo from "./registration/registrationStepTwo";
 import RegistrationStepThree from "./registration/registrationStepThree";
 import RegistrationStepFour from "./registration/registrationStepFour";
 import RegistrationComplete from "./registration/registrationComplete";
+import Dashboard from "./dashboard";
 // SCREEN HELPERS ---------------------------------------------------------
 import Loading from "../components/loading";
 import Error from "./error";
@@ -63,21 +64,28 @@ const App = ({ state, actions }) => {
             <BlocksPage when={data.route.includes("blocks-page")} />
             <Login when={endPoint === "/login/"} />
             <CreateAccount when={endPoint === "/create-account/"} />
-            <Registration when={endPoint === "/registration/"} />
+            <Dashboard when={endPoint === "/membership/dashboard/"} />
+            <Registration when={endPoint === "/membership/register/"} />
             <RegistrationStepOne
-              when={endPoint === "/registration/step-1-the-process/"}
+              when={endPoint === "/membership/register/step-1-the-process/"}
             />
             <RegistrationStepTwo
-              when={endPoint === "/registration/step-2-personal-information/"}
+              when={
+                endPoint === "/membership/register/step-2-personal-information/"
+              }
             />
             <RegistrationStepThree
-              when={endPoint === "/registration/step-3-category-selection/"}
+              when={
+                endPoint === "/membership/register/step-3-category-selection/"
+              }
             />
             <RegistrationStepFour
-              when={endPoint === "/registration/step-4-professional-details/"}
+              when={
+                endPoint === "/membership/register/step-4-professional-details/"
+              }
             />
             <RegistrationComplete
-              when={endPoint === "/registration/registration-thank-you/"}
+              when={endPoint === "/membership/register/registration-thank-you/"}
             />
 
             <PilsArchive when={data.isPilsArchive} />
