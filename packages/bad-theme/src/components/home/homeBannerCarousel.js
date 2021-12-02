@@ -9,7 +9,7 @@ import Loading from "../loading";
 
 const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-  const BANNER_HEIGHT = state.theme.bannerHeight;
+  const BANNER_HEIGHT = state.theme.bannerHeight * 1.25;
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
@@ -34,63 +34,83 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
   if (!block) return <Loading />;
   // RETURN ---------------------------------------------------
   return (
-    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
-      <Carousel className='home-banner-carousel'>
+    <div style={{ margin: `${marginVertical}px 0` }}>
+      <Carousel className="home-banner-carousel">
         {block.slides.map((block, key) => {
           const {
-            add_button,
             background_image,
-            category,
+            event_label,
+            event_link,
             label,
             link,
-            selected_page,
-            selected_post,
-            slide_type,
             title,
           } = block;
 
           let THEME_COLOR = colors.white;
           if (!background_image) THEME_COLOR = colors.danger;
 
-          // HELPERS ----------------------------------------------------
-          const handleGoToAction = () => {
-            if (!link.url) return null;
-            actions.router.set(`${link.url}`);
+          // HELPERS ---------------------------------------------
+          const handleGoToPath = ({ path }) => {
+            actions.router.set(path);
           };
 
           // SERVERS ----------------------------------------------------
-          const ServeFindOutMoreAction = () => {
-            if (!label.length) return null;
+          const ServeMoreAction = () => {
+            if (!label && !link) return null;
+
+            let LABEL = "More";
+            if (label) LABEL = label;
 
             return (
-              <button
-                className="btn btn-outline-light flex-center-row mt-4"
-                style={{
-                  textTransform: "uppercase",
-                  color: THEME_COLOR,
-                  borderColor: THEME_COLOR,
-                }}
-                onClick={handleGoToAction}
-              >
-                <Html2React html={label} />
-                <div>
-                  <KeyboardArrowRightIcon style={{ fill: THEME_COLOR }} />
-                </div>
-              </button>
+              <div>
+                <button
+                  className="btn btn-outline-light flex-center-row"
+                  style={{
+                    color: THEME_COLOR,
+                    borderColor: THEME_COLOR,
+                    borderRadius: 5,
+                    padding: `0.5em 2em`,
+                  }}
+                  onClick={() => handleGoToPath({ path: link.url })}
+                >
+                  <div className="flex">
+                    <Html2React html={LABEL} />
+                  </div>
+                  <div>
+                    <KeyboardArrowRightIcon
+                      style={{
+                        fill: colors.white,
+                        borderRadius: "50%",
+                        padding: 0,
+                      }}
+                    />
+                  </div>
+                </button>
+              </div>
             );
           };
 
           const ServeEventAction = () => {
-            if (!add_button) return null;
+            if (!event_label && !event_link) return null;
+
+            let LABEL = "Event";
+            if (event_label) LABEL = event_label;
 
             return (
-              <button
-                className="btn btn-outline-light flex-center-row mb-4"
-                style={{ color: THEME_COLOR, borderColor: THEME_COLOR }}
-                onClick={handleGoToAction}
-              >
-                <div>Event</div>
-              </button>
+              <div>
+                <button
+                  className="btn btn-outline-light flex-center-row"
+                  style={{
+                    fontSize: 12,
+                    color: THEME_COLOR,
+                    borderColor: THEME_COLOR,
+                    borderRadius: 5,
+                  }}
+                  onClick={() => handleGoToPath({ path: event_link.url })}
+                >
+                  <Html2React html={LABEL} />
+                </button>
+              </div>
             );
           };
 
@@ -123,17 +143,23 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
                 }}
               >
                 <ServeCardImage />
-                <div style={{ paddingLeft: "2em" }}>
-                  <Carousel.Caption style={{ color: THEME_COLOR }}>
-                    <ServeEventAction />
-                    <div style={{ maxWidth: "75%" }}>
-                      <div style={{ fontSize: "2em", textAlign: "start" }}>
-                        <Html2React html={title} />
-                      </div>
-                    </div>
-                    <ServeFindOutMoreAction />
-                  </Carousel.Caption>
-                </div>
+                <Carousel.Caption
+                  style={{ color: THEME_COLOR, left: `10%`, bottom: `4em` }}
+                >
+                  <ServeEventAction />
+                  <div
+                    className="flex"
+                    style={{
+                      fontSize: 42,
+                      textAlign: "start",
+                      maxWidth: "75%",
+                      padding: `1em 0`,
+                    }}
+                  >
+                    <Html2React html={title} />
+                  </div>
+                  <ServeMoreAction />
+                </Carousel.Caption>
               </div>
             </Carousel.Item>
           );

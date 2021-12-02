@@ -14,27 +14,46 @@ const Banner = ({ state, actions, libraries, block }) => {
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+  let THEME_COLOR = colors.white;
 
-  // HELPERS ----------------------------------------------------
-  const handleGoToAction = () => {
-    if (!link.url) return null;
-    actions.router.set(`${link.url}`);
+  // HELPERS ---------------------------------------------
+  const handleGoToPath = ({ path }) => {
+    actions.router.set(path);
   };
 
   // SERVERS ----------------------------------------------------------------
   const ServeFooter = () => {
-    const ServeActions = () => {
-      if (!label.length) return null;
+    const ServeMoreAction = () => {
+      if (!label && !link) return null;
+
+      let LABEL = "More";
+      if (label) LABEL = label;
 
       return (
-        <div className="mr-5">
+        <div>
           <button
             className="btn btn-outline-light flex-center-row"
-            onClick={handleGoToAction}
+            style={{
+              color: THEME_COLOR,
+              borderColor: THEME_COLOR,
+              textTransform: "uppercase",
+              alignItems: "center",
+              borderRadius: 5,
+              padding: `0.5em 2em`,
+            }}
+            onClick={() => handleGoToPath({ path: link.url })}
           >
-            <Html2React html={label} />
+            <div className="flex">
+              <Html2React html={LABEL} />
+            </div>
             <div>
-              <KeyboardArrowRightIcon style={{ fill: colors.white }} />
+              <KeyboardArrowRightIcon
+                style={{
+                  fill: THEME_COLOR,
+                  borderRadius: "50%",
+                  padding: 0,
+                }}
+              />
             </div>
           </button>
         </div>
@@ -48,23 +67,26 @@ const Banner = ({ state, actions, libraries, block }) => {
           position: "absolute",
           bottom: 0,
           left: 0,
+          right: marginHorizontal,
           width: "100%",
-          padding: `3em 5em`,
+          // padding: `3em 5em`,
+          padding: `${marginVertical}px ${marginHorizontal}px`,
         }}
       >
-        <div className="flex">
+        <div className="flex BAD-banner">
           <div
             className="card-text"
             style={{
-              color: colors.white,
-              fontSize: "2em",
+              fontSize: 36,
+              fontWeight: "bold",
+              color: THEME_COLOR,
               textTransform: "capitalize",
             }}
           >
             <Html2React html={title} />
           </div>
         </div>
-        <ServeActions />
+        <ServeMoreAction />
       </div>
     );
   };
@@ -110,7 +132,7 @@ const Banner = ({ state, actions, libraries, block }) => {
       style={{
         position: "relative",
         height: BANNER_HEIGHT,
-        margin: `${marginVertical}px ${marginHorizontal}px`,
+        margin: `${marginVertical}px 0`,
       }}
     >
       <ServeCardImage />

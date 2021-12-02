@@ -11,10 +11,15 @@ const CardBody = ({
   title,
   body,
   heroBanner,
+  newsCarousel,
   TEXT_ALIGN,
   isFrom4Col,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
+  let CONTENT_ALIGNMENT = 0;
+  if (heroBanner) CONTENT_ALIGNMENT = `auto 0`;
+  if (newsCarousel) CONTENT_ALIGNMENT = `auto 0`;
 
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
@@ -27,11 +32,13 @@ const CardBody = ({
 
     return (
       <div
+        className="flex"
         style={{
           fontSize: heroBanner ? 36 : 20,
           height: heroBanner ? "auto" : 80,
           fontWeight: "bold",
           color: colors.black,
+          alignItems: newsCarousel ? "center" : "flex-start",
         }}
       >
         <Html2React html={titlePreview} />
@@ -62,7 +69,7 @@ const CardBody = ({
         padding: heroBanner ? `1em 2em` : 0,
       }}
     >
-      <div style={{ margin: heroBanner ? `auto 0` : 0 }}>
+      <div style={{ margin: CONTENT_ALIGNMENT }}>
         <ServeTitle />
         <ServeBody />
       </div>

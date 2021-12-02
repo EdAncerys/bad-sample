@@ -40,7 +40,11 @@ const FullWidthContentBlock = ({
       <div>
         <div
           className="card-text"
-          style={{ fontSize: 36, fontWeight: "bold", color: colors.black }}
+          style={{
+            fontSize: 36,
+            fontWeight: "bold",
+            color: colors.black,
+          }}
         >
           <Html2React html={title} />
         </div>
@@ -88,7 +92,6 @@ const FullWidthContentBlock = ({
               textTransform: "capitalize",
               color: colors.white,
               backgroundColor: colors.primary,
-              marginBottom: `2em`,
             }}
             onClick={handleGoToAction}
           >
@@ -107,13 +110,13 @@ const FullWidthContentBlock = ({
         justifyContent: "center",
         textAlign: ALIGNMENT,
         backgroundColor: background_colour || "transparent",
-        minHeight: BANNER_HEIGHT,
+        minHeight: heroBanner ? BANNER_HEIGHT : "auto",
         margin: disableMargin
           ? paddingLeft
           : `${marginVertical}px ${marginHorizontal}px`,
       }}
     >
-      <div style={{ margin: heroBanner ? 0 : PADDING }}>
+      <div style={{ margin: heroBanner ? 0 : PADDING, padding: `2em 0` }}>
         <ServeTitle />
         <ServeCardBody />
         <ServeActions />

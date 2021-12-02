@@ -38,7 +38,7 @@ const IndexCard = ({
       if (!card_title) return null;
 
       return (
-        <div style={{ fontSize: 20, fontWeight: "bold" }}>
+        <div style={{ fontSize: 20, fontWeight: "bold", color: colors.black }}>
           <Html2React html={card_title} />
         </div>
       );
@@ -71,7 +71,10 @@ const IndexCard = ({
       return (
         <div
           className="list-group-block"
-          style={{ padding: `0.5em 0`, cursor: "pointer" }}
+          style={{
+            padding: `0.5em 0`,
+            cursor: "pointer",
+          }}
         >
           <div
             style={{
@@ -105,7 +108,7 @@ const IndexCard = ({
       }}
     >
       <div style={{ padding: `2em 1em` }}>
-        <div className="list-group">
+        <div className="list-group index-card">
           <ServeContent />
           {index_title.map((block, key) => {
             return <ServeIndexTitle key={key} block={block} />;

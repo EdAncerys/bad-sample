@@ -11,6 +11,7 @@ import GalleryCarousel from "./galleryCarousel";
 import VenueInfo from "./venueInfo";
 import NewsArticleHeader from "./newsArticleHeader";
 import VideoGalleryInfo from "./videoGalleryInfo";
+import NewsCarouselHeader from "./newsCarouselHeader";
 
 const Card = ({
   state,
@@ -36,6 +37,7 @@ const Card = ({
   cardWidth,
   cardHeight,
   heroBanner,
+  newsCarousel,
   journalCard,
   newsArticle,
 }) => {
@@ -75,7 +77,7 @@ const Card = ({
     const alt = title || "BAD";
 
     return (
-      <div style={{ width: "100%", maxHeight: 300 }}>
+      <div style={{ width: "100%", height: "50%" }}>
         <Image
           src={url}
           alt={alt}
@@ -95,16 +97,20 @@ const Card = ({
 
     return (
       <div>
-        <div
-          className="flex"
-          style={{
-            backgroundColor: colors.lightSilver,
-            borderRadius: 5,
-            textTransform: "uppercase",
-            marginBottom: `1em`,
-          }}
-        >
-          <Html2React html={cardTitle} />
+        <div className="flex" style={{ justifyContent: "flex-start" }}>
+          <div
+            style={{
+              backgroundColor: colors.lightSilver,
+              fontSize: 12,
+              letterSpacing: 2,
+              borderRadius: 5,
+              textTransform: "uppercase",
+              marginBottom: `1em`,
+              padding: `0.5em`,
+            }}
+          >
+            <Html2React html={cardTitle} />
+          </div>
         </div>
       </div>
     );
@@ -121,6 +127,7 @@ const Card = ({
           heroBanner={heroBanner}
           TEXT_ALIGN={TEXT_ALIGN}
           isFrom4Col={isFrom4Col}
+          newsCarousel={newsCarousel}
         />
         <VenueInfo venueInfo={venueInfo} />
         <VideoGalleryInfo videoGalleryInfo={videoGalleryInfo} />
@@ -144,11 +151,13 @@ const Card = ({
         backgroundColor: colors.white,
         width: cardWidth || "100%",
         height: cardHeight || "100%",
+        position: "relative",
       }}
     >
       <PromoHeader fundingPromo={fundingPromo} />
       <GalleryCarousel gallery={gallery} />
       <NewsArticleHeader newsArticle={newsArticle} />
+      <NewsCarouselHeader newsCarousel={newsCarousel} />
       <ServeCardImage />
       <ServeContent />
       <ServeFooter />
