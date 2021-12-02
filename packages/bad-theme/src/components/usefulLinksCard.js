@@ -1,24 +1,27 @@
 import { connect } from "frontity";
 import { colors } from "../config/colors";
 
-const IndexCard = ({
+const UsefulLinksCard = ({
   state,
   actions,
   libraries,
-  card_title,
   colour,
-  index_title,
-  subtitle,
+  link_title,
   shadow,
   cardWidth,
   cardHeight,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  if (!index_title) return null;
+  if (!link_title) return null;
 
   const SHADOW = shadow ? "shadow" : "";
   const THEME = colour || colors.primary;
+
+  // HELPERS ---------------------------------------------
+  const handleGoToPath = ({ path }) => {
+    actions.router.set(path);
+  };
 
   // SERVERS ----------------------------------------------
   const ServeFooter = () => {
@@ -33,62 +36,55 @@ const IndexCard = ({
     );
   };
 
-  const ServeContent = () => {
-    const ServeTitle = () => {
-      if (!card_title) return null;
-
-      return (
-        <div style={{ fontSize: 20, fontWeight: "bold" }}>
-          <Html2React html={card_title} />
-        </div>
-      );
-    };
-
-    const ServeSubtile = () => {
-      if (!subtitle) return null;
-
-      return (
-        <div style={{ fontSize: 16, fontWeight: "bold", padding: `1em 0` }}>
-          <Html2React html={subtitle} />
-        </div>
-      );
-    };
-
-    return (
-      <div className="flex-col">
-        <ServeTitle />
-        <ServeSubtile />
-      </div>
-    );
-  };
-
   const ServeIndexTitle = ({ block }) => {
-    const { title, link_id } = block;
+    const { label, title, link } = block;
 
-    if (!title) return null;
+    if (!title && !label) return null;
 
-    const ServeTitle = () => {
+    const ServeLabel = () => {
       return (
         <div
-          className="list-group-block"
-          style={{ padding: `0.5em 0`, cursor: "pointer" }}
+          className="flex"
+          style={{ justifyContent: "flex-start", padding: `2em 0` }}
         >
           <div
             style={{
-              borderBottom: `1px dotted ${colors.darkSilver}`,
-              textTransform: "capitalize",
+              fontSize: 12,
+              textTransform: "uppercase",
+              padding: 10,
+              backgroundColor: colors.lightSilver,
             }}
           >
-            <a href={`#${link_id}`}>
-              <Html2React html={title} />
-            </a>
+            <Html2React html={label} />
           </div>
         </div>
       );
     };
 
+    const ServeTitle = () => {
+      return (
+        <div
+          style={{
+            fontSize: 20,
+            color: colors.black,
+            textTransform: "capitalize",
+            cursor: "pointer",
+          }}
+          onClick={() => handleGoToPath({ path: link.url })}
+        >
+          <Html2React html={title} />
+        </div>
+      );
+    };
+
     return (
-      <div className="flex-col">
+      <div
+        style={{
+          borderBottom: `1px dotted ${colors.darkSilver}`,
+          padding: `1em 0`,
+        }}
+      >
+        <ServeLabel />
         <ServeTitle />
       </div>
     );
@@ -105,9 +101,9 @@ const IndexCard = ({
       }}
     >
       <div style={{ padding: `2em 1em` }}>
+        <div style={{ fontSize: 20, color: colors.black }}>Useful Links</div>
         <div className="list-group">
-          <ServeContent />
-          {index_title.map((block, key) => {
+          {link_title.map((block, key) => {
             return <ServeIndexTitle key={key} block={block} />;
           })}
         </div>
@@ -129,4 +125,4 @@ const styles = {
   },
 };
 
-export default connect(IndexCard);
+export default connect(UsefulLinksCard);

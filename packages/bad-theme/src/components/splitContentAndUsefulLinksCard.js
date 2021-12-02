@@ -2,15 +2,20 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../config/colors";
-import IndexCard from "./indexCard";
+import UsefulLinksCard from "./usefulLinksCard";
 import Loading from "./loading";
 
-const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
+const SplitContentAndUsefulLinksCard = ({
+  state,
+  actions,
+  libraries,
+  block,
+}) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
 
-  const { body, label, link, index_card } = block;
+  const { body, label, link, useful_link_card } = block;
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -72,12 +77,12 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
   };
 
   const ServeIndexCard = ({}) => {
-    if (!index_card) return null;
+    if (!useful_link_card) return null;
 
     return (
       <div>
-        {index_card.map((block, key) => {
-          const { card_title, colour, index_title, link, subtitle } = block;
+        {useful_link_card.map((block, key) => {
+          const { colour, link_title } = block;
 
           return (
             <div
@@ -91,12 +96,9 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
                 top: 0,
               }}
             >
-              <IndexCard
-                card_title={card_title}
+              <UsefulLinksCard
                 colour={colour}
-                index_title={index_title}
-                subtitle={subtitle}
-                link={link}
+                link_title={link_title}
                 shadow // optional param
               />
             </div>
@@ -126,4 +128,4 @@ const styles = {
   },
 };
 
-export default connect(SplitContentAndIndexCard);
+export default connect(SplitContentAndUsefulLinksCard);

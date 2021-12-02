@@ -28,6 +28,7 @@ import HistoryTimeline from "../historyTimeline";
 import VideoGallery from "../videoGallery";
 import SocialIcons from "../socialIcons";
 import TitleAndBodyBlock from "../titleAndBodyBlock";
+import SplitContentAndUsefulLinksCard from "../splitContentAndUsefulLinksCard";
 
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   // console.log("BLOCKS: ", blocks); // debug
@@ -55,6 +56,14 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
         {blocks.map((block, key) => {
           const { acf_fc_layout } = block;
           console.log("CONTENT BLOCK", block); // debug
+
+          if (acf_fc_layout === "split_content_and_useful_links_card_block")
+            return (
+              <div key={key + 1}>
+                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                <SplitContentAndUsefulLinksCard key={key} block={block} />
+              </div>
+            );
 
           if (acf_fc_layout === "title_and_body_block")
             return (

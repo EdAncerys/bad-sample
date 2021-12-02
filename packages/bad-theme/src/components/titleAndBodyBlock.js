@@ -11,6 +11,8 @@ const TitleAndBodyBlock = ({ state, actions, libraries, block }) => {
 
   const { body, title, text_align } = block;
 
+  console.log("-----------", block);
+
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
   let ALIGNMENT = "start";
@@ -19,7 +21,7 @@ const TitleAndBodyBlock = ({ state, actions, libraries, block }) => {
 
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
-    if (!title.length) return null;
+    if (!title) return null;
 
     return (
       <div
@@ -38,7 +40,7 @@ const TitleAndBodyBlock = ({ state, actions, libraries, block }) => {
   };
 
   const ServeBody = () => {
-    if (!body.length) return null;
+    if (!body) return null;
 
     return (
       <div
