@@ -34,6 +34,7 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
             className="flex"
             style={{
               fontSize: 20,
+              color: colors.black,
               fontWeight: "bold",
               alignItems: "center",
             }}
@@ -97,6 +98,7 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
           >
             <Image
               src={logo.url}
+              alt={alt}
               style={{
                 width: "100%",
                 height: "100%",
@@ -202,12 +204,7 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
 
       return (
         <Accordion.Body>
-          <div
-            style={{
-              fontSize: 16,
-              color: colors.darkSilver,
-            }}
-          >
+          <div>
             <Html2React html={body} />
           </div>
           <ServeDownloads />

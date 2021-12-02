@@ -10,6 +10,7 @@ const FullWidthContentBlock = ({
   libraries,
   block,
   disableMargin,
+  heroBanner,
   disablePadding,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -22,6 +23,7 @@ const FullWidthContentBlock = ({
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+  const paddingLeft = heroBanner ? `0 1em 0 ${marginHorizontal}px` : 0;
   let PADDING = `0 20%`;
   let ALIGNMENT = "start";
   if (text_align === "centre") ALIGNMENT = "center";
@@ -107,11 +109,11 @@ const FullWidthContentBlock = ({
         backgroundColor: background_colour || "transparent",
         minHeight: BANNER_HEIGHT,
         margin: disableMargin
-          ? `0`
+          ? paddingLeft
           : `${marginVertical}px ${marginHorizontal}px`,
       }}
     >
-      <div style={{ margin: PADDING }}>
+      <div style={{ margin: heroBanner ? 0 : PADDING }}>
         <ServeTitle />
         <ServeCardBody />
         <ServeActions />

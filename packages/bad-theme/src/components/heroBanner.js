@@ -27,6 +27,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
   const {
     add_background_image,
     add_buttons,
+    background_colour,
     background_image,
     body,
     buttons,
@@ -39,8 +40,8 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
     BODY_LENGTH = 450;
     CARD_HEIGHT = BANNER_HEIGHT - FOOTER_HEIGHT;
   }
-
   if (!background_image && layout === "full-width") return null; // defaults to null based on config
+  const BACKGROUND_COLOUR = background_colour || "transparent";
 
   // SERVERS -----------------------------------------------------------
   const ServeFooter = () => {
@@ -128,8 +129,9 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
         >
           <FullWidthContentBlock
             block={block}
-            disableMargin
             disablePadding={!background_image || false}
+            disableMargin
+            heroBanner
           />
         </div>
       </div>
@@ -185,7 +187,10 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div className="flex-col" style={{ height: BANNER_HEIGHT }}>
+    <div
+      className="flex-col"
+      style={{ height: BANNER_HEIGHT, backgroundColor: BACKGROUND_COLOUR }}
+    >
       <div className="flex-row relative">
         <ServeCardContent />
         <ServeOverLay />

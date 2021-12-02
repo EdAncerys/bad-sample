@@ -55,9 +55,17 @@ const CardBody = ({
   };
 
   return (
-    <div className="flex-col" style={{ textAlign: `${TEXT_ALIGN}` }}>
-      <ServeTitle />
-      <ServeBody />
+    <div
+      className="flex-col"
+      style={{
+        textAlign: `${TEXT_ALIGN}`,
+        padding: heroBanner ? `1em 2em` : 0,
+      }}
+    >
+      <div style={{ margin: heroBanner ? `auto 0` : 0 }}>
+        <ServeTitle />
+        <ServeBody />
+      </div>
     </div>
   );
 };
