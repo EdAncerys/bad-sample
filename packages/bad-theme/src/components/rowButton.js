@@ -41,19 +41,17 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
         width: "100%",
       }}
     >
-      <div className="card-body flex-col">
-        <div
-          className="flex-row pointer"
-          style={{ margin: "5px 0", alignItems: "center" }}
-          onClick={handleGoToPath}
-        >
+      <div className="flex-col" style={{ padding: `1em` }}>
+        <div className="flex-row pointer" onClick={handleGoToPath}>
           <div
             className="flex"
             style={{
               fontWeight: "bold",
               fontSize: "13px",
               textTransform: "uppercase",
-              justifyContent: "center",
+              justifyContent: "start",
+              alignItems: "center",
+              letterSpacing: 2,
             }}
           >
             <Html2React html={title} />

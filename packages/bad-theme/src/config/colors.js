@@ -10,7 +10,7 @@ export const colors = {
   silver: "#ced4da",
   lightSilver: "#F0F1F4",
   darkSilver: "#A2A2A2",
-  textMain: "#505050",
+  textMain: "#707070",
   textBlack: "#171717",
   shade: "rgba(0, 0, 0, 0.25)",
   shadeIntense: "rgba(0, 0, 0, 0.5)",

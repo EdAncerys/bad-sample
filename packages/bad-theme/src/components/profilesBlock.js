@@ -49,6 +49,7 @@ const ProfilesBlock = ({ state, actions, libraries, block }) => {
         <div
           style={{
             fontSize: 36,
+            color: colors.black,
             fontWeight: "bold",
             textTransform: "capitalize",
           }}

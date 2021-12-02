@@ -40,7 +40,14 @@ const Profile = ({ state, actions, libraries, block }) => {
     if (!title) return null;
 
     return (
-      <div style={{ fontSize: 20, fontWeight: "bold", margin: `0.75em 0` }}>
+      <div
+        style={{
+          fontSize: 20,
+          color: colors.black,
+          fontWeight: "bold",
+          margin: `0.75em 0`,
+        }}
+      >
         <Html2React html={title} />
       </div>
     );
@@ -54,7 +61,6 @@ const Profile = ({ state, actions, libraries, block }) => {
         style={{
           fontSize: 16,
           fontWeight: "regular",
-          color: colors.darkSilver,
         }}
       >
         <Html2React html={body} />
