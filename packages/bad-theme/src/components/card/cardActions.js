@@ -30,8 +30,14 @@ const CardActions = ({
     let GO_TO_LABEL = "Read More";
     if (label) GO_TO_LABEL = <Html2React html={label} />;
 
+    const handleRedirectLink = () => {
+      if (link.includes(`http://3.9.193.188/`))
+        return handleGoToPath({ path: link });
+      window.open(link, "_blank");
+    };
+
     return (
-      <div onClick={() => handleGoToPath({ path: link })}>
+      <div onClick={handleRedirectLink}>
         <div style={styles.footerActionTitle}>
           <div
             style={{
@@ -51,8 +57,8 @@ const CardActions = ({
   const ServeFromAction = () => {
     if (!form_link) return null;
 
-    let LABEL = "Nomination Form";
-    if (form_label) LABEL = form_label;
+    let GO_TO_LABEL = "Nomination Form";
+    if (form_label) GO_TO_LABEL = <Html2React html={form_label} />;
 
     return (
       <div style={styles.footerActionTitle}>
@@ -66,7 +72,7 @@ const CardActions = ({
           onClick={() => console.log(form_link)}
         >
           <a href={form_link} target="_blank" download>
-            <Html2React html={LABEL} />
+            {GO_TO_LABEL}
           </a>
         </div>
       </div>
