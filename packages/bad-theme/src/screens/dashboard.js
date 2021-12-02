@@ -1,8 +1,9 @@
-import React from "react";
+import { useState } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Form } from "react-bootstrap";
 
+import BlockBuilder from "../components/builder/blockBuilder";
 import { colors } from "../config/colors";
 import Avatar from "../img/svg/profile.svg";
 import Ellipse from "../img/svg/ellipse.svg";
@@ -12,6 +13,7 @@ const Dashboard = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
+  const wpBlocks = page.acf.blocks;
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -19,6 +21,21 @@ const Dashboard = ({ state, actions, libraries }) => {
   // HELPERS ---------------------------------------------
   const handleGoToPath = ({ path }) => {
     actions.router.set(path);
+  };
+
+  const handleFormSave = () => {
+    const firstName = document.querySelector("#fistName").value;
+    const lastName = document.querySelector("#lastName").value;
+    const password = document.querySelector("#password").value;
+    const email = document.querySelector("#email").value.toLowerCase();
+
+    const updateCredentials = {
+      firstName,
+      lastName,
+      email,
+      password,
+    };
+    console.log("updateCredentials", updateCredentials);
   };
 
   // SERVERS ---------------------------------------------
@@ -36,7 +53,7 @@ const Dashboard = ({ state, actions, libraries }) => {
           <div className="form-group" style={{ display: "grid", gap: 10 }}>
             <label>Your First Name</label>
             <input
-              onChange={(e) => setPassword(e.target.value)}
+              id="fistName"
               type="text"
               className="form-control"
               placeholder="Your First Name"
@@ -44,7 +61,7 @@ const Dashboard = ({ state, actions, libraries }) => {
             />
             <label>Your Last Name</label>
             <input
-              onChange={(e) => setPassword(e.target.value)}
+              id="lastName"
               type="text"
               className="form-control"
               placeholder="Your Last Name"
@@ -55,15 +72,15 @@ const Dashboard = ({ state, actions, libraries }) => {
           <div className="form-group" style={{ display: "grid", gap: 10 }}>
             <label>Your Contact E-mail Address</label>
             <input
-              onChange={(e) => setPassword(e.target.value)}
-              type="text"
+              id="email"
+              type="email"
               className="form-control"
               placeholder="Your Contact E-mail Address"
               style={styles.input}
             />
             <label>Password</label>
             <input
-              onChange={(e) => setPassword(e.target.value)}
+              id="password"
               type="password"
               className="form-control"
               placeholder="Password"
@@ -102,9 +119,12 @@ const Dashboard = ({ state, actions, libraries }) => {
             color: colors.white,
             marginLeft: `1em`,
           }}
-          onClick={() => handleGoToPath({ path: `/membership/dashboard/` })}
+          onClick={() => {
+            handleFormSave();
+            // handleGoToPath({ path: `/membership/dashboard/` });
+          }}
         >
-          Next
+          Save
         </button>
       </div>
     );
@@ -287,7 +307,10 @@ const Dashboard = ({ state, actions, libraries }) => {
 
   const ServePersonalDetails = () => {
     return (
-      <div className="shadow" style={{ padding: `2em 4em`, margin: `2em 0` }}>
+      <div
+        className="shadow"
+        style={{ padding: `2em 4em`, margin: `2em 0 0 0` }}
+      >
         <div>
           <div style={styles.subTitle}>Personal Details:</div>
           <ServeForm />
@@ -298,18 +321,21 @@ const Dashboard = ({ state, actions, libraries }) => {
   };
 
   return (
-    <div style={{ backgroundColor: colors.white }}>
-      <div
-        style={{
-          margin: `${marginVertical}px ${marginHorizontal}px`,
-        }}
-      >
-        <div className="flex-col" style={{ justifyContent: "center" }}>
-          <ServeProfileContent />
-          <ServeProfileProgress />
-          <ServePersonalDetails />
+    <div>
+      <div style={{ backgroundColor: colors.white }}>
+        <div
+          style={{
+            padding: `${marginVertical}px ${marginHorizontal}px`,
+          }}
+        >
+          <div className="flex-col" style={{ justifyContent: "center" }}>
+            <ServeProfileContent />
+            <ServeProfileProgress />
+            <ServePersonalDetails />
+          </div>
         </div>
       </div>
+      <BlockBuilder blocks={wpBlocks} />
     </div>
   );
 };
