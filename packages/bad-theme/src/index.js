@@ -12,7 +12,7 @@ import {
   setEnquireAction,
   setIsLoggedInAction,
   setActiveDropDownRef,
-} from "./helpers/context";
+} from "./context/actions/context";
 
 const BADTheme = {
   name: "bad-theme",

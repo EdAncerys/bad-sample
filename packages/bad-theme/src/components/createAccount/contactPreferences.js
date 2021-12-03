@@ -3,7 +3,7 @@ import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 
 import { colors } from "../../config/colors";
-import { setCreateAccountAction } from "../../helpers/context";
+import { setCreateAccountAction } from "../../context/actions/context";
 
 const ContactPreferences = ({
   state,

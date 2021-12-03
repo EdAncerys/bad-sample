@@ -11,5 +11,3 @@ export const setGoToAction = async ({ path, actions, onClick }) => {
   if (isExternalLink) return window.open(path, "_blank"); // handle external links
   actions.router.set(path);
 };
-
-``;
