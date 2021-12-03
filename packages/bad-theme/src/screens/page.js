@@ -1,8 +1,9 @@
-import React from "react";
+import { useContext } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../config/colors";
 import BlockBuilder from "../components/builder/blockBuilder";
+import { muiQuery } from "../context";
 
 const Post = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -10,12 +11,14 @@ const Post = ({ state, actions, libraries }) => {
   const page = state.source[data.type][data.id];
   const wpBlocks = page.acf.blocks;
 
+  const { sm, md, lg, xl } = muiQuery();
+
   return (
     <div>
       <div>
         <p style={styles.title}>PAGE</p>
       </div>
-
+      <span>{`theme.breakpoints.up('sm') matches: ${sm}`}</span>
       <BlockBuilder blocks={wpBlocks} />
     </div>
   );
