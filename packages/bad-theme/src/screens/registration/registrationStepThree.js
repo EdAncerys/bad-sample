@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/colors";
+import { setGoToAction } from "../../context";
 import SideBarMenu from "./sideBarMenu";
 import { Form } from "react-bootstrap";
 
@@ -11,11 +12,6 @@ const RegistrationStepThree = ({ state, actions }) => {
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-
-  // HELPERS ---------------------------------------------
-  const handleGoToPath = ({ path }) => {
-    actions.router.set(path);
-  };
 
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
@@ -28,8 +24,9 @@ const RegistrationStepThree = ({ state, actions }) => {
           type="submit"
           className="btn btn-outline-secondary"
           onClick={() =>
-            handleGoToPath({
-              path: `/membership/register/step-2-personal-information/`,
+            setGoToAction({
+              path: `https://badadmin.skylarkdev.co/membership/register/step-2-personal-information/`,
+              actions,
             })
           }
         >
@@ -39,7 +36,12 @@ const RegistrationStepThree = ({ state, actions }) => {
           type="submit"
           className="btn btn-outline-secondary"
           style={{ margin: `0 1em` }}
-          onClick={() => handleGoToPath({ path: `/` })}
+          onClick={() =>
+            setGoToAction({
+              path: `/`,
+              actions,
+            })
+          }
         >
           Save & Exit
         </button>
@@ -48,8 +50,9 @@ const RegistrationStepThree = ({ state, actions }) => {
           className="btn"
           style={{ backgroundColor: colors.primary, color: colors.white }}
           onClick={() =>
-            handleGoToPath({
-              path: `/membership/register/step-4-professional-details/`,
+            setGoToAction({
+              path: `https://badadmin.skylarkdev.co/membership/register/step-4-professional-details/`,
+              actions,
             })
           }
         >
@@ -101,7 +104,12 @@ const RegistrationStepThree = ({ state, actions }) => {
           </div>
           <div
             style={styles.link}
-            onClick={() => handleGoToPath({ path: `/` })}
+            onClick={() =>
+              setGoToAction({
+                path: `/`,
+                actions,
+              })
+            }
           >
             Memberships Categories
           </div>

@@ -4,6 +4,7 @@ import Image from "@frontity/components/image";
 
 import { colors } from "../../config/colors";
 import DownloadFileBlock from "../downloadFileBlock";
+import { setGoToAction } from "../../context";
 
 const CardActions = ({
   state,
@@ -18,11 +19,6 @@ const CardActions = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!link && !form_link && !downloadFile) return null;
-  // HELPERS ---------------------------------------------
-  const handleGoToPath = ({ path }) => {
-    // console.log("link", link); // debug
-    actions.router.set(`${path}`);
-  };
 
   // SERVERS ---------------------------------------------
   const ServeReadMoreAction = () => {
@@ -30,14 +26,8 @@ const CardActions = ({
     let GO_TO_LABEL = "Read More";
     if (label) GO_TO_LABEL = <Html2React html={label} />;
 
-    const handleRedirectLink = () => {
-      if (link.includes(`http://3.9.193.188/`))
-        return handleGoToPath({ path: link });
-      window.open(link, "_blank");
-    };
-
     return (
-      <div onClick={handleRedirectLink}>
+      <div onClick={() => setGoToAction({ path: link, actions })}>
         <div style={styles.footerActionTitle}>
           <div
             style={{

@@ -6,6 +6,7 @@ import { colors } from "../../config/colors";
 import SideBarMenu from "./sideBarMenu";
 import { Form } from "react-bootstrap";
 import CheckMark from "../../img/svg/checkMark.svg";
+import { setGoToAction } from "../../context";
 
 const RegistrationComplete = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
@@ -13,11 +14,6 @@ const RegistrationComplete = ({ state, actions }) => {
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-
-  // HELPERS ---------------------------------------------
-  const handleGoToPath = ({ path }) => {
-    actions.router.set(path);
-  };
 
   // SERVERS ---------------------------------------------
   const ServeCardImage = () => {
@@ -51,11 +47,7 @@ const RegistrationComplete = ({ state, actions }) => {
           type="submit"
           className="btn"
           style={{ backgroundColor: colors.primary, color: colors.white }}
-          onClick={() =>
-            handleGoToPath({
-              path: `/`,
-            })
-          }
+          onClick={() => setGoToAction({ path: `/`, actions })}
         >
           Enter
         </button>

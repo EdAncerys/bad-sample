@@ -4,6 +4,7 @@ import { connect } from "frontity";
 import { colors } from "../../config/colors";
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import { setGoToAction } from "../../context";
 
 import { setActiveDropDownRef } from "../../helpers/context";
 import NavBarDropDownContent from "./navDropDownContent";
@@ -13,10 +14,8 @@ const Navigation = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const [wpMainMenu, setWpMainMenu] = useState([]);
   const [wpMoreMenu, setWpMoreMenu] = useState([]);
-  const [activeMenu, setActiveMenu] = useState("");
 
   const childMenuRef = useRef("");
-  const menuRef = useRef("");
 
   const NAV_DIVIDER = 8;
   const BANNER_HEIGHT = state.theme.bannerHeight;
@@ -31,18 +30,13 @@ const Navigation = ({ state, actions, libraries }) => {
     setWpMoreMenu(data.slice(NAV_DIVIDER, dataLength)); // more menu into dropdown
   }, [state.theme.menu]);
 
-  // HELPERS -----------------------------------------------------
-  const handleGoToPath = ({ slug }) => {
-    actions.router.set(`/${slug}`);
-  };
-
   // SERVERS -----------------------------------------------------
-  const ServeMenuDropDown = ({ title, menu, slugPrefix }) => {
+  const ServeMenuDropDown = ({ title, menu, url }) => {
     if (!menu.length) return null;
     const isMoreMenu = title === "More";
 
-    const ServeTitle = ({ title, SLUG_PATH }) => {
-      if (!title || !SLUG_PATH) return null;
+    const ServeTitle = ({ title, url }) => {
+      if (!title || !url) return null;
 
       return (
         <NavDropdown.Item
@@ -53,13 +47,13 @@ const Navigation = ({ state, actions, libraries }) => {
             borderBottom: `1px dotted ${colors.darkSilver}`,
             whiteSpace: "normal",
           }}
-          onClick={() => handleGoToPath({ slug: SLUG_PATH })}
+          onClick={() => setGoToAction({ path: url, actions })}
           onMouseOver={(e) => {
             if (!e.target.innerText) return null; // prevents passing empty title object
 
             childMenuRef.current = e.target.innerText;
             const title = {
-              slug: SLUG_PATH,
+              url: url,
               title: childMenuRef.current,
             };
             state.theme.childMenuRef = title;
@@ -112,11 +106,9 @@ const Navigation = ({ state, actions, libraries }) => {
               width: 400,
             }}
           >
-            <ServeTitle title={title} SLUG_PATH={slugPrefix} />
+            <ServeTitle title={title} url={url} />
             {menu.map((item, key) => {
-              const { title, slug } = item;
-              let SLUG_PATH = slug; // combining parent & child path
-              if (slugPrefix) SLUG_PATH = slugPrefix + "/" + slug;
+              const { title, url } = item;
 
               return (
                 <div
@@ -124,7 +116,7 @@ const Navigation = ({ state, actions, libraries }) => {
                   className="flex-row"
                   style={{ marginLeft: isMoreMenu ? 0 : 20 }}
                 >
-                  <ServeTitle title={title} SLUG_PATH={SLUG_PATH} />
+                  <ServeTitle title={title} url={url} />
                 </div>
               );
             })}
@@ -146,7 +138,7 @@ const Navigation = ({ state, actions, libraries }) => {
         style={styles.container}
       >
         {wpMainMenu.map((item, key) => {
-          const { title, slug } = item;
+          const { title, slug, url } = item;
 
           const TEST_BLOCK = slug.includes("blocks-page")
             ? { color: colors.danger, fontWeight: "bold", fontSize: 20 }
@@ -157,7 +149,7 @@ const Navigation = ({ state, actions, libraries }) => {
               <ServeMenuDropDown
                 key={key}
                 title={title}
-                slugPrefix={slug}
+                url={url}
                 menu={item.child_items}
               />
             );
@@ -166,7 +158,7 @@ const Navigation = ({ state, actions, libraries }) => {
             <div key={key}>
               <Nav.Link
                 style={{ ...styles.link, ...TEST_BLOCK }}
-                onClick={() => handleGoToPath({ slug })}
+                onClick={() => setGoToAction({ path: url, actions })}
               >
                 <Html2React html={title} />
               </Nav.Link>

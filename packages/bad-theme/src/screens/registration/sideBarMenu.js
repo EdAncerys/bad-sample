@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/colors";
+import { setGoToAction } from "../../context";
 
 const SideBarMenu = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -20,13 +21,6 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   if (slug.includes("step-2")) stepTwo = activeStyle;
   if (slug.includes("step-3")) stepThree = activeStyle;
   if (slug.includes("step-4")) stepFour = activeStyle;
-
-  // HELPERS ---------------------------------------------
-  const handleGoToPath = ({ path }) => {
-    if (slug === "/registration/registration-thank-you/") return null;
-
-    actions.router.set(path);
-  };
 
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
@@ -50,41 +44,53 @@ const SideBarMenu = ({ state, actions, libraries }) => {
       <div style={{ ...styles.titleWrapper, padding: `2em 0` }}>
         <div
           style={{ ...styles.title, ...stepOne }}
-          onClick={() =>
-            handleGoToPath({
-              path: `/registration/step-1-the-process/`,
-            })
-          }
+          onClick={() => {
+            if (slug === "/membership/register/registration-thank-you/")
+              return null;
+            setGoToAction({
+              path: `https://badadmin.skylarkdev.co/membership/register/step-1-the-process/`,
+              actions,
+            });
+          }}
         >
           Step 1 - The Process
         </div>
         <div
           style={{ ...styles.title, ...stepTwo }}
-          onClick={() =>
-            handleGoToPath({
-              path: `/registration/step-2-personal-information/`,
-            })
-          }
+          onClick={() => {
+            if (slug === "/membership/register/registration-thank-you/")
+              return null;
+            setGoToAction({
+              path: `https://badadmin.skylarkdev.co/membership/register/step-2-personal-information/`,
+              actions,
+            });
+          }}
         >
           Step 2 - Personal Information
         </div>
         <div
           style={{ ...styles.title, ...stepThree }}
-          onClick={() =>
-            handleGoToPath({
-              path: `/registration/step-3-category-selection/`,
-            })
-          }
+          onClick={() => {
+            if (slug === "/membership/register/registration-thank-you/")
+              return null;
+            setGoToAction({
+              path: `https://badadmin.skylarkdev.co/membership/register/step-3-category-selection/`,
+              actions,
+            });
+          }}
         >
           Step 3 - Category Selection
         </div>
         <div
           style={{ ...styles.title, ...stepFour }}
-          onClick={() =>
-            handleGoToPath({
-              path: `/registration/step-4-professional-details/`,
-            })
-          }
+          onClick={() => {
+            if (slug === "/membership/register/registration-thank-you/")
+              return null;
+            setGoToAction({
+              path: `https://badadmin.skylarkdev.co/membership/register/step-4-professional-details/`,
+              actions,
+            });
+          }}
         >
           Step 4 - Professional Details
         </div>

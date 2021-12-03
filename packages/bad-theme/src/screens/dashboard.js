@@ -8,6 +8,7 @@ import { colors } from "../config/colors";
 import Avatar from "../img/svg/profile.svg";
 import Ellipse from "../img/svg/ellipse.svg";
 import CheckMarkGreen from "../img/svg/checkMarkGreen.svg";
+import { setGoToAction } from "../context";
 
 const Dashboard = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -17,11 +18,6 @@ const Dashboard = ({ state, actions, libraries }) => {
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-
-  // HELPERS ---------------------------------------------
-  const handleGoToPath = ({ path }) => {
-    actions.router.set(path);
-  };
 
   const handleFormSave = () => {
     const firstName = document.querySelector("#fistName").value;
@@ -107,7 +103,12 @@ const Dashboard = ({ state, actions, libraries }) => {
         <button
           type="submit"
           className="btn btn-outline-secondary"
-          onClick={() => handleGoToPath({ path: `/membership/` })}
+          onClick={() =>
+            setGoToAction({
+              path: `https://badadmin.skylarkdev.co/membership/`,
+              actions,
+            })
+          }
         >
           Back
         </button>
@@ -121,7 +122,10 @@ const Dashboard = ({ state, actions, libraries }) => {
           }}
           onClick={() => {
             handleFormSave();
-            // handleGoToPath({ path: `/membership/dashboard/` });
+            setGoToAction({
+              path: `https://badadmin.skylarkdev.co/membership/`,
+              actions,
+            });
           }}
         >
           Save
@@ -291,8 +295,9 @@ const Dashboard = ({ state, actions, libraries }) => {
             className="btn"
             style={{ backgroundColor: colors.primary, color: colors.white }}
             onClick={() =>
-              handleGoToPath({
-                path: `/membership/register/step-1-the-process/`,
+              setGoToAction({
+                path: `https://badadmin.skylarkdev.co/membership/register/step-1-the-process/`,
+                actions,
               })
             }
           >

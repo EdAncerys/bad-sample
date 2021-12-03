@@ -3,6 +3,7 @@ import { connect } from "frontity";
 import { colors } from "../config/colors";
 
 import Loading from "./loading";
+import { setGoToAction } from "../context";
 
 const TitleBlock = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -19,13 +20,6 @@ const TitleBlock = ({ state, actions, libraries, block }) => {
   if (text_align === "centre") ALIGNMENT = "center";
   if (text_align === "right") ALIGNMENT = "end";
 
-  // HELPERS ---------------------------------------------
-  const handleGoToPath = () => {
-    // console.log("url", url); // debug
-    if (!link.url) return null;
-    actions.router.set(`${link.url}`);
-  };
-
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
     if (!label) return null;
@@ -39,7 +33,7 @@ const TitleBlock = ({ state, actions, libraries, block }) => {
           cursor: "pointer",
           marginLeft: `2em`,
         }}
-        onClick={handleGoToPath}
+        onClick={() => setGoToAction({ path: link.url, actions })}
       >
         <Html2React html={label} />
       </div>

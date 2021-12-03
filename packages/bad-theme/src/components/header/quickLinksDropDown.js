@@ -3,53 +3,11 @@ import { connect } from "frontity";
 import { Dropdown } from "react-bootstrap";
 
 import { colors } from "../../config/colors";
+import { setGoToAction } from "../../context";
+import { MENU_DATA } from "../../config/data";
 
 const QuickLinksDropDown = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
-  const MENU_DATA = [
-    {
-      title: "Patient Information Leaflets",
-      slug: "slug",
-    },
-    {
-      title: "BAD Affiliated Groups",
-      slug: "slug",
-    },
-    {
-      title: "Find a Dermatologist",
-      slug: "slug",
-    },
-    {
-      title: "Patient Hub",
-      slug: "slug",
-    },
-    {
-      title: "COVID 19 Information",
-      slug: "slug",
-    },
-    {
-      title: "CED Journal",
-      slug: "slug",
-    },
-    {
-      title: "BJD Journal",
-      slug: "slug",
-    },
-    {
-      title: "SHD Journal",
-      slug: "slug",
-    },
-    {
-      title: "Clinical Guidelines",
-      slug: "slug",
-    },
-  ];
-
-  // HELPERS ---------------------------------------------
-  const handleGoToPath = ({ slug }) => {
-    actions.router.set(`/${slug}`);
-  };
 
   // SERVERS ----------------------------------------------------------
   const ServeDivider = () => {
@@ -71,7 +29,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
     return (
       <div style={{ paddingBottom: `1em` }}>
         {MENU_DATA.map((item, key) => {
-          const { title, slug } = item;
+          const { title, url } = item;
 
           return (
             <div
@@ -82,7 +40,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
               }}
             >
               <Dropdown.Item
-                onClick={() => handleGoToPath({ slug })}
+                onClick={() => setGoToAction({ path: url, actions })}
                 style={{
                   padding: `0 0 1em`,
                   borderBottom: `1px dotted ${colors.darkSilver}`,

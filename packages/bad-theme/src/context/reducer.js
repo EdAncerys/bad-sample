@@ -1,6 +1,7 @@
 export const initialState = {
   isLoading: false,
-  setLogin: false,
+  jwt: null,
+  user: null,
 };
 
 export const AppReducer = (state = initialState, action) => {
@@ -8,7 +9,7 @@ export const AppReducer = (state = initialState, action) => {
     case "SET_LOADING":
       return { ...state, isLoading: action.payload };
     case "SET_LOGIN":
-      return { ...state, setLogin: action.payload };
+      return { ...state, user: action.payload };
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }

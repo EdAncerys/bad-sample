@@ -4,6 +4,7 @@ import Image from "@frontity/components/image";
 import { Form } from "react-bootstrap";
 
 import { colors } from "../../config/colors";
+import { setGoToAction } from "../../context";
 import SideBarMenu from "./sideBarMenu";
 import Avatar from "../../img/svg/profile.svg";
 import FileUpload from "../../img/svg/fileUpload.svg";
@@ -14,11 +15,6 @@ const RegistrationStepTwo = ({ state, actions }) => {
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-
-  // HELPERS ---------------------------------------------
-  const handleGoToPath = ({ path }) => {
-    actions.router.set(path);
-  };
 
   // SERVERS ---------------------------------------------
   const SMF = () => {
@@ -45,7 +41,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
     return (
       <div>
         <label
-          for="fileUpload"
+          htmlFor="fileUpload"
           className="flex"
           style={{
             backgroundColor: colors.white,
@@ -224,7 +220,10 @@ const RegistrationStepTwo = ({ state, actions }) => {
           type="submit"
           className="btn btn-outline-secondary"
           onClick={() =>
-            handleGoToPath({ path: `/membership/register/step-1-the-process/` })
+            setGoToAction({
+              path: `https://badadmin.skylarkdev.co/membership/register/step-1-the-process/`,
+              actions,
+            })
           }
         >
           Back
@@ -233,7 +232,12 @@ const RegistrationStepTwo = ({ state, actions }) => {
           type="submit"
           className="btn btn-outline-secondary"
           style={{ margin: `0 1em` }}
-          onClick={() => handleGoToPath({ path: `/` })}
+          onClick={() =>
+            setGoToAction({
+              path: `/`,
+              actions,
+            })
+          }
         >
           Save & Exit
         </button>
@@ -242,7 +246,10 @@ const RegistrationStepTwo = ({ state, actions }) => {
           className="btn"
           style={{ backgroundColor: colors.primary, color: colors.white }}
           onClick={() =>
-            handleGoToPath({ path: `/membership/register/step-3-category-selection/` })
+            setGoToAction({
+              path: `https://badadmin.skylarkdev.co/membership/register/step-3-category-selection/`,
+              actions,
+            })
           }
         >
           Next

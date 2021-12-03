@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/colors";
 
+import { setGoToAction } from "../context";
 import Loading from "./loading";
 
 const FullWidthContentBlock = ({
@@ -76,12 +77,6 @@ const FullWidthContentBlock = ({
   const ServeActions = () => {
     if (!label) return null;
 
-    // HELPERS ----------------------------------------------------
-    const handleGoToAction = () => {
-      if (!link.url) return null;
-      actions.router.set(`${link.url}`);
-    };
-
     return (
       <div>
         <div className="flex" style={{ justifyContent: ALIGNMENT }}>
@@ -93,7 +88,7 @@ const FullWidthContentBlock = ({
               color: colors.white,
               backgroundColor: colors.primary,
             }}
-            onClick={handleGoToAction}
+            onClick={() => setGoToAction({ path: link.url, actions })}
           >
             <Html2React html={label} />
           </button>

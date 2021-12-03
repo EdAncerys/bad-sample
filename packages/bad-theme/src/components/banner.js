@@ -5,6 +5,7 @@ import Image from "@frontity/components/image";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import Loading from "./loading";
+import { setGoToAction } from "../context";
 
 const Banner = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -15,11 +16,6 @@ const Banner = ({ state, actions, libraries, block }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
   let THEME_COLOR = colors.white;
-
-  // HELPERS ---------------------------------------------
-  const handleGoToPath = ({ path }) => {
-    actions.router.set(path);
-  };
 
   // SERVERS ----------------------------------------------------------------
   const ServeFooter = () => {
@@ -41,7 +37,7 @@ const Banner = ({ state, actions, libraries, block }) => {
               borderRadius: 5,
               padding: `0.5em 2em`,
             }}
-            onClick={() => handleGoToPath({ path: link.url })}
+            onClick={() => setGoToAction({ path: link.url, actions })}
           >
             <div className="flex">
               <Html2React html={LABEL} />

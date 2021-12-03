@@ -3,6 +3,8 @@ import { connect } from "frontity";
 import { colors } from "../config/colors";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
+import { setGoToAction } from "../context";
+
 const RowButton = ({ state, actions, libraries, block, onClick }) => {
   // block: object
   // onClick action
@@ -10,14 +12,6 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
 
   const { title, colour, link } = block;
   const THEME = colour || colors.primary;
-
-  // HELPERS ---------------------------------------------
-  const handleGoToPath = () => {
-    // console.log("link", link); // debug
-    if (onClick) onClick();
-    if (!link) return null;
-    actions.router.set(`${link.url}`);
-  };
 
   // SERVERS --------------------------------------------
   const ServeFooter = () => {
@@ -42,7 +36,17 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
       }}
     >
       <div className="flex-col" style={{ padding: `1em` }}>
-        <div className="flex-row pointer" onClick={handleGoToPath}>
+        <div
+          className="flex-row pointer"
+          onClick={() => {
+            if (onClick) {
+              setGoToAction({ onClick });
+            } else {
+              if (!link) return null;
+              setGoToAction({ path: link.url, actions });
+            }
+          }}
+        >
           <div
             className="flex"
             style={{

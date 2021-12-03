@@ -3,6 +3,8 @@ import { connect } from "frontity";
 import { colors } from "../config/colors";
 import Image from "@frontity/components/image";
 
+import { setGoToAction } from "../context";
+
 const CardFS = ({
   state,
   actions,
@@ -18,12 +20,6 @@ const CardFS = ({
   const TEXT_ALIGN = textAlign || "start";
   const MIN_CARD_HEIGHT = 100;
   const THEME = themeColor || colors.primary;
-
-  // HELPERS ---------------------------------------------
-  const handleGoToPath = () => {
-    actions.router.set(`${url}`);
-    console.log("url", url);
-  };
 
   // SERVERS ----------------------------------------------------------------
   const ServeFooter = () => {
@@ -96,7 +92,7 @@ const CardFS = ({
   const ServeFooterActions = () => {
     return (
       <div className="flex pt-4">
-        <div onClick={handleGoToPath}>
+        <div onClick={() => setGoToAction({ path: url, actions })}>
           <div style={styles.footerActionTitle}>
             <p className="card-text">Find Out More</p>
           </div>

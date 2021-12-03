@@ -1,6 +1,8 @@
 import { connect } from "frontity";
 import { colors } from "../config/colors";
 
+import { setGoToAction } from "../context";
+
 const UsefulLinksCard = ({
   state,
   actions,
@@ -17,11 +19,6 @@ const UsefulLinksCard = ({
 
   const SHADOW = shadow ? "shadow" : "";
   const THEME = colour || colors.primary;
-
-  // HELPERS ---------------------------------------------
-  const handleGoToPath = ({ path }) => {
-    actions.router.set(path);
-  };
 
   // SERVERS ----------------------------------------------
   const ServeFooter = () => {
@@ -70,7 +67,7 @@ const UsefulLinksCard = ({
             textTransform: "capitalize",
             cursor: "pointer",
           }}
-          onClick={() => handleGoToPath({ path: link.url })}
+          onClick={() => setGoToAction({ path: link.url, actions })}
         >
           <Html2React html={title} />
         </div>

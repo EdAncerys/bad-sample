@@ -4,6 +4,7 @@ import { connect } from "frontity";
 import Profile from "./profile";
 import { colors } from "../config/colors";
 import Loading from "./loading";
+import { setGoToAction } from "../context";
 
 const ProfilesBlock = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -19,12 +20,6 @@ const ProfilesBlock = ({ state, actions, libraries, block }) => {
   const ServeActions = () => {
     if (!label.length) return null;
 
-    // HELPERS ----------------------------------------------------
-    const handleGoToAction = () => {
-      if (!link.url) return null;
-      actions.router.set(`${link.url}`);
-    };
-
     return (
       <div className="flex-center-row">
         <button
@@ -35,7 +30,7 @@ const ProfilesBlock = ({ state, actions, libraries, block }) => {
             color: colors.white,
             backgroundColor: colors.primary,
           }}
-          onClick={handleGoToAction}
+          onClick={() => setGoToAction({ path: link.url, actions })}
         >
           <Html2React html={label} />
         </button>

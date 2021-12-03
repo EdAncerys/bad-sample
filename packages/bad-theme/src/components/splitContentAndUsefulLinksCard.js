@@ -4,6 +4,7 @@ import { connect } from "frontity";
 import { colors } from "../config/colors";
 import UsefulLinksCard from "./usefulLinksCard";
 import Loading from "./loading";
+import { setGoToAction } from "../context";
 
 const SplitContentAndUsefulLinksCard = ({
   state,
@@ -19,11 +20,6 @@ const SplitContentAndUsefulLinksCard = ({
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-
-  // HELPERS ---------------------------------------------
-  const handleGoToPath = ({ path }) => {
-    actions.router.set(path);
-  };
 
   // SERVERS -----------------------------------------------------
   const ServeContent = () => {
@@ -56,11 +52,7 @@ const SplitContentAndUsefulLinksCard = ({
             type="submit"
             className="btn"
             style={{ backgroundColor: colors.primary, color: colors.white }}
-            onClick={() =>
-              handleGoToPath({
-                path: link.url,
-              })
-            }
+            onClick={() => setGoToAction({ path: link.url, actions })}
           >
             <Html2React html={label} />
           </button>

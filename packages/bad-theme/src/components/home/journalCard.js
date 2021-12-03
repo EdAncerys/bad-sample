@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import { colors } from "../../config/colors";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import { setGoToAction } from "../../context";
 
 const JournalCard = ({
   state,
@@ -22,13 +23,6 @@ const JournalCard = ({
 
   if (!image && !title) return null; // do not render card if content not provided
 
-  // HELPERS ---------------------------------------------
-  const handleGoToPath = () => {
-    // console.log("url", url); // debug
-    if (!link.url) return null;
-    actions.router.set(`${link.url}`);
-  };
-
   // SERVERS ---------------------------------------------
   const ServeCardContent = () => {
     if (!title) return null;
@@ -46,7 +40,7 @@ const JournalCard = ({
           <div
             className="flex-row pointer"
             style={{ alignItems: "center" }}
-            onClick={handleGoToPath}
+            onClick={() => setGoToAction({ path: link.url, actions })}
           >
             <div style={{ textTransform: "uppercase", fontSize: 12 }}>
               <p className="card-text">Read More</p>

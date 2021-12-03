@@ -3,6 +3,7 @@ import { connect } from "frontity";
 import { NavDropdown } from "react-bootstrap";
 
 import { colors } from "../../config/colors";
+import { setGoToAction } from "../../context";
 
 const ChildMenu = ({ state, actions, libraries, slugPrefix, menu }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -15,11 +16,6 @@ const ChildMenu = ({ state, actions, libraries, slugPrefix, menu }) => {
   if (menu.title !== parentTitle) return null;
   // console.log(menu); // debug
 
-  // HELPERS -----------------------------------------------------
-  const handleGoToPath = ({ SLUG_PATH }) => {
-    actions.router.set(`/${SLUG_PATH}`);
-  };
-
   return (
     <div style={{ minWidth: 200, padding: `1em` }}>
       <div
@@ -29,19 +25,19 @@ const ChildMenu = ({ state, actions, libraries, slugPrefix, menu }) => {
           padding: `0 0 1em 0`,
           borderBottom: `1px dotted ${colors.darkSilver}`,
         }}
-        onClick={() => handleGoToPath({ SLUG_PATH: menu.slug })}
+        onClick={() => setGoToAction({ path: menu.slug, actions })}
       >
         {parentTitle}
       </div>
 
       {menu.child_items.map((item, key) => {
-        const { title, slug } = item;
-
-        const SLUG_PATH = menu.slug + "/" + slug; // combining parent & child path
+        const { title, url } = item;
 
         return (
           <div key={key} className="flex" style={{ overflow: "auto" }}>
-            <NavDropdown.Item onClick={() => handleGoToPath({ SLUG_PATH })}>
+            <NavDropdown.Item
+              onClick={() => setGoToAction({ path: url, actions })}
+            >
               <Html2React html={title} />
             </NavDropdown.Item>
           </div>

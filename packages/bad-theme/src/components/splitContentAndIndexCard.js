@@ -4,6 +4,7 @@ import { connect } from "frontity";
 import { colors } from "../config/colors";
 import IndexCard from "./indexCard";
 import Loading from "./loading";
+import { setGoToAction } from "../context";
 
 const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -14,11 +15,6 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-
-  // HELPERS ---------------------------------------------
-  const handleGoToPath = ({ path }) => {
-    actions.router.set(path);
-  };
 
   // SERVERS -----------------------------------------------------
   const ServeContent = () => {
@@ -51,11 +47,7 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
             type="submit"
             className="btn"
             style={{ backgroundColor: colors.primary, color: colors.white }}
-            onClick={() =>
-              handleGoToPath({
-                path: link.url,
-              })
-            }
+            onClick={() => setGoToAction({ path: link.url, actions })}
           >
             <Html2React html={label} />
           </button>

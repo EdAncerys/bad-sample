@@ -33,6 +33,9 @@ import Error from "./error";
 import { useAppDispatch, useAppState } from "../context";
 
 const App = ({ state, actions }) => {
+  const dispatch = useAppDispatch();
+  const { jwt, user } = useAppState();
+
   const CONTENT_WIDTH = state.theme.contentContainer;
 
   // env file access

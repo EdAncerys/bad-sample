@@ -6,6 +6,7 @@ import { colors } from "../../config/colors";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import Loading from "../loading";
+import { setGoToAction } from "../../context";
 
 const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -49,11 +50,6 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
           let THEME_COLOR = colors.white;
           if (!background_image) THEME_COLOR = colors.danger;
 
-          // HELPERS ---------------------------------------------
-          const handleGoToPath = ({ path }) => {
-            actions.router.set(path);
-          };
-
           // SERVERS ----------------------------------------------------
           const ServeMoreAction = () => {
             if (!label && !link) return null;
@@ -71,7 +67,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
                     borderRadius: 5,
                     padding: `0.5em 2em`,
                   }}
-                  onClick={() => handleGoToPath({ path: link.url })}
+                  onClick={() => setGoToAction({ path: link.url, actions })}
                 >
                   <div className="flex">
                     <Html2React html={LABEL} />
@@ -106,7 +102,9 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
                     borderColor: THEME_COLOR,
                     borderRadius: 5,
                   }}
-                  onClick={() => handleGoToPath({ path: event_link.url })}
+                  onClick={() =>
+                    setGoToAction({ path: event_label.url, actions })
+                  }
                 >
                   <Html2React html={LABEL} />
                 </button>

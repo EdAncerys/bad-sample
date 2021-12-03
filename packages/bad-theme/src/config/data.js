@@ -63,3 +63,72 @@ export const DATA = [
     cardTitle: "This is a tile",
   },
 ];
+
+export const MENU_DATA = [
+  {
+    title: "Patient Information Leaflets",
+    url: "/",
+  },
+  {
+    title: "BAD Affiliated Groups",
+    url: "/",
+  },
+  {
+    title: "Find a Dermatologist",
+    url: "/",
+  },
+  {
+    title: "Patient Hub",
+    url: "/",
+  },
+  {
+    title: "COVID 19 Information",
+    url: "/",
+  },
+  {
+    title: "CED Journal",
+    url: "/",
+  },
+  {
+    title: "BJD Journal",
+    url: "/",
+  },
+  {
+    title: "SHD Journal",
+    url: "/node_modules",
+  },
+  {
+    title: "Clinical Guidelines",
+    url: "/",
+  },
+];
+
+export const ALPHABET = [
+  "0-9",
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H",
+  "I",
+  "J",
+  "K",
+  "L",
+  "M",
+  "N",
+  "O",
+  "P",
+  "Q",
+  "R",
+  "S",
+  "T",
+  "U",
+  "V",
+  "W",
+  "X",
+  "Y",
+  "Z",
+];

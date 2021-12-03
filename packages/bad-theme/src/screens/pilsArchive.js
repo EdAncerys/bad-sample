@@ -3,6 +3,7 @@ import { connect, styled } from "frontity";
 
 import Loading from "../components/loading";
 import { colors } from "../config/colors";
+import { setGoToAction } from "../context";
 
 const PilsArchive = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -15,11 +16,6 @@ const PilsArchive = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
 
   if (!PIL_LIST) return <Loading />;
-
-  // HELPERS ----------------------------------------------------
-  const handleGoToAction = ({ link }) => {
-    actions.router.set(link);
-  };
 
   let ALPHABET = ["0-9"];
   PIL_LIST.map((item) => {
@@ -47,7 +43,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
       return (
         <div
           style={{ fontSize: 16, marginBottom: `0.25em`, cursor: "pointer" }}
-          onClick={() => handleGoToAction({ link })}
+          onClick={() => setGoToAction({ path: link, actions })}
         >
           <Html2React html={title.rendered} />
         </div>
