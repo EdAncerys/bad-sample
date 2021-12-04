@@ -27,15 +27,19 @@ const PilGuidelines = ({ state, actions }) => {
     return (
       <div className="d-none d-lg-block">
         <div
-          className="input-group lg"
-          style={{ display: "flex", padding: `0.75em 0` }}
+          style={{ display: "flex", padding: `0.75em 0`, position: "relative" }}
         >
           <input
+            id="searchInput"
             type="text"
             className="form-control"
             placeholder="Enter your search..."
+            style={styles.input}
           />
-          <span className="input-group-text" id="basic-addon2">
+          <span
+            className="input-group-text"
+            style={{ position: "absolute", right: 0, cursor: "pointer" }}
+          >
             <SearchIcon />
           </span>
         </div>
@@ -61,7 +65,6 @@ const PilGuidelines = ({ state, actions }) => {
       >
         <div className="flex-col" style={{ padding: `1em 2em` }}>
           <div
-            className="card-title"
             style={{ fontSize: 36, fontWeight: "bold", color: colors.black }}
           >
             PIL & Guidelines Quicklinks
@@ -77,6 +80,12 @@ const PilGuidelines = ({ state, actions }) => {
 const styles = {
   container: {
     backgroundColor: colors.lightSilver,
+  },
+  input: {
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
+    paddingRight: 60,
+    color: colors.darkSilver,
   },
 };
 

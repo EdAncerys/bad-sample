@@ -18,7 +18,7 @@ const Post = ({ state, actions, libraries }) => {
       <div>
         <p style={styles.title}>PAGE</p>
       </div>
-      <span>{`theme.breakpoints.up('sm') matches: ${sm}`}</span>
+      <span>{`theme.breakpoints.down('sm') matches: ${sm}`}</span>
       <BlockBuilder blocks={wpBlocks} />
     </div>
   );
