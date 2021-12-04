@@ -8,14 +8,28 @@ import { setGoToAction } from "../context";
 const PilsArchive = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const [activePilAlphabet, setActivePilAlphabet] = useState([]);
+  const [isReady, seIsReady] = useState(false);
   const data = state.source.get(state.router.link);
-  const PIL_LIST = Object.values(state.source.pils);
+  const { totalPages, page, next } = data; // check if data have multiple pages
+
+  // DATA pre FETCH ----------------------------------------------------------------
+  useEffect(async () => {
+    // fetch data via wp API page by page
+    let isThereNextPage = next;
+    while (isThereNextPage) {
+      await actions.source.fetch(isThereNextPage); // fetch next page
+      const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
+      isThereNextPage = nextPage;
+    }
+    seIsReady(true);
+  }, []);
+  const PIL_LIST = Object.values(state.source.pils); // add pill object to data array
+  // DATA pre FETCH ----------------------------------------------------------------
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  if (!PIL_LIST) return <Loading />;
+  if (!isReady) return <Loading />;
 
   let ALPHABET = ["0-9"];
   PIL_LIST.map((item) => {

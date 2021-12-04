@@ -33,7 +33,7 @@ const settings = {
           url: "https://badadmin.skylarkdev.co/", // production url
           // api: "https://app-5efddb43c1ac181508283e93.closte.com/wp-json", // frontity example api
           params: {
-            per_page: 100, // limit per page fetch request
+            per_page: 50, // limit per page fetch request
           },
           postTypes: [
             {
