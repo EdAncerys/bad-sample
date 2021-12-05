@@ -16,6 +16,7 @@ const SearchFilter = ({
   filterOne,
   filterTwo,
   filterThree,
+  disableMargin,
 }) => {
   const dispatch = useAppDispatch();
   const { filter } = useAppState();
@@ -170,7 +171,6 @@ const SearchFilter = ({
             style={{
               position: "absolute",
               right: 0,
-              cursor: "pointer",
               border: "none",
               background: "transparent",
               color: colors.darkSilver,
@@ -210,7 +210,11 @@ const SearchFilter = ({
       <div className="flex">
         <div
           className="flex-col"
-          style={{ padding: `0 ${marginHorizontal}px` }}
+          style={{
+            padding: disableMargin
+              ? 0
+              : `${marginVertical}px ${marginHorizontal}px`,
+          }}
         >
           <ServeTitle />
           <ServeSearchContainer />

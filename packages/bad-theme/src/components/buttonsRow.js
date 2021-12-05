@@ -25,9 +25,7 @@ const ButtonsRow = ({ state, actions, style, block, disableMargin }) => {
         gridTemplateColumns: `repeat(${BUTTON_COUNT}, 1fr)`,
         justifyContent: "space-between",
         gap: 10,
-        margin: disableMargin
-          ? ``
-          : `${marginVertical}px ${marginHorizontal}px`,
+        margin: disableMargin ? 0 : `${marginVertical}px ${marginHorizontal}px`,
       }}
     >
       {block.buttons.map((block, key) => {
