@@ -1,4 +1,5 @@
 export const setGoToAction = async ({ path, actions, onClick }) => {
+  console.log("setGoToAction triggered"); //debug
   if (onClick) return onClick();
   if (!path || !actions) return null;
 
@@ -10,4 +11,9 @@ export const setGoToAction = async ({ path, actions, onClick }) => {
   console.log("----", isExternalLink, path);
   if (isExternalLink) return window.open(path, "_blank"); // handle external links
   actions.router.set(path);
+};
+
+export const setSearchFilterAction = async ({ dispatch, filter }) => {
+  console.log("setSearchFilterAction triggered"); //debug
+  dispatch({ type: "SET_SEARCH_FILTERS", payload: filter });
 };

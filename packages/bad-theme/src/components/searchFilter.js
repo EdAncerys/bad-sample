@@ -5,6 +5,8 @@ import { colors } from "../config/colors";
 import Loading from "./loading";
 import SearchIcon from "@mui/icons-material/Search";
 import { Form } from "react-bootstrap";
+// CONTEXT ----------------------------------------------------------------
+import { useAppDispatch, useAppState, setSearchFilterAction } from "../context";
 
 const SearchFilter = ({
   state,
@@ -15,11 +17,18 @@ const SearchFilter = ({
   filterTwo,
   filterThree,
 }) => {
+  const dispatch = useAppDispatch();
+  const { filter } = useAppState();
+
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
   const TITLE = title || "Search Component";
+
+  useEffect(() => {
+    console.log("filter", filter);
+  }, [filter]);
 
   // HELPERS ----------------------------------------------------------------
   const handleFormSave = () => {
@@ -29,13 +38,13 @@ const SearchFilter = ({
     const serveFilterTwo = document.querySelector("#serveFilterTwo").value;
     const serveFilterThree = document.querySelector("#serveFilterThree").value;
 
-    const updateCredentials = {
+    const filter = {
       searchInput,
       serveFilterOne,
       serveFilterTwo,
       serveFilterThree,
     };
-    console.log("updateCredentials", updateCredentials);
+    setSearchFilterAction({ dispatch, filter });
   };
 
   // SERVERS ---------------------------------------------

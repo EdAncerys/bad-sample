@@ -4,6 +4,7 @@ import { connect } from "frontity";
 import { colors } from "../../config/colors";
 import SearchFilter from "../../components/searchFilter";
 import PilGuidelines from "../../components/home/pilGuidelines";
+import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 
 const Registration = ({ state }) => {
   const data = state.source.get(state.router.link);
@@ -16,6 +17,9 @@ const Registration = ({ state }) => {
       </div>
 
       <SearchFilter />
+      <div>
+        <GooglePlacesAutocomplete apiKey="AIzaSyB1HY1FKYgS-Tdiq0uG0J6T-c3_CPed5mo" />
+      </div>
       <PilGuidelines />
     </div>
   );
