@@ -2,6 +2,8 @@ import React from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/colors";
+import SearchFilter from "../../components/searchFilter";
+import PilGuidelines from "../../components/home/pilGuidelines";
 
 const Registration = ({ state }) => {
   const data = state.source.get(state.router.link);
@@ -12,6 +14,9 @@ const Registration = ({ state }) => {
       <div>
         <p style={styles.title}>REGISTRATION</p>
       </div>
+
+      <SearchFilter />
+      <PilGuidelines />
     </div>
   );
 };

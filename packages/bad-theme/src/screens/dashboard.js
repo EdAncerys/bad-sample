@@ -19,6 +19,7 @@ const Dashboard = ({ state, actions, libraries }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
+  // HELPERS ----------------------------------------------------------------
   const handleFormSave = () => {
     const firstName = document.querySelector("#fistName").value;
     const lastName = document.querySelector("#lastName").value;

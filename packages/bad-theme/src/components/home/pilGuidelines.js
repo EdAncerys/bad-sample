@@ -10,6 +10,16 @@ const PilGuidelines = ({ state, actions }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
+  // HELPERS ----------------------------------------------------------------
+  const handleFormSave = () => {
+    const searchInput = document.querySelector("#searchInput").value;
+
+    const updateCredentials = {
+      searchInput,
+    };
+    console.log("updateCredentials", updateCredentials);
+  };
+
   // SERVERS ---------------------------------------------
   const ServeFooter = () => {
     return (
@@ -25,24 +35,23 @@ const PilGuidelines = ({ state, actions }) => {
 
   const ServeSearchContainer = () => {
     return (
-      <div className="d-none d-lg-block">
-        <div
-          style={{ display: "flex", padding: `0.75em 0`, position: "relative" }}
+      <div
+        style={{ display: "flex", padding: `0.75em 0`, position: "relative" }}
+      >
+        <input
+          id="searchInput"
+          type="text"
+          className="form-control"
+          placeholder="Enter your search..."
+          style={styles.input}
+        />
+        <span
+          className="input-group-text"
+          style={{ position: "absolute", right: 0, cursor: "pointer" }}
+          onClick={handleFormSave}
         >
-          <input
-            id="searchInput"
-            type="text"
-            className="form-control"
-            placeholder="Enter your search..."
-            style={styles.input}
-          />
-          <span
-            className="input-group-text"
-            style={{ position: "absolute", right: 0, cursor: "pointer" }}
-          >
-            <SearchIcon />
-          </span>
-        </div>
+          <SearchIcon />
+        </span>
       </div>
     );
   };
@@ -82,8 +91,8 @@ const styles = {
     backgroundColor: colors.lightSilver,
   },
   input: {
-    borderTopLeftRadius: 5,
-    borderBottomLeftRadius: 5,
+    borderRadius: 5,
+    overflow: "hidden",
     paddingRight: 60,
     color: colors.darkSilver,
   },
