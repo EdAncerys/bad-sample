@@ -12,8 +12,7 @@ const MultiPostBlock = ({ state, actions, block }) => {
   if (!block) return <Loading />;
   if (!block.card) return null;
 
-  const dispatch = useAppDispatch();
-  const { filter } = useAppState();
+  const [filter, setFilter] = useState(null);
   let FILTER_LENGTH = 0; // defines if search returns null
 
   const marginHorizontal = state.theme.marginHorizontal;
@@ -25,13 +24,22 @@ const MultiPostBlock = ({ state, actions, block }) => {
 
   const isFrom4Col = CARD_NUMBER === 4;
 
+  useEffect(() => {
+    setFilter(null); // handles search filter reset on component load
+  }, []);
+
+  // HELPERS ----------------------------------------------------------------
+  const handleSetState = ({ filter }) => {
+    setFilter(filter);
+  };
+
   // SERVERS ----------------------------------------------
   const ServeSearchFilterContainer = () => {
     if (block.search_filters === "False") return null;
 
     return (
       <div style={{ paddingBottom: `1em` }}>
-        <SearchFilter />
+        <SearchFilter handleSetState={handleSetState} />
       </div>
     );
   };
@@ -64,7 +72,7 @@ const MultiPostBlock = ({ state, actions, block }) => {
               color: colors.white,
               padding: `0.5em`,
             }}
-            onClick={() => setSearchFilterAction({ dispatch, filter: null })}
+            onClick={() => setFilter(null)}
           >
             Search Again
           </button>

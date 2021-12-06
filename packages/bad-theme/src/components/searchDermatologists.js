@@ -2,45 +2,54 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/colors";
 
+import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import Loading from "./loading";
 import SearchIcon from "@mui/icons-material/Search";
 import { Form } from "react-bootstrap";
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, useAppState, setSearchFilterAction } from "../context";
 
-const SearchFilter = ({
+const SearchDermatologists = ({
   state,
   actions,
   libraries,
-  handleSetState,
   title,
   filterOne,
   filterTwo,
   filterThree,
   disableMargin,
 }) => {
+  const dispatch = useAppDispatch();
+  const { filter } = useAppState();
+
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  const TITLE = title || "Search Component";
+  const TITLE = title || "Search For Dermatologists";
+
+  useEffect(() => {
+    console.log("filter", filter);
+  }, [filter]);
 
   // HELPERS ----------------------------------------------------------------
   const handleSearchSubmit = () => {
     const searchInput = document.querySelector("#searchInput").value;
+    const searchNameInput = document.querySelector("#searchNameInput").value;
 
     const serveFilterOne = document.querySelector("#serveFilterOne").value;
-    const serveFilterTwo = document.querySelector("#serveFilterTwo").value;
-    const serveFilterThree = document.querySelector("#serveFilterThree").value;
 
     const filter = {
       searchInput,
+      searchNameInput,
       serveFilterOne,
-      serveFilterTwo,
-      serveFilterThree,
     };
-    handleSetState({ filter });
+    setSearchFilterAction({ dispatch, filter });
   };
+
+  useEffect(() => {
+    setSearchFilterAction({ dispatch, filter: null }); // handles search filter reset on component load
+  }, []);
 
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
@@ -81,47 +90,7 @@ const SearchFilter = ({
             aria-label="Default select example"
             style={styles.input}
           >
-            <option style={styles.option}>Sort By</option>
-            <option value="1">Category one</option>
-            <option value="2">Category Two</option>
-            <option value="3">Category Three</option>
-            <option value="3">Category Four</option>
-          </Form.Select>
-        </div>
-      );
-    };
-
-    const ServeFilterTwo = () => {
-      // if (!filterTwo) return null;
-
-      return (
-        <div style={{ paddingRight: `1em` }}>
-          <Form.Select
-            id="serveFilterTwo"
-            aria-label="Default select example"
-            style={styles.input}
-          >
-            <option style={styles.option}>Sort By</option>
-            <option value="1">Category one</option>
-            <option value="2">Category Two</option>
-            <option value="3">Category Three</option>
-            <option value="3">Category Four</option>
-          </Form.Select>
-        </div>
-      );
-    };
-
-    const ServeFilterThree = () => {
-      // if (!filterThree) return null;
-
-      return (
-        <div style={{ paddingRight: `1em` }}>
-          <Form.Select
-            id="serveFilterThree"
-            aria-label="Default select example"
-            style={styles.input}
-          >
-            <option style={styles.option}>Sort By</option>
+            <option style={styles.option}>Set The Distance</option>
             <option value="1">Category one</option>
             <option value="2">Category Two</option>
             <option value="3">Category Three</option>
@@ -135,8 +104,6 @@ const SearchFilter = ({
       <div className="flex" style={{ padding: `1em 0`, alignItems: "center" }}>
         <ServeTitle />
         <ServeFilterOne />
-        <ServeFilterTwo />
-        <ServeFilterThree />
       </div>
     );
   };
@@ -196,7 +163,6 @@ const SearchFilter = ({
     <div
       className="flex"
       style={{
-        ...styles.container,
         height: BANNER_HEIGHT / 1.2,
         alignItems: "center",
       }}
@@ -213,6 +179,30 @@ const SearchFilter = ({
           <ServeTitle />
           <ServeSearchContainer />
           <ServeFilters />
+
+          <div>
+            <GooglePlacesAutocomplete
+              apiKey="AIzaSyB1HY1FKYgS-Tdiq0uG0J6T-c3_CPed5mo"
+              autocompletionRequest={{
+                componentRestrictions: {
+                  country: ["uk"],
+                },
+              }}
+              selectProps={{
+                // defaultInputValue: 'Default input value',
+                isClearable: true,
+                onChange: (e) => {
+                  // let placeId = "";
+                  // if (o) {
+                  //   placeId = o["value"]["place_id"];
+                  // }
+                  // setAddress(o);
+                  // formik.setFieldValue("googlePlaceId", placeId);
+                  console.log(e);
+                },
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -220,9 +210,7 @@ const SearchFilter = ({
 };
 
 const styles = {
-  container: {
-    backgroundColor: colors.white,
-  },
+  container: {},
   input: {
     borderRadius: 10,
     paddingRight: 60,
@@ -231,4 +219,4 @@ const styles = {
   },
 };
 
-export default connect(SearchFilter);
+export default connect(SearchDermatologists);
