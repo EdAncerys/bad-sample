@@ -1,5 +1,7 @@
 import { connect } from "frontity";
+
 import { colors } from "../config/colors";
+import { setGoToAction } from "../context";
 
 const IndexCard = ({
   state,
@@ -63,11 +65,35 @@ const IndexCard = ({
   };
 
   const ServeIndexTitle = ({ block }) => {
-    const { title, link_id } = block;
-
-    if (!title) return null;
+    const { title, link_id, link } = block;
 
     const ServeTitle = () => {
+      if (!title) return null;
+
+      const ServeReference = () => {
+        if (!link_id) return null;
+
+        const handleGoToRef = () => {
+          document.location = `index.html#${link_id}`;
+        };
+
+        return (
+          <a href={`#${link_id}`}>
+            <Html2React html={title} />
+          </a>
+        );
+      };
+
+      const ServeGoToPage = () => {
+        if (!link || link_id) return null;
+
+        return (
+          <div onClick={() => setGoToAction({ path: link.url, actions })}>
+            <Html2React html={title} />
+          </div>
+        );
+      };
+
       return (
         <div
           className="list-group-block"
@@ -82,9 +108,8 @@ const IndexCard = ({
               textTransform: "capitalize",
             }}
           >
-            <a href={`#${link_id}`}>
-              <Html2React html={title} />
-            </a>
+            <ServeReference />
+            <ServeGoToPage />
           </div>
         </div>
       );

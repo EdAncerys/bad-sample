@@ -25,17 +25,23 @@ const CardBody = ({
   const ServeTitle = () => {
     if (!title) return null;
 
+    let TITLE_HEIGHT = 80;
+    if (heroBanner || !body) TITLE_HEIGHT = "auto";
+
     let titlePreview = title;
     const MAX_CHAR = 45;
     if (title.length > MAX_CHAR && isFrom4Col)
       titlePreview = `${title.slice(0, MAX_CHAR)}...`;
+    if (!body) titlePreview = title;
 
     return (
       <div
         className="flex"
         style={{
           fontSize: heroBanner ? 36 : 20,
-          height: heroBanner ? "auto" : 80,
+          height: TITLE_HEIGHT,
+          maxHeight: isFrom4Col ? 200 : "auto", // restricting title height
+          overflow: "hidden",
           fontWeight: "bold",
           color: colors.black,
           alignItems: newsCarousel ? "center" : "flex-start",
