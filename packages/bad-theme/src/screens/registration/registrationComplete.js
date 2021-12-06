@@ -67,7 +67,7 @@ const RegistrationComplete = ({ state, actions }) => {
       >
         <label style={styles.subTitle}>What is your Ethnic Group?</label>
         <Form.Select aria-label="Default select example" style={styles.input}>
-          <option style={styles.option}>Membership Category</option>
+          <option>Membership Category</option>
           <option value="1">Category one</option>
           <option value="2">Category Two</option>
           <option value="3">Category Three</option>

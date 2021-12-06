@@ -9,6 +9,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Form } from "react-bootstrap";
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, useAppState, setSearchFilterAction } from "../context";
+const INPUT_WIDTH = 365;
 
 const SearchDermatologists = ({
   state,
@@ -36,17 +37,7 @@ const SearchDermatologists = ({
   }, []);
 
   // HELPERS ----------------------------------------------------------------
-  const handleGetCoordinates = () => {
-    // if (!filter) return null;
-
-    geocodeByAddress("London")
-      .then((results) => getLatLng(results[0]))
-      .then(({ lat, lng }) =>
-        console.log("Successfully got latitude and longitude", { lat, lng })
-      );
-  };
-
-  const handleSearchSubmit = () => {
+  const handleSearchByNameSubmit = () => {
     const searchNameInput = document.querySelector("#searchNameInput").value;
 
     const serveFilterOne = document.querySelector("#serveFilterOne").value;
@@ -56,7 +47,6 @@ const SearchDermatologists = ({
       serveFilterOne,
     };
     setFilter(filter);
-    handleGetCoordinates();
   };
 
   // SERVERS ---------------------------------------------
@@ -96,9 +86,9 @@ const SearchDermatologists = ({
           <Form.Select
             id="serveFilterOne"
             aria-label="Default select example"
-            style={styles.input}
+            style={{ ...styles.input, minWidth: "100%" }}
           >
-            <option style={styles.option}>Set The Distance</option>
+            <option>Set The Distance</option>
             <option value="1">Category one</option>
             <option value="2">Category Two</option>
             <option value="3">Category Three</option>
@@ -116,7 +106,7 @@ const SearchDermatologists = ({
     );
   };
 
-  const ServeSearchContainer = () => {
+  const ServeSearchComponent = () => {
     const ServeSearchName = () => {
       return (
         <div className="flex-row">
@@ -133,7 +123,7 @@ const SearchDermatologists = ({
               id="searchNameInput"
               type="text"
               className="form-control"
-              placeholder="Enter your search..."
+              placeholder="Search by Name"
               style={styles.input}
             />
             <span
@@ -158,7 +148,114 @@ const SearchDermatologists = ({
                 color: colors.white,
                 padding: `0.5em`,
               }}
-              onClick={handleSearchSubmit}
+              onClick={handleSearchByNameSubmit}
+            >
+              Search
+            </button>
+          </div>
+        </div>
+      );
+    };
+
+    const ServeSearchLocation = () => {
+      const [location, setLocation] = useState(null);
+
+      const handleAddress = ({ description }) => {
+        geocodeByAddress(description)
+          .then((results) => getLatLng(results[0]))
+          .then(({ lat, lng }) =>
+            console.log("Successfully got latitude and longitude", { lat, lng })
+          )
+          .catch((error) => console.error(error));
+      };
+
+      return (
+        <div className="flex">
+          <div
+            className="flex"
+            style={{
+              flex: 2,
+              marginRight: `2em`,
+            }}
+          >
+            <div className="flex" style={{ alignItems: "center" }}>
+              <div className="flex" style={{ position: "relative" }}>
+                <div style={{ width: INPUT_WIDTH }}>
+                  <GooglePlacesAutocomplete
+                    apiKey={`${state.theme.GOOGLE_API_KEY}`}
+                    debounce={1000} // number of milliseconds to delay before making a call to Google Maps API
+                    placeholder="Search"
+                    autocompletionRequest={{
+                      componentRestrictions: {
+                        country: ["uk"],
+                      },
+                    }}
+                    onLoadFailed={
+                      (error) =>
+                        console.error("Could not inject Google script", error) // to be called when the injection of the Google Maps JavaScript API fails due to network error
+                    }
+                    textInputProps={{
+                      leftIcon: { type: "font-awesome", name: "chevron-left" },
+                      errorStyle: { color: "red" },
+                    }}
+                    selectProps={{
+                      // defaultInputValue: "Default input value",
+                      placeholder: "Search by location/postcode",
+                      isClearable: true,
+                      onChange: (e) => {
+                        if (!e) return null;
+
+                        console.log(e);
+                        handleAddress({ description: e.label });
+                      },
+
+                      styles: {
+                        input: (provided) => ({
+                          ...provided,
+                          color: colors.darkSilver,
+                          overflow: "hidden",
+                          borderColor: colors.primary,
+                          marginRight: 30,
+                        }),
+                        option: (provided, state) => ({
+                          ...provided, // dropdown styles
+                          borderBottom: "1px dotted pink",
+                          color: "green",
+                        }),
+                        singleValue: (provided) => ({
+                          ...provided, // selected styles
+                          color: colors.textMain,
+                          paddingRight: 40,
+                        }),
+                      },
+                    }}
+                  />
+                </div>
+                <span
+                  className="input-group-text"
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    border: "none",
+                    background: "transparent",
+                    color: colors.darkSilver,
+                  }}
+                >
+                  <SearchIcon />
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="flex" style={{ alignItems: "center" }}>
+            <button
+              type="submit"
+              className="btn"
+              style={{
+                backgroundColor: colors.primary,
+                color: colors.white,
+                padding: `0.5em`,
+              }}
+              onClick={handleSearchByNameSubmit}
             >
               Search
             </button>
@@ -170,52 +267,17 @@ const SearchDermatologists = ({
     return (
       <div>
         <div className="flex-row">
+          <ServeSearchLocation />
           <ServeSearchName />
-
-          <div className="flex">
-            <div
-              className="flex"
-              style={{
-                flex: 2,
-                marginRight: `2em`,
-              }}
-            >
-              <div style={{ width: "100%" }}>
-                <GooglePlacesAutocomplete
-                  apiKey="AIzaSyB1HY1FKYgS-Tdiq0uG0J6T-c3_CPed5mo"
-                  placeholder="Search"
-                  autocompletionRequest={{
-                    componentRestrictions: {
-                      country: ["uk"],
-                    },
-                  }}
-                  selectProps={{
-                    // defaultInputValue: 'Default input value',
-                    isClearable: true,
-                    onChange: (e) => {
-                      console.log(e);
-                    },
-                  }}
-                  style={{ backgroundColor: "pink" }}
-                />
-              </div>
-            </div>
-            <div className="flex" style={{ alignItems: "center" }}>
-              <button
-                type="submit"
-                className="btn"
-                style={{
-                  backgroundColor: colors.primary,
-                  color: colors.white,
-                  padding: `0.5em`,
-                }}
-                onClick={handleSearchSubmit}
-              >
-                Search
-              </button>
-            </div>
-          </div>
         </div>
+      </div>
+    );
+  };
+
+  const ServeMap = () => {
+    return (
+      <div className="flex pink" style={{ margin: `2em 0` }}>
+        <MapsComponent />
       </div>
     );
   };
@@ -223,27 +285,17 @@ const SearchDermatologists = ({
   // RETURN ---------------------------------------------------
   return (
     <div
-      className="flex"
+      className="flex-col"
       style={{
-        height: BANNER_HEIGHT / 1.2,
-        alignItems: "center",
+        padding: disableMargin
+          ? 0
+          : `${marginVertical}px ${marginHorizontal}px`,
       }}
     >
-      <div className="flex">
-        <div
-          className="flex-col"
-          style={{
-            padding: disableMargin
-              ? 0
-              : `${marginVertical}px ${marginHorizontal}px`,
-          }}
-        >
-          <ServeTitle />
-          {/* <ServeSearchContainer /> */}
-          <ServeFilters />
-          <MapsComponent />
-        </div>
-      </div>
+      <ServeTitle />
+      {/* <ServeSearchComponent /> */}
+      <ServeFilters />
+      <ServeMap />
     </div>
   );
 };
@@ -254,7 +306,7 @@ const styles = {
     borderRadius: 10,
     paddingRight: 60,
     color: colors.darkSilver,
-    minWidth: 300,
+    minWidth: INPUT_WIDTH,
   },
 };
 

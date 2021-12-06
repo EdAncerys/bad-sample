@@ -81,7 +81,7 @@ const SearchFilter = ({
             aria-label="Default select example"
             style={styles.input}
           >
-            <option style={styles.option}>Sort By</option>
+            <option>Sort By</option>
             <option value="1">Category one</option>
             <option value="2">Category Two</option>
             <option value="3">Category Three</option>
@@ -101,7 +101,7 @@ const SearchFilter = ({
             aria-label="Default select example"
             style={styles.input}
           >
-            <option style={styles.option}>Sort By</option>
+            <option>Sort By</option>
             <option value="1">Category one</option>
             <option value="2">Category Two</option>
             <option value="3">Category Three</option>
@@ -121,7 +121,7 @@ const SearchFilter = ({
             aria-label="Default select example"
             style={styles.input}
           >
-            <option style={styles.option}>Sort By</option>
+            <option>Sort By</option>
             <option value="1">Category one</option>
             <option value="2">Category Two</option>
             <option value="3">Category Three</option>

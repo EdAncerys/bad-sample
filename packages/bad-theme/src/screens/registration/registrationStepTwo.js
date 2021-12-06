@@ -115,7 +115,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
             Title <SMF />
           </label>
           <Form.Select aria-label="Default select example" style={styles.input}>
-            <option style={styles.option}>Professor, Dr, Mr, Miss, Ms</option>
+            <option>Professor, Dr, Mr, Miss, Ms</option>
             <option value="1">Dr.</option>
             <option value="2">Mr.</option>
             <option value="3">Miss</option>
@@ -123,7 +123,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
           </Form.Select>
           <label>Gender</label>
           <Form.Select aria-label="Default select example" style={styles.input}>
-            <option style={styles.option}>Male, Female, Transgender…</option>
+            <option>Male, Female, Transgender…</option>
             <option value="1">Male</option>
             <option value="2">Female</option>
             <option value="3">Transgender</option>
@@ -193,7 +193,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
             aria-label="Default select example"
             style={styles.input}
           >
-            <option style={styles.option}>Country</option>
+            <option>Country</option>
             <option value="1">One</option>
             <option value="2">Two</option>
             <option value="3">Three</option>

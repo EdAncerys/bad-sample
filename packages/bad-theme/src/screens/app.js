@@ -39,7 +39,7 @@ const App = ({ state, actions }) => {
   const CONTENT_WIDTH = state.theme.contentContainer;
 
   // env file access
-  // console.log(".env variables", state.theme.myVariable);
+  // console.log(".env variables", state.theme.MY_VARIABLE);
 
   const endPoint = state.router.link;
   const data = state.source.get(endPoint);

@@ -21,7 +21,8 @@ const BADTheme = {
   },
   state: {
     theme: {
-      myVariable: process.env.MY_VARIABLE,
+      MY_VARIABLE: process.env.MY_VARIABLE,
+      GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
       menuUrl: "/menu/primary-menu",
       menu: null,
       activeDropDownRef: "hello",

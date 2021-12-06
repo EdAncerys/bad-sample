@@ -5,22 +5,23 @@ import { colors } from "../config/colors";
 import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 
 const containerStyle = {
-  width: "800px",
+  width: "100%",
   height: "400px",
 };
-
 const center = {
-  lat: 51.5072178,
-  lng: -0.1275862,
+  lat: 1.5072,
+  lng: 0.1276,
 };
 
-const MapsComponent = () => {
+const MapsComponent = ({ state, actions, libraries }) => {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyB1HY1FKYgS-Tdiq0uG0J6T-c3_CPed5mo",
   });
 
   const [map, setMap] = React.useState(null);
+
+  const BANNER_HEIGHT = state.theme.bannerHeight;
 
   const onLoad = React.useCallback(function callback(map) {
     const bounds = new window.google.maps.LatLngBounds();
@@ -33,19 +34,15 @@ const MapsComponent = () => {
   }, []);
 
   return isLoaded ? (
-    <div style={{ position: "relative", height: 500 }}>
-      <div style={{ position: "absolute", backgroundColor: colors.primary }}>
-        {/* <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={center}
-          zoom={10}
-          onLoad={onLoad}
-          onUnmount={onUnmount}
-        >
-          <>Child components, such as markers, info windows, etc.</>
-        </GoogleMap> */}
-      </div>
-    </div>
+    <GoogleMap
+      mapContainerStyle={containerStyle}
+      defaultZoom={8}
+      defaultCenter={center}
+      onLoad={onLoad}
+      onUnmount={onUnmount}
+    >
+      <>Child components, such as markers, info windows, etc.</>
+    </GoogleMap>
   ) : (
     <></>
   );

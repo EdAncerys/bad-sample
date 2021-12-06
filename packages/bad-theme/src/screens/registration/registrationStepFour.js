@@ -133,7 +133,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             aria-label="Default select example"
             style={styles.input}
           >
-            <option style={styles.option}>GP Practice/Hospital</option>
+            <option>GP Practice/Hospital</option>
             <option value="1">Hospital One</option>
             <option value="2">Hospital Two</option>
             <option value="3">Hospital Three</option>
