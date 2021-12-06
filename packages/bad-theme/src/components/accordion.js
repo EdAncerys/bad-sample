@@ -8,6 +8,8 @@ import Loading from "./loading";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import DownloadFileBlock from "./downloadFileBlock";
+import { setGoToAction } from "../context";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 const AccordionComponent = ({ state, actions, libraries, block }) => {
   if (!block) return <Loading />;
@@ -22,7 +24,7 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
     const [active, setActive] = useState(null);
     const hasPreview = block.preview === "true";
 
-    const { title, body, logo, downloads } = block;
+    const { title, body, logo, downloads, label, link } = block;
     if (!title) return null;
 
     const ServeTitle = () => {
@@ -199,6 +201,44 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
       );
     };
 
+    const ServeGoToPage = () => {
+      if (!link) return null;
+
+      let LABEL = "More";
+      if (label) LABEL = label;
+
+      return (
+        <div
+          className="flex"
+          style={{ justifyContent: "flex-end", paddingTop: `1em` }}
+        >
+          <div>
+            <button
+              className="btn flex-row"
+              style={{
+                backgroundColor: colors.primary,
+                color: colors.white,
+                padding: `0.5em 2em`,
+              }}
+              onClick={() => setGoToAction({ path: link.url, actions })}
+            >
+              <div className="flex">
+                <Html2React html={LABEL} />
+              </div>
+              <div>
+                <KeyboardArrowRightIcon
+                  style={{
+                    borderRadius: "50%",
+                    padding: 0,
+                  }}
+                />
+              </div>
+            </button>
+          </div>
+        </div>
+      );
+    };
+
     const ServeBody = () => {
       if (!body) return null;
 
@@ -208,6 +248,7 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
             <Html2React html={body} />
           </div>
           <ServeDownloads />
+          <ServeGoToPage />
         </Accordion.Body>
       );
     };
