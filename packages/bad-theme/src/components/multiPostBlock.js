@@ -6,7 +6,7 @@ import Card from "./card/card";
 import SearchFilter from "./searchFilter";
 import Loading from "./loading";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setSearchFilterAction } from "../context";
+import { useAppDispatch, useAppState } from "../context";
 
 const MultiPostBlock = ({ state, actions, block }) => {
   if (!block) return <Loading />;

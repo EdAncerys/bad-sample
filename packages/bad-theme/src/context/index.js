@@ -1,6 +1,6 @@
 import { AppProvider, useAppDispatch, useAppState } from "./context";
 import { setLoadingAction, setLoginAction } from "./auth/actions";
-import { setGoToAction, setSearchFilterAction } from "./actions/actions";
+import { setGoToAction } from "./actions/actions";
 import { muiQuery } from "./mediaQueryContext";
 
 export {
@@ -9,7 +9,6 @@ export {
   useAppState,
   muiQuery,
   setGoToAction,
-  setSearchFilterAction,
   setLoadingAction,
   setLoginAction,
 };

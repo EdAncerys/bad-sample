@@ -34,7 +34,7 @@ const BADTheme = {
     },
     context: {
       isLoggedIn: false,
-      loginAction: false,
+      loginAction: true,
       createAccountAction: false,
       enquireAction: false,
     },

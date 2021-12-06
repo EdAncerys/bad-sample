@@ -4,11 +4,11 @@ import { colors } from "../config/colors";
 
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";
-import MapsComponent from "./mapsComponent";
+// import MapsComponent from "./mapsComponent";
 import SearchIcon from "@mui/icons-material/Search";
 import { Form } from "react-bootstrap";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setSearchFilterAction } from "../context";
+import { useAppDispatch, useAppState } from "../context";
 const INPUT_WIDTH = 365;
 
 const SearchDermatologists = ({
@@ -293,9 +293,9 @@ const SearchDermatologists = ({
       }}
     >
       <ServeTitle />
-      {/* <ServeSearchComponent /> */}
+      <ServeSearchComponent />
       <ServeFilters />
-      <ServeMap />
+      {/* <ServeMap /> */}
     </div>
   );
 };

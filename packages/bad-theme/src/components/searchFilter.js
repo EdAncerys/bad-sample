@@ -6,7 +6,7 @@ import Loading from "./loading";
 import SearchIcon from "@mui/icons-material/Search";
 import { Form } from "react-bootstrap";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setSearchFilterAction } from "../context";
+import { useAppDispatch, useAppState } from "../context";
 
 const SearchFilter = ({
   state,

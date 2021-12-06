@@ -16,6 +16,11 @@ const HeaderActions = ({ state, actions }) => {
     actions.router.set(path);
   };
 
+  const handleLoginAction = () => {
+    actions.context.setActionFlipper;
+    console.log("hello", state.theme.GOOGLE_API_KEY);
+  };
+
   // SERVERS ----------------------------------------------------
   const ServeLogoContainer = () => {
     return (
@@ -54,7 +59,7 @@ const HeaderActions = ({ state, actions }) => {
       <div>
         <button
           className="btn shadow-none m-2"
-          onClick={actions.context.setLoginAction}
+          onClick={handleLoginAction}
           style={styles.loginBtn}
         >
           Login

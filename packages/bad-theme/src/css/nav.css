@@ -22,6 +22,7 @@
   max-width: 1350px;
 }
 
+/* drop down link config */
 .dropdown-item.active,
 .dropdown-item:active {
   color: #707070 !important;
