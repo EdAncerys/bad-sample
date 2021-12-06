@@ -188,7 +188,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
   // RETURN ---------------------------------------------------
   return (
     <div
-      className="flex-col"
+      className="flex-col "
       style={{ height: BANNER_HEIGHT, backgroundColor: BACKGROUND_COLOUR }}
     >
       <div className="flex-row relative">

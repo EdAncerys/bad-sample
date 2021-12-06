@@ -62,32 +62,35 @@ const Banner = ({ state, actions, libraries, block }) => {
     };
 
     return (
-      <div
-        className="flex-row"
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: marginHorizontal,
-          width: "100%",
-          // padding: `3em 5em`,
-          padding: `${marginVertical}px ${marginHorizontal}px`,
-        }}
-      >
-        <div className="flex BAD-banner" style={{ flex: 3 }}>
-          <div
-            className="card-text"
-            style={{
-              fontSize: 36,
-              fontWeight: "bold",
-              color: THEME_COLOR,
-              textTransform: "capitalize",
-            }}
-          >
-            <Html2React html={title} />
+      <div style={{ position: "relative" }}>
+        <div
+          className="flex-row"
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: marginHorizontal,
+            width: "100%",
+            height: BANNER_HEIGHT,
+            // padding: `3em 5em`,
+            padding: `${marginVertical}px ${marginHorizontal}px`,
+          }}
+        >
+          <div className="flex BAD-banner" style={{ flex: 3 }}>
+            <div
+              className="flex-col"
+              style={{
+                color: THEME_COLOR,
+                // textTransform: "capitalize",
+                justifyContent: "flex-end",
+                overflow: "hidden",
+              }}
+            >
+              <Html2React html={title} />
+            </div>
           </div>
+          <ServeMoreAction />
         </div>
-        <ServeMoreAction />
       </div>
     );
   };
