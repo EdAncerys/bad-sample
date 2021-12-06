@@ -12,6 +12,8 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
 
   const { title, colour, link } = block;
   const THEME = colour || colors.primary;
+  let LABEL = title;
+  if (!title && link) LABEL = link.title;
 
   // SERVERS --------------------------------------------
   const ServeFooter = () => {
@@ -58,7 +60,7 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
               letterSpacing: 2,
             }}
           >
-            <Html2React html={title} />
+            <Html2React html={LABEL} />
           </div>
           <div>
             <KeyboardArrowRightIcon

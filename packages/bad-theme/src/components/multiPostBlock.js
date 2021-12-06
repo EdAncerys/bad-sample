@@ -103,6 +103,7 @@ const MultiPostBlock = ({ state, actions, block }) => {
               colour,
               form_label,
               form_link,
+              link_label,
               link,
               title,
             } = block;
@@ -126,6 +127,7 @@ const MultiPostBlock = ({ state, actions, block }) => {
                   title={title}
                   body={body}
                   colour={colour}
+                  link_label={link_label}
                   link={link.url}
                   url={isFrom4Col ? null : background_image.url} // optional param
                   form_label={form_label} // optional param

@@ -18,7 +18,7 @@ const DownloadFileBlock = ({
   if (!block || !block.file) return null;
   const { file, label } = block;
 
-  let LABEL = "Download file";
+  let LABEL = "Download";
   if (label) LABEL = label;
 
   const marginHorizontal = state.theme.marginHorizontal;

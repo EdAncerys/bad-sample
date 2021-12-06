@@ -10,7 +10,7 @@ const CardActions = ({
   state,
   actions,
   libraries,
-  label,
+  link_label,
   link,
   form_label,
   form_link,
@@ -23,8 +23,8 @@ const CardActions = ({
   // SERVERS ---------------------------------------------
   const ServeReadMoreAction = () => {
     if (!link) return null;
-    let GO_TO_LABEL = "Read More";
-    if (label) GO_TO_LABEL = <Html2React html={label} />;
+    let GO_TO_LABEL = "More";
+    if (link_label) GO_TO_LABEL = <Html2React html={link_label} />;
 
     return (
       <div onClick={() => setGoToAction({ path: link, actions })}>

@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/colors";
 
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
-import Loading from "./loading";
+import { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";
+import MapsComponent from "./mapsComponent";
 import SearchIcon from "@mui/icons-material/Search";
 import { Form } from "react-bootstrap";
 // CONTEXT ----------------------------------------------------------------
@@ -15,12 +16,10 @@ const SearchDermatologists = ({
   libraries,
   title,
   filterOne,
-  filterTwo,
-  filterThree,
   disableMargin,
 }) => {
   const dispatch = useAppDispatch();
-  const { filter } = useAppState();
+  const [filter, setFilter] = useState(null);
 
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
@@ -29,27 +28,36 @@ const SearchDermatologists = ({
   const TITLE = title || "Search For Dermatologists";
 
   useEffect(() => {
-    console.log("filter", filter);
+    console.log(filter);
   }, [filter]);
 
+  useEffect(() => {
+    setFilter(null); // handles search filter reset on component load
+  }, []);
+
   // HELPERS ----------------------------------------------------------------
+  const handleGetCoordinates = () => {
+    // if (!filter) return null;
+
+    geocodeByAddress("London")
+      .then((results) => getLatLng(results[0]))
+      .then(({ lat, lng }) =>
+        console.log("Successfully got latitude and longitude", { lat, lng })
+      );
+  };
+
   const handleSearchSubmit = () => {
-    const searchInput = document.querySelector("#searchInput").value;
     const searchNameInput = document.querySelector("#searchNameInput").value;
 
     const serveFilterOne = document.querySelector("#serveFilterOne").value;
 
     const filter = {
-      searchInput,
       searchNameInput,
       serveFilterOne,
     };
-    setSearchFilterAction({ dispatch, filter });
+    setFilter(filter);
+    handleGetCoordinates();
   };
-
-  useEffect(() => {
-    setSearchFilterAction({ dispatch, filter: null }); // handles search filter reset on component load
-  }, []);
 
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
@@ -64,7 +72,7 @@ const SearchDermatologists = ({
   };
 
   const ServeFilters = () => {
-    // if (!filterOne && !filterTwo && !filterThree) return null; // props for filter options
+    // if (!filterOne) return null; // props for filter options
 
     const ServeTitle = () => {
       return (
@@ -109,50 +117,104 @@ const SearchDermatologists = ({
   };
 
   const ServeSearchContainer = () => {
-    return (
-      <div className="flex-row">
-        <div
-          className="flex"
-          style={{
-            flex: 2,
-            marginRight: `2em`,
-            padding: `0.75em 0`,
-            position: "relative",
-          }}
-        >
-          <input
-            id="searchInput"
-            type="text"
-            className="form-control"
-            placeholder="Enter your search..."
-            style={styles.input}
-          />
-          <span
-            className="input-group-text"
+    const ServeSearchName = () => {
+      return (
+        <div className="flex-row">
+          <div
+            className="flex"
             style={{
-              position: "absolute",
-              right: 0,
-              border: "none",
-              background: "transparent",
-              color: colors.darkSilver,
+              flex: 2,
+              marginRight: `2em`,
+              padding: `0.75em 0`,
+              position: "relative",
             }}
           >
-            <SearchIcon />
-          </span>
+            <input
+              id="searchNameInput"
+              type="text"
+              className="form-control"
+              placeholder="Enter your search..."
+              style={styles.input}
+            />
+            <span
+              className="input-group-text"
+              style={{
+                position: "absolute",
+                right: 0,
+                border: "none",
+                background: "transparent",
+                color: colors.darkSilver,
+              }}
+            >
+              <SearchIcon />
+            </span>
+          </div>
+          <div className="flex" style={{ alignItems: "center" }}>
+            <button
+              type="submit"
+              className="btn"
+              style={{
+                backgroundColor: colors.primary,
+                color: colors.white,
+                padding: `0.5em`,
+              }}
+              onClick={handleSearchSubmit}
+            >
+              Search
+            </button>
+          </div>
         </div>
-        <div className="flex" style={{ alignItems: "center" }}>
-          <button
-            type="submit"
-            className="btn"
-            style={{
-              backgroundColor: colors.primary,
-              color: colors.white,
-              padding: `0.5em`,
-            }}
-            onClick={handleSearchSubmit}
-          >
-            Search
-          </button>
+      );
+    };
+
+    return (
+      <div>
+        <div className="flex-row">
+          <ServeSearchName />
+
+          <div className="flex">
+            <div
+              className="flex"
+              style={{
+                flex: 2,
+                marginRight: `2em`,
+              }}
+            >
+              <div style={{ width: "100%" }}>
+                <GooglePlacesAutocomplete
+                  apiKey="AIzaSyB1HY1FKYgS-Tdiq0uG0J6T-c3_CPed5mo"
+                  placeholder="Search"
+                  autocompletionRequest={{
+                    componentRestrictions: {
+                      country: ["uk"],
+                    },
+                  }}
+                  selectProps={{
+                    // defaultInputValue: 'Default input value',
+                    isClearable: true,
+                    onChange: (e) => {
+                      console.log(e);
+                    },
+                  }}
+                  style={{ backgroundColor: "pink" }}
+                />
+              </div>
+            </div>
+            <div className="flex" style={{ alignItems: "center" }}>
+              <button
+                type="submit"
+                className="btn"
+                style={{
+                  backgroundColor: colors.primary,
+                  color: colors.white,
+                  padding: `0.5em`,
+                }}
+                onClick={handleSearchSubmit}
+              >
+                Search
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -177,32 +239,9 @@ const SearchDermatologists = ({
           }}
         >
           <ServeTitle />
-          <ServeSearchContainer />
+          {/* <ServeSearchContainer /> */}
           <ServeFilters />
-
-          <div>
-            <GooglePlacesAutocomplete
-              apiKey="AIzaSyB1HY1FKYgS-Tdiq0uG0J6T-c3_CPed5mo"
-              autocompletionRequest={{
-                componentRestrictions: {
-                  country: ["uk"],
-                },
-              }}
-              selectProps={{
-                // defaultInputValue: 'Default input value',
-                isClearable: true,
-                onChange: (e) => {
-                  // let placeId = "";
-                  // if (o) {
-                  //   placeId = o["value"]["place_id"];
-                  // }
-                  // setAddress(o);
-                  // formik.setFieldValue("googlePlaceId", placeId);
-                  console.log(e);
-                },
-              }}
-            />
-          </div>
+          <MapsComponent />
         </div>
       </div>
     </div>

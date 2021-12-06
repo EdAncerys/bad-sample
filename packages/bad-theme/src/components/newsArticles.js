@@ -37,7 +37,7 @@ const NewsArticles = ({ state, actions, block }) => {
                 title={title}
                 body={body}
                 colour={colour}
-                label={label}
+                link_label={label}
                 link={link.url}
                 shadow // optional param
               />

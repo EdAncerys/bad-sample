@@ -26,32 +26,37 @@ const Banner = ({ state, actions, libraries, block }) => {
       if (label) LABEL = label;
 
       return (
-        <div>
-          <button
-            className="btn btn-outline-light flex-center-row"
-            style={{
-              color: THEME_COLOR,
-              borderColor: THEME_COLOR,
-              textTransform: "uppercase",
-              alignItems: "center",
-              borderRadius: 5,
-              padding: `0.5em 2em`,
-            }}
-            onClick={() => setGoToAction({ path: link.url, actions })}
-          >
-            <div className="flex">
-              <Html2React html={LABEL} />
-            </div>
-            <div>
-              <KeyboardArrowRightIcon
-                style={{
-                  fill: THEME_COLOR,
-                  borderRadius: "50%",
-                  padding: 0,
-                }}
-              />
-            </div>
-          </button>
+        <div
+          className="flex"
+          style={{ alignItems: "flex-end", justifyContent: "flex-end" }}
+        >
+          <div>
+            <button
+              className="btn btn-outline-light flex-center-row"
+              style={{
+                color: THEME_COLOR,
+                borderColor: THEME_COLOR,
+                textTransform: "uppercase",
+                alignItems: "center",
+                borderRadius: 5,
+                padding: `0.5em 2em`,
+              }}
+              onClick={() => setGoToAction({ path: link.url, actions })}
+            >
+              <div className="flex">
+                <Html2React html={LABEL} />
+              </div>
+              <div>
+                <KeyboardArrowRightIcon
+                  style={{
+                    fill: THEME_COLOR,
+                    borderRadius: "50%",
+                    padding: 0,
+                  }}
+                />
+              </div>
+            </button>
+          </div>
         </div>
       );
     };
@@ -69,7 +74,7 @@ const Banner = ({ state, actions, libraries, block }) => {
           padding: `${marginVertical}px ${marginHorizontal}px`,
         }}
       >
-        <div className="flex BAD-banner">
+        <div className="flex BAD-banner" style={{ flex: 3 }}>
           <div
             className="card-text"
             style={{
@@ -129,6 +134,7 @@ const Banner = ({ state, actions, libraries, block }) => {
         position: "relative",
         height: BANNER_HEIGHT,
         margin: `${marginVertical}px 0`,
+        overflow: "hidden",
       }}
     >
       <ServeCardImage />

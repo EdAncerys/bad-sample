@@ -7,6 +7,7 @@ import globalCSS from "../../css/main.css";
 import carousel from "../../css/carousel.css";
 import accordion from "../../css/accordion.css";
 import nav from "../../css/nav.css";
+import input from "../../css/input.css";
 
 // COMPONENTS -------------------------------------------------------------
 import HTMLHead from "./htmlHead";
@@ -21,7 +22,7 @@ const Header = ({ state, actions }) => {
     <>
       <Global
         styles={css`
-          ${bootStrapCSS}, ${globalCSS}, ${carousel}, ${accordion}, ${nav}
+          ${bootStrapCSS}, ${globalCSS}, ${carousel}, ${accordion}, ${nav}, ${input}
         `}
       />
       <HTMLHead />

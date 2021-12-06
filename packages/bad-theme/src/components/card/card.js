@@ -21,7 +21,7 @@ const Card = ({
   cardTitle,
   title,
   body,
-  label,
+  link_label,
   link,
   downloadFile,
   gallery,
@@ -132,7 +132,7 @@ const Card = ({
         <VenueInfo venueInfo={venueInfo} />
         <VideoGalleryInfo videoGalleryInfo={videoGalleryInfo} />
         <CardActions
-          label={label}
+          link_label={link_label}
           link={link}
           form_label={form_label}
           form_link={form_link}
