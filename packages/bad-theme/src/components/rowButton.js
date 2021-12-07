@@ -42,7 +42,7 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
           className="flex-row pointer"
           onClick={() => {
             if (onClick) {
-              setGoToAction({ onClick });
+              onClick();
             } else {
               if (!link) return null;
               setGoToAction({ path: link.url, actions });

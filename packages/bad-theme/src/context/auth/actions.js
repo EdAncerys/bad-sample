@@ -1,12 +1,11 @@
-// SET CONTEXT ---------------------------------------------------
-export const setLoginAction = async ({ dispatch, user }) => {
-  console.log("setLoginAction triggered"); //debug
-  dispatch({ type: "SET_LOGIN", payload: user });
-};
+import { setLoginModalAction } from "../index";
 
-export const setLoadingAction = async ({ dispatch, isLoading }) => {
-  console.log("setLoadingAction triggered"); //debug
-  dispatch({ type: "SET_LOADING", payload: isLoading });
+// SET CONTEXT ---------------------------------------------------
+export const setLoginAction = ({ dispatch, loginAction }) => {
+  console.log("setLoginAction triggered"); //debug
+  dispatch({ type: "SET_LOGIN_ACTION", payload: true });
+
+  setLoginModalAction({ dispatch, loginModalAction: false });
 };
 
 // const handleUserLogin = async ({}) => {

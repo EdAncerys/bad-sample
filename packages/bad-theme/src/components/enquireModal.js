@@ -3,8 +3,16 @@ import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 
 import { colors } from "../config/colors";
+// CONTEXT ----------------------------------------------------------------
+import {
+  useAppDispatch,
+  useAppState,
+  setCreateAccountModalAction,
+  setEnquireAction,
+} from "../context";
 
 const EnquireModal = ({ state, actions }) => {
+  const dispatch = useAppDispatch();
   const data = state.source.get(state.router.link);
   const enquireAction = state.context.enquireAction;
 
@@ -51,7 +59,12 @@ const EnquireModal = ({ state, actions }) => {
                 <label className="form-check-label">
                   <span
                     style={styles.TC}
-                    onClick={actions.context.setCreateAccountAction}
+                    onClick={() =>
+                      setCreateAccountModalAction({
+                        dispatch,
+                        createAccountAction: true,
+                      })
+                    }
                   >
                     I agree
                   </span>{" "}
@@ -86,7 +99,12 @@ const EnquireModal = ({ state, actions }) => {
             type="submit"
             className="btn"
             style={{ backgroundColor: colors.primary, color: colors.white }}
-            onClick={actions.context.setEnquireAction}
+            onClick={() =>
+              setEnquireAction({
+                dispatch,
+                createAccountAction: true,
+              })
+            }
           >
             Send Enquiry
           </button>

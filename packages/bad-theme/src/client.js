@@ -5,14 +5,14 @@ import iframe from "@frontity/html2react/processors/iframe";
 import link from "@frontity/html2react/processors/link";
 import menuHandler from "./components/handlers/menu-handler";
 
-import {
-  setLoginAction,
-  setCreateAccountAction,
-  setActionFlipper,
-  setEnquireAction,
-  setIsLoggedInAction,
-  setActiveDropDownRef,
-} from "./context/actions/context";
+// import {
+//   setLoginModalAction,
+//   setCreateAccountModalAction,
+//   setActionFlipper,
+//   setEnquireAction,
+//   setIsLoggedInAction,
+//   setActiveDropDownRef,
+// } from "./context/actions/navigation";
 
 const BADTheme = {
   name: "bad-theme",
@@ -34,7 +34,7 @@ const BADTheme = {
     },
     context: {
       isLoggedIn: false,
-      loginAction: true,
+      loginModalAction: false,
       createAccountAction: false,
       enquireAction: false,
     },
@@ -70,13 +70,13 @@ const BADTheme = {
       },
       setActiveDropDownRef: ({ state }) => setActiveDropDownRef({ state }),
     },
-    context: {
-      setLoginAction: ({ state }) => setLoginAction({ state }),
-      setCreateAccountAction: ({ state }) => setCreateAccountAction({ state }),
-      setActionFlipper: ({ state }) => setActionFlipper({ state }),
-      setEnquireAction: ({ state }) => setEnquireAction({ state }),
-      setIsLoggedInAction: ({ state }) => setIsLoggedInAction({ state }),
-    },
+    // context: {
+    //   setLoginModalAction: ({ state }) => setLoginModalAction({ state }),
+    //   setCreateAccountModalAction: ({ state }) => setCreateAccountModalAction({ state }),
+    //   setActionFlipper: ({ state }) => setActionFlipper({ state }),
+    //   setEnquireAction: ({ state }) => setEnquireAction({ state }),
+    //   setIsLoggedInAction: ({ state }) => setIsLoggedInAction({ state }),
+    // },
   },
   libraries: {
     html2react: {

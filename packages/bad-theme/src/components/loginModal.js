@@ -4,10 +4,20 @@ import { Modal } from "react-bootstrap";
 
 import { colors } from "../config/colors";
 import RowButton from "./rowButton";
+// CONTEXT ----------------------------------------------------------------
+import {
+  useAppDispatch,
+  useAppState,
+  setLoginModalAction,
+  setCreateAccountModalAction,
+  setLoginAction,
+} from "../context";
 
 const LoginModal = ({ state, actions }) => {
+  const dispatch = useAppDispatch();
+  const { loginModalAction } = useAppState();
+
   const data = state.source.get(state.router.link);
-  const loginAction = state.context.loginAction;
 
   // SERVERS --------------------------------------------------
   const ServeModalContent = () => {
@@ -33,7 +43,12 @@ const LoginModal = ({ state, actions }) => {
             </div>
             <div
               type="submit"
-              onClick={actions.context.setLoginAction}
+              onClick={() =>
+                setLoginModalAction({
+                  dispatch,
+                  loginModalAction: !loginModalAction,
+                })
+              }
               style={{ textDecoration: "underline", textUnderlineOffset: 5 }}
             >
               Forgotten Password?
@@ -62,7 +77,13 @@ const LoginModal = ({ state, actions }) => {
               title: "Not yet registered? Register here",
               // link: { url: "hello" },
             }}
-            onClick={actions.context.setActionFlipper}
+            onClick={() => {
+              setCreateAccountModalAction({
+                dispatch,
+                createAccountAction: true,
+              });
+              setLoginModalAction({ dispatch, loginModalAction: false });
+            }}
             buttonWidth="60%"
           />
         </div>
@@ -75,7 +96,12 @@ const LoginModal = ({ state, actions }) => {
           <button
             type="submit"
             className="btn btn-outline-secondary"
-            onClick={actions.context.setLoginAction}
+            onClick={() =>
+              setLoginModalAction({
+                dispatch,
+                loginModalAction: !loginModalAction,
+              })
+            }
           >
             Exit
           </button>
@@ -84,7 +110,7 @@ const LoginModal = ({ state, actions }) => {
             type="submit"
             className="btn"
             style={{ backgroundColor: colors.primary, color: colors.white }}
-            onClick={actions.context.setIsLoggedInAction}
+            onClick={() => setLoginAction({ dispatch, loginAction: true })}
           >
             Login
           </button>
@@ -131,7 +157,7 @@ const LoginModal = ({ state, actions }) => {
   // RETURN ---------------------------------------------------
   return (
     <div>
-      <Modal show={loginAction} size="xl" centered>
+      <Modal show={loginModalAction} size="xl" centered>
         <div className="flex-row">
           <ServeModalInfo />
           <ServeModalContent />

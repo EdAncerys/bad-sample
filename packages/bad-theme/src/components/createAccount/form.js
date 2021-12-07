@@ -2,8 +2,12 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/colors";
+// CONTEXT ----------------------------------------------------------------
+import { useAppDispatch, setCreateAccountModalAction } from "../../context";
 
 const Form = ({ state, actions }) => {
+  const dispatch = useAppDispatch();
+
   // RETURN ---------------------------------------------
   return (
     <form>
@@ -59,7 +63,12 @@ const Form = ({ state, actions }) => {
               I Agree with the{" "}
               <span
                 style={styles.TC}
-                onClick={actions.context.setCreateAccountAction}
+                onClick={() =>
+                  setCreateAccountModalAction({
+                    dispatch,
+                    createAccountAction: true,
+                  })
+                }
               >
                 Terms & Conditions
               </span>
@@ -81,7 +90,12 @@ const Form = ({ state, actions }) => {
               I Agree with the{" "}
               <span
                 style={styles.TC}
-                onClick={actions.context.setCreateAccountAction}
+                onClick={() =>
+                  setCreateAccountModalAction({
+                    dispatch,
+                    createAccountAction: true,
+                  })
+                }
               >
                 Marketing
               </span>

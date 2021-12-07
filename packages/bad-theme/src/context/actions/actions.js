@@ -1,6 +1,5 @@
-export const setGoToAction = async ({ path, actions, onClick }) => {
+export const setGoToAction = async ({ path, actions }) => {
   console.log("setGoToAction triggered"); //debug
-  if (onClick) return onClick();
   if (!path || !actions) return null;
 
   let isExternalLink = true;

@@ -1,7 +1,12 @@
 import { AppProvider, useAppDispatch, useAppState } from "./context";
-import { setLoadingAction, setLoginAction } from "./auth/actions";
 import { setGoToAction } from "./actions/actions";
 import { muiQuery } from "./mediaQueryContext";
+import {
+  setLoginModalAction,
+  setCreateAccountModalAction,
+  setEnquireAction,
+} from "./actions/navigation";
+import { setLoginAction } from "./auth/actions";
 
 export {
   AppProvider,
@@ -9,6 +14,8 @@ export {
   useAppState,
   muiQuery,
   setGoToAction,
-  setLoadingAction,
+  setLoginModalAction,
+  setCreateAccountModalAction,
+  setEnquireAction,
   setLoginAction,
 };

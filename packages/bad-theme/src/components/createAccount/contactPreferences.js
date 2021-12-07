@@ -3,7 +3,8 @@ import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 
 import { colors } from "../../config/colors";
-import { setCreateAccountAction } from "../../context/actions/context";
+// CONTEXT ----------------------------------------------------------------
+import { useAppDispatch, setCreateAccountModalAction } from "../../context";
 
 const ContactPreferences = ({
   state,
@@ -13,6 +14,7 @@ const ContactPreferences = ({
   setFormSubmitted,
 }) => {
   if (!formComplete) return null;
+  const dispatch = useAppDispatch();
 
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
@@ -36,7 +38,10 @@ const ContactPreferences = ({
 
             // resetting the state & closing the module with time out
             setTimeout(() => {
-              setCreateAccountAction({ state });
+              setCreateAccountModalAction({
+                dispatch,
+                createAccountAction: true,
+              });
             }, 2000);
             setTimeout(() => {
               setFormSubmitted(false);
@@ -141,7 +146,12 @@ const ContactPreferences = ({
                 I have read the{" "}
                 <span
                   style={styles.TC}
-                  onClick={actions.context.setCreateAccountAction}
+                  onClick={() =>
+                    setCreateAccountModalAction({
+                      dispatch,
+                      createAccountAction: true,
+                    })
+                  }
                 >
                   BAD Constitution
                 </span>
@@ -163,7 +173,12 @@ const ContactPreferences = ({
               <label className="form-check-label">
                 <span
                   style={styles.TC}
-                  onClick={actions.context.setCreateAccountAction}
+                  onClick={() =>
+                    setCreateAccountModalAction({
+                      dispatch,
+                      createAccountAction: true,
+                    })
+                  }
                 >
                   I agree - GDPR
                 </span>{" "}

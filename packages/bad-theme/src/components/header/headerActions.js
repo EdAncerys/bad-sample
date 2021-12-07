@@ -6,20 +6,17 @@ import { colors } from "../../config/colors";
 import BADLogo from "../../img/svg/badLogoHeader.svg";
 import SearchIcon from "@mui/icons-material/Search";
 import QuickLinksDropDown from "./quickLinksDropDown";
+// CONTEXT ----------------------------------------------------------------
+import {
+  useAppDispatch,
+  useAppState,
+  setLoginModalAction,
+  setGoToAction,
+} from "../../context";
 
 const HeaderActions = ({ state, actions }) => {
-  const isLoggedIn = state.context.isLoggedIn;
-  console.log("isLoggedIn", isLoggedIn);
-
-  // HELPERS ----------------------------------------------------
-  const handleGoToLink = ({ path }) => {
-    actions.router.set(path);
-  };
-
-  const handleLoginAction = () => {
-    actions.context.setActionFlipper;
-    console.log("hello", state.theme.GOOGLE_API_KEY);
-  };
+  const dispatch = useAppDispatch();
+  const { user } = useAppState();
 
   // SERVERS ----------------------------------------------------
   const ServeLogoContainer = () => {
@@ -27,7 +24,7 @@ const HeaderActions = ({ state, actions }) => {
       <div className="flex">
         <div
           style={{ width: 385, height: 90, cursor: "pointer" }}
-          onClick={() => handleGoToLink({ path: "/" })}
+          onClick={() => setGoToAction({ path: `/`, actions })}
         >
           <Image src={BADLogo} className="d-block h-100" alt="BAD Logo" />
         </div>
@@ -53,13 +50,15 @@ const HeaderActions = ({ state, actions }) => {
   };
 
   const ServeLoginAction = () => {
-    if (isLoggedIn) return null;
+    if (user) return null;
 
     return (
       <div>
         <button
           className="btn shadow-none m-2"
-          onClick={handleLoginAction}
+          onClick={() =>
+            setLoginModalAction({ dispatch, loginModalAction: true })
+          }
           style={styles.loginBtn}
         >
           Login
@@ -69,13 +68,18 @@ const HeaderActions = ({ state, actions }) => {
   };
 
   const ServeDashboardAction = () => {
-    if (!isLoggedIn) return null;
+    if (!user) return null;
 
     return (
       <div>
         <button
           className="btn shadow-none m-2"
-          onClick={() => handleGoToLink({ path: "/dashboard" })}
+          onClick={() =>
+            setGoToAction({
+              path: `https://badadmin.skylarkdev.co/membership`,
+              actions,
+            })
+          }
           style={styles.loginBtn}
         >
           Dashboard

@@ -6,7 +6,7 @@ import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { setGoToAction } from "../../context";
 
-import { setActiveDropDownRef } from "../../context/actions/context";
+import { setActiveDropDownRef } from "../../context/actions/navigation";
 import NavBarDropDownContent from "./navDropDownContent";
 import ChildMenu from "./childMenu";
 

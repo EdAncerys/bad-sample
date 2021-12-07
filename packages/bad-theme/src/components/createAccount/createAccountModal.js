@@ -6,13 +6,20 @@ import { colors } from "../../config/colors";
 import Form from "./form";
 import ContactPreferences from "./contactPreferences";
 import FormSubmitted from "./formSubmitted";
+// CONTEXT ----------------------------------------------------------------
+import {
+  useAppDispatch,
+  useAppState,
+  setLoginModalAction,
+  setCreateAccountModalAction,
+} from "../../context";
 
 const loginModal = ({ state, actions }) => {
+  const dispatch = useAppDispatch();
+  const { createAccountAction } = useAppState();
   const data = state.source.get(state.router.link);
   const [formComplete, setFormComplete] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
-
-  const createAccountAction = state.context.createAccountAction;
 
   // SERVERS --------------------------------------------------
   const ServeModalContent = () => {
@@ -37,7 +44,16 @@ const loginModal = ({ state, actions }) => {
             <label
               className="form-check-label"
               style={{ ...styles.TC, color: colors.blue }}
-              onClick={actions.context.setActionFlipper}
+              onClick={() => {
+                setCreateAccountModalAction({
+                  dispatch,
+                  createAccountAction: false,
+                });
+                setLoginModalAction({
+                  dispatch,
+                  loginModalAction: true,
+                });
+              }}
             >
               Already a member? Login
             </label>
@@ -52,7 +68,12 @@ const loginModal = ({ state, actions }) => {
           <button
             type="submit"
             className="btn btn-outline-secondary"
-            onClick={actions.context.setCreateAccountAction}
+            onClick={() =>
+              setCreateAccountModalAction({
+                dispatch,
+                createAccountAction: false,
+              })
+            }
           >
             Back
           </button>
@@ -61,7 +82,7 @@ const loginModal = ({ state, actions }) => {
             type="submit"
             className="btn"
             style={{ backgroundColor: colors.primary, color: colors.white }}
-            onClick={() => setFormComplete(true)}
+            // onClick={() => setFormComplete(true)}
           >
             Confirm
           </button>

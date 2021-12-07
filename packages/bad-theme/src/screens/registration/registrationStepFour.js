@@ -353,7 +353,7 @@ const RegistrationStepFour = ({ state, actions }) => {
               I have read the{" "}
               <span
                 style={styles.TC}
-                onClick={actions.context.setCreateAccountAction}
+                onClick={actions.context.setCreateAccountModalAction}
               >
                 BAD Constitution
                 <SMF />
@@ -377,7 +377,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             <label className="form-check-label">
               <span
                 style={styles.TC}
-                onClick={actions.context.setCreateAccountAction}
+                onClick={actions.context.setCreateAccountModalAction}
               >
                 I agree - Privacy Notice
                 <SMF />
