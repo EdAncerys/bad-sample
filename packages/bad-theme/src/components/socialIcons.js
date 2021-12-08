@@ -10,7 +10,7 @@ import Instagram from "../img/svg/instagramColour.svg";
 const SocialIcons = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  if (!block.social_links) return null;
+  if (!block) return null;
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -57,16 +57,11 @@ const SocialIcons = ({ state, actions, libraries, block }) => {
     );
   };
 
-  // RETURN ---------------------------------------------------
-  return (
-    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: COLUMNS_NUMBER,
-          gap: 20,
-        }}
-      >
+  const ServeSocialContent = () => {
+    if (!social_links) return null;
+
+    return (
+      <div>
         {social_links.map((block, key) => {
           return (
             <div key={key}>
@@ -81,6 +76,21 @@ const SocialIcons = ({ state, actions, libraries, block }) => {
             </div>
           );
         })}
+      </div>
+    );
+  };
+
+  // RETURN ---------------------------------------------------
+  return (
+    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: COLUMNS_NUMBER,
+          gap: 20,
+        }}
+      >
+        <ServeSocialContent />
       </div>
     </div>
   );
