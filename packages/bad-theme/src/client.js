@@ -5,15 +5,6 @@ import iframe from "@frontity/html2react/processors/iframe";
 import link from "@frontity/html2react/processors/link";
 import menuHandler from "./components/handlers/menu-handler";
 
-// import {
-//   setLoginModalAction,
-//   setCreateAccountModalAction,
-//   setActionFlipper,
-//   setEnquireAction,
-//   setIsLoggedInAction,
-//   setActiveDropDownRef,
-// } from "./context/actions/navigation";
-
 const BADTheme = {
   name: "bad-theme",
   roots: {
@@ -32,12 +23,7 @@ const BADTheme = {
       marginHorizontal: 100, // px units
       marginVertical: 40, // px units
     },
-    context: {
-      isLoggedIn: false,
-      loginModalAction: false,
-      createAccountAction: false,
-      enquireAction: false,
-    },
+    context: {},
   },
   actions: {
     theme: {
@@ -70,13 +56,6 @@ const BADTheme = {
       },
       setActiveDropDownRef: ({ state }) => setActiveDropDownRef({ state }),
     },
-    // context: {
-    //   setLoginModalAction: ({ state }) => setLoginModalAction({ state }),
-    //   setCreateAccountModalAction: ({ state }) => setCreateAccountModalAction({ state }),
-    //   setActionFlipper: ({ state }) => setActionFlipper({ state }),
-    //   setEnquireAction: ({ state }) => setEnquireAction({ state }),
-    //   setIsLoggedInAction: ({ state }) => setIsLoggedInAction({ state }),
-    // },
   },
   libraries: {
     html2react: {

@@ -42,12 +42,17 @@ const settings = {
               endpoint: "pils",
               archive: "/pils",
             },
+            {
+              type: "events",
+              endpoint: "events",
+              archive: "/events",
+            },
           ],
           taxonomies: [
             {
-              taxonomy: "record_cat",
-              endpoint: "record_cat",
-              postTypeEndpoint: "record",
+              taxonomy: "event_type", // taxonomy slug
+              endpoint: "events", // REST API endpoint
+              postTypeEndpoint: "events", // endpoint from which posts from this taxonomy are fetched
             },
           ],
         },

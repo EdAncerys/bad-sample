@@ -1,0 +1,67 @@
+/**
+   <span
+      className="popup"
+      citations="Description..."
+    >
+      Anna IT Solutions
+    </span>
+ */
+
+.popup {
+  position: relative;
+  color: #3882cd;
+  font-size: 12px;
+  padding-left: 5px;
+  top: -5px;
+}
+.popup:hover {
+  text-decoration: none;
+  color: #1f335e;
+  cursor: pointer;
+}
+.popup:before {
+  content: attr(citations);
+  visibility: hidden;
+  opacity: 0;
+}
+
+.popup:after {
+  content: attr(citations);
+  display: block;
+  position: absolute;
+  z-index: 99;
+  /* top: -6em; */
+  left: 1em;
+  /* height: 50px; */
+  /* min-width: 300px; */
+  width: 300px;
+  text-align: start;
+
+  color: #707070;
+  font-size: 16px;
+  padding: 5px 10px;
+  border-radius: 10px;
+  background: #f0f1f4;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  display: none;
+}
+.popup:before {
+  z-index: 1000;
+  position: absolute;
+  content: "";
+  top: 15px;
+  left: 0px;
+  border-right: 7px transparent solid;
+  border-left: 7px transparent solid;
+  display: none;
+}
+.popup:hover {
+  color: #171717;
+  cursor: pointer;
+}
+.popup:hover:after {
+  display: block;
+}
+.popup:hover:before {
+  display: block;
+}

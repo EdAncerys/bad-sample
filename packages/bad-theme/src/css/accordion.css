@@ -16,3 +16,8 @@
 [type="button"]:not(:disabled) {
   box-shadow: none;
 }
+
+.popup {
+  position: relative;
+  color: #1f335e;
+}
