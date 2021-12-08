@@ -11,6 +11,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
   const [isReady, seIsReady] = useState(false);
   const data = state.source.get(state.router.link);
   const { totalPages, page, next } = data; // check if data have multiple pages
+  // console.log("pageData ", data); // debug
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {

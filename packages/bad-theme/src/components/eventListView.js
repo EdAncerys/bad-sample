@@ -5,7 +5,7 @@ import Image from "@frontity/components/image";
 import Loading from "./loading";
 import { colors } from "../config/colors";
 
-const PromoBlock = ({ state, actions, libraries, block, reverse }) => {
+const EventListView = ({ state, actions, libraries, block, reverse }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
 
@@ -16,7 +16,7 @@ const PromoBlock = ({ state, actions, libraries, block, reverse }) => {
   // RETURN ---------------------------------------------------
   return (
     <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
-      <div style={{ minHeight: `${BANNER_HEIGHT / 2}` }}>
+      <div className="pink" style={{ minHeight: `${BANNER_HEIGHT / 2}` }}>
         {block.card.map((block, key) => {
           const {
             body,
@@ -150,4 +150,4 @@ const styles = {
   },
 };
 
-export default connect(PromoBlock);
+export default connect(EventListView);
