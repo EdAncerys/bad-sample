@@ -4,133 +4,204 @@ import Image from "@frontity/components/image";
 
 import Loading from "./loading";
 import { colors } from "../config/colors";
+import { setGoToAction } from "../context";
 
 const EventListView = ({ state, actions, libraries, block, reverse }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
 
+  console.log("block data", block);
+
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  // RETURN ---------------------------------------------------
-  return (
-    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
-      <div className="pink" style={{ minHeight: `${BANNER_HEIGHT / 2}` }}>
-        {block.card.map((block, key) => {
-          const {
-            body,
-            condition,
-            date,
-            image,
-            information,
-            procedure,
-            service,
-            title,
-          } = block;
+  const {
+    date_time,
+    email,
+    event_type,
+    image,
+    layout,
+    organizer,
+    registration_page_link,
+    scientific_committee,
+    summary,
+    venue,
+    title,
+    filter_one,
+    filter_two,
+    filter_three,
+  } = block.acf;
 
-          if (!title && !image && !body) return null;
+  // SERVERS ----------------------------------------------------------------
+  const ServeCardImage = () => {
+    if (!image) return null;
+    const alt = <Html2React html={title} /> || "BAD";
 
-          // SERVERS ----------------------------------------------------------------
-          const ServeCardImage = () => {
-            if (!image.url) return null;
-            const alt = <Html2React html={title} /> || "BAD";
+    return (
+      <div style={{ width: "100%", height: "100%" }}>
+        <Image
+          src={image}
+          alt={alt}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+          }}
+        />
+      </div>
+    );
+  };
 
-            return (
-              <div style={{ width: "100%", height: "100%" }}>
-                <Image
-                  src={image.url}
-                  alt={alt}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                  }}
-                />
-              </div>
-            );
-          };
+  const ServeCardContent = () => {
+    // SERVERS ---------------------------------------------
+    const ServeDate = () => {
+      if (!date_time) return null;
 
-          const ServeCardContent = () => {
-            // SERVERS ---------------------------------------------
-            const ServeDate = () => {
-              if (!date) return null;
+      return (
+        <div>
+          <div className="flex">
+            {date_time.map((block, key) => {
+              const { date, end_time, start_time } = block;
 
               return (
-                <div style={{ fontSize: 12 }}>
+                <div key={key} style={{ fontSize: 12, paddingRight: `1em` }}>
                   <Html2React html={date} />
                 </div>
               );
-            };
+            })}
+          </div>
+        </div>
+      );
+    };
 
-            const ServeTitle = () => {
-              if (!title) return null;
+    const ServeTitle = () => {
+      if (!title) return null;
 
-              return (
-                <div
-                  style={{ fontSize: 22, fontWeight: "bold", padding: `1em 0` }}
-                >
-                  <Html2React html={title} />
-                </div>
-              );
-            };
+      return (
+        <div style={{ fontSize: 22, fontWeight: "bold", padding: `1em 0` }}>
+          <Html2React html={title} />
+        </div>
+      );
+    };
 
-            const ServeInformation = () => {
-              if (!information) return null;
+    const ServeInformation = () => {
+      const ServeEventType = () => {
+        if (!event_type) return null;
 
-              return (
-                <div style={{ fontSize: 16, color: colors.blue }}>
-                  <Html2React html={information} />
-                </div>
-              );
-            };
+        return (
+          <div
+            style={{ cursor: "pointer" }}
+            onClick={() => setGoToAction({ path: block.link, actions })}
+          >
+            <Html2React html={event_type} />
+          </div>
+        );
+      };
 
-            const ServeBody = () => {
-              if (!body) return null;
+      const ServeEventOrganizer = () => {
+        if (!organizer) return null;
+        return (
+          <div>
+            <Html2React html={organizer} />
+          </div>
+        );
+      };
 
-              return (
-                <div style={{ fontSize: 16, padding: `1em 0 0` }}>
-                  <Html2React html={body} />
-                </div>
-              );
-            };
+      const ServeEventCommittee = () => {
+        if (!scientific_committee) return null;
+        return (
+          <div>
+            <Html2React html={scientific_committee} />
+          </div>
+        );
+      };
 
-            const ServeActions = () => {
-              if (!condition && !procedure && !service) return null;
+      return (
+        <div className="flex" style={{ fontSize: 16, color: colors.blue }}>
+          <ServeEventType />
+          {organizer && <div style={styles.divider} />}
+          <ServeEventOrganizer />
+          {scientific_committee && <div style={styles.divider} />}
+          <ServeEventCommittee />
+        </div>
+      );
+    };
 
-              return (
-                <div className="flex-row" style={{ flexWrap: "wrap" }}>
-                  <div style={styles.action}>
-                    <Html2React html={condition} />
-                  </div>
-                  <div style={styles.action}>
-                    <Html2React html={procedure} />
-                  </div>
-                  <div style={styles.action}>
-                    <Html2React html={service} />
-                  </div>
-                </div>
-              );
-            };
+    const ServeSummary = () => {
+      if (!summary) return null;
 
-            return (
-              <div className="flex-col" style={{ padding: `1em 0` }}>
-                <ServeDate />
-                <ServeTitle />
-                <ServeInformation />
-                <ServeBody />
-                <ServeActions />
-              </div>
-            );
-          };
+      return (
+        <div style={{ fontSize: 16, padding: `1em 0 0` }}>
+          <Html2React html={summary} />
+        </div>
+      );
+    };
 
-          return (
-            <div key={key} style={styles.container}>
-              <ServeCardContent />
-              <ServeCardImage />
-            </div>
-          );
-        })}
+    const ServeFilters = () => {
+      const ServeFilterOne = () => {
+        if (!filter_one) return null;
+
+        return (
+          <div style={styles.action}>
+            <Html2React html={filter_one[0].post_title} />
+          </div>
+        );
+      };
+
+      const ServeFilterTwo = () => {
+        if (!filter_two) return null;
+
+        return (
+          <div style={styles.action}>
+            <Html2React html={filter_two[0].post_title} />
+          </div>
+        );
+      };
+
+      const ServeFilterThree = () => {
+        if (!filter_three) return null;
+
+        return (
+          <div style={styles.action}>
+            <Html2React html={filter_three[0].post_title} />
+          </div>
+        );
+      };
+
+      return (
+        <div className="flex-row" style={{ flexWrap: "wrap" }}>
+          <ServeFilterOne />
+          <ServeFilterTwo />
+          <ServeFilterThree />
+        </div>
+      );
+    };
+
+    return (
+      <div className="flex-col" style={{ padding: `2em 4em` }}>
+        <ServeDate />
+        <ServeTitle />
+        <ServeInformation />
+        <ServeSummary />
+        <ServeFilters />
+      </div>
+    );
+  };
+
+  // RETURN ---------------------------------------------------
+  return (
+    <div style={{ margin: `${marginVertical}px 0` }}>
+      <div
+        style={{
+          minHeight: `${BANNER_HEIGHT / 1.5}`,
+          backgroundColor: colors.silverFill,
+        }}
+      >
+        <div style={styles.container}>
+          <ServeCardContent />
+          <ServeCardImage />
+        </div>
       </div>
     </div>
   );
@@ -139,7 +210,7 @@ const EventListView = ({ state, actions, libraries, block, reverse }) => {
 const styles = {
   container: {
     display: "grid",
-    gridTemplateColumns: `3fr 1fr`,
+    gridTemplateColumns: `2.5fr 1fr`,
     gap: 20,
   },
   action: {
@@ -147,6 +218,11 @@ const styles = {
     borderRadius: 5,
     padding: `0.5em 1.5em`,
     margin: `1em 1em 0 0`,
+    cursor: "pointer",
+  },
+  divider: {
+    margin: `5px 0.5em`,
+    borderRight: `1px solid ${colors.blue}`,
   },
 };
 

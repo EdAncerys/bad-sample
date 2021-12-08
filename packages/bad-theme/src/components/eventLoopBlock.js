@@ -6,13 +6,15 @@ import Loading from "../components/loading";
 import DownloadFileBlock from "../components/downloadFileBlock";
 import EventListView from "../components/eventListView";
 
-const Post = ({ state, actions, libraries }) => {
+const Post = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
+  if (!block) return <Loading />;
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  const [eventList, setEventList] = useState(null);
+  const [eventList, setEventList] = useState(null); // event data
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
@@ -36,62 +38,20 @@ const Post = ({ state, actions, libraries }) => {
 
   if (!eventList) return <Loading />;
 
-  // SERVERS ---------------------------------------------
-  const EventLoopBlock = () => {
-    if (!pil.title) return null;
-
-    return (
-      <div className="flex">
-        <div
-          style={{
-            fontSize: 36,
-            fontWeight: "bold",
-            padding: `0.5em 1em`,
-            color: colors.black,
-            backgroundColor: colors.white,
-            borderBottom: `5px solid ${colors.danger}`,
-          }}
-        >
-          <Html2React html={pil.title.rendered} />
-        </div>
-      </div>
-    );
-  };
-
-  const ServeBody = () => {
-    if (!pil.content) return null;
-
-    return (
-      <div
-        style={{
-          backgroundColor: colors.white,
-          padding: `2em 1em`,
-          margin: `2em 0`,
-        }}
-      >
-        <Html2React html={pil.content.rendered} />
-      </div>
-    );
-  };
-
-  const ServeDownload = () => {
-    if (!pil.acf) return null;
-
-    return (
-      <div style={{ margin: `4em 0` }}>
-        <DownloadFileBlock block={pil.acf} disableMargin />
-      </div>
-    );
-  };
-
+  // RETURN ---------------------------------------------
   return (
     <div
       style={{
         margin: `${marginVertical}px ${marginHorizontal}px`,
       }}
     >
-      {/* <EventListView /> */}
-      hello
+      {eventList.map((block, key) => {
+        return (
+          <div key={key}>
+            <EventListView block={block} />
+          </div>
+        );
+      })}
     </div>
   );
 };
