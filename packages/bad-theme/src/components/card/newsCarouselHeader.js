@@ -16,6 +16,7 @@ const NewsCarouselHeader = ({ state, actions, libraries, newsCarousel }) => {
   if (!newsCarousel) return null;
 
   const { date, release } = newsCarousel;
+  if (!date && !release) return null;
 
   // SERVERS ---------------------------------------------
   const ServeRelease = () => {

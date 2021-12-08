@@ -61,7 +61,7 @@ const CardBody = ({
       bodyPreview = `${body.slice(0, MAX_CHAR)}...`;
 
     return (
-      <div className="flex mt-2" style={{ fontSize: 16, overflow: "auto" }}>
+      <div style={{ fontSize: 16, overflow: "auto", padding: `1em 0` }}>
         <Html2React html={bodyPreview} />
       </div>
     );

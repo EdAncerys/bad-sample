@@ -46,6 +46,8 @@ const Card = ({
   const THEME = colour || colors.primary;
   const SHADOW = shadow ? "shadow" : "";
 
+  console.log("-----", url, body);
+
   // SERVERS ----------------------------------------------
   const ServeFooter = () => {
     return (
@@ -150,7 +152,7 @@ const Card = ({
         ...styles.card,
         backgroundColor: colors.white,
         width: cardWidth || "100%",
-        height: cardHeight || "100%",
+        height: cardHeight || "auto",
         position: "relative",
       }}
     >

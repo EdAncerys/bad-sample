@@ -5,6 +5,7 @@ import { colors } from "../config/colors";
 import Loading from "../components/loading";
 import DownloadFileBlock from "../components/downloadFileBlock";
 import EventListView from "../components/eventListView";
+import Card from "../components/card/card";
 
 const Post = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -13,6 +14,11 @@ const Post = ({ state, actions, libraries, block }) => {
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+  const LAYOUT = block.layout;
+  const layoutOne = LAYOUT === "layout_one";
+  const layoutTwo = LAYOUT === "layout_two";
+  const layoutThree = LAYOUT === "layout_three";
+  const STYLES = layoutTwo ? styles.layoutTwo : {};
 
   const [eventList, setEventList] = useState(null); // event data
 
@@ -42,22 +48,59 @@ const Post = ({ state, actions, libraries, block }) => {
   return (
     <div
       style={{
+        ...STYLES,
         margin: `${marginVertical}px ${marginHorizontal}px`,
       }}
     >
       {eventList.map((block, key) => {
-        return (
-          <div key={key}>
-            <EventListView block={block} />
-          </div>
-        );
+        const {
+          date_time,
+          email,
+          event_type,
+          image,
+          layout,
+          organizer,
+          registration_page_link,
+          scientific_committee,
+          summary,
+          venue,
+          title,
+          filter_one,
+          filter_two,
+          filter_three,
+        } = block.acf;
+
+        console.log("block", block);
+
+        if (layoutOne)
+          return (
+            <div key={key}>
+              <EventListView block={block} />
+            </div>
+          );
+
+        if (layoutTwo)
+          return (
+            <div key={key}>
+              <Card
+                title={title}
+                body={summary}
+                url={image}
+                link={block.link}
+              />
+            </div>
+          );
       })}
     </div>
   );
 };
 
 const styles = {
-  container: {},
+  layoutTwo: {
+    display: "grid",
+    gridTemplateColumns: `1fr 1fr`,
+    gap: 20,
+  },
 };
 
 export default connect(Post);
