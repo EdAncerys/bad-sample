@@ -18,7 +18,9 @@ const Post = ({ state, actions, libraries, block }) => {
   const layoutOne = LAYOUT === "layout_one";
   const layoutTwo = LAYOUT === "layout_two";
   const layoutThree = LAYOUT === "layout_three";
-  const STYLES = layoutTwo ? styles.layoutTwo : {};
+  let STYLES = {};
+  if (layoutTwo) STYLES = styles.layoutTwo;
+  if (layoutThree) STYLES = styles.layoutThree;
 
   const [eventList, setEventList] = useState(null); // event data
 
@@ -53,24 +55,9 @@ const Post = ({ state, actions, libraries, block }) => {
       }}
     >
       {eventList.map((block, key) => {
-        const {
-          date_time,
-          email,
-          event_type,
-          image,
-          layout,
-          organizer,
-          registration_page_link,
-          scientific_committee,
-          summary,
-          venue,
-          title,
-          filter_one,
-          filter_two,
-          filter_three,
-        } = block.acf;
+        const { colour, image, summary, title } = block.acf;
 
-        console.log("block", block);
+        console.log("block", block.acf);
 
         if (layoutOne)
           return (
@@ -87,6 +74,20 @@ const Post = ({ state, actions, libraries, block }) => {
                 body={summary}
                 url={image}
                 link={block.link}
+                colour={colour}
+              />
+            </div>
+          );
+
+        if (layoutThree)
+          return (
+            <div key={key}>
+              <Card
+                title={title}
+                body={summary}
+                link={block.link}
+                colour={colour}
+                isFrom4Col
               />
             </div>
           );
@@ -99,6 +100,11 @@ const styles = {
   layoutTwo: {
     display: "grid",
     gridTemplateColumns: `1fr 1fr`,
+    gap: 20,
+  },
+  layoutThree: {
+    display: "grid",
+    gridTemplateColumns: `repeat(4, 1fr)`,
     gap: 20,
   },
 };

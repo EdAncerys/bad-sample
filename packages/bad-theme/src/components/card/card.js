@@ -45,8 +45,9 @@ const Card = ({
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
   const THEME = colour || colors.primary;
   const SHADOW = shadow ? "shadow" : "";
-
-  console.log("-----", url, body);
+  let CARD_HEIGHT = "100%";
+  if (title || body) CARD_HEIGHT = "auto";
+  if (cardHeight) CARD_HEIGHT = cardHeight;
 
   // SERVERS ----------------------------------------------
   const ServeFooter = () => {
@@ -152,7 +153,7 @@ const Card = ({
         ...styles.card,
         backgroundColor: colors.white,
         width: cardWidth || "100%",
-        height: cardHeight || "auto",
+        height: CARD_HEIGHT,
         position: "relative",
       }}
     >
