@@ -9,6 +9,8 @@ const Event = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const event = state.source[data.type][data.id];
+
+  const marginHorizontal = state.theme.marginHorizontal;
   console.log("event ", event.acf);
 
   const { sm, md, lg, xl } = muiQuery();
@@ -39,7 +41,7 @@ const Event = ({ state, actions, libraries }) => {
           fontSize: 36,
           fontWeight: "bold",
           color: colors.black,
-          paddingBottom: `1em`,
+          paddingBottom: `0.5em`,
         }}
       >
         <Html2React html={title} />
@@ -225,7 +227,7 @@ const Event = ({ state, actions, libraries }) => {
   };
 
   return (
-    <div>
+    <div style={{ margin: `0 ${marginHorizontal}px` }}>
       <div style={styles.container}>
         <div>
           <ServeTitle />
@@ -236,7 +238,7 @@ const Event = ({ state, actions, libraries }) => {
           <ServeRegisterLink />
           <ServeSummary />
         </div>
-        <div className="pink">Side Bar</div>
+        <div className="pink"></div>
       </div>
     </div>
   );

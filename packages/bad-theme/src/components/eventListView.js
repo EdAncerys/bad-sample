@@ -77,7 +77,15 @@ const EventListView = ({ state, actions, libraries, block, reverse }) => {
       if (!title) return null;
 
       return (
-        <div style={{ fontSize: 22, fontWeight: "bold", padding: `1em 0` }}>
+        <div
+          style={{
+            fontSize: 22,
+            fontWeight: "bold",
+            padding: `1em 0`,
+            cursor: "pointer",
+          }}
+          onClick={() => setGoToAction({ path: block.link, actions })}
+        >
           <Html2React html={title} />
         </div>
       );
@@ -129,9 +137,14 @@ const EventListView = ({ state, actions, libraries, block, reverse }) => {
     const ServeSummary = () => {
       if (!summary) return null;
 
+      // Manage max string Length
+      const MAX_LENGTH = 300;
+      let summaryPreview = `${summary.substring(0, MAX_LENGTH)}...`;
+      if (summary.length < MAX_LENGTH) summaryPreview = summary;
+
       return (
         <div style={{ fontSize: 16, padding: `1em 0 0` }}>
-          <Html2React html={summary} />
+          <Html2React html={summaryPreview} />
         </div>
       );
     };
