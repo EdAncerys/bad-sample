@@ -3,7 +3,6 @@ import { connect } from "frontity";
 
 import { colors } from "../config/colors";
 import Loading from "../components/loading";
-import DownloadFileBlock from "../components/downloadFileBlock";
 import EventListView from "../components/eventListView";
 import Card from "../components/card/card";
 
