@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import { colors } from "../config/colors";
 import BlockBuilder from "../components/builder/blockBuilder";
 import { muiQuery } from "../context";
 import Loading from "../components/loading";
@@ -28,7 +27,6 @@ const EventsLandingPage = ({ state, actions, libraries }) => {
 
   return (
     <div>
-      events landing page
       <BlockBuilder blocks={wpBlocks} />
     </div>
   );

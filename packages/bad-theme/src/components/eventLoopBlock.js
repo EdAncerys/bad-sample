@@ -5,21 +5,26 @@ import { colors } from "../config/colors";
 import Loading from "../components/loading";
 import EventListView from "../components/eventListView";
 import Card from "../components/card/card";
+import TitleBlock from "../components/titleBlock";
 
 const Post = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
 
+  const { layout, title, align_title } = block;
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-  const LAYOUT = block.layout;
+  const LAYOUT = layout;
   const layoutOne = LAYOUT === "layout_one";
   const layoutTwo = LAYOUT === "layout_two";
   const layoutThree = LAYOUT === "layout_three";
   let STYLES = {};
   if (layoutTwo) STYLES = styles.layoutTwo;
   if (layoutThree) STYLES = styles.layoutThree;
+  let ALIGNMENT = "start";
+  if (align_title === "centre") ALIGNMENT = "center";
+  if (align_title === "right") ALIGNMENT = "end";
 
   const [eventList, setEventList] = useState(null); // event data
 
@@ -53,6 +58,7 @@ const Post = ({ state, actions, libraries, block }) => {
         margin: `${marginVertical}px ${marginHorizontal}px`,
       }}
     >
+      <TitleBlock block={block} disableMargin />
       {eventList.map((block, key) => {
         const { colour, image, summary, title } = block.acf;
 

@@ -5,14 +5,14 @@ import { colors } from "../config/colors";
 import Loading from "./loading";
 import { setGoToAction } from "../context";
 
-const TitleBlock = ({ state, actions, libraries, block }) => {
+const TitleBlock = ({ state, actions, libraries, block, disableMargin }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
 
   const { label, link, title, text_align } = block;
-  if (!title.length) return null;
-  if (!label.length) return null;
+  if (!title) return null;
+  if (!label) return null;
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -27,7 +27,7 @@ const TitleBlock = ({ state, actions, libraries, block }) => {
     return (
       <div
         style={{
-          borderBottom: `1px solid ${colors.black}`,
+          borderBottom: `1px solid ${colors.textMain}`,
           textTransform: "uppercase",
           fontSize: "0.75em",
           cursor: "pointer",
@@ -41,13 +41,18 @@ const TitleBlock = ({ state, actions, libraries, block }) => {
   };
 
   return (
-    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
+    <div
+      style={{
+        margin: disableMargin ? 0 : `${marginVertical}px ${marginHorizontal}px`,
+      }}
+    >
       <div className="flex-row" style={{ alignItems: "center" }}>
         <div
           className="flex"
           style={{
-            fontSize: 27,
+            fontSize: 36,
             fontWeight: "bold",
+            color: colors.black,
             textAlign: ALIGNMENT,
             justifyContent: ALIGNMENT,
           }}
