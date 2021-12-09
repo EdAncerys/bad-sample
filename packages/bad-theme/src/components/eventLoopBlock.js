@@ -56,8 +56,6 @@ const Post = ({ state, actions, libraries, block }) => {
       {eventList.map((block, key) => {
         const { colour, image, summary, title } = block.acf;
 
-        console.log("block", block.acf);
-
         if (layoutOne)
           return (
             <div key={key}>

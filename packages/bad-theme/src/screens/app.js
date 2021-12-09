@@ -27,6 +27,7 @@ import RegistrationStepFour from "./registration/registrationStepFour";
 import RegistrationComplete from "./registration/registrationComplete";
 import Dashboard from "./dashboard";
 import Event from "./event";
+import EventsLandingPage from "./eventsLandingPage";
 // SCREEN HELPERS ---------------------------------------------------------
 import Loading from "../components/loading";
 import Error from "./error";
@@ -91,6 +92,7 @@ const App = ({ state, actions }) => {
             <RegistrationComplete
               when={endPoint === "/membership/register/registration-thank-you/"}
             />
+            <EventsLandingPage when={endPoint === "/events/"} />
 
             <PilsArchive when={data.isPilsArchive} />
             <Pils when={data.isPils} />
