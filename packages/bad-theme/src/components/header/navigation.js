@@ -19,6 +19,7 @@ const Navigation = ({ state, actions, libraries }) => {
 
   const NAV_DIVIDER = 8;
   const BANNER_HEIGHT = state.theme.bannerHeight;
+  const marginHorizontal = state.theme.marginHorizontal;
 
   useEffect(() => {
     // getting wp menu from state
@@ -132,11 +133,7 @@ const Navigation = ({ state, actions, libraries }) => {
 
   const ServeMenu = () => {
     return (
-      <div
-        className="flex"
-        id="BAD-menu-container pink"
-        style={styles.container}
-      >
+      <div className="flex" id="BAD-menu-container" style={styles.container}>
         {wpMainMenu.map((item, key) => {
           const { title, slug, url } = item;
 
@@ -180,9 +177,14 @@ const Navigation = ({ state, actions, libraries }) => {
               className="m-2"
             />
             <Navbar.Collapse>
-              <Nav className="flex BAD-menu">
-                <ServeMenu />
-              </Nav>
+              <div
+                className="flex"
+                style={{ height: "4em", margin: `0 ${marginHorizontal}px` }}
+              >
+                <Nav className="flex BAD-menu">
+                  <ServeMenu />
+                </Nav>
+              </div>
             </Navbar.Collapse>
           </Container>
         </Navbar>
@@ -195,7 +197,6 @@ const styles = {
   container: {
     justifyContent: "space-between",
     alignItems: "center",
-    paddingTop: 20,
     flexWrap: "wrap",
   },
   dropDown: {

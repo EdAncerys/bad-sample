@@ -8,6 +8,7 @@ const Directions = ({ state, actions }) => {
   const endPoint = state.router.link;
   const data = state.source.get(endPoint);
 
+  const marginHorizontal = state.theme.marginHorizontal;
   const directions = endPoint.split("/").slice(1, -1);
   const directionLength = directions.length;
   const MARGIN = 10;
@@ -63,7 +64,12 @@ const Directions = ({ state, actions }) => {
   if (data.isError) return null;
 
   return (
-    <div style={styles.container}>
+    <div
+      style={{
+        backgroundColor: colors.lightSilver,
+        margin: `0 ${marginHorizontal}px`,
+      }}
+    >
       <div className="flex" style={styles.wrapper}>
         <ServeTitle />
         <ServeFallBack />
@@ -77,9 +83,6 @@ const Directions = ({ state, actions }) => {
 };
 
 const styles = {
-  container: {
-    backgroundColor: colors.lightSilver,
-  },
   wrapper: {
     height: 75,
     flexWrap: "wrap",
