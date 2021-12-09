@@ -35,7 +35,6 @@ const Event = ({ state, actions, libraries }) => {
 
     return (
       <div
-        className="flex"
         style={{
           fontSize: 36,
           fontWeight: "bold",
@@ -210,14 +209,16 @@ const Event = ({ state, actions, libraries }) => {
     if (!summary) return null;
 
     return (
-      <div
-        className="flex"
-        style={{
-          fontSize: 36,
-          fontWeight: "bold",
-          color: colors.black,
-        }}
-      >
+      <div>
+        <div
+          style={{
+            fontSize: 16,
+            fontWeight: "bold",
+            color: colors.black,
+          }}
+        >
+          Summary
+        </div>
         <Html2React html={summary} />
       </div>
     );
@@ -235,7 +236,7 @@ const Event = ({ state, actions, libraries }) => {
           <ServeRegisterLink />
           <ServeSummary />
         </div>
-        <div className="pink">Left Bar</div>
+        <div className="pink">Side Bar</div>
       </div>
     </div>
   );
