@@ -98,7 +98,8 @@ const Navigation = ({ state, actions, libraries }) => {
             padding: `2em 4em`,
             height: BANNER_HEIGHT,
             backgroundColor: colors.lightSilver, // nav bar dropdown background color
-            border: `1px solid ${colors.darkSilver}`,
+            // border: `1px solid ${colors.darkSilver}`, // add border for visibility
+            boxShadow: `0 0.5rem 1rem rgba(0, 0, 0, 0.15)`,
           }}
         >
           <div

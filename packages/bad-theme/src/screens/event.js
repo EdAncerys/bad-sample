@@ -1,10 +1,19 @@
 import { useContext } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
+import Link from "@frontity/components/link";
 
 import { colors } from "../config/colors";
 import { setGoToAction } from "../context";
 import { muiQuery } from "../context";
+import RowButton from "../components/rowButton";
+
+import Facebook from "../img/svg/facebookBlack.svg";
+import Twitter from "../img/svg/twitterBlack.svg";
+import Instagram from "../img/svg/instagramBlack.svg";
+import Linkedin from "../img/svg/linkedinBlack.svg";
+import Connect from "../img/svg/connectBlack.svg";
+import WebPage from "../img/svg/webPageBlack.svg";
 
 const Event = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -12,6 +21,7 @@ const Event = ({ state, actions, libraries }) => {
   const event = state.source[data.type][data.id];
 
   const marginHorizontal = state.theme.marginHorizontal;
+  const marginVertical = state.theme.marginVertical;
   console.log("event------ ", event.acf);
 
   const { sm, md, lg, xl } = muiQuery();
@@ -285,7 +295,15 @@ const Event = ({ state, actions, libraries }) => {
     };
 
     return (
-      <div className="flex-row" style={{ flexWrap: "wrap" }}>
+      <div
+        className="flex-row"
+        style={{
+          flexWrap: "wrap",
+          marginTop: `2em`,
+          padding: `2em 0`,
+          borderTop: `1px solid ${colors.darkSilver}`,
+        }}
+      >
         <ServeFilterOne />
         <ServeFilterTwo />
         <ServeFilterThree />
@@ -293,20 +311,94 @@ const Event = ({ state, actions, libraries }) => {
     );
   };
 
-  return (
-    <div style={{ margin: `0 ${marginHorizontal}px` }}>
-      <div style={styles.container}>
-        <div>
-          <ServeTitle />
-          <div style={styles.eventInfo}>
-            <ServeCardImage />
-            <ServeEventInfo />
+  const ServeSocials = () => {
+    return (
+      <div className="flex-col" style={{ width: `50%` }}>
+        <div
+          className="flex-row"
+          style={{ justifyContent: "space-between", padding: `2em 0` }}
+        >
+          <div
+            style={{ fontSize: 20, fontWeight: "bold", color: colors.black }}
+          >
+            Share
           </div>
-          <ServeRegisterLink />
-          <ServeSummary />
-          <ServeFilters />
+          <div
+            style={{ fontSize: 20, fontWeight: "bold", color: colors.black }}
+          >
+            Add to calendar
+          </div>
         </div>
-        <div className="pink"></div>
+        <div className="flex" style={{ justifyContent: "space-between" }}>
+          <div style={styles.socials}>
+            <Link link={`https://www.facebook.com/`} target="_blank">
+              <Image src={Facebook} className="d-block h-100" alt="Facebook" />
+            </Link>
+          </div>
+          <div style={styles.socials}>
+            <Link link={`https://www.twitter.com/`} target="_blank">
+              <Image src={Twitter} className="d-block h-100" alt="Twitter" />
+            </Link>
+          </div>
+          <div style={styles.socials}>
+            <Link link={`https://www.instagram.com/`} target="_blank">
+              <Image
+                src={Instagram}
+                className="d-block h-100"
+                alt="Instagram"
+              />
+            </Link>
+          </div>
+          <div style={styles.socials}>
+            <Link link={`https://www.linkedin.com/`} target="_blank">
+              <Image src={Linkedin} className="d-block h-100" alt="Instagram" />
+            </Link>
+          </div>
+          <div style={styles.socials}>
+            <Link link={`https://www.linkedin.com/`} target="_blank">
+              <Image src={Connect} className="d-block h-100" alt="Instagram" />
+            </Link>
+          </div>
+          <div style={styles.socials}>
+            <Link link={`https://www.linkedin.com/`} target="_blank">
+              <Image src={WebPage} className="d-block h-100" alt="Instagram" />
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div>
+      <div style={{ backgroundColor: colors.white }}>
+        <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
+          <div style={styles.container}>
+            <div>
+              <ServeTitle />
+              <div style={styles.eventInfo}>
+                <ServeCardImage />
+                <ServeEventInfo />
+              </div>
+              <ServeRegisterLink />
+              <ServeSummary />
+              <ServeSocials />
+              <ServeFilters />
+            </div>
+            <div className="pink"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
+        <RowButton
+          block={{
+            title: "If you would like more information please contact us",
+            // link: { url: "hello" },
+          }}
+          onClick={() => setGoToAction({ path: `/`, actions })}
+          buttonWidth="60%"
+        />
       </div>
     </div>
   );
@@ -327,10 +419,15 @@ const styles = {
     paddingRight: 5,
   },
   action: {
-    backgroundColor: colors.white,
+    backgroundColor: colors.silverFill,
     borderRadius: 5,
     padding: `0.5em 1.5em`,
     margin: `1em 1em 0 0`,
+    cursor: "pointer",
+  },
+  socials: {
+    width: 25,
+    height: 25,
     cursor: "pointer",
   },
 };

@@ -10,7 +10,7 @@ const Post = ({ state, actions, libraries }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
   const wpBlocks = page.acf.blocks;
-  console.log("pageData ", data, page);
+  // console.log("pageData ", data, page);
 
   const { sm, md, lg, xl } = muiQuery();
 

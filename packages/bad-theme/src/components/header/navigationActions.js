@@ -93,11 +93,11 @@ const NavigationActions = ({ state, actions, libraries }) => {
           </Dropdown.Toggle>
 
           <Dropdown.Menu style={styles.dropDown}>
-            {child_items.map((item) => {
-              const { ID, title, slug } = item;
+            {child_items.map((item, key) => {
+              const { title, slug } = item;
 
               return (
-                <div key={ID}>
+                <div key={key}>
                   <Dropdown.Item href={`${slug}`}>
                     <Html2React html={title} />
                   </Dropdown.Item>
