@@ -47,6 +47,11 @@ const settings = {
               endpoint: "events",
               archive: "/events",
             },
+            {
+              type: "event_grade",
+              endpoint: "event_grade",
+              archive: "/event_grade",
+            },
           ],
           taxonomies: [
             {

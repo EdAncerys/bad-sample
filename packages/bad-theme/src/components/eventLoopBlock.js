@@ -12,21 +12,23 @@ const Post = ({ state, actions, libraries, block }) => {
 
   if (!block) return <Loading />;
 
-  const { layout, title, align_title } = block;
+  const [eventList, setEventList] = useState(null); // event data
+  const [grades, setGrades] = useState(null); // data
+  const [locations, setLocations] = useState(null); // data
+  const [types, setTypes] = useState(null); // data
+  const [gradeFilterId, setGradeFilterId] = useState(null); // data
+  const { layout, grade_filter } = block;
+
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-  const LAYOUT = layout;
-  const layoutOne = LAYOUT === "layout_one";
-  const layoutTwo = LAYOUT === "layout_two";
-  const layoutThree = LAYOUT === "layout_three";
+
+  const layoutOne = layout === "layout_one";
+  const layoutTwo = layout === "layout_two";
+  const layoutThree = layout === "layout_three";
+
   let STYLES = {};
   if (layoutTwo) STYLES = styles.layoutTwo;
   if (layoutThree) STYLES = styles.layoutThree;
-  let ALIGNMENT = "start";
-  if (align_title === "centre") ALIGNMENT = "center";
-  if (align_title === "right") ALIGNMENT = "end";
-
-  const [eventList, setEventList] = useState(null); // event data
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
@@ -45,9 +47,22 @@ const Post = ({ state, actions, libraries, block }) => {
     if (!state.source.events) return null;
 
     const EVENT_LIST = Object.values(state.source.events); // add pill object to data array
-    setEventList(EVENT_LIST);
-  }, []);
+    const GRADES = Object.values(state.source.event_grade);
+    const LOCATIONS = Object.values(state.source.event_location);
+    const TYPES = Object.values(state.source.event_type);
+    let GRADE_FILTER_ID = GRADES.filter(
+      (filter) => filter.name === grade_filter
+    )[0];
+    if (GRADE_FILTER_ID) GRADE_FILTER_ID = GRADE_FILTER_ID.id;
 
+    setGradeFilterId(GRADE_FILTER_ID);
+
+    setEventList(EVENT_LIST);
+    setGrades(GRADES);
+    setLocations(LOCATIONS);
+    setTypes(TYPES);
+  }, []);
+  // DATA pre FETCH ----------------------------------------------------------------
   if (!eventList) return <Loading />;
 
   // RETURN ---------------------------------------------
@@ -61,6 +76,12 @@ const Post = ({ state, actions, libraries, block }) => {
       <TitleBlock block={block} disableMargin />
       {eventList.map((block, key) => {
         const { colour, image, summary, title } = block.acf;
+        const event_grade = block.event_grade;
+        const event_location = block.event_location;
+        const event_type = block.event_type;
+
+        if (!event_grade.includes(gradeFilterId) && gradeFilterId !== 97)
+          return null;
 
         if (layoutOne)
           return (
