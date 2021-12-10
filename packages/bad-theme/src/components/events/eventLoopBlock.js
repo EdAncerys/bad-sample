@@ -6,7 +6,15 @@ import EventListView from "../eventListView";
 import Card from "../card/card";
 import TitleBlock from "../titleBlock";
 
-const Post = ({ state, actions, libraries, block }) => {
+const Post = ({
+  state,
+  actions,
+  libraries,
+  block,
+  searchFilter,
+  gradesFilter,
+  locationsFilter,
+}) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
@@ -64,12 +72,13 @@ const Post = ({ state, actions, libraries, block }) => {
   // DATA pre FETCH ----------------------------------------------------------------
   if (!eventList) return <Loading />;
 
+  console.log("------", searchFilter, gradesFilter, locationsFilter);
   // RETURN ---------------------------------------------
   return (
     <div
       style={{
         ...STYLES,
-        margin: `0 ${marginHorizontal}px ${marginVertical}px `,
+        margin: `${marginVertical}px ${marginHorizontal}px `,
       }}
     >
       <TitleBlock block={block} disableMargin />
@@ -81,6 +90,11 @@ const Post = ({ state, actions, libraries, block }) => {
 
         if (!event_grade.includes(gradeFilterId) && gradeFilterId !== 97)
           return null;
+        if (!!searchFilter) {
+          if (!title) return null;
+          if (!title.toLowerCase().includes(searchFilter.toLowerCase()))
+            return null;
+        }
 
         if (layoutOne)
           return (

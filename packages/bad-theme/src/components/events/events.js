@@ -19,13 +19,19 @@ const Events = ({ state, actions, libraries, block }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
+  const search = block.add_search_function;
+
   useEffect(() => {
-    const GRADES = Object.values(state.source.event_grade);
-    const LOCATIONS = Object.values(state.source.event_location);
+    let GRADES = null;
+    let LOCATIONS = null;
+    if (state.source.event_grade)
+      GRADES = Object.values(state.source.event_grade);
+    if (state.source.event_location)
+      LOCATIONS = Object.values(state.source.event_location);
 
     setGrades(GRADES);
     setLocations(LOCATIONS);
-  }, []);
+  }, [state.source.event_grade, state.source.event_location]);
 
   // HELPERS ----------------------------------------------------------------
   const handleSearchSubmit = () => {
@@ -34,12 +40,9 @@ const Events = ({ state, actions, libraries, block }) => {
     const serveFilterOne = document.querySelector("#serveFilterOne").value;
     const serveFilterTwo = document.querySelector("#serveFilterTwo").value;
 
-    const filter = {
-      searchInput,
-      serveFilterOne,
-      serveFilterTwo,
-    };
-    console.log(filter);
+    if (!!searchInput) setSearchFilter(searchInput);
+    if (!!serveFilterOne) setGradesFilter(serveFilterOne);
+    if (!!serveFilterTwo) setLocationsFilter(serveFilterTwo);
   };
 
   // SERVERS ---------------------------------------------
@@ -70,7 +73,7 @@ const Events = ({ state, actions, libraries, block }) => {
             aria-label="Default select example"
             style={styles.input}
           >
-            <option>Event Grades</option>
+            <option value="">Event Grades</option>
             {grades.map((item, key) => {
               return (
                 <option key={key} value={item.name}>
@@ -93,7 +96,7 @@ const Events = ({ state, actions, libraries, block }) => {
             aria-label="Default select example"
             style={styles.input}
           >
-            <option>Location</option>
+            <option value="">Location</option>
             {locations.map((item, key) => {
               return (
                 <option key={key} value={item.name}>
@@ -167,17 +170,30 @@ const Events = ({ state, actions, libraries, block }) => {
     );
   };
 
-  // RETURN ---------------------------------------------------
-  return (
-    <div>
+  const ServeFilter = () => {
+    if (!search) return null;
+
+    return (
       <div
         className="flex-row"
-        style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}
+        style={{ padding: `${marginVertical}px ${marginHorizontal}px 0` }}
       >
         <ServeSearchContainer />
         <ServeFilters />
       </div>
-      <EventLoopBlock block={block} />
+    );
+  };
+
+  // RETURN ---------------------------------------------------
+  return (
+    <div>
+      <ServeFilter />
+      <EventLoopBlock
+        block={block}
+        searchFilter={searchFilter}
+        gradesFilter={gradesFilter}
+        locationsFilter={locationsFilter}
+      />
     </div>
   );
 };
