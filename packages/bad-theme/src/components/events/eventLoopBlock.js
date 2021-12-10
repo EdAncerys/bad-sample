@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import { colors } from "../config/colors";
-import Loading from "../components/loading";
-import EventFilter from "../components/eventFilter";
-import EventListView from "../components/eventListView";
-import Card from "../components/card/card";
-import TitleBlock from "../components/titleBlock";
+import Loading from "../loading";
+import EventListView from "../eventListView";
+import Card from "../card/card";
+import TitleBlock from "../titleBlock";
 
 const Post = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -14,7 +12,6 @@ const Post = ({ state, actions, libraries, block }) => {
   if (!block) return <Loading />;
 
   const [eventList, setEventList] = useState(null); // event data
-  const [filter, setFilter] = useState(null);
   const [grades, setGrades] = useState(null); // data
   const [locations, setLocations] = useState(null); // data
   const [types, setTypes] = useState(null); // data
@@ -72,11 +69,10 @@ const Post = ({ state, actions, libraries, block }) => {
     <div
       style={{
         ...STYLES,
-        margin: `${marginVertical}px ${marginHorizontal}px`,
+        margin: `0 ${marginHorizontal}px ${marginVertical}px `,
       }}
     >
       <TitleBlock block={block} disableMargin />
-      <EventFilter />
       {eventList.map((block, key) => {
         const { colour, image, summary, title } = block.acf;
         const event_grade = block.event_grade;

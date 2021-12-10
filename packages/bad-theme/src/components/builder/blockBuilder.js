@@ -29,7 +29,7 @@ import SocialIcons from "../socialIcons";
 import TitleAndBodyBlock from "../titleAndBodyBlock";
 import SplitContentAndUsefulLinksCard from "../splitContentAndUsefulLinksCard";
 import MultiPhotoBlock from "../multiPhotoBlock";
-import EventLoopBlock from "../eventLoopBlock";
+import Events from "../events/events";
 
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   // console.log("BLOCKS: ", blocks); // debug
@@ -62,7 +62,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
             return (
               <div key={key + 1}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <EventLoopBlock key={key} block={block} />
+                <Events key={key} block={block} />
               </div>
             );
 

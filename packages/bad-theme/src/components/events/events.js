@@ -1,18 +1,31 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import { colors } from "../config/colors";
+import { colors } from "../../config/colors";
+import EventLoopBlock from "./eventLoopBlock";
 
-import Loading from "./loading";
+import Loading from "../loading";
 import SearchIcon from "@mui/icons-material/Search";
 import { Form } from "react-bootstrap";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState } from "../context";
+import { useAppDispatch, useAppState } from "../../context";
 
-const EventFilter = ({ state, actions, libraries, handleSetState }) => {
+const Events = ({ state, actions, libraries, block }) => {
+  const [grades, setGrades] = useState(null); // data
+  const [locations, setLocations] = useState(null); // data
+  const [searchFilter, setSearchFilter] = useState(null);
+  const [gradesFilter, setGradesFilter] = useState(null);
+  const [locationsFilter, setLocationsFilter] = useState(null);
+
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-  const GRADES = Object.values(state.source.event_grade);
-  const LOCATIONS = Object.values(state.source.event_location);
+
+  useEffect(() => {
+    const GRADES = Object.values(state.source.event_grade);
+    const LOCATIONS = Object.values(state.source.event_location);
+
+    setGrades(GRADES);
+    setLocations(LOCATIONS);
+  }, []);
 
   // HELPERS ----------------------------------------------------------------
   const handleSearchSubmit = () => {
@@ -26,12 +39,12 @@ const EventFilter = ({ state, actions, libraries, handleSetState }) => {
       serveFilterOne,
       serveFilterTwo,
     };
-    handleSetState({ filter });
+    console.log(filter);
   };
 
   // SERVERS ---------------------------------------------
   const ServeFilters = () => {
-    // if (!filterOne && !filterTwo && !filterThree) return null; // props for filter options
+    if (!grades && !locations) return null; // props for filter options
 
     const ServeTitle = () => {
       return (
@@ -39,7 +52,7 @@ const EventFilter = ({ state, actions, libraries, handleSetState }) => {
           style={{
             fontSize: 20,
             color: colors.black,
-            paddingRight: `2em`,
+            padding: `0 2em`,
           }}
         >
           Filter:
@@ -48,7 +61,7 @@ const EventFilter = ({ state, actions, libraries, handleSetState }) => {
     };
 
     const ServeFilterOne = () => {
-      if (!GRADES) return null;
+      if (!grades) return null;
 
       return (
         <div className="flex" style={{ paddingRight: `1em` }}>
@@ -58,7 +71,7 @@ const EventFilter = ({ state, actions, libraries, handleSetState }) => {
             style={styles.input}
           >
             <option>Event Grades</option>
-            {GRADES.map((item, key) => {
+            {grades.map((item, key) => {
               return (
                 <option key={key} value={item.name}>
                   {item.name}
@@ -71,7 +84,7 @@ const EventFilter = ({ state, actions, libraries, handleSetState }) => {
     };
 
     const ServeFilterTwo = () => {
-      if (!LOCATIONS) return null;
+      if (!locations) return null;
 
       return (
         <div className="flex">
@@ -81,7 +94,7 @@ const EventFilter = ({ state, actions, libraries, handleSetState }) => {
             style={styles.input}
           >
             <option>Location</option>
-            {LOCATIONS.map((item, key) => {
+            {locations.map((item, key) => {
               return (
                 <option key={key} value={item.name}>
                   {item.name}
@@ -108,7 +121,7 @@ const EventFilter = ({ state, actions, libraries, handleSetState }) => {
         <div
           className="flex"
           style={{
-            flex: 2,
+            flex: 1,
             marginRight: `2em`,
             padding: `0.75em 0`,
             position: "relative",
@@ -126,16 +139,17 @@ const EventFilter = ({ state, actions, libraries, handleSetState }) => {
             style={{
               position: "absolute",
               right: 0,
-              top: `1.2em`,
+              height: 45,
               border: "none",
               background: "transparent",
+              alignItems: "center",
               color: colors.darkSilver,
             }}
           >
             <SearchIcon />
           </span>
         </div>
-        <div className="flex" style={{ alignItems: "center" }}>
+        <div style={{ display: "grid", alignItems: "center" }}>
           <button
             type="submit"
             className="btn"
@@ -155,17 +169,20 @@ const EventFilter = ({ state, actions, libraries, handleSetState }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div className="flex">
-      <div className="flex-row" style={{ paddingTop: `${marginVertical}px` }}>
+    <div>
+      <div
+        className="flex-row"
+        style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}
+      >
         <ServeSearchContainer />
         <ServeFilters />
       </div>
+      <EventLoopBlock block={block} />
     </div>
   );
 };
 
 const styles = {
-  container: {},
   input: {
     borderRadius: 10,
     paddingRight: 35,
@@ -173,4 +190,4 @@ const styles = {
   },
 };
 
-export default connect(EventFilter);
+export default connect(Events);
