@@ -3,6 +3,7 @@ import { connect } from "frontity";
 
 import { colors } from "../config/colors";
 import Loading from "../components/loading";
+import EventFilter from "../components/eventFilter";
 import EventListView from "../components/eventListView";
 import Card from "../components/card/card";
 import TitleBlock from "../components/titleBlock";
@@ -13,6 +14,7 @@ const Post = ({ state, actions, libraries, block }) => {
   if (!block) return <Loading />;
 
   const [eventList, setEventList] = useState(null); // event data
+  const [filter, setFilter] = useState(null);
   const [grades, setGrades] = useState(null); // data
   const [locations, setLocations] = useState(null); // data
   const [types, setTypes] = useState(null); // data
@@ -74,6 +76,7 @@ const Post = ({ state, actions, libraries, block }) => {
       }}
     >
       <TitleBlock block={block} disableMargin />
+      <EventFilter />
       {eventList.map((block, key) => {
         const { colour, image, summary, title } = block.acf;
         const event_grade = block.event_grade;

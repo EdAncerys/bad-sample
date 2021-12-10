@@ -36,9 +36,6 @@ const EventListView = ({ state, actions, libraries, block }) => {
     if (eventGradeIds.includes(item.id)) return item;
   });
 
-  // console.log("block------", block);
-  console.log("eventGrades", eventGrades);
-
   // SERVERS ----------------------------------------------------------------
   const ServeCardImage = () => {
     if (!image) return null;
