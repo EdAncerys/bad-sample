@@ -77,7 +77,7 @@ const Events = ({ state, actions, libraries, block }) => {
             <option value="">Event Grades</option>
             {grades.map((item, key) => {
               return (
-                <option key={key} value={item.name}>
+                <option key={key} value={item.id}>
                   {item.name}
                 </option>
               );
@@ -100,7 +100,7 @@ const Events = ({ state, actions, libraries, block }) => {
             <option value="">Location</option>
             {locations.map((item, key) => {
               return (
-                <option key={key} value={item.name}>
+                <option key={key} value={item.id}>
                   {item.name}
                 </option>
               );
@@ -174,13 +174,21 @@ const Events = ({ state, actions, libraries, block }) => {
   const ServeFilter = () => {
     if (!search) return null;
 
+    const ServeSearchFilter = () => {
+      if (!searchFilter) return null;
+
+      return <div style={styles.action}>{searchFilter}</div>;
+    };
+
     return (
-      <div
-        className="flex-row"
-        style={{ padding: `${marginVertical}px ${marginHorizontal}px 0` }}
-      >
-        <ServeSearchContainer />
-        <ServeFilters />
+      <div style={{ padding: `${marginVertical}px ${marginHorizontal}px 0` }}>
+        <div className="flex-row">
+          <ServeSearchContainer />
+          <ServeFilters />
+        </div>
+        <div style={{ justifyContent: "center" }}>
+          <ServeSearchFilter />
+        </div>
       </div>
     );
   };
@@ -204,6 +212,14 @@ const styles = {
     borderRadius: 10,
     paddingRight: 35,
     color: colors.darkSilver,
+  },
+  action: {
+    backgroundColor: colors.white,
+    borderRadius: 5,
+    padding: `0.5em 1.5em`,
+    margin: `1em 1em 0 0`,
+    cursor: "pointer",
+    width: "fit-content",
   },
 };
 
