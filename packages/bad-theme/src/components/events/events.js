@@ -40,6 +40,7 @@ const Events = ({ state, actions, libraries, block }) => {
     const serveFilterOne = document.querySelector("#serveFilterOne").value;
     const serveFilterTwo = document.querySelector("#serveFilterTwo").value;
 
+    if (!searchInput) setSearchFilter(null);
     if (!!searchInput) setSearchFilter(searchInput);
     if (!!serveFilterOne) setGradesFilter(serveFilterOne);
     if (!!serveFilterTwo) setLocationsFilter(serveFilterTwo);

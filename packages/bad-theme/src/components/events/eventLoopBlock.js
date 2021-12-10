@@ -72,7 +72,6 @@ const Post = ({
   // DATA pre FETCH ----------------------------------------------------------------
   if (!eventList) return <Loading />;
 
-  console.log("------", searchFilter, gradesFilter, locationsFilter);
   // RETURN ---------------------------------------------
   return (
     <div
@@ -91,8 +90,14 @@ const Post = ({
         if (!event_grade.includes(gradeFilterId) && gradeFilterId !== 97)
           return null;
         if (!!searchFilter) {
-          if (!title) return null;
-          if (!title.toLowerCase().includes(searchFilter.toLowerCase()))
+          if (!title && !summary) return null;
+          if (
+            title
+              ? !title.toLowerCase().includes(searchFilter.toLowerCase())
+              : null || summary
+              ? !summary.toLowerCase().includes(searchFilter.toLowerCase())
+              : null
+          )
             return null;
         }
 
