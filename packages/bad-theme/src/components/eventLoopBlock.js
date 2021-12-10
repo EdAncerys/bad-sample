@@ -46,7 +46,7 @@ const Post = ({ state, actions, libraries, block }) => {
     }
     if (!state.source.events) return null;
 
-    const EVENT_LIST = Object.values(state.source.events); // add pill object to data array
+    const EVENT_LIST = Object.values(state.source.events); // add events object to data array
     const GRADES = Object.values(state.source.event_grade);
     const LOCATIONS = Object.values(state.source.event_location);
     const TYPES = Object.values(state.source.event_type);

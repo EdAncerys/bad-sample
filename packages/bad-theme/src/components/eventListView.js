@@ -6,7 +6,7 @@ import Loading from "./loading";
 import { colors } from "../config/colors";
 import { setGoToAction } from "../context";
 
-const EventListView = ({ state, actions, libraries, block, reverse }) => {
+const EventListView = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
 
@@ -17,19 +17,27 @@ const EventListView = ({ state, actions, libraries, block, reverse }) => {
   const {
     date_time,
     email,
-    event_type,
     image,
     layout,
     organizer,
+    public_or_members_only,
     registration_page_link,
+    registration_type,
     scientific_committee,
+    show_add_to_calendar,
+    show_sharing_buttons,
     summary,
-    venue,
     title,
-    filter_one,
-    filter_two,
-    filter_three,
+    venue,
   } = block.acf;
+  const GRADES = Object.values(state.source.event_grade);
+  const eventGradeIds = Object.values(block.event_grade);
+  const eventGrades = GRADES.filter((item) => {
+    if (eventGradeIds.includes(item.id)) return item;
+  });
+
+  // console.log("block------", block);
+  console.log("eventGrades", eventGrades);
 
   // SERVERS ----------------------------------------------------------------
   const ServeCardImage = () => {
@@ -63,7 +71,14 @@ const EventListView = ({ state, actions, libraries, block, reverse }) => {
               const { date, end_time, start_time } = block;
 
               return (
-                <div key={key} style={{ fontSize: 12, paddingRight: `1em` }}>
+                <div
+                  key={key}
+                  style={{
+                    fontSize: 12,
+                    fontWeight: "bold",
+                    paddingRight: `1em`,
+                  }}
+                >
                   <Html2React html={date} />
                 </div>
               );
@@ -92,15 +107,11 @@ const EventListView = ({ state, actions, libraries, block, reverse }) => {
     };
 
     const ServeInformation = () => {
-      const ServeEventType = () => {
-        if (!event_type) return null;
-
+      const ServeEventVenue = () => {
+        if (!venue) return null;
         return (
-          <div
-            style={{ cursor: "pointer" }}
-            onClick={() => setGoToAction({ path: block.link, actions })}
-          >
-            <Html2React html={event_type} />
+          <div>
+            <Html2React html={venue} />
           </div>
         );
       };
@@ -109,7 +120,10 @@ const EventListView = ({ state, actions, libraries, block, reverse }) => {
         if (!organizer) return null;
         return (
           <div>
-            <Html2React html={organizer} />
+            <div className="flex">
+              {venue && <div style={styles.divider} />}
+              <Html2React html={organizer} />
+            </div>
           </div>
         );
       };
@@ -117,18 +131,20 @@ const EventListView = ({ state, actions, libraries, block, reverse }) => {
       const ServeEventCommittee = () => {
         if (!scientific_committee) return null;
         return (
-          <div>
+          <div className="flex">
+            {(organizer || venue) && <div style={styles.divider} />}
             <Html2React html={scientific_committee} />
           </div>
         );
       };
 
       return (
-        <div className="flex" style={{ fontSize: 16, color: colors.blue }}>
-          <ServeEventType />
-          {organizer && <div style={styles.divider} />}
+        <div
+          className="flex"
+          style={{ fontSize: 16, color: colors.blue, fontStyle: "italic" }}
+        >
+          <ServeEventVenue />
           <ServeEventOrganizer />
-          {scientific_committee && <div style={styles.divider} />}
           <ServeEventCommittee />
         </div>
       );
@@ -150,41 +166,23 @@ const EventListView = ({ state, actions, libraries, block, reverse }) => {
     };
 
     const ServeFilters = () => {
-      const ServeFilterOne = () => {
-        if (!filter_one) return null;
-
+      const ServeFilter = ({ filter }) => {
         return (
           <div style={styles.action}>
-            <Html2React html={filter_one[0].post_title} />
-          </div>
-        );
-      };
-
-      const ServeFilterTwo = () => {
-        if (!filter_two) return null;
-
-        return (
-          <div style={styles.action}>
-            <Html2React html={filter_two[0].post_title} />
-          </div>
-        );
-      };
-
-      const ServeFilterThree = () => {
-        if (!filter_three) return null;
-
-        return (
-          <div style={styles.action}>
-            <Html2React html={filter_three[0].post_title} />
+            <Html2React html={filter.name} />
           </div>
         );
       };
 
       return (
         <div className="flex-row" style={{ flexWrap: "wrap" }}>
-          <ServeFilterOne />
-          <ServeFilterTwo />
-          <ServeFilterThree />
+          {eventGrades.map((filter, key) => {
+            return (
+              <div key={key}>
+                <ServeFilter filter={filter} />
+              </div>
+            );
+          })}
         </div>
       );
     };
