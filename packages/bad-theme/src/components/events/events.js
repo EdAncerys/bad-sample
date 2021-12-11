@@ -6,6 +6,7 @@ import EventLoopBlock from "./eventLoopBlock";
 import Loading from "../loading";
 import SearchIcon from "@mui/icons-material/Search";
 import { Form } from "react-bootstrap";
+import CloseIcon from "@mui/icons-material/Close";
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, useAppState } from "../../context";
 
@@ -40,7 +41,6 @@ const Events = ({ state, actions, libraries, block }) => {
     const serveFilterOne = document.querySelector("#serveFilterOne").value;
     const serveFilterTwo = document.querySelector("#serveFilterTwo").value;
 
-    if (!searchInput) setSearchFilter(null);
     if (!!searchInput) setSearchFilter(searchInput);
     if (!!serveFilterOne) setGradesFilter(serveFilterOne);
     if (!!serveFilterTwo) setLocationsFilter(serveFilterTwo);
@@ -177,7 +177,65 @@ const Events = ({ state, actions, libraries, block }) => {
     const ServeSearchFilter = () => {
       if (!searchFilter) return null;
 
-      return <div style={styles.action}>{searchFilter}</div>;
+      return (
+        <div style={styles.action}>
+          <div>{searchFilter}</div>
+          <div style={styles.closeAction} onClick={() => setSearchFilter(null)}>
+            <CloseIcon
+              style={{
+                fill: colors.darkSilver,
+                padding: 0,
+              }}
+            />
+          </div>
+        </div>
+      );
+    };
+
+    const ServeGradesFilter = () => {
+      if (!gradesFilter) return null;
+      const GRADES = Object.values(state.source.event_grade);
+      const filter = GRADES.filter((item) => {
+        consol.log(item.id);
+        item.id === gradesFilter;
+      });
+      console.log(GRADES, filter);
+
+      return (
+        <div style={styles.action}>
+          <div>{gradesFilter}</div>
+          <div style={styles.closeAction} onClick={() => setGradesFilter(null)}>
+            <CloseIcon
+              style={{
+                fill: colors.darkSilver,
+                padding: 0,
+              }}
+            />
+          </div>
+        </div>
+      );
+    };
+
+    const ServeLocationsFilter = () => {
+      if (!locationsFilter) return null;
+      // const LOCATIONS = Object.values(state.source.event_location);
+
+      return (
+        <div style={styles.action}>
+          <div>{locationsFilter}</div>
+          <div
+            style={styles.closeAction}
+            onClick={() => setLocationsFilter(null)}
+          >
+            <CloseIcon
+              style={{
+                fill: colors.darkSilver,
+                padding: 0,
+              }}
+            />
+          </div>
+        </div>
+      );
     };
 
     return (
@@ -186,8 +244,10 @@ const Events = ({ state, actions, libraries, block }) => {
           <ServeSearchContainer />
           <ServeFilters />
         </div>
-        <div style={{ justifyContent: "center" }}>
+        <div className="flex pink" style={{ minHeight: `2.4em` }}>
           <ServeSearchFilter />
+          <ServeGradesFilter />
+          <ServeLocationsFilter />
         </div>
       </div>
     );
@@ -214,12 +274,20 @@ const styles = {
     color: colors.darkSilver,
   },
   action: {
+    position: "relative",
     backgroundColor: colors.white,
     borderRadius: 5,
     padding: `0.5em 1.5em`,
-    margin: `1em 1em 0 0`,
-    cursor: "pointer",
+    marginRight: `1em`,
     width: "fit-content",
+  },
+  closeAction: {
+    position: "absolute",
+    top: -10,
+    right: -10,
+    backgroundColor: colors.silverFill,
+    cursor: "pointer",
+    borderRadius: "50%",
   },
 };
 

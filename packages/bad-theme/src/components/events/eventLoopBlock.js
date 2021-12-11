@@ -101,8 +101,13 @@ const Post = ({
               : null
           )
             return null;
-          // select filtering
+        }
+        // select filtering config
+        if (gradesFilter) {
           if (!event_grade.includes(Number(gradesFilter))) return null;
+        }
+        if (locationsFilter) {
+          if (!event_location.includes(Number(locationsFilter))) return null;
         }
 
         if (layoutOne)
