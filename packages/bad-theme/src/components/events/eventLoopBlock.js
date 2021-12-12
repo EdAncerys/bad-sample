@@ -71,7 +71,6 @@ const Post = ({
   }, []);
   // DATA pre FETCH ----------------------------------------------------------------
   if (!eventList) return <Loading />;
-  console.log(searchFilter, gradesFilter, locationsFilter);
 
   // RETURN ---------------------------------------------
   return (
@@ -87,7 +86,6 @@ const Post = ({
         const event_grade = block.event_grade;
         const event_location = block.event_location;
         const event_type = block.event_type;
-        console.log("block---", block);
 
         if (!event_grade.includes(gradeFilterId) && gradeFilterId !== 97)
           return null;

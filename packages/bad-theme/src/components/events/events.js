@@ -16,6 +16,7 @@ const Events = ({ state, actions, libraries, block }) => {
   const [searchFilter, setSearchFilter] = useState(null);
   const [gradesFilter, setGradesFilter] = useState(null);
   const [locationsFilter, setLocationsFilter] = useState(null);
+  const [ready, isReady] = useState(false);
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -32,6 +33,7 @@ const Events = ({ state, actions, libraries, block }) => {
 
     setGrades(GRADES);
     setLocations(LOCATIONS);
+    isReady(true);
   }, [state.source.event_grade, state.source.event_location]);
 
   // HELPERS ----------------------------------------------------------------
@@ -195,15 +197,12 @@ const Events = ({ state, actions, libraries, block }) => {
     const ServeGradesFilter = () => {
       if (!gradesFilter) return null;
       const GRADES = Object.values(state.source.event_grade);
-      const filter = GRADES.filter((item) => {
-        consol.log(item.id);
-        item.id === gradesFilter;
-      });
-      console.log(GRADES, filter);
+      const filter = GRADES.filter((item) => item.id === Number(gradesFilter));
+      const name = filter[0].name;
 
       return (
         <div style={styles.action}>
-          <div>{gradesFilter}</div>
+          <div>{name}</div>
           <div style={styles.closeAction} onClick={() => setGradesFilter(null)}>
             <CloseIcon
               style={{
@@ -218,11 +217,15 @@ const Events = ({ state, actions, libraries, block }) => {
 
     const ServeLocationsFilter = () => {
       if (!locationsFilter) return null;
-      // const LOCATIONS = Object.values(state.source.event_location);
+      const LOCATIONS = Object.values(state.source.event_location);
+      const filter = LOCATIONS.filter(
+        (item) => item.id === Number(locationsFilter)
+      );
+      const name = filter[0].name;
 
       return (
         <div style={styles.action}>
-          <div>{locationsFilter}</div>
+          <div>{name}</div>
           <div
             style={styles.closeAction}
             onClick={() => setLocationsFilter(null)}
@@ -244,7 +247,7 @@ const Events = ({ state, actions, libraries, block }) => {
           <ServeSearchContainer />
           <ServeFilters />
         </div>
-        <div className="flex pink" style={{ minHeight: `2.4em` }}>
+        <div className="flex" style={{ minHeight: `2.4em` }}>
           <ServeSearchFilter />
           <ServeGradesFilter />
           <ServeLocationsFilter />
@@ -253,6 +256,7 @@ const Events = ({ state, actions, libraries, block }) => {
     );
   };
 
+  if (!ready) return <Loading />;
   // RETURN ---------------------------------------------------
   return (
     <div>
