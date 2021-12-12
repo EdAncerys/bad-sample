@@ -1,5 +1,51 @@
 import { setLoginModalAction } from "../index";
 
+export const loginAction = async ({ dispatch, user }) => {
+  console.log("loginAction triggered", user);
+
+  const username = user.username;
+  const password = user.password;
+  if (username === "" || password === "") {
+    console.log("Credentials provided not valid");
+    return;
+  }
+  const URL = "https://skylarkdev.digital/dynamicsbridge/users/login";
+
+  // const userCredentials = JSON.stringify({
+  //   username,
+  //   password,
+  // });
+  const userCredentials = JSON.stringify({
+    username: "ed.ancerys",
+    password: "h98H*(H9h9hiuuitg7g*f6ftu",
+  });
+
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers":
+        "Origin, X-Requested-With, Content-Type, Accept",
+      "Access-Control-Allow-Methods": "PUT, POST, GET, DELETE, OPTIONS",
+    },
+    body: userCredentials,
+  };
+  try {
+    const data = await fetch(URL, requestOptions);
+    const response = await data.json();
+    console.log(response);
+    // if (response.token) {
+    //   const encryptedJWT = handleEncryption({ jwt: response.token }); // encrypting provided jwt
+    //   handleSetCookie({ name: "events", value: encryptedJWT }); // set cookie in the browser
+    // } else {
+    //   alert(`${response.message}`);
+    // }
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
 // SET CONTEXT ---------------------------------------------------
 export const setLoginAction = ({ dispatch, loginAction }) => {
   console.log("setLoginAction triggered"); //debug
@@ -7,35 +53,3 @@ export const setLoginAction = ({ dispatch, loginAction }) => {
 
   setLoginModalAction({ dispatch, loginModalAction: false });
 };
-
-// const handleUserLogin = async ({}) => {
-//   console.log("handleUserLogin triggered");
-//   if (username === "" || password === "") return;
-//   const URL = "http://localhost:8888/events/wp-json/jwt-auth/v1/token";
-
-//   const userCredentials = JSON.stringify({
-//     username,
-//     password,
-//   });
-//   const requestOptions = {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     body: userCredentials,
-//   };
-//   try {
-//     const data = await fetch(URL, requestOptions);
-//     const response = await data.json();
-//     if (response.token) {
-//       const encryptedJWT = handleEncryption({ jwt: response.token }); // encrypting provided jwt
-//       handleSetCookie({ name: "events", value: encryptedJWT }); // set cookie in the browser
-
-//       actions.theme.setTaken(response.token);
-//       actions.theme.setLogin(true);
-//       actions.router.set("/");
-//     } else {
-//       alert(`${response.message}`);
-//     }
-//   } catch (error) {
-//     console.log("error", error);
-//   }
-// };

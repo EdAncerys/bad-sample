@@ -11,13 +11,12 @@ import {
   setLoginModalAction,
   setCreateAccountModalAction,
   setLoginAction,
+  loginAction,
 } from "../context";
 
 const LoginModal = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { loginModalAction } = useAppState();
-
-  const data = state.source.get(state.router.link);
 
   // SERVERS --------------------------------------------------
   const ServeModalContent = () => {
@@ -110,7 +109,12 @@ const LoginModal = ({ state, actions }) => {
             type="submit"
             className="btn"
             style={{ backgroundColor: colors.primary, color: colors.white }}
-            onClick={() => setLoginAction({ dispatch, loginAction: true })}
+            onClick={() =>
+              loginAction({
+                dispatch,
+                user: { username: "hello", password: "password" },
+              })
+            }
           >
             Login
           </button>

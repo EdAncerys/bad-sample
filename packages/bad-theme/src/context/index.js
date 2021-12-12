@@ -7,6 +7,7 @@ import {
   setEnquireAction,
 } from "./actions/navigation";
 import { setLoginAction } from "./auth/actions";
+import { loginAction } from "./auth/actions";
 
 export {
   AppProvider,
@@ -18,4 +19,5 @@ export {
   setCreateAccountModalAction,
   setEnquireAction,
   setLoginAction,
+  loginAction,
 };

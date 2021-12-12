@@ -17,21 +17,18 @@ const Post = ({ state, actions, libraries }) => {
   return (
     <div>
       <div>
-        <p style={styles.title}>PAGE</p>
+        {/* <span>{`theme.breakpoints.down('sm') matches: ${sm}`}</span> */}
+        {/* <span class="popup" citations="Right, finally">
+          right
+        </span> */}
       </div>
-      <span>{`theme.breakpoints.down('sm') matches: ${sm}`}</span>
       <BlockBuilder blocks={wpBlocks} />
     </div>
   );
 };
 
 const styles = {
-  title: {
-    textAlign: "center",
-    fontSize: 40,
-    fontWeight: "500",
-    color: colors.primary,
-  },
+  container: {},
 };
 
 export default connect(Post);
