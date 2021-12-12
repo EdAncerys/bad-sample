@@ -7,6 +7,7 @@ import Loading from "../loading";
 import SearchIcon from "@mui/icons-material/Search";
 import { Form } from "react-bootstrap";
 import CloseIcon from "@mui/icons-material/Close";
+import TitleBlock from "../titleBlock";
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, useAppState } from "../../context";
 
@@ -242,12 +243,12 @@ const Events = ({ state, actions, libraries, block }) => {
     };
 
     return (
-      <div style={{ padding: `${marginVertical}px ${marginHorizontal}px 0` }}>
+      <div style={{ position: "relative", paddingBottom: `1em` }}>
         <div className="flex-row">
           <ServeSearchContainer />
           <ServeFilters />
         </div>
-        <div className="flex" style={{ minHeight: `2.4em` }}>
+        <div className="flex" style={{ position: "absolute" }}>
           <ServeSearchFilter />
           <ServeGradesFilter />
           <ServeLocationsFilter />
@@ -259,7 +260,8 @@ const Events = ({ state, actions, libraries, block }) => {
   if (!ready) return <Loading />;
   // RETURN ---------------------------------------------------
   return (
-    <div>
+    <div style={{ padding: `${marginVertical}px ${marginHorizontal}px 0` }}>
+      <TitleBlock block={block} disableMargin />
       <ServeFilter />
       <EventLoopBlock
         block={block}

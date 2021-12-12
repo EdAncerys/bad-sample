@@ -4,7 +4,6 @@ import { connect } from "frontity";
 import Loading from "../loading";
 import EventListView from "../eventListView";
 import Card from "../card/card";
-import TitleBlock from "../titleBlock";
 
 const Post = ({
   state,
@@ -74,13 +73,7 @@ const Post = ({
 
   // RETURN ---------------------------------------------
   return (
-    <div
-      style={{
-        ...STYLES,
-        margin: `${marginVertical}px ${marginHorizontal}px `,
-      }}
-    >
-      <TitleBlock block={block} disableMargin />
+    <div style={{ ...STYLES }}>
       {eventList.map((block, key) => {
         const { colour, image, summary, title } = block.acf;
         const event_grade = block.event_grade;
