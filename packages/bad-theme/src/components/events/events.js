@@ -248,7 +248,7 @@ const Events = ({ state, actions, libraries, block }) => {
           <ServeSearchContainer />
           <ServeFilters />
         </div>
-        <div className="flex" style={{ position: "absolute" }}>
+        <div className="flex">
           <ServeSearchFilter />
           <ServeGradesFilter />
           <ServeLocationsFilter />

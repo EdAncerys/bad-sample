@@ -6,13 +6,15 @@ import Loading from "./loading";
 import { colors } from "../config/colors";
 import { setGoToAction } from "../context";
 
-const EventListView = ({ state, actions, libraries, block }) => {
+const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
 
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+  let MARGIN = `${marginVertical}px 0`;
+  if (removeMargin) MARGIN = `0 0 ${marginVertical}px`;
 
   const {
     date_time,
@@ -197,7 +199,7 @@ const EventListView = ({ state, actions, libraries, block }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div style={{ margin: `${marginVertical}px 0` }}>
+    <div style={{ margin: MARGIN }}>
       <div
         style={{
           minHeight: `${BANNER_HEIGHT / 1.5}`,

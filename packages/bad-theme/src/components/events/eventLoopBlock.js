@@ -23,6 +23,7 @@ const Post = ({
   const [locations, setLocations] = useState(null); // data
   const [types, setTypes] = useState(null); // data
   const [gradeFilterId, setGradeFilterId] = useState(null); // data
+  const search = block.add_search_function;
   const { layout, grade_filter } = block;
 
   const marginHorizontal = state.theme.marginHorizontal;
@@ -101,12 +102,13 @@ const Post = ({
           if (!event_location.includes(Number(locationsFilter))) return null;
         }
 
-        if (layoutOne)
+        if (layoutOne) {
           return (
             <div key={key}>
-              <EventListView block={block} />
+              <EventListView block={block} removeMargin={search} />
             </div>
           );
+        }
 
         if (layoutTwo)
           return (
