@@ -84,7 +84,6 @@ const FullWidthContentBlock = ({
             className="btn"
             style={{
               fontSize: 16,
-              textTransform: "capitalize",
               color: colors.white,
               backgroundColor: colors.primary,
             }}
