@@ -244,7 +244,7 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
 
       return (
         <Accordion.Body>
-          <div>
+          <div className="text-body">
             <Html2React html={body} />
           </div>
           <ServeDownloads />

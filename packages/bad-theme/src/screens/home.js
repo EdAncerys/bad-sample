@@ -5,7 +5,6 @@ import { colors } from "../config/colors";
 // COMPONENTS ----------------------------------------------------------------
 import BlockBuilder from "../components/builder/blockBuilder";
 import Loading from "../components/loading";
-// import CardFS from "../components/cardFS";
 
 const Home = ({ state, actions, libraries }) => {
   const [wpBlocks, setWpBlocks] = useState(null);

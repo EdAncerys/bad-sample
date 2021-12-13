@@ -26,6 +26,8 @@ const Directions = ({ state, actions, libraries }) => {
 
   // SERVERS ---------------------------------------------
   const ServePatchDirections = ({ item, nextKey }) => {
+    let TITLE_RENDER = item;
+
     let chevron = (
       <ChevronRightIcon style={{ fontSize: 16, color: colors.darkSilver }} />
     );
@@ -38,34 +40,32 @@ const Directions = ({ state, actions, libraries }) => {
       actions.router.set(`${goToLink}`);
     };
 
-    let TITLE_RENDER = item;
-    wpMenu.map((menuItem) => {
-      // check for nested child_items
-      if (menuItem.child_items)
-        menuItem.child_items.map((childItem) => {
-          console.log("---", childItem.slug);
-          // check for nested child_items
-          if (childItem.child_items) {
-            childItem.child_items.map((childItem) => {
-              if (childItem.slug.includes(item.toLowerCase()))
-                TITLE_RENDER = childItem.title;
-              return;
-            });
-          }
-          if (childItem.slug.includes(item.toLowerCase()))
-            TITLE_RENDER = childItem.title;
-          return;
-        });
-      if (menuItem.slug.includes(item.toLowerCase()))
-        TITLE_RENDER = menuItem.title;
-    });
+    if (item[0] !== "home")
+      wpMenu.map((menuItem) => {
+        // check for nested child_items
+        if (menuItem.child_items)
+          menuItem.child_items.map((childItem) => {
+            // check for nested child_items
+            if (childItem.child_items) {
+              childItem.child_items.map((childItem) => {
+                if (childItem.slug.includes(item.toLowerCase()))
+                  TITLE_RENDER = <Html2React html={childItem.title} />;
+                return;
+              });
+            }
+            if (childItem.slug.includes(item.toLowerCase()))
+              TITLE_RENDER = <Html2React html={childItem.title} />;
+            return;
+          });
+
+        if (menuItem.slug.includes(item.toLowerCase()))
+          TITLE_RENDER = menuItem.title;
+      });
 
     return (
       <div>
         <div className="flex-row" style={styles.link} onClick={handleGoToLink}>
-          <div style={styles.linkValue}>
-            <Html2React html={TITLE_RENDER} />
-          </div>
+          <div style={styles.linkValue}>{TITLE_RENDER}</div>
           <div style={{ margin: `0 ${MARGIN}px` }}>{chevron}</div>
         </div>
       </div>
