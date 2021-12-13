@@ -40,12 +40,24 @@ const Directions = ({ state, actions, libraries }) => {
 
     let TITLE_RENDER = item;
     wpMenu.map((menuItem) => {
+      // check for nested child_items
       if (menuItem.child_items)
         menuItem.child_items.map((childItem) => {
-          if (childItem.slug === item.toLowerCase())
+          console.log("---", childItem.slug);
+          // check for nested child_items
+          if (childItem.child_items) {
+            childItem.child_items.map((childItem) => {
+              if (childItem.slug.includes(item.toLowerCase()))
+                TITLE_RENDER = childItem.title;
+              return;
+            });
+          }
+          if (childItem.slug.includes(item.toLowerCase()))
             TITLE_RENDER = childItem.title;
+          return;
         });
-      if (menuItem.slug === item.toLowerCase()) TITLE_RENDER = menuItem.title;
+      if (menuItem.slug.includes(item.toLowerCase()))
+        TITLE_RENDER = menuItem.title;
     });
 
     return (
