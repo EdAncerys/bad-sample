@@ -17,7 +17,7 @@ const Post = ({ state, actions, libraries }) => {
   return (
     <div>
       <div>
-        {/* <span>{`theme.breakpoints.down('sm') matches: ${sm}`}</span> */}
+        <span>{`theme.breakpoints.down('sm') matches: ${sm}`}</span>
         {/* <span class="popup" citations="Right, finally">
           right
         </span> */}

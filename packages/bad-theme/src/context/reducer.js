@@ -19,6 +19,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, createAccountAction: action.payload };
     case "SET_ENQUIRE_ACTION":
       return { ...state, enquireAction: action.payload };
+    case "SET_JWT_ACTION":
+      return { ...state, jwt: action.payload };
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }

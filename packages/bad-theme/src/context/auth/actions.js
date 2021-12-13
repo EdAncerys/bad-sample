@@ -35,6 +35,7 @@ export const loginAction = async ({ dispatch, user }) => {
     const data = await fetch(URL, requestOptions);
     const response = await data.json();
     console.log(response);
+    seJWTAction({ dispatch, jwt: "token" }); // add jwt to context
     // if (response.token) {
     //   const encryptedJWT = handleEncryption({ jwt: response.token }); // encrypting provided jwt
     //   handleSetCookie({ name: "events", value: encryptedJWT }); // set cookie in the browser
@@ -52,4 +53,9 @@ export const setLoginAction = ({ dispatch, loginAction }) => {
   dispatch({ type: "SET_LOGIN_ACTION", payload: true });
 
   setLoginModalAction({ dispatch, loginModalAction: false });
+};
+
+export const seJWTAction = ({ dispatch, jwt }) => {
+  console.log("seJWTAction triggered"); //debug
+  dispatch({ type: "SET_JWT_ACTION", payload: jwt });
 };
