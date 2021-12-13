@@ -40,11 +40,12 @@ const CardBody = ({
         style={{
           fontSize: heroBanner ? 36 : 20,
           height: TITLE_HEIGHT,
-          maxHeight: isFrom4Col ? 200 : "auto", // restricting title height
+          maxHeight: isFrom4Col ? "7em" : "auto", // restricting title height
           overflow: "hidden",
           fontWeight: "bold",
           color: colors.black,
           alignItems: newsCarousel ? "center" : "flex-start",
+          lineHeight: 1.2,
         }}
       >
         <Html2React html={titlePreview} />
@@ -61,7 +62,7 @@ const CardBody = ({
       bodyPreview = `${body.slice(0, MAX_CHAR)}...`;
 
     return (
-      <div style={{ fontSize: 16, overflow: "auto", padding: `1em 0` }}>
+      <div style={{ fontSize: 16, overflow: "auto", paddingTop: `1em` }}>
         <Html2React html={bodyPreview} />
       </div>
     );

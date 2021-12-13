@@ -57,6 +57,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
 
       return (
         <div
+          className="pil-title"
           style={{ fontSize: 16, marginBottom: `0.25em`, cursor: "pointer" }}
           onClick={() => setGoToAction({ path: link, actions })}
         >

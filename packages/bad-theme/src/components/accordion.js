@@ -159,7 +159,7 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
       return (
         <div style={{ position: "relative" }}>
           <Accordion.Header>
-            <div className="flex" style={{ padding: `0.5em 0` }}>
+            <div className="flex" style={{ margin: 0, padding: `0.5em 0` }}>
               <ServeTitle />
               <ServeLogo />
               <ServeIcon />
@@ -258,7 +258,7 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
         <Accordion.Item
           eventKey={eventKey}
           className="shadow"
-          style={{ padding: `0 1em`, margin: `1em 0` }}
+          style={{ padding: `0.5em 1em`, margin: `1em 0` }}
           onClick={() => setActive(!active)}
         >
           <ServeTitle />

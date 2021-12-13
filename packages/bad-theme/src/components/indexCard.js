@@ -104,6 +104,7 @@ const IndexCard = ({
         >
           <div
             style={{
+              padding: `0.5em 0`,
               borderBottom: `1px dotted ${colors.darkSilver}`,
               textTransform: "capitalize",
             }}
@@ -132,7 +133,7 @@ const IndexCard = ({
         height: cardHeight || "100%",
       }}
     >
-      <div style={{ padding: `2em 1em` }}>
+      <div style={{ padding: `2em` }}>
         <div className="list-group index-card">
           <ServeContent />
           {index_title.map((block, key) => {

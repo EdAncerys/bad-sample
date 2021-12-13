@@ -16,7 +16,9 @@
 [type="button"]:not(:disabled) {
   box-shadow: none;
 }
-
+.accordion-header {
+  margin: 0;
+}
 .popup {
   position: relative;
   color: #1f335e;

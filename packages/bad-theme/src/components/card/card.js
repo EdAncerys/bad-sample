@@ -121,7 +121,7 @@ const Card = ({
 
   const ServeContent = () => {
     return (
-      <div className="flex-col" style={{ padding: `1em 2em` }}>
+      <div className="flex-col" style={{ padding: `2em` }}>
         <ServeCardHeader />
         <ServeJournalCard />
         <CardBody
