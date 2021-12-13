@@ -4,15 +4,25 @@ import { colors } from "../config/colors";
 
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
-const Directions = ({ state, actions }) => {
+const Directions = ({ state, actions, libraries }) => {
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const endPoint = state.router.link;
   const data = state.source.get(endPoint);
 
+  const [wpMenu, setWpMenu] = useState([]);
   const marginHorizontal = state.theme.marginHorizontal;
   const directions = endPoint.split("/").slice(1, -1);
   const directionLength = directions.length;
   const MARGIN = 10;
   let KEY = 0;
+
+  useEffect(() => {
+    // getting wp menu from state
+    const data = state.theme.menu;
+    if (!data) return;
+
+    setWpMenu(data);
+  }, [state.theme.menu]);
 
   // SERVERS ---------------------------------------------
   const ServePatchDirections = ({ item, nextKey }) => {
@@ -28,10 +38,22 @@ const Directions = ({ state, actions }) => {
       actions.router.set(`${goToLink}`);
     };
 
+    let TITLE_RENDER = item;
+    wpMenu.map((menuItem) => {
+      if (menuItem.child_items)
+        menuItem.child_items.map((childItem) => {
+          if (childItem.slug === item.toLowerCase())
+            TITLE_RENDER = childItem.title;
+        });
+      if (menuItem.slug === item.toLowerCase()) TITLE_RENDER = menuItem.title;
+    });
+
     return (
       <div>
         <div className="flex-row" style={styles.link} onClick={handleGoToLink}>
-          <div style={styles.linkValue}>{item}</div>
+          <div style={styles.linkValue}>
+            <Html2React html={TITLE_RENDER} />
+          </div>
           <div style={{ margin: `0 ${MARGIN}px` }}>{chevron}</div>
         </div>
       </div>
@@ -55,7 +77,7 @@ const Directions = ({ state, actions }) => {
             alignItems: "center",
           }}
         >
-          You’re here:
+          You're here:
         </div>
       </div>
     );

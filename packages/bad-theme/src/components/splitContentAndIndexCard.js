@@ -23,6 +23,7 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
 
       return (
         <div
+          className="text-body"
           style={{
             fontSize: 16,
           }}

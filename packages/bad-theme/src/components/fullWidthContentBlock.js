@@ -58,7 +58,7 @@ const FullWidthContentBlock = ({
 
     return (
       <div
-        className="flex-col"
+        className="flex-col text-body"
         style={{
           fontSize: 16,
           margin: `2em 0`,

@@ -28,6 +28,7 @@ const SplitContentAndUsefulLinksCard = ({
 
       return (
         <div
+          className="text-body"
           style={{
             fontSize: 16,
           }}
