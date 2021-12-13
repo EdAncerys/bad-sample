@@ -59,7 +59,7 @@ const Directions = ({ state, actions, libraries }) => {
           });
 
         if (menuItem.slug.includes(item.toLowerCase()))
-          TITLE_RENDER = menuItem.title;
+          TITLE_RENDER = <Html2React html={menuItem.title} />;
       });
 
     return (
