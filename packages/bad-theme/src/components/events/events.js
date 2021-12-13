@@ -248,7 +248,7 @@ const Events = ({ state, actions, libraries, block }) => {
           <ServeSearchContainer />
           <ServeFilters />
         </div>
-        <div className="flex">
+        <div className="flex" style={{ marginTop: "0.5em" }}>
           <ServeSearchFilter />
           <ServeGradesFilter />
           <ServeLocationsFilter />
@@ -291,7 +291,7 @@ const styles = {
     position: "absolute",
     top: -10,
     right: -10,
-    backgroundColor: colors.silverFill,
+    backgroundColor: colors.silverFillOne,
     cursor: "pointer",
     borderRadius: "50%",
   },

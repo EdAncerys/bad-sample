@@ -101,7 +101,7 @@ const Directions = ({ state, actions, libraries }) => {
     <div
       style={{
         backgroundColor: colors.lightSilver,
-        margin: `0 ${marginHorizontal}px`,
+        padding: `0 ${marginHorizontal}px`,
       }}
     >
       <div className="flex" style={styles.wrapper}>

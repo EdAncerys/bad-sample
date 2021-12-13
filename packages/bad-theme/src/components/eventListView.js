@@ -203,7 +203,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
       <div
         style={{
           minHeight: `${BANNER_HEIGHT / 1.5}`,
-          backgroundColor: colors.silverFill,
+          backgroundColor: colors.silverFillOne,
         }}
       >
         <div style={styles.container}>

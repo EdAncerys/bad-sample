@@ -14,7 +14,6 @@ const Post = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
 
   if (!pil) return <Loading />;
-  console.log("pil", pil);
 
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {

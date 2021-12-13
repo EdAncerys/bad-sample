@@ -222,7 +222,7 @@ const Event = ({ state, actions, libraries }) => {
       <div
         className="flex"
         style={{
-          backgroundColor: colors.silverFill,
+          backgroundColor: colors.silverFillOne,
           justifyContent: "center",
           padding: `2em`,
           margin: `2em 0`,
@@ -419,7 +419,7 @@ const styles = {
     paddingRight: 5,
   },
   action: {
-    backgroundColor: colors.silverFill,
+    backgroundColor: colors.silverFillOne,
     borderRadius: 5,
     padding: `0.5em 1.5em`,
     margin: `1em 1em 0 0`,

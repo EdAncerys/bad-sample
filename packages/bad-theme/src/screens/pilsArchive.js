@@ -4,11 +4,15 @@ import { connect, styled } from "frontity";
 import Loading from "../components/loading";
 import { colors } from "../config/colors";
 import { setGoToAction } from "../context";
+import SearchIcon from "@mui/icons-material/Search";
+import CloseIcon from "@mui/icons-material/Close";
 
 const PilsArchive = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const [isReady, seIsReady] = useState(false);
+  const [searchFilter, setSearchFilter] = useState(null);
+  const [pilList, setPilList] = useState([]);
   const data = state.source.get(state.router.link);
   const { totalPages, page, next } = data; // check if data have multiple pages
   // console.log("pageData ", data); // debug
@@ -23,8 +27,8 @@ const PilsArchive = ({ state, actions, libraries }) => {
       isThereNextPage = nextPage;
     }
     seIsReady(true);
+    setPilList(Object.values(state.source.pils)); // add pill object to data array
   }, []);
-  const PIL_LIST = Object.values(state.source.pils); // add pill object to data array
   // DATA pre FETCH ----------------------------------------------------------------
 
   const marginHorizontal = state.theme.marginHorizontal;
@@ -32,8 +36,8 @@ const PilsArchive = ({ state, actions, libraries }) => {
 
   if (!isReady) return <Loading />;
 
-  let ALPHABET = ["0-9"];
-  PIL_LIST.map((item) => {
+  let ALPHABET = [];
+  pilList.map((item) => {
     const pilTitle = item.title.rendered;
     if (!pilTitle) return null;
 
@@ -41,11 +45,22 @@ const PilsArchive = ({ state, actions, libraries }) => {
       if (ALPHABET.includes("0-9")) return null;
       ALPHABET.push("0-9");
     }
-    if (ALPHABET.includes(pilTitle[0].toUpperCase())) return null;
-    ALPHABET.push(pilTitle[0].toUpperCase());
+    if (isNaN(pilTitle[0]) && !ALPHABET.includes(pilTitle[0].toUpperCase()))
+      ALPHABET.push(pilTitle[0].toUpperCase());
   });
+  ALPHABET.sort(); // sorts array alphabetically
 
-  if (!ALPHABET.length) return <Loading />; // awaits for pil data to be processed
+  // HELPERS ----------------------------------------------------------------
+  const handleSearchSubmit = () => {
+    const searchInput = document.querySelector("#searchInput").value;
+    if (!!searchInput) {
+      const filter = pilList.filter((pil) =>
+        pil.title.rendered.includes(searchInput)
+      );
+      setSearchFilter(searchInput);
+      setPilList(filter);
+    }
+  };
 
   // SERVERS --------------------------------------------------------
   const ServePilsList = ({ item }) => {
@@ -78,7 +93,16 @@ const PilsArchive = ({ state, actions, libraries }) => {
           {item}
         </div>
         <div style={{ padding: `1em 0` }}>
-          {PIL_LIST.map((pil, key) => {
+          {pilList.map((pil, key) => {
+            if (searchFilter) {
+              if (
+                !pil.title.rendered
+                  .toLowerCase()
+                  .includes(searchFilter.toLowerCase())
+              )
+                return null;
+            }
+
             return <ServePil key={key} pil={pil} />;
           })}
         </div>
@@ -86,13 +110,164 @@ const PilsArchive = ({ state, actions, libraries }) => {
     );
   };
 
+  const ServeInfo = () => {
+    const ServeTitle = () => {
+      return (
+        <div
+          className="flex"
+          style={{
+            fontSize: 36,
+            color: colors.black,
+            fontWeight: "bold",
+            alignItems: "center",
+          }}
+        >
+          Search for Patient Information Leaflets
+        </div>
+      );
+    };
+
+    const ServeBody = () => {
+      return (
+        <div className="flex" style={{ padding: `1em 0`, width: "60%" }}>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat.
+        </div>
+      );
+    };
+    return (
+      <div
+        className="flex-col"
+        style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}
+      >
+        <ServeTitle />
+        <ServeBody />
+      </div>
+    );
+  };
+
+  const ServeFilter = () => {
+    const ServeTitle = () => {
+      return (
+        <div
+          className="flex"
+          style={{
+            fontSize: 36,
+            color: colors.black,
+            fontWeight: "bold",
+            alignItems: "center",
+          }}
+        >
+          Search for Patient Information Leaflets
+        </div>
+      );
+    };
+
+    const ServeSearchFilter = () => {
+      if (!searchFilter) return null;
+
+      return (
+        <div style={styles.action}>
+          <div>{searchFilter}</div>
+          <div
+            style={styles.closeAction}
+            onClick={() => {
+              setSearchFilter(null);
+              setPilList(Object.values(state.source.pils));
+            }}
+          >
+            <CloseIcon
+              style={{
+                fill: colors.darkSilver,
+                padding: 0,
+              }}
+            />
+          </div>
+        </div>
+      );
+    };
+
+    return (
+      <div style={{ backgroundColor: colors.silverFillTwo }}>
+        <div
+          className="flex-col"
+          style={{
+            padding: `${
+              marginVertical * 1.5
+            }px ${marginHorizontal}px ${marginVertical}px`,
+          }}
+        >
+          <ServeTitle />
+
+          <div className="flex-row" style={{ width: "60%" }}>
+            <div
+              className="flex"
+              style={{
+                flex: 1,
+                marginRight: `2em`,
+                padding: `0.75em 0`,
+                position: "relative",
+              }}
+            >
+              <input
+                id="searchInput"
+                type="text"
+                className="form-control"
+                placeholder="Find An Event"
+                style={styles.input}
+              />
+              <span
+                className="input-group-text"
+                style={{
+                  position: "absolute",
+                  right: 0,
+                  height: 45,
+                  border: "none",
+                  background: "transparent",
+                  alignItems: "center",
+                  color: colors.darkSilver,
+                }}
+              >
+                <SearchIcon />
+              </span>
+            </div>
+            <div style={{ display: "grid", alignItems: "center" }}>
+              <button
+                type="submit"
+                className="btn"
+                style={{
+                  backgroundColor: colors.primary,
+                  color: colors.white,
+                  padding: `0.5em`,
+                }}
+                onClick={handleSearchSubmit}
+              >
+                Search
+              </button>
+            </div>
+          </div>
+
+          <div className="flex" style={{ padding: "0.5em 0 1em" }}>
+            <ServeSearchFilter />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   // RETURN ----------------------------------------------------------------
   return (
-    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
-      <div style={styles.container}>
-        {ALPHABET.map((item, key) => {
-          return <ServePilsList key={key} item={item} />;
-        })}
+    <div>
+      <ServeInfo />
+      <ServeFilter />
+      <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
+        <div style={styles.container}>
+          {ALPHABET.map((item, key) => {
+            return <ServePilsList key={key} item={item} />;
+          })}
+        </div>
       </div>
     </div>
   );
@@ -103,6 +278,22 @@ const styles = {
     display: "grid",
     gridTemplateColumns: `repeat(3, 1fr)`,
     gap: 20,
+  },
+  action: {
+    position: "absolute",
+    backgroundColor: colors.white,
+    borderRadius: 5,
+    padding: `0.5em 1.5em`,
+    marginRight: `1em`,
+    width: "fit-content",
+  },
+  closeAction: {
+    position: "absolute",
+    top: -10,
+    right: -10,
+    backgroundColor: colors.silverFillOne,
+    cursor: "pointer",
+    borderRadius: "50%",
   },
 };
 

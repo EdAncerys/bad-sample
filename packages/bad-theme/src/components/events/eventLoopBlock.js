@@ -76,7 +76,8 @@ const Post = ({
   return (
     <div style={{ ...STYLES }}>
       {eventList.map((block, key) => {
-        const { colour, image, summary, title } = block.acf;
+        const { colour, image, summary, title, public_or_members_only } =
+          block.acf;
         const event_grade = block.event_grade;
         const event_location = block.event_location;
         const event_type = block.event_type;
