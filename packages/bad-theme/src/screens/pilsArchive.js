@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { connect, styled } from "frontity";
+import { v4 as uuidv4 } from "uuid";
 
 import Loading from "../components/loading";
 import { colors } from "../config/colors";
 import { setGoToAction } from "../context";
+
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -16,6 +18,8 @@ const PilsArchive = ({ state, actions, libraries }) => {
   const data = state.source.get(state.router.link);
   const { totalPages, page, next } = data; // check if data have multiple pages
   // console.log("pageData ", data); // debug
+
+  const id = uuidv4();
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
@@ -52,7 +56,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handleSearchSubmit = () => {
-    const searchInput = document.querySelector("#searchInput").value;
+    const searchInput = document.querySelector(`#searchInput${id}`).value;
     if (!!searchInput) {
       const INPUT = searchInput.toLowerCase();
       const filter = pilList.filter((pil) =>
@@ -170,7 +174,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
       if (!searchFilter) return null;
 
       return (
-        <div style={styles.action}>
+        <div className="shadow" style={styles.action}>
           <div>{searchFilter}</div>
           <div
             style={styles.closeAction}
@@ -213,7 +217,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
               }}
             >
               <input
-                id="searchInput"
+                id={`searchInput${id}`}
                 type="text"
                 className="form-control"
                 placeholder="Find An Event"
@@ -287,7 +291,6 @@ const styles = {
     padding: `0.5em 1.5em`,
     marginRight: `1em`,
     width: "fit-content",
-    boxShadow: `0 0.5rem 1rem rgba(0, 0, 0, 0.15)`,
   },
   closeAction: {
     position: "absolute",

@@ -80,7 +80,6 @@ const styles = {
     borderRadius: 5,
     padding: `0.5em 1.5em`,
     margin: `1em 1em 0 0`,
-    boxShadow: `0 0.5rem 1rem rgba(0, 0, 0, 0.15)`,
   },
 };
 

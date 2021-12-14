@@ -185,7 +185,7 @@ const Events = ({ state, actions, libraries, block }) => {
       if (!searchFilter) return null;
 
       return (
-        <div style={styles.action}>
+        <div className="shadow" style={styles.action}>
           <div>{searchFilter}</div>
           <div style={styles.closeAction} onClick={() => setSearchFilter(null)}>
             <CloseIcon
@@ -206,7 +206,7 @@ const Events = ({ state, actions, libraries, block }) => {
       const name = filter[0].name;
 
       return (
-        <div style={styles.action}>
+        <div className="shadow" style={styles.action}>
           <div>{name}</div>
           <div style={styles.closeAction} onClick={() => setGradesFilter(null)}>
             <CloseIcon
@@ -229,7 +229,7 @@ const Events = ({ state, actions, libraries, block }) => {
       const name = filter[0].name;
 
       return (
-        <div style={styles.action}>
+        <div className="shadow" style={styles.action}>
           <div>{name}</div>
           <div
             style={styles.closeAction}
@@ -295,7 +295,6 @@ const styles = {
     padding: `0.5em 1.5em`,
     marginRight: `1em`,
     width: "fit-content",
-    boxShadow: `0 0.5rem 1rem rgba(0, 0, 0, 0.15)`,
   },
   closeAction: {
     position: "absolute",

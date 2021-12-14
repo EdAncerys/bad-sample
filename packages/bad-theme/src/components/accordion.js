@@ -19,8 +19,6 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  console.log(block);
-
   // SERVERS ---------------------------------------------
   const ServeAccordion = ({ block, eventKey }) => {
     const [active, setActive] = useState(null);

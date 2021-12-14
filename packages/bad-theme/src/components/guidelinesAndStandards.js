@@ -8,9 +8,10 @@ import { setGoToAction } from "../context";
 import Loading from "./loading";
 import Accordion from "./accordion";
 import { colors } from "../config/colors";
+import BrandLogo from "../img/placeholders/logo.svg";
+
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
-import BrandLogo from "../img/placeholders/logo.svg";
 
 const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -154,7 +155,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
       if (!searchFilter) return null;
 
       return (
-        <div style={styles.action}>
+        <div className="shadow" style={styles.action}>
           <div>{searchFilter}</div>
           <div
             style={styles.closeAction}
@@ -262,7 +263,6 @@ const styles = {
     padding: `0.5em 1.5em`,
     marginRight: `1em`,
     width: "fit-content",
-    boxShadow: `0 0.5rem 1rem rgba(0, 0, 0, 0.15)`,
   },
   closeAction: {
     position: "absolute",

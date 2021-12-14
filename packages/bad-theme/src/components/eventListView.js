@@ -10,6 +10,8 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
 
+  console.log(block);
+
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -227,7 +229,6 @@ const styles = {
     padding: `0.5em 1.5em`,
     margin: `1em 1em 0 0`,
     cursor: "pointer",
-    boxShadow: `0 0.5rem 1rem rgba(0, 0, 0, 0.15)`,
   },
   divider: {
     margin: `5px 0.5em`,
