@@ -32,7 +32,10 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handleSearchSubmit = () => {
-    const searchInput = document.querySelector(`#searchInput${id}`).value;
+    const searchInput = document.querySelector(
+      // `input[name=searchInput${id}]`
+      `#searchInput`
+    ).value;
     if (!!searchInput) {
       const INPUT = searchInput.toLowerCase();
       const filter = list.accordion_item.filter(
@@ -198,7 +201,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
               }}
             >
               <input
-                id={`searchInput${id}`}
+                id="searchInput"
                 type="text"
                 className="form-control"
                 placeholder="Find Guidelines"

@@ -20,6 +20,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
 
   const {
     date_time,
+    conditions,
     email,
     image,
     layout,
@@ -166,21 +167,23 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
       );
     };
 
-    const ServeFilters = () => {
-      const ServeFilter = ({ filter }) => {
+    const ServeCondition = () => {
+      if (!conditions) return null;
+
+      const ServeFilterCondition = ({ filter }) => {
         return (
           <div style={styles.action}>
-            <Html2React html={filter.name} />
+            <Html2React html={filter.post_title} />
           </div>
         );
       };
 
       return (
         <div className="flex-row" style={{ flexWrap: "wrap" }}>
-          {eventGrades.map((filter, key) => {
+          {conditions.map((filter, key) => {
             return (
               <div key={key}>
-                <ServeFilter filter={filter} />
+                <ServeFilterCondition filter={filter} />
               </div>
             );
           })}
@@ -194,7 +197,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
         <ServeTitle />
         <ServeInformation />
         <ServeSummary />
-        <ServeFilters />
+        <ServeCondition />
       </div>
     );
   };
