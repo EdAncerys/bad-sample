@@ -43,12 +43,10 @@ const Events = ({ state, actions, libraries, block }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handleSearchSubmit = () => {
-    const searchInput = document.querySelector(
-      `input[name='${id}_searchInput']`
-    ).value;
+    const searchInput = document.querySelector(`#searchInput${id}`).value;
 
-    const serveFilterOne = document.querySelector("#serveFilterOne").value;
-    const serveFilterTwo = document.querySelector("#serveFilterTwo").value;
+    const serveFilterOne = document.querySelector(`#serveFilterOne${id}`).value;
+    const serveFilterTwo = document.querySelector(`#serveFilterTwo${id}`).value;
 
     if (!!searchInput) setSearchFilter(searchInput);
     if (!!serveFilterOne) setGradesFilter(serveFilterOne);
@@ -79,7 +77,7 @@ const Events = ({ state, actions, libraries, block }) => {
       return (
         <div className="flex" style={{ paddingRight: `1em` }}>
           <Form.Select
-            id="serveFilterOne"
+            id={`serveFilterOne${id}`}
             aria-label="Default select example"
             style={styles.input}
           >
@@ -102,7 +100,7 @@ const Events = ({ state, actions, libraries, block }) => {
       return (
         <div className="flex">
           <Form.Select
-            id="serveFilterTwo"
+            id={`serveFilterTwo${id}`}
             aria-label="Default select example"
             style={styles.input}
           >
@@ -141,8 +139,7 @@ const Events = ({ state, actions, libraries, block }) => {
           }}
         >
           <input
-            id={`${id}_searchInput`}
-            name={`${id}_searchInput`}
+            id={`searchInput${id}`}
             type="text"
             className="form-control"
             placeholder="Find An Event"
@@ -298,12 +295,13 @@ const styles = {
     padding: `0.5em 1.5em`,
     marginRight: `1em`,
     width: "fit-content",
+    boxShadow: `0 0.5rem 1rem rgba(0, 0, 0, 0.15)`,
   },
   closeAction: {
     position: "absolute",
     top: -10,
     right: -10,
-    backgroundColor: colors.lightSilver,
+    backgroundColor: colors.white,
     cursor: "pointer",
     borderRadius: "50%",
   },

@@ -31,7 +31,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handleSearchSubmit = () => {
-    const searchInput = document.querySelector(`input[name='${id}']`).value;
+    const searchInput = document.querySelector(`#searchInput${id}`).value;
     if (!!searchInput) {
       const INPUT = searchInput.toLowerCase();
       const filter = list.accordion_item.filter(
@@ -197,8 +197,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
               }}
             >
               <input
-                id={`${id}`}
-                name={`${id}`}
+                id={`searchInput${id}`}
                 type="text"
                 className="form-control"
                 placeholder="Find Guidelines"
@@ -263,12 +262,13 @@ const styles = {
     padding: `0.5em 1.5em`,
     marginRight: `1em`,
     width: "fit-content",
+    boxShadow: `0 0.5rem 1rem rgba(0, 0, 0, 0.15)`,
   },
   closeAction: {
     position: "absolute",
     top: -10,
     right: -10,
-    backgroundColor: colors.lightSilver,
+    backgroundColor: colors.white,
     cursor: "pointer",
     borderRadius: "50%",
   },
