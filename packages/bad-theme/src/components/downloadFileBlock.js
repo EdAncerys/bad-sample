@@ -39,7 +39,12 @@ const DownloadFileBlock = ({
           marginLeft: `1em`,
         }}
       >
-        <a href={file.url} target="_blank" download>
+        <a
+          href={file.url}
+          target="_blank"
+          download
+          style={{ color: colors.textMain }}
+        >
           <Html2React html={LABEL} />
         </a>
       </div>

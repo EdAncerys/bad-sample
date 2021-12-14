@@ -19,13 +19,62 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
+  console.log(block);
+
   // SERVERS ---------------------------------------------
   const ServeAccordion = ({ block, eventKey }) => {
     const [active, setActive] = useState(null);
     const hasPreview = block.preview === "true";
 
-    const { title, body, logo, downloads, label, link } = block;
+    const {
+      title,
+      body,
+      logo,
+      downloads,
+      label,
+      link,
+      date,
+      update_in_progress,
+      doi,
+      link_to_pil,
+    } = block;
     if (!title) return null;
+
+    const ServeDate = () => {
+      if (!date) return null;
+
+      const ServeEventOrganizer = () => {
+        if (!update_in_progress) return null;
+
+        return (
+          <div>
+            <div className="flex">
+              <div style={styles.divider} />
+              <div style={{ fontStyle: "italic", alignItems: "center" }}>
+                Update in Progress
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      return (
+        <div
+          className="flex"
+          style={{
+            paddingLeft: `2em`,
+            color: colors.textMain,
+            fontSize: 16,
+            alignItems: "center",
+          }}
+        >
+          <div>
+            Published <Html2React html={date} />
+          </div>
+          <ServeEventOrganizer />
+        </div>
+      );
+    };
 
     const ServeTitle = () => {
       if (!title) return null;
@@ -42,6 +91,7 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
             }}
           >
             <Html2React html={title} />
+            <ServeDate />
           </div>
         );
       };
@@ -129,7 +179,6 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
                   style={{
                     fontSize: 12,
                     textTransform: "uppercase",
-                    alignItems: "center",
                     height: "100%",
                   }}
                 >
@@ -145,7 +194,6 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
                   style={{
                     fontSize: 12,
                     textTransform: "uppercase",
-                    alignItems: "center",
                     height: "100%",
                   }}
                 >
@@ -159,7 +207,10 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
       return (
         <div style={{ position: "relative" }}>
           <Accordion.Header>
-            <div className="flex" style={{ margin: 0, padding: `0.5em 0` }}>
+            <div
+              className="flex"
+              style={{ margin: 0, padding: `0.5em 0`, alignItems: "center" }}
+            >
               <ServeTitle />
               <ServeLogo />
               <ServeIcon />
@@ -239,6 +290,50 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
       );
     };
 
+    const ServeGuidelines = () => {
+      if (!link_to_pil) return null;
+
+      return (
+        <div
+          style={{
+            borderBottom: `1px solid ${colors.darkSilver}`,
+            textTransform: "uppercase",
+            fontSize: 12,
+            cursor: "pointer",
+            marginRight: `2em`,
+            paddingBottom: 5,
+          }}
+        >
+          <div
+            onClick={() => setGoToAction({ path: link_to_pil.url, actions })}
+          >
+            Read guideline
+          </div>
+        </div>
+      );
+    };
+
+    const ServeDOI = () => {
+      if (!doi) return null;
+
+      return (
+        <div
+          style={{
+            borderBottom: `1px solid ${colors.darkSilver}`,
+            textTransform: "uppercase",
+            fontSize: 12,
+            cursor: "pointer",
+            marginRight: `1em`,
+            paddingBottom: 5,
+          }}
+        >
+          <div onClick={() => setGoToAction({ path: doi.url, actions })}>
+            Patient Information Leaflet
+          </div>
+        </div>
+      );
+    };
+
     const ServeBody = () => {
       if (!body) return null;
 
@@ -246,6 +341,12 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
         <Accordion.Body>
           <div className="text-body">
             <Html2React html={body} />
+          </div>
+          <div style={{ width: "50%" }}>
+            <div className="flex-row" style={{ padding: `1em 0` }}>
+              <ServeGuidelines />
+              <ServeDOI />
+            </div>
           </div>
           <ServeDownloads />
           <ServeGoToPage />
@@ -279,7 +380,15 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
 };
 
 const styles = {
-  container: {},
+  container: {
+    display: "grid",
+    gridTemplateColumns: `repeat(2, 1fr)`,
+    gap: 20,
+  },
+  divider: {
+    margin: `2px 0.5em`,
+    borderRight: `1px solid ${colors.darkSilver}`,
+  },
 };
 
 export default connect(AccordionComponent);

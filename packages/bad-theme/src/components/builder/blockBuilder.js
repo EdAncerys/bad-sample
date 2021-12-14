@@ -30,6 +30,7 @@ import TitleAndBodyBlock from "../titleAndBodyBlock";
 import SplitContentAndUsefulLinksCard from "../splitContentAndUsefulLinksCard";
 import MultiPhotoBlock from "../multiPhotoBlock";
 import Events from "../events/events";
+import GuidelinesAndStandards from "../guidelinesAndStandards";
 
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   // console.log("BLOCKS: ", blocks); // debug
@@ -57,6 +58,14 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
         {blocks.map((block, key) => {
           const { acf_fc_layout } = block;
           console.log("CONTENT BLOCK", block); // debug
+
+          if (acf_fc_layout === "guidelines_and_standards")
+            return (
+              <div key={key + 1}>
+                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                <GuidelinesAndStandards key={key} block={block} />
+              </div>
+            );
 
           if (acf_fc_layout === "events_loop_block")
             return (
