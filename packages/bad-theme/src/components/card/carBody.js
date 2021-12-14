@@ -10,6 +10,8 @@ const CardBody = ({
   libraries,
   title,
   body,
+  date,
+  seatNumber,
   heroBanner,
   newsCarousel,
   TEXT_ALIGN,
@@ -25,8 +27,8 @@ const CardBody = ({
   const ServeTitle = () => {
     if (!title) return null;
 
-    let TITLE_HEIGHT = 80;
-    if (heroBanner || !body) TITLE_HEIGHT = "auto";
+    let TITLE_HEIGHT = "auto";
+    if (isFrom4Col) TITLE_HEIGHT = 80;
 
     let titlePreview = title;
     const MAX_CHAR = 45;
@@ -62,8 +64,60 @@ const CardBody = ({
       bodyPreview = `${body.slice(0, MAX_CHAR)}...`;
 
     return (
-      <div style={{ fontSize: 16, overflow: "auto", paddingTop: `1em` }}>
+      <div
+        style={{
+          fontSize: 16,
+          overflow: "auto",
+          paddingTop: title ? `1em` : 0,
+        }}
+      >
         <Html2React html={bodyPreview} />
+      </div>
+    );
+  };
+
+  const ServeSeatsRemaining = () => {
+    if (!seatNumber) return null;
+
+    return (
+      <div
+        className="flex"
+        style={{
+          fontSize: 12,
+          fontWeight: "bold",
+          color: colors.ocean,
+          fontStyle: "italic",
+          textTransform: "capitalize",
+          paddingBottom: `1em`,
+        }}
+      >
+        {/* <Html2React html={date} /> */}
+        TBC Seats remaining
+      </div>
+    );
+  };
+
+  const ServeDate = () => {
+    if (!date) return null;
+
+    return (
+      <div className="flex" style={{ paddingTop: `1em` }}>
+        {date.map((block, key) => {
+          const { date, end_time, start_time } = block;
+
+          return (
+            <div
+              key={key}
+              style={{
+                fontSize: 12,
+                fontWeight: "bold",
+                paddingRight: `1em`,
+              }}
+            >
+              <Html2React html={date} />
+            </div>
+          );
+        })}
       </div>
     );
   };
@@ -77,8 +131,10 @@ const CardBody = ({
       }}
     >
       <div style={{ margin: CONTENT_ALIGNMENT }}>
+        <ServeSeatsRemaining />
         <ServeTitle />
         <ServeBody />
+        <ServeDate />
       </div>
     </div>
   );

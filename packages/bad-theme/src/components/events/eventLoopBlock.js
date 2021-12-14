@@ -77,8 +77,14 @@ const Post = ({
   return (
     <div style={{ ...STYLES }}>
       {eventList.map((block, key) => {
-        const { colour, image, summary, title, public_or_members_only } =
-          block.acf;
+        const {
+          colour,
+          image,
+          summary,
+          title,
+          public_or_members_only,
+          date_time,
+        } = block.acf;
         const event_grade = block.event_grade;
         const event_location = block.event_location;
         const event_type = block.event_type;
@@ -118,10 +124,11 @@ const Post = ({
             <div key={key}>
               <Card
                 title={title}
-                body={summary}
                 url={image}
                 link={block.link}
                 colour={colour}
+                date={date_time}
+                seatNumber="seatNumber"
                 cardHeight="100%"
               />
             </div>
@@ -132,11 +139,11 @@ const Post = ({
             <div key={key}>
               <Card
                 title={title}
-                body={summary}
+                link_label="Read More"
                 link={block.link}
                 colour={colour}
+                eventHeader={block.acf}
                 isFrom4Col
-                cardHeight="100%"
               />
             </div>
           );

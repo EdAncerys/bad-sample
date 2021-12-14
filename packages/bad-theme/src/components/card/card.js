@@ -12,6 +12,7 @@ import VenueInfo from "./venueInfo";
 import NewsArticleHeader from "./newsArticleHeader";
 import VideoGalleryInfo from "./videoGalleryInfo";
 import NewsCarouselHeader from "./newsCarouselHeader";
+import EventCardHeader from "./eventCardHeader";
 
 const Card = ({
   state,
@@ -33,6 +34,9 @@ const Card = ({
   isFrom4Col,
   form_label,
   form_link,
+  date,
+  seatNumber,
+  eventHeader,
   shadow,
   cardWidth,
   cardHeight,
@@ -48,6 +52,7 @@ const Card = ({
   let CARD_HEIGHT = "100%";
   if (title || body) CARD_HEIGHT = "auto";
   if (cardHeight) CARD_HEIGHT = cardHeight;
+  if (isFrom4Col) CARD_HEIGHT = "100%";
 
   // SERVERS ----------------------------------------------
   const ServeFooter = () => {
@@ -80,7 +85,7 @@ const Card = ({
     const alt = title || "BAD";
 
     return (
-      <div style={{ width: "100%", minHeight: 300 }}>
+      <div style={{ width: "100%", minHeight: 200, maxHeight: 300 }}>
         <Image
           src={url}
           alt={alt}
@@ -121,12 +126,15 @@ const Card = ({
 
   const ServeContent = () => {
     return (
-      <div className="flex-col" style={{ padding: `2em` }}>
+      <div className="flex-col" style={{ padding: isFrom4Col ? `1em` : `2em` }}>
         <ServeCardHeader />
+        <EventCardHeader eventHeader={eventHeader} />
         <ServeJournalCard />
         <CardBody
           title={title}
           body={body}
+          date={date}
+          seatNumber={seatNumber}
           heroBanner={heroBanner}
           TEXT_ALIGN={TEXT_ALIGN}
           isFrom4Col={isFrom4Col}
