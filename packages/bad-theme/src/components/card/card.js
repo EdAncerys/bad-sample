@@ -80,7 +80,7 @@ const Card = ({
     const alt = title || "BAD";
 
     return (
-      <div style={{ width: "100%", height: "50%" }}>
+      <div style={{ width: "100%", minHeight: 300 }}>
         <Image
           src={url}
           alt={alt}

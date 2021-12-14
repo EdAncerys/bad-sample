@@ -23,6 +23,7 @@ const Events = ({ state, actions, libraries, block }) => {
   const marginVertical = state.theme.marginVertical;
 
   const search = block.add_search_function;
+  const layoutOne = block.layout === "layout_one";
 
   useEffect(() => {
     let GRADES = null;
@@ -260,7 +261,12 @@ const Events = ({ state, actions, libraries, block }) => {
   if (!ready) return <Loading />;
   // RETURN ---------------------------------------------------
   return (
-    <div style={{ padding: `${marginVertical}px ${marginHorizontal}px 0` }}>
+    <div
+      style={{
+        padding: `${marginVertical}px ${marginHorizontal}px`,
+        backgroundColor: layoutOne ? colors.white : colors.silverFillOne,
+      }}
+    >
       <TitleBlock block={block} disableMargin />
       <ServeFilter />
       <EventLoopBlock

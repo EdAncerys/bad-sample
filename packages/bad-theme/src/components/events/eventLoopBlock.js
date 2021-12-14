@@ -4,6 +4,7 @@ import { connect } from "frontity";
 import Loading from "../loading";
 import EventListView from "../eventListView";
 import Card from "../card/card";
+import { colors } from "../../config/colors";
 
 const Post = ({
   state,
@@ -104,9 +105,10 @@ const Post = ({
         }
 
         if (layoutOne) {
+          const removeMargin = search && key === 0;
           return (
             <div key={key}>
-              <EventListView block={block} removeMargin={search} />
+              <EventListView block={block} removeMargin={removeMargin} />
             </div>
           );
         }
@@ -120,6 +122,7 @@ const Post = ({
                 url={image}
                 link={block.link}
                 colour={colour}
+                cardHeight="100%"
               />
             </div>
           );
@@ -133,6 +136,7 @@ const Post = ({
                 link={block.link}
                 colour={colour}
                 isFrom4Col
+                cardHeight="100%"
               />
             </div>
           );

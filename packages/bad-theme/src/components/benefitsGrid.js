@@ -16,7 +16,12 @@ const BenefitsGrid = ({ state, actions, libraries, block }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
+    <div
+      style={{
+        padding: `${marginVertical}px ${marginHorizontal}px`,
+        backgroundColor: colors.silverFillTwo,
+      }}
+    >
       <div style={styles.container}>
         {block.benefits_card.map((block, key) => {
           return <Benefit key={key} block={block} />;

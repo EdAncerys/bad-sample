@@ -13,8 +13,8 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-  let MARGIN = `${marginVertical}px 0`;
-  if (removeMargin) MARGIN = `0 0 ${marginVertical}px`;
+  let MARGIN = `${marginVertical}px 0 0`;
+  if (removeMargin) MARGIN = 0;
 
   const {
     date_time,
