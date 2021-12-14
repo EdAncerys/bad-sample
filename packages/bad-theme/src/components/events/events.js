@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import { colors } from "../../config/colors";
-import EventLoopBlock from "./eventLoopBlock";
-
-import Loading from "../loading";
-import SearchIcon from "@mui/icons-material/Search";
 import { Form } from "react-bootstrap";
-import CloseIcon from "@mui/icons-material/Close";
+import { v4 as uuidv4 } from "uuid";
+
+import EventLoopBlock from "./eventLoopBlock";
+import Loading from "../loading";
 import TitleBlock from "../titleBlock";
+import { colors } from "../../config/colors";
+
+import SearchIcon from "@mui/icons-material/Search";
+import CloseIcon from "@mui/icons-material/Close";
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, useAppState } from "../../context";
 
@@ -24,6 +26,7 @@ const Events = ({ state, actions, libraries, block }) => {
 
   const search = block.add_search_function;
   const layoutOne = block.layout === "layout_one";
+  const id = uuidv4();
 
   useEffect(() => {
     let GRADES = null;
@@ -40,10 +43,12 @@ const Events = ({ state, actions, libraries, block }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handleSearchSubmit = () => {
-    const searchInput = document.querySelector("#searchInput").value;
-
+    const searchInput = document.querySelector(`input[name='${id}_searchInput']`).value;
+    
     const serveFilterOne = document.querySelector("#serveFilterOne").value;
     const serveFilterTwo = document.querySelector("#serveFilterTwo").value;
+
+    console.log("hello");
 
     if (!!searchInput) setSearchFilter(searchInput);
     if (!!serveFilterOne) setGradesFilter(serveFilterOne);
@@ -136,7 +141,8 @@ const Events = ({ state, actions, libraries, block }) => {
           }}
         >
           <input
-            id="searchInput"
+            id={`${id}_searchInput`}
+            name={`${id}_searchInput`}
             type="text"
             className="form-control"
             placeholder="Find An Event"
@@ -297,7 +303,7 @@ const styles = {
     position: "absolute",
     top: -10,
     right: -10,
-    backgroundColor: colors.silverFillOne,
+    backgroundColor: colors.lightSilver,
     cursor: "pointer",
     borderRadius: "50%",
   },

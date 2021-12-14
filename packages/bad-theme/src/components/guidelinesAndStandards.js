@@ -1,19 +1,23 @@
 import { useState, useEffect } from "react";
 import { connect, styled } from "frontity";
+import Image from "@frontity/components/image";
+import { v4 as uuidv4 } from "uuid";
+
+import { setGoToAction } from "../context";
 
 import Loading from "./loading";
 import Accordion from "./accordion";
 import { colors } from "../config/colors";
-import { setGoToAction } from "../context";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
-import Image from "@frontity/components/image";
 import BrandLogo from "../img/placeholders/logo.svg";
 
 const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
+
+  const id = uuidv4();
 
   const data = state.source.get(state.router.link);
   const [searchFilter, setSearchFilter] = useState(null);
@@ -27,7 +31,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handleSearchSubmit = () => {
-    const searchInput = document.querySelector("#searchInput").value;
+    const searchInput = document.querySelector(`input[name='${id}']`).value;
     if (!!searchInput) {
       const INPUT = searchInput.toLowerCase();
       const filter = list.accordion_item.filter(
@@ -35,7 +39,6 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
           item.title.toLowerCase().includes(INPUT) ||
           item.body.toLowerCase().includes(INPUT)
       );
-      console.log(filter);
       setSearchFilter(searchInput);
       setList({ accordion_item: Object.values(filter) });
     }
@@ -194,7 +197,8 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
               }}
             >
               <input
-                id="searchInput"
+                id={`${id}`}
+                name={`${id}`}
                 type="text"
                 className="form-control"
                 placeholder="Find Guidelines"
@@ -264,7 +268,7 @@ const styles = {
     position: "absolute",
     top: -10,
     right: -10,
-    backgroundColor: colors.silverFillOne,
+    backgroundColor: colors.lightSilver,
     cursor: "pointer",
     borderRadius: "50%",
   },

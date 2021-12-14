@@ -39,7 +39,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
   // SERVERS -----------------------------------------------------
   const ServeBlockTitle = ({ acf_fc_layout }) => {
-    return null; // add block name title
+    // return null; // add block name title
 
     return (
       <div

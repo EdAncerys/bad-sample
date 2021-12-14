@@ -292,7 +292,7 @@ const styles = {
     position: "absolute",
     top: -10,
     right: -10,
-    backgroundColor: colors.silverFillOne,
+    backgroundColor: colors.lightSilver,
     cursor: "pointer",
     borderRadius: "50%",
   },
