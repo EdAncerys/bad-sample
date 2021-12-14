@@ -107,6 +107,29 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     );
   };
 
+  const ServeType = () => {
+    if (!block.guideline_type) return null;
+
+    return (
+      <div style={{ padding: `${marginVertical}px ${marginHorizontal}px 0` }}>
+        <div
+          className="shadow"
+          style={{
+            fontSize: 12,
+            textTransform: "uppercase",
+            color: colors.black,
+            fontWeight: "bold",
+            alignItems: "center",
+            padding: `2em 4em`,
+            width: "fit-content",
+          }}
+        >
+          <Html2React html={block.guideline_type} />
+        </div>
+      </div>
+    );
+  };
+
   const ServeFilter = () => {
     const ServeTitle = () => {
       return (
@@ -221,6 +244,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     <div>
       <ServeInfo />
       <ServeFilter />
+      <ServeType />
       <Accordion block={list} />
     </div>
   );
