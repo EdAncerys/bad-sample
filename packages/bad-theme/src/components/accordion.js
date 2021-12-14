@@ -22,7 +22,6 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
   // SERVERS ---------------------------------------------
   const ServeAccordion = ({ block, eventKey }) => {
     const [active, setActive] = useState(null);
-    const hasPreview = block.preview === "true";
 
     const {
       title,
@@ -36,7 +35,7 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
       doi,
       link_to_pil,
     } = block;
-    if (!title) return null;
+    const hasPreview = block.preview === "true";
 
     const ServeDate = () => {
       if (!date) return null;
@@ -74,10 +73,9 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
       );
     };
 
-    const ServeTitle = () => {
-      if (!title) return null;
-
+    const ServeHeader = () => {
       const ServeTitle = () => {
+        if (!title) return null;
         return (
           <div
             className="flex"
@@ -87,23 +85,11 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
               fontWeight: "bold",
               alignItems: "center",
             }}
+            onClick={() => setActive(!active)}
           >
             <Html2React html={title} />
             <ServeDate />
           </div>
-        );
-      };
-
-      const ServeDivider = ({ active }) => {
-        if (!active) return null;
-
-        return (
-          <div
-            style={{
-              margin: `0 1.25em`,
-              borderTop: `1px solid ${colors.darkSilver}`,
-            }}
-          />
         );
       };
 
@@ -117,18 +103,16 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
         if (body.length < MAX_LENGTH) bodyPreview = body;
 
         return (
-          <div>
-            <ServeDivider active />
-            <div
-              style={{
-                fontSize: 16,
-                margin: `0 1.25em`,
-                padding: `1em 0`,
-                color: colors.darkSilver,
-              }}
-            >
-              <Html2React html={bodyPreview} />
-            </div>
+          <div
+            style={{
+              fontSize: 16,
+              margin: `0 1.25em`,
+              padding: `1em 0`,
+              color: colors.darkSilver,
+              borderTop: `1px solid ${colors.darkSilver}`,
+            }}
+          >
+            <Html2React html={bodyPreview} />
           </div>
         );
       };
@@ -214,7 +198,6 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
               <ServeIcon />
             </div>
           </Accordion.Header>
-          <ServeDivider active={active} />
           <ServePreview />
         </div>
       );
@@ -336,8 +319,14 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
       if (!body) return null;
 
       return (
-        <Accordion.Body>
-          <div className="text-body">
+        <Accordion.Body
+          style={{
+            borderTop: `1px solid ${colors.darkSilver}`,
+            margin: `0 1.25em`,
+            padding: `1em 0`,
+          }}
+        >
+          <div>
             <Html2React html={body} />
           </div>
           <div style={{ width: "50%" }}>
@@ -358,9 +347,8 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
           eventKey={eventKey}
           className="shadow"
           style={{ padding: `0.5em 1em`, margin: `1em 0` }}
-          onClick={() => setActive(!active)}
         >
-          <ServeTitle />
+          <ServeHeader />
           <ServeBody />
         </Accordion.Item>
       </Accordion>
