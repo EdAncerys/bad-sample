@@ -43,12 +43,12 @@ const Events = ({ state, actions, libraries, block }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handleSearchSubmit = () => {
-    const searchInput = document.querySelector(`input[name='${id}_searchInput']`).value;
-    
+    const searchInput = document.querySelector(
+      `input[name='${id}_searchInput']`
+    ).value;
+
     const serveFilterOne = document.querySelector("#serveFilterOne").value;
     const serveFilterTwo = document.querySelector("#serveFilterTwo").value;
-
-    console.log("hello");
 
     if (!!searchInput) setSearchFilter(searchInput);
     if (!!serveFilterOne) setGradesFilter(serveFilterOne);
