@@ -54,8 +54,9 @@ const PilsArchive = ({ state, actions, libraries }) => {
   const handleSearchSubmit = () => {
     const searchInput = document.querySelector("#searchInput").value;
     if (!!searchInput) {
+      const INPUT = searchInput.toLowerCase();
       const filter = pilList.filter((pil) =>
-        pil.title.rendered.includes(searchInput)
+        pil.title.rendered.toLowerCase().includes(INPUT)
       );
       setSearchFilter(searchInput);
       setPilList(filter);
