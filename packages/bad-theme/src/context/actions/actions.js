@@ -1,5 +1,4 @@
 export const setGoToAction = async ({ path, actions }) => {
-  console.log("setGoToAction triggered"); //debug
   if (!path || !actions) return null;
 
   let isExternalLink = true;
