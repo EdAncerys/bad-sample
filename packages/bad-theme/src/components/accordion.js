@@ -30,7 +30,6 @@ const AccordionComponent = ({
   const ServeAccordion = ({ block, eventKey }) => {
     const [active, setActive] = useState(null);
 
-    console.log("---", block);
     const {
       title,
       body,
@@ -529,8 +528,11 @@ const AccordionComponent = ({
         let isListLayout = true;
         if (LT_LAYOUT === "officer") isListLayout = false;
         if (LT_LAYOUT === "senior-management") isListLayout = false;
-
-        console.log("LT_LAYOUT", LT_LAYOUT, ALL_GRADES);
+        const jobRole = Object.values(ALL_GRADES).filter(
+          (job) => job.slug === LT_LAYOUT
+        );
+        let rolId = 0;
+        if (jobRole) rolId = jobRole[0].id;
 
         if (isListLayout)
           return (
@@ -538,12 +540,12 @@ const AccordionComponent = ({
               {block.leadershipList.map((item, key) => {
                 if (
                   LT_LAYOUT === "executive-committee-regional" &&
-                  !item.leadership_grade.includes(83)
+                  !item.leadership_grade.includes(rolId)
                 )
                   return null;
                 if (
                   LT_LAYOUT === "executive-committee-co-opted" &&
-                  !item.leadership_grade.includes(84)
+                  !item.leadership_grade.includes(rolId)
                 )
                   return null;
                 if (isListLayout)
@@ -558,12 +560,12 @@ const AccordionComponent = ({
               {block.leadershipList.map((item, key) => {
                 if (
                   LT_LAYOUT === "senior-management" &&
-                  !item.leadership_grade.includes(81)
+                  !item.leadership_grade.includes(rolId)
                 )
                   return null;
                 if (
                   LT_LAYOUT === "officer" &&
-                  !item.leadership_grade.includes(82)
+                  !item.leadership_grade.includes(rolId)
                 )
                   return null;
 
