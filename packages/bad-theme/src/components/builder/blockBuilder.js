@@ -28,7 +28,6 @@ import VideoGallery from "../videoGallery";
 import SocialIcons from "../socialIcons";
 import TitleAndBodyBlock from "../titleAndBodyBlock";
 import SplitContentAndUsefulLinksCard from "../splitContentAndUsefulLinksCard";
-import MultiPhotoBlock from "../multiPhotoBlock";
 import Events from "../events/events";
 import GuidelinesAndStandards from "../guidelinesAndStandards";
 
@@ -39,7 +38,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
   // SERVERS -----------------------------------------------------
   const ServeBlockTitle = ({ acf_fc_layout }) => {
-    return null; // add block name title
+    // return null; // add block name title
 
     return (
       <div
@@ -74,14 +73,6 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
               <div key={key + 1}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
                 <Events key={key} block={block} />
-              </div>
-            );
-
-          if (acf_fc_layout === "multiple_photo_block")
-            return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <MultiPhotoBlock key={key} block={block} />
               </div>
             );
 
@@ -141,7 +132,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
               </div>
             );
 
-          if (acf_fc_layout === "venue_hire_gallery")
+          if (acf_fc_layout === "venues_loop_block")
             return (
               <div key={key + 1}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />

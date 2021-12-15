@@ -6,7 +6,7 @@ import Loading from "./loading";
 import FullWidthContentBlock from "./fullWidthContentBlock";
 import { colors } from "../config/colors";
 
-const PromoBlock = ({ state, actions, block, reverse }) => {
+const PromoBlock = ({ state, actions, block, reverse, disableMargin }) => {
   if (!block) return <Loading />;
 
   const { background_image, image_align, title, horizontal_padding } = block;
@@ -16,9 +16,9 @@ const PromoBlock = ({ state, actions, block, reverse }) => {
   const marginVertical = state.theme.marginVertical;
   const isAlignLeft = image_align === "left";
   const HORIZONTAL_PADDING = horizontal_padding === "True";
-  const MARGIN = HORIZONTAL_PADDING
-    ? `${marginVertical}px ${marginHorizontal}px`
-    : `${marginVertical}px 0`;
+  let MARGIN = `${marginVertical}px 0`;
+  if (HORIZONTAL_PADDING) MARGIN = `${marginVertical}px ${marginHorizontal}px`;
+  if (disableMargin) MARGIN = 0;
 
   // SERVERS ----------------------------------------------------------------
   const ServeCardImage = () => {

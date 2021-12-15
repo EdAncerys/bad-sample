@@ -6,7 +6,6 @@ import Loading from "./loading";
 
 const MultiPhotoBlock = ({ state, actions, block }) => {
   if (!block) return <Loading />;
-  if (!block.photo_card) return null;
 
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
@@ -17,9 +16,8 @@ const MultiPhotoBlock = ({ state, actions, block }) => {
 
   useEffect(() => {
     let imgArray = [];
-    block.photo_card.map((block) => {
-      const { background_image } = block;
-      imgArray.push(background_image.url);
+    block.map((block) => {
+      imgArray.push(block.url);
     });
     setImageArray(imgArray);
   }, []);
@@ -107,7 +105,7 @@ const MultiPhotoBlock = ({ state, actions, block }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
+    <div style={{ margin: `${marginVertical}px 0` }}>
       <div>
         <ServeSingleImg />
         <ServeSplitImg />

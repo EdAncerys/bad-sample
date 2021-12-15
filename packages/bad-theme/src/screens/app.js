@@ -28,6 +28,7 @@ import RegistrationComplete from "./registration/registrationComplete";
 import Dashboard from "./dashboard";
 import Event from "./event";
 import EventsLandingPage from "./eventsLandingPage";
+import Venue from "./venue";
 // SCREEN HELPERS ---------------------------------------------------------
 import Loading from "../components/loading";
 import Error from "./error";
@@ -97,6 +98,7 @@ const App = ({ state, actions }) => {
             <PilsArchive when={data.isPilsArchive} />
             <Pils when={data.isPils} />
             <Event when={data.isEvents} />
+            <Venue when={data.isVenues} />
 
             <Home when={data.isHome} />
 

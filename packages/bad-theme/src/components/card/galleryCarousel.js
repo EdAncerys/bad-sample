@@ -19,8 +19,6 @@ const GalleryCarousel = ({ state, actions, libraries, gallery }) => {
         {gallery.map((block, key) => {
           const { subtype, url, title } = block;
 
-          console.log("........", block);
-
           const ServeCardImage = () => {
             if (!url || subtype !== "jpeg") return null;
             const alt = title || "BAD";

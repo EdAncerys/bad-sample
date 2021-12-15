@@ -6,23 +6,55 @@ import Loading from "./loading";
 
 const VenueHireGallery = ({ state, actions, block }) => {
   if (!block) return <Loading />;
-  if (!block.room) return null;
+
+  const [venueList, setVenueList] = useState(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+
+  // DATA pre FETCH ----------------------------------------------------------------
+  useEffect(async () => {
+    const path = `/venues/`;
+    await actions.source.fetch(path); // fetch CPT venues
+
+    const venues = state.source.get(path);
+    const { totalPages, page, next } = venues; // check if venues have multiple pages
+    // fetch venues via wp API page by page
+    let isThereNextPage = next;
+    while (isThereNextPage) {
+      await actions.source.fetch(isThereNextPage); // fetch next page
+      const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
+      isThereNextPage = nextPage;
+    }
+
+    const VENUE_LIST = Object.values(state.source["venues"]); // add venues object to data array
+    setVenueList(VENUE_LIST);
+  }, []);
+  // DATA pre FETCH ----------------------------------------------------------------
+  if (!venueList) return <Loading />;
 
   // RETURN ---------------------------------------------------
   return (
     <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
       <div style={styles.container}>
-        {block.room.map((block, key) => {
-          const { capacity, gallery, colour, title } = block;
+        {venueList.map((block, key) => {
+          const {
+            about_the_venue,
+            address,
+            capacity_options,
+            catering,
+            enquiry_email,
+            excerpt,
+            gallery,
+            square_footage,
+            colour,
+          } = block.acf;
 
           return (
             <div key={key} className="flex">
               <Card
                 gallery={gallery}
-                venueInfo={{ capacity, title }}
+                venueInfo={block}
                 colour={colour}
                 shadow // optional param
               />
