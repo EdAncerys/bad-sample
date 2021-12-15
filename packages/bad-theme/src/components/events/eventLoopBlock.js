@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
-
+import BlockWrapper from "../blockWrapper";
 import Loading from "../loading";
 import EventListView from "../eventListView";
 import Card from "../card/card";
@@ -127,22 +127,25 @@ const Post = ({
                 date={date_time}
                 seatNumber="seatNumber"
                 cardHeight="100%"
+                cardWidth="100%"
               />
             </div>
           );
 
         if (layoutThree)
           return (
-            <div key={key}>
-              <Card
-                title={title}
-                link_label="Read More"
-                link={block.link}
-                colour={colour}
-                eventHeader={block.acf}
-                isFrom4Col
-              />
-            </div>
+            <BlockWrapper background={block.background_colour}>
+              <div key={key}>
+                <Card
+                  title={title}
+                  link_label="Read More"
+                  link={block.link}
+                  colour={colour}
+                  eventHeader={block.acf}
+                  isFrom4Col
+                />
+              </div>
+            </BlockWrapper>
           );
       })}
     </div>

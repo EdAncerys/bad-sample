@@ -29,15 +29,15 @@ const Header = ({ state, actions }) => {
         `}
       />
       <HTMLHead />
-      <div>
-        <div className="flex-col" style={styles.container}>
-          <BlockWrapper>
+      <BlockWrapper>
+        <div>
+          <div className="flex-col" style={styles.container}>
             <HeaderActions />
             <Navigation />
             {/* <NavigationActions /> // secondary inactive nav */}
-          </BlockWrapper>
+          </div>
         </div>
-      </div>
+      </BlockWrapper>
     </>
   );
 };

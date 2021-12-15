@@ -3,6 +3,7 @@ import { connect } from "frontity";
 
 import Loading from "../components/loading";
 import RowButton from "./rowButton";
+import { setGoToAction } from "../context";
 
 const ButtonsRow = ({ state, actions, style, block, disableMargin }) => {
   if (!block) return <Loading />;
@@ -29,7 +30,9 @@ const ButtonsRow = ({ state, actions, style, block, disableMargin }) => {
       }}
     >
       {block.buttons.map((block, key) => {
-        return <RowButton key={key} block={block} />;
+        return (
+          <RowButton key={key} block={block} style={{ cursor: "pointer" }} />
+        );
       })}
     </div>
   );

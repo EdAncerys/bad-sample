@@ -6,6 +6,7 @@ import Card from "./card/card";
 import Loading from "./loading";
 import ButtonsRow from "./buttonsRow";
 import FullWidthContentBlock from "./fullWidthContentBlock";
+import BlockWrapper from "./blockWrapper";
 
 const HeroBanner = ({ state, actions, libraries, block }) => {
   // console.log("HeroBanner Triggered", block); //debug
@@ -187,17 +188,19 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div
-      className="flex-col "
-      style={{ height: BANNER_HEIGHT, backgroundColor: BACKGROUND_COLOUR }}
-    >
-      <div className="flex-row relative">
-        <ServeCardContent />
-        <ServeOverLay />
-        <ServeCardImage />
+    <BlockWrapper>
+      <div
+        className="flex-col "
+        style={{ height: BANNER_HEIGHT, backgroundColor: BACKGROUND_COLOUR }}
+      >
+        <div className="flex-row relative">
+          <ServeCardContent />
+          <ServeOverLay />
+          <ServeCardImage />
+        </div>
+        <ServeFooter />
       </div>
-      <ServeFooter />
-    </div>
+    </BlockWrapper>
   );
 };
 
