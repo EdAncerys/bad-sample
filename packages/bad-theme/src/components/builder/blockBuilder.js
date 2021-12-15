@@ -38,7 +38,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
   // SERVERS -----------------------------------------------------
   const ServeBlockTitle = ({ acf_fc_layout }) => {
-    return null; // add block name title
+    // return null; // add block name title
 
     return (
       <div
@@ -256,6 +256,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
             return (
               <div key={key + 1}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+
                 <FullWidthContentBlock key={key} block={block} />
               </div>
             );

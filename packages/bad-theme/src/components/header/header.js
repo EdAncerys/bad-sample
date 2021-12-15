@@ -15,9 +15,11 @@ import HTMLHead from "./htmlHead";
 import NavigationActions from "./navigationActions";
 import HeaderActions from "./headerActions";
 import Navigation from "./navigation";
+import BlockWrapper from "../blockWrapper";
 
 const Header = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
+  const CONTENT_WIDTH = state.theme.contentContainer;
 
   return (
     <>
@@ -29,9 +31,11 @@ const Header = ({ state, actions }) => {
       <HTMLHead />
       <div>
         <div className="flex-col" style={styles.container}>
-          <HeaderActions />
-          <Navigation />
-          {/* <NavigationActions /> // secondary inactive nav */}
+          <BlockWrapper>
+            <HeaderActions />
+            <Navigation />
+            {/* <NavigationActions /> // secondary inactive nav */}
+          </BlockWrapper>
         </div>
       </div>
     </>

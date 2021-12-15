@@ -5,6 +5,7 @@ import Image from "@frontity/components/image";
 import Loading from "./loading";
 import FullWidthContentBlock from "./fullWidthContentBlock";
 import { colors } from "../config/colors";
+import BlockWrapper from "./blockWrapper";
 
 const PromoBlock = ({ state, actions, block, reverse, disableMargin }) => {
   if (!block) return <Loading />;
@@ -58,16 +59,22 @@ const PromoBlock = ({ state, actions, block, reverse, disableMargin }) => {
   return (
     <div
       style={{
-        display: "flex",
-        flexDirection: isAlignLeft ? "row-reverse" : "inherit",
-        backgroundColor: colors.lightSilver,
-        height: BANNER_HEIGHT,
-        overflow: "hidden",
-        margin: MARGIN,
+        backgroundColor: block.background_colour,
       }}
     >
-      <ServeCardContent />
-      <ServeCardImage />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: isAlignLeft ? "row-reverse" : "inherit",
+          height: BANNER_HEIGHT,
+          overflow: "hidden",
+          margin: MARGIN,
+          backgroundColor: colors.lightSilver,
+        }}
+      >
+        <ServeCardContent />
+        <ServeCardImage />
+      </div>
     </div>
   );
 };

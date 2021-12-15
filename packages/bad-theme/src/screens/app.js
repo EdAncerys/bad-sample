@@ -39,8 +39,6 @@ const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { jwt, user } = useAppState();
 
-  const CONTENT_WIDTH = state.theme.contentContainer;
-
   // env file access
   // console.log(".env variables", state.theme.MY_VARIABLE);
 
@@ -55,7 +53,7 @@ const App = ({ state, actions }) => {
         state.theme.activeDropDownRef = "menu reset"; // reset menu ref value
       }}
     >
-      <div style={{ ...styles.container, width: CONTENT_WIDTH }}>
+      <div style={{ ...styles.container }}>
         <Header />
         <Directions />
         <LoginModal />
