@@ -54,19 +54,21 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handleSearchSubmit = () => {
-    const searchInput = document.querySelector(
-      // `input[name=searchInput${id}]`
-      `#searchInput`
-    ).value;
+    const searchInput = document.querySelector(`#searchInput${id}`).value;
+
     if (!!searchInput) {
       const INPUT = searchInput.toLowerCase();
-      const filter = guidelinesList.accordion_item.filter(
-        (item) =>
-          item.title.toLowerCase().includes(INPUT) ||
-          item.body.toLowerCase().includes(INPUT)
-      );
+      const filter = guidelinesList.filter((item) => {
+        let TITLE = item.title.rendered;
+        let SUBTITLE = item.acf.subtitle;
+        if (TITLE) TITLE = TITLE.toLowerCase().includes(INPUT);
+        if (SUBTITLE) SUBTITLE = SUBTITLE.toLowerCase().includes(INPUT);
+
+        return TITLE || SUBTITLE;
+      });
+      console.log(filter);
       setSearchFilter(searchInput);
-      setGuidelinesList({ accordion_item: Object.values(filter) });
+      setGuidelinesList(filter);
     }
   };
 
@@ -136,6 +138,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     );
   };
 
+  console.log("---", guidelinesList);
   const ServeType = () => {
     if (!block.guideline_type) return null;
 
@@ -186,7 +189,9 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
             style={styles.closeAction}
             onClick={() => {
               setSearchFilter(null);
-              setGuidelinesList(block);
+              setGuidelinesList(
+                Object.values(state.source.guidelines_standards)
+              );
             }}
           >
             <CloseIcon
@@ -223,7 +228,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
               }}
             >
               <input
-                id="searchInput"
+                id={`searchInput${id}`}
                 type="text"
                 className="form-control"
                 placeholder="Find Guidelines"
