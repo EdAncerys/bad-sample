@@ -17,11 +17,10 @@ const AccordionComponent = ({
   libraries,
   block,
   guidelines,
+  leadershipBlock,
 }) => {
   if (!block) return <Loading />;
   if (!block.accordion_item) return null;
-
-  console.log("---", block);
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const marginHorizontal = state.theme.marginHorizontal;
@@ -31,6 +30,7 @@ const AccordionComponent = ({
   const ServeAccordion = ({ block, eventKey }) => {
     const [active, setActive] = useState(null);
 
+    console.log("---", block);
     const {
       title,
       body,
@@ -68,6 +68,22 @@ const AccordionComponent = ({
       gsSubtitle = block.acf.subtitle;
       gsUpdate_in_progress = block.acf.update_in_progress;
     }
+    // Guidelines & Standards --------------------------------
+
+    // LEadership team & Standards --------------------------------
+    let ltTitle = null;
+    let ltBody = null;
+    let ltAlignTitles = null;
+    let LT_LAYOUT = null;
+
+    if (leadershipBlock) {
+      ltTitle = block.block.title;
+      ltBody = block.block.intro_text;
+      ltAlignTitles = block.block.align_title;
+      LT_LAYOUT = block.block.layout;
+      // ltBody = block.acf.authors;
+    }
+    // LEadership team & Standards --------------------------------
 
     const ServeHeader = () => {
       const ServeTitle = () => {
@@ -238,6 +254,29 @@ const AccordionComponent = ({
         }
       };
 
+      const ServeLTTitle = () => {
+        if (!ltTitle) return null;
+        let ALIGNMENT = "flex-start";
+        if (ltAlignTitles === "center") ALIGNMENT = "center";
+        if (ltAlignTitles === "right") ALIGNMENT = "flex-end";
+
+        return (
+          <div
+            className="flex"
+            style={{
+              fontSize: 20,
+              color: colors.black,
+              fontWeight: "bold",
+              alignItems: "center",
+              justifyContent: ALIGNMENT,
+            }}
+            onClick={() => setActive(!active)}
+          >
+            <Html2React html={ltTitle} />
+          </div>
+        );
+      };
+
       return (
         <div style={{ position: "relative" }}>
           <Accordion.Header>
@@ -247,6 +286,8 @@ const AccordionComponent = ({
             >
               <ServeTitle />
               <ServeGSTitle />
+              <ServeLTTitle />
+
               <ServeLogo />
               <ServeIcon />
             </div>
@@ -345,6 +386,77 @@ const AccordionComponent = ({
         );
       };
 
+      const ServeLTBody = () => {
+        if (!ltBody) return null;
+
+        return (
+          <div>
+            <Html2React html={ltBody} />
+          </div>
+        );
+      };
+
+      const ServeLTTeam = () => {
+        if (!block.leadershipList) return null;
+
+        const ServeCommitteeRegional = ({ item }) => {
+          const title = item.title.rendered;
+          const hospital = item.acf.hospital;
+          const dates = item.acf.dates;
+
+          const ServeTitle = () => {
+            if (!title) return null;
+
+            return (
+              <div>
+                <Html2React html={title} />
+              </div>
+            );
+          };
+
+          const ServeHospital = () => {
+            if (!hospital) return null;
+
+            return (
+              <div style={{ marginRight: 10 }}>
+                <Html2React html={hospital} />
+              </div>
+            );
+          };
+
+          const ServeDates = () => {
+            if (!dates) return null;
+
+            return (
+              <div>
+                <Html2React html={dates} />
+              </div>
+            );
+          };
+
+          return (
+            <div style={styles.regionalCommittee}>
+              <ServeTitle />
+              <div className="flex-row">
+                <ServeHospital />
+                <ServeDates />
+              </div>
+            </div>
+          );
+        };
+
+        return (
+          <div style={{ padding: `3em 0 0` }}>
+            {block.leadershipList.map((item, key) => {
+              console.log("LT_LAYOUT", LT_LAYOUT);
+              // console.log(item);
+
+              return <ServeCommitteeRegional item={item} key={key} />;
+            })}
+          </div>
+        );
+      };
+
       const ServeLink = ({ link }) => {
         if (!link) return null;
         const { label, link_url } = link;
@@ -376,6 +488,9 @@ const AccordionComponent = ({
           }}
         >
           <ServeBody />
+          <ServeLTBody />
+
+          <ServeLTTeam />
           <ServeGSSubTitle />
           <div className="flex-row" style={{ width: "50%", flexWrap: "wrap" }}>
             {gsLinks &&
@@ -422,6 +537,12 @@ const styles = {
   divider: {
     margin: `2px 0.5em`,
     borderRight: `1px solid ${colors.darkSilver}`,
+  },
+  regionalCommittee: {
+    display: "grid",
+    gridTemplateColumns: `25% auto`,
+    gap: 20,
+    padding: `0.5em 0`,
   },
 };
 
