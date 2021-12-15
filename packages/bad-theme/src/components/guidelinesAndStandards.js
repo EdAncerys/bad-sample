@@ -138,25 +138,34 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     );
   };
 
-  console.log("---", guidelinesList);
   const ServeType = () => {
-    if (!block.guideline_type) return null;
+    if (!guidelinesType) return null;
 
     return (
       <div style={{ padding: `${marginVertical}px ${marginHorizontal}px 0` }}>
-        <div
-          className="shadow"
-          style={{
-            fontSize: 12,
-            textTransform: "uppercase",
-            color: colors.black,
-            fontWeight: "bold",
-            alignItems: "center",
-            padding: `2em 4em`,
-            width: "fit-content",
-          }}
-        >
-          <Html2React html={block.guideline_type} />
+        <div className="flex-row">
+          {guidelinesType.map((type, key) => {
+            console.log(type);
+
+            return (
+              <div
+                key={key}
+                className="shadow"
+                style={{
+                  fontSize: 12,
+                  textTransform: "uppercase",
+                  color: colors.black,
+                  fontWeight: "bold",
+                  alignItems: "center",
+                  padding: `2em 4em`,
+                  marginRight: `3em`,
+                  width: "fit-content",
+                }}
+              >
+                <Html2React html={type.name} />
+              </div>
+            );
+          })}
         </div>
       </div>
     );

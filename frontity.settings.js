@@ -53,6 +53,11 @@ const settings = {
               archive: "/guidelines_standards",
             },
             {
+              type: "venues",
+              endpoint: "venues",
+              archive: "/venues",
+            },
+            {
               type: "education_training",
               endpoint: "education_training",
               archive: "/education_training",
