@@ -48,9 +48,14 @@ const settings = {
               archive: "/events",
             },
             {
-              type: "event_grade",
-              endpoint: "event_grade",
-              archive: "/event_grade",
+              type: "guidelines_standards",
+              endpoint: "guidelines_standards",
+              archive: "/guidelines_standards",
+            },
+            {
+              type: "education_training",
+              endpoint: "education_training",
+              archive: "/education_training",
             },
           ],
           taxonomies: [

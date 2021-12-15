@@ -18,17 +18,39 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
   if (!block) return <Loading />;
 
-  const id = uuidv4();
-
   const data = state.source.get(state.router.link);
   const [searchFilter, setSearchFilter] = useState(null);
-  const [list, setList] = useState(block);
-
-  const { totalPages, page, next } = data; // check if data have multiple pages
+  const [guidelinesList, setGuidelinesList] = useState(null);
+  const [guidelinesType, setGuidelinesType] = useState(null);
   // console.log("pageData ", data); // debug
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+  const id = uuidv4();
+
+  // DATA pre FETCH ----------------------------------------------------------------
+  useEffect(async () => {
+    const path = `/guidelines_standards/`;
+    await actions.source.fetch(path); // fetch CPT guidelines
+
+    const guidelines = state.source.get(path);
+    const { totalPages, page, next } = guidelines; // check if guidelines have multiple pages
+    // fetch guidelines via wp API page by page
+    let isThereNextPage = next;
+    while (isThereNextPage) {
+      await actions.source.fetch(isThereNextPage); // fetch next page
+      const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
+      isThereNextPage = nextPage;
+    }
+    if (!state.source.guidelines_standards) return null;
+
+    const GUIDELINES_TYPE = Object.values(state.source.guidelines_type);
+    const GUIDELINES_LIST = Object.values(state.source.guidelines_standards); // add guidelines object to data array
+    setGuidelinesType(GUIDELINES_TYPE);
+    setGuidelinesList(GUIDELINES_LIST);
+  }, []);
+  // DATA pre FETCH ----------------------------------------------------------------
+  if (!guidelinesList) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
   const handleSearchSubmit = () => {
@@ -38,13 +60,13 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     ).value;
     if (!!searchInput) {
       const INPUT = searchInput.toLowerCase();
-      const filter = list.accordion_item.filter(
+      const filter = guidelinesList.accordion_item.filter(
         (item) =>
           item.title.toLowerCase().includes(INPUT) ||
           item.body.toLowerCase().includes(INPUT)
       );
       setSearchFilter(searchInput);
-      setList({ accordion_item: Object.values(filter) });
+      setGuidelinesList({ accordion_item: Object.values(filter) });
     }
   };
 
@@ -164,7 +186,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
             style={styles.closeAction}
             onClick={() => {
               setSearchFilter(null);
-              setList(block);
+              setGuidelinesList(block);
             }}
           >
             <CloseIcon
@@ -252,7 +274,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
       <ServeInfo />
       <ServeFilter />
       <ServeType />
-      <Accordion block={list} />
+      <Accordion block={{ accordion_item: guidelinesList }} guidelines />
     </div>
   );
 };

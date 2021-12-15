@@ -1,5 +1,5 @@
-import { connect } from "frontity";
 import { useState, useEffect } from "react";
+import { connect } from "frontity";
 import { colors } from "../config/colors";
 import Accordion from "react-bootstrap/Accordion";
 import Image from "@frontity/components/image";
@@ -11,9 +11,17 @@ import DownloadFileBlock from "./downloadFileBlock";
 import { setGoToAction } from "../context";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
-const AccordionComponent = ({ state, actions, libraries, block }) => {
+const AccordionComponent = ({
+  state,
+  actions,
+  libraries,
+  block,
+  guidelines,
+}) => {
   if (!block) return <Loading />;
   if (!block.accordion_item) return null;
+
+  console.log("---", block);
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const marginHorizontal = state.theme.marginHorizontal;
@@ -34,14 +42,55 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
       update_in_progress,
       doi,
       link_to_pil,
+      guidelines_type,
     } = block;
     const hasPreview = block.preview === "true";
 
-    const ServeDate = () => {
-      if (!date) return null;
+    // Guidelines & Standards --------------------------------
+    let gsTitle = null;
+    let gsAuthors = null;
+    let gsBlocks = null;
+    let gsCollaboration_partners = null;
+    let gsDocument_uploads = null;
+    let gsLinks = null;
+    let gsPublished_date = null;
+    let gsSubtitle = null;
+    let gsUpdate_in_progress = null;
 
-      const ServeEventOrganizer = () => {
-        if (!update_in_progress) return null;
+    if (guidelines) {
+      gsTitle = block.title.rendered;
+      gsAuthors = block.acf.authors;
+      gsBlocks = block.acf.blocks;
+      gsCollaboration_partners = block.acf.collaboration_partners;
+      gsDocument_uploads = block.acf.document_uploads;
+      gsLinks = block.acf.links;
+      gsPublished_date = block.acf.published_date;
+      gsSubtitle = block.acf.subtitle;
+      gsUpdate_in_progress = block.acf.update_in_progress;
+    }
+
+    const ServeHeader = () => {
+      const ServeTitle = () => {
+        if (!title || guidelines) return null;
+
+        return (
+          <div
+            className="flex"
+            style={{
+              fontSize: 20,
+              color: colors.black,
+              fontWeight: "bold",
+              alignItems: "center",
+            }}
+            onClick={() => setActive(!active)}
+          >
+            <Html2React html={title} />
+          </div>
+        );
+      };
+
+      const ServeGSUpdateInProgress = () => {
+        if (!gsUpdate_in_progress) return null;
 
         return (
           <div>
@@ -55,27 +104,30 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
         );
       };
 
-      return (
-        <div
-          className="flex"
-          style={{
-            paddingLeft: `2em`,
-            color: colors.textMain,
-            fontSize: 16,
-            alignItems: "center",
-          }}
-        >
-          <div>
-            Published <Html2React html={date} />
-          </div>
-          <ServeEventOrganizer />
-        </div>
-      );
-    };
+      const ServeGSDate = () => {
+        if (!gsPublished_date) return null;
 
-    const ServeHeader = () => {
-      const ServeTitle = () => {
-        if (!title) return null;
+        return (
+          <div
+            className="flex"
+            style={{
+              paddingLeft: `2em`,
+              color: colors.textMain,
+              fontSize: 16,
+              alignItems: "center",
+            }}
+          >
+            <div>
+              Published <Html2React html={gsPublished_date} />
+            </div>
+            <ServeGSUpdateInProgress />
+          </div>
+        );
+      };
+
+      const ServeGSTitle = () => {
+        if (!gsTitle) return null;
+
         return (
           <div
             className="flex"
@@ -87,14 +139,14 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
             }}
             onClick={() => setActive(!active)}
           >
-            <Html2React html={title} />
-            <ServeDate />
+            <Html2React html={gsTitle} />
+            <ServeGSDate />
           </div>
         );
       };
 
       const ServePreview = () => {
-        if (!hasPreview) return null;
+        if (!hasPreview || guidelines) return null;
         if (active) return null;
 
         // Manage max string Length
@@ -194,6 +246,7 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
               style={{ margin: 0, padding: `0.5em 0`, alignItems: "center" }}
             >
               <ServeTitle />
+              <ServeGSTitle />
               <ServeLogo />
               <ServeIcon />
             </div>
@@ -203,120 +256,116 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
       );
     };
 
-    const ServeDownloads = () => {
-      if (!downloads) return null;
+    const ServeContent = () => {
+      const ServeGSSubTitle = () => {
+        if (!gsSubtitle) return null;
 
-      return (
-        <div className="flex-col" style={{ width: "70%" }}>
+        return (
+          <div className="flex">
+            <Html2React html={gsSubtitle} />
+          </div>
+        );
+      };
+
+      const ServeDownloads = () => {
+        if (!gsDocument_uploads) return null;
+
+        return (
+          <div className="flex-col" style={{ width: "70%" }}>
+            <div
+              style={{
+                fontSize: 20,
+                fontWeight: "bold",
+                padding: `2em 0 1em`,
+              }}
+            >
+              Downloads:
+            </div>
+            <div className="flex" style={{ flexWrap: "wrap" }}>
+              {gsDocument_uploads.map((block, key) => {
+                return (
+                  <div
+                    key={key}
+                    style={{ minWidth: "33%", padding: `1em 1em 1em 0` }}
+                  >
+                    <DownloadFileBlock block={block} disableMargin />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      };
+
+      const ServeGoToPage = () => {
+        if (!link || guidelines) return null;
+
+        let LABEL = "More";
+        if (label) LABEL = label;
+
+        return (
+          <div
+            className="flex"
+            style={{ justifyContent: "flex-end", paddingTop: `1em` }}
+          >
+            <div>
+              <button
+                className="btn flex-row"
+                style={{
+                  backgroundColor: colors.primary,
+                  color: colors.white,
+                  padding: `0.5em 2em`,
+                }}
+                onClick={() => setGoToAction({ path: link.url, actions })}
+              >
+                <div className="flex">
+                  <Html2React html={LABEL} />
+                </div>
+                <div>
+                  <KeyboardArrowRightIcon
+                    style={{
+                      borderRadius: "50%",
+                      padding: 0,
+                    }}
+                  />
+                </div>
+              </button>
+            </div>
+          </div>
+        );
+      };
+
+      const ServeBody = () => {
+        if (!body) return null;
+
+        return (
+          <div>
+            <Html2React html={body} />
+          </div>
+        );
+      };
+
+      const ServeLink = ({ link }) => {
+        if (!link) return null;
+        const { label, link_url } = link;
+
+        return (
           <div
             style={{
-              fontSize: 20,
-              fontWeight: "bold",
-              padding: `1em 0`,
+              borderBottom: `1px solid ${colors.darkSilver}`,
+              textTransform: "uppercase",
+              fontSize: 12,
+              cursor: "pointer",
+              margin: `2em 2em 0 0`,
+              paddingBottom: 5,
             }}
           >
-            Downloads:
+            <div onClick={() => setGoToAction({ path: link_url, actions })}>
+              <Html2React html={label} />
+            </div>
           </div>
-          <div className="flex" style={{ flexWrap: "wrap" }}>
-            {downloads.map((block, key) => {
-              return (
-                <div
-                  key={key}
-                  style={{ minWidth: "33%", padding: `1em 1em 1em 0` }}
-                >
-                  <DownloadFileBlock block={block} disableMargin />
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      );
-    };
-
-    const ServeGoToPage = () => {
-      if (!link) return null;
-
-      let LABEL = "More";
-      if (label) LABEL = label;
-
-      return (
-        <div
-          className="flex"
-          style={{ justifyContent: "flex-end", paddingTop: `1em` }}
-        >
-          <div>
-            <button
-              className="btn flex-row"
-              style={{
-                backgroundColor: colors.primary,
-                color: colors.white,
-                padding: `0.5em 2em`,
-              }}
-              onClick={() => setGoToAction({ path: link.url, actions })}
-            >
-              <div className="flex">
-                <Html2React html={LABEL} />
-              </div>
-              <div>
-                <KeyboardArrowRightIcon
-                  style={{
-                    borderRadius: "50%",
-                    padding: 0,
-                  }}
-                />
-              </div>
-            </button>
-          </div>
-        </div>
-      );
-    };
-
-    const ServeGuidelines = () => {
-      if (!link_to_pil) return null;
-
-      return (
-        <div
-          style={{
-            borderBottom: `1px solid ${colors.darkSilver}`,
-            textTransform: "uppercase",
-            fontSize: 12,
-            cursor: "pointer",
-            marginRight: `2em`,
-            paddingBottom: 5,
-          }}
-        >
-          <div
-            onClick={() => setGoToAction({ path: link_to_pil.url, actions })}
-          >
-            Read guideline
-          </div>
-        </div>
-      );
-    };
-
-    const ServeDOI = () => {
-      if (!doi) return null;
-
-      return (
-        <div
-          style={{
-            borderBottom: `1px solid ${colors.darkSilver}`,
-            textTransform: "uppercase",
-            fontSize: 12,
-            cursor: "pointer",
-            marginRight: `1em`,
-            paddingBottom: 5,
-          }}
-        >
-          <div onClick={() => setGoToAction({ path: doi.url, actions })}>
-            Patient Information Leaflet
-          </div>
-        </div>
-      );
-    };
-
-    const ServeBody = () => {
-      if (!body) return null;
+        );
+      };
 
       return (
         <Accordion.Body
@@ -326,14 +375,13 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
             padding: `1em 0`,
           }}
         >
-          <div>
-            <Html2React html={body} />
-          </div>
-          <div style={{ width: "50%" }}>
-            <div className="flex-row" style={{ padding: `1em 0` }}>
-              <ServeGuidelines />
-              <ServeDOI />
-            </div>
+          <ServeBody />
+          <ServeGSSubTitle />
+          <div className="flex-row" style={{ width: "50%", flexWrap: "wrap" }}>
+            {gsLinks &&
+              gsLinks.map((link, key) => {
+                return <ServeLink key={key} link={link} />;
+              })}
           </div>
           <ServeDownloads />
           <ServeGoToPage />
@@ -349,7 +397,7 @@ const AccordionComponent = ({ state, actions, libraries, block }) => {
           style={{ padding: `0.5em 1em`, margin: `1em 0` }}
         >
           <ServeHeader />
-          <ServeBody />
+          <ServeContent />
         </Accordion.Item>
       </Accordion>
     );

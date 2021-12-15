@@ -22,7 +22,6 @@ const Event = ({ state, actions, libraries }) => {
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-  console.log("event------ ", event.acf);
 
   const { sm, md, lg, xl } = muiQuery();
   const {

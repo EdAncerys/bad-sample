@@ -15,8 +15,8 @@ const DownloadFileBlock = ({
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  if (!block || !block.file) return null;
-  const { file, label } = block;
+  if (!block) return null;
+  const { file, label, guidline_file } = block;
 
   let LABEL = "Download";
   if (label) LABEL = label;
@@ -51,6 +51,31 @@ const DownloadFileBlock = ({
     );
   };
 
+  const ServeGSActions = () => {
+    if (!guidline_file) return null;
+
+    return (
+      <div
+        style={{
+          borderBottom: `1px solid ${colors.black}`,
+          textTransform: "uppercase",
+          fontSize: 12,
+          cursor: "pointer",
+          marginLeft: `1em`,
+        }}
+      >
+        <a
+          href={guidline_file.url}
+          target="_blank"
+          download
+          style={{ color: colors.textMain }}
+        >
+          <Html2React html={"Read Guideline"} />
+        </a>
+      </div>
+    );
+  };
+
   return (
     <div
       style={{
@@ -73,8 +98,8 @@ const DownloadFileBlock = ({
             }}
           />
         </div>
-
         <ServeActions />
+        <ServeGSActions />
       </div>
     </div>
   );

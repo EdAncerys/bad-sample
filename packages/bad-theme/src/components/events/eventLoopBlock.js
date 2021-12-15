@@ -27,9 +27,6 @@ const Post = ({
   const search = block.add_search_function;
   const { layout, grade_filter } = block;
 
-  const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
-
   const layoutOne = layout === "layout_one";
   const layoutTwo = layout === "layout_two";
   const layoutThree = layout === "layout_three";
