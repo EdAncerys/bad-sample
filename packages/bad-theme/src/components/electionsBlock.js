@@ -21,6 +21,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
   const [searchFilter, setSearchFilter] = useState(null);
   const [filterOne, setFilterOne] = useState(null);
   const [filterTwo, setFilterTwo] = useState(null);
+  const [filterThree, setFilterThree] = useState(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -269,6 +270,24 @@ const ElectionsBlock = ({ state, actions, block }) => {
     };
 
     const ServeBtnFilter = () => {
+      if (!filterThree) return null;
+
+      return (
+        <div className="shadow" style={styles.action}>
+          <div>Open Positions</div>
+          <div style={styles.closeAction} onClick={() => setFilterThree(null)}>
+            <CloseIcon
+              style={{
+                fill: colors.darkSilver,
+                padding: 0,
+              }}
+            />
+          </div>
+        </div>
+      );
+    };
+
+    const ServeOpenPositionBtnFilter = () => {
       if (!isOpen) return null;
 
       return (
@@ -281,7 +300,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
               padding: `1em 2em`,
               cursor: "pointer",
             }}
-            // onClick={() => setFilterTwo(null)}
+            onClick={() => setFilterThree(!filterThree)}
           >
             Only Show Open Positions
           </div>
@@ -299,9 +318,10 @@ const ElectionsBlock = ({ state, actions, block }) => {
           <ServeSearchFilter />
           <ServeDropDownFilterOne />
           <ServeDropDownFilterTwo />
+          <ServeBtnFilter />
         </div>
         <div className="flex" style={{ marginTop: "1em" }}>
-          <ServeBtnFilter />
+          <ServeOpenPositionBtnFilter />
         </div>
       </div>
     );
@@ -343,6 +363,11 @@ const ElectionsBlock = ({ state, actions, block }) => {
           }
           if (filterTwo) {
             if (!election_roles.includes(Number(filterTwo))) return null;
+          }
+          if (filterThree) {
+            const date = new Date();
+            const electionDate = new Date(closing_date);
+            if (date >= electionDate) return null;
           }
 
           return (
