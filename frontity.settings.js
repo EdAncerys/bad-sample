@@ -72,6 +72,11 @@ const settings = {
               endpoint: "leadership_team",
               archive: "/leadership_team",
             },
+            {
+              type: "posts",
+              endpoint: "posts",
+              archive: "/posts",
+            },
           ],
           taxonomies: [
             {
