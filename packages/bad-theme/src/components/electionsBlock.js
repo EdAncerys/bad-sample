@@ -22,6 +22,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
   const [filterOne, setFilterOne] = useState(null);
   const [filterTwo, setFilterTwo] = useState(null);
   const [filterThree, setFilterThree] = useState(null);
+  const [filterFour, setFilterFour] = useState(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -71,10 +72,26 @@ const ElectionsBlock = ({ state, actions, block }) => {
 
     const serveFilterOne = document.querySelector(`#serveFilterOne${id}`).value;
     const serveFilterTwo = document.querySelector(`#serveFilterTwo${id}`).value;
+    const serveFilterFour = document.querySelector(
+      `#serveFilterFour${id}`
+    ).value;
 
     if (!!searchInput) setSearchFilter(searchInput);
     if (!!serveFilterOne) setFilterOne(serveFilterOne);
     if (!!serveFilterTwo) setFilterTwo(serveFilterTwo);
+    if (!!serveFilterFour) {
+      setFilterFour(serveFilterFour);
+      // apply date filter
+      let filter = electionList.sort(
+        (a, b) => new Date(a.acf.closing_date) - new Date(b.acf.closing_date)
+      );
+      if (serveFilterFour === "Date Descending") {
+        filter = electionList.sort(
+          (a, b) => new Date(b.acf.closing_date) - new Date(a.acf.closing_date)
+        );
+      }
+      setElectionList(filter);
+    }
   };
 
   // SERVERS ---------------------------------------------
@@ -143,7 +160,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
             style={{
               fontSize: 20,
               color: colors.black,
-              padding: `0 2em`,
+              paddingRight: `2em`,
             }}
           >
             Filter:
@@ -178,7 +195,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
         if (!dropDownTwo) return null;
 
         return (
-          <div className="flex">
+          <div className="flex" style={{ paddingRight: `1em` }}>
             <Form.Select
               id={`serveFilterTwo${id}`}
               aria-label="Default select example"
@@ -197,6 +214,22 @@ const ElectionsBlock = ({ state, actions, block }) => {
         );
       };
 
+      const ServeFilterFour = () => {
+        return (
+          <div className="flex">
+            <Form.Select
+              id={`serveFilterFour${id}`}
+              aria-label="Default select example"
+              style={styles.input}
+            >
+              <option value="">Sort By</option>
+              <option value="Date Descending">Date Descending</option>
+              <option value="Date Ascending">Date Ascending</option>
+            </Form.Select>
+          </div>
+        );
+      };
+
       return (
         <div
           className="flex"
@@ -205,6 +238,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
           <ServeTitle />
           <ServeFilterOne />
           <ServeFilterTwo />
+          <ServeFilterFour />
         </div>
       );
     };
@@ -287,6 +321,31 @@ const ElectionsBlock = ({ state, actions, block }) => {
       );
     };
 
+    const ServeDropDownFilterFour = () => {
+      if (!filterFour) return null;
+
+      return (
+        <div className="shadow" style={styles.action}>
+          <div>{filterFour}</div>
+          <div
+            style={styles.closeAction}
+            onClick={() => {
+              setFilterFour(null);
+              const ELECTION_LIST = Object.values(state.source.elections); // add electionData object to data array
+              setElectionList(ELECTION_LIST);
+            }}
+          >
+            <CloseIcon
+              style={{
+                fill: colors.darkSilver,
+                padding: 0,
+              }}
+            />
+          </div>
+        </div>
+      );
+    };
+
     const ServeOpenPositionBtnFilter = () => {
       if (!isOpen) return null;
 
@@ -310,7 +369,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
 
     return (
       <div style={{ position: "relative", paddingBottom: `1em` }}>
-        <div className="flex-row">
+        <div className="flex-col" style={{ width: "60%" }}>
           <ServeSearchContainer />
           <ServeFilters />
         </div>
@@ -319,6 +378,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
           <ServeDropDownFilterOne />
           <ServeDropDownFilterTwo />
           <ServeBtnFilter />
+          <ServeDropDownFilterFour />
         </div>
         <div className="flex" style={{ marginTop: "1em" }}>
           <ServeOpenPositionBtnFilter />
