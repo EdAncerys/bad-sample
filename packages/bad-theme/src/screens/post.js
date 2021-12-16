@@ -55,13 +55,14 @@ const Post = ({ state, actions, libraries }) => {
 
   const ServeSideBar = () => {
     return (
-      <div className="flex" style={{ alignItems: "flex-start" }}>
+      <div>
         <Card
           authorInfo={post}
           colour={
             press_release_authors ? press_release_authors[0].colour : null
           }
           shadow
+          cardHeight="auto"
         />
       </div>
     );

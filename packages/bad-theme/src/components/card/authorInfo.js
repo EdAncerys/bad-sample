@@ -135,7 +135,12 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
 
   const ServeSocials = () => {
     return (
-      <div className="flex-col">
+      <div
+        style={{
+          padding: `1em 0`,
+          borderTop: `1px solid ${colors.lightSilver}`,
+        }}
+      >
         <div className="flex" style={{ justifyContent: "space-between" }}>
           <div style={styles.socials}>
             <Link link={`https://www.facebook.com/`} target="_blank">
@@ -178,18 +183,14 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
 
   const ServeTopics = () => {
     return (
-      <div style={{}}>
-        <div
-          style={{
-            fontSize: 20,
-            fontWeight: "bold",
-            padding: `0.5em 0`,
-            marginBottom: `1em 0`,
-            borderBottom: `1px solid ${colors.lightSilver}`,
-          }}
-        >
-          Topics
-        </div>
+      <div
+        style={{
+          fontSize: 20,
+          fontWeight: "bold",
+          padding: `0.5em 0`,
+        }}
+      >
+        Topics
       </div>
     );
   };
