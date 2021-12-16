@@ -31,7 +31,7 @@ const CardActions = ({
         <div style={styles.footerActionTitle}>
           <div
             style={{
-              borderBottom: `4px solid ${colors.darkSilver}`,
+              borderBottom: `2px solid ${colors.darkSilver}`,
               paddingBottom: 5,
               textTransform: "capitalize",
               cursor: "pointer",
@@ -54,14 +54,19 @@ const CardActions = ({
       <div style={styles.footerActionTitle}>
         <div
           style={{
-            borderBottom: `4px solid ${colors.darkSilver}`,
             paddingBottom: 5,
             textTransform: "capitalize",
+            borderBottom: `2px solid ${colors.darkSilver}`,
             cursor: "pointer",
           }}
           onClick={() => console.log(form_link)}
         >
-          <a href={form_link} target="_blank" download>
+          <a
+            href={form_link}
+            target="_blank"
+            download
+            style={{ color: colors.textMain }}
+          >
             {GO_TO_LABEL}
           </a>
         </div>

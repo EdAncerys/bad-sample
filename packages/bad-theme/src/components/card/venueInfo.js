@@ -8,7 +8,6 @@ const VenueInfo = ({ state, actions, libraries, venueInfo }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!venueInfo) return null;
-  console.log("----", venueInfo);
 
   const { title, link } = venueInfo;
   const { capacity_options } = venueInfo.acf;

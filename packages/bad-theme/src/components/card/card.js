@@ -28,6 +28,7 @@ const Card = ({
   gallery,
   venueInfo,
   videoGalleryInfo,
+  electionInfo,
   fundingPromo,
   textAlign,
   url,
@@ -37,6 +38,7 @@ const Card = ({
   date,
   seatNumber,
   eventHeader,
+  limitBodyLength,
   shadow,
   cardWidth,
   cardHeight,
@@ -129,6 +131,7 @@ const Card = ({
       <div className="flex-col" style={{ padding: isFrom4Col ? `1em` : `2em` }}>
         <ServeCardHeader />
         <EventCardHeader eventHeader={eventHeader} />
+        <VenueInfo venueInfo={venueInfo} />
         <ServeJournalCard />
         <CardBody
           title={title}
@@ -139,8 +142,9 @@ const Card = ({
           TEXT_ALIGN={TEXT_ALIGN}
           isFrom4Col={isFrom4Col}
           newsCarousel={newsCarousel}
+          limitBodyLength={limitBodyLength}
+          electionInfo={electionInfo}
         />
-        <VenueInfo venueInfo={venueInfo} />
         <VideoGalleryInfo videoGalleryInfo={videoGalleryInfo} />
         <CardActions
           link_label={link_label}

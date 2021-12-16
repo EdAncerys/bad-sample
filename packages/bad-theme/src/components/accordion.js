@@ -17,11 +17,10 @@ const AccordionComponent = ({
   libraries,
   block,
   guidelines,
+  leadershipBlock,
 }) => {
   if (!block) return <Loading />;
   if (!block.accordion_item) return null;
-
-  console.log("---", block);
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const marginHorizontal = state.theme.marginHorizontal;
@@ -68,6 +67,23 @@ const AccordionComponent = ({
       gsSubtitle = block.acf.subtitle;
       gsUpdate_in_progress = block.acf.update_in_progress;
     }
+    // Guidelines & Standards --------------------------------
+
+    // LEadership team & Standards --------------------------------
+    let ltTitle = null;
+    let ltBody = null;
+    let ltAlignTitles = null;
+    let LT_LAYOUT = null;
+    let ALL_GRADES = null;
+
+    if (leadershipBlock) {
+      ltTitle = block.block.title;
+      ltBody = block.block.intro_text;
+      ltAlignTitles = block.block.align_title;
+      LT_LAYOUT = block.block.layout;
+      ALL_GRADES = state.source.leadership_grade;
+    }
+    // LEadership team & Standards --------------------------------
 
     const ServeHeader = () => {
       const ServeTitle = () => {
@@ -238,6 +254,29 @@ const AccordionComponent = ({
         }
       };
 
+      const ServeLTTitle = () => {
+        if (!ltTitle) return null;
+        let ALIGNMENT = "flex-start";
+        if (ltAlignTitles === "center") ALIGNMENT = "center";
+        if (ltAlignTitles === "right") ALIGNMENT = "flex-end";
+
+        return (
+          <div
+            className="flex"
+            style={{
+              fontSize: 20,
+              color: colors.black,
+              fontWeight: "bold",
+              alignItems: "center",
+              justifyContent: ALIGNMENT,
+            }}
+            onClick={() => setActive(!active)}
+          >
+            <Html2React html={ltTitle} />
+          </div>
+        );
+      };
+
       return (
         <div style={{ position: "relative" }}>
           <Accordion.Header>
@@ -247,6 +286,8 @@ const AccordionComponent = ({
             >
               <ServeTitle />
               <ServeGSTitle />
+              <ServeLTTitle />
+
               <ServeLogo />
               <ServeIcon />
             </div>
@@ -345,6 +386,195 @@ const AccordionComponent = ({
         );
       };
 
+      const ServeLTBody = () => {
+        if (!ltBody) return null;
+
+        return (
+          <div>
+            <Html2React html={ltBody} />
+          </div>
+        );
+      };
+
+      const ServeLTTeam = () => {
+        if (!block.leadershipList) return null;
+
+        const ServeListLayout = ({ item }) => {
+          const title = item.title.rendered;
+          const hospital = item.acf.hospital;
+          const dates = item.acf.dates;
+
+          const ServeTitle = () => {
+            if (!title) return null;
+
+            return (
+              <div>
+                <Html2React html={title} />
+              </div>
+            );
+          };
+
+          const ServeHospital = () => {
+            if (!hospital) return null;
+
+            return (
+              <div style={{ marginRight: 10 }}>
+                <Html2React html={hospital} />
+              </div>
+            );
+          };
+
+          const ServeDates = () => {
+            if (!dates) return null;
+
+            return (
+              <div>
+                <Html2React html={dates} />
+              </div>
+            );
+          };
+
+          return (
+            <div style={styles.listLayout}>
+              <ServeTitle />
+              <div className="flex-row">
+                <ServeHospital />
+                <ServeDates />
+              </div>
+            </div>
+          );
+        };
+
+        const ServeProfileLayout = ({ item }) => {
+          const title = item.title.rendered;
+          const hospital = item.acf.hospital;
+          const dates = item.acf.dates;
+          const image = item.acf.image;
+
+          const ServeTitle = () => {
+            if (!title) return null;
+
+            return (
+              <div>
+                <Html2React html={title} />
+              </div>
+            );
+          };
+
+          const ServeHospital = () => {
+            if (!hospital) return null;
+
+            return (
+              <div style={{ marginRight: 10 }}>
+                <Html2React html={hospital} />
+              </div>
+            );
+          };
+
+          const ServeDates = () => {
+            if (!dates) return null;
+
+            return (
+              <div>
+                <Html2React html={dates} />
+              </div>
+            );
+          };
+
+          const ServeCardImage = () => {
+            if (!image) return null;
+            const alt = title || "BAD";
+
+            return (
+              <div
+                style={{
+                  width: 190,
+                  height: 190,
+                  borderRadius: "50%",
+                  overflow: "hidden",
+                  margin: `1em 0`,
+                }}
+              >
+                <Image
+                  src={image.url}
+                  alt={alt}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+              </div>
+            );
+          };
+
+          return (
+            <div
+              className="flex-col"
+              style={{
+                justifyContent: "flex-end",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              <ServeCardImage />
+              <ServeTitle />
+              <ServeDates />
+              <ServeHospital />
+            </div>
+          );
+        };
+
+        let isListLayout = true;
+        if (LT_LAYOUT === "officer") isListLayout = false;
+        if (LT_LAYOUT === "senior-management") isListLayout = false;
+        const jobRole = Object.values(ALL_GRADES).filter(
+          (job) => job.slug === LT_LAYOUT
+        );
+        let rolId = 0;
+        if (jobRole) rolId = jobRole[0].id;
+
+        if (isListLayout)
+          return (
+            <div style={{ padding: `3em 0 0` }}>
+              {block.leadershipList.map((item, key) => {
+                if (
+                  LT_LAYOUT === "executive-committee-regional" &&
+                  !item.leadership_grade.includes(rolId)
+                )
+                  return null;
+                if (
+                  LT_LAYOUT === "executive-committee-co-opted" &&
+                  !item.leadership_grade.includes(rolId)
+                )
+                  return null;
+                if (isListLayout)
+                  return <ServeListLayout item={item} key={key} />;
+              })}
+            </div>
+          );
+
+        if (!isListLayout)
+          return (
+            <div style={styles.profileLayout}>
+              {block.leadershipList.map((item, key) => {
+                if (
+                  LT_LAYOUT === "senior-management" &&
+                  !item.leadership_grade.includes(rolId)
+                )
+                  return null;
+                if (
+                  LT_LAYOUT === "officer" &&
+                  !item.leadership_grade.includes(rolId)
+                )
+                  return null;
+
+                return <ServeProfileLayout item={item} key={key} />;
+              })}
+            </div>
+          );
+      };
+
       const ServeLink = ({ link }) => {
         if (!link) return null;
         const { label, link_url } = link;
@@ -376,6 +606,9 @@ const AccordionComponent = ({
           }}
         >
           <ServeBody />
+          <ServeLTBody />
+
+          <ServeLTTeam />
           <ServeGSSubTitle />
           <div className="flex-row" style={{ width: "50%", flexWrap: "wrap" }}>
             {gsLinks &&
@@ -422,6 +655,18 @@ const styles = {
   divider: {
     margin: `2px 0.5em`,
     borderRight: `1px solid ${colors.darkSilver}`,
+  },
+  listLayout: {
+    display: "grid",
+    gridTemplateColumns: `25% auto`,
+    gap: 20,
+    padding: `0.5em 0`,
+  },
+  profileLayout: {
+    display: "grid",
+    gridTemplateColumns: `repeat(3, 1fr)`,
+    gap: 20,
+    padding: `3em 0 0`,
   },
 };
 

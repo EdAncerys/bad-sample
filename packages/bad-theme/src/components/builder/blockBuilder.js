@@ -30,6 +30,9 @@ import TitleAndBodyBlock from "../titleAndBodyBlock";
 import SplitContentAndUsefulLinksCard from "../splitContentAndUsefulLinksCard";
 import Events from "../events/events";
 import GuidelinesAndStandards from "../guidelinesAndStandards";
+import LeadershipBlock from "../leadershipBlock";
+import ElectionsBlock from "../electionsBlock";
+import EmbeddedVideo from "../embeddedVideo";
 
 import BlockWrapper from "../blockWrapper";
 
@@ -61,6 +64,30 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
         {blocks.map((block, key) => {
           const { acf_fc_layout } = block;
           console.log("CONTENT BLOCK", block); // debug
+
+          if (acf_fc_layout === "embedded_video_block")
+            return (
+              <div key={key + 1}>
+                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                <EmbeddedVideo key={key} block={block} />
+              </div>
+            );
+
+          if (acf_fc_layout === "elections_loop_block")
+            return (
+              <div key={key + 1}>
+                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                <ElectionsBlock key={key} block={block} />
+              </div>
+            );
+
+          if (acf_fc_layout === "leadership_loop_block")
+            return (
+              <div key={key + 1}>
+                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                <LeadershipBlock key={key} block={block} />
+              </div>
+            );
 
           if (acf_fc_layout === "guidelines_and_standards_loop_block")
             return (

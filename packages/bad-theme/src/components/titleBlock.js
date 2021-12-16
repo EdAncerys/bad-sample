@@ -11,8 +11,6 @@ const TitleBlock = ({ state, actions, libraries, block, disableMargin }) => {
   if (!block) return <Loading />;
 
   const { label, link, title, text_align } = block;
-  if (!title) return null;
-  if (!label) return null;
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -22,7 +20,9 @@ const TitleBlock = ({ state, actions, libraries, block, disableMargin }) => {
 
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
-    if (!label) return null;
+    if (!link) return null;
+    let LABEL = "More";
+    if (label) LABEL = label;
 
     return (
       <div
@@ -35,7 +35,26 @@ const TitleBlock = ({ state, actions, libraries, block, disableMargin }) => {
         }}
         onClick={() => setGoToAction({ path: link.url, actions })}
       >
-        <Html2React html={label} />
+        <Html2React html={LABEL} />
+      </div>
+    );
+  };
+
+  const ServeTitle = () => {
+    if (!title) return null;
+
+    return (
+      <div
+        className="flex"
+        style={{
+          fontSize: 36,
+          fontWeight: "bold",
+          color: colors.black,
+          textAlign: ALIGNMENT,
+          justifyContent: ALIGNMENT,
+        }}
+      >
+        <Html2React html={title} />
       </div>
     );
   };
@@ -47,19 +66,7 @@ const TitleBlock = ({ state, actions, libraries, block, disableMargin }) => {
       }}
     >
       <div className="flex-row" style={{ alignItems: "center" }}>
-        <div
-          className="flex"
-          style={{
-            fontSize: 36,
-            fontWeight: "bold",
-            color: colors.black,
-            textAlign: ALIGNMENT,
-            justifyContent: ALIGNMENT,
-          }}
-        >
-          <Html2React html={title} />
-        </div>
-
+        <ServeTitle />
         <ServeActions />
       </div>
     </div>

@@ -24,7 +24,7 @@ const Events = ({ state, actions, libraries, block }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  const search = block.add_search_function;
+  const isSearch = block.add_search_function;
   const layoutOne = block.layout === "layout_one";
   const id = uuidv4();
 
@@ -179,7 +179,7 @@ const Events = ({ state, actions, libraries, block }) => {
   };
 
   const ServeFilter = () => {
-    if (!search) return null;
+    if (!isSearch) return null;
 
     const ServeSearchFilter = () => {
       if (!searchFilter) return null;
@@ -199,7 +199,7 @@ const Events = ({ state, actions, libraries, block }) => {
       );
     };
 
-    const ServeGradesFilter = () => {
+    const ServeDropDownFilterOne = () => {
       if (!gradesFilter) return null;
       const GRADES = Object.values(state.source.event_grade);
       const filter = GRADES.filter((item) => item.id === Number(gradesFilter));
@@ -220,7 +220,7 @@ const Events = ({ state, actions, libraries, block }) => {
       );
     };
 
-    const ServeLocationsFilter = () => {
+    const ServeDropDownFilterTwo = () => {
       if (!locationsFilter) return null;
       const LOCATIONS = Object.values(state.source.event_location);
       const filter = LOCATIONS.filter(
@@ -254,8 +254,8 @@ const Events = ({ state, actions, libraries, block }) => {
         </div>
         <div className="flex" style={{ marginTop: "0.5em" }}>
           <ServeSearchFilter />
-          <ServeGradesFilter />
-          <ServeLocationsFilter />
+          <ServeDropDownFilterOne />
+          <ServeDropDownFilterTwo />
         </div>
       </div>
     );
