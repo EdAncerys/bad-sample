@@ -34,6 +34,7 @@ import Loading from "../components/loading";
 import Error from "./error";
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, useAppState } from "../context";
+import BlockWrapper from "../components/blockWrapper";
 
 const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
@@ -54,12 +55,13 @@ const App = ({ state, actions }) => {
       }}
     >
       <div style={{ ...styles.container }}>
-        //TODO: Wrap as well
-        <Header />
-        <Directions />
-        <LoginModal />
-        <CreateAccountModal />
-        <EnquireModal />
+        <BlockWrapper>
+          <Header />
+          <Directions />
+          <LoginModal />
+          <CreateAccountModal />
+          <EnquireModal />
+        </BlockWrapper>
         <div className="flex-col">
           <Switch>
             <Loading when={data.isFetching} />

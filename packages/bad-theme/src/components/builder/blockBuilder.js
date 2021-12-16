@@ -67,175 +67,217 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
           if (acf_fc_layout === "embedded_video_block")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <EmbeddedVideo key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <EmbeddedVideo key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "elections_loop_block")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <ElectionsBlock key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <ElectionsBlock key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "leadership_loop_block")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <LeadershipBlock key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <LeadershipBlock key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "guidelines_and_standards_loop_block")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <GuidelinesAndStandards key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <GuidelinesAndStandards key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "events_loop_block")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <Events key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <Events key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "split_content_and_useful_links_card_block")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <SplitContentAndUsefulLinksCard key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <SplitContentAndUsefulLinksCard key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "title_and_body_block")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <TitleAndBodyBlock key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <TitleAndBodyBlock key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "social_icons")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <SocialIcons key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <SocialIcons key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "video_gallery_block")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <VideoGallery key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <VideoGallery key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "history_timeline")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <HistoryTimeline key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <HistoryTimeline key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "news_article_block")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <NewsArticles key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <NewsArticles key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "split_content_and_index_card_block")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <SplitContentAndIndexCard key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <SplitContentAndIndexCard key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "venues_loop_block")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <VenueHireGallery key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <VenueHireGallery key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "funding_promo")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <FundingPromo key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <FundingPromo key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "latest_tweets")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <Tweets key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <Tweets key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "download_file_block")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <DownloadFileBlock key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <DownloadFileBlock key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "benefits_grid")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <BenefitsGrid key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <BenefitsGrid key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "quotation_carousel")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <QuotationCarousel key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <QuotationCarousel key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "promotional_block")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <PromoBlock key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <PromoBlock key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "profiles_block")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <ProfilesBlock key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <ProfilesBlock key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "title_block")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <TitleBlock key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <TitleBlock key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "multi_post_block")
             return (
-              <BlockWrapper background={colors.danger}>
+              <BlockWrapper background={block.background_colour}>
                 <div key={key + 1}>
                   <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
                   <MultiPostBlock key={key} block={block} />
@@ -245,47 +287,57 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
           if (acf_fc_layout === "news_carousel")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <NewsCarousel key={key} block={block} isMenu />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <NewsCarousel key={key} block={block} isMenu />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "banner")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <Banner key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <Banner key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "buttons_row")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <ButtonsRow key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <ButtonsRow key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "accordion")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <Accordion key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <Accordion key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "journal_promo_block")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <JournalPromoBlock key={key} block={block} />
-              </div>
+              <BlockWrapper background={block.background_colour}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <JournalPromoBlock key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "full_width_content_block")
             return (
-              <BlockWrapper>
+              <BlockWrapper background={block.background_colour}>
                 <div key={key + 1}>
                   <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
                   <FullWidthContentBlock key={key} block={block} />
@@ -303,7 +355,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
           if (acf_fc_layout === "hero_banner")
             return (
-              <BlockWrapper background={colors.danger}>
+              <BlockWrapper background={block.background_colour}>
                 <div key={key + 1}>
                   <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
                   <HeroBanner key={key} block={block} />
