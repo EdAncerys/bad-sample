@@ -33,8 +33,8 @@ const ElectionsBlock = ({ state, actions, block }) => {
     title,
   } = block;
   const isSearch = has_search;
-  const isOpen = opened_or_closed_filter;
   const isPosition = positions_filter;
+  const isOpen = opened_or_closed_filter;
   const id = uuidv4();
 
   // DATA pre FETCH ----------------------------------------------------------------
@@ -134,6 +134,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
 
     const ServeFilters = () => {
       if (!dropDownOne && !dropDownTwo) return null; // props for filter options
+      if (!isPosition) return null;
 
       const ServeTitle = () => {
         return (
@@ -268,6 +269,8 @@ const ElectionsBlock = ({ state, actions, block }) => {
     };
 
     const ServeBtnFilter = () => {
+      if (!isOpen) return null;
+
       return (
         <div className="shadow" style={styles.action}>
           <div
@@ -324,7 +327,6 @@ const ElectionsBlock = ({ state, actions, block }) => {
             description,
             nomination_form_upload,
           } = block.acf;
-          console.log("data----", block, filterOne, filterTwo);
 
           if (searchFilter) {
             if (
@@ -354,6 +356,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
                 colour={colour}
                 limitBodyLength
                 cardHeight="100%"
+                electionInfo={block}
               />
             </div>
           );

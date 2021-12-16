@@ -12,8 +12,6 @@ const TitleBlock = ({ state, actions, libraries, block, disableMargin }) => {
 
   const { label, link, title, text_align } = block;
 
-  console.log("block----", block);
-
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
   let ALIGNMENT = "start";

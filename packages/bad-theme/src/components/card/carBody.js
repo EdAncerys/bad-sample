@@ -3,6 +3,7 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
 import { colors } from "../../config/colors";
+import ElectionInfo from "./electionInfo";
 
 const CardBody = ({
   state,
@@ -16,6 +17,7 @@ const CardBody = ({
   newsCarousel,
   TEXT_ALIGN,
   isFrom4Col,
+  electionInfo,
   limitBodyLength,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -135,6 +137,7 @@ const CardBody = ({
       <div style={{ margin: CONTENT_ALIGNMENT }}>
         <ServeSeatsRemaining />
         <ServeTitle />
+        <ElectionInfo electionInfo={electionInfo} />
         <ServeBody />
         <ServeDate />
       </div>
