@@ -16,6 +16,7 @@ const CardBody = ({
   newsCarousel,
   TEXT_ALIGN,
   isFrom4Col,
+  limitBodyLength,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -62,6 +63,7 @@ const CardBody = ({
     const MAX_CHAR = 80;
     if (body.length > MAX_CHAR && isFrom4Col)
       bodyPreview = `${body.slice(0, MAX_CHAR)}...`;
+    if (limitBodyLength) bodyPreview = `${body.slice(0, MAX_CHAR)}...`;
 
     return (
       <div

@@ -15,8 +15,9 @@ const ElectionsBlock = ({ state, actions, block }) => {
   if (!block) return <Loading />;
 
   const [electionList, setElectionList] = useState(null);
-  const [grades, setGrades] = useState(null); // data
-  const [locations, setLocations] = useState(null); // data
+  const [dropDownOne, setDropDownOne] = useState(null); // data
+  const [dropDownTwo, setDropDownTwo] = useState(null); // data
+
   const [searchFilter, setSearchFilter] = useState(null);
   const [filterOne, setFilterOne] = useState(null);
   const [filterTwo, setFilterTwo] = useState(null);
@@ -57,14 +58,11 @@ const ElectionsBlock = ({ state, actions, block }) => {
     const GRADES = Object.values(state.source.election_grade);
     const ROLES = Object.values(state.source.election_roles);
 
-    setGrades(GRADES);
-    setLocations(ROLES);
+    setDropDownOne(GRADES);
+    setDropDownTwo(ROLES);
   }, []);
   // DATA pre FETCH ----------------------------------------------------------------
   if (!electionList) return <Loading />;
-
-  console.log("electionList", electionList);
-  console.log("data----", grades, locations);
 
   // HELPERS ----------------------------------------------------------------
   const handleSearchSubmit = () => {
@@ -135,7 +133,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
     };
 
     const ServeFilters = () => {
-      if (!grades && !locations) return null; // props for filter options
+      if (!dropDownOne && !dropDownTwo) return null; // props for filter options
 
       const ServeTitle = () => {
         return (
@@ -152,7 +150,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
       };
 
       const ServeFilterOne = () => {
-        if (!grades) return null;
+        if (!dropDownOne) return null;
 
         return (
           <div className="flex" style={{ paddingRight: `1em` }}>
@@ -162,7 +160,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
               style={styles.input}
             >
               <option value="">Election Grades</option>
-              {grades.map((item, key) => {
+              {dropDownOne.map((item, key) => {
                 return (
                   <option key={key} value={item.id}>
                     {item.name}
@@ -175,7 +173,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
       };
 
       const ServeFilterTwo = () => {
-        if (!locations) return null;
+        if (!dropDownTwo) return null;
 
         return (
           <div className="flex">
@@ -185,7 +183,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
               style={styles.input}
             >
               <option value="">Election Role</option>
-              {locations.map((item, key) => {
+              {dropDownTwo.map((item, key) => {
                 return (
                   <option key={key} value={item.id}>
                     {item.name}
@@ -278,6 +276,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
               fontWeight: "bold",
               textTransform: "uppercase",
               padding: `1em 2em`,
+              cursor: "pointer",
             }}
             // onClick={() => setFilterTwo(null)}
           >
@@ -317,11 +316,27 @@ const ElectionsBlock = ({ state, actions, block }) => {
       <ServeFilter />
       <div style={styles.container}>
         {electionList.map((block, key) => {
+          const { title } = block;
+          const {
+            closing_date,
+            cta,
+            colour,
+            description,
+            nomination_form_upload,
+          } = block.acf;
+          console.log("data----", block);
+
           return (
             <div key={key}>
               <Card
-                block={{ accordion_item: [{ electionList, block }] }}
-                leadershipBlock
+                cardTitle="Officers Of The BAD"
+                title={title.rendered}
+                body={description}
+                form_label={cta}
+                form_link={nomination_form_upload}
+                colour={colour}
+                limitBodyLength
+                cardHeight="100%"
               />
             </div>
           );
@@ -334,7 +349,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
 const styles = {
   container: {
     display: "grid",
-    gridTemplateColumns: `repeat(2, 1fr)`,
+    gridTemplateColumns: `repeat(3, 1fr)`,
     gap: 20,
   },
   input: {

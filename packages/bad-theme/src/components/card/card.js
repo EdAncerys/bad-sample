@@ -37,6 +37,7 @@ const Card = ({
   date,
   seatNumber,
   eventHeader,
+  limitBodyLength,
   shadow,
   cardWidth,
   cardHeight,
@@ -139,6 +140,7 @@ const Card = ({
           TEXT_ALIGN={TEXT_ALIGN}
           isFrom4Col={isFrom4Col}
           newsCarousel={newsCarousel}
+          limitBodyLength={limitBodyLength}
         />
         <VenueInfo venueInfo={venueInfo} />
         <VideoGalleryInfo videoGalleryInfo={videoGalleryInfo} />
