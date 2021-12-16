@@ -10,6 +10,7 @@ const GalleryCarousel = ({ state, actions, libraries, gallery }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const BANNER_HEIGHT = 370;
 
+  console.log("gallery", gallery);
   if (!gallery) return null;
 
   // RETURN ---------------------------------------------------

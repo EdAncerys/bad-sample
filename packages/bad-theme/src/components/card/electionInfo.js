@@ -20,7 +20,6 @@ const ElectionInfo = ({ state, actions, libraries, electionInfo }) => {
       (item) => item.id === Number(election_roles[0])
     );
     const name = filter[0].name;
-    console.log(name);
 
     return (
       <div style={{}}>
