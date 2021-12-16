@@ -54,12 +54,12 @@ const App = ({ state, actions }) => {
       }}
     >
       <div style={{ ...styles.container }}>
+        //TODO: Wrap as well
         <Header />
         <Directions />
         <LoginModal />
         <CreateAccountModal />
         <EnquireModal />
-
         <div className="flex-col">
           <Switch>
             <Loading when={data.isFetching} />

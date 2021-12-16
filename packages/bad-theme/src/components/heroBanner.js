@@ -188,19 +188,17 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <BlockWrapper>
-      <div
-        className="flex-col "
-        style={{ height: BANNER_HEIGHT, backgroundColor: BACKGROUND_COLOUR }}
-      >
-        <div className="flex-row relative">
-          <ServeCardContent />
-          <ServeOverLay />
-          <ServeCardImage />
-        </div>
-        <ServeFooter />
+    <div
+      className="flex-col "
+      style={{ height: BANNER_HEIGHT, backgroundColor: BACKGROUND_COLOUR }}
+    >
+      <div className="flex-row relative">
+        <ServeCardContent />
+        <ServeOverLay />
+        <ServeCardImage />
       </div>
-    </BlockWrapper>
+      <ServeFooter />
+    </div>
   );
 };
 

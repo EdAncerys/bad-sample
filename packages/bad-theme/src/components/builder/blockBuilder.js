@@ -31,6 +31,8 @@ import SplitContentAndUsefulLinksCard from "../splitContentAndUsefulLinksCard";
 import Events from "../events/events";
 import GuidelinesAndStandards from "../guidelinesAndStandards";
 
+import BlockWrapper from "../blockWrapper";
+
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   // console.log("BLOCKS: ", blocks); // debug
 
@@ -206,10 +208,12 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
           if (acf_fc_layout === "multi_post_block")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <MultiPostBlock key={key} block={block} />
-              </div>
+              <BlockWrapper background={colors.danger}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <MultiPostBlock key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "news_carousel")
@@ -254,11 +258,12 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
           if (acf_fc_layout === "full_width_content_block")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-
-                <FullWidthContentBlock key={key} block={block} />
-              </div>
+              <BlockWrapper>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <FullWidthContentBlock key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           if (acf_fc_layout === "home_banner_carousel")
@@ -271,10 +276,12 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
           if (acf_fc_layout === "hero_banner")
             return (
-              <div key={key + 1}>
-                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <HeroBanner key={key} block={block} />
-              </div>
+              <BlockWrapper background={colors.danger}>
+                <div key={key + 1}>
+                  <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                  <HeroBanner key={key} block={block} />
+                </div>
+              </BlockWrapper>
             );
 
           return null;
