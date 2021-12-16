@@ -9,9 +9,6 @@ const LeadershipBlock = ({ state, actions, block }) => {
 
   const [leadershipList, setLeadershipList] = useState(null);
 
-  const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
-
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
     const path = `/leadership_team/`;

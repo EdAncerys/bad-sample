@@ -63,6 +63,11 @@ const settings = {
               archive: "/education_training",
             },
             {
+              type: "elections",
+              endpoint: "elections",
+              archive: "/elections",
+            },
+            {
               type: "leadership_team",
               endpoint: "leadership_team",
               archive: "/leadership_team",
