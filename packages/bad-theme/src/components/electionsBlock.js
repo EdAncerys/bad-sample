@@ -316,7 +316,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
       <ServeFilter />
       <div style={styles.container}>
         {electionList.map((block, key) => {
-          const { title } = block;
+          const { title, election_grade, election_roles } = block;
           const {
             closing_date,
             cta,
@@ -324,7 +324,24 @@ const ElectionsBlock = ({ state, actions, block }) => {
             description,
             nomination_form_upload,
           } = block.acf;
-          console.log("data----", block);
+          console.log("data----", block, filterOne, filterTwo);
+
+          if (searchFilter) {
+            if (
+              !title.rendered
+                .toLowerCase()
+                .includes(searchFilter.toLowerCase()) &&
+              !description.toLowerCase().includes(searchFilter.toLowerCase())
+            )
+              return null;
+          }
+          // select filtering config
+          if (filterOne) {
+            if (!election_grade.includes(Number(filterOne))) return null;
+          }
+          if (filterTwo) {
+            if (!election_roles.includes(Number(filterTwo))) return null;
+          }
 
           return (
             <div key={key}>
