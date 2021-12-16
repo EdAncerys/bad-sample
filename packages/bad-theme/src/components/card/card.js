@@ -14,6 +14,7 @@ import VideoGalleryInfo from "./videoGalleryInfo";
 import NewsCarouselHeader from "./newsCarouselHeader";
 import EventCardHeader from "./eventCardHeader";
 import NewsAndMediaHeader from "./newsAndMediaHeader";
+import AuthorInfo from "./authorInfo";
 
 const Card = ({
   state,
@@ -28,6 +29,7 @@ const Card = ({
   downloadFile,
   gallery,
   venueInfo,
+  authorInfo,
   videoGalleryInfo,
   electionInfo,
   newsAndMediaInfo,
@@ -135,6 +137,7 @@ const Card = ({
         <EventCardHeader eventHeader={eventHeader} />
         <VenueInfo venueInfo={venueInfo} />
         <NewsAndMediaHeader newsAndMediaInfo={newsAndMediaInfo} />
+        <AuthorInfo authorInfo={authorInfo} />
         <ServeJournalCard />
         <CardBody
           title={title}

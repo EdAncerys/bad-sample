@@ -28,7 +28,6 @@ const NewsAndMediaHeader = ({
 
   const [category, setCategory] = useState(null);
   const { categories, title, date } = newsAndMediaInfo;
-  console.log(newsAndMediaInfo);
 
   useEffect(async () => {
     if (state.source.category) {
@@ -38,7 +37,6 @@ const NewsAndMediaHeader = ({
       );
       const categoryName = filter[0].name;
       setCategory(categoryName);
-      console.log(CATEGORY);
     }
   }, []);
 

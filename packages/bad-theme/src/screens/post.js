@@ -2,6 +2,7 @@ import React from "react";
 import { connect, styled } from "frontity";
 
 import { colors } from "../config/colors";
+import Card from "../components/card/card";
 
 const Post = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -9,21 +10,78 @@ const Post = ({ state, actions, libraries }) => {
   const post = state.source[data.type][data.id];
   console.log("post data: ", post); // debug
 
+  const marginHorizontal = state.theme.marginHorizontal;
+  const marginVertical = state.theme.marginVertical;
+
+  const { categories, title, content, excerpt, link } = post;
+  const { press_release_authors } = post.acf;
+
+  // SERVERS ---------------------------------------------
+  const ServeContent = () => {
+    const ServeTitle = () => {
+      if (!title) return null;
+
+      return (
+        <div
+          className="flex"
+          style={{
+            fontSize: 36,
+            fontWeight: "bold",
+            color: colors.black,
+          }}
+        >
+          <Html2React html={title.rendered} />
+        </div>
+      );
+    };
+
+    const ServeBody = () => {
+      if (!content) return null;
+
+      return (
+        <div className="flex-col">
+          <Html2React html={content.rendered} />
+        </div>
+      );
+    };
+
+    return (
+      <div className="text-body">
+        <ServeTitle />
+        <ServeBody />
+      </div>
+    );
+  };
+
+  const ServeSideBar = () => {
+    return (
+      <div className="flex" style={{ alignItems: "flex-start" }}>
+        <Card
+          authorInfo={post}
+          colour={
+            press_release_authors ? press_release_authors[0].colour : null
+          }
+          shadow
+        />
+      </div>
+    );
+  };
+
   return (
-    <div>
-      <div>
-        <p style={styles.title}>POST</p>
+    <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
+      <div style={styles.container}>
+        <ServeContent />
+        <ServeSideBar />
       </div>
     </div>
   );
 };
 
 const styles = {
-  title: {
-    textAlign: "center",
-    fontSize: 40,
-    fontWeight: "500",
-    color: colors.primary,
+  container: {
+    display: "grid",
+    gridTemplateColumns: `2.5fr 1fr`,
+    gap: 20,
   },
 };
 
