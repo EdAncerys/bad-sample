@@ -60,7 +60,7 @@ const Card = ({
   let CARD_HEIGHT = "100%";
   if (title || body) CARD_HEIGHT = "auto";
   if (cardHeight) CARD_HEIGHT = cardHeight;
-  if (isFrom4Col) CARD_HEIGHT = "100%";
+  if (isFrom4Col) CARD_HEIGHT = 250;
 
   let PADDING = `2em`;
   if (isFrom4Col) PADDING = `1em`;

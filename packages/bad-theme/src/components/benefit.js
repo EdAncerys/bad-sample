@@ -66,13 +66,7 @@ const Benefit = ({ state, actions, libraries, block }) => {
     if (!body) return null;
 
     return (
-      <div
-        style={{
-          fontSize: 16,
-          fontWeight: "regular",
-          color: colors.darkSilver,
-        }}
-      >
+      <div>
         <Html2React html={body} />
       </div>
     );
@@ -80,7 +74,7 @@ const Benefit = ({ state, actions, libraries, block }) => {
 
   const ServeProfile = () => {
     return (
-      <div style={{ textAlign: "center" }}>
+      <div style={{ textAlign: "center", color: colors.black }}>
         <ServeTitle />
         <ServeBody />
       </div>

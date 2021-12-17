@@ -638,7 +638,10 @@ const AccordionComponent = ({
 
   // RETURN ----------------------------------------------------
   return (
-    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
+    <div
+      className="text-body"
+      style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}
+    >
       {block.accordion_item.map((block, key) => {
         return <ServeAccordion key={key} eventKey={key} block={block} />;
       })}

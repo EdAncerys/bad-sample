@@ -5,7 +5,7 @@ export const colors = {
   ocean: "#3882CD",
   yellow: "#F2F013",
   white: "#FFFF",
-  black: "#090910",
+  black: "#212529",
   softBlack: "#454545",
   danger: "#A9333A",
   silver: "#ced4da",

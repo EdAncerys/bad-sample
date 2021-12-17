@@ -65,7 +65,7 @@ const CardBody = ({
     if (!body) return null;
 
     let bodyPreview = body;
-    const MAX_CHAR = 50;
+    const MAX_CHAR = 90;
     if (body.length >= MAX_CHAR && isFrom4Col)
       bodyPreview = `${body.slice(0, MAX_CHAR)}...`;
     if (limitBodyLength) bodyPreview = `${body.slice(0, MAX_CHAR)}...`;
