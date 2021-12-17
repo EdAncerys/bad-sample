@@ -44,8 +44,7 @@ const Post = ({ state, actions, libraries }) => {
       <div
         style={{
           backgroundColor: colors.white,
-          padding: `2em 1em`,
-          margin: `2em 0`,
+          padding: `2em 0`,
         }}
       >
         <Html2React html={pil.content.rendered} />
@@ -57,7 +56,7 @@ const Post = ({ state, actions, libraries }) => {
     if (!pil.acf) return null;
 
     return (
-      <div style={{ margin: `4em 0` }}>
+      <div style={{ margin: `3em 0 1em` }}>
         <DownloadFileBlock block={pil.acf} disableMargin />
       </div>
     );
@@ -65,6 +64,7 @@ const Post = ({ state, actions, libraries }) => {
 
   return (
     <div
+      className="text-body"
       style={{
         margin: `${marginVertical}px ${marginHorizontal}px`,
       }}
