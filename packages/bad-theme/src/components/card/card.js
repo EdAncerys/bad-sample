@@ -15,6 +15,7 @@ import NewsCarouselHeader from "./newsCarouselHeader";
 import EventCardHeader from "./eventCardHeader";
 import NewsAndMediaHeader from "./newsAndMediaHeader";
 import AuthorInfo from "./authorInfo";
+import ImageAndPromoCard from "./imageAndPromoCard";
 
 const Card = ({
   state,
@@ -51,6 +52,8 @@ const Card = ({
   newsCarousel,
   journalCard,
   newsArticle,
+  imageAndPromoCard,
+  removePadding,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
@@ -65,6 +68,7 @@ const Card = ({
   let PADDING = `2em`;
   if (isFrom4Col) PADDING = `1em`;
   if (newsAndMediaInfo) PADDING = `0 2em 2em`;
+  if (removePadding) PADDING = 0;
 
   // SERVERS ----------------------------------------------
   const ServeFooter = () => {
@@ -181,6 +185,7 @@ const Card = ({
       }}
     >
       <PromoHeader fundingPromo={fundingPromo} />
+      <ImageAndPromoCard imageAndPromoCard={imageAndPromoCard} />
       <NewsAndMediaHeader newsAndMediaInfo={newsAndMediaInfo} layout={layout} />
       <GalleryCarousel gallery={gallery} />
       <NewsArticleHeader newsArticle={newsArticle} />
