@@ -62,6 +62,11 @@ const Directions = ({ state, actions, libraries }) => {
           TITLE_RENDER = <Html2React html={menuItem.title} />;
       });
 
+    // if (typeof TITLE_RENDER == "string" && TITLE_RENDER.includes("-"))
+    //   console.log(TITLE_RENDER);
+    // TITLE_RENDER.replace(/-/g, "");
+    // console.log(TITLE_RENDER.replace(/-/g, " "));
+
     return (
       <div>
         <div className="flex-row" style={styles.link} onClick={handleGoToLink}>

@@ -4,6 +4,7 @@ import { Form } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 
 import Card from "./card/card";
+import NewsCarousel from "./newsCarousel";
 import TitleBlock from "./titleBlock";
 import Loading from "./loading";
 import { colors } from "../config/colors";
@@ -268,6 +269,15 @@ const NewsAndMedia = ({ state, actions, block }) => {
             const electionDate = new Date(closing_date);
             if (date >= electionDate) return null;
           }
+
+          const news_card = {};
+
+          if (layout === "layout_one") return null;
+          // return (
+          //   <div key={key}>
+          //     <NewsCarousel block={news_card} />
+          //   </div>
+          // );
 
           if (layout === "layout_two")
             return (

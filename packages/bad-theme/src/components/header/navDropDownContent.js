@@ -5,10 +5,8 @@ import { colors } from "../../config/colors";
 
 const NavBarDropDownContent = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
-  const menu = state.source[data.type][data.id];
 
   // HELPERS ---------------------------------------------
-
   return (
     <div
       className="flex-center-row"
