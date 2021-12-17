@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
-
 import Loading from "./loading";
 import { colors } from "../config/colors";
+import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 
 const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
   function slide(direction) {
@@ -35,6 +35,7 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
   const WIDTH = 4;
 
   const DATA_LENGTH = block.timeline_item.length / 5;
+
   const HistoryButton = ({ next }) => {
     return (
       <button
@@ -71,27 +72,16 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
   };
   // RETURN ---------------------------------------------------
   return (
-    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
-      <div style={styles.container}>
+    <div className="mt-3">
+      <div className="d-flex justify-content-between">
+        <HistoryButton next={false} />
+        <HistoryButton next={true} />
+      </div>
+      <div style={styles.container} id="carousel-container">
         {block.timeline_item.map((block, key) => {
           const { body, image, year } = block;
 
           if (!body) return null;
-
-          if (GRID_KEY === 5 && ROW_COUNTER === 1) {
-            GRID_KEY = 0;
-            ROW_COUNTER++;
-          }
-          if (GRID_KEY === 6 && ROW_COUNTER === 0) {
-            GRID_KEY = 1;
-            ROW_COUNTER++;
-          }
-          if (ROW_COUNTER === 2) {
-            GRID_KEY = 0;
-            ROW_COUNTER = 0;
-          }
-
-          GRID_KEY++;
 
           let BORDER_WIDTH = `0 0 ${WIDTH}px ${WIDTH}px`;
           if (ROW_COUNTER === 1) BORDER_WIDTH = `0 0 0 ${WIDTH}px`;
@@ -100,24 +90,6 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
           if (GRID_KEY === 5) ROW++;
 
           // SERVERS ----------------------------------------------------------------
-          const ServeCardImage = () => {
-            if (!image.url) return null;
-            const alt = <Html2React html={year} /> || "BAD";
-
-            return (
-              <div style={{ width: IMG_WIDTH, height: IMG_WIDTH }}>
-                <Image
-                  src={image.url}
-                  alt={alt}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                  }}
-                />
-              </div>
-            );
-          };
 
           const ServeCardContent = () => {
             // SERVERS ---------------------------------------------
@@ -125,9 +97,28 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
               if (!year) return null;
 
               return (
-                <div style={{ fontSize: 20, fontWeight: "bold" }}>
-                  <Html2React html={year} />
-                </div>
+                <>
+                  <div className="container">
+                    <div className="row">
+                      <div
+                        style={{
+                          fontSize: 40,
+                          fontWeight: "bold",
+                          zIndex: 12,
+                        }}
+                        className="col-3"
+                      >
+                        <Html2React
+                          html={year}
+                          style={{ backgroundColor: "white" }}
+                        />
+                      </div>
+                      <div className="col d-flex flex-column justify-content-center">
+                        <hr />
+                      </div>
+                    </div>
+                  </div>
+                </>
               );
             };
 
@@ -142,8 +133,10 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
             };
 
             return (
-              <div className="flex-col">
-                <ServeDate />
+              <div style={{ width: "25vw" }}>
+                <div style={{ width: "100%", display: "table" }}>
+                  <ServeDate />
+                </div>
                 <ServeBody />
               </div>
             );
@@ -154,14 +147,11 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
               key={key}
               className="flex-col"
               style={{
-                gridColumnStart: GRID_KEY,
-                border: `1px solid ${colors.darkSilver}`,
-                borderWidth: BORDER_WIDTH,
                 padding: `1em`,
+                width: "33%",
               }}
             >
               <ServeCardContent />
-              <ServeCardImage />
             </div>
           );
         })}
@@ -172,14 +162,13 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
 
 const styles = {
   container: {
-    display: "grid",
-    gridTemplateColumns: `repeat(6, 1fr)`,
-    justifyContent: "space-between",
+    display: "flex",
+    overflowX: "auto",
     gap: 0,
   },
   action: {
     backgroundColor: colors.white,
-    borderRadius: 5,
+
     padding: `0.5em 1.5em`,
     margin: `1em 1em 0 0`,
   },
