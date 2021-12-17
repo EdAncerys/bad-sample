@@ -40,6 +40,7 @@ const Card = ({
   form_label,
   form_link,
   date,
+  layout,
   seatNumber,
   eventHeader,
   limitBodyLength,
@@ -55,10 +56,15 @@ const Card = ({
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
   const THEME = colour || colors.primary;
   const SHADOW = shadow ? "shadow" : "";
+
   let CARD_HEIGHT = "100%";
   if (title || body) CARD_HEIGHT = "auto";
   if (cardHeight) CARD_HEIGHT = cardHeight;
   if (isFrom4Col) CARD_HEIGHT = "100%";
+
+  let PADDING = `2em`;
+  if (isFrom4Col) PADDING = `1em`;
+  if (newsAndMediaInfo) PADDING = `0 2em 2em`;
 
   // SERVERS ----------------------------------------------
   const ServeFooter = () => {
@@ -132,11 +138,10 @@ const Card = ({
 
   const ServeContent = () => {
     return (
-      <div className="flex-col" style={{ padding: isFrom4Col ? `1em` : `2em` }}>
+      <div className="flex-col" style={{ padding: PADDING }}>
         <ServeCardHeader />
         <EventCardHeader eventHeader={eventHeader} />
         <VenueInfo venueInfo={venueInfo} />
-        <NewsAndMediaHeader newsAndMediaInfo={newsAndMediaInfo} />
         <AuthorInfo authorInfo={authorInfo} />
         <ServeJournalCard />
         <CardBody
@@ -176,6 +181,7 @@ const Card = ({
       }}
     >
       <PromoHeader fundingPromo={fundingPromo} />
+      <NewsAndMediaHeader newsAndMediaInfo={newsAndMediaInfo} layout={layout} />
       <GalleryCarousel gallery={gallery} />
       <NewsArticleHeader newsArticle={newsArticle} />
       <NewsCarouselHeader newsCarousel={newsCarousel} />

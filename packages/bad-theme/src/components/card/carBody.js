@@ -26,6 +26,9 @@ const CardBody = ({
   if (heroBanner) CONTENT_ALIGNMENT = `auto 0`;
   if (newsCarousel) CONTENT_ALIGNMENT = `auto 0`;
 
+  let PADDING = 0;
+  if (heroBanner) PADDING = `1em 2em`;
+
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
     if (!title) return null;
@@ -62,8 +65,8 @@ const CardBody = ({
     if (!body) return null;
 
     let bodyPreview = body;
-    const MAX_CHAR = 80;
-    if (body.length > MAX_CHAR && isFrom4Col)
+    const MAX_CHAR = 50;
+    if (body.length >= MAX_CHAR && isFrom4Col)
       bodyPreview = `${body.slice(0, MAX_CHAR)}...`;
     if (limitBodyLength) bodyPreview = `${body.slice(0, MAX_CHAR)}...`;
 
@@ -131,7 +134,7 @@ const CardBody = ({
       className="flex-col"
       style={{
         textAlign: `${TEXT_ALIGN}`,
-        padding: heroBanner ? `1em 2em` : 0,
+        padding: PADDING,
       }}
     >
       <div style={{ margin: CONTENT_ALIGNMENT }}>

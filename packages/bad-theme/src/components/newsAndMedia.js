@@ -23,7 +23,7 @@ const NewsAndMedia = ({ state, actions, block }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  const { text_align, has_search, title } = block;
+  const { text_align, has_search, layout, title } = block;
   const isSearch = false; // has_search search functionality
   const id = uuidv4();
 
@@ -251,6 +251,7 @@ const NewsAndMedia = ({ state, actions, block }) => {
           );
           const categoryName = filter[0].name;
 
+          // search filter options --------------------------------
           if (searchFilter) {
             if (
               // !title.rendered
@@ -268,22 +269,44 @@ const NewsAndMedia = ({ state, actions, block }) => {
             if (date >= electionDate) return null;
           }
 
-          return (
-            <div key={key}>
-              <Card
-                title={categoryName}
-                body={excerpt.rendered}
-                link_label="Read More"
-                link={link}
-                newsAndMediaInfo={block}
-                colour={
-                  press_release_authors ? press_release_authors[0].colour : null
-                }
-                limitBodyLength
-                cardHeight="100%"
-              />
-            </div>
-          );
+          if (layout === "layout_two")
+            return (
+              <div key={key}>
+                <Card
+                  link_label="Read More"
+                  link={link}
+                  newsAndMediaInfo={block}
+                  colour={
+                    press_release_authors
+                      ? press_release_authors[0].colour
+                      : null
+                  }
+                  limitBodyLength
+                  cardHeight="100%"
+                  layout={layout}
+                />
+              </div>
+            );
+
+          if (layout === "layout_three")
+            return (
+              <div key={key}>
+                <Card
+                  title={categoryName}
+                  body={excerpt.rendered}
+                  link_label="Read More"
+                  link={link}
+                  newsAndMediaInfo={block}
+                  colour={
+                    press_release_authors
+                      ? press_release_authors[0].colour
+                      : null
+                  }
+                  limitBodyLength
+                  cardHeight="100%"
+                />
+              </div>
+            );
         })}
       </div>
     </div>

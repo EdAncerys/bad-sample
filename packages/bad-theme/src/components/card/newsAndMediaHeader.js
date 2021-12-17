@@ -21,13 +21,15 @@ const NewsAndMediaHeader = ({
   actions,
   libraries,
   newsAndMediaInfo,
+  layout,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!newsAndMediaInfo) return null;
 
   const [category, setCategory] = useState(null);
-  const { categories, title, date } = newsAndMediaInfo;
+  const { categories, excerpt, title, date, featured_media } = newsAndMediaInfo;
+  const isLayoutTwo = layout === "layout_two";
 
   useEffect(async () => {
     if (state.source.category) {
@@ -52,25 +54,22 @@ const NewsAndMediaHeader = ({
 
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
-    if (!title) return null;
+    if (!title || isLayoutTwo) return null;
 
     // Manage max string Length
-    const MAX_LENGTH = 24;
+    const MAX_LENGTH = 36;
     let titlePreview = `${title.rendered.substring(0, MAX_LENGTH)}...`;
     if (title.rendered.length < MAX_LENGTH) titlePreview = title.rendered;
 
     return (
-      <div
-        style={{ fontSize: 22, fontWeight: "bold", cursor: "pointer" }}
-        // onClick={() => setGoToAction({ path: link, actions })}
-      >
+      <div style={{ fontSize: 22, fontWeight: "bold", cursor: "pointer" }}>
         <Html2React html={titlePreview} />
       </div>
     );
   };
 
   const ServeDate = () => {
-    if (!date) return null;
+    if (!date || isLayoutTwo) return null;
     const dateObject = new Date(date);
     const formattedDate = DATE_MODULE.format(dateObject, "DD/MMM/YYYY");
 
@@ -82,8 +81,8 @@ const NewsAndMediaHeader = ({
   };
 
   const ServeIcon = () => {
-    if (!category) return null;
-    const alt = "BAD";
+    if (!category || isLayoutTwo) return null;
+    const alt = title.rendered || "BAD";
 
     return (
       <div
@@ -105,8 +104,74 @@ const NewsAndMediaHeader = ({
     );
   };
 
+  const ServeMedia = () => {
+    if (!isLayoutTwo) return null;
+
+    const CATEGORY = Object.values(state.source.category);
+    const filter = CATEGORY.filter((item) => item.id === Number(categories[0]));
+    const categoryName = filter[0].name;
+
+    const dateObject = new Date(date);
+    const formattedDate = DATE_MODULE.format(dateObject, "DD/MMM/YYYY");
+    const media = state.source.attachment[featured_media];
+
+    // Manage max string Length
+    const MAX_LENGTH = 36;
+    let bodyPreview = `${excerpt.rendered.substring(0, MAX_LENGTH)}...`;
+    if (excerpt.rendered.length < MAX_LENGTH) bodyPreview = excerpt.rendered;
+
+    const ServeImage = () => {
+      if (!media) return null;
+      const alt = title.rendered || "BAD";
+
+      return (
+        <div
+          style={{
+            width: "100%",
+            height: 200,
+          }}
+        >
+          <Image
+            src={media.source_url}
+            alt={alt}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
+          />
+        </div>
+      );
+    };
+
+    return (
+      <div>
+        <ServeImage />
+        <div style={{ padding: `1em 2em 0` }}>
+          <div style={{ fontSize: 22, fontWeight: "bold", cursor: "pointer" }}>
+            <Html2React html={categoryName} />
+          </div>
+          <div style={{ padding: `0.5em 0 0` }}>
+            <Html2React html={formattedDate} />
+          </div>
+          <div style={{ padding: `0.5em 0 0` }}>
+            <Html2React html={bodyPreview} />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div style={styles.container}>
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: isLayoutTwo ? `1fr` : `3fr 1fr`,
+        gap: 5,
+        padding: isLayoutTwo ? 0 : `2em 2em 0`,
+        marginBottom: isLayoutTwo ? 0 : `1em`,
+      }}
+    >
       <div
         className="flex-col"
         style={{
@@ -115,6 +180,7 @@ const NewsAndMediaHeader = ({
           color: colors.black,
         }}
       >
+        <ServeMedia />
         <ServeTitle />
         <ServeDate />
       </div>
@@ -124,12 +190,7 @@ const NewsAndMediaHeader = ({
 };
 
 const styles = {
-  container: {
-    display: "grid",
-    gridTemplateColumns: `3fr 1fr`,
-    gap: 5,
-    paddingBottom: `1em`,
-  },
+  container: {},
 };
 
 export default connect(NewsAndMediaHeader);
