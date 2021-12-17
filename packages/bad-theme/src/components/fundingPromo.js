@@ -3,6 +3,7 @@ import { connect } from "frontity";
 
 import Card from "./card/card";
 import Loading from "./loading";
+import { colors } from "../config/colors";
 
 const FundingPromo = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -24,6 +25,7 @@ const FundingPromo = ({ state, actions, libraries, block }) => {
             fontSize: 36,
             fontWeight: "bold",
             justifyContent: "center",
+            color: colors.black,
           }}
         >
           <Html2React html={block.title} />
@@ -67,14 +69,27 @@ const FundingPromo = ({ state, actions, libraries, block }) => {
       <ServeContent />
       <div style={styles.container}>
         {block.card.map((block, key) => {
-          const { amount, body, colour, deadline, file, label, title } = block;
+          const {
+            amount,
+            body,
+            colour,
+            deadline,
+            file,
+            label,
+            title,
+            link_label,
+            link,
+          } = block;
 
+          console.log("----", block);
           return (
             <div key={key} className="flex">
               <Card
                 fundingPromo={{ title, amount, deadline }}
                 body={body}
                 downloadFile={{ file, title: label }}
+                link_label={link_label}
+                link={link}
                 colour={colour}
                 shadow // optional param
               />
