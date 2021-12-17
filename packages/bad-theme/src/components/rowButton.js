@@ -37,18 +37,19 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
         width: "100%",
       }}
     >
-      <div className="flex-col" style={{ padding: `1em` }}>
-        <div
-          className="flex-row pointer"
-          onClick={() => {
-            if (onClick) {
-              onClick();
-            } else {
-              if (!link) return null;
-              setGoToAction({ path: link.url, actions });
-            }
-          }}
-        >
+      <div
+        className="flex-col"
+        style={{ padding: `1em` }}
+        onClick={() => {
+          if (onClick) {
+            onClick();
+          } else {
+            if (!link) return null;
+            setGoToAction({ path: link.url, actions });
+          }
+        }}
+      >
+        <div className="flex-row pointer">
           <div
             className="flex"
             style={{
@@ -62,7 +63,7 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
           >
             <Html2React html={LABEL} />
           </div>
-          <div>
+          <div style={{ display: "grid", alignItems: "center" }}>
             <KeyboardArrowRightIcon
               style={{
                 fill: colors.white,

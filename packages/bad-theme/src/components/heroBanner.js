@@ -176,7 +176,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           height: BANNER_HEIGHT,
           width: CONTENT_WIDTH,
           position: "absolute",
-          zIndex: 1,
+          zIndex: 9,
         }}
       >
         <ServeBannerOverLay />
