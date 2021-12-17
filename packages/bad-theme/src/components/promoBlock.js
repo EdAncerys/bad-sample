@@ -11,7 +11,7 @@ const PromoBlock = ({ state, actions, block, reverse, disableMargin }) => {
 
   const { background_image, image_align, title, horizontal_padding } = block;
 
-  const BANNER_HEIGHT = state.theme.bannerHeight * 0.75;
+  const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
   const isAlignLeft = image_align === "left";
@@ -49,7 +49,7 @@ const PromoBlock = ({ state, actions, block, reverse, disableMargin }) => {
   const ServeCardContent = () => {
     return (
       <div className="flex">
-        <FullWidthContentBlock block={block} disableMargin />
+        <FullWidthContentBlock block={block} />
       </div>
     );
   };

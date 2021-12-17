@@ -24,14 +24,17 @@ const FullWidthContentBlock = ({
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-  const paddingLeft = heroBanner ? `0 1em 0 ${marginHorizontal}px` : 0;
-  let PADDING = `0 0`;
   let ALIGNMENT = "start";
+  let MARGIN = `0 0`;
   if (text_align === "centre") ALIGNMENT = "center";
   if (text_align === "right") ALIGNMENT = "end";
-  if (padding === "medium") PADDING = `0 10%`;
-  if (padding === "large") PADDING = `0 15%`;
-  if (disablePadding) PADDING = `0 0 0 ${marginHorizontal}px`;
+  if (padding === "medium") MARGIN = `0 10%`;
+  if (padding === "large") MARGIN = `0 15%`;
+  if (disableMargin) MARGIN = `0 0 0 ${marginHorizontal}px`;
+
+  let PADDING = `${marginVertical}px ${marginHorizontal}px`;
+  if (heroBanner) PADDING = `0 1em 0 ${marginHorizontal}px`;
+  if (disablePadding) PADDING = 0;
 
   // SERVERS ----------------------------------------------------------------
   const ServeTitle = () => {
@@ -105,12 +108,10 @@ const FullWidthContentBlock = ({
         textAlign: ALIGNMENT,
         backgroundColor: background_colour || "transparent",
         minHeight: heroBanner ? BANNER_HEIGHT : "auto",
-        padding: disableMargin
-          ? paddingLeft
-          : `${marginVertical}px ${marginHorizontal}px`,
+        padding: PADDING,
       }}
     >
-      <div style={{ margin: heroBanner ? 0 : PADDING, padding: `2em 0` }}>
+      <div style={{ margin: heroBanner ? 0 : MARGIN, padding: `2em 0` }}>
         <ServeTitle />
         <ServeCardBody />
         <ServeActions />

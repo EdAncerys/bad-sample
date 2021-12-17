@@ -17,7 +17,7 @@ const Navigation = ({ state, actions, libraries }) => {
 
   const childMenuRef = useRef("");
 
-  const NAV_DIVIDER = 8;
+  const NAV_DIVIDER = 6;
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
 

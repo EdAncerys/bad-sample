@@ -34,7 +34,7 @@ const CardBody = ({
     if (!title) return null;
 
     let TITLE_HEIGHT = "auto";
-    if (isFrom4Col) TITLE_HEIGHT = 80;
+    if (isFrom4Col) TITLE_HEIGHT = 60;
 
     let titlePreview = title;
     const MAX_CHAR = 45;
@@ -47,7 +47,7 @@ const CardBody = ({
         className="flex"
         style={{
           fontSize: heroBanner ? 36 : 20,
-          height: TITLE_HEIGHT,
+          minHeight: TITLE_HEIGHT,
           maxHeight: isFrom4Col ? "7em" : "auto", // restricting title height
           overflow: "hidden",
           fontWeight: "bold",
