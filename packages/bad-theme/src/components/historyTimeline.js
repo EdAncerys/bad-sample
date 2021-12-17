@@ -6,6 +6,21 @@ import Loading from "./loading";
 import { colors } from "../config/colors";
 
 const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
+  function slide(direction) {
+    const container = document.getElementById("carousel-container");
+    let scrollCompleted = 0;
+    const slideVar = setInterval(function () {
+      if (direction == "left") {
+        container.scrollLeft -= 100;
+      } else {
+        container.scrollLeft += 100;
+      }
+      scrollCompleted += 100;
+      if (scrollCompleted >= 1000) {
+        window.clearInterval(slideVar);
+      }
+    }, 50);
+  }
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
   if (!block.timeline_item) return null;
