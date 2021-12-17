@@ -11,7 +11,7 @@ const PromoBlock = ({ state, actions, block, reverse, disableMargin }) => {
 
   const { background_image, image_align, title, horizontal_padding } = block;
 
-  const BANNER_HEIGHT = state.theme.bannerHeight;
+  const BANNER_HEIGHT = state.theme.bannerHeight * 0.75;
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
   const isAlignLeft = image_align === "left";
