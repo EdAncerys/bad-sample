@@ -13,17 +13,6 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
 
   if (!block) return <Loading />;
 
-  const BANNER_HEIGHT = state.theme.bannerHeight;
-  const PADDING = state.theme.marginHorizontal;
-  const FOOTER_HEIGHT = 50;
-  let OVERLAY_WIDTH = "100%";
-  let CARD_WIDTH = "50%";
-  let CARD_HEIGHT = BANNER_HEIGHT - FOOTER_HEIGHT * 2;
-  let BODY_LENGTH = 400;
-  const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
-  const CONTENT_WIDTH = state.theme.contentContainer;
-
   const {
     add_background_image,
     add_buttons,
@@ -34,8 +23,22 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
     layout,
     pop_out_text,
     title,
+    content_height,
   } = block;
 
+  let BANNER_HEIGHT = state.theme.bannerHeight;
+  const PADDING = state.theme.marginHorizontal;
+  const FOOTER_HEIGHT = 50;
+  let OVERLAY_WIDTH = "100%";
+  let CARD_WIDTH = "50%";
+  let CARD_HEIGHT = BANNER_HEIGHT - FOOTER_HEIGHT * 2;
+  let BODY_LENGTH = 400;
+  const marginHorizontal = state.theme.marginHorizontal;
+  const marginVertical = state.theme.marginVertical;
+  const CONTENT_WIDTH = state.theme.contentContainer;
+
+  if (content_height === "small")
+    BANNER_HEIGHT = state.theme.bannerHeight * 0.75;
   if (!buttons) {
     BODY_LENGTH = 450;
     CARD_HEIGHT = BANNER_HEIGHT - FOOTER_HEIGHT;
