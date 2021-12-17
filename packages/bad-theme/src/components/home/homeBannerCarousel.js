@@ -9,12 +9,15 @@ import Loading from "../loading";
 import { setGoToAction } from "../../context";
 
 const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
+  if (!block) return null;
+
+  const { disable_vertical_padding } = block;
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const BANNER_HEIGHT = state.theme.bannerHeight * 1.25;
-  const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
+  let marginVertical = state.theme.marginVertical;
 
-  if (!block.slides) return null;
+  if (disable_vertical_padding) marginVertical = 0;
 
   // SERVERS ----------------------------------------------------------------
   const ServeOverlay = () => {
