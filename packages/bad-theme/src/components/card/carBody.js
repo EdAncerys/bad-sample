@@ -41,6 +41,7 @@ const CardBody = ({
     if (title.length > MAX_CHAR && isFrom4Col)
       titlePreview = `${title.slice(0, MAX_CHAR)}...`;
     if (!body) titlePreview = title;
+    if (!body && isFrom4Col) titlePreview = `${title.slice(0, 80)}`;
 
     return (
       <div

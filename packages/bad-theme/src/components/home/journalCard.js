@@ -77,7 +77,6 @@ const JournalCard = ({
           className="flex"
           style={{
             fontSize: 20,
-            color: colors.darkSilver,
           }}
         >
           <Html2React html={user} />
@@ -93,7 +92,10 @@ const JournalCard = ({
           minHeight: IMG_WIDTH,
         }}
       >
-        <div className="flex-col" style={{ paddingLeft: `1em` }}>
+        <div
+          className="flex-col"
+          style={{ paddingLeft: `1em`, color: colors.black }}
+        >
           <ServeTitle />
           <ServeUser />
           <ServeActions />

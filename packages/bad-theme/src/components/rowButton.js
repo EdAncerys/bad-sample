@@ -38,7 +38,7 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
       }}
     >
       <div
-        className="flex-col"
+        className="flex-col pointer"
         style={{ padding: `1em` }}
         onClick={() => {
           if (onClick) {
@@ -49,7 +49,7 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
           }
         }}
       >
-        <div className="flex-row pointer">
+        <div className="flex-row">
           <div
             className="flex"
             style={{

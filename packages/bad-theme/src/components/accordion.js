@@ -98,7 +98,6 @@ const AccordionComponent = ({
               fontWeight: "bold",
               alignItems: "center",
             }}
-            onClick={() => setActive(!active)}
           >
             <Html2React html={title} />
           </div>
@@ -153,7 +152,6 @@ const AccordionComponent = ({
               fontWeight: "bold",
               alignItems: "center",
             }}
-            onClick={() => setActive(!active)}
           >
             <Html2React html={gsTitle} />
             <ServeGSDate />
@@ -162,8 +160,8 @@ const AccordionComponent = ({
       };
 
       const ServePreview = () => {
-        if (!hasPreview || guidelines) return null;
-        if (active) return null;
+        if (active || !hasPreview) return null;
+        if (guidelines) return null;
 
         // Manage max string Length
         const MAX_LENGTH = 140;
@@ -174,7 +172,7 @@ const AccordionComponent = ({
           <div
             style={{
               fontSize: 16,
-              margin: `0 1.25em`,
+              // margin: `0 1.25em`,
               padding: `1em 0`,
               color: colors.darkSilver,
               borderTop: `1px solid ${colors.darkSilver}`,
@@ -270,7 +268,6 @@ const AccordionComponent = ({
               alignItems: "center",
               justifyContent: ALIGNMENT,
             }}
-            onClick={() => setActive(!active)}
           >
             <Html2React html={ltTitle} />
           </div>
@@ -280,19 +277,22 @@ const AccordionComponent = ({
       return (
         <div style={{ position: "relative" }}>
           <Accordion.Header>
-            <div
-              className="flex"
-              style={{ margin: 0, padding: `0.5em 0`, alignItems: "center" }}
-            >
-              <ServeTitle />
-              <ServeGSTitle />
-              <ServeLTTitle />
+            <div className="flex-col">
+              <div
+                className="flex"
+                style={{ margin: 0, padding: `0.5em 0`, alignItems: "center" }}
+                onClick={() => setActive(!active)}
+              >
+                <ServeTitle />
+                <ServeGSTitle />
+                <ServeLTTitle />
 
-              <ServeLogo />
-              <ServeIcon />
+                <ServeLogo />
+                <ServeIcon />
+              </div>
+              <ServePreview />
             </div>
           </Accordion.Header>
-          <ServePreview />
         </div>
       );
     };
