@@ -100,6 +100,7 @@ const Directions = ({ state, actions, libraries }) => {
   };
 
   if (data.isError) return null;
+  if (endPoint === "/") return null; // disable breadcrumbs in home page
 
   return (
     <div
