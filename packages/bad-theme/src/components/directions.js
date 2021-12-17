@@ -58,14 +58,13 @@ const Directions = ({ state, actions, libraries }) => {
             return;
           });
 
-        if (menuItem.slug.includes(item.toLowerCase()))
+        if (menuItem.slug.includes(item.toLowerCase())) {
           TITLE_RENDER = <Html2React html={menuItem.title} />;
+          return;
+        }
+        if (typeof TITLE_RENDER == "string" && TITLE_RENDER.includes("-"))
+          TITLE_RENDER = <Html2React html={TITLE_RENDER.replace(/-/g, " ")} />;
       });
-
-    // if (typeof TITLE_RENDER == "string" && TITLE_RENDER.includes("-"))
-    //   console.log(TITLE_RENDER);
-    // TITLE_RENDER.replace(/-/g, "");
-    // console.log(TITLE_RENDER.replace(/-/g, " "));
 
     return (
       <div>

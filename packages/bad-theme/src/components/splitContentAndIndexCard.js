@@ -80,8 +80,8 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
                 justifyContent: "center",
                 paddingBottom: `1em`,
                 // add sticky config to side component
-                position: "sticky",
-                top: 0,
+                // position: "sticky",
+                // top: 0,
               }}
             >
               <IndexCard
