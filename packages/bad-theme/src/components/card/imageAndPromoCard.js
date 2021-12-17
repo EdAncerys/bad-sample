@@ -21,7 +21,10 @@ const ImageAndPromoCard = ({
     if (!body) return null;
 
     return (
-      <div className="flex-col" style={{ padding: `2em 0` }}>
+      <div
+        className="flex-col"
+        style={{ padding: `2em 0`, marginRight: `2em` }}
+      >
         <div className="flex">
           <Html2React html={body} />
         </div>
