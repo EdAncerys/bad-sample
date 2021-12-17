@@ -19,6 +19,8 @@ const Post = ({
 
   if (!block) return <Loading />;
 
+  const { post_limit } = block;
+
   const [eventList, setEventList] = useState(null); // event data
   const [grades, setGrades] = useState(null); // data
   const [locations, setLocations] = useState(null); // data
@@ -51,14 +53,16 @@ const Post = ({
     }
     if (!state.source.events) return null;
 
-    const EVENT_LIST = Object.values(state.source.events); // add events object to data array
+    let EVENT_LIST = Object.values(state.source.events); // add events object to data array
     const GRADES = Object.values(state.source.event_grade);
     const LOCATIONS = Object.values(state.source.event_location);
     const TYPES = Object.values(state.source.event_type);
     let GRADE_FILTER_ID = GRADES.filter(
       (filter) => filter.name === grade_filter
     )[0];
+
     if (GRADE_FILTER_ID) GRADE_FILTER_ID = GRADE_FILTER_ID.id;
+    if (post_limit) EVENT_LIST = EVENT_LIST.slice(0, Number(post_limit));
 
     setGradeFilterId(GRADE_FILTER_ID);
 
