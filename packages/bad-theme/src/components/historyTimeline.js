@@ -35,7 +35,40 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
   const WIDTH = 4;
 
   const DATA_LENGTH = block.timeline_item.length / 5;
-
+  const HistoryButton = ({ next }) => {
+    return (
+      <button
+        onClick={() => {
+          next ? slide("right") : slide("left");
+        }}
+        style={{
+          backgroundColor: colors.darkSilver,
+          textTransform: "uppercase",
+          display: "flex",
+          justifyContent: next ? "end" : "start",
+          alignItems: "center",
+          fontSize: "10px",
+          borderRadius: "5px",
+          border: 0,
+          paddingLeft: "10px",
+          paddingTop: "2px",
+          paddingBottom: "2px",
+          paddingRight: "10px",
+          marginBottom: 0,
+        }}
+      >
+        {next ? (
+          <span>
+            Next <KeyboardArrowRight sx={{ fontSize: 15 }} />
+          </span>
+        ) : (
+          <span>
+            <KeyboardArrowLeft sx={{ fontSize: 15 }} /> Previous
+          </span>
+        )}
+      </button>
+    );
+  };
   // RETURN ---------------------------------------------------
   return (
     <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
