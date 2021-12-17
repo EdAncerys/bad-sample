@@ -96,21 +96,20 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
             if (event_label) LABEL = event_label;
 
             return (
-              <div>
-                <button
-                  className="btn btn-outline-light flex-center-row"
-                  style={{
-                    fontSize: 12,
-                    color: THEME_COLOR,
-                    borderColor: THEME_COLOR,
-                    borderRadius: 5,
-                  }}
-                  onClick={() =>
-                    setGoToAction({ path: event_label.url, actions })
-                  }
-                >
-                  <Html2React html={LABEL} />
-                </button>
+              <div
+                style={{
+                  fontSize: 12,
+                  color: THEME_COLOR,
+                  border: `1px solid ${THEME_COLOR}`,
+                  borderRadius: 5,
+                  width: "fit-content",
+                  padding: `1em 2em`,
+                }}
+                onClick={() =>
+                  setGoToAction({ path: event_label.url, actions })
+                }
+              >
+                <Html2React html={LABEL} />
               </div>
             );
           };
@@ -145,19 +144,26 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
               >
                 <ServeCardImage />
                 <Carousel.Caption
-                  style={{ color: THEME_COLOR, left: `10%`, bottom: `4em` }}
+                  style={{ color: THEME_COLOR, left: `10%`, bottom: `5em` }}
                 >
                   <ServeEventAction />
                   <div
                     className="flex"
                     style={{
-                      fontSize: 42,
-                      textAlign: "start",
-                      maxWidth: "75%",
-                      padding: `1em 0`,
+                      alignItems: "center",
+                      height: BANNER_HEIGHT / 2,
+                      maxWidth: "50%",
                     }}
                   >
-                    <Html2React html={title} />
+                    <div
+                      className="flex-col"
+                      style={{
+                        fontSize: 42,
+                        textAlign: "start",
+                      }}
+                    >
+                      <Html2React html={title} />
+                    </div>
                   </div>
                   <ServeMoreAction />
                 </Carousel.Caption>
