@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Carousel } from "react-bootstrap";
@@ -61,7 +61,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
             if (label) LABEL = label;
 
             return (
-              <div>
+              <div className="home-banner">
                 <button
                   className="btn btn-outline-light flex-center-row"
                   style={{

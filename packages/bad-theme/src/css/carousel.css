@@ -39,3 +39,7 @@
 .BAD-banner {
   font-family: roboto, sans-serif;
 }
+
+.home-banner .btn-outline-light:hover {
+  color: rgba(31, 51, 94, 1) !important;
+}
