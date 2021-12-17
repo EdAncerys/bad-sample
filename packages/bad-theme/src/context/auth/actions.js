@@ -1,7 +1,7 @@
 import { setLoginModalAction } from "../index";
 
 export const loginAction = async ({ dispatch, user }) => {
-  console.log("loginAction triggered", user);
+  console.log("loginAction triggered");
 
   const username = user.username;
   const password = user.password;
