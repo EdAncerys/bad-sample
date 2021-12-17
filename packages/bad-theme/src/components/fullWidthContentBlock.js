@@ -25,12 +25,12 @@ const FullWidthContentBlock = ({
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
   const paddingLeft = heroBanner ? `0 1em 0 ${marginHorizontal}px` : 0;
-  let PADDING = `0 20%`;
+  let PADDING = `0 0`;
   let ALIGNMENT = "start";
   if (text_align === "centre") ALIGNMENT = "center";
   if (text_align === "right") ALIGNMENT = "end";
-  if (padding === "small") PADDING = `0 10%`;
-  if (padding === "large") PADDING = `0 25%`;
+  if (padding === "medium") PADDING = `0 10%`;
+  if (padding === "large") PADDING = `0 15%`;
   if (disablePadding) PADDING = `0 0 0 ${marginHorizontal}px`;
 
   // SERVERS ----------------------------------------------------------------
@@ -105,7 +105,7 @@ const FullWidthContentBlock = ({
         textAlign: ALIGNMENT,
         backgroundColor: background_colour || "transparent",
         minHeight: heroBanner ? BANNER_HEIGHT : "auto",
-        margin: disableMargin
+        padding: disableMargin
           ? paddingLeft
           : `${marginVertical}px ${marginHorizontal}px`,
       }}
