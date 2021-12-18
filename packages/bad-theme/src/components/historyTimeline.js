@@ -106,15 +106,18 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
                           fontWeight: "bold",
                           zIndex: 12,
                         }}
-                        className="col-3"
+                        className="col-4"
                       >
                         <Html2React
                           html={year}
                           style={{ backgroundColor: "white" }}
                         />
                       </div>
-                      <div className="col d-flex flex-column justify-content-center">
-                        <hr />
+                      <div
+                        className="col-8 d-flex p-0 flex-column justify-content-center"
+                        style={{ overflow: "hidden" }}
+                      >
+                        <hr style={{ width: "100%" }} />
                       </div>
                     </div>
                   </div>
@@ -133,7 +136,7 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
             };
 
             return (
-              <div style={{ width: "25vw" }}>
+              <div style={{ width: "300px" }}>
                 <div style={{ width: "100%", display: "table" }}>
                   <ServeDate />
                 </div>
