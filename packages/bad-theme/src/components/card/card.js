@@ -83,7 +83,7 @@ const Card = ({
     );
   };
 
-  const ServeJournalCard = () => {
+  const  ServeJournalCard = () => {
     if (!journalCard) return null;
 
     return (

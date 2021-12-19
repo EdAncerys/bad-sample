@@ -65,7 +65,7 @@ const Post = ({
     )[0];
 
     if (GRADE_FILTER_ID) GRADE_FILTER_ID = GRADE_FILTER_ID.id;
-    if (post_limit) EVENT_LIST = EVENT_LIST.slice(0, Number(post_limit));
+    if (post_limit) EVENT_LIST = EVENT_LIST.slice(0, Number(post_limit)); // apply limit on posts
 
     setGradeFilterId(GRADE_FILTER_ID);
 

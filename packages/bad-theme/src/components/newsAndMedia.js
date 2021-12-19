@@ -24,40 +24,39 @@ const NewsAndMedia = ({ state, actions, block }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  const { text_align, has_search, layout, title } = block;
+  const { text_align, has_search, layout, title, post_limit } = block;
   const isSearch = false; // has_search search functionality
   const id = uuidv4();
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
     const path = `/posts/`;
-    if (!state.source.post) {
-      console.log("post pre-fetch action");
-    } else {
-      console.log("posts exist");
+    await actions.source.fetch(path); // fetch CPT postData
+
+    const postData = state.source.get(path);
+    const { totalPages, page, next } = postData; // check if postData have multiple pages
+    // fetch postData via wp API page by page
+    let isThereNextPage = next;
+    while (isThereNextPage) {
+      await actions.source.fetch(isThereNextPage); // fetch next page
+      const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
+      isThereNextPage = nextPage;
     }
-    // await actions.source.fetch(path); // fetch CPT postData
 
-    // const postData = state.source.get(path);
-    // const { totalPages, page, next } = postData; // check if postData have multiple pages
-    // // fetch postData via wp API page by page
-    // let isThereNextPage = next;
-    // while (isThereNextPage) {
-    //   await actions.source.fetch(isThereNextPage); // fetch next page
-    //   const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
-    //   isThereNextPage = nextPage;
-    // }
+    if (!state.source.post) {
+      console.log("Error. Failed to fetch post data"); // debug
+      return null;
+    }
+    let POST_LIST = Object.values(state.source.post); // add postData object to data array
+    if (post_limit) POST_LIST = POST_LIST.slice(0, Number(post_limit)); // apply limit on posts
+    if (state.source.category) {
+      const CATEGORY = Object.values(state.source.category);
+      setCategory(CATEGORY);
+    }
 
-    // const POST_LIST = Object.values(state.source.post); // add postData object to data array
-    // if (state.source.category) {
-    //   const CATEGORY = Object.values(state.source.category);
-    //   setCategory(CATEGORY);
-    // }
-
-    // setPostList(POST_LIST);
-  }, []);
+    setPostList(POST_LIST);
+  }, [state.source.post, state.source.category]);
   // DATA pre FETCH ----------------------------------------------------------------
-  if (!postList || !category) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
   const handleSearchSubmit = () => {
@@ -238,6 +237,8 @@ const NewsAndMedia = ({ state, actions, block }) => {
     );
   };
 
+  if (!postList || !category) return <Loading />;
+
   // RETURN ---------------------------------------------------
   return (
     <div
@@ -258,26 +259,12 @@ const NewsAndMedia = ({ state, actions, block }) => {
           const categoryName = filter[0].name;
 
           // search filter options --------------------------------
-          if (searchFilter) {
-            if (
-              // !title.rendered
-              //   .toLowerCase()
-              //   .includes(searchFilter.toLowerCase()) &&
-              // !description.toLowerCase().includes(searchFilter.toLowerCase())
-              console.log(searchFilter)
-            )
-              return null;
-          }
-          // select filtering config
-          if (dateFilter) {
-            const date = new Date();
-            const electionDate = new Date(closing_date);
-            if (date >= electionDate) return null;
-          }
+          // apply search options if needed
 
-          const news_card = {};
-
-          if (layout === "layout_one") return null;
+          // if (layout === "layout_one") {
+          //   console.log("layout one trigered");
+          //   return null;
+          // }
           // return (
           //   <div key={key}>
           //     <NewsCarousel block={news_card} />

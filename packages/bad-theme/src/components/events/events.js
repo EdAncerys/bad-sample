@@ -19,7 +19,7 @@ const Events = ({ state, actions, libraries, block }) => {
   const [searchFilter, setSearchFilter] = useState(null);
   const [gradesFilter, setGradesFilter] = useState(null);
   const [locationsFilter, setLocationsFilter] = useState(null);
-  const [isTaxonomyReady, setIsTaxonomyReady] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -38,7 +38,7 @@ const Events = ({ state, actions, libraries, block }) => {
 
     setGrades(GRADES);
     setLocations(LOCATIONS);
-    setIsTaxonomyReady(true);
+    setIsReady(true);
   }, [state.source.event_grade, state.source.event_location]);
 
   // HELPERS ----------------------------------------------------------------
@@ -261,7 +261,7 @@ const Events = ({ state, actions, libraries, block }) => {
     );
   };
 
-  if (!isTaxonomyReady) return <Loading />;
+  if (!isReady) return <Loading />;
   // RETURN ---------------------------------------------------
   return (
     <div
