@@ -12,7 +12,6 @@ import custom from "../../css/custom.css";
 
 // COMPONENTS -------------------------------------------------------------
 import HTMLHead from "./htmlHead";
-import NavigationActions from "./navigationActions";
 import HeaderActions from "./headerActions";
 import Navigation from "./navigation";
 
@@ -31,7 +30,6 @@ const Header = ({ state, actions }) => {
         <div className="flex-col" style={styles.container}>
           <HeaderActions />
           <Navigation />
-          {/* <NavigationActions /> // secondary inactive nav */}
         </div>
       </div>
     </>
