@@ -3,11 +3,10 @@ import { connect } from "frontity";
 import { Form } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 
-import Card from "./card/card";
-import NewsCarousel from "./newsCarousel";
-import TitleBlock from "./titleBlock";
-import Loading from "./loading";
-import { colors } from "../config/colors";
+import NewsBlock from "./newsBlock";
+import TitleBlock from "../titleBlock";
+import Loading from "../loading";
+import { colors } from "../../config/colors";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
@@ -15,72 +14,14 @@ import CloseIcon from "@mui/icons-material/Close";
 const NewsAndMedia = ({ state, actions, block }) => {
   if (!block) return <Loading />;
 
-  const [postList, setPostList] = useState(null);
-  const [category, setCategory] = useState(null);
-
   const [searchFilter, setSearchFilter] = useState(null);
   const [dateFilter, setDateFilter] = useState(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  const { text_align, has_search, layout, title, post_limit } = block;
   const isSearch = false; // has_search search functionality
   const id = uuidv4();
-
-  // DATA pre FETCH ----------------------------------------------------------------
-  useEffect(async () => {
-    const path = `/posts/`;
-    await actions.source.fetch(path); // fetch CPT postData
-
-    const postData = state.source.get(path);
-    const { totalPages, page, next } = postData; // check if postData have multiple pages
-    // fetch postData via wp API page by page
-    let isThereNextPage = next;
-    while (isThereNextPage) {
-      await actions.source.fetch(isThereNextPage); // fetch next page
-      const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
-      isThereNextPage = nextPage;
-    }
-
-    if (!state.source.post) {
-      console.log("Error. Failed to fetch post data"); // debug
-      return null;
-    }
-    let POST_LIST = Object.values(state.source.post); // add postData object to data array
-    if (post_limit) POST_LIST = POST_LIST.slice(0, Number(post_limit)); // apply limit on posts
-    if (state.source.category) {
-      const CATEGORY = Object.values(state.source.category);
-      setCategory(CATEGORY);
-    }
-
-    setPostList(POST_LIST);
-  }, [state.source.post, state.source.category]);
-  // DATA pre FETCH ----------------------------------------------------------------
-
-  // HELPERS ----------------------------------------------------------------
-  const handleSearchSubmit = () => {
-    const searchInput = document.querySelector(`#searchInput${id}`).value;
-
-    const serveDateFilter = document.querySelector(
-      `#serveDateFilter${id}`
-    ).value;
-
-    if (!!searchInput) setSearchFilter(searchInput);
-    if (!!serveDateFilter) {
-      setDateFilter(serveDateFilter);
-      // apply date filter
-      let filter = postList.sort(
-        (a, b) => new Date(a.acf.closing_date) - new Date(b.acf.closing_date)
-      );
-      if (serveDateFilter === "Date Descending") {
-        filter = postList.sort(
-          (a, b) => new Date(b.acf.closing_date) - new Date(a.acf.closing_date)
-        );
-      }
-      setPostList(filter);
-    }
-  };
 
   // SERVERS ---------------------------------------------
   const ServeFilter = () => {
@@ -237,8 +178,6 @@ const NewsAndMedia = ({ state, actions, block }) => {
     );
   };
 
-  if (!postList || !category) return <Loading />;
-
   // RETURN ---------------------------------------------------
   return (
     <div
@@ -247,80 +186,18 @@ const NewsAndMedia = ({ state, actions, block }) => {
         backgroundColor: colors.silverFillOne,
       }}
     >
-      <TitleBlock block={{ title, text_align }} disableMargin />
+      <TitleBlock block={block} disableHorizontalMargin />
       <ServeFilter />
-      <div style={styles.container}>
-        {postList.map((block, key) => {
-          const { categories, title, content, excerpt, link } = block;
-          const { press_release_authors } = block.acf;
-          const filter = category.filter(
-            (item) => item.id === Number(categories[0])
-          );
-          const categoryName = filter[0].name;
-
-          // search filter options --------------------------------
-          // apply search options if needed
-
-          // if (layout === "layout_one") {
-          //   console.log("layout one trigered");
-          //   return null;
-          // }
-          // return (
-          //   <div key={key}>
-          //     <NewsCarousel block={news_card} />
-          //   </div>
-          // );
-
-          if (layout === "layout_two")
-            return (
-              <div key={key}>
-                <Card
-                  link_label="Read More"
-                  link={link}
-                  newsAndMediaInfo={block}
-                  colour={
-                    press_release_authors
-                      ? press_release_authors[0].colour
-                      : null
-                  }
-                  limitBodyLength
-                  cardHeight="100%"
-                  layout={layout}
-                />
-              </div>
-            );
-
-          if (layout === "layout_three")
-            return (
-              <div key={key}>
-                <Card
-                  title={categoryName}
-                  body={excerpt.rendered}
-                  link_label="Read More"
-                  link={link}
-                  newsAndMediaInfo={block}
-                  colour={
-                    press_release_authors
-                      ? press_release_authors[0].colour
-                      : null
-                  }
-                  limitBodyLength
-                  cardHeight="100%"
-                />
-              </div>
-            );
-        })}
-      </div>
+      <NewsBlock
+        block={block}
+        searchFilter={searchFilter}
+        dateFilter={dateFilter}
+      />
     </div>
   );
 };
 
 const styles = {
-  container: {
-    display: "grid",
-    gridTemplateColumns: `repeat(4, 1fr)`,
-    gap: 20,
-  },
   input: {
     borderRadius: 10,
     paddingRight: 35,

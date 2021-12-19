@@ -5,7 +5,14 @@ import { colors } from "../config/colors";
 import Loading from "./loading";
 import { setGoToAction } from "../context";
 
-const TitleBlock = ({ state, actions, libraries, block, disableMargin }) => {
+const TitleBlock = ({
+  state,
+  actions,
+  libraries,
+  block,
+  disableMargin,
+  disableHorizontalMargin,
+}) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
@@ -17,6 +24,10 @@ const TitleBlock = ({ state, actions, libraries, block, disableMargin }) => {
   let ALIGNMENT = "start";
   if (text_align === "centre") ALIGNMENT = "center";
   if (text_align === "right") ALIGNMENT = "end";
+
+  let MARGIN = `${marginVertical}px ${marginHorizontal}px`;
+  if (disableMargin) MARGIN = 0;
+  if (disableHorizontalMargin) MARGIN = `${marginVertical}px 0`;
 
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
@@ -62,7 +73,7 @@ const TitleBlock = ({ state, actions, libraries, block, disableMargin }) => {
   return (
     <div
       style={{
-        margin: disableMargin ? 0 : `${marginVertical}px ${marginHorizontal}px`,
+        margin: MARGIN,
       }}
     >
       <div className="flex-row" style={{ alignItems: "center" }}>

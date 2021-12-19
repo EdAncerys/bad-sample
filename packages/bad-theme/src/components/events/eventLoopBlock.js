@@ -124,31 +124,29 @@ const Post = ({
 
         if (layoutTwo)
           return (
-            <div key={key}>
-              <Card
-                title={title}
-                url={image}
-                link={block.link}
-                colour={colour}
-                date={date_time}
-                seatNumber="seatNumber"
-                cardHeight="100%"
-              />
-            </div>
+            <Card
+              key={key}
+              title={title}
+              url={image}
+              link={block.link}
+              colour={colour}
+              date={date_time}
+              seatNumber="seatNumber"
+              cardHeight="100%"
+            />
           );
 
         if (layoutThree)
           return (
-            <div key={key}>
-              <Card
-                title={title}
-                link_label="Read More"
-                link={block.link}
-                colour={colour}
-                eventHeader={block.acf}
-                isFrom4Col
-              />
-            </div>
+            <Card
+              key={key}
+              title={title}
+              link_label="Read More"
+              link={block.link}
+              colour={colour}
+              eventHeader={block.acf}
+              isFrom4Col
+            />
           );
       })}
     </div>

@@ -33,7 +33,7 @@ import GuidelinesAndStandards from "../guidelinesAndStandards";
 import LeadershipBlock from "../leadershipBlock";
 import ElectionsBlock from "../electionsBlock";
 import EmbeddedVideo from "../embeddedVideo";
-import NewsAndMedia from "../newsAndMedia";
+import NewsAndMedia from "../news/newsAndMedia";
 import FullWidthAndPromoCard from "../fullWidthAndPromoCard";
 
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
@@ -43,7 +43,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
   // SERVERS -----------------------------------------------------
   const ServeBlockTitle = ({ acf_fc_layout }) => {
-    return null; // add block name title
+    // return null; // add block name title
 
     return (
       <div

@@ -270,7 +270,7 @@ const Events = ({ state, actions, libraries, block }) => {
         backgroundColor: layoutOne ? colors.white : colors.silverFillOne,
       }}
     >
-      <TitleBlock block={block} disableMargin />
+      <TitleBlock block={block} disableHorizontalMargin />
       <ServeFilter />
       <EventLoopBlock
         block={block}
