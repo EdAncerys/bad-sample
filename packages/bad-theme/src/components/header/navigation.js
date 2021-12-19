@@ -17,7 +17,7 @@ const Navigation = ({ state, actions, libraries }) => {
 
   const childMenuRef = useRef("");
 
-  const NAV_DIVIDER = 6;
+  const MAIN_NAV_LENGTH = 6; // main navigation length config
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
 
@@ -27,8 +27,8 @@ const Navigation = ({ state, actions, libraries }) => {
     if (!data) return;
     const dataLength = data.length;
 
-    setWpMainMenu(data.slice(0, NAV_DIVIDER)); // main menu to display
-    setWpMoreMenu(data.slice(NAV_DIVIDER, dataLength)); // more menu into dropdown
+    setWpMainMenu(data.slice(0, MAIN_NAV_LENGTH)); // main menu to display
+    setWpMoreMenu(data.slice(MAIN_NAV_LENGTH, dataLength)); // more menu into dropdown
   }, [state.theme.menu]);
 
   // SERVERS -----------------------------------------------------

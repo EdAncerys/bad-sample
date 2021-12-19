@@ -31,25 +31,30 @@ const NewsAndMedia = ({ state, actions, block }) => {
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
     const path = `/posts/`;
-    await actions.source.fetch(path); // fetch CPT postData
-
-    const postData = state.source.get(path);
-    const { totalPages, page, next } = postData; // check if postData have multiple pages
-    // fetch postData via wp API page by page
-    let isThereNextPage = next;
-    while (isThereNextPage) {
-      await actions.source.fetch(isThereNextPage); // fetch next page
-      const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
-      isThereNextPage = nextPage;
+    if (!state.source.post) {
+      console.log("post pre-fetch action");
+    } else {
+      console.log("posts exist");
     }
+    // await actions.source.fetch(path); // fetch CPT postData
 
-    const POST_LIST = Object.values(state.source.post); // add postData object to data array
-    if (state.source.category) {
-      const CATEGORY = Object.values(state.source.category);
-      setCategory(CATEGORY);
-    }
+    // const postData = state.source.get(path);
+    // const { totalPages, page, next } = postData; // check if postData have multiple pages
+    // // fetch postData via wp API page by page
+    // let isThereNextPage = next;
+    // while (isThereNextPage) {
+    //   await actions.source.fetch(isThereNextPage); // fetch next page
+    //   const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
+    //   isThereNextPage = nextPage;
+    // }
 
-    setPostList(POST_LIST);
+    // const POST_LIST = Object.values(state.source.post); // add postData object to data array
+    // if (state.source.category) {
+    //   const CATEGORY = Object.values(state.source.category);
+    //   setCategory(CATEGORY);
+    // }
+
+    // setPostList(POST_LIST);
   }, []);
   // DATA pre FETCH ----------------------------------------------------------------
   if (!postList || !category) return <Loading />;

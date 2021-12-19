@@ -37,22 +37,25 @@ const Post = ({
   if (layoutTwo) STYLES = styles.layoutTwo;
   if (layoutThree) STYLES = styles.layoutThree;
 
-  // DATA pre FETCH ----------------------------------------------------------------
+  // DATA get for EVENTS ----------------------------------------------------------------
   useEffect(async () => {
     const path = `/events/`;
     await actions.source.fetch(path); // fetch CPT events
 
-    const events = state.source.get(path);
+    const events = await state.source.get(path);
     const { totalPages, page, next } = events; // check if events have multiple pages
     // fetch events via wp API page by page
     let isThereNextPage = next;
     while (isThereNextPage) {
       await actions.source.fetch(isThereNextPage); // fetch next page
-      const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
+      const nextPage = await state.source.get(isThereNextPage).next; // check ifNext page & set next page
       isThereNextPage = nextPage;
     }
-    if (!state.source.events) return null;
 
+    if (!state.source.events) {
+      console.log("Error. Failed to fetch events data"); // debug
+      return null;
+    }
     let EVENT_LIST = Object.values(state.source.events); // add events object to data array
     const GRADES = Object.values(state.source.event_grade);
     const LOCATIONS = Object.values(state.source.event_location);
@@ -70,8 +73,7 @@ const Post = ({
     setGrades(GRADES);
     setLocations(LOCATIONS);
     setTypes(TYPES);
-  }, []);
-  // DATA pre FETCH ----------------------------------------------------------------
+  }, [state.source.events]);
   if (!eventList) return <Loading />;
 
   // RETURN ---------------------------------------------
