@@ -19,6 +19,7 @@ const CardBody = ({
   isFrom4Col,
   electionInfo,
   limitBodyLength,
+  limitTitleLength,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -42,6 +43,7 @@ const CardBody = ({
       titlePreview = `${title.slice(0, MAX_CHAR)}...`;
     if (!body) titlePreview = title;
     if (!body && isFrom4Col) titlePreview = `${title.slice(0, 80)}`;
+    if (limitTitleLength) titlePreview = `${title.slice(0, MAX_CHAR)}...`;
 
     return (
       <div

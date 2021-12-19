@@ -45,6 +45,7 @@ const Card = ({
   seatNumber,
   eventHeader,
   limitBodyLength,
+  limitTitleLength,
   shadow,
   cardWidth,
   cardHeight,
@@ -83,7 +84,7 @@ const Card = ({
     );
   };
 
-  const  ServeJournalCard = () => {
+  const ServeJournalCard = () => {
     if (!journalCard) return null;
 
     return (
@@ -158,6 +159,7 @@ const Card = ({
           isFrom4Col={isFrom4Col}
           newsCarousel={newsCarousel}
           limitBodyLength={limitBodyLength}
+          limitTitleLength={limitTitleLength}
           electionInfo={electionInfo}
         />
         <VideoGalleryInfo videoGalleryInfo={videoGalleryInfo} />

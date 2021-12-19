@@ -4,6 +4,7 @@ import { Form } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 
 import NewsBlock from "./newsBlock";
+import NewsCarousel from "./newsCarousel";
 import TitleBlock from "../titleBlock";
 import Loading from "../loading";
 import { colors } from "../../config/colors";
@@ -13,6 +14,9 @@ import CloseIcon from "@mui/icons-material/Close";
 
 const NewsAndMedia = ({ state, actions, block }) => {
   if (!block) return <Loading />;
+
+  const { layout } = block;
+  const isLayoutOne = layout === "layout_one";
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [dateFilter, setDateFilter] = useState(null);
@@ -178,6 +182,20 @@ const NewsAndMedia = ({ state, actions, block }) => {
     );
   };
 
+  const ServeLayout = () => {
+    if (isLayoutOne) return <NewsCarousel block={block} />;
+
+    return (
+      <div>
+        <NewsBlock
+          block={block}
+          searchFilter={searchFilter}
+          dateFilter={dateFilter}
+        />
+      </div>
+    );
+  };
+
   // RETURN ---------------------------------------------------
   return (
     <div
@@ -188,11 +206,7 @@ const NewsAndMedia = ({ state, actions, block }) => {
     >
       <TitleBlock block={block} disableHorizontalMargin />
       <ServeFilter />
-      <NewsBlock
-        block={block}
-        searchFilter={searchFilter}
-        dateFilter={dateFilter}
-      />
+      <ServeLayout />
     </div>
   );
 };

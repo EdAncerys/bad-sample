@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import Card from "../card/card";
-import NewsCarousel from "../newsCarousel";
 import Loading from "../loading";
 import { colors } from "../../config/colors";
 
@@ -18,7 +17,6 @@ const NewsBlock = ({
   const [category, setCategory] = useState(null);
 
   const { layout, post_limit } = block;
-  const isLayoutOne = layout === "layout_one";
   const isLayoutTwo = layout === "layout_two";
   const isLayoutThree = layout === "layout_three";
 
@@ -69,12 +67,12 @@ const NewsBlock = ({
   // RETURN ---------------------------------------------
   return (
     <div style={styles.container}>
-      {postList.map((event, key) => {
+      {postList.map((block, key) => {
         // search filter options --------------------------------
         // apply search options if needed
 
-        const { categories, title, content, excerpt, link } = event;
-        const { press_release_authors } = event.acf;
+        const { categories, title, content, excerpt, link } = block;
+        const { press_release_authors } = block.acf;
         const filter = category.filter(
           (item) => item.id === Number(categories[0])
         );
@@ -86,7 +84,7 @@ const NewsBlock = ({
               key={key}
               link_label="Read More"
               link={link}
-              newsAndMediaInfo={event}
+              newsAndMediaInfo={block}
               colour={
                 press_release_authors ? press_release_authors[0].colour : null
               }
@@ -104,7 +102,7 @@ const NewsBlock = ({
               body={excerpt.rendered}
               link_label="Read More"
               link={link}
-              newsAndMediaInfo={event}
+              newsAndMediaInfo={block}
               colour={
                 press_release_authors ? press_release_authors[0].colour : null
               }
