@@ -55,7 +55,7 @@ const NewsAndMedia = ({ state, actions, block }) => {
               style={{
                 position: "absolute",
                 right: 0,
-                height: 45,
+                height: 40,
                 border: "none",
                 background: "transparent",
                 alignItems: "center",

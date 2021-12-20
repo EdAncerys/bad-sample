@@ -134,6 +134,7 @@ const NewsCarousel = ({ state, actions, libraries, block }) => {
                         link_label="Read More"
                         limitTitleLength
                         cardHeight="90%"
+                        shadow
                       />
                       <ServeDivider i={0} />
                     </div>

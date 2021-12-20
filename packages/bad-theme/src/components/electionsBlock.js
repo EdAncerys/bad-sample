@@ -122,7 +122,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
               style={{
                 position: "absolute",
                 right: 0,
-                height: 45,
+                height: 40,
                 border: "none",
                 background: "transparent",
                 alignItems: "center",
@@ -159,7 +159,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
           <div
             style={{
               fontSize: 20,
-              fontFamily: 'Roboto',
+              fontFamily: "Roboto",
               color: colors.black,
               paddingRight: `2em`,
             }}

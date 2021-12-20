@@ -138,7 +138,12 @@ const Navigation = ({ state, actions, libraries }) => {
           const { title, slug, url } = item;
 
           const TEST_BLOCK = slug.includes("blocks-page")
-            ? { color: colors.danger, fontWeight: "bold", fontSize: 20, fontFamily: "Roboto", }
+            ? {
+                color: colors.danger,
+                fontWeight: "bold",
+                fontSize: 20,
+                fontFamily: "Roboto",
+              }
             : {};
 
           if (item.child_items)

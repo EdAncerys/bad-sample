@@ -80,7 +80,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
           className="flex"
           style={{
             fontSize: 36,
-            fontFamily: 'Roboto',
+            fontFamily: "Roboto",
             color: colors.black,
             fontWeight: "bold",
             alignItems: "center",
@@ -179,7 +179,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
           className="flex"
           style={{
             fontSize: 36,
-            fontFamily: 'Roboto',
+            fontFamily: "Roboto",
             color: colors.black,
             fontWeight: "bold",
             alignItems: "center",
@@ -250,7 +250,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
                 style={{
                   position: "absolute",
                   right: 0,
-                  height: 45,
+                  height: 40,
                   border: "none",
                   background: "transparent",
                   alignItems: "center",

@@ -91,6 +91,7 @@ const NewsBlock = ({
               limitBodyLength
               cardHeight="100%"
               layout={layout}
+              shadow
             />
           );
 
@@ -108,6 +109,7 @@ const NewsBlock = ({
               }
               limitBodyLength
               cardHeight="100%"
+              shadow
             />
           );
       })}

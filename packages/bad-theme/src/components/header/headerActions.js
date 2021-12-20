@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
+import { v4 as uuidv4 } from "uuid";
 
 import { colors } from "../../config/colors";
 import BADLogo from "../../img/svg/badLogoHeader.svg";
@@ -18,6 +19,8 @@ const HeaderActions = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { user } = useAppState();
 
+  const id = uuidv4();
+
   // SERVERS ----------------------------------------------------
   const ServeLogoContainer = () => {
     return (
@@ -34,17 +37,36 @@ const HeaderActions = ({ state, actions }) => {
 
   const ServeSearchContainer = () => {
     return (
-      <div className="flex d-none d-lg-block">
-        <div className="input-group">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Enter your search..."
-          />
-          <span className="input-group-text" id="basic-addon2">
-            <SearchIcon />
-          </span>
-        </div>
+      <div
+        className="flex"
+        style={{
+          flex: 1,
+          marginRight: `2em`,
+          padding: `0.75em 0`,
+          position: "relative",
+        }}
+      >
+        <input
+          id={`searchInput${id}`}
+          type="text"
+          className="form-control"
+          placeholder="Find An Event"
+          style={styles.input}
+        />
+        <span
+          className="input-group-text"
+          style={{
+            position: "absolute",
+            right: 0,
+            height: 40,
+            border: "none",
+            background: "transparent",
+            alignItems: "center",
+            color: colors.darkSilver,
+          }}
+        >
+          <SearchIcon />
+        </span>
       </div>
     );
   };
@@ -120,6 +142,11 @@ const styles = {
     backgroundColor: colors.primary,
     textTransform: "capitalize",
     border: "none",
+  },
+  input: {
+    borderRadius: 10,
+    paddingRight: 35,
+    color: colors.darkSilver,
   },
 };
 
