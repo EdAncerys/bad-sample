@@ -43,7 +43,6 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
           next ? slide("right") : slide("left");
         }}
         style={{
-          padding: `1em 2em`,
           backgroundColor: colors.white,
           textTransform: "uppercase",
           display: "flex",
@@ -55,11 +54,11 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
         }}
       >
         {next ? (
-          <div className="shadow">
+          <div className="shadow" style={{ padding: `1em 2em` }}>
             Next <KeyboardArrowRight sx={{ fontSize: 15 }} />
           </div>
         ) : (
-          <div className="shadow">
+          <div className="shadow" style={{ padding: `1em 2em` }}>
             <KeyboardArrowLeft sx={{ fontSize: 15 }} /> Previous
           </div>
         )}
