@@ -43,29 +43,25 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
           next ? slide("right") : slide("left");
         }}
         style={{
-          backgroundColor: colors.darkSilver,
+          padding: `1em 2em`,
+          backgroundColor: colors.white,
           textTransform: "uppercase",
           display: "flex",
           justifyContent: next ? "end" : "start",
           alignItems: "center",
-          fontSize: "10px",
           borderRadius: "5px",
           border: 0,
-          paddingLeft: "10px",
-          paddingTop: "2px",
-          paddingBottom: "2px",
-          paddingRight: "10px",
           marginBottom: 0,
         }}
       >
         {next ? (
-          <span>
+          <div className="shadow">
             Next <KeyboardArrowRight sx={{ fontSize: 15 }} />
-          </span>
+          </div>
         ) : (
-          <span>
+          <div className="shadow">
             <KeyboardArrowLeft sx={{ fontSize: 15 }} /> Previous
-          </span>
+          </div>
         )}
       </button>
     );
@@ -171,7 +167,6 @@ const styles = {
   },
   action: {
     backgroundColor: colors.white,
-
     padding: `0.5em 1.5em`,
     margin: `1em 1em 0 0`,
   },
