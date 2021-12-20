@@ -47,7 +47,7 @@ const HeaderActions = ({ state, actions }) => {
         }}
       >
         <input
-          id={`searchInput${id}`}
+          // id={`searchMain${id}`}
           type="text"
           className="form-control"
           placeholder="Find An Event"

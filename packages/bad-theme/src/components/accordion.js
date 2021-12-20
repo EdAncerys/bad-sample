@@ -10,6 +10,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import DownloadFileBlock from "./downloadFileBlock";
 import { setGoToAction } from "../context";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import { v4 as uuidv4 } from "uuid";
 
 const AccordionComponent = ({
   state,
@@ -28,8 +29,6 @@ const AccordionComponent = ({
 
   // SERVERS ---------------------------------------------
   const ServeAccordion = ({ block, eventKey }) => {
-    const [active, setActive] = useState(null);
-
     const {
       title,
       body,
@@ -85,6 +84,41 @@ const AccordionComponent = ({
     }
     // LEadership team & Standards --------------------------------
 
+    // HANDLERS ----------------------------------------------------
+    const handleAccordionToggle = () => {
+      const addIcon = document.querySelector(`#add-id-${eventKey}`);
+      const removeIcon = document.querySelector(`#remove-id-${eventKey}`);
+      const moreIcon = document.querySelector(`#more-id-${eventKey}`);
+      const lessIcon = document.querySelector(`#less-id-${eventKey}`);
+      const preview = document.querySelector(`#preview-id-${eventKey}`);
+
+      // apply toggle to selected components
+      if (preview) {
+        preview.classList.toggle("d-none");
+      }
+      if (addIcon) {
+        addIcon.classList.toggle("d-none");
+      }
+      if (removeIcon) {
+        if (removeIcon.classList.contains("d-none")) {
+          removeIcon.classList.remove("d-none");
+        } else {
+          removeIcon.classList.add("d-none");
+        }
+      }
+
+      if (moreIcon) {
+        moreIcon.classList.toggle("d-none");
+      }
+      if (lessIcon) {
+        if (lessIcon.classList.contains("d-none")) {
+          lessIcon.classList.remove("d-none");
+        } else {
+          lessIcon.classList.add("d-none");
+        }
+      }
+    };
+    // SERVERS ----------------------------------------------------
     const ServeHeader = () => {
       const ServeTitle = () => {
         if (!title || guidelines) return null;
@@ -94,7 +128,7 @@ const AccordionComponent = ({
             className="flex"
             style={{
               fontSize: 20,
-              fontFamily: 'Roboto',
+              fontFamily: "Roboto",
               color: colors.black,
               fontWeight: "bold",
               alignItems: "center",
@@ -149,7 +183,7 @@ const AccordionComponent = ({
             className="flex"
             style={{
               fontSize: 20,
-              fontFamily: 'Roboto',
+              fontFamily: "Roboto",
               color: colors.black,
               fontWeight: "bold",
               alignItems: "center",
@@ -162,8 +196,7 @@ const AccordionComponent = ({
       };
 
       const ServePreview = () => {
-        if (active || !hasPreview) return null;
-        if (guidelines) return null;
+        if (guidelines || !hasPreview) return null;
 
         // Manage max string Length
         const MAX_LENGTH = 140;
@@ -172,10 +205,10 @@ const AccordionComponent = ({
 
         return (
           <div
+            id={`preview-id-${eventKey}`}
             style={{
-              fontSize: 16,
-              // margin: `0 1.25em`,
               padding: `1em 0`,
+              marginTop: `1.25em`,
               color: colors.darkSilver,
               borderTop: `1px solid ${colors.darkSilver}`,
             }}
@@ -213,44 +246,36 @@ const AccordionComponent = ({
 
       const ServeIcon = () => {
         if (!hasPreview) {
-          if (!active)
-            return <AddIcon style={{ fontSize: 48, fill: colors.textMain }} />;
-          if (active)
-            return (
-              <RemoveIcon style={{ fontSize: 48, fill: colors.textMain }} />
-            );
-        }
-        if (hasPreview) {
-          if (!active)
-            return (
-              <div>
-                <div
-                  className="flex"
-                  style={{
-                    fontSize: 12,
-                    textTransform: "uppercase",
-                    height: "100%",
-                  }}
-                >
-                  See More
+          return (
+            <div>
+              <div className="flex">
+                <div id={`add-id-${eventKey}`}>
+                  <AddIcon style={{ fontSize: 48, fill: colors.textMain }} />
+                </div>
+                <div className="d-none" id={`remove-id-${eventKey}`}>
+                  <RemoveIcon style={{ fontSize: 48, fill: colors.textMain }} />
                 </div>
               </div>
-            );
-          if (active)
-            return (
-              <div>
+            </div>
+          );
+        }
+        if (hasPreview) {
+          return (
+            <div>
+              <div className="flex">
+                <div id={`more-id-${eventKey}`} style={styles.previewIcon}>
+                  See More
+                </div>
                 <div
-                  className="flex"
-                  style={{
-                    fontSize: 12,
-                    textTransform: "uppercase",
-                    height: "100%",
-                  }}
+                  className="d-none"
+                  id={`less-id-${eventKey}`}
+                  style={styles.previewIcon}
                 >
                   Less
                 </div>
               </div>
-            );
+            </div>
+          );
         }
       };
 
@@ -265,7 +290,7 @@ const AccordionComponent = ({
             className="flex"
             style={{
               fontSize: 20,
-              fontFamily: 'Roboto',
+              fontFamily: "Roboto",
               color: colors.black,
               fontWeight: "bold",
               alignItems: "center",
@@ -280,11 +305,11 @@ const AccordionComponent = ({
       return (
         <div style={{ position: "relative" }}>
           <Accordion.Header>
-            <div className="flex-col">
+            <div className="flex-col" onClick={handleAccordionToggle}>
               <div
                 className="flex"
                 style={{ margin: 0, padding: `0.5em 0`, alignItems: "center" }}
-                onClick={() => setActive(!active)}
+                data-mdb-toggle="collapse"
               >
                 <ServeTitle />
                 <ServeGSTitle />
@@ -319,7 +344,7 @@ const AccordionComponent = ({
             <div
               style={{
                 fontSize: 20,
-                fontFamily: 'Roboto',
+                fontFamily: "Roboto",
                 fontWeight: "bold",
                 padding: `2em 0 1em`,
               }}
@@ -674,6 +699,11 @@ const styles = {
     gridTemplateColumns: `repeat(3, 1fr)`,
     gap: 20,
     padding: `3em 0 0`,
+  },
+  previewIcon: {
+    fontSize: 12,
+    textTransform: "uppercase",
+    height: "100%",
   },
 };
 
