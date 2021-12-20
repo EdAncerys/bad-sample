@@ -14,6 +14,7 @@ const FullWidthContentBlock = ({
   disableMargin,
   heroBanner,
   disablePadding,
+  disableVerticalPadding,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -35,7 +36,10 @@ const FullWidthContentBlock = ({
 
   let PADDING = `${marginVertical}px ${marginHorizontal}px`;
   if (heroBanner) PADDING = `0 1em 0 ${marginHorizontal}px`;
+  if (disableVerticalPadding) PADDING = `0 ${marginHorizontal}px`;
   if (disablePadding) PADDING = 0;
+
+  let BACKGROUND_COLOUR = background_colour || "transparent";
 
   // SERVERS ----------------------------------------------------------------
   const ServeTitle = () => {
@@ -106,7 +110,7 @@ const FullWidthContentBlock = ({
       style={{
         justifyContent: "center",
         textAlign: ALIGNMENT,
-        backgroundColor: background_colour || "transparent",
+        backgroundColor: BACKGROUND_COLOUR,
         minHeight: heroBanner ? BANNER_HEIGHT : "auto",
         padding: PADDING,
       }}

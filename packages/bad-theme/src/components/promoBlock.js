@@ -6,7 +6,7 @@ import Loading from "./loading";
 import FullWidthContentBlock from "./fullWidthContentBlock";
 import { colors } from "../config/colors";
 
-const PromoBlock = ({ state, actions, block, reverse, disableMargin }) => {
+const PromoBlock = ({ state, actions, block, disableMargin }) => {
   if (!block) return <Loading />;
 
   const { background_image, image_align, title, horizontal_padding } = block;
@@ -48,8 +48,16 @@ const PromoBlock = ({ state, actions, block, reverse, disableMargin }) => {
 
   const ServeCardContent = () => {
     return (
-      <div className="flex">
-        <FullWidthContentBlock block={block} />
+      <div
+        className="flex"
+        style={{
+          margin: "auto 0",
+          padding: isAlignLeft
+            ? `0 0 0 ${marginHorizontal}px`
+            : `0 ${marginHorizontal}px 0 0`,
+        }}
+      >
+        <FullWidthContentBlock block={block} disablePadding />
       </div>
     );
   };
@@ -68,7 +76,6 @@ const PromoBlock = ({ state, actions, block, reverse, disableMargin }) => {
           height: BANNER_HEIGHT,
           overflow: "hidden",
           margin: MARGIN,
-          backgroundColor: colors.lightSilver,
         }}
       >
         <ServeCardContent />
