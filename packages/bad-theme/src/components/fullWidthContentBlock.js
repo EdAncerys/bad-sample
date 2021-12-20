@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
+import BlockWrapper from "./blockWrapper";
 import { colors } from "../config/colors";
 
 import { setGoToAction } from "../context";
@@ -102,7 +103,6 @@ const FullWidthContentBlock = ({
   // RETURN ---------------------------------------------------
   return (
     <div
-      className="flex-col"
       style={{
         justifyContent: "center",
         textAlign: ALIGNMENT,

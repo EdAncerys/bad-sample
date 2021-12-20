@@ -198,12 +198,7 @@ const NewsAndMedia = ({ state, actions, block }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div
-      style={{
-        padding: `${marginVertical}px ${marginHorizontal}px`,
-        backgroundColor: colors.silverFillOne,
-      }}
-    >
+    <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
       <TitleBlock block={block} disableHorizontalMargin />
       <ServeFilter />
       <ServeLayout />

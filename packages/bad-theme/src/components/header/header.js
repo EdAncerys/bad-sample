@@ -14,6 +14,7 @@ import custom from "../../css/custom.css";
 import HTMLHead from "./htmlHead";
 import HeaderActions from "./headerActions";
 import Navigation from "./navigation";
+import BlockWrapper from "../blockWrapper";
 
 const Header = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
@@ -26,12 +27,12 @@ const Header = ({ state, actions }) => {
         `}
       />
       <HTMLHead />
-      <div>
+      <BlockWrapper>
         <div className="flex-col" style={styles.container}>
           <HeaderActions />
           <Navigation />
         </div>
-      </div>
+      </BlockWrapper>
     </>
   );
 };

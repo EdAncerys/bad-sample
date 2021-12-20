@@ -81,7 +81,6 @@ const Navigation = ({ state, actions, libraries }) => {
         title={<Html2React html={title} /> || "Menu Title"}
         style={{
           position: "static", // static position adding ability for dropdown to move up the scope
-          padding: `0 1em`,
           // borderBottom: `5px solid ${colors.danger}`,
         }}
         onClick={(e) => {

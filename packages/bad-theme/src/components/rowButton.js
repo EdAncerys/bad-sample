@@ -35,6 +35,15 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
         ...styles.container,
         backgroundColor: colors.white,
         width: "100%",
+        cursor: "pointer",
+      }}
+      onClick={() => {
+        if (onClick) {
+          onClick();
+        } else {
+          if (!link) return null;
+          setGoToAction({ path: link.url, actions });
+        }
       }}
     >
       <div
@@ -57,8 +66,17 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
               fontSize: 12,
               textTransform: "uppercase",
               justifyContent: "start",
-              alignItems: "center",
+              alignItems: "start",
               letterSpacing: 2,
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              if (onClick) {
+                onClick();
+              } else {
+                if (!link) return null;
+                setGoToAction({ path: link.url, actions });
+              }
             }}
           >
             <Html2React html={LABEL} />
@@ -70,6 +88,15 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
                 backgroundColor: THEME,
                 borderRadius: "50%",
                 padding: 0,
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                if (onClick) {
+                  onClick();
+                } else {
+                  if (!link) return null;
+                  setGoToAction({ path: link.url, actions });
+                }
               }}
             />
           </div>
