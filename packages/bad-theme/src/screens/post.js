@@ -3,6 +3,8 @@ import { connect, styled } from "frontity";
 
 import { colors } from "../config/colors";
 import Card from "../components/card/card";
+// BLOCK WIDTH WRAPPER -------------------------------------------------------
+import BlockWrapper from "../components/blockWrapper";
 
 const Post = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -69,21 +71,24 @@ const Post = ({ state, actions, libraries }) => {
   };
 
   return (
-    <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
-      <div style={styles.container}>
+    <BlockWrapper>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: `2.5fr 1fr`,
+          gap: 20,
+          padding: `${marginVertical}px 0`,
+        }}
+      >
         <ServeContent />
         <ServeSideBar />
       </div>
-    </div>
+    </BlockWrapper>
   );
 };
 
 const styles = {
-  container: {
-    display: "grid",
-    gridTemplateColumns: `2.5fr 1fr`,
-    gap: 20,
-  },
+  container: {},
 };
 
 export default connect(Post);

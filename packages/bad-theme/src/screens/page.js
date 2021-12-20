@@ -12,10 +12,11 @@ const Post = ({ state, actions, libraries }) => {
   const wpBlocks = page.acf.blocks;
   // console.log("pageData ", data, page); // debug
 
+  const marginVertical = state.theme.marginVertical;
   const { sm, md, lg, xl } = muiQuery();
 
   return (
-    <div>
+    <div style={{ padding: `${marginVertical}px 0` }}>
       <div>
         {/* <span>{`theme.breakpoints.down('sm') matches: ${sm}`}</span> */}
         {/* <span class="popup" citations="Right, finally">

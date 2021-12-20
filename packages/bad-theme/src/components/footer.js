@@ -24,51 +24,61 @@ const Footer = ({ state, actions }) => {
   const ServeFooterTopRow = () => {
     return (
       <div
-        className="flex-row"
         style={{
-          flex: 2,
-          alignItems: "center",
+          padding: `1em 0`,
           borderBottom: `1px solid ${colors.darkSilver}`,
         }}
       >
-        <div className="flex" style={{ flex: 3 }}>
-          <div style={{ width: 235, height: 70 }}>
-            <Image src={BADLogo} className="d-block h-100" alt="BAD Logo" />
-          </div>
-        </div>
         <div
-          className="flex"
-          style={{ flex: 4, fontSize: 11, justifyContent: "flex-end" }}
+          className="flex-row"
+          style={{
+            flex: 2,
+            alignItems: "center",
+          }}
         >
-          <div style={styles.footerTitle}>
-            <div>Willan House, 4 Fitzroy Square, London, W1T 5HQ</div>
-            <ServeDivider />
+          <div className="flex" style={{ flex: 3 }}>
+            <div style={{ width: 235, height: 70 }}>
+              <Image src={BADLogo} className="d-block h-100" alt="BAD Logo" />
+            </div>
           </div>
-          <div style={styles.footerTitle}>
-            <div>admin@bad.org.uk</div>
-            <ServeDivider />
+          <div
+            className="flex"
+            style={{ flex: 4, fontSize: 11, justifyContent: "flex-end" }}
+          >
+            <div style={styles.footerTitle}>
+              <div>Willan House, 4 Fitzroy Square, London, W1T 5HQ</div>
+              <ServeDivider />
+            </div>
+            <div style={styles.footerTitle}>
+              <div>admin@bad.org.uk</div>
+              <ServeDivider />
+            </div>
+            <div style={styles.footerTitle}>+44 (0)207 383 0266</div>
           </div>
-          <div style={styles.footerTitle}>+44 (0)207 383 0266</div>
-        </div>
-        <div className="flex" style={{ justifyContent: "space-around" }}>
-          <div style={styles.socials}>
-            <Link link={`https://www.facebook.com/`} target="_blank">
-              <Image src={Facebook} className="d-block h-100" alt="Facebook" />
-            </Link>
-          </div>
-          <div style={styles.socials}>
-            <Link link={`https://www.twitter.com/`} target="_blank">
-              <Image src={Twitter} className="d-block h-100" alt="Twitter" />
-            </Link>
-          </div>
-          <div style={styles.socials}>
-            <Link link={`https://www.instagram.com/`} target="_blank">
-              <Image
-                src={Instagram}
-                className="d-block h-100"
-                alt="Instagram"
-              />
-            </Link>
+          <div className="flex" style={{ justifyContent: "space-around" }}>
+            <div style={styles.socials}>
+              <Link link={`https://www.facebook.com/`} target="_blank">
+                <Image
+                  src={Facebook}
+                  className="d-block h-100"
+                  alt="Facebook"
+                />
+              </Link>
+            </div>
+            <div style={styles.socials}>
+              <Link link={`https://www.twitter.com/`} target="_blank">
+                <Image src={Twitter} className="d-block h-100" alt="Twitter" />
+              </Link>
+            </div>
+            <div style={styles.socials}>
+              <Link link={`https://www.instagram.com/`} target="_blank">
+                <Image
+                  src={Instagram}
+                  className="d-block h-100"
+                  alt="Instagram"
+                />
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -77,7 +87,10 @@ const Footer = ({ state, actions }) => {
 
   const ServeFooterBottomRow = () => {
     return (
-      <div className="flex-row" style={{ alignItems: "center", fontSize: 9 }}>
+      <div
+        className="flex-row"
+        style={{ alignItems: "center", fontSize: 9, padding: `2em 0` }}
+      >
         <div className="flex">
           ©{`${year}`} British Association of Dermatologists
         </div>
@@ -130,7 +143,6 @@ const Footer = ({ state, actions }) => {
 
 const styles = {
   container: {
-    height: 170,
     backgroundColor: colors.softBlack,
     color: colors.white,
   },

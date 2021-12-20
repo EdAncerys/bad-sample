@@ -14,6 +14,8 @@ import Instagram from "../img/svg/instagramBlack.svg";
 import Linkedin from "../img/svg/linkedinBlack.svg";
 import Connect from "../img/svg/connectBlack.svg";
 import WebPage from "../img/svg/webPageBlack.svg";
+// BLOCK WIDTH WRAPPER -------------------------------------------------------
+import BlockWrapper from "../components/blockWrapper";
 
 const Event = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -369,9 +371,9 @@ const Event = ({ state, actions, libraries }) => {
   };
 
   return (
-    <div>
+    <BlockWrapper>
       <div style={{ backgroundColor: colors.white }}>
-        <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
+        <div style={{ padding: `${marginVertical}px 0` }}>
           <div style={styles.container}>
             <div>
               <ServeTitle />
@@ -399,7 +401,7 @@ const Event = ({ state, actions, libraries }) => {
           buttonWidth="60%"
         />
       </div>
-    </div>
+    </BlockWrapper>
   );
 };
 

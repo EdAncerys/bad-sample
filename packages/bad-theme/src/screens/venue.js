@@ -7,6 +7,8 @@ import { muiQuery } from "../context";
 import PromoBlock from "../components/promoBlock";
 import MultiPhotoBlock from "../components/multiPhotoBlock";
 import { setGoToAction } from "../context";
+// BLOCK WIDTH WRAPPER -------------------------------------------------------
+import BlockWrapper from "../components/blockWrapper";
 
 const Venue = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -193,7 +195,7 @@ const Venue = ({ state, actions, libraries }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div>
+    <BlockWrapper>
       <PromoBlock
         block={{
           title: venue.title.rendered,
@@ -205,7 +207,7 @@ const Venue = ({ state, actions, libraries }) => {
       />
       <ServeInfo />
       <MultiPhotoBlock block={gallery} />
-    </div>
+    </BlockWrapper>
   );
 };
 

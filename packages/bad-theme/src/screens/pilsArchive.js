@@ -8,6 +8,8 @@ import { setGoToAction } from "../context";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
+// BLOCK WIDTH WRAPPER -------------------------------------------------------
+import BlockWrapper from "../components/blockWrapper";
 
 const PilsArchive = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -264,7 +266,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
 
   // RETURN ----------------------------------------------------------------
   return (
-    <div>
+    <BlockWrapper>
       <ServeInfo />
       <ServeFilter />
       <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
@@ -274,7 +276,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
           })}
         </div>
       </div>
-    </div>
+    </BlockWrapper>
   );
 };
 

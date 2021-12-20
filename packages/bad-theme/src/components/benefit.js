@@ -11,11 +11,12 @@ import Newsletters from "../img/svg/newsletters.svg";
 import Fellowships from "../img/svg/fellowships.svg";
 import Library from "../img/svg/library.svg";
 import HireDiscounts from "../img/svg/hireDiscounts.svg";
+import { setGoToAction } from "../context";
 
 const Benefit = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const { icon, body, title } = block;
+  const { icon, body, title, link } = block;
 
   const ICON_WIDTH = 100;
   let SERVE_ICON = Journal;
@@ -38,7 +39,9 @@ const Benefit = ({ state, actions, libraries, block }) => {
           width: ICON_WIDTH,
           height: ICON_WIDTH,
           margin: `0 auto`,
+          cursor: "pointer",
         }}
+        onClick={() => setGoToAction({ path: link.url, actions })}
       >
         <Image
           src={SERVE_ICON}

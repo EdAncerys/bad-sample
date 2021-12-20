@@ -67,8 +67,8 @@ const App = ({ state, actions }) => {
           <Switch>
             <Loading when={data.isFetching} />
             <Error when={data.isError} />
-
             <BlocksPage when={data.route.includes("blocks-page")} />
+
             <Login when={endPoint === "/login/"} />
             <CreateAccount when={endPoint === "/create-account/"} />
             <Dashboard when={endPoint === "/membership/dashboard/"} />

@@ -4,6 +4,8 @@ import { connect } from "frontity";
 import { colors } from "../config/colors";
 import Loading from "../components/loading";
 import DownloadFileBlock from "../components/downloadFileBlock";
+// BLOCK WIDTH WRAPPER -------------------------------------------------------
+import BlockWrapper from "../components/blockWrapper";
 
 const Post = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -63,7 +65,7 @@ const Post = ({ state, actions, libraries }) => {
   };
 
   return (
-    <div
+    <BlockWrapper
       className="text-body"
       style={{
         margin: `${marginVertical}px ${marginHorizontal}px`,
@@ -72,7 +74,7 @@ const Post = ({ state, actions, libraries }) => {
       <ServeTitle />
       <ServeDownload />
       <ServeBody />
-    </div>
+    </BlockWrapper>
   );
 };
 
