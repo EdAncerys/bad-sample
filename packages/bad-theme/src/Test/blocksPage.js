@@ -26,8 +26,9 @@ const BlocksPage = ({ state }) => {
 
 const styles = {
   title: {
-    textAlign: "center",
     fontSize: 40,
+    fontFamily: "Roboto",
+    textAlign: "center",
     fontWeight: "500",
     color: colors.primary,
     backgroundColor: "#66806A",

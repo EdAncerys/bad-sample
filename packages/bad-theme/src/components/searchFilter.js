@@ -47,7 +47,7 @@ const SearchFilter = ({
     return (
       <div
         className="flex"
-        style={{ fontSize: 36, fontWeight: "bold", color: colors.black }}
+        style={{ fontSize: 36, fontFamily: "Roboto", fontWeight: "bold", color: colors.black }}
       >
         {TITLE}
       </div>
@@ -62,6 +62,7 @@ const SearchFilter = ({
         <div
           style={{
             fontSize: 20,
+            fontFamily: "Roboto",
             color: colors.black,
             paddingRight: `2em`,
           }}

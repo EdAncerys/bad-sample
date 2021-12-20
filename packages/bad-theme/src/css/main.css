@@ -8,15 +8,12 @@ xxl 1400
 
 */
 
-@font-face {
+/* @font-face {
   font-family: "lato";
   src: url("../config/fonts/Lato-Regular.ttf");
-}
+} */
 
-@font-face {
-  font-family: "Roboto";
-  src: url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
-}
+@import url("https://fonts.googleapis.com/css2?family=Lato&family=Roboto&display=swap");
 
 * {
   padding: 0;
@@ -31,7 +28,7 @@ xxl 1400
   user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: "Lato", sans-serif;
   font-style: normal;
 }
 .sticky {

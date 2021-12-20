@@ -80,6 +80,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
           className="flex"
           style={{
             fontSize: 36,
+            fontFamily: 'Roboto',
             color: colors.black,
             fontWeight: "bold",
             alignItems: "center",
@@ -178,6 +179,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
           className="flex"
           style={{
             fontSize: 36,
+            fontFamily: 'Roboto',
             color: colors.black,
             fontWeight: "bold",
             alignItems: "center",

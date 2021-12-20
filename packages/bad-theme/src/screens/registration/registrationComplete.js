@@ -143,7 +143,8 @@ const styles = {
     margin: `0 1em 0`,
   },
   title: {
-    fontSize: 22,
+    fontSize: 20,
+    fontFamily: "Roboto",
     fontWeight: "bold",
     color: colors.black,
     padding: `1em 0`,

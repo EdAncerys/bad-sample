@@ -319,7 +319,7 @@ const styles = {
     borderBottom: `1px solid ${colors.darkSilver}`,
     margin: `0 1em 0`,
   },
-  title: { fontSize: 22, fontWeight: "bold", color: colors.black },
+  title: { fontSize: 22, fontFamily: "Roboto", fontWeight: "bold", color: colors.black },
   subTitle: {
     fontSize: 16,
     fontWeight: "bold",

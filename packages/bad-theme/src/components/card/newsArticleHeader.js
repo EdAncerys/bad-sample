@@ -34,6 +34,7 @@ const NewsArticleHeader = ({ state, actions, libraries, newsArticle }) => {
       <div
         style={{
           fontSize: 20,
+          fontFamily: "Roboto",
           fontWeight: "bold",
         }}
       >

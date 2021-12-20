@@ -51,6 +51,7 @@ const FullWidthContentBlock = ({
           className="card-text"
           style={{
             fontSize: 36,
+            fontFamily: 'Roboto',
             fontWeight: "bold",
             color: colors.black,
           }}

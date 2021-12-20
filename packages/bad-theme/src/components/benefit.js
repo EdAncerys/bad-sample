@@ -59,7 +59,7 @@ const Benefit = ({ state, actions, libraries, block }) => {
     if (!title) return null;
 
     return (
-      <div style={{ fontSize: 20, fontWeight: "bold", margin: `0.75em 0` }}>
+      <div style={{ fontSize: 20,  fontFamily: 'Roboto', fontWeight: "bold", margin: `0.75em 0` }}>
         <Html2React html={title} />
       </div>
     );

@@ -372,12 +372,14 @@ const styles = {
   },
   title: {
     fontSize: 36,
+    fontFamily: "Roboto",
     fontWeight: "bold",
     color: colors.black,
     padding: `0.5em 0`,
   },
   subTitle: {
     fontSize: 20,
+    fontFamily: "Roboto",
     fontWeight: "bold",
     color: colors.black,
   },

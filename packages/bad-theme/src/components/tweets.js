@@ -28,6 +28,7 @@ const Tweets = ({ state, actions, libraries, block }) => {
         className="flex"
         style={{
           fontSize: 36,
+          fontFamily: "Roboto",
           fontWeight: "bold",
           justifyContent: "center",
           padding: `1em 0`,

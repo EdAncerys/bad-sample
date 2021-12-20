@@ -159,6 +159,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
           <div
             style={{
               fontSize: 20,
+              fontFamily: 'Roboto',
               color: colors.black,
               paddingRight: `2em`,
             }}

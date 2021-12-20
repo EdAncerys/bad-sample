@@ -18,7 +18,7 @@ const VenueInfo = ({ state, actions, libraries, venueInfo }) => {
 
     return (
       <div
-        style={{ fontSize: 22, fontWeight: "bold", cursor: "pointer" }}
+        style={{ fontSize: 22, fontFamily: "Roboto", fontWeight: "bold", cursor: "pointer" }}
         onClick={() => setGoToAction({ path: link, actions })}
       >
         <Html2React html={title.rendered} />

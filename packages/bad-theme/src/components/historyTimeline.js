@@ -54,12 +54,14 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
         }}
       >
         {next ? (
-          <div className="shadow" style={{ padding: `1em 2em` }}>
-            Next <KeyboardArrowRight sx={{ fontSize: 15 }} />
+          <div className="flex shadow" style={{ padding: `0.5em 2em` }}>
+            <div>Next</div>
+            <KeyboardArrowRight sx={{ fontSize: 24 }} />
           </div>
         ) : (
-          <div className="shadow" style={{ padding: `1em 2em` }}>
-            <KeyboardArrowLeft sx={{ fontSize: 15 }} /> Previous
+          <div className="flex shadow" style={{ padding: `0.5em 2em` }}>
+            <KeyboardArrowLeft sx={{ fontSize: 24 }} />
+            <div>Previous</div>
           </div>
         )}
       </button>
@@ -98,6 +100,7 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
                       <div
                         style={{
                           fontSize: 40,
+                          fontFamily: "Roboto",
                           fontWeight: "bold",
                           zIndex: 12,
                         }}

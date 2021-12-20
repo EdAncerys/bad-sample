@@ -57,7 +57,7 @@ const ContactPreferences = ({
   const ServeContent = () => {
     return (
       <div style={{ marginTop: `3em` }}>
-        <div style={{ fontSize: 20, fontWeight: "bold" }}>
+        <div style={{ fontSize: 20, fontFamily: "Roboto", fontWeight: "bold" }}>
           Contact Preferences:
         </div>
         <div style={{ color: colors.darkSilver, margin: `1em 0` }}>

@@ -40,6 +40,7 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
         <div
           style={{
             fontSize: 24,
+            fontFamily: "Roboto",
             fontWeight: "bold",
             paddingTop: `1em`,
           }}

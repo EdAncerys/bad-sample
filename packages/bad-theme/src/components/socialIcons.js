@@ -47,6 +47,7 @@ const SocialIcons = ({ state, actions, libraries, block }) => {
       <div
         style={{
           fontSize: 24,
+          fontFamily: "Roboto",
           fontWeight: "bold",
           color: colors.black,
           paddingBottom: `1em`,

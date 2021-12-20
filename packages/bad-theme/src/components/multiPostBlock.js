@@ -53,6 +53,7 @@ const MultiPostBlock = ({ state, actions, block }) => {
         <div
           style={{
             fontSize: 24,
+            fontFamily: "Roboto",
             fontWeight: "bold",
             color: colors.black,
           }}

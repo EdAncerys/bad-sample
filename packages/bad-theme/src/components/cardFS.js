@@ -67,9 +67,10 @@ const CardFS = ({
         <div className="flex">
           <div
             style={{
+              fontSize: 28,
+              fontFamily: 'Roboto',
               marginLeft: "1em",
               textAlign: "start",
-              fontSize: "1.75em",
               fontWeight: "bold",
             }}
           >
@@ -144,10 +145,10 @@ const styles = {
     overflow: "hidden",
   },
   footerActionTitle: {
+    fontSize: 12,
     marginRight: 25,
     borderBottom: `1px solid ${colors.black}`,
     textTransform: "uppercase",
-    fontSize: "0.75em",
   },
 };
 

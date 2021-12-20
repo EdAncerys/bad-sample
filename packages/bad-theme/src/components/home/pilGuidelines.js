@@ -74,7 +74,7 @@ const PilGuidelines = ({ state, actions }) => {
       >
         <div className="flex-col" style={{ padding: `1em 2em` }}>
           <div
-            style={{ fontSize: 36, fontWeight: "bold", color: colors.black }}
+            style={{ fontSize: 36, fontFamily: "Roboto", fontWeight: "bold", color: colors.black }}
           >
             PIL & Guidelines Quicklinks
           </div>

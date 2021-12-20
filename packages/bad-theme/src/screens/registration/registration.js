@@ -26,6 +26,7 @@ const styles = {
   title: {
     textAlign: "center",
     fontSize: 40,
+    fontFamily: "Roboto",
     fontWeight: "500",
     color: colors.primary,
   },

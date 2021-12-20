@@ -94,7 +94,8 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
       return (
         <div
           style={{
-            fontSize: 22,
+            fontSize: 20,
+            fontFamily: 'Roboto',
             fontWeight: "bold",
             padding: `1em 0`,
             cursor: "pointer",

@@ -23,6 +23,7 @@ const FundingPromo = ({ state, actions, libraries, block }) => {
           className="flex"
           style={{
             fontSize: 36,
+            fontFamily: 'Roboto',
             fontWeight: "bold",
             justifyContent: "center",
             color: colors.black,

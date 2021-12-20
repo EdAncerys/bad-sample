@@ -62,6 +62,7 @@ const Events = ({ state, actions, libraries, block }) => {
         <div
           style={{
             fontSize: 20,
+            fontFamily: "Roboto",
             color: colors.black,
             padding: `0 2em`,
           }}

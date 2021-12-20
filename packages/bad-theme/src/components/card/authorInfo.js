@@ -120,6 +120,7 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
         <div
           style={{
             fontSize: 20,
+            fontFamily: "Roboto",
             fontWeight: "bold",
             color: colors.black,
           }}
@@ -186,6 +187,7 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
       <div
         style={{
           fontSize: 20,
+          fontFamily: "Roboto",
           fontWeight: "bold",
           padding: `0.5em 0`,
         }}

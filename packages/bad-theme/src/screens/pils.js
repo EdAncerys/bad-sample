@@ -26,6 +26,7 @@ const Post = ({ state, actions, libraries }) => {
         <div
           style={{
             fontSize: 36,
+            fontFamily: "Roboto",
             fontWeight: "bold",
             padding: `0.5em 1em`,
             color: colors.black,

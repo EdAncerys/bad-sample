@@ -16,7 +16,7 @@ const VideoGalleryInfo = ({ state, actions, libraries, videoGalleryInfo }) => {
     return (
       <div
         className="flex"
-        style={{ fontSize: 22, fontWeight: "bold", paddingRight: `1em` }}
+        style={{ fontSize: 20, fontFamily: "Roboto", fontWeight: "bold", paddingRight: `1em` }}
       >
         <Html2React html={title} />
       </div>

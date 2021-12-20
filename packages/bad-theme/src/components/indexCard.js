@@ -40,7 +40,7 @@ const IndexCard = ({
       if (!card_title) return null;
 
       return (
-        <div style={{ fontSize: 20, fontWeight: "bold", color: colors.black }}>
+        <div style={{ fontSize: 20, fontFamily: "Roboto", fontWeight: "bold", color: colors.black }}>
           <Html2React html={card_title} />
         </div>
       );

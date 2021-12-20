@@ -82,6 +82,7 @@ const Venue = ({ state, actions, libraries }) => {
               className="flex"
               style={{
                 fontSize: 20,
+                fontFamily: "Roboto",
                 color: colors.black,
                 fontWeight: "bold",
               }}
@@ -113,6 +114,7 @@ const Venue = ({ state, actions, libraries }) => {
               className="flex"
               style={{
                 fontSize: 20,
+                fontFamily: "Roboto",
                 color: colors.black,
                 fontWeight: "bold",
               }}
@@ -136,6 +138,7 @@ const Venue = ({ state, actions, libraries }) => {
               className="flex"
               style={{
                 fontSize: 20,
+                fontFamily: "Roboto",
                 color: colors.black,
                 fontWeight: "bold",
               }}
@@ -159,6 +162,7 @@ const Venue = ({ state, actions, libraries }) => {
               className="flex"
               style={{
                 fontSize: 20,
+                fontFamily: "Roboto",
                 color: colors.black,
                 fontWeight: "bold",
               }}

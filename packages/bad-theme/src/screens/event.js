@@ -51,6 +51,7 @@ const Event = ({ state, actions, libraries }) => {
       <div
         style={{
           fontSize: 36,
+          fontFamily: "Roboto",
           fontWeight: "bold",
           color: colors.black,
           paddingBottom: `0.5em`,
@@ -89,6 +90,7 @@ const Event = ({ state, actions, libraries }) => {
           <div
             style={{
               fontSize: 20,
+              fontFamily: "Roboto",
               fontWeight: "bold",
               color: colors.black,
             }}
@@ -157,6 +159,7 @@ const Event = ({ state, actions, libraries }) => {
           <div
             style={{
               fontSize: 20,
+              fontFamily: "Roboto",
               fontWeight: "bold",
               color: colors.black,
             }}
@@ -176,6 +179,7 @@ const Event = ({ state, actions, libraries }) => {
           <div
             style={{
               fontSize: 20,
+              fontFamily: "Roboto",
               fontWeight: "bold",
               color: colors.black,
             }}
@@ -195,6 +199,7 @@ const Event = ({ state, actions, libraries }) => {
           <div
             style={{
               fontSize: 20,
+              fontFamily: "Roboto",
               fontWeight: "bold",
               color: colors.black,
             }}
@@ -320,12 +325,12 @@ const Event = ({ state, actions, libraries }) => {
           style={{ justifyContent: "space-between", padding: `2em 0` }}
         >
           <div
-            style={{ fontSize: 20, fontWeight: "bold", color: colors.black }}
+            style={{ fontSize: 20, fontFamily: "Roboto", fontWeight: "bold", color: colors.black }}
           >
             Share
           </div>
           <div
-            style={{ fontSize: 20, fontWeight: "bold", color: colors.black }}
+            style={{ fontSize: 20, fontFamily: "Roboto", fontWeight: "bold", color: colors.black }}
           >
             Add to calendar
           </div>

@@ -44,6 +44,7 @@ const ProfilesBlock = ({ state, actions, libraries, block }) => {
         <div
           style={{
             fontSize: 36,
+            fontFamily: "Roboto",
             color: colors.black,
             fontWeight: "bold",
             textTransform: "capitalize",

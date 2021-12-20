@@ -45,6 +45,7 @@ const SplitContentAndUsefulLinksCard = ({
         <div
           style={{
             fontSize: 24,
+            fontFamily: "Roboto",
             fontWeight: "bold",
             paddingTop: `1em`,
           }}

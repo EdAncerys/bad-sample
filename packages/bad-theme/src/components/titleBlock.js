@@ -40,7 +40,7 @@ const TitleBlock = ({
         style={{
           borderBottom: `1px solid ${colors.textMain}`,
           textTransform: "uppercase",
-          fontSize: "0.75em",
+          fontSize: 12,
           cursor: "pointer",
           marginLeft: `2em`,
         }}
@@ -59,6 +59,7 @@ const TitleBlock = ({
         className="flex"
         style={{
           fontSize: 36,
+          fontFamily: "Roboto",
           fontWeight: "bold",
           color: colors.black,
           textAlign: ALIGNMENT,

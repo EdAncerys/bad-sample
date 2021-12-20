@@ -18,6 +18,7 @@ const PromoHeader = ({ state, actions, libraries, fundingPromo }) => {
       <div
         style={{
           fontSize: 20,
+          fontFamily: "Roboto",
           fontWeight: "bold",
           color: colors.black,
         }}
@@ -35,6 +36,7 @@ const PromoHeader = ({ state, actions, libraries, fundingPromo }) => {
         className="flex"
         style={{
           fontSize: 20,
+          fontFamily: "Roboto",
         }}
       >
         <Html2React html={amount} />

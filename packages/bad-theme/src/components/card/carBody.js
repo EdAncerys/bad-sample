@@ -50,6 +50,7 @@ const CardBody = ({
         className="flex"
         style={{
           fontSize: heroBanner ? 36 : 20,
+          fontFamily: "Roboto",
           minHeight: TITLE_HEIGHT,
           maxHeight: isFrom4Col ? "7em" : "auto", // restricting title height
           overflow: "hidden",

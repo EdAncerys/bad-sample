@@ -28,6 +28,7 @@ const Post = ({ state, actions, libraries }) => {
           className="flex"
           style={{
             fontSize: 36,
+            fontFamily: "Roboto",
             fontWeight: "bold",
             color: colors.black,
           }}

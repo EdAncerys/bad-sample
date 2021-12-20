@@ -28,6 +28,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
       <div
         style={{
           fontSize: 22,
+          fontFamily: "Roboto",
           fontWeight: "bold",
           color: colors.black,
           borderBottom: `1px solid ${colors.darkSilver}`,

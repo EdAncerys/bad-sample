@@ -43,6 +43,7 @@ const Profile = ({ state, actions, libraries, block }) => {
       <div
         style={{
           fontSize: 20,
+          fontFamily: "Roboto",
           color: colors.black,
           fontWeight: "bold",
           margin: `0.75em 0`,

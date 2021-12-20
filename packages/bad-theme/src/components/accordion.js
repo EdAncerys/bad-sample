@@ -94,6 +94,7 @@ const AccordionComponent = ({
             className="flex"
             style={{
               fontSize: 20,
+              fontFamily: 'Roboto',
               color: colors.black,
               fontWeight: "bold",
               alignItems: "center",
@@ -148,6 +149,7 @@ const AccordionComponent = ({
             className="flex"
             style={{
               fontSize: 20,
+              fontFamily: 'Roboto',
               color: colors.black,
               fontWeight: "bold",
               alignItems: "center",
@@ -263,6 +265,7 @@ const AccordionComponent = ({
             className="flex"
             style={{
               fontSize: 20,
+              fontFamily: 'Roboto',
               color: colors.black,
               fontWeight: "bold",
               alignItems: "center",
@@ -316,6 +319,7 @@ const AccordionComponent = ({
             <div
               style={{
                 fontSize: 20,
+                fontFamily: 'Roboto',
                 fontWeight: "bold",
                 padding: `2em 0 1em`,
               }}

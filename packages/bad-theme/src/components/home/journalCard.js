@@ -61,6 +61,7 @@ const JournalCard = ({
           className="flex"
           style={{
             fontSize: 20,
+            fontFamily: "Roboto",
             fontWeight: "bold",
           }}
         >
@@ -77,6 +78,7 @@ const JournalCard = ({
           className="flex"
           style={{
             fontSize: 20,
+            fontFamily: "Roboto",
           }}
         >
           <Html2React html={user} />

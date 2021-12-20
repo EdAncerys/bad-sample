@@ -93,6 +93,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
         <div
           style={{
             fontSize: 36,
+            fontFamily: "Roboto",
             fontWeight: "bold",
             borderBottom: `1px solid ${colors.darkSilver}`,
           }}
@@ -124,6 +125,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
           className="flex"
           style={{
             fontSize: 36,
+            fontFamily: "Roboto",
             color: colors.black,
             fontWeight: "bold",
             alignItems: "center",
@@ -162,6 +164,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
           className="flex"
           style={{
             fontSize: 36,
+            fontFamily: "Roboto",
             color: colors.black,
             fontWeight: "bold",
             alignItems: "center",
