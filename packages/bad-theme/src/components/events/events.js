@@ -265,12 +265,7 @@ const Events = ({ state, actions, libraries, block }) => {
   if (!isReady) return <Loading />;
   // RETURN ---------------------------------------------------
   return (
-    <div
-      style={{
-        padding: `${marginVertical}px ${marginHorizontal}px`,
-        // backgroundColor: layoutOne ? colors.white : colors.silverFillOne,
-      }}
-    >
+    <div style={{ padding: `0 ${marginHorizontal}px` }}>
       <TitleBlock block={block} disableHorizontalMargin />
       <ServeFilter />
       <EventLoopBlock

@@ -14,7 +14,6 @@ const FullWidthContentBlock = ({
   disableMargin,
   heroBanner,
   disablePadding,
-  disableVerticalPadding,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -34,9 +33,8 @@ const FullWidthContentBlock = ({
   if (padding === "large") MARGIN = `0 15%`;
   if (disableMargin) MARGIN = `0 0 0 ${marginHorizontal}px`;
 
-  let PADDING = `${marginVertical}px ${marginHorizontal}px`;
+  let PADDING = `0 ${marginHorizontal}px`;
   if (heroBanner) PADDING = `0 1em 0 ${marginHorizontal}px`;
-  if (disableVerticalPadding) PADDING = `0 ${marginHorizontal}px`;
   if (disablePadding) PADDING = 0;
 
   let BACKGROUND_COLOUR = background_colour || "transparent";
@@ -51,7 +49,7 @@ const FullWidthContentBlock = ({
           className="card-text"
           style={{
             fontSize: 36,
-            fontFamily: 'Roboto',
+            fontFamily: "Roboto",
             fontWeight: "bold",
             color: colors.black,
           }}

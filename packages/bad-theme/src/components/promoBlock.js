@@ -16,8 +16,8 @@ const PromoBlock = ({ state, actions, block, disableMargin }) => {
   const marginVertical = state.theme.marginVertical;
   const isAlignLeft = image_align === "left";
   const HORIZONTAL_PADDING = horizontal_padding === "True";
-  let MARGIN = `${marginVertical}px 0`;
-  if (HORIZONTAL_PADDING) MARGIN = `${marginVertical}px ${marginHorizontal}px`;
+  let MARGIN = 0;
+  if (HORIZONTAL_PADDING) MARGIN = `0 ${marginHorizontal}px`;
   if (disableMargin) MARGIN = 0;
 
   // SERVERS ----------------------------------------------------------------
