@@ -11,11 +11,15 @@ const Banner = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
 
+  const { disable_vertical_padding } = block;
+
   const { background_image, label, link, title } = block;
   const BANNER_HEIGHT = state.theme.bannerHeight;
+  const THEME_COLOR = colors.white;
   const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
-  let THEME_COLOR = colors.white;
+  let marginVertical = state.theme.marginVertical;
+
+  if (disable_vertical_padding) marginVertical = 0;
 
   // SERVERS ----------------------------------------------------------------
   const ServeFooter = () => {

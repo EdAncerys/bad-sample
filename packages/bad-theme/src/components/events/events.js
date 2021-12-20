@@ -267,7 +267,7 @@ const Events = ({ state, actions, libraries, block }) => {
     <div
       style={{
         padding: `${marginVertical}px ${marginHorizontal}px`,
-        backgroundColor: layoutOne ? colors.white : colors.silverFillOne,
+        // backgroundColor: layoutOne ? colors.white : colors.silverFillOne,
       }}
     >
       <TitleBlock block={block} disableHorizontalMargin />
