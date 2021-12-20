@@ -11,12 +11,12 @@ import Card from "../card/card";
 import LeftIcon from "../../img/svg/leftIcon.svg";
 import RightIcon from "../../img/svg/rightIcon.svg";
 
-const NewsCarousel = ({ state, actions, libraries, block }) => {
+const NewsCarouselComponent = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const [postList, setPostList] = useState(null);
   const [category, setCategory] = useState(null);
-  const { post_limit } = block;
+  const { post_limit, disable_vertical_padding } = block;
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
@@ -37,7 +37,9 @@ const NewsCarousel = ({ state, actions, libraries, block }) => {
   ); // split data in array of pairs
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
+  let marginVertical = state.theme.marginVertical;
+
+  if (disable_vertical_padding) marginVertical = 0;
 
   // SERVERS ----------------------------------------------------------------
   const ServeIcon = ({ icon, left, right }) => {
@@ -108,7 +110,6 @@ const NewsCarousel = ({ state, actions, libraries, block }) => {
                     );
                   };
 
-                  console.log(block);
                   return (
                     <div
                       key={key}
@@ -153,4 +154,4 @@ const styles = {
   container: {},
 };
 
-export default connect(NewsCarousel);
+export default connect(NewsCarouselComponent);

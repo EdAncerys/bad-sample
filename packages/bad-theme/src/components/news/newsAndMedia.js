@@ -4,7 +4,7 @@ import { Form } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 
 import NewsBlock from "./newsBlock";
-import NewsCarousel from "./newsCarousel";
+import NewsCarouselComponent from "./newsCarouselComponent";
 import TitleBlock from "../titleBlock";
 import Loading from "../loading";
 import { colors } from "../../config/colors";
@@ -184,7 +184,7 @@ const NewsAndMedia = ({ state, actions, block }) => {
   };
 
   const ServeLayout = () => {
-    if (isLayoutOne) return <NewsCarousel block={block} />;
+    if (isLayoutOne) return <NewsCarouselComponent block={block} />;
 
     return (
       <div>

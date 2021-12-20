@@ -16,7 +16,7 @@ const Post = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   return (
-    <div style={{ padding: `${marginVertical}px 0` }}>
+    <div>
       <div>
         {/* <span>{`theme.breakpoints.down('sm') matches: ${sm}`}</span> */}
         {/* <span class="popup" citations="Right, finally">

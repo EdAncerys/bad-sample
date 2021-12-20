@@ -15,12 +15,16 @@ const NewsCarousel = ({ state, actions, libraries, block, isMenu }) => {
 
   if (!block) return <Loading />;
 
+  const { disable_vertical_padding } = block;
+
   const BLOCK_PAIRS = block.news_card.flatMap((_, i, a) =>
     i % 2 ? [] : [a.slice(i, i + 2)]
   ); // split data in array of pairs
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = isMenu ? 0 : state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
+  let marginVertical = state.theme.marginVertical;
+
+  if (disable_vertical_padding) marginVertical = 0;
 
   // SERVERS ----------------------------------------------------------------
   const ServeIcon = ({ icon, left, right }) => {
