@@ -72,7 +72,6 @@ const Banner = ({ state, actions, libraries, block }) => {
             className="flex-row"
             style={{
               position: "absolute",
-              alignItems: "center",
               bottom: 0,
               left: 0,
               right: marginHorizontal,
