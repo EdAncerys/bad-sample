@@ -278,14 +278,10 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
           if (acf_fc_layout === "banner")
             return (
-              <BlockWrapper
-                key={key + 1}
-                background={block.background_colour}
-                fullWidth
-              >
+              <div key={key + 1}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
                 <Banner key={key} block={block} />
-              </BlockWrapper>
+              </div>
             );
 
           if (acf_fc_layout === "buttons_row")

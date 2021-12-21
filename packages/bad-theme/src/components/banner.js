@@ -5,6 +5,7 @@ import Image from "@frontity/components/image";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import Loading from "./loading";
+import BlockWrapper from "./blockWrapper";
 import { setGoToAction } from "../context";
 
 const Banner = ({ state, actions, libraries, block }) => {
@@ -67,33 +68,34 @@ const Banner = ({ state, actions, libraries, block }) => {
 
     return (
       <div style={{ position: "relative" }}>
-        <div
-          className="flex-row"
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: marginHorizontal,
-            width: "100%",
-            height: BANNER_HEIGHT,
-            // padding: `3em 5em`,
-            padding: `${marginVertical}px ${marginHorizontal}px`,
-          }}
-        >
-          <div className="flex BAD-banner" style={{ flex: 3 }}>
-            <div
-              className="flex-col"
-              style={{
-                color: THEME_COLOR,
-                // textTransform: "capitalize",
-                justifyContent: "flex-end",
-                overflow: "hidden",
-              }}
-            >
-              <Html2React html={title} />
+        <div>
+          <div
+            className="flex-row"
+            style={{
+              position: "absolute",
+              alignItems: "center",
+              bottom: 0,
+              left: 0,
+              right: marginHorizontal,
+              width: "100%",
+              padding: `${marginVertical}px ${marginHorizontal}px`,
+              marginBottom: `2em`,
+            }}
+          >
+            <div className="flex BAD-banner" style={{ flex: 3 }}>
+              <div
+                className="flex-col"
+                style={{
+                  color: THEME_COLOR,
+                  justifyContent: "flex-end",
+                  overflow: "hidden",
+                }}
+              >
+                <Html2React html={title} />
+              </div>
             </div>
+            <ServeMoreAction />
           </div>
-          <ServeMoreAction />
         </div>
       </div>
     );
@@ -146,7 +148,9 @@ const Banner = ({ state, actions, libraries, block }) => {
     >
       <ServeCardImage />
       <ServeOverlay />
-      <ServeFooter />
+      <BlockWrapper>
+        <ServeFooter />
+      </BlockWrapper>
     </div>
   );
 };
