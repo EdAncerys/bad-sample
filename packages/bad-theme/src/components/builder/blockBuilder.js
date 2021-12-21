@@ -318,10 +318,10 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
           if (acf_fc_layout === "home_banner_carousel")
             return (
-              <BlockWrapper key={key + 1} background={block.background_colour}>
+              <div key={key + 1}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
                 <HomeBannerCarousel key={key} block={block} />
-              </BlockWrapper>
+              </div>
             );
 
           if (acf_fc_layout === "hero_banner")

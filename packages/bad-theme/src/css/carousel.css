@@ -20,7 +20,7 @@
 }
 .carousel-control-prev,
 .carousel-control-next {
-  width: 7%;
+  margin: 2em;
 }
 .home-banner-carousel .carousel-indicators [data-bs-target],
 .news-carousel .carousel-indicators [data-bs-target] {
@@ -48,4 +48,12 @@
 .home-banner-carousel .carousel-control-prev-icon,
 .home-banner-carousel .carousel-control-next-icon {
   display: none;
+}
+
+.home-banner-carousel .carousel-indicators {
+  width: 1350px;
+  display: flex;
+  margin: 0 auto;
+  margin-bottom: 2em;
+  padding-left: 100px;
 }

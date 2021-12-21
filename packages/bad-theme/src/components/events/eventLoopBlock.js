@@ -6,7 +6,7 @@ import EventListView from "../eventListView";
 import Card from "../card/card";
 import { colors } from "../../config/colors";
 
-const Post = ({
+const EventLoopBlock = ({
   state,
   actions,
   libraries,
@@ -166,4 +166,4 @@ const styles = {
   },
 };
 
-export default connect(Post);
+export default connect(EventLoopBlock);

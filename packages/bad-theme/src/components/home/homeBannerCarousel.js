@@ -6,6 +6,7 @@ import { colors } from "../../config/colors";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import Loading from "../loading";
+import BlockWrapper from "../blockWrapper";
 import { setGoToAction } from "../../context";
 import LeftIcon from "../../img/svg/carouselIconLeft.svg";
 import RightIcon from "../../img/svg/carouselIconRight.svg";
@@ -17,6 +18,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const BANNER_HEIGHT = state.theme.bannerHeight * 1.25;
+  const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
 
   if (disable_vertical_padding) marginVertical = 0;
@@ -35,8 +37,6 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
           cursor: "pointer",
           top: BANNER_HEIGHT / 2,
           right: right ? 0 : "",
-          marginLeft: left ? "1.5em" : "",
-          marginRight: right ? "1.5em" : "",
         }}
       >
         <Image className="d-block h-100" src={icon} />
@@ -160,8 +160,12 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
 
           return (
             <Carousel.Item key={key}>
-              <ServeIcon icon={LeftIcon} left />
-              <ServeIcon icon={RightIcon} right />
+              <BlockWrapper>
+                <div style={{ position: "relative" }}>
+                  <ServeIcon icon={LeftIcon} left />
+                  <ServeIcon icon={RightIcon} right />
+                </div>
+              </BlockWrapper>
               <div
                 style={{
                   position: "relative",
@@ -169,31 +173,39 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
                 }}
               >
                 <ServeCardImage />
-                <Carousel.Caption
-                  style={{ color: THEME_COLOR, left: `10%`, bottom: `5em` }}
-                >
-                  <ServeEventAction />
-                  <div
-                    className="flex"
-                    style={{
-                      alignItems: "center",
-                      height: BANNER_HEIGHT / 2,
-                      maxWidth: "50%",
-                    }}
-                  >
-                    <div
-                      className="flex-col"
+                <BlockWrapper>
+                  <div style={{ position: "relative" }}>
+                    <Carousel.Caption
                       style={{
-                        fontSize: 42,
-                        fontFamily: "Roboto",
-                        textAlign: "start",
+                        color: THEME_COLOR,
+                        left: `${marginHorizontal}px`,
+                        bottom: `5em`,
                       }}
                     >
-                      <Html2React html={title} />
-                    </div>
+                      <ServeEventAction />
+                      <div
+                        className="flex"
+                        style={{
+                          alignItems: "center",
+                          height: BANNER_HEIGHT / 2,
+                          maxWidth: "50%",
+                        }}
+                      >
+                        <div
+                          className="flex-col"
+                          style={{
+                            fontSize: 42,
+                            fontFamily: "Roboto",
+                            textAlign: "start",
+                          }}
+                        >
+                          <Html2React html={title} />
+                        </div>
+                      </div>
+                      <ServeMoreAction />
+                    </Carousel.Caption>
                   </div>
-                  <ServeMoreAction />
-                </Carousel.Caption>
+                </BlockWrapper>
               </div>
             </Carousel.Item>
           );
