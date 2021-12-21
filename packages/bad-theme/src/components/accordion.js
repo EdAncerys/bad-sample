@@ -10,7 +10,6 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import DownloadFileBlock from "./downloadFileBlock";
 import { setGoToAction } from "../context";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import { v4 as uuidv4 } from "uuid";
 
 const AccordionComponent = ({
   state,
@@ -225,7 +224,6 @@ const AccordionComponent = ({
         return (
           <div
             style={{
-              width: 120,
               height: 60,
               padding: `0.25em`,
               margin: `0 4em 0 1em`,
@@ -237,7 +235,6 @@ const AccordionComponent = ({
               style={{
                 width: "100%",
                 height: "100%",
-                objectFit: "cover",
               }}
             />
           </div>
@@ -385,6 +382,7 @@ const AccordionComponent = ({
                   backgroundColor: colors.primary,
                   color: colors.white,
                   padding: `0.5em 2em`,
+                  alignItems: "center",
                 }}
                 onClick={() => setGoToAction({ path: link.url, actions })}
               >
