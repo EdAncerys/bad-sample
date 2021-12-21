@@ -19,19 +19,28 @@ const EventLoopBlock = ({
 
   if (!block) return <Loading />;
 
-  const { post_limit } = block;
+  const {
+    post_limit,
+    disable_vertical_padding,
+    add_search_function,
+    layout,
+    grade_filter,
+    title,
+  } = block;
 
   const [eventList, setEventList] = useState(null); // event data
   const [grades, setGrades] = useState(null); // data
   const [locations, setLocations] = useState(null); // data
   const [types, setTypes] = useState(null); // data
   const [gradeFilterId, setGradeFilterId] = useState(null); // data
-  const search = block.add_search_function;
-  const { layout, grade_filter } = block;
 
   const layoutOne = layout === "layout_one";
   const layoutTwo = layout === "layout_two";
   const layoutThree = layout === "layout_three";
+  const search = add_search_function;
+  let marginVertical = state.theme.marginVertical;
+
+  if (disable_vertical_padding) marginVertical = 0;
 
   let STYLES = {};
   if (layoutTwo) STYLES = styles.layoutTwo;
@@ -78,7 +87,12 @@ const EventLoopBlock = ({
 
   // RETURN ---------------------------------------------
   return (
-    <div style={{ ...STYLES }}>
+    <div
+      style={{
+        ...STYLES,
+        padding: title ? `0 0 ${marginVertical}px 0` : `${marginVertical}px 0`,
+      }}
+    >
       {eventList.map((block, key) => {
         const {
           colour,
