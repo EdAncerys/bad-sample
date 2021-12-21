@@ -265,7 +265,7 @@ const Events = ({ state, actions, libraries, block }) => {
   // RETURN ---------------------------------------------------
   return (
     <div style={{ padding: `0 ${marginHorizontal}px` }}>
-      <TitleBlock block={block} disableHorizontalMargin />
+      <TitleBlock block={block} margin={`0 0 ${marginVertical}px 0`} />
       <ServeFilter />
       <EventLoopBlock
         block={block}

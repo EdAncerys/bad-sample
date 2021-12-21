@@ -12,6 +12,7 @@ const TitleBlock = ({
   block,
   disableMargin,
   disableHorizontalMargin,
+  margin,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -30,6 +31,7 @@ const TitleBlock = ({
   let MARGIN = `${marginVertical}px ${marginHorizontal}px`;
   if (disableMargin) MARGIN = 0;
   if (disableHorizontalMargin) MARGIN = `${marginVertical}px 0`;
+  if (margin) MARGIN = margin;
 
   // SERVERS ---------------------------------------------
   const ServeActions = () => {

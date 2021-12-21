@@ -29,7 +29,16 @@ Colours
 
 */
 
-@import url("https://fonts.googleapis.com/css2?family=Lato&family=Roboto&display=swap");
+/* google fonts import */
+/* @import url("https://fonts.googleapis.com/css2?family=Lato&family=Roboto&display=swap"); */
+@font-face {
+  font-family: "Lato";
+  src: url("../config/fonts/Lato-Regular.ttf");
+}
+@font-face {
+  font-family: "3D";
+  src: url("../config/fonts/Rock3D.ttf");
+}
 
 * {
   padding: 0;
