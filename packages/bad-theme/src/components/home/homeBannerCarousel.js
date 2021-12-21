@@ -7,6 +7,8 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import Loading from "../loading";
 import { setGoToAction } from "../../context";
+import LeftIcon from "../../img/svg/carouselIconLeft.svg";
+import RightIcon from "../../img/svg/carouselIconRight.svg";
 
 const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
   if (!block) return null;
@@ -20,6 +22,28 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
   if (disable_vertical_padding) marginVertical = 0;
 
   // SERVERS ----------------------------------------------------------------
+  const ServeIcon = ({ icon, left, right }) => {
+    if (!icon) return null;
+
+    return (
+      <div
+        style={{
+          position: "absolute",
+          zIndex: 1,
+          width: 25,
+          height: 50,
+          cursor: "pointer",
+          top: BANNER_HEIGHT / 2,
+          right: right ? 0 : "",
+          marginLeft: left ? "1.5em" : "",
+          marginRight: right ? "1.5em" : "",
+        }}
+      >
+        <Image className="d-block h-100" src={icon} />
+      </div>
+    );
+  };
+
   const ServeOverlay = () => {
     return (
       <div
@@ -136,6 +160,8 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
 
           return (
             <Carousel.Item key={key}>
+              <ServeIcon icon={LeftIcon} left />
+              <ServeIcon icon={RightIcon} right />
               <div
                 style={{
                   position: "relative",

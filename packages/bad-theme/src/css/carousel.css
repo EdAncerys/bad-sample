@@ -40,6 +40,12 @@
   font-family: roboto, sans-serif;
 }
 
-.home-banner .btn-outline-light:hover {
+.home-banner .btn-outline-light:hover,
+.home-banner-carousel button:hover .MuiSvgIcon-fontSizeMedium {
   color: rgba(31, 51, 94, 1) !important;
+}
+
+.home-banner-carousel .carousel-control-prev-icon,
+.home-banner-carousel .carousel-control-next-icon {
+  display: none;
 }
