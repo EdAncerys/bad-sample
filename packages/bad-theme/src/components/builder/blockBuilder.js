@@ -120,11 +120,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
             return (
               <BlockWrapper
                 key={key + 1}
-                background={
-                  block.layout === "layout_one"
-                    ? colors.white
-                    : colors.silverFillOne
-                }
+                background={block.background_colour}
                 fullWidth
               >
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
