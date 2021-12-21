@@ -88,9 +88,9 @@ const FundingPromo = ({ state, actions, libraries, block }) => {
               <Card
                 fundingPromo={{ title, amount, deadline }}
                 body={body}
-                downloadFile={{ file, title: label }}
+                downloadFile={file ? { file, title: label } : null}
                 link_label={link_label}
-                link={link}
+                link={link.url}
                 colour={colour}
                 shadow // optional param
               />
