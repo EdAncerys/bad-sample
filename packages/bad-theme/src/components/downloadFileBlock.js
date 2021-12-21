@@ -83,18 +83,12 @@ const DownloadFileBlock = ({
       }}
     >
       <div className="flex-row" style={{ alignItems: "center" }}>
-        <div
-          style={{
-            width: ICON_WIDTH,
-            height: ICON_WIDTH,
-            marginRight: `1em`,
-          }}
-        >
+        <div style={{ marginRight: `1em` }}>
           <Image
             src={PDF}
             style={{
-              width: "100%",
-              height: "100%",
+              width: ICON_WIDTH,
+              height: ICON_WIDTH,
             }}
           />
         </div>

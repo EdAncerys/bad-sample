@@ -334,7 +334,9 @@ const AccordionComponent = ({
       };
 
       const ServeDownloads = () => {
-        if (!gsDocument_uploads) return null;
+        if (!gsDocument_uploads && !downloads) return null;
+
+        const files = gsDocument_uploads || downloads;
 
         return (
           <div className="flex-col" style={{ width: "70%" }}>
@@ -349,7 +351,7 @@ const AccordionComponent = ({
               Downloads:
             </div>
             <div className="flex" style={{ flexWrap: "wrap" }}>
-              {gsDocument_uploads.map((block, key) => {
+              {files.map((block, key) => {
                 return (
                   <div
                     key={key}
