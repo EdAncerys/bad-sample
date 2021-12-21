@@ -45,6 +45,7 @@ const Post = ({ state, actions, libraries }) => {
 
     return (
       <div
+        className="text-body"
         style={{
           backgroundColor: colors.white,
           padding: `2em 0`,

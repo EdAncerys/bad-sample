@@ -10,13 +10,15 @@ const FundingPromo = ({ state, actions, libraries, block }) => {
   if (!block) return <Loading />;
   if (!block.card) return null;
 
+  const { body, title } = block;
+
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
   // SERVERS ---------------------------------------------
   const ServeContent = () => {
     const ServeTitle = () => {
-      if (!block.title) return null;
+      if (!title) return null;
 
       return (
         <div
@@ -29,23 +31,23 @@ const FundingPromo = ({ state, actions, libraries, block }) => {
             color: colors.black,
           }}
         >
-          <Html2React html={block.title} />
+          <Html2React html={title} />
         </div>
       );
     };
     const ServeBody = () => {
-      if (!block.body) return null;
+      if (!body) return null;
 
       return (
         <div
-          className="flex"
+          className="flex-col"
           style={{
             fontSize: 16,
             textAlign: "center",
             padding: `1em 0`,
           }}
         >
-          <Html2React html={block.body} />
+          <Html2React html={body} />
         </div>
       );
     };

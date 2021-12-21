@@ -38,12 +38,19 @@ const JournalCard = ({
       return (
         <div>
           <div
+            className="flex"
             className="flex-row pointer"
             style={{ alignItems: "center" }}
             onClick={() => setGoToAction({ path: link.url, actions })}
           >
-            <div style={{ textTransform: "uppercase", fontSize: 12 }}>
-              <p className="card-text">Read More</p>
+            <div
+              style={{
+                textTransform: "uppercase",
+                fontSize: 12,
+                letterSpacing: 2,
+              }}
+            >
+              <div className="card-text">Read More</div>
             </div>
             <div>
               <KeyboardArrowRightIcon style={{ fill: colors.darkSilver }} />
