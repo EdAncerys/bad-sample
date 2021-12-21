@@ -11,7 +11,7 @@ const BenefitsGrid = ({ state, actions, libraries, block }) => {
   if (!block) return <Loading />;
   if (!block.benefits_card) return null;
 
-  const { disable_vertical_padding } = block;
+  const { disable_vertical_padding, background_colour } = block;
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -22,7 +22,7 @@ const BenefitsGrid = ({ state, actions, libraries, block }) => {
     <div
       style={{
         padding: `${marginVertical}px ${marginHorizontal}px`,
-        backgroundColor: colors.silverFillTwo,
+        backgroundColor: background_colour || "transparent",
       }}
     >
       <div style={styles.container}>

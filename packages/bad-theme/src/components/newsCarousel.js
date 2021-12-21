@@ -105,6 +105,7 @@ const NewsCarousel = ({ state, actions, libraries, block, isMenu }) => {
                         url={background_image.url}
                         colour={colour}
                         link={link.url}
+                        shadow
                       />
                       <ServeDivider i={0} />
                     </div>
