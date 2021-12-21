@@ -16,14 +16,16 @@ const DownloadFileBlock = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return null;
-  const { file, label, guidline_file } = block;
 
+  const { file, label, guidline_file, disable_vertical_padding } = block;
+
+  const ICON_WIDTH = 35;
   let LABEL = "Download";
   if (label) LABEL = label;
 
   const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
-  const ICON_WIDTH = 35;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
 
   // SERVERS ---------------------------------------------
   const ServeActions = () => {

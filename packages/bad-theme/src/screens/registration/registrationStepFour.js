@@ -7,6 +7,7 @@ import { colors } from "../../config/colors";
 import { setGoToAction } from "../../context";
 import SideBarMenu from "./sideBarMenu";
 import FileUpload from "../../img/svg/fileUpload.svg";
+import BlockWrapper from "../../components/blockWrapper";
 
 const RegistrationStepFour = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
@@ -432,7 +433,7 @@ const RegistrationStepFour = ({ state, actions }) => {
   };
 
   return (
-    <div style={{ backgroundColor: colors.white }}>
+    <BlockWrapper>
       <div
         style={{
           margin: `${marginVertical}px ${marginHorizontal}px`,
@@ -443,7 +444,7 @@ const RegistrationStepFour = ({ state, actions }) => {
           <ServeContent />
         </div>
       </div>
-    </div>
+    </BlockWrapper>
   );
 };
 
@@ -464,7 +465,12 @@ const styles = {
   wrapper: {
     margin: `0 1em 0`,
   },
-  title: { fontSize: 22, fontFamily: "Roboto", fontWeight: "bold", color: colors.black },
+  title: {
+    fontSize: 22,
+    fontFamily: "Roboto",
+    fontWeight: "bold",
+    color: colors.black,
+  },
   subTitle: {
     fontSize: 16,
     fontWeight: "bold",

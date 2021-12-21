@@ -15,7 +15,6 @@ const BenefitsGrid = ({ state, actions, libraries, block }) => {
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
-
   if (disable_vertical_padding) marginVertical = 0;
 
   // RETURN ---------------------------------------------------

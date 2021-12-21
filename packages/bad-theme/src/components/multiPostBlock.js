@@ -12,11 +12,15 @@ const MultiPostBlock = ({ state, actions, block }) => {
   if (!block) return <Loading />;
   if (!block.card) return null;
 
+  const { disable_vertical_padding } = block;
+
   const [filter, setFilter] = useState(null);
-  let FILTER_LENGTH = 0; // defines if search returns null
 
   const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
+
+  let FILTER_LENGTH = 0; // defines if search returns null
   let CARD_NUMBER = 3;
   if (block.cards_per_row === "One") CARD_NUMBER = 1;
   if (block.cards_per_row === "Two") CARD_NUMBER = 2;

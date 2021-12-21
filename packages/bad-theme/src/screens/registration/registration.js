@@ -4,20 +4,21 @@ import { connect } from "frontity";
 import { colors } from "../../config/colors";
 import SearchDermatologists from "../../components/searchDermatologists";
 import PilGuidelines from "../../components/home/pilGuidelines";
+import BlockWrapper from "../../components/blockWrapper";
 
 const Registration = ({ state }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
 
   return (
-    <div>
+    <BlockWrapper>
       <div>
         <div style={styles.title}>REGISTRATION</div>
       </div>
       <SearchDermatologists />
 
       <PilGuidelines />
-    </div>
+    </BlockWrapper>
   );
 };
 

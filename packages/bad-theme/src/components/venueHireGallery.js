@@ -7,10 +7,13 @@ import Loading from "./loading";
 const VenueHireGallery = ({ state, actions, block }) => {
   if (!block) return <Loading />;
 
+  const { disable_vertical_padding } = block;
+
   const [venueList, setVenueList] = useState(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {

@@ -12,9 +12,10 @@ const ProfilesBlock = ({ state, actions, libraries, block }) => {
   if (!block) return <Loading />;
   if (!block.profile_card) return null;
 
-  const { label, link, title } = block;
+  const { label, link, title, disable_vertical_padding } = block;
   const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
 
   // SERVERS ------------------------------------------------------
   const ServeActions = () => {

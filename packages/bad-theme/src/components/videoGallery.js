@@ -8,8 +8,11 @@ const VideoGallery = ({ state, actions, block }) => {
   if (!block) return <Loading />;
   if (!block.video_card) return null;
 
+  const { disable_vertical_padding } = block;
+
   const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
 
   // RETURN ---------------------------------------------------
   return (

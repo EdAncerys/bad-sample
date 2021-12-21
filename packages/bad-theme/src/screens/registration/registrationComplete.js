@@ -7,6 +7,7 @@ import SideBarMenu from "./sideBarMenu";
 import { Form } from "react-bootstrap";
 import CheckMark from "../../img/svg/checkMark.svg";
 import { setGoToAction } from "../../context";
+import BlockWrapper from "../../components/blockWrapper";
 
 const RegistrationComplete = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
@@ -117,7 +118,7 @@ const RegistrationComplete = ({ state, actions }) => {
   };
 
   return (
-    <div style={{ backgroundColor: colors.white }}>
+    <BlockWrapper>
       <div
         style={{
           margin: `${marginVertical}px ${marginHorizontal}px`,
@@ -128,7 +129,7 @@ const RegistrationComplete = ({ state, actions }) => {
           <ServeContent />
         </div>
       </div>
-    </div>
+    </BlockWrapper>
   );
 };
 

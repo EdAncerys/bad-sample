@@ -24,6 +24,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
     pop_out_text,
     title,
     content_height,
+    disable_vertical_padding,
   } = block;
 
   let BANNER_HEIGHT = state.theme.bannerHeight;
@@ -33,9 +34,10 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
   let CARD_WIDTH = "50%";
   let CARD_HEIGHT = BANNER_HEIGHT - FOOTER_HEIGHT * 2;
   let BODY_LENGTH = 400;
-  const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
   const CONTENT_WIDTH = state.theme.contentContainer;
+  const marginHorizontal = state.theme.marginHorizontal;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
 
   if (content_height === "small")
     BANNER_HEIGHT = state.theme.bannerHeight * 0.75;
@@ -187,7 +189,11 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
   return (
     <div
       className="flex-col "
-      style={{ height: BANNER_HEIGHT, backgroundColor: BACKGROUND_COLOUR }}
+      style={{
+        height: BANNER_HEIGHT,
+        backgroundColor: BACKGROUND_COLOUR,
+        margin: `${marginVertical}px 0`,
+      }}
     >
       <div className="flex-row relative">
         <ServeCardContent />

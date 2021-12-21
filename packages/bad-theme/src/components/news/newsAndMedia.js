@@ -15,14 +15,16 @@ import CloseIcon from "@mui/icons-material/Close";
 const NewsAndMedia = ({ state, actions, block }) => {
   if (!block) return <Loading />;
 
-  const { layout } = block;
+  const { layout, disable_vertical_padding } = block;
+
   const isLayoutOne = layout === "layout_one";
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [dateFilter, setDateFilter] = useState(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
 
   const isSearch = false; // has_search search functionality
   const id = uuidv4();

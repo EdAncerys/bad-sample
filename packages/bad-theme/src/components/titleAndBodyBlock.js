@@ -9,12 +9,12 @@ const TitleAndBodyBlock = ({ state, actions, libraries, block }) => {
 
   if (!block) return <Loading />;
 
-  const { body, title, text_align } = block;
-
-  console.log("-----------", block);
+  const { body, title, text_align, disable_vertical_padding } = block;
 
   const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
+
   let ALIGNMENT = "start";
   if (text_align === "centre") ALIGNMENT = "center";
   if (text_align === "right") ALIGNMENT = "end";

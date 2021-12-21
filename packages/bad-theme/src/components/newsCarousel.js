@@ -23,7 +23,6 @@ const NewsCarousel = ({ state, actions, libraries, block, isMenu }) => {
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = isMenu ? 0 : state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
-
   if (disable_vertical_padding) marginVertical = 0;
 
   // SERVERS ----------------------------------------------------------------

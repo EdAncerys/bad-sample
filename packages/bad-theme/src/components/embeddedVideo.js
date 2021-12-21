@@ -9,11 +9,14 @@ const EmbeddedVideo = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
+
+  const { colour, video_url, disable_vertical_padding } = block;
+
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
 
-  const { colour, video_url } = block;
   const THEME = colour || colors.primary;
 
   // SERVERS ---------------------------------------------

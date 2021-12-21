@@ -9,14 +9,15 @@ const ButtonsRow = ({ state, actions, style, block, disableMargin }) => {
   if (!block) return <Loading />;
   if (!block.buttons) return null;
 
+  const { disable_vertical_padding } = block;
+
   let BUTTON_COUNT = 4;
   if (block.button_width === "33%") BUTTON_COUNT = 3;
   if (block.button_width === "100%") BUTTON_COUNT = 1;
 
-  // if (!block.add_buttons) return null; // if toggle set to false
-
   const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
 
   // RETURN ---------------------------------------------------
   return (

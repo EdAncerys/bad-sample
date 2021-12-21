@@ -18,15 +18,18 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
   if (!block) return <Loading />;
 
+  const { disable_vertical_padding } = block;
+
   const data = state.source.get(state.router.link);
   const [searchFilter, setSearchFilter] = useState(null);
   const [guidelinesList, setGuidelinesList] = useState(null);
   const [guidelinesType, setGuidelinesType] = useState(null);
   // console.log("pageData ", data); // debug
 
-  const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
   const id = uuidv4();
+  const marginHorizontal = state.theme.marginHorizontal;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {

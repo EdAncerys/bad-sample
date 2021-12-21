@@ -14,6 +14,15 @@ import CloseIcon from "@mui/icons-material/Close";
 const ElectionsBlock = ({ state, actions, block }) => {
   if (!block) return <Loading />;
 
+  const {
+    text_align,
+    has_search,
+    opened_or_closed_filter,
+    positions_filter,
+    title,
+    disable_vertical_padding,
+  } = block;
+
   const [electionList, setElectionList] = useState(null);
   const [dropDownOne, setDropDownOne] = useState(null); // data
   const [dropDownTwo, setDropDownTwo] = useState(null); // data
@@ -25,15 +34,9 @@ const ElectionsBlock = ({ state, actions, block }) => {
   const [filterFour, setFilterFour] = useState(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
 
-  const {
-    text_align,
-    has_search,
-    opened_or_closed_filter,
-    positions_filter,
-    title,
-  } = block;
   const isSearch = has_search;
   const isPosition = positions_filter;
   const isOpen = opened_or_closed_filter;

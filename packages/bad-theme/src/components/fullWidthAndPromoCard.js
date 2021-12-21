@@ -7,10 +7,11 @@ import Loading from "./loading";
 const FullWidthAndPromoCard = ({ state, actions, block }) => {
   if (!block) return <Loading />;
 
-  const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
+  const { body, colour, image, disable_vertical_padding } = block;
 
-  const { body, colour, image } = block;
+  const marginHorizontal = state.theme.marginHorizontal;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
 
   // RETURN ---------------------------------------------------
   return (

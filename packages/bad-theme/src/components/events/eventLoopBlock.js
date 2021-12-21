@@ -39,7 +39,6 @@ const EventLoopBlock = ({
   const layoutThree = layout === "layout_three";
   const search = add_search_function;
   let marginVertical = state.theme.marginVertical;
-
   if (disable_vertical_padding) marginVertical = 0;
 
   let STYLES = {};

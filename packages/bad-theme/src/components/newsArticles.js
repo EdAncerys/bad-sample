@@ -8,8 +8,12 @@ const NewsArticles = ({ state, actions, block }) => {
   if (!block) return <Loading />;
   if (!block.card) return null;
 
+  const { disable_vertical_padding } = block;
+
   const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
+
   let CARD_NUMBER = 3;
   if (block.cards_per_row === "One") CARD_NUMBER = 1;
   if (block.cards_per_row === "Two") CARD_NUMBER = 2;

@@ -1,15 +1,14 @@
 import { connect } from "frontity";
 import { colors } from "../config/colors";
 
-const BlockWrapper = ({ children, state, background, fullWidth }) => {
+const BlockWrapper = ({ children, state, background }) => {
   const data = state.source.get(state.router.link);
 
   const CONTENT_WIDTH = state.theme.contentContainer;
 
-  let STYLES = { display: "block" };
+  let STYLES = { display: "flex", flex: 1 };
   let PAGE_STYLES = "flex";
 
-  if (fullWidth) STYLES = { display: "flex", flex: 1 };
   if (data.isPost || data.isPage) {
     PAGE_STYLES = "block";
     STYLES = { display: "grid" };

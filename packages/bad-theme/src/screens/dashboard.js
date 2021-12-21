@@ -9,6 +9,7 @@ import Avatar from "../img/svg/profile.svg";
 import Ellipse from "../img/svg/ellipse.svg";
 import CheckMarkGreen from "../img/svg/checkMarkGreen.svg";
 import { setGoToAction } from "../context";
+import BlockWrapper from "../components/blockWrapper";
 
 const Dashboard = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -327,7 +328,7 @@ const Dashboard = ({ state, actions, libraries }) => {
   };
 
   return (
-    <div>
+    <BlockWrapper>
       <div style={{ backgroundColor: colors.white }}>
         <div
           style={{
@@ -342,7 +343,7 @@ const Dashboard = ({ state, actions, libraries }) => {
         </div>
       </div>
       <BlockBuilder blocks={wpBlocks} />
-    </div>
+    </BlockWrapper>
   );
 };
 

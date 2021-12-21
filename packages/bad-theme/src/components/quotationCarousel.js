@@ -15,7 +15,6 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const BANNER_HEIGHT = state.theme.bannerHeight;
   let marginVertical = state.theme.marginVertical;
-
   if (disable_vertical_padding) marginVertical = 0;
 
   // SERVERS ----------------------------------------------------------------

@@ -19,7 +19,6 @@ const Banner = ({ state, actions, libraries, block }) => {
   const THEME_COLOR = colors.white;
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
-
   if (disable_vertical_padding) marginVertical = 0;
 
   // SERVERS ----------------------------------------------------------------

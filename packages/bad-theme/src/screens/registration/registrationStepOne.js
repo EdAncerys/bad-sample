@@ -4,6 +4,7 @@ import { connect } from "frontity";
 import { colors } from "../../config/colors";
 import { setGoToAction } from "../../context";
 import SideBarMenu from "./sideBarMenu";
+import BlockWrapper from "../../components/blockWrapper";
 
 const RegistrationStepOne = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
@@ -108,7 +109,7 @@ const RegistrationStepOne = ({ state, actions }) => {
   };
 
   return (
-    <div style={{ backgroundColor: colors.white }}>
+    <BlockWrapper>
       <div
         style={{
           margin: `${marginVertical}px ${marginHorizontal}px`,
@@ -119,7 +120,7 @@ const RegistrationStepOne = ({ state, actions }) => {
           <ServeContent />
         </div>
       </div>
-    </div>
+    </BlockWrapper>
   );
 };
 
@@ -134,7 +135,12 @@ const styles = {
     borderBottom: `1px solid ${colors.darkSilver}`,
     margin: `0 1em 0`,
   },
-  title: { fontSize: 22, fontFamily: "Roboto", fontWeight: "bold", color: colors.black },
+  title: {
+    fontSize: 22,
+    fontFamily: "Roboto",
+    fontWeight: "bold",
+    color: colors.black,
+  },
   subTitle: {
     fontSize: 16,
     fontWeight: "bold",

@@ -19,12 +19,22 @@ const FullWidthContentBlock = ({
 
   if (!block) return <Loading />;
 
-  const { background_colour, body, label, link, padding, text_align, title } =
-    block;
+  const {
+    background_colour,
+    body,
+    label,
+    link,
+    padding,
+    text_align,
+    title,
+    disable_vertical_padding,
+  } = block;
 
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
+
   let ALIGNMENT = "start";
   let MARGIN = `0 0`;
   if (text_align === "centre") ALIGNMENT = "center";
@@ -33,7 +43,7 @@ const FullWidthContentBlock = ({
   if (padding === "large") MARGIN = `0 15%`;
   if (disableMargin) MARGIN = `0 0 0 ${marginHorizontal}px`;
 
-  let PADDING = `0 ${marginHorizontal}px`;
+  let PADDING = `${marginVertical}px ${marginHorizontal}px`;
   if (heroBanner) PADDING = `0 1em 0 ${marginHorizontal}px`;
   if (disablePadding) PADDING = 0;
 

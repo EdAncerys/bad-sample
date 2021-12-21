@@ -16,10 +16,12 @@ const SplitContentAndUsefulLinksCard = ({
 
   if (!block) return <Loading />;
 
-  const { body, label, link, useful_link_card } = block;
+  const { body, label, link, useful_link_card, disable_vertical_padding } =
+    block;
 
   const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
 
   // SERVERS -----------------------------------------------------
   const ServeContent = () => {

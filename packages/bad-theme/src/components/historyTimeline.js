@@ -6,7 +6,24 @@ import { colors } from "../config/colors";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 
 const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
-  function slide(direction) {
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  if (!block) return <Loading />;
+  if (!block.timeline_item) return null;
+
+  const { disable_vertical_padding } = block;
+
+  const IMG_WIDTH = 70;
+  let GRID_KEY = 0;
+  let ROW_COUNTER = 0;
+  let ROW = 1;
+  const WIDTH = 4;
+
+  const marginHorizontal = state.theme.marginHorizontal;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
+
+  // HELPERS ----------------------------------------------------------------
+  const slide = (direction) => {
     const container = document.getElementById("carousel-container");
     let scrollCompleted = 0;
     const slideVar = setInterval(function () {
@@ -20,21 +37,7 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
         window.clearInterval(slideVar);
       }
     }, 50);
-  }
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-  if (!block) return <Loading />;
-  if (!block.timeline_item) return null;
-
-  const BANNER_HEIGHT = state.theme.bannerHeight;
-  const IMG_WIDTH = 70;
-  const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
-  let GRID_KEY = 0;
-  let ROW_COUNTER = 0;
-  let ROW = 1;
-  const WIDTH = 4;
-
-  const DATA_LENGTH = block.timeline_item.length / 5;
+  };
 
   const HistoryButton = ({ next }) => {
     return (
@@ -69,7 +72,7 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
   };
   // RETURN ---------------------------------------------------
   return (
-    <div className="mt-3">
+    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
       <div className="d-flex justify-content-between">
         <HistoryButton next={false} />
         <HistoryButton next={true} />
@@ -86,7 +89,7 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
             BORDER_WIDTH = `${WIDTH}px 0 0 ${WIDTH}px`;
           if (GRID_KEY === 5) ROW++;
 
-          // SERVERS ----------------------------------------------------------------
+          // SERVERS -----------------------------------------------
 
           const ServeCardContent = () => {
             // SERVERS ---------------------------------------------

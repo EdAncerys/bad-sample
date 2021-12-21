@@ -8,8 +8,11 @@ const JournalPromoBlock = ({ state, actions, block }) => {
   if (!block) return <Loading />;
   if (!block.thumbnails) return null;
 
+  const { disable_vertical_padding } = block;
+
   const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
 
   // SERVERS ----------------------------------------------
   const ServeJournalCards = () => {
@@ -20,7 +23,13 @@ const JournalPromoBlock = ({ state, actions, block }) => {
             const { image, link, title } = block;
 
             return (
-              <JournalCard key={key} image={image} title={title} link={link} shadow />
+              <JournalCard
+                key={key}
+                image={image}
+                title={title}
+                link={link}
+                shadow
+              />
             );
           })}
         </div>

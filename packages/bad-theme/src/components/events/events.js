@@ -22,7 +22,6 @@ const Events = ({ state, actions, libraries, block }) => {
   const [isReady, setIsReady] = useState(false);
 
   const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
 
   const isSearch = block.add_search_function;
   const layoutOne = block.layout === "layout_one";

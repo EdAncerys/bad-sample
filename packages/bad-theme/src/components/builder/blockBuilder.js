@@ -118,11 +118,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
           if (acf_fc_layout === "events_loop_block")
             return (
-              <BlockWrapper
-                key={key + 1}
-                background={block.background_colour}
-                fullWidth
-              >
+              <BlockWrapper key={key + 1} background={block.background_colour}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
                 <Events key={key} block={block} />
               </BlockWrapper>
@@ -234,11 +230,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
           if (acf_fc_layout === "promotional_block")
             return (
-              <BlockWrapper
-                key={key + 1}
-                background={block.background_colour}
-                fullWidth
-              >
+              <BlockWrapper key={key + 1} background={block.background_colour}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
                 <PromoBlock key={key} block={block} />
               </BlockWrapper>

@@ -22,9 +22,12 @@ const AccordionComponent = ({
   if (!block) return <Loading />;
   if (!block.accordion_item) return null;
 
+  const { disable_vertical_padding } = block;
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
 
   // SERVERS ---------------------------------------------
   const ServeAccordion = ({ block, eventKey }) => {

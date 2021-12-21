@@ -9,15 +9,22 @@ import { colors } from "../config/colors";
 const PromoBlock = ({ state, actions, block, disableMargin }) => {
   if (!block) return <Loading />;
 
-  const { background_image, image_align, title, horizontal_padding } = block;
+  const {
+    background_image,
+    image_align,
+    title,
+    disable_horizontal_padding,
+    disable_vertical_padding,
+  } = block;
 
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
+
   const isAlignLeft = image_align === "left";
-  const HORIZONTAL_PADDING = horizontal_padding === "True";
-  let MARGIN = 0;
-  if (HORIZONTAL_PADDING) MARGIN = `0 ${marginHorizontal}px`;
+  let MARGIN = `${marginVertical}px ${marginHorizontal}px`;
+  if (disable_horizontal_padding) MARGIN = `${marginVertical}px 0`;
   if (disableMargin) MARGIN = 0;
 
   // SERVERS ----------------------------------------------------------------
