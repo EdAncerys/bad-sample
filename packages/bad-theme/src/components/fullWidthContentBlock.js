@@ -110,7 +110,7 @@ const FullWidthContentBlock = ({
         justifyContent: "center",
         textAlign: ALIGNMENT,
         backgroundColor: BACKGROUND_COLOUR,
-        minHeight: heroBanner ? BANNER_HEIGHT : "auto",
+        minHeight: "auto",
         padding: PADDING,
       }}
     >
