@@ -39,8 +39,8 @@ Colours
 }
 @font-face {
   font-family: Roboto;
-  src: local("../config/fonts/Roboto-Regular.ttf"),
-    url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+  src: local("../config/fonts/Roboto-Regular.ttf");
+  /* url("https://fonts.googleapis.com/css2?family=Roboto&display=swap"); */
 }
 
 * {

@@ -10,7 +10,7 @@ import nav from "../../css/nav.css";
 import input from "../../css/input.css";
 import custom from "../../css/custom.css";
 
-import FamilyGuy from "../../config/fonts/Family-Guy-Font.ttf";
+import Roboto from "../../config/fonts/Roboto-Regular.ttf"; // font preload
 
 // COMPONENTS -------------------------------------------------------------
 import HTMLHead from "./htmlHead";
@@ -27,11 +27,11 @@ const Header = ({ state, actions }) => {
         styles={css`
           ${bootStrapCSS}, ${globalCSS}, ${carousel}, ${accordion}, ${nav}, ${input}, ${custom},  
           @font-face {
-            font-family: "FamilyGuy";
+            font-family: "Roboto";
             font-style: normal;
             font-weight: normal;
             font-display: fallback;
-            src: url("${FamilyGuy}") format("truetype");
+            src: url("${Roboto}") format("truetype");
           }
         `}
       />

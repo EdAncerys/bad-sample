@@ -37,6 +37,7 @@ const Card = ({
   fundingPromo,
   textAlign,
   url,
+  imgHeight,
   isFrom4Col,
   form_label,
   form_link,
@@ -101,8 +102,11 @@ const Card = ({
     if (!url) return null;
     const alt = title || "BAD";
 
+    let STYLES = { minHeight: 200, maxHeight: 300 };
+    if (imgHeight) STYLES = { height: imgHeight };
+
     return (
-      <div style={{ width: "100%", minHeight: 200, maxHeight: 300 }}>
+      <div style={{ ...STYLES, width: "100%" }}>
         <Image
           src={url}
           alt={alt}
