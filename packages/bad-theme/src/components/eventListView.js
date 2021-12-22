@@ -30,9 +30,9 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
     show_add_to_calendar,
     show_sharing_buttons,
     summary,
-    title,
     venue,
   } = block.acf;
+  const title = block.title.rendered;
   const GRADES = Object.values(state.source.event_grade);
   const eventGradeIds = Object.values(block.event_grade);
   const eventGrades = GRADES.filter((item) => {
@@ -96,6 +96,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
           className="primary-title"
           style={{
             fontSize: 20,
+            color: colors.black,
             fontWeight: "bold",
             padding: `1em 0`,
             cursor: "pointer",

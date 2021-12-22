@@ -1,27 +1,16 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import Image from "@frontity/components/image";
 
 import { colors } from "../../config/colors";
 
 const EventCardHeader = ({ state, actions, libraries, eventHeader }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  if (!eventHeader) return null;
+  if (!eventHeader || !eventHeader.date_time) return null;
 
-  const { date_time, venue } = eventHeader;
+  const { date_time } = eventHeader;
 
   // SERVERS ---------------------------------------------
-  const ServeVenue = () => {
-    if (!venue) return null;
-
-    return (
-      <div>
-        <Html2React html={venue} />
-      </div>
-    );
-  };
-
   const ServeDate = () => {
     if (!date_time) return null;
 
@@ -65,7 +54,6 @@ const EventCardHeader = ({ state, actions, libraries, eventHeader }) => {
         }}
       >
         <ServeDate />
-        <ServeVenue />
       </div>
     </div>
   );

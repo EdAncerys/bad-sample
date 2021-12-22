@@ -93,14 +93,8 @@ const EventLoopBlock = ({
       }}
     >
       {eventList.map((block, key) => {
-        const {
-          colour,
-          image,
-          summary,
-          title,
-          public_or_members_only,
-          date_time,
-        } = block.acf;
+        const { image, summary, public_or_members_only, date_time } = block.acf;
+        const title = block.title.rendered;
         const event_grade = block.event_grade;
         const event_location = block.event_location;
         const event_type = block.event_type;
@@ -142,10 +136,11 @@ const EventLoopBlock = ({
               title={title}
               url={image}
               link={block.link}
-              colour={colour}
+              colour={colors.turquoise}
               date={date_time}
               seatNumber="seatNumber"
               cardHeight="100%"
+              shadow
             />
           );
 
@@ -156,9 +151,10 @@ const EventLoopBlock = ({
               title={title}
               link_label="Read More"
               link={block.link}
-              colour={colour}
+              colour={colors.turquoise}
               eventHeader={block.acf}
               isFrom4Col
+              shadow
             />
           );
       })}

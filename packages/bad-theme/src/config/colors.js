@@ -17,4 +17,6 @@ export const colors = {
   textBlack: "#171717",
   shade: "rgba(0, 0, 0, 0.25)",
   shadeIntense: "rgba(0, 0, 0, 0.5)",
+
+  turquoise: "#17A2B8",
 };
