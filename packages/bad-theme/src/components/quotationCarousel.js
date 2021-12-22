@@ -1,32 +1,65 @@
 import React from "react";
 import { connect } from "frontity";
-import Image from "@frontity/components/image";
 import { Carousel } from "react-bootstrap";
 import { colors } from "../config/colors";
-import Quate from "../img/svg/quote.svg";
+import Image from "@frontity/components/image";
+
+import Quotation from "../img/svg/quotation.svg";
+import LeftIcon from "../img/svg/carouselIconLeft.svg";
+import RightIcon from "../img/svg/carouselIconRight.svg";
 
 import Loading from "./loading";
+import BlockWrapper from "./blockWrapper";
 
 const QuotationCarousel = ({ state, actions, libraries, block }) => {
   if (!block) return null;
 
-  const { disable_vertical_padding } = block;
+  const { disable_vertical_padding, background_colour } = block;
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const BANNER_HEIGHT = state.theme.bannerHeight;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 
+  const ICON_WIDTH = 40;
+
   // SERVERS ----------------------------------------------------------------
-  const ServeIcon = () => {
+  const ServeQuotation = () => {
     return (
       <div
-        className="flex"
-        style={{ justifyContent: "center", padding: `2em 0` }}
+        style={{
+          width: ICON_WIDTH,
+          height: ICON_WIDTH,
+        }}
       >
-        <div style={{ width: 100, height: 100 }}>
-          <Image src={Quate} className="d-block h-100" alt="BAD Logo" />
-        </div>
+        <Image
+          src={Quotation}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+          }}
+        />
+      </div>
+    );
+  };
+
+  const ServeIcon = ({ icon, right }) => {
+    if (!icon) return null;
+
+    return (
+      <div
+        style={{
+          position: "absolute",
+          zIndex: 1,
+          width: 25,
+          height: 50,
+          cursor: "pointer",
+          top: BANNER_HEIGHT / 2,
+          right: right ? 0 : "",
+        }}
+      >
+        <Image className="d-block h-100" src={icon} />
       </div>
     );
   };
@@ -47,27 +80,31 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
 
           return (
             <Carousel.Item key={key}>
+              <BlockWrapper>
+                <div style={{ position: "relative" }}>
+                  <ServeIcon icon={LeftIcon} />
+                  <ServeIcon icon={RightIcon} right />
+                </div>
+              </BlockWrapper>
               <div
                 style={{
-                  position: "relative",
                   height: BANNER_HEIGHT,
-                  backgroundColor: colors.silver,
+                  backgroundColor: background_colour || "transparent",
                 }}
               >
-                <ServeIcon />
                 <Carousel.Caption
                   className="flex-col"
-                  style={{
-                    color: colors.textMain,
-                    textAlign: "center",
-                  }}
+                  style={{ alignItems: "center" }}
                 >
+                  <ServeQuotation />
                   <div
-                    className="flex primary-title" 
+                    className="flex primary-title"
                     style={{
                       fontSize: 36,
                       fontWeight: "bold",
                       color: colors.black,
+                      maxHeight: BANNER_HEIGHT / 2,
+                      overflow: "hidden",
                     }}
                   >
                     <Html2React html={title} />

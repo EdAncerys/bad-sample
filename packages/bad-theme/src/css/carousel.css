@@ -1,8 +1,3 @@
-@font-face {
-  font-family: "roboto";
-  src: url("../config/fonts/Roboto-Regular.ttf");
-}
-
 /* home-banner-carousel Carousel styling */
 .home-banner-carousel .carousel-indicators {
   /* bottom indicators */
@@ -18,9 +13,9 @@
 .news-carousel .carousel-control-next-icon {
   background-image: none;
 }
-.carousel-control-prev,
-.carousel-control-next {
-  margin: 2em;
+.home-banner-carousel .carousel-control-prev,
+.home-banner-carousel .carousel-control-next {
+  margin: 4em;
 }
 .home-banner-carousel .carousel-indicators [data-bs-target],
 .news-carousel .carousel-indicators [data-bs-target] {
@@ -30,16 +25,6 @@
   /* bottom indicators */
   justify-content: center;
 }
-
-/* quotation-carousel Carousel styling */
-.quotation-carousel .carousel-indicators [data-bs-target] {
-  background-color: #a2a2a2;
-}
-
-.BAD-banner {
-  font-family: roboto, sans-serif;
-}
-
 .home-banner .btn-outline-light:hover,
 .home-banner-carousel button:hover .MuiSvgIcon-fontSizeMedium {
   color: rgba(31, 51, 94, 1) !important;
@@ -56,4 +41,13 @@
   margin: 0 auto;
   margin-bottom: 2em;
   padding-left: 100px;
+}
+
+/* quotation-carousel Carousel styling */
+.quotation-carousel .carousel-indicators [data-bs-target] {
+  background-color: #a2a2a2;
+}
+.quotation-carousel .carousel-control-prev-icon,
+.quotation-carousel .carousel-control-next-icon {
+  display: none;
 }

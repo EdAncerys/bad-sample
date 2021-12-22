@@ -46,7 +46,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
   // SERVERS -----------------------------------------------------
   const ServeBlockTitle = ({ acf_fc_layout }) => {
-    if (state.theme.ENVIROMENT !== "DEVELOPMENT") return null; // add block name title
+    if (state.theme.ENVIRONMENT !== "DEVELOPMENT") return null; // add block name title
 
     return (
       <div

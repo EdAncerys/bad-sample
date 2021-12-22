@@ -11,7 +11,7 @@ const settings = {
       description: "British Association of Dermatologists (BAD) WebApp",
     },
     env: {
-      ENVIROMENT: process.env.ENVIROMENT,
+      ENVIRONMENT: process.env.ENVIRONMENT,
       GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
     },
   },

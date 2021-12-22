@@ -29,8 +29,6 @@ Colours
 
 */
 
-/* google fonts import */
-
 * {
   padding: 0;
   margin: 0;
@@ -49,6 +47,7 @@ body {
 }
 .primary-title {
   font-family: Roboto, sans-serif;
+  font-weight: bold; /* or 700 */
 }
 .sticky {
   position: -webkit-sticky;

@@ -148,6 +148,7 @@ const styles = {
   },
   footerTitle: {
     display: "flex",
+    cursor: "pointer",
   },
   socials: {
     width: 25,

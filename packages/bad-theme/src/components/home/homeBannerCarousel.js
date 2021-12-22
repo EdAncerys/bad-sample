@@ -23,7 +23,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
   if (disable_vertical_padding) marginVertical = 0;
 
   // SERVERS ----------------------------------------------------------------
-  const ServeIcon = ({ icon, left, right }) => {
+  const ServeIcon = ({ icon, right }) => {
     if (!icon) return null;
 
     return (
@@ -161,7 +161,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
             <Carousel.Item key={key}>
               <BlockWrapper>
                 <div style={{ position: "relative" }}>
-                  <ServeIcon icon={LeftIcon} left />
+                  <ServeIcon icon={LeftIcon} />
                   <ServeIcon icon={RightIcon} right />
                 </div>
               </BlockWrapper>

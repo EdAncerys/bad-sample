@@ -12,7 +12,7 @@ const BADTheme = {
   },
   state: {
     theme: {
-      ENVIROMENT: process.env.ENVIROMENT,
+      ENVIRONMENT: process.env.ENVIRONMENT,
       GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
       menuUrl: "/menu/primary-menu",
       menu: null,

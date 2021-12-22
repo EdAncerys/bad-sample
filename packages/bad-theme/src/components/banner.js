@@ -80,7 +80,7 @@ const Banner = ({ state, actions, libraries, block }) => {
               marginBottom: `2em`,
             }}
           >
-            <div className="flex BAD-banner" style={{ flex: 3 }}>
+            <div className="flex" style={{ flex: 3 }}>
               <div
                 className="flex-col"
                 style={{
