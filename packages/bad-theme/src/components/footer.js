@@ -119,13 +119,7 @@ const Footer = ({ state, actions }) => {
 
   return (
     <div>
-      <div
-        className="flex-col"
-        style={{
-          ...styles.container,
-          margin: `${marginVertical}px 0 0`,
-        }}
-      >
+      <div className="flex-col" style={{ ...styles.container }}>
         <div
           className="flex-col"
           style={{ padding: `0 ${marginHorizontal / 2}px` }}

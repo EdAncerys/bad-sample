@@ -133,7 +133,7 @@ const Navigation = ({ state, actions, libraries }) => {
 
   const ServeMenu = () => {
     return (
-      <div className="flex" id="BAD-menu-container" style={styles.container}>
+      <div className="flex" style={styles.container}>
         {wpMainMenu.map((item, key) => {
           const { title, slug, url } = item;
 
@@ -147,12 +147,13 @@ const Navigation = ({ state, actions, libraries }) => {
 
           if (item.child_items)
             return (
-              <ServeMenuDropDown
-                key={key}
-                title={title}
-                url={url}
-                menu={item.child_items}
-              />
+              <div key={key} className="bad-menu-container">
+                <ServeMenuDropDown
+                  title={title}
+                  url={url}
+                  menu={item.child_items}
+                />
+              </div>
             );
 
           return (
