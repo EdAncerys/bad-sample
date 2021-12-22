@@ -22,6 +22,7 @@ const FullWidthContentBlock = ({
   const {
     background_colour,
     body,
+    email,
     label,
     link,
     padding,
@@ -91,7 +92,20 @@ const FullWidthContentBlock = ({
   };
 
   const ServeActions = () => {
-    if (!label) return null;
+    if (!link) return null;
+
+    let LABEL = "More";
+    if (label) LABEL = label;
+
+    const handleSubmitAction = () => {
+      if (email) {
+        // "mailto:"+email+"?subject="+subject+"&body="+emailBody;
+        document.location = "mailto:" + email;
+        return;
+      }
+
+      setGoToAction({ path: link.url, actions });
+    };
 
     return (
       <div>
@@ -103,9 +117,9 @@ const FullWidthContentBlock = ({
               color: colors.white,
               backgroundColor: colors.primary,
             }}
-            onClick={() => setGoToAction({ path: link.url, actions })}
+            onClick={handleSubmitAction}
           >
-            <Html2React html={label} />
+            <Html2React html={LABEL} />
           </button>
         </div>
       </div>
