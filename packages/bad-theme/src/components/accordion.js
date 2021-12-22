@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import { colors } from "../config/colors";
 import Accordion from "react-bootstrap/Accordion";
 import Image from "@frontity/components/image";
 
-import Loading from "./loading";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import DownloadFileBlock from "./downloadFileBlock";
-import { setGoToAction } from "../context";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+
+import NiceLogo from "../img/placeholders/niceLogo.svg";
+import DownloadFileBlock from "./downloadFileBlock";
+import Loading from "./loading";
+import { colors } from "../config/colors";
+import { setGoToAction } from "../context";
 
 const AccordionComponent = ({
   state,
@@ -242,6 +244,30 @@ const AccordionComponent = ({
         );
       };
 
+      const ServeNICELogo = () => {
+        if (!guidelines_type.includes(87)) return null;
+        const alt = "Nice";
+
+        return (
+          <div
+            style={{
+              height: 60,
+              padding: `0.25em`,
+              margin: `0 4em 0 1em`,
+            }}
+          >
+            <Image
+              src={NiceLogo}
+              alt={alt}
+              style={{
+                width: "100%",
+                height: "100%",
+              }}
+            />
+          </div>
+        );
+      };
+
       const ServeIcon = () => {
         if (!hasPreview) {
           return (
@@ -313,6 +339,7 @@ const AccordionComponent = ({
                 <ServeLTTitle />
 
                 <ServeLogo />
+                <ServeNICELogo />
                 <ServeIcon />
               </div>
               <ServePreview />
@@ -341,7 +368,7 @@ const AccordionComponent = ({
         return (
           <div className="flex-col" style={{ width: "70%" }}>
             <div
-            className="primary-title"
+              className="primary-title"
               style={{
                 fontSize: 20,
                 fontWeight: "bold",
@@ -357,7 +384,7 @@ const AccordionComponent = ({
                     key={key}
                     style={{ minWidth: "33%", padding: `1em 1em 1em 0` }}
                   >
-                    <DownloadFileBlock block={block} disableMargin />
+                    <DownloadFileBlock block={block} guidelines disableMargin />
                   </div>
                 );
               })}

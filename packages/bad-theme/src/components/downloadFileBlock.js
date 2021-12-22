@@ -11,6 +11,7 @@ const DownloadFileBlock = ({
   actions,
   libraries,
   block,
+  guidelines,
   disableMargin,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -56,6 +57,14 @@ const DownloadFileBlock = ({
   const ServeGSActions = () => {
     if (!guidline_file) return null;
 
+    let fileName = "Read Guideline";
+
+    const MAX_LENGTH = 20;
+    let titlePreview = `${guidline_file.title.substring(0, MAX_LENGTH)}...`;
+    if (guidline_file.title.length < MAX_LENGTH)
+      titlePreview = guidline_file.title;
+    if (guidelines) fileName = titlePreview;
+
     return (
       <div
         style={{
@@ -72,7 +81,7 @@ const DownloadFileBlock = ({
           download
           style={{ color: colors.textMain }}
         >
-          <Html2React html={"Read Guideline"} />
+          <Html2React html={fileName} />
         </a>
       </div>
     );

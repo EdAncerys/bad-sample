@@ -8,7 +8,7 @@ import { setGoToAction } from "../context";
 import Loading from "./loading";
 import Accordion from "./accordion";
 import { colors } from "../config/colors";
-import BrandLogo from "../img/placeholders/logo.svg";
+import NiceLogo from "../img/placeholders/niceLogo.svg";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
@@ -22,6 +22,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
   const data = state.source.get(state.router.link);
   const [searchFilter, setSearchFilter] = useState(null);
+  const [typeFilter, setTypeFilter] = useState(null);
   const [guidelinesList, setGuidelinesList] = useState(null);
   const [guidelinesType, setGuidelinesType] = useState(null);
   // console.log("pageData ", data); // debug
@@ -69,8 +70,22 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
         return TITLE || SUBTITLE;
       });
-      console.log(filter);
       setSearchFilter(searchInput);
+      setGuidelinesList(filter);
+    }
+  };
+
+  const handleTypeFilterSearch = ({ typeId, typeName }) => {
+    if (typeId) {
+      // reset filter option
+      const guidelinesList = Object.values(state.source.guidelines_standards);
+
+      const filter = guidelinesList.filter((item) => {
+        const GUIDELINES_LIST = item.guidelines_type;
+        if (GUIDELINES_LIST.includes(typeId)) return item;
+      });
+
+      setTypeFilter(typeName);
       setGuidelinesList(filter);
     }
   };
@@ -117,12 +132,11 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
           }}
         >
           <Image
-            src={BrandLogo}
+            src={NiceLogo}
             alt={alt}
             style={{
               width: "100%",
               height: "100%",
-              objectFit: "cover",
             }}
           />
         </div>
@@ -148,8 +162,6 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
       <div style={{ padding: `${marginVertical}px ${marginHorizontal}px 0` }}>
         <div className="flex-row">
           {guidelinesType.map((type, key) => {
-            console.log(type);
-
             return (
               <div
                 key={key}
@@ -163,7 +175,14 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
                   padding: `2em 4em`,
                   marginRight: `3em`,
                   width: "fit-content",
+                  cursor: "pointer",
                 }}
+                onClick={() =>
+                  handleTypeFilterSearch({
+                    typeId: type.id,
+                    typeName: type.name,
+                  })
+                }
               >
                 <Html2React html={type.name} />
               </div>
@@ -201,6 +220,35 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
             style={styles.closeAction}
             onClick={() => {
               setSearchFilter(null);
+              setGuidelinesList(
+                Object.values(state.source.guidelines_standards)
+              );
+            }}
+          >
+            <CloseIcon
+              style={{
+                fill: colors.darkSilver,
+                padding: 0,
+              }}
+            />
+          </div>
+        </div>
+      );
+    };
+
+    const ServeTypeFilter = () => {
+      if (!typeFilter) return null;
+
+      return (
+        <div
+          className="shadow"
+          style={{ ...styles.action, textTransform: "uppercase" }}
+        >
+          <div>{typeFilter}</div>
+          <div
+            style={styles.closeAction}
+            onClick={() => {
+              setTypeFilter(null);
               setGuidelinesList(
                 Object.values(state.source.guidelines_standards)
               );
@@ -279,6 +327,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
           <div className="flex" style={{ padding: "0.5em 0 1em" }}>
             <ServeSearchFilter />
+            <ServeTypeFilter />
           </div>
         </div>
       </div>
