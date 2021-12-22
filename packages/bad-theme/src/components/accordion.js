@@ -245,7 +245,9 @@ const AccordionComponent = ({
       };
 
       const ServeNICELogo = () => {
+        if (!guidelines_type) return null;
         if (!guidelines_type.includes(87)) return null;
+
         const alt = "Nice";
 
         return (
