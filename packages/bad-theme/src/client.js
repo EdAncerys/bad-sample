@@ -65,7 +65,7 @@ const BADTheme = {
 
           WebFontLoader.load({
             google: {
-              families: ["Roboto", "Lato"],
+              families: ["Roboto:700", "Lato"],
             },
           });
         });
