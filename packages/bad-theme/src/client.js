@@ -47,6 +47,7 @@ const BADTheme = {
           }
         }
 
+        // pre fetch post data
         await actions.source.fetch(`/posts/`); // fetch CPT postData
         const postData = state.source.get(`/posts/`);
         const { totalPages, page, next } = postData; // check if postData have multiple pages
@@ -57,6 +58,17 @@ const BADTheme = {
           const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
           isThereNextPage = nextPage;
         }
+
+        // pre load fonts from google
+        import("webfontloader").then((WebFontLoader) => {
+          console.log("fonts", WebFontLoader);
+
+          WebFontLoader.load({
+            google: {
+              families: ["Roboto", "Lato"],
+            },
+          });
+        });
       },
       afterCSR: async ({ state, actions }) => {
         console.log("afterCSR triggered"); // debug
