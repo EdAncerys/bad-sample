@@ -10,8 +10,6 @@ import nav from "../../css/nav.css";
 import input from "../../css/input.css";
 import custom from "../../css/custom.css";
 
-import Roboto from "../../config/fonts/Roboto-Regular.ttf"; // font preload
-
 // COMPONENTS -------------------------------------------------------------
 import HTMLHead from "./htmlHead";
 import HeaderActions from "./headerActions";
@@ -25,14 +23,7 @@ const Header = ({ state, actions }) => {
     <>
       <Global
         styles={css`
-          ${bootStrapCSS}, ${globalCSS}, ${carousel}, ${accordion}, ${nav}, ${input}, ${custom},  
-          @font-face {
-            font-family: "Roboto";
-            font-style: normal;
-            font-weight: normal;
-            font-display: fallback;
-            src: url("${Roboto}") format("truetype");
-          }
+          ${bootStrapCSS}, ${globalCSS}, ${carousel}, ${accordion}, ${nav}, ${input}, ${custom},
         `}
       />
       <HTMLHead />
