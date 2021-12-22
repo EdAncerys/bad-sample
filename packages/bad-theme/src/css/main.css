@@ -31,13 +31,16 @@ Colours
 
 /* google fonts import */
 /* @import url("https://fonts.googleapis.com/css2?family=Lato&family=Roboto&display=swap"); */
+
 @font-face {
-  font-family: "Lato";
-  src: url("../config/fonts/Lato-Regular.ttf");
+  font-family: Lato;
+  src: local("../config/fonts/Lato-Regular.ttff"),
+    url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
 }
 @font-face {
-  font-family: "3D";
-  src: url("../config/fonts/Rock3D.ttf");
+  font-family: Roboto;
+  src: local("../config/fonts/Roboto-Regular.ttf"),
+    url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 }
 
 * {
@@ -53,8 +56,11 @@ Colours
   user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
 body {
-  font-family: "Lato", sans-serif;
+  font-family: Lato, sans-serif;
   font-style: normal;
+}
+.primary-title {
+  font-family: Roboto, sans-serif;
 }
 .sticky {
   position: -webkit-sticky;

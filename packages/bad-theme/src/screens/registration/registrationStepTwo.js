@@ -263,7 +263,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
     return (
       <div>
         <div style={styles.wrapper}>
-          <div style={styles.title}>Personal Information</div>
+          <div className="primary-title" style={styles.title}>Personal Information</div>
           <div style={{ paddingTop: `0.75em` }}>
             How it works dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut
@@ -322,7 +322,6 @@ const styles = {
   },
   title: {
     fontSize: 22,
-    fontFamily: "Roboto",
     fontWeight: "bold",
     color: colors.black,
   },

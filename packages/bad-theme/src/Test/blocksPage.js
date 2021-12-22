@@ -14,7 +14,7 @@ const BlocksPage = ({ state }) => {
   return (
     <div>
       <div>
-        <p style={styles.title}>BLOCK BUILDER 😈 </p>
+        <div className="primary-title" style={styles.title}>BLOCK BUILDER 😈 </div>
       </div>
 
       <BlockBuilder blocks={wpBlocks} />
@@ -27,7 +27,6 @@ const BlocksPage = ({ state }) => {
 const styles = {
   title: {
     fontSize: 40,
-    fontFamily: "Roboto",
     textAlign: "center",
     fontWeight: "500",
     color: colors.primary,

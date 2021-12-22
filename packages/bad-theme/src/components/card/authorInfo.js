@@ -118,9 +118,9 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
     return (
       <div>
         <div
+          className="primary-title"
           style={{
             fontSize: 20,
-            fontFamily: "Roboto",
             fontWeight: "bold",
             color: colors.black,
           }}
@@ -185,9 +185,9 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
   const ServeTopics = () => {
     return (
       <div
+        className="primary-title"
         style={{
           fontSize: 20,
-          fontFamily: "Roboto",
           fontWeight: "bold",
           padding: `0.5em 0`,
         }}

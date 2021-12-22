@@ -83,7 +83,7 @@ const RegistrationComplete = ({ state, actions }) => {
       <div>
         <div style={styles.wrapper}>
           <ServeCardImage />
-          <div style={styles.title}>Thank You</div>
+          <div className="primary-title" style={styles.title}>Thank You</div>
           <div
             style={{
               paddingBottom: `1em`,
@@ -95,7 +95,7 @@ const RegistrationComplete = ({ state, actions }) => {
             been added to the agenda for their next meeting. An email confirming
             receipt of your application will be sent to you shortly.
           </div>
-          <div style={styles.title}>Ethnic Diversity Monitoring</div>
+          <div className="primary-title" style={styles.title}>Ethnic Diversity Monitoring</div>
           <div>
             The BAD wants to meet the aims and commitments set out in its
             equality policy. This includes not discriminating under the Equality
@@ -145,7 +145,6 @@ const styles = {
   },
   title: {
     fontSize: 20,
-    fontFamily: "Roboto",
     fontWeight: "bold",
     color: colors.black,
     padding: `1em 0`,

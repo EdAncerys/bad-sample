@@ -13,7 +13,7 @@ const Registration = ({ state }) => {
   return (
     <BlockWrapper>
       <div>
-        <div style={styles.title}>REGISTRATION</div>
+        <div className="primary-title" style={styles.title}>REGISTRATION</div>
       </div>
       <SearchDermatologists />
 
@@ -26,7 +26,6 @@ const styles = {
   title: {
     textAlign: "center",
     fontSize: 40,
-    fontFamily: "Roboto",
     fontWeight: "500",
     color: colors.primary,
   },

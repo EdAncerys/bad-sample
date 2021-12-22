@@ -23,10 +23,9 @@ const FundingPromo = ({ state, actions, libraries, block }) => {
 
       return (
         <div
-          className="flex"
+          className="flex primary-title"
           style={{
             fontSize: 36,
-            fontFamily: "Roboto",
             fontWeight: "bold",
             justifyContent: "center",
             color: colors.black,

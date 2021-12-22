@@ -32,9 +32,9 @@ const NewsArticleHeader = ({ state, actions, libraries, newsArticle }) => {
 
     return (
       <div
+        className="primary-title"
         style={{
           fontSize: 20,
-          fontFamily: "Roboto",
           fontWeight: "bold",
         }}
       >

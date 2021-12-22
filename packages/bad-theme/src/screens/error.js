@@ -7,7 +7,7 @@ const Error = ({ state }) => {
   return (
     <div style={styles.container}>
       <div>
-        <h2 style={styles.title}>404 Error</h2>
+        <div className="primary-title" style={styles.title}>404 Error</div>
         <div>
           The path <em>{state.router.link}</em> cannot be found.
         </div>
@@ -27,7 +27,6 @@ const styles = {
   },
   title: {
     fontSize: 40,
-    fontFamily: "Roboto",
     fontWeight: "500",
     color: colors.primary,
   },

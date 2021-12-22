@@ -46,8 +46,8 @@ const SearchFilter = ({
   const ServeTitle = () => {
     return (
       <div
-        className="flex"
-        style={{ fontSize: 36, fontFamily: "Roboto", fontWeight: "bold", color: colors.black }}
+        className="flex primary-title"
+        style={{ fontSize: 36, fontWeight: "bold", color: colors.black }}
       >
         {TITLE}
       </div>
@@ -60,9 +60,9 @@ const SearchFilter = ({
     const ServeTitle = () => {
       return (
         <div
+          className="primary-title" 
           style={{
             fontSize: 20,
-            fontFamily: "Roboto",
             color: colors.black,
             paddingRight: `2em`,
           }}

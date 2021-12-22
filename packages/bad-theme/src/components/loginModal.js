@@ -74,7 +74,7 @@ const LoginModal = ({ state, actions }) => {
           <RowButton
             block={{
               title: "Not yet registered? Register here",
-              // link: { url: "hello" },
+              // link: { url: "link" },
             }}
             onClick={() => {
               setCreateAccountModalAction({
@@ -112,7 +112,7 @@ const LoginModal = ({ state, actions }) => {
             onClick={() =>
               loginAction({
                 dispatch,
-                user: { username: "hello", password: "password" },
+                user: { username: "name", password: "password" },
               })
             }
           >

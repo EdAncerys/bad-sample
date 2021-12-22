@@ -65,10 +65,9 @@ const JournalCard = ({
 
       return (
         <div
-          className="flex"
+          className="flex primary-title"
           style={{
             fontSize: 20,
-            fontFamily: "Roboto",
             fontWeight: "bold",
           }}
         >
@@ -81,13 +80,7 @@ const JournalCard = ({
       if (!user) return null;
 
       return (
-        <div
-          className="flex"
-          style={{
-            fontSize: 20,
-            fontFamily: "Roboto",
-          }}
-        >
+        <div className="flex primary-title" style={{ fontSize: 20 }}>
           <Html2React html={user} />
         </div>
       );

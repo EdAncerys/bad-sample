@@ -59,9 +59,9 @@ const Events = ({ state, actions, libraries, block }) => {
     const ServeTitle = () => {
       return (
         <div
+          className="primary-title"
           style={{
             fontSize: 20,
-            fontFamily: "Roboto",
             color: colors.black,
             padding: `0 2em`,
           }}

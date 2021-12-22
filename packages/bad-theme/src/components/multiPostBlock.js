@@ -55,9 +55,9 @@ const MultiPostBlock = ({ state, actions, block }) => {
     return (
       <div className="flex-col">
         <div
+          className="primary-title"
           style={{
             fontSize: 24,
-            fontFamily: "Roboto",
             fontWeight: "bold",
             color: colors.black,
           }}

@@ -48,9 +48,9 @@ const SocialIcons = ({ state, actions, libraries, block }) => {
 
     return (
       <div
+        className="primary-title" 
         style={{
           fontSize: 24,
-          fontFamily: "Roboto",
           fontWeight: "bold",
           color: colors.black,
           paddingBottom: `1em`,

@@ -397,7 +397,7 @@ const RegistrationStepFour = ({ state, actions }) => {
     return (
       <div>
         <div style={styles.wrapper}>
-          <div style={styles.title}>Professional Details</div>
+          <div className="primary-title" style={styles.title}>Professional Details</div>
           <div style={{ paddingTop: `0.75em` }}>
             How it works dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut
@@ -417,7 +417,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             Memberships Categories
           </div>
 
-          <div style={styles.title}>Category Selected : GP</div>
+          <div className="primary-title" style={styles.title}>Category Selected : GP</div>
           <div style={{ paddingTop: `0.75em` }}>
             Category requirements: GP members will be UK or Irish general
             practitioners (including GPwSIs/GPwERs) who spend less than 50% of
@@ -467,7 +467,6 @@ const styles = {
   },
   title: {
     fontSize: 22,
-    fontFamily: "Roboto",
     fontWeight: "bold",
     color: colors.black,
   },

@@ -16,9 +16,9 @@ const PromoHeader = ({ state, actions, libraries, fundingPromo }) => {
 
     return (
       <div
+        className="primary-title"
         style={{
           fontSize: 20,
-          fontFamily: "Roboto",
           fontWeight: "bold",
           color: colors.black,
         }}
@@ -33,10 +33,9 @@ const PromoHeader = ({ state, actions, libraries, fundingPromo }) => {
 
     return (
       <div
-        className="flex"
+        className="flex primary-title"
         style={{
           fontSize: 20,
-          fontFamily: "Roboto",
         }}
       >
         <Html2React html={amount} />

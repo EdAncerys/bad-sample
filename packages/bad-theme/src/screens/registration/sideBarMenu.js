@@ -26,9 +26,9 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   const ServeTitle = () => {
     return (
       <div
+        className="primary-title"
         style={{
           fontSize: 22,
-          fontFamily: "Roboto",
           fontWeight: "bold",
           color: colors.black,
           borderBottom: `1px solid ${colors.darkSilver}`,

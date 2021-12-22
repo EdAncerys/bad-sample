@@ -91,9 +91,9 @@ const PilsArchive = ({ state, actions, libraries }) => {
     return (
       <div>
         <div
+          className="primary-title"
           style={{
             fontSize: 36,
-            fontFamily: "Roboto",
             fontWeight: "bold",
             borderBottom: `1px solid ${colors.darkSilver}`,
           }}
@@ -122,10 +122,9 @@ const PilsArchive = ({ state, actions, libraries }) => {
     const ServeTitle = () => {
       return (
         <div
-          className="flex"
+          className="flex primary-title"
           style={{
             fontSize: 36,
-            fontFamily: "Roboto",
             color: colors.black,
             fontWeight: "bold",
             alignItems: "center",
@@ -161,10 +160,9 @@ const PilsArchive = ({ state, actions, libraries }) => {
     const ServeTitle = () => {
       return (
         <div
-          className="flex"
+          className="flex primary-title"
           style={{
             fontSize: 36,
-            fontFamily: "Roboto",
             color: colors.black,
             fontWeight: "bold",
             alignItems: "center",

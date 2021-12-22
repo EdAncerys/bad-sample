@@ -62,7 +62,7 @@ const NewsAndMediaHeader = ({
     if (title.rendered.length < MAX_LENGTH) titlePreview = title.rendered;
 
     return (
-      <div style={{ fontSize: 22, fontFamily: "Roboto", fontWeight: "bold", cursor: "pointer" }}>
+      <div className="primary-title" style={{ fontSize: 22, fontWeight: "bold", cursor: "pointer" }}>
         <Html2React html={titlePreview} />
       </div>
     );
@@ -148,7 +148,7 @@ const NewsAndMediaHeader = ({
       <div>
         <ServeImage />
         <div style={{ padding: `1em 2em 0` }}>
-          <div style={{ fontSize: 22, fontFamily: "Roboto", fontWeight: "bold", cursor: "pointer" }}>
+          <div className="primary-title" style={{ fontSize: 22, fontWeight: "bold", cursor: "pointer" }}>
             <Html2React html={categoryName} />
           </div>
           <div style={{ padding: `0.5em 0 0` }}>

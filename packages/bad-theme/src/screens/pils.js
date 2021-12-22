@@ -24,9 +24,9 @@ const Post = ({ state, actions, libraries }) => {
     return (
       <div className="flex">
         <div
+          className="primary-title"
           style={{
             fontSize: 36,
-            fontFamily: "Roboto",
             fontWeight: "bold",
             padding: `0.5em 1em`,
             color: colors.black,

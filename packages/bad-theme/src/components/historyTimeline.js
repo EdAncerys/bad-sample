@@ -101,9 +101,9 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
                   <div className="container">
                     <div className="row">
                       <div
+                        className="primary-title"
                         style={{
                           fontSize: 40,
-                          fontFamily: "Roboto",
                           fontWeight: "bold",
                           zIndex: 12,
                         }}

@@ -142,7 +142,6 @@ const Navigation = ({ state, actions, libraries }) => {
                 color: colors.danger,
                 fontWeight: "bold",
                 fontSize: 20,
-                fontFamily: "Roboto",
               }
             : {};
 

@@ -43,9 +43,9 @@ const ProfilesBlock = ({ state, actions, libraries, block }) => {
     return (
       <div className="flex">
         <div
+          className="primary-title"
           style={{
             fontSize: 36,
-            fontFamily: "Roboto",
             color: colors.black,
             fontWeight: "bold",
             textTransform: "capitalize",

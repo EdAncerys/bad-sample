@@ -21,6 +21,9 @@
   padding: 0;
   max-width: 1350px;
 }
+.dropdown-toggle::after {
+  display: none !important;
+}
 
 /* drop down link config */
 .dropdown-item.active,

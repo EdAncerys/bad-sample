@@ -56,7 +56,7 @@ const RegistrationStepOne = ({ state, actions }) => {
     return (
       <div>
         <div style={styles.wrapper}>
-          <div style={styles.title}>The Process</div>
+          <div className="primary-title" style={styles.title}>The Process</div>
           <div style={{ paddingTop: `0.75em` }}>
             How it works dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut
@@ -71,7 +71,7 @@ const RegistrationStepOne = ({ state, actions }) => {
           >
             Memberships Page
           </div>
-          <div style={styles.title}>You Will Need:</div>
+          <div className="primary-title" style={styles.title}>You Will Need:</div>
           <div style={styles.subTitle}>Personal Details:</div>
           <div>
             <ul>
@@ -137,7 +137,6 @@ const styles = {
   },
   title: {
     fontSize: 22,
-    fontFamily: "Roboto",
     fontWeight: "bold",
     color: colors.black,
   },

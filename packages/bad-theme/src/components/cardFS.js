@@ -66,9 +66,9 @@ const CardFS = ({
         <ServeCardImage />
         <div className="flex">
           <div
+            className="primary-title"
             style={{
               fontSize: 28,
-              fontFamily: 'Roboto',
               marginLeft: "1em",
               textAlign: "start",
               fontWeight: "bold",

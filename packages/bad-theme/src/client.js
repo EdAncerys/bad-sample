@@ -16,7 +16,7 @@ const BADTheme = {
       GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
       menuUrl: "/menu/primary-menu",
       menu: null,
-      activeDropDownRef: "hello",
+      activeDropDownRef: "activeDropDownRef",
       childMenuRef: null,
       contentContainer: 1350, // px units
       bannerHeight: 425, // px units

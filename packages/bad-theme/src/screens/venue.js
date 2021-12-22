@@ -79,10 +79,9 @@ const Venue = ({ state, actions, libraries }) => {
         return (
           <div>
             <div
-              className="flex"
+              className="flex primary-title"
               style={{
                 fontSize: 20,
-                fontFamily: "Roboto",
                 color: colors.black,
                 fontWeight: "bold",
               }}
@@ -111,10 +110,9 @@ const Venue = ({ state, actions, libraries }) => {
         return (
           <div style={{ paddingTop: `2em` }}>
             <div
-              className="flex"
+              className="flex primary-title"
               style={{
                 fontSize: 20,
-                fontFamily: "Roboto",
                 color: colors.black,
                 fontWeight: "bold",
               }}
@@ -135,10 +133,9 @@ const Venue = ({ state, actions, libraries }) => {
         return (
           <div style={{ paddingTop: `2em` }}>
             <div
-              className="flex"
+              className="flex primary-title"
               style={{
                 fontSize: 20,
-                fontFamily: "Roboto",
                 color: colors.black,
                 fontWeight: "bold",
               }}
@@ -159,10 +156,9 @@ const Venue = ({ state, actions, libraries }) => {
         return (
           <div style={{ paddingTop: `2em` }}>
             <div
-              className="flex"
+              className="flex primary-title"
               style={{
                 fontSize: 20,
-                fontFamily: "Roboto",
                 color: colors.black,
                 fontWeight: "bold",
               }}

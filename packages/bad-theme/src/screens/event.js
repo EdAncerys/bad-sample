@@ -49,9 +49,9 @@ const Event = ({ state, actions, libraries }) => {
 
     return (
       <div
+        className="primary-title"
         style={{
           fontSize: 36,
-          fontFamily: "Roboto",
           fontWeight: "bold",
           color: colors.black,
           paddingBottom: `0.5em`,
@@ -88,9 +88,9 @@ const Event = ({ state, actions, libraries }) => {
       return (
         <div style={{ paddingBottom: `1em` }}>
           <div
+            className="primary-title"
             style={{
               fontSize: 20,
-              fontFamily: "Roboto",
               fontWeight: "bold",
               color: colors.black,
             }}
@@ -157,9 +157,9 @@ const Event = ({ state, actions, libraries }) => {
       return (
         <div style={{ paddingBottom: `1em` }}>
           <div
+            className="primary-title"
             style={{
               fontSize: 20,
-              fontFamily: "Roboto",
               fontWeight: "bold",
               color: colors.black,
             }}
@@ -177,9 +177,9 @@ const Event = ({ state, actions, libraries }) => {
       return (
         <div style={{ paddingBottom: `1em` }}>
           <div
+            className="primary-title"
             style={{
               fontSize: 20,
-              fontFamily: "Roboto",
               fontWeight: "bold",
               color: colors.black,
             }}
@@ -197,9 +197,9 @@ const Event = ({ state, actions, libraries }) => {
       return (
         <div style={{ paddingBottom: `1em` }}>
           <div
+            className="primary-title"
             style={{
               fontSize: 20,
-              fontFamily: "Roboto",
               fontWeight: "bold",
               color: colors.black,
             }}
@@ -325,12 +325,14 @@ const Event = ({ state, actions, libraries }) => {
           style={{ justifyContent: "space-between", padding: `2em 0` }}
         >
           <div
-            style={{ fontSize: 20, fontFamily: "Roboto", fontWeight: "bold", color: colors.black }}
+            className="primary-title"
+            style={{ fontSize: 20, fontWeight: "bold", color: colors.black }}
           >
             Share
           </div>
           <div
-            style={{ fontSize: 20, fontFamily: "Roboto", fontWeight: "bold", color: colors.black }}
+            className="primary-title"
+            style={{ fontSize: 20, fontWeight: "bold", color: colors.black }}
           >
             Add to calendar
           </div>
@@ -400,7 +402,6 @@ const Event = ({ state, actions, libraries }) => {
         <RowButton
           block={{
             title: "If you would like more information please contact us",
-            // link: { url: "hello" },
           }}
           onClick={() => setGoToAction({ path: `/`, actions })}
           buttonWidth="60%"

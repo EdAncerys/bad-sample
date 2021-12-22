@@ -61,9 +61,9 @@ const UsefulLinksCard = ({
     const ServeTitle = () => {
       return (
         <div
+          className="primary-title"
           style={{
             fontSize: 20,
-            fontFamily: "Roboto",
             color: colors.black,
             textTransform: "capitalize",
             cursor: "pointer",

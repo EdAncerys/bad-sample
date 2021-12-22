@@ -63,10 +63,9 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
                   }}
                 >
                   <div
-                    className="flex"
+                    className="flex primary-title" 
                     style={{
                       fontSize: 36,
-                      fontFamily: "Roboto",
                       fontWeight: "bold",
                       color: colors.black,
                     }}

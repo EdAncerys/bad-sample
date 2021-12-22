@@ -80,10 +80,9 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     const ServeTitle = () => {
       return (
         <div
-          className="flex"
+          className="flex primary-title"
           style={{
             fontSize: 36,
-            fontFamily: "Roboto",
             color: colors.black,
             fontWeight: "bold",
             alignItems: "center",
@@ -179,10 +178,9 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     const ServeTitle = () => {
       return (
         <div
-          className="flex"
+          className="flex primary-title"
           style={{
             fontSize: 36,
-            fontFamily: "Roboto",
             color: colors.black,
             fontWeight: "bold",
             alignItems: "center",

@@ -127,10 +127,9 @@ const AccordionComponent = ({
 
         return (
           <div
-            className="flex"
+            className="flex primary-title"
             style={{
               fontSize: 20,
-              fontFamily: "Roboto",
               color: colors.black,
               fontWeight: "bold",
               alignItems: "center",
@@ -182,10 +181,9 @@ const AccordionComponent = ({
 
         return (
           <div
-            className="flex"
+            className="flex primary-title"
             style={{
               fontSize: 20,
-              fontFamily: "Roboto",
               color: colors.black,
               fontWeight: "bold",
               alignItems: "center",
@@ -287,10 +285,9 @@ const AccordionComponent = ({
 
         return (
           <div
-            className="flex"
+            className="flex primary-title"
             style={{
               fontSize: 20,
-              fontFamily: "Roboto",
               color: colors.black,
               fontWeight: "bold",
               alignItems: "center",
@@ -344,9 +341,9 @@ const AccordionComponent = ({
         return (
           <div className="flex-col" style={{ width: "70%" }}>
             <div
+            className="primary-title"
               style={{
                 fontSize: 20,
-                fontFamily: "Roboto",
                 fontWeight: "bold",
                 padding: `2em 0 1em`,
               }}
