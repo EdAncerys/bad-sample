@@ -94,16 +94,16 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
               >
                 <Carousel.Caption
                   className="flex-col"
-                  style={{ alignItems: "center" }}
+                  style={{ alignItems: "center", height: BANNER_HEIGHT * 0.95 }}
                 >
                   <ServeQuotation />
                   <div
                     className="flex primary-title"
                     style={{
-                      fontSize: 36,
+                      fontSize: 22,
                       fontWeight: "bold",
                       color: colors.black,
-                      maxHeight: BANNER_HEIGHT / 2,
+                      alignItems: "center",
                       overflow: "hidden",
                     }}
                   >

@@ -58,7 +58,7 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
           }
         }}
       >
-        <div className="flex-row">
+        <div className="flex-row" style={{ alignItems: "center" }}>
           <div
             className="flex"
             style={{
