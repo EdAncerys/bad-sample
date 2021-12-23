@@ -174,7 +174,7 @@ const Navigation = ({ state, actions, libraries }) => {
 
   return (
     <BlockWrapper>
-      <div className="row">
+      <div className="row roboto">
         <div className="col-md-12">
           <Navbar collapseOnSelect expand="lg">
             <Container>

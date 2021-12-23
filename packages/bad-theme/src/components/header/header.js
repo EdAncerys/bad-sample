@@ -26,7 +26,7 @@ const Header = ({ state, actions }) => {
         `}
       />
       <HTMLHead />
-      <div className="roboto" style={styles.container}>
+      <div style={styles.container}>
         <HeaderActions />
         <Navigation />
       </div>

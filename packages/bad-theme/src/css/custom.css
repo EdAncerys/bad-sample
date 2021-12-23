@@ -107,6 +107,18 @@
   top: 50%;
   transform: translate(0, -50%);
 }
+.dropdown-basic .dropdown-toggle:after {
+  margin-left: 1.25em;
+  margin-top: 0.25em;
+}
+.dropdown-basic .dropdown-menu.show {
+  border-radius: 15px;
+  border-top-right-radius: 0px;
+  background-color: #f0f1f4;
+  border: none;
+  overflow: hidden;
+  transform: translate(-0.125px, 58px) !important;
+}
 
 /* pil config  */
 .pil-title:hover {

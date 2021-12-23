@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import { colors } from "../config/colors";
+import { colors, capsBtn } from "../config/colors";
 
 import Loading from "./loading";
 import { setGoToAction } from "../context";
@@ -41,13 +41,7 @@ const TitleBlock = ({
 
     return (
       <div
-        style={{
-          borderBottom: `1px solid ${colors.textMain}`,
-          textTransform: "uppercase",
-          fontSize: 12,
-          cursor: "pointer",
-          marginLeft: `2em`,
-        }}
+        style={capsBtn}
         onClick={() => setGoToAction({ path: link.url, actions })}
       >
         <Html2React html={LABEL} />

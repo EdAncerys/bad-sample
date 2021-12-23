@@ -5,6 +5,7 @@ export const colors = {
   ocean: "#3882CD",
   yellow: "#F2F013",
   white: "#FFFF",
+  darkGrey: "#404040",
   black: "#212529",
   softBlack: "#454545",
   danger: "#A9333A",
@@ -19,4 +20,39 @@ export const colors = {
   shadeIntense: "rgba(0, 0, 0, 0.5)",
 
   turquoise: "#17A2B8",
+};
+
+export const blueBtn = {
+  fontSize: 15,
+  color: colors.white,
+  backgroundColor: colors.primary,
+  textTransform: "uppercase",
+  padding: `0.75em`,
+  borderRadius: 10,
+  border: "none",
+};
+export const transparentBtn = {
+  ...blueBtn,
+  color: colors.primary,
+  backgroundColor: "transparent",
+  border: `1px solid ${colors.primary}`,
+  borderRadius: 10,
+};
+export const greyBtn = {
+  ...blueBtn,
+  color: colors.black,
+  backgroundColor: colors.lightSilver,
+  padding: `0.75em 1em`,
+};
+
+export const capsBtn = {
+  fontSize: 12,
+  fontWeight: "bold",
+  width: "fit-content",
+  letterSpacing: 2,
+  color: colors.darkGrey,
+  backgroundColor: "transparent",
+  textTransform: "uppercase",
+  paddingBottom: 3,
+  borderBottom: `1px solid ${colors.darkGrey}`,
 };

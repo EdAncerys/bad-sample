@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
-import { colors } from "../../config/colors";
+import { colors, capsBtn } from "../../config/colors";
 import DownloadFileBlock from "../downloadFileBlock";
 import { setGoToAction } from "../../context";
 
@@ -29,16 +29,7 @@ const CardActions = ({
     return (
       <div onClick={() => setGoToAction({ path: link, actions })}>
         <div style={styles.footerActionTitle}>
-          <div
-            style={{
-              borderBottom: `2px solid ${colors.darkSilver}`,
-              paddingBottom: 5,
-              textTransform: "capitalize",
-              cursor: "pointer",
-            }}
-          >
-            {GO_TO_LABEL}
-          </div>
+          <div style={capsBtn}>{GO_TO_LABEL}</div>
         </div>
       </div>
     );
@@ -52,15 +43,7 @@ const CardActions = ({
 
     return (
       <div style={styles.footerActionTitle}>
-        <div
-          style={{
-            paddingBottom: 5,
-            textTransform: "capitalize",
-            borderBottom: `2px solid ${colors.darkSilver}`,
-            cursor: "pointer",
-          }}
-          onClick={() => console.log(form_link)}
-        >
+        <div style={capsBtn} onClick={() => console.log(form_link)}>
           <a
             href={form_link}
             target="_blank"

@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
-import { colors } from "../../config/colors";
+import { colors, capsBtn } from "../../config/colors";
 import { setGoToAction } from "../../context";
 
 const JournalCard = ({
@@ -43,18 +42,7 @@ const JournalCard = ({
             style={{ alignItems: "center" }}
             onClick={() => setGoToAction({ path: link.url, actions })}
           >
-            <div
-              style={{
-                textTransform: "uppercase",
-                fontSize: 12,
-                letterSpacing: 2,
-              }}
-            >
-              <div className="card-text">Read More</div>
-            </div>
-            <div>
-              <KeyboardArrowRightIcon style={{ fill: colors.darkSilver }} />
-            </div>
+            <div style={capsBtn}>Read More</div>
           </div>
         </div>
       );

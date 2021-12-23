@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
-import { colors } from "../../config/colors";
+import { colors, capsBtn } from "../../config/colors";
 import { setGoToAction } from "../../context";
 
 const ImageAndPromoCard = ({
@@ -59,17 +59,7 @@ const ImageAndPromoCard = ({
 
     return (
       <div onClick={() => setGoToAction({ path: link, actions })}>
-        <div
-          style={{
-            borderBottom: `2px solid ${colors.darkSilver}`,
-            paddingBottom: 5,
-            textTransform: "capitalize",
-            cursor: "pointer",
-            width: "fit-content",
-          }}
-        >
-          {GO_TO_LABEL}
-        </div>
+        <div style={capsBtn}>{GO_TO_LABEL}</div>
       </div>
     );
   };

@@ -3,7 +3,7 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { v4 as uuidv4 } from "uuid";
 
-import { colors } from "../../config/colors";
+import { colors, blueBtn } from "../../config/colors";
 import BADLogo from "../../img/svg/badLogoHeader.svg";
 import SearchIcon from "@mui/icons-material/Search";
 import QuickLinksDropDown from "./quickLinksDropDown";
@@ -63,6 +63,7 @@ const HeaderActions = ({ state, actions }) => {
             background: "transparent",
             alignItems: "center",
             color: colors.darkSilver,
+            cursor: "pointer",
           }}
         >
           <SearchIcon />
@@ -75,13 +76,13 @@ const HeaderActions = ({ state, actions }) => {
     if (user) return null;
 
     return (
-      <div style={styles.actionBtn}>
+      <div style={{ padding: `0 2em` }}>
         <button
           className="btn shadow-none"
           onClick={() =>
             setLoginModalAction({ dispatch, loginModalAction: true })
           }
-          style={styles.loginBtn}
+          style={blueBtn}
         >
           Login
         </button>
@@ -93,16 +94,15 @@ const HeaderActions = ({ state, actions }) => {
     if (!user) return null;
 
     return (
-      <div style={styles.actionBtn}>
+      <div style={{ padding: `0 2em` }}>
         <button
-          className="btn shadow-none"
           onClick={() =>
             setGoToAction({
               path: `https://badadmin.skylarkdev.co/membership`,
               actions,
             })
           }
-          style={styles.loginBtn}
+          style={blueBtn}
         >
           Dashboard
         </button>
@@ -135,19 +135,11 @@ const HeaderActions = ({ state, actions }) => {
 };
 
 const styles = {
-  loginBtn: {
-    fontSize: 16,
-    color: colors.white,
-    backgroundColor: colors.primary,
-    textTransform: "capitalize",
-    border: "none",
-  },
   input: {
     borderRadius: 10,
     paddingRight: 35,
     color: colors.darkSilver,
   },
-  actionBtn: { padding: `0 2em` },
 };
 
 export default connect(HeaderActions);

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { Dropdown } from "react-bootstrap";
 
-import { colors } from "../../config/colors";
+import { colors, greyBtn } from "../../config/colors";
 import { setGoToAction } from "../../context";
 import { MENU_DATA } from "../../config/data";
 
@@ -12,10 +12,10 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
   // SERVERS ----------------------------------------------------------
   const ServeDivider = () => {
     return (
-      <div className="flex">
-        <div className="flex" />
+      <div className="relative">
         <div
           style={{
+            position: "absolute",
             height: 20,
             minWidth: 140,
             backgroundColor: colors.lightSilver,
@@ -56,24 +56,15 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
   };
 
   return (
-    <div className="dropdown">
+    <div className="dropdown dropdown-basic">
       <div>
         <Dropdown align="end">
-          <Dropdown.Toggle
-            variant="shadow-none btn-m"
-            style={styles.dropDownBtn}
-            id="dropdown-basic"
-          >
+          <Dropdown.Toggle variant="shadow-none btn-m" style={greyBtn}>
             Quick Links
           </Dropdown.Toggle>
-          <Dropdown.Menu style={{ border: "none", padding: 0 }}>
-            <div style={{ marginTop: `-10px` }}>
-              <ServeDivider />
-
-              <div style={styles.dropDown}>
-                <ServeMenu />
-              </div>
-            </div>
+          <Dropdown.Menu>
+            {/* <ServeDivider /> */}
+            <ServeMenu />
           </Dropdown.Menu>
         </Dropdown>
       </div>
@@ -82,16 +73,10 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
 };
 
 const styles = {
-  dropDownBtn: {
-    fontSize: 16,
-    backgroundColor: colors.lightSilver,
-    textTransform: "capitalize",
-    border: "none",
-  },
-  dropDown: {
+  container: {
     backgroundColor: colors.lightSilver,
     minWidth: 240,
-    border: "none",
+    paddingBottom: `1em`,
   },
 };
 
