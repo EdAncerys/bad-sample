@@ -92,7 +92,7 @@ const FundingPromo = ({ state, actions, libraries, block }) => {
                 body={body}
                 downloadFile={file ? { file, title: label } : null}
                 link_label={link_label}
-                link={link.url}
+                link={link ? link.url : null}
                 colour={colour}
                 shadow // optional param
               />
