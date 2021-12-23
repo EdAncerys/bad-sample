@@ -26,7 +26,7 @@ const Header = ({ state, actions }) => {
         `}
       />
       <HTMLHead />
-      <div className="flex-col roboto" style={styles.container}>
+      <div className="roboto" style={styles.container}>
         <HeaderActions />
         <Navigation />
       </div>

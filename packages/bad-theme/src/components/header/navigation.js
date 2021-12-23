@@ -9,6 +9,7 @@ import { setGoToAction } from "../../context";
 import { setActiveDropDownRef } from "../../context/actions/navigation";
 import NavBarDropDownContent from "./navDropDownContent";
 import ChildMenu from "./childMenu";
+import BlockWrapper from "../blockWrapper";
 
 const Navigation = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -172,28 +173,30 @@ const Navigation = ({ state, actions, libraries }) => {
   };
 
   return (
-    <div className="row">
-      <div className="col-md-12">
-        <Navbar collapseOnSelect expand="lg">
-          <Container>
-            <Navbar.Toggle
-              aria-controls="responsive-navbar-nav"
-              className="m-2"
-            />
-            <Navbar.Collapse>
-              <div
-                className="flex"
-                style={{ height: "4em", margin: `0 ${marginHorizontal}px` }}
-              >
-                <Nav className="flex BAD-menu">
-                  <ServeMenu />
-                </Nav>
-              </div>
-            </Navbar.Collapse>
-          </Container>
-        </Navbar>
+    <BlockWrapper>
+      <div className="row">
+        <div className="col-md-12">
+          <Navbar collapseOnSelect expand="lg">
+            <Container>
+              <Navbar.Toggle
+                aria-controls="responsive-navbar-nav"
+                className="m-2"
+              />
+              <Navbar.Collapse>
+                <div
+                  className="flex"
+                  style={{ height: "4em", margin: `0 ${marginHorizontal}px` }}
+                >
+                  <Nav className="flex BAD-menu">
+                    <ServeMenu />
+                  </Nav>
+                </div>
+              </Navbar.Collapse>
+            </Container>
+          </Navbar>
+        </div>
       </div>
-    </div>
+    </BlockWrapper>
   );
 };
 
