@@ -23,6 +23,7 @@ const BADTheme = {
       marginHorizontal: 100, // px units
       marginVertical: 40, // px units
     },
+    autoPrefetch: "hover", // values: no | hover | in-view | all
     context: {},
   },
   actions: {
@@ -50,10 +51,22 @@ const BADTheme = {
         // pre fetch post data
         await actions.source.fetch(`/posts/`); // fetch CPT postData
         const postData = state.source.get(`/posts/`);
-        const { totalPages, page, next } = postData; // check if postData have multiple pages
+        const postDataNextPage = postData.next; // check if postData have multiple pages
         // fetch postData via wp API page by page
-        let isThereNextPage = next;
-        while (isThereNextPage) {
+        let isThereNextPostPage = postDataNextPage;
+        while (isThereNextPostPage) {
+          await actions.source.fetch(isThereNextPage); // fetch next page
+          const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
+          isThereNextPage = nextPage;
+        }
+
+        // pre fetch leadership_team data
+        await actions.source.fetch(`/leadership_team/`); // fetch CPT leadershipTeam
+        const leadershipTeam = state.source.get(`/leadership_team/`);
+        const leadershipTeamNextPage = leadershipTeam.next; // check if leadershipTeam have multiple pages
+        // fetch leadershipTeam via wp API page by page
+        let isThereNextLeadershipPage = leadershipTeamNextPage;
+        while (isThereNextLeadershipPage) {
           await actions.source.fetch(isThereNextPage); // fetch next page
           const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
           isThereNextPage = nextPage;
@@ -61,8 +74,7 @@ const BADTheme = {
 
         // pre load fonts from google
         import("webfontloader").then((WebFontLoader) => {
-          console.log("fonts", WebFontLoader);
-
+          // console.log("google fonts loaded"); // debug
           WebFontLoader.load({
             google: {
               families: ["Roboto:400,700", "Lato"],

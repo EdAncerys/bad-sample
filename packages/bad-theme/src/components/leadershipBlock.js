@@ -11,22 +11,15 @@ const LeadershipBlock = ({ state, actions, block }) => {
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
-    const path = `/leadership_team/`;
-    await actions.source.fetch(path); // fetch CPT leadershipTeam
-
-    const leadershipTeam = state.source.get(path);
-    const { totalPages, page, next } = leadershipTeam; // check if leadershipTeam have multiple pages
-    // fetch leadershipTeam via wp API page by page
-    let isThereNextPage = next;
-    while (isThereNextPage) {
-      await actions.source.fetch(isThereNextPage); // fetch next page
-      const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
-      isThereNextPage = nextPage;
+    if (!state.source.leadership_team) {
+      console.log("Error. Failed to fetch leadership_team data"); // debug
+      return null;
     }
 
     const LEADERSHIP_LIST = Object.values(state.source.leadership_team); // add leadershipTeam object to data array
     setLeadershipList(LEADERSHIP_LIST);
-  }, []);
+  }, [state.source.leadership_team]);
+
   // DATA pre FETCH ----------------------------------------------------------------
   if (!leadershipList) return <Loading />;
 

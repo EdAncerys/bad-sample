@@ -590,7 +590,7 @@ const AccordionComponent = ({
           (job) => job.slug === LT_LAYOUT
         );
         let rolId = 0;
-        if (jobRole) rolId = jobRole[0].id;
+        if (jobRole[0]) rolId = jobRole[0].id;
 
         if (isListLayout)
           return (

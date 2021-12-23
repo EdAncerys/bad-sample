@@ -131,14 +131,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
             marginTop: `1em`,
           }}
         >
-          <Image
-            src={NiceLogo}
-            alt={alt}
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-          />
+          <Image src={NiceLogo} alt={alt} style={{ height: "100%" }} />
         </div>
       );
     };
