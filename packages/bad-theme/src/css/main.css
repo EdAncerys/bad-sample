@@ -49,6 +49,10 @@ body {
   font-family: Roboto, sans-serif;
   font-weight: bold; /* or 700 */
 }
+.roboto {
+  font-family: Roboto, sans-serif;
+  font-weight: normal;
+}
 .sticky {
   position: -webkit-sticky;
   position: sticky;

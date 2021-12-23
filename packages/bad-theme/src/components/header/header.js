@@ -14,7 +14,6 @@ import custom from "../../css/custom.css";
 import HTMLHead from "./htmlHead";
 import HeaderActions from "./headerActions";
 import Navigation from "./navigation";
-import BlockWrapper from "../blockWrapper";
 
 const Header = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
@@ -27,21 +26,17 @@ const Header = ({ state, actions }) => {
         `}
       />
       <HTMLHead />
-      <BlockWrapper>
-        <div className="flex-col" style={styles.container}>
-          <HeaderActions />
-          <Navigation />
-        </div>
-      </BlockWrapper>
+      <div className="flex-col roboto" style={styles.container}>
+        <HeaderActions />
+        <Navigation />
+      </div>
     </>
   );
 };
 
 const styles = {
   container: {
-    minHeight: 245,
     backgroundColor: `${colors.white}`,
-    borderBottom: `2px solid ${colors.lightSilver}`,
   },
 };
 

@@ -55,9 +55,9 @@ const App = ({ state, actions }) => {
       }}
     >
       <div style={{ ...styles.container }}>
+        <Header />
+        <Directions />
         <BlockWrapper>
-          <Header />
-          <Directions />
           <LoginModal />
           <CreateAccountModal />
           <EnquireModal />

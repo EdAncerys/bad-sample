@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/colors";
 
+import BlockWrapper from "./blockWrapper";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 const Directions = ({ state, actions, libraries }) => {
@@ -103,13 +104,11 @@ const Directions = ({ state, actions, libraries }) => {
   if (endPoint === "/") return null; // disable breadcrumbs in home page
 
   return (
-    <div
-      style={{
-        backgroundColor: colors.lightSilver,
-        padding: `0 ${marginHorizontal}px`,
-      }}
-    >
-      <div className="flex" style={styles.wrapper}>
+    <BlockWrapper background={colors.lightSilver}>
+      <div
+        className="flex"
+        style={{ ...styles.wrapper, padding: `0 ${marginHorizontal}px` }}
+      >
         <ServeTitle />
         <ServeFallBack />
         {directions.map((item) => {
@@ -117,7 +116,7 @@ const Directions = ({ state, actions, libraries }) => {
           return <ServePatchDirections key={KEY} item={item} nextKey={KEY} />;
         })}
       </div>
-    </div>
+    </BlockWrapper>
   );
 };
 

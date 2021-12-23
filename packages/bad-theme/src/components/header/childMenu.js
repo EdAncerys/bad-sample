@@ -17,32 +17,44 @@ const ChildMenu = ({ state, actions, libraries, slugPrefix, menu }) => {
   // console.log(menu); // debug
 
   return (
-    <div style={{ minWidth: 200, padding: `1em` }}>
-      <div
+    <div
+      style={{ minWidth: 200, maxWidth: 400, padding: `1em`, overflow: "auto" }}
+    >
+      <NavDropdown.Item
         className="pointer"
         style={{
           alignItems: "center",
           padding: `0 0 1em 0`,
           borderBottom: `1px dotted ${colors.darkSilver}`,
         }}
-        onClick={() => setGoToAction({ path: menu.slug, actions })}
+        onClick={() => {
+          console.log(menu.url);
+          setGoToAction({ path: menu.url, actions });
+          state.theme.childMenuRef = "";
+        }}
       >
         {parentTitle}
-      </div>
+      </NavDropdown.Item>
 
-      {menu.child_items.map((item, key) => {
-        const { title, url } = item;
+      <div style={{ padding: `1em 0` }}>
+        {menu.child_items.map((item, key) => {
+          const { title, url } = item;
 
-        return (
-          <div key={key} className="flex" style={{ overflow: "auto" }}>
-            <NavDropdown.Item
-              onClick={() => setGoToAction({ path: url, actions })}
+          return (
+            <div
+              key={key}
+              className="flex"
+              style={{ overflow: "auto", padding: `0.5em 0` }}
             >
-              <Html2React html={title} />
-            </NavDropdown.Item>
-          </div>
-        );
-      })}
+              <NavDropdown.Item
+                onClick={() => setGoToAction({ path: url, actions })}
+              >
+                <Html2React html={title} />
+              </NavDropdown.Item>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

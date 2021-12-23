@@ -7,6 +7,7 @@ import { colors } from "../../config/colors";
 import BADLogo from "../../img/svg/badLogoHeader.svg";
 import SearchIcon from "@mui/icons-material/Search";
 import QuickLinksDropDown from "./quickLinksDropDown";
+import BlockWrapper from "../blockWrapper";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -41,7 +42,6 @@ const HeaderActions = ({ state, actions }) => {
         className="flex"
         style={{
           flex: 1,
-          marginRight: `2em`,
           padding: `0.75em 0`,
           position: "relative",
         }}
@@ -75,9 +75,9 @@ const HeaderActions = ({ state, actions }) => {
     if (user) return null;
 
     return (
-      <div>
+      <div style={styles.actionBtn}>
         <button
-          className="btn shadow-none m-2"
+          className="btn shadow-none"
           onClick={() =>
             setLoginModalAction({ dispatch, loginModalAction: true })
           }
@@ -93,9 +93,9 @@ const HeaderActions = ({ state, actions }) => {
     if (!user) return null;
 
     return (
-      <div>
+      <div style={styles.actionBtn}>
         <button
-          className="btn shadow-none m-2"
+          className="btn shadow-none"
           onClick={() =>
             setGoToAction({
               path: `https://badadmin.skylarkdev.co/membership`,
@@ -111,26 +111,25 @@ const HeaderActions = ({ state, actions }) => {
   };
 
   return (
-    <div
-      className="flex"
-      style={{
-        alignItems: "center",
-        borderBottom: `1px solid ${colors.primary}`,
-      }}
-    >
-      <ServeLogoContainer />
-      <div
-        className="flex-row"
-        style={{
-          justifyContent: "space-around",
-          alignItems: "center",
-        }}
-      >
-        <ServeSearchContainer />
-        <ServeLoginAction />
-        <ServeDashboardAction />
-        <QuickLinksDropDown />
-      </div>
+    <div style={{ borderBottom: `1px solid ${colors.primary}` }}>
+      <BlockWrapper>
+        <div className="flex" style={{ padding: `2.75em 0` }}>
+          <ServeLogoContainer />
+          <div
+            className="flex-row"
+            style={{
+              justifyContent: "space-around",
+              alignItems: "center",
+              flex: 1.5,
+            }}
+          >
+            <ServeSearchContainer />
+            <ServeLoginAction />
+            <ServeDashboardAction />
+            <QuickLinksDropDown />
+          </div>
+        </div>
+      </BlockWrapper>
     </div>
   );
 };
@@ -148,6 +147,7 @@ const styles = {
     paddingRight: 35,
     color: colors.darkSilver,
   },
+  actionBtn: { padding: `0 2em` },
 };
 
 export default connect(HeaderActions);

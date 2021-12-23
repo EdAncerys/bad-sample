@@ -6,6 +6,8 @@ import { colors } from "../../config/colors";
 const NavBarDropDownContent = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
 
+  return null; // remove nav content placeholder
+
   // HELPERS ---------------------------------------------
   return (
     <div

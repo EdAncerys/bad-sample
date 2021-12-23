@@ -81,7 +81,6 @@ const Navigation = ({ state, actions, libraries }) => {
         title={<Html2React html={title} /> || "Menu Title"}
         style={{
           position: "static", // static position adding ability for dropdown to move up the scope
-          // borderBottom: `5px solid ${colors.danger}`,
         }}
         onClick={(e) => {
           const title = {
@@ -115,7 +114,7 @@ const Navigation = ({ state, actions, libraries }) => {
                 <div
                   key={key}
                   className="flex-row"
-                  style={{ marginLeft: isMoreMenu ? 0 : 20 }}
+                  style={{ marginLeft: isMoreMenu ? 0 : `1em` }}
                 >
                   <ServeTitle title={title} url={url} />
                 </div>
