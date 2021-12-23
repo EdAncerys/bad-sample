@@ -38,11 +38,12 @@ export const transparentBtn = {
   border: `1px solid ${colors.primary}`,
   borderRadius: 10,
 };
-export const greyBtn = {
+export const dropDownBtn = {
   ...blueBtn,
   color: colors.black,
   backgroundColor: colors.lightSilver,
-  padding: `0.75em 1em`,
+  padding: `0.75em`,
+  width: 150,
 };
 
 export const capsBtn = {
