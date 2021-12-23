@@ -12,6 +12,7 @@ import DownloadFileBlock from "./downloadFileBlock";
 import Loading from "./loading";
 import { colors } from "../config/colors";
 import { setGoToAction } from "../context";
+import { v4 as uuidv4 } from "uuid";
 
 const AccordionComponent = ({
   state,
@@ -701,7 +702,9 @@ const AccordionComponent = ({
       style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}
     >
       {block.accordion_item.map((block, key) => {
-        return <ServeAccordion key={key} eventKey={key} block={block} />;
+        const blockId = uuidv4(); // add unique id
+
+        return <ServeAccordion key={key} eventKey={blockId} block={block} />;
       })}
     </div>
   );
