@@ -30,6 +30,7 @@ export const blueBtn = {
   padding: `0.75em`,
   borderRadius: 10,
   border: "none",
+  cursor: "pointer",
 };
 export const transparentBtn = {
   ...blueBtn,
@@ -56,4 +57,5 @@ export const capsBtn = {
   textTransform: "uppercase",
   paddingBottom: 3,
   borderBottom: `1px solid ${colors.darkGrey}`,
+  cursor: "pointer",
 };
