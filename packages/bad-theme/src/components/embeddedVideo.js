@@ -56,12 +56,7 @@ const EmbeddedVideo = ({ state, actions, libraries, block }) => {
 
   // RETURN ---------------------------------------------
   return (
-    <div
-      style={{
-        padding: `${marginVertical}px ${marginHorizontal}px`,
-        backgroundColor: colors.silverFillOne,
-      }}
-    >
+    <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
       <ServeCardVideo />
       <ServeFooter />
     </div>
