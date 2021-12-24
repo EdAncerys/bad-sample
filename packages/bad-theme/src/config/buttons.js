@@ -4,7 +4,6 @@ export const blueBtn = {
   fontSize: 15,
   color: colors.white,
   backgroundColor: colors.primary,
-  textTransform: "uppercase",
   padding: `0.75em`,
   borderRadius: 10,
   border: "none",
@@ -15,13 +14,11 @@ export const transparentBtn = {
   color: colors.primary,
   backgroundColor: "transparent",
   border: `1px solid ${colors.primary}`,
-  borderRadius: 10,
 };
 export const dropDownBtn = {
   ...blueBtn,
   color: colors.black,
   backgroundColor: colors.lightSilver,
-  padding: `0.75em`,
   width: 150,
 };
 

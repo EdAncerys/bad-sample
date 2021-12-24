@@ -56,7 +56,6 @@ const CardBody = ({
           fontWeight: "bold",
           color: colors.black,
           alignItems: newsCarousel ? "center" : "flex-start",
-          lineHeight: 1.2,
         }}
       >
         <Html2React html={titlePreview} />

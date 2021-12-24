@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { connect } from "frontity";
 import Accordion from "react-bootstrap/Accordion";
 import Image from "@frontity/components/image";
@@ -10,7 +10,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import NiceLogo from "../img/placeholders/niceLogo.svg";
 import DownloadFileBlock from "./downloadFileBlock";
 import Loading from "./loading";
-import { colors } from "../config/imports";
+import { colors, blueBtn, capsBtn } from "../config/imports";
 import { setGoToAction } from "../context";
 import { v4 as uuidv4 } from "uuid";
 
@@ -33,7 +33,16 @@ const AccordionComponent = ({
   if (disable_vertical_padding) marginVertical = 0;
 
   // SERVERS ---------------------------------------------
-  const ServeAccordion = ({ block, eventKey }) => {
+  const ServeAccordion = ({ block }) => {
+    const [eventKey, setEventKey] = useState(null);
+    // hook applies after React has performed all DOM mutations
+    useLayoutEffect(() => {
+      const blockId = uuidv4(); // add unique id
+      setEventKey(blockId);
+    }, []);
+
+    if (!eventKey) return <Loading />;
+
     const {
       title,
       body,
@@ -210,7 +219,7 @@ const AccordionComponent = ({
           <div
             id={`preview-id-${eventKey}`}
             style={{
-              padding: `1em 0`,
+              paddingTop: `1em`,
               marginTop: `1.25em`,
               color: colors.darkSilver,
               borderTop: `1px solid ${colors.darkSilver}`,
@@ -272,38 +281,37 @@ const AccordionComponent = ({
       };
 
       const ServeIcon = () => {
-        if (!hasPreview) {
-          return (
-            <div>
-              <div className="flex">
-                <div id={`add-id-${eventKey}`}>
-                  <AddIcon style={{ fontSize: 48, fill: colors.textMain }} />
-                </div>
-                <div className="d-none" id={`remove-id-${eventKey}`}>
-                  <RemoveIcon style={{ fontSize: 48, fill: colors.textMain }} />
-                </div>
+        return (
+          <div>
+            <div className="flex">
+              <div id={`add-id-${eventKey}`}>
+                <AddIcon style={{ fontSize: 48, fill: colors.textMain }} />
+              </div>
+              <div className="d-none" id={`remove-id-${eventKey}`}>
+                <RemoveIcon style={{ fontSize: 48, fill: colors.textMain }} />
               </div>
             </div>
-          );
-        }
-        if (hasPreview) {
-          return (
-            <div>
-              <div className="flex">
-                <div id={`more-id-${eventKey}`} style={styles.previewIcon}>
-                  See More
-                </div>
-                <div
-                  className="d-none"
-                  id={`less-id-${eventKey}`}
-                  style={styles.previewIcon}
-                >
-                  Less
-                </div>
-              </div>
-            </div>
-          );
-        }
+          </div>
+        );
+        // option for preview button
+        // if (hasPreview) {
+        //   return (
+        //     <div>
+        //       <div className="flex">
+        //         <div id={`more-id-${eventKey}`} style={styles.previewIcon}>
+        //           See More
+        //         </div>
+        //         <div
+        //           className="d-none"
+        //           id={`less-id-${eventKey}`}
+        //           style={styles.previewIcon}
+        //         >
+        //           Less
+        //         </div>
+        //       </div>
+        //     </div>
+        //   );
+        // }
       };
 
       const ServeLTTitle = () => {
@@ -409,19 +417,14 @@ const AccordionComponent = ({
           >
             <div>
               <button
-                className="btn flex-row"
-                style={{
-                  backgroundColor: colors.primary,
-                  color: colors.white,
-                  padding: `0.5em 2em`,
-                  alignItems: "center",
-                }}
+                className="flex-row"
+                style={blueBtn}
                 onClick={() => setGoToAction({ path: link.url, actions })}
               >
                 <div className="flex">
                   <Html2React html={LABEL} />
                 </div>
-                <div>
+                <div style={{ margin: "auto 0" }}>
                   <KeyboardArrowRightIcon
                     style={{
                       borderRadius: "50%",
@@ -639,17 +642,11 @@ const AccordionComponent = ({
         const { label, link_url } = link;
 
         return (
-          <div
-            style={{
-              borderBottom: `1px solid ${colors.darkSilver}`,
-              textTransform: "uppercase",
-              fontSize: 12,
-              cursor: "pointer",
-              margin: `2em 2em 0 0`,
-              paddingBottom: 5,
-            }}
-          >
-            <div onClick={() => setGoToAction({ path: link_url, actions })}>
+          <div style={{ margin: `2em 2em 0 0` }}>
+            <div
+              style={capsBtn}
+              onClick={() => setGoToAction({ path: link_url, actions })}
+            >
               <Html2React html={label} />
             </div>
           </div>
@@ -702,9 +699,7 @@ const AccordionComponent = ({
       style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}
     >
       {block.accordion_item.map((block, key) => {
-        const blockId = uuidv4(); // add unique id
-
-        return <ServeAccordion key={key} eventKey={blockId} block={block} />;
+        return <ServeAccordion key={key} block={block} />;
       })}
     </div>
   );
