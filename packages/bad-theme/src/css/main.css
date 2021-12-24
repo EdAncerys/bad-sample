@@ -44,6 +44,7 @@ Colours
 body {
   font-family: Lato, sans-serif;
   font-style: normal;
+  line-height: 1.3;
 }
 .primary-title {
   font-family: Roboto, sans-serif;
@@ -52,6 +53,7 @@ body {
 .roboto {
   font-family: Roboto, sans-serif;
   font-weight: normal;
+  line-height: 2;
 }
 .sticky {
   position: -webkit-sticky;
