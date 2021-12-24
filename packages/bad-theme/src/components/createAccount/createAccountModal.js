@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 import Form from "./form";
 import ContactPreferences from "./contactPreferences";
 import FormSubmitted from "./formSubmitted";

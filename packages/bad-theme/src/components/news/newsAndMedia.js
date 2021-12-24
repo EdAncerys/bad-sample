@@ -7,7 +7,7 @@ import NewsBlock from "./newsBlock";
 import NewsCarouselComponent from "./newsCarouselComponent";
 import TitleBlock from "../titleBlock";
 import Loading from "../loading";
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";

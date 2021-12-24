@@ -3,7 +3,7 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
 import Loading from "./loading";
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 import { setGoToAction } from "../context";
 
 const EventListView = ({ state, actions, libraries, block, removeMargin }) => {

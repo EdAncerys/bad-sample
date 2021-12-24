@@ -1,5 +1,5 @@
 import { connect } from "frontity";
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 
 const BlockWrapper = ({ children, state, background }) => {
   const data = state.source.get(state.router.link);

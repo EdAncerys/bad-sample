@@ -3,7 +3,7 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import Link from "@frontity/components/link";
 
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 import date from "date-and-time";
 import { setGoToAction } from "../../context";
 

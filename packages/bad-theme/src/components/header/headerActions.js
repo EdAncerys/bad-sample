@@ -3,7 +3,7 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { v4 as uuidv4 } from "uuid";
 
-import { colors, blueBtn } from "../../config/colors";
+import { colors, blueBtn } from "../../config/imports";
 import BADLogo from "../../img/svg/badLogoHeader.svg";
 import SearchIcon from "@mui/icons-material/Search";
 import QuickLinksDropDown from "./quickLinksDropDown";
@@ -37,12 +37,14 @@ const HeaderActions = ({ state, actions }) => {
   };
 
   const ServeSearchContainer = () => {
+    const ctaHeight = 45;
+
     return (
       <div
         className="flex"
         style={{
           flex: 1,
-          padding: `0.75em 0`,
+          height: ctaHeight,
           position: "relative",
         }}
       >
@@ -58,7 +60,7 @@ const HeaderActions = ({ state, actions }) => {
           style={{
             position: "absolute",
             right: 0,
-            height: 40,
+            height: ctaHeight,
             border: "none",
             background: "transparent",
             alignItems: "center",

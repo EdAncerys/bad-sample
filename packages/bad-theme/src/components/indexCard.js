@@ -1,6 +1,6 @@
 import { connect } from "frontity";
 
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 import { setGoToAction } from "../context";
 
 const IndexCard = ({
@@ -40,7 +40,10 @@ const IndexCard = ({
       if (!card_title) return null;
 
       return (
-        <div className="primary-title" style={{ fontSize: 20, fontWeight: "bold", color: colors.black }}>
+        <div
+          className="primary-title"
+          style={{ fontSize: 20, fontWeight: "bold", color: colors.black }}
+        >
           <Html2React html={card_title} />
         </div>
       );

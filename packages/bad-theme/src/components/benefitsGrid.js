@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import Benefit from "./benefit";
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 import Loading from "./loading";
 
 const BenefitsGrid = ({ state, actions, libraries, block }) => {

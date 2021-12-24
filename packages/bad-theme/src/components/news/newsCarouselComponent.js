@@ -3,7 +3,7 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Carousel } from "react-bootstrap";
 
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 
 import Loading from "../loading";
 

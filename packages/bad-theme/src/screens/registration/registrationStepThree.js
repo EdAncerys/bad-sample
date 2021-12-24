@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "frontity";
 
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 import { setGoToAction } from "../../context";
 import SideBarMenu from "./sideBarMenu";
 import { Form } from "react-bootstrap";
@@ -94,7 +94,9 @@ const RegistrationStepThree = ({ state, actions }) => {
     return (
       <div>
         <div style={styles.wrapper}>
-          <div className="primary-title" style={styles.title}>Category Selection</div>
+          <div className="primary-title" style={styles.title}>
+            Category Selection
+          </div>
           <div style={{ paddingTop: `0.75em` }}>
             How it works dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut

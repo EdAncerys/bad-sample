@@ -3,7 +3,7 @@ import { connect } from "frontity";
 
 import Card from "../card/card";
 import Loading from "../loading";
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 
 const NewsBlock = ({
   state,

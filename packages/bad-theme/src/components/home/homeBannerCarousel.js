@@ -2,7 +2,7 @@ import { useState } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Carousel } from "react-bootstrap";
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import Loading from "../loading";

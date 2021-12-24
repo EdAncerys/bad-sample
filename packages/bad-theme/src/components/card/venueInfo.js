@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 import { setGoToAction } from "../../context";
 
 const VenueInfo = ({ state, actions, libraries, venueInfo }) => {

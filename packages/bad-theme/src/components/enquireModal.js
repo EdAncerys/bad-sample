@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,

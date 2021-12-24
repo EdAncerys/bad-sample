@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 import Card from "./card/card";
 import SearchFilter from "./searchFilter";
 import Loading from "./loading";

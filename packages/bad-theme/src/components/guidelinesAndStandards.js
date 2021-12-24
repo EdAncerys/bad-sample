@@ -7,7 +7,7 @@ import { setGoToAction } from "../context";
 
 import Loading from "./loading";
 import Accordion from "./accordion";
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 import NiceLogo from "../img/placeholders/niceLogo.svg";
 
 import SearchIcon from "@mui/icons-material/Search";

@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 import SideBarMenu from "./sideBarMenu";
 import { Form } from "react-bootstrap";
 import CheckMark from "../../img/svg/checkMark.svg";
@@ -83,7 +83,9 @@ const RegistrationComplete = ({ state, actions }) => {
       <div>
         <div style={styles.wrapper}>
           <ServeCardImage />
-          <div className="primary-title" style={styles.title}>Thank You</div>
+          <div className="primary-title" style={styles.title}>
+            Thank You
+          </div>
           <div
             style={{
               paddingBottom: `1em`,
@@ -95,7 +97,9 @@ const RegistrationComplete = ({ state, actions }) => {
             been added to the agenda for their next meeting. An email confirming
             receipt of your application will be sent to you shortly.
           </div>
-          <div className="primary-title" style={styles.title}>Ethnic Diversity Monitoring</div>
+          <div className="primary-title" style={styles.title}>
+            Ethnic Diversity Monitoring
+          </div>
           <div>
             The BAD wants to meet the aims and commitments set out in its
             equality policy. This includes not discriminating under the Equality

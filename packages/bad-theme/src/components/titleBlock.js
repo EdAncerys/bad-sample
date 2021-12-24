@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import { colors, capsBtn } from "../config/colors";
+import { colors, capsBtn } from "../config/imports";
 
 import Loading from "./loading";
 import { setGoToAction } from "../context";

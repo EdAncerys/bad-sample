@@ -4,7 +4,7 @@ import BlockWrapper from "../blockWrapper";
 import Loading from "../loading";
 import EventListView from "../eventListView";
 import Card from "../card/card";
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 
 const EventLoopBlock = ({
   state,

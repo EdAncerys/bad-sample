@@ -4,7 +4,7 @@ import Image from "@frontity/components/image";
 import { Carousel } from "react-bootstrap";
 import ReactPlayer from "react-player";
 
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 
 const GalleryCarousel = ({ state, actions, libraries, gallery }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.

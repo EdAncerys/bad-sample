@@ -3,7 +3,7 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Form } from "react-bootstrap";
 
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 import { setGoToAction } from "../../context";
 import SideBarMenu from "./sideBarMenu";
 import Avatar from "../../img/svg/profile.svg";
@@ -263,7 +263,9 @@ const RegistrationStepTwo = ({ state, actions }) => {
     return (
       <div>
         <div style={styles.wrapper}>
-          <div className="primary-title" style={styles.title}>Personal Information</div>
+          <div className="primary-title" style={styles.title}>
+            Personal Information
+          </div>
           <div style={{ paddingTop: `0.75em` }}>
             How it works dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut

@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "frontity";
 
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 import PilGuidelines from "../components/home/pilGuidelines";
 import BlockBuilder from "../components/builder/blockBuilder";
 
@@ -14,7 +14,9 @@ const BlocksPage = ({ state }) => {
   return (
     <div>
       <div>
-        <div className="primary-title" style={styles.title}>BLOCK BUILDER 😈 </div>
+        <div className="primary-title" style={styles.title}>
+          BLOCK BUILDER 😈{" "}
+        </div>
       </div>
 
       <BlockBuilder blocks={wpBlocks} />

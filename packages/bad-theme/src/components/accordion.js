@@ -10,7 +10,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import NiceLogo from "../img/placeholders/niceLogo.svg";
 import DownloadFileBlock from "./downloadFileBlock";
 import Loading from "./loading";
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 import { setGoToAction } from "../context";
 import { v4 as uuidv4 } from "uuid";
 

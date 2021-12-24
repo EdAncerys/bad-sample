@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 import date from "date-and-time";
 
 const DATE_MODULE = date;

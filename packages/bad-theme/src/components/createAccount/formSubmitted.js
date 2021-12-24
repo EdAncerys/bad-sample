@@ -3,7 +3,7 @@ import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 import Image from "@frontity/components/image";
 
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 import Tick from "../../img/svg/tick.svg";
 
 const FormSubmitted = ({ state, actions, formSubmitted }) => {

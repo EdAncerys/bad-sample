@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect, Global, css } from "frontity";
 import bootStrapCSS from "../../css/bootstrap.min.css";
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 // css imports ------------------------------------------------------------
 import globalCSS from "../../css/main.css";
 import carousel from "../../css/carousel.css";

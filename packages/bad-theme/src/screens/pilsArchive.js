@@ -3,7 +3,7 @@ import { connect, styled } from "frontity";
 import { v4 as uuidv4 } from "uuid";
 
 import Loading from "../components/loading";
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 import { setGoToAction } from "../context";
 
 import SearchIcon from "@mui/icons-material/Search";

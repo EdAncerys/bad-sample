@@ -1,13 +1,15 @@
 import React from "react";
 import { connect } from "frontity";
 
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 
 const Error = ({ state }) => {
   return (
     <div style={styles.container}>
       <div>
-        <div className="primary-title" style={styles.title}>404 Error</div>
+        <div className="primary-title" style={styles.title}>
+          404 Error
+        </div>
         <div>
           The path <em>{state.router.link}</em> cannot be found.
         </div>

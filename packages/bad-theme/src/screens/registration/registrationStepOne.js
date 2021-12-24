@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "frontity";
 
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 import { setGoToAction } from "../../context";
 import SideBarMenu from "./sideBarMenu";
 import BlockWrapper from "../../components/blockWrapper";
@@ -56,7 +56,9 @@ const RegistrationStepOne = ({ state, actions }) => {
     return (
       <div>
         <div style={styles.wrapper}>
-          <div className="primary-title" style={styles.title}>The Process</div>
+          <div className="primary-title" style={styles.title}>
+            The Process
+          </div>
           <div style={{ paddingTop: `0.75em` }}>
             How it works dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut
@@ -71,7 +73,9 @@ const RegistrationStepOne = ({ state, actions }) => {
           >
             Memberships Page
           </div>
-          <div className="primary-title" style={styles.title}>You Will Need:</div>
+          <div className="primary-title" style={styles.title}>
+            You Will Need:
+          </div>
           <div style={styles.subTitle}>Personal Details:</div>
           <div>
             <ul>

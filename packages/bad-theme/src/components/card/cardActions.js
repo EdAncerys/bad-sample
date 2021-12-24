@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
-import { colors, capsBtn } from "../../config/colors";
+import { colors, capsBtn } from "../../config/imports";
 import DownloadFileBlock from "../downloadFileBlock";
 import { setGoToAction } from "../../context";
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { Dropdown } from "react-bootstrap";
 
-import { colors, dropDownBtn } from "../../config/colors";
+import { colors, dropDownBtn } from "../../config/imports";
 import { setGoToAction } from "../../context";
 import { MENU_DATA } from "../../config/data";
 

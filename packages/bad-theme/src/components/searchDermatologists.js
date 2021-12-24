@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { connect } from "frontity";
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";

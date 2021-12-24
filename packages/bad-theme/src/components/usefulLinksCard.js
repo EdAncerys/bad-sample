@@ -1,5 +1,5 @@
 import { connect } from "frontity";
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 
 import { setGoToAction } from "../context";
 

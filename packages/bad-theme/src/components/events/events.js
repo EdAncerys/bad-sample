@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import EventLoopBlock from "./eventLoopBlock";
 import Loading from "../loading";
 import TitleBlock from "../titleBlock";
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";

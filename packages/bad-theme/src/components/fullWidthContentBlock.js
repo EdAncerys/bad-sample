@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import BlockWrapper from "./blockWrapper";
-import { colors, blueBtn } from "../config/colors";
+import { colors, blueBtn } from "../config/imports";
 
 import { setGoToAction } from "../context";
 import Loading from "./loading";

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import Loading from "./loading";
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 
 const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {

@@ -3,7 +3,7 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Form } from "react-bootstrap";
 
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 import { setGoToAction } from "../../context";
 import SideBarMenu from "./sideBarMenu";
 import FileUpload from "../../img/svg/fileUpload.svg";
@@ -397,7 +397,9 @@ const RegistrationStepFour = ({ state, actions }) => {
     return (
       <div>
         <div style={styles.wrapper}>
-          <div className="primary-title" style={styles.title}>Professional Details</div>
+          <div className="primary-title" style={styles.title}>
+            Professional Details
+          </div>
           <div style={{ paddingTop: `0.75em` }}>
             How it works dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut
@@ -417,7 +419,9 @@ const RegistrationStepFour = ({ state, actions }) => {
             Memberships Categories
           </div>
 
-          <div className="primary-title" style={styles.title}>Category Selected : GP</div>
+          <div className="primary-title" style={styles.title}>
+            Category Selected : GP
+          </div>
           <div style={{ paddingTop: `0.75em` }}>
             Category requirements: GP members will be UK or Irish general
             practitioners (including GPwSIs/GPwERs) who spend less than 50% of

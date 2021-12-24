@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 import IndexCard from "./indexCard";
 import Loading from "./loading";
 import { setGoToAction } from "../context";
@@ -39,7 +39,7 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
 
       return (
         <div
-          className="primary-title" 
+          className="primary-title"
           style={{
             fontSize: 24,
             fontWeight: "bold",

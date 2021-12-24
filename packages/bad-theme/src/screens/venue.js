@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { connect } from "frontity";
 
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 import BlockBuilder from "../components/builder/blockBuilder";
 import { muiQuery } from "../context";
 import PromoBlock from "../components/promoBlock";

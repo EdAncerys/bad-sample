@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 import date from "date-and-time";
 import { setGoToAction } from "../../context";
 
@@ -62,7 +62,10 @@ const NewsAndMediaHeader = ({
     if (title.rendered.length < MAX_LENGTH) titlePreview = title.rendered;
 
     return (
-      <div className="primary-title" style={{ fontSize: 22, fontWeight: "bold", cursor: "pointer" }}>
+      <div
+        className="primary-title"
+        style={{ fontSize: 22, fontWeight: "bold", cursor: "pointer" }}
+      >
         <Html2React html={titlePreview} />
       </div>
     );
@@ -148,7 +151,10 @@ const NewsAndMediaHeader = ({
       <div>
         <ServeImage />
         <div style={{ padding: `1em 2em 0` }}>
-          <div className="primary-title" style={{ fontSize: 22, fontWeight: "bold", cursor: "pointer" }}>
+          <div
+            className="primary-title"
+            style={{ fontSize: 22, fontWeight: "bold", cursor: "pointer" }}
+          >
             <Html2React html={categoryName} />
           </div>
           <div style={{ padding: `0.5em 0 0` }}>

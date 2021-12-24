@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import Profile from "./profile";
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 import Loading from "./loading";
 import { setGoToAction } from "../context";
 

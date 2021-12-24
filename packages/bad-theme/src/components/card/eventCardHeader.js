@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 
 const EventCardHeader = ({ state, actions, libraries, eventHeader }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.

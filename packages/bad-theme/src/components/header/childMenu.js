@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { NavDropdown } from "react-bootstrap";
 
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 import { setGoToAction } from "../../context";
 
 const ChildMenu = ({ state, actions, libraries, slugPrefix, menu }) => {

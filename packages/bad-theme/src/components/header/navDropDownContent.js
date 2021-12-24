@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 
 const NavBarDropDownContent = ({ state, actions }) => {
   const data = state.source.get(state.router.link);

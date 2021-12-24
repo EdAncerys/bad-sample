@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 import Bulletins from "../../img/svg/bulletins.svg";
 import eCircular from "../../img/svg/eCircular.svg";
 import Insights from "../../img/svg/insights.svg";

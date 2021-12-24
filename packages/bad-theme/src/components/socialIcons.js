@@ -2,7 +2,7 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import Link from "@frontity/components/link";
 
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 import Facebook from "../img/svg/facebookColour.svg";
 import Twitter from "../img/svg/twitterColour.svg";
 import Instagram from "../img/svg/instagramColour.svg";
@@ -48,7 +48,7 @@ const SocialIcons = ({ state, actions, libraries, block }) => {
 
     return (
       <div
-        className="primary-title" 
+        className="primary-title"
         style={{
           fontSize: 24,
           fontWeight: "bold",

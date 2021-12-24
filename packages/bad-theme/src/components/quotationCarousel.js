@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "frontity";
 import { Carousel } from "react-bootstrap";
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 import Image from "@frontity/components/image";
 
 import Quotation from "../img/svg/quotation.svg";

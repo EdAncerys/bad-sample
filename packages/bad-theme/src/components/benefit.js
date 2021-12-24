@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 import Image from "@frontity/components/image";
 
 import Journal from "../img/svg/journal.svg";
@@ -59,7 +59,10 @@ const Benefit = ({ state, actions, libraries, block }) => {
     if (!title) return null;
 
     return (
-      <div className="primary-title" style={{ fontSize: 20,  fontWeight: "bold", margin: `0.75em 0` }}>
+      <div
+        className="primary-title"
+        style={{ fontSize: 20, fontWeight: "bold", margin: `0.75em 0` }}
+      >
         <Html2React html={title} />
       </div>
     );

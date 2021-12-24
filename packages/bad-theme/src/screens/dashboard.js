@@ -4,7 +4,7 @@ import Image from "@frontity/components/image";
 import { Form } from "react-bootstrap";
 
 import BlockBuilder from "../components/builder/blockBuilder";
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 import Avatar from "../img/svg/profile.svg";
 import Ellipse from "../img/svg/ellipse.svg";
 import CheckMarkGreen from "../img/svg/checkMarkGreen.svg";
@@ -160,7 +160,9 @@ const Dashboard = ({ state, actions, libraries }) => {
     return (
       <div className="shadow" style={styles.profileContainer}>
         <div>
-          <div className="primary-title" style={styles.title}>Hello Dr. Katie Lewis</div>
+          <div className="primary-title" style={styles.title}>
+            Hello Dr. Katie Lewis
+          </div>
 
           <div style={{ paddingTop: `0.75em` }}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -319,7 +321,9 @@ const Dashboard = ({ state, actions, libraries }) => {
         style={{ padding: `2em 4em`, margin: `2em 0 0 0` }}
       >
         <div>
-          <div className="primary-title" style={styles.subTitle}>Personal Details:</div>
+          <div className="primary-title" style={styles.subTitle}>
+            Personal Details:
+          </div>
           <ServeForm />
           <ServeActions />
         </div>

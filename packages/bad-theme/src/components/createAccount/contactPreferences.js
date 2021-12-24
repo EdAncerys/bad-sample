@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 
-import { colors } from "../../config/colors";
+import { colors } from "../../config/imports";
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, setCreateAccountModalAction } from "../../context";
 
@@ -57,7 +57,10 @@ const ContactPreferences = ({
   const ServeContent = () => {
     return (
       <div style={{ marginTop: `3em` }}>
-        <div className="primary-title" style={{ fontSize: 20, fontWeight: "bold" }}>
+        <div
+          className="primary-title"
+          style={{ fontSize: 20, fontWeight: "bold" }}
+        >
           Contact Preferences:
         </div>
         <div style={{ color: colors.darkSilver, margin: `1em 0` }}>

@@ -1,7 +1,7 @@
 import React from "react";
 import { connect, styled } from "frontity";
 
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 import Card from "../components/card/card";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";

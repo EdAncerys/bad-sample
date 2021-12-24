@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "frontity";
 import Switch from "@frontity/components/switch";
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 
 // COMPONENTS ---------------------------------------------------------
 import Header from "../components/header/header";

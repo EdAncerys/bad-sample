@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import { colors } from "../config/colors";
+import { colors } from "../config/imports";
 
 import Loading from "./loading";
 import SearchIcon from "@mui/icons-material/Search";
@@ -60,7 +60,7 @@ const SearchFilter = ({
     const ServeTitle = () => {
       return (
         <div
-          className="primary-title" 
+          className="primary-title"
           style={{
             fontSize: 20,
             color: colors.black,
