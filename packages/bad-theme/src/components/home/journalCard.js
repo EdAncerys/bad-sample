@@ -39,7 +39,7 @@ const JournalCard = ({
           <div
             className="flex"
             className="flex-row pointer"
-            style={{ alignItems: "center" }}
+            style={{ alignItems: "center", paddingTop: `1em` }}
             onClick={() => setGoToAction({ path: link.url, actions })}
           >
             <div style={capsBtn}>Read More</div>
@@ -105,7 +105,7 @@ const JournalCard = ({
           height: IMG_WIDTH,
           borderRadius: "50%",
           overflow: "hidden",
-          marginRight: `1em`,
+          margin: "auto",
         }}
       >
         <Image
@@ -136,6 +136,7 @@ const JournalCard = ({
         className="flex-row"
         style={{
           padding: !tweet ? `1em` : 0,
+          height: `100%`,
         }}
       >
         <ServeCardImage />

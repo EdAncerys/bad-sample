@@ -82,7 +82,7 @@ const Banner = ({ state, actions, libraries, block }) => {
           >
             <div className="flex" style={{ flex: 3 }}>
               <div
-                className="flex-col"
+                className="flex-col title-no-bottom-margin"
                 style={{
                   color: THEME_COLOR,
                   justifyContent: "flex-end",

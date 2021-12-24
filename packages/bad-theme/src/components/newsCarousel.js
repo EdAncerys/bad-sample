@@ -103,7 +103,7 @@ const NewsCarousel = ({ state, actions, libraries, block, isMenu }) => {
                         cardHeight={BANNER_HEIGHT}
                         title={title}
                         url={background_image.url}
-                        imgHeight={BANNER_HEIGHT * 0.6}
+                        imgHeight={BANNER_HEIGHT * 0.55}
                         colour={colour}
                         link={link.url}
                         shadow
