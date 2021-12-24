@@ -14,6 +14,7 @@ const FullWidthContentBlock = ({
   disableMargin,
   heroBanner,
   disablePadding,
+  reducePadding,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -129,7 +130,12 @@ const FullWidthContentBlock = ({
         padding: PADDING,
       }}
     >
-      <div style={{ margin: heroBanner ? 0 : MARGIN, padding: `2em 0` }}>
+      <div
+        style={{
+          margin: heroBanner ? 0 : MARGIN,
+          padding: reducePadding ? `1em 0` : `2em 0`,
+        }}
+      >
         <ServeTitle />
         <ServeCardBody />
         <ServeActions />

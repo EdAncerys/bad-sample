@@ -104,9 +104,7 @@ const NewsBlock = ({
               link_label="Read More"
               link={link}
               newsAndMediaInfo={block}
-              colour={
-                press_release_authors ? press_release_authors[0].colour : null
-              }
+              colour={colors.danger}
               limitBodyLength
               cardHeight="100%"
               shadow

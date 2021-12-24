@@ -125,11 +125,7 @@ const NewsCarouselComponent = ({ state, actions, libraries, block }) => {
                         cardWidth={isSingleBlock ? "50%" : "100%"}
                         cardHeight={BANNER_HEIGHT}
                         title={excerpt ? excerpt.rendered : null}
-                        colour={
-                          press_release_authors
-                            ? press_release_authors[0].colour
-                            : null
-                        }
+                        colour={colors.danger}
                         link={link}
                         link_label="Read More"
                         limitTitleLength

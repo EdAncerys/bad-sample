@@ -8,7 +8,7 @@ export const colors = {
   darkGrey: "#404040",
   black: "#212529",
   softBlack: "#454545",
-  danger: "#A9333A",
+  danger: "#ef476e",
   silver: "#ced4da",
   lightSilver: "#F0F1F4",
   darkSilver: "#A2A2A2",
@@ -21,4 +21,3 @@ export const colors = {
 
   turquoise: "#17A2B8",
 };
-

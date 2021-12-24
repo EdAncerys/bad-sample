@@ -132,7 +132,11 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
             width: !background_image ? CONTENT_WIDTH / 1.5 : CONTENT_WIDTH / 2, // if no img provided defaults to diff width
           }}
         >
-          <FullWidthContentBlock block={block} heroBanner />
+          <FullWidthContentBlock
+            block={block}
+            heroBanner
+            reducePadding={disable_vertical_padding}
+          />
         </div>
       </div>
     );
