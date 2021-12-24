@@ -193,18 +193,11 @@ const SearchFilter = ({
 
   // RETURN ---------------------------------------------------
   return (
-    <div
-      className="flex"
-      style={{ height: BANNER_HEIGHT / 1.2, alignItems: "center" }}
-    >
+    <div className="flex" style={{ alignItems: "center" }}>
       <div className="flex">
         <div
           className="flex-col"
-          style={{
-            padding: disableMargin
-              ? 0
-              : `${marginVertical}px ${marginHorizontal}px`,
-          }}
+          style={{ padding: disableMargin ? 0 : `0 ${marginHorizontal}px` }}
         >
           <ServeTitle />
           <ServeSearchContainer />
