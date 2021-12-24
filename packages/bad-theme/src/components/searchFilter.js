@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/imports";
 
-import Loading from "./loading";
 import SearchIcon from "@mui/icons-material/Search";
 import { Form } from "react-bootstrap";
 // CONTEXT ----------------------------------------------------------------
@@ -196,11 +195,7 @@ const SearchFilter = ({
   return (
     <div
       className="flex"
-      style={{
-        ...styles.container,
-        height: BANNER_HEIGHT / 1.2,
-        alignItems: "center",
-      }}
+      style={{ height: BANNER_HEIGHT / 1.2, alignItems: "center" }}
     >
       <div className="flex">
         <div
@@ -221,9 +216,6 @@ const SearchFilter = ({
 };
 
 const styles = {
-  container: {
-    backgroundColor: colors.white,
-  },
   input: {
     borderRadius: 10,
     paddingRight: 60,
