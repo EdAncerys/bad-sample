@@ -380,7 +380,7 @@ const Event = ({ state, actions, libraries }) => {
   return (
     <BlockWrapper>
       <div style={{ backgroundColor: colors.white }}>
-        <div style={{ padding: `${marginVertical}px 0` }}>
+        <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
           <div style={styles.container}>
             <div>
               <ServeTitle />
@@ -393,7 +393,7 @@ const Event = ({ state, actions, libraries }) => {
               <ServeSocials />
               <ServeFilters />
             </div>
-            <div className="pink"></div>
+            <div style={{ backgroundColor: colors.lightSilver }}></div>
           </div>
         </div>
       </div>

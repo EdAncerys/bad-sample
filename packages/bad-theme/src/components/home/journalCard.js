@@ -80,6 +80,7 @@ const JournalCard = ({
         style={{
           borderLeft: BORDER,
           minHeight: IMG_WIDTH,
+          marginLeft: image ? `1em` : 0,
         }}
       >
         <div

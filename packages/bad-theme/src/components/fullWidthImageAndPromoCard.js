@@ -4,7 +4,7 @@ import { connect } from "frontity";
 import Card from "./card/card";
 import Loading from "./loading";
 
-const FullWidthAndPromoCard = ({ state, actions, block }) => {
+const FullWidthImageAndPromoCard = ({ state, actions, block }) => {
   if (!block) return <Loading />;
 
   const { body, colour, image, disable_vertical_padding } = block;
@@ -34,4 +34,4 @@ const styles = {
   container: {},
 };
 
-export default connect(FullWidthAndPromoCard);
+export default connect(FullWidthImageAndPromoCard);

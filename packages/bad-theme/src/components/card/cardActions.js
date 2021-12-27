@@ -71,7 +71,6 @@ const CardActions = ({
           fontSize: 12,
           justifyContent: "space-between",
           alignItems: "center",
-          marginTop: `2em`,
         }}
       >
         <ServeFileAction />

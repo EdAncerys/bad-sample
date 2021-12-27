@@ -37,7 +37,7 @@ import LeadershipBlock from "../leadershipBlock";
 import ElectionsBlock from "../electionsBlock";
 import EmbeddedVideo from "../embeddedVideo";
 import NewsAndMedia from "../news/newsAndMedia";
-import FullWidthAndPromoCard from "../fullWidthAndPromoCard";
+import FullWidthImageAndPromoCard from "../fullWidthImageAndPromoCard";
 
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   // console.log("BLOCKS: ", blocks); // debug
@@ -72,7 +72,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
             return (
               <BlockWrapper key={key + 1} background={block.background_colour}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <FullWidthAndPromoCard key={key} block={block} />
+                <FullWidthImageAndPromoCard key={key} block={block} />
               </BlockWrapper>
             );
 

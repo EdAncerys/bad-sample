@@ -45,15 +45,15 @@ const Footer = ({ state, actions }) => {
             className="flex"
             style={{ flex: 4, fontSize: 11, justifyContent: "flex-end" }}
           >
-            <div style={styles.footerTitle}>
+            <div style={styles.footerLink}>
               <div>Willan House, 4 Fitzroy Square, London, W1T 5HQ</div>
               <ServeDivider />
             </div>
-            <div style={styles.footerTitle}>
+            <div style={styles.footerLink}>
               <div>admin@bad.org.uk</div>
               <ServeDivider />
             </div>
-            <div style={styles.footerTitle}>+44 (0)207 383 0266</div>
+            <div style={styles.footerLink}>+44 (0)207 383 0266</div>
           </div>
           <div className="flex" style={{ justifyContent: "space-around" }}>
             <div style={styles.socials}>
@@ -95,23 +95,29 @@ const Footer = ({ state, actions }) => {
           ©{`${year}`} British Association of Dermatologists
         </div>
         <div className="flex" style={{ flex: 2, justifyContent: "flex-end" }}>
-          <div style={styles.footerTitle}>
+          <div style={styles.footerLink}>
             <div>Registered Charity No. 25847</div>
             <ServeDivider />
           </div>
-          <div style={styles.footerTitle}>
+          <div style={styles.footerLink}>
             <div>Equal Opportunities Policy</div>
             <ServeDivider />
           </div>
-          <div style={styles.footerTitle}>
+          <div style={styles.footerLink}>
             <div>Privacy Policy</div>
             <ServeDivider />
           </div>
-          <div style={styles.footerTitle}>
+          <div style={styles.footerLink}>
             <div>Terms & Conditions</div>
             <ServeDivider />
           </div>
-          <div style={styles.footerTitle}>Site produced by Skylark</div>
+          <Link
+            link={`https://skylarkcreative.co.uk/`}
+            target="_blank"
+            style={styles.footerLink}
+          >
+            Site produced by Skylark
+          </Link>
         </div>
       </div>
     );
@@ -140,8 +146,9 @@ const styles = {
     backgroundColor: colors.softBlack,
     color: colors.white,
   },
-  footerTitle: {
+  footerLink: {
     display: "flex",
+    color: colors.white,
     cursor: "pointer",
   },
   socials: {

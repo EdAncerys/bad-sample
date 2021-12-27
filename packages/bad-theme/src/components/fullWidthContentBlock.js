@@ -14,7 +14,6 @@ const FullWidthContentBlock = ({
   disableMargin,
   heroBanner,
   disablePadding,
-  reducePadding,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -79,7 +78,6 @@ const FullWidthContentBlock = ({
         className="flex-col text-body"
         style={{
           fontSize: 16,
-          margin: `2em 0`,
           // limit container height
           // maxHeight: BANNER_HEIGHT / 1.25,
           // overflow: "auto",
@@ -111,7 +109,7 @@ const FullWidthContentBlock = ({
     return (
       <div>
         <div className="flex" style={{ justifyContent: ALIGNMENT }}>
-          <div className='blue-btn' onClick={handleSubmitAction}>
+          <div className="blue-btn" onClick={handleSubmitAction}>
             <Html2React html={LABEL} />
           </div>
         </div>
@@ -130,12 +128,7 @@ const FullWidthContentBlock = ({
         padding: PADDING,
       }}
     >
-      <div
-        style={{
-          margin: heroBanner ? 0 : MARGIN,
-          padding: reducePadding ? `1em 0` : `2em 0`,
-        }}
-      >
+      <div style={{ margin: heroBanner ? 0 : MARGIN }}>
         <ServeTitle />
         <ServeCardBody />
         <ServeActions />
