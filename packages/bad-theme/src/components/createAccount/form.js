@@ -50,7 +50,7 @@ const Form = ({ state, actions }) => {
       </div>
 
       <div className="flex mb-3 form-check">
-        <div className="flex">
+        <div className="flex" style={{ alignItems: "center" }}>
           <div>
             <input
               type="checkbox"
@@ -77,7 +77,7 @@ const Form = ({ state, actions }) => {
         </div>
       </div>
       <div className="flex mb-3 form-check">
-        <div className="flex">
+        <div className="flex" style={{ alignItems: "center" }}>
           <div>
             <input
               type="checkbox"

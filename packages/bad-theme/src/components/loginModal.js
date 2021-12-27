@@ -32,7 +32,7 @@ const LoginModal = ({ state, actions }) => {
             <input type="password" className="form-control" />
           </div>
           <div className="flex mb-3 form-check">
-            <div className="flex">
+            <div className="flex" style={{ alignItems: "center" }}>
               <input
                 type="checkbox"
                 className="form-check-input"
@@ -41,14 +41,13 @@ const LoginModal = ({ state, actions }) => {
               <label className="form-check-label">Remember Me</label>
             </div>
             <div
-              type="submit"
+              className='caps-btn'
               onClick={() =>
                 setLoginModalAction({
                   dispatch,
                   loginModalAction: !loginModalAction,
                 })
               }
-              style={{ textDecoration: "underline", textUnderlineOffset: 5 }}
             >
               Forgotten Password?
             </div>
@@ -93,8 +92,7 @@ const LoginModal = ({ state, actions }) => {
       return (
         <Modal.Footer>
           <button
-            type="submit"
-            className="btn btn-outline-secondary"
+            className='transparent-btn'
             onClick={() =>
               setLoginModalAction({
                 dispatch,
@@ -106,9 +104,7 @@ const LoginModal = ({ state, actions }) => {
           </button>
 
           <button
-            type="submit"
-            className="btn"
-            style={{ backgroundColor: colors.primary, color: colors.white }}
+            className='blue-btn'
             onClick={() =>
               loginAction({
                 dispatch,
@@ -151,7 +147,7 @@ const LoginModal = ({ state, actions }) => {
               margin: `3em 1em`,
             }}
           >
-            <h4>Login</h4>
+            <div>Login</div>
           </div>
         </Modal.Body>
       </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import BlockWrapper from "./blockWrapper";
-import { colors, blueBtn } from "../config/imports";
+import { colors } from "../config/imports";
 
 import { setGoToAction } from "../context";
 import Loading from "./loading";
@@ -111,7 +111,7 @@ const FullWidthContentBlock = ({
     return (
       <div>
         <div className="flex" style={{ justifyContent: ALIGNMENT }}>
-          <div style={blueBtn} onClick={handleSubmitAction}>
+          <div className='blue-btn' onClick={handleSubmitAction}>
             <Html2React html={LABEL} />
           </div>
         </div>

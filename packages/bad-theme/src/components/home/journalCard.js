@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
-import { colors, capsBtn } from "../../config/imports";
+import { colors } from "../../config/imports";
 import { setGoToAction } from "../../context";
 
 const JournalCard = ({
@@ -42,7 +42,7 @@ const JournalCard = ({
             style={{ alignItems: "center", paddingTop: `1em` }}
             onClick={() => setGoToAction({ path: link.url, actions })}
           >
-            <div style={capsBtn}>Read More</div>
+            <div className="caps-btn">Read More</div>
           </div>
         </div>
       );

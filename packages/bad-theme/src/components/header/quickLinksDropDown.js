@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { Dropdown } from "react-bootstrap";
 
-import { colors, dropDownBtn } from "../../config/imports";
+import { colors } from "../../config/imports";
 import { setGoToAction } from "../../context";
 import { MENU_DATA } from "../../config/data";
 
@@ -16,10 +16,10 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
         <div
           style={{
             position: "absolute",
-            height: 20,
-            width: 150,
+            height: 25,
+            width: 145,
             backgroundColor: colors.lightSilver,
-            top: -20,
+            top: -25,
             right: 0,
           }}
         />
@@ -61,7 +61,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
     <div className="dropdown dropdown-basic">
       <div>
         <Dropdown align="end">
-          <Dropdown.Toggle variant="shadow-none btn-m" style={dropDownBtn}>
+          <Dropdown.Toggle variant="shadow-none btn-m drop-down-btn">
             Quick Links
           </Dropdown.Toggle>
           <Dropdown.Menu>

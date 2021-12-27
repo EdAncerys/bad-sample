@@ -42,8 +42,7 @@ const loginModal = ({ state, actions }) => {
           </div>
           <div>
             <label
-              className="form-check-label"
-              style={{ ...styles.TC, color: colors.blue }}
+              className="caps-btn"
               onClick={() => {
                 setCreateAccountModalAction({
                   dispatch,
@@ -66,8 +65,7 @@ const loginModal = ({ state, actions }) => {
       return (
         <Modal.Footer>
           <button
-            type="submit"
-            className="btn btn-outline-secondary"
+            className='transparent-btn'
             onClick={() =>
               setCreateAccountModalAction({
                 dispatch,
@@ -79,9 +77,7 @@ const loginModal = ({ state, actions }) => {
           </button>
 
           <button
-            type="submit"
-            className="btn"
-            style={{ backgroundColor: colors.primary, color: colors.white }}
+            className='blue-btn'
             // onClick={() => setFormComplete(true)}
           >
             Confirm

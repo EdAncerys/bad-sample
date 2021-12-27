@@ -3,7 +3,7 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { v4 as uuidv4 } from "uuid";
 
-import { colors, blueBtn } from "../../config/imports";
+import { colors } from "../../config/imports";
 import BADLogo from "../../img/svg/badLogoHeader.svg";
 import SearchIcon from "@mui/icons-material/Search";
 import QuickLinksDropDown from "./quickLinksDropDown";
@@ -79,15 +79,14 @@ const HeaderActions = ({ state, actions }) => {
 
     return (
       <div style={{ padding: `0 2em` }}>
-        <button
-          className="btn shadow-none"
+        <div
+          className="blue-btn"
           onClick={() =>
             setLoginModalAction({ dispatch, loginModalAction: true })
           }
-          style={blueBtn}
         >
           Login
-        </button>
+        </div>
       </div>
     );
   };
@@ -104,7 +103,7 @@ const HeaderActions = ({ state, actions }) => {
               actions,
             })
           }
-          style={blueBtn}
+          className='blue-btn'
         >
           Dashboard
         </button>

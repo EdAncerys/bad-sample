@@ -10,7 +10,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import NiceLogo from "../img/placeholders/niceLogo.svg";
 import DownloadFileBlock from "./downloadFileBlock";
 import Loading from "./loading";
-import { colors, blueBtn, capsBtn } from "../config/imports";
+import { colors } from "../config/imports";
 import { setGoToAction } from "../context";
 import { v4 as uuidv4 } from "uuid";
 
@@ -417,8 +417,7 @@ const AccordionComponent = ({
           >
             <div>
               <button
-                className="flex-row"
-                style={blueBtn}
+                className="flex-row blue-btn"
                 onClick={() => setGoToAction({ path: link.url, actions })}
               >
                 <div className="flex">
@@ -644,7 +643,7 @@ const AccordionComponent = ({
         return (
           <div style={{ margin: `2em 2em 0 0` }}>
             <div
-              style={capsBtn}
+              className="caps-btn"
               onClick={() => setGoToAction({ path: link_url, actions })}
             >
               <Html2React html={label} />
