@@ -86,13 +86,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
             return (
               <div className="home-banner">
                 <button
-                  className="btn btn-outline-light flex-center-row"
-                  style={{
-                    color: THEME_COLOR,
-                    borderColor: THEME_COLOR,
-                    borderRadius: 5,
-                    padding: `0.5em 2em`,
-                  }}
+                  className="banner-transparent-btn"
                   onClick={() => setGoToAction({ path: link.url, actions })}
                 >
                   <div className="flex">
@@ -120,14 +114,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
 
             return (
               <div
-                style={{
-                  fontSize: 12,
-                  color: THEME_COLOR,
-                  border: `1px solid ${THEME_COLOR}`,
-                  borderRadius: 5,
-                  width: "fit-content",
-                  padding: `1em 2em`,
-                }}
+                className="label"
                 onClick={() =>
                   setGoToAction({ path: event_label.url, actions })
                 }

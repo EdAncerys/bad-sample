@@ -26,7 +26,7 @@
   justify-content: center;
 }
 .home-banner .btn-outline-light:hover,
-.home-banner-carousel button:hover .MuiSvgIcon-fontSizeMedium {
+.home-banner-carousel button:hover .MuiSvgIcon-root .MuiSvgIcon-fontSizeMedium {
   color: rgba(31, 51, 94, 1) !important;
 }
 
