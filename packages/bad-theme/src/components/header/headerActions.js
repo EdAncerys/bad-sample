@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
-import { v4 as uuidv4 } from "uuid";
 
 import { colors } from "../../config/imports";
 import BADLogo from "../../img/svg/badLogoHeader.svg";
-import SearchIcon from "@mui/icons-material/Search";
 import QuickLinksDropDown from "./quickLinksDropDown";
 import BlockWrapper from "../blockWrapper";
+import SearchInput from "./searchInput";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -20,8 +19,6 @@ const HeaderActions = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { user } = useAppState();
 
-  const id = uuidv4();
-
   // SERVERS ----------------------------------------------------
   const ServeLogoContainer = () => {
     return (
@@ -32,44 +29,6 @@ const HeaderActions = ({ state, actions }) => {
         >
           <Image src={BADLogo} className="d-block h-100" alt="BAD Logo" />
         </div>
-      </div>
-    );
-  };
-
-  const ServeSearchContainer = () => {
-    const ctaHeight = 45;
-
-    return (
-      <div
-        className="flex"
-        style={{
-          flex: 1,
-          height: ctaHeight,
-          position: "relative",
-        }}
-      >
-        <input
-          // id={`searchMain${id}`}
-          type="text"
-          className="form-control"
-          placeholder="Find An Event"
-          style={styles.input}
-        />
-        <span
-          className="input-group-text"
-          style={{
-            position: "absolute",
-            right: 0,
-            height: ctaHeight,
-            border: "none",
-            background: "transparent",
-            alignItems: "center",
-            color: colors.darkSilver,
-            cursor: "pointer",
-          }}
-        >
-          <SearchIcon />
-        </span>
       </div>
     );
   };
@@ -103,7 +62,7 @@ const HeaderActions = ({ state, actions }) => {
               actions,
             })
           }
-          className='blue-btn'
+          className="blue-btn"
         >
           Dashboard
         </button>
@@ -124,7 +83,7 @@ const HeaderActions = ({ state, actions }) => {
               flex: 1.5,
             }}
           >
-            <ServeSearchContainer />
+            <SearchInput />
             <ServeLoginAction />
             <ServeDashboardAction />
             <QuickLinksDropDown />
@@ -136,11 +95,7 @@ const HeaderActions = ({ state, actions }) => {
 };
 
 const styles = {
-  input: {
-    borderRadius: 10,
-    paddingRight: 35,
-    color: colors.darkSilver,
-  },
+  container: {},
 };
 
 export default connect(HeaderActions);

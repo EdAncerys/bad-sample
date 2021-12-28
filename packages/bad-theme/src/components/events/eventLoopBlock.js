@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import BlockWrapper from "../blockWrapper";
+
 import Loading from "../loading";
 import EventListView from "../eventListView";
 import Card from "../card/card";
