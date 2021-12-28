@@ -47,19 +47,7 @@ const EventLoopBlock = ({
 
   // DATA get for EVENTS ----------------------------------------------------------------
   useEffect(async () => {
-    const path = `/events/`;
-    await actions.source.fetch(path); // fetch CPT events
-
-    const events = await state.source.get(path);
-    const { totalPages, page, next } = events; // check if events have multiple pages
-    // fetch events via wp API page by page
-    let isThereNextPage = next;
-    while (isThereNextPage) {
-      await actions.source.fetch(isThereNextPage); // fetch next page
-      const nextPage = await state.source.get(isThereNextPage).next; // check ifNext page & set next page
-      isThereNextPage = nextPage;
-    }
-
+    // events data pre fetch via beforeCSR
     if (!state.source.events) {
       console.log("Error. Failed to fetch events data"); // debug
       return null;

@@ -67,7 +67,7 @@ const Card = ({
   if (cardHeight) CARD_HEIGHT = cardHeight;
   if (isFrom4Col) CARD_HEIGHT = 250;
 
-  let PADDING = `2em`;
+  let PADDING = heroBanner ? 0 : `2em`;
   if (isFrom4Col) PADDING = `1em`;
   if (newsAndMediaInfo) PADDING = `0 2em 2em`;
   if (removePadding) PADDING = 0;

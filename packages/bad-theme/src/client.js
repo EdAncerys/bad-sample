@@ -55,9 +55,9 @@ const BADTheme = {
         // fetch postData via wp API page by page
         let isThereNextPostPage = postDataNextPage;
         while (isThereNextPostPage) {
-          await actions.source.fetch(isThereNextPage); // fetch next page
-          const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
-          isThereNextPage = nextPage;
+          await actions.source.fetch(isThereNextPostPage); // fetch next page
+          const nextPage = state.source.get(isThereNextPostPage).next; // check ifNext page & set next page
+          isThereNextPostPage = nextPage;
         }
 
         // pre fetch leadership_team data
@@ -67,9 +67,21 @@ const BADTheme = {
         // fetch leadershipTeam via wp API page by page
         let isThereNextLeadershipPage = leadershipTeamNextPage;
         while (isThereNextLeadershipPage) {
-          await actions.source.fetch(isThereNextPage); // fetch next page
-          const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
-          isThereNextPage = nextPage;
+          await actions.source.fetch(isThereNextLeadershipPage); // fetch next page
+          const nextPage = state.source.get(isThereNextLeadershipPage).next; // check ifNext page & set next page
+          isThereNextLeadershipPage = nextPage;
+        }
+
+        // pre fetch events data
+        await actions.source.fetch(`/events/`); // fetch CPT events
+        const events = state.source.get(`/events/`);
+        const eventsNextPage = events.next; // check if events have multiple pages
+        // fetch events via wp API page by page
+        let isThereNextEventPage = eventsNextPage;
+        while (isThereNextEventPage) {
+          await actions.source.fetch(isThereNextEventPage); // fetch next page
+          const nextPage = state.source.get(isThereNextEventPage).next; // check ifNext page & set next page
+          isThereNextEventPage = nextPage;
         }
 
         // pre load fonts from google
