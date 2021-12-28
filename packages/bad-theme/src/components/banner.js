@@ -36,15 +36,7 @@ const Banner = ({ state, actions, libraries, block }) => {
         >
           <div>
             <button
-              className="btn btn-outline-light flex-center-row"
-              style={{
-                color: THEME_COLOR,
-                borderColor: THEME_COLOR,
-                textTransform: "uppercase",
-                alignItems: "center",
-                borderRadius: 5,
-                padding: `0.5em 2em`,
-              }}
+              className="banner-transparent-btn"
               onClick={() => setGoToAction({ path: link.url, actions })}
             >
               <div className="flex">

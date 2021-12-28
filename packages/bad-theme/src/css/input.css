@@ -4,8 +4,9 @@
 .css-yk16xz-control {
   border-radius: 10px !important;
 }
-.event-input .input-group-text:hover .MuiSvgIcon-root {
-  fill: #454545;
+.event-input .input-group-text:hover .MuiSvgIcon-root,
+.event-input .search-clear-icon:hover .MuiSvgIcon-root {
+  fill: #454545 !important;
 }
 .event-search-title:hover {
   color: #454545;

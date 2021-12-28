@@ -67,15 +67,17 @@ const Post = ({ state, actions, libraries }) => {
   };
 
   return (
-    <BlockWrapper
-      className="text-body"
-      style={{
-        margin: `${marginVertical}px ${marginHorizontal}px`,
-      }}
-    >
-      <ServeTitle />
-      <ServeDownload />
-      <ServeBody />
+    <BlockWrapper>
+      <div
+        className="text-body"
+        style={{
+          margin: `${marginVertical}px ${marginHorizontal}px`,
+        }}
+      >
+        <ServeTitle />
+        <ServeDownload />
+        <ServeBody />
+      </div>
     </BlockWrapper>
   );
 };

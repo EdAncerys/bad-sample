@@ -1,5 +1,5 @@
 import { AppProvider, useAppDispatch, useAppState } from "./context";
-import { setGoToAction } from "./actions/actions";
+import { setGoToAction, eventFilterAction } from "./actions/actions";
 import { muiQuery } from "./mediaQueryContext";
 import {
   setLoginModalAction,
@@ -20,4 +20,5 @@ export {
   setEnquireAction,
   setLoginAction,
   loginAction,
+  eventFilterAction,
 };

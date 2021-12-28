@@ -34,7 +34,7 @@ import Loading from "../components/loading";
 import Error from "./error";
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState } from "../context";
+import { useAppDispatch, useAppState, eventFilterAction } from "../context";
 
 const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
@@ -52,6 +52,7 @@ const App = ({ state, actions }) => {
       onClick={() => {
         state.theme.childMenuRef = ""; // reset child menu ref value
         state.theme.activeDropDownRef = "menu reset"; // reset menu ref value
+        eventFilterAction({ dispatch, filter: null }); // reset search event filter
       }}
     >
       <div style={{ ...styles.container }}>
