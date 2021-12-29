@@ -8,15 +8,12 @@ import { setGoToAction } from "../../context";
 
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
-// CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, eventFilterAction } from "../../context";
 
 const SearchInput = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-  const dispatch = useAppDispatch();
-  const { filter } = useAppState();
 
   const [eventKey, setEventKey] = useState(null);
+  const filter = state.theme.filter;
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const ctaHeight = 45;
   // hook applies after React has performed all DOM mutations
@@ -41,9 +38,8 @@ const SearchInput = ({ state, actions, libraries }) => {
       event.title.rendered.toLowerCase().includes(searchInput)
     );
 
-    console.log(searchInput);
     if (!results.length) results = [{ title: { rendered: "No Events Found" } }];
-    eventFilterAction({ dispatch, filter: results });
+    state.theme.filter = results;
   };
 
   // SERVERS ---------------------------------------------
@@ -76,9 +72,6 @@ const SearchInput = ({ state, actions, libraries }) => {
           >
             {filter.map((event, key) => {
               if (!event.title) return null;
-
-              console.log(event);
-
               const { link, title } = event;
 
               return (
@@ -88,7 +81,7 @@ const SearchInput = ({ state, actions, libraries }) => {
                   style={{ padding: `0.5em 0`, cursor: "pointer" }}
                   onClick={() => {
                     setGoToAction({ path: link, actions });
-                    eventFilterAction({ dispatch, filter: null });
+                    state.theme.filter = null;
                   }}
                 >
                   <Html2React html={title.rendered} />
@@ -110,7 +103,7 @@ const SearchInput = ({ state, actions, libraries }) => {
           <div
             className="search-clear-icon"
             style={styles.closeAction}
-            onClick={() => eventFilterAction({ dispatch, filter: null })}
+            onClick={() => (state.theme.filter = null)}
           >
             <CloseIcon
               style={{

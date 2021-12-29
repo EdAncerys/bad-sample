@@ -16,6 +16,7 @@ const BADTheme = {
       GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
       menuUrl: "/menu/primary-menu",
       menu: null,
+      filter: null,
       activeDropDownRef: "activeDropDownRef",
       childMenuRef: null,
       contentContainer: 1350, // px units
