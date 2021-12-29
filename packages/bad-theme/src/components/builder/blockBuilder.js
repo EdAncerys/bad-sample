@@ -38,6 +38,7 @@ import ElectionBlocks from "../electionBlocks";
 import EmbeddedVideo from "../embeddedVideo";
 import NewsAndMedia from "../news/newsAndMedia";
 import FullWidthImageAndPromoCard from "../fullWidthImageAndPromoCard";
+import ImageBlock from "../imageBlock";
 
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   // console.log("BLOCKS: ", blocks); // debug
@@ -67,6 +68,14 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
         {blocks.map((block, key) => {
           const { acf_fc_layout } = block;
           console.log("CONTENT BLOCK", block); // debug
+
+          if (acf_fc_layout === "image_block")
+            return (
+              <BlockWrapper key={key + 1} background={block.background_colour}>
+                <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+                <ImageBlock key={key} block={block} />
+              </BlockWrapper>
+            );
 
           if (acf_fc_layout === "full_width_image_and_promo_card")
             return (
