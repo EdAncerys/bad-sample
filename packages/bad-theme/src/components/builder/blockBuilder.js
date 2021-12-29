@@ -34,7 +34,7 @@ import SplitContentAndUsefulLinksCard from "../splitContentAndUsefulLinksCard";
 import Events from "../events/events";
 import GuidelinesAndStandards from "../guidelinesAndStandards";
 import LeadershipBlock from "../leadershipBlock";
-import ElectionsBlock from "../electionsBlock";
+import ElectionBlocks from "../electionBlocks";
 import EmbeddedVideo from "../embeddedVideo";
 import NewsAndMedia from "../news/newsAndMedia";
 import FullWidthImageAndPromoCard from "../fullWidthImageAndPromoCard";
@@ -96,7 +96,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
             return (
               <BlockWrapper key={key + 1} background={block.background_colour}>
                 <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-                <ElectionsBlock key={key} block={block} />
+                <ElectionBlocks key={key} block={block} />
               </BlockWrapper>
             );
 

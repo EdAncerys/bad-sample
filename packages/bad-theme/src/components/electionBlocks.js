@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { connect } from "frontity";
 import { Form } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
@@ -11,7 +11,7 @@ import { colors } from "../config/imports";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 
-const ElectionsBlock = ({ state, actions, block }) => {
+const ElectionBlocks = ({ state, actions, block }) => {
   if (!block) return <Loading />;
 
   const {
@@ -24,14 +24,15 @@ const ElectionsBlock = ({ state, actions, block }) => {
   } = block;
 
   const [electionList, setElectionList] = useState(null);
-  const [dropDownOne, setDropDownOne] = useState(null); // data
-  const [dropDownTwo, setDropDownTwo] = useState(null); // data
+  const [gradeList, setGradeList] = useState(null); // data
+  const [roleList, setRoleList] = useState(null); // data
 
   const [searchFilter, setSearchFilter] = useState(null);
-  const [filterOne, setFilterOne] = useState(null);
-  const [filterTwo, setFilterTwo] = useState(null);
-  const [filterThree, setFilterThree] = useState(null);
-  const [filterFour, setFilterFour] = useState(null);
+  const [gradeFilter, setGradeFilter] = useState(null);
+  const [roleFilter, setRoleFilter] = useState(null);
+  const [openPositions, serOpenPositions] = useState(null);
+  const [dateFilter, setDateFilter] = useState(null);
+  const [uniqueId, setUniqueId] = useState(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -40,7 +41,12 @@ const ElectionsBlock = ({ state, actions, block }) => {
   const isSearch = has_search;
   const isPosition = positions_filter;
   const isOpen = opened_or_closed_filter;
-  const id = uuidv4();
+  const ctaHeight = 45;
+
+  useLayoutEffect(() => {
+    const blockId = uuidv4(); // add unique uniqueId
+    setUniqueId(blockId);
+  }, []);
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
@@ -63,32 +69,36 @@ const ElectionsBlock = ({ state, actions, block }) => {
     const GRADES = Object.values(state.source.election_grade);
     const ROLES = Object.values(state.source.election_roles);
 
-    setDropDownOne(GRADES);
-    setDropDownTwo(ROLES);
+    setGradeList(GRADES);
+    setRoleList(ROLES);
   }, []);
   // DATA pre FETCH ----------------------------------------------------------------
   if (!electionList) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
-  const handleSearchSubmit = () => {
-    const searchInput = document.querySelector(`#searchInput${id}`).value;
+  const handleInputSearch = () => {
+    const searchInput = document.querySelector(`#searchInput${uniqueId}`).value;
 
-    const serveFilterOne = document.querySelector(`#serveFilterOne${id}`).value;
-    const serveFilterTwo = document.querySelector(`#serveFilterTwo${id}`).value;
-    const serveFilterFour = document.querySelector(
-      `#serveFilterFour${id}`
+    const serveGradeFilter = document.querySelector(
+      `#serveGradeFilter${uniqueId}`
+    ).value;
+    const serveRoleFilter = document.querySelector(
+      `#serveRoleFilter${uniqueId}`
+    ).value;
+    const serveDateFilter = document.querySelector(
+      `#serveDateFilter${uniqueId}`
     ).value;
 
     if (!!searchInput) setSearchFilter(searchInput);
-    if (!!serveFilterOne) setFilterOne(serveFilterOne);
-    if (!!serveFilterTwo) setFilterTwo(serveFilterTwo);
-    if (!!serveFilterFour) {
-      setFilterFour(serveFilterFour);
+    if (!!serveGradeFilter) setGradeFilter(serveGradeFilter);
+    if (!!serveRoleFilter) setRoleFilter(serveRoleFilter);
+    if (!!serveDateFilter) {
+      setDateFilter(serveDateFilter);
       // apply date filter
       let filter = electionList.sort(
         (a, b) => new Date(a.acf.closing_date) - new Date(b.acf.closing_date)
       );
-      if (serveFilterFour === "Date Descending") {
+      if (serveDateFilter === "Date Descending") {
         filter = electionList.sort(
           (a, b) => new Date(b.acf.closing_date) - new Date(a.acf.closing_date)
         );
@@ -108,38 +118,45 @@ const ElectionsBlock = ({ state, actions, block }) => {
             className="flex"
             style={{
               flex: 1,
-              marginRight: `2em`,
-              padding: `0.75em 0`,
+              height: ctaHeight,
               position: "relative",
+              margin: "auto 0",
             }}
           >
             <input
-              id={`searchInput${id}`}
+              id={`searchInput${uniqueId}`}
               type="text"
               className="form-control"
               placeholder="Find An Event"
               style={styles.input}
             />
-            <span
+            <div
               className="input-group-text"
               style={{
                 position: "absolute",
                 right: 0,
-                height: 45,
+                height: ctaHeight,
                 border: "none",
                 background: "transparent",
                 alignItems: "center",
                 color: colors.darkSilver,
+                cursor: "pointer",
               }}
             >
               <SearchIcon />
-            </span>
+            </div>
           </div>
-          <div style={{ display: "grid", alignItems: "center" }}>
+          <div
+            style={{
+              display: "grid",
+              alignItems: "center",
+              paddingLeft: `2em`,
+            }}
+          >
             <button
               type="submit"
               className="blue-btn"
-              onClick={handleSearchSubmit}
+              onClick={handleInputSearch}
             >
               Search
             </button>
@@ -149,7 +166,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
     };
 
     const ServeFilters = () => {
-      if (!dropDownOne && !dropDownTwo) return null; // props for filter options
+      if (!gradeList && !roleList) return null; // props for filter options
       if (!isPosition) return null;
 
       const ServeTitle = () => {
@@ -168,17 +185,17 @@ const ElectionsBlock = ({ state, actions, block }) => {
       };
 
       const ServeFilterOne = () => {
-        if (!dropDownOne) return null;
+        if (!gradeList) return null;
 
         return (
           <div className="flex" style={{ paddingRight: `1em` }}>
             <Form.Select
-              id={`serveFilterOne${id}`}
+              id={`serveGradeFilter${uniqueId}`}
               aria-label="Default select example"
               style={styles.input}
             >
               <option value="">Election Grades</option>
-              {dropDownOne.map((item, key) => {
+              {gradeList.map((item, key) => {
                 return (
                   <option key={key} value={item.id}>
                     {item.name}
@@ -191,17 +208,17 @@ const ElectionsBlock = ({ state, actions, block }) => {
       };
 
       const ServeFilterTwo = () => {
-        if (!dropDownTwo) return null;
+        if (!roleList) return null;
 
         return (
           <div className="flex" style={{ paddingRight: `1em` }}>
             <Form.Select
-              id={`serveFilterTwo${id}`}
+              id={`serveRoleFilter${uniqueId}`}
               aria-label="Default select example"
               style={styles.input}
             >
               <option value="">Election Role</option>
-              {dropDownTwo.map((item, key) => {
+              {roleList.map((item, key) => {
                 return (
                   <option key={key} value={item.id}>
                     {item.name}
@@ -213,11 +230,11 @@ const ElectionsBlock = ({ state, actions, block }) => {
         );
       };
 
-      const ServeFilterFour = () => {
+      const ServeDateFilter = () => {
         return (
           <div className="flex">
             <Form.Select
-              id={`serveFilterFour${id}`}
+              id={`serveDateFilter${uniqueId}`}
               aria-label="Default select example"
               style={styles.input}
             >
@@ -237,7 +254,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
           <ServeTitle />
           <ServeFilterOne />
           <ServeFilterTwo />
-          <ServeFilterFour />
+          <ServeDateFilter />
         </div>
       );
     };
@@ -260,16 +277,16 @@ const ElectionsBlock = ({ state, actions, block }) => {
       );
     };
 
-    const ServeDropDownFilterOne = () => {
-      if (!filterOne) return null;
+    const ServeDropDownGradeFilter = () => {
+      if (!gradeFilter) return null;
       const GRADES = Object.values(state.source.election_grade);
-      const filter = GRADES.filter((item) => item.id === Number(filterOne));
+      const filter = GRADES.filter((item) => item.id === Number(gradeFilter));
       const name = filter[0].name;
 
       return (
         <div className="shadow" style={styles.action}>
           <div>{name}</div>
-          <div style={styles.closeAction} onClick={() => setFilterOne(null)}>
+          <div style={styles.closeAction} onClick={() => setGradeFilter(null)}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -281,16 +298,16 @@ const ElectionsBlock = ({ state, actions, block }) => {
       );
     };
 
-    const ServeDropDownFilterTwo = () => {
-      if (!filterTwo) return null;
+    const ServeDropDownRoleFilter = () => {
+      if (!roleFilter) return null;
       const ROLES = Object.values(state.source.election_roles);
-      const filter = ROLES.filter((item) => item.id === Number(filterTwo));
+      const filter = ROLES.filter((item) => item.id === Number(roleFilter));
       const name = filter[0].name;
 
       return (
         <div className="shadow" style={styles.action}>
           <div>{name}</div>
-          <div style={styles.closeAction} onClick={() => setFilterTwo(null)}>
+          <div style={styles.closeAction} onClick={() => setRoleFilter(null)}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -303,12 +320,15 @@ const ElectionsBlock = ({ state, actions, block }) => {
     };
 
     const ServeBtnFilter = () => {
-      if (!filterThree) return null;
+      if (!openPositions) return null;
 
       return (
         <div className="shadow" style={styles.action}>
           <div>Open Positions</div>
-          <div style={styles.closeAction} onClick={() => setFilterThree(null)}>
+          <div
+            style={styles.closeAction}
+            onClick={() => serOpenPositions(null)}
+          >
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -321,15 +341,15 @@ const ElectionsBlock = ({ state, actions, block }) => {
     };
 
     const ServeDropDownFilterFour = () => {
-      if (!filterFour) return null;
+      if (!dateFilter) return null;
 
       return (
         <div className="shadow" style={styles.action}>
-          <div>{filterFour}</div>
+          <div>{dateFilter}</div>
           <div
             style={styles.closeAction}
             onClick={() => {
-              setFilterFour(null);
+              setDateFilter(null);
               const ELECTION_LIST = Object.values(state.source.elections); // add electionData object to data array
               setElectionList(ELECTION_LIST);
             }}
@@ -358,7 +378,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
               padding: `1em 2em`,
               cursor: "pointer",
             }}
-            onClick={() => setFilterThree(!filterThree)}
+            onClick={() => serOpenPositions(!openPositions)}
           >
             Only Show Open Positions
           </div>
@@ -367,15 +387,15 @@ const ElectionsBlock = ({ state, actions, block }) => {
     };
 
     return (
-      <div style={{ position: "relative", paddingBottom: `1em` }}>
-        <div className="flex-col" style={{ width: "60%" }}>
+      <div style={{ position: "relative", padding: `1em 0`, width: `70%` }}>
+        <div className="flex-col">
           <ServeSearchContainer />
           <ServeFilters />
         </div>
         <div className="flex" style={{ marginTop: "0.5em" }}>
           <ServeSearchFilter />
-          <ServeDropDownFilterOne />
-          <ServeDropDownFilterTwo />
+          <ServeDropDownGradeFilter />
+          <ServeDropDownRoleFilter />
           <ServeBtnFilter />
           <ServeDropDownFilterFour />
         </div>
@@ -388,12 +408,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div
-      style={{
-        padding: `${marginVertical}px ${marginHorizontal}px`,
-        backgroundColor: colors.silverFillOne,
-      }}
-    >
+    <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
       <TitleBlock block={{ title, text_align }} disableMargin />
       <ServeFilter />
       <div style={styles.container}>
@@ -417,13 +432,13 @@ const ElectionsBlock = ({ state, actions, block }) => {
               return null;
           }
           // select filtering config
-          if (filterOne) {
-            if (!election_grade.includes(Number(filterOne))) return null;
+          if (gradeFilter) {
+            if (!election_grade.includes(Number(gradeFilter))) return null;
           }
-          if (filterTwo) {
-            if (!election_roles.includes(Number(filterTwo))) return null;
+          if (roleFilter) {
+            if (!election_roles.includes(Number(roleFilter))) return null;
           }
-          if (filterThree) {
+          if (openPositions) {
             const date = new Date();
             const electionDate = new Date(closing_date);
             if (date >= electionDate) return null;
@@ -479,4 +494,4 @@ const styles = {
   },
 };
 
-export default connect(ElectionsBlock);
+export default connect(ElectionBlocks);
