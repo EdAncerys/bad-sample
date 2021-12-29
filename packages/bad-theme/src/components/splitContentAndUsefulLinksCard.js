@@ -16,9 +16,16 @@ const SplitContentAndUsefulLinksCard = ({
 
   if (!block) return <Loading />;
 
-  const { body, label, link, useful_link_card, disable_vertical_padding } =
-    block;
+  const {
+    body,
+    label,
+    link,
+    useful_link_card,
+    disable_vertical_padding,
+    limit_body_length,
+  } = block;
 
+  const [limit, setLimit] = useState(limit_body_length);
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
@@ -29,9 +36,26 @@ const SplitContentAndUsefulLinksCard = ({
       if (!body) return null;
 
       // Manage max string Length
-      const MAX_LENGTH = 140;
+      let BODY = body;
+      const MAX_LENGTH = 1600;
       let bodyPreview = `${body.substring(0, MAX_LENGTH)}...`;
       if (body.length < MAX_LENGTH) bodyPreview = body;
+      if (limit) BODY = bodyPreview;
+
+      const ServeActions = () => {
+        if (!limit_body_length) return null;
+
+        let label = "Read More";
+        if (!limit) label = "Read Less";
+
+        return (
+          <div style={{ padding: `2em 0` }}>
+            <div className="caps-btn" onClick={() => setLimit(!limit)}>
+              {label}
+            </div>
+          </div>
+        );
+      };
 
       return (
         <div
@@ -40,7 +64,8 @@ const SplitContentAndUsefulLinksCard = ({
             fontSize: 16,
           }}
         >
-          <Html2React html={body} />
+          <Html2React html={BODY} />
+          <ServeActions />
         </div>
       );
     };

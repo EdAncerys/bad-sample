@@ -32,8 +32,9 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
 
       // Manage max string Length
       let BODY = body;
-      const MAX_LENGTH = 800;
+      const MAX_LENGTH = 1600;
       let bodyPreview = `${body.substring(0, MAX_LENGTH)}...`;
+      if (body.length < MAX_LENGTH) bodyPreview = body;
       if (limit) BODY = bodyPreview;
 
       const ServeActions = () => {
