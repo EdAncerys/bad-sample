@@ -4,6 +4,7 @@ import Image from "@frontity/components/image";
 import Loading from "./loading";
 import { colors } from "../config/imports";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
+import titleBlock from "./titleBlock";
 
 const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -57,12 +58,18 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
         }}
       >
         {next ? (
-          <div className="flex shadow" style={{ padding: `0.5em 2em` }}>
+          <div
+            className="flex shadow"
+            style={{ padding: `0.5em 2em`, alignItems: "center" }}
+          >
             <div>Next</div>
             <KeyboardArrowRight sx={{ fontSize: 24 }} />
           </div>
         ) : (
-          <div className="flex shadow" style={{ padding: `0.5em 2em` }}>
+          <div
+            className="flex shadow"
+            style={{ padding: `0.5em 2em`, alignItems: "center" }}
+          >
             <KeyboardArrowLeft sx={{ fontSize: 24 }} />
             <div>Previous</div>
           </div>
@@ -79,9 +86,9 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
       </div>
       <div style={styles.container} id="carousel-container">
         {block.timeline_item.map((block, key) => {
-          const { body, image, year } = block;
+          const { body, title, image, year } = block;
 
-          if (!body) return null;
+          if (!body && !title) return null;
 
           let BORDER_WIDTH = `0 0 ${WIDTH}px ${WIDTH}px`;
           if (ROW_COUNTER === 1) BORDER_WIDTH = `0 0 0 ${WIDTH}px`;
@@ -126,11 +133,24 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
               );
             };
 
+            const ServeTitle = () => {
+              if (!title) return null;
+
+              return (
+                <div
+                  className="primary-title"
+                  style={{ fontSize: 12, padding: `1em 0` }}
+                >
+                  <Html2React html={title} />
+                </div>
+              );
+            };
+
             const ServeBody = () => {
               if (!body) return null;
 
               return (
-                <div style={{ fontSize: 12, padding: `1em 0` }}>
+                <div style={{ fontSize: 12, padding: title ? 0 : `1em 0` }}>
                   <Html2React html={body} />
                 </div>
               );
@@ -141,6 +161,7 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
                 <div style={{ width: "100%", display: "table" }}>
                   <ServeDate />
                 </div>
+                <ServeTitle />
                 <ServeBody />
               </div>
             );
