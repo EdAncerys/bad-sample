@@ -9,7 +9,7 @@ import BlockWrapper from "../blockWrapper";
 import HomeBannerCarousel from "../home/homeBannerCarousel";
 import JournalPromoBlock from "../home/journalPromoBlock";
 import ButtonsRow from "../buttonsRow";
-import MultiPostBlock from "../multiPostBlock";
+import MultiPostBlock from "../multiPostBlocks/multiPostBlocks";
 import HeroBanner from "../heroBanner";
 import TitleBlock from "../titleBlock";
 import Banner from "../banner";

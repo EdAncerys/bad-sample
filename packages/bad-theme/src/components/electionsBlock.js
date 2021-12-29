@@ -125,7 +125,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
               style={{
                 position: "absolute",
                 right: 0,
-                height: 40,
+                height: 45,
                 border: "none",
                 background: "transparent",
                 alignItems: "center",
@@ -138,12 +138,7 @@ const ElectionsBlock = ({ state, actions, block }) => {
           <div style={{ display: "grid", alignItems: "center" }}>
             <button
               type="submit"
-              className="btn"
-              style={{
-                backgroundColor: colors.primary,
-                color: colors.white,
-                padding: `0.5em`,
-              }}
+              className="blue-btn"
               onClick={handleSearchSubmit}
             >
               Search
