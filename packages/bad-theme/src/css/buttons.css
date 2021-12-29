@@ -57,7 +57,7 @@
 .banner-transparent-btn:hover {
   color: #1f335e !important;
   border: 1px solid #1f335e !important;
-  background-color: #fff;
+  background-color: rgb(255, 255, 255, 0.7);
 }
 .banner-transparent-btn:hover .MuiSvgIcon-root {
   fill: #1f335e !important;

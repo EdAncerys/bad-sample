@@ -28,6 +28,11 @@ const SplitContentAndUsefulLinksCard = ({
     const ServeBody = () => {
       if (!body) return null;
 
+      // Manage max string Length
+      const MAX_LENGTH = 140;
+      let bodyPreview = `${body.substring(0, MAX_LENGTH)}...`;
+      if (body.length < MAX_LENGTH) bodyPreview = body;
+
       return (
         <div
           className="text-body"
@@ -88,8 +93,8 @@ const SplitContentAndUsefulLinksCard = ({
                 justifyContent: "center",
                 paddingBottom: `1em`,
                 // add sticky config to side component
-                position: "sticky",
-                top: 0,
+                // position: "sticky",
+                // top: 0,
               }}
             >
               <UsefulLinksCard
