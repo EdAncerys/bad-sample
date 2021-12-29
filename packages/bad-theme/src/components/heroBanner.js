@@ -127,9 +127,12 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
       <div className="flex relative">
         <div
           style={{
+            display: "grid",
+            alignItems: "center",
             position: "absolute",
-            zIndex: 2,
-            width: !background_image ? CONTENT_WIDTH / 1.5 : CONTENT_WIDTH / 2, // if no img provided defaults to diff width
+            zIndex: 99,
+            width: !background_image ? CONTENT_WIDTH : CONTENT_WIDTH / 2, // if no img provided defaults to diff width
+            height: BANNER_HEIGHT,
           }}
         >
           <FullWidthContentBlock block={block} heroBanner />
