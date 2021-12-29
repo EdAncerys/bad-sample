@@ -33,15 +33,7 @@ const DownloadFileBlock = ({
     if (!file) return null;
 
     return (
-      <div
-        style={{
-          borderBottom: `1px solid ${colors.black}`,
-          textTransform: "uppercase",
-          fontSize: 12,
-          cursor: "pointer",
-          marginLeft: `1em`,
-        }}
-      >
+      <div className="caps-btn">
         <a
           href={file.url}
           target="_blank"
@@ -66,15 +58,7 @@ const DownloadFileBlock = ({
     if (guidelines) fileName = titlePreview;
 
     return (
-      <div
-        style={{
-          borderBottom: `1px solid ${colors.black}`,
-          textTransform: "uppercase",
-          fontSize: 12,
-          cursor: "pointer",
-          marginLeft: `1em`,
-        }}
-      >
+      <div className="caps-btn">
         <a
           href={guidline_file.url}
           target="_blank"

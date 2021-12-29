@@ -15,29 +15,6 @@ import {
   setGoToAction,
 } from "../../context";
 
-const PictureFrame = React.memo(function PictureFrame({ src }) {
-  return <img src={src} className="spinner" />;
-});
-
-const PureComponent = () => {
-  const [counter, setCounter] = React.useState(0);
-  const src =
-    "https://en.bcdn.biz/Images/2018/6/12/f0d2c2ca-dc61-4613-9685-6c98cbb8a990.jpg";
-  React.useEffect(() => {
-    const t = setInterval(() => {
-      setCounter((c) => c + 1);
-    }, 100);
-  });
-  return (
-    <div>
-      <div>{counter}</div>
-      <div>
-        <PictureFrame src={src} />
-      </div>
-    </div>
-  );
-};
-
 const HeaderActions = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { user } = useAppState();

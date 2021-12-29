@@ -24,8 +24,7 @@ const CardBody = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   let CONTENT_ALIGNMENT = 0;
-  if (heroBanner) CONTENT_ALIGNMENT = `auto 0`;
-  if (newsCarousel) CONTENT_ALIGNMENT = `auto 0`;
+  if (heroBanner || newsCarousel) CONTENT_ALIGNMENT = `auto 0`;
 
   let PADDING = 0;
   if (heroBanner) PADDING = `1em 2em`;

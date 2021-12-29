@@ -68,9 +68,9 @@ const CardActions = ({
       <div
         className="flex-row"
         style={{
-          fontSize: 12,
           justifyContent: "space-between",
           alignItems: "center",
+          paddingTop: `1em`,
         }}
       >
         <ServeFileAction />

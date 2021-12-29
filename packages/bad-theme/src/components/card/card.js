@@ -65,7 +65,6 @@ const Card = ({
   let CARD_HEIGHT = "100%";
   if (title || body) CARD_HEIGHT = "auto";
   if (cardHeight) CARD_HEIGHT = cardHeight;
-  if (isFrom4Col) CARD_HEIGHT = 250;
 
   let PADDING = heroBanner ? 0 : `2em`;
   if (isFrom4Col) PADDING = `1em`;
@@ -187,6 +186,7 @@ const Card = ({
         backgroundColor: colors.white,
         width: cardWidth || "100%",
         height: CARD_HEIGHT,
+        minHeight: isFrom4Col ? 250 : "auto",
         position: "relative",
       }}
     >

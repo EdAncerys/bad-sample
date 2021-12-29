@@ -2,7 +2,6 @@ export const initialState = {
   isLoading: false,
   jwt: null,
   user: null,
-  filter: null,
 
   loginModalAction: false,
   createAccountAction: false,
@@ -21,8 +20,7 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, enquireAction: action.payload };
     case "SET_JWT_ACTION":
       return { ...state, jwt: action.payload };
-    case "SET_EVENT_FILTER":
-      return { ...state, filter: action.payload };
+
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }
