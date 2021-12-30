@@ -221,6 +221,7 @@ const AccordionComponent = ({
 
         return (
           <div
+            className="text-body"
             id={`preview-id-${eventKey}`}
             style={{
               paddingTop: `1em`,
@@ -429,7 +430,7 @@ const AccordionComponent = ({
         if (!body) return null;
 
         return (
-          <div>
+          <div className="text-body">
             <Html2React html={body} />
           </div>
         );
@@ -697,10 +698,7 @@ const AccordionComponent = ({
 
   // RETURN ----------------------------------------------------
   return (
-    <div
-      className="text-body"
-      style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}
-    >
+    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
       {block.accordion_item.map((block, key) => {
         return <ServeAccordion key={key} block={block} />;
       })}
