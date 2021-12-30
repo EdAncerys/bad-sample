@@ -45,6 +45,7 @@ const AccordionComponent = ({
 
     if (!eventKey) return <Loading />;
 
+    const ALL_POSITIONS = Object.values(state.source.leadership_position);
     const {
       title,
       body,
@@ -498,13 +499,29 @@ const AccordionComponent = ({
           const hospital = item.acf.hospital;
           const dates = item.acf.dates;
           const image = item.acf.image;
+          const positionId = item.leadership_position;
 
           const ServeTitle = () => {
             if (!title) return null;
 
             return (
-              <div>
+              <div className="primary-title">
                 <Html2React html={title} />
+              </div>
+            );
+          };
+
+          const ServePosition = () => {
+            if (!positionId[0]) return null;
+
+            const positionData = ALL_POSITIONS.filter(
+              (position) => position.id === positionId[0]
+            );
+            const positionName = positionData[0].name;
+
+            return (
+              <div>
+                <Html2React html={positionName} />
               </div>
             );
           };
@@ -560,13 +577,13 @@ const AccordionComponent = ({
             <div
               className="flex-col"
               style={{
-                justifyContent: "flex-end",
                 alignItems: "center",
                 textAlign: "center",
               }}
             >
               <ServeCardImage />
               <ServeTitle />
+              <ServePosition />
               <ServeDates />
               <ServeHospital />
             </div>
@@ -584,7 +601,7 @@ const AccordionComponent = ({
 
         if (isListLayout)
           return (
-            <div style={{ padding: `3em 0 0` }}>
+            <div>
               {block.leadershipList.map((item, key) => {
                 if (
                   LT_LAYOUT === "executive-committee-regional" &&
@@ -711,7 +728,6 @@ const styles = {
     display: "grid",
     gridTemplateColumns: `repeat(3, 1fr)`,
     gap: 20,
-    padding: `3em 0 0`,
   },
   previewIcon: {
     fontSize: 12,
