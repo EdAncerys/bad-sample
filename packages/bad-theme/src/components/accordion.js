@@ -32,6 +32,8 @@ const AccordionComponent = ({
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 
+  const LOGO_HEIGHT = 45;
+
   // SERVERS ---------------------------------------------
   const ServeAccordion = ({ block }) => {
     const [eventKey, setEventKey] = useState(null);
@@ -175,8 +177,7 @@ const AccordionComponent = ({
             className="flex"
             style={{
               paddingLeft: `2em`,
-              color: colors.textMain,
-              fontSize: 16,
+              color: colors.black,
               alignItems: "center",
             }}
           >
@@ -192,16 +193,18 @@ const AccordionComponent = ({
         if (!gsTitle) return null;
 
         return (
-          <div
-            className="flex primary-title"
-            style={{
-              fontSize: 20,
-              color: colors.black,
-              fontWeight: "bold",
-              alignItems: "center",
-            }}
-          >
-            <Html2React html={gsTitle} />
+          <div className="flex">
+            <div
+              className="primary-title"
+              style={{
+                fontSize: 20,
+                color: colors.black,
+                fontWeight: "bold",
+                alignItems: "center",
+              }}
+            >
+              <Html2React html={gsTitle} />
+            </div>
             <ServeGSDate />
           </div>
         );
@@ -237,19 +240,11 @@ const AccordionComponent = ({
         return (
           <div
             style={{
-              height: 60,
               padding: `0.25em`,
               margin: `0 4em 0 1em`,
             }}
           >
-            <Image
-              src={logo.url}
-              alt={alt}
-              style={{
-                width: "100%",
-                height: "100%",
-              }}
-            />
+            <Image src={logo.url} alt={alt} style={{ height: LOGO_HEIGHT }} />
           </div>
         );
       };
@@ -263,19 +258,11 @@ const AccordionComponent = ({
         return (
           <div
             style={{
-              height: 60,
               padding: `0.25em`,
               margin: `0 4em 0 1em`,
             }}
           >
-            <Image
-              src={NiceLogo}
-              alt={alt}
-              style={{
-                width: "100%",
-                height: "100%",
-              }}
-            />
+            <Image src={NiceLogo} alt={alt} style={{ height: LOGO_HEIGHT }} />
           </div>
         );
       };
@@ -388,7 +375,7 @@ const AccordionComponent = ({
             >
               Downloads:
             </div>
-            <div className="flex" style={{ flexWrap: "wrap" }}>
+            <div className="flex-col" style={{ flexWrap: "wrap" }}>
               {files.map((block, key) => {
                 return (
                   <div

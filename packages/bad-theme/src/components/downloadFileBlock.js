@@ -50,12 +50,7 @@ const DownloadFileBlock = ({
     if (!guidline_file) return null;
 
     let fileName = "Read Guideline";
-
-    const MAX_LENGTH = 20;
-    let titlePreview = `${guidline_file.title.substring(0, MAX_LENGTH)}...`;
-    if (guidline_file.title.length < MAX_LENGTH)
-      titlePreview = guidline_file.title;
-    if (guidelines) fileName = titlePreview;
+    if (guidelines) fileName = guidline_file.title;
 
     return (
       <div className="caps-btn">
