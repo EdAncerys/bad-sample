@@ -15,10 +15,11 @@ const CardActions = ({
   form_label,
   form_link,
   downloadFile,
+  handler,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  if (!link && !form_link && !downloadFile) return null;
+  if (!link && !form_link && !downloadFile && !handler) return null;
 
   // SERVERS ---------------------------------------------
   const ServeReadMoreAction = () => {
@@ -28,7 +29,21 @@ const CardActions = ({
 
     return (
       <div onClick={() => setGoToAction({ path: link, actions })}>
-        <div style={styles.footerActionTitle}>
+        <div>
+          <div className="caps-btn">{GO_TO_LABEL}</div>
+        </div>
+      </div>
+    );
+  };
+
+  const ServeHandlerAction = () => {
+    if (!handler) return null;
+    let GO_TO_LABEL = "More";
+    if (link_label) GO_TO_LABEL = <Html2React html={link_label} />;
+
+    return (
+      <div onClick={handler}>
+        <div>
           <div className="caps-btn">{GO_TO_LABEL}</div>
         </div>
       </div>
@@ -42,8 +57,8 @@ const CardActions = ({
     if (form_label) GO_TO_LABEL = <Html2React html={form_label} />;
 
     return (
-      <div style={styles.footerActionTitle}>
-        <div className="caps-btn" onClick={() => console.log(form_link)}>
+      <div>
+        <div className="caps-btn">
           <a
             href={form_link}
             target="_blank"
@@ -73,6 +88,7 @@ const CardActions = ({
           paddingTop: `1em`,
         }}
       >
+        <ServeHandlerAction />
         <ServeFileAction />
         <ServeReadMoreAction />
         <ServeFromAction />

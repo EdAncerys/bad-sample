@@ -34,7 +34,7 @@ import SplitContentAndUsefulLinksCard from "../splitContentAndUsefulLinksCard";
 import Events from "../events/events";
 import GuidelinesAndStandards from "../guidelinesAndStandards";
 import LeadershipBlock from "../leadershipBlock";
-import ElectionBlocks from "../electionBlocks";
+import ElectionBlocks from "../elections/electionBlocks";
 import EmbeddedVideo from "../embeddedVideo";
 import NewsAndMedia from "../news/newsAndMedia";
 import FullWidthImageAndPromoCard from "../fullWidthImageAndPromoCard";

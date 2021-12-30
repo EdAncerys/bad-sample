@@ -33,6 +33,7 @@ const Card = ({
   authorInfo,
   videoGalleryInfo,
   electionInfo,
+  handler,
   newsAndMediaInfo,
   fundingPromo,
   textAlign,
@@ -172,6 +173,7 @@ const Card = ({
           form_label={form_label}
           form_link={form_link}
           downloadFile={downloadFile}
+          handler={handler}
         />
       </div>
     );

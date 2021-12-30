@@ -134,14 +134,6 @@ const styles = {
     marginRight: `1em`,
     width: "fit-content",
   },
-  closeAction: {
-    position: "absolute",
-    top: -10,
-    right: -10,
-    backgroundColor: colors.white,
-    cursor: "pointer",
-    borderRadius: "50%",
-  },
 };
 
 export default connect(NewsBlock);

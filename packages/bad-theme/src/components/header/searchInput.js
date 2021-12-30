@@ -102,7 +102,6 @@ const SearchInput = ({ state, actions, libraries }) => {
         <div style={styles.action}>
           <div
             className="search-clear-icon"
-            style={styles.closeAction}
             onClick={() => (state.theme.filter = null)}
           >
             <CloseIcon

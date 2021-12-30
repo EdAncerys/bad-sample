@@ -12,9 +12,14 @@ const ElectionInfo = ({ state, actions, libraries, electionInfo }) => {
   const { title, election_roles } = electionInfo;
   const { closing_date } = electionInfo.acf;
 
+  const today = new Date();
+  const electionClosingDate = new Date(closing_date);
+  const isClosedPosition = today > electionClosingDate;
+
   // SERVERS ---------------------------------------------
   const ServeOfficer = () => {
     if (!election_roles.length) return null;
+
     const ROLES = Object.values(state.source.election_roles);
     const filter = ROLES.filter(
       (item) => item.id === Number(election_roles[0])
@@ -22,14 +27,14 @@ const ElectionInfo = ({ state, actions, libraries, electionInfo }) => {
     const name = filter[0].name;
 
     return (
-      <div style={{}}>
+      <div style={{ paddingBottom: isClosedPosition ? `2em` : 0 }}>
         <Html2React html={name} />
       </div>
     );
   };
 
   const ServeDate = () => {
-    if (!closing_date) return null;
+    if (!closing_date || isClosedPosition) return null;
 
     return (
       <div className="flex-row">

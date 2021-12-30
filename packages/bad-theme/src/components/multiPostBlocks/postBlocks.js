@@ -76,8 +76,6 @@ const MultiPostBlock = ({ state, actions, block, filter }) => {
             title,
           } = block;
 
-          console.log(block);
-
           if (filter) {
             if (
               !title.toLowerCase().includes(filter) &&

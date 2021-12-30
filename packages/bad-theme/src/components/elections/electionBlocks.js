@@ -3,13 +3,14 @@ import { connect } from "frontity";
 import { Form } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 
-import Card from "./card/card";
-import TitleBlock from "./titleBlock";
-import Loading from "./loading";
-import { colors } from "../config/imports";
+import Card from "../card/card";
+import TitleBlock from "../titleBlock";
+import Loading from "../loading";
+import { colors } from "../../config/imports";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
+import ElectionModal from "./electionModal";
 
 const ElectionBlocks = ({ state, actions, block }) => {
   if (!block) return <Loading />;
@@ -26,6 +27,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
   const [electionList, setElectionList] = useState(null);
   const [gradeList, setGradeList] = useState(null); // data
   const [roleList, setRoleList] = useState(null); // data
+  const [modalData, setModalData] = useState(null);
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [gradeFilter, setGradeFilter] = useState(null);
@@ -105,6 +107,10 @@ const ElectionBlocks = ({ state, actions, block }) => {
       }
       setElectionList(filter);
     }
+  };
+
+  const handleElectionModal = ({ block }) => {
+    setModalData(block);
   };
 
   // SERVERS ---------------------------------------------
@@ -406,21 +412,47 @@ const ElectionBlocks = ({ state, actions, block }) => {
     );
   };
 
+  const ServeFooterActions = ({ isClosedPosition }) => {
+    if (!isClosedPosition) return null;
+
+    return (
+      <div
+        className="caps-btn"
+        style={{
+          position: "absolute",
+          bottom: 38,
+          left: 32,
+        }}
+      >
+        Notify me when position is open
+      </div>
+    );
+  };
+
+  if (!gradeList) return <Loading />;
   // RETURN ---------------------------------------------------
   return (
     <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
+      <ElectionModal modalData={modalData} setModalData={setModalData} />
       <TitleBlock block={{ title, text_align }} disableMargin />
       <ServeFilter />
       <div style={styles.container}>
         {electionList.map((block, key) => {
           const { title, election_grade, election_roles } = block;
-          const {
-            closing_date,
-            cta,
-            colour,
-            description,
-            nomination_form_upload,
-          } = block.acf;
+          const { closing_date, cta, description, nomination_form_upload } =
+            block.acf;
+
+          // taxonomy grade name filtering
+          const filter = gradeList.filter(
+            (item) => item.id === Number(election_grade[0])
+          );
+          let GRADE_NAME = null;
+          if (filter[0]) GRADE_NAME = filter[0].name;
+
+          // elections closing date
+          const today = new Date();
+          const electionClosingDate = new Date(closing_date);
+          const isClosedPosition = today > electionClosingDate;
 
           if (searchFilter) {
             if (
@@ -445,18 +477,31 @@ const ElectionBlocks = ({ state, actions, block }) => {
           }
 
           return (
-            <div key={key}>
-              <Card
-                cardTitle="Officers Of The BAD"
-                title={title.rendered}
-                body={description}
-                form_label={cta}
-                form_link={nomination_form_upload}
-                colour={colour}
-                limitBodyLength
-                cardHeight="100%"
-                electionInfo={block}
-              />
+            <div key={key} className="flex" style={{ position: "relative" }}>
+              <div
+                className="flex"
+                style={{ opacity: isClosedPosition ? 0.7 : 1 }}
+              >
+                <Card
+                  cardTitle={GRADE_NAME}
+                  title={title.rendered}
+                  body={isClosedPosition ? null : description}
+                  link_label={cta}
+                  colour={colors.primary}
+                  cardHeight="100%"
+                  electionInfo={block}
+                  form_label="Nomination Form"
+                  form_link={isClosedPosition ? null : nomination_form_upload}
+                  handler={
+                    isClosedPosition
+                      ? null
+                      : () => handleElectionModal({ block })
+                  }
+                  limitBodyLength
+                  shadow
+                />
+              </div>
+              <ServeFooterActions isClosedPosition={isClosedPosition} />
             </div>
           );
         })}
@@ -485,6 +530,7 @@ const styles = {
     width: "fit-content",
   },
   closeAction: {
+    display: "grid",
     position: "absolute",
     top: -10,
     right: -10,
