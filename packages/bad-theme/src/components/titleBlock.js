@@ -28,9 +28,9 @@ const TitleBlock = ({
   if (text_align === "centre") ALIGNMENT = "center";
   if (text_align === "right") ALIGNMENT = "end";
 
-  let MARGIN = `${marginVertical}px ${marginHorizontal}px`;
+  let MARGIN = `${marginVertical}px ${marginHorizontal}px 0 ${marginHorizontal}px`;
   if (disableMargin) MARGIN = 0;
-  if (disableHorizontalMargin) MARGIN = `${marginVertical}px 0`;
+  if (disableHorizontalMargin) MARGIN = `${marginVertical}px 0 0`;
   if (margin) MARGIN = margin;
 
   // SERVERS ---------------------------------------------
@@ -41,7 +41,7 @@ const TitleBlock = ({
 
     return (
       <div
-        className='caps-btn'
+        className="caps-btn"
         onClick={() => setGoToAction({ path: link.url, actions })}
       >
         <Html2React html={LABEL} />
