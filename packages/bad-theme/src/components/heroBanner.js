@@ -131,7 +131,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
             alignItems: "center",
             position: "absolute",
             zIndex: 99,
-            width: !background_image ? CONTENT_WIDTH : CONTENT_WIDTH / 2, // if no img provided defaults to diff width
+            width: !background_image ? CONTENT_WIDTH / 1.5 : CONTENT_WIDTH / 2, // if no img provided defaults to diff width
             height: BANNER_HEIGHT,
           }}
         >

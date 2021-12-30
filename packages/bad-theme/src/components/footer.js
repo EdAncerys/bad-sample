@@ -43,19 +43,22 @@ const Footer = ({ state, actions }) => {
           </div>
           <div
             className="flex"
-            style={{ flex: 4, fontSize: 11, justifyContent: "flex-end" }}
+            style={{ flex: 5, fontSize: 11, justifyContent: "flex-end" }}
           >
-            <div style={styles.footerLink}>
+            <div style={styles.footerInfo}>
               <div>Willan House, 4 Fitzroy Square, London, W1T 5HQ</div>
               <ServeDivider />
             </div>
-            <div style={styles.footerLink}>
+            <div style={styles.footerInfo}>
               <div>admin@bad.org.uk</div>
               <ServeDivider />
             </div>
-            <div style={styles.footerLink}>+44 (0)207 383 0266</div>
+            <div style={styles.footerInfo}>+44 (0)207 383 0266</div>
           </div>
-          <div className="flex" style={{ justifyContent: "space-around" }}>
+          <div
+            className="flex"
+            style={{ justifyContent: "space-around", paddingLeft: `3em` }}
+          >
             <div style={styles.socials}>
               <Link link={`https://www.facebook.com/`} target="_blank">
                 <Image
@@ -143,12 +146,19 @@ const Footer = ({ state, actions }) => {
 
 const styles = {
   container: {
-    backgroundColor: colors.softBlack,
+    backgroundColor: colors.footer,
     color: colors.white,
+    textTransform: "uppercase",
+  },
+  footerInfo: {
+    display: "flex",
+    cursor: "pointer",
   },
   footerLink: {
     display: "flex",
+    fontSize: 9,
     color: colors.white,
+    opacity: 0.5,
     cursor: "pointer",
   },
   socials: {
