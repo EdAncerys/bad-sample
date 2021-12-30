@@ -169,22 +169,22 @@ h6 {
 }
 
 .text-body h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+.text-body h2,
+.text-body h3,
+.text-body h4,
+.text-body h5,
+.text-body h6 {
   margin: 0.75em 0;
 }
 .text-body p {
   margin: 0.5em 0;
 }
 .title-no-bottom-margin h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+.title-no-bottom-margin h2,
+.title-no-bottom-margin h3,
+.title-no-bottom-margin h4,
+.title-no-bottom-margin h5,
+.title-no-bottom-margin h6 {
   margin-bottom: 0 !important;
 }
 

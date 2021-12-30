@@ -74,15 +74,7 @@ const FullWidthContentBlock = ({
     if (!body) return null;
 
     return (
-      <div
-        className="flex-col text-body"
-        style={{
-          fontSize: 16,
-          // limit container height
-          // maxHeight: BANNER_HEIGHT / 1.25,
-          // overflow: "auto",
-        }}
-      >
+      <div className="flex-col">
         <div className="card-text">
           <Html2React html={body} />
         </div>
