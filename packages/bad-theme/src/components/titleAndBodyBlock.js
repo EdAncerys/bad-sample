@@ -44,7 +44,7 @@ const TitleAndBodyBlock = ({ state, actions, libraries, block }) => {
 
     return (
       <div
-        className="flex"
+        className="flex-col"
         style={{
           fontSize: 16,
           fontWeight: "bold",

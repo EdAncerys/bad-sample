@@ -22,7 +22,7 @@ const ProfilesBlock = ({ state, actions, libraries, block }) => {
     if (!label.length) return null;
 
     return (
-      <div className="flex-center-row">
+      <div className="flex-center-row" style={{ paddingTop: `1em` }}>
         <button
           className="btn"
           style={{
