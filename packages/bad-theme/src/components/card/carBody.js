@@ -48,12 +48,12 @@ const CardBody = ({
       <div
         className="flex primary-title"
         style={{
-          fontSize: heroBanner ? 36 : 20,
+          fontSize: heroBanner ? `2.25rem` : 20,
           minHeight: TITLE_HEIGHT,
           maxHeight: isFrom4Col ? "7em" : "auto", // restricting title height
           overflow: "hidden",
           fontWeight: "bold",
-          color: colors.black,
+          color: heroBanner ? colors.trueBlack : colors.black,
           alignItems: newsCarousel ? "center" : "flex-start",
         }}
       >
