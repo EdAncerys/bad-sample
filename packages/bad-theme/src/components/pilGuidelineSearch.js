@@ -1,46 +1,92 @@
 import { useState, useEffect, useLayoutEffect } from "react";
 import { connect } from "frontity";
 
-import Loading from "../loading";
-import { colors } from "../../config/imports";
+import Loading from "./loading";
+import { colors } from "../config/imports";
 import { v4 as uuidv4 } from "uuid";
-import { setGoToAction } from "../../context";
+import { setGoToAction } from "../context";
 
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 
-const SearchInput = ({ state, actions, libraries }) => {
+let tetsPil = null;
+
+const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const BANNER_HEIGHT = state.theme.bannerHeight;
-  const [eventKey, setEventKey] = useState(null);
-  const filter = state.theme.filter;
+  const { disable_vertical_padding } = block;
+
   const ctaHeight = 45;
+  const BANNER_HEIGHT = state.theme.bannerHeight;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
+
+  const [uniqueId, setEventKey] = useState(null);
+  const [pilData, setPilData] = useState(null);
+  const filter = state.theme.filter;
+
+  useEffect(async () => {
+    state.theme.pilFilter = null; // reset search filter
+    const path = `/pils/`;
+    await actions.source.fetch(path); // fetch CPT guidelines
+
+    const guidelines = await state.source.get(path);
+    const { totalPages, page, next } = guidelines; // check if guidelines have multiple pages
+    // fetch guidelines via wp API page by page
+    let isThereNextPage = next;
+    while (isThereNextPage) {
+      await actions.source.fetch(isThereNextPage); // fetch next page
+      const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
+      isThereNextPage = nextPage;
+    }
+
+    const PIL_LIST = Object.values(state.source.pils); // add guidelines object to data array
+    setPilData(PIL_LIST);
+  }, []);
+
   // hook applies after React has performed all DOM mutations
   useLayoutEffect(() => {
     const blockId = uuidv4(); // add unique id
     setEventKey(blockId);
   }, []);
 
+  if (!block || !pilData) return <Loading />; // awaits pre fetch & data
+
   // HELPERS ---------------------------------------------
   const handleInputSearch = () => {
     const searchInput = document
-      .querySelector(`#eventSearch${eventKey}`)
+      .querySelector(`#pilSearch${uniqueId}`)
       .value.toLowerCase();
     if (!searchInput) return null;
+    console.log(searchInput);
 
-    const EVENT_LIST = Object.values(state.source.events); // add events object to data array
-    let results = EVENT_LIST.filter((event) =>
-      event.title.rendered.toLowerCase().includes(searchInput)
+    const PIL_LIST = Object.values(state.source.pils); // add events object to data array
+    let results = PIL_LIST.filter((pil) =>
+      pil.title.rendered.toLowerCase().includes(searchInput)
     );
 
-    if (!results.length) results = [{ title: { rendered: "No Events Found" } }];
-    state.theme.filter = results;
+    if (!results.length) results = [{ title: { rendered: "No Pils Found" } }];
+    // state.theme.filter = results;
+    tetsPil = results;
+    console.log(results);
   };
 
   // SERVERS ---------------------------------------------
+  const ServeFooter = () => {
+    return (
+      <div
+        style={{
+          backgroundColor: colors.primary,
+          marginTop: `2em`,
+          height: 5,
+          width: "100%",
+        }}
+      />
+    );
+  };
+
   const ServeDropDown = () => {
-    if (!filter) return null;
+    if (!tetsPil) return null;
 
     return (
       <div
@@ -66,7 +112,7 @@ const SearchInput = ({ state, actions, libraries }) => {
               overflow: "auto",
             }}
           >
-            {filter.map((event, key) => {
+            {tetsPil.map((event, key) => {
               if (!event.title) return null;
               const { link, title } = event;
 
@@ -98,7 +144,7 @@ const SearchInput = ({ state, actions, libraries }) => {
         <div style={styles.action}>
           <div
             className="search-clear-icon"
-            onClick={() => (state.theme.filter = null)}
+            onClick={() => state.theme.pilFilter}
           >
             <CloseIcon
               style={{
@@ -112,26 +158,21 @@ const SearchInput = ({ state, actions, libraries }) => {
     }
   };
 
-  // RETURN ---------------------------------------------
-  return (
-    <div
-      className="event-input"
-      style={{ position: "relative", width: "100%" }}
-    >
+  const ServeSearchContainer = () => {
+    return (
       <div
         className="flex"
         style={{
-          flex: 1,
           height: ctaHeight,
           position: "relative",
         }}
       >
         <input
-          id={`eventSearch${eventKey}`}
+          id={`pilSearch${uniqueId}`}
           onChange={handleInputSearch}
           type="text"
           className="form-control"
-          placeholder="Find An Event"
+          placeholder="Find Guidelines"
           style={styles.input}
         />
         <div
@@ -149,8 +190,27 @@ const SearchInput = ({ state, actions, libraries }) => {
         >
           <ServeIcon />
         </div>
+        <ServeDropDown />
       </div>
-      <ServeDropDown />
+    );
+  };
+
+  // RETURN ---------------------------------------------------
+  return (
+    <div className="event-input" style={{ margin: `${marginVertical}px 0` }}>
+      <div
+        className="primary-title"
+        style={{
+          fontSize: 36,
+          fontWeight: "bold",
+          color: colors.black,
+          paddingBottom: `1em`,
+        }}
+      >
+        PIL & Guidelines Quicklinks
+      </div>
+      <ServeSearchContainer />
+      <ServeFooter />
     </div>
   );
 };
@@ -168,4 +228,4 @@ const styles = {
   },
 };
 
-export default connect(SearchInput);
+export default connect(PilGuidelineSearch);

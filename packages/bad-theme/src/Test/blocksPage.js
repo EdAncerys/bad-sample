@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "frontity";
 
 import { colors } from "../config/imports";
-import PilGuidelines from "../components/home/pilGuidelines";
 import BlockBuilder from "../components/builder/blockBuilder";
 
 const BlocksPage = ({ state }) => {
@@ -21,7 +20,6 @@ const BlocksPage = ({ state }) => {
 
       <BlockBuilder blocks={wpBlocks} />
 
-      <PilGuidelines />
     </div>
   );
 };

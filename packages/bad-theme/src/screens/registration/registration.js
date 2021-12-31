@@ -3,7 +3,6 @@ import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 import SearchDermatologists from "../../components/searchDermatologists";
-import PilGuidelines from "../../components/home/pilGuidelines";
 import BlockWrapper from "../../components/blockWrapper";
 
 const Registration = ({ state }) => {
@@ -18,8 +17,6 @@ const Registration = ({ state }) => {
         </div>
       </div>
       <SearchDermatologists />
-
-      <PilGuidelines />
     </BlockWrapper>
   );
 };

@@ -46,7 +46,6 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
       const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
       isThereNextPage = nextPage;
     }
-    if (!state.source.guidelines_standards) return null;
 
     const GUIDELINES_TYPE = Object.values(state.source.guidelines_type);
     const GUIDELINES_LIST = Object.values(state.source.guidelines_standards); // add guidelines object to data array
