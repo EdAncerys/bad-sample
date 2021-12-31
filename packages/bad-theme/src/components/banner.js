@@ -76,6 +76,8 @@ const Banner = ({ state, actions, libraries, block }) => {
               <div
                 className="flex-col title-no-bottom-margin"
                 style={{
+                  fontSize: "2.5rem",
+                  lineHeight: 1.2,
                   color: THEME_COLOR,
                   justifyContent: "flex-end",
                   overflow: "hidden",

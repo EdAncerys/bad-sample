@@ -56,9 +56,10 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
           <div
             style={{
               position: "absolute",
+              zIndex: 99,
               top: 0,
               left: 0,
-              backgroundColor: `#F8EFF3`,
+              backgroundColor: `rgb(248, 239, 243, 0.8)`,
               color: colors.danger,
               textTransform: "uppercase",
               textAlign: "center",
