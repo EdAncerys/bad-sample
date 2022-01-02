@@ -20,6 +20,7 @@ const CardBody = ({
   electionInfo,
   limitBodyLength,
   limitTitleLength,
+  opacity,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -55,6 +56,7 @@ const CardBody = ({
           fontWeight: "bold",
           color: heroBanner ? colors.trueBlack : colors.black,
           alignItems: newsCarousel ? "center" : "flex-start",
+          opacity: opacity || 1,
         }}
       >
         <Html2React html={titlePreview} />
@@ -66,7 +68,7 @@ const CardBody = ({
     if (!body) return null;
 
     let bodyPreview = body;
-    const MAX_CHAR = 90;
+    const MAX_CHAR = 76;
     if (body.length >= MAX_CHAR && isFrom4Col)
       bodyPreview = `${body.slice(0, MAX_CHAR)}...`;
     if (limitBodyLength) bodyPreview = `${body.slice(0, MAX_CHAR)}...`;
@@ -141,7 +143,7 @@ const CardBody = ({
       <div style={{ margin: CONTENT_ALIGNMENT }}>
         <ServeSeatsRemaining />
         <ServeTitle />
-        <ElectionInfo electionInfo={electionInfo} />
+        <ElectionInfo electionInfo={electionInfo} opacity={opacity} />
         <ServeBody />
         <ServeDate />
       </div>

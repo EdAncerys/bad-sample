@@ -372,7 +372,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
     };
 
     const ServeOpenPositionBtnFilter = () => {
-      if (!isOpen) return null;
+      if (!isOpen || openPositions) return null;
 
       return (
         <div className="shadow" style={styles.action}>
@@ -480,28 +480,35 @@ const ElectionBlocks = ({ state, actions, block }) => {
             <div key={key} className="flex" style={{ position: "relative" }}>
               <div
                 className="flex"
-                style={{ opacity: isClosedPosition ? 0.7 : 1 }}
+                // style={{ opacity: isClosedPosition ? 0.7 : 1 }}
               >
                 <Card
                   cardTitle={GRADE_NAME}
                   title={title.rendered}
                   body={isClosedPosition ? null : description}
-                  link_label={cta}
                   colour={colors.primary}
                   cardHeight="100%"
                   electionInfo={block}
-                  form_label="Nomination Form"
-                  form_link={isClosedPosition ? null : nomination_form_upload}
+                  link_label={
+                    isClosedPosition ? "Notify me when position is open" : cta
+                  }
                   handler={
                     isClosedPosition
-                      ? null
+                      ? () => console.log("Notify user")
                       : () => handleElectionModal({ block })
                   }
+                  form_label="Nomination Form"
+                  form_link={isClosedPosition ? null : nomination_form_upload}
+                  cardMinHeight={370}
+                  backgroundColor={
+                    isClosedPosition ? colors.silverFillOne : null
+                  }
+                  opacity={isClosedPosition ? 0.7 : null}
                   limitBodyLength
                   shadow
                 />
               </div>
-              <ServeFooterActions isClosedPosition={isClosedPosition} />
+              {/* <ServeFooterActions isClosedPosition={isClosedPosition} /> */}
             </div>
           );
         })}

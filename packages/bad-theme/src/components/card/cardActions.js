@@ -39,12 +39,15 @@ const CardActions = ({
   const ServeHandlerAction = () => {
     if (!handler) return null;
     let GO_TO_LABEL = "More";
-    if (link_label) GO_TO_LABEL = <Html2React html={link_label} />;
+    if (link_label) GO_TO_LABEL = link_label;
+    console.log(link_label, handler);
 
     return (
       <div onClick={handler}>
         <div>
-          <div className="caps-btn">{GO_TO_LABEL}</div>
+          <div className="caps-btn">
+            <Html2React html={GO_TO_LABEL} />
+          </div>
         </div>
       </div>
     );

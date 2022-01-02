@@ -4,7 +4,7 @@ import { connect } from "frontity";
 import { colors } from "../../config/imports";
 import { setGoToAction } from "../../context";
 
-const ElectionInfo = ({ state, actions, libraries, electionInfo }) => {
+const ElectionInfo = ({ state, actions, libraries, electionInfo, opacity }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!electionInfo) return null;
@@ -27,7 +27,7 @@ const ElectionInfo = ({ state, actions, libraries, electionInfo }) => {
     const name = filter[0].name;
 
     return (
-      <div style={{ paddingBottom: isClosedPosition ? `2em` : 0 }}>
+      <div style={{ opacity: opacity || 1 }}>
         <Html2React html={name} />
       </div>
     );
@@ -48,7 +48,7 @@ const ElectionInfo = ({ state, actions, libraries, electionInfo }) => {
 
   return (
     <div>
-      <div className="flex-col" style={{ padding: `1em 0` }}>
+      <div className="flex-col" style={{ paddingTop: `1em` }}>
         <ServeOfficer />
         <ServeDate />
       </div>

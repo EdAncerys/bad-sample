@@ -49,8 +49,11 @@ const Card = ({
   limitBodyLength,
   limitTitleLength,
   shadow,
+  backgroundColor,
+  opacity,
   cardWidth,
   cardHeight,
+  cardMinHeight,
   heroBanner,
   newsCarousel,
   journalCard,
@@ -67,7 +70,11 @@ const Card = ({
   if (title || body) CARD_HEIGHT = "auto";
   if (cardHeight) CARD_HEIGHT = cardHeight;
 
-  let PADDING = heroBanner ? 0 : `2em`;
+  let MIN_CARD_HEIGHT = "auto";
+  if (isFrom4Col) MIN_CARD_HEIGHT = 250;
+  if (cardMinHeight) MIN_CARD_HEIGHT = cardMinHeight;
+
+  let PADDING = heroBanner ? 0 : `1.5em`;
   if (isFrom4Col) PADDING = `1em`;
   if (newsAndMediaInfo) PADDING = `0 2em 2em`;
   if (removePadding) PADDING = 0;
@@ -80,6 +87,7 @@ const Card = ({
           backgroundColor: THEME,
           height: 5,
           width: "100%",
+          opacity: opacity || 1,
         }}
       />
     );
@@ -125,7 +133,7 @@ const Card = ({
     if (!cardTitle) return null;
 
     return (
-      <div>
+      <div style={{ opacity: opacity || 1 }}>
         <div className="flex" style={{ justifyContent: "flex-start" }}>
           <div
             style={{
@@ -165,6 +173,7 @@ const Card = ({
           limitBodyLength={limitBodyLength}
           limitTitleLength={limitTitleLength}
           electionInfo={electionInfo}
+          opacity={opacity}
         />
         <VideoGalleryInfo videoGalleryInfo={videoGalleryInfo} />
         <CardActions
@@ -185,10 +194,10 @@ const Card = ({
       className={SHADOW}
       style={{
         ...styles.card,
-        backgroundColor: colors.white,
+        backgroundColor: backgroundColor || colors.white,
         width: cardWidth || "100%",
         height: CARD_HEIGHT,
-        minHeight: isFrom4Col ? 250 : "auto",
+        minHeight: MIN_CARD_HEIGHT,
         position: "relative",
       }}
     >
