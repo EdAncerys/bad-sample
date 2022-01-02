@@ -29,12 +29,13 @@ const Benefit = ({ state, actions, libraries, block }) => {
   if (icon === "Room Hire Discount") SERVE_ICON = HireDiscounts;
 
   // SERVERS ----------------------------------------------------------------
-  const ServeProfilePicture = () => {
+  const ServeIcon = () => {
     if (!icon) return null;
     const alt = title || "BAD";
 
     return (
       <div
+        className="active-icon"
         style={{
           width: ICON_WIDTH,
           height: ICON_WIDTH,
@@ -78,7 +79,7 @@ const Benefit = ({ state, actions, libraries, block }) => {
     );
   };
 
-  const ServeProfile = () => {
+  const ServeContent = () => {
     return (
       <div style={{ textAlign: "center", color: colors.black }}>
         <ServeTitle />
@@ -90,8 +91,8 @@ const Benefit = ({ state, actions, libraries, block }) => {
   return (
     <div style={{ margin: `2em auto` }}>
       <div>
-        <ServeProfilePicture />
-        <ServeProfile />
+        <ServeIcon />
+        <ServeContent />
       </div>
     </div>
   );

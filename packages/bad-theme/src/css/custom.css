@@ -208,3 +208,11 @@ li {
   text-align: center;
   padding: 8px;
 }
+
+/* Icon hover */
+.active-icon {
+  transition: transform 450ms;
+}
+.active-icon:hover {
+  transform: scale(1.1);
+}
