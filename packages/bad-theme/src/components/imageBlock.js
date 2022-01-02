@@ -10,7 +10,7 @@ const ImageBlock = ({ state, actions, libraries, block }) => {
 
   if (!block) return <Loading />;
 
-  const { image, image_ratio, disable_vertical_padding } = block;
+  const { image, image_height, disable_vertical_padding } = block;
 
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
@@ -22,11 +22,8 @@ const ImageBlock = ({ state, actions, libraries, block }) => {
     if (!image) return null;
     const alt = image.title || "BAD";
 
-    let STYLES = { height: BANNER_HEIGHT, width: BANNER_HEIGHT };
-    if (image_ratio === "16:9")
-      STYLES = { height: BANNER_HEIGHT, width: BANNER_HEIGHT * (9 / 16) };
-    if (image_ratio === "9:16")
-      STYLES = { height: BANNER_HEIGHT, width: BANNER_HEIGHT * (16 / 9) };
+    let STYLES = { height: BANNER_HEIGHT };
+    if (image_height) STYLES = { height: `${image_height}px` };
 
     return (
       <div className="flex" style={{ justifyContent: "center" }}>
@@ -35,9 +32,7 @@ const ImageBlock = ({ state, actions, libraries, block }) => {
             src={image.url}
             alt={alt}
             style={{
-              width: "100%",
               height: "100%",
-              objectFit: "cover",
             }}
           />
         </div>
@@ -47,7 +42,12 @@ const ImageBlock = ({ state, actions, libraries, block }) => {
 
   // RETURN ---------------------------------------------
   return (
-    <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
+    <div
+      style={{
+        padding: `${marginVertical}px ${marginHorizontal}px`,
+        overflow: "hidden",
+      }}
+    >
       <ServeCardImage />
     </div>
   );
