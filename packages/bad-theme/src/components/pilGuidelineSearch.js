@@ -9,8 +9,6 @@ import { setGoToAction } from "../context";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 
-let tetsPil = null;
-
 const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -21,12 +19,12 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 
-  const [uniqueId, setEventKey] = useState(null);
-  const [pilData, setPilData] = useState(null);
-  const filter = state.theme.filter;
+  const [uniqueId, setUniqueId] = useState(null);
+  const [isReady, setIsReady] = useState(null);
+
+  const filter = state.theme.pilFilter;
 
   useEffect(async () => {
-    state.theme.pilFilter = null; // reset search filter
     const path = `/pils/`;
     await actions.source.fetch(path); // fetch CPT guidelines
 
@@ -40,17 +38,16 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
       isThereNextPage = nextPage;
     }
 
-    const PIL_LIST = Object.values(state.source.pils); // add guidelines object to data array
-    setPilData(PIL_LIST);
+    setIsReady(true);
   }, []);
 
   // hook applies after React has performed all DOM mutations
   useLayoutEffect(() => {
     const blockId = uuidv4(); // add unique id
-    setEventKey(blockId);
+    setUniqueId(blockId);
   }, []);
 
-  if (!block || !pilData) return <Loading />; // awaits pre fetch & data
+  if (!block || !isReady) return <Loading />; // awaits pre fetch & data
 
   // HELPERS ---------------------------------------------
   const handleInputSearch = () => {
@@ -58,17 +55,14 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
       .querySelector(`#pilSearch${uniqueId}`)
       .value.toLowerCase();
     if (!searchInput) return null;
-    console.log(searchInput);
 
     const PIL_LIST = Object.values(state.source.pils); // add events object to data array
-    let results = PIL_LIST.filter((pil) =>
-      pil.title.rendered.toLowerCase().includes(searchInput)
+    let results = PIL_LIST.filter((event) =>
+      event.title.rendered.toLowerCase().includes(searchInput)
     );
 
-    if (!results.length) results = [{ title: { rendered: "No Pils Found" } }];
-    // state.theme.filter = results;
-    tetsPil = results;
-    console.log(results);
+    if (!results.length) results = [{ title: { rendered: "No Pil's Found" } }];
+    state.theme.pilFilter = results;
   };
 
   // SERVERS ---------------------------------------------
@@ -77,7 +71,6 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
       <div
         style={{
           backgroundColor: colors.primary,
-          marginTop: `2em`,
           height: 5,
           width: "100%",
         }}
@@ -85,8 +78,33 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
     );
   };
 
+  const ServeIcon = () => {
+    if (!filter) {
+      return <SearchIcon />;
+    } else {
+      return (
+        <div style={styles.action}>
+          <div
+            className="search-clear-icon"
+            onClick={() => {
+              state.theme.filter = null;
+              document.querySelector(`#pilSearch${uniqueId}`).value = "";
+            }}
+          >
+            <CloseIcon
+              style={{
+                fill: colors.darkSilver,
+                padding: 0,
+              }}
+            />
+          </div>
+        </div>
+      );
+    }
+  };
+
   const ServeDropDown = () => {
-    if (!tetsPil) return null;
+    if (!filter) return null;
 
     return (
       <div
@@ -112,7 +130,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
               overflow: "auto",
             }}
           >
-            {tetsPil.map((event, key) => {
+            {filter.map((event, key) => {
               if (!event.title) return null;
               const { link, title } = event;
 
@@ -136,80 +154,53 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
     );
   };
 
-  const ServeIcon = () => {
-    if (!filter) {
-      return <SearchIcon />;
-    } else {
-      return (
-        <div style={styles.action}>
-          <div
-            className="search-clear-icon"
-            onClick={() => state.theme.pilFilter}
-          >
-            <CloseIcon
-              style={{
-                fill: colors.darkSilver,
-                padding: 0,
-              }}
-            />
-          </div>
-        </div>
-      );
-    }
-  };
-
-  const ServeSearchContainer = () => {
-    return (
-      <div
-        className="flex"
-        style={{
-          height: ctaHeight,
-          position: "relative",
-        }}
-      >
-        <input
-          id={`pilSearch${uniqueId}`}
-          onChange={handleInputSearch}
-          type="text"
-          className="form-control"
-          placeholder="Find Guidelines"
-          style={styles.input}
-        />
-        <div
-          className="input-group-text"
-          style={{
-            position: "absolute",
-            right: 0,
-            height: ctaHeight,
-            border: "none",
-            background: "transparent",
-            alignItems: "center",
-            color: colors.darkSilver,
-            cursor: "pointer",
-          }}
-        >
-          <ServeIcon />
-        </div>
-        <ServeDropDown />
-      </div>
-    );
-  };
-
   // RETURN ---------------------------------------------------
   return (
-    <div className="event-input" style={{ margin: `${marginVertical}px 0` }}>
+    <div style={{ padding: `${marginVertical}px 0` }}>
       <div
-        className="primary-title"
+        className="event-input shadow"
         style={{
-          fontSize: 36,
-          fontWeight: "bold",
-          color: colors.black,
-          paddingBottom: `1em`,
+          position: "relative",
+          display: "grid",
+          alignItems: "center",
+          height: BANNER_HEIGHT / 2,
+          width: "100%",
+          backgroundColor: colors.white,
         }}
       >
-        PIL & Guidelines Quicklinks
+        <div
+          className="flex-col"
+          style={{
+            position: "relative",
+            margin: `2em`,
+          }}
+        >
+          <input
+            id={`pilSearch${uniqueId}`}
+            onChange={handleInputSearch}
+            type="text"
+            className="form-control"
+            placeholder="Find An Event"
+            style={{ ...styles.input, height: ctaHeight }}
+          />
+          <div
+            className="input-group-text"
+            style={{
+              position: "absolute",
+              right: 0,
+              height: ctaHeight,
+              border: "none",
+              background: "transparent",
+              alignItems: "center",
+              color: colors.darkSilver,
+              cursor: "pointer",
+            }}
+          >
+            <ServeIcon />
+          </div>
+          <ServeDropDown />
+        </div>
       </div>
-      <ServeSearchContainer />
       <ServeFooter />
     </div>
   );

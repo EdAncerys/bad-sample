@@ -53,7 +53,7 @@ const App = ({ state, actions }) => {
         state.theme.childMenuRef = ""; // reset child menu ref value
         state.theme.activeDropDownRef = "menu reset"; // reset menu ref value
         state.theme.filter = null; // reset search event filter
-        // eventFilterAction({ dispatch, filter: null }); // reset search event filter
+        state.theme.pilFilter = null; // reset pil filter
       }}
     >
       <div style={{ ...styles.container }}>

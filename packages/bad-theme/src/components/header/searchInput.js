@@ -12,20 +12,21 @@ import SearchIcon from "@mui/icons-material/Search";
 const SearchInput = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const BANNER_HEIGHT = state.theme.bannerHeight;
-  const [eventKey, setEventKey] = useState(null);
-  const filter = state.theme.filter;
   const ctaHeight = 45;
+  const BANNER_HEIGHT = state.theme.bannerHeight;
+  const [uniqueId, setUniqueId] = useState(null);
+  const filter = state.theme.filter;
+
   // hook applies after React has performed all DOM mutations
   useLayoutEffect(() => {
     const blockId = uuidv4(); // add unique id
-    setEventKey(blockId);
+    setUniqueId(blockId);
   }, []);
 
   // HELPERS ---------------------------------------------
   const handleInputSearch = () => {
     const searchInput = document
-      .querySelector(`#eventSearch${eventKey}`)
+      .querySelector(`#eventSearch${uniqueId}`)
       .value.toLowerCase();
     if (!searchInput) return null;
 
@@ -98,7 +99,10 @@ const SearchInput = ({ state, actions, libraries }) => {
         <div style={styles.action}>
           <div
             className="search-clear-icon"
-            onClick={() => (state.theme.filter = null)}
+            onClick={() => {
+              state.theme.filter = null;
+              document.querySelector(`#eventSearch${uniqueId}`).value = "";
+            }}
           >
             <CloseIcon
               style={{
@@ -127,7 +131,7 @@ const SearchInput = ({ state, actions, libraries }) => {
         }}
       >
         <input
-          id={`eventSearch${eventKey}`}
+          id={`eventSearch${uniqueId}`}
           onChange={handleInputSearch}
           type="text"
           className="form-control"

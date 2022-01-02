@@ -10,18 +10,14 @@ console.log(STATS);
 
 // check/increase heap size for node.js
 // node nodeHeapSize.js
-// node --max-old-space-size=8192 nodeHeapSize.js
 // node --max-old-space-size=4096 nodeHeapSize.js
+// node --max-old-space-size=8192 nodeHeapSize.js
 
 // $ NODE_OPTIONS=--max_old_space_size=4096 node
 // Welcome to Node.js v14.17.4.
 // Type ".help" for more information.
 // > v8.getHeapStatistics()
-// {
-//   ...
-//   heap_size_limit: 8640266240,
-//   ...
-// }
+
 
 // node --max-old-space-size=1024 nodeHeapSize.js #increase to 1gb
 // node --max-old-space-size=2048 nodeHeapSize.js #increase to 2gb
