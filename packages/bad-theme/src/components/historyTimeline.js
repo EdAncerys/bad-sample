@@ -133,6 +133,25 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
               );
             };
 
+            const ServeCardImage = () => {
+              if (!image) return null;
+              const alt = title || "BAD";
+
+              return (
+                <div style={{ height: 150, width: 150 }}>
+                  <Image
+                    src={image.url}
+                    alt={alt}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
+              );
+            };
+
             const ServeTitle = () => {
               if (!title) return null;
 
@@ -163,6 +182,7 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
                 </div>
                 <ServeTitle />
                 <ServeBody />
+                <ServeCardImage />
               </div>
             );
           };
