@@ -14,6 +14,7 @@ const BADTheme = {
     theme: {
       ENVIRONMENT: process.env.ENVIRONMENT,
       GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
+      SEND_GRID_API: process.env.SEND_GRID_API,
       menuUrl: "/menu/primary-menu",
       menu: null,
       filter: null,

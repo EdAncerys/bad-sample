@@ -102,7 +102,7 @@ const FullWidthContentBlock = ({
       <div>
         <div
           className="flex"
-          style={{ justifyContent: ALIGNMENT, paddingTop: `2em` }}
+          style={{ justifyContent: ALIGNMENT, paddingTop: `3em` }}
         >
           <div className="blue-btn" onClick={handleSubmitAction}>
             <Html2React html={LABEL} />

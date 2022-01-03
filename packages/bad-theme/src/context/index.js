@@ -6,7 +6,7 @@ import {
   setCreateAccountModalAction,
   setEnquireAction,
 } from "./actions/navigation";
-import { setLoginAction } from "./auth/actions";
+import { setLoginAction, sendEnquireAction } from "./auth/actions";
 import { loginAction } from "./auth/actions";
 
 export {
@@ -21,4 +21,5 @@ export {
   setLoginAction,
   loginAction,
   eventFilterAction,
+  sendEnquireAction,
 };

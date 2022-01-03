@@ -5,7 +5,12 @@ import { Modal } from "react-bootstrap";
 import { colors } from "../config/imports";
 import CloseIcon from "@mui/icons-material/Close";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setEnquireAction } from "../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setEnquireAction,
+  sendEnquireAction,
+} from "../context";
 
 const EnquireModal = ({ state, actions }) => {
   const dispatch = useAppDispatch();
@@ -96,7 +101,7 @@ const EnquireModal = ({ state, actions }) => {
             onClick={() => {
               // if (!agreement) return null; // agreement is required
 
-              setEnquireAction({ dispatch, enquireAction: null });
+              sendEnquireAction({ state, dispatch, enquire: null });
             }}
           >
             Send Enquiry

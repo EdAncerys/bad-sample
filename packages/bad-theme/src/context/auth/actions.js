@@ -47,6 +47,12 @@ export const loginAction = async ({ dispatch, user }) => {
   }
 };
 
+export const sendEnquireAction = async ({ state, dispatch, enquire }) => {
+  console.log("enquireAction triggered");
+  const SEND_GRID_API = state.theme.SEND_GRID_API;
+  console.log("SEND_GRID_API", SEND_GRID_API);
+};
+
 // SET CONTEXT ---------------------------------------------------
 export const setLoginAction = ({ dispatch, loginAction }) => {
   console.log("setLoginAction triggered"); //debug
