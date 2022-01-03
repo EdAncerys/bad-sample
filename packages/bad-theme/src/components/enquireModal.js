@@ -94,12 +94,9 @@ const EnquireModal = ({ state, actions }) => {
           <button
             className="blue-btn"
             onClick={() => {
-              if (!agreement) return null; // agreement is required
+              // if (!agreement) return null; // agreement is required
 
-              setEnquireAction({
-                dispatch,
-                createAccountAction: true,
-              });
+              setEnquireAction({ dispatch, enquireAction: null });
             }}
           >
             Send Enquiry
