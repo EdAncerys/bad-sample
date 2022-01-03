@@ -13,6 +13,13 @@
 .news-carousel .carousel-control-next-icon {
   background-image: none;
 }
+.news-carousel .carousel-control-prev {
+  left: -172px;
+}
+.news-carousel .carousel-control-next {
+  right: -172px;
+}
+
 .home-banner-carousel .carousel-control-prev,
 .home-banner-carousel .carousel-control-next {
   margin: 4em;

@@ -9,7 +9,7 @@ export const colors = {
   trueBlack: "#000",
   black: "#454545",
   softBlack: "#454545",
-  danger: "#ef476e",
+  danger: "#EF476F",
   silver: "#ced4da",
   lightSilver: "#F0F1F4",
   darkSilver: "#A2A2A2",

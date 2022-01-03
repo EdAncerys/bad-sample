@@ -11,7 +11,7 @@ const NewsCarouselHeader = ({ state, actions, libraries, newsCarousel }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!newsCarousel) return null;
 
-  const { date, release, categoryName, media } = newsCarousel;
+  const { date, release, categoryName, media, background_image } = newsCarousel;
   if (!date && !release) return null;
 
   // SERVERS ---------------------------------------------
@@ -87,9 +87,24 @@ const NewsCarouselHeader = ({ state, actions, libraries, newsCarousel }) => {
     );
   };
 
+  const ServePlaceholder = () => {
+    if (media || background_image) return null;
+
+    return (
+      <div
+        style={{
+          width: "100%",
+          height: 250,
+          backgroundColor: colors.silverFillTwo,
+        }}
+      />
+    );
+  };
+
   return (
     <div className="position-relative">
       <ServeCardImage />
+      <ServePlaceholder />
       <div
         className="position-absolute"
         style={{ backgroundColor: colors.white, top: `3em`, left: `2em` }}

@@ -74,7 +74,7 @@ const NewsAndMediaHeader = ({
   const ServeDate = () => {
     if (!date || isLayoutTwo) return null;
     const dateObject = new Date(date);
-    const formattedDate = DATE_MODULE.format(dateObject, "DD/MMM/YYYY");
+    const formattedDate = DATE_MODULE.format(dateObject, "DD/MM/YYYY");
 
     return (
       <div style={{ padding: `0.5em 0` }}>
@@ -92,7 +92,6 @@ const NewsAndMediaHeader = ({
         style={{
           width: ICON_WIDTH,
           height: ICON_WIDTH,
-          margin: `0 auto`,
         }}
       >
         <Image
@@ -119,7 +118,7 @@ const NewsAndMediaHeader = ({
     const media = state.source.attachment[featured_media];
 
     // Manage max string Length
-    const MAX_LENGTH = 36;
+    const MAX_LENGTH = 30;
     let bodyPreview = `${excerpt.rendered.substring(0, MAX_LENGTH)}...`;
     if (excerpt.rendered.length < MAX_LENGTH) bodyPreview = excerpt.rendered;
 
@@ -150,7 +149,7 @@ const NewsAndMediaHeader = ({
     return (
       <div>
         <ServeImage />
-        <div style={{ padding: `1em 2em 0` }}>
+        <div style={{ padding: `1em 1.5em 0` }}>
           <div
             className="primary-title"
             style={{ fontSize: 22, fontWeight: "bold", cursor: "pointer" }}
@@ -169,15 +168,7 @@ const NewsAndMediaHeader = ({
   };
 
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: isLayoutTwo ? `1fr` : `3fr 1fr`,
-        gap: 5,
-        padding: isLayoutTwo ? 0 : `2em 2em 0`,
-        marginBottom: isLayoutTwo ? 0 : `1em`,
-      }}
-    >
+    <div style={{ padding: isLayoutTwo ? 0 : `1.5em 1.5em 0` }}>
       <div
         className="flex-col"
         style={{
@@ -189,8 +180,8 @@ const NewsAndMediaHeader = ({
         <ServeMedia />
         <ServeTitle />
         <ServeDate />
+        <ServeIcon />
       </div>
-      <ServeIcon />
     </div>
   );
 };

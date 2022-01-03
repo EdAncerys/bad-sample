@@ -18,6 +18,7 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const BANNER_HEIGHT = state.theme.bannerHeight;
+  const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 
@@ -44,7 +45,7 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
     );
   };
 
-  const ServeIcon = ({ icon, right }) => {
+  const ServeIcon = ({ icon, left, right }) => {
     if (!icon) return null;
 
     return (
@@ -53,10 +54,12 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
           position: "absolute",
           zIndex: 1,
           width: 25,
-          height: 50,
+          height: 40,
           cursor: "pointer",
           top: BANNER_HEIGHT / 2,
           right: right ? 0 : "",
+          marginLeft: left ? `-6em` : "auto",
+          marginRight: right ? `-6em` : "auto",
         }}
       >
         <Image className="d-block h-100" src={icon} />
@@ -68,7 +71,18 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div style={{ margin: `${marginVertical}px 0` }}>
+    <div>
+      <BlockWrapper>
+        <div
+          style={{
+            position: "relative",
+            margin: `${marginVertical}px ${marginHorizontal}px`,
+          }}
+        >
+          <ServeIcon icon={LeftIcon} left />
+          <ServeIcon icon={RightIcon} right />
+        </div>
+      </BlockWrapper>
       <Carousel
         className="quotation-carousel"
         style={{ color: colors.darkSilver }}
@@ -80,12 +94,6 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
 
           return (
             <Carousel.Item key={key}>
-              <BlockWrapper>
-                <div style={{ position: "relative" }}>
-                  <ServeIcon icon={LeftIcon} />
-                  <ServeIcon icon={RightIcon} right />
-                </div>
-              </BlockWrapper>
               <div
                 style={{
                   height: BANNER_HEIGHT,

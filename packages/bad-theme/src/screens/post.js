@@ -77,7 +77,7 @@ const Post = ({ state, actions, libraries }) => {
           display: "grid",
           gridTemplateColumns: `2.5fr 1fr`,
           gap: 20,
-          padding: `${marginVertical}px 0`,
+          padding: `${marginVertical}px ${marginHorizontal}px`,
         }}
       >
         <ServeContent />

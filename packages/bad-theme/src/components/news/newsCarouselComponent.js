@@ -54,8 +54,8 @@ const NewsCarouselComponent = ({ state, actions, libraries, block }) => {
           cursor: "pointer",
           top: BANNER_HEIGHT / 2,
           right: right ? 0 : "",
-          marginLeft: left ? "1.5em" : "",
-          marginRight: right ? "1.5em" : "",
+          marginLeft: left ? `-6em` : "auto",
+          marginRight: right ? `-6em` : "auto",
         }}
       >
         <Image className="d-block h-100" src={icon} />
@@ -64,19 +64,16 @@ const NewsCarouselComponent = ({ state, actions, libraries, block }) => {
   };
 
   return (
-    <div style={{ margin: `${marginVertical}px 0` }}>
+    <div style={{ position: "relative" }}>
+      <ServeIcon icon={LeftIcon} left />
+      <ServeIcon icon={RightIcon} right />
       <Carousel className="news-carousel">
         {BLOCK_PAIRS.map((block, key) => {
           const isSingleBlock = block.length === 1;
 
           return (
             <Carousel.Item key={key}>
-              <ServeIcon icon={LeftIcon} left />
-              <ServeIcon icon={RightIcon} right />
-              <div
-                className="flex"
-                style={{ padding: `0 ${state.theme.marginHorizontal}px` }}
-              >
+              <div className="flex">
                 {block.map((block, key) => {
                   const {
                     date,

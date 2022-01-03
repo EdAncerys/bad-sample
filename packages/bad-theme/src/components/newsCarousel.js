@@ -10,20 +10,16 @@ import Card from "./card/card";
 import LeftIcon from "../img/svg/leftIcon.svg";
 import RightIcon from "../img/svg/rightIcon.svg";
 
-const NewsCarousel = ({ state, actions, libraries, block, isMenu }) => {
+const NewsCarousel = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
-
-  const { disable_vertical_padding } = block;
 
   const BLOCK_PAIRS = block.news_card.flatMap((_, i, a) =>
     i % 2 ? [] : [a.slice(i, i + 2)]
   ); // split data in array of pairs
   const BANNER_HEIGHT = state.theme.bannerHeight;
-  const marginHorizontal = isMenu ? 0 : state.theme.marginHorizontal;
-  let marginVertical = state.theme.marginVertical;
-  if (disable_vertical_padding) marginVertical = 0;
+  const marginHorizontal = state.theme.marginHorizontal;
 
   // SERVERS ----------------------------------------------------------------
   const ServeIcon = ({ icon, left, right }) => {
@@ -39,8 +35,8 @@ const NewsCarousel = ({ state, actions, libraries, block, isMenu }) => {
           cursor: "pointer",
           top: BANNER_HEIGHT / 2,
           right: right ? 0 : "",
-          marginLeft: left ? "1.5em" : "",
-          marginRight: right ? "1.5em" : "",
+          marginLeft: left ? `-6em` : "auto",
+          marginRight: right ? `-6em` : "auto",
         }}
       >
         <Image className="d-block h-100" src={icon} />
@@ -49,19 +45,16 @@ const NewsCarousel = ({ state, actions, libraries, block, isMenu }) => {
   };
 
   return (
-    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
+    <div style={{ position: "relative", margin: `0 ${marginHorizontal}px` }}>
+      <ServeIcon icon={LeftIcon} left />
+      <ServeIcon icon={RightIcon} right />
       <Carousel className="news-carousel">
         {BLOCK_PAIRS.map((block, key) => {
           const isSingleBlock = block.length === 1;
 
           return (
             <Carousel.Item key={key}>
-              <ServeIcon icon={LeftIcon} left />
-              <ServeIcon icon={RightIcon} right />
-              <div
-                className="flex"
-                style={{ padding: `0 ${state.theme.marginHorizontal}px` }}
-              >
+              <div className="flex">
                 {block.map((block, key) => {
                   const {
                     background_image,
@@ -98,9 +91,9 @@ const NewsCarousel = ({ state, actions, libraries, block, isMenu }) => {
                     >
                       <ServeDivider i={1} />
                       <Card
-                        newsCarousel={{ date, release }}
+                        newsCarousel={block}
                         cardWidth={isSingleBlock ? "50%" : "100%"}
-                        cardHeight={BANNER_HEIGHT}
+                        cardHeight="90%"
                         title={title}
                         url={background_image.url}
                         imgHeight={BANNER_HEIGHT * 0.55}

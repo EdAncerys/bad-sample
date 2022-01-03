@@ -88,8 +88,7 @@ const NewsArticleHeader = ({ state, actions, libraries, newsArticle }) => {
     <div
       style={{
         width: "100%",
-        minHeight: 150,
-        padding: `2em 2em 0`,
+        padding: `1.5em 1.5em 0`,
         overflow: "auto",
       }}
     >

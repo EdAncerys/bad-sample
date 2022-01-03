@@ -5,22 +5,13 @@ import Card from "../card/card";
 import Loading from "../loading";
 import { colors } from "../../config/imports";
 
-const NewsBlock = ({
-  state,
-  actions,
-  libraries,
-  block,
-  searchFilter,
-  dateFilter,
-}) => {
+const NewsBlock = ({ state, actions, libraries, block }) => {
   const [postList, setPostList] = useState(null);
   const [category, setCategory] = useState(null);
 
-  const { layout, post_limit } = block;
+  const { layout, post_limit, category_filter } = block;
   const isLayoutTwo = layout === "layout_two";
   const isLayoutThree = layout === "layout_three";
-
-  // if (!isLayoutThree) return null;
 
   // HELPERS ----------------------------------------------------------------
   const handleSearchSubmit = () => {
@@ -71,12 +62,18 @@ const NewsBlock = ({
         // search filter options --------------------------------
         // apply search options if needed
 
-        const { categories, title, content, excerpt, link } = block;
+        const { categories, link } = block;
         const { press_release_authors } = block.acf;
         const filter = category.filter(
           (item) => item.id === Number(categories[0])
         );
         const categoryName = filter[0].name;
+
+        if (
+          !categories.includes(Number(category_filter)) &&
+          Number(category_filter) !== 0
+        )
+          return null;
 
         if (isLayoutTwo)
           return (
@@ -85,9 +82,7 @@ const NewsBlock = ({
               link_label="Read More"
               link={link}
               newsAndMediaInfo={block}
-              colour={
-                press_release_authors ? press_release_authors[0].colour : null
-              }
+              colour={colors.danger}
               limitBodyLength
               cardHeight="100%"
               layout={layout}
@@ -99,13 +94,10 @@ const NewsBlock = ({
           return (
             <Card
               key={key}
-              title={categoryName}
-              body={excerpt.rendered}
               link_label="Read More"
               link={link}
               newsAndMediaInfo={block}
               colour={colors.danger}
-              limitBodyLength
               cardHeight="100%"
               shadow
             />
