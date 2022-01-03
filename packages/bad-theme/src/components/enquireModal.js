@@ -3,52 +3,49 @@ import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 
 import { colors } from "../config/imports";
+import CloseIcon from "@mui/icons-material/Close";
 // CONTEXT ----------------------------------------------------------------
-import {
-  useAppDispatch,
-  useAppState,
-  setCreateAccountModalAction,
-  setEnquireAction,
-} from "../context";
+import { useAppDispatch, useAppState, setEnquireAction } from "../context";
 
 const EnquireModal = ({ state, actions }) => {
   const dispatch = useAppDispatch();
-  const data = state.source.get(state.router.link);
-  const enquireAction = state.context.enquireAction;
+  const { enquireAction } = useAppState();
+
+  const [agreement, setAgreement] = useState(null);
 
   // SERVERS --------------------------------------------------
   const ServeModalContent = () => {
     const ServeForm = () => {
       return (
         <form>
-          <div style={{ margin: `1em 0` }}>
+          <div style={styles.inputContainer}>
             <label className="form-label">Full Name</label>
             <input type="text" className="form-control" />
           </div>
-          <div style={{ margin: `1em 0` }}>
+          <div style={styles.inputContainer}>
             <label className="form-label">Email Address</label>
             <input type="email" className="form-control" />
           </div>
-          <div style={{ margin: `1em 0` }}>
+          <div style={styles.inputContainer}>
             <label className="form-label">Phone Number</label>
             <input type="number" className="form-control" />
           </div>
-          <div style={{ margin: `1em 0` }}>
+          <div style={styles.inputContainer}>
             <label className="form-label">Subject</label>
             <input type="text" className="form-control" />
           </div>
-          <div style={{ margin: `1em 0` }}>
+          <div style={styles.inputContainer}>
             <label className="form-label">Reason For Enquiry</label>
             <input type="text" className="form-control" />
           </div>
-          <div style={{ margin: `1em 0` }}>
+          <div style={styles.inputContainer}>
             <label className="form-label">Message</label>
             <textarea type="text" rows="3" className="form-control" />
           </div>
 
           <div className="flex mb-3 form-check">
             <div className="flex">
-              <div>
+              <div className="flex" style={{ alignItems: "center" }}>
                 <input
                   type="checkbox"
                   className="form-check-input"
@@ -59,12 +56,10 @@ const EnquireModal = ({ state, actions }) => {
                 <label className="form-check-label">
                   <span
                     style={styles.TC}
-                    onClick={() =>
-                      setCreateAccountModalAction({
-                        dispatch,
-                        createAccountAction: true,
-                      })
-                    }
+                    onClick={() => {
+                      console.log("agree");
+                      setAgreement(true);
+                    }}
                   >
                     I agree
                   </span>{" "}
@@ -83,8 +78,7 @@ const EnquireModal = ({ state, actions }) => {
         <div
           style={{
             borderBottom: `1px solid ${colors.darkSilver}`,
-            padding: `0.5em 0 1em`,
-            margin: `2em 0`,
+            paddingBottom: `2em`,
           }}
         >
           <h4>Enquire About Education & Training </h4>
@@ -94,17 +88,19 @@ const EnquireModal = ({ state, actions }) => {
 
     const ServeActions = () => {
       return (
-        <Modal.Footer style={{ justifyContent: "flex-start" }}>
+        <Modal.Footer
+          style={{ justifyContent: "flex-start", padding: `1em 0 0` }}
+        >
           <button
-            type="submit"
-            className="btn"
-            style={{ backgroundColor: colors.primary, color: colors.white }}
-            onClick={() =>
+            className="blue-btn"
+            onClick={() => {
+              if (!agreement) return null; // agreement is required
+
               setEnquireAction({
                 dispatch,
                 createAccountAction: true,
-              })
-            }
+              });
+            }}
           >
             Send Enquiry
           </button>
@@ -113,13 +109,13 @@ const EnquireModal = ({ state, actions }) => {
     };
 
     return (
-      <div className="flex m-4" style={{ flex: 2, paddingRight: `2em` }}>
+      <div className="flex">
         <div className="flex-col">
           <Modal.Body>
             <ServeFormInfo />
             <ServeForm />
+            <ServeActions />
           </Modal.Body>
-          <ServeActions />
         </div>
       </div>
     );
@@ -127,28 +123,17 @@ const EnquireModal = ({ state, actions }) => {
 
   const ServeModalInfo = () => {
     return (
-      <div
-        className="flex"
-        style={{
-          backgroundColor: colors.lightSilver,
-        }}
-      >
+      <div className="flex">
         <Modal.Body>
           <div
             style={{
               borderBottom: `1px solid ${colors.darkSilver}`,
-              padding: `1em 1em 1em 0`,
-              margin: `3em 1em`,
+              paddingBottom: `2em`,
             }}
           >
             <h4>Contact Details</h4>
           </div>
-          <div
-            style={{
-              padding: `0 1em 1em 0`,
-              margin: `3em 1em`,
-            }}
-          >
+          <div style={{ padding: `1em 0` }}>
             <div style={styles.infoTitle}>
               <div>Address</div>
             </div>
@@ -182,9 +167,22 @@ const EnquireModal = ({ state, actions }) => {
   return (
     <div>
       <Modal show={enquireAction} size="xl" centered>
-        <div className="flex-row">
-          <ServeModalInfo />
-          <ServeModalContent />
+        <div style={{ backgroundColor: colors.silverFillOne }}>
+          <div
+            className="flex"
+            onClick={() => setEnquireAction({ dispatch, enquireAction: null })}
+            style={{
+              padding: `2em 4em 1em`,
+              cursor: "pointer",
+              justifyContent: "flex-end",
+            }}
+          >
+            <CloseIcon style={{ fontSize: 24, fill: colors.textMain }} />
+          </div>
+          <div style={styles.container}>
+            <ServeModalInfo />
+            <ServeModalContent />
+          </div>
         </div>
       </Modal>
     </div>
@@ -192,6 +190,15 @@ const EnquireModal = ({ state, actions }) => {
 };
 
 const styles = {
+  container: {
+    display: "grid",
+    gridTemplateColumns: `1fr 1.5fr`,
+    gap: `4em`,
+    padding: `0em 3em 3em`,
+  },
+  inputContainer: {
+    margin: `1em 0`,
+  },
   TC: {
     textDecoration: "underline",
     textUnderlineOffset: 5,

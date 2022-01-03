@@ -5,7 +5,7 @@ export const initialState = {
 
   loginModalAction: false,
   createAccountAction: false,
-  enquireAction: false,
+  enquireAction: true,
 };
 
 export const AppReducer = (state = initialState, action) => {

@@ -11,3 +11,6 @@
 .event-search-title:hover {
   color: #454545;
 }
+.form-control {
+  border-radius: 10px;
+}
