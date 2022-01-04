@@ -174,7 +174,8 @@ const Navigation = ({ state, actions, libraries }) => {
       }
     };
     const handleActiveItem = () => {
-      if (selectedr.current) {
+      console.log(selectedr.current);
+      if (selectedr.current || selectedr.current === 0) {
         const activeItem = document.querySelector(
           `#footer-shower-${selectedr.current}`
         );
