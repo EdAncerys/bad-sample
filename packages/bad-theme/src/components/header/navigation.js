@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, createRef } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
@@ -10,6 +10,7 @@ import { setActiveDropDownRef } from "../../context/actions/navigation";
 import NavBarDropDownContent from "./navDropDownContent";
 import ChildMenu from "./childMenu";
 import BlockWrapper from "../blockWrapper";
+import Footer from "../footer";
 
 const Navigation = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -81,7 +82,10 @@ const Navigation = ({ state, actions, libraries }) => {
       <NavDropdown
         title={<Html2React html={title} /> || "Menu Title"}
         style={{
-          position: "static", // static position adding ability for dropdown to move up the scope
+          position: "static",
+          height: "100%",
+          alignItems: "center",
+          display: "flex", // static position adding ability for dropdown to move up the scope
         }}
         onClick={(e) => {
           const title = {
@@ -132,6 +136,69 @@ const Navigation = ({ state, actions, libraries }) => {
   };
 
   const ServeMenu = () => {
+    const [selected, setSelected] = useState(null);
+    const selectedr = useRef(null);
+    const hovered = useRef(null);
+
+    const handleFooterVisible = (method) => {
+      if (selectedr.current !== hovered.current) {
+        const attractor = document.querySelector(
+          `#footer-shower-${hovered.current}`
+        );
+        console.log("Method: ", method);
+        if (method === "enter") {
+          attractor.classList.remove("d-none");
+        } else {
+          attractor.classList.add("d-none");
+        }
+      }
+    };
+    const handleFooterColour = (slug) => {
+      switch (slug) {
+        case "clinical-services":
+          return colors.darkGreen;
+        case "news and media":
+          return colors.pink;
+        case "guidelines-and-standards":
+          return colors.maroon;
+        case "events-content":
+          return colors.turquoise;
+        case "education-training":
+          return colors.orange;
+        case "research-journals":
+          return colors.red;
+        case "membership":
+          return colors.yellow;
+        default:
+          return "black";
+      }
+    };
+    const handleActiveItem = () => {
+      console.log(selectedr.current);
+      if (selectedr.current || selectedr.current === 0) {
+        const activeItem = document.querySelector(
+          `#footer-shower-${selectedr.current}`
+        );
+        activeItem.classList.add("d-none");
+      }
+
+      // selectedr.current === hovered.current
+      //   ? (selectedr.current = null)
+      //   : (selectedr.current = hovered.current);
+      if (selectedr.current !== hovered.current) {
+        const nextActive = document.querySelector(
+          `#footer-shower-${hovered.current}`
+        );
+        nextActive.classList.remove("d-none");
+        selectedr.current = hovered.current;
+      } else {
+        const nextActive = document.querySelector(
+          `#footer-shower-${hovered.current}`
+        );
+        nextActive.classList.remove("d-none");
+        selectedr.current = null;
+      }
+    };
     return (
       <div className="flex" style={styles.container}>
         {wpMainMenu.map((item, key) => {
@@ -144,14 +211,51 @@ const Navigation = ({ state, actions, libraries }) => {
                 fontSize: 20,
               }
             : {};
-
+          console.log("Ajtem: ", item);
           if (item.child_items)
             return (
-              <div key={key} className="bad-menu-container">
+              <div
+                key={key}
+                className={"bad-menu-container " + key}
+                style={{ height: "100%" }}
+                onMouseEnter={(e) => {
+                  // document
+                  //   .querySelector(`.footer-shower-${key}`)
+                  //   .removeAttribute("hidden");
+                  hovered.current = key;
+                  handleFooterVisible("enter");
+                }}
+                onMouseLeave={(e) => {
+                  handleFooterVisible("leave");
+                  // if (key !== selectedr.current) {
+                  //   document
+                  //     .querySelector(`.footer-shower-${key}`)
+                  //     .setAttribute("hidden", true);
+                  // }
+                  hovered.current = null;
+                }}
+                onClick={() => {
+                  handleActiveItem();
+                  console.log(selectedr);
+                }}
+              >
                 <ServeMenuDropDown
+                  style={{ height: "100%" }}
                   title={title}
                   url={url}
                   menu={item.child_items}
+                />
+
+                <div
+                  id={`footer-shower-${key}`}
+                  className="d-none"
+                  style={{
+                    backgroundColor: handleFooterColour(item.slug),
+                    height: 5,
+                    width: "100%",
+                    position: "relative",
+                    bottom: "5px",
+                  }}
                 />
               </div>
             );
@@ -167,6 +271,7 @@ const Navigation = ({ state, actions, libraries }) => {
             </div>
           );
         })}
+
         <ServeMenuDropDown title="More" menu={wpMoreMenu} />
       </div>
     );
@@ -205,6 +310,7 @@ const styles = {
     justifyContent: "space-between",
     alignItems: "center",
     flexWrap: "wrap",
+    display: "flex",
   },
   dropDown: {
     backgroundColor: colors.lightSilver,
