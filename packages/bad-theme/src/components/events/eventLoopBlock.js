@@ -26,6 +26,7 @@ const EventLoopBlock = ({
     layout,
     grade_filter,
     title,
+    colour,
   } = block;
 
   const [eventList, setEventList] = useState(null); // event data
@@ -124,7 +125,7 @@ const EventLoopBlock = ({
               title={title}
               url={image}
               link={block.link}
-              colour={colors.turquoise}
+              colour={colour}
               date={date_time}
               seatNumber="seatNumber"
               cardHeight="100%"
@@ -139,7 +140,7 @@ const EventLoopBlock = ({
               title={title}
               link_label="Read More"
               link={block.link}
-              colour={colors.turquoise}
+              colour={colour}
               eventHeader={block.acf}
               isFrom4Col
               shadow

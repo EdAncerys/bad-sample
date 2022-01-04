@@ -9,9 +9,11 @@ const NewsBlock = ({ state, actions, libraries, block }) => {
   const [postList, setPostList] = useState(null);
   const [category, setCategory] = useState(null);
 
-  const { layout, post_limit, category_filter } = block;
+  const { layout, post_limit, category_filter, colour } = block;
   const isLayoutTwo = layout === "layout_two";
   const isLayoutThree = layout === "layout_three";
+
+  console.log(block);
 
   // HELPERS ----------------------------------------------------------------
   const handleSearchSubmit = () => {
@@ -57,7 +59,13 @@ const NewsBlock = ({ state, actions, libraries, block }) => {
 
   // RETURN ---------------------------------------------
   return (
-    <div style={styles.container}>
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: `repeat(3, 1fr)`,
+        gap: 20,
+      }}
+    >
       {postList.map((block, key) => {
         // search filter options --------------------------------
         // apply search options if needed
@@ -82,7 +90,7 @@ const NewsBlock = ({ state, actions, libraries, block }) => {
               link_label="Read More"
               link={link}
               newsAndMediaInfo={block}
-              colour={colors.danger}
+              colour={colour}
               limitBodyLength
               cardHeight="100%"
               layout={layout}
@@ -97,7 +105,7 @@ const NewsBlock = ({ state, actions, libraries, block }) => {
               link_label="Read More"
               link={link}
               newsAndMediaInfo={block}
-              colour={colors.danger}
+              colour={colour}
               cardHeight="100%"
               shadow
             />
@@ -108,11 +116,6 @@ const NewsBlock = ({ state, actions, libraries, block }) => {
 };
 
 const styles = {
-  container: {
-    display: "grid",
-    gridTemplateColumns: `repeat(4, 1fr)`,
-    gap: 20,
-  },
   input: {
     borderRadius: 10,
     paddingRight: 35,
