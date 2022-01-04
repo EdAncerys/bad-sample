@@ -139,16 +139,38 @@ const Navigation = ({ state, actions, libraries }) => {
     const [selected, setSelected] = useState(null);
     const selectedr = useRef(null);
     const hovered = useRef(null);
-    console.log("Hovered now: ", hovered.current);
-    const handleFooterVisible = () => {
+
+    const handleFooterVisible = (method) => {
       if (selectedr.current !== hovered.current) {
-        console.log("handle hovered: ", hovered.current);
         const attractor = document.querySelector(
           `#footer-shower-${hovered.current}`
         );
-        console.log("Attractore: ", attractor);
-
-        attractor.classList.toggle("d-none");
+        console.log("Method: ", method);
+        if (method === "enter") {
+          attractor.classList.remove("d-none");
+        } else {
+          attractor.classList.add("d-none");
+        }
+      }
+    };
+    const handleFooterColour = (slug) => {
+      switch (slug) {
+        case "clinical-services":
+          return colors.darkGreen;
+        case "news and media":
+          return colors.pink;
+        case "guidelines-and-standards":
+          return colors.maroon;
+        case "events-content":
+          return colors.turquoise;
+        case "education-training":
+          return colors.orange;
+        case "research-journals":
+          return colors.red;
+        case "membership":
+          return colors.yellow;
+        default:
+          return "black";
       }
     };
     const handleActiveItem = () => {
@@ -158,12 +180,23 @@ const Navigation = ({ state, actions, libraries }) => {
         );
         activeItem.classList.add("d-none");
       }
-      selectedr.current = hovered.current;
 
-      const nextActive = document.querySelector(
-        `#footer-shower-${hovered.current}`
-      );
-      nextActive.classList.remove("d-none");
+      // selectedr.current === hovered.current
+      //   ? (selectedr.current = null)
+      //   : (selectedr.current = hovered.current);
+      if (selectedr.current !== hovered.current) {
+        const nextActive = document.querySelector(
+          `#footer-shower-${hovered.current}`
+        );
+        nextActive.classList.remove("d-none");
+        selectedr.current = hovered.current;
+      } else {
+        const nextActive = document.querySelector(
+          `#footer-shower-${hovered.current}`
+        );
+        nextActive.classList.remove("d-none");
+        selectedr.current = null;
+      }
     };
     return (
       <div className="flex" style={styles.container}>
@@ -177,7 +210,7 @@ const Navigation = ({ state, actions, libraries }) => {
                 fontSize: 20,
               }
             : {};
-
+          console.log("Ajtem: ", item);
           if (item.child_items)
             return (
               <div
@@ -189,13 +222,10 @@ const Navigation = ({ state, actions, libraries }) => {
                   //   .querySelector(`.footer-shower-${key}`)
                   //   .removeAttribute("hidden");
                   hovered.current = key;
-                  handleFooterVisible();
-                  console.log(hovered.current);
-                  console.log("Hovered vs key: ", hovered.current === key);
-                  console.log("Selectedr vs key: ", selectedr.current === key);
+                  handleFooterVisible("enter");
                 }}
                 onMouseLeave={(e) => {
-                  handleFooterVisible();
+                  handleFooterVisible("leave");
                   // if (key !== selectedr.current) {
                   //   document
                   //     .querySelector(`.footer-shower-${key}`)
@@ -219,8 +249,8 @@ const Navigation = ({ state, actions, libraries }) => {
                   id={`footer-shower-${key}`}
                   className="d-none"
                   style={{
-                    backgroundColor: "black",
-                    height: 20,
+                    backgroundColor: handleFooterColour(item.slug),
+                    height: 5,
                     width: "100%",
                     position: "relative",
                     bottom: "5px",
