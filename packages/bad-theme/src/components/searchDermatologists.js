@@ -1,40 +1,50 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { connect } from "frontity";
-import { colors } from "../config/imports";
 
-import GooglePlacesAutocomplete from "react-google-places-autocomplete";
-import { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";
+import GooglePlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from "react-google-places-autocomplete";
 // import MapsComponent from "./mapsComponent";
+import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import { Form } from "react-bootstrap";
+
+import BlockWrapper from "./blockWrapper";
+import Loading from "./loading";
+import { colors } from "../config/imports";
+import { v4 as uuidv4 } from "uuid";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState } from "../context";
-const INPUT_WIDTH = 365;
+import { useAppDispatch, useAppState, setGoToAction } from "../context";
 
-const SearchDermatologists = ({
-  state,
-  actions,
-  libraries,
-  title,
-  filterOne,
-  disableMargin,
-}) => {
+const SearchDermatologists = ({ state, actions, libraries, block }) => {
   const dispatch = useAppDispatch();
-  const [filter, setFilter] = useState(null);
 
+  const { disable_vertical_padding, background_colour } = block;
+
+  const ctaHeight = 45;
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
 
-  const TITLE = title || "Search For Dermatologists";
+  const [uniqueId, setUniqueId] = useState(null);
+  const [isReady, setIsReady] = useState(null);
+  const filter = state.theme.addressFilter;
 
-  useEffect(() => {
-    console.log(filter);
-  }, [filter]);
+  useEffect(async () => {
+    console.log("fetch dermatologists data");
 
-  useEffect(() => {
-    setFilter(null); // handles search filter reset on component load
+    setIsReady(true);
   }, []);
+
+  // hook applies after React has performed all DOM mutations
+  useLayoutEffect(() => {
+    const blockId = uuidv4(); // add unique id
+    setUniqueId(blockId);
+  }, []);
+
+  if (!isReady) return <Loading />; // awaits pre fetch & data
 
   // HELPERS ----------------------------------------------------------------
   const handleSearchByNameSubmit = () => {
@@ -49,6 +59,14 @@ const SearchDermatologists = ({
     setFilter(filter);
   };
 
+  const handleInputSearch = () => {
+    const searchInput = document
+      .querySelector(`#addressSearch${uniqueId}`)
+      .value.toLowerCase();
+
+    state.theme.addressFilter = searchInput;
+  };
+
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
     return (
@@ -56,7 +74,7 @@ const SearchDermatologists = ({
         className="flex primary-title"
         style={{ fontSize: 36, fontWeight: "bold", color: colors.black }}
       >
-        {TITLE}
+        Search For Dermatologists
       </div>
     );
   };
@@ -100,7 +118,7 @@ const SearchDermatologists = ({
     };
 
     return (
-      <div className="flex" style={{ padding: `1em 0`, alignItems: "center" }}>
+      <div className="flex" style={{ alignItems: "center" }}>
         <ServeTitle />
         <ServeFilterOne />
       </div>
@@ -110,14 +128,13 @@ const SearchDermatologists = ({
   const ServeSearchComponent = () => {
     const ServeSearchName = () => {
       return (
-        <div className="flex-row">
+        <div className="flex-row pink" style={{ alignItems: "center" }}>
           <div
             className="flex"
             style={{
-              flex: 2,
-              marginRight: `2em`,
-              padding: `0.75em 0`,
+              height: ctaHeight,
               position: "relative",
+              marginRight: `2em`,
             }}
           >
             <input
@@ -140,16 +157,11 @@ const SearchDermatologists = ({
               <SearchIcon />
             </span>
           </div>
-          <div className="flex" style={{ alignItems: "center" }}>
+          <div>
             <button
               type="submit"
-              className="btn"
-              style={{
-                backgroundColor: colors.primary,
-                color: colors.white,
-                padding: `0.5em`,
-              }}
-              onClick={handleSearchByNameSubmit}
+              className="blue-btn"
+              onClick={handleInputSearch}
             >
               Search
             </button>
@@ -159,7 +171,29 @@ const SearchDermatologists = ({
     };
 
     const ServeSearchLocation = () => {
-      const [location, setLocation] = useState(null);
+      const ServeIcon = () => {
+        if (!filter) {
+          return <SearchIcon />;
+        } else {
+          return (
+            <div
+              className="search-clear-icon"
+              style={{ height: ctaHeight }}
+              onClick={() => {
+                state.theme.addressFilter = null;
+                document.querySelector(`#addressSearch${uniqueId}`).value = "";
+              }}
+            >
+              <CloseIcon
+                style={{
+                  fill: colors.darkSilver,
+                  padding: 0,
+                }}
+              />
+            </div>
+          );
+        }
+      };
 
       const handleAddress = ({ description }) => {
         geocodeByAddress(description)
@@ -171,91 +205,86 @@ const SearchDermatologists = ({
       };
 
       return (
-        <div className="flex">
+        <div className="flex" style={{ alignItems: "center" }}>
           <div
             className="flex"
             style={{
-              flex: 2,
+              height: ctaHeight,
+              position: "relative",
+              alignItems: "center",
               marginRight: `2em`,
             }}
           >
-            <div className="flex" style={{ alignItems: "center" }}>
-              <div className="flex" style={{ position: "relative" }}>
-                <div style={{ width: INPUT_WIDTH }}>
-                  <GooglePlacesAutocomplete
-                    apiKey={`${state.theme.GOOGLE_API_KEY}`}
-                    debounce={1000} // number of milliseconds to delay before making a call to Google Maps API
-                    placeholder="Search"
-                    autocompletionRequest={{
-                      componentRestrictions: {
-                        country: ["uk"],
-                      },
-                    }}
-                    onLoadFailed={
-                      (error) =>
-                        console.error("Could not inject Google script", error) // to be called when the injection of the Google Maps JavaScript API fails due to network error
-                    }
-                    textInputProps={{
-                      leftIcon: { type: "font-awesome", name: "chevron-left" },
-                      errorStyle: { color: "red" },
-                    }}
-                    selectProps={{
-                      // defaultInputValue: "Default input value",
-                      placeholder: "Search by location/postcode",
-                      isClearable: true,
-                      onChange: (e) => {
-                        if (!e) return null;
+            <GooglePlacesAutocomplete
+              apiKey={`${state.theme.GOOGLE_API_KEY}`}
+              debounce={1000} // number of milliseconds to delay before making a call to Google Maps API
+              autocompletionRequest={{
+                componentRestrictions: {
+                  country: ["uk"],
+                },
+              }}
+              onLoadFailed={
+                (error) =>
+                  console.error("Could not inject Google script", error) // to be called when the injection of the Google Maps JavaScript API fails due to network error
+              }
+              textInputProps={{
+                leftIcon: { type: "font-awesome", name: "chevron-left" },
+                errorStyle: { color: "red" },
+              }}
+              selectProps={{
+                // defaultInputValue: "Default input value",
+                placeholder: "Search by location/postcode",
+                isClearable: true,
+                onChange: (e) => {
+                  if (!e) return null;
 
-                        console.log(e);
-                        handleAddress({ description: e.label });
-                      },
+                  console.log(e);
+                  handleAddress({ description: e.label });
+                },
 
-                      styles: {
-                        input: (provided) => ({
-                          ...provided,
-                          color: colors.darkSilver,
-                          overflow: "hidden",
-                          borderColor: colors.primary,
-                          marginRight: 30,
-                        }),
-                        option: (provided, state) => ({
-                          ...provided, // dropdown styles
-                          borderBottom: "1px dotted pink",
-                          color: "green",
-                        }),
-                        singleValue: (provided) => ({
-                          ...provided, // selected styles
-                          color: colors.textMain,
-                          paddingRight: 40,
-                        }),
-                      },
-                    }}
-                  />
-                </div>
-                <span
-                  className="input-group-text"
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    border: "none",
-                    background: "transparent",
+                styles: {
+                  input: (provided) => ({
+                    ...provided,
                     color: colors.darkSilver,
-                  }}
-                >
-                  <SearchIcon />
-                </span>
-              </div>
-            </div>
+                    overflow: "hidden",
+                    borderColor: colors.primary,
+                    height: ctaHeight,
+                    marginRight: 30,
+                  }),
+                  option: (provided, state) => ({
+                    ...provided, // dropdown styles
+                    borderBottom: "1px dotted pink",
+                    color: "green",
+                    cursor: "pointer",
+                  }),
+                  singleValue: (provided) => ({
+                    ...provided, // selected styles
+                    color: colors.textMain,
+                    paddingRight: 40,
+                  }),
+                },
+              }}
+            />
+            <span
+              className="input-group-text"
+              style={{
+                position: "absolute",
+                right: 0,
+                height: ctaHeight,
+                border: "none",
+                background: "transparent",
+                alignItems: "center",
+                color: colors.darkSilver,
+                cursor: "pointer",
+              }}
+            >
+              <ServeIcon />
+            </span>
           </div>
-          <div className="flex" style={{ alignItems: "center" }}>
+          <div>
             <button
               type="submit"
-              className="btn"
-              style={{
-                backgroundColor: colors.primary,
-                color: colors.white,
-                padding: `0.5em`,
-              }}
+              className="blue-btn"
               onClick={handleSearchByNameSubmit}
             >
               Search
@@ -266,19 +295,16 @@ const SearchDermatologists = ({
     };
 
     return (
-      <div>
-        <div className="flex-row">
-          <ServeSearchLocation />
-          <ServeSearchName />
-        </div>
-      </div>
-    );
-  };
-
-  const ServeMap = () => {
-    return (
-      <div className="flex pink" style={{ margin: `2em 0` }}>
-        <MapsComponent />
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: `1em`,
+          padding: `2em 0`,
+        }}
+      >
+        <ServeSearchLocation />
+        <ServeSearchName />
       </div>
     );
   };
@@ -286,28 +312,35 @@ const SearchDermatologists = ({
   // RETURN ---------------------------------------------------
   return (
     <div
-      className="flex-col"
       style={{
-        padding: disableMargin
-          ? 0
-          : `${marginVertical}px ${marginHorizontal}px`,
+        backgroundColor: background_colour || null,
+        padding: `${marginVertical}px 0`,
       }}
     >
-      <ServeTitle />
-      <ServeSearchComponent />
-      <ServeFilters />
-      {/* <ServeMap /> */}
+      <div
+        className="flex"
+        style={{
+          display: "grid",
+          alignItems: "center",
+          backgroundColor: colors.silverFillTwo,
+        }}
+      >
+        <BlockWrapper>
+          <div style={{ padding: `2em 0` }}>
+            <ServeTitle />
+            <ServeSearchComponent />
+            <ServeFilters />
+          </div>
+        </BlockWrapper>
+      </div>
     </div>
   );
 };
 
 const styles = {
-  container: {},
   input: {
     borderRadius: 10,
-    paddingRight: 60,
     color: colors.darkSilver,
-    minWidth: INPUT_WIDTH,
   },
 };
 

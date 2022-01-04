@@ -21,7 +21,6 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
 
   const [uniqueId, setUniqueId] = useState(null);
   const [isReady, setIsReady] = useState(null);
-
   const filter = state.theme.pilFilter;
 
   useEffect(async () => {

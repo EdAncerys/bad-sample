@@ -19,6 +19,7 @@ const BADTheme = {
       menu: null,
       filter: null,
       pilFilter: null,
+      addressFilter: null,
       activeDropDownRef: "activeDropDownRef",
       childMenuRef: null,
       contentContainer: 1350, // px units

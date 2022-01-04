@@ -38,13 +38,13 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
               key={key}
               className="flex-row"
               style={{
-                padding: `1em 2em`,
+                padding: `0 2em`,
               }}
             >
               <Dropdown.Item
                 onClick={() => setGoToAction({ path: url, actions })}
                 style={{
-                  padding: `0 0 1em`,
+                  padding: `1em 0`,
                   borderBottom: `1px dotted ${colors.darkSilver}`,
                 }}
               >

@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
-import SearchDermatologists from "../../components/searchDermatologists";
 import BlockWrapper from "../../components/blockWrapper";
 
 const Registration = ({ state }) => {
@@ -16,7 +15,6 @@ const Registration = ({ state }) => {
           REGISTRATION
         </div>
       </div>
-      <SearchDermatologists />
     </BlockWrapper>
   );
 };
