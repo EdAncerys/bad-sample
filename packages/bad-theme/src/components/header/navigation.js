@@ -6,11 +6,9 @@ import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { setGoToAction } from "../../context";
 
-import { setActiveDropDownRef } from "../../context/actions/navigation";
 import NavBarDropDownContent from "./navDropDownContent";
 import ChildMenu from "./childMenu";
 import BlockWrapper from "../blockWrapper";
-import Footer from "../footer";
 
 const Navigation = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -23,6 +21,10 @@ const Navigation = ({ state, actions, libraries }) => {
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
 
+  // let activeMenu = state.theme.activeMenu;
+  const activeMenu = useRef(null);
+  const hovered = useRef(null);
+
   useEffect(() => {
     // getting wp menu from state
     const data = state.theme.menu;
@@ -32,6 +34,61 @@ const Navigation = ({ state, actions, libraries }) => {
     setWpMainMenu(data.slice(0, MAIN_NAV_LENGTH)); // main menu to display
     setWpMoreMenu(data.slice(MAIN_NAV_LENGTH, dataLength)); // more menu into dropdown
   }, [state.theme.menu]);
+
+  // HANDLERS ----------------------------------------------------
+  const handleFooterColour = (slug) => {
+    switch (slug) {
+      case "clinical-services":
+        return colors.darkGreen;
+      case "news and media":
+        return colors.pink;
+      case "guidelines-and-standards":
+        return colors.maroon;
+      case "events-content":
+        return colors.turquoise;
+      case "education-training":
+        return colors.orange;
+      case "research-journals":
+        return colors.red;
+      case "membership":
+        return colors.yellow;
+
+      default:
+        return colors.primary;
+    }
+  };
+
+  const handleMenuHover = ({ onMouseEnter }) => {
+    const attractor = document.querySelector(`#menu-shadow-${hovered.current}`);
+
+    if (state.theme.activeMenuItem === null && activeMenu.current !== null)
+      activeMenu.current = null; // reset useRef hooks after dropdown dismiss event
+
+    if (activeMenu.current !== hovered.current) {
+      if (onMouseEnter) {
+        attractor.classList.remove("d-none");
+      } else {
+        attractor.classList.add("d-none");
+      }
+    }
+  };
+
+  const handleActiveMenu = () => {
+    const attractor = document.querySelector(`#menu-shadow-${hovered.current}`);
+    const activeMenuItem = document.querySelector(
+      `#menu-shadow-${activeMenu.current}`
+    );
+
+    if (activeMenu.current === hovered.current) {
+      attractor.classList.add("d-none");
+      activeMenu.current = null;
+    } else {
+      if (activeMenuItem) activeMenuItem.classList.add("d-none");
+      attractor.classList.remove("d-none");
+      activeMenu.current = hovered.current;
+    }
+    state.theme.activeMenuItem = activeMenu.current;
+  };
 
   // SERVERS -----------------------------------------------------
   const ServeMenuDropDown = ({ title, menu, url }) => {
@@ -51,7 +108,7 @@ const Navigation = ({ state, actions, libraries }) => {
             whiteSpace: "normal",
           }}
           onClick={() => setGoToAction({ path: url, actions })}
-          onMouseOver={(e) => {
+          onMouseEnter={(e) => {
             if (!e.target.innerText) return null; // prevents passing empty title object
 
             childMenuRef.current = e.target.innerText;
@@ -82,17 +139,20 @@ const Navigation = ({ state, actions, libraries }) => {
       <NavDropdown
         title={<Html2React html={title} /> || "Menu Title"}
         style={{
+          display: "flex", // static position adding ability for dropdown to move up the scope
           position: "static",
           height: "100%",
           alignItems: "center",
-          display: "flex", // static position adding ability for dropdown to move up the scope
         }}
-        onClick={(e) => {
-          const title = {
-            color: `5px solid ${colors.danger}`,
-            title: e.target.innerHTML,
-          };
-          setActiveDropDownRef({ state, actions: title });
+        onClick={() => {
+          if (isMoreMenu) {
+            const activeMenuItem = document.querySelector(
+              `#menu-shadow-${activeMenu.current}`
+            );
+            if (activeMenuItem) activeMenuItem.classList.add("d-none");
+            activeMenu.current = null;
+            state.theme.activeMenuItem = null;
+          }
         }}
       >
         <div
@@ -101,7 +161,6 @@ const Navigation = ({ state, actions, libraries }) => {
             padding: `2em 4em`,
             height: BANNER_HEIGHT,
             backgroundColor: colors.lightSilver, // nav bar dropdown background color
-            // border: `1px solid ${colors.darkSilver}`, // add border for visibility
             boxShadow: `0 0.5rem 1rem rgba(0, 0, 0, 0.15)`,
           }}
         >
@@ -136,108 +195,26 @@ const Navigation = ({ state, actions, libraries }) => {
   };
 
   const ServeMenu = () => {
-    const [selected, setSelected] = useState(null);
-    const selectedr = useRef(null);
-    const hovered = useRef(null);
-
-    const handleFooterVisible = (method) => {
-      if (selectedr.current !== hovered.current) {
-        const attractor = document.querySelector(
-          `#footer-shower-${hovered.current}`
-        );
-        console.log("Method: ", method);
-        if (method === "enter") {
-          attractor.classList.remove("d-none");
-        } else {
-          attractor.classList.add("d-none");
-        }
-      }
-    };
-    const handleFooterColour = (slug) => {
-      switch (slug) {
-        case "clinical-services":
-          return colors.darkGreen;
-        case "news and media":
-          return colors.pink;
-        case "guidelines-and-standards":
-          return colors.maroon;
-        case "events-content":
-          return colors.turquoise;
-        case "education-training":
-          return colors.orange;
-        case "research-journals":
-          return colors.red;
-        case "membership":
-          return colors.yellow;
-        default:
-          return "black";
-      }
-    };
-    const handleActiveItem = () => {
-      console.log(selectedr.current);
-      if (selectedr.current || selectedr.current === 0) {
-        const activeItem = document.querySelector(
-          `#footer-shower-${selectedr.current}`
-        );
-        activeItem.classList.add("d-none");
-      }
-
-      // selectedr.current === hovered.current
-      //   ? (selectedr.current = null)
-      //   : (selectedr.current = hovered.current);
-      if (selectedr.current !== hovered.current) {
-        const nextActive = document.querySelector(
-          `#footer-shower-${hovered.current}`
-        );
-        nextActive.classList.remove("d-none");
-        selectedr.current = hovered.current;
-      } else {
-        const nextActive = document.querySelector(
-          `#footer-shower-${hovered.current}`
-        );
-        nextActive.classList.remove("d-none");
-        selectedr.current = null;
-      }
-    };
     return (
       <div className="flex" style={styles.container}>
         {wpMainMenu.map((item, key) => {
           const { title, slug, url } = item;
 
-          const TEST_BLOCK = slug.includes("blocks-page")
-            ? {
-                color: colors.danger,
-                fontWeight: "bold",
-                fontSize: 20,
-              }
-            : {};
-          console.log("Ajtem: ", item);
           if (item.child_items)
             return (
               <div
                 key={key}
                 className={"bad-menu-container " + key}
                 style={{ height: "100%" }}
-                onMouseEnter={(e) => {
-                  // document
-                  //   .querySelector(`.footer-shower-${key}`)
-                  //   .removeAttribute("hidden");
+                onMouseEnter={() => {
                   hovered.current = key;
-                  handleFooterVisible("enter");
+                  handleMenuHover({ onMouseEnter: true });
                 }}
-                onMouseLeave={(e) => {
-                  handleFooterVisible("leave");
-                  // if (key !== selectedr.current) {
-                  //   document
-                  //     .querySelector(`.footer-shower-${key}`)
-                  //     .setAttribute("hidden", true);
-                  // }
-                  hovered.current = null;
+                onMouseLeave={() => {
+                  handleMenuHover({ onMouseEnter: false });
+                  hovered.current = null; // clear Ref hook after handler been triggered only!
                 }}
-                onClick={() => {
-                  handleActiveItem();
-                  console.log(selectedr);
-                }}
+                onClick={handleActiveMenu}
               >
                 <ServeMenuDropDown
                   style={{ height: "100%" }}
@@ -247,14 +224,14 @@ const Navigation = ({ state, actions, libraries }) => {
                 />
 
                 <div
-                  id={`footer-shower-${key}`}
+                  id={`menu-shadow-${key}`}
                   className="d-none"
                   style={{
                     backgroundColor: handleFooterColour(item.slug),
                     height: 5,
                     width: "100%",
                     position: "relative",
-                    bottom: "5px",
+                    bottom: 5,
                   }}
                 />
               </div>
@@ -263,7 +240,7 @@ const Navigation = ({ state, actions, libraries }) => {
           return (
             <div key={key}>
               <Nav.Link
-                style={{ ...styles.link, ...TEST_BLOCK }}
+                style={styles.link}
                 onClick={() => setGoToAction({ path: url, actions })}
               >
                 <Html2React html={title} />
@@ -311,10 +288,6 @@ const styles = {
     alignItems: "center",
     flexWrap: "wrap",
     display: "flex",
-  },
-  dropDown: {
-    backgroundColor: colors.lightSilver,
-    border: "none",
   },
   link: {
     color: colors.textMain,

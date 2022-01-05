@@ -49,11 +49,22 @@ const App = ({ state, actions }) => {
 
   return (
     <div
-      onClick={() => {
+      onClick={(e) => {
         state.theme.childMenuRef = ""; // reset child menu ref value
         state.theme.activeDropDownRef = "menu reset"; // reset menu ref value
         state.theme.filter = null; // reset search event filter
         state.theme.pilFilter = null; // reset pil filter
+
+        const activeMenu = document.querySelector(
+          `#menu-shadow-${state.theme.activeMenuItem}`
+        );
+        if (
+          !e.target.className.includes("dropdown-toggle nav-link") &&
+          activeMenu
+        ) {
+          activeMenu.classList.add("d-none");
+          state.theme.activeMenuItem = null;
+        }
       }}
     >
       <div style={{ ...styles.container }}>
