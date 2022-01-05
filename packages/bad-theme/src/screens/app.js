@@ -58,11 +58,8 @@ const App = ({ state, actions }) => {
         const activeMenu = document.querySelector(
           `#menu-shadow-${state.theme.activeMenuItem}`
         );
-        if (
-          !e.target.className.includes("dropdown-toggle nav-link") &&
-          activeMenu
-        ) {
-          activeMenu.classList.add("d-none");
+        if (!e.target.classList.contains("dropdown-toggle")) {
+          if (activeMenu) activeMenu.classList.add("d-none");
           state.theme.activeMenuItem = null;
         }
       }}

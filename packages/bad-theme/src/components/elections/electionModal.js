@@ -35,7 +35,11 @@ const ElectionModal = ({
           >
             <Html2React html={title.rendered} />
           </div>
-          <div onClick={() => setModalData(null)} style={{ cursor: "pointer" }}>
+          <div
+            className="icon-hover"
+            onClick={() => setModalData(null)}
+            style={{ cursor: "pointer" }}
+          >
             <CloseIcon style={{ fontSize: 24, fill: colors.textMain }} />
           </div>
         </div>
@@ -53,7 +57,7 @@ const ElectionModal = ({
     };
 
     const ServeActions = () => {
-      const ServeFormDownloaded = () => {
+      const ServeFormDownload = () => {
         if (!nomination_form_upload) return null;
 
         return (
@@ -64,7 +68,7 @@ const ElectionModal = ({
               download
               style={{ color: colors.white }}
             >
-              Download Form
+              Download Application Form
             </a>
           </div>
         );
@@ -72,20 +76,13 @@ const ElectionModal = ({
       return (
         <Modal.Footer
           style={{
-            flexDirection: "row-reverse",
+            justifyContent: "flex-start",
             padding: 0,
             border: "none",
             marginTop: `1em`,
           }}
         >
-          <ServeFormDownloaded />
-
-          <button
-            className="blue-btn"
-            onClick={() => setGoToAction({ path: link, actions })}
-          >
-            Read More
-          </button>
+          <ServeFormDownload />
         </Modal.Footer>
       );
     };

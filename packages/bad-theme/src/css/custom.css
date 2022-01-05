@@ -216,3 +216,6 @@ li {
 .active-icon:hover {
   transform: scale(1.1);
 }
+.icon-hover:hover .MuiSvgIcon-root {
+  fill: #454545 !important;
+}

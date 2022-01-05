@@ -196,17 +196,19 @@ const Venue = ({ state, actions, libraries }) => {
   // RETURN ---------------------------------------------------
   return (
     <BlockWrapper>
-      <PromoBlock
-        block={{
-          title: venue.title.rendered,
-          body: excerpt,
-          background_image: gallery[0],
-          padding: "small",
-        }}
-        disableMargin
-      />
-      <ServeInfo />
-      <MultiPhotoBlock block={gallery} />
+      <div style={{ padding: `0 ${marginHorizontal}px` }}>
+        <PromoBlock
+          block={{
+            title: venue.title.rendered,
+            body: excerpt,
+            background_image: gallery[0],
+            padding: "small",
+          }}
+          disableMargin
+        />
+        <ServeInfo />
+        <MultiPhotoBlock block={gallery} />
+      </div>
     </BlockWrapper>
   );
 };
