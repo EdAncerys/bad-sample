@@ -88,33 +88,30 @@ export const sendEmailEnquireAction = async ({
 
   const URL = state.auth.APP_AUTH_HOST + `/email`;
   const jwt = await authenticateAppAction({ state });
+
   let recipientsArray = [];
   recipients.map((item) => {
     recipientsArray.push(item.email);
   });
   const recipientsList = recipientsArray.toString();
 
-  console.log(jwt);
-  console.log(recipientsList);
-  console.log(formData);
-  console.log("attachments", attachments);
+  let fileAttachmentList = [];
+  if (attachments) fileAttachmentList = Object.values(attachments); // add attachments to array
 
   const form = new FormData();
   form.append("email", recipientsList);
   form.append("template", "SampleEmailTemplate");
   form.append("data", `${formData}`);
-  // form.append("data", JSON.stringify( formData ));
-  // form.append(
-  //   "attachments",
-  //   fileInput.files[0],
-  //   "Placeholder-doc (6).docx"
-  // );
+  fileAttachmentList.map((file) => {
+    form.append("attachments", file, file.name);
+  });
 
   const requestOptions = {
     method: "POST",
     headers: { Authorization: `Bearer ${jwt}` },
     body: form,
   };
+
   try {
     const data = await fetch(URL, requestOptions);
     const response = await data.json();
