@@ -41,7 +41,7 @@ const App = ({ state, actions }) => {
   const { jwt, user } = useAppState();
 
   // env file access
-  // console.log(".env variables", state.theme.ENVIRONMENT);
+  // console.log(".env variables", state.auth.ENVIRONMENT);
 
   const endPoint = state.router.link;
   const data = state.source.get(endPoint);

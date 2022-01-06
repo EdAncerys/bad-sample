@@ -131,8 +131,6 @@ const Navigation = ({ state, actions, libraries }) => {
               title: childMenuRef.current,
             };
             state.theme.childMenuRef = title;
-
-            console.log(childMenuRef.current);
           }}
         >
           <div className="flex-row">

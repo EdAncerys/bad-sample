@@ -47,9 +47,67 @@ export const loginAction = async ({ dispatch, user }) => {
   }
 };
 
+export const authenticateAppAction = async ({ state }) => {
+  console.log("authenticateAppAction triggered");
+
+  // const username = state.auth.APP_USERNAME;
+  // const password = state.auth.APP_PASSWORD;
+  // const URL = state.auth.APP_AUTH_URL;
+
+  // const appCredentials = JSON.stringify({
+  //   username,
+  //   password,
+  // });
+
+  // const requestOptions = {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     "Access-Control-Allow-Origin": "*",
+  //     "Access-Control-Allow-Headers":
+  //       "Origin, X-Requested-With, Content-Type, Accept",
+  //     "Access-Control-Allow-Methods": "PUT, POST, GET, DELETE, OPTIONS",
+  //   },
+  //   body: appCredentials,
+  // };
+  // try {
+  //   const data = await fetch(URL, requestOptions);
+  //   const response = await data.json();
+  //   console.log(response);
+  //   // if (response.token) {
+  //   //   const encryptedJWT = handleEncryption({ jwt: response.token }); // encrypting provided jwt
+  //   //   handleSetCookie({ name: "events", value: encryptedJWT }); // set cookie in the browser
+  //   // } else {
+  //   //   alert(`${response.message}`);
+  //   // }
+  // } catch (error) {
+  //   console.log("error", error);
+  // }
+
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  var raw = JSON.stringify({
+    username: "ed.ancerys",
+    password: "UJHb7(&*&HhbgibjkK",
+  });
+
+  var requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
+  };
+
+  fetch("https://skylarkdev.digital/dynamicsbridge/users/login", requestOptions)
+    .then((response) => response.text())
+    .then((result) => console.log(result))
+    .catch((error) => console.log("error", error));
+};
+
 export const sendEnquireAction = async ({ state, dispatch, enquire }) => {
   console.log("enquireAction triggered");
-  const SEND_GRID_API = state.theme.SEND_GRID_API;
+  const SEND_GRID_API = state.auth.SEND_GRID_API;
   console.log("SEND_GRID_API", SEND_GRID_API);
 };
 

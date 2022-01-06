@@ -6,7 +6,11 @@ import {
   setCreateAccountModalAction,
   setEnquireAction,
 } from "./actions/navigation";
-import { setLoginAction, sendEnquireAction } from "./auth/actions";
+import {
+  setLoginAction,
+  authenticateAppAction,
+  sendEnquireAction,
+} from "./auth/actions";
 import { loginAction } from "./auth/actions";
 
 export {
@@ -22,4 +26,5 @@ export {
   loginAction,
   eventFilterAction,
   sendEnquireAction,
+  authenticateAppAction,
 };

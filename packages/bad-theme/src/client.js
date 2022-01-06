@@ -12,9 +12,6 @@ const BADTheme = {
   },
   state: {
     theme: {
-      ENVIRONMENT: process.env.ENVIRONMENT,
-      GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
-      SEND_GRID_API: process.env.SEND_GRID_API,
       menuUrl: "/menu/primary-menu",
       menu: null,
       filter: null,
@@ -27,6 +24,14 @@ const BADTheme = {
       bannerHeight: 425, // px units
       marginHorizontal: 100, // px units
       marginVertical: 40, // px units
+    },
+    auth: {
+      ENVIRONMENT: process.env.ENVIRONMENT,
+      GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
+      SEND_GRID_API: process.env.SEND_GRID_API,
+      APP_USERNAME: process.env.APP_USERNAME,
+      APP_PASSWORD: process.env.APP_PASSWORD,
+      APP_AUTH_URL: process.env.APP_AUTH_URL,
     },
     autoPrefetch: "hover", // values: no | hover | in-view | all
     context: {},

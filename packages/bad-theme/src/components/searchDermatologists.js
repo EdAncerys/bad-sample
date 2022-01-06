@@ -216,7 +216,7 @@ const SearchDermatologists = ({ state, actions, libraries, block }) => {
             }}
           >
             <GooglePlacesAutocomplete
-              apiKey={`${state.theme.GOOGLE_API_KEY}`}
+              apiKey={`${state.auth.GOOGLE_API_KEY}`}
               debounce={1000} // number of milliseconds to delay before making a call to Google Maps API
               autocompletionRequest={{
                 componentRestrictions: {

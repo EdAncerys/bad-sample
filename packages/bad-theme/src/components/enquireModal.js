@@ -6,7 +6,12 @@ import { v4 as uuidv4 } from "uuid";
 import { colors } from "../config/imports";
 import CloseIcon from "@mui/icons-material/Close";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setEnquireAction } from "../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setEnquireAction,
+  authenticateAppAction,
+} from "../context";
 
 const EnquireModal = ({ state, actions }) => {
   const dispatch = useAppDispatch();
@@ -24,22 +29,39 @@ const EnquireModal = ({ state, actions }) => {
 
   // HANDLERS ----------------------------------------------------
   const handleContactFormSubmit = () => {
-    if (!agreement) return null;
+    if (!agreement.current) return null;
+    authenticateAppAction({ state });
+    console.log(agreement.current);
 
-    const fullName = document.querySelector(`#full-name-${uniqueId}`);
-    const email = document.querySelector(`#email-${uniqueId}`);
-    const phoneNumber = document.querySelector(`#phone-number-${uniqueId}`);
-    const enquireReason = document.querySelector(`#enquire-reason-${uniqueId}`);
-    const message = document.querySelector(`#message-${uniqueId}`);
+    const fullName = document.querySelector(`#full-name-${uniqueId}`).value;
+    const email = document.querySelector(`#email-${uniqueId}`).value;
+    const phoneNumber = document.querySelector(
+      `#phone-number-${uniqueId}`
+    ).value;
+    const enquireReason = document.querySelector(
+      `#enquiry-reason-${uniqueId}`
+    ).value;
+    const message = document.querySelector(`#message-${uniqueId}`).value;
+    const attachments = document.querySelector(
+      `#attachments-${uniqueId}`
+    ).files;
 
-    const params = { fullName, email, phoneNumber, enquireReason, message };
+    const params = {
+      fullName,
+      email,
+      phoneNumber,
+      enquireReason,
+      message,
+      attachments,
+    };
     console.log("params", params);
   };
 
   // SERVERS --------------------------------------------------
   const ServeModalContent = () => {
     const ServeFileUpload = () => {
-      if (!enquireAction && !enquireAction.allow_attachments) return null;
+      if (!enquireAction) return null;
+      if (!enquireAction.allow_attachments) return null;
 
       return (
         <div style={styles.inputContainer}>
@@ -145,6 +167,8 @@ const EnquireModal = ({ state, actions }) => {
     };
 
     const ServeActions = () => {
+      console.log(agreement.current);
+
       return (
         <Modal.Footer
           style={{ justifyContent: "flex-start", padding: `1em 0 0` }}
@@ -161,14 +185,12 @@ const EnquireModal = ({ state, actions }) => {
     };
 
     return (
-      <div className="flex">
-        <div className="flex-col">
-          <Modal.Body>
-            <ServeFormInfo />
-            <ServeForm />
-            <ServeActions />
-          </Modal.Body>
-        </div>
+      <div className="flex-col">
+        <Modal.Body>
+          <ServeFormInfo />
+          <ServeForm />
+          <ServeActions />
+        </Modal.Body>
       </div>
     );
   };
@@ -217,27 +239,25 @@ const EnquireModal = ({ state, actions }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div>
-      <Modal show={enquireAction} size="xl" centered>
-        <div style={{ backgroundColor: colors.silverFillOne }}>
-          <div
-            className="flex"
-            onClick={() => setEnquireAction({ dispatch, enquireAction: null })}
-            style={{
-              padding: `2em 4em 1em`,
-              cursor: "pointer",
-              justifyContent: "flex-end",
-            }}
-          >
-            <CloseIcon style={{ fontSize: 24, fill: colors.softBlack }} />
-          </div>
-          <div style={styles.container}>
-            <ServeModalInfo />
-            <ServeModalContent />
-          </div>
+    <Modal show={enquireAction} size="xl" centered>
+      <div style={{ backgroundColor: colors.silverFillOne }}>
+        <div
+          className="flex"
+          onClick={() => setEnquireAction({ dispatch, enquireAction: null })}
+          style={{
+            padding: `2em 4em 1em`,
+            cursor: "pointer",
+            justifyContent: "flex-end",
+          }}
+        >
+          <CloseIcon style={{ fontSize: 24, fill: colors.softBlack }} />
         </div>
-      </Modal>
-    </div>
+        <div style={styles.container}>
+          <ServeModalInfo />
+          <ServeModalContent />
+        </div>
+      </div>
+    </Modal>
   );
 };
 
