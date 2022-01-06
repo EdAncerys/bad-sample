@@ -3,7 +3,7 @@ import Root from "./screens/index";
 import image from "@frontity/html2react/processors/image";
 import iframe from "@frontity/html2react/processors/iframe";
 import link from "@frontity/html2react/processors/link";
-import menuHandler from "./components/handlers/menu-handler";
+import menuHandler from "./handlers/menu-handler";
 
 const BADTheme = {
   name: "bad-theme",

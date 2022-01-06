@@ -5,7 +5,7 @@ import { NavDropdown } from "react-bootstrap";
 import { colors } from "../../config/imports";
 import { setGoToAction } from "../../context";
 
-const ChildMenu = ({ state, actions, libraries, slugPrefix, menu }) => {
+const ChildMenu = ({ state, actions, libraries, menu }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!state.theme.childMenuRef) return null;

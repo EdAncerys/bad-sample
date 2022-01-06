@@ -95,8 +95,22 @@ const Navigation = ({ state, actions, libraries }) => {
     if (!menu.length) return null;
     const isMoreMenu = title === "More";
 
-    const ServeTitle = ({ title, url }) => {
+    const ServeTitle = ({ title, url, child_items }) => {
       if (!title || !url) return null;
+
+      const ServeMenuArrow = () => {
+        if (!child_items) return null;
+
+        return (
+          <KeyboardArrowRightIcon
+            style={{
+              fill: colors.darkSilver,
+              borderRadius: "50%",
+              padding: 0,
+            }}
+          />
+        );
+      };
 
       return (
         <NavDropdown.Item
@@ -117,19 +131,15 @@ const Navigation = ({ state, actions, libraries }) => {
               title: childMenuRef.current,
             };
             state.theme.childMenuRef = title;
+
+            console.log(childMenuRef.current);
           }}
         >
           <div className="flex-row">
             <div className="flex" style={{ textTransform: "capitalize" }}>
               <Html2React html={title} />
             </div>
-            <KeyboardArrowRightIcon
-              style={{
-                fill: colors.darkSilver,
-                borderRadius: "50%",
-                padding: 0,
-              }}
-            />
+            <ServeMenuArrow />
           </div>
         </NavDropdown.Item>
       );
@@ -172,7 +182,7 @@ const Navigation = ({ state, actions, libraries }) => {
           >
             <ServeTitle title={title} url={url} />
             {menu.map((item, key) => {
-              const { title, url } = item;
+              const { title, url, child_items } = item;
 
               return (
                 <div
@@ -180,7 +190,11 @@ const Navigation = ({ state, actions, libraries }) => {
                   className="flex-row"
                   style={{ marginLeft: isMoreMenu ? 0 : `1em` }}
                 >
-                  <ServeTitle title={title} url={url} />
+                  <ServeTitle
+                    title={title}
+                    url={url}
+                    child_items={child_items}
+                  />
                 </div>
               );
             })}
@@ -198,9 +212,9 @@ const Navigation = ({ state, actions, libraries }) => {
     return (
       <div className="flex" style={styles.container}>
         {wpMainMenu.map((item, key) => {
-          const { title, slug, url } = item;
+          const { title, slug, url, child_items } = item;
 
-          if (item.child_items)
+          if (child_items)
             return (
               <div
                 key={key}
@@ -220,7 +234,7 @@ const Navigation = ({ state, actions, libraries }) => {
                   style={{ height: "100%" }}
                   title={title}
                   url={url}
-                  menu={item.child_items}
+                  menu={child_items}
                 />
 
                 <div
