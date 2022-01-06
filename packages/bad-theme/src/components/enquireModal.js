@@ -18,8 +18,6 @@ const EnquireModal = ({ state, actions }) => {
   const { enquireAction } = useAppState();
 
   const [uniqueId, setUniqueId] = useState(null);
-  const agreement = useRef(null);
-  console.log(enquireAction);
 
   // hook applies after React has performed all DOM mutations
   useLayoutEffect(() => {
@@ -28,10 +26,9 @@ const EnquireModal = ({ state, actions }) => {
   }, []);
 
   // HANDLERS ----------------------------------------------------
-  const handleContactFormSubmit = () => {
-    if (!agreement.current) return null;
+  const handleContactFormSubmit = ({ agreement }) => {
+    if (!agreement) return null;
     authenticateAppAction({ state });
-    console.log(agreement.current);
 
     const fullName = document.querySelector(`#full-name-${uniqueId}`).value;
     const email = document.querySelector(`#email-${uniqueId}`).value;
@@ -77,6 +74,39 @@ const EnquireModal = ({ state, actions }) => {
     };
 
     const ServeForm = () => {
+      const ServeActions = () => {
+        const [agreement, setAgreement] = useState(null);
+
+        return (
+          <div>
+            <div className="flex mb-3 form-check">
+              <label className="form-check-label">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  style={styles.checkBox}
+                  onClick={() => setAgreement(!agreement)}
+                />
+                <span style={styles.TC}>I agree</span> - justo donec enim diam
+                vulputate ut pharetra sit. Purus semper eget duis at tellus at.
+                Sed adipiscing diam.
+              </label>
+            </div>
+            <Modal.Footer
+              style={{ justifyContent: "flex-start", padding: `1em 0 0` }}
+            >
+              <div
+                className="blue-btn"
+                style={{ opacity: agreement ? 1 : 0.7 }}
+                onClick={() => handleContactFormSubmit({ agreement })}
+              >
+                Send Enquiry
+              </div>
+            </Modal.Footer>
+          </div>
+        );
+      };
+
       return (
         <form>
           <div style={styles.inputContainer}>
@@ -129,26 +159,7 @@ const EnquireModal = ({ state, actions }) => {
             />
           </div>
           <ServeFileUpload />
-
-          <div className="flex mb-3 form-check">
-            <label className="form-check-label">
-              <input
-                type="checkbox"
-                className="form-check-input"
-                style={styles.checkBox}
-                onClick={() => {
-                  if (agreement.current) {
-                    agreement.current = null;
-                  } else {
-                    agreement.current = true;
-                  }
-                }}
-              />
-              <span style={styles.TC}>I agree</span> - justo donec enim diam
-              vulputate ut pharetra sit. Purus semper eget duis at tellus at.
-              Sed adipiscing diam.
-            </label>
-          </div>
+          <ServeActions />
         </form>
       );
     };
@@ -166,30 +177,11 @@ const EnquireModal = ({ state, actions }) => {
       );
     };
 
-    const ServeActions = () => {
-      console.log(agreement.current);
-
-      return (
-        <Modal.Footer
-          style={{ justifyContent: "flex-start", padding: `1em 0 0` }}
-        >
-          <div
-            className="blue-btn"
-            style={{ opacity: agreement.current ? 1 : 0.7 }}
-            onClick={handleContactFormSubmit}
-          >
-            Send Enquiry
-          </div>
-        </Modal.Footer>
-      );
-    };
-
     return (
       <div className="flex-col">
         <Modal.Body>
           <ServeFormInfo />
           <ServeForm />
-          <ServeActions />
         </Modal.Body>
       </div>
     );

@@ -50,59 +50,32 @@ export const loginAction = async ({ dispatch, user }) => {
 export const authenticateAppAction = async ({ state }) => {
   console.log("authenticateAppAction triggered");
 
-  // const username = state.auth.APP_USERNAME;
-  // const password = state.auth.APP_PASSWORD;
-  // const URL = state.auth.APP_AUTH_URL;
+  const username = state.auth.APP_USERNAME;
+  const password = state.auth.APP_PASSWORD;
+  const URL = state.auth.APP_AUTH_URL;
 
-  // const appCredentials = JSON.stringify({
-  //   username,
-  //   password,
-  // });
-
-  // const requestOptions = {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     "Access-Control-Allow-Origin": "*",
-  //     "Access-Control-Allow-Headers":
-  //       "Origin, X-Requested-With, Content-Type, Accept",
-  //     "Access-Control-Allow-Methods": "PUT, POST, GET, DELETE, OPTIONS",
-  //   },
-  //   body: appCredentials,
-  // };
-  // try {
-  //   const data = await fetch(URL, requestOptions);
-  //   const response = await data.json();
-  //   console.log(response);
-  //   // if (response.token) {
-  //   //   const encryptedJWT = handleEncryption({ jwt: response.token }); // encrypting provided jwt
-  //   //   handleSetCookie({ name: "events", value: encryptedJWT }); // set cookie in the browser
-  //   // } else {
-  //   //   alert(`${response.message}`);
-  //   // }
-  // } catch (error) {
-  //   console.log("error", error);
-  // }
-
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-
-  var raw = JSON.stringify({
-    username: "ed.ancerys",
-    password: "UJHb7(&*&HhbgibjkK",
+  const appCredentials = JSON.stringify({
+    username,
+    password,
   });
 
-  var requestOptions = {
+  const requestOptions = {
     method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
+    headers: { "Content-Type": "application/json" },
+    body: appCredentials,
   };
-
-  fetch("https://skylarkdev.digital/dynamicsbridge/users/login", requestOptions)
-    .then((response) => response.text())
-    .then((result) => console.log(result))
-    .catch((error) => console.log("error", error));
+  try {
+    const data = await fetch(URL, requestOptions);
+    const response = await data.json();
+    console.log(response);
+    if (response.token) {
+      return response.token;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.log("error", error);
+  }
 };
 
 export const sendEnquireAction = async ({ state, dispatch, enquire }) => {
