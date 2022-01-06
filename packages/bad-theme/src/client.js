@@ -31,7 +31,7 @@ const BADTheme = {
       SEND_GRID_API: process.env.SEND_GRID_API,
       APP_USERNAME: process.env.APP_USERNAME,
       APP_PASSWORD: process.env.APP_PASSWORD,
-      APP_AUTH_URL: process.env.APP_AUTH_URL,
+      APP_AUTH_HOST: process.env.APP_AUTH_HOST,
     },
     autoPrefetch: "hover", // values: no | hover | in-view | all
     context: {},

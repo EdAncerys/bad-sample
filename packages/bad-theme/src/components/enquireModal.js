@@ -10,7 +10,7 @@ import {
   useAppDispatch,
   useAppState,
   setEnquireAction,
-  authenticateAppAction,
+  sendEmailEnquireAction,
 } from "../context";
 
 const EnquireModal = ({ state, actions }) => {
@@ -28,7 +28,6 @@ const EnquireModal = ({ state, actions }) => {
   // HANDLERS ----------------------------------------------------
   const handleContactFormSubmit = ({ agreement }) => {
     if (!agreement) return null;
-    authenticateAppAction({ state });
 
     const fullName = document.querySelector(`#full-name-${uniqueId}`).value;
     const email = document.querySelector(`#email-${uniqueId}`).value;
@@ -43,15 +42,16 @@ const EnquireModal = ({ state, actions }) => {
       `#attachments-${uniqueId}`
     ).files;
 
-    const params = {
+    const formData = {
       fullName,
       email,
       phoneNumber,
       enquireReason,
       message,
-      attachments,
     };
-    console.log("params", params);
+    const recipients = enquireAction.recipients;
+
+    sendEmailEnquireAction({ state, formData, attachments, recipients });
   };
 
   // SERVERS --------------------------------------------------

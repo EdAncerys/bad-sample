@@ -9,7 +9,7 @@ import {
 import {
   setLoginAction,
   authenticateAppAction,
-  sendEnquireAction,
+  sendEmailEnquireAction,
 } from "./auth/actions";
 import { loginAction } from "./auth/actions";
 
@@ -25,6 +25,6 @@ export {
   setLoginAction,
   loginAction,
   eventFilterAction,
-  sendEnquireAction,
+  sendEmailEnquireAction,
   authenticateAppAction,
 };

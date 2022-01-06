@@ -52,7 +52,7 @@ export const authenticateAppAction = async ({ state }) => {
 
   const username = state.auth.APP_USERNAME;
   const password = state.auth.APP_PASSWORD;
-  const URL = state.auth.APP_AUTH_URL;
+  const URL = state.auth.APP_AUTH_HOST + `/users/login`;
 
   const appCredentials = JSON.stringify({
     username,
@@ -78,10 +78,50 @@ export const authenticateAppAction = async ({ state }) => {
   }
 };
 
-export const sendEnquireAction = async ({ state, dispatch, enquire }) => {
+export const sendEmailEnquireAction = async ({
+  state,
+  formData,
+  attachments,
+  recipients,
+}) => {
   console.log("enquireAction triggered");
-  const SEND_GRID_API = state.auth.SEND_GRID_API;
-  console.log("SEND_GRID_API", SEND_GRID_API);
+
+  const URL = state.auth.APP_AUTH_HOST + `/email`;
+  const jwt = await authenticateAppAction({ state });
+  let recipientsArray = [];
+  recipients.map((item) => {
+    recipientsArray.push(item.email);
+  });
+  const recipientsList = recipientsArray.toString();
+
+  console.log(jwt);
+  console.log(recipientsList);
+  console.log(formData);
+  console.log("attachments", attachments);
+
+  const form = new FormData();
+  form.append("email", recipientsList);
+  form.append("template", "SampleEmailTemplate");
+  form.append("data", `${formData}`);
+  // form.append("data", JSON.stringify( formData ));
+  // form.append(
+  //   "attachments",
+  //   fileInput.files[0],
+  //   "Placeholder-doc (6).docx"
+  // );
+
+  const requestOptions = {
+    method: "POST",
+    headers: { Authorization: `Bearer ${jwt}` },
+    body: form,
+  };
+  try {
+    const data = await fetch(URL, requestOptions);
+    const response = await data.json();
+    console.log(response);
+  } catch (error) {
+    console.log("error", error);
+  }
 };
 
 // SET CONTEXT ---------------------------------------------------
