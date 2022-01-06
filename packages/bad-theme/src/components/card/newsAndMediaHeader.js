@@ -174,7 +174,7 @@ const NewsAndMediaHeader = ({
         style={{
           justifyContent: "space-between",
           justifyContent: "center",
-          color: colors.black,
+          color: colors.softBlack,
         }}
       >
         <ServeMedia />

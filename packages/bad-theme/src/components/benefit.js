@@ -81,7 +81,7 @@ const Benefit = ({ state, actions, libraries, block }) => {
 
   const ServeContent = () => {
     return (
-      <div style={{ textAlign: "center", color: colors.black }}>
+      <div style={{ textAlign: "center", color: colors.softBlack }}>
         <ServeTitle />
         <ServeBody />
       </div>

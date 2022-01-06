@@ -229,7 +229,7 @@ const EnquireModal = ({ state, actions }) => {
               justifyContent: "flex-end",
             }}
           >
-            <CloseIcon style={{ fontSize: 24, fill: colors.textMain }} />
+            <CloseIcon style={{ fontSize: 24, fill: colors.softBlack }} />
           </div>
           <div style={styles.container}>
             <ServeModalInfo />

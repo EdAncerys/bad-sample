@@ -181,7 +181,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
             className="primary-title"
             style={{
               fontSize: 20,
-              color: colors.black,
+              color: colors.softBlack,
               paddingRight: `2em`,
             }}
           >
@@ -378,7 +378,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
         <div className="shadow" style={styles.action}>
           <div
             style={{
-              color: colors.black,
+              color: colors.softBlack,
               fontWeight: "bold",
               textTransform: "uppercase",
               padding: `1em 2em`,

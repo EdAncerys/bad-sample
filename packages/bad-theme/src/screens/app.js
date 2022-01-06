@@ -126,7 +126,7 @@ const App = ({ state, actions }) => {
 const styles = {
   container: {
     backgroundColor: colors.white, // content background color
-    color: colors.textMain,
+    color: colors.softBlack,
     // apply full height to viewport
     display: "flex",
     flexDirection: "column",

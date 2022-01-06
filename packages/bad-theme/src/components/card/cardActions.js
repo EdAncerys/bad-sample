@@ -65,7 +65,7 @@ const CardActions = ({
             href={form_link}
             target="_blank"
             download
-            style={{ color: colors.textMain }}
+            style={{ color: colors.softBlack }}
           >
             {GO_TO_LABEL}
           </a>

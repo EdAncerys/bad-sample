@@ -38,7 +38,7 @@ const DownloadFileBlock = ({
           href={file.url}
           target="_blank"
           download
-          style={{ color: colors.textMain }}
+          style={{ color: colors.softBlack }}
         >
           <Html2React html={LABEL} />
         </a>
@@ -58,7 +58,7 @@ const DownloadFileBlock = ({
           href={guidline_file.url}
           target="_blank"
           download
-          style={{ color: colors.textMain }}
+          style={{ color: colors.softBlack }}
         >
           <Html2React html={fileName} />
         </a>

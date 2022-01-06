@@ -147,7 +147,7 @@ const styles = {
   footerActionTitle: {
     fontSize: 12,
     marginRight: 25,
-    borderBottom: `1px solid ${colors.black}`,
+    borderBottom: `1px solid ${colors.softBlack}`,
     textTransform: "uppercase",
   },
 };

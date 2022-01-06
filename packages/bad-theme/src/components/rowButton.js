@@ -73,7 +73,7 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
             className="flex"
             style={{
               fontSize: 13,
-              color: colors.black,
+              color: colors.softBlack,
               letterSpacing: 2,
               fontWeight: "bold",
               textTransform: "uppercase",

@@ -28,7 +28,7 @@ const FundingPromo = ({ state, actions, libraries, block }) => {
             fontSize: 36,
             fontWeight: "bold",
             justifyContent: "center",
-            color: colors.black,
+            color: colors.softBlack,
           }}
         >
           <Html2React html={title} />

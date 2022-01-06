@@ -72,7 +72,7 @@ const SearchDermatologists = ({ state, actions, libraries, block }) => {
     return (
       <div
         className="flex primary-title"
-        style={{ fontSize: 36, fontWeight: "bold", color: colors.black }}
+        style={{ fontSize: 36, fontWeight: "bold", color: colors.softBlack }}
       >
         Search For Dermatologists
       </div>
@@ -88,7 +88,7 @@ const SearchDermatologists = ({ state, actions, libraries, block }) => {
           className="primary-title"
           style={{
             fontSize: 20,
-            color: colors.black,
+            color: colors.softBlack,
             paddingRight: `2em`,
           }}
         >
@@ -259,7 +259,7 @@ const SearchDermatologists = ({ state, actions, libraries, block }) => {
                   }),
                   singleValue: (provided) => ({
                     ...provided, // selected styles
-                    color: colors.textMain,
+                    color: colors.softBlack,
                     paddingRight: 40,
                   }),
                 },

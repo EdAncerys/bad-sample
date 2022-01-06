@@ -50,7 +50,7 @@ const MultiPostBlocks = ({ state, actions, libraries, block }) => {
           className="primary-title"
           style={{
             fontSize: 20,
-            color: colors.black,
+            color: colors.softBlack,
             paddingRight: `2em`,
           }}
         >

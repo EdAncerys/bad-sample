@@ -122,7 +122,7 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
           style={{
             fontSize: 20,
             fontWeight: "bold",
-            color: colors.black,
+            color: colors.softBlack,
           }}
         >
           Author

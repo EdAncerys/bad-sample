@@ -42,7 +42,7 @@ const IndexCard = ({
       return (
         <div
           className="primary-title"
-          style={{ fontSize: 20, fontWeight: "bold", color: colors.black }}
+          style={{ fontSize: 20, fontWeight: "bold", color: colors.softBlack }}
         >
           <Html2React html={card_title} />
         </div>

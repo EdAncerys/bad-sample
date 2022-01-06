@@ -378,13 +378,13 @@ const styles = {
   title: {
     fontSize: 36,
     fontWeight: "bold",
-    color: colors.black,
+    color: colors.softBlack,
     padding: `0.5em 0`,
   },
   subTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    color: colors.black,
+    color: colors.softBlack,
   },
   input: {
     borderRadius: 10,

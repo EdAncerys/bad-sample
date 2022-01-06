@@ -11,7 +11,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   const defaultStyle = { fontWight: "normal" };
   const activeStyle = {
     fontWeight: "bold",
-    color: colors.black,
+    color: colors.softBlack,
   };
   let stepOne,
     stepTwo,
@@ -30,7 +30,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
         style={{
           fontSize: 22,
           fontWeight: "bold",
-          color: colors.black,
+          color: colors.softBlack,
           borderBottom: `1px solid ${colors.darkSilver}`,
           padding: `0 1em 1em 0`,
         }}

@@ -37,7 +37,7 @@ const MultiPostBlock = ({ state, actions, block, filter }) => {
           style={{
             fontSize: 24,
             fontWeight: "bold",
-            color: colors.black,
+            color: colors.softBlack,
           }}
         >
           Sorry, no results were found for '{filter}'

@@ -150,13 +150,13 @@ const styles = {
   title: {
     fontSize: 20,
     fontWeight: "bold",
-    color: colors.black,
+    color: colors.softBlack,
     padding: `1em 0`,
   },
   subTitle: {
     fontSize: 16,
     fontWeight: "bold",
-    color: colors.black,
+    color: colors.softBlack,
     padding: `1em 0`,
   },
   link: {

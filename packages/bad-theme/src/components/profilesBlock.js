@@ -46,7 +46,7 @@ const ProfilesBlock = ({ state, actions, libraries, block }) => {
           className="primary-title"
           style={{
             fontSize: 36,
-            color: colors.black,
+            color: colors.softBlack,
             fontWeight: "bold",
             textTransform: "capitalize",
           }}

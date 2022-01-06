@@ -97,7 +97,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
           className="flex primary-title"
           style={{
             fontSize: 36,
-            color: colors.black,
+            color: colors.softBlack,
             fontWeight: "bold",
             alignItems: "center",
           }}
@@ -161,7 +161,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
                 style={{
                   fontSize: 12,
                   textTransform: "uppercase",
-                  color: colors.black,
+                  color: colors.softBlack,
                   fontWeight: "bold",
                   alignItems: "center",
                   padding: `2em 4em`,
@@ -192,7 +192,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
           className="flex primary-title"
           style={{
             fontSize: 36,
-            color: colors.black,
+            color: colors.softBlack,
             fontWeight: "bold",
             alignItems: "center",
           }}

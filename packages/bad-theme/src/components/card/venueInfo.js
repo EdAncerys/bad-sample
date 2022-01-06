@@ -58,7 +58,7 @@ const VenueInfo = ({ state, actions, libraries, venueInfo }) => {
         style={{
           justifyContent: "space-between",
           alignItems: "center",
-          color: colors.black,
+          color: colors.softBlack,
         }}
       >
         <ServeTitle />

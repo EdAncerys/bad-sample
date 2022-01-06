@@ -85,7 +85,7 @@ const JournalCard = ({
       >
         <div
           className="flex-col"
-          style={{ paddingLeft: `1em`, color: colors.black }}
+          style={{ paddingLeft: `1em`, color: colors.softBlack }}
         >
           <ServeTitle />
           <ServeUser />

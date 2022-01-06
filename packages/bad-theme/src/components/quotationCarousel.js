@@ -110,7 +110,7 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
                     style={{
                       fontSize: 22,
                       fontWeight: "bold",
-                      color: colors.black,
+                      color: colors.softBlack,
                       alignItems: "center",
                       overflow: "hidden",
                     }}

@@ -304,7 +304,7 @@ const styles = {
     display: "flex",
   },
   link: {
-    color: colors.textMain,
+    color: colors.softBlack,
     textTransform: "capitalize",
   },
 };

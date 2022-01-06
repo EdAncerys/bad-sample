@@ -125,7 +125,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
           className="flex primary-title"
           style={{
             fontSize: 36,
-            color: colors.black,
+            color: colors.softBlack,
             fontWeight: "bold",
             alignItems: "center",
           }}
@@ -163,7 +163,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
           className="flex primary-title"
           style={{
             fontSize: 36,
-            color: colors.black,
+            color: colors.softBlack,
             fontWeight: "bold",
             alignItems: "center",
           }}

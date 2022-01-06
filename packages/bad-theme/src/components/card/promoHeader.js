@@ -20,7 +20,7 @@ const PromoHeader = ({ state, actions, libraries, fundingPromo }) => {
         style={{
           fontSize: 20,
           fontWeight: "bold",
-          color: colors.black,
+          color: colors.softBlack,
         }}
       >
         <Html2React html={title} />

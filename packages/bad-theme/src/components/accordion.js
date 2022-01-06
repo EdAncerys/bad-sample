@@ -146,7 +146,7 @@ const AccordionComponent = ({
             className="flex primary-title"
             style={{
               fontSize: 20,
-              color: colors.black,
+              color: colors.softBlack,
               fontWeight: "bold",
               alignItems: "center",
             }}
@@ -179,7 +179,7 @@ const AccordionComponent = ({
             className="flex"
             style={{
               paddingLeft: `2em`,
-              color: colors.black,
+              color: colors.softBlack,
               alignItems: "center",
             }}
           >
@@ -200,7 +200,7 @@ const AccordionComponent = ({
               className="primary-title"
               style={{
                 fontSize: 20,
-                color: colors.black,
+                color: colors.softBlack,
                 fontWeight: "bold",
                 alignItems: "center",
               }}
@@ -275,10 +275,10 @@ const AccordionComponent = ({
           <div>
             <div className="flex">
               <div id={`add-id-${uniqueId}`}>
-                <AddIcon style={{ fontSize: 48, fill: colors.textMain }} />
+                <AddIcon style={{ fontSize: 48, fill: colors.softBlack }} />
               </div>
               <div className="d-none" id={`remove-id-${uniqueId}`}>
-                <RemoveIcon style={{ fontSize: 48, fill: colors.textMain }} />
+                <RemoveIcon style={{ fontSize: 48, fill: colors.softBlack }} />
               </div>
             </div>
           </div>
@@ -315,7 +315,7 @@ const AccordionComponent = ({
             className="flex primary-title"
             style={{
               fontSize: 20,
-              color: colors.black,
+              color: colors.softBlack,
               fontWeight: "bold",
               alignItems: "center",
               justifyContent: ALIGNMENT,

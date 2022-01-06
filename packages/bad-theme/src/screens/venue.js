@@ -82,7 +82,7 @@ const Venue = ({ state, actions, libraries }) => {
               className="flex primary-title"
               style={{
                 fontSize: 20,
-                color: colors.black,
+                color: colors.softBlack,
                 fontWeight: "bold",
               }}
             >
@@ -113,7 +113,7 @@ const Venue = ({ state, actions, libraries }) => {
               className="flex primary-title"
               style={{
                 fontSize: 20,
-                color: colors.black,
+                color: colors.softBlack,
                 fontWeight: "bold",
               }}
             >
@@ -136,7 +136,7 @@ const Venue = ({ state, actions, libraries }) => {
               className="flex primary-title"
               style={{
                 fontSize: 20,
-                color: colors.black,
+                color: colors.softBlack,
                 fontWeight: "bold",
               }}
             >
@@ -159,7 +159,7 @@ const Venue = ({ state, actions, libraries }) => {
               className="flex primary-title"
               style={{
                 fontSize: 20,
-                color: colors.black,
+                color: colors.softBlack,
                 fontWeight: "bold",
               }}
             >

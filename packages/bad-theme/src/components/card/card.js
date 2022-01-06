@@ -221,7 +221,7 @@ const styles = {
     overflow: "hidden",
   },
   footerActionTitle: {
-    borderBottom: `1px solid ${colors.black}`,
+    borderBottom: `1px solid ${colors.softBlack}`,
     cursor: "pointer",
   },
 };

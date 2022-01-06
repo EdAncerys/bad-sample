@@ -64,7 +64,7 @@ const UsefulLinksCard = ({
           className="primary-title"
           style={{
             fontSize: 20,
-            color: colors.black,
+            color: colors.softBlack,
             textTransform: "capitalize",
             cursor: "pointer",
           }}
@@ -99,7 +99,9 @@ const UsefulLinksCard = ({
       }}
     >
       <div style={{ padding: `2em 1em` }}>
-        <div style={{ fontSize: 20, color: colors.black }}>Useful Links</div>
+        <div style={{ fontSize: 20, color: colors.softBlack }}>
+          Useful Links
+        </div>
         <div className="list-group">
           {link_title.map((block, key) => {
             return <ServeIndexTitle key={key} block={block} />;

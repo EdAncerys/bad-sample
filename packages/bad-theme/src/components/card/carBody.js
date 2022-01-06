@@ -54,7 +54,7 @@ const CardBody = ({
           maxHeight: isFrom4Col ? "7em" : "auto", // restricting title height
           overflow: "hidden",
           fontWeight: "bold",
-          color: heroBanner ? colors.trueBlack : colors.black,
+          color: heroBanner ? colors.trueBlack : colors.softBlack,
           alignItems: newsCarousel ? "center" : "flex-start",
           opacity: opacity || 1,
         }}

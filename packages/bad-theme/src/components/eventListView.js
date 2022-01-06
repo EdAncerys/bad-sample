@@ -96,7 +96,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
           className="primary-title"
           style={{
             fontSize: 20,
-            color: colors.black,
+            color: colors.softBlack,
             fontWeight: "bold",
             padding: `1em 0`,
             cursor: "pointer",
@@ -141,10 +141,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
       };
 
       return (
-        <div
-          className="flex"
-          style={{ fontSize: 16, color: colors.blue, fontStyle: "italic" }}
-        >
+        <div className="flex" style={{ fontStyle: "italic" }}>
           <ServeEventVenue />
           <ServeEventOrganizer />
           <ServeEventCommittee />
@@ -235,7 +232,7 @@ const styles = {
   },
   divider: {
     margin: `5px 0.5em`,
-    borderRight: `1px solid ${colors.blue}`,
+    borderRight: `1px solid ${colors.softBlack}`,
   },
 };
 

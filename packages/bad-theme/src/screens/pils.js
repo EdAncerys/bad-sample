@@ -29,7 +29,7 @@ const Post = ({ state, actions, libraries }) => {
             fontSize: 36,
             fontWeight: "bold",
             padding: `0.5em 1em`,
-            color: colors.black,
+            color: colors.softBlack,
             backgroundColor: colors.white,
             borderBottom: `5px solid ${colors.danger}`,
           }}

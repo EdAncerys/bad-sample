@@ -31,7 +31,7 @@ const ElectionModal = ({
         <div className="flex">
           <div
             className="flex primary-title"
-            style={{ fontSize: 20, color: colors.black }}
+            style={{ fontSize: 20, color: colors.softBlack }}
           >
             <Html2React html={title.rendered} />
           </div>
@@ -40,7 +40,7 @@ const ElectionModal = ({
             onClick={() => setModalData(null)}
             style={{ cursor: "pointer" }}
           >
-            <CloseIcon style={{ fontSize: 24, fill: colors.textMain }} />
+            <CloseIcon style={{ fontSize: 24, fill: colors.softBlack }} />
           </div>
         </div>
       );

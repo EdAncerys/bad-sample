@@ -58,7 +58,7 @@ const TitleBlock = ({
         style={{
           fontSize: 36,
           fontWeight: "bold",
-          color: colors.black,
+          color: colors.softBlack,
           textAlign: ALIGNMENT,
           justifyContent: ALIGNMENT,
         }}

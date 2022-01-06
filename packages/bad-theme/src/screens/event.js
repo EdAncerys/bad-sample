@@ -53,7 +53,7 @@ const Event = ({ state, actions, libraries }) => {
         style={{
           fontSize: 36,
           fontWeight: "bold",
-          color: colors.black,
+          color: colors.softBlack,
           paddingBottom: `0.5em`,
         }}
       >
@@ -92,7 +92,7 @@ const Event = ({ state, actions, libraries }) => {
             style={{
               fontSize: 20,
               fontWeight: "bold",
-              color: colors.black,
+              color: colors.softBlack,
             }}
           >
             Date & Time:
@@ -161,7 +161,7 @@ const Event = ({ state, actions, libraries }) => {
             style={{
               fontSize: 20,
               fontWeight: "bold",
-              color: colors.black,
+              color: colors.softBlack,
             }}
           >
             Venue:
@@ -181,7 +181,7 @@ const Event = ({ state, actions, libraries }) => {
             style={{
               fontSize: 20,
               fontWeight: "bold",
-              color: colors.black,
+              color: colors.softBlack,
             }}
           >
             Venue:
@@ -201,7 +201,7 @@ const Event = ({ state, actions, libraries }) => {
             style={{
               fontSize: 20,
               fontWeight: "bold",
-              color: colors.black,
+              color: colors.softBlack,
             }}
           >
             Email:
@@ -259,7 +259,7 @@ const Event = ({ state, actions, libraries }) => {
           style={{
             fontSize: 16,
             fontWeight: "bold",
-            color: colors.black,
+            color: colors.softBlack,
           }}
         >
           Summary
@@ -326,13 +326,21 @@ const Event = ({ state, actions, libraries }) => {
         >
           <div
             className="primary-title"
-            style={{ fontSize: 20, fontWeight: "bold", color: colors.black }}
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+              color: colors.softBlack,
+            }}
           >
             Share
           </div>
           <div
             className="primary-title"
-            style={{ fontSize: 20, fontWeight: "bold", color: colors.black }}
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+              color: colors.softBlack,
+            }}
           >
             Add to calendar
           </div>

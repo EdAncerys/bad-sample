@@ -61,7 +61,7 @@ const FullWidthContentBlock = ({
           style={{
             fontSize: 36,
             fontWeight: "bold",
-            color: colors.black,
+            color: colors.softBlack,
           }}
         >
           <Html2React html={title} />

@@ -52,7 +52,7 @@ const SocialIcons = ({ state, actions, libraries, block }) => {
         style={{
           fontSize: 24,
           fontWeight: "bold",
-          color: colors.black,
+          color: colors.softBlack,
           padding: `1em 0`,
         }}
       >
