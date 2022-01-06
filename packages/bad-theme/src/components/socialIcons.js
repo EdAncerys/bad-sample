@@ -53,7 +53,7 @@ const SocialIcons = ({ state, actions, libraries, block }) => {
           fontSize: 24,
           fontWeight: "bold",
           color: colors.black,
-          paddingBottom: `1em`,
+          padding: `1em 0`,
         }}
       >
         <Html2React html={title} />
@@ -65,10 +65,20 @@ const SocialIcons = ({ state, actions, libraries, block }) => {
     if (!social_links) return null;
 
     return (
-      <div>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: COLUMNS_NUMBER,
+          gap: 20,
+          alignItems: "flex-end",
+        }}
+      >
         {social_links.map((block, key) => {
+          let paddingTop = 0;
+          if (key !== 0 && links_per_row === "One") paddingTop = `1em`;
+
           return (
-            <div key={key}>
+            <div key={key} style={{ paddingTop: paddingTop }}>
               <div className="flex" style={{ justifyContent: "center" }}>
                 <ServeTitle title={block.title} />
               </div>
@@ -87,15 +97,7 @@ const SocialIcons = ({ state, actions, libraries, block }) => {
   // RETURN ---------------------------------------------------
   return (
     <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: COLUMNS_NUMBER,
-          gap: 20,
-        }}
-      >
-        <ServeSocialContent />
-      </div>
+      <ServeSocialContent />
     </div>
   );
 };
