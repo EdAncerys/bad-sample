@@ -32,6 +32,9 @@
   background-color: transparent !important;
   border-color: none !important;
 }
+.dropdown-item {
+  white-space: normal;
+}
 
 @media screen and (max-width: 992px) {
   container {
