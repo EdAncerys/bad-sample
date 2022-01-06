@@ -36,14 +36,14 @@ const AccordionComponent = ({
 
   // SERVERS ---------------------------------------------
   const ServeAccordion = ({ block }) => {
-    const [eventKey, setEventKey] = useState(null);
+    const [uniqueId, setUniqueId] = useState(null);
     // hook applies after React has performed all DOM mutations
     useLayoutEffect(() => {
       const blockId = uuidv4(); // add unique id
-      setEventKey(blockId);
+      setUniqueId(blockId);
     }, []);
 
-    if (!eventKey) return <Loading />;
+    if (!uniqueId) return <Loading />;
 
     const ALL_POSITIONS = Object.values(state.source.leadership_position);
     const {
@@ -103,11 +103,11 @@ const AccordionComponent = ({
 
     // HANDLERS ----------------------------------------------------
     const handleAccordionToggle = () => {
-      const addIcon = document.querySelector(`#add-id-${eventKey}`);
-      const removeIcon = document.querySelector(`#remove-id-${eventKey}`);
-      const moreIcon = document.querySelector(`#more-id-${eventKey}`);
-      const lessIcon = document.querySelector(`#less-id-${eventKey}`);
-      const preview = document.querySelector(`#preview-id-${eventKey}`);
+      const addIcon = document.querySelector(`#add-id-${uniqueId}`);
+      const removeIcon = document.querySelector(`#remove-id-${uniqueId}`);
+      const moreIcon = document.querySelector(`#more-id-${uniqueId}`);
+      const lessIcon = document.querySelector(`#less-id-${uniqueId}`);
+      const preview = document.querySelector(`#preview-id-${uniqueId}`);
 
       // apply toggle to selected components
       if (preview) {
@@ -135,6 +135,7 @@ const AccordionComponent = ({
         }
       }
     };
+
     // SERVERS ----------------------------------------------------
     const ServeHeader = () => {
       const ServeTitle = () => {
@@ -222,7 +223,7 @@ const AccordionComponent = ({
         return (
           <div
             className="text-body"
-            id={`preview-id-${eventKey}`}
+            id={`preview-id-${uniqueId}`}
             style={{
               paddingTop: `1em`,
               marginTop: `1.25em`,
@@ -273,10 +274,10 @@ const AccordionComponent = ({
         return (
           <div>
             <div className="flex">
-              <div id={`add-id-${eventKey}`}>
+              <div id={`add-id-${uniqueId}`}>
                 <AddIcon style={{ fontSize: 48, fill: colors.textMain }} />
               </div>
-              <div className="d-none" id={`remove-id-${eventKey}`}>
+              <div className="d-none" id={`remove-id-${uniqueId}`}>
                 <RemoveIcon style={{ fontSize: 48, fill: colors.textMain }} />
               </div>
             </div>
@@ -287,12 +288,12 @@ const AccordionComponent = ({
         //   return (
         //     <div>
         //       <div className="flex">
-        //         <div id={`more-id-${eventKey}`} style={styles.previewIcon}>
+        //         <div id={`more-id-${uniqueId}`} style={styles.previewIcon}>
         //           See More
         //         </div>
         //         <div
         //           className="d-none"
-        //           id={`less-id-${eventKey}`}
+        //           id={`less-id-${uniqueId}`}
         //           style={styles.previewIcon}
         //         >
         //           Less
@@ -685,7 +686,7 @@ const AccordionComponent = ({
     return (
       <Accordion>
         <Accordion.Item
-          eventKey={eventKey}
+          uniqueId={uniqueId}
           className="shadow"
           style={{ padding: `0.5em 1em`, margin: `1em 0` }}
         >

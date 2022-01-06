@@ -1,78 +1,131 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useLayoutEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
+import { v4 as uuidv4 } from "uuid";
 
 import { colors } from "../config/imports";
 import CloseIcon from "@mui/icons-material/Close";
 // CONTEXT ----------------------------------------------------------------
-import {
-  useAppDispatch,
-  useAppState,
-  setEnquireAction,
-  sendEnquireAction,
-} from "../context";
+import { useAppDispatch, useAppState, setEnquireAction } from "../context";
 
 const EnquireModal = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { enquireAction } = useAppState();
 
-  const [agreement, setAgreement] = useState(null);
+  const [uniqueId, setUniqueId] = useState(null);
+  const agreement = useRef(null);
+  console.log(enquireAction);
+
+  // hook applies after React has performed all DOM mutations
+  useLayoutEffect(() => {
+    const blockId = uuidv4(); // add unique id
+    setUniqueId(blockId);
+  }, []);
+
+  // HANDLERS ----------------------------------------------------
+  const handleContactFormSubmit = () => {
+    if (!agreement) return null;
+
+    const fullName = document.querySelector(`#full-name-${uniqueId}`);
+    const email = document.querySelector(`#email-${uniqueId}`);
+    const phoneNumber = document.querySelector(`#phone-number-${uniqueId}`);
+    const enquireReason = document.querySelector(`#enquire-reason-${uniqueId}`);
+    const message = document.querySelector(`#message-${uniqueId}`);
+
+    const params = { fullName, email, phoneNumber, enquireReason, message };
+    console.log("params", params);
+  };
 
   // SERVERS --------------------------------------------------
   const ServeModalContent = () => {
+    const ServeFileUpload = () => {
+      if (!enquireAction && !enquireAction.allow_attachments) return null;
+
+      return (
+        <div style={styles.inputContainer}>
+          <label className="form-label">File Attachments</label>
+          <input
+            id={`attachments-${uniqueId}`}
+            className="form-control"
+            type="file"
+            multiple
+          />
+        </div>
+      );
+    };
+
     const ServeForm = () => {
       return (
         <form>
           <div style={styles.inputContainer}>
             <label className="form-label">Full Name</label>
-            <input type="text" className="form-control" />
+            <input
+              id={`full-name-${uniqueId}`}
+              type="text"
+              className="form-control"
+            />
           </div>
           <div style={styles.inputContainer}>
             <label className="form-label">Email Address</label>
-            <input type="email" className="form-control" />
+            <input
+              id={`email-${uniqueId}`}
+              type="email"
+              className="form-control"
+            />
           </div>
           <div style={styles.inputContainer}>
             <label className="form-label">Phone Number</label>
-            <input type="number" className="form-control" />
+            <input
+              id={`phone-number-${uniqueId}`}
+              type="number"
+              className="form-control"
+            />
           </div>
           <div style={styles.inputContainer}>
             <label className="form-label">Subject</label>
-            <input type="text" className="form-control" />
+            <input
+              id={`subject-${uniqueId}`}
+              type="text"
+              className="form-control"
+            />
           </div>
           <div style={styles.inputContainer}>
             <label className="form-label">Reason For Enquiry</label>
-            <input type="text" className="form-control" />
+            <input
+              id={`enquiry-reason-${uniqueId}`}
+              type="text"
+              className="form-control"
+            />
           </div>
           <div style={styles.inputContainer}>
             <label className="form-label">Message</label>
-            <textarea type="text" rows="3" className="form-control" />
+            <textarea
+              id={`message-${uniqueId}`}
+              type="text"
+              rows="3"
+              className="form-control"
+            />
           </div>
+          <ServeFileUpload />
 
           <div className="flex mb-3 form-check">
-            <div className="flex">
-              <div className="flex" style={{ alignItems: "center" }}>
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  style={styles.checkBox}
-                />
-              </div>
-              <div>
-                <label className="form-check-label">
-                  <span
-                    style={styles.TC}
-                    onClick={() => {
-                      console.log("agree");
-                      setAgreement(true);
-                    }}
-                  >
-                    I agree
-                  </span>{" "}
-                  - justo donec enim diam vulputate ut pharetra sit. Purus
-                  semper eget duis at tellus at. Sed adipiscing diam.
-                </label>
-              </div>
-            </div>
+            <label className="form-check-label">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                style={styles.checkBox}
+                onClick={() => {
+                  if (agreement.current) {
+                    agreement.current = null;
+                  } else {
+                    agreement.current = true;
+                  }
+                }}
+              />
+              <span style={styles.TC}>I agree</span> - justo donec enim diam
+              vulputate ut pharetra sit. Purus semper eget duis at tellus at.
+              Sed adipiscing diam.
+            </label>
           </div>
         </form>
       );
@@ -96,16 +149,13 @@ const EnquireModal = ({ state, actions }) => {
         <Modal.Footer
           style={{ justifyContent: "flex-start", padding: `1em 0 0` }}
         >
-          <button
+          <div
             className="blue-btn"
-            onClick={() => {
-              // if (!agreement) return null; // agreement is required
-
-              sendEnquireAction({ state, dispatch, enquire: null });
-            }}
+            style={{ opacity: agreement.current ? 1 : 0.7 }}
+            onClick={handleContactFormSubmit}
           >
             Send Enquiry
-          </button>
+          </div>
         </Modal.Footer>
       );
     };

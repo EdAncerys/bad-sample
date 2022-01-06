@@ -38,6 +38,8 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
+  let marginBottom = marginVertical;
+  if (buttons) marginBottom = state.theme.marginVertical;
 
   if (content_height === "small")
     BANNER_HEIGHT = state.theme.bannerHeight * 0.75;
@@ -195,7 +197,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
       style={{
         height: BANNER_HEIGHT,
         backgroundColor: BACKGROUND_COLOUR,
-        margin: `${marginVertical}px 0`,
+        margin: `${marginVertical}px 0 ${marginBottom}px`,
       }}
     >
       <div className="flex-row relative">

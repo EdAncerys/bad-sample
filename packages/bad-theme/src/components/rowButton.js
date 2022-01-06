@@ -13,7 +13,8 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const dispatch = useAppDispatch();
 
-  const { title, colour, link, contact_form } = block;
+  const { title, colour, link, contact_form, allow_attachments, recipients } =
+    block;
   const THEME = colour || colors.primary;
   let LABEL = title;
   if (!title && link) LABEL = link.title;
@@ -46,7 +47,10 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
           return;
         }
         if (contact_form) {
-          setEnquireAction({ dispatch, enquireAction: true });
+          setEnquireAction({
+            dispatch,
+            enquireAction: { allow_attachments, recipients },
+          });
           return;
         }
         if (link) setGoToAction({ path: link.url, actions });
