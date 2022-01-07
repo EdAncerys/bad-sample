@@ -270,6 +270,37 @@ const EnquireModal = ({ state, actions }) => {
   };
 
   const ServeModalInfo = () => {
+    const ServePublicEmail = () => {
+      if (!enquireAction.contact_public_email) return null;
+
+      return (
+        <div>
+          <div style={styles.infoTitle}>
+            <div>Email Address</div>
+          </div>
+          <div>
+            <div>{enquireAction.contact_public_email}</div>
+          </div>
+        </div>
+      );
+    };
+
+    const ServePublicPhone = () => {
+      if (!enquireAction.contact_public_phone_number) return null;
+
+      return (
+        <div>
+          <div style={styles.infoTitle}>
+            <div>Phone Number</div>
+          </div>
+          <div style={styles.infoText}>
+            <div>{enquireAction.contact_public_phone_number}</div>
+          </div>
+        </div>
+      );
+    };
+
+    if (!enquireAction) return null;
     return (
       <div className="flex">
         <Modal.Body>
@@ -291,20 +322,8 @@ const EnquireModal = ({ state, actions }) => {
               <div>4 Fitzroy square</div>
               <div>London, W1T 5HQ</div>
             </div>
-
-            <div style={styles.infoTitle}>
-              <div>Email Address</div>
-            </div>
-            <div>
-              <div>{enquireAction.contact_public_email}</div>
-            </div>
-
-            <div style={styles.infoTitle}>
-              <div>Phone Number</div>
-            </div>
-            <div style={styles.infoText}>
-              <div>{enquireAction.contact_public_phone_number}</div>
-            </div>
+            <ServePublicEmail />
+            <ServePublicPhone />
           </div>
         </Modal.Body>
       </div>
