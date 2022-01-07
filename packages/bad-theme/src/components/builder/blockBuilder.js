@@ -41,6 +41,7 @@ import FullWidthImageAndPromoCard from "../fullWidthImageAndPromoCard";
 import ImageBlock from "../imageBlock";
 import PilGuidelineSearch from "../pilGuidelineSearch";
 import SearchDermatologists from "../searchDermatologists";
+import DividerBlock from "../dividerBlock";
 
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   // console.log("BLOCKS: ", blocks); // debug
@@ -79,6 +80,14 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
       {blocks.map((block, key) => {
         const { acf_fc_layout } = block;
         console.log("CONTENT BLOCK", block); // debug
+
+        if (acf_fc_layout === "divider_block")
+          return (
+            <BlockWrapper key={key + 1}>
+              <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+              <DividerBlock key={key} block={block} />
+            </BlockWrapper>
+          );
 
         if (acf_fc_layout === "search_dermatologists")
           return (
