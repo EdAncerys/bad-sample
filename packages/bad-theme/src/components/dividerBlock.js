@@ -8,10 +8,8 @@ import { colors } from "../config/imports";
 const DividerBlock = ({ state, actions, libraries, block }) => {
   if (!block) return <Loading />;
 
-  const { background_colour, block_height, divider } = block;
+  const { block_height, divider } = block;
 
-  const BANNER_HEIGHT = state.theme.bannerHeight;
-  const marginHorizontal = state.theme.marginHorizontal;
   let height = state.theme.marginVertical;
   if (block_height) height = block_height;
 
@@ -21,7 +19,11 @@ const DividerBlock = ({ state, actions, libraries, block }) => {
 
     return (
       <div
-        style={{ backgroundColor: background_colour, height: 1, width: "100%" }}
+        style={{
+          backgroundColor: `rgb(0, 0, 0, 0.4)`,
+          height: 1,
+          width: "100%",
+        }}
       />
     );
   };
@@ -35,10 +37,6 @@ const DividerBlock = ({ state, actions, libraries, block }) => {
       <ServeDivider />
     </div>
   );
-};
-
-const styles = {
-  container: {},
 };
 
 export default connect(DividerBlock);
