@@ -109,7 +109,6 @@ const BADTheme = {
         const menu = sessionStorage.getItem("badMenu"); // checking if menu already pre fetched from wp
         if (menu) state.theme.menu = JSON.parse(menu); // replacing menu stored in sessions with state var
       },
-      setActiveDropDownRef: ({ state }) => setActiveDropDownRef({ state }),
     },
   },
   libraries: {

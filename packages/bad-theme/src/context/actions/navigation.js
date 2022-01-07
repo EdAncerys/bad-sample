@@ -15,10 +15,3 @@ export const setEnquireAction = ({ dispatch, enquireAction }) => {
   console.log("setEnquireAction triggered"); //debug
   dispatch({ type: "SET_ENQUIRE_ACTION", payload: enquireAction });
 };
-
-export const setActiveDropDownRef = ({ state, actions }) => {
-  // if (!actions) state.theme.activeDropDownRef = null;
-  // if (actions) state.theme.activeDropDownRef = actions;
-  state.theme.activeDropDownRef = null;
-  // console.log("activeDropDownRef", actions); // debug
-};

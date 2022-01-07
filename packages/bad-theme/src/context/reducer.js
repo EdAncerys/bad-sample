@@ -1,5 +1,6 @@
 export const initialState = {
-  isLoading: false,
+  isFetching: null,
+  isError: null,
   jwt: null,
   user: null,
 
@@ -10,6 +11,10 @@ export const initialState = {
 
 export const AppReducer = (state = initialState, action) => {
   switch (action.type) {
+    case "SET_FETCH_ACTION":
+      return { ...state, isFetching: action.payload };
+    case "SET_ERROR_ACTION":
+      return { ...state, isError: action.payload };
     case "SET_LOGIN_ACTION":
       return { ...state, user: action.payload };
     case "SET_LOGIN_MODAL_ACTION":

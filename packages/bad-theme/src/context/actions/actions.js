@@ -21,3 +21,13 @@ export const setEventFilterAction = ({ dispatch, filter }) => {
   console.log("setEventFilterAction triggered"); //debug
   dispatch({ type: "SET_EVENT_FILTER", payload: filter });
 };
+
+export const setFetchAction = ({ dispatch, isFetching }) => {
+  console.log("setFetchAction triggered"); //debug
+  dispatch({ type: "SET_FETCH_ACTION", payload: isFetching });
+};
+
+export const setErrorAction = ({ dispatch, isError }) => {
+  console.log("setErrorAction triggered"); //debug
+  dispatch({ type: "SET_ERROR_ACTION", payload: isError });
+};

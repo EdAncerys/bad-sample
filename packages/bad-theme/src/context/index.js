@@ -1,5 +1,10 @@
 import { AppProvider, useAppDispatch, useAppState } from "./context";
-import { setGoToAction, eventFilterAction } from "./actions/actions";
+import {
+  setGoToAction,
+  eventFilterAction,
+  setFetchAction,
+  setErrorAction,
+} from "./actions/actions";
 import { muiQuery } from "./mediaQueryContext";
 import {
   setLoginModalAction,
@@ -7,11 +12,11 @@ import {
   setEnquireAction,
 } from "./actions/navigation";
 import {
+  loginAction,
   setLoginAction,
   authenticateAppAction,
-  sendEmailEnquireAction,
 } from "./auth/actions";
-import { loginAction } from "./auth/actions";
+import { sendEmailEnquireAction } from "./auth/sendEnquire";
 
 export {
   AppProvider,
@@ -27,4 +32,6 @@ export {
   eventFilterAction,
   sendEmailEnquireAction,
   authenticateAppAction,
+  setFetchAction,
+  setErrorAction,
 };

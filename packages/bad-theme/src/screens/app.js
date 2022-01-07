@@ -34,7 +34,7 @@ import Loading from "../components/loading";
 import Error from "./error";
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, eventFilterAction } from "../context";
+import { useAppDispatch, useAppState } from "../context";
 
 const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();

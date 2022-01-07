@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { colors } from "../config/imports";
 import CloseIcon from "@mui/icons-material/Close";
+import Loading from "./loading";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -15,7 +16,7 @@ import {
 
 const EnquireModal = ({ state, actions }) => {
   const dispatch = useAppDispatch();
-  const { enquireAction } = useAppState();
+  const { enquireAction, isFetching } = useAppState();
 
   const [uniqueId, setUniqueId] = useState(null);
 
@@ -51,7 +52,13 @@ const EnquireModal = ({ state, actions }) => {
     };
     const recipients = enquireAction.recipients;
 
-    sendEmailEnquireAction({ state, formData, attachments, recipients });
+    sendEmailEnquireAction({
+      state,
+      dispatch,
+      formData,
+      attachments,
+      recipients,
+    });
   };
 
   // SERVERS --------------------------------------------------
@@ -229,10 +236,33 @@ const EnquireModal = ({ state, actions }) => {
     );
   };
 
+  const ServeIndicator = () => {
+    if (!isFetching) return null;
+
+    return (
+      <div
+        style={{
+          position: "absolute",
+          zIndex: 1,
+          width: "100%",
+          height: "100%",
+          display: "grid",
+          justifyItems: "center",
+          backgroundColor: colors.bgLight,
+        }}
+      >
+        <Loading />
+      </div>
+    );
+  };
+
   // RETURN ---------------------------------------------------
   return (
     <Modal show={enquireAction} size="xl" centered>
-      <div style={{ backgroundColor: colors.silverFillOne }}>
+      <div
+        style={{ backgroundColor: colors.silverFillOne, position: "relative" }}
+      >
+        <ServeIndicator />
         <div
           className="flex"
           onClick={() => setEnquireAction({ dispatch, enquireAction: null })}
@@ -272,7 +302,7 @@ const styles = {
     borderRadius: "50%",
     width: 20,
     height: 20,
-    marginRight: 10,
+    marginTop: 10,
   },
   infoTitle: {
     fontSize: 10,

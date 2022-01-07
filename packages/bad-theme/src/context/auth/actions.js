@@ -78,49 +78,6 @@ export const authenticateAppAction = async ({ state }) => {
   }
 };
 
-export const sendEmailEnquireAction = async ({
-  state,
-  formData,
-  attachments,
-  recipients,
-}) => {
-  console.log("enquireAction triggered");
-
-  const URL = state.auth.APP_AUTH_HOST + `/email`;
-  const jwt = await authenticateAppAction({ state });
-
-  let recipientsArray = [];
-  recipients.map((item) => {
-    recipientsArray.push(item.email);
-  });
-  const recipientsList = recipientsArray.toString();
-
-  let fileAttachmentList = [];
-  if (attachments) fileAttachmentList = Object.values(attachments); // add attachments to array
-
-  const form = new FormData();
-  form.append("email", recipientsList);
-  form.append("template", "SampleEmailTemplate");
-  form.append("data", `${formData}`);
-  fileAttachmentList.map((file) => {
-    form.append("attachments", file, file.name);
-  });
-
-  const requestOptions = {
-    method: "POST",
-    headers: { Authorization: `Bearer ${jwt}` },
-    body: form,
-  };
-
-  try {
-    const data = await fetch(URL, requestOptions);
-    const response = await data.json();
-    console.log(response);
-  } catch (error) {
-    console.log("error", error);
-  }
-};
-
 // SET CONTEXT ---------------------------------------------------
 export const setLoginAction = ({ dispatch, loginAction }) => {
   console.log("setLoginAction triggered"); //debug

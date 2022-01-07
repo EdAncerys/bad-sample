@@ -20,7 +20,9 @@ export const colors = {
   shade: "rgba(0, 0, 0, 0.25)",
   shadeIntense: "rgba(0, 0, 0, 0.5)",
   footer: "#292929",
-
+  // background colours
+  bgLight: 'rgb(230,230,230, 0.7)',
+  // nav colours
   maroon: "#842057",
   pink: "#EF476F",
   orange: "#EF7D21",
