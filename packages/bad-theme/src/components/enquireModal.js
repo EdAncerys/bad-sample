@@ -39,9 +39,9 @@ const EnquireModal = ({ state, actions }) => {
       `#enquiry-reason-${uniqueId}`
     ).value;
     const message = document.querySelector(`#message-${uniqueId}`).value;
-    const attachments = document.querySelector(
-      `#attachments-${uniqueId}`
-    ).files;
+    const isFileUpload = document.querySelector(`#attachments-${uniqueId}`);
+    let attachments = null;
+    if (isFileUpload) attachments = isFileUpload.files;
 
     const formData = {
       fullName,
