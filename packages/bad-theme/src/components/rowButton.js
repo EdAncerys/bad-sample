@@ -49,7 +49,7 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
         if (contact_form) {
           setEnquireAction({
             dispatch,
-            enquireAction: { allow_attachments, recipients },
+            enquireAction: block,
           });
           return;
         }

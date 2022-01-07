@@ -104,7 +104,6 @@ const SearchDermatologists = ({ state, actions, libraries, block }) => {
         <div style={{ paddingRight: `1em` }}>
           <Form.Select
             id="serveFilterOne"
-            aria-label="Default select example"
             style={{ ...styles.input, minWidth: "100%" }}
           >
             <option>Set The Distance</option>

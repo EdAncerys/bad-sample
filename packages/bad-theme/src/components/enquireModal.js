@@ -1,10 +1,12 @@
 import React, { useState, useLayoutEffect, useRef } from "react";
 import { connect } from "frontity";
+
 import { Modal } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
+import CloseIcon from "@mui/icons-material/Close";
+import { Form } from "react-bootstrap";
 
 import { colors } from "../config/imports";
-import CloseIcon from "@mui/icons-material/Close";
 import Loading from "./loading";
 // CONTEXT ----------------------------------------------------------------
 import {
@@ -30,28 +32,45 @@ const EnquireModal = ({ state, actions }) => {
   const handleContactFormSubmit = ({ agreement }) => {
     if (!agreement) return null;
 
-    const fullName = document.querySelector(`#full-name-${uniqueId}`).value;
-    const email = document.querySelector(`#email-${uniqueId}`).value;
-    const phoneNumber = document.querySelector(
-      `#phone-number-${uniqueId}`
-    ).value;
-    const enquireReason = document.querySelector(
-      `#enquiry-reason-${uniqueId}`
-    ).value;
-    const message = document.querySelector(`#message-${uniqueId}`).value;
+    const isFullName = document.querySelector(`#full-name-${uniqueId}`);
+    const isEmail = document.querySelector(`#email-${uniqueId}`);
+    const isPhoneNumber = document.querySelector(`#phone-number-${uniqueId}`);
+    const isSubject = document.querySelector(`#subject-${uniqueId}`);
+    const isSubjectDropDown = document.querySelector(
+      `#subject-dropdown-${uniqueId}`
+    );
+    const isMessage = document.querySelector(`#message-${uniqueId}`);
     const isFileUpload = document.querySelector(`#attachments-${uniqueId}`);
+
+    // optional fields
+    let fullName = null;
+    let email = null;
+    let phoneNumber = null;
+    let subject = null;
+    let subjectDropDown = null;
+    let message = null;
     let attachments = null;
+
+    // validating & passing values is present
+    if (isFullName) fullName = isFullName.value;
+    if (isEmail) email = isEmail.value;
+    if (isPhoneNumber) phoneNumber = isPhoneNumber.value;
+    if (isSubject) subject = isSubject.value;
+    if (isSubjectDropDown) subjectDropDown = isSubjectDropDown.value;
+    if (isMessage) message = isMessage.value;
     if (isFileUpload) attachments = isFileUpload.files;
 
     const formData = {
       fullName,
       email,
       phoneNumber,
-      enquireReason,
+      subject,
+      subjectDropDown,
       message,
     };
     const recipients = enquireAction.recipients;
 
+    console.log(formData);
     sendEmailEnquireAction({
       state,
       dispatch,
@@ -64,7 +83,6 @@ const EnquireModal = ({ state, actions }) => {
   // SERVERS --------------------------------------------------
   const ServeModalContent = () => {
     const ServeFileUpload = () => {
-      if (!enquireAction) return null;
       if (!enquireAction.allow_attachments) return null;
 
       return (
@@ -114,8 +132,10 @@ const EnquireModal = ({ state, actions }) => {
         );
       };
 
-      return (
-        <form>
+      const ServeFullName = () => {
+        if (!enquireAction.full_name) return null;
+
+        return (
           <div style={styles.inputContainer}>
             <label className="form-label">Full Name</label>
             <input
@@ -124,6 +144,13 @@ const EnquireModal = ({ state, actions }) => {
               className="form-control"
             />
           </div>
+        );
+      };
+
+      const ServeEmail = () => {
+        if (!enquireAction.email_address) return null;
+
+        return (
           <div style={styles.inputContainer}>
             <label className="form-label">Email Address</label>
             <input
@@ -132,6 +159,13 @@ const EnquireModal = ({ state, actions }) => {
               className="form-control"
             />
           </div>
+        );
+      };
+
+      const ServeNumber = () => {
+        if (!enquireAction.phone_number) return null;
+
+        return (
           <div style={styles.inputContainer}>
             <label className="form-label">Phone Number</label>
             <input
@@ -140,6 +174,13 @@ const EnquireModal = ({ state, actions }) => {
               className="form-control"
             />
           </div>
+        );
+      };
+
+      const ServeSubject = () => {
+        if (!enquireAction.subject) return null;
+
+        return (
           <div style={styles.inputContainer}>
             <label className="form-label">Subject</label>
             <input
@@ -148,14 +189,36 @@ const EnquireModal = ({ state, actions }) => {
               className="form-control"
             />
           </div>
+        );
+      };
+
+      const ServeSubjectDropDown = () => {
+        if (!enquireAction.subject_dropdown_options) return null;
+
+        return (
           <div style={styles.inputContainer}>
-            <label className="form-label">Reason For Enquiry</label>
-            <input
-              id={`enquiry-reason-${uniqueId}`}
-              type="text"
+            <label className="form-label">Subject</label>
+            <Form.Select
+              id={`subject-dropdown-${uniqueId}`}
               className="form-control"
-            />
+            >
+              <option value="null">Select the subject</option>
+              {enquireAction.subject_dropdown_options.map((item, key) => {
+                return (
+                  <option key={key} value={item.field}>
+                    {item.field}
+                  </option>
+                );
+              })}
+            </Form.Select>
           </div>
+        );
+      };
+
+      const ServeMessage = () => {
+        if (!enquireAction.message) return null;
+
+        return (
           <div style={styles.inputContainer}>
             <label className="form-label">Message</label>
             <textarea
@@ -165,6 +228,18 @@ const EnquireModal = ({ state, actions }) => {
               className="form-control"
             />
           </div>
+        );
+      };
+
+      if (!enquireAction) return null;
+      return (
+        <form>
+          <ServeFullName />
+          <ServeEmail />
+          <ServeNumber />
+          <ServeSubject />
+          <ServeSubjectDropDown />
+          <ServeMessage />
           <ServeFileUpload />
           <ServeActions />
         </form>
@@ -221,14 +296,14 @@ const EnquireModal = ({ state, actions }) => {
               <div>Email Address</div>
             </div>
             <div>
-              <div>education@bad.org.uk</div>
+              <div>{enquireAction.contact_public_email}</div>
             </div>
 
             <div style={styles.infoTitle}>
               <div>Phone Number</div>
             </div>
             <div style={styles.infoText}>
-              <div>+44 (0)207 383 0266</div>
+              <div>{enquireAction.contact_public_phone_number}</div>
             </div>
           </div>
         </Modal.Body>

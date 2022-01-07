@@ -13,6 +13,8 @@ export const sendEmailEnquireAction = async ({
 }) => {
   console.log("enquireAction triggered");
 
+  console.log("formData", formData);
+
   setFetchAction({ dispatch, isFetching: true });
   const URL = state.auth.APP_HOST + `/email`;
   const jwt = await authenticateAppAction({ state });

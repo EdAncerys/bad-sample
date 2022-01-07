@@ -135,7 +135,7 @@ const SearchInput = ({ state, actions, libraries }) => {
           onChange={handleInputSearch}
           type="text"
           className="form-control"
-          placeholder="Find An Event"
+          placeholder="Search"
           style={styles.input}
         />
         <div
