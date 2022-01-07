@@ -17,6 +17,7 @@ import {
   authenticateAppAction,
 } from "./auth/actions";
 import { sendEmailEnquireAction } from "./auth/sendEnquire";
+import { getTweetsAction } from "./auth/getTweets";
 
 export {
   AppProvider,
@@ -34,4 +35,5 @@ export {
   authenticateAppAction,
   setFetchAction,
   setErrorAction,
+  getTweetsAction,
 };

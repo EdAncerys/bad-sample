@@ -3,6 +3,7 @@ export const initialState = {
   isError: null,
   jwt: null,
   user: null,
+  tweets: null,
 
   loginModalAction: false,
   createAccountAction: false,
@@ -25,6 +26,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, enquireAction: action.payload };
     case "SET_JWT_ACTION":
       return { ...state, jwt: action.payload };
+    case "SET_TWEETS_ACTION":
+      return { ...state, tweets: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

@@ -16,6 +16,7 @@ import EventCardHeader from "./eventCardHeader";
 import NewsAndMediaHeader from "./newsAndMediaHeader";
 import AuthorInfo from "./authorInfo";
 import ImageAndPromoCard from "./imageAndPromoCard";
+import TweetInfo from "./tweetInfo";
 
 const Card = ({
   state,
@@ -31,6 +32,7 @@ const Card = ({
   gallery,
   venueInfo,
   authorInfo,
+  tweetInfo,
   videoGalleryInfo,
   electionInfo,
   handler,
@@ -101,7 +103,6 @@ const Card = ({
         image={journalCard.image}
         title={journalCard.title}
         user={journalCard.user}
-        tweet
       />
     );
   };
@@ -160,6 +161,7 @@ const Card = ({
         <EventCardHeader eventHeader={eventHeader} />
         <VenueInfo venueInfo={venueInfo} />
         <AuthorInfo authorInfo={authorInfo} />
+        <TweetInfo tweetInfo={tweetInfo}/>
         <ServeJournalCard />
         <CardBody
           title={title}

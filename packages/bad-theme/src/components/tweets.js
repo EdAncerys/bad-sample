@@ -7,20 +7,39 @@ import Link from "@frontity/components/link";
 import Loading from "./loading";
 import Card from "./card/card";
 import SocialIcons from "../components/socialIcons";
-import Facebook from "../img/svg/facebookColour.svg";
-import Twitter from "../img/svg/twitterColour.svg";
-import Instagram from "../img/svg/instagramColour.svg";
+// CONTEXT ----------------------------------------------------------------
+import { useAppDispatch, useAppState, getTweetsAction } from "../context";
 
 const Tweets = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
-  if (!block.tweets) return null;
 
-  const { disable_vertical_padding } = block;
+  const {
+    facebook_link,
+    twitter_link,
+    instagram_link,
+    disable_vertical_padding,
+  } = block;
+  const dispatch = useAppDispatch();
+  const { tweets } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
+
+  const socials = {
+    social_links: [
+      {
+        facebook: facebook_link,
+        twitter: twitter_link,
+        instagram: instagram_link,
+      },
+    ],
+  };
+
+  useEffect(() => {
+    getTweetsAction({ state, dispatch });
+  }, []);
 
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
@@ -41,34 +60,28 @@ const Tweets = ({ state, actions, libraries, block }) => {
     );
   };
 
+  if (!tweets) return <Loading />;
+
   // RETURN ---------------------------------------------------
   return (
-    <div style={{ backgroundColor: colors.white }}>
-      <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
-        <ServeTitle />
-        <div style={styles.container}>
-          {block.tweets.map((block, key) => {
-            const { background_image, body, colour, user, title } = block;
+    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
+      <div style={styles.container}>
+        {tweets.map((block, key) => {
+          const { author, text } = block;
 
-            return (
-              <div key={key} className="flex">
-                <Card
-                  journalCard={{
-                    image: background_image,
-                    title,
-                    user,
-                  }}
-                  body={body}
-                  colour={colour}
-                  colour={colour}
-                  shadow // optional param
-                />
-              </div>
-            );
-          })}
-        </div>
-        <SocialIcons />
+          return (
+            <div key={key} className="flex">
+              <Card
+                tweetInfo={author}
+                body={text}
+                colour={colors.danger}
+                shadow // optional param
+              />
+            </div>
+          );
+        })}
       </div>
+      <SocialIcons block={socials} />
     </div>
   );
 };
@@ -79,12 +92,6 @@ const styles = {
     gridTemplateColumns: `repeat(3, 1fr)`,
     justifyContent: "space-between",
     gap: 20,
-  },
-  socials: {
-    width: 77,
-    height: 77,
-    cursor: "pointer",
-    margin: `0 1em`,
   },
 };
 
