@@ -52,7 +52,7 @@ export const authenticateAppAction = async ({ state }) => {
 
   const username = state.auth.APP_USERNAME;
   const password = state.auth.APP_PASSWORD;
-  const URL = state.auth.APP_AUTH_HOST + `/users/login`;
+  const URL = state.auth.APP_HOST + `/users/login`;
 
   const appCredentials = JSON.stringify({
     username,

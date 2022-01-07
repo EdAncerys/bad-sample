@@ -14,7 +14,7 @@ export const sendEmailEnquireAction = async ({
   console.log("enquireAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
-  const URL = state.auth.APP_AUTH_HOST + `/email`;
+  const URL = state.auth.APP_HOST + `/email`;
   const jwt = await authenticateAppAction({ state });
 
   let recipientsArray = [];
