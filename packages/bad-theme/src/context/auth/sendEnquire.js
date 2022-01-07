@@ -18,9 +18,12 @@ export const sendEmailEnquireAction = async ({
   const jwt = await authenticateAppAction({ state });
 
   let recipientsArray = [];
-  recipients.map((item) => {
-    recipientsArray.push(item.email);
-  });
+  console.log(recipients);
+  if (!!recipients.length) {
+    recipients.map((item) => {
+      recipientsArray.push(item.email);
+    });
+  }
   const recipientsList = recipientsArray.toString();
 
   let fileAttachmentList = [];

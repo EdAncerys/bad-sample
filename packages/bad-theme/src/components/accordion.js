@@ -686,7 +686,7 @@ const AccordionComponent = ({
     return (
       <Accordion>
         <Accordion.Item
-          uniqueId={uniqueId}
+          id={uniqueId}
           className="shadow"
           style={{ padding: `0.5em 1em`, margin: `1em 0` }}
         >
