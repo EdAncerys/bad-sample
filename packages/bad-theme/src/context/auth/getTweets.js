@@ -19,7 +19,7 @@ export const getTweetsAction = async ({ state, dispatch }) => {
   try {
     const data = await fetch(URL, requestOptions);
     const tweets = await data.json();
-    console.log(tweets);
+
     setFetchAction({ dispatch, isFetching: null });
     setTweetsAction({ dispatch, tweets });
   } catch (error) {

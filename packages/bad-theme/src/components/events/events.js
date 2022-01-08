@@ -10,8 +10,6 @@ import { colors } from "../../config/imports";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
-// CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState } from "../../context";
 
 const Events = ({ state, actions, libraries, block }) => {
   const [grades, setGrades] = useState(null); // data
@@ -25,7 +23,6 @@ const Events = ({ state, actions, libraries, block }) => {
   const marginVertical = state.theme.marginVertical;
 
   const isSearch = block.add_search_function;
-  const layoutOne = block.layout === "layout_one";
   const id = uuidv4();
 
   useEffect(() => {

@@ -209,13 +209,17 @@ li {
   padding: 8px;
 }
 
-/* Icon hover */
-.active-icon {
+/* Icon events */
+.toggle-icon-scale,
+.toggle-icon-opacity {
   transition: transform 450ms;
 }
-.active-icon:hover {
+.toggle-icon-scale:hover {
   transform: scale(1.1);
 }
-.icon-hover:hover .MuiSvgIcon-root {
+.toggle-icon-opacity:hover {
+  opacity: 0.7;
+}
+.toggle-icon-color:hover .MuiSvgIcon-root {
   fill: #454545 !important;
 }

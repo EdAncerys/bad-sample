@@ -12,13 +12,11 @@ const SocialIcons = ({ state, actions, libraries, block }) => {
 
   if (!block) return null;
 
-  const { disable_vertical_padding } = block;
+  const { disable_vertical_padding, links_per_row, social_links } = block;
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
-
-  const { links_per_row, social_links } = block;
 
   let COLUMNS_NUMBER = `1fr`;
   if (links_per_row === "Two") COLUMNS_NUMBER = ` 1fr 1fr`;
@@ -47,16 +45,48 @@ const SocialIcons = ({ state, actions, libraries, block }) => {
     if (!title) return null;
 
     return (
-      <div
-        className="primary-title"
-        style={{
-          fontSize: 24,
-          fontWeight: "bold",
-          color: colors.softBlack,
-          padding: `1em 0`,
-        }}
-      >
-        <Html2React html={title} />
+      <div className="flex" style={{ justifyContent: "center" }}>
+        <div
+          className="primary-title"
+          style={{
+            fontSize: 24,
+            fontWeight: "bold",
+            color: colors.softBlack,
+            padding: `1em 0`,
+          }}
+        >
+          <Html2React html={title} />
+        </div>
+      </div>
+    );
+  };
+
+  const ServeFacebookIcon = ({ facebook }) => {
+    if (!facebook) return null;
+
+    return (
+      <div className="toggle-icon-scale">
+        <ServeIcon icon={Facebook} url={facebook} />
+      </div>
+    );
+  };
+
+  const ServeTwitterIcon = ({ twitter }) => {
+    if (!twitter) return null;
+
+    return (
+      <div className="toggle-icon-scale">
+        <ServeIcon icon={Twitter} url={twitter} />
+      </div>
+    );
+  };
+
+  const ServeInstagramIcon = ({ instagram }) => {
+    if (!instagram) return null;
+
+    return (
+      <div className="toggle-icon-scale">
+        <ServeIcon icon={Instagram} url={instagram} />
       </div>
     );
   };
@@ -74,18 +104,18 @@ const SocialIcons = ({ state, actions, libraries, block }) => {
         }}
       >
         {social_links.map((block, key) => {
+          const { facebook, twitter, instagram } = block;
+
           let paddingTop = 0;
           if (key !== 0 && links_per_row === "One") paddingTop = `1em`;
 
           return (
             <div key={key} style={{ paddingTop: paddingTop }}>
+              <ServeTitle title={block.title} />
               <div className="flex" style={{ justifyContent: "center" }}>
-                <ServeTitle title={block.title} />
-              </div>
-              <div className="flex" style={{ justifyContent: "center" }}>
-                <ServeIcon icon={Facebook} url={block.facebook} />
-                <ServeIcon icon={Twitter} url={block.twitter} />
-                <ServeIcon icon={Instagram} url={block.instagram} />
+                <ServeFacebookIcon facebook={facebook} />
+                <ServeInstagramIcon instagram={instagram} />
+                <ServeTwitterIcon twitter={twitter} />
               </div>
             </div>
           );

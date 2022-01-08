@@ -36,7 +36,7 @@ const ElectionModal = ({
             <Html2React html={title.rendered} />
           </div>
           <div
-            className="icon-hover"
+            className="toggle-icon-color"
             onClick={() => setModalData(null)}
             style={{ cursor: "pointer" }}
           >

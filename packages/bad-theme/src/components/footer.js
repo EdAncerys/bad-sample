@@ -59,7 +59,7 @@ const Footer = ({ state, actions }) => {
             className="flex"
             style={{ justifyContent: "space-around", paddingLeft: `3em` }}
           >
-            <div style={styles.socials}>
+            <div className="toggle-icon-opacity" style={styles.socials}>
               <Link link={`https://www.facebook.com/`} target="_blank">
                 <Image
                   src={Facebook}
@@ -68,12 +68,12 @@ const Footer = ({ state, actions }) => {
                 />
               </Link>
             </div>
-            <div style={styles.socials}>
+            <div className="toggle-icon-opacity" style={styles.socials}>
               <Link link={`https://www.twitter.com/`} target="_blank">
                 <Image src={Twitter} className="d-block h-100" alt="Twitter" />
               </Link>
             </div>
-            <div style={styles.socials}>
+            <div className="toggle-icon-opacity" style={styles.socials}>
               <Link link={`https://www.instagram.com/`} target="_blank">
                 <Image
                   src={Instagram}

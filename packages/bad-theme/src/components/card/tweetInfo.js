@@ -74,11 +74,11 @@ const TweetInfo = ({ state, actions, libraries, tweetInfo }) => {
         gap: 20,
         borderBottom: `1px solid ${colors.darkSilver}`,
         paddingBottom: `1em`,
-        marginBottom: `1em`,
+        marginBottom: `2em`,
       }}
     >
       <ServeCardImage />
-      <div className="flex-col" style={{}}>
+      <div className="flex-col">
         <ServeName />
         <ServeUserName />
       </div>

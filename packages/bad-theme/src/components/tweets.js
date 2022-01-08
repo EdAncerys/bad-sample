@@ -27,7 +27,15 @@ const Tweets = ({ state, actions, libraries, block }) => {
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 
-  const socials = {
+  let PADDING_BOTTOM = 0;
+  if (
+    disable_vertical_padding &&
+    (facebook_link || twitter_link || instagram_link)
+  )
+    PADDING_BOTTOM = 40;
+
+  const SOCIAL_BLOCK = {
+    disable_vertical_padding,
     social_links: [
       {
         facebook: facebook_link,
@@ -65,7 +73,15 @@ const Tweets = ({ state, actions, libraries, block }) => {
   // RETURN ---------------------------------------------------
   return (
     <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
-      <div style={styles.container}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: `repeat(3, 1fr)`,
+          justifyContent: "space-between",
+          gap: 20,
+          paddingBottom: PADDING_BOTTOM,
+        }}
+      >
         {tweets.map((block, key) => {
           const { author, text } = block;
 
@@ -81,18 +97,13 @@ const Tweets = ({ state, actions, libraries, block }) => {
           );
         })}
       </div>
-      <SocialIcons block={socials} />
+      <SocialIcons block={SOCIAL_BLOCK} />
     </div>
   );
 };
 
 const styles = {
-  container: {
-    display: "grid",
-    gridTemplateColumns: `repeat(3, 1fr)`,
-    justifyContent: "space-between",
-    gap: 20,
-  },
+  container: {},
 };
 
 export default connect(Tweets);

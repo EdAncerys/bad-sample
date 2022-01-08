@@ -35,7 +35,7 @@ const Benefit = ({ state, actions, libraries, block }) => {
 
     return (
       <div
-        className="active-icon"
+        className="toggle-icon-scale"
         style={{
           width: ICON_WIDTH,
           height: ICON_WIDTH,
