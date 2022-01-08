@@ -21,6 +21,7 @@ const AccordionHeader = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { title, body, logo, has_preview, guidelines_type } = block;
+  const LOGO_HEIGHT = 45;
 
   // Guidelines & Standards --------------------------------
   let gsTitle = null;
@@ -32,7 +33,7 @@ const AccordionHeader = ({
     gsPublished_date = block.acf.published_date;
     gsUpdate_in_progress = block.acf.update_in_progress;
   }
-  // Guidelines & Standards --------------------------------
+  // Guidelines & Standards -------------------------------------
 
   // LEadership team & Standards --------------------------------
   let ltTitle = null;
@@ -257,7 +258,15 @@ const AccordionHeader = ({
 };
 
 const styles = {
-  container: {},
+  divider: {
+    margin: `2px 0.5em`,
+    borderRight: `1px solid ${colors.darkSilver}`,
+  },
+  previewIcon: {
+    fontSize: 12,
+    textTransform: "uppercase",
+    height: "100%",
+  },
 };
 
 export default connect(AccordionHeader);
