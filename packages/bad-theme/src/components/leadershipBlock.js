@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import AccordionComponent from "./accordion";
+import AccordionComponent from "./accordion/accordion";
 import Loading from "./loading";
 
 const LeadershipBlock = ({ state, actions, block }) => {

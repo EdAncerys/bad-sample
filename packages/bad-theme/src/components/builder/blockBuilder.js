@@ -17,7 +17,7 @@ import NewsCarousel from "../newsCarousel";
 import ProfilesBlock from "../profilesBlock";
 import FullWidthContentBlock from "../fullWidthContentBlock";
 import PromoBlock from "../promoBlock";
-import Accordion from "../accordion";
+import Accordion from "../accordion/accordion";
 import QuotationCarousel from "../quotationCarousel";
 import BenefitsGrid from "../benefitsGrid";
 import DownloadFileBlock from "../downloadFileBlock";

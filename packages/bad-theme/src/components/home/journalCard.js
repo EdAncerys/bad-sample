@@ -14,7 +14,6 @@ const JournalCard = ({
   user,
   link,
   shadow,
-  tweet,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const CARD_WIDTH = "30%";
@@ -28,7 +27,6 @@ const JournalCard = ({
 
     let BORDER = `none`;
     if (image) BORDER = `2px solid ${colors.darkSilver}`;
-    if (tweet) BORDER = `none`;
 
     // SERVERS ------------------------------
     const ServeActions = () => {
@@ -129,14 +127,12 @@ const JournalCard = ({
       style={{
         minWidth: CARD_WIDTH,
         width: "100%",
-        padding: tweet ? `1em 0` : 0,
-        borderBottom: tweet ? `2px solid ${colors.darkSilver}` : 0,
       }}
     >
       <div
         className="flex-row"
         style={{
-          padding: !tweet ? `1em` : 0,
+          padding: `1em`,
           height: `100%`,
         }}
       >

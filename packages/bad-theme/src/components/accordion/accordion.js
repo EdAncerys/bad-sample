@@ -7,11 +7,11 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
-import NiceLogo from "../img/placeholders/niceLogo.svg";
-import DownloadFileBlock from "./downloadFileBlock";
-import Loading from "./loading";
-import { colors } from "../config/imports";
-import { setGoToAction } from "../context";
+import NiceLogo from "../../img/placeholders/niceLogo.svg";
+import DownloadFileBlock from "../downloadFileBlock";
+import Loading from "../loading";
+import { colors } from "../../config/imports";
+import { setGoToAction } from "../../context";
 import { v4 as uuidv4 } from "uuid";
 
 const AccordionComponent = ({
@@ -23,9 +23,8 @@ const AccordionComponent = ({
   leadershipBlock,
 }) => {
   if (!block) return <Loading />;
-  if (!block.accordion_item) return null;
 
-  const { disable_vertical_padding } = block;
+  const { disable_vertical_padding, accordion_item } = block;
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const marginHorizontal = state.theme.marginHorizontal;
@@ -53,13 +52,11 @@ const AccordionComponent = ({
       downloads,
       label,
       link,
-      date,
-      update_in_progress,
-      doi,
-      link_to_pil,
+      has_preview,
+      file_submit_option,
+      recipients,
       guidelines_type,
     } = block;
-    const hasPreview = block.preview === "true";
 
     // Guidelines & Standards --------------------------------
     let gsTitle = null;
@@ -103,37 +100,35 @@ const AccordionComponent = ({
 
     // HANDLERS ----------------------------------------------------
     const handleAccordionToggle = () => {
-      const addIcon = document.querySelector(`#add-id-${uniqueId}`);
-      const removeIcon = document.querySelector(`#remove-id-${uniqueId}`);
-      const moreIcon = document.querySelector(`#more-id-${uniqueId}`);
-      const lessIcon = document.querySelector(`#less-id-${uniqueId}`);
-      const preview = document.querySelector(`#preview-id-${uniqueId}`);
-
-      // apply toggle to selected components
-      if (preview) {
-        preview.classList.toggle("d-none");
-      }
-      if (addIcon) {
-        addIcon.classList.toggle("d-none");
-      }
-      if (removeIcon) {
-        if (removeIcon.classList.contains("d-none")) {
-          removeIcon.classList.remove("d-none");
-        } else {
-          removeIcon.classList.add("d-none");
-        }
-      }
-
-      if (moreIcon) {
-        moreIcon.classList.toggle("d-none");
-      }
-      if (lessIcon) {
-        if (lessIcon.classList.contains("d-none")) {
-          lessIcon.classList.remove("d-none");
-        } else {
-          lessIcon.classList.add("d-none");
-        }
-      }
+      // const addIcon = document.querySelector(`#add-id-${uniqueId}`);
+      // const removeIcon = document.querySelector(`#remove-id-${uniqueId}`);
+      // const moreIcon = document.querySelector(`#more-id-${uniqueId}`);
+      // const lessIcon = document.querySelector(`#less-id-${uniqueId}`);
+      // const preview = document.querySelector(`#preview-id-${uniqueId}`);
+      // // apply toggle to selected components
+      // if (preview) {
+      //   preview.classList.toggle("d-none");
+      // }
+      // if (addIcon) {
+      //   addIcon.classList.toggle("d-none");
+      // }
+      // if (removeIcon) {
+      //   if (removeIcon.classList.contains("d-none")) {
+      //     removeIcon.classList.remove("d-none");
+      //   } else {
+      //     removeIcon.classList.add("d-none");
+      //   }
+      // }
+      // if (moreIcon) {
+      //   moreIcon.classList.toggle("d-none");
+      // }
+      // if (lessIcon) {
+      //   if (lessIcon.classList.contains("d-none")) {
+      //     lessIcon.classList.remove("d-none");
+      //   } else {
+      //     lessIcon.classList.add("d-none");
+      //   }
+      // }
     };
 
     // SERVERS ----------------------------------------------------
@@ -213,7 +208,7 @@ const AccordionComponent = ({
       };
 
       const ServePreview = () => {
-        if (guidelines || !hasPreview) return null;
+        if (guidelines || !has_preview) return null;
 
         // Manage max string Length
         const MAX_LENGTH = 140;
@@ -284,7 +279,7 @@ const AccordionComponent = ({
           </div>
         );
         // option for preview button
-        // if (hasPreview) {
+        // if (has_preview) {
         //   return (
         //     <div>
         //       <div className="flex">
@@ -361,13 +356,25 @@ const AccordionComponent = ({
         );
       };
 
+      const ServeGSLink = () => {
+        if (!gsLinks) return null;
+
+        return (
+          <div className="flex-row" style={{ width: "50%", flexWrap: "wrap" }}>
+            {gsLinks.map((link, key) => {
+              return <ServeLink key={key} link={link} />;
+            })}
+          </div>
+        );
+      };
+
       const ServeDownloads = () => {
         if (!gsDocument_uploads && !downloads) return null;
 
         const files = gsDocument_uploads || downloads;
 
         return (
-          <div className="flex-col" style={{ width: "70%" }}>
+          <div className="flex-col">
             <div
               className="primary-title"
               style={{
@@ -382,8 +389,9 @@ const AccordionComponent = ({
               {files.map((block, key) => {
                 return (
                   <div
+                    className="flex"
                     key={key}
-                    style={{ minWidth: "33%", padding: `1em 1em 1em 0` }}
+                    style={{ padding: `1em 1em 1em 0` }}
                   >
                     <DownloadFileBlock block={block} guidelines disableMargin />
                   </div>
@@ -403,7 +411,11 @@ const AccordionComponent = ({
         return (
           <div
             className="flex"
-            style={{ justifyContent: "flex-end", paddingTop: `1em` }}
+            style={{
+              justifyContent: "flex-end",
+              alignItems: "flex-end",
+              padding: `1em 0`,
+            }}
           >
             <div>
               <button
@@ -422,6 +434,40 @@ const AccordionComponent = ({
                   />
                 </div>
               </button>
+            </div>
+          </div>
+        );
+      };
+
+      const ServeFileSubmit = () => {
+        if (!file_submit_option) return null;
+
+        return (
+          <div>
+            <div
+              className="flex"
+              style={{
+                justifyContent: "flex-end",
+                alignItems: "flex-end",
+                paddingBottom: `1em`,
+              }}
+            >
+              <div>
+                <button
+                  className="flex-row blue-btn"
+                  onClick={() => console.log("file upload")}
+                >
+                  <div className="flex">Apply Here</div>
+                  <div style={{ margin: "auto 0" }}>
+                    <KeyboardArrowRightIcon
+                      style={{
+                        borderRadius: "50%",
+                        padding: 0,
+                      }}
+                    />
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
         );
@@ -658,6 +704,9 @@ const AccordionComponent = ({
         );
       };
 
+      let COLUMNS = `3fr 1fr`;
+      if (!gsDocument_uploads && !downloads) COLUMNS = `1fr`;
+
       return (
         <Accordion.Body
           style={{
@@ -671,14 +720,16 @@ const AccordionComponent = ({
 
           <ServeLTTeam />
           <ServeGSSubTitle />
-          <div className="flex-row" style={{ width: "50%", flexWrap: "wrap" }}>
-            {gsLinks &&
-              gsLinks.map((link, key) => {
-                return <ServeLink key={key} link={link} />;
-              })}
+          <ServeGSLink />
+          <div
+            style={{ display: "grid", gridTemplateColumns: COLUMNS, gap: 20 }}
+          >
+            <ServeDownloads />
+            <div className="flex-col">
+              <ServeGoToPage />
+              <ServeFileSubmit />
+            </div>
           </div>
-          <ServeDownloads />
-          <ServeGoToPage />
         </Accordion.Body>
       );
     };
@@ -686,6 +737,7 @@ const AccordionComponent = ({
     return (
       <Accordion>
         <Accordion.Item
+          eventKey={uniqueId}
           id={uniqueId}
           className="shadow"
           style={{ padding: `0.5em 1em`, margin: `1em 0` }}
@@ -700,7 +752,7 @@ const AccordionComponent = ({
   // RETURN ----------------------------------------------------
   return (
     <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
-      {block.accordion_item.map((block, key) => {
+      {accordion_item.map((block, key) => {
         return <ServeAccordion key={key} block={block} />;
       })}
     </div>
@@ -708,11 +760,6 @@ const AccordionComponent = ({
 };
 
 const styles = {
-  container: {
-    display: "grid",
-    gridTemplateColumns: `repeat(2, 1fr)`,
-    gap: 20,
-  },
   divider: {
     margin: `2px 0.5em`,
     borderRight: `1px solid ${colors.darkSilver}`,

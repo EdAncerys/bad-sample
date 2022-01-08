@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/imports";
-import Image from "@frontity/components/image";
-import Link from "@frontity/components/link";
 
 import Loading from "./loading";
 import Card from "./card/card";
@@ -48,25 +46,6 @@ const Tweets = ({ state, actions, libraries, block }) => {
   useEffect(() => {
     getTweetsAction({ state, dispatch });
   }, []);
-
-  // SERVERS ---------------------------------------------
-  const ServeTitle = () => {
-    if (!block.title) return null;
-
-    return (
-      <div
-        className="flex primary-title"
-        style={{
-          fontSize: 36,
-          fontWeight: "bold",
-          justifyContent: "center",
-          padding: `1em 0`,
-        }}
-      >
-        <Html2React html={block.title} />
-      </div>
-    );
-  };
 
   if (!tweets) return <Loading />;
 

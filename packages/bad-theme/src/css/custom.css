@@ -210,9 +210,11 @@ li {
 }
 
 /* Icon events */
-.toggle-icon-scale,
-.toggle-icon-opacity {
+.toggle-icon-scale {
   transition: transform 450ms;
+}
+.toggle-icon-opacity {
+  transition: opacity 0.3s;
 }
 .toggle-icon-scale:hover {
   transform: scale(1.1);

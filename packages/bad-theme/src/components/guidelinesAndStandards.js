@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { setGoToAction } from "../context";
 
 import Loading from "./loading";
-import Accordion from "./accordion";
+import Accordion from "./accordion/accordion";
 import { colors } from "../config/imports";
 import NiceLogo from "../img/placeholders/niceLogo.svg";
 
