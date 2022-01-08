@@ -1,18 +1,17 @@
 import { useState, useEffect, useLayoutEffect } from "react";
 import { connect } from "frontity";
-import Accordion from "react-bootstrap/Accordion";
 import Image from "@frontity/components/image";
 
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
+import Accordion from "react-bootstrap/Accordion";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import { v4 as uuidv4 } from "uuid";
 
-import NiceLogo from "../../img/placeholders/niceLogo.svg";
 import DownloadFileBlock from "../downloadFileBlock";
 import Loading from "../loading";
 import { colors } from "../../config/imports";
 import { setGoToAction } from "../../context";
-import { v4 as uuidv4 } from "uuid";
+
+import AccordionHeader from "./accordionHeader";
 
 const AccordionComponent = ({
   state,
@@ -132,219 +131,6 @@ const AccordionComponent = ({
     };
 
     // SERVERS ----------------------------------------------------
-    const ServeHeader = () => {
-      const ServeTitle = () => {
-        if (!title || guidelines) return null;
-
-        return (
-          <div
-            className="flex primary-title"
-            style={{
-              fontSize: 20,
-              color: colors.softBlack,
-              fontWeight: "bold",
-              alignItems: "center",
-            }}
-          >
-            <Html2React html={title} />
-          </div>
-        );
-      };
-
-      const ServeGSUpdateInProgress = () => {
-        if (!gsUpdate_in_progress) return null;
-
-        return (
-          <div>
-            <div className="flex">
-              <div style={styles.divider} />
-              <div style={{ fontStyle: "italic", alignItems: "center" }}>
-                Update in Progress
-              </div>
-            </div>
-          </div>
-        );
-      };
-
-      const ServeGSDate = () => {
-        if (!gsPublished_date) return null;
-
-        return (
-          <div
-            className="flex"
-            style={{
-              paddingLeft: `2em`,
-              color: colors.softBlack,
-              alignItems: "center",
-            }}
-          >
-            <div>
-              Published <Html2React html={gsPublished_date} />
-            </div>
-            <ServeGSUpdateInProgress />
-          </div>
-        );
-      };
-
-      const ServeGSTitle = () => {
-        if (!gsTitle) return null;
-
-        return (
-          <div className="flex">
-            <div
-              className="primary-title"
-              style={{
-                fontSize: 20,
-                color: colors.softBlack,
-                fontWeight: "bold",
-                alignItems: "center",
-              }}
-            >
-              <Html2React html={gsTitle} />
-            </div>
-            <ServeGSDate />
-          </div>
-        );
-      };
-
-      const ServePreview = () => {
-        if (guidelines || !has_preview) return null;
-
-        // Manage max string Length
-        const MAX_LENGTH = 140;
-        let bodyPreview = `${body.substring(0, MAX_LENGTH)}...`;
-        if (body.length < MAX_LENGTH) bodyPreview = body;
-
-        return (
-          <div
-            className="text-body"
-            id={`preview-id-${uniqueId}`}
-            style={{
-              paddingTop: `1em`,
-              marginTop: `1.25em`,
-              color: colors.darkSilver,
-              borderTop: `1px solid ${colors.darkSilver}`,
-            }}
-          >
-            <Html2React html={bodyPreview} />
-          </div>
-        );
-      };
-
-      const ServeLogo = () => {
-        if (!logo) return null;
-        const alt = logo.title || "BAD";
-
-        return (
-          <div
-            style={{
-              padding: `0.25em`,
-              margin: `0 4em 0 1em`,
-            }}
-          >
-            <Image src={logo.url} alt={alt} style={{ height: LOGO_HEIGHT }} />
-          </div>
-        );
-      };
-
-      const ServeNICELogo = () => {
-        if (!guidelines_type) return null;
-        if (!guidelines_type.includes(87)) return null;
-
-        const alt = "Nice";
-
-        return (
-          <div
-            style={{
-              padding: `0.25em`,
-              margin: `0 4em 0 1em`,
-            }}
-          >
-            <Image src={NiceLogo} alt={alt} style={{ height: LOGO_HEIGHT }} />
-          </div>
-        );
-      };
-
-      const ServeIcon = () => {
-        return (
-          <div>
-            <div className="flex">
-              <div id={`add-id-${uniqueId}`}>
-                <AddIcon style={{ fontSize: 48, fill: colors.softBlack }} />
-              </div>
-              <div className="d-none" id={`remove-id-${uniqueId}`}>
-                <RemoveIcon style={{ fontSize: 48, fill: colors.softBlack }} />
-              </div>
-            </div>
-          </div>
-        );
-        // option for preview button
-        // if (has_preview) {
-        //   return (
-        //     <div>
-        //       <div className="flex">
-        //         <div id={`more-id-${uniqueId}`} style={styles.previewIcon}>
-        //           See More
-        //         </div>
-        //         <div
-        //           className="d-none"
-        //           id={`less-id-${uniqueId}`}
-        //           style={styles.previewIcon}
-        //         >
-        //           Less
-        //         </div>
-        //       </div>
-        //     </div>
-        //   );
-        // }
-      };
-
-      const ServeLTTitle = () => {
-        if (!ltTitle) return null;
-        let ALIGNMENT = "flex-start";
-        if (ltAlignTitles === "center") ALIGNMENT = "center";
-        if (ltAlignTitles === "right") ALIGNMENT = "flex-end";
-
-        return (
-          <div
-            className="flex primary-title"
-            style={{
-              fontSize: 20,
-              color: colors.softBlack,
-              fontWeight: "bold",
-              alignItems: "center",
-              justifyContent: ALIGNMENT,
-            }}
-          >
-            <Html2React html={ltTitle} />
-          </div>
-        );
-      };
-
-      return (
-        <div style={{ position: "relative" }}>
-          <Accordion.Header>
-            <div className="flex-col" onClick={handleAccordionToggle}>
-              <div
-                className="flex"
-                style={{ margin: 0, padding: `0.5em 0`, alignItems: "center" }}
-                data-mdb-toggle="collapse"
-              >
-                <ServeTitle />
-                <ServeGSTitle />
-                <ServeLTTitle />
-
-                <ServeLogo />
-                <ServeNICELogo />
-                <ServeIcon />
-              </div>
-              <ServePreview />
-            </div>
-          </Accordion.Header>
-        </div>
-      );
-    };
-
     const ServeContent = () => {
       const ServeGSSubTitle = () => {
         if (!gsSubtitle) return null;
@@ -742,7 +528,13 @@ const AccordionComponent = ({
           className="shadow"
           style={{ padding: `0.5em 1em`, margin: `1em 0` }}
         >
-          <ServeHeader />
+          <AccordionHeader
+            block={block}
+            guidelines={guidelines}
+            leadershipBlock={leadershipBlock}
+            handleAccordionToggle={handleAccordionToggle}
+            uniqueId={uniqueId}
+          />
           <ServeContent />
         </Accordion.Item>
       </Accordion>
