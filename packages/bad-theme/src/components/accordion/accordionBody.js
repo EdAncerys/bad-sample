@@ -6,15 +6,12 @@ import Accordion from "react-bootstrap/Accordion";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import DownloadFileBlock from "../downloadFileBlock";
-import ActionPlaceholder from "../actionPlaceholder";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
-  useAppState,
   setGoToAction,
   sendEmailEnquireAction,
 } from "../../context";
-import { colors } from "../../config/imports";
 
 const AccordionBody = ({
   state,
@@ -24,9 +21,9 @@ const AccordionBody = ({
   guidelines,
   leadershipBlock,
   uniqueId,
+  setFetching,
 }) => {
   const dispatch = useAppDispatch();
-  const { isFetching } = useAppState();
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -42,26 +39,26 @@ const AccordionBody = ({
   } = block;
 
   // HANDLERS ----------------------------------------------------
-  const handleContactFormSubmit = () => {
+  const handleContactFormSubmit = async () => {
     const isFileUpload = document.querySelector(`#attachments-${uniqueId}`);
     const date = new Date();
 
     const isAttachment = isFileUpload.files.length > 0;
     if (!isAttachment) return null;
 
+    setFetching(true);
     const attachments = isFileUpload.files;
     const formData = { date };
 
-    console.log(attachments);
-    console.log(recipients);
-
-    sendEmailEnquireAction({
+    await sendEmailEnquireAction({
       state,
       dispatch,
       formData,
       attachments,
       recipients,
     });
+    setFetching(false);
+    document.querySelector(`#attachments-${uniqueId}`).value = "";
   };
 
   // Guidelines & Standards -----------------------------------
@@ -454,9 +451,8 @@ const AccordionBody = ({
   return (
     <Accordion.Body
       className={`accordion-${uniqueId}`}
-      style={{ margin: `0 1.25em`, padding: `1em 0`, position: "relative" }}
+      style={{ margin: `0 1.25em`, padding: `1em 0` }}
     >
-      <ActionPlaceholder isFetching={isFetching} />
       <ServeBody />
       <ServeLTBody />
 

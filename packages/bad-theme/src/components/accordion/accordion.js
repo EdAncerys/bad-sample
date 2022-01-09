@@ -8,6 +8,7 @@ import Loading from "../loading";
 
 import AccordionHeader from "./accordionHeader";
 import AccordionBody from "./accordionBody";
+import ActionPlaceholder from "../actionPlaceholder";
 
 const AccordionComponent = ({
   state,
@@ -29,6 +30,7 @@ const AccordionComponent = ({
   // SERVERS ---------------------------------------------
   const ServeAccordion = ({ block }) => {
     const [uniqueId, setUniqueId] = useState(null);
+    const [fetching, setFetching] = useState(null);
     // hook applies after React has performed all DOM mutations
     useLayoutEffect(() => {
       const blockId = uuidv4(); // add unique id
@@ -75,12 +77,16 @@ const AccordionComponent = ({
     };
 
     return (
-      <Accordion>
+      <Accordion style={{ position: "relative" }}>
+        <ActionPlaceholder isFetching={fetching} />
         <Accordion.Item
           eventKey={uniqueId}
           id={uniqueId}
           className="shadow"
-          style={{ padding: `0.5em 1em`, margin: `1em 0` }}
+          style={{
+            padding: `0.5em 1em`,
+            margin: `1em 0`,
+          }}
         >
           <AccordionHeader
             block={block}
@@ -94,6 +100,7 @@ const AccordionComponent = ({
             guidelines={guidelines}
             leadershipBlock={leadershipBlock}
             uniqueId={uniqueId}
+            setFetching={setFetching}
           />
         </Accordion.Item>
       </Accordion>
