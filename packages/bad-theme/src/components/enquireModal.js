@@ -70,7 +70,6 @@ const EnquireModal = ({ state, actions }) => {
     };
     const recipients = enquireAction.recipients;
 
-    console.log(formData);
     sendEmailEnquireAction({
       state,
       dispatch,

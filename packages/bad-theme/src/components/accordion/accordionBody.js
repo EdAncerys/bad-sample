@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useLayoutEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
@@ -6,7 +6,11 @@ import Accordion from "react-bootstrap/Accordion";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import DownloadFileBlock from "../downloadFileBlock";
-import { setGoToAction } from "../../context";
+import {
+  useAppDispatch,
+  setGoToAction,
+  sendEmailEnquireAction,
+} from "../../context";
 import { colors } from "../../config/imports";
 
 const AccordionBody = ({
@@ -18,6 +22,7 @@ const AccordionBody = ({
   leadershipBlock,
   uniqueId,
 }) => {
+  const dispatch = useAppDispatch();
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const ALL_POSITIONS = Object.values(state.source.leadership_position);
@@ -31,7 +36,30 @@ const AccordionBody = ({
     recipients,
   } = block;
 
-  // Guidelines & Standards --------------------------------
+  // HANDLERS ----------------------------------------------------
+  const handleContactFormSubmit = () => {
+    const isFileUpload = document.querySelector(`#attachments-${uniqueId}`);
+    const date = new Date();
+
+    const isAttachment = isFileUpload.files.length > 0;
+    if (!isAttachment) return null;
+
+    const attachments = isFileUpload.files;
+    const formData = { date };
+
+    console.log(attachments);
+    console.log(recipients);
+
+    sendEmailEnquireAction({
+      state,
+      dispatch,
+      formData,
+      attachments,
+      recipients,
+    });
+  };
+
+  // Guidelines & Standards -----------------------------------
   let gsDocument_uploads = null;
   let gsLinks = null;
   let gsSubtitle = null;
@@ -152,22 +180,33 @@ const AccordionBody = ({
     if (!file_submit_option) return null;
 
     return (
-      <div>
-        <div
-          className="flex"
-          style={{
-            justifyContent: "flex-end",
-            alignItems: "flex-end",
-            paddingBottom: `1em`,
-          }}
-        >
-          <div>
-            <div
-              className="flex-row blue-btn"
-              onClick={() => console.log("file upload")}
-            >
-              Apply Here
-            </div>
+      <div
+        className="flex-col"
+        style={{
+          justifyContent: "flex-end",
+          alignItems: "flex-end",
+          paddingBottom: `1em`,
+        }}
+      >
+        <div>
+          <div
+            className="primary-title"
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+            }}
+          >
+            File Attachments
+          </div>
+          <input
+            id={`attachments-${uniqueId}`}
+            className="form-control"
+            style={{ width: "fit content", margin: `1em 0` }}
+            type="file"
+            multiple
+          />
+          <div className="blue-btn" onClick={handleContactFormSubmit}>
+            Apply Here
           </div>
         </div>
       </div>
@@ -404,7 +443,7 @@ const AccordionBody = ({
     );
   };
 
-  let COLUMNS = `3fr 1fr`;
+  let COLUMNS = `1fr 400px`;
   if (!gsDocument_uploads && !downloads) COLUMNS = `1fr`;
 
   return (

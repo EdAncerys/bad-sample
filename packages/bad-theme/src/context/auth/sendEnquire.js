@@ -13,14 +13,12 @@ export const sendEmailEnquireAction = async ({
 }) => {
   console.log("enquireAction triggered");
 
-  console.log("formData", formData);
-
   setFetchAction({ dispatch, isFetching: true });
   const URL = state.auth.APP_HOST + `/email`;
   const jwt = await authenticateAppAction({ state });
+  const date = new Date();
 
   let recipientsArray = [];
-  console.log(recipients);
   if (!!recipients.length) {
     recipients.map((item) => {
       recipientsArray.push(item.email);
@@ -48,7 +46,7 @@ export const sendEmailEnquireAction = async ({
   try {
     const data = await fetch(URL, requestOptions);
     const response = await data.json();
-    console.log(response);
+
     setFetchAction({ dispatch, isFetching: null });
     setEnquireAction({ dispatch, enquireAction: null });
   } catch (error) {
