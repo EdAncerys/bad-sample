@@ -7,7 +7,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Form } from "react-bootstrap";
 
 import { colors } from "../config/imports";
-import Loading from "./loading";
+import ActionPlaceholder from "./actionPlaceholder";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -329,33 +329,13 @@ const EnquireModal = ({ state, actions }) => {
     );
   };
 
-  const ServeIndicator = () => {
-    if (!isFetching) return null;
-
-    return (
-      <div
-        style={{
-          position: "absolute",
-          zIndex: 1,
-          width: "100%",
-          height: "100%",
-          display: "grid",
-          justifyItems: "center",
-          backgroundColor: colors.bgLight,
-        }}
-      >
-        <Loading />
-      </div>
-    );
-  };
-
   // RETURN ---------------------------------------------------
   return (
     <Modal show={enquireAction} size="xl" centered>
       <div
         style={{ backgroundColor: colors.silverFillOne, position: "relative" }}
       >
-        <ServeIndicator />
+        <ActionPlaceholder isFetching={isFetching} />
         <div
           className="flex"
           onClick={() => setEnquireAction({ dispatch, enquireAction: null })}

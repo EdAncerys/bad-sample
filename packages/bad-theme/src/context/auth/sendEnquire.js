@@ -46,6 +46,7 @@ export const sendEmailEnquireAction = async ({
   try {
     const data = await fetch(URL, requestOptions);
     const response = await data.json();
+    console.log("response", response);
 
     setFetchAction({ dispatch, isFetching: null });
     setEnquireAction({ dispatch, enquireAction: null });

@@ -6,8 +6,11 @@ import Accordion from "react-bootstrap/Accordion";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import DownloadFileBlock from "../downloadFileBlock";
+import ActionPlaceholder from "../actionPlaceholder";
+// CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
+  useAppState,
   setGoToAction,
   sendEmailEnquireAction,
 } from "../../context";
@@ -23,6 +26,8 @@ const AccordionBody = ({
   uniqueId,
 }) => {
   const dispatch = useAppDispatch();
+  const { isFetching } = useAppState();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const ALL_POSITIONS = Object.values(state.source.leadership_position);
@@ -449,8 +454,9 @@ const AccordionBody = ({
   return (
     <Accordion.Body
       className={`accordion-${uniqueId}`}
-      style={{ margin: `0 1.25em`, padding: `1em 0` }}
+      style={{ margin: `0 1.25em`, padding: `1em 0`, position: "relative" }}
     >
+      <ActionPlaceholder isFetching={isFetching} />
       <ServeBody />
       <ServeLTBody />
 
