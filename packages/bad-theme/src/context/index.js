@@ -13,7 +13,7 @@ import {
 } from "./actions/navigation";
 import {
   loginAction,
-  setLoginAction,
+  setUserAction,
   authenticateAppAction,
 } from "./auth/actions";
 import { sendEmailEnquireAction } from "./auth/sendEnquire";
@@ -28,7 +28,7 @@ export {
   setLoginModalAction,
   setCreateAccountModalAction,
   setEnquireAction,
-  setLoginAction,
+  setUserAction,
   loginAction,
   eventFilterAction,
   sendEmailEnquireAction,

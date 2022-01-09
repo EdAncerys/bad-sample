@@ -10,13 +10,29 @@ import {
   useAppState,
   setLoginModalAction,
   setCreateAccountModalAction,
-  setLoginAction,
   loginAction,
 } from "../context";
 
 const LoginModal = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { loginModalAction } = useAppState();
+
+  // HANDLERS ----------------------------------------------------
+  const handleLoginAction = () => {
+    const username = document.querySelector(`#login-username`).value;
+    const password = document.querySelector(`#login-password`).value;
+
+    const loginData = {
+      username,
+      password,
+    };
+
+    loginAction({
+      state,
+      dispatch,
+      loginData,
+    });
+  };
 
   // SERVERS --------------------------------------------------
   const ServeModalContent = () => {
@@ -25,11 +41,15 @@ const LoginModal = ({ state, actions }) => {
         <form>
           <div style={{ margin: `2em 0` }}>
             <label className="form-label">Email address</label>
-            <input type="email" className="form-control" />
+            <input type="email" className="form-control" id="login-username" />
           </div>
           <div className="mb-3">
             <label className="form-label">Password</label>
-            <input type="password" className="form-control" />
+            <input
+              type="password"
+              className="form-control"
+              id="login-password"
+            />
           </div>
           <div className="flex mb-3 form-check">
             <div className="flex" style={{ alignItems: "center" }}>
@@ -40,15 +60,7 @@ const LoginModal = ({ state, actions }) => {
               />
               <label className="form-check-label">Remember Me</label>
             </div>
-            <div
-              className='caps-btn'
-              onClick={() =>
-                setLoginModalAction({
-                  dispatch,
-                  loginModalAction: !loginModalAction,
-                })
-              }
-            >
+            <div className="caps-btn" onClick={handleLoginAction}>
               Forgotten Password?
             </div>
           </div>
@@ -92,7 +104,7 @@ const LoginModal = ({ state, actions }) => {
       return (
         <Modal.Footer>
           <button
-            className='transparent-btn'
+            className="transparent-btn"
             onClick={() =>
               setLoginModalAction({
                 dispatch,
@@ -104,13 +116,8 @@ const LoginModal = ({ state, actions }) => {
           </button>
 
           <button
-            className='blue-btn'
-            onClick={() =>
-              loginAction({
-                dispatch,
-                user: { username: "name", password: "password" },
-              })
-            }
+            className="blue-btn"
+            onClick={() => loginAction({ state, dispatch })}
           >
             Login
           </button>

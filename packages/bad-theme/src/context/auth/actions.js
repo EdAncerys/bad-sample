@@ -1,49 +1,13 @@
 import { setLoginModalAction } from "../index";
 
-export const loginAction = async ({ dispatch, user }) => {
+export const loginAction = async ({ state, dispatch, loginData }) => {
   console.log("loginAction triggered");
 
-  const username = user.username;
-  const password = user.password;
-  if (username === "" || password === "") {
-    console.log("Credentials provided not valid");
-    return;
-  }
-  const URL = "https://skylarkdev.digital/dynamicsbridge/users/login";
-
-  // const userCredentials = JSON.stringify({
-  //   username,
-  //   password,
-  // });
-  const userCredentials = JSON.stringify({
-    username: "ed.ancerys",
-    password: "h98H*(H9h9hiuuitg7g*f6ftu",
-  });
-
-  const requestOptions = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers":
-        "Origin, X-Requested-With, Content-Type, Accept",
-      "Access-Control-Allow-Methods": "PUT, POST, GET, DELETE, OPTIONS",
-    },
-    body: userCredentials,
-  };
-  try {
-    const data = await fetch(URL, requestOptions);
-    const response = await data.json();
-    console.log(response);
-    seJWTAction({ dispatch, jwt: "token" }); // add jwt to context
-    // if (response.token) {
-    //   const encryptedJWT = handleEncryption({ jwt: response.token }); // encrypting provided jwt
-    //   handleSetCookie({ name: "events", value: encryptedJWT }); // set cookie in the browser
-    // } else {
-    //   alert(`${response.message}`);
-    // }
-  } catch (error) {
-    console.log("error", error);
+  const jwt = authenticateAppAction({ state });
+  const user = { user: "user", jwt };
+  if (jwt) {
+    setUserAction({ dispatch, user });
+    setLoginModalAction({ dispatch, loginModalAction: false });
   }
 };
 
@@ -79,11 +43,9 @@ export const authenticateAppAction = async ({ state }) => {
 };
 
 // SET CONTEXT ---------------------------------------------------
-export const setLoginAction = ({ dispatch, loginAction }) => {
-  console.log("setLoginAction triggered"); //debug
-  dispatch({ type: "SET_LOGIN_ACTION", payload: true });
-
-  setLoginModalAction({ dispatch, loginModalAction: false });
+export const setUserAction = ({ dispatch, user }) => {
+  console.log("setUserAction triggered"); //debug
+  dispatch({ type: "SET_USER_ACTION", payload: user });
 };
 
 export const seJWTAction = ({ dispatch, jwt }) => {
