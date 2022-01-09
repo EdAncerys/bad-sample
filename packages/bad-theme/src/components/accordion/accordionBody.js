@@ -16,6 +16,7 @@ const AccordionBody = ({
   block,
   guidelines,
   leadershipBlock,
+  uniqueId,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -25,7 +26,7 @@ const AccordionBody = ({
     downloads,
     label,
     link,
-    has_preview,
+    preview,
     file_submit_option,
     recipients,
   } = block;
@@ -161,20 +162,12 @@ const AccordionBody = ({
           }}
         >
           <div>
-            <button
+            <div
               className="flex-row blue-btn"
               onClick={() => console.log("file upload")}
             >
-              <div className="flex">Apply Here</div>
-              <div style={{ margin: "auto 0" }}>
-                <KeyboardArrowRightIcon
-                  style={{
-                    borderRadius: "50%",
-                    padding: 0,
-                  }}
-                />
-              </div>
-            </button>
+              Apply Here
+            </div>
           </div>
         </div>
       </div>
@@ -416,11 +409,8 @@ const AccordionBody = ({
 
   return (
     <Accordion.Body
-      style={{
-        borderTop: `1px solid ${colors.darkSilver}`,
-        margin: `0 1.25em`,
-        padding: `1em 0`,
-      }}
+      className={`accordion-${uniqueId}`}
+      style={{ margin: `0 1.25em`, padding: `1em 0` }}
     >
       <ServeBody />
       <ServeLTBody />

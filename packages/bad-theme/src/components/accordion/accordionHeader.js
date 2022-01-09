@@ -20,7 +20,7 @@ const AccordionHeader = ({
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const { title, body, logo, has_preview, guidelines_type } = block;
+  const { title, body, logo, preview, guidelines_type } = block;
   const LOGO_HEIGHT = 45;
 
   // Guidelines & Standards --------------------------------
@@ -120,7 +120,7 @@ const AccordionHeader = ({
   };
 
   const ServePreview = () => {
-    if (guidelines || !has_preview) return null;
+    if (guidelines || !preview) return null;
 
     // Manage max string Length
     const MAX_LENGTH = 140;
@@ -133,9 +133,10 @@ const AccordionHeader = ({
         id={`preview-id-${uniqueId}`}
         style={{
           paddingTop: `1em`,
-          marginTop: `1.25em`,
+          margin: `0 1.25em`,
           color: colors.darkSilver,
           borderTop: `1px solid ${colors.darkSilver}`,
+          transitionDelay: `1s`,
         }}
       >
         <Html2React html={bodyPreview} />
@@ -190,25 +191,6 @@ const AccordionHeader = ({
         </div>
       </div>
     );
-    // option for preview button
-    // if (has_preview) {
-    //   return (
-    //     <div>
-    //       <div className="flex">
-    //         <div id={`more-id-${uniqueId}`} style={styles.previewIcon}>
-    //           See More
-    //         </div>
-    //         <div
-    //           className="d-none"
-    //           id={`less-id-${uniqueId}`}
-    //           style={styles.previewIcon}
-    //         >
-    //           Less
-    //         </div>
-    //       </div>
-    //     </div>
-    //   );
-    // }
   };
 
   const ServeLTTitle = () => {
@@ -250,9 +232,9 @@ const AccordionHeader = ({
             <ServeNICELogo />
             <ServeIcon />
           </div>
-          <ServePreview />
         </div>
       </Accordion.Header>
+      <ServePreview />
     </div>
   );
 };

@@ -20,7 +20,7 @@ const AccordionComponent = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
 
-  const { disable_vertical_padding, accordion_item } = block;
+  const { disable_vertical_padding, accordion_item, preview } = block;
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -39,35 +39,39 @@ const AccordionComponent = ({
 
     // HANDLERS ----------------------------------------------------
     const handleAccordionToggle = () => {
-      // const addIcon = document.querySelector(`#add-id-${uniqueId}`);
-      // const removeIcon = document.querySelector(`#remove-id-${uniqueId}`);
-      // const moreIcon = document.querySelector(`#more-id-${uniqueId}`);
-      // const lessIcon = document.querySelector(`#less-id-${uniqueId}`);
-      // const preview = document.querySelector(`#preview-id-${uniqueId}`);
-      // // apply toggle to selected components
-      // if (preview) {
-      //   preview.classList.toggle("d-none");
-      // }
-      // if (addIcon) {
-      //   addIcon.classList.toggle("d-none");
-      // }
-      // if (removeIcon) {
-      //   if (removeIcon.classList.contains("d-none")) {
-      //     removeIcon.classList.remove("d-none");
-      //   } else {
-      //     removeIcon.classList.add("d-none");
-      //   }
-      // }
-      // if (moreIcon) {
-      //   moreIcon.classList.toggle("d-none");
-      // }
-      // if (lessIcon) {
-      //   if (lessIcon.classList.contains("d-none")) {
-      //     lessIcon.classList.remove("d-none");
-      //   } else {
-      //     lessIcon.classList.add("d-none");
-      //   }
-      // }
+      const addIcon = document.querySelector(`#add-id-${uniqueId}`);
+      const removeIcon = document.querySelector(`#remove-id-${uniqueId}`);
+      const moreIcon = document.querySelector(`#more-id-${uniqueId}`);
+      const lessIcon = document.querySelector(`#less-id-${uniqueId}`);
+      const preview = document.querySelector(`#preview-id-${uniqueId}`);
+      const accordionBody = document.querySelector(`.accordion-${uniqueId}`);
+      // apply toggle to selected components
+      if (preview) {
+        preview.classList.toggle("d-none");
+      }
+      if (accordionBody) {
+        accordionBody.classList.toggle("border-top-show");
+      }
+      if (addIcon) {
+        addIcon.classList.toggle("d-none");
+      }
+      if (removeIcon) {
+        if (removeIcon.classList.contains("d-none")) {
+          removeIcon.classList.remove("d-none");
+        } else {
+          removeIcon.classList.add("d-none");
+        }
+      }
+      if (moreIcon) {
+        moreIcon.classList.toggle("d-none");
+      }
+      if (lessIcon) {
+        if (lessIcon.classList.contains("d-none")) {
+          lessIcon.classList.remove("d-none");
+        } else {
+          lessIcon.classList.add("d-none");
+        }
+      }
     };
 
     return (
@@ -89,7 +93,6 @@ const AccordionComponent = ({
             block={block}
             guidelines={guidelines}
             leadershipBlock={leadershipBlock}
-            handleAccordionToggle={handleAccordionToggle}
             uniqueId={uniqueId}
           />
         </Accordion.Item>
