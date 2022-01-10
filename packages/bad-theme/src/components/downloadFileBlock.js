@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
+import path from "path";
+
 import { colors } from "../config/imports";
 import Link from "@frontity/components/link";
 import Image from "@frontity/components/image";
@@ -22,6 +24,12 @@ const DownloadFileBlock = ({
   if (!block) return null;
 
   const { file, label, guidline_file, disable_vertical_padding } = block;
+
+  const fileType = path.extname(file.filename);
+  let FILE_ICON = PDF;
+  if (fileType.includes("doc")) FILE_ICON = DOC;
+  if (fileType.includes("ppt")) FILE_ICON = PPT;
+  if (fileType.includes("xls")) FILE_ICON = XLS;
 
   const ICON_WIDTH = 35;
   let LABEL = "Download";
@@ -78,7 +86,7 @@ const DownloadFileBlock = ({
       <div className="flex-row" style={{ alignItems: "center" }}>
         <div style={{ marginRight: `1em` }}>
           <Image
-            src={PDF}
+            src={FILE_ICON}
             style={{
               width: ICON_WIDTH,
               height: ICON_WIDTH,
