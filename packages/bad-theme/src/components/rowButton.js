@@ -13,8 +13,15 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const dispatch = useAppDispatch();
 
-  const { title, colour, link, contact_form, allow_attachments, recipients } =
-    block;
+  const {
+    title,
+    colour,
+    link,
+    contact_form,
+    allow_attachments,
+    recipients,
+    link_id,
+  } = block;
   const THEME = colour || colors.primary;
   let LABEL = title;
   if (!title && link) LABEL = link.title;
@@ -32,88 +39,88 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
     );
   };
 
-  return (
-    <div
-      className="shadow"
-      style={{
-        ...styles.container,
-        backgroundColor: colors.white,
-        width: "100%",
-        cursor: "pointer",
-      }}
-      onClick={() => {
-        if (onClick) {
-          onClick();
-          return;
-        }
-        if (contact_form) {
-          setEnquireAction({
-            dispatch,
-            enquireAction: block,
-          });
-          return;
-        }
-        if (link) setGoToAction({ path: link.url, actions });
-      }}
-    >
+  const ServeAnchorLink = () => {
+    if (!link_id) return null;
+
+    return (
+      <a
+        style={{
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          top: 0,
+          left: 0,
+          zIndex: 1,
+        }}
+        href={`#${link_id}`}
+      />
+    );
+  };
+
+  const ServeButton = () => {
+    return (
       <div
-        className="flex-col"
-        style={{ padding: `1.5em 1em` }}
+        className="shadow"
+        style={{
+          ...styles.container,
+          backgroundColor: colors.white,
+          width: "100%",
+          cursor: "pointer",
+        }}
         onClick={() => {
+          if (link_id) return null;
           if (onClick) {
             onClick();
-          } else {
-            if (!link) return null;
-            setGoToAction({ path: link.url, actions });
+            return;
           }
+          if (contact_form) {
+            setEnquireAction({
+              dispatch,
+              enquireAction: block,
+            });
+            return;
+          }
+          if (link) setGoToAction({ path: link.url, actions });
         }}
       >
-        <div className="flex-row" style={{ alignItems: "center" }}>
-          <div
-            className="flex"
-            style={{
-              fontSize: 13,
-              color: colors.softBlack,
-              letterSpacing: 2,
-              fontWeight: "bold",
-              textTransform: "uppercase",
-              justifyContent: "start",
-              alignItems: "start",
-              cursor: "pointer",
-            }}
-            onClick={() => {
-              if (onClick) {
-                onClick();
-              } else {
-                if (!link) return null;
-                setGoToAction({ path: link.url, actions });
-              }
-            }}
-          >
-            <Html2React html={LABEL} />
-          </div>
-          <div style={{ display: "grid", alignItems: "center" }}>
-            <KeyboardArrowRightIcon
+        <div className="flex-col" style={{ padding: `1.5em 1em` }}>
+          <div className="flex-row" style={{ alignItems: "center" }}>
+            <div
+              className="flex"
               style={{
-                fill: colors.white,
-                backgroundColor: THEME,
-                borderRadius: "50%",
-                padding: 0,
+                fontSize: 13,
+                letterSpacing: 2,
+                fontWeight: "bold",
+                textTransform: "uppercase",
+                justifyContent: "start",
+                alignItems: "start",
                 cursor: "pointer",
               }}
-              onClick={() => {
-                if (onClick) {
-                  onClick();
-                } else {
-                  if (!link) return null;
-                  setGoToAction({ path: link.url, actions });
-                }
-              }}
-            />
+            >
+              <Html2React html={LABEL} />
+            </div>
+            <div style={{ display: "grid", alignItems: "center" }}>
+              <KeyboardArrowRightIcon
+                style={{
+                  fill: colors.white,
+                  backgroundColor: THEME,
+                  borderRadius: "50%",
+                  padding: 0,
+                  cursor: "pointer",
+                }}
+              />
+            </div>
           </div>
         </div>
+        <ServeFooter />
       </div>
-      <ServeFooter />
+    );
+  };
+
+  return (
+    <div style={{ position: "relative" }}>
+      <ServeAnchorLink />
+      <ServeButton />
     </div>
   );
 };
