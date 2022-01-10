@@ -10,9 +10,12 @@ import Loading from "../loading";
 import Card from "../card/card";
 import LeftIcon from "../../img/svg/leftIcon.svg";
 import RightIcon from "../../img/svg/rightIcon.svg";
+import { muiQuery } from "../../context";
 
 const NewsCarouselComponent = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
+  const { sm, md, lg, xl } = muiQuery();
 
   const [postList, setPostList] = useState(null);
   const [category, setCategory] = useState(null);
@@ -63,10 +66,10 @@ const NewsCarouselComponent = ({ state, actions, libraries, block }) => {
     );
   };
 
-  return (
-    <div style={{ position: "relative" }}>
-      <ServeIcon icon={LeftIcon} left />
-      <ServeIcon icon={RightIcon} right />
+  const ServeDoubleCardCarousel = () => {
+    if (md) return null;
+
+    return (
       <Carousel className="news-carousel">
         {BLOCK_PAIRS.map((block, key) => {
           const isSingleBlock = block.length === 1;
@@ -138,6 +141,61 @@ const NewsCarouselComponent = ({ state, actions, libraries, block }) => {
           );
         })}
       </Carousel>
+    );
+  };
+
+  const ServeSingleCardCarousel = () => {
+    if (!md) return null;
+
+    return (
+      <Carousel className="news-carousel">
+        {postList.map((block, key) => {
+          const { date, categories, excerpt, link, featured_media } = block;
+
+          const media = state.source.attachment[featured_media];
+          const filter = category.filter(
+            (item) => item.id === Number(categories[0])
+          );
+          const categoryName = filter[0].name;
+
+          return (
+            <Carousel.Item key={key}>
+              <div
+                key={key}
+                className="flex"
+                style={{
+                  position: "relative",
+                  justifyContent: "center",
+                  height: BANNER_HEIGHT * 1.2,
+                }}
+              >
+                <Card
+                  newsCarousel={{ date, categoryName, media }}
+                  cardWidth="50%"
+                  cardHeight={BANNER_HEIGHT}
+                  title={excerpt ? excerpt.rendered : null}
+                  colour={colors.danger}
+                  link={link}
+                  link_label="Read More"
+                  limitTitleLength
+                  cardHeight="90%"
+                  shadow
+                />
+              </div>
+            </Carousel.Item>
+          );
+        })}
+      </Carousel>
+    );
+  };
+
+  return (
+    <div style={{ position: "relative" }}>
+      <ServeIcon icon={LeftIcon} left />
+      <ServeIcon icon={RightIcon} right />
+
+      <ServeDoubleCardCarousel />
+      <ServeSingleCardCarousel />
     </div>
   );
 };
