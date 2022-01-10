@@ -16,7 +16,6 @@ const Banner = ({ state, actions, libraries, block }) => {
 
   const { background_image, label, link, title } = block;
   const BANNER_HEIGHT = state.theme.bannerHeight;
-  const THEME_COLOR = colors.white;
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
@@ -45,7 +44,7 @@ const Banner = ({ state, actions, libraries, block }) => {
               <div>
                 <KeyboardArrowRightIcon
                   style={{
-                    fill: THEME_COLOR,
+                    fill: colors.white,
                     borderRadius: "50%",
                     padding: 0,
                   }}
@@ -74,11 +73,10 @@ const Banner = ({ state, actions, libraries, block }) => {
           >
             <div className="flex" style={{ flex: 3 }}>
               <div
-                className="flex-col title-no-bottom-margin"
+                className="flex-col title-no-bottom-margin colour-white"
                 style={{
                   fontSize: "2.5rem",
                   lineHeight: 1.2,
-                  color: THEME_COLOR,
                   justifyContent: "flex-end",
                   overflow: "hidden",
                 }}

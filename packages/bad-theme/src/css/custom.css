@@ -225,3 +225,14 @@ li {
 .toggle-icon-color:hover .MuiSvgIcon-root {
   fill: #454545 !important;
 }
+
+/* text colour adjust */
+.colour-white p,
+.colour-white h1,
+.colour-white h2,
+.colour-white h3,
+.colour-white h4,
+.colour-white h5,
+.colour-white h6 {
+  color: #ffff !important;
+}
