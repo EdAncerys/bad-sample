@@ -4,7 +4,10 @@ import { colors } from "../config/imports";
 import Link from "@frontity/components/link";
 import Image from "@frontity/components/image";
 
-import PDF from "../img/svg/pdf.svg";
+import PDF from "../img/svg/badPDF.svg";
+import DOC from "../img/svg/badDOC.svg";
+import PPT from "../img/svg/badPPT.svg";
+import XLS from "../img/svg/badXLS.svg";
 
 const DownloadFileBlock = ({
   state,
