@@ -119,7 +119,7 @@ const SearchInput = ({ state, actions, libraries }) => {
   // RETURN ---------------------------------------------
   return (
     <div
-      className="event-input"
+      className="search-input"
       style={{ position: "relative", width: "100%" }}
     >
       <div

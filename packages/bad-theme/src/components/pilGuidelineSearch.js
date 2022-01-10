@@ -157,7 +157,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
   return (
     <div style={{ padding: `${marginVertical}px 0` }}>
       <div
-        className="event-input shadow"
+        className="search-input shadow"
         style={{
           position: "relative",
           display: "grid",

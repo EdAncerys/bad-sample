@@ -17,6 +17,8 @@ const PilsArchive = ({ state, actions, libraries }) => {
   const [isReady, seIsReady] = useState(false);
   const [searchFilter, setSearchFilter] = useState(null);
   const [pilList, setPilList] = useState([]);
+
+  const ctaHeight = 45;
   const data = state.source.get(state.router.link);
   const { totalPages, page, next } = data; // check if data have multiple pages
   // console.log("pageData ", data); // debug
@@ -186,12 +188,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
               setPilList(Object.values(state.source.pils));
             }}
           >
-            <CloseIcon
-              style={{
-                fill: colors.darkSilver,
-                padding: 0,
-              }}
-            />
+            <CloseIcon />
           </div>
         </div>
       );
@@ -199,85 +196,92 @@ const PilsArchive = ({ state, actions, libraries }) => {
 
     return (
       <div style={{ backgroundColor: colors.silverFillTwo }}>
-        <div
-          className="flex-col"
-          style={{
-            padding: `${
-              marginVertical * 1.5
-            }px ${marginHorizontal}px ${marginVertical}px`,
-          }}
-        >
-          <ServeTitle />
+        <BlockWrapper>
+          <div
+            className="flex-col"
+            style={{
+              padding: `${
+                marginVertical * 1.5
+              }px ${marginHorizontal}px ${marginVertical}px`,
+            }}
+          >
+            <ServeTitle />
 
-          <div className="flex-row" style={{ width: "60%" }}>
-            <div
-              className="flex"
-              style={{
-                flex: 1,
-                marginRight: `2em`,
-                padding: `0.75em 0`,
-                position: "relative",
-              }}
-            >
-              <input
-                id={`searchInput${id}`}
-                type="text"
-                className="form-control"
-                placeholder="Find An Event"
-                style={styles.input}
-              />
-              <span
-                className="input-group-text"
+            <div className="flex-row" style={{ width: "60%" }}>
+              <div
+                className="flex search-input"
                 style={{
-                  position: "absolute",
-                  right: 0,
-                  height: 40,
-                  border: "none",
-                  background: "transparent",
-                  alignItems: "center",
-                  color: colors.darkSilver,
+                  flex: 1,
+                  marginRight: `2em`,
+                  padding: `0.75em 0`,
+                  position: "relative",
                 }}
               >
-                <SearchIcon />
-              </span>
+                <input
+                  id={`searchInput${id}`}
+                  type="text"
+                  className="form-control"
+                  placeholder="Find PIL"
+                  style={styles.input}
+                />
+                <span
+                  className="input-group-text"
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    height: ctaHeight,
+                    border: "none",
+                    background: "transparent",
+                    alignItems: "center",
+                    color: colors.darkSilver,
+                    cursor: "pointer",
+                  }}
+                >
+                  <SearchIcon />
+                </span>
+              </div>
+              <div style={{ display: "grid", alignItems: "center" }}>
+                <button
+                  type="submit"
+                  className="btn"
+                  style={{
+                    backgroundColor: colors.primary,
+                    color: colors.white,
+                    padding: `0.5em`,
+                  }}
+                  onClick={handleSearchSubmit}
+                >
+                  Search
+                </button>
+              </div>
             </div>
-            <div style={{ display: "grid", alignItems: "center" }}>
-              <button
-                type="submit"
-                className="btn"
-                style={{
-                  backgroundColor: colors.primary,
-                  color: colors.white,
-                  padding: `0.5em`,
-                }}
-                onClick={handleSearchSubmit}
-              >
-                Search
-              </button>
-            </div>
-          </div>
 
-          <div className="flex" style={{ padding: "0.5em 0 1em" }}>
-            <ServeSearchFilter />
+            <div className="flex" style={{ padding: "0.5em 0 1em" }}>
+              <ServeSearchFilter />
+            </div>
           </div>
-        </div>
+        </BlockWrapper>
       </div>
     );
   };
 
   // RETURN ----------------------------------------------------------------
   return (
-    <BlockWrapper>
-      <ServeInfo />
+    <div>
+      <BlockWrapper>
+        <ServeInfo />
+      </BlockWrapper>
       <ServeFilter />
-      <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
-        <div style={styles.container}>
-          {ALPHABET.map((item, key) => {
-            return <ServePilsList key={key} item={item} />;
-          })}
+      <BlockWrapper>
+        <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
+          <div style={styles.container}>
+            {ALPHABET.map((item, key) => {
+              return <ServePilsList key={key} item={item} />;
+            })}
+          </div>
         </div>
-      </div>
-    </BlockWrapper>
+      </BlockWrapper>
+    </div>
   );
 };
 
