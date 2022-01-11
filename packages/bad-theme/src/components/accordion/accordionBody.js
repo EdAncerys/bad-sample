@@ -4,6 +4,7 @@ import Image from "@frontity/components/image";
 
 import Accordion from "react-bootstrap/Accordion";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import LINK from "../../img/svg/badLink.svg";
 
 import DownloadFileBlock from "../downloadFileBlock";
 // CONTEXT ----------------------------------------------------------------
@@ -28,10 +29,13 @@ const AccordionBody = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const ALL_POSITIONS = Object.values(state.source.leadership_position);
+  const ICON_WIDTH = 35;
   const {
     body,
     downloads,
-    label,
+    button_label,
+    button_link,
+    link_label,
     link,
     preview,
     file_submit_option,
@@ -100,8 +104,8 @@ const AccordionBody = ({
 
     return (
       <div className="flex-row" style={{ width: "50%", flexWrap: "wrap" }}>
-        {gsLinks.map((link, key) => {
-          return <ServeLink key={key} link={link} />;
+        {gsLinks.map((button_link, key) => {
+          return <ServeLink key={key} button_link={button_link} />;
         })}
       </div>
     );
@@ -141,11 +145,11 @@ const AccordionBody = ({
     );
   };
 
-  const ServeGoToPage = () => {
-    if (!link || guidelines) return null;
+  const ServeGoToButton = () => {
+    if (!button_link || guidelines) return null;
 
     let LABEL = "More";
-    if (label) LABEL = label;
+    if (button_label) LABEL = button_label;
 
     return (
       <div
@@ -159,7 +163,7 @@ const AccordionBody = ({
         <div>
           <button
             className="flex-row blue-btn"
-            onClick={() => setGoToAction({ path: link.url, actions })}
+            onClick={() => setGoToAction({ path: button_link.url, actions })}
           >
             <div className="flex">
               <Html2React html={LABEL} />
@@ -173,6 +177,44 @@ const AccordionBody = ({
               />
             </div>
           </button>
+        </div>
+      </div>
+    );
+  };
+
+  const ServeGoToLink = () => {
+    if (!link) return null;
+
+    let LABEL = "External Link";
+    if (link_label) LABEL = button_label;
+
+    return (
+      <div
+        className="flex"
+        style={{
+          justifyContent: "flex-end",
+          alignItems: "flex-end",
+          padding: `1em 0`,
+        }}
+      >
+        <div className="flex">
+          <div style={{ marginRight: `1em` }}>
+            <Image
+              src={LINK}
+              style={{
+                width: ICON_WIDTH,
+                height: ICON_WIDTH,
+              }}
+            />
+          </div>
+          <div
+            className="caps-btn"
+            onClick={() => setGoToAction({ path: link.url, actions })}
+          >
+            <div className="flex">
+              <Html2React html={LABEL} />
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -429,9 +471,9 @@ const AccordionBody = ({
       );
   };
 
-  const ServeLink = ({ link }) => {
-    if (!link) return null;
-    const { label, link_url } = link;
+  const ServeLink = ({ button_link }) => {
+    if (!button_link) return null;
+    const { button_label, link_url } = button_link;
 
     return (
       <div style={{ margin: `2em 2em 0 0` }}>
@@ -439,14 +481,14 @@ const AccordionBody = ({
           className="caps-btn"
           onClick={() => setGoToAction({ path: link_url, actions })}
         >
-          <Html2React html={label} />
+          <Html2React html={button_label} />
         </div>
       </div>
     );
   };
 
   let COLUMNS = `1fr 400px`;
-  if (!gsDocument_uploads && !downloads) COLUMNS = `1fr`;
+  if (!gsDocument_uploads && !downloads && !link) COLUMNS = `1fr`;
 
   return (
     <Accordion.Body
@@ -460,9 +502,12 @@ const AccordionBody = ({
       <ServeGSSubTitle />
       <ServeGSLink />
       <div style={{ display: "grid", gridTemplateColumns: COLUMNS, gap: 20 }}>
-        <ServeDownloads />
         <div className="flex-col">
-          <ServeGoToPage />
+          <ServeDownloads />
+          <ServeGoToLink />
+        </div>
+        <div className="flex-col">
+          <ServeGoToButton />
           <ServeFileSubmit />
         </div>
       </div>

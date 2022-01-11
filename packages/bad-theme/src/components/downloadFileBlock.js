@@ -3,7 +3,6 @@ import { connect } from "frontity";
 import path from "path";
 
 import { colors } from "../config/imports";
-import Link from "@frontity/components/link";
 import Image from "@frontity/components/image";
 
 import PDF from "../img/svg/badPDF.svg";
