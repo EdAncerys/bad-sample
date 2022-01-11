@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import { connect } from "frontity";
 import Switch from "@frontity/components/switch";
 import { colors } from "../config/imports";
@@ -81,6 +81,7 @@ const App = ({ state, actions }) => {
 
             <Login when={endPoint === "/login/"} />
             <CreateAccount when={endPoint === "/create-account/"} />
+
             <Dashboard when={endPoint === "/dashboard/" && user} />
             <Registration when={endPoint === "/membership/register/"} />
             <RegistrationStepOne
