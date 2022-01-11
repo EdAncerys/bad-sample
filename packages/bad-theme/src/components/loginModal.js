@@ -103,7 +103,7 @@ const LoginModal = ({ state, actions }) => {
     const ServeActions = () => {
       return (
         <Modal.Footer>
-          <button
+          <div
             className="transparent-btn"
             onClick={() =>
               setLoginModalAction({
@@ -113,14 +113,14 @@ const LoginModal = ({ state, actions }) => {
             }
           >
             Exit
-          </button>
+          </div>
 
-          <button
+          <div
             className="blue-btn"
             onClick={() => loginAction({ state, dispatch })}
           >
             Login
-          </button>
+          </div>
         </Modal.Footer>
       );
     };

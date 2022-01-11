@@ -25,7 +25,9 @@ const HeaderActions = ({ state, actions }) => {
       <div className="flex">
         <div
           style={{ width: 385, height: 90, cursor: "pointer" }}
-          onClick={() => setGoToAction({ path: `/`, actions })}
+          onClick={() =>
+            setGoToAction({ path: `https://badadmin.skylarkdev.co/`, actions })
+          }
         >
           <Image src={BADLogo} className="d-block h-100" alt="BAD Logo" />
         </div>

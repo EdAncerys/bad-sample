@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import Image from "@frontity/components/image";
 
 import { colors } from "../../config/imports";
 
@@ -83,13 +82,9 @@ const UpdateProfileAction = ({ state, actions, libraries }) => {
         className="flex"
         style={{ justifyContent: "flex-end", padding: `2em 0 0` }}
       >
-        <button
-          type="submit"
-          className="blue-btn"
-          onClick={handleProfileUpdate}
-        >
+        <div type="submit" className="blue-btn" onClick={handleProfileUpdate}>
           Save
-        </button>
+        </div>
       </div>
     );
   };

@@ -14,107 +14,69 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const marginVertical = state.theme.marginVertical;
+  const ICON_WIDTH = 30;
 
   // SERVERS ---------------------------------------------
   const ServeProgressBar = () => {
-    const ServeLine = () => {
+    const ServeProgressIcon = ({ complete }) => {
+      const alt = complete ? "complete" : "in-progress";
+
       return (
         <div
           style={{
-            borderBottom: `15px solid ${colors.primary}`,
+            width: ICON_WIDTH,
+            height: ICON_WIDTH,
           }}
-        />
+        >
+          <Image
+            src={complete ? CheckMarkGreen : Ellipse}
+            alt={alt}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
+          />
+        </div>
       );
     };
 
-    const ServeProgress = ({ complete }) => {
-      const ServeComplete = () => {
-        const alt = "Complete";
-        const WIDTH = 30;
-
-        return (
-          <div style={{ position: "relative" }}>
-            <div>
-              <ServeLine />
-            </div>
-            <div
-              style={{
-                width: WIDTH,
-                height: WIDTH,
-                position: "absolute",
-                zIndex: 1,
-                top: -WIDTH / 4,
-                right: -3,
-              }}
-            >
-              <Image
-                src={CheckMarkGreen}
-                alt={alt}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
-              />
-            </div>
-          </div>
-        );
-      };
-
-      const ServeInProgress = () => {
-        const alt = "InProgress";
-        const WIDTH = 30;
-
-        return (
-          <div style={{ position: "relative" }}>
-            <ServeLine />
-            <div
-              style={{
-                width: WIDTH,
-                height: WIDTH,
-                position: "absolute",
-                zIndex: 1,
-                top: -WIDTH / 4,
-                right: -3,
-              }}
-            >
-              <Image
-                src={Ellipse}
-                alt={alt}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
-              />
-            </div>
-          </div>
-        );
-      };
+    const ServeLine = () => {
       return (
         <div
+          className="flex"
           style={{
-            display: "grid",
-            gridTemplateColumns: `2fr 1fr`,
-            alignItems: "center",
+            position: "relative",
+            borderBottom: `15px solid ${colors.primary}`,
+            margin: `2em 0`,
           }}
         >
-          <ServeLine />
-          {complete && <ServeComplete />}
-          {!complete && <ServeInProgress />}
+          <div
+            style={{
+              position: "absolute",
+              zIndex: 1,
+              display: "grid",
+              gridTemplateColumns: `0.5fr 1fr 1fr 1fr 1fr`,
+              width: "100%",
+              left: 0,
+              top: -ICON_WIDTH / 3,
+              justifyItems: "flex-end",
+            }}
+          >
+            <ServeProgressIcon complete />
+            <ServeProgressIcon complete />
+            <ServeProgressIcon complete />
+            <ServeProgressIcon />
+            <ServeProgressIcon />
+          </div>
         </div>
       );
     };
 
     return (
       <div>
-        <div style={styles.progressBar}>
-          <ServeProgress complete />
-          <ServeProgress complete />
-          <ServeProgress complete />
-          <ServeProgress />
-          <ServeProgress />
-        </div>
+        <ServeLine />
+
         <div className="flex" style={styles.progressMenuBar}>
           <div>Step 1 - The Process</div>
           <div>Step 2 - Personal Information</div>
@@ -122,6 +84,23 @@ const ProfileProgress = ({ state, actions, libraries }) => {
           <div>Step 4 - Professional Details</div>
           <div>Review</div>
         </div>
+      </div>
+    );
+  };
+
+  const ServeActions = () => {
+    return (
+      <div
+        type="submit"
+        className="blue-btn"
+        // onClick={() =>
+        //   setGoToAction({
+        //     path: `https://badadmin.skylarkdev.co/membership/register/step-1-the-process/`,
+        //     actions,
+        //   })
+        // }
+      >
+        Application
       </div>
     );
   };
@@ -141,19 +120,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
         >
           Application Progress - Step 3 - Category Selection
         </div>
-        <button
-          type="submit"
-          className="btn"
-          style={{ backgroundColor: colors.primary, color: colors.white }}
-          onClick={() =>
-            setGoToAction({
-              path: `https://badadmin.skylarkdev.co/membership/register/step-1-the-process/`,
-              actions,
-            })
-          }
-        >
-          Application
-        </button>
+        <ServeActions />
       </div>
 
       <ServeProgressBar />
@@ -162,20 +129,11 @@ const ProfileProgress = ({ state, actions, libraries }) => {
 };
 
 const styles = {
-  progressBar: {
-    display: "grid",
-    gridTemplateColumns: `0.5fr 1fr 1fr 1fr 1fr`,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: `2em 0`,
-  },
   progressMenuBar: {
     display: "grid",
     gridTemplateColumns: `0.5fr 1fr 1fr 1fr 1fr`,
     textAlign: "end",
-    gap: 0,
     fontSize: 12,
-    padding: `0 0 3em 0`,
   },
   title: {
     fontSize: 36,

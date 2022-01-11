@@ -9,9 +9,15 @@ import UpdateProfileAction from "../components/dashboard/updateProfileAction";
 
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT ----------------------------------------------------------------
-import { setGoToAction } from "../context";
+import { useAppDispatch, useAppState } from "../context";
 
 const Dashboard = ({ state, actions, libraries }) => {
+  const dispatch = useAppDispatch();
+  const { user } = useAppState();
+  console.log(user);
+
+  // if (!user) actions.router.set(`https://badadmin.skylarkdev.co`);
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const data = state.source.get(state.router.link);
@@ -22,21 +28,23 @@ const Dashboard = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
 
   return (
-    <BlockWrapper>
-      <div
-        style={{
-          padding: `${marginVertical}px ${marginHorizontal}px`,
-        }}
-      >
-        <div className="flex-col" style={{ justifyContent: "center" }}>
-          <Profile />
-          <ProfileProgress />
-          <UpdateProfileAction />
+    <div>
+      <BlockWrapper>
+        <div
+          style={{
+            padding: `${marginVertical}px ${marginHorizontal}px`,
+          }}
+        >
+          <div className="flex-col" style={{ justifyContent: "center" }}>
+            <Profile />
+            <ProfileProgress />
+            <UpdateProfileAction />
+          </div>
         </div>
-      </div>
+      </BlockWrapper>
 
       <BlockBuilder blocks={wpBlocks} />
-    </BlockWrapper>
+    </div>
   );
 };
 
