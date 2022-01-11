@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from "uuid";
 
 import EventLoopBlock from "./eventLoopBlock";
 import Loading from "../loading";
-import TitleBlock from "../titleBlock";
 import { colors } from "../../config/imports";
 
 import SearchIcon from "@mui/icons-material/Search";
@@ -263,7 +262,6 @@ const Events = ({ state, actions, libraries, block }) => {
   // RETURN ---------------------------------------------------
   return (
     <div style={{ padding: `0 ${marginHorizontal}px` }}>
-      <TitleBlock block={block} margin={`0 0 ${marginVertical}px 0`} />
       <ServeFilter />
       <EventLoopBlock
         block={block}

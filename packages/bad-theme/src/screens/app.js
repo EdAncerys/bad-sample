@@ -81,7 +81,7 @@ const App = ({ state, actions }) => {
 
             <Login when={endPoint === "/login/"} />
             <CreateAccount when={endPoint === "/create-account/"} />
-            <Dashboard when={endPoint === "/membership/dashboard/"} />
+            <Dashboard when={endPoint === "/dashboard/"} />
             <Registration when={endPoint === "/membership/register/"} />
             <RegistrationStepOne
               when={endPoint === "/membership/register/step-1-the-process/"}

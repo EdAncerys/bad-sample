@@ -58,7 +58,7 @@ const HeaderActions = ({ state, actions }) => {
         <button
           onClick={() =>
             setGoToAction({
-              path: `https://badadmin.skylarkdev.co/membership`,
+              path: `https://badadmin.skylarkdev.co/dashboard`,
               actions,
             })
           }
