@@ -24,12 +24,6 @@ const DownloadFileBlock = ({
 
   const { file, label, guidline_file, disable_vertical_padding } = block;
 
-  const fileType = path.extname(file.filename);
-  let FILE_ICON = PDF;
-  if (fileType.includes("doc")) FILE_ICON = DOC;
-  if (fileType.includes("ppt")) FILE_ICON = PPT;
-  if (fileType.includes("xls")) FILE_ICON = XLS;
-
   const ICON_WIDTH = 35;
   let LABEL = "Download";
   if (label) LABEL = label;
@@ -76,6 +70,28 @@ const DownloadFileBlock = ({
     );
   };
 
+  const ServeIcon = () => {
+    if (!file) return null;
+
+    const fileType = path.extname(file.filename);
+    let FILE_ICON = PDF;
+    if (fileType.includes("doc")) FILE_ICON = DOC;
+    if (fileType.includes("ppt")) FILE_ICON = PPT;
+    if (fileType.includes("xls")) FILE_ICON = XLS;
+
+    return (
+      <div style={{ marginRight: `1em` }}>
+        <Image
+          src={FILE_ICON}
+          style={{
+            width: ICON_WIDTH,
+            height: ICON_WIDTH,
+          }}
+        />
+      </div>
+    );
+  };
+
   return (
     <div
       style={{
@@ -83,15 +99,7 @@ const DownloadFileBlock = ({
       }}
     >
       <div className="flex-row" style={{ alignItems: "center" }}>
-        <div style={{ marginRight: `1em` }}>
-          <Image
-            src={FILE_ICON}
-            style={{
-              width: ICON_WIDTH,
-              height: ICON_WIDTH,
-            }}
-          />
-        </div>
+        <ServeIcon />
         <ServeActions />
         <ServeGSActions />
       </div>

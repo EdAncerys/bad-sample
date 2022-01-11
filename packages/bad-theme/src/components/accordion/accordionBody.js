@@ -473,15 +473,16 @@ const AccordionBody = ({
 
   const ServeLink = ({ button_link }) => {
     if (!button_link) return null;
-    const { button_label, link_url } = button_link;
+
+    const { button_label, link_url, label, link } = button_link;
 
     return (
       <div style={{ margin: `2em 2em 0 0` }}>
         <div
           className="caps-btn"
-          onClick={() => setGoToAction({ path: link_url, actions })}
+          onClick={() => setGoToAction({ path: link || link_url, actions })}
         >
-          <Html2React html={button_label} />
+          <Html2React html={label || button_label} />
         </div>
       </div>
     );

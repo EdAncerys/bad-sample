@@ -3,8 +3,7 @@ import { connect, styled } from "frontity";
 import Image from "@frontity/components/image";
 import { v4 as uuidv4 } from "uuid";
 
-import { setGoToAction } from "../context";
-
+import BlockWrapper from "./blockWrapper";
 import Loading from "./loading";
 import Accordion from "./accordion/accordion";
 import { colors } from "../config/imports";
@@ -18,7 +17,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
   if (!block) return <Loading />;
 
-  const { disable_vertical_padding } = block;
+  const { disable_vertical_padding, background_colour } = block;
 
   const data = state.source.get(state.router.link);
   const [searchFilter, setSearchFilter] = useState(null);
@@ -151,7 +150,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     if (!guidelinesType) return null;
 
     return (
-      <div style={{ padding: `${marginVertical}px ${marginHorizontal}px 0` }}>
+      <div style={{ padding: `0 ${marginHorizontal}px` }}>
         <div className="flex-row">
           {guidelinesType.map((type, key) => {
             return (
@@ -162,6 +161,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
                   fontSize: 12,
                   textTransform: "uppercase",
                   color: colors.softBlack,
+                  backgroundColor: colors.white,
                   fontWeight: "bold",
                   alignItems: "center",
                   padding: `2em 4em`,
@@ -258,87 +258,97 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     };
 
     return (
-      <div style={{ backgroundColor: colors.silverFillTwo }}>
-        <div
-          className="flex-col"
-          style={{
-            padding: `${
-              marginVertical * 1.5
-            }px ${marginHorizontal}px ${marginVertical}px`,
-          }}
-        >
-          <ServeTitle />
+      <div
+        style={{
+          backgroundColor: colors.silverFillTwo,
+          margin: `${state.theme.marginVertical}px 0`,
+        }}
+      >
+        <BlockWrapper>
+          <div
+            className="flex-col"
+            style={{
+              padding: `${
+                state.theme.marginVertical * 1.5
+              }px ${marginHorizontal}px ${state.theme.marginVertical}px`,
+            }}
+          >
+            <ServeTitle />
 
-          <div className="flex-row" style={{ width: "60%" }}>
-            <div
-              className="flex"
-              style={{
-                flex: 1,
-                marginRight: `2em`,
-                padding: `0.75em 0`,
-                position: "relative",
-              }}
-            >
-              <input
-                id={`searchInput${id}`}
-                type="text"
-                className="form-control"
-                placeholder="Find Guidelines"
-                style={styles.input}
-              />
-              <span
-                className="input-group-text"
+            <div className="flex-row" style={{ width: "60%" }}>
+              <div
+                className="flex"
                 style={{
-                  position: "absolute",
-                  right: 0,
-                  height: 40,
-                  border: "none",
-                  background: "transparent",
-                  alignItems: "center",
-                  color: colors.darkSilver,
+                  flex: 1,
+                  marginRight: `2em`,
+                  padding: `0.75em 0`,
+                  position: "relative",
                 }}
               >
-                <SearchIcon />
-              </span>
+                <input
+                  id={`searchInput${id}`}
+                  type="text"
+                  className="form-control"
+                  placeholder="Find Guidelines"
+                  style={styles.input}
+                />
+                <span
+                  className="input-group-text"
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    height: 40,
+                    border: "none",
+                    background: "transparent",
+                    alignItems: "center",
+                    color: colors.darkSilver,
+                  }}
+                >
+                  <SearchIcon />
+                </span>
+              </div>
+              <div style={{ display: "grid", alignItems: "center" }}>
+                <button
+                  type="submit"
+                  className="btn"
+                  style={{
+                    backgroundColor: colors.primary,
+                    color: colors.white,
+                    padding: `0.5em`,
+                  }}
+                  onClick={handleSearchSubmit}
+                >
+                  Search
+                </button>
+              </div>
             </div>
-            <div style={{ display: "grid", alignItems: "center" }}>
-              <button
-                type="submit"
-                className="btn"
-                style={{
-                  backgroundColor: colors.primary,
-                  color: colors.white,
-                  padding: `0.5em`,
-                }}
-                onClick={handleSearchSubmit}
-              >
-                Search
-              </button>
-            </div>
-          </div>
 
-          <div className="flex" style={{ padding: "0.5em 0 1em" }}>
-            <ServeSearchFilter />
-            <ServeTypeFilter />
+            <div className="flex" style={{ padding: "0.5em 0 1em" }}>
+              <ServeSearchFilter />
+              <ServeTypeFilter />
+            </div>
           </div>
-        </div>
+        </BlockWrapper>
       </div>
     );
   };
 
   // RETURN ----------------------------------------------------------------
   return (
-    <div>
-      <ServeInfo />
+    <div style={{ backgroundColor: background_colour }}>
+      <BlockWrapper>
+        <ServeInfo />
+      </BlockWrapper>
       <ServeFilter />
-      <ServeType />
-      <Accordion block={{ accordion_item: guidelinesList }} guidelines />
+      <BlockWrapper>
+        <ServeType />
+        <Accordion block={{ accordion_item: guidelinesList }} guidelines />
+      </BlockWrapper>
     </div>
   );
 };
 
 const styles = {
-  container: {},
   action: {
     position: "absolute",
     backgroundColor: colors.white,
