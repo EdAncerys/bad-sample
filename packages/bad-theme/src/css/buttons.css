@@ -62,30 +62,3 @@
 .banner-transparent-btn:hover .MuiSvgIcon-root {
   fill: #1f335e !important;
 }
-.link-icon {
-  /* background-image: url("/src/img/svg/badLink.svg"); */
-  /* background-image: url("http://www.birds.com/wp-content/uploads/home/bird4.jpg");
-  height: 20px;
-  width: 20px;
-  display: block; */
-  position: relative;
-}
-.link-icon:after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  /* background-image: url("/src/img/svg/badLink.svg"); */
-  background-image: url("http://www.birds.com/wp-content/uploads/home/bird4.jpg");
-  height: 20px;
-  width: 20px;
-  display: block;
-}
-
-.test-icon {
-  background-image: url("/src/img/svg/badLink.svg");
-  height: 20px;
-  width: 20px;
-  display: block;
-}
