@@ -62,3 +62,11 @@
 .banner-transparent-btn:hover .MuiSvgIcon-root {
   fill: #1f335e !important;
 }
+.dashboard-menu {
+  cursor: pointer;
+}
+.dashboard-menu:hover {
+  color: #1f335e;
+  text-decoration: none;
+  box-shadow: 0 3px tomato !important;
+}

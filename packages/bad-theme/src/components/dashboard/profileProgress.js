@@ -116,6 +116,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
           style={{
             fontSize: 20,
             fontWeight: "bold",
+            justifyItems: "center",
           }}
         >
           Application Progress - Step 3 - Category Selection

@@ -2,22 +2,34 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
+// CONTEXT ----------------------------------------------------------------
+import { useAppDispatch, useAppState, loginAction } from "../../context";
 
-const DashboardNavigation = ({ state, actions, libraries }) => {
+const DashboardNavigation = ({
+  state,
+  actions,
+  libraries,
+  dashboardPath,
+  setDashboardPath,
+}) => {
+  const dispatch = useAppDispatch();
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const marginVertical = state.theme.marginVertical;
 
   // HELPERS ----------------------------------------------------------------
-  const handleNavigate = () => {
-    const searchInput = document.querySelector(`#searchInput${id}`).value;
+  const handleNavigate = ({ e }) => {
+    const menuItem = e.target.innerText;
+    console.log(menuItem);
+    setDashboardPath(menuItem);
+  };
 
-    const serveFilterOne = document.querySelector(`#serveFilterOne${id}`).value;
-    const serveFilterTwo = document.querySelector(`#serveFilterTwo${id}`).value;
-
-    if (!!searchInput) setSearchFilter(searchInput);
-    if (!!serveFilterOne) setGradesFilter(serveFilterOne);
-    if (!!serveFilterTwo) setLocationsFilter(serveFilterTwo);
+  const handleUnderline = (path) => {
+    if (path === dashboardPath) {
+      return `0 3px tomato`;
+    } else {
+      return "none";
+    }
   };
 
   return (
@@ -31,14 +43,65 @@ const DashboardNavigation = ({ state, actions, libraries }) => {
       }}
     >
       <div
-        style={{ borderBottom: `1px solid ${colors.darkSilver}` }}
-        onClick={handleNavigate}
+        className="dashboard-menu"
+        style={{
+          boxShadow: handleUnderline("Dashboard"),
+        }}
+        onClick={(e) => handleNavigate({ e })}
       >
         Dashboard
       </div>
-      <div>Events</div>
-      <div>Directory</div>
-      <div>My Account</div>
+      <div
+        className="dashboard-menu"
+        style={{
+          boxShadow: handleUnderline("Events"),
+        }}
+        onClick={(e) => handleNavigate({ e })}
+      >
+        Events
+      </div>
+      <div
+        className="dashboard-menu"
+        style={{
+          boxShadow: handleUnderline("Directory"),
+        }}
+        onClick={(e) => handleNavigate({ e })}
+      >
+        Directory
+      </div>
+      <div
+        className="dashboard-menu"
+        style={{
+          boxShadow: handleUnderline("My Account"),
+        }}
+        onClick={(e) => handleNavigate({ e })}
+      >
+        My Account
+      </div>
+      <div
+        className="dashboard-menu"
+        style={{
+          boxShadow: handleUnderline("Billing"),
+        }}
+        onClick={(e) => handleNavigate({ e })}
+      >
+        Billing
+      </div>
+      <div
+        className="dashboard-menu"
+        style={{
+          boxShadow: handleUnderline("Settings"),
+        }}
+        onClick={(e) => handleNavigate({ e })}
+      >
+        Settings
+      </div>
+      <div
+        className="dashboard-menu"
+        // onClick={() => loginAction({ state, dispatch })}
+      >
+        Log Out
+      </div>
     </div>
   );
 };
