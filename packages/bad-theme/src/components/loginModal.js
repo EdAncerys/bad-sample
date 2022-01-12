@@ -19,12 +19,14 @@ const LoginModal = ({ state, actions }) => {
 
   // HANDLERS ----------------------------------------------------
   const handleLoginAction = () => {
-    const username = document.querySelector(`#login-username`).value;
-    const password = document.querySelector(`#login-password`).value;
+    const username = document.querySelector(`#username`).value;
+    const password = document.querySelector(`#password`).value;
+    const rememberMe = document.querySelector("#rememberMe").checked;
 
     const loginData = {
       username,
       password,
+      rememberMe,
     };
 
     loginAction({
@@ -41,19 +43,26 @@ const LoginModal = ({ state, actions }) => {
         <form>
           <div style={{ margin: `2em 0` }}>
             <label className="form-label">Email address</label>
-            <input type="email" className="form-control" id="login-username" />
+            <input
+              id="username"
+              type="email"
+              className="form-control"
+              placeholder="Email Address"
+            />
           </div>
           <div className="mb-3">
             <label className="form-label">Password</label>
             <input
+              id="password"
               type="password"
               className="form-control"
-              id="login-password"
+              placeholder="Password"
             />
           </div>
           <div className="flex mb-3 form-check">
             <div className="flex" style={{ alignItems: "center" }}>
               <input
+                id="rememberMe"
                 type="checkbox"
                 className="form-check-input"
                 style={{ borderRadius: "50%", marginRight: 10 }}

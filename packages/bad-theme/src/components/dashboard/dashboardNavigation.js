@@ -26,7 +26,7 @@ const DashboardNavigation = ({
 
   const handleUnderline = (path) => {
     if (path === dashboardPath) {
-      return `0 3px ${colors.darkSilver}`;
+      return `0 1px ${colors.darkSilver}`;
     } else {
       return "none";
     }
@@ -112,7 +112,7 @@ const DashboardNavigation = ({
           }}
           onClick={(e) => {
             handleNavigate({ e });
-            logoutAction({ dispatch });
+            logoutAction({ dispatch, actions });
           }}
         >
           Log Out

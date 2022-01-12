@@ -494,7 +494,6 @@ const styles = {
   },
   input: {
     borderRadius: 10,
-    color: colors.darkSilver,
   },
   checkBox: {
     borderRadius: "50%",

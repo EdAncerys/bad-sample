@@ -1,14 +1,30 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-const Settings = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+import { colors } from "../../../config/colors";
 
-  // HELPERS ---------------------------------------------
+import PrivacyPreferences from "../privacyPreferences";
+import FindDermatologistOptions from "../findDermatologistOptions";
 
+const Settings = ({ state, actions, libraries, dashboardPath }) => {
+  if (dashboardPath !== "Settings") return null;
+
+  const marginHorizontal = state.theme.marginHorizontal;
+
+  // SERVERS ---------------------------------------------
+  const ServeDashboard = () => {
+    return (
+      <div style={{ padding: `0 ${marginHorizontal}px` }}>
+        <PrivacyPreferences />
+        <FindDermatologistOptions />
+      </div>
+    );
+  };
+
+  // RETURN ---------------------------------------------
   return (
-    <div style={styles.container}>
-      <div></div>
+    <div>
+      <ServeDashboard />
     </div>
   );
 };

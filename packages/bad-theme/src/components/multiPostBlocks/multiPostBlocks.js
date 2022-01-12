@@ -199,7 +199,6 @@ const styles = {
   input: {
     borderRadius: 10,
     paddingRight: 35,
-    color: colors.darkSilver,
   },
   action: {
     position: "relative",

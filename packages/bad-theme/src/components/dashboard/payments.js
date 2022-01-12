@@ -71,7 +71,7 @@ const Payments = ({ state, actions, libraries }) => {
       className="shadow"
       style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
     >
-      <div className="primary-title" style={{ fontSize: 36 }}>
+      <div className="primary-title" style={{ fontSize: 20 }}>
         Payments:
       </div>
       <ServeSubTitle title="Invoices" />

@@ -9,6 +9,7 @@ import DashboardEvents from "../components/dashboard/pages/dashboardEvents";
 import Membership from "../components/dashboard/pages/membership";
 import MyAccount from "../components/dashboard/pages/myAccount";
 import Billing from "../components/dashboard/pages/billing";
+import Settings from "../components/dashboard/pages/settings";
 
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT ----------------------------------------------------------------
@@ -39,6 +40,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
           <Membership dashboardPath={dashboardPath} />
           <MyAccount dashboardPath={dashboardPath} />
           <Billing dashboardPath={dashboardPath} />
+          <Settings dashboardPath={dashboardPath} />
         </BlockWrapper>
       </div>
 

@@ -36,7 +36,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
           return (
             <div
               key={key}
-              className="flex-row"
+              className="flex-row quick-links"
               style={{
                 padding: `0 2em`,
               }}

@@ -35,6 +35,9 @@
 .dropdown-item {
   white-space: normal;
 }
+.quick-links .dropdown-item {
+  white-space: nowrap;
+}
 
 @media screen and (max-width: 992px) {
   container {

@@ -136,12 +136,6 @@ const styles = {
     textAlign: "end",
     fontSize: 12,
   },
-  title: {
-    fontSize: 36,
-    fontWeight: "bold",
-    color: colors.softBlack,
-    padding: `0.5em 0`,
-  },
 };
 
 export default connect(ProfileProgress);

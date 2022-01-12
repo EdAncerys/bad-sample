@@ -45,11 +45,12 @@ export const authenticateAppAction = async ({ state }) => {
   }
 };
 
-export const logoutAction = async ({ dispatch }) => {
+export const logoutAction = async ({ actions, dispatch }) => {
   console.log("logoutAction triggered");
 
   setUserAction({ dispatch, user: null });
   seJWTAction({ dispatch, jwt: null });
+  actions.router.set(`https://badadmin.skylarkdev.co`);
 };
 
 // SET CONTEXT ---------------------------------------------------

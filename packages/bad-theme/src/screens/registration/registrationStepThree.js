@@ -171,7 +171,6 @@ const styles = {
   },
   input: {
     borderRadius: 10,
-    color: colors.darkSilver,
   },
 };
 

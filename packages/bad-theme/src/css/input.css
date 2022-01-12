@@ -31,3 +31,8 @@ input:focus {
 .css-yk16xz-control input:focus {
   border: none !important;
 }
+input::placeholder,
+textarea::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #a2a2a2 !important;
+}

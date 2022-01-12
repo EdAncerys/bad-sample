@@ -33,10 +33,10 @@ const BillingHistory = ({ state, actions, libraries }) => {
             marginRight: marginHorizontal * 2,
           }}
         >
-          <div className="flex" style={styles.fontSize}>
+          <div className="flex" style={styles.textInfo}>
             <div>Details of the invoice to be paid.</div>
           </div>
-          <div className="flex" style={styles.fontSize}>
+          <div className="flex" style={styles.textInfo}>
             <div>01/12/2021</div>
           </div>
         </div>
@@ -85,7 +85,7 @@ const BillingHistory = ({ state, actions, libraries }) => {
       className="shadow"
       style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
     >
-      <div className="primary-title" style={{ fontSize: 36 }}>
+      <div className="primary-title" style={{ fontSize: 20 }}>
         Billing History:
       </div>
       <ServeSubTitle title="2021" />
@@ -110,8 +110,8 @@ const BillingHistory = ({ state, actions, libraries }) => {
 };
 
 const styles = {
-  text: {
-    fontSize: 12,
+  textInfo: {
+    textInfo: 12,
   },
 };
 

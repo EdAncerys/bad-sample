@@ -68,5 +68,5 @@
 .dashboard-menu:hover {
   color: #1f335e;
   text-decoration: none;
-  box-shadow: 0 3px #1f335e !important;
+  box-shadow: 0 1px #1f335e !important;
 }
