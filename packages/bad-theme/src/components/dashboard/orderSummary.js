@@ -4,6 +4,9 @@ import { connect } from "frontity";
 import { colors } from "../../config/imports";
 import { Form } from "react-bootstrap";
 
+import { UK_COUNTIES } from "../../config/data";
+import { UK_COUNTRIES } from "../../config/data";
+
 const OrderSummary = ({ state, actions, libraries, setPayOrder }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -11,18 +14,29 @@ const OrderSummary = ({ state, actions, libraries, setPayOrder }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handleProfileUpdate = () => {
-    const firstName = document.querySelector("#fistName").value;
-    const lastName = document.querySelector("#lastName").value;
-    const password = document.querySelector("#password").value;
-    const email = document.querySelector("#email").value.toLowerCase();
+    const addressType = document.querySelector("#addressType").value;
+    const addressLineOne = document.querySelector("#addressLineOne").value;
+    const addressLineTwo = document.querySelector("#addressLineTwo").value;
+    const addressLineThree = document.querySelector("#addressLineThree").value;
+    const town = document.querySelector("#town").value;
+    const mobileNumber = document.querySelector("#mobileNumber").value;
 
-    const updateCredentials = {
-      firstName,
-      lastName,
-      email,
-      password,
+    const county = document.querySelector("#county").value;
+    const postcode = document.querySelector("#postcode").value;
+    const country = document.querySelector("#country").value;
+
+    const orderSummary = {
+      addressType,
+      addressLineOne,
+      addressLineTwo,
+      addressLineThree,
+      town,
+      mobileNumber,
+      county,
+      postcode,
+      country,
     };
-    console.log("updateCredentials", updateCredentials);
+    console.log("orderSummary", orderSummary);
   };
 
   // SERVERS ---------------------------------------------
@@ -51,16 +65,6 @@ const OrderSummary = ({ state, actions, libraries, setPayOrder }) => {
   const ServeBillingAddress = () => {
     return (
       <div>
-        <label>Address Type</label>
-        <Form.Select
-          id="serveFilterOne"
-          style={{ ...styles.input, width: "100%" }}
-        >
-          <option>Home Address</option>
-          <option value="1">Home Address</option>
-          <option value="2">Home Address</option>
-          <option value="3">Home Address</option>
-        </Form.Select>
         <div
           style={{
             display: "grid",
@@ -69,74 +73,137 @@ const OrderSummary = ({ state, actions, libraries, setPayOrder }) => {
             padding: `1em 0 0`,
           }}
         >
-          <div className="form-group" style={{ display: "grid", gap: 10 }}>
-            <label>Address Line 1</label>
-            <input
-              id="addressLineOne"
-              type="text"
-              className="form-control"
-              placeholder="Address Line 1"
-              style={styles.input}
-            />
-            <label>Address Line 2</label>
-            <input
-              id="addressLineTwo"
-              type="text"
-              className="form-control"
-              placeholder="Address Line 2"
-              style={styles.input}
-            />
-            <label>Address Line 3</label>
-            <input
-              id="addressLineThree"
-              type="text"
-              className="form-control"
-              placeholder="Address Line 3"
-              style={styles.input}
-            />
-            <label>Town/City</label>
-            <input
-              id="town"
-              type="text"
-              className="form-control"
-              placeholder="Town/City"
-              style={styles.input}
-            />
-            <label>Mobile Number</label>
-            <input
-              id="mobileNumber"
-              type="text"
-              className="form-control"
-              placeholder="Mobile Number"
-              style={styles.input}
-            />
+          <div>
+            <label>Address Type</label>
+            <Form.Select
+              id="addressType"
+              style={{ ...styles.input, width: "100%" }}
+            >
+              <option>Home Address</option>
+              <option value="1">Home Address</option>
+              <option value="2">Home Address</option>
+              <option value="3">Home Address</option>
+            </Form.Select>
+          </div>
+        </div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: `1fr 1fr`,
+            gap: 20,
+            padding: `1em 0 0`,
+          }}
+        >
+          <div
+            className="form-group"
+            style={{
+              display: "grid",
+              gridTemplateRows: `repeat(6, 1fr)`,
+              gap: 10,
+            }}
+          >
+            <div>
+              <label>Address Line 1</label>
+              <input
+                id="addressLineOne"
+                type="text"
+                className="form-control"
+                placeholder="Address Line 1"
+                style={styles.input}
+              />
+            </div>
+            <div>
+              <label>Address Line 2</label>
+              <input
+                id="addressLineTwo"
+                type="text"
+                className="form-control"
+                placeholder="Address Line 2"
+                style={styles.input}
+              />
+            </div>
+            <div>
+              <label>Address Line 3</label>
+              <input
+                id="addressLineThree"
+                type="text"
+                className="form-control"
+                placeholder="Address Line 3"
+                style={styles.input}
+              />
+            </div>
+            <div>
+              <label>Town/City</label>
+              <input
+                id="town"
+                type="text"
+                className="form-control"
+                placeholder="Town/City"
+                style={styles.input}
+              />
+            </div>
+            <div>
+              <label>Mobile Number</label>
+              <input
+                id="mobileNumber"
+                type="number"
+                className="form-control"
+                placeholder="Mobile Number"
+                style={styles.input}
+              />
+            </div>
           </div>
 
-          <div className="form-group" style={{ display: "grid", gap: 10 }}>
-            <label>County/State</label>
-            <input
-              id="state"
-              type="text"
-              className="form-control"
-              placeholder="County/State"
-              style={styles.input}
-            />
-            <label>Postcode</label>
-            <input
-              id="postcode"
-              type="text"
-              className="form-control"
-              placeholder="Postcode"
-              style={styles.input}
-            />
-            <label>County/State</label>
-            <input
-              id="country"
-              type="text"
-              className="form-control"
-              placeholder="County/State"
-              style={styles.input}
-            />
+          <div
+            className="form-group"
+            style={{
+              display: "grid",
+              gridTemplateRows: `repeat(6, 1fr)`,
+              gap: 10,
+            }}
+          >
+            <div>
+              <label>County/State</label>
+              <Form.Select
+                id="county"
+                style={{ ...styles.input, width: "100%" }}
+              >
+                <option>County/State</option>
+                {UK_COUNTIES.map((item, key) => {
+                  return (
+                    <option key={key} value={item}>
+                      {item}
+                    </option>
+                  );
+                })}
+              </Form.Select>
+            </div>
+            <div>
+              <label>Postcode</label>
+              <input
+                id="postcode"
+                type="text"
+                className="form-control"
+                placeholder="Postcode"
+                style={styles.input}
+              />
+            </div>
+            <div>
+              <label>Country/State</label>
+              <Form.Select
+                id="country"
+                style={{ ...styles.input, width: "100%" }}
+              >
+                <option>Country/State</option>
+                {UK_COUNTRIES.map((item, key) => {
+                  return (
+                    <option key={key} value={item}>
+                      {item}
+                    </option>
+                  );
+                })}
+              </Form.Select>
+            </div>
           </div>
         </div>
       </div>
@@ -152,7 +219,8 @@ const OrderSummary = ({ state, actions, libraries, setPayOrder }) => {
         <div
           type="submit"
           className="transparent-btn"
-          // onClick={() => setPayOrder(null)}
+          style={{ marginRight: `1em` }}
+          onClick={() => setPayOrder(null)}
         >
           Cancel
         </div>
@@ -198,9 +266,9 @@ const styles = {
   summary: {
     fontSize: 12,
     color: colors.darkSilver,
-    border: `1px solid ${colors.darkSilver}`,
+    border: `1px solid ${colors.silver}`,
     borderRadius: 10,
-    padding: `1em`,
+    padding: `0.375rem 0.75rem`,
     margin: `10px 0`,
   },
 };

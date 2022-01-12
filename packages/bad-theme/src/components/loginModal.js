@@ -59,16 +59,17 @@ const LoginModal = ({ state, actions }) => {
               placeholder="Password"
             />
           </div>
-          <div className="flex mb-3 form-check">
-            <div className="flex" style={{ alignItems: "center" }}>
+          <div className="flex" style={{ paddingBottom: `1em` }}>
+            <div className="flex-row" style={styles.wrapper}>
               <input
                 id="rememberMe"
                 type="checkbox"
                 className="form-check-input"
-                style={{ borderRadius: "50%", marginRight: 10 }}
+                style={styles.checkBox}
               />
-              <label className="form-check-label">Remember Me</label>
+              <div style={styles.textInfo}>Remember Me</div>
             </div>
+
             <div className="caps-btn" onClick={handleLoginAction}>
               Forgotten Password?
             </div>
@@ -94,7 +95,6 @@ const LoginModal = ({ state, actions }) => {
           <RowButton
             block={{
               title: "Not yet registered? Register here",
-              // link: { url: "link" },
             }}
             onClick={() => {
               setCreateAccountModalAction({
@@ -184,7 +184,12 @@ const LoginModal = ({ state, actions }) => {
 };
 
 const styles = {
-  container: {},
+  checkBox: {
+    borderRadius: "50%",
+    width: 20,
+    height: 20,
+    marginRight: 10,
+  },
 };
 
 export default connect(LoginModal);

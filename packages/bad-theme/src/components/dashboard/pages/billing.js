@@ -6,25 +6,30 @@ import BillingHistory from "../billingHistory";
 import OrderSummary from "../orderSummary";
 
 const Billing = ({ state, actions, libraries, dashboardPath }) => {
+  const [payOrder, setPayOrder] = useState(null);
+
   if (dashboardPath !== "Billing") return null;
 
-  // const [payOrder, setPayOrder] = useState(null);
   const marginHorizontal = state.theme.marginHorizontal;
 
   // SERVERS ---------------------------------------------
   const ServeDashboard = () => {
+    if (payOrder) return null;
+
     return (
       <div style={{ padding: `0 ${marginHorizontal}px` }}>
-        <Payments />
+        <Payments setPayOrder={setPayOrder} />
         <BillingHistory />
       </div>
     );
   };
 
   const ServeOrderSummary = () => {
+    if (!payOrder) return null;
+
     return (
       <div style={{ padding: `0 ${marginHorizontal}px` }}>
-        <OrderSummary />
+        <OrderSummary setPayOrder={setPayOrder} />
       </div>
     );
   };

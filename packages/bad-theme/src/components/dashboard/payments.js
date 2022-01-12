@@ -4,7 +4,7 @@ import { connect } from "frontity";
 import { colors } from "../../config/imports";
 import { padding } from "@mui/system";
 
-const Payments = ({ state, actions, libraries }) => {
+const Payments = ({ state, actions, libraries, setPayOrder }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const marginHorizontal = state.theme.marginHorizontal;
@@ -12,8 +12,8 @@ const Payments = ({ state, actions, libraries }) => {
   const PAYMENTS = [1, 2, 3];
 
   // HELPERS ----------------------------------------------------------------
-  const handlePayment = () => {
-    console.log("API call");
+  const handlePayment = ({ block }) => {
+    setPayOrder(block);
   };
 
   // SERVERS ---------------------------------------------
@@ -22,7 +22,11 @@ const Payments = ({ state, actions, libraries }) => {
       return (
         <div style={{ margin: `auto 0`, width: marginHorizontal * 2 }}>
           <div style={{ padding: `0 2em` }}>
-            <div type="submit" className="blue-btn" onClick={handlePayment}>
+            <div
+              type="submit"
+              className="blue-btn"
+              onClick={() => handlePayment({ block })}
+            >
               Pay Now
             </div>
           </div>
