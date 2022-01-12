@@ -15,6 +15,7 @@ const DashboardNavigation = ({
   const dispatch = useAppDispatch();
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
+  const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
   // HELPERS ----------------------------------------------------------------
@@ -32,80 +33,81 @@ const DashboardNavigation = ({
   };
 
   return (
-    <div
-      className="shadow"
-      style={{
-        display: "flex",
-        justifyContent: "space-around",
-        padding: `${marginVertical}px 0`,
-        marginBottom: `${marginVertical}px`,
-      }}
-    >
+    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
       <div
-        className="dashboard-menu"
+        className="shadow"
         style={{
-          boxShadow: handleUnderline("Dashboard"),
-        }}
-        onClick={(e) => handleNavigate({ e })}
-      >
-        Dashboard
-      </div>
-      <div
-        className="dashboard-menu"
-        style={{
-          boxShadow: handleUnderline("Events"),
-        }}
-        onClick={(e) => handleNavigate({ e })}
-      >
-        Events
-      </div>
-      <div
-        className="dashboard-menu"
-        style={{
-          boxShadow: handleUnderline("Directory"),
-        }}
-        onClick={(e) => handleNavigate({ e })}
-      >
-        Directory
-      </div>
-      <div
-        className="dashboard-menu"
-        style={{
-          boxShadow: handleUnderline("My Account"),
-        }}
-        onClick={(e) => handleNavigate({ e })}
-      >
-        My Account
-      </div>
-      <div
-        className="dashboard-menu"
-        style={{
-          boxShadow: handleUnderline("Billing"),
-        }}
-        onClick={(e) => handleNavigate({ e })}
-      >
-        Billing
-      </div>
-      <div
-        className="dashboard-menu"
-        style={{
-          boxShadow: handleUnderline("Settings"),
-        }}
-        onClick={(e) => handleNavigate({ e })}
-      >
-        Settings
-      </div>
-      <div
-        className="dashboard-menu"
-        style={{
-          boxShadow: handleUnderline("Log Out"),
-        }}
-        onClick={(e) => {
-          handleNavigate({ e });
-          logoutAction({ dispatch });
+          display: "flex",
+          justifyContent: "space-around",
+          padding: `${marginVertical}px 0`,
         }}
       >
-        Log Out
+        <div
+          className="dashboard-menu"
+          style={{
+            boxShadow: handleUnderline("Dashboard"),
+          }}
+          onClick={(e) => handleNavigate({ e })}
+        >
+          Dashboard
+        </div>
+        <div
+          className="dashboard-menu"
+          style={{
+            boxShadow: handleUnderline("Events"),
+          }}
+          onClick={(e) => handleNavigate({ e })}
+        >
+          Events
+        </div>
+        <div
+          className="dashboard-menu"
+          style={{
+            boxShadow: handleUnderline("Directory"),
+          }}
+          onClick={(e) => handleNavigate({ e })}
+        >
+          Directory
+        </div>
+        <div
+          className="dashboard-menu"
+          style={{
+            boxShadow: handleUnderline("My Account"),
+          }}
+          onClick={(e) => handleNavigate({ e })}
+        >
+          My Account
+        </div>
+        <div
+          className="dashboard-menu"
+          style={{
+            boxShadow: handleUnderline("Billing"),
+          }}
+          onClick={(e) => handleNavigate({ e })}
+        >
+          Billing
+        </div>
+        <div
+          className="dashboard-menu"
+          style={{
+            boxShadow: handleUnderline("Settings"),
+          }}
+          onClick={(e) => handleNavigate({ e })}
+        >
+          Settings
+        </div>
+        <div
+          className="dashboard-menu"
+          style={{
+            boxShadow: handleUnderline("Log Out"),
+          }}
+          onClick={(e) => {
+            handleNavigate({ e });
+            logoutAction({ dispatch });
+          }}
+        >
+          Log Out
+        </div>
       </div>
     </div>
   );

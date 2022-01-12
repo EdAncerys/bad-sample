@@ -25,7 +25,7 @@ import RegistrationStepTwo from "./registration/registrationStepTwo";
 import RegistrationStepThree from "./registration/registrationStepThree";
 import RegistrationStepFour from "./registration/registrationStepFour";
 import RegistrationComplete from "./registration/registrationComplete";
-import Dashboard from "./dashboard";
+import AccountDashboard from "./accountDashboard";
 import Event from "./event";
 import EventsLandingPage from "./eventsLandingPage";
 import Venue from "./venue";
@@ -82,7 +82,7 @@ const App = ({ state, actions }) => {
             <Login when={endPoint === "/login/"} />
             <CreateAccount when={endPoint === "/create-account/"} />
 
-            <Dashboard when={endPoint === "/dashboard/"} />
+            <AccountDashboard when={endPoint === "/dashboard/"} />
             <Registration when={endPoint === "/membership/register/"} />
             <RegistrationStepOne
               when={endPoint === "/membership/register/step-1-the-process/"}

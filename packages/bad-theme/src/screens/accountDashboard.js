@@ -3,16 +3,14 @@ import { connect } from "frontity";
 
 import BlockBuilder from "../components/builder/blockBuilder";
 
-import Profile from "../components/dashboard/profile";
-import ProfileProgress from "../components/dashboard/profileProgress";
-import UpdateProfileAction from "../components/dashboard/updateProfileAction";
 import DashboardNavigation from "../components/dashboard/dashboardNavigation";
+import Dashboard from "../components/dashboard/pages/dashboard";
 
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, useAppState } from "../context";
 
-const Dashboard = ({ state, actions, libraries }) => {
+const AccountDashboard = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { user } = useAppState();
 
@@ -23,29 +21,18 @@ const Dashboard = ({ state, actions, libraries }) => {
   const page = state.source[data.type][data.id];
   const wpBlocks = page.acf.blocks;
 
-  const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
-
   return (
-    <div>
-      <BlockWrapper>
-        <div
-          style={{
-            padding: `${marginVertical}px ${marginHorizontal}px`,
-          }}
-        >
-          <div className="flex-col">
-            <DashboardNavigation
-              dashboardPath={dashboardPath}
-              setDashboardPath={setDashboardPath}
-            />
+    <div className="flex-col">
+      <div className="flex-col">
+        <BlockWrapper>
+          <DashboardNavigation
+            dashboardPath={dashboardPath}
+            setDashboardPath={setDashboardPath}
+          />
 
-            <Profile />
-            <ProfileProgress />
-            <UpdateProfileAction />
-          </div>
-        </div>
-      </BlockWrapper>
+          <Dashboard dashboardPath={dashboardPath} />
+        </BlockWrapper>
+      </div>
 
       <BlockBuilder blocks={wpBlocks} />
     </div>
@@ -56,4 +43,4 @@ const styles = {
   container: {},
 };
 
-export default connect(Dashboard);
+export default connect(AccountDashboard);
