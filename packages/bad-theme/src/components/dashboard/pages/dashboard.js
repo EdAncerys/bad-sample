@@ -3,7 +3,7 @@ import { connect } from "frontity";
 
 import Profile from "../profile";
 import ProfileProgress from "../profileProgress";
-import UpdateProfileAction from "../updateProfileAction";
+import UpdateProfile from "../updateProfile";
 import { colors } from "../../../config/colors";
 
 import TitleBlock from "../../titleBlock";
@@ -20,7 +20,7 @@ const Dashboard = ({ state, actions, libraries, dashboardPath }) => {
       <div style={{ padding: `0 ${marginHorizontal}px` }}>
         <Profile />
         <ProfileProgress />
-        <UpdateProfileAction />
+        <UpdateProfile />
       </div>
     );
   };

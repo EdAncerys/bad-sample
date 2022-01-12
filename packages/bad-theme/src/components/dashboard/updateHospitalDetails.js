@@ -3,25 +3,21 @@ import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 
-const UpdateProfileAction = ({ state, actions, libraries }) => {
+const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const marginVertical = state.theme.marginVertical;
 
   // HELPERS ----------------------------------------------------------------
-  const handleProfileUpdate = () => {
-    const firstName = document.querySelector("#fistName").value;
-    const lastName = document.querySelector("#lastName").value;
-    const password = document.querySelector("#password").value;
-    const email = document.querySelector("#email").value.toLowerCase();
+  const handleHospitalUpdate = () => {
+    const hospitalName = document.querySelector("#hospitalName").value;
+    const jobTitle = document.querySelector("#jobTitle").value;
 
-    const updateCredentials = {
-      firstName,
-      lastName,
-      email,
-      password,
+    const updateHospital = {
+      hospitalName,
+      jobTitle,
     };
-    console.log("updateCredentials", updateCredentials);
+    console.log("updateHospital", updateHospital);
   };
 
   // SERVERS ---------------------------------------------
@@ -36,40 +32,26 @@ const UpdateProfileAction = ({ state, actions, libraries }) => {
         }}
       >
         <div className="form-group" style={{ display: "grid", gap: 10 }}>
-          <label>Your First Name</label>
+          <label>Hospital Name</label>
           <input
-            id="fistName"
+            id="hospitalName"
             type="text"
             className="form-control"
-            placeholder="Your First Name"
+            placeholder="Kings College Hospital"
             style={styles.input}
-          />
-          <label>Your Last Name</label>
-          <input
-            id="lastName"
-            type="text"
-            className="form-control"
-            placeholder="Your Last Name"
-            style={styles.input}
+            readOnly
           />
         </div>
 
         <div className="form-group" style={{ display: "grid", gap: 10 }}>
-          <label>Your Contact E-mail Address</label>
+          <label>Job Title</label>
           <input
-            id="email"
-            type="email"
+            id="jobTitle"
+            type="text"
             className="form-control"
-            placeholder="Your Contact E-mail Address"
+            placeholder="Job Title"
             style={styles.input}
-          />
-          <label>Password</label>
-          <input
-            id="password"
-            type="password"
-            className="form-control"
-            placeholder="Password"
-            style={styles.input}
+            readOnly
           />
         </div>
       </div>
@@ -82,17 +64,20 @@ const UpdateProfileAction = ({ state, actions, libraries }) => {
         className="flex"
         style={{ justifyContent: "flex-end", padding: `2em 0 0` }}
       >
-        <div type="submit" className="blue-btn" onClick={handleProfileUpdate}>
-          Save
+        <div type="submit" className="blue-btn" onClick={handleHospitalUpdate}>
+          Request To Edit
         </div>
       </div>
     );
   };
 
   return (
-    <div className="shadow" style={{ padding: `2em 4em` }}>
+    <div
+      className="shadow"
+      style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
+    >
       <div className="primary-title" style={{ fontSize: 36 }}>
-        Personal Details:
+        Hospital Details:
       </div>
       <ServeForm />
       <ServeActions />
@@ -107,4 +92,4 @@ const styles = {
   },
 };
 
-export default connect(UpdateProfileAction);
+export default connect(UpdateHospitalDetails);

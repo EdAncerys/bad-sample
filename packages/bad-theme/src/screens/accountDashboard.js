@@ -7,6 +7,7 @@ import DashboardNavigation from "../components/dashboard/dashboardNavigation";
 import Dashboard from "../components/dashboard/pages/dashboard";
 import DashboardEvents from "../components/dashboard/pages/dashboardEvents";
 import Membership from "../components/dashboard/pages/membership";
+import MyAccount from "../components/dashboard/pages/myAccount";
 
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT ----------------------------------------------------------------
@@ -35,6 +36,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
           <Dashboard dashboardPath={dashboardPath} />
           <DashboardEvents dashboardPath={dashboardPath} />
           <Membership dashboardPath={dashboardPath} />
+          <MyAccount dashboardPath={dashboardPath} />
         </BlockWrapper>
       </div>
 

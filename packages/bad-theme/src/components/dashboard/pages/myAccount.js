@@ -1,14 +1,32 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-const MyAccount = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+import { colors } from "../../../config/colors";
 
-  // HELPERS ---------------------------------------------
+import UpdateProfile from "../updateProfile";
+import UpdateHospitalDetails from "../updateHospitalDetails";
+import UpdateAddress from "../updateAddress";
 
+const MyAccount = ({ state, actions, libraries, dashboardPath }) => {
+  if (dashboardPath !== "My Account") return null;
+
+  const marginHorizontal = state.theme.marginHorizontal;
+
+  // SERVERS ---------------------------------------------
+  const ServeDashboard = () => {
+    return (
+      <div style={{ padding: `0 ${marginHorizontal}px` }}>
+        <UpdateProfile />
+        <UpdateHospitalDetails />
+        <UpdateAddress />
+      </div>
+    );
+  };
+
+  // RETURN ---------------------------------------------
   return (
-    <div style={styles.container}>
-      <div></div>
+    <div>
+      <ServeDashboard />
     </div>
   );
 };
