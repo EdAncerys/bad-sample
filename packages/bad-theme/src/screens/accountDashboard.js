@@ -5,6 +5,7 @@ import BlockBuilder from "../components/builder/blockBuilder";
 
 import DashboardNavigation from "../components/dashboard/dashboardNavigation";
 import Dashboard from "../components/dashboard/pages/dashboard";
+import DashboardEvents from "../components/dashboard/pages/dashboardEvents";
 
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT ----------------------------------------------------------------
@@ -31,6 +32,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
           />
 
           <Dashboard dashboardPath={dashboardPath} />
+          <DashboardEvents dashboardPath={dashboardPath} />
         </BlockWrapper>
       </div>
 

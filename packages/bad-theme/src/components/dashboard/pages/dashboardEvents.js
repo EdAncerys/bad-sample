@@ -1,0 +1,56 @@
+import { useState, useEffect } from "react";
+import { connect } from "frontity";
+
+import TitleBlock from "../../titleBlock";
+import Events from "../../events/events";
+
+const DashboardEvents = ({ state, actions, libraries, dashboardPath }) => {
+  if (dashboardPath !== "Events") return null;
+
+  // RETURN ---------------------------------------------
+  return (
+    <div>
+      <TitleBlock
+        block={{ text_align: "left", title: "Events I Am Registered For" }}
+      />
+      <Events
+        block={{
+          add_search_function: false,
+          background_colour: "transparent",
+          colour: "#F5F6F7",
+          disable_vertical_padding: false,
+          event_type: false,
+          grade_filter: "All Levels",
+          grades: false,
+          layout: "layout_two",
+          locations: false,
+          post_limit: "2",
+          view_all_link: false,
+        }}
+      />
+
+      <TitleBlock block={{ text_align: "left", title: "Upcoming Events" }} />
+      <Events
+        block={{
+          add_search_function: false,
+          background_colour: "transparent",
+          colour: "#F5F6F7",
+          disable_vertical_padding: false,
+          event_type: false,
+          grade_filter: "All Levels",
+          grades: false,
+          layout: "layout_two",
+          locations: false,
+          post_limit: "4",
+          view_all_link: false,
+        }}
+      />
+    </div>
+  );
+};
+
+const styles = {
+  container: {},
+};
+
+export default connect(DashboardEvents);
