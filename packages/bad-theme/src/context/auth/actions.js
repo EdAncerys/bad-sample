@@ -4,9 +4,12 @@ export const loginAction = async ({ state, dispatch, loginData }) => {
   console.log("loginAction triggered");
 
   const jwt = authenticateAppAction({ state });
-  const user = { user: "user", jwt };
+
+  // fetch call to separate API to retrieve user data
+  const user = { user: "user" };
   if (jwt) {
     setUserAction({ dispatch, user });
+    seJWTAction({ dispatch, jwt });
     setLoginModalAction({ dispatch, loginModalAction: false });
   }
 };
@@ -40,6 +43,13 @@ export const authenticateAppAction = async ({ state }) => {
   } catch (error) {
     console.log("error", error);
   }
+};
+
+export const logoutAction = async ({ dispatch }) => {
+  console.log("logoutAction triggered");
+
+  setUserAction({ dispatch, user: null });
+  seJWTAction({ dispatch, jwt: null });
 };
 
 // SET CONTEXT ---------------------------------------------------

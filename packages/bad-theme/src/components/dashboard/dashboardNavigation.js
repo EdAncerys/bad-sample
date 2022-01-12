@@ -3,7 +3,7 @@ import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, loginAction } from "../../context";
+import { useAppDispatch, logoutAction } from "../../context";
 
 const DashboardNavigation = ({
   state,
@@ -20,13 +20,12 @@ const DashboardNavigation = ({
   // HELPERS ----------------------------------------------------------------
   const handleNavigate = ({ e }) => {
     const menuItem = e.target.innerText;
-    console.log(menuItem);
     setDashboardPath(menuItem);
   };
 
   const handleUnderline = (path) => {
     if (path === dashboardPath) {
-      return `0 3px tomato`;
+      return `0 3px ${colors.darkSilver}`;
     } else {
       return "none";
     }
@@ -98,7 +97,13 @@ const DashboardNavigation = ({
       </div>
       <div
         className="dashboard-menu"
-        // onClick={() => loginAction({ state, dispatch })}
+        style={{
+          boxShadow: handleUnderline("Log Out"),
+        }}
+        onClick={(e) => {
+          handleNavigate({ e });
+          logoutAction({ dispatch });
+        }}
       >
         Log Out
       </div>

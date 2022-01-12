@@ -13,6 +13,7 @@ import {
 } from "./actions/navigation";
 import {
   loginAction,
+  logoutAction,
   setUserAction,
   authenticateAppAction,
 } from "./auth/actions";
@@ -30,6 +31,7 @@ export {
   setEnquireAction,
   setUserAction,
   loginAction,
+  logoutAction,
   eventFilterAction,
   sendEmailEnquireAction,
   authenticateAppAction,
