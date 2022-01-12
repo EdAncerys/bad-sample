@@ -3,10 +3,12 @@ import { connect } from "frontity";
 
 import Payments from "../payments";
 import BillingHistory from "../billingHistory";
+import OrderSummary from "../orderSummary";
 
 const Billing = ({ state, actions, libraries, dashboardPath }) => {
   if (dashboardPath !== "Billing") return null;
 
+  // const [payOrder, setPayOrder] = useState(null);
   const marginHorizontal = state.theme.marginHorizontal;
 
   // SERVERS ---------------------------------------------
@@ -19,10 +21,19 @@ const Billing = ({ state, actions, libraries, dashboardPath }) => {
     );
   };
 
+  const ServeOrderSummary = () => {
+    return (
+      <div style={{ padding: `0 ${marginHorizontal}px` }}>
+        <OrderSummary />
+      </div>
+    );
+  };
+
   // RETURN ---------------------------------------------
   return (
     <div>
       <ServeDashboard />
+      <ServeOrderSummary />
     </div>
   );
 };

@@ -26,7 +26,7 @@ const DashboardNavigation = ({
 
   const handleUnderline = (path) => {
     if (path === dashboardPath) {
-      return `0 1px ${colors.darkSilver}`;
+      return `0 2px ${colors.darkSilver}`;
     } else {
       return "none";
     }
