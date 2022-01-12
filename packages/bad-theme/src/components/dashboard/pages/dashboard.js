@@ -4,6 +4,7 @@ import { connect } from "frontity";
 import Profile from "../profile";
 import ProfileProgress from "../profileProgress";
 import UpdateProfileAction from "../updateProfileAction";
+import { colors } from "../../../config/colors";
 
 import TitleBlock from "../../titleBlock";
 import Events from "../../events/events";
@@ -34,7 +35,7 @@ const Dashboard = ({ state, actions, libraries, dashboardPath }) => {
         block={{
           add_search_function: false,
           background_colour: "transparent",
-          colour: "#F5F6F7",
+          colour: colors.turquoise,
           disable_vertical_padding: false,
           event_type: false,
           grade_filter: "All Levels",

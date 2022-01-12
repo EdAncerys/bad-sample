@@ -20,8 +20,18 @@ export const colors = {
   shade: "rgba(0, 0, 0, 0.25)",
   shadeIntense: "rgba(0, 0, 0, 0.5)",
   footer: "#292929",
+  // app Colours
+  maroon: "#842057",
+  pink: "#EF476F",
+  orange: "#EF7D21",
+  turquoise: "#17A2B8",
+  red: "#DC3545",
+  yellow: "#FFC107",
+  navy: "#1E335D",
+  green: "#80b918",
+  darkGreen: "#29A74C",
   // background colours
-  bgLight: 'rgb(230,230,230, 0.7)',
+  bgLight: "rgb(230,230,230, 0.7)",
   // nav colours
   maroon: "#842057",
   pink: "#EF476F",

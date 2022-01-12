@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
+import { colors } from "../../../config/colors";
+
 import TitleBlock from "../../titleBlock";
 import Events from "../../events/events";
 
@@ -17,7 +19,7 @@ const DashboardEvents = ({ state, actions, libraries, dashboardPath }) => {
         block={{
           add_search_function: false,
           background_colour: "transparent",
-          colour: "#F5F6F7",
+          colour: colors.turquoise,
           disable_vertical_padding: false,
           event_type: false,
           grade_filter: "All Levels",
@@ -29,12 +31,18 @@ const DashboardEvents = ({ state, actions, libraries, dashboardPath }) => {
         }}
       />
 
-      <TitleBlock block={{ text_align: "left", title: "Upcoming Events" }} />
+      <TitleBlock
+        block={{
+          text_align: "left",
+          title: "Upcoming Events",
+          disable_vertical_padding: true,
+        }}
+      />
       <Events
         block={{
           add_search_function: false,
           background_colour: "transparent",
-          colour: "#F5F6F7",
+          colour: colors.turquoise,
           disable_vertical_padding: false,
           event_type: false,
           grade_filter: "All Levels",

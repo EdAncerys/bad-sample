@@ -63,6 +63,15 @@ const DashboardNavigation = ({
         <div
           className="dashboard-menu"
           style={{
+            boxShadow: handleUnderline("Membership"),
+          }}
+          onClick={(e) => handleNavigate({ e })}
+        >
+          Membership
+        </div>
+        <div
+          className="dashboard-menu"
+          style={{
             boxShadow: handleUnderline("Directory"),
           }}
           onClick={(e) => handleNavigate({ e })}
