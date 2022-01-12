@@ -59,19 +59,22 @@ const LoginModal = ({ state, actions }) => {
               placeholder="Password"
             />
           </div>
-          <div className="flex" style={{ paddingBottom: `1em` }}>
+          <div className="flex">
             <div className="flex-row" style={styles.wrapper}>
-              <input
-                id="rememberMe"
-                type="checkbox"
-                className="form-check-input"
-                style={styles.checkBox}
-              />
-              <div style={styles.textInfo}>Remember Me</div>
-            </div>
-
-            <div className="caps-btn" onClick={handleLoginAction}>
-              Forgotten Password?
+              <div>
+                <input
+                  id="rememberMe"
+                  type="checkbox"
+                  className="form-check-input"
+                  style={styles.checkBox}
+                />
+              </div>
+              <div className="flex" style={styles.textInfo}>
+                Remember Me
+              </div>
+              <div className="caps-btn" onClick={handleLoginAction}>
+                Forgotten Password?
+              </div>
             </div>
           </div>
         </form>
@@ -157,7 +160,9 @@ const LoginModal = ({ state, actions }) => {
       >
         <Modal.Body>
           <div
+            className="primary-title"
             style={{
+              fontSize: 20,
               borderBottom: `1px solid ${colors.darkSilver}`,
               padding: `1em 1em 1em 0`,
               margin: `3em 1em`,
@@ -189,6 +194,12 @@ const styles = {
     width: 20,
     height: 20,
     marginRight: 10,
+  },
+  wrapper: {
+    paddingTop: `1em`,
+  },
+  textInfo: {
+    textInfo: 12,
   },
 };
 

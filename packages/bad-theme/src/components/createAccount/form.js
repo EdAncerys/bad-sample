@@ -8,123 +8,209 @@ import { useAppDispatch, setCreateAccountModalAction } from "../../context";
 const Form = ({ state, actions }) => {
   const dispatch = useAppDispatch();
 
+  const ServePersonalDetailsForm = () => {
+    return (
+      <div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: `1fr 1fr`,
+            gap: 20,
+            padding: `2em 0`,
+          }}
+        >
+          <div
+            className="form-group"
+            style={{
+              display: "grid",
+              gridTemplateRows: `repeat(1, 1fr)`,
+            }}
+          >
+            <div>
+              <label>Password</label>
+              <input
+                id="password"
+                type="text"
+                className="form-control"
+                placeholder="Password"
+                style={styles.input}
+              />
+            </div>
+          </div>
+
+          <div
+            className="form-group"
+            style={{
+              display: "grid",
+              gridTemplateRows: `repeat(1, 1fr)`,
+            }}
+          >
+            <div>
+              <label>Confirm Password</label>
+              <input
+                id="confirmPassword"
+                type="text"
+                className="form-control"
+                placeholder="Confirm Password"
+                style={styles.input}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const ServePasswordForm = () => {
+    return (
+      <div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: `1fr 1fr`,
+            gap: 20,
+            padding: `2em 0`,
+          }}
+        >
+          <div
+            className="form-group"
+            style={{
+              display: "grid",
+              gridTemplateRows: `repeat(1, 1fr)`,
+              gap: `2em`,
+            }}
+          >
+            <div>
+              <label>Your First Name</label>
+              <input
+                id="firstName"
+                type="text"
+                className="form-control"
+                placeholder="Your First Name"
+                style={styles.input}
+              />
+            </div>
+            <div>
+              <label>Your Last Name</label>
+              <input
+                id="lastName"
+                type="text"
+                className="form-control"
+                placeholder="Your Last Name"
+                style={styles.input}
+              />
+            </div>
+          </div>
+
+          <div
+            className="form-group"
+            style={{
+              display: "grid",
+              gridTemplateRows: `repeat(1, 1fr)`,
+              gap: `2em`,
+            }}
+          >
+            <div>
+              <label>Your Contact E-mail Address</label>
+              <input
+                id="emailAddress"
+                type="text"
+                className="form-control"
+                placeholder="Your Contact E-mail Address"
+                style={styles.input}
+              />
+            </div>
+            <div>
+              <label>Confirm Contact E-mail Address</label>
+              <input
+                id="confirmEmailAddress"
+                type="text"
+                className="form-control"
+                placeholder="Confirm Contact E-mail Address"
+                style={styles.input}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const ServeDivider = () => {
+    return (
+      <div
+        className="flex"
+        style={{
+          borderBottom: `1px solid ${colors.darkSilver}`,
+          margin: `1em 0`,
+        }}
+      />
+    );
+  };
+
+  const ServeAgreements = () => {
+    return (
+      <div className="flex">
+        <div className="flex-col">
+          <div className="flex-row" style={styles.wrapper}>
+            <input
+              id="agreeTermsAndConditions"
+              type="checkbox"
+              className="form-check-input"
+              style={styles.checkBox}
+            />
+            <div style={styles.textInfo}>
+              I Agree with the{" "}
+              <span style={styles.tcAgreement}>Terms & Conditions</span>
+            </div>
+          </div>
+          <div className="flex-row" style={styles.wrapper}>
+            <input
+              id="agreeMarketing"
+              type="checkbox"
+              className="form-check-input"
+              style={styles.checkBox}
+            />
+            <div style={styles.textInfo}>
+              I Agree with the <span style={styles.tcAgreement}>Marketing</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   // RETURN ---------------------------------------------
   return (
-    <form>
-      <div style={styles.formContainer}>
-        <div className="flex-col">
-          <label className="form-label">Your First Name*</label>
-          <input type="text" className="form-control" />
-        </div>
-        <div className="flex-col">
-          <label className="form-label">Your Contact E-mail Address</label>
-          <input type="email" className="form-control" />
-        </div>
-
-        <div className="flex-col">
-          <label className="form-label">Your Last Name*</label>
-          <input type="text" className="form-control" />
-        </div>
-        <div className="flex-col">
-          <label className="form-label">Confirm Contact E-mail Address</label>
-          <input type="email" className="form-control" />
-        </div>
-      </div>
-
-      <div
-        style={{
-          ...styles.formContainer,
-          borderTop: `1px solid ${colors.darkSilver}`,
-          borderBottom: `1px solid ${colors.darkSilver}`,
-          padding: `2em 0`,
-        }}
-      >
-        <div className="flex-col">
-          <label className="form-label">Password</label>
-          <input type="password" className="form-control" />
-        </div>
-        <div className="flex-col">
-          <label className="form-label">Confirm Password</label>
-          <input type="password" className="form-control" />
-        </div>
-      </div>
-
-      <div className="flex mb-3 form-check">
-        <div className="flex" style={{ alignItems: "center" }}>
-          <div>
-            <input
-              type="checkbox"
-              className="form-check-input"
-              style={styles.checkBox}
-            />
-          </div>
-          <div>
-            <label className="form-check-label">
-              I Agree with the{" "}
-              <span
-                style={styles.TC}
-                onClick={() =>
-                  setCreateAccountModalAction({
-                    dispatch,
-                    createAccountAction: true,
-                  })
-                }
-              >
-                Terms & Conditions
-              </span>
-            </label>
-          </div>
-        </div>
-      </div>
-      <div className="flex mb-3 form-check">
-        <div className="flex" style={{ alignItems: "center" }}>
-          <div>
-            <input
-              type="checkbox"
-              className="form-check-input"
-              style={styles.checkBox}
-            />
-          </div>
-          <div>
-            <label className="form-check-label">
-              I Agree with the{" "}
-              <span
-                style={styles.TC}
-                onClick={() =>
-                  setCreateAccountModalAction({
-                    dispatch,
-                    createAccountAction: true,
-                  })
-                }
-              >
-                Marketing
-              </span>
-            </label>
-          </div>
-        </div>
-      </div>
-    </form>
+    <div>
+      <ServePersonalDetailsForm />
+      <ServeDivider />
+      <ServePasswordForm />
+      <ServeDivider />
+      <ServeAgreements />
+    </div>
   );
 };
 
 const styles = {
-  formContainer: {
-    display: "grid",
-    gridTemplateColumns: `repeat(2, 1fr)`,
-    justifyContent: "space-between",
-    gap: 20,
-    margin: `2em 0 2em 0`,
+  input: {
+    borderRadius: 10,
   },
-  TC: {
-    textDecoration: "underline",
-    textUnderlineOffset: 5,
+  tcAgreement: {
+    boxShadow: `0 2px ${colors.darkSilver}`,
     cursor: "pointer",
   },
   checkBox: {
     borderRadius: "50%",
     width: 20,
     height: 20,
-    margin: `0 10px 0 0`,
+    marginRight: 10,
+  },
+  textInfo: {
+    textInfo: 12,
+  },
+  wrapper: {
+    paddingTop: `1em`,
   },
 };
 

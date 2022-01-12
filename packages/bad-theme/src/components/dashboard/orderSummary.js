@@ -231,6 +231,7 @@ const OrderSummary = ({ state, actions, libraries, setPayOrder }) => {
     );
   };
 
+  // RETURN ---------------------------------------------
   return (
     <div
       className="shadow"

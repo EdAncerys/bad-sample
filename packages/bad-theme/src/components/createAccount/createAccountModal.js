@@ -18,8 +18,40 @@ const loginModal = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { createAccountAction } = useAppState();
   const data = state.source.get(state.router.link);
+
   const [formComplete, setFormComplete] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
+
+  // HANDLERS ----------------------------------------------------
+  const handleConfirmDetailsAction = () => {
+    const password = document.querySelector(`#password`).value;
+    const confirmPassword = document.querySelector(`#confirmPassword`).value;
+
+    const firstName = document.querySelector(`#firstName`).value;
+    const lastName = document.querySelector(`#lastName`).value;
+    const emailAddress = document.querySelector(`#emailAddress`).value;
+    const confirmEmailAddress =
+      document.querySelector(`#confirmEmailAddress`).value;
+
+    const agreeTermsAndConditions = document.querySelector(
+      "#agreeTermsAndConditions"
+    ).checked;
+    const agreeMarketing = document.querySelector("#agreeMarketing").checked;
+
+    const accountDetails = {
+      password,
+      confirmPassword,
+      firstName,
+      lastName,
+      emailAddress,
+      confirmEmailAddress,
+      agreeTermsAndConditions,
+      agreeMarketing,
+    };
+    console.log("accountDetails", accountDetails);
+
+    // setFormComplete(true);
+  };
 
   // SERVERS --------------------------------------------------
   const ServeModalContent = () => {
@@ -41,7 +73,7 @@ const loginModal = ({ state, actions }) => {
             </div>
           </div>
           <div>
-            <label
+            <div
               className="caps-btn"
               onClick={() => {
                 setCreateAccountModalAction({
@@ -55,7 +87,7 @@ const loginModal = ({ state, actions }) => {
               }}
             >
               Already a member? Login
-            </label>
+            </div>
           </div>
         </div>
       );
@@ -63,9 +95,14 @@ const loginModal = ({ state, actions }) => {
 
     const ServeActions = () => {
       return (
-        <Modal.Footer>
-          <button
-            className='transparent-btn'
+        <Modal.Footer
+          style={{
+            borderTop: `1px solid ${colors.darkSilver}`,
+            marginTop: `2em`,
+          }}
+        >
+          <div
+            className="transparent-btn"
             onClick={() =>
               setCreateAccountModalAction({
                 dispatch,
@@ -74,14 +111,11 @@ const loginModal = ({ state, actions }) => {
             }
           >
             Back
-          </button>
+          </div>
 
-          <button
-            className='blue-btn'
-            // onClick={() => setFormComplete(true)}
-          >
+          <div className="blue-btn" onClick={handleConfirmDetailsAction}>
             Confirm
-          </button>
+          </div>
         </Modal.Footer>
       );
     };
@@ -109,13 +143,15 @@ const loginModal = ({ state, actions }) => {
       >
         <Modal.Body>
           <div
+            className="primary-title"
             style={{
+              fontSize: 20,
               borderBottom: `1px solid ${colors.darkSilver}`,
               padding: `1em 1em 1em 0`,
               margin: `3em 1em`,
             }}
           >
-            <h4>Register with the BAD website</h4>
+            <div>Register with the BAD website</div>
           </div>
         </Modal.Body>
       </div>
@@ -145,11 +181,7 @@ const loginModal = ({ state, actions }) => {
 };
 
 const styles = {
-  TC: {
-    textDecoration: "underline",
-    textUnderlineOffset: 5,
-    cursor: "pointer",
-  },
+  container: {},
 };
 
 export default connect(loginModal);
