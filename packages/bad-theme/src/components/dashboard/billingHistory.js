@@ -19,8 +19,7 @@ const BillingHistory = ({ state, actions, libraries }) => {
   // SERVERS ---------------------------------------------
   const ServePayments = ({ block, item }) => {
     const ServeInfo = () => {
-      const dataLength = PAYMENTS.length;
-      const isLastItem = dataLength === item + 1;
+      const isLastItem = PAYMENTS.length === item + 1;
 
       return (
         <div

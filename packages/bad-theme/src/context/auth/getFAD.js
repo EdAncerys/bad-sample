@@ -16,7 +16,6 @@ export const getFadAction = async ({ state, dispatch }) => {
     const data = await fetch(URL, requestOptions);
     const result = await data.json();
     const fad = result.value;
-    console.log("fad result", fad);
 
     setFetchAction({ dispatch, isFetching: null });
     setFadAction({ dispatch, fad });

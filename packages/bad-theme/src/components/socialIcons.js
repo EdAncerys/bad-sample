@@ -52,7 +52,7 @@ const SocialIcons = ({ state, actions, libraries, block }) => {
             fontSize: 24,
             fontWeight: "bold",
             color: colors.softBlack,
-            padding: `1em 0`,
+            paddingBottom: `1em`,
           }}
         >
           <Html2React html={title} />
@@ -100,17 +100,26 @@ const SocialIcons = ({ state, actions, libraries, block }) => {
           display: "grid",
           gridTemplateColumns: COLUMNS_NUMBER,
           gap: 20,
-          alignItems: "flex-end",
+          alignItems: "center",
         }}
       >
         {social_links.map((block, key) => {
           const { facebook, twitter, instagram } = block;
 
+          const isLastItem = social_links.length === key + 1;
+
           let paddingTop = 0;
           if (key !== 0 && links_per_row === "One") paddingTop = `1em`;
+          let BORDER_RIGHT = "none";
+          if (links_per_row !== "One" && !isLastItem)
+            BORDER_RIGHT = `1px solid ${colors.lightSilver}`;
+          if (links_per_row === "Two" && key % 2 !== 0) BORDER_RIGHT = `none`;
 
           return (
-            <div key={key} style={{ paddingTop: paddingTop }}>
+            <div
+              key={key}
+              style={{ paddingTop: paddingTop, borderRight: BORDER_RIGHT }}
+            >
               <ServeTitle title={block.title} />
               <div className="flex" style={{ justifyContent: "center" }}>
                 <ServeFacebookIcon facebook={facebook} />
