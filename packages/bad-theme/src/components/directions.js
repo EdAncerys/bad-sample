@@ -29,6 +29,8 @@ const Directions = ({ state, actions, libraries }) => {
   const ServePatchDirections = ({ item, nextKey }) => {
     let TITLE_RENDER = item;
 
+    console.log(item);
+
     let chevron = (
       <ChevronRightIcon style={{ fontSize: 16, color: colors.darkSilver }} />
     );
@@ -43,23 +45,24 @@ const Directions = ({ state, actions, libraries }) => {
 
     if (item[0] !== "home")
       wpMenu.map((menuItem) => {
+        console.log("menuItem", menuItem);
         // check for nested child_items
         if (menuItem.child_items)
           menuItem.child_items.map((childItem) => {
             // check for nested child_items
             if (childItem.child_items) {
               childItem.child_items.map((childItem) => {
-                if (childItem.slug.includes(item.toLowerCase()))
+                if (childItem.slug === item.toLowerCase())
                   TITLE_RENDER = <Html2React html={childItem.title} />;
                 return;
               });
             }
-            if (childItem.slug.includes(item.toLowerCase()))
+            if (childItem.slug === item.toLowerCase())
               TITLE_RENDER = <Html2React html={childItem.title} />;
             return;
           });
 
-        if (menuItem.slug.includes(item.toLowerCase())) {
+        if (menuItem.slug === item.toLowerCase()) {
           TITLE_RENDER = <Html2React html={menuItem.title} />;
           return;
         }
@@ -75,12 +78,6 @@ const Directions = ({ state, actions, libraries }) => {
         </div>
       </div>
     );
-  };
-
-  const ServeFallBack = () => {
-    if (directionLength) return null;
-
-    return <ServePatchDirections key={KEY} item={["home"]} nextKey={KEY} />;
   };
 
   const ServeTitle = () => {
@@ -110,7 +107,6 @@ const Directions = ({ state, actions, libraries }) => {
         style={{ ...styles.wrapper, padding: `0 ${marginHorizontal}px` }}
       >
         <ServeTitle />
-        <ServeFallBack />
         {directions.map((item) => {
           KEY += 1;
           return <ServePatchDirections key={KEY} item={item} nextKey={KEY} />;
