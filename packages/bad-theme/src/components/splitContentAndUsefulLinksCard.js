@@ -2,9 +2,11 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../config/imports";
-import UsefulLinksCard from "./usefulLinksCard";
-import Loading from "./loading";
 import { setGoToAction } from "../context";
+
+import Loading from "./loading";
+import UsefulLinksCard from "./usefulLinksCard";
+import TitleBlock from "./titleBlock";
 
 const SplitContentAndUsefulLinksCard = ({
   state,
@@ -18,6 +20,7 @@ const SplitContentAndUsefulLinksCard = ({
 
   const {
     body,
+    title,
     label,
     link,
     useful_link_card,
@@ -57,6 +60,16 @@ const SplitContentAndUsefulLinksCard = ({
         );
       };
 
+      const ServeTitle = () => {
+        if (!title) return null;
+
+        return (
+          <div className="text-body-no-margin">
+            <TitleBlock block={{ title, text_align: "left" }} disableMargin />
+          </div>
+        );
+      };
+
       return (
         <div
           className="text-body"
@@ -64,6 +77,7 @@ const SplitContentAndUsefulLinksCard = ({
             fontSize: 16,
           }}
         >
+          <ServeTitle />
           <Html2React html={BODY} />
           <ServeActions />
         </div>

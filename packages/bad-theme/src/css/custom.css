@@ -184,6 +184,7 @@ h6 {
 .text-body p {
   margin: 0.5em 0;
 }
+.title-no-bottom-margin p,
 .title-no-bottom-margin h1,
 .title-no-bottom-margin h2,
 .title-no-bottom-margin h3,
@@ -191,6 +192,15 @@ h6 {
 .title-no-bottom-margin h5,
 .title-no-bottom-margin h6 {
   margin-bottom: 0 !important;
+}
+.text-body-no-margin p,
+.text-body-no-margin h1,
+.text-body-no-margin h2,
+.text-body-no-margin h3,
+.text-body-no-margin h4,
+.text-body-no-margin h5,
+.text-body-no-margin h6 {
+  margin: 0 !important;
 }
 
 .shadow {
