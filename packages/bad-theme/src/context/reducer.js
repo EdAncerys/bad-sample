@@ -4,6 +4,7 @@ export const initialState = {
   jwt: null,
   user: null,
   tweets: null,
+  fad: null,
 
   loginModalAction: false,
   createAccountAction: false,
@@ -28,6 +29,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, jwt: action.payload };
     case "SET_TWEETS_ACTION":
       return { ...state, tweets: action.payload };
+    case "SET_FAD_ACTION":
+      return { ...state, fad: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

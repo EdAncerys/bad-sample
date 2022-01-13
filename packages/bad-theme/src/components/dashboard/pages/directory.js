@@ -9,10 +9,10 @@ import { colors } from "../../../config/colors";
 
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../../blockWrapper";
-// CONTEXT ----------------------------------------------------------------
+// CONTEXT -------------------------------------------------------------------
 import { useAppDispatch, useAppState, getFadAction } from "../../../context";
 
-const Membership = ({ state, actions, libraries, dashboardPath }) => {
+const Directory = ({ state, actions, libraries, dashboardPath }) => {
   const dispatch = useAppDispatch();
   const { fad } = useAppState();
 
@@ -23,9 +23,7 @@ const Membership = ({ state, actions, libraries, dashboardPath }) => {
   const marginVertical = state.theme.marginVertical;
   const ctaHeight = 45;
 
-  if (dashboardPath !== "Membership") return null;
-
-  // DATA pre FETCH ----------------------------------------------------------------
+  // DATA pre FETCH ------------------------------------------------------------
   useEffect(async () => {
     // fetch data via API
     await getFadAction({ state, dispatch });
@@ -40,12 +38,13 @@ const Membership = ({ state, actions, libraries, dashboardPath }) => {
       <div>
         <div>
           {/* <Html2React html={title} /> */}
-          hello
+          {/* hello */}
         </div>
       </div>
     );
   };
 
+  if (dashboardPath !== "Directory") return null;
   // HELPERS ----------------------------------------------------------------
   const handleSearchFilter = () => {
     const searchInput = document.querySelector(`#searchDirectoryInput`).value;
@@ -210,4 +209,4 @@ const styles = {
   },
 };
 
-export default connect(Membership);
+export default connect(Directory);

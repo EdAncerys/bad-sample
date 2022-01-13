@@ -6,6 +6,7 @@ import BlockBuilder from "../components/builder/blockBuilder";
 import DashboardNavigation from "../components/dashboard/dashboardNavigation";
 import Dashboard from "../components/dashboard/pages/dashboard";
 import DashboardEvents from "../components/dashboard/pages/dashboardEvents";
+import Directory from "../components/dashboard/pages/directory";
 import Membership from "../components/dashboard/pages/membership";
 import MyAccount from "../components/dashboard/pages/myAccount";
 import Billing from "../components/dashboard/pages/billing";
@@ -37,6 +38,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
 
           <Dashboard dashboardPath={dashboardPath} />
           <DashboardEvents dashboardPath={dashboardPath} />
+          <Directory dashboardPath={dashboardPath} />
           <Membership dashboardPath={dashboardPath} />
           <MyAccount dashboardPath={dashboardPath} />
           <Billing dashboardPath={dashboardPath} />

@@ -2,11 +2,12 @@ import { connect } from "frontity";
 
 import Loading from "./loading";
 import { colors } from "../config/imports";
+import BlockWrapper from "./blockWrapper";
 
 const DividerBlock = ({ state, actions, libraries, block }) => {
   if (!block) return <Loading />;
 
-  const { block_height, divider } = block;
+  const { block_height, divider, background_colour } = block;
 
   let height = state.theme.marginVertical;
   if (block_height) height = block_height;
@@ -29,10 +30,16 @@ const DividerBlock = ({ state, actions, libraries, block }) => {
   // RETURN ---------------------------------------------
   return (
     <div
-      className="flex"
-      style={{ height: `${height}px`, alignItems: "center" }}
+      style={{
+        display: "grid",
+        alignItems: "center",
+        height: `${height}px`,
+        backgroundColor: background_colour,
+      }}
     >
-      <ServeDivider />
+      <BlockWrapper>
+        <ServeDivider />
+      </BlockWrapper>
     </div>
   );
 };
