@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useRef, useLayoutEffect } from "react";
 import { connect } from "frontity";
 
 import Accordion from "react-bootstrap/Accordion";
@@ -22,6 +22,7 @@ const AccordionComponent = ({
   if (!block) return <Loading />;
 
   const { disable_vertical_padding, accordion_item, preview } = block;
+  const isActive = useRef(false);
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -43,36 +44,27 @@ const AccordionComponent = ({
     const handleAccordionToggle = () => {
       const addIcon = document.querySelector(`#add-id-${uniqueId}`);
       const removeIcon = document.querySelector(`#remove-id-${uniqueId}`);
-      const moreIcon = document.querySelector(`#more-id-${uniqueId}`);
-      const lessIcon = document.querySelector(`#less-id-${uniqueId}`);
       const preview = document.querySelector(`#preview-id-${uniqueId}`);
       const accordionBody = document.querySelector(`.accordion-${uniqueId}`);
-      // apply toggle to selected components
-      if (preview) {
-        preview.classList.toggle("d-none");
-      }
-      if (accordionBody) {
-        accordionBody.classList.toggle("border-top-show");
-      }
-      if (addIcon) {
-        addIcon.classList.toggle("d-none");
-      }
-      if (removeIcon) {
-        if (removeIcon.classList.contains("d-none")) {
-          removeIcon.classList.remove("d-none");
-        } else {
-          removeIcon.classList.add("d-none");
+
+      if (isActive.current) {
+        // apply actions if accordion isActive
+        if (preview) {
+          preview.classList.add("d-none");
         }
+        accordionBody.classList.add("border-top-show");
+        addIcon.classList.add("d-none");
+        removeIcon.classList.remove("d-none");
       }
-      if (moreIcon) {
-        moreIcon.classList.toggle("d-none");
-      }
-      if (lessIcon) {
-        if (lessIcon.classList.contains("d-none")) {
-          lessIcon.classList.remove("d-none");
-        } else {
-          lessIcon.classList.add("d-none");
+
+      if (!isActive.current) {
+        // apply actions if accordion !isActive
+        if (preview) {
+          preview.classList.remove("d-none");
         }
+        accordionBody.classList.remove("border-top-show");
+        addIcon.classList.remove("d-none");
+        removeIcon.classList.add("d-none");
       }
     };
 
@@ -92,7 +84,10 @@ const AccordionComponent = ({
             block={block}
             guidelines={guidelines}
             leadershipBlock={leadershipBlock}
-            handleAccordionToggle={handleAccordionToggle}
+            handleAccordionToggle={() => {
+              isActive.current = !isActive.current;
+              handleAccordionToggle();
+            }}
             uniqueId={uniqueId}
           />
           <AccordionBody

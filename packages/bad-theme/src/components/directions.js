@@ -11,8 +11,6 @@ const Directions = ({ state, actions, libraries }) => {
   const endPoint = state.router.link;
   const data = state.source.get(endPoint);
 
-  console.log("-------", data);
-
   const [wpMenu, setWpMenu] = useState([]);
   const marginHorizontal = state.theme.marginHorizontal;
   const directions = endPoint.split("/").slice(1, -1);
@@ -32,8 +30,6 @@ const Directions = ({ state, actions, libraries }) => {
   const ServePatchDirections = ({ item, nextKey }) => {
     let TITLE_RENDER = item;
 
-    console.log(item);
-
     let chevron = (
       <ChevronRightIcon style={{ fontSize: 16, color: colors.darkSilver }} />
     );
@@ -48,7 +44,6 @@ const Directions = ({ state, actions, libraries }) => {
 
     if (item[0] !== "home")
       wpMenu.map((menuItem) => {
-        console.log("menuItem", menuItem);
         // check for nested child_items
         if (menuItem.child_items)
           menuItem.child_items.map((childItem) => {
