@@ -14,10 +14,11 @@ import BlockWrapper from "../components/blockWrapper";
 const PilsArchive = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const [isReady, seIsReady] = useState(false);
   const [searchFilter, setSearchFilter] = useState(null);
   const [pilList, setPilList] = useState([]);
 
+  const marginHorizontal = state.theme.marginHorizontal;
+  const marginVertical = state.theme.marginVertical;
   const ctaHeight = 45;
   const data = state.source.get(state.router.link);
   const { totalPages, page, next } = data; // check if data have multiple pages
@@ -34,15 +35,11 @@ const PilsArchive = ({ state, actions, libraries }) => {
       const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
       isThereNextPage = nextPage;
     }
-    seIsReady(true);
     setPilList(Object.values(state.source.pils)); // add pill object to data array
   }, []);
   // DATA pre FETCH ----------------------------------------------------------------
 
-  const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
-
-  if (!isReady) return <Loading />;
+  if (!pilList.length) return <Loading />;
 
   let ALPHABET = [];
   pilList.map((item) => {
@@ -59,7 +56,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
   ALPHABET.sort(); // sorts array alphabetically
 
   // HELPERS ----------------------------------------------------------------
-  const handleSearchSubmit = () => {
+  const handleSearchFilter = () => {
     const searchInput = document.querySelector(`#searchInput${id}`).value;
     if (!!searchInput) {
       const INPUT = searchInput.toLowerCase();
@@ -249,7 +246,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
                     color: colors.white,
                     padding: `0.5em`,
                   }}
-                  onClick={handleSearchSubmit}
+                  onClick={handleSearchFilter}
                 >
                   Search
                 </button>
@@ -307,6 +304,9 @@ const styles = {
     backgroundColor: colors.white,
     cursor: "pointer",
     borderRadius: "50%",
+  },
+  input: {
+    borderRadius: 10,
   },
 };
 
