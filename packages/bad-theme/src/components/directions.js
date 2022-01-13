@@ -4,11 +4,14 @@ import { colors } from "../config/imports";
 
 import BlockWrapper from "./blockWrapper";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { setGoToAction } from "../context";
 
 const Directions = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const endPoint = state.router.link;
   const data = state.source.get(endPoint);
+
+  console.log("-------", data);
 
   const [wpMenu, setWpMenu] = useState([]);
   const marginHorizontal = state.theme.marginHorizontal;
@@ -97,6 +100,27 @@ const Directions = ({ state, actions, libraries }) => {
     );
   };
 
+  const ServeNewsMediaPreFix = () => {
+    if (!data.isPost && data.type !== "post") return null;
+
+    return (
+      <div>
+        <div
+          className="flex-row"
+          style={styles.link}
+          onClick={() => setGoToAction({ path: "/news-media/", actions })}
+        >
+          <div style={styles.linkValue}>News & Media</div>
+          <div style={{ margin: `0 10px` }}>
+            <ChevronRightIcon
+              style={{ fontSize: 16, color: colors.darkSilver }}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   if (data.isError) return null;
   if (endPoint === "/") return null; // disable breadcrumbs in home page
 
@@ -107,6 +131,7 @@ const Directions = ({ state, actions, libraries }) => {
         style={{ ...styles.wrapper, padding: `0 ${marginHorizontal}px` }}
       >
         <ServeTitle />
+        <ServeNewsMediaPreFix />
         {directions.map((item) => {
           KEY += 1;
           return <ServePatchDirections key={KEY} item={item} nextKey={KEY} />;
