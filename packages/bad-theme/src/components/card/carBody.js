@@ -95,7 +95,7 @@ const CardBody = ({
         style={{
           fontSize: 12,
           fontWeight: "bold",
-          color: colors.ocean,
+          color: colors.softBlack,
           fontStyle: "italic",
           textTransform: "capitalize",
           paddingBottom: `1em`,

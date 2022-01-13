@@ -18,14 +18,15 @@ const DividerBlock = ({ state, actions, libraries, block }) => {
     if (!divider) return null;
 
     return (
-      <div
-        style={{
-          backgroundColor: `rgb(0, 0, 0, 0.4)`,
-          height: 1,
-          width: "100%",
-          margin: `0 ${marginHorizontal}px`,
-        }}
-      />
+      <div style={{ padding: `0 ${marginHorizontal}px` }}>
+        <div
+          style={{
+            backgroundColor: `rgb(0, 0, 0, 0.4)`,
+            height: 1,
+            width: "100%",
+          }}
+        />
+      </div>
     );
   };
 

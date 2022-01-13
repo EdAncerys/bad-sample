@@ -27,7 +27,7 @@ const Header = ({ state, actions }) => {
         `}
       />
       <HTMLHead />
-      <div style={styles.container}>
+      <div className="bad-header" style={styles.container}>
         <HeaderActions />
         <Navigation />
       </div>

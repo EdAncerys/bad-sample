@@ -24,7 +24,9 @@
 .bad-menu-container .dropdown-toggle::after {
   display: none !important;
 }
-
+.bad-header a:hover {
+  box-shadow: none;
+}
 /* drop down link config */
 .dropdown-item.active,
 .dropdown-item:active {
