@@ -20,7 +20,7 @@ const AccordionHeader = ({
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const { title, body, logo, preview, guidelines_type } = block;
+  const { title, body, logo, preview, guidelines_type, subtitle } = block;
   const LOGO_HEIGHT = 45;
 
   // Guidelines & Standards --------------------------------
@@ -48,17 +48,25 @@ const AccordionHeader = ({
   const ServeTitle = () => {
     if (!title || guidelines) return null;
 
+    const ServeSubtitle = () => {
+      if (!subtitle) return null;
+
+      return (
+        <div
+          className="flex primary-title"
+          style={{ fontStyle: "italic", padding: `0 2em` }}
+        >
+          <Html2React html={subtitle} />
+        </div>
+      );
+    };
+
     return (
-      <div
-        className="flex primary-title"
-        style={{
-          fontSize: 20,
-          color: colors.softBlack,
-          fontWeight: "bold",
-          alignItems: "center",
-        }}
-      >
-        <Html2React html={title} />
+      <div className="flex primary-title" style={{ alignItems: "center" }}>
+        <div style={{ fontSize: 20 }}>
+          <Html2React html={title} />
+        </div>
+        <ServeSubtitle />
       </div>
     );
   };
