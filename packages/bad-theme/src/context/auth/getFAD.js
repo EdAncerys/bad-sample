@@ -1,10 +1,10 @@
 import { authenticateAppAction, setFetchAction } from "../index";
 
-export const getTweetsAction = async ({ state, dispatch }) => {
-  console.log("getTweetsAction triggered");
+export const getFadAction = async ({ state, dispatch }) => {
+  console.log("getFadAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
-  const URL = state.auth.APP_HOST + `/twitter/tweets?limit=3`;
+  const URL = state.auth.APP_HOST + `/catalogue/fad`;
   const jwt = await authenticateAppAction({ state });
 
   const requestOptions = {
@@ -14,10 +14,10 @@ export const getTweetsAction = async ({ state, dispatch }) => {
 
   try {
     const data = await fetch(URL, requestOptions);
-    const tweets = await data.json();
+    const fad = await data.json();
 
     setFetchAction({ dispatch, isFetching: null });
-    setTweetsAction({ dispatch, tweets });
+    setTweetsAction({ dispatch, fad });
   } catch (error) {
     console.log("error", error);
     setFetchAction({ dispatch, isFetching: null });
@@ -25,7 +25,7 @@ export const getTweetsAction = async ({ state, dispatch }) => {
 };
 
 // SET CONTEXT ---------------------------------------------------
-export const setTweetsAction = ({ dispatch, tweets }) => {
-  console.log("setTweetsAction triggered"); //debug
-  dispatch({ type: "SET_TWEETS_ACTION", payload: tweets });
+export const setFadAction = ({ dispatch, fad }) => {
+  console.log("setFadAction triggered"); //debug
+  dispatch({ type: "SET_FAD_ACTION", payload: fad });
 };

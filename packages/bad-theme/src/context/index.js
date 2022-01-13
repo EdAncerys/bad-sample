@@ -19,6 +19,7 @@ import {
 } from "./auth/actions";
 import { sendEmailEnquireAction } from "./auth/sendEnquire";
 import { getTweetsAction } from "./auth/getTweets";
+import { getFadAction } from "./auth/getFAD";
 
 export {
   AppProvider,
@@ -38,4 +39,5 @@ export {
   setFetchAction,
   setErrorAction,
   getTweetsAction,
+  getFadAction,
 };

@@ -10,7 +10,7 @@ import { colors } from "../../../config/colors";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../../blockWrapper";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, fadDataAction } from "../../../context";
+import { useAppDispatch, useAppState, getFadAction } from "../../../context";
 
 const Membership = ({ state, actions, libraries, dashboardPath }) => {
   const dispatch = useAppDispatch();
@@ -28,7 +28,7 @@ const Membership = ({ state, actions, libraries, dashboardPath }) => {
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
     // fetch data via API
-    await fadDataAction({ dispatch });
+    await getFadAction({ state, dispatch });
   }, []);
 
   if (!fad) return <Loading />; // awaits data
