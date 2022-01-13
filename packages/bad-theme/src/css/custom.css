@@ -179,10 +179,10 @@ h6 {
 .text-body h4,
 .text-body h5,
 .text-body h6 {
-  margin: 0.75em 0;
+  margin: 0.75em 0 !important;
 }
 .text-body p {
-  margin: 0.5em 0;
+  margin: 0.5em 0 !important;
 }
 .title-no-bottom-margin p,
 .title-no-bottom-margin h1,

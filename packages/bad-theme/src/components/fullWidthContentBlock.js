@@ -57,7 +57,7 @@ const FullWidthContentBlock = ({
     return (
       <div>
         <div
-          className="card-text primary-title"
+          className="primary-title"
           style={{
             fontSize: 36,
             fontWeight: "bold",
@@ -102,7 +102,7 @@ const FullWidthContentBlock = ({
       <div>
         <div
           className="flex"
-          style={{ justifyContent: ALIGNMENT, paddingTop: `3em` }}
+          style={{ justifyContent: ALIGNMENT, paddingTop: `1em` }}
         >
           <div className="blue-btn" onClick={handleSubmitAction}>
             <Html2React html={LABEL} />
@@ -115,6 +115,7 @@ const FullWidthContentBlock = ({
   // RETURN ---------------------------------------------------
   return (
     <div
+      className="text-body"
       style={{
         justifyContent: "center",
         textAlign: ALIGNMENT,
