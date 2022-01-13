@@ -15,11 +15,12 @@ export const getFadAction = async ({ state, dispatch }) => {
   try {
     const data = await fetch(URL, requestOptions);
     const result = await data.json();
-    const fad = result.values;
-    console.log("fad", fad);
+    const fad = result.value;
+    console.log("fad result", fad);
 
     setFetchAction({ dispatch, isFetching: null });
     setFadAction({ dispatch, fad });
+    return fad;
   } catch (error) {
     console.log("error", error);
     setFetchAction({ dispatch, isFetching: null });

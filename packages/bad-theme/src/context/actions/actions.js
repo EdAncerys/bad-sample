@@ -5,6 +5,9 @@ export const setGoToAction = async ({ path, actions }) => {
   if (path.includes(`http://3.9.193.188`)) isExternalLink = false;
   if (path.includes(`https://badadmin.skylarkdev.co`)) isExternalLink = false;
 
+  if (path.includes(`www`) && !path.includes(`http`) && isExternalLink)
+    return window.open(`https://` + path, "_blank"); // handle external links without pre fix
+
   if (isExternalLink) return window.open(path, "_blank"); // handle external links
   actions.router.set(path);
 };

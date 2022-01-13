@@ -6,6 +6,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import Loading from "../../loading";
 import { colors } from "../../../config/colors";
+import Card from "../../card/card";
 
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../../blockWrapper";
@@ -17,7 +18,7 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
   const { fad } = useAppState();
 
   const [searchFilter, setSearchFilter] = useState(null);
-  const [fadData, setFadData] = useState(fad);
+  const [fadData, setFadData] = useState(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -26,34 +27,38 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
   // DATA pre FETCH ------------------------------------------------------------
   useEffect(async () => {
     // fetch data via API
-    await getFadAction({ state, dispatch });
-  }, []);
+    if (!fad) {
+      const data = await getFadAction({ state, dispatch });
+      setFadData(data);
+    } else {
+      setFadData(fad);
+    }
+  }, [fad]);
 
-  if (!fad) return <Loading />; // awaits data
+  const ServeFadList = ({ fad }) => {
+    const { contactid } = fad;
+    // API call to fetch fad profile
 
-  const ServeFadList = ({ item }) => {
-    const {} = item;
-
-    return (
-      <div>
-        <div>
-          {/* <Html2React html={title} /> */}
-          {/* hello */}
-        </div>
-      </div>
-    );
+    return <Card fadDirectory={fad} colour={colors.primary} shadow />;
   };
 
-  if (dashboardPath !== "Directory") return null;
+  if (dashboardPath !== "Directory") return null; // call after all React hooks
+  if (!fadData) return <Loading />; // awaits data
   // HELPERS ----------------------------------------------------------------
   const handleSearchFilter = () => {
     const searchInput = document.querySelector(`#searchDirectoryInput`).value;
     const INPUT = searchInput.toLowerCase();
-    // const filter = fadData.filter((fad) =>
-    //   fad.title.toLowerCase().includes(INPUT)
-    // );
-    // setFadData(filter);
-    setSearchFilter(searchInput);
+    const filter = fadData.filter((fad) => {
+      const { bad_findadermatologisttext } = fad;
+
+      if (
+        bad_findadermatologisttext &&
+        bad_findadermatologisttext.toLowerCase().includes(INPUT)
+      )
+        return fad;
+    });
+    setFadData(filter);
+    setSearchFilter(INPUT);
   };
 
   // SERVERS --------------------------------------------------------
@@ -83,7 +88,7 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
             style={styles.closeAction}
             onClick={() => {
               setSearchFilter(null);
-              setPilList(Object.values(state.source.pils));
+              setFadData(fad);
             }}
           >
             <CloseIcon />
@@ -119,7 +124,7 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
                   id={`searchDirectoryInput`}
                   type="text"
                   className="form-control"
-                  placeholder="Find PIL"
+                  placeholder="Search Directory"
                   style={styles.input}
                 />
                 <span
@@ -166,13 +171,13 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
   // SERVERS ---------------------------------------------
   const Directory = () => {
     return (
-      <div style={{ padding: `0 ${marginHorizontal}px` }}>
+      <div>
         <ServeFilter />
         <BlockWrapper>
           <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
             <div style={styles.container}>
-              {fadData.map((item, key) => {
-                return <ServeFadList key={key} item={item} />;
+              {fadData.map((fad, key) => {
+                return <ServeFadList key={key} fad={fad} />;
               })}
             </div>
           </div>
@@ -194,6 +199,14 @@ const styles = {
     display: "grid",
     gridTemplateColumns: `repeat(3, 1fr)`,
     gap: 20,
+  },
+  action: {
+    position: "absolute",
+    backgroundColor: colors.white,
+    borderRadius: 5,
+    padding: `0.5em 1.5em`,
+    marginRight: `1em`,
+    width: "fit-content",
   },
   closeAction: {
     display: "grid",

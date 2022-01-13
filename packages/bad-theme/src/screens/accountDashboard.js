@@ -38,12 +38,13 @@ const AccountDashboard = ({ state, actions, libraries }) => {
 
           <Dashboard dashboardPath={dashboardPath} />
           <DashboardEvents dashboardPath={dashboardPath} />
-          <Directory dashboardPath={dashboardPath} />
           <Membership dashboardPath={dashboardPath} />
           <MyAccount dashboardPath={dashboardPath} />
           <Billing dashboardPath={dashboardPath} />
           <Settings dashboardPath={dashboardPath} />
         </BlockWrapper>
+
+        <Directory dashboardPath={dashboardPath} />
       </div>
 
       <BlockBuilder blocks={wpBlocks} />

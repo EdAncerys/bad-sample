@@ -17,6 +17,7 @@ import NewsAndMediaHeader from "./newsAndMediaHeader";
 import AuthorInfo from "./authorInfo";
 import ImageAndPromoCard from "./imageAndPromoCard";
 import TweetInfo from "./tweetInfo";
+import FadDirectory from "./fadDirectory";
 
 const Card = ({
   state,
@@ -62,6 +63,7 @@ const Card = ({
   newsArticle,
   imageAndPromoCard,
   removePadding,
+  fadDirectory,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
@@ -161,7 +163,8 @@ const Card = ({
         <EventCardHeader eventHeader={eventHeader} />
         <VenueInfo venueInfo={venueInfo} />
         <AuthorInfo authorInfo={authorInfo} />
-        <TweetInfo tweetInfo={tweetInfo}/>
+        <TweetInfo tweetInfo={tweetInfo} />
+        <FadDirectory fadDirectory={fadDirectory} />
         <ServeJournalCard />
         <CardBody
           title={title}
