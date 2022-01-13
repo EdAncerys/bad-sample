@@ -9,6 +9,7 @@ const DividerBlock = ({ state, actions, libraries, block }) => {
 
   const { block_height, divider, background_colour } = block;
 
+  const marginHorizontal = state.theme.marginHorizontal;
   let height = state.theme.marginVertical;
   if (block_height) height = block_height;
 
@@ -22,6 +23,7 @@ const DividerBlock = ({ state, actions, libraries, block }) => {
           backgroundColor: `rgb(0, 0, 0, 0.4)`,
           height: 1,
           width: "100%",
+          margin: `0 ${marginHorizontal}px`,
         }}
       />
     );
