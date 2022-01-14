@@ -40,6 +40,10 @@ const NewsAndMediaHeader = ({
       const categoryName = filter[0].name;
       setCategory(categoryName);
     }
+
+    return () => {
+      mountedRef.current = false;   // clean up function
+    };
   }, []);
 
   const ICON_WIDTH = 40;

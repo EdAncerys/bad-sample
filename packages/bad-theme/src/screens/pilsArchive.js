@@ -36,6 +36,10 @@ const PilsArchive = ({ state, actions, libraries }) => {
       isThereNextPage = nextPage;
     }
     setPilList(Object.values(state.source.pils)); // add pill object to data array
+
+    return () => {
+      mountedRef.current = false;   // clean up function
+    };
   }, []);
   // DATA pre FETCH ----------------------------------------------------------------
 

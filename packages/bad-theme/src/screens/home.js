@@ -13,6 +13,10 @@ const Home = ({ state, actions, libraries }) => {
     const home = await state.source["page"][22];
     // console.log("home data: ", home); // debug
     setWpBlocks(home.acf.blocks);
+
+    return () => {
+      mountedRef.current = false;   // clean up function
+    };
   }, []);
 
   if (!wpBlocks) return <Loading />;

@@ -73,6 +73,10 @@ const ElectionBlocks = ({ state, actions, block }) => {
 
     setGradeList(GRADES);
     setRoleList(ROLES);
+
+    return () => {
+      mountedRef.current = false;   // clean up function
+    };
   }, []);
   // DATA pre FETCH ----------------------------------------------------------------
   if (!electionList) return <Loading />;

@@ -38,6 +38,10 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
     }
 
     setIsReady(true);
+
+    return () => {
+      mountedRef.current = false;   // clean up function
+    };
   }, []);
 
   // hook applies after React has performed all DOM mutations

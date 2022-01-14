@@ -33,6 +33,10 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
     } else {
       setFadData(fad);
     }
+
+    return () => {
+      mountedRef.current = false;   // clean up function
+    };
   }, [fad]);
 
   const ServeFadList = ({ fad }) => {

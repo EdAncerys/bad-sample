@@ -32,6 +32,10 @@ const VenueHireGallery = ({ state, actions, block }) => {
 
     const VENUE_LIST = Object.values(state.source["venues"]); // add venues object to data array
     setVenueList(VENUE_LIST);
+
+    return () => {
+      mountedRef.current = false;   // clean up function
+    };
   }, []);
   // DATA pre FETCH ----------------------------------------------------------------
   if (!venueList) return <Loading />;

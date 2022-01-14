@@ -35,6 +35,10 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
       const categoryName = filter[0].name;
       setCategory(categoryName);
     }
+
+    return () => {
+      mountedRef.current = false;   // clean up function
+    };
   }, []);
 
   // SERVERS ---------------------------------------------

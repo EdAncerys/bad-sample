@@ -5,6 +5,8 @@ import iframe from "@frontity/html2react/processors/iframe";
 import link from "@frontity/html2react/processors/link";
 import menuHandler from "./handlers/menu-handler";
 
+import { handleGetCookie } from "./helpers/cookie";
+
 const BADTheme = {
   name: "bad-theme",
   roots: {
@@ -94,6 +96,9 @@ const BADTheme = {
           isThereNextEventPage = nextPage;
         }
 
+        // handle login cookies
+        handleGetCookie({ name: `BAD-WebApp` });
+
         // pre load fonts from google
         import("webfontloader").then((WebFontLoader) => {
           // console.log("google fonts loaded"); // debug
@@ -104,6 +109,7 @@ const BADTheme = {
           });
         });
       },
+
       afterCSR: async ({ state, actions }) => {
         console.log("afterCSR triggered"); // debug
         const menu = sessionStorage.getItem("badMenu"); // checking if menu already pre fetched from wp

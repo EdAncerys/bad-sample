@@ -1,7 +1,7 @@
 import { setLoginModalAction } from "../index";
 import { handleSetCookie } from "../../helpers/cookie";
 
-const LOGIN_COOKIE = "BAD-login-path";
+const LOGIN_COOKIE = "BAD-WebApp";
 const REDIRECT_URL = `https://bad-uat.powerappsportals.com/SignIn?returnUrl=%2fhandshake%3faction%3dlogin%2f`;
 
 export const loginAction = async ({ state, dispatch, loginData }) => {

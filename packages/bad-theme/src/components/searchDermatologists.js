@@ -36,6 +36,10 @@ const SearchDermatologists = ({ state, actions, libraries, block }) => {
     console.log("fetch dermatologists data");
 
     setIsReady(true);
+
+    return () => {
+      mountedRef.current = false;   // clean up function
+    };
   }, []);
 
   // hook applies after React has performed all DOM mutations

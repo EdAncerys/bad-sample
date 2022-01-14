@@ -20,6 +20,10 @@ const EventsLandingPage = ({ state, actions, libraries }) => {
     const events = state.source[data.type][data.id];
     const wpBlocks = events.acf.blocks;
     setWpBlocks(wpBlocks);
+
+    return () => {
+      mountedRef.current = false;   // clean up function
+    };
   }, []);
   // DATA pre FETCH ----------------------------------------------------------------
 

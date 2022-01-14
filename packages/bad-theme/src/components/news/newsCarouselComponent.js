@@ -31,6 +31,10 @@ const NewsCarouselComponent = ({ state, actions, libraries, block }) => {
     }
 
     setPostList(POST_LIST);
+
+    return () => {
+      mountedRef.current = false;   // clean up function
+    };
   }, [state.source.post]);
 
   if (!postList || !category) return <Loading />;

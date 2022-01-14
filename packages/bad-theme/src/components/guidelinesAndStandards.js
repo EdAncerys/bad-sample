@@ -50,6 +50,10 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     const GUIDELINES_LIST = Object.values(state.source.guidelines_standards); // add guidelines object to data array
     setGuidelinesType(GUIDELINES_TYPE);
     setGuidelinesList(GUIDELINES_LIST);
+
+    return () => {
+      mountedRef.current = false;   // clean up function
+    };
   }, []);
   // DATA pre FETCH ----------------------------------------------------------------
   if (!guidelinesList) return <Loading />;

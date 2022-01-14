@@ -18,6 +18,10 @@ const LeadershipBlock = ({ state, actions, block }) => {
 
     const LEADERSHIP_LIST = Object.values(state.source.leadership_team); // add leadershipTeam object to data array
     setLeadershipList(LEADERSHIP_LIST);
+
+    return () => {
+      mountedRef.current = false;   // clean up function
+    };
   }, [state.source.leadership_team]);
 
   // DATA pre FETCH ----------------------------------------------------------------

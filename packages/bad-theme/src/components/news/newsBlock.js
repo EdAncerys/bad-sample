@@ -53,6 +53,10 @@ const NewsBlock = ({ state, actions, libraries, block }) => {
     }
 
     setPostList(POST_LIST);
+
+    return () => {
+      mountedRef.current = false;   // clean up function
+    };
   }, [state.source.post]);
   // DATA pre FETCH ----------------------------------------------------------------
   if (!postList || !category) return <Loading />;

@@ -70,6 +70,10 @@ const EventLoopBlock = ({
     setGrades(GRADES);
     setLocations(LOCATIONS);
     setTypes(TYPES);
+
+    return () => {
+      mountedRef.current = false;   // clean up function
+    };
   }, [state.source.events]);
   if (!eventList) return <Loading />;
 
