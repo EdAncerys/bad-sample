@@ -216,7 +216,7 @@ const Navigation = ({ state, actions, libraries }) => {
             return (
               <div
                 key={key}
-                className={"bad-menu-container " + key}
+                className={"main-menu-container " + key}
                 style={{ height: "100%" }}
                 onMouseEnter={() => {
                   hovered.current = key;
@@ -382,34 +382,74 @@ const Navigation = ({ state, actions, libraries }) => {
   };
 
   const ServeMenuB = () => {
+    const ServeMenuChildren = ({ item }) => {
+      const { title, slug, url, child_items } = item;
+
+      if (!child_items) return null;
+
+      return (
+        <ul
+          className="dropdown-menu child-menu"
+          aria-labelledby="navbarDropdownMenuLink"
+        >
+          <div
+            style={{
+              display: "grid",
+              gridAutoFlow: "column",
+              gridTemplateColumns: `repeat(3, 1fr)`,
+              gridTemplateRows: `repeat(5, auto)`,
+              gap: `0 2em`,
+            }}
+          >
+            {child_items.map((item, key) => {
+              const { title, url, child_items } = item;
+
+              return (
+                <li
+                  key={key}
+                  style={{
+                    width: "100%",
+                    borderBottom: `1px dotted ${colors.darkSilver}`,
+                  }}
+                >
+                  <a
+                    className="dropdown-item"
+                    style={styles.link}
+                    onClick={() => setGoToAction({ path: url, actions })}
+                  >
+                    <Html2React html={title} />
+                  </a>
+                </li>
+              );
+            })}
+          </div>
+        </ul>
+      );
+    };
+
     return (
-      <div className="flex" style={styles.container}>
+      <div className="flex main-menu-container" style={styles.container}>
         {wpMainMenu.map((item, key) => {
           const { title, slug, url, child_items } = item;
 
-          if (child_items)
-            return (
-              <div
-                key={key}
-                className={"bad-menu-container " + key}
-                style={{ height: "100%" }}
-                onMouseEnter={() => {
-                  hovered.current = key;
-                  handleMenuHover({ onMouseEnter: true });
-                }}
-                onMouseLeave={() => {
-                  handleMenuHover({ onMouseEnter: false });
-                  hovered.current = null; // clear Ref hook after handler been triggered only!
-                }}
-                onClick={handleActiveMenu}
-              >
-                <ServeMenuDropDownB
-                  style={{ height: "100%" }}
-                  title={title}
-                  url={url}
-                  menu={child_items}
-                />
-
+          return (
+            <ul key={key} className="navbar-nav">
+              <li className="nav-item dropdown">
+                <a
+                  className="nav-link dropdown-toggle"
+                  style={styles.link}
+                  onMouseEnter={() => {
+                    hovered.current = key;
+                    handleMenuHover({ onMouseEnter: true });
+                  }}
+                  onMouseLeave={() => {
+                    handleMenuHover({ onMouseEnter: false });
+                    hovered.current = null; // clear Ref hook after handler been triggered only!
+                  }}
+                  onClick={() => setGoToAction({ path: url, actions })}
+                >
+                  <Html2React html={title} />
+                </a>
                 <div
                   id={`menu-shadow-${key}`}
                   className="d-none"
@@ -421,22 +461,11 @@ const Navigation = ({ state, actions, libraries }) => {
                     bottom: 5,
                   }}
                 />
-              </div>
-            );
-
-          return (
-            <div key={key}>
-              <a
-                style={styles.link}
-                onClick={() => setGoToAction({ path: url, actions })}
-              >
-                <Html2React html={title} />
-              </a>
-            </div>
+                <ServeMenuChildren item={item} />
+              </li>
+            </ul>
           );
         })}
-
-        <ServeMenuDropDownB title="More" menu={wpMoreMenu} />
       </div>
     );
   };
@@ -468,11 +497,12 @@ const Navigation = ({ state, actions, libraries }) => {
 
       <nav
         className="navbar navbar-expand-lg roboto"
-        style={{ padding: `2em 0`, backgroundColor: colors.turquoise }}
+        style={{ margin: `0 ${marginHorizontal}px` }}
       >
         <div className="container-fluid">
           <div className="collapse navbar-collapse" id="navbarNavDropdown">
             <ServeMenuB />
+
             <ul className="navbar-nav">
               <li className="nav-item dropdown">
                 <a
