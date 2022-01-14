@@ -266,6 +266,181 @@ const Navigation = ({ state, actions, libraries }) => {
     );
   };
 
+  const ServeMenuDropDownB = ({ title, menu, url }) => {
+    if (!menu.length) return null;
+    const isMoreMenu = title === "More";
+
+    const ServeTitle = ({ title, url, child_items }) => {
+      if (!title || !url) return null;
+
+      const ServeMenuArrow = () => {
+        if (!child_items) return null;
+
+        return (
+          <KeyboardArrowRightIcon
+            style={{
+              fill: colors.darkSilver,
+              borderRadius: "50%",
+              padding: 0,
+            }}
+          />
+        );
+      };
+
+      return (
+        <li
+          className="flex pointer"
+          style={{
+            alignItems: "center",
+            padding: `1em 0 1em`,
+            borderBottom: `1px dotted ${colors.darkSilver}`,
+            whiteSpace: "normal",
+          }}
+          onClick={() => setGoToAction({ path: url, actions })}
+          onMouseEnter={(e) => {
+            if (!e.target.innerText) return null; // prevents passing empty title object
+
+            childMenuRef.current = e.target.innerText;
+            const title = {
+              url: url,
+              title: childMenuRef.current,
+            };
+            state.theme.childMenuRef = title;
+          }}
+        >
+          <div className="flex-row">
+            <div className="flex" style={{ textTransform: "capitalize" }}>
+              <Html2React html={title} />
+            </div>
+            <ServeMenuArrow />
+          </div>
+        </li>
+      );
+    };
+
+    return (
+      <NavDropdown
+        title={<Html2React html={title} /> || "Menu Title"}
+        style={{
+          display: "flex", // static position adding ability for dropdown to move up the scope
+          position: "static",
+          height: "100%",
+          alignItems: "center",
+        }}
+        onClick={() => {
+          if (isMoreMenu) {
+            const activeMenuItem = document.querySelector(
+              `#menu-shadow-${activeMenu.current}`
+            );
+            if (activeMenuItem) activeMenuItem.classList.add("d-none");
+            activeMenu.current = null;
+            state.theme.activeMenuItem = null;
+          }
+        }}
+      >
+        <div
+          className="flex"
+          style={{
+            padding: `2em 4em`,
+            height: BANNER_HEIGHT,
+            backgroundColor: colors.lightSilver, // nav bar dropdown background color
+            boxShadow: `0 0.5rem 1rem rgba(0, 0, 0, 0.15)`,
+          }}
+        >
+          <div
+            style={{
+              overflow: "auto",
+              width: 400,
+            }}
+          >
+            <ServeTitle title={title} url={url} />
+            {menu.map((item, key) => {
+              const { title, url, child_items } = item;
+
+              return (
+                <div
+                  key={key}
+                  className="flex-row"
+                  style={{ marginLeft: isMoreMenu ? 0 : `1em` }}
+                >
+                  <ServeTitle
+                    title={title}
+                    url={url}
+                    child_items={child_items}
+                  />
+                </div>
+              );
+            })}
+          </div>
+          {menu.map((menu, key) => {
+            return <ChildMenu key={key} menu={menu} />;
+          })}
+          <NavBarDropDownContent />
+        </div>
+      </NavDropdown>
+    );
+  };
+
+  const ServeMenuB = () => {
+    return (
+      <div className="flex" style={styles.container}>
+        {wpMainMenu.map((item, key) => {
+          const { title, slug, url, child_items } = item;
+
+          if (child_items)
+            return (
+              <div
+                key={key}
+                className={"bad-menu-container " + key}
+                style={{ height: "100%" }}
+                onMouseEnter={() => {
+                  hovered.current = key;
+                  handleMenuHover({ onMouseEnter: true });
+                }}
+                onMouseLeave={() => {
+                  handleMenuHover({ onMouseEnter: false });
+                  hovered.current = null; // clear Ref hook after handler been triggered only!
+                }}
+                onClick={handleActiveMenu}
+              >
+                <ServeMenuDropDownB
+                  style={{ height: "100%" }}
+                  title={title}
+                  url={url}
+                  menu={child_items}
+                />
+
+                <div
+                  id={`menu-shadow-${key}`}
+                  className="d-none"
+                  style={{
+                    backgroundColor: handleFooterColour(item.slug),
+                    height: 5,
+                    width: "100%",
+                    position: "relative",
+                    bottom: 5,
+                  }}
+                />
+              </div>
+            );
+
+          return (
+            <div key={key}>
+              <a
+                style={styles.link}
+                onClick={() => setGoToAction({ path: url, actions })}
+              >
+                <Html2React html={title} />
+              </a>
+            </div>
+          );
+        })}
+
+        <ServeMenuDropDownB title="More" menu={wpMoreMenu} />
+      </div>
+    );
+  };
+
   return (
     <BlockWrapper>
       <div className="row roboto">
@@ -290,6 +465,51 @@ const Navigation = ({ state, actions, libraries }) => {
           </Navbar>
         </div>
       </div>
+
+      <nav
+        className="navbar navbar-expand-lg roboto"
+        style={{ padding: `2em 0`, backgroundColor: colors.turquoise }}
+      >
+        <div className="container-fluid">
+          <div className="collapse navbar-collapse" id="navbarNavDropdown">
+            <ServeMenuB />
+            <ul className="navbar-nav">
+              <li className="nav-item dropdown">
+                <a
+                  className="nav-link dropdown-toggle"
+                  href="#"
+                  id="navbarDropdownMenuLink"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Dropdown link
+                </a>
+                <ul
+                  className="dropdown-menu"
+                  aria-labelledby="navbarDropdownMenuLink"
+                >
+                  <li>
+                    <a className="dropdown-item" href="#">
+                      Action
+                    </a>
+                  </li>
+                  <li>
+                    <a className="dropdown-item" href="#">
+                      Another action
+                    </a>
+                  </li>
+                  <li>
+                    <a className="dropdown-item" href="#">
+                      Something else here
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
     </BlockWrapper>
   );
 };
@@ -298,8 +518,6 @@ const styles = {
   container: {
     justifyContent: "space-between",
     alignItems: "center",
-    flexWrap: "wrap",
-    display: "flex",
   },
   link: {
     color: colors.softBlack,

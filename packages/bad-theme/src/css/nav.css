@@ -40,9 +40,9 @@
 .quick-links .dropdown-item {
   white-space: nowrap;
 }
+.nav-item:hover .dropdown-menu {
+  display: block !important;
+}
 
-@media screen and (max-width: 992px) {
-  container {
-    /* padding: 0; */
-  }
+@media screen and (max-width: 576px) {
 }
