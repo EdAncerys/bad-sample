@@ -1,13 +1,19 @@
 import { setLoginModalAction } from "../index";
+import { handleSetCookie } from "../../helpers/cookie";
+
+const LOGIN_COOKIE = "BAD-login-path";
+const REDIRECT_URL = `https://bad-uat.powerappsportals.com/SignIn?returnUrl=%2fhandshake%3faction%3dlogin%2f`;
 
 export const loginAction = async ({ state, dispatch, loginData }) => {
   console.log("loginAction triggered");
 
-  const jwt = authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state });
+  // window.location.assign(REDIRECT_URL); // redirects to external website
 
   // fetch call to separate API to retrieve user data
   const user = { user: "user" };
   if (jwt) {
+    handleSetCookie({ name: LOGIN_COOKIE, value: state.router.link });
     setUserAction({ dispatch, user });
     seJWTAction({ dispatch, jwt });
     setLoginModalAction({ dispatch, loginModalAction: false });
@@ -31,6 +37,7 @@ export const authenticateAppAction = async ({ state }) => {
     headers: { "Content-Type": "application/json" },
     body: appCredentials,
   };
+
   try {
     const data = await fetch(URL, requestOptions);
     const response = await data.json();
@@ -50,6 +57,7 @@ export const logoutAction = async ({ actions, dispatch }) => {
 
   setUserAction({ dispatch, user: null });
   seJWTAction({ dispatch, jwt: null });
+  handleSetCookie({ name: LOGIN_COOKIE, value: "null", deleteCookie: true });
   actions.router.set(`https://badadmin.skylarkdev.co`);
 };
 

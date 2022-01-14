@@ -4,7 +4,7 @@ export const handleSetCookie = ({ name, value, exDays, deleteCookie }) => {
     cookieName = "cookie",
     cookieValue = "🍪 value not set!",
     cookieExDays = 1,
-    expiredDate = "Thu, 01-Jan-1970 00:00:01 GMT;";
+    expiredDate = new Date(0);
 
   if (name) cookieName = name;
   if (value) cookieValue = value;
