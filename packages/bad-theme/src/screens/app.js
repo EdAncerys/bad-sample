@@ -11,6 +11,7 @@ import EnquireModal from "../components/enquireModal";
 import CreateAccountModal from "../components/createAccount/createAccountModal";
 import Directions from "../components/directions";
 import CreateAccount from "./createAccount";
+import { handleGetCookie } from "../helpers/cookie";
 // SCREENS --------------------------------------------------------------
 import Post from "./post";
 import Page from "./page";
@@ -34,11 +35,16 @@ import Loading from "../components/loading";
 import Error from "./error";
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState } from "../context";
+import { useAppDispatch, useAppState, setUserAction } from "../context";
 
 const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { jwt, user } = useAppState();
+
+  // // handle login auth via cookies
+  // const cookieJWT = handleGetCookie({ name: `BAD-WebApp` });
+  // // handle API call to fetch user data
+  // if (cookieJWT) setUserAction({ dispatch, user: { user: "user" } });
 
   // env file access
   // console.log(".env variables", state.auth.ENVIRONMENT);

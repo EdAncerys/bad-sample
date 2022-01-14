@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import Card from "./card/card";
@@ -10,7 +10,7 @@ const VenueHireGallery = ({ state, actions, block }) => {
   const { disable_vertical_padding } = block;
 
   const [venueList, setVenueList] = useState(null);
-
+  const mountedRef = useRef(true);
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
@@ -34,7 +34,7 @@ const VenueHireGallery = ({ state, actions, block }) => {
     setVenueList(VENUE_LIST);
 
     return () => {
-      mountedRef.current = false;   // clean up function
+      mountedRef.current = false; // clean up function
     };
   }, []);
   // DATA pre FETCH ----------------------------------------------------------------

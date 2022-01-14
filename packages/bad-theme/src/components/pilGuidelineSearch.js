@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import Loading from "./loading";
@@ -14,6 +14,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
 
   const { disable_vertical_padding } = block;
 
+  const mountedRef = useRef(true)
   const ctaHeight = 45;
   const BANNER_HEIGHT = state.theme.bannerHeight;
   let marginVertical = state.theme.marginVertical;

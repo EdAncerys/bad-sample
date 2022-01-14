@@ -5,8 +5,6 @@ import iframe from "@frontity/html2react/processors/iframe";
 import link from "@frontity/html2react/processors/link";
 import menuHandler from "./handlers/menu-handler";
 
-import { handleGetCookie } from "./helpers/cookie";
-
 const BADTheme = {
   name: "bad-theme",
   roots: {
@@ -95,9 +93,6 @@ const BADTheme = {
           const nextPage = state.source.get(isThereNextEventPage).next; // check ifNext page & set next page
           isThereNextEventPage = nextPage;
         }
-
-        // handle login cookies
-        handleGetCookie({ name: `BAD-WebApp` });
 
         // pre load fonts from google
         import("webfontloader").then((WebFontLoader) => {

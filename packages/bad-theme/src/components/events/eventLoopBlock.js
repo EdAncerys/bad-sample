@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import Loading from "../loading";
@@ -34,6 +34,7 @@ const EventLoopBlock = ({
   const [locations, setLocations] = useState(null); // data
   const [types, setTypes] = useState(null); // data
   const [gradeFilterId, setGradeFilterId] = useState(null); // data
+  const mountedRef = useRef(true);
 
   const layoutOne = layout === "layout_one";
   const layoutTwo = layout === "layout_two";
@@ -72,7 +73,7 @@ const EventLoopBlock = ({
     setTypes(TYPES);
 
     return () => {
-      mountedRef.current = false;   // clean up function
+      mountedRef.current = false; // clean up function
     };
   }, [state.source.events]);
   if (!eventList) return <Loading />;

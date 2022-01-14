@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import BlockBuilder from "../components/builder/blockBuilder";
@@ -9,6 +9,7 @@ const EventsLandingPage = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const [wpBlocks, setWpBlocks] = useState(false); // event data
+  const mountedRef = useRef(true);
   const { sm, md, lg, xl } = muiQuery();
 
   // DATA pre FETCH ----------------------------------------------------------------
@@ -22,7 +23,7 @@ const EventsLandingPage = ({ state, actions, libraries }) => {
     setWpBlocks(wpBlocks);
 
     return () => {
-      mountedRef.current = false;   // clean up function
+      mountedRef.current = false; // clean up function
     };
   }, []);
   // DATA pre FETCH ----------------------------------------------------------------

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import AccordionComponent from "./accordion/accordion";
@@ -8,6 +8,7 @@ const LeadershipBlock = ({ state, actions, block }) => {
   if (!block) return <Loading />;
 
   const [leadershipList, setLeadershipList] = useState(null);
+  const mountedRef = useRef(true)
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {

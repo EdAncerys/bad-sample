@@ -28,10 +28,11 @@ export const handleGetCookie = ({ name }) => {
 
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${cookieName}=`);
-  console.log(parts.length);
+
   if (parts.length >= 2) {
-    console.log("🍪 value: ", parts.pop().split(";").shift());
-    return parts.pop().split(";").shift();
+    const COOKIE_VALUE = parts.pop().split(";").shift();
+    console.log("🍪 value: ", COOKIE_VALUE);
+    return COOKIE_VALUE;
   } else {
     console.log("🍪 not found");
     return null;

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect, styled } from "frontity";
 import Image from "@frontity/components/image";
 import { v4 as uuidv4 } from "uuid";
@@ -18,7 +18,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
   if (!block) return <Loading />;
 
   const { disable_vertical_padding, background_colour } = block;
-
+  const mountedRef = useRef(true)
   const data = state.source.get(state.router.link);
   const [searchFilter, setSearchFilter] = useState(null);
   const [typeFilter, setTypeFilter] = useState(null);
