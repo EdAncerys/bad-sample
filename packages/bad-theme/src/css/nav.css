@@ -61,7 +61,7 @@
 .child-menu a:hover {
   color: #1f335e !important;
 }
-.child-menu a:hover div {
+.child-menu a:hover .menu-title {
   box-shadow: inset 0 -2px #1f335e !important;
 }
 .container-fluid {
