@@ -1,21 +1,17 @@
-import { useState, useEffect, useRef, createRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
-import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { setGoToAction } from "../../context";
 
 import NavBarDropDownContent from "./navDropDownContent";
-import ChildMenu from "./childMenu";
 import BlockWrapper from "../blockWrapper";
 
 const Navigation = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const [wpMainMenu, setWpMainMenu] = useState([]);
   const [wpMoreMenu, setWpMoreMenu] = useState([]);
-
-  const childMenuRef = useRef("");
 
   const MAIN_NAV_LENGTH = 6; // main navigation length config
   const BANNER_HEIGHT = state.theme.bannerHeight;
@@ -85,7 +81,7 @@ const Navigation = ({ state, actions, libraries }) => {
               display: "grid",
               gridAutoFlow: "column",
               gridTemplateColumns: `repeat(3, 1fr)`,
-              gridTemplateRows: `repeat(5, auto)`,
+              gridTemplateRows: `repeat(7, auto)`,
               gap: `0 2em`,
             }}
           >
@@ -136,6 +132,30 @@ const Navigation = ({ state, actions, libraries }) => {
       );
     };
 
+    if (secondaryMenu)
+      return (
+        <ul
+          className="navbar-nav secondary-menu-container"
+          style={{ paddingLeft: `3em` }}
+        >
+          <li
+            className="nav-item dropdown"
+            onMouseEnter={() => {
+              activeMenu.current = null;
+            }}
+          >
+            <a
+              id={`menu-more}`}
+              className="nav-link dropdown-toggle"
+              style={styles.link}
+            >
+              <Html2React html={"More"} />
+            </a>
+            <ServeMenuChildren item={{ child_items: wpMoreMenu }} />
+          </li>
+        </ul>
+      );
+
     return (
       <div className="flex main-menu-container" style={styles.container}>
         {wpMainMenu.map((item, key) => {
@@ -180,41 +200,7 @@ const Navigation = ({ state, actions, libraries }) => {
         <div className="container-fluid">
           <div className="collapse navbar-collapse" id="navbarNavDropdown">
             <ServeMenu />
-
-            <ul className="navbar-nav">
-              <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle"
-                  href="#"
-                  id="navbarDropdownMenuLink"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Dropdown link
-                </a>
-                <ul
-                  className="dropdown-menu"
-                  aria-labelledby="navbarDropdownMenuLink"
-                >
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Action
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Another action
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Something else here
-                    </a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
+            <ServeMenu secondaryMenu />
           </div>
         </div>
       </nav>
@@ -230,6 +216,7 @@ const styles = {
   link: {
     color: colors.softBlack,
     textTransform: "capitalize",
+    cursor: "pointer",
   },
 };
 

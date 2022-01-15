@@ -49,12 +49,15 @@
 .main-menu-container .dropdown-toggle::after {
   display: none !important;
 }
+.secondary-menu-container .dropdown,
 .main-menu-container .dropdown {
   position: static !important;
 }
+.secondary-menu-container .dropdown-item,
 .main-menu-container .dropdown-item {
   padding: 0.5rem 0 !important;
 }
+.secondary-menu-container li,
 .main-menu-container li {
   margin-left: 0 !important;
 }
@@ -67,11 +70,12 @@
 .container-fluid {
   padding: 0 !important;
 }
+.secondary-menu-container .dropdown-menu,
 .main-menu-container .dropdown-menu {
   left: 0 !important;
   width: 100%;
   padding: 2em 4em;
-  height: 425px;
+  height: 450px;
   background-color: rgb(240, 241, 244);
   box-shadow: rgb(0 0 0 / 15%) 0px 0.5rem 1rem;
   border: none;
