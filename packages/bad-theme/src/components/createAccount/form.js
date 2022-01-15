@@ -197,7 +197,7 @@ const styles = {
     borderRadius: 10,
   },
   tcAgreement: {
-    boxShadow: `0 2px ${colors.darkSilver}`,
+    boxShadow: `inset 0 -2px ${colors.darkSilver}`,
     cursor: "pointer",
   },
   checkBox: {

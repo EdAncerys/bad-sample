@@ -86,7 +86,7 @@ a {
 a:hover {
   text-decoration: none;
   color: #3882cd;
-  box-shadow: 0 1px #3882cd;
+  box-shadow: inset 0 -1px #3882cd;
 }
 ul,
 p {

@@ -60,7 +60,9 @@
 }
 .child-menu a:hover {
   color: #1f335e !important;
-  box-shadow: 0 2px #1f335e !important;
+}
+.child-menu a:hover div {
+  box-shadow: inset 0 -2px #1f335e !important;
 }
 .container-fluid {
   padding: 0 !important;

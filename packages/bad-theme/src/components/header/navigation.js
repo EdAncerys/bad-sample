@@ -21,9 +21,8 @@ const Navigation = ({ state, actions, libraries }) => {
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
 
-  // let activeMenu = state.theme.activeMenu;
+  // active menu slug ref
   const activeMenu = useRef(null);
-  const hovered = useRef(null);
 
   useEffect(() => {
     // getting wp menu from state
@@ -36,35 +35,37 @@ const Navigation = ({ state, actions, libraries }) => {
   }, [state.theme.menu]);
 
   // HANDLERS ----------------------------------------------------
-  const handleFooterColour = (slug) => {
+  const handleBoxShadow = (slug) => {
     switch (slug) {
       case "clinical-services":
-        return colors.darkGreen;
+        return `inset ${colors.darkGreen} 0px -5px`;
       case "news and media":
-        return colors.pink;
+        return `inset ${colors.pink} 0px -5px`;
       case "guidelines-and-standards":
-        return colors.maroon;
+        return `inset ${colors.maroon} 0px -5px`;
       case "events-content":
-        return colors.turquoise;
+        return `inset ${colors.turquoise} 0px -5px`;
       case "education-training":
-        return colors.orange;
+        return `inset ${colors.orange} 0px -5px`;
       case "research-journals":
-        return colors.red;
+        return `inset ${colors.red} 0px -5px`;
       case "membership":
-        return colors.yellow;
+        return `inset ${colors.yellow} 0px -5px`;
 
       default:
-        return colors.primary;
+        return "none";
     }
   };
 
   const handleMenuHover = ({ onMouseEnter }) => {
-    const attractor = document.querySelector(`#menu-shadow-${hovered.current}`);
+    const attractor = document.querySelector(
+      `#menu-shadow-${activeMenu.current}`
+    );
 
     if (state.theme.activeMenuItem === null && activeMenu.current !== null)
       activeMenu.current = null; // reset useRef hooks after dropdown dismiss event
 
-    if (activeMenu.current !== hovered.current) {
+    if (activeMenu.current !== activeMenu.current) {
       if (onMouseEnter) {
         attractor.classList.remove("d-none");
       } else {
@@ -73,21 +74,17 @@ const Navigation = ({ state, actions, libraries }) => {
     }
   };
 
-  const handleActiveMenu = () => {
-    const attractor = document.querySelector(`#menu-shadow-${hovered.current}`);
-    const activeMenuItem = document.querySelector(
-      `#menu-shadow-${activeMenu.current}`
-    );
+  const handleActiveMenu = ({ slug, removeShadow }) => {
+    const selector = document.querySelector(`#menu-${slug}`);
+    const shadowColor = handleBoxShadow(slug);
 
-    if (activeMenu.current === hovered.current) {
-      attractor.classList.add("d-none");
-      activeMenu.current = null;
-    } else {
-      if (activeMenuItem) activeMenuItem.classList.add("d-none");
-      attractor.classList.remove("d-none");
-      activeMenu.current = hovered.current;
+    if (removeShadow) {
+      selector.style.boxShadow = "none";
+      return;
     }
-    state.theme.activeMenuItem = activeMenu.current;
+    if (activeMenu.current === slug) selector.style.boxShadow = shadowColor;
+
+    console.log(slug);
   };
 
   // SERVERS -----------------------------------------------------
@@ -219,14 +216,14 @@ const Navigation = ({ state, actions, libraries }) => {
                 className={"main-menu-container " + key}
                 style={{ height: "100%" }}
                 onMouseEnter={() => {
-                  hovered.current = key;
+                  activeMenu.current = key;
                   handleMenuHover({ onMouseEnter: true });
                 }}
                 onMouseLeave={() => {
-                  handleMenuHover({ onMouseEnter: false });
-                  hovered.current = null; // clear Ref hook after handler been triggered only!
+                  // handleMenuHover({ remove });
+                  activeMenu.current = null; // clear Ref hook after handler been triggered only!
                 }}
-                onClick={handleActiveMenu}
+                // onClick={handleActiveMenu}
               >
                 <ServeMenuDropDown
                   style={{ height: "100%" }}
@@ -239,7 +236,7 @@ const Navigation = ({ state, actions, libraries }) => {
                   id={`menu-shadow-${key}`}
                   className="d-none"
                   style={{
-                    backgroundColor: handleFooterColour(item.slug),
+                    backgroundColor: handleBoxShadow(item.slug),
                     height: 5,
                     width: "100%",
                     position: "relative",
@@ -404,20 +401,39 @@ const Navigation = ({ state, actions, libraries }) => {
             {child_items.map((item, key) => {
               const { title, url, child_items } = item;
 
+              const ServeMenuArrow = () => {
+                if (!child_items) return null;
+
+                return (
+                  <KeyboardArrowRightIcon
+                    style={{
+                      fill: colors.darkSilver,
+                      borderRadius: "50%",
+                      padding: 0,
+                      margin: "auto",
+                    }}
+                  />
+                );
+              };
+
               return (
                 <li
                   key={key}
+                  className="flex-row"
                   style={{
                     width: "100%",
                     borderBottom: `1px dotted ${colors.darkSilver}`,
                   }}
                 >
                   <a
-                    className="dropdown-item"
+                    className="flex-row dropdown-item"
                     style={styles.link}
                     onClick={() => setGoToAction({ path: url, actions })}
                   >
-                    <Html2React html={title} />
+                    <div className="flex">
+                      <Html2React html={title} />
+                    </div>
+                    <ServeMenuArrow />
                   </a>
                 </li>
               );
@@ -434,33 +450,25 @@ const Navigation = ({ state, actions, libraries }) => {
 
           return (
             <ul key={key} className="navbar-nav">
-              <li className="nav-item dropdown">
+              <li
+                className="nav-item dropdown"
+                onMouseEnter={() => {
+                  activeMenu.current = slug;
+                  handleActiveMenu({ slug });
+                }}
+                onMouseLeave={() => {
+                  activeMenu.current = null; // clear Ref hook after handler been triggered only!
+                  handleActiveMenu({ slug, removeShadow: true });
+                }}
+              >
                 <a
+                  id={`menu-${slug}`}
                   className="nav-link dropdown-toggle"
                   style={styles.link}
-                  onMouseEnter={() => {
-                    hovered.current = key;
-                    handleMenuHover({ onMouseEnter: true });
-                  }}
-                  onMouseLeave={() => {
-                    handleMenuHover({ onMouseEnter: false });
-                    hovered.current = null; // clear Ref hook after handler been triggered only!
-                  }}
                   onClick={() => setGoToAction({ path: url, actions })}
                 >
                   <Html2React html={title} />
                 </a>
-                <div
-                  id={`menu-shadow-${key}`}
-                  className="d-none"
-                  style={{
-                    backgroundColor: handleFooterColour(item.slug),
-                    height: 5,
-                    width: "100%",
-                    position: "relative",
-                    bottom: 5,
-                  }}
-                />
                 <ServeMenuChildren item={item} />
               </li>
             </ul>
