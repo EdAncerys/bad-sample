@@ -11,10 +11,10 @@ export const loginAction = async ({ state, dispatch, loginData }) => {
   // window.location.assign(REDIRECT_URL); // redirects to external website
 
   // fetch call to separate API to retrieve user data
-  const user = { user: "user" };
+  // user data from API
   if (jwt) {
     handleSetCookie({ name: LOGIN_COOKIE, value: state.router.link });
-    setUserAction({ dispatch, user });
+    state.context.isActiveUser = jwt;
     seJWTAction({ dispatch, jwt });
     setLoginModalAction({ dispatch, loginModalAction: false });
   }
@@ -52,21 +52,17 @@ export const authenticateAppAction = async ({ state }) => {
   }
 };
 
-export const logoutAction = async ({ actions, dispatch }) => {
+export const logoutAction = async ({ state, actions, dispatch }) => {
   console.log("logoutAction triggered");
 
-  setUserAction({ dispatch, user: null });
   seJWTAction({ dispatch, jwt: null });
-  handleSetCookie({ name: LOGIN_COOKIE, value: "null", deleteCookie: true });
+  state.context.isActiveUser = null;
+
+  handleSetCookie({ name: LOGIN_COOKIE, deleteCookie: true });
   actions.router.set(`https://badadmin.skylarkdev.co`);
 };
 
 // SET CONTEXT ---------------------------------------------------
-export const setUserAction = ({ dispatch, user }) => {
-  console.log("setUserAction triggered"); //debug
-  dispatch({ type: "SET_USER_ACTION", payload: user });
-};
-
 export const seJWTAction = ({ dispatch, jwt }) => {
   console.log("seJWTAction triggered"); //debug
   dispatch({ type: "SET_JWT_ACTION", payload: jwt });

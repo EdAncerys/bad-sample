@@ -18,7 +18,7 @@ import { useAppDispatch, useAppState } from "../context";
 
 const AccountDashboard = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
-  const { user } = useAppState();
+  const user = state.context.isActiveUser;
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 

@@ -112,7 +112,7 @@ const DashboardNavigation = ({
           }}
           onClick={(e) => {
             handleNavigate({ e });
-            logoutAction({ dispatch, actions });
+            logoutAction({ state, dispatch, actions });
           }}
         >
           Log Out

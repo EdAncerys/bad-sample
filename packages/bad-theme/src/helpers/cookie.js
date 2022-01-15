@@ -48,7 +48,7 @@ export const handleEncryption = ({ jwt }) => {
   const saltRounds = 10;
 
   const salt = bcrypt.genSaltSync(saltRounds);
-  const hash = bcrypt.hashSync(jwt, salt);
+  const hash = bcrypt.hashSync(jwt, salt); 
   const valid = bcrypt.compareSync(jwt, hash); // validate encrypted token
 
   if (valid) {

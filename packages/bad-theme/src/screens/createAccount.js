@@ -7,7 +7,7 @@ const CreateAccount = ({ state, actions }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  // HELPERS ----------------------------------------------------
+  // HELPERS ------------------------------------------------------------
   const handleUserLogin = async () => {
     console.log("handleUserLogin triggered");
     const URL = "http://localhost:8888/events/wp-json/jwt-auth/v1/token";
