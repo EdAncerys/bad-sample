@@ -37,8 +37,20 @@
 .dropdown-item {
   white-space: normal;
 }
-.quick-links .dropdown-item {
+.quick-link .dropdown-item {
   white-space: nowrap;
+}
+.quick-link .dropdown-menu {
+  left: -113px !important;
+  border-radius: 0.5em !important;
+}
+.quick-link:hover .dropdown-menu {
+  display: block;
+}
+.quick-link li:hover .quick-link-title {
+  color: #1f335e !important;
+  box-shadow: inset 0 -2px #1f335e !important;
+  cursor: pointer;
 }
 
 /* bootstrap css menu config */

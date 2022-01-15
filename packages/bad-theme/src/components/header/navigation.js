@@ -59,7 +59,6 @@ const Navigation = ({ state, actions, libraries }) => {
   const handleActiveMenu = ({ slug, removeShadow }) => {
     const selector = document.querySelector(`#menu-${slug}`);
     const shadowColor = handleBoxShadow(slug);
-    activeChildMenu.current = null; // clears sub menu nav
 
     if (removeShadow) {
       selector.style.boxShadow = "none";
@@ -68,16 +67,9 @@ const Navigation = ({ state, actions, libraries }) => {
     if (activeMenu.current === slug) selector.style.boxShadow = shadowColor;
   };
 
-  const handleSubMenu = ({ slug, removeMenu }) => {
+  const handleSubMenu = ({ slug }) => {
     const selector = document.querySelector(`#${slug}-submenu`);
-    console.log(slug);
-    console.log(activeChildMenu.current);
-    console.log(selector);
 
-    // if (removeMenu) {
-    //   selector.style.display = "none";
-    //   return;
-    // }
     if (activeChildMenu.current === slug) {
       selector.style.display = "block";
     } else {

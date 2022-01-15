@@ -251,6 +251,12 @@ li {
   color: #ffff !important;
 }
 
+.title-link:hover {
+  color: #1f335e !important;
+  box-shadow: inset 0 -2px #1f335e !important;
+  cursor: pointer;
+}
+
 /* icon  */
 .link-icon {
   position: relative;

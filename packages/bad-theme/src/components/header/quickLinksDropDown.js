@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import { Dropdown } from "react-bootstrap";
 
 import { colors } from "../../config/imports";
 import { setGoToAction } from "../../context";
@@ -16,8 +15,8 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
         <div
           style={{
             position: "absolute",
-            height: 25,
-            width: 145,
+            height: 35,
+            width: 147,
             backgroundColor: colors.lightSilver,
             top: -25,
             right: 0,
@@ -29,57 +28,57 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
 
   const ServeMenu = () => {
     return (
-      <div style={{ paddingBottom: `1em` }}>
+      <ul
+        className="dropdown-menu dropdown-menu-end shadow quick-link"
+        style={{
+          paddingBottom: `2em`,
+          marginTop: `1em`,
+          border: "none",
+          backgroundColor: colors.lightSilver,
+        }}
+      >
+        <ServeDivider />
+
         {MENU_DATA.map((item, key) => {
           const { title, url } = item;
 
           return (
-            <div
+            <li
               key={key}
-              className="flex-row quick-links"
+              className="flex-row"
               style={{
-                padding: `0 2em`,
+                marginRight: `2em`,
+                borderBottom: `1px dotted ${colors.darkSilver}`,
               }}
+              onClick={() => setGoToAction({ path: url, actions })}
             >
-              <Dropdown.Item
-                onClick={() => setGoToAction({ path: url, actions })}
-                style={{
-                  padding: `1em 0`,
-                  borderBottom: `1px dotted ${colors.darkSilver}`,
-                }}
-              >
-                <Html2React html={title} />
-              </Dropdown.Item>
-            </div>
+              <a className="dropdown-item" style={{ padding: `0.5em 0` }}>
+                <div
+                  className="quick-link-title"
+                  style={{ width: `fit-content` }}
+                >
+                  <Html2React html={title} />
+                </div>
+              </a>
+            </li>
           );
         })}
-      </div>
+      </ul>
     );
   };
 
   return (
-    <div className="dropdown dropdown-basic">
-      <div>
-        <Dropdown align="end">
-          <Dropdown.Toggle variant="shadow-none btn-m drop-down-btn">
-            Quick Links
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            <ServeDivider />
-            <ServeMenu />
-          </Dropdown.Menu>
-        </Dropdown>
-      </div>
+    <div className="dropdown quick-link">
+      <button className="dropdown-toggle drop-down-btn" type="button">
+        Quick Links
+      </button>
+      <ServeMenu />
     </div>
   );
 };
 
 const styles = {
-  container: {
-    backgroundColor: colors.lightSilver,
-    minWidth: 240,
-    paddingBottom: `1em`,
-  },
+  container: {},
 };
 
 export default connect(QuickLinksDropDown);
