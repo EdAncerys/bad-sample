@@ -19,6 +19,7 @@ const Navigation = ({ state, actions, libraries }) => {
 
   // active menu slug ref
   const activeMenu = useRef(null);
+  const activeChildMenu = useRef(null);
 
   useEffect(() => {
     // getting wp menu from state
@@ -29,6 +30,8 @@ const Navigation = ({ state, actions, libraries }) => {
     setWpMainMenu(data.slice(0, MAIN_NAV_LENGTH)); // main menu to display
     setWpMoreMenu(data.slice(MAIN_NAV_LENGTH, dataLength)); // more menu into dropdown
   }, [state.theme.menu]);
+
+  if (!wpMoreMenu.length || !wpMainMenu.length) return null;
 
   // HANDLERS ----------------------------------------------------
   const handleBoxShadow = (slug) => {
@@ -56,6 +59,7 @@ const Navigation = ({ state, actions, libraries }) => {
   const handleActiveMenu = ({ slug, removeShadow }) => {
     const selector = document.querySelector(`#menu-${slug}`);
     const shadowColor = handleBoxShadow(slug);
+    activeChildMenu.current = null; // clears sub menu nav
 
     if (removeShadow) {
       selector.style.boxShadow = "none";
@@ -64,9 +68,86 @@ const Navigation = ({ state, actions, libraries }) => {
     if (activeMenu.current === slug) selector.style.boxShadow = shadowColor;
   };
 
+  const handleSubMenu = ({ slug, removeMenu }) => {
+    const selector = document.querySelector(`#${slug}-submenu`);
+    console.log(slug);
+    console.log(activeChildMenu.current);
+    console.log(selector);
+
+    // if (removeMenu) {
+    //   selector.style.display = "none";
+    //   return;
+    // }
+    if (activeChildMenu.current === slug) {
+      selector.style.display = "block";
+    } else {
+      if (selector) selector.style.display = "none";
+    }
+  };
+
   // SERVERS -----------------------------------------------------
   const ServeMenu = ({ secondaryMenu }) => {
-    const ServeMenuChildren = ({ item }) => {
+    const ServeSubChildMenu = ({ child_items, parentKey, slug }) => {
+      if (!child_items) return null;
+
+      return (
+        <ul
+          id={`${slug}-submenu`}
+          aria-labelledby="navbarDropdownMenuLink"
+          className="shadow"
+          style={{
+            position: "absolute",
+            zIndex: 1,
+            top: `5%`,
+            width: "35%",
+            height: "90%",
+            marginLeft: "30%",
+            backgroundColor: colors.lightSilver,
+            overflowY: "auto",
+            display: "none",
+          }}
+          onMouseEnter={() => {
+            activeChildMenu.current = slug;
+            handleSubMenu({ slug });
+          }}
+          onMouseLeave={() => {
+            activeChildMenu.current = null; // clear Ref hook after handler been triggered only!
+            handleSubMenu({ slug, removeMenu: true });
+          }}
+        >
+          <div style={{ paddingRight: `2em` }}>
+            {child_items.map((item, key) => {
+              const { title, url, child_items } = item;
+
+              return (
+                <li
+                  key={key}
+                  className="flex-row"
+                  style={{
+                    width: "100%",
+                    borderBottom: `1px dotted ${colors.darkSilver}`,
+                  }}
+                >
+                  <a
+                    className="flex-row dropdown-item"
+                    style={styles.link}
+                    onClick={() => setGoToAction({ path: url, actions })}
+                  >
+                    <div className="flex">
+                      <div className="menu-title">
+                        <Html2React html={title} />
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              );
+            })}
+          </div>
+        </ul>
+      );
+    };
+
+    const ServeChildMenu = ({ item }) => {
       const { title, slug, url, child_items } = item;
 
       if (!child_items) return null;
@@ -86,7 +167,7 @@ const Navigation = ({ state, actions, libraries }) => {
             }}
           >
             {child_items.map((item, key) => {
-              const { title, url, child_items } = item;
+              const { title, url, slug, child_items } = item;
 
               const ServeMenuArrow = () => {
                 if (!child_items) return null;
@@ -111,6 +192,20 @@ const Navigation = ({ state, actions, libraries }) => {
                     width: "100%",
                     borderBottom: `1px dotted ${colors.darkSilver}`,
                   }}
+                  onMouseEnter={() => {
+                    activeChildMenu.current = slug;
+                    handleSubMenu({ slug });
+                  }}
+                  onMouseLeave={() => {
+                    activeChildMenu.current = null; // clear Ref hook after handler been triggered only!
+                    if (child_items) {
+                      setTimeout(() => {
+                        handleSubMenu({ slug, removeMenu: true });
+                      }, 200);
+                    } else {
+                      handleSubMenu({ slug, removeMenu: true });
+                    }
+                  }}
                 >
                   <a
                     className="flex-row dropdown-item"
@@ -124,6 +219,11 @@ const Navigation = ({ state, actions, libraries }) => {
                     </div>
                     <ServeMenuArrow />
                   </a>
+                  <ServeSubChildMenu
+                    parentKey={key}
+                    child_items={child_items}
+                    slug={slug}
+                  />
                 </li>
               );
             })}
@@ -151,7 +251,7 @@ const Navigation = ({ state, actions, libraries }) => {
             >
               <Html2React html={"More"} />
             </a>
-            <ServeMenuChildren item={{ child_items: wpMoreMenu }} />
+            <ServeChildMenu item={{ child_items: wpMoreMenu }} />
           </li>
         </ul>
       );
@@ -182,7 +282,7 @@ const Navigation = ({ state, actions, libraries }) => {
                 >
                   <Html2React html={title} />
                 </a>
-                <ServeMenuChildren item={item} />
+                <ServeChildMenu item={item} />
               </li>
             </ul>
           );
