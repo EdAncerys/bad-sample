@@ -91,7 +91,7 @@ const IndexCard = ({
         if (!link || link_id) return null;
 
         return (
-          <div onClick={() => setGoToAction({ path: link.url, actions })}>
+          <div className='title-link' onClick={() => setGoToAction({ path: link.url, actions })}>
             <Html2React html={title} />
           </div>
         );

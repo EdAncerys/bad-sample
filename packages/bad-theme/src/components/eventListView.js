@@ -93,7 +93,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
 
       return (
         <div
-          className="primary-title"
+          className="primary-title title-link"
           style={{
             fontSize: 20,
             color: colors.softBlack,
