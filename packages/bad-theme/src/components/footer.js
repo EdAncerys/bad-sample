@@ -4,11 +4,12 @@ import { colors } from "../config/imports";
 import Image from "@frontity/components/image";
 import Link from "@frontity/components/link";
 
+import BlockWrapper from "./blockWrapper";
+
 import BADLogo from "../img/svg/badLogoFooter.svg";
 import Facebook from "../img/svg/facebook.svg";
 import Twitter from "../img/svg/twitter.svg";
 import Instagram from "../img/svg/instagram.svg";
-import BlockWrapper from "./blockWrapper";
 
 const Footer = ({ state, actions }) => {
   const date = new Date();
@@ -59,27 +60,19 @@ const Footer = ({ state, actions }) => {
             className="flex"
             style={{ justifyContent: "space-around", paddingLeft: `3em` }}
           >
-            <div className="toggle-icon-opacity" style={styles.socials}>
+            <div style={styles.socials}>
               <Link link={`https://www.facebook.com/`} target="_blank">
-                <Image
-                  src={Facebook}
-                  className="d-block h-100"
-                  alt="Facebook"
-                />
+                <span className="facebook-icon" />
               </Link>
             </div>
-            <div className="toggle-icon-opacity" style={styles.socials}>
+            <div style={styles.socials}>
               <Link link={`https://www.twitter.com/`} target="_blank">
-                <Image src={Twitter} className="d-block h-100" alt="Twitter" />
+                <span className="twitter-icon" />
               </Link>
             </div>
-            <div className="toggle-icon-opacity" style={styles.socials}>
+            <div style={styles.socials}>
               <Link link={`https://www.instagram.com/`} target="_blank">
-                <Image
-                  src={Instagram}
-                  className="d-block h-100"
-                  alt="Instagram"
-                />
+                <span className="instagram-icon" />
               </Link>
             </div>
           </div>
@@ -98,29 +91,55 @@ const Footer = ({ state, actions }) => {
           ©{`${year}`} British Association of Dermatologists
         </div>
         <div className="flex" style={{ flex: 2, justifyContent: "flex-end" }}>
-          <div style={styles.footerLink}>
-            <div>Registered Charity No. 25847</div>
+          <div className="footer-title-link" style={styles.footerLink}>
+            <Link
+              link={`https://skylarkcreative.co.uk/`}
+              target="_blank"
+              style={styles.footerLink}
+            >
+              Registered Charity No. 25847
+            </Link>
             <ServeDivider />
           </div>
-          <div style={styles.footerLink}>
-            <div>Equal Opportunities Policy</div>
+          <div className="footer-title-link" style={styles.footerLink}>
+            <Link
+              link={`https://skylarkcreative.co.uk/`}
+              target="_blank"
+              style={styles.footerLink}
+            >
+              Equal Opportunities Policy
+            </Link>
             <ServeDivider />
           </div>
-          <div style={styles.footerLink}>
-            <div>Privacy Policy</div>
+          <div className="footer-title-link" style={styles.footerLink}>
+            <Link
+              link={`https://skylarkcreative.co.uk/`}
+              target="_blank"
+              style={styles.footerLink}
+            >
+              Privacy Policy
+            </Link>
             <ServeDivider />
           </div>
-          <div style={styles.footerLink}>
-            <div>Terms & Conditions</div>
+          <div className="footer-title-link" style={styles.footerLink}>
+            <Link
+              link={`https://skylarkcreative.co.uk/`}
+              target="_blank"
+              style={styles.footerLink}
+            >
+              Terms & Conditions
+            </Link>
             <ServeDivider />
           </div>
-          <Link
-            link={`https://skylarkcreative.co.uk/`}
-            target="_blank"
-            style={styles.footerLink}
-          >
-            Site produced by Skylark
-          </Link>
+          <div className="footer-title-link">
+            <Link
+              link={`https://skylarkcreative.co.uk/`}
+              target="_blank"
+              style={styles.footerLink}
+            >
+              Site produced by Skylark
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -152,14 +171,10 @@ const styles = {
   },
   footerInfo: {
     display: "flex",
-    cursor: "pointer",
   },
   footerLink: {
     display: "flex",
     fontSize: 9,
-    color: colors.white,
-    opacity: 0.5,
-    cursor: "pointer",
   },
   socials: {
     width: 25,

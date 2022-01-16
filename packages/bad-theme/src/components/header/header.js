@@ -10,7 +10,6 @@ import nav from "../../css/nav.css";
 import input from "../../css/input.css";
 import custom from "../../css/custom.css";
 import buttons from "../../css/buttons.css";
-import animations from "../../css/animations.css";
 
 // COMPONENTS -------------------------------------------------------------
 import HTMLHead from "./htmlHead";
@@ -24,7 +23,7 @@ const Header = ({ state, actions }) => {
     <>
       <Global
         styles={css`
-          ${bootStrapCSS}, ${globalCSS}, ${carousel}, ${accordion}, ${nav}, ${input},  ${buttons}, ${animations}, ${custom},
+          ${bootStrapCSS}, ${globalCSS}, ${carousel}, ${accordion}, ${nav}, ${input},  ${buttons}, ${custom},
         `}
       />
       <HTMLHead />
