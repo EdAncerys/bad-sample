@@ -91,7 +91,7 @@ const Navigation = ({ state, actions, libraries }) => {
             position: "absolute",
             zIndex: 1,
             top: `5%`,
-            width: "35%",
+            width: "33%",
             height: "90%",
             marginLeft: "30%",
             backgroundColor: colors.lightSilver,
