@@ -14,7 +14,6 @@ import {
 import {
   loginAction,
   logoutAction,
-  setUserAction,
   authenticateAppAction,
 } from "./auth/actions";
 import { sendEmailEnquireAction } from "./auth/sendEnquire";
@@ -30,7 +29,6 @@ export {
   setLoginModalAction,
   setCreateAccountModalAction,
   setEnquireAction,
-  setUserAction,
   loginAction,
   logoutAction,
   eventFilterAction,

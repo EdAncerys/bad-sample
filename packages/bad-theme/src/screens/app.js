@@ -35,7 +35,7 @@ import Error from "./error";
 import BlockWrapper from "../components/blockWrapper";
 import { handleGetCookie } from "../helpers/cookie";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setUserAction } from "../context";
+import { useAppDispatch, useAppState } from "../context";
 import { useCookies } from "react-cookie";
 
 const App = ({ state, actions }) => {
@@ -54,7 +54,6 @@ const App = ({ state, actions }) => {
   // useEffect(() => {
   //   if (cookies) {
   //     console.log(`API call ${cookies}`);
-  //     setUserAction({ dispatch, user: cookies });
   //   }
   // }, []);
 
