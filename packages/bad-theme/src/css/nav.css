@@ -54,10 +54,6 @@
 }
 
 /* bootstrap css menu config */
-.nav-item:hover .dropdown-menu {
-  display: block !important;
-  cursor: pointer;
-}
 .main-menu-container .dropdown-toggle::after {
   display: none !important;
 }

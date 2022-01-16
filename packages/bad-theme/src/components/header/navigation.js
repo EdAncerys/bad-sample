@@ -58,94 +58,117 @@ const Navigation = ({ state, actions, libraries }) => {
 
   const handleActiveMenu = ({ slug, removeShadow }) => {
     const selector = document.querySelector(`#menu-${slug}`);
+    const childMenuSelector = document.querySelector(`#${slug}-child-menu`);
     const shadowColor = handleBoxShadow(slug);
+
+    console.log(slug);
 
     if (removeShadow) {
       selector.style.boxShadow = "none";
+      childMenuSelector.style.display = "none";
       return;
     }
     if (activeMenu.current === slug) selector.style.boxShadow = shadowColor;
+    childMenuSelector.style.display = "block";
   };
 
   const handleSubMenu = ({ slug }) => {
     const selector = document.querySelector(`#${slug}-submenu`);
 
-    if (activeChildMenu.current === slug) {
+    if (activeChildMenu.current === slug && selector) {
       selector.style.display = "block";
     } else {
       if (selector) selector.style.display = "none";
     }
   };
 
+  const handleOnClickNavigation = ({ path, parentSlug }) => {
+    const childMenuSelector = document.querySelector(
+      `#${parentSlug}-child-menu`
+    );
+
+    console.log(parentSlug);
+    childMenuSelector.style.display = "none";
+    if (path) setGoToAction({ path, actions });
+  };
+
   // SERVERS -----------------------------------------------------
   const ServeMenu = ({ secondaryMenu }) => {
-    const ServeSubChildMenu = ({ child_items, parentKey, slug }) => {
-      if (!child_items) return null;
-
-      return (
-        <ul
-          id={`${slug}-submenu`}
-          aria-labelledby="navbarDropdownMenuLink"
-          className="shadow"
-          style={{
-            position: "absolute",
-            zIndex: 1,
-            top: `5%`,
-            width: "33%",
-            height: "90%",
-            marginLeft: "30%",
-            backgroundColor: colors.lightSilver,
-            overflowY: "auto",
-            display: "none",
-          }}
-          onMouseEnter={() => {
-            activeChildMenu.current = slug;
-            handleSubMenu({ slug });
-          }}
-          onMouseLeave={() => {
-            activeChildMenu.current = null; // clear Ref hook after handler been triggered only!
-            handleSubMenu({ slug, removeMenu: true });
-          }}
-        >
-          <div style={{ paddingRight: `2em` }}>
-            {child_items.map((item, key) => {
-              const { title, url, child_items } = item;
-
-              return (
-                <li
-                  key={key}
-                  className="flex-row"
-                  style={{
-                    width: "100%",
-                    borderBottom: `1px dotted ${colors.darkSilver}`,
-                  }}
-                >
-                  <a
-                    className="flex-row dropdown-item"
-                    style={styles.link}
-                    onClick={() => setGoToAction({ path: url, actions })}
-                  >
-                    <div className="flex">
-                      <div className="menu-title">
-                        <Html2React html={title} />
-                      </div>
-                    </div>
-                  </a>
-                </li>
-              );
-            })}
-          </div>
-        </ul>
-      );
-    };
-
-    const ServeChildMenu = ({ item }) => {
+    const ServeChildMenu = ({ item, parentSlug }) => {
       const { title, slug, url, child_items } = item;
 
       if (!child_items) return null;
+      let slugID = parentSlug;
+      if (secondaryMenu) slugID = "more";
+
+      const ServeSubChildMenu = ({ child_items, parentKey, slug }) => {
+        if (!child_items) return null;
+
+        return (
+          <ul
+            id={`${slug}-submenu`}
+            aria-labelledby="navbarDropdownMenuLink"
+            className="shadow"
+            style={{
+              position: "absolute",
+              zIndex: 1,
+              top: `5%`,
+              width: "33%",
+              height: "90%",
+              marginLeft: "30%",
+              backgroundColor: colors.lightSilver,
+              overflowY: "auto",
+              display: "none",
+            }}
+            onMouseEnter={() => {
+              activeChildMenu.current = slug;
+              handleSubMenu({ slug });
+            }}
+            onMouseLeave={() => {
+              activeChildMenu.current = null; // clear Ref hook after handler been triggered only!
+              handleSubMenu({ slug, removeMenu: true });
+            }}
+          >
+            <div style={{ paddingRight: `2em` }}>
+              {child_items.map((item, key) => {
+                const { title, url, slug, child_items } = item;
+
+                return (
+                  <li
+                    key={key}
+                    className="flex-row"
+                    style={{
+                      width: "100%",
+                      borderBottom: `1px dotted ${colors.darkSilver}`,
+                    }}
+                  >
+                    <a
+                      className="flex-row dropdown-item"
+                      style={styles.link}
+                      onClick={() =>
+                        handleOnClickNavigation({
+                          path: url,
+                          parentSlug: parentSlug || "more",
+                        })
+                      }
+                    >
+                      <div className="flex">
+                        <div className="menu-title">
+                          <Html2React html={title} />
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                );
+              })}
+            </div>
+          </ul>
+        );
+      };
 
       return (
         <ul
+          id={`${slugID}-child-menu`}
           className="dropdown-menu child-menu"
           aria-labelledby="navbarDropdownMenuLink"
         >
@@ -202,7 +225,12 @@ const Navigation = ({ state, actions, libraries }) => {
                   <a
                     className="flex-row dropdown-item"
                     style={styles.link}
-                    onClick={() => setGoToAction({ path: url, actions })}
+                    onClick={() =>
+                      handleOnClickNavigation({
+                        path: url,
+                        parentSlug: parentSlug || "more",
+                      })
+                    }
                   >
                     <div className="flex">
                       <div className="menu-title">
@@ -226,20 +254,24 @@ const Navigation = ({ state, actions, libraries }) => {
 
     if (secondaryMenu)
       return (
-        <ul
-          className="navbar-nav secondary-menu-container"
-          style={{ paddingLeft: `3em` }}
-        >
+        <ul className="navbar-nav secondary-menu-container">
           <li
             className="nav-item dropdown"
+            style={{ paddingLeft: `3em` }}
             onMouseEnter={() => {
               activeMenu.current = null;
+              handleActiveMenu({ slug: "more" });
+            }}
+            onMouseLeave={() => {
+              activeMenu.current = null; // clear Ref hook after handler been triggered only!
+              handleActiveMenu({ slug: "more", removeShadow: true });
             }}
           >
             <a
-              id={`menu-more}`}
+              id={`menu-more`}
               className="nav-link dropdown-toggle"
               style={styles.link}
+              onClick={() => handleOnClickNavigation({ parentSlug: "more" })}
             >
               <Html2React html={"More"} />
             </a>
@@ -270,11 +302,13 @@ const Navigation = ({ state, actions, libraries }) => {
                   id={`menu-${slug}`}
                   className="nav-link dropdown-toggle"
                   style={styles.link}
-                  onClick={() => setGoToAction({ path: url, actions })}
+                  onClick={() =>
+                    handleOnClickNavigation({ path: url, parentSlug: slug })
+                  }
                 >
                   <Html2React html={title} />
                 </a>
-                <ServeChildMenu item={item} />
+                <ServeChildMenu item={item} parentSlug={slug} />
               </li>
             </ul>
           );
