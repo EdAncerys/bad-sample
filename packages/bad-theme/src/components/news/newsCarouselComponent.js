@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Carousel } from "react-bootstrap";
@@ -20,6 +20,7 @@ const NewsCarouselComponent = ({ state, actions, libraries, block }) => {
   const [postList, setPostList] = useState(null);
   const [category, setCategory] = useState(null);
   const { post_limit, disable_vertical_padding } = block;
+  const mountedRef = useRef(true);
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
@@ -31,6 +32,10 @@ const NewsCarouselComponent = ({ state, actions, libraries, block }) => {
     }
 
     setPostList(POST_LIST);
+
+    return () => {
+      mountedRef.current = false; // clean up function
+    };
   }, [state.source.post]);
 
   if (!postList || !category) return <Loading />;

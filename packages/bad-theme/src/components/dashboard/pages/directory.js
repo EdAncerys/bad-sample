@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import SearchIcon from "@mui/icons-material/Search";
@@ -19,7 +19,7 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [fadData, setFadData] = useState(null);
-
+  const mountedRef = useRef(true);
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
   const ctaHeight = 45;
@@ -33,6 +33,10 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
     } else {
       setFadData(fad);
     }
+
+    return () => {
+      mountedRef.current = false; // clean up function
+    };
   }, [fad]);
 
   const ServeFadList = ({ fad }) => {

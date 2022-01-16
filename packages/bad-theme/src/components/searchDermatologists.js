@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import GooglePlacesAutocomplete, {
@@ -22,6 +22,7 @@ const SearchDermatologists = ({ state, actions, libraries, block }) => {
 
   const { disable_vertical_padding, background_colour } = block;
 
+  const mountedRef = useRef(true);
   const ctaHeight = 45;
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
@@ -36,6 +37,10 @@ const SearchDermatologists = ({ state, actions, libraries, block }) => {
     console.log("fetch dermatologists data");
 
     setIsReady(true);
+
+    return () => {
+      mountedRef.current = false; // clean up function
+    };
   }, []);
 
   // hook applies after React has performed all DOM mutations

@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Form } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
@@ -28,6 +28,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
   const [gradeList, setGradeList] = useState(null); // data
   const [roleList, setRoleList] = useState(null); // data
   const [modalData, setModalData] = useState(null);
+  const mountedRef = useRef(true);
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [gradeFilter, setGradeFilter] = useState(null);
@@ -73,6 +74,10 @@ const ElectionBlocks = ({ state, actions, block }) => {
 
     setGradeList(GRADES);
     setRoleList(ROLES);
+
+    return () => {
+      mountedRef.current = false; // clean up function
+    };
   }, []);
   // DATA pre FETCH ----------------------------------------------------------------
   if (!electionList) return <Loading />;

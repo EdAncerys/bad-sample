@@ -2,7 +2,6 @@ export const initialState = {
   isFetching: null,
   isError: null,
   jwt: null,
-  user: null,
   tweets: null,
   fad: null,
 
@@ -17,8 +16,6 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, isFetching: action.payload };
     case "SET_ERROR_ACTION":
       return { ...state, isError: action.payload };
-    case "SET_USER_ACTION":
-      return { ...state, user: action.payload };
     case "SET_LOGIN_MODAL_ACTION":
       return { ...state, loginModalAction: action.payload };
     case "SET_CREATE_ACCOUNT_ACTION":

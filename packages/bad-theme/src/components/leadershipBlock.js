@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import AccordionComponent from "./accordion/accordion";
@@ -8,6 +8,7 @@ const LeadershipBlock = ({ state, actions, block }) => {
   if (!block) return <Loading />;
 
   const [leadershipList, setLeadershipList] = useState(null);
+  const mountedRef = useRef(true)
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
@@ -18,6 +19,10 @@ const LeadershipBlock = ({ state, actions, block }) => {
 
     const LEADERSHIP_LIST = Object.values(state.source.leadership_team); // add leadershipTeam object to data array
     setLeadershipList(LEADERSHIP_LIST);
+
+    return () => {
+      mountedRef.current = false;   // clean up function
+    };
   }, [state.source.leadership_team]);
 
   // DATA pre FETCH ----------------------------------------------------------------

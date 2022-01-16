@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
@@ -17,7 +17,17 @@ import {
 
 const HeaderActions = ({ state, actions }) => {
   const dispatch = useAppDispatch();
-  const { user } = useAppState();
+  const { jwt } = useAppState();
+  const user = state.context.isActiveUser;
+
+  const [isReady, SetReady] = useState(null);
+
+  // hook applies after React has performed all DOM mutations
+  // prevent dashboard actions to load before user data loaded
+  useLayoutEffect(() => {
+    SetReady(true);
+  }, []);
+  if (!isReady) return null;
 
   // SERVERS ----------------------------------------------------
   const ServeLogoContainer = () => {

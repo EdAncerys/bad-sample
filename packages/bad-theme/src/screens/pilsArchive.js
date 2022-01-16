@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect, styled } from "frontity";
 import { v4 as uuidv4 } from "uuid";
 
@@ -16,6 +16,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [pilList, setPilList] = useState([]);
+  const mountedRef = useRef(true);
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -36,6 +37,10 @@ const PilsArchive = ({ state, actions, libraries }) => {
       isThereNextPage = nextPage;
     }
     setPilList(Object.values(state.source.pils)); // add pill object to data array
+
+    return () => {
+      mountedRef.current = false; // clean up function
+    };
   }, []);
   // DATA pre FETCH ----------------------------------------------------------------
 

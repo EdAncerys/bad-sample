@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
@@ -27,6 +27,7 @@ const NewsAndMediaHeader = ({
 
   if (!newsAndMediaInfo) return null;
 
+  const mountedRef = useRef(true);
   const [category, setCategory] = useState(null);
   const { categories, excerpt, title, date, featured_media } = newsAndMediaInfo;
   const isLayoutTwo = layout === "layout_two";
@@ -40,6 +41,10 @@ const NewsAndMediaHeader = ({
       const categoryName = filter[0].name;
       setCategory(categoryName);
     }
+
+    return () => {
+      mountedRef.current = false; // clean up function
+    };
   }, []);
 
   const ICON_WIDTH = 40;

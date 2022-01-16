@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import Card from "../card/card";
@@ -12,8 +12,7 @@ const NewsBlock = ({ state, actions, libraries, block }) => {
   const { layout, post_limit, category_filter, colour } = block;
   const isLayoutTwo = layout === "layout_two";
   const isLayoutThree = layout === "layout_three";
-
-  console.log(block);
+  const mountedRef = useRef(true);
 
   // HELPERS ----------------------------------------------------------------
   const handleSearchSubmit = () => {
@@ -53,6 +52,10 @@ const NewsBlock = ({ state, actions, libraries, block }) => {
     }
 
     setPostList(POST_LIST);
+
+    return () => {
+      mountedRef.current = false; // clean up function
+    };
   }, [state.source.post]);
   // DATA pre FETCH ----------------------------------------------------------------
   if (!postList || !category) return <Loading />;

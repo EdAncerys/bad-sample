@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Switch from "@frontity/components/switch";
 import { colors } from "../config/imports";
@@ -33,20 +33,32 @@ import Venue from "./venue";
 import Loading from "../components/loading";
 import Error from "./error";
 import BlockWrapper from "../components/blockWrapper";
+import { handleGetCookie } from "../helpers/cookie";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState } from "../context";
+import { useAppDispatch, useAppState, setUserAction } from "../context";
+import { useCookies } from "react-cookie";
 
 const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
-  const { jwt, user } = useAppState();
-
-  // env file access
-  // console.log(".env variables", state.auth.ENVIRONMENT);
+  const { jwt } = useAppState();
+  const user = state.context.isActiveUser;
 
   const endPoint = state.router.link;
   const data = state.source.get(endPoint);
   console.log("INDEX data", data); // debug
 
+  // HELPERS ------------------------------------------------------------
+  // const LOGIN_COOKIE = "BAD-WebApp";
+  // const [cookies, setCookie] = useCookies();
+  // console.log("cookies", cookies);
+  // useEffect(() => {
+  //   if (cookies) {
+  //     console.log(`API call ${cookies}`);
+  //     setUserAction({ dispatch, user: cookies });
+  //   }
+  // }, []);
+
+  // RETURN ------------------------------------------------------------
   return (
     <div
       onClick={(e) => {

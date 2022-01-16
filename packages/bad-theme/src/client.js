@@ -5,6 +5,8 @@ import iframe from "@frontity/html2react/processors/iframe";
 import link from "@frontity/html2react/processors/link";
 import menuHandler from "./handlers/menu-handler";
 
+import { handleGetCookie } from "./helpers/cookie";
+
 const BADTheme = {
   name: "bad-theme",
   roots: {
@@ -23,6 +25,9 @@ const BADTheme = {
       bannerHeight: 425, // px units
       marginHorizontal: 100, // px units
       marginVertical: 40, // px units
+    },
+    context: {
+      isActiveUser: null,
     },
     auth: {
       ENVIRONMENT: process.env.ENVIRONMENT,
@@ -93,6 +98,11 @@ const BADTheme = {
           isThereNextEventPage = nextPage;
         }
 
+        // handle login auth via cookies
+        const jwt = handleGetCookie({ name: `BAD-WebApp` });
+        // handle API call to fetch user data
+        if (jwt) state.context.isActiveUser = jwt;
+
         // pre load fonts from google
         import("webfontloader").then((WebFontLoader) => {
           // console.log("google fonts loaded"); // debug
@@ -103,6 +113,7 @@ const BADTheme = {
           });
         });
       },
+
       afterCSR: async ({ state, actions }) => {
         console.log("afterCSR triggered"); // debug
         const menu = sessionStorage.getItem("badMenu"); // checking if menu already pre fetched from wp

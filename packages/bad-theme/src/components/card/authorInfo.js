@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import Link from "@frontity/components/link";
@@ -21,6 +21,7 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
 
   if (!authorInfo) return null;
 
+  const mountedRef = useRef(true)
   const [category, setCategory] = useState(null);
   const ICON_WIDTH = 100;
   const { categories, date, modified } = authorInfo;
@@ -35,6 +36,10 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
       const categoryName = filter[0].name;
       setCategory(categoryName);
     }
+
+    return () => {
+      mountedRef.current = false;   // clean up function
+    };
   }, []);
 
   // SERVERS ---------------------------------------------
