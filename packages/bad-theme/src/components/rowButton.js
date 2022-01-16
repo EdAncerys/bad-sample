@@ -60,7 +60,7 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
   const ServeButton = () => {
     return (
       <div
-        className="shadow"
+        className="shadow title-animation"
         style={{
           ...styles.container,
           backgroundColor: colors.white,
@@ -86,7 +86,7 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
         <div className="flex-col" style={{ padding: `1.5em 1em` }}>
           <div className="flex-row" style={{ alignItems: "center" }}>
             <div
-              className="flex title-animation"
+              className="flex"
               style={{
                 fontSize: 13,
                 letterSpacing: 2,
@@ -97,7 +97,9 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
                 cursor: "pointer",
               }}
             >
-              <Html2React html={LABEL} />
+              <span style={{ width: "fit-content" }}>
+                <Html2React html={LABEL} />
+              </span>
             </div>
             <div style={{ display: "grid", alignItems: "center" }}>
               <KeyboardArrowRightIcon

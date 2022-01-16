@@ -8,6 +8,27 @@ import { MENU_DATA } from "../../config/data";
 const QuickLinksDropDown = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
+  // HANDLERS ----------------------------------------------------
+  const handleActiveMenu = ({ mouseLeave }) => {
+    const selector = document.querySelector(`#quick-link-menu`);
+    const btn = document.querySelector(`#drop-down-btn`);
+
+    if (mouseLeave) {
+      if (selector) selector.style.display = "none";
+      if (btn) btn.classList.remove = "shadow";
+      return;
+    }
+    if (selector) selector.style.display = "block";
+    if (btn) btn.classList.add = "shadow";
+  };
+
+  const handleOnClickNavigation = ({ path }) => {
+    const selector = document.querySelector(`#quick-link-menu`);
+
+    selector.style.display = "none";
+    if (path) setGoToAction({ path, actions });
+  };
+
   // SERVERS ----------------------------------------------------------
   const ServeDivider = () => {
     return (
@@ -29,6 +50,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
   const ServeMenu = () => {
     return (
       <ul
+        id="quick-link-menu"
         className="dropdown-menu dropdown-menu-end shadow quick-link"
         style={{
           paddingBottom: `2em`,
@@ -50,7 +72,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
                 marginRight: `2em`,
                 borderBottom: `1px dotted ${colors.darkSilver}`,
               }}
-              onClick={() => setGoToAction({ path: url, actions })}
+              onClick={() => handleOnClickNavigation({ path: url })}
             >
               <a className="dropdown-item" style={{ padding: `0.5em 0` }}>
                 <div
@@ -68,8 +90,18 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
   };
 
   return (
-    <div className="dropdown quick-link">
-      <button className="dropdown-toggle drop-down-btn" type="button">
+    <div
+      className="dropdown quick-link"
+      onMouseEnter={handleActiveMenu}
+      onMouseLeave={() => {
+        handleActiveMenu({ mouseLeave: true });
+      }}
+    >
+      <button
+        id="drop-down-btn"
+        className="dropdown-toggle drop-down-btn"
+        type="button"
+      >
         Quick Links
       </button>
       <ServeMenu />

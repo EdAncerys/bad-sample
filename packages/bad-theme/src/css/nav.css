@@ -27,7 +27,7 @@
 .bad-header a:hover {
   box-shadow: none;
 }
-/* drop down link config */
+/* quick link drop down config */
 .dropdown-item.active,
 .dropdown-item:active {
   color: #707070 !important;
@@ -43,9 +43,6 @@
 .quick-link .dropdown-menu {
   left: -113px !important;
   border-radius: 0.5em !important;
-}
-.quick-link:hover .dropdown-menu {
-  display: block;
 }
 .quick-link li:hover .quick-link-title {
   color: #1f335e !important;

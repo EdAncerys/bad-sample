@@ -61,15 +61,14 @@ const Navigation = ({ state, actions, libraries }) => {
     const childMenuSelector = document.querySelector(`#${slug}-child-menu`);
     const shadowColor = handleBoxShadow(slug);
 
-    console.log(slug);
-
     if (removeShadow) {
-      selector.style.boxShadow = "none";
-      childMenuSelector.style.display = "none";
+      if (selector) selector.style.boxShadow = "none";
+      if (childMenuSelector) childMenuSelector.style.display = "none";
       return;
     }
-    if (activeMenu.current === slug) selector.style.boxShadow = shadowColor;
-    childMenuSelector.style.display = "block";
+    if (activeMenu.current === slug && selector)
+      selector.style.boxShadow = shadowColor;
+    if (childMenuSelector) childMenuSelector.style.display = "block";
   };
 
   const handleSubMenu = ({ slug }) => {
@@ -87,8 +86,7 @@ const Navigation = ({ state, actions, libraries }) => {
       `#${parentSlug}-child-menu`
     );
 
-    console.log(parentSlug);
-    childMenuSelector.style.display = "none";
+    if (childMenuSelector) childMenuSelector.style.display = "none";
     if (path) setGoToAction({ path, actions });
   };
 
