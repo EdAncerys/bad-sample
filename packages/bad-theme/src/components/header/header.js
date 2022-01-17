@@ -10,6 +10,7 @@ import nav from "../../css/nav.css";
 import input from "../../css/input.css";
 import custom from "../../css/custom.css";
 import buttons from "../../css/buttons.css";
+import iFrame from "../../css/iFrame.css";
 
 // COMPONENTS -------------------------------------------------------------
 import HTMLHead from "./htmlHead";
@@ -17,20 +18,29 @@ import HeaderActions from "./headerActions";
 import Navigation from "./navigation";
 
 const Header = ({ state, actions }) => {
-  const data = state.source.get(state.router.link);
+  const endPoint = state.router.link;
+  const data = state.source.get(endPoint);
+
+  const ServeNavigation = () => {
+    if (endPoint.includes("/redirect/")) return null;
+
+    return (
+      <div className="bad-header" style={styles.container}>
+        <HeaderActions />
+        <Navigation />
+      </div>
+    );
+  };
 
   return (
     <>
       <Global
         styles={css`
-          ${bootStrapCSS}, ${globalCSS}, ${carousel}, ${accordion}, ${nav}, ${input},  ${buttons}, ${custom},
+          ${bootStrapCSS}, ${globalCSS}, ${carousel}, ${accordion}, ${nav}, ${input},  ${buttons}, ${iFrame}, ${custom},
         `}
       />
       <HTMLHead />
-      <div className="bad-header" style={styles.container}>
-        <HeaderActions />
-        <Navigation />
-      </div>
+      <ServeNavigation />
     </>
   );
 };

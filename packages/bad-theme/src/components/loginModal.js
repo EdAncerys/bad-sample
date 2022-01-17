@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
+
+import Iframe from "react-iframe";
+import ActionPlaceholder from "../components/actionPlaceholder";
 
 import { colors } from "../config/imports";
 import RowButton from "./rowButton";
@@ -11,11 +14,23 @@ import {
   setLoginModalAction,
   setCreateAccountModalAction,
   loginAction,
+  setFetchAction,
 } from "../context";
 
 const LoginModal = ({ state, actions }) => {
   const dispatch = useAppDispatch();
-  const { loginModalAction } = useAppState();
+  const { loginModalAction, isFetching } = useAppState();
+
+  const codeRef = useRef(null);
+  let myIframe = null; // iFrame window
+
+  useEffect(() => {
+    myIframe = document.getElementById("inlineBADLogon");
+    if (!myIframe) return console.log("No iFrame Detected");
+
+    console.log("myIframe", myIframe);
+    myIframe.addEventListener("load", iFrameHandler);
+  }, [loginModalAction]);
 
   // HANDLERS ----------------------------------------------------
   const handleLoginAction = () => {
@@ -36,48 +51,125 @@ const LoginModal = ({ state, actions }) => {
     });
   };
 
+  const iFrameHandler = async () => {
+    console.log("iFrameHandler triggered");
+    const iFrameContainer = document.querySelector(`#iFrame-container`);
+
+    try {
+      const currentWin = myIframe.contentWindow.location.href;
+      console.log("currentWin", currentWin);
+
+      // ⏬⏬  CORS validation on old type browsers ⏬⏬
+      // const isDevelopment = state.auth.ENVIRONMENT;
+      // const URL = isDevelopment
+      //   ? !/http:\/\/localhost:3000/i.test(win)
+      //   : currentWin.includes(state.auth.BASE_URL);
+
+      // if (URL)
+      //   throw new Error("Wrong redirection url");
+
+      // if (iFrameContainer) iFrameContainer.style.display = "none"; // hide iFrame on redirect
+
+      const iqs = new URLSearchParams(myIframe.contentWindow.location.search);
+      console.log("*** READ IFRAME INFORMATION OK **");
+      console.log("iqs = %o", iqs.toString());
+
+      if (iqs && iqs.has("transId")) {
+        console.log("*** WE FOUND A TRANSACTION ID IN THE IFRAME **");
+        console.log("transId", iqs.get("transId"));
+
+        const transId = iqs.get("transId");
+        codeRef.current = transId;
+        // await loginAction({ state, dispatch, transId: codeRef.current });
+
+        setTimeout(async () => {
+          await getUserData();
+        }, 100);
+      }
+      // --------------------------------------------------------------------------
+    } catch (error) {
+      // 😎 This is not an error handler - it's an error ignorer.
+      console.log("*** ERROR GETTING IFRAME CONTENT - CROSS-ORIGIN **");
+    }
+  };
+
+  const getUserData = async () => {
+    console.log("😎😎😎😎😎😎😎😎😎😎 MY_CODE 😎😎😎😎😎😎😎😎😎😎");
+    setFetchAction({ dispatch, isFetching: true });
+    // --------------------------------------------------------------------------
+    // 📌 STEP: Check to see if we have a query parameter, of we do not then show
+    //          the logon iframe
+    // --------------------------------------------------------------------------
+    console.log("Query ", codeRef.current);
+    if (codeRef.current) {
+      // we will now process the trans
+      // fr.style.display = "none"; // hide iFrame
+      console.log("hide iFrame");
+    } else {
+      // return (fr.style.display = "inherit");
+      console.log("error. No codeRef found");
+    }
+
+    // --------------------------------------------------------------------------
+    // 📌 STEP: Log onto the API server and get the Bearer token
+    // --------------------------------------------------------------------------
+    console.log("Loging in to API server....");
+    let res = await fetch(
+      "https://skylarkdev.digital/dynamicsbridge/users/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: "chris.cullen",
+          password: "IDUAF-eozv7",
+        }),
+      }
+    );
+    res = await res.json();
+    console.log(JSON.stringify(res, null, 2));
+    let token;
+    if ("token" in res) token = res.token;
+    if (!token) throw new Error("Cannot logon to server.");
+    console.log("Getting transId information....");
+
+    let user = await fetch(
+      "https://skylarkdev.digital/dynamicsbridge/redirect/CoreModule.aspx/trans",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({
+          transId: codeRef.current,
+        }),
+      }
+    );
+
+    user = await user.json();
+    state.context.isActiveUser = user;
+    setLoginModalAction({ dispatch, loginModalAction: false });
+    setFetchAction({ dispatch, isFetching: false });
+    console.log("userInfo", user);
+  };
+
   // SERVERS --------------------------------------------------
   const ServeModalContent = () => {
     const ServeForm = () => {
       return (
-        <form>
-          <div style={{ margin: `2em 0` }}>
-            <label className="form-label">Email address</label>
-            <input
-              id="username"
-              type="email"
-              className="form-control"
-              placeholder="Email Address"
-            />
-          </div>
-          <div className="mb-3">
-            <label className="form-label">Password</label>
-            <input
-              id="password"
-              type="password"
-              className="form-control"
-              placeholder="Password"
-            />
-          </div>
-          <div className="flex">
-            <div className="flex-row" style={styles.wrapper}>
-              <div>
-                <input
-                  id="rememberMe"
-                  type="checkbox"
-                  className="form-check-input"
-                  style={styles.checkBox}
-                />
-              </div>
-              <div className="flex" style={styles.textInfo}>
-                Remember Me
-              </div>
-              <div className="caps-btn" onClick={handleLoginAction}>
-                Forgotten Password?
-              </div>
-            </div>
-          </div>
-        </form>
+        <div id="iFrame-container" style={{ paddingTop: `2em` }}>
+          <Iframe
+            url="https://bad-uat.powerappsportals.com/SignIn?returnUrl=%2fhandshake%3faction%3dlogin%2f"
+            width="100%"
+            height="600px"
+            id="inlineBADLogon"
+            className="myClassname"
+            display="initial"
+            position="relative"
+          />
+        </div>
       );
     };
 
@@ -129,7 +221,8 @@ const LoginModal = ({ state, actions }) => {
 
           <div
             className="blue-btn"
-            onClick={() => loginAction({ state, dispatch })}
+            // onClick={() => loginAction({ state, dispatch })}
+            onClick={handleLoginAction}
           >
             Login
           </div>
@@ -144,7 +237,6 @@ const LoginModal = ({ state, actions }) => {
             <ServeFormInfo />
             <ServeForm />
           </Modal.Body>
-          <ServeActions />
         </div>
       </div>
     );
@@ -179,6 +271,7 @@ const LoginModal = ({ state, actions }) => {
   return (
     <div>
       <Modal show={loginModalAction} size="xl" centered>
+        <ActionPlaceholder isFetching={isFetching} />
         <div className="flex-row">
           <ServeModalInfo />
           <ServeModalContent />

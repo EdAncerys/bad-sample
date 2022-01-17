@@ -1,23 +1,92 @@
-import { setLoginModalAction } from "../index";
+import { setLoginModalAction, setFetchAction } from "../index";
 import { handleSetCookie } from "../../helpers/cookie";
 
-const LOGIN_COOKIE = "BAD-WebApp";
-const REDIRECT_URL = `https://bad-uat.powerappsportals.com/SignIn?returnUrl=%2fhandshake%3faction%3dlogin%2f`;
+const COOKIE_NAME = "BAD-WebApp";
 
-export const loginAction = async ({ state, dispatch, loginData }) => {
+export const loginAction = async ({ state, dispatch, transId }) => {
   console.log("loginAction triggered");
+  const URL = process.env.DYNAMICS_BRIDGE;
 
-  const jwt = await authenticateAppAction({ state });
-  // window.location.assign(REDIRECT_URL); // redirects to external website
-
-  // fetch call to separate API to retrieve user data
-  // user data from API
-  if (jwt) {
-    handleSetCookie({ name: LOGIN_COOKIE, value: state.router.link });
-    state.context.isActiveUser = jwt;
-    seJWTAction({ dispatch, jwt });
-    setLoginModalAction({ dispatch, loginModalAction: false });
+  setFetchAction({ dispatch, isFetching: true });
+  if (!jwt) {
+    console.log("Error. No JWT found");
+    return;
   }
+
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + jwt,
+    },
+    body: JSON.stringify({ transId }),
+  };
+
+  // --------------------------------------------------------------------------
+  // 📌 STEP: Log onto the API server and get the Bearer token
+  // --------------------------------------------------------------------------
+  const jwt = await authenticateAppAction({ state });
+
+  if ("token" in res) token = res.token;
+  if (!jwt) throw new Error("Cannot logon to server.");
+
+  console.log("Getting transId information....");
+  let user = await fetch(
+    "https://skylarkdev.digital/dynamicsbridge/redirect/CoreModule.aspx/trans",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + jwt,
+      },
+      body: JSON.stringify({
+        transId: transId,
+      }),
+    }
+  );
+
+  user = await user.json();
+
+  setLoginModalAction({ dispatch, loginModalAction: false });
+  state.context.isActiveUser = user;
+  console.log("userInfo", user);
+
+  // try {
+  //   // const data = await fetch(URL, requestOptions);
+  //   // const response = await data.json();
+  //   // console.log(response);
+  //   // if (response.data) {
+  //   //   // handleSetCookie({ name: COOKIE_NAME, value: state.router.link });
+  //   //   state.context.isActiveUser = response;
+  //   //   seJWTAction({ dispatch, jwt });
+  //   //   setFetchAction({ dispatch, isFetching: null });
+  //   //   setLoginModalAction({ dispatch, loginModalAction: false });
+
+  //   //   console.log("userInfo", response);
+  //   //   return response;
+  //   // } else {
+  //   //   console.log(`Error. Response ${response}`);
+  //   //   setFetchAction({ dispatch, isFetching: null });
+  //   //   return null;
+  //   // }
+
+  //   let user = await fetch(
+  //     "https://skylarkdev.digital/dynamicsbridge/redirect/CoreModule.aspx/trans",
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: "Bearer " + jwt,
+  //       },
+  //       body: JSON.stringify({ transId }),
+  //     }
+  //   );
+
+  //   user = await user.json();
+  //   console.log(user);
+  // } catch (error) {
+  //   console.log("error", error);
+  // }
 };
 
 export const authenticateAppAction = async ({ state }) => {
@@ -58,7 +127,7 @@ export const logoutAction = async ({ state, actions, dispatch }) => {
   seJWTAction({ dispatch, jwt: null });
   state.context.isActiveUser = null;
 
-  handleSetCookie({ name: LOGIN_COOKIE, deleteCookie: true });
+  handleSetCookie({ name: COOKIE_NAME, deleteCookie: true });
   actions.router.set(`https://badadmin.skylarkdev.co`);
 };
 
