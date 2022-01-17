@@ -8,12 +8,15 @@ const Profile = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const marginVertical = state.theme.marginVertical;
-
-  let PROFILE_NAME = "Hello Dr. Katie Lewis";
+  const activeUser = state.context.isActiveUser;
 
   // SERVERS ---------------------------------------------
   const ServeProfileAvatar = () => {
-    const alt = PROFILE_NAME;
+    if (!activeUser.data) return null;
+
+    const { Name } = activeUser.data;
+
+    const alt = Name || "Profile Picture";
 
     return (
       <div className="flex" style={{ justifyContent: "flex-end" }}>
@@ -32,6 +35,38 @@ const Profile = ({ state, actions, libraries }) => {
     );
   };
 
+  const ServeProfileName = () => {
+    if (!activeUser.data) return null;
+
+    const { Name } = activeUser.data;
+
+    return (
+      <div className="primary-title" style={{ fontSize: 36 }}>
+        <Html2React html={Name} />
+      </div>
+    );
+  };
+
+  const ServeProfileInfo = () => {
+    if (!activeUser.data) return null;
+
+    const { Name, Email, AccessLevel } = activeUser.data;
+
+    return (
+      <div
+        className="flex-col primary-title"
+        style={{ paddingTop: `1em`, fontSize: 20 }}
+      >
+        <div style={{ padding: "1em 0" }}>
+          <Html2React html={Email} />
+        </div>
+        <div>
+          <Html2React html={AccessLevel} />
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div
       className="shadow"
@@ -45,14 +80,8 @@ const Profile = ({ state, actions, libraries }) => {
       }}
     >
       <div style={{ display: "grid", alignItems: "center" }}>
-        <div className="primary-title" style={{ fontSize: 36 }}>
-          <Html2React html={PROFILE_NAME} />
-        </div>
-
-        <div style={{ paddingTop: `1em` }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </div>
+        <ServeProfileName />
+        <ServeProfileInfo />
       </div>
 
       <ServeProfileAvatar />

@@ -54,17 +54,19 @@ const LoginModal = ({ state, actions }) => {
     const iFrameContainer = document.querySelector(`#iFrame-container`);
 
     try {
-      // let currentWin = `${window.location.protocol}//${windows.location.host}`;
-      // let iFrameWin = `${myIframe.contentWindow.location.protocol}//${myIframe.contentWindow.location.host}`;
-      // console.log(`${window.location.protocol}//${windows.location.host}`);
-      // console.log(`${myIframe.contentWindow.location.protocol}//${myIframe.contentWindow.location.host}`);
+      // let win = `${window.location.protocol}//${windows.location.host}`;
+      // let iwin = `${myIframe.contentWindow.location.protocol}//${myIframe.contentWindow.location.host}`;
+
       // // ⏬⏬  compares iFrame & window location url. Imitates cross origin error ⏬⏬
       // if (currentWin !== iFrameWin) throw new Error("CROSS-ORIGIN ERROR");
 
       const currentWin = myIframe.contentWindow.location.href;
+      console.log("currentWin", currentWin);
       // ⏬⏬ You will need to change the line below to have the correct regex expression for your site. ⏬⏬
       if (!/http:\/\/localhost:3000/i.test(currentWin))
         throw new Error("Wrong redirection url");
+
+      if (iFrameContainer) iFrameContainer.style.display = "none"; // hide iFrame on redirect
 
       const iqs = new URLSearchParams(myIframe.contentWindow.location.search);
       console.log("*** READ IFRAME INFORMATION OK **");
@@ -74,7 +76,6 @@ const LoginModal = ({ state, actions }) => {
         console.log("*** WE FOUND A TRANSACTION ID IN THE IFRAME **");
         console.log("transId", iqs.get("transId"));
 
-        if (iFrameContainer) iFrameContainer.style.display = "none"; // hide iFrame if transId received
         const transId = iqs.get("transId");
         codeRef.current = transId;
         // loginAction({ state, dispatch, transId });
@@ -147,65 +148,24 @@ const LoginModal = ({ state, actions }) => {
     user = await user.json();
 
     setLoginModalAction({ dispatch, loginModalAction: false });
-    state.context.isActiveUser = JSON.stringify(user, null, 2);
-    console.log("userInfo", JSON.stringify(user, null, 2));
+    state.context.isActiveUser = user;
+    console.log("userInfo", user);
   };
 
   // SERVERS --------------------------------------------------
   const ServeModalContent = () => {
     const ServeForm = () => {
       return (
-        <div>
-          {/* <form>
-            <div style={{ margin: `2em 0` }}>
-              <label className="form-label">Email address</label>
-              <input
-                id="username"
-                type="email"
-                className="form-control"
-                placeholder="Email Address"
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Password</label>
-              <input
-                id="password"
-                type="password"
-                className="form-control"
-                placeholder="Password"
-              />
-            </div>
-            <div className="flex">
-              <div className="flex-row" style={styles.wrapper}>
-                <div>
-                  <input
-                    id="rememberMe"
-                    type="checkbox"
-                    className="form-check-input"
-                    style={styles.checkBox}
-                  />
-                </div>
-                <div className="flex" style={styles.textInfo}>
-                  Remember Me
-                </div>
-                <div className="caps-btn" onClick={handleLoginAction}>
-                  Forgotten Password?
-                </div>
-              </div>
-            </div>
-          </form> */}
-
-          <div id="iFrame-container" style={{ paddingTop: `2em` }}>
-            <Iframe
-              url="https://bad-uat.powerappsportals.com/SignIn?returnUrl=%2fhandshake%3faction%3dlogin%2f"
-              width="100%"
-              height="600px"
-              id="inlineBADLogon"
-              className="myClassname"
-              display="initial"
-              position="relative"
-            />
-          </div>
+        <div id="iFrame-container" style={{ paddingTop: `2em` }}>
+          <Iframe
+            url="https://bad-uat.powerappsportals.com/SignIn?returnUrl=%2fhandshake%3faction%3dlogin%2f"
+            width="100%"
+            height="600px"
+            id="inlineBADLogon"
+            className="myClassname"
+            display="initial"
+            position="relative"
+          />
         </div>
       );
     };
@@ -274,7 +234,6 @@ const LoginModal = ({ state, actions }) => {
             <ServeFormInfo />
             <ServeForm />
           </Modal.Body>
-          {/* <ServeActions /> */}
         </div>
       </div>
     );
