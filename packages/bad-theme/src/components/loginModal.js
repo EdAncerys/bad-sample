@@ -4,6 +4,7 @@ import { Modal } from "react-bootstrap";
 
 import Iframe from "react-iframe";
 import ActionPlaceholder from "../components/actionPlaceholder";
+import CloseIcon from "@mui/icons-material/Close";
 
 import { colors } from "../config/imports";
 import RowButton from "./rowButton";
@@ -14,6 +15,8 @@ import {
   setLoginModalAction,
   setCreateAccountModalAction,
   loginAction,
+  authenticateAppAction,
+  getUserAction,
 } from "../context";
 
 const LoginModal = ({ state, actions }) => {
@@ -23,8 +26,8 @@ const LoginModal = ({ state, actions }) => {
   const codeRef = useRef(null);
   let myIframe = null; // iFrame window
 
-  useEffect(() => {
-    myIframe = document.getElementById("inlineBADLogon");
+  useLayoutEffect(() => {
+    myIframe = document.getElementById("badLoginIframe");
     if (!myIframe) return console.log("No iFrame Detected");
 
     console.log("myIframe", myIframe);
@@ -32,42 +35,17 @@ const LoginModal = ({ state, actions }) => {
   }, [loginModalAction]);
 
   // HANDLERS ----------------------------------------------------
-  const handleLoginAction = () => {
-    const username = document.querySelector(`#username`).value;
-    const password = document.querySelector(`#password`).value;
-    const rememberMe = document.querySelector("#rememberMe").checked;
-
-    const loginData = {
-      username,
-      password,
-      rememberMe,
-    };
-
-    loginAction({
-      state,
-      dispatch,
-      loginData,
-    });
-  };
-
   const iFrameHandler = async () => {
     console.log("iFrameHandler triggered");
-    const iFrameContainer = document.querySelector(`#iFrame-container`);
 
     try {
-      const currentWin = myIframe.contentWindow.location.href;
-      console.log("currentWin", currentWin);
+      const iframeLocation = myIframe.contentWindow.location.href;
+      // const myLocation = `${window.location.protocol}//${windows.location.host}`;
+      console.log("iframeLocation", iframeLocation);
 
       // ⏬⏬  CORS validation on old type browsers ⏬⏬
-      // const isDevelopment = state.auth.ENVIRONMENT;
-      // const URL = isDevelopment
-      //   ? !/http:\/\/localhost:3000/i.test(win)
-      //   : currentWin.includes(state.auth.BASE_URL);
-
-      // if (URL)
-      //   throw new Error("Wrong redirection url");
-
-      // if (iFrameContainer) iFrameContainer.style.display = "none"; // hide iFrame on redirect
+      if (!/http:\/\/localhost:3000/i.test(iframeLocation))
+        throw new Error("Wrong redirection url");
 
       const iqs = new URLSearchParams(myIframe.contentWindow.location.search);
       console.log("*** READ IFRAME INFORMATION OK **");
@@ -76,11 +54,9 @@ const LoginModal = ({ state, actions }) => {
       if (iqs && iqs.has("transId")) {
         console.log("*** WE FOUND A TRANSACTION ID IN THE IFRAME **");
         console.log("transId", iqs.get("transId"));
+        codeRef.current = iqs.get("transId");
 
-        const transId = iqs.get("transId");
-        codeRef.current = transId;
         // await loginAction({ state, dispatch, transId: codeRef.current });
-
         setTimeout(async () => {
           await getUserData();
         }, 100);
@@ -93,44 +69,15 @@ const LoginModal = ({ state, actions }) => {
   };
 
   const getUserData = async () => {
-    console.log("😎😎😎😎😎😎😎😎😎😎 MY_CODE 😎😎😎😎😎😎😎😎😎😎");
-    // --------------------------------------------------------------------------
-    // 📌 STEP: Check to see if we have a query parameter, of we do not then show
-    //          the logon iframe
-    // --------------------------------------------------------------------------
-    console.log("Query ", codeRef.current);
-    if (codeRef.current) {
-      // we will now process the trans
-      // fr.style.display = "none"; // hide iFrame
-      console.log("hide iFrame");
-    } else {
-      // return (fr.style.display = "inherit");
-      console.log("error. No codeRef found");
-    }
-
+    console.log("getUserData triggered");
     // --------------------------------------------------------------------------
     // 📌 STEP: Log onto the API server and get the Bearer token
     // --------------------------------------------------------------------------
-    console.log("Loging in to API server....");
-    let res = await fetch(
-      "https://skylarkdev.digital/dynamicsbridge/users/login",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: "chris.cullen",
-          password: "IDUAF-eozv7",
-        }),
-      }
-    );
-    res = await res.json();
-    console.log(JSON.stringify(res, null, 2));
-    let token;
-    if ("token" in res) token = res.token;
+    const token = await authenticateAppAction({ state });
+    // await getUserAction({ state, jwt, transId });
+
     if (!token) throw new Error("Cannot logon to server.");
-    console.log("Getting transId information....");
+    console.log("Getting user information....");
 
     let user = await fetch(
       "https://skylarkdev.digital/dynamicsbridge/redirect/CoreModule.aspx/trans",
@@ -147,83 +94,79 @@ const LoginModal = ({ state, actions }) => {
     );
 
     user = await user.json();
-    state.context.isActiveUser = user;
-    setLoginModalAction({ dispatch, loginModalAction: false });
+    if (user.success) {
+      state.context.isActiveUser = user;
+      setLoginModalAction({ dispatch, loginModalAction: false });
+    }
     console.log("userInfo", user);
   };
 
   // SERVERS --------------------------------------------------
   const ServeModalContent = () => {
-    const ServeForm = () => {
+    const ServeCloseAction = () => {
       return (
-        <div id="iFrame-container" style={{ paddingTop: `2em` }}>
-          <Iframe
-            url="https://bad-uat.powerappsportals.com/SignIn?returnUrl=%2fhandshake%3faction%3dlogin%2f"
-            width="100%"
-            height="600px"
-            id="inlineBADLogon"
-            className="myClassname"
-            display="initial"
-            position="relative"
-          />
+        <div
+          className="flex"
+          onClick={() =>
+            setLoginModalAction({ dispatch, loginModalAction: false })
+          }
+          style={{
+            cursor: "pointer",
+            justifyContent: "flex-end",
+          }}
+        >
+          <CloseIcon style={{ fontSize: 24, fill: colors.softBlack }} />
         </div>
       );
     };
 
     const ServeFormInfo = () => {
       return (
-        <div style={{ marginTop: `3em` }}>
-          <div className="mb-4">
-            <div>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum.
+        <div>
+          <ServeCloseAction />
+          <div style={{ marginTop: `2em` }}>
+            <div className="mb-4">
+              <div>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </div>
             </div>
+            <RowButton
+              block={{
+                title: "Not yet registered? Register here",
+              }}
+              onClick={() => {
+                setCreateAccountModalAction({
+                  dispatch,
+                  createAccountAction: true,
+                });
+                setLoginModalAction({ dispatch, loginModalAction: false });
+              }}
+              buttonWidth="60%"
+            />
           </div>
-          <RowButton
-            block={{
-              title: "Not yet registered? Register here",
-            }}
-            onClick={() => {
-              setCreateAccountModalAction({
-                dispatch,
-                createAccountAction: true,
-              });
-              setLoginModalAction({ dispatch, loginModalAction: false });
-            }}
-            buttonWidth="60%"
-          />
         </div>
       );
     };
 
-    const ServeActions = () => {
+    const ServeIframe = () => {
       return (
-        <Modal.Footer>
-          <div
-            className="transparent-btn"
-            onClick={() =>
-              setLoginModalAction({
-                dispatch,
-                loginModalAction: !loginModalAction,
-              })
-            }
-          >
-            Exit
-          </div>
-
-          <div
-            className="blue-btn"
-            // onClick={() => loginAction({ state, dispatch })}
-            onClick={handleLoginAction}
-          >
-            Login
-          </div>
-        </Modal.Footer>
+        <div id="iFrame-container" style={{ paddingTop: `2em` }}>
+          <Iframe
+            // url={process.env.IFRAME_URL}
+            url="https://bad-uat.powerappsportals.com/SignIn?returnUrl=%2fhandshake%3faction%3dlogin%2f"
+            width="100%"
+            height="700px"
+            id="badLoginIframe"
+            display="initial"
+            position="relative"
+          />
+        </div>
       );
     };
 
@@ -232,7 +175,7 @@ const LoginModal = ({ state, actions }) => {
         <div className="flex-col">
           <Modal.Body>
             <ServeFormInfo />
-            <ServeForm />
+            <ServeIframe />
           </Modal.Body>
         </div>
       </div>
@@ -254,7 +197,7 @@ const LoginModal = ({ state, actions }) => {
               fontSize: 20,
               borderBottom: `1px solid ${colors.darkSilver}`,
               padding: `1em 1em 1em 0`,
-              margin: `3em 1em`,
+              margin: `4em 1em`,
             }}
           >
             <div>Login</div>
@@ -269,6 +212,7 @@ const LoginModal = ({ state, actions }) => {
     <div>
       <Modal show={loginModalAction} size="xl" centered>
         <ActionPlaceholder isFetching={isFetching} />
+
         <div className="flex-row">
           <ServeModalInfo />
           <ServeModalContent />
@@ -279,18 +223,7 @@ const LoginModal = ({ state, actions }) => {
 };
 
 const styles = {
-  checkBox: {
-    borderRadius: "50%",
-    width: 20,
-    height: 20,
-    marginRight: 10,
-  },
-  wrapper: {
-    paddingTop: `1em`,
-  },
-  textInfo: {
-    textInfo: 12,
-  },
+  container: {},
 };
 
 export default connect(LoginModal);

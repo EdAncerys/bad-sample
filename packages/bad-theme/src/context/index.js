@@ -15,6 +15,7 @@ import {
   loginAction,
   logoutAction,
   authenticateAppAction,
+  getUserAction
 } from "./auth/actions";
 import { sendEmailEnquireAction } from "./auth/sendEnquire";
 import { getTweetsAction } from "./auth/getTweets";
@@ -38,4 +39,5 @@ export {
   setErrorAction,
   getTweetsAction,
   getFadAction,
+  getUserAction
 };
