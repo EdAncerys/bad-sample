@@ -37,7 +37,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
           style={{
             position: "absolute",
             height: 35,
-            width: 147,
+            width: 143,
             backgroundColor: colors.lightSilver,
             top: -25,
             right: 0,
@@ -68,10 +68,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
             <li
               key={key}
               className="flex-row"
-              style={{
-                marginRight: `2em`,
-                borderBottom: `1px dotted ${colors.darkSilver}`,
-              }}
+              style={{ marginRight: `2em` }}
               onClick={() => handleOnClickNavigation({ path: url })}
             >
               <a className="dropdown-item" style={{ padding: `0.5em 0` }}>

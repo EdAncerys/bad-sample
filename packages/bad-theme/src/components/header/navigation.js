@@ -184,6 +184,7 @@ const Navigation = ({ state, actions, libraries }) => {
 
                 return (
                   <KeyboardArrowRightIcon
+                    id={`${slug}-arrow`}
                     style={{
                       fill: colors.darkSilver,
                       borderRadius: "50%",
