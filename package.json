@@ -33,6 +33,7 @@
     "react-bootstrap": "^2.0.2",
     "react-cookie": "^4.1.1",
     "react-google-places-autocomplete": "^3.3.2",
+    "react-iframe": "^1.8.0",
     "react-player": "^2.9.0",
     "styled-components": "^5.3.3",
     "uuid": "^8.3.2",
