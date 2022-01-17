@@ -12,8 +12,12 @@ import Twitter from "../img/svg/twitter.svg";
 import Instagram from "../img/svg/instagram.svg";
 
 const Footer = ({ state, actions }) => {
+  const endPoint = state.router.link;
+  if (endPoint.includes("/redirect/")) return null;
+
   const date = new Date();
   const year = date.getFullYear();
+
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 

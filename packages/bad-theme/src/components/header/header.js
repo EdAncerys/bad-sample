@@ -18,7 +18,19 @@ import HeaderActions from "./headerActions";
 import Navigation from "./navigation";
 
 const Header = ({ state, actions }) => {
-  const data = state.source.get(state.router.link);
+  const endPoint = state.router.link;
+  const data = state.source.get(endPoint);
+
+  const ServeNavigation = () => {
+    if (endPoint.includes("/redirect/")) return null;
+
+    return (
+      <div className="bad-header" style={styles.container}>
+        <HeaderActions />
+        <Navigation />
+      </div>
+    );
+  };
 
   return (
     <>
@@ -28,10 +40,7 @@ const Header = ({ state, actions }) => {
         `}
       />
       <HTMLHead />
-      <div className="bad-header" style={styles.container}>
-        <HeaderActions />
-        <Navigation />
-      </div>
+      <ServeNavigation />
     </>
   );
 };

@@ -58,9 +58,11 @@ const Profile = ({ state, actions, libraries }) => {
         style={{ paddingTop: `1em`, fontSize: 20 }}
       >
         <div style={{ padding: "1em 0" }}>
+          <span>Email: </span>
           <Html2React html={Email} />
         </div>
         <div>
+          <span>AccessLevel: </span>
           <Html2React html={AccessLevel} />
         </div>
       </div>

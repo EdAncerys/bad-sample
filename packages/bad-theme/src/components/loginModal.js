@@ -3,6 +3,7 @@ import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 
 import Iframe from "react-iframe";
+import ActionPlaceholder from "../components/actionPlaceholder";
 
 import { colors } from "../config/imports";
 import RowButton from "./rowButton";
@@ -17,7 +18,7 @@ import {
 
 const LoginModal = ({ state, actions }) => {
   const dispatch = useAppDispatch();
-  const { loginModalAction } = useAppState();
+  const { loginModalAction, isFetching } = useAppState();
 
   const codeRef = useRef(null);
   let myIframe = null; // iFrame window
@@ -54,19 +55,19 @@ const LoginModal = ({ state, actions }) => {
     const iFrameContainer = document.querySelector(`#iFrame-container`);
 
     try {
-      // let win = `${window.location.protocol}//${windows.location.host}`;
-      // let iwin = `${myIframe.contentWindow.location.protocol}//${myIframe.contentWindow.location.host}`;
-
-      // // ⏬⏬  compares iFrame & window location url. Imitates cross origin error ⏬⏬
-      // if (currentWin !== iFrameWin) throw new Error("CROSS-ORIGIN ERROR");
-
       const currentWin = myIframe.contentWindow.location.href;
       console.log("currentWin", currentWin);
-      // ⏬⏬ You will need to change the line below to have the correct regex expression for your site. ⏬⏬
-      if (!/http:\/\/localhost:3000/i.test(currentWin))
-        throw new Error("Wrong redirection url");
 
-      if (iFrameContainer) iFrameContainer.style.display = "none"; // hide iFrame on redirect
+      // ⏬⏬  CORS validation on old type browsers ⏬⏬
+      // const isDevelopment = state.auth.ENVIRONMENT;
+      // const URL = isDevelopment
+      //   ? !/http:\/\/localhost:3000/i.test(win)
+      //   : currentWin.includes(state.auth.BASE_URL);
+
+      // if (URL)
+      //   throw new Error("Wrong redirection url");
+
+      // if (iFrameContainer) iFrameContainer.style.display = "none"; // hide iFrame on redirect
 
       const iqs = new URLSearchParams(myIframe.contentWindow.location.search);
       console.log("*** READ IFRAME INFORMATION OK **");
@@ -78,7 +79,7 @@ const LoginModal = ({ state, actions }) => {
 
         const transId = iqs.get("transId");
         codeRef.current = transId;
-        // loginAction({ state, dispatch, transId });
+        // await loginAction({ state, dispatch, transId });
 
         setTimeout(async () => {
           await getUserData();
@@ -268,6 +269,7 @@ const LoginModal = ({ state, actions }) => {
   return (
     <div>
       <Modal show={loginModalAction} size="xl" centered>
+        {/* <ActionPlaceholder isFetching={isFetching} /> */}
         <div className="flex-row">
           <ServeModalInfo />
           <ServeModalContent />

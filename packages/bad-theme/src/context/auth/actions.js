@@ -1,13 +1,13 @@
-import { setLoginModalAction } from "../index";
+import { setLoginModalAction, setFetchAction } from "../index";
 import { handleSetCookie } from "../../helpers/cookie";
 
-const LOGIN_COOKIE = "BAD-WebApp";
-const REDIRECT_URL = `https://bad-uat.powerappsportals.com/SignIn?returnUrl=%2fhandshake%3faction%3dlogin%2f`;
+const COOKIE_NAME = "BAD-WebApp";
 
 export const loginAction = async ({ state, dispatch, transId }) => {
   console.log("loginAction triggered");
-  const URL = "https://skylarkdev.digital/dynamicsbridge/users/login";
+  const URL = process.env.BASE_URL;
 
+  setFetchAction({ dispatch, isFetching: true });
   const jwt = await authenticateAppAction({ state });
   if (!jwt) {
     console.log("Error. No JWT found");
@@ -27,16 +27,20 @@ export const loginAction = async ({ state, dispatch, transId }) => {
     const data = await fetch(URL, requestOptions);
     const response = await data.json();
     console.log(response);
-    // if (response.token) {
-    //   return response.token;
-    // } else {
-    //   return null;
-    // }
+    if (response.data) {
+      // handleSetCookie({ name: COOKIE_NAME, value: state.router.link });
+      state.context.isActiveUser = response;
+      seJWTAction({ dispatch, jwt });
+      setFetchAction({ dispatch, isFetching: null });
+      setLoginModalAction({ dispatch, loginModalAction: false });
 
-    // handleSetCookie({ name: LOGIN_COOKIE, value: state.router.link });
-    // state.context.isActiveUser = jwt;
-    // seJWTAction({ dispatch, jwt });
-    setLoginModalAction({ dispatch, loginModalAction: false });
+      console.log("userInfo", response);
+      return response;
+    } else {
+      console.log(`Error. Response ${response}`);
+      setFetchAction({ dispatch, isFetching: null });
+      return null;
+    }
   } catch (error) {
     console.log("error", error);
   }
@@ -80,7 +84,7 @@ export const logoutAction = async ({ state, actions, dispatch }) => {
   seJWTAction({ dispatch, jwt: null });
   state.context.isActiveUser = null;
 
-  handleSetCookie({ name: LOGIN_COOKIE, deleteCookie: true });
+  handleSetCookie({ name: COOKIE_NAME, deleteCookie: true });
   actions.router.set(`https://badadmin.skylarkdev.co`);
 };
 

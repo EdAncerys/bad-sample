@@ -36,6 +36,7 @@ const BADTheme = {
       APP_USERNAME: process.env.APP_USERNAME,
       APP_PASSWORD: process.env.APP_PASSWORD,
       APP_HOST: process.env.APP_HOST,
+      BASE_URL: process.env.BASE_URL,
     },
     autoPrefetch: "hover", // values: no | hover | in-view | all
     context: {},
