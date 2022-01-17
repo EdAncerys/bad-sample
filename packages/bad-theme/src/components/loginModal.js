@@ -14,6 +14,7 @@ import {
   setLoginModalAction,
   setCreateAccountModalAction,
   loginAction,
+  setFetchAction,
 } from "../context";
 
 const LoginModal = ({ state, actions }) => {
@@ -79,7 +80,7 @@ const LoginModal = ({ state, actions }) => {
 
         const transId = iqs.get("transId");
         codeRef.current = transId;
-        // await loginAction({ state, dispatch, transId });
+        // await loginAction({ state, dispatch, transId: codeRef.current });
 
         setTimeout(async () => {
           await getUserData();
@@ -94,6 +95,7 @@ const LoginModal = ({ state, actions }) => {
 
   const getUserData = async () => {
     console.log("😎😎😎😎😎😎😎😎😎😎 MY_CODE 😎😎😎😎😎😎😎😎😎😎");
+    setFetchAction({ dispatch, isFetching: true });
     // --------------------------------------------------------------------------
     // 📌 STEP: Check to see if we have a query parameter, of we do not then show
     //          the logon iframe
@@ -147,9 +149,9 @@ const LoginModal = ({ state, actions }) => {
     );
 
     user = await user.json();
-
-    setLoginModalAction({ dispatch, loginModalAction: false });
     state.context.isActiveUser = user;
+    setLoginModalAction({ dispatch, loginModalAction: false });
+    setFetchAction({ dispatch, isFetching: false });
     console.log("userInfo", user);
   };
 
@@ -269,7 +271,7 @@ const LoginModal = ({ state, actions }) => {
   return (
     <div>
       <Modal show={loginModalAction} size="xl" centered>
-        {/* <ActionPlaceholder isFetching={isFetching} /> */}
+        <ActionPlaceholder isFetching={isFetching} />
         <div className="flex-row">
           <ServeModalInfo />
           <ServeModalContent />
