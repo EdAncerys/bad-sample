@@ -14,7 +14,6 @@ import {
   setLoginModalAction,
   setCreateAccountModalAction,
   loginAction,
-  setFetchAction,
 } from "../context";
 
 const LoginModal = ({ state, actions }) => {
@@ -95,7 +94,6 @@ const LoginModal = ({ state, actions }) => {
 
   const getUserData = async () => {
     console.log("😎😎😎😎😎😎😎😎😎😎 MY_CODE 😎😎😎😎😎😎😎😎😎😎");
-    setFetchAction({ dispatch, isFetching: true });
     // --------------------------------------------------------------------------
     // 📌 STEP: Check to see if we have a query parameter, of we do not then show
     //          the logon iframe
@@ -151,7 +149,6 @@ const LoginModal = ({ state, actions }) => {
     user = await user.json();
     state.context.isActiveUser = user;
     setLoginModalAction({ dispatch, loginModalAction: false });
-    setFetchAction({ dispatch, isFetching: false });
     console.log("userInfo", user);
   };
 
