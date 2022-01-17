@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 
@@ -19,21 +19,16 @@ const LoginModal = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { loginModalAction } = useAppState();
 
-  // hook applies after React has performed all DOM mutations
-  useLayoutEffect(() => {
-    let fr = document.getElementById("framecolumn");
-    let code = document.getElementById("code");
-    let lo = document.getElementById("logon");
-    let da = document.getElementById("data");
-    let st = document.getElementById("status");
+  const codeRef = useRef(null);
+  let myIframe = null; // iFrame window
 
-    const myIframe = document.getElementById("inlineBADLogon");
-    if (myIframe) myIframe.addEventListener("load", newIframe);
-    initialise();
+  useEffect(() => {
+    myIframe = document.getElementById("inlineBADLogon");
+    if (!myIframe) return console.log("No iFrame Detected");
+
+    console.log("myIframe", myIframe);
+    myIframe.addEventListener("load", iFrameHandler);
   }, [loginModalAction]);
-
-  // useEffect(() => {
-  // }, [loginModalAction]);
 
   // HANDLERS ----------------------------------------------------
   const handleLoginAction = () => {
@@ -54,32 +49,38 @@ const LoginModal = ({ state, actions }) => {
     });
   };
 
-  async function newIframe(event) {
-    let win;
-    let iqs;
+  const iFrameHandler = async () => {
+    console.log("iFrameHandler triggered");
+    const iFrameContainer = document.querySelector(`#iFrame-container`);
+
     try {
-      win = myIframe.contentWindow.location.href;
+      // let currentWin = `${window.location.protocol}//${windows.location.host}`;
+      // let iFrameWin = `${myIframe.contentWindow.location.protocol}//${myIframe.contentWindow.location.host}`;
+      // console.log(`${window.location.protocol}//${windows.location.host}`);
+      // console.log(`${myIframe.contentWindow.location.protocol}//${myIframe.contentWindow.location.host}`);
+      // // ⏬⏬  compares iFrame & window location url. Imitates cross origin error ⏬⏬
+      // if (currentWin !== iFrameWin) throw new Error("CROSS-ORIGIN ERROR");
+
+      const currentWin = myIframe.contentWindow.location.href;
       // ⏬⏬ You will need to change the line below to have the correct regex expression for your site. ⏬⏬
-      if (!/http:\/\/localhost:5500/i.test(win))
+      if (!/http:\/\/localhost:3000/i.test(currentWin))
         throw new Error("Wrong redirection url");
-      // --------------------------------------------------------------------------
-      iqs = new URLSearchParams(myIframe.contentWindow.location.search);
+
+      const iqs = new URLSearchParams(myIframe.contentWindow.location.search);
       console.log("*** READ IFRAME INFORMATION OK **");
       console.log("iqs = %o", iqs.toString());
 
       if (iqs && iqs.has("transId")) {
         console.log("*** WE FOUND A TRANSACTION ID IN THE IFRAME **");
-        fr.style.display = "none";
-        // --------------------------------------------------------------------------
-        // 😖 You do not need to use setTimeout at all for this.  I did it because
-        //    I am in a simple HTML file.  In react you will probably use a setState
-        //    to change the code and a useEffect to go and pull the information from
-        //    the api server.
-        // --------------------------------------------------------------------------
+        console.log("transId", iqs.get("transId"));
+
+        if (iFrameContainer) iFrameContainer.style.display = "none"; // hide iFrame if transId received
+        const transId = iqs.get("transId");
+        codeRef.current = transId;
+        // loginAction({ state, dispatch, transId });
+
         setTimeout(async () => {
-          alert("We are done " + iqs.get("transId"));
-          code.value = iqs.get("transId");
-          await my_code();
+          await getUserData();
         }, 100);
       }
       // --------------------------------------------------------------------------
@@ -87,35 +88,28 @@ const LoginModal = ({ state, actions }) => {
       // 😎 This is not an error handler - it's an error ignorer.
       console.log("*** ERROR GETTING IFRAME CONTENT - CROSS-ORIGIN **");
     }
-  }
+  };
 
-  async function initialise() {
-    if (code.value || window.location.search) {
-      // we will now process the trans
-      fr.style.display = "none";
-    } else {
-      return (fr.style.display = "inherit");
-    }
-  }
-
-  async function my_code() {
+  const getUserData = async () => {
     console.log("😎😎😎😎😎😎😎😎😎😎 MY_CODE 😎😎😎😎😎😎😎😎😎😎");
     // --------------------------------------------------------------------------
     // 📌 STEP: Check to see if we have a query parameter, of we do not then show
     //          the logon iframe
     // --------------------------------------------------------------------------
-    console.log("Query ", code.value);
-    if (code.value) {
+    console.log("Query ", codeRef.current);
+    if (codeRef.current) {
       // we will now process the trans
-      fr.style.display = "none";
+      // fr.style.display = "none"; // hide iFrame
+      console.log("hide iFrame");
     } else {
-      return (fr.style.display = "inherit");
+      // return (fr.style.display = "inherit");
+      console.log("error. No codeRef found");
     }
 
     // --------------------------------------------------------------------------
     // 📌 STEP: Log onto the API server and get the Bearer token
     // --------------------------------------------------------------------------
-    st.textContent = "Loging in to API server....";
+    console.log("Loging in to API server....");
     let res = await fetch(
       "https://skylarkdev.digital/dynamicsbridge/users/login",
       {
@@ -130,10 +124,12 @@ const LoginModal = ({ state, actions }) => {
       }
     );
     res = await res.json();
-    lo.textContent = JSON.stringify(res, null, 2);
+    console.log(JSON.stringify(res, null, 2));
+    let token;
     if ("token" in res) token = res.token;
     if (!token) throw new Error("Cannot logon to server.");
-    st.textContent = "Getting transId information....";
+    console.log("Getting transId information....");
+
     let user = await fetch(
       "https://skylarkdev.digital/dynamicsbridge/redirect/CoreModule.aspx/trans",
       {
@@ -143,21 +139,24 @@ const LoginModal = ({ state, actions }) => {
           Authorization: "Bearer " + token,
         },
         body: JSON.stringify({
-          transId: code.value,
+          transId: codeRef.current,
         }),
       }
     );
+
     user = await user.json();
-    da.textContent = JSON.stringify(user, null, 2);
-    st.textContent = "Complete";
-  }
+
+    setLoginModalAction({ dispatch, loginModalAction: false });
+    state.context.isActiveUser = JSON.stringify(user, null, 2);
+    console.log("userInfo", JSON.stringify(user, null, 2));
+  };
 
   // SERVERS --------------------------------------------------
   const ServeModalContent = () => {
     const ServeForm = () => {
       return (
         <div>
-          <form>
+          {/* <form>
             <div style={{ margin: `2em 0` }}>
               <label className="form-label">Email address</label>
               <input
@@ -194,17 +193,19 @@ const LoginModal = ({ state, actions }) => {
                 </div>
               </div>
             </div>
-          </form>
+          </form> */}
 
-          <Iframe
-            url="https://bad-uat.powerappsportals.com/SignIn?returnUrl=%2fhandshake%3faction%3dlogin%2f"
-            width="100%"
-            height="600px"
-            id="inlineBADLogon"
-            className="myClassname"
-            display="initial"
-            position="relative"
-          />
+          <div id="iFrame-container" style={{ paddingTop: `2em` }}>
+            <Iframe
+              url="https://bad-uat.powerappsportals.com/SignIn?returnUrl=%2fhandshake%3faction%3dlogin%2f"
+              width="100%"
+              height="600px"
+              id="inlineBADLogon"
+              className="myClassname"
+              display="initial"
+              position="relative"
+            />
+          </div>
         </div>
       );
     };
@@ -273,7 +274,7 @@ const LoginModal = ({ state, actions }) => {
             <ServeFormInfo />
             <ServeForm />
           </Modal.Body>
-          <ServeActions />
+          {/* <ServeActions /> */}
         </div>
       </div>
     );

@@ -4,19 +4,41 @@ import { handleSetCookie } from "../../helpers/cookie";
 const LOGIN_COOKIE = "BAD-WebApp";
 const REDIRECT_URL = `https://bad-uat.powerappsportals.com/SignIn?returnUrl=%2fhandshake%3faction%3dlogin%2f`;
 
-export const loginAction = async ({ state, dispatch, loginData }) => {
+export const loginAction = async ({ state, dispatch, transId }) => {
   console.log("loginAction triggered");
+  const URL = "https://skylarkdev.digital/dynamicsbridge/users/login";
 
   const jwt = await authenticateAppAction({ state });
-  // window.location.assign(REDIRECT_URL); // redirects to external website
+  if (!jwt) {
+    console.log("Error. No JWT found");
+    return;
+  }
 
-  // fetch call to separate API to retrieve user data
-  // user data from API
-  if (jwt) {
-    handleSetCookie({ name: LOGIN_COOKIE, value: state.router.link });
-    state.context.isActiveUser = jwt;
-    seJWTAction({ dispatch, jwt });
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + jwt,
+    },
+    body: JSON.stringify({ transId }),
+  };
+
+  try {
+    const data = await fetch(URL, requestOptions);
+    const response = await data.json();
+    console.log(response);
+    // if (response.token) {
+    //   return response.token;
+    // } else {
+    //   return null;
+    // }
+
+    // handleSetCookie({ name: LOGIN_COOKIE, value: state.router.link });
+    // state.context.isActiveUser = jwt;
+    // seJWTAction({ dispatch, jwt });
     setLoginModalAction({ dispatch, loginModalAction: false });
+  } catch (error) {
+    console.log("error", error);
   }
 };
 
