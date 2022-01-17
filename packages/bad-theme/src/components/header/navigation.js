@@ -115,9 +115,9 @@ const Navigation = ({ state, actions, libraries }) => {
               position: "absolute",
               zIndex: 1,
               top: `5%`,
-              width: "33%",
+              width: "30%",
               height: "90%",
-              marginLeft: "30%",
+              marginLeft: "31%",
               backgroundColor: colors.lightSilver,
               overflowY: "auto",
               display: "none",
@@ -172,7 +172,7 @@ const Navigation = ({ state, actions, libraries }) => {
               display: "grid",
               gridAutoFlow: "column",
               gridTemplateColumns: `repeat(3, 1fr)`,
-              gridTemplateRows: `repeat(7, auto)`,
+              gridTemplateRows: `repeat(8, auto)`,
               gap: `0 2em`,
             }}
           >
@@ -279,20 +279,22 @@ const Navigation = ({ state, actions, libraries }) => {
           const { title, slug, url, child_items } = item;
 
           return (
-            <ul key={key} className="navbar-nav">
-              <li
-                className="nav-item dropdown"
-                onMouseEnter={() => {
-                  activeMenu.current = slug;
-                  handleActiveMenu({ slug });
-                }}
-                onMouseLeave={() => {
-                  activeMenu.current = null; // clear Ref hook after handler been triggered only!
-                  handleActiveMenu({ slug, removeShadow: true });
-                }}
-              >
+            <ul
+              id={`menu-${slug}`}
+              key={key}
+              className="flex navbar-nav"
+              style={{ justifyContent: "center" }}
+              onMouseEnter={() => {
+                activeMenu.current = slug;
+                handleActiveMenu({ slug });
+              }}
+              onMouseLeave={() => {
+                activeMenu.current = null; // clear Ref hook after handler been triggered only!
+                handleActiveMenu({ slug, removeShadow: true });
+              }}
+            >
+              <li className="nav-item dropdown">
                 <a
-                  id={`menu-${slug}`}
                   className="nav-link dropdown-toggle"
                   style={styles.link}
                   onClick={() =>
@@ -314,7 +316,7 @@ const Navigation = ({ state, actions, libraries }) => {
     <BlockWrapper>
       <nav
         className="navbar navbar-expand-lg roboto"
-        style={{ margin: `0 ${marginHorizontal}px` }}
+        style={{ padding: `0.5em 0` }}
       >
         <div className="container-fluid">
           <div className="collapse navbar-collapse" id="navbarNavDropdown">
