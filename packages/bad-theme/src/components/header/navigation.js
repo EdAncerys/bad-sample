@@ -63,11 +63,13 @@ const Navigation = ({ state, actions, libraries }) => {
 
     if (removeShadow) {
       if (selector) selector.style.boxShadow = "none";
+      if (selector) selector.style.color = `${colors.black}`;
       if (childMenuSelector) childMenuSelector.style.display = "none";
       return;
     }
-    if (activeMenu.current === slug && selector)
-      selector.style.boxShadow = shadowColor;
+    if (activeMenu.current === slug)
+      if (selector) selector.style.boxShadow = shadowColor;
+    if (selector) selector.style.color = `${colors.blue}`;
     if (childMenuSelector) childMenuSelector.style.display = "block";
   };
 
@@ -98,6 +100,8 @@ const Navigation = ({ state, actions, libraries }) => {
       if (!child_items) return null;
       let slugID = parentSlug;
       if (secondaryMenu) slugID = "more";
+
+      const menuLength = child_items.length;
 
       const ServeSubChildMenu = ({ child_items, parentKey, slug }) => {
         if (!child_items) return null;
@@ -132,14 +136,7 @@ const Navigation = ({ state, actions, libraries }) => {
                 const { title, url, slug, child_items } = item;
 
                 return (
-                  <li
-                    key={key}
-                    className="flex-row"
-                    style={{
-                      width: "100%",
-                      borderBottom: `1px dotted ${colors.darkSilver}`,
-                    }}
-                  >
+                  <li key={key} className="flex-row" style={{ width: "100%" }}>
                     <a
                       className="flex-row dropdown-item"
                       style={styles.link}
@@ -201,10 +198,7 @@ const Navigation = ({ state, actions, libraries }) => {
                 <li
                   key={key}
                   className="flex-row"
-                  style={{
-                    width: "100%",
-                    borderBottom: `1px dotted ${colors.darkSilver}`,
-                  }}
+                  style={{ width: "100%" }}
                   onMouseEnter={() => {
                     activeChildMenu.current = slug;
                     handleSubMenu({ slug });
