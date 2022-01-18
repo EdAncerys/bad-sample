@@ -102,24 +102,23 @@ const LoginModal = ({ state, actions }) => {
   };
 
   // SERVERS --------------------------------------------------
+  const ServeCloseAction = () => {
+    return (
+      <div
+        className="flex"
+        onClick={() =>
+          setLoginModalAction({ dispatch, loginModalAction: false })
+        }
+        style={{
+          cursor: "pointer",
+          justifyContent: "flex-end",
+        }}
+      >
+        <CloseIcon style={{ fontSize: 24, fill: colors.softBlack }} />
+      </div>
+    );
+  };
   const ServeModalContent = () => {
-    const ServeCloseAction = () => {
-      return (
-        <div
-          className="flex"
-          onClick={() =>
-            setLoginModalAction({ dispatch, loginModalAction: false })
-          }
-          style={{
-            cursor: "pointer",
-            justifyContent: "flex-end",
-          }}
-        >
-          <CloseIcon style={{ fontSize: 24, fill: colors.softBlack }} />
-        </div>
-      );
-    };
-
     const ServeFormInfo = () => {
       return (
         <div>
@@ -161,7 +160,7 @@ const LoginModal = ({ state, actions }) => {
             // url={process.env.IFRAME_URL}
             url="https://bad-uat.powerappsportals.com/SignIn?returnUrl=%2fhandshake%3faction%3dlogin%2f"
             width="100%"
-            height="700px"
+            height="1000px"
             id="badLoginIframe"
             display="initial"
             position="relative"
@@ -174,7 +173,8 @@ const LoginModal = ({ state, actions }) => {
       <div className="flex m-4" style={{ flex: 2, paddingRight: `2em` }}>
         <div className="flex-col">
           <Modal.Body>
-            <ServeFormInfo />
+            {/* <ServeFormInfo /> */}
+            <ServeCloseAction />
             <ServeIframe />
           </Modal.Body>
         </div>
