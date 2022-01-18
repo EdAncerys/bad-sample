@@ -14,15 +14,23 @@ const Profile = ({ state, actions, libraries }) => {
   const ServeProfileAvatar = () => {
     if (!activeUser) return null;
 
-    const { Name } = activeUser;
+    const { Name, user } = activeUser;
+    const { bad_profile_photo_url } = user;
 
     const alt = Name || "Profile Picture";
 
     return (
       <div className="flex" style={{ justifyContent: "flex-end" }}>
-        <div style={{ width: 190, height: 190 }}>
+        <div
+          style={{
+            width: 190,
+            height: 190,
+            borderRadius: `50%`,
+            overflow: `hidden`,
+          }}
+        >
           <Image
-            src={ProfileAvatar}
+            src={bad_profile_photo_url || ProfileAvatar}
             alt={alt}
             style={{
               width: "100%",
