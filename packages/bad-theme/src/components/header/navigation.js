@@ -110,7 +110,7 @@ const Navigation = ({ state, actions, libraries }) => {
           <ul
             id={`${slug}-submenu`}
             aria-labelledby="navbarDropdownMenuLink"
-            className="shadow"
+            className="shadow-strong"
             style={{
               position: "absolute",
               zIndex: 1,
@@ -161,6 +161,24 @@ const Navigation = ({ state, actions, libraries }) => {
         );
       };
 
+      const ServeDivider = ({ nullCondition, left }) => {
+        if (nullCondition) return null;
+
+        return (
+          <div
+            style={{
+              position: "absolute",
+              zIndex: 1,
+              backgroundColor: colors.silver,
+              height: "85%",
+              width: 2,
+              left: left || `32.5%`,
+              margin: `0 1em`,
+            }}
+          />
+        );
+      };
+
       return (
         <ul
           id={`${slugID}-child-menu`}
@@ -176,6 +194,9 @@ const Navigation = ({ state, actions, libraries }) => {
               gap: `0 2em`,
             }}
           >
+            <ServeDivider nullCondition={menuLength < 9} />
+            <ServeDivider nullCondition={menuLength < 17} left="65%" />
+
             {child_items.map((item, key) => {
               const { title, url, slug, child_items } = item;
 
