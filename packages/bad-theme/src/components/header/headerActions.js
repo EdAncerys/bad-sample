@@ -49,7 +49,7 @@ const HeaderActions = ({ state, actions }) => {
     if (user) return null;
 
     return (
-      <div style={{ padding: `0 2em` }}>
+      <div style={{ padding: `0 1em` }}>
         <div
           className="blue-btn"
           onClick={() =>
@@ -66,7 +66,7 @@ const HeaderActions = ({ state, actions }) => {
     if (!user) return null;
 
     return (
-      <div style={{ padding: `0 2em` }}>
+      <div style={{ padding: `0 1em` }}>
         <button
           onClick={() =>
             setGoToAction({
@@ -92,7 +92,6 @@ const HeaderActions = ({ state, actions }) => {
             style={{
               justifyContent: "space-around",
               alignItems: "center",
-              flex: 1.5,
             }}
           >
             <SearchInput />

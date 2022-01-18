@@ -13,16 +13,19 @@
   cursor: pointer;
   border: none;
   line-height: normal;
+  transition: all 0.3s ease-in-out;
 }
 .transparent-btn {
   color: #1f335e;
   background-color: transparent;
   border: 1px solid #1f335e;
+  transition: all 0.3s ease-in-out;
 }
 .drop-down-btn {
   color: #1f335e;
   background-color: #f0f1f4;
   width: 145px;
+  transition: all 0.3s ease-in-out;
 }
 .caps-btn {
   font-size: 12px;
@@ -41,7 +44,7 @@
   animation: rainbow 2s ease-in-out infinite;
   background-clip: text;
   -webkit-background-clip: text;
-  transition: color 0.25s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 .caps-btn:hover {
   color: rgba(0, 0, 0, 0);
@@ -76,6 +79,7 @@
   width: fit-content;
   border-radius: 5px;
   padding: 0.5em 2em;
+  transition: all 0.3s ease-in-out;
 }
 .banner-transparent-btn:hover {
   color: #1f335e !important;
@@ -87,6 +91,7 @@
 }
 .dashboard-menu {
   cursor: pointer;
+  transition: all 0.3s ease-in-out;
 }
 .dashboard-menu:hover {
   color: #3882cd;
@@ -100,9 +105,9 @@
 }
 .title-animation {
   margin-left: 0px;
-  transition: all 0.25s ease;
+  transition: all 0.3s ease-in-out;
 }
-.title-animation:hover span {
+.title-animation:hover {
   color: #3882cd;
   margin-left: 5px;
 }

@@ -60,7 +60,7 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
   const ServeButton = () => {
     return (
       <div
-        className="shadow title-animation"
+        className="shadow"
         style={{
           ...styles.container,
           backgroundColor: colors.white,
@@ -86,7 +86,7 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
         <div className="flex-col" style={{ padding: `1.5em 1em` }}>
           <div className="flex-row" style={{ alignItems: "center" }}>
             <div
-              className="flex"
+              className="flex title-animation"
               style={{
                 fontSize: 13,
                 letterSpacing: 2,
