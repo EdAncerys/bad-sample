@@ -281,7 +281,7 @@ https://codebeautify.org/
 
 .facebook-icon {
   position: relative;
-  transition: all 0.25s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 .facebook-icon::before {
   content: "";
@@ -297,6 +297,7 @@ https://codebeautify.org/
 
 .twitter-icon {
   position: relative;
+  transition: all 0.3s ease-in-out;
 }
 .twitter-icon::before {
   content: "";
@@ -312,6 +313,7 @@ https://codebeautify.org/
 
 .instagram-icon {
   position: relative;
+  transition: all 0.3s ease-in-out;
 }
 .instagram-icon::before {
   content: "";

@@ -12,9 +12,9 @@ const Profile = ({ state, actions, libraries }) => {
 
   // SERVERS ---------------------------------------------
   const ServeProfileAvatar = () => {
-    if (!activeUser.data) return null;
+    if (!activeUser) return null;
 
-    const { Name } = activeUser.data;
+    const { Name } = activeUser;
 
     const alt = Name || "Profile Picture";
 
@@ -36,9 +36,9 @@ const Profile = ({ state, actions, libraries }) => {
   };
 
   const ServeProfileName = () => {
-    if (!activeUser.data) return null;
+    if (!activeUser) return null;
 
-    const { Name } = activeUser.data;
+    const { Name } = activeUser;
 
     return (
       <div className="primary-title" style={{ fontSize: 36 }}>
@@ -48,9 +48,9 @@ const Profile = ({ state, actions, libraries }) => {
   };
 
   const ServeProfileInfo = () => {
-    if (!activeUser.data) return null;
+    if (!activeUser) return null;
 
-    const { Name, Email, AccessLevel } = activeUser.data;
+    const { Name, Email, AccessLevel } = activeUser;
 
     return (
       <div

@@ -46,6 +46,8 @@
 }
 .quick-link li:hover .quick-link-title {
   color: #3882cd !important;
+}
+.quick-link:hover li {
   cursor: pointer;
 }
 .quick-link li:hover a {

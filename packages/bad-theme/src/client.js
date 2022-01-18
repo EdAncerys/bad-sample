@@ -39,6 +39,7 @@ const BADTheme = {
       BASE_URL: process.env.BASE_URL,
       DYNAMICS_BRIDGE: process.env.DYNAMICS_BRIDGE,
       IFRAME_URL: process.env.IFRAME_URL,
+      HOST_URL: process.env.HOST_URL,
     },
     autoPrefetch: "hover", // values: no | hover | in-view | all
     context: {},

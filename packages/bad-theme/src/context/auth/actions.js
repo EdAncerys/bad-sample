@@ -5,9 +5,10 @@ const COOKIE_NAME = "BAD-WebApp";
 
 export const loginAction = async ({ state, dispatch, transId }) => {
   console.log("loginAction triggered");
-  const URL = process.env.DYNAMICS_BRIDGE;
 
-  // setFetchAction({ dispatch, isFetching: true });
+  const URL = state.auth.DYNAMICS_BRIDGE;
+
+  setFetchAction({ dispatch, isFetching: true });
   // --------------------------------------------------------------------------
   // 📌 STEP: Log onto the API server and get the Bearer token
   // --------------------------------------------------------------------------
@@ -23,29 +24,22 @@ export const loginAction = async ({ state, dispatch, transId }) => {
     body: JSON.stringify({ transId }),
   };
 
-  console.log("requestOptions", requestOptions);
-
   try {
     const data = await fetch(URL, requestOptions);
     console.log("data", data);
     const response = await data.json();
     console.log("response", response);
-    // if (response.data) {
-    //   // handleSetCookie({ name: COOKIE_NAME, value: state.router.link });
-    //   state.context.isActiveUser = response;
-    //   seJWTAction({ dispatch, jwt });
-    //   setFetchAction({ dispatch, isFetching: null });
-    //   setLoginModalAction({ dispatch, loginModalAction: false });
-
-    //   console.log("userInfo", response);
-    //   return response;
-    // } else {
-    //   console.log(`Error. Response ${response}`);
-    //   setFetchAction({ dispatch, isFetching: null });
-    //   return null;
-    // }
+    if (response.success) {
+      // handleSetCookie({ name: COOKIE_NAME, value: state.router.link });
+      state.context.isActiveUser = response.data;
+      seJWTAction({ dispatch, jwt });
+      setFetchAction({ dispatch, isFetching: null });
+      setLoginModalAction({ dispatch, loginModalAction: false });
+    }
   } catch (error) {
     console.log("error", error);
+  } finally {
+    setFetchAction({ dispatch, isFetching: false });
   }
 };
 

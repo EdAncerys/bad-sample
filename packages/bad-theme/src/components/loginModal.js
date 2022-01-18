@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 
@@ -15,24 +15,27 @@ import {
   setLoginModalAction,
   setCreateAccountModalAction,
   loginAction,
-  authenticateAppAction,
-  getUserAction,
 } from "../context";
 
 const LoginModal = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { loginModalAction, isFetching } = useAppState();
 
-  const codeRef = useRef(null);
+  const [id, setId] = useState(null);
   let myIframe = null; // iFrame window
 
   useLayoutEffect(() => {
+    setId(null); // reset id value on component load
     myIframe = document.getElementById("badLoginIframe");
     if (!myIframe) return console.log("No iFrame Detected");
 
     console.log("myIframe", myIframe);
     myIframe.addEventListener("load", iFrameHandler);
   }, [loginModalAction]);
+
+  useEffect(async () => {
+    if (id) await loginAction({ state, dispatch, transId: id });
+  }, [id]);
 
   // HANDLERS ----------------------------------------------------
   const iFrameHandler = async () => {
@@ -44,8 +47,8 @@ const LoginModal = ({ state, actions }) => {
       console.log("iframeLocation", iframeLocation);
 
       // ⏬⏬  CORS validation on old type browsers ⏬⏬
-      // if (!/http:\/\/localhost:3000/i.test(iframeLocation))
-      //   throw new Error("Wrong redirection url");
+      if (!iframeLocation.includes(`localhost:3000` || state.auth.HOST_URL))
+        throw new Error("Wrong redirection url");
 
       const iqs = new URLSearchParams(myIframe.contentWindow.location.search);
       console.log("*** READ IFRAME INFORMATION OK **");
@@ -54,12 +57,8 @@ const LoginModal = ({ state, actions }) => {
       if (iqs && iqs.has("transId")) {
         console.log("*** WE FOUND A TRANSACTION ID IN THE IFRAME **");
         console.log("transId", iqs.get("transId"));
-        codeRef.current = iqs.get("transId");
 
-        // await loginAction({ state, dispatch, transId: codeRef.current });
-        setTimeout(async () => {
-          await getUserData();
-        }, 100);
+        setId(iqs.get("transId"));
       }
       // --------------------------------------------------------------------------
     } catch (error) {
@@ -68,57 +67,25 @@ const LoginModal = ({ state, actions }) => {
     }
   };
 
-  const getUserData = async () => {
-    console.log("getUserData triggered");
-    // --------------------------------------------------------------------------
-    // 📌 STEP: Log onto the API server and get the Bearer token
-    // --------------------------------------------------------------------------
-    const token = await authenticateAppAction({ state });
-    // await getUserAction({ state, jwt, transId });
-
-    if (!token) throw new Error("Cannot logon to server.");
-    console.log("Getting user information....");
-
-    let user = await fetch(
-      "https://skylarkdev.digital/dynamicsbridge/redirect/CoreModule.aspx/trans",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify({
-          transId: codeRef.current,
-        }),
-      }
-    );
-
-    user = await user.json();
-    if (user.success) {
-      state.context.isActiveUser = user;
-      setLoginModalAction({ dispatch, loginModalAction: false });
-    }
-    console.log("userInfo", user);
-  };
-
   // SERVERS --------------------------------------------------
-  const ServeCloseAction = () => {
-    return (
-      <div
-        className="flex"
-        onClick={() =>
-          setLoginModalAction({ dispatch, loginModalAction: false })
-        }
-        style={{
-          cursor: "pointer",
-          justifyContent: "flex-end",
-        }}
-      >
-        <CloseIcon style={{ fontSize: 24, fill: colors.softBlack }} />
-      </div>
-    );
-  };
   const ServeModalContent = () => {
+    const ServeCloseAction = () => {
+      return (
+        <div
+          className="flex"
+          onClick={() =>
+            setLoginModalAction({ dispatch, loginModalAction: false })
+          }
+          style={{
+            cursor: "pointer",
+            justifyContent: "flex-end",
+          }}
+        >
+          <CloseIcon style={{ fontSize: 24, fill: colors.softBlack }} />
+        </div>
+      );
+    };
+
     const ServeFormInfo = () => {
       return (
         <div>
@@ -154,11 +121,12 @@ const LoginModal = ({ state, actions }) => {
     };
 
     const ServeIframe = () => {
+      if (id) return null;
+
       return (
         <div id="iFrame-container" style={{ paddingTop: `2em` }}>
           <Iframe
-            // url={process.env.IFRAME_URL}
-            url="https://bad-uat.powerappsportals.com/SignIn?returnUrl=%2fhandshake%3faction%3dlogin%2f"
+            url={state.auth.IFRAME_URL}
             width="100%"
             height="1000px"
             id="badLoginIframe"
@@ -170,10 +138,12 @@ const LoginModal = ({ state, actions }) => {
     };
 
     return (
-      <div className="flex m-4" style={{ flex: 2, paddingRight: `2em` }}>
+      <div
+        className="flex m-4"
+        style={{ flex: 2, paddingRight: `2em`, minHeight: 1150 }}
+      >
         <div className="flex-col">
           <Modal.Body>
-            {/* <ServeFormInfo /> */}
             <ServeCloseAction />
             <ServeIframe />
           </Modal.Body>
@@ -211,7 +181,7 @@ const LoginModal = ({ state, actions }) => {
   return (
     <div>
       <Modal show={loginModalAction} size="xl" centered>
-        <ActionPlaceholder isFetching={isFetching} />
+        <ActionPlaceholder isFetching={id} />
 
         <div className="flex-row">
           <ServeModalInfo />
