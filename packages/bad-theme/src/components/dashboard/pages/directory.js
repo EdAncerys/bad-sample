@@ -16,6 +16,7 @@ import { useAppDispatch, useAppState, getFadAction } from "../../../context";
 const Directory = ({ state, actions, libraries, dashboardPath }) => {
   const dispatch = useAppDispatch();
   const { fad } = useAppState();
+  debugger;
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [fadData, setFadData] = useState(null);
@@ -132,7 +133,7 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
                   style={styles.input}
                 />
                 <span
-                  className="input-group-text"
+                  className="input-group-text toggle-icon-color"
                   style={{
                     position: "absolute",
                     right: 0,

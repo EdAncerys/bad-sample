@@ -142,7 +142,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
               style={styles.input}
             />
             <div
-              className="input-group-text"
+              className="input-group-text toggle-icon-color"
               style={{
                 position: "absolute",
                 right: 0,

@@ -14,30 +14,6 @@ const NewsBlock = ({ state, actions, libraries, block }) => {
   const isLayoutThree = layout === "layout_three";
   const mountedRef = useRef(true);
 
-  // HELPERS ----------------------------------------------------------------
-  const handleSearchSubmit = () => {
-    const searchInput = document.querySelector(`#searchInput${id}`).value;
-
-    const serveDateFilter = document.querySelector(
-      `#serveDateFilter${id}`
-    ).value;
-
-    if (!!searchInput) setSearchFilter(searchInput);
-    if (!!serveDateFilter) {
-      setDateFilter(serveDateFilter);
-      // apply date filter
-      let filter = postList.sort(
-        (a, b) => new Date(a.acf.closing_date) - new Date(b.acf.closing_date)
-      );
-      if (serveDateFilter === "Date Descending") {
-        filter = postList.sort(
-          (a, b) => new Date(b.acf.closing_date) - new Date(a.acf.closing_date)
-        );
-      }
-      setPostList(filter);
-    }
-  };
-
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
     if (!state.source.post) {
@@ -70,9 +46,6 @@ const NewsBlock = ({ state, actions, libraries, block }) => {
       }}
     >
       {postList.map((block, key) => {
-        // search filter options --------------------------------
-        // apply search options if needed
-
         const { categories, link } = block;
         const { press_release_authors } = block.acf;
         const filter = category.filter(
@@ -90,13 +63,12 @@ const NewsBlock = ({ state, actions, libraries, block }) => {
           return (
             <Card
               key={key}
-              link_label="Read More"
+              link_label="Listen Here"
               link={link}
               newsAndMediaInfo={block}
-              colour={colour}
-              limitBodyLength
-              cardHeight="100%"
+              cardMinHeight={290}
               layout={layout}
+              colour={colour}
               shadow
             />
           );

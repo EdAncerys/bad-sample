@@ -188,7 +188,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
             style={{ ...styles.input, height: ctaHeight }}
           />
           <div
-            className="input-group-text"
+            className="input-group-text toggle-icon-color"
             style={{
               position: "absolute",
               right: 0,

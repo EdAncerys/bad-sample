@@ -297,7 +297,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
                   style={styles.input}
                 />
                 <span
-                  className="input-group-text"
+                  className="input-group-text toggle-icon-color"
                   style={{
                     position: "absolute",
                     right: 0,

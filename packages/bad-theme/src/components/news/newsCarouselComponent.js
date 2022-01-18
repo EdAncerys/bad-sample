@@ -17,9 +17,10 @@ const NewsCarouselComponent = ({ state, actions, libraries, block }) => {
 
   const { sm, md, lg, xl } = muiQuery();
 
+  const { post_limit, disable_vertical_padding } = block;
+  
   const [postList, setPostList] = useState(null);
   const [category, setCategory] = useState(null);
-  const { post_limit, disable_vertical_padding } = block;
   const mountedRef = useRef(true);
 
   // DATA pre FETCH ----------------------------------------------------------------

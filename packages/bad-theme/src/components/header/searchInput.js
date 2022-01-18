@@ -139,7 +139,7 @@ const SearchInput = ({ state, actions, libraries }) => {
           style={styles.input}
         />
         <div
-          className="input-group-text"
+          className="input-group-text toggle-icon-color"
           style={{
             position: "absolute",
             right: 0,

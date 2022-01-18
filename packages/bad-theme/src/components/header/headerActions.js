@@ -18,7 +18,9 @@ import {
 const HeaderActions = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { jwt } = useAppState();
+
   const user = state.context.isActiveUser;
+  const isDevelopment = state.auth.ENVIRONMENT;
 
   const [isReady, SetReady] = useState(null);
 

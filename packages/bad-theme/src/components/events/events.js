@@ -143,7 +143,7 @@ const Events = ({ state, actions, libraries, block }) => {
             style={styles.input}
           />
           <span
-            className="input-group-text"
+            className="input-group-text toggle-icon-color"
             style={{
               position: "absolute",
               right: 0,
@@ -196,7 +196,7 @@ const Events = ({ state, actions, libraries, block }) => {
       );
     };
 
-    const ServeDropDownFilterOne = () => {
+    const ServeSelectedGradesFilter = () => {
       if (!gradesFilter) return null;
       const GRADES = Object.values(state.source.event_grade);
       const filter = GRADES.filter((item) => item.id === Number(gradesFilter));
@@ -217,7 +217,7 @@ const Events = ({ state, actions, libraries, block }) => {
       );
     };
 
-    const ServeDropDownFilterTwo = () => {
+    const ServeSelectedLocationFilter = () => {
       if (!locationsFilter) return null;
       const LOCATIONS = Object.values(state.source.event_location);
       const filter = LOCATIONS.filter(
@@ -251,8 +251,8 @@ const Events = ({ state, actions, libraries, block }) => {
         </div>
         <div className="flex" style={{ marginTop: "0.5em" }}>
           <ServeSearchFilter />
-          <ServeDropDownFilterOne />
-          <ServeDropDownFilterTwo />
+          <ServeSelectedGradesFilter />
+          <ServeSelectedLocationFilter />
         </div>
       </div>
     );

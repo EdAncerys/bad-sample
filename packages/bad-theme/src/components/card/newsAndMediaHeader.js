@@ -61,17 +61,9 @@ const NewsAndMediaHeader = ({
   const ServeTitle = () => {
     if (!title || isLayoutTwo) return null;
 
-    // Manage max string Length
-    const MAX_LENGTH = 36;
-    let titlePreview = `${title.rendered.substring(0, MAX_LENGTH)}...`;
-    if (title.rendered.length < MAX_LENGTH) titlePreview = title.rendered;
-
     return (
-      <div
-        className="primary-title"
-        style={{ fontSize: 22, fontWeight: "bold", cursor: "pointer" }}
-      >
-        <Html2React html={titlePreview} />
+      <div className="primary-title" style={{ fontSize: 20 }}>
+        <Html2React html={title.rendered} />
       </div>
     );
   };
@@ -79,11 +71,21 @@ const NewsAndMediaHeader = ({
   const ServeDate = () => {
     if (!date || isLayoutTwo) return null;
     const dateObject = new Date(date);
-    const formattedDate = DATE_MODULE.format(dateObject, "DD/MM/YYYY");
+    const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
 
     return (
-      <div style={{ padding: `0.5em 0` }}>
+      <div style={{ paddingBottom: `1em` }}>
         <Html2React html={formattedDate} />
+      </div>
+    );
+  };
+
+  const ServeCategory = () => {
+    if (!category) return null;
+
+    return (
+      <div style={{ paddingBottom: `1em` }}>
+        <Html2React html={category} />
       </div>
     );
   };
@@ -172,6 +174,18 @@ const NewsAndMediaHeader = ({
     );
   };
 
+  const ServeHeader = () => {
+    return (
+      <div className="flex">
+        <div className="flex-col">
+          <ServeCategory />
+          <ServeDate />
+        </div>
+        <ServeIcon />
+      </div>
+    );
+  };
+
   return (
     <div style={{ padding: isLayoutTwo ? 0 : `1.5em 1.5em 0` }}>
       <div
@@ -183,9 +197,8 @@ const NewsAndMediaHeader = ({
         }}
       >
         <ServeMedia />
+        <ServeHeader />
         <ServeTitle />
-        <ServeDate />
-        <ServeIcon />
       </div>
     </div>
   );

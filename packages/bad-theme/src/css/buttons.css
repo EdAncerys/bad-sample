@@ -15,12 +15,21 @@
   line-height: normal;
   transition: all 0.3s ease-in-out;
 }
+.blue-btn:hover {
+  background-color: rgb(31, 51, 94, 0.9);
+}
+
 .transparent-btn {
   color: #1f335e;
   background-color: transparent;
   border: 1px solid #1f335e;
   transition: all 0.3s ease-in-out;
 }
+.transparent-btn:hover {
+  color: #3882cd;
+  border: 1px solid #3882cd;
+}
+
 .drop-down-btn {
   color: #1f335e;
   background-color: #f0f1f4;
