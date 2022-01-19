@@ -29,6 +29,7 @@
     "date-and-time": "^2.0.1",
     "dotenv": "^10.0.0",
     "frontity": "^1.17.1",
+    "html-react-parser": "^1.4.5",
     "js-cookie": "^3.0.1",
     "react-bootstrap": "^2.0.2",
     "react-cookie": "^4.1.1",

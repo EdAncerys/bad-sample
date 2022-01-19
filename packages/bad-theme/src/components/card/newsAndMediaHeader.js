@@ -28,9 +28,14 @@ const NewsAndMediaHeader = ({
   if (!newsAndMediaInfo) return null;
 
   const mountedRef = useRef(true);
+  const CATEGORY = Object.values(state.source.category);
+
   const [category, setCategory] = useState(null);
   const { categories, excerpt, title, date, featured_media } = newsAndMediaInfo;
+
   const isLayoutTwo = layout === "layout_two";
+  const isLayoutThree = layout === "layout_three";
+  const isLayoutFour = layout === "layout_four";
 
   useEffect(async () => {
     if (state.source.category) {
@@ -59,33 +64,11 @@ const NewsAndMediaHeader = ({
 
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
-    if (!title || isLayoutTwo) return null;
+    if (!title) return null;
 
     return (
       <div className="primary-title" style={{ fontSize: 20 }}>
         <Html2React html={title.rendered} />
-      </div>
-    );
-  };
-
-  const ServeDate = () => {
-    if (!date || isLayoutTwo) return null;
-    const dateObject = new Date(date);
-    const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
-
-    return (
-      <div style={{ paddingBottom: `1em` }}>
-        <Html2React html={formattedDate} />
-      </div>
-    );
-  };
-
-  const ServeCategory = () => {
-    if (!category) return null;
-
-    return (
-      <div style={{ paddingBottom: `1em` }}>
-        <Html2React html={category} />
       </div>
     );
   };
@@ -113,93 +96,107 @@ const NewsAndMediaHeader = ({
     );
   };
 
-  const ServeMedia = () => {
-    if (!isLayoutTwo) return null;
+  const ServeImage = () => {
+    if (!featured_media) return null;
 
-    const CATEGORY = Object.values(state.source.category);
+    const media = state.source.attachment[featured_media];
+    const alt = title.rendered || "BAD";
+
+    return (
+      <div
+        style={{
+          width: "100%",
+          height: 300,
+        }}
+      >
+        <Image
+          src={media.source_url}
+          alt={alt}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+          }}
+        />
+      </div>
+    );
+  };
+
+  const ServeCategory = () => {
+    if (!CATEGORY) return null;
+
     const filter = CATEGORY.filter((item) => item.id === Number(categories[0]));
     const categoryName = filter[0].name;
 
+    return (
+      <div className="primary-title" style={{ fontSize: 20 }}>
+        <Html2React html={categoryName} />
+      </div>
+    );
+  };
+
+  const ServeDate = () => {
+    if (!date) return null;
+
     const dateObject = new Date(date);
-    const formattedDate = DATE_MODULE.format(dateObject, "DD/MMM/YYYY");
-    const media = state.source.attachment[featured_media];
+    const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
 
-    // Manage max string Length
-    const MAX_LENGTH = 30;
-    let bodyPreview = `${excerpt.rendered.substring(0, MAX_LENGTH)}...`;
-    if (excerpt.rendered.length < MAX_LENGTH) bodyPreview = excerpt.rendered;
+    return (
+      <div style={{ padding: `0.5em 0` }}>
+        <Html2React html={formattedDate} />
+      </div>
+    );
+  };
 
-    const ServeImage = () => {
-      if (!media) return null;
-      const alt = title.rendered || "BAD";
+  const ServeBody = () => {
+    if (!excerpt) return null;
 
-      return (
-        <div
-          style={{
-            width: "100%",
-            height: 200,
-          }}
-        >
-          <Image
-            src={media.source_url}
-            alt={alt}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-            }}
-          />
-        </div>
-      );
-    };
+    return (
+      <div style={{ padding: `0.5em 0 0` }}>
+        <Html2React html={excerpt.rendered} />
+      </div>
+    );
+  };
+
+  const ServeLayoutTwo = () => {
+    if (!isLayoutTwo) return null;
 
     return (
       <div>
         <ServeImage />
         <div style={{ padding: `1em 1.5em 0` }}>
-          <div
-            className="primary-title"
-            style={{ fontSize: 22, fontWeight: "bold", cursor: "pointer" }}
-          >
-            <Html2React html={categoryName} />
-          </div>
-          <div style={{ padding: `0.5em 0 0` }}>
-            <Html2React html={formattedDate} />
-          </div>
-          <div style={{ padding: `0.5em 0 0` }}>
-            <Html2React html={bodyPreview} />
-          </div>
+          <ServeCategory />
+          <ServeDate />
+          <ServeBody />
         </div>
       </div>
     );
   };
 
-  const ServeHeader = () => {
+  const ServeLayoutThree = () => {
+    if (!isLayoutThree) return null;
+
     return (
-      <div className="flex">
-        <div className="flex-col">
-          <ServeCategory />
-          <ServeDate />
+      <div style={{ padding: `1em 1.5em 0` }}>
+        <div style={{ paddingBottom: `1em` }}>
+          <div className="flex">
+            <div className="flex-col">
+              <ServeCategory />
+              <ServeDate />
+            </div>
+            <ServeIcon />
+          </div>
         </div>
-        <ServeIcon />
+        <ServeTitle />
       </div>
     );
   };
 
   return (
-    <div style={{ padding: isLayoutTwo ? 0 : `1.5em 1.5em 0` }}>
-      <div
-        className="flex-col"
-        style={{
-          justifyContent: "space-between",
-          justifyContent: "center",
-          color: colors.softBlack,
-        }}
-      >
-        <ServeMedia />
-        <ServeHeader />
-        <ServeTitle />
-      </div>
+    <div className="flex-col">
+      <ServeLayoutTwo />
+      <ServeLayoutThree />
+      {/* <ServeLayoutFour />  */}
     </div>
   );
 };

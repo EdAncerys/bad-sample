@@ -15,13 +15,14 @@ const NewsBlock = ({
   const { layout, post_limit, category_filter, colour } = block;
   const isLayoutTwo = layout === "layout_two";
   const isLayoutThree = layout === "layout_three";
+  const isLayoutFour = layout === "layout_four";
 
   // RETURN ---------------------------------------------
   return (
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: `repeat(3, 1fr)`,
+        gridTemplateColumns: isLayoutFour ? `1fr` : `repeat(3, 1fr)`,
         gap: 20,
       }}
     >
@@ -42,7 +43,7 @@ const NewsBlock = ({
           return (
             <Card
               key={key}
-              link_label="Listen Here"
+              link_label="Read More"
               link={link}
               newsAndMediaInfo={block}
               layout={layout}
@@ -58,9 +59,22 @@ const NewsBlock = ({
               link_label="Read More"
               link={link}
               newsAndMediaInfo={block}
+              layout={layout}
               cardHeight={290}
               colour={colour}
-              cardHeight="100%"
+              shadow
+            />
+          );
+
+        if (isLayoutFour)
+          return (
+            <Card
+              key={key}
+              link_label="Read More"
+              link={link}
+              newsAndMediaInfo={block}
+              layout={layout}
+              colour={colour}
               shadow
             />
           );

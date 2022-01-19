@@ -2,6 +2,7 @@ import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Form } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
+import parse from "html-react-parser";
 
 import NewsBlock from "./newsBlock";
 import NewsCarouselComponent from "./newsCarouselComponent";
@@ -241,8 +242,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
             {categoryList.map((item, key) => {
               return (
                 <option key={key} value={item.id}>
-                  {/* <Html2React html={item.name} /> */}
-                  {item.name}
+                  {parse(item.name)}
                 </option>
               );
             })}
@@ -333,9 +333,6 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       let value = categoryList.filter(
         (category) => category.id === Number(categoryFilterRef.current)
       );
-
-      console.log(value);
-      console.log(value.name);
 
       return (
         <div className="shadow" style={styles.action}>
@@ -465,7 +462,12 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div style={{ padding: `${marginVertical}px 0` }}>
+    <div
+      style={{
+        padding: `${marginVertical}px 0`,
+        backgroundColor: background_colour,
+      }}
+    >
       <BlockWrapper>
         <TitleBlock
           block={block}
