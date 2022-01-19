@@ -192,11 +192,23 @@ const NewsAndMediaHeader = ({
     );
   };
 
+  const ServeLayoutFour = () => {
+    if (!isLayoutFour) return null;
+
+    return (
+      <div style={{ padding: `2em 3em 0` }}>
+        <ServeTitle />
+        <ServeDate />
+        <ServeBody />
+      </div>
+    );
+  };
+
   return (
     <div className="flex-col">
       <ServeLayoutTwo />
       <ServeLayoutThree />
-      {/* <ServeLayoutFour />  */}
+      <ServeLayoutFour />
     </div>
   );
 };

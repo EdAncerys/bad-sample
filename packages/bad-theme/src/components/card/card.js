@@ -56,6 +56,7 @@ const Card = ({
   opacity,
   cardWidth,
   cardHeight,
+  padding,
   cardMinHeight,
   heroBanner,
   newsCarousel,
@@ -82,6 +83,7 @@ const Card = ({
   if (isFrom4Col) PADDING = `1em`;
   if (newsAndMediaInfo) PADDING = `0 1.5em 1.5em`;
   if (removePadding) PADDING = 0;
+  if (padding) PADDING = padding;
 
   // SERVERS ----------------------------------------------
   const ServeFooter = () => {
