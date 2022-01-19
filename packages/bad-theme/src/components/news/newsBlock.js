@@ -1,40 +1,20 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import Card from "../card/card";
-import Loading from "../loading";
 import { colors } from "../../config/imports";
 
-const NewsBlock = ({ state, actions, libraries, block }) => {
-  const [postList, setPostList] = useState(null);
-  const [category, setCategory] = useState(null);
-
+const NewsBlock = ({
+  state,
+  actions,
+  libraries,
+  newsList,
+  categoryList,
+  block,
+}) => {
   const { layout, post_limit, category_filter, colour } = block;
   const isLayoutTwo = layout === "layout_two";
   const isLayoutThree = layout === "layout_three";
-  const mountedRef = useRef(true);
-
-  // DATA pre FETCH ----------------------------------------------------------------
-  useEffect(async () => {
-    if (!state.source.post) {
-      console.log("Error. Failed to fetch post data"); // debug
-      return null;
-    }
-    let POST_LIST = Object.values(state.source.post); // add postData object to data array
-    if (post_limit) POST_LIST = POST_LIST.slice(0, Number(post_limit)); // apply limit on posts
-    if (state.source.category) {
-      const CATEGORY = Object.values(state.source.category);
-      setCategory(CATEGORY);
-    }
-
-    setPostList(POST_LIST);
-
-    return () => {
-      mountedRef.current = false; // clean up function
-    };
-  }, [state.source.post]);
-  // DATA pre FETCH ----------------------------------------------------------------
-  if (!postList || !category) return <Loading />;
 
   // RETURN ---------------------------------------------
   return (
@@ -45,10 +25,9 @@ const NewsBlock = ({ state, actions, libraries, block }) => {
         gap: 20,
       }}
     >
-      {postList.map((block, key) => {
+      {newsList.map((block, key) => {
         const { categories, link } = block;
-        const { press_release_authors } = block.acf;
-        const filter = category.filter(
+        const filter = categoryList.filter(
           (item) => item.id === Number(categories[0])
         );
         const categoryName = filter[0].name;
@@ -66,7 +45,6 @@ const NewsBlock = ({ state, actions, libraries, block }) => {
               link_label="Listen Here"
               link={link}
               newsAndMediaInfo={block}
-              cardMinHeight={290}
               layout={layout}
               colour={colour}
               shadow
@@ -80,6 +58,7 @@ const NewsBlock = ({ state, actions, libraries, block }) => {
               link_label="Read More"
               link={link}
               newsAndMediaInfo={block}
+              cardHeight={290}
               colour={colour}
               cardHeight="100%"
               shadow
@@ -91,18 +70,7 @@ const NewsBlock = ({ state, actions, libraries, block }) => {
 };
 
 const styles = {
-  input: {
-    borderRadius: 10,
-    paddingRight: 35,
-  },
-  action: {
-    position: "relative",
-    backgroundColor: colors.white,
-    borderRadius: 5,
-    padding: `0.5em 1.5em`,
-    marginRight: `1em`,
-    width: "fit-content",
-  },
+  container: {},
 };
 
 export default connect(NewsBlock);

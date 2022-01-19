@@ -123,10 +123,10 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
         if (acf_fc_layout === "news_and_media_loop_block")
           return (
-            <BlockWrapper key={key + 1} background={block.background_colour}>
+            <div key={key + 1}>
               <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
               <NewsAndMedia key={key} block={block} />
-            </BlockWrapper>
+            </div>
           );
 
         if (acf_fc_layout === "embedded_video_block")

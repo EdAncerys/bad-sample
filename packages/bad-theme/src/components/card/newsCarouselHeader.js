@@ -73,7 +73,7 @@ const NewsCarouselHeader = ({ state, actions, libraries, newsCarousel }) => {
     const alt = release || "BAD";
 
     return (
-      <div style={{ width: "100%", minHeight: 200, maxHeight: 300 }}>
+      <div style={{ width: "100%", height: 300 }}>
         <Image
           src={media.source_url}
           alt={alt}

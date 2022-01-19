@@ -209,7 +209,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
           >
             <ServeTitle />
 
-            <div className="flex-row" style={{ width: "60%" }}>
+            <div className="flex-row" style={{ width: "70%" }}>
               <div
                 className="flex search-input"
                 style={{
