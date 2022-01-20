@@ -20,7 +20,8 @@ const ElectionModal = ({
   if (!modalData) return null;
 
   const { title, link } = modalData;
-  const { description, nomination_form_upload } = modalData.acf;
+  const { description, nomination_form_upload, job_description_upload } =
+    modalData.acf;
   // HELPERS ---------------------------------------------
   console.log(modalData);
 
@@ -73,6 +74,22 @@ const ElectionModal = ({
           </div>
         );
       };
+      const ServeJobDescriptionDownload = () => {
+        if (!job_description_upload) return null;
+
+        return (
+          <div className="blue-btn">
+            <a
+              href={job_description_upload}
+              target="_blank"
+              download
+              style={{ color: colors.white }}
+            >
+              Download Job Description
+            </a>
+          </div>
+        );
+      };
       return (
         <Modal.Footer
           style={{
@@ -83,6 +100,7 @@ const ElectionModal = ({
           }}
         >
           <ServeFormDownload />
+          <ServeJobDescriptionDownload />
         </Modal.Footer>
       );
     };

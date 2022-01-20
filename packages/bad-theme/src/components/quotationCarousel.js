@@ -14,7 +14,7 @@ import BlockWrapper from "./blockWrapper";
 const QuotationCarousel = ({ state, actions, libraries, block }) => {
   if (!block) return null;
 
-  const { disable_vertical_padding, background_colour } = block;
+  const { disable_vertical_padding, background_colour, carouselling } = block;
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const BANNER_HEIGHT = state.theme.bannerHeight;
@@ -66,7 +66,14 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
       </div>
     );
   };
-
+  const ServeAuthorPhoto = ({ photo }) => {
+    if (!photo) return null;
+    return (
+      <div style={{ maxHeight: 200 }}>
+        <Image src={photo} style={styles.authorPhoto} />
+      </div>
+    );
+  };
   if (!block) return <Loading />;
 
   // RETURN ---------------------------------------------------
@@ -86,9 +93,10 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
       <Carousel
         className="quotation-carousel"
         style={{ color: colors.darkSilver }}
+        interval={carouselling ? 5000 : null}
       >
         {block.slides.map((block, key) => {
-          const { label, title } = block;
+          const { label, title, photo } = block;
 
           // SERVERS ----------------------------------------------------
 
@@ -115,6 +123,7 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
                       overflow: "hidden",
                     }}
                   >
+                    <ServeAuthorPhoto photo={photo} />
                     <Html2React html={title} />
                   </div>
                   <div
@@ -138,6 +147,12 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
 
 const styles = {
   container: {},
+  authorPhoto: {
+    borderRadius: "50%",
+    aspectRatio: "1/1",
+    marginRight: "1em",
+    width: 150,
+  },
 };
 
 export default connect(QuotationCarousel);
