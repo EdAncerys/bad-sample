@@ -157,7 +157,7 @@ const NewsCarouselComponent = ({
                 }}
               >
                 <Card
-                  newsCarousel={{ date, categoryName, media }}
+                  newsCarousel={block}
                   cardWidth="50%"
                   cardHeight={BANNER_HEIGHT}
                   title={excerpt ? excerpt.rendered : null}

@@ -58,3 +58,8 @@
 .quotation-carousel .carousel-control-next-icon {
   display: none;
 }
+
+.carousel:hover a,
+.carousel:hover a {
+  box-shadow: none;
+}
