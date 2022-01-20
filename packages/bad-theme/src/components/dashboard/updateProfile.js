@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
+import ActionPlaceholder from "../actionPlaceholder";
 import { colors } from "../../config/imports";
 
 const UpdateProfile = ({ state, actions, libraries }) => {
@@ -92,13 +93,16 @@ const UpdateProfile = ({ state, actions, libraries }) => {
   return (
     <div
       className="shadow"
-      style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
+      style={{ position: "relative", marginBottom: `${marginVertical}px` }}
     >
-      <div className="primary-title" style={{ fontSize: 20 }}>
-        Personal Details:
+      <ActionPlaceholder isFetching={false} />
+      <div style={{ padding: `2em 4em` }}>
+        <div className="primary-title" style={{ fontSize: 20 }}>
+          Personal Details:
+        </div>
+        <ServeForm />
+        <ServeActions />
       </div>
-      <ServeForm />
-      <ServeActions />
     </div>
   );
 };

@@ -6,45 +6,21 @@ const COOKIE_NAME = "BAD-WebApp";
 export const loginAction = async ({ state, dispatch, transId }) => {
   console.log("loginAction triggered");
 
-  const URL = state.auth.DYNAMICS_BRIDGE;
-
-  setFetchAction({ dispatch, isFetching: true });
   // --------------------------------------------------------------------------
   // 📌 STEP: Log onto the API server and get the Bearer token
   // --------------------------------------------------------------------------
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch });
   if (!jwt) throw new Error("Cannot logon to server.");
 
-  const requestOptions = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + jwt,
-    },
-    body: JSON.stringify({ transId }),
-  };
-
-  try {
-    const data = await fetch(URL, requestOptions);
-    console.log("data", data);
-    const response = await data.json();
-    console.log("response", response);
-    if (response.success) {
-      // handleSetCookie({ name: COOKIE_NAME, value: state.router.link });
-      state.context.isActiveUser = response.data;
-      seJWTAction({ dispatch, jwt });
-      setFetchAction({ dispatch, isFetching: null });
-      setLoginModalAction({ dispatch, loginModalAction: false });
-    }
-  } catch (error) {
-    console.log("error", error);
-  } finally {
-    setFetchAction({ dispatch, isFetching: false });
-  }
+  // --------------------------------------------------------------------------
+  // 📌 STEP: Get User data from Dynamics
+  // --------------------------------------------------------------------------
+  await getUserAction({ state, dispatch, jwt, transId });
 };
 
-export const authenticateAppAction = async ({ state }) => {
+export const authenticateAppAction = async ({ state, dispatch }) => {
   console.log("authenticateAppAction triggered");
+  setFetchAction({ dispatch, isFetching: true });
 
   const username = state.auth.APP_USERNAME;
   const password = state.auth.APP_PASSWORD;
@@ -72,59 +48,42 @@ export const authenticateAppAction = async ({ state }) => {
     }
   } catch (error) {
     console.log("error", error);
+  } finally {
+    setFetchAction({ dispatch, isFetching: false });
   }
 };
 
-export const getUserAction = async ({ state, jwt, transId }) => {
+export const getUserAction = async ({ state, dispatch, jwt, transId }) => {
   console.log("getUserAction triggered");
+  setFetchAction({ dispatch, isFetching: true });
 
-  // const URL = process.env.DYNAMICS_BRIDGE;
+  const URL = state.auth.DYNAMICS_BRIDGE;
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + jwt,
+    },
+    body: JSON.stringify({ transId }),
+  };
 
-  // const requestOptions = {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     Authorization: "Bearer " + jwt,
-  //   },
-  //   body: JSON.stringify({ transId }),
-  // };
-
-  // try {
-  //   const data = await fetch(URL, requestOptions);
-  //   const response = await data.json();
-  //   console.log(response);
-  //   if (response.success) {
-  //     state.context.isActiveUser = user;
-  //     setLoginModalAction({ dispatch, loginModalAction: false });
-
-  //     return response;
-  //   } else {
-  //     return null;
-  //   }
-  // } catch (error) {
-  //   console.log("error", error);
-  // }
-
-  let user = await fetch(
-    "https://skylarkdev.digital/dynamicsbridge/redirect/CoreModule.aspx/trans",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + jwt,
-      },
-      body: JSON.stringify({
-        transId,
-      }),
+  try {
+    const data = await fetch(URL, requestOptions);
+    console.log("data", data);
+    const response = await data.json();
+    console.log("response", response);
+    if (response.success) {
+      // handleSetCookie({ name: COOKIE_NAME, value: state.router.link });
+      state.context.isActiveUser = response.data;
+      seJWTAction({ dispatch, jwt });
+      setFetchAction({ dispatch, isFetching: null });
+      setLoginModalAction({ dispatch, loginModalAction: false });
     }
-  );
-
-  user = await user.json();
-  if (user.success) {
-    state.context.isActiveUser = user;
-    setLoginModalAction({ dispatch, loginModalAction: false });
+  } catch (error) {
+    console.log("error", error);
+  } finally {
+    setFetchAction({ dispatch, isFetching: false });
   }
-  console.log("userInfo", user);
 };
 
 export const logoutAction = async ({ state, actions, dispatch }) => {

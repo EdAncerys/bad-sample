@@ -47,15 +47,11 @@ const App = ({ state, actions }) => {
   const data = state.source.get(endPoint);
   console.log("INDEX data", data); // debug
 
+  useEffect(() => {
+    console.log("GOT transID", data.query);
+  }, [data]);
+
   // HELPERS ------------------------------------------------------------
-  // const LOGIN_COOKIE = "BAD-WebApp";
-  // const [cookies, setCookie] = useCookies();
-  // console.log("cookies", cookies);
-  // useEffect(() => {
-  //   if (cookies) {
-  //     console.log(`API call ${cookies}`);
-  //   }
-  // }, []);
 
   // RETURN ------------------------------------------------------------
   return (

@@ -1,9 +1,11 @@
 # bad-org 😈
 
-## README TBD 
+## README TBD
 
 ### Deployment to Versel
+
 #### Deploy Frontity using the vercel command (from the root of your project):
+
 `npx vercel`
 
 This project was bootstrapped with [Frontity](https://frontity.org/).
@@ -16,6 +18,12 @@ This project was bootstrapped with [Frontity](https://frontity.org/).
 - [Deploy](#deploy)
 
 ### Launch a development server
+
+```
+npm run dev
+```
+
+-or-
 
 ```
 npx frontity dev
