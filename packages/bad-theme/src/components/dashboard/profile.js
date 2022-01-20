@@ -14,10 +14,9 @@ const Profile = ({ state, actions, libraries }) => {
   const ServeProfileAvatar = () => {
     if (!activeUser) return null;
 
-    const { Name, user } = activeUser;
-    const { bad_profile_photo_url } = user;
+    const { bad_listname, bad_profile_photo_url } = activeUser;
 
-    const alt = Name || "Profile Picture";
+    const alt = bad_listname || "Profile Picture";
 
     return (
       <div className="flex" style={{ justifyContent: "flex-end" }}>
@@ -46,11 +45,11 @@ const Profile = ({ state, actions, libraries }) => {
   const ServeProfileName = () => {
     if (!activeUser) return null;
 
-    const { Name } = activeUser;
+    const { bad_listname } = activeUser;
 
     return (
       <div className="primary-title" style={{ fontSize: 36 }}>
-        <Html2React html={Name} />
+        <Html2React html={bad_listname} />
       </div>
     );
   };
@@ -58,20 +57,17 @@ const Profile = ({ state, actions, libraries }) => {
   const ServeProfileInfo = () => {
     if (!activeUser) return null;
 
-    const { Name, Email, AccessLevel } = activeUser;
+    const { emailaddress1, address2_line2 } = activeUser;
 
     return (
-      <div
-        className="flex-col primary-title"
-        style={{ paddingTop: `1em`, fontSize: 20 }}
-      >
+      <div className="flex-col" style={{ paddingTop: `1em`, fontSize: 20 }}>
         <div style={{ padding: "1em 0" }}>
-          <span>Email: </span>
-          <Html2React html={Email} />
+          <span className="primary-title">Email: </span>
+          <Html2React html={emailaddress1} />
         </div>
         <div>
-          <span>AccessLevel: </span>
-          <Html2React html={AccessLevel} />
+          <span className="primary-title">Current Outstanding Balance: </span>
+          <Html2React html={address2_line2} />
         </div>
       </div>
     );
