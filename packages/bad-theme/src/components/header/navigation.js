@@ -110,14 +110,13 @@ const Navigation = ({ state, actions, libraries }) => {
           <ul
             id={`${slug}-submenu`}
             aria-labelledby="navbarDropdownMenuLink"
-            className="shadow-strong"
             style={{
               position: "absolute",
               zIndex: 1,
               top: `5%`,
               width: "30%",
               height: "90%",
-              marginLeft: "31%",
+              marginLeft: "32%",
               backgroundColor: colors.lightSilver,
               overflowY: "auto",
               display: "none",
@@ -170,7 +169,7 @@ const Navigation = ({ state, actions, libraries }) => {
               position: "absolute",
               zIndex: 1,
               backgroundColor: colors.silver,
-              height: "85%",
+              height: "90%",
               width: 2,
               left: left || `32.5%`,
               margin: `0 1em`,
@@ -190,12 +189,11 @@ const Navigation = ({ state, actions, libraries }) => {
               display: "grid",
               gridAutoFlow: "column",
               gridTemplateColumns: `repeat(3, 1fr)`,
-              gridTemplateRows: `repeat(8, auto)`,
+              gridTemplateRows: `repeat(11, auto)`,
               gap: `0 2em`,
             }}
           >
-            <ServeDivider nullCondition={menuLength < 9} />
-            <ServeDivider nullCondition={menuLength < 17} left="65%" />
+            <ServeDivider />
 
             {child_items.map((item, key) => {
               const { title, url, slug, child_items } = item;
@@ -238,7 +236,7 @@ const Navigation = ({ state, actions, libraries }) => {
                 >
                   <a
                     className="flex-row dropdown-item"
-                    style={styles.link}
+                    style={{ ...styles.link, fontWeight: "bold" }}
                     onClick={() =>
                       handleOnClickNavigation({
                         path: url,
