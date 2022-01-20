@@ -45,11 +45,11 @@ const Profile = ({ state, actions, libraries }) => {
   const ServeProfileName = () => {
     if (!activeUser) return null;
 
-    const { bad_listname } = activeUser;
+    const { fullname } = activeUser;
 
     return (
       <div className="primary-title" style={{ fontSize: 36 }}>
-        <Html2React html={bad_listname} />
+        <Html2React html={fullname} />
       </div>
     );
   };

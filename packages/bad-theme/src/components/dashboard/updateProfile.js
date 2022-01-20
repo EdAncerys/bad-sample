@@ -3,26 +3,34 @@ import { connect } from "frontity";
 
 import ActionPlaceholder from "../actionPlaceholder";
 import { colors } from "../../config/imports";
+// CONTEXT ----------------------------------------------------------------
+import { useAppDispatch, useAppState, updateProfile } from "../../context";
 
 const UpdateProfile = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
+  const dispatch = useAppDispatch();
+  const { isFetching } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
 
   // HELPERS ----------------------------------------------------------------
   const handleProfileUpdate = () => {
-    const firstName = document.querySelector("#fistName").value;
-    const lastName = document.querySelector("#lastName").value;
+    const firstname = document.querySelector("#fistName").value.trim();
+    const lastname = document.querySelector("#lastName").value.trim();
+    const profilePicture = document.querySelector("#profilePicture").value;
     const password = document.querySelector("#password").value;
-    const email = document.querySelector("#email").value.toLowerCase();
+    const email = document.querySelector("#email").value.toLowerCase().trim();
 
-    const updateCredentials = {
-      firstName,
-      lastName,
-      email,
-      password,
+    const data = {
+      firstname,
+      lastname,
+      bad_profile_photo_url: profilePicture,
     };
-    console.log("updateCredentials", updateCredentials);
+
+    updateProfile({ state, dispatch, data });
+
+    console.log("updateCredentials", data);
   };
 
   // SERVERS ---------------------------------------------
@@ -73,6 +81,16 @@ const UpdateProfile = ({ state, actions, libraries }) => {
             style={styles.input}
           />
         </div>
+
+        <div className="form-group" style={{ display: "grid", gap: 10 }}>
+          <label>Your Profile Picture</label>
+          <input
+            id="profilePicture"
+            type="file"
+            className="form-control"
+            style={styles.input}
+          />
+        </div>
       </div>
     );
   };
@@ -95,7 +113,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
       className="shadow"
       style={{ position: "relative", marginBottom: `${marginVertical}px` }}
     >
-      <ActionPlaceholder isFetching={false} />
+      <ActionPlaceholder isFetching={isFetching} />
       <div style={{ padding: `2em 4em` }}>
         <div className="primary-title" style={{ fontSize: 20 }}>
           Personal Details:

@@ -16,11 +16,11 @@ export const getTweetsAction = async ({ state, dispatch }) => {
     const data = await fetch(URL, requestOptions);
     const tweets = await data.json();
 
-    setFetchAction({ dispatch, isFetching: null });
     setTweetsAction({ dispatch, tweets });
   } catch (error) {
     console.log("error", error);
-    setFetchAction({ dispatch, isFetching: null });
+  } finally {
+    setFetchAction({ dispatch, isFetching: false });
   }
 };
 

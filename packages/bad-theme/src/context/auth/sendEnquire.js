@@ -48,13 +48,12 @@ export const sendEmailEnquireAction = async ({
     const response = await data.json();
 
     if (response.success) {
-      setFetchAction({ dispatch, isFetching: null });
       setEnquireAction({ dispatch, enquireAction: null });
-
       return response;
     }
   } catch (error) {
     console.log("error", error);
-    setFetchAction({ dispatch, isFetching: null });
+  } finally {
+    setFetchAction({ dispatch, isFetching: false });
   }
 };

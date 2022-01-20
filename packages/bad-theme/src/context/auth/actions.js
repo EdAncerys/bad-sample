@@ -5,6 +5,7 @@ const COOKIE_NAME = "BAD-WebApp";
 
 export const loginAction = async ({ state, dispatch, transId }) => {
   console.log("loginAction triggered");
+  setFetchAction({ dispatch, isFetching: true });
 
   // --------------------------------------------------------------------------
   // 📌 STEP: Log onto the API server and get the Bearer token
@@ -16,11 +17,13 @@ export const loginAction = async ({ state, dispatch, transId }) => {
   // 📌 STEP: Get User data from Dynamics
   // --------------------------------------------------------------------------
   await getUserAction({ state, dispatch, jwt, transId });
+  // handleSetCookie({ name: COOKIE_NAME, value: state.router.link });
+  setFetchAction({ dispatch, isFetching: false });
+  setLoginModalAction({ dispatch, loginModalAction: false });
 };
 
 export const authenticateAppAction = async ({ state, dispatch }) => {
   console.log("authenticateAppAction triggered");
-  setFetchAction({ dispatch, isFetching: true });
 
   const username = state.auth.APP_USERNAME;
   const password = state.auth.APP_PASSWORD;
@@ -48,8 +51,6 @@ export const authenticateAppAction = async ({ state, dispatch }) => {
     }
   } catch (error) {
     console.log("error", error);
-  } finally {
-    setFetchAction({ dispatch, isFetching: false });
   }
 };
 
@@ -67,7 +68,6 @@ export const getUserAction = async ({ state, dispatch, jwt, transId }) => {
 
 export const getUserContactId = async ({ state, dispatch, jwt, transId }) => {
   console.log("getUserTransId triggered");
-  setFetchAction({ dispatch, isFetching: true });
 
   const URL = state.auth.DYNAMICS_BRIDGE;
   const requestOptions = {
@@ -87,8 +87,6 @@ export const getUserContactId = async ({ state, dispatch, jwt, transId }) => {
     }
   } catch (error) {
     console.log("error", error);
-  } finally {
-    setFetchAction({ dispatch, isFetching: false });
   }
 };
 
@@ -99,7 +97,6 @@ export const getUserDataByContactId = async ({
   contactid,
 }) => {
   console.log("getUserDataByContactId triggered");
-  setFetchAction({ dispatch, isFetching: true });
 
   const URL = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
 
@@ -112,15 +109,12 @@ export const getUserDataByContactId = async ({
     const data = await fetch(URL, requestOptions);
     const response = await data.json();
     if (response) {
-      // handleSetCookie({ name: COOKIE_NAME, value: state.router.link });
       state.context.isActiveUser = response;
+      debugger;
       seJWTAction({ dispatch, jwt });
-      setLoginModalAction({ dispatch, loginModalAction: false });
     }
   } catch (error) {
     console.log("error", error);
-  } finally {
-    setFetchAction({ dispatch, isFetching: false });
   }
 };
 

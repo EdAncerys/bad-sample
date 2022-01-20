@@ -15,11 +15,13 @@ import {
   loginAction,
   logoutAction,
   authenticateAppAction,
-  getUserAction
+  getUserAction,
+  getUserDataByContactId,
 } from "./auth/actions";
 import { sendEmailEnquireAction } from "./auth/sendEnquire";
 import { getTweetsAction } from "./auth/getTweets";
 import { getFadAction } from "./auth/getFAD";
+import { updateProfile } from "./auth/updateProfile";
 
 export {
   AppProvider,
@@ -39,5 +41,7 @@ export {
   setErrorAction,
   getTweetsAction,
   getFadAction,
-  getUserAction
+  getUserAction,
+  getUserDataByContactId,
+  updateProfile,
 };

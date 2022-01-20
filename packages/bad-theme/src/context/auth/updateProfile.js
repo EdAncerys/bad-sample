@@ -1,4 +1,8 @@
-import { authenticateAppAction, setFetchAction } from "../index";
+import {
+  authenticateAppAction,
+  getUserDataByContactId,
+  setFetchAction,
+} from "../index";
 
 export const updateProfile = async ({ state, dispatch, data }) => {
   console.log("loginAction triggered");
@@ -21,16 +25,21 @@ export const updateProfile = async ({ state, dispatch, data }) => {
       "if-Match": "*",
       Authorization: "Bearer " + jwt,
     },
-    body: JSON.stringify({ data }),
+    body: JSON.stringify(data),
   };
 
   try {
     const data = await fetch(URL, requestOptions);
-    console.log("data", data);
     const response = await data.json();
     console.log("response", response);
     if (response.success) {
-      // handleSetCookie({ name: COOKIE_NAME, value: state.router.link });
+      await getUserDataByContactId({
+        state,
+        dispatch,
+        jwt,
+        contactid,
+      });
+      debugger;
     }
   } catch (error) {
     console.log("error", error);

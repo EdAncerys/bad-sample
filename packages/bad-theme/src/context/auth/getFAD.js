@@ -17,12 +17,12 @@ export const getFadAction = async ({ state, dispatch }) => {
     const result = await data.json();
     const fad = result.value;
 
-    setFetchAction({ dispatch, isFetching: null });
     setFadAction({ dispatch, fad });
     return fad;
   } catch (error) {
     console.log("error", error);
-    setFetchAction({ dispatch, isFetching: null });
+  } finally {
+    setFetchAction({ dispatch, isFetching: false });
   }
 };
 
