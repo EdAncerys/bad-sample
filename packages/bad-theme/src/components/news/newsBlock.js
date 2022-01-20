@@ -44,8 +44,7 @@ const NewsBlock = ({
             <div
               style={{
                 width: "100%",
-                height: "100%",
-                borderBottom: `5px solid ${colour}`,
+                height: 400,
               }}
             >
               <Image
@@ -96,7 +95,11 @@ const NewsBlock = ({
 
         if (isLayoutFour)
           return (
-            <div key={key} className="flex shadow" style={{ height: 410 }}>
+            <div
+              key={key}
+              className="flex shadow"
+              style={{ borderBottom: `5px solid ${colour}` }}
+            >
               <ServeImage />
               <Card
                 key={key}
@@ -106,6 +109,7 @@ const NewsBlock = ({
                 padding="1.5em 3em"
                 layout={layout}
                 colour={colour}
+                disableFooter
               />
             </div>
           );

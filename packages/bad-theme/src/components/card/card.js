@@ -65,6 +65,7 @@ const Card = ({
   imageAndPromoCard,
   removePadding,
   fadDirectory,
+  disableFooter,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
@@ -87,6 +88,8 @@ const Card = ({
 
   // SERVERS ----------------------------------------------
   const ServeFooter = () => {
+    if (disableFooter) return null;
+
     return (
       <div
         style={{

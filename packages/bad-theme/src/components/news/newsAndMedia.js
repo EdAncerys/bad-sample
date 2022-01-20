@@ -452,7 +452,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
         <button
           type="submit"
           className="transparent-btn"
-          // onClick={handleLoadMoreFilter}
+          onClick={handleLoadMoreFilter}
         >
           {value}
         </button>
