@@ -14,7 +14,6 @@ const CardBody = ({
   date,
   seatNumber,
   heroBanner,
-  newsCarousel,
   TEXT_ALIGN,
   isFrom4Col,
   electionInfo,
@@ -25,7 +24,7 @@ const CardBody = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   let CONTENT_ALIGNMENT = 0;
-  if (heroBanner || newsCarousel) CONTENT_ALIGNMENT = `auto 0`;
+  if (heroBanner) CONTENT_ALIGNMENT = `auto 0`;
 
   let PADDING = 0;
   if (heroBanner) PADDING = `1em 2em`;
@@ -55,7 +54,7 @@ const CardBody = ({
           overflow: "hidden",
           fontWeight: "bold",
           color: heroBanner ? colors.trueBlack : colors.softBlack,
-          alignItems: newsCarousel ? "center" : "flex-start",
+          alignItems: "flex-start",
           opacity: opacity || 1,
         }}
       >

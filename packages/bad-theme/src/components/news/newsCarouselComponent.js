@@ -1,47 +1,30 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Carousel } from "react-bootstrap";
 
 import { colors } from "../../config/imports";
 
-import Loading from "../loading";
-
 import Card from "../card/card";
 import LeftIcon from "../../img/svg/leftIcon.svg";
 import RightIcon from "../../img/svg/rightIcon.svg";
 import { muiQuery } from "../../context";
 
-const NewsCarouselComponent = ({ state, actions, libraries, block }) => {
+const NewsCarouselComponent = ({
+  state,
+  actions,
+  libraries,
+  block,
+  newsList,
+  categoryList,
+}) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { sm, md, lg, xl } = muiQuery();
 
   const { post_limit, disable_vertical_padding } = block;
-  
-  const [postList, setPostList] = useState(null);
-  const [category, setCategory] = useState(null);
-  const mountedRef = useRef(true);
 
-  // DATA pre FETCH ----------------------------------------------------------------
-  useEffect(async () => {
-    let POST_LIST = Object.values(state.source.post); // add postData object to data array
-    if (post_limit) POST_LIST = POST_LIST.slice(0, Number(post_limit)); // apply limit on posts
-    if (state.source.category) {
-      const CATEGORY = Object.values(state.source.category);
-      setCategory(CATEGORY);
-    }
-
-    setPostList(POST_LIST);
-
-    return () => {
-      mountedRef.current = false; // clean up function
-    };
-  }, [state.source.post]);
-
-  if (!postList || !category) return <Loading />;
-
-  const BLOCK_PAIRS = postList.flatMap((_, i, a) =>
+  const BLOCK_PAIRS = newsList.flatMap((_, i, a) =>
     i % 2 ? [] : [a.slice(i, i + 2)]
   ); // split data in array of pairs
   const BANNER_HEIGHT = state.theme.bannerHeight;
@@ -96,7 +79,7 @@ const NewsCarouselComponent = ({ state, actions, libraries, block }) => {
                   const { press_release_authors } = block.acf;
 
                   const media = state.source.attachment[featured_media];
-                  const filter = category.filter(
+                  const filter = categoryList.filter(
                     (item) => item.id === Number(categories[0])
                   );
                   const categoryName = filter[0].name;
@@ -122,19 +105,17 @@ const NewsCarouselComponent = ({ state, actions, libraries, block }) => {
                       style={{
                         position: "relative",
                         justifyContent: "center",
-                        height: BANNER_HEIGHT * 1.2,
+                        height: BANNER_HEIGHT * 1.4,
                       }}
                     >
                       <ServeDivider i={1} />
                       <Card
-                        newsCarousel={{ date, categoryName, media }}
+                        newsCarousel={block}
                         cardWidth={isSingleBlock ? "50%" : "100%"}
                         cardHeight={BANNER_HEIGHT}
-                        title={excerpt ? excerpt.rendered : null}
                         colour={colors.danger}
                         link={link}
                         link_label="Read More"
-                        limitTitleLength
                         cardHeight="90%"
                         shadow
                       />
@@ -155,11 +136,11 @@ const NewsCarouselComponent = ({ state, actions, libraries, block }) => {
 
     return (
       <Carousel className="news-carousel">
-        {postList.map((block, key) => {
+        {newsList.map((block, key) => {
           const { date, categories, excerpt, link, featured_media } = block;
 
           const media = state.source.attachment[featured_media];
-          const filter = category.filter(
+          const filter = categoryList.filter(
             (item) => item.id === Number(categories[0])
           );
           const categoryName = filter[0].name;

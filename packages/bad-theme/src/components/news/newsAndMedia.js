@@ -423,7 +423,14 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   };
 
   const ServeLayout = () => {
-    if (isLayoutOne) return <NewsCarouselComponent block={block} />;
+    if (isLayoutOne)
+      return (
+        <NewsCarouselComponent
+          block={block}
+          newsList={newsList}
+          categoryList={categoryList}
+        />
+      );
 
     return (
       <div>

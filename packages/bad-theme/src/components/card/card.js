@@ -11,7 +11,7 @@ import GalleryCarousel from "./galleryCarousel";
 import VenueInfo from "./venueInfo";
 import NewsArticleHeader from "./newsArticleHeader";
 import VideoGalleryInfo from "./videoGalleryInfo";
-import NewsCarouselHeader from "./newsCarouselHeader";
+import NewsCarousel from "./newsCarousel";
 import EventCardHeader from "./eventCardHeader";
 import NewsAndMediaHeader from "./newsAndMediaHeader";
 import AuthorInfo from "./authorInfo";
@@ -179,7 +179,6 @@ const Card = ({
           heroBanner={heroBanner}
           TEXT_ALIGN={TEXT_ALIGN}
           isFrom4Col={isFrom4Col}
-          newsCarousel={newsCarousel}
           limitBodyLength={limitBodyLength}
           limitTitleLength={limitTitleLength}
           electionInfo={electionInfo}
@@ -216,7 +215,7 @@ const Card = ({
       <NewsAndMediaHeader newsAndMediaInfo={newsAndMediaInfo} layout={layout} />
       <GalleryCarousel gallery={gallery} />
       <NewsArticleHeader newsArticle={newsArticle} />
-      <NewsCarouselHeader newsCarousel={newsCarousel} />
+      <NewsCarousel newsCarousel={newsCarousel} />
       <ServeCardImage />
       <ServeContent />
       <ServeFooter />
