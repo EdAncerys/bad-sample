@@ -16,6 +16,7 @@ const CardActions = ({
   form_link,
   downloadFile,
   handler,
+  electionBlocks,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -23,7 +24,7 @@ const CardActions = ({
 
   // SERVERS ---------------------------------------------
   const ServeReadMoreAction = () => {
-    if (!link) return null;
+    if (!link || electionBlocks) return null;
     let GO_TO_LABEL = "More";
     if (link_label) GO_TO_LABEL = <Html2React html={link_label} />;
 

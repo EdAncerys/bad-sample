@@ -76,6 +76,7 @@ const Card = ({
   const [modalData, setModalData] = useState();
 
   let CARD_HEIGHT = "100%";
+  let ELECTION_BLOCKS = false;
   if (title || body) CARD_HEIGHT = "auto";
   if (cardHeight) CARD_HEIGHT = cardHeight;
 
@@ -93,6 +94,8 @@ const Card = ({
   if (state.router.link === "/about-the-bad/bad-elections/") {
     CARD_HEIGHT = "200px";
     limitBodyLength = 300;
+    link_label = "Read more";
+    ELECTION_BLOCKS = true;
     handler = () => {
       modalData
         ? setModalData(null)
@@ -102,7 +105,6 @@ const Card = ({
             title,
           });
     };
-    link = null;
   }
 
   // SERVERS ----------------------------------------------
@@ -212,6 +214,7 @@ const Card = ({
           form_link={form_link}
           downloadFile={downloadFile}
           handler={handler}
+          electionBlocks={ELECTION_BLOCKS}
         />
       </div>
     );

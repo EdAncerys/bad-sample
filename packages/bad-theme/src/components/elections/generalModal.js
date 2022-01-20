@@ -48,7 +48,18 @@ const GeneralModal = ({ state, actions, libraries, modalData, handler }) => {
         </div>
       );
     };
+    const ServeMoreLink = () => {
+      if (!link) return null;
 
+      return (
+        <div
+          className="blue-btn"
+          onClick={() => setGoToAction({ path: link, actions })}
+        >
+          Read more here
+        </div>
+      );
+    };
     const ServeActions = () => {
       return (
         <Modal.Footer
@@ -58,7 +69,9 @@ const GeneralModal = ({ state, actions, libraries, modalData, handler }) => {
             border: "none",
             marginTop: `1em`,
           }}
-        ></Modal.Footer>
+        >
+          <ServeMoreLink />
+        </Modal.Footer>
       );
     };
 
