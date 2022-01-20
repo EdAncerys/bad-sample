@@ -53,8 +53,12 @@ const AccordionHeader = ({
 
       return (
         <div
-          className="flex primary-title"
-          style={{ fontStyle: "italic", padding: `0 2em` }}
+          className="flex"
+          style={{
+            fontStyle: "italic",
+            padding: `0 2em`,
+            fontWeight: "normal",
+          }}
         >
           <Html2React html={subtitle} />
         </div>
