@@ -104,7 +104,7 @@ const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
     return (
       <div
         className="primary-title"
-        style={{ paddingTop: `2em`, fontSize: 20 }}
+        style={{ padding: `2em 2em 0 0`, fontSize: 20 }}
       >
         <Html2React html={title.rendered} />
       </div>
