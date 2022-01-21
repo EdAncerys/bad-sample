@@ -4,20 +4,14 @@ export const sendFileToS3Action = async ({ state, dispatch, attachments }) => {
   console.log("sendFileToS3Action triggered");
 
   setFetchAction({ dispatch, isFetching: true });
-  const URL = `state.auth.APP_HOST` + `/email`;
+  const URL = state.auth.APP_HOST + `/s3/profile/image`;
   const jwt = await authenticateAppAction({ state });
 
-  let fileAttachmentList = [];
-  if (attachments) fileAttachmentList = Object.values(attachments); // add attachments to array
-
   const form = new FormData(); // create form object to sent email content & attachments
-
-  fileAttachmentList.map((file) => {
-    form.append("attachments", file, file.name);
-  });
+  form.append("profile", attachments, attachments.name);
 
   const requestOptions = {
-    method: "POST",
+    method: "PUT",
     headers: { Authorization: `Bearer ${jwt}` },
     body: form,
   };
@@ -25,10 +19,8 @@ export const sendFileToS3Action = async ({ state, dispatch, attachments }) => {
   try {
     const data = await fetch(URL, requestOptions);
     const response = await data.json();
-    console.log("response", response);
-
     if (response.success) {
-      return response;
+      return response.data;
     }
   } catch (error) {
     console.log("error", error);

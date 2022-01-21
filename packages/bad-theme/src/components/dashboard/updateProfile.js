@@ -4,7 +4,12 @@ import { connect } from "frontity";
 import ActionPlaceholder from "../actionPlaceholder";
 import { colors } from "../../config/imports";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, updateProfileAction } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  sendFileToS3Action,
+  updateProfileAction,
+} from "../../context";
 
 const UpdateProfile = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -15,20 +20,26 @@ const UpdateProfile = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
 
   // HELPERS ----------------------------------------------------------------
-  const handleProfileUpdate = () => {
+  const handleProfileUpdate = async () => {
     const firstname = document.querySelector("#fistName").value.trim();
     const lastname = document.querySelector("#lastName").value.trim();
-    const profilePicture = document.querySelector("#profilePicture").value;
+    const profilePicture = document.querySelector("#profilePicture").files[0];
     const password = document.querySelector("#password").value;
     const email = document.querySelector("#email").value.toLowerCase().trim();
 
+    console.log(profilePicture);
     let bad_profile_photo_url = "";
     if (!!profilePicture) {
       // API call to S3 to get img url
-      // bad_profile_photo_url = API
+      bad_profile_photo_url = await sendFileToS3Action({
+        state,
+        dispatch,
+        attachments: profilePicture,
+      });
     }
 
     const data = Object.assign(
+      {}, // add empty object
       !!firstname && { firstname },
       !!lastname && { lastname },
       !!bad_profile_photo_url && { bad_profile_photo_url }

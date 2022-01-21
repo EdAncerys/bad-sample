@@ -23,6 +23,7 @@ import { getTweetsAction } from "./auth/getTweets";
 import { getFadAction } from "./auth/getFAD";
 import { updateProfileAction } from "./auth/updateProfile";
 import { updateAddressAction } from "./auth/updateAddress";
+import { sendFileToS3Action } from "./auth/saveFileToS3";
 
 export {
   AppProvider,
@@ -46,4 +47,5 @@ export {
   getUserDataByContactId,
   updateProfileAction,
   updateAddressAction,
+  sendFileToS3Action,
 };

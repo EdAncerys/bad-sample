@@ -20,9 +20,11 @@
   right: -172px;
 }
 
-.home-banner-carousel .carousel-control-prev,
+.home-banner-carousel .carousel-control-prev {
+  left: 9em;
+}
 .home-banner-carousel .carousel-control-next {
-  margin: 4em;
+  right: 9em;
 }
 .home-banner-carousel .carousel-indicators [data-bs-target],
 .news-carousel .carousel-indicators [data-bs-target] {

@@ -31,7 +31,6 @@ export const updateProfileAction = async ({ state, dispatch, data }) => {
   try {
     const data = await fetch(URL, requestOptions);
     const response = await data.json();
-    console.log("response", response);
     if (response.success) {
       await getUserDataByContactId({
         state,

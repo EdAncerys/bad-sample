@@ -30,6 +30,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     const address2_postalcode = document.querySelector("#postcode").value;
 
     const data = Object.assign(
+      {}, // add empty object
       !!address2_line1 && { address2_line1 },
       !!address2_line2 && { address2_line2 },
       !!address2_city && { address2_city },
