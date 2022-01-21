@@ -49,7 +49,8 @@ const LoginModal = ({ state, actions }) => {
       // ⏬⏬  CORS validation on old type browsers ⏬⏬
       if (
         !iframeLocation.includes(`3000`) ||
-        !iframeLocation.includes(state.auth.APP_URL)
+        // !iframeLocation.includes(state.auth.APP_URL)
+        !iframeLocation.includes(`bad-org-skylarkcreative.vercel.app`)
       )
         throw new Error("Wrong redirection url");
 
