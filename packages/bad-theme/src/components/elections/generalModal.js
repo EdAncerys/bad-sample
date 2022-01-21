@@ -8,22 +8,14 @@ import { setGoToAction } from "../../context";
 
 import CloseIcon from "@mui/icons-material/Close";
 
-const ElectionModal = ({
-  state,
-  actions,
-  libraries,
-  modalData,
-  setModalData,
-}) => {
+const GeneralModal = ({ state, actions, libraries, modalData, handler }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!modalData) return null;
 
-  const { title, link } = modalData;
-  const { description, nomination_form_upload, job_description_upload } =
-    modalData.acf;
+  const { title, link, body } = modalData;
+
   // HELPERS ---------------------------------------------
-  console.log(modalData);
 
   // SERVERS --------------------------------------------------
   const ServeModalContent = () => {
@@ -34,11 +26,11 @@ const ElectionModal = ({
             className="flex primary-title"
             style={{ fontSize: 20, color: colors.softBlack }}
           >
-            <Html2React html={title.rendered} />
+            {title}
           </div>
           <div
+            onClick={handler}
             className="toggle-icon-color"
-            onClick={() => setModalData(null)}
             style={{ cursor: "pointer" }}
           >
             <CloseIcon style={{ fontSize: 24, fill: colors.softBlack }} />
@@ -48,48 +40,27 @@ const ElectionModal = ({
     };
 
     const ServeFormInfo = () => {
-      if (!description) return null;
+      if (!body) return null;
 
       return (
         <div style={{ padding: `2em 0` }}>
-          <Html2React html={description} />
+          <Html2React html={body} />
         </div>
       );
     };
+    const ServeMoreLink = () => {
+      if (!link) return null;
 
+      return (
+        <div
+          className="blue-btn"
+          onClick={() => setGoToAction({ path: link, actions })}
+        >
+          Read more here
+        </div>
+      );
+    };
     const ServeActions = () => {
-      const ServeFormDownload = () => {
-        if (!nomination_form_upload) return null;
-
-        return (
-          <div className="blue-btn">
-            <a
-              href={nomination_form_upload}
-              target="_blank"
-              download
-              style={{ color: colors.white }}
-            >
-              Download Application Form
-            </a>
-          </div>
-        );
-      };
-      const ServeJobDescriptionDownload = () => {
-        if (!job_description_upload) return null;
-
-        return (
-          <div className="blue-btn">
-            <a
-              href={job_description_upload}
-              target="_blank"
-              download
-              style={{ color: colors.white }}
-            >
-              Download Job Description
-            </a>
-          </div>
-        );
-      };
       return (
         <Modal.Footer
           style={{
@@ -99,8 +70,7 @@ const ElectionModal = ({
             marginTop: `1em`,
           }}
         >
-          <ServeFormDownload />
-          <ServeJobDescriptionDownload />
+          <ServeMoreLink />
         </Modal.Footer>
       );
     };
@@ -130,7 +100,7 @@ const ElectionModal = ({
 
   return (
     <div style={styles.container}>
-      <Modal show={modalData} size="xl" centered>
+      <Modal show={body} size="xl" centered>
         <ServeModalContent />
         <ServeFooter />
       </Modal>
@@ -142,4 +112,4 @@ const styles = {
   container: {},
 };
 
-export default connect(ElectionModal);
+export default connect(GeneralModal);

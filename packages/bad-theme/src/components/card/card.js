@@ -19,6 +19,8 @@ import ImageAndPromoCard from "./imageAndPromoCard";
 import TweetInfo from "./tweetInfo";
 import FadDirectory from "./fadDirectory";
 
+import GeneralModal from "../elections/generalModal";
+
 const Card = ({
   state,
   actions,
@@ -71,8 +73,10 @@ const Card = ({
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
   const THEME = colour || colors.primary;
   const SHADOW = shadow ? "shadow" : "";
+  const [modalData, setModalData] = useState();
 
   let CARD_HEIGHT = "100%";
+  let ELECTION_BLOCKS = false;
   if (title || body) CARD_HEIGHT = "auto";
   if (cardHeight) CARD_HEIGHT = cardHeight;
 
@@ -85,6 +89,23 @@ const Card = ({
   if (newsAndMediaInfo) PADDING = `0 1.5em 1.5em`;
   if (removePadding) PADDING = 0;
   if (padding) PADDING = padding;
+
+  // APPLIES TO BAD ELECTIONS ------------------------------
+  if (state.router.link === "/about-the-bad/bad-elections/") {
+    CARD_HEIGHT = "200px";
+    limitBodyLength = 300;
+    link_label = "Read more";
+    ELECTION_BLOCKS = true;
+    handler = () => {
+      modalData
+        ? setModalData(null)
+        : setModalData({
+            body,
+            link,
+            title,
+          });
+    };
+  }
 
   // SERVERS ----------------------------------------------
   const ServeFooter = () => {
@@ -164,6 +185,7 @@ const Card = ({
   const ServeContent = () => {
     return (
       <div className="flex-col" style={{ padding: PADDING }}>
+        <GeneralModal modalData={modalData} handler={handler} />
         <ServeCardHeader />
         <EventCardHeader eventHeader={eventHeader} />
         <VenueInfo venueInfo={venueInfo} />
@@ -192,6 +214,7 @@ const Card = ({
           form_link={form_link}
           downloadFile={downloadFile}
           handler={handler}
+          electionBlocks={ELECTION_BLOCKS}
         />
       </div>
     );
