@@ -22,15 +22,19 @@ const UpdateProfile = ({ state, actions, libraries }) => {
     const password = document.querySelector("#password").value;
     const email = document.querySelector("#email").value.toLowerCase().trim();
 
-    const data = {
-      firstname,
-      lastname,
-      bad_profile_photo_url: profilePicture,
-    };
+    let bad_profile_photo_url = "";
+    if (!!profilePicture) {
+      // API call to S3 to get img url
+      // bad_profile_photo_url = API
+    }
+
+    const data = Object.assign(
+      !!firstname && { firstname },
+      !!lastname && { lastname },
+      !!bad_profile_photo_url && { bad_profile_photo_url }
+    );
 
     updateProfile({ state, dispatch, data });
-
-    console.log("updateCredentials", data);
   };
 
   // SERVERS ---------------------------------------------
@@ -71,6 +75,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
             className="form-control"
             placeholder="Your Contact E-mail Address"
             style={styles.input}
+            disabled
           />
           <label>Password</label>
           <input
@@ -79,6 +84,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
             className="form-control"
             placeholder="Password"
             style={styles.input}
+            disabled
           />
         </div>
 
@@ -89,6 +95,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
             type="file"
             className="form-control"
             style={styles.input}
+            accept="image/png, image/jpeg"
           />
         </div>
       </div>

@@ -39,7 +39,6 @@ export const updateProfile = async ({ state, dispatch, data }) => {
         jwt,
         contactid,
       });
-      debugger;
     }
   } catch (error) {
     console.log("error", error);
