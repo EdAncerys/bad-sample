@@ -37,7 +37,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
       !!address2_postalcode && { address2_postalcode }
     );
 
-    // updateAddressAction({ state, dispatch, data });
+    updateAddressAction({ state, dispatch, data });
     console.log("updateAddress", data);
   };
 
@@ -127,14 +127,16 @@ const UpdateAddress = ({ state, actions, libraries }) => {
   return (
     <div
       className="shadow"
-      style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
+      style={{ position: "relative", marginBottom: `${marginVertical}px` }}
     >
       <ActionPlaceholder isFetching={isFetching} />
-      <div className="primary-title" style={{ fontSize: 20 }}>
-        Address Details:
+      <div style={{ padding: `2em 4em` }}>
+        <div className="primary-title" style={{ fontSize: 20 }}>
+          Address Details:
+        </div>
+        <ServeForm />
+        <ServeActions />
       </div>
-      <ServeForm />
-      <ServeActions />
     </div>
   );
 };

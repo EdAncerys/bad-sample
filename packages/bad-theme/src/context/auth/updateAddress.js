@@ -31,7 +31,6 @@ export const updateAddressAction = async ({ state, dispatch, data }) => {
   try {
     const data = await fetch(URL, requestOptions);
     const response = await data.json();
-    debugger;
     if (response.success) {
       await getUserDataByContactId({
         state,
