@@ -191,6 +191,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
                           style={{
                             fontSize: `2.25rem`,
                             textAlign: "start",
+                            color: colors.white,
                           }}
                         >
                           <Html2React html={title} />
