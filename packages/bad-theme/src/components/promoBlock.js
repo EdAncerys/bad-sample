@@ -17,6 +17,7 @@ const PromoBlock = ({ state, actions, block, disableMargin }) => {
     title,
     disable_horizontal_padding,
     disable_vertical_padding,
+    logo_overlay,
     logo,
   } = block;
 
@@ -24,7 +25,6 @@ const PromoBlock = ({ state, actions, block, disableMargin }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
-
   const isAlignLeft = image_align === "left";
   let MARGIN = !journals
     ? `${marginVertical}px ${marginHorizontal}px`
@@ -37,6 +37,7 @@ const PromoBlock = ({ state, actions, block, disableMargin }) => {
     if (!background_image) return null;
     const alt = title || "BAD";
     const ServeLogo = () => {
+      if (!logo || !logo_overlay) return null;
       return (
         <div
           style={{
@@ -47,7 +48,7 @@ const PromoBlock = ({ state, actions, block, disableMargin }) => {
           }}
         >
           <Image
-            src="https://badadmin.skylarkdev.co/wp-content/uploads/2021/12/Screenshot-2021-12-14-at-18.34.39.png"
+            src={logo}
             alt="Logo"
             style={{ width: "100px", height: "auto", borderRadius: "50%" }}
           />
