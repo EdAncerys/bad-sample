@@ -110,7 +110,6 @@ export const getUserDataByContactId = async ({
     const response = await data.json();
     if (response) {
       state.context.isActiveUser = response;
-      debugger;
       seJWTAction({ dispatch, jwt });
     }
   } catch (error) {

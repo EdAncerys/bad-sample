@@ -4,8 +4,8 @@ import {
   setFetchAction,
 } from "../index";
 
-export const updateProfileAction = async ({ state, dispatch, data }) => {
-  console.log("updateProfileAction triggered");
+export const updateAddressAction = async ({ state, dispatch, data }) => {
+  console.log("updateAddressAction triggered");
   const user = state.context.isActiveUser;
   const { contactid } = user;
 
@@ -31,7 +31,7 @@ export const updateProfileAction = async ({ state, dispatch, data }) => {
   try {
     const data = await fetch(URL, requestOptions);
     const response = await data.json();
-    console.log("response", response);
+    debugger;
     if (response.success) {
       await getUserDataByContactId({
         state,

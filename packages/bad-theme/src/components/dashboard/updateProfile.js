@@ -4,7 +4,7 @@ import { connect } from "frontity";
 import ActionPlaceholder from "../actionPlaceholder";
 import { colors } from "../../config/imports";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, updateProfile } from "../../context";
+import { useAppDispatch, useAppState, updateProfileAction } from "../../context";
 
 const UpdateProfile = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -34,7 +34,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
       !!bad_profile_photo_url && { bad_profile_photo_url }
     );
 
-    updateProfile({ state, dispatch, data });
+    updateProfileAction({ state, dispatch, data });
   };
 
   // SERVERS ---------------------------------------------

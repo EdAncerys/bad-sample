@@ -31,8 +31,13 @@ input:focus {
 .css-yk16xz-control input:focus {
   border: none !important;
 }
+select,
 input::placeholder,
 textarea::placeholder {
   /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: #a2a2a2 !important;
+}
+select {
+  border: 1px solid #ced4da !important;
+  padding: 0.375rem 0.75rem;
 }

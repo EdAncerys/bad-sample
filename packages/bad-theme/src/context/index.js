@@ -21,7 +21,8 @@ import {
 import { sendEmailEnquireAction } from "./auth/sendEnquire";
 import { getTweetsAction } from "./auth/getTweets";
 import { getFadAction } from "./auth/getFAD";
-import { updateProfile } from "./auth/updateProfile";
+import { updateProfileAction } from "./auth/updateProfile";
+import { updateAddressAction } from "./auth/updateAddress";
 
 export {
   AppProvider,
@@ -43,5 +44,6 @@ export {
   getFadAction,
   getUserAction,
   getUserDataByContactId,
-  updateProfile,
+  updateProfileAction,
+  updateAddressAction,
 };

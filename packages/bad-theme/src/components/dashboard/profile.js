@@ -57,18 +57,89 @@ const Profile = ({ state, actions, libraries }) => {
   const ServeProfileInfo = () => {
     if (!activeUser) return null;
 
-    const { emailaddress1, address2_line2 } = activeUser;
+    const {
+      emailaddress1,
+      address2_line1,
+      address2_line2,
+      address2_city,
+      address2_postalcode,
+      address2_country,
+    } = activeUser;
 
-    return (
-      <div className="flex-col" style={{ paddingTop: `1em`, fontSize: 20 }}>
-        <div style={{ padding: "1em 0" }}>
+    const ServeEmail = () => {
+      if (!emailaddress1) return null;
+
+      return (
+        <div style={styles.container}>
           <span className="primary-title">Email: </span>
           <Html2React html={emailaddress1} />
         </div>
-        <div>
-          <span className="primary-title">Current Outstanding Balance: </span>
+      );
+    };
+
+    const ServeAddressOne = () => {
+      if (!address2_line1) return null;
+
+      return (
+        <div style={styles.container}>
+          <span className="primary-title">Address: </span>
+          <Html2React html={address2_line1} />
+        </div>
+      );
+    };
+
+    const ServeAddressTwo = () => {
+      if (!address2_line2) return null;
+
+      return (
+        <div style={styles.container}>
+          <span className="primary-title">Address: </span>
           <Html2React html={address2_line2} />
         </div>
+      );
+    };
+
+    const ServeCity = () => {
+      if (!address2_city) return null;
+
+      return (
+        <div style={styles.container}>
+          <span className="primary-title">City: </span>
+          <Html2React html={address2_city} />
+        </div>
+      );
+    };
+
+    const ServePostcode = () => {
+      if (!address2_postalcode) return null;
+
+      return (
+        <div style={styles.container}>
+          <span className="primary-title">Postcode: </span>
+          <Html2React html={address2_postalcode} />
+        </div>
+      );
+    };
+
+    const ServeCountry = () => {
+      if (!address2_country) return null;
+
+      return (
+        <div style={styles.container}>
+          <span className="primary-title">Country: </span>
+          <Html2React html={address2_country} />
+        </div>
+      );
+    };
+
+    return (
+      <div className="flex-col" style={{ paddingTop: `1em`, fontSize: 20 }}>
+        <ServeEmail />
+        <ServeAddressOne />
+        <ServeAddressTwo />
+        <ServeCity />
+        <ServePostcode />
+        <ServeCountry />
       </div>
     );
   };
@@ -96,7 +167,9 @@ const Profile = ({ state, actions, libraries }) => {
 };
 
 const styles = {
-  container: {},
+  container: {
+    padding: "0.5em 0",
+  },
 };
 
 export default connect(Profile);
