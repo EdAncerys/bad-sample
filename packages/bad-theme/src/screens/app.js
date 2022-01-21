@@ -48,7 +48,7 @@ const App = ({ state, actions }) => {
   console.log("INDEX data", data); // debug
 
   useEffect(() => {
-    if (data.query) console.log("GOT transId", data.query);
+    if (data.query.transId) console.log("GOT transId", data.query.transId);
   }, [data]);
 
   // HELPERS ------------------------------------------------------------
