@@ -14,6 +14,8 @@ const FadDirectory = ({ state, actions, libraries, fadDirectory }) => {
   if (!fadDirectory) return null;
 
   const {
+    fullname,
+    emailaddress1,
     bad_mainhosptialweb,
     bad_findadermatologisttext,
     contactid,
@@ -53,14 +55,24 @@ const FadDirectory = ({ state, actions, libraries, fadDirectory }) => {
   };
 
   const ServeFullName = () => {
-    const name = "John Doe";
+    if (!fullname) return null;
 
     return (
       <div
         className="flex primary-title"
-        style={{ fontSize: 20, paddingBottom: `1em` }}
+        style={{ fontSize: 20, paddingBottom: `0.5em` }}
       >
-        <Html2React html={name} />
+        <Html2React html={fullname} />
+      </div>
+    );
+  };
+
+  const ServeEmail = () => {
+    if (!emailaddress1) return null;
+
+    return (
+      <div className="flex" style={{ paddingBottom: `0.5em` }}>
+        <Html2React html={emailaddress1} />
       </div>
     );
   };
@@ -93,6 +105,7 @@ const FadDirectory = ({ state, actions, libraries, fadDirectory }) => {
     <div className="flex-col">
       <ServeCardImage />
       <ServeFullName />
+      <ServeEmail />
       <ServeJobTitle />
       <ServeHospitalUrl />
     </div>

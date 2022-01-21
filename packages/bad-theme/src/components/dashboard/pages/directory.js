@@ -19,6 +19,7 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [fadData, setFadData] = useState(null);
+
   const mountedRef = useRef(true);
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -29,6 +30,7 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
     // fetch data via API
     if (!fad) {
       const data = await getFadAction({ state, dispatch });
+
       setFadData(data);
     } else {
       setFadData(fad);
@@ -48,18 +50,20 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
 
   if (dashboardPath !== "Directory") return null; // call after all React hooks
   if (!fadData) return <Loading />; // awaits data
+
   // HELPERS ----------------------------------------------------------------
   const handleSearchFilter = () => {
     const searchInput = document.querySelector(`#searchDirectoryInput`).value;
     const INPUT = searchInput.toLowerCase();
     const filter = fadData.filter((fad) => {
-      const { bad_findadermatologisttext } = fad;
+      const { bad_findadermatologisttext, fullname } = fad;
 
       if (
         bad_findadermatologisttext &&
         bad_findadermatologisttext.toLowerCase().includes(INPUT)
       )
         return fad;
+      if (fullname && fullname.toLowerCase().includes(INPUT)) return fad;
     });
     setFadData(filter);
     setSearchFilter(INPUT);
@@ -181,6 +185,8 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
           <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
             <div style={styles.container}>
               {fadData.map((fad, key) => {
+                console.log(fad);
+
                 return <ServeFadList key={key} fad={fad} />;
               })}
             </div>
