@@ -3,7 +3,7 @@ import { connect } from "frontity";
 import { colors } from "../../config/imports";
 import Image from "@frontity/components/image";
 
-import CardBody from "./carBody";
+import CardBody from "./cardBody";
 import CardActions from "./cardActions";
 import JournalCard from "../home/journalCard";
 import PromoHeader from "./promoHeader";

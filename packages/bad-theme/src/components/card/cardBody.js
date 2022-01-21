@@ -2,8 +2,12 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
+import date from "date-and-time";
+
 import { colors } from "../../config/imports";
 import ElectionInfo from "./electionInfo";
+
+const DATE_MODULE = date;
 
 const CardBody = ({
   state,
@@ -94,14 +98,13 @@ const CardBody = ({
         style={{
           fontSize: 12,
           fontWeight: "bold",
-          color: colors.softBlack,
+          color: colors.blue,
           fontStyle: "italic",
           textTransform: "capitalize",
           paddingBottom: `1em`,
         }}
       >
-        {/* <Html2React html={date} /> */}
-        TBC Seats remaining
+        <Html2React html={"TBC Seats remaining"} />
       </div>
     );
   };
@@ -114,6 +117,9 @@ const CardBody = ({
         {date.map((block, key) => {
           const { date, end_time, start_time } = block;
 
+          const dateObject = new Date(date);
+          const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
+
           return (
             <div
               key={key}
@@ -123,7 +129,7 @@ const CardBody = ({
                 paddingRight: `1em`,
               }}
             >
-              <Html2React html={date} />
+              <Html2React html={formattedDate} />
             </div>
           );
         })}

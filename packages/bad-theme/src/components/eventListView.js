@@ -2,9 +2,13 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
+import date from "date-and-time";
+
 import Loading from "./loading";
 import { colors } from "../config/imports";
 import { setGoToAction } from "../context";
+
+const DATE_MODULE = date;
 
 const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -15,6 +19,8 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
   const marginVertical = state.theme.marginVertical;
   let MARGIN = `${marginVertical}px 0 0`;
   if (removeMargin) MARGIN = 0;
+
+  const HEIGHT = BANNER_HEIGHT / 1.5;
 
   const {
     date_time,
@@ -45,7 +51,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
     const alt = <Html2React html={title} /> || "BAD";
 
     return (
-      <div style={{ width: "100%", height: "100%" }}>
+      <div style={{ width: "100%", height: HEIGHT }}>
         <Image
           src={image}
           alt={alt}
@@ -70,6 +76,12 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
             {date_time.map((block, key) => {
               const { date, end_time, start_time } = block;
 
+              const dateObject = new Date(date);
+              const formattedDate = DATE_MODULE.format(
+                dateObject,
+                "DD MMM YYYY"
+              );
+
               return (
                 <div
                   key={key}
@@ -79,7 +91,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
                     paddingRight: `1em`,
                   }}
                 >
-                  <Html2React html={date} />
+                  <Html2React html={formattedDate} />
                 </div>
               );
             })}
@@ -93,15 +105,8 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
 
       return (
         <div
-          className="primary-title title-link"
-          style={{
-            fontSize: 20,
-            color: colors.softBlack,
-            fontWeight: "bold",
-            padding: `1em 0`,
-            cursor: "pointer",
-          }}
-          onClick={() => setGoToAction({ path: block.link, actions })}
+          className="primary-title"
+          style={{ fontSize: 20, padding: `0.5em 0` }}
         >
           <Html2React html={title} />
         </div>
@@ -141,10 +146,15 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
       };
 
       return (
-        <div className="flex" style={{ fontStyle: "italic" }}>
-          <ServeEventVenue />
-          <ServeEventOrganizer />
-          <ServeEventCommittee />
+        <div>
+          <div
+            className="flex"
+            style={{ fontStyle: "italic", color: colors.blue }}
+          >
+            <ServeEventVenue />
+            <ServeEventOrganizer />
+            <ServeEventCommittee />
+          </div>
         </div>
       );
     };
@@ -153,12 +163,12 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
       if (!summary) return null;
 
       // Manage max string Length
-      const MAX_LENGTH = 300;
+      const MAX_LENGTH = 150;
       let summaryPreview = `${summary.substring(0, MAX_LENGTH)}...`;
       if (summary.length < MAX_LENGTH) summaryPreview = summary;
 
       return (
-        <div style={{ fontSize: 16, padding: `1em 0 0` }}>
+        <div style={{ fontSize: 16, padding: `0.5em 0 0` }}>
           <Html2React html={summaryPreview} />
         </div>
       );
@@ -189,7 +199,10 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
     };
 
     return (
-      <div className="flex-col" style={{ padding: `2em 4em` }}>
+      <div
+        className="flex-col"
+        style={{ padding: `2em 4em`, overflowY: "auto", height: HEIGHT }}
+      >
         <ServeDate />
         <ServeTitle />
         <ServeInformation />
@@ -204,11 +217,14 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
     <div style={{ margin: MARGIN }}>
       <div
         style={{
-          minHeight: `${BANNER_HEIGHT / 1.5}`,
+          height: `${HEIGHT}px`,
           backgroundColor: colors.silverFillOne,
         }}
       >
-        <div style={styles.container}>
+        <div
+          style={styles.container}
+          onClick={() => setGoToAction({ path: block.link, actions })}
+        >
           <ServeCardContent />
           <ServeCardImage />
         </div>
@@ -222,9 +238,11 @@ const styles = {
     display: "grid",
     gridTemplateColumns: `2.5fr 1fr`,
     gap: 20,
+    cursor: "pointer",
   },
   action: {
     backgroundColor: colors.white,
+    textTransform: "uppercase",
     borderRadius: 5,
     padding: `0.5em 1.5em`,
     margin: `1em 1em 0 0`,
@@ -232,7 +250,7 @@ const styles = {
   },
   divider: {
     margin: `5px 0.5em`,
-    borderRight: `1px solid ${colors.softBlack}`,
+    borderRight: `1px solid ${colors.blue}`,
   },
 };
 

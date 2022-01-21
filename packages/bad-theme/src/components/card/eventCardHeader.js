@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
+import date from "date-and-time";
+
 import { colors } from "../../config/imports";
+
+const DATE_MODULE = date;
 
 const EventCardHeader = ({ state, actions, libraries, eventHeader }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -20,6 +24,10 @@ const EventCardHeader = ({ state, actions, libraries, eventHeader }) => {
           {date_time.map((block, key) => {
             const { date, end_time, start_time } = block;
 
+            console.log(date);
+            const dateObject = new Date(date);
+            const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
+
             return (
               <div
                 key={key}
@@ -29,7 +37,7 @@ const EventCardHeader = ({ state, actions, libraries, eventHeader }) => {
                   paddingRight: `1em`,
                 }}
               >
-                <Html2React html={date} />
+                <Html2React html={formattedDate} />
               </div>
             );
           })}

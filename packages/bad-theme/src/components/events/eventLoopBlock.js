@@ -4,6 +4,7 @@ import { connect } from "frontity";
 import Loading from "../loading";
 import EventListView from "../eventListView";
 import Card from "../card/card";
+import TitleBlock from "../titleBlock";
 import { colors } from "../../config/imports";
 
 const EventLoopBlock = ({
@@ -80,78 +81,82 @@ const EventLoopBlock = ({
 
   // RETURN ---------------------------------------------
   return (
-    <div
-      style={{
-        ...STYLES,
-        padding: title ? `0 0 ${marginVertical}px 0` : `${marginVertical}px 0`,
-      }}
-    >
-      {eventList.map((block, key) => {
-        const { image, summary, public_or_members_only, date_time } = block.acf;
-        const title = block.title.rendered;
-        const event_grade = block.event_grade;
-        const event_location = block.event_location;
-        const event_type = block.event_type;
+    <div style={{ paddingBottom: `${marginVertical}px` }}>
+      <TitleBlock
+        block={{ title, text_align: "centre" }}
+        margin={`0 0 ${marginVertical}px`}
+      />
+      <div style={STYLES}>
+        {eventList.map((block, key) => {
+          const { image, summary, public_or_members_only, date_time } =
+            block.acf;
+          const title = block.title.rendered;
+          const event_grade = block.event_grade;
+          const event_location = block.event_location;
+          const event_type = block.event_type;
 
-        if (!event_grade.includes(gradeFilterId) && gradeFilterId !== 97)
-          return null;
-        if (!!searchFilter) {
-          if (!title && !summary) return null;
-          if (
-            title
-              ? !title.toLowerCase().includes(searchFilter.toLowerCase())
-              : null || summary
-              ? !summary.toLowerCase().includes(searchFilter.toLowerCase())
-              : null
-          )
+          if (!event_grade.includes(gradeFilterId) && gradeFilterId !== 97)
             return null;
-        }
-        // select filtering config
-        if (gradesFilter) {
-          if (!event_grade.includes(Number(gradesFilter))) return null;
-        }
-        if (locationsFilter) {
-          if (!event_location.includes(Number(locationsFilter))) return null;
-        }
+          if (!!searchFilter) {
+            if (!title && !summary) return null;
+            if (
+              title
+                ? !title.toLowerCase().includes(searchFilter.toLowerCase())
+                : null || summary
+                ? !summary.toLowerCase().includes(searchFilter.toLowerCase())
+                : null
+            )
+              return null;
+          }
+          // select filtering config
+          if (gradesFilter) {
+            if (!event_grade.includes(Number(gradesFilter))) return null;
+          }
+          if (locationsFilter) {
+            if (!event_location.includes(Number(locationsFilter))) return null;
+          }
 
-        if (layoutOne) {
-          const removeMargin = search && key === 0;
-          return (
-            <div key={key}>
-              <EventListView block={block} removeMargin={removeMargin} />
-            </div>
-          );
-        }
+          if (layoutOne) {
+            const removeMargin = search && key === 0;
+            return (
+              <div key={key}>
+                <EventListView block={block} removeMargin={removeMargin} />
+              </div>
+            );
+          }
 
-        if (layoutTwo)
-          return (
-            <Card
-              key={key}
-              title={title}
-              url={image}
-              link={block.link}
-              colour={colour}
-              date={date_time}
-              seatNumber="seatNumber"
-              cardHeight="100%"
-              shadow
-            />
-          );
+          if (layoutTwo)
+            return (
+              <Card
+                key={key}
+                title={title}
+                url={image}
+                imgHeight={200}
+                link_label="Read More"
+                link={block.link}
+                colour={colour}
+                date={date_time}
+                seatNumber="seatNumber"
+                cardHeight="100%"
+                shadow
+              />
+            );
 
-        if (layoutThree)
-          return (
-            <Card
-              key={key}
-              title={title}
-              link_label="Read More"
-              link={block.link}
-              colour={colour}
-              eventHeader={block.acf}
-              isFrom4Col
-              shadow
-            />
-          );
-      })}
+          if (layoutThree)
+            return (
+              <Card
+                key={key}
+                title={title}
+                link_label="Read More"
+                link={block.link}
+                colour={colour}
+                eventHeader={block.acf}
+                isFrom4Col
+                shadow
+              />
+            );
+        })}
+      </div>
     </div>
   );
 };

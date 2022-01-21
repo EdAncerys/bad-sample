@@ -244,7 +244,7 @@ const Events = ({ state, actions, libraries, block }) => {
     };
 
     return (
-      <div style={{ position: "relative", paddingBottom: `1em` }}>
+      <div style={{ position: "relative" }}>
         <div className="flex-row">
           <ServeSearchContainer />
           <ServeFilters />
