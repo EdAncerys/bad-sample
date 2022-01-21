@@ -38,19 +38,8 @@ const PromoBlock = ({ state, actions, block, disableMargin }) => {
     const alt = title || "BAD";
     const ServeLogo = () => {
       return (
-        <div
-          style={{
-            position: "absolute",
-            bottom: 20,
-            right: isAlignLeft ? 20 : null,
-            left: isAlignLeft ? null : 20,
-          }}
-        >
-          <Image
-            src="https://badadmin.skylarkdev.co/wp-content/uploads/2021/12/Screenshot-2021-12-14-at-18.34.39.png"
-            alt="Logo"
-            style={{ width: "100px", height: "auto", borderRadius: "50%" }}
-          />
+        <div style={{ position: "relative", zIndex: 344, left: 4, bottom: 10 }}>
+          <h3>Hello</h3>
         </div>
       );
     };
@@ -60,8 +49,6 @@ const PromoBlock = ({ state, actions, block, disableMargin }) => {
         style={{
           width: BANNER_HEIGHT,
           height: BANNER_HEIGHT,
-          position: "relative",
-          width: "100%",
         }}
       >
         <ServeLogo />
@@ -106,14 +93,9 @@ const PromoBlock = ({ state, actions, block, disableMargin }) => {
           overflow: "hidden",
           margin: MARGIN,
         }}
-        className="row"
       >
-        <div className="col-6">
-          <ServeCardContent />
-        </div>
-        <div className="col-6 p-0">
-          <ServeCardImage />
-        </div>
+        <ServeCardContent />
+        <ServeCardImage />
       </div>
     </div>
   );
