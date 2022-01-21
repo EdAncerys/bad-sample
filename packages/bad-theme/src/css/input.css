@@ -22,6 +22,7 @@
   align-items: center;
   height: 45px;
 }
+select:focus,
 textarea:focus,
 input:focus {
   outline: 0px !important;
