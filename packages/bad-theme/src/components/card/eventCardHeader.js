@@ -24,7 +24,6 @@ const EventCardHeader = ({ state, actions, libraries, eventHeader }) => {
           {date_time.map((block, key) => {
             const { date, end_time, start_time } = block;
 
-            console.log(date);
             const dateObject = new Date(date);
             const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
 

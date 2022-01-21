@@ -47,7 +47,7 @@ const LoginModal = ({ state, actions }) => {
       console.log("iframeLocation", iframeLocation);
 
       // ⏬⏬  CORS validation on old type browsers ⏬⏬
-      if (!iframeLocation.includes(`3000` || state.auth.HOST_URL))
+      if (!iframeLocation.includes(`3000` || state.auth.APP_URL))
         throw new Error("Wrong redirection url");
 
       const iqs = new URLSearchParams(myIframe.contentWindow.location.search);
