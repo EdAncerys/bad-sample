@@ -17,7 +17,6 @@ const PromoBlock = ({ state, actions, block, disableMargin }) => {
     title,
     disable_horizontal_padding,
     disable_vertical_padding,
-    logo_overlay,
     logo,
   } = block;
 
@@ -25,6 +24,7 @@ const PromoBlock = ({ state, actions, block, disableMargin }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
+
   const isAlignLeft = image_align === "left";
   let MARGIN = !journals
     ? `${marginVertical}px ${marginHorizontal}px`
@@ -37,21 +37,9 @@ const PromoBlock = ({ state, actions, block, disableMargin }) => {
     if (!background_image) return null;
     const alt = title || "BAD";
     const ServeLogo = () => {
-      if (!logo || !logo_overlay) return null;
       return (
-        <div
-          style={{
-            position: "absolute",
-            bottom: 20,
-            right: isAlignLeft ? 20 : null,
-            left: isAlignLeft ? null : 20,
-          }}
-        >
-          <Image
-            src={logo}
-            alt="Logo"
-            style={{ width: "100px", height: "auto", borderRadius: "50%" }}
-          />
+        <div style={{ position: "relative", zIndex: 344, left: 4, bottom: 10 }}>
+          <h3>Hello</h3>
         </div>
       );
     };
@@ -61,8 +49,6 @@ const PromoBlock = ({ state, actions, block, disableMargin }) => {
         style={{
           width: BANNER_HEIGHT,
           height: BANNER_HEIGHT,
-          position: "relative",
-          width: "100%",
         }}
       >
         <ServeLogo />
@@ -107,14 +93,9 @@ const PromoBlock = ({ state, actions, block, disableMargin }) => {
           overflow: "hidden",
           margin: MARGIN,
         }}
-        className="row"
       >
-        <div className="col-6">
-          <ServeCardContent />
-        </div>
-        <div className="col-6 p-0">
-          <ServeCardImage />
-        </div>
+        <ServeCardContent />
+        <ServeCardImage />
       </div>
     </div>
   );
