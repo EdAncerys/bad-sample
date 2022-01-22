@@ -19,11 +19,11 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
   if (!block) return <Loading />;
 
   const {
-    layout,
+    colour,
     background_colour,
     post_limit,
     disable_vertical_padding,
-    has_search,
+    add_search_function,
   } = block;
 
   const ctaHeight = 45;
@@ -33,6 +33,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
 
   const searchFilterRef = useRef(null);
   const typeFilterRef = useRef(null);
+  const loadMoreRef = useRef(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -66,8 +67,6 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
   // DATA pre FETCH ----------------------------------------------------------------
   if (!dermGroupe || !groupeType) return <Loading />;
 
-  return null;
-
   // HELPERS ----------------------------------------------------------------
   const handleClearFilter = ({ clearInput, clearCategory }) => {
     if (clearInput) searchFilterRef.current = null;
@@ -86,59 +85,55 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
   };
 
   const handleFilterSearch = () => {
-    const searchInput = document.querySelector(
-      `#search-input-${uniqueId}`
-    ).value;
+    const searchInput = searchFilterRef.current.value;
 
-    const categoryInput = document.querySelector(
-      `#category-filter-${uniqueId}`
-    ).value;
-    const dateInput = document.querySelector(`#date-filter-${uniqueId}`).value;
-    const yearInput = document.querySelector(`#year-filter-${uniqueId}`).value;
+    console.log(searchInput);
 
-    if (!!searchInput) searchFilterRef.current = searchInput;
-    if (!!categoryInput) categoryFilterRef.current = categoryInput;
-    if (!!dateInput) dateFilterRef.current = dateInput;
-    if (!!yearInput) yearFilterRef.current = yearInput;
+    // const categoryInput = document.querySelector(
+    //   `#category-filter-${uniqueId}`
+    // ).value;
 
-    let filter = Object.values(state.source.post);
+    // if (!!searchInput) searchFilterRef.current = searchInput;
+    // if (!!categoryInput) categoryFilterRef.current = categoryInput;
 
-    const searchInputValue = !!searchInput
-      ? searchInput
-      : searchFilterRef.current;
-    if (searchInputValue) {
-      const INPUT = searchInputValue.toLowerCase();
-      filter = filter.filter((news) =>
-        news.title.rendered.toLowerCase().includes(INPUT)
-      );
-    }
+    // let filter = Object.values(state.source.post);
 
-    const searchCategoryValue = !!categoryInput
-      ? categoryInput
-      : categoryFilterRef.current;
-    if (searchCategoryValue)
-      filter = filter.filter((news) =>
-        news.categories.includes(Number(searchCategoryValue))
-      );
+    // const searchInputValue = !!searchInput
+    //   ? searchInput
+    //   : searchFilterRef.current;
+    // if (searchInputValue) {
+    //   const INPUT = searchInputValue.toLowerCase();
+    //   filter = filter.filter((news) =>
+    //     news.title.rendered.toLowerCase().includes(INPUT)
+    //   );
+    // }
 
-    // apply date filter
-    const searchDateValue = !!dateInput ? dateInput : dateFilterRef.current;
-    if (searchDateValue === "Date Descending")
-      filter = filter.sort((a, b) => new Date(b.date) - new Date(a.date));
-    if (searchDateValue === "Date Ascending")
-      filter = filter.sort((a, b) => new Date(a.date) - new Date(b.date));
+    // const searchCategoryValue = !!categoryInput
+    //   ? categoryInput
+    //   : categoryFilterRef.current;
+    // if (searchCategoryValue)
+    //   filter = filter.filter((news) =>
+    //     news.categories.includes(Number(searchCategoryValue))
+    //   );
 
-    const searchYearValue = !!yearInput ? yearInput : yearFilterRef.current;
-    if (searchYearValue)
-      filter = filter.filter(
-        (news) => new Date(news.date).getFullYear() === Number(searchYearValue)
-      );
-    setDermGroupe(filter);
+    // // apply date filter
+    // const searchDateValue = !!dateInput ? dateInput : dateFilterRef.current;
+    // if (searchDateValue === "Date Descending")
+    //   filter = filter.sort((a, b) => new Date(b.date) - new Date(a.date));
+    // if (searchDateValue === "Date Ascending")
+    //   filter = filter.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    // const searchYearValue = !!yearInput ? yearInput : yearFilterRef.current;
+    // if (searchYearValue)
+    //   filter = filter.filter(
+    //     (news) => new Date(news.date).getFullYear() === Number(searchYearValue)
+    //   );
+    // setDermGroupe(filter);
   };
 
   // SERVERS ---------------------------------------------
   const ServeFilter = () => {
-    if (!has_search) return null;
+    if (!add_search_function) return null;
 
     const ServeTitle = () => {
       return (
@@ -168,7 +163,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
             }}
           >
             <input
-              id={`search-input-${uniqueId}`}
+              ref={searchFilterRef}
               type="text"
               className="form-control"
               placeholder="Find An Event"
@@ -209,90 +204,6 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
       );
     };
 
-    const ServeFilters = () => {
-      const ServeTitle = () => {
-        return (
-          <div className="primary-title" style={{ fontSize: 20 }}>
-            Filter:
-          </div>
-        );
-      };
-
-      const ServeCategoryFilter = () => {
-        return (
-          <Form.Select
-            id={`category-filter-${uniqueId}`}
-            aria-label="Default select example"
-            style={styles.input}
-          >
-            <option value="">Category</option>
-            {categoryList.map((item, key) => {
-              return (
-                <option key={key} value={item.id}>
-                  {parse(item.name)}
-                </option>
-              );
-            })}
-          </Form.Select>
-        );
-      };
-
-      const ServeDateFilter = () => {
-        return (
-          <Form.Select
-            id={`date-filter-${uniqueId}`}
-            aria-label="Default select example"
-            style={styles.input}
-          >
-            <option value="">Sort By</option>
-            <option value="Date Descending">Date Descending</option>
-            <option value="Date Ascending">Date Ascending</option>
-          </Form.Select>
-        );
-      };
-
-      const ServeYearFilter = () => {
-        const now = new Date().getUTCFullYear();
-        const years = Array(now - (now - 10))
-          .fill("")
-          .map((v, idx) => now - idx);
-
-        return (
-          <Form.Select
-            id={`year-filter-${uniqueId}`}
-            aria-label="Default select example"
-            style={styles.input}
-          >
-            <option value="">Filter By Year</option>
-            {years.map((year, key) => {
-              return (
-                <option key={key} value={year}>
-                  {year}
-                </option>
-              );
-            })}
-          </Form.Select>
-        );
-      };
-
-      return (
-        <div
-          style={{
-            padding: `1em 0`,
-            alignItems: "center",
-            display: "grid",
-            gridTemplateColumns: `100px 1fr 1fr 1fr`,
-            gap: `1em`,
-          }}
-        >
-          <ServeTitle />
-          <ServeDateFilter />
-          <ServeCategoryFilter />
-          <ServeYearFilter />
-        </div>
-      );
-    };
-
     const ServeSearchFilter = () => {
       if (!searchFilterRef.current) return null;
 
@@ -314,11 +225,11 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
       );
     };
 
-    const ServeSelectedCategoryFilter = () => {
-      if (!categoryFilterRef.current) return null;
+    const ServeTypeFilter = () => {
+      if (!typeFilterRef.current) return null;
 
-      let value = categoryList.filter(
-        (category) => category.id === Number(categoryFilterRef.current)
+      let value = groupeType.filter(
+        (type) => type.id === Number(typeFilterRef.current)
       );
 
       return (
@@ -341,43 +252,38 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
       );
     };
 
-    const ServeSelectedDateFilter = () => {
-      if (!dateFilterRef.current) return null;
+    const ServeTypeFilters = () => {
+      if (!groupeType) return null;
 
-      return (
-        <div className="shadow" style={styles.action}>
-          <div>{dateFilterRef.current}</div>
+      const ServeTitle = () => {
+        return (
           <div
-            style={styles.closeAction}
-            onClick={() => handleClearFilter({ clearDate: true })}
+            className="flex primary-title"
+            style={{
+              fontSize: 30,
+              alignItems: "center",
+            }}
           >
-            <CloseIcon
-              style={{
-                fill: colors.darkSilver,
-                padding: 0,
-              }}
-            />
+            Search Groupe
           </div>
-        </div>
-      );
-    };
-
-    const ServeSelectedYearFilter = () => {
-      if (!yearFilterRef.current) return null;
+        );
+      };
 
       return (
-        <div className="shadow" style={styles.action}>
-          <div>{yearFilterRef.current}</div>
-          <div
-            style={styles.closeAction}
-            onClick={() => handleClearFilter({ clearYear: true })}
-          >
-            <CloseIcon
-              style={{
-                fill: colors.darkSilver,
-                padding: 0,
-              }}
-            />
+        <div>
+          <ServeTitle />
+          <div className="flex-row" style={{ flexWrap: "wrap" }}>
+            {groupeType.map((type, key) => {
+              return (
+                <div
+                  key={key}
+                  style={styles.filterAction}
+                  onClick={() => console.log(type.id)}
+                >
+                  <Html2React html={type.name} />
+                </div>
+              );
+            })}
           </div>
         </div>
       );
@@ -387,7 +293,8 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
       <div
         style={{
           backgroundColor: colors.silverFillTwo,
-          margin: `${state.theme.marginVertical}px 0`,
+          marginBottom: `${state.theme.marginVertical}px`,
+          padding: `2em 0`,
         }}
       >
         <BlockWrapper>
@@ -395,15 +302,13 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
             <div className="flex-col">
               <ServeTitle />
               <ServeSearchContainer />
-              <ServeFilters />
             </div>
             <div className="flex" style={{ marginTop: "0.5em" }}>
               <ServeSearchFilter />
-              <ServeSelectedCategoryFilter />
-              <ServeSelectedDateFilter />
-              <ServeSelectedYearFilter />
+              <ServeTypeFilter />
             </div>
           </div>
+          <ServeTypeFilters />
         </BlockWrapper>
       </div>
     );
@@ -411,12 +316,22 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
 
   const ServeLayout = () => {
     return (
-      <div>
-        <Card
-          block={block}
-          dermGroupe={dermGroupe}
-          categoryList={categoryList}
-        />
+      <div style={styles.container}>
+        {dermGroupe.map((block, key) => {
+          const { title, content, link } = block;
+
+          return (
+            <Card
+              key={key}
+              title={title.rendered}
+              link_label="Read More"
+              link={link}
+              colour={colour}
+              // body={content.rendered}
+              shadow
+            />
+          );
+        })}
       </div>
     );
   };
@@ -455,7 +370,9 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
         <TitleBlock
           block={block}
           margin={{
-            marginBottom: `${has_search ? 0 : state.theme.marginVertical}px`,
+            marginBottom: `${
+              add_search_function ? 0 : state.theme.marginVertical
+            }px`,
           }}
         />
       </BlockWrapper>
@@ -469,9 +386,23 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
 };
 
 const styles = {
+  container: {
+    display: "grid",
+    gridTemplateColumns: `repeat(4, 1fr)`,
+    justifyContent: "space-between",
+    gap: 20,
+  },
   input: {
     borderRadius: 10,
     paddingRight: 35,
+  },
+  filterAction: {
+    backgroundColor: colors.white,
+    textTransform: "uppercase",
+    borderRadius: 5,
+    padding: `1em 1.5em`,
+    margin: `1em 1em 0 0`,
+    cursor: "pointer",
   },
   action: {
     position: "relative",
