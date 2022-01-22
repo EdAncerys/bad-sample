@@ -27,9 +27,7 @@ const Post = ({ state, actions, libraries }) => {
           className="primary-title"
           style={{
             fontSize: 36,
-            fontWeight: "bold",
             padding: `0.5em 1em`,
-            color: colors.softBlack,
             backgroundColor: colors.white,
             borderBottom: `5px solid ${colors.danger}`,
           }}

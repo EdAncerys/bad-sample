@@ -40,10 +40,7 @@ const IndexCard = ({
       if (!card_title) return null;
 
       return (
-        <div
-          className="primary-title"
-          style={{ fontSize: 20, fontWeight: "bold", color: colors.softBlack }}
-        >
+        <div className="primary-title" style={{ fontSize: 20 }}>
           <Html2React html={card_title} />
         </div>
       );
@@ -91,7 +88,10 @@ const IndexCard = ({
         if (!link || link_id) return null;
 
         return (
-          <div className='title-link' onClick={() => setGoToAction({ path: link.url, actions })}>
+          <div
+            className="title-link"
+            onClick={() => setGoToAction({ path: link.url, actions })}
+          >
             <Html2React html={title} />
           </div>
         );

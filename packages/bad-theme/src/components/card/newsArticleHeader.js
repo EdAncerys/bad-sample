@@ -31,13 +31,7 @@ const NewsArticleHeader = ({ state, actions, libraries, newsArticle }) => {
     if (!news_title) return null;
 
     return (
-      <div
-        className="primary-title"
-        style={{
-          fontSize: 20,
-          fontWeight: "bold",
-        }}
-      >
+      <div className="primary-title" style={{ fontSize: 20 }}>
         <Html2React html={news_title} />
       </div>
     );

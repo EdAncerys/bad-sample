@@ -64,7 +64,6 @@ const UsefulLinksCard = ({
           className="primary-title title-link"
           style={{
             fontSize: 20,
-            color: colors.softBlack,
             textTransform: "capitalize",
             cursor: "pointer",
           }}
@@ -99,7 +98,7 @@ const UsefulLinksCard = ({
       }}
     >
       <div style={{ padding: `2em 1em` }}>
-        <div style={{ fontSize: 20, color: colors.softBlack }}>
+        <div className="primary-title" style={{ fontSize: 20 }}>
           Useful Links
         </div>
         <div className="list-group">

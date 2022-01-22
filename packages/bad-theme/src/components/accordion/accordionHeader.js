@@ -117,12 +117,7 @@ const AccordionHeader = ({
       <div className="flex">
         <div
           className="primary-title"
-          style={{
-            fontSize: 20,
-            color: colors.softBlack,
-            fontWeight: "bold",
-            alignItems: "center",
-          }}
+          style={{ fontSize: 20, alignItems: "center" }}
         >
           <Html2React html={gsTitle} />
         </div>
@@ -216,8 +211,6 @@ const AccordionHeader = ({
         className="flex primary-title"
         style={{
           fontSize: 20,
-          color: colors.softBlack,
-          fontWeight: "bold",
           alignItems: "center",
           justifyContent: ALIGNMENT,
         }}

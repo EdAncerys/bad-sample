@@ -65,21 +65,13 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
   }, []);
   // DATA pre FETCH ----------------------------------------------------------------
   if (!dermGroupe || !groupeType) return <Loading />;
-  console.log(dermGroupe, groupeType);
 
   return null;
 
   // HELPERS ----------------------------------------------------------------
-  const handleClearFilter = ({
-    clearInput,
-    clearCategory,
-    clearDate,
-    clearYear,
-  }) => {
+  const handleClearFilter = ({ clearInput, clearCategory }) => {
     if (clearInput) searchFilterRef.current = null;
     if (clearCategory) categoryFilterRef.current = null;
-    if (clearDate) dateFilterRef.current = null;
-    if (clearYear) yearFilterRef.current = null;
 
     handleFilterSearch();
   };
@@ -154,12 +146,11 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
           className="flex primary-title"
           style={{
             fontSize: 36,
-            color: colors.softBlack,
             alignItems: "center",
             paddingBottom: `0.5em`,
           }}
         >
-          Search for News & Media
+          Search for Dermatology Groupe & Charities
         </div>
       );
     };
@@ -221,13 +212,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
     const ServeFilters = () => {
       const ServeTitle = () => {
         return (
-          <div
-            className="primary-title"
-            style={{
-              fontSize: 20,
-              color: colors.softBlack,
-            }}
-          >
+          <div className="primary-title" style={{ fontSize: 20 }}>
             Filter:
           </div>
         );

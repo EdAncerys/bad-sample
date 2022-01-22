@@ -78,14 +78,7 @@ const Venue = ({ state, actions, libraries }) => {
 
         return (
           <div>
-            <div
-              className="flex primary-title"
-              style={{
-                fontSize: 20,
-                color: colors.softBlack,
-                fontWeight: "bold",
-              }}
-            >
+            <div className="flex primary-title" style={{ fontSize: 20 }}>
               Capacity:
             </div>
             {capacity_options.map((item, key) => {
@@ -109,14 +102,7 @@ const Venue = ({ state, actions, libraries }) => {
 
         return (
           <div style={{ paddingTop: `2em` }}>
-            <div
-              className="flex primary-title"
-              style={{
-                fontSize: 20,
-                color: colors.softBlack,
-                fontWeight: "bold",
-              }}
-            >
+            <div className="flex primary-title" style={{ fontSize: 20 }}>
               Square Footage:
             </div>
 
@@ -132,14 +118,7 @@ const Venue = ({ state, actions, libraries }) => {
 
         return (
           <div style={{ paddingTop: `2em` }}>
-            <div
-              className="flex primary-title"
-              style={{
-                fontSize: 20,
-                color: colors.softBlack,
-                fontWeight: "bold",
-              }}
-            >
+            <div className="flex primary-title" style={{ fontSize: 20 }}>
               Address:
             </div>
 
@@ -155,14 +134,7 @@ const Venue = ({ state, actions, libraries }) => {
 
         return (
           <div style={{ paddingTop: `2em` }}>
-            <div
-              className="flex primary-title"
-              style={{
-                fontSize: 20,
-                color: colors.softBlack,
-                fontWeight: "bold",
-              }}
-            >
+            <div className="flex primary-title" style={{ fontSize: 20 }}>
               Catering:
             </div>
 

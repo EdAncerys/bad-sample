@@ -21,7 +21,7 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
 
   if (!authorInfo) return null;
 
-  const mountedRef = useRef(true)
+  const mountedRef = useRef(true);
   const [category, setCategory] = useState(null);
   const ICON_WIDTH = 100;
   const { categories, date, modified } = authorInfo;
@@ -38,7 +38,7 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
     }
 
     return () => {
-      mountedRef.current = false;   // clean up function
+      mountedRef.current = false; // clean up function
     };
   }, []);
 
@@ -122,14 +122,7 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
 
     return (
       <div>
-        <div
-          className="primary-title"
-          style={{
-            fontSize: 20,
-            fontWeight: "bold",
-            color: colors.softBlack,
-          }}
-        >
+        <div className="primary-title" style={{ fontSize: 20 }}>
           Author
         </div>
         <ServeProfilePhoto />

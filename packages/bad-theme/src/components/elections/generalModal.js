@@ -22,10 +22,7 @@ const GeneralModal = ({ state, actions, libraries, modalData, handler }) => {
     const ServeHeader = () => {
       return (
         <div className="flex">
-          <div
-            className="flex primary-title"
-            style={{ fontSize: 20, color: colors.softBlack }}
-          >
+          <div className="flex primary-title" style={{ fontSize: 20 }}>
             {title}
           </div>
           <div

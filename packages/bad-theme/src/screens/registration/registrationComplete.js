@@ -149,8 +149,6 @@ const styles = {
   },
   title: {
     fontSize: 20,
-    fontWeight: "bold",
-    color: colors.softBlack,
     padding: `1em 0`,
   },
   subTitle: {

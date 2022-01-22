@@ -50,12 +50,7 @@ const Event = ({ state, actions, libraries }) => {
     return (
       <div
         className="primary-title"
-        style={{
-          fontSize: 36,
-          fontWeight: "bold",
-          color: colors.softBlack,
-          paddingBottom: `0.5em`,
-        }}
+        style={{ fontSize: 36, paddingBottom: `0.5em` }}
       >
         <Html2React html={title} />
       </div>
@@ -87,14 +82,7 @@ const Event = ({ state, actions, libraries }) => {
 
       return (
         <div style={{ paddingBottom: `1em` }}>
-          <div
-            className="primary-title"
-            style={{
-              fontSize: 20,
-              fontWeight: "bold",
-              color: colors.softBlack,
-            }}
-          >
+          <div className="primary-title" style={{ fontSize: 20 }}>
             Date & Time:
           </div>
           <div>
@@ -156,14 +144,7 @@ const Event = ({ state, actions, libraries }) => {
 
       return (
         <div style={{ paddingBottom: `1em` }}>
-          <div
-            className="primary-title"
-            style={{
-              fontSize: 20,
-              fontWeight: "bold",
-              color: colors.softBlack,
-            }}
-          >
+          <div className="primary-title" style={{ fontSize: 20 }}>
             Venue:
           </div>
           <Html2React html={venue} />
@@ -176,14 +157,7 @@ const Event = ({ state, actions, libraries }) => {
 
       return (
         <div style={{ paddingBottom: `1em` }}>
-          <div
-            className="primary-title"
-            style={{
-              fontSize: 20,
-              fontWeight: "bold",
-              color: colors.softBlack,
-            }}
-          >
+          <div className="primary-title" style={{ fontSize: 20 }}>
             Venue:
           </div>
           <Html2React html={scientific_committee} />
@@ -196,14 +170,7 @@ const Event = ({ state, actions, libraries }) => {
 
       return (
         <div style={{ paddingBottom: `1em` }}>
-          <div
-            className="primary-title"
-            style={{
-              fontSize: 20,
-              fontWeight: "bold",
-              color: colors.softBlack,
-            }}
-          >
+          <div className="primary-title" style={{ fontSize: 20 }}>
             Email:
           </div>
           <Html2React html={email} />
@@ -324,24 +291,10 @@ const Event = ({ state, actions, libraries }) => {
           className="flex-row"
           style={{ justifyContent: "space-between", padding: `2em 0` }}
         >
-          <div
-            className="primary-title"
-            style={{
-              fontSize: 20,
-              fontWeight: "bold",
-              color: colors.softBlack,
-            }}
-          >
+          <div className="primary-title" style={{ fontSize: 20 }}>
             Share
           </div>
-          <div
-            className="primary-title"
-            style={{
-              fontSize: 20,
-              fontWeight: "bold",
-              color: colors.softBlack,
-            }}
-          >
+          <div className="primary-title" style={{ fontSize: 20 }}>
             Add to calendar
           </div>
         </div>

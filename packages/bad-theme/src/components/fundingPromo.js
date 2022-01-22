@@ -24,12 +24,7 @@ const FundingPromo = ({ state, actions, libraries, block }) => {
       return (
         <div
           className="flex primary-title"
-          style={{
-            fontSize: 36,
-            fontWeight: "bold",
-            justifyContent: "center",
-            color: colors.softBlack,
-          }}
+          style={{ fontSize: 36, justifyContent: "center" }}
         >
           <Html2React html={title} />
         </div>

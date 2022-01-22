@@ -75,11 +75,7 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
       return (
         <div
           className="flex primary-title"
-          style={{
-            fontSize: 36,
-            color: colors.softBlack,
-            alignItems: "center",
-          }}
+          style={{ fontSize: 36, alignItems: "center" }}
         >
           Directory
         </div>

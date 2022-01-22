@@ -111,7 +111,6 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
                         className="primary-title"
                         style={{
                           fontSize: 40,
-                          fontWeight: "bold",
                           zIndex: 12,
                         }}
                         className="col-4"

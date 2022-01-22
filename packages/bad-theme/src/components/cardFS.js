@@ -71,7 +71,6 @@ const CardFS = ({
               fontSize: 28,
               marginLeft: "1em",
               textAlign: "start",
-              fontWeight: "bold",
             }}
           >
             {titlePreview}

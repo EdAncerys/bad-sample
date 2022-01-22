@@ -29,8 +29,6 @@ const SideBarMenu = ({ state, actions, libraries }) => {
         className="primary-title"
         style={{
           fontSize: 22,
-          fontWeight: "bold",
-          color: colors.softBlack,
           borderBottom: `1px solid ${colors.darkSilver}`,
           padding: `0 1em 1em 0`,
         }}

@@ -184,11 +184,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
         return (
           <div
             className="primary-title"
-            style={{
-              fontSize: 20,
-              color: colors.softBlack,
-              paddingRight: `2em`,
-            }}
+            style={{ fontSize: 20, paddingRight: `2em` }}
           >
             Filter:
           </div>

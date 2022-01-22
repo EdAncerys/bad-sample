@@ -98,7 +98,6 @@ const PilsArchive = ({ state, actions, libraries }) => {
           className="primary-title"
           style={{
             fontSize: 36,
-            fontWeight: "bold",
             borderBottom: `1px solid ${colors.darkSilver}`,
           }}
         >
@@ -127,12 +126,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
       return (
         <div
           className="flex primary-title"
-          style={{
-            fontSize: 36,
-            color: colors.softBlack,
-            fontWeight: "bold",
-            alignItems: "center",
-          }}
+          style={{ fontSize: 36, alignItems: "center" }}
         >
           Search for Patient Information Leaflets
         </div>
@@ -165,12 +159,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
       return (
         <div
           className="flex primary-title"
-          style={{
-            fontSize: 36,
-            color: colors.softBlack,
-            fontWeight: "bold",
-            alignItems: "center",
-          }}
+          style={{ fontSize: 36, alignItems: "center" }}
         >
           Search for Patient Information Leaflets
         </div>

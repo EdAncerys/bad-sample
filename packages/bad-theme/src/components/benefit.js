@@ -62,7 +62,7 @@ const Benefit = ({ state, actions, libraries, block }) => {
     return (
       <div
         className="primary-title"
-        style={{ fontSize: 20, fontWeight: "bold", margin: `0.75em 0` }}
+        style={{ fontSize: 20, margin: `0.75em 0` }}
       >
         <Html2React html={title} />
       </div>

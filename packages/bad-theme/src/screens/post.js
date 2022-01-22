@@ -24,14 +24,7 @@ const Post = ({ state, actions, libraries }) => {
       if (!title) return null;
 
       return (
-        <div
-          className="flex primary-title"
-          style={{
-            fontSize: 36,
-            fontWeight: "bold",
-            color: colors.softBlack,
-          }}
-        >
+        <div className="flex primary-title" style={{ fontSize: 36 }}>
           <Html2React html={title.rendered} />
         </div>
       );

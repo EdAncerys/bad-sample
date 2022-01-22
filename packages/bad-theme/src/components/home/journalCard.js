@@ -50,13 +50,7 @@ const JournalCard = ({
       if (!title) return null;
 
       return (
-        <div
-          className="flex primary-title"
-          style={{
-            fontSize: 20,
-            fontWeight: "bold",
-          }}
-        >
+        <div className="flex primary-title" style={{ fontSize: 20 }}>
           <Html2React html={title} />
         </div>
       );

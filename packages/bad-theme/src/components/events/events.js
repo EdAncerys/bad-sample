@@ -57,11 +57,7 @@ const Events = ({ state, actions, libraries, block }) => {
       return (
         <div
           className="primary-title"
-          style={{
-            fontSize: 20,
-            color: colors.softBlack,
-            padding: `0 2em`,
-          }}
+          style={{ fontSize: 20, padding: `0 2em` }}
         >
           Filter:
         </div>

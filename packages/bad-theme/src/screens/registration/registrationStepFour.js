@@ -471,8 +471,6 @@ const styles = {
   },
   title: {
     fontSize: 22,
-    fontWeight: "bold",
-    color: colors.softBlack,
   },
   subTitle: {
     fontSize: 16,

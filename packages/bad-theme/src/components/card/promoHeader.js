@@ -15,14 +15,7 @@ const PromoHeader = ({ state, actions, libraries, fundingPromo }) => {
     if (!title) return null;
 
     return (
-      <div
-        className="primary-title"
-        style={{
-          fontSize: 20,
-          fontWeight: "bold",
-          color: colors.softBlack,
-        }}
-      >
+      <div className="primary-title" style={{ fontSize: 20 }}>
         <Html2React html={title} />
       </div>
     );

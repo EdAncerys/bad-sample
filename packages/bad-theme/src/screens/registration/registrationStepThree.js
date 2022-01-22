@@ -151,9 +151,7 @@ const styles = {
     margin: `0 1em 0`,
   },
   title: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: colors.softBlack,
+    fontSize: 20,
   },
   subTitle: {
     fontSize: 16,

@@ -30,10 +30,7 @@ const ElectionModal = ({
     const ServeHeader = () => {
       return (
         <div className="flex">
-          <div
-            className="flex primary-title"
-            style={{ fontSize: 20, color: colors.softBlack }}
-          >
+          <div className="flex primary-title" style={{ fontSize: 20 }}>
             <Html2React html={title.rendered} />
           </div>
           <div

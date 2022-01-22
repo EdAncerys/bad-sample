@@ -75,10 +75,7 @@ const SearchDermatologists = ({ state, actions, libraries, block }) => {
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
     return (
-      <div
-        className="flex primary-title"
-        style={{ fontSize: 36, fontWeight: "bold", color: colors.softBlack }}
-      >
+      <div className="flex primary-title" style={{ fontSize: 36 }}>
         Search For Dermatologists
       </div>
     );
@@ -91,11 +88,7 @@ const SearchDermatologists = ({ state, actions, libraries, block }) => {
       return (
         <div
           className="primary-title"
-          style={{
-            fontSize: 20,
-            color: colors.softBlack,
-            paddingRight: `2em`,
-          }}
+          style={{ fontSize: 20, paddingRight: `2em` }}
         >
           Filter:
         </div>

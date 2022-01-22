@@ -122,7 +122,6 @@ const AccordionBody = ({
           className="primary-title"
           style={{
             fontSize: 20,
-            fontWeight: "bold",
             padding: `2em 0 1em`,
           }}
         >
@@ -237,7 +236,6 @@ const AccordionBody = ({
             className="primary-title"
             style={{
               fontSize: 20,
-              fontWeight: "bold",
             }}
           >
             File Attachments

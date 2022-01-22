@@ -18,7 +18,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
   if (!block) return <Loading />;
 
   const { disable_vertical_padding, background_colour } = block;
-  const mountedRef = useRef(true)
+  const mountedRef = useRef(true);
   const data = state.source.get(state.router.link);
   const [searchFilter, setSearchFilter] = useState(null);
   const [typeFilter, setTypeFilter] = useState(null);
@@ -52,7 +52,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     setGuidelinesList(GUIDELINES_LIST);
 
     return () => {
-      mountedRef.current = false;   // clean up function
+      mountedRef.current = false; // clean up function
     };
   }, []);
   // DATA pre FETCH ----------------------------------------------------------------
@@ -98,12 +98,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
       return (
         <div
           className="flex primary-title"
-          style={{
-            fontSize: 36,
-            color: colors.softBlack,
-            fontWeight: "bold",
-            alignItems: "center",
-          }}
+          style={{ fontSize: 36, alignItems: "center" }}
         >
           Clinical Guidelines
         </div>
@@ -194,12 +189,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
       return (
         <div
           className="flex primary-title"
-          style={{
-            fontSize: 36,
-            color: colors.softBlack,
-            fontWeight: "bold",
-            alignItems: "center",
-          }}
+          style={{ fontSize: 36, alignItems: "center" }}
         >
           Search for Guidelines
         </div>

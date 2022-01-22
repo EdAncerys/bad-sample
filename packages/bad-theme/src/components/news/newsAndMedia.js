@@ -150,12 +150,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       return (
         <div
           className="flex primary-title"
-          style={{
-            fontSize: 36,
-            color: colors.softBlack,
-            alignItems: "center",
-            paddingBottom: `0.5em`,
-          }}
+          style={{ fontSize: 36, alignItems: "center", paddingBottom: `0.5em` }}
         >
           Search for News & Media
         </div>
@@ -219,13 +214,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     const ServeFilters = () => {
       const ServeTitle = () => {
         return (
-          <div
-            className="primary-title"
-            style={{
-              fontSize: 20,
-              color: colors.softBlack,
-            }}
-          >
+          <div className="primary-title" style={{ fontSize: 20 }}>
             Filter:
           </div>
         );
