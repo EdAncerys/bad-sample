@@ -200,10 +200,10 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
       if (!searchFilter) return null;
 
       return (
-        <div className="shadow" style={styles.action}>
+        <div className="shadow filter">
           <div>{searchFilter}</div>
           <div
-            style={styles.closeAction}
+            className="filter-icon"
             onClick={() => {
               setSearchFilter(null);
               setGuidelinesList(
@@ -226,13 +226,10 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
       if (!typeFilter) return null;
 
       return (
-        <div
-          className="shadow"
-          style={{ ...styles.action, textTransform: "uppercase" }}
-        >
+        <div className="shadow filter" style={{ textTransform: "uppercase" }}>
           <div>{typeFilter}</div>
           <div
-            style={styles.closeAction}
+            className="filter-icon"
             onClick={() => {
               setTypeFilter(null);
               setGuidelinesList(
@@ -343,23 +340,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 };
 
 const styles = {
-  action: {
-    position: "absolute",
-    backgroundColor: colors.white,
-    borderRadius: 5,
-    padding: `0.5em 1.5em`,
-    marginRight: `1em`,
-    width: "fit-content",
-  },
-  closeAction: {
-    display: "grid",
-    position: "absolute",
-    top: -10,
-    right: -10,
-    backgroundColor: colors.white,
-    cursor: "pointer",
-    borderRadius: "50%",
-  },
+  container: {},
 };
 
 export default connect(GuidelinesAndStandards);

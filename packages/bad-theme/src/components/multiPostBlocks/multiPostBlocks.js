@@ -136,9 +136,9 @@ const MultiPostBlocks = ({ state, actions, libraries, block }) => {
       if (!filter) return null;
 
       return (
-        <div className="shadow" style={styles.action}>
+        <div className="shadow filter">
           <div>{filter}</div>
-          <div style={styles.closeAction} onClick={() => setFilter(null)}>
+          <div className="filter-icon" onClick={() => setFilter(null)}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -154,9 +154,9 @@ const MultiPostBlocks = ({ state, actions, libraries, block }) => {
       if (!dateFilter) return null;
 
       return (
-        <div className="shadow" style={styles.action}>
+        <div className="shadow filter">
           <div>{dateFilter}</div>
-          <div style={styles.closeAction} onClick={() => setDateFilter(null)}>
+          <div className="filter-icon" onClick={() => setDateFilter(null)}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -195,23 +195,6 @@ const styles = {
   input: {
     borderRadius: 10,
     paddingRight: 35,
-  },
-  action: {
-    position: "relative",
-    backgroundColor: colors.white,
-    borderRadius: 5,
-    padding: `0.5em 1.5em`,
-    marginRight: `1em`,
-    width: "fit-content",
-  },
-  closeAction: {
-    display: "grid",
-    position: "absolute",
-    top: -10,
-    right: -10,
-    backgroundColor: colors.white,
-    cursor: "pointer",
-    borderRadius: "50%",
   },
 };
 

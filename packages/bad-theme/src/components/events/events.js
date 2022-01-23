@@ -178,9 +178,9 @@ const Events = ({ state, actions, libraries, block }) => {
       if (!searchFilter) return null;
 
       return (
-        <div className="shadow" style={styles.action}>
+        <div className="shadow filter">
           <div>{searchFilter}</div>
-          <div style={styles.closeAction} onClick={() => setSearchFilter(null)}>
+          <div className="filter-icon" onClick={() => setSearchFilter(null)}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -199,9 +199,9 @@ const Events = ({ state, actions, libraries, block }) => {
       const name = filter[0].name;
 
       return (
-        <div className="shadow" style={styles.action}>
+        <div className="shadow filter">
           <div>{name}</div>
-          <div style={styles.closeAction} onClick={() => setGradesFilter(null)}>
+          <div className="filter-icon" onClick={() => setGradesFilter(null)}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -222,12 +222,9 @@ const Events = ({ state, actions, libraries, block }) => {
       const name = filter[0].name;
 
       return (
-        <div className="shadow" style={styles.action}>
+        <div className="shadow filter">
           <div>{name}</div>
-          <div
-            style={styles.closeAction}
-            onClick={() => setLocationsFilter(null)}
-          >
+          <div className="filter-icon" onClick={() => setLocationsFilter(null)}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -273,23 +270,6 @@ const styles = {
   input: {
     borderRadius: 10,
     paddingRight: 35,
-  },
-  action: {
-    position: "relative",
-    backgroundColor: colors.white,
-    borderRadius: 5,
-    padding: `0.5em 1.5em`,
-    marginRight: `1em`,
-    width: "fit-content",
-  },
-  closeAction: {
-    display: "grid",
-    position: "absolute",
-    top: -10,
-    right: -10,
-    backgroundColor: colors.white,
-    cursor: "pointer",
-    borderRadius: "50%",
   },
 };
 

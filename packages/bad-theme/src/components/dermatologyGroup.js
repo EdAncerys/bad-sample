@@ -277,7 +277,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
               return (
                 <div
                   key={key}
-                  className="filter-action"
+                  className="shadow filter-action"
                   onClick={() => console.log(type.id)}
                 >
                   <Html2React html={type.name} />

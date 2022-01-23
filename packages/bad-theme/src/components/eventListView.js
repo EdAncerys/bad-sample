@@ -179,7 +179,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
 
       const ServeFilterCondition = ({ filter }) => {
         return (
-          <div style={styles.action}>
+          <div className="shadow filter-action">
             <Html2React html={filter.post_title} />
           </div>
         );
@@ -238,14 +238,6 @@ const styles = {
     display: "grid",
     gridTemplateColumns: `2.5fr 1fr`,
     gap: 20,
-    cursor: "pointer",
-  },
-  action: {
-    backgroundColor: colors.white,
-    textTransform: "uppercase",
-    borderRadius: 5,
-    padding: `0.5em 1.5em`,
-    margin: `1em 1em 0 0`,
     cursor: "pointer",
   },
   divider: {

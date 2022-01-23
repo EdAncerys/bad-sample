@@ -210,11 +210,6 @@ const styles = {
     overflowX: "auto",
     gap: 0,
   },
-  action: {
-    backgroundColor: colors.white,
-    padding: `0.5em 1.5em`,
-    margin: `1em 1em 0 0`,
-  },
 };
 
 export default connect(HistoryTimeline);

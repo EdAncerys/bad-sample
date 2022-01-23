@@ -74,7 +74,6 @@ const VideoGalleryInfo = ({ state, actions, libraries, videoGalleryInfo }) => {
 };
 
 const styles = {
-  container: {},
   action: {
     backgroundColor: colors.lightSilver,
     borderRadius: 5,

@@ -270,9 +270,9 @@ const ElectionBlocks = ({ state, actions, block }) => {
       if (!searchFilter) return null;
 
       return (
-        <div className="shadow" style={styles.action}>
+        <div className="shadow filter">
           <div>{searchFilter}</div>
-          <div style={styles.closeAction} onClick={() => setSearchFilter(null)}>
+          <div className="filter-icon" onClick={() => setSearchFilter(null)}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -291,9 +291,9 @@ const ElectionBlocks = ({ state, actions, block }) => {
       const name = filter[0].name;
 
       return (
-        <div className="shadow" style={styles.action}>
+        <div className="shadow filter">
           <div>{name}</div>
-          <div style={styles.closeAction} onClick={() => setGradeFilter(null)}>
+          <div className="filter-icon" onClick={() => setGradeFilter(null)}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -312,9 +312,9 @@ const ElectionBlocks = ({ state, actions, block }) => {
       const name = filter[0].name;
 
       return (
-        <div className="shadow" style={styles.action}>
+        <div className="shadow filter">
           <div>{name}</div>
-          <div style={styles.closeAction} onClick={() => setRoleFilter(null)}>
+          <div className="filter-icon" onClick={() => setRoleFilter(null)}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -332,10 +332,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
       return (
         <div className="shadow" style={styles.action}>
           <div>Open Positions</div>
-          <div
-            style={styles.closeAction}
-            onClick={() => serOpenPositions(null)}
-          >
+          <div className="filter-icon" onClick={() => serOpenPositions(null)}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -351,10 +348,10 @@ const ElectionBlocks = ({ state, actions, block }) => {
       if (!dateFilter) return null;
 
       return (
-        <div className="shadow" style={styles.action}>
+        <div className="shadow filter">
           <div>{dateFilter}</div>
           <div
-            style={styles.closeAction}
+            className="filter-icon"
             onClick={() => {
               setDateFilter(null);
               const ELECTION_LIST = Object.values(state.source.elections); // add electionData object to data array
@@ -376,7 +373,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
       if (!isOpen || openPositions) return null;
 
       return (
-        <div className="shadow" style={styles.action}>
+        <div className="shadow filter">
           <div
             style={{
               color: colors.softBlack,
@@ -527,23 +524,6 @@ const styles = {
   input: {
     borderRadius: 10,
     paddingRight: 35,
-  },
-  action: {
-    position: "relative",
-    backgroundColor: colors.white,
-    borderRadius: 5,
-    padding: `0.5em 1.5em`,
-    marginRight: `1em`,
-    width: "fit-content",
-  },
-  closeAction: {
-    display: "grid",
-    position: "absolute",
-    top: -10,
-    right: -10,
-    backgroundColor: colors.white,
-    cursor: "pointer",
-    borderRadius: "50%",
   },
 };
 

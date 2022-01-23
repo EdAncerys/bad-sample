@@ -86,10 +86,10 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
       if (!searchFilter) return null;
 
       return (
-        <div className="shadow" style={styles.action}>
+        <div className="shadow filter">
           <div>{searchFilter}</div>
           <div
-            style={styles.closeAction}
+            className="filter-icon"
             onClick={() => {
               setSearchFilter(null);
               setFadData(fad);
@@ -205,23 +205,6 @@ const styles = {
     display: "grid",
     gridTemplateColumns: `repeat(3, 1fr)`,
     gap: 20,
-  },
-  action: {
-    position: "absolute",
-    backgroundColor: colors.white,
-    borderRadius: 5,
-    padding: `0.5em 1.5em`,
-    marginRight: `1em`,
-    width: "fit-content",
-  },
-  closeAction: {
-    display: "grid",
-    position: "absolute",
-    top: -10,
-    right: -10,
-    backgroundColor: colors.white,
-    cursor: "pointer",
-    borderRadius: "50%",
   },
   input: {
     borderRadius: 10,

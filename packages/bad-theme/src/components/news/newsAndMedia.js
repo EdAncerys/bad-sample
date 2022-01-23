@@ -299,10 +299,10 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       if (!searchFilterRef.current) return null;
 
       return (
-        <div className="shadow" style={styles.action}>
+        <div className="shadow filter">
           <div>{searchFilterRef.current}</div>
           <div
-            style={styles.closeAction}
+            className="filter-icon"
             onClick={() => handleClearFilter({ clearInput: true })}
           >
             <CloseIcon
@@ -324,12 +324,12 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       );
 
       return (
-        <div className="shadow" style={styles.action}>
+        <div className="shadow filter">
           <div>
             <Html2React html={value[0].name} />
           </div>
           <div
-            style={styles.closeAction}
+            className="filter-icon"
             onClick={() => handleClearFilter({ clearCategory: true })}
           >
             <CloseIcon
@@ -347,10 +347,10 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       if (!dateFilterRef.current) return null;
 
       return (
-        <div className="shadow" style={styles.action}>
+        <div className="shadow filter">
           <div>{dateFilterRef.current}</div>
           <div
-            style={styles.closeAction}
+            className="filter-icon"
             onClick={() => handleClearFilter({ clearDate: true })}
           >
             <CloseIcon
@@ -368,10 +368,10 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       if (!yearFilterRef.current) return null;
 
       return (
-        <div className="shadow" style={styles.action}>
+        <div className="shadow filter">
           <div>{yearFilterRef.current}</div>
           <div
-            style={styles.closeAction}
+            className="filter-icon"
             onClick={() => handleClearFilter({ clearYear: true })}
           >
             <CloseIcon
@@ -485,23 +485,6 @@ const styles = {
   input: {
     borderRadius: 10,
     paddingRight: 35,
-  },
-  action: {
-    position: "relative",
-    backgroundColor: colors.white,
-    borderRadius: 5,
-    padding: `0.5em 1.5em`,
-    marginRight: `1em`,
-    width: "fit-content",
-  },
-  closeAction: {
-    display: "grid",
-    position: "absolute",
-    top: -10,
-    right: -10,
-    backgroundColor: colors.white,
-    cursor: "pointer",
-    borderRadius: "50%",
   },
 };
 
