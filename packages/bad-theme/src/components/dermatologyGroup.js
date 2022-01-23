@@ -9,6 +9,7 @@ import Card from "./card/card";
 import Loading from "./loading";
 import { colors } from "../config/imports";
 import BlockWrapper from "./blockWrapper";
+import SearchContainer from "./searchContainer";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
@@ -30,6 +31,9 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
 
   const [dermGroupe, setDermGroupe] = useState(null);
   const [groupeType, setGroupeType] = useState(null);
+
+  const [searchFilter, setSearchFilter] = useState(null);
+  const [typeFilter, setTypeFilter] = useState(null);
 
   const searchFilterRef = useRef(null);
   const typeFilterRef = useRef(null);
@@ -68,11 +72,11 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
   if (!dermGroupe || !groupeType) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
-  const handleClearFilter = ({ clearInput, clearCategory }) => {
-    if (clearInput) searchFilterRef.current = null;
-    if (clearCategory) categoryFilterRef.current = null;
+  const handleClearFilter = ({ clearInput, clearType }) => {
+    if (clearInput) searchFilterRef.current.value = "";
+    if (clearType) typeFilterRef.current.value = "";
 
-    handleFilterSearch();
+    handleSearch();
   };
 
   const handleLoadMoreFilter = () => {
@@ -84,10 +88,9 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
     loadMoreRef.current = !loadMoreRef.current;
   };
 
-  const handleFilterSearch = () => {
+  const handleSearch = () => {
     const searchInput = searchFilterRef.current.value;
-
-    console.log(searchInput);
+    setSearchFilter(searchInput);
 
     // const categoryInput = document.querySelector(
     //   `#category-filter-${uniqueId}`
@@ -145,12 +148,31 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
             paddingBottom: `0.5em`,
           }}
         >
-          Search for Dermatology Groupe & Charities
+          Search for Dermatology Group & Charities
         </div>
       );
     };
 
     const ServeSearchContainer = () => {
+      const [value, setValue] = useState(null);
+
+      const ServeIcon = () => {
+        const searchIcon = <SearchIcon />;
+        const closeIcon = <CloseIcon />;
+        const icon = value ? closeIcon : searchIcon;
+
+        return (
+          <div
+            onClick={() => {
+              setValue(null);
+              searchFilterRef.current.value = "";
+            }}
+          >
+            {icon}
+          </div>
+        );
+      };
+
       return (
         <div className="flex-row">
           <div
@@ -164,6 +186,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
           >
             <input
               ref={searchFilterRef}
+              onChange={(e) => setValue(e.target.value)}
               type="text"
               className="form-control"
               placeholder="Find An Event"
@@ -182,7 +205,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
                 cursor: "pointer",
               }}
             >
-              <SearchIcon />
+              <ServeIcon />
             </div>
           </div>
           <div
@@ -205,11 +228,11 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
     };
 
     const ServeSearchFilter = () => {
-      if (!searchFilterRef.current) return null;
+      if (!searchFilter) return null;
 
       return (
         <div className="shadow filter">
-          <div>{searchFilterRef.current}</div>
+          <div>{searchFilter}</div>
           <div
             className="filter-icon"
             onClick={() => handleClearFilter({ clearInput: true })}
@@ -226,7 +249,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
     };
 
     const ServeTypeFilter = () => {
-      if (!typeFilterRef.current) return null;
+      if (!typeFilter) return null;
 
       let value = groupeType.filter(
         (type) => type.id === Number(typeFilterRef.current)
@@ -239,7 +262,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
           </div>
           <div
             className="filter-icon"
-            onClick={() => handleClearFilter({ clearCategory: true })}
+            onClick={() => handleClearFilter({ clearType: true })}
           >
             <CloseIcon
               style={{
@@ -264,7 +287,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
               alignItems: "center",
             }}
           >
-            Search Groupe
+            Search Group
           </div>
         );
       };
@@ -298,15 +321,15 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
         }}
       >
         <BlockWrapper>
-          <div style={{ position: "relative", padding: `1em 0`, width: `70%` }}>
-            <div className="flex-col">
-              <ServeTitle />
-              <ServeSearchContainer />
-            </div>
-            <div className="flex" style={{ marginTop: "0.5em" }}>
-              <ServeSearchFilter />
-              <ServeTypeFilter />
-            </div>
+          <SearchContainer
+            title="Search for Dermatology Groupe & Charities"
+            width="70%"
+            searchFilterRef={searchFilterRef}
+            handleSearch={handleSearch}
+          />
+          <div className="flex" style={{ margin: "0.5em 0" }}>
+            <ServeSearchFilter />
+            <ServeTypeFilter />
           </div>
           <ServeTypeFilters />
         </BlockWrapper>
@@ -395,23 +418,6 @@ const styles = {
   input: {
     borderRadius: 10,
     paddingRight: 35,
-  },
-  action: {
-    position: "relative",
-    backgroundColor: colors.white,
-    borderRadius: 5,
-    padding: `0.5em 1.5em`,
-    marginRight: `1em`,
-    width: "fit-content",
-  },
-  closeAction: {
-    display: "grid",
-    position: "absolute",
-    top: -10,
-    right: -10,
-    backgroundColor: colors.white,
-    cursor: "pointer",
-    borderRadius: "50%",
   },
 };
 
