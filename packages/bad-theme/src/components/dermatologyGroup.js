@@ -208,10 +208,10 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
       if (!searchFilterRef.current) return null;
 
       return (
-        <div className="shadow" style={styles.action}>
+        <div className="shadow filter">
           <div>{searchFilterRef.current}</div>
           <div
-            style={styles.closeAction}
+            className="filter-icon"
             onClick={() => handleClearFilter({ clearInput: true })}
           >
             <CloseIcon
@@ -233,12 +233,12 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
       );
 
       return (
-        <div className="shadow" style={styles.action}>
+        <div className="shadow filter">
           <div>
             <Html2React html={value[0].name} />
           </div>
           <div
-            style={styles.closeAction}
+            className="filter-icon"
             onClick={() => handleClearFilter({ clearCategory: true })}
           >
             <CloseIcon
@@ -277,7 +277,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
               return (
                 <div
                   key={key}
-                  style={styles.filterAction}
+                  className="filter-action"
                   onClick={() => console.log(type.id)}
                 >
                   <Html2React html={type.name} />
@@ -395,14 +395,6 @@ const styles = {
   input: {
     borderRadius: 10,
     paddingRight: 35,
-  },
-  filterAction: {
-    backgroundColor: colors.white,
-    textTransform: "uppercase",
-    borderRadius: 5,
-    padding: `1em 1.5em`,
-    margin: `1em 1em 0 0`,
-    cursor: "pointer",
   },
   action: {
     position: "relative",
