@@ -30,7 +30,7 @@ import Event from "./event";
 import EventsLandingPage from "./eventsLandingPage";
 import Venue from "./venue";
 // SCREEN HELPERS ---------------------------------------------------------
-import Loading from "../components/loading";
+import Loading from "./loading";
 import Error from "./error";
 import BlockWrapper from "../components/blockWrapper";
 import { handleGetCookie } from "../helpers/cookie";
@@ -47,11 +47,10 @@ const App = ({ state, actions }) => {
   const data = state.source.get(endPoint);
   console.log("INDEX data", data); // debug
 
+  // HELPERS ------------------------------------------------------------
   useEffect(() => {
     if (data.query.transId) console.log("GOT transId", data.query.transId);
   }, [data]);
-
-  // HELPERS ------------------------------------------------------------
 
   // RETURN ------------------------------------------------------------
   return (
