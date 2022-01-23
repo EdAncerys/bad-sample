@@ -138,95 +138,6 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
   const ServeFilter = () => {
     if (!add_search_function) return null;
 
-    const ServeTitle = () => {
-      return (
-        <div
-          className="flex primary-title"
-          style={{
-            fontSize: 36,
-            alignItems: "center",
-            paddingBottom: `0.5em`,
-          }}
-        >
-          Search for Dermatology Group & Charities
-        </div>
-      );
-    };
-
-    const ServeSearchContainer = () => {
-      const [value, setValue] = useState(null);
-
-      const ServeIcon = () => {
-        const searchIcon = <SearchIcon />;
-        const closeIcon = <CloseIcon />;
-        const icon = value ? closeIcon : searchIcon;
-
-        return (
-          <div
-            onClick={() => {
-              setValue(null);
-              searchFilterRef.current.value = "";
-            }}
-          >
-            {icon}
-          </div>
-        );
-      };
-
-      return (
-        <div className="flex-row">
-          <div
-            className="flex"
-            style={{
-              flex: 1,
-              height: ctaHeight,
-              position: "relative",
-              margin: "auto 0",
-            }}
-          >
-            <input
-              ref={searchFilterRef}
-              onChange={(e) => setValue(e.target.value)}
-              type="text"
-              className="form-control"
-              placeholder="Find An Event"
-              style={styles.input}
-            />
-            <div
-              className="input-group-text toggle-icon-color"
-              style={{
-                position: "absolute",
-                right: 0,
-                height: ctaHeight,
-                border: "none",
-                background: "transparent",
-                alignItems: "center",
-                color: colors.darkSilver,
-                cursor: "pointer",
-              }}
-            >
-              <ServeIcon />
-            </div>
-          </div>
-          <div
-            style={{
-              display: "grid",
-              alignItems: "center",
-              paddingLeft: `2em`,
-            }}
-          >
-            <button
-              type="submit"
-              className="blue-btn"
-              onClick={handleFilterSearch}
-            >
-              Search
-            </button>
-          </div>
-        </div>
-      );
-    };
-
     const ServeSearchFilter = () => {
       if (!searchFilter) return null;
 
@@ -236,33 +147,6 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
           <div
             className="filter-icon"
             onClick={() => handleClearFilter({ clearInput: true })}
-          >
-            <CloseIcon
-              style={{
-                fill: colors.darkSilver,
-                padding: 0,
-              }}
-            />
-          </div>
-        </div>
-      );
-    };
-
-    const ServeTypeFilter = () => {
-      if (!typeFilter) return null;
-
-      let value = groupeType.filter(
-        (type) => type.id === Number(typeFilterRef.current)
-      );
-
-      return (
-        <div className="shadow filter">
-          <div>
-            <Html2React html={value[0].name} />
-          </div>
-          <div
-            className="filter-icon"
-            onClick={() => handleClearFilter({ clearType: true })}
           >
             <CloseIcon
               style={{
@@ -296,12 +180,29 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
         <div>
           <ServeTitle />
           <div className="flex-row" style={{ flexWrap: "wrap" }}>
+            <div
+              className="shadow filter-action"
+              onClick={() => setTypeFilter(null)}
+              style={{
+                backgroundColor: !typeFilter ? colors.primary : colors.white,
+                color: !typeFilter ? colors.white : colors.softBlack,
+              }}
+            >
+              <Html2React html={"All Groups"} />
+            </div>
+
             {groupeType.map((type, key) => {
+              const idMatching = typeFilter === type.id;
+
               return (
                 <div
                   key={key}
                   className="shadow filter-action"
-                  onClick={() => console.log(type.id)}
+                  onClick={() => setTypeFilter(type.id)}
+                  style={{
+                    backgroundColor: idMatching ? colors.primary : colors.white,
+                    color: idMatching ? colors.white : colors.softBlack,
+                  }}
                 >
                   <Html2React html={type.name} />
                 </div>
@@ -329,7 +230,6 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
           />
           <div className="flex" style={{ margin: "0.5em 0" }}>
             <ServeSearchFilter />
-            <ServeTypeFilter />
           </div>
           <ServeTypeFilters />
         </BlockWrapper>
@@ -341,7 +241,24 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
     return (
       <div style={styles.container}>
         {dermGroupe.map((block, key) => {
-          const { title, content, link } = block;
+          const { title, content, link, dermo_group_type } = block;
+
+          if (typeFilter) {
+            if (!Object.values(block.dermo_group_type).includes(typeFilter))
+              return;
+          }
+
+          if (searchFilter) {
+            if (
+              !title.rendered
+                .toLowerCase()
+                .includes(searchFilter.toLowerCase()) ||
+              !content.rendered
+                .toLowerCase()
+                .includes(searchFilter.toLowerCase())
+            )
+              return;
+          }
 
           return (
             <Card
