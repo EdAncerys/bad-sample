@@ -11,7 +11,7 @@ import SearchContainer from "./searchContainer";
 
 import CloseIcon from "@mui/icons-material/Close";
 
-const DermatologyGroup = ({ state, actions, libraries, block }) => {
+const Covid = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
@@ -22,17 +22,17 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
     post_limit,
     disable_vertical_padding,
     add_search_function,
-    type_filter,
+    guidance_filter,
   } = block;
 
-  const [dermGroup, setDermGroup] = useState(null);
-  const [groupeType, setGroupeType] = useState(null);
+  const [covidData, setCovidData] = useState(null);
+  const [guidanceType, setGuidanceType] = useState(null);
 
   const [searchFilter, setSearchFilter] = useState(null);
-  const [typeFilter, setTypeFilter] = useState(null);
+  const [guidanceFilter, setGuidanceFilter] = useState(null);
 
   const searchFilterRef = useRef(null);
-  const typeFilterRef = useRef(null);
+  const guidanceFilterRef = useRef(null);
   const loadMoreRef = useRef(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
@@ -41,12 +41,12 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
-    const path = `/derm_groups_charity/`;
-    await actions.source.fetch(path); // fetch CPT dermGroupeData
+    const path = `/covid_19/`;
+    await actions.source.fetch(path); // fetch CPT covidGroupeData
 
-    let dermGroupeData = state.source.get(path);
-    const { totalPages, page, next } = dermGroupeData; // check if dermGroupeData have multiple pages
-    // fetch dermGroupeData via wp API page by page
+    let covidGroupeData = state.source.get(path);
+    const { totalPages, page, next } = covidGroupeData; // check if covidGroupeData have multiple pages
+    // fetch covidGroupeData via wp API page by page
     let isThereNextPage = next;
     while (isThereNextPage) {
       await actions.source.fetch(isThereNextPage); // fetch next page
@@ -54,34 +54,34 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
       isThereNextPage = nextPage;
     }
 
-    const GROUPE_DATA = Object.values(state.source.derm_groups_charity);
-    const GROUPE_TYPE = Object.values(state.source.dermo_group_type);
+    const COVID_DATA = Object.values(state.source.covid_19);
+    const GUIDANCE_DATA = Object.values(state.source.guidance);
 
     const limit = post_limit || 8;
-    setDermGroup(GROUPE_DATA.slice(0, Number(limit))); // apply limit on posts
-    setGroupeType(GROUPE_TYPE);
+    setCovidData(COVID_DATA.slice(0, Number(limit))); // apply limit on posts
+    setGuidanceType(GUIDANCE_DATA);
 
     return () => {
       searchFilterRef.current = false; // clean up function
     };
   }, []);
   // DATA pre FETCH ----------------------------------------------------------------
-  if (!dermGroup || !groupeType) return <Loading />;
+  if (!covidData || !guidanceType) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
   const handleClearFilter = ({ clearInput, clearType }) => {
     if (clearInput) searchFilterRef.current.value = "";
-    if (clearType) typeFilterRef.current.value = "";
+    if (clearType) guidanceFilterRef.current.value = "";
 
     handleSearch();
   };
 
   const handleLoadMoreFilter = () => {
     const limit = 8;
-    let GROUPE_DATA = Object.values(state.source.derm_groups_charity); // add dermGroup object to data array
-    if (loadMoreRef.current) GROUPE_DATA = GROUPE_DATA.slice(0, Number(limit)); // apply limit on posts
+    let COVID_DATA = Object.values(state.source.covid_19); // add covidData object to data array
+    if (loadMoreRef.current) COVID_DATA = COVID_DATA.slice(0, Number(limit)); // apply limit on posts
 
-    setDermGroup(GROUPE_DATA);
+    setCovidData(COVID_DATA);
     loadMoreRef.current = !loadMoreRef.current;
   };
 
@@ -116,7 +116,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
     };
 
     const ServeTypeFilters = () => {
-      if (!groupeType || type_filter !== "All Levels") return null;
+      if (!guidanceType || guidance_filter !== "All Levels") return null;
 
       const ServeTitle = () => {
         return (
@@ -138,23 +138,25 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
           <div className="flex-row" style={{ flexWrap: "wrap" }}>
             <div
               className="shadow filter-action"
-              onClick={() => setTypeFilter(null)}
+              onClick={() => setGuidanceFilter(null)}
               style={{
-                backgroundColor: !typeFilter ? colors.primary : colors.white,
-                color: !typeFilter ? colors.white : colors.softBlack,
+                backgroundColor: !guidanceFilter
+                  ? colors.primary
+                  : colors.white,
+                color: !guidanceFilter ? colors.white : colors.softBlack,
               }}
             >
               <Html2React html={"All Groups"} />
             </div>
 
-            {groupeType.map((type, key) => {
-              const idMatching = typeFilter === type.id;
+            {guidanceType.map((type, key) => {
+              const idMatching = guidanceFilter === type.id;
 
               return (
                 <div
                   key={key}
                   className="shadow filter-action"
-                  onClick={() => setTypeFilter(type.id)}
+                  onClick={() => setGuidanceFilter(type.id)}
                   style={{
                     backgroundColor: idMatching ? colors.primary : colors.white,
                     color: idMatching ? colors.white : colors.softBlack,
@@ -194,7 +196,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
   };
 
   const ServeMoreAction = () => {
-    if (post_limit || dermGroup.length < 8) return null;
+    if (post_limit || covidData.length < 8) return null;
     const value = loadMoreRef.current ? "Less" : " Load More";
 
     return (
@@ -219,11 +221,13 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
   const ServeLayout = () => {
     return (
       <div style={styles.container}>
-        {dermGroup.map((block, key) => {
-          const { title, content, link, date, dermo_group_type } = block;
+        {covidData.map((block, key) => {
+          const { title, content, link, date, guidance } = block;
 
-          if (typeFilter) {
-            if (!Object.values(dermo_group_type).includes(typeFilter)) return;
+          console.log(block);
+
+          if (guidanceFilter) {
+            if (!Object.values(guidance).includes(guidanceFilter)) return;
           }
 
           if (searchFilter) {
@@ -238,8 +242,8 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
               return;
           }
 
-          if (type_filter !== "All Levels") {
-            if (!Object.values(dermo_group_type).includes(Number(type_filter)))
+          if (guidance_filter !== "All Levels") {
+            if (!Object.values(guidance).includes(Number(guidance_filter)))
               return;
           }
 
@@ -301,4 +305,4 @@ const styles = {
   },
 };
 
-export default connect(DermatologyGroup);
+export default connect(Covid);
