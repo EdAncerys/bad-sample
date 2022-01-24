@@ -57,8 +57,6 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
       />
     );
   };
-  console.log(parse(title));
-  console.log(<Html2React html={LABEL} />);
 
   const ServeButton = () => {
     return (

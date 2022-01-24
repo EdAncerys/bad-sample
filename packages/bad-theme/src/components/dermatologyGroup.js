@@ -24,8 +24,6 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
     add_search_function,
   } = block;
 
-  const ctaHeight = 45;
-
   const [dermGroupe, setDermGroupe] = useState(null);
   const [groupeType, setGroupeType] = useState(null);
 
@@ -58,7 +56,8 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
     const GROUPE_DATA = Object.values(state.source.derm_groups_charity);
     const GROUPE_TYPE = Object.values(state.source.dermo_group_type);
 
-    setDermGroupe(GROUPE_DATA);
+    const limit = post_limit || 8;
+    setDermGroupe(GROUPE_DATA.slice(0, Number(limit))); // apply limit on posts
     setGroupeType(GROUPE_TYPE);
 
     return () => {
@@ -77,58 +76,17 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
   };
 
   const handleLoadMoreFilter = () => {
-    const limit = post_limit || 6;
-    let POST_LIST = Object.values(state.source.post); // add dermGroupe object to data array
-    if (loadMoreRef.current) POST_LIST = POST_LIST.slice(0, Number(limit)); // apply limit on posts
+    const limit = 8;
+    let GROUPE_DATA = Object.values(state.source.derm_groups_charity); // add dermGroupe object to data array
+    if (loadMoreRef.current) GROUPE_DATA = GROUPE_DATA.slice(0, Number(limit)); // apply limit on posts
 
-    setDermGroupe(POST_LIST);
+    setDermGroupe(GROUPE_DATA);
     loadMoreRef.current = !loadMoreRef.current;
   };
 
   const handleSearch = () => {
     const searchInput = searchFilterRef.current.value;
     setSearchFilter(searchInput);
-
-    // const categoryInput = document.querySelector(
-    //   `#category-filter-${uniqueId}`
-    // ).value;
-
-    // if (!!searchInput) searchFilterRef.current = searchInput;
-    // if (!!categoryInput) categoryFilterRef.current = categoryInput;
-
-    // let filter = Object.values(state.source.post);
-
-    // const searchInputValue = !!searchInput
-    //   ? searchInput
-    //   : searchFilterRef.current;
-    // if (searchInputValue) {
-    //   const INPUT = searchInputValue.toLowerCase();
-    //   filter = filter.filter((news) =>
-    //     news.title.rendered.toLowerCase().includes(INPUT)
-    //   );
-    // }
-
-    // const searchCategoryValue = !!categoryInput
-    //   ? categoryInput
-    //   : categoryFilterRef.current;
-    // if (searchCategoryValue)
-    //   filter = filter.filter((news) =>
-    //     news.categories.includes(Number(searchCategoryValue))
-    //   );
-
-    // // apply date filter
-    // const searchDateValue = !!dateInput ? dateInput : dateFilterRef.current;
-    // if (searchDateValue === "Date Descending")
-    //   filter = filter.sort((a, b) => new Date(b.date) - new Date(a.date));
-    // if (searchDateValue === "Date Ascending")
-    //   filter = filter.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    // const searchYearValue = !!yearInput ? yearInput : yearFilterRef.current;
-    // if (searchYearValue)
-    //   filter = filter.filter(
-    //     (news) => new Date(news.date).getFullYear() === Number(searchYearValue)
-    //   );
-    // setDermGroupe(filter);
   };
 
   // SERVERS ---------------------------------------------
@@ -234,46 +192,8 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
     );
   };
 
-  const ServeLayout = () => {
-    return (
-      <div style={styles.container}>
-        {dermGroupe.map((block, key) => {
-          const { title, content, link, dermo_group_type } = block;
-
-          if (typeFilter) {
-            if (!Object.values(block.dermo_group_type).includes(typeFilter))
-              return;
-          }
-
-          if (searchFilter) {
-            if (
-              !title.rendered
-                .toLowerCase()
-                .includes(searchFilter.toLowerCase()) ||
-              !content.rendered
-                .toLowerCase()
-                .includes(searchFilter.toLowerCase())
-            )
-              return;
-          }
-
-          return (
-            <Card
-              key={key}
-              title={title.rendered}
-              link_label="Read More"
-              link={link}
-              colour={colour}
-              // body={content.rendered}
-              shadow
-            />
-          );
-        })}
-      </div>
-    );
-  };
-
   const ServeMoreAction = () => {
+    if (post_limit) return null;
     const value = loadMoreRef.current ? "Less" : " Load More";
 
     return (
@@ -291,6 +211,49 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
         >
           {value}
         </button>
+      </div>
+    );
+  };
+
+  const ServeLayout = () => {
+    return (
+      <div style={styles.container}>
+        {dermGroupe.map((block, key) => {
+          const { title, content, link, date } = block;
+
+          console.log(block);
+
+          if (typeFilter) {
+            if (!Object.values(block.dermo_group_type).includes(typeFilter))
+              return;
+          }
+
+          if (searchFilter) {
+            if (
+              !title.rendered
+                .toLowerCase()
+                .includes(searchFilter.toLowerCase()) &&
+              !content.rendered
+                .toLowerCase()
+                .includes(searchFilter.toLowerCase())
+            )
+              return;
+          }
+
+          return (
+            <Card
+              key={key}
+              title={title.rendered}
+              publicationDate={date}
+              body={content.rendered}
+              link_label="Read More"
+              link={link}
+              colour={colour}
+              limitBodyLength
+              shadow
+            />
+          );
+        })}
       </div>
     );
   };

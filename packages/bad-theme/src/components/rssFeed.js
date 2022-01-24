@@ -162,12 +162,11 @@ const RssFeed = ({ state, actions, libraries, block }) => {
           return (
             <Card
               key={key}
-              title={category}
+              title={title}
+              publicationDate={pubDate}
               link_label="Read More"
               link={link}
               colour={colour}
-              body={title}
-              publicationDate={pubDate}
               shadow
             />
           );

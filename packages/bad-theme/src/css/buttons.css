@@ -109,10 +109,15 @@
   box-shadow: inset 0 -2px #3882cd !important;
 }
 
-.title-animation {
+.title-animation,
+.title-link-animation {
   position: relative;
 }
-.title-animation::before {
+.title-link-animation {
+  width: fit-content;
+}
+.title-animation::before,
+.title-link-animation::before {
   content: attr(value);
   position: absolute;
   top: 0;
@@ -131,7 +136,17 @@
   -webkit-text-fill-color: transparent;
   -moz-text-fill-color: transparent;
 }
+.title-link-animation::before {
+  height: 100%;
+  transition: all 0.3s ease-in-out;
+  box-shadow: inset 0 -2px #3882cd !important;
+  padding-bottom: 0;
+}
+
 .title-animation:hover::before {
   width: 100%;
   height: 100%;
+}
+.title-link-animation:hover::before {
+  width: 100%;
 }

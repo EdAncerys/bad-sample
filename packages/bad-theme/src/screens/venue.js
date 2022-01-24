@@ -12,6 +12,7 @@ import BlockWrapper from "../components/blockWrapper";
 
 const Venue = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
   const data = state.source.get(state.router.link);
   const venue = state.source[data.type][data.id];
   console.log("pageData ", data, venue); // debug
@@ -71,8 +72,6 @@ const Venue = ({ state, actions, libraries }) => {
     };
 
     const ServeDetails = () => {
-      console.log("capacity_options", capacity_options);
-
       const ServeCapacity = () => {
         if (!capacity_options) return null;
 

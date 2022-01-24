@@ -18,6 +18,7 @@ import AuthorInfo from "./authorInfo";
 import ImageAndPromoCard from "./imageAndPromoCard";
 import TweetInfo from "./tweetInfo";
 import FadDirectory from "./fadDirectory";
+import DermGroupe from "./dermGroupe";
 
 import GeneralModal from "../elections/generalModal";
 
@@ -69,6 +70,7 @@ const Card = ({
   removePadding,
   fadDirectory,
   disableFooter,
+  dermGroupe,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
@@ -193,6 +195,7 @@ const Card = ({
         <AuthorInfo authorInfo={authorInfo} />
         <TweetInfo tweetInfo={tweetInfo} />
         <FadDirectory fadDirectory={fadDirectory} />
+        <DermGroupe dermGroupe={dermGroupe} />
         <ServeJournalCard />
         <CardBody
           title={title}

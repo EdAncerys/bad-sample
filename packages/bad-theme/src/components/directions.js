@@ -32,6 +32,8 @@ const Directions = ({ state, actions, libraries }) => {
   const ServePatchDirections = ({ item, nextKey }) => {
     let TITLE_RENDER = item;
 
+    console.log(TITLE_RENDER);
+
     let chevron = (
       <ChevronRightIcon style={{ fontSize: 16, color: colors.darkSilver }} />
     );

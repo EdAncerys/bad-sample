@@ -29,6 +29,7 @@ import AccountDashboard from "./accountDashboard";
 import Event from "./event";
 import EventsLandingPage from "./eventsLandingPage";
 import Venue from "./venue";
+import DermGroupsCharity from "./dermGroupsCharity";
 // SCREEN HELPERS ---------------------------------------------------------
 import Error from "./error";
 import Loading from "../components/loading";
@@ -106,6 +107,7 @@ const App = ({ state, actions }) => {
             <Pils when={data.isPils} />
             <Event when={data.isEvents} />
             <Venue when={data.isVenues} />
+            <DermGroupsCharity when={data.isDermGroupsCharity} />
 
             <Home when={data.isHome} />
 
