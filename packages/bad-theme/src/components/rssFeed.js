@@ -109,7 +109,7 @@ const RssFeed = ({ state, actions, libraries, block }) => {
       >
         <BlockWrapper>
           <SearchContainer
-            title="Search for Dermatology Groupe & Charities"
+            title="Search for RSS Articles"
             width="70%"
             searchFilterRef={searchFilterRef}
             handleSearch={handleSearch}
