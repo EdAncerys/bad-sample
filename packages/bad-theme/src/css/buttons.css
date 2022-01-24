@@ -37,6 +37,7 @@
   transition: all 0.3s ease-in-out;
 }
 .caps-btn {
+  position: relative;
   font-size: 12px;
   color: #404040;
   letter-spacing: 2px;
@@ -47,28 +48,35 @@
   width: fit-content;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+}
 
-  background: linear-gradient(to right, #3882cd, #3882cd);
-  background-size: 100% 100%;
-  animation: rainbow 2s ease-in-out infinite;
-  background-clip: text;
-  -webkit-background-clip: text;
+.caps-btn::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 2px;
+  width: 100%;
+  transition: all 0.3s ease-in-out;
+
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.caps-btn::before {
+  content: attr(value);
+  position: absolute;
+  white-space: nowrap;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  color: #3882cd;
   transition: all 0.3s ease-in-out;
 }
-.caps-btn:hover {
-  color: rgba(0, 0, 0, 0);
-  box-shadow: inset 0 -2px #3882cd;
+.caps-btn:hover::before {
+  width: 100%;
 }
-@keyframes caps-btn {
-  0% {
-    background-position: left;
-  }
-  50% {
-    background-position: right;
-  }
-  100% {
-    background-position: left;
-  }
+.caps-btn:hover::after {
+  transform: scaleX(1);
 }
 
 .label {

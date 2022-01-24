@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useLayoutEffect } from "react";
 import { connect } from "frontity";
 import Switch from "@frontity/components/switch";
 import { colors } from "../config/imports";
@@ -30,8 +30,8 @@ import Event from "./event";
 import EventsLandingPage from "./eventsLandingPage";
 import Venue from "./venue";
 // SCREEN HELPERS ---------------------------------------------------------
-import Loading from "./loading";
 import Error from "./error";
+import Loading from "../components/loading";
 import BlockWrapper from "../components/blockWrapper";
 import { handleGetCookie } from "../helpers/cookie";
 // CONTEXT ----------------------------------------------------------------
@@ -48,9 +48,6 @@ const App = ({ state, actions }) => {
   console.log("INDEX data", data); // debug
 
   // HELPERS ------------------------------------------------------------
-  useEffect(() => {
-    if (data.query.transId) console.log("GOT transId", data.query.transId);
-  }, [data]);
 
   // RETURN ------------------------------------------------------------
   return (
