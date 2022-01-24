@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import Image from "@frontity/components/image";
+import parse from "html-react-parser";
 
 import { colors } from "../../config/imports";
 import DownloadFileBlock from "../downloadFileBlock";
@@ -26,13 +26,13 @@ const CardActions = ({
   const ServeReadMoreAction = () => {
     if (!link || electionBlocks) return null;
     let GO_TO_LABEL = "More";
-    if (link_label) GO_TO_LABEL = <Html2React html={link_label} />;
+    if (link_label) GO_TO_LABEL = link_label;
 
     return (
       <div onClick={() => setGoToAction({ path: link, actions })}>
         <div>
-          <div value={link_label} className="caps-btn">
-            {GO_TO_LABEL}
+          <div value={parse(GO_TO_LABEL)} className="caps-btn">
+            <Html2React html={GO_TO_LABEL} />
           </div>
         </div>
       </div>
@@ -47,7 +47,7 @@ const CardActions = ({
     return (
       <div onClick={handler}>
         <div>
-          <div value={link_label} className="caps-btn">
+          <div value={parse(GO_TO_LABEL)} className="caps-btn">
             <Html2React html={GO_TO_LABEL} />
           </div>
         </div>
@@ -59,18 +59,19 @@ const CardActions = ({
     if (!form_link) return null;
 
     let GO_TO_LABEL = "Nomination Form";
-    if (form_label) GO_TO_LABEL = <Html2React html={form_label} />;
+    if (form_label) GO_TO_LABEL = form_label;
 
     return (
       <div>
         <div className="caps-btn">
           <a
             href={form_link}
+            value={parse(GO_TO_LABEL)}
             target="_blank"
             download
             style={{ color: colors.softBlack }}
           >
-            {GO_TO_LABEL}
+            <Html2React html={GO_TO_LABEL} />
           </a>
         </div>
       </div>

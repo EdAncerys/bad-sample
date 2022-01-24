@@ -74,6 +74,7 @@ const loginModal = ({ state, actions }) => {
           </div>
           <div>
             <div
+              value="Already a member? Login"
               className="caps-btn"
               onClick={() => {
                 setCreateAccountModalAction({

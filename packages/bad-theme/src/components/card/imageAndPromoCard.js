@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
+import parse from "html-react-parser";
 
 import { colors } from "../../config/imports";
 import { setGoToAction } from "../../context";
@@ -55,11 +56,13 @@ const ImageAndPromoCard = ({
   const ServeMoreAction = () => {
     if (!link) return null;
     let GO_TO_LABEL = "More";
-    if (label) GO_TO_LABEL = <Html2React html={label} />;
+    if (label) GO_TO_LABEL = label;
 
     return (
       <div onClick={() => setGoToAction({ path: link.url, actions })}>
-        <div className="caps-btn">{GO_TO_LABEL}</div>
+        <div value={parse(GO_TO_LABEL)} className="caps-btn">
+          <Html2React html={GO_TO_LABEL} />
+        </div>
       </div>
     );
   };

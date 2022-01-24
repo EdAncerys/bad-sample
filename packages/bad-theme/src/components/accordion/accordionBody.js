@@ -1,6 +1,7 @@
 import { useState, useLayoutEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
+import parse from "html-react-parser";
 
 import Accordion from "react-bootstrap/Accordion";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
@@ -207,6 +208,7 @@ const AccordionBody = ({
             />
           </div>
           <div
+            value={parse(LABEL)}
             className="caps-btn"
             onClick={() => setGoToAction({ path: link.url, actions })}
           >
@@ -477,6 +479,7 @@ const AccordionBody = ({
     return (
       <div style={{ margin: `2em 2em 0 0` }}>
         <div
+          value={parse(label || button_label)}
           className="caps-btn"
           onClick={() => setGoToAction({ path: link || link_url, actions })}
         >

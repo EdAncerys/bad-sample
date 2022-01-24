@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import path from "path";
+import parse from "html-react-parser";
 
 import { colors } from "../config/imports";
 import Image from "@frontity/components/image";
+import Link from "@frontity/components/link";
 
 import PDF from "../img/svg/badPDF.svg";
 import DOC from "../img/svg/badDOC.svg";
@@ -37,15 +39,10 @@ const DownloadFileBlock = ({
     if (!file) return null;
 
     return (
-      <div className="caps-btn">
-        <a
-          href={file.url}
-          target="_blank"
-          download
-          style={{ color: colors.softBlack }}
-        >
+      <div value={parse(LABEL)} className="caps-btn">
+        <Link href={file.url} target="_blank" download style={styles.link}>
           <Html2React html={LABEL} />
-        </a>
+        </Link>
       </div>
     );
   };
@@ -57,15 +54,15 @@ const DownloadFileBlock = ({
     if (guidelines) fileName = guidline_file.title;
 
     return (
-      <div className="caps-btn">
-        <a
+      <div value={parse(fileName)} className="caps-btn">
+        <Link
           href={guidline_file.url}
           target="_blank"
           download
-          style={{ color: colors.softBlack }}
+          style={styles.link}
         >
           <Html2React html={fileName} />
-        </a>
+        </Link>
       </div>
     );
   };
@@ -108,7 +105,7 @@ const DownloadFileBlock = ({
 };
 
 const styles = {
-  container: {},
+  link: { boxShadow: "none", color: "inherit" },
 };
 
 export default connect(DownloadFileBlock);

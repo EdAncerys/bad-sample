@@ -48,7 +48,11 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
 
         return (
           <div style={{ padding: `2em 0` }}>
-            <div className="caps-btn" onClick={() => setLimit(!limit)}>
+            <div
+              value={label}
+              className="caps-btn"
+              onClick={() => setLimit(!limit)}
+            >
               {label}
             </div>
           </div>

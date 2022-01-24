@@ -415,6 +415,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
 
     return (
       <div
+        value="Notify me when position is open"
         className="caps-btn"
         style={{
           position: "absolute",
