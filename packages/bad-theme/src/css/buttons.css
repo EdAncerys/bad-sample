@@ -45,14 +45,12 @@
   font-weight: bold;
   box-shadow: 0 2px #404040;
   width: fit-content;
-  height: 25px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
 }
 .caps-btn::before {
   content: attr(value);
   position: absolute;
-  white-space: nowrap;
   top: 0;
   bottom: 0;
   left: 0;
@@ -62,6 +60,13 @@
   color: #3882cd;
   box-shadow: 0 2px #3882cd;
   transition: all 0.3s ease-in-out;
+
+  background-image: linear-gradient(45deg, #3882cd, #3882cd);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
 }
 .caps-btn:hover::before {
   width: 100%;
@@ -103,16 +108,30 @@
   text-decoration: none;
   box-shadow: inset 0 -2px #3882cd !important;
 }
-.title-link:hover {
-  color: #3882cd !important;
-  box-shadow: inset 0 -2px #3882cd !important;
-  cursor: pointer;
-}
+
 .title-animation {
-  margin-left: 0px;
-  transition: all 0.3s ease-in-out;
+  position: relative;
 }
-.title-animation:hover {
-  color: #3882cd;
-  margin-left: 5px;
+.title-animation::before {
+  content: attr(value);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  transition: height 0.45s ease-in-out;
+
+  background-image: linear-gradient(45deg, #3882cd, #3882cd);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+.title-animation:hover::before {
+  width: 100%;
+  height: 100%;
 }

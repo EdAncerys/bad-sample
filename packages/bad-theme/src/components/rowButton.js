@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/imports";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import parse from "html-react-parser";
 
 import { setGoToAction } from "../context";
 // CONTEXT ----------------------------------------------------------------
@@ -56,6 +57,8 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
       />
     );
   };
+  console.log(parse(title));
+  console.log(<Html2React html={LABEL} />);
 
   const ServeButton = () => {
     return (
@@ -86,7 +89,7 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
         <div className="flex-col" style={{ padding: `1.5em 1em` }}>
           <div className="flex-row" style={{ alignItems: "center" }}>
             <div
-              className="flex title-animation"
+              className="flex"
               style={{
                 fontSize: 13,
                 letterSpacing: 2,
@@ -97,11 +100,21 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
                 cursor: "pointer",
               }}
             >
-              <span style={{ width: "fit-content" }}>
+              <span
+                value={parse(title)}
+                className="title-animation"
+                style={{ width: "fit-content" }}
+              >
                 <Html2React html={LABEL} />
               </span>
             </div>
-            <div style={{ display: "grid", alignItems: "center" }}>
+            <div
+              style={{
+                display: "grid",
+                alignItems: "center",
+                paddingLeft: `1em`,
+              }}
+            >
               <KeyboardArrowRightIcon
                 style={{
                   fill: colors.white,
