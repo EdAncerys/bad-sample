@@ -44,6 +44,7 @@ import SearchDermatologists from "../searchDermatologists";
 import DividerBlock from "../dividerBlock";
 import DermatologyGroup from "../dermatologyGroup";
 import RssFeed from "../rssFeed";
+import Covid from "../covid";
 
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   // console.log("BLOCKS: ", blocks); // debug
@@ -88,6 +89,14 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
             <div key={key + 1}>
               <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
               <RssFeed key={key} block={block} />
+            </div>
+          );
+
+        if (acf_fc_layout === "covid_loop_block")
+          return (
+            <div key={key + 1}>
+              <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+              <Covid key={key} block={block} />
             </div>
           );
 

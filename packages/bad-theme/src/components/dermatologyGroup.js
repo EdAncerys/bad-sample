@@ -22,6 +22,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
     post_limit,
     disable_vertical_padding,
     add_search_function,
+    type_filter,
   } = block;
 
   const [dermGroupe, setDermGroupe] = useState(null);
@@ -115,7 +116,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
     };
 
     const ServeTypeFilters = () => {
-      if (!groupeType) return null;
+      if (!groupeType || type_filter !== "All Levels") return null;
 
       const ServeTitle = () => {
         return (
@@ -219,13 +220,12 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
     return (
       <div style={styles.container}>
         {dermGroupe.map((block, key) => {
-          const { title, content, link, date } = block;
+          const { title, content, link, date, dermo_group_type } = block;
 
           console.log(block);
 
           if (typeFilter) {
-            if (!Object.values(block.dermo_group_type).includes(typeFilter))
-              return;
+            if (!Object.values(dermo_group_type).includes(typeFilter)) return;
           }
 
           if (searchFilter) {
@@ -237,6 +237,11 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
                 .toLowerCase()
                 .includes(searchFilter.toLowerCase())
             )
+              return;
+          }
+
+          if (type_filter !== "All Levels") {
+            if (!Object.values(dermo_group_type).includes(Number(type_filter)))
               return;
           }
 
