@@ -16,6 +16,7 @@ const CardBody = ({
   title,
   body,
   date,
+  publicationDate,
   seatNumber,
   heroBanner,
   TEXT_ALIGN,
@@ -137,6 +138,26 @@ const CardBody = ({
     );
   };
 
+  const ServePublicationDate = () => {
+    if (!publicationDate) return null;
+
+    const dateObject = new Date(publicationDate);
+    const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
+
+    return (
+      <div className="flex" style={{ paddingTop: `1em` }}>
+        <div
+          style={{
+            fontSize: 12,
+            fontWeight: "bold",
+          }}
+        >
+          <Html2React html={formattedDate} />
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div
       className="flex-col"
@@ -148,6 +169,7 @@ const CardBody = ({
       <div style={{ margin: CONTENT_ALIGNMENT }}>
         <ServeSeatsRemaining />
         <ServeTitle />
+        <ServePublicationDate />
         <ElectionInfo electionInfo={electionInfo} opacity={opacity} />
         <ServeBody />
         <ServeDate />

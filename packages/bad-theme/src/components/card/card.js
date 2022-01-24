@@ -48,6 +48,7 @@ const Card = ({
   form_label,
   form_link,
   date,
+  publicationDate,
   layout,
   seatNumber,
   eventHeader,
@@ -197,6 +198,7 @@ const Card = ({
           title={title}
           body={body}
           date={date}
+          publicationDate={publicationDate}
           seatNumber={seatNumber}
           heroBanner={heroBanner}
           TEXT_ALIGN={TEXT_ALIGN}

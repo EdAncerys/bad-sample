@@ -1,9 +1,12 @@
 export const initialState = {
   isFetching: null,
   isError: null,
+
   jwt: null,
+
   tweets: null,
   fad: null,
+  rssFeed: null,
 
   loginModalAction: false,
   createAccountAction: false,
@@ -28,6 +31,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, tweets: action.payload };
     case "SET_FAD_ACTION":
       return { ...state, fad: action.payload };
+    case "SET_RSS_FEED_ACTION":
+      return { ...state, rssFeed: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

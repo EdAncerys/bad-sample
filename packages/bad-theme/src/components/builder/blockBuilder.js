@@ -43,6 +43,7 @@ import PilGuidelineSearch from "../pilGuidelineSearch";
 import SearchDermatologists from "../searchDermatologists";
 import DividerBlock from "../dividerBlock";
 import DermatologyGroup from "../dermatologyGroup";
+import RssFeed from "../rssFeed";
 
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   // console.log("BLOCKS: ", blocks); // debug
@@ -81,6 +82,14 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
       {blocks.map((block, key) => {
         const { acf_fc_layout } = block;
         console.log("CONTENT BLOCK", block); // debug
+
+        if (acf_fc_layout === "rss_feed")
+          return (
+            <div key={key + 1}>
+              <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+              <RssFeed key={key} block={block} />
+            </div>
+          );
 
         if (acf_fc_layout === "dermatology_group_and_charity")
           return (

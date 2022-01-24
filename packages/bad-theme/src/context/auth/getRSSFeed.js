@@ -1,10 +1,10 @@
 import { authenticateAppAction, setFetchAction } from "../index";
 
-export const getFadAction = async ({ state, dispatch }) => {
-  console.log("getFadAction triggered");
+export const getRSSFeedAction = async ({ state, dispatch }) => {
+  console.log("getRSSFeedAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
-  const URL = state.auth.APP_HOST + `/catalogue/fad`;
+  const URL = state.auth.APP_HOST + `/rss/bjd?summary`;
   const jwt = await authenticateAppAction({ state });
 
   const requestOptions = {
@@ -16,11 +16,11 @@ export const getFadAction = async ({ state, dispatch }) => {
     const data = await fetch(URL, requestOptions);
     const result = await data.json();
 
-    if (result.value) {
-      const fad = result.value;
+    if (result.success) {
+      const rssFeed = result.data;
 
-      setFadAction({ dispatch, fad });
-      return fad;
+      setRSSFeedAction({ dispatch, rssFeed });
+      return rssFeed;
     }
   } catch (error) {
     console.log("error", error);
@@ -30,7 +30,7 @@ export const getFadAction = async ({ state, dispatch }) => {
 };
 
 // SET CONTEXT ---------------------------------------------------
-export const setFadAction = ({ dispatch, fad }) => {
-  console.log("setFadAction triggered"); //debug
-  dispatch({ type: "SET_FAD_ACTION", payload: fad });
+export const setRSSFeedAction = ({ dispatch, rssFeed }) => {
+  console.log("setRSSFeedAction triggered"); //debug
+  dispatch({ type: "SET_RSS_FEED_ACTION", payload: rssFeed });
 };

@@ -1,7 +1,5 @@
-import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
-import { Form } from "react-bootstrap";
-import { v4 as uuidv4 } from "uuid";
 import parse from "html-react-parser";
 
 import TitleBlock from "./titleBlock";
@@ -11,7 +9,6 @@ import { colors } from "../config/imports";
 import BlockWrapper from "./blockWrapper";
 import SearchContainer from "./searchContainer";
 
-import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 
 const DermatologyGroup = ({ state, actions, libraries, block }) => {
