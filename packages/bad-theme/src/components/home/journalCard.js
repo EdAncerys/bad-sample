@@ -40,7 +40,9 @@ const JournalCard = ({
             style={{ alignItems: "center", paddingTop: `1em` }}
             onClick={() => setGoToAction({ path: link.url, actions })}
           >
-            <div className="caps-btn">Read More</div>
+            <div value="Read More" className="caps-btn">
+              Read More
+            </div>
           </div>
         </div>
       );

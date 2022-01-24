@@ -31,7 +31,9 @@ const CardActions = ({
     return (
       <div onClick={() => setGoToAction({ path: link, actions })}>
         <div>
-          <div className="caps-btn">{GO_TO_LABEL}</div>
+          <div value={link_label} className="caps-btn">
+            {GO_TO_LABEL}
+          </div>
         </div>
       </div>
     );
@@ -45,7 +47,7 @@ const CardActions = ({
     return (
       <div onClick={handler}>
         <div>
-          <div className="caps-btn">
+          <div value={link_label} className="caps-btn">
             <Html2React html={GO_TO_LABEL} />
           </div>
         </div>
