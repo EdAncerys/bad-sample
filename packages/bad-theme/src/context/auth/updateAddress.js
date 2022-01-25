@@ -4,10 +4,14 @@ import {
   setFetchAction,
 } from "../index";
 
-export const updateAddressAction = async ({ state, dispatch, data }) => {
+export const updateAddressAction = async ({
+  state,
+  dispatch,
+  data,
+  isActiveUser,
+}) => {
   console.log("updateAddressAction triggered");
-  const user = state.context.isActiveUser;
-  const { contactid } = user;
+  const { contactid } = isActiveUser;
 
   const URL = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
 

@@ -4,10 +4,14 @@ import {
   setFetchAction,
 } from "../index";
 
-export const updateProfileAction = async ({ state, dispatch, data }) => {
+export const updateProfileAction = async ({
+  state,
+  dispatch,
+  data,
+  isActiveUser,
+}) => {
   console.log("updateProfileAction triggered");
-  const user = state.context.isActiveUser;
-  const { contactid } = user;
+  const { contactid } = isActiveUser;
 
   const URL = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
 

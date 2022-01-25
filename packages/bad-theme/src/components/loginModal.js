@@ -36,14 +36,14 @@ const LoginModal = ({ state, actions }) => {
   useEffect(async () => {
     if (id) await loginAction({ state, dispatch, transId: id });
 
-    if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
-      console.log("DEVELOPMENT ENVIRONMENT AUTH LOGIN");
-      loginAction({
-        state,
-        dispatch,
-        transId: "vQOKclgzqdPg83Z0zSuTTantjFmEJqj8",
-      });
-    }
+    // if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
+    //   console.log("DEVELOPMENT ENVIRONMENT AUTH LOGIN");
+    //   loginAction({
+    //     state,
+    //     dispatch,
+    //     transId: "vQOKclgzqdPg83Z0zSuTTantjFmEJqj8",
+    //   });
+    // }
   }, [id]);
 
   // HANDLERS ----------------------------------------------------

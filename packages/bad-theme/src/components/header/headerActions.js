@@ -18,15 +18,14 @@ import {
 
 const HeaderActions = ({ state, actions }) => {
   const dispatch = useAppDispatch();
-  const { jwt } = useAppState();
+  const { isActiveUser } = useAppState();
 
-  const user = state.context.isActiveUser;
   const isDevelopment = state.auth.ENVIRONMENT;
 
   const [isReady, SetReady] = useState(null);
 
   // hook applies after React has performed all DOM mutations
-  // prevent dashboard actions to load before user data loaded
+  // prevent dashboard actions to load before isActiveUser data loaded
   useLayoutEffect(() => {
     SetReady(true);
   }, []);
@@ -54,7 +53,7 @@ const HeaderActions = ({ state, actions }) => {
   };
 
   const ServeLoginAction = () => {
-    if (user) return null;
+    if (isActiveUser) return null;
 
     return (
       <div style={{ padding: `0 1em` }}>
@@ -71,7 +70,7 @@ const HeaderActions = ({ state, actions }) => {
   };
 
   const ServeDashboardAction = () => {
-    if (!user) return null;
+    if (!isActiveUser) return null;
 
     return (
       <div style={{ padding: `0 1em` }}>

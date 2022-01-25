@@ -1,8 +1,6 @@
 import { setLoginModalAction, setFetchAction } from "../index";
 import { handleSetCookie } from "../../helpers/cookie";
 
-const COOKIE_NAME = "BAD-WebApp";
-
 export const loginAction = async ({ state, dispatch, transId }) => {
   console.log("loginAction triggered");
   setFetchAction({ dispatch, isFetching: true });
@@ -17,12 +15,11 @@ export const loginAction = async ({ state, dispatch, transId }) => {
   // 📌 STEP: Get User data from Dynamics
   // --------------------------------------------------------------------------
   await getUserAction({ state, dispatch, jwt, transId });
-  // handleSetCookie({ name: COOKIE_NAME, value: state.router.link });
   setFetchAction({ dispatch, isFetching: false });
   setLoginModalAction({ dispatch, loginModalAction: false });
 };
 
-export const authenticateAppAction = async ({ state, dispatch }) => {
+export const authenticateAppAction = async ({ state }) => {
   console.log("authenticateAppAction triggered");
 
   const username = state.auth.APP_USERNAME;
@@ -109,7 +106,11 @@ export const getUserDataByContactId = async ({
     const data = await fetch(URL, requestOptions);
     const response = await data.json();
     if (response) {
-      state.context.isActiveUser = response;
+      setActiveUserAction({ dispatch, isActiveUser: response });
+      handleSetCookie({
+        name: state.auth.COOKIE_NAME,
+        value: { jwt, contactid },
+      });
       seJWTAction({ dispatch, jwt });
     }
   } catch (error) {
@@ -121,9 +122,9 @@ export const logoutAction = async ({ state, actions, dispatch }) => {
   console.log("logoutAction triggered");
 
   seJWTAction({ dispatch, jwt: null });
-  state.context.isActiveUser = null;
+  setActiveUserAction({ dispatch, isActiveUser: null });
 
-  handleSetCookie({ name: COOKIE_NAME, deleteCookie: true });
+  handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
   actions.router.set(`https://badadmin.skylarkdev.co`);
 };
 
@@ -131,4 +132,8 @@ export const logoutAction = async ({ state, actions, dispatch }) => {
 export const seJWTAction = ({ dispatch, jwt }) => {
   console.log("seJWTAction triggered"); //debug
   dispatch({ type: "SET_JWT_ACTION", payload: jwt });
+};
+export const setActiveUserAction = ({ dispatch, isActiveUser }) => {
+  console.log("setActiveUserAction triggered"); //debug
+  dispatch({ type: "SET_ACTIVE_USER_ACTION", payload: isActiveUser });
 };

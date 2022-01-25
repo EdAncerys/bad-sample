@@ -3,18 +3,21 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
 import ProfileAvatar from "../../img/svg/profile.svg";
+// CONTEXT ----------------------------------------------------------------
+import { useAppState } from "../../context";
 
 const Profile = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
+  const { isActiveUser } = useAppState();
+
   const marginVertical = state.theme.marginVertical;
-  const activeUser = state.context.isActiveUser;
 
   // SERVERS ---------------------------------------------
   const ServeProfileAvatar = () => {
-    if (!activeUser) return null;
+    if (!isActiveUser) return null;
 
-    const { bad_listname, bad_profile_photo_url } = activeUser;
+    const { bad_listname, bad_profile_photo_url } = isActiveUser;
 
     const alt = bad_listname || "Profile Picture";
 
@@ -43,9 +46,9 @@ const Profile = ({ state, actions, libraries }) => {
   };
 
   const ServeProfileName = () => {
-    if (!activeUser) return null;
+    if (!isActiveUser) return null;
 
-    const { fullname } = activeUser;
+    const { fullname } = isActiveUser;
 
     return (
       <div className="primary-title" style={{ fontSize: 36 }}>
@@ -55,7 +58,7 @@ const Profile = ({ state, actions, libraries }) => {
   };
 
   const ServeProfileInfo = () => {
-    if (!activeUser) return null;
+    if (!isActiveUser) return null;
 
     const {
       emailaddress1,
@@ -64,7 +67,7 @@ const Profile = ({ state, actions, libraries }) => {
       address2_city,
       address2_postalcode,
       address2_country,
-    } = activeUser;
+    } = isActiveUser;
 
     const ServeEmail = () => {
       if (!emailaddress1) return null;

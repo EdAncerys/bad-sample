@@ -13,13 +13,8 @@ import Billing from "../components/dashboard/pages/billing";
 import Settings from "../components/dashboard/pages/settings";
 
 import BlockWrapper from "../components/blockWrapper";
-// CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState } from "../context";
 
 const AccountDashboard = ({ state, actions, libraries }) => {
-  const dispatch = useAppDispatch();
-  const user = state.context.isActiveUser;
-
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const [dashboardPath, setDashboardPath] = useState("Dashboard");

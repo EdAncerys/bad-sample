@@ -42,8 +42,7 @@ import { useCookies } from "react-cookie";
 
 const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
-  const { jwt } = useAppState();
-  const user = state.context.isActiveUser;
+  const { isActiveUser } = useAppState();
 
   const endPoint = state.router.link;
   const data = state.source.get(endPoint);
@@ -79,7 +78,9 @@ const App = ({ state, actions }) => {
             <Login when={endPoint === "/login/"} />
             <CreateAccount when={endPoint === "/create-account/"} />
 
-            <AccountDashboard when={endPoint === "/dashboard/" && user} />
+            <AccountDashboard
+              when={endPoint === "/dashboard/" && isActiveUser}
+            />
             <Registration when={endPoint === "/membership/register/"} />
             <RegistrationStepOne
               when={endPoint === "/membership/register/step-1-the-process/"}

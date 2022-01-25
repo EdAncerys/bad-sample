@@ -5,7 +5,10 @@ import iframe from "@frontity/html2react/processors/iframe";
 import link from "@frontity/html2react/processors/link";
 import menuHandler from "./handlers/menu-handler";
 
-import { handleGetCookie } from "./helpers/cookie";
+import { handleGetCookie, handleSetCookie } from "./helpers/cookie";
+// CONTEXT ----------------------------------------------------------------
+import { initialState } from "../src/context/reducer";
+import { authenticateAppAction } from "../src/context";
 
 const BADTheme = {
   name: "bad-theme",
@@ -26,9 +29,6 @@ const BADTheme = {
       marginHorizontal: 100, // px units
       marginVertical: 40, // px units
     },
-    context: {
-      isActiveUser: null,
-    },
     auth: {
       ENVIRONMENT: process.env.ENVIRONMENT,
       GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
@@ -41,6 +41,7 @@ const BADTheme = {
       IFRAME_URL: process.env.IFRAME_URL,
       HOST_URL: process.env.HOST_URL,
       APP_URL: process.env.APP_URL,
+      COOKIE_NAME: "BAD-WebApp",
     },
     autoPrefetch: "hover", // values: no | hover | in-view | all
     context: {},
@@ -104,9 +105,38 @@ const BADTheme = {
         }
 
         // handle login auth via cookies
-        const jwt = handleGetCookie({ name: `BAD-WebApp` });
+        const cookie = handleGetCookie({ name: `BAD-WebApp` });
+        console.log(initialState);
         // handle API call to fetch user data
-        if (jwt) state.context.isActiveUser = jwt;
+        if (cookie) {
+          console.log("API to get user data", cookie);
+
+          const URL =
+            state.auth.APP_HOST +
+            `/catalogue/data/contacts(${cookie.contactid})`;
+
+          const requestOptions = {
+            method: "GET",
+            headers: { Authorization: "Bearer " + cookie.jwt },
+          };
+
+          try {
+            const data = await fetch(URL, requestOptions);
+            const response = await data.json();
+            console.log(response);
+            if (response) {
+              initialState.isActiveUser = response;
+              initialState.jwt = cookie.jwt;
+              const taken = await authenticateAppAction({ state });
+              handleSetCookie({
+                name: state.auth.COOKIE_NAME,
+                value: { jwt: taken, contactid },
+              });
+            }
+          } catch (error) {
+            console.log("error", error);
+          }
+        }
 
         // pre load fonts from google
         import("webfontloader").then((WebFontLoader) => {

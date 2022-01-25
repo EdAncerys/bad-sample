@@ -17,7 +17,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { isFetching } = useAppState();
+  const { isFetching, isActiveUser } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
 
@@ -38,7 +38,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
       !!address2_postalcode && { address2_postalcode }
     );
 
-    updateAddressAction({ state, dispatch, data });
+    updateAddressAction({ state, dispatch, data, isActiveUser });
     console.log("updateAddress", data);
   };
 

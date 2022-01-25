@@ -7,7 +7,7 @@ export const handleSetCookie = ({ name, value, exDays, deleteCookie }) => {
     cookieValue = "🍪 value not set!";
 
   if (name) cookieName = name;
-  if (value) cookieValue = value;
+  if (value) cookieValue = JSON.stringify(value);
   if (exDays) cookieExDays = exDays;
 
   if (deleteCookie) {
@@ -30,7 +30,8 @@ export const handleGetCookie = ({ name }) => {
   const parts = value.split(`; ${cookieName}=`);
 
   if (parts.length >= 2) {
-    const COOKIE_VALUE = parts.pop().split(";").shift();
+    let COOKIE_VALUE = parts.pop().split(";").shift();
+    COOKIE_VALUE = JSON.parse(COOKIE_VALUE);
     console.log("🍪 value: ", COOKIE_VALUE);
     return COOKIE_VALUE;
   } else {
@@ -48,7 +49,7 @@ export const handleEncryption = ({ jwt }) => {
   const saltRounds = 10;
 
   const salt = bcrypt.genSaltSync(saltRounds);
-  const hash = bcrypt.hashSync(jwt, salt); 
+  const hash = bcrypt.hashSync(jwt, salt);
   const valid = bcrypt.compareSync(jwt, hash); // validate encrypted token
 
   if (valid) {

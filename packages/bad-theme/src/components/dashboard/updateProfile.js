@@ -15,7 +15,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { isFetching } = useAppState();
+  const { isFetching, isActiveUser } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
 
@@ -45,7 +45,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
       !!bad_profile_photo_url && { bad_profile_photo_url }
     );
 
-    updateProfileAction({ state, dispatch, data });
+    updateProfileAction({ state, dispatch, data, isActiveUser });
   };
 
   // SERVERS ---------------------------------------------
