@@ -82,7 +82,7 @@ const Profile = ({ state, actions, libraries }) => {
 
       return (
         <div style={styles.container}>
-          <span className="primary-title">Address: </span>
+          <span className="primary-title">Address Line One: </span>
           <Html2React html={address2_line1} />
         </div>
       );
@@ -93,7 +93,7 @@ const Profile = ({ state, actions, libraries }) => {
 
       return (
         <div style={styles.container}>
-          <span className="primary-title">Address: </span>
+          <span className="primary-title">Address Line Two: </span>
           <Html2React html={address2_line2} />
         </div>
       );
@@ -133,7 +133,16 @@ const Profile = ({ state, actions, libraries }) => {
     };
 
     return (
-      <div className="flex-col" style={{ paddingTop: `1em`, fontSize: 20 }}>
+      <div
+        style={{
+          paddingTop: `1em`,
+          fontSize: 20,
+          display: "grid",
+          gridTemplateColumns: `1fr 1fr`,
+          gridTemplateRows: `repeat(4, 40px)`,
+          gap: `5px 20px`,
+        }}
+      >
         <ServeEmail />
         <ServeAddressOne />
         <ServeAddressTwo />
@@ -167,9 +176,7 @@ const Profile = ({ state, actions, libraries }) => {
 };
 
 const styles = {
-  container: {
-    padding: "0.5em 0",
-  },
+  container: {},
 };
 
 export default connect(Profile);
