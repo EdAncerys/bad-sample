@@ -41,7 +41,7 @@
   white-space: nowrap;
 }
 .quick-link .dropdown-menu {
-  left: -115px !important;
+  left: -105px !important;
   border-radius: 0.5em !important;
 }
 .quick-link li:hover .quick-link-title {

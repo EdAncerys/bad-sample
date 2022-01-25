@@ -41,9 +41,12 @@ const TitleBlock = ({
     let LABEL = "More";
     if (label) LABEL = label;
 
+    console.log(parse(LABEL));
+    console.log(parse("LABEL,", <Html2React html={LABEL} />));
+
     return (
       <div
-        value={parse(LABEL)}
+        value={parse(LABEL)[0].props.children}
         className="caps-btn"
         onClick={() => setGoToAction({ path: link.url, actions })}
       >
