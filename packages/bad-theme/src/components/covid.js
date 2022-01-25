@@ -223,7 +223,7 @@ const Covid = ({ state, actions, libraries, block }) => {
       <div style={styles.container}>
         {covidData.map((block, key) => {
           const { title, content, link, date, guidance, acf } = block;
-          const { redirect_url } = acf;
+          const { redirect_url, file_download } = acf;
           const redirectLink = redirect_url ? redirect_url.url : link;
           console.log(block);
 
@@ -256,6 +256,7 @@ const Covid = ({ state, actions, libraries, block }) => {
               body={content.rendered}
               link_label="Read More"
               link={redirectLink}
+              downloads={file_download}
               colour={colour}
               limitBodyLength
               shadow

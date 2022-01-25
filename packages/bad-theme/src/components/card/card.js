@@ -21,6 +21,7 @@ import FadDirectory from "./fadDirectory";
 import DermGroupe from "./dermGroupe";
 
 import GeneralModal from "../elections/generalModal";
+import DownloadFileBlock from "../downloadFileBlock";
 
 const Card = ({
   state,
@@ -71,6 +72,7 @@ const Card = ({
   fadDirectory,
   disableFooter,
   dermGroupe,
+  downloads,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
@@ -135,6 +137,22 @@ const Card = ({
         title={journalCard.title}
         user={journalCard.user}
       />
+    );
+  };
+
+  const ServeDownloads = () => {
+    if (!downloads) return null;
+
+    return (
+      <div style={{ padding: `0.5em 0` }}>
+        <DownloadFileBlock
+          block={{
+            file: { url: downloads.url, filename: downloads.filename },
+            title: downloads.title,
+          }}
+          disableMargin
+        />
+      </div>
     );
   };
 
@@ -212,6 +230,7 @@ const Card = ({
           opacity={opacity}
         />
         <VideoGalleryInfo videoGalleryInfo={videoGalleryInfo} />
+        <ServeDownloads />
         <CardActions
           link_label={link_label}
           link={link}

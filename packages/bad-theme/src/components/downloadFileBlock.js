@@ -24,7 +24,7 @@ const DownloadFileBlock = ({
 
   if (!block) return null;
 
-  const { file, label, guidline_file, disable_vertical_padding } = block;
+  const { file, label, guidline_file, disable_vertical_padding, title } = block;
 
   const ICON_WIDTH = 35;
   let LABEL = "Download";
@@ -52,6 +52,7 @@ const DownloadFileBlock = ({
 
     let fileName = "Read Guideline";
     if (guidelines) fileName = guidline_file.title;
+    if (title) fileName = title;
 
     return (
       <div value={parse(fileName)} className="caps-btn">
