@@ -29,7 +29,7 @@ const HeaderActions = ({ state, actions }) => {
   useLayoutEffect(() => {
     SetReady(true);
   }, []);
-  if (!isReady) return null;
+  if (!isReady) return <div style={{ height: 178,  borderBottom: `1px solid ${colors.primary}` }} />;
 
   // SERVERS ----------------------------------------------------
   const ServeLogoContainer = () => {

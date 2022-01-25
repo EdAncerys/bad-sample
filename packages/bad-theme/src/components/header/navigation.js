@@ -31,7 +31,8 @@ const Navigation = ({ state, actions, libraries }) => {
     setWpMoreMenu(data.slice(MAIN_NAV_LENGTH, dataLength)); // more menu into dropdown
   }, [state.theme.menu]);
 
-  if (!wpMoreMenu.length || !wpMainMenu.length) return null;
+  if (!wpMoreMenu.length || !wpMainMenu.length)
+    return <div style={{ height: 60 }} />;
 
   // HANDLERS ----------------------------------------------------
   const handleBoxShadow = (slug) => {

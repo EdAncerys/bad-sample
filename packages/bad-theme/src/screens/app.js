@@ -30,6 +30,7 @@ import Event from "./event";
 import EventsLandingPage from "./eventsLandingPage";
 import Venue from "./venue";
 import DermGroupsCharity from "./dermGroupsCharity";
+import Covid from "./covid";
 // SCREEN HELPERS ---------------------------------------------------------
 import Error from "./error";
 import Loading from "../components/loading";
@@ -108,6 +109,7 @@ const App = ({ state, actions }) => {
             <Event when={data.isEvents} />
             <Venue when={data.isVenues} />
             <DermGroupsCharity when={data.isDermGroupsCharity} />
+            <Covid when={data.isCovid19} />
 
             <Home when={data.isHome} />
 
