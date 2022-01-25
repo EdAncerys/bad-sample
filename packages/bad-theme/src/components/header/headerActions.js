@@ -7,6 +7,7 @@ import BADLogo from "../../img/svg/badLogoHeader.svg";
 import QuickLinksDropDown from "./quickLinksDropDown";
 import BlockWrapper from "../blockWrapper";
 import SearchInput from "./searchInput";
+import Loading from "../../components/loading";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -29,7 +30,12 @@ const HeaderActions = ({ state, actions }) => {
   useLayoutEffect(() => {
     SetReady(true);
   }, []);
-  if (!isReady) return <div style={{ height: 178,  borderBottom: `1px solid ${colors.primary}` }} />;
+  if (!isReady)
+    return (
+      <div style={{ height: 178, borderBottom: `1px solid ${colors.primary}` }}>
+        <Loading />
+      </div>
+    );
 
   // SERVERS ----------------------------------------------------
   const ServeLogoContainer = () => {

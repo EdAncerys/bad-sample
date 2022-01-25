@@ -222,8 +222,9 @@ const Covid = ({ state, actions, libraries, block }) => {
     return (
       <div style={styles.container}>
         {covidData.map((block, key) => {
-          const { title, content, link, date, guidance } = block;
-
+          const { title, content, link, date, guidance, acf } = block;
+          const { redirect_url } = acf;
+          const redirectLink = redirect_url ? redirect_url.url : link;
           console.log(block);
 
           if (guidanceFilter) {
@@ -254,7 +255,7 @@ const Covid = ({ state, actions, libraries, block }) => {
               publicationDate={date}
               body={content.rendered}
               link_label="Read More"
-              link={link}
+              link={redirectLink}
               colour={colour}
               limitBodyLength
               shadow
