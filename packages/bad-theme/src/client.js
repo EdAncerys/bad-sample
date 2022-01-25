@@ -5,11 +5,9 @@ import iframe from "@frontity/html2react/processors/iframe";
 import link from "@frontity/html2react/processors/link";
 import menuHandler from "./handlers/menu-handler";
 
-import { handleGetCookie, handleSetCookie } from "./helpers/cookie";
-import { authLogViaCookie } from "./helpers";
+import { authLogViaCookie, getWPMenu } from "./helpers";
 // CONTEXT ----------------------------------------------------------------
 import { initialState } from "../src/context/reducer";
-import { authenticateAppAction } from "../src/context";
 
 const BADTheme = {
   name: "bad-theme",
@@ -57,17 +55,7 @@ const BADTheme = {
         ]);
 
         // pre fetch WP MENU ----------------------------------------------------------------------
-        const menu = sessionStorage.getItem("badMenu"); // checking if menu already pre fetched from wp
-        if (!menu) {
-          try {
-            await actions.source.fetch(`${state.theme.menuUrl}`);
-            const badMenu = await state.source.data["/menu/primary-menu/"]
-              .items;
-            sessionStorage.setItem("badMenu", JSON.stringify(badMenu));
-          } catch (error) {
-            console.log("error: " + error);
-          }
-        }
+        await getWPMenu({ state, actions });
 
         // pre fetch post data
         await actions.source.fetch(`/posts/`); // fetch CPT postData

@@ -34,3 +34,16 @@ export const authLogViaCookie = async ({ state, initialState }) => {
     }
   }
 };
+
+export const getWPMenu = async ({ state, actions }) => {
+  const menu = sessionStorage.getItem("badMenu"); // checking if menu already pre fetched from wp
+  if (!menu) {
+    try {
+      await actions.source.fetch(`${state.theme.menuUrl}`);
+      const badMenu = await state.source.data["/menu/primary-menu/"].items;
+      sessionStorage.setItem("badMenu", JSON.stringify(badMenu));
+    } catch (error) {
+      console.log("error: " + error);
+    }
+  }
+};
