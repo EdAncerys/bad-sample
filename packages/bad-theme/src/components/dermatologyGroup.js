@@ -10,6 +10,7 @@ import BlockWrapper from "./blockWrapper";
 import SearchContainer from "./searchContainer";
 
 import CloseIcon from "@mui/icons-material/Close";
+import { ContrastOutlined } from "@mui/icons-material";
 
 const DermatologyGroup = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -71,14 +72,21 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
   // HELPERS ----------------------------------------------------------------
   const handleClearFilter = ({ clearInput, clearType }) => {
     if (clearInput) searchFilterRef.current.value = "";
-    if (clearType) typeFilterRef.current.value = "";
+    if (clearType) typeFilterRef.current = null;
+
+    handleSearch();
+  };
+
+  const handleSetTypeFilter = ({ id }) => {
+    setTypeFilter(id);
+    typeFilterRef.current = id;
 
     handleSearch();
   };
 
   const handleLoadMoreFilter = () => {
     const limit = 8;
-    let GROUPE_DATA = Object.values(state.source.derm_groups_charity); // add dermGroup object to data array
+    let GROUPE_DATA = dermGroup;
     if (loadMoreRef.current) GROUPE_DATA = GROUPE_DATA.slice(0, Number(limit)); // apply limit on posts
 
     setDermGroup(GROUPE_DATA);
@@ -87,6 +95,32 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
 
   const handleSearch = () => {
     const searchInput = searchFilterRef.current.value;
+    const typeInput = typeFilterRef.current;
+    let data = Object.values(state.source.derm_groups_charity); // add dermGroup object to data array
+
+    if (typeInput) {
+      data = data.filter((item) => {
+        let GROPE = Object.values(item.dermo_group_type);
+        if (GROPE) GROPE = GROPE.includes(typeInput);
+
+        return GROPE;
+      });
+    }
+
+    if (searchInput) {
+      data = data.filter((item) => {
+        let TITLE = item.title.rendered;
+        let CONTENT = item.content.rendered;
+        if (TITLE)
+          TITLE = TITLE.toLowerCase().includes(searchInput.toLowerCase());
+        if (CONTENT)
+          CONTENT = CONTENT.toLowerCase().includes(searchInput.toLowerCase());
+
+        return TITLE || CONTENT;
+      });
+    }
+
+    setDermGroup(data);
     setSearchFilter(searchInput);
   };
 
@@ -138,7 +172,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
           <div className="flex-row" style={{ flexWrap: "wrap" }}>
             <div
               className="shadow filter-action"
-              onClick={() => setTypeFilter(null)}
+              onClick={() => handleSetTypeFilter({ id: null })}
               style={{
                 backgroundColor: !typeFilter ? colors.primary : colors.white,
                 color: !typeFilter ? colors.white : colors.softBlack,
@@ -154,7 +188,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
                 <div
                   key={key}
                   className="shadow filter-action"
-                  onClick={() => setTypeFilter(type.id)}
+                  onClick={() => handleSetTypeFilter({ id: type.id })}
                   style={{
                     backgroundColor: idMatching ? colors.primary : colors.white,
                     color: idMatching ? colors.white : colors.softBlack,
@@ -223,27 +257,6 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
       <div style={styles.container}>
         {dermGroup.map((block, key) => {
           const { title, content, link, date, dermo_group_type } = block;
-
-          if (typeFilter) {
-            if (!Object.values(dermo_group_type).includes(typeFilter)) return;
-          }
-
-          if (searchFilter) {
-            if (
-              !title.rendered
-                .toLowerCase()
-                .includes(searchFilter.toLowerCase()) &&
-              !content.rendered
-                .toLowerCase()
-                .includes(searchFilter.toLowerCase())
-            )
-              return;
-          }
-
-          if (type_filter !== "All Levels") {
-            if (!Object.values(dermo_group_type).includes(Number(type_filter)))
-              return;
-          }
 
           return (
             <Card
