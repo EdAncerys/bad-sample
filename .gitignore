@@ -58,3 +58,6 @@ macOS .DS_Store files
 build
 .vercel
 sendgrid.env
+
+# git cashe
+.dccache 

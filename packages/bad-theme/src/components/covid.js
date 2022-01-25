@@ -127,7 +127,7 @@ const Covid = ({ state, actions, libraries, block }) => {
               alignItems: "center",
             }}
           >
-            Search Group
+            Search Guidance
           </div>
         );
       };
@@ -146,7 +146,7 @@ const Covid = ({ state, actions, libraries, block }) => {
                 color: !guidanceFilter ? colors.white : colors.softBlack,
               }}
             >
-              <Html2React html={"All Groups"} />
+              <Html2React html={"All"} />
             </div>
 
             {guidanceType.map((type, key) => {
@@ -180,16 +180,18 @@ const Covid = ({ state, actions, libraries, block }) => {
         }}
       >
         <BlockWrapper>
-          <SearchContainer
-            title="Search for Dermatology Groupe & Charities"
-            width="70%"
-            searchFilterRef={searchFilterRef}
-            handleSearch={handleSearch}
-          />
-          <div className="flex" style={{ margin: "0.5em 0" }}>
-            <ServeSearchFilter />
+          <div style={{ padding: `0 ${marginHorizontal}px` }}>
+            <SearchContainer
+              title="Search for COVID 19 Resources"
+              width="70%"
+              searchFilterRef={searchFilterRef}
+              handleSearch={handleSearch}
+            />
+            <div className="flex" style={{ margin: "0.5em 0" }}>
+              <ServeSearchFilter />
+            </div>
+            <ServeTypeFilters />
           </div>
-          <ServeTypeFilters />
         </BlockWrapper>
       </div>
     );
@@ -225,7 +227,6 @@ const Covid = ({ state, actions, libraries, block }) => {
           const { title, content, link, date, guidance, acf } = block;
           const { redirect_url, file_download } = acf;
           const redirectLink = redirect_url ? redirect_url.url : link;
-          console.log(block);
 
           if (guidanceFilter) {
             if (!Object.values(guidance).includes(guidanceFilter)) return;
@@ -271,24 +272,28 @@ const Covid = ({ state, actions, libraries, block }) => {
   return (
     <div
       style={{
-        padding: `${marginVertical}px 0`,
         backgroundColor: background_colour,
+        padding: `${marginVertical}px 0`,
       }}
     >
       <BlockWrapper>
-        <TitleBlock
-          block={block}
-          margin={{
-            marginBottom: `${
-              add_search_function ? 0 : state.theme.marginVertical
-            }px`,
-          }}
-        />
+        <div style={{ padding: `0 ${marginHorizontal}px` }}>
+          <TitleBlock
+            block={block}
+            margin={{
+              marginBottom: `${
+                add_search_function ? 0 : state.theme.marginVertical
+              }px`,
+            }}
+          />
+        </div>
       </BlockWrapper>
       <ServeFilter />
       <BlockWrapper>
-        <ServeLayout />
-        <ServeMoreAction />
+        <div style={{ padding: `0 ${marginHorizontal}px` }}>
+          <ServeLayout />
+          <ServeMoreAction />
+        </div>
       </BlockWrapper>
     </div>
   );

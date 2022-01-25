@@ -144,7 +144,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
                 color: !typeFilter ? colors.white : colors.softBlack,
               }}
             >
-              <Html2React html={"All Groups"} />
+              <Html2React html={"All"} />
             </div>
 
             {groupeType.map((type, key) => {
@@ -178,16 +178,18 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
         }}
       >
         <BlockWrapper>
-          <SearchContainer
-            title="Search for Dermatology Groupe & Charities"
-            width="70%"
-            searchFilterRef={searchFilterRef}
-            handleSearch={handleSearch}
-          />
-          <div className="flex" style={{ margin: "0.5em 0" }}>
-            <ServeSearchFilter />
+          <div style={{ padding: `0 ${marginHorizontal}px` }}>
+            <SearchContainer
+              title="Search for Dermatology Groupe & Charities"
+              width="70%"
+              searchFilterRef={searchFilterRef}
+              handleSearch={handleSearch}
+            />
+            <div className="flex" style={{ margin: "0.5em 0" }}>
+              <ServeSearchFilter />
+            </div>
+            <ServeTypeFilters />
           </div>
-          <ServeTypeFilters />
         </BlockWrapper>
       </div>
     );
@@ -270,19 +272,23 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
       }}
     >
       <BlockWrapper>
-        <TitleBlock
-          block={block}
-          margin={{
-            marginBottom: `${
-              add_search_function ? 0 : state.theme.marginVertical
-            }px`,
-          }}
-        />
+        <div style={{ padding: `0 ${marginHorizontal}px` }}>
+          <TitleBlock
+            block={block}
+            margin={{
+              marginBottom: `${
+                add_search_function ? 0 : state.theme.marginVertical
+              }px`,
+            }}
+          />
+        </div>
       </BlockWrapper>
       <ServeFilter />
       <BlockWrapper>
-        <ServeLayout />
-        <ServeMoreAction />
+        <div style={{ padding: `0 ${marginHorizontal}px` }}>
+          <ServeLayout />
+          <ServeMoreAction />
+        </div>
       </BlockWrapper>
     </div>
   );

@@ -108,14 +108,16 @@ const RssFeed = ({ state, actions, libraries, block }) => {
         }}
       >
         <BlockWrapper>
-          <SearchContainer
-            title="Search for RSS Articles"
-            width="70%"
-            searchFilterRef={searchFilterRef}
-            handleSearch={handleSearch}
-          />
-          <div className="flex" style={{ margin: "0.5em 0" }}>
-            <ServeSearchFilter />
+          <div style={{ padding: `0 ${marginHorizontal}px` }}>
+            <SearchContainer
+              title="Search for British Journal of Dermatology Articles"
+              width="70%"
+              searchFilterRef={searchFilterRef}
+              handleSearch={handleSearch}
+            />
+            <div className="flex" style={{ margin: "0.5em 0" }}>
+              <ServeSearchFilter />
+            </div>
           </div>
         </BlockWrapper>
       </div>
@@ -184,19 +186,23 @@ const RssFeed = ({ state, actions, libraries, block }) => {
       }}
     >
       <BlockWrapper>
-        <TitleBlock
-          block={block}
-          margin={{
-            marginBottom: `${
-              add_search_function ? 0 : state.theme.marginVertical
-            }px`,
-          }}
-        />
+        <div style={{ padding: `0 ${marginHorizontal}px` }}>
+          <TitleBlock
+            block={block}
+            margin={{
+              marginBottom: `${
+                add_search_function ? 0 : state.theme.marginVertical
+              }px`,
+            }}
+          />
+        </div>
       </BlockWrapper>
       <ServeFilter />
       <BlockWrapper>
-        <ServeLayout />
-        <ServeMoreAction />
+        <div style={{ padding: `0 ${marginHorizontal}px` }}>
+          <ServeLayout />
+          <ServeMoreAction />
+        </div>
       </BlockWrapper>
     </div>
   );

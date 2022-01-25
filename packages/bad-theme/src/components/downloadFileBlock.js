@@ -40,7 +40,7 @@ const DownloadFileBlock = ({
 
     return (
       <div value={parse(LABEL)} className="caps-btn">
-        <Link href={file.url} target="_blank" download style={styles.link}>
+        <Link link={file.url} target="_blank" download style={styles.link}>
           <Html2React html={LABEL} />
         </Link>
       </div>
@@ -57,7 +57,7 @@ const DownloadFileBlock = ({
     return (
       <div value={parse(fileName)} className="caps-btn">
         <Link
-          href={guidline_file.url}
+          link={guidline_file.url}
           target="_blank"
           download
           style={styles.link}

@@ -17,6 +17,13 @@ const SearchContainer = ({
   const ctaHeight = 45;
   const WIDTH = width || "100%";
 
+  // HANDLERS ---------------------------------------------
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && e.target.value) {
+      handleSearch();
+    }
+  };
+
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
     if (!title) return null;
@@ -69,9 +76,10 @@ const SearchContainer = ({
           <input
             ref={searchFilterRef}
             onChange={(e) => setValue(e.target.value)}
+            onKeyPress={(e) => handleKeyPress(e)}
             type="text"
             className="form-control"
-            placeholder="Find An Event"
+            placeholder="Search"
             style={styles.input}
           />
           <div
