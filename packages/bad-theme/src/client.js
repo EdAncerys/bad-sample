@@ -5,7 +5,13 @@ import iframe from "@frontity/html2react/processors/iframe";
 import link from "@frontity/html2react/processors/link";
 import menuHandler from "./handlers/menu-handler";
 
-import { authLogViaCookie, getWPMenu } from "./helpers";
+import {
+  authLogViaCookie,
+  getWPMenu,
+  getEventsData,
+  getPostData,
+  getLeadershipTeamData,
+} from "./helpers";
 // CONTEXT ----------------------------------------------------------------
 import { initialState } from "../src/context/reducer";
 
@@ -58,40 +64,11 @@ const BADTheme = {
         await getWPMenu({ state, actions });
 
         // pre fetch post data
-        await actions.source.fetch(`/posts/`); // fetch CPT postData
-        const postData = state.source.get(`/posts/`);
-        const postDataNextPage = postData.next; // check if postData have multiple pages
-        // fetch postData via wp API page by page
-        let isThereNextPostPage = postDataNextPage;
-        while (isThereNextPostPage) {
-          await actions.source.fetch(isThereNextPostPage); // fetch next page
-          const nextPage = state.source.get(isThereNextPostPage).next; // check ifNext page & set next page
-          isThereNextPostPage = nextPage;
-        }
-
+        await getPostData({ state, actions });
         // pre fetch leadership_team data
-        await actions.source.fetch(`/leadership_team/`); // fetch CPT leadershipTeam
-        const leadershipTeam = state.source.get(`/leadership_team/`);
-        const leadershipTeamNextPage = leadershipTeam.next; // check if leadershipTeam have multiple pages
-        // fetch leadershipTeam via wp API page by page
-        let isThereNextLeadershipPage = leadershipTeamNextPage;
-        while (isThereNextLeadershipPage) {
-          await actions.source.fetch(isThereNextLeadershipPage); // fetch next page
-          const nextPage = state.source.get(isThereNextLeadershipPage).next; // check ifNext page & set next page
-          isThereNextLeadershipPage = nextPage;
-        }
-
+        await getLeadershipTeamData({ state, actions });
         // pre fetch events data
-        await actions.source.fetch(`/events/`); // fetch CPT events
-        const events = state.source.get(`/events/`);
-        const eventsNextPage = events.next; // check if events have multiple pages
-        // fetch events via wp API page by page
-        let isThereNextEventPage = eventsNextPage;
-        while (isThereNextEventPage) {
-          await actions.source.fetch(isThereNextEventPage); // fetch next page
-          const nextPage = state.source.get(isThereNextEventPage).next; // check ifNext page & set next page
-          isThereNextEventPage = nextPage;
-        }
+        await getEventsData({ state, actions });
 
         // handle auth login auth via cookies
         await authLogViaCookie({ state, initialState });
@@ -109,8 +86,6 @@ const BADTheme = {
 
       afterCSR: async ({ state, actions }) => {
         console.log("afterCSR triggered"); // debug
-        const menu = sessionStorage.getItem("badMenu"); // checking if menu already pre fetched from wp
-        if (menu) state.theme.menu = JSON.parse(menu); // replacing menu stored in sessions with state var
       },
     },
   },

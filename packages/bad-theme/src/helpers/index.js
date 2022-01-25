@@ -41,9 +41,51 @@ export const getWPMenu = async ({ state, actions }) => {
     try {
       await actions.source.fetch(`${state.theme.menuUrl}`);
       const badMenu = await state.source.data["/menu/primary-menu/"].items;
+      state.theme.menu = badMenu; // replacing menu stored in sessions
       sessionStorage.setItem("badMenu", JSON.stringify(badMenu));
     } catch (error) {
       console.log("error: " + error);
     }
+  } else {
+    state.theme.menu = JSON.parse(menu);
+  }
+};
+
+export const getEventsData = async ({ state, actions }) => {
+  await actions.source.fetch(`/events/`); // fetch CPT events
+  const events = state.source.get(`/events/`);
+  const eventsNextPage = events.next; // check if events have multiple pages
+  // fetch events via wp API page by page
+  let isThereNextEventPage = eventsNextPage;
+  while (isThereNextEventPage) {
+    await actions.source.fetch(isThereNextEventPage); // fetch next page
+    const nextPage = state.source.get(isThereNextEventPage).next; // check ifNext page & set next page
+    isThereNextEventPage = nextPage;
+  }
+};
+
+export const getPostData = async ({ state, actions }) => {
+  await actions.source.fetch(`/posts/`); // fetch CPT postData
+  const postData = state.source.get(`/posts/`);
+  const postDataNextPage = postData.next; // check if postData have multiple pages
+  // fetch postData via wp API page by page
+  let isThereNextPostPage = postDataNextPage;
+  while (isThereNextPostPage) {
+    await actions.source.fetch(isThereNextPostPage); // fetch next page
+    const nextPage = state.source.get(isThereNextPostPage).next; // check ifNext page & set next page
+    isThereNextPostPage = nextPage;
+  }
+};
+
+export const getLeadershipTeamData = async ({ state, actions }) => {
+  await actions.source.fetch(`/leadership_team/`); // fetch CPT leadershipTeam
+  const leadershipTeam = state.source.get(`/leadership_team/`);
+  const leadershipTeamNextPage = leadershipTeam.next; // check if leadershipTeam have multiple pages
+  // fetch leadershipTeam via wp API page by page
+  let isThereNextLeadershipPage = leadershipTeamNextPage;
+  while (isThereNextLeadershipPage) {
+    await actions.source.fetch(isThereNextLeadershipPage); // fetch next page
+    const nextPage = state.source.get(isThereNextLeadershipPage).next; // check ifNext page & set next page
+    isThereNextLeadershipPage = nextPage;
   }
 };
