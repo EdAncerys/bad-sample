@@ -41,7 +41,7 @@ export const getWPMenu = async ({ state, actions }) => {
     try {
       await actions.source.fetch(`${state.theme.menuUrl}`);
       const badMenu = await state.source.data["/menu/primary-menu/"].items;
-      state.theme.menu = badMenu; // replacing menu stored in sessions
+      state.theme.menu = badMenu; // replacing menu stored in sessions with state var
       sessionStorage.setItem("badMenu", JSON.stringify(badMenu));
     } catch (error) {
       console.log("error: " + error);
