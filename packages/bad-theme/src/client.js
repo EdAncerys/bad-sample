@@ -6,6 +6,7 @@ import link from "@frontity/html2react/processors/link";
 import menuHandler from "./handlers/menu-handler";
 
 import { handleGetCookie, handleSetCookie } from "./helpers/cookie";
+import { authLogViaCookie } from "./helpers";
 // CONTEXT ----------------------------------------------------------------
 import { initialState } from "../src/context/reducer";
 import { authenticateAppAction } from "../src/context";
@@ -104,39 +105,8 @@ const BADTheme = {
           isThereNextEventPage = nextPage;
         }
 
-        // handle login auth via cookies
-        const cookie = handleGetCookie({ name: `BAD-WebApp` });
-        console.log(initialState);
-        // handle API call to fetch user data
-        if (cookie) {
-          console.log("API to get user data", cookie);
-
-          const URL =
-            state.auth.APP_HOST +
-            `/catalogue/data/contacts(${cookie.contactid})`;
-
-          const requestOptions = {
-            method: "GET",
-            headers: { Authorization: "Bearer " + cookie.jwt },
-          };
-
-          try {
-            const data = await fetch(URL, requestOptions);
-            const response = await data.json();
-            console.log(response);
-            if (response) {
-              initialState.isActiveUser = response;
-              initialState.jwt = cookie.jwt;
-              const taken = await authenticateAppAction({ state });
-              handleSetCookie({
-                name: state.auth.COOKIE_NAME,
-                value: { jwt: taken, contactid },
-              });
-            }
-          } catch (error) {
-            console.log("error", error);
-          }
-        }
+        // handle auth login auth via cookies
+        await authLogViaCookie({ state, initialState });
 
         // pre load fonts from google
         import("webfontloader").then((WebFontLoader) => {
