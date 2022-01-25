@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useLayoutEffect } from "react";
 import { connect } from "frontity";
 
 import BlockBuilder from "../components/builder/blockBuilder";
@@ -21,6 +21,14 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
   const wpBlocks = page.acf.blocks;
+
+  const [isReady, SetReady] = useState(null);
+
+  // prevent dashboard actions to load before all server side mutations loaded
+  useLayoutEffect(() => {
+    SetReady(true);
+  }, []);
+  if (!isReady) return null;
 
   return (
     <div className="flex-col">

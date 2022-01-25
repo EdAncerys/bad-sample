@@ -99,16 +99,6 @@
 .banner-transparent-btn:hover .MuiSvgIcon-root {
   fill: #1f335e !important;
 }
-.dashboard-menu {
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-}
-.dashboard-menu:hover {
-  color: #3882cd;
-  text-decoration: none;
-  box-shadow: inset 0 -2px #3882cd !important;
-}
-
 .title-animation,
 .title-link-animation {
   position: relative;
