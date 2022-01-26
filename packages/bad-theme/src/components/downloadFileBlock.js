@@ -39,7 +39,7 @@ const DownloadFileBlock = ({
     if (!file) return null;
 
     return (
-      <div value={parse(LABEL)} className="caps-btn">
+      <div value={parse(LABEL)[0].props.children} className="caps-btn">
         <Link link={file.url} target="_blank" download style={styles.link}>
           <Html2React html={LABEL} />
         </Link>

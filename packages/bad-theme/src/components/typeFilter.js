@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../config/imports";
@@ -39,9 +39,8 @@ const TypeFilter = ({
     );
   };
 
-  return (
-    <div>
-      <ServeTitle />
+  const ServeFilter = () => {
+    return (
       <div className="flex-row" style={{ flexWrap: "wrap" }}>
         <div
           className="shadow filter-action"
@@ -71,6 +70,18 @@ const TypeFilter = ({
           );
         })}
       </div>
+    );
+  };
+
+  return (
+    <div>
+      <ServeTitle />
+      {useMemo(
+        () => (
+          <ServeFilter />
+        ),
+        [typeFilter]
+      )}
     </div>
   );
 };

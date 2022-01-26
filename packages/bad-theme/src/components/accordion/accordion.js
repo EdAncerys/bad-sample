@@ -24,6 +24,8 @@ const AccordionComponent = ({
   const { disable_vertical_padding, accordion_item, preview } = block;
   const isActive = useRef(false);
 
+  if (!accordion_item) return null; // defensive programming
+
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
