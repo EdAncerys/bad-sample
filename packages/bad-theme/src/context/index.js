@@ -24,7 +24,7 @@ import { getFadAction } from "./auth/getFAD";
 import { updateProfileAction } from "./auth/updateProfile";
 import { updateAddressAction } from "./auth/updateAddress";
 import { sendFileToS3Action } from "./auth/saveFileToS3";
-import { getRSSFeedAction } from "./auth/getRSSFeed";
+import { getBJDFeedAction } from "./auth/rssFeed";
 
 export {
   AppProvider,
@@ -49,5 +49,5 @@ export {
   updateProfileAction,
   updateAddressAction,
   sendFileToS3Action,
-  getRSSFeedAction,
+  getBJDFeedAction,
 };

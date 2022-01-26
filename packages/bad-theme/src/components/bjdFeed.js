@@ -11,13 +11,13 @@ import SearchContainer from "./searchContainer";
 
 import CloseIcon from "@mui/icons-material/Close";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, getRSSFeedAction } from "../context";
+import { useAppDispatch, useAppState, getBJDFeedAction } from "../context";
 
-const RssFeed = ({ state, actions, libraries, block }) => {
+const bjdFeed = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { rssFeed, isFetching } = useAppState();
+  const { bjdFeed, isFetching } = useAppState();
 
   const [feedData, setFeedData] = useState(null);
 
@@ -43,7 +43,7 @@ const RssFeed = ({ state, actions, libraries, block }) => {
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
     const limit = post_limit || 8;
-    const result = await getRSSFeedAction({ state, dispatch });
+    const result = await getBJDFeedAction({ state, dispatch });
     setFeedData(result.slice(0, Number(limit))); // apply limit on posts
 
     return () => {
@@ -62,8 +62,8 @@ const RssFeed = ({ state, actions, libraries, block }) => {
 
   const handleLoadMoreFilter = () => {
     const limit = 8;
-    let POST_LIST = rssFeed; // add dermGroupe object to data array
-    if (loadMoreRef.current) POST_LIST = rssFeed.slice(0, Number(limit)); // apply limit on posts
+    let POST_LIST = bjdFeed; // add dermGroupe object to data array
+    if (loadMoreRef.current) POST_LIST = bjdFeed.slice(0, Number(limit)); // apply limit on posts
 
     setFeedData(POST_LIST);
     loadMoreRef.current = !loadMoreRef.current;
@@ -221,4 +221,4 @@ const styles = {
   },
 };
 
-export default connect(RssFeed);
+export default connect(bjdFeed);

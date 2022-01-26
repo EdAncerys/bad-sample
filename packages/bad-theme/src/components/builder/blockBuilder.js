@@ -43,7 +43,7 @@ import PilGuidelineSearch from "../pilGuidelineSearch";
 import SearchDermatologists from "../searchDermatologists";
 import DividerBlock from "../dividerBlock";
 import DermatologyGroup from "../dermatologyGroup";
-import RssFeed from "../rssFeed";
+import BJDFeed from "../bjdFeed";
 import Covid from "../covid";
 
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
@@ -88,7 +88,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
           return (
             <div key={key + 1}>
               <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-              <RssFeed key={key} block={block} />
+              <BJDFeed key={key} block={block} />
             </div>
           );
 

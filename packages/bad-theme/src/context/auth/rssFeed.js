@@ -1,7 +1,7 @@
 import { authenticateAppAction, setFetchAction } from "../index";
 
-export const getRSSFeedAction = async ({ state, dispatch }) => {
-  console.log("getRSSFeedAction triggered");
+export const getBJDFeedAction = async ({ state, dispatch }) => {
+  console.log("getBJDFeedAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
   const URL = state.auth.APP_HOST + `/rss/bjd?summary`;
@@ -17,10 +17,10 @@ export const getRSSFeedAction = async ({ state, dispatch }) => {
     const result = await data.json();
 
     if (result.success) {
-      const rssFeed = result.data;
+      const bjdFeed = result.data;
 
-      setRSSFeedAction({ dispatch, rssFeed });
-      return rssFeed;
+      setBJDFeedAction({ dispatch, bjdFeed });
+      return bjdFeed;
     }
   } catch (error) {
     console.log("error", error);
@@ -30,7 +30,7 @@ export const getRSSFeedAction = async ({ state, dispatch }) => {
 };
 
 // SET CONTEXT ---------------------------------------------------
-export const setRSSFeedAction = ({ dispatch, rssFeed }) => {
-  console.log("setRSSFeedAction triggered"); //debug
-  dispatch({ type: "SET_RSS_FEED_ACTION", payload: rssFeed });
+export const setBJDFeedAction = ({ dispatch, bjdFeed }) => {
+  console.log("setBJDFeedAction triggered"); //debug
+  dispatch({ type: "SET_BJD_FEED_ACTION", payload: bjdFeed });
 };
