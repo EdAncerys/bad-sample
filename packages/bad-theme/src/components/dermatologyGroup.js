@@ -8,7 +8,7 @@ import Loading from "./loading";
 import { colors } from "../config/imports";
 import BlockWrapper from "./blockWrapper";
 import SearchContainer from "./searchContainer";
-import TypeFilter from "./typeFilter";
+import TypeFilters from "./typeFilters";
 
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -96,20 +96,13 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
 
   const handleSearch = () => {
     const searchInput = searchFilterRef.current.value;
-    const typeInput = typeFilterRef.current;
     let data = Object.values(state.source.derm_groups_charity); // add dermGroup object to data array
+    if (typeFilterRef.current) data = dermGroup;
 
-    if (typeInput) {
-      data = data.filter((item) => {
-        let GROPE = Object.values(item.dermo_group_type);
-        if (GROPE) GROPE = GROPE.includes(typeInput);
-
-        return GROPE;
-      });
-    }
+    console.log(typeFilterRef.current);
 
     if (searchInput) {
-      data = data.filter((item) => {
+      data = dermGroup.filter((item) => {
         let TITLE = item.title.rendered;
         let CONTENT = item.content.rendered;
         if (TITLE)
@@ -125,7 +118,25 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
     setSearchFilter(searchInput);
   };
 
-  // SERVERS ---------------------------------------------
+  const handleTypeSearch = () => {
+    const typeInput = typeFilterRef.current;
+    let data = Object.values(state.source.derm_groups_charity); // add dermGroup object to data array
+    if (searchFilterRef.current.value) data = dermGroup;
+    console.log(searchFilterRef.current.value);
+
+    if (typeInput) {
+      data = data.filter((item) => {
+        let GROPE = Object.values(item.dermo_group_type);
+        if (GROPE) GROPE = GROPE.includes(typeInput);
+
+        return GROPE;
+      });
+    }
+
+    setDermGroup(data);
+  };
+
+  // SERVERS ----------------------------------------------------------------
   const ServeFilter = () => {
     if (!add_search_function) return null;
 
@@ -169,9 +180,9 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
             <div className="flex" style={{ margin: "0.5em 0" }}>
               <ServeSearchFilter />
             </div>
-            <TypeFilter
+            <TypeFilters
               filters={groupeType}
-              handleSearch={handleSearch}
+              handleSearch={handleTypeSearch}
               typeFilterRef={typeFilterRef}
               title="Search Groupe"
             />

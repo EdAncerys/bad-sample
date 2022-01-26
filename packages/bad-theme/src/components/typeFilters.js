@@ -1,9 +1,9 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../config/imports";
 
-const TypeFilter = ({
+const TypeFilters = ({
   state,
   actions,
   libraries,
@@ -11,21 +11,22 @@ const TypeFilter = ({
   typeFilterRef,
   title,
   handleSearch,
+  removeAllFilter,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!filters) return null;
 
-  const [typeFilter, setTypeFilter] = useState(null);
-
+  // HELPERS ----------------------------------------------------------------
   const handleSetTypeFilter = ({ id }) => {
-    setTypeFilter(id);
     typeFilterRef.current = id;
-
     handleSearch();
   };
 
+  // SERVERS ----------------------------------------------------------------
   const ServeTitle = () => {
+    if (!title) return null;
+
     return (
       <div
         className="flex primary-title"
@@ -34,7 +35,26 @@ const TypeFilter = ({
           alignItems: "center",
         }}
       >
-        {title || "Search"}
+        {title}
+      </div>
+    );
+  };
+
+  const ServeAllFilter = () => {
+    if (removeAllFilter) return null;
+
+    return (
+      <div
+        className="shadow filter-action"
+        onClick={() => handleSetTypeFilter({ id: null })}
+        style={{
+          backgroundColor: !typeFilterRef.current
+            ? colors.primary
+            : colors.white,
+          color: !typeFilterRef.current ? colors.white : colors.softBlack,
+        }}
+      >
+        <Html2React html={"All"} />
       </div>
     );
   };
@@ -42,16 +62,7 @@ const TypeFilter = ({
   const ServeFilter = () => {
     return (
       <div className="flex-row" style={{ flexWrap: "wrap" }}>
-        <div
-          className="shadow filter-action"
-          onClick={() => handleSetTypeFilter({ id: null })}
-          style={{
-            backgroundColor: !typeFilter ? colors.primary : colors.white,
-            color: !typeFilter ? colors.white : colors.softBlack,
-          }}
-        >
-          <Html2React html={"All"} />
-        </div>
+        <ServeAllFilter />
 
         {filters.map((type, key) => {
           return (
@@ -61,8 +72,13 @@ const TypeFilter = ({
               onClick={() => handleSetTypeFilter({ id: type.id })}
               style={{
                 backgroundColor:
-                  typeFilter === type.id ? colors.primary : colors.white,
-                color: typeFilter === type.id ? colors.white : colors.softBlack,
+                  typeFilterRef.current === type.id
+                    ? colors.primary
+                    : colors.white,
+                color:
+                  typeFilterRef.current === type.id
+                    ? colors.white
+                    : colors.softBlack,
               }}
             >
               <Html2React html={type.name} />
@@ -76,14 +92,9 @@ const TypeFilter = ({
   return (
     <div>
       <ServeTitle />
-      {useMemo(
-        () => (
-          <ServeFilter />
-        ),
-        [typeFilter]
-      )}
+      <ServeFilter />
     </div>
   );
 };
 
-export default connect(TypeFilter);
+export default connect(TypeFilters);

@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { connect, styled } from "frontity";
+import { connect } from "frontity";
 import Image from "@frontity/components/image";
-import { v4 as uuidv4 } from "uuid";
 
 import BlockWrapper from "./blockWrapper";
 import Loading from "./loading";
@@ -9,8 +8,8 @@ import Accordion from "./accordion/accordion";
 import { colors } from "../config/imports";
 import NiceLogo from "../img/placeholders/niceLogo.svg";
 import SearchContainer from "./searchContainer";
+import TypeFilters from "./typeFilters";
 
-import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 
 const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
@@ -19,17 +18,17 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
   if (!block) return <Loading />;
 
   const { disable_vertical_padding, background_colour } = block;
-  const mountedRef = useRef(true);
-  const searchFilterRef = useRef(null);
 
-  const data = state.source.get(state.router.link);
+  const searchFilterRef = useRef(null);
+  const currentSearchFilterRef = useRef(null);
+  const typeFilterRef = useRef(null);
+
   const [searchFilter, setSearchFilter] = useState(null);
   const [typeFilter, setTypeFilter] = useState(null);
+
   const [guidelinesList, setGuidelinesList] = useState(null);
   const [guidelinesType, setGuidelinesType] = useState(null);
-  // console.log("pageData ", data); // debug
 
-  const id = uuidv4();
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
@@ -55,43 +54,89 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     setGuidelinesList(GUIDELINES_LIST);
 
     return () => {
-      mountedRef.current = false; // clean up function
+      searchFilterRef.current = false; // clean up function
     };
   }, []);
   // DATA pre FETCH ----------------------------------------------------------------
   if (!guidelinesList) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
-  const handleSearchSubmit = () => {
-    const searchInput = searchFilterRef.current.value;
+  const handleSearch = () => {
+    const input = searchFilterRef.current.value || searchFilter;
+    currentSearchFilterRef.current = input;
+    let guidelinesList = Object.values(state.source.guidelines_standards);
 
-    if (!!searchInput) {
-      const INPUT = searchInput.toLowerCase();
-      const filter = guidelinesList.filter((item) => {
-        let TITLE = item.title.rendered;
-        let SUBTITLE = item.acf.subtitle;
-        if (TITLE) TITLE = TITLE.toLowerCase().includes(INPUT);
-        if (SUBTITLE) SUBTITLE = SUBTITLE.toLowerCase().includes(INPUT);
-
-        return TITLE || SUBTITLE;
+    if (typeFilterRef.current)
+      guidelinesList = guidelinesList.filter((item) => {
+        const list = item.guidelines_type;
+        if (list.includes(typeFilterRef.current)) return item;
       });
-      setSearchFilter(searchInput);
+
+    if (!!input) {
+      const INPUT = input.toLowerCase();
+      const filter = guidelinesList.filter((item) => {
+        let title = item.title.rendered;
+        let subtitle = item.acf.subtitle;
+        if (title) title = title.toLowerCase().includes(INPUT);
+        if (subtitle) subtitle = subtitle.toLowerCase().includes(INPUT);
+
+        return title || subtitle;
+      });
+      setSearchFilter(input);
       setGuidelinesList(filter);
     }
   };
 
-  const handleTypeFilterSearch = ({ typeId, typeName }) => {
-    if (typeId) {
-      // reset filter option
-      const guidelinesList = Object.values(state.source.guidelines_standards);
+  const handleTypeSearch = () => {
+    const input = typeFilterRef.current;
+    let name = guidelinesType.filter((item) => item.id === input)[0].name;
+    let guidelinesList = Object.values(state.source.guidelines_standards);
 
-      const filter = guidelinesList.filter((item) => {
-        const GUIDELINES_LIST = item.guidelines_type;
-        if (GUIDELINES_LIST.includes(typeId)) return item;
+    if (currentSearchFilterRef.current)
+      guidelinesList = guidelinesList.filter((item) => {
+        let title = item.title.rendered;
+        let subtitle = item.acf.subtitle;
+        if (title)
+          title = title.toLowerCase().includes(currentSearchFilterRef.current);
+        if (subtitle)
+          subtitle = subtitle
+            .toLowerCase()
+            .includes(currentSearchFilterRef.current);
+
+        return title || subtitle;
       });
 
-      setTypeFilter(typeName);
+    if (input) {
+      const filter = guidelinesList.filter((item) => {
+        const list = item.guidelines_type;
+        if (list.includes(input)) return item;
+      });
+
+      setTypeFilter(name);
       setGuidelinesList(filter);
+    }
+  };
+
+  const handleClearTypeFilter = () => {
+    setTypeFilter(null);
+    typeFilterRef.current = null;
+
+    if (!searchFilter) {
+      setGuidelinesList(Object.values(state.source.guidelines_standards));
+    } else {
+      handleSearch();
+    }
+  };
+
+  const handleClearSearchFilter = () => {
+    setSearchFilter(null);
+    searchFilterRef.current = null;
+    currentSearchFilterRef.current = null;
+
+    if (!typeFilter) {
+      setGuidelinesList(Object.values(state.source.guidelines_standards));
+    } else {
+      handleTypeSearch();
     }
   };
 
@@ -153,36 +198,12 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
     return (
       <div style={{ padding: `1em ${marginHorizontal}px` }}>
-        <div className="flex-row">
-          {guidelinesType.map((type, key) => {
-            return (
-              <div
-                key={key}
-                className="shadow"
-                style={{
-                  fontSize: 12,
-                  textTransform: "uppercase",
-                  color: colors.softBlack,
-                  backgroundColor: colors.white,
-                  fontWeight: "bold",
-                  alignItems: "center",
-                  padding: `2em 4em`,
-                  marginRight: `3em`,
-                  width: "fit-content",
-                  cursor: "pointer",
-                }}
-                onClick={() =>
-                  handleTypeFilterSearch({
-                    typeId: type.id,
-                    typeName: type.name,
-                  })
-                }
-              >
-                <Html2React html={type.name} />
-              </div>
-            );
-          })}
-        </div>
+        <TypeFilters
+          filters={guidelinesType}
+          handleSearch={handleTypeSearch}
+          typeFilterRef={typeFilterRef}
+          removeAllFilter
+        />
       </div>
     );
   };
@@ -194,15 +215,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
       return (
         <div className="shadow filter">
           <div>{searchFilter}</div>
-          <div
-            className="filter-icon"
-            onClick={() => {
-              setSearchFilter(null);
-              setGuidelinesList(
-                Object.values(state.source.guidelines_standards)
-              );
-            }}
-          >
+          <div className="filter-icon" onClick={handleClearSearchFilter}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -220,15 +233,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
       return (
         <div className="shadow filter" style={{ textTransform: "uppercase" }}>
           <div>{typeFilter}</div>
-          <div
-            className="filter-icon"
-            onClick={() => {
-              setTypeFilter(null);
-              setGuidelinesList(
-                Object.values(state.source.guidelines_standards)
-              );
-            }}
-          >
+          <div className="filter-icon" onClick={handleClearTypeFilter}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -251,7 +256,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
               title="Search for Guidelines"
               width="70%"
               searchFilterRef={searchFilterRef}
-              handleSearch={handleSearchSubmit}
+              handleSearch={handleSearch}
             />
 
             <div className="flex" style={{ padding: "0.5em 0 1em" }}>

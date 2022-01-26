@@ -79,7 +79,7 @@ const AccordionComponent = ({
         <div
           className="accordion-item"
           id={uniqueId}
-          classNameName="shadow"
+          className="shadow"
           style={{ padding: `0.5em 1em` }}
         >
           <AccordionHeader

@@ -233,7 +233,7 @@ const AccordionHeader = ({
         >
           <div
             className="flex"
-            style={{ margin: 0, padding: `0.5em 1em`, alignItems: "center" }}
+            style={{ margin: 0, padding: `0.5em 1.25em`, alignItems: "center" }}
             data-mdb-toggle="collapse"
           >
             <ServeTitle />
