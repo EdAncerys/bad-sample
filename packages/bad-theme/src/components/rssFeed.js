@@ -11,19 +11,26 @@ import SearchContainer from "./searchContainer";
 
 import CloseIcon from "@mui/icons-material/Close";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, getBJDFeedAction } from "../context";
+import {
+  useAppDispatch,
+  useAppState,
+  getBJDFeedAction,
+  getCEDFeedAction,
+  getSHDFeedAction,
+} from "../context";
 
-const bjdFeed = ({ state, actions, libraries, block }) => {
+const RSSFeed = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { bjdFeed, isFetching } = useAppState();
+  const { bjdFeed, cedFeed, shdFeed, isFetching } = useAppState();
 
   const [feedData, setFeedData] = useState(null);
 
   if (!block) return <Loading />;
 
   const {
+    acf_fc_layout,
     colour,
     background_colour,
     post_limit,
@@ -43,7 +50,15 @@ const bjdFeed = ({ state, actions, libraries, block }) => {
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
     const limit = post_limit || 8;
-    const result = await getBJDFeedAction({ state, dispatch });
+    let result = null;
+
+    if (acf_fc_layout === "bjd_feed")
+      result = await getBJDFeedAction({ state, dispatch });
+    if (acf_fc_layout === "ced_feed")
+      result = await getCEDFeedAction({ state, dispatch });
+    if (acf_fc_layout === "shd_feed")
+      result = await getSHDFeedAction({ state, dispatch });
+
     setFeedData(result.slice(0, Number(limit))); // apply limit on posts
 
     return () => {
@@ -62,8 +77,12 @@ const bjdFeed = ({ state, actions, libraries, block }) => {
 
   const handleLoadMoreFilter = () => {
     const limit = 8;
-    let POST_LIST = bjdFeed; // add dermGroupe object to data array
-    if (loadMoreRef.current) POST_LIST = bjdFeed.slice(0, Number(limit)); // apply limit on posts
+    let POST_LIST = null; // add dermGroupe object to data array
+    if (acf_fc_layout === "bjd_feed") POST_LIST = bjdFeed;
+    if (acf_fc_layout === "ced_feed") POST_LIST = cedFeed;
+    if (acf_fc_layout === "shd_feed") POST_LIST = shdFeed;
+
+    if (loadMoreRef.current) POST_LIST = POST_LIST.slice(0, Number(limit)); // apply limit on posts
 
     setFeedData(POST_LIST);
     loadMoreRef.current = !loadMoreRef.current;
@@ -221,4 +240,4 @@ const styles = {
   },
 };
 
-export default connect(bjdFeed);
+export default connect(RSSFeed);

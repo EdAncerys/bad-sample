@@ -43,7 +43,7 @@ import PilGuidelineSearch from "../pilGuidelineSearch";
 import SearchDermatologists from "../searchDermatologists";
 import DividerBlock from "../dividerBlock";
 import DermatologyGroup from "../dermatologyGroup";
-import BJDFeed from "../bjdFeed";
+import RSSFeed from "../rssFeed";
 import Covid from "../covid";
 
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
@@ -84,11 +84,27 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
         const { acf_fc_layout } = block;
         console.log("CONTENT BLOCK", block); // debug
 
-        if (acf_fc_layout === "rss_feed")
+        if (acf_fc_layout === "bjd_feed")
           return (
             <div key={key + 1}>
               <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-              <BJDFeed key={key} block={block} />
+              <RSSFeed key={key} block={block} />
+            </div>
+          );
+
+        if (acf_fc_layout === "ced_feed")
+          return (
+            <div key={key + 1}>
+              <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+              <RSSFeed key={key} block={block} />
+            </div>
+          );
+
+        if (acf_fc_layout === "shd_feed")
+          return (
+            <div key={key + 1}>
+              <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+              <RSSFeed key={key} block={block} />
             </div>
           );
 

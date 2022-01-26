@@ -8,6 +8,8 @@ export const initialState = {
   tweets: null,
   fad: null,
   bjdFeed: null,
+  cedFeed: null,
+  shdFeed: null,
 
   loginModalAction: false,
   createAccountAction: false,
@@ -36,6 +38,10 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, fad: action.payload };
     case "SET_BJD_FEED_ACTION":
       return { ...state, bjdFeed: action.payload };
+    case "SET_CED_FEED_ACTION":
+      return { ...state, cedFeed: action.payload };
+    case "SET_SHD_FEED_ACTION":
+      return { ...state, shdFeed: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
