@@ -115,7 +115,7 @@ const AccordionHeader = ({
     if (!gsTitle) return null;
 
     return (
-      <div className="flex">
+      <div className="flex" style={{ alignItems: "center" }}>
         <div
           className="primary-title"
           style={{ fontSize: 20, alignItems: "center" }}
