@@ -8,9 +8,9 @@ import Loading from "./loading";
 import { colors } from "../config/imports";
 import BlockWrapper from "./blockWrapper";
 import SearchContainer from "./searchContainer";
+import TypeFilter from "./typeFilter";
 
 import CloseIcon from "@mui/icons-material/Close";
-import { ContrastOutlined } from "@mui/icons-material";
 
 const DermatologyGroup = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -30,7 +30,6 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
   const [groupeType, setGroupeType] = useState(null);
 
   const [searchFilter, setSearchFilter] = useState(null);
-  const [typeFilter, setTypeFilter] = useState(null);
 
   const searchFilterRef = useRef(null);
   const typeFilterRef = useRef(null);
@@ -66,7 +65,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
       searchFilterRef.current = false; // clean up function
     };
   }, []);
-  // DATA pre FETCH ----------------------------------------------------------------
+  // DATA pre FETCH ---------------------------------------------------------
   if (!dermGroup || !groupeType) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
@@ -77,19 +76,22 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
     handleSearch();
   };
 
-  const handleSetTypeFilter = ({ id }) => {
-    setTypeFilter(id);
-    typeFilterRef.current = id;
-
-    handleSearch();
-  };
-
   const handleLoadMoreFilter = () => {
     const limit = 8;
+    if (dermGroup.length < 8) return;
     let GROUPE_DATA = dermGroup;
-    if (loadMoreRef.current) GROUPE_DATA = GROUPE_DATA.slice(0, Number(limit)); // apply limit on posts
+    if (!searchFilterRef.current.value && !typeFilterRef.current)
+      GROUPE_DATA = Object.values(state.source.derm_groups_charity);
 
-    setDermGroup(GROUPE_DATA);
+    console.log(searchFilterRef.current.value);
+    console.log(typeFilterRef.current);
+    console.log(GROUPE_DATA.length);
+    if (loadMoreRef.current) {
+      setDermGroup(GROUPE_DATA);
+      return;
+    }
+
+    handleSearch();
     loadMoreRef.current = !loadMoreRef.current;
   };
 
@@ -149,60 +151,6 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
       );
     };
 
-    const ServeTypeFilters = () => {
-      if (!groupeType || type_filter !== "All Levels") return null;
-
-      const ServeTitle = () => {
-        return (
-          <div
-            className="flex primary-title"
-            style={{
-              fontSize: 30,
-              alignItems: "center",
-            }}
-          >
-            Search Group
-          </div>
-        );
-      };
-
-      return (
-        <div>
-          <ServeTitle />
-          <div className="flex-row" style={{ flexWrap: "wrap" }}>
-            <div
-              className="shadow filter-action"
-              onClick={() => handleSetTypeFilter({ id: null })}
-              style={{
-                backgroundColor: !typeFilter ? colors.primary : colors.white,
-                color: !typeFilter ? colors.white : colors.softBlack,
-              }}
-            >
-              <Html2React html={"All"} />
-            </div>
-
-            {groupeType.map((type, key) => {
-              const idMatching = typeFilter === type.id;
-
-              return (
-                <div
-                  key={key}
-                  className="shadow filter-action"
-                  onClick={() => handleSetTypeFilter({ id: type.id })}
-                  style={{
-                    backgroundColor: idMatching ? colors.primary : colors.white,
-                    color: idMatching ? colors.white : colors.softBlack,
-                  }}
-                >
-                  <Html2React html={type.name} />
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      );
-    };
-
     return (
       <div
         style={{
@@ -222,7 +170,12 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
             <div className="flex" style={{ margin: "0.5em 0" }}>
               <ServeSearchFilter />
             </div>
-            <ServeTypeFilters />
+            <TypeFilter
+              filters={groupeType}
+              handleSearch={handleSearch}
+              typeFilterRef={typeFilterRef}
+              title="Search Groupe"
+            />
           </div>
         </BlockWrapper>
       </div>
