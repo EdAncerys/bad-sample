@@ -122,7 +122,7 @@ const AccordionBody = ({
           className="primary-title"
           style={{
             fontSize: 20,
-            padding: `2em 0 1em`,
+            padding: `2em 0 0`,
           }}
         >
           Downloads:

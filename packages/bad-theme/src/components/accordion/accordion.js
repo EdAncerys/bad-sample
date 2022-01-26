@@ -75,34 +75,6 @@ const AccordionComponent = ({
     };
 
     return (
-      // <Accordion style={{ position: "relative" }}>
-      //   <ActionPlaceholder isFetching={fetching} />
-      //   <Accordion.Item
-      //     eventKey={uniqueId}
-      //     id={uniqueId}
-      //     classNameName="shadow"
-      //     style={{ padding: `0.5em 1em` }}
-      //   >
-      //     <AccordionHeader
-      //       block={block}
-      //       guidelines={guidelines}
-      //       leadershipBlock={leadershipBlock}
-      //       handleAccordionToggle={() => {
-      //         isActive.current = !isActive.current;
-      //         handleAccordionToggle();
-      //       }}
-      //       uniqueId={uniqueId}
-      //     />
-      //     <AccordionBody
-      //       block={block}
-      //       guidelines={guidelines}
-      //       leadershipBlock={leadershipBlock}
-      //       uniqueId={uniqueId}
-      //       setFetching={setFetching}
-      //     />
-      //   </Accordion.Item>
-      // </Accordion>
-
       <div
         className="accordion shadow"
         style={{ position: "relative", margin: `${marginVertical}px 0` }}

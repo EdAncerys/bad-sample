@@ -8,6 +8,7 @@ import Loading from "./loading";
 import Accordion from "./accordion/accordion";
 import { colors } from "../config/imports";
 import NiceLogo from "../img/placeholders/niceLogo.svg";
+import SearchContainer from "./searchContainer";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
@@ -19,6 +20,8 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
   const { disable_vertical_padding, background_colour } = block;
   const mountedRef = useRef(true);
+  const searchFilterRef = useRef(null);
+
   const data = state.source.get(state.router.link);
   const [searchFilter, setSearchFilter] = useState(null);
   const [typeFilter, setTypeFilter] = useState(null);
@@ -60,7 +63,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handleSearchSubmit = () => {
-    const searchInput = document.querySelector(`#searchInput${id}`).value;
+    const searchInput = searchFilterRef.current.value;
 
     if (!!searchInput) {
       const INPUT = searchInput.toLowerCase();
@@ -149,7 +152,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     if (!guidelinesType) return null;
 
     return (
-      <div style={{ padding: `0 ${marginHorizontal}px` }}>
+      <div style={{ padding: `1em ${marginHorizontal}px` }}>
         <div className="flex-row">
           {guidelinesType.map((type, key) => {
             return (
@@ -185,17 +188,6 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
   };
 
   const ServeFilter = () => {
-    const ServeTitle = () => {
-      return (
-        <div
-          className="flex primary-title"
-          style={{ fontSize: 36, alignItems: "center" }}
-        >
-          Search for Guidelines
-        </div>
-      );
-    };
-
     const ServeSearchFilter = () => {
       if (!searchFilter) return null;
 
@@ -249,70 +241,18 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     };
 
     return (
-      <div
-        style={{
-          backgroundColor: colors.silverFillTwo,
-          margin: `${state.theme.marginVertical}px 0`,
-        }}
-      >
+      <div style={{ backgroundColor: colors.silverFillTwo }}>
         <BlockWrapper>
           <div
             className="flex-col"
-            style={{
-              padding: `${
-                state.theme.marginVertical * 1.5
-              }px ${marginHorizontal}px ${state.theme.marginVertical}px`,
-            }}
+            style={{ padding: `0 ${marginHorizontal}px` }}
           >
-            <ServeTitle />
-
-            <div className="flex-row" style={{ width: "60%" }}>
-              <div
-                className="flex"
-                style={{
-                  flex: 1,
-                  marginRight: `2em`,
-                  padding: `0.75em 0`,
-                  position: "relative",
-                }}
-              >
-                <input
-                  id={`searchInput${id}`}
-                  type="text"
-                  className="form-control"
-                  placeholder="Find Guidelines"
-                  style={styles.input}
-                />
-                <span
-                  className="input-group-text toggle-icon-color"
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    height: 40,
-                    border: "none",
-                    background: "transparent",
-                    alignItems: "center",
-                    color: colors.darkSilver,
-                  }}
-                >
-                  <SearchIcon />
-                </span>
-              </div>
-              <div style={{ display: "grid", alignItems: "center" }}>
-                <button
-                  type="submit"
-                  className="btn"
-                  style={{
-                    backgroundColor: colors.primary,
-                    color: colors.white,
-                    padding: `0.5em`,
-                  }}
-                  onClick={handleSearchSubmit}
-                >
-                  Search
-                </button>
-              </div>
-            </div>
+            <SearchContainer
+              title="Search for Guidelines"
+              width="70%"
+              searchFilterRef={searchFilterRef}
+              handleSearch={handleSearchSubmit}
+            />
 
             <div className="flex" style={{ padding: "0.5em 0 1em" }}>
               <ServeSearchFilter />
