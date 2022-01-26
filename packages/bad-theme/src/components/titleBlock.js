@@ -39,11 +39,9 @@ const TitleBlock = ({
   const ServeActions = () => {
     if (!link) return null;
     let LABEL = "More";
-    if (label) LABEL = label;
 
     return (
       <div
-        value={parse(LABEL)[0].props.children}
         className="caps-btn"
         onClick={() => setGoToAction({ path: link.url, actions })}
       >

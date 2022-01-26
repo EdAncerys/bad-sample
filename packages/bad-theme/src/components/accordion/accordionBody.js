@@ -208,7 +208,6 @@ const AccordionBody = ({
             />
           </div>
           <div
-            value={parse(LABEL)}
             className="caps-btn"
             onClick={() => setGoToAction({ path: link.url, actions })}
           >

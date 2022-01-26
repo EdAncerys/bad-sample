@@ -49,7 +49,8 @@
   transition: all 0.3s ease-in-out;
 }
 .caps-btn::before {
-  content: attr(value);
+  /* content: attr(value); */
+  content: "";
   position: absolute;
   top: 0;
   bottom: 0;
@@ -67,6 +68,9 @@
   -moz-background-clip: text;
   -webkit-text-fill-color: transparent;
   -moz-text-fill-color: transparent;
+}
+.caps-btn:hover {
+  color: #3882cd;
 }
 .caps-btn:hover::before {
   width: 100%;
@@ -108,7 +112,7 @@
 }
 .title-animation::before,
 .title-link-animation::before {
-  content: attr(value);
+  content: "";
   position: absolute;
   top: 0;
   bottom: 0;
@@ -133,9 +137,8 @@
   padding-bottom: 0;
 }
 
-.title-animation:hover::before {
-  width: 100%;
-  height: 100%;
+.title-animation:hover {
+  color: #3882cd;
 }
 .title-link-animation:hover::before {
   width: 100%;
