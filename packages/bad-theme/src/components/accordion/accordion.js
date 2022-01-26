@@ -27,7 +27,7 @@ const AccordionComponent = ({
   if (!accordion_item) return null; // defensive programming
 
   const marginHorizontal = state.theme.marginHorizontal;
-  let marginVertical = state.theme.marginVertical;
+  let marginVertical = state.theme.marginVertical / 4;
   if (disable_vertical_padding) marginVertical = 0;
 
   // SERVERS ---------------------------------------------
@@ -77,10 +77,7 @@ const AccordionComponent = ({
           eventKey={uniqueId}
           id={uniqueId}
           className="shadow"
-          style={{
-            padding: `0.5em 1em`,
-            margin: `1em 0`,
-          }}
+          style={{ padding: `0.5em 1em` }}
         >
           <AccordionHeader
             block={block}
