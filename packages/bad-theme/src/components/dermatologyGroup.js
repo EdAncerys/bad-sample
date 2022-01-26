@@ -32,6 +32,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
   const [searchFilter, setSearchFilter] = useState(null);
 
   const searchFilterRef = useRef(null);
+  const currentSearchFilterRef = useRef(null);
   const typeFilterRef = useRef(null);
   const loadMoreRef = useRef(null);
 
@@ -69,13 +70,6 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
   if (!dermGroup || !groupeType) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
-  const handleClearFilter = ({ clearInput, clearType }) => {
-    if (clearInput) searchFilterRef.current.value = "";
-    if (clearType) typeFilterRef.current = null;
-
-    handleSearch();
-  };
-
   const handleLoadMoreFilter = () => {
     if (dermGroup.length < 8) return;
     let GROUPE_DATA = dermGroup;
@@ -95,45 +89,81 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
   };
 
   const handleSearch = () => {
-    const searchInput = searchFilterRef.current.value;
-    let data = Object.values(state.source.derm_groups_charity); // add dermGroup object to data array
-    if (typeFilterRef.current) data = dermGroup;
+    const input = searchFilterRef.current.value.toLowerCase() || searchFilter;
+    currentSearchFilterRef.current = input;
+    let data = Object.values(state.source.derm_groups_charity);
 
-    console.log(typeFilterRef.current);
+    if (typeFilterRef.current) {
+      data = data.filter((item) =>
+        item.dermo_group_type.includes(typeFilterRef.current)
+      );
+    }
 
-    if (searchInput) {
-      data = dermGroup.filter((item) => {
-        let TITLE = item.title.rendered;
-        let CONTENT = item.content.rendered;
-        if (TITLE)
-          TITLE = TITLE.toLowerCase().includes(searchInput.toLowerCase());
-        if (CONTENT)
-          CONTENT = CONTENT.toLowerCase().includes(searchInput.toLowerCase());
+    if (!!input) {
+      data = data.filter((item) => {
+        let title = item.title.rendered;
+        let content = item.content.rendered;
 
-        return TITLE || CONTENT;
+        if (title) title = title.toLowerCase().includes(input.toLowerCase());
+        if (content)
+          content = content.toLowerCase().includes(input.toLowerCase());
+
+        return title || content;
       });
     }
 
     setDermGroup(data);
-    setSearchFilter(searchInput);
+    setSearchFilter(input);
   };
 
   const handleTypeSearch = () => {
-    const typeInput = typeFilterRef.current;
+    const input = typeFilterRef.current;
     let data = Object.values(state.source.derm_groups_charity); // add dermGroup object to data array
-    if (searchFilterRef.current.value) data = dermGroup;
-    console.log(searchFilterRef.current.value);
 
-    if (typeInput) {
+    if (currentSearchFilterRef.current)
       data = data.filter((item) => {
-        let GROPE = Object.values(item.dermo_group_type);
-        if (GROPE) GROPE = GROPE.includes(typeInput);
+        let title = item.title.rendered;
+        let content = item.content.rendered;
+        if (title)
+          title = title.toLowerCase().includes(currentSearchFilterRef.current);
+        if (content)
+          content = content
+            .toLowerCase()
+            .includes(currentSearchFilterRef.current);
 
-        return GROPE;
+        return title || content;
       });
-    }
 
-    setDermGroup(data);
+    if (input) {
+      data = data.filter((item) => {
+        const list = item.dermo_group_type;
+        if (list.includes(input)) return item;
+      });
+
+      setDermGroup(data);
+    }
+  };
+
+  const handleClearSearchFilter = () => {
+    setSearchFilter(null);
+    searchFilterRef.current = null;
+    currentSearchFilterRef.current = null;
+
+    if (!typeFilterRef.current) {
+      setDermGroup(Object.values(state.source.derm_groups_charity));
+    } else {
+      handleTypeSearch();
+    }
+  };
+
+  const handleClearTypeFilter = () => {
+    typeFilterRef.current = null;
+
+    if (!currentSearchFilterRef.current) {
+      setDermGroup(Object.values(state.source.derm_groups_charity));
+    } else {
+      handleSearch();
+    }
   };
 
   // SERVERS ----------------------------------------------------------------
@@ -146,10 +176,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
       return (
         <div className="shadow filter">
           <div>{searchFilter}</div>
-          <div
-            className="filter-icon"
-            onClick={() => handleClearFilter({ clearInput: true })}
-          >
+          <div className="filter-icon" onClick={handleClearSearchFilter}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -184,6 +211,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
               filters={groupeType}
               handleSearch={handleTypeSearch}
               typeFilterRef={typeFilterRef}
+              handleClearTypeFilter={handleClearTypeFilter}
               title="Search Groupe"
             />
           </div>

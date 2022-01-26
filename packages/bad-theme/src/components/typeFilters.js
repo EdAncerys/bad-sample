@@ -11,7 +11,7 @@ const TypeFilters = ({
   typeFilterRef,
   title,
   handleSearch,
-  removeAllFilter,
+  handleClearTypeFilter,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -41,17 +41,17 @@ const TypeFilters = ({
   };
 
   const ServeAllFilter = () => {
-    if (removeAllFilter) return null;
+    if (!handleClearTypeFilter) return null;
 
     return (
       <div
         className="shadow filter-action"
-        onClick={() => handleSetTypeFilter({ id: null })}
+        onClick={handleClearTypeFilter}
         style={{
-          backgroundColor: !typeFilterRef.current
-            ? colors.primary
-            : colors.white,
-          color: !typeFilterRef.current ? colors.white : colors.softBlack,
+          backgroundColor:
+            typeFilterRef.current === null ? colors.primary : colors.white,
+          color:
+            typeFilterRef.current === null ? colors.white : colors.softBlack,
         }}
       >
         <Html2React html={"All"} />

@@ -89,7 +89,8 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
   const handleTypeSearch = () => {
     const input = typeFilterRef.current;
-    let name = guidelinesType.filter((item) => item.id === input)[0].name;
+    let name = guidelinesType.filter((item) => item.id === input)[0];
+    if (name) name = name.name;
     let guidelinesList = Object.values(state.source.guidelines_standards);
 
     if (currentSearchFilterRef.current)
@@ -202,7 +203,6 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
           filters={guidelinesType}
           handleSearch={handleTypeSearch}
           typeFilterRef={typeFilterRef}
-          removeAllFilter
         />
       </div>
     );
