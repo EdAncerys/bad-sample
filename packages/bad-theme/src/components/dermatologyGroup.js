@@ -70,22 +70,22 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
   if (!dermGroup || !groupeType) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
-  const handleLoadMoreFilter = () => {
+  const handleLoadMoreFilter = async () => {
     if (dermGroup.length < 8) return;
-    let GROUPE_DATA = dermGroup;
-    if (!searchFilterRef.current.value && !typeFilterRef.current)
-      GROUPE_DATA = Object.values(state.source.derm_groups_charity);
 
-    console.log(searchFilterRef.current.value);
-    console.log(typeFilterRef.current);
-    console.log(GROUPE_DATA.length);
-    if (loadMoreRef.current) {
-      setDermGroup(GROUPE_DATA);
-      return;
+    if (!loadMoreRef.current) {
+      let dermData = Object.values(state.source.derm_groups_charity);
+      if (!!currentSearchFilterRef.current || !!typeFilterRef.current)
+        dermData = dermGroup;
+
+      loadMoreRef.current = dermData;
+      const lessArray = dermData.slice(0, Number(8));
+      setDermGroup(lessArray);
+    } else {
+      setDermGroup(loadMoreRef.current);
+      loadMoreRef.current = null;
     }
-
-    handleSearch();
-    loadMoreRef.current = !loadMoreRef.current;
+    console.log(loadMoreRef.current);
   };
 
   const handleSearch = () => {

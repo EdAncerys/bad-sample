@@ -13,6 +13,7 @@ const SearchContainer = ({
   width,
   searchFilterRef,
   handleSearch,
+  padding,
 }) => {
   const ctaHeight = 45;
   const WIDTH = width || "100%";
@@ -114,7 +115,7 @@ const SearchContainer = ({
   };
 
   return (
-    <div style={{ padding: `1em 0`, width: WIDTH }}>
+    <div style={{ padding: padding || `1em 0`, width: WIDTH }}>
       <div className="flex-col">
         <ServeTitle />
         <ServeSearchContainer />

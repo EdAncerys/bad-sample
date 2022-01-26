@@ -8,15 +8,18 @@ import { setGoToAction } from "../context";
 
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
+import SearchContainer from "./searchContainer";
 
 const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { disable_vertical_padding } = block;
 
-  const mountedRef = useRef(true)
+  const searchFilterRef = useRef(true);
   const ctaHeight = 45;
   const BANNER_HEIGHT = state.theme.bannerHeight;
+
+  const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 
@@ -41,7 +44,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
     setIsReady(true);
 
     return () => {
-      mountedRef.current = false;   // clean up function
+      searchFilterRef.current = false; // clean up function
     };
   }, []);
 
@@ -160,52 +163,17 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div style={{ padding: `${marginVertical}px 0` }}>
-      <div
-        className="search-input shadow"
-        style={{
-          position: "relative",
-          display: "grid",
-          alignItems: "center",
-          height: BANNER_HEIGHT / 2,
-          width: "100%",
-          backgroundColor: colors.white,
-        }}
-      >
-        <div
-          className="flex-col"
-          style={{
-            position: "relative",
-            margin: `2em`,
-          }}
-        >
-          <input
-            id={`pilSearch${uniqueId}`}
-            onChange={handleInputSearch}
-            type="text"
-            className="form-control"
-            placeholder="Find An Event"
-            style={{ ...styles.input, height: ctaHeight }}
-          />
-          <div
-            className="input-group-text toggle-icon-color"
-            style={{
-              position: "absolute",
-              right: 0,
-              height: ctaHeight,
-              border: "none",
-              background: "transparent",
-              alignItems: "center",
-              color: colors.darkSilver,
-              cursor: "pointer",
-            }}
-          >
-            <ServeIcon />
-          </div>
-          <ServeDropDown />
-        </div>
+    <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
+      <div className="shadow">
+        <SearchContainer
+          title="Search for Dermatology Groupe & Charities"
+          width="70%"
+          searchFilterRef={searchFilterRef}
+          // handleSearch={handleSearch}
+          padding="0 0 2em 2em"
+        />
+        <ServeFooter />
       </div>
-      <ServeFooter />
     </div>
   );
 };
