@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
@@ -21,6 +21,8 @@ const AccordionHeader = ({
 
   const { title, body, logo, preview, guidelines_type, subtitle } = block;
   const LOGO_HEIGHT = 45;
+
+  const isActive = useRef(false);
 
   // Guidelines & Standards --------------------------------
   let gsTitle = null;
@@ -222,7 +224,13 @@ const AccordionHeader = ({
   return (
     <div style={{ position: "relative" }}>
       <div className="accordion-header">
-        <div className="flex-col" onClick={handleAccordionToggle}>
+        <div
+          className="flex-col"
+          onClick={() => {
+            handleAccordionToggle({ isActive: isActive.current });
+            isActive.current = !isActive.current; // toggle accordion state tracking
+          }}
+        >
           <div
             className="flex"
             style={{ margin: 0, padding: `0.5em 1em`, alignItems: "center" }}

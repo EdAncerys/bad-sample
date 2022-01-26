@@ -77,7 +77,6 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
   };
 
   const handleLoadMoreFilter = () => {
-    const limit = 8;
     if (dermGroup.length < 8) return;
     let GROUPE_DATA = dermGroup;
     if (!searchFilterRef.current.value && !typeFilterRef.current)

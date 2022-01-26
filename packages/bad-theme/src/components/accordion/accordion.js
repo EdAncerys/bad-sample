@@ -21,7 +21,6 @@ const AccordionComponent = ({
   if (!block) return <Loading />;
 
   const { disable_vertical_padding, accordion_item, preview } = block;
-  const isActive = useRef(false);
 
   if (!accordion_item) return null; // defensive programming
 
@@ -42,7 +41,7 @@ const AccordionComponent = ({
     if (!uniqueId) return <Loading />;
 
     // HANDLERS ----------------------------------------------------
-    const handleAccordionToggle = () => {
+    const handleAccordionToggle = ({ isActive }) => {
       const addIcon = document.querySelector(`#add-icon-${uniqueId}`);
       const removeIcon = document.querySelector(`#remove-icon-${uniqueId}`);
       const preview = document.querySelector(`#preview-id-${uniqueId}`);
@@ -50,8 +49,7 @@ const AccordionComponent = ({
         `#accordion-body-${uniqueId}`
       );
 
-      console.log(addIcon);
-      if (!isActive.current) {
+      if (!isActive) {
         // apply actions if accordion !isActive
         accordionBody.classList.add("show");
         if (preview) {
@@ -61,7 +59,7 @@ const AccordionComponent = ({
         removeIcon.classList.remove("d-none");
       }
 
-      if (isActive.current) {
+      if (isActive) {
         // apply actions if accordion isActive
         accordionBody.classList.remove("show");
         if (preview) {
@@ -70,8 +68,6 @@ const AccordionComponent = ({
         addIcon.classList.remove("d-none");
         removeIcon.classList.add("d-none");
       }
-
-      isActive.current = !isActive.current; // toggle accordion state tracking
     };
 
     return (
@@ -82,7 +78,6 @@ const AccordionComponent = ({
         <ActionPlaceholder isFetching={fetching} />
         <div
           className="accordion-item"
-          eventKey={uniqueId}
           id={uniqueId}
           classNameName="shadow"
           style={{ padding: `0.5em 1em` }}
