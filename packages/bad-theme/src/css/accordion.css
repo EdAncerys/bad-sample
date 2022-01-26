@@ -2,6 +2,13 @@
 .accordion-button::after {
   display: none;
 }
+.accordion {
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 5px;
+}
+.accordion-item {
+  border: none !important;
+}
 .accordion-button:not(.collapsed)::after {
   display: none;
 }
@@ -18,11 +25,12 @@
 }
 .accordion-header {
   margin: 0;
+  cursor: pointer;
 }
 .popup {
   position: relative;
   color: #1f335e;
 }
-.border-top-show {
+.accordion-body {
   border-top: 1px solid #a2a2a2 !important;
 }

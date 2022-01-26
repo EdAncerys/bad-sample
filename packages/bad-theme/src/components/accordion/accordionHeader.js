@@ -5,7 +5,6 @@ import Image from "@frontity/components/image";
 import NiceLogo from "../../img/placeholders/niceLogo.svg";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import Accordion from "react-bootstrap/Accordion";
 import { colors } from "../../config/imports";
 
 const AccordionHeader = ({
@@ -189,10 +188,10 @@ const AccordionHeader = ({
     return (
       <div>
         <div className="flex">
-          <div id={`add-id-${uniqueId}`}>
+          <div id={`add-icon-${uniqueId}`}>
             <AddIcon style={{ fontSize: 48, fill: colors.softBlack }} />
           </div>
-          <div className="d-none" id={`remove-id-${uniqueId}`}>
+          <div className="d-none" id={`remove-icon-${uniqueId}`}>
             <RemoveIcon style={{ fontSize: 48, fill: colors.softBlack }} />
           </div>
         </div>
@@ -222,11 +221,11 @@ const AccordionHeader = ({
 
   return (
     <div style={{ position: "relative" }}>
-      <Accordion.Header>
+      <div className="accordion-header">
         <div className="flex-col" onClick={handleAccordionToggle}>
           <div
             className="flex"
-            style={{ margin: 0, padding: `0.5em 0`, alignItems: "center" }}
+            style={{ margin: 0, padding: `0.5em 1em`, alignItems: "center" }}
             data-mdb-toggle="collapse"
           >
             <ServeTitle />
@@ -238,7 +237,7 @@ const AccordionHeader = ({
             <ServeIcon />
           </div>
         </div>
-      </Accordion.Header>
+      </div>
       <ServePreview />
     </div>
   );

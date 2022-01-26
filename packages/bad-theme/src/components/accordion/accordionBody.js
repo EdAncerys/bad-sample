@@ -3,7 +3,6 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import parse from "html-react-parser";
 
-import Accordion from "react-bootstrap/Accordion";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import LINK from "../../img/svg/badLink.svg";
 
@@ -492,27 +491,32 @@ const AccordionBody = ({
   if (!gsDocument_uploads && !downloads && !link) COLUMNS = `1fr`;
 
   return (
-    <Accordion.Body
-      className={`accordion-${uniqueId}`}
-      style={{ margin: `0 1.25em`, padding: `1em 0` }}
+    <div
+      id={`accordion-body-${uniqueId}`}
+      className="accordion-collapse collapse"
     >
-      <ServeBody />
-      <ServeLTBody />
+      <div
+        className="accordion-body"
+        style={{ margin: `0 1.25em`, padding: `1em 0` }}
+      >
+        <ServeBody />
+        <ServeLTBody />
 
-      <ServeLTTeam />
-      <ServeGSSubTitle />
-      <ServeGSLink />
-      <div style={{ display: "grid", gridTemplateColumns: COLUMNS, gap: 20 }}>
-        <div className="flex-col">
-          <ServeDownloads />
-          <ServeGoToLink />
-        </div>
-        <div className="flex-col">
-          <ServeGoToButton />
-          <ServeFileSubmit />
+        <ServeLTTeam />
+        <ServeGSSubTitle />
+        <ServeGSLink />
+        <div style={{ display: "grid", gridTemplateColumns: COLUMNS, gap: 20 }}>
+          <div className="flex-col">
+            <ServeDownloads />
+            <ServeGoToLink />
+          </div>
+          <div className="flex-col">
+            <ServeGoToButton />
+            <ServeFileSubmit />
+          </div>
         </div>
       </div>
-    </Accordion.Body>
+    </div>
   );
 };
 

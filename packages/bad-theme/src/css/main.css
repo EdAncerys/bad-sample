@@ -49,7 +49,6 @@ body {
 .primary-title {
   font-family: Roboto, sans-serif;
   font-weight: bold; /* or 700 */
-  line-height: 1.2;
   color: #000000;
 }
 .roboto {

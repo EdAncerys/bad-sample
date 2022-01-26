@@ -1,7 +1,6 @@
 import { useState, useRef, useLayoutEffect } from "react";
 import { connect } from "frontity";
 
-import Accordion from "react-bootstrap/Accordion";
 import { v4 as uuidv4 } from "uuid";
 
 import Loading from "../loading";
@@ -44,50 +43,84 @@ const AccordionComponent = ({
 
     // HANDLERS ----------------------------------------------------
     const handleAccordionToggle = () => {
-      const addIcon = document.querySelector(`#add-id-${uniqueId}`);
-      const removeIcon = document.querySelector(`#remove-id-${uniqueId}`);
+      const addIcon = document.querySelector(`#add-icon-${uniqueId}`);
+      const removeIcon = document.querySelector(`#remove-icon-${uniqueId}`);
       const preview = document.querySelector(`#preview-id-${uniqueId}`);
-      const accordionBody = document.querySelector(`.accordion-${uniqueId}`);
+      const accordionBody = document.querySelector(
+        `#accordion-body-${uniqueId}`
+      );
 
-      if (isActive.current) {
-        // apply actions if accordion isActive
+      console.log(addIcon);
+      if (!isActive.current) {
+        // apply actions if accordion !isActive
+        accordionBody.classList.add("show");
         if (preview) {
           preview.classList.add("d-none");
         }
-        accordionBody.classList.add("border-top-show");
         addIcon.classList.add("d-none");
         removeIcon.classList.remove("d-none");
       }
 
-      if (!isActive.current) {
-        // apply actions if accordion !isActive
+      if (isActive.current) {
+        // apply actions if accordion isActive
+        accordionBody.classList.remove("show");
         if (preview) {
           preview.classList.remove("d-none");
         }
-        accordionBody.classList.remove("border-top-show");
         addIcon.classList.remove("d-none");
         removeIcon.classList.add("d-none");
       }
+
+      isActive.current = !isActive.current; // toggle accordion state tracking
     };
 
     return (
-      <Accordion style={{ position: "relative" }}>
+      // <Accordion style={{ position: "relative" }}>
+      //   <ActionPlaceholder isFetching={fetching} />
+      //   <Accordion.Item
+      //     eventKey={uniqueId}
+      //     id={uniqueId}
+      //     classNameName="shadow"
+      //     style={{ padding: `0.5em 1em` }}
+      //   >
+      //     <AccordionHeader
+      //       block={block}
+      //       guidelines={guidelines}
+      //       leadershipBlock={leadershipBlock}
+      //       handleAccordionToggle={() => {
+      //         isActive.current = !isActive.current;
+      //         handleAccordionToggle();
+      //       }}
+      //       uniqueId={uniqueId}
+      //     />
+      //     <AccordionBody
+      //       block={block}
+      //       guidelines={guidelines}
+      //       leadershipBlock={leadershipBlock}
+      //       uniqueId={uniqueId}
+      //       setFetching={setFetching}
+      //     />
+      //   </Accordion.Item>
+      // </Accordion>
+
+      <div
+        className="accordion shadow"
+        style={{ position: "relative", margin: `${marginVertical}px 0` }}
+      >
         <ActionPlaceholder isFetching={fetching} />
-        <Accordion.Item
+        <div
+          className="accordion-item"
           eventKey={uniqueId}
           id={uniqueId}
-          className="shadow"
+          classNameName="shadow"
           style={{ padding: `0.5em 1em` }}
         >
           <AccordionHeader
+            uniqueId={uniqueId}
             block={block}
             guidelines={guidelines}
             leadershipBlock={leadershipBlock}
-            handleAccordionToggle={() => {
-              isActive.current = !isActive.current;
-              handleAccordionToggle();
-            }}
-            uniqueId={uniqueId}
+            handleAccordionToggle={handleAccordionToggle}
           />
           <AccordionBody
             block={block}
@@ -96,14 +129,14 @@ const AccordionComponent = ({
             uniqueId={uniqueId}
             setFetching={setFetching}
           />
-        </Accordion.Item>
-      </Accordion>
+        </div>
+      </div>
     );
   };
 
   // RETURN ----------------------------------------------------
   return (
-    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
+    <div style={{ margin: `0 ${marginHorizontal}px` }}>
       {accordion_item.map((block, key) => {
         return <ServeAccordion key={key} block={block} />;
       })}
