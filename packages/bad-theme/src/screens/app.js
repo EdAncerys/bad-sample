@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Switch from "@frontity/components/switch";
 import { colors } from "../config/imports";
@@ -37,18 +37,20 @@ import Loading from "../components/loading";
 import BlockWrapper from "../components/blockWrapper";
 import { handleGetCookie } from "../helpers/cookie";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState } from "../context";
+import { useAppDispatch, useAppState, setGoToAction } from "../context";
 import { useCookies } from "react-cookie";
 
 const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
 
-  const endPoint = state.router.link;
+  let endPoint = state.router.link;
   const data = state.source.get(endPoint);
   console.log("INDEX data", data); // debug
 
-  // HELPERS ------------------------------------------------------------
+  if (data.route === "/derm_groups_charity/") {
+    actions.router.set("/derm-groups-charity/");
+  }
 
   // RETURN ------------------------------------------------------------
   return (

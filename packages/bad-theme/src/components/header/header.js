@@ -25,13 +25,13 @@ const Header = ({ state, actions }) => {
   const ServeNavigation = () => {
     if (endPoint.includes("/redirect/"))
       return (
-        <div style={{ paddingTop: `25%` }}>
+        <div style={{ paddingTop: `55%` }}>
           <Loading />
         </div>
       );
 
     return (
-      <div className="bad-header" style={styles.container}>
+      <div className="bad-header no-selector" style={styles.container}>
         <HeaderActions />
         <Navigation />
       </div>

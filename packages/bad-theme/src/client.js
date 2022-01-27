@@ -14,6 +14,7 @@ import {
 } from "./helpers";
 // CONTEXT ----------------------------------------------------------------
 import { initialState } from "../src/context/reducer";
+import { setGoToAction } from "../src/context";
 
 const BADTheme = {
   name: "bad-theme",

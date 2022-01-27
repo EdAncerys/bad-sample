@@ -166,8 +166,6 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
       return null;
     const value = loadMoreRef.current ? "Less" : " Load More";
 
-    console.log(feedData.length);
-
     return (
       <div
         className="flex"

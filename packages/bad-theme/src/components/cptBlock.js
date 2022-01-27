@@ -62,7 +62,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
       isThereNextPage = nextPage;
     }
-
     const GROUPE_DATA = Object.values(state.source[postPath]);
     const GROUPE_TYPE = Object.values(state.source[typePath]);
 
