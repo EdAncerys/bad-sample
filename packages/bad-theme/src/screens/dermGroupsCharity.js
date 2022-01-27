@@ -40,7 +40,12 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
       <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
         <div style={styles.container}>
           <ServeContent />
-          <Card dermGroupe={acf} colour={colors.primary} shadow />
+          <Card
+            dermGroupe={acf}
+            colour={colors.primary}
+            cardHeight="fit-content"
+            shadow
+          />
         </div>
       </div>
     </BlockWrapper>
@@ -50,7 +55,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
 const styles = {
   container: {
     display: "grid",
-    gridTemplateColumns: `3fr 1fr`,
+    gridTemplateColumns: `1fr auto`,
     gap: "2em",
   },
 };

@@ -59,11 +59,9 @@ const App = ({ state, actions }) => {
 
   // LOGIN HANDLERS ----------------------------------------------------
   useEffect(async () => {
-    // if (data.query)
-    //   if (data.query.transId)
-    //     await loginAction({ state, dispatch, transId: data.query.transId });
-
-    if (data.query) console.log("ID ", data.query.transId);
+    if (data.query && data.query.transId)
+      await loginAction({ state, dispatch, transId: data.query.transId });
+    console.log("ID ", data.query);
 
     return () => {
       asyncRef.current = false; // clean up function

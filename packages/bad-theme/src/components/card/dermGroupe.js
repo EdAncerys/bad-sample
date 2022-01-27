@@ -23,7 +23,7 @@ const DermGroupe = ({ state, actions, libraries, dermGroupe }) => {
     const alt = logo;
 
     return (
-      <div className="flex" style={{ paddingBottom: `1em` }}>
+      <div className="flex" style={{ paddingBottom: `2em` }}>
         <div style={{ height: `100%` }}>
           <Image
             src={logo}
@@ -41,9 +41,14 @@ const DermGroupe = ({ state, actions, libraries, dermGroupe }) => {
 
   const ServeEmail = () => {
     if (!email) return null;
+    let padding = `2em`;
+    if (!website_url && !telephone_helpline) padding = `0`;
 
     return (
-      <div className="flex-col primary-title" style={{ paddingBottom: `1em` }}>
+      <div
+        className="flex-col primary-title"
+        style={{ paddingBottom: padding }}
+      >
         <div style={{ fontSize: 20 }}>Contact Email:</div>
         <div className="title-link-animation">
           <Link
@@ -60,12 +65,13 @@ const DermGroupe = ({ state, actions, libraries, dermGroupe }) => {
 
   const ServeWebsite = () => {
     if (!website_url) return null;
+    let padding = telephone_helpline ? `2em` : 0;
 
     return (
       <div
         className="flex-col primary-title"
         onClick={() => setGoToAction({ path: website_url, actions })}
-        style={{ paddingBottom: `1em` }}
+        style={{ paddingBottom: padding }}
       >
         <div style={{ fontSize: 20 }}>Website:</div>
         <div className="title-link-animation">
@@ -79,7 +85,7 @@ const DermGroupe = ({ state, actions, libraries, dermGroupe }) => {
     if (!telephone_helpline) return null;
 
     return (
-      <div className="flex primary-title" style={{ paddingBottom: `1em` }}>
+      <div className="flex primary-title">
         <div style={{ fontSize: 20 }}>Phone Number:</div>
         <div className="title-link-animation" style={{ cursor: "pointer" }}>
           <Html2React html={telephone_helpline} />
