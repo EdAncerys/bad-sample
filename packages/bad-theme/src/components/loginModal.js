@@ -129,22 +129,22 @@ const LoginModal = ({ state, actions }) => {
 
       return (
         <div id="iFrame-container" style={{ paddingTop: `2em` }}>
-          {/* <Iframe
+          <Iframe
             url={state.auth.IFRAME_URL}
             width="100%"
             height="1000px"
             id="badLoginIframe"
             display="initial"
             position="relative"
-          /> */}
-          <iframe
+          />
+          {/* <iframe
             className="contain"
             id="badLoginIframe"
             title="Inline Frame Example"
             width="100%"
             height="1000"
             src="https://bad-uat.powerappsportals.com/SignIn?returnUrl=%2fhandshake%3faction%3dlogin%2f"
-          ></iframe>
+          ></iframe> */}
         </div>
       );
     };

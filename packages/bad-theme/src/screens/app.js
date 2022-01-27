@@ -61,7 +61,7 @@ const App = ({ state, actions }) => {
   useEffect(async () => {
     if (data.query && data.query.transId)
       await loginAction({ state, dispatch, transId: data.query.transId });
-    console.log("ID ", data.query);
+    console.log("ID ", data.query.transId);
 
     return () => {
       asyncRef.current = false; // clean up function
