@@ -115,10 +115,12 @@ const SearchContainer = ({
   };
 
   return (
-    <div style={{ padding: padding || `1em 0`, width: WIDTH }}>
+    <div style={{ padding: padding || `1em 0` }}>
       <div className="flex-col">
         <ServeTitle />
-        <ServeSearchContainer />
+        <div style={{ width: WIDTH }}>
+          <ServeSearchContainer />
+        </div>
       </div>
     </div>
   );

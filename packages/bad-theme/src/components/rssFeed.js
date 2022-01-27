@@ -41,23 +41,30 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
   const [searchFilter, setSearchFilter] = useState(null);
 
   const searchFilterRef = useRef(null);
+  const currentSearchFilterRef = useRef(null);
   const loadMoreRef = useRef(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 
+  const isBJD = acf_fc_layout === "bjd_feed";
+  const isCED = acf_fc_layout === "ced_feed";
+  const isSHD = acf_fc_layout === "shd_feed";
+
+  let feedTitle = "Search for British Journal of Dermatology Articles";
+  if (isCED)
+    feedTitle = "Search for Clinical and Experimental Dermatology Articles";
+  if (isSHD) feedTitle = "Search for Skin Health and Disease Articles";
+
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
     const limit = post_limit || 8;
     let result = null;
 
-    if (acf_fc_layout === "bjd_feed")
-      result = await getBJDFeedAction({ state, dispatch });
-    if (acf_fc_layout === "ced_feed")
-      result = await getCEDFeedAction({ state, dispatch });
-    if (acf_fc_layout === "shd_feed")
-      result = await getSHDFeedAction({ state, dispatch });
+    if (isBJD) result = await getBJDFeedAction({ state, dispatch });
+    if (isCED) result = await getCEDFeedAction({ state, dispatch });
+    if (isSHD) result = await getSHDFeedAction({ state, dispatch });
 
     setFeedData(result.slice(0, Number(limit))); // apply limit on posts
 
@@ -69,28 +76,42 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
   if (!feedData) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
-  const handleClearFilter = ({ clearInput }) => {
-    if (clearInput) searchFilterRef.current.value = "";
+  const handleClearFilter = () => {
+    setSearchFilter(null);
+    searchFilterRef.current.value = "";
+    currentSearchFilterRef.current = null;
+    loadMoreRef.current = null;
 
-    handleSearch();
+    let data = null;
+
+    if (isBJD) data = bjdFeed;
+    if (isCED) data = cedFeed;
+    if (isSHD) data = shdFeed;
+
+    setFeedData(data.slice(0, Number(8)));
   };
 
   const handleLoadMoreFilter = () => {
-    const limit = 8;
-    let POST_LIST = null; // add dermGroupe object to data array
-    if (acf_fc_layout === "bjd_feed") POST_LIST = bjdFeed;
-    if (acf_fc_layout === "ced_feed") POST_LIST = cedFeed;
-    if (acf_fc_layout === "shd_feed") POST_LIST = shdFeed;
+    if (feedData.length < 8) return;
+    let data = null;
 
-    if (loadMoreRef.current) POST_LIST = POST_LIST.slice(0, Number(limit)); // apply limit on posts
+    if (isBJD) data = bjdFeed;
+    if (isCED) data = cedFeed;
+    if (isSHD) data = shdFeed;
 
-    setFeedData(POST_LIST);
-    loadMoreRef.current = !loadMoreRef.current;
+    if (!loadMoreRef.current) {
+      loadMoreRef.current = data;
+      setFeedData(data);
+    } else {
+      setFeedData(loadMoreRef.current.slice(0, Number(8)));
+      loadMoreRef.current = null;
+    }
   };
 
   const handleSearch = () => {
-    const searchInput = searchFilterRef.current.value;
-    setSearchFilter(searchInput);
+    const input = searchFilterRef.current.value;
+    currentSearchFilterRef.current = input;
+    setSearchFilter(input);
   };
 
   // SERVERS ---------------------------------------------
@@ -103,10 +124,7 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
       return (
         <div className="shadow filter">
           <div>{searchFilter}</div>
-          <div
-            className="filter-icon"
-            onClick={() => handleClearFilter({ clearInput: true })}
-          >
+          <div className="filter-icon" onClick={handleClearFilter}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -129,7 +147,7 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
         <BlockWrapper>
           <div style={{ padding: `0 ${marginHorizontal}px` }}>
             <SearchContainer
-              title="Search for British Journal of Dermatology Articles"
+              title={feedTitle}
               width="70%"
               searchFilterRef={searchFilterRef}
               handleSearch={handleSearch}
@@ -144,8 +162,11 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
   };
 
   const ServeMoreAction = () => {
-    if (post_limit) return null;
+    if (post_limit || feedData.length < 8 || currentSearchFilterRef.current)
+      return null;
     const value = loadMoreRef.current ? "Less" : " Load More";
+
+    console.log(feedData.length);
 
     return (
       <div

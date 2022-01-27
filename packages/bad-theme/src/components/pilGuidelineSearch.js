@@ -166,10 +166,10 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
     <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
       <div className="shadow">
         <SearchContainer
-          title="Search for Dermatology Groupe & Charities"
+          title="Search for Guidelines"
           width="70%"
           searchFilterRef={searchFilterRef}
-          // handleSearch={handleSearch}
+          handleSearch={() => console.log("search")}
           padding="0 0 2em 2em"
         />
         <ServeFooter />

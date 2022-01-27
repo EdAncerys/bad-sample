@@ -16,13 +16,19 @@ import iFrame from "../../css/iFrame.css";
 import HTMLHead from "./htmlHead";
 import HeaderActions from "./headerActions";
 import Navigation from "./navigation";
+import Loading from "../loading";
 
 const Header = ({ state, actions }) => {
   const endPoint = state.router.link;
   const data = state.source.get(endPoint);
 
   const ServeNavigation = () => {
-    if (endPoint.includes("/redirect/")) return null;
+    if (endPoint.includes("/redirect/"))
+      return (
+        <div style={{ paddingTop: `25%` }}>
+          <Loading />
+        </div>
+      );
 
     return (
       <div className="bad-header" style={styles.container}>
