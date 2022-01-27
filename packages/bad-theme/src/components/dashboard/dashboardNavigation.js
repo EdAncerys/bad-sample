@@ -33,7 +33,10 @@ const DashboardNavigation = ({
   };
 
   return (
-    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
+    <div
+      className="no-selector"
+      style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}
+    >
       <div
         className="shadow"
         style={{

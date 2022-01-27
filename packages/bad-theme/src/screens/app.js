@@ -37,12 +37,14 @@ import Loading from "../components/loading";
 import BlockWrapper from "../components/blockWrapper";
 import { handleGetCookie } from "../helpers/cookie";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setGoToAction } from "../context";
+import { useAppDispatch, useAppState, loginAction } from "../context";
 import { useCookies } from "react-cookie";
 
 const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
+
+  const asyncRef = useRef(null);
 
   let endPoint = state.router.link;
   const data = state.source.get(endPoint);
@@ -54,8 +56,16 @@ const App = ({ state, actions }) => {
   if (data.route === "/covid_19/") actions.router.set("/covid-19/");
 
   // LOGIN HANDLERS ----------------------------------------------------
-  useEffect(() => {
-    if (data.query) console.log("API call");
+  useEffect(async () => {
+    // if (data.query)
+    //   if (data.query.transId)
+    //     await loginAction({ state, dispatch, transId: data.query.transId });
+
+    if (data.query) console.log("ID ", data.query.transId);
+
+    return () => {
+      asyncRef.current = false; // clean up function
+    };
   }, [data]);
 
   // RETURN ------------------------------------------------------------

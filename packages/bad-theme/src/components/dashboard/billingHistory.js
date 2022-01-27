@@ -13,7 +13,7 @@ const BillingHistory = ({ state, actions, libraries }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handleDownloadPayment = () => {
-    console.log("API call");
+    console.log("API call download payment");
   };
 
   // SERVERS ---------------------------------------------

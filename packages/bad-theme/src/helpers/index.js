@@ -8,6 +8,11 @@ export const authLogViaCookie = async ({ state, initialState }) => {
   if (cookie) {
     console.log("API to get user data", cookie);
 
+    if (!cookie.contactid || cookie.jwt) {
+      console.log("Failed to get cookie data");
+      return null;
+    }
+
     const URL =
       state.auth.APP_HOST + `/catalogue/data/contacts(${cookie.contactid})`;
 
