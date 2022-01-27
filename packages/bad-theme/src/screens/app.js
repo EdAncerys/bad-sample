@@ -9,7 +9,7 @@ import Footer from "../components/footer";
 import LoginModal from "../components/loginModal";
 import EnquireModal from "../components/enquireModal";
 import CreateAccountModal from "../components/createAccount/createAccountModal";
-import Directions from "../components/directions";
+import Breadcrumbs from "../components/breadcrumbs";
 import CreateAccount from "./createAccount";
 // SCREENS --------------------------------------------------------------
 import Post from "./post";
@@ -48,9 +48,9 @@ const App = ({ state, actions }) => {
   const data = state.source.get(endPoint);
   console.log("INDEX data", data); // debug
 
-  if (data.route === "/derm_groups_charity/") {
+  if (data.route === "/derm_groups_charity/")
     actions.router.set("/derm-groups-charity/");
-  }
+  if (data.route === "/covid_19/") actions.router.set("/covid-19/");
 
   // RETURN ------------------------------------------------------------
   return (
@@ -64,7 +64,7 @@ const App = ({ state, actions }) => {
     >
       <div style={{ ...styles.container }}>
         <Header />
-        <Directions />
+        <Breadcrumbs />
         <BlockWrapper>
           <LoginModal />
           <CreateAccountModal />

@@ -6,7 +6,7 @@ import BlockWrapper from "./blockWrapper";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { setGoToAction } from "../context";
 
-const Directions = ({ state, actions, libraries }) => {
+const Breadcrumbs = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const endPoint = state.router.link;
   const data = state.source.get(endPoint);
@@ -30,9 +30,14 @@ const Directions = ({ state, actions, libraries }) => {
 
   // SERVERS ---------------------------------------------
   const ServePatchDirections = ({ item, nextKey }) => {
-    let TITLE_RENDER = item;
+    let titleName = item;
 
-    console.log(TITLE_RENDER);
+    // title name tweaks
+    if (titleName === "derm_groups_charity")
+      titleName = "Dermatology Groupe & Charities";
+    if (titleName === "covid_19") titleName = "COVID-19";
+
+    console.log(titleName);
 
     let chevron = (
       <ChevronRightIcon style={{ fontSize: 16, color: colors.darkSilver }} />
@@ -55,27 +60,27 @@ const Directions = ({ state, actions, libraries }) => {
             if (childItem.child_items) {
               childItem.child_items.map((childItem) => {
                 if (childItem.slug === item.toLowerCase())
-                  TITLE_RENDER = <Html2React html={childItem.title} />;
+                  titleName = <Html2React html={childItem.title} />;
                 return;
               });
             }
             if (childItem.slug === item.toLowerCase())
-              TITLE_RENDER = <Html2React html={childItem.title} />;
+              titleName = <Html2React html={childItem.title} />;
             return;
           });
 
         if (menuItem.slug === item.toLowerCase()) {
-          TITLE_RENDER = <Html2React html={menuItem.title} />;
+          titleName = <Html2React html={menuItem.title} />;
           return;
         }
-        if (typeof TITLE_RENDER == "string" && TITLE_RENDER.includes("-"))
-          TITLE_RENDER = <Html2React html={TITLE_RENDER.replace(/-/g, " ")} />;
+        if (typeof titleName == "string" && titleName.includes("-"))
+          titleName = <Html2React html={titleName.replace(/-/g, " ")} />;
       });
 
     return (
       <div>
         <div className="flex-row" style={styles.link} onClick={handleGoToLink}>
-          <div style={styles.linkValue}>{TITLE_RENDER}</div>
+          <div style={styles.linkValue}>{titleName}</div>
           <div style={{ margin: `0 ${MARGIN}px` }}>{chevron}</div>
         </div>
       </div>
@@ -159,4 +164,4 @@ const styles = {
   },
 };
 
-export default connect(Directions);
+export default connect(Breadcrumbs);
