@@ -55,6 +55,8 @@ const App = ({ state, actions }) => {
     actions.router.set("/derm-groups-charity/");
   if (data.route === "/covid_19/") actions.router.set("/covid-19/");
 
+  if (data.query) console.log(data.query);
+
   // LOGIN HANDLERS ----------------------------------------------------
   useEffect(async () => {
     // if (data.query)

@@ -61,8 +61,6 @@ const BADTheme = {
           actions.source.fetch(`/bad-constitution`), // pre fetch WP menu as a page CONTENT
         ]);
 
-        console.log("BCSR state", state.source);
-
         // pre fetch WP MENU ----------------------------------------------------------------------
         await getWPMenu({ state, actions });
 
@@ -89,6 +87,7 @@ const BADTheme = {
 
       afterCSR: async ({ state, actions }) => {
         console.log("afterCSR triggered"); // debug
+        console.log("BCSR state", state);
       },
     },
   },
