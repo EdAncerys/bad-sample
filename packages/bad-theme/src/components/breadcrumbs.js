@@ -34,7 +34,7 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
 
     // title name tweaks
     if (titleName === "derm_groups_charity")
-      titleName = "Dermatology Groupe & Charities";
+      titleName = "Dermatology Groups & Charities";
     if (titleName === "covid_19") titleName = "COVID-19";
 
     console.log(titleName);

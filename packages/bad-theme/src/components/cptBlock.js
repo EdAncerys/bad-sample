@@ -209,7 +209,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               title={
                 isCovid_19
                   ? "Search for COVID 19 Resources"
-                  : "Search for Dermatology Groupe & Charities"
+                  : "Search for Dermatology Groups & Charities"
               }
               width="70%"
               searchFilterRef={searchFilterRef}
@@ -223,7 +223,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               handleSearch={handleTypeSearch}
               typeFilterRef={typeFilterRef}
               handleClearTypeFilter={handleClearTypeFilter}
-              title="Search Groupe"
+              title="Filter"
               title={isCovid_19 ? "Search Guidance" : "Search Groupe"}
             />
           </div>
