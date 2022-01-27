@@ -12,6 +12,34 @@ import TypeFilters from "./typeFilters";
 
 import CloseIcon from "@mui/icons-material/Close";
 
+const ServeMoreAction = ({
+  post_limit,
+  postListData,
+  handleLoadMoreFilter,
+  loadMoreRef,
+}) => {
+  if (post_limit || postListData.length < 8) return null;
+  const value = loadMoreRef.current ? "Less" : " Load More";
+
+  return (
+    <div
+      className="flex"
+      style={{
+        justifyContent: "center",
+        paddingTop: `2em`,
+      }}
+    >
+      <button
+        type="submit"
+        className="transparent-btn"
+        onClick={handleLoadMoreFilter}
+      >
+        {value}
+      </button>
+    </div>
+  );
+};
+
 const DermatologyGroup = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -26,7 +54,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
     type_filter,
   } = block;
 
-  const [dermGroup, setDermGroup] = useState(null);
+  const [postListData, setPostListData] = useState(null);
   const [groupeType, setGroupeType] = useState(null);
 
   const [searchFilter, setSearchFilter] = useState(null);
@@ -59,7 +87,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
     const GROUPE_TYPE = Object.values(state.source.dermo_group_type);
 
     const limit = post_limit || 8;
-    setDermGroup(GROUPE_DATA.slice(0, Number(limit))); // apply limit on posts
+    setPostListData(GROUPE_DATA.slice(0, Number(limit))); // apply limit on posts
     setGroupeType(GROUPE_TYPE);
 
     return () => {
@@ -67,22 +95,22 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
     };
   }, []);
   // DATA pre FETCH ---------------------------------------------------------
-  if (!dermGroup || !groupeType) return <Loading />;
+  if (!postListData || !groupeType) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
   const handleLoadMoreFilter = async () => {
-    if (dermGroup.length < 8) return;
+    if (postListData.length < 8) return;
 
     if (!loadMoreRef.current) {
       let dermData = Object.values(state.source.derm_groups_charity);
       if (!!currentSearchFilterRef.current || !!typeFilterRef.current)
-        dermData = dermGroup;
+        dermData = postListData;
 
       loadMoreRef.current = dermData;
       const lessArray = dermData.slice(0, Number(8));
-      setDermGroup(lessArray);
+      setPostListData(lessArray);
     } else {
-      setDermGroup(loadMoreRef.current);
+      setPostListData(loadMoreRef.current);
       loadMoreRef.current = null;
     }
     console.log(loadMoreRef.current);
@@ -112,13 +140,13 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
       });
     }
 
-    setDermGroup(data);
+    setPostListData(data);
     setSearchFilter(input);
   };
 
   const handleTypeSearch = () => {
     const input = typeFilterRef.current;
-    let data = Object.values(state.source.derm_groups_charity); // add dermGroup object to data array
+    let data = Object.values(state.source.derm_groups_charity); // add postListData object to data array
 
     if (currentSearchFilterRef.current)
       data = data.filter((item) => {
@@ -140,7 +168,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
         if (list.includes(input)) return item;
       });
 
-      setDermGroup(data);
+      setPostListData(data);
     }
   };
 
@@ -150,7 +178,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
     currentSearchFilterRef.current = null;
 
     if (!typeFilterRef.current) {
-      setDermGroup(Object.values(state.source.derm_groups_charity));
+      setPostListData(Object.values(state.source.derm_groups_charity));
     } else {
       handleTypeSearch();
     }
@@ -160,7 +188,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
     typeFilterRef.current = null;
 
     if (!currentSearchFilterRef.current) {
-      setDermGroup(Object.values(state.source.derm_groups_charity));
+      setPostListData(Object.values(state.source.derm_groups_charity));
     } else {
       handleSearch();
     }
@@ -220,33 +248,10 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
     );
   };
 
-  const ServeMoreAction = () => {
-    if (post_limit || dermGroup.length < 8) return null;
-    const value = loadMoreRef.current ? "Less" : " Load More";
-
-    return (
-      <div
-        className="flex"
-        style={{
-          justifyContent: "center",
-          paddingTop: `2em`,
-        }}
-      >
-        <button
-          type="submit"
-          className="transparent-btn"
-          onClick={handleLoadMoreFilter}
-        >
-          {value}
-        </button>
-      </div>
-    );
-  };
-
   const ServeLayout = () => {
     return (
       <div style={styles.container}>
-        {dermGroup.map((block, key) => {
+        {postListData.map((block, key) => {
           const { title, content, link, date, dermo_group_type } = block;
 
           return (
@@ -291,7 +296,12 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
       <BlockWrapper>
         <div style={{ padding: `0 ${marginHorizontal}px` }}>
           <ServeLayout />
-          <ServeMoreAction />
+          <ServeMoreAction
+            post_limit={post_limit}
+            postListData={postListData}
+            handleLoadMoreFilter={handleLoadMoreFilter}
+            loadMoreRef={loadMoreRef}
+          />
         </div>
       </BlockWrapper>
     </div>
