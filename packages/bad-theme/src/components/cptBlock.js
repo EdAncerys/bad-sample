@@ -12,35 +12,7 @@ import TypeFilters from "./typeFilters";
 
 import CloseIcon from "@mui/icons-material/Close";
 
-const ServeMoreAction = ({
-  post_limit,
-  postListData,
-  handleLoadMoreFilter,
-  loadMoreRef,
-}) => {
-  if (post_limit || postListData.length < 8) return null;
-  const value = loadMoreRef.current ? "Less" : " Load More";
-
-  return (
-    <div
-      className="flex"
-      style={{
-        justifyContent: "center",
-        paddingTop: `2em`,
-      }}
-    >
-      <button
-        type="submit"
-        className="transparent-btn"
-        onClick={handleLoadMoreFilter}
-      >
-        {value}
-      </button>
-    </div>
-  );
-};
-
-const DermatologyGroup = ({ state, actions, libraries, block }) => {
+const CPTBlock = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
@@ -51,8 +23,16 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
     post_limit,
     disable_vertical_padding,
     add_search_function,
-    type_filter,
+    acf_fc_layout,
   } = block;
+
+  const isCovid_19 = acf_fc_layout === "covid_loop_block";
+  let postPath = `derm_groups_charity`;
+  let typePath = `dermo_group_type`;
+  if (isCovid_19) {
+    postPath = `covid_19`;
+    typePath = `guidance`;
+  }
 
   const [postListData, setPostListData] = useState(null);
   const [groupeType, setGroupeType] = useState(null);
@@ -70,7 +50,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
-    const path = `/derm_groups_charity/`;
+    const path = `/${postPath}/`;
     await actions.source.fetch(path); // fetch CPT dermGroupeData
 
     let dermGroupeData = state.source.get(path);
@@ -83,8 +63,8 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
       isThereNextPage = nextPage;
     }
 
-    const GROUPE_DATA = Object.values(state.source.derm_groups_charity);
-    const GROUPE_TYPE = Object.values(state.source.dermo_group_type);
+    const GROUPE_DATA = Object.values(state.source[postPath]);
+    const GROUPE_TYPE = Object.values(state.source[typePath]);
 
     const limit = post_limit || 8;
     setPostListData(GROUPE_DATA.slice(0, Number(limit))); // apply limit on posts
@@ -100,30 +80,28 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
   // HELPERS ----------------------------------------------------------------
   const handleLoadMoreFilter = async () => {
     if (postListData.length < 8) return;
+    let data = Object.values(state.source[postPath]);
 
     if (!loadMoreRef.current) {
-      let dermData = Object.values(state.source.derm_groups_charity);
-      if (!!currentSearchFilterRef.current || !!typeFilterRef.current)
-        dermData = postListData;
+      // if (!!currentSearchFilterRef.current || !!typeFilterRef.current)
+      //   data = postListData;
 
-      loadMoreRef.current = dermData;
-      const lessArray = dermData.slice(0, Number(8));
-      setPostListData(lessArray);
+      loadMoreRef.current = data;
+      setPostListData(data);
     } else {
-      setPostListData(loadMoreRef.current);
+      setPostListData(loadMoreRef.current.slice(0, Number(8)));
       loadMoreRef.current = null;
     }
-    console.log(loadMoreRef.current);
   };
 
   const handleSearch = () => {
     const input = searchFilterRef.current.value.toLowerCase() || searchFilter;
     currentSearchFilterRef.current = input;
-    let data = Object.values(state.source.derm_groups_charity);
+    let data = Object.values(state.source[postPath]);
 
     if (typeFilterRef.current) {
       data = data.filter((item) =>
-        item.dermo_group_type.includes(typeFilterRef.current)
+        item[typePath].includes(typeFilterRef.current)
       );
     }
 
@@ -146,7 +124,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
 
   const handleTypeSearch = () => {
     const input = typeFilterRef.current;
-    let data = Object.values(state.source.derm_groups_charity); // add postListData object to data array
+    let data = Object.values(state.source[postPath]); // add postListData object to data array
 
     if (currentSearchFilterRef.current)
       data = data.filter((item) => {
@@ -164,7 +142,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
 
     if (input) {
       data = data.filter((item) => {
-        const list = item.dermo_group_type;
+        const list = item[typePath];
         if (list.includes(input)) return item;
       });
 
@@ -173,12 +151,13 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
   };
 
   const handleClearSearchFilter = () => {
+    let data = Object.values(state.source[postPath]); // add postListData object to data array
     setSearchFilter(null);
     searchFilterRef.current = null;
     currentSearchFilterRef.current = null;
 
     if (!typeFilterRef.current) {
-      setPostListData(Object.values(state.source.derm_groups_charity));
+      setPostListData(data.slice(0, Number(8)));
     } else {
       handleTypeSearch();
     }
@@ -186,9 +165,10 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
 
   const handleClearTypeFilter = () => {
     typeFilterRef.current = null;
+    let data = Object.values(state.source[postPath]); // add postListData object to data array
 
     if (!currentSearchFilterRef.current) {
-      setPostListData(Object.values(state.source.derm_groups_charity));
+      setPostListData(data.slice(0, Number(8)));
     } else {
       handleSearch();
     }
@@ -227,7 +207,11 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
         <BlockWrapper>
           <div style={{ padding: `0 ${marginHorizontal}px` }}>
             <SearchContainer
-              title="Search for Dermatology Groupe & Charities"
+              title={
+                isCovid_19
+                  ? "Search for COVID 19 Resources"
+                  : "Search for Dermatology Groupe & Charities"
+              }
               width="70%"
               searchFilterRef={searchFilterRef}
               handleSearch={handleSearch}
@@ -241,6 +225,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
               typeFilterRef={typeFilterRef}
               handleClearTypeFilter={handleClearTypeFilter}
               title="Search Groupe"
+              title={isCovid_19 ? "Search Guidance" : "Search Groupe"}
             />
           </div>
         </BlockWrapper>
@@ -272,6 +257,31 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
     );
   };
 
+  const ServeMoreAction = () => {
+    if (currentSearchFilterRef.current || typeFilterRef.current) return null;
+    if (post_limit || postListData.length < 8) return null;
+
+    const value = loadMoreRef.current ? "Less" : "Load More";
+
+    return (
+      <div
+        className="flex"
+        style={{
+          justifyContent: "center",
+          paddingTop: `2em`,
+        }}
+      >
+        <button
+          type="submit"
+          className="transparent-btn"
+          onClick={handleLoadMoreFilter}
+        >
+          {value}
+        </button>
+      </div>
+    );
+  };
+
   // RETURN ---------------------------------------------------
   return (
     <div
@@ -296,12 +306,7 @@ const DermatologyGroup = ({ state, actions, libraries, block }) => {
       <BlockWrapper>
         <div style={{ padding: `0 ${marginHorizontal}px` }}>
           <ServeLayout />
-          <ServeMoreAction
-            post_limit={post_limit}
-            postListData={postListData}
-            handleLoadMoreFilter={handleLoadMoreFilter}
-            loadMoreRef={loadMoreRef}
-          />
+          <ServeMoreAction />
         </div>
       </BlockWrapper>
     </div>
@@ -321,4 +326,4 @@ const styles = {
   },
 };
 
-export default connect(DermatologyGroup);
+export default connect(CPTBlock);

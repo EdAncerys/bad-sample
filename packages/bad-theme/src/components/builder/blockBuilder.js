@@ -42,9 +42,8 @@ import ImageBlock from "../imageBlock";
 import PilGuidelineSearch from "../pilGuidelineSearch";
 import SearchDermatologists from "../searchDermatologists";
 import DividerBlock from "../dividerBlock";
-import DermatologyGroup from "../dermatologyGroup";
+import CPTBlock from "../cptBlock";
 import RSSFeed from "../rssFeed";
-import Covid from "../covid";
 
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   // console.log("BLOCKS: ", blocks); // debug
@@ -112,7 +111,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
           return (
             <div key={key + 1}>
               <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-              <Covid key={key} block={block} />
+              <CPTBlock key={key} block={block} />
             </div>
           );
 
@@ -120,7 +119,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
           return (
             <div key={key + 1}>
               <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-              <DermatologyGroup key={key} block={block} />
+              <CPTBlock key={key} block={block} />
             </div>
           );
 
