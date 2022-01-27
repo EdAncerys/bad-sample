@@ -85,7 +85,7 @@ const DermGroupe = ({ state, actions, libraries, dermGroupe }) => {
   };
 
   return (
-    <div className="flex-col">
+    <div className="flex-col text-wrap">
       <ServeCardImage />
       <ServeEmail />
       <ServeWebsite />

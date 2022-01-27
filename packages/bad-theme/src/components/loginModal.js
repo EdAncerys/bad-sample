@@ -3,7 +3,6 @@ import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 
 import Iframe from "react-iframe";
-import ActionPlaceholder from "../components/actionPlaceholder";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { colors } from "../config/imports";
@@ -35,15 +34,6 @@ const LoginModal = ({ state, actions }) => {
 
   useEffect(async () => {
     if (id) await loginAction({ state, dispatch, transId: id });
-
-    // if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
-    //   console.log("DEVELOPMENT ENVIRONMENT AUTH LOGIN");
-    //   loginAction({
-    //     state,
-    //     dispatch,
-    //     transId: "vQOKclgzqdPg83Z0zSuTTantjFmEJqj8",
-    //   });
-    // }
   }, [id]);
 
   // HANDLERS ----------------------------------------------------
@@ -193,8 +183,6 @@ const LoginModal = ({ state, actions }) => {
   return (
     <div>
       <Modal show={loginModalAction} size="xl" centered>
-        <ActionPlaceholder isFetching={id} />
-
         <div className="flex-row">
           <ServeModalInfo />
           <ServeModalContent />

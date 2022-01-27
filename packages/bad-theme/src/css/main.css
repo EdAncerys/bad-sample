@@ -55,6 +55,8 @@ body {
   font-family: Roboto, sans-serif;
   font-weight: bold; /* or 700 */
   color: #000000;
+}
+.text-wrap {
   word-break: break-all; /* break-word if not fitting */
 }
 .roboto {
