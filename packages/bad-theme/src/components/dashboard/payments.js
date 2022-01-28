@@ -2,9 +2,8 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
-import { padding } from "@mui/system";
 
-const Payments = ({ state, actions, libraries, setPayOrder }) => {
+const Payments = ({ state, actions, libraries, setPage }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const marginHorizontal = state.theme.marginHorizontal;
@@ -13,7 +12,7 @@ const Payments = ({ state, actions, libraries, setPayOrder }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handlePayment = ({ block }) => {
-    setPayOrder(block);
+    setPage({ page: "directDebit", data: block });
   };
 
   // SERVERS ---------------------------------------------

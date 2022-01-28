@@ -7,7 +7,7 @@ import { Form } from "react-bootstrap";
 import { UK_COUNTIES } from "../../config/data";
 import { UK_COUNTRIES } from "../../config/data";
 
-const OrderSummary = ({ state, actions, libraries, setPayOrder }) => {
+const OrderSummary = ({ state, actions, libraries, setPage }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const marginVertical = state.theme.marginVertical;
@@ -39,22 +39,33 @@ const OrderSummary = ({ state, actions, libraries, setPayOrder }) => {
     console.log("orderSummary", orderSummary);
   };
 
+  // HELPERS ----------------------------------------------------------------
+  const handlePayment = () => {
+    setPage({ page: "billing" });
+  };
+
   // SERVERS ---------------------------------------------
   const ServeOrderSummary = () => {
     return (
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: `1fr 1fr`,
-          gap: 20,
-          padding: `1em 0 0`,
+          gridTemplateColumns: `1fr`,
+          gridTemplateRows: `repeat(3, 80px)`,
+          gap: `5px 20px`,
+          paddingTop: `2em`,
+          width: `50%`,
         }}
       >
-        <div className="form-group" style={{ display: "grid", gap: 10 }}>
+        <div>
           <label>Subscription</label>
           <div style={styles.summary}>2022 - BAD - Associate Trainee</div>
+        </div>
+        <div>
           <label>Outstanding</label>
           <div style={styles.summary}>£65.00</div>
+        </div>
+        <div>
           <label>Total Amount</label>
           <div style={styles.summary}>£65.00</div>
         </div>
@@ -69,8 +80,9 @@ const OrderSummary = ({ state, actions, libraries, setPayOrder }) => {
           style={{
             display: "grid",
             gridTemplateColumns: `1fr 1fr`,
-            gap: 20,
-            padding: `1em 0 0`,
+            gridTemplateRows: `repeat(1, 70px)`,
+            gap: `5px 20px`,
+            paddingTop: `2em`,
           }}
         >
           <div>
@@ -90,16 +102,17 @@ const OrderSummary = ({ state, actions, libraries, setPayOrder }) => {
           style={{
             display: "grid",
             gridTemplateColumns: `1fr 1fr`,
-            gap: 20,
-            padding: `1em 0 0`,
+            gap: `5px 20px`,
+            paddingTop: `1em`,
           }}
         >
           <div
-            className="form-group"
             style={{
               display: "grid",
-              gridTemplateRows: `repeat(6, 1fr)`,
-              gap: 10,
+              gridTemplateColumns: `1fr`,
+              gridTemplateRows: `repeat(5, 70px)`,
+              gap: `20px`,
+              paddingTop: `1em`,
             }}
           >
             <div>
@@ -158,8 +171,10 @@ const OrderSummary = ({ state, actions, libraries, setPayOrder }) => {
             className="form-group"
             style={{
               display: "grid",
-              gridTemplateRows: `repeat(6, 1fr)`,
-              gap: 10,
+              gridTemplateColumns: `1fr`,
+              gridTemplateRows: `repeat(5, 70px)`,
+              gap: `20px`,
+              paddingTop: `1em`,
             }}
           >
             <div>
@@ -219,8 +234,8 @@ const OrderSummary = ({ state, actions, libraries, setPayOrder }) => {
         <div
           type="submit"
           className="transparent-btn"
-          style={{ marginRight: `1em` }}
-          onClick={() => setPayOrder(null)}
+          style={{ marginRight: `2em` }}
+          onClick={handlePayment}
         >
           Cancel
         </div>
@@ -238,20 +253,22 @@ const OrderSummary = ({ state, actions, libraries, setPayOrder }) => {
       style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
     >
       <div className="primary-title" style={{ fontSize: 20 }}>
-        Personal Details:
+        Order Summary:
       </div>
       <ServeOrderSummary />
 
       <div
         className="flex"
         style={{
+          alignItems: "center",
           borderBottom: `1px solid ${colors.darkSilver}`,
-          margin: `1em 0`,
+          paddingTop: `2em`,
+          marginBottom: `2em`,
         }}
       />
 
       <div className="primary-title" style={{ fontSize: 20 }}>
-        Personal Details:
+        Billing Address:
       </div>
       <ServeBillingAddress />
 

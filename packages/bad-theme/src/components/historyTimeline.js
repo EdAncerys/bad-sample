@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
+import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
+
 import Loading from "./loading";
 import { colors } from "../config/imports";
-import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
-import titleBlock from "./titleBlock";
 
 const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.

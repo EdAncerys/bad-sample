@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
+import DirectDebitNotification from "../directDebitNotification";
 import Payments from "../payments";
 import BillingHistory from "../billingHistory";
 import OrderSummary from "../orderSummary";
+import DirectDebitSetup from "../directDebitSetup";
 
 const Billing = ({ state, actions, libraries, dashboardPath }) => {
-  const [payOrder, setPayOrder] = useState(null);
+  const [page, setPage] = useState({ page: "billing" });
 
   if (dashboardPath !== "Billing") return null;
 
@@ -14,31 +16,35 @@ const Billing = ({ state, actions, libraries, dashboardPath }) => {
 
   // SERVERS ---------------------------------------------
   const ServeDashboard = () => {
-    if (payOrder) return null;
+    if (page.page !== "billing") return null;
 
     return (
-      <div style={{ padding: `0 ${marginHorizontal}px` }}>
-        <Payments setPayOrder={setPayOrder} />
+      <div>
+        <DirectDebitNotification setPage={setPage} />
+        <Payments setPage={setPage} />
         <BillingHistory />
       </div>
     );
   };
 
   const ServeOrderSummary = () => {
-    if (!payOrder) return null;
+    if (page.page !== "directDebit") return null;
 
-    return (
-      <div style={{ padding: `0 ${marginHorizontal}px` }}>
-        <OrderSummary setPayOrder={setPayOrder} />
-      </div>
-    );
+    return <OrderSummary setPage={setPage} />;
+  };
+
+  const ServeDirectDebitSetup = () => {
+    if (page.page !== "directDebitSetup") return null;
+
+    return <DirectDebitSetup setPage={setPage} />;
   };
 
   // RETURN ---------------------------------------------
   return (
-    <div>
+    <div style={{ padding: `0 ${marginHorizontal}px` }}>
       <ServeDashboard />
       <ServeOrderSummary />
+      <ServeDirectDebitSetup />
     </div>
   );
 };

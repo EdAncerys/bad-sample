@@ -60,6 +60,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
             type="text"
             className="form-control"
             placeholder="Address Line 1"
+            defaultValue={isActiveUser.address2_line1}
             style={styles.input}
           />
           <label>Address Line 2</label>
@@ -68,6 +69,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
             type="text"
             className="form-control"
             placeholder="Address Line 2"
+            defaultValue={isActiveUser.address2_line2}
             style={styles.input}
           />
         </div>
@@ -99,12 +101,13 @@ const UpdateAddress = ({ state, actions, libraries }) => {
         </div>
 
         <div className="form-group" style={{ display: "grid", gap: 10 }}>
-          <label>Post Code</label>
+          <label>Postcode</label>
           <input
             id="postcode"
             type="text"
             className="form-control"
-            placeholder="Post Code"
+            placeholder="Postcode"
+            defaultValue={isActiveUser.address2_postalcode}
             style={styles.input}
           />
         </div>

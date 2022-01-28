@@ -19,6 +19,8 @@ const UpdateProfile = ({ state, actions, libraries }) => {
 
   const marginVertical = state.theme.marginVertical;
 
+  console.log("isActiveUser", isActiveUser);
+
   // HELPERS ----------------------------------------------------------------
   const handleProfileUpdate = async () => {
     const firstname = document.querySelector("#fistName").value.trim();
@@ -66,6 +68,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
             type="text"
             className="form-control"
             placeholder="Your First Name"
+            defaultValue={isActiveUser.firstname}
             style={styles.input}
           />
           <label>Your Last Name</label>
@@ -74,6 +77,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
             type="text"
             className="form-control"
             placeholder="Your Last Name"
+            defaultValue={isActiveUser.lastname}
             style={styles.input}
           />
         </div>
@@ -85,6 +89,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
             type="email"
             className="form-control"
             placeholder="Your Contact E-mail Address"
+            defaultValue={isActiveUser.emailaddress1}
             style={styles.input}
             disabled
           />

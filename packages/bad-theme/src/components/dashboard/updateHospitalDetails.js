@@ -2,9 +2,13 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
+// CONTEXT ----------------------------------------------------------------
+import { useAppState } from "../../context";
 
 const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
+  const { isActiveUser } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
 
@@ -37,7 +41,8 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
             id="hospitalName"
             type="text"
             className="form-control"
-            placeholder="Kings College Hospital"
+            placeholder="Hospital Name"
+            defaultValue={isActiveUser.bad_mainhosptialweb}
             style={styles.input}
             readOnly
           />
@@ -50,6 +55,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
             type="text"
             className="form-control"
             placeholder="Job Title"
+            defaultValue={isActiveUser.jobtitle}
             style={styles.input}
             readOnly
           />
