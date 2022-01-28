@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
-import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 
 import Loading from "../../loading";
 import { colors } from "../../../config/colors";
 import Card from "../../card/card";
+import SearchContainer from "../../searchContainer";
 
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../../blockWrapper";
@@ -16,35 +16,39 @@ import { useAppDispatch, useAppState, getFadAction } from "../../../context";
 const Directory = ({ state, actions, libraries, dashboardPath }) => {
   const dispatch = useAppDispatch();
   const { fad } = useAppState();
+  const LIMIT = 9;
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [fadData, setFadData] = useState(null);
 
-  const mountedRef = useRef(true);
+  const searchFilterRef = useRef(null);
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-  const ctaHeight = 45;
 
   // DATA pre FETCH ------------------------------------------------------------
   useEffect(async () => {
-    // fetch data via API
     if (!fad) {
+      // fetch data via API
       const data = await getFadAction({ state, dispatch });
-
-      setFadData(data);
+      setFadData(data.slice(0, Number(LIMIT)));
     } else {
-      setFadData(fad);
+      setFadData(fad.slice(0, Number(LIMIT)));
     }
 
     return () => {
-      mountedRef.current = false; // clean up function
+      searchFilterRef.current = null; // clean up function
     };
   }, [fad]);
 
-  const ServeFadList = ({ fad }) => {
-    const { contactid } = fad;
-    // API call to fetch fad profile
+  // HANDLERS -------------------------------------------------------------------
+  const handleClearSearchFilter = () => {
+    setSearchFilter(null);
+    searchFilterRef.current = null;
 
+    setFadData(fad.slice(0, Number(LIMIT)));
+  };
+
+  const ServeFadList = ({ fad }) => {
     return <Card fadDirectory={fad} colour={colors.primary} shadow />;
   };
 
@@ -52,49 +56,35 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
   if (!fadData) return <Loading />; // awaits data
 
   // HELPERS ----------------------------------------------------------------
-  const handleSearchFilter = () => {
-    const searchInput = document.querySelector(`#searchDirectoryInput`).value;
-    const INPUT = searchInput.toLowerCase();
-    const filter = fadData.filter((fad) => {
-      const { bad_findadermatologisttext, fullname } = fad;
+  const handleSearch = () => {
+    const input = searchFilterRef.current.value.toLowerCase();
+    let data = fad;
 
-      if (
-        bad_findadermatologisttext &&
-        bad_findadermatologisttext.toLowerCase().includes(INPUT)
-      )
-        return fad;
-      if (fullname && fullname.toLowerCase().includes(INPUT)) return fad;
-    });
-    setFadData(filter);
-    setSearchFilter(INPUT);
+    if (!!input) {
+      data = data.filter((item) => {
+        let fullname = item.fullname;
+        let email = item.emailaddress1;
+
+        if (fullname) fullname = fullname.toLowerCase().includes(input);
+        if (email) email = email.toLowerCase().includes(input);
+
+        return fullname || email;
+      });
+    }
+
+    setFadData(data);
+    setSearchFilter(input);
   };
 
   // SERVERS --------------------------------------------------------
   const ServeFilter = () => {
-    const ServeTitle = () => {
-      return (
-        <div
-          className="flex primary-title"
-          style={{ fontSize: 36, alignItems: "center" }}
-        >
-          Directory
-        </div>
-      );
-    };
-
     const ServeSearchFilter = () => {
       if (!searchFilter) return null;
 
       return (
         <div className="shadow filter">
           <div>{searchFilter}</div>
-          <div
-            className="filter-icon"
-            onClick={() => {
-              setSearchFilter(null);
-              setFadData(fad);
-            }}
-          >
+          <div className="filter-icon" onClick={handleClearSearchFilter}>
             <CloseIcon />
           </div>
         </div>
@@ -102,89 +92,22 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
     };
 
     return (
-      <div style={{ backgroundColor: colors.silverFillTwo }}>
+      <div
+        style={{
+          backgroundColor: colors.silverFillTwo,
+          marginBottom: `${state.theme.marginVertical}px`,
+        }}
+      >
         <BlockWrapper>
-          <div
-            className="flex-col"
-            style={{
-              padding: `${
-                marginVertical * 1.5
-              }px ${marginHorizontal}px ${marginVertical}px`,
-            }}
-          >
-            <ServeTitle />
-
-            <div className="flex-row" style={{ width: "60%" }}>
-              <div
-                className="flex search-input"
-                style={{
-                  flex: 1,
-                  marginRight: `2em`,
-                  padding: `0.75em 0`,
-                  position: "relative",
-                }}
-              >
-                <input
-                  id={`searchDirectoryInput`}
-                  type="text"
-                  className="form-control"
-                  placeholder="Search Directory"
-                  style={styles.input}
-                />
-                <span
-                  className="input-group-text toggle-icon-color"
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    height: ctaHeight,
-                    border: "none",
-                    background: "transparent",
-                    alignItems: "center",
-                    color: colors.darkSilver,
-                    cursor: "pointer",
-                  }}
-                >
-                  <SearchIcon />
-                </span>
-              </div>
-              <div style={{ display: "grid", alignItems: "center" }}>
-                <button
-                  type="submit"
-                  className="btn"
-                  style={{
-                    backgroundColor: colors.primary,
-                    color: colors.white,
-                    padding: `0.5em`,
-                  }}
-                  onClick={handleSearchFilter}
-                >
-                  Search
-                </button>
-              </div>
-            </div>
-
-            <div className="flex" style={{ padding: "0.5em 0 1em" }}>
+          <div style={{ padding: `0 ${marginHorizontal}px` }}>
+            <SearchContainer
+              title="Directory"
+              width="70%"
+              searchFilterRef={searchFilterRef}
+              handleSearch={handleSearch}
+            />
+            <div className="flex" style={{ margin: "0.5em 0" }}>
               <ServeSearchFilter />
-            </div>
-          </div>
-        </BlockWrapper>
-      </div>
-    );
-  };
-
-  // SERVERS ---------------------------------------------
-  const Directory = () => {
-    return (
-      <div>
-        <ServeFilter />
-        <BlockWrapper>
-          <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
-            <div style={styles.container}>
-              {fadData.map((fad, key) => {
-                console.log(fad);
-
-                return <ServeFadList key={key} fad={fad} />;
-              })}
             </div>
           </div>
         </BlockWrapper>
@@ -195,7 +118,18 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
   // RETURN ---------------------------------------------
   return (
     <div>
-      <Directory />
+      <ServeFilter />
+      <BlockWrapper>
+        <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
+          <div style={styles.container}>
+            {fadData.map((fad, key) => {
+              console.log(fad);
+
+              return <ServeFadList key={key} fad={fad} />;
+            })}
+          </div>
+        </div>
+      </BlockWrapper>
     </div>
   );
 };
