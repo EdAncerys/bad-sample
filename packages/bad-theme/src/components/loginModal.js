@@ -55,6 +55,14 @@ const LoginModal = ({ state, actions }) => {
     console.log("iFrameRef", iFrameRef.current);
 
     try {
+      setTimeout(
+        console.log(
+          "iFrameRef setTimeout",
+          iFrameRef.current.contentWindow.location
+        ),
+        100
+      );
+
       const iFramePath = iFrameRef.current.contentWindow.location.pathname;
       console.log("iFramePath", iFramePath);
 

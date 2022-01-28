@@ -16,7 +16,9 @@ import {
   sendEmailEnquireAction,
 } from "../context";
 
-const EnquireModal = ({ state, actions }) => {
+const EnquireModal = ({ state, actions, libraries }) => {
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
   const dispatch = useAppDispatch();
   const { enquireAction, isFetching } = useAppState();
 
@@ -27,6 +29,8 @@ const EnquireModal = ({ state, actions }) => {
     const blockId = uuidv4(); // add unique id
     setUniqueId(blockId);
   }, []);
+
+  console.log("enquireAction", enquireAction);
 
   // HANDLERS ----------------------------------------------------
   const handleContactFormSubmit = ({ agreement }) => {
@@ -124,7 +128,7 @@ const EnquireModal = ({ state, actions }) => {
                 style={{ opacity: agreement ? 1 : 0.7 }}
                 onClick={() => handleContactFormSubmit({ agreement })}
               >
-                Send Enquiry
+                Submit
               </div>
             </Modal.Footer>
           </div>
@@ -245,7 +249,27 @@ const EnquireModal = ({ state, actions }) => {
       );
     };
 
-    const ServeFormInfo = () => {
+    const ServeFormHeader = () => {
+      const ServeFormTitle = () => {
+        if (!enquireAction.form_title) return null;
+
+        return (
+          <div className="primary-title" style={{ fontSize: 20 }}>
+            <Html2React html={enquireAction.form_title} />
+          </div>
+        );
+      };
+
+      const ServeFormBody = () => {
+        if (!enquireAction.form_body) return null;
+
+        return (
+          <div style={{ paddingTop: `1em` }}>
+            <Html2React html={enquireAction.form_body} />
+          </div>
+        );
+      };
+
       return (
         <div
           style={{
@@ -253,7 +277,8 @@ const EnquireModal = ({ state, actions }) => {
             paddingBottom: `2em`,
           }}
         >
-          <h4>Enquire About Education & Training </h4>
+          <ServeFormTitle />
+          <ServeFormBody />
         </div>
       );
     };
@@ -261,7 +286,7 @@ const EnquireModal = ({ state, actions }) => {
     return (
       <div className="flex-col">
         <Modal.Body>
-          <ServeFormInfo />
+          <ServeFormHeader />
           <ServeForm />
         </Modal.Body>
       </div>
@@ -304,12 +329,14 @@ const EnquireModal = ({ state, actions }) => {
       <div className="flex">
         <Modal.Body>
           <div
+            className="primary-title"
             style={{
               borderBottom: `1px solid ${colors.darkSilver}`,
               paddingBottom: `2em`,
+              fontSize: 20,
             }}
           >
-            <h4>Contact Details</h4>
+            Contact Details
           </div>
           <div style={{ padding: `1em 0` }}>
             <div style={styles.infoTitle}>

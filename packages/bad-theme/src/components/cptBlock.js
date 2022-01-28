@@ -26,14 +26,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     acf_fc_layout,
   } = block;
 
-  const isCovid_19 = acf_fc_layout === "covid_loop_block";
-  let postPath = `derm_groups_charity`;
-  let typePath = `dermo_group_type`;
-  if (isCovid_19) {
-    postPath = `covid_19`;
-    typePath = `guidance`;
-  }
-
   const [postListData, setPostListData] = useState(null);
   const [groupeType, setGroupeType] = useState(null);
 
@@ -47,6 +39,17 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
+
+  const isCovid_19 = acf_fc_layout === "covid_loop_block";
+  let postPath = `derm_groups_charity`;
+  let typePath = `dermo_group_type`;
+  if (isCovid_19) {
+    postPath = `covid_19`;
+    typePath = `guidance`;
+  }
+
+  let PADDING = `${marginVertical}px 0`;
+  if (add_search_function) PADDING = `0 0 ${marginVertical}px 0`;
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
@@ -223,8 +226,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               handleSearch={handleTypeSearch}
               typeFilterRef={typeFilterRef}
               handleClearTypeFilter={handleClearTypeFilter}
-              title="Filter"
-              title={isCovid_19 ? "Search Guidance" : "Search Groupe"}
+              title={isCovid_19 ? "Filter" : "Search Groupe"}
             />
           </div>
         </BlockWrapper>
@@ -285,7 +287,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   return (
     <div
       style={{
-        padding: `${marginVertical}px 0`,
+        padding: PADDING,
         backgroundColor: background_colour,
       }}
     >
