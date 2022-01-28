@@ -74,7 +74,7 @@ const BADTheme = {
         await getEventsData({ state, actions });
 
         // handle auth login auth via cookies
-        // await authLogViaCookie({ state, initialState });
+        await authLogViaCookie({ state, initialState });
 
         // pre load fonts from google
         import("webfontloader").then((WebFontLoader) => {
@@ -89,7 +89,6 @@ const BADTheme = {
 
       afterCSR: async ({ state, actions }) => {
         console.log("afterCSR triggered"); // debug
-        console.log("BCSR state", state);
       },
     },
   },

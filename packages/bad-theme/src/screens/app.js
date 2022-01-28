@@ -58,15 +58,15 @@ const App = ({ state, actions }) => {
   if (data.query) console.log(data.query);
 
   // LOGIN HANDLERS ----------------------------------------------------
-  useEffect(async () => {
-    if (data.query && data.query.transId)
-      await loginAction({ state, dispatch, transId: data.query.transId });
-    console.log("ID ", data.query.transId);
+  // useEffect(async () => {
+  //   if (data.query && data.query.transId)
+  //     await loginAction({ state, dispatch, transId: data.query.transId });
+  //   console.log("ID ", data.query.transId);
 
-    return () => {
-      asyncRef.current = false; // clean up function
-    };
-  }, [data]);
+  //   return () => {
+  //     asyncRef.current = false; // clean up function
+  //   };
+  // }, [data]);
 
   // RETURN ------------------------------------------------------------
   return (

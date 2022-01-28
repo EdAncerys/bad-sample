@@ -4,21 +4,22 @@ import { authenticateAppAction } from "../context";
 export const authLogViaCookie = async ({ state, initialState }) => {
   const cookie = handleGetCookie({ name: `BAD-WebApp` });
 
-  // handle API call to fetch user data
+  // ⏬⏬  user validation & auth ⏬⏬
   if (cookie) {
     console.log("API to get user data", cookie);
+    const { jwt, contactid } = cookie;
 
-    if (!cookie.contactid || cookie.jwt) {
-      console.log("Failed to get cookie data");
+    if (!contactid || !jwt) {
+      console.log("Failed to Auth 🍪 data");
+      handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
       return null;
     }
 
-    const URL =
-      state.auth.APP_HOST + `/catalogue/data/contacts(${cookie.contactid})`;
+    const URL = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
 
     const requestOptions = {
       method: "GET",
-      headers: { Authorization: "Bearer " + cookie.jwt },
+      headers: { Authorization: "Bearer " + jwt },
     };
 
     try {
@@ -26,9 +27,10 @@ export const authLogViaCookie = async ({ state, initialState }) => {
       const response = await data.json();
       console.log(response);
       if (response) {
-        initialState.isActiveUser = response;
-        initialState.jwt = cookie.jwt;
         const taken = await authenticateAppAction({ state }); // replace taken with new one
+        initialState.isActiveUser = response; // populates user data
+        initialState.jwt = taken; // replace taken with new one
+
         handleSetCookie({
           name: state.auth.COOKIE_NAME,
           value: { jwt: taken, contactid },
@@ -36,6 +38,7 @@ export const authLogViaCookie = async ({ state, initialState }) => {
       }
     } catch (error) {
       console.log("error", error);
+      handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
     }
   }
 };
