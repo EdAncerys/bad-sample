@@ -67,39 +67,35 @@ export const DATA = [
 export const MENU_DATA = [
   {
     title: "Patient Information Leaflets",
-    url: "/",
+    url: "/pils/",
   },
   {
     title: "BAD Affiliated Groups",
-    url: "/",
-  },
-  {
-    title: "Find a Dermatologist",
-    url: "/",
+    url: "/derm-groups-charity/",
   },
   {
     title: "Patient Hub",
-    url: "/",
+    url: "https://www.skinhealthinfo.org.uk/",
   },
   {
     title: "COVID 19 Information",
-    url: "/",
+    url: "/covid-19/",
   },
   {
     title: "CED Journal",
-    url: "/",
+    url: "/research-journals/journals/clinical-and-experimental-dermatology/",
   },
   {
     title: "BJD Journal",
-    url: "/",
+    url: "/research-journals/journals/british-journal-of-dermatology/",
   },
   {
     title: "SHD Journal",
-    url: "/node_modules",
+    url: " /research-journals/journals/skin-health-and-disease/",
   },
   {
     title: "Clinical Guidelines",
-    url: "/",
+    url: "/guidelines-and-standards/clinical-guidelines/",
   },
 ];
 

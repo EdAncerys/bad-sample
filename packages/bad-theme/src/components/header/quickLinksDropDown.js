@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
-import { setGoToAction } from "../../context";
 import { MENU_DATA } from "../../config/data";
+// CONTEXT ----------------------------------------------------
+import { setGoToAction } from "../../context";
 
 const QuickLinksDropDown = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -20,13 +21,6 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
     }
     if (selector) selector.style.display = "block";
     if (btn) btn.classList.add = "shadow";
-  };
-
-  const handleOnClickNavigation = ({ path }) => {
-    const selector = document.querySelector(`#quick-link-menu`);
-
-    selector.style.display = "none";
-    if (path) setGoToAction({ path, actions });
   };
 
   // SERVERS ----------------------------------------------------------
@@ -69,7 +63,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
               key={key}
               className="flex-row"
               style={{ marginRight: `2em` }}
-              onClick={() => handleOnClickNavigation({ path: url })}
+              onClick={() => setGoToAction({ path: url, actions })}
             >
               <a className="dropdown-item" style={{ padding: `0.5em 0` }}>
                 <div

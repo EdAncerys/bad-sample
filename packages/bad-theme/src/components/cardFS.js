@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/imports";
 import Image from "@frontity/components/image";
-
+// CONTEXT ----------------------------------------------------
 import { setGoToAction } from "../context";
 
 const CardFS = ({
