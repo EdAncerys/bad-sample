@@ -50,7 +50,9 @@ const BADTheme = {
       COOKIE_NAME: "BAD-WebApp",
     },
     autoPrefetch: "hover", // values: no | hover | in-view | all
-    context: {},
+    context: {
+      transId: null,
+    },
   },
   actions: {
     theme: {

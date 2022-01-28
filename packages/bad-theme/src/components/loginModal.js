@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 
@@ -23,22 +23,55 @@ const LoginModal = ({ state, actions }) => {
   const [id, setId] = useState(null);
   let myIframe = null; // iFrame window
 
-  console.log(state.auth.IFRAME_URL);
+  const iFrameRef = useRef(null);
 
-  useLayoutEffect(() => {
-    setId(null); // reset id value on component load
-    myIframe = document.getElementById("badLoginIframe");
-    if (!myIframe) return console.log("No iFrame Detected");
+  // useLayoutEffect(() => {
+  //   setId(null); // reset id value on component load
+  //   myIframe = document.getElementById("badLoginIframe");
+  //   if (!myIframe) return console.log("No iFrame Detected");
 
-    console.log("myIframe", myIframe);
-    myIframe.addEventListener("load", iFrameHandler);
-  }, [loginModalAction]);
+  //   console.log("myIframe", myIframe);
+  //   myIframe.addEventListener("load", handler);
+  // }, []);
+
+  // useLayoutEffect(() => {
+  //   setId(null); // reset id value on component load
+  //   myIframe = document.getElementById("badLoginIframe");
+  //   if (!myIframe) return console.log("No iFrame Detected");
+
+  //   console.log("myIframe", myIframe);
+  //   myIframe.addEventListener("load", iFrameHandler);
+  // }, [loginModalAction]);
 
   useEffect(async () => {
     if (id) await loginAction({ state, dispatch, transId: id });
   }, [id]);
 
   // HANDLERS ----------------------------------------------------
+  const handler = () => {
+    console.log("iFrame handler triggered...");
+    // const iFrame = document.getElementById("badLoginIframe");
+    // console.log("iFrame", iFrame);
+    console.log("iFrameRef", iFrameRef.current);
+
+    try {
+      const iFramePath = iFrameRef.current.contentWindow.location.pathname;
+      console.log("iFramePath", iFramePath);
+
+      const iqs = new URLSearchParams(
+        iFrameRef.current.contentWindow.location.search
+      );
+      console.log("iFrameRef iqs", iqs);
+      if (iqs) {
+        const transId = iqs.get("transId");
+        console.log("transId", transId);
+        setId(transId);
+      }
+    } catch (e) {
+      console.log("*** ERROR GETTING IFRAME CONTENT - CROSS-ORIGIN **");
+    }
+  };
+
   const iFrameHandler = async () => {
     console.log("iFrameHandler triggered");
 
@@ -129,22 +162,24 @@ const LoginModal = ({ state, actions }) => {
 
       return (
         <div id="iFrame-container" style={{ paddingTop: `2em` }}>
-          <Iframe
+          {/* <Iframe
             url={state.auth.IFRAME_URL}
+            onLoad={handler}
             width="100%"
             height="1000px"
             id="badLoginIframe"
             display="initial"
             position="relative"
-          />
-          {/* <iframe
+            /> */}
+          <iframe
             className="contain"
             id="badLoginIframe"
-            title="Inline Frame Example"
+            ref={iFrameRef}
+            onLoad={handler}
             width="100%"
             height="1000"
             src="https://bad-uat.powerappsportals.com/SignIn?returnUrl=%2fhandshake%3faction%3dlogin%2f"
-          ></iframe> */}
+          ></iframe>
         </div>
       );
     };
