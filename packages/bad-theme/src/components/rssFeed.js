@@ -44,6 +44,8 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
   const currentSearchFilterRef = useRef(null);
   const loadMoreRef = useRef(null);
 
+  const LIMIT = LIMIT;
+
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
@@ -59,7 +61,7 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
-    const limit = post_limit || 8;
+    const limit = post_limit || LIMIT;
     let result = null;
 
     if (isBJD) result = await getBJDFeedAction({ state, dispatch });
@@ -88,11 +90,11 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
     if (isCED) data = cedFeed;
     if (isSHD) data = shdFeed;
 
-    setFeedData(data.slice(0, Number(8)));
+    setFeedData(data.slice(0, Number(LIMIT)));
   };
 
   const handleLoadMoreFilter = () => {
-    if (feedData.length < 8) return;
+    if (feedData.length < LIMIT) return;
     let data = null;
 
     if (isBJD) data = bjdFeed;
@@ -103,7 +105,7 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
       loadMoreRef.current = data;
       setFeedData(data);
     } else {
-      setFeedData(loadMoreRef.current.slice(0, Number(8)));
+      setFeedData(loadMoreRef.current.slice(0, Number(LIMIT)));
       loadMoreRef.current = null;
     }
   };
@@ -162,7 +164,7 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
   };
 
   const ServeMoreAction = () => {
-    if (post_limit || feedData.length < 8 || currentSearchFilterRef.current)
+    if (post_limit || feedData.length < LIMIT || currentSearchFilterRef.current)
       return null;
     const value = loadMoreRef.current ? "Less" : " Load More";
 

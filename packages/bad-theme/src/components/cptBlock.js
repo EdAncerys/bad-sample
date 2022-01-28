@@ -36,6 +36,8 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   const typeFilterRef = useRef(null);
   const loadMoreRef = useRef(null);
 
+  const LIMIT = 8;
+
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
@@ -68,7 +70,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     const GROUPE_DATA = Object.values(state.source[postPath]);
     const GROUPE_TYPE = Object.values(state.source[typePath]);
 
-    const limit = post_limit || 8;
+    const limit = post_limit || LIMIT;
     setPostListData(GROUPE_DATA.slice(0, Number(limit))); // apply limit on posts
     setGroupeType(GROUPE_TYPE);
 
@@ -81,7 +83,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handleLoadMoreFilter = async () => {
-    if (postListData.length < 8) return;
+    if (postListData.length < LIMIT) return;
     let data = Object.values(state.source[postPath]);
 
     if (!loadMoreRef.current) {
@@ -91,7 +93,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       loadMoreRef.current = data;
       setPostListData(data);
     } else {
-      setPostListData(loadMoreRef.current.slice(0, Number(8)));
+      setPostListData(loadMoreRef.current.slice(0, Number(LIMIT)));
       loadMoreRef.current = null;
     }
   };
@@ -159,7 +161,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     currentSearchFilterRef.current = null;
 
     if (!typeFilterRef.current) {
-      setPostListData(data.slice(0, Number(8)));
+      setPostListData(data.slice(0, Number(LIMIT)));
     } else {
       handleTypeSearch();
     }
@@ -170,7 +172,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     let data = Object.values(state.source[postPath]); // add postListData object to data array
 
     if (!currentSearchFilterRef.current) {
-      setPostListData(data.slice(0, Number(8)));
+      setPostListData(data.slice(0, Number(LIMIT)));
     } else {
       handleSearch();
     }
@@ -260,7 +262,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   const ServeMoreAction = () => {
     if (currentSearchFilterRef.current || typeFilterRef.current) return null;
-    if (post_limit || postListData.length < 8) return null;
+    if (post_limit || postListData.length < LIMIT) return null;
 
     const value = loadMoreRef.current ? "Less" : "Load More";
 

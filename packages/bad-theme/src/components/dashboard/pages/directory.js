@@ -22,6 +22,7 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
   const [fadData, setFadData] = useState(null);
 
   const searchFilterRef = useRef(null);
+  const loadMoreRef = useRef(null);
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
@@ -48,14 +49,6 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
     setFadData(fad.slice(0, Number(LIMIT)));
   };
 
-  const ServeFadList = ({ fad }) => {
-    return <Card fadDirectory={fad} colour={colors.primary} shadow />;
-  };
-
-  if (dashboardPath !== "Directory") return null; // call after all React hooks
-  if (!fadData) return <Loading />; // awaits data
-
-  // HELPERS ----------------------------------------------------------------
   const handleSearch = () => {
     const input = searchFilterRef.current.value.toLowerCase();
     let data = fad;
@@ -76,7 +69,29 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
     setSearchFilter(input);
   };
 
+  const handleLoadMoreFilter = async () => {
+    if (fadData.length < LIMIT) return;
+    let data = fad;
+
+    if (!loadMoreRef.current) {
+      loadMoreRef.current = data;
+      setFadData(data);
+      console.log(loadMoreRef.current.length);
+    } else {
+      setFadData(loadMoreRef.current.slice(0, Number(LIMIT)));
+      loadMoreRef.current = null;
+      console.log(loadMoreRef.current);
+    }
+  };
+
+  if (dashboardPath !== "Directory") return null; // call after all React hooks
+  if (!fadData) return <Loading />; // awaits data
+
   // SERVERS --------------------------------------------------------
+  const ServeFadList = ({ fad }) => {
+    return <Card fadDirectory={fad} colour={colors.primary} shadow />;
+  };
+
   const ServeFilter = () => {
     const ServeSearchFilter = () => {
       if (!searchFilter) return null;
@@ -115,6 +130,30 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
     );
   };
 
+  const ServeMoreAction = () => {
+    if (searchFilter || fadData.length < LIMIT) return null;
+
+    const value = loadMoreRef.current ? "Less" : "Load More";
+
+    return (
+      <div
+        className="flex"
+        style={{
+          justifyContent: "center",
+          paddingTop: `2em`,
+        }}
+      >
+        <button
+          type="submit"
+          className="transparent-btn"
+          onClick={handleLoadMoreFilter}
+        >
+          {value}
+        </button>
+      </div>
+    );
+  };
+
   // RETURN ---------------------------------------------
   return (
     <div>
@@ -123,11 +162,10 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
         <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
           <div style={styles.container}>
             {fadData.map((fad, key) => {
-              console.log(fad);
-
               return <ServeFadList key={key} fad={fad} />;
             })}
           </div>
+          <ServeMoreAction />
         </div>
       </BlockWrapper>
     </div>
