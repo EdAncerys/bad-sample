@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import Loading from "../components/loading";
 import { colors } from "../config/imports";
 import { setGoToAction } from "../context";
+import SearchContainer from "../components/searchContainer";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
@@ -16,7 +17,8 @@ const PilsArchive = ({ state, actions, libraries }) => {
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [pilList, setPilList] = useState([]);
-  const mountedRef = useRef(true);
+
+  const searchFilterRef = useRef(true);
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -39,7 +41,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
     setPilList(Object.values(state.source.pils)); // add pill object to data array
 
     return () => {
-      mountedRef.current = false; // clean up function
+      searchFilterRef.current = false; // clean up function
     };
   }, []);
   // DATA pre FETCH ----------------------------------------------------------------
@@ -61,17 +63,22 @@ const PilsArchive = ({ state, actions, libraries }) => {
   ALPHABET.sort(); // sorts array alphabetically
 
   // HELPERS ----------------------------------------------------------------
-  const handleSearchFilter = () => {
-    const searchInput = document.querySelector(`#searchInput${id}`).value;
-    if (!!searchInput) {
-      const INPUT = searchInput.toLowerCase();
+  const handleSearch = () => {
+    const input = searchFilterRef.current.value.toLowerCase();
+    if (!!input) {
       const filter = pilList.filter((pil) =>
-        pil.title.rendered.toLowerCase().includes(INPUT)
+        pil.title.rendered.toLowerCase().includes(input)
       );
-      setSearchFilter(searchInput);
+
+      setSearchFilter(input);
       setPilList(filter);
     }
   };
+
+  const handleClearFilter = () => {
+    setSearchFilter(null);
+    setPilList(Object.values(state.source.pils));
+  }
 
   // SERVERS --------------------------------------------------------
   const ServePilsList = ({ item }) => {
@@ -155,99 +162,41 @@ const PilsArchive = ({ state, actions, libraries }) => {
   };
 
   const ServeFilter = () => {
-    const ServeTitle = () => {
-      return (
-        <div
-          className="flex primary-title"
-          style={{ fontSize: 36, alignItems: "center" }}
-        >
-          Search for Patient Information Leaflets
-        </div>
-      );
-    };
-
     const ServeSearchFilter = () => {
       if (!searchFilter) return null;
 
       return (
         <div className="shadow filter">
           <div>{searchFilter}</div>
-          <div
-            className="filter-icon"
-            onClick={() => {
-              setSearchFilter(null);
-              setPilList(Object.values(state.source.pils));
-            }}
-          >
-            <CloseIcon />
+          <div className="filter-icon" onClick={handleClearFilter}>
+            <CloseIcon
+              style={{
+                fill: colors.darkSilver,
+                padding: 0,
+              }}
+            />
           </div>
         </div>
       );
     };
 
     return (
-      <div style={{ backgroundColor: colors.silverFillTwo }}>
+      <div
+        style={{
+          backgroundColor: colors.silverFillTwo,
+          marginBottom: `${state.theme.marginVertical}px`,
+          padding: `2em 0`,
+        }}
+      >
         <BlockWrapper>
-          <div
-            className="flex-col"
-            style={{
-              padding: `${
-                marginVertical * 1.5
-              }px ${marginHorizontal}px ${marginVertical}px`,
-            }}
-          >
-            <ServeTitle />
-
-            <div className="flex-row" style={{ width: "70%" }}>
-              <div
-                className="flex search-input"
-                style={{
-                  flex: 1,
-                  marginRight: `2em`,
-                  padding: `0.75em 0`,
-                  position: "relative",
-                }}
-              >
-                <input
-                  id={`searchInput${id}`}
-                  type="text"
-                  className="form-control"
-                  placeholder="Find PIL"
-                  style={styles.input}
-                />
-                <span
-                  className="input-group-text toggle-icon-color"
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    height: ctaHeight,
-                    border: "none",
-                    background: "transparent",
-                    alignItems: "center",
-                    color: colors.darkSilver,
-                    cursor: "pointer",
-                  }}
-                >
-                  <SearchIcon />
-                </span>
-              </div>
-              <div style={{ display: "grid", alignItems: "center" }}>
-                <button
-                  type="submit"
-                  className="btn"
-                  style={{
-                    backgroundColor: colors.primary,
-                    color: colors.white,
-                    padding: `0.5em`,
-                  }}
-                  onClick={handleSearchFilter}
-                >
-                  Search
-                </button>
-              </div>
-            </div>
-
-            <div className="flex" style={{ padding: "0.5em 0 1em" }}>
+          <div style={{ padding: `0 ${marginHorizontal}px` }}>
+            <SearchContainer
+              title='Search for Patient Information Leaflets'
+              width="70%"
+              searchFilterRef={searchFilterRef}
+              handleSearch={handleSearch}
+            />
+            <div className="flex" style={{ margin: "0.5em 0" }}>
               <ServeSearchFilter />
             </div>
           </div>
