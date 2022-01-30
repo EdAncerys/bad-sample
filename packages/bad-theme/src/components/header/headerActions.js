@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useMemo, useLayoutEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
@@ -46,7 +46,9 @@ const HeaderActions = ({ state, actions }) => {
             setGoToAction({ path: `https://badadmin.skylarkdev.co/`, actions })
           }
         >
-          <Image src={BADLogo} className="d-block h-100" alt="BAD Logo" />
+          {useMemo(() => (
+            <Image src={BADLogo} className="d-block h-100" alt="BAD Logo" />
+          ))}
         </div>
       </div>
     );
@@ -94,6 +96,7 @@ const HeaderActions = ({ state, actions }) => {
       <BlockWrapper>
         <div className="flex" style={{ padding: `2.75em 0` }}>
           <ServeLogoContainer />
+
           <div
             className="flex-row"
             style={{
