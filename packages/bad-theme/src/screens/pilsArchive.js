@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { connect, styled } from "frontity";
+import { connect } from "frontity";
 import { v4 as uuidv4 } from "uuid";
 
 import Loading from "../components/loading";
@@ -7,7 +7,6 @@ import { colors } from "../config/imports";
 import { setGoToAction } from "../context";
 import SearchContainer from "../components/searchContainer";
 
-import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
@@ -78,7 +77,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
   const handleClearFilter = () => {
     setSearchFilter(null);
     setPilList(Object.values(state.source.pils));
-  }
+  };
 
   // SERVERS --------------------------------------------------------
   const ServePilsList = ({ item }) => {
@@ -191,7 +190,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
         <BlockWrapper>
           <div style={{ padding: `0 ${marginHorizontal}px` }}>
             <SearchContainer
-              title='Search for Patient Information Leaflets'
+              title="Search for Patient Information Leaflets"
               width="70%"
               searchFilterRef={searchFilterRef}
               handleSearch={handleSearch}

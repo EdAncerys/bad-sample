@@ -37,7 +37,7 @@ import Loading from "../components/loading";
 import BlockWrapper from "../components/blockWrapper";
 import { handleGetCookie } from "../helpers/cookie";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, loginAction } from "../context";
+import { useAppDispatch, useAppState, setFilterAction } from "../context";
 import { useCookies } from "react-cookie";
 
 const App = ({ state, actions }) => {
@@ -57,25 +57,14 @@ const App = ({ state, actions }) => {
 
   if (data.query) console.log(data.query);
 
-  // LOGIN HANDLERS ----------------------------------------------------
-  // useEffect(async () => {
-  //   if (data.query && data.query.transId)
-  //     await loginAction({ state, dispatch, transId: data.query.transId });
-  //   console.log("ID ", data.query.transId);
-
-  //   return () => {
-  //     asyncRef.current = false; // clean up function
-  //   };
-  // }, [data]);
-
   // RETURN ------------------------------------------------------------
   return (
     <div
       onClick={(e) => {
         state.theme.childMenuRef = ""; // reset child menu ref value
         state.theme.activeDropDownRef = "menu reset"; // reset menu ref value
-        state.theme.filter = null; // reset search event filter
         state.theme.pilFilter = null; // reset pil filter
+        setFilterAction({ dispatch, filter: null }); // reset main search filter
       }}
     >
       <div style={{ ...styles.container }}>

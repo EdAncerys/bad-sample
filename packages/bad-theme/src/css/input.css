@@ -8,9 +8,6 @@
 .search-input .search-clear-icon:hover .MuiSvgIcon-root {
   fill: #454545 !important;
 }
-.event-search-title:hover {
-  color: #454545;
-}
 .form-control {
   border-radius: 10px;
 }

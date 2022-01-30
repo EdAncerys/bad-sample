@@ -1,7 +1,7 @@
 import { AppProvider, useAppDispatch, useAppState } from "./context";
 import {
   setGoToAction,
-  eventFilterAction,
+  setFilterAction,
   setFetchAction,
   setErrorAction,
 } from "./actions/actions";
@@ -41,7 +41,7 @@ export {
   setEnquireAction,
   loginAction,
   logoutAction,
-  eventFilterAction,
+  setFilterAction,
   sendEmailEnquireAction,
   authenticateAppAction,
   setFetchAction,

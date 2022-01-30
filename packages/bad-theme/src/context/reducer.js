@@ -10,6 +10,7 @@ export const initialState = {
   bjdFeed: null,
   cedFeed: null,
   shdFeed: null,
+  filter: null,
 
   loginModalAction: false,
   createAccountAction: false,
@@ -42,6 +43,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, cedFeed: action.payload };
     case "SET_SHD_FEED_ACTION":
       return { ...state, shdFeed: action.payload };
+    case "SET_FILTER_ACTION":
+      return { ...state, filter: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

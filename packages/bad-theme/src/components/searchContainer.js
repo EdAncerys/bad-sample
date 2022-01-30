@@ -14,6 +14,8 @@ const SearchContainer = ({
   searchFilterRef,
   handleSearch,
   padding,
+  onChange,
+  inputOnly,
 }) => {
   const ctaHeight = 45;
   const WIDTH = width || "100%";
@@ -46,6 +48,11 @@ const SearchContainer = ({
   const ServeSearchContainer = () => {
     const [value, setValue] = useState(null);
 
+    const handleOnChange = ({ e }) => {
+      setValue(e.target.value);
+      if (onChange) handleSearch();
+    };
+
     const ServeIcon = () => {
       const searchIcon = <SearchIcon />;
       const closeIcon = <CloseIcon />;
@@ -63,6 +70,24 @@ const SearchContainer = ({
       );
     };
 
+    const ServeSerachButton = () => {
+      if (inputOnly) return null;
+
+      return (
+        <div
+          style={{
+            display: "grid",
+            alignItems: "center",
+            paddingLeft: `2em`,
+          }}
+        >
+          <button type="submit" className="blue-btn" onClick={handleSearch}>
+            Search
+          </button>
+        </div>
+      );
+    };
+
     return (
       <div className="flex-row">
         <div
@@ -76,7 +101,7 @@ const SearchContainer = ({
         >
           <input
             ref={searchFilterRef}
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => handleOnChange({ e })}
             onKeyPress={(e) => handleKeyPress(e)}
             type="text"
             className="form-control"
@@ -99,17 +124,7 @@ const SearchContainer = ({
             <ServeIcon />
           </div>
         </div>
-        <div
-          style={{
-            display: "grid",
-            alignItems: "center",
-            paddingLeft: `2em`,
-          }}
-        >
-          <button type="submit" className="blue-btn" onClick={handleSearch}>
-            Search
-          </button>
-        </div>
+        <ServeSerachButton />
       </div>
     );
   };
