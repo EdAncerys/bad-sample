@@ -20,9 +20,10 @@ const EnquireModal = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { enquireAction, isFetching } = useAppState();
+  const { enquireAction } = useAppState();
 
   const [uniqueId, setUniqueId] = useState(null);
+  const [isFetching, setIsFetching] = useState(null);
 
   // hook applies after React has performed all DOM mutations
   useLayoutEffect(() => {
@@ -31,8 +32,9 @@ const EnquireModal = ({ state, actions, libraries }) => {
   }, []);
 
   // HANDLERS ----------------------------------------------------
-  const handleContactFormSubmit = ({ agreement }) => {
+  const handleContactFormSubmit = async ({ agreement }) => {
     if (!agreement) return null;
+    setIsFetching(true);
 
     const isFullName = document.querySelector(`#full-name-${uniqueId}`);
     const isEmail = document.querySelector(`#email-${uniqueId}`);
@@ -72,13 +74,14 @@ const EnquireModal = ({ state, actions, libraries }) => {
     };
     const recipients = enquireAction.recipients;
 
-    sendEmailEnquireAction({
+    await sendEmailEnquireAction({
       state,
       dispatch,
       formData,
       attachments,
       recipients,
     });
+    setIsFetching(false);
   };
 
   // SERVERS --------------------------------------------------

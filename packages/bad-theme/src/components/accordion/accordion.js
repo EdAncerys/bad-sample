@@ -31,7 +31,8 @@ const AccordionComponent = ({
   // SERVERS ---------------------------------------------
   const ServeAccordion = ({ block }) => {
     const [uniqueId, setUniqueId] = useState(null);
-    const [fetching, setFetching] = useState(null);
+    const [isFetching, setFetching] = useState(null);
+
     // hook applies after React has performed all DOM mutations
     useLayoutEffect(() => {
       const blockId = uuidv4(); // add unique id
@@ -75,7 +76,7 @@ const AccordionComponent = ({
         className="accordion shadow"
         style={{ position: "relative", margin: `${marginVertical}px 0` }}
       >
-        <ActionPlaceholder isFetching={fetching} />
+        <ActionPlaceholder isFetching={isFetching} />
         <div
           className="accordion-item"
           id={uniqueId}

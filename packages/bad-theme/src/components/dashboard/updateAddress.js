@@ -17,12 +17,16 @@ const UpdateAddress = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { isFetching, isActiveUser } = useAppState();
+  const { isActiveUser } = useAppState();
+
+  const [isFetching, setIsFetching] = useState(null);
 
   const marginVertical = state.theme.marginVertical;
 
   // HELPERS ----------------------------------------------------------------
-  const handleAddressUpdate = () => {
+  const handleAddressUpdate = async () => {
+    setIsFetching(true);
+
     const address2_line1 = document.querySelector("#addressLineOne").value;
     const address2_line2 = document.querySelector("#addressLineTwo").value;
     const address2_city = document.querySelector("#city").value;
@@ -38,8 +42,8 @@ const UpdateAddress = ({ state, actions, libraries }) => {
       !!address2_postalcode && { address2_postalcode }
     );
 
-    updateAddressAction({ state, dispatch, data, isActiveUser });
-    console.log("updateAddress", data);
+    await updateAddressAction({ state, dispatch, data, isActiveUser });
+    setIsFetching(false);
   };
 
   // SERVERS ---------------------------------------------
