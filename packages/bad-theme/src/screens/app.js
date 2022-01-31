@@ -80,7 +80,7 @@ const App = ({ state, actions }) => {
           <Switch>
             <Loading when={data.isFetching} />
             <Error when={data.isError} />
-            <BlocksPage when={data.route.includes("blocks-page")} />
+            <BlocksPage when={data.route.includes("blocks")} />
 
             <Login when={endPoint === "/login/"} />
             <CreateAccount when={endPoint === "/create-account/"} />

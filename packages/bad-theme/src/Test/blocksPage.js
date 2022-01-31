@@ -3,6 +3,11 @@ import { connect } from "frontity";
 
 import { colors } from "../config/imports";
 import BlockBuilder from "../components/builder/blockBuilder";
+import BlockWrapper from "../components/blockWrapper";
+
+import Wiley from "../components/authentication/wiley";
+import Sagepay from "../components/authentication/sagepay";
+import OCP from "../components/authentication/ocp";
 
 const BlocksPage = ({ state }) => {
   const data = state.source.get(state.router.link);
@@ -16,10 +21,15 @@ const BlocksPage = ({ state }) => {
         <div className="primary-title" style={styles.title}>
           BLOCK BUILDER 😈{" "}
         </div>
+
+        <BlockWrapper>
+          <Wiley />
+          <Sagepay />
+          <OCP />
+        </BlockWrapper>
       </div>
 
       <BlockBuilder blocks={wpBlocks} />
-
     </div>
   );
 };
