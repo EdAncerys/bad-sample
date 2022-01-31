@@ -179,7 +179,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
 
       const ServeFilterCondition = ({ filter }) => {
         return (
-          <div className="shadow filter-action">
+          <div className="shadow filter-action-small">
             <Html2React html={filter.post_title} />
           </div>
         );
@@ -201,7 +201,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
     return (
       <div
         className="flex-col"
-        style={{ padding: `2em 4em`, overflowY: "auto", height: HEIGHT }}
+        style={{ padding: `2em 0 2em 2em`, overflowY: "auto", height: HEIGHT }}
       >
         <ServeDate />
         <ServeTitle />
