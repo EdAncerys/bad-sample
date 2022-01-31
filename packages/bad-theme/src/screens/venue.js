@@ -167,7 +167,7 @@ const Venue = ({ state, actions, libraries }) => {
   // RETURN ---------------------------------------------------
   return (
     <BlockWrapper>
-      <div style={{ padding: `0 ${marginHorizontal}px` }}>
+      <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
         <PromoBlock
           block={{
             title: venue.title.rendered,

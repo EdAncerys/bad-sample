@@ -36,8 +36,10 @@ const PromoBlock = ({ state, actions, block, disableMargin }) => {
   const ServeCardImage = () => {
     if (!background_image) return null;
     const alt = title || "BAD";
+
     const ServeLogo = () => {
       if (!logo || !logo_overlay) return null;
+
       return (
         <div
           style={{
@@ -47,14 +49,27 @@ const PromoBlock = ({ state, actions, block, disableMargin }) => {
             left: isAlignLeft ? null : 20,
           }}
         >
-          <Image
-            src={logo}
-            alt="Logo"
-            style={{ width: "100px", height: "auto", borderRadius: "50%" }}
-          />
+          <div
+            style={{
+              width: 100,
+              height: 100,
+              borderRadius: "50%",
+              overflow: "hidden",
+            }}
+          >
+            <Image
+              src={logo}
+              alt={alt}
+              style={{
+                width: `100%`,
+                height: `100%`,
+              }}
+            />
+          </div>
         </div>
       );
     };
+
     return (
       <div
         className="flex"
@@ -109,7 +124,7 @@ const PromoBlock = ({ state, actions, block, disableMargin }) => {
         }}
         className="row"
       >
-        <div className="col-6">
+        <div className="col-6 flex" style={{ margin: `auto 0` }}>
           <ServeCardContent />
         </div>
         <div className="col-6 p-0">

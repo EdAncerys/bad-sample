@@ -34,7 +34,7 @@ const EmbeddedVideo = ({ state, actions, libraries, block }) => {
           style={{
             objectFit: "cover",
           }}
-          playing
+          // playing // adds auto play option
           muted
           controls
         />

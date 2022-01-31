@@ -44,7 +44,7 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
   const currentSearchFilterRef = useRef(null);
   const loadMoreRef = useRef(null);
 
-  const LIMIT = LIMIT;
+  const LIMIT = 8;
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;

@@ -105,7 +105,7 @@ const MultiPhotoBlock = ({ state, actions, block }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div style={{ margin: `${marginVertical}px 0` }}>
+    <div style={{ margin: `${marginVertical}px 0 0` }}>
       <div>
         <ServeSingleImg />
         <ServeSplitImg />
