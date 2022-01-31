@@ -15,7 +15,7 @@ const GalleryCarousel = ({ state, actions, libraries, gallery }) => {
   // RETURN ---------------------------------------------------
   return (
     <div>
-      <Carousel className="gallery-carousel">
+      <Carousel interval={null} className="gallery-carousel">
         {gallery.map((block, key) => {
           const { subtype, url, title } = block;
 
@@ -52,7 +52,7 @@ const GalleryCarousel = ({ state, actions, libraries, gallery }) => {
                   style={{
                     objectFit: "cover",
                   }}
-                  playing
+                  // playing
                   muted
                   controls
                 />
