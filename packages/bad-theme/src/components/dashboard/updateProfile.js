@@ -15,21 +15,22 @@ const UpdateProfile = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { isFetching, isActiveUser } = useAppState();
+  const { isActiveUser } = useAppState();
+
+  const [isFetching, setIsFetching] = useState(null);
 
   const marginVertical = state.theme.marginVertical;
 
-  console.log("isActiveUser", isActiveUser);
-
   // HELPERS ----------------------------------------------------------------
   const handleProfileUpdate = async () => {
+    setIsFetching(true);
+
     const firstname = document.querySelector("#fistName").value.trim();
     const lastname = document.querySelector("#lastName").value.trim();
     const profilePicture = document.querySelector("#profilePicture").files[0];
     const password = document.querySelector("#password").value;
     const email = document.querySelector("#email").value.toLowerCase().trim();
 
-    console.log(profilePicture);
     let bad_profile_photo_url = "";
     if (!!profilePicture) {
       // API call to S3 to get img url
@@ -47,7 +48,8 @@ const UpdateProfile = ({ state, actions, libraries }) => {
       !!bad_profile_photo_url && { bad_profile_photo_url }
     );
 
-    updateProfileAction({ state, dispatch, data, isActiveUser });
+    await updateProfileAction({ state, dispatch, data, isActiveUser });
+    setIsFetching(false);
   };
 
   // SERVERS ---------------------------------------------

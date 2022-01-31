@@ -30,6 +30,11 @@ const LoginModal = ({ state, actions }) => {
   const iFrameHandler = () => {
     console.log("iFrame iFrameHandler triggered...");
 
+    if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
+      setId(`vQOKclgzqdPg83Z0zSuTTantjFmEJqj8`); // auto login in dev enviroment
+      return;
+    }
+
     try {
       const iFramePath = iFrameRef.current.contentWindow.location.pathname;
       console.log("iFramePath", iFramePath);

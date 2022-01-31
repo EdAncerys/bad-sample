@@ -22,6 +22,8 @@ const EnquireModal = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { enquireAction, isFetching } = useAppState();
 
+  if (!enquireAction) return null;
+
   const [uniqueId, setUniqueId] = useState(null);
 
   // hook applies after React has performed all DOM mutations
