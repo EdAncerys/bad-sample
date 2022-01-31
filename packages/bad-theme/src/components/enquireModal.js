@@ -294,6 +294,8 @@ const EnquireModal = ({ state, actions, libraries }) => {
   };
 
   const ServeModalInfo = () => {
+    if (!enquireAction) return null;
+
     const ServePublicEmail = () => {
       if (!enquireAction.contact_public_email) return null;
 
@@ -324,7 +326,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
       );
     };
 
-    if (!enquireAction) return null;
     return (
       <div className="flex">
         <Modal.Body>
