@@ -37,7 +37,7 @@ import Loading from "../components/loading";
 import BlockWrapper from "../components/blockWrapper";
 import { handleGetCookie } from "../helpers/cookie";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setFilterAction } from "../context";
+import { useAppDispatch, useAppState } from "../context";
 import { useCookies } from "react-cookie";
 
 const App = ({ state, actions }) => {
@@ -60,7 +60,6 @@ const App = ({ state, actions }) => {
         state.theme.childMenuRef = ""; // reset child menu ref value
         state.theme.activeDropDownRef = "menu reset"; // reset menu ref value
         state.theme.pilFilter = null; // reset pil filter
-        setFilterAction({ dispatch, filter: null }); // reset main search filter
       }}
     >
       <div style={{ ...styles.container }}>

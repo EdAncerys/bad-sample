@@ -31,7 +31,13 @@ const SearchInput = ({ state, actions, libraries }) => {
 
   // RETURN ---------------------------------------------
   return (
-    <div style={{ position: "relative", width: "100%" }}>
+    <div
+      style={{ position: "relative", width: "100%" }}
+      onMouseLeave={() => {
+        searchFilterRef.current.value = "";
+        setFilterAction({ dispatch, filter: null });
+      }}
+    >
       <SearchContainer
         searchFilterRef={searchFilterRef}
         handleSearch={handleSearch}

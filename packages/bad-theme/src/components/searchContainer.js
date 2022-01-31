@@ -5,6 +5,8 @@ import { colors } from "../config/imports";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
+// CONTEXT ----------------------------------------------------------------
+import { useAppDispatch, setFilterAction } from "../context";
 
 const SearchContainer = ({
   state,
@@ -17,6 +19,8 @@ const SearchContainer = ({
   onChange,
   inputOnly,
 }) => {
+  const dispatch = useAppDispatch();
+
   const ctaHeight = 45;
   const WIDTH = width || "100%";
 
@@ -63,6 +67,7 @@ const SearchContainer = ({
           onClick={() => {
             setValue(null);
             searchFilterRef.current.value = "";
+            if (onChange) setFilterAction({ dispatch, filter: null }); // reset main search filter
           }}
         >
           {icon}
