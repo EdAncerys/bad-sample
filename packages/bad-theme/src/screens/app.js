@@ -44,8 +44,6 @@ const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
 
-  const asyncRef = useRef(null);
-
   let endPoint = state.router.link;
   const data = state.source.get(endPoint);
   console.log("INDEX data", data); // debug
@@ -54,8 +52,6 @@ const App = ({ state, actions }) => {
   if (data.route === "/derm_groups_charity/")
     actions.router.set("/derm-groups-charity/");
   if (data.route === "/covid_19/") actions.router.set("/covid-19/");
-
-  if (data.query) console.log(data.query);
 
   // RETURN ------------------------------------------------------------
   return (

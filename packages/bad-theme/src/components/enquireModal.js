@@ -22,8 +22,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { enquireAction, isFetching } = useAppState();
 
-  if (!enquireAction) return null;
-
   const [uniqueId, setUniqueId] = useState(null);
 
   // hook applies after React has performed all DOM mutations
@@ -85,6 +83,8 @@ const EnquireModal = ({ state, actions, libraries }) => {
 
   // SERVERS --------------------------------------------------
   const ServeModalContent = () => {
+    if (!enquireAction) return null;
+
     const ServeFileUpload = () => {
       if (!enquireAction.allow_attachments) return null;
 
