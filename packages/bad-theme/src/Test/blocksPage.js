@@ -23,9 +23,9 @@ const BlocksPage = ({ state }) => {
         </div>
 
         <BlockWrapper>
-          <Wiley />
-          <Sagepay />
-          <OCP />
+          {/* <Wiley /> */}
+          {/* <Sagepay /> */}
+          {/* <OCP /> */}
         </BlockWrapper>
       </div>
 

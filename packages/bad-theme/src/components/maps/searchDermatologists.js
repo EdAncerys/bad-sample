@@ -5,29 +5,34 @@ import GooglePlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from "react-google-places-autocomplete";
-// import MapsComponent from "./mapsComponent";
+// import MapsComponent from "./maps";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import { Form } from "react-bootstrap";
+import SearchContainer from "../searchContainer";
 
-import BlockWrapper from "./blockWrapper";
-import Loading from "./loading";
-import { colors } from "../config/imports";
+import BlockWrapper from "../blockWrapper";
+import Loading from "../loading";
+import { colors } from "../../config/imports";
 import { v4 as uuidv4 } from "uuid";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setGoToAction } from "../context";
+import { useAppDispatch, useAppState, setGoToAction } from "../../context";
 
 const SearchDermatologists = ({ state, actions, libraries, block }) => {
   const dispatch = useAppDispatch();
 
   const { disable_vertical_padding, background_colour } = block;
 
-  const mountedRef = useRef(true);
-  const ctaHeight = 45;
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
+
+  const addressFilterRef = useRef(null);
+  const nameFilterRef = useRef(null);
+  const distanceFilterRef = useRef(null);
+
+  const ctaHeight = 45;
 
   const [uniqueId, setUniqueId] = useState(null);
   const [isReady, setIsReady] = useState(null);
@@ -39,7 +44,7 @@ const SearchDermatologists = ({ state, actions, libraries, block }) => {
     setIsReady(true);
 
     return () => {
-      mountedRef.current = false; // clean up function
+      addressFilterRef.current = false; // clean up function
     };
   }, []);
 
@@ -53,23 +58,42 @@ const SearchDermatologists = ({ state, actions, libraries, block }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handleSearchByNameSubmit = () => {
-    const searchNameInput = document.querySelector("#searchNameInput").value;
+    const input = nameFilterRef.current.value.toLowerCase();
 
-    const serveFilterOne = document.querySelector("#serveFilterOne").value;
+    const distanceFilter = distanceFilter.current.value.toLowerCase();
 
     const filter = {
-      searchNameInput,
-      serveFilterOne,
+      input,
+      distanceFilter,
     };
-    setFilter(filter);
+    // setFilter(filter);
   };
 
-  const handleInputSearch = () => {
-    const searchInput = document
-      .querySelector(`#addressSearch${uniqueId}`)
-      .value.toLowerCase();
+  const handleSearch = () => {
+    let addressInput = "";
+    let nameInput = "";
+    let distanceInput = "";
 
-    state.theme.addressFilter = searchInput;
+    console.log(
+      addressFilterRef.current.value,
+      nameFilterRef.current.value,
+      distanceFilterRef.current.value
+    );
+    // if (addressFilterRef.current)
+    //   addressInput = addressFilterRef.current.value.toLowerCase();
+    // if (nameFilterRef.current)
+    //   nameInput = nameFilterRef.current.value.toLowerCase();
+    // if (distanceFilterRef.current)
+    //   distanceInput = distanceFilterRef.current.value;
+
+    const serachParams = {
+      addressInput,
+      nameInput,
+      distanceInput,
+    };
+
+    // state.theme.addressFilter = input;
+    console.log("serachParams", serachParams);
   };
 
   // SERVERS ---------------------------------------------
@@ -96,12 +120,11 @@ const SearchDermatologists = ({ state, actions, libraries, block }) => {
     };
 
     const ServeFilterOne = () => {
-      // if (!filterOne) return null;
-
       return (
         <div style={{ paddingRight: `1em` }}>
           <Form.Select
             id="serveFilterOne"
+            ref={distanceFilter}
             style={{ ...styles.input, minWidth: "100%" }}
           >
             <option>Set The Distance</option>
@@ -155,11 +178,7 @@ const SearchDermatologists = ({ state, actions, libraries, block }) => {
             </span>
           </div>
           <div>
-            <button
-              type="submit"
-              className="blue-btn"
-              onClick={handleInputSearch}
-            >
+            <button type="submit" className="blue-btn" onClick={handleSearch}>
               Search
             </button>
           </div>
@@ -310,23 +329,38 @@ const SearchDermatologists = ({ state, actions, libraries, block }) => {
   return (
     <div
       style={{
-        backgroundColor: background_colour || null,
         padding: `${marginVertical}px 0`,
+        backgroundColor: background_colour,
       }}
     >
       <div
-        className="flex"
         style={{
-          display: "grid",
-          alignItems: "center",
           backgroundColor: colors.silverFillTwo,
+          marginBottom: `${state.theme.marginVertical}px`,
+          padding: `2em 0`,
         }}
       >
         <BlockWrapper>
-          <div style={{ padding: `2em 0` }}>
+          {/* <div style={{ padding: `2em 0` }}>
             <ServeTitle />
             <ServeSearchComponent />
             <ServeFilters />
+          </div> */}
+          <div
+            className="flex-row"
+            style={{ padding: `0 ${marginHorizontal}px` }}
+          >
+            <SearchContainer
+              title="Search For Dermatologists"
+              addressFilterRef={addressFilterRef}
+              handleSearch={handleSearch}
+            />
+
+            <SearchContainer
+              title="Search By Name"
+              addressFilterRef={nameFilterRef}
+              handleSearch={handleSearch}
+            />
           </div>
         </BlockWrapper>
       </div>

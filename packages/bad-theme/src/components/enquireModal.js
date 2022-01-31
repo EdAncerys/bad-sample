@@ -30,8 +30,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
     setUniqueId(blockId);
   }, []);
 
-  console.log("enquireAction", enquireAction);
-
   // HANDLERS ----------------------------------------------------
   const handleContactFormSubmit = ({ agreement }) => {
     if (!agreement) return null;

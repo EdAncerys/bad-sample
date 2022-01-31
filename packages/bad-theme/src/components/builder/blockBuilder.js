@@ -40,7 +40,7 @@ import NewsAndMedia from "../news/newsAndMedia";
 import FullWidthImageAndPromoCard from "../fullWidthImageAndPromoCard";
 import ImageBlock from "../imageBlock";
 import PilGuidelineSearch from "../pilGuidelineSearch";
-import SearchDermatologists from "../searchDermatologists";
+import SearchDermatologists from "../maps/searchDermatologists";
 import DividerBlock from "../dividerBlock";
 import CPTBlock from "../cptBlock";
 import RSSFeed from "../rssFeed";
