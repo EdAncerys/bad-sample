@@ -144,6 +144,7 @@ const styles = {
     flexDirection: "column",
     overflow: "hidden",
   },
+  link: { boxShadow: "none", color: "inherit" },
 };
 
 export default connect(RowButton);
