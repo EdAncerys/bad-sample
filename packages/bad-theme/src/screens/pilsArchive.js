@@ -13,25 +13,25 @@ import BlockWrapper from "../components/blockWrapper";
 const PilsArchive = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
+  const data = state.source.get(state.router.link);
+  const pilPageData = state.source[data.type][data.id];
+  // console.log("pageData ", data); // debug
+  console.log("----", pilPageData);
+
   const [searchFilter, setSearchFilter] = useState(null);
   const [pilList, setPilList] = useState([]);
-  const [pilArchive, setPilArchive] = useState(null);
 
   const searchFilterRef = useRef(true);
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  const data = state.source.get(state.router.link);
-  const { totalPages, page, next } = data; // check if data have multiple pages
-  // console.log("pageData ", data); // debug
-
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
     // fetch data via wp API page by page
-    await actions.source.fetch(`/pils-archive/`); // fetch pil archive page content
-    let pillArhivePage = await state.source.get(`/pils-archive/`);
-    pillArhivePage = state.source[pillArhivePage.type][pillArhivePage.id];
+    await actions.source.fetch(`/pils/`); // fetch pil archive page content
+    let pilArhive = await state.source.get(`/pils/`);
+    const { totalPages, page, next } = pilArhive; // check if data have multiple pages
 
     let isThereNextPage = next;
     while (isThereNextPage) {
@@ -40,7 +40,6 @@ const PilsArchive = ({ state, actions, libraries }) => {
       isThereNextPage = nextPage;
     }
 
-    setPilArchive(pillArhivePage);
     setPilList(Object.values(state.source.pils)); // add pill object to data array
 
     return () => {
@@ -132,9 +131,9 @@ const PilsArchive = ({ state, actions, libraries }) => {
   };
 
   const ServeInfo = () => {
-    if (!pilArchive) return null;
+    if (!pilPageData) return null;
 
-    const { title, description } = pilArchive.acf;
+    const { title, content } = pilPageData;
 
     const ServeTitle = () => {
       if (!title) return null;
@@ -144,17 +143,17 @@ const PilsArchive = ({ state, actions, libraries }) => {
           className="flex primary-title"
           style={{ fontSize: 36, alignItems: "center" }}
         >
-          <Html2React html={title} />
+          <Html2React html={title.rendered} />
         </div>
       );
     };
 
     const ServeBody = () => {
-      if (!description) return null;
+      if (!content) return null;
 
       return (
         <div className="flex" style={{ padding: `1em 0`, width: "70%" }}>
-          <Html2React html={description} />
+          <Html2React html={content.rendered} />
         </div>
       );
     };
