@@ -21,9 +21,8 @@ const RegistrationStepThree = ({ state, actions }) => {
         className="flex"
         style={{ justifyContent: "flex-end", padding: `1em 0` }}
       >
-        <button
-          type="submit"
-          className="btn btn-outline-secondary"
+        <div
+          className="btn-outline-secondary"
           onClick={() =>
             setGoToAction({
               path: `https://badadmin.skylarkdev.co/membership/register/step-2-personal-information/`,
@@ -32,10 +31,9 @@ const RegistrationStepThree = ({ state, actions }) => {
           }
         >
           Back
-        </button>
-        <button
-          type="submit"
-          className="btn btn-outline-secondary"
+        </div>
+        <div
+          className="btn-outline-secondary"
           style={{ margin: `0 1em` }}
           onClick={() =>
             setGoToAction({
@@ -45,11 +43,9 @@ const RegistrationStepThree = ({ state, actions }) => {
           }
         >
           Save & Exit
-        </button>
-        <button
-          type="submit"
-          className="btn"
-          style={{ backgroundColor: colors.primary, color: colors.white }}
+        </div>
+        <div
+          className="blue-btn"
           onClick={() =>
             setGoToAction({
               path: `https://badadmin.skylarkdev.co/membership/register/step-4-professional-details/`,
@@ -58,7 +54,7 @@ const RegistrationStepThree = ({ state, actions }) => {
           }
         >
           Next
-        </button>
+        </div>
       </div>
     );
   };

@@ -154,18 +154,12 @@ const Events = ({ state, actions, libraries, block }) => {
           </span>
         </div>
         <div style={{ display: "grid", alignItems: "center" }}>
-          <button
-            type="submit"
-            className="btn"
-            style={{
-              backgroundColor: colors.primary,
-              color: colors.white,
-              padding: `0.5em`,
-            }}
+          <div
+            className="blue-btn"
             onClick={handleSearchSubmit}
           >
             Search
-          </button>
+          </div>
         </div>
       </div>
     );

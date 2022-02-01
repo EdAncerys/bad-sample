@@ -20,18 +20,15 @@ const ContactPreferences = ({
   const ServeActions = () => {
     return (
       <Modal.Footer>
-        <button
-          type="submit"
-          className="btn btn-outline-secondary"
+        <div
+          className="btn-outline-secondary"
           onClick={() => setFormComplete(false)}
         >
           Back
-        </button>
+        </div>
 
-        <button
-          type="submit"
-          className="btn"
-          style={{ backgroundColor: colors.primary, color: colors.white }}
+        <div
+          className="blue-btn"
           onClick={() => {
             setFormComplete(false);
             setFormSubmitted(true);
@@ -49,7 +46,7 @@ const ContactPreferences = ({
           }}
         >
           Confirm
-        </button>
+        </div>
       </Modal.Footer>
     );
   };

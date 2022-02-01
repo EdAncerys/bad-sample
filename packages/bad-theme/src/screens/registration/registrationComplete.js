@@ -44,14 +44,12 @@ const RegistrationComplete = ({ state, actions }) => {
           borderTop: `1px solid ${colors.darkSilver}`,
         }}
       >
-        <button
-          type="submit"
-          className="btn"
-          style={{ backgroundColor: colors.primary, color: colors.white }}
+        <div
+          className="blue-btn"
           onClick={() => setGoToAction({ path: `/`, actions })}
         >
           Enter
-        </button>
+        </div>
       </div>
     );
   };

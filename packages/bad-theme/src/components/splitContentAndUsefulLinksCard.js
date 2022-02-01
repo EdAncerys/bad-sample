@@ -100,14 +100,12 @@ const SplitContentAndUsefulLinksCard = ({
             paddingTop: `1em`,
           }}
         >
-          <button
-            type="submit"
-            className="btn"
-            style={{ backgroundColor: colors.primary, color: colors.white }}
+          <div
+            className="blue-btn"
             onClick={() => setGoToAction({ path: link.url, actions })}
           >
             <Html2React html={label} />
-          </button>
+          </div>
         </div>
       );
     };

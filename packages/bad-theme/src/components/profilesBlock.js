@@ -23,18 +23,12 @@ const ProfilesBlock = ({ state, actions, libraries, block }) => {
 
     return (
       <div className="flex-center-row" style={{ paddingTop: `1em` }}>
-        <button
-          className="btn"
-          style={{
-            fontSize: 16,
-            textTransform: "capitalize",
-            color: colors.white,
-            backgroundColor: colors.primary,
-          }}
+        <div
+          className="blue-btn"
           onClick={() => setGoToAction({ path: link.url, actions })}
         >
           <Html2React html={label} />
-        </button>
+        </div>
       </div>
     );
   };

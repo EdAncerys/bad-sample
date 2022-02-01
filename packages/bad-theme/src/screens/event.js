@@ -201,9 +201,8 @@ const Event = ({ state, actions, libraries }) => {
           margin: `2em 0`,
         }}
       >
-        <button
-          type="submit"
-          className="btn"
+        <div
+          className="blue-btn"
           style={{
             backgroundColor: colors.primary,
             color: colors.white,
@@ -212,7 +211,7 @@ const Event = ({ state, actions, libraries }) => {
           onClick={() => setGoToAction({ path: `/`, actions })}
         >
           Register for this Event
-        </button>
+        </div>
       </div>
     );
   };

@@ -70,32 +70,29 @@ const login = ({ state, actions }) => {
         <input type="checkbox" className="form-check-input" />
         <label className="form-check-label">Check me out</label>
       </div>
-      <button
-        type="submit"
-        className="btn btn-primary"
+      <div
+        className="btn-primary"
         onClick={handleUserLogin}
       >
         Login
-      </button>
+      </div>
 
       <div style={{ display: "flex", flexDirection: "column", marginTop: 50 }}>
         <div>Dev panel</div>
-        <button
-          type="submit"
-          className="btn btn-warning"
+        <div
+          className="btn-warning"
           onClick={() =>
             handleSetCookie({ name: "hello2", deleteCookie: true })
           }
         >
           handleSetCookie
-        </button>
-        <button
-          type="submit"
-          className="btn btn-success mt-4"
+        </div>
+        <div
+          className="btn-success mt-4"
           onClick={() => handleGetCookie({ name: "events" })}
         >
           handleGetCookie
-        </button>
+        </div>
       </div>
     </div>
   );

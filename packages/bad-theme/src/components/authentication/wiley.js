@@ -76,25 +76,25 @@ const Wileys = ({ state, actions, libraries }) => {
               />
             </div>
             <div className="col-md-1">
-              <button
-                className="btn btn-success"
+              <div
+                className="btn-success"
                 onClick={(e) =>
                   e.preventDefault() || setiFrameSrc("") || setDoi("")
                 }
               >
                 Clear
-              </button>
+              </div>
             </div>
           </div>
           <div className="row">
             <label className="col-md-2 col-form-label">&nbsp;</label>
             <div className="col-md-3 ">
-              <button
-                className="btn btn-info form-control"
+              <div
+                className="btn-info form-control"
                 onClick={executeScript}
               >
                 Click here to get URL
-              </button>
+              </div>
             </div>
           </div>
           <div className="row">

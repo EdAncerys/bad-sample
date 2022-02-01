@@ -50,22 +50,16 @@ const Venue = ({ state, actions, libraries }) => {
             style={{
               justifyContent: "center",
               backgroundColor: colors.lightSilver,
-              padding: `3em`,
-              margin: `2em 0 0`,
             }}
           >
-            <button
-              type="submit"
-              className="btn"
-              style={{
-                backgroundColor: colors.primary,
-                color: colors.white,
-                padding: `1em 4em`,
-              }}
-              onClick={() => setGoToAction({ path: "/", actions })}
-            >
-              Enquire Now
-            </button>
+            <div className="flex" style={{ justifyContent: "center" }}>
+              <div
+                className="blue-btn"
+                onClick={() => setGoToAction({ path: "/", actions })}
+              >
+                Enquire Now
+              </div>
+            </div>
           </div>
         </div>
       );
