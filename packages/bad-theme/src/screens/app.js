@@ -14,6 +14,7 @@ import CreateAccount from "./createAccount";
 // SCREENS --------------------------------------------------------------
 import Post from "./post";
 import Page from "./page";
+import Contact from "./contact";
 import Login from "./login";
 import Home from "./home";
 import PilsArchive from "./pilsArchive";
@@ -79,6 +80,7 @@ const App = ({ state, actions }) => {
               when={endPoint === "/dashboard/" && isActiveUser}
             />
             <Registration when={endPoint === "/membership/register/"} />
+            <Contact when={endPoint === "/contact-us/"} />
             <RegistrationStepOne
               when={endPoint === "/membership/register/step-1-the-process/"}
             />

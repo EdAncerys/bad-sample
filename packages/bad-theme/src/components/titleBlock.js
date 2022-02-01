@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import { colors } from "../config/imports";
 
 import parse from "html-react-parser";
 
@@ -15,6 +14,7 @@ const TitleBlock = ({
   disableMargin,
   disableHorizontalMargin,
   margin,
+  fontSize,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -57,7 +57,7 @@ const TitleBlock = ({
       <div
         className="flex primary-title"
         style={{
-          fontSize: 36,
+          fontSize: fontSize || 36,
           textAlign: ALIGNMENT,
           justifyContent: ALIGNMENT,
         }}
