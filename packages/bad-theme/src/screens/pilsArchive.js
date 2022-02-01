@@ -19,7 +19,6 @@ const PilsArchive = ({ state, actions, libraries }) => {
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [pilList, setPilList] = useState(null);
-  console.log(pilList);
 
   const searchFilterRef = useRef(true);
 
@@ -72,9 +71,8 @@ const PilsArchive = ({ state, actions, libraries }) => {
         pil.title.rendered.toLowerCase().includes(input)
       );
 
-      console.log(filter);
-      // setSearchFilter(input);
-      // setPilList(filter);
+      setSearchFilter(input);
+      setPilList(filter);
     }
   };
 

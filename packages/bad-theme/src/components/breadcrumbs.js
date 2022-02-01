@@ -49,11 +49,11 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
       let goToLink = `/${goToPath.join("/")}`;
       // REDIRECT HANDLERS -------------------------------------------------
       if (goToLink === "/derm_groups_charity/")
-        goToLink = "/derm-groups-charity/";
-      if (goToLink === "/covid_19/") goToLink = "/covid-19/";
-      if (goToLink === "pils") goToLink = "/patient-information-leaflets/";
+        goToLink = "/derm-groups-charity";
+      if (goToLink === "/covid_19") goToLink = "/covid-19/";
+      if (goToLink === "/pils") goToLink = "/patient-information-leaflets/";
 
-      console.log(goToPath);
+      console.log(goToLink);
 
       actions.router.set(`${goToLink}`);
     };
