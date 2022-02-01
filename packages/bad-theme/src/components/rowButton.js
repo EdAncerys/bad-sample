@@ -60,51 +60,13 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
 
   const ServeButton = () => {
     return (
-      <div
-        className="shadow"
-        style={{
-          ...styles.container,
-          backgroundColor: colors.white,
-          width: "100%",
-          cursor: "pointer",
-        }}
-        onClick={() => {
-          if (link_id) return null;
-          if (onClick) {
-            onClick();
-            return;
-          }
-          if (contact_form) {
-            setEnquireAction({
-              dispatch,
-              enquireAction: block,
-            });
-            return;
-          }
-          if (link) setGoToAction({ path: link.url, actions });
-        }}
-      >
-        <div className="flex-col" style={{ padding: `1.5em 1em` }}>
+      <div className="flex-col">
+        <div className="flex-col row-btn">
           <div className="flex-row" style={{ alignItems: "center" }}>
-            <div
-              className="flex"
-              style={{
-                fontSize: 13,
-                letterSpacing: 2,
-                fontWeight: "bold",
-                textTransform: "uppercase",
-                justifyContent: "start",
-                alignItems: "start",
-                cursor: "pointer",
-              }}
-            >
-              <span
-                value={parse(title)}
-                className="title-animation"
-                style={{ width: "fit-content" }}
-              >
+            <div className="flex">
+              <div className="caps-btn">
                 <Html2React html={LABEL} />
-              </span>
+              </div>
             </div>
             <div
               style={{
@@ -131,7 +93,29 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
   };
 
   return (
-    <div style={{ position: "relative" }}>
+    <div
+      className="flex shadow"
+      style={{
+        backgroundColor: colors.white,
+        cursor: "pointer",
+        position: "relative",
+      }}
+      onClick={() => {
+        if (link_id) return null;
+        if (onClick) {
+          onClick();
+          return;
+        }
+        if (contact_form) {
+          setEnquireAction({
+            dispatch,
+            enquireAction: block,
+          });
+          return;
+        }
+        if (link) setGoToAction({ path: link.url, actions });
+      }}
+    >
       <ServeAnchorLink />
       <ServeButton />
     </div>
@@ -139,12 +123,7 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
 };
 
 const styles = {
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    overflow: "hidden",
-  },
-  link: { boxShadow: "none", color: "inherit" },
+  conteiner: {},
 };
 
 export default connect(RowButton);

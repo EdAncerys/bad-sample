@@ -75,6 +75,20 @@
 .caps-btn:hover::before {
   width: 100%;
 }
+.row-btn {
+  padding: 1.5em 1em;
+  transition: all 0.3s ease-in-out;
+}
+.row-btn .caps-btn {
+  box-shadow: none;
+  color: inherit;
+}
+.row-btn:hover .caps-btn::before {
+  width: 100%;
+}
+.row-btn:hover {
+  padding: 1.5em 0.5em 1.5em 1.5em;
+}
 
 .label {
   font-size: 12px;
