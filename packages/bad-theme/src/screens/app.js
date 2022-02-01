@@ -48,11 +48,6 @@ const App = ({ state, actions }) => {
   const data = state.source.get(endPoint);
   console.log("INDEX data", data); // debug
 
-  // REDIRECT HANDLERS -------------------------------------------------
-  if (data.route === "/derm_groups_charity/")
-    actions.router.set("/derm-groups-charity/");
-  if (data.route === "/covid_19/") actions.router.set("/covid-19/");
-
   // RETURN ------------------------------------------------------------
   return (
     <div

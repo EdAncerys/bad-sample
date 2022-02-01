@@ -18,7 +18,8 @@ const PilsArchive = ({ state, actions, libraries }) => {
   // console.log("pageData ", data); // debug
 
   const [searchFilter, setSearchFilter] = useState(null);
-  const [pilList, setPilList] = useState([]);
+  const [pilList, setPilList] = useState(null);
+  console.log(pilList);
 
   const searchFilterRef = useRef(true);
 
@@ -47,7 +48,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
   }, []);
   // DATA pre FETCH ----------------------------------------------------------------
 
-  if (!pilList.length) return <Loading />;
+  if (!pilList) return <Loading />;
 
   let ALPHABET = [];
   pilList.map((item) => {
@@ -71,8 +72,9 @@ const PilsArchive = ({ state, actions, libraries }) => {
         pil.title.rendered.toLowerCase().includes(input)
       );
 
-      setSearchFilter(input);
-      setPilList(filter);
+      console.log(filter);
+      // setSearchFilter(input);
+      // setPilList(filter);
     }
   };
 

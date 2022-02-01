@@ -36,8 +36,7 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
     if (titleName === "derm_groups_charity")
       titleName = "Dermatology Groups & Charities";
     if (titleName === "covid_19") titleName = "COVID-19";
-
-    console.log(titleName);
+    if (titleName === "pils") titleName = "Patient Information Leaflets";
 
     let chevron = (
       <ChevronRightIcon style={{ fontSize: 16, color: colors.darkSilver }} />
@@ -47,7 +46,15 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
     // HELPERS ---------------------------------------------
     const handleGoToLink = () => {
       const goToPath = endPoint.split("/").slice(1, nextKey + 1);
-      const goToLink = `/${goToPath.join("/")}`;
+      let goToLink = `/${goToPath.join("/")}`;
+      // REDIRECT HANDLERS -------------------------------------------------
+      if (goToLink === "/derm_groups_charity/")
+        goToLink = "/derm-groups-charity/";
+      if (goToLink === "/covid_19/") goToLink = "/covid-19/";
+      if (goToLink === "pils") goToLink = "/patient-information-leaflets/";
+
+      console.log(goToPath);
+
       actions.router.set(`${goToLink}`);
     };
 
