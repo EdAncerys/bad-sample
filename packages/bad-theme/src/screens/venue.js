@@ -6,12 +6,15 @@ import BlockBuilder from "../components/builder/blockBuilder";
 import { muiQuery } from "../context";
 import PromoBlock from "../components/promoBlock";
 import MultiPhotoBlock from "../components/multiPhotoBlock";
-import { setGoToAction } from "../context";
+// CONTEXT -------------------------------------------------------------------
+import { useAppDispatch, setEnquireAction } from "../context";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 
 const Venue = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
+  const dispatch = useAppDispatch();
 
   const data = state.source.get(state.router.link);
   const venue = state.source[data.type][data.id];
@@ -27,11 +30,16 @@ const Venue = ({ state, actions, libraries }) => {
     address,
     capacity_options,
     catering,
-    enquiry_email,
     excerpt,
     gallery,
     square_footage,
-    colour,
+    fullName,
+    email,
+    phoneNumber,
+    subject,
+    subjectDropDown,
+    message,
+    attachments,
   } = venue.acf;
 
   // SERVERS ---------------------------------------------------
@@ -46,19 +54,29 @@ const Venue = ({ state, actions, libraries }) => {
               <Html2React html={about_the_venue} />
             </div>
           </div>
+
           <div
-            style={{
-              justifyContent: "center",
-              backgroundColor: colors.lightSilver,
-            }}
+            className="flex"
+            style={{ justifyContent: "center", paddingTop: `1em` }}
           >
-            <div className="flex" style={{ justifyContent: "center" }}>
-              <div
-                className="blue-btn"
-                onClick={() => setGoToAction({ path: "/", actions })}
-              >
-                Enquire Now
-              </div>
+            <div
+              className="blue-btn"
+              onClick={() =>
+                setEnquireAction({
+                  dispatch,
+                  enquireAction: {
+                    fullName,
+                    email,
+                    phoneNumber,
+                    subject,
+                    subjectDropDown,
+                    message,
+                    attachments,
+                  },
+                })
+              }
+            >
+              Enquire Now
             </div>
           </div>
         </div>

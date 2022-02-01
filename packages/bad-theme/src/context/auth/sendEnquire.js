@@ -18,12 +18,16 @@ export const sendEmailEnquireAction = async ({
   const jwt = await authenticateAppAction({ state });
   const date = new Date();
 
-  let recipientsArray = [];
-  if (!!recipients.length) {
-    recipients.map((item) => {
-      recipientsArray.push(item.email);
-    });
+  if (!recipients) {
+    setEnquireAction({ dispatch, enquireAction: null });
+    throw new Error("No Receipients Provided");
   }
+
+  let recipientsArray = [];
+  recipients.map((item) => {
+    recipientsArray.push(item.email);
+  });
+
   const recipientsList = recipientsArray.toString();
 
   let fileAttachmentList = [];
@@ -46,14 +50,13 @@ export const sendEmailEnquireAction = async ({
   try {
     const data = await fetch(URL, requestOptions);
     const response = await data.json();
-
     if (response.success) {
-      setEnquireAction({ dispatch, enquireAction: null });
       return response;
     }
   } catch (error) {
     console.log("error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
+    setEnquireAction({ dispatch, enquireAction: null });
   }
 };
