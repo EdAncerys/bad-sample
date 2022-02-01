@@ -221,7 +221,7 @@ const Event = ({ state, actions, libraries }) => {
     if (!summary) return null;
 
     return (
-      <div>
+      <div className="text-body" style={{ paddingTop: `2em` }}>
         <div
           style={{
             fontSize: 16,
@@ -232,54 +232,6 @@ const Event = ({ state, actions, libraries }) => {
           Summary
         </div>
         <Html2React html={summary} />
-      </div>
-    );
-  };
-
-  const ServeFilters = () => {
-    const ServeFilterOne = () => {
-      if (!filter_one) return null;
-
-      return (
-        <div style={styles.action}>
-          <Html2React html={filter_one[0].post_title} />
-        </div>
-      );
-    };
-
-    const ServeFilterTwo = () => {
-      if (!filter_two) return null;
-
-      return (
-        <div style={styles.action}>
-          <Html2React html={filter_two[0].post_title} />
-        </div>
-      );
-    };
-
-    const ServeFilterThree = () => {
-      if (!filter_three) return null;
-
-      return (
-        <div style={styles.action}>
-          <Html2React html={filter_three[0].post_title} />
-        </div>
-      );
-    };
-
-    return (
-      <div
-        className="flex-row"
-        style={{
-          flexWrap: "wrap",
-          marginTop: `2em`,
-          padding: `2em 0`,
-          borderTop: `1px solid ${colors.darkSilver}`,
-        }}
-      >
-        <ServeFilterOne />
-        <ServeFilterTwo />
-        <ServeFilterThree />
       </div>
     );
   };
@@ -338,6 +290,22 @@ const Event = ({ state, actions, libraries }) => {
     );
   };
 
+  const ServeActions = () => {
+    return (
+      <div
+        className="flex"
+        style={{ padding: `1em 0`, justifyContent: "center" }}
+      >
+        <div
+          className="transparent-btn"
+          onClick={() => console.log("API call")}
+        >
+          Register
+        </div>
+      </div>
+    );
+  };
+
   return (
     <BlockWrapper>
       <div style={{ backgroundColor: colors.white }}>
@@ -351,8 +319,8 @@ const Event = ({ state, actions, libraries }) => {
               </div>
               <ServeRegisterLink />
               <ServeSummary />
+              <ServeActions />
               <ServeSocials />
-              <ServeFilters />
             </div>
             <div style={{ backgroundColor: colors.lightSilver }}></div>
           </div>

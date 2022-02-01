@@ -168,7 +168,10 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
       if (summary.length < MAX_LENGTH) summaryPreview = summary;
 
       return (
-        <div style={{ fontSize: 16, padding: `0.5em 0 0` }}>
+        <div
+          className="flex"
+          style={{ justifyItems: "center", fontSize: 16, padding: `0.5em 0 0` }}
+        >
           <Html2React html={summaryPreview} />
         </div>
       );
