@@ -15,44 +15,9 @@ const ImageAndPromoCard = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!imageAndPromoCard) return null;
 
-  const { body, image, link, label } = imageAndPromoCard;
+  const { body, image, link, label, title } = imageAndPromoCard;
 
   // SERVERS ---------------------------------------------
-  const ServeBody = () => {
-    if (!body) return null;
-
-    return (
-      <div
-        className="flex-col"
-        style={{ padding: `2em 0`, marginRight: `2em` }}
-      >
-        <div className="flex">
-          <Html2React html={body} />
-        </div>
-        <ServeMoreAction />
-      </div>
-    );
-  };
-
-  const ServeCardImage = () => {
-    if (!image) return null;
-    const alt = "BAD";
-
-    return (
-      <div style={{ width: "100%", maxHeight: 300, padding: `2em` }}>
-        <Image
-          src={image.url}
-          alt={alt}
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-          }}
-        />
-      </div>
-    );
-  };
-
   const ServeMoreAction = () => {
     if (!link) return null;
     let GO_TO_LABEL = "More";
@@ -67,6 +32,59 @@ const ImageAndPromoCard = ({
     );
   };
 
+  const ServeTitle = () => {
+    if (!title) return null;
+
+    return (
+      <div className="primary-title" style={{ fontSize: 20 }}>
+        <Html2React html={title} />
+      </div>
+    );
+  };
+
+  const ServeBody = () => {
+    if (!body) return null;
+
+    return (
+      <div style={{ padding: `1em 0` }}>
+        <Html2React html={body} />
+      </div>
+    );
+  };
+
+  const ServeContent = () => {
+    if (!body) return null;
+
+    return (
+      <div className="flex-col" style={{ padding: `2em` }}>
+        <div className="flex-col">
+          <ServeTitle />
+          <ServeBody />
+        </div>
+        <ServeMoreAction />
+      </div>
+    );
+  };
+
+  const ServeCardImage = () => {
+    if (!image) return null;
+    const alt = "BAD";
+
+    return (
+      <div style={{ width: "100%", maxHeight: 300 }}>
+        <Image
+          src={image.url}
+          alt={alt}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+          }}
+        />
+      </div>
+    );
+  };
+
   return (
     <div
       style={{
@@ -76,7 +94,7 @@ const ImageAndPromoCard = ({
       }}
     >
       <ServeCardImage />
-      <ServeBody />
+      <ServeContent />
     </div>
   );
 };
