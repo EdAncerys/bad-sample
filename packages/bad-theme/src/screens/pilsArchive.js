@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
-import { v4 as uuidv4 } from "uuid";
 
 import Loading from "../components/loading";
 import { colors } from "../config/imports";
@@ -16,27 +15,32 @@ const PilsArchive = ({ state, actions, libraries }) => {
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [pilList, setPilList] = useState([]);
+  const [pilArchive, setPilArchive] = useState(null);
 
   const searchFilterRef = useRef(true);
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-  const ctaHeight = 45;
+
   const data = state.source.get(state.router.link);
   const { totalPages, page, next } = data; // check if data have multiple pages
   // console.log("pageData ", data); // debug
 
-  const id = uuidv4();
-
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
     // fetch data via wp API page by page
+    await actions.source.fetch(`/pils-archive/`); // fetch pil archive page content
+    let pillArhivePage = await state.source.get(`/pils-archive/`);
+    pillArhivePage = state.source[pillArhivePage.type][pillArhivePage.id];
+
     let isThereNextPage = next;
     while (isThereNextPage) {
       await actions.source.fetch(isThereNextPage); // fetch next page
       const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
       isThereNextPage = nextPage;
     }
+
+    setPilArchive(pillArhivePage);
     setPilList(Object.values(state.source.pils)); // add pill object to data array
 
     return () => {
@@ -128,24 +132,29 @@ const PilsArchive = ({ state, actions, libraries }) => {
   };
 
   const ServeInfo = () => {
+    if (!pilArchive) return null;
+
+    const { title, description } = pilArchive.acf;
+
     const ServeTitle = () => {
+      if (!title) return null;
+
       return (
         <div
           className="flex primary-title"
           style={{ fontSize: 36, alignItems: "center" }}
         >
-          Search for Patient Information Leaflets
+          <Html2React html={title} />
         </div>
       );
     };
 
     const ServeBody = () => {
+      if (!description) return null;
+
       return (
-        <div className="flex" style={{ padding: `1em 0`, width: "60%" }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
+        <div className="flex" style={{ padding: `1em 0`, width: "70%" }}>
+          <Html2React html={description} />
         </div>
       );
     };
