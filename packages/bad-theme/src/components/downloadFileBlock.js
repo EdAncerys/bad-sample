@@ -4,7 +4,6 @@ import parse from "html-react-parser";
 
 import { colors } from "../config/imports";
 import Image from "@frontity/components/image";
-import Link from "@frontity/components/link";
 
 import PDF from "../img/svg/badPDF.svg";
 import DOC from "../img/svg/badDOC.svg";
@@ -40,17 +39,19 @@ const DownloadFileBlock = ({
     let fileName = "Download";
     if (file.title) fileName = file.title;
 
+    console.log("--------", file);
+
     return (
       <div style={{ display: "grid" }}>
-        <Link
-          link={file.url}
+        <a
+          href={file.url}
           target="_blank"
-          download
           className="caps-btn"
           style={styles.link}
+          download
         >
           <Html2React html={fileName} />
-        </Link>
+        </a>
       </div>
     );
   };
@@ -64,15 +65,15 @@ const DownloadFileBlock = ({
 
     return (
       <div style={{ display: "grid" }}>
-        <Link
-          link={guidline_file.url}
+        <a
+          href={guidline_file.url}
           target="_blank"
-          download
           className="caps-btn"
           style={styles.link}
+          download
         >
           <Html2React html={fileName} />
-        </Link>
+        </a>
       </div>
     );
   };

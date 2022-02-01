@@ -67,7 +67,7 @@ export const DATA = [
 export const MENU_DATA = [
   {
     title: "Patient Information Leaflets",
-    url: "/pils/",
+    url: "/patient-information-leaflets/",
   },
   {
     title: "BAD Affiliated Groups",

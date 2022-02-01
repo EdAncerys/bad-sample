@@ -106,7 +106,7 @@ const App = ({ state, actions }) => {
               when={endPoint === "/membership/register/registration-thank-you/"}
             />
             <EventsLandingPage when={endPoint === "/events/"} />
-            <PilsArchive when={endPoint === '/patient-information-leaflets/'} />
+            <PilsArchive when={endPoint === "/patient-information-leaflets/"} />
 
             <Pils when={data.isPils} />
             <Event when={data.isEvents} />
