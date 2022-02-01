@@ -24,7 +24,7 @@ const DermGroupe = ({ state, actions, libraries, dermGroupe }) => {
 
     return (
       <div className="flex" style={{ paddingBottom: `2em` }}>
-        <div style={{ height: `100%` }}>
+        <div style={{ height: `100%`, width: 200 }}>
           <Image
             src={logo}
             alt={alt}
@@ -85,7 +85,7 @@ const DermGroupe = ({ state, actions, libraries, dermGroupe }) => {
     if (!telephone_helpline) return null;
 
     return (
-      <div className="flex primary-title">
+      <div className="flex-col primary-title">
         <div style={{ fontSize: 20 }}>Phone Number:</div>
         <div className="title-link-animation" style={{ cursor: "pointer" }}>
           <Html2React html={telephone_helpline} />
