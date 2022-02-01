@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import path from "path";
 import parse from "html-react-parser";
 
 import { colors } from "../config/imports";
@@ -11,6 +10,8 @@ import PDF from "../img/svg/badPDF.svg";
 import DOC from "../img/svg/badDOC.svg";
 import PPT from "../img/svg/badPPT.svg";
 import XLS from "../img/svg/badXLS.svg";
+// CONTEXT ---------------------------------------------
+import { setGoToAction } from "../context";
 
 const DownloadFileBlock = ({
   state,
@@ -24,11 +25,9 @@ const DownloadFileBlock = ({
 
   if (!block) return null;
 
-  const { file, label, guidline_file, disable_vertical_padding, title } = block;
+  const { file, guidline_file, disable_vertical_padding, title } = block;
 
   const ICON_WIDTH = 35;
-  let LABEL = "Download";
-  if (label) LABEL = label;
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -38,10 +37,19 @@ const DownloadFileBlock = ({
   const ServeActions = () => {
     if (!file) return null;
 
+    let fileName = "Download";
+    if (file.title) fileName = file.title;
+
     return (
-      <div className="caps-btn">
-        <Link link={file.url} target="_blank" download style={styles.link}>
-          <Html2React html={LABEL} />
+      <div style={{ display: "grid" }}>
+        <Link
+          link={file.url}
+          target="_blank"
+          download
+          className="caps-btn"
+          style={styles.link}
+        >
+          <Html2React html={fileName} />
         </Link>
       </div>
     );
@@ -55,11 +63,12 @@ const DownloadFileBlock = ({
     if (title) fileName = title;
 
     return (
-      <div value={parse(fileName)} className="caps-btn">
+      <div style={{ display: "grid" }}>
         <Link
           link={guidline_file.url}
           target="_blank"
           download
+          className="caps-btn"
           style={styles.link}
         >
           <Html2React html={fileName} />
@@ -69,11 +78,15 @@ const DownloadFileBlock = ({
   };
 
   const ServeIcon = () => {
-    if (!file) return null;
+    if (!file && !guidline_file) return null;
 
-    const fileType = path.extname(file.filename);
+    let fileType = "";
+    if (file) fileType = file.subtype;
+    if (guidline_file) fileType = guidline_file.subtype;
+
     let FILE_ICON = PDF;
     if (fileType.includes("doc")) FILE_ICON = DOC;
+    if (fileType.includes("word")) FILE_ICON = DOC;
     if (fileType.includes("ppt")) FILE_ICON = PPT;
     if (fileType.includes("xls")) FILE_ICON = XLS;
 

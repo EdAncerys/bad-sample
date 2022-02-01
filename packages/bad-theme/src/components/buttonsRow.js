@@ -3,7 +3,6 @@ import { connect } from "frontity";
 
 import Loading from "../components/loading";
 import RowButton from "./rowButton";
-import { setGoToAction } from "../context";
 
 const ButtonsRow = ({ state, actions, style, block, disableMargin }) => {
   if (!block) return <Loading />;

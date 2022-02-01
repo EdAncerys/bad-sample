@@ -29,14 +29,18 @@ const SearchInput = ({ state, actions, libraries }) => {
     console.log(input);
   };
 
+  const handleMouseLeave = () => {
+    if (!searchFilterRef.current.value) return null;
+
+    searchFilterRef.current.value = null;
+    setFilterAction({ dispatch, filter: null });
+  };
+
   // RETURN ---------------------------------------------
   return (
     <div
       style={{ position: "relative", width: "100%" }}
-      onMouseLeave={() => {
-        searchFilterRef.current.value = "";
-        setFilterAction({ dispatch, filter: null });
-      }}
+      // onMouseLeave={handleMouseLeave} // clears search input on mouse leave
     >
       <SearchContainer
         searchFilterRef={searchFilterRef}
