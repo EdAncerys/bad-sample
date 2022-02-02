@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Form } from "react-bootstrap";
@@ -10,12 +10,55 @@ import Avatar from "../../img/svg/profile.svg";
 import FileUpload from "../../img/svg/fileUpload.svg";
 import BlockWrapper from "../../components/blockWrapper";
 
+import { UK_COUNTIES } from "../../config/data";
+import { UK_COUNTRIES } from "../../config/data";
+
 const RegistrationStepTwo = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+
+  const profilePhotoRef = useRef(null);
+  const titleRef = useRef(null);
+  const genderRef = useRef(null);
+  const mobileRef = useRef(null);
+  const addressLineOneRef = useRef(null);
+  const addressLineTwoRef = useRef(null);
+  const cityRef = useRef(null);
+  const countryRef = useRef(null);
+  const countyRef = useRef(null);
+  const postcodeRef = useRef(null);
+
+  // HANDLERS --------------------------------------------
+  const handelSubmit = () => {
+    const profilePhoto = profilePhotoRef.current.files[0];
+    const title = titleRef.current.value;
+    const gender = genderRef.current.value;
+    const mobile = mobileRef.current.value;
+    const addressLineOne = addressLineOneRef.current.value;
+    const addressLineTwo = addressLineTwoRef.current.value;
+    const city = cityRef.current.value;
+    const country = countryRef.current.value;
+    const county = countyRef.current.value;
+    const postcode = postcodeRef.current.value;
+
+    const details = {
+      profilePhoto,
+      title,
+      gender,
+      mobile,
+      addressLineOne,
+      addressLineTwo,
+      city,
+      country,
+      county,
+      postcode,
+    };
+
+    console.log(details);
+  };
 
   // SERVERS ---------------------------------------------
   const SMF = () => {
@@ -39,6 +82,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
         </div>
       );
     };
+
     return (
       <div>
         <label
@@ -46,7 +90,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
           className="flex"
           style={{
             backgroundColor: colors.white,
-            border: `1px solid ${colors.darkSilver}`,
+            border: `1px solid ${colors.silverFillTwo}`,
             borderRadius: 10,
             cursor: "pointer",
           }}
@@ -55,7 +99,6 @@ const RegistrationStepTwo = ({ state, actions }) => {
             className="flex"
             style={{
               fontSize: 12,
-              color: colors.darkSilver,
               padding: `1em 1.5em`,
             }}
           >
@@ -76,13 +119,15 @@ const RegistrationStepTwo = ({ state, actions }) => {
   };
 
   const ServeCardImage = () => {
+    const [profilePhoto, setProfilePhoto] = useState(null);
+
     const alt = "Profile Avatar";
 
     return (
       <div>
         <div style={{ width: 260, height: 260 }}>
           <Image
-            src={Avatar}
+            src={profilePhoto || Avatar}
             alt={alt}
             style={{
               width: "100%",
@@ -95,6 +140,12 @@ const RegistrationStepTwo = ({ state, actions }) => {
 
         <div style={styles.subTitle}>
           <input
+            ref={profilePhotoRef}
+            onChange={() => {
+              const file = profilePhotoRef.current.files[0];
+              const objectURL = URL.createObjectURL(file);
+              setProfilePhoto(objectURL);
+            }}
             type="file"
             className="form-control"
             placeholder="Profile Photo"
@@ -103,7 +154,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
           />
         </div>
 
-        <ServeFileUploadInput />
+        {/* <ServeFileUploadInput /> */}
       </div>
     );
   };
@@ -111,32 +162,49 @@ const RegistrationStepTwo = ({ state, actions }) => {
   const ServeForm = () => {
     const ServePersonalDetailsInput = () => {
       return (
-        <div className="form-group" style={{ display: "grid", gap: 5 }}>
+        <div className="form-group" style={{ display: "grid", gap: 10 }}>
           <label>
             Title <SMF />
           </label>
-          <Form.Select aria-label="Default select example" style={styles.input}>
-            <option>Professor, Dr, Mr, Miss, Ms</option>
-            <option value="1">Dr.</option>
-            <option value="2">Mr.</option>
-            <option value="3">Miss</option>
-            <option value="3">Ms</option>
+          <Form.Select
+            aria-label="Default select example"
+            style={styles.input}
+            ref={titleRef}
+          >
+            <option value="null">Professor, Dr, Mr, Miss, Ms</option>
+            <option value="Dr.">Dr.</option>
+            <option value="Mr.">Mr.</option>
+            <option value="Miss">Miss</option>
+            <option value="Ms">Ms</option>
+            <option value="Professor">Professor</option>
           </Form.Select>
           <label>Gender</label>
-          <Form.Select aria-label="Default select example" style={styles.input}>
-            <option>Male, Female, Transgender…</option>
-            <option value="1">Male</option>
-            <option value="2">Female</option>
-            <option value="3">Transgender</option>
-            <option value="3">Prefer not to say</option>
+          <Form.Select
+            aria-label="Default select example"
+            style={styles.input}
+            ref={genderRef}
+          >
+            <option value="null">
+              Male, Female, Transgender, Prefer Not To Answer
+            </option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Transgender Male">Transgender Male</option>
+            <option value="Transgender Female">Transgender Female</option>
+            <option value="Gender Variant/Non-Conforming">
+              Gender Variant/Non-Conforming
+            </option>
+            <option value="Not Listed">Not Listed</option>
+            <option value="Prefer Not To Answer">Prefer Not To Answer</option>
+            <option value="Unknown">Unknown</option>
           </Form.Select>
           <label>
             Mobile Number <SMF />
           </label>
           <input
-            onChange={(e) => setPassword(e.target.value)}
+            ref={mobileRef}
             type="tel"
-            pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+            // pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
             className="form-control"
             placeholder="Eg 07999999999"
             style={styles.input}
@@ -149,56 +217,67 @@ const RegistrationStepTwo = ({ state, actions }) => {
       return (
         <div
           className="form-group"
-          style={{ display: "grid", gap: 5, padding: `1em 0` }}
+          style={{ display: "grid", gap: 10, padding: `1em 0` }}
         >
           <label>
             Home Address <SMF />
           </label>
           <input
-            id="addressLineOne"
+            ref={addressLineOneRef}
             type="text"
             className="form-control"
             placeholder="Address Line 1"
             style={styles.input}
           />
           <input
-            id="addressLineTwo"
+            ref={addressLineTwoRef}
             type="text"
             className="form-control"
             placeholder="Address Line 2"
             style={styles.input}
           />
           <input
-            id="city"
+            ref={cityRef}
             type="text"
             className="form-control"
             placeholder="City"
             style={styles.input}
           />
-          <input
-            id="country"
-            type="text"
-            className="form-control"
-            placeholder="Country"
+          <Form.Select
+            ref={countyRef}
+            aria-label="Default select example"
             style={styles.input}
-          />
+          >
+            <option>County/State</option>
+            {UK_COUNTIES.map((item, key) => {
+              return (
+                <option key={key} value={item}>
+                  {item}
+                </option>
+              );
+            })}
+          </Form.Select>
+          <Form.Select
+            ref={countryRef}
+            aria-label="Default select example"
+            style={styles.input}
+          >
+            <option>Country/State</option>
+            {UK_COUNTRIES.map((item, key) => {
+              return (
+                <option key={key} value={item}>
+                  {item}
+                </option>
+              );
+            })}
+          </Form.Select>
           <input
-            id="postcode"
+            ref={postcodeRef}
             type="text"
             className="form-control"
             placeholder="Postcode"
             style={styles.input}
           />
-          <Form.Select
-            id="country"
-            aria-label="Default select example"
-            style={styles.input}
-          >
-            <option>Country</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-          </Form.Select>
         </div>
       );
     };
@@ -218,10 +297,10 @@ const RegistrationStepTwo = ({ state, actions }) => {
         style={{ justifyContent: "flex-end", padding: `1em 0` }}
       >
         <div
-          className="btn-outline-secondary"
+          className="transparent-btn"
           onClick={() =>
             setGoToAction({
-              path: `https://badadmin.skylarkdev.co/membership/register/step-1-the-process/`,
+              path: `/membership/step-1-the-process/`,
               actions,
             })
           }
@@ -229,14 +308,15 @@ const RegistrationStepTwo = ({ state, actions }) => {
           Back
         </div>
         <div
-          className="btn-outline-secondary"
+          className="transparent-btn"
           style={{ margin: `0 1em` }}
-          onClick={() =>
-            setGoToAction({
-              path: `/`,
-              actions,
-            })
-          }
+          // onClick={() =>
+          //   setGoToAction({
+          //     path: `/`,
+          //     actions,
+          //   })
+          // }
+          onClick={handelSubmit}
         >
           Save & Exit
         </div>
@@ -244,7 +324,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
           className="blue-btn"
           onClick={() =>
             setGoToAction({
-              path: `https://badadmin.skylarkdev.co/membership/register/step-3-category-selection/`,
+              path: `/membership/step-3-category-selection/`,
               actions,
             })
           }
@@ -315,21 +395,19 @@ const styles = {
     padding: `2em 0`,
   },
   wrapper: {
-    borderBottom: `1px solid ${colors.darkSilver}`,
-    margin: `0 1em 0`,
+    borderBottom: `1px solid ${colors.silverFillTwo}`,
+    padding: `0 1em 0`,
   },
   title: {
     fontSize: 20,
   },
   subTitle: {
-    fontSize: 16,
     fontWeight: "bold",
-    color: colors.softBlack,
     padding: `0.75em 0`,
   },
   mandatory: {
     padding: `0.75em 0`,
-    borderBottom: `1px solid ${colors.darkSilver}`,
+    borderBottom: `1px solid ${colors.silverFillTwo}`,
   },
   input: {
     borderRadius: 10,
