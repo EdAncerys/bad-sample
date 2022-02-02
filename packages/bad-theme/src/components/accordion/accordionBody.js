@@ -12,6 +12,7 @@ import {
   useAppDispatch,
   setGoToAction,
   sendEmailEnquireAction,
+  setApplicationTypeAction,
 } from "../../context";
 
 const AccordionBody = ({
@@ -494,9 +495,13 @@ const AccordionBody = ({
       <div
         className="blue-btn"
         style={{ width: "fit-content" }}
-        onClick={() =>
-          setGoToAction({ path: `/membership/step-1-the-process/`, actions })
-        }
+        onClick={() => {
+          setApplicationTypeAction({
+            dispatch,
+            applicationType: { type: "BAD", apply_for_membership },
+          });
+          setGoToAction({ path: `/membership/step-1-the-process/`, actions });
+        }}
       >
         <Html2React html={`Apply for ${apply_for_membership} membership`} />
       </div>

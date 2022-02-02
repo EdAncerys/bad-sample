@@ -63,7 +63,7 @@ const RegistrationComplete = ({ state, actions }) => {
           className="blue-btn"
           onClick={() => {
             handleSubmit();
-            // setGoToAction({ path: `/membership/`, actions });
+            setGoToAction({ path: `/membership/`, actions });
           }}
         >
           Enter

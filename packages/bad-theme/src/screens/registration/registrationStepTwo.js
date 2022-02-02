@@ -12,10 +12,19 @@ import BlockWrapper from "../../components/blockWrapper";
 
 import { UK_COUNTIES } from "../../config/data";
 import { UK_COUNTRIES } from "../../config/data";
+// CONTEXT ----------------------------------------------------------------
+import {
+  useAppDispatch,
+  useAppState,
+  setApplicationDataAction,
+} from "../../context";
 
 const RegistrationStepTwo = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
+
+  const dispatch = useAppDispatch();
+  const { applicationData, applicationType } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -58,6 +67,11 @@ const RegistrationStepTwo = ({ state, actions }) => {
     };
 
     console.log(details);
+    console.log(applicationType);
+    setApplicationDataAction({
+      dispatch,
+      applicationData: { ...applicationData, ...details },
+    });
   };
 
   // SERVERS ---------------------------------------------

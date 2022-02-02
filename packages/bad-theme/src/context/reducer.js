@@ -12,6 +12,9 @@ export const initialState = {
   shdFeed: null,
   filter: null,
 
+  applicationData: null,
+  applicationType: null,
+
   loginModalAction: false,
   createAccountAction: false,
   enquireAction: null,
@@ -45,6 +48,10 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, shdFeed: action.payload };
     case "SET_FILTER_ACTION":
       return { ...state, filter: action.payload };
+    case "SET_APPLICATION_DATA_ACTION":
+      return { ...state, applicationData: action.payload };
+    case "SET_APPLICATION_TYPE_ACTION":
+      return { ...state, applicationType: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

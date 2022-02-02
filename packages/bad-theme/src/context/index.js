@@ -4,6 +4,8 @@ import {
   setFilterAction,
   setFetchAction,
   setErrorAction,
+  setApplicationDataAction,
+  setApplicationTypeAction,
 } from "./actions/actions";
 import { muiQuery } from "./mediaQueryContext";
 import {
@@ -56,4 +58,6 @@ export {
   getBJDFeedAction,
   getCEDFeedAction,
   getSHDFeedAction,
+  setApplicationDataAction,
+  setApplicationTypeAction,
 };
