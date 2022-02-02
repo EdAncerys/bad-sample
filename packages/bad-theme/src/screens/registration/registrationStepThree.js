@@ -105,19 +105,26 @@ const RegistrationStepThree = ({ state, actions }) => {
       >
         <label style={styles.subTitle}>Membership Type</label>
         <Form.Select ref={typeRef} style={styles.input}>
-          <option value="null" disabled hidden>
+          <option value="null" hidden>
             Membership Type
           </option>
-          <option value="BAD Membership">BAD Membership</option>
-          <option value="SIG Membership">SIG Membership</option>
+          <option
+            selected={applicationType && applicationType.type === "BAD"}
+            value="BAD Membership"
+          >
+            BAD Membership
+          </option>
+          <option
+            selected={applicationType && applicationType.type === "SIG"}
+            value="SIG Membership"
+          >
+            SIG Membership
+          </option>
         </Form.Select>
 
         <label style={styles.subTitle}>Membership Category</label>
-        <Form.Select
-          ref={categoryRef}
-          style={styles.input}
-        >
-          <option value="null" disabled hidden>
+        <Form.Select ref={categoryRef} style={styles.input}>
+          <option value="null" hidden>
             Membership Category
           </option>
           <option value="Ordinary">Ordinary</option>

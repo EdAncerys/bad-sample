@@ -208,7 +208,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
               id={`subject-dropdown-${uniqueId}`}
               className="form-control"
             >
-              <option value="null" disabled hidden>
+              <option value="null" hidden>
                 Select the subject
               </option>
               {enquireAction.subject_dropdown_options.map((item, key) => {

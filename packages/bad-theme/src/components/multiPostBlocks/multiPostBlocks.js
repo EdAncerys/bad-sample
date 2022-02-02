@@ -59,7 +59,7 @@ const MultiPostBlocks = ({ state, actions, libraries, block }) => {
       return (
         <div>
           <Form.Select id={`dateSearch${uniqueId}`} style={styles.input}>
-            <option value="null" disabled hidden>
+            <option value="null" hidden>
               Sort By
             </option>
             <option value="Descending">Date Descending</option>

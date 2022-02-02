@@ -223,7 +223,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       const ServeCategoryFilter = () => {
         return (
           <Form.Select id={`category-filter-${uniqueId}`} style={styles.input}>
-            <option value="null" disabled hidden>
+            <option value="null" hidden>
               Category
             </option>
             {categoryList.map((item, key) => {
@@ -240,7 +240,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       const ServeDateFilter = () => {
         return (
           <Form.Select id={`date-filter-${uniqueId}`} style={styles.input}>
-            <option value="null" disabled hidden>
+            <option value="null" hidden>
               Sort By
             </option>
             <option value="Date Descending">Date Descending</option>
@@ -257,7 +257,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
         return (
           <Form.Select id={`year-filter-${uniqueId}`} style={styles.input}>
-            <option value="null" disabled hidden>
+            <option value="null" hidden>
               Filter By Year
             </option>
             {years.map((year, key) => {

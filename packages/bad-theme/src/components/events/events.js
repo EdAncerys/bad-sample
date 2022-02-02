@@ -70,7 +70,7 @@ const Events = ({ state, actions, libraries, block }) => {
       return (
         <div className="flex" style={{ paddingRight: `1em` }}>
           <Form.Select id={`serveFilterOne${id}`} style={styles.input}>
-            <option value="null" disabled hidden>
+            <option value="null" hidden>
               Event Grades
             </option>
             {grades.map((item, key) => {
@@ -91,7 +91,7 @@ const Events = ({ state, actions, libraries, block }) => {
       return (
         <div className="flex">
           <Form.Select id={`serveFilterTwo${id}`} style={styles.input}>
-            <option value="null" disabled hidden>
+            <option value="null" hidden>
               Location
             </option>
             {locations.map((item, key) => {

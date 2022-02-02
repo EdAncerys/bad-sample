@@ -126,7 +126,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
             Title <SMF />
           </label>
           <Form.Select style={styles.input} ref={titleRef}>
-            <option value="null" disabled hidden>
+            <option value="null" hidden>
               Professor, Dr, Mr, Miss, Ms
             </option>
             <option value="Dr.">Dr.</option>
@@ -137,7 +137,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
           </Form.Select>
           <label>Gender</label>
           <Form.Select style={styles.input} ref={genderRef}>
-            <option value="null" disabled hidden>
+            <option value="null" hidden>
               Male, Female, Transgender, Prefer Not To Answer
             </option>
             <option value="Male">Male</option>
@@ -197,7 +197,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
             style={styles.input}
           />
           <Form.Select ref={countyRef} style={styles.input}>
-            <option value="null" disabled hidden>
+            <option value="null" hidden>
               County/State
             </option>
             {UK_COUNTIES.map((item, key) => {
@@ -209,7 +209,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
             })}
           </Form.Select>
           <Form.Select ref={countryRef} style={styles.input}>
-            <option value="null" disabled hidden>
+            <option value="null" hidden>
               Country/State
             </option>
             {UK_COUNTRIES.map((item, key) => {

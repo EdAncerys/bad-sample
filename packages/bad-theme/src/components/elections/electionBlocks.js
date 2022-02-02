@@ -200,7 +200,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
               id={`serveGradeFilter${uniqueId}`}
               style={styles.input}
             >
-              <option value="null" disabled hidden>
+              <option value="null" hidden>
                 Election Grades
               </option>
               {gradeList.map((item, key) => {
@@ -221,7 +221,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
         return (
           <div className="flex" style={{ paddingRight: `1em` }}>
             <Form.Select id={`serveRoleFilter${uniqueId}`} style={styles.input}>
-              <option value="null" disabled hidden>
+              <option value="null" hidden>
                 Election Role
               </option>
               {roleList.map((item, key) => {
@@ -240,7 +240,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
         return (
           <div className="flex">
             <Form.Select id={`serveDateFilter${uniqueId}`} style={styles.input}>
-              <option value="null" disabled hidden>
+              <option value="null" hidden>
                 Sort By
               </option>
               <option value="Date Descending">Date Descending</option>

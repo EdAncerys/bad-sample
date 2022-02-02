@@ -84,7 +84,7 @@ const RegistrationComplete = ({ state, actions }) => {
       >
         <label style={styles.subTitle}>What is your Ethnic Group?</label>
         <Form.Select ref={ethnicGroupRef} style={styles.input}>
-          <option value="null" disabled hidden>
+          <option value="null" hidden>
             Ethnic Group
           </option>
           {ETHNIC_GROUPES.map((item, key) => {

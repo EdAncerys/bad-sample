@@ -91,7 +91,7 @@ const OrderSummary = ({ state, actions, libraries, setPage }) => {
               id="addressType"
               style={{ ...styles.input, width: "100%" }}
             >
-              <option value="null" disabled hidden>
+              <option value="null" hidden>
                 Home Address
               </option>
               <option value="1">Home Address</option>
@@ -185,7 +185,7 @@ const OrderSummary = ({ state, actions, libraries, setPage }) => {
                 id="county"
                 style={{ ...styles.input, width: "100%" }}
               >
-                <option value="null" disabled hidden>
+                <option value="null" hidden>
                   County/State
                 </option>
                 {UK_COUNTIES.map((item, key) => {
@@ -213,7 +213,7 @@ const OrderSummary = ({ state, actions, libraries, setPage }) => {
                 id="country"
                 style={{ ...styles.input, width: "100%" }}
               >
-                <option value="null" disabled hidden>
+                <option value="null" hidden>
                   Country/State
                 </option>
                 {UK_COUNTRIES.map((item, key) => {
