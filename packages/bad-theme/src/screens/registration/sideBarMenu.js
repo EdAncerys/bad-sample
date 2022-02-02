@@ -10,8 +10,8 @@ const SideBarMenu = ({ state, actions, libraries }) => {
 
   const defaultStyle = {};
   const activeStyle = {
-    fontWeight: "bold",
-    color: colors.black,
+    fontWeight: 800,
+    color: colors.blue,
   };
 
   let stepOne,
@@ -47,7 +47,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
           className="title-link-animation"
           style={{ ...stepOne, padding: `0.5em 0` }}
           onClick={() => {
-            if (slug === "/membership/registration-thank-you/") return null;
+            if (slug === "/membership/step-5-thank-you/") return null;
             setGoToAction({
               path: `/membership/step-1-the-process/`,
               actions,
@@ -60,7 +60,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
           className="title-link-animation"
           style={{ ...stepTwo, padding: `0.5em 0` }}
           onClick={() => {
-            if (slug === "/membership/registration-thank-you/") return null;
+            if (slug === "/membership/step-5-thank-you/") return null;
             setGoToAction({
               path: `/membership/step-2-personal-information/`,
               actions,
@@ -73,7 +73,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
           className="title-link-animation"
           style={{ ...stepThree, padding: `0.5em 0` }}
           onClick={() => {
-            if (slug === "/membership/registration-thank-you/") return null;
+            if (slug === "/membership/step-5-thank-you/") return null;
             setGoToAction({
               path: `/membership/step-3-category-selection/`,
               actions,
@@ -86,7 +86,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
           className="title-link-animation"
           style={{ ...stepFour, padding: `0.5em 0` }}
           onClick={() => {
-            if (slug === "/membership/registration-thank-you/") return null;
+            if (slug === "/membership/step-5-thank-you/") return null;
             setGoToAction({
               path: `/membership/step-4-professional-details/`,
               actions,

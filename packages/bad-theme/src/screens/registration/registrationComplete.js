@@ -1,4 +1,4 @@
-import React from "react";
+import { useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
@@ -9,12 +9,27 @@ import CheckMark from "../../img/svg/checkMark.svg";
 import { setGoToAction } from "../../context";
 import BlockWrapper from "../../components/blockWrapper";
 
+import { ETHNIC_GROUPES } from "../../config/data";
+
 const RegistrationComplete = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+
+  const ethnicGroupRef = useRef(null);
+
+  // HANDLERS --------------------------------------------
+  const handleSubmit = () => {
+    const ethnicGroup = ethnicGroupRef.current.value;
+
+    const details = {
+      ethnicGroup,
+    };
+
+    console.log(details);
+  };
 
   // SERVERS ---------------------------------------------
   const ServeCardImage = () => {
@@ -41,12 +56,15 @@ const RegistrationComplete = ({ state, actions }) => {
         style={{
           justifyContent: "flex-end",
           padding: `1em 0`,
-          borderTop: `1px solid ${colors.darkSilver}`,
+          borderTop: `1px solid ${colors.silverFillTwo}`,
         }}
       >
         <div
           className="blue-btn"
-          onClick={() => setGoToAction({ path: `/`, actions })}
+          onClick={() => {
+            handleSubmit();
+            // setGoToAction({ path: `/membership/`, actions });
+          }}
         >
           Enter
         </div>
@@ -60,17 +78,20 @@ const RegistrationComplete = ({ state, actions }) => {
         className="form-group"
         style={{
           display: "grid",
-          gap: 5,
-          padding: `1em 0 2em`,
+          gap: 10,
+          padding: `0 0 2em`,
         }}
       >
         <label style={styles.subTitle}>What is your Ethnic Group?</label>
-        <Form.Select aria-label="Default select example" style={styles.input}>
-          <option>Membership Category</option>
-          <option value="1">Category one</option>
-          <option value="2">Category Two</option>
-          <option value="3">Category Three</option>
-          <option value="3">Category Four</option>
+        <Form.Select ref={ethnicGroupRef} style={styles.input}>
+          <option value="null">Ethnic Group</option>
+          {ETHNIC_GROUPES.map((item, key) => {
+            return (
+              <option key={key} value={item}>
+                {item}
+              </option>
+            );
+          })}
         </Form.Select>
       </div>
     );
@@ -87,7 +108,7 @@ const RegistrationComplete = ({ state, actions }) => {
           <div
             style={{
               paddingBottom: `1em`,
-              borderBottom: `1px solid ${colors.darkSilver}`,
+              borderBottom: `1px solid ${colors.silverFillTwo}`,
             }}
           >
             Thank you for completing you application for BAD membership. Your
@@ -150,18 +171,8 @@ const styles = {
     padding: `1em 0`,
   },
   subTitle: {
-    fontSize: 16,
     fontWeight: "bold",
-    color: colors.softBlack,
     padding: `1em 0`,
-  },
-  link: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: colors.blue,
-    textDecoration: "underline",
-    cursor: "pointer",
-    padding: `0.75em 0`,
   },
   input: {
     borderRadius: 10,

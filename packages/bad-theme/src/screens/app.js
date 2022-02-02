@@ -84,22 +84,16 @@ const App = ({ state, actions }) => {
               when={endPoint === "/membership/step-1-the-process/"}
             />
             <RegistrationStepTwo
-              when={
-                endPoint === "/membership/step-2-personal-information/"
-              }
+              when={endPoint === "/membership/step-2-personal-information/"}
             />
             <RegistrationStepThree
-              when={
-                endPoint === "/membership/step-3-category-selection/"
-              }
+              when={endPoint === "/membership/step-3-category-selection/"}
             />
             <RegistrationStepFour
-              when={
-                endPoint === "/membership/step-4-professional-details/"
-              }
+              when={endPoint === "/membership/step-4-professional-details/"}
             />
             <RegistrationComplete
-              when={endPoint === "/membership/registration-thank-you/"}
+              when={endPoint === "/membership/step-5-thank-you/"}
             />
             <EventsLandingPage when={endPoint === "/events/"} />
             <PilsArchive when={endPoint === "/patient-information-leaflets/"} />

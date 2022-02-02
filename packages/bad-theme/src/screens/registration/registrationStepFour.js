@@ -9,6 +9,8 @@ import SideBarMenu from "./sideBarMenu";
 import FileUpload from "../../img/svg/fileUpload.svg";
 import BlockWrapper from "../../components/blockWrapper";
 
+import { UK_HOSPITALS } from "../../config/data";
+
 const RegistrationStepFour = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
@@ -145,16 +147,15 @@ const RegistrationStepFour = ({ state, actions }) => {
           <label style={styles.subTitle}>
             Main Hospital/Place of work <SMF />
           </label>
-          <Form.Select
-            ref={hospitalRef}
-            aria-label="Default select example"
-            style={styles.input}
-          >
-            <option>GP Practice/Hospital</option>
-            <option value="1">Hospital One</option>
-            <option value="2">Hospital Two</option>
-            <option value="3">Hospital Three</option>
-            <option value="3">Hospital Four</option>
+          <Form.Select ref={hospitalRef} style={styles.input}>
+            <option value="null">Main Hospital/Place of work</option>
+            {UK_HOSPITALS.map((item, key) => {
+              return (
+                <option key={key} value={item}>
+                  {item}
+                </option>
+              );
+            })}
           </Form.Select>
           <label style={styles.subTitle}>Medical School</label>
           <input
@@ -343,10 +344,10 @@ const RegistrationStepFour = ({ state, actions }) => {
           className="blue-btn"
           onClick={() => {
             handleSubmit();
-            // setGoToAction({
-            //   path: `/membership/registration-thank-you/`,
-            //   actions,
-            // })}
+            setGoToAction({
+              path: `/membership/step-5-thank-you/`,
+              actions,
+            });
           }}
         >
           Next
