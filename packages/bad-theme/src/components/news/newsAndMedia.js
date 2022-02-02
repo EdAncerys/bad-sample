@@ -222,12 +222,10 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
       const ServeCategoryFilter = () => {
         return (
-          <Form.Select
-            id={`category-filter-${uniqueId}`}
-            aria-label="Default select example"
-            style={styles.input}
-          >
-            <option value="">Category</option>
+          <Form.Select id={`category-filter-${uniqueId}`} style={styles.input}>
+            <option value="null" disabled hidden>
+              Category
+            </option>
             {categoryList.map((item, key) => {
               return (
                 <option key={key} value={item.id}>
@@ -241,12 +239,10 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
       const ServeDateFilter = () => {
         return (
-          <Form.Select
-            id={`date-filter-${uniqueId}`}
-            aria-label="Default select example"
-            style={styles.input}
-          >
-            <option value="">Sort By</option>
+          <Form.Select id={`date-filter-${uniqueId}`} style={styles.input}>
+            <option value="null" disabled hidden>
+              Sort By
+            </option>
             <option value="Date Descending">Date Descending</option>
             <option value="Date Ascending">Date Ascending</option>
           </Form.Select>
@@ -260,12 +256,10 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
           .map((v, idx) => now - idx);
 
         return (
-          <Form.Select
-            id={`year-filter-${uniqueId}`}
-            aria-label="Default select example"
-            style={styles.input}
-          >
-            <option value="">Filter By Year</option>
+          <Form.Select id={`year-filter-${uniqueId}`} style={styles.input}>
+            <option value="null" disabled hidden>
+              Filter By Year
+            </option>
             {years.map((year, key) => {
               return (
                 <option key={key} value={year}>

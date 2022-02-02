@@ -26,6 +26,8 @@ const RegistrationStepTwo = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { applicationData, applicationType } = useAppState();
 
+  console.log("applicationType", applicationType);
+
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
@@ -67,7 +69,6 @@ const RegistrationStepTwo = ({ state, actions }) => {
     };
 
     console.log(details);
-    console.log(applicationType);
     setApplicationDataAction({
       dispatch,
       applicationData: { ...applicationData, ...details },
@@ -124,12 +125,10 @@ const RegistrationStepTwo = ({ state, actions }) => {
           <label>
             Title <SMF />
           </label>
-          <Form.Select
-            aria-label="Default select example"
-            style={styles.input}
-            ref={titleRef}
-          >
-            <option value="null">Professor, Dr, Mr, Miss, Ms</option>
+          <Form.Select style={styles.input} ref={titleRef}>
+            <option value="null" disabled hidden>
+              Professor, Dr, Mr, Miss, Ms
+            </option>
             <option value="Dr.">Dr.</option>
             <option value="Mr.">Mr.</option>
             <option value="Miss">Miss</option>
@@ -137,12 +136,8 @@ const RegistrationStepTwo = ({ state, actions }) => {
             <option value="Professor">Professor</option>
           </Form.Select>
           <label>Gender</label>
-          <Form.Select
-            aria-label="Default select example"
-            style={styles.input}
-            ref={genderRef}
-          >
-            <option value="null">
+          <Form.Select style={styles.input} ref={genderRef}>
+            <option value="null" disabled hidden>
               Male, Female, Transgender, Prefer Not To Answer
             </option>
             <option value="Male">Male</option>
@@ -201,12 +196,10 @@ const RegistrationStepTwo = ({ state, actions }) => {
             placeholder="City"
             style={styles.input}
           />
-          <Form.Select
-            ref={countyRef}
-            aria-label="Default select example"
-            style={styles.input}
-          >
-            <option>County/State</option>
+          <Form.Select ref={countyRef} style={styles.input}>
+            <option value="null" disabled hidden>
+              County/State
+            </option>
             {UK_COUNTIES.map((item, key) => {
               return (
                 <option key={key} value={item}>
@@ -215,12 +208,10 @@ const RegistrationStepTwo = ({ state, actions }) => {
               );
             })}
           </Form.Select>
-          <Form.Select
-            ref={countryRef}
-            aria-label="Default select example"
-            style={styles.input}
-          >
-            <option>Country/State</option>
+          <Form.Select ref={countryRef} style={styles.input}>
+            <option value="null" disabled hidden>
+              Country/State
+            </option>
             {UK_COUNTRIES.map((item, key) => {
               return (
                 <option key={key} value={item}>

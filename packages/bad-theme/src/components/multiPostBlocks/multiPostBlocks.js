@@ -58,12 +58,10 @@ const MultiPostBlocks = ({ state, actions, libraries, block }) => {
     const ServeDateFilter = () => {
       return (
         <div>
-          <Form.Select
-            id={`dateSearch${uniqueId}`}
-            aria-label="Default select example"
-            style={styles.input}
-          >
-            <option value="">Sort By</option>
+          <Form.Select id={`dateSearch${uniqueId}`} style={styles.input}>
+            <option value="null" disabled hidden>
+              Sort By
+            </option>
             <option value="Descending">Date Descending</option>
             <option value="Ascending">Date Ascending</option>
           </Form.Select>

@@ -69,12 +69,10 @@ const Events = ({ state, actions, libraries, block }) => {
 
       return (
         <div className="flex" style={{ paddingRight: `1em` }}>
-          <Form.Select
-            id={`serveFilterOne${id}`}
-            aria-label="Default select example"
-            style={styles.input}
-          >
-            <option value="">Event Grades</option>
+          <Form.Select id={`serveFilterOne${id}`} style={styles.input}>
+            <option value="null" disabled hidden>
+              Event Grades
+            </option>
             {grades.map((item, key) => {
               return (
                 <option key={key} value={item.id}>
@@ -92,12 +90,10 @@ const Events = ({ state, actions, libraries, block }) => {
 
       return (
         <div className="flex">
-          <Form.Select
-            id={`serveFilterTwo${id}`}
-            aria-label="Default select example"
-            style={styles.input}
-          >
-            <option value="">Location</option>
+          <Form.Select id={`serveFilterTwo${id}`} style={styles.input}>
+            <option value="null" disabled hidden>
+              Location
+            </option>
             {locations.map((item, key) => {
               return (
                 <option key={key} value={item.id}>
@@ -154,10 +150,7 @@ const Events = ({ state, actions, libraries, block }) => {
           </span>
         </div>
         <div style={{ display: "grid", alignItems: "center" }}>
-          <div
-            className="blue-btn"
-            onClick={handleSearchSubmit}
-          >
+          <div className="blue-btn" onClick={handleSearchSubmit}>
             Search
           </div>
         </div>

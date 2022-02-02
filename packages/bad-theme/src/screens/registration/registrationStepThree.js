@@ -6,10 +6,21 @@ import { setGoToAction } from "../../context";
 import SideBarMenu from "./sideBarMenu";
 import { Form } from "react-bootstrap";
 import BlockWrapper from "../../components/blockWrapper";
+// CONTEXT ----------------------------------------------------------------
+import {
+  useAppDispatch,
+  useAppState,
+  setApplicationDataAction,
+} from "../../context";
 
 const RegistrationStepThree = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
+
+  const dispatch = useAppDispatch();
+  const { applicationData, applicationType } = useAppState();
+
+  console.log("applicationType", applicationType);
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -28,6 +39,10 @@ const RegistrationStepThree = ({ state, actions }) => {
     };
 
     console.log(details);
+    setApplicationDataAction({
+      dispatch,
+      applicationData: { ...applicationData, ...details },
+    });
   };
 
   // SERVERS ---------------------------------------------
@@ -89,12 +104,10 @@ const RegistrationStepThree = ({ state, actions }) => {
         }}
       >
         <label style={styles.subTitle}>Membership Type</label>
-        <Form.Select
-          ref={typeRef}
-          aria-label="Default select example"
-          style={styles.input}
-        >
-          <option value="null">Membership Type</option>
+        <Form.Select ref={typeRef} style={styles.input}>
+          <option value="null" disabled hidden>
+            Membership Type
+          </option>
           <option value="BAD Membership">BAD Membership</option>
           <option value="SIG Membership">SIG Membership</option>
         </Form.Select>
@@ -102,10 +115,11 @@ const RegistrationStepThree = ({ state, actions }) => {
         <label style={styles.subTitle}>Membership Category</label>
         <Form.Select
           ref={categoryRef}
-          aria-label="Default select example"
           style={styles.input}
         >
-          <option value="null">Membership Category</option>
+          <option value="null" disabled hidden>
+            Membership Category
+          </option>
           <option value="Ordinary">Ordinary</option>
           <option value="Trainee">Trainee</option>
           <option value="Associate Trainee">Associate Trainee</option>

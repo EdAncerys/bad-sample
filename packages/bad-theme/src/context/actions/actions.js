@@ -1,7 +1,7 @@
 export const setGoToAction = async ({ path, actions }) => {
   if (!path || !actions) return null;
 
-  console.log("setGoToAction triggered", path); // debug
+  // console.log("setGoToAction triggered", path); // debug
 
   const END_POINT_ONE = `http://3.9.193.188`;
   const END_POINT_TWO = `https://badadmin.skylarkdev.co`;

@@ -127,7 +127,9 @@ const SearchDermatologists = ({ state, actions, libraries, block }) => {
             ref={distanceFilter}
             style={{ ...styles.input, minWidth: "100%" }}
           >
-            <option>Set The Distance</option>
+            <option value="null" disabled hidden>
+              Set The Distance
+            </option>
             <option value="1">Category one</option>
             <option value="2">Category Two</option>
             <option value="3">Category Three</option>

@@ -25,9 +25,9 @@ const AccordionBody = ({
   uniqueId,
   setFetching,
 }) => {
-  const dispatch = useAppDispatch();
-
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
+  const dispatch = useAppDispatch();
 
   const ALL_POSITIONS = Object.values(state.source.leadership_position);
   const ICON_WIDTH = 35;

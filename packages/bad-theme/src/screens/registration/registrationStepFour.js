@@ -147,8 +147,8 @@ const RegistrationStepFour = ({ state, actions }) => {
           <label style={styles.subTitle}>
             Main Hospital/Place of work <SMF />
           </label>
-          <Form.Select ref={hospitalRef} style={styles.input}>
-            <option value="null">Main Hospital/Place of work</option>
+          <Form.Select ref={hospitalRef} style={styles.input} >
+            <option value="null" disabled hidden>Main Hospital/Place of work</option>
             {UK_HOSPITALS.map((item, key) => {
               return (
                 <option key={key} value={item}>

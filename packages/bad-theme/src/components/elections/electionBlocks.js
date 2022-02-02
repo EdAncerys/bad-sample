@@ -198,10 +198,11 @@ const ElectionBlocks = ({ state, actions, block }) => {
           <div className="flex" style={{ paddingRight: `1em` }}>
             <Form.Select
               id={`serveGradeFilter${uniqueId}`}
-              aria-label="Default select example"
               style={styles.input}
             >
-              <option value="">Election Grades</option>
+              <option value="null" disabled hidden>
+                Election Grades
+              </option>
               {gradeList.map((item, key) => {
                 return (
                   <option key={key} value={item.id}>
@@ -219,12 +220,10 @@ const ElectionBlocks = ({ state, actions, block }) => {
 
         return (
           <div className="flex" style={{ paddingRight: `1em` }}>
-            <Form.Select
-              id={`serveRoleFilter${uniqueId}`}
-              aria-label="Default select example"
-              style={styles.input}
-            >
-              <option value="">Election Role</option>
+            <Form.Select id={`serveRoleFilter${uniqueId}`} style={styles.input}>
+              <option value="null" disabled hidden>
+                Election Role
+              </option>
               {roleList.map((item, key) => {
                 return (
                   <option key={key} value={item.id}>
@@ -240,12 +239,10 @@ const ElectionBlocks = ({ state, actions, block }) => {
       const ServeDateFilter = () => {
         return (
           <div className="flex">
-            <Form.Select
-              id={`serveDateFilter${uniqueId}`}
-              aria-label="Default select example"
-              style={styles.input}
-            >
-              <option value="">Sort By</option>
+            <Form.Select id={`serveDateFilter${uniqueId}`} style={styles.input}>
+              <option value="null" disabled hidden>
+                Sort By
+              </option>
               <option value="Date Descending">Date Descending</option>
               <option value="Date Ascending">Date Ascending</option>
             </Form.Select>
