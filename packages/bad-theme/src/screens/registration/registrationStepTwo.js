@@ -310,13 +310,12 @@ const RegistrationStepTwo = ({ state, actions }) => {
         <div
           className="transparent-btn"
           style={{ margin: `0 1em` }}
-          // onClick={() =>
-          //   setGoToAction({
-          //     path: `/`,
-          //     actions,
-          //   })
-          // }
-          onClick={handelSubmit}
+          onClick={() =>
+            setGoToAction({
+              path: `/membership/`,
+              actions,
+            })
+          }
         >
           Save & Exit
         </div>

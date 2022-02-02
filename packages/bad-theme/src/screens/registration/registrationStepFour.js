@@ -84,8 +84,9 @@ const RegistrationStepFour = ({ state, actions }) => {
           style={{
             display: "grid",
             gap: 5,
-            padding: `2em 0`,
-            borderBottom: `1px solid ${colors.darkSilver}`,
+            marginTop: `1em`,
+            paddingTop: `1em`,
+            borderTop: `1px solid ${colors.silverFillTwo}`,
           }}
         >
           <label style={styles.subTitle}>
@@ -299,10 +300,10 @@ const RegistrationStepFour = ({ state, actions }) => {
         style={{ justifyContent: "flex-end", padding: `1em 0` }}
       >
         <div
-          className="btn-outline-secondary"
+          className="transparent-btn"
           onClick={() =>
             setGoToAction({
-              path: `https://badadmin.skylarkdev.co/membership/register/step-3-category-selection/`,
+              path: `/membership/step-3-category-selection/`,
               actions,
             })
           }
@@ -310,7 +311,7 @@ const RegistrationStepFour = ({ state, actions }) => {
           Back
         </div>
         <div
-          className="btn-outline-secondary"
+          className="transparent-btn"
           style={{ margin: `0 1em` }}
           onClick={() => setGoToAction({ path: `/`, actions })}
         >
@@ -320,7 +321,7 @@ const RegistrationStepFour = ({ state, actions }) => {
           className="blue-btn"
           onClick={() =>
             setGoToAction({
-              path: `https://badadmin.skylarkdev.co/membership/register/registration-thank-you/`,
+              path: `/membership/registration-thank-you/`,
               actions,
             })
           }
@@ -348,10 +349,7 @@ const RegistrationStepFour = ({ state, actions }) => {
           <div>
             <label className="form-check-label">
               I have read the{" "}
-              <span
-                style={styles.TC}
-                onClick={actions.context.setCreateAccountModalAction}
-              >
+              <span style={styles.TC}>
                 BAD Constitution
                 <SMF />
               </span>
@@ -372,10 +370,7 @@ const RegistrationStepFour = ({ state, actions }) => {
           </div>
           <div>
             <label className="form-check-label">
-              <span
-                style={styles.TC}
-                onClick={actions.context.setCreateAccountModalAction}
-              >
+              <span style={styles.TC}>
                 I agree - Privacy Notice
                 <SMF />
               </span>{" "}
@@ -409,10 +404,11 @@ const RegistrationStepFour = ({ state, actions }) => {
             Mandatory fields
           </div>
           <div
-            style={styles.link}
-            onClick={() => setGoToAction({ path: `/`, actions })}
+            className="caps-btn"
+            onClick={() => setGoToAction({ path: `/membership/`, actions })}
+            style={{ paddingTop: `1em` }}
           >
-            Memberships Categories
+            Memberships Page
           </div>
 
           <div className="primary-title" style={styles.title}>

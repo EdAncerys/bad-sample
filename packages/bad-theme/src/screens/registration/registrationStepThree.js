@@ -19,13 +19,13 @@ const RegistrationStepThree = ({ state, actions }) => {
     return (
       <div
         className="flex"
-        style={{ justifyContent: "flex-end", padding: `1em 0` }}
+        style={{ justifyContent: "flex-end", paddingTop: `1em` }}
       >
         <div
-          className="btn-outline-secondary"
+          className="transparent-btn"
           onClick={() =>
             setGoToAction({
-              path: `https://badadmin.skylarkdev.co/membership/register/step-2-personal-information/`,
+              path: `/membership/step-2-personal-information/`,
               actions,
             })
           }
@@ -33,11 +33,11 @@ const RegistrationStepThree = ({ state, actions }) => {
           Back
         </div>
         <div
-          className="btn-outline-secondary"
+          className="transparent-btn"
           style={{ margin: `0 1em` }}
           onClick={() =>
             setGoToAction({
-              path: `/`,
+              path: `/membership/`,
               actions,
             })
           }
@@ -48,7 +48,7 @@ const RegistrationStepThree = ({ state, actions }) => {
           className="blue-btn"
           onClick={() =>
             setGoToAction({
-              path: `https://badadmin.skylarkdev.co/membership/register/step-4-professional-details/`,
+              path: `/membership/step-4-professional-details/`,
               actions,
             })
           }
@@ -65,22 +65,31 @@ const RegistrationStepThree = ({ state, actions }) => {
         className="form-group"
         style={{
           display: "grid",
-          gap: 5,
-          padding: `1em 0 2em`,
-          borderTop: `1px solid ${colors.darkSilver}`,
+          gap: 10,
+          marginTop: `1em`,
+          paddingTop: `1em`,
+          borderTop: `1px solid ${colors.silverFillTwo}`,
         }}
       >
-        <label style={styles.subTitle}>Title</label>
+        <label style={styles.subTitle}>Membership Type</label>
         <Form.Select
           id="category"
           aria-label="Default select example"
           style={styles.input}
         >
-          <option>Membership Category</option>
-          <option value="1">Category one</option>
-          <option value="2">Category Two</option>
-          <option value="3">Category Three</option>
-          <option value="3">Category Four</option>
+          <option value="null">Membership Category</option>
+          <option value="Ordinary">Ordinary</option>
+          <option value="Trainee">Trainee</option>
+          <option value="Associate Trainee">Associate Trainee</option>
+          <option value="Honorary">Honorary</option>
+          <option value="Associate">Associate</option>
+          <option value="GP">GP</option>
+          <option value="Student">Student</option>
+          <option value="Scientist and Allied Healthcare Professionals">
+            Scientist and Allied Healthcare Professionals
+          </option>
+          <option value="Honorary Overseas">Honorary Overseas</option>
+          <option value="Retired">Retired</option>
         </Form.Select>
       </div>
     );
@@ -102,13 +111,9 @@ const RegistrationStepThree = ({ state, actions }) => {
             vitae tempus quam. Ac auctor augue
           </div>
           <div
-            style={styles.link}
-            onClick={() =>
-              setGoToAction({
-                path: `/`,
-                actions,
-              })
-            }
+            className="caps-btn"
+            onClick={() => setGoToAction({ path: `/membership/`, actions })}
+            style={{ paddingTop: `1em` }}
           >
             Memberships Categories
           </div>
@@ -143,25 +148,14 @@ const styles = {
     gap: 20,
   },
   wrapper: {
-    borderBottom: `1px solid ${colors.darkSilver}`,
-    margin: `0 1em 0`,
+    borderBottom: `1px solid ${colors.silverFillTwo}`,
+    padding: `0 1em 1em 2em`,
   },
   title: {
     fontSize: 20,
   },
   subTitle: {
-    fontSize: 16,
     fontWeight: "bold",
-    color: colors.softBlack,
-    padding: `0.75em 0`,
-  },
-  link: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: colors.blue,
-    textDecoration: "underline",
-    cursor: "pointer",
-    padding: `0.75em 0`,
   },
   input: {
     borderRadius: 10,
