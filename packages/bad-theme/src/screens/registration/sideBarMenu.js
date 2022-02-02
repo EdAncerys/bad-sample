@@ -13,10 +13,12 @@ const SideBarMenu = ({ state, actions, libraries }) => {
     fontWeight: "bold",
     color: colors.softBlack,
   };
+
   let stepOne,
     stepTwo,
     stepThree,
     stepFour = defaultStyle;
+
   if (slug.includes("step-1")) stepOne = activeStyle;
   if (slug.includes("step-2")) stepTwo = activeStyle;
   if (slug.includes("step-3")) stepThree = activeStyle;
@@ -42,12 +44,12 @@ const SideBarMenu = ({ state, actions, libraries }) => {
     return (
       <div style={{ ...styles.titleWrapper, padding: `2em 0` }}>
         <div
-          style={{ ...styles.title, ...stepOne }}
+          className="title-link-animation"
+          style={{ ...stepOne }}
           onClick={() => {
-            if (slug === "/membership/register/registration-thank-you/")
-              return null;
+            if (slug === "/membership/registration-thank-you/") return null;
             setGoToAction({
-              path: `https://badadmin.skylarkdev.co/membership/register/step-1-the-process/`,
+              path: `/membership/step-1-the-process/`,
               actions,
             });
           }}
@@ -55,12 +57,12 @@ const SideBarMenu = ({ state, actions, libraries }) => {
           Step 1 - The Process
         </div>
         <div
-          style={{ ...styles.title, ...stepTwo }}
+          className="title-link-animation"
+          style={{ ...stepTwo }}
           onClick={() => {
-            if (slug === "/membership/register/registration-thank-you/")
-              return null;
+            if (slug === "/membership/registration-thank-you/") return null;
             setGoToAction({
-              path: `https://badadmin.skylarkdev.co/membership/register/step-2-personal-information/`,
+              path: `/membership/step-2-personal-information/`,
               actions,
             });
           }}
@@ -68,12 +70,12 @@ const SideBarMenu = ({ state, actions, libraries }) => {
           Step 2 - Personal Information
         </div>
         <div
-          style={{ ...styles.title, ...stepThree }}
+          className="title-link-animation"
+          style={{ ...stepThree }}
           onClick={() => {
-            if (slug === "/membership/register/registration-thank-you/")
-              return null;
+            if (slug === "/membership/registration-thank-you/") return null;
             setGoToAction({
-              path: `https://badadmin.skylarkdev.co/membership/register/step-3-category-selection/`,
+              path: `/membership/step-3-category-selection/`,
               actions,
             });
           }}
@@ -81,12 +83,12 @@ const SideBarMenu = ({ state, actions, libraries }) => {
           Step 3 - Category Selection
         </div>
         <div
-          style={{ ...styles.title, ...stepFour }}
+          className="title-link-animation"
+          style={{ ...stepFour }}
           onClick={() => {
-            if (slug === "/membership/register/registration-thank-you/")
-              return null;
+            if (slug === "/membership/registration-thank-you/") return null;
             setGoToAction({
-              path: `https://badadmin.skylarkdev.co/membership/register/step-4-professional-details/`,
+              path: `/membership/step-4-professional-details/`,
               actions,
             });
           }}
@@ -114,10 +116,6 @@ const SideBarMenu = ({ state, actions, libraries }) => {
 const styles = {
   titleWrapper: {
     fontSize: 16,
-  },
-  title: {
-    padding: `0.5em 0`,
-    cursor: "pointer",
   },
 };
 

@@ -21,15 +21,15 @@ const RegistrationStepOne = ({ state, actions }) => {
         style={{ justifyContent: "flex-end", padding: `1em 0` }}
       >
         <div
-          className="btn-outline-secondary"
-          onClick={() => setGoToAction({ path: `/`, actions })}
+          className="transparent-btn"
+          onClick={() => setGoToAction({ path: `/membership/`, actions })}
         >
           Back
         </div>
         <div
-          className="btn-outline-secondary"
+          className="transparent-btn"
           style={{ margin: `0 1em` }}
-          onClick={() => setGoToAction({ path: `/`, actions })}
+          onClick={() => setGoToAction({ path: `/membership/`, actions })}
         >
           Save & Exit
         </div>
@@ -37,7 +37,7 @@ const RegistrationStepOne = ({ state, actions }) => {
           className="blue-btn"
           onClick={() =>
             setGoToAction({
-              path: `https://badadmin.skylarkdev.co/membership/register/step-2-personal-information/`,
+              path: `/membership/step-2-personal-information/`,
               actions,
             })
           }
@@ -64,8 +64,8 @@ const RegistrationStepOne = ({ state, actions }) => {
             vitae tempus quam. Ac auctor augue
           </div>
           <div
-            style={styles.link}
-            onClick={() => setGoToAction({ path: `/`, actions })}
+            className="caps-btn"
+            onClick={() => setGoToAction({ path: `/membership/`, actions })}
           >
             Memberships Page
           </div>
@@ -139,17 +139,7 @@ const styles = {
     fontSize: 20,
   },
   subTitle: {
-    fontSize: 16,
     fontWeight: "bold",
-    color: colors.softBlack,
-    padding: `0.75em 0`,
-  },
-  link: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: colors.blue,
-    textDecoration: "underline",
-    cursor: "pointer",
     padding: `0.75em 0`,
   },
 };

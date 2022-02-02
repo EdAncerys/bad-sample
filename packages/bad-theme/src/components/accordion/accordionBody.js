@@ -37,7 +37,7 @@ const AccordionBody = ({
     button_link,
     link_label,
     link,
-    preview,
+    apply_for_membership,
     file_submit_option,
     recipients,
   } = block;
@@ -487,6 +487,22 @@ const AccordionBody = ({
     );
   };
 
+  const ApplyForMembership = () => {
+    if (apply_for_membership === "Disabled") return null;
+
+    return (
+      <div
+        className="blue-btn"
+        style={{ width: "fit-content" }}
+        onClick={() =>
+          setGoToAction({ path: `/membership/step-1-the-process/`, actions })
+        }
+      >
+        <Html2React html={`Apply for ${apply_for_membership} membership`} />
+      </div>
+    );
+  };
+
   let COLUMNS = `1fr 400px`;
   if (!gsDocument_uploads && !downloads && !link) COLUMNS = `1fr`;
 
@@ -515,6 +531,7 @@ const AccordionBody = ({
             <ServeFileSubmit />
           </div>
         </div>
+        <ApplyForMembership />
       </div>
     </div>
   );
