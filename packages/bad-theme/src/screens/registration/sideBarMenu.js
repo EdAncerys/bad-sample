@@ -8,10 +8,10 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const slug = state.router.link;
 
-  const defaultStyle = { fontWight: "normal" };
+  const defaultStyle = {};
   const activeStyle = {
     fontWeight: "bold",
-    color: colors.softBlack,
+    color: colors.black,
   };
 
   let stepOne,
@@ -31,7 +31,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
         className="primary-title"
         style={{
           fontSize: 22,
-          borderBottom: `1px solid ${colors.darkSilver}`,
+          borderBottom: `1px solid ${colors.silverFillTwo}`,
           padding: `0 1em 1em 0`,
         }}
       >
@@ -42,10 +42,10 @@ const SideBarMenu = ({ state, actions, libraries }) => {
 
   const ServeContent = () => {
     return (
-      <div style={{ ...styles.titleWrapper, padding: `2em 0` }}>
+      <div style={{ padding: `2em 0` }}>
         <div
           className="title-link-animation"
-          style={{ ...stepOne }}
+          style={{ ...stepOne, padding: `0.5em 0` }}
           onClick={() => {
             if (slug === "/membership/registration-thank-you/") return null;
             setGoToAction({
@@ -58,7 +58,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
         </div>
         <div
           className="title-link-animation"
-          style={{ ...stepTwo }}
+          style={{ ...stepTwo, padding: `0.5em 0` }}
           onClick={() => {
             if (slug === "/membership/registration-thank-you/") return null;
             setGoToAction({
@@ -71,7 +71,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
         </div>
         <div
           className="title-link-animation"
-          style={{ ...stepThree }}
+          style={{ ...stepThree, padding: `0.5em 0` }}
           onClick={() => {
             if (slug === "/membership/registration-thank-you/") return null;
             setGoToAction({
@@ -84,7 +84,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
         </div>
         <div
           className="title-link-animation"
-          style={{ ...stepFour }}
+          style={{ ...stepFour, padding: `0.5em 0` }}
           onClick={() => {
             if (slug === "/membership/registration-thank-you/") return null;
             setGoToAction({
@@ -104,7 +104,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
       className="flex-col"
       style={{
         paddingRight: `4em`,
-        borderRight: `1px solid ${colors.darkSilver}`,
+        borderRight: `1px solid ${colors.silverFillTwo}`,
       }}
     >
       <ServeTitle />
@@ -114,9 +114,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
 };
 
 const styles = {
-  titleWrapper: {
-    fontSize: 16,
-  },
+  container: {},
 };
 
 export default connect(SideBarMenu);

@@ -18,7 +18,7 @@ const RegistrationStepOne = ({ state, actions }) => {
     return (
       <div
         className="flex"
-        style={{ justifyContent: "flex-end", padding: `1em 0` }}
+        style={{ justifyContent: "flex-end", paddingTop: `2em` }}
       >
         <div
           className="transparent-btn"
@@ -66,10 +66,19 @@ const RegistrationStepOne = ({ state, actions }) => {
           <div
             className="caps-btn"
             onClick={() => setGoToAction({ path: `/membership/`, actions })}
+            style={{ paddingTop: `1em` }}
           >
             Memberships Page
           </div>
-          <div className="primary-title" style={styles.title}>
+          <div
+            className="primary-title"
+            style={{
+              ...styles.title,
+              marginTop: `1em`,
+              paddingTop: `1em`,
+              borderTop: `1px solid ${colors.silverFillTwo}`,
+            }}
+          >
             You Will Need:
           </div>
           <div style={styles.subTitle}>Personal Details:</div>
@@ -132,8 +141,8 @@ const styles = {
     gap: 20,
   },
   wrapper: {
-    borderBottom: `1px solid ${colors.darkSilver}`,
-    margin: `0 1em 0`,
+    borderBottom: `1px solid ${colors.silverFillTwo}`,
+    padding: `0 1em 0`,
   },
   title: {
     fontSize: 20,
