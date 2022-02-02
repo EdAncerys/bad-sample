@@ -7,21 +7,6 @@ import Loading from "../loading";
 import PinIcon from "../../img/svg/pinIcon.svg";
 import { colors } from "../../config/imports";
 
-const mapCenter = {
-  lat: 37.7824134,
-  lng: -122.4088472,
-};
-
-const MARKER_POSITION = {
-  lat: 37.772,
-  lng: -122.214,
-};
-
-const containerStyle = {
-  width: "100%",
-  height: "100%",
-};
-
 const MapsComponent = ({ state, actions, libraries }) => {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -29,65 +14,70 @@ const MapsComponent = ({ state, actions, libraries }) => {
   });
 
   const [map, setMap] = React.useState(null);
-  const mapRef = useRef(null);
-  const [position, setPosition] = useState({
-    lat: 41,
-    lng: -71,
-  });
 
-  // const BANNER_HEIGHT = state.theme.bannerHeight;
+  const mapCenter = {
+    lat: 51.523523422233716,
+    lng: -0.13923969291700383,
+  };
+
+  const MARKER_POSITION = {
+    lat: 37.772,
+    lng: -122.214,
+  };
+
+  const containerStyle = {
+    width: "100%",
+    height: "100%",
+    borderRadius: 10,
+  };
+
+  const myPlaces = [
+    {
+      id: "place1",
+      pos: { lat: 52.523523422233716, lng: -0.13923969291700383 },
+    },
+    {
+      id: "place1",
+      pos: { lat: 51.523523422233716, lng: -0.13923969291700383 },
+    },
+  ];
 
   const onLoad = React.useCallback(function callback(map) {
     const bounds = new window.google.maps.LatLngBounds();
+
+    // map coordinates will be the center of the map
+    myPlaces.map((place) => {
+      bounds.extend(place.pos);
+      return place.id;
+    });
+    // bounds.extend(center);
     map.fitBounds(bounds);
     setMap(map);
-    mapRef.current = map;
   }, []);
 
   const onUnmount = React.useCallback(function callback(map) {
     setMap(null);
-    mapRef.current = null;
   }, []);
-
-  function handleLoad(map) {
-    mapRef.current = map;
-  }
-
-  function handleCenter() {
-    if (!mapRef.current) return;
-
-    const newPos = mapRef.current.getCenter().toJSON();
-    setPosition(newPos);
-  }
-
-  // return isLoaded ? (
-  //   <GoogleMap
-  //     mapContainerStyle={containerStyle}
-  //     defaultZoom={12}
-  //     defaultCenter={center}
-  //     onLoad={onLoad}
-  //     onUnmount={onUnmount}
-  //   >
-  //     <>Child components, such as markers, info windows, etc.</>
-  //   </GoogleMap>
-  // ) : (
-  //   <></>
-  // );
 
   if (isLoaded)
     return (
       <GoogleMap
-        mapContainerStyle={containerStyle}
-        defaultZoom={12}
-        center={mapCenter}
         onLoad={onLoad}
         onUnmount={onUnmount}
-
-        // onLoad={handleLoad}
-        // onDragEnd={handleCenter}
-        // center={mapCenter}
+        mapContainerStyle={containerStyle}
+        // zoom={10}
+        // defaultCenter={mapCenter}
       >
         <Marker position={MARKER_POSITION} icon={PinIcon} />
+        <Marker
+          position={{
+            lat: 37.672,
+            lng: -122.214,
+          }}
+          icon={PinIcon}
+          text="Hello World!"
+        />
+        <Marker position={mapCenter} icon={PinIcon} title="Hello" />
       </GoogleMap>
     );
 
