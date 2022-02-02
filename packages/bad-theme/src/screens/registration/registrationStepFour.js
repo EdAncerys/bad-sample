@@ -1,4 +1,4 @@
-import React from "react";
+import { useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Form } from "react-bootstrap";
@@ -16,66 +16,81 @@ const RegistrationStepFour = ({ state, actions }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
+  const gmcNumberRef = useRef(null);
+  const registrationNumberRef = useRef(null);
+  const ntnNumberRef = useRef(null);
+  const jobTitleRef = useRef(null);
+  const hospitalRef = useRef(null);
+  const medicalSchoolRef = useRef(null);
+
+  const smOneFirstNameRef = useRef(null);
+  const smOneLastNameRef = useRef(null);
+  const smOneEmailRef = useRef(null);
+  const smOneConfirmEmailRef = useRef(null);
+
+  const smTwoFirstNameRef = useRef(null);
+  const smTwoLastNameRef = useRef(null);
+  const smTwoEmailRef = useRef(null);
+  const smTwoConfirmEmailRef = useRef(null);
+
+  const mrcpRef = useRef(null);
+  const cvRef = useRef(null);
+  const constitutionCheckRef = useRef(null);
+  const privacyNoticeRef = useRef(null);
+
+  // HANDLERS --------------------------------------------
+  const handleSubmit = () => {
+    const gmcNumber = gmcNumberRef.current.value;
+    const registrationNumber = registrationNumberRef.current.value;
+    const ntnNumber = ntnNumberRef.current.value;
+    const jobTitle = jobTitleRef.current.value;
+    const hospital = hospitalRef.current.value;
+    const medicalSchool = medicalSchoolRef.current.value;
+
+    const smOneLastName = smOneLastNameRef.current.value;
+    const smOneFirstName = smOneFirstNameRef.current.value;
+    const smOneEmail = smOneEmailRef.current.value;
+    const smOneConfirmEmail = smOneConfirmEmailRef.current.value;
+
+    const smTwoLastName = smTwoLastNameRef.current.value;
+    const smTwoFirstName = smTwoFirstNameRef.current.value;
+    const smTwoEmail = smTwoEmailRef.current.value;
+    const smTwoConfirmEmail = smTwoConfirmEmailRef.current.value;
+
+    const mrcp = mrcpRef.current.value;
+    const cv = cvRef.current.files[0];
+    const constitutionCheck = constitutionCheckRef.current.checked;
+    const privacyNotice = privacyNoticeRef.current.checked;
+
+    const details = {
+      gmcNumber,
+      registrationNumber,
+      ntnNumber,
+      jobTitle,
+      hospital,
+      medicalSchool,
+      smOneLastName,
+      smOneFirstName,
+      smOneEmail,
+      smOneConfirmEmail,
+      smTwoLastName,
+      smTwoFirstName,
+      smTwoEmail,
+      smTwoConfirmEmail,
+      mrcp,
+      cv,
+      constitutionCheck,
+      privacyNotice,
+    };
+
+    console.log(details);
+  };
+
   const SMF = () => {
     return <span style={{ color: colors.danger }}>*</span>;
   };
 
   // SERVERS ---------------------------------------------
-  const ServeFileUploadInput = () => {
-    const ServeImage = () => {
-      const alt = "Upload";
-
-      return (
-        <div style={{ width: 30, height: 30 }}>
-          <Image
-            src={FileUpload}
-            alt={alt}
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-          />
-        </div>
-      );
-    };
-
-    return (
-      <div>
-        <label
-          htmlFor="fileUpload"
-          className="flex"
-          style={{
-            backgroundColor: colors.white,
-            border: `1px solid ${colors.silver}`,
-            borderRadius: 10,
-            cursor: "pointer",
-            padding: `3px 10px`,
-          }}
-        >
-          <div
-            className="flex"
-            style={{
-              fontSize: 12,
-              color: colors.darkSilver,
-              alignItems: "center",
-            }}
-          >
-            Upload Your CV
-          </div>
-          <ServeImage />
-        </label>
-        <input
-          id="fileUpload"
-          type="file"
-          className="form-control"
-          placeholder="Profile Photo"
-          accept="image/*"
-          style={{ display: "none" }}
-        />
-      </div>
-    );
-  };
-
   const ServeForm = () => {
     const ServePersonalDetailsInput = () => {
       return (
@@ -83,9 +98,9 @@ const RegistrationStepFour = ({ state, actions }) => {
           className="form-group"
           style={{
             display: "grid",
-            gap: 5,
+            gap: 10,
             marginTop: `1em`,
-            paddingTop: `1em`,
+            padding: `1em 1em 0 1em`,
             borderTop: `1px solid ${colors.silverFillTwo}`,
           }}
         >
@@ -93,7 +108,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             GMC Number <SMF />
           </label>
           <input
-            id="gmcNumber"
+            ref={gmcNumberRef}
             type="text"
             className="form-control"
             placeholder="GMC Number"
@@ -103,7 +118,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             Regulatory Body Registration Number
           </label>
           <input
-            id="registrationNumber"
+            ref={registrationNumberRef}
             type="text"
             className="form-control"
             placeholder="Regulatory Body Registration Number"
@@ -111,27 +126,27 @@ const RegistrationStepFour = ({ state, actions }) => {
           />
           <label style={styles.subTitle}>NTN Number</label>
           <input
-            id="ntnNumber"
+            ref={ntnNumberRef}
             type="text"
             className="form-control"
             placeholder="NTN Number"
             style={styles.input}
           />
           <label style={styles.subTitle}>
-            Current job title <SMF />
+            Current post/job title <SMF />
           </label>
           <input
-            id="jobTitle"
+            ref={jobTitleRef}
             type="text"
             className="form-control"
             placeholder="Current job title"
             style={styles.input}
           />
           <label style={styles.subTitle}>
-            GP Practice/Hospital <SMF />
+            Main Hospital/Place of work <SMF />
           </label>
           <Form.Select
-            id="hospital"
+            ref={hospitalRef}
             aria-label="Default select example"
             style={styles.input}
           >
@@ -143,7 +158,7 @@ const RegistrationStepFour = ({ state, actions }) => {
           </Form.Select>
           <label style={styles.subTitle}>Medical School</label>
           <input
-            id="medicalSchool"
+            ref={medicalSchoolRef}
             type="text"
             className="form-control"
             placeholder="Medical School"
@@ -161,13 +176,13 @@ const RegistrationStepFour = ({ state, actions }) => {
             display: "grid",
             gridTemplateColumns: `1fr 1fr`,
             gap: 20,
-            padding: `2em 0`,
+            padding: `2em 1em`,
           }}
         >
           <div
             style={{
               display: "grid",
-              gap: 5,
+              gap: 10,
             }}
           >
             <label style={styles.subTitle}>
@@ -175,7 +190,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             </label>
             <label style={styles.subTitle}>First Name</label>
             <input
-              id="supportMemberOneFirstName"
+              ref={smOneFirstNameRef}
               type="text"
               className="form-control"
               placeholder="First Name"
@@ -183,7 +198,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             />
             <label style={styles.subTitle}>Last Name</label>
             <input
-              id="supportMemberOneLastName"
+              ref={smOneLastNameRef}
               type="text"
               className="form-control"
               placeholder="Last Name"
@@ -191,7 +206,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             />
             <label style={styles.subTitle}>E-mail Address</label>
             <input
-              id="supportMemberOneEmail"
+              ref={smOneEmailRef}
               type="email"
               className="form-control"
               placeholder="E-mail Address"
@@ -199,7 +214,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             />
             <label style={styles.subTitle}>Confirm Their E-mail Address</label>
             <input
-              id="supportMemberOneConfirmEmail"
+              ref={smOneConfirmEmailRef}
               type="email"
               className="form-control"
               placeholder="E-mail Address"
@@ -209,7 +224,7 @@ const RegistrationStepFour = ({ state, actions }) => {
           <div
             style={{
               display: "grid",
-              gap: 5,
+              gap: 10,
             }}
           >
             <label style={styles.subTitle}>
@@ -217,7 +232,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             </label>
             <label style={styles.subTitle}>First Name</label>
             <input
-              id="supportMemberTwoFirstName"
+              ref={smTwoFirstNameRef}
               type="text"
               className="form-control"
               placeholder="First Name"
@@ -225,7 +240,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             />
             <label style={styles.subTitle}>Last Name</label>
             <input
-              id="supportMemberTwoLastName"
+              ref={smTwoLastNameRef}
               type="text"
               className="form-control"
               placeholder="Last Name"
@@ -233,7 +248,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             />
             <label style={styles.subTitle}>E-mail Address</label>
             <input
-              id="supportMemberTwoEmail"
+              ref={smTwoEmailRef}
               type="email"
               className="form-control"
               placeholder="E-mail Address"
@@ -241,7 +256,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             />
             <label style={styles.subTitle}>Confirm Their E-mail Address</label>
             <input
-              id="supportMemberTwoConfirmEmail"
+              ref={smTwoConfirmEmailRef}
               type="email"
               className="form-control"
               placeholder="E-mail Address"
@@ -252,16 +267,16 @@ const RegistrationStepFour = ({ state, actions }) => {
       );
     };
 
-    const ServeUploadsInput = () => {
+    const ServeUploads = () => {
       return (
         <div
           className="form-group"
           style={{
             display: "grid",
             gap: 20,
-            padding: `1em 0 2em`,
-            borderTop: `1px solid ${colors.darkSilver}`,
-            borderBottom: `1px solid ${colors.darkSilver}`,
+            padding: `2em 1em`,
+            borderTop: `1px solid ${colors.silverFillTwo}`,
+            borderBottom: `1px solid ${colors.silverFillTwo}`,
           }}
         >
           <label style={styles.subTitle}>
@@ -269,7 +284,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             <SMF />
           </label>
           <input
-            id="mrcp"
+            ref={mrcpRef}
             type="text"
             className="form-control"
             placeholder="MRCP"
@@ -279,7 +294,14 @@ const RegistrationStepFour = ({ state, actions }) => {
             Upload Your CV
             <SMF />
           </label>
-          <ServeFileUploadInput />
+          <input
+            ref={cvRef}
+            type="file"
+            className="form-control"
+            placeholder="Profile Photo"
+            accept="*"
+            style={styles.input}
+          />
         </div>
       );
     };
@@ -288,7 +310,7 @@ const RegistrationStepFour = ({ state, actions }) => {
       <div>
         <ServePersonalDetailsInput />
         <ServeSupportingMembers />
-        <ServeUploadsInput />
+        <ServeUploads />
       </div>
     );
   };
@@ -297,7 +319,7 @@ const RegistrationStepFour = ({ state, actions }) => {
     return (
       <div
         className="flex"
-        style={{ justifyContent: "flex-end", padding: `1em 0` }}
+        style={{ justifyContent: "flex-end", padding: `2em 1em 0 1em` }}
       >
         <div
           className="transparent-btn"
@@ -319,12 +341,13 @@ const RegistrationStepFour = ({ state, actions }) => {
         </div>
         <div
           className="blue-btn"
-          onClick={() =>
-            setGoToAction({
-              path: `/membership/registration-thank-you/`,
-              actions,
-            })
-          }
+          onClick={() => {
+            handleSubmit();
+            // setGoToAction({
+            //   path: `/membership/registration-thank-you/`,
+            //   actions,
+            // })}
+          }}
         >
           Next
         </div>
@@ -334,13 +357,20 @@ const RegistrationStepFour = ({ state, actions }) => {
 
   const ServeAgreements = () => {
     return (
-      <div className="flex-col form-check" style={{ padding: `1em 0` }}>
+      <div
+        className="flex-col form-check"
+        style={{
+          padding: `1em 0`,
+          borderBottom: `1px solid ${colors.silverFillTwo}`,
+        }}
+      >
         <div
           className="flex"
           style={{ alignItems: "center", padding: `1em 0` }}
         >
           <div>
             <input
+              ref={constitutionCheckRef}
               type="checkbox"
               className="form-check-input"
               style={styles.checkBox}
@@ -363,6 +393,7 @@ const RegistrationStepFour = ({ state, actions }) => {
         >
           <div>
             <input
+              ref={privacyNoticeRef}
               type="checkbox"
               className="form-check-input"
               style={styles.checkBox}
@@ -387,7 +418,7 @@ const RegistrationStepFour = ({ state, actions }) => {
   const ServeContent = () => {
     return (
       <div>
-        <div style={styles.wrapper}>
+        <div style={{ padding: `0 1em 0` }}>
           <div className="primary-title" style={styles.title}>
             Professional Details
           </div>
@@ -399,7 +430,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             diam donec adipiscing tristique risus. A cras semper auctor neque
             vitae tempus quam. Ac auctor augue
           </div>
-          <div style={styles.mandatory}>
+          <div>
             <SMF />
             Mandatory fields
           </div>
@@ -411,7 +442,15 @@ const RegistrationStepFour = ({ state, actions }) => {
             Memberships Page
           </div>
 
-          <div className="primary-title" style={styles.title}>
+          <div
+            className="primary-title"
+            style={{
+              ...styles.title,
+              paddingTop: `1em`,
+              marginTop: `1em`,
+              borderTop: `1px solid ${colors.silverFillTwo}`,
+            }}
+          >
             Category Selected : GP
           </div>
           <div style={{ paddingTop: `0.75em` }}>
@@ -458,29 +497,11 @@ const styles = {
     gap: 20,
     padding: `2em 0`,
   },
-  wrapper: {
-    margin: `0 1em 0`,
-  },
   title: {
     fontSize: 22,
   },
   subTitle: {
-    fontSize: 16,
     fontWeight: "bold",
-    color: colors.softBlack,
-    padding: `0.75em 0`,
-  },
-  link: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: colors.blue,
-    textDecoration: "underline",
-    cursor: "pointer",
-    padding: `0.75em 0`,
-  },
-  mandatory: {
-    padding: `0.75em 0`,
-    borderBottom: `1px solid ${colors.darkSilver}`,
   },
   input: {
     borderRadius: 10,

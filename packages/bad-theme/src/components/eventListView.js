@@ -38,6 +38,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
     summary,
     venue,
   } = block.acf;
+
   const title = block.title.rendered;
   const GRADES = Object.values(state.source.event_grade);
   const eventGradeIds = Object.values(block.event_grade);
