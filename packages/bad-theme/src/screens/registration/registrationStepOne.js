@@ -18,7 +18,7 @@ const RegistrationStepOne = ({ state, actions }) => {
     return (
       <div
         className="flex"
-        style={{ justifyContent: "flex-end", paddingTop: `2em` }}
+        style={{ justifyContent: "flex-end", padding: `2em 1em 0 1em` }}
       >
         <div
           className="transparent-btn"

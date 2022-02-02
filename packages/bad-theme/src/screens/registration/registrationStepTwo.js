@@ -32,7 +32,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
   const postcodeRef = useRef(null);
 
   // HANDLERS --------------------------------------------
-  const handelSubmit = () => {
+  const handleSubmit = () => {
     const profilePhoto = profilePhotoRef.current.files[0];
     const title = titleRef.current.value;
     const gender = genderRef.current.value;
@@ -65,62 +65,8 @@ const RegistrationStepTwo = ({ state, actions }) => {
     return <span style={{ color: colors.danger }}>*</span>;
   };
 
-  const ServeFileUploadInput = () => {
-    const ServeImage = () => {
-      const alt = "Upload";
-
-      return (
-        <div style={{ width: 30, height: 30, padding: `7px 10px 0 0` }}>
-          <Image
-            src={FileUpload}
-            alt={alt}
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-          />
-        </div>
-      );
-    };
-
-    return (
-      <div>
-        <label
-          htmlFor="fileUpload"
-          className="flex"
-          style={{
-            backgroundColor: colors.white,
-            border: `1px solid ${colors.silverFillTwo}`,
-            borderRadius: 10,
-            cursor: "pointer",
-          }}
-        >
-          <div
-            className="flex"
-            style={{
-              fontSize: 12,
-              padding: `1em 1.5em`,
-            }}
-          >
-            Profile Photo
-          </div>
-          <ServeImage />
-        </label>
-        <input
-          id="fileUpload"
-          type="file"
-          className="form-control"
-          placeholder="Profile Photo"
-          accept="image/*"
-          style={{ display: "none" }}
-        />
-      </div>
-    );
-  };
-
   const ServeCardImage = () => {
     const [profilePhoto, setProfilePhoto] = useState(null);
-
     const alt = "Profile Avatar";
 
     return (
@@ -153,8 +99,6 @@ const RegistrationStepTwo = ({ state, actions }) => {
             style={styles.input}
           />
         </div>
-
-        {/* <ServeFileUploadInput /> */}
       </div>
     );
   };
@@ -217,7 +161,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
       return (
         <div
           className="form-group"
-          style={{ display: "grid", gap: 10, padding: `1em 0` }}
+          style={{ display: "grid", gap: 10, paddingTop: `1em` }}
         >
           <label>
             Home Address <SMF />
@@ -294,7 +238,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
     return (
       <div
         className="flex"
-        style={{ justifyContent: "flex-end", padding: `1em 0` }}
+        style={{ justifyContent: "flex-end", padding: `2em 1em 0 1em` }}
       >
         <div
           className="transparent-btn"
@@ -321,12 +265,13 @@ const RegistrationStepTwo = ({ state, actions }) => {
         </div>
         <div
           className="blue-btn"
-          onClick={() =>
+          onClick={() => {
+            handleSubmit();
             setGoToAction({
               path: `/membership/step-3-category-selection/`,
               actions,
-            })
-          }
+            });
+          }}
         >
           Next
         </div>

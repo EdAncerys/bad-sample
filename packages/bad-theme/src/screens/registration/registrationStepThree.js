@@ -1,4 +1,4 @@
-import React from "react";
+import { useRef } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
@@ -14,12 +14,28 @@ const RegistrationStepThree = ({ state, actions }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
+  const typeRef = useRef(null);
+  const categoryRef = useRef(null);
+
+  // HANDLERS --------------------------------------------
+  const handleSubmit = () => {
+    const type = typeRef.current.value;
+    const category = categoryRef.current.value;
+
+    const details = {
+      type,
+      category,
+    };
+
+    console.log(details);
+  };
+
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
     return (
       <div
         className="flex"
-        style={{ justifyContent: "flex-end", paddingTop: `1em` }}
+        style={{ justifyContent: "flex-end", padding: `2em 1em 0 1em` }}
       >
         <div
           className="transparent-btn"
@@ -46,12 +62,13 @@ const RegistrationStepThree = ({ state, actions }) => {
         </div>
         <div
           className="blue-btn"
-          onClick={() =>
-            setGoToAction({
-              path: `/membership/step-4-professional-details/`,
-              actions,
-            })
-          }
+          onClick={() => {
+            handleSubmit();
+            // setGoToAction({
+            //   path: `/membership/step-4-professional-details/`,
+            //   actions,
+            // });
+          }}
         >
           Next
         </div>
@@ -73,7 +90,18 @@ const RegistrationStepThree = ({ state, actions }) => {
       >
         <label style={styles.subTitle}>Membership Type</label>
         <Form.Select
-          id="category"
+          ref={typeRef}
+          aria-label="Default select example"
+          style={styles.input}
+        >
+          <option value="null">Membership Type</option>
+          <option value="BAD Membership">BAD Membership</option>
+          <option value="SIG Membership">SIG Membership</option>
+        </Form.Select>
+
+        <label style={styles.subTitle}>Membership Category</label>
+        <Form.Select
+          ref={categoryRef}
           aria-label="Default select example"
           style={styles.input}
         >
@@ -149,7 +177,7 @@ const styles = {
   },
   wrapper: {
     borderBottom: `1px solid ${colors.silverFillTwo}`,
-    padding: `0 1em 1em 2em`,
+    padding: `0 1em 2em 1em`,
   },
   title: {
     fontSize: 20,
