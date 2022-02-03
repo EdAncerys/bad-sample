@@ -31,21 +31,9 @@ const RegistrationStepFour = ({ state, actions }) => {
     applicationType && applicationType.apply_for_membership === "Student";
   const isTrainee =
     applicationType && applicationType.apply_for_membership === "Trainee";
-  const isAssociateTrainee =
-    applicationType &&
-    applicationType.apply_for_membership === "Associate Trainee";
-  const isAssociate =
-    applicationType && applicationType.apply_for_membership === "Associate";
   const isAssociateOverseas =
     applicationType &&
     applicationType.apply_for_membership === "Associate Overseas";
-  const isGP = applicationType && applicationType.apply_for_membership === "GP";
-  const isCareerGrade =
-    applicationType && applicationType.apply_for_membership === "Career Grade";
-  const isOrdinary =
-    applicationType && applicationType.apply_for_membership === "Ordinary";
-  const isOrdinarySAS =
-    applicationType && applicationType.apply_for_membership === "Ordinary SAS";
   const isAlliedHealthcareProfessional =
     applicationType &&
     applicationType.apply_for_membership === "Allied Healthcare Professional";
@@ -127,6 +115,110 @@ const RegistrationStepFour = ({ state, actions }) => {
   // SERVERS ---------------------------------------------
   const ServeForm = () => {
     const ServePersonalDetailsInput = () => {
+      const ServeGMCNumber = () => {
+        if (
+          (applicationType && isStudent) ||
+          (applicationType && isAssociateOverseas)
+        )
+          return null;
+
+        return (
+          <div>
+            <label style={styles.subTitle}>
+              GMC Number <SMF />
+            </label>
+            <input
+              ref={gmcNumberRef}
+              type="text"
+              className="form-control"
+              placeholder="GMC Number"
+              style={styles.input}
+            />
+          </div>
+        );
+      };
+
+      const ServeRegistrationNumber = () => {
+        if (
+          (applicationType && isAssociateOverseas) ||
+          (applicationType && isAlliedHealthcareProfessional)
+        )
+          return null;
+
+        return (
+          <div>
+            <label style={styles.subTitle}>
+              Regulatory Body Registration Number
+            </label>
+            <input
+              ref={registrationNumberRef}
+              type="text"
+              className="form-control"
+              placeholder="Regulatory Body Registration Number"
+              style={styles.input}
+            />
+          </div>
+        );
+      };
+
+      const ServeNTNNumber = () => {
+        if (applicationType && isTrainee) return null;
+
+        return (
+          <div>
+            <label style={styles.subTitle}>NTN Number</label>
+            <input
+              ref={ntnNumberRef}
+              type="text"
+              className="form-control"
+              placeholder="NTN Number"
+              style={styles.input}
+            />
+          </div>
+        );
+      };
+
+      const ServeMainHospital = () => {
+        if (applicationType && isStudent) return null;
+
+        return (
+          <div>
+            <label style={styles.subTitle}>
+              Main Hospital/Place of work <SMF />
+            </label>
+            <Form.Select ref={hospitalRef} style={styles.input}>
+              <option value="null" hidden>
+                Main Hospital/Place of work
+              </option>
+              {UK_HOSPITALS.map((item, key) => {
+                return (
+                  <option key={key} value={item}>
+                    {item}
+                  </option>
+                );
+              })}
+            </Form.Select>
+          </div>
+        );
+      };
+
+      const ServeMedicalSchool = () => {
+        if (applicationType && isStudent) return null;
+
+        return (
+          <div>
+            <label style={styles.subTitle}>Medical School</label>
+            <input
+              ref={medicalSchoolRef}
+              type="text"
+              className="form-control"
+              placeholder="Medical School"
+              style={styles.input}
+            />
+          </div>
+        );
+      };
+
       return (
         <div
           className="form-group"
@@ -138,38 +230,10 @@ const RegistrationStepFour = ({ state, actions }) => {
             borderTop: `1px solid ${colors.silverFillTwo}`,
           }}
         >
-          {!isStudent && (
-            <div>
-              <label style={styles.subTitle}>
-                GMC Number <SMF />
-              </label>
-              <input
-                ref={gmcNumberRef}
-                type="text"
-                className="form-control"
-                placeholder="GMC Number"
-                style={styles.input}
-              />
-            </div>
-          )}
-          <label style={styles.subTitle}>
-            Regulatory Body Registration Number
-          </label>
-          <input
-            ref={registrationNumberRef}
-            type="text"
-            className="form-control"
-            placeholder="Regulatory Body Registration Number"
-            style={styles.input}
-          />
-          <label style={styles.subTitle}>NTN Number</label>
-          <input
-            ref={ntnNumberRef}
-            type="text"
-            className="form-control"
-            placeholder="NTN Number"
-            style={styles.input}
-          />
+          <ServeGMCNumber />
+          <ServeRegistrationNumber />
+          <ServeNTNNumber />
+
           <label style={styles.subTitle}>
             Current post/job title <SMF />
           </label>
@@ -180,44 +244,16 @@ const RegistrationStepFour = ({ state, actions }) => {
             placeholder="Current job title"
             style={styles.input}
           />
-          <label style={styles.subTitle}>
-            Main Hospital/Place of work <SMF />
-          </label>
-          <Form.Select ref={hospitalRef} style={styles.input}>
-            <option value="null" hidden>
-              Main Hospital/Place of work
-            </option>
-            {UK_HOSPITALS.map((item, key) => {
-              return (
-                <option key={key} value={item}>
-                  {item}
-                </option>
-              );
-            })}
-          </Form.Select>
-          <label style={styles.subTitle}>Medical School</label>
-          <input
-            ref={medicalSchoolRef}
-            type="text"
-            className="form-control"
-            placeholder="Medical School"
-            style={styles.input}
-          />
+
+          <ServeMainHospital />
+          <ServeMedicalSchool />
         </div>
       );
     };
 
     const ServeSupportingMembers = () => {
-      return (
-        <div
-          className="form-group"
-          style={{
-            display: "grid",
-            gridTemplateColumns: `1fr 1fr`,
-            gap: 20,
-            padding: `2em 1em`,
-          }}
-        >
+      const ServeSupportingMemberOne = () => {
+        return (
           <div
             style={{
               display: "grid",
@@ -260,6 +296,13 @@ const RegistrationStepFour = ({ state, actions }) => {
               style={styles.input}
             />
           </div>
+        );
+      };
+
+      const ServeSupportingMemberTwo = () => {
+        if (applicationType && isStudent) return null;
+
+        return (
           <div
             style={{
               display: "grid",
@@ -302,11 +345,50 @@ const RegistrationStepFour = ({ state, actions }) => {
               style={styles.input}
             />
           </div>
+        );
+      };
+
+      return (
+        <div
+          className="form-group"
+          style={{
+            display: "grid",
+            gridTemplateColumns: `1fr 1fr`,
+            gap: 20,
+            padding: `2em 1em`,
+          }}
+        >
+          <ServeSupportingMemberOne />
+          <ServeSupportingMemberTwo />
         </div>
       );
     };
 
     const ServeUploads = () => {
+      const ServeMRCPNumber = () => {
+        if (
+          (applicationType && isStudent) ||
+          (applicationType && isAssociateOverseas)
+        )
+          return null;
+
+        return (
+          <div>
+            <label style={styles.subTitle}>
+              MRCP
+              <SMF />
+            </label>
+            <input
+              ref={mrcpRef}
+              type="text"
+              className="form-control"
+              placeholder="MRCP"
+              style={styles.input}
+            />
+          </div>
+        );
+      };
+
       return (
         <div
           className="form-group"
@@ -318,17 +400,7 @@ const RegistrationStepFour = ({ state, actions }) => {
             borderBottom: `1px solid ${colors.silverFillTwo}`,
           }}
         >
-          <label style={styles.subTitle}>
-            MRCP
-            <SMF />
-          </label>
-          <input
-            ref={mrcpRef}
-            type="text"
-            className="form-control"
-            placeholder="MRCP"
-            style={styles.input}
-          />
+          <ServeMRCPNumber />
           <label style={styles.subTitle}>
             Upload Your CV
             <SMF />
