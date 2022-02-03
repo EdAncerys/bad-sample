@@ -56,8 +56,11 @@ const Venue = ({ state, actions, libraries }) => {
           </div>
 
           <div
-            className="flex"
-            style={{ justifyContent: "center", paddingTop: `1em` }}
+            style={{
+              width: "fit-content",
+              margin: "0 auto",
+              paddingTop: `1em`,
+            }}
           >
             <div
               className="blue-btn"
@@ -112,7 +115,7 @@ const Venue = ({ state, actions, libraries }) => {
         if (!square_footage) return null;
 
         return (
-          <div style={{ paddingTop: `2em` }}>
+          <div style={{ paddingTop: `1em` }}>
             <div className="flex primary-title" style={{ fontSize: 20 }}>
               Square Footage:
             </div>
@@ -128,7 +131,7 @@ const Venue = ({ state, actions, libraries }) => {
         if (!address) return null;
 
         return (
-          <div style={{ paddingTop: `2em` }}>
+          <div style={{ paddingTop: `1em` }}>
             <div className="flex primary-title" style={{ fontSize: 20 }}>
               Address:
             </div>
@@ -144,7 +147,7 @@ const Venue = ({ state, actions, libraries }) => {
         if (!catering) return null;
 
         return (
-          <div style={{ paddingTop: `2em` }}>
+          <div style={{ paddingTop: `1em` }}>
             <div className="flex primary-title" style={{ fontSize: 20 }}>
               Catering:
             </div>
