@@ -27,43 +27,13 @@ const RegistrationStepFive = ({ state, actions }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  const isStudent =
-    applicationType && applicationType.apply_for_membership === "Student";
-  const isTrainee =
-    applicationType && applicationType.apply_for_membership === "Trainee";
-  const isAssociateOverseas =
-    applicationType &&
-    applicationType.apply_for_membership === "Associate Overseas";
-  const isAlliedHealthcareProfessional =
-    applicationType &&
-    applicationType.apply_for_membership === "Allied Healthcare Professional";
-  const isBritishCosmeticDermatologyGroup =
-    applicationType &&
-    applicationType.apply_for_membership ===
-      "British Cosmetic Dermatology Group";
   const isBritishHairNailsSociety =
     applicationType &&
     applicationType.apply_for_membership === "British Hair and Nails Society";
-  const isBritishSocietyOverseas =
-    applicationType &&
-    applicationType.apply_for_membership ===
-      "British Society of Cutaneous Allergy Overseas";
   const isBritishSocietyDermatopathology =
     applicationType &&
     applicationType.apply_for_membership ===
       "British Society for Dermatopathology";
-  const isBritishSurgeryInternational =
-    applicationType &&
-    applicationType.apply_for_membership ===
-      "British Society for Dermatological Surgery International";
-  const isBritishSocietyGeriatricDermatology =
-    applicationType &&
-    applicationType.apply_for_membership ===
-      "British Society for Geriatric Dermatology";
-  const isBritishSocietyMedicalDermatology =
-    applicationType &&
-    applicationType.apply_for_membership ===
-      "British Society for Medical Dermatology";
   const isBritishSocietyMedicalDermatologyAssociate =
     applicationType &&
     applicationType.apply_for_membership ===
@@ -72,101 +42,59 @@ const RegistrationStepFive = ({ state, actions }) => {
     applicationType &&
     applicationType.apply_for_membership ===
       "British Society for Skin Care in Immunocompromised Individuals";
-  const isDERMPATHPRO =
-    applicationType && applicationType.apply_for_membership === "DERMPATHPRO";
 
-  const gmcNumberRef = useRef(null);
-  const registrationNumberRef = useRef(null);
-  const ntnNumberRef = useRef(null);
-  const jobTitleRef = useRef(null);
-  const hospitalRef = useRef(null);
-  const medicalSchoolRef = useRef(null);
-
-  const smOneFirstNameRef = useRef(null);
-  const smOneLastNameRef = useRef(null);
-  const smOneEmailRef = useRef(null);
-  const smOneConfirmEmailRef = useRef(null);
-
-  const smTwoFirstNameRef = useRef(null);
-  const smTwoLastNameRef = useRef(null);
-  const smTwoEmailRef = useRef(null);
-  const smTwoConfirmEmailRef = useRef(null);
-
+  const qualificationRef = useRef(null);
+  const licenseRef = useRef(null);
   const mrcpRef = useRef(null);
-  const cvRef = useRef(null);
-  const gradeRef = useRef(null);
-  const constitutionCheckRef = useRef(null);
-  const privacyNoticeRef = useRef(null);
+  const badMemberRef = useRef(null);
+
+  const myLocationRef = useRef(null);
+  const interestRef = useRef(null);
+  const descriptionRef = useRef(null);
+  const specialtiesRef = useRef(null);
+
+  const areaInterestRef = useRef(null);
+  const bssciiRef = useRef(null);
+  const emailRef = useRef(null);
 
   // HANDLERS --------------------------------------------
   const handleSubmit = () => {
-    const gmcNumber = gmcNumberRef.current ? gmcNumberRef.current.value : null;
-    const registrationNumber = registrationNumberRef.current
-      ? registrationNumberRef.current.value
+    const qualification = qualificationRef.current
+      ? qualificationRef.current.value
       : null;
-    const ntnNumber = ntnNumberRef.current ? ntnNumberRef.current.value : null;
-    const jobTitle = jobTitleRef.current ? jobTitleRef.current.value : null;
-    const hospital = hospitalRef.current ? hospitalRef.current.value : null;
-    const medicalSchool = medicalSchoolRef.current
-      ? medicalSchoolRef.current.value
-      : null;
-
-    const smOneLastName = smOneLastNameRef.current
-      ? smOneLastNameRef.current.value
-      : null;
-    const smOneFirstName = smOneFirstNameRef.current
-      ? smOneFirstNameRef.current.value
-      : null;
-    const smOneEmail = smOneEmailRef.current
-      ? smOneEmailRef.current.value
-      : null;
-    const smOneConfirmEmail = smOneConfirmEmailRef.current
-      ? smOneConfirmEmailRef.current.value
-      : null;
-
-    const smTwoLastName = smTwoLastNameRef.current
-      ? smTwoLastNameRef.current.value
-      : null;
-    const smTwoFirstName = smTwoFirstNameRef.current
-      ? smTwoFirstNameRef.current.value
-      : null;
-    const smTwoEmail = smTwoEmailRef.current
-      ? smTwoEmailRef.current.value
-      : null;
-    const smTwoConfirmEmail = smTwoConfirmEmailRef.current
-      ? smTwoConfirmEmailRef.current.value
-      : null;
-
+    const license = licenseRef.current ? licenseRef.current.value : null;
     const mrcp = mrcpRef.current ? mrcpRef.current.value : null;
-    const cv = cvRef.current ? cvRef.current.files[0] : null;
-    const grade = gradeRef.current ? gradeRef.current.value : null;
-    const constitutionCheck = constitutionCheckRef.current
-      ? constitutionCheckRef.current.checked
+    const badMember = badMemberRef.current ? badMemberRef.current.value : null;
+
+    const myLocation = myLocationRef.current
+      ? myLocationRef.current.value
       : null;
-    const privacyNotice = privacyNoticeRef.current
-      ? privacyNoticeRef.current.checked
+    const interest = interestRef.current ? interestRef.current.value : null;
+    const description = descriptionRef.current
+      ? descriptionRef.current.value
       : null;
+    const specialties = specialtiesRef.current
+      ? specialtiesRef.current.value
+      : null;
+
+    const areaInterest = areaInterestRef.current
+      ? areaInterestRef.current.value
+      : null;
+    const bsscii = bssciiRef.current ? bssciiRef.current.value : null;
+    const email = emailRef.current ? emailRef.current.files[0] : null;
 
     const details = {
-      gmcNumber,
-      registrationNumber,
-      ntnNumber,
-      jobTitle,
-      hospital,
-      medicalSchool,
-      smOneLastName,
-      smOneFirstName,
-      smOneEmail,
-      smOneConfirmEmail,
-      smTwoLastName,
-      smTwoFirstName,
-      smTwoEmail,
-      smTwoConfirmEmail,
+      qualification,
+      license,
       mrcp,
-      cv,
-      grade,
-      constitutionCheck,
-      privacyNotice,
+      badMember,
+      myLocation,
+      interest,
+      description,
+      specialties,
+      areaInterest,
+      bsscii,
+      email,
     };
 
     console.log(details);
@@ -179,15 +107,13 @@ const RegistrationStepFive = ({ state, actions }) => {
   // SERVERS ---------------------------------------------
   const ServeForm = () => {
     const ServeQualification = () => {
-      if (applicationType && isStudent) return null;
-
       return (
         <div>
           <label style={styles.subTitle}>
             Qualification <SMF />
           </label>
           <input
-            ref={gmcNumberRef}
+            ref={qualificationRef}
             type="text"
             className="form-control"
             placeholder="Qualification"
@@ -198,11 +124,7 @@ const RegistrationStepFive = ({ state, actions }) => {
     };
 
     const ServeLicense = () => {
-      if (
-        (applicationType && isAssociateOverseas) ||
-        (applicationType && isAlliedHealthcareProfessional)
-      )
-        return null;
+      if (applicationType && !isBritishHairNailsSociety) return null;
 
       return (
         <div className="flex-col">
@@ -210,7 +132,7 @@ const RegistrationStepFive = ({ state, actions }) => {
             License to practice medicine (Y/N)
           </label>
           <input
-            ref={constitutionCheckRef}
+            ref={licenseRef}
             type="checkbox"
             className="form-check-input"
             style={styles.checkBox}
@@ -219,14 +141,29 @@ const RegistrationStepFive = ({ state, actions }) => {
       );
     };
 
-    const ServeBADMember = () => {
-      if (applicationType && isTrainee) return null;
+    const ServeMRCP = () => {
+      return (
+        <div>
+          <label style={styles.subTitle}>
+            MRCP membership <SMF />
+          </label>
+          <input
+            ref={mrcpRef}
+            type="text"
+            className="form-control"
+            placeholder="MRCP membership"
+            style={styles.input}
+          />
+        </div>
+      );
+    };
 
+    const ServeBADMember = () => {
       return (
         <div className="flex-col">
           <label style={styles.subTitle}>Are you BAD member (Y/N)</label>
           <input
-            ref={constitutionCheckRef}
+            ref={badMemberRef}
             type="checkbox"
             className="form-check-input"
             style={styles.checkBox}
@@ -236,12 +173,12 @@ const RegistrationStepFive = ({ state, actions }) => {
     };
 
     const ServeLocation = () => {
-      if (applicationType && isStudent) return null;
+      if (applicationType && !isBritishHairNailsSociety) return null;
 
       return (
         <div>
           <label style={styles.subTitle}>I identify myself as</label>
-          <Form.Select ref={hospitalRef} style={styles.input}>
+          <Form.Select ref={myLocationRef} style={styles.input}>
             <option value="null" hidden>
               Are you
             </option>
@@ -257,12 +194,12 @@ const RegistrationStepFive = ({ state, actions }) => {
     };
 
     const ServeInterest = () => {
-      if (applicationType && isStudent) return null;
+      if (applicationType && !isBritishHairNailsSociety) return null;
 
       return (
         <div>
           <label style={styles.subTitle}>Specialist Interest</label>
-          <Form.Select ref={hospitalRef} style={styles.input}>
+          <Form.Select ref={interestRef} style={styles.input}>
             <option value="null" hidden>
               Specialist Interest
             </option>
@@ -276,7 +213,7 @@ const RegistrationStepFive = ({ state, actions }) => {
     };
 
     const ServeInterestDescription = () => {
-      if (applicationType && isDERMPATHPRO) return null;
+      if (applicationType && isBritishSocietySkinCare) return null;
 
       const sigName = applicationType
         ? applicationType.apply_for_membership
@@ -288,7 +225,7 @@ const RegistrationStepFive = ({ state, actions }) => {
             Describe your interest in {sigName}
           </label>
           <input
-            ref={jobTitleRef}
+            ref={descriptionRef}
             type="text"
             className="form-control"
             placeholder={`Describe your interest in ${sigName}`}
@@ -299,7 +236,11 @@ const RegistrationStepFive = ({ state, actions }) => {
     };
 
     const ServeSpecialties = () => {
-      if (applicationType && isDERMPATHPRO) return null;
+      if (
+        (applicationType && !isBritishSocietyDermatopathology) ||
+        (applicationType && !isBritishSocietyMedicalDermatologyAssociate)
+      )
+        return null;
 
       return (
         <div>
@@ -307,7 +248,7 @@ const RegistrationStepFive = ({ state, actions }) => {
             Do you do joint clinics with any other specialties?
           </label>
           <input
-            ref={jobTitleRef}
+            ref={specialtiesRef}
             type="text"
             className="form-control"
             placeholder="Do you do joint clinics with any other specialties?"
@@ -318,12 +259,12 @@ const RegistrationStepFive = ({ state, actions }) => {
     };
 
     const ServeAreaInterest = () => {
-      if (applicationType && isStudent) return null;
+      if (applicationType && !isBritishSocietySkinCare) return null;
 
       return (
         <div>
           <label style={styles.subTitle}>Main area of interest </label>
-          <Form.Select ref={hospitalRef} style={styles.input}>
+          <Form.Select ref={areaInterestRef} style={styles.input}>
             <option value="null" hidden>
               Main area of interest
             </option>
@@ -343,7 +284,7 @@ const RegistrationStepFive = ({ state, actions }) => {
     };
 
     const ServeBSSCII = () => {
-      if (applicationType && isTrainee) return null;
+      if (applicationType && !isBritishSocietySkinCare) return null;
 
       const [include, setInclude] = useState(null);
 
@@ -353,7 +294,7 @@ const RegistrationStepFive = ({ state, actions }) => {
             Do you want to be part of the BSSCII discussion form?
           </label>
           <input
-            ref={constitutionCheckRef}
+            ref={bssciiRef}
             onChange={() => setInclude(!include)}
             type="checkbox"
             className="form-check-input"
@@ -364,7 +305,7 @@ const RegistrationStepFive = ({ state, actions }) => {
             <div>
               <label style={styles.subTitle}>Email Address</label>
               <input
-                ref={jobTitleRef}
+                ref={emailRef}
                 type="text"
                 className="form-control"
                 placeholder="Email Address"
@@ -389,6 +330,7 @@ const RegistrationStepFive = ({ state, actions }) => {
       >
         <ServeQualification />
         <ServeLicense />
+        <ServeMRCP />
         <ServeBADMember />
         <ServeInterestDescription />
         <ServeLocation />
