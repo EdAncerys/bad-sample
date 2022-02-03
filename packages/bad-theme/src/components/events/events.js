@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Form } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 
 import EventLoopBlock from "./eventLoopBlock";
+import SearchContainer from "../searchContainer";
 import Loading from "../loading";
 import { colors } from "../../config/imports";
 
-import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 
 const Events = ({ state, actions, libraries, block }) => {
@@ -20,6 +20,10 @@ const Events = ({ state, actions, libraries, block }) => {
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+
+  const searchFilterRef = useRef(null);
+  const gradeRef = useRef(null);
+  const locationRef = useRef(null);
 
   const isSearch = block.add_search_function;
   const id = uuidv4();
@@ -38,15 +42,17 @@ const Events = ({ state, actions, libraries, block }) => {
   }, [state.source.event_grade, state.source.event_location]);
 
   // HELPERS ----------------------------------------------------------------
-  const handleSearchSubmit = () => {
-    const searchInput = document.querySelector(`#searchInput${id}`).value;
+  const handleSearch = () => {
+    const input = searchFilterRef.current.value.toLowerCase();
 
-    const serveFilterOne = document.querySelector(`#serveFilterOne${id}`).value;
-    const serveFilterTwo = document.querySelector(`#serveFilterTwo${id}`).value;
+    const grade = gradeRef.current.value;
+    const location = locationRef.current.value;
 
-    if (!!searchInput) setSearchFilter(searchInput);
-    if (!!serveFilterOne) setGradesFilter(serveFilterOne);
-    if (!!serveFilterTwo) setLocationsFilter(serveFilterTwo);
+    console.log(input, location, grade);
+
+    if (!!input) setSearchFilter(input);
+    if (!!grade) setGradesFilter(grade);
+    if (!!location) setLocationsFilter(location);
   };
 
   // SERVERS ---------------------------------------------
@@ -57,20 +63,20 @@ const Events = ({ state, actions, libraries, block }) => {
       return (
         <div
           className="primary-title"
-          style={{ fontSize: 20, padding: `0 2em` }}
+          style={{ fontSize: 20, paddingRight: `2em` }}
         >
           Filter:
         </div>
       );
     };
 
-    const ServeFilterOne = () => {
+    const ServeGradeFilter = () => {
       if (!grades) return null;
 
       return (
         <div className="flex" style={{ paddingRight: `1em` }}>
-          <Form.Select id={`serveFilterOne${id}`} style={styles.input}>
-            <option value="null" hidden>
+          <Form.Select ref={gradeRef} style={styles.input}>
+            <option value="" hidden>
               Event Grades
             </option>
             {grades.map((item, key) => {
@@ -85,13 +91,13 @@ const Events = ({ state, actions, libraries, block }) => {
       );
     };
 
-    const ServeFilterTwo = () => {
+    const ServeLocationFilter = () => {
       if (!locations) return null;
 
       return (
         <div className="flex">
-          <Form.Select id={`serveFilterTwo${id}`} style={styles.input}>
-            <option value="null" hidden>
+          <Form.Select ref={locationRef} style={styles.input}>
+            <option value="" hidden>
               Location
             </option>
             {locations.map((item, key) => {
@@ -109,51 +115,8 @@ const Events = ({ state, actions, libraries, block }) => {
     return (
       <div className="flex" style={{ padding: `1em 0`, alignItems: "center" }}>
         <ServeTitle />
-        <ServeFilterOne />
-        <ServeFilterTwo />
-      </div>
-    );
-  };
-
-  const ServeSearchContainer = () => {
-    return (
-      <div className="flex-row">
-        <div
-          className="flex"
-          style={{
-            flex: 1,
-            marginRight: `2em`,
-            padding: `0.75em 0`,
-            position: "relative",
-          }}
-        >
-          <input
-            id={`searchInput${id}`}
-            type="text"
-            className="form-control"
-            placeholder="Find An Event"
-            style={styles.input}
-          />
-          <span
-            className="input-group-text toggle-icon-color"
-            style={{
-              position: "absolute",
-              right: 0,
-              height: 40,
-              border: "none",
-              background: "transparent",
-              alignItems: "center",
-              color: colors.darkSilver,
-            }}
-          >
-            <SearchIcon />
-          </span>
-        </div>
-        <div style={{ display: "grid", alignItems: "center" }}>
-          <div className="blue-btn" onClick={handleSearchSubmit}>
-            Search
-          </div>
-        </div>
+        <ServeGradeFilter />
+        <ServeLocationFilter />
       </div>
     );
   };
@@ -225,8 +188,11 @@ const Events = ({ state, actions, libraries, block }) => {
 
     return (
       <div style={{ position: "relative" }}>
-        <div className="flex-row">
-          <ServeSearchContainer />
+        <div className="flex-col" style={{ width: "70%" }}>
+          <SearchContainer
+            searchFilterRef={searchFilterRef}
+            handleSearch={handleSearch}
+          />
           <ServeFilters />
         </div>
         <div className="flex" style={{ marginTop: "0.5em" }}>

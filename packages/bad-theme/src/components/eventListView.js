@@ -20,7 +20,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
   let MARGIN = `${marginVertical}px 0 0`;
   if (removeMargin) MARGIN = 0;
 
-  const HEIGHT = BANNER_HEIGHT / 1.5;
+  const HEIGHT = BANNER_HEIGHT / 1.45;
 
   const {
     date_time,
@@ -35,7 +35,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
     scientific_committee,
     show_add_to_calendar,
     show_sharing_buttons,
-    summary,
+    preview_summary,
     venue,
   } = block.acf;
 
@@ -104,12 +104,17 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
     const ServeTitle = () => {
       if (!title) return null;
 
+      // Manage max string Length
+      const MAX_LENGTH = 70;
+      let titlePreview = `${title.substring(0, MAX_LENGTH)}...`;
+      if (title.length < MAX_LENGTH) titlePreview = title;
+
       return (
         <div
           className="primary-title"
           style={{ fontSize: 20, padding: `0.5em 0` }}
         >
-          <Html2React html={title} />
+          <Html2React html={titlePreview} />
         </div>
       );
     };
@@ -161,43 +166,11 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
     };
 
     const ServeSummary = () => {
-      if (!summary) return null;
-
-      // Manage max string Length
-      const MAX_LENGTH = 150;
-      let summaryPreview = `${summary.substring(0, MAX_LENGTH)}...`;
-      if (summary.length < MAX_LENGTH) summaryPreview = summary;
+      if (!preview_summary) return null;
 
       return (
-        <div
-          className="flex"
-          style={{ justifyItems: "center", fontSize: 16, padding: `0.5em 0 0` }}
-        >
-          <Html2React html={summaryPreview} />
-        </div>
-      );
-    };
-
-    const ServeCondition = () => {
-      if (!conditions) return null;
-
-      const ServeFilterCondition = ({ filter }) => {
-        return (
-          <div className="shadow filter-action-small">
-            <Html2React html={filter.post_title} />
-          </div>
-        );
-      };
-
-      return (
-        <div className="flex-row" style={{ flexWrap: "wrap" }}>
-          {conditions.map((filter, key) => {
-            return (
-              <div key={key}>
-                <ServeFilterCondition filter={filter} />
-              </div>
-            );
-          })}
+        <div className="flex-col" style={{ justifyItems: "center" }}>
+          <Html2React html={preview_summary} />
         </div>
       );
     };
@@ -211,7 +184,6 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
         <ServeTitle />
         <ServeInformation />
         <ServeSummary />
-        <ServeCondition />
       </div>
     );
   };
