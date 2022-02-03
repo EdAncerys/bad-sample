@@ -40,6 +40,9 @@ const Venue = ({ state, actions, libraries }) => {
     subjectDropDown,
     message,
     attachments,
+    contact_public_email,
+    contact_public_phone_number,
+    form_title,
   } = venue.acf;
 
   // SERVERS ---------------------------------------------------
@@ -68,6 +71,10 @@ const Venue = ({ state, actions, libraries }) => {
                 setEnquireAction({
                   dispatch,
                   enquireAction: {
+                    contact_public_email,
+                    contact_public_phone_number,
+                    form_title,
+                    form_body,
                     fullName,
                     email,
                     phoneNumber,

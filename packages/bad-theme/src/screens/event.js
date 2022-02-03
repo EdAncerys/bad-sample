@@ -16,11 +16,15 @@ import Connect from "../img/svg/connectBlack.svg";
 import WebPage from "../img/svg/webPageBlack.svg";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
+// CONTEXT -------------------------------------------------------------------
+import { useAppDispatch, setEnquireAction } from "../context";
 
 const Event = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const event = state.source[data.type][data.id];
+
+  const dispatch = useAppDispatch();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -37,11 +41,31 @@ const Event = ({ state, actions, libraries }) => {
     scientific_committee,
     summary,
     venue,
-    title,
-    filter_one,
-    filter_two,
-    filter_three,
+    register_public_email,
+    register_public_phone_number,
+    register_form_title,
+    register_form_body,
+    register_full_name,
+    register_email,
+    register_phone_number,
+    register_subject,
+    register_subject_dropdown_options,
+    register_message,
+    register_allow_attachments,
+
+    contact_public_email,
+    contact_public_phone_number,
+    contact_form_title,
+    contact_form_body,
+    contact_full_name,
+    contact_email,
+    contact_phone_number,
+    contact_subject,
+    contact_subject_dropdown_options,
+    contact_message,
+    contact_allow_attachments,
   } = event.acf;
+  const { title } = event;
 
   // SERVERS ----------------------------------------------
   const ServeTitle = () => {
@@ -50,16 +74,16 @@ const Event = ({ state, actions, libraries }) => {
     return (
       <div
         className="primary-title"
-        style={{ fontSize: 36, paddingBottom: `0.5em` }}
+        style={{ fontSize: 36, paddingBottom: `1em` }}
       >
-        <Html2React html={title} />
+        <Html2React html={title.rendered} />
       </div>
     );
   };
 
-  const ServeCardImage = () => {
+  const ServeImage = () => {
     if (!image) return null;
-    const alt = title || "BAD";
+    const alt = title.rendered || "BAD";
 
     return (
       <div style={{ width: "100%", height: 350 }}>
@@ -189,8 +213,6 @@ const Event = ({ state, actions, libraries }) => {
   };
 
   const ServeRegisterLink = () => {
-    if (!title) return null;
-
     return (
       <div
         className="flex"
@@ -208,7 +230,24 @@ const Event = ({ state, actions, libraries }) => {
             color: colors.white,
             padding: `1em 2em`,
           }}
-          onClick={() => setGoToAction({ path: `/`, actions })}
+          onClick={() =>
+            setEnquireAction({
+              dispatch,
+              enquireAction: {
+                register_public_email,
+                register_public_phone_number,
+                register_form_title,
+                register_form_body,
+                register_full_name,
+                register_email,
+                register_phone_number,
+                register_subject,
+                register_subject_dropdown_options,
+                register_message,
+                register_allow_attachments,
+              },
+            })
+          }
         >
           Register for this Event
         </div>
@@ -220,14 +259,8 @@ const Event = ({ state, actions, libraries }) => {
     if (!summary) return null;
 
     return (
-      <div className="text-body" style={{ paddingTop: `2em` }}>
-        <div
-          style={{
-            fontSize: 16,
-            fontWeight: "bold",
-            color: colors.softBlack,
-          }}
-        >
+      <div className="text-body">
+        <div className="primary-title" style={{ fontSize: 20 }}>
           Summary
         </div>
         <Html2React html={summary} />
@@ -289,22 +322,6 @@ const Event = ({ state, actions, libraries }) => {
     );
   };
 
-  const ServeActions = () => {
-    return (
-      <div
-        className="flex"
-        style={{ padding: `1em 0`, justifyContent: "center" }}
-      >
-        <div
-          className="transparent-btn"
-          onClick={() => console.log("API call")}
-        >
-          Register
-        </div>
-      </div>
-    );
-  };
-
   return (
     <BlockWrapper>
       <div style={{ backgroundColor: colors.white }}>
@@ -313,12 +330,11 @@ const Event = ({ state, actions, libraries }) => {
             <div>
               <ServeTitle />
               <div style={styles.eventInfo}>
-                <ServeCardImage />
+                <ServeImage />
                 <ServeEventInfo />
               </div>
               <ServeRegisterLink />
               <ServeSummary />
-              <ServeActions />
               <ServeSocials />
             </div>
             <div style={{ backgroundColor: colors.lightSilver }}></div>
@@ -331,7 +347,24 @@ const Event = ({ state, actions, libraries }) => {
           block={{
             title: "If you would like more information please contact us",
           }}
-          onClick={() => setGoToAction({ path: `/`, actions })}
+          onClick={() =>
+            setEnquireAction({
+              dispatch,
+              enquireAction: {
+                contact_public_email,
+                contact_public_phone_number,
+                contact_form_title,
+                contact_form_body,
+                contact_full_name,
+                contact_email,
+                contact_phone_number,
+                contact_subject,
+                contact_subject_dropdown_options,
+                contact_message,
+                contact_allow_attachments,
+              },
+            })
+          }
           buttonWidth="60%"
         />
       </div>

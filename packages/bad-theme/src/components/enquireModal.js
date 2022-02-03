@@ -88,7 +88,13 @@ const EnquireModal = ({ state, actions, libraries }) => {
     if (!enquireAction) return null;
 
     const ServeFileUpload = () => {
-      if (!enquireAction.allow_attachments) return null;
+      let attachments = enquireAction.allow_attachments;
+      if (enquireAction.register_allow_attachments)
+        attachments = enquireAction.register_allow_attachments;
+      if (enquireAction.contact_allow_attachments)
+        attachments = enquireAction.contact_allow_attachments;
+
+      if (!attachments) return null;
 
       return (
         <div style={styles.inputContainer}>
@@ -104,6 +110,8 @@ const EnquireModal = ({ state, actions, libraries }) => {
     };
 
     const ServeForm = () => {
+      if (!enquireAction) return null;
+
       const ServeActions = () => {
         return (
           <Modal.Footer
@@ -117,7 +125,13 @@ const EnquireModal = ({ state, actions, libraries }) => {
       };
 
       const ServeFullName = () => {
-        if (!enquireAction.full_name) return null;
+        let fullName = enquireAction.full_name;
+        if (enquireAction.register_full_name)
+          fullName = enquireAction.register_full_name;
+        if (enquireAction.contact_full_name)
+          fullName = enquireAction.contact_full_name;
+
+        if (!fullName) return null;
 
         return (
           <div style={styles.inputContainer}>
@@ -132,7 +146,11 @@ const EnquireModal = ({ state, actions, libraries }) => {
       };
 
       const ServeEmail = () => {
-        if (!enquireAction.email_address) return null;
+        let email = enquireAction.email_address;
+        if (enquireAction.register_email) email = enquireAction.register_email;
+        if (enquireAction.contact_email) email = enquireAction.contact_email;
+
+        if (!email) return null;
 
         return (
           <div style={styles.inputContainer}>
@@ -147,14 +165,20 @@ const EnquireModal = ({ state, actions, libraries }) => {
       };
 
       const ServeNumber = () => {
-        if (!enquireAction.phone_number) return null;
+        let phoneNumber = enquireAction.phone_number;
+        if (enquireAction.register_phone_number)
+          phoneNumber = enquireAction.register_phone_number;
+        if (enquireAction.contact_phone_number)
+          phoneNumber = enquireAction.contact_phone_number;
+
+        if (!phoneNumber) return null;
 
         return (
           <div style={styles.inputContainer}>
             <label className="form-label">Phone Number</label>
             <input
               id={`phone-number-${uniqueId}`}
-              type="number"
+              type="text"
               className="form-control"
             />
           </div>
@@ -162,7 +186,13 @@ const EnquireModal = ({ state, actions, libraries }) => {
       };
 
       const ServeSubject = () => {
-        if (!enquireAction.subject) return null;
+        let subject = enquireAction.subject;
+        if (enquireAction.register_subject)
+          subject = enquireAction.register_subject;
+        if (enquireAction.contact_subject)
+          subject = enquireAction.contact_subject;
+
+        if (!subject) return null;
 
         return (
           <div style={styles.inputContainer}>
@@ -177,7 +207,13 @@ const EnquireModal = ({ state, actions, libraries }) => {
       };
 
       const ServeSubjectDropDown = () => {
-        if (!enquireAction.subject_dropdown_options) return null;
+        let dropdown = enquireAction.subject_dropdown_options;
+        if (enquireAction.register_subject_dropdown_options)
+          dropdown = enquireAction.register_subject_dropdown_options;
+        if (enquireAction.contact_subject_dropdown_options)
+          dropdown = enquireAction.contact_subject_dropdown_options;
+
+        if (!dropdown) return null;
 
         return (
           <div style={styles.inputContainer}>
@@ -189,7 +225,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
               <option value="null" hidden>
                 Select the subject
               </option>
-              {enquireAction.subject_dropdown_options.map((item, key) => {
+              {Object.values(dropdown).map((item, key) => {
                 return (
                   <option key={key} value={item.field}>
                     {item.field}
@@ -202,7 +238,13 @@ const EnquireModal = ({ state, actions, libraries }) => {
       };
 
       const ServeMessage = () => {
-        if (!enquireAction.message) return null;
+        let message = enquireAction.message;
+        if (enquireAction.register_message)
+          message = enquireAction.register_message;
+        if (enquireAction.contact_message)
+          message = enquireAction.contact_message;
+
+        if (!message) return null;
 
         return (
           <div style={styles.inputContainer}>
@@ -217,7 +259,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
         );
       };
 
-      if (!enquireAction) return null;
       return (
         <form>
           <ServeFullName />
@@ -234,21 +275,33 @@ const EnquireModal = ({ state, actions, libraries }) => {
 
     const ServeFormHeader = () => {
       const ServeFormTitle = () => {
-        if (!enquireAction.form_title) return null;
+        let title = enquireAction.form_title;
+        if (enquireAction.register_form_title)
+          title = enquireAction.register_form_title;
+        if (enquireAction.contact_form_title)
+          title = enquireAction.contact_form_title;
+
+        if (!title) return null;
 
         return (
           <div className="primary-title" style={{ fontSize: 20 }}>
-            <Html2React html={enquireAction.form_title} />
+            <Html2React html={title} />
           </div>
         );
       };
 
       const ServeFormBody = () => {
-        if (!enquireAction.form_body) return null;
+        let body = enquireAction.form_body;
+        if (enquireAction.register_form_body)
+          body = enquireAction.register_form_body;
+        if (enquireAction.contact_form_body)
+          body = enquireAction.contact_form_body;
+
+        if (!body) return null;
 
         return (
           <div style={{ paddingTop: `1em` }}>
-            <Html2React html={enquireAction.form_body} />
+            <Html2React html={body} />
           </div>
         );
       };
@@ -280,7 +333,13 @@ const EnquireModal = ({ state, actions, libraries }) => {
     if (!enquireAction) return null;
 
     const ServePublicEmail = () => {
-      if (!enquireAction.contact_public_email) return null;
+      let email = enquireAction.contact_public_email;
+      if (enquireAction.register_public_email)
+        email = enquireAction.register_public_email;
+      if (enquireAction.contact_public_email)
+        email = enquireAction.contact_public_email;
+
+      if (!email) return null;
 
       return (
         <div>
@@ -288,14 +347,18 @@ const EnquireModal = ({ state, actions, libraries }) => {
             <div>Email Address</div>
           </div>
           <div>
-            <div>{enquireAction.contact_public_email}</div>
+            <div>{email}</div>
           </div>
         </div>
       );
     };
 
     const ServePublicPhone = () => {
-      if (!enquireAction.contact_public_phone_number) return null;
+      let phoneNumber = enquireAction.contact_public_phone_number;
+      if (enquireAction.register_public_phone_number)
+        phoneNumber = enquireAction.register_public_phone_number;
+
+      if (!phoneNumber) return null;
 
       return (
         <div>
@@ -303,7 +366,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
             <div>Phone Number</div>
           </div>
           <div style={styles.infoText}>
-            <div>{enquireAction.contact_public_phone_number}</div>
+            <div>{phoneNumber}</div>
           </div>
         </div>
       );
