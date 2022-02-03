@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useState, useRef } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
@@ -25,10 +25,29 @@ const RegistrationStepThree = ({ state, actions }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
+  const [type, setType] = useState(() => {
+    if (applicationType && applicationType.type === "BAD")
+      return "BAD Membership";
+    return "";
+  });
+  const [category, setCategory] = useState(() => {
+    if (applicationType && applicationType.apply_for_membership)
+      return applicationType.apply_for_membership;
+    return "";
+  });
+
   const typeRef = useRef(null);
   const categoryRef = useRef(null);
 
   // HANDLERS --------------------------------------------
+  const handleTypeChange = (e) => {
+    setType(e.target.value);
+  };
+
+  const handleCategoryChange = (e) => {
+    setCategory(e.target.value);
+  };
+
   const handleSubmit = () => {
     const type = typeRef.current.value;
     const category = categoryRef.current.value;
@@ -79,10 +98,10 @@ const RegistrationStepThree = ({ state, actions }) => {
           className="blue-btn"
           onClick={() => {
             handleSubmit();
-            setGoToAction({
-              path: `/membership/step-4-professional-details/`,
-              actions,
-            });
+            // setGoToAction({
+            //   path: `/membership/step-4-professional-details/`,
+            //   actions,
+            // });
           }}
         >
           Next
@@ -104,26 +123,26 @@ const RegistrationStepThree = ({ state, actions }) => {
         }}
       >
         <label style={styles.subTitle}>Membership Type</label>
-        <Form.Select ref={typeRef} style={styles.input}>
+        <Form.Select
+          ref={typeRef}
+          style={styles.input}
+          value={type}
+          onChange={(e) => handleTypeChange(e)}
+        >
           <option value="null" hidden>
             Membership Type
           </option>
-          <option
-            selected={applicationType && applicationType.type === "BAD"}
-            value="BAD Membership"
-          >
-            BAD Membership
-          </option>
-          <option
-            selected={applicationType && applicationType.type === "SIG"}
-            value="SIG Membership"
-          >
-            SIG Membership
-          </option>
+          <option value="BAD Membership">BAD Membership</option>
+          <option value="SIG Membership">SIG Membership</option>
         </Form.Select>
 
         <label style={styles.subTitle}>Membership Category</label>
-        <Form.Select ref={categoryRef} style={styles.input}>
+        <Form.Select
+          ref={categoryRef}
+          style={styles.input}
+          value={category}
+          onChange={(e) => handleCategoryChange(e)}
+        >
           <option value="null" hidden>
             Membership Category
           </option>

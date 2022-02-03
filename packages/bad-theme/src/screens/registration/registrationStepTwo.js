@@ -45,7 +45,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
   // HANDLERS --------------------------------------------
   const handleSubmit = () => {
     const profilePhoto = profilePhotoRef.current.files[0];
-    const title = titleRef.current.value;
+    const py3_title = titleRef.current.value;
     const gender = genderRef.current.value;
     const mobile = mobileRef.current.value;
     const addressLineOne = addressLineOneRef.current.value;
@@ -57,7 +57,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
 
     const details = {
       profilePhoto,
-      title,
+      py3_title,
       gender,
       mobile,
       addressLineOne,
