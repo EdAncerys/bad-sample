@@ -10,13 +10,45 @@ import FileUpload from "../../img/svg/fileUpload.svg";
 import BlockWrapper from "../../components/blockWrapper";
 
 import { UK_HOSPITALS } from "../../config/data";
+// CONTEXT ----------------------------------------------------------------
+import {
+  useAppDispatch,
+  useAppState,
+  setApplicationDataAction,
+} from "../../context";
 
 const RegistrationStepFour = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
 
+  const dispatch = useAppDispatch();
+  const { applicationData, applicationType } = useAppState();
+
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+
+  const isStudent =
+    applicationType && applicationType.apply_for_membership === "Student";
+  const isTrainee =
+    applicationType && applicationType.apply_for_membership === "Trainee";
+  const isAssociateTrainee =
+    applicationType &&
+    applicationType.apply_for_membership === "Associate Trainee";
+  const isAssociate =
+    applicationType && applicationType.apply_for_membership === "Associate";
+  const isAssociateOverseas =
+    applicationType &&
+    applicationType.apply_for_membership === "Associate Overseas";
+  const isGP = applicationType && applicationType.apply_for_membership === "GP";
+  const isCareerGrade =
+    applicationType && applicationType.apply_for_membership === "Career Grade";
+  const isOrdinary =
+    applicationType && applicationType.apply_for_membership === "Ordinary";
+  const isOrdinarySAS =
+    applicationType && applicationType.apply_for_membership === "Ordinary SAS";
+  const isAlliedHealthcareProfessional =
+    applicationType &&
+    applicationType.apply_for_membership === "Allied Healthcare Professional";
 
   const gmcNumberRef = useRef(null);
   const registrationNumberRef = useRef(null);
@@ -106,16 +138,20 @@ const RegistrationStepFour = ({ state, actions }) => {
             borderTop: `1px solid ${colors.silverFillTwo}`,
           }}
         >
-          <label style={styles.subTitle}>
-            GMC Number <SMF />
-          </label>
-          <input
-            ref={gmcNumberRef}
-            type="text"
-            className="form-control"
-            placeholder="GMC Number"
-            style={styles.input}
-          />
+          {!isStudent && (
+            <div>
+              <label style={styles.subTitle}>
+                GMC Number <SMF />
+              </label>
+              <input
+                ref={gmcNumberRef}
+                type="text"
+                className="form-control"
+                placeholder="GMC Number"
+                style={styles.input}
+              />
+            </div>
+          )}
           <label style={styles.subTitle}>
             Regulatory Body Registration Number
           </label>

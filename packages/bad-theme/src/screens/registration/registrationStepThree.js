@@ -98,10 +98,10 @@ const RegistrationStepThree = ({ state, actions }) => {
           className="blue-btn"
           onClick={() => {
             handleSubmit();
-            // setGoToAction({
-            //   path: `/membership/step-4-professional-details/`,
-            //   actions,
-            // });
+            setGoToAction({
+              path: `/membership/step-4-professional-details/`,
+              actions,
+            });
           }}
         >
           Next
