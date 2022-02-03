@@ -28,7 +28,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   if (slug.includes("step-2")) stepTwo = activeStyle;
   if (slug.includes("step-3")) stepThree = activeStyle;
   if (slug.includes("step-4")) stepFour = activeStyle;
-  if (slug.includes("step-5")) stepFour = activeStyle;
+  if (slug.includes("step-5")) stepFive = activeStyle;
 
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
@@ -48,7 +48,10 @@ const SideBarMenu = ({ state, actions, libraries }) => {
 
   const ServeContent = () => {
     const ServeStepFive = () => {
-      if (applicationType && applicationType.type !== "SIG Membership")
+      if (
+        !applicationType ||
+        (applicationType && applicationType.type !== "SIG Membership")
+      )
         return null;
 
       return (

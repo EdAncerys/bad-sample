@@ -645,22 +645,23 @@ const RegistrationStepFour = ({ state, actions }) => {
           <div>
             <label className="form-check-label flex-row">
               <div>
+                <div
+                  className="caps-btn"
+                  style={{
+                    paddingTop: 6,
+                    marginRight: 10,
+                    whiteSpace: "nowrap",
+                    float: "left",
+                  }}
+                >
+                  I agree - Privacy Notice
+                  <SMF />
+                </div>
                 <span>
-                  <div
-                    className="caps-btn"
-                    style={{
-                      paddingTop: 6,
-                      marginRight: 10,
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    I agree - Privacy Notice
-                    <SMF />
-                  </div>
-                </span>{" "}
-                I agree - Privacy Notice* - justo donec enim diam vulputate ut
-                pharetra sit. Purus semper eget duis at tellus at. Sed
-                adipiscing diam.
+                  I agree - Privacy Notice* - justo donec enim diam vulputate ut
+                  pharetra sit. Purus semper eget duis at tellus at. Sed
+                  adipiscing diam.
+                </span>
               </div>
             </label>
           </div>
