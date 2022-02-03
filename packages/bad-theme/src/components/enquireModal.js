@@ -32,8 +32,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
   }, []);
 
   // HANDLERS ----------------------------------------------------
-  const handleContactFormSubmit = async ({ agreement }) => {
-    if (!agreement) return null;
+  const handleContactFormSubmit = async () => {
     setIsFetching(true);
 
     const isFullName = document.querySelector(`#full-name-${uniqueId}`);
@@ -106,35 +105,14 @@ const EnquireModal = ({ state, actions, libraries }) => {
 
     const ServeForm = () => {
       const ServeActions = () => {
-        const [agreement, setAgreement] = useState(null);
-
         return (
-          <div>
-            <div className="flex mb-3 form-check">
-              <label className="form-check-label">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  style={styles.checkBox}
-                  onClick={() => setAgreement(!agreement)}
-                />
-                <span style={styles.TC}>I agree</span> - justo donec enim diam
-                vulputate ut pharetra sit. Purus semper eget duis at tellus at.
-                Sed adipiscing diam.
-              </label>
+          <Modal.Footer
+            style={{ justifyContent: "flex-start", padding: `1em 0 0` }}
+          >
+            <div className="blue-btn" onClick={handleContactFormSubmit}>
+              Submit
             </div>
-            <Modal.Footer
-              style={{ justifyContent: "flex-start", padding: `1em 0 0` }}
-            >
-              <div
-                className="blue-btn"
-                style={{ opacity: agreement ? 1 : 0.7 }}
-                onClick={() => handleContactFormSubmit({ agreement })}
-              >
-                Submit
-              </div>
-            </Modal.Footer>
-          </div>
+          </Modal.Footer>
         );
       };
 
