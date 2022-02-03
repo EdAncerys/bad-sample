@@ -33,7 +33,7 @@ export const authLogViaCookie = async ({ state, initialState }) => {
       });
       console.log(userStoreData);
 
-      if (userStoreData.success) {
+      if (userStoreData && userStoreData.success) {
         initialState.applicationData = userStoreResponse; // populates user userResponse
       }
 

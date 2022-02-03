@@ -10,10 +10,15 @@ import { setGoToAction } from "../../context";
 import BlockWrapper from "../../components/blockWrapper";
 
 import { ETHNIC_GROUPES } from "../../config/data";
+// CONTEXT ----------------------------------------------------------------
+import { useAppDispatch, useAppState, setUserStoreAction } from "../../context";
 
 const RegistrationComplete = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
+
+  const dispatch = useAppDispatch();
+  const { applicationData, isActiveUser } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -21,14 +26,21 @@ const RegistrationComplete = ({ state, actions }) => {
   const ethnicGroupRef = useRef(null);
 
   // HANDLERS --------------------------------------------
-  const handleSubmit = () => {
+  const handleExit = async () => {
     const ethnicGroup = ethnicGroupRef.current.value;
 
-    const details = {
+    const data = {
       ethnicGroup,
     };
 
-    console.log(details);
+    await setUserStoreAction({
+      state,
+      dispatch,
+      applicationData,
+      isActiveUser,
+      data,
+    });
+    setGoToAction({ path: `/membership/`, actions });
   };
 
   // SERVERS ---------------------------------------------
@@ -59,13 +71,7 @@ const RegistrationComplete = ({ state, actions }) => {
           borderTop: `1px solid ${colors.silverFillTwo}`,
         }}
       >
-        <div
-          className="blue-btn"
-          onClick={() => {
-            handleSubmit();
-            setGoToAction({ path: `/membership/`, actions });
-          }}
-        >
+        <div className="blue-btn" onClick={handleExit}>
           Enter
         </div>
       </div>

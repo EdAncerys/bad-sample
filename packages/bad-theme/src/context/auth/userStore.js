@@ -22,6 +22,7 @@ export const setUserStoreAction = async ({
     const URL = state.auth.APP_HOST + `/store/${contactid}/applications`;
     const jwt = await authenticateAppAction({ state });
     const newDataObject = { ...applicationData, ...data };
+    console.log(newDataObject);
 
     const requestOptions = {
       method: "POST",
@@ -34,9 +35,6 @@ export const setUserStoreAction = async ({
 
     const response = await fetch(URL, requestOptions);
     const userStore = await response.json();
-
-    console.log("userStore", userStore);
-    console.log("applicationData", newDataObject);
 
     if (userStore.success)
       setApplicationDataAction({
@@ -72,6 +70,8 @@ export const getUserStoreAction = async ({ state, isActiveUser }) => {
     console.log("userStore", userStore);
 
     if (userStore.success) return userStore.data;
+
+    return null;
   } catch (error) {
     console.log("error", error);
   }

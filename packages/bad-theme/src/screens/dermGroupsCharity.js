@@ -6,6 +6,7 @@ import BlockBuilder from "../components/builder/blockBuilder";
 import { muiQuery } from "../context";
 import TitleBlock from "../components/titleBlock";
 import Card from "../components/card/card";
+// CONTEXT -----------------------------------------------------------------
 import {
   useAppDispatch,
   useAppState,
@@ -31,6 +32,23 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   const { content, title, acf } = dermGroupe;
   const { apply_for_membership } = dermGroupe.acf;
 
+  // HANDLERS --------------------------------------------------
+  const handleApply = async () => {
+    if (!isActiveUser) {
+      setLoginModalAction({ dispatch, loginModalAction: true });
+      return;
+    }
+
+    await setUserStoreAction({
+      state,
+      dispatch,
+      applicationData,
+      isActiveUser,
+      data: { type: "SIG Membership", apply_for_membership },
+    });
+    setGoToAction({ path: `/membership/step-1-the-process/`, actions });
+  };
+
   // SERVERS ---------------------------------------------------
   const ApplyForMembership = () => {
     if (apply_for_membership === "Disabled") return null;
@@ -39,21 +57,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
       <div
         className="blue-btn"
         style={{ width: "fit-content", marginTop: marginVertical }}
-        onClick={() => {
-          if (!isActiveUser) {
-            setLoginModalAction({ dispatch, loginModalAction: true });
-            return;
-          }
-
-          setUserStoreAction({
-            state,
-            dispatch,
-            applicationData,
-            isActiveUser,
-            data: { type: "SIG Membership", apply_for_membership },
-          });
-          setGoToAction({ path: `/membership/step-1-the-process/`, actions });
-        }}
+        onClick={handleApply}
       >
         <Html2React html={`Apply for ${apply_for_membership} membership`} />
       </div>

@@ -47,6 +47,22 @@ const AccordionBody = ({
   } = block;
 
   // HANDLERS ----------------------------------------------------
+  const handleApply = async () => {
+    if (!isActiveUser) {
+      setLoginModalAction({ dispatch, loginModalAction: true });
+      return;
+    }
+
+    await setUserStoreAction({
+      state,
+      dispatch,
+      applicationData,
+      isActiveUser,
+      data: { type: "BAD Membership", apply_for_membership },
+    });
+    setGoToAction({ path: `/membership/step-1-the-process/`, actions });
+  };
+
   const handleContactFormSubmit = async () => {
     const isFileUpload = document.querySelector(`#attachments-${uniqueId}`);
     const date = new Date();
@@ -498,21 +514,7 @@ const AccordionBody = ({
       <div
         className="blue-btn"
         style={{ width: "fit-content" }}
-        onClick={() => {
-          if (!isActiveUser) {
-            setLoginModalAction({ dispatch, loginModalAction: true });
-            return;
-          }
-
-          setUserStoreAction({
-            state,
-            dispatch,
-            applicationData,
-            isActiveUser,
-            data: { type: "BAD Membership", apply_for_membership },
-          });
-          // setGoToAction({ path: `/membership/step-1-the-process/`, actions });
-        }}
+        onClick={handleApply}
       >
         <Html2React html={`Apply for ${apply_for_membership} membership`} />
       </div>

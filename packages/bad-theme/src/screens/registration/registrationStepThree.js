@@ -7,20 +7,14 @@ import SideBarMenu from "./sideBarMenu";
 import { Form } from "react-bootstrap";
 import BlockWrapper from "../../components/blockWrapper";
 // CONTEXT ----------------------------------------------------------------
-import {
-  useAppDispatch,
-  useAppState,
-  setApplicationDataAction,
-} from "../../context";
+import { useAppDispatch, useAppState, setUserStoreAction } from "../../context";
 
 const RegistrationStepThree = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData } = useAppState();
-
-  console.log("applicationData", applicationData);
+  const { applicationData, isActiveUser } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -40,6 +34,17 @@ const RegistrationStepThree = ({ state, actions }) => {
   const categoryRef = useRef(null);
 
   // HANDLERS --------------------------------------------
+  const handleSaveExit = async() => {
+    await setUserStoreAction({
+      state,
+      dispatch,
+      applicationData,
+      isActiveUser,
+    });
+
+    setGoToAction({ path: `/membership/`, actions });
+  };
+
   const handleTypeChange = (e) => {
     setType(e.target.value);
   };
@@ -48,19 +53,25 @@ const RegistrationStepThree = ({ state, actions }) => {
     setCategory(e.target.value);
   };
 
-  const handleSubmit = () => {
+  const handleNext = async () => {
     const type = typeRef.current.value;
-    const category = categoryRef.current.value;
+    const apply_for_membership = categoryRef.current.value;
 
-    const details = {
+    const data = {
       type,
-      category,
+      apply_for_membership,
     };
 
-    console.log(details);
-    setApplicationDataAction({
+   await setUserStoreAction({
+      state,
       dispatch,
-      applicationData: { ...applicationData, ...details },
+      applicationData,
+      isActiveUser,
+      data,
+    });
+    setGoToAction({
+      path: `/membership/step-4-professional-details/`,
+      actions,
     });
   };
 
@@ -85,25 +96,11 @@ const RegistrationStepThree = ({ state, actions }) => {
         <div
           className="transparent-btn"
           style={{ margin: `0 1em` }}
-          onClick={() =>
-            setGoToAction({
-              path: `/membership/`,
-              actions,
-            })
-          }
+          onClick={handleSaveExit}
         >
           Save & Exit
         </div>
-        <div
-          className="blue-btn"
-          onClick={() => {
-            handleSubmit();
-            setGoToAction({
-              path: `/membership/step-4-professional-details/`,
-              actions,
-            });
-          }}
-        >
+        <div className="blue-btn" onClick={handleNext}>
           Next
         </div>
       </div>

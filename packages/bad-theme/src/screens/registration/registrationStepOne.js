@@ -2,16 +2,44 @@ import React from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
-import { setGoToAction } from "../../context";
 import SideBarMenu from "./sideBarMenu";
 import BlockWrapper from "../../components/blockWrapper";
+// CONTEXT -----------------------------------------------------------------
+import {
+  useAppDispatch,
+  useAppState,
+  setGoToAction,
+  setUserStoreAction,
+} from "../../context";
 
 const RegistrationStepOne = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
 
+  const dispatch = useAppDispatch();
+  const { applicationData, isActiveUser } = useAppState();
+
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+
+  // HANDLERS --------------------------------------------
+  const handleSaveExit = async () => {
+    await setUserStoreAction({
+      state,
+      dispatch,
+      applicationData,
+      isActiveUser,
+    });
+
+    setGoToAction({ path: `/membership/`, actions });
+  };
+
+  const handleNext = () => {
+    setGoToAction({
+      path: `/membership/step-2-personal-information/`,
+      actions,
+    });
+  };
 
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
@@ -29,19 +57,11 @@ const RegistrationStepOne = ({ state, actions }) => {
         <div
           className="transparent-btn"
           style={{ margin: `0 1em` }}
-          onClick={() => setGoToAction({ path: `/membership/`, actions })}
+          onClick={handleSaveExit}
         >
           Save & Exit
         </div>
-        <div
-          className="blue-btn"
-          onClick={() =>
-            setGoToAction({
-              path: `/membership/step-2-personal-information/`,
-              actions,
-            })
-          }
-        >
+        <div className="blue-btn" onClick={handleNext}>
           Next
         </div>
       </div>

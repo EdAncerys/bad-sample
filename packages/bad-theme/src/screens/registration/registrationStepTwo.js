@@ -13,20 +13,14 @@ import BlockWrapper from "../../components/blockWrapper";
 import { UK_COUNTIES } from "../../config/data";
 import { UK_COUNTRIES } from "../../config/data";
 // CONTEXT ----------------------------------------------------------------
-import {
-  useAppDispatch,
-  useAppState,
-  setApplicationDataAction,
-} from "../../context";
+import { useAppDispatch, useAppState, setUserStoreAction } from "../../context";
 
 const RegistrationStepTwo = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData } = useAppState();
-
-  console.log("applicationData", applicationData);
+  const { applicationData, isActiveUser } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -43,7 +37,18 @@ const RegistrationStepTwo = ({ state, actions }) => {
   const postcodeRef = useRef(null);
 
   // HANDLERS --------------------------------------------
-  const handleSubmit = () => {
+  const handleSaveExit = async() => {
+    await setUserStoreAction({
+      state,
+      dispatch,
+      applicationData,
+      isActiveUser,
+    });
+
+    setGoToAction({ path: `/membership/`, actions });
+  };
+
+  const handleNext = async () => {
     const profilePhoto = profilePhotoRef.current.files[0];
     const py3_title = titleRef.current.value;
     const gender = genderRef.current.value;
@@ -55,7 +60,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
     const county = countyRef.current.value;
     const postcode = postcodeRef.current.value;
 
-    const details = {
+    const data = {
       profilePhoto,
       py3_title,
       gender,
@@ -68,11 +73,14 @@ const RegistrationStepTwo = ({ state, actions }) => {
       postcode,
     };
 
-    console.log(details);
-    setApplicationDataAction({
+   await setUserStoreAction({
+      state,
       dispatch,
-      applicationData: { ...applicationData, ...details },
+      applicationData,
+      isActiveUser,
+      data,
     });
+    setGoToAction({ path: `/membership/step-3-category-selection/`, actions });
   };
 
   // SERVERS ---------------------------------------------
@@ -259,25 +267,11 @@ const RegistrationStepTwo = ({ state, actions }) => {
         <div
           className="transparent-btn"
           style={{ margin: `0 1em` }}
-          onClick={() =>
-            setGoToAction({
-              path: `/membership/`,
-              actions,
-            })
-          }
+          onClick={handleSaveExit}
         >
           Save & Exit
         </div>
-        <div
-          className="blue-btn"
-          onClick={() => {
-            handleSubmit();
-            setGoToAction({
-              path: `/membership/step-3-category-selection/`,
-              actions,
-            });
-          }}
-        >
+        <div className="blue-btn" onClick={handleNext}>
           Next
         </div>
       </div>

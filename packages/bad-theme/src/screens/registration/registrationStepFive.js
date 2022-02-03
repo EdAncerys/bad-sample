@@ -11,18 +11,14 @@ import BlockWrapper from "../../components/blockWrapper";
 
 import { UK_HOSPITALS } from "../../config/data";
 // CONTEXT ----------------------------------------------------------------
-import {
-  useAppDispatch,
-  useAppState,
-  setApplicationDataAction,
-} from "../../context";
+import { useAppDispatch, useAppState, setUserStoreAction } from "../../context";
 
 const RegistrationStepFive = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData } = useAppState();
+  const { applicationData, isActiveUser } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -61,7 +57,18 @@ const RegistrationStepFive = ({ state, actions }) => {
   const privacyNoticeRef = useRef(null);
 
   // HANDLERS --------------------------------------------
-  const handleSubmit = () => {
+  const handleSaveExit = async () => {
+    await setUserStoreAction({
+      state,
+      dispatch,
+      applicationData,
+      isActiveUser,
+    });
+
+    setGoToAction({ path: `/membership/`, actions });
+  };
+
+  const handleNext = async () => {
     const qualification = qualificationRef.current
       ? qualificationRef.current.value
       : null;
@@ -109,7 +116,14 @@ const RegistrationStepFive = ({ state, actions }) => {
       privacyNotice,
     };
 
-    console.log(data);
+   await setUserStoreAction({
+      state,
+      dispatch,
+      applicationData,
+      isActiveUser,
+      data,
+    });
+    setGoToAction({ path: `/membership/final-step-thank-you/`, actions });
   };
 
   const SMF = () => {
@@ -374,22 +388,11 @@ const RegistrationStepFive = ({ state, actions }) => {
         <div
           className="transparent-btn"
           style={{ margin: `0 1em` }}
-          onClick={() => setGoToAction({ path: `/`, actions })}
+          onClick={handleSaveExit}
         >
           Save & Exit
         </div>
-        <div
-          className="blue-btn"
-          onClick={() => {
-            let slug = `/membership/final-step-thank-you/`;
-
-            handleSubmit();
-            setGoToAction({
-              path: slug,
-              actions,
-            });
-          }}
-        >
+        <div className="blue-btn" onClick={handleNext}>
           Next
         </div>
       </div>

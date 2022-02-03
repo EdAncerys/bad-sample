@@ -11,18 +11,14 @@ import BlockWrapper from "../../components/blockWrapper";
 
 import { UK_HOSPITALS } from "../../config/data";
 // CONTEXT ----------------------------------------------------------------
-import {
-  useAppDispatch,
-  useAppState,
-  setApplicationDataAction,
-} from "../../context";
+import { useAppDispatch, useAppState, setUserStoreAction } from "../../context";
 
 const RegistrationStepFour = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData } = useAppState();
+  const { applicationData, isActiveUser } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -99,7 +95,18 @@ const RegistrationStepFour = ({ state, actions }) => {
   const privacyNoticeRef = useRef(null);
 
   // HANDLERS --------------------------------------------
-  const handleSubmit = () => {
+  const handleSaveExit = async () => {
+   await setUserStoreAction({
+      state,
+      dispatch,
+      applicationData,
+      isActiveUser,
+    });
+
+    setGoToAction({ path: `/membership/`, actions });
+  };
+
+  const handleNext = async () => {
     const gmcNumber = gmcNumberRef.current ? gmcNumberRef.current.value : null;
     const registrationNumber = registrationNumberRef.current
       ? registrationNumberRef.current.value
@@ -147,7 +154,7 @@ const RegistrationStepFour = ({ state, actions }) => {
       ? privacyNoticeRef.current.checked
       : null;
 
-    const details = {
+    const data = {
       gmcNumber,
       registrationNumber,
       ntnNumber,
@@ -169,7 +176,18 @@ const RegistrationStepFour = ({ state, actions }) => {
       privacyNotice,
     };
 
-    console.log(details);
+   await  setUserStoreAction({
+      state,
+      dispatch,
+      applicationData,
+      isActiveUser,
+      data,
+    });
+
+    let slug = `/membership/final-step-thank-you/`;
+    if (applicationData && applicationData.type === "SIG Membership")
+      slug = `/membership/step-5-sig-questions/`;
+    setGoToAction({ path: slug, actions });
   };
 
   const SMF = () => {
@@ -571,24 +589,11 @@ const RegistrationStepFour = ({ state, actions }) => {
         <div
           className="transparent-btn"
           style={{ margin: `0 1em` }}
-          onClick={() => setGoToAction({ path: `/`, actions })}
+          onClick={handleSaveExit}
         >
           Save & Exit
         </div>
-        <div
-          className="blue-btn"
-          onClick={() => {
-            let slug = `/membership/final-step-thank-you/`;
-            if (applicationData && applicationData.type === "SIG Membership")
-              slug = `/membership/step-5-sig-questions/`;
-
-            handleSubmit();
-            setGoToAction({
-              path: slug,
-              actions,
-            });
-          }}
-        >
+        <div className="blue-btn" onClick={handleNext}>
           Next
         </div>
       </div>
