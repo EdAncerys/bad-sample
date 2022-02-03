@@ -3,10 +3,14 @@ import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 import { setGoToAction } from "../../context";
+// CONTEXT ----------------------------------------------------------------
+import { useAppState } from "../../context";
 
 const SideBarMenu = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const slug = state.router.link;
+
+  const { applicationType } = useAppState();
 
   const defaultStyle = {};
   const activeStyle = {
@@ -17,12 +21,14 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   let stepOne,
     stepTwo,
     stepThree,
-    stepFour = defaultStyle;
+    stepFour,
+    stepFive = defaultStyle;
 
   if (slug.includes("step-1")) stepOne = activeStyle;
   if (slug.includes("step-2")) stepTwo = activeStyle;
   if (slug.includes("step-3")) stepThree = activeStyle;
   if (slug.includes("step-4")) stepFour = activeStyle;
+  if (slug.includes("step-5")) stepFour = activeStyle;
 
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
@@ -41,13 +47,34 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   };
 
   const ServeContent = () => {
+    const ServeStepFive = () => {
+      if (applicationType && applicationType.type !== "SIG Membership")
+        return null;
+
+      return (
+        <div
+          className="title-link-animation"
+          style={{ ...stepFive, padding: `0.5em 0` }}
+          onClick={() => {
+            if (slug === "/membership/final-step-thank-you/") return null;
+            setGoToAction({
+              path: `/membership/step-4-professional-details/`,
+              actions,
+            });
+          }}
+        >
+          Step 5 - SIG Questions
+        </div>
+      );
+    };
+
     return (
       <div style={{ padding: `2em 0` }}>
         <div
           className="title-link-animation"
           style={{ ...stepOne, padding: `0.5em 0` }}
           onClick={() => {
-            if (slug === "/membership/step-5-thank-you/") return null;
+            if (slug === "/membership/final-step-thank-you/") return null;
             setGoToAction({
               path: `/membership/step-1-the-process/`,
               actions,
@@ -60,7 +87,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
           className="title-link-animation"
           style={{ ...stepTwo, padding: `0.5em 0` }}
           onClick={() => {
-            if (slug === "/membership/step-5-thank-you/") return null;
+            if (slug === "/membership/final-step-thank-you/") return null;
             setGoToAction({
               path: `/membership/step-2-personal-information/`,
               actions,
@@ -73,7 +100,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
           className="title-link-animation"
           style={{ ...stepThree, padding: `0.5em 0` }}
           onClick={() => {
-            if (slug === "/membership/step-5-thank-you/") return null;
+            if (slug === "/membership/final-step-thank-you/") return null;
             setGoToAction({
               path: `/membership/step-3-category-selection/`,
               actions,
@@ -86,7 +113,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
           className="title-link-animation"
           style={{ ...stepFour, padding: `0.5em 0` }}
           onClick={() => {
-            if (slug === "/membership/step-5-thank-you/") return null;
+            if (slug === "/membership/final-step-thank-you/") return null;
             setGoToAction({
               path: `/membership/step-4-professional-details/`,
               actions,
@@ -95,6 +122,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
         >
           Step 4 - Professional Details
         </div>
+        <ServeStepFive />
       </div>
     );
   };

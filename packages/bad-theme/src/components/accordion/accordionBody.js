@@ -504,7 +504,7 @@ const AccordionBody = ({
 
           setApplicationTypeAction({
             dispatch,
-            applicationType: { type: "BAD", apply_for_membership },
+            applicationType: { type: "BAD Membership", apply_for_membership },
           });
           setGoToAction({ path: `/membership/step-1-the-process/`, actions });
         }}

@@ -25,6 +25,7 @@ import RegistrationStepOne from "./registration/registrationStepOne";
 import RegistrationStepTwo from "./registration/registrationStepTwo";
 import RegistrationStepThree from "./registration/registrationStepThree";
 import RegistrationStepFour from "./registration/registrationStepFour";
+import RegistrationStepFive from "./registration/registrationStepFive";
 import RegistrationComplete from "./registration/registrationComplete";
 import AccountDashboard from "./accountDashboard";
 import Event from "./event";
@@ -92,8 +93,11 @@ const App = ({ state, actions }) => {
             <RegistrationStepFour
               when={endPoint === "/membership/step-4-professional-details/"}
             />
+            <RegistrationStepFive
+              when={endPoint === "/membership/step-5-sig-questions/"}
+            />
             <RegistrationComplete
-              when={endPoint === "/membership/step-5-thank-you/"}
+              when={endPoint === "/membership/final-step-thank-you/"}
             />
             <EventsLandingPage when={endPoint === "/events/"} />
             <PilsArchive when={endPoint === "/patient-information-leaflets/"} />

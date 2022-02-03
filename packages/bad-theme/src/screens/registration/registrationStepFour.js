@@ -37,6 +37,43 @@ const RegistrationStepFour = ({ state, actions }) => {
   const isAlliedHealthcareProfessional =
     applicationType &&
     applicationType.apply_for_membership === "Allied Healthcare Professional";
+  const isBritishCosmeticDermatologyGroup =
+    applicationType &&
+    applicationType.apply_for_membership ===
+      "British Cosmetic Dermatology Group";
+  const isBritishHairNailsSociety =
+    applicationType &&
+    applicationType.apply_for_membership === "British Hair and Nails Society";
+  const isBritishSocietyOverseas =
+    applicationType &&
+    applicationType.apply_for_membership ===
+      "British Society of Cutaneous Allergy Overseas";
+  const isBritishSocietyDermatopathology =
+    applicationType &&
+    applicationType.apply_for_membership ===
+      "British Society for Dermatopathology";
+  const isBritishSurgeryInternational =
+    applicationType &&
+    applicationType.apply_for_membership ===
+      "British Society for Dermatological Surgery International";
+  const isBritishSocietyGeriatricDermatology =
+    applicationType &&
+    applicationType.apply_for_membership ===
+      "British Society for Geriatric Dermatology";
+  const isBritishSocietyMedicalDermatology =
+    applicationType &&
+    applicationType.apply_for_membership ===
+      "British Society for Medical Dermatology";
+  const isBritishSocietyMedicalDermatologyAssociate =
+    applicationType &&
+    applicationType.apply_for_membership ===
+      "British Society for Medical Dermatology Associate";
+  const isBritishSocietySkinCare =
+    applicationType &&
+    applicationType.apply_for_membership ===
+      "British Society for Skin Care in Immunocompromised Individuals";
+  const isDERMPATHPRO =
+    applicationType && applicationType.apply_for_membership === "DERMPATHPRO";
 
   const gmcNumberRef = useRef(null);
   const registrationNumberRef = useRef(null);
@@ -57,32 +94,58 @@ const RegistrationStepFour = ({ state, actions }) => {
 
   const mrcpRef = useRef(null);
   const cvRef = useRef(null);
+  const gradeRef = useRef(null);
   const constitutionCheckRef = useRef(null);
   const privacyNoticeRef = useRef(null);
 
   // HANDLERS --------------------------------------------
   const handleSubmit = () => {
-    const gmcNumber = gmcNumberRef.current.value;
-    const registrationNumber = registrationNumberRef.current.value;
-    const ntnNumber = ntnNumberRef.current.value;
-    const jobTitle = jobTitleRef.current.value;
-    const hospital = hospitalRef.current.value;
-    const medicalSchool = medicalSchoolRef.current.value;
+    const gmcNumber = gmcNumberRef.current ? gmcNumberRef.current.value : null;
+    const registrationNumber = registrationNumberRef.current
+      ? registrationNumberRef.current.value
+      : null;
+    const ntnNumber = ntnNumberRef.current ? ntnNumberRef.current.value : null;
+    const jobTitle = jobTitleRef.current ? jobTitleRef.current.value : null;
+    const hospital = hospitalRef.current ? hospitalRef.current.value : null;
+    const medicalSchool = medicalSchoolRef.current
+      ? medicalSchoolRef.current.value
+      : null;
 
-    const smOneLastName = smOneLastNameRef.current.value;
-    const smOneFirstName = smOneFirstNameRef.current.value;
-    const smOneEmail = smOneEmailRef.current.value;
-    const smOneConfirmEmail = smOneConfirmEmailRef.current.value;
+    const smOneLastName = smOneLastNameRef.current
+      ? smOneLastNameRef.current.value
+      : null;
+    const smOneFirstName = smOneFirstNameRef.current
+      ? smOneFirstNameRef.current.value
+      : null;
+    const smOneEmail = smOneEmailRef.current
+      ? smOneEmailRef.current.value
+      : null;
+    const smOneConfirmEmail = smOneConfirmEmailRef.current
+      ? smOneConfirmEmailRef.current.value
+      : null;
 
-    const smTwoLastName = smTwoLastNameRef.current.value;
-    const smTwoFirstName = smTwoFirstNameRef.current.value;
-    const smTwoEmail = smTwoEmailRef.current.value;
-    const smTwoConfirmEmail = smTwoConfirmEmailRef.current.value;
+    const smTwoLastName = smTwoLastNameRef.current
+      ? smTwoLastNameRef.current.value
+      : null;
+    const smTwoFirstName = smTwoFirstNameRef.current
+      ? smTwoFirstNameRef.current.value
+      : null;
+    const smTwoEmail = smTwoEmailRef.current
+      ? smTwoEmailRef.current.value
+      : null;
+    const smTwoConfirmEmail = smTwoConfirmEmailRef.current
+      ? smTwoConfirmEmailRef.current.value
+      : null;
 
-    const mrcp = mrcpRef.current.value;
-    const cv = cvRef.current.files[0];
-    const constitutionCheck = constitutionCheckRef.current.checked;
-    const privacyNotice = privacyNoticeRef.current.checked;
+    const mrcp = mrcpRef.current ? mrcpRef.current.value : null;
+    const cv = cvRef.current ? cvRef.current.files[0] : null;
+    const grade = gradeRef.current ? gradeRef.current.value : null;
+    const constitutionCheck = constitutionCheckRef.current
+      ? constitutionCheckRef.current.checked
+      : null;
+    const privacyNotice = privacyNoticeRef.current
+      ? privacyNoticeRef.current.checked
+      : null;
 
     const details = {
       gmcNumber,
@@ -101,6 +164,7 @@ const RegistrationStepFour = ({ state, actions }) => {
       smTwoConfirmEmail,
       mrcp,
       cv,
+      grade,
       constitutionCheck,
       privacyNotice,
     };
@@ -115,10 +179,14 @@ const RegistrationStepFour = ({ state, actions }) => {
   // SERVERS ---------------------------------------------
   const ServeForm = () => {
     const ServePersonalDetailsInput = () => {
+      if (isDERMPATHPRO) return null;
+
       const ServeGMCNumber = () => {
         if (
           (applicationType && isStudent) ||
-          (applicationType && isAssociateOverseas)
+          (applicationType && isAssociateOverseas) ||
+          (applicationType && isBritishSocietyOverseas) ||
+          (applicationType && isBritishSurgeryInternational)
         )
           return null;
 
@@ -219,6 +287,25 @@ const RegistrationStepFour = ({ state, actions }) => {
         );
       };
 
+      const ServeJob = () => {
+        if (applicationType && isDERMPATHPRO) return null;
+
+        return (
+          <div>
+            <label style={styles.subTitle}>
+              Current post/job title <SMF />
+            </label>
+            <input
+              ref={jobTitleRef}
+              type="text"
+              className="form-control"
+              placeholder="Current job title"
+              style={styles.input}
+            />
+          </div>
+        );
+      };
+
       return (
         <div
           className="form-group"
@@ -233,18 +320,7 @@ const RegistrationStepFour = ({ state, actions }) => {
           <ServeGMCNumber />
           <ServeRegistrationNumber />
           <ServeNTNNumber />
-
-          <label style={styles.subTitle}>
-            Current post/job title <SMF />
-          </label>
-          <input
-            ref={jobTitleRef}
-            type="text"
-            className="form-control"
-            placeholder="Current job title"
-            style={styles.input}
-          />
-
+          <ServeJob />
           <ServeMainHospital />
           <ServeMedicalSchool />
         </div>
@@ -252,7 +328,17 @@ const RegistrationStepFour = ({ state, actions }) => {
     };
 
     const ServeSupportingMembers = () => {
+      if (isDERMPATHPRO) return null;
+
       const ServeSupportingMemberOne = () => {
+        if (
+          (applicationType && isBritishCosmeticDermatologyGroup) ||
+          (applicationType && isBritishHairNailsSociety) ||
+          (applicationType && isBritishSocietyGeriatricDermatology) ||
+          (applicationType && isBritishSocietySkinCare)
+        )
+          return null;
+
         return (
           <div
             style={{
@@ -300,7 +386,17 @@ const RegistrationStepFour = ({ state, actions }) => {
       };
 
       const ServeSupportingMemberTwo = () => {
-        if (applicationType && isStudent) return null;
+        if (
+          (applicationType && isStudent) ||
+          (applicationType && isBritishCosmeticDermatologyGroup) ||
+          (applicationType && isBritishHairNailsSociety) ||
+          (applicationType && isBritishSocietyDermatopathology) ||
+          (applicationType && isBritishSocietyGeriatricDermatology) ||
+          (applicationType && isBritishSocietyMedicalDermatology) ||
+          (applicationType && isBritishSocietyMedicalDermatologyAssociate) ||
+          (applicationType && isBritishSocietySkinCare)
+        )
+          return null;
 
         return (
           <div
@@ -368,7 +464,8 @@ const RegistrationStepFour = ({ state, actions }) => {
       const ServeMRCPNumber = () => {
         if (
           (applicationType && isStudent) ||
-          (applicationType && isAssociateOverseas)
+          (applicationType && isAssociateOverseas) ||
+          (applicationType && isDERMPATHPRO)
         )
           return null;
 
@@ -389,6 +486,44 @@ const RegistrationStepFour = ({ state, actions }) => {
         );
       };
 
+      const ServeCV = () => {
+        if (applicationType && isDERMPATHPRO) return null;
+
+        return (
+          <div>
+            <label style={styles.subTitle}>
+              Upload Your CV
+              <SMF />
+            </label>
+            <input
+              ref={cvRef}
+              type="file"
+              className="form-control"
+              placeholder="Profile Photo"
+              accept="*"
+              style={styles.input}
+            />
+          </div>
+        );
+      };
+
+      const ServeCurrentGrade = () => {
+        if (applicationType && !isDERMPATHPRO) return null;
+
+        return (
+          <div>
+            <label style={styles.subTitle}>Current Grade</label>
+            <input
+              ref={gradeRef}
+              type="text"
+              className="form-control"
+              placeholder="Curent Grade"
+              style={styles.input}
+            />
+          </div>
+        );
+      };
+
       return (
         <div
           className="form-group"
@@ -401,18 +536,8 @@ const RegistrationStepFour = ({ state, actions }) => {
           }}
         >
           <ServeMRCPNumber />
-          <label style={styles.subTitle}>
-            Upload Your CV
-            <SMF />
-          </label>
-          <input
-            ref={cvRef}
-            type="file"
-            className="form-control"
-            placeholder="Profile Photo"
-            accept="*"
-            style={styles.input}
-          />
+          <ServeCV />
+          <ServeCurrentGrade />
         </div>
       );
     };
@@ -453,9 +578,13 @@ const RegistrationStepFour = ({ state, actions }) => {
         <div
           className="blue-btn"
           onClick={() => {
+            let slug = `/membership/final-step-thank-you/`;
+            if (applicationType && applicationType.type === "SIG Membership")
+              slug = `/membership/step-5-sig-questions/`;
+
             handleSubmit();
             setGoToAction({
-              path: `/membership/step-5-thank-you/`,
+              path: slug,
               actions,
             });
           }}
@@ -488,12 +617,15 @@ const RegistrationStepFour = ({ state, actions }) => {
             />
           </div>
           <div>
-            <label className="form-check-label">
-              I have read the{" "}
-              <span style={styles.TC}>
+            <label className="form-check-label flex-row">
+              <div>I agree to the </div>
+              <div
+                className="caps-btn"
+                style={{ paddingTop: 6, marginLeft: 10 }}
+              >
                 BAD Constitution
                 <SMF />
-              </span>
+              </div>
             </label>
           </div>
         </div>
@@ -511,14 +643,25 @@ const RegistrationStepFour = ({ state, actions }) => {
             />
           </div>
           <div>
-            <label className="form-check-label">
-              <span style={styles.TC}>
-                I agree - Privacy Notice
-                <SMF />
-              </span>{" "}
-              I agree - Privacy Notice* - justo donec enim diam vulputate ut
-              pharetra sit. Purus semper eget duis at tellus at. Sed adipiscing
-              diam.
+            <label className="form-check-label flex-row">
+              <div>
+                <span>
+                  <div
+                    className="caps-btn"
+                    style={{
+                      paddingTop: 6,
+                      marginRight: 10,
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    I agree - Privacy Notice
+                    <SMF />
+                  </div>
+                </span>{" "}
+                I agree - Privacy Notice* - justo donec enim diam vulputate ut
+                pharetra sit. Purus semper eget duis at tellus at. Sed
+                adipiscing diam.
+              </div>
             </label>
           </div>
         </div>
@@ -527,6 +670,10 @@ const RegistrationStepFour = ({ state, actions }) => {
   };
 
   const ServeContent = () => {
+    const category = applicationType
+      ? applicationType.apply_for_membership
+      : "";
+
     return (
       <div>
         <div style={{ padding: `0 1em 0` }}>
@@ -562,7 +709,7 @@ const RegistrationStepFour = ({ state, actions }) => {
               borderTop: `1px solid ${colors.silverFillTwo}`,
             }}
           >
-            Category Selected : GP
+            Category Selected : {category}
           </div>
           <div style={{ paddingTop: `0.75em` }}>
             Category requirements: GP members will be UK or Irish general
@@ -622,11 +769,6 @@ const styles = {
     width: 20,
     height: 20,
     margin: `0 10px 0 0`,
-  },
-  TC: {
-    textDecoration: "underline",
-    textUnderlineOffset: 5,
-    cursor: "pointer",
   },
 };
 

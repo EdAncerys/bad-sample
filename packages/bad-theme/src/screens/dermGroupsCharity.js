@@ -6,12 +6,21 @@ import BlockBuilder from "../components/builder/blockBuilder";
 import { muiQuery } from "../context";
 import TitleBlock from "../components/titleBlock";
 import Card from "../components/card/card";
-import { setGoToAction } from "../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setGoToAction,
+  setApplicationTypeAction,
+  setLoginModalAction,
+} from "../context";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 
 const DermGroupsCharity = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
+  const dispatch = useAppDispatch();
+  const { isActiveUser } = useAppState();
 
   const data = state.source.get(state.router.link);
   const dermGroupe = state.source[data.type][data.id];
@@ -20,8 +29,32 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
 
   const { content, title, acf } = dermGroupe;
+  const { apply_for_membership } = dermGroupe.acf;
 
   // SERVERS ---------------------------------------------------
+  const ApplyForMembership = () => {
+    if (apply_for_membership === "Disabled") return null;
+
+    return (
+      <div
+        className="blue-btn"
+        style={{ width: "fit-content", marginTop: marginVertical }}
+        onClick={() => {
+          if (!isActiveUser)
+            setLoginModalAction({ dispatch, loginModalAction: true });
+
+          setApplicationTypeAction({
+            dispatch,
+            applicationType: { type: "SIG Membership", apply_for_membership },
+          });
+          setGoToAction({ path: `/membership/step-1-the-process/`, actions });
+        }}
+      >
+        <Html2React html={`Apply for ${apply_for_membership} membership`} />
+      </div>
+    );
+  };
+
   const ServeContent = () => {
     return (
       <div>
@@ -30,6 +63,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
           margin={`0 0 ${marginVertical}px 0`}
         />
         <Html2React html={content.rendered} />
+        <ApplyForMembership />
       </div>
     );
   };
