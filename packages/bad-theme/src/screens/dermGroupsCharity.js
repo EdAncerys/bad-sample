@@ -10,7 +10,7 @@ import {
   useAppDispatch,
   useAppState,
   setGoToAction,
-  setApplicationTypeAction,
+  setUserStoreAction,
   setLoginModalAction,
 } from "../context";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
@@ -20,7 +20,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { isActiveUser } = useAppState();
+  const { applicationData, isActiveUser } = useAppState();
 
   const data = state.source.get(state.router.link);
   const dermGroupe = state.source[data.type][data.id];
@@ -40,12 +40,17 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
         className="blue-btn"
         style={{ width: "fit-content", marginTop: marginVertical }}
         onClick={() => {
-          if (!isActiveUser)
+          if (!isActiveUser) {
             setLoginModalAction({ dispatch, loginModalAction: true });
+            return;
+          }
 
-          setApplicationTypeAction({
+          setUserStoreAction({
+            state,
             dispatch,
-            applicationType: { type: "SIG Membership", apply_for_membership },
+            applicationData,
+            isActiveUser,
+            data: { type: "SIG Membership", apply_for_membership },
           });
           setGoToAction({ path: `/membership/step-1-the-process/`, actions });
         }}

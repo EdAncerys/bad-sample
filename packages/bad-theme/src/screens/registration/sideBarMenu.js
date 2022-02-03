@@ -10,7 +10,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const slug = state.router.link;
 
-  const { applicationType } = useAppState();
+  const { applicationData } = useAppState();
 
   const defaultStyle = {};
   const activeStyle = {
@@ -49,8 +49,8 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   const ServeContent = () => {
     const ServeStepFive = () => {
       if (
-        !applicationType ||
-        (applicationType && applicationType.type !== "SIG Membership")
+        !applicationData ||
+        (applicationData && applicationData.type !== "SIG Membership")
       )
         return null;
 

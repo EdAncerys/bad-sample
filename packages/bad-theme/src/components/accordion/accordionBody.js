@@ -13,7 +13,7 @@ import {
   useAppState,
   setGoToAction,
   sendEmailEnquireAction,
-  setApplicationTypeAction,
+  setApplicationDataAction,
   setLoginModalAction,
 } from "../../context";
 
@@ -30,7 +30,7 @@ const AccordionBody = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { isActiveUser } = useAppState();
+  const { applicationData, isActiveUser } = useAppState();
 
   const ALL_POSITIONS = Object.values(state.source.leadership_position);
   const ICON_WIDTH = 35;
@@ -499,14 +499,19 @@ const AccordionBody = ({
         className="blue-btn"
         style={{ width: "fit-content" }}
         onClick={() => {
-          if (!isActiveUser)
+          if (!isActiveUser) {
             setLoginModalAction({ dispatch, loginModalAction: true });
+            return;
+          }
 
-          setApplicationTypeAction({
+          setUserStoreAction({
+            state,
             dispatch,
-            applicationType: { type: "BAD Membership", apply_for_membership },
+            applicationData,
+            isActiveUser,
+            data: { type: "BAD Membership", apply_for_membership },
           });
-          setGoToAction({ path: `/membership/step-1-the-process/`, actions });
+          // setGoToAction({ path: `/membership/step-1-the-process/`, actions });
         }}
       >
         <Html2React html={`Apply for ${apply_for_membership} membership`} />

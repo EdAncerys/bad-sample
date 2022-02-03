@@ -24,9 +24,9 @@ const RegistrationStepTwo = ({ state, actions }) => {
   const page = state.source[data.type][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData, applicationType } = useAppState();
+  const { applicationData } = useAppState();
 
-  console.log("applicationType", applicationType);
+  console.log("applicationData", applicationData);
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;

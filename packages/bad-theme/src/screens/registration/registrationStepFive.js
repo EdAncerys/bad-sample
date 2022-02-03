@@ -22,25 +22,25 @@ const RegistrationStepFive = ({ state, actions }) => {
   const page = state.source[data.type][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData, applicationType } = useAppState();
+  const { applicationData } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
   const isBritishHairNailsSociety =
-    applicationType &&
-    applicationType.apply_for_membership === "British Hair and Nails Society";
+    applicationData &&
+    applicationData.apply_for_membership === "British Hair and Nails Society";
   const isBritishSocietyDermatopathology =
-    applicationType &&
-    applicationType.apply_for_membership ===
+    applicationData &&
+    applicationData.apply_for_membership ===
       "British Society for Dermatopathology";
   const isBritishSocietyMedicalDermatologyAssociate =
-    applicationType &&
-    applicationType.apply_for_membership ===
+    applicationData &&
+    applicationData.apply_for_membership ===
       "British Society for Medical Dermatology Associate";
   const isBritishSocietySkinCare =
-    applicationType &&
-    applicationType.apply_for_membership ===
+    applicationData &&
+    applicationData.apply_for_membership ===
       "British Society for Skin Care in Immunocompromised Individuals";
 
   const qualificationRef = useRef(null);
@@ -56,6 +56,9 @@ const RegistrationStepFive = ({ state, actions }) => {
   const areaInterestRef = useRef(null);
   const bssciiRef = useRef(null);
   const emailRef = useRef(null);
+
+  const constitutionCheckRef = useRef(null);
+  const privacyNoticeRef = useRef(null);
 
   // HANDLERS --------------------------------------------
   const handleSubmit = () => {
@@ -83,7 +86,14 @@ const RegistrationStepFive = ({ state, actions }) => {
     const bsscii = bssciiRef.current ? bssciiRef.current.value : null;
     const email = emailRef.current ? emailRef.current.files[0] : null;
 
-    const details = {
+    const constitutionCheck = constitutionCheckRef.current
+      ? constitutionCheckRef.current.value
+      : null;
+    const privacyNotice = privacyNoticeRef.current
+      ? privacyNoticeRef.current.value
+      : null;
+
+    const data = {
       qualification,
       license,
       mrcp,
@@ -95,9 +105,11 @@ const RegistrationStepFive = ({ state, actions }) => {
       areaInterest,
       bsscii,
       email,
+      constitutionCheck,
+      privacyNotice,
     };
 
-    console.log(details);
+    console.log(data);
   };
 
   const SMF = () => {
@@ -124,7 +136,7 @@ const RegistrationStepFive = ({ state, actions }) => {
     };
 
     const ServeLicense = () => {
-      if (applicationType && !isBritishHairNailsSociety) return null;
+      if (applicationData && !isBritishHairNailsSociety) return null;
 
       return (
         <div className="flex-col">
@@ -173,7 +185,7 @@ const RegistrationStepFive = ({ state, actions }) => {
     };
 
     const ServeLocation = () => {
-      if (applicationType && !isBritishHairNailsSociety) return null;
+      if (applicationData && !isBritishHairNailsSociety) return null;
 
       return (
         <div>
@@ -194,7 +206,7 @@ const RegistrationStepFive = ({ state, actions }) => {
     };
 
     const ServeInterest = () => {
-      if (applicationType && !isBritishHairNailsSociety) return null;
+      if (applicationData && !isBritishHairNailsSociety) return null;
 
       return (
         <div>
@@ -213,10 +225,10 @@ const RegistrationStepFive = ({ state, actions }) => {
     };
 
     const ServeInterestDescription = () => {
-      if (applicationType && isBritishSocietySkinCare) return null;
+      if (applicationData && isBritishSocietySkinCare) return null;
 
-      const sigName = applicationType
-        ? applicationType.apply_for_membership
+      const sigName = applicationData
+        ? applicationData.apply_for_membership
         : "SIG";
 
       return (
@@ -237,8 +249,8 @@ const RegistrationStepFive = ({ state, actions }) => {
 
     const ServeSpecialties = () => {
       if (
-        (applicationType && !isBritishSocietyDermatopathology) ||
-        (applicationType && !isBritishSocietyMedicalDermatologyAssociate)
+        (applicationData && !isBritishSocietyDermatopathology) ||
+        (applicationData && !isBritishSocietyMedicalDermatologyAssociate)
       )
         return null;
 
@@ -259,7 +271,7 @@ const RegistrationStepFive = ({ state, actions }) => {
     };
 
     const ServeAreaInterest = () => {
-      if (applicationType && !isBritishSocietySkinCare) return null;
+      if (applicationData && !isBritishSocietySkinCare) return null;
 
       return (
         <div>
@@ -284,7 +296,7 @@ const RegistrationStepFive = ({ state, actions }) => {
     };
 
     const ServeBSSCII = () => {
-      if (applicationType && !isBritishSocietySkinCare) return null;
+      if (applicationData && !isBritishSocietySkinCare) return null;
 
       const [include, setInclude] = useState(null);
 
@@ -462,8 +474,8 @@ const RegistrationStepFive = ({ state, actions }) => {
   };
 
   const ServeContent = () => {
-    const category = applicationType
-      ? applicationType.apply_for_membership
+    const category = applicationData
+      ? applicationData.apply_for_membership
       : "";
 
     return (

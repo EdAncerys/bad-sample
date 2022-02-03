@@ -22,58 +22,58 @@ const RegistrationStepFour = ({ state, actions }) => {
   const page = state.source[data.type][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData, applicationType } = useAppState();
+  const { applicationData } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
   const isStudent =
-    applicationType && applicationType.apply_for_membership === "Student";
+    applicationData && applicationData.apply_for_membership === "Student";
   const isTrainee =
-    applicationType && applicationType.apply_for_membership === "Trainee";
+    applicationData && applicationData.apply_for_membership === "Trainee";
   const isAssociateOverseas =
-    applicationType &&
-    applicationType.apply_for_membership === "Associate Overseas";
+    applicationData &&
+    applicationData.apply_for_membership === "Associate Overseas";
   const isAlliedHealthcareProfessional =
-    applicationType &&
-    applicationType.apply_for_membership === "Allied Healthcare Professional";
+    applicationData &&
+    applicationData.apply_for_membership === "Allied Healthcare Professional";
   const isBritishCosmeticDermatologyGroup =
-    applicationType &&
-    applicationType.apply_for_membership ===
+    applicationData &&
+    applicationData.apply_for_membership ===
       "British Cosmetic Dermatology Group";
   const isBritishHairNailsSociety =
-    applicationType &&
-    applicationType.apply_for_membership === "British Hair and Nails Society";
+    applicationData &&
+    applicationData.apply_for_membership === "British Hair and Nails Society";
   const isBritishSocietyOverseas =
-    applicationType &&
-    applicationType.apply_for_membership ===
+    applicationData &&
+    applicationData.apply_for_membership ===
       "British Society of Cutaneous Allergy Overseas";
   const isBritishSocietyDermatopathology =
-    applicationType &&
-    applicationType.apply_for_membership ===
+    applicationData &&
+    applicationData.apply_for_membership ===
       "British Society for Dermatopathology";
   const isBritishSurgeryInternational =
-    applicationType &&
-    applicationType.apply_for_membership ===
+    applicationData &&
+    applicationData.apply_for_membership ===
       "British Society for Dermatological Surgery International";
   const isBritishSocietyGeriatricDermatology =
-    applicationType &&
-    applicationType.apply_for_membership ===
+    applicationData &&
+    applicationData.apply_for_membership ===
       "British Society for Geriatric Dermatology";
   const isBritishSocietyMedicalDermatology =
-    applicationType &&
-    applicationType.apply_for_membership ===
+    applicationData &&
+    applicationData.apply_for_membership ===
       "British Society for Medical Dermatology";
   const isBritishSocietyMedicalDermatologyAssociate =
-    applicationType &&
-    applicationType.apply_for_membership ===
+    applicationData &&
+    applicationData.apply_for_membership ===
       "British Society for Medical Dermatology Associate";
   const isBritishSocietySkinCare =
-    applicationType &&
-    applicationType.apply_for_membership ===
+    applicationData &&
+    applicationData.apply_for_membership ===
       "British Society for Skin Care in Immunocompromised Individuals";
   const isDERMPATHPRO =
-    applicationType && applicationType.apply_for_membership === "DERMPATHPRO";
+    applicationData && applicationData.apply_for_membership === "DERMPATHPRO";
 
   const gmcNumberRef = useRef(null);
   const registrationNumberRef = useRef(null);
@@ -183,10 +183,10 @@ const RegistrationStepFour = ({ state, actions }) => {
 
       const ServeGMCNumber = () => {
         if (
-          (applicationType && isStudent) ||
-          (applicationType && isAssociateOverseas) ||
-          (applicationType && isBritishSocietyOverseas) ||
-          (applicationType && isBritishSurgeryInternational)
+          (applicationData && isStudent) ||
+          (applicationData && isAssociateOverseas) ||
+          (applicationData && isBritishSocietyOverseas) ||
+          (applicationData && isBritishSurgeryInternational)
         )
           return null;
 
@@ -208,8 +208,8 @@ const RegistrationStepFour = ({ state, actions }) => {
 
       const ServeRegistrationNumber = () => {
         if (
-          (applicationType && isAssociateOverseas) ||
-          (applicationType && isAlliedHealthcareProfessional)
+          (applicationData && isAssociateOverseas) ||
+          (applicationData && isAlliedHealthcareProfessional)
         )
           return null;
 
@@ -230,7 +230,7 @@ const RegistrationStepFour = ({ state, actions }) => {
       };
 
       const ServeNTNNumber = () => {
-        if (applicationType && isTrainee) return null;
+        if (applicationData && isTrainee) return null;
 
         return (
           <div>
@@ -247,7 +247,7 @@ const RegistrationStepFour = ({ state, actions }) => {
       };
 
       const ServeMainHospital = () => {
-        if (applicationType && isStudent) return null;
+        if (applicationData && isStudent) return null;
 
         return (
           <div>
@@ -271,7 +271,7 @@ const RegistrationStepFour = ({ state, actions }) => {
       };
 
       const ServeMedicalSchool = () => {
-        if (applicationType && isStudent) return null;
+        if (applicationData && isStudent) return null;
 
         return (
           <div>
@@ -288,7 +288,7 @@ const RegistrationStepFour = ({ state, actions }) => {
       };
 
       const ServeJob = () => {
-        if (applicationType && isDERMPATHPRO) return null;
+        if (applicationData && isDERMPATHPRO) return null;
 
         return (
           <div>
@@ -332,10 +332,10 @@ const RegistrationStepFour = ({ state, actions }) => {
 
       const ServeSupportingMemberOne = () => {
         if (
-          (applicationType && isBritishCosmeticDermatologyGroup) ||
-          (applicationType && isBritishHairNailsSociety) ||
-          (applicationType && isBritishSocietyGeriatricDermatology) ||
-          (applicationType && isBritishSocietySkinCare)
+          (applicationData && isBritishCosmeticDermatologyGroup) ||
+          (applicationData && isBritishHairNailsSociety) ||
+          (applicationData && isBritishSocietyGeriatricDermatology) ||
+          (applicationData && isBritishSocietySkinCare)
         )
           return null;
 
@@ -387,14 +387,14 @@ const RegistrationStepFour = ({ state, actions }) => {
 
       const ServeSupportingMemberTwo = () => {
         if (
-          (applicationType && isStudent) ||
-          (applicationType && isBritishCosmeticDermatologyGroup) ||
-          (applicationType && isBritishHairNailsSociety) ||
-          (applicationType && isBritishSocietyDermatopathology) ||
-          (applicationType && isBritishSocietyGeriatricDermatology) ||
-          (applicationType && isBritishSocietyMedicalDermatology) ||
-          (applicationType && isBritishSocietyMedicalDermatologyAssociate) ||
-          (applicationType && isBritishSocietySkinCare)
+          (applicationData && isStudent) ||
+          (applicationData && isBritishCosmeticDermatologyGroup) ||
+          (applicationData && isBritishHairNailsSociety) ||
+          (applicationData && isBritishSocietyDermatopathology) ||
+          (applicationData && isBritishSocietyGeriatricDermatology) ||
+          (applicationData && isBritishSocietyMedicalDermatology) ||
+          (applicationData && isBritishSocietyMedicalDermatologyAssociate) ||
+          (applicationData && isBritishSocietySkinCare)
         )
           return null;
 
@@ -463,9 +463,9 @@ const RegistrationStepFour = ({ state, actions }) => {
     const ServeUploads = () => {
       const ServeMRCPNumber = () => {
         if (
-          (applicationType && isStudent) ||
-          (applicationType && isAssociateOverseas) ||
-          (applicationType && isDERMPATHPRO)
+          (applicationData && isStudent) ||
+          (applicationData && isAssociateOverseas) ||
+          (applicationData && isDERMPATHPRO)
         )
           return null;
 
@@ -487,7 +487,7 @@ const RegistrationStepFour = ({ state, actions }) => {
       };
 
       const ServeCV = () => {
-        if (applicationType && isDERMPATHPRO) return null;
+        if (applicationData && isDERMPATHPRO) return null;
 
         return (
           <div>
@@ -508,7 +508,7 @@ const RegistrationStepFour = ({ state, actions }) => {
       };
 
       const ServeCurrentGrade = () => {
-        if (applicationType && !isDERMPATHPRO) return null;
+        if (applicationData && !isDERMPATHPRO) return null;
 
         return (
           <div>
@@ -579,7 +579,7 @@ const RegistrationStepFour = ({ state, actions }) => {
           className="blue-btn"
           onClick={() => {
             let slug = `/membership/final-step-thank-you/`;
-            if (applicationType && applicationType.type === "SIG Membership")
+            if (applicationData && applicationData.type === "SIG Membership")
               slug = `/membership/step-5-sig-questions/`;
 
             handleSubmit();
@@ -671,8 +671,8 @@ const RegistrationStepFour = ({ state, actions }) => {
   };
 
   const ServeContent = () => {
-    const category = applicationType
-      ? applicationType.apply_for_membership
+    const category = applicationData
+      ? applicationData.apply_for_membership
       : "";
 
     return (

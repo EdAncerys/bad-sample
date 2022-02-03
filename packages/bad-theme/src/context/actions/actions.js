@@ -39,8 +39,3 @@ export const setApplicationDataAction = ({ dispatch, applicationData }) => {
   console.log("setApplicationDataAction triggered"); //debug
   dispatch({ type: "SET_APPLICATION_DATA_ACTION", payload: applicationData });
 };
-
-export const setApplicationTypeAction = ({ dispatch, applicationType }) => {
-  console.log("setApplicationTypeAction triggered"); //debug
-  dispatch({ type: "SET_APPLICATION_TYPE_ACTION", payload: applicationType });
-};

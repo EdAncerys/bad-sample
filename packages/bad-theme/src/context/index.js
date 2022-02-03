@@ -5,7 +5,6 @@ import {
   setFetchAction,
   setErrorAction,
   setApplicationDataAction,
-  setApplicationTypeAction,
 } from "./actions/actions";
 import { muiQuery } from "./mediaQueryContext";
 import {
@@ -26,6 +25,7 @@ import { getFadAction } from "./auth/getFAD";
 import { updateProfileAction } from "./auth/updateProfile";
 import { updateAddressAction } from "./auth/updateAddress";
 import { sendFileToS3Action } from "./auth/saveFileToS3";
+import { setUserStoreAction, getUserStoreAction } from "./auth/userStore";
 import {
   getBJDFeedAction,
   getCEDFeedAction,
@@ -59,5 +59,6 @@ export {
   getCEDFeedAction,
   getSHDFeedAction,
   setApplicationDataAction,
-  setApplicationTypeAction,
+  setUserStoreAction,
+  getUserStoreAction,
 };

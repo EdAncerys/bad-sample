@@ -1,5 +1,5 @@
 import { handleGetCookie, handleSetCookie } from "./cookie";
-import { authenticateAppAction } from "../context";
+import { authenticateAppAction, getUserStoreAction } from "../context";
 
 export const authLogViaCookie = async ({ state, initialState }) => {
   const cookie = handleGetCookie({ name: `BAD-WebApp` });
@@ -23,12 +23,23 @@ export const authLogViaCookie = async ({ state, initialState }) => {
     };
 
     try {
-      const data = await fetch(URL, requestOptions);
-      const response = await data.json();
-      console.log(response);
-      if (response) {
+      const userResponse = await fetch(URL, requestOptions);
+      const userData = await userResponse.json();
+      console.log(userData);
+
+      const userStoreData = await getUserStoreAction({
+        state,
+        isActiveUser: userData,
+      });
+      console.log(userStoreData);
+
+      if (userStoreData.success) {
+        initialState.applicationData = userStoreResponse; // populates user userResponse
+      }
+
+      if (userData) {
         const taken = await authenticateAppAction({ state }); // replace taken with new one
-        initialState.isActiveUser = response; // populates user data
+        initialState.isActiveUser = userData; // populates user userResponse
         initialState.jwt = taken; // replace taken with new one
 
         handleSetCookie({

@@ -18,21 +18,21 @@ const RegistrationStepThree = ({ state, actions }) => {
   const page = state.source[data.type][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData, applicationType } = useAppState();
+  const { applicationData } = useAppState();
 
-  console.log("applicationType", applicationType);
+  console.log("applicationData", applicationData);
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
   const [type, setType] = useState(() => {
-    if (applicationType && applicationType.type) return applicationType.type;
+    if (applicationData && applicationData.type) return applicationData.type;
     return "";
   });
 
   const [category, setCategory] = useState(() => {
-    if (applicationType && applicationType.apply_for_membership)
-      return applicationType.apply_for_membership;
+    if (applicationData && applicationData.apply_for_membership)
+      return applicationData.apply_for_membership;
     return "";
   });
 
