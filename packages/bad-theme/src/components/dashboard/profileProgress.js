@@ -116,6 +116,8 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   };
 
   const ServeActions = () => {
+    if (applicationData && applicationData.stepComplete) return null;
+
     return (
       <div type="submit" className="blue-btn" onClick={handleApply}>
         Application

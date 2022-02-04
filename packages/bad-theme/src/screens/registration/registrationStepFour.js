@@ -701,7 +701,7 @@ const RegistrationStepFour = ({ state, actions }) => {
           </div>
           <div
             className="caps-btn"
-            onClick={() => setGoToAction({ path: `/membership/`, actions })}
+            onClick={() => setGoToAction({ path: `/membership/categories-of-membership/`, actions })}
             style={{ paddingTop: `1em` }}
           >
             Memberships Page

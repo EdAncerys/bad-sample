@@ -88,16 +88,27 @@ const RegistrationStepOne = ({ state, actions }) => {
             The Process
           </div>
           <div style={{ paddingTop: `0.75em` }}>
-            How it works dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut
-            tellus elementum sagittis vitae et. Justo donec enim diam vulputate
-            ut pharetra sit. Purus semper eget duis at tellus at. Sed adipiscing
-            diam donec adipiscing tristique risus. A cras semper auctor neque
-            vitae tempus quam. Ac auctor augue
+            Applying for membership of the BAD is a four-step process. All the
+            details of what you will require for your application are below.
+          </div>
+          <div style={{ paddingTop: `0.75em` }}>
+            Once your membership application has been completed, it will be
+            reviewed by the BAD’s membership team and then presented to BAD
+            Executive for approval at the quarterly Executive Meeting. You will
+            receive an email on completion of your application detailing when
+            the date of the next meeting, shortly following the meeting you will
+            be contacted with the outcome of the application. Successful
+            applicants will then be prompted to make payment to activate their
+            membership.
           </div>
           <div
             className="caps-btn"
-            onClick={() => setGoToAction({ path: `/membership/`, actions })}
+            onClick={() =>
+              setGoToAction({
+                path: `/membership/categories-of-membership/`,
+                actions,
+              })
+            }
             style={{ paddingTop: `1em` }}
           >
             Memberships Page
@@ -134,14 +145,7 @@ const RegistrationStepOne = ({ state, actions }) => {
               </li>
             </ul>
           </div>
-          <div style={styles.subTitle}>Professional Details:</div>
-          <div>
-            <ul>
-              <li>Coffee</li>
-              <li>Tea</li>
-              <li>Milk</li>
-            </ul>
-          </div>
+
           <div style={styles.subTitle}>Payment Details</div>
         </div>
         <ServeActions />

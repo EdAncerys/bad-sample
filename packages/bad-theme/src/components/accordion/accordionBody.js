@@ -524,6 +524,21 @@ const AccordionBody = ({
   let COLUMNS = `1fr 400px`;
   if (!gsDocument_uploads && !downloads && !link) COLUMNS = `1fr`;
 
+  const ServeBodyActions = () => {
+    return (
+      <div style={{ display: "grid", gridTemplateColumns: COLUMNS, gap: 20 }}>
+        <div className="flex-col">
+          <ServeDownloads />
+          <ServeGoToLink />
+        </div>
+        <div className="flex-col">
+          <ServeGoToButton />
+          <ServeFileSubmit />
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div
       id={`accordion-body-${uniqueId}`}
@@ -539,16 +554,7 @@ const AccordionBody = ({
         <ServeLTTeam />
         <ServeGSSubTitle />
         <ServeGSLink />
-        <div style={{ display: "grid", gridTemplateColumns: COLUMNS, gap: 20 }}>
-          <div className="flex-col">
-            <ServeDownloads />
-            <ServeGoToLink />
-          </div>
-          <div className="flex-col">
-            <ServeGoToButton />
-            <ServeFileSubmit />
-          </div>
-        </div>
+        <ServeBodyActions />
         <ApplyForMembership />
       </div>
     </div>
