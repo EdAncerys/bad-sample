@@ -19,7 +19,7 @@ const BlockWrapper = ({ children, state, background, fullWidth }) => {
           ...STYLES,
           backgroundColor: background || null,
           justifyContent: "center",
-          paddingTop: !lg ? "auto" : "1em",
+          paddingTop: !lg ? "auto" : 0,
         }}
       >
         <div style={{ width: !lg ? CONTENT_WIDTH : null }}>{children}</div>
