@@ -15,6 +15,8 @@ export const getWileyAction = async ({ state, doi }) => {
     body: JSON.stringify({ doi }),
   };
 
+  console.log("requestOptions", requestOptions);
+
   try {
     const data = await fetch(URL, requestOptions);
     const wiley = await data.json();

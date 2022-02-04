@@ -228,7 +228,8 @@ const RegistrationStepFour = ({ state, actions }) => {
       const ServeRegistrationNumber = () => {
         if (
           (applicationData && isAssociateOverseas) ||
-          (applicationData && isAlliedHealthcareProfessional)
+          (applicationData && isAlliedHealthcareProfessional) ||
+          (applicationData && isStudent)
         )
           return null;
 
@@ -249,7 +250,7 @@ const RegistrationStepFour = ({ state, actions }) => {
       };
 
       const ServeNTNNumber = () => {
-        if (applicationData && isTrainee) return null;
+        if (applicationData && isStudent) return null;
 
         return (
           <div>
@@ -701,7 +702,12 @@ const RegistrationStepFour = ({ state, actions }) => {
           </div>
           <div
             className="caps-btn"
-            onClick={() => setGoToAction({ path: `/membership/categories-of-membership/`, actions })}
+            onClick={() =>
+              setGoToAction({
+                path: `/membership/categories-of-membership/`,
+                actions,
+              })
+            }
             style={{ paddingTop: `1em` }}
           >
             Memberships Page

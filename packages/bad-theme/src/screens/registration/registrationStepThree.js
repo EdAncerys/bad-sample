@@ -54,8 +54,10 @@ const RegistrationStepThree = ({ state, actions }) => {
   };
 
   const handleNext = async () => {
-    const type = typeRef.current.value;
-    const apply_for_membership = categoryRef.current.value;
+    const type = typeRef.current ? typeRef.current.value : null;
+    const apply_for_membership = categoryRef.current
+      ? categoryRef.current.value
+      : null;
 
     const data = {
       type,
@@ -113,28 +115,31 @@ const RegistrationStepThree = ({ state, actions }) => {
       if (type !== "BAD Membership") return null;
 
       return (
-        <Form.Select
-          ref={categoryRef}
-          style={styles.input}
-          value={category}
-          onChange={(e) => handleCategoryChange(e)}
-        >
-          <option value="null" hidden>
-            Membership Category
-          </option>
-          <option value="Ordinary">Ordinary</option>
-          <option value="Trainee">Trainee</option>
-          <option value="Associate Trainee">Associate Trainee</option>
-          <option value="Honorary">Honorary</option>
-          <option value="Associate">Associate</option>
-          <option value="GP">GP</option>
-          <option value="Student">Student</option>
-          <option value="Scientist and Allied Healthcare Professionals">
-            Scientist and Allied Healthcare Professionals
-          </option>
-          <option value="Honorary Overseas">Honorary Overseas</option>
-          <option value="Retired">Retired</option>
-        </Form.Select>
+        <div>
+          <label style={styles.subTitle}>Membership Category</label>
+          <Form.Select
+            ref={categoryRef}
+            style={styles.input}
+            value={category}
+            onChange={(e) => handleCategoryChange(e)}
+          >
+            <option value="null" hidden>
+              Membership Category
+            </option>
+            <option value="Ordinary">Ordinary</option>
+            <option value="Trainee">Trainee</option>
+            <option value="Associate Trainee">Associate Trainee</option>
+            <option value="Honorary">Honorary</option>
+            <option value="Associate">Associate</option>
+            <option value="GP">GP</option>
+            <option value="Student">Student</option>
+            <option value="Scientist and Allied Healthcare Professionals">
+              Scientist and Allied Healthcare Professionals
+            </option>
+            <option value="Honorary Overseas">Honorary Overseas</option>
+            <option value="Retired">Retired</option>
+          </Form.Select>
+        </div>
       );
     };
 
@@ -142,66 +147,69 @@ const RegistrationStepThree = ({ state, actions }) => {
       if (type !== "SIG Membership") return null;
 
       return (
-        <Form.Select
-          ref={categoryRef}
-          style={styles.input}
-          value={category}
-          onChange={(e) => handleCategoryChange(e)}
-        >
-          <option value="null" hidden>
-            Membership Category
-          </option>
-          <option value="British Cosmetic Dermatology Group">
-            British Cosmetic Dermatology Group
-          </option>
-          <option value="British Hair and Nails Society">
-            British Hair and Nails Society
-          </option>
-          <option value="British Photodermatology Group">
-            British Photodermatology Group
-          </option>
-          <option value="British Society of Cutaneous Allergy">
-            British Society of Cutaneous Allergy
-          </option>
-          <option value="British Society of Cutaneous Allergy Overseas">
-            British Society of Cutaneous Allergy Overseas
-          </option>
-          <option value="British Society for Dermatopathology">
-            British Society for Dermatopathology
-          </option>
-          <option value="British Society for Dermatological Surgery">
-            British Society for Dermatological Surgery
-          </option>
-          <option value="British Society for Dermatological Surgery Associate">
-            British Society for Dermatological Surgery Associate
-          </option>
-          <option value="British Society for Dermatological Surgery International">
-            British Society for Dermatological Surgery International
-          </option>
-          <option value="British Society for Dermatological Surgery Trainnee">
-            British Society for Dermatological Surgery Trainnee
-          </option>
-          <option value="British Society for Investigative Dermatology">
-            British Society for Investigative Dermatology
-          </option>
-          <option value="British Society for Medical Dermatology">
-            British Society for Medical Dermatology
-          </option>
-          <option value="British Society for Medical Dermatology Associate">
-            British Society for Medical Dermatology Associate
-          </option>
-          <option value="British Society for Paediatric Dermatology">
-            British Society for Paediatric Dermatology
-          </option>
-          <option value="British Society for Paediatric Dermatology Trainee">
-            British Society for Paediatric Dermatology Trainee
-          </option>
-          <option value="British Society for Skin Care in Immunocompromised Individuals">
-            British Society for Skin Care in Immunocompromised Individuals
-          </option>
-          <option value="The Dowling Club">The Dowling Club</option>
-          <option value="DERMPATHPRO">DERMPATHPRO</option>
-        </Form.Select>
+        <div>
+          <label style={styles.subTitle}>Membership Category</label>
+          <Form.Select
+            ref={categoryRef}
+            style={styles.input}
+            value={category}
+            onChange={(e) => handleCategoryChange(e)}
+          >
+            <option value="null" hidden>
+              Membership Category
+            </option>
+            <option value="British Cosmetic Dermatology Group">
+              British Cosmetic Dermatology Group
+            </option>
+            <option value="British Hair and Nails Society">
+              British Hair and Nails Society
+            </option>
+            <option value="British Photodermatology Group">
+              British Photodermatology Group
+            </option>
+            <option value="British Society of Cutaneous Allergy">
+              British Society of Cutaneous Allergy
+            </option>
+            <option value="British Society of Cutaneous Allergy Overseas">
+              British Society of Cutaneous Allergy Overseas
+            </option>
+            <option value="British Society for Dermatopathology">
+              British Society for Dermatopathology
+            </option>
+            <option value="British Society for Dermatological Surgery">
+              British Society for Dermatological Surgery
+            </option>
+            <option value="British Society for Dermatological Surgery Associate">
+              British Society for Dermatological Surgery Associate
+            </option>
+            <option value="British Society for Dermatological Surgery International">
+              British Society for Dermatological Surgery International
+            </option>
+            <option value="British Society for Dermatological Surgery Trainnee">
+              British Society for Dermatological Surgery Trainnee
+            </option>
+            <option value="British Society for Investigative Dermatology">
+              British Society for Investigative Dermatology
+            </option>
+            <option value="British Society for Medical Dermatology">
+              British Society for Medical Dermatology
+            </option>
+            <option value="British Society for Medical Dermatology Associate">
+              British Society for Medical Dermatology Associate
+            </option>
+            <option value="British Society for Paediatric Dermatology">
+              British Society for Paediatric Dermatology
+            </option>
+            <option value="British Society for Paediatric Dermatology Trainee">
+              British Society for Paediatric Dermatology Trainee
+            </option>
+            <option value="British Society for Skin Care in Immunocompromised Individuals">
+              British Society for Skin Care in Immunocompromised Individuals
+            </option>
+            <option value="The Dowling Club">The Dowling Club</option>
+            <option value="DERMPATHPRO">DERMPATHPRO</option>
+          </Form.Select>
+        </div>
       );
     };
 
@@ -230,7 +238,6 @@ const RegistrationStepThree = ({ state, actions }) => {
           <option value="SIG Membership">SIG Membership</option>
         </Form.Select>
 
-        <label style={styles.subTitle}>Membership Category</label>
         <ServeBADMembershipCategory />
         <ServeSIGMembershipCategory />
       </div>
