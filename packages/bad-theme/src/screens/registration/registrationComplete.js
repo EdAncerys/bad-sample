@@ -31,6 +31,7 @@ const RegistrationComplete = ({ state, actions }) => {
 
     const data = {
       ethnicGroup,
+      stepComplete: true,
     };
 
     await setUserStoreAction({

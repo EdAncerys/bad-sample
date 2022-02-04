@@ -13,7 +13,7 @@ import {
   useAppState,
   setGoToAction,
   sendEmailEnquireAction,
-  setApplicationDataAction,
+  setUserStoreAction,
   setLoginModalAction,
 } from "../../context";
 

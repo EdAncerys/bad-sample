@@ -21,12 +21,14 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   // HELPERS ----------------------------------------------
   const handleApply = () => {
     let path = `/membership/step-1-the-process/`;
-    if (applicationData && applicationData.stepTwo)
+    if (applicationData && applicationData.stepOne)
       path = `/membership/step-2-personal-information/`;
-    if (applicationData && applicationData.stepThree)
+    if (applicationData && applicationData.stepTwo)
       path = `/membership/step-3-category-selection/`;
-    if (applicationData && applicationData.stepFour)
+    if (applicationData && applicationData.stepThree)
       path = `/membership/step-4-professional-details/`;
+    if (applicationData && applicationData.stepFour)
+      path = `/membership/final-step-thank-you/`;
 
     setGoToAction({ path: path, actions });
   };
@@ -78,11 +80,21 @@ const ProfileProgress = ({ state, actions, libraries }) => {
               justifyItems: "flex-end",
             }}
           >
-            <ServeProgressIcon complete />
-            <ServeProgressIcon complete />
-            <ServeProgressIcon complete />
-            <ServeProgressIcon />
-            <ServeProgressIcon />
+            <ServeProgressIcon
+              complete={applicationData && applicationData.stepOne}
+            />
+            <ServeProgressIcon
+              complete={applicationData && applicationData.stepTwo}
+            />
+            <ServeProgressIcon
+              complete={applicationData && applicationData.stepThree}
+            />
+            <ServeProgressIcon
+              complete={applicationData && applicationData.stepFour}
+            />
+            <ServeProgressIcon
+              complete={applicationData && applicationData.stepComplete}
+            />
           </div>
         </div>
       );
