@@ -8,6 +8,8 @@ import QuickLinksDropDown from "./quickLinksDropDown";
 import BlockWrapper from "../blockWrapper";
 import SearchInput from "./searchInput";
 import Loading from "../../components/loading";
+import { muiQuery } from "../../context";
+
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -17,6 +19,8 @@ import {
 } from "../../context";
 
 const HeaderActions = ({ state, actions }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
 
@@ -31,7 +35,12 @@ const HeaderActions = ({ state, actions }) => {
   }, []);
   if (!isReady)
     return (
-      <div style={{ height: 178, borderBottom: `1px solid ${colors.primary}` }}>
+      <div
+        style={{
+          height: !lg ? 178 : 40,
+          borderBottom: `1px solid ${colors.primary}`,
+        }}
+      >
         <Loading />
       </div>
     );
@@ -94,8 +103,8 @@ const HeaderActions = ({ state, actions }) => {
   return (
     <div style={{ borderBottom: `1px solid ${colors.primary}` }}>
       <BlockWrapper>
-        <div className="flex" style={{ padding: `2.75em 0` }}>
-          <ServeLogoContainer />
+        <div className="flex" style={{ padding: !lg ? `2.75em 0` : 0 }}>
+          {!lg ? <ServeLogoContainer /> : null}
 
           <div
             className="flex-row"
@@ -104,10 +113,10 @@ const HeaderActions = ({ state, actions }) => {
               alignItems: "center",
             }}
           >
-            <SearchInput />
-            <ServeLoginAction />
-            <ServeDashboardAction />
-            <QuickLinksDropDown />
+            {!lg ? <SearchInput /> : null}
+            {!lg ? <ServeLoginAction /> : null}
+            {!lg ? <ServeDashboardAction /> : null}
+            {!lg ? <QuickLinksDropDown /> : null}
           </div>
         </div>
       </BlockWrapper>
