@@ -29,6 +29,7 @@ const HeaderActions = ({ state, actions }) => {
   useLayoutEffect(() => {
     SetReady(true);
   }, []);
+
   if (!isReady)
     return (
       <div style={{ height: 178, borderBottom: `1px solid ${colors.primary}` }}>
