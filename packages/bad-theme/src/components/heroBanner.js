@@ -114,7 +114,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           <div
             className="d-flex justify-content-center"
             style={{
-              marginTop: "-50%",
+              marginTop: "-20%",
             }}
           >
             <Card
@@ -153,7 +153,27 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
       </div>
     );
   };
+  const ServeButtonsOverLayMobile = () => {
+    if (!buttons) return null;
 
+    return (
+      <div
+        style={{
+          zIndex: 1,
+          width: OVERLAY_WIDTH,
+        }}
+      >
+        <div
+          style={{
+            margin: `0 ${PADDING}px`,
+            // marginTop: BANNER_HEIGHT - FOOTER_HEIGHT,
+          }}
+        >
+          <ButtonsRow block={block} disableMargin />
+        </div>
+      </div>
+    );
+  };
   const ServeCardContent = () => {
     if (layout === "full-width") return null;
     if (pop_out_text) return <div className="flex" />;

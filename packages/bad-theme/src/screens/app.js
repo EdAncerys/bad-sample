@@ -58,7 +58,6 @@ const App = ({ state, actions }) => {
   if (lg) state.theme.fontSize = 22;
   if (lg) state.theme.footerHeight = 2;
   if (lg) state.theme.contentContainer = "100vw";
-
   // RETURN ------------------------------------------------------------
   return (
     <div
