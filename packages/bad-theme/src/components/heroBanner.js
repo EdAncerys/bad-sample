@@ -6,8 +6,11 @@ import Card from "./card/card";
 import Loading from "./loading";
 import ButtonsRow from "./buttonsRow";
 import FullWidthContentBlock from "./fullWidthContentBlock";
+import { muiQuery } from "../context";
 
 const HeroBanner = ({ state, actions, libraries, block }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   // console.log("HeroBanner Triggered", block); //debug
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -31,7 +34,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
   const PADDING = state.theme.marginHorizontal;
   const FOOTER_HEIGHT = 50;
   let OVERLAY_WIDTH = "100%";
-  let CARD_WIDTH = "50%";
+  let CARD_WIDTH = !lg ? "50%" : "100%";
   let CARD_HEIGHT = BANNER_HEIGHT - FOOTER_HEIGHT * 2;
   let BODY_LENGTH = 400;
   const CONTENT_WIDTH = state.theme.contentContainer;
@@ -79,7 +82,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
         <div
           className="flex"
           style={{
-            marginLeft: PADDING,
+            marginLeft: !lg ? PADDING : 0,
             marginTop: FOOTER_HEIGHT / 2,
           }}
         >
@@ -133,7 +136,11 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
             alignItems: "center",
             position: "absolute",
             zIndex: 99,
-            width: !background_image ? CONTENT_WIDTH / 1.5 : CONTENT_WIDTH / 2, // if no img provided defaults to diff width
+            width: !lg
+              ? !background_image
+                ? CONTENT_WIDTH / 1.5
+                : CONTENT_WIDTH / 2
+              : CONTENT_WIDTH, // if no img provided defaults to diff width
             height: BANNER_HEIGHT,
           }}
         >
