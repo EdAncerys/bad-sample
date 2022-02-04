@@ -1,9 +1,8 @@
 import { authenticateAppAction, setFetchAction } from "../index";
 
-export const getWileyAction = async ({ state, dispatch, doi }) => {
+export const getWileyAction = async ({ state, doi }) => {
   console.log("getWileyAction triggered");
 
-  // setFetchAction({ dispatch, isFetching: true });
   const URL = state.auth.APP_HOST + `/wiley`;
   const jwt = await authenticateAppAction({ state });
 
@@ -13,7 +12,7 @@ export const getWileyAction = async ({ state, dispatch, doi }) => {
       Authorization: `Bearer ${jwt}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ doi: "10.1038/ncomms8983" }),
+    body: JSON.stringify({ doi }),
   };
 
   try {
@@ -24,7 +23,5 @@ export const getWileyAction = async ({ state, dispatch, doi }) => {
     return null;
   } catch (error) {
     console.log("error", error);
-  } finally {
-    // setFetchAction({ dispatch, isFetching: false });
   }
 };

@@ -4,6 +4,7 @@ import parse from "html-react-parser";
 
 import { colors } from "../../config/imports";
 import DownloadFileBlock from "../downloadFileBlock";
+import ActionPlaceholder from "../actionPlaceholder";
 import {
   useAppDispatch,
   useAppState,
@@ -30,6 +31,7 @@ const CardActions = ({
   const { isActiveUser } = useAppState();
 
   const [authLink, setAuthLink] = useState(null);
+  const [isFetching, setFetching] = useState(null);
   const useEffectRef = useRef(null);
 
   // ⏬⏬  clear component if data not provided ⏬⏬
@@ -40,14 +42,16 @@ const CardActions = ({
   useEffect(async () => {
     if (!rssFeedLink) return null;
 
+    setFetching(true);
     const { link, doi } = rssFeedLink;
     let authLink = link;
 
     // ⏬⏬  validate auth link for users via wiley ⏬⏬
     // ammend link to wiley if user is logged in && user is a wiley user
     if (isActiveUser) authLink = await getWileyAction({ state, dispatch, doi });
-    console.log(link);
-    console.log(authLink);
+
+    setAuthLink(authLink); // set auth link via wiley
+    setFetching(false);
 
     return () => {
       useEffectRef.current = false; // clean up function
@@ -63,7 +67,7 @@ const CardActions = ({
     return (
       <div onClick={() => setGoToAction({ path: link, actions })}>
         <div>
-          <div value={parse(goToLabel)} className="caps-btn">
+          <div className="caps-btn">
             <Html2React html={goToLabel} />
           </div>
         </div>
@@ -78,12 +82,9 @@ const CardActions = ({
     if (link_label) goToLabel = link_label;
 
     return (
-      // <div onClick={() => setGoToAction({ path: authLink, actions })}>
-      <div onClick={() => console.log(authLink)}>
-        <div>
-          <div value={parse(goToLabel)} className="caps-btn">
-            <Html2React html={goToLabel} />
-          </div>
+      <div onClick={() => setGoToAction({ path: authLink, actions })}>
+        <div className="caps-btn">
+          <Html2React html={goToLabel} />
         </div>
       </div>
     );
@@ -97,7 +98,7 @@ const CardActions = ({
     return (
       <div onClick={handler}>
         <div>
-          <div value={parse(goToLabel)} className="caps-btn">
+          <div className="caps-btn">
             <Html2React html={goToLabel} />
           </div>
         </div>
@@ -116,7 +117,6 @@ const CardActions = ({
         <div className="caps-btn">
           <a
             href={form_link}
-            value={parse(goToLabel)}
             target="_blank"
             download
             style={{ color: colors.softBlack }}
@@ -134,6 +134,23 @@ const CardActions = ({
     return <DownloadFileBlock block={downloadFile} disableMargin />;
   };
 
+  if (isFetching)
+    return (
+      <div>
+        <div
+          className="flex-row"
+          style={{
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingTop: `1em`,
+            position: "relative",
+          }}
+        >
+          <div className="caps-btn">Loading...</div>
+        </div>
+      </div>
+    );
+
   return (
     <div>
       <div
@@ -142,6 +159,7 @@ const CardActions = ({
           justifyContent: "space-between",
           alignItems: "center",
           paddingTop: `1em`,
+          position: "relative",
         }}
       >
         <ServeHandlerAction />
