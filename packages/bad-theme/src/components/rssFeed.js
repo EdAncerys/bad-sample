@@ -193,6 +193,7 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
         {feedData.map((block, key) => {
           const { title, category, link, pubDate } = block;
           const doi = block["prism:doi"];
+          console.log(block);
 
           // HANDLERS -----------------------------------------------------
           if (searchFilter) {

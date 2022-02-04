@@ -12,10 +12,8 @@ export const getWileyAction = async ({ state, doi }) => {
       Authorization: `Bearer ${jwt}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ doi }),
+    body: JSON.stringify({ doi: `doi/${doi}` }),
   };
-
-  console.log("requestOptions", requestOptions);
 
   try {
     const data = await fetch(URL, requestOptions);
