@@ -33,6 +33,7 @@ const Card = ({
   body,
   link_label,
   link,
+  rssFeedLink,
   downloadFile,
   gallery,
   venueInfo,
@@ -234,6 +235,7 @@ const Card = ({
         <CardActions
           link_label={link_label}
           link={link}
+          rssFeedLink={rssFeedLink}
           form_label={form_label}
           form_link={form_link}
           downloadFile={downloadFile}

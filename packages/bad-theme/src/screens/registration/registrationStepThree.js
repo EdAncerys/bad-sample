@@ -34,7 +34,7 @@ const RegistrationStepThree = ({ state, actions }) => {
   const categoryRef = useRef(null);
 
   // HANDLERS --------------------------------------------
-  const handleSaveExit = async() => {
+  const handleSaveExit = async () => {
     await setUserStoreAction({
       state,
       dispatch,
@@ -60,9 +60,10 @@ const RegistrationStepThree = ({ state, actions }) => {
     const data = {
       type,
       apply_for_membership,
+      stepThree: true,
     };
 
-   await setUserStoreAction({
+    await setUserStoreAction({
       state,
       dispatch,
       applicationData,

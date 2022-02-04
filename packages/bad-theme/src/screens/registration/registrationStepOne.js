@@ -34,7 +34,19 @@ const RegistrationStepOne = ({ state, actions }) => {
     setGoToAction({ path: `/membership/`, actions });
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    const data = {
+      stepOne: true,
+    };
+
+    await setUserStoreAction({
+      state,
+      dispatch,
+      applicationData,
+      isActiveUser,
+      data,
+    });
+
     setGoToAction({
       path: `/membership/step-2-personal-information/`,
       actions,

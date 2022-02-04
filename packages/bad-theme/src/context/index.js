@@ -26,6 +26,7 @@ import { updateProfileAction } from "./auth/updateProfile";
 import { updateAddressAction } from "./auth/updateAddress";
 import { sendFileToS3Action } from "./auth/saveFileToS3";
 import { setUserStoreAction, getUserStoreAction } from "./auth/userStore";
+import { getWileyAction } from "./auth/getWiley";
 import {
   getBJDFeedAction,
   getCEDFeedAction,
@@ -61,4 +62,5 @@ export {
   setApplicationDataAction,
   setUserStoreAction,
   getUserStoreAction,
+  getWileyAction,
 };

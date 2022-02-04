@@ -4,7 +4,7 @@ export const getBJDFeedAction = async ({ state, dispatch }) => {
   console.log("getBJDFeedAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
-  const URL = state.auth.APP_HOST + `/rss/bjd?summary`;
+  const URL = state.auth.APP_HOST + `/rss/bjd`;
   const jwt = await authenticateAppAction({ state });
 
   const requestOptions = {
@@ -17,7 +17,7 @@ export const getBJDFeedAction = async ({ state, dispatch }) => {
     const result = await data.json();
 
     if (result.success) {
-      const bjdFeed = result.data;
+      const bjdFeed = result.data.item;
 
       setBJDFeedAction({ dispatch, bjdFeed });
       return bjdFeed;
@@ -33,7 +33,7 @@ export const getCEDFeedAction = async ({ state, dispatch }) => {
   console.log("getCEDFeedAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
-  const URL = state.auth.APP_HOST + `/rss/ced?summary`;
+  const URL = state.auth.APP_HOST + `/rss/ced`;
   const jwt = await authenticateAppAction({ state });
 
   const requestOptions = {
@@ -46,7 +46,7 @@ export const getCEDFeedAction = async ({ state, dispatch }) => {
     const result = await data.json();
 
     if (result.success) {
-      const cedFeed = result.data;
+      const cedFeed = result.data.item;
 
       setCEDFeedAction({ dispatch, cedFeed });
       return cedFeed;
@@ -62,7 +62,7 @@ export const getSHDFeedAction = async ({ state, dispatch }) => {
   console.log("getSHDFeedAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
-  const URL = state.auth.APP_HOST + `/rss/shd?summary`;
+  const URL = state.auth.APP_HOST + `/rss/shd`;
   const jwt = await authenticateAppAction({ state });
 
   const requestOptions = {
@@ -75,7 +75,7 @@ export const getSHDFeedAction = async ({ state, dispatch }) => {
     const result = await data.json();
 
     if (result.success) {
-      const shdFeed = result.data;
+      const shdFeed = result.data.item;
 
       setSHDFeedAction({ dispatch, shdFeed });
       return shdFeed;

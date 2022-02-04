@@ -24,6 +24,10 @@ const LoginModal = ({ state, actions }) => {
 
   useEffect(async () => {
     if (id) await loginAction({ state, dispatch, transId: id });
+
+    return () => {
+      iFrameRef.current = false; // clean up function
+    };
   }, [id]);
 
   // HANDLERS ----------------------------------------------------

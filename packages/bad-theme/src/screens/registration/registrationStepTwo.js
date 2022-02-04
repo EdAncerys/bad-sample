@@ -37,7 +37,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
   const postcodeRef = useRef(null);
 
   // HANDLERS --------------------------------------------
-  const handleSaveExit = async() => {
+  const handleSaveExit = async () => {
     await setUserStoreAction({
       state,
       dispatch,
@@ -71,9 +71,10 @@ const RegistrationStepTwo = ({ state, actions }) => {
       country,
       county,
       postcode,
+      stepTwo: true,
     };
 
-   await setUserStoreAction({
+    await setUserStoreAction({
       state,
       dispatch,
       applicationData,

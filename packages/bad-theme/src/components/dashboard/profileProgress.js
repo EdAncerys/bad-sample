@@ -8,13 +8,24 @@ import Ellipse from "../../img/svg/ellipse.svg";
 import CheckMarkGreen from "../../img/svg/checkMarkGreen.svg";
 
 // CONTEXT ----------------------------------------------------------------
-import { setGoToAction } from "../../context";
+import { useAppState, setGoToAction } from "../../context";
 
 const ProfileProgress = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
+  const { applicationData } = useAppState();
+
   const marginVertical = state.theme.marginVertical;
   const ICON_WIDTH = 30;
+
+  // HELPERS ----------------------------------------------
+  const handleApply = () => {
+    let path = `/membership/step-1-the-process/`;
+    if (applicationData.stepTwo)
+      path = `/membership/step-2-personal-information/`;
+
+    setGoToAction({ path: path, actions });
+  };
 
   // SERVERS ---------------------------------------------
   const ServeProgressBar = () => {
@@ -90,16 +101,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
 
   const ServeActions = () => {
     return (
-      <div
-        type="submit"
-        className="blue-btn"
-        // onClick={() =>
-        //   setGoToAction({
-        //     path: `https://badadmin.skylarkdev.co/membership/register/step-1-the-process/`,
-        //     actions,
-        //   })
-        // }
-      >
+      <div type="submit" className="blue-btn" onClick={handleApply}>
         Application
       </div>
     );

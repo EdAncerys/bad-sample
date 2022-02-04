@@ -96,7 +96,7 @@ const RegistrationStepFour = ({ state, actions }) => {
 
   // HANDLERS --------------------------------------------
   const handleSaveExit = async () => {
-   await setUserStoreAction({
+    await setUserStoreAction({
       state,
       dispatch,
       applicationData,
@@ -174,9 +174,10 @@ const RegistrationStepFour = ({ state, actions }) => {
       grade,
       constitutionCheck,
       privacyNotice,
+      stepFour: true,
     };
 
-   await  setUserStoreAction({
+    await setUserStoreAction({
       state,
       dispatch,
       applicationData,

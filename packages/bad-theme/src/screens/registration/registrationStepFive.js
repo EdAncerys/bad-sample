@@ -114,9 +114,10 @@ const RegistrationStepFive = ({ state, actions }) => {
       email,
       constitutionCheck,
       privacyNotice,
+      stepFive: true,
     };
 
-   await setUserStoreAction({
+    await setUserStoreAction({
       state,
       dispatch,
       applicationData,

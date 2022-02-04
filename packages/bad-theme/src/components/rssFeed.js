@@ -23,7 +23,7 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { bjdFeed, cedFeed, shdFeed, isFetching } = useAppState();
+  const { bjdFeed, cedFeed, shdFeed } = useAppState();
 
   const [feedData, setFeedData] = useState(null);
 
@@ -192,7 +192,9 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
       <div style={styles.container}>
         {feedData.map((block, key) => {
           const { title, category, link, pubDate } = block;
+          const doi = block["prism:doi"];
 
+          // HANDLERS -----------------------------------------------------
           if (searchFilter) {
             if (
               !title.toLowerCase().includes(searchFilter.toLowerCase()) &&
@@ -207,7 +209,7 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
               title={title}
               publicationDate={pubDate}
               link_label="Read More"
-              link={link}
+              rssFeedLink={{ link, doi }}
               colour={colour}
               shadow
             />
