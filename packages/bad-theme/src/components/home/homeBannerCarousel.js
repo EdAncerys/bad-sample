@@ -7,12 +7,13 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import Loading from "../loading";
 import BlockWrapper from "../blockWrapper";
-import { setGoToAction } from "../../context";
+import { setGoToAction, muiQuery } from "../../context";
 import LeftIcon from "../../img/svg/carouselIconLeft.svg";
 import RightIcon from "../../img/svg/carouselIconRight.svg";
 
 const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
   if (!block) return null;
+  const { sm, md, lg, xl } = muiQuery();
 
   const { disable_vertical_padding, background_colour } = block;
 
@@ -54,7 +55,9 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
           left: 0,
           width: "100%",
           height: BANNER_HEIGHT,
-          background: `linear-gradient(90deg, rgba(31,51,94,1) 0%, rgba(133,133,148,0.1) 80%)`,
+          background: !sm
+            ? `linear-gradient(90deg, rgba(31,51,94,1) 0%, rgba(133,133,148,0.1) 80%)`
+            : `linear-gradient(180deg, rgba(133,133,148,0.1)  0%, rgba(31,51,94,1)80%)`,
         }}
       />
     );
@@ -182,8 +185,9 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
                         className="flex"
                         style={{
                           alignItems: "center",
-                          height: BANNER_HEIGHT / 2,
-                          maxWidth: "50%",
+                          height: !lg ? BANNER_HEIGHT / 2 : null,
+                          maxWidth: !lg ? "50%" : "100%",
+                          margin: !lg ? null : "1em 0 1em 0",
                         }}
                       >
                         <div
