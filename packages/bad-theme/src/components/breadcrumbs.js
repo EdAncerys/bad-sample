@@ -50,8 +50,10 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
       // REDIRECT HANDLERS -------------------------------------------------
       if (goToLink === "/derm_groups_charity/")
         goToLink = "/derm-groups-charity";
-      if (goToLink === "/covid_19") goToLink = "/covid-19/";
-      if (goToLink === "/pils") goToLink = "/patient-information-leaflets/";
+      if (goToLink === "/covid_19") goToLink = "/covid-19";
+      if (goToLink === "/pils") goToLink = "/patient-information-leaflets";
+      if (goToLink === "/derm_groups_charity")
+        goToLink = "/derm-groups-charity";
 
       console.log(goToLink);
 
