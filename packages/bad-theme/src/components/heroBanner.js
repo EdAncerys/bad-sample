@@ -100,7 +100,37 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
       </div>
     );
   };
+  const ServeBannerOverLayMobile = () => {
+    if (layout === "full-width") return null;
+    if (!pop_out_text) return null;
 
+    return (
+      <div className="row">
+        <div
+          style={{
+            zIndex: 1,
+          }}
+        >
+          <div
+            className="d-flex justify-content-center"
+            style={{
+              marginTop: "-50%",
+            }}
+          >
+            <Card
+              title={title}
+              body={body}
+              cardWidth="90%"
+              bodyLength={BODY_LENGTH}
+              colour={block.colour}
+              shadow
+              heroBanner
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
   const ServeButtonsOverLay = () => {
     if (!buttons) return null;
 
@@ -190,7 +220,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           zIndex: 9,
         }}
       >
-        <ServeBannerOverLay />
+        {!lg ? <ServeBannerOverLay /> : <ServeBannerOverLayMobile />}
         <ServeButtonsOverLay />
       </div>
     );
