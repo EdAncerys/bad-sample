@@ -48,11 +48,6 @@ const AccordionBody = ({
 
   // HANDLERS ----------------------------------------------------
   const handleApply = async () => {
-    if (!isActiveUser) {
-      setLoginModalAction({ dispatch, loginModalAction: true });
-      return;
-    }
-
     await setUserStoreAction({
       state,
       dispatch,
@@ -60,7 +55,7 @@ const AccordionBody = ({
       isActiveUser,
       data: { type: "BAD Membership", apply_for_membership },
     });
-    setGoToAction({ path: `/membership/step-1-the-process/`, actions });
+   if(isActiveUser) setGoToAction({ path: `/membership/step-1-the-process/`, actions });
   };
 
   const handleContactFormSubmit = async () => {

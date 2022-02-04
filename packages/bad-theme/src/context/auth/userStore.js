@@ -2,6 +2,7 @@ import {
   authenticateAppAction,
   setFetchAction,
   setApplicationDataAction,
+  setLoginModalAction,
 } from "../index";
 
 export const setUserStoreAction = async ({
@@ -12,6 +13,12 @@ export const setUserStoreAction = async ({
   data,
 }) => {
   console.log("setUserStoreAction triggered");
+  if (!isActiveUser) {
+    // validate if isActiveUser 🤖
+    setLoginModalAction({ dispatch, loginModalAction: true });
+    return null;
+  }
+
   setFetchAction({ dispatch, isFetching: true });
 
   try {
@@ -41,6 +48,7 @@ export const setUserStoreAction = async ({
         dispatch,
         applicationData: newDataObject,
       });
+    return true;
   } catch (error) {
     console.log("error", error);
   } finally {

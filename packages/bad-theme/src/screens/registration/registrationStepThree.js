@@ -40,19 +40,13 @@ const RegistrationStepThree = ({ state, actions }) => {
 
   // HANDLERS --------------------------------------------
   const handleSaveExit = async () => {
-    if (!isActiveUser) {
-      setLoginModalAction({ dispatch, loginModalAction: true });
-      return;
-    }
-
     await setUserStoreAction({
       state,
       dispatch,
       applicationData,
       isActiveUser,
     });
-
-    setGoToAction({ path: `/membership/`, actions });
+    if(isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
   const handleTypeChange = (e) => {
@@ -64,11 +58,6 @@ const RegistrationStepThree = ({ state, actions }) => {
   };
 
   const handleNext = async () => {
-    if (!isActiveUser) {
-      setLoginModalAction({ dispatch, loginModalAction: true });
-      return;
-    }
-
     const type = typeRef.current ? typeRef.current.value : null;
     const apply_for_membership = categoryRef.current
       ? categoryRef.current.value
@@ -87,7 +76,7 @@ const RegistrationStepThree = ({ state, actions }) => {
       isActiveUser,
       data,
     });
-    setGoToAction({
+    if(isActiveUser) setGoToAction({
       path: `/membership/step-4-professional-details/`,
       actions,
     });

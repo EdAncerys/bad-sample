@@ -101,27 +101,16 @@ const RegistrationStepFour = ({ state, actions }) => {
 
   // HANDLERS --------------------------------------------
   const handleSaveExit = async () => {
-    if (!isActiveUser) {
-      setLoginModalAction({ dispatch, loginModalAction: true });
-      return;
-    }
-
     await setUserStoreAction({
       state,
       dispatch,
       applicationData,
       isActiveUser,
     });
-
-    setGoToAction({ path: `/membership/`, actions });
+    if(isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
   const handleNext = async () => {
-    if (!isActiveUser) {
-      setLoginModalAction({ dispatch, loginModalAction: true });
-      return;
-    }
-
     const gmcNumber = gmcNumberRef.current ? gmcNumberRef.current.value : null;
     const registrationNumber = registrationNumberRef.current
       ? registrationNumberRef.current.value
@@ -203,7 +192,7 @@ const RegistrationStepFour = ({ state, actions }) => {
     let slug = `/membership/final-step-thank-you/`;
     if (applicationData && applicationData.type === "SIG Membership")
       slug = `/membership/step-5-sig-questions/`;
-    setGoToAction({ path: slug, actions });
+    if(isActiveUser) setGoToAction({ path: slug, actions });
   };
 
   const SMF = () => {

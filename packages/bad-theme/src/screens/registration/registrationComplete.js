@@ -27,11 +27,6 @@ const RegistrationComplete = ({ state, actions }) => {
 
   // HANDLERS --------------------------------------------
   const handleExit = async () => {
-    if (!isActiveUser) {
-      setLoginModalAction({ dispatch, loginModalAction: true });
-      return;
-    }
-
     const ethnicGroup = ethnicGroupRef.current.value;
 
     const data = {
@@ -46,7 +41,7 @@ const RegistrationComplete = ({ state, actions }) => {
       isActiveUser,
       data,
     });
-    setGoToAction({ path: `/membership/`, actions });
+    if(isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
   // SERVERS ---------------------------------------------

@@ -43,27 +43,16 @@ const RegistrationStepTwo = ({ state, actions }) => {
 
   // HANDLERS --------------------------------------------
   const handleSaveExit = async () => {
-    if (!isActiveUser) {
-      setLoginModalAction({ dispatch, loginModalAction: true });
-      return;
-    }
-
     await setUserStoreAction({
       state,
       dispatch,
       applicationData,
       isActiveUser,
     });
-
-    setGoToAction({ path: `/membership/`, actions });
+    if(isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
   const handleNext = async () => {
-    if (!isActiveUser) {
-      setLoginModalAction({ dispatch, loginModalAction: true });
-      return;
-    }
-
     const profilePhoto = profilePhotoRef.current.files[0];
     const py3_title = titleRef.current.value;
     const gender = genderRef.current.value;
@@ -96,7 +85,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
       isActiveUser,
       data,
     });
-    setGoToAction({ path: `/membership/step-3-category-selection/`, actions });
+    if(isActiveUser) setGoToAction({ path: `/membership/step-3-category-selection/`, actions });
   };
 
   // SERVERS ---------------------------------------------

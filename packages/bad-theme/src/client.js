@@ -63,7 +63,7 @@ const BADTheme = {
           actions.source.fetch(`/bad-constitution`), // pre fetch WP menu as a page CONTENT
         ]);
 
-        // pre fetch WP MENU ----------------------------------------------------------------------
+        // pre fetch WP MENU --------------------------------------------------------------
         await getWPMenu({ state, actions });
 
         // pre fetch post data

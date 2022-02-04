@@ -63,27 +63,16 @@ const RegistrationStepFive = ({ state, actions }) => {
 
   // HANDLERS --------------------------------------------
   const handleSaveExit = async () => {
-    if (!isActiveUser) {
-      setLoginModalAction({ dispatch, loginModalAction: true });
-      return;
-    }
-
     await setUserStoreAction({
       state,
       dispatch,
       applicationData,
       isActiveUser,
     });
-
-    setGoToAction({ path: `/membership/`, actions });
+    if(isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
   const handleNext = async () => {
-    if (!isActiveUser) {
-      setLoginModalAction({ dispatch, loginModalAction: true });
-      return;
-    }
-
     const qualification = qualificationRef.current
       ? qualificationRef.current.value
       : null;
@@ -139,7 +128,7 @@ const RegistrationStepFive = ({ state, actions }) => {
       isActiveUser,
       data,
     });
-    setGoToAction({ path: `/membership/final-step-thank-you/`, actions });
+    if(isActiveUser) setGoToAction({ path: `/membership/final-step-thank-you/`, actions });
   };
 
   const SMF = () => {

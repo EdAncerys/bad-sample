@@ -25,10 +25,7 @@ const RegistrationStepOne = ({ state, actions }) => {
 
   // HANDLERS --------------------------------------------
   const handleSaveExit = async () => {
-    if (!isActiveUser) {
-      setLoginModalAction({ dispatch, loginModalAction: true });
-      return;
-    }
+  
 
     await setUserStoreAction({
       state,
@@ -36,15 +33,11 @@ const RegistrationStepOne = ({ state, actions }) => {
       applicationData,
       isActiveUser,
     });
-
-    setGoToAction({ path: `/membership/`, actions });
+    if(isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
   const handleNext = async () => {
-    if (!isActiveUser) {
-      setLoginModalAction({ dispatch, loginModalAction: true });
-      return;
-    }
+   
 
     const data = {
       stepOne: true,
@@ -57,8 +50,7 @@ const RegistrationStepOne = ({ state, actions }) => {
       isActiveUser,
       data,
     });
-
-    setGoToAction({
+    if(isActiveUser) setGoToAction({
       path: `/membership/step-2-personal-information/`,
       actions,
     });
