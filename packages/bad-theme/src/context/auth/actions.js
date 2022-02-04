@@ -40,7 +40,7 @@ export const authenticateAppAction = async ({ state }) => {
   try {
     const data = await fetch(URL, requestOptions);
     const response = await data.json();
-    console.log(response);
+
     if (response.token) {
       return response.token;
     } else {

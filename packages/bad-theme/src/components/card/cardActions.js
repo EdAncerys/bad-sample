@@ -56,7 +56,7 @@ const CardActions = ({
     return () => {
       useEffectRef.current = false; // clean up function
     };
-  }, []);
+  }, [isActiveUser]);
 
   // SERVERS ---------------------------------------------
   const ServeReadMoreAction = () => {

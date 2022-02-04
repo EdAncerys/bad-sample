@@ -19,6 +19,8 @@ export const getWileyAction = async ({ state, doi }) => {
     const data = await fetch(URL, requestOptions);
     const wiley = await data.json();
 
+    // console.log("getWileyAction wiley", wiley); // debug
+
     if (wiley.success) return wiley.data;
     return null;
   } catch (error) {
