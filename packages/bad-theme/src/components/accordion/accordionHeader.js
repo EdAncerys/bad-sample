@@ -7,6 +7,8 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { colors } from "../../config/imports";
 
+import { muiQuery } from "../../context";
+
 const AccordionHeader = ({
   state,
   actions,
@@ -17,6 +19,8 @@ const AccordionHeader = ({
   handleAccordionToggle,
   uniqueId,
 }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { title, body, logo, preview, guidelines_type, subtitle } = block;
@@ -57,7 +61,8 @@ const AccordionHeader = ({
           className="flex"
           style={{
             fontStyle: "italic",
-            padding: `0 2em`,
+            padding: !lg ? `0 2em` : 0,
+            marginTop: !lg ? null : "1em",
             fontWeight: "normal",
           }}
         >
@@ -67,7 +72,13 @@ const AccordionHeader = ({
     };
 
     return (
-      <div className="flex primary-title" style={{ alignItems: "center" }}>
+      <div
+        className="flex primary-title"
+        style={{
+          alignItems: !lg ? "center" : "flex-start",
+          flexDirection: !lg ? "row" : "column",
+        }}
+      >
         <div style={{ fontSize: 20 }}>
           <Html2React html={title} />
         </div>

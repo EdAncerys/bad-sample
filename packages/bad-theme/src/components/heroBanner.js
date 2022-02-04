@@ -37,7 +37,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
   let CARD_WIDTH = !lg ? "50%" : "100%";
   let CARD_HEIGHT = BANNER_HEIGHT - FOOTER_HEIGHT * 2;
   let BODY_LENGTH = 400;
-  const CONTENT_WIDTH = state.theme.contentContainer;
+  const CONTENT_WIDTH = !lg ? state.theme.contentContainer : "100%";
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
