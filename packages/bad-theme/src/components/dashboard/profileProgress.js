@@ -21,8 +21,12 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   // HELPERS ----------------------------------------------
   const handleApply = () => {
     let path = `/membership/step-1-the-process/`;
-    if (applicationData.stepTwo)
+    if (applicationData && applicationData.stepTwo)
       path = `/membership/step-2-personal-information/`;
+    if (applicationData && applicationData.stepThree)
+      path = `/membership/step-3-category-selection/`;
+    if (applicationData && applicationData.stepFour)
+      path = `/membership/step-4-professional-details/`;
 
     setGoToAction({ path: path, actions });
   };

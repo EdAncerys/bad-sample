@@ -50,7 +50,8 @@ const CardActions = ({
     // ammend link to wiley if user is logged in && user is a wiley user
     if (isActiveUser) authLink = await getWileyAction({ state, dispatch, doi });
 
-    setAuthLink(authLink); // set auth link via wiley
+    console.log(authLink);
+    setAuthLink(link); // set auth link via wiley
     setFetching(false);
 
     return () => {
