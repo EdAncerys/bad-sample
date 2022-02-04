@@ -227,25 +227,40 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
   };
 
   // RETURN ---------------------------------------------------
-  return (
-    <div
-      className="flex-col "
-      style={{
-        height: BANNER_HEIGHT,
-        backgroundColor: BACKGROUND_COLOUR,
-        margin: `${marginVertical}px 0 ${marginBottom}px`,
-      }}
-    >
-      <div className="flex-row relative">
-        <ServeCardContent />
-        <ServeOverLay />
-        <ServeCardImage />
-      </div>
-      <ServeFooter />
-    </div>
-  );
-};
 
+  if (!lg) {
+    return (
+      <div
+        className="flex-col "
+        style={{
+          height: BANNER_HEIGHT,
+          backgroundColor: BACKGROUND_COLOUR,
+          margin: `${marginVertical}px 0 ${marginBottom}px`,
+        }}
+      >
+        <div className="flex-row relative">
+          <ServeCardContent />
+          <ServeOverLay />
+          <ServeCardImage />
+        </div>
+        <ServeFooter />
+      </div>
+    );
+  } else {
+    return (
+      <>
+        <div className="col-12 col-lg-6">
+          <ServeCardImage />
+        </div>
+        <div className="col-12 col-lg-6">
+          <ServeCardContent />
+          <ServeBannerOverLayMobile />
+          <ServeButtonsOverLayMobile />
+        </div>
+      </>
+    );
+  }
+};
 const styles = {
   container: {},
 };
