@@ -7,7 +7,12 @@ import SideBarMenu from "./sideBarMenu";
 import { Form } from "react-bootstrap";
 import BlockWrapper from "../../components/blockWrapper";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setUserStoreAction } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setUserStoreAction,
+  setLoginModalAction,
+} from "../../context";
 
 const RegistrationStepThree = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
@@ -35,6 +40,11 @@ const RegistrationStepThree = ({ state, actions }) => {
 
   // HANDLERS --------------------------------------------
   const handleSaveExit = async () => {
+    if (!isActiveUser) {
+      setLoginModalAction({ dispatch, loginModalAction: true });
+      return;
+    }
+
     await setUserStoreAction({
       state,
       dispatch,
@@ -54,6 +64,11 @@ const RegistrationStepThree = ({ state, actions }) => {
   };
 
   const handleNext = async () => {
+    if (!isActiveUser) {
+      setLoginModalAction({ dispatch, loginModalAction: true });
+      return;
+    }
+
     const type = typeRef.current ? typeRef.current.value : null;
     const apply_for_membership = categoryRef.current
       ? categoryRef.current.value

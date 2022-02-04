@@ -11,7 +11,12 @@ import BlockWrapper from "../../components/blockWrapper";
 
 import { UK_HOSPITALS } from "../../config/data";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setUserStoreAction } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setUserStoreAction,
+  setLoginModalAction,
+} from "../../context";
 
 const RegistrationStepFive = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
@@ -58,6 +63,11 @@ const RegistrationStepFive = ({ state, actions }) => {
 
   // HANDLERS --------------------------------------------
   const handleSaveExit = async () => {
+    if (!isActiveUser) {
+      setLoginModalAction({ dispatch, loginModalAction: true });
+      return;
+    }
+
     await setUserStoreAction({
       state,
       dispatch,
@@ -69,6 +79,11 @@ const RegistrationStepFive = ({ state, actions }) => {
   };
 
   const handleNext = async () => {
+    if (!isActiveUser) {
+      setLoginModalAction({ dispatch, loginModalAction: true });
+      return;
+    }
+
     const qualification = qualificationRef.current
       ? qualificationRef.current.value
       : null;
@@ -504,7 +519,12 @@ const RegistrationStepFive = ({ state, actions }) => {
         </div>
         <div
           className="caps-btn"
-          onClick={() => setGoToAction({ path: `/membership/categories-of-membership/`, actions })}
+          onClick={() =>
+            setGoToAction({
+              path: `/membership/categories-of-membership/`,
+              actions,
+            })
+          }
           style={{ paddingTop: `1em` }}
         >
           Memberships Page

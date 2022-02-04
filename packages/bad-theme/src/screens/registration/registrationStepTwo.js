@@ -13,7 +13,12 @@ import BlockWrapper from "../../components/blockWrapper";
 import { UK_COUNTIES } from "../../config/data";
 import { UK_COUNTRIES } from "../../config/data";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setUserStoreAction } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setUserStoreAction,
+  setLoginModalAction,
+} from "../../context";
 
 const RegistrationStepTwo = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
@@ -38,6 +43,11 @@ const RegistrationStepTwo = ({ state, actions }) => {
 
   // HANDLERS --------------------------------------------
   const handleSaveExit = async () => {
+    if (!isActiveUser) {
+      setLoginModalAction({ dispatch, loginModalAction: true });
+      return;
+    }
+
     await setUserStoreAction({
       state,
       dispatch,
@@ -49,6 +59,11 @@ const RegistrationStepTwo = ({ state, actions }) => {
   };
 
   const handleNext = async () => {
+    if (!isActiveUser) {
+      setLoginModalAction({ dispatch, loginModalAction: true });
+      return;
+    }
+
     const profilePhoto = profilePhotoRef.current.files[0];
     const py3_title = titleRef.current.value;
     const gender = genderRef.current.value;

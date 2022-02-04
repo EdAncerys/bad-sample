@@ -27,6 +27,11 @@ const RegistrationComplete = ({ state, actions }) => {
 
   // HANDLERS --------------------------------------------
   const handleExit = async () => {
+    if (!isActiveUser) {
+      setLoginModalAction({ dispatch, loginModalAction: true });
+      return;
+    }
+
     const ethnicGroup = ethnicGroupRef.current.value;
 
     const data = {

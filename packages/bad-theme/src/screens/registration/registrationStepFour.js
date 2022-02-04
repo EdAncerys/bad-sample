@@ -11,7 +11,12 @@ import BlockWrapper from "../../components/blockWrapper";
 
 import { UK_HOSPITALS } from "../../config/data";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setUserStoreAction } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setUserStoreAction,
+  setLoginModalAction,
+} from "../../context";
 
 const RegistrationStepFour = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
@@ -96,6 +101,11 @@ const RegistrationStepFour = ({ state, actions }) => {
 
   // HANDLERS --------------------------------------------
   const handleSaveExit = async () => {
+    if (!isActiveUser) {
+      setLoginModalAction({ dispatch, loginModalAction: true });
+      return;
+    }
+
     await setUserStoreAction({
       state,
       dispatch,
@@ -107,6 +117,11 @@ const RegistrationStepFour = ({ state, actions }) => {
   };
 
   const handleNext = async () => {
+    if (!isActiveUser) {
+      setLoginModalAction({ dispatch, loginModalAction: true });
+      return;
+    }
+
     const gmcNumber = gmcNumberRef.current ? gmcNumberRef.current.value : null;
     const registrationNumber = registrationNumberRef.current
       ? registrationNumberRef.current.value
