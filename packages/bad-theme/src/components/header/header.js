@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { connect, Global, css } from "frontity";
 import bootStrapCSS from "../../css/bootstrap.min.css";
 import { colors } from "../../config/imports";
+import { muiQuery } from "../../context";
+
 // css imports ------------------------------------------------------------
 import globalCSS from "../../css/main.css";
 import carousel from "../../css/carousel.css";
@@ -19,6 +21,8 @@ import Navigation from "./navigation";
 import Loading from "../loading";
 
 const Header = ({ state, actions }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const endPoint = state.router.link;
   const data = state.source.get(endPoint);
 
@@ -46,7 +50,7 @@ const Header = ({ state, actions }) => {
         `}
       />
       <HTMLHead />
-      <ServeNavigation />
+      {!lg ? <ServeNavigation /> : null}
     </>
   );
 };
