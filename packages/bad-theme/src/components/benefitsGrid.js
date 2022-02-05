@@ -5,7 +5,11 @@ import Benefit from "./benefit";
 import { colors } from "../config/imports";
 import Loading from "./loading";
 
+import { muiQuery } from "../context";
+
 const BenefitsGrid = ({ state, actions, libraries, block }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
@@ -25,7 +29,7 @@ const BenefitsGrid = ({ state, actions, libraries, block }) => {
         backgroundColor: background_colour || "transparent",
       }}
     >
-      <div style={styles.container}>
+      <div style={!lg ? styles.container : styles.containerMobile}>
         {block.benefits_card.map((block, key) => {
           return <Benefit key={key} block={block} />;
         })}
@@ -40,6 +44,11 @@ const styles = {
     gridTemplateColumns: `repeat(4, 1fr)`,
     justifyContent: "space-between",
     gap: 15,
+  },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `repeat(2, 1fr)`,
+    justifyContent: "space-between",
   },
 };
 
