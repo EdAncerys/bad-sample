@@ -10,8 +10,11 @@ import RightIcon from "../img/svg/carouselIconRight.svg";
 
 import Loading from "./loading";
 import BlockWrapper from "./blockWrapper";
+import { muiQuery } from "../context";
 
 const QuotationCarousel = ({ state, actions, libraries, block }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   if (!block) return null;
 
   const { disable_vertical_padding, background_colour, carouselling } = block;
@@ -68,6 +71,7 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
   };
   const ServeAuthorPhoto = ({ photo }) => {
     if (!photo) return null;
+    if (lg) return null;
     return (
       <div style={{ maxHeight: 200 }}>
         <Image src={photo} style={styles.authorPhoto} />
