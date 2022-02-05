@@ -3,8 +3,11 @@ import { connect } from "frontity";
 
 import Loading from "../loading";
 import JournalCard from "./journalCard";
+import { muiQuery } from "../../context";
 
 const JournalPromoBlock = ({ state, actions, block }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   if (!block) return <Loading />;
   if (!block.thumbnails) return null;
 
@@ -18,7 +21,7 @@ const JournalPromoBlock = ({ state, actions, block }) => {
   const ServeJournalCards = () => {
     return (
       <div>
-        <div style={styles.container}>
+        <div style={!lg ? styles.container : styles.containerMobile}>
           {block.thumbnails.map((block, key) => {
             const { image, link, title } = block;
 
@@ -50,6 +53,12 @@ const styles = {
     gridTemplateColumns: `repeat(3, 1fr)`,
     justifyContent: "space-between",
     gap: 15,
+  },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `repeat(1, 1fr)`,
+    justifyContent: "space-between",
+    gap: 10,
   },
 };
 
