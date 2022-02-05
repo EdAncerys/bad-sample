@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../config/imports";
+import { muiQuery } from "../context";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
@@ -19,6 +20,8 @@ const SearchContainer = ({
   onChange,
   inputOnly,
 }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const dispatch = useAppDispatch();
 
   const ctaHeight = 45;
@@ -39,7 +42,7 @@ const SearchContainer = ({
       <div
         className="primary-title"
         style={{
-          fontSize: 36,
+          fontSize: !lg ? 36 : 25,
           alignItems: "center",
           paddingBottom: `0.5em`,
         }}
@@ -83,7 +86,8 @@ const SearchContainer = ({
           style={{
             display: "grid",
             alignItems: "center",
-            paddingLeft: `2em`,
+            paddingLeft: !lg ? `2em` : 0,
+            paddingTop: !lg ? null : "1em",
           }}
         >
           <button type="submit" className="blue-btn" onClick={handleSearch}>
@@ -94,7 +98,7 @@ const SearchContainer = ({
     };
 
     return (
-      <div className="flex-row">
+      <div className={!lg ? "flex-row" : "flex-col"}>
         <div
           className="flex"
           style={{
