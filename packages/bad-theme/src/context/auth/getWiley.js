@@ -1,4 +1,4 @@
-import { authenticateAppAction, setFetchAction } from "../index";
+import { authenticateAppAction } from "../index";
 
 export const getWileyAction = async ({ state, doi }) => {
   console.log("getWileyAction triggered");
