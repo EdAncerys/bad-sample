@@ -32,7 +32,7 @@ export const authLogViaCookie = async ({ state, initialState }) => {
       });
 
       if (userStoreData) {
-        initialState.applicationData = userStoreData; // populates user userResponse
+        initialState.applicationData = userStoreData; // populates user application record
       }
 
       if (userData) {

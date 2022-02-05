@@ -55,7 +55,7 @@ const AccordionBody = ({
       isActiveUser,
       data: { type: "BAD Membership", apply_for_membership },
     });
-   if(isActiveUser) setGoToAction({ path: `/membership/step-1-the-process/`, actions });
+    //  if(isActiveUser) setGoToAction({ path: `/membership/step-1-the-process/`, actions });
   };
 
   const handleContactFormSubmit = async () => {

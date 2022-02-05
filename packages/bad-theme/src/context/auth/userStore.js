@@ -1,3 +1,4 @@
+import { ConstructionOutlined } from "@mui/icons-material";
 import {
   authenticateAppAction,
   setFetchAction,
@@ -26,10 +27,25 @@ export const setUserStoreAction = async ({
     if (!contactid)
       throw new Error("Cannot set user store. Contactid is missing.");
 
+    // ⏬⏬  get application record from store ⏬⏬
+    let storeApplication = null;
+    storeApplication = await getUserStoreAction({ state, isActiveUser });
+
+    if (!storeApplication) {
+      const newApplicationRecord = await createNewApplicationAction({
+        state,
+        contactid,
+      });
+      if (newApplicationRecord) storeApplication = newApplicationRecord;
+    }
+
+    // update storeApplication with new data
+
+    console.log("⏬ Membership Record ⏬");
+    console.log(storeApplication);
+
     const URL = state.auth.APP_HOST + `/store/${contactid}/applications`;
     const jwt = await authenticateAppAction({ state });
-    const newDataObject = { ...applicationData, ...data };
-    console.log(newDataObject);
 
     const requestOptions = {
       method: "POST",
@@ -37,7 +53,7 @@ export const setUserStoreAction = async ({
         "Content-Type": "application/json",
         Authorization: `Bearer ${jwt}`,
       },
-      body: JSON.stringify(newDataObject),
+      body: JSON.stringify(storeApplication),
     };
 
     const response = await fetch(URL, requestOptions);
@@ -46,9 +62,8 @@ export const setUserStoreAction = async ({
     if (userStore.success)
       setApplicationDataAction({
         dispatch,
-        applicationData: newDataObject,
+        applicationData: storeApplication,
       });
-    return true;
   } catch (error) {
     console.log("error", error);
   } finally {
@@ -75,11 +90,44 @@ export const getUserStoreAction = async ({ state, isActiveUser }) => {
     const response = await fetch(URL, requestOptions);
     const userStore = await response.json();
 
-    console.log("userStore", userStore);
+    if (userStore.success) {
+      console.log("⏬ Membership Record ⏬");
+      console.log(userStore.data);
+      return userStore.data;
+    } else {
+      console.log("⏬ Membership Record Not Found ⏬");
+      return null;
+    }
+  } catch (error) {
+    console.log("error", error);
+  }
+};
 
-    if (userStore.success) return userStore.data;
+export const createNewApplicationAction = async ({ state, contactid }) => {
+  console.log("createNewApplicationAction triggered");
 
-    return null;
+  // ⏬⏬  create application record in dynamics ⏬⏬
+  const URL = state.auth.APP_HOST + `/applications/new/${contactid}`;
+  const jwt = await authenticateAppAction({ state });
+
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${jwt}`,
+    },
+  };
+
+  try {
+    const data = await fetch(URL, requestOptions);
+    const result = await data.json();
+
+    // console.log("createNewApplicationAction result", result); // debug
+
+    if (result.success) {
+      return result.data;
+    } else {
+      return null;
+    }
   } catch (error) {
     console.log("error", error);
   }
