@@ -32,7 +32,10 @@ const RegistrationStepTwo = ({ state, actions }) => {
 
   const profilePhotoRef = useRef(null);
   const titleRef = useRef(null);
+  const firstNameRef = useRef(null);
+  const lastNameRef = useRef(null);
   const genderRef = useRef(null);
+  const emailRef = useRef(null);
   const mobileRef = useRef(null);
   const addressLineOneRef = useRef(null);
   const addressLineTwoRef = useRef(null);
@@ -49,33 +52,38 @@ const RegistrationStepTwo = ({ state, actions }) => {
       applicationData,
       isActiveUser,
     });
-    if(isActiveUser) setGoToAction({ path: `/membership/`, actions });
+    if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
   const handleNext = async () => {
     const profilePhoto = profilePhotoRef.current.files[0];
     const py3_title = titleRef.current.value;
-    const gender = genderRef.current.value;
-    const mobile = mobileRef.current.value;
-    const addressLineOne = addressLineOneRef.current.value;
-    const addressLineTwo = addressLineTwoRef.current.value;
-    const city = cityRef.current.value;
-    const country = countryRef.current.value;
-    const county = countyRef.current.value;
-    const postcode = postcodeRef.current.value;
+    const py3_firstname = firstNameRef.current.value;
+    const py3_lastname = lastNameRef.current.value;
+    const py3_gender = genderRef.current.value;
+    const py3_email = emailRef.current.value;
+    const py3_mobilephone = mobileRef.current.value;
+    const py3_address1ine1 = addressLineOneRef.current.value;
+    const py3_addressline2 = addressLineTwoRef.current.value;
+    const py3_addresstowncity = cityRef.current.value;
+    const py3_addresscountry = countryRef.current.value;
+    // const py3_addresscountry = countyRef.current.value;
+    const py3_addresszippostalcode = postcodeRef.current.value;
 
     const data = {
-      profilePhoto,
+      // profilePhoto, // field not present + API call to S£ bucket
+      py3_firstname,
+      py3_lastname,
       py3_title,
-      gender,
-      mobile,
-      addressLineOne,
-      addressLineTwo,
-      city,
-      country,
-      county,
-      postcode,
-      stepTwo: true,
+      py3_gender,
+      py3_email,
+      py3_mobilephone
+      py3_address1ine1,
+      py3_addressline2,
+      py3_addresstowncity,
+      py3_addresscountry,
+      // county, // field not present
+      py3_addresszippostalcode,
     };
 
     await setUserStoreAction({
@@ -85,7 +93,11 @@ const RegistrationStepTwo = ({ state, actions }) => {
       isActiveUser,
       data,
     });
-    if(isActiveUser) setGoToAction({ path: `/membership/step-3-category-selection/`, actions });
+    if (isActiveUser)
+      setGoToAction({
+        path: `/membership/step-3-category-selection/`,
+        actions,
+      });
   };
 
   // SERVERS ---------------------------------------------
@@ -148,6 +160,26 @@ const RegistrationStepTwo = ({ state, actions }) => {
             <option value="Ms">Ms</option>
             <option value="Professor">Professor</option>
           </Form.Select>
+          <label>
+            First Name <SMF />
+          </label>
+          <input
+            ref={firstNameRef}
+            type="text"
+            className="form-control"
+            placeholder="First Name"
+            style={styles.input}
+          />
+          <label>
+            Last Name <SMF />
+          </label>
+          <input
+            ref={lastNameRef}
+            type="text"
+            className="form-control"
+            placeholder="Last Name"
+            style={styles.input}
+          />
           <label>Gender</label>
           <Form.Select style={styles.input} ref={genderRef}>
             <option value="null" hidden>
@@ -164,6 +196,16 @@ const RegistrationStepTwo = ({ state, actions }) => {
             <option value="Prefer Not To Answer">Prefer Not To Answer</option>
             <option value="Unknown">Unknown</option>
           </Form.Select>
+          <label>
+            Email <SMF />
+          </label>
+          <input
+            ref={emailRef}
+            type="text"
+            className="form-control"
+            placeholder="Email"
+            style={styles.input}
+          />
           <label>
             Mobile Number <SMF />
           </label>

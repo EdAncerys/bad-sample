@@ -28,7 +28,7 @@ export const setUserStoreAction = async ({
       throw new Error("Cannot set user store. Contactid is missing.");
 
     // ⏬⏬  get application record from store ⏬⏬
-    let storeApplication = null;
+    let storeApplication = applicationData;
     storeApplication = await getUserStoreAction({ state, isActiveUser });
 
     if (!storeApplication) {
