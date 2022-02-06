@@ -4,7 +4,7 @@ import Image from "@frontity/components/image";
 
 import { colors } from "../../config/imports";
 import date from "date-and-time";
-import { setGoToAction } from "../../context";
+import { setGoToAction, muiQuery } from "../../context";
 
 import Bulletins from "../../img/svg/bulletins.svg";
 import eCircular from "../../img/svg/eCircular.svg";
@@ -26,6 +26,8 @@ const NewsAndMediaHeader = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!newsAndMediaInfo) return null;
+
+  const { sm, md, lg, xl } = muiQuery();
 
   const mountedRef = useRef(true);
   const CATEGORY = Object.values(state.source.category);
@@ -162,7 +164,7 @@ const NewsAndMediaHeader = ({
     if (!isLayoutTwo) return null;
 
     return (
-      <div>
+      <div id="layout-two">
         <ServeImage />
         <div style={{ padding: `1em 1.5em 0` }}>
           <ServeCategory />
@@ -177,7 +179,7 @@ const NewsAndMediaHeader = ({
     if (!isLayoutThree) return null;
 
     return (
-      <div style={{ padding: `1em 1.5em 0` }}>
+      <div style={{ padding: `1em 1.5em 0` }} id="layout-three">
         <div style={{ paddingBottom: `1em` }}>
           <div className="flex">
             <div className="flex-col">
@@ -196,7 +198,7 @@ const NewsAndMediaHeader = ({
     if (!isLayoutFour) return null;
 
     return (
-      <div style={{ padding: `2em 3em 0` }}>
+      <div style={{ padding: `2em 3em 0` }} id="layour-four">
         <ServeTitle />
         <ServeDate />
         <ServeBody />

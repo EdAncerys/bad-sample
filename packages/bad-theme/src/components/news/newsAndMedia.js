@@ -14,7 +14,11 @@ import BlockWrapper from "../blockWrapper";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 
+import { muiQuery } from "../../context";
+
 const NewsAndMedia = ({ state, actions, libraries, block }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
