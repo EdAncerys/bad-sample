@@ -6,7 +6,11 @@ import Loading from "./loading";
 import FullWidthContentBlock from "./fullWidthContentBlock";
 import { colors } from "../config/imports";
 
+import { muiQuery } from "../context";
+
 const PromoBlock = ({ state, actions, block, disableMargin }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const journals =
     state.router.link === "/research-journals/journals/" ? true : false;
   if (!block) return <Loading />;
@@ -116,18 +120,27 @@ const PromoBlock = ({ state, actions, block, disableMargin }) => {
     >
       <div
         style={{
-          display: "flex",
+          display: !lg ? "flex" : null,
           flexDirection: isAlignLeft ? "row-reverse" : "inherit",
-          height: BANNER_HEIGHT,
+          height: !lg ? BANNER_HEIGHT : BANNER_HEIGHT * 2,
           overflow: "hidden",
           margin: MARGIN,
         }}
         className="row"
       >
-        <div className="col-6 flex" style={{ margin: `auto 0` }}>
+        <div
+          className={
+            !lg ? "col-lg-6 col-12 flex" : "col-lg-6 col-12 flex order-2"
+          }
+          style={{ margin: `auto 0` }}
+        >
           <ServeCardContent />
         </div>
-        <div className="col-6 p-0">
+        <div
+          className={
+            !lg ? "col-lg-6 col-12 p-0" : "col-lg-6 col-12 p-0 order-1"
+          }
+        >
           <ServeCardImage />
         </div>
       </div>
