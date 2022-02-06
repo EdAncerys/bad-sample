@@ -4,9 +4,11 @@ import { connect } from "frontity";
 import Profile from "./profile";
 import { colors } from "../config/imports";
 import Loading from "./loading";
-import { setGoToAction } from "../context";
+import { setGoToAction, muiQuery } from "../context";
 
 const ProfilesBlock = ({ state, actions, libraries, block }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
@@ -53,7 +55,7 @@ const ProfilesBlock = ({ state, actions, libraries, block }) => {
       style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}
     >
       <ServeTitle />
-      <div style={styles.container}>
+      <div style={!lg ? styles.container : styles.containerMobile}>
         {block.profile_card.map((block, key) => {
           return <Profile key={key} block={block} />;
         })}
@@ -67,6 +69,12 @@ const styles = {
   container: {
     display: "grid",
     gridTemplateColumns: `repeat(3, 1fr)`,
+    justifyContent: "space-between",
+    gap: 15,
+  },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `repeat(1, 1fr)`,
     justifyContent: "space-between",
     gap: 15,
   },
