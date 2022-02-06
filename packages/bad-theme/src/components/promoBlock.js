@@ -79,7 +79,7 @@ const PromoBlock = ({ state, actions, block, disableMargin }) => {
         className="flex"
         style={{
           width: BANNER_HEIGHT,
-          height: BANNER_HEIGHT,
+          height: !lg ? BANNER_HEIGHT : BANNER_HEIGHT / 2,
           position: "relative",
           width: "100%",
         }}
@@ -122,7 +122,7 @@ const PromoBlock = ({ state, actions, block, disableMargin }) => {
         style={{
           display: !lg ? "flex" : null,
           flexDirection: isAlignLeft ? "row-reverse" : "inherit",
-          height: !lg ? BANNER_HEIGHT : BANNER_HEIGHT * 2,
+          height: !lg ? BANNER_HEIGHT : null,
           overflow: "hidden",
           margin: MARGIN,
         }}
