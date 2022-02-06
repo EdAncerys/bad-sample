@@ -9,13 +9,13 @@ import BlockWrapper from "../blockWrapper";
 import SearchInput from "./searchInput";
 import Loading from "../../components/loading";
 import { muiQuery } from "../../context";
-
 // RESPONSIVE ----------------------------------------------
 import MobileLogo from "../../img/png/logo-mobile.png";
 import SearchIcon from "@mui/icons-material/Search";
 import Login from "@mui/icons-material/Login";
 import ResponsiveMenuIcon from "../../img/png/BAD-Mobile_MENU.png";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import MobileMenu from "./MobileMenu";
 
 // CONTEXT ----------------------------------------------------------------
 import {
@@ -35,6 +35,7 @@ const HeaderActions = ({ state, actions }) => {
   const isDevelopment = state.auth.ENVIRONMENT;
 
   const [isReady, SetReady] = useState(null);
+  const [mobileMenuActive, setMobileMenuActive] = useState(false);
 
   // hook applies after React has performed all DOM mutations
   // prevent dashboard actions to load before isActiveUser data loaded
@@ -149,11 +150,7 @@ const HeaderActions = ({ state, actions }) => {
   const ServeMobileMenuAction = () => {
     return (
       <div style={{}}>
-        <div
-          onClick={() =>
-            setLoginModalAction({ dispatch, loginModalAction: true })
-          }
-        >
+        <div onClick={() => setMobileMenuActive(!mobileMenuActive)}>
           <Image src={ResponsiveMenuIcon} style={{ maxWidth: "80px" }} />
         </div>
       </div>
@@ -209,6 +206,7 @@ const HeaderActions = ({ state, actions }) => {
   return (
     <div style={{ borderBottom: `1px solid ${colors.primary}` }}>
       <BlockWrapper>
+        {mobileMenuActive ? <MobileMenu /> : null}
         <div className="flex" style={{ padding: !lg ? `2.75em 0` : "0.3em" }}>
           {!lg ? <ServeLogoContainer /> : <ServeMobileLogoContainer />}
 
