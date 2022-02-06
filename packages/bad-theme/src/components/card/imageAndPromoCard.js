@@ -4,7 +4,7 @@ import Image from "@frontity/components/image";
 import parse from "html-react-parser";
 
 import { colors } from "../../config/imports";
-import { setGoToAction } from "../../context";
+import { setGoToAction, muiQuery } from "../../context";
 
 const ImageAndPromoCard = ({
   state,
@@ -14,6 +14,8 @@ const ImageAndPromoCard = ({
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!imageAndPromoCard) return null;
+
+  const { sm, md, lg, xl } = muiQuery();
 
   const { body, image, link, label, title } = imageAndPromoCard;
 
@@ -89,7 +91,7 @@ const ImageAndPromoCard = ({
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: `repeat(2, 1fr)`,
+        gridTemplateColumns: !lg ? `repeat(2, 1fr)` : `repeat(1, 1fr)`,
         gap: 20,
       }}
     >
