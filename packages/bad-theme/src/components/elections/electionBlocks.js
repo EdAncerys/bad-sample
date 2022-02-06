@@ -7,6 +7,7 @@ import Card from "../card/card";
 import TitleBlock from "../titleBlock";
 import Loading from "../loading";
 import { colors } from "../../config/imports";
+import { muiQuery } from "../../context";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
@@ -14,6 +15,8 @@ import ElectionModal from "./electionModal";
 
 const ElectionBlocks = ({ state, actions, block }) => {
   if (!block) return <Loading />;
+
+  const { sm, md, lg, xl } = muiQuery();
 
   const {
     text_align,
