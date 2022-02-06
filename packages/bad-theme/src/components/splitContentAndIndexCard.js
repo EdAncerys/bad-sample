@@ -1,17 +1,20 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import { setGoToAction } from "../context";
+import { setGoToAction, muiQuery } from "../context";
 import { colors } from "../config/imports";
 
 import Loading from "./loading";
 import IndexCard from "./indexCard";
 import TitleBlock from "./titleBlock";
+import Dropdown from "react-bootstrap/Dropdown";
 
 const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
+
+  const { sm, md, lg, xl } = muiQuery();
 
   const {
     body,
@@ -147,12 +150,36 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
     );
   };
 
+  const ServeMobileDropdown = ({}) => {
+    if (!index_card) return null;
+
+    return (
+      <Dropdown>
+        <Dropdown.Toggle
+          id="dropdown-basic"
+          style={{ backgroundColor: block.colour }}
+        >
+          {block.card_title}
+        </Dropdown.Toggle>
+
+        {index_card.map((block, key) => {
+          const { card_title, colour, index_title, link, subtitle } = block;
+          console.log("BLOCKO: ", block);
+          return (
+            <Dropdown.Menu>
+              <Dropdown.Item>{index_title[key].title}</Dropdown.Item>
+            </Dropdown.Menu>
+          );
+        })}
+      </Dropdown>
+    );
+  };
   // RETURN ---------------------------------------------------
   return (
     <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
-      <div style={styles.container}>
+      <div style={!lg ? styles.container : styles.containerMobile}>
         <ServeContent />
-        <ServeIndexCard />
+        {!lg ? <ServeIndexCard /> : <ServeMobileDropdown />}
       </div>
     </div>
   );
@@ -163,6 +190,12 @@ const styles = {
     display: "grid",
     gridTemplateColumns: `2fr 1fr`,
     justifyContent: "space-between",
+    gap: 20,
+  },
+  containerMobile: {
+    display: "flex",
+    justifyContent: "space-between",
+    flexDirection: "column-reverse",
     gap: 20,
   },
 };
