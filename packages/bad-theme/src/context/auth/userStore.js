@@ -27,16 +27,21 @@ export const setUserStoreAction = async ({
     if (!contactid)
       throw new Error("Cannot set user store. Contactid is missing.");
 
-    // ⏬⏬  get application record from store ⏬⏬
     let storeApplication = applicationData;
-    storeApplication = await getUserStoreAction({ state, isActiveUser });
 
+    // ⏬⏬  get application record from store ⏬⏬
     if (!storeApplication) {
+      storeApplication = await getUserStoreAction({ state, isActiveUser });
+    }
+
+    // ⏬⏬  creat application record in Dynamics ⏬⏬
+    if (!storeApplication) {
+      storeApplication = await getUserStoreAction({ state, isActiveUser });
       const newApplicationRecord = await createNewApplicationAction({
         state,
         contactid,
       });
-      if (newApplicationRecord) storeApplication = newApplicationRecord;
+      storeApplication = newApplicationRecord;
     }
 
     // update storeApplication with new data

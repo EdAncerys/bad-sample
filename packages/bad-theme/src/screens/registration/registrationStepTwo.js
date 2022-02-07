@@ -77,7 +77,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
       py3_title,
       py3_gender,
       py3_email,
-      py3_mobilephone
+      py3_mobilephone,
       py3_address1ine1,
       py3_addressline2,
       py3_addresstowncity,
@@ -180,7 +180,9 @@ const RegistrationStepTwo = ({ state, actions }) => {
             placeholder="Last Name"
             style={styles.input}
           />
-          <label>Gender</label>
+          <label>
+            Gender <SMF />
+          </label>
           <Form.Select style={styles.input} ref={genderRef}>
             <option value="null" hidden>
               Male, Female, Transgender, Prefer Not To Answer
