@@ -1,4 +1,3 @@
-import { ConstructionOutlined } from "@mui/icons-material";
 import {
   authenticateAppAction,
   setFetchAction,
@@ -44,31 +43,8 @@ export const setUserStoreAction = async ({
     }
 
     // 🤖 update object with user input data
-    console.log("⏬ UPDATING Membership Record ⏬");
-    //⏬ step one of the application process
-    if (data.core_name) storeApplication[2].value = data.core_name;
-    if (data.core_membershipapplicationid)
-      storeApplication[0].value = data.core_membershipapplicationid;
-    //⏬ step two of the application process
-    if (data.py3_title) storeApplication[4].value = data.py3_title;
-    if (data.py3_firstname) storeApplication[5].value = data.py3_firstname;
-    if (data.py3_lastname) storeApplication[7].value = data.py3_lastname;
-    if (data.py3_gender) storeApplication[9].value = data.py3_gender;
-    if (data.py3_email) storeApplication[11].value = data.py3_email;
-    if (data.py3_mobilephone) storeApplication[12].value = data.py3_mobilephone;
-    if (data.py3_address1ine1)
-    storeApplication[28].value = data.py3_address1ine1;
-    if (data.py3_addressline2)
-    storeApplication[29].value = data.py3_addressline2;
-    if (data.py3_addresstowncity)
-    storeApplication[30].value = data.py3_addresstowncity;
-    if (data.py3_addresszippostalcode)
-    storeApplication[32].value = data.py3_addresszippostalcode;
-    if (data.py3_addresscountry)
-    storeApplication[33].value = data.py3_addresscountry;
-    //⏬ step two of the application process
-    
-    console.log(storeApplication);
+    storeApplication = updateMembershipApplication({ storeApplication, data });
+    // console.log("Final storeApplication Record", storeApplication); // debug
 
     const URL = state.auth.APP_HOST + `/store/${contactid}/applications`;
     const jwt = await authenticateAppAction({ state });
@@ -81,8 +57,6 @@ export const setUserStoreAction = async ({
       },
       body: JSON.stringify(storeApplication),
     };
-
-    console.log("requestOptions", requestOptions);
 
     const response = await fetch(URL, requestOptions);
     const userStore = await response.json();
@@ -159,4 +133,54 @@ export const createNewApplicationAction = async ({ state, contactid }) => {
   } catch (error) {
     console.log("error", error);
   }
+};
+
+const updateMembershipApplication = ({ storeApplication, data }) => {
+  console.log("⏬ UPDATING Membership Record ⏬");
+  let newApplicationRecord = storeApplication;
+
+  newApplicationRecord.map((application) => {
+    //⏬ step one of the application process
+    if (data.core_name && application.name === "core_name")
+      application.value = data.core_name;
+    if (
+      data.core_membershipapplicationid &&
+      application.name === "core_membershipapplicationid"
+    )
+      application.value = data.core_membershipapplicationid;
+
+    //⏬ personal info of the application process
+    if (data.py3_title && application.name === "py3_title")
+      application.value = data.py3_title;
+    if (
+      data.py3_firstname &&
+      application.name === "core_membershipapplicationid"
+    )
+      application.value = data.py3_firstname;
+    if (data.py3_lastname && application.name === "py3_firstname")
+      application.value = data.py3_lastname;
+    if (data.py3_gender && application.name === "py3_gender")
+      application.value = data.py3_gender;
+    if (data.py3_email) application.value = data.py3_email;
+    if (data.py3_mobilephone && application.name === "py3_mobilephone")
+      application.value = data.py3_mobilephone;
+    if (data.py3_address1ine1 && application.name === "py3_address1ine1")
+      application.value = data.py3_address1ine1;
+    if (data.py3_addressline2 && application.name === "py3_addressline2")
+      application.value = data.py3_addressline2;
+    if (data.py3_addresstowncity && application.name === "py3_addresstowncity")
+      application.value = data.py3_addresstowncity;
+    if (
+      data.py3_addresszippostalcode &&
+      application.name === "py3_addresszippostalcode"
+    )
+      application.value = data.py3_addresszippostalcode;
+    if (data.py3_addresscountry && application.name === "py3_addresscountry")
+      application.value = data.py3_addresscountry;
+
+    //⏬ category section of the application process
+  });
+  console.log("User Input Data ", data);
+
+  return newApplicationRecord;
 };

@@ -63,6 +63,8 @@ const RegistrationStepTwo = ({ state, actions }) => {
         dispatch,
         attachments: profilePhoto,
       });
+    console.log("profilePhoto", profilePhoto);
+
     const py3_title = titleRef.current.value;
     const py3_firstname = firstNameRef.current.value;
     const py3_lastname = lastNameRef.current.value;
@@ -193,16 +195,14 @@ const RegistrationStepTwo = ({ state, actions }) => {
             <option value="null" hidden>
               Male, Female, Transgender, Prefer Not To Answer
             </option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Transgender Male">Transgender Male</option>
-            <option value="Transgender Female">Transgender Female</option>
-            <option value="Gender Variant/Non-Conforming">
-              Gender Variant/Non-Conforming
-            </option>
-            <option value="Not Listed">Not Listed</option>
-            <option value="Prefer Not To Answer">Prefer Not To Answer</option>
-            <option value="Unknown">Unknown</option>
+            <option value="215500000">Male</option>
+            <option value="215500001">Female</option>
+            <option value="215500004">Transgender Male</option>
+            <option value="215500003">Transgender Female</option>
+            <option value="215500005">Gender Variant/Non-Conforming</option>
+            <option value="215500006">Not Listed</option>
+            <option value="215500007">Prefer Not To Answer</option>
+            <option value="215500002">Unknown</option>
           </Form.Select>
           <label>
             Email <SMF />

@@ -25,8 +25,12 @@ const RegistrationStepThree = ({ state, actions }) => {
   const marginVertical = state.theme.marginVertical;
 
   const [type, setType] = useState(() => {
-    if (applicationData && applicationData.type) return applicationData.type;
-    return "";
+    if (applicationData) {
+      applicationData.map((application) => {
+        if (application.core_name) return application.core_name;
+        return "";
+      });
+    }
   });
 
   const [category, setCategory] = useState(() => {
@@ -116,7 +120,7 @@ const RegistrationStepThree = ({ state, actions }) => {
 
   const ServeForm = () => {
     const ServeBADMembershipCategory = () => {
-      if (type !== "BAD Membership") return null;
+      if (type !== "810170000") return null;
 
       return (
         <div>
@@ -147,7 +151,7 @@ const RegistrationStepThree = ({ state, actions }) => {
     };
 
     const ServeSIGMembershipCategory = () => {
-      if (type !== "SIG Membership") return null;
+      if (type !== "810170001") return null;
 
       return (
         <div>

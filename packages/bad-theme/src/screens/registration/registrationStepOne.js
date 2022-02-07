@@ -25,35 +25,27 @@ const RegistrationStepOne = ({ state, actions }) => {
 
   // HANDLERS --------------------------------------------
   const handleSaveExit = async () => {
-  
-
     await setUserStoreAction({
       state,
       dispatch,
       applicationData,
       isActiveUser,
     });
-    if(isActiveUser) setGoToAction({ path: `/membership/`, actions });
+    if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
   const handleNext = async () => {
-   
-
-    const data = {
-      stepOne: true,
-    };
-
     await setUserStoreAction({
       state,
       dispatch,
       applicationData,
       isActiveUser,
-      data,
     });
-    if(isActiveUser) setGoToAction({
-      path: `/membership/step-2-personal-information/`,
-      actions,
-    });
+    if (isActiveUser)
+      setGoToAction({
+        path: `/membership/step-2-personal-information/`,
+        actions,
+      });
   };
 
   // SERVERS ---------------------------------------------

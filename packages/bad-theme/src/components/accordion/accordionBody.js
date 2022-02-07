@@ -54,7 +54,7 @@ const AccordionBody = ({
       applicationData,
       isActiveUser,
       data: {
-        core_name: "810170000", // "Label": "BAD"
+        core_name: "810170000", // "Label": "BAD" readonly FIELD!
         core_membershipapplicationid: apply_for_membership, // type of membership for application
       },
     });
