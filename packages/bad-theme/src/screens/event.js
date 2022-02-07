@@ -5,7 +5,6 @@ import Link from "@frontity/components/link";
 
 import { colors } from "../config/imports";
 import { setGoToAction } from "../context";
-import { muiQuery } from "../context";
 import RowButton from "../components/rowButton";
 
 import Facebook from "../img/svg/facebookBlack.svg";
@@ -31,7 +30,6 @@ const Event = ({ state, actions, libraries }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  const { sm, md, lg, xl } = muiQuery();
   const {
     date_time,
     email,
