@@ -11,7 +11,7 @@ import { colors } from "../../config/imports";
 export default connect(({ libraries, state, actions, toggleMobileMenu }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const [menuContent, setMenuContent] = React.useState([]);
+  const [menuContent, setMenuContent] = React.useState();
   const [wpMainMenu, setWpMainMenu] = React.useState([]);
   const [wpMoreMenu, setWpMoreMenu] = React.useState([]);
 
@@ -37,7 +37,12 @@ export default connect(({ libraries, state, actions, toggleMobileMenu }) => {
         <Nav.Link
           onClick={() => {
             if (menu.child_items) {
-              setMenuContent(menu.child_items);
+              setMenuContent({
+                main_title: menu.title,
+                main_slug: menu.slug,
+                main_url: menu.url,
+                children: menu.child_items,
+              });
             } else {
               setGoToAction({ path: menu.url, actions });
               toggleMobileMenu();
@@ -59,11 +64,25 @@ export default connect(({ libraries, state, actions, toggleMobileMenu }) => {
     setWpMainMenu(data); // main menu to display
     setWpMoreMenu(data); // more menu into dropdown
   }, [state.theme.menu]);
-  if (menuContent.length > 0) {
+  if (menuContent) {
+    console.log(menuContent);
     return (
       <div style={styles.container}>
-        <Nav.Link onClick={() => setMenuContent([])}> Go Back</Nav.Link>
-        {menuContent.map((item) => {
+        <Nav.Link onClick={() => setMenuContent(null)}> Go Back</Nav.Link>
+        <Nav.Link
+          style={{
+            ...styles.navItem,
+            ...styles.navMenuItem,
+            fontWeight: "bold",
+          }}
+          onClick={() =>
+            setGoToAction({ path: menuContent.main_slug, actions })
+          }
+        >
+          <Html2React html={menuContent.main_title} />
+        </Nav.Link>
+
+        {menuContent.children.map((item) => {
           console.log(menuContent);
           return (
             <Nav.Link
@@ -110,7 +129,7 @@ const styles = {
   navItem: {
     display: "flex",
     alignItems: "center",
-    minHeight: "4em",
+    minHeight: "5em",
     borderBottomWidth: "2px",
     borderColor: colors.softBlack,
     color: colors.softBlack,
