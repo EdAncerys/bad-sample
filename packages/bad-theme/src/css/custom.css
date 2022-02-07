@@ -24,7 +24,9 @@
     <span class='link-icon' />
 
  **/
-
+html {
+  overflow-y: scroll;
+}
 .popup {
   display: inline-block;
   position: relative;

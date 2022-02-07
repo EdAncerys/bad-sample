@@ -70,6 +70,7 @@ const Footer = ({ state, actions }) => {
               justifyContent: "space-around",
               paddingLeft: !lg ? `3em` : 0,
               width: !lg ? null : "100%",
+              marginTop: !lg ? null : "1em",
             }}
           >
             <div style={!lg ? styles.socials : styles.socialsMobile}>
@@ -96,7 +97,7 @@ const Footer = ({ state, actions }) => {
   const ServeFooterBottomRow = () => {
     return (
       <div
-        className="flex-row"
+        className={!lg ? "flex-row" : "flex-col"}
         style={{
           alignItems: "center",
           fontSize: !lg ? 9 : 15,
