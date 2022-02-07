@@ -25,18 +25,24 @@ const RegistrationStepThree = ({ state, actions }) => {
   const marginVertical = state.theme.marginVertical;
 
   const [type, setType] = useState(() => {
-    if (applicationData) {
-      applicationData.map((application) => {
-        if (application.core_name) return application.core_name;
-        return "";
-      });
-    }
+    if (!applicationData) return null;
+    let applicationType = "";
+    applicationData.map((data) => {
+      if (data.name === "core_name") applicationType = data.value;
+    });
+
+    return applicationType;
   });
 
   const [category, setCategory] = useState(() => {
-    if (applicationData && applicationData.apply_for_membership)
-      return applicationData.apply_for_membership;
-    return "";
+    if (!applicationData) return null;
+    let applicationCategory = "";
+    applicationData.map((data) => {
+      if (data.name === "core_membershipsubscriptionplanid")
+        applicationCategory = data.value;
+    });
+
+    return applicationCategory;
   });
 
   const typeRef = useRef(null);
@@ -134,7 +140,7 @@ const RegistrationStepThree = ({ state, actions }) => {
             <option value="null" hidden>
               Membership Category
             </option>
-            <option value="810170027">Ordinary</option>
+            {/* <option value="810170027">Ordinary</option>
             <option value="370410000">Ordinary SAS</option>
             <option value="810170029">Career Grade</option>
             <option value="810170005">Trainee</option>
@@ -144,7 +150,20 @@ const RegistrationStepThree = ({ state, actions }) => {
             <option value="810170013">Associate Overseas</option>
             <option value="810170011">GP</option>
             <option value="810170016">Student</option>
-            <option value="810170012">Allied Healthcare Professional</option>
+            <option value="810170012">Allied Healthcare Professional</option> */}
+
+            <option value="9a39cc47-6456-eb11-a812-000d3a28700d">
+              2021 - BSMD
+            </option>
+            <option value="3f5e50e6-be9e-eb11-b1ac-000d3a2d9388">
+              2021- BAD - Trainee
+            </option>
+            <option value="9f677f51-3ed3-ea11-a812-000d3a49475c">
+              2021 - DC - Honorary
+            </option>
+            <option value="fb581b00-3ad3-ea11-a812-000d3a4a1557">
+              2021 - DC
+            </option>
           </Form.Select>
         </div>
       );
@@ -162,7 +181,7 @@ const RegistrationStepThree = ({ state, actions }) => {
             value={category}
             onChange={(e) => handleCategoryChange(e)}
           >
-            <option value="null" hidden>
+            {/* <option value="null" hidden>
               Membership Category
             </option>
             <option value="British Cosmetic Dermatology Group">
@@ -214,7 +233,20 @@ const RegistrationStepThree = ({ state, actions }) => {
               British Society for Skin Care in Immunocompromised Individuals
             </option>
             <option value="The Dowling Club">The Dowling Club</option>
-            <option value="DERMPATHPRO">DERMPATHPRO</option>
+            <option value="DERMPATHPRO">DERMPATHPRO</option> */}
+
+            <option value="9a39cc47-6456-eb11-a812-000d3a28700d">
+              2021 - BSMD
+            </option>
+            <option value="3f5e50e6-be9e-eb11-b1ac-000d3a2d9388">
+              2021- BAD - Trainee
+            </option>
+            <option value="9f677f51-3ed3-ea11-a812-000d3a49475c">
+              2021 - DC - Honorary
+            </option>
+            <option value="fb581b00-3ad3-ea11-a812-000d3a4a1557">
+              2021 - DC
+            </option>
           </Form.Select>
         </div>
       );

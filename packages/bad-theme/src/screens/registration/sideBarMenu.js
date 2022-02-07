@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
@@ -17,6 +17,16 @@ const SideBarMenu = ({ state, actions, libraries }) => {
     fontWeight: 800,
     color: colors.blue,
   };
+
+  const [type, setType] = useState(() => {
+    if (!applicationData) return null;
+    let applicationType = "";
+    applicationData.map((data) => {
+      if (data.name === "core_name") applicationType = data.value;
+    });
+
+    return applicationType;
+  });
 
   let stepOne,
     stepTwo,
@@ -48,11 +58,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
 
   const ServeContent = () => {
     const ServeStepFive = () => {
-      if (
-        !applicationData ||
-        (applicationData && applicationData.type !== "SIG Membership")
-      )
-        return null;
+      if (type !== "810170001") return null;
 
       return (
         <div

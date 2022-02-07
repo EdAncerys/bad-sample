@@ -39,9 +39,14 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
       dispatch,
       applicationData,
       isActiveUser,
-      data: { type: "SIG Membership", apply_for_membership },
+      data: {
+        core_name: "810170001", // "Label": "BAD" readonly FIELD!
+        core_membershipsubscriptionplanid: apply_for_membership, // type of membership for application
+        bad_applicationfor: "810170000", // silent assignment
+      },
     });
-    if(isActiveUser) setGoToAction({ path: `/membership/step-1-the-process/`, actions });
+    if (isActiveUser)
+      setGoToAction({ path: `/membership/step-1-the-process/`, actions });
   };
 
   // SERVERS ---------------------------------------------------

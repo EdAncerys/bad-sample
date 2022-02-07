@@ -26,7 +26,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
   const marginVertical = state.theme.marginVertical;
 
   const profilePhotoRef = useRef(null);
-  const titleRef = useRef(null);
+  const titleRef = useRef("");
   const firstNameRef = useRef(null);
   const lastNameRef = useRef(null);
   const genderRef = useRef(null);
@@ -34,7 +34,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
   const mobileRef = useRef(null);
   const addressLineOneRef = useRef(null);
   const addressLineTwoRef = useRef(null);
-  const cityRef = useRef(null);
+  const cityRef = useRef("");
   const countryRef = useRef(null);
   const countyRef = useRef(null);
   const postcodeRef = useRef(null);
@@ -58,15 +58,16 @@ const RegistrationStepTwo = ({ state, actions }) => {
         dispatch,
         attachments: profilePhoto,
       });
-    console.log("profilePhoto", profilePhoto);
+    console.log("profilePhoto", profilePhoto); // debug
 
-    const py3_title = titleRef.current ? titleRef.current.value : null;
+    const py3_title = titleRef.current ? titleRef.current : null;
     const py3_firstname = firstNameRef.current
       ? firstNameRef.current.value
       : null;
     const py3_lastname = lastNameRef.current ? lastNameRef.current.value : null;
     const py3_gender = genderRef.current ? genderRef.current.value : null;
     const py3_email = emailRef.current ? emailRef.current.value : null;
+    const py3_mobilephone = mobileRef.current ? mobileRef.current.value : null;
     const py3_address1ine1 = addressLineOneRef.current
       ? addressLineOneRef.current.value
       : null;
@@ -80,6 +81,8 @@ const RegistrationStepTwo = ({ state, actions }) => {
     const py3_addresszippostalcode = postcodeRef.current
       ? postcodeRef.current.value
       : null;
+
+    console.log("py3_gender", py3_gender === "");
 
     const data = {
       // profilePhoto, // field not present
@@ -95,6 +98,8 @@ const RegistrationStepTwo = ({ state, actions }) => {
       py3_addresscountry,
       py3_addresszippostalcode,
     };
+
+    console.log("data passed to func ", data);
 
     await setUserStoreAction({
       state,
@@ -164,8 +169,10 @@ const RegistrationStepTwo = ({ state, actions }) => {
           <Form.Select
             style={styles.input}
             ref={titleRef}
-            defaultValue={applicationData ? applicationData[4].value : ""}
-            onChange={(e) => (titleRef.current = e.target.value)}
+            // defaultValue={applicationData ? applicationData[11].value : ""}
+            onChange={(e) => {
+              titleRef.current = e.target.value;
+            }}
           >
             <option value="" hidden>
               Professor, Dr, Mr, Miss, Ms
@@ -181,7 +188,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
           </label>
           <input
             ref={firstNameRef}
-            defaultValue={applicationData ? applicationData[5].value : ""}
+            // defaultValue={applicationData ? applicationData[12].value : ""}
             type="text"
             className="form-control"
             placeholder="First Name"
@@ -192,7 +199,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
           </label>
           <input
             ref={lastNameRef}
-            defaultValue={applicationData ? applicationData[7].value : ""}
+            // defaultValue={applicationData ? applicationData[14].value : ""}
             type="text"
             className="form-control"
             placeholder="Last Name"
@@ -204,8 +211,10 @@ const RegistrationStepTwo = ({ state, actions }) => {
           <Form.Select
             style={styles.input}
             ref={genderRef}
-            defaultValue={applicationData ? applicationData[9].value : ""}
-            onChange={(e) => (genderRef.current = e.target.value)}
+            defaultValue={applicationData ? applicationData[16].value : ""}
+            onChange={(e) => {
+              genderRef.current = e.target;
+            }}
           >
             <option value="" hidden>
               Male, Female, Transgender, Prefer Not To Answer
@@ -224,7 +233,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
           </label>
           <input
             ref={emailRef}
-            defaultValue={applicationData ? applicationData[11].value : ""}
+            defaultValue={applicationData ? applicationData[18].value : ""}
             type="text"
             className="form-control"
             placeholder="Email"
@@ -235,7 +244,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
           </label>
           <input
             ref={mobileRef}
-            defaultValue={applicationData ? applicationData[12].value : ""}
+            // defaultValue={applicationData ? applicationData[12].value : ""}
             type="tel"
             // pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
             className="form-control"
@@ -257,7 +266,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
           </label>
           <input
             ref={addressLineOneRef}
-            defaultValue={applicationData ? applicationData[28].value : ""}
+            // defaultValue={applicationData ? applicationData[28].value : ""}
             type="text"
             className="form-control"
             placeholder="Address Line 1"
@@ -265,7 +274,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
           />
           <input
             ref={addressLineTwoRef}
-            defaultValue={applicationData ? applicationData[29].value : ""}
+            // defaultValue={applicationData ? applicationData[29].value : ""}
             type="text"
             className="form-control"
             placeholder="Address Line 2"
@@ -275,14 +284,15 @@ const RegistrationStepTwo = ({ state, actions }) => {
           <Form.Select
             ref={countyRef}
             style={styles.input}
-            defaultValue={applicationData ? applicationData[30].value : ""}
-            onChange={(e) => (countyRef.current = e.target.value)}
+            // defaultValue={applicationData ? applicationData[30].value : ""}
+            onChange={(e) => {
+              countyRef.current = e.target;
+            }}
           >
             <option value="" hidden>
               County/State
             </option>
             {UK_COUNTIES.map((item, key) => {
-              console.log(item);
               return (
                 <option key={key} value={item}>
                   {item}
@@ -293,8 +303,10 @@ const RegistrationStepTwo = ({ state, actions }) => {
           <Form.Select
             ref={countryRef}
             style={styles.input}
-            defaultValue={applicationData ? applicationData[33].value : ""}
-            onChange={(e) => countryRef.current(e.target.value)}
+            // defaultValue={applicationData ? applicationData[33].value : ""}
+            onChange={(e) => {
+              countryRef.current = e.target;
+            }}
           >
             <option value="" hidden>
               Country/State
@@ -309,7 +321,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
           </Form.Select>
           <input
             ref={postcodeRef}
-            defaultValue={applicationData ? applicationData[32].value : ""}
+            // defaultValue={applicationData ? applicationData[32].value : ""}
             type="text"
             className="form-control"
             placeholder="Postcode"

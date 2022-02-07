@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useState, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Form } from "react-bootstrap";
@@ -24,6 +24,16 @@ const RegistrationStepFour = ({ state, actions }) => {
 
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser } = useAppState();
+
+  const [type, setType] = useState(() => {
+    if (!applicationData) return null;
+    let applicationType = "";
+    applicationData.map((data) => {
+      if (data.name === "core_name") applicationType = data.value;
+    });
+
+    return applicationType;
+  });
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -107,22 +117,28 @@ const RegistrationStepFour = ({ state, actions }) => {
       applicationData,
       isActiveUser,
     });
-    if(isActiveUser) setGoToAction({ path: `/membership/`, actions });
+    if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
   const handleNext = async () => {
-    const gmcNumber = gmcNumberRef.current ? gmcNumberRef.current.value : null;
+    const py3_gmcnumber = gmcNumberRef.current
+      ? gmcNumberRef.current.value
+      : null;
     const registrationNumber = registrationNumberRef.current
       ? registrationNumberRef.current.value
       : null;
-    const ntnNumber = ntnNumberRef.current ? ntnNumberRef.current.value : null;
-    const jobTitle = jobTitleRef.current ? jobTitleRef.current.value : null;
-    const hospital = hospitalRef.current ? hospitalRef.current.value : null;
-    const medicalSchool = medicalSchoolRef.current
+    const py3_ntnno = ntnNumberRef.current ? ntnNumberRef.current.value : null;
+    const bad_currentpost = jobTitleRef.current
+      ? jobTitleRef.current.value
+      : null;
+    const py3_hospitalid = hospitalRef.current
+      ? hospitalRef.current.value
+      : null;
+    const bad_medicalschool = medicalSchoolRef.current
       ? medicalSchoolRef.current.value
       : null;
 
-    const smOneLastName = smOneLastNameRef.current
+    const py3_alternativelastname = smOneLastNameRef.current
       ? smOneLastNameRef.current.value
       : null;
     const smOneFirstName = smOneFirstNameRef.current
@@ -148,10 +164,10 @@ const RegistrationStepFour = ({ state, actions }) => {
       ? smTwoConfirmEmailRef.current.value
       : null;
 
-    const mrcp = mrcpRef.current ? mrcpRef.current.value : null;
+    const bad_mrpcqualified = mrcpRef.current ? mrcpRef.current.value : null;
     const cv = cvRef.current ? cvRef.current.files[0] : null;
     const grade = gradeRef.current ? gradeRef.current.value : null;
-    const constitutionCheck = constitutionCheckRef.current
+    const py3_constitutionagreement = constitutionCheckRef.current
       ? constitutionCheckRef.current.checked
       : null;
     const privacyNotice = privacyNoticeRef.current
@@ -159,13 +175,13 @@ const RegistrationStepFour = ({ state, actions }) => {
       : null;
 
     const data = {
-      gmcNumber,
-      registrationNumber,
-      ntnNumber,
-      jobTitle,
-      hospital,
-      medicalSchool,
-      smOneLastName,
+      py3_gmcnumber,
+      registrationNumber, // TBD
+      py3_ntnno,
+      bad_currentpost,
+      py3_hospitalid,
+      bad_medicalschool,
+      py3_alternativelastname,
       smOneFirstName,
       smOneEmail,
       smOneConfirmEmail,
@@ -173,12 +189,11 @@ const RegistrationStepFour = ({ state, actions }) => {
       smTwoFirstName,
       smTwoEmail,
       smTwoConfirmEmail,
-      mrcp,
+      bad_mrpcqualified,
       cv,
       grade,
-      constitutionCheck,
+      py3_constitutionagreement,
       privacyNotice,
-      stepFour: true,
     };
 
     await setUserStoreAction({
@@ -190,9 +205,8 @@ const RegistrationStepFour = ({ state, actions }) => {
     });
 
     let slug = `/membership/final-step-thank-you/`;
-    if (applicationData && applicationData.type === "SIG Membership")
-      slug = `/membership/step-5-sig-questions/`;
-    if(isActiveUser) setGoToAction({ path: slug, actions });
+    if (type === "810170001") slug = `/membership/step-5-sig-questions/`;
+    if (isActiveUser) setGoToAction({ path: slug, actions });
   };
 
   const SMF = () => {
@@ -284,8 +298,8 @@ const RegistrationStepFour = ({ state, actions }) => {
               </option>
               {UK_HOSPITALS.map((item, key) => {
                 return (
-                  <option key={key} value={item}>
-                    {item}
+                  <option key={key} value={item.accountid}>
+                    {item.name}
                   </option>
                 );
               })}

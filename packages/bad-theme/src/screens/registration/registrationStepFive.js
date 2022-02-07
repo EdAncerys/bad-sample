@@ -9,7 +9,6 @@ import SideBarMenu from "./sideBarMenu";
 import FileUpload from "../../img/svg/fileUpload.svg";
 import BlockWrapper from "../../components/blockWrapper";
 
-import { UK_HOSPITALS } from "../../config/data";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -69,21 +68,27 @@ const RegistrationStepFive = ({ state, actions }) => {
       applicationData,
       isActiveUser,
     });
-    if(isActiveUser) setGoToAction({ path: `/membership/`, actions });
+    if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
   const handleNext = async () => {
-    const qualification = qualificationRef.current
+    const bad_qualifications = qualificationRef.current
       ? qualificationRef.current.value
       : null;
-    const license = licenseRef.current ? licenseRef.current.value : null;
-    const mrcp = mrcpRef.current ? mrcpRef.current.value : null;
-    const badMember = badMemberRef.current ? badMemberRef.current.value : null;
+    const bad_hasmedicallicence = licenseRef.current
+      ? licenseRef.current.value
+      : null;
+    const bad_mrpcqualified = mrcpRef.current ? mrcpRef.current.value : null;
+    const bad_isbadmember = badMemberRef.current
+      ? badMemberRef.current.value
+      : null;
 
     const myLocation = myLocationRef.current
       ? myLocationRef.current.value
       : null;
-    const interest = interestRef.current ? interestRef.current.value : null;
+    const bad_interestinfieldquestion = interestRef.current
+      ? interestRef.current.value
+      : null;
     const description = descriptionRef.current
       ? descriptionRef.current.value
       : null;
@@ -105,12 +110,12 @@ const RegistrationStepFive = ({ state, actions }) => {
       : null;
 
     const data = {
-      qualification,
-      license,
-      mrcp,
-      badMember,
+      bad_qualifications,
+      bad_hasmedicallicence,
+      bad_mrpcqualified,
+      bad_isbadmember,
       myLocation,
-      interest,
+      bad_interestinfieldquestion,
       description,
       specialties,
       areaInterest,
@@ -118,7 +123,6 @@ const RegistrationStepFive = ({ state, actions }) => {
       email,
       constitutionCheck,
       privacyNotice,
-      stepFive: true,
     };
 
     await setUserStoreAction({
@@ -128,7 +132,8 @@ const RegistrationStepFive = ({ state, actions }) => {
       isActiveUser,
       data,
     });
-    if(isActiveUser) setGoToAction({ path: `/membership/final-step-thank-you/`, actions });
+    if (isActiveUser)
+      setGoToAction({ path: `/membership/final-step-thank-you/`, actions });
   };
 
   const SMF = () => {
