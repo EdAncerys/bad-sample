@@ -119,7 +119,7 @@ export default connect(({ libraries, state, actions, toggleMobileMenu }) => {
 const styles = {
   container: {
     backgroundColor: "white",
-    height: "80vh",
+    height: "100vh",
     width: "100%",
     position: "absolute",
     overflow: "scroll",

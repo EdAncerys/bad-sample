@@ -48,7 +48,7 @@ const EventLoopBlock = ({
 
   let STYLES = {};
   if (layoutTwo) STYLES = !lg ? styles.layoutTwo : styles.layoutTwoMobile;
-  if (layoutThree) STYLES = styles.layoutThree;
+  if (layoutThree) STYLES = !lg ? styles.layoutThree : styles.layoutTwoMobile;
 
   // DATA get for EVENTS ----------------------------------------------------------------
   useEffect(async () => {
