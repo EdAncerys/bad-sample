@@ -69,16 +69,20 @@ export default connect(({ libraries, state, actions, toggleMobileMenu }) => {
     return (
       <div style={styles.container}>
         <Nav.Link onClick={() => setMenuContent(null)}> Go Back</Nav.Link>
-        <Nav.Link
-          style={{
-            ...styles.navItem,
-            ...styles.navMenuItem,
-            fontWeight: "bold",
-          }}
-          onClick={() => setGoToAction({ path: menuContent.main_url, actions })}
-        >
-          <Html2React html={menuContent.main_title} />
-        </Nav.Link>
+        {menuContent.main_title ? (
+          <Nav.Link
+            style={{
+              ...styles.navItem,
+              ...styles.navMenuItem,
+              fontWeight: "bold",
+            }}
+            onClick={() =>
+              setGoToAction({ path: menuContent.main_url, actions })
+            }
+          >
+            <Html2React html={menuContent.main_title} />
+          </Nav.Link>
+        ) : null}
 
         {menuContent.children.map((item) => {
           console.log(menuContent);
@@ -101,7 +105,7 @@ export default connect(({ libraries, state, actions, toggleMobileMenu }) => {
     <div style={styles.container} className="BAD-menu">
       <Nav.Link
         onClick={() => {
-          setMenu(MENU_DATA);
+          setMenu({ children: MENU_DATA });
         }}
       >
         <MenuNavItem item={{ title: "Quick Links" }} />
