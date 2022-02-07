@@ -40,7 +40,7 @@ const ProfilesBlock = ({ state, actions, libraries, block }) => {
       <div className="flex">
         <div
           className="primary-title"
-          style={{ fontSize: 36, textTransform: "capitalize" }}
+          style={{ fontSize: !lg ? 36 : 25, textTransform: "capitalize" }}
         >
           <Html2React html={title} />
         </div>

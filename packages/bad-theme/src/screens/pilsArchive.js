@@ -7,10 +7,14 @@ import { setGoToAction } from "../context";
 import SearchContainer from "../components/searchContainer";
 
 import CloseIcon from "@mui/icons-material/Close";
+
+import { muiQuery } from "../context";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 
 const PilsArchive = ({ state, actions, libraries }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const data = state.source.get(state.router.link);
@@ -105,7 +109,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
         <div
           className="primary-title"
           style={{
-            fontSize: 36,
+            fontSize: !lg ? 36 : 25,
             borderBottom: `1px solid ${colors.darkSilver}`,
           }}
         >
@@ -140,7 +144,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
       return (
         <div
           className="flex primary-title"
-          style={{ fontSize: 36, alignItems: "center" }}
+          style={{ fontSize: !lg ? 36 : 25, alignItems: "center" }}
         >
           <Html2React html={title.rendered} />
         </div>

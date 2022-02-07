@@ -154,7 +154,11 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       return (
         <div
           className="flex primary-title"
-          style={{ fontSize: 36, alignItems: "center", paddingBottom: `0.5em` }}
+          style={{
+            fontSize: !lg ? 36 : 25,
+            alignItems: "center",
+            paddingBottom: `0.5em`,
+          }}
         >
           Search for News & Media
         </div>

@@ -193,7 +193,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
                         <div
                           className="flex-col primary-title"
                           style={{
-                            fontSize: `2.25rem`,
+                            fontSize: !lg ? `2.25rem` : "1.75em",
                             textAlign: "start",
                             color: colors.white,
                           }}

@@ -4,7 +4,11 @@ import { colors } from "../config/imports";
 
 import Loading from "./loading";
 
+import { muiQuery } from "../context";
+
 const TitleAndBodyBlock = ({ state, actions, libraries, block }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
@@ -27,7 +31,7 @@ const TitleAndBodyBlock = ({ state, actions, libraries, block }) => {
       <div
         className="flex primary-title"
         style={{
-          fontSize: 36,
+          fontSize: !lg ? 36 : 25,
           textAlign: ALIGNMENT,
           justifyContent: ALIGNMENT,
         }}

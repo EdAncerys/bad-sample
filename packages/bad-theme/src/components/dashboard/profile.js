@@ -4,9 +4,11 @@ import Image from "@frontity/components/image";
 
 import ProfileAvatar from "../../img/svg/profile.svg";
 // CONTEXT ----------------------------------------------------------------
-import { useAppState } from "../../context";
+import { useAppState, muiQuery } from "../../context";
 
 const Profile = ({ state, actions, libraries }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { isActiveUser } = useAppState();
@@ -51,7 +53,7 @@ const Profile = ({ state, actions, libraries }) => {
     const { fullname } = isActiveUser;
 
     return (
-      <div className="primary-title" style={{ fontSize: 36 }}>
+      <div className="primary-title" style={{ fontSize: !lg ? 36 : 25 }}>
         <Html2React html={fullname} />
       </div>
     );

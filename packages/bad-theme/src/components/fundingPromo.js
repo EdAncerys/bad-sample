@@ -5,7 +5,11 @@ import Card from "./card/card";
 import Loading from "./loading";
 import { colors } from "../config/imports";
 
+import { muiQuery } from "../context";
+
 const FundingPromo = ({ state, actions, libraries, block }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
   if (!block.card) return null;
@@ -24,7 +28,7 @@ const FundingPromo = ({ state, actions, libraries, block }) => {
       return (
         <div
           className="flex primary-title"
-          style={{ fontSize: 36, justifyContent: "center" }}
+          style={{ fontSize: !lg ? 36 : 25, justifyContent: "center" }}
         >
           <Html2React html={title} />
         </div>

@@ -3,10 +3,14 @@ import { connect, styled } from "frontity";
 
 import { colors } from "../config/imports";
 import Card from "../components/card/card";
+
+import { muiQuery } from "../context";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 
 const Post = ({ state, actions, libraries }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
@@ -24,7 +28,7 @@ const Post = ({ state, actions, libraries }) => {
       if (!title) return null;
 
       return (
-        <div className="flex primary-title" style={{ fontSize: 36 }}>
+        <div className="flex primary-title" style={{ fontSize: !lg ? 36 : 25 }}>
           <Html2React html={title.rendered} />
         </div>
       );

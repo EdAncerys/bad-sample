@@ -12,7 +12,11 @@ import TypeFilters from "./typeFilters";
 
 import CloseIcon from "@mui/icons-material/Close";
 
+import { muiQuery } from "../context";
+
 const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
@@ -147,7 +151,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
       return (
         <div
           className="flex primary-title"
-          style={{ fontSize: 36, alignItems: "center" }}
+          style={{ fontSize: !lg ? 36 : 25, alignItems: "center" }}
         >
           Clinical Guidelines
         </div>

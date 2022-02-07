@@ -17,9 +17,11 @@ import WebPage from "../img/svg/webPageBlack.svg";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT -------------------------------------------------------------------
-import { useAppDispatch, setEnquireAction } from "../context";
+import { useAppDispatch, setEnquireAction, muiQuery } from "../context";
 
 const Event = ({ state, actions, libraries }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const event = state.source[data.type][data.id];
@@ -74,7 +76,7 @@ const Event = ({ state, actions, libraries }) => {
     return (
       <div
         className="primary-title"
-        style={{ fontSize: 36, paddingBottom: `1em` }}
+        style={{ fontSize: !lg ? 36 : 25, paddingBottom: `1em` }}
       >
         <Html2React html={title.rendered} />
       </div>
