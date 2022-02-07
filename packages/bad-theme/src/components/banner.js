@@ -6,11 +6,13 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import Loading from "./loading";
 import BlockWrapper from "./blockWrapper";
-import { setGoToAction } from "../context";
+import { setGoToAction, muiQuery } from "../context";
 
 const Banner = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
+
+  const { sm, md, lg, xl } = muiQuery();
 
   const { disable_vertical_padding } = block;
 
@@ -31,7 +33,11 @@ const Banner = ({ state, actions, libraries, block }) => {
       return (
         <div
           className="flex"
-          style={{ alignItems: "flex-end", justifyContent: "flex-end" }}
+          style={{
+            alignItems: !lg ? "flex-end" : "flex-start",
+            justifyContent: !lg ? "flex-end" : "flex-start",
+            marginTop: !lg ? null : "1em",
+          }}
         >
           <div>
             <button
@@ -60,7 +66,7 @@ const Banner = ({ state, actions, libraries, block }) => {
       <div style={{ position: "relative" }}>
         <div>
           <div
-            className="flex-row"
+            className={!lg ? "flex-row" : "flow-col"}
             style={{
               position: "absolute",
               bottom: 0,
