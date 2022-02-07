@@ -42,6 +42,7 @@ const HeaderActions = ({ state, actions }) => {
   useLayoutEffect(() => {
     SetReady(true);
   }, []);
+
   if (!isReady)
     return (
       <div

@@ -34,11 +34,6 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
 
   // HANDLERS --------------------------------------------------
   const handleApply = async () => {
-    if (!isActiveUser) {
-      setLoginModalAction({ dispatch, loginModalAction: true });
-      return;
-    }
-
     await setUserStoreAction({
       state,
       dispatch,
@@ -46,7 +41,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
       isActiveUser,
       data: { type: "SIG Membership", apply_for_membership },
     });
-    setGoToAction({ path: `/membership/step-1-the-process/`, actions });
+    if(isActiveUser) setGoToAction({ path: `/membership/step-1-the-process/`, actions });
   };
 
   // SERVERS ---------------------------------------------------

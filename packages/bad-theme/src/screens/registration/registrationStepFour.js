@@ -11,7 +11,12 @@ import BlockWrapper from "../../components/blockWrapper";
 
 import { UK_HOSPITALS } from "../../config/data";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setUserStoreAction } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setUserStoreAction,
+  setLoginModalAction,
+} from "../../context";
 
 const RegistrationStepFour = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
@@ -102,8 +107,7 @@ const RegistrationStepFour = ({ state, actions }) => {
       applicationData,
       isActiveUser,
     });
-
-    setGoToAction({ path: `/membership/`, actions });
+    if(isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
   const handleNext = async () => {
@@ -188,7 +192,7 @@ const RegistrationStepFour = ({ state, actions }) => {
     let slug = `/membership/final-step-thank-you/`;
     if (applicationData && applicationData.type === "SIG Membership")
       slug = `/membership/step-5-sig-questions/`;
-    setGoToAction({ path: slug, actions });
+    if(isActiveUser) setGoToAction({ path: slug, actions });
   };
 
   const SMF = () => {

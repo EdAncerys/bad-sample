@@ -25,22 +25,21 @@ export const authLogViaCookie = async ({ state, initialState }) => {
     try {
       const userResponse = await fetch(URL, requestOptions);
       const userData = await userResponse.json();
-      console.log(userData);
 
       const userStoreData = await getUserStoreAction({
         state,
         isActiveUser: userData,
       });
-      console.log(userStoreData);
 
       if (userStoreData) {
-        initialState.applicationData = userStoreData; // populates user userResponse
+        initialState.applicationData = userStoreData; // populates user application record
       }
 
       if (userData) {
         const taken = await authenticateAppAction({ state }); // replace taken with new one
         initialState.isActiveUser = userData; // populates user userResponse
         initialState.jwt = taken; // replace taken with new one
+        console.log("initialState", initialState); // debug
 
         handleSetCookie({
           name: state.auth.COOKIE_NAME,

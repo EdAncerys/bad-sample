@@ -41,7 +41,7 @@ const RegistrationComplete = ({ state, actions }) => {
       isActiveUser,
       data,
     });
-    setGoToAction({ path: `/membership/`, actions });
+    if(isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
   // SERVERS ---------------------------------------------

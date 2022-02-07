@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 
@@ -20,6 +20,7 @@ const LoginModal = ({ state, actions }) => {
   const { loginModalAction, isFetching } = useAppState();
 
   const [id, setId] = useState(null);
+  const [forceRerender, setForceRerender] = useState(true);
   const iFrameRef = useRef(null);
 
   useEffect(async () => {
@@ -29,6 +30,10 @@ const LoginModal = ({ state, actions }) => {
       iFrameRef.current = false; // clean up function
     };
   }, [id]);
+
+  useLayoutEffect(() => {
+    setForceRerender(!forceRerender);
+  }, [loginModalAction]);
 
   // HANDLERS ----------------------------------------------------
   const iFrameHandler = () => {
@@ -65,6 +70,40 @@ const LoginModal = ({ state, actions }) => {
   };
 
   // SERVERS --------------------------------------------------
+  const ServeFormInfo = () => {
+    return (
+      <div>
+        {/* <ServeCloseAction /> */}
+        <div style={{ marginTop: `2em` }}>
+          <div className="mb-4">
+            <div>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </div>
+          </div>
+          <RowButton
+            block={{
+              title: "Not yet registered? Register here",
+            }}
+            onClick={() => {
+              setCreateAccountModalAction({
+                dispatch,
+                createAccountAction: true,
+              });
+              setLoginModalAction({ dispatch, loginModalAction: false });
+            }}
+            buttonWidth="60%"
+          />
+        </div>
+      </div>
+    );
+  };
+
   const ServeModalContent = () => {
     const ServeCloseAction = () => {
       return (
@@ -79,40 +118,6 @@ const LoginModal = ({ state, actions }) => {
           }}
         >
           <CloseIcon style={{ fontSize: 24, fill: colors.softBlack }} />
-        </div>
-      );
-    };
-
-    const ServeFormInfo = () => {
-      return (
-        <div>
-          <ServeCloseAction />
-          <div style={{ marginTop: `2em` }}>
-            <div className="mb-4">
-              <div>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </div>
-            </div>
-            <RowButton
-              block={{
-                title: "Not yet registered? Register here",
-              }}
-              onClick={() => {
-                setCreateAccountModalAction({
-                  dispatch,
-                  createAccountAction: true,
-                });
-                setLoginModalAction({ dispatch, loginModalAction: false });
-              }}
-              buttonWidth="60%"
-            />
-          </div>
         </div>
       );
     };

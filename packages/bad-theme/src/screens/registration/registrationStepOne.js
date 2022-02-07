@@ -10,6 +10,7 @@ import {
   useAppState,
   setGoToAction,
   setUserStoreAction,
+  setLoginModalAction,
 } from "../../context";
 
 const RegistrationStepOne = ({ state, actions }) => {
@@ -24,17 +25,20 @@ const RegistrationStepOne = ({ state, actions }) => {
 
   // HANDLERS --------------------------------------------
   const handleSaveExit = async () => {
+  
+
     await setUserStoreAction({
       state,
       dispatch,
       applicationData,
       isActiveUser,
     });
-
-    setGoToAction({ path: `/membership/`, actions });
+    if(isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
   const handleNext = async () => {
+   
+
     const data = {
       stepOne: true,
     };
@@ -46,8 +50,7 @@ const RegistrationStepOne = ({ state, actions }) => {
       isActiveUser,
       data,
     });
-
-    setGoToAction({
+    if(isActiveUser) setGoToAction({
       path: `/membership/step-2-personal-information/`,
       actions,
     });

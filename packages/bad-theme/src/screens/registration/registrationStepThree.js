@@ -7,7 +7,12 @@ import SideBarMenu from "./sideBarMenu";
 import { Form } from "react-bootstrap";
 import BlockWrapper from "../../components/blockWrapper";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setUserStoreAction } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setUserStoreAction,
+  setLoginModalAction,
+} from "../../context";
 
 const RegistrationStepThree = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
@@ -41,8 +46,7 @@ const RegistrationStepThree = ({ state, actions }) => {
       applicationData,
       isActiveUser,
     });
-
-    setGoToAction({ path: `/membership/`, actions });
+    if(isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
   const handleTypeChange = (e) => {
@@ -72,7 +76,7 @@ const RegistrationStepThree = ({ state, actions }) => {
       isActiveUser,
       data,
     });
-    setGoToAction({
+    if(isActiveUser) setGoToAction({
       path: `/membership/step-4-professional-details/`,
       actions,
     });
