@@ -115,7 +115,7 @@ const SearchContainer = ({
             type="text"
             className="form-control"
             placeholder="Search"
-            style={styles.input}
+            style={!lg ? styles.input : { padding: "1em" }}
           />
           <div
             className="input-group-text toggle-icon-color"
