@@ -48,17 +48,6 @@ const AccordionBody = ({
 
   // HANDLERS ----------------------------------------------------
   const handleApply = async () => {
-    //   "Choices": [
-    //     {
-    //         "value": 810170000,
-    //         "Label": "BAD"
-    //     },
-    //     {
-    //         "value": 810170001,
-    //         "Label": "SIG"
-    //     }
-    // ]
-
     await setUserStoreAction({
       state,
       dispatch,
