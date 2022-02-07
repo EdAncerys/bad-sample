@@ -9,10 +9,12 @@ import {
   useAppState,
   sendFileToS3Action,
   updateProfileAction,
+  muiQuery,
 } from "../../context";
 
 const UpdateProfile = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
@@ -58,7 +60,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: `1fr 1fr`,
+          gridTemplateColumns: !lg ? `1fr 1fr` : `1fr`,
           gap: 20,
           padding: `1em 0 0`,
         }}

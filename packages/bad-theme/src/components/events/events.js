@@ -11,6 +11,7 @@ import { colors } from "../../config/imports";
 import CloseIcon from "@mui/icons-material/Close";
 
 const Events = ({ state, actions, libraries, block }) => {
+  console.log("EVENTS BLOCK: ", block);
   const [grades, setGrades] = useState(null); // data
   const [locations, setLocations] = useState(null); // data
   const [searchFilter, setSearchFilter] = useState(null);

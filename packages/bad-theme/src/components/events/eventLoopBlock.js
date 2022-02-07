@@ -7,6 +7,7 @@ import Card from "../card/card";
 import TitleBlock from "../titleBlock";
 import { colors } from "../../config/imports";
 
+import { muiQuery } from "../../context";
 const EventLoopBlock = ({
   state,
   actions,
@@ -19,6 +20,7 @@ const EventLoopBlock = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
+  const { sm, md, lg, xl } = muiQuery();
 
   const {
     post_limit,
@@ -45,7 +47,7 @@ const EventLoopBlock = ({
   if (disable_vertical_padding) marginVertical = 0;
 
   let STYLES = {};
-  if (layoutTwo) STYLES = styles.layoutTwo;
+  if (layoutTwo) STYLES = !lg ? styles.layoutTwo : styles.layoutTwoMobile;
   if (layoutThree) STYLES = styles.layoutThree;
 
   // DATA get for EVENTS ----------------------------------------------------------------
@@ -167,6 +169,11 @@ const styles = {
   layoutTwo: {
     display: "grid",
     gridTemplateColumns: `1fr 1fr`,
+    gap: 20,
+  },
+  layoutTwoMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
     gap: 20,
   },
   layoutThree: {
