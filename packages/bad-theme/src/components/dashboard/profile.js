@@ -143,8 +143,8 @@ const Profile = ({ state, actions, libraries }) => {
           paddingTop: `1em`,
           fontSize: 20,
           display: "grid",
-          gridTemplateColumns: `1fr 1fr`,
-          gridTemplateRows: `repeat(3, 40px)`,
+          gridTemplateColumns: !lg ? `1fr 1fr` : "1fr",
+          gridTemplateRows: !lg ? `repeat(3, 40px)` : null,
           gap: `5px 20px`,
         }}
       >
@@ -163,19 +163,26 @@ const Profile = ({ state, actions, libraries }) => {
       className="shadow"
       style={{
         display: "grid",
-        gridTemplateColumns: `2fr 1fr`,
+        gridTemplateColumns: !lg ? `2fr 1fr` : "1fr",
         justifyContent: "space-between",
         gap: 20,
-        padding: `2em 4em`,
+        padding: !lg ? `2em 4em` : "1em",
         marginBottom: `${marginVertical}px`,
       }}
     >
-      <div style={{ display: "grid", alignItems: "center" }}>
+      <div
+        style={{
+          display: !lg ? "grid" : "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        {!lg ? null : <ServeProfileAvatar />}
         <ServeProfileName />
         <ServeProfileInfo />
       </div>
 
-      <ServeProfileAvatar />
+      {!lg ? <ServeProfileAvatar /> : null}
     </div>
   );
 };

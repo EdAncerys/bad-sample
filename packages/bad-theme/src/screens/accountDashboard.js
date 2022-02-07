@@ -4,6 +4,7 @@ import { connect } from "frontity";
 import BlockBuilder from "../components/builder/blockBuilder";
 
 import DashboardNavigation from "../components/dashboard/dashboardNavigation";
+import DashboardNavigationMobile from "../components/dashboard/dashboardNavigationMobile";
 import Dashboard from "../components/dashboard/pages/dashboard";
 import DashboardEvents from "../components/dashboard/pages/dashboardEvents";
 import Directory from "../components/dashboard/pages/directory";
@@ -14,8 +15,11 @@ import Settings from "../components/dashboard/pages/settings";
 
 import BlockWrapper from "../components/blockWrapper";
 
+import { muiQuery } from "../context";
+
 const AccountDashboard = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  const { sm, md, lg, xl } = muiQuery();
 
   const [dashboardPath, setDashboardPath] = useState("Dashboard");
   const data = state.source.get(state.router.link);
@@ -34,11 +38,17 @@ const AccountDashboard = ({ state, actions, libraries }) => {
     <div className="flex-col">
       <div className="flex-col">
         <BlockWrapper>
-          <DashboardNavigation
-            dashboardPath={dashboardPath}
-            setDashboardPath={setDashboardPath}
-          />
-
+          {!lg ? (
+            <DashboardNavigation
+              dashboardPath={dashboardPath}
+              setDashboardPath={setDashboardPath}
+            />
+          ) : (
+            <DashboardNavigationMobile
+              dashboardPath={dashboardPath}
+              setDashboardPath={setDashboardPath}
+            />
+          )}
           <Dashboard dashboardPath={dashboardPath} />
           <DashboardEvents dashboardPath={dashboardPath} />
           <Membership dashboardPath={dashboardPath} />
