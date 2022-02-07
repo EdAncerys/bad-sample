@@ -48,13 +48,28 @@ const AccordionBody = ({
 
   // HANDLERS ----------------------------------------------------
   const handleApply = async () => {
+    //   "Choices": [
+    //     {
+    //         "value": 810170000,
+    //         "Label": "BAD"
+    //     },
+    //     {
+    //         "value": 810170001,
+    //         "Label": "SIG"
+    //     }
+    // ]
+
     await setUserStoreAction({
       state,
       dispatch,
       applicationData,
       isActiveUser,
-      data: { type: "BAD Membership", apply_for_membership },
+      data: {
+        core_name: "810170000", // "Label": "BAD"
+        core_membershipapplicationid: apply_for_membership, // type of membership for application
+      },
     });
+
     if (isActiveUser)
       setGoToAction({ path: `/membership/step-1-the-process/`, actions });
   };

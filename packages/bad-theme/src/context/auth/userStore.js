@@ -29,14 +29,13 @@ export const setUserStoreAction = async ({
 
     let storeApplication = applicationData;
 
-    // ⏬⏬  get application record from store ⏬⏬
     if (!storeApplication) {
+      // ⏬⏬  get application record from store ⏬⏬
       storeApplication = await getUserStoreAction({ state, isActiveUser });
     }
 
-    // ⏬⏬  creat application record in Dynamics ⏬⏬
     if (!storeApplication) {
-      storeApplication = await getUserStoreAction({ state, isActiveUser });
+      // ⏬⏬  creat application record in Dynamics ⏬⏬
       const newApplicationRecord = await createNewApplicationAction({
         state,
         contactid,
@@ -44,9 +43,17 @@ export const setUserStoreAction = async ({
       storeApplication = newApplicationRecord;
     }
 
-    // update storeApplication with new data
-
-    console.log("⏬ Membership Record ⏬");
+    // 🤖 update object with user input data
+    console.log("⏬ UPDATING Membership Record ⏬");
+    //⏬ step one of the application process
+    if (data.core_name) storeApplication[2].value = data.core_name;
+    if (data.core_membershipapplicationid)
+      storeApplication[0].value = data.core_membershipapplicationid;
+    //⏬ step two of the application process
+    if (data.py3_title) storeApplication[4].value = data.py3_title;
+    if (data.py3_firstname) storeApplication[5].value = data.py3_firstname;
+    if (data.py3_lastname) storeApplication[7].value = data.py3_lastname;
+    if (data.py3_gender) storeApplication[9].value = data.py3_gender;
     console.log(storeApplication);
 
     const URL = state.auth.APP_HOST + `/store/${contactid}/applications`;
@@ -60,6 +67,8 @@ export const setUserStoreAction = async ({
       },
       body: JSON.stringify(storeApplication),
     };
+
+    console.log("requestOptions", requestOptions);
 
     const response = await fetch(URL, requestOptions);
     const userStore = await response.json();

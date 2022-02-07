@@ -4,7 +4,7 @@ import Image from "@frontity/components/image";
 import { Form } from "react-bootstrap";
 
 import { colors } from "../../config/imports";
-import { setGoToAction } from "../../context";
+import { setGoToAction, sendFileToS3Action } from "../../context";
 import SideBarMenu from "./sideBarMenu";
 import Avatar from "../../img/svg/profile.svg";
 import FileUpload from "../../img/svg/fileUpload.svg";
@@ -56,7 +56,13 @@ const RegistrationStepTwo = ({ state, actions }) => {
   };
 
   const handleNext = async () => {
-    const profilePhoto = profilePhotoRef.current.files[0];
+    let profilePhoto = profilePhotoRef.current.files[0];
+    // profilePhoto = bad_profile_photo_url = await sendFileToS3Action({
+    //   state,
+    //   dispatch,
+    //   attachments: profilePhoto,
+    // });
+    console.log("file upload ", profilePhoto);
     const py3_title = titleRef.current.value;
     const py3_firstname = firstNameRef.current.value;
     const py3_lastname = lastNameRef.current.value;
@@ -86,18 +92,18 @@ const RegistrationStepTwo = ({ state, actions }) => {
       py3_addresszippostalcode,
     };
 
-    await setUserStoreAction({
-      state,
-      dispatch,
-      applicationData,
-      isActiveUser,
-      data,
-    });
-    if (isActiveUser)
-      setGoToAction({
-        path: `/membership/step-3-category-selection/`,
-        actions,
-      });
+    // await setUserStoreAction({
+    //   state,
+    //   dispatch,
+    //   applicationData,
+    //   isActiveUser,
+    //   data,
+    // });
+    // if (isActiveUser)
+    //   setGoToAction({
+    //     path: `/membership/step-3-category-selection/`,
+    //     actions,
+    //   });
   };
 
   // SERVERS ---------------------------------------------
