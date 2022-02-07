@@ -55,6 +55,19 @@ export const setUserStoreAction = async ({
     if (data.py3_lastname) storeApplication[7].value = data.py3_lastname;
     if (data.py3_gender) storeApplication[9].value = data.py3_gender;
     if (data.py3_email) storeApplication[11].value = data.py3_email;
+    if (data.py3_mobilephone) storeApplication[12].value = data.py3_mobilephone;
+    if (data.py3_address1ine1)
+    storeApplication[28].value = data.py3_address1ine1;
+    if (data.py3_addressline2)
+    storeApplication[29].value = data.py3_addressline2;
+    if (data.py3_addresstowncity)
+    storeApplication[30].value = data.py3_addresstowncity;
+    if (data.py3_addresszippostalcode)
+    storeApplication[32].value = data.py3_addresszippostalcode;
+    if (data.py3_addresscountry)
+    storeApplication[33].value = data.py3_addresscountry;
+    //⏬ step two of the application process
+    
     console.log(storeApplication);
 
     const URL = state.auth.APP_HOST + `/store/${contactid}/applications`;
