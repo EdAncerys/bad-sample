@@ -132,7 +132,9 @@ const HeaderActions = ({ state, actions }) => {
       <div style={{}}>
         <div
           onClick={() =>
-            setLoginModalAction({ dispatch, loginModalAction: true })
+            document
+              .querySelector("#mobile-search-bar")
+              .toggleAttribute("hidden")
           }
           style={{
             display: "flex",
@@ -153,6 +155,14 @@ const HeaderActions = ({ state, actions }) => {
         <div onClick={() => setMobileMenuActive(!mobileMenuActive)}>
           <Image src={ResponsiveMenuIcon} style={{ maxWidth: "80px" }} />
         </div>
+      </div>
+    );
+  };
+
+  const ServeMobileSearchBar = () => {
+    return (
+      <div id="mobile-search-bar" style={styles.mobileSearchBar} hidden>
+        <SearchInput />
       </div>
     );
   };
@@ -217,6 +227,7 @@ const HeaderActions = ({ state, actions }) => {
               alignItems: "center",
             }}
           >
+            {!lg ? null : <ServeMobileSearchBar />}
             {!lg ? <SearchInput /> : <ServeMobileSearchAction />}
             {!lg ? <ServeLoginAction /> : <ServeMobileLoginAction />}
             {!lg ? <ServeDashboardAction /> : <ServeMobileDashboardAction />}
@@ -231,6 +242,17 @@ const HeaderActions = ({ state, actions }) => {
 
 const styles = {
   container: {},
+  mobileSearchBar: {
+    position: "absolute",
+    top: 80,
+    left: 0,
+    padding: "1em",
+    backgroundColor: "white",
+    width: "100%",
+    borderBottom: "1px solid " + colors.navy,
+    borderTop: "1px solid " + colors.navy,
+    borderColor: colors.navy,
+  },
 };
 
 export default connect(HeaderActions);
