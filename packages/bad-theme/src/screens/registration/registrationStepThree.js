@@ -138,7 +138,7 @@ const RegistrationStepThree = ({ state, actions }) => {
             <option value="370410000">Ordinary SAS</option>
             <option value="810170029">Career Grade</option>
             <option value="810170005">Trainee</option>
-            <option value="Honorary">Honorary</option>
+            <option value="810170000">Honorary</option>
             <option value="810170010">Associate</option>
             <option value="810170008">Associate Trainee</option>
             <option value="810170013">Associate Overseas</option>

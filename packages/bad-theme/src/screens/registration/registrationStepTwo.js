@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Form } from "react-bootstrap";
@@ -13,12 +13,7 @@ import BlockWrapper from "../../components/blockWrapper";
 import { UK_COUNTIES } from "../../config/data";
 import { UK_COUNTRIES } from "../../config/data";
 // CONTEXT ----------------------------------------------------------------
-import {
-  useAppDispatch,
-  useAppState,
-  setUserStoreAction,
-  setLoginModalAction,
-} from "../../context";
+import { useAppDispatch, useAppState, setUserStoreAction } from "../../context";
 
 const RegistrationStepTwo = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
@@ -65,18 +60,26 @@ const RegistrationStepTwo = ({ state, actions }) => {
       });
     console.log("profilePhoto", profilePhoto);
 
-    const py3_title = titleRef.current.value;
-    const py3_firstname = firstNameRef.current.value;
-    const py3_lastname = lastNameRef.current.value;
-    const py3_gender = genderRef.current.value;
-    const py3_email = emailRef.current.value;
-    const py3_mobilephone = mobileRef.current.value;
-    const py3_address1ine1 = addressLineOneRef.current.value;
-    const py3_addressline2 = addressLineTwoRef.current.value;
-    const py3_addresstowncity = cityRef.current.value;
-    const py3_addresscountry = countryRef.current.value;
-    // const py3_addresscountry = countyRef.current.value;
-    const py3_addresszippostalcode = postcodeRef.current.value;
+    const py3_title = titleRef.current ? titleRef.current.value : null;
+    const py3_firstname = firstNameRef.current
+      ? firstNameRef.current.value
+      : null;
+    const py3_lastname = lastNameRef.current ? lastNameRef.current.value : null;
+    const py3_gender = genderRef.current ? genderRef.current.value : null;
+    const py3_email = emailRef.current ? emailRef.current.value : null;
+    const py3_address1ine1 = addressLineOneRef.current
+      ? addressLineOneRef.current.value
+      : null;
+    const py3_addressline2 = addressLineTwoRef.current
+      ? addressLineTwoRef.current.value
+      : null;
+    const py3_addresstowncity = cityRef.current ? cityRef.current.value : null;
+    const py3_addresscountry = countryRef.current
+      ? countryRef.current.value
+      : null;
+    const py3_addresszippostalcode = postcodeRef.current
+      ? postcodeRef.current.value
+      : null;
 
     const data = {
       // profilePhoto, // field not present
@@ -90,7 +93,6 @@ const RegistrationStepTwo = ({ state, actions }) => {
       py3_addressline2,
       py3_addresstowncity,
       py3_addresscountry,
-      // county, // field not present
       py3_addresszippostalcode,
     };
 
@@ -115,6 +117,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
 
   const ServeCardImage = () => {
     const [profilePhoto, setProfilePhoto] = useState(null);
+
     const alt = "Profile Avatar";
 
     return (
@@ -158,12 +161,17 @@ const RegistrationStepTwo = ({ state, actions }) => {
           <label>
             Title <SMF />
           </label>
-          <Form.Select style={styles.input} ref={titleRef}>
-            <option value="null" hidden>
+          <Form.Select
+            style={styles.input}
+            ref={titleRef}
+            defaultValue={applicationData ? applicationData[4].value : ""}
+            onChange={(e) => (titleRef.current = e.target.value)}
+          >
+            <option value="" hidden>
               Professor, Dr, Mr, Miss, Ms
             </option>
-            <option value="Dr.">Dr.</option>
-            <option value="Mr.">Mr.</option>
+            <option value="Dr">Dr</option>
+            <option value="Mr">Mr</option>
             <option value="Miss">Miss</option>
             <option value="Ms">Ms</option>
             <option value="Professor">Professor</option>
@@ -173,6 +181,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
           </label>
           <input
             ref={firstNameRef}
+            defaultValue={applicationData ? applicationData[5].value : ""}
             type="text"
             className="form-control"
             placeholder="First Name"
@@ -183,6 +192,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
           </label>
           <input
             ref={lastNameRef}
+            defaultValue={applicationData ? applicationData[7].value : ""}
             type="text"
             className="form-control"
             placeholder="Last Name"
@@ -191,8 +201,13 @@ const RegistrationStepTwo = ({ state, actions }) => {
           <label>
             Gender <SMF />
           </label>
-          <Form.Select style={styles.input} ref={genderRef}>
-            <option value="null" hidden>
+          <Form.Select
+            style={styles.input}
+            ref={genderRef}
+            defaultValue={applicationData ? applicationData[9].value : ""}
+            onChange={(e) => (genderRef.current = e.target.value)}
+          >
+            <option value="" hidden>
               Male, Female, Transgender, Prefer Not To Answer
             </option>
             <option value="215500000">Male</option>
@@ -209,6 +224,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
           </label>
           <input
             ref={emailRef}
+            defaultValue={applicationData ? applicationData[11].value : ""}
             type="text"
             className="form-control"
             placeholder="Email"
@@ -219,6 +235,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
           </label>
           <input
             ref={mobileRef}
+            defaultValue={applicationData ? applicationData[12].value : ""}
             type="tel"
             // pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
             className="form-control"
@@ -240,6 +257,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
           </label>
           <input
             ref={addressLineOneRef}
+            defaultValue={applicationData ? applicationData[28].value : ""}
             type="text"
             className="form-control"
             placeholder="Address Line 1"
@@ -247,23 +265,24 @@ const RegistrationStepTwo = ({ state, actions }) => {
           />
           <input
             ref={addressLineTwoRef}
+            defaultValue={applicationData ? applicationData[29].value : ""}
             type="text"
             className="form-control"
             placeholder="Address Line 2"
             style={styles.input}
           />
-          <input
-            ref={cityRef}
-            type="text"
-            className="form-control"
-            placeholder="City"
+
+          <Form.Select
+            ref={countyRef}
             style={styles.input}
-          />
-          <Form.Select ref={countyRef} style={styles.input}>
-            <option value="null" hidden>
+            defaultValue={applicationData ? applicationData[30].value : ""}
+            onChange={(e) => (countyRef.current = e.target.value)}
+          >
+            <option value="" hidden>
               County/State
             </option>
             {UK_COUNTIES.map((item, key) => {
+              console.log(item);
               return (
                 <option key={key} value={item}>
                   {item}
@@ -271,8 +290,13 @@ const RegistrationStepTwo = ({ state, actions }) => {
               );
             })}
           </Form.Select>
-          <Form.Select ref={countryRef} style={styles.input}>
-            <option value="null" hidden>
+          <Form.Select
+            ref={countryRef}
+            style={styles.input}
+            defaultValue={applicationData ? applicationData[33].value : ""}
+            onChange={(e) => countryRef.current(e.target.value)}
+          >
+            <option value="" hidden>
               Country/State
             </option>
             {UK_COUNTRIES.map((item, key) => {
@@ -285,6 +309,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
           </Form.Select>
           <input
             ref={postcodeRef}
+            defaultValue={applicationData ? applicationData[32].value : ""}
             type="text"
             className="form-control"
             placeholder="Postcode"

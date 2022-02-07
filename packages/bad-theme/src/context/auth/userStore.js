@@ -136,6 +136,8 @@ export const createNewApplicationAction = async ({ state, contactid }) => {
 };
 
 const updateMembershipApplication = ({ storeApplication, data }) => {
+  if (!data) return null;
+
   console.log("⏬ UPDATING Membership Record ⏬");
   let newApplicationRecord = storeApplication;
 
@@ -152,16 +154,14 @@ const updateMembershipApplication = ({ storeApplication, data }) => {
     //⏬ personal info of the application process
     if (data.py3_title && application.name === "py3_title")
       application.value = data.py3_title;
-    if (
-      data.py3_firstname &&
-      application.name === "core_membershipapplicationid"
-    )
+    if (data.py3_firstname && application.name === "py3_firstname")
       application.value = data.py3_firstname;
-    if (data.py3_lastname && application.name === "py3_firstname")
+    if (data.py3_lastname && application.py3_lastname === "py3_lastname")
       application.value = data.py3_lastname;
     if (data.py3_gender && application.name === "py3_gender")
       application.value = data.py3_gender;
-    if (data.py3_email) application.value = data.py3_email;
+    if (data.py3_email && application.name === "py3_email")
+      application.value = data.py3_email;
     if (data.py3_mobilephone && application.name === "py3_mobilephone")
       application.value = data.py3_mobilephone;
     if (data.py3_address1ine1 && application.name === "py3_address1ine1")
@@ -170,13 +170,13 @@ const updateMembershipApplication = ({ storeApplication, data }) => {
       application.value = data.py3_addressline2;
     if (data.py3_addresstowncity && application.name === "py3_addresstowncity")
       application.value = data.py3_addresstowncity;
+    if (data.py3_addresscountry && application.name === "py3_addresscountry")
+      application.value = data.py3_addresscountry;
     if (
       data.py3_addresszippostalcode &&
       application.name === "py3_addresszippostalcode"
     )
       application.value = data.py3_addresszippostalcode;
-    if (data.py3_addresscountry && application.name === "py3_addresscountry")
-      application.value = data.py3_addresscountry;
 
     //⏬ category section of the application process
   });
