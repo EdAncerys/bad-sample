@@ -75,9 +75,7 @@ export default connect(({ libraries, state, actions, toggleMobileMenu }) => {
             ...styles.navMenuItem,
             fontWeight: "bold",
           }}
-          onClick={() =>
-            setGoToAction({ path: menuContent.main_slug, actions })
-          }
+          onClick={() => setGoToAction({ path: menuContent.main_url, actions })}
         >
           <Html2React html={menuContent.main_title} />
         </Nav.Link>

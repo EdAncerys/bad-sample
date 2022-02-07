@@ -23,8 +23,6 @@ const Venue = ({ state, actions, libraries }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  const { sm, md, lg, xl } = muiQuery();
-
   const {
     about_the_venue,
     address,
