@@ -54,6 +54,7 @@ export const setUserStoreAction = async ({
     if (data.py3_firstname) storeApplication[5].value = data.py3_firstname;
     if (data.py3_lastname) storeApplication[7].value = data.py3_lastname;
     if (data.py3_gender) storeApplication[9].value = data.py3_gender;
+    if (data.py3_email) storeApplication[11].value = data.py3_email;
     console.log(storeApplication);
 
     const URL = state.auth.APP_HOST + `/store/${contactid}/applications`;

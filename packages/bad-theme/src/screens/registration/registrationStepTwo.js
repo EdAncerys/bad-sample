@@ -57,12 +57,12 @@ const RegistrationStepTwo = ({ state, actions }) => {
 
   const handleNext = async () => {
     let profilePhoto = profilePhotoRef.current.files[0];
-    // profilePhoto = bad_profile_photo_url = await sendFileToS3Action({
-    //   state,
-    //   dispatch,
-    //   attachments: profilePhoto,
-    // });
-    console.log("file upload ", profilePhoto);
+    if (profilePhoto)
+      profilePhoto = await sendFileToS3Action({
+        state,
+        dispatch,
+        attachments: profilePhoto,
+      });
     const py3_title = titleRef.current.value;
     const py3_firstname = firstNameRef.current.value;
     const py3_lastname = lastNameRef.current.value;
@@ -77,7 +77,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
     const py3_addresszippostalcode = postcodeRef.current.value;
 
     const data = {
-      // profilePhoto, // field not present + API call to S£ bucket
+      // profilePhoto, // field not present
       py3_firstname,
       py3_lastname,
       py3_title,
@@ -92,18 +92,18 @@ const RegistrationStepTwo = ({ state, actions }) => {
       py3_addresszippostalcode,
     };
 
-    // await setUserStoreAction({
-    //   state,
-    //   dispatch,
-    //   applicationData,
-    //   isActiveUser,
-    //   data,
-    // });
-    // if (isActiveUser)
-    //   setGoToAction({
-    //     path: `/membership/step-3-category-selection/`,
-    //     actions,
-    //   });
+    await setUserStoreAction({
+      state,
+      dispatch,
+      applicationData,
+      isActiveUser,
+      data,
+    });
+    if (isActiveUser)
+      setGoToAction({
+        path: `/membership/step-3-category-selection/`,
+        actions,
+      });
   };
 
   // SERVERS ---------------------------------------------
