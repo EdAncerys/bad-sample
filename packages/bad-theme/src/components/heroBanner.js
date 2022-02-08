@@ -29,7 +29,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
     content_height,
     disable_vertical_padding,
   } = block;
-
+  console.log("LAYOUT", pop_out_text);
   let BANNER_HEIGHT = state.theme.bannerHeight;
   const PADDING = state.theme.marginHorizontal;
   const FOOTER_HEIGHT = 50;
@@ -184,7 +184,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           style={{
             display: "grid",
             alignItems: "center",
-            position: "absolute",
+            position: !lg ? "absolute" : pop_out_text ? "absolute" : null,
             zIndex: 99,
             width: !lg
               ? !background_image
