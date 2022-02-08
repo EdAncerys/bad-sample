@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect } from "react";
+import { useState, useLayoutEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import parse from "html-react-parser";
@@ -523,10 +523,8 @@ const AccordionBody = ({
 
     return (
       <div>
-        <div className="shadow">
-          <label>
-            USER ID <SMF />
-          </label>
+        {/* <div className="shadow" style={{ padding: `1em`, margin: `1em 0` }}>
+          <label>USER ID</label>
           <input
             ref={idReplacement}
             type="text"
@@ -534,7 +532,7 @@ const AccordionBody = ({
             placeholder="First Name"
             style={styles.input}
           />
-        </div>
+        </div> */}
 
         <div
           className="blue-btn"

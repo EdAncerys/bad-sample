@@ -306,6 +306,5 @@ const updateMembershipApplication = ({ storeApplication, data }) => {
   // console.log("Final storeApplication Record", storeApplication); // debug
 
   console.log("newApplicationRecord-----", newApplicationRecord);
-  debugger;
   return newApplicationRecord;
 };
