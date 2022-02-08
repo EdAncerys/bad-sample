@@ -167,7 +167,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
     const ServeSearchContainer = () => {
       return (
-        <div className="flex-row">
+        <div className={!lg ? "flex-row" : "flex-col"}>
           <div
             className="flex"
             style={{
@@ -204,7 +204,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
             style={{
               display: "grid",
               alignItems: "center",
-              paddingLeft: `2em`,
+              paddingLeft: !lg ? `2em` : 0,
             }}
           >
             <button
@@ -285,7 +285,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
             padding: `1em 0`,
             alignItems: "center",
             display: "grid",
-            gridTemplateColumns: `100px 1fr 1fr 1fr`,
+            gridTemplateColumns: !lg ? `100px 1fr 1fr 1fr` : "1fr",
             gap: `1em`,
           }}
         >
@@ -395,7 +395,13 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
         }}
       >
         <BlockWrapper>
-          <div style={{ position: "relative", padding: `1em 0`, width: `70%` }}>
+          <div
+            style={{
+              position: "relative",
+              padding: `1em 0`,
+              width: !lg ? `70%` : `90%`,
+            }}
+          >
             <div className="flex-col">
               <ServeTitle />
               <ServeSearchContainer />
