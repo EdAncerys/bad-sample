@@ -22,7 +22,7 @@ const RegistrationStepFive = ({ state, actions }) => {
   const page = state.source[data.type][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser } = useAppState();
+  const { applicationData, isActiveUser, idReplacement } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -99,7 +99,9 @@ const RegistrationStepFive = ({ state, actions }) => {
     const areaInterest = areaInterestRef.current
       ? areaInterestRef.current.value
       : null;
-    const bad_includeinthebssciiemaildiscussionforum = bssciiRef.current ? bssciiRef.current.value : null;
+    const bad_includeinthebssciiemaildiscussionforum = bssciiRef.current
+      ? bssciiRef.current.value
+      : null;
     const py3_email = emailRef.current ? emailRef.current.files[0] : null;
 
     const py3_constitutionagreement = constitutionCheckRef.current
@@ -131,6 +133,7 @@ const RegistrationStepFive = ({ state, actions }) => {
       applicationData,
       isActiveUser,
       data,
+      idReplacement,
     });
     if (isActiveUser)
       setGoToAction({ path: `/membership/final-step-thank-you/`, actions });

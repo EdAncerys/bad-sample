@@ -23,7 +23,7 @@ const RegistrationStepFour = ({ state, actions }) => {
   const page = state.source[data.type][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser } = useAppState();
+  const { applicationData, isActiveUser, idReplacement } = useAppState();
 
   const [type, setType] = useState(() => {
     if (!applicationData) return null;
@@ -116,6 +116,7 @@ const RegistrationStepFour = ({ state, actions }) => {
       dispatch,
       applicationData,
       isActiveUser,
+      idReplacement,
     });
     if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };

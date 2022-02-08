@@ -11,6 +11,7 @@ export const setUserStoreAction = async ({
   applicationData,
   isActiveUser,
   data,
+  idReplacement,
 }) => {
   console.log("setUserStoreAction triggered");
   if (!isActiveUser) {
@@ -22,7 +23,10 @@ export const setUserStoreAction = async ({
   setFetchAction({ dispatch, isFetching: true });
 
   try {
-    const { contactid } = isActiveUser;
+    const contactid = idReplacement || isActiveUser.contactid;
+    // const { contactid } = isActiveUser;
+    console.log("⏬ ID overwrite ⏬", contactid);
+
     if (!contactid)
       throw new Error("Cannot set user store. Contactid is missing.");
 

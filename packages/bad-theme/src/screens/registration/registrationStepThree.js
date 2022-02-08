@@ -7,19 +7,14 @@ import SideBarMenu from "./sideBarMenu";
 import { Form } from "react-bootstrap";
 import BlockWrapper from "../../components/blockWrapper";
 // CONTEXT ----------------------------------------------------------------
-import {
-  useAppDispatch,
-  useAppState,
-  setUserStoreAction,
-  setLoginModalAction,
-} from "../../context";
+import { useAppDispatch, useAppState, setUserStoreAction } from "../../context";
 
 const RegistrationStepThree = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser } = useAppState();
+  const { applicationData, isActiveUser, idReplacement } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -84,6 +79,7 @@ const RegistrationStepThree = ({ state, actions }) => {
       applicationData,
       isActiveUser,
       data,
+      idReplacement,
     });
     if (isActiveUser)
       setGoToAction({
