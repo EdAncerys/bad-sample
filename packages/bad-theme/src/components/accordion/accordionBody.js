@@ -511,17 +511,8 @@ const AccordionBody = ({
   };
 
   const ApplyForMembership = () => {
-    if (apply_for_membership === "Disabled") return null;
-
-    let type = "";
-    if (apply_for_membership === "9a39cc47-6456-eb11-a812-000d3a28700d")
-      type = "2021 - BSMD";
-    if (apply_for_membership === "3f5e50e6-be9e-eb11-b1ac-000d3a2d9388")
-      type = "2021- BAD - Trainee";
-    if (apply_for_membership === "9f677f51-3ed3-ea11-a812-000d3a49475c")
-      type = "2021 - DC  - Honorary";
-    if (apply_for_membership === "fb581b00-3ad3-ea11-a812-000d3a4a1557")
-      type = "2021 - DC";
+    if (apply_for_membership === "Disabled" || !apply_for_membership)
+      return null;
 
     return (
       <div
@@ -529,7 +520,7 @@ const AccordionBody = ({
         style={{ width: "fit-content" }}
         onClick={handleApply}
       >
-        <Html2React html={`Apply for ${type} membership`} />
+        <Html2React html={`Apply for ${apply_for_membership} membership`} />
       </div>
     );
   };

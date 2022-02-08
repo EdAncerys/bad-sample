@@ -15,7 +15,7 @@ import {
   useAppDispatch,
   useAppState,
   setUserStoreAction,
-  setLoginModalAction,
+  sendFileToS3Action,
 } from "../../context";
 
 const RegistrationStepFour = ({ state, actions }) => {
@@ -165,7 +165,15 @@ const RegistrationStepFour = ({ state, actions }) => {
       : null;
 
     const bad_mrpcqualified = mrcpRef.current ? mrcpRef.current.value : null;
-    const cv = cvRef.current ? cvRef.current.files[0] : null;
+    let cv = cvRef.current ? cvRef.current.files[0] : null;
+    if (cv)
+      cv = await sendFileToS3Action({
+        state,
+        dispatch,
+        attachments: cv,
+      });
+    console.log("cv", cv); // debug
+
     const grade = gradeRef.current ? gradeRef.current.value : null;
     const py3_constitutionagreement = constitutionCheckRef.current
       ? constitutionCheckRef.current.checked

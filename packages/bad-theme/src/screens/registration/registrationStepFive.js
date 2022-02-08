@@ -99,10 +99,10 @@ const RegistrationStepFive = ({ state, actions }) => {
     const areaInterest = areaInterestRef.current
       ? areaInterestRef.current.value
       : null;
-    const bsscii = bssciiRef.current ? bssciiRef.current.value : null;
-    const email = emailRef.current ? emailRef.current.files[0] : null;
+    const bad_includeinthebssciiemaildiscussionforum = bssciiRef.current ? bssciiRef.current.value : null;
+    const py3_email = emailRef.current ? emailRef.current.files[0] : null;
 
-    const constitutionCheck = constitutionCheckRef.current
+    const py3_constitutionagreement = constitutionCheckRef.current
       ? constitutionCheckRef.current.value
       : null;
     const privacyNotice = privacyNoticeRef.current
@@ -119,9 +119,9 @@ const RegistrationStepFive = ({ state, actions }) => {
       description,
       specialties,
       areaInterest,
-      bsscii,
-      email,
-      constitutionCheck,
+      bad_includeinthebssciiemaildiscussionforum,
+      py3_email,
+      py3_constitutionagreement,
       privacyNotice,
     };
 
