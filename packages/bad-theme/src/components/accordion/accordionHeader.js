@@ -58,7 +58,7 @@ const AccordionHeader = ({
 
       return (
         <div
-          className="flex"
+          className={!lg ? "flex" : "flex-col"}
           style={{
             fontStyle: "italic",
             padding: !lg ? `0 2em` : 0,
@@ -66,6 +66,7 @@ const AccordionHeader = ({
             fontWeight: "normal",
           }}
         >
+          <ServeLogo />
           <Html2React html={subtitle} />
         </div>
       );
@@ -260,7 +261,7 @@ const AccordionHeader = ({
             <ServeGSTitle />
             <ServeLTTitle />
 
-            <ServeLogo />
+            {!lg ? <ServeLogo /> : null}
             {!lg ? <ServeNICELogo /> : null}
             <ServeIcon />
           </div>
