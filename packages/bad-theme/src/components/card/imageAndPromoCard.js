@@ -58,7 +58,7 @@ const ImageAndPromoCard = ({
     if (!body) return null;
 
     return (
-      <div className="flex-col" style={{ padding: `2em` }}>
+      <div className="flex-col" style={{ padding: !lg ? `2em` : `1em` }}>
         <div className="flex-col">
           <ServeTitle />
           <ServeBody />
@@ -92,7 +92,7 @@ const ImageAndPromoCard = ({
       style={{
         display: "grid",
         gridTemplateColumns: !lg ? `repeat(2, 1fr)` : `repeat(1, 1fr)`,
-        gap: 20,
+        gap: !lg ? 20 : 0,
       }}
     >
       <ServeCardImage />
