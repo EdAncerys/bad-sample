@@ -10,7 +10,11 @@ import { colors } from "../../config/imports";
 
 import CloseIcon from "@mui/icons-material/Close";
 
+import { muiQuery } from "../../context";
+
 const Events = ({ state, actions, libraries, block }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   console.log("EVENTS BLOCK: ", block);
   const [grades, setGrades] = useState(null); // data
   const [locations, setLocations] = useState(null); // data
@@ -64,7 +68,7 @@ const Events = ({ state, actions, libraries, block }) => {
       return (
         <div
           className="primary-title"
-          style={{ fontSize: 20, paddingRight: `2em` }}
+          style={{ fontSize: 20, paddingRight: !lg ? `2em` : 0 }}
         >
           Filter:
         </div>
@@ -75,7 +79,10 @@ const Events = ({ state, actions, libraries, block }) => {
       if (!grades) return null;
 
       return (
-        <div className="flex" style={{ paddingRight: `1em` }}>
+        <div
+          className="flex"
+          style={{ paddingRight: !lg ? `1em` : 0, width: "100%" }}
+        >
           <Form.Select ref={gradeRef} style={styles.input}>
             <option value="" hidden>
               Event Grades
@@ -96,7 +103,10 @@ const Events = ({ state, actions, libraries, block }) => {
       if (!locations) return null;
 
       return (
-        <div className="flex">
+        <div
+          className="flex"
+          style={{ marginTop: !lg ? null : "1em", width: "100%" }}
+        >
           <Form.Select ref={locationRef} style={styles.input}>
             <option value="" hidden>
               Location
@@ -114,7 +124,10 @@ const Events = ({ state, actions, libraries, block }) => {
     };
 
     return (
-      <div className="flex" style={{ padding: `1em 0`, alignItems: "center" }}>
+      <div
+        className={!lg ? "flex" : "flex-col"}
+        style={{ padding: `1em 0`, alignItems: !lg ? "center" : "flex-start" }}
+      >
         <ServeTitle />
         <ServeGradeFilter />
         <ServeLocationFilter />
@@ -189,7 +202,7 @@ const Events = ({ state, actions, libraries, block }) => {
 
     return (
       <div style={{ position: "relative" }}>
-        <div className="flex-col" style={{ width: "70%" }}>
+        <div className="flex-col" style={{ width: !lg ? "70%" : "100%" }}>
           <SearchContainer
             searchFilterRef={searchFilterRef}
             handleSearch={handleSearch}

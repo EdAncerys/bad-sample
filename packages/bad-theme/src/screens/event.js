@@ -270,12 +270,19 @@ const Event = ({ state, actions, libraries }) => {
 
   const ServeSocials = () => {
     return (
-      <div className="flex-col" style={{ width: `50%` }}>
+      <div className="flex-col" style={{ width: !lg ? `50%` : `100%` }}>
         <div
-          className="flex-row"
-          style={{ justifyContent: "space-between", padding: `2em 0` }}
+          className={!lg ? "flex-row" : "flex-col"}
+          style={{
+            flexDirection: "column-reverse",
+            justifyContent: "space-between",
+            padding: `2em 0 0 0`,
+          }}
         >
-          <div className="primary-title" style={{ fontSize: 20 }}>
+          <div
+            className="primary-title"
+            style={{ fontSize: 20, marginTop: !lg ? null : "1em" }}
+          >
             Share
           </div>
           <div className="primary-title" style={{ fontSize: 20 }}>
@@ -326,10 +333,10 @@ const Event = ({ state, actions, libraries }) => {
     <BlockWrapper>
       <div style={{ backgroundColor: colors.white }}>
         <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
-          <div style={styles.container}>
+          <div style={!lg ? styles.container : styles.containerMobile}>
             <div>
               <ServeTitle />
-              <div style={styles.eventInfo}>
+              <div style={!lg ? styles.eventInfo : styles.eventInfoMobile}>
                 <ServeImage />
                 <ServeEventInfo />
               </div>
@@ -378,9 +385,19 @@ const styles = {
     gridTemplateColumns: `2fr 1fr`,
     gap: 20,
   },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
+    gap: 20,
+  },
   eventInfo: {
     display: "grid",
     gridTemplateColumns: `1fr 1fr`,
+    gap: 40,
+  },
+  eventInfoMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
     gap: 40,
   },
   date: {
