@@ -18,42 +18,35 @@ const RegistrationStepOne = ({ state, actions }) => {
   const page = state.source[data.type][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser } = useAppState();
+  const { applicationData, isActiveUser, idReplacement } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
   // HANDLERS --------------------------------------------
   const handleSaveExit = async () => {
-  
-
     await setUserStoreAction({
       state,
       dispatch,
       applicationData,
       isActiveUser,
+      idReplacement,
     });
-    if(isActiveUser) setGoToAction({ path: `/membership/`, actions });
+    if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
   const handleNext = async () => {
-   
-
-    const data = {
-      stepOne: true,
-    };
-
     await setUserStoreAction({
       state,
       dispatch,
       applicationData,
       isActiveUser,
-      data,
     });
-    if(isActiveUser) setGoToAction({
-      path: `/membership/step-2-personal-information/`,
-      actions,
-    });
+    if (isActiveUser)
+      setGoToAction({
+        path: `/membership/step-2-personal-information/`,
+        actions,
+      });
   };
 
   // SERVERS ---------------------------------------------

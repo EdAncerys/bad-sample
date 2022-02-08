@@ -9,7 +9,6 @@ import SideBarMenu from "./sideBarMenu";
 import FileUpload from "../../img/svg/fileUpload.svg";
 import BlockWrapper from "../../components/blockWrapper";
 
-import { UK_HOSPITALS } from "../../config/data";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -23,7 +22,7 @@ const RegistrationStepFive = ({ state, actions }) => {
   const page = state.source[data.type][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser } = useAppState();
+  const { applicationData, isActiveUser, idReplacement } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -69,21 +68,27 @@ const RegistrationStepFive = ({ state, actions }) => {
       applicationData,
       isActiveUser,
     });
-    if(isActiveUser) setGoToAction({ path: `/membership/`, actions });
+    if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
   const handleNext = async () => {
-    const qualification = qualificationRef.current
+    const bad_qualifications = qualificationRef.current
       ? qualificationRef.current.value
       : null;
-    const license = licenseRef.current ? licenseRef.current.value : null;
-    const mrcp = mrcpRef.current ? mrcpRef.current.value : null;
-    const badMember = badMemberRef.current ? badMemberRef.current.value : null;
+    const bad_hasmedicallicence = licenseRef.current
+      ? licenseRef.current.value
+      : null;
+    const bad_mrpcqualified = mrcpRef.current ? mrcpRef.current.value : null;
+    const bad_isbadmember = badMemberRef.current
+      ? badMemberRef.current.value
+      : null;
 
     const myLocation = myLocationRef.current
       ? myLocationRef.current.value
       : null;
-    const interest = interestRef.current ? interestRef.current.value : null;
+    const bad_interestinfieldquestion = interestRef.current
+      ? interestRef.current.value
+      : null;
     const description = descriptionRef.current
       ? descriptionRef.current.value
       : null;
@@ -94,10 +99,12 @@ const RegistrationStepFive = ({ state, actions }) => {
     const areaInterest = areaInterestRef.current
       ? areaInterestRef.current.value
       : null;
-    const bsscii = bssciiRef.current ? bssciiRef.current.value : null;
-    const email = emailRef.current ? emailRef.current.files[0] : null;
+    const bad_includeinthebssciiemaildiscussionforum = bssciiRef.current
+      ? bssciiRef.current.value
+      : null;
+    const py3_email = emailRef.current ? emailRef.current.files[0] : null;
 
-    const constitutionCheck = constitutionCheckRef.current
+    const py3_constitutionagreement = constitutionCheckRef.current
       ? constitutionCheckRef.current.value
       : null;
     const privacyNotice = privacyNoticeRef.current
@@ -105,20 +112,19 @@ const RegistrationStepFive = ({ state, actions }) => {
       : null;
 
     const data = {
-      qualification,
-      license,
-      mrcp,
-      badMember,
+      bad_qualifications,
+      bad_hasmedicallicence,
+      bad_mrpcqualified,
+      bad_isbadmember,
       myLocation,
-      interest,
+      bad_interestinfieldquestion,
       description,
       specialties,
       areaInterest,
-      bsscii,
-      email,
-      constitutionCheck,
+      bad_includeinthebssciiemaildiscussionforum,
+      py3_email,
+      py3_constitutionagreement,
       privacyNotice,
-      stepFive: true,
     };
 
     await setUserStoreAction({
@@ -127,8 +133,10 @@ const RegistrationStepFive = ({ state, actions }) => {
       applicationData,
       isActiveUser,
       data,
+      idReplacement,
     });
-    if(isActiveUser) setGoToAction({ path: `/membership/final-step-thank-you/`, actions });
+    if (isActiveUser)
+      setGoToAction({ path: `/membership/final-step-thank-you/`, actions });
   };
 
   const SMF = () => {

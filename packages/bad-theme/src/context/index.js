@@ -5,6 +5,7 @@ import {
   setFetchAction,
   setErrorAction,
   setApplicationDataAction,
+  setUserIDReplacementAction,
 } from "./actions/actions";
 import { muiQuery } from "./mediaQueryContext";
 import {
@@ -25,7 +26,11 @@ import { getFadAction } from "./auth/getFAD";
 import { updateProfileAction } from "./auth/updateProfile";
 import { updateAddressAction } from "./auth/updateAddress";
 import { sendFileToS3Action } from "./auth/saveFileToS3";
-import { setUserStoreAction, getUserStoreAction } from "./auth/userStore";
+import {
+  setUserStoreAction,
+  getUserStoreAction,
+  setCompleteUserApplicationAction,
+} from "./auth/userStore";
 import { getWileyAction } from "./auth/getWiley";
 import {
   getBJDFeedAction,
@@ -63,4 +68,6 @@ export {
   setUserStoreAction,
   getUserStoreAction,
   getWileyAction,
+  setCompleteUserApplicationAction,
+  setUserIDReplacementAction,
 };

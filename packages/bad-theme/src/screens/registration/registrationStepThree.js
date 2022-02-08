@@ -7,32 +7,37 @@ import SideBarMenu from "./sideBarMenu";
 import { Form } from "react-bootstrap";
 import BlockWrapper from "../../components/blockWrapper";
 // CONTEXT ----------------------------------------------------------------
-import {
-  useAppDispatch,
-  useAppState,
-  setUserStoreAction,
-  setLoginModalAction,
-} from "../../context";
+import { useAppDispatch, useAppState, setUserStoreAction } from "../../context";
 
 const RegistrationStepThree = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser } = useAppState();
+  const { applicationData, isActiveUser, idReplacement } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
   const [type, setType] = useState(() => {
-    if (applicationData && applicationData.type) return applicationData.type;
-    return "";
+    if (!applicationData) return null;
+    let applicationType = "";
+    applicationData.map((data) => {
+      if (data.name === "core_name") applicationType = data.value;
+    });
+
+    return applicationType;
   });
 
   const [category, setCategory] = useState(() => {
-    if (applicationData && applicationData.apply_for_membership)
-      return applicationData.apply_for_membership;
-    return "";
+    if (!applicationData) return null;
+    let applicationCategory = "";
+    applicationData.map((data) => {
+      if (data.name === "core_membershipsubscriptionplanid")
+        applicationCategory = data.value;
+    });
+
+    return applicationCategory;
   });
 
   const typeRef = useRef(null);
@@ -46,7 +51,7 @@ const RegistrationStepThree = ({ state, actions }) => {
       applicationData,
       isActiveUser,
     });
-    if(isActiveUser) setGoToAction({ path: `/membership/`, actions });
+    if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
   const handleTypeChange = (e) => {
@@ -58,15 +63,14 @@ const RegistrationStepThree = ({ state, actions }) => {
   };
 
   const handleNext = async () => {
-    const type = typeRef.current ? typeRef.current.value : null;
-    const apply_for_membership = categoryRef.current
+    const core_name = typeRef.current ? typeRef.current.value : null;
+    const core_membershipapplicationid = categoryRef.current
       ? categoryRef.current.value
       : null;
 
     const data = {
-      type,
-      apply_for_membership,
-      stepThree: true,
+      core_name,
+      core_membershipapplicationid,
     };
 
     await setUserStoreAction({
@@ -75,11 +79,13 @@ const RegistrationStepThree = ({ state, actions }) => {
       applicationData,
       isActiveUser,
       data,
+      idReplacement,
     });
-    if(isActiveUser) setGoToAction({
-      path: `/membership/step-4-professional-details/`,
-      actions,
-    });
+    if (isActiveUser)
+      setGoToAction({
+        path: `/membership/step-4-professional-details/`,
+        actions,
+      });
   };
 
   // SERVERS ---------------------------------------------
@@ -116,7 +122,7 @@ const RegistrationStepThree = ({ state, actions }) => {
 
   const ServeForm = () => {
     const ServeBADMembershipCategory = () => {
-      if (type !== "BAD Membership") return null;
+      if (type !== "810170000") return null;
 
       return (
         <div>
@@ -130,25 +136,37 @@ const RegistrationStepThree = ({ state, actions }) => {
             <option value="null" hidden>
               Membership Category
             </option>
-            <option value="Ordinary">Ordinary</option>
-            <option value="Trainee">Trainee</option>
-            <option value="Associate Trainee">Associate Trainee</option>
-            <option value="Honorary">Honorary</option>
-            <option value="Associate">Associate</option>
-            <option value="GP">GP</option>
-            <option value="Student">Student</option>
-            <option value="Scientist and Allied Healthcare Professionals">
-              Scientist and Allied Healthcare Professionals
+            {/* <option value="810170027">Ordinary</option>
+            <option value="370410000">Ordinary SAS</option>
+            <option value="810170029">Career Grade</option>
+            <option value="810170005">Trainee</option>
+            <option value="810170000">Honorary</option>
+            <option value="810170010">Associate</option>
+            <option value="810170008">Associate Trainee</option>
+            <option value="810170013">Associate Overseas</option>
+            <option value="810170011">GP</option>
+            <option value="810170016">Student</option>
+            <option value="810170012">Allied Healthcare Professional</option> */}
+
+            <option value="9a39cc47-6456-eb11-a812-000d3a28700d">
+              2021 - BSMD
             </option>
-            <option value="Honorary Overseas">Honorary Overseas</option>
-            <option value="Retired">Retired</option>
+            <option value="3f5e50e6-be9e-eb11-b1ac-000d3a2d9388">
+              2021- BAD - Trainee
+            </option>
+            <option value="9f677f51-3ed3-ea11-a812-000d3a49475c">
+              2021 - DC - Honorary
+            </option>
+            <option value="fb581b00-3ad3-ea11-a812-000d3a4a1557">
+              2021 - DC
+            </option>
           </Form.Select>
         </div>
       );
     };
 
     const ServeSIGMembershipCategory = () => {
-      if (type !== "SIG Membership") return null;
+      if (type !== "810170001") return null;
 
       return (
         <div>
@@ -159,7 +177,7 @@ const RegistrationStepThree = ({ state, actions }) => {
             value={category}
             onChange={(e) => handleCategoryChange(e)}
           >
-            <option value="null" hidden>
+            {/* <option value="null" hidden>
               Membership Category
             </option>
             <option value="British Cosmetic Dermatology Group">
@@ -211,7 +229,20 @@ const RegistrationStepThree = ({ state, actions }) => {
               British Society for Skin Care in Immunocompromised Individuals
             </option>
             <option value="The Dowling Club">The Dowling Club</option>
-            <option value="DERMPATHPRO">DERMPATHPRO</option>
+            <option value="DERMPATHPRO">DERMPATHPRO</option> */}
+
+            <option value="9a39cc47-6456-eb11-a812-000d3a28700d">
+              2021 - BSMD
+            </option>
+            <option value="3f5e50e6-be9e-eb11-b1ac-000d3a2d9388">
+              2021- BAD - Trainee
+            </option>
+            <option value="9f677f51-3ed3-ea11-a812-000d3a49475c">
+              2021 - DC - Honorary
+            </option>
+            <option value="fb581b00-3ad3-ea11-a812-000d3a4a1557">
+              2021 - DC
+            </option>
           </Form.Select>
         </div>
       );
@@ -238,8 +269,8 @@ const RegistrationStepThree = ({ state, actions }) => {
           <option value="null" hidden>
             Membership Type
           </option>
-          <option value="BAD Membership">BAD Membership</option>
-          <option value="SIG Membership">SIG Membership</option>
+          <option value="810170000">BAD Membership</option>
+          <option value="810170001">SIG Membership</option>
         </Form.Select>
 
         <ServeBADMembershipCategory />

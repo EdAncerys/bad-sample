@@ -32,6 +32,8 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   const { content, title, acf } = dermGroupe;
   const { apply_for_membership } = dermGroupe.acf;
 
+  console.log(dermGroupe.acf);
+
   // HANDLERS --------------------------------------------------
   const handleApply = async () => {
     await setUserStoreAction({
@@ -39,14 +41,20 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
       dispatch,
       applicationData,
       isActiveUser,
-      data: { type: "SIG Membership", apply_for_membership },
+      data: {
+        core_name: "810170001", // "Label": "BAD" readonly FIELD!
+        core_membershipsubscriptionplanid: apply_for_membership, // type of membership for application
+        bad_applicationfor: "810170000", // silent assignment
+      },
     });
-    if(isActiveUser) setGoToAction({ path: `/membership/step-1-the-process/`, actions });
+    if (isActiveUser)
+      setGoToAction({ path: `/membership/step-1-the-process/`, actions });
   };
 
   // SERVERS ---------------------------------------------------
   const ApplyForMembership = () => {
-    if (apply_for_membership === "Disabled") return null;
+    if (apply_for_membership === "Disabled" || !apply_for_membership)
+      return null;
 
     return (
       <div

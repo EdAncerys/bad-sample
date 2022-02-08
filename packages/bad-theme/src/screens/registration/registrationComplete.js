@@ -11,14 +11,19 @@ import BlockWrapper from "../../components/blockWrapper";
 
 import { ETHNIC_GROUPES } from "../../config/data";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setUserStoreAction } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setUserStoreAction,
+  setCompleteUserApplicationAction,
+} from "../../context";
 
 const RegistrationComplete = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser } = useAppState();
+  const { applicationData, isActiveUser, idReplacement } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -27,11 +32,10 @@ const RegistrationComplete = ({ state, actions }) => {
 
   // HANDLERS --------------------------------------------
   const handleExit = async () => {
-    const ethnicGroup = ethnicGroupRef.current.value;
+    const py3_gender = ethnicGroupRef.current.value;
 
     const data = {
-      ethnicGroup,
-      stepComplete: true,
+      py3_gender,
     };
 
     await setUserStoreAction({
@@ -40,8 +44,15 @@ const RegistrationComplete = ({ state, actions }) => {
       applicationData,
       isActiveUser,
       data,
+      idReplacement,
     });
-    if(isActiveUser) setGoToAction({ path: `/membership/`, actions });
+    await setCompleteUserApplicationAction({
+      state,
+      isActiveUser,
+      applicationData,
+    });
+    await setCompleteUserApplicationAction({ state, isActiveUser });
+    if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
   // SERVERS ---------------------------------------------

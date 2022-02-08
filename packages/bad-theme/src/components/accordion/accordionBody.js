@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect } from "react";
+import { useState, useLayoutEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import parse from "html-react-parser";
@@ -14,7 +14,7 @@ import {
   setGoToAction,
   sendEmailEnquireAction,
   setUserStoreAction,
-  setLoginModalAction,
+  setUserIDReplacementAction,
 } from "../../context";
 
 const AccordionBody = ({
@@ -32,6 +32,8 @@ const AccordionBody = ({
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser } = useAppState();
 
+  const idReplacement = useRef(null);
+
   const ALL_POSITIONS = Object.values(state.source.leadership_position);
   const ICON_WIDTH = 35;
   const {
@@ -48,13 +50,25 @@ const AccordionBody = ({
 
   // HANDLERS ----------------------------------------------------
   const handleApply = async () => {
+    console.log("apply_for_membership", apply_for_membership); // debug
+    setUserIDReplacementAction({
+      dispatch,
+      idReplacement: idReplacement.current,
+    });
+
     await setUserStoreAction({
       state,
       dispatch,
       applicationData,
       isActiveUser,
-      data: { type: "BAD Membership", apply_for_membership },
+      data: {
+        core_name: "810170000", // "Label": "BAD" readonly FIELD!
+        core_membershipsubscriptionplanid: apply_for_membership, // type of membership for application
+        bad_applicationfor: "810170000", // silent assignment
+      },
+      idReplacement: idReplacement.current,
     });
+
     if (isActiveUser)
       setGoToAction({ path: `/membership/step-1-the-process/`, actions });
   };
@@ -504,15 +518,29 @@ const AccordionBody = ({
   };
 
   const ApplyForMembership = () => {
-    if (apply_for_membership === "Disabled") return null;
+    if (apply_for_membership === "Disabled" || !apply_for_membership)
+      return null;
 
     return (
-      <div
-        className="blue-btn"
-        style={{ width: "fit-content" }}
-        onClick={handleApply}
-      >
-        <Html2React html={`Apply for ${apply_for_membership} membership`} />
+      <div>
+        {/* <div className="shadow" style={{ padding: `1em`, margin: `1em 0` }}>
+          <label>USER ID</label>
+          <input
+            ref={idReplacement}
+            type="text"
+            className="form-control"
+            placeholder="First Name"
+            style={styles.input}
+          />
+        </div> */}
+
+        <div
+          className="blue-btn"
+          style={{ width: "fit-content" }}
+          onClick={handleApply}
+        >
+          <Html2React html={`Apply for ${apply_for_membership} membership`} />
+        </div>
       </div>
     );
   };

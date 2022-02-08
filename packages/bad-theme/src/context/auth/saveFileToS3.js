@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 import { authenticateAppAction, setFetchAction } from "../index";
 
 export const sendFileToS3Action = async ({ state, dispatch, attachments }) => {
@@ -8,7 +9,7 @@ export const sendFileToS3Action = async ({ state, dispatch, attachments }) => {
   const jwt = await authenticateAppAction({ state });
 
   const form = new FormData(); // create form object to sent email content & attachments
-  form.append("profile", attachments, attachments.name);
+  form.append("profile", attachments, uuidv4());
 
   const requestOptions = {
     method: "PUT",
