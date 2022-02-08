@@ -107,15 +107,16 @@ const AccordionHeader = ({
 
     return (
       <div
-        className="flex"
+        className={!lg ? "flex" : "flex-row"}
         style={{
-          paddingLeft: `2em`,
+          fontSize: !lg ? null : 12,
+          paddingLeft: !lg ? `2em` : 0,
           color: colors.softBlack,
           alignItems: "center",
         }}
       >
         <div>
-          Published <Html2React html={gsPublished_date} />
+          {!lg ? "Published" : null} <Html2React html={gsPublished_date} />
         </div>
         <ServeGSUpdateInProgress />
       </div>
@@ -126,10 +127,14 @@ const AccordionHeader = ({
     if (!gsTitle) return null;
 
     return (
-      <div className="flex" style={{ alignItems: "center" }}>
+      <div
+        className={!lg ? "flex" : "flex-col"}
+        style={{ alignItems: !lg ? "center" : "flex-start" }}
+      >
+        {!lg ? null : <ServeNICELogo />}
         <div
           className="primary-title"
-          style={{ fontSize: 20, alignItems: "center" }}
+          style={{ fontSize: 20, alignItems: !lg ? "center" : "flex-start" }}
         >
           <Html2React html={gsTitle} />
         </div>
@@ -188,11 +193,15 @@ const AccordionHeader = ({
     return (
       <div
         style={{
-          padding: `0.25em`,
-          margin: `0 4em 0 1em`,
+          padding: !lg ? `0.25em` : 0,
+          margin: !lg ? `0 4em 0 1em` : 0,
         }}
       >
-        <Image src={NiceLogo} alt={alt} style={{ height: LOGO_HEIGHT }} />
+        <Image
+          src={NiceLogo}
+          alt={alt}
+          style={{ height: !lg ? LOGO_HEIGHT : LOGO_HEIGHT / 2 }}
+        />
       </div>
     );
   };
@@ -252,7 +261,7 @@ const AccordionHeader = ({
             <ServeLTTitle />
 
             <ServeLogo />
-            <ServeNICELogo />
+            {!lg ? <ServeNICELogo /> : null}
             <ServeIcon />
           </div>
         </div>

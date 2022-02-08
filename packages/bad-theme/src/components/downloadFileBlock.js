@@ -10,7 +10,7 @@ import DOC from "../img/svg/badDOC.svg";
 import PPT from "../img/svg/badPPT.svg";
 import XLS from "../img/svg/badXLS.svg";
 // CONTEXT ---------------------------------------------
-import { setGoToAction } from "../context";
+import { setGoToAction, muiQuery } from "../context";
 
 const DownloadFileBlock = ({
   state,
@@ -21,6 +21,7 @@ const DownloadFileBlock = ({
   disableMargin,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  const { sm, md, lg, xl } = muiQuery();
 
   if (!block) return null;
 
@@ -72,7 +73,7 @@ const DownloadFileBlock = ({
           style={styles.link}
           download
         >
-          <Html2React html={fileName} />
+          {!lg ? <Html2React html={fileName} /> : "Download file"}
         </a>
       </div>
     );
