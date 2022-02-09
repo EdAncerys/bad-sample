@@ -191,7 +191,11 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
                 ? CONTENT_WIDTH / 1.5
                 : CONTENT_WIDTH / 2
               : CONTENT_WIDTH, // if no img provided defaults to diff width
-            height: BANNER_HEIGHT,
+            height: !lg
+              ? BANNER_HEIGHT
+              : background_image
+              ? BANNER_HEIGHT
+              : "5em",
           }}
         >
           <FullWidthContentBlock block={block} heroBanner />
