@@ -23,17 +23,16 @@ const Post = ({ state, actions, libraries }) => {
   const { press_release_authors } = post.acf;
 
   // SERVERS ---------------------------------------------
+  const ServeTitle = () => {
+    if (!title) return null;
+
+    return (
+      <div className="flex primary-title" style={{ fontSize: !lg ? 36 : 25 }}>
+        <Html2React html={title.rendered} />
+      </div>
+    );
+  };
   const ServeContent = () => {
-    const ServeTitle = () => {
-      if (!title) return null;
-
-      return (
-        <div className="flex primary-title" style={{ fontSize: !lg ? 36 : 25 }}>
-          <Html2React html={title.rendered} />
-        </div>
-      );
-    };
-
     const ServeBody = () => {
       if (!content) return null;
 
@@ -46,7 +45,7 @@ const Post = ({ state, actions, libraries }) => {
 
     return (
       <div className="text-body">
-        <ServeTitle />
+        {!lg ? <ServeTitle /> : null}
         <ServeBody />
       </div>
     );
@@ -70,15 +69,25 @@ const Post = ({ state, actions, libraries }) => {
   return (
     <BlockWrapper>
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: `2.5fr 1fr`,
-          gap: 20,
-          padding: `${marginVertical}px ${marginHorizontal}px`,
-        }}
+        style={
+          !lg
+            ? {
+                display: "grid",
+                gridTemplateColumns: `2.5fr 1fr`,
+                gap: 20,
+                padding: `${marginVertical}px ${marginHorizontal}px`,
+              }
+            : {
+                display: "flex",
+                flexDirection: "column-reverse",
+                gap: 20,
+                padding: `${marginVertical}px ${marginHorizontal}px`,
+              }
+        }
       >
         <ServeContent />
         <ServeSideBar />
+        {!lg ? null : <ServeTitle />}
       </div>
     </BlockWrapper>
   );
