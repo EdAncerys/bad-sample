@@ -81,19 +81,19 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     clearYear,
   }) => {
     if (clearInput) {
-      searchFilterRef.current = null;
+      searchFilterRef.current.value = "";
       setSearchValue(null);
     }
     if (clearCategory) {
-      categoryFilterRef.current = null;
+      categoryFilterRef.current.value = "";
       setCategoryValue(null);
     }
     if (clearDate) {
-      dateFilterRef.current = null;
+      dateFilterRef.current.value = "";
       setDateValue(null);
     }
     if (clearYear) {
-      yearFilterRef.current = null;
+      yearFilterRef.current.value = "";
       setYearValue(null);
     }
 
@@ -110,53 +110,43 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   };
 
   const handleSearch = () => {
-    const searchInput = searchFilterRef.current.value;
+    const input = searchFilterRef.current.value.toLowerCase();
 
-    const categoryInput = categoryFilterRef.current.value;
-    const dateInput = dateFilterRef.current.value;
-    const yearInput = yearFilterRef.current.value;
-
-    console.log("searchInput", searchInput);
-    console.log("categoryInput", categoryInput);
-    console.log("dateInput", dateInput);
-    console.log("yearInput", yearInput);
+    const category = categoryFilterRef.current.value;
+    const date = dateFilterRef.current.value;
+    const year = yearFilterRef.current.value;
 
     let filter = Object.values(state.source.post);
 
-    if (searchInput) {
-      const INPUT = searchInput.toLowerCase();
+    if (input) {
+      const INPUT = input.toLowerCase();
       filter = filter.filter((news) =>
         news.title.rendered.toLowerCase().includes(INPUT)
       );
     }
 
-    const searchCategoryValue = !!categoryInput
-      ? categoryInput
-      : categoryFilterRef.current;
-    if (searchCategoryValue)
+    if (category)
       filter = filter.filter((news) =>
-        news.categories.includes(Number(searchCategoryValue))
+        news.categories.includes(Number(category))
       );
 
     // apply date filter
-    const searchDateValue = !!dateInput ? dateInput : dateFilterRef.current;
-    if (searchDateValue === "Date Descending")
+    if (date === "Date Descending")
       filter = filter.sort((a, b) => new Date(b.date) - new Date(a.date));
-    if (searchDateValue === "Date Ascending")
+    if (date === "Date Ascending")
       filter = filter.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    const searchYearValue = !!yearInput ? yearInput : yearFilterRef.current;
-    if (searchYearValue)
+    if (year)
       filter = filter.filter(
-        (news) => new Date(news.date).getFullYear() === Number(searchYearValue)
+        (news) => new Date(news.date).getFullYear() === Number(year)
       );
 
-    console.log(filter);
-    if (searchInput) setSearchValue(searchInput);
-    if (categoryInput) setSearchValue(setCategoryValue);
-    if (dateInput) setDateValue(dateInput);
-    if (yearInput) setYearValue(yearInput);
-    // setFilterList(filter);
+    if (input) setSearchValue(input);
+    if (category) setCategoryValue(category);
+    if (date) setDateValue(date);
+    if (year) setYearValue(year);
+
+    setFilterList(filter);
   };
 
   // SERVERS ---------------------------------------------
@@ -174,60 +164,6 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       );
     };
 
-
-
-    
-
-    const ServeSearchContainer = () => {
-      return (
-        <div className="flex-row">
-          <div
-            className="flex"
-            style={{
-              flex: 1,
-              height: ctaHeight,
-              position: "relative",
-              margin: "auto 0",
-            }}
-          >
-            <input
-              id={`search-input-${uniqueId}`}
-              type="text"
-              className="form-control"
-              placeholder="Find An Event"
-              style={styles.input}
-            />
-            <div
-              className="input-group-text toggle-icon-color"
-              style={{
-                position: "absolute",
-                right: 0,
-                height: ctaHeight,
-                border: "none",
-                background: "transparent",
-                alignItems: "center",
-                color: colors.darkSilver,
-                cursor: "pointer",
-              }}
-            >
-              <SearchIcon />
-            </div>
-          </div>
-          <div
-            style={{
-              display: "grid",
-              alignItems: "center",
-              paddingLeft: `2em`,
-            }}
-          >
-            <button type="submit" className="blue-btn" onClick={handleSearch}>
-              Search
-            </button>
-          </div>
-        </div>
-      );
-    };
-
     const ServeFilters = () => {
       const ServeTitle = () => {
         return (
@@ -240,7 +176,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       const ServeCategoryFilter = () => {
         return (
           <Form.Select ref={categoryFilterRef} style={styles.input}>
-            <option value="null" hidden>
+            <option value="" hidden>
               Category
             </option>
             {categoryList.map((item, key) => {
@@ -257,7 +193,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       const ServeDateFilter = () => {
         return (
           <Form.Select ref={dateFilterRef} style={styles.input}>
-            <option value="null" hidden>
+            <option value="" hidden>
               Sort By
             </option>
             <option value="Date Descending">Date Descending</option>
@@ -274,7 +210,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
         return (
           <Form.Select ref={yearFilterRef} style={styles.input}>
-            <option value="null" hidden>
+            <option value="" hidden>
               Filter By Year
             </option>
             {years.map((year, key) => {
@@ -311,7 +247,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
       return (
         <div className="shadow filter">
-          <div>{searchFilterRef.current}</div>
+          <div>{searchValue}</div>
           <div
             className="filter-icon"
             onClick={() => handleClearFilter({ clearInput: true })}
@@ -330,14 +266,15 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     const ServeSelectedCategoryFilter = () => {
       if (!categoryValue) return null;
 
-      let value = categoryList.filter(
-        (category) => category.id === Number(categoryFilterRef.current)
+      let catName = categoryList.filter(
+        (category) => category.id === Number(categoryValue)
       );
+      catName = catName[0] ? catName[0].name : "N/A";
 
       return (
         <div className="shadow filter">
           <div>
-            <Html2React html={value[0].name} />
+            <Html2React html={catName} />
           </div>
           <div
             className="filter-icon"
@@ -359,7 +296,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
       return (
         <div className="shadow filter">
-          <div>{dateFilterRef.current}</div>
+          <div>{dateValue}</div>
           <div
             className="filter-icon"
             onClick={() => handleClearFilter({ clearDate: true })}
@@ -380,7 +317,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
       return (
         <div className="shadow filter">
-          <div>{yearFilterRef.current}</div>
+          <div>{yearValue}</div>
           <div
             className="filter-icon"
             onClick={() => handleClearFilter({ clearYear: true })}
