@@ -185,24 +185,24 @@ const RegistrationStepFour = ({ state, actions }) => {
 
     const data = {
       py3_gmcnumber,
-      registrationNumber, // TBD
+      registrationNumber, // TBC
       py3_ntnno,
       bad_currentpost,
       py3_hospitalid,
       bad_medicalschool,
       py3_alternativelastname,
-      smOneFirstName,
-      smOneEmail,
-      smOneConfirmEmail,
-      smTwoLastName,
-      smTwoFirstName,
-      smTwoEmail,
-      smTwoConfirmEmail,
+      smOneFirstName, // TBC
+      smOneEmail, // TBC
+      smOneConfirmEmail, // TBC
+      smTwoLastName, // TBC
+      smTwoFirstName, // TBC
+      smTwoEmail, // TBC
+      smTwoConfirmEmail, // TBC
       bad_mrpcqualified,
-      cv,
-      grade,
+      cv, // TBC
+      grade, // TBC
       py3_constitutionagreement,
-      privacyNotice,
+      privacyNotice, // TBC
     };
 
     await setUserStoreAction({

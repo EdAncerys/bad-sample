@@ -102,7 +102,9 @@ const RegistrationStepFive = ({ state, actions }) => {
     const bad_includeinthebssciiemaildiscussionforum = bssciiRef.current
       ? bssciiRef.current.value
       : null;
-    const py3_email = emailRef.current ? emailRef.current.files[0] : null;
+    const py3_insertnhsnetemailaddress = emailRef.current
+      ? emailRef.current.files[0]
+      : null;
 
     const py3_constitutionagreement = constitutionCheckRef.current
       ? constitutionCheckRef.current.value
@@ -116,15 +118,15 @@ const RegistrationStepFive = ({ state, actions }) => {
       bad_hasmedicallicence,
       bad_mrpcqualified,
       bad_isbadmember,
-      myLocation,
+      myLocation, // TBC
       bad_interestinfieldquestion,
-      description,
-      specialties,
-      areaInterest,
+      description, // TBC
+      specialties, // TBC
+      areaInterest, // TBC
       bad_includeinthebssciiemaildiscussionforum,
-      py3_email,
+      py3_insertnhsnetemailaddress,
       py3_constitutionagreement,
-      privacyNotice,
+      privacyNotice, // TBC
     };
 
     await setUserStoreAction({

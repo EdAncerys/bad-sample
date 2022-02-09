@@ -96,6 +96,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
       py3_address1ine1,
       py3_addressline2,
       py3_addresstowncity,
+
       py3_addresscountry,
       py3_addresszippostalcode,
     };
@@ -281,6 +282,14 @@ const RegistrationStepTwo = ({ state, actions }) => {
             placeholder="Address Line 2"
             style={styles.input}
           />
+          <input
+            ref={cityRef}
+            // defaultValue={applicationData ? applicationData[29].value : ""}
+            type="text"
+            className="form-control"
+            placeholder="Address Line 2"
+            style={styles.input}
+          />
 
           <Form.Select
             ref={countyRef}
@@ -301,6 +310,14 @@ const RegistrationStepTwo = ({ state, actions }) => {
               );
             })}
           </Form.Select>
+          <input
+            ref={postcodeRef}
+            // defaultValue={applicationData ? applicationData[32].value : ""}
+            type="text"
+            className="form-control"
+            placeholder="Postcode"
+            style={styles.input}
+          />
           <Form.Select
             ref={countryRef}
             style={styles.input}
@@ -320,14 +337,6 @@ const RegistrationStepTwo = ({ state, actions }) => {
               );
             })}
           </Form.Select>
-          <input
-            ref={postcodeRef}
-            // defaultValue={applicationData ? applicationData[32].value : ""}
-            type="text"
-            className="form-control"
-            placeholder="Postcode"
-            style={styles.input}
-          />
         </div>
       );
     };

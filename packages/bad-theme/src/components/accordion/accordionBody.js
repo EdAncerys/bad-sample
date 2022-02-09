@@ -85,26 +85,26 @@ const AccordionBody = ({
   const handleApply = async () => {
     console.log("apply_for_membership", apply_for_membership); // debug
 
-    setUserIDReplacementAction({
-      dispatch,
-      idReplacement: idReplacement.current,
-    });
-
-    // await setUserStoreAction({
-    //   state,
+    // setUserIDReplacementAction({
     //   dispatch,
-    //   applicationData,
-    //   isActiveUser,
-    //   data: {
-    //     core_name: "810170000", // "Label": "BAD" readonly FIELD!
-    //     core_membershipsubscriptionplanid: apply_for_membership, // type of membership for application
-    //     bad_applicationfor: "810170000", // silent assignment
-    //   },
     //   idReplacement: idReplacement.current,
     // });
 
-    // if (isActiveUser)
-    //   setGoToAction({ path: `/membership/step-1-the-process/`, actions });
+    await setUserStoreAction({
+      state,
+      dispatch,
+      applicationData,
+      isActiveUser,
+      data: {
+        core_name: "810170000", // "Label": "BAD" readonly FIELD!
+        core_membershipsubscriptionplanid: apply_for_membership, // type of membership for application
+        bad_applicationfor: "810170000", // silent assignment
+      },
+      idReplacement: idReplacement.current,
+    });
+
+    if (isActiveUser)
+      setGoToAction({ path: `/membership/step-1-the-process/`, actions });
   };
 
   const handleContactFormSubmit = async () => {
@@ -557,7 +557,7 @@ const AccordionBody = ({
 
     return (
       <div>
-        <div className="shadow" style={{ padding: `1em`, margin: `1em 0` }}>
+        {/* <div className="shadow" style={{ padding: `1em`, margin: `1em 0` }}>
           <label>USER ID</label>
           <SearchContainer
             width="50%"
@@ -567,7 +567,7 @@ const AccordionBody = ({
             inputOnly
           />
           <SearchDropDown filter={idFilter} onClickHandler={onClickHandler} />
-        </div>
+        </div> */}
 
         <div
           className="blue-btn"
