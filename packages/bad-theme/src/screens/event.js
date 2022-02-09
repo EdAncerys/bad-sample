@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useLayoutEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import Link from "@frontity/components/link";
@@ -28,6 +28,10 @@ const Event = ({ state, actions, libraries }) => {
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
+  }, []);
 
   const { sm, md, lg, xl } = muiQuery();
   const {
@@ -337,7 +341,7 @@ const Event = ({ state, actions, libraries }) => {
               <ServeSummary />
               <ServeSocials />
             </div>
-            <div style={{ backgroundColor: colors.lightSilver }}></div>
+            <div className="shadow"></div>
           </div>
         </div>
       </div>

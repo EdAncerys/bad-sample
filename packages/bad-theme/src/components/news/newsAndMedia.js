@@ -174,6 +174,10 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       );
     };
 
+
+
+    
+
     const ServeSearchContainer = () => {
       return (
         <div className="flex-row">
@@ -403,7 +407,6 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
           <div style={{ position: "relative", padding: `1em 0`, width: `70%` }}>
             <div className="flex-col">
               <ServeTitle />
-              {/* <ServeSearchContainer /> */}
               <SearchContainer
                 searchFilterRef={searchFilterRef}
                 handleSearch={handleSearch}
@@ -483,7 +486,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
           }}
         />
       </BlockWrapper>
-      {/* <ServeFilter /> */}
+      <ServeFilter />
       <BlockWrapper>
         <ServeLayout />
         <ServeMoreAction />
