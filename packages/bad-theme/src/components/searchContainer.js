@@ -25,7 +25,7 @@ const SearchContainer = ({
   const dispatch = useAppDispatch();
 
   const ctaHeight = 45;
-  const WIDTH = width || "100%";
+  const WIDTH = !lg ? width || "100%" : "100%";
 
   // HANDLERS ---------------------------------------------
   const handleKeyPress = (e) => {
