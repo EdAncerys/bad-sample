@@ -177,7 +177,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
   const ServeCardContent = () => {
     if (layout === "full-width") return null;
     if (pop_out_text) return <div className="flex" />;
-
+    console.log("CARD CONTENT");
     return (
       <div className="flex relative">
         <div
@@ -191,7 +191,11 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
                 ? CONTENT_WIDTH / 1.5
                 : CONTENT_WIDTH / 2
               : CONTENT_WIDTH, // if no img provided defaults to diff width
-            height: BANNER_HEIGHT,
+            height: !lg
+              ? BANNER_HEIGHT
+              : background_image
+              ? BANNER_HEIGHT
+              : "4em",
           }}
         >
           <FullWidthContentBlock block={block} heroBanner />
