@@ -85,9 +85,7 @@ const MultiPostBlock = ({ state, actions, block, filter }) => {
           }
           if (lg)
             return (
-              <RowButton
-                block={{ title: title, link: link.url, colour: colour }}
-              />
+              <RowButton block={{ title: title, link: link, colour: colour }} />
             );
           return (
             <div key={key} className="flex">
