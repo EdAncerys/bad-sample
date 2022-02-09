@@ -224,7 +224,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
       <ServeFilter />
       <BlockWrapper>
         <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
-          <div style={styles.container}>
+          <div style={!lg ? styles.container : styles.containerMobile}>
             {ALPHABET.map((item, key) => {
               return <ServePilsList key={key} item={item} />;
             })}
@@ -239,6 +239,11 @@ const styles = {
   container: {
     display: "grid",
     gridTemplateColumns: `repeat(3, 1fr)`,
+    gap: 20,
+  },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
     gap: 20,
   },
   input: {
