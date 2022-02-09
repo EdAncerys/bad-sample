@@ -5,6 +5,8 @@ import parse from "html-react-parser";
 
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import LINK from "../../img/svg/badLink.svg";
+import SearchContainer from "../../components/searchContainer";
+import SearchDropDown from "../../components/searchDropDown";
 
 import DownloadFileBlock from "../downloadFileBlock";
 // CONTEXT ----------------------------------------------------------------
@@ -15,6 +17,8 @@ import {
   sendEmailEnquireAction,
   setUserStoreAction,
   setUserIDReplacementAction,
+  getTestUserAccountsAction,
+  setIDFilterAction,
 } from "../../context";
 
 const AccordionBody = ({
@@ -30,8 +34,10 @@ const AccordionBody = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser } = useAppState();
+  const { applicationData, isActiveUser, idFilter } = useAppState();
 
+  const testAccountsRef = useRef(null);
+  const searchFilterRef = useRef(null);
   const idReplacement = useRef(null);
 
   const ALL_POSITIONS = Object.values(state.source.leadership_position);
@@ -49,28 +55,56 @@ const AccordionBody = ({
   } = block;
 
   // HANDLERS ----------------------------------------------------
+  const onClickHandler = (e) => {
+    console.log(e.target.value);
+  };
+
+  const handleSearch = async () => {
+    console.log("API call/search");
+
+    const input = searchFilterRef.current.value.toLowerCase();
+    if (!input) return null;
+
+    let data = testAccountsRef.current; //
+
+    // handle API get user data
+    if (!data) data = await getTestUserAccountsAction({ state });
+
+    let filter = data.filter((user) =>
+      user.bad_listname.toLowerCase().includes(input)
+    );
+    // overwrite address3_addressid to title field
+
+    if (!filter.length) filter = [{ title: { rendered: "No Results" } }];
+    // setIDFilterAction({ dispatch, filter });
+
+    console.log(filter);
+    console.log(data);
+  };
+
   const handleApply = async () => {
     console.log("apply_for_membership", apply_for_membership); // debug
+
     setUserIDReplacementAction({
       dispatch,
       idReplacement: idReplacement.current,
     });
 
-    await setUserStoreAction({
-      state,
-      dispatch,
-      applicationData,
-      isActiveUser,
-      data: {
-        core_name: "810170000", // "Label": "BAD" readonly FIELD!
-        core_membershipsubscriptionplanid: apply_for_membership, // type of membership for application
-        bad_applicationfor: "810170000", // silent assignment
-      },
-      idReplacement: idReplacement.current,
-    });
+    // await setUserStoreAction({
+    //   state,
+    //   dispatch,
+    //   applicationData,
+    //   isActiveUser,
+    //   data: {
+    //     core_name: "810170000", // "Label": "BAD" readonly FIELD!
+    //     core_membershipsubscriptionplanid: apply_for_membership, // type of membership for application
+    //     bad_applicationfor: "810170000", // silent assignment
+    //   },
+    //   idReplacement: idReplacement.current,
+    // });
 
-    if (isActiveUser)
-      setGoToAction({ path: `/membership/step-1-the-process/`, actions });
+    // if (isActiveUser)
+    //   setGoToAction({ path: `/membership/step-1-the-process/`, actions });
   };
 
   const handleContactFormSubmit = async () => {
@@ -523,16 +557,17 @@ const AccordionBody = ({
 
     return (
       <div>
-        {/* <div className="shadow" style={{ padding: `1em`, margin: `1em 0` }}>
+        <div className="shadow" style={{ padding: `1em`, margin: `1em 0` }}>
           <label>USER ID</label>
-          <input
-            ref={idReplacement}
-            type="text"
-            className="form-control"
-            placeholder="First Name"
-            style={styles.input}
+          <SearchContainer
+            width="50%"
+            searchFilterRef={searchFilterRef}
+            handleSearch={handleSearch}
+            onChange
+            inputOnly
           />
-        </div> */}
+          <SearchDropDown filter={idFilter} onClickHandler={onClickHandler} />
+        </div>
 
         <div
           className="blue-btn"

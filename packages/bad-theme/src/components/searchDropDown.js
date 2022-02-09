@@ -3,32 +3,19 @@ import { connect } from "frontity";
 
 import { colors } from "../config/imports";
 
-import SearchIcon from "@mui/icons-material/Search";
-import CloseIcon from "@mui/icons-material/Close";
-// CONTEXT ----------------------------------------------------------------
-import {
-  useAppDispatch,
-  useAppState,
-  setFilterAction,
-  setGoToAction,
-} from "../context";
-
-const SearchDropDown = ({ state, actions, libraries }) => {
+const SearchDropDown = ({
+  state,
+  actions,
+  libraries,
+  filter,
+  onClickHandler,
+}) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
-  const dispatch = useAppDispatch();
-  const { filter } = useAppState();
 
   if (!filter) return null;
 
   const ctaHeight = 45;
   const BANNER_HEIGHT = state.theme.bannerHeight;
-
-  // HANDLERS ---------------------------------------------
-  const onClickHandler = ({ link }) => {
-    setGoToAction({ path: link, actions });
-    setFilterAction({ dispatch, filter: null });
-  };
 
   return (
     <div
