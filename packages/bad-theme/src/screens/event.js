@@ -31,6 +31,7 @@ const Event = ({ state, actions, libraries }) => {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
+    document.documentElement.scrollTop = 0; // for safari
   }, []);
 
   const { sm, md, lg, xl } = muiQuery();
