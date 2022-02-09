@@ -70,7 +70,13 @@ const EventLoopBlock = ({
 
     setGradeFilterId(GRADE_FILTER_ID);
 
-    setEventList(EVENT_LIST);
+    // sort events in order by date accenting from
+    let filterByDate = EVENT_LIST.sort(
+      (a, b) =>
+        new Date(a.acf.date_time[0].date) - new Date(b.acf.date_time[0].date)
+    );
+
+    setEventList(filterByDate);
     setGrades(GRADES);
     setLocations(LOCATIONS);
     setTypes(TYPES);
