@@ -39,8 +39,6 @@ const DownloadFileBlock = ({
     let fileName = "Download";
     if (file.title) fileName = file.title;
 
-    console.log("--------", file);
-
     return (
       <div style={{ display: "grid" }}>
         <a

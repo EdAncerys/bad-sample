@@ -249,7 +249,7 @@ const AccordionBody = ({
     if (!link) return null;
 
     let LABEL = "External Link";
-    if (link_label) LABEL = button_label;
+    if (link_label) LABEL = link_label;
 
     return (
       <div
