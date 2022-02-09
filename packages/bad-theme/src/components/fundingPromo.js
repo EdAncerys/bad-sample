@@ -56,7 +56,7 @@ const FundingPromo = ({ state, actions, libraries, block }) => {
         className="flex-col"
         style={{
           justifyContent: "center",
-          padding: `0 6em 2em`,
+          padding: !lg ? `0 6em 2em` : null,
         }}
       >
         <ServeTitle />
@@ -69,7 +69,7 @@ const FundingPromo = ({ state, actions, libraries, block }) => {
   return (
     <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
       <ServeContent />
-      <div style={styles.container}>
+      <div style={!lg ? styles.container : styles.containerMobile}>
         {block.card.map((block, key) => {
           const {
             amount,
@@ -107,6 +107,12 @@ const styles = {
   container: {
     display: "grid",
     gridTemplateColumns: `repeat(3, 1fr)`,
+    justifyContent: "space-between",
+    gap: 20,
+  },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
     justifyContent: "space-between",
     gap: 20,
   },
