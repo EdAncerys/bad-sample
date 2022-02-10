@@ -84,7 +84,7 @@ export const setUserStoreAction = async ({
     if (userStore.success)
       setApplicationDataAction({
         dispatch,
-        applicationData: storeApplication,
+        applicationData: updatedMembershipData,
       });
   } catch (error) {
     console.log("error", error);
@@ -201,8 +201,8 @@ const updateMembershipApplication = ({ storeApplication, data }) => {
 
   newApplicationRecord.map((application) => {
     //⏬ step one of the application process
-    if (data.core_name && application.name === "core_name")
-      application.value = data.core_name;
+    if (data.bad_organisedfor && application.name === "bad_organisedfor")
+      application.value = data.bad_organisedfor;
     if (
       data.core_membershipsubscriptionplanid &&
       application.name === "core_membershipsubscriptionplanid"
@@ -300,8 +300,7 @@ const updateMembershipApplication = ({ storeApplication, data }) => {
   // notice TBC
 
   console.log("User Input Data ", data); // debug
-  // console.log("Final storeApplication Record", storeApplication); // debug
+  console.log("UPDATED Application Record", newApplicationRecord); // debug
 
-  console.log("newApplicationRecord-----", newApplicationRecord);
   return newApplicationRecord;
 };

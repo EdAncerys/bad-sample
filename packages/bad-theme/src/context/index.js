@@ -26,6 +26,7 @@ import { getFadAction } from "./auth/getFAD";
 import { updateProfileAction } from "./auth/updateProfile";
 import { updateAddressAction } from "./auth/updateAddress";
 import { sendFileToS3Action } from "./auth/saveFileToS3";
+import { getMembershipSubscriptionId } from "./auth/getMembershipSubscriptionId";
 import {
   setUserStoreAction,
   getUserStoreAction,
@@ -74,4 +75,5 @@ export {
   getTestUserAccountsAction,
   setIDFilterAction,
   getHospitalsAction,
+  getMembershipSubscriptionId,
 };

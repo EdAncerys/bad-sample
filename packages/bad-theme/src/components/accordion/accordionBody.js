@@ -5,8 +5,6 @@ import parse from "html-react-parser";
 
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import LINK from "../../img/svg/badLink.svg";
-import SearchContainer from "../../components/searchContainer";
-import SearchDropDown from "../../components/searchDropDown";
 
 import date from "date-and-time";
 const DATE_MODULE = date;
@@ -20,7 +18,7 @@ import {
   sendEmailEnquireAction,
   setUserStoreAction,
   getTestUserAccountsAction,
-  setIDFilterAction,
+  getMembershipSubscriptionId,
 } from "../../context";
 
 const AccordionBody = ({
@@ -89,6 +87,11 @@ const AccordionBody = ({
 
   const handleApply = async () => {
     console.log("apply_for_membership", apply_for_membership); // debug
+    const membershipId = await getMembershipSubscriptionId({
+      state,
+      category: "BAD",
+      type: apply_for_membership,
+    });
 
     await setUserStoreAction({
       state,
@@ -96,8 +99,8 @@ const AccordionBody = ({
       applicationData,
       isActiveUser,
       data: {
-        core_name: "810170000", // "Label": "BAD" readonly FIELD!
-        core_membershipsubscriptionplanid: apply_for_membership, // type of membership for application
+        bad_organisedfor: "810170000", // BAD members type
+        core_membershipsubscriptionplanid: membershipId, // type of membership for application
         bad_applicationfor: "810170000", // silent assignment
       },
     });
@@ -585,23 +588,10 @@ const AccordionBody = ({
   };
 
   const ApplyForMembership = () => {
-    if (apply_for_membership === "Disabled" || !apply_for_membership)
-      return null;
+    if (apply_for_membership === "Disabled") return null;
 
     return (
       <div>
-        {/* <div className="shadow" style={{ padding: `1em`, margin: `1em 0` }}>
-          <label>USER ID</label>
-          <SearchContainer
-            width="50%"
-            searchFilterRef={searchFilterRef}
-            handleSearch={handleSearch}
-            onChange
-            inputOnly
-          />
-          <SearchDropDown filter={idFilter} onClickHandler={onClickHandler} />
-        </div> */}
-
         <div
           className="blue-btn"
           style={{ width: "fit-content" }}
