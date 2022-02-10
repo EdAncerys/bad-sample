@@ -66,7 +66,7 @@ const Header = ({ state, actions }) => {
               : {
                   ...styles.container,
                   position: "sticky",
-                  zIndex: "500",
+                  zIndex: "999",
                   top: 0,
                 }
           }

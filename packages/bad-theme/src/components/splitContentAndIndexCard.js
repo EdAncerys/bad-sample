@@ -150,27 +150,44 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
     );
   };
 
-  const ServeMobileDropdown = ({}) => {
-    if (!index_card) return null;
-
+  const ServeMobileDropdown = (card) => {
+    if (!card.card.index_card) return null;
+    console.log("MOBILE DROPDOWN", card);
+    console.log("CARD: ", card.card.index_title);
     return (
       <Dropdown>
         <Dropdown.Toggle
           id="dropdown-basic"
-          style={{ backgroundColor: block.colour }}
+          style={{
+            backgroundColor: colors.darkSilver,
+            width: "100%",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            borderRadius: 0,
+            position: "relative",
+            zIndex: 700,
+            padding: "1em",
+            backgroundColor: card.card.colour,
+            border: 0,
+          }}
+          drop="down"
         >
-          {block.card_title}
+          <Html2React html={card.card.card_title} />
         </Dropdown.Toggle>
-
-        {index_card.map((block, key) => {
-          const { card_title, colour, index_title, link, subtitle } = block;
-          console.log("BLOCKO: ", block);
-          return (
-            <Dropdown.Menu>
-              <Dropdown.Item>{index_title[key].title}</Dropdown.Item>
-            </Dropdown.Menu>
-          );
-        })}
+        <Dropdown.Menu style={{ width: "100%" }}>
+          {card.card.index_title.map((item, key) => {
+            return (
+              <Dropdown.Item
+                onClick={() => setGoToAction({ path: item.link.url, actions })}
+                drop="down"
+              >
+                <Html2React html={item.title} />
+              </Dropdown.Item>
+            );
+          })}
+        </Dropdown.Menu>
       </Dropdown>
     );
   };
@@ -179,7 +196,11 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
     <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
       <div style={!lg ? styles.container : styles.containerMobile}>
         <ServeContent />
-        {!lg ? <ServeIndexCard /> : <ServeMobileDropdown />}
+        {!lg ? (
+          <ServeIndexCard />
+        ) : (
+          <ServeMobileDropdown card={block.index_card[0]} />
+        )}
       </div>
     </div>
   );

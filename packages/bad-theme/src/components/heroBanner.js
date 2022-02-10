@@ -195,7 +195,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
               ? BANNER_HEIGHT
               : background_image
               ? BANNER_HEIGHT
-              : "5em",
+              : null,
           }}
         >
           <FullWidthContentBlock block={block} heroBanner />
