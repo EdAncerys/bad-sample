@@ -58,10 +58,10 @@ const AccordionBody = ({
 
   let body = block.body;
   let link = block.link;
-  let amount = block.acf.amount;
-  let closingDate = block.acf.closing_date;
+  let amount = block.acf ? block.acf.amount : null;
+  let closingDate = block.acf ? block.acf.closing_date : null;
 
-  if (fundingBlock) body = block.acf.overview;
+  if (fundingBlock) body = block.acf ? block.acf.overview : null;
   if (fundingBlock) link = { url: block.acf.external_application_link };
 
   // HANDLERS ----------------------------------------------------
