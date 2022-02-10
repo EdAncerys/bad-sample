@@ -16,6 +16,7 @@ import {
   useAppState,
   setUserStoreAction,
   sendFileToS3Action,
+  getHospitalsAction,
 } from "../../context";
 
 const RegistrationStepFour = ({ state, actions }) => {
@@ -110,6 +111,18 @@ const RegistrationStepFour = ({ state, actions }) => {
   const privacyNoticeRef = useRef(null);
 
   // HANDLERS --------------------------------------------
+  const handleHospitalLookup = async () => {
+    console.log("API call");
+    if (hospitalRef.current.value.length < 2) return; // API call after 2 characters
+
+    const hospitalData = await getHospitalsAction({
+      state,
+      input: hospitalRef.current.value,
+    });
+
+    console.log("Hospitals", hospitalData);
+  };
+
   const handleSaveExit = async () => {
     await setUserStoreAction({
       state,
@@ -313,6 +326,18 @@ const RegistrationStepFour = ({ state, actions }) => {
                 );
               })}
             </Form.Select>
+
+            <label className="pink" style={styles.subTitle}>
+              Main Hospital/Place of work <SMF />
+            </label>
+            <input
+              ref={hospitalRef}
+              type="text"
+              className="form-control"
+              placeholder="Main Hospital/Place of work"
+              onChange={handleHospitalLookup}
+              style={styles.input}
+            />
           </div>
         );
       };

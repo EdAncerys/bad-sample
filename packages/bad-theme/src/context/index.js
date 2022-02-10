@@ -6,7 +6,7 @@ import {
   setErrorAction,
   setApplicationDataAction,
   setUserIDReplacementAction,
-  setIDFilterAction
+  setIDFilterAction,
 } from "./actions/actions";
 import { muiQuery } from "./mediaQueryContext";
 import {
@@ -34,6 +34,7 @@ import {
 } from "./auth/userStore";
 import { getWileyAction } from "./auth/getWiley";
 import { getTestUserAccountsAction } from "./auth/getTestUserAccounts";
+import { getHospitalsAction } from "./auth/getHospitals";
 import {
   getBJDFeedAction,
   getCEDFeedAction,
@@ -73,5 +74,6 @@ export {
   setCompleteUserApplicationAction,
   setUserIDReplacementAction,
   getTestUserAccountsAction,
-  setIDFilterAction
+  setIDFilterAction,
+  getHospitalsAction,
 };
