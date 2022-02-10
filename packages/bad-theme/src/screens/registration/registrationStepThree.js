@@ -20,7 +20,7 @@ const RegistrationStepThree = ({ state, actions }) => {
   const marginVertical = state.theme.marginVertical;
 
   const [type, setType] = useState(() => {
-    if (!applicationData) return null;
+    if (!applicationData) return "810170000";
     let applicationType = "";
     applicationData.map((data) => {
       if (data.name === "core_name") applicationType = data.value;
@@ -30,7 +30,7 @@ const RegistrationStepThree = ({ state, actions }) => {
   });
 
   const [category, setCategory] = useState(() => {
-    if (!applicationData) return null;
+    if (!applicationData) return "";
     let applicationCategory = "";
     applicationData.map((data) => {
       if (data.name === "core_membershipsubscriptionplanid")
@@ -133,7 +133,7 @@ const RegistrationStepThree = ({ state, actions }) => {
             value={category}
             onChange={(e) => handleCategoryChange(e)}
           >
-            <option value="null" hidden>
+            <option value="" hidden>
               Membership Category
             </option>
             {/* <option value="810170027">Ordinary</option>
@@ -177,9 +177,10 @@ const RegistrationStepThree = ({ state, actions }) => {
             value={category}
             onChange={(e) => handleCategoryChange(e)}
           >
-            {/* <option value="null" hidden>
+            <option value="" hidden>
               Membership Category
             </option>
+            {/*
             <option value="British Cosmetic Dermatology Group">
               British Cosmetic Dermatology Group
             </option>
