@@ -61,38 +61,16 @@ const AccordionBody = ({
   if (fundingBlock) link = { url: block.acf.external_application_link };
 
   // HANDLERS ----------------------------------------------------
-  const onClickHandler = (e) => {
-    console.log(e.target.value);
-  };
-
-  const handleSearch = async () => {
-    console.log("API call/search");
-
-    const input = searchFilterRef.current.value.toLowerCase();
-    if (!input) return null;
-
-    let data = testAccountsRef.current; //
-
-    // handle API get user data
-    if (!data) data = await getTestUserAccountsAction({ state });
-
-    let filter = data.filter((user) =>
-      user.bad_listname.toLowerCase().includes(input)
-    );
-    // overwrite address3_addressid to title field
-
-    if (!filter.length) filter = [{ title: { rendered: "No Results" } }];
-    // setIDFilterAction({ dispatch, filter });
-  };
-
   const handleApply = async () => {
-    console.log("apply_for_membership", apply_for_membership); // debug
+    // ⏬ get appropriate membership ID
     const membershipId = await getMembershipSubscriptionId({
       state,
       category: "BAD",
       type: apply_for_membership,
     });
+    console.log("Application Type ", apply_for_membership); // debug
 
+    // ⏬ create user application record in Store
     await setUserStoreAction({
       state,
       dispatch,
