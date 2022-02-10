@@ -23,7 +23,7 @@ const RegistrationStepThree = ({ state, actions }) => {
     if (!applicationData) return "810170000";
     let applicationType = "";
     applicationData.map((data) => {
-      if (data.name === "core_name") applicationType = data.value;
+      if (data.name === "bad_organisedfor") applicationType = data.value;
     });
 
     return applicationType;
@@ -125,7 +125,7 @@ const RegistrationStepThree = ({ state, actions }) => {
 
       return (
         <div>
-          <label style={styles.subTitle}>Membership Category</label>
+          <label className="bold">Membership Category</label>
           <Form.Select
             ref={categoryRef}
             style={styles.input}
@@ -135,7 +135,7 @@ const RegistrationStepThree = ({ state, actions }) => {
             <option value="" hidden>
               Membership Category
             </option>
-            {/* <option value="810170027">Ordinary</option>
+            <option value="810170027">Ordinary</option>
             <option value="370410000">Ordinary SAS</option>
             <option value="810170029">Career Grade</option>
             <option value="810170005">Trainee</option>
@@ -145,20 +145,7 @@ const RegistrationStepThree = ({ state, actions }) => {
             <option value="810170013">Associate Overseas</option>
             <option value="810170011">GP</option>
             <option value="810170016">Student</option>
-            <option value="810170012">Allied Healthcare Professional</option> */}
-
-            <option value="9a39cc47-6456-eb11-a812-000d3a28700d">
-              2021 - BSMD
-            </option>
-            <option value="3f5e50e6-be9e-eb11-b1ac-000d3a2d9388">
-              2021- BAD - Trainee
-            </option>
-            <option value="9f677f51-3ed3-ea11-a812-000d3a49475c">
-              2021 - DC - Honorary
-            </option>
-            <option value="fb581b00-3ad3-ea11-a812-000d3a4a1557">
-              2021 - DC
-            </option>
+            <option value="810170012">Allied Healthcare Professional</option>
           </Form.Select>
         </div>
       );
@@ -169,7 +156,7 @@ const RegistrationStepThree = ({ state, actions }) => {
 
       return (
         <div>
-          <label style={styles.subTitle}>Membership Category</label>
+          <label className="bold">Membership Category</label>
           <Form.Select
             ref={categoryRef}
             style={styles.input}
@@ -179,7 +166,7 @@ const RegistrationStepThree = ({ state, actions }) => {
             <option value="" hidden>
               Membership Category
             </option>
-            {/*
+
             <option value="British Cosmetic Dermatology Group">
               British Cosmetic Dermatology Group
             </option>
@@ -229,20 +216,7 @@ const RegistrationStepThree = ({ state, actions }) => {
               British Society for Skin Care in Immunocompromised Individuals
             </option>
             <option value="The Dowling Club">The Dowling Club</option>
-            <option value="DERMPATHPRO">DERMPATHPRO</option> */}
-
-            <option value="9a39cc47-6456-eb11-a812-000d3a28700d">
-              2021 - BSMD
-            </option>
-            <option value="3f5e50e6-be9e-eb11-b1ac-000d3a2d9388">
-              2021- BAD - Trainee
-            </option>
-            <option value="9f677f51-3ed3-ea11-a812-000d3a49475c">
-              2021 - DC - Honorary
-            </option>
-            <option value="fb581b00-3ad3-ea11-a812-000d3a4a1557">
-              2021 - DC
-            </option>
+            <option value="DERMPATHPRO">DERMPATHPRO</option>
           </Form.Select>
         </div>
       );
@@ -259,7 +233,7 @@ const RegistrationStepThree = ({ state, actions }) => {
           borderTop: `1px solid ${colors.silverFillTwo}`,
         }}
       >
-        <label style={styles.subTitle}>Membership Type</label>
+        <label className="bold">Membership Type</label>
         <Form.Select
           ref={typeRef}
           style={styles.input}
@@ -336,9 +310,6 @@ const styles = {
   },
   title: {
     fontSize: 20,
-  },
-  subTitle: {
-    fontWeight: "bold",
   },
   input: {
     borderRadius: 10,

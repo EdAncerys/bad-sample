@@ -234,7 +234,6 @@ const updateMembershipApplication = ({ storeApplication, data }) => {
 
   console.log("⏬ UPDATING Membership Record ⏬");
   let newApplicationRecord = storeApplication;
-  console.log(newApplicationRecord);
 
   newApplicationRecord.map((application) => {
     //⏬ step one of the application process

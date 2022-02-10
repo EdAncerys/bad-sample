@@ -95,7 +95,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
           className="transparent-btn"
           onClick={() =>
             setGoToAction({
-              path: `/membership/step-3-category-selection/`,
+              path: `/membership/step-1-the-process/`,
               actions,
             })
           }
