@@ -347,8 +347,6 @@ const AccordionBody = ({
     const ServeClosingDate = () => {
       if (!closingDate) return null;
 
-      console.log("---------", closingDate);
-
       const dateObject = new Date(closingDate);
       const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
 

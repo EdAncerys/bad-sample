@@ -109,7 +109,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     if (!!input) {
       data = data.filter((item) => {
         let title = item.title.rendered;
-        let content = item.content.rendered;
+        let content = item.acf.overview;
 
         if (title) title = title.toLowerCase().includes(input.toLowerCase());
         if (content)
@@ -247,14 +247,17 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
         {postListData.map((block, key) => {
           const { title, content, link, date, dermo_group_type } = block.acf;
 
+          console.log(block);
+
           return (
             <Card
               key={key}
-              // title={title.rendered}
+              fundingHeader={block}
               publicationDate={date}
-              // body={content.rendered}
+              body={block.acf.overview}
+              bodyLimit={150}
               link_label="Read More"
-              link={link}
+              link={block.acf.external_application_link}
               colour={colour}
               limitBodyLength
               shadow
@@ -324,7 +327,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 const styles = {
   container: {
     display: "grid",
-    gridTemplateColumns: `repeat(4, 1fr)`,
+    gridTemplateColumns: `repeat(3, 1fr)`,
     justifyContent: "space-between",
     gap: 20,
   },

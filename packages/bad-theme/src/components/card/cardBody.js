@@ -15,6 +15,7 @@ const CardBody = ({
   libraries,
   title,
   body,
+  bodyLimit,
   date,
   publicationDate,
   seatNumber,
@@ -72,7 +73,7 @@ const CardBody = ({
     if (!body) return null;
 
     let bodyPreview = body;
-    const MAX_CHAR = 76;
+    const MAX_CHAR = bodyLimit || 76;
     if (body.length >= MAX_CHAR && isFrom4Col)
       bodyPreview = `${body.slice(0, MAX_CHAR)}...`;
     if (limitBodyLength) bodyPreview = `${body.slice(0, MAX_CHAR)}...`;
