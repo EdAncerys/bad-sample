@@ -19,7 +19,6 @@ import {
   setGoToAction,
   sendEmailEnquireAction,
   setUserStoreAction,
-  setUserIDReplacementAction,
   getTestUserAccountsAction,
   setIDFilterAction,
 } from "../../context";
@@ -42,7 +41,6 @@ const AccordionBody = ({
 
   const testAccountsRef = useRef(null);
   const searchFilterRef = useRef(null);
-  const idReplacement = useRef(null);
 
   const ALL_POSITIONS = Object.values(state.source.leadership_position);
   const ICON_WIDTH = 35;
@@ -102,7 +100,6 @@ const AccordionBody = ({
         core_membershipsubscriptionplanid: apply_for_membership, // type of membership for application
         bad_applicationfor: "810170000", // silent assignment
       },
-      idReplacement: idReplacement.current,
     });
 
     if (isActiveUser)

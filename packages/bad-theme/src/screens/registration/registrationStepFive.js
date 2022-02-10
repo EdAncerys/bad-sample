@@ -22,7 +22,7 @@ const RegistrationStepFive = ({ state, actions }) => {
   const page = state.source[data.type][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, idReplacement } = useAppState();
+  const { applicationData, isActiveUser } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -135,7 +135,6 @@ const RegistrationStepFive = ({ state, actions }) => {
       applicationData,
       isActiveUser,
       data,
-      idReplacement,
     });
     if (isActiveUser)
       setGoToAction({ path: `/membership/final-step-thank-you/`, actions });
@@ -177,23 +176,6 @@ const RegistrationStepFive = ({ state, actions }) => {
             type="checkbox"
             className="form-check-input"
             style={styles.checkBox}
-          />
-        </div>
-      );
-    };
-
-    const ServeMRCP = () => {
-      return (
-        <div>
-          <label style={styles.subTitle}>
-            MRCP membership <SMF />
-          </label>
-          <input
-            ref={mrcpRef}
-            type="text"
-            className="form-control"
-            placeholder="MRCP membership"
-            style={styles.input}
           />
         </div>
       );
@@ -310,14 +292,14 @@ const RegistrationStepFive = ({ state, actions }) => {
               Main area of interest
             </option>
             <option value="HIV">HIV</option>
-            <option value="biologics">biologics</option>
-            <option value="Solid organ transplatation">
-              Solid organ transplatation
+            <option value="biologics">Biologics</option>
+            <option value="Solid Organ Transplatation">
+              Solid Organ Transplatation
             </option>
-            <option value="Haemtone oncology">Haemtone oncology</option>
+            <option value="Haemtone oncology">Haemtone Oncology</option>
             <option value="Both">Both</option>
-            <option value="Other immunosuppresed groups">
-              Other immunosuppresed groups
+            <option value="Other Immunosuppresed Groups">
+              Other Immunosuppresed Groups
             </option>
           </Form.Select>
         </div>
@@ -371,7 +353,6 @@ const RegistrationStepFive = ({ state, actions }) => {
       >
         <ServeQualification />
         <ServeLicense />
-        <ServeMRCP />
         <ServeBADMember />
         <ServeInterestDescription />
         <ServeLocation />
@@ -548,7 +529,6 @@ const RegistrationStepFive = ({ state, actions }) => {
         </div>
 
         <ServeForm />
-        <ServeAgreements />
         <ServeActions />
       </div>
     );

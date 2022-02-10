@@ -14,7 +14,7 @@ const RegistrationStepThree = ({ state, actions }) => {
   const page = state.source[data.type][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, idReplacement } = useAppState();
+  const { applicationData, isActiveUser } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -79,7 +79,6 @@ const RegistrationStepThree = ({ state, actions }) => {
       applicationData,
       isActiveUser,
       data,
-      idReplacement,
     });
     if (isActiveUser)
       setGoToAction({

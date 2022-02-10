@@ -5,7 +5,6 @@ import {
   setFetchAction,
   setErrorAction,
   setApplicationDataAction,
-  setUserIDReplacementAction,
   setIDFilterAction,
 } from "./actions/actions";
 import { muiQuery } from "./mediaQueryContext";
@@ -72,7 +71,6 @@ export {
   getUserStoreAction,
   getWileyAction,
   setCompleteUserApplicationAction,
-  setUserIDReplacementAction,
   getTestUserAccountsAction,
   setIDFilterAction,
   getHospitalsAction,

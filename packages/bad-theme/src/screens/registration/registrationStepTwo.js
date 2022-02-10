@@ -20,7 +20,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
   const page = state.source[data.type][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, idReplacement } = useAppState();
+  const { applicationData, isActiveUser } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -46,7 +46,6 @@ const RegistrationStepTwo = ({ state, actions }) => {
       dispatch,
       applicationData,
       isActiveUser,
-      idReplacement,
     });
     if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
@@ -287,29 +286,19 @@ const RegistrationStepTwo = ({ state, actions }) => {
             // defaultValue={applicationData ? applicationData[29].value : ""}
             type="text"
             className="form-control"
-            placeholder="Address Line 2"
+            placeholder="City"
             style={styles.input}
           />
 
-          <Form.Select
-            ref={countyRef}
+          <input
+            ref={cityRef}
+            // defaultValue={applicationData ? applicationData[29].value : ""}
+            type="text"
+            className="form-control"
+            placeholder="County/State"
             style={styles.input}
-            // defaultValue={applicationData ? applicationData[30].value : ""}
-            onChange={(e) => {
-              countyRef.current = e.target;
-            }}
-          >
-            <option value="" hidden>
-              County/State
-            </option>
-            {UK_COUNTIES.map((item, key) => {
-              return (
-                <option key={key} value={item}>
-                  {item}
-                </option>
-              );
-            })}
-          </Form.Select>
+          />
+
           <input
             ref={postcodeRef}
             // defaultValue={applicationData ? applicationData[32].value : ""}
@@ -318,25 +307,14 @@ const RegistrationStepTwo = ({ state, actions }) => {
             placeholder="Postcode"
             style={styles.input}
           />
-          <Form.Select
-            ref={countryRef}
+          <input
+            ref={cityRef}
+            // defaultValue={applicationData ? applicationData[29].value : ""}
+            type="text"
+            className="form-control"
+            placeholder="Country"
             style={styles.input}
-            // defaultValue={applicationData ? applicationData[33].value : ""}
-            onChange={(e) => {
-              countryRef.current = e.target;
-            }}
-          >
-            <option value="" hidden>
-              Country/State
-            </option>
-            {UK_COUNTRIES.map((item, key) => {
-              return (
-                <option key={key} value={item}>
-                  {item}
-                </option>
-              );
-            })}
-          </Form.Select>
+          />
         </div>
       );
     };

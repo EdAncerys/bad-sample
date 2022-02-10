@@ -23,7 +23,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     py3_ntnno: "",
     bad_currentpost: "",
     py3_hospitalid: "",
-    bad_medicalschool: "",
     bad_mrpcqualified: "",
     cvDocument: "",
     currentGrade: "",
@@ -67,6 +66,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         attachments: document,
       });
     console.log("document", document); // debug
+    console.log(formData); // debug
 
     // setFormData((prevFormData) => ({
     //   ...prevFormData,
@@ -163,7 +163,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
           />
 
           <label className="required form-label">
-            Main Hospital/Place of work
+            Main Hospital/Medical School/Place of work
           </label>
           <input
             name="py3_hospitalid"
@@ -174,16 +174,45 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             className="form-control input"
             placeholder="Main Hospital/Place of work"
           />
+        </div>
 
-          <label className="required form-label">Medical School</label>
-          <input
-            name="bad_medicalschool"
-            value={formData.bad_medicalschool}
-            onChange={handleInputChange}
-            type="text"
-            className="form-control input"
-            placeholder="Medical School"
-          />
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: `repeat(2, 1fr)`,
+            gap: 20,
+            padding: `2em 1em`,
+            borderTop: `1px solid ${colors.silverFillTwo}`,
+            borderBottom: `1px solid ${colors.silverFillTwo}`,
+          }}
+        >
+          <div>
+            <label className="required form-label required">
+              Supporting Member 1
+            </label>
+            <input
+              name="bad_mrpcqualified"
+              value={formData.bad_mrpcqualified}
+              onChange={handleInputChange}
+              type="text"
+              className="form-control input"
+              placeholder="MRCP"
+            />
+          </div>
+
+          <div>
+            <label className="required form-label required">
+              Supporting Member 2
+            </label>
+            <input
+              name="bad_mrpcqualified"
+              value={formData.bad_mrpcqualified}
+              onChange={handleInputChange}
+              type="text"
+              className="form-control input"
+              placeholder="MRCP"
+            />
+          </div>
         </div>
 
         <div
@@ -203,6 +232,18 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             placeholder="MRCP"
           />
 
+          <label className="required form-label">SIG DERMPATHPRO ONLY</label>
+          <br />
+          <label className="required form-label">Current Grade</label>
+          <input
+            name="currentGrade"
+            value={formData.currentGrade}
+            onChange={handleInputChange}
+            type="text"
+            className="form-control input"
+            placeholder="Current Grade"
+          />
+
           <label className="required form-label">Upload Your CV</label>
           <input
             ref={cvRef}
@@ -211,16 +252,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             className="form-control input"
             placeholder="CV Document"
             accept="*"
-          />
-
-          <label className="form-label">Current Grade</label>
-          <input
-            name="currentGrade"
-            value={formData.currentGrade}
-            onChange={handleInputChange}
-            type="text"
-            className="form-control input"
-            placeholder="Curent Grade"
           />
         </div>
       </form>

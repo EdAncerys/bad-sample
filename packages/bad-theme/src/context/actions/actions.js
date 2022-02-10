@@ -45,7 +45,4 @@ export const setApplicationDataAction = ({ dispatch, applicationData }) => {
   dispatch({ type: "SET_APPLICATION_DATA_ACTION", payload: applicationData });
 };
 
-export const setUserIDReplacementAction = ({ dispatch, idReplacement }) => {
-  console.log("setApplicationDataAction triggered"); //debug
-  dispatch({ type: "SET_ID_REPLACEMENT_ACTION", payload: idReplacement });
-};
+
