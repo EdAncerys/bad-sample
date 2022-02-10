@@ -234,6 +234,7 @@ const updateMembershipApplication = ({ storeApplication, data }) => {
 
   console.log("⏬ UPDATING Membership Record ⏬");
   let newApplicationRecord = storeApplication;
+  console.log(newApplicationRecord);
 
   newApplicationRecord.map((application) => {
     //⏬ step one of the application process
@@ -266,13 +267,18 @@ const updateMembershipApplication = ({ storeApplication, data }) => {
       application.value = data.py3_addressline2;
     if (data.py3_addresstowncity && application.name === "py3_addresstowncity")
       application.value = data.py3_addresstowncity;
-    if (data.py3_addresscountry && application.name === "py3_addresscountry")
-      application.value = data.py3_addresscountry;
+    if (
+      data.py3_addresscountystate &&
+      application.name === "py3_addresscountystate"
+    )
+      application.value = data.py3_addresscountystate;
     if (
       data.py3_addresszippostalcode &&
       application.name === "py3_addresszippostalcode"
     )
       application.value = data.py3_addresszippostalcode;
+    if (data.py3_addresscountry && application.name === "py3_addresscountry")
+      application.value = data.py3_addresscountry;
 
     //⏬ category section of the application process
     if (data.py3_gmcnumber && application.name === "py3_gmcnumber")
