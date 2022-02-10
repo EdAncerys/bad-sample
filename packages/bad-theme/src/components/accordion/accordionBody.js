@@ -8,6 +8,9 @@ import LINK from "../../img/svg/badLink.svg";
 import SearchContainer from "../../components/searchContainer";
 import SearchDropDown from "../../components/searchDropDown";
 
+import date from "date-and-time";
+const DATE_MODULE = date;
+
 import DownloadFileBlock from "../downloadFileBlock";
 // CONTEXT ----------------------------------------------------------------
 import {
@@ -28,6 +31,7 @@ const AccordionBody = ({
   block,
   guidelines,
   leadershipBlock,
+  fundingBlock,
   uniqueId,
   setFetching,
 }) => {
@@ -43,16 +47,22 @@ const AccordionBody = ({
   const ALL_POSITIONS = Object.values(state.source.leadership_position);
   const ICON_WIDTH = 35;
   const {
-    body,
     downloads,
     button_label,
     button_link,
     link_label,
-    link,
     apply_for_membership,
     file_submit_option,
     recipients,
   } = block;
+
+  let body = block.body;
+  let link = block.link;
+  let amount = block.acf.amount;
+  let closingDate = block.acf.closing_date;
+
+  if (fundingBlock) body = block.acf.overview;
+  if (fundingBlock) link = { url: block.acf.external_application_link };
 
   // HANDLERS ----------------------------------------------------
   const onClickHandler = (e) => {
@@ -77,18 +87,10 @@ const AccordionBody = ({
 
     if (!filter.length) filter = [{ title: { rendered: "No Results" } }];
     // setIDFilterAction({ dispatch, filter });
-
-    console.log(filter);
-    console.log(data);
   };
 
   const handleApply = async () => {
     console.log("apply_for_membership", apply_for_membership); // debug
-
-    // setUserIDReplacementAction({
-    //   dispatch,
-    //   idReplacement: idReplacement.current,
-    // });
 
     await setUserStoreAction({
       state,
@@ -325,6 +327,42 @@ const AccordionBody = ({
     return (
       <div className="text-body">
         <Html2React html={body} />
+      </div>
+    );
+  };
+
+  const ServeFundingInfo = () => {
+    if (!amount || !closingDate) return null;
+
+    const ServeAmount = () => {
+      if (!amount) return null;
+
+      return (
+        <div className="flex-col">
+          <Html2React html={amount} />
+        </div>
+      );
+    };
+
+    const ServeClosingDate = () => {
+      if (!closingDate) return null;
+
+      console.log("---------", closingDate);
+
+      const dateObject = new Date(closingDate);
+      const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
+
+      return (
+        <div className="flex-col">
+          <Html2React html={formattedDate} />
+        </div>
+      );
+    };
+
+    return (
+      <div className="flex-col text-body">
+        <ServeAmount />
+        <ServeClosingDate />
       </div>
     );
   };
@@ -610,6 +648,7 @@ const AccordionBody = ({
         <ServeBody />
         <ServeLTBody />
 
+        <ServeFundingInfo />
         <ServeLTTeam />
         <ServeGSSubTitle />
         <ServeGSLink />

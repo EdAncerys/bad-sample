@@ -44,6 +44,7 @@ import SearchDermatologists from "../maps/searchDermatologists";
 import DividerBlock from "../dividerBlock";
 import CPTBlock from "../cptBlock";
 import RSSFeed from "../rssFeed";
+import FundingBlock from "../fundingBlock";
 
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   // console.log("BLOCKS: ", blocks); // debug
@@ -82,6 +83,14 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
       {blocks.map((block, key) => {
         const { acf_fc_layout } = block;
         console.log("CONTENT BLOCK", block); // debug
+
+        if (acf_fc_layout === "funding_loop_block")
+          return (
+            <div key={key + 1}>
+              <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+              <FundingBlock key={key} block={block} />
+            </div>
+          );
 
         if (acf_fc_layout === "bjd_feed")
           return (

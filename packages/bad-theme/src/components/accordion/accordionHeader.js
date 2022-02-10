@@ -14,6 +14,7 @@ const AccordionHeader = ({
   block,
   guidelines,
   leadershipBlock,
+  fundingBlock,
   handleAccordionToggle,
   uniqueId,
 }) => {
@@ -21,6 +22,8 @@ const AccordionHeader = ({
 
   const { title, body, logo, preview, guidelines_type, subtitle } = block;
   const LOGO_HEIGHT = 45;
+
+  console.log(block);
 
   const isActive = useRef(false);
 
@@ -46,8 +49,30 @@ const AccordionHeader = ({
   }
   // LEadership team & Standards --------------------------------
 
+  // Funding ----------------------------------------------------
+  let fundingTitle = null;
+  let fundingLogo = null;
+
+  if (fundingBlock) {
+    fundingTitle = block.title.rendered;
+    fundingLogo = block.acf.logo;
+  }
+  // Funding ----------------------------------------------------
+
+  const ServeFundingTitle = () => {
+    if (!fundingTitle) return null;
+
+    return (
+      <div className="flex primary-title" style={{ alignItems: "center" }}>
+        <div style={{ fontSize: 20 }}>
+          <Html2React html={fundingTitle} />
+        </div>
+      </div>
+    );
+  };
+
   const ServeTitle = () => {
-    if (!title || guidelines) return null;
+    if (!title || guidelines || fundingBlock) return null;
 
     const ServeSubtitle = () => {
       if (!subtitle) return null;
@@ -168,6 +193,26 @@ const AccordionHeader = ({
     );
   };
 
+  const ServeFundingLogo = () => {
+    if (!fundingLogo) return null;
+    const alt = fundingLogo.title || "BAD";
+
+    return (
+      <div
+        style={{
+          padding: `0.25em`,
+          margin: `0 4em 0 1em`,
+        }}
+      >
+        <Image
+          src={fundingLogo.url}
+          alt={alt}
+          style={{ height: LOGO_HEIGHT }}
+        />
+      </div>
+    );
+  };
+
   const ServeNICELogo = () => {
     if (!guidelines_type) return null;
     if (!guidelines_type.includes(87)) return null;
@@ -239,8 +284,10 @@ const AccordionHeader = ({
             <ServeTitle />
             <ServeGSTitle />
             <ServeLTTitle />
+            <ServeFundingTitle />
 
             <ServeLogo />
+            <ServeFundingLogo />
             <ServeNICELogo />
             <ServeIcon />
           </div>
