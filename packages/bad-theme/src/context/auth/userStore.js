@@ -33,10 +33,16 @@ export const setUserStoreAction = async ({
       // ⏬⏬  get application record from store ⏬⏬
       storeApplication = await getUserStoreAction({ state, isActiveUser });
     }
-
+    if (!storeApplication) {
+      // ⏬⏬  get application record from Dynamics ⏬⏬
+      storeApplication = await getDynamicsApplicationAction({
+        state,
+        contactid,
+      });
+    }
     if (!storeApplication) {
       // ⏬⏬  creat application record in Dynamics ⏬⏬
-      const newApplicationRecord = await createNewApplicationAction({
+      const newApplicationRecord = await createDynamicsApplicationAction({
         state,
         contactid,
       });
@@ -125,8 +131,8 @@ export const getUserStoreAction = async ({ state, isActiveUser }) => {
   }
 };
 
-export const createNewApplicationAction = async ({ state, contactid }) => {
-  console.log("createNewApplicationAction triggered");
+export const createDynamicsApplicationAction = async ({ state, contactid }) => {
+  console.log("createDynamicsApplicationAction triggered");
 
   // ⏬⏬  create application record in dynamics ⏬⏬
   const URL = state.auth.APP_HOST + `/applications/new/${contactid}`;
@@ -143,7 +149,37 @@ export const createNewApplicationAction = async ({ state, contactid }) => {
     const data = await fetch(URL, requestOptions);
     const result = await data.json();
 
-    // console.log("createNewApplicationAction result", result); // debug
+    // console.log("createDynamicsApplicationAction result", result); // debug
+
+    if (result.success) {
+      return result.data;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
+export const getDynamicsApplicationAction = async ({ state, contactid }) => {
+  console.log("getDynamicsApplicationAction triggered");
+
+  // ⏬⏬  create application record in dynamics ⏬⏬
+  const URL = state.auth.APP_HOST + `/applications/current/${contactid}`;
+  const jwt = await authenticateAppAction({ state });
+
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${jwt}`,
+    },
+  };
+
+  try {
+    const data = await fetch(URL, requestOptions);
+    const result = await data.json();
+
+    // console.log("createDynamicsApplicationAction result", result); // debug
 
     if (result.success) {
       return result.data;
