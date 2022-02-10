@@ -37,7 +37,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   const typeFilterRef = useRef(null);
   const loadMoreRef = useRef(null);
 
-  const LIMIT = 8;
+  const LIMIT = 100; // max limit
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -158,7 +158,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     currentSearchFilterRef.current = null;
 
     if (!typeFilterRef.current) {
-      setPostListData(data.slice(0, Number(LIMIT)));
+      setPostListData(data.slice(0, Number(post_limit || LIMIT)));
     } else {
       handleTypeSearch();
     }
@@ -169,7 +169,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     let data = Object.values(state.source[postPath]); // add postListData object to data array
 
     if (!currentSearchFilterRef.current) {
-      setPostListData(data.slice(0, Number(LIMIT)));
+      setPostListData(data.slice(0, Number(post_limit || LIMIT)));
     } else {
       handleSearch();
     }
