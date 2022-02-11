@@ -103,8 +103,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
       data: formData,
     });
 
-    // let slug = `/membership/final-step-thank-you/`;
-    // if (isActiveUser) setGoToAction({ path: slug, actions });
+    let slug = `/membership/final-step-thank-you/`;
+    if (isActiveUser) setGoToAction({ path: slug, actions });
   };
 
   const handleInputChange = (e) => {

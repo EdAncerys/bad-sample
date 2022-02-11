@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { Form } from "react-bootstrap";
 
@@ -26,6 +26,27 @@ const CompleteApplication = ({ state, actions, libraries }) => {
     privacyNotice: "",
   });
 
+  // ⏬ populate form data values from applicationData
+  useEffect(() => {
+    const handleSetData = ({ data, name }) => {
+      if (name === "bad_isbadmember") console.log(data.value);
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [`${name}`]: data.value || "",
+      }));
+    };
+
+    if (!applicationData) return null;
+    applicationData.map((data) => {
+      if (data.name === "bad_ethnicity")
+        handleSetData({ data, name: "bad_ethnicity" });
+      if (data.name === "py3_constitutionagreement")
+        handleSetData({ data, name: "py3_constitutionagreement" });
+      if (data.name === "privacyNotice")
+        handleSetData({ data, name: "privacyNotice" });
+    });
+  }, []);
+
   // HANDLERS --------------------------------------------
   const handleComplete = async () => {
     await setUserStoreAction({
@@ -36,13 +57,13 @@ const CompleteApplication = ({ state, actions, libraries }) => {
       data: formData,
     });
 
-    await setCompleteUserApplicationAction({
-      state,
-      isActiveUser,
-    });
+    // await setCompleteUserApplicationAction({
+    //   state,
+    //   isActiveUser,
+    // });
 
-    let slug = `/membership/`;
-    if (isActiveUser) setGoToAction({ path: slug, actions });
+    // let slug = `/membership/`;
+    // if (isActiveUser) setGoToAction({ path: slug, actions });
   };
 
   const handleInputChange = (e) => {
@@ -109,7 +130,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
               <div>
                 <input
                   name="py3_constitutionagreement"
-                  value={formData.py3_constitutionagreement}
+                  checked={formData.py3_constitutionagreement}
                   onChange={handleInputChange}
                   type="checkbox"
                   className="form-check-input"
@@ -136,7 +157,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
               <div>
                 <input
                   name="privacyNotice"
-                  value={formData.privacyNotice}
+                  checked={formData.privacyNotice}
                   onChange={handleInputChange}
                   type="checkbox"
                   className="form-check-input"
