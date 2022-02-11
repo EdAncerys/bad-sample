@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect, useRef } from "react";
+import { useState } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import parse from "html-react-parser";
@@ -18,7 +18,7 @@ import {
   sendEmailEnquireAction,
   setUserStoreAction,
   getTestUserAccountsAction,
-  getMembershipSubscriptionId,
+  getBADMembershipSubscriptionId,
 } from "../../context";
 
 const AccordionBody = ({
@@ -36,9 +36,6 @@ const AccordionBody = ({
 
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, idFilter } = useAppState();
-
-  const testAccountsRef = useRef(null);
-  const searchFilterRef = useRef(null);
 
   const ALL_POSITIONS = Object.values(state.source.leadership_position);
   const ICON_WIDTH = 35;
@@ -63,28 +60,28 @@ const AccordionBody = ({
   // HANDLERS ----------------------------------------------------
   const handleApply = async () => {
     // ⏬ get appropriate membership ID
-    const membershipId = await getMembershipSubscriptionId({
+    const membershipId = await getBADMembershipSubscriptionId({
       state,
       category: "BAD",
       type: apply_for_membership,
     });
     console.log("Application Type ", apply_for_membership); // debug
 
-    // ⏬ create user application record in Store
-    await setUserStoreAction({
-      state,
-      dispatch,
-      applicationData,
-      isActiveUser,
-      data: {
-        bad_organisedfor: "810170000", // BAD members category
-        core_membershipsubscriptionplanid: membershipId, // type of membership for application
-        bad_applicationfor: "810170000", // silent assignment
-      },
-    });
+    // // ⏬ create user application record in Store
+    // await setUserStoreAction({
+    //   state,
+    //   dispatch,
+    //   applicationData,
+    //   isActiveUser,
+    //   data: {
+    //     bad_organisedfor: "810170000", // BAD members category
+    //     core_membershipsubscriptionplanid: membershipId, // type of membership for application
+    //     bad_applicationfor: "810170000", // silent assignment
+    //   },
+    // });
 
-    if (isActiveUser)
-      setGoToAction({ path: `/membership/step-1-the-process/`, actions });
+    // if (isActiveUser)
+    //   setGoToAction({ path: `/membership/step-1-the-process/`, actions });
   };
 
   const handleContactFormSubmit = async () => {

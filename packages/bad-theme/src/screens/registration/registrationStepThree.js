@@ -10,7 +10,7 @@ import {
   useAppDispatch,
   useAppState,
   setUserStoreAction,
-  getMembershipSubscriptionId,
+  getBADMembershipSubscriptionId,
   setGoToAction,
 } from "../../context";
 
@@ -51,7 +51,7 @@ const RegistrationStepThree = ({ state, actions }) => {
   // HANDLERS --------------------------------------------
   const handleSaveExit = async () => {
     // ⏬ get appropriate membership ID
-    const membershipId = await getMembershipSubscriptionId({
+    const membershipId = await getBADMembershipSubscriptionId({
       state,
       category: category === "810170000" ? "BAD" : "SIG",
       type,
@@ -86,7 +86,7 @@ const RegistrationStepThree = ({ state, actions }) => {
 
   const handleNext = async () => {
     // ⏬ get appropriate membership ID
-    const membershipId = await getMembershipSubscriptionId({
+    const membershipId = await getBADMembershipSubscriptionId({
       state,
       category: category === "810170000" ? "BAD" : "SIG",
       type,

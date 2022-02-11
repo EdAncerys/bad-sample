@@ -1,16 +1,16 @@
 import { authenticateAppAction } from "../index";
 
-export const getMembershipSubscriptionId = async ({
+export const getBADMembershipSubscriptionId = async ({
   state,
   category,
   type,
 }) => {
-  console.log("getMembershipSubscriptionId triggered");
+  console.log("getBADMembershipSubscriptionId triggered");
 
-  const year = new Date("01.01.2021").getFullYear(); // get current year
+  const year = new Date().getFullYear(); // get current year
   const URL =
     state.auth.APP_HOST +
-    `/catalogue/lookup/membershiptype?search=${category}:${type}:${year}`;
+    `/catalogue/lookup/membershiptype?search=${category}:${type}::${year}`;
   const jwt = await authenticateAppAction({ state });
 
   console.log(URL);
@@ -25,11 +25,13 @@ export const getMembershipSubscriptionId = async ({
     const result = await data.json();
 
     if (result.success) {
-      const membershipId = result.data.core_membershipsubscriptionplanid;
+      const membershipId = result.data[0]
+        ? result.data[0].core_membershipsubscriptionplanid
+        : null;
       console.log("⏬ Application ID ⏬");
       console.log(membershipId);
 
-      return membershipId || "ef2fac54-3ed3-ea11-a812-000d3a4a1557"; // dummy default value
+      return membershipId;
     }
   } catch (error) {
     console.log("error", error);
