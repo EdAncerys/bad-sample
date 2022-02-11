@@ -42,7 +42,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     const handleSetData = ({ data, name }) => {
       setFormData((prevFormData) => ({
         ...prevFormData,
-        [`${name}`]: data.value,
+        [`${name}`]: data.value || "",
       }));
     };
 

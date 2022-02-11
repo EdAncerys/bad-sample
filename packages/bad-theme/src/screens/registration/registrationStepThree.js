@@ -44,7 +44,7 @@ const RegistrationStepThree = ({ state, actions }) => {
     const handleSetData = ({ data, name }) => {
       setFormData((prevFormData) => ({
         ...prevFormData,
-        [`${name}`]: data.value,
+        [`${name}`]: data.value || "",
       }));
     };
 

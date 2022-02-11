@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../../config/imports";
@@ -49,6 +49,35 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   const cvRef = useRef(null);
   const hospitalSearchRef = useRef("");
 
+  // ⏬ populate form data values from applicationData
+  useEffect(() => {
+    const handleSetData = ({ data, name }) => {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [`${name}`]: data.value || "",
+      }));
+    };
+
+    if (!applicationData) return null;
+    applicationData.map((data) => {
+      if (data.name === "py3_gmcnumber")
+        handleSetData({ data, name: "py3_gmcnumber" });
+      if (data.name === "py3_otherregulatorybodyreference")
+        handleSetData({ data, name: "py3_otherregulatorybodyreference" });
+      if (data.name === "py3_ntnno") handleSetData({ data, name: "py3_ntnno" });
+      if (data.name === "bad_currentpost")
+        handleSetData({ data, name: "bad_currentpost" });
+      if (data.name === "bad_proposer1")
+        handleSetData({ data, name: "bad_proposer1" });
+      if (data.name === "bad_proposer2")
+        handleSetData({ data, name: "bad_proposer2" });
+      if (data.name === "bad_mrpcqualified")
+        handleSetData({ data, name: "bad_mrpcqualified" });
+      if (data.name === "bad_medicalschool")
+        handleSetData({ data, name: "bad_medicalschool" });
+    });
+  }, []);
+
   // HANDLERS --------------------------------------------
   const handleSelectHospital = ({ item }) => {
     setSelectedHospital(item);
@@ -66,7 +95,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       py3_hospitalid: "",
     }));
   };
-  console.log(formData);
 
   const handleHospitalLookup = async () => {
     if (hospitalSearchRef.current.value.length < 2) return; // API call after 2 characters
