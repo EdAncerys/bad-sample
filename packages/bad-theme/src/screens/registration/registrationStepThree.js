@@ -41,13 +41,17 @@ const RegistrationStepThree = ({ state, actions }) => {
 
   // ⏬ populate form data values from applicationData
   useEffect(() => {
+    const handleSetData = ({ data, name }) => {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [`${name}`]: data.value,
+      }));
+    };
+
     if (!applicationData) return null;
     applicationData.map((data) => {
       if (data.name === "bad_organisedfor")
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          bad_organisedfor: data.value,
-        }));
+        handleSetData({ data, name: "bad_organisedfor" });
     });
   }, []);
 
