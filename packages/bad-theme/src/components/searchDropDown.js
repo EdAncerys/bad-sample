@@ -9,6 +9,7 @@ const SearchDropDown = ({
   libraries,
   filter,
   onClickHandler,
+  mapToName,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -23,7 +24,6 @@ const SearchDropDown = ({
         position: "absolute",
         zIndex: 99,
         left: 0,
-        top: ctaHeight + 10,
         right: 0,
         marginTop: 10,
         border: `1px solid ${colors.silver}`,
@@ -42,19 +42,17 @@ const SearchDropDown = ({
           }}
         >
           {filter.map((item, key) => {
-            if (!item.title) return null;
-            const { link, title } = item;
-
-            const isNoResults = title === "No Results";
+            if (!mapToName) return null;
+            const name = item[mapToName];
 
             return (
               <div
-                className={isNoResults ? "" : "title-link-animation"}
+                className="title-link-animation"
                 key={key}
                 style={{ padding: `0.5em 0`, cursor: "pointer" }}
-                onClick={() => onClickHandler({ link })}
+                onClick={() => onClickHandler({ item })}
               >
-                <Html2React html={title.rendered} />
+                <Html2React html={name} />
               </div>
             );
           })}

@@ -194,8 +194,49 @@ export const getDynamicsApplicationAction = async ({ state, contactid }) => {
 export const setCompleteUserApplicationAction = async ({
   state,
   isActiveUser,
+  applicationData,
 }) => {
   console.log("setCompleteUserApplicationAction triggered");
+
+  try {
+    const { contactid } = isActiveUser;
+    if (!contactid)
+      throw new Error("Cannot set user store. Contactid is missing.");
+
+    await updateDynamicsApplicationAction({
+      state,
+      isActiveUser,
+      applicationData,
+    });
+
+    const URL = state.auth.APP_HOST + `/applications/new/${contactid}`;
+    const jwt = await authenticateAppAction({ state });
+
+    const requestOptions = {
+      method: "POST",
+      headers: { Authorization: `Bearer ${jwt}` },
+    };
+
+    const response = await fetch(URL, requestOptions);
+    const data = await response.json();
+
+    if (data.success) {
+      console.log("⏬ Membership Completed ⏬");
+      console.log(data);
+    } else {
+      console.log("⏬ Failed to Create Membership ⏬");
+    }
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
+export const updateDynamicsApplicationAction = async ({
+  state,
+  isActiveUser,
+  applicationData,
+}) => {
+  console.log("updateDynamicsApplicationAction triggered");
 
   try {
     const { contactid } = isActiveUser;
@@ -211,17 +252,18 @@ export const setCompleteUserApplicationAction = async ({
         "Content-Type": "application/json",
         Authorization: `Bearer ${jwt}`,
       },
+      body: JSON.stringify(applicationData),
     };
 
     const response = await fetch(URL, requestOptions);
-    const userStore = await response.json();
+    const data = await response.json();
 
-    if (userStore.success) {
-      console.log("⏬ Membership Successfully Created ⏬");
-      console.log(userStore);
-      return userStore.data;
+    if (data.success) {
+      console.log("⏬ Membership Successfully Updated ⏬");
+      console.log(data);
+      return data.data;
     } else {
-      console.log("⏬ Faild to Create Membership Record ⏬");
+      console.log("⏬ Faild to Update Membership Record ⏬");
       return null;
     }
   } catch (error) {
@@ -293,6 +335,8 @@ const updateMembershipApplication = ({ storeApplication, data }) => {
       application.value = data.bad_currentpost;
     if (data.py3_hospitalid && application.name === "py3_hospitalid")
       application.value = data.py3_hospitalid;
+    if (data.bad_medicalschool && application.name === "bad_medicalschool")
+      application.value = data.bad_medicalschool;
     if (data.bad_proposer1 && application.name === "bad_proposer1")
       application.value = data.bad_proposer1;
     if (data.bad_proposer2 && application.name === "bad_proposer2")
@@ -301,46 +345,42 @@ const updateMembershipApplication = ({ storeApplication, data }) => {
       application.value = data.bad_mrpcqualified;
     // cv input TCC
     // grade TBC
-    if (
-      data.py3_constitutionagreement &&
-      application.name === "py3_constitutionagreement"
-    )
-      application.value = data.py3_constitutionagreement;
-    // privacy notice TBC
   });
 
   //⏬ SIG section of the application process
-  if (data.bad_qualifications && application.name === "bad_qualifications")
-    application.value = data.bad_qualifications;
+  // if (data.bad_qualifications && application.name === "bad_qualifications")
+  //   application.value = data.bad_qualifications;
+  // if (
+  //   data.bad_hasmedicallicence &&
+  //   application.name === "bad_hasmedicallicence"
+  // )
+  //   application.value = data.bad_hasmedicallicence;
+  // if (data.bad_isbadmember && application.name === "bad_isbadmember")
+  //   application.value = data.bad_isbadmember;
+  // // location TBC
+  // if (
+  //   data.bad_interestinfieldquestion &&
+  //   application.name === "bad_interestinfieldquestion"
+  // )
+  //   application.value = data.bad_interestinfieldquestion;
+  // // description TBC
+  // // specialties TBC
+  // // areaInterest TBC
+  // if (
+  //   data.bad_includeinthebssciiemaildiscussionforum &&
+  //   application.name === "bad_includeinthebssciiemaildiscussionforum"
+  // )
+  //   application.value = data.bad_includeinthebssciiemaildiscussionforum;
+
+  //⏬ complete & submit of the application process
+  if (data.bad_ethnicity && application.name === "bad_ethnicity")
+    application.value = data.bad_ethnicity;
   if (
-    data.bad_hasmedicallicence &&
-    application.name === "bad_hasmedicallicence"
-  )
-    application.value = data.bad_hasmedicallicence;
-  if (data.bad_isbadmember && application.name === "bad_isbadmember")
-    application.value = data.bad_isbadmember;
-  // location TBC
-  if (
-    data.bad_interestinfieldquestion &&
-    application.name === "bad_interestinfieldquestion"
-  )
-    application.value = data.bad_interestinfieldquestion;
-  // description TBC
-  // specialties TBC
-  // areaInterest TBC
-  if (
-    data.bad_includeinthebssciiemaildiscussionforum &&
-    application.name === "bad_includeinthebssciiemaildiscussionforum"
-  )
-    application.value = data.bad_includeinthebssciiemaildiscussionforum;
-  if (data.py3_email && application.name === "py3_email")
-    application.value = data.py3_email;
-  if (
-    data.py3_constitutionagreement &&
+    data.py3_constitutionagreement !== undefined &&
     application.name === "py3_constitutionagreement"
   )
     application.value = data.py3_constitutionagreement;
-  // notice TBC
+  // privacyNotice TBC
 
   console.log("User Input Data ", data); // debug
   console.log("UPDATED Application Record", newApplicationRecord); // debug

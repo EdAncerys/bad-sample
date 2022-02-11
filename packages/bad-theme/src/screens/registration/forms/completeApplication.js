@@ -10,9 +10,8 @@ import {
   useAppDispatch,
   useAppState,
   setUserStoreAction,
-  sendFileToS3Action,
-  getHospitalsAction,
   setGoToAction,
+  setCompleteUserApplicationAction,
 } from "../../../context";
 
 const CompleteApplication = ({ state, actions, libraries }) => {
@@ -21,32 +20,26 @@ const CompleteApplication = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser } = useAppState();
 
-  const [category, setCategory] = useState(() => {
-    if (!applicationData) return "";
-    let applicationCategory = "";
-    applicationData.map((data) => {
-      if (data.name === "bad_organisedfor") applicationCategory = data.value;
-    });
-
-    return applicationCategory;
-  });
-
   const [formData, setFormData] = useState({
     bad_ethnicity: "",
     py3_constitutionagreement: "",
     privacyNotice: "",
   });
 
-  const cvRef = useRef(null);
-
   // HANDLERS --------------------------------------------
-  const handleNext = async () => {
+  const handleComplete = async () => {
     await setUserStoreAction({
       state,
       dispatch,
       applicationData,
       isActiveUser,
       data: formData,
+    });
+
+    await setCompleteUserApplicationAction({
+      state,
+      isActiveUser,
+      applicationData,
     });
 
     let slug = `/membership/`;
@@ -72,7 +65,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
           borderTop: `1px solid ${colors.silverFillTwo}`,
         }}
       >
-        <div className="blue-btn" onClick={handleNext}>
+        <div className="blue-btn" onClick={handleComplete}>
           Enter
         </div>
       </div>
@@ -85,10 +78,10 @@ const CompleteApplication = ({ state, actions, libraries }) => {
         <div style={{ padding: `2em 1em` }}>
           <label style={styles.subTitle}>What is your Ethnic Group?</label>
           <Form.Select
-            name="bad_ethnicity input"
+            name="bad_ethnicity"
             value={formData.bad_ethnicity}
             onChange={handleInputChange}
-            className='input'
+            className="input"
           >
             <option value="" hidden>
               Ethnic Group

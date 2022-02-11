@@ -5,7 +5,12 @@ import { colors } from "../../config/imports";
 import SearchContainer from "../searchContainer";
 import SearchDropDown from "../searchDropDown";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch,useAppState, setFilterAction, setGoToAction } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setFilterAction,
+  setGoToAction,
+} from "../../context";
 
 const SearchInput = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -50,11 +55,11 @@ const SearchInput = ({ state, actions, libraries }) => {
     >
       <SearchContainer
         searchFilterRef={searchFilterRef}
-        handleSearch={handleSearch}
+        handleSearch={() => console.log(searchFilterRef.current.value)}
         onChange
         inputOnly
       />
-      <SearchDropDown filter={filter} onClickHandler={onClickHandler} />
+      {/* <SearchDropDown filter={filter} onClickHandler={onClickHandler} /> */}
     </div>
   );
 };

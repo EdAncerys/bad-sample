@@ -2,6 +2,8 @@ import { useState, useRef } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../../config/imports";
+import SearchDropDown from "../../../components/searchDropDown";
+import CloseIcon from "@mui/icons-material/Close";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -39,11 +41,45 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     bad_mrpcqualified: "",
     cvDocument: "",
     currentGrade: "",
+    bad_medicalschool: "",
   });
+  const [hospitalData, setHospitalData] = useState(null);
+  const [selectedHospital, setSelectedHospital] = useState(null);
 
   const cvRef = useRef(null);
+  const hospitalSearchRef = useRef("");
 
   // HANDLERS --------------------------------------------
+  const handleSelectHospital = ({ item }) => {
+    setSelectedHospital(item);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      py3_hospitalid: item.accountid,
+    }));
+    setHospitalData(null);
+    console.log(item);
+  };
+  const handleClearHospital = () => {
+    setSelectedHospital(null);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      py3_hospitalid: "",
+    }));
+  };
+  console.log(formData);
+
+  const handleHospitalLookup = async () => {
+    if (hospitalSearchRef.current.value.length < 2) return; // API call after 2 characters
+
+    const hospitalData = await getHospitalsAction({
+      state,
+      input: hospitalSearchRef.current.value,
+    });
+
+    console.log("Hospitals", hospitalData);
+    setHospitalData(hospitalData);
+  };
+
   const handleSaveExit = async () => {
     await setUserStoreAction({
       state,
@@ -175,16 +211,63 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
           />
 
           <label className="required form-label">
-            Main Hospital/Medical School/Place of work
+            Main Hospital/Place of work
           </label>
+          <div style={{ position: "relative" }}>
+            {selectedHospital && (
+              <div className="form-control input">
+                <div className="flex-row">
+                  <div
+                    style={{
+                      position: "relative",
+                      width: "fit-content",
+                      paddingRight: 15,
+                    }}
+                  >
+                    {selectedHospital.name}
+                    <div
+                      className="filter-icon"
+                      style={{ top: -7 }}
+                      onClick={handleClearHospital}
+                    >
+                      <CloseIcon
+                        style={{
+                          fill: colors.darkSilver,
+                          padding: 0,
+                          width: "0.7em",
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            {!selectedHospital && (
+              <input
+                ref={hospitalSearchRef}
+                onChange={handleHospitalLookup}
+                type="text"
+                className="form-control input"
+                placeholder="Main Hospital/Place of work"
+              />
+            )}
+            {hospitalData && (
+              <SearchDropDown
+                filter={hospitalData}
+                mapToName="name"
+                onClickHandler={handleSelectHospital}
+              />
+            )}
+          </div>
+
+          <label className="required form-label">Medical School</label>
           <input
-            name="py3_hospitalid"
-            value={formData.py3_hospitalid}
+            name="bad_medicalschool"
+            value={formData.bad_medicalschool}
             onChange={handleInputChange}
-            // onChange={handleHospitalLookup}
             type="text"
             className="form-control input"
-            placeholder="Main Hospital/Place of work"
+            placeholder="Medical School"
           />
         </div>
 
