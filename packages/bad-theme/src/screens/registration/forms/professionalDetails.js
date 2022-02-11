@@ -9,6 +9,7 @@ import {
   setUserStoreAction,
   sendFileToS3Action,
   getHospitalsAction,
+  setGoToAction,
 } from "../../../context";
 
 const ProfessionalDetails = ({ state, actions, libraries }) => {
@@ -17,12 +18,24 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser } = useAppState();
 
+  const [category, setCategory] = useState(() => {
+    if (!applicationData) return "";
+    let applicationCategory = "";
+    applicationData.map((data) => {
+      if (data.name === "bad_organisedfor") applicationCategory = data.value;
+    });
+
+    return applicationCategory;
+  });
+
   const [formData, setFormData] = useState({
     py3_gmcnumber: "",
-    registrationNumber: "",
+    py3_otherregulatorybodyreference: "",
     py3_ntnno: "",
     bad_currentpost: "",
     py3_hospitalid: "",
+    bad_proposer1: "",
+    bad_proposer2: "",
     bad_mrpcqualified: "",
     cvDocument: "",
     currentGrade: "",
@@ -37,35 +50,36 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       dispatch,
       applicationData,
       isActiveUser,
+      data: formData,
     });
+
     if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
   const handleNext = async () => {
-    console.log(formData);
+    await setUserStoreAction({
+      state,
+      dispatch,
+      applicationData,
+      isActiveUser,
+      data: formData,
+    });
 
-    // await setUserStoreAction({
-    //   state,
-    //   dispatch,
-    //   applicationData,
-    //   isActiveUser,
-    //   data: formData,
-    // });
-
-    // let slug = `/membership/final-step-thank-you/`;
-    // if (type === "810170001") slug = `/membership/step-5-sig-questions/`;
-    // if (isActiveUser) setGoToAction({ path: slug, actions });
+    let slug = `/membership/final-step-thank-you/`;
+    if (category === "810170001") slug = `/membership/step-5-sig-questions/`;
+    if (isActiveUser) setGoToAction({ path: slug, actions });
   };
 
   const handleDocUploadChange = async () => {
-    let document = cvRef.current ? cvRef.current.files[0] : null;
-    if (document)
-      document = await sendFileToS3Action({
-        state,
-        dispatch,
-        attachments: document,
-      });
-    console.log("document", document); // debug
+    let document = cvRef.current.files[0];
+    let documentUrl = "";
+    // if (document)
+    //   documentUrl = await sendFileToS3Action({
+    //     state,
+    //     dispatch,
+    //     attachments: document,
+    //   });
+    console.log("documentUrl", documentUrl); // debug
     console.log(formData); // debug
 
     // setFormData((prevFormData) => ({
@@ -75,8 +89,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   };
 
   const handleInputChange = (e) => {
-    console.log(formData);
-
     const { name, value, type, checked, files } = e.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -95,7 +107,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
           className="transparent-btn"
           onClick={() =>
             setGoToAction({
-              path: `/membership/step-1-the-process/`,
+              path: `/membership/step-3-category-selection/`,
               actions,
             })
           }
@@ -134,8 +146,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             Regulatory Body Registration Number
           </label>
           <input
-            name="registrationNumber"
-            value={formData.registrationNumber}
+            name="py3_otherregulatorybodyreference"
+            value={formData.py3_otherregulatorybodyreference}
             onChange={handleInputChange}
             type="text"
             className="form-control input"
@@ -191,8 +203,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
               Supporting Member 1
             </label>
             <input
-              name="bad_mrpcqualified"
-              value={formData.bad_mrpcqualified}
+              name="bad_proposer1"
+              value={formData.bad_proposer1}
               onChange={handleInputChange}
               type="text"
               className="form-control input"
@@ -205,8 +217,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
               Supporting Member 2
             </label>
             <input
-              name="bad_mrpcqualified"
-              value={formData.bad_mrpcqualified}
+              name="bad_proposer2"
+              value={formData.bad_proposer2}
               onChange={handleInputChange}
               type="text"
               className="form-control input"
@@ -232,9 +244,9 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             placeholder="MRCP"
           />
 
-          <label className="required form-label">SIG DERMPATHPRO ONLY</label>
-          <br />
-          <label className="required form-label">Current Grade</label>
+          <label className="required form-label">
+            Current Grade <span style={{ color: "red" }}>DERMPATHPRO ONLY</span>
+          </label>
           <input
             name="currentGrade"
             value={formData.currentGrade}

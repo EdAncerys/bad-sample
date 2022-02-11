@@ -2,7 +2,6 @@ import { useState, useRef } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
-import { setGoToAction } from "../../context";
 import SideBarMenu from "./sideBarMenu";
 import { Form } from "react-bootstrap";
 import BlockWrapper from "../../components/blockWrapper";
@@ -12,6 +11,7 @@ import {
   useAppState,
   setUserStoreAction,
   getMembershipSubscriptionId,
+  setGoToAction,
 } from "../../context";
 
 const RegistrationStepThree = ({ state, actions }) => {

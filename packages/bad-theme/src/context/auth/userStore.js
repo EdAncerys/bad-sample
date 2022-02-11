@@ -282,17 +282,21 @@ const updateMembershipApplication = ({ storeApplication, data }) => {
     //⏬ category section of the application process
     if (data.py3_gmcnumber && application.name === "py3_gmcnumber")
       application.value = data.py3_gmcnumber;
-    // registration number TBC
+    if (
+      data.py3_otherregulatorybodyreference &&
+      application.name === "py3_otherregulatorybodyreference"
+    )
+      application.value = data.py3_otherregulatorybodyreference;
     if (data.py3_ntnno && application.name === "py3_ntnno")
       application.value = data.py3_ntnno;
     if (data.bad_currentpost && application.name === "bad_currentpost")
       application.value = data.bad_currentpost;
     if (data.py3_hospitalid && application.name === "py3_hospitalid")
       application.value = data.py3_hospitalid;
-    if (data.bad_medicalschool && application.name === "bad_medicalschool")
-      application.value = data.bad_medicalschool;
-    // supporting member one TBC
-    // supporting member two TBC
+    if (data.bad_proposer1 && application.name === "bad_proposer1")
+      application.value = data.bad_proposer1;
+    if (data.bad_proposer2 && application.name === "bad_proposer2")
+      application.value = data.bad_proposer2;
     if (data.bad_mrpcqualified && application.name === "bad_mrpcqualified")
       application.value = data.bad_mrpcqualified;
     // cv input TCC
@@ -313,8 +317,6 @@ const updateMembershipApplication = ({ storeApplication, data }) => {
     application.name === "bad_hasmedicallicence"
   )
     application.value = data.bad_hasmedicallicence;
-  if (data.bad_mrpcqualified && application.name === "bad_mrpcqualified")
-    application.value = data.bad_mrpcqualified;
   if (data.bad_isbadmember && application.name === "bad_isbadmember")
     application.value = data.bad_isbadmember;
   // location TBC
