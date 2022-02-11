@@ -39,7 +39,6 @@ const CompleteApplication = ({ state, actions, libraries }) => {
     await setCompleteUserApplicationAction({
       state,
       isActiveUser,
-      applicationData,
     });
 
     let slug = `/membership/`;

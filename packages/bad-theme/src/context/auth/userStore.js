@@ -80,6 +80,11 @@ export const setUserStoreAction = async ({
       body: JSON.stringify(updatedMembershipData, getCircularReplacer()),
     };
 
+    await updateDynamicsApplicationAction({
+      state,
+      contactid,
+      updatedMembershipData,
+    });
     const response = await fetch(URL, requestOptions);
     console.log("response", response);
     console.log("requestOptions", requestOptions);
@@ -194,7 +199,6 @@ export const getDynamicsApplicationAction = async ({ state, contactid }) => {
 export const setCompleteUserApplicationAction = async ({
   state,
   isActiveUser,
-  applicationData,
 }) => {
   console.log("setCompleteUserApplicationAction triggered");
 
@@ -202,12 +206,6 @@ export const setCompleteUserApplicationAction = async ({
     const { contactid } = isActiveUser;
     if (!contactid)
       throw new Error("Cannot set user store. Contactid is missing.");
-
-    await updateDynamicsApplicationAction({
-      state,
-      isActiveUser,
-      applicationData,
-    });
 
     const URL = state.auth.APP_HOST + `/applications/new/${contactid}`;
     const jwt = await authenticateAppAction({ state });
@@ -233,17 +231,13 @@ export const setCompleteUserApplicationAction = async ({
 
 export const updateDynamicsApplicationAction = async ({
   state,
-  isActiveUser,
-  applicationData,
+  contactid,
+  updatedMembershipData,
 }) => {
   console.log("updateDynamicsApplicationAction triggered");
 
   try {
-    const { contactid } = isActiveUser;
-    if (!contactid)
-      throw new Error("Cannot set user store. Contactid is missing.");
-
-    const URL = state.auth.APP_HOST + `/applications/new/${contactid}`;
+    const URL = state.auth.APP_HOST + `/applications/current/${contactid}`;
     const jwt = await authenticateAppAction({ state });
 
     const requestOptions = {
@@ -252,18 +246,17 @@ export const updateDynamicsApplicationAction = async ({
         "Content-Type": "application/json",
         Authorization: `Bearer ${jwt}`,
       },
-      body: JSON.stringify(applicationData),
+      body: JSON.stringify(updatedMembershipData),
     };
 
     const response = await fetch(URL, requestOptions);
     const data = await response.json();
 
     if (data.success) {
-      console.log("⏬ Membership Successfully Updated ⏬");
-      console.log(data);
+      console.log("⏬ DYNAMICS. Membership Record Successfully Updated ⏬");
       return data.data;
     } else {
-      console.log("⏬ Faild to Update Membership Record ⏬");
+      console.log("⏬ DYNAMICS. Failed to Update Membership Record ⏬");
       return null;
     }
   } catch (error) {
