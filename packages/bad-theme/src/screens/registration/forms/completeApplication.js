@@ -108,8 +108,8 @@ const CompleteApplication = ({ state, actions, libraries }) => {
             </option>
             {ETHNIC_GROUPES.map((item, key) => {
               return (
-                <option key={key} value={item}>
-                  {item}
+                <option key={key} value={item.value}>
+                  {item.Label}
                 </option>
               );
             })}
