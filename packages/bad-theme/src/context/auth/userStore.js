@@ -348,29 +348,47 @@ const updateMembershipApplication = ({ storeApplication, data }) => {
   });
 
   //⏬ SIG section of the application process
-  // if (data.bad_qualifications && application.name === "bad_qualifications")
-  //   application.value = data.bad_qualifications;
-  // if (
-  //   data.bad_hasmedicallicence &&
-  //   application.name === "bad_hasmedicallicence"
-  // )
-  //   application.value = data.bad_hasmedicallicence;
-  // if (data.bad_isbadmember && application.name === "bad_isbadmember")
-  //   application.value = data.bad_isbadmember;
-  // // location TBC
-  // if (
-  //   data.bad_interestinfieldquestion &&
-  //   application.name === "bad_interestinfieldquestion"
-  // )
-  //   application.value = data.bad_interestinfieldquestion;
-  // // description TBC
-  // // specialties TBC
-  // // areaInterest TBC
-  // if (
-  //   data.bad_includeinthebssciiemaildiscussionforum &&
-  //   application.name === "bad_includeinthebssciiemaildiscussionforum"
-  // )
-  //   application.value = data.bad_includeinthebssciiemaildiscussionforum;
+  if (data.bad_qualifications && application.name === "bad_qualifications")
+    application.value = data.bad_qualifications;
+  if (
+    data.bad_hasmedicallicence &&
+    application.name === "bad_hasmedicallicence"
+  )
+    application.value = data.bad_hasmedicallicence;
+  if (data.bad_isbadmember && application.name === "bad_isbadmember")
+    application.value = data.bad_isbadmember;
+  if (
+    data.bad_interestinfieldquestion &&
+    application.name === "bad_interestinfieldquestion"
+  )
+    application.value = data.bad_interestinfieldquestion;
+  if (
+    data.py3_whatukbasedroleareyou &&
+    application.name === "py3_whatukbasedroleareyou"
+  )
+    application.value = data.py3_whatukbasedroleareyou;
+  if (data.py3_speciality && application.name === "py3_speciality")
+    application.value = data.py3_speciality;
+  if (
+    data.bad_otherjointclinics &&
+    application.name === "bad_otherjointclinics"
+  )
+    application.value = data.bad_otherjointclinics;
+  if (
+    data.bad_mainareaofinterest &&
+    application.name === "bad_mainareaofinterest"
+  )
+    application.value = data.bad_mainareaofinterest;
+  if (
+    data.bad_includeinthebssciiemaildiscussionforum &&
+    application.name === "bad_includeinthebssciiemaildiscussionforum"
+  )
+    application.value = data.bad_includeinthebssciiemaildiscussionforum;
+  if (
+    data.py3_insertnhsnetemailaddress &&
+    application.name === "py3_insertnhsnetemailaddress"
+  )
+    application.value = data.py3_insertnhsnetemailaddress;
 
   //⏬ complete & submit of the application process
   if (data.bad_ethnicity && application.name === "bad_ethnicity")
