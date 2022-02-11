@@ -57,13 +57,13 @@ const CompleteApplication = ({ state, actions, libraries }) => {
       data: formData,
     });
 
-    // await setCompleteUserApplicationAction({
-    //   state,
-    //   isActiveUser,
-    // });
+    await setCompleteUserApplicationAction({
+      state,
+      isActiveUser,
+    });
 
-    // let slug = `/membership/`;
-    // if (isActiveUser) setGoToAction({ path: slug, actions });
+    let slug = `/membership/`;
+    if (isActiveUser) setGoToAction({ path: slug, actions });
   };
 
   const handleInputChange = (e) => {
