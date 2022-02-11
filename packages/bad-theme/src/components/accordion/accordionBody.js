@@ -67,21 +67,21 @@ const AccordionBody = ({
     });
     console.log("Application Type ", apply_for_membership); // debug
 
-    // // ⏬ create user application record in Store
-    // await setUserStoreAction({
-    //   state,
-    //   dispatch,
-    //   applicationData,
-    //   isActiveUser,
-    //   data: {
-    //     bad_organisedfor: "810170000", // BAD members category
-    //     core_membershipsubscriptionplanid: membershipId, // type of membership for application
-    //     bad_applicationfor: "810170000", // silent assignment
-    //   },
-    // });
+    // ⏬ create user application record in Store
+    await setUserStoreAction({
+      state,
+      dispatch,
+      applicationData,
+      isActiveUser,
+      data: {
+        bad_organisedfor: "810170000", // BAD members category
+        core_membershipsubscriptionplanid: membershipId, // type of membership for application
+        bad_applicationfor: "810170000", // silent assignment
+      },
+    });
 
-    // if (isActiveUser)
-    //   setGoToAction({ path: `/membership/step-1-the-process/`, actions });
+    if (isActiveUser)
+      setGoToAction({ path: `/membership/step-1-the-process/`, actions });
   };
 
   const handleContactFormSubmit = async () => {
