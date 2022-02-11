@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Form } from "react-bootstrap";
@@ -36,6 +36,42 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   });
   const [profilePhoto, setProfilePhoto] = useState(null);
   const profilePhotoRef = useRef(null);
+
+  // ⏬ populate form data values from applicationData
+  useEffect(() => {
+    const handleSetData = ({ data, name }) => {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [`${name}`]: data.value,
+      }));
+    };
+
+    if (!applicationData) return null;
+    applicationData.map((data) => {
+      if (data.name === "py3_title") handleSetData({ data, name: "py3_title" });
+      if (data.name === "py3_firstname")
+        handleSetData({ data, name: "py3_firstname" });
+      if (data.name === "py3_lastname")
+        handleSetData({ data, name: "py3_lastname" });
+      if (data.name === "py3_gender")
+        handleSetData({ data, name: "py3_gender" });
+      if (data.name === "py3_email") handleSetData({ data, name: "py3_email" });
+      if (data.name === "py3_mobilephone")
+        handleSetData({ data, name: "py3_mobilephone" });
+      if (data.name === "py3_address1ine1")
+        handleSetData({ data, name: "py3_address1ine1" });
+      if (data.name === "py3_addressline2")
+        handleSetData({ data, name: "py3_addressline2" });
+      if (data.name === "py3_addresstowncity")
+        handleSetData({ data, name: "py3_addresstowncity" });
+      if (data.name === "py3_addresscountystate")
+        handleSetData({ data, name: "py3_addresscountystate" });
+      if (data.name === "py3_addresszippostalcode")
+        handleSetData({ data, name: "py3_addresszippostalcode" });
+      if (data.name === "py3_addresscountry")
+        handleSetData({ data, name: "py3_addresscountry" });
+    });
+  }, []);
 
   // HANDLERS --------------------------------------------
   const handleSaveExit = async () => {
