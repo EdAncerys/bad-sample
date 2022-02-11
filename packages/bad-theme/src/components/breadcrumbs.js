@@ -63,13 +63,13 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
       actions.router.set(`${goToLink}`);
     };
 
-    if (item[0] !== "home")
+    if (item[0] !== "home" && !lg)
       wpMenu.map((menuItem) => {
         // check for nested child_items
-        if (menuItem.child_items)
+        if (menuItem.child_items && !lg)
           menuItem.child_items.map((childItem) => {
             // check for nested child_items
-            if (childItem.child_items) {
+            if (childItem.child_items && !lg) {
               childItem.child_items.map((childItem) => {
                 if (childItem.slug === item.toLowerCase())
                   titleName = <Html2React html={childItem.title} />;
@@ -93,7 +93,9 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
       <div>
         <div className="flex-row" style={styles.link} onClick={handleGoToLink}>
           <div style={styles.linkValue}>{titleName}</div>
-          <div style={{ margin: `0 ${MARGIN}px` }}>{chevron}</div>
+          {!lg ? (
+            <div style={{ margin: `0 ${MARGIN}px` }}>{chevron}</div>
+          ) : null}
         </div>
       </div>
     );
@@ -148,10 +150,14 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
       >
         <ServeTitle />
         <ServeNewsMediaPreFix />
-        {directions.map((item) => {
-          KEY += 1;
-          return <ServePatchDirections key={KEY} item={item} nextKey={KEY} />;
-        })}
+        {!lg ? (
+          directions.map((item) => {
+            KEY += 1;
+            return <ServePatchDirections key={KEY} item={item} nextKey={KEY} />;
+          })
+        ) : (
+          <ServePatchDirections key={KEY} item={directions[0]} nextKey={KEY} />
+        )}
       </div>
     </BlockWrapper>
   );
