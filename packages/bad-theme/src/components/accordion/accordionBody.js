@@ -77,7 +77,7 @@ const AccordionBody = ({
       applicationData,
       isActiveUser,
       data: {
-        bad_organisedfor: "810170000", // BAD members type
+        bad_organisedfor: "810170000", // BAD members category
         core_membershipsubscriptionplanid: membershipId, // type of membership for application
         bad_applicationfor: "810170000", // silent assignment
       },

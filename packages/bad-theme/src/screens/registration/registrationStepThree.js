@@ -7,11 +7,16 @@ import SideBarMenu from "./sideBarMenu";
 import { Form } from "react-bootstrap";
 import BlockWrapper from "../../components/blockWrapper";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setUserStoreAction } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setUserStoreAction,
+  getMembershipSubscriptionId,
+} from "../../context";
 
 const RegistrationStepThree = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
-  const page = state.source[data.type][data.id];
+  const page = state.source[data.category][data.id];
 
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser } = useAppState();
@@ -19,8 +24,8 @@ const RegistrationStepThree = ({ state, actions }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  const [type, setType] = useState(() => {
-    if (!applicationData) return "810170000";
+  const [category, setCategory] = useState(() => {
+    if (!applicationData) return "";
     let applicationType = "";
     applicationData.map((data) => {
       if (data.name === "bad_organisedfor") applicationType = data.value;
@@ -29,7 +34,7 @@ const RegistrationStepThree = ({ state, actions }) => {
     return applicationType;
   });
 
-  const [category, setCategory] = useState(() => {
+  const [type, setType] = useState(() => {
     if (!applicationData) return "";
     let applicationCategory = "";
     applicationData.map((data) => {
@@ -45,40 +50,60 @@ const RegistrationStepThree = ({ state, actions }) => {
 
   // HANDLERS --------------------------------------------
   const handleSaveExit = async () => {
+    // ⏬ get appropriate membership ID
+    const membershipId = await getMembershipSubscriptionId({
+      state,
+      category: category === "810170000" ? "BAD" : "SIG",
+      type,
+    });
+    console.log("Application cat id ", membershipId); // debug
+
+    // ⏬ create user application record in Store
     await setUserStoreAction({
       state,
       dispatch,
       applicationData,
       isActiveUser,
+      data: {
+        bad_organisedfor: category,
+        core_membershipsubscriptionplanid: membershipId, // type of membership for application
+        bad_applicationfor: "810170000", // silent assignment
+      },
     });
     if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
+
+    console.log("category", category);
+    console.log("type", type);
   };
 
   const handleTypeChange = (e) => {
-    setType(e.target.value);
-  };
-
-  const handleCategoryChange = (e) => {
     setCategory(e.target.value);
   };
 
+  const handleCategoryChange = (e) => {
+    setType(e.target.value);
+  };
+
   const handleNext = async () => {
-    const core_name = typeRef.current ? typeRef.current.value : null;
-    const core_membershipapplicationid = categoryRef.current
-      ? categoryRef.current.value
-      : null;
+    // ⏬ get appropriate membership ID
+    const membershipId = await getMembershipSubscriptionId({
+      state,
+      category: category === "810170000" ? "BAD" : "SIG",
+      type,
+    });
+    console.log("Application cat id ", membershipId); // debug
 
-    const data = {
-      core_name,
-      core_membershipapplicationid,
-    };
-
+    // ⏬ create user application record in Store
     await setUserStoreAction({
       state,
       dispatch,
       applicationData,
       isActiveUser,
-      data,
+      data: {
+        bad_organisedfor: category,
+        core_membershipsubscriptionplanid: membershipId, // type of membership for application
+        bad_applicationfor: "810170000", // silent assignment
+      },
     });
     if (isActiveUser)
       setGoToAction({
@@ -121,7 +146,7 @@ const RegistrationStepThree = ({ state, actions }) => {
 
   const ServeForm = () => {
     const ServeBADMembershipCategory = () => {
-      if (type !== "810170000") return null;
+      if (category !== "810170000") return null;
 
       return (
         <div>
@@ -129,30 +154,32 @@ const RegistrationStepThree = ({ state, actions }) => {
           <Form.Select
             ref={categoryRef}
             style={styles.input}
-            value={category}
+            value={type}
             onChange={(e) => handleCategoryChange(e)}
           >
             <option value="" hidden>
               Membership Category
             </option>
-            <option value="810170027">Ordinary</option>
-            <option value="370410000">Ordinary SAS</option>
-            <option value="810170029">Career Grade</option>
-            <option value="810170005">Trainee</option>
-            <option value="810170000">Honorary</option>
-            <option value="810170010">Associate</option>
-            <option value="810170008">Associate Trainee</option>
-            <option value="810170013">Associate Overseas</option>
-            <option value="810170011">GP</option>
-            <option value="810170016">Student</option>
-            <option value="810170012">Allied Healthcare Professional</option>
+            <option value="Full">Full</option>
+            <option value="Allied Healthcare Professional">
+              Allied Healthcare Professional
+            </option>
+            <option value="Associate">Associate</option>
+            <option value="Associate Overseas">Associate Overseas</option>
+            <option value="Associate Trainee">Associate Trainee</option>
+            <option value="Career Grade">Career Grade</option>
+            <option value="GP">GP</option>
+            <option value="Ordinary">Ordinary</option>
+            <option value="Ordinary SAS">Ordinary SAS</option>
+            <option value="Student">Student</option>
+            <option value="Trainee">Trainee</option>
           </Form.Select>
         </div>
       );
     };
 
     const ServeSIGMembershipCategory = () => {
-      if (type !== "810170001") return null;
+      if (category !== "810170001") return null;
 
       return (
         <div>
@@ -160,7 +187,7 @@ const RegistrationStepThree = ({ state, actions }) => {
           <Form.Select
             ref={categoryRef}
             style={styles.input}
-            value={category}
+            value={type}
             onChange={(e) => handleCategoryChange(e)}
           >
             <option value="" hidden>
@@ -237,7 +264,7 @@ const RegistrationStepThree = ({ state, actions }) => {
         <Form.Select
           ref={typeRef}
           style={styles.input}
-          value={type}
+          value={category}
           onChange={(e) => handleTypeChange(e)}
         >
           <option value="null" hidden>
