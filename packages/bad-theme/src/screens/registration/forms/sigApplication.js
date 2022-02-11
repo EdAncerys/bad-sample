@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { Form } from "react-bootstrap";
 
@@ -31,7 +31,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
   const [formData, setFormData] = useState({
     bad_qualifications: "",
-    bad_hasmedicallicence: "",
+    bad_hasmedicallicence: true,
     bad_isbadmember: "",
     bad_interestinfieldquestion: "",
     py3_whatukbasedroleareyou: "",
@@ -43,7 +43,43 @@ const SIGApplication = ({ state, actions, libraries }) => {
   });
   const [isEmail, setIsEmail] = useState(false);
 
-  console.log(formData);
+  // ⏬ populate form data values from applicationData
+  useEffect(() => {
+    const handleSetData = ({ data, name }) => {
+      if (name === "bad_isbadmember") console.log(data.value);
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [`${name}`]: data.value || "",
+      }));
+    };
+
+    if (!applicationData) return null;
+    applicationData.map((data) => {
+      if (data.name === "bad_qualifications")
+        handleSetData({ data, name: "bad_qualifications" });
+      if (data.name === "bad_hasmedicallicence")
+        handleSetData({ data, name: "bad_hasmedicallicence" });
+      if (data.name === "bad_isbadmember")
+        handleSetData({ data, name: "bad_isbadmember" });
+      if (data.name === "bad_interestinfieldquestion")
+        handleSetData({ data, name: "bad_interestinfieldquestion" });
+      if (data.name === "py3_whatukbasedroleareyou")
+        handleSetData({ data, name: "py3_whatukbasedroleareyou" });
+      if (data.name === "py3_speciality")
+        handleSetData({ data, name: "py3_speciality" });
+      if (data.name === "bad_otherjointclinics")
+        handleSetData({ data, name: "bad_otherjointclinics" });
+      if (data.name === "bad_mainareaofinterest")
+        handleSetData({ data, name: "bad_mainareaofinterest" });
+      if (data.name === "bad_includeinthebssciiemaildiscussionforum")
+        handleSetData({
+          data,
+          name: "bad_includeinthebssciiemaildiscussionforum",
+        });
+      if (data.name === "py3_insertnhsnetemailaddress")
+        handleSetData({ data, name: "py3_insertnhsnetemailaddress" });
+    });
+  }, []);
 
   // HANDLERS --------------------------------------------
   const handleSaveExit = async () => {
@@ -74,8 +110,11 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    if (name === "bad_includeinthebssciiemaildiscussionforum") {
-      setIsEmail(!isEmail);
+    if (name === "bad_includeinthebssciiemaildiscussionforum" && checked) {
+      setIsEmail(true);
+    }
+    if (name === "bad_includeinthebssciiemaildiscussionforum" && !checked) {
+      setIsEmail(false);
     }
 
     setFormData((prevFormData) => ({
@@ -136,7 +175,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </label>
             <input
               name="bad_hasmedicallicence"
-              value={formData.bad_hasmedicallicence}
+              checked={formData.bad_hasmedicallicence}
               onChange={handleInputChange}
               type="checkbox"
               className="form-check-input"
@@ -148,7 +187,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             <label className="form-label">Are you BAD member (Y/N)</label>
             <input
               name="bad_isbadmember"
-              value={formData.bad_isbadmember}
+              checked={formData.bad_isbadmember}
               onChange={handleInputChange}
               type="checkbox"
               className="form-check-input"
@@ -242,7 +281,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </label>
             <input
               name="bad_includeinthebssciiemaildiscussionforum"
-              value={formData.bad_includeinthebssciiemaildiscussionforum}
+              checked={formData.bad_includeinthebssciiemaildiscussionforum}
               onChange={handleInputChange}
               type="checkbox"
               className="form-check-input"

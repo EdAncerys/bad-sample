@@ -58,7 +58,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
 
   const ServeContent = () => {
     const ServeStepFive = () => {
-      if (category === "810170001") return null; // SIG application link
+      if (category !== "810170001") return null; // SIG application link
 
       return (
         <div
