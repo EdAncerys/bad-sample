@@ -193,7 +193,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     };
 
     return (
-      <div style={{ backgroundColor: colors.silverFillTwo }}>
+      <div style={{ backgroundColor: colors.silverFillTwo }}  className="no-selector">
         <BlockWrapper>
           <div
             className="flex-col"

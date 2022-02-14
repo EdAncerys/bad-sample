@@ -187,7 +187,7 @@ const Events = ({ state, actions, libraries, block }) => {
     };
 
     return (
-      <div style={{ position: "relative" }}>
+      <div style={{ position: "relative" }} className="no-selector">
         <div className="flex-col" style={{ width: "70%" }}>
           <SearchContainer
             searchFilterRef={searchFilterRef}

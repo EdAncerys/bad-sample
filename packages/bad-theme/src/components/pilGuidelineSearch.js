@@ -163,7 +163,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
+    <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }} className="no-selector">
       <div className="shadow">
         <SearchContainer
           title="Search for Guidelines"

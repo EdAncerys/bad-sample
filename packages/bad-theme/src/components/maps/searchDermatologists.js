@@ -334,6 +334,7 @@ const SearchDermatologists = ({ state, actions, libraries, block }) => {
         padding: `${marginVertical}px 0`,
         backgroundColor: background_colour,
       }}
+      className="no-selector"
     >
       <div
         style={{

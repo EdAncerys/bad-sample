@@ -145,9 +145,13 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
           marginBottom: `${state.theme.marginVertical}px`,
           padding: `2em 0`,
         }}
+        className="no-selector"
       >
         <BlockWrapper>
-          <div style={{ padding: `0 ${marginHorizontal}px` }}>
+          <div
+            style={{ padding: `0 ${marginHorizontal}px` }}
+            className="no-selector"
+          >
             <SearchContainer
               title={feedTitle}
               width="70%"

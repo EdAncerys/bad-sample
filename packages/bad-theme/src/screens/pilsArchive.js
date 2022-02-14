@@ -193,6 +193,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
           marginBottom: `${state.theme.marginVertical}px`,
           padding: `2em 0`,
         }}
+        className="no-selector"
       >
         <BlockWrapper>
           <div style={{ padding: `0 ${marginHorizontal}px` }}>

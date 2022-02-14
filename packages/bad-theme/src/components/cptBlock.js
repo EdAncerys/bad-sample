@@ -304,6 +304,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               padding: `0 ${marginHorizontal}px`,
               width: isCovid_19 ? "100%" : `70%`,
             }}
+            className="no-selector"
           >
             <div className="flex-row">
               <SearchContainer
