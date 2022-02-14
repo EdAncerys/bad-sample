@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { connect } from "frontity";
-
+import { muiQuery } from "../context";
 import { colors } from "../config/imports";
+
+import { Dropdown } from "react-bootstrap";
 
 const TypeFilters = ({
   state,
@@ -14,6 +16,7 @@ const TypeFilters = ({
   handleClearTypeFilter,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  const { sm, md, lg, xl } = muiQuery();
 
   if (!filters) return null;
 
@@ -88,12 +91,52 @@ const TypeFilters = ({
       </div>
     );
   };
+
   const ServeFilterMobile = () => {
+    const getFilterName = () => {
+      filters.filter((item) => {
+        return item.id === 86;
+      });
+    };
+    console.log(filters);
     return (
       <div className="flex-row" style={{ flexWrap: "wrap" }}>
         <ServeAllFilter />
 
-        {filters.map((type, key) => {
+        <Dropdown>
+          <Dropdown.Toggle
+            id="dropdown-basic"
+            style={{
+              backgroundColor: colors.darkSilver,
+              width: "100%",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              borderRadius: 0,
+              position: "relative",
+              zIndex: 700,
+              padding: "1em",
+              border: 0,
+            }}
+            drop="down"
+          >
+            {typeFilterRef.current ? getFilterName()[0].name : "Filters"}
+          </Dropdown.Toggle>
+          <Dropdown.Menu style={{ width: "100%" }}>
+            {filters.map((type, key) => {
+              return (
+                <Dropdown.Item
+                  onClick={() => handleSetTypeFilter({ id: type.id })}
+                  drop="down"
+                >
+                  <Html2React html={type.name} />
+                </Dropdown.Item>
+              );
+            })}
+          </Dropdown.Menu>
+        </Dropdown>
+        {/* {filters.map((type, key) => {
           return (
             <div
               key={key}
@@ -113,14 +156,14 @@ const TypeFilters = ({
               <Html2React html={type.name} />
             </div>
           );
-        })}
+        })} */}
       </div>
     );
   };
   return (
     <div>
       <ServeTitle />
-      <ServeFilter />
+      {!lg ? <ServeFilter /> : <ServeFilterMobile />}
     </div>
   );
 };
