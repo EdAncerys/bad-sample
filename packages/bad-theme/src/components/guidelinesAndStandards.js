@@ -142,58 +142,6 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
   };
 
   // SERVERS --------------------------------------------------------
-  const ServeInfo = () => {
-    const ServeTitle = () => {
-      return (
-        <div
-          className="flex primary-title"
-          style={{ fontSize: 36, alignItems: "center" }}
-        >
-          Clinical Guidelines
-        </div>
-      );
-    };
-
-    const ServeBody = () => {
-      return (
-        <div className="flex" style={{ padding: `1em 0`, width: "60%" }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
-        </div>
-      );
-    };
-
-    const ServeBrandLogo = () => {
-      const alt = "BAD Brand";
-
-      return (
-        <div
-          style={{
-            width: 195,
-            height: 70,
-            overflow: "hidden",
-            marginTop: `1em`,
-          }}
-        >
-          <Image src={NiceLogo} alt={alt} style={{ height: "100%" }} />
-        </div>
-      );
-    };
-
-    return (
-      <div
-        className="flex-col"
-        style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}
-      >
-        <ServeTitle />
-        <ServeBody />
-        <ServeBrandLogo />
-      </div>
-    );
-  };
-
   const ServeType = () => {
     if (!guidelinesType) return null;
 
@@ -272,9 +220,6 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
   // RETURN ----------------------------------------------------------------
   return (
     <div style={{ backgroundColor: background_colour }}>
-      <BlockWrapper>
-        <ServeInfo />
-      </BlockWrapper>
       <ServeFilter />
       <BlockWrapper>
         <ServeType />

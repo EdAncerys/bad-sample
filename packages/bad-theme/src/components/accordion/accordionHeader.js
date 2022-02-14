@@ -23,8 +23,6 @@ const AccordionHeader = ({
   const { title, body, logo, preview, guidelines_type, subtitle } = block;
   const LOGO_HEIGHT = 45;
 
-  console.log(block);
-
   const isActive = useRef(false);
 
   // Guidelines & Standards --------------------------------
