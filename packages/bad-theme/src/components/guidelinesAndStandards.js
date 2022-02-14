@@ -146,61 +146,6 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
   };
 
   // SERVERS --------------------------------------------------------
-<<<<<<< HEAD
-=======
-  const ServeInfo = () => {
-    const ServeTitle = () => {
-      return (
-        <div
-          className="flex primary-title"
-          style={{ fontSize: !lg ? 36 : 25, alignItems: "center" }}
-        >
-          Clinical Guidelines
-        </div>
-      );
-    };
-
-    const ServeBody = () => {
-      return (
-        <div className="flex" style={{ padding: `1em 0`, width: "60%" }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
-        </div>
-      );
-    };
-
-    const ServeBrandLogo = () => {
-      const alt = "BAD Brand";
-
-      return (
-        <div
-          style={{
-            width: 195,
-            height: 70,
-            overflow: "hidden",
-            marginTop: `1em`,
-          }}
-        >
-          <Image src={NiceLogo} alt={alt} style={{ height: "100%" }} />
-        </div>
-      );
-    };
-
-    return (
-      <div
-        className="flex-col"
-        style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}
-      >
-        <ServeTitle />
-        <ServeBody />
-        <ServeBrandLogo />
-      </div>
-    );
-  };
-
->>>>>>> 808705d89688f4a9b75a876918ebfcdbffd9870a
   const ServeType = () => {
     if (!guidelinesType) return null;
 
@@ -210,6 +155,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
           filters={guidelinesType}
           handleSearch={handleTypeSearch}
           typeFilterRef={typeFilterRef}
+          currentFilter={typeFilter}
         />
       </div>
     );
@@ -235,7 +181,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     };
 
     const ServeTypeFilter = () => {
-      if (!typeFilter) return null;
+      if (!typeFilter || lg) return null;
 
       return (
         <div className="shadow filter" style={{ textTransform: "uppercase" }}>

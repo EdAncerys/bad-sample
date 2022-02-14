@@ -30,15 +30,11 @@ const Event = ({ state, actions, libraries }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-<<<<<<< HEAD
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
     document.documentElement.scrollTop = 0; // for safari
   }, []);
 
-  const { sm, md, lg, xl } = muiQuery();
-=======
->>>>>>> 808705d89688f4a9b75a876918ebfcdbffd9870a
   const {
     date_time,
     email,

@@ -305,14 +305,8 @@ const AccordionHeader = ({
             <ServeLTTitle />
             <ServeFundingTitle />
 
-<<<<<<< HEAD
-            <ServeLogo />
-            <ServeFundingLogo />
-            <ServeNICELogo />
-=======
             {!lg ? <ServeLogo /> : null}
             {!lg ? <ServeNICELogo /> : null}
->>>>>>> 808705d89688f4a9b75a876918ebfcdbffd9870a
             <ServeIcon />
           </div>
         </div>

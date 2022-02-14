@@ -73,8 +73,7 @@ const Footer = ({ state, actions }) => {
               marginTop: !lg ? null : "1em",
             }}
           >
-<<<<<<< HEAD
-            <div style={styles.socials}>
+            <div style={!lg ? styles.socials : styles.socialsMobile}>
               <Link
                 link={`https://www.facebook.com/BritishAssociationOfDermatologists/`}
                 target="_blank"
@@ -82,7 +81,7 @@ const Footer = ({ state, actions }) => {
                 <span className="facebook-icon" />
               </Link>
             </div>
-            <div style={styles.socials}>
+            <div style={!lg ? styles.socials : styles.socialsMobile}>
               <Link
                 link={`https://www.twitter.com/HealthySkin4All/`}
                 target="_blank"
@@ -90,25 +89,11 @@ const Footer = ({ state, actions }) => {
                 <span className="twitter-icon" />
               </Link>
             </div>
-            <div style={styles.socials}>
+            <div style={!lg ? styles.socials : styles.socialsMobile}>
               <Link
                 link={`https://www.instagram.com/explore/locations/1020258048/british-association-of-dermatologists?hl=en`}
                 target="_blank"
               >
-=======
-            <div style={!lg ? styles.socials : styles.socialsMobile}>
-              <Link link={`https://www.facebook.com/`} target="_blank">
-                <span className="facebook-icon" />
-              </Link>
-            </div>
-            <div style={!lg ? styles.socials : styles.socialsMobile}>
-              <Link link={`https://www.twitter.com/`} target="_blank">
-                <span className="twitter-icon" />
-              </Link>
-            </div>
-            <div style={!lg ? styles.socials : styles.socialsMobile}>
-              <Link link={`https://www.instagram.com/`} target="_blank">
->>>>>>> 808705d89688f4a9b75a876918ebfcdbffd9870a
                 <span className="instagram-icon" />
               </Link>
             </div>

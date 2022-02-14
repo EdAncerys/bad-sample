@@ -14,6 +14,7 @@ const TypeFilters = ({
   title,
   handleSearch,
   handleClearTypeFilter,
+  currentFilter,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { sm, md, lg, xl } = muiQuery();
@@ -121,7 +122,7 @@ const TypeFilters = ({
             }}
             drop="down"
           >
-            {typeFilterRef.current ? getFilterName()[0].name : "Filters"}
+            {currentFilter ? currentFilter : "Filters"}
           </Dropdown.Toggle>
           <Dropdown.Menu style={{ width: "100%" }}>
             {filters.map((type, key) => {

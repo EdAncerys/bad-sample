@@ -253,11 +253,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               key={key}
               title={title.rendered}
               publicationDate={date}
-<<<<<<< HEAD
-              body={isCovid_19 ? null : content.rendered}
-=======
-              body={!lg ? content.rendered : null}
->>>>>>> 808705d89688f4a9b75a876918ebfcdbffd9870a
+              body={isCovid_19 ? null : !lg ? content.rendered : null}
               link_label="Read More"
               link={link}
               colour={colour}

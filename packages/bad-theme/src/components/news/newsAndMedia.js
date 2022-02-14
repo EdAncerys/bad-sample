@@ -172,8 +172,6 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       );
     };
 
-<<<<<<< HEAD
-=======
     const ServeSearchContainer = () => {
       return (
         <div className={!lg ? "flex-row" : "flex-col"}>
@@ -228,7 +226,6 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       );
     };
 
->>>>>>> 808705d89688f4a9b75a876918ebfcdbffd9870a
     const ServeFilters = () => {
       const ServeTitle = () => {
         return (
