@@ -24,9 +24,11 @@ const DownloadFileBlock = ({
 
   if (!block) return null;
 
-  const { file, guidline_file, disable_vertical_padding, title, label } = block;
+  const { file, guidline_file, disable_vertical_padding, title, label, type } =
+    block;
 
   const ICON_WIDTH = 35;
+  const isBtnStyle = type && type === "Button";
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -45,7 +47,7 @@ const DownloadFileBlock = ({
         <a
           href={file.url}
           target="_blank"
-          className="caps-btn"
+          className={isBtnStyle ? "" : "caps-btn"}
           style={styles.link}
           download
         >
@@ -79,6 +81,7 @@ const DownloadFileBlock = ({
 
   const ServeIcon = () => {
     if (!file && !guidline_file) return null;
+    if (type && type === "Button") return null;
 
     let fileType = "";
     if (file) fileType = file.subtype;
@@ -109,7 +112,13 @@ const DownloadFileBlock = ({
         margin: disableMargin ? 0 : `${marginVertical}px ${marginHorizontal}px`,
       }}
     >
-      <div className="flex-row" style={{ alignItems: "center" }}>
+      <div
+        className={isBtnStyle ? "flex-row blue-btn" : "flex-row"}
+        style={{
+          alignItems: "center",
+          width: isBtnStyle ? "fit-content" : "auto",
+        }}
+      >
         <ServeIcon />
         <ServeActions />
         <ServeGSActions />
