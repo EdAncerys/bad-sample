@@ -142,7 +142,7 @@ const SearchContainer = ({
     <div style={{ padding: padding || `1em 0` }}>
       <div className="flex-col">
         <ServeTitle />
-        <div style={{ width: WIDTH }}>
+        <div style={{ width: !lg ? WIDTH : `100%` }}>
           <ServeSearchContainer />
         </div>
       </div>

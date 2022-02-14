@@ -172,60 +172,6 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       );
     };
 
-    const ServeSearchContainer = () => {
-      return (
-        <div className={!lg ? "flex-row" : "flex-col"}>
-          <div
-            className="flex"
-            style={{
-              flex: 1,
-              height: ctaHeight,
-              position: "relative",
-              margin: "auto 0",
-            }}
-          >
-            <input
-              id={`search-input-${uniqueId}`}
-              type="text"
-              className="form-control"
-              placeholder="Find An Event"
-              style={styles.input}
-            />
-            <div
-              className="input-group-text toggle-icon-color"
-              style={{
-                position: "absolute",
-                right: 0,
-                height: ctaHeight,
-                border: "none",
-                background: "transparent",
-                alignItems: "center",
-                color: colors.darkSilver,
-                cursor: "pointer",
-              }}
-            >
-              <SearchIcon />
-            </div>
-          </div>
-          <div
-            style={{
-              display: "grid",
-              alignItems: "center",
-              paddingLeft: !lg ? `2em` : 0,
-            }}
-          >
-            <button
-              type="submit"
-              className="blue-btn"
-              onClick={handleFilterSearch}
-            >
-              Search
-            </button>
-          </div>
-        </div>
-      );
-    };
-
     const ServeFilters = () => {
       const ServeTitle = () => {
         return (
@@ -406,8 +352,8 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
           <div
             style={{
               position: "relative",
-              padding: `1em 0`,
-              width: !lg ? `70%` : `90%`,
+              padding: !lg ? `1em 0` : `1em`,
+              width: !lg ? `70%` : `100%`,
             }}
           >
             <div className="flex-col">
