@@ -110,7 +110,13 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     currentSearchFilterRef.current = input;
     let data = Object.values(state.source[postPath]);
 
+    const categoryId = guidanceCategoryRef.current.value;
+    console.log("guidanceCategoryRef", guidanceCategoryRef.current.value);
     console.log(data);
+
+    if (categoryId) {
+      data = data.filter((item) => item.guidance_category.includes(categoryId));
+    }
 
     if (typeFilterRef.current) {
       data = data.filter((item) =>
@@ -213,13 +219,19 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       if (!guidanceCategory) return null;
 
       return (
-        <div>
+        <div
+          style={{
+            marginTop: "auto",
+            padding: `1em 0 1em ${state.theme.marginVertical}px`,
+          }}
+        >
           <select
             name="guidance"
             ref={guidanceCategoryRef}
-            value={guidanceCategoryRef.current}
+            value={guidanceCategoryRef.current.value}
             onChange={handleSearch}
             className="input"
+            style={{ height: 45 }}
           >
             <option value="" hidden>
               Select Guidance Category
@@ -247,21 +259,28 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
         }}
       >
         <BlockWrapper>
-          <div style={{ padding: `0 ${marginHorizontal}px`, width: `70%` }}>
-            <SearchContainer
-              title={
-                isCovid_19
-                  ? "Search for COVID 19 Resources"
-                  : "Search for Dermatology Groups & Charities"
-              }
-              searchFilterRef={searchFilterRef}
-              handleSearch={handleSearch}
-            />
+          <div
+            style={{
+              padding: `0 ${marginHorizontal}px`,
+              width: isCovid_19 ? "100%" : `70%`,
+            }}
+          >
+            <div className="flex-row">
+              <SearchContainer
+                title={
+                  isCovid_19
+                    ? "Search for COVID 19 Resources"
+                    : "Search for Dermatology Groups & Charities"
+                }
+                searchFilterRef={searchFilterRef}
+                handleSearch={handleSearch}
+              />
+              <ServeGuidanceType />
+            </div>
 
             <div className="flex" style={{ margin: "0.5em 0" }}>
               <ServeSearchFilter />
             </div>
-            <ServeGuidanceType />
             <TypeFilters
               filters={groupeType}
               handleSearch={handleTypeSearch}
@@ -281,8 +300,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
         {postListData.map((block, key) => {
           const { title, content, link, date, dermo_group_type } = block;
           const redirect = block.acf.redirect_url;
-
-          console.log(block);
 
           return (
             <Card
