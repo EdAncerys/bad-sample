@@ -31,6 +31,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   const [guidanceCategory, setGuidanceCategory] = useState(null);
 
   const [searchFilter, setSearchFilter] = useState(null);
+  const [guidanceFilter, setGuidanceFilter] = useState(null);
 
   const searchFilterRef = useRef(null);
   const currentSearchFilterRef = useRef(null);
@@ -111,11 +112,11 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     let data = Object.values(state.source[postPath]);
 
     const categoryId = guidanceCategoryRef.current.value;
-    console.log("guidanceCategoryRef", guidanceCategoryRef.current.value);
-    console.log(data);
 
     if (categoryId) {
-      data = data.filter((item) => item.guidance_category.includes(categoryId));
+      data = data.filter((item) =>
+        item.guidance_category.includes(Number(categoryId))
+      );
     }
 
     if (typeFilterRef.current) {
@@ -139,11 +140,19 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
     setPostListData(data);
     setSearchFilter(input);
+    if (categoryId) setGuidanceFilter(categoryId);
   };
 
   const handleTypeSearch = () => {
     const input = typeFilterRef.current;
+    const categoryId = guidanceCategoryRef.current.value;
     let data = Object.values(state.source[postPath]); // add postListData object to data array
+
+    if (categoryId) {
+      data = data.filter((item) =>
+        item.guidance_category.includes(Number(categoryId))
+      );
+    }
 
     if (currentSearchFilterRef.current)
       data = data.filter((item) => {
@@ -182,6 +191,15 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     }
   };
 
+  const handleClearCategoryFilter = () => {
+    let data = Object.values(state.source[postPath]); // add postListData object to data array
+    guidanceCategoryRef.current = "";
+    setGuidanceFilter(null);
+    setPostListData(data.slice(0, Number(post_limit || LIMIT)));
+
+    handleTypeSearch();
+  };
+
   const handleClearTypeFilter = () => {
     typeFilterRef.current = null;
     let data = Object.values(state.source[postPath]); // add postListData object to data array
@@ -215,6 +233,30 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       );
     };
 
+    const ServeGuidanceFilter = () => {
+      if (!guidanceFilter) return null;
+
+      let name = "Category";
+      name = guidanceCategory.filter(
+        (item) => item.id === Number(guidanceFilter)
+      )[0];
+      if (name) name = name.name; // apply category filter name
+
+      return (
+        <div className="shadow filter">
+          <div>{name}</div>
+          <div className="filter-icon" onClick={handleClearCategoryFilter}>
+            <CloseIcon
+              style={{
+                fill: colors.darkSilver,
+                padding: 0,
+              }}
+            />
+          </div>
+        </div>
+      );
+    };
+
     const ServeGuidanceType = () => {
       if (!guidanceCategory) return null;
 
@@ -237,8 +279,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               Select Guidance Category
             </option>
             {guidanceCategory.map((item, key) => {
-              console.log(guidanceCategory);
-
               return (
                 <option key={key} value={item.id}>
                   {item.name}
@@ -280,6 +320,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
             <div className="flex" style={{ margin: "0.5em 0" }}>
               <ServeSearchFilter />
+              <ServeGuidanceFilter />
             </div>
             <TypeFilters
               filters={groupeType}

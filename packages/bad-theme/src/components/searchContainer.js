@@ -135,7 +135,7 @@ const SearchContainer = ({
   };
 
   return (
-    <div style={{ padding: padding || `1em 0` }}>
+    <div className="flex" style={{ padding: padding || `1em 0` }}>
       <div className="flex-col">
         <ServeTitle />
         <div style={{ width: WIDTH }}>
