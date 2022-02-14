@@ -563,7 +563,8 @@ const AccordionBody = ({
   };
 
   const ApplyForMembership = () => {
-    if (apply_for_membership === "Disabled") return null;
+    if (apply_for_membership === "Disabled" || !apply_for_membership)
+      return null;
 
     return (
       <div>
