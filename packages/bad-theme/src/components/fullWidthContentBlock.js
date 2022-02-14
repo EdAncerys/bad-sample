@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { connect } from "frontity";
-import BlockWrapper from "./blockWrapper";
 import { colors } from "../config/imports";
 
 import { setGoToAction } from "../context";
 import Loading from "./loading";
+import DownloadFileBlock from "../components/downloadFileBlock";
 
 const FullWidthContentBlock = ({
   state,
@@ -29,6 +29,7 @@ const FullWidthContentBlock = ({
     text_align,
     title,
     disable_vertical_padding,
+    downloads,
   } = block;
 
   const BANNER_HEIGHT = state.theme.bannerHeight;
@@ -105,6 +106,22 @@ const FullWidthContentBlock = ({
     );
   };
 
+  const ServeDownloads = () => {
+    if (!downloads) return null;
+
+    return (
+      <div style={{ display: "grid", gap: `1em`, padding: `1em 0` }}>
+        {downloads.map((download, key) => {
+          return (
+            <div key={key}>
+              <DownloadFileBlock block={download} disableMargin />
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
   // RETURN ---------------------------------------------------
   return (
     <div
@@ -120,6 +137,7 @@ const FullWidthContentBlock = ({
       <div style={{ margin: heroBanner ? 0 : MARGIN }}>
         <ServeTitle />
         <ServeCardBody />
+        <ServeDownloads />
         <ServeActions />
       </div>
     </div>

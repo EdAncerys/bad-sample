@@ -3,32 +3,20 @@ import { connect } from "frontity";
 
 import { colors } from "../config/imports";
 
-import SearchIcon from "@mui/icons-material/Search";
-import CloseIcon from "@mui/icons-material/Close";
-// CONTEXT ----------------------------------------------------------------
-import {
-  useAppDispatch,
-  useAppState,
-  setFilterAction,
-  setGoToAction,
-} from "../context";
-
-const SearchDropDown = ({ state, actions, libraries }) => {
+const SearchDropDown = ({
+  state,
+  actions,
+  libraries,
+  filter,
+  onClickHandler,
+  mapToName,
+}) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
-  const dispatch = useAppDispatch();
-  const { filter } = useAppState();
 
   if (!filter) return null;
 
   const ctaHeight = 45;
   const BANNER_HEIGHT = state.theme.bannerHeight;
-
-  // HANDLERS ---------------------------------------------
-  const onClickHandler = ({ link }) => {
-    setGoToAction({ path: link, actions });
-    setFilterAction({ dispatch, filter: null });
-  };
 
   return (
     <div
@@ -36,7 +24,6 @@ const SearchDropDown = ({ state, actions, libraries }) => {
         position: "absolute",
         zIndex: 99,
         left: 0,
-        top: ctaHeight + 10,
         right: 0,
         marginTop: 10,
         border: `1px solid ${colors.silver}`,
@@ -55,19 +42,17 @@ const SearchDropDown = ({ state, actions, libraries }) => {
           }}
         >
           {filter.map((item, key) => {
-            if (!item.title) return null;
-            const { link, title } = item;
-
-            const isNoResults = title === "No Results";
+            if (!mapToName) return null;
+            const name = item[mapToName];
 
             return (
               <div
-                className={isNoResults ? "" : "title-link-animation"}
+                className="title-link-animation"
                 key={key}
                 style={{ padding: `0.5em 0`, cursor: "pointer" }}
-                onClick={() => onClickHandler({ link })}
+                onClick={() => onClickHandler({ item })}
               >
-                <Html2React html={title.rendered} />
+                <Html2React html={name} />
               </div>
             );
           })}

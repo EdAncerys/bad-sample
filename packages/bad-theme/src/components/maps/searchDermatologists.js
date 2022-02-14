@@ -343,11 +343,6 @@ const SearchDermatologists = ({ state, actions, libraries, block }) => {
         }}
       >
         <BlockWrapper>
-          {/* <div style={{ padding: `2em 0` }}>
-            <ServeTitle />
-            <ServeSearchComponent />
-            <ServeFilters />
-          </div> */}
           <div
             className="flex-row"
             style={{ padding: `0 ${marginHorizontal}px` }}

@@ -87,6 +87,11 @@ const settings = {
               endpoint: "covid_19",
               archive: "/covid_19",
             },
+            {
+              type: "funding_awards",
+              endpoint: "funding_awards",
+              archive: "/funding_awards",
+            },
           ],
           taxonomies: [
             {

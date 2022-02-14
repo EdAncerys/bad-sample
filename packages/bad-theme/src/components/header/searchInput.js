@@ -5,17 +5,28 @@ import { colors } from "../../config/imports";
 import SearchContainer from "../searchContainer";
 import SearchDropDown from "../searchDropDown";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, setFilterAction } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setFilterAction,
+  setGoToAction,
+} from "../../context";
 
 const SearchInput = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
+  const { filter } = useAppState();
 
   const searchFilterRef = useRef(null);
   const eventList = Object.values(state.source.events); // add events object to data array
 
   // HELPERS ---------------------------------------------
+  const onClickHandler = ({ link }) => {
+    setGoToAction({ path: link, actions });
+    setFilterAction({ dispatch, filter: null });
+  };
+
   const handleSearch = () => {
     const input = searchFilterRef.current.value.toLowerCase();
     if (!input) return null;
@@ -44,11 +55,11 @@ const SearchInput = ({ state, actions, libraries }) => {
     >
       <SearchContainer
         searchFilterRef={searchFilterRef}
-        handleSearch={handleSearch}
+        handleSearch={() => console.log(searchFilterRef.current.value)}
         onChange
         inputOnly
       />
-      <SearchDropDown />
+      {/* <SearchDropDown filter={filter} onClickHandler={onClickHandler} /> */}
     </div>
   );
 };

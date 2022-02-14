@@ -4,14 +4,15 @@ export const initialState = {
 
   isActiveUser: null,
   jwt: null,
-  idReplacement: null,
 
   tweets: null,
   fad: null,
   bjdFeed: null,
   cedFeed: null,
   shdFeed: null,
+
   filter: null,
+  idFilter: null,
 
   applicationData: null,
 
@@ -50,8 +51,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, filter: action.payload };
     case "SET_APPLICATION_DATA_ACTION":
       return { ...state, applicationData: action.payload };
-    case "SET_ID_REPLACEMENT_ACTION":
-      return { ...state, idReplacement: action.payload };
+    case "SET_ID_FILTER_ACTION":
+      return { ...state, idFilter: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

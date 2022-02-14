@@ -34,7 +34,7 @@ const CardActions = ({
   const [isFetching, setFetching] = useState(null);
   const useEffectRef = useRef(null);
 
-  // ⏬⏬  clear component if data not provided ⏬⏬
+  // ⏬⏬  hide component if data not provided ⏬⏬
   if (!link && !form_link && !downloadFile && !handler && !rssFeedLink)
     return null;
 
@@ -163,6 +163,7 @@ const CardActions = ({
           alignItems: "center",
           paddingTop: `1em`,
           position: "relative",
+          flexWrap: "wrap",
         }}
       >
         <ServeHandlerAction />

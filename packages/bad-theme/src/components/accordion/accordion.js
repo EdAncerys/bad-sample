@@ -16,11 +16,12 @@ const AccordionComponent = ({
   block,
   guidelines,
   leadershipBlock,
+  fundingBlock,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
 
-  const { disable_vertical_padding, accordion_item, preview } = block;
+  const { disable_vertical_padding, accordion_item } = block;
 
   if (!accordion_item) return null; // defensive programming
 
@@ -89,6 +90,7 @@ const AccordionComponent = ({
             guidelines={guidelines}
             leadershipBlock={leadershipBlock}
             handleAccordionToggle={handleAccordionToggle}
+            fundingBlock={fundingBlock}
           />
           <AccordionBody
             block={block}
@@ -96,6 +98,7 @@ const AccordionComponent = ({
             leadershipBlock={leadershipBlock}
             uniqueId={uniqueId}
             setFetching={setFetching}
+            fundingBlock={fundingBlock}
           />
         </div>
       </div>

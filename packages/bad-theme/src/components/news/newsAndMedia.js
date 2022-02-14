@@ -13,6 +13,7 @@ import BlockWrapper from "../blockWrapper";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
+import SearchContainer from "../../components/searchContainer";
 
 const NewsAndMedia = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -32,8 +33,13 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
   const [uniqueId, setUniqueId] = useState(null);
 
-  const [newsList, setNewsList] = useState(null);
+  const [filterList, setFilterList] = useState(null);
   const [categoryList, setCategoryList] = useState(null);
+
+  const [searchValue, setSearchValue] = useState(null);
+  const [categoryValue, setCategoryValue] = useState(null);
+  const [dateValue, setDateValue] = useState(null);
+  const [yearValue, setYearValue] = useState(null);
 
   const searchFilterRef = useRef(null);
   const categoryFilterRef = useRef(null);
@@ -54,7 +60,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   useEffect(() => {
     if (!state.source.post) return null;
 
-    let POST_LIST = Object.values(state.source.post); // add newsList object to data array
+    let POST_LIST = Object.values(state.source.post); // add filterList object to data array
     if (post_limit) POST_LIST = POST_LIST.slice(0, Number(post_limit)); // apply limit on posts
 
     if (state.source.category) {
@@ -62,10 +68,10 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       setCategoryList(CATEGORY);
     }
 
-    setNewsList(POST_LIST);
+    setFilterList(POST_LIST);
   }, [state.source.post]);
 
-  if (!newsList || !categoryList) return <Loading />;
+  if (!filterList || !categoryList) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
   const handleClearFilter = ({
@@ -74,72 +80,73 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     clearDate,
     clearYear,
   }) => {
-    if (clearInput) searchFilterRef.current = null;
-    if (clearCategory) categoryFilterRef.current = null;
-    if (clearDate) dateFilterRef.current = null;
-    if (clearYear) yearFilterRef.current = null;
+    if (clearInput) {
+      searchFilterRef.current.value = "";
+      setSearchValue(null);
+    }
+    if (clearCategory) {
+      categoryFilterRef.current.value = "";
+      setCategoryValue(null);
+    }
+    if (clearDate) {
+      dateFilterRef.current.value = "";
+      setDateValue(null);
+    }
+    if (clearYear) {
+      yearFilterRef.current.value = "";
+      setYearValue(null);
+    }
 
-    handleFilterSearch();
+    handleSearch();
   };
 
   const handleLoadMoreFilter = () => {
     const limit = post_limit || 6;
-    let POST_LIST = Object.values(state.source.post); // add newsList object to data array
+    let POST_LIST = Object.values(state.source.post); // add filterList object to data array
     if (loadMoreRef.current) POST_LIST = POST_LIST.slice(0, Number(limit)); // apply limit on posts
 
-    setNewsList(POST_LIST);
+    setFilterList(POST_LIST);
     loadMoreRef.current = !loadMoreRef.current;
   };
 
-  const handleFilterSearch = () => {
-    const searchInput = document.querySelector(
-      `#search-input-${uniqueId}`
-    ).value;
+  const handleSearch = () => {
+    const input = searchFilterRef.current.value.toLowerCase();
 
-    const categoryInput = document.querySelector(
-      `#category-filter-${uniqueId}`
-    ).value;
-    const dateInput = document.querySelector(`#date-filter-${uniqueId}`).value;
-    const yearInput = document.querySelector(`#year-filter-${uniqueId}`).value;
-
-    if (!!searchInput) searchFilterRef.current = searchInput;
-    if (!!categoryInput) categoryFilterRef.current = categoryInput;
-    if (!!dateInput) dateFilterRef.current = dateInput;
-    if (!!yearInput) yearFilterRef.current = yearInput;
+    const category = categoryFilterRef.current.value;
+    const date = dateFilterRef.current.value;
+    const year = yearFilterRef.current.value;
 
     let filter = Object.values(state.source.post);
 
-    const searchInputValue = !!searchInput
-      ? searchInput
-      : searchFilterRef.current;
-    if (searchInputValue) {
-      const INPUT = searchInputValue.toLowerCase();
+    if (input) {
+      const INPUT = input.toLowerCase();
       filter = filter.filter((news) =>
         news.title.rendered.toLowerCase().includes(INPUT)
       );
     }
 
-    const searchCategoryValue = !!categoryInput
-      ? categoryInput
-      : categoryFilterRef.current;
-    if (searchCategoryValue)
+    if (category)
       filter = filter.filter((news) =>
-        news.categories.includes(Number(searchCategoryValue))
+        news.categories.includes(Number(category))
       );
 
     // apply date filter
-    const searchDateValue = !!dateInput ? dateInput : dateFilterRef.current;
-    if (searchDateValue === "Date Descending")
+    if (date === "Date Descending")
       filter = filter.sort((a, b) => new Date(b.date) - new Date(a.date));
-    if (searchDateValue === "Date Ascending")
+    if (date === "Date Ascending")
       filter = filter.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    const searchYearValue = !!yearInput ? yearInput : yearFilterRef.current;
-    if (searchYearValue)
+    if (year)
       filter = filter.filter(
-        (news) => new Date(news.date).getFullYear() === Number(searchYearValue)
+        (news) => new Date(news.date).getFullYear() === Number(year)
       );
-    setNewsList(filter);
+
+    if (input) setSearchValue(input);
+    if (category) setCategoryValue(category);
+    if (date) setDateValue(date);
+    if (year) setYearValue(year);
+
+    setFilterList(filter);
   };
 
   // SERVERS ---------------------------------------------
@@ -157,60 +164,6 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       );
     };
 
-    const ServeSearchContainer = () => {
-      return (
-        <div className="flex-row">
-          <div
-            className="flex"
-            style={{
-              flex: 1,
-              height: ctaHeight,
-              position: "relative",
-              margin: "auto 0",
-            }}
-          >
-            <input
-              id={`search-input-${uniqueId}`}
-              type="text"
-              className="form-control"
-              placeholder="Find An Event"
-              style={styles.input}
-            />
-            <div
-              className="input-group-text toggle-icon-color"
-              style={{
-                position: "absolute",
-                right: 0,
-                height: ctaHeight,
-                border: "none",
-                background: "transparent",
-                alignItems: "center",
-                color: colors.darkSilver,
-                cursor: "pointer",
-              }}
-            >
-              <SearchIcon />
-            </div>
-          </div>
-          <div
-            style={{
-              display: "grid",
-              alignItems: "center",
-              paddingLeft: `2em`,
-            }}
-          >
-            <button
-              type="submit"
-              className="blue-btn"
-              onClick={handleFilterSearch}
-            >
-              Search
-            </button>
-          </div>
-        </div>
-      );
-    };
-
     const ServeFilters = () => {
       const ServeTitle = () => {
         return (
@@ -222,8 +175,8 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
       const ServeCategoryFilter = () => {
         return (
-          <Form.Select id={`category-filter-${uniqueId}`} style={styles.input}>
-            <option value="null" hidden>
+          <Form.Select ref={categoryFilterRef} style={styles.input}>
+            <option value="" hidden>
               Category
             </option>
             {categoryList.map((item, key) => {
@@ -239,8 +192,8 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
       const ServeDateFilter = () => {
         return (
-          <Form.Select id={`date-filter-${uniqueId}`} style={styles.input}>
-            <option value="null" hidden>
+          <Form.Select ref={dateFilterRef} style={styles.input}>
+            <option value="" hidden>
               Sort By
             </option>
             <option value="Date Descending">Date Descending</option>
@@ -256,8 +209,8 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
           .map((v, idx) => now - idx);
 
         return (
-          <Form.Select id={`year-filter-${uniqueId}`} style={styles.input}>
-            <option value="null" hidden>
+          <Form.Select ref={yearFilterRef} style={styles.input}>
+            <option value="" hidden>
               Filter By Year
             </option>
             {years.map((year, key) => {
@@ -290,11 +243,11 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     };
 
     const ServeSearchFilter = () => {
-      if (!searchFilterRef.current) return null;
+      if (!searchValue) return null;
 
       return (
         <div className="shadow filter">
-          <div>{searchFilterRef.current}</div>
+          <div>{searchValue}</div>
           <div
             className="filter-icon"
             onClick={() => handleClearFilter({ clearInput: true })}
@@ -311,16 +264,17 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     };
 
     const ServeSelectedCategoryFilter = () => {
-      if (!categoryFilterRef.current) return null;
+      if (!categoryValue) return null;
 
-      let value = categoryList.filter(
-        (category) => category.id === Number(categoryFilterRef.current)
+      let catName = categoryList.filter(
+        (category) => category.id === Number(categoryValue)
       );
+      catName = catName[0] ? catName[0].name : "N/A";
 
       return (
         <div className="shadow filter">
           <div>
-            <Html2React html={value[0].name} />
+            <Html2React html={catName} />
           </div>
           <div
             className="filter-icon"
@@ -338,11 +292,11 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     };
 
     const ServeSelectedDateFilter = () => {
-      if (!dateFilterRef.current) return null;
+      if (!dateValue) return null;
 
       return (
         <div className="shadow filter">
-          <div>{dateFilterRef.current}</div>
+          <div>{dateValue}</div>
           <div
             className="filter-icon"
             onClick={() => handleClearFilter({ clearDate: true })}
@@ -359,11 +313,11 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     };
 
     const ServeSelectedYearFilter = () => {
-      if (!yearFilterRef.current) return null;
+      if (!yearValue) return null;
 
       return (
         <div className="shadow filter">
-          <div>{yearFilterRef.current}</div>
+          <div>{yearValue}</div>
           <div
             className="filter-icon"
             onClick={() => handleClearFilter({ clearYear: true })}
@@ -383,14 +337,17 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       <div
         style={{
           backgroundColor: colors.silverFillTwo,
-          margin: `${state.theme.marginVertical}px 0`,
+          margin: `${marginVertical}px 0 ${state.theme.marginVertical}px 0`,
         }}
       >
         <BlockWrapper>
           <div style={{ position: "relative", padding: `1em 0`, width: `70%` }}>
             <div className="flex-col">
               <ServeTitle />
-              <ServeSearchContainer />
+              <SearchContainer
+                searchFilterRef={searchFilterRef}
+                handleSearch={handleSearch}
+              />
               <ServeFilters />
             </div>
             <div className="flex" style={{ marginTop: "0.5em" }}>
@@ -410,7 +367,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       return (
         <NewsCarouselComponent
           block={block}
-          newsList={newsList}
+          newsList={filterList}
           categoryList={categoryList}
         />
       );
@@ -419,7 +376,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       <div>
         <NewsBlock
           block={block}
-          newsList={newsList}
+          newsList={filterList}
           categoryList={categoryList}
         />
       </div>
@@ -436,7 +393,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
         className="flex"
         style={{
           justifyContent: "center",
-          paddingTop: `2em`,
+          padding: `${state.theme.marginVertical}px 0`,
         }}
       >
         <button

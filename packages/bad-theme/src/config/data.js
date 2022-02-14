@@ -1211,24 +1211,36 @@ export const UK_HOSPITALS = [
 ];
 
 export const ETHNIC_GROUPES = [
-  "Asian or Asian British: Indian",
-  "Asian or Asian British: Pakistani",
-  "Asian or Asian British: Bangladeshi",
-  "Asian or Asian British: Chinese",
-  "Any other Asian background",
-  "Black, Black British, Caribbean or African: Caribbean",
-  "Black, Black British, Caribbean or African: African background",
-  "Any other Black, Black British or Caribbean background",
-  "Mixed or Multiple ethnic groups: White and Black Caribbean",
-  "Mixed or Multiple ethnic groups: White and Black African",
-  "Mixed or Multiple ethnic groups: White and Asian",
-  "Any other Mixed or Multiple background",
-  "White: English, Welsh, Scottish, Northern Irish or British",
-  "White: Irish",
-  "White: Gypsy or Irish Traveller",
-  "White: Roma",
-  "Any other white background",
-  "Other ethnic group: Arab",
-  "Any other ethnic group",
-  "Prefer Not To Say",
+  {
+    value: 215500000,
+    Label: "Male",
+  },
+  {
+    value: 215500001,
+    Label: "Female",
+  },
+  {
+    value: 215500003,
+    Label: "Transgender Female",
+  },
+  {
+    value: 215500004,
+    Label: "Transgender Male",
+  },
+  {
+    value: 215500005,
+    Label: "Gender Variant/Non-Conforming",
+  },
+  {
+    value: 215500006,
+    Label: "Not Listed",
+  },
+  {
+    value: 215500007,
+    Label: "Prefer Not to Answer",
+  },
+  {
+    value: 215500002,
+    Label: "Unknown",
+  },
 ];

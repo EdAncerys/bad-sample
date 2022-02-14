@@ -18,14 +18,14 @@ const SideBarMenu = ({ state, actions, libraries }) => {
     color: colors.blue,
   };
 
-  const [type, setType] = useState(() => {
-    if (!applicationData) return null;
-    let applicationType = "";
+  const [category, setCategory] = useState(() => {
+    if (!applicationData) return "";
+    let applicationCategory = "";
     applicationData.map((data) => {
-      if (data.name === "core_name") applicationType = data.value;
+      if (data.name === "bad_organisedfor") applicationCategory = data.value;
     });
 
-    return applicationType;
+    return applicationCategory;
   });
 
   let stepOne,
@@ -58,7 +58,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
 
   const ServeContent = () => {
     const ServeStepFive = () => {
-      if (type !== "810170001") return null;
+      if (category !== "810170001") return null; // SIG application link
 
       return (
         <div
@@ -67,7 +67,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
           onClick={() => {
             if (slug === "/membership/final-step-thank-you/") return null;
             setGoToAction({
-              path: `/membership/step-4-professional-details/`,
+              path: `/membership/step-5-sig-questions/`,
               actions,
             });
           }}

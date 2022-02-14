@@ -4,6 +4,7 @@ import parse from "html-react-parser";
 
 import TitleBlock from "./titleBlock";
 import Card from "./card/card";
+import Accordion from "./accordion/accordion";
 import Loading from "./loading";
 import { colors } from "../config/imports";
 import BlockWrapper from "./blockWrapper";
@@ -23,7 +24,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     post_limit,
     disable_vertical_padding,
     add_search_function,
-    acf_fc_layout,
+    layout,
   } = block;
 
   const [postListData, setPostListData] = useState(null);
@@ -36,19 +37,15 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   const typeFilterRef = useRef(null);
   const loadMoreRef = useRef(null);
 
-  const LIMIT = 8;
+  const LIMIT = 100; // max limit
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 
-  const isCovid_19 = acf_fc_layout === "covid_loop_block";
-  let postPath = `derm_groups_charity`;
-  let typePath = `dermo_group_type`;
-  if (isCovid_19) {
-    postPath = `covid_19`;
-    typePath = `guidance`;
-  }
+  const isAccordion = layout === "accordion";
+  let postPath = `funding_awards`;
+  let typePath = `funding_type`;
 
   let PADDING = `${marginVertical}px 0`;
   if (add_search_function) PADDING = `0 0 ${marginVertical}px 0`;
@@ -57,9 +54,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   useEffect(async () => {
     const path = `/${postPath}/`;
     await actions.source.fetch(path); // fetch CPT dermGroupeData
-
-    console.log("useEffect fires up");
-    console.log(typeFilterRef.current);
 
     let dermGroupeData = state.source.get(path);
     const { totalPages, page, next } = dermGroupeData; // check if dermGroupeData have multiple pages
@@ -115,7 +109,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     if (!!input) {
       data = data.filter((item) => {
         let title = item.title.rendered;
-        let content = item.content.rendered;
+        let content = item.acf.overview;
 
         if (title) title = title.toLowerCase().includes(input.toLowerCase());
         if (content)
@@ -212,13 +206,10 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
         }}
       >
         <BlockWrapper>
-          <div style={{ padding: `0 ${marginHorizontal}px`, width: `70%` }}>
+          <div style={{ padding: `0 ${marginHorizontal}px` }}>
             <SearchContainer
-              title={
-                isCovid_19
-                  ? "Search for COVID 19 Resources"
-                  : "Search for Dermatology Groups & Charities"
-              }
+              title={isAccordion ? "Undergraduate Awards" : "Research Funding"}
+              width="70%"
               searchFilterRef={searchFilterRef}
               handleSearch={handleSearch}
             />
@@ -239,22 +230,36 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   };
 
   const ServeLayout = () => {
+    if (isAccordion)
+      return (
+        <div>
+          <Accordion
+            block={{
+              accordion_item: postListData,
+            }}
+            fundingBlock
+          />
+        </div>
+      );
+
     return (
       <div style={styles.container}>
         {postListData.map((block, key) => {
-          const { title, content, link, date, dermo_group_type } = block;
+          const { title, content, link, date, dermo_group_type } = block.acf;
+
+          console.log(block);
 
           return (
             <Card
               key={key}
-              title={title.rendered}
+              fundingHeader={block}
               publicationDate={date}
-              body={isCovid_19 ? null : content.rendered}
+              body={block.acf.overview}
+              bodyLimit={150}
               link_label="Read More"
-              link={link}
+              link={block.acf.external_application_link}
               colour={colour}
               limitBodyLength
-              cardMinHeight={250}
               shadow
             />
           );
@@ -322,7 +327,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 const styles = {
   container: {
     display: "grid",
-    gridTemplateColumns: `repeat(4, 1fr)`,
+    gridTemplateColumns: `repeat(3, 1fr)`,
     justifyContent: "space-between",
     gap: 20,
   },

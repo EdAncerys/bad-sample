@@ -1,143 +1,43 @@
-import { useRef } from "react";
+import { useState } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
-import { colors } from "../../config/imports";
 import SideBarMenu from "./sideBarMenu";
-import { Form } from "react-bootstrap";
-import CheckMark from "../../img/svg/checkMark.svg";
-import { setGoToAction } from "../../context";
 import BlockWrapper from "../../components/blockWrapper";
+import CheckMark from "../../img/svg/checkMark.svg";
 
-import { ETHNIC_GROUPES } from "../../config/data";
-// CONTEXT ----------------------------------------------------------------
-import {
-  useAppDispatch,
-  useAppState,
-  setUserStoreAction,
-  setCompleteUserApplicationAction,
-} from "../../context";
+import CompleteApplication from "./forms/completeApplication";
 
 const RegistrationComplete = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
-  const page = state.source[data.type][data.id];
-
-  const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, idReplacement } = useAppState();
+  const page = state.source[data.category][data.id];
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  const ethnicGroupRef = useRef(null);
-
-  // HANDLERS --------------------------------------------
-  const handleExit = async () => {
-    const py3_gender = ethnicGroupRef.current.value;
-
-    const data = {
-      py3_gender,
-    };
-
-    await setUserStoreAction({
-      state,
-      dispatch,
-      applicationData,
-      isActiveUser,
-      data,
-      idReplacement,
-    });
-    await setCompleteUserApplicationAction({
-      state,
-      isActiveUser,
-      applicationData,
-    });
-    await setCompleteUserApplicationAction({ state, isActiveUser });
-    if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
-  };
-
   // SERVERS ---------------------------------------------
-  const ServeCardImage = () => {
-    const alt = "BAD Complete";
-
-    return (
-      <div style={{ width: 60, maxHeight: 60 }}>
-        <Image
-          src={CheckMark}
-          alt={alt}
-          style={{
-            width: "100%",
-            height: "100%",
-          }}
-        />
-      </div>
-    );
-  };
-
-  const ServeActions = () => {
-    return (
-      <div
-        className="flex"
-        style={{
-          justifyContent: "flex-end",
-          padding: `1em 0`,
-          borderTop: `1px solid ${colors.silverFillTwo}`,
-        }}
-      >
-        <div className="blue-btn" onClick={handleExit}>
-          Enter
-        </div>
-      </div>
-    );
-  };
-
-  const ServeForm = () => {
-    return (
-      <div
-        className="form-group"
-        style={{
-          display: "grid",
-          gap: 10,
-          padding: `0 0 2em`,
-        }}
-      >
-        <label style={styles.subTitle}>What is your Ethnic Group?</label>
-        <Form.Select ref={ethnicGroupRef} style={styles.input}>
-          <option value="null" hidden>
-            Ethnic Group
-          </option>
-          {ETHNIC_GROUPES.map((item, key) => {
-            return (
-              <option key={key} value={item}>
-                {item}
-              </option>
-            );
-          })}
-        </Form.Select>
-      </div>
-    );
-  };
-
   const ServeContent = () => {
     return (
       <div>
         <div style={styles.wrapper}>
-          <ServeCardImage />
+          <div style={{ width: 60, maxHeight: 60, marginBottom: `1em` }}>
+            <Image
+              src={CheckMark}
+              alt="BAD Complete"
+              style={{
+                width: "100%",
+                height: "100%",
+              }}
+            />
+          </div>
           <div className="primary-title" style={styles.title}>
             Thank You
           </div>
-          <div
-            style={{
-              paddingBottom: `1em`,
-              borderBottom: `1px solid ${colors.silverFillTwo}`,
-            }}
-          >
+          <div style={{ paddingTop: `0.75em` }}>
             Thank you for completing you application for BAD membership. Your
             application must be approved by the BAD Executive Committee and has
             been added to the agenda for their next meeting. An email confirming
             receipt of your application will be sent to you shortly.
-          </div>
-          <div className="primary-title" style={styles.title}>
-            Ethnic Diversity Monitoring
           </div>
           <div>
             The BAD wants to meet the aims and commitments set out in its
@@ -152,9 +52,7 @@ const RegistrationComplete = ({ state, actions }) => {
             with, this is then followed by a question asking for a more specific
             ethnic background.
           </div>
-
-          <ServeForm />
-          <ServeActions />
+          <CompleteApplication />
         </div>
       </div>
     );
@@ -184,18 +82,10 @@ const styles = {
     gap: 20,
   },
   wrapper: {
-    margin: `0 1em 0`,
+    padding: `0 1em`,
   },
   title: {
     fontSize: 20,
-    padding: `1em 0`,
-  },
-  subTitle: {
-    fontWeight: "bold",
-    padding: `1em 0`,
-  },
-  input: {
-    borderRadius: 10,
   },
 };
 

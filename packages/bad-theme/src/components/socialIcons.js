@@ -56,36 +56,6 @@ const SocialIcons = ({ state, actions, libraries, block }) => {
     );
   };
 
-  const ServeFacebookIcon = ({ facebook }) => {
-    if (!facebook) return null;
-
-    return (
-      <div className="toggle-icon-scale">
-        <ServeIcon icon={Facebook} url={facebook} />
-      </div>
-    );
-  };
-
-  const ServeTwitterIcon = ({ twitter }) => {
-    if (!twitter) return null;
-
-    return (
-      <div className="toggle-icon-scale">
-        <ServeIcon icon={Twitter} url={twitter} />
-      </div>
-    );
-  };
-
-  const ServeInstagramIcon = ({ instagram }) => {
-    if (!instagram) return null;
-
-    return (
-      <div className="toggle-icon-scale">
-        <ServeIcon icon={Instagram} url={instagram} />
-      </div>
-    );
-  };
-
   const ServeSocialContent = () => {
     if (!social_links) return null;
 
@@ -99,7 +69,7 @@ const SocialIcons = ({ state, actions, libraries, block }) => {
         }}
       >
         {social_links.map((block, key) => {
-          const { facebook, twitter, instagram } = block;
+          const { facebook_link, twitter_link, instagram_link } = block;
 
           const isLastItem = social_links.length === key + 1;
 
@@ -107,7 +77,7 @@ const SocialIcons = ({ state, actions, libraries, block }) => {
           if (key !== 0 && links_per_row === "One") paddingTop = `1em`;
           let BORDER_RIGHT = "none";
           if (links_per_row !== "One" && !isLastItem)
-            BORDER_RIGHT = `1px solid ${colors.lightSilver}`;
+            BORDER_RIGHT = `1px solid ${colors.silverFillTwo}`;
           if (links_per_row === "Two" && key % 2 !== 0) BORDER_RIGHT = `none`;
 
           return (
@@ -117,9 +87,9 @@ const SocialIcons = ({ state, actions, libraries, block }) => {
             >
               <ServeTitle title={block.title} />
               <div className="flex" style={{ justifyContent: "center" }}>
-                <ServeFacebookIcon facebook={facebook} />
-                <ServeInstagramIcon instagram={instagram} />
-                <ServeTwitterIcon twitter={twitter} />
+                <ServeIcon url={facebook_link} icon={Facebook} />
+                <ServeIcon url={instagram_link} icon={Instagram} />
+                <ServeIcon url={twitter_link} icon={Twitter} />
               </div>
             </div>
           );

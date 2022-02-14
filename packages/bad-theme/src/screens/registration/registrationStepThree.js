@@ -1,86 +1,114 @@
-import { useState, useRef } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
-import { setGoToAction } from "../../context";
 import SideBarMenu from "./sideBarMenu";
 import { Form } from "react-bootstrap";
 import BlockWrapper from "../../components/blockWrapper";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setUserStoreAction } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setUserStoreAction,
+  getBADMembershipSubscriptionId,
+  setGoToAction,
+} from "../../context";
 
 const RegistrationStepThree = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
-  const page = state.source[data.type][data.id];
+  const page = state.source[data.category][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, idReplacement } = useAppState();
+  const { applicationData, isActiveUser } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  const [type, setType] = useState(() => {
-    if (!applicationData) return null;
+  const [formData, setFormData] = useState({
+    bad_organisedfor: "",
+    core_membershipsubscriptionplanid: "",
+  });
+
+  const [category, setCategory] = useState(() => {
+    if (!applicationData) return "";
     let applicationType = "";
     applicationData.map((data) => {
-      if (data.name === "core_name") applicationType = data.value;
+      if (data.name === "bad_organisedfor") applicationType = data.value;
     });
 
     return applicationType;
   });
 
-  const [category, setCategory] = useState(() => {
+  // ⏬ populate form data values from applicationData
+  useEffect(() => {
+    const handleSetData = ({ data, name }) => {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [`${name}`]: data.value || "",
+      }));
+    };
+
     if (!applicationData) return null;
-    let applicationCategory = "";
     applicationData.map((data) => {
-      if (data.name === "core_membershipsubscriptionplanid")
-        applicationCategory = data.value;
+      if (data.name === "bad_organisedfor")
+        handleSetData({ data, name: "bad_organisedfor" });
     });
-
-    return applicationCategory;
-  });
-
-  const typeRef = useRef(null);
-  const categoryRef = useRef(null);
+  }, []);
 
   // HANDLERS --------------------------------------------
   const handleSaveExit = async () => {
-    await setUserStoreAction({
-      state,
-      dispatch,
-      applicationData,
-      isActiveUser,
-    });
+    // ⏬ get appropriate membership ID
+    // const membershipId = await getBADMembershipSubscriptionId({
+    //   state,
+    //   category: formData.bad_organisedfor === "810170000" ? "BAD" : "SIG",
+    //   type,
+    // });
+    // console.log("Application cat id ", membershipId); // debug
+
+    // ⏬ create user application record in Store
+    // await setUserStoreAction({
+    //   state,
+    //   dispatch,
+    //   applicationData,
+    //   isActiveUser,
+    //   data: {
+    //     bad_organisedfor: formData.bad_organisedfor,
+    //     core_membershipsubscriptionplanid: membershipId, // type of membership for application
+    //     bad_applicationfor: "810170000", // silent assignment
+    //   },
+    // });
     if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
-  const handleTypeChange = (e) => {
-    setType(e.target.value);
-  };
-
-  const handleCategoryChange = (e) => {
-    setCategory(e.target.value);
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
   const handleNext = async () => {
-    const core_name = typeRef.current ? typeRef.current.value : null;
-    const core_membershipapplicationid = categoryRef.current
-      ? categoryRef.current.value
-      : null;
+    // ⏬ get appropriate membership ID
+    // const membershipId = await getBADMembershipSubscriptionId({
+    //   state,
+    //   category: formData.bad_organisedfor === "810170000" ? "BAD" : "SIG",
+    //   type,
+    // });
+    // console.log("Application cat id ", membershipId); // debug
 
-    const data = {
-      core_name,
-      core_membershipapplicationid,
-    };
-
-    await setUserStoreAction({
-      state,
-      dispatch,
-      applicationData,
-      isActiveUser,
-      data,
-      idReplacement,
-    });
+    // ⏬ create user application record in Store
+    // await setUserStoreAction({
+    //   state,
+    //   dispatch,
+    //   applicationData,
+    //   isActiveUser,
+    //   data: {
+    //     bad_organisedfor: formData.bad_organisedfor,
+    //     core_membershipsubscriptionplanid: membershipId, // type of membership for application
+    //     bad_applicationfor: "810170000", // silent assignment
+    //   },
+    // });
     if (isActiveUser)
       setGoToAction({
         path: `/membership/step-4-professional-details/`,
@@ -122,64 +150,61 @@ const RegistrationStepThree = ({ state, actions }) => {
 
   const ServeForm = () => {
     const ServeBADMembershipCategory = () => {
-      if (type !== "810170000") return null;
+      if (formData.bad_organisedfor !== "810170000") return null;
 
       return (
         <div>
-          <label style={styles.subTitle}>Membership Category</label>
+          <label className="bold">Membership Category</label>
           <Form.Select
-            ref={categoryRef}
-            style={styles.input}
-            value={category}
-            onChange={(e) => handleCategoryChange(e)}
+            name="core_membershipsubscriptionplanid"
+            value={formData.core_membershipsubscriptionplanid}
+            onChange={handleInputChange}
+            className="input"
+            disabled
           >
-            <option value="null" hidden>
+            <option value="" hidden>
               Membership Category
             </option>
-            {/* <option value="810170027">Ordinary</option>
-            <option value="370410000">Ordinary SAS</option>
-            <option value="810170029">Career Grade</option>
-            <option value="810170005">Trainee</option>
-            <option value="810170000">Honorary</option>
-            <option value="810170010">Associate</option>
-            <option value="810170008">Associate Trainee</option>
-            <option value="810170013">Associate Overseas</option>
-            <option value="810170011">GP</option>
-            <option value="810170016">Student</option>
-            <option value="810170012">Allied Healthcare Professional</option> */}
-
-            <option value="9a39cc47-6456-eb11-a812-000d3a28700d">
-              2021 - BSMD
+            <option value="Associate">Associate</option>
+            <option value="Associate Overseas">Associate Overseas</option>
+            <option value="Associate Trainee">Associate Trainee</option>
+            <option value="Career Grade">Career Grade</option>
+            <option value="GP">GP</option>
+            <option value="International">International</option>
+            <option value="Ordinary SAS">Ordinary SAS</option>
+            <option value="Retired">Retired</option>
+            <option value="Retired No Journal">Retired No Journal</option>
+            <option value="Retired Overseas">Retired Overseas</option>
+            <option value="Retired Overseas No Journal">
+              Retired Overseas No Journal
             </option>
-            <option value="3f5e50e6-be9e-eb11-b1ac-000d3a2d9388">
-              2021- BAD - Trainee
+            <option value="Scientist and Allied Healthcare Professional">
+              Scientist and Allied Healthcare Professional
             </option>
-            <option value="9f677f51-3ed3-ea11-a812-000d3a49475c">
-              2021 - DC - Honorary
-            </option>
-            <option value="fb581b00-3ad3-ea11-a812-000d3a4a1557">
-              2021 - DC
-            </option>
+            <option value="Student">Student</option>
+            <option value="Trainee">Trainee</option>
           </Form.Select>
         </div>
       );
     };
 
     const ServeSIGMembershipCategory = () => {
-      if (type !== "810170001") return null;
+      if (formData.bad_organisedfor !== "810170001") return null;
 
       return (
         <div>
-          <label style={styles.subTitle}>Membership Category</label>
+          <label className="bold">Membership Category</label>
           <Form.Select
-            ref={categoryRef}
-            style={styles.input}
-            value={category}
-            onChange={(e) => handleCategoryChange(e)}
+            name="core_membershipsubscriptionplanid"
+            value={formData.core_membershipsubscriptionplanid}
+            onChange={handleInputChange}
+            className="input"
+            disabled
           >
-            {/* <option value="null" hidden>
+            <option value="" hidden>
               Membership Category
             </option>
+
             <option value="British Cosmetic Dermatology Group">
               British Cosmetic Dermatology Group
             </option>
@@ -229,20 +254,7 @@ const RegistrationStepThree = ({ state, actions }) => {
               British Society for Skin Care in Immunocompromised Individuals
             </option>
             <option value="The Dowling Club">The Dowling Club</option>
-            <option value="DERMPATHPRO">DERMPATHPRO</option> */}
-
-            <option value="9a39cc47-6456-eb11-a812-000d3a28700d">
-              2021 - BSMD
-            </option>
-            <option value="3f5e50e6-be9e-eb11-b1ac-000d3a2d9388">
-              2021- BAD - Trainee
-            </option>
-            <option value="9f677f51-3ed3-ea11-a812-000d3a49475c">
-              2021 - DC - Honorary
-            </option>
-            <option value="fb581b00-3ad3-ea11-a812-000d3a4a1557">
-              2021 - DC
-            </option>
+            <option value="DERMPATHPRO">DERMPATHPRO</option>
           </Form.Select>
         </div>
       );
@@ -259,12 +271,13 @@ const RegistrationStepThree = ({ state, actions }) => {
           borderTop: `1px solid ${colors.silverFillTwo}`,
         }}
       >
-        <label style={styles.subTitle}>Membership Type</label>
+        <label className="bold">Membership Type</label>
         <Form.Select
-          ref={typeRef}
-          style={styles.input}
-          value={type}
-          onChange={(e) => handleTypeChange(e)}
+          name="bad_organisedfor"
+          value={formData.bad_organisedfor}
+          onChange={handleInputChange}
+          className="input"
+          disabled
         >
           <option value="null" hidden>
             Membership Type
@@ -336,9 +349,6 @@ const styles = {
   },
   title: {
     fontSize: 20,
-  },
-  subTitle: {
-    fontWeight: "bold",
   },
   input: {
     borderRadius: 10,

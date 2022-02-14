@@ -19,6 +19,7 @@ import ImageAndPromoCard from "./imageAndPromoCard";
 import TweetInfo from "./tweetInfo";
 import FadDirectory from "./fadDirectory";
 import DermGroupe from "./dermGroupe";
+import FundingHeader from "./fundingHeader";
 
 import GeneralModal from "../elections/generalModal";
 import DownloadFileBlock from "../downloadFileBlock";
@@ -31,6 +32,7 @@ const Card = ({
   cardTitle,
   title,
   body,
+  bodyLimit,
   link_label,
   link,
   rssFeedLink,
@@ -74,6 +76,7 @@ const Card = ({
   disableFooter,
   dermGroupe,
   downloads,
+  fundingHeader,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
@@ -219,6 +222,7 @@ const Card = ({
         <CardBody
           title={title}
           body={body}
+          bodyLimit={bodyLimit}
           date={date}
           publicationDate={publicationDate}
           seatNumber={seatNumber}
@@ -260,6 +264,7 @@ const Card = ({
       }}
     >
       <PromoHeader fundingPromo={fundingPromo} />
+      <FundingHeader fundingHeader={fundingHeader} />
       <ImageAndPromoCard imageAndPromoCard={imageAndPromoCard} />
       <NewsAndMediaHeader newsAndMediaInfo={newsAndMediaInfo} layout={layout} />
       <GalleryCarousel gallery={gallery} />

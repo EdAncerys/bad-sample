@@ -1,10 +1,13 @@
-import { useState, useLayoutEffect, useRef } from "react";
+import { useState } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import parse from "html-react-parser";
 
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import LINK from "../../img/svg/badLink.svg";
+
+import date from "date-and-time";
+const DATE_MODULE = date;
 
 import DownloadFileBlock from "../downloadFileBlock";
 // CONTEXT ----------------------------------------------------------------
@@ -14,7 +17,8 @@ import {
   setGoToAction,
   sendEmailEnquireAction,
   setUserStoreAction,
-  setUserIDReplacementAction,
+  getTestUserAccountsAction,
+  getBADMembershipSubscriptionId,
 } from "../../context";
 
 const AccordionBody = ({
@@ -24,49 +28,56 @@ const AccordionBody = ({
   block,
   guidelines,
   leadershipBlock,
+  fundingBlock,
   uniqueId,
   setFetching,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser } = useAppState();
-
-  const idReplacement = useRef(null);
+  const { applicationData, isActiveUser, idFilter } = useAppState();
 
   const ALL_POSITIONS = Object.values(state.source.leadership_position);
   const ICON_WIDTH = 35;
   const {
-    body,
     downloads,
     button_label,
     button_link,
     link_label,
-    link,
     apply_for_membership,
     file_submit_option,
     recipients,
   } = block;
 
+  let body = block.body;
+  let link = block.link;
+  let amount = block.acf ? block.acf.amount : null;
+  let closingDate = block.acf ? block.acf.closing_date : null;
+
+  if (fundingBlock) body = block.acf ? block.acf.overview : null;
+  if (fundingBlock) link = { url: block.acf.external_application_link };
+
   // HANDLERS ----------------------------------------------------
   const handleApply = async () => {
-    console.log("apply_for_membership", apply_for_membership); // debug
-    setUserIDReplacementAction({
-      dispatch,
-      idReplacement: idReplacement.current,
+    // ⏬ get appropriate membership ID
+    const membershipId = await getBADMembershipSubscriptionId({
+      state,
+      category: "BAD",
+      type: apply_for_membership,
     });
+    console.log("Application Type ", apply_for_membership); // debug
 
+    // ⏬ create user application record in Store
     await setUserStoreAction({
       state,
       dispatch,
       applicationData,
       isActiveUser,
       data: {
-        core_name: "810170000", // "Label": "BAD" readonly FIELD!
-        core_membershipsubscriptionplanid: apply_for_membership, // type of membership for application
+        bad_organisedfor: "810170000", // BAD members category
+        core_membershipsubscriptionplanid: membershipId, // type of membership for application
         bad_applicationfor: "810170000", // silent assignment
       },
-      idReplacement: idReplacement.current,
     });
 
     if (isActiveUser)
@@ -215,7 +226,7 @@ const AccordionBody = ({
     if (!link) return null;
 
     let LABEL = "External Link";
-    if (link_label) LABEL = button_label;
+    if (link_label) LABEL = link_label;
 
     return (
       <div
@@ -291,6 +302,40 @@ const AccordionBody = ({
     return (
       <div className="text-body">
         <Html2React html={body} />
+      </div>
+    );
+  };
+
+  const ServeFundingInfo = () => {
+    if (!amount || !closingDate) return null;
+
+    const ServeAmount = () => {
+      if (!amount) return null;
+
+      return (
+        <div className="flex-col">
+          <Html2React html={amount} />
+        </div>
+      );
+    };
+
+    const ServeClosingDate = () => {
+      if (!closingDate) return null;
+
+      const dateObject = new Date(closingDate);
+      const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
+
+      return (
+        <div className="flex-col">
+          <Html2React html={formattedDate} />
+        </div>
+      );
+    };
+
+    return (
+      <div className="flex-col text-body">
+        <ServeAmount />
+        <ServeClosingDate />
       </div>
     );
   };
@@ -523,17 +568,6 @@ const AccordionBody = ({
 
     return (
       <div>
-        {/* <div className="shadow" style={{ padding: `1em`, margin: `1em 0` }}>
-          <label>USER ID</label>
-          <input
-            ref={idReplacement}
-            type="text"
-            className="form-control"
-            placeholder="First Name"
-            style={styles.input}
-          />
-        </div> */}
-
         <div
           className="blue-btn"
           style={{ width: "fit-content" }}
@@ -575,6 +609,7 @@ const AccordionBody = ({
         <ServeBody />
         <ServeLTBody />
 
+        <ServeFundingInfo />
         <ServeLTTeam />
         <ServeGSSubTitle />
         <ServeGSLink />
