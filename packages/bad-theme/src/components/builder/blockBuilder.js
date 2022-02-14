@@ -88,7 +88,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
           return (
             <div key={key + 1}>
               <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-              <FundingBlock key={key} block={block} />
+              <Accordion key={key} block={block} />
             </div>
           );
 

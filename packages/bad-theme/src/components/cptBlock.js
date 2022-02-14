@@ -243,6 +243,9 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       <div style={styles.container}>
         {postListData.map((block, key) => {
           const { title, content, link, date, dermo_group_type } = block;
+          const redirect = block.acf.redirect_url;
+
+          console.log(block);
 
           return (
             <Card
@@ -251,7 +254,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               publicationDate={date}
               body={isCovid_19 ? null : content.rendered}
               link_label="Read More"
-              link={link}
+              link={redirect ? redirect.url : link}
               colour={colour}
               limitBodyLength
               cardMinHeight={250}

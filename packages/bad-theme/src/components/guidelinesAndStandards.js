@@ -6,7 +6,6 @@ import BlockWrapper from "./blockWrapper";
 import Loading from "./loading";
 import Accordion from "./accordion/accordion";
 import { colors } from "../config/imports";
-import NiceLogo from "../img/placeholders/niceLogo.svg";
 import SearchContainer from "./searchContainer";
 import TypeFilters from "./typeFilters";
 
