@@ -88,7 +88,35 @@ const TypeFilters = ({
       </div>
     );
   };
+  const ServeFilterMobile = () => {
+    return (
+      <div className="flex-row" style={{ flexWrap: "wrap" }}>
+        <ServeAllFilter />
 
+        {filters.map((type, key) => {
+          return (
+            <div
+              key={key}
+              className="shadow filter-action"
+              onClick={() => handleSetTypeFilter({ id: type.id })}
+              style={{
+                backgroundColor:
+                  typeFilterRef.current === type.id
+                    ? colors.primary
+                    : colors.white,
+                color:
+                  typeFilterRef.current === type.id
+                    ? colors.white
+                    : colors.softBlack,
+              }}
+            >
+              <Html2React html={type.name} />
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
   return (
     <div>
       <ServeTitle />

@@ -97,7 +97,7 @@ const GeneralModal = ({ state, actions, libraries, modalData, handler }) => {
 
   return (
     <div style={styles.container}>
-      <Modal show={body} size="xl" centered>
+      <Modal show={body} centered>
         <ServeModalContent />
         <ServeFooter />
       </Modal>

@@ -4,8 +4,10 @@ import { connect } from "frontity";
 import { colors } from "../../config/imports";
 import { padding } from "@mui/system";
 
+import { muiQuery } from "../../context";
 const BillingHistory = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  const { sm, md, lg, xl } = muiQuery();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -55,7 +57,7 @@ const BillingHistory = ({ state, actions, libraries }) => {
         <div style={{ margin: `auto 0` }}>
           <div
             className="flex"
-            style={{ alignItems: "center", padding: `0 2em` }}
+            style={{ alignItems: "center", padding: !lg ? `0 2em` : 0 }}
           >
             <div
               type="submit"
@@ -70,7 +72,10 @@ const BillingHistory = ({ state, actions, libraries }) => {
     };
 
     return (
-      <div className="flex" style={{ padding: `1em 0` }}>
+      <div
+        className="flex"
+        style={{ padding: `1em 0`, flexDirection: !lg ? null : "column" }}
+      >
         <div className="flex" style={{ justifyItems: "center" }}>
           {title}
         </div>
@@ -82,7 +87,10 @@ const BillingHistory = ({ state, actions, libraries }) => {
   return (
     <div
       className="shadow"
-      style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
+      style={{
+        padding: !lg ? `2em 4em` : "1em",
+        marginBottom: `${marginVertical}px`,
+      }}
     >
       <div className="primary-title" style={{ fontSize: 20 }}>
         Billing History:

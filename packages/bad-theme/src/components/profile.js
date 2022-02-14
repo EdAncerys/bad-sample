@@ -2,8 +2,11 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/imports";
 import Image from "@frontity/components/image";
+import { muiQuery } from "../context";
 
 const Profile = ({ state, actions, libraries, block }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const PROFILE_PICTURE_WIDTH = 190;
   const { background_image, body, title } = block;
@@ -51,7 +54,7 @@ const Profile = ({ state, actions, libraries, block }) => {
 
   const ServeBody = () => {
     if (!body) return null;
-
+    if (lg) return null;
     return (
       <div
         style={{

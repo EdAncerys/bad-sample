@@ -3,8 +3,11 @@ import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 import { setGoToAction } from "../../context";
+import { muiQuery } from "../../context";
 
 const VenueInfo = ({ state, actions, libraries, venueInfo }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!venueInfo) return null;
@@ -42,7 +45,10 @@ const VenueInfo = ({ state, actions, libraries, venueInfo }) => {
           {capacity_options.map((item, key) => {
             return (
               <div key={key} style={{ paddingRight: 5 }}>
-                <Html2React html={item.capacity} />
+                <span>
+                  <Html2React html={item.capacity} />{" "}
+                  {key < capacity_options.length - 1 ? "/" : null}
+                </span>
               </div>
             );
           })}
@@ -54,10 +60,10 @@ const VenueInfo = ({ state, actions, libraries, venueInfo }) => {
   return (
     <div>
       <div
-        className="flex-row"
+        className={!lg ? "flex-row" : "flex-col"}
         style={{
           justifyContent: "space-between",
-          alignItems: "center",
+          alignItems: !lg ? "center" : "flex-start",
           color: colors.softBlack,
         }}
       >

@@ -7,6 +7,7 @@ import Card from "../card/card";
 import TitleBlock from "../titleBlock";
 import Loading from "../loading";
 import { colors } from "../../config/imports";
+import { muiQuery } from "../../context";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
@@ -14,6 +15,8 @@ import ElectionModal from "./electionModal";
 
 const ElectionBlocks = ({ state, actions, block }) => {
   if (!block) return <Loading />;
+
+  const { sm, md, lg, xl } = muiQuery();
 
   const {
     text_align,
@@ -432,7 +435,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
       <ElectionModal modalData={modalData} setModalData={setModalData} />
       <TitleBlock block={{ title, text_align }} disableMargin />
       <ServeFilter />
-      <div style={styles.container}>
+      <div style={!lg ? styles.container : styles.containerMobile}>
         {electionList.map((block, key) => {
           const { title, election_grade, election_roles } = block;
           const { closing_date, cta, description, nomination_form_upload } =
@@ -518,6 +521,11 @@ const styles = {
     display: "grid",
     gridTemplateColumns: `repeat(3, 1fr)`,
     gap: 20,
+  },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `repeat(1, 1fr)`,
+    gap: 0,
   },
   input: {
     borderRadius: 10,

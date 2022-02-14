@@ -3,12 +3,16 @@ import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 import Card from "../card/card";
+import RowButton from "../rowButton";
+
 import Loading from "../loading";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState } from "../../context";
+import { useAppDispatch, useAppState, muiQuery } from "../../context";
 
 const MultiPostBlock = ({ state, actions, block, filter }) => {
   const { disable_vertical_padding, add_search_function } = block;
+
+  const { sm, md, lg, xl } = muiQuery();
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -50,9 +54,11 @@ const MultiPostBlock = ({ state, actions, block, filter }) => {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: `repeat(${CARD_NUMBER}, 1fr)`,
+          gridTemplateColumns: !lg
+            ? `repeat(${CARD_NUMBER}, 1fr)`
+            : "repeat(1, 1fr)",
           justifyContent: "space-between",
-          gap: isFrom4Col ? 10 : 20,
+          gap: !lg ? (isFrom4Col ? 10 : 20) : 0,
         }}
       >
         {block.card.map((block, key) => {
@@ -77,7 +83,10 @@ const MultiPostBlock = ({ state, actions, block, filter }) => {
               return null;
             FILTER_LENGTH++;
           }
-
+          if (lg)
+            return (
+              <RowButton block={{ title: title, link: link, colour: colour }} />
+            );
           return (
             <div key={key} className="flex">
               <Card

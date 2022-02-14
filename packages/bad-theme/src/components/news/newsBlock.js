@@ -4,6 +4,7 @@ import Image from "@frontity/components/image";
 
 import Card from "../card/card";
 import { colors } from "../../config/imports";
+import { muiQuery } from "../../context";
 
 const NewsBlock = ({
   state,
@@ -18,14 +19,24 @@ const NewsBlock = ({
   const isLayoutThree = layout === "layout_three";
   const isLayoutFour = layout === "layout_four";
 
+  const { sm, md, lg, xl } = muiQuery();
+
   // RETURN ---------------------------------------------
   return (
     <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: isLayoutFour ? `1fr` : `repeat(3, 1fr)`,
-        gap: 20,
-      }}
+      style={
+        !lg
+          ? {
+              display: "grid",
+              gridTemplateColumns: isLayoutFour ? `1fr` : `repeat(3, 1fr)`,
+              gap: 20,
+            }
+          : {
+              display: "grid",
+              gridTemplateColumns: "repeat(1, 1fr)",
+              gap: 20,
+            }
+      }
     >
       {newsList.map((block, key) => {
         const { categories, link, title, featured_media } = block;

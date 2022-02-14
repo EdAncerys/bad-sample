@@ -4,13 +4,15 @@ import { connect } from "frontity";
 import Loading from "./loading";
 import { colors } from "../config/imports";
 import { v4 as uuidv4 } from "uuid";
-import { setGoToAction } from "../context";
+import { setGoToAction, muiQuery } from "../context";
 
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import SearchContainer from "./searchContainer";
 
 const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { disable_vertical_padding } = block;
@@ -167,10 +169,10 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
       <div className="shadow">
         <SearchContainer
           title="Search for Guidelines"
-          width="70%"
+          width={!lg ? "70%" : null}
           searchFilterRef={searchFilterRef}
           handleSearch={() => console.log("search")}
-          padding="0 0 2em 2em"
+          padding={!lg ? "0 0 2em 2em" : "1em"}
         />
         <ServeFooter />
       </div>

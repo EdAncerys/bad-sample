@@ -9,6 +9,7 @@ import accordion from "../../css/accordion.css";
 import nav from "../../css/nav.css";
 import input from "../../css/input.css";
 import custom from "../../css/custom.css";
+import customMobile from "../../css/custom-mobile.css";
 import buttons from "../../css/buttons.css";
 import iFrame from "../../css/iFrame.css";
 
@@ -16,9 +17,12 @@ import iFrame from "../../css/iFrame.css";
 import HTMLHead from "./htmlHead";
 import HeaderActions from "./headerActions";
 import Navigation from "./navigation";
+import BlockWrapper from "../blockWrapper";
+import { muiQuery } from "../../context";
 import Loading from "../loading";
 
 const Header = ({ state, actions }) => {
+  const { sm, md, lg, xl } = muiQuery();
   const endPoint = state.router.link;
   const data = state.source.get(endPoint);
 
@@ -33,7 +37,7 @@ const Header = ({ state, actions }) => {
     return (
       <div className="bad-header no-selector" style={styles.container}>
         <HeaderActions />
-        <Navigation />
+        {!lg ? <Navigation /> : null}
       </div>
     );
   };
@@ -42,11 +46,35 @@ const Header = ({ state, actions }) => {
     <>
       <Global
         styles={css`
-          ${bootStrapCSS}, ${globalCSS}, ${carousel}, ${accordion}, ${nav}, ${input},  ${buttons}, ${iFrame}, ${custom},
+          ${bootStrapCSS}, ${globalCSS}, ${carousel}, ${accordion}, ${nav}, ${input},  ${buttons}, ${iFrame}, ${!lg
+            ? custom
+            : customMobile},
         `}
       />
       <HTMLHead />
-      <ServeNavigation />
+      {!lg ? (
+        <div className="bad-header" style={styles.container}>
+          <HeaderActions />
+          <Navigation />
+        </div>
+      ) : (
+        <div
+          className="flex-col"
+          style={
+            !lg
+              ? styles.container
+              : {
+                  ...styles.container,
+                  position: "sticky",
+                  zIndex: "999",
+                  top: 0,
+                }
+          }
+        >
+          <HTMLHead />
+          <ServeNavigation />
+        </div>
+      )}
     </>
   );
 };

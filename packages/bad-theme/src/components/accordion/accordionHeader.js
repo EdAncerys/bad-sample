@@ -7,6 +7,8 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { colors } from "../../config/imports";
 
+import { muiQuery } from "../../context";
+
 const AccordionHeader = ({
   state,
   actions,
@@ -18,6 +20,8 @@ const AccordionHeader = ({
   handleAccordionToggle,
   uniqueId,
 }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { title, body, logo, preview, guidelines_type, subtitle } = block;
@@ -77,20 +81,28 @@ const AccordionHeader = ({
 
       return (
         <div
-          className="flex"
+          className={!lg ? "flex" : "flex-col"}
           style={{
             fontStyle: "italic",
-            padding: `0 2em`,
+            padding: !lg ? `0 2em` : 0,
+            marginTop: !lg ? null : "1em",
             fontWeight: "normal",
           }}
         >
+          <ServeLogo />
           <Html2React html={subtitle} />
         </div>
       );
     };
 
     return (
-      <div className="flex primary-title" style={{ alignItems: "center" }}>
+      <div
+        className="flex primary-title"
+        style={{
+          alignItems: !lg ? "center" : "flex-start",
+          flexDirection: !lg ? "row" : "column",
+        }}
+      >
         <div style={{ fontSize: 20 }}>
           <Html2React html={title} />
         </div>
@@ -119,15 +131,16 @@ const AccordionHeader = ({
 
     return (
       <div
-        className="flex"
+        className={!lg ? "flex" : "flex-row"}
         style={{
-          paddingLeft: `2em`,
+          fontSize: !lg ? null : 12,
+          paddingLeft: !lg ? `2em` : 0,
           color: colors.softBlack,
           alignItems: "center",
         }}
       >
         <div>
-          Published <Html2React html={gsPublished_date} />
+          {!lg ? "Published" : null} <Html2React html={gsPublished_date} />
         </div>
         <ServeGSUpdateInProgress />
       </div>
@@ -138,10 +151,14 @@ const AccordionHeader = ({
     if (!gsTitle) return null;
 
     return (
-      <div className="flex" style={{ alignItems: "center" }}>
+      <div
+        className={!lg ? "flex" : "flex-col"}
+        style={{ alignItems: !lg ? "center" : "flex-start" }}
+      >
+        {!lg ? null : <ServeNICELogo />}
         <div
           className="primary-title"
-          style={{ fontSize: 20, alignItems: "center" }}
+          style={{ fontSize: 20, alignItems: !lg ? "center" : "flex-start" }}
         >
           <Html2React html={gsTitle} />
         </div>
@@ -220,11 +237,15 @@ const AccordionHeader = ({
     return (
       <div
         style={{
-          padding: `0.25em`,
-          margin: `0 4em 0 1em`,
+          padding: !lg ? `0.25em` : 0,
+          margin: !lg ? `0 4em 0 1em` : 0,
         }}
       >
-        <Image src={NiceLogo} alt={alt} style={{ height: LOGO_HEIGHT }} />
+        <Image
+          src={NiceLogo}
+          alt={alt}
+          style={{ height: !lg ? LOGO_HEIGHT : LOGO_HEIGHT / 2 }}
+        />
       </div>
     );
   };
@@ -284,9 +305,14 @@ const AccordionHeader = ({
             <ServeLTTitle />
             <ServeFundingTitle />
 
+<<<<<<< HEAD
             <ServeLogo />
             <ServeFundingLogo />
             <ServeNICELogo />
+=======
+            {!lg ? <ServeLogo /> : null}
+            {!lg ? <ServeNICELogo /> : null}
+>>>>>>> 808705d89688f4a9b75a876918ebfcdbffd9870a
             <ServeIcon />
           </div>
         </div>

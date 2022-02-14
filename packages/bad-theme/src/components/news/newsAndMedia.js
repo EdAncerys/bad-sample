@@ -15,7 +15,11 @@ import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchContainer from "../../components/searchContainer";
 
+import { muiQuery } from "../../context";
+
 const NewsAndMedia = ({ state, actions, libraries, block }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
@@ -157,13 +161,74 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       return (
         <div
           className="flex primary-title"
-          style={{ fontSize: 36, alignItems: "center", paddingBottom: `0.5em` }}
+          style={{
+            fontSize: !lg ? 36 : 25,
+            alignItems: "center",
+            paddingBottom: `0.5em`,
+          }}
         >
           Search for News & Media
         </div>
       );
     };
 
+<<<<<<< HEAD
+=======
+    const ServeSearchContainer = () => {
+      return (
+        <div className={!lg ? "flex-row" : "flex-col"}>
+          <div
+            className="flex"
+            style={{
+              flex: 1,
+              height: ctaHeight,
+              position: "relative",
+              margin: "auto 0",
+            }}
+          >
+            <input
+              id={`search-input-${uniqueId}`}
+              type="text"
+              className="form-control"
+              placeholder="Find An Event"
+              style={styles.input}
+            />
+            <div
+              className="input-group-text toggle-icon-color"
+              style={{
+                position: "absolute",
+                right: 0,
+                height: ctaHeight,
+                border: "none",
+                background: "transparent",
+                alignItems: "center",
+                color: colors.darkSilver,
+                cursor: "pointer",
+              }}
+            >
+              <SearchIcon />
+            </div>
+          </div>
+          <div
+            style={{
+              display: "grid",
+              alignItems: "center",
+              paddingLeft: !lg ? `2em` : 0,
+            }}
+          >
+            <button
+              type="submit"
+              className="blue-btn"
+              onClick={handleFilterSearch}
+            >
+              Search
+            </button>
+          </div>
+        </div>
+      );
+    };
+
+>>>>>>> 808705d89688f4a9b75a876918ebfcdbffd9870a
     const ServeFilters = () => {
       const ServeTitle = () => {
         return (
@@ -230,7 +295,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
             padding: `1em 0`,
             alignItems: "center",
             display: "grid",
-            gridTemplateColumns: `100px 1fr 1fr 1fr`,
+            gridTemplateColumns: !lg ? `100px 1fr 1fr 1fr` : "1fr",
             gap: `1em`,
           }}
         >
@@ -341,7 +406,13 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
         }}
       >
         <BlockWrapper>
-          <div style={{ position: "relative", padding: `1em 0`, width: `70%` }}>
+          <div
+            style={{
+              position: "relative",
+              padding: `1em 0`,
+              width: !lg ? `70%` : `90%`,
+            }}
+          >
             <div className="flex-col">
               <ServeTitle />
               <SearchContainer

@@ -10,8 +10,10 @@ import BADLogo from "../img/svg/badLogoFooter.svg";
 import Facebook from "../img/svg/facebook.svg";
 import Twitter from "../img/svg/twitter.svg";
 import Instagram from "../img/svg/instagram.svg";
-
+import { muiQuery } from "../context";
 const Footer = ({ state, actions }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const endPoint = state.router.link;
   if (endPoint.includes("/redirect/")) return null;
 
@@ -35,10 +37,10 @@ const Footer = ({ state, actions }) => {
         }}
       >
         <div
-          className="flex-row"
+          className={!lg ? "flex-row" : "flex-col"}
           style={{
             flex: 2,
-            alignItems: "center",
+            alignItems: !lg ? "center" : "flex-start",
           }}
         >
           <div className="flex" style={{ flex: 3 }}>
@@ -50,10 +52,12 @@ const Footer = ({ state, actions }) => {
             className="flex"
             style={{ flex: 5, fontSize: 11, justifyContent: "flex-end" }}
           >
-            <div style={styles.footerInfo}>
-              <div>Willan House, 4 Fitzroy Square, London, W1T 5HQ</div>
-              <ServeDivider />
-            </div>
+            {!lg ? (
+              <div style={styles.footerInfo}>
+                <div>Willan House, 4 Fitzroy Square, London, W1T 5HQ</div>
+                <ServeDivider />
+              </div>
+            ) : null}
             <div style={styles.footerInfo}>
               <div>admin@bad.org.uk</div>
               <ServeDivider />
@@ -62,8 +66,14 @@ const Footer = ({ state, actions }) => {
           </div>
           <div
             className="flex"
-            style={{ justifyContent: "space-around", paddingLeft: `3em` }}
+            style={{
+              justifyContent: "space-around",
+              paddingLeft: !lg ? `3em` : 0,
+              width: !lg ? null : "100%",
+              marginTop: !lg ? null : "1em",
+            }}
           >
+<<<<<<< HEAD
             <div style={styles.socials}>
               <Link
                 link={`https://www.facebook.com/BritishAssociationOfDermatologists/`}
@@ -85,6 +95,20 @@ const Footer = ({ state, actions }) => {
                 link={`https://www.instagram.com/explore/locations/1020258048/british-association-of-dermatologists?hl=en`}
                 target="_blank"
               >
+=======
+            <div style={!lg ? styles.socials : styles.socialsMobile}>
+              <Link link={`https://www.facebook.com/`} target="_blank">
+                <span className="facebook-icon" />
+              </Link>
+            </div>
+            <div style={!lg ? styles.socials : styles.socialsMobile}>
+              <Link link={`https://www.twitter.com/`} target="_blank">
+                <span className="twitter-icon" />
+              </Link>
+            </div>
+            <div style={!lg ? styles.socials : styles.socialsMobile}>
+              <Link link={`https://www.instagram.com/`} target="_blank">
+>>>>>>> 808705d89688f4a9b75a876918ebfcdbffd9870a
                 <span className="instagram-icon" />
               </Link>
             </div>
@@ -97,8 +121,12 @@ const Footer = ({ state, actions }) => {
   const ServeFooterBottomRow = () => {
     return (
       <div
-        className="flex-row"
-        style={{ alignItems: "center", fontSize: 9, padding: `2em 0` }}
+        className={!lg ? "flex-row" : "flex-col"}
+        style={{
+          alignItems: "center",
+          fontSize: !lg ? 9 : 15,
+          padding: `2em 0`,
+        }}
       >
         <div className="flex">
           ©{`${year}`} British Association of Dermatologists
@@ -192,6 +220,11 @@ const styles = {
   socials: {
     width: 25,
     height: 25,
+    cursor: "pointer",
+  },
+  socialsMobile: {
+    width: 50,
+    height: 50,
     cursor: "pointer",
   },
 };

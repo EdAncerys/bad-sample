@@ -12,7 +12,11 @@ import TypeFilters from "./typeFilters";
 
 import CloseIcon from "@mui/icons-material/Close";
 
+import { muiQuery } from "../context";
+
 const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
@@ -142,6 +146,61 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
   };
 
   // SERVERS --------------------------------------------------------
+<<<<<<< HEAD
+=======
+  const ServeInfo = () => {
+    const ServeTitle = () => {
+      return (
+        <div
+          className="flex primary-title"
+          style={{ fontSize: !lg ? 36 : 25, alignItems: "center" }}
+        >
+          Clinical Guidelines
+        </div>
+      );
+    };
+
+    const ServeBody = () => {
+      return (
+        <div className="flex" style={{ padding: `1em 0`, width: "60%" }}>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat.
+        </div>
+      );
+    };
+
+    const ServeBrandLogo = () => {
+      const alt = "BAD Brand";
+
+      return (
+        <div
+          style={{
+            width: 195,
+            height: 70,
+            overflow: "hidden",
+            marginTop: `1em`,
+          }}
+        >
+          <Image src={NiceLogo} alt={alt} style={{ height: "100%" }} />
+        </div>
+      );
+    };
+
+    return (
+      <div
+        className="flex-col"
+        style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}
+      >
+        <ServeTitle />
+        <ServeBody />
+        <ServeBrandLogo />
+      </div>
+    );
+  };
+
+>>>>>>> 808705d89688f4a9b75a876918ebfcdbffd9870a
   const ServeType = () => {
     if (!guidelinesType) return null;
 

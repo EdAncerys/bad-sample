@@ -2,7 +2,7 @@ import { useState } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/imports";
 
-import { setGoToAction } from "../context";
+import { setGoToAction, muiQuery } from "../context";
 import Loading from "./loading";
 import DownloadFileBlock from "../components/downloadFileBlock";
 
@@ -16,6 +16,7 @@ const FullWidthContentBlock = ({
   disablePadding,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  const { sm, md, lg, xl } = muiQuery();
 
   if (!block) return <Loading />;
 
@@ -57,7 +58,7 @@ const FullWidthContentBlock = ({
 
     return (
       <div>
-        <div className="primary-title" style={{ fontSize: 36 }}>
+        <div className="primary-title" style={{ fontSize: !lg ? 36 : 25 }}>
           <Html2React html={title} />
         </div>
       </div>

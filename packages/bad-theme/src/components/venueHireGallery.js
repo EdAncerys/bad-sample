@@ -3,8 +3,11 @@ import { connect } from "frontity";
 
 import Card from "./card/card";
 import Loading from "./loading";
+import { muiQuery } from "../context";
 
 const VenueHireGallery = ({ state, actions, block }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   if (!block) return <Loading />;
 
   const { disable_vertical_padding } = block;
@@ -43,7 +46,7 @@ const VenueHireGallery = ({ state, actions, block }) => {
   // RETURN ---------------------------------------------------
   return (
     <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
-      <div style={styles.container}>
+      <div style={!lg ? styles.container : styles.containerMobile}>
         {venueList.map((block, key) => {
           const {
             about_the_venue,
@@ -79,6 +82,12 @@ const styles = {
     gridTemplateColumns: `repeat(2, 1fr)`,
     justifyContent: "space-between",
     gap: 20,
+  },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `repeat(1, 1fr)`,
+    justifyContent: "space-between",
+    gap: 10,
   },
 };
 

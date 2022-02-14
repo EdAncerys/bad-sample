@@ -6,13 +6,14 @@ import date from "date-and-time";
 
 import Loading from "./loading";
 import { colors } from "../config/imports";
-import { setGoToAction } from "../context";
+import { setGoToAction, muiQuery } from "../context";
 
 const DATE_MODULE = date;
 
 const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
+  const { sm, md, lg, xl } = muiQuery();
 
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
@@ -20,7 +21,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
   let MARGIN = `${marginVertical}px 0 0`;
   if (removeMargin) MARGIN = 0;
 
-  const HEIGHT = BANNER_HEIGHT / 1.45;
+  const HEIGHT = !lg ? BANNER_HEIGHT / 1.45 : BANNER_HEIGHT / 2.2;
 
   const {
     date_time,
@@ -73,7 +74,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
 
       return (
         <div>
-          <div className="flex">
+          <div className={!lg ? "flex" : "flex-col"}>
             {date_time.map((block, key) => {
               const { date, end_time, start_time } = block;
 
@@ -112,7 +113,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
       return (
         <div
           className="primary-title"
-          style={{ fontSize: 20, padding: `0.5em 0` }}
+          style={{ fontSize: !lg ? 20 : 17, padding: `0.5em 0` }}
         >
           <Html2React html={titlePreview} />
         </div>
@@ -178,12 +179,16 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
     return (
       <div
         className="flex-col"
-        style={{ padding: `2em 0 2em 2em`, overflowY: "auto", height: HEIGHT }}
+        style={{
+          padding: !lg ? `2em 0 2em 2em` : "1em",
+          overflowY: "auto",
+          height: HEIGHT,
+        }}
       >
         <ServeDate />
         <ServeTitle />
-        <ServeInformation />
-        <ServeSummary />
+        {!lg ? <ServeInformation /> : null}
+        {!lg ? <ServeSummary /> : null}
       </div>
     );
   };
@@ -198,7 +203,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
         }}
       >
         <div
-          style={styles.container}
+          style={!lg ? styles.container : styles.containerMobile}
           onClick={() => setGoToAction({ path: block.link, actions })}
         >
           <ServeCardContent />
@@ -213,6 +218,12 @@ const styles = {
   container: {
     display: "grid",
     gridTemplateColumns: `2.5fr 1fr`,
+    gap: 20,
+    cursor: "pointer",
+  },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr 1fr`,
     gap: 20,
     cursor: "pointer",
   },

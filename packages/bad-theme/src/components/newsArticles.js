@@ -3,8 +3,11 @@ import { connect } from "frontity";
 
 import Card from "./card/card";
 import Loading from "./loading";
+import { muiQuery } from "../context";
 
 const NewsArticles = ({ state, actions, block }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   if (!block) return <Loading />;
   if (!block.card) return null;
 
@@ -25,7 +28,9 @@ const NewsArticles = ({ state, actions, block }) => {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: `repeat(${CARD_NUMBER}, 1fr)`,
+          gridTemplateColumns: !lg
+            ? `repeat(${CARD_NUMBER}, 1fr)`
+            : "repeat(1, 1fr)",
           justifyContent: "space-between",
           gap: 20,
         }}

@@ -5,7 +5,6 @@ import Link from "@frontity/components/link";
 
 import { colors } from "../config/imports";
 import { setGoToAction } from "../context";
-import { muiQuery } from "../context";
 import RowButton from "../components/rowButton";
 
 import Facebook from "../img/svg/facebookBlack.svg";
@@ -17,9 +16,11 @@ import WebPage from "../img/svg/webPageBlack.svg";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT -------------------------------------------------------------------
-import { useAppDispatch, setEnquireAction } from "../context";
+import { useAppDispatch, setEnquireAction, muiQuery } from "../context";
 
 const Event = ({ state, actions, libraries }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const event = state.source[data.type][data.id];
@@ -29,12 +30,15 @@ const Event = ({ state, actions, libraries }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
+<<<<<<< HEAD
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
     document.documentElement.scrollTop = 0; // for safari
   }, []);
 
   const { sm, md, lg, xl } = muiQuery();
+=======
+>>>>>>> 808705d89688f4a9b75a876918ebfcdbffd9870a
   const {
     date_time,
     email,
@@ -79,7 +83,7 @@ const Event = ({ state, actions, libraries }) => {
     return (
       <div
         className="primary-title"
-        style={{ fontSize: 36, paddingBottom: `1em` }}
+        style={{ fontSize: !lg ? 36 : 25, paddingBottom: `1em` }}
       >
         <Html2React html={title.rendered} />
       </div>
@@ -275,12 +279,19 @@ const Event = ({ state, actions, libraries }) => {
 
   const ServeSocials = () => {
     return (
-      <div className="flex-col" style={{ width: `50%` }}>
+      <div className="flex-col" style={{ width: !lg ? `50%` : `100%` }}>
         <div
-          className="flex-row"
-          style={{ justifyContent: "space-between", padding: `2em 0` }}
+          className={!lg ? "flex-row" : "flex-col"}
+          style={{
+            flexDirection: "column-reverse",
+            justifyContent: "space-between",
+            padding: `2em 0 0 0`,
+          }}
         >
-          <div className="primary-title" style={{ fontSize: 20 }}>
+          <div
+            className="primary-title"
+            style={{ fontSize: 20, marginTop: !lg ? null : "1em" }}
+          >
             Share
           </div>
           <div className="primary-title" style={{ fontSize: 20 }}>
@@ -331,10 +342,10 @@ const Event = ({ state, actions, libraries }) => {
     <BlockWrapper>
       <div style={{ backgroundColor: colors.white }}>
         <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
-          <div style={styles.container}>
+          <div style={!lg ? styles.container : styles.containerMobile}>
             <div>
               <ServeTitle />
-              <div style={styles.eventInfo}>
+              <div style={!lg ? styles.eventInfo : styles.eventInfoMobile}>
                 <ServeImage />
                 <ServeEventInfo />
               </div>
@@ -383,9 +394,19 @@ const styles = {
     gridTemplateColumns: `2fr 1fr`,
     gap: 20,
   },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
+    gap: 20,
+  },
   eventInfo: {
     display: "grid",
     gridTemplateColumns: `1fr 1fr`,
+    gap: 40,
+  },
+  eventInfoMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
     gap: 40,
   },
   date: {

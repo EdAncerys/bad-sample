@@ -3,8 +3,10 @@ import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 
+import { muiQuery } from "../../context";
 const FindDermatologistOptions = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  const { sm, md, lg, xl } = muiQuery();
 
   const marginVertical = state.theme.marginVertical;
 
@@ -151,7 +153,10 @@ const FindDermatologistOptions = ({ state, actions, libraries }) => {
   return (
     <div
       className="shadow"
-      style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
+      style={{
+        padding: !lg ? `2em 4em` : "1em",
+        marginBottom: `${marginVertical}px`,
+      }}
     >
       <div className="primary-title" style={{ fontSize: 20 }}>
         Find a Dermatologist:
