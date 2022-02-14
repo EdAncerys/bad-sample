@@ -8,7 +8,14 @@ import { setGoToAction } from "../context";
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, setEnquireAction } from "../context";
 
-const RowButton = ({ state, actions, libraries, block, onClick }) => {
+const RowButton = ({
+  state,
+  actions,
+  libraries,
+  block,
+  onClick,
+  multiPostRowButtons,
+}) => {
   // block: object
   // onClick action
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -64,7 +71,9 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
         <div className="flex-col row-btn">
           <div className="flex-row" style={{ alignItems: "center" }}>
             <div className="flex">
-              <div className="caps-btn">
+              <div
+                className={!multiPostRowButtons ? "caps-btn" : "mp-row-button"}
+              >
                 <Html2React html={LABEL} />
               </div>
             </div>
