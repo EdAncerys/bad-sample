@@ -86,10 +86,10 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
         if (acf_fc_layout === "membership_accordion")
           return (
-            <div key={key + 1}>
+            <BlockWrapper key={key + 1} background={block.background_colour}>
               <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
               <Accordion key={key} block={block} />
-            </div>
+            </BlockWrapper>
           );
 
         if (acf_fc_layout === "funding_loop_block")

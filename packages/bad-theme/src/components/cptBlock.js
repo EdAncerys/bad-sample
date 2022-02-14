@@ -28,6 +28,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   const [postListData, setPostListData] = useState(null);
   const [groupeType, setGroupeType] = useState(null);
+  const [guidanceCategory, setGuidanceCategory] = useState(null);
 
   const [searchFilter, setSearchFilter] = useState(null);
 
@@ -35,6 +36,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   const currentSearchFilterRef = useRef(null);
   const typeFilterRef = useRef(null);
   const loadMoreRef = useRef(null);
+  const guidanceCategoryRef = useRef("");
 
   const LIMIT = 8;
 
@@ -72,6 +74,8 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     }
     const GROUPE_DATA = Object.values(state.source[postPath]);
     const GROUPE_TYPE = Object.values(state.source[typePath]);
+    if (isCovid_19)
+      setGuidanceCategory(Object.values(state.source.guidance_category)); // set additional filter option to COVID-19
 
     const limit = post_limit || LIMIT;
     setPostListData(GROUPE_DATA.slice(0, Number(limit))); // apply limit on posts
@@ -105,6 +109,8 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     const input = searchFilterRef.current.value.toLowerCase() || searchFilter;
     currentSearchFilterRef.current = input;
     let data = Object.values(state.source[postPath]);
+
+    console.log(data);
 
     if (typeFilterRef.current) {
       data = data.filter((item) =>
@@ -203,6 +209,35 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       );
     };
 
+    const ServeGuidanceType = () => {
+      if (!guidanceCategory) return null;
+
+      return (
+        <div>
+          <select
+            name="guidance"
+            ref={guidanceCategoryRef}
+            value={guidanceCategoryRef.current}
+            onChange={handleSearch}
+            className="input"
+          >
+            <option value="" hidden>
+              Select Guidance Category
+            </option>
+            {guidanceCategory.map((item, key) => {
+              console.log(guidanceCategory);
+
+              return (
+                <option key={key} value={item.id}>
+                  {item.name}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+      );
+    };
+
     return (
       <div
         style={{
@@ -222,9 +257,11 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               searchFilterRef={searchFilterRef}
               handleSearch={handleSearch}
             />
+
             <div className="flex" style={{ margin: "0.5em 0" }}>
               <ServeSearchFilter />
             </div>
+            <ServeGuidanceType />
             <TypeFilters
               filters={groupeType}
               handleSearch={handleTypeSearch}
