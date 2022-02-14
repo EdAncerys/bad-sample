@@ -62,16 +62,17 @@ const Tweets = ({ state, actions, libraries, block }) => {
         }}
       >
         {tweets.map((block, key) => {
-          const { author, text } = block;
+          const { html } = block;
 
           return (
-            <div key={key} className="flex">
-              <Card
-                tweetInfo={author}
-                body={text}
+            <div key={key} className="flex tweet">
+              {/* <Card
+                tweetInfo={block}
+                body={html}
                 colour={colors.danger}
                 shadow // optional param
-              />
+              /> */}
+              <Html2React html={html} />
             </div>
           );
         })}

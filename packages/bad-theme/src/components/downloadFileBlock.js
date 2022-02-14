@@ -24,7 +24,7 @@ const DownloadFileBlock = ({
 
   if (!block) return null;
 
-  const { file, guidline_file, disable_vertical_padding, title } = block;
+  const { file, guidline_file, disable_vertical_padding, title, label } = block;
 
   const ICON_WIDTH = 35;
 
@@ -38,6 +38,7 @@ const DownloadFileBlock = ({
 
     let fileName = "Download";
     if (file.title) fileName = file.title;
+    if (label) fileName = label;
 
     return (
       <div style={{ display: "grid" }}>

@@ -11,7 +11,7 @@ const TweetInfo = ({ state, actions, libraries, tweetInfo }) => {
 
   if (!tweetInfo) return null;
 
-  const { name, profile_image_url, username } = tweetInfo;
+  const { name, profile_image_url, author_name } = tweetInfo;
 
   // SERVERS ---------------------------------------------
   const ServeCardImage = () => {
@@ -57,11 +57,11 @@ const TweetInfo = ({ state, actions, libraries, tweetInfo }) => {
   };
 
   const ServeUserName = () => {
-    if (!username) return null;
+    if (!author_name) return null;
 
     return (
       <div style={{ fontSize: 22 }}>
-        @<Html2React html={username} />
+        @<Html2React html={author_name} />
       </div>
     );
   };

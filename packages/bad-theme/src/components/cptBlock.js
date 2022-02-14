@@ -58,6 +58,9 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     const path = `/${postPath}/`;
     await actions.source.fetch(path); // fetch CPT dermGroupeData
 
+    console.log("useEffect fires up");
+    console.log(typeFilterRef.current);
+
     let dermGroupeData = state.source.get(path);
     const { totalPages, page, next } = dermGroupeData; // check if dermGroupeData have multiple pages
     // fetch dermGroupeData via wp API page by page
@@ -209,14 +212,13 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
         }}
       >
         <BlockWrapper>
-          <div style={{ padding: `0 ${marginHorizontal}px` }}>
+          <div style={{ padding: `0 ${marginHorizontal}px`, width: `70%` }}>
             <SearchContainer
               title={
                 isCovid_19
                   ? "Search for COVID 19 Resources"
                   : "Search for Dermatology Groups & Charities"
               }
-              width="70%"
               searchFilterRef={searchFilterRef}
               handleSearch={handleSearch}
             />
@@ -228,7 +230,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               handleSearch={handleTypeSearch}
               typeFilterRef={typeFilterRef}
               handleClearTypeFilter={handleClearTypeFilter}
-              title={isCovid_19 ? "Filter" : "Search Groupe"}
+              title="Filter"
             />
           </div>
         </BlockWrapper>
@@ -247,11 +249,12 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               key={key}
               title={title.rendered}
               publicationDate={date}
-              body={content.rendered}
+              body={isCovid_19 ? null : content.rendered}
               link_label="Read More"
               link={link}
               colour={colour}
               limitBodyLength
+              cardMinHeight={250}
               shadow
             />
           );
