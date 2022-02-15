@@ -18,7 +18,7 @@ import {
   sendEmailEnquireAction,
   setUserStoreAction,
   getTestUserAccountsAction,
-  getBADMembershipSubscriptionId,
+  getBADMembershipSubscriptionData,
 } from "../../context";
 
 const AccordionBody = ({
@@ -61,12 +61,13 @@ const AccordionBody = ({
   // HANDLERS ----------------------------------------------------
   const handleApply = async () => {
     // ⏬ get appropriate membership ID
-    const membershipId = await getBADMembershipSubscriptionId({
+    const membershipData = await getBADMembershipSubscriptionData({
       state,
       category: "BAD",
       type: apply_for_membership,
     });
-    console.log("Application Type ", apply_for_membership); // debug
+    // console.log("Application Type ", apply_for_membership); // debug
+    // console.log("membershipData ", membershipData); // debug
 
     // ⏬ create user application record in Store
     await setUserStoreAction({
@@ -74,9 +75,11 @@ const AccordionBody = ({
       dispatch,
       applicationData,
       isActiveUser,
+      membershipApplication: membershipData,
       data: {
         bad_organisedfor: "810170000", // BAD members category
-        core_membershipsubscriptionplanid: membershipId, // type of membership for application
+        core_membershipsubscriptionplanid:
+          membershipData.core_membershipsubscriptionplanid, // type of membership for application
         bad_applicationfor: "810170000", // silent assignment
       },
     });

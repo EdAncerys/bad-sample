@@ -11,6 +11,7 @@ export const setUserStoreAction = async ({
   applicationData,
   isActiveUser,
   data,
+  membershipApplication,
 }) => {
   console.log("setUserStoreAction triggered");
   if (!isActiveUser) {
@@ -53,6 +54,7 @@ export const setUserStoreAction = async ({
     const updatedMembershipData = updateMembershipApplication({
       storeApplication,
       data,
+      membershipApplication,
     });
 
     const URL = state.auth.APP_HOST + `/store/${contactid}/applications`;
@@ -264,13 +266,25 @@ export const updateDynamicsApplicationAction = async ({
   }
 };
 
-const updateMembershipApplication = ({ storeApplication, data }) => {
+const updateMembershipApplication = ({
+  storeApplication,
+  data,
+  membershipApplication,
+}) => {
   if (!data) return storeApplication;
 
   console.log("⏬ UPDATING Membership Record ⏬");
   let newApplicationRecord = storeApplication;
 
-  newApplicationRecord.map((application) => {
+  if (membershipApplication) {
+    console.log("⏬ Additional Membership data added ⏬");
+    newApplicationRecord[0] = {
+      ...newApplicationRecord[0],
+      ...membershipApplication,
+    };
+  }
+
+  newApplicationRecord[1].map((application) => {
     //⏬ step one of the application process
     if (data.bad_organisedfor && application.name === "bad_organisedfor")
       application.value = data.bad_organisedfor;

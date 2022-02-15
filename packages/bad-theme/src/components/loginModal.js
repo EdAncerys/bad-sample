@@ -40,7 +40,7 @@ const LoginModal = ({ state, actions }) => {
     console.log("iFrame iFrameHandler triggered...");
 
     if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
-      setId(`vQOKclgzqdPg83Z0zSuTTantjFmEJqj8`); // auto login in dev enviroment
+      setId(`ePJYuY/QEu94+k+T8IGaLATzK8S9l/YN`); // auto login in dev enviroment
       return;
     }
 

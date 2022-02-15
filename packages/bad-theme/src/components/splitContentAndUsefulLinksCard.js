@@ -16,8 +16,7 @@ const SplitContentAndUsefulLinksCard = ({
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  if (!block) return <Loading />;
-
+  
   const {
     body,
     title,
@@ -27,11 +26,13 @@ const SplitContentAndUsefulLinksCard = ({
     disable_vertical_padding,
     limit_body_length,
   } = block;
-
+  
   const [limit, setLimit] = useState(limit_body_length);
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
+  
+  if (!block) return <Loading />;
 
   // SERVERS -----------------------------------------------------
   const ServeContent = () => {

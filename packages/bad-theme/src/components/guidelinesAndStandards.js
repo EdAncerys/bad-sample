@@ -14,19 +14,20 @@ import CloseIcon from "@mui/icons-material/Close";
 const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  if (!block) return <Loading />;
-
-  const { disable_vertical_padding, background_colour } = block;
-
+  
   const searchFilterRef = useRef(null);
   const currentSearchFilterRef = useRef(null);
   const typeFilterRef = useRef(null);
-
+  
   const [searchFilter, setSearchFilter] = useState(null);
   const [typeFilter, setTypeFilter] = useState(null);
-
+  
   const [guidelinesList, setGuidelinesList] = useState(null);
   const [guidelinesType, setGuidelinesType] = useState(null);
+  
+  if (!block) return <Loading />;
+
+  const { disable_vertical_padding, background_colour } = block;
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;

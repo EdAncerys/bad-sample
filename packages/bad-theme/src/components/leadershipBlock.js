@@ -5,10 +5,11 @@ import AccordionComponent from "./accordion/accordion";
 import Loading from "./loading";
 
 const LeadershipBlock = ({ state, actions, block }) => {
-  if (!block) return <Loading />;
-
+  
   const [leadershipList, setLeadershipList] = useState(null);
   const mountedRef = useRef(true)
+  
+  if (!block) return <Loading />;
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {

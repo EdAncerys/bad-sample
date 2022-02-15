@@ -10,7 +10,7 @@ import {
   useAppDispatch,
   useAppState,
   setUserStoreAction,
-  getBADMembershipSubscriptionId,
+  getBADMembershipSubscriptionData,
   setGoToAction,
 } from "../../context";
 
@@ -58,7 +58,7 @@ const RegistrationStepThree = ({ state, actions }) => {
   // HANDLERS --------------------------------------------
   const handleSaveExit = async () => {
     // ⏬ get appropriate membership ID
-    // const membershipId = await getBADMembershipSubscriptionId({
+    // const membershipId = await getBADMembershipSubscriptionData({
     //   state,
     //   category: formData.bad_organisedfor === "810170000" ? "BAD" : "SIG",
     //   type,
@@ -90,7 +90,7 @@ const RegistrationStepThree = ({ state, actions }) => {
 
   const handleNext = async () => {
     // ⏬ get appropriate membership ID
-    // const membershipId = await getBADMembershipSubscriptionId({
+    // const membershipId = await getBADMembershipSubscriptionData({
     //   state,
     //   category: formData.bad_organisedfor === "810170000" ? "BAD" : "SIG",
     //   type,
