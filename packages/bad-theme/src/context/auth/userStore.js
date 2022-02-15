@@ -276,15 +276,16 @@ const updateMembershipApplication = ({
   console.log("⏬ UPDATING Membership Record ⏬");
   let newApplicationRecord = storeApplication;
 
-  if (membershipApplication) {
-    console.log("⏬ Additional Membership data added ⏬");
-    newApplicationRecord[0] = {
-      ...newApplicationRecord[0],
-      ...membershipApplication,
-    };
-  }
+  newApplicationRecord.map((application, key) => {
+    if (membershipApplication && key === 0) {
+      console.log("🚀 Additional Membership data added 🚀");
+      Object.keys(membershipApplication).map((key) => {
+        const value = membershipApplication[key];
 
-  newApplicationRecord[1].map((application) => {
+        application[key] = value; // update application record
+      });
+    }
+
     //⏬ step one of the application process
     if (data.bad_organisedfor && application.name === "bad_organisedfor")
       application.value = data.bad_organisedfor;
