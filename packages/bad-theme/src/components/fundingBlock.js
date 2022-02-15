@@ -231,6 +231,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   };
 
   const ServeLayout = () => {
+    console.log(postListData);
     if (isAccordion)
       return (
         <div>
@@ -247,8 +248,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       <div style={styles.container}>
         {postListData.map((block, key) => {
           const { title, content, link, date, dermo_group_type } = block.acf;
-
-          console.log(block);
 
           return (
             <Card
@@ -303,23 +302,19 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       }}
     >
       <BlockWrapper>
-        <div style={{ padding: `0 ${marginHorizontal}px` }}>
-          <TitleBlock
-            block={block}
-            margin={{
-              marginBottom: `${
-                add_search_function ? 0 : state.theme.marginVertical
-              }px`,
-            }}
-          />
-        </div>
+        <TitleBlock
+          block={block}
+          margin={{
+            marginBottom: `${
+              add_search_function ? 0 : state.theme.marginVertical
+            }px`,
+          }}
+        />
       </BlockWrapper>
       <ServeFilter />
       <BlockWrapper>
-        <div style={{ padding: `0 ${marginHorizontal}px` }}>
-          <ServeLayout />
-          <ServeMoreAction />
-        </div>
+        <ServeLayout />
+        <ServeMoreAction />
       </BlockWrapper>
     </div>
   );
