@@ -47,6 +47,7 @@ const AccordionBody = ({
     apply_for_membership,
     file_submit_option,
     recipients,
+    links,
   } = block;
 
   let body = block.body;
@@ -166,7 +167,7 @@ const AccordionBody = ({
             padding: `2em 0 0`,
           }}
         >
-          Downloads:
+          Links and Downloads:
         </div>
         <div className="flex-col" style={{ flexWrap: "wrap" }}>
           {files.map((block, key) => {
@@ -188,8 +189,8 @@ const AccordionBody = ({
   const ServeGoToButton = () => {
     if (!button_link || guidelines) return null;
 
-    let LABEL = "More";
-    if (button_label) LABEL = button_label;
+    let linkLabel = "More";
+    if (button_label) linkLabel = button_label;
 
     return (
       <div
@@ -206,7 +207,7 @@ const AccordionBody = ({
             onClick={() => setGoToAction({ path: button_link.url, actions })}
           >
             <div className="flex">
-              <Html2React html={LABEL} />
+              <Html2React html={linkLabel} />
             </div>
             <div style={{ margin: "auto 0" }}>
               <KeyboardArrowRightIcon
@@ -225,8 +226,8 @@ const AccordionBody = ({
   const ServeGoToLink = () => {
     if (!link) return null;
 
-    let LABEL = "External Link";
-    if (link_label) LABEL = link_label;
+    let linkLabel = "External Link";
+    if (link_label) linkLabel = link_label;
 
     return (
       <div
@@ -249,13 +250,52 @@ const AccordionBody = ({
           </div>
           <div
             className="caps-btn"
+            style={{ boxShadow: "none" }}
             onClick={() => setGoToAction({ path: link.url, actions })}
           >
             <div className="flex">
-              <Html2React html={LABEL} />
+              <Html2React html={linkLabel} />
             </div>
           </div>
         </div>
+      </div>
+    );
+  };
+
+  const ServeGoToLinkRepeater = () => {
+    if (!links) return null;
+
+    return (
+      <div style={{ display: "grid", gap: `0.5em` }}>
+        {links.map((block, key) => {
+          const { label, link } = block;
+
+          let linkLabel = "External Link";
+          if (label) linkLabel = label;
+
+          return (
+            <div className="flex" key={key}>
+              <div style={{ marginRight: `1em` }}>
+                <Image
+                  src={LINK}
+                  style={{
+                    width: ICON_WIDTH,
+                    height: ICON_WIDTH,
+                  }}
+                />
+              </div>
+              <div
+                className="caps-btn"
+                style={{ boxShadow: "none" }}
+                onClick={() => setGoToAction({ path: link.url, actions })}
+              >
+                <div className="flex">
+                  <Html2React html={linkLabel} />
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     );
   };
@@ -613,6 +653,7 @@ const AccordionBody = ({
         <ServeLTTeam />
         <ServeGSSubTitle />
         <ServeGSLink />
+        <ServeGoToLinkRepeater />
         <ServeBodyActions />
         <ApplyForMembership />
       </div>
