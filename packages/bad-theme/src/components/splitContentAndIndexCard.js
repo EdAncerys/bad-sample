@@ -39,8 +39,10 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
       if (body.length > maxLength && limit)
         bodyPreview = `${body.substring(0, maxLength)}...`;
 
+      console.log(body.length);
+
       const ServeActions = () => {
-        if (!limit_body_length) return null;
+        if (!limit_body_length || body.length <= maxLength) return null;
 
         let label = "Read More";
         if (!limit) label = "Read Less";
