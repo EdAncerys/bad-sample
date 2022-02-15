@@ -282,7 +282,7 @@ const updateMembershipApplication = ({
       Object.keys(membershipApplication).map((key) => {
         const value = membershipApplication[key];
 
-        application[key] = value; // update application record
+        application[key] = value; // additional application record data
       });
     }
 

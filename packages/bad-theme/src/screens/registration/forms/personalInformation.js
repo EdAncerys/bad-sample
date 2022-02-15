@@ -33,6 +33,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     py3_addresscountystate: "",
     py3_addresszippostalcode: "",
     py3_addresscountry: "",
+    document: "",
   });
   const [profilePhoto, setProfilePhoto] = useState(null);
   const profilePhotoRef = useRef(null);
@@ -104,19 +105,21 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     let document = profilePhotoRef.current
       ? profilePhotoRef.current.files[0]
       : null;
+    const objectURL = URL.createObjectURL(document);
+    setProfilePhoto(objectURL);
+
     if (document)
       document = await sendFileToS3Action({
         state,
         dispatch,
         attachments: document,
       });
-    console.log("document", document); // debug
-    console.log(formData); // debug
 
-    // setFormData((prevFormData) => ({
-    //   ...prevFormData,
-    //   cvDocument: document,
-    // }));
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      ["document"]: document,
+    }));
+    console.log("document", document); // debug
   };
 
   const handleInputChange = (e) => {
@@ -196,11 +199,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
 
           <input
             ref={profilePhotoRef}
-            onChange={() => {
-              const file = profilePhotoRef.current.files[0];
-              const objectURL = URL.createObjectURL(file);
-              setProfilePhoto(objectURL);
-            }}
+            onChange={handleDocUploadChange}
             type="file"
             className="form-control"
             placeholder="Profile Photo"

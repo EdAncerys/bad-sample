@@ -66,8 +66,6 @@ const AccordionBody = ({
       category: "BAD",
       type: apply_for_membership,
     });
-    // console.log("Application Type ", apply_for_membership); // debug
-    // console.log("membershipData ", membershipData); // debug
 
     // ⏬ create user application record in Store
     await setUserStoreAction({

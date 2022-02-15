@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
@@ -22,6 +22,17 @@ const RegistrationStepOne = ({ state, actions }) => {
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+
+  const useEffectRef = useRef(null);
+
+  // DATA pre FETCH ----------------------------------------------------------------
+  useEffect(async () => {
+    await actions.source.fetch(`/memberships/`); // fetch membership application data
+
+    return () => {
+      useEffectRef.current = false; // clean up function
+    };
+  }, []);
 
   // HANDLERS --------------------------------------------
   const handleSaveExit = async () => {
