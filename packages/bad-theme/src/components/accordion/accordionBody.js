@@ -60,27 +60,32 @@ const AccordionBody = ({
 
   // HANDLERS ----------------------------------------------------
   const handleApply = async () => {
-    // ⏬ get appropriate membership ID
-    const membershipData = await getBADMembershipSubscriptionData({
-      state,
-      category: "BAD",
-      type: apply_for_membership,
-    });
+    try {
+      // ⏬ get appropriate membership ID
+      const membershipData = await getBADMembershipSubscriptionData({
+        state,
+        category: "BAD",
+        type: apply_for_membership,
+      });
+      if (!membershipData) throw new Error("Failed to get membership data");
 
-    // ⏬ create user application record in Store
-    await setUserStoreAction({
-      state,
-      dispatch,
-      applicationData,
-      isActiveUser,
-      membershipApplication: membershipData,
-      data: {
-        bad_organisedfor: "810170000", // BAD members category
-        core_membershipsubscriptionplanid:
-          membershipData.core_membershipsubscriptionplanid, // type of membership for application
-        bad_applicationfor: "810170000", // silent assignment
-      },
-    });
+      // ⏬ create user application record in Store
+      await setUserStoreAction({
+        state,
+        dispatch,
+        applicationData,
+        isActiveUser,
+        membershipApplication: membershipData,
+        data: {
+          bad_organisedfor: "810170000", // BAD members category
+          core_membershipsubscriptionplanid:
+            membershipData.core_membershipsubscriptionplanid, // type of membership for application
+          bad_applicationfor: "810170000", // silent assignment
+        },
+      });
+    } catch (error) {
+      console.log("ERROR: ", error);
+    }
 
     if (isActiveUser)
       setGoToAction({ path: `/membership/step-1-the-process/`, actions });

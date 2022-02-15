@@ -8,9 +8,14 @@ export const getBADMembershipSubscriptionData = async ({
   console.log("getBADMembershipSubscriptionData triggered");
 
   const year = new Date().getFullYear(); // get current year
-  const URL =
+  let URL =
     state.auth.APP_HOST +
     `/catalogue/lookup/membershiptype?search=${category}:${type}::${year}`;
+  if (category === "SIG")
+    URL =
+      state.auth.APP_HOST +
+      `/catalogue/lookup/membershiptype?search=${category}:Full:${type}:${year}`;
+
   const jwt = await authenticateAppAction({ state });
 
   console.log(URL);
