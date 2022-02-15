@@ -17,25 +17,36 @@ const AccordionHeader = ({
   fundingBlock,
   handleAccordionToggle,
   uniqueId,
+  hasPreview,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const { title, body, logo, preview, guidelines_type, subtitle } = block;
+  const { guidelines_type, subtitle } = block;
   const LOGO_HEIGHT = 45;
+
+  let preview = block.preview;
+  if (hasPreview) preview = hasPreview;
+
+  let title = block.title;
+  if (fundingBlock) title = block.title.rendered;
+  if (guidelines) title = block.title.rendered;
+
+  let body = block.body;
+  if (fundingBlock) body = block.acf ? block.acf.overview : null;
+
+  let logo = block.logo;
+  if (fundingBlock) logo = block.acf.logo;
 
   const isActive = useRef(false);
 
   // Guidelines & Standards --------------------------------
-  let gsTitle = null;
   let gsPublished_date = null;
   let gsUpdate_in_progress = null;
 
   if (guidelines) {
-    gsTitle = block.title.rendered;
     gsPublished_date = block.acf.published_date;
     gsUpdate_in_progress = block.acf.update_in_progress;
   }
-  // Guidelines & Standards -------------------------------------
 
   // LEadership team & Standards --------------------------------
   let ltTitle = null;
@@ -45,32 +56,9 @@ const AccordionHeader = ({
     ltTitle = block.block.title;
     ltAlignTitles = block.block.align_title;
   }
-  // LEadership team & Standards --------------------------------
-
-  // Funding ----------------------------------------------------
-  let fundingTitle = null;
-  let fundingLogo = null;
-
-  if (fundingBlock) {
-    fundingTitle = block.title.rendered;
-    fundingLogo = block.acf.logo;
-  }
-  // Funding ----------------------------------------------------
-
-  const ServeFundingTitle = () => {
-    if (!fundingTitle) return null;
-
-    return (
-      <div className="flex primary-title" style={{ alignItems: "center" }}>
-        <div style={{ fontSize: 20 }}>
-          <Html2React html={fundingTitle} />
-        </div>
-      </div>
-    );
-  };
 
   const ServeTitle = () => {
-    if (!title || guidelines || fundingBlock) return null;
+    if (!title) return null;
 
     const ServeSubtitle = () => {
       if (!subtitle) return null;
@@ -99,59 +87,8 @@ const AccordionHeader = ({
     );
   };
 
-  const ServeGSUpdateInProgress = () => {
-    if (!gsUpdate_in_progress) return null;
-
-    return (
-      <div>
-        <div className="flex">
-          <div style={styles.divider} />
-          <div style={{ fontStyle: "italic", alignItems: "center" }}>
-            Update in Progress
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const ServeGSDate = () => {
-    if (!gsPublished_date) return null;
-
-    return (
-      <div
-        className="flex"
-        style={{
-          paddingLeft: `2em`,
-          color: colors.softBlack,
-          alignItems: "center",
-        }}
-      >
-        <div>
-          Published <Html2React html={gsPublished_date} />
-        </div>
-        <ServeGSUpdateInProgress />
-      </div>
-    );
-  };
-
-  const ServeGSTitle = () => {
-    if (!gsTitle) return null;
-
-    return (
-      <div className="flex" style={{ alignItems: "center" }}>
-        <div
-          className="primary-title"
-          style={{ fontSize: 20, alignItems: "center" }}
-        >
-          <Html2React html={gsTitle} />
-        </div>
-        <ServeGSDate />
-      </div>
-    );
-  };
-
   const ServePreview = () => {
-    if (guidelines || !preview) return null;
+    if (guidelines || !preview || !body) return null;
 
     // Manage max string Length
     const MAX_LENGTH = 140;
@@ -187,26 +124,6 @@ const AccordionHeader = ({
         }}
       >
         <Image src={logo.url} alt={alt} style={{ height: LOGO_HEIGHT }} />
-      </div>
-    );
-  };
-
-  const ServeFundingLogo = () => {
-    if (!fundingLogo) return null;
-    const alt = fundingLogo.title || "BAD";
-
-    return (
-      <div
-        style={{
-          padding: `0.25em`,
-          margin: `0 4em 0 1em`,
-        }}
-      >
-        <Image
-          src={fundingLogo.url}
-          alt={alt}
-          style={{ height: LOGO_HEIGHT }}
-        />
       </div>
     );
   };
@@ -280,12 +197,9 @@ const AccordionHeader = ({
             data-mdb-toggle="collapse"
           >
             <ServeTitle />
-            <ServeGSTitle />
             <ServeLTTitle />
-            <ServeFundingTitle />
 
             <ServeLogo />
-            <ServeFundingLogo />
             <ServeNICELogo />
             <ServeIcon />
           </div>
