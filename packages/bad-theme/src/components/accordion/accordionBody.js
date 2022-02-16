@@ -30,6 +30,7 @@ const AccordionBody = ({
   leadershipBlock,
   fundingBlock,
   uniqueId,
+  membershipApplications,
   setFetching,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -44,9 +45,9 @@ const AccordionBody = ({
     button_label,
     button_link,
     link_label,
-    apply_for_membership,
     file_submit_option,
     recipients,
+    category_types,
     links,
   } = block;
 
@@ -65,7 +66,7 @@ const AccordionBody = ({
       const membershipData = await getBADMembershipSubscriptionData({
         state,
         category: "BAD",
-        type: apply_for_membership,
+        type: category_types,
       });
       if (!membershipData) throw new Error("Failed to get membership data");
 
@@ -83,11 +84,11 @@ const AccordionBody = ({
           bad_applicationfor: "810170000", // silent assignment
         },
       });
-    } catch (error) {
-      console.log("ERROR: ", error);
-    } finally {
+
       if (isActiveUser)
         setGoToAction({ path: `/membership/step-1-the-process/`, actions });
+    } catch (error) {
+      console.log("ERROR: ", error);
     }
   };
 
@@ -609,8 +610,7 @@ const AccordionBody = ({
   };
 
   const ApplyForMembership = () => {
-    if (apply_for_membership === "Disabled" || !apply_for_membership)
-      return null;
+    if (!membershipApplications) return null;
 
     return (
       <div>
@@ -619,7 +619,7 @@ const AccordionBody = ({
           style={{ width: "fit-content" }}
           onClick={handleApply}
         >
-          <Html2React html={`Apply for ${apply_for_membership} membership`} />
+          <Html2React html={`Apply for ${category_types} membership`} />
         </div>
       </div>
     );

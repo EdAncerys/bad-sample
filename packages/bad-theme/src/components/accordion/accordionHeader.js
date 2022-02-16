@@ -25,15 +25,12 @@ const AccordionHeader = ({
   const { guidelines_type, subtitle } = block;
   const LOGO_HEIGHT = 45;
 
-  console.log(block);
-
   let preview = block.preview;
   if (hasPreview) preview = hasPreview;
 
   let title = block.title;
-  if (fundingBlock) title = block.title.rendered;
-  if (guidelines) title = block.title.rendered;
-  if (membershipApplications) title = block.title.rendered;
+  if (fundingBlock || membershipApplications || guidelines)
+    title = block.title.rendered;
 
   let body = block.body;
   if (fundingBlock) body = block.acf ? block.acf.overview : null;

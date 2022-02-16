@@ -3,7 +3,6 @@ import { connect } from "frontity";
 import { colors } from "../config/imports";
 
 import Loading from "./loading";
-import BlockWrapper from "./blockWrapper";
 import Accordion from "./accordion/accordion";
 
 const BADMemberships = ({ state, actions, libraries, block }) => {
@@ -54,27 +53,26 @@ const BADMemberships = ({ state, actions, libraries, block }) => {
   return (
     <div className="flex-col" style={{ margin: `${marginVertical}px 0` }}>
       {membershipTypes.map((membership, key) => {
-        const { body_copy, category_types, price } = membership.acf; // get the data from the memberships CPT
+        const { body_copy, category_types, price, bad_or_sig } = membership.acf; // get the data from the memberships CPT
         const { title } = membership; // get the data from the memberships CPT
 
         const accordion_item = {
           title: title,
           subtitle: price,
+          body: body_copy,
+          category_types,
         };
-        console.log(accordion_item);
+        if (bad_or_sig !== "bad") return null; // filter out the bad memberships
 
         return (
           <Accordion
             key={key}
-            block={accordion_item}
+            block={{ accordion_item: [accordion_item] }}
             membershipApplications
             hasPreview={true}
           />
         );
       })}
-      <BlockWrapper>
-        <div>BAD</div>
-      </BlockWrapper>
     </div>
   );
 };
