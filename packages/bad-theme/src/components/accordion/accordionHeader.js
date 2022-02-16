@@ -17,6 +17,7 @@ const AccordionHeader = ({
   fundingBlock,
   handleAccordionToggle,
   uniqueId,
+  membershipApplications,
   hasPreview,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -24,12 +25,15 @@ const AccordionHeader = ({
   const { guidelines_type, subtitle } = block;
   const LOGO_HEIGHT = 45;
 
+  console.log(block);
+
   let preview = block.preview;
   if (hasPreview) preview = hasPreview;
 
   let title = block.title;
   if (fundingBlock) title = block.title.rendered;
   if (guidelines) title = block.title.rendered;
+  if (membershipApplications) title = block.title.rendered;
 
   let body = block.body;
   if (fundingBlock) body = block.acf ? block.acf.overview : null;

@@ -30,6 +30,26 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     return applicationCategory;
   });
 
+  const isStudent = category === "Student";
+  const isTrainee = category === "Trainee";
+  const isAssociate = category === "Associate";
+  const isAssociateTrainee = category === "Associate Trainee";
+  const isAssociateOversees = category === "Associate Oversees";
+  const isGp = category === "GP";
+  const isCareerGrade = category === "Career Grade";
+  const isOrdinary = category === "Ordinary";
+  const isOrdinarySAS = category === "Ordinary SAS";
+  const isAlliedHealthcareProfessional =
+    category === "Allied Healthcare Professional";
+
+  // conditional rendering
+  const py3_gmcnumber =
+    isStudent || isAssociate || isAssociateTrainee || isAssociateOversees;
+  const py3_otherregulatorybodyreference =
+    isAssociate || isAssociateTrainee || isAssociateOversees;
+  const py3_ntnno = isTrainee;
+  const py3_hospitalid = isStudent;
+
   const [formData, setFormData] = useState({
     py3_gmcnumber: "",
     py3_otherregulatorybodyreference: "",
@@ -139,12 +159,13 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   const handleDocUploadChange = async () => {
     let document = documentRef.current ? documentRef.current.files[0] : null;
 
-    if (document)
-      document = await sendFileToS3Action({
-        state,
-        dispatch,
-        attachments: document,
-      });
+    // useEffect via useRef to avoid re-rendering
+    // if (document)
+    //   document = await sendFileToS3Action({
+    //     state,
+    //     dispatch,
+    //     attachments: document,
+    //   });
 
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -197,37 +218,49 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     <div>
       <form>
         <div style={{ padding: `2em 1em` }}>
-          <label className="required form-label">GMC Number</label>
-          <input
-            name="py3_gmcnumber"
-            value={formData.py3_gmcnumber}
-            onChange={handleInputChange}
-            type="text"
-            className="form-control input"
-            placeholder="GMC Number"
-          />
+          {!py3_gmcnumber && (
+            <div>
+              <label className="required form-label">GMC Number</label>
+              <input
+                name="py3_gmcnumber"
+                value={formData.py3_gmcnumber}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="GMC Number"
+              />
+            </div>
+          )}
 
-          <label className="form-label">
-            Regulatory Body Registration Number
-          </label>
-          <input
-            name="py3_otherregulatorybodyreference"
-            value={formData.py3_otherregulatorybodyreference}
-            onChange={handleInputChange}
-            type="text"
-            className="form-control input"
-            placeholder="Regulatory Body Registration Number"
-          />
+          {!py3_otherregulatorybodyreference && (
+            <div>
+              <label className="form-label">
+                Regulatory Body Registration Number
+              </label>
+              <input
+                name="py3_otherregulatorybodyreference"
+                value={formData.py3_otherregulatorybodyreference}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Regulatory Body Registration Number"
+              />
+            </div>
+          )}
 
-          <label className="form-label">NTN Number</label>
-          <input
-            name="py3_ntnno"
-            value={formData.py3_ntnno}
-            onChange={handleInputChange}
-            type="text"
-            className="form-control input"
-            placeholder="NTN Number"
-          />
+          {!py3_ntnno && (
+            <div>
+              <label className="form-label">NTN Number</label>
+              <input
+                name="py3_ntnno"
+                value={formData.py3_ntnno}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="NTN Number"
+              />
+            </div>
+          )}
 
           <label className="required form-label">Current post/job title</label>
           <input
@@ -239,55 +272,59 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             placeholder="Current job title"
           />
 
-          <label className="required form-label">
-            Main Hospital/Place of work
-          </label>
-          <div style={{ position: "relative" }}>
-            {selectedHospital && (
-              <div className="form-control input">
-                <div className="flex-row">
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "fit-content",
-                      paddingRight: 15,
-                    }}
-                  >
-                    {selectedHospital.name}
-                    <div
-                      className="filter-icon"
-                      style={{ top: -7 }}
-                      onClick={handleClearHospital}
-                    >
-                      <CloseIcon
+          {!py3_hospitalid && (
+            <div>
+              <label className="required form-label">
+                Main Hospital/Place of work
+              </label>
+              <div style={{ position: "relative" }}>
+                {selectedHospital && (
+                  <div className="form-control input">
+                    <div className="flex-row">
+                      <div
                         style={{
-                          fill: colors.darkSilver,
-                          padding: 0,
-                          width: "0.7em",
+                          position: "relative",
+                          width: "fit-content",
+                          paddingRight: 15,
                         }}
-                      />
+                      >
+                        {selectedHospital.name}
+                        <div
+                          className="filter-icon"
+                          style={{ top: -7 }}
+                          onClick={handleClearHospital}
+                        >
+                          <CloseIcon
+                            style={{
+                              fill: colors.darkSilver,
+                              padding: 0,
+                              width: "0.7em",
+                            }}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
+                {!selectedHospital && (
+                  <input
+                    ref={hospitalSearchRef}
+                    onChange={handleHospitalLookup}
+                    type="text"
+                    className="form-control input"
+                    placeholder="Main Hospital/Place of work"
+                  />
+                )}
+                {hospitalData && (
+                  <SearchDropDown
+                    filter={hospitalData}
+                    mapToName="name"
+                    onClickHandler={handleSelectHospital}
+                  />
+                )}
               </div>
-            )}
-            {!selectedHospital && (
-              <input
-                ref={hospitalSearchRef}
-                onChange={handleHospitalLookup}
-                type="text"
-                className="form-control input"
-                placeholder="Main Hospital/Place of work"
-              />
-            )}
-            {hospitalData && (
-              <SearchDropDown
-                filter={hospitalData}
-                mapToName="name"
-                onClickHandler={handleSelectHospital}
-              />
-            )}
-          </div>
+            </div>
+          )}
 
           <label className="required form-label">Medical School</label>
           <input

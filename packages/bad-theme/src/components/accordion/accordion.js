@@ -17,6 +17,7 @@ const AccordionComponent = ({
   guidelines,
   leadershipBlock,
   fundingBlock,
+  membershipApplications,
   hasPreview,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -92,6 +93,7 @@ const AccordionComponent = ({
             leadershipBlock={leadershipBlock}
             handleAccordionToggle={handleAccordionToggle}
             fundingBlock={fundingBlock}
+            membershipApplications={membershipApplications}
             hasPreview={hasPreview}
           />
           <AccordionBody
@@ -101,6 +103,7 @@ const AccordionComponent = ({
             uniqueId={uniqueId}
             setFetching={setFetching}
             fundingBlock={fundingBlock}
+            membershipApplications={membershipApplications}
           />
         </div>
       </div>

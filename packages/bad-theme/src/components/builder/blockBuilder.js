@@ -45,6 +45,7 @@ import DividerBlock from "../dividerBlock";
 import CPTBlock from "../cptBlock";
 import RSSFeed from "../rssFeed";
 import FundingBlock from "../fundingBlock";
+import BADMemberships from "../badMemberships";
 
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   // console.log("BLOCKS: ", blocks); // debug
@@ -88,7 +89,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
           return (
             <BlockWrapper key={key + 1} background={block.background_colour}>
               <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
-              <Accordion key={key} block={block} />
+              <BADMemberships key={key} block={block} />
             </BlockWrapper>
           );
 
