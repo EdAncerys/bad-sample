@@ -64,10 +64,17 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   const hospitalSearchRef = useRef("");
 
   useEffect(async () => {
-    const handleSetData = ({ data, name }) => {
+    const handleSetFormData = ({ data, name }) => {
       setFormData((prevFormData) => ({
         ...prevFormData,
         [`${name}`]: data.value || "",
+      }));
+    };
+
+    const handleSetInputData = ({ data, name }) => {
+      setInputValidator((prevFormData) => ({
+        ...prevFormData,
+        [name]: data[name],
       }));
     };
 
@@ -75,20 +82,21 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     if (!applicationData) return null;
     applicationData.map((data) => {
       if (data.name === "py3_gmcnumber")
-        handleSetData({ data, name: "py3_gmcnumber" });
+        handleSetFormData({ data, name: "py3_gmcnumber" });
       if (data.name === "py3_otherregulatorybodyreference")
-        handleSetData({ data, name: "py3_otherregulatorybodyreference" });
-      if (data.name === "py3_ntnno") handleSetData({ data, name: "py3_ntnno" });
+        handleSetFormData({ data, name: "py3_otherregulatorybodyreference" });
+      if (data.name === "py3_ntnno")
+        handleSetFormData({ data, name: "py3_ntnno" });
       if (data.name === "bad_currentpost")
-        handleSetData({ data, name: "bad_currentpost" });
+        handleSetFormData({ data, name: "bad_currentpost" });
       if (data.name === "bad_proposer1")
-        handleSetData({ data, name: "bad_proposer1" });
+        handleSetFormData({ data, name: "bad_proposer1" });
       if (data.name === "bad_proposer2")
-        handleSetData({ data, name: "bad_proposer2" });
+        handleSetFormData({ data, name: "bad_proposer2" });
       if (data.name === "bad_mrpcqualified")
-        handleSetData({ data, name: "bad_mrpcqualified" });
+        handleSetFormData({ data, name: "bad_mrpcqualified" });
       if (data.name === "bad_medicalschool")
-        handleSetData({ data, name: "bad_medicalschool" });
+        handleSetFormData({ data, name: "bad_medicalschool" });
     });
 
     // ⏬ validate inputs
@@ -96,8 +104,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       await getMembershipDataAction({ state, actions });
     const membershipTypes = Object.values(state.source.memberships);
     if (!membershipTypes) return null;
-
-    console.log(membershipTypes);
 
     membershipTypes.map((membership) => {
       if (
@@ -108,18 +114,9 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         const application = membership.acf;
         // console.log(application); // debug
 
-        inputValidator.py3_gmcnumber = application.py3_gmcnumber;
-        inputValidator.py3_otherregulatorybodyreference =
-          application.py3_otherregulatorybodyreference;
-        inputValidator.py3_ntnno = application.py3_ntnno;
-        inputValidator.bad_currentpost = application.bad_currentpost;
-        inputValidator.py3_hospitalid = application.py3_hospitalid;
-        inputValidator.bad_medicalschool = application.bad_medicalschool;
-        inputValidator.bad_proposer1 = application.bad_proposer1;
-        inputValidator.bad_proposer2 = application.bad_proposer2;
-        inputValidator.bad_mrpcqualified = application.bad_mrpcqualified;
-        inputValidator.currentGrade = application.currentGrade;
-        inputValidator.document = application.document;
+        Object.keys(application).map((keyName) => {
+          handleSetInputData({ data: application, name: keyName });
+        });
       }
     });
   }, []);
@@ -150,7 +147,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       input: hospitalSearchRef.current.value,
     });
 
-    console.log("Hospitals", hospitalData);
+    console.log("Hospitals", hospitalData); // debug
     setHospitalData(hospitalData);
   };
 
