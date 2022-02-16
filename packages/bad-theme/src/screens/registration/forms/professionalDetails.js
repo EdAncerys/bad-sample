@@ -80,6 +80,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
     // ⏬ populate form data values from applicationData
     if (!applicationData) return null;
+
     applicationData.map((data) => {
       if (data.name === "py3_gmcnumber")
         handleSetFormData({ data, name: "py3_gmcnumber" });
@@ -106,11 +107,12 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     if (!membershipTypes) return null;
 
     membershipTypes.map((membership) => {
-      if (
-        membership.acf &&
-        applicationData &&
-        membership.acf.category_types === applicationData[0].bad_categorytype
-      ) {
+      // validate application type and membership type SIG & BAD
+      const applicationType =
+        membership.acf.category_types === applicationData[0].bad_categorytype ||
+        membership.acf.category_types === applicationData[0]._bad_sigid_value;
+
+      if (membership.acf && applicationData && applicationType) {
         const application = membership.acf;
         // console.log(application); // debug
 
@@ -164,8 +166,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   };
 
   const handleNext = async () => {
-    console.log(formData); // debug
-
     await setUserStoreAction({
       state,
       dispatch,
@@ -173,7 +173,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       isActiveUser,
       data: formData,
     });
-
     let slug = `/membership/final-step-thank-you/`;
     if (category === "810170001") slug = `/membership/step-5-sig-questions/`;
     if (isActiveUser) setGoToAction({ path: slug, actions });
@@ -370,48 +369,50 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
           )}
         </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: `repeat(2, 1fr)`,
-            gap: 20,
-            padding: `2em 1em`,
-            borderTop: `1px solid ${colors.silverFillTwo}`,
-            borderBottom: `1px solid ${colors.silverFillTwo}`,
-          }}
-        >
-          {inputValidator.bad_proposer1 && (
-            <div>
-              <label className="required form-label required">
-                Supporting Member 1
-              </label>
-              <input
-                name="bad_proposer1"
-                value={formData.bad_proposer1}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="MRCP"
-              />
-            </div>
-          )}
+        {inputValidator.bad_proposer1 && (
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: `repeat(2, 1fr)`,
+              gap: 20,
+              padding: `1em 1em 2em 1em`,
+              borderTop: `1px solid ${colors.silverFillTwo}`,
+              borderBottom: `1px solid ${colors.silverFillTwo}`,
+            }}
+          >
+            {inputValidator.bad_proposer1 && (
+              <div>
+                <label className="required form-label required">
+                  Supporting Member 1
+                </label>
+                <input
+                  name="bad_proposer1"
+                  value={formData.bad_proposer1}
+                  onChange={handleInputChange}
+                  type="text"
+                  className="form-control input"
+                  placeholder="MRCP"
+                />
+              </div>
+            )}
 
-          {inputValidator.bad_proposer2 && (
-            <div>
-              <label className="required form-label required">
-                Supporting Member 2
-              </label>
-              <input
-                name="bad_proposer2"
-                value={formData.bad_proposer2}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="MRCP"
-              />
-            </div>
-          )}
-        </div>
+            {inputValidator.bad_proposer2 && (
+              <div>
+                <label className="required form-label required">
+                  Supporting Member 2
+                </label>
+                <input
+                  name="bad_proposer2"
+                  value={formData.bad_proposer2}
+                  onChange={handleInputChange}
+                  type="text"
+                  className="form-control input"
+                  placeholder="MRCP"
+                />
+              </div>
+            )}
+          </div>
+        )}
 
         <div
           style={{

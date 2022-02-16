@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../config/imports";
@@ -10,9 +10,8 @@ import Card from "../components/card/card";
 import {
   useAppDispatch,
   useAppState,
-  setGoToAction,
-  setUserStoreAction,
-  setLoginModalAction,
+  handleApplyForMembershipAction,
+  getMembershipDataAction,
 } from "../context";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
@@ -31,23 +30,30 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
 
   const { content, title, acf } = dermGroupe;
-  const { apply_for_membership } = dermGroupe.acf;
+  const [isSIGApplication, setApplication] = useState(null);
+
+  useEffect(async () => {
+    if (!state.source.memberships)
+      await getMembershipDataAction({ state, actions });
+
+    const application = acf.sigs[0];
+    if (!application) return null;
+
+    const isSIG = state.source.memberships[application.ID];
+    setApplication(isSIG);
+  }, []);
 
   // HANDLERS --------------------------------------------------
   const handleApply = async () => {
-    await setUserStoreAction({
+    await handleApplyForMembershipAction({
       state,
+      actions,
       dispatch,
       applicationData,
       isActiveUser,
-      data: {
-        core_name: "810170001", // "Label": "BAD" readonly FIELD!
-        core_membershipsubscriptionplanid: apply_for_membership, // type of membership for application
-        bad_applicationfor: "810170000", // silent assignment
-      },
+      category: "SIG",
+      type: isSIGApplication.acf.category_types || "", // application type name
     });
-    if (isActiveUser)
-      setGoToAction({ path: `/membership/step-1-the-process/`, actions });
   };
 
   // SERVERS ---------------------------------------------------
@@ -65,16 +71,20 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   };
 
   const ApplyForMembership = () => {
-    if (true) return null;
+    if (!isSIGApplication) return null;
+
+    let applicationName = "SIG Application";
+    if (isSIGApplication.acf)
+      applicationName = isSIGApplication.acf.category_types;
 
     return (
       <div>
         <div
           className="blue-btn"
-          style={{ width: "fit-content" }}
+          style={{ width: "fit-content", margin: `1em 0` }}
           onClick={handleApply}
         >
-          <Html2React html={`Apply for ${category_types} membership`} />
+          <Html2React html={`Apply for ${applicationName} membership`} />
         </div>
       </div>
     );

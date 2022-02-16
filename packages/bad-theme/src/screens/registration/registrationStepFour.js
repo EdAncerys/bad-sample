@@ -33,9 +33,14 @@ const RegistrationStepFour = ({ state, actions }) => {
 
   const [category, setCategory] = useState(() => {
     if (!applicationData) return "";
+    const isSIG = applicationData[0].bad_organisedfor === "SIG";
+
     let applicationCategory = "";
     applicationData.map((data) => {
-      if (data.bad_categorytype) applicationCategory = data.bad_categorytype;
+      if (data.bad_categorytype)
+        applicationCategory = isSIG
+          ? data._bad_sigid_value
+          : data.bad_categorytype;
     });
 
     return applicationCategory;

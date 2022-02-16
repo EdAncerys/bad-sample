@@ -26,6 +26,7 @@ export const handleApplyForMembershipAction = async ({
   isActiveUser,
   category,
   type,
+  path,
 }) => {
   try {
     // ⏬ get appropriate membership ID
@@ -52,7 +53,10 @@ export const handleApplyForMembershipAction = async ({
     });
 
     if (isActiveUser)
-      setGoToAction({ path: `/membership/step-1-the-process/`, actions });
+      setGoToAction({
+        path: path || `/membership/step-1-the-process/`,
+        actions,
+      });
   } catch (error) {
     console.log("ERROR: ", error);
   }

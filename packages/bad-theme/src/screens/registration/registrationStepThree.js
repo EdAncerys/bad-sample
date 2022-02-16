@@ -9,9 +9,9 @@ import BlockWrapper from "../../components/blockWrapper";
 import {
   useAppDispatch,
   useAppState,
-  setUserStoreAction,
-  getBADMembershipSubscriptionData,
   setGoToAction,
+  handleApplyForMembershipAction,
+  getMembershipDataAction,
 } from "../../context";
 
 const RegistrationStepThree = ({ state, actions }) => {
@@ -30,7 +30,7 @@ const RegistrationStepThree = ({ state, actions }) => {
   });
 
   // ⏬ populate form data values from applicationData
-  useEffect(() => {
+  useEffect(async () => {
     const handleSetData = ({ data, name }) => {
       console.log(name);
       setFormData((prevFormData) => ({
@@ -40,42 +40,35 @@ const RegistrationStepThree = ({ state, actions }) => {
     };
 
     if (!applicationData) return null;
+    const isSIG = applicationData[0].bad_organisedfor === "SIG";
+
     applicationData.map((data) => {
       // set data from Dynamics membership object
       if (data.name === "bad_organisedfor")
         handleSetData({ data, name: "bad_organisedfor" });
-      // set data from custom object type
+      // set data from custom object type based on CATEGORY
       if (data.bad_categorytype)
         setFormData((prevFormData) => ({
           ...prevFormData,
-          bad_categorytype: data.bad_categorytype,
+          bad_categorytype: isSIG
+            ? data._bad_sigid_value
+            : data.bad_categorytype,
         }));
     });
   }, []);
 
   // HANDLERS --------------------------------------------
   const handleSaveExit = async () => {
-    // ⏬ get appropriate membership ID
-    // const membershipId = await getBADMembershipSubscriptionData({
-    //   state,
-    //   category: formData.bad_organisedfor === "810170000" ? "BAD" : "SIG",
-    //   type: formData.type,
-    // });
-    // console.log("Application cat id ", membershipId); // debug
-
-    // ⏬ create user application record in Store
-    // await setUserStoreAction({
-    //   state,
-    //   dispatch,
-    //   applicationData,
-    //   isActiveUser,
-    //   data: {
-    //     bad_organisedfor: formData.bad_organisedfor,
-    //     core_membershipsubscriptionplanid: membershipId, // type of membership for application
-    //     bad_applicationfor: "810170000", // silent assignment
-    //   },
-    // });
-    if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
+    await handleApplyForMembershipAction({
+      state,
+      actions,
+      dispatch,
+      applicationData,
+      isActiveUser,
+      category: formData.bad_organisedfor === "810170000" ? "BAD" : "SIG",
+      type: formData.bad_categorytype, // application type name
+      path: `/membership/`,
+    });
   };
 
   const handleChange = (e) => {
@@ -99,40 +92,18 @@ const RegistrationStepThree = ({ state, actions }) => {
       console.log("FORM INPUTS NOT VALIDATED");
       return;
     }
+    console.log("formData", formData); // debug
 
-    try {
-      // ⏬ get appropriate membership ID
-      const membershipData = await getBADMembershipSubscriptionData({
-        state,
-        category: formData.bad_organisedfor === "810170000" ? "BAD" : "SIG",
-        type: formData.bad_categorytype,
-      });
-      if (!membershipData) throw new Error("Failed to get membership data");
-      console.log("membershipData", membershipData); // debug
-
-      // ⏬ create user application record in Store
-      await setUserStoreAction({
-        state,
-        dispatch,
-        applicationData,
-        isActiveUser,
-        membershipApplication: membershipData,
-        data: {
-          bad_organisedfor: formData.bad_organisedfor, // BAD members category
-          core_membershipsubscriptionplanid:
-            membershipData.core_membershipsubscriptionplanid, // type of membership for application
-          bad_applicationfor: "810170000", // silent assignment
-        },
-      });
-    } catch (error) {
-      console.log("ERROR: ", error);
-    } finally {
-      if (isActiveUser)
-        setGoToAction({
-          path: `/membership/step-4-professional-details/`,
-          actions,
-        });
-    }
+    await handleApplyForMembershipAction({
+      state,
+      actions,
+      dispatch,
+      applicationData,
+      isActiveUser,
+      category: formData.bad_organisedfor === "810170000" ? "BAD" : "SIG",
+      type: formData.bad_categorytype, // application type name
+      path: `/membership/step-4-professional-details/`,
+    });
   };
 
   // SERVERS ---------------------------------------------
@@ -267,7 +238,7 @@ const RegistrationStepThree = ({ state, actions }) => {
               British Society for Skin Care in Immunocompromised Individuals
             </option>
             <option value="The Dowling Club">The Dowling Club</option>
-            <option value="DERMPATHPRO">DERMPATHPRO</option>
+            <option value="DermpathPRO">DERMPATHPRO</option>
           </Form.Select>
         </div>
       );
