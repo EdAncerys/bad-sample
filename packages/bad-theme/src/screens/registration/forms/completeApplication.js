@@ -3,7 +3,6 @@ import { connect } from "frontity";
 import { Form } from "react-bootstrap";
 
 import { ETHNIC_GROUPES } from "../../../config/data";
-
 import { colors } from "../../../config/imports";
 // CONTEXT ----------------------------------------------------------------
 import {
@@ -25,14 +24,25 @@ const CompleteApplication = ({ state, actions, libraries }) => {
     py3_constitutionagreement: "",
     privacyNotice: "",
   });
+  const [inputValidator, setInputValidator] = useState({
+    bad_ethnicity: true,
+    py3_constitutionagreement: true,
+    privacyNotice: true,
+  });
 
   // ⏬ populate form data values from applicationData
-  useEffect(() => {
+  useEffect(async () => {
     const handleSetData = ({ data, name }) => {
-      if (name === "bad_isbadmember") console.log(data.value);
       setFormData((prevFormData) => ({
         ...prevFormData,
         [`${name}`]: data.value || "",
+      }));
+    };
+
+    const handleSetInputData = ({ data, name }) => {
+      setInputValidator((prevFormData) => ({
+        ...prevFormData,
+        [name]: data[name],
       }));
     };
 
@@ -44,6 +54,28 @@ const CompleteApplication = ({ state, actions, libraries }) => {
         handleSetData({ data, name: "py3_constitutionagreement" });
       if (data.name === "privacyNotice")
         handleSetData({ data, name: "privacyNotice" });
+    });
+
+    // ⏬ validate inputs
+    if (!state.source.memberships)
+      await getMembershipDataAction({ state, actions });
+    const membershipTypes = Object.values(state.source.memberships);
+    if (!membershipTypes) return null;
+
+    membershipTypes.map((membership) => {
+      // validate application type and membership type SIG & BAD
+      const applicationType =
+        membership.acf.category_types === applicationData[0].bad_categorytype ||
+        membership.acf.category_types === applicationData[0]._bad_sigid_value;
+
+      if (membership.acf && applicationData && applicationType) {
+        const application = membership.acf;
+        // console.log(application); // debug
+
+        Object.keys(application).map((keyName) => {
+          handleSetInputData({ data: application, name: keyName });
+        });
+      }
     });
   }, []);
 
@@ -96,24 +128,28 @@ const CompleteApplication = ({ state, actions, libraries }) => {
     <div>
       <form>
         <div style={{ padding: `2em 1em` }}>
-          <label style={styles.subTitle}>What is your Ethnic Group?</label>
-          <Form.Select
-            name="bad_ethnicity"
-            value={formData.bad_ethnicity}
-            onChange={handleInputChange}
-            className="input"
-          >
-            <option value="" hidden>
-              Ethnic Group
-            </option>
-            {ETHNIC_GROUPES.map((item, key) => {
-              return (
-                <option key={key} value={item.value}>
-                  {item.Label}
+          {inputValidator.bad_ethnicity && (
+            <div>
+              <label style={styles.subTitle}>What is your Ethnic Group?</label>
+              <Form.Select
+                name="bad_ethnicity"
+                value={formData.bad_ethnicity}
+                onChange={handleInputChange}
+                className="input"
+              >
+                <option value="" hidden>
+                  Ethnic Group
                 </option>
-              );
-            })}
-          </Form.Select>
+                {ETHNIC_GROUPES.map((item, key) => {
+                  return (
+                    <option key={key} value={item.value}>
+                      {item.Label}
+                    </option>
+                  );
+                })}
+              </Form.Select>
+            </div>
+          )}
 
           <div
             className="flex-col form-check"
@@ -123,70 +159,74 @@ const CompleteApplication = ({ state, actions, libraries }) => {
               borderTop: `1px solid ${colors.silverFillTwo}`,
             }}
           >
-            <div
-              className="flex"
-              style={{ alignItems: "center", padding: `1em 0` }}
-            >
-              <div>
-                <input
-                  name="py3_constitutionagreement"
-                  checked={formData.py3_constitutionagreement}
-                  onChange={handleInputChange}
-                  type="checkbox"
-                  className="form-check-input"
-                  style={styles.checkBox}
-                />
-              </div>
-              <div>
-                <label className="form-check-label flex-row">
-                  <div>I agree to the </div>
-                  <div
-                    className="caps-btn required"
-                    style={{ paddingTop: 6, marginLeft: 10 }}
-                  >
-                    BAD Constitution
-                  </div>
-                </label>
-              </div>
-            </div>
-
-            <div
-              className="flex"
-              style={{ alignItems: "center", padding: `1em 0` }}
-            >
-              <div>
-                <input
-                  name="privacyNotice"
-                  checked={formData.privacyNotice}
-                  onChange={handleInputChange}
-                  type="checkbox"
-                  className="form-check-input"
-                  style={styles.checkBox}
-                />
-              </div>
-              <div>
-                <label className="form-check-label flex-row">
-                  <div>
+            {inputValidator.py3_constitutionagreement && (
+              <div
+                className="flex"
+                style={{ alignItems: "center", padding: `1em 0` }}
+              >
+                <div>
+                  <input
+                    name="py3_constitutionagreement"
+                    checked={formData.py3_constitutionagreement}
+                    onChange={handleInputChange}
+                    type="checkbox"
+                    className="form-check-input"
+                    style={styles.checkBox}
+                  />
+                </div>
+                <div>
+                  <label className="form-check-label flex-row">
+                    <div>I agree to the </div>
                     <div
                       className="caps-btn required"
-                      style={{
-                        paddingTop: 6,
-                        marginRight: 10,
-                        whiteSpace: "nowrap",
-                        float: "left",
-                      }}
+                      style={{ paddingTop: 6, marginLeft: 10 }}
                     >
-                      I agree - Privacy Notice
+                      BAD Constitution
                     </div>
-                    <span>
-                      I agree - Privacy Notice* - justo donec enim diam
-                      vulputate ut pharetra sit. Purus semper eget duis at
-                      tellus at. Sed adipiscing diam.
-                    </span>
-                  </div>
-                </label>
+                  </label>
+                </div>
               </div>
-            </div>
+            )}
+
+            {inputValidator.privacyNotice && (
+              <div
+                className="flex"
+                style={{ alignItems: "center", padding: `1em 0` }}
+              >
+                <div>
+                  <input
+                    name="privacyNotice"
+                    checked={formData.privacyNotice}
+                    onChange={handleInputChange}
+                    type="checkbox"
+                    className="form-check-input"
+                    style={styles.checkBox}
+                  />
+                </div>
+                <div>
+                  <label className="form-check-label flex-row">
+                    <div>
+                      <div
+                        className="caps-btn required"
+                        style={{
+                          paddingTop: 6,
+                          marginRight: 10,
+                          whiteSpace: "nowrap",
+                          float: "left",
+                        }}
+                      >
+                        I agree - Privacy Notice
+                      </div>
+                      <span>
+                        I agree - Privacy Notice* - justo donec enim diam
+                        vulputate ut pharetra sit. Purus semper eget duis at
+                        tellus at. Sed adipiscing diam.
+                      </span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </form>
