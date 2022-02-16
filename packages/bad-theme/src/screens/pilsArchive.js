@@ -155,7 +155,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
       if (!content) return null;
 
       return (
-        <div className="flex-col" style={{ padding: `1em 0`, width: "70%" }}>
+        <div className="flex-col" style={{ padding: `1em 0`, width: "100%" }}>
           <Html2React html={content.rendered} />
         </div>
       );

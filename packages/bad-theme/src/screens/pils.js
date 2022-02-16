@@ -20,7 +20,9 @@ const Post = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
 
   if (!pil) return <Loading />;
-
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  });
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
     if (!pil.title) return null;
