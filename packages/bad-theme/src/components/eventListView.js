@@ -195,7 +195,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div style={{ margin: MARGIN }}>
+    <div style={{ margin: MARGIN }} class="shadow-on-hover">
       <div
         style={{
           height: `${HEIGHT}px`,

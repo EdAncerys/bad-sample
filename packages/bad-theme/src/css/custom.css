@@ -342,3 +342,10 @@ https://codebeautify.org/
 .input {
   border-radius: 10px;
 }
+
+.shadow-on-hover {
+  transition: all 0.3s ease-in-out;
+}
+.shadow-on-hover:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
