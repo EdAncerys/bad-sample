@@ -70,7 +70,11 @@ export const MENU_DATA = [
     url: "/patient-information-leaflets/",
   },
   {
-    title: "BAD Affiliated Groups",
+    title: "Clinical Guidelines",
+    url: "/guidelines-and-standards/clinical-guidelines/",
+  },
+  {
+    title: "Dermatology Groups and Charities",
     url: "/derm-groups-charity/",
   },
   {
@@ -82,20 +86,16 @@ export const MENU_DATA = [
     url: "/covid-19/",
   },
   {
-    title: "CED Journal",
-    url: "/research-journals/journals/clinical-and-experimental-dermatology/",
+    title: "BJD Journal",
+    url: "https://onlinelibrary.wiley.com/journal/13652133",
   },
   {
-    title: "BJD Journal",
-    url: "/research-journals/journals/british-journal-of-dermatology/",
+    title: "CED Journal",
+    url: "https://onlinelibrary.wiley.com/journal/13652230",
   },
   {
     title: "SHD Journal",
-    url: " /research-journals/journals/skin-health-and-disease/",
-  },
-  {
-    title: "Clinical Guidelines",
-    url: "/guidelines-and-standards/clinical-guidelines/",
+    url: "https://onlinelibrary.wiley.com/journal/2690442x?gclid=Cj0KCQiAu62QBhC7ARIsALXijXT-nKH8mRIKSZ4IT5dxjWslV4XzyQAxYppPvYNY4K-b9GR6IDtR7X0aAq8hEALw_wcB",
   },
 ];
 

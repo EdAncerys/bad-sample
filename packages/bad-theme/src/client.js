@@ -60,7 +60,7 @@ const BADTheme = {
         console.log("beforeCSR triggered"); // debug
         await Promise.all([
           actions.source.fetch(`/home-page`), // pre fetch home page CONTENT
-          actions.source.fetch(`/bad-constitution`), // pre fetch WP menu as a page CONTENT
+          actions.source.fetch(`/menu_featured`), // pre fetch menu featured CONTENT
         ]);
 
         // pre fetch WP MENU --------------------------------------------------------------

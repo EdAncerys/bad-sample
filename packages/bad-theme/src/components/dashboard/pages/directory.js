@@ -119,6 +119,7 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
           backgroundColor: colors.silverFillTwo,
           marginBottom: `${state.theme.marginVertical}px`,
         }}
+        className="no-selector"
       >
         <BlockWrapper>
           <div style={{ padding: `0 ${marginHorizontal}px` }}>

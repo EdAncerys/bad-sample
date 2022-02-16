@@ -13,14 +13,16 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
   const endPoint = state.router.link;
   const data = state.source.get(endPoint);
 
-  if (endPoint.includes("/redirect/")) return null;
-
+  
   const [wpMenu, setWpMenu] = useState([]);
+  
+  if (endPoint.includes("/redirect/")) return null;
   const marginHorizontal = state.theme.marginHorizontal;
   const directions = endPoint.split("/").slice(1, -1);
   const directionLength = directions.length;
   const MARGIN = 10;
   let KEY = 0;
+  
 
   useEffect(() => {
     // getting wp menu from state

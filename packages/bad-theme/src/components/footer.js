@@ -172,7 +172,7 @@ const Footer = ({ state, actions }) => {
   };
 
   return (
-    <div>
+    <div className="no-selector">
       <div className="flex-col" style={{ ...styles.container }}>
         <div
           className="flex-col"

@@ -186,6 +186,11 @@ h6 {
 .text-body p {
   margin: 0.5em 0 !important;
 }
+.text-body span:has(img) {
+  /* img centered selector */
+  display: grid !important;
+}
+
 .title-no-bottom-margin p,
 .title-no-bottom-margin h1,
 .title-no-bottom-margin h2,

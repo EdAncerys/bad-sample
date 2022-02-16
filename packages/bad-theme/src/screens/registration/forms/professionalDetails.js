@@ -12,6 +12,7 @@ import {
   sendFileToS3Action,
   getHospitalsAction,
   setGoToAction,
+  getMembershipDataAction,
 } from "../../../context";
 
 const ProfessionalDetails = ({ state, actions, libraries }) => {
@@ -24,7 +25,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     if (!applicationData) return "";
     let applicationCategory = "";
     applicationData.map((data) => {
-      if (data.name === "bad_organisedfor") applicationCategory = data.value;
+      if (data.bad_categorytype) applicationCategory = data.bad_categorytype;
     });
 
     return applicationCategory;
@@ -39,42 +40,84 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     bad_proposer1: "",
     bad_proposer2: "",
     bad_mrpcqualified: "",
-    cvDocument: "",
+    document: "",
     currentGrade: "",
     bad_medicalschool: "",
+  });
+  const [inputValidator, setInputValidator] = useState({
+    py3_gmcnumber: true,
+    py3_otherregulatorybodyreference: true,
+    py3_ntnno: true,
+    bad_currentpost: true,
+    py3_hospitalid: true,
+    bad_medicalschool: true,
+    bad_proposer1: true,
+    bad_proposer2: true,
+    bad_mrpcqualified: true,
+    currentGrade: true,
+    document: true,
   });
   const [hospitalData, setHospitalData] = useState(null);
   const [selectedHospital, setSelectedHospital] = useState(null);
 
-  const cvRef = useRef(null);
+  const documentRef = useRef(null);
   const hospitalSearchRef = useRef("");
 
-  // ⏬ populate form data values from applicationData
-  useEffect(() => {
-    const handleSetData = ({ data, name }) => {
+  useEffect(async () => {
+    const handleSetFormData = ({ data, name }) => {
       setFormData((prevFormData) => ({
         ...prevFormData,
         [`${name}`]: data.value || "",
       }));
     };
 
+    const handleSetInputData = ({ data, name }) => {
+      setInputValidator((prevFormData) => ({
+        ...prevFormData,
+        [name]: data[name],
+      }));
+    };
+
+    // ⏬ populate form data values from applicationData
     if (!applicationData) return null;
     applicationData.map((data) => {
       if (data.name === "py3_gmcnumber")
-        handleSetData({ data, name: "py3_gmcnumber" });
+        handleSetFormData({ data, name: "py3_gmcnumber" });
       if (data.name === "py3_otherregulatorybodyreference")
-        handleSetData({ data, name: "py3_otherregulatorybodyreference" });
-      if (data.name === "py3_ntnno") handleSetData({ data, name: "py3_ntnno" });
+        handleSetFormData({ data, name: "py3_otherregulatorybodyreference" });
+      if (data.name === "py3_ntnno")
+        handleSetFormData({ data, name: "py3_ntnno" });
       if (data.name === "bad_currentpost")
-        handleSetData({ data, name: "bad_currentpost" });
+        handleSetFormData({ data, name: "bad_currentpost" });
       if (data.name === "bad_proposer1")
-        handleSetData({ data, name: "bad_proposer1" });
+        handleSetFormData({ data, name: "bad_proposer1" });
       if (data.name === "bad_proposer2")
-        handleSetData({ data, name: "bad_proposer2" });
+        handleSetFormData({ data, name: "bad_proposer2" });
       if (data.name === "bad_mrpcqualified")
-        handleSetData({ data, name: "bad_mrpcqualified" });
+        handleSetFormData({ data, name: "bad_mrpcqualified" });
       if (data.name === "bad_medicalschool")
-        handleSetData({ data, name: "bad_medicalschool" });
+        handleSetFormData({ data, name: "bad_medicalschool" });
+    });
+
+    // ⏬ validate inputs
+    if (!state.source.memberships)
+      await getMembershipDataAction({ state, actions });
+    const membershipTypes = Object.values(state.source.memberships);
+    if (!membershipTypes) return null;
+
+    membershipTypes.map((membership) => {
+      if (
+        membership.acf &&
+        applicationData &&
+        membership.acf.category_types === applicationData[0].bad_categorytype
+      ) {
+        const application = membership.acf;
+        // console.log(application); // debug
+
+        Object.keys(application).map((keyName) => {
+          handleSetInputData({ data: application, name: keyName });
+        });
+      }
     });
   }, []);
 
@@ -104,7 +147,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       input: hospitalSearchRef.current.value,
     });
 
-    console.log("Hospitals", hospitalData);
+    console.log("Hospitals", hospitalData); // debug
     setHospitalData(hospitalData);
   };
 
@@ -121,6 +164,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   };
 
   const handleNext = async () => {
+    console.log(formData); // debug
+
     await setUserStoreAction({
       state,
       dispatch,
@@ -135,21 +180,21 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   };
 
   const handleDocUploadChange = async () => {
-    let document = cvRef.current.files[0];
-    let documentUrl = "";
+    let document = documentRef.current ? documentRef.current.files[0] : null;
+
+    // useEffect via useRef to avoid re-rendering
     // if (document)
-    //   documentUrl = await sendFileToS3Action({
+    //   document = await sendFileToS3Action({
     //     state,
     //     dispatch,
     //     attachments: document,
     //   });
-    console.log("documentUrl", documentUrl); // debug
-    console.log(formData); // debug
 
-    // setFormData((prevFormData) => ({
-    //   ...prevFormData,
-    //   cvDocument: document,
-    // }));
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      ["document"]: document,
+    }));
+    console.log("document", document); // debug
   };
 
   const handleInputChange = (e) => {
@@ -196,107 +241,133 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     <div>
       <form>
         <div style={{ padding: `2em 1em` }}>
-          <label className="required form-label">GMC Number</label>
-          <input
-            name="py3_gmcnumber"
-            value={formData.py3_gmcnumber}
-            onChange={handleInputChange}
-            type="text"
-            className="form-control input"
-            placeholder="GMC Number"
-          />
-
-          <label className="form-label">
-            Regulatory Body Registration Number
-          </label>
-          <input
-            name="py3_otherregulatorybodyreference"
-            value={formData.py3_otherregulatorybodyreference}
-            onChange={handleInputChange}
-            type="text"
-            className="form-control input"
-            placeholder="Regulatory Body Registration Number"
-          />
-
-          <label className="form-label">NTN Number</label>
-          <input
-            name="py3_ntnno"
-            value={formData.py3_ntnno}
-            onChange={handleInputChange}
-            type="text"
-            className="form-control input"
-            placeholder="NTN Number"
-          />
-
-          <label className="required form-label">Current post/job title</label>
-          <input
-            name="bad_currentpost"
-            value={formData.bad_currentpost}
-            onChange={handleInputChange}
-            type="text"
-            className="form-control input"
-            placeholder="Current job title"
-          />
-
-          <label className="required form-label">
-            Main Hospital/Place of work
-          </label>
-          <div style={{ position: "relative" }}>
-            {selectedHospital && (
-              <div className="form-control input">
-                <div className="flex-row">
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "fit-content",
-                      paddingRight: 15,
-                    }}
-                  >
-                    {selectedHospital.name}
-                    <div
-                      className="filter-icon"
-                      style={{ top: -7 }}
-                      onClick={handleClearHospital}
-                    >
-                      <CloseIcon
-                        style={{
-                          fill: colors.darkSilver,
-                          padding: 0,
-                          width: "0.7em",
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-            {!selectedHospital && (
+          {inputValidator.py3_gmcnumber && (
+            <div>
+              <label className="required form-label">GMC Number</label>
               <input
-                ref={hospitalSearchRef}
-                onChange={handleHospitalLookup}
+                name="py3_gmcnumber"
+                value={formData.py3_gmcnumber}
+                onChange={handleInputChange}
                 type="text"
                 className="form-control input"
-                placeholder="Main Hospital/Place of work"
+                placeholder="GMC Number"
               />
-            )}
-            {hospitalData && (
-              <SearchDropDown
-                filter={hospitalData}
-                mapToName="name"
-                onClickHandler={handleSelectHospital}
-              />
-            )}
-          </div>
+            </div>
+          )}
 
-          <label className="required form-label">Medical School</label>
-          <input
-            name="bad_medicalschool"
-            value={formData.bad_medicalschool}
-            onChange={handleInputChange}
-            type="text"
-            className="form-control input"
-            placeholder="Medical School"
-          />
+          {inputValidator.py3_otherregulatorybodyreference && (
+            <div>
+              <label className="form-label">
+                Regulatory Body Registration Number
+              </label>
+              <input
+                name="py3_otherregulatorybodyreference"
+                value={formData.py3_otherregulatorybodyreference}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Regulatory Body Registration Number"
+              />
+            </div>
+          )}
+
+          {inputValidator.py3_ntnno && (
+            <div>
+              <label className="form-label">NTN Number</label>
+              <input
+                name="py3_ntnno"
+                value={formData.py3_ntnno}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="NTN Number"
+              />
+            </div>
+          )}
+
+          {inputValidator.bad_currentpost && (
+            <div>
+              <label className="required form-label">
+                Current post/job title
+              </label>
+              <input
+                name="bad_currentpost"
+                value={formData.bad_currentpost}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Current job title"
+              />
+            </div>
+          )}
+
+          {inputValidator.py3_hospitalid && (
+            <div>
+              <label className="required form-label">
+                Main Hospital/Place of work
+              </label>
+              <div style={{ position: "relative" }}>
+                {selectedHospital && (
+                  <div className="form-control input">
+                    <div className="flex-row">
+                      <div
+                        style={{
+                          position: "relative",
+                          width: "fit-content",
+                          paddingRight: 15,
+                        }}
+                      >
+                        {selectedHospital.name}
+                        <div
+                          className="filter-icon"
+                          style={{ top: -7 }}
+                          onClick={handleClearHospital}
+                        >
+                          <CloseIcon
+                            style={{
+                              fill: colors.darkSilver,
+                              padding: 0,
+                              width: "0.7em",
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {!selectedHospital && (
+                  <input
+                    ref={hospitalSearchRef}
+                    onChange={handleHospitalLookup}
+                    type="text"
+                    className="form-control input"
+                    placeholder="Main Hospital/Place of work"
+                  />
+                )}
+                {hospitalData && (
+                  <SearchDropDown
+                    filter={hospitalData}
+                    mapToName="name"
+                    onClickHandler={handleSelectHospital}
+                  />
+                )}
+              </div>
+            </div>
+          )}
+
+          {inputValidator.bad_medicalschool && (
+            <div>
+              <label className="required form-label">Medical School</label>
+              <input
+                name="bad_medicalschool"
+                value={formData.bad_medicalschool}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Medical School"
+              />
+            </div>
+          )}
         </div>
 
         <div
@@ -309,33 +380,37 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             borderBottom: `1px solid ${colors.silverFillTwo}`,
           }}
         >
-          <div>
-            <label className="required form-label required">
-              Supporting Member 1
-            </label>
-            <input
-              name="bad_proposer1"
-              value={formData.bad_proposer1}
-              onChange={handleInputChange}
-              type="text"
-              className="form-control input"
-              placeholder="MRCP"
-            />
-          </div>
+          {inputValidator.bad_proposer1 && (
+            <div>
+              <label className="required form-label required">
+                Supporting Member 1
+              </label>
+              <input
+                name="bad_proposer1"
+                value={formData.bad_proposer1}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="MRCP"
+              />
+            </div>
+          )}
 
-          <div>
-            <label className="required form-label required">
-              Supporting Member 2
-            </label>
-            <input
-              name="bad_proposer2"
-              value={formData.bad_proposer2}
-              onChange={handleInputChange}
-              type="text"
-              className="form-control input"
-              placeholder="MRCP"
-            />
-          </div>
+          {inputValidator.bad_proposer2 && (
+            <div>
+              <label className="required form-label required">
+                Supporting Member 2
+              </label>
+              <input
+                name="bad_proposer2"
+                value={formData.bad_proposer2}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="MRCP"
+              />
+            </div>
+          )}
         </div>
 
         <div
@@ -345,37 +420,47 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             borderBottom: `1px solid ${colors.silverFillTwo}`,
           }}
         >
-          <label className="required form-label">MRCP</label>
-          <input
-            name="bad_mrpcqualified"
-            value={formData.bad_mrpcqualified}
-            onChange={handleInputChange}
-            type="text"
-            className="form-control input"
-            placeholder="MRCP"
-          />
+          {inputValidator.bad_mrpcqualified && (
+            <div>
+              <label className="required form-label">MRCP</label>
+              <input
+                name="bad_mrpcqualified"
+                value={formData.bad_mrpcqualified}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="MRCP"
+              />
+            </div>
+          )}
 
-          <label className="required form-label">
-            Current Grade <span style={{ color: "red" }}>DERMPATHPRO ONLY</span>
-          </label>
-          <input
-            name="currentGrade"
-            value={formData.currentGrade}
-            onChange={handleInputChange}
-            type="text"
-            className="form-control input"
-            placeholder="Current Grade"
-          />
+          {inputValidator.currentGrade && (
+            <div>
+              <label className="required form-label">Current Grade</label>
+              <input
+                name="currentGrade"
+                value={formData.currentGrade}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Current Grade"
+              />
+            </div>
+          )}
 
-          <label className="required form-label">Upload Your CV</label>
-          <input
-            ref={cvRef}
-            onChange={handleDocUploadChange}
-            type="file"
-            className="form-control input"
-            placeholder="CV Document"
-            accept="*"
-          />
+          {inputValidator.document && (
+            <div>
+              <label className="required form-label">Upload Your CV</label>
+              <input
+                ref={documentRef}
+                onChange={handleDocUploadChange}
+                type="file"
+                className="form-control input"
+                placeholder="CV Document"
+                accept="*"
+              />
+            </div>
+          )}
         </div>
       </form>
       <ServeActions />

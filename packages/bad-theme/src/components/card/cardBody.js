@@ -46,12 +46,12 @@ const CardBody = ({
     if (isFrom4Col) TITLE_HEIGHT = 60;
 
     let titlePreview = title;
-    const MAX_CHAR = 45;
-    if (title.length > MAX_CHAR && isFrom4Col)
-      titlePreview = `${title.slice(0, MAX_CHAR)}...`;
+    const maxChar = 45;
+    if (title.length > maxChar && isFrom4Col)
+      titlePreview = `${title.slice(0, maxChar)}...`;
     if (!body) titlePreview = title;
     if (!body && isFrom4Col) titlePreview = `${title.slice(0, 80)}`;
-    if (limitTitleLength) titlePreview = `${title.slice(0, MAX_CHAR)}...`;
+    if (limitTitleLength) titlePreview = `${title.slice(0, maxChar)}...`;
 
     return (
       <div
@@ -76,10 +76,10 @@ const CardBody = ({
     if (!body) return null;
 
     let bodyPreview = body;
-    const MAX_CHAR = bodyLimit || 76;
-    if (body.length >= MAX_CHAR && isFrom4Col)
-      bodyPreview = `${body.slice(0, MAX_CHAR)}...`;
-    if (limitBodyLength) bodyPreview = `${body.slice(0, MAX_CHAR)}...`;
+    const maxChar = bodyLimit || 76;
+    if (limitBodyLength || isFrom4Col)
+      bodyPreview = `${body.slice(0, maxChar)}...`;
+    if (body.length <= maxChar) bodyPreview = body; // remove limit if string is < maxChar
 
     return (
       <div

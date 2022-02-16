@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
+import date from "date-and-time";
+const DATE_MODULE = date;
+
 import { colors } from "../../config/imports";
 
 const FundingHeader = ({ state, actions, libraries, fundingHeader }) => {
@@ -8,7 +11,7 @@ const FundingHeader = ({ state, actions, libraries, fundingHeader }) => {
   if (!fundingHeader) return null;
 
   const { title } = fundingHeader;
-  const { information } = fundingHeader.acf;
+  const { amount, opening_date } = fundingHeader.acf;
 
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
@@ -21,8 +24,28 @@ const FundingHeader = ({ state, actions, libraries, fundingHeader }) => {
     );
   };
 
-  const ServeInfo = () => {
-    if (!information) return null;
+  const ServeAmount = () => {
+    if (!amount) return null;
+
+    return (
+      <div
+        className="primary-title flex-col"
+        style={{
+          fontSize: 20,
+        }}
+      >
+        <Html2React html={amount} />
+      </div>
+    );
+  };
+
+  const ServeDate = () => {
+    if (!opening_date) return null;
+
+    const dateObject = new Date(opening_date);
+    const formattedDate = DATE_MODULE.format(dateObject, "DD MMMM");
+
+    console.log(formattedDate);
 
     return (
       <div
@@ -31,7 +54,7 @@ const FundingHeader = ({ state, actions, libraries, fundingHeader }) => {
           fontSize: 20,
         }}
       >
-        <Html2React html={information} />
+        {`${formattedDate} each year`}
       </div>
     );
   };
@@ -48,7 +71,8 @@ const FundingHeader = ({ state, actions, libraries, fundingHeader }) => {
     >
       <div className="flex-col" style={{ height: "100%" }}>
         <ServeTitle />
-        <ServeInfo />
+        <ServeAmount />
+        <ServeDate />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";

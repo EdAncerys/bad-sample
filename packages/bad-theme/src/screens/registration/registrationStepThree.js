@@ -10,7 +10,7 @@ import {
   useAppDispatch,
   useAppState,
   setUserStoreAction,
-  getBADMembershipSubscriptionId,
+  getBADMembershipSubscriptionData,
   setGoToAction,
 } from "../../context";
 
@@ -26,22 +26,13 @@ const RegistrationStepThree = ({ state, actions }) => {
 
   const [formData, setFormData] = useState({
     bad_organisedfor: "",
-    core_membershipsubscriptionplanid: "",
-  });
-
-  const [category, setCategory] = useState(() => {
-    if (!applicationData) return "";
-    let applicationType = "";
-    applicationData.map((data) => {
-      if (data.name === "bad_organisedfor") applicationType = data.value;
-    });
-
-    return applicationType;
+    bad_categorytype: "",
   });
 
   // ⏬ populate form data values from applicationData
   useEffect(() => {
     const handleSetData = ({ data, name }) => {
+      console.log(name);
       setFormData((prevFormData) => ({
         ...prevFormData,
         [`${name}`]: data.value || "",
@@ -50,18 +41,25 @@ const RegistrationStepThree = ({ state, actions }) => {
 
     if (!applicationData) return null;
     applicationData.map((data) => {
+      // set data from Dynamics membership object
       if (data.name === "bad_organisedfor")
         handleSetData({ data, name: "bad_organisedfor" });
+      // set data from custom object type
+      if (data.bad_categorytype)
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          bad_categorytype: data.bad_categorytype,
+        }));
     });
   }, []);
 
   // HANDLERS --------------------------------------------
   const handleSaveExit = async () => {
     // ⏬ get appropriate membership ID
-    // const membershipId = await getBADMembershipSubscriptionId({
+    // const membershipId = await getBADMembershipSubscriptionData({
     //   state,
     //   category: formData.bad_organisedfor === "810170000" ? "BAD" : "SIG",
-    //   type,
+    //   type: formData.type,
     // });
     // console.log("Application cat id ", membershipId); // debug
 
@@ -80,8 +78,15 @@ const RegistrationStepThree = ({ state, actions }) => {
     if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
-  const handleInputChange = (e) => {
+  const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    if (name === "bad_organisedfor")
+      // reset form on category change
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        bad_categorytype: "",
+      }));
+
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
@@ -89,31 +94,45 @@ const RegistrationStepThree = ({ state, actions }) => {
   };
 
   const handleNext = async () => {
-    // ⏬ get appropriate membership ID
-    // const membershipId = await getBADMembershipSubscriptionId({
-    //   state,
-    //   category: formData.bad_organisedfor === "810170000" ? "BAD" : "SIG",
-    //   type,
-    // });
-    // console.log("Application cat id ", membershipId); // debug
+    // form value validations
+    if (!formData.bad_organisedfor || !formData.bad_categorytype) {
+      console.log("FORM INPUTS NOT VALIDATED");
+      return;
+    }
 
-    // ⏬ create user application record in Store
-    // await setUserStoreAction({
-    //   state,
-    //   dispatch,
-    //   applicationData,
-    //   isActiveUser,
-    //   data: {
-    //     bad_organisedfor: formData.bad_organisedfor,
-    //     core_membershipsubscriptionplanid: membershipId, // type of membership for application
-    //     bad_applicationfor: "810170000", // silent assignment
-    //   },
-    // });
-    if (isActiveUser)
-      setGoToAction({
-        path: `/membership/step-4-professional-details/`,
-        actions,
+    try {
+      // ⏬ get appropriate membership ID
+      const membershipData = await getBADMembershipSubscriptionData({
+        state,
+        category: formData.bad_organisedfor === "810170000" ? "BAD" : "SIG",
+        type: formData.bad_categorytype,
       });
+      if (!membershipData) throw new Error("Failed to get membership data");
+      console.log("membershipData", membershipData); // debug
+
+      // ⏬ create user application record in Store
+      await setUserStoreAction({
+        state,
+        dispatch,
+        applicationData,
+        isActiveUser,
+        membershipApplication: membershipData,
+        data: {
+          bad_organisedfor: formData.bad_organisedfor, // BAD members category
+          core_membershipsubscriptionplanid:
+            membershipData.core_membershipsubscriptionplanid, // type of membership for application
+          bad_applicationfor: "810170000", // silent assignment
+        },
+      });
+    } catch (error) {
+      console.log("ERROR: ", error);
+    } finally {
+      if (isActiveUser)
+        setGoToAction({
+          path: `/membership/step-4-professional-details/`,
+          actions,
+        });
+    }
   };
 
   // SERVERS ---------------------------------------------
@@ -156,33 +175,27 @@ const RegistrationStepThree = ({ state, actions }) => {
         <div>
           <label className="bold">Membership Category</label>
           <Form.Select
-            name="core_membershipsubscriptionplanid"
-            value={formData.core_membershipsubscriptionplanid}
-            onChange={handleInputChange}
+            name="bad_categorytype"
+            value={formData.bad_categorytype}
+            onChange={handleChange}
             className="input"
-            disabled
+            // disabled
           >
             <option value="" hidden>
               Membership Category
             </option>
-            <option value="Associate">Associate</option>
-            <option value="Associate Overseas">Associate Overseas</option>
-            <option value="Associate Trainee">Associate Trainee</option>
-            <option value="Career Grade">Career Grade</option>
-            <option value="GP">GP</option>
-            <option value="International">International</option>
-            <option value="Ordinary SAS">Ordinary SAS</option>
-            <option value="Retired">Retired</option>
-            <option value="Retired No Journal">Retired No Journal</option>
-            <option value="Retired Overseas">Retired Overseas</option>
-            <option value="Retired Overseas No Journal">
-              Retired Overseas No Journal
-            </option>
-            <option value="Scientist and Allied Healthcare Professional">
-              Scientist and Allied Healthcare Professional
-            </option>
             <option value="Student">Student</option>
             <option value="Trainee">Trainee</option>
+            <option value="Associate Trainee">Associate Trainee</option>
+            <option value="Associate">Associate</option>
+            <option value="Associate Overseas">Associate Overseas</option>
+            <option value="GP">GP</option>
+            <option value="Career Grade">Career Grade</option>
+            <option value="Ordinary">Ordinary</option>
+            <option value="Ordinary SAS">Ordinary SAS</option>
+            <option value="Allied Healthcare Professional">
+              Allied Healthcare Professional
+            </option>
           </Form.Select>
         </div>
       );
@@ -195,11 +208,11 @@ const RegistrationStepThree = ({ state, actions }) => {
         <div>
           <label className="bold">Membership Category</label>
           <Form.Select
-            name="core_membershipsubscriptionplanid"
-            value={formData.core_membershipsubscriptionplanid}
-            onChange={handleInputChange}
+            name="bad_categorytype"
+            value={formData.bad_categorytype}
+            onChange={handleChange}
             className="input"
-            disabled
+            // disabled
           >
             <option value="" hidden>
               Membership Category
@@ -275,9 +288,8 @@ const RegistrationStepThree = ({ state, actions }) => {
         <Form.Select
           name="bad_organisedfor"
           value={formData.bad_organisedfor}
-          onChange={handleInputChange}
+          onChange={handleChange}
           className="input"
-          disabled
         >
           <option value="null" hidden>
             Membership Type

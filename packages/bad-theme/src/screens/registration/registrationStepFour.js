@@ -31,70 +31,18 @@ const RegistrationStepFour = ({ state, actions }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  const inputRef = useRef(null);
-
-  const gmcNumberRef = useRef(null);
-  const registrationNumberRef = useRef(null);
-  const ntnNumberRef = useRef(null);
-  const jobTitleRef = useRef("");
-  const hospitalRef = useRef("");
-  const medicalSchoolRef = useRef(null);
-
-  const smOneFirstNameRef = useRef(null);
-  const smOneLastNameRef = useRef(null);
-  const smOneEmailRef = useRef(null);
-  const smOneConfirmEmailRef = useRef(null);
-
-  const smTwoFirstNameRef = useRef(null);
-  const smTwoLastNameRef = useRef(null);
-  const smTwoEmailRef = useRef(null);
-  const smTwoConfirmEmailRef = useRef(null);
-
-  const mrcpRef = useRef(null);
-  const cvRef = useRef(null);
-  const gradeRef = useRef(null);
-  const constitutionCheckRef = useRef(null);
-  const privacyNoticeRef = useRef(null);
-
-  const [hospitals, setHospitals] = useState(null);
-
-  const [formData, setFormData] = useState({
-    jobTitle: "",
-    hospitalSearch: "",
-  });
-
-  // HANDLERS --------------------------------------------
-  const handleInputChange = (e) => {
-    console.log(formData);
-
-    const { name, value, type, checked } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-
-    console.log(name, value);
-  };
-
-  const handleHospitalLookup = async () => {
-    console.log("API call");
-    if (hospitalRef.current.value.length < 2) return; // API call after 2 characters
-
-    const hospitalData = await getHospitalsAction({
-      state,
-      input: hospitalRef.current.value,
+  const [category, setCategory] = useState(() => {
+    if (!applicationData) return "";
+    let applicationCategory = "";
+    applicationData.map((data) => {
+      if (data.bad_categorytype) applicationCategory = data.bad_categorytype;
     });
 
-    console.log("Hospitals", hospitalData);
-    setHospitals(hospitalData);
-  };
+    return applicationCategory;
+  });
 
   // SERVERS ---------------------------------------------
   const ServeContent = () => {
-    const category = applicationData
-      ? applicationData.apply_for_membership
-      : "";
-
     return (
       <div>
         <div style={{ padding: `0 1em 0` }}>
@@ -135,7 +83,7 @@ const RegistrationStepFour = ({ state, actions }) => {
               borderTop: `1px solid ${colors.silverFillTwo}`,
             }}
           >
-            Category Selected : {category}
+            Category Selected : <span>{category}</span>
           </div>
           <div style={{ paddingTop: `0.75em` }}>
             Category requirements: GP members will be UK or Irish general

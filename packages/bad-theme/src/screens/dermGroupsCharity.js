@@ -25,14 +25,13 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
 
   const data = state.source.get(state.router.link);
   const dermGroupe = state.source[data.type][data.id];
+  console.log("dermGroupe", dermGroupe); // debug
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
   const { content, title, acf } = dermGroupe;
   const { apply_for_membership } = dermGroupe.acf;
-
-  console.log(dermGroupe.acf);
 
   // HANDLERS --------------------------------------------------
   const handleApply = async () => {
@@ -86,12 +85,15 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
       <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
         <div style={styles.container}>
           <ServeContent />
-          <Card
-            dermGroupe={acf}
-            colour={colors.primary}
-            cardHeight="fit-content"
-            shadow
-          />
+          <div style={{ minWidth: 300 }}>
+            <Card
+              dermGroupe={acf}
+              colour={colors.primary}
+              cardHeight="fit-content"
+              cardMinHeight={400}
+              shadow
+            />
+          </div>
         </div>
       </div>
     </BlockWrapper>

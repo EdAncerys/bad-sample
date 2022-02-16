@@ -347,6 +347,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
           backgroundColor: colors.silverFillTwo,
           margin: `${marginVertical}px 0 ${state.theme.marginVertical}px 0`,
         }}
+        className="no-selector"
       >
         <BlockWrapper>
           <div

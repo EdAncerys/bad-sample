@@ -5,18 +5,24 @@ export const loginAction = async ({ state, dispatch, transId }) => {
   console.log("loginAction triggered");
   setFetchAction({ dispatch, isFetching: true });
 
-  // --------------------------------------------------------------------------
-  // 📌 STEP: Log onto the API server and get the Bearer token
-  // --------------------------------------------------------------------------
-  const jwt = await authenticateAppAction({ state, dispatch });
-  if (!jwt) throw new Error("Cannot logon to server.");
+  try {
+    // --------------------------------------------------------------------------
+    // 📌 STEP: Log onto the API server and get the Bearer token
+    // --------------------------------------------------------------------------
+    const jwt = await authenticateAppAction({ state, dispatch });
+    if (!jwt) throw new Error("Cannot logon to server.");
 
-  // --------------------------------------------------------------------------
-  // 📌 STEP: Get User data from Dynamics
-  // --------------------------------------------------------------------------
-  await getUserAction({ state, dispatch, jwt, transId });
-  setFetchAction({ dispatch, isFetching: false });
-  setLoginModalAction({ dispatch, loginModalAction: false });
+    // --------------------------------------------------------------------------
+    // 📌 STEP: Get User data from Dynamics
+    // --------------------------------------------------------------------------
+    const response = await getUserAction({ state, dispatch, jwt, transId });
+    if (!response) throw new Error("Error login in.");
+    
+    setFetchAction({ dispatch, isFetching: false });
+    setLoginModalAction({ dispatch, loginModalAction: false });
+  } catch (error) {
+    console.log("loginAction error", error);
+  }
 };
 
 export const authenticateAppAction = async ({ state }) => {
@@ -54,13 +60,22 @@ export const authenticateAppAction = async ({ state }) => {
 export const getUserAction = async ({ state, dispatch, jwt, transId }) => {
   console.log("getUserAction triggered");
 
-  const contactid = await getUserContactId({ state, dispatch, jwt, transId });
-  await getUserDataByContactId({
-    state,
-    dispatch,
-    jwt,
-    contactid,
-  });
+  try {
+    const contactid = await getUserContactId({ state, dispatch, jwt, transId });
+    if (!contactid) throw new Error("Error getting contactid.");
+
+    const userData = await getUserDataByContactId({
+      state,
+      dispatch,
+      jwt,
+      contactid,
+    });
+    if (!userData) throw new Error("Error getting userData.");
+
+    return userData;
+  } catch (error) {
+    console.log("error", error);
+  }
 };
 
 export const getUserContactId = async ({ state, dispatch, jwt, transId }) => {
@@ -75,6 +90,8 @@ export const getUserContactId = async ({ state, dispatch, jwt, transId }) => {
     },
     body: JSON.stringify({ transId }),
   };
+
+  console.log(URL);
 
   try {
     const data = await fetch(URL, requestOptions);
@@ -112,6 +129,8 @@ export const getUserDataByContactId = async ({
         value: { jwt, contactid },
       });
       seJWTAction({ dispatch, jwt });
+
+      return response;
     }
   } catch (error) {
     console.log("error", error);

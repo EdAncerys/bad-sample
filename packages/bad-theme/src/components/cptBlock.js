@@ -17,6 +17,13 @@ import CloseIcon from "@mui/icons-material/Close";
 const CPTBlock = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
+  const [postListData, setPostListData] = useState(null);
+  const [groupeType, setGroupeType] = useState(null);
+  const [guidanceCategory, setGuidanceCategory] = useState(null);
+
+  const [searchFilter, setSearchFilter] = useState(null);
+  const [guidanceFilter, setGuidanceFilter] = useState(null);
+  
   if (!block) return <Loading />;
 
   const { sm, md, lg, xl } = muiQuery();
@@ -30,15 +37,12 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     acf_fc_layout,
   } = block;
 
-  const [postListData, setPostListData] = useState(null);
-  const [groupeType, setGroupeType] = useState(null);
-
-  const [searchFilter, setSearchFilter] = useState(null);
 
   const searchFilterRef = useRef(null);
   const currentSearchFilterRef = useRef(null);
   const typeFilterRef = useRef(null);
   const loadMoreRef = useRef(null);
+  const guidanceCategoryRef = useRef("");
 
   const LIMIT = 8;
 
@@ -76,6 +80,8 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     }
     const GROUPE_DATA = Object.values(state.source[postPath]);
     const GROUPE_TYPE = Object.values(state.source[typePath]);
+    if (isCovid_19)
+      setGuidanceCategory(Object.values(state.source.guidance_category)); // set additional filter option to COVID-19
 
     const limit = post_limit || LIMIT;
     setPostListData(GROUPE_DATA.slice(0, Number(limit))); // apply limit on posts
@@ -110,6 +116,14 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     currentSearchFilterRef.current = input;
     let data = Object.values(state.source[postPath]);
 
+    const categoryId = guidanceCategoryRef.current.value;
+
+    if (categoryId) {
+      data = data.filter((item) =>
+        item.guidance_category.includes(Number(categoryId))
+      );
+    }
+
     if (typeFilterRef.current) {
       data = data.filter((item) =>
         item[typePath].includes(typeFilterRef.current)
@@ -131,11 +145,19 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
     setPostListData(data);
     setSearchFilter(input);
+    if (categoryId) setGuidanceFilter(categoryId);
   };
 
   const handleTypeSearch = () => {
     const input = typeFilterRef.current;
+    const categoryId = guidanceCategoryRef.current.value;
     let data = Object.values(state.source[postPath]); // add postListData object to data array
+
+    if (categoryId) {
+      data = data.filter((item) =>
+        item.guidance_category.includes(Number(categoryId))
+      );
+    }
 
     if (currentSearchFilterRef.current)
       data = data.filter((item) => {
@@ -174,6 +196,15 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     }
   };
 
+  const handleClearCategoryFilter = () => {
+    let data = Object.values(state.source[postPath]); // add postListData object to data array
+    guidanceCategoryRef.current = "";
+    setGuidanceFilter(null);
+    setPostListData(data.slice(0, Number(post_limit || LIMIT)));
+
+    handleTypeSearch();
+  };
+
   const handleClearTypeFilter = () => {
     typeFilterRef.current = null;
     let data = Object.values(state.source[postPath]); // add postListData object to data array
@@ -207,6 +238,63 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       );
     };
 
+    const ServeGuidanceFilter = () => {
+      if (!guidanceFilter) return null;
+
+      let name = "Category";
+      name = guidanceCategory.filter(
+        (item) => item.id === Number(guidanceFilter)
+      )[0];
+      if (name) name = name.name; // apply category filter name
+
+      return (
+        <div className="shadow filter">
+          <div>{name}</div>
+          <div className="filter-icon" onClick={handleClearCategoryFilter}>
+            <CloseIcon
+              style={{
+                fill: colors.darkSilver,
+                padding: 0,
+              }}
+            />
+          </div>
+        </div>
+      );
+    };
+
+    const ServeGuidanceType = () => {
+      if (!guidanceCategory) return null;
+
+      return (
+        <div
+          style={{
+            marginTop: "auto",
+            padding: `1em 0 1em ${state.theme.marginVertical}px`,
+          }}
+        >
+          <select
+            name="guidance"
+            ref={guidanceCategoryRef}
+            value={guidanceCategoryRef.current.value}
+            onChange={handleSearch}
+            className="input"
+            style={{ height: 45 }}
+          >
+            <option value="" hidden>
+              Select Guidance Category
+            </option>
+            {guidanceCategory.map((item, key) => {
+              return (
+                <option key={key} value={item.id}>
+                  {item.name}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+      );
+    };
+
     return (
       <div
         style={{
@@ -216,18 +304,29 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
         }}
       >
         <BlockWrapper>
-          <div style={{ padding: `0 ${marginHorizontal}px`, width: `70%` }}>
-            <SearchContainer
-              title={
-                isCovid_19
-                  ? "Search for COVID 19 Resources"
-                  : "Search for Dermatology Groups & Charities"
-              }
-              searchFilterRef={searchFilterRef}
-              handleSearch={handleSearch}
-            />
+          <div
+            style={{
+              padding: `0 ${marginHorizontal}px`,
+              width: isCovid_19 ? "100%" : `70%`,
+            }}
+            className="no-selector"
+          >
+            <div className="flex-row">
+              <SearchContainer
+                title={
+                  isCovid_19
+                    ? "Search for COVID 19 Resources"
+                    : "Search for Dermatology Groups & Charities"
+                }
+                searchFilterRef={searchFilterRef}
+                handleSearch={handleSearch}
+              />
+              <ServeGuidanceType />
+            </div>
+
             <div className="flex" style={{ margin: "0.5em 0" }}>
               <ServeSearchFilter />
+              <ServeGuidanceFilter />
             </div>
             <TypeFilters
               filters={groupeType}
@@ -247,6 +346,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       <div style={!lg ? styles.container : styles.containerMobile}>
         {postListData.map((block, key) => {
           const { title, content, link, date, dermo_group_type } = block;
+          const redirect = block.acf.redirect_url;
 
           return (
             <Card
@@ -255,7 +355,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               publicationDate={date}
               body={isCovid_19 ? null : !lg ? content.rendered : null}
               link_label="Read More"
-              link={link}
+              link={redirect ? redirect.url : link}
               colour={colour}
               limitBodyLength
               cardMinHeight={250}

@@ -16,6 +16,16 @@ import CloseIcon from "@mui/icons-material/Close";
 const CPTBlock = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
+  const [postListData, setPostListData] = useState(null);
+  const [groupeType, setGroupeType] = useState(null);
+
+  const [searchFilter, setSearchFilter] = useState(null);
+  
+  const searchFilterRef = useRef(null);
+  const currentSearchFilterRef = useRef(null);
+  const typeFilterRef = useRef(null);
+  const loadMoreRef = useRef(null);
+
   if (!block) return <Loading />;
 
   const {
@@ -25,17 +35,11 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     disable_vertical_padding,
     add_search_function,
     layout,
+    preview,
+    funding_filter,
   } = block;
 
-  const [postListData, setPostListData] = useState(null);
-  const [groupeType, setGroupeType] = useState(null);
 
-  const [searchFilter, setSearchFilter] = useState(null);
-
-  const searchFilterRef = useRef(null);
-  const currentSearchFilterRef = useRef(null);
-  const typeFilterRef = useRef(null);
-  const loadMoreRef = useRef(null);
 
   const LIMIT = 100; // max limit
 
@@ -64,11 +68,17 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
       isThereNextPage = nextPage;
     }
-    const GROUPE_DATA = Object.values(state.source[postPath]);
+    let resultData = Object.values(state.source[postPath]);
     const GROUPE_TYPE = Object.values(state.source[typePath]);
 
+    if (funding_filter !== "All Levels") {
+      resultData = resultData.filter((item) =>
+        item.funding_type.includes(Number(funding_filter))
+      );
+    }
+
     const limit = post_limit || LIMIT;
-    setPostListData(GROUPE_DATA.slice(0, Number(limit))); // apply limit on posts
+    setPostListData(resultData.slice(0, Number(limit))); // apply limit on posts
     setGroupeType(GROUPE_TYPE);
 
     return () => {
@@ -84,9 +94,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     let data = Object.values(state.source[postPath]);
 
     if (!loadMoreRef.current) {
-      // if (!!currentSearchFilterRef.current || !!typeFilterRef.current)
-      //   data = postListData;
-
       loadMoreRef.current = data;
       setPostListData(data);
     } else {
@@ -204,6 +211,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           marginBottom: `${state.theme.marginVertical}px`,
           padding: `2em 0`,
         }}
+        className="no-selector"
       >
         <BlockWrapper>
           <div style={{ padding: `0 ${marginHorizontal}px` }}>
@@ -238,16 +246,23 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               accordion_item: postListData,
             }}
             fundingBlock
+            hasPreview={preview}
           />
         </div>
       );
 
     return (
-      <div style={styles.container}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: `repeat(3, 1fr)`,
+          justifyContent: "space-between",
+          gap: 20,
+          padding: `0 ${marginHorizontal}px`,
+        }}
+      >
         {postListData.map((block, key) => {
           const { title, content, link, date, dermo_group_type } = block.acf;
-
-          console.log(block);
 
           return (
             <Card
@@ -255,11 +270,10 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               fundingHeader={block}
               publicationDate={date}
               body={block.acf.overview}
-              bodyLimit={150}
+              bodyLimit={600}
               link_label="Read More"
               link={block.acf.external_application_link}
               colour={colour}
-              limitBodyLength
               shadow
             />
           );
@@ -302,39 +316,26 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       }}
     >
       <BlockWrapper>
-        <div style={{ padding: `0 ${marginHorizontal}px` }}>
-          <TitleBlock
-            block={block}
-            margin={{
-              marginBottom: `${
-                add_search_function ? 0 : state.theme.marginVertical
-              }px`,
-            }}
-          />
-        </div>
+        <TitleBlock
+          block={block}
+          margin={{
+            marginBottom: `${
+              add_search_function ? 0 : state.theme.marginVertical
+            }px`,
+          }}
+        />
       </BlockWrapper>
       <ServeFilter />
       <BlockWrapper>
-        <div style={{ padding: `0 ${marginHorizontal}px` }}>
-          <ServeLayout />
-          <ServeMoreAction />
-        </div>
+        <ServeLayout />
+        <ServeMoreAction />
       </BlockWrapper>
     </div>
   );
 };
 
 const styles = {
-  container: {
-    display: "grid",
-    gridTemplateColumns: `repeat(3, 1fr)`,
-    justifyContent: "space-between",
-    gap: 20,
-  },
-  input: {
-    borderRadius: 10,
-    paddingRight: 35,
-  },
+  container: {},
 };
 
 export default connect(CPTBlock);

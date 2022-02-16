@@ -20,7 +20,7 @@ import {
   sendEmailEnquireAction,
   setUserStoreAction,
   getTestUserAccountsAction,
-  getBADMembershipSubscriptionId,
+  getBADMembershipSubscriptionData,
 } from "../../context";
 
 const AccordionBody = ({
@@ -32,6 +32,7 @@ const AccordionBody = ({
   leadershipBlock,
   fundingBlock,
   uniqueId,
+  membershipApplications,
   setFetching,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -47,9 +48,10 @@ const AccordionBody = ({
     button_label,
     button_link,
     link_label,
-    apply_for_membership,
     file_submit_option,
     recipients,
+    category_types,
+    links,
   } = block;
 
   let body = block.body;
@@ -62,29 +64,35 @@ const AccordionBody = ({
 
   // HANDLERS ----------------------------------------------------
   const handleApply = async () => {
-    // ⏬ get appropriate membership ID
-    const membershipId = await getBADMembershipSubscriptionId({
-      state,
-      category: "BAD",
-      type: apply_for_membership,
-    });
-    console.log("Application Type ", apply_for_membership); // debug
+    try {
+      // ⏬ get appropriate membership ID
+      const membershipData = await getBADMembershipSubscriptionData({
+        state,
+        category: "BAD",
+        type: category_types,
+      });
+      if (!membershipData) throw new Error("Failed to get membership data");
 
-    // ⏬ create user application record in Store
-    await setUserStoreAction({
-      state,
-      dispatch,
-      applicationData,
-      isActiveUser,
-      data: {
-        bad_organisedfor: "810170000", // BAD members category
-        core_membershipsubscriptionplanid: membershipId, // type of membership for application
-        bad_applicationfor: "810170000", // silent assignment
-      },
-    });
+      // ⏬ create user application record in Store
+      await setUserStoreAction({
+        state,
+        dispatch,
+        applicationData,
+        isActiveUser,
+        membershipApplication: membershipData,
+        data: {
+          bad_organisedfor: "810170000", // BAD members category
+          core_membershipsubscriptionplanid:
+            membershipData.core_membershipsubscriptionplanid, // type of membership for application
+          bad_applicationfor: "810170000", // silent assignment
+        },
+      });
 
-    if (isActiveUser)
-      setGoToAction({ path: `/membership/step-1-the-process/`, actions });
+      if (isActiveUser)
+        setGoToAction({ path: `/membership/step-1-the-process/`, actions });
+    } catch (error) {
+      console.log("ERROR: ", error);
+    }
   };
 
   const handleContactFormSubmit = async () => {
@@ -172,7 +180,7 @@ const AccordionBody = ({
             padding: `2em 0 0`,
           }}
         >
-          Downloads:
+          Links and Downloads:
         </div>
         <div className="flex-col" style={{ flexWrap: "wrap" }}>
           {files.map((block, key) => {
@@ -194,8 +202,8 @@ const AccordionBody = ({
   const ServeGoToButton = () => {
     if (!button_link || guidelines) return null;
 
-    let LABEL = "More";
-    if (button_label) LABEL = button_label;
+    let linkLabel = "More";
+    if (button_label) linkLabel = button_label;
 
     return (
       <div
@@ -212,7 +220,7 @@ const AccordionBody = ({
             onClick={() => setGoToAction({ path: button_link.url, actions })}
           >
             <div className="flex">
-              <Html2React html={LABEL} />
+              <Html2React html={linkLabel} />
             </div>
             <div style={{ margin: "auto 0" }}>
               <KeyboardArrowRightIcon
@@ -231,8 +239,8 @@ const AccordionBody = ({
   const ServeGoToLink = () => {
     if (!link) return null;
 
-    let LABEL = "External Link";
-    if (link_label) LABEL = link_label;
+    let linkLabel = "External Link";
+    if (link_label) linkLabel = link_label;
 
     return (
       <div
@@ -255,13 +263,52 @@ const AccordionBody = ({
           </div>
           <div
             className="caps-btn"
+            style={{ boxShadow: "none" }}
             onClick={() => setGoToAction({ path: link.url, actions })}
           >
             <div className="flex">
-              <Html2React html={LABEL} />
+              <Html2React html={linkLabel} />
             </div>
           </div>
         </div>
+      </div>
+    );
+  };
+
+  const ServeGoToLinkRepeater = () => {
+    if (!links) return null;
+
+    return (
+      <div style={{ display: "grid", gap: `0.5em` }}>
+        {links.map((block, key) => {
+          const { label, link } = block;
+
+          let linkLabel = "External Link";
+          if (label) linkLabel = label;
+
+          return (
+            <div className="flex" key={key}>
+              <div style={{ marginRight: `1em` }}>
+                <Image
+                  src={LINK}
+                  style={{
+                    width: ICON_WIDTH,
+                    height: ICON_WIDTH,
+                  }}
+                />
+              </div>
+              <div
+                className="caps-btn"
+                style={{ boxShadow: "none" }}
+                onClick={() => setGoToAction({ path: link.url, actions })}
+              >
+                <div className="flex">
+                  <Html2React html={linkLabel} />
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     );
   };
@@ -569,8 +616,7 @@ const AccordionBody = ({
   };
 
   const ApplyForMembership = () => {
-    if (apply_for_membership === "Disabled" || !apply_for_membership)
-      return null;
+    if (!membershipApplications) return null;
 
     return (
       <div>
@@ -579,7 +625,7 @@ const AccordionBody = ({
           style={{ width: "fit-content" }}
           onClick={handleApply}
         >
-          <Html2React html={`Apply for ${apply_for_membership} membership`} />
+          <Html2React html={`Apply for ${category_types} membership`} />
         </div>
       </div>
     );
@@ -619,6 +665,7 @@ const AccordionBody = ({
         <ServeLTTeam />
         <ServeGSSubTitle />
         <ServeGSLink />
+        <ServeGoToLinkRepeater />
         <ServeBodyActions />
         <ApplyForMembership />
       </div>

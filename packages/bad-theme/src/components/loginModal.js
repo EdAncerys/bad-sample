@@ -13,6 +13,8 @@ import {
   setLoginModalAction,
   setCreateAccountModalAction,
   loginAction,
+  getUserDataByContactId,
+  authenticateAppAction,
 } from "../context";
 
 const LoginModal = ({ state, actions }) => {
@@ -20,7 +22,6 @@ const LoginModal = ({ state, actions }) => {
   const { loginModalAction, isFetching } = useAppState();
 
   const [id, setId] = useState(null);
-  const [forceRerender, setForceRerender] = useState(true);
   const iFrameRef = useRef(null);
 
   useEffect(async () => {
@@ -32,15 +33,22 @@ const LoginModal = ({ state, actions }) => {
   }, [id]);
 
   useLayoutEffect(() => {
-    setForceRerender(!forceRerender);
+    iFrameRef.current = null;
   }, [loginModalAction]);
 
   // HANDLERS ----------------------------------------------------
-  const iFrameHandler = () => {
+  const iFrameHandler = async () => {
     console.log("iFrame iFrameHandler triggered...");
 
     if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
-      setId(`vQOKclgzqdPg83Z0zSuTTantjFmEJqj8`); // auto login in dev enviroment
+      const jwt = await authenticateAppAction({ state, dispatch });
+      await getUserDataByContactId({
+        state,
+        dispatch,
+        jwt,
+        contactid: "cc9a332a-3672-ec11-8943-000d3a43c136",
+      });
+      setLoginModalAction({ dispatch, loginModalAction: false });
       return;
     }
 

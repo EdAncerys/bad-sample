@@ -6,7 +6,6 @@ import BlockWrapper from "./blockWrapper";
 import Loading from "./loading";
 import Accordion from "./accordion/accordion";
 import { colors } from "../config/imports";
-import NiceLogo from "../img/placeholders/niceLogo.svg";
 import SearchContainer from "./searchContainer";
 import TypeFilters from "./typeFilters";
 
@@ -19,19 +18,20 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  if (!block) return <Loading />;
-
-  const { disable_vertical_padding, background_colour } = block;
-
+  
   const searchFilterRef = useRef(null);
   const currentSearchFilterRef = useRef(null);
   const typeFilterRef = useRef(null);
-
+  
   const [searchFilter, setSearchFilter] = useState(null);
   const [typeFilter, setTypeFilter] = useState(null);
-
+  
   const [guidelinesList, setGuidelinesList] = useState(null);
   const [guidelinesType, setGuidelinesType] = useState(null);
+  
+  if (!block) return <Loading />;
+
+  const { disable_vertical_padding, background_colour } = block;
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -199,7 +199,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     };
 
     return (
-      <div style={{ backgroundColor: colors.silverFillTwo }}>
+      <div style={{ backgroundColor: colors.silverFillTwo }}  className="no-selector">
         <BlockWrapper>
           <div
             className="flex-col"

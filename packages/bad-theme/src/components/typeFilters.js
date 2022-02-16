@@ -162,7 +162,7 @@ const TypeFilters = ({
     );
   };
   return (
-    <div>
+    <div className="no-selector">
       <ServeTitle />
       {!lg ? <ServeFilter /> : <ServeFilterMobile />}
     </div>

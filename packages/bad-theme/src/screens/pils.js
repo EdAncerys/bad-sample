@@ -47,6 +47,8 @@ const Post = ({ state, actions, libraries }) => {
   const ServeBody = () => {
     if (!pil.content) return null;
 
+    console.log(pil.content);
+
     return (
       <div
         className="text-body"

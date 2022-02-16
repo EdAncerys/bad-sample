@@ -73,7 +73,10 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   const ServeMaps = () => {
     return (
       <div>
-        <MapsComponent />
+        <MapsComponent
+          zoom={15}
+          center={{ lat: 51.52346281629359, lng: -0.13927725740945598 }}
+        />
       </div>
     );
   };
@@ -85,10 +88,10 @@ const AccountDashboard = ({ state, actions, libraries }) => {
           style={{
             display: "grid",
             gap: marginHorizontal,
-            gridTemplateColumns: !lg ? `repeat(2, 1fr)` : "1fr",
+            gridTemplateColumns: !lg ? `1fr 1.5fr` : "1fr",
             justifyContent: "center",
             padding: `${marginVertical}px ${marginHorizontal}px`,
-            height: 400,
+            height: 500,
           }}
         >
           <ServeInfo />

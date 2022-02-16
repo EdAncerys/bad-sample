@@ -33,9 +33,10 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     py3_addresscountystate: "",
     py3_addresszippostalcode: "",
     py3_addresscountry: "",
+    document: "",
   });
   const [profilePhoto, setProfilePhoto] = useState(null);
-  const profilePhotoRef = useRef(null);
+  const documentRef = useRef(null);
 
   // ⏬ populate form data values from applicationData
   useEffect(() => {
@@ -86,7 +87,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   };
 
   const handleNext = async () => {
-    console.log(formData);
+    console.log(formData); // debug
 
     await setUserStoreAction({
       state,
@@ -101,22 +102,22 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   };
 
   const handleDocUploadChange = async () => {
-    let document = profilePhotoRef.current
-      ? profilePhotoRef.current.files[0]
-      : null;
+    let document = documentRef.current ? documentRef.current.files[0] : null;
+    const objectURL = URL.createObjectURL(document);
+    setProfilePhoto(objectURL);
+
     if (document)
       document = await sendFileToS3Action({
         state,
         dispatch,
         attachments: document,
       });
-    console.log("document", document); // debug
-    console.log(formData); // debug
 
-    // setFormData((prevFormData) => ({
-    //   ...prevFormData,
-    //   cvDocument: document,
-    // }));
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      ["document"]: document,
+    }));
+    console.log("document", document); // debug
   };
 
   const handleInputChange = (e) => {
@@ -195,17 +196,12 @@ const PersonalDetails = ({ state, actions, libraries }) => {
           </div>
 
           <input
-            ref={profilePhotoRef}
-            onChange={() => {
-              const file = profilePhotoRef.current.files[0];
-              const objectURL = URL.createObjectURL(file);
-              setProfilePhoto(objectURL);
-            }}
+            ref={documentRef}
+            onChange={handleDocUploadChange}
             type="file"
-            className="form-control"
+            className="form-control input"
             placeholder="Profile Photo"
             accept="image/*"
-            style={styles.input}
           />
         </div>
 

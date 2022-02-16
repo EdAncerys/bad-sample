@@ -2,10 +2,7 @@ import { useContext } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../config/imports";
-import BlockBuilder from "../components/builder/blockBuilder";
-import { muiQuery } from "../context";
 import TitleBlock from "../components/titleBlock";
-import Card from "../components/card/card";
 import { setGoToAction } from "../context";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";

@@ -29,6 +29,7 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
   const { bjdFeed, cedFeed, shdFeed } = useAppState();
 
   const [feedData, setFeedData] = useState(null);
+  const [searchFilter, setSearchFilter] = useState(null);
 
   if (!block) return <Loading />;
 
@@ -41,7 +42,6 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
     add_search_function,
   } = block;
 
-  const [searchFilter, setSearchFilter] = useState(null);
 
   const searchFilterRef = useRef(null);
   const currentSearchFilterRef = useRef(null);
@@ -148,9 +148,13 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
           marginBottom: `${state.theme.marginVertical}px`,
           padding: `2em 0`,
         }}
+        className="no-selector"
       >
         <BlockWrapper>
-          <div style={{ padding: `0 ${marginHorizontal}px` }}>
+          <div
+            style={{ padding: `0 ${marginHorizontal}px` }}
+            className="no-selector"
+          >
             <SearchContainer
               title={feedTitle}
               width="70%"
