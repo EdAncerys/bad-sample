@@ -33,6 +33,7 @@ const SearchDropDown = ({
     >
       <div className="flex">
         <div
+          className="flex-col"
           style={{
             minHeight: ctaHeight,
             maxHeight: BANNER_HEIGHT / 2,

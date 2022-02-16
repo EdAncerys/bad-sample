@@ -12,6 +12,7 @@ import {
   sendFileToS3Action,
   getHospitalsAction,
   setGoToAction,
+  getMembershipDataAction,
 } from "../../../context";
 
 const ProfessionalDetails = ({ state, actions, libraries }) => {
@@ -62,7 +63,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   const documentRef = useRef(null);
   const hospitalSearchRef = useRef("");
 
-  useEffect(() => {
+  useEffect(async () => {
     const handleSetData = ({ data, name }) => {
       setFormData((prevFormData) => ({
         ...prevFormData,
@@ -91,15 +92,36 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     });
 
     // ⏬ validate inputs
-    // const membershipTypes = Object.values(state.source.memberships);
-    // if (!membershipTypes) return null;
+    if (!state.source.memberships)
+      await getMembershipDataAction({ state, actions });
+    const membershipTypes = Object.values(state.source.memberships);
+    if (!membershipTypes) return null;
 
-    // membershipTypes.map((membership) => {
-    //   console.log(membership);
-    //   // const data = state.source[membership.type][membership.id];
+    console.log(membershipTypes);
 
-    //   // return data;
-    // });
+    membershipTypes.map((membership) => {
+      if (
+        membership.acf &&
+        applicationData &&
+        membership.acf.category_types === applicationData[0].bad_categorytype
+      ) {
+        const application = membership.acf;
+        // console.log(application); // debug
+
+        inputValidator.py3_gmcnumber = application.py3_gmcnumber;
+        inputValidator.py3_otherregulatorybodyreference =
+          application.py3_otherregulatorybodyreference;
+        inputValidator.py3_ntnno = application.py3_ntnno;
+        inputValidator.bad_currentpost = application.bad_currentpost;
+        inputValidator.py3_hospitalid = application.py3_hospitalid;
+        inputValidator.bad_medicalschool = application.bad_medicalschool;
+        inputValidator.bad_proposer1 = application.bad_proposer1;
+        inputValidator.bad_proposer2 = application.bad_proposer2;
+        inputValidator.bad_mrpcqualified = application.bad_mrpcqualified;
+        inputValidator.currentGrade = application.currentGrade;
+        inputValidator.document = application.document;
+      }
+    });
   }, []);
 
   // HANDLERS --------------------------------------------
@@ -147,17 +169,17 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   const handleNext = async () => {
     console.log(formData); // debug
 
-    // await setUserStoreAction({
-    //   state,
-    //   dispatch,
-    //   applicationData,
-    //   isActiveUser,
-    //   data: formData,
-    // });
+    await setUserStoreAction({
+      state,
+      dispatch,
+      applicationData,
+      isActiveUser,
+      data: formData,
+    });
 
-    // let slug = `/membership/final-step-thank-you/`;
-    // if (category === "810170001") slug = `/membership/step-5-sig-questions/`;
-    // if (isActiveUser) setGoToAction({ path: slug, actions });
+    let slug = `/membership/final-step-thank-you/`;
+    if (category === "810170001") slug = `/membership/step-5-sig-questions/`;
+    if (isActiveUser) setGoToAction({ path: slug, actions });
   };
 
   const handleDocUploadChange = async () => {
@@ -266,15 +288,21 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          <label className="required form-label">Current post/job title</label>
-          <input
-            name="bad_currentpost"
-            value={formData.bad_currentpost}
-            onChange={handleInputChange}
-            type="text"
-            className="form-control input"
-            placeholder="Current job title"
-          />
+          {inputValidator.bad_currentpost && (
+            <div>
+              <label className="required form-label">
+                Current post/job title
+              </label>
+              <input
+                name="bad_currentpost"
+                value={formData.bad_currentpost}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Current job title"
+              />
+            </div>
+          )}
 
           {inputValidator.py3_hospitalid && (
             <div>

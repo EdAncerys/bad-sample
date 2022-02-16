@@ -83,7 +83,7 @@ const RegistrationStepFour = ({ state, actions }) => {
               borderTop: `1px solid ${colors.silverFillTwo}`,
             }}
           >
-            Category Selected : {category}
+            Category Selected : <span>{category}</span>
           </div>
           <div style={{ paddingTop: `0.75em` }}>
             Category requirements: GP members will be UK or Irish general
