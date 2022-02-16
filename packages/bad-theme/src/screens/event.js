@@ -352,7 +352,7 @@ const Event = ({ state, actions, libraries }) => {
               <ServeSocials />
             </div>
             <div className="shadow">
-              <div style={{ padding: "1em" }}>
+              <div style={{ padding: "2em" }}>
                 <h3>Related events</h3>
               </div>
               <EventLoopBlock
