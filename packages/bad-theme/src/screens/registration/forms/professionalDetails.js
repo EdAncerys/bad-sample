@@ -30,26 +30,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     return applicationCategory;
   });
 
-  const isStudent = category === "Student";
-  const isTrainee = category === "Trainee";
-  const isAssociate = category === "Associate";
-  const isAssociateTrainee = category === "Associate Trainee";
-  const isAssociateOversees = category === "Associate Oversees";
-  const isGp = category === "GP";
-  const isCareerGrade = category === "Career Grade";
-  const isOrdinary = category === "Ordinary";
-  const isOrdinarySAS = category === "Ordinary SAS";
-  const isAlliedHealthcareProfessional =
-    category === "Allied Healthcare Professional";
-
-  // conditional rendering
-  const py3_gmcnumber =
-    isStudent || isAssociate || isAssociateTrainee || isAssociateOversees;
-  const py3_otherregulatorybodyreference =
-    isAssociate || isAssociateTrainee || isAssociateOversees;
-  const py3_ntnno = isTrainee;
-  const py3_hospitalid = isStudent;
-
   const [formData, setFormData] = useState({
     py3_gmcnumber: "",
     py3_otherregulatorybodyreference: "",
@@ -63,13 +43,25 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     currentGrade: "",
     bad_medicalschool: "",
   });
+  const [inputValidator, setInputValidator] = useState({
+    py3_gmcnumber: true,
+    py3_otherregulatorybodyreference: true,
+    py3_ntnno: true,
+    bad_currentpost: true,
+    py3_hospitalid: true,
+    bad_medicalschool: true,
+    bad_proposer1: true,
+    bad_proposer2: true,
+    bad_mrpcqualified: true,
+    currentGrade: true,
+    document: true,
+  });
   const [hospitalData, setHospitalData] = useState(null);
   const [selectedHospital, setSelectedHospital] = useState(null);
 
   const documentRef = useRef(null);
   const hospitalSearchRef = useRef("");
 
-  // ⏬ populate form data values from applicationData
   useEffect(() => {
     const handleSetData = ({ data, name }) => {
       setFormData((prevFormData) => ({
@@ -78,6 +70,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       }));
     };
 
+    // ⏬ populate form data values from applicationData
     if (!applicationData) return null;
     applicationData.map((data) => {
       if (data.name === "py3_gmcnumber")
@@ -96,6 +89,17 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       if (data.name === "bad_medicalschool")
         handleSetData({ data, name: "bad_medicalschool" });
     });
+
+    // ⏬ validate inputs
+    // const membershipTypes = Object.values(state.source.memberships);
+    // if (!membershipTypes) return null;
+
+    // membershipTypes.map((membership) => {
+    //   console.log(membership);
+    //   // const data = state.source[membership.type][membership.id];
+
+    //   // return data;
+    // });
   }, []);
 
   // HANDLERS --------------------------------------------
@@ -218,7 +222,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     <div>
       <form>
         <div style={{ padding: `2em 1em` }}>
-          {!py3_gmcnumber && (
+          {inputValidator.py3_gmcnumber && (
             <div>
               <label className="required form-label">GMC Number</label>
               <input
@@ -232,7 +236,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {!py3_otherregulatorybodyreference && (
+          {inputValidator.py3_otherregulatorybodyreference && (
             <div>
               <label className="form-label">
                 Regulatory Body Registration Number
@@ -248,7 +252,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {!py3_ntnno && (
+          {inputValidator.py3_ntnno && (
             <div>
               <label className="form-label">NTN Number</label>
               <input
@@ -272,7 +276,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             placeholder="Current job title"
           />
 
-          {!py3_hospitalid && (
+          {inputValidator.py3_hospitalid && (
             <div>
               <label className="required form-label">
                 Main Hospital/Place of work
@@ -326,15 +330,19 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          <label className="required form-label">Medical School</label>
-          <input
-            name="bad_medicalschool"
-            value={formData.bad_medicalschool}
-            onChange={handleInputChange}
-            type="text"
-            className="form-control input"
-            placeholder="Medical School"
-          />
+          {inputValidator.bad_medicalschool && (
+            <div>
+              <label className="required form-label">Medical School</label>
+              <input
+                name="bad_medicalschool"
+                value={formData.bad_medicalschool}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Medical School"
+              />
+            </div>
+          )}
         </div>
 
         <div
@@ -347,33 +355,37 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             borderBottom: `1px solid ${colors.silverFillTwo}`,
           }}
         >
-          <div>
-            <label className="required form-label required">
-              Supporting Member 1
-            </label>
-            <input
-              name="bad_proposer1"
-              value={formData.bad_proposer1}
-              onChange={handleInputChange}
-              type="text"
-              className="form-control input"
-              placeholder="MRCP"
-            />
-          </div>
+          {inputValidator.bad_proposer1 && (
+            <div>
+              <label className="required form-label required">
+                Supporting Member 1
+              </label>
+              <input
+                name="bad_proposer1"
+                value={formData.bad_proposer1}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="MRCP"
+              />
+            </div>
+          )}
 
-          <div>
-            <label className="required form-label required">
-              Supporting Member 2
-            </label>
-            <input
-              name="bad_proposer2"
-              value={formData.bad_proposer2}
-              onChange={handleInputChange}
-              type="text"
-              className="form-control input"
-              placeholder="MRCP"
-            />
-          </div>
+          {inputValidator.bad_proposer2 && (
+            <div>
+              <label className="required form-label required">
+                Supporting Member 2
+              </label>
+              <input
+                name="bad_proposer2"
+                value={formData.bad_proposer2}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="MRCP"
+              />
+            </div>
+          )}
         </div>
 
         <div
@@ -383,37 +395,47 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             borderBottom: `1px solid ${colors.silverFillTwo}`,
           }}
         >
-          <label className="required form-label">MRCP</label>
-          <input
-            name="bad_mrpcqualified"
-            value={formData.bad_mrpcqualified}
-            onChange={handleInputChange}
-            type="text"
-            className="form-control input"
-            placeholder="MRCP"
-          />
+          {inputValidator.bad_mrpcqualified && (
+            <div>
+              <label className="required form-label">MRCP</label>
+              <input
+                name="bad_mrpcqualified"
+                value={formData.bad_mrpcqualified}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="MRCP"
+              />
+            </div>
+          )}
 
-          <label className="required form-label">
-            Current Grade <span style={{ color: "red" }}>DERMPATHPRO ONLY</span>
-          </label>
-          <input
-            name="currentGrade"
-            value={formData.currentGrade}
-            onChange={handleInputChange}
-            type="text"
-            className="form-control input"
-            placeholder="Current Grade"
-          />
+          {inputValidator.currentGrade && (
+            <div>
+              <label className="required form-label">Current Grade</label>
+              <input
+                name="currentGrade"
+                value={formData.currentGrade}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Current Grade"
+              />
+            </div>
+          )}
 
-          <label className="required form-label">Upload Your CV</label>
-          <input
-            ref={documentRef}
-            onChange={handleDocUploadChange}
-            type="file"
-            className="form-control input"
-            placeholder="CV Document"
-            accept="*"
-          />
+          {inputValidator.document && (
+            <div>
+              <label className="required form-label">Upload Your CV</label>
+              <input
+                ref={documentRef}
+                onChange={handleDocUploadChange}
+                type="file"
+                className="form-control input"
+                placeholder="CV Document"
+                accept="*"
+              />
+            </div>
+          )}
         </div>
       </form>
       <ServeActions />

@@ -4,6 +4,8 @@ import { colors } from "../config/imports";
 
 import Loading from "./loading";
 import Accordion from "./accordion/accordion";
+// CONTEXT ----------------------------------------------------------------
+import { getMembershipDataAction } from "../context";
 
 const BADMemberships = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -19,17 +21,7 @@ const BADMemberships = ({ state, actions, libraries, block }) => {
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
-    const path = `/memberships/`;
-    await actions.source.fetch(path); // fetch membership application data
-    const memberships = state.source.get(path);
-    const { totalPages, page, next } = memberships; // check if memberships have multiple pages
-    // fetch memberships via wp API page by page
-    let isThereNextPage = next;
-    while (isThereNextPage) {
-      await actions.source.fetch(isThereNextPage); // fetch next page
-      const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
-      isThereNextPage = nextPage;
-    }
+    await getMembershipDataAction({ state, actions });
     const membershipTypes = Object.values(state.source.memberships);
     if (!membershipTypes) return null;
 
@@ -39,7 +31,7 @@ const BADMemberships = ({ state, actions, libraries, block }) => {
       return data;
     });
 
-    console.log(response);
+    console.log(response); // debug
     setMembershipTypes(response);
 
     return () => {
