@@ -8,9 +8,8 @@ import {
   useAppDispatch,
   useAppState,
   setUserStoreAction,
-  sendFileToS3Action,
-  getHospitalsAction,
   setGoToAction,
+  getMembershipDataAction,
 } from "../../../context";
 
 const SIGApplication = ({ state, actions, libraries }) => {
@@ -41,15 +40,33 @@ const SIGApplication = ({ state, actions, libraries }) => {
     bad_includeinthebssciiemaildiscussionforum: "",
     py3_insertnhsnetemailaddress: "",
   });
+  const [inputValidator, setInputValidator] = useState({
+    bad_qualifications: true,
+    bad_hasmedicallicence: true,
+    bad_isbadmember: true,
+    bad_interestinfieldquestion: true,
+    py3_whatukbasedroleareyou: true,
+    py3_speciality: true,
+    bad_otherjointclinics: true,
+    bad_mainareaofinterest: true,
+    bad_includeinthebssciiemaildiscussionforum: true,
+    py3_insertnhsnetemailaddress: true,
+  });
   const [isEmail, setIsEmail] = useState(false);
 
   // ⏬ populate form data values from applicationData
-  useEffect(() => {
+  useEffect(async () => {
     const handleSetData = ({ data, name }) => {
-      if (name === "bad_isbadmember") console.log(data.value);
       setFormData((prevFormData) => ({
         ...prevFormData,
         [`${name}`]: data.value || "",
+      }));
+    };
+
+    const handleSetInputData = ({ data, name }) => {
+      setInputValidator((prevFormData) => ({
+        ...prevFormData,
+        [name]: data[name],
       }));
     };
 
@@ -78,6 +95,28 @@ const SIGApplication = ({ state, actions, libraries }) => {
         });
       if (data.name === "py3_insertnhsnetemailaddress")
         handleSetData({ data, name: "py3_insertnhsnetemailaddress" });
+    });
+
+    // ⏬ validate inputs
+    if (!state.source.memberships)
+      await getMembershipDataAction({ state, actions });
+    const membershipTypes = Object.values(state.source.memberships);
+    if (!membershipTypes) return null;
+
+    membershipTypes.map((membership) => {
+      // validate application type and membership type SIG & BAD
+      const applicationType =
+        membership.acf.category_types === applicationData[0].bad_categorytype ||
+        membership.acf.category_types === applicationData[0]._bad_sigid_value;
+
+      if (membership.acf && applicationData && applicationType) {
+        const application = membership.acf;
+        // console.log(application); // debug
+
+        Object.keys(application).map((keyName) => {
+          handleSetInputData({ data: application, name: keyName });
+        });
+      }
     });
   }, []);
 
@@ -159,149 +198,179 @@ const SIGApplication = ({ state, actions, libraries }) => {
     <div>
       <form>
         <div style={{ padding: `2em 1em` }}>
-          <label className="required form-label">Qualification</label>
-          <input
-            name="bad_qualifications"
-            value={formData.bad_qualifications}
-            onChange={handleInputChange}
-            type="text"
-            className="form-control input"
-            placeholder="Qualification"
-          />
+          {inputValidator.bad_qualifications && (
+            <div>
+              <label className="required form-label">Qualification</label>
+              <input
+                name="bad_qualifications"
+                value={formData.bad_qualifications}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Qualification"
+              />
+            </div>
+          )}
 
-          <div className="flex-col">
-            <label className="form-label">
-              License to practice medicine (Y/N)
-            </label>
-            <input
-              name="bad_hasmedicallicence"
-              checked={formData.bad_hasmedicallicence}
-              onChange={handleInputChange}
-              type="checkbox"
-              className="form-check-input"
-              style={styles.checkBox}
-            />
-          </div>
+          {inputValidator.bad_hasmedicallicence && (
+            <div className="flex-col">
+              <label className="form-label">
+                License to practice medicine (Y/N)
+              </label>
+              <input
+                name="bad_hasmedicallicence"
+                checked={formData.bad_hasmedicallicence}
+                onChange={handleInputChange}
+                type="checkbox"
+                className="form-check-input"
+                style={styles.checkBox}
+              />
+            </div>
+          )}
 
-          <div className="flex-col">
-            <label className="form-label">Are you BAD member (Y/N)</label>
-            <input
-              name="bad_isbadmember"
-              checked={formData.bad_isbadmember}
-              onChange={handleInputChange}
-              type="checkbox"
-              className="form-check-input"
-              style={styles.checkBox}
-            />
-          </div>
+          {inputValidator.bad_isbadmember && (
+            <div className="flex-col">
+              <label className="form-label">Are you BAD member (Y/N)</label>
+              <input
+                name="bad_isbadmember"
+                checked={formData.bad_isbadmember}
+                onChange={handleInputChange}
+                type="checkbox"
+                className="form-check-input"
+                style={styles.checkBox}
+              />
+            </div>
+          )}
 
-          <label className="form-label">
-            Describe your interest in (SIG name)
-          </label>
-          <textarea
-            name="bad_interestinfieldquestion"
-            value={formData.bad_interestinfieldquestion}
-            onChange={handleInputChange}
-            type="text"
-            className="form-control input"
-            placeholder={`Describe your interest in (SIG name)`}
-          ></textarea>
+          {inputValidator.bad_interestinfieldquestion && (
+            <div>
+              <label className="form-label">
+                Describe your interest in (SIG name)
+              </label>
+              <textarea
+                name="bad_interestinfieldquestion"
+                value={formData.bad_interestinfieldquestion}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder={`Describe your interest in (SIG name)`}
+              ></textarea>
+            </div>
+          )}
 
-          <label style={styles.subTitle}>I identify myself as</label>
-          <Form.Select
-            name="py3_whatukbasedroleareyou"
-            value={formData.py3_whatukbasedroleareyou}
-            onChange={handleInputChange}
-            className="input"
-          >
-            <option value="" hidden>
-              Are you
-            </option>
-            <option value="UK based Trainee">UK based Trainee</option>
-            <option value="UK based SAS Doctor">UK based SAS Doctor</option>
-            <option value="UK based Consultant">UK based Consultant</option>
-            <option value="Working outside the UK">
-              Working outside the UK
-            </option>
-          </Form.Select>
+          {inputValidator.py3_whatukbasedroleareyou && (
+            <div>
+              <label style={styles.subTitle}>I identify myself as</label>
+              <Form.Select
+                name="py3_whatukbasedroleareyou"
+                value={formData.py3_whatukbasedroleareyou}
+                onChange={handleInputChange}
+                className="input"
+              >
+                <option value="" hidden>
+                  Are you
+                </option>
+                <option value="UK based Trainee">UK based Trainee</option>
+                <option value="UK based SAS Doctor">UK based SAS Doctor</option>
+                <option value="UK based Consultant">UK based Consultant</option>
+                <option value="Working outside the UK">
+                  Working outside the UK
+                </option>
+              </Form.Select>
+            </div>
+          )}
 
-          <label style={styles.subTitle}>Specialist Interest</label>
-          <Form.Select
-            name="py3_speciality"
-            value={formData.py3_speciality}
-            onChange={handleInputChange}
-            className="input"
-          >
-            <option value="" hidden>
-              Specialist Interest
-            </option>
-            <option value="Hair">Hair</option>
-            <option value="Nails">Nails</option>
-            <option value="UK based Consultant">UK based Consultant</option>
-            <option value="Both">Both</option>
-          </Form.Select>
+          {inputValidator.py3_speciality && (
+            <div>
+              <label style={styles.subTitle}>Specialist Interest</label>
+              <Form.Select
+                name="py3_speciality"
+                value={formData.py3_speciality}
+                onChange={handleInputChange}
+                className="input"
+              >
+                <option value="" hidden>
+                  Specialist Interest
+                </option>
+                <option value="Hair">Hair</option>
+                <option value="Nails">Nails</option>
+                <option value="UK based Consultant">UK based Consultant</option>
+                <option value="Both">Both</option>
+              </Form.Select>
+            </div>
+          )}
 
-          <label className="form-label">
-            Do you do joint clinics with any other specialties?
-          </label>
-          <input
-            name="bad_otherjointclinics"
-            value={formData.bad_otherjointclinics}
-            onChange={handleInputChange}
-            type="text"
-            className="form-control input"
-            placeholder="Do you do joint clinics with any other specialties?"
-          />
+          {inputValidator.bad_otherjointclinics && (
+            <div>
+              <label className="form-label">
+                Do you do joint clinics with any other specialties?
+              </label>
+              <input
+                name="bad_otherjointclinics"
+                value={formData.bad_otherjointclinics}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Do you do joint clinics with any other specialties?"
+              />
+            </div>
+          )}
 
-          <label style={styles.subTitle}>Main area of interest</label>
-          <Form.Select
-            name="bad_mainareaofinterest"
-            value={formData.bad_mainareaofinterest}
-            onChange={handleInputChange}
-            className="input"
-          >
-            <option value="" hidden>
-              Main area of interest
-            </option>
-            <option value="HIV">HIV</option>
-            <option value="biologics">Biologics</option>
-            <option value="Solid Organ Transplatation">
-              Solid Organ Transplatation
-            </option>
-            <option value="Haemtone oncology">Haemtone Oncology</option>
-            <option value="Both">Both</option>
-            <option value="Other Immunosuppresed Groups">
-              Other Immunosuppresed Groups
-            </option>
-          </Form.Select>
+          {inputValidator.bad_mainareaofinterest && (
+            <div>
+              <label style={styles.subTitle}>Main area of interest</label>
+              <Form.Select
+                name="bad_mainareaofinterest"
+                value={formData.bad_mainareaofinterest}
+                onChange={handleInputChange}
+                className="input"
+              >
+                <option value="" hidden>
+                  Main area of interest
+                </option>
+                <option value="HIV">HIV</option>
+                <option value="biologics">Biologics</option>
+                <option value="Solid Organ Transplatation">
+                  Solid Organ Transplatation
+                </option>
+                <option value="Haemtone oncology">Haemtone Oncology</option>
+                <option value="Both">Both</option>
+                <option value="Other Immunosuppresed Groups">
+                  Other Immunosuppresed Groups
+                </option>
+              </Form.Select>
+            </div>
+          )}
 
-          <div className="flex-col">
-            <label className="form-label">
-              Do you want to be part of the BSSCII discussion form?
-            </label>
-            <input
-              name="bad_includeinthebssciiemaildiscussionforum"
-              checked={formData.bad_includeinthebssciiemaildiscussionforum}
-              onChange={handleInputChange}
-              type="checkbox"
-              className="form-check-input"
-              style={styles.checkBox}
-            />
+          {inputValidator.bad_includeinthebssciiemaildiscussionforum && (
+            <div className="flex-col">
+              <label className="form-label">
+                Do you want to be part of the BSSCII discussion form?
+              </label>
+              <input
+                name="bad_includeinthebssciiemaildiscussionforum"
+                checked={formData.bad_includeinthebssciiemaildiscussionforum}
+                onChange={handleInputChange}
+                type="checkbox"
+                className="form-check-input"
+                style={styles.checkBox}
+              />
 
-            {isEmail && (
-              <div>
-                <label style={styles.subTitle}>Email Address</label>
-                <input
-                  name="py3_insertnhsnetemailaddress"
-                  value={formData.py3_insertnhsnetemailaddress}
-                  onChange={handleInputChange}
-                  type="text"
-                  className="form-control input"
-                  placeholder="Email Address"
-                />
-              </div>
-            )}
-          </div>
+              {isEmail && (
+                <div>
+                  <label style={styles.subTitle}>Email Address</label>
+                  <input
+                    name="py3_insertnhsnetemailaddress"
+                    value={formData.py3_insertnhsnetemailaddress}
+                    onChange={handleInputChange}
+                    type="text"
+                    className="form-control input"
+                    placeholder="Email Address"
+                  />
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </form>
       <ServeActions />

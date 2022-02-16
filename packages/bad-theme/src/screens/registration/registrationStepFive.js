@@ -19,12 +19,23 @@ const RegistrationStepFive = ({ state, actions }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
+  const [category, setCategory] = useState(() => {
+    if (!applicationData) return "";
+    const isSIG = applicationData[0].bad_organisedfor === "SIG";
+
+    let applicationCategory = "";
+    applicationData.map((data) => {
+      if (data.bad_categorytype)
+        applicationCategory = isSIG
+          ? data._bad_sigid_value
+          : data.bad_categorytype;
+    });
+
+    return applicationCategory;
+  });
+
   // SERVERS ---------------------------------------------
   const ServeContent = () => {
-    const category = applicationData
-      ? applicationData.apply_for_membership
-      : "";
-
     return (
       <div style={{ padding: `0 1em 1em` }}>
         <div className="primary-title" style={styles.title}>
@@ -67,7 +78,7 @@ const RegistrationStepFive = ({ state, actions }) => {
             borderTop: `1px solid ${colors.silverFillTwo}`,
           }}
         >
-          Category Selected : {category}
+          Category Selected : <span>{category}</span>
         </div>
         <div style={{ paddingTop: `0.75em` }}>
           Lorem Ipsum is simply dummy text of the printing and typesetting

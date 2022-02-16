@@ -23,9 +23,10 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
   const [category, setCategory] = useState(() => {
     if (!applicationData) return "";
+
     let applicationCategory = "";
     applicationData.map((data) => {
-      if (data.bad_categorytype) applicationCategory = data.bad_categorytype;
+      if (data.bad_organisedfor) applicationCategory = data.bad_organisedfor; // validate application category type
     });
 
     return applicationCategory;
@@ -174,7 +175,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       data: formData,
     });
     let slug = `/membership/final-step-thank-you/`;
-    if (category === "810170001") slug = `/membership/step-5-sig-questions/`;
+    if (category === "SIG") slug = `/membership/step-5-sig-questions/`;
     if (isActiveUser) setGoToAction({ path: slug, actions });
   };
 
