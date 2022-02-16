@@ -16,8 +16,8 @@ export const loginAction = async ({ state, dispatch, transId }) => {
     // 📌 STEP: Get User data from Dynamics
     // --------------------------------------------------------------------------
     const response = await getUserAction({ state, dispatch, jwt, transId });
-
     if (!response) throw new Error("Error login in.");
+    
     setFetchAction({ dispatch, isFetching: false });
     setLoginModalAction({ dispatch, loginModalAction: false });
   } catch (error) {
