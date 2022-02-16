@@ -16,6 +16,7 @@ const EventLoopBlock = ({
   searchFilter,
   gradesFilter,
   locationsFilter,
+  recommended_events,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -88,7 +89,8 @@ const EventLoopBlock = ({
     };
   }, [state.source.events]);
   if (!eventList) return <Loading />;
-
+  if (eventList) console.log(eventList);
+  console.log("EVENT LOOP BLOCK BLOCK", block);
   // RETURN ---------------------------------------------
   return (
     <div style={{ paddingBottom: `${marginVertical}px` }}>
@@ -130,7 +132,11 @@ const EventLoopBlock = ({
             const removeMargin = search && key === 0;
             return (
               <div key={key}>
-                <EventListView block={block} removeMargin={removeMargin} />
+                <EventListView
+                  block={block}
+                  removeMargin={removeMargin}
+                  recommended_events={recommended_events ? true : false}
+                />
               </div>
             );
           }

@@ -13,6 +13,8 @@ import Instagram from "../img/svg/instagramBlack.svg";
 import Linkedin from "../img/svg/linkedinBlack.svg";
 import Connect from "../img/svg/connectBlack.svg";
 import WebPage from "../img/svg/webPageBlack.svg";
+import EventListView from "../components/eventListView";
+import EventLoopBlock from "../components/events/eventLoopBlock";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT -------------------------------------------------------------------
@@ -71,7 +73,7 @@ const Event = ({ state, actions, libraries }) => {
     contact_allow_attachments,
   } = event.acf;
   const { title } = event;
-
+  console.log(event.acf);
   // SERVERS ----------------------------------------------
   const ServeTitle = () => {
     if (!title) return null;
@@ -349,7 +351,30 @@ const Event = ({ state, actions, libraries }) => {
               <ServeSummary />
               <ServeSocials />
             </div>
-            <div className="shadow"></div>
+            <div className="shadow">
+              <div style={{ padding: "1em" }}>
+                <h3>Related events</h3>
+              </div>
+              <EventLoopBlock
+                block={{
+                  acf_fc_layout: "events_loop_block",
+                  background_colour: "transparent",
+                  disable_vertical_padding: false,
+                  add_search_function: false,
+                  title: "",
+                  body: "",
+                  locations: false,
+                  grades: false,
+                  event_type: false,
+                  layout: "layout_one",
+                  view_all_link: false,
+                  grade_filter: "All Levels",
+                  post_limit: "3",
+                  colour: "#F5F6F7",
+                }}
+                recommended_events
+              />
+            </div>
           </div>
         </div>
       </div>

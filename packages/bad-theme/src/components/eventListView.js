@@ -10,7 +10,14 @@ import { setGoToAction, muiQuery } from "../context";
 
 const DATE_MODULE = date;
 
-const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
+const EventListView = ({
+  state,
+  actions,
+  libraries,
+  block,
+  removeMargin,
+  recommended_events,
+}) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
   const { sm, md, lg, xl } = muiQuery();
@@ -187,19 +194,23 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
       >
         <ServeDate />
         <ServeTitle />
-        {!lg ? <ServeInformation /> : null}
-        {!lg ? <ServeSummary /> : null}
+        {!lg ? !recommended_events ? <ServeInformation /> : null : null}
+        {!lg ? !recommended_events ? <ServeSummary /> : null : null}
+        <hr />
       </div>
     );
   };
 
   // RETURN ---------------------------------------------------
   return (
-    <div style={{ margin: MARGIN }} class="shadow-on-hover">
+    <div
+      style={{ margin: !recommended_events ? MARGIN : 10 }}
+      class="shadow-on-hover"
+    >
       <div
         style={{
-          height: `${HEIGHT}px`,
-          backgroundColor: colors.silverFillOne,
+          height: !recommended_events ? `${HEIGHT}px` : null,
+          backgroundColor: !recommended_events ? colors.silverFillOne : "white",
         }}
       >
         <div
@@ -207,7 +218,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
           onClick={() => setGoToAction({ path: block.link, actions })}
         >
           <ServeCardContent />
-          <ServeCardImage />
+          {!recommended_events ? <ServeCardImage /> : null}
         </div>
       </div>
     </div>
