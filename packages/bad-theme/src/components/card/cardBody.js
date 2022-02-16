@@ -120,9 +120,9 @@ const CardBody = ({
     return (
       <div className="flex" style={{ paddingTop: `1em` }}>
         {date.map((block, key) => {
-          const { date, end_time, start_time } = block;
+          const { end_time, start_time } = block;
 
-          const dateObject = new Date(date);
+          const dateObject = new Date(block.date);
           const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
 
           return (
@@ -131,10 +131,10 @@ const CardBody = ({
               style={{
                 fontSize: 12,
                 fontWeight: "bold",
-                paddingRight: `1em`,
               }}
             >
               <Html2React html={formattedDate} />
+              {key + 1 < date.length ? " - " : null}
             </div>
           );
         })}

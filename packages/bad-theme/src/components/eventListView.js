@@ -76,9 +76,9 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
         <div>
           <div className={!lg ? "flex" : "flex-col"}>
             {date_time.map((block, key) => {
-              const { date, end_time, start_time } = block;
+              const { end_time, start_time } = block;
 
-              const dateObject = new Date(date);
+              const dateObject = new Date(block.date);
               const formattedDate = DATE_MODULE.format(
                 dateObject,
                 "DD MMM YYYY"
@@ -88,12 +88,12 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
                 <div
                   key={key}
                   style={{
-                    fontSize: 12,
+                    fontSize: !lg ? 16 : 12,
                     fontWeight: "bold",
-                    paddingRight: `1em`,
                   }}
                 >
                   <Html2React html={formattedDate} />
+                  {key + 1 < date_time.length ? "  -  " : null}
                 </div>
               );
             })}
