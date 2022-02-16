@@ -44,7 +44,6 @@ const PilsArchive = ({ state, actions, libraries }) => {
     }
 
     setPilList(Object.values(state.source.pils)); // add pill object to data array
-
     return () => {
       searchFilterRef.current = false; // clean up function
     };
@@ -52,7 +51,6 @@ const PilsArchive = ({ state, actions, libraries }) => {
   // DATA pre FETCH ----------------------------------------------------------------
 
   if (!pilList) return <Loading />;
-
   let ALPHABET = [];
   pilList.map((item) => {
     const pilTitle = item.title.rendered;
