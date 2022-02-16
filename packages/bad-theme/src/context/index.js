@@ -21,7 +21,10 @@ import {
   getUserDataByContactId,
 } from "./auth/actions";
 import { sendEmailEnquireAction } from "./auth/sendEnquire";
-import { getMembershipDataAction } from "./actions/memberships";
+import {
+  getMembershipDataAction,
+  handleApplyForMembershipAction,
+} from "./actions/memberships";
 import { getTweetsAction } from "./auth/getTweets";
 import { getFadAction } from "./auth/getFAD";
 import { updateProfileAction } from "./auth/updateProfile";
@@ -78,4 +81,5 @@ export {
   getHospitalsAction,
   getBADMembershipSubscriptionData,
   getMembershipDataAction,
+  handleApplyForMembershipAction,
 };

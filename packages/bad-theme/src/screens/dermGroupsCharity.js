@@ -51,21 +51,6 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   };
 
   // SERVERS ---------------------------------------------------
-  const ApplyForMembership = () => {
-    if (apply_for_membership === "Disabled" || !apply_for_membership)
-      return null;
-
-    return (
-      <div
-        className="blue-btn"
-        style={{ width: "fit-content", marginTop: marginVertical }}
-        onClick={handleApply}
-      >
-        <Html2React html={`Apply for ${apply_for_membership} membership`} />
-      </div>
-    );
-  };
-
   const ServeContent = () => {
     return (
       <div>
@@ -75,6 +60,22 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
         />
         <Html2React html={content.rendered} />
         <ApplyForMembership />
+      </div>
+    );
+  };
+
+  const ApplyForMembership = () => {
+    if (true) return null;
+
+    return (
+      <div>
+        <div
+          className="blue-btn"
+          style={{ width: "fit-content" }}
+          onClick={handleApply}
+        >
+          <Html2React html={`Apply for ${category_types} membership`} />
+        </div>
       </div>
     );
   };
@@ -90,7 +91,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
               dermGroupe={acf}
               colour={colors.primary}
               cardHeight="fit-content"
-              cardMinHeight={400}
+              cardMinHeight={300}
               shadow
             />
           </div>

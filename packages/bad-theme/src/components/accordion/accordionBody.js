@@ -16,9 +16,7 @@ import {
   useAppState,
   setGoToAction,
   sendEmailEnquireAction,
-  setUserStoreAction,
-  getTestUserAccountsAction,
-  getBADMembershipSubscriptionData,
+  handleApplyForMembershipAction,
 } from "../../context";
 
 const AccordionBody = ({
@@ -30,8 +28,8 @@ const AccordionBody = ({
   leadershipBlock,
   fundingBlock,
   uniqueId,
-  membershipApplications,
   setFetching,
+  membershipApplications,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -61,35 +59,15 @@ const AccordionBody = ({
 
   // HANDLERS ----------------------------------------------------
   const handleApply = async () => {
-    try {
-      // ⏬ get appropriate membership ID
-      const membershipData = await getBADMembershipSubscriptionData({
-        state,
-        category: "BAD",
-        type: category_types,
-      });
-      if (!membershipData) throw new Error("Failed to get membership data");
-
-      // ⏬ create user application record in Store
-      await setUserStoreAction({
-        state,
-        dispatch,
-        applicationData,
-        isActiveUser,
-        membershipApplication: membershipData,
-        data: {
-          bad_organisedfor: "810170000", // BAD members category
-          core_membershipsubscriptionplanid:
-            membershipData.core_membershipsubscriptionplanid, // type of membership for application
-          bad_applicationfor: "810170000", // silent assignment
-        },
-      });
-
-      if (isActiveUser)
-        setGoToAction({ path: `/membership/step-1-the-process/`, actions });
-    } catch (error) {
-      console.log("ERROR: ", error);
-    }
+    await handleApplyForMembershipAction({
+      state,
+      actions,
+      dispatch,
+      applicationData,
+      isActiveUser,
+      category: "BAD",
+      type: category_types, // application type name
+    });
   };
 
   const handleContactFormSubmit = async () => {
