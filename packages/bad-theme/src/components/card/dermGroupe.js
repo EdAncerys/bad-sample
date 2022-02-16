@@ -23,7 +23,7 @@ const DermGroupe = ({ state, actions, libraries, dermGroupe }) => {
     const alt = logo;
 
     return (
-      <div className="flex" style={{ paddingBottom: `2em` }}>
+      <div className="flex" style={{ paddingBottom: `2em`, margin: `auto` }}>
         <div style={{ height: `100%`, width: 200 }}>
           <Image
             src={logo}
