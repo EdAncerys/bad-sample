@@ -85,10 +85,10 @@ const AccordionBody = ({
       });
     } catch (error) {
       console.log("ERROR: ", error);
+    } finally {
+      if (isActiveUser)
+        setGoToAction({ path: `/membership/step-1-the-process/`, actions });
     }
-
-    if (isActiveUser)
-      setGoToAction({ path: `/membership/step-1-the-process/`, actions });
   };
 
   const handleContactFormSubmit = async () => {

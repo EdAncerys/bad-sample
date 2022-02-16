@@ -36,7 +36,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     document: "",
   });
   const [profilePhoto, setProfilePhoto] = useState(null);
-  const profilePhotoRef = useRef(null);
+  const documentRef = useRef(null);
 
   // ⏬ populate form data values from applicationData
   useEffect(() => {
@@ -87,7 +87,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   };
 
   const handleNext = async () => {
-    console.log(formData);
+    console.log(formData); // debug
 
     await setUserStoreAction({
       state,
@@ -102,9 +102,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   };
 
   const handleDocUploadChange = async () => {
-    let document = profilePhotoRef.current
-      ? profilePhotoRef.current.files[0]
-      : null;
+    let document = documentRef.current ? documentRef.current.files[0] : null;
     const objectURL = URL.createObjectURL(document);
     setProfilePhoto(objectURL);
 
@@ -198,13 +196,12 @@ const PersonalDetails = ({ state, actions, libraries }) => {
           </div>
 
           <input
-            ref={profilePhotoRef}
+            ref={documentRef}
             onChange={handleDocUploadChange}
             type="file"
-            className="form-control"
+            className="form-control input"
             placeholder="Profile Photo"
             accept="image/*"
-            style={styles.input}
           />
         </div>
 

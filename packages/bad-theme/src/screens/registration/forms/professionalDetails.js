@@ -24,7 +24,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     if (!applicationData) return "";
     let applicationCategory = "";
     applicationData.map((data) => {
-      if (data.name === "bad_organisedfor") applicationCategory = data.value;
+      if (data.bad_categorytype) applicationCategory = data.bad_categorytype;
     });
 
     return applicationCategory;
@@ -39,14 +39,14 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     bad_proposer1: "",
     bad_proposer2: "",
     bad_mrpcqualified: "",
-    cvDocument: "",
+    document: "",
     currentGrade: "",
     bad_medicalschool: "",
   });
   const [hospitalData, setHospitalData] = useState(null);
   const [selectedHospital, setSelectedHospital] = useState(null);
 
-  const cvRef = useRef(null);
+  const documentRef = useRef(null);
   const hospitalSearchRef = useRef("");
 
   // ⏬ populate form data values from applicationData
@@ -121,35 +121,36 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   };
 
   const handleNext = async () => {
-    await setUserStoreAction({
-      state,
-      dispatch,
-      applicationData,
-      isActiveUser,
-      data: formData,
-    });
+    console.log(formData); // debug
 
-    let slug = `/membership/final-step-thank-you/`;
-    if (category === "810170001") slug = `/membership/step-5-sig-questions/`;
-    if (isActiveUser) setGoToAction({ path: slug, actions });
+    // await setUserStoreAction({
+    //   state,
+    //   dispatch,
+    //   applicationData,
+    //   isActiveUser,
+    //   data: formData,
+    // });
+
+    // let slug = `/membership/final-step-thank-you/`;
+    // if (category === "810170001") slug = `/membership/step-5-sig-questions/`;
+    // if (isActiveUser) setGoToAction({ path: slug, actions });
   };
 
   const handleDocUploadChange = async () => {
-    let document = cvRef.current.files[0];
-    let documentUrl = "";
-    // if (document)
-    //   documentUrl = await sendFileToS3Action({
-    //     state,
-    //     dispatch,
-    //     attachments: document,
-    //   });
-    console.log("documentUrl", documentUrl); // debug
-    console.log(formData); // debug
+    let document = documentRef.current ? documentRef.current.files[0] : null;
 
-    // setFormData((prevFormData) => ({
-    //   ...prevFormData,
-    //   cvDocument: document,
-    // }));
+    if (document)
+      document = await sendFileToS3Action({
+        state,
+        dispatch,
+        attachments: document,
+      });
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      ["document"]: document,
+    }));
+    console.log("document", document); // debug
   };
 
   const handleInputChange = (e) => {
@@ -369,7 +370,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
           <label className="required form-label">Upload Your CV</label>
           <input
-            ref={cvRef}
+            ref={documentRef}
             onChange={handleDocUploadChange}
             type="file"
             className="form-control input"

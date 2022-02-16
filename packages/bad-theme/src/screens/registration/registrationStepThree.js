@@ -108,23 +108,30 @@ const RegistrationStepThree = ({ state, actions }) => {
         type: formData.bad_categorytype,
       });
       if (!membershipData) throw new Error("Failed to get membership data");
+      console.log("membershipData", membershipData); // debug
 
       // ⏬ create user application record in Store
-      // await setUserStoreAction({
-      //   state,
-      //   dispatch,
-      //   applicationData,
-      //   isActiveUser,
-      //   membershipApplication: membershipData,
-      //   data: {
-      //     bad_organisedfor: "810170000", // BAD members category
-      //     core_membershipsubscriptionplanid:
-      //       membershipData.core_membershipsubscriptionplanid, // type of membership for application
-      //     bad_applicationfor: "810170000", // silent assignment
-      //   },
-      // });
+      await setUserStoreAction({
+        state,
+        dispatch,
+        applicationData,
+        isActiveUser,
+        membershipApplication: membershipData,
+        data: {
+          bad_organisedfor: formData.bad_organisedfor, // BAD members category
+          core_membershipsubscriptionplanid:
+            membershipData.core_membershipsubscriptionplanid, // type of membership for application
+          bad_applicationfor: "810170000", // silent assignment
+        },
+      });
     } catch (error) {
       console.log("ERROR: ", error);
+    } finally {
+      if (isActiveUser)
+        setGoToAction({
+          path: `/membership/step-4-professional-details/`,
+          actions,
+        });
     }
   };
 
@@ -177,25 +184,18 @@ const RegistrationStepThree = ({ state, actions }) => {
             <option value="" hidden>
               Membership Category
             </option>
-            <option value="Associate">Associate</option>
-            <option value="Associate Overseas">Associate Overseas</option>
-            <option value="Associate Trainee">Associate Trainee</option>
-            <option value="Career Grade">Career Grade</option>
-            <option value="GP">GP</option>
-            <option value="International">International</option>
-            <option value="Ordinary SAS">Ordinary SAS</option>
-            <option value="Ordinary">Ordinary</option>
-            <option value="Retired">Retired</option>
-            <option value="Retired No Journal">Retired No Journal</option>
-            <option value="Retired Overseas">Retired Overseas</option>
-            <option value="Retired Overseas No Journal">
-              Retired Overseas No Journal
-            </option>
-            <option value="Scientist and Allied Healthcare Professional">
-              Scientist and Allied Healthcare Professional
-            </option>
             <option value="Student">Student</option>
             <option value="Trainee">Trainee</option>
+            <option value="Associate Trainee">Associate Trainee</option>
+            <option value="Associate">Associate</option>
+            <option value="Associate Overseas">Associate Overseas</option>
+            <option value="GP">GP</option>
+            <option value="Career Grade">Career Grade</option>
+            <option value="Ordinary">Ordinary</option>
+            <option value="Ordinary SAS">Ordinary SAS</option>
+            <option value="Allied Healthcare Professional">
+              Allied Healthcare Professional
+            </option>
           </Form.Select>
         </div>
       );
