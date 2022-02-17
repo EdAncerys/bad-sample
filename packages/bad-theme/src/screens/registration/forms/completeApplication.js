@@ -11,6 +11,7 @@ import {
   setUserStoreAction,
   setGoToAction,
   setCompleteUserApplicationAction,
+  validateMembershipFormAction,
 } from "../../../context";
 
 const CompleteApplication = ({ state, actions, libraries }) => {
@@ -24,6 +25,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
     py3_constitutionagreement: "",
     privacyNotice: "",
   });
+  
   const [inputValidator, setInputValidator] = useState({
     bad_ethnicity: true,
     py3_constitutionagreement: true,
@@ -39,13 +41,6 @@ const CompleteApplication = ({ state, actions, libraries }) => {
       }));
     };
 
-    const handleSetInputData = ({ data, name }) => {
-      setInputValidator((prevFormData) => ({
-        ...prevFormData,
-        [name]: data[name],
-      }));
-    };
-
     if (!applicationData) return null;
     applicationData.map((data) => {
       if (data.name === "bad_ethnicity")
@@ -57,25 +52,11 @@ const CompleteApplication = ({ state, actions, libraries }) => {
     });
 
     // ⏬ validate inputs
-    if (!state.source.memberships)
-      await getMembershipDataAction({ state, actions });
-    const membershipTypes = Object.values(state.source.memberships);
-    if (!membershipTypes) return null;
-
-    membershipTypes.map((membership) => {
-      // validate application type and membership type SIG & BAD
-      const applicationType =
-        membership.acf.category_types === applicationData[0].bad_categorytype ||
-        membership.acf.category_types === applicationData[0]._bad_sigid_value;
-
-      if (membership.acf && applicationData && applicationType) {
-        const application = membership.acf;
-        // console.log(application); // debug
-
-        Object.keys(application).map((keyName) => {
-          handleSetInputData({ data: application, name: keyName });
-        });
-      }
+    validateMembershipFormAction({
+      state,
+      actions,
+      setData: setInputValidator,
+      applicationData,
     });
   }, []);
 

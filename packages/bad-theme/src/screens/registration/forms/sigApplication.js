@@ -10,7 +10,7 @@ import {
   setUserStoreAction,
   setGoToAction,
   getMembershipDataAction,
-  validateMembershipFormAction
+  validateMembershipFormAction,
 } from "../../../context";
 
 const SIGApplication = ({ state, actions, libraries }) => {
@@ -64,13 +64,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
       }));
     };
 
-    const handleSetInputData = ({ data, name }) => {
-      setInputValidator((prevFormData) => ({
-        ...prevFormData,
-        [name]: data[name],
-      }));
-    };
-
     if (!applicationData) return null;
     applicationData.map((data) => {
       if (data.name === "bad_qualifications")
@@ -99,25 +92,11 @@ const SIGApplication = ({ state, actions, libraries }) => {
     });
 
     // ⏬ validate inputs
-    if (!state.source.memberships)
-      await getMembershipDataAction({ state, actions });
-    const membershipTypes = Object.values(state.source.memberships);
-    if (!membershipTypes) return null;
-
-    membershipTypes.map((membership) => {
-      // validate application type and membership type SIG & BAD
-      const applicationType =
-        membership.acf.category_types === applicationData[0].bad_categorytype ||
-        membership.acf.category_types === applicationData[0]._bad_sigid_value;
-
-      if (membership.acf && applicationData && applicationType) {
-        const application = membership.acf;
-        // console.log(application); // debug
-
-        Object.keys(application).map((keyName) => {
-          handleSetInputData({ data: application, name: keyName });
-        });
-      }
+    validateMembershipFormAction({
+      state,
+      actions,
+      setData: setInputValidator,
+      applicationData,
     });
   }, []);
 

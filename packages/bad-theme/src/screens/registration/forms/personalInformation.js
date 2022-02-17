@@ -12,6 +12,7 @@ import {
   setUserStoreAction,
   sendFileToS3Action,
   setGoToAction,
+  validateMembershipFormAction,
 } from "../../../context";
 
 const PersonalDetails = ({ state, actions, libraries }) => {
@@ -34,6 +35,21 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     py3_addresszippostalcode: "",
     py3_addresscountry: "",
     document: "",
+  });
+  const [inputValidator, setInputValidator] = useState({
+    py3_title: true,
+    py3_firstname: true,
+    py3_lastname: true,
+    py3_gender: true,
+    py3_email: true,
+    py3_mobilephone: true,
+    py3_address1ine1: true,
+    py3_addressline2: true,
+    py3_addresstowncity: true,
+    py3_addresscountystate: true,
+    py3_addresszippostalcode: true,
+    py3_addresscountry: true,
+    document: true,
   });
   const [profilePhoto, setProfilePhoto] = useState(null);
   const documentRef = useRef(null);
@@ -71,6 +87,14 @@ const PersonalDetails = ({ state, actions, libraries }) => {
         handleSetData({ data, name: "py3_addresszippostalcode" });
       if (data.name === "py3_addresscountry")
         handleSetData({ data, name: "py3_addresscountry" });
+    });
+
+    // ⏬ validate inputs
+    validateMembershipFormAction({
+      state,
+      actions,
+      setData: setInputValidator,
+      applicationData,
     });
   }, []);
 
@@ -207,82 +231,108 @@ const PersonalDetails = ({ state, actions, libraries }) => {
 
         <form>
           <div style={{ padding: `0 1em 1em` }}>
-            <label className="required form-label">Title</label>
-            <Form.Select
-              name="py3_title"
-              value={formData.py3_title}
-              onChange={handleInputChange}
-              className="input"
-            >
-              <option value="" hidden>
-                Professor, Dr, Mr, Miss, Ms
-              </option>
-              <option value="Dr">Dr</option>
-              <option value="Mr">Mr</option>
-              <option value="Miss">Miss</option>
-              <option value="Ms">Ms</option>
-              <option value="Professor">Professor</option>
-            </Form.Select>
+            {inputValidator.py3_title && (
+              <div>
+                <label className="required form-label">Title</label>
+                <Form.Select
+                  name="py3_title"
+                  value={formData.py3_title}
+                  onChange={handleInputChange}
+                  className="input"
+                >
+                  <option value="" hidden>
+                    Professor, Dr, Mr, Miss, Ms
+                  </option>
+                  <option value="Dr">Dr</option>
+                  <option value="Mr">Mr</option>
+                  <option value="Miss">Miss</option>
+                  <option value="Ms">Ms</option>
+                  <option value="Professor">Professor</option>
+                </Form.Select>
+              </div>
+            )}
 
-            <label className="form-label required">First Name</label>
-            <input
-              name="py3_firstname"
-              value={formData.py3_firstname}
-              onChange={handleInputChange}
-              type="text"
-              className="form-control input"
-              placeholder="First Name"
-            />
+            {inputValidator.py3_firstname && (
+              <div>
+                <label className="form-label required">First Name</label>
+                <input
+                  name="py3_firstname"
+                  value={formData.py3_firstname}
+                  onChange={handleInputChange}
+                  type="text"
+                  className="form-control input"
+                  placeholder="First Name"
+                />
+              </div>
+            )}
 
-            <label className="form-label required">Last Name</label>
-            <input
-              name="py3_lastname"
-              value={formData.py3_lastname}
-              onChange={handleInputChange}
-              type="text"
-              className="form-control input"
-              placeholder="Last Name"
-            />
+            {inputValidator.py3_lastname && (
+              <div>
+                <label className="form-label required">Last Name</label>
+                <input
+                  name="py3_lastname"
+                  value={formData.py3_lastname}
+                  onChange={handleInputChange}
+                  type="text"
+                  className="form-control input"
+                  placeholder="Last Name"
+                />
+              </div>
+            )}
 
-            <label className="required form-label">Gender</label>
-            <Form.Select
-              name="py3_gender"
-              value={formData.py3_gender}
-              onChange={handleInputChange}
-              className="input"
-            >
-              <option value="" hidden>
-                Male, Female, Transgender, Prefer Not To Answer
-              </option>
-              <option value="215500000">Male</option>
-              <option value="215500001">Female</option>
-              <option value="215500004">Transgender Male</option>
-              <option value="215500003">Transgender Female</option>
-              <option value="215500005">Gender Variant/Non-Conforming</option>
-              <option value="215500006">Not Listed</option>
-              <option value="215500007">Prefer Not To Answer</option>
-              <option value="215500002">Unknown</option>
-            </Form.Select>
+            {inputValidator.py3_gender && (
+              <div>
+                <label className="required form-label">Gender</label>
+                <Form.Select
+                  name="py3_gender"
+                  value={formData.py3_gender}
+                  onChange={handleInputChange}
+                  className="input"
+                >
+                  <option value="" hidden>
+                    Male, Female, Transgender, Prefer Not To Answer
+                  </option>
+                  <option value="215500000">Male</option>
+                  <option value="215500001">Female</option>
+                  <option value="215500004">Transgender Male</option>
+                  <option value="215500003">Transgender Female</option>
+                  <option value="215500005">
+                    Gender Variant/Non-Conforming
+                  </option>
+                  <option value="215500006">Not Listed</option>
+                  <option value="215500007">Prefer Not To Answer</option>
+                  <option value="215500002">Unknown</option>
+                </Form.Select>
+              </div>
+            )}
 
-            <label className="form-label required">Email</label>
-            <input
-              name="py3_email"
-              value={formData.py3_email}
-              onChange={handleInputChange}
-              type="text"
-              className="form-control input"
-              placeholder="Email"
-            />
+            {inputValidator.py3_email && (
+              <div>
+                <label className="form-label required">Email</label>
+                <input
+                  name="py3_email"
+                  value={formData.py3_email}
+                  onChange={handleInputChange}
+                  type="text"
+                  className="form-control input"
+                  placeholder="Email"
+                />
+              </div>
+            )}
 
-            <label className="form-label required">Mobile Number</label>
-            <input
-              name="py3_mobilephone"
-              value={formData.py3_mobilephone}
-              onChange={handleInputChange}
-              type="text"
-              className="form-control input"
-              placeholder="Mobile Number"
-            />
+            {inputValidator.py3_mobilephone && (
+              <div>
+                <label className="form-label required">Mobile Number</label>
+                <input
+                  name="py3_mobilephone"
+                  value={formData.py3_mobilephone}
+                  onChange={handleInputChange}
+                  type="text"
+                  className="form-control input"
+                  placeholder="Mobile Number"
+                />
+              </div>
+            )}
           </div>
 
           <div
@@ -292,55 +342,70 @@ const PersonalDetails = ({ state, actions, libraries }) => {
               gap: 10,
             }}
           >
-            <label className="required form-label">Home Address</label>
-            <input
-              name="py3_address1ine1"
-              value={formData.py3_address1ine1}
-              onChange={handleInputChange}
-              type="text"
-              className="form-control input"
-              placeholder="Address Line 1"
-            />
-            <input
-              name="py3_addressline2"
-              value={formData.py3_addressline2}
-              onChange={handleInputChange}
-              type="text"
-              className="form-control input"
-              placeholder="Address Line 2"
-            />
-            <input
-              name="py3_addresstowncity"
-              value={formData.py3_addresstowncity}
-              onChange={handleInputChange}
-              type="text"
-              className="form-control input"
-              placeholder="City"
-            />
-            <input
-              name="py3_addresscountystate"
-              value={formData.py3_addresscountystate}
-              onChange={handleInputChange}
-              type="text"
-              className="form-control input"
-              placeholder="County/State"
-            />
-            <input
-              name="py3_addresszippostalcode"
-              value={formData.py3_addresszippostalcode}
-              onChange={handleInputChange}
-              type="text"
-              className="form-control input"
-              placeholder="Postcode/Zip"
-            />
-            <input
-              name="py3_addresscountry"
-              value={formData.py3_addresscountry}
-              onChange={handleInputChange}
-              type="text"
-              className="form-control input"
-              placeholder="Country"
-            />
+            {inputValidator.py3_address1ine1 && (
+              <div>
+                <label className="required form-label">Home Address</label>
+                <input
+                  name="py3_address1ine1"
+                  value={formData.py3_address1ine1}
+                  onChange={handleInputChange}
+                  type="text"
+                  className="form-control input"
+                  placeholder="Address Line 1"
+                />
+              </div>
+            )}
+
+            {inputValidator.py3_addressline2 && (
+              <input
+                name="py3_addressline2"
+                value={formData.py3_addressline2}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Address Line 2"
+              />
+            )}
+            {inputValidator.py3_addresstowncity && (
+              <input
+                name="py3_addresstowncity"
+                value={formData.py3_addresstowncity}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="City"
+              />
+            )}
+            {inputValidator.py3_addresscountystate && (
+              <input
+                name="py3_addresscountystate"
+                value={formData.py3_addresscountystate}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="County/State"
+              />
+            )}
+            {inputValidator.py3_addresszippostalcode && (
+              <input
+                name="py3_addresszippostalcode"
+                value={formData.py3_addresszippostalcode}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Postcode/Zip"
+              />
+            )}
+            {inputValidator.py3_addresscountry && (
+              <input
+                name="py3_addresscountry"
+                value={formData.py3_addresscountry}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Country"
+              />
+            )}
           </div>
         </form>
       </div>

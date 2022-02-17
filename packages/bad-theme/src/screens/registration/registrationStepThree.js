@@ -11,7 +11,6 @@ import {
   useAppState,
   setGoToAction,
   handleApplyForMembershipAction,
-  getMembershipDataAction,
 } from "../../context";
 
 const RegistrationStepThree = ({ state, actions }) => {
@@ -25,6 +24,11 @@ const RegistrationStepThree = ({ state, actions }) => {
   const marginVertical = state.theme.marginVertical;
 
   const [formData, setFormData] = useState({
+    bad_organisedfor: "",
+    bad_categorytype: "",
+  });
+
+  const [inputValidator, setInputValidator] = useState({
     bad_organisedfor: "",
     bad_categorytype: "",
   });
