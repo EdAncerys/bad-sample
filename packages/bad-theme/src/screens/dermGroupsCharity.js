@@ -75,7 +75,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
 
     let applicationName = "SIG Application";
     if (isSIGApplication.acf)
-      applicationName = isSIGApplication.acf.category_types;
+      applicationName = isSIGApplication.acf.category_types.split(":")[1]; // remove membership type prefix
 
     return (
       <div>

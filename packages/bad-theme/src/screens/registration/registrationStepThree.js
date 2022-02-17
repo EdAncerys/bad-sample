@@ -168,7 +168,8 @@ const RegistrationStepThree = ({ state, actions }) => {
             <option value="Student">Student</option>
             <option value="Honorary">Honorary</option>
             <option value="Honorary Overseas">Honorary Overseas</option>
-            <option value="Retired">Retired</option>
+            {/* only for change of membership */}
+            {/* <option value="Retired">Retired</option> */}
           </Form.Select>
         </div>
       );
