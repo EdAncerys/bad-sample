@@ -1,4 +1,4 @@
-import { useState, useRef, useLayoutEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { connect } from "frontity";
 
 import { v4 as uuidv4 } from "uuid";
@@ -41,6 +41,16 @@ const AccordionComponent = ({
       const blockId = uuidv4(); // add unique id
       setUniqueId(blockId);
     }, []);
+
+    useEffect(() => {
+      // set active accordion
+      const accordionBody = document.querySelector(
+        `#accordion-body-${uniqueId}`
+      );
+
+      if (accordionBody && block.block.is_active)
+        accordionBody.classList.add("show");
+    }, [uniqueId]);
 
     if (!uniqueId) return <Loading />;
 
@@ -114,7 +124,8 @@ const AccordionComponent = ({
   return (
     <div style={{ margin: `0 ${marginHorizontal}px` }}>
       {accordion_item.map((block, key) => {
-        console.log(block);
+        // console.log(block); // debug
+
         return <ServeAccordion key={key} block={block} />;
       })}
     </div>
