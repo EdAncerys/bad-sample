@@ -1,3 +1,5 @@
+//
+
 import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
@@ -25,7 +27,7 @@ const LoginModal = ({ state, actions }) => {
   const iFrameRef = useRef(null);
 
   useEffect(async () => {
-    console.log("LoginModal useEffect triggered", id); // debug
+    console.log("useEffect trigeted. ID ", id);
     if (id) await loginAction({ state, dispatch, transId: id });
 
     return () => {
@@ -34,12 +36,15 @@ const LoginModal = ({ state, actions }) => {
   }, [id]);
 
   useLayoutEffect(() => {
-    iFrameRef.current = null;
+    iFrameRef.current = false;
   }, [loginModalAction]);
 
   // HANDLERS ----------------------------------------------------
-  const iFrameHandler = async () => {
+  const iFrameHandler = async() => {
     console.log("iFrame iFrameHandler triggered...");
+    console.log("iFramePath", iFrameRef.current);
+
+
 
     // if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
     //   const jwt = await authenticateAppAction({ state, dispatch });
@@ -64,15 +69,16 @@ const LoginModal = ({ state, actions }) => {
       // )
       //   throw new Error("Wrong redirection url");
 
-      const iqs = new URLSearchParams(myIframe.contentWindow.location.search);
-      
+      const iqs = new URLSearchParams(
+        iFrameRef.current.contentWindow.location.search
+      );
       console.log("iFrameRef iqs", iqs);
       if (iqs && iqs.has("transId")) {
         const transId = iqs.get("transId");
         console.log("*** WE FOUND A TRANSACTION ID IN THE IFRAME ** ", transId);
         setId(transId);
       } else {
-        console.log("CANT FIND TRANS ID");
+        console.log("Error getting transId from iFrame");
       }
     } catch (e) {
       console.log("*** ERROR GETTING IFRAME CONTENT - CROSS-ORIGIN **");
