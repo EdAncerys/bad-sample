@@ -24,6 +24,7 @@ import { sendEmailEnquireAction } from "./auth/sendEnquire";
 import {
   getMembershipDataAction,
   handleApplyForMembershipAction,
+  validateMembershipFormAction,
 } from "./actions/memberships";
 import { getTweetsAction } from "./auth/getTweets";
 import { getFadAction } from "./auth/getFAD";
@@ -82,4 +83,5 @@ export {
   getBADMembershipSubscriptionData,
   getMembershipDataAction,
   handleApplyForMembershipAction,
+  validateMembershipFormAction,
 };

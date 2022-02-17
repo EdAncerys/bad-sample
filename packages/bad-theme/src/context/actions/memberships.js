@@ -18,6 +18,44 @@ export const getMembershipDataAction = async ({ state, actions }) => {
   }
 };
 
+export const validateMembershipFormAction = async ({
+  state,
+  actions,
+  setData,
+  applicationData,
+}) => {
+  const handleSetInputData = ({ data, name }) => {
+    setData((prevFormData) => ({
+      ...prevFormData,
+      [name]: data[name],
+    }));
+  };
+
+  // ⏬ validate inputs
+  if (!state.source.memberships)
+    await getMembershipDataAction({ state, actions });
+  const membershipTypes = Object.values(state.source.memberships);
+
+  if (!membershipTypes) return null;
+  if (!applicationData) return null;
+
+  membershipTypes.map((membership) => {
+    // validate application type against store object
+    const applicationType =
+      membership.acf.category_types === applicationData[0].bad_categorytype ||
+      membership.acf.category_types === applicationData[0]._bad_sigid_value;
+
+    if (applicationType) {
+      const applicationForm = membership.acf;
+      // console.log(applicationForm); // debug
+
+      Object.keys(applicationForm).map((keyName) => {
+        handleSetInputData({ data: applicationForm, name: keyName });
+      });
+    }
+  });
+};
+
 export const handleApplyForMembershipAction = async ({
   state,
   actions,

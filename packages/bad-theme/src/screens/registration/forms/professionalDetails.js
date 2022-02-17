@@ -13,6 +13,7 @@ import {
   getHospitalsAction,
   setGoToAction,
   getMembershipDataAction,
+  validateMembershipFormAction,
 } from "../../../context";
 
 const ProfessionalDetails = ({ state, actions, libraries }) => {
@@ -72,13 +73,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       }));
     };
 
-    const handleSetInputData = ({ data, name }) => {
-      setInputValidator((prevFormData) => ({
-        ...prevFormData,
-        [name]: data[name],
-      }));
-    };
-
     // ⏬ populate form data values from applicationData
     if (!applicationData) return null;
 
@@ -102,25 +96,11 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     });
 
     // ⏬ validate inputs
-    if (!state.source.memberships)
-      await getMembershipDataAction({ state, actions });
-    const membershipTypes = Object.values(state.source.memberships);
-    if (!membershipTypes) return null;
-
-    membershipTypes.map((membership) => {
-      // validate application type and membership type SIG & BAD
-      const applicationType =
-        membership.acf.category_types === applicationData[0].bad_categorytype ||
-        membership.acf.category_types === applicationData[0]._bad_sigid_value;
-
-      if (membership.acf && applicationData && applicationType) {
-        const application = membership.acf;
-        // console.log(application); // debug
-
-        Object.keys(application).map((keyName) => {
-          handleSetInputData({ data: application, name: keyName });
-        });
-      }
+    validateMembershipFormAction({
+      state,
+      actions,
+      setData: setInputValidator,
+      applicationData,
     });
   }, []);
 
