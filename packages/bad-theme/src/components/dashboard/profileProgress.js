@@ -18,6 +18,26 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
   const ICON_WIDTH = 30;
 
+  const [applicationStep, setStep] = useState("");
+
+  useEffect(() => {
+    if (!applicationData) return null;
+
+    let progressName = "Start new the application";
+    if (applicationData[0].stepOne) progressName = "Step 1 - The Process";
+    if (applicationData[0].stepTwo)
+      progressName = "Step 2 - Personal Information";
+    if (applicationData[0].stepThree)
+      progressName = "Step 3 - Category Selection";
+    if (applicationData[0].stepFour)
+      progressName = "Step 4 - Professional Details";
+    if (applicationData[0].stepFive) progressName = "Step 5 - SIG Questions";
+    if (applicationData[0].applicationComplete)
+      progressName = "Application Complete";
+
+    setStep(progressName);
+  }, [applicationData]);
+
   // HELPERS ----------------------------------------------
   const handleApply = () => {
     let path = `/membership/step-1-the-process/`;
@@ -141,7 +161,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
             justifyItems: "center",
           }}
         >
-          Application Progress - Step 3 - Category Selection
+          Application Progress - <span>{applicationStep}</span>
         </div>
         <ServeActions />
       </div>

@@ -62,22 +62,26 @@ const CompleteApplication = ({ state, actions, libraries }) => {
 
   // HANDLERS --------------------------------------------
   const handleComplete = async () => {
-    await setUserStoreAction({
-      state,
-      dispatch,
-      applicationData,
-      isActiveUser,
-      membershipApplication: { applicationComplete: true }, // set stepOne to complete
-      data: formData,
-    });
+    try {
+      await setUserStoreAction({
+        state,
+        dispatch,
+        applicationData,
+        isActiveUser,
+        membershipApplication: { applicationComplete: true }, // set stepOne to complete
+        data: formData,
+      });
 
-    await setCompleteUserApplicationAction({
-      state,
-      isActiveUser,
-    });
+      await setCompleteUserApplicationAction({
+        state,
+        isActiveUser,
+      });
 
-    let slug = `/membership/`;
-    if (isActiveUser) setGoToAction({ path: slug, actions });
+      let slug = `/dashboard/`;
+      if (isActiveUser) setGoToAction({ path: slug, actions });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleInputChange = (e) => {

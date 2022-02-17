@@ -42,20 +42,20 @@ const LoginModal = ({ state, actions }) => {
   }, [loginModalAction]);
 
   // HANDLERS ----------------------------------------------------
-  const iFrameHandler = (e) => {
+  const iFrameHandler = async (e) => {
     const iFrame = e.currentTarget;
 
-    // if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
-    //   const jwt = await authenticateAppAction({ state, dispatch });
-    //   await getUserDataByContactId({
-    //     state,
-    //     dispatch,
-    //     jwt,
-    //     contactid: "cc9a332a-3672-ec11-8943-000d3a43c136",
-    //   });
-    //   setLoginModalAction({ dispatch, loginModalAction: false });
-    //   return;
-    // }
+    if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
+      const jwt = await authenticateAppAction({ state, dispatch });
+      await getUserDataByContactId({
+        state,
+        dispatch,
+        jwt,
+        contactid: "cc9a332a-3672-ec11-8943-000d3a43c136",
+      });
+      setLoginModalAction({ dispatch, loginModalAction: false });
+      return;
+    }
 
     try {
       const iFramePath = iFrame.contentWindow.location.pathname;
@@ -79,7 +79,7 @@ const LoginModal = ({ state, actions }) => {
       }
     } catch (error) {
       console.log("*** ERROR GETTING IFRAME CONTENT - CROSS-ORIGIN **");
-      console.log(error);
+      // console.log(error); // debug
     }
   };
 
