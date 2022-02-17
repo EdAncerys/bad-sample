@@ -31,7 +31,7 @@ const Event = ({ state, actions, libraries }) => {
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-
+  console.log("ALL EVENT DATA", event);
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
     document.documentElement.scrollTop = 0; // for safari
@@ -368,7 +368,7 @@ const Event = ({ state, actions, libraries }) => {
                   event_type: false,
                   layout: "layout_one",
                   view_all_link: false,
-                  grade_filter: "All Levels",
+                  passed_grade_filter_id: event.event_grade[0],
                   post_limit: "3",
                   colour: "#F5F6F7",
                 }}

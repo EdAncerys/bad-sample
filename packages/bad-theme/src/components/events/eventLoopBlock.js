@@ -31,6 +31,7 @@ const EventLoopBlock = ({
     grade_filter,
     title,
     colour,
+    passed_grade_filter_id,
   } = block;
 
   const [eventList, setEventList] = useState(null); // event data
@@ -69,8 +70,11 @@ const EventLoopBlock = ({
     )[0];
 
     if (GRADE_FILTER_ID) GRADE_FILTER_ID = GRADE_FILTER_ID.id;
-    if (post_limit) EVENT_LIST = EVENT_LIST.slice(0, Number(post_limit)); // apply limit on posts
+    if (passed_grade_filter_id) GRADE_FILTER_ID = passed_grade_filter_id;
 
+    if (post_limit) EVENT_LIST = EVENT_LIST.slice(0, Number(post_limit)); // apply limit on posts
+    if (passed_grade_filter_id && EVENT_LIST.length < post_limit)
+      GRADE_FILTER_ID = null;
     setGradeFilterId(GRADE_FILTER_ID);
 
     // sort events in order by date accenting from
