@@ -14,11 +14,13 @@ import {
   setGoToAction,
   getMembershipDataAction,
   validateMembershipFormAction,
+  useIsMounted,
 } from "../../../context";
 
 const ProfessionalDetails = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
+  const isMounted = useIsMounted();
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser } = useAppState();
 
@@ -64,6 +66,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
   const documentRef = useRef(null);
   const hospitalSearchRef = useRef("");
+  const useEffectRef = useRef(false);
 
   useEffect(async () => {
     const handleSetFormData = ({ data, name }) => {
@@ -96,12 +99,14 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     });
 
     // ⏬ validate inputs
-    validateMembershipFormAction({
+    await validateMembershipFormAction({
       state,
       actions,
       setData: setInputValidator,
       applicationData,
     });
+
+    if (isMounted.current) useEffectRef.current = !useEffectRef.current;
   }, []);
 
   // HANDLERS --------------------------------------------
@@ -160,21 +165,22 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     if (isActiveUser) setGoToAction({ path: slug, actions });
   };
 
-  const handleDocUploadChange = async () => {
-    let document = documentRef.current ? documentRef.current.files[0] : null;
+  const handleDocUploadChange = async (e) => {
+    let document = e.target.files[0];
+    // let document = documentRef.current ? documentRef.current.files[0] : null;
 
-    // useEffect via useRef to avoid re-rendering
-    // if (document)
-    //   document = await sendFileToS3Action({
-    //     state,
-    //     dispatch,
-    //     attachments: document,
-    //   });
+    if (document)
+      document = await sendFileToS3Action({
+        state,
+        dispatch,
+        attachments: document,
+      });
 
     setFormData((prevFormData) => ({
       ...prevFormData,
       ["document"]: document,
     }));
+    console.log("document", e.target); // debug
     console.log("document", document); // debug
   };
 

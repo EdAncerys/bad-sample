@@ -209,7 +209,9 @@ const AccordionBody = ({
   };
 
   const ServeGoToLink = () => {
-    if (!link) return null;
+    if (!link || guidelines) return null;
+
+    console.log(link);
 
     let linkLabel = "External Link";
     if (link_label) linkLabel = link_label;

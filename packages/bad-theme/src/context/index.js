@@ -45,6 +45,7 @@ import {
   getCEDFeedAction,
   getSHDFeedAction,
 } from "./auth/rssFeed";
+import { useIsMounted } from "../helpers/useIsMounted";
 
 export {
   AppProvider,
@@ -84,4 +85,5 @@ export {
   getMembershipDataAction,
   handleApplyForMembershipAction,
   validateMembershipFormAction,
+  useIsMounted,
 };
