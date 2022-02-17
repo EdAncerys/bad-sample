@@ -54,6 +54,7 @@ const Profile = ({ state, actions, libraries, block }) => {
 
     return (
       <div
+        className="primary-title"
         style={{
           fontSize: 16,
           fontWeight: "regular",
