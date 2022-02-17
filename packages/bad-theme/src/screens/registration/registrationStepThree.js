@@ -155,18 +155,20 @@ const RegistrationStepThree = ({ state, actions }) => {
             <option value="" hidden>
               Membership Category
             </option>
-            <option value="Student">Student</option>
+            <option value="Ordinary">Ordinary</option>
+            <option value="Ordinary SAS">Ordinary SAS</option>
             <option value="Trainee">Trainee</option>
             <option value="Associate Trainee">Associate Trainee</option>
             <option value="Associate">Associate</option>
             <option value="Associate Overseas">Associate Overseas</option>
             <option value="GP">GP</option>
-            <option value="Career Grade">Career Grade</option>
-            <option value="Ordinary">Ordinary</option>
-            <option value="Ordinary SAS">Ordinary SAS</option>
-            <option value="Allied Healthcare Professional">
-              Allied Healthcare Professional
+            <option value="Scientist and Allied Health Care Professionals">
+              Scientist and Allied Health Care Professionals
             </option>
+            <option value="Student">Student</option>
+            <option value="Honorary">Honorary</option>
+            <option value="Honorary Overseas">Honorary Overseas</option>
+            <option value="Retired">Retired</option>
           </Form.Select>
         </div>
       );
