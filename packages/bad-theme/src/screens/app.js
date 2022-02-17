@@ -37,7 +37,6 @@ import Covid from "./covid";
 import Error from "./error";
 import Loading from "../components/loading";
 import BlockWrapper from "../components/blockWrapper";
-import { handleGetCookie } from "../helpers/cookie";
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, useAppState } from "../context";
 import { useCookies } from "react-cookie";

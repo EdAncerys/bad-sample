@@ -25,6 +25,7 @@ const LoginModal = ({ state, actions }) => {
   const iFrameRef = useRef(null);
 
   useEffect(async () => {
+    console.log("LoginModal useEffect triggered", id); // debug
     if (id) await loginAction({ state, dispatch, transId: id });
 
     return () => {
@@ -40,17 +41,17 @@ const LoginModal = ({ state, actions }) => {
   const iFrameHandler = async () => {
     console.log("iFrame iFrameHandler triggered...");
 
-    if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
-      const jwt = await authenticateAppAction({ state, dispatch });
-      await getUserDataByContactId({
-        state,
-        dispatch,
-        jwt,
-        contactid: "cc9a332a-3672-ec11-8943-000d3a43c136",
-      });
-      setLoginModalAction({ dispatch, loginModalAction: false });
-      return;
-    }
+    // if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
+    //   const jwt = await authenticateAppAction({ state, dispatch });
+    //   await getUserDataByContactId({
+    //     state,
+    //     dispatch,
+    //     jwt,
+    //     contactid: "cc9a332a-3672-ec11-8943-000d3a43c136",
+    //   });
+    //   setLoginModalAction({ dispatch, loginModalAction: false });
+    //   return;
+    // }
 
     try {
       const iFramePath = iFrameRef.current.contentWindow.location.pathname;
@@ -63,14 +64,15 @@ const LoginModal = ({ state, actions }) => {
       // )
       //   throw new Error("Wrong redirection url");
 
-      const iqs = new URLSearchParams(
-        iFrameRef.current.contentWindow.location.search
-      );
+      const iqs = new URLSearchParams(myIframe.contentWindow.location.search);
+      
       console.log("iFrameRef iqs", iqs);
       if (iqs && iqs.has("transId")) {
         const transId = iqs.get("transId");
         console.log("*** WE FOUND A TRANSACTION ID IN THE IFRAME ** ", transId);
         setId(transId);
+      } else {
+        console.log("CANT FIND TRANS ID");
       }
     } catch (e) {
       console.log("*** ERROR GETTING IFRAME CONTENT - CROSS-ORIGIN **");
