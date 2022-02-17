@@ -18,7 +18,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
   const ICON_WIDTH = 30;
 
-  const [applicationStep, setStep] = useState("Start new the application");
+  const [applicationStep, setStep] = useState("Start new application");
 
   useEffect(() => {
     if (!applicationData) return null;
