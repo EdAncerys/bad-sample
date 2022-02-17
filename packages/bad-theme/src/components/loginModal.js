@@ -27,8 +27,10 @@ const LoginModal = ({ state, actions }) => {
   const iFrameRef = useRef(null);
 
   useEffect(async () => {
+    if (!id) return null;
+
     console.log("useEffect trigeted. ID ", id);
-    if (id) await loginAction({ state, dispatch, transId: id });
+    await loginAction({ state, dispatch, transId: id });
 
     return () => {
       iFrameRef.current = false; // clean up function
@@ -36,15 +38,12 @@ const LoginModal = ({ state, actions }) => {
   }, [id]);
 
   useLayoutEffect(() => {
-    iFrameRef.current = false;
+    setId(null);
   }, [loginModalAction]);
 
   // HANDLERS ----------------------------------------------------
-  const iFrameHandler = async() => {
-    console.log("iFrame iFrameHandler triggered...");
-    console.log("iFramePath", iFrameRef.current);
-
-
+  const iFrameHandler = (e) => {
+    const iFrame = e.currentTarget;
 
     // if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
     //   const jwt = await authenticateAppAction({ state, dispatch });
@@ -59,8 +58,8 @@ const LoginModal = ({ state, actions }) => {
     // }
 
     try {
-      const iFramePath = iFrameRef.current.contentWindow.location.pathname;
-      console.log("iFramePath", iFramePath);
+      const iFramePath = iFrame.contentWindow.location.pathname;
+      // console.log("iFramePath", iFramePath); // debug
 
       // ⏬⏬  CORS validation on old type browsers ⏬⏬
       // if (
@@ -69,9 +68,7 @@ const LoginModal = ({ state, actions }) => {
       // )
       //   throw new Error("Wrong redirection url");
 
-      const iqs = new URLSearchParams(
-        iFrameRef.current.contentWindow.location.search
-      );
+      const iqs = new URLSearchParams(iFrame.contentWindow.location.search);
       console.log("iFrameRef iqs", iqs);
       if (iqs && iqs.has("transId")) {
         const transId = iqs.get("transId");
@@ -80,8 +77,9 @@ const LoginModal = ({ state, actions }) => {
       } else {
         console.log("Error getting transId from iFrame");
       }
-    } catch (e) {
+    } catch (error) {
       console.log("*** ERROR GETTING IFRAME CONTENT - CROSS-ORIGIN **");
+      console.log(error);
     }
   };
 
@@ -146,7 +144,6 @@ const LoginModal = ({ state, actions }) => {
           <iframe
             className="contain"
             id="badLoginIframe"
-            ref={iFrameRef}
             onLoad={iFrameHandler}
             width="100%"
             height="1000"
