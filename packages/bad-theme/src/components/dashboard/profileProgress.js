@@ -18,12 +18,12 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
   const ICON_WIDTH = 30;
 
-  const [applicationStep, setStep] = useState("");
+  const [applicationStep, setStep] = useState("Start new the application");
 
   useEffect(() => {
     if (!applicationData) return null;
 
-    let progressName = "Start new the application";
+    let progressName = "";
     if (applicationData[0].stepOne) progressName = "Step 1 - The Process";
     if (applicationData[0].stepTwo)
       progressName = "Step 2 - Personal Information";
