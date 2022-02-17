@@ -109,7 +109,6 @@ const IndexCard = ({
             style={{
               padding: `0.5em 0`,
               borderBottom: `1px dotted ${colors.darkSilver}`,
-              textTransform: "capitalize",
             }}
           >
             <ServeReference />
