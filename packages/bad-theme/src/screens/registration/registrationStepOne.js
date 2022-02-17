@@ -39,6 +39,7 @@ const RegistrationStepOne = ({ state, actions }) => {
       state,
       dispatch,
       applicationData,
+      membershipApplication: { stepOne: true }, // set stepOne to complete
       isActiveUser,
     });
     if (isActiveUser)

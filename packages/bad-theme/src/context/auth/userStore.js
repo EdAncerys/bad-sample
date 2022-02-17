@@ -271,12 +271,13 @@ const updateMembershipApplication = ({
   data,
   membershipApplication,
 }) => {
-  if (!data) return storeApplication;
+  if (!data && !membershipApplication) return storeApplication;
 
   console.log("⏬ UPDATING Membership Record ⏬");
   let newApplicationRecord = storeApplication;
 
   newApplicationRecord.map((application, key) => {
+    // add additional data to membershop application object
     if (membershipApplication && key === 0) {
       console.log("🚀 Additional Membership data added 🚀");
       Object.keys(membershipApplication).map((key) => {
@@ -285,7 +286,7 @@ const updateMembershipApplication = ({
         application[key] = value; // additional application record data
       });
     }
-
+    if (!data) return null; // exit if data object not passed in
     //⏬ step one of the application process
     if (data.bad_organisedfor && application.name === "bad_organisedfor")
       application.value = data.bad_organisedfor;

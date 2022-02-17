@@ -65,6 +65,7 @@ export const handleApplyForMembershipAction = async ({
   category,
   type,
   path,
+  membershipApplication,
 }) => {
   try {
     // ⏬ get appropriate membership ID
@@ -81,7 +82,7 @@ export const handleApplyForMembershipAction = async ({
       dispatch,
       applicationData,
       isActiveUser,
-      membershipApplication: membershipData,
+      membershipApplication: { ...membershipData, ...membershipApplication },
       data: {
         bad_organisedfor: category === "BAD" ? "810170000" : "810170001", // BAD members category
         core_membershipsubscriptionplanid:

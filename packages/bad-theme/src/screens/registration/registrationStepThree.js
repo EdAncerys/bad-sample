@@ -28,11 +28,6 @@ const RegistrationStepThree = ({ state, actions }) => {
     bad_categorytype: "",
   });
 
-  const [inputValidator, setInputValidator] = useState({
-    bad_organisedfor: "",
-    bad_categorytype: "",
-  });
-
   // ⏬ populate form data values from applicationData
   useEffect(async () => {
     const handleSetData = ({ data, name }) => {
@@ -104,6 +99,7 @@ const RegistrationStepThree = ({ state, actions }) => {
       dispatch,
       applicationData,
       isActiveUser,
+      membershipApplication: { stepThree: true }, // set stepOne to complete
       category: formData.bad_organisedfor === "810170000" ? "BAD" : "SIG",
       type: formData.bad_categorytype, // application type name
       path: `/membership/step-4-professional-details/`,

@@ -21,13 +21,13 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   // HELPERS ----------------------------------------------
   const handleApply = () => {
     let path = `/membership/step-1-the-process/`;
-    if (applicationData && applicationData.stepOne)
+    if (applicationData && applicationData[0].stepOne)
       path = `/membership/step-2-personal-information/`;
-    if (applicationData && applicationData.stepTwo)
+    if (applicationData && applicationData[0].stepTwo)
       path = `/membership/step-3-category-selection/`;
-    if (applicationData && applicationData.stepThree)
+    if (applicationData && applicationData[0].stepThree)
       path = `/membership/step-4-professional-details/`;
-    if (applicationData && applicationData.stepFour)
+    if (applicationData && applicationData[0].stepFour)
       path = `/membership/final-step-thank-you/`;
 
     setGoToAction({ path: path, actions });
@@ -81,19 +81,21 @@ const ProfileProgress = ({ state, actions, libraries }) => {
             }}
           >
             <ServeProgressIcon
-              complete={applicationData && applicationData.stepOne}
+              complete={applicationData && applicationData[0].stepOne}
             />
             <ServeProgressIcon
-              complete={applicationData && applicationData.stepTwo}
+              complete={applicationData && applicationData[0].stepTwo}
             />
             <ServeProgressIcon
-              complete={applicationData && applicationData.stepThree}
+              complete={applicationData && applicationData[0].stepThree}
             />
             <ServeProgressIcon
-              complete={applicationData && applicationData.stepFour}
+              complete={applicationData && applicationData[0].stepFour}
             />
             <ServeProgressIcon
-              complete={applicationData && applicationData.stepComplete}
+              complete={
+                applicationData && applicationData[0].applicationComplete
+              }
             />
           </div>
         </div>
@@ -116,7 +118,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   };
 
   const ServeActions = () => {
-    if (applicationData && applicationData.stepComplete) return null;
+    if (applicationData && applicationData[0].applicationComplete) return null;
 
     return (
       <div type="submit" className="blue-btn" onClick={handleApply}>

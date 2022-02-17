@@ -118,6 +118,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
       dispatch,
       applicationData,
       isActiveUser,
+      membershipApplication: { stepTwo: true }, // set stepOne to complete
       data: formData,
     });
 
@@ -164,7 +165,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
           className="transparent-btn"
           onClick={() =>
             setGoToAction({
-              path: `/membership/step-3-category-selection/`,
+              path: `/membership/step-1-the-process/`,
               actions,
             })
           }

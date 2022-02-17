@@ -152,6 +152,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       dispatch,
       applicationData,
       isActiveUser,
+      membershipApplication: { stepFour: true }, // set stepOne to complete
       data: formData,
     });
     let slug = `/membership/final-step-thank-you/`;

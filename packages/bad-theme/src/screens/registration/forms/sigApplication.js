@@ -119,6 +119,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       dispatch,
       applicationData,
       isActiveUser,
+      membershipApplication: { stepFive: true }, // set stepOne to complete
       data: formData,
     });
 

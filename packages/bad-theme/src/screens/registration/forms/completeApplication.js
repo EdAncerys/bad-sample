@@ -25,7 +25,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
     py3_constitutionagreement: "",
     privacyNotice: "",
   });
-  
+
   const [inputValidator, setInputValidator] = useState({
     bad_ethnicity: true,
     py3_constitutionagreement: true,
@@ -67,6 +67,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
       dispatch,
       applicationData,
       isActiveUser,
+      membershipApplication: { applicationComplete: true }, // set stepOne to complete
       data: formData,
     });
 
