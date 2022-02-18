@@ -4,6 +4,7 @@ import { connect } from "frontity";
 import { colors } from "../../../config/imports";
 import SearchDropDown from "../../../components/searchDropDown";
 import CloseIcon from "@mui/icons-material/Close";
+import FormError from "../../../components/formError";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -12,7 +13,7 @@ import {
   sendFileToS3Action,
   getHospitalsAction,
   setGoToAction,
-  getMembershipDataAction,
+  errorHandler,
   validateMembershipFormAction,
   useIsMounted,
 } from "../../../context";
@@ -170,20 +171,44 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
-  const handleNext = async () => {
-    // await setUserStoreAction({
-    //   state,
-    //   dispatch,
-    //   applicationData,
-    //   isActiveUser,
-    //   membershipApplication: { stepFour: true }, // set stepOne to complete
-    //   data: formData,
-    // });
-    // let slug = `/membership/final-step-thank-you/`;
-    // if (category === "SIG") slug = `/membership/step-5-sig-questions/`;
-    // if (isActiveUser) setGoToAction({ path: slug, actions });
+  const isFormValidated = ({ required }) => {
+    if (!required && !required.length) return null;
+    let isValid = true;
 
-    console.log("formData", formData); // debug
+    required.map((input) => {
+      if (!formData[input]) {
+        errorHandler({ id: `form-error-${input}` });
+        isValid = false;
+      }
+    });
+
+    return isValid;
+  };
+
+  const handleNext = async () => {
+    const isValid = isFormValidated({
+      required: [
+        "py3_gmcnumber",
+        "py3_otherregulatorybodyreference",
+        "py3_ntnno",
+        "bad_currentpost",
+        "bad_medicalschool",
+        "bad_mrpcqualified",
+      ],
+    });
+    if (!isValid) return null;
+
+    await setUserStoreAction({
+      state,
+      dispatch,
+      applicationData,
+      isActiveUser,
+      membershipApplication: { stepFour: true }, // set stepOne to complete
+      data: formData,
+    });
+    let slug = `/membership/final-step-thank-you/`;
+    if (category === "SIG") slug = `/membership/step-5-sig-questions/`;
+    if (isActiveUser) setGoToAction({ path: slug, actions });
   };
 
   const handleDocUploadChange = async (e) => {
@@ -269,6 +294,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                 className="form-control input"
                 placeholder="GMC Number"
               />
+              <FormError id="py3_gmcnumber" />
             </div>
           )}
 
@@ -285,12 +311,13 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                 className="form-control input"
                 placeholder="Regulatory Body Registration Number"
               />
+              <FormError id="py3_otherregulatorybodyreference" />
             </div>
           )}
 
           {inputValidator.py3_ntnno && (
             <div>
-              <label className="form-label">NTN Number</label>
+              <label className="required form-label">NTN Number</label>
               <input
                 name="py3_ntnno"
                 value={formData.py3_ntnno}
@@ -299,6 +326,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                 className="form-control input"
                 placeholder="NTN Number"
               />
+              <FormError id="py3_ntnno" />
             </div>
           )}
 
@@ -315,14 +343,13 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                 className="form-control input"
                 placeholder="Current job title"
               />
+              <FormError id="bad_currentpost" />
             </div>
           )}
 
           {inputValidator.py3_hospitalid && (
             <div>
-              <label className="required form-label">
-                Main Hospital/Place of work
-              </label>
+              <label className="form-label">Main Hospital/Place of work</label>
               <div style={{ position: "relative" }}>
                 {selectedHospital && (
                   <div className="form-control input">
@@ -383,6 +410,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                 className="form-control input"
                 placeholder="Medical School"
               />
+              <FormError id="bad_medicalschool" />
             </div>
           )}
         </div>
@@ -400,7 +428,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
           >
             {inputValidator.bad_proposer1 && (
               <div>
-                <label className="required form-label required">
+                <label className="form-label required">
                   Supporting Member 1
                 </label>
                 <input
@@ -416,7 +444,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
             {inputValidator.bad_proposer2 && (
               <div>
-                <label className="required form-label required">
+                <label className="form-label required">
                   Supporting Member 2
                 </label>
                 <input
@@ -450,12 +478,13 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                 className="form-control input"
                 placeholder="MRCP"
               />
+              <FormError id="bad_mrpcqualified" />
             </div>
           )}
 
           {inputValidator.currentGrade && (
             <div>
-              <label className="required form-label">Current Grade</label>
+              <label className="form-label">Current Grade</label>
               <input
                 name="currentGrade"
                 value={formData.currentGrade}
@@ -469,7 +498,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
           {inputValidator.document && (
             <div>
-              <label className="required form-label">Upload Your CV</label>
+              <label className="form-label">Upload Your CV</label>
               <input
                 ref={documentRef}
                 onChange={handleDocUploadChange}
