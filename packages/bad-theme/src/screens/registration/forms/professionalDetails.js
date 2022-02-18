@@ -47,6 +47,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     document: "",
     currentGrade: "",
     bad_medicalschool: "",
+    sky_newhospitalname: "",
   });
   const [inputValidator, setInputValidator] = useState({
     py3_gmcnumber: true,
@@ -118,10 +119,13 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       py3_hospitalid: item.accountid,
+      sky_newhospitalname: "",
     }));
-    setHospitalData(null);
+
+    setHospitalData(null); // clear hospital data for dropdown
     console.log(item);
   };
+
   const handleClearHospital = () => {
     setSelectedHospital(null);
     setFormData((prevFormData) => ({
@@ -131,15 +135,27 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   };
 
   const handleHospitalLookup = async () => {
-    if (hospitalSearchRef.current.value.length < 2) return; // API call after 2 characters
+    const input = hospitalSearchRef.current.value;
+    if (input.length < 2) return; // API call after 2 characters
 
     const hospitalData = await getHospitalsAction({
       state,
-      input: hospitalSearchRef.current.value,
+      input,
     });
 
+    if (hospitalData.length > 0) setHospitalData(hospitalData);
+    if (hospitalData.length === 0) {
+      // if no results, clear hospital data for dropdown & pass input as new hospitalData
+      setHospitalData(null);
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        py3_hospitalid: "",
+        sky_newhospitalname: input,
+      }));
+    }
+
     console.log("Hospitals", hospitalData); // debug
-    setHospitalData(hospitalData);
+    console.log("input", input); // debug
   };
 
   const handleSaveExit = async () => {
