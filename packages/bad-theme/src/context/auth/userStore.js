@@ -214,7 +214,7 @@ export const setCompleteUserApplicationAction = async ({
     const jwt = await authenticateAppAction({ state });
 
     const requestOptions = {
-      method: "POST",
+      method: "GET",
       headers: { Authorization: `Bearer ${jwt}` },
     };
 
@@ -226,6 +226,7 @@ export const setCompleteUserApplicationAction = async ({
       console.log(data);
     } else {
       console.log("⏬ Failed to Create Membership ⏬");
+      console.log(data);
     }
   } catch (error) {
     console.log("error", error);
