@@ -119,7 +119,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     let isValid = true;
 
     required.map((input) => {
-      if (!formData[input]) {
+      if (!formData[input] && inputValidator[input]) {
         errorHandler({ id: `form-error-${input}` });
         isValid = false;
       }

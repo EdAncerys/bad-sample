@@ -329,6 +329,8 @@ const updateMembershipApplication = ({
       application.value = data.py3_addresszippostalcode;
     if (data.py3_addresscountry && application.name === "py3_addresscountry")
       application.value = data.py3_addresscountry;
+    if (data.sky_profilepicture && application.name === "sky_profilepicture")
+      application.value = data.sky_profilepicture;
 
     //⏬ category section of the application process
     if (data.py3_gmcnumber && application.name === "py3_gmcnumber")
@@ -352,8 +354,12 @@ const updateMembershipApplication = ({
       application.value = data.bad_proposer2;
     if (data.bad_mrpcqualified && application.name === "bad_mrpcqualified")
       application.value = data.bad_mrpcqualified;
-    // cv input TCC
-    // grade TBC
+    if (data.sky_cvurl && application.name === "sky_cvurl")
+      application.value = data.sky_cvurl;
+    if (data.sky_newhospitalname && application.name === "sky_newhospitalname")
+      application.value = data.sky_newhospitalname;
+    if (data.sky_newhospitaltype && application.name === "sky_newhospitaltype")
+      application.value = data.sky_newhospitaltype;
 
     //⏬ SIG section of the application process
     if (data.bad_qualifications && application.name === "bad_qualifications")

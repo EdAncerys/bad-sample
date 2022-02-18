@@ -31,7 +31,7 @@ const BADMemberships = ({ state, actions, libraries, block }) => {
       return data;
     });
 
-    console.log(response); // debug
+    // console.log(response); // debug
     setMembershipTypes(response);
 
     return () => {

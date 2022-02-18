@@ -36,7 +36,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     py3_addresscountystate: "",
     py3_addresszippostalcode: "",
     py3_addresscountry: "",
-    document: "",
+    sky_profilepicture: "",
   });
   const [inputValidator, setInputValidator] = useState({
     py3_title: true,
@@ -51,7 +51,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     py3_addresscountystate: true,
     py3_addresszippostalcode: true,
     py3_addresscountry: true,
-    document: true,
+    sky_profilepicture: true,
   });
   const [profilePhoto, setProfilePhoto] = useState(null);
   const documentRef = useRef(null);
@@ -117,7 +117,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     let isValid = true;
 
     required.map((input) => {
-      if (!formData[input]) {
+      if (!formData[input] && inputValidator[input]) {
         errorHandler({ id: `form-error-${input}` });
         isValid = false;
       }
@@ -158,22 +158,24 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   };
 
   const handleDocUploadChange = async () => {
-    let document = documentRef.current ? documentRef.current.files[0] : null;
-    const objectURL = URL.createObjectURL(document);
+    let sky_profilepicture = documentRef.current
+      ? documentRef.current.files[0]
+      : null;
+    const objectURL = URL.createObjectURL(sky_profilepicture);
     setProfilePhoto(objectURL);
 
-    if (document)
-      document = await sendFileToS3Action({
+    if (sky_profilepicture)
+      sky_profilepicture = await sendFileToS3Action({
         state,
         dispatch,
-        attachments: document,
+        attachments: sky_profilepicture,
       });
 
     setFormData((prevFormData) => ({
       ...prevFormData,
-      ["document"]: document,
+      ["sky_profilepicture"]: sky_profilepicture,
     }));
-    console.log("document", document); // debug
+    console.log("sky_profilepicture", sky_profilepicture); // debug
   };
 
   const handleInputChange = (e) => {

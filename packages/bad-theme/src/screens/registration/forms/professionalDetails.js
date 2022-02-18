@@ -121,6 +121,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       ...prevFormData,
       py3_hospitalid: item.accountid,
       sky_newhospitalname: "",
+      sky_newhospitaltype: "Hospital",
     }));
 
     setHospitalData(null); // clear hospital data for dropdown
@@ -175,7 +176,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     let isValid = true;
 
     required.map((input) => {
-      if (!formData[input]) {
+      if (!formData[input] && inputValidator[input]) {
         errorHandler({ id: `form-error-${input}` });
         isValid = false;
       }
@@ -195,6 +196,9 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         "bad_mrpcqualified",
       ],
     });
+
+    console.log(formData);
+    console.log(isValid);
     if (!isValid) return null;
 
     await setUserStoreAction({
