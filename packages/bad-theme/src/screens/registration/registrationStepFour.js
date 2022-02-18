@@ -11,15 +11,8 @@ import BlockWrapper from "../../components/blockWrapper";
 
 import ProfessionalDetails from "./forms/professionalDetails";
 
-import { UK_HOSPITALS } from "../../config/data";
 // CONTEXT ----------------------------------------------------------------
-import {
-  useAppDispatch,
-  useAppState,
-  setUserStoreAction,
-  sendFileToS3Action,
-  getHospitalsAction,
-} from "../../context";
+import { useAppDispatch, useAppState } from "../../context";
 
 const RegistrationStepFour = ({ state, actions }) => {
   const data = state.source.get(state.router.link);

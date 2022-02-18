@@ -48,7 +48,7 @@ const AccordionComponent = ({
         `#accordion-body-${uniqueId}`
       );
 
-      if (accordionBody && block.block.is_active)
+      if (accordionBody && block.block && block.block.is_active)
         accordionBody.classList.add("show");
     }, [uniqueId]);
 
