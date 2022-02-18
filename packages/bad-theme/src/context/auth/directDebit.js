@@ -1,9 +1,33 @@
 import { authenticateAppAction } from "../index";
 
-export const directDebit = async ({ state, doi }) => {
-  console.log("directDebit triggered");
+export const getDirectDebitAction = async ({ state, id }) => {
+  console.log("getDirectDebitAction triggered");
 
-  const URL = state.auth.APP_HOST + `/wiley`;
+  const URL = state.auth.APP_HOST + `/bankaccount/${id}`;
+  const jwt = await authenticateAppAction({ state });
+
+  const requestOptions = {
+    method: "GET",
+    headers: { Authorization: `Bearer ${jwt}` },
+  };
+
+  try {
+    const response = await fetch(URL, requestOptions);
+    const data = await data.json();
+
+    console.log("getDirectDebitAction data", data); // debug
+
+    if (response.success) return data.data;
+    return null;
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
+export const createDirectDebitAction = async ({ state, id, data }) => {
+  console.log("createDirectDebitAction triggered");
+
+  const URL = state.auth.APP_HOST + `/bankaccount/${id}`;
   const jwt = await authenticateAppAction({ state });
 
   const requestOptions = {
@@ -12,16 +36,16 @@ export const directDebit = async ({ state, doi }) => {
       Authorization: `Bearer ${jwt}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ doi: `doi/${doi}` }),
+    body: JSON.stringify(data),
   };
 
   try {
-    const data = await fetch(URL, requestOptions);
-    const wiley = await data.json();
+    const response = await fetch(URL, requestOptions);
+    const data = await data.json();
 
-    // console.log("directDebit wiley", wiley); // debug
+    console.log("createDirectDebitAction data", data); // debug
 
-    if (wiley.success) return wiley.data;
+    if (response.success) return data.data;
     return null;
   } catch (error) {
     console.log("error", error);

@@ -33,6 +33,10 @@ import { updateAddressAction } from "./auth/updateAddress";
 import { sendFileToS3Action } from "./auth/saveFileToS3";
 import { getBADMembershipSubscriptionData } from "./auth/getBADMembershipSubscriptionData";
 import {
+  getDirectDebitAction,
+  createDirectDebitAction,
+} from "./auth/directDebit";
+import {
   setUserStoreAction,
   getUserStoreAction,
   setCompleteUserApplicationAction,
@@ -88,4 +92,6 @@ export {
   validateMembershipFormAction,
   useIsMounted,
   errorHandler,
+  getDirectDebitAction,
+  createDirectDebitAction,
 };
