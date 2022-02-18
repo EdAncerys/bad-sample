@@ -10,6 +10,7 @@ const DirectDebitNotification = ({
   setPage,
   debitActive,
   visible,
+  setVisible
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 

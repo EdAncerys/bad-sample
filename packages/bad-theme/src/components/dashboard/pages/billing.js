@@ -14,6 +14,7 @@ const Billing = ({
   dashboardPath,
   debitActive,
   visible,
+  setVisible,
 }) => {
   const [page, setPage] = useState({ page: "billing" });
 
@@ -31,6 +32,7 @@ const Billing = ({
           setPage={setPage}
           debitActive={debitActive}
           visible={visible}
+          setVisible={setVisible}
         />
         <Payments setPage={setPage} />
         <BillingHistory />
