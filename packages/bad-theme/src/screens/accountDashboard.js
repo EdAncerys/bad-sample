@@ -49,7 +49,6 @@ const AccountDashboard = ({ state, actions, libraries }) => {
 
       const json = await getUserApplicationData.json();
       if (json) setApplicationStatus(json);
-      console.log(json);
     };
 
     fetchApplicationBillingStatus();

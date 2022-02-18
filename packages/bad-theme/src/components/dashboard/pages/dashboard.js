@@ -24,6 +24,7 @@ const Dashboard = ({
 
   // SERVERS ---------------------------------------------
   const ServeDashboard = () => {
+    if (!userStatus) return "Loading";
     return (
       <div style={{ padding: `0 ${marginHorizontal}px` }}>
         <Profile />
