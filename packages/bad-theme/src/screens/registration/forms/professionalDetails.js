@@ -150,15 +150,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     });
 
     if (hospitalData.length > 0) setHospitalData(hospitalData);
-    if (hospitalData.length === 0) {
-      // if no results, clear hospital data for dropdown & pass input as new hospitalData
-      setHospitalData(null);
-      // setFormData((prevFormData) => ({
-      //   ...prevFormData,
-      //   py3_hospitalid: "",
-      //   sky_newhospitalname: input,
-      // }));
-    }
+    if (hospitalData.length === 0) setHospitalData(null);
 
     // console.log("Hospitals", hospitalData); // debug
   };
@@ -200,21 +192,20 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       ],
     });
 
-    console.log(formData); // debug
-    console.log(isValid);
+    // console.log(formData); // debug
     if (!isValid) return null;
 
-    // await setUserStoreAction({
-    //   state,
-    //   dispatch,
-    //   applicationData,
-    //   isActiveUser,
-    //   membershipApplication: { stepFour: true }, // set stepOne to complete
-    //   data: formData,
-    // });
-    // let slug = `/membership/final-step-thank-you/`;
-    // if (category === "SIG") slug = `/membership/step-5-sig-questions/`;
-    // if (isActiveUser) setGoToAction({ path: slug, actions });
+    await setUserStoreAction({
+      state,
+      dispatch,
+      applicationData,
+      isActiveUser,
+      membershipApplication: { stepFour: true }, // set stepOne to complete
+      data: formData,
+    });
+    let slug = `/membership/final-step-thank-you/`;
+    if (category === "SIG") slug = `/membership/step-5-sig-questions/`;
+    if (isActiveUser) setGoToAction({ path: slug, actions });
   };
 
   const handleDocUploadChange = async (e) => {

@@ -14,25 +14,8 @@ const RegistrationStepFive = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
 
-  const { applicationData } = useAppState();
-
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-
-  const [category, setCategory] = useState(() => {
-    if (!applicationData) return "";
-    const isSIG = applicationData[0].bad_organisedfor === "SIG";
-
-    let applicationCategory = "";
-    applicationData.map((data) => {
-      if (data.bad_categorytype)
-        applicationCategory = isSIG
-          ? data._bad_sigid_value
-          : data.bad_categorytype;
-    });
-
-    return applicationCategory;
-  });
 
   // SERVERS ---------------------------------------------
   const ServeContent = () => {
@@ -67,24 +50,6 @@ const RegistrationStepFive = ({ state, actions }) => {
           style={{ paddingTop: `1em` }}
         >
           Memberships Page
-        </div>
-
-        <div
-          className="primary-title"
-          style={{
-            ...styles.title,
-            paddingTop: `1em`,
-            marginTop: `1em`,
-            borderTop: `1px solid ${colors.silverFillTwo}`,
-          }}
-        >
-          Category Selected : <span>{category}</span>
-        </div>
-        <div style={{ paddingTop: `0.75em` }}>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book.
         </div>
 
         <SIGApplication />
