@@ -190,7 +190,7 @@ const Navigation = ({ state, actions, libraries }) => {
               display: "grid",
               gridAutoFlow: "column",
               gridTemplateColumns: `repeat(3, 1fr)`,
-              gridTemplateRows: `repeat(11, auto)`,
+              gridTemplateRows: `repeat(12, auto)`,
               gap: `0 2em`,
             }}
           >

@@ -14,7 +14,7 @@ import {
 } from "./helpers";
 // CONTEXT ----------------------------------------------------------------
 import { initialState } from "../src/context/reducer";
-import { setGoToAction } from "../src/context";
+import { getMembershipDataAction } from "../src/context";
 
 const BADTheme = {
   name: "bad-theme",
@@ -72,6 +72,8 @@ const BADTheme = {
         await getLeadershipTeamData({ state, actions });
         // pre fetch events data
         await getEventsData({ state, actions });
+        // pre fetch membership data
+        await getMembershipDataAction({ state, actions });
 
         // handle auth login auth via cookies
         await authLogViaCookie({ state, initialState });

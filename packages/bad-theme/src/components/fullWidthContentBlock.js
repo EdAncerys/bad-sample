@@ -110,7 +110,14 @@ const FullWidthContentBlock = ({
     if (!downloads) return null;
 
     return (
-      <div style={{ display: "grid", gap: `1em`, padding: `1em 0` }}>
+      <div
+        style={{
+          display: "grid",
+          gap: `1em`,
+          padding: `1em 0`,
+          justifyContent: ALIGNMENT,
+        }}
+      >
         {downloads.map((download, key) => {
           return (
             <div key={key}>

@@ -6,12 +6,12 @@ import BlockBuilder from "../components/builder/blockBuilder";
 import { muiQuery } from "../context";
 import TitleBlock from "../components/titleBlock";
 import Card from "../components/card/card";
+import Loading from "../components/loading";
 // CONTEXT -----------------------------------------------------------------
 import {
   useAppDispatch,
   useAppState,
   handleApplyForMembershipAction,
-  getMembershipDataAction,
 } from "../context";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
@@ -30,21 +30,10 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
 
   const { content, title, acf } = dermGroupe;
-  const [isSIGApplication, setApplication] = useState(null);
-
-  useEffect(async () => {
-    if (!state.source.memberships)
-      await getMembershipDataAction({ state, actions });
-
-    const application = acf.sigs[0];
-    if (!application) return null;
-
-    const isSIG = state.source.memberships[application.ID];
-    setApplication(isSIG);
-  }, []);
+  const memberships = state.source.memberships;
 
   // HANDLERS --------------------------------------------------
-  const handleApply = async () => {
+  const handleApply = async ({ catType }) => {
     await handleApplyForMembershipAction({
       state,
       actions,
@@ -52,7 +41,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
       applicationData,
       isActiveUser,
       category: "SIG",
-      type: isSIGApplication.acf.category_types || "", // application type name
+      type: catType || "", // application type name
     });
   };
 
@@ -71,21 +60,32 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   };
 
   const ApplyForMembership = () => {
-    if (!isSIGApplication) return null;
-
-    let applicationName = "SIG Application";
-    if (isSIGApplication.acf)
-      applicationName = isSIGApplication.acf.category_types;
+    if (!acf.sigs || !memberships) return null;
 
     return (
-      <div>
-        <div
-          className="blue-btn"
-          style={{ width: "fit-content", margin: `1em 0` }}
-          onClick={handleApply}
-        >
-          <Html2React html={`Apply for ${applicationName} membership`} />
-        </div>
+      <div style={{ paddingTop: `2em` }}>
+        {acf.sigs.map((application, key) => {
+          const applicationData = memberships[application.ID];
+          const catType = applicationData.acf.category_types;
+          console.log(applicationData);
+
+          let applicationName = "SIG Application";
+          if (catType)
+            applicationName =
+              applicationData.acf.category_types.split(":")[1] ||
+              applicationData.acf.category_types; // remove membership type prefix
+
+          return (
+            <div
+              key={key}
+              className="blue-btn"
+              style={{ width: "fit-content", margin: `1em 0` }}
+              onClick={() => handleApply({ catType })}
+            >
+              <Html2React html={`Apply for ${applicationName} membership`} />
+            </div>
+          );
+        })}
       </div>
     );
   };

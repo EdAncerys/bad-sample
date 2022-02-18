@@ -4,6 +4,7 @@ import { connect } from "frontity";
 import { colors } from "../../../config/imports";
 import SearchDropDown from "../../../components/searchDropDown";
 import CloseIcon from "@mui/icons-material/Close";
+import FormError from "../../../components/formError";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -12,7 +13,7 @@ import {
   sendFileToS3Action,
   getHospitalsAction,
   setGoToAction,
-  getMembershipDataAction,
+  errorHandler,
   validateMembershipFormAction,
   useIsMounted,
 } from "../../../context";
@@ -44,9 +45,9 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     bad_proposer1: "",
     bad_proposer2: "",
     bad_mrpcqualified: "",
-    document: "",
+    sky_cvurl: "",
     currentGrade: "",
-    bad_medicalschool: "",
+    sky_newhospitalname: "",
   });
   const [inputValidator, setInputValidator] = useState({
     py3_gmcnumber: true,
@@ -54,15 +55,15 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     py3_ntnno: true,
     bad_currentpost: true,
     py3_hospitalid: true,
-    bad_medicalschool: true,
     bad_proposer1: true,
     bad_proposer2: true,
     bad_mrpcqualified: true,
     currentGrade: true,
-    document: true,
+    sky_cvurl: true,
   });
   const [hospitalData, setHospitalData] = useState(null);
   const [selectedHospital, setSelectedHospital] = useState(null);
+  const [applicationType, setType] = useState("");
 
   const documentRef = useRef(null);
   const hospitalSearchRef = useRef("");
@@ -94,8 +95,9 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         handleSetFormData({ data, name: "bad_proposer2" });
       if (data.name === "bad_mrpcqualified")
         handleSetFormData({ data, name: "bad_mrpcqualified" });
-      if (data.name === "bad_medicalschool")
-        handleSetFormData({ data, name: "bad_medicalschool" });
+
+      if (data.bad_categorytype) setType(data.bad_categorytype);
+      if (data._bad_sigid_value) setType(data._bad_sigid_value);
     });
 
     // ⏬ validate inputs
@@ -115,10 +117,14 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       py3_hospitalid: item.accountid,
+      sky_newhospitalname: "",
+      sky_newhospitaltype: "Hospital",
     }));
-    setHospitalData(null);
+
+    setHospitalData(null); // clear hospital data for dropdown
     console.log(item);
   };
+
   const handleClearHospital = () => {
     setSelectedHospital(null);
     setFormData((prevFormData) => ({
@@ -128,15 +134,26 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   };
 
   const handleHospitalLookup = async () => {
-    if (hospitalSearchRef.current.value.length < 2) return; // API call after 2 characters
+    const input = hospitalSearchRef.current.value;
+    if (input.length < 2) return; // API call after 2 characters
 
     const hospitalData = await getHospitalsAction({
       state,
-      input: hospitalSearchRef.current.value,
+      input,
     });
 
-    console.log("Hospitals", hospitalData); // debug
-    setHospitalData(hospitalData);
+    if (hospitalData.length > 0) setHospitalData(hospitalData);
+    if (hospitalData.length === 0) {
+      // if no results, clear hospital data for dropdown & pass input as new hospitalData
+      setHospitalData(null);
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        py3_hospitalid: "",
+        sky_newhospitalname: input,
+      }));
+    }
+
+    // console.log("Hospitals", hospitalData); // debug
   };
 
   const handleSaveExit = async () => {
@@ -151,7 +168,35 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
+  const isFormValidated = ({ required }) => {
+    if (!required && !required.length) return null;
+    let isValid = true;
+
+    required.map((input) => {
+      if (!formData[input] && inputValidator[input]) {
+        errorHandler({ id: `form-error-${input}` });
+        isValid = false;
+      }
+    });
+
+    return isValid;
+  };
+
   const handleNext = async () => {
+    const isValid = isFormValidated({
+      required: [
+        "py3_gmcnumber",
+        "py3_otherregulatorybodyreference",
+        "py3_ntnno",
+        "bad_currentpost",
+        "bad_mrpcqualified",
+      ],
+    });
+
+    console.log(formData);
+    console.log(isValid);
+    if (!isValid) return null;
+
     await setUserStoreAction({
       state,
       dispatch,
@@ -166,22 +211,20 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   };
 
   const handleDocUploadChange = async (e) => {
-    let document = e.target.files[0];
-    // let document = documentRef.current ? documentRef.current.files[0] : null;
+    let sky_cvurl = e.target.files[0];
 
-    if (document)
-      document = await sendFileToS3Action({
+    if (sky_cvurl)
+      sky_cvurl = await sendFileToS3Action({
         state,
         dispatch,
-        attachments: document,
+        attachments: sky_cvurl,
       });
+    console.log("sky_cvurl", sky_cvurl); // debug
 
     setFormData((prevFormData) => ({
       ...prevFormData,
-      ["document"]: document,
+      ["sky_cvurl"]: sky_cvurl,
     }));
-    console.log("document", e.target); // debug
-    console.log("document", document); // debug
   };
 
   const handleInputChange = (e) => {
@@ -226,6 +269,17 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
   return (
     <div>
+      <div
+        className="primary-title"
+        style={{
+          fontSize: 22,
+          paddingTop: `1em`,
+          marginTop: `1em`,
+          borderTop: `1px solid ${colors.silverFillTwo}`,
+        }}
+      >
+        Category Selected: <span>{applicationType}</span>
+      </div>
       <form>
         <div style={{ padding: `2em 1em` }}>
           {inputValidator.py3_gmcnumber && (
@@ -239,12 +293,13 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                 className="form-control input"
                 placeholder="GMC Number"
               />
+              <FormError id="py3_gmcnumber" />
             </div>
           )}
 
           {inputValidator.py3_otherregulatorybodyreference && (
             <div>
-              <label className="form-label">
+              <label className="required form-label">
                 Regulatory Body Registration Number
               </label>
               <input
@@ -255,12 +310,13 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                 className="form-control input"
                 placeholder="Regulatory Body Registration Number"
               />
+              <FormError id="py3_otherregulatorybodyreference" />
             </div>
           )}
 
           {inputValidator.py3_ntnno && (
             <div>
-              <label className="form-label">NTN Number</label>
+              <label className="required form-label">NTN Number</label>
               <input
                 name="py3_ntnno"
                 value={formData.py3_ntnno}
@@ -269,6 +325,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                 className="form-control input"
                 placeholder="NTN Number"
               />
+              <FormError id="py3_ntnno" />
             </div>
           )}
 
@@ -285,14 +342,13 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                 className="form-control input"
                 placeholder="Current job title"
               />
+              <FormError id="bad_currentpost" />
             </div>
           )}
 
           {inputValidator.py3_hospitalid && (
             <div>
-              <label className="required form-label">
-                Main Hospital/Place of work
-              </label>
+              <label className="form-label">Main Hospital/Place of work</label>
               <div style={{ position: "relative" }}>
                 {selectedHospital && (
                   <div className="form-control input">
@@ -341,20 +397,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
               </div>
             </div>
           )}
-
-          {inputValidator.bad_medicalschool && (
-            <div>
-              <label className="required form-label">Medical School</label>
-              <input
-                name="bad_medicalschool"
-                value={formData.bad_medicalschool}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="Medical School"
-              />
-            </div>
-          )}
         </div>
 
         {inputValidator.bad_proposer1 && (
@@ -370,9 +412,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
           >
             {inputValidator.bad_proposer1 && (
               <div>
-                <label className="required form-label required">
-                  Supporting Member 1
-                </label>
+                <label className="form-label">Supporting Member 1</label>
                 <input
                   name="bad_proposer1"
                   value={formData.bad_proposer1}
@@ -386,9 +426,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
             {inputValidator.bad_proposer2 && (
               <div>
-                <label className="required form-label required">
-                  Supporting Member 2
-                </label>
+                <label className="form-label">Supporting Member 2</label>
                 <input
                   name="bad_proposer2"
                   value={formData.bad_proposer2}
@@ -420,12 +458,13 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                 className="form-control input"
                 placeholder="MRCP"
               />
+              <FormError id="bad_mrpcqualified" />
             </div>
           )}
 
           {inputValidator.currentGrade && (
             <div>
-              <label className="required form-label">Current Grade</label>
+              <label className="form-label">Current Grade</label>
               <input
                 name="currentGrade"
                 value={formData.currentGrade}
@@ -437,9 +476,9 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.document && (
+          {inputValidator.sky_cvurl && (
             <div>
-              <label className="required form-label">Upload Your CV</label>
+              <label className="form-label">Upload Your CV</label>
               <input
                 ref={documentRef}
                 onChange={handleDocUploadChange}

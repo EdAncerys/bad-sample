@@ -14,7 +14,7 @@ export const getBADMembershipSubscriptionData = async ({
   if (category === "SIG")
     URL =
       state.auth.APP_HOST +
-      `/catalogue/lookup/membershiptype?search=${category}:Full:${type}:${year}`;
+      `/catalogue/lookup/membershiptype?search=${category}:${type}:${year}`;
 
   const jwt = await authenticateAppAction({ state });
 

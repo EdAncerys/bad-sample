@@ -32,9 +32,8 @@ export const validateMembershipFormAction = async ({
   };
 
   // ⏬ validate inputs
-  if (!state.source.memberships)
-    await getMembershipDataAction({ state, actions });
   const membershipTypes = Object.values(state.source.memberships);
+  console.log("membershipTypes", membershipTypes); // debug
 
   if (!membershipTypes) return null;
   if (!applicationData) return null;

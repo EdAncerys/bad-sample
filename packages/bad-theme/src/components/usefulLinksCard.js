@@ -64,7 +64,6 @@ const UsefulLinksCard = ({
           className="primary-title title-link"
           style={{
             fontSize: 20,
-            textTransform: "capitalize",
             cursor: "pointer",
           }}
           onClick={() => setGoToAction({ path: link.url, actions })}

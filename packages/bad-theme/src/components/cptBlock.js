@@ -21,7 +21,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [guidanceFilter, setGuidanceFilter] = useState(null);
-  
+
   if (!block) return <Loading />;
 
   const {
@@ -32,7 +32,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     add_search_function,
     acf_fc_layout,
   } = block;
-
 
   const searchFilterRef = useRef(null);
   const currentSearchFilterRef = useRef(null);
@@ -61,9 +60,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   useEffect(async () => {
     const path = `/${postPath}/`;
     await actions.source.fetch(path); // fetch CPT dermGroupeData
-
-    console.log("useEffect fires up");
-    console.log(typeFilterRef.current);
 
     let dermGroupeData = state.source.get(path);
     const { totalPages, page, next } = dermGroupeData; // check if dermGroupeData have multiple pages

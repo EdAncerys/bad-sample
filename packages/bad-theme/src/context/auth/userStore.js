@@ -153,13 +153,13 @@ export const createDynamicsApplicationAction = async ({ state, contactid }) => {
   };
 
   try {
-    const data = await fetch(URL, requestOptions);
-    const result = await data.json();
+    const response = await fetch(URL, requestOptions);
+    const data = await response.json();
 
-    // console.log("createDynamicsApplicationAction result", result); // debug
+    console.log("createDynamicsApplicationAction result", data); // debug
 
-    if (result.success) {
-      return result.data;
+    if (data.success) {
+      return data.data;
     } else {
       return null;
     }
@@ -183,13 +183,14 @@ export const getDynamicsApplicationAction = async ({ state, contactid }) => {
   };
 
   try {
-    const data = await fetch(URL, requestOptions);
-    const result = await data.json();
+    const response = await fetch(URL, requestOptions);
+    const data = await response.json();
 
-    // console.log("createDynamicsApplicationAction result", result); // debug
+    console.log("⏬ Membership Record In Dynamics not Found ⏬");
+    console.log("createDynamicsApplicationAction result", data); // debug
 
-    if (result.success) {
-      return result.data;
+    if (data.success) {
+      return data.data;
     } else {
       return null;
     }
@@ -213,7 +214,7 @@ export const setCompleteUserApplicationAction = async ({
     const jwt = await authenticateAppAction({ state });
 
     const requestOptions = {
-      method: "POST",
+      method: "GET",
       headers: { Authorization: `Bearer ${jwt}` },
     };
 
@@ -225,6 +226,7 @@ export const setCompleteUserApplicationAction = async ({
       console.log(data);
     } else {
       console.log("⏬ Failed to Create Membership ⏬");
+      console.log(data);
     }
   } catch (error) {
     console.log("error", error);
@@ -329,6 +331,10 @@ const updateMembershipApplication = ({
       application.value = data.py3_addresszippostalcode;
     if (data.py3_addresscountry && application.name === "py3_addresscountry")
       application.value = data.py3_addresscountry;
+    if (data.sky_profilepicture && application.name === "sky_profilepicture")
+      application.value = data.sky_profilepicture;
+    if (data.py3_dateofbirth && application.name === "py3_dateofbirth")
+      application.value = data.py3_dateofbirth;
 
     //⏬ category section of the application process
     if (data.py3_gmcnumber && application.name === "py3_gmcnumber")
@@ -344,16 +350,18 @@ const updateMembershipApplication = ({
       application.value = data.bad_currentpost;
     if (data.py3_hospitalid && application.name === "py3_hospitalid")
       application.value = data.py3_hospitalid;
-    if (data.bad_medicalschool && application.name === "bad_medicalschool")
-      application.value = data.bad_medicalschool;
     if (data.bad_proposer1 && application.name === "bad_proposer1")
       application.value = data.bad_proposer1;
     if (data.bad_proposer2 && application.name === "bad_proposer2")
       application.value = data.bad_proposer2;
     if (data.bad_mrpcqualified && application.name === "bad_mrpcqualified")
       application.value = data.bad_mrpcqualified;
-    // cv input TCC
-    // grade TBC
+    if (data.sky_cvurl && application.name === "sky_cvurl")
+      application.value = data.sky_cvurl;
+    if (data.sky_newhospitalname && application.name === "sky_newhospitalname")
+      application.value = data.sky_newhospitalname;
+    if (data.sky_newhospitaltype && application.name === "sky_newhospitaltype")
+      application.value = data.sky_newhospitaltype;
 
     //⏬ SIG section of the application process
     if (data.bad_qualifications && application.name === "bad_qualifications")

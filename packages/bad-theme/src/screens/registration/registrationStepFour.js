@@ -1,50 +1,20 @@
-import { useState, useRef } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import Image from "@frontity/components/image";
+
 import { Form } from "react-bootstrap";
 
 import { colors } from "../../config/imports";
-import { setGoToAction } from "../../context";
 import SideBarMenu from "./sideBarMenu";
-import FileUpload from "../../img/svg/fileUpload.svg";
-import BlockWrapper from "../../components/blockWrapper";
 
+import BlockWrapper from "../../components/blockWrapper";
 import ProfessionalDetails from "./forms/professionalDetails";
 
-import { UK_HOSPITALS } from "../../config/data";
-// CONTEXT ----------------------------------------------------------------
-import {
-  useAppDispatch,
-  useAppState,
-  setUserStoreAction,
-  sendFileToS3Action,
-  getHospitalsAction,
-} from "../../context";
-
-const RegistrationStepFour = ({ state, actions }) => {
+const RegistrationStepTwo = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
 
-  const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser } = useAppState();
-
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-
-  const [category, setCategory] = useState(() => {
-    if (!applicationData) return "";
-    const isSIG = applicationData[0].bad_organisedfor === "SIG";
-
-    let applicationCategory = "";
-    applicationData.map((data) => {
-      if (data.bad_categorytype)
-        applicationCategory = isSIG
-          ? data._bad_sigid_value
-          : data.bad_categorytype;
-    });
-
-    return applicationCategory;
-  });
 
   // SERVERS ---------------------------------------------
   const ServeContent = () => {
@@ -79,23 +49,6 @@ const RegistrationStepFour = ({ state, actions }) => {
             Memberships Page
           </div>
 
-          <div
-            className="primary-title"
-            style={{
-              ...styles.title,
-              paddingTop: `1em`,
-              marginTop: `1em`,
-              borderTop: `1px solid ${colors.silverFillTwo}`,
-            }}
-          >
-            Category Selected : <span>{category}</span>
-          </div>
-          <div style={{ paddingTop: `0.75em` }}>
-            Category requirements: GP members will be UK or Irish general
-            practitioners (including GPwSIs/GPwERs) who spend less than 50% of
-            their working time in dermatology.
-          </div>
-
           <ProfessionalDetails />
         </div>
       </div>
@@ -125,22 +78,9 @@ const styles = {
     justifyContent: "space-between",
     gap: 20,
   },
-  inputContainer: {
-    display: "grid",
-    gridTemplateColumns: `1fr 1fr`,
-    justifyContent: "space-between",
-    gap: 20,
-    padding: `2em 0`,
-  },
   title: {
-    fontSize: 22,
-  },
-  checkBox: {
-    borderRadius: "50%",
-    width: 20,
-    height: 20,
-    margin: `0 10px 0 0`,
+    fontSize: 20,
   },
 };
 
-export default connect(RegistrationStepFour);
+export default connect(RegistrationStepTwo);

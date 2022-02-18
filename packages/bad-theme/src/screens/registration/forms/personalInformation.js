@@ -5,6 +5,7 @@ import { Form } from "react-bootstrap";
 
 import Avatar from "../../../img/svg/profile.svg";
 import { colors } from "../../../config/imports";
+import FormError from "../../../components/formError";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -13,6 +14,7 @@ import {
   sendFileToS3Action,
   setGoToAction,
   validateMembershipFormAction,
+  errorHandler,
 } from "../../../context";
 
 const PersonalDetails = ({ state, actions, libraries }) => {
@@ -34,7 +36,8 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     py3_addresscountystate: "",
     py3_addresszippostalcode: "",
     py3_addresscountry: "",
-    document: "",
+    sky_profilepicture: "",
+    py3_dateofbirth: "",
   });
   const [inputValidator, setInputValidator] = useState({
     py3_title: true,
@@ -49,9 +52,9 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     py3_addresscountystate: true,
     py3_addresszippostalcode: true,
     py3_addresscountry: true,
-    document: true,
+    sky_profilepicture: true,
+    py3_dateofbirth: true,
   });
-  const [profilePhoto, setProfilePhoto] = useState(null);
   const documentRef = useRef(null);
 
   // ⏬ populate form data values from applicationData
@@ -87,6 +90,10 @@ const PersonalDetails = ({ state, actions, libraries }) => {
         handleSetData({ data, name: "py3_addresszippostalcode" });
       if (data.name === "py3_addresscountry")
         handleSetData({ data, name: "py3_addresscountry" });
+      if (data.name === "sky_profilepicture")
+        handleSetData({ data, name: "sky_profilepicture" });
+      if (data.name === "py3_dateofbirth")
+        handleSetData({ data, name: "py3_dateofbirth" });
     });
 
     // ⏬ validate inputs
@@ -110,8 +117,37 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
+  const isFormValidated = ({ required }) => {
+    if (!required && !required.length) return null;
+    let isValid = true;
+
+    required.map((input) => {
+      if (!formData[input] && inputValidator[input]) {
+        errorHandler({ id: `form-error-${input}` });
+        isValid = false;
+      }
+    });
+
+    return isValid;
+  };
+
   const handleNext = async () => {
-    console.log(formData); // debug
+    const isValid = isFormValidated({
+      required: [
+        "py3_title",
+        "py3_firstname",
+        "py3_lastname",
+        "py3_gender",
+        "py3_email",
+        "py3_mobilephone",
+        "py3_address1ine1",
+        "py3_addresstowncity",
+        "py3_addresscountystate",
+        "py3_addresszippostalcode",
+        "py3_addresscountry",
+      ],
+    });
+    if (!isValid) return null;
 
     await setUserStoreAction({
       state,
@@ -124,25 +160,28 @@ const PersonalDetails = ({ state, actions, libraries }) => {
 
     let slug = `/membership/step-3-category-selection/`;
     if (isActiveUser) setGoToAction({ path: slug, actions });
+
+    // console.log(formData); // debug
   };
 
   const handleDocUploadChange = async () => {
-    let document = documentRef.current ? documentRef.current.files[0] : null;
-    const objectURL = URL.createObjectURL(document);
-    setProfilePhoto(objectURL);
+    let sky_profilepicture = documentRef.current
+      ? documentRef.current.files[0]
+      : null;
+    // const objectURL = URL.createObjectURL(sky_profilepicture);
 
-    if (document)
-      document = await sendFileToS3Action({
+    if (sky_profilepicture)
+      sky_profilepicture = await sendFileToS3Action({
         state,
         dispatch,
-        attachments: document,
+        attachments: sky_profilepicture,
       });
 
     setFormData((prevFormData) => ({
       ...prevFormData,
-      ["document"]: document,
+      ["sky_profilepicture"]: sky_profilepicture,
     }));
-    console.log("document", document); // debug
+    console.log("sky_profilepicture", sky_profilepicture); // debug
   };
 
   const handleInputChange = (e) => {
@@ -207,7 +246,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
             }}
           >
             <Image
-              src={profilePhoto || Avatar}
+              src={formData.sky_profilepicture || Avatar}
               alt="Profile Avatar"
               style={{
                 width: "100%",
@@ -250,6 +289,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
                   <option value="Ms">Ms</option>
                   <option value="Professor">Professor</option>
                 </Form.Select>
+                <FormError id="py3_title" />
               </div>
             )}
 
@@ -264,6 +304,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
                   className="form-control input"
                   placeholder="First Name"
                 />
+                <FormError id="py3_firstname" />
               </div>
             )}
 
@@ -278,6 +319,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
                   className="form-control input"
                   placeholder="Last Name"
                 />
+                <FormError id="py3_lastname" />
               </div>
             )}
 
@@ -304,6 +346,21 @@ const PersonalDetails = ({ state, actions, libraries }) => {
                   <option value="215500007">Prefer Not To Answer</option>
                   <option value="215500002">Unknown</option>
                 </Form.Select>
+                <FormError id="py3_gender" />
+              </div>
+            )}
+
+            {inputValidator.py3_dateofbirth && (
+              <div>
+                <label className="form-label">Date of Birth</label>
+                <input
+                  name="py3_dateofbirth"
+                  value={formData.py3_dateofbirth}
+                  onChange={handleInputChange}
+                  type="date"
+                  className="form-control input"
+                  placeholder="Date of Birth"
+                />
               </div>
             )}
 
@@ -332,6 +389,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
                   className="form-control input"
                   placeholder="Mobile Number"
                 />
+                <FormError id="py3_mobilephone" />
               </div>
             )}
           </div>
@@ -354,6 +412,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
                   className="form-control input"
                   placeholder="Address Line 1"
                 />
+                <FormError id="py3_address1ine1" />
               </div>
             )}
 
@@ -368,44 +427,56 @@ const PersonalDetails = ({ state, actions, libraries }) => {
               />
             )}
             {inputValidator.py3_addresstowncity && (
-              <input
-                name="py3_addresstowncity"
-                value={formData.py3_addresstowncity}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="City"
-              />
+              <div>
+                <input
+                  name="py3_addresstowncity"
+                  value={formData.py3_addresstowncity}
+                  onChange={handleInputChange}
+                  type="text"
+                  className="form-control input"
+                  placeholder="City"
+                />
+                <FormError id="py3_addresstowncity" />
+              </div>
             )}
             {inputValidator.py3_addresscountystate && (
-              <input
-                name="py3_addresscountystate"
-                value={formData.py3_addresscountystate}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="County/State"
-              />
+              <div>
+                <input
+                  name="py3_addresscountystate"
+                  value={formData.py3_addresscountystate}
+                  onChange={handleInputChange}
+                  type="text"
+                  className="form-control input"
+                  placeholder="County/State"
+                />
+                <FormError id="py3_addresscountystate" />
+              </div>
             )}
             {inputValidator.py3_addresszippostalcode && (
-              <input
-                name="py3_addresszippostalcode"
-                value={formData.py3_addresszippostalcode}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="Postcode/Zip"
-              />
+              <div>
+                <input
+                  name="py3_addresszippostalcode"
+                  value={formData.py3_addresszippostalcode}
+                  onChange={handleInputChange}
+                  type="text"
+                  className="form-control input"
+                  placeholder="Postcode/Zip"
+                />
+                <FormError id="py3_addresszippostalcode" />
+              </div>
             )}
             {inputValidator.py3_addresscountry && (
-              <input
-                name="py3_addresscountry"
-                value={formData.py3_addresscountry}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="Country"
-              />
+              <div>
+                <input
+                  name="py3_addresscountry"
+                  value={formData.py3_addresscountry}
+                  onChange={handleInputChange}
+                  type="text"
+                  className="form-control input"
+                  placeholder="Country"
+                />
+                <FormError id="py3_addresscountry" />
+              </div>
             )}
           </div>
         </form>
