@@ -37,6 +37,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     py3_addresszippostalcode: "",
     py3_addresscountry: "",
     sky_profilepicture: "",
+    py3_dateofbirth: "",
   });
   const [inputValidator, setInputValidator] = useState({
     py3_title: true,
@@ -52,8 +53,8 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     py3_addresszippostalcode: true,
     py3_addresscountry: true,
     sky_profilepicture: true,
+    py3_dateofbirth: true,
   });
-  const [profilePhoto, setProfilePhoto] = useState(null);
   const documentRef = useRef(null);
 
   // ⏬ populate form data values from applicationData
@@ -89,6 +90,10 @@ const PersonalDetails = ({ state, actions, libraries }) => {
         handleSetData({ data, name: "py3_addresszippostalcode" });
       if (data.name === "py3_addresscountry")
         handleSetData({ data, name: "py3_addresscountry" });
+      if (data.name === "sky_profilepicture")
+        handleSetData({ data, name: "sky_profilepicture" });
+      if (data.name === "py3_dateofbirth")
+        handleSetData({ data, name: "py3_dateofbirth" });
     });
 
     // ⏬ validate inputs
@@ -155,14 +160,15 @@ const PersonalDetails = ({ state, actions, libraries }) => {
 
     let slug = `/membership/step-3-category-selection/`;
     if (isActiveUser) setGoToAction({ path: slug, actions });
+
+    // console.log(formData); // debug
   };
 
   const handleDocUploadChange = async () => {
     let sky_profilepicture = documentRef.current
       ? documentRef.current.files[0]
       : null;
-    const objectURL = URL.createObjectURL(sky_profilepicture);
-    setProfilePhoto(objectURL);
+    // const objectURL = URL.createObjectURL(sky_profilepicture);
 
     if (sky_profilepicture)
       sky_profilepicture = await sendFileToS3Action({
@@ -240,7 +246,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
             }}
           >
             <Image
-              src={profilePhoto || Avatar}
+              src={formData.sky_profilepicture || Avatar}
               alt="Profile Avatar"
               style={{
                 width: "100%",
@@ -341,6 +347,20 @@ const PersonalDetails = ({ state, actions, libraries }) => {
                   <option value="215500002">Unknown</option>
                 </Form.Select>
                 <FormError id="py3_gender" />
+              </div>
+            )}
+
+            {inputValidator.py3_dateofbirth && (
+              <div>
+                <label className="form-label">Date of Birth</label>
+                <input
+                  name="py3_dateofbirth"
+                  value={formData.py3_dateofbirth}
+                  onChange={handleInputChange}
+                  type="date"
+                  className="form-control input"
+                  placeholder="Date of Birth"
+                />
               </div>
             )}
 

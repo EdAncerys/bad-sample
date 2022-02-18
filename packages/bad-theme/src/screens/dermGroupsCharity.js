@@ -12,7 +12,6 @@ import {
   useAppDispatch,
   useAppState,
   handleApplyForMembershipAction,
-  getMembershipDataAction,
 } from "../context";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";

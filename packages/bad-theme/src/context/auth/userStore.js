@@ -333,6 +333,8 @@ const updateMembershipApplication = ({
       application.value = data.py3_addresscountry;
     if (data.sky_profilepicture && application.name === "sky_profilepicture")
       application.value = data.sky_profilepicture;
+    if (data.py3_dateofbirth && application.name === "py3_dateofbirth")
+      application.value = data.py3_dateofbirth;
 
     //⏬ category section of the application process
     if (data.py3_gmcnumber && application.name === "py3_gmcnumber")
