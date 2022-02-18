@@ -3,17 +3,15 @@ import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 
-const DirectDebitNotification = ({
-  state,
-  actions,
-  libraries,
-  setPage,
-}) => {
+const DirectDebitNotification = ({ state, actions, libraries, setPage }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-  const PAYMENTS = [1, 2, 3];
+
+  const [visible, setVisible] = useState(true);
+
+  if (!visible) return null;
 
   // HELPERS ----------------------------------------------------------------
   const handlePayment = () => {
@@ -23,10 +21,19 @@ const DirectDebitNotification = ({
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
     return (
-      <div style={{ margin: `auto 0`, width: marginHorizontal * 2 }}>
+      <div className="flex" style={{ margin: `auto 0` }}>
         <div style={{ padding: `0 2em` }}>
           <div type="submit" className="blue-btn" onClick={handlePayment}>
             Setup Direct Debit
+          </div>
+        </div>
+        <div>
+          <div
+            type="submit"
+            className="transparent-btn"
+            onClick={() => setVisible(false)}
+          >
+            Dismiss
           </div>
         </div>
       </div>
