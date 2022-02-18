@@ -9,11 +9,10 @@ import CheckMarkGreen from "../../img/svg/checkMarkGreen.svg";
 
 // CONTEXT ----------------------------------------------------------------
 import { useAppState, setGoToAction } from "../../context";
-
 const ProfileProgress = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const { applicationData } = useAppState();
+  const { applicationData, isActiveUser } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
   const ICON_WIDTH = 30;

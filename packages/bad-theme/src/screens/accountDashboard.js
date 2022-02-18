@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { connect } from "frontity";
 
 import BlockBuilder from "../components/builder/blockBuilder";
@@ -14,10 +14,16 @@ import Settings from "../components/dashboard/pages/settings";
 
 import BlockWrapper from "../components/blockWrapper";
 
+import { handleGetCookie } from "../helpers/cookie";
+
 const AccountDashboard = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
+  const cookie = handleGetCookie({ name: `BAD-WebApp` });
+  const { contactid, jwt } = cookie;
+
   const [dashboardPath, setDashboardPath] = useState("Dashboard");
+  const [applicationStatus, setApplicationStatus] = useState();
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
   const wpBlocks = page.acf.blocks;
@@ -27,6 +33,26 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   // prevent dashboard actions to load before all server side mutations loaded
   useLayoutEffect(() => {
     SetReady(true);
+  }, []);
+
+  useEffect(() => {
+    const fetchApplicationBillingStatus = async () => {
+      const getUserApplicationData = await fetch(
+        state.auth.APP_HOST +
+          "/applications/billing/c1bfc5c0-87d1-ea11-a812-000d3a2ab5a1",
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+
+      const json = await getUserApplicationData.json();
+      if (json) setApplicationStatus(json);
+      console.log(json);
+    };
+
+    fetchApplicationBillingStatus();
   }, []);
   if (!isReady) return null;
 
@@ -39,11 +65,17 @@ const AccountDashboard = ({ state, actions, libraries }) => {
             setDashboardPath={setDashboardPath}
           />
 
-          <Dashboard dashboardPath={dashboardPath} />
+          <Dashboard
+            dashboardPath={dashboardPath}
+            userStatus={applicationStatus}
+          />
           <DashboardEvents dashboardPath={dashboardPath} />
           <Membership dashboardPath={dashboardPath} />
           <MyAccount dashboardPath={dashboardPath} />
-          <Billing dashboardPath={dashboardPath} />
+          <Billing
+            dashboardPath={dashboardPath}
+            userStatus={applicationStatus}
+          />
           <Settings dashboardPath={dashboardPath} />
         </BlockWrapper>
 

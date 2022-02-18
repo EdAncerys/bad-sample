@@ -7,7 +7,7 @@ import BillingHistory from "../billingHistory";
 import OrderSummary from "../orderSummary";
 import DirectDebitSetup from "../directDebitSetup";
 
-const Billing = ({ state, actions, libraries, dashboardPath }) => {
+const Billing = ({ state, actions, libraries, dashboardPath, userStatus }) => {
   const [page, setPage] = useState({ page: "billing" });
 
   if (dashboardPath !== "Billing") return null;
@@ -21,7 +21,7 @@ const Billing = ({ state, actions, libraries, dashboardPath }) => {
     return (
       <div>
         <DirectDebitNotification setPage={setPage} />
-        <Payments setPage={setPage} />
+        <Payments setPage={setPage} subscriptions={userStatus} />
         <BillingHistory />
       </div>
     );

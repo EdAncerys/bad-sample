@@ -10,9 +10,8 @@ const Profile = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { isActiveUser } = useAppState();
-
+  console.log(useAppState());
   const marginVertical = state.theme.marginVertical;
-
   // SERVERS ---------------------------------------------
   const ServeProfileAvatar = () => {
     if (!isActiveUser) return null;

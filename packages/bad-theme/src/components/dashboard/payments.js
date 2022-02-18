@@ -2,31 +2,59 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
-
-const Payments = ({ state, actions, libraries, setPage }) => {
+import { handleGetCookie } from "../../helpers/cookie";
+const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-  const PAYMENTS = [1, 2, 3];
-
+  const { subs } = subscriptions;
+  console.log(subs);
   // HELPERS ----------------------------------------------------------------
-  const handlePayment = ({ block }) => {
-    setPage({ page: "directDebit", data: block });
+  const handlePayment = async ({ core_membershipsubscriptionid }) => {
+    const cookie = handleGetCookie({ name: `BAD-WebApp` });
+    const { contactid, jwt } = cookie;
+    const fetchVendorId = await fetch(
+      state.auth.APP_HOST +
+        "/sagepay/test/subscription/" +
+        core_membershipsubscriptionid,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+    if (fetchVendorId.ok) {
+      const json = await fetchVendorId.json();
+      alert(
+        "VendorTx for subscriptionId " +
+          core_membershipsubscriptionid +
+          " is " +
+          json.VendorTxCode
+      );
+    }
+    // setPage({ page: "directDebit", data: block });
   };
 
   // SERVERS ---------------------------------------------
   const ServePayments = ({ block, item }) => {
     const ServeActions = () => {
+      const { bad_outstandingpayments, core_membershipsubscriptionid } = block;
+      const stringAmountToPay = bad_outstandingpayments.replace(
+        /[^0-9.-]+/g,
+        ""
+      );
+      const amountToPay = Number(stringAmountToPay);
+      const outstanding = amountToPay > 0;
       return (
         <div style={{ margin: `auto 0`, width: marginHorizontal * 2 }}>
           <div style={{ padding: `0 2em` }}>
             <div
               type="submit"
               className="blue-btn"
-              onClick={() => handlePayment({ block })}
+              onClick={() => handlePayment({ core_membershipsubscriptionid })}
             >
-              Pay Now
+              {outstanding ? "Pay now" : "Already paid"}
             </div>
           </div>
         </div>
@@ -34,9 +62,10 @@ const Payments = ({ state, actions, libraries, setPage }) => {
     };
 
     const ServeInfo = () => {
-      const dataLength = PAYMENTS.length;
+      const dataLength = subs.data.length;
       const isLastItem = dataLength === item + 1;
-
+      const { bad_outstandingpayments_date } = block;
+      const date = bad_outstandingpayments_date.split(" ");
       return (
         <div
           className="flex"
@@ -48,10 +77,10 @@ const Payments = ({ state, actions, libraries, setPage }) => {
           }}
         >
           <div className="flex" style={styles.fontSize}>
-            <div>Details of the invoice to be paid.</div>
+            <div>{block.core_name}</div>
           </div>
           <div className="flex" style={styles.fontSize}>
-            <div>01/12/2021</div>
+            <div>{date[0]}</div>
           </div>
         </div>
       );
@@ -75,10 +104,14 @@ const Payments = ({ state, actions, libraries, setPage }) => {
       style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
     >
       <div className="primary-title" style={{ fontSize: 20 }}>
-        Payments:
+        Active subscriptions:
       </div>
-      <ServeSubTitle title="Invoices" />
-      {PAYMENTS.map((block, key) => {
+      {subs.length === 0 ? (
+        <ServeSubTitle title="No active subscriptions at the moment" />
+      ) : (
+        <ServeSubTitle title="Invoices" />
+      )}
+      {subs.data.map((block, key) => {
         return <ServePayments key={key} block={block} item={key} />;
       })}
     </div>

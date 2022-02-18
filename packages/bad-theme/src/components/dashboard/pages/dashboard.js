@@ -5,12 +5,20 @@ import Profile from "../profile";
 import ProfileProgress from "../profileProgress";
 import UpdateProfile from "../updateProfile";
 import { colors } from "../../../config/colors";
-
+import { useAppState } from "../../../context";
 import TitleBlock from "../../titleBlock";
 import Events from "../../events/events";
 
-const Dashboard = ({ state, actions, libraries, dashboardPath }) => {
+const Dashboard = ({
+  state,
+  actions,
+  libraries,
+  dashboardPath,
+  userStatus,
+}) => {
   if (dashboardPath !== "Dashboard") return null;
+
+  const { jwt, isActiveUser } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
 
@@ -19,7 +27,7 @@ const Dashboard = ({ state, actions, libraries, dashboardPath }) => {
     return (
       <div style={{ padding: `0 ${marginHorizontal}px` }}>
         <Profile />
-        <ProfileProgress />
+        <ProfileProgress userStatus={userStatus} />
         <UpdateProfile />
       </div>
     );
