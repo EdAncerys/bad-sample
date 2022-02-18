@@ -63,6 +63,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   });
   const [hospitalData, setHospitalData] = useState(null);
   const [selectedHospital, setSelectedHospital] = useState(null);
+  const [applicationType, setType] = useState("");
 
   const documentRef = useRef(null);
   const hospitalSearchRef = useRef("");
@@ -96,6 +97,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         handleSetFormData({ data, name: "bad_mrpcqualified" });
       if (data.name === "bad_medicalschool")
         handleSetFormData({ data, name: "bad_medicalschool" });
+      if (data.bad_categorytype) setType(data.bad_categorytype);
+      if (data._bad_sigid_value) setType(data._bad_sigid_value);
     });
 
     // ⏬ validate inputs
@@ -152,22 +155,23 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   };
 
   const handleNext = async () => {
-    await setUserStoreAction({
-      state,
-      dispatch,
-      applicationData,
-      isActiveUser,
-      membershipApplication: { stepFour: true }, // set stepOne to complete
-      data: formData,
-    });
-    let slug = `/membership/final-step-thank-you/`;
-    if (category === "SIG") slug = `/membership/step-5-sig-questions/`;
-    if (isActiveUser) setGoToAction({ path: slug, actions });
+    // await setUserStoreAction({
+    //   state,
+    //   dispatch,
+    //   applicationData,
+    //   isActiveUser,
+    //   membershipApplication: { stepFour: true }, // set stepOne to complete
+    //   data: formData,
+    // });
+    // let slug = `/membership/final-step-thank-you/`;
+    // if (category === "SIG") slug = `/membership/step-5-sig-questions/`;
+    // if (isActiveUser) setGoToAction({ path: slug, actions });
+
+    console.log("formData", formData); // debug
   };
 
   const handleDocUploadChange = async (e) => {
     let document = e.target.files[0];
-    // let document = documentRef.current ? documentRef.current.files[0] : null;
 
     if (document)
       document = await sendFileToS3Action({
@@ -175,13 +179,12 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         dispatch,
         attachments: document,
       });
+    console.log("document", document); // debug
 
     setFormData((prevFormData) => ({
       ...prevFormData,
       ["document"]: document,
     }));
-    console.log("document", e.target); // debug
-    console.log("document", document); // debug
   };
 
   const handleInputChange = (e) => {
@@ -226,6 +229,17 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
   return (
     <div>
+      <div
+        className="primary-title"
+        style={{
+          fontSize: 22,
+          paddingTop: `1em`,
+          marginTop: `1em`,
+          borderTop: `1px solid ${colors.silverFillTwo}`,
+        }}
+      >
+        Category Selected: <span>{applicationType}</span>
+      </div>
       <form>
         <div style={{ padding: `2em 1em` }}>
           {inputValidator.py3_gmcnumber && (
