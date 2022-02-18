@@ -430,6 +430,11 @@ const updateMembershipApplication = ({
       application.name === "py3_constitutionagreement"
     )
       application.value = data.py3_constitutionagreement;
+    if (
+      data.bad_readpolicydocument !== undefined &&
+      application.name === "bad_readpolicydocument"
+    )
+      application.value = data.bad_readpolicydocument;
   });
 
   console.log("User Input Data ", data); // debug
