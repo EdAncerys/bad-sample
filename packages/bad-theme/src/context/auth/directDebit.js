@@ -13,12 +13,11 @@ export const getDirectDebitAction = async ({ state, id }) => {
 
   try {
     const response = await fetch(URL, requestOptions);
-    const data = await data.json();
+    const data = await response.json();
 
     console.log("getDirectDebitAction data", data); // debug
 
-    if (response.success) return data.data;
-    return null;
+    return data.data;
   } catch (error) {
     console.log("error", error);
   }

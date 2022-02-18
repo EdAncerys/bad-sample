@@ -1,17 +1,23 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
+import Loading from "../../components/loading";
 
-const DirectDebitNotification = ({ state, actions, libraries, setPage }) => {
+const DirectDebitNotification = ({
+  state,
+  actions,
+  libraries,
+  setPage,
+  debitActive,
+  visible,
+}) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  const [visible, setVisible] = useState(true);
-
-  if (!visible) return null;
+  if (!visible || !debitActive) return null;
+  // if (!debitActive) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
   const handlePayment = () => {
