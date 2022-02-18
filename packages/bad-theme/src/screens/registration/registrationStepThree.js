@@ -192,56 +192,56 @@ const RegistrationStepThree = ({ state, actions }) => {
               Membership Category
             </option>
 
-            <option value="British Cosmetic Dermatology Group">
+            <option value="Full:British Cosmetic Dermatology Group">
               British Cosmetic Dermatology Group
             </option>
-            <option value="British Hair and Nails Society">
+            <option value="Full:British Hair and Nails Society">
               British Hair and Nails Society
             </option>
-            <option value="British Photodermatology Group">
+            <option value="Full:British Photodermatology Group">
               British Photodermatology Group
             </option>
-            <option value="British Society of Cutaneous Allergy">
+            <option value="Full:British Society of Cutaneous Allergy">
               British Society of Cutaneous Allergy
             </option>
-            <option value="British Society of Cutaneous Allergy Overseas">
+            <option value="Full:British Society of Cutaneous Allergy Overseas">
               British Society of Cutaneous Allergy Overseas
             </option>
-            <option value="British Society for Dermatopathology">
+            <option value="Full:British Society for Dermatopathology">
               British Society for Dermatopathology
             </option>
-            <option value="British Society for Dermatological Surgery">
+            <option value="Full:British Society for Dermatological Surgery">
               British Society for Dermatological Surgery
             </option>
-            <option value="British Society for Dermatological Surgery Associate">
+            <option value="Full:British Society for Dermatological Surgery Associate">
               British Society for Dermatological Surgery Associate
             </option>
-            <option value="British Society for Dermatological Surgery International">
+            <option value="Full:British Society for Dermatological Surgery International">
               British Society for Dermatological Surgery International
             </option>
-            <option value="British Society for Dermatological Surgery Trainnee">
+            <option value="Full:British Society for Dermatological Surgery Trainnee">
               British Society for Dermatological Surgery Trainnee
             </option>
-            <option value="British Society for Investigative Dermatology">
+            <option value="Full:British Society for Investigative Dermatology">
               British Society for Investigative Dermatology
             </option>
-            <option value="British Society for Medical Dermatology">
+            <option value="Full:British Society for Medical Dermatology">
               British Society for Medical Dermatology
             </option>
-            <option value="British Society for Medical Dermatology Associate">
+            <option value="Full:British Society for Medical Dermatology Associate">
               British Society for Medical Dermatology Associate
             </option>
-            <option value="British Society for Paediatric Dermatology">
+            <option value="Full:British Society for Paediatric Dermatology">
               British Society for Paediatric Dermatology
             </option>
-            <option value="British Society for Paediatric Dermatology Trainee">
+            <option value="Full:British Society for Paediatric Dermatology Trainee">
               British Society for Paediatric Dermatology Trainee
             </option>
-            <option value="British Society for Skin Care in Immunocompromised Individuals">
+            <option value="Full:British Society for Skin Care in Immunocompromised Individuals">
               British Society for Skin Care in Immunocompromised Individuals
             </option>
-            <option value="The Dowling Club">The Dowling Club</option>
-            <option value="DermpathPRO">DERMPATHPRO</option>
+            <option value="Full:The Dowling Club">The Dowling Club</option>
+            <option value="Full:DermpathPRO">DERMPATHPRO</option>
           </Form.Select>
         </div>
       );
