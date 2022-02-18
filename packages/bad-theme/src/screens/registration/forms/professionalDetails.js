@@ -45,7 +45,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     bad_proposer1: "",
     bad_proposer2: "",
     bad_mrpcqualified: "",
-    document: "",
+    sky_cvurl: "",
     currentGrade: "",
     bad_medicalschool: "",
     sky_newhospitalname: "",
@@ -61,7 +61,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     bad_proposer2: true,
     bad_mrpcqualified: true,
     currentGrade: true,
-    document: true,
+    sky_cvurl: true,
   });
   const [hospitalData, setHospitalData] = useState(null);
   const [selectedHospital, setSelectedHospital] = useState(null);
@@ -211,19 +211,19 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   };
 
   const handleDocUploadChange = async (e) => {
-    let document = e.target.files[0];
+    let sky_cvurl = e.target.files[0];
 
-    if (document)
-      document = await sendFileToS3Action({
+    if (sky_cvurl)
+      sky_cvurl = await sendFileToS3Action({
         state,
         dispatch,
-        attachments: document,
+        attachments: sky_cvurl,
       });
-    console.log("document", document); // debug
+    console.log("sky_cvurl", sky_cvurl); // debug
 
     setFormData((prevFormData) => ({
       ...prevFormData,
-      ["document"]: document,
+      ["sky_cvurl"]: sky_cvurl,
     }));
   };
 
@@ -491,7 +491,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.document && (
+          {inputValidator.sky_cvurl && (
             <div>
               <label className="form-label">Upload Your CV</label>
               <input

@@ -3,13 +3,14 @@ import { connect } from "frontity";
 import { Form } from "react-bootstrap";
 
 import { colors } from "../../../config/imports";
+import FormError from "../../../components/formError";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
   useAppState,
   setUserStoreAction,
   setGoToAction,
-  getMembershipDataAction,
+  errorHandler,
   validateMembershipFormAction,
 } from "../../../context";
 
@@ -31,7 +32,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
   const [formData, setFormData] = useState({
     bad_qualifications: "",
-    bad_hasmedicallicence: true,
+    bad_hasmedicallicence: "",
     bad_isbadmember: "",
     bad_interestinfieldquestion: "",
     py3_whatukbasedroleareyou: "",
@@ -113,7 +114,26 @@ const SIGApplication = ({ state, actions, libraries }) => {
     if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
 
+  const isFormValidated = ({ required }) => {
+    if (!required && !required.length) return null;
+    let isValid = true;
+
+    required.map((input) => {
+      if (!formData[input]) {
+        errorHandler({ id: `form-error-${input}` });
+        isValid = false;
+      }
+    });
+
+    return isValid;
+  };
+
   const handleNext = async () => {
+    const isValid = isFormValidated({
+      required: ["bad_qualifications"],
+    });
+    if (!isValid) return null;
+
     await setUserStoreAction({
       state,
       dispatch,
@@ -190,6 +210,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 className="form-control input"
                 placeholder="Qualification"
               />
+              <FormError id="bad_qualifications" />
             </div>
           )}
 
