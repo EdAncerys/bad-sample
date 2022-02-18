@@ -46,6 +46,7 @@ import {
   getSHDFeedAction,
 } from "./auth/rssFeed";
 import { useIsMounted } from "../helpers/useIsMounted";
+import { errorHandler } from "../helpers/errorHandler";
 
 export {
   AppProvider,
@@ -86,4 +87,5 @@ export {
   handleApplyForMembershipAction,
   validateMembershipFormAction,
   useIsMounted,
+  errorHandler,
 };

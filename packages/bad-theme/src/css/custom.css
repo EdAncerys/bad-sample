@@ -345,3 +345,10 @@ https://codebeautify.org/
 .input {
   border-radius: 10px;
 }
+.error-notification {
+  display: block;
+  color: #ef476f;
+  font-size: 0.8em;
+  padding-top: 0.5em;
+  transition: all 0.25s ease-in-out;
+}
