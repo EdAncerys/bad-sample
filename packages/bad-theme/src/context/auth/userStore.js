@@ -221,8 +221,6 @@ export const setCompleteUserApplicationAction = async ({
     const response = await fetch(URL, requestOptions);
     const data = await response.json();
 
-    console.log("createDynamicsApplicationAction result", data); // debug
-
     if (data.success) {
       console.log("⏬ Membership Completed ⏬");
       console.log(data);
