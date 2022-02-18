@@ -40,12 +40,11 @@ export const createDirectDebitAction = async ({ state, id, data }) => {
 
   try {
     const response = await fetch(URL, requestOptions);
-    const data = await data.json();
+    const data = await response.json();
 
     console.log("createDirectDebitAction data", data); // debug
 
-    if (response.success) return data.data;
-    return null;
+    return data;
   } catch (error) {
     console.log("error", error);
   }

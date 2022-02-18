@@ -1,24 +1,23 @@
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
-import Loading from "../../components/loading";
 
 const DirectDebitNotification = ({
   state,
   actions,
   libraries,
   setPage,
-  debitActive,
+  isActiveDebit,
   visible,
-  setVisible
+  setVisible,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  if (!visible || !debitActive) return null;
-  // if (!debitActive) return <Loading />;
+  if (!visible || !isActiveDebit) return null;
+  // if (!isActiveDebit) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
   const handlePayment = () => {

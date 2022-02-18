@@ -12,7 +12,7 @@ const Billing = ({
   actions,
   libraries,
   dashboardPath,
-  debitActive,
+  isActiveDebit,
   visible,
   setVisible,
 }) => {
@@ -30,7 +30,7 @@ const Billing = ({
       <div>
         <DirectDebitNotification
           setPage={setPage}
-          debitActive={debitActive}
+          isActiveDebit={isActiveDebit}
           visible={visible}
           setVisible={setVisible}
         />

@@ -26,7 +26,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   const wpBlocks = page.acf.blocks;
 
   const [dashboardPath, setDashboardPath] = useState("Dashboard");
-  const [debitActive, setDebitActive] = useState(null);
+  const [isActiveDebit, setActiveDebit] = useState(null);
   const [visible, setVisible] = useState(true);
 
   const [isReady, SetReady] = useState(null);
@@ -41,7 +41,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
       id: isActiveUser.contactid,
     });
 
-    setDebitActive(debitResponse); // direct debit data
+    setActiveDebit(debitResponse); // direct debit data
 
     return () => {
       useEffectRef.current = false; // clean up function
@@ -70,7 +70,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
           <MyAccount dashboardPath={dashboardPath} />
           <Billing
             dashboardPath={dashboardPath}
-            debitActive={debitActive}
+            isActiveDebit={isActiveDebit}
             visible={visible}
             setVisible={setVisible}
           />
