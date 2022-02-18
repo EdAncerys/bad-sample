@@ -47,7 +47,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     bad_mrpcqualified: "",
     sky_cvurl: "",
     currentGrade: "",
-    bad_medicalschool: "",
     sky_newhospitalname: "",
   });
   const [inputValidator, setInputValidator] = useState({
@@ -56,7 +55,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     py3_ntnno: true,
     bad_currentpost: true,
     py3_hospitalid: true,
-    bad_medicalschool: true,
     bad_proposer1: true,
     bad_proposer2: true,
     bad_mrpcqualified: true,
@@ -97,8 +95,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         handleSetFormData({ data, name: "bad_proposer2" });
       if (data.name === "bad_mrpcqualified")
         handleSetFormData({ data, name: "bad_mrpcqualified" });
-      if (data.name === "bad_medicalschool")
-        handleSetFormData({ data, name: "bad_medicalschool" });
+
       if (data.bad_categorytype) setType(data.bad_categorytype);
       if (data._bad_sigid_value) setType(data._bad_sigid_value);
     });
@@ -192,7 +189,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         "py3_otherregulatorybodyreference",
         "py3_ntnno",
         "bad_currentpost",
-        "bad_medicalschool",
         "bad_mrpcqualified",
       ],
     });
@@ -399,21 +395,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                   />
                 )}
               </div>
-            </div>
-          )}
-
-          {inputValidator.bad_medicalschool && (
-            <div>
-              <label className="required form-label">Medical School</label>
-              <input
-                name="bad_medicalschool"
-                value={formData.bad_medicalschool}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="Medical School"
-              />
-              <FormError id="bad_medicalschool" />
             </div>
           )}
         </div>

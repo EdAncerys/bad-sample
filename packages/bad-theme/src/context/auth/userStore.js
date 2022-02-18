@@ -153,13 +153,13 @@ export const createDynamicsApplicationAction = async ({ state, contactid }) => {
   };
 
   try {
-    const data = await fetch(URL, requestOptions);
-    const result = await data.json();
+    const response = await fetch(URL, requestOptions);
+    const data = await response.json();
 
-    // console.log("createDynamicsApplicationAction result", result); // debug
+    console.log("createDynamicsApplicationAction result", data); // debug
 
-    if (result.success) {
-      return result.data;
+    if (data.success) {
+      return data.data;
     } else {
       return null;
     }
@@ -183,13 +183,14 @@ export const getDynamicsApplicationAction = async ({ state, contactid }) => {
   };
 
   try {
-    const data = await fetch(URL, requestOptions);
-    const result = await data.json();
+    const response = await fetch(URL, requestOptions);
+    const data = await response.json();
 
-    // console.log("createDynamicsApplicationAction result", result); // debug
+    console.log("⏬ Membership Record In Dynamics not Found ⏬");
+    console.log("createDynamicsApplicationAction result", data); // debug
 
-    if (result.success) {
-      return result.data;
+    if (data.success) {
+      return data.data;
     } else {
       return null;
     }
@@ -219,6 +220,8 @@ export const setCompleteUserApplicationAction = async ({
 
     const response = await fetch(URL, requestOptions);
     const data = await response.json();
+
+    console.log("createDynamicsApplicationAction result", data); // debug
 
     if (data.success) {
       console.log("⏬ Membership Completed ⏬");
@@ -346,8 +349,6 @@ const updateMembershipApplication = ({
       application.value = data.bad_currentpost;
     if (data.py3_hospitalid && application.name === "py3_hospitalid")
       application.value = data.py3_hospitalid;
-    if (data.bad_medicalschool && application.name === "bad_medicalschool")
-      application.value = data.bad_medicalschool;
     if (data.bad_proposer1 && application.name === "bad_proposer1")
       application.value = data.bad_proposer1;
     if (data.bad_proposer2 && application.name === "bad_proposer2")
