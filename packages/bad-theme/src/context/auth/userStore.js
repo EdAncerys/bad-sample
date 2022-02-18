@@ -367,6 +367,13 @@ const updateMembershipApplication = ({
       application.name === "bad_newhospitaladded"
     )
       application.value = data.bad_newhospitaladded;
+    if (data.sky_newhospitalname && application.name === "sky_newhospitalname")
+      application.value = data.sky_newhospitalname;
+    if (
+      data.bad_expectedyearofqualification &&
+      application.name === "bad_expectedyearofqualification"
+    )
+      application.value = data.bad_expectedyearofqualification;
 
     //⏬ SIG section of the application process
     if (data.bad_qualifications && application.name === "bad_qualifications")

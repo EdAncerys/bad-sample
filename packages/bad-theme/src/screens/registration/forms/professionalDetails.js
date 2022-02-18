@@ -46,10 +46,10 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     bad_proposer2: "",
     bad_mrpcqualified: "",
     sky_cvurl: "",
-    currentGrade: "",
+    py3_currentgrade: "",
     sky_newhospitalname: "",
     bad_newhospitaladded: "",
-    sky_newhospitalname: "",
+    bad_expectedyearofqualification: "",
   });
   const [inputValidator, setInputValidator] = useState({
     py3_gmcnumber: true,
@@ -60,10 +60,11 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     bad_proposer1: true,
     bad_proposer2: true,
     bad_mrpcqualified: true,
-    currentGrade: true,
+    py3_currentgrade: true,
     sky_cvurl: true,
     bad_newhospitaladded: true,
     sky_newhospitalname: true,
+    bad_expectedyearofqualification: true,
   });
   const [hospitalData, setHospitalData] = useState(null);
   const [selectedHospital, setSelectedHospital] = useState(null);
@@ -101,6 +102,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         handleSetFormData({ data, name: "bad_mrpcqualified" });
       if (data.name === "sky_newhospitalname")
         handleSetFormData({ data, name: "sky_newhospitalname" });
+      if (data.name === "bad_expectedyearofqualification")
+        handleSetFormData({ data, name: "bad_expectedyearofqualification" });
 
       if (data.bad_categorytype) setType(data.bad_categorytype);
       if (data._bad_sigid_value) setType(data._bad_sigid_value);
@@ -123,8 +126,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       py3_hospitalid: item.accountid,
-      sky_newhospitalname: "",
-      sky_newhospitaltype: "Hospital",
     }));
 
     setHospitalData(null); // clear hospital data for dropdown
@@ -240,6 +241,11 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
+
+  const isFormFooter =
+    inputValidator.bad_mrpcqualified ||
+    inputValidator.py3_currentgrade ||
+    inputValidator.sky_cvurl;
 
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
@@ -421,18 +427,35 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.sky_newhospitalname && (
+          {formData.bad_newhospitaladded && inputValidator.sky_newhospitalname && (
             <div>
-              <label className="required form-label">New Hospital Name</label>
+              <label className="form-label">New Hospital Name</label>
               <input
                 name="sky_newhospitalname"
                 value={formData.sky_newhospitalname}
                 onChange={handleInputChange}
                 type="text"
                 className="form-control input"
-                placeholder="MRCP"
+                placeholder="New Hospital Name"
               />
               <FormError id="bad_mrpcqualified" />
+            </div>
+          )}
+
+          {inputValidator.bad_expectedyearofqualification && (
+            <div>
+              <label className="form-label">
+                Expected Year of Qualification
+              </label>
+              <input
+                name="bad_expectedyearofqualification"
+                value={formData.bad_expectedyearofqualification}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Expected Year of Qualification"
+              />
+              <FormError id="bad_currentpost" />
             </div>
           )}
         </div>
@@ -478,56 +501,58 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
           </div>
         )}
 
-        <div
-          style={{
-            padding: `2em 1em`,
-            borderTop: `1px solid ${colors.silverFillTwo}`,
-            borderBottom: `1px solid ${colors.silverFillTwo}`,
-          }}
-        >
-          {inputValidator.bad_mrpcqualified && (
-            <div>
-              <label className="required form-label">MRCP</label>
-              <input
-                name="bad_mrpcqualified"
-                value={formData.bad_mrpcqualified}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="MRCP"
-              />
-              <FormError id="bad_mrpcqualified" />
-            </div>
-          )}
+        {isFormFooter && (
+          <div
+            style={{
+              padding: `2em 1em`,
+              borderTop: `1px solid ${colors.silverFillTwo}`,
+              borderBottom: `1px solid ${colors.silverFillTwo}`,
+            }}
+          >
+            {inputValidator.bad_mrpcqualified && (
+              <div>
+                <label className="required form-label">MRCP</label>
+                <input
+                  name="bad_mrpcqualified"
+                  value={formData.bad_mrpcqualified}
+                  onChange={handleInputChange}
+                  type="text"
+                  className="form-control input"
+                  placeholder="MRCP"
+                />
+                <FormError id="bad_mrpcqualified" />
+              </div>
+            )}
 
-          {inputValidator.currentGrade && (
-            <div>
-              <label className="form-label">Current Grade</label>
-              <input
-                name="currentGrade"
-                value={formData.currentGrade}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="Current Grade"
-              />
-            </div>
-          )}
+            {inputValidator.py3_currentgrade && (
+              <div>
+                <label className="form-label">Current Grade</label>
+                <input
+                  name="py3_currentgrade"
+                  value={formData.py3_currentgrade}
+                  onChange={handleInputChange}
+                  type="text"
+                  className="form-control input"
+                  placeholder="Current Grade"
+                />
+              </div>
+            )}
 
-          {inputValidator.sky_cvurl && (
-            <div>
-              <label className="form-label">Upload Your CV</label>
-              <input
-                ref={documentRef}
-                onChange={handleDocUploadChange}
-                type="file"
-                className="form-control input"
-                placeholder="CV Document"
-                accept="*"
-              />
-            </div>
-          )}
-        </div>
+            {inputValidator.sky_cvurl && (
+              <div>
+                <label className="form-label">Upload Your CV</label>
+                <input
+                  ref={documentRef}
+                  onChange={handleDocUploadChange}
+                  type="file"
+                  className="form-control input"
+                  placeholder="CV Document"
+                  accept="*"
+                />
+              </div>
+            )}
+          </div>
+        )}
       </form>
       <ServeActions />
     </div>
