@@ -156,8 +156,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
                     checked={formData.py3_constitutionagreement}
                     onChange={handleInputChange}
                     type="checkbox"
-                    className="form-check-input"
-                    style={styles.checkBox}
+                    className="form-check-input check-box"
                   />
                 </div>
                 <div>
@@ -185,8 +184,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
                     checked={formData.privacyNotice}
                     onChange={handleInputChange}
                     type="checkbox"
-                    className="form-check-input"
-                    style={styles.checkBox}
+                    className="form-check-input check-box"
                   />
                 </div>
                 <div>
@@ -224,12 +222,6 @@ const CompleteApplication = ({ state, actions, libraries }) => {
 const styles = {
   title: {
     fontSize: 20,
-  },
-  checkBox: {
-    borderRadius: "50%",
-    width: 20,
-    height: 20,
-    margin: `0 10px 0 0`,
   },
 };
 

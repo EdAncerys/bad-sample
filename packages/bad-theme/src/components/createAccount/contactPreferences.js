@@ -67,8 +67,7 @@ const ContactPreferences = ({
             <div>
               <input
                 type="checkbox"
-                className="form-check-input"
-                style={styles.checkBox}
+                className="form-check-input check-box"
               />
             </div>
             <div>
@@ -83,8 +82,7 @@ const ContactPreferences = ({
             <div>
               <input
                 type="checkbox"
-                className="form-check-input"
-                style={styles.checkBox}
+                className="form-check-input check-box"
               />
             </div>
             <div>
@@ -99,8 +97,7 @@ const ContactPreferences = ({
             <div>
               <input
                 type="checkbox"
-                className="form-check-input"
-                style={styles.checkBox}
+                className="form-check-input check-box"
               />
             </div>
             <div>
@@ -115,8 +112,7 @@ const ContactPreferences = ({
             <div>
               <input
                 type="checkbox"
-                className="form-check-input"
-                style={styles.checkBox}
+                className="form-check-input check-box"
               />
             </div>
             <div>
@@ -134,8 +130,7 @@ const ContactPreferences = ({
             <div>
               <input
                 type="checkbox"
-                className="form-check-input"
-                style={styles.checkBox}
+                className="form-check-input check-box"
               />
             </div>
             <div>
@@ -162,8 +157,7 @@ const ContactPreferences = ({
             <div>
               <input
                 type="checkbox"
-                className="form-check-input"
-                style={styles.checkBox}
+                className="form-check-input check-box"
               />
             </div>
             <div>
@@ -214,12 +208,6 @@ const styles = {
     textDecoration: "underline",
     textUnderlineOffset: 5,
     cursor: "pointer",
-  },
-  checkBox: {
-    borderRadius: "50%",
-    width: 20,
-    height: 20,
-    marginRight: 10,
   },
 };
 

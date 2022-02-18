@@ -53,8 +53,7 @@ const FindDermatologistOptions = ({ state, actions, libraries }) => {
               <input
                 id="includeInFindDermatologist"
                 type="checkbox"
-                className="form-check-input"
-                style={styles.checkBox}
+                className="form-check-input check-box"
               />
               <div style={styles.textInfo}>
                 I would like to be included in the Find a Dermatologist
@@ -177,13 +176,6 @@ const styles = {
   input: {
     borderRadius: 10,
     margin: `0.5em 0`,
-  },
-  checkBox: {
-    borderRadius: "50%",
-    width: 20,
-    height: 20,
-    paddingRight: 10,
-    margin: `auto 0`,
   },
   textInfo: {
     paddingLeft: `1em`,

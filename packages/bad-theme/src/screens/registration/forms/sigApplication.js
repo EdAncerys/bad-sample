@@ -224,8 +224,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 checked={formData.bad_hasmedicallicence}
                 onChange={handleInputChange}
                 type="checkbox"
-                className="form-check-input"
-                style={styles.checkBox}
+                className="form-check-input check-box"
               />
             </div>
           )}
@@ -238,8 +237,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 checked={formData.bad_isbadmember}
                 onChange={handleInputChange}
                 type="checkbox"
-                className="form-check-input"
-                style={styles.checkBox}
+                className="form-check-input check-box"
               />
             </div>
           )}
@@ -354,8 +352,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 checked={formData.bad_includeinthebssciiemaildiscussionforum}
                 onChange={handleInputChange}
                 type="checkbox"
-                className="form-check-input"
-                style={styles.checkBox}
+                className="form-check-input check-box"
               />
 
               {isEmail && (
@@ -381,12 +378,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 };
 
 const styles = {
-  checkBox: {
-    borderRadius: "50%",
-    width: 20,
-    height: 20,
-    margin: `0 10px 0 0`,
-  },
+  container: {},
 };
 
 export default connect(SIGApplication);

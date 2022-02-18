@@ -48,6 +48,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     sky_cvurl: "",
     currentGrade: "",
     sky_newhospitalname: "",
+    bad_newhospitaladded: "",
+    sky_newhospitalname: "",
   });
   const [inputValidator, setInputValidator] = useState({
     py3_gmcnumber: true,
@@ -60,6 +62,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     bad_mrpcqualified: true,
     currentGrade: true,
     sky_cvurl: true,
+    bad_newhospitaladded: true,
+    sky_newhospitalname: true,
   });
   const [hospitalData, setHospitalData] = useState(null);
   const [selectedHospital, setSelectedHospital] = useState(null);
@@ -95,6 +99,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         handleSetFormData({ data, name: "bad_proposer2" });
       if (data.name === "bad_mrpcqualified")
         handleSetFormData({ data, name: "bad_mrpcqualified" });
+      if (data.name === "sky_newhospitalname")
+        handleSetFormData({ data, name: "sky_newhospitalname" });
 
       if (data.bad_categorytype) setType(data.bad_categorytype);
       if (data._bad_sigid_value) setType(data._bad_sigid_value);
@@ -146,11 +152,11 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     if (hospitalData.length === 0) {
       // if no results, clear hospital data for dropdown & pass input as new hospitalData
       setHospitalData(null);
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        py3_hospitalid: "",
-        sky_newhospitalname: input,
-      }));
+      // setFormData((prevFormData) => ({
+      //   ...prevFormData,
+      //   py3_hospitalid: "",
+      //   sky_newhospitalname: input,
+      // }));
     }
 
     // console.log("Hospitals", hospitalData); // debug
@@ -193,21 +199,21 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       ],
     });
 
-    console.log(formData);
+    console.log(formData); // debug
     console.log(isValid);
     if (!isValid) return null;
 
-    await setUserStoreAction({
-      state,
-      dispatch,
-      applicationData,
-      isActiveUser,
-      membershipApplication: { stepFour: true }, // set stepOne to complete
-      data: formData,
-    });
-    let slug = `/membership/final-step-thank-you/`;
-    if (category === "SIG") slug = `/membership/step-5-sig-questions/`;
-    if (isActiveUser) setGoToAction({ path: slug, actions });
+    // await setUserStoreAction({
+    //   state,
+    //   dispatch,
+    //   applicationData,
+    //   isActiveUser,
+    //   membershipApplication: { stepFour: true }, // set stepOne to complete
+    //   data: formData,
+    // });
+    // let slug = `/membership/final-step-thank-you/`;
+    // if (category === "SIG") slug = `/membership/step-5-sig-questions/`;
+    // if (isActiveUser) setGoToAction({ path: slug, actions });
   };
 
   const handleDocUploadChange = async (e) => {
@@ -348,7 +354,9 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
           {inputValidator.py3_hospitalid && (
             <div>
-              <label className="form-label">Main Hospital/Place of work</label>
+              <label className="form-label">
+                Main Place of Work / Medical School
+              </label>
               <div style={{ position: "relative" }}>
                 {selectedHospital && (
                   <div className="form-control input">
@@ -395,6 +403,36 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                   />
                 )}
               </div>
+            </div>
+          )}
+
+          {inputValidator.bad_newhospitaladded && (
+            <div className="flex-col">
+              <label className="form-label">
+                Hospital / Medical School not listed
+              </label>
+              <input
+                name="bad_newhospitaladded"
+                checked={formData.bad_newhospitaladded}
+                onChange={handleInputChange}
+                type="checkbox"
+                className="form-check-input check-box"
+              />
+            </div>
+          )}
+
+          {inputValidator.sky_newhospitalname && (
+            <div>
+              <label className="required form-label">New Hospital Name</label>
+              <input
+                name="sky_newhospitalname"
+                value={formData.sky_newhospitalname}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="MRCP"
+              />
+              <FormError id="bad_mrpcqualified" />
             </div>
           )}
         </div>

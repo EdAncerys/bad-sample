@@ -70,3 +70,9 @@ select {
   background-color: #fff;
   cursor: pointer;
 }
+.check-box {
+  border-radius: 50% !important;
+  width: 20px;
+  height: 20px;
+  margin: 0 10px 0 0;
+}

@@ -336,7 +336,7 @@ const updateMembershipApplication = ({
     if (data.py3_dateofbirth && application.name === "py3_dateofbirth")
       application.value = data.py3_dateofbirth;
 
-    //⏬ category section of the application process
+    //⏬ professional section of the application process
     if (data.py3_gmcnumber && application.name === "py3_gmcnumber")
       application.value = data.py3_gmcnumber;
     if (
@@ -362,6 +362,11 @@ const updateMembershipApplication = ({
       application.value = data.sky_newhospitalname;
     if (data.sky_newhospitaltype && application.name === "sky_newhospitaltype")
       application.value = data.sky_newhospitaltype;
+    if (
+      data.bad_newhospitaladded &&
+      application.name === "bad_newhospitaladded"
+    )
+      application.value = data.bad_newhospitaladded;
 
     //⏬ SIG section of the application process
     if (data.bad_qualifications && application.name === "bad_qualifications")
