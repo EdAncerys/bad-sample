@@ -15,6 +15,7 @@ const Billing = ({
   isActiveDebit,
   visible,
   setVisible,
+  setActiveDebit,
 }) => {
   const [page, setPage] = useState({ page: "billing" });
 
@@ -49,7 +50,9 @@ const Billing = ({
   const ServeDirectDebitSetup = () => {
     if (page.page !== "directDebitSetup") return null;
 
-    return <DirectDebitSetup setPage={setPage} />;
+    return (
+      <DirectDebitSetup setPage={setPage} setActiveDebit={setActiveDebit} />
+    );
   };
 
   // RETURN ---------------------------------------------

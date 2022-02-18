@@ -73,6 +73,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
             isActiveDebit={isActiveDebit}
             visible={visible}
             setVisible={setVisible}
+            setActiveDebit={setActiveDebit}
           />
           <Settings dashboardPath={dashboardPath} />
         </BlockWrapper>

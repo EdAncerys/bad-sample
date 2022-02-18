@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
@@ -16,8 +17,23 @@ const DirectDebitNotification = ({
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  if (!visible || !isActiveDebit) return null;
+  const [isDebitSetup, setDebitSetup] = useState(false);
+
+  if (!visible || !isActiveDebit || !isDebitSetup) return null;
   // if (!isActiveDebit) return <Loading />;
+
+  console.log(isActiveDebit);
+
+  useEffect(() => {
+    if (!isActiveDebit) return null;
+    let debitStatus = false;
+
+    isActiveDebit.map((debit) => {
+      if (debit.statecode === "Active") debitStatus = true;
+    });
+
+    setDebitSetup(debitStatus);
+  }, []);
 
   // HELPERS ----------------------------------------------------------------
   const handlePayment = () => {

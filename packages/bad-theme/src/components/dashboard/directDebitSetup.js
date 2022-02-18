@@ -6,9 +6,19 @@ import { colors } from "../../config/imports";
 import DirectDebit from "../../img/svg/directDebit.svg";
 import Loading from "../../components/loading";
 // CONTEXT ----------------------------------------------------------------
-import { useAppState, getDirectDebitAction } from "../../context";
+import {
+  useAppState,
+  getDirectDebitAction,
+  createDirectDebitAction,
+} from "../../context";
 
-const DirectDebitSetup = ({ state, actions, libraries, setPage }) => {
+const DirectDebitSetup = ({
+  state,
+  actions,
+  libraries,
+  setPage,
+  setActiveDebit,
+}) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { isActiveUser } = useAppState();
@@ -23,19 +33,13 @@ const DirectDebitSetup = ({ state, actions, libraries, setPage }) => {
   const marginVertical = state.theme.marginVertical;
 
   useEffect(() => {
-    const handleSetData = ({ data, name }) => {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [`${name}`]: data.value || "",
-      }));
-    };
-
     if (!isActiveUser) return null;
-    Object.values(isActiveUser).map((data) => {
-      console.log(values);
-      if (data.py3_email) handleSetData({ data, name: "py3_email" });
-      if (data.core_name) handleSetData({ data, name: "core_name" });
-    });
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [`py3_email`]: isActiveUser.emailaddress1 || "",
+      [`core_name`]: isActiveUser.fullname || "",
+    }));
 
     // // ⏬ validate inputs
     // validateMembershipFormAction({
@@ -58,12 +62,23 @@ const DirectDebitSetup = ({ state, actions, libraries, setPage }) => {
   };
 
   const handleDirectDebitSetup = async () => {
-    console.log("formData", formData);
-    // await getDirectDebitAction({
-    //   state,
-    //   id: isActiveUser.contactid,
-    //   data: formData,
-    // });
+    const debitResponse = await createDirectDebitAction({
+      state,
+      id: isActiveUser.contactid,
+      data: formData,
+    });
+
+    if (debitResponse.success) {
+      const debitResponse = await getDirectDebitAction({
+        state,
+        id: isActiveUser.contactid,
+      });
+      setActiveDebit(debitResponse); // direct debit data
+      handlePayment();
+    } else {
+      console.log("Failed to create direct debit");
+      console.log(debitResponse);
+    }
   };
 
   // HELPERS ----------------------------------------------------------------
@@ -118,73 +133,6 @@ const DirectDebitSetup = ({ state, actions, libraries, setPage }) => {
     );
   };
 
-  const ServeForm = () => {
-    return (
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: `1fr 1fr`,
-          gap: `5px 20px`,
-        }}
-      >
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: `1fr`,
-            gridTemplateRows: `repeat(4, 70px)`,
-            gap: `20px`,
-            paddingTop: `1em`,
-          }}
-        >
-          <div>
-            <label>Email</label>
-            <input
-              name="py3_email"
-              value={formData.py3_email}
-              onChange={handleInputChange}
-              type="text"
-              className="form-control input"
-              placeholder="First Name"
-            />
-          </div>
-          <div>
-            <label>Account Name</label>
-            <input
-              name="core_name"
-              value={formData.core_name}
-              onChange={handleInputChange}
-              type="text"
-              className="form-control input"
-              placeholder="Account Name"
-            />
-          </div>
-          <div>
-            <label>Account Number</label>
-            <input
-              name="core_accountnumber"
-              value={formData.core_accountnumber}
-              onChange={handleInputChange}
-              type="text"
-              className="form-control input"
-              placeholder="Account Number"
-            />
-          </div>
-          <div>
-            <label>Sort Code</label>
-            <input
-              name="core_sortcode"
-              value={formData.core_sortcode}
-              onChange={handleInputChange}
-              type="text"
-              className="form-control input"
-              placeholder="Sort Code"
-            />
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   const ServeActions = () => {
     return (
       <div
@@ -221,16 +169,75 @@ const DirectDebitSetup = ({ state, actions, libraries, setPage }) => {
           Direct Debit Details
         </div>
         <ServeInfo />
-
         <div
           className="primary-title"
           style={{ fontSize: 20, paddingTop: `1em` }}
         >
           Please enter your direct debit details:
         </div>
-        <ServeForm />
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: `1fr 1fr`,
+            gap: `5px 20px`,
+          }}
+        >
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: `1fr`,
+              gridTemplateRows: `repeat(4, 70px)`,
+              gap: `20px`,
+              paddingTop: `1em`,
+            }}
+          >
+            <div>
+              <label>Email</label>
+              <input
+                name="py3_email"
+                value={formData.py3_email}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="First Name"
+              />
+            </div>
+            <div>
+              <label>Account Name</label>
+              <input
+                name="core_name"
+                value={formData.core_name}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Account Name"
+              />
+            </div>
+            <div>
+              <label>Account Number</label>
+              <input
+                name="core_accountnumber"
+                value={formData.core_accountnumber}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Account Number"
+              />
+            </div>
+            <div>
+              <label>Sort Code</label>
+              <input
+                name="core_sortcode"
+                value={formData.core_sortcode}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Sort Code"
+              />
+            </div>
+          </div>
+        </div>
         <ServeConditions />
-
         <ServeActions />
       </div>
       <div
