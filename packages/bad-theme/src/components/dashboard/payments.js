@@ -13,6 +13,7 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
   const handlePayment = async ({ core_membershipsubscriptionid }) => {
     const cookie = handleGetCookie({ name: `BAD-WebApp` });
     const { contactid, jwt } = cookie;
+
     const fetchVendorId = await fetch(
       state.auth.APP_HOST +
         "/sagepay/test/subscription/" +
@@ -26,12 +27,9 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
     );
     if (fetchVendorId.ok) {
       const json = await fetchVendorId.json();
-      alert(
-        "VendorTx for subscriptionId " +
-          core_membershipsubscriptionid +
-          " is " +
-          json.VendorTxCode
-      );
+      const url =
+        json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
+      window.open(url);
     }
     // setPage({ page: "directDebit", data: block });
   };
