@@ -155,8 +155,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       }));
     }
 
-    console.log("Hospitals", hospitalData); // debug
-    console.log("input", input); // debug
+    // console.log("Hospitals", hospitalData); // debug
   };
 
   const handleSaveExit = async () => {
@@ -300,7 +299,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
           {inputValidator.py3_otherregulatorybodyreference && (
             <div>
-              <label className="form-label">
+              <label className="required form-label">
                 Regulatory Body Registration Number
               </label>
               <input
@@ -428,9 +427,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
           >
             {inputValidator.bad_proposer1 && (
               <div>
-                <label className="form-label required">
-                  Supporting Member 1
-                </label>
+                <label className="form-label">Supporting Member 1</label>
                 <input
                   name="bad_proposer1"
                   value={formData.bad_proposer1}
@@ -444,9 +441,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
             {inputValidator.bad_proposer2 && (
               <div>
-                <label className="form-label required">
-                  Supporting Member 2
-                </label>
+                <label className="form-label">Supporting Member 2</label>
                 <input
                   name="bad_proposer2"
                   value={formData.bad_proposer2}
