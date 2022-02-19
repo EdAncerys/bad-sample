@@ -7,23 +7,19 @@ import DirectDebit from "../../img/svg/directDebit.svg";
 import Loading from "../../components/loading";
 // CONTEXT ----------------------------------------------------------------
 import {
+  useAppDispatch,
   useAppState,
   getDirectDebitAction,
   createDirectDebitAction,
 } from "../../context";
 
-const DirectDebitSetup = ({
-  state,
-  actions,
-  libraries,
-  setPage,
-  setActiveDebit,
-}) => {
+const DirectDebitSetup = ({ state, actions, libraries, setPage }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
+  const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
+
   const [formData, setFormData] = useState({
-    bad_transactiontype: "0S",
     py3_email: "",
     core_name: "",
     core_accountnumber: "",
@@ -65,18 +61,23 @@ const DirectDebitSetup = ({
     const debitResponse = await createDirectDebitAction({
       state,
       id: isActiveUser.contactid,
-      data: formData,
+      data: {
+        bad_transactiontype: "0S",
+        core_name: formData.core_name,
+        core_accountnumber: formData.core_accountnumber,
+        core_sortcode: formData.core_sortcode,
+      },
     });
 
     if (debitResponse.success) {
-      const debitResponse = await getDirectDebitAction({
+      await getDirectDebitAction({
         state,
+        dispatch,
         id: isActiveUser.contactid,
       });
-      setActiveDebit(debitResponse); // direct debit data
       handlePayment();
     } else {
-      console.log("Failed to create direct debit");
+      console.log("⬇️ Failed to create direct debit ⬇️");
       console.log(debitResponse);
     }
   };

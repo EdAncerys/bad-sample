@@ -1,6 +1,6 @@
 import { authenticateAppAction } from "../index";
 
-export const getDirectDebitAction = async ({ state, id }) => {
+export const getDirectDebitAction = async ({ state, dispatch, id }) => {
   console.log("getDirectDebitAction triggered");
 
   const URL = state.auth.APP_HOST + `/bankaccount/${id}`;
@@ -16,8 +16,8 @@ export const getDirectDebitAction = async ({ state, id }) => {
     const data = await response.json();
 
     console.log("getDirectDebitAction data", data); // debug
-
-    return data.data;
+    if (data.success)
+      setDirectDebitAction({ dispatch, isDirectDebit: data.data });
   } catch (error) {
     console.log("error", error);
   }
@@ -30,9 +30,9 @@ export const createDirectDebitAction = async ({ state, id, data }) => {
   const jwt = await authenticateAppAction({ state });
 
   console.log("data", data);
-  console.log("core_name", data.core_name);
-  console.log("core_accountnumber", data.core_accountnumber);
-  console.log("core_sortcode", data.core_sortcode);
+  // console.log("core_name", data.core_name);
+  // console.log("core_accountnumber", data.core_accountnumber);
+  // console.log("core_sortcode", data.core_sortcode);
 
   const requestOptions = {
     method: "POST",
@@ -40,12 +40,7 @@ export const createDirectDebitAction = async ({ state, id, data }) => {
       Authorization: `Bearer ${jwt}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      bad_transactiontype: "0S",
-      core_name: data.core_name,
-      core_accountnumber: data.core_accountnumber,
-      core_sortcode: data.core_sortcode,
-    }),
+    body: JSON.stringify(data),
   };
 
   try {
@@ -58,4 +53,10 @@ export const createDirectDebitAction = async ({ state, id, data }) => {
   } catch (error) {
     console.log("error", error);
   }
+};
+
+// SET CONTEXT ---------------------------------------------------
+export const setDirectDebitAction = ({ dispatch, isDirectDebit }) => {
+  console.log("setDirectDebitAction triggered"); //debug
+  dispatch({ type: "SET_DIRECT_DEBIT_ACTION", payload: isDirectDebit });
 };

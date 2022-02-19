@@ -12,10 +12,8 @@ const Billing = ({
   actions,
   libraries,
   dashboardPath,
-  isActiveDebit,
   visible,
   setVisible,
-  setActiveDebit,
 }) => {
   const [page, setPage] = useState({ page: "billing" });
 
@@ -31,7 +29,6 @@ const Billing = ({
       <div>
         <DirectDebitNotification
           setPage={setPage}
-          isActiveDebit={isActiveDebit}
           visible={visible}
           setVisible={setVisible}
         />
@@ -50,9 +47,7 @@ const Billing = ({
   const ServeDirectDebitSetup = () => {
     if (page.page !== "directDebitSetup") return null;
 
-    return (
-      <DirectDebitSetup setPage={setPage} setActiveDebit={setActiveDebit} />
-    );
+    return <DirectDebitSetup setPage={setPage} />;
   };
 
   // RETURN ---------------------------------------------

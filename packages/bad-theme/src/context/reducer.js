@@ -10,6 +10,7 @@ export const initialState = {
   bjdFeed: null,
   cedFeed: null,
   shdFeed: null,
+  isDirectDebit: null,
 
   filter: null,
   idFilter: null,
@@ -53,6 +54,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, applicationData: action.payload };
     case "SET_ID_FILTER_ACTION":
       return { ...state, idFilter: action.payload };
+    case "SET_DIRECT_DEBIT_ACTION":
+      return { ...state, isDirectDebit: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

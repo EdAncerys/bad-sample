@@ -2,33 +2,32 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
+// CONTEXT ------------------------------------------------------------------
+import { useAppState } from "../../context";
 
 const DirectDebitNotification = ({
   state,
   actions,
   libraries,
   setPage,
-  isActiveDebit,
   visible,
   setVisible,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const marginHorizontal = state.theme.marginHorizontal;
+  const { isDirectDebit } = useAppState();
+
   const marginVertical = state.theme.marginVertical;
 
   const [isDebitSetup, setDebitSetup] = useState(false);
 
-  if (!visible || !isActiveDebit || !isDebitSetup) return null;
-  // if (!isActiveDebit) return <Loading />;
-
-  console.log(isActiveDebit);
+  if (!visible || !isDirectDebit || isDebitSetup) return null;
 
   useEffect(() => {
-    if (!isActiveDebit) return null;
+    if (!isDirectDebit) return null;
     let debitStatus = false;
 
-    isActiveDebit.map((debit) => {
+    isDirectDebit.map((debit) => {
       if (debit.statecode === "Active") debitStatus = true;
     });
 
@@ -86,9 +85,7 @@ const DirectDebitNotification = ({
 };
 
 const styles = {
-  text: {
-    fontSize: 12,
-  },
+  container: {},
 };
 
 export default connect(DirectDebitNotification);

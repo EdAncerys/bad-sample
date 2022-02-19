@@ -14,11 +14,12 @@ import Settings from "../components/dashboard/pages/settings";
 
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT ------------------------------------------------------------------
-import { getDirectDebitAction, useAppState } from "../context";
+import { getDirectDebitAction, useAppState, useAppDispatch } from "../context";
 
 const AccountDashboard = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
+  const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
 
   const data = state.source.get(state.router.link);
@@ -26,7 +27,6 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   const wpBlocks = page.acf.blocks;
 
   const [dashboardPath, setDashboardPath] = useState("Dashboard");
-  const [isActiveDebit, setActiveDebit] = useState(null);
   const [visible, setVisible] = useState(true);
 
   const [isReady, SetReady] = useState(null);
@@ -36,12 +36,11 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   useEffect(async () => {
     if (!isActiveUser) return null;
 
-    const debitResponse = await getDirectDebitAction({
+    await getDirectDebitAction({
       state,
+      dispatch,
       id: isActiveUser.contactid,
     });
-
-    setActiveDebit(debitResponse); // direct debit data
 
     return () => {
       useEffectRef.current = false; // clean up function
@@ -70,10 +69,8 @@ const AccountDashboard = ({ state, actions, libraries }) => {
           <MyAccount dashboardPath={dashboardPath} />
           <Billing
             dashboardPath={dashboardPath}
-            isActiveDebit={isActiveDebit}
             visible={visible}
             setVisible={setVisible}
-            setActiveDebit={setActiveDebit}
           />
           <Settings dashboardPath={dashboardPath} />
         </BlockWrapper>
