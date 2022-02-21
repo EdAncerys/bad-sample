@@ -28,7 +28,6 @@ const Dashboard = ({
     return (
       <div style={{ padding: `0 ${marginHorizontal}px` }}>
         <Profile />
-        <ProfileProgress userStatus={userStatus} />
         <UpdateProfile />
       </div>
     );

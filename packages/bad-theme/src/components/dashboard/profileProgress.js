@@ -7,10 +7,11 @@ import { colors } from "../../config/imports";
 import Ellipse from "../../img/svg/ellipse.svg";
 import CheckMarkGreen from "../../img/svg/checkMarkGreen.svg";
 
+import PaymentNotification from "./paymentNotification";
 // CONTEXT ----------------------------------------------------------------
 import { useAppState, setGoToAction } from "../../context";
 const ProfileProgress = ({ state, actions, libraries, userStatus }) => {
-  const { apps, subs } = userStatus;
+  const { apps } = userStatus;
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -35,7 +36,8 @@ const ProfileProgress = ({ state, actions, libraries, userStatus }) => {
     if (applicationData[0].stepFive) progressName = "Step 5 - SIG Questions";
     if (applicationData[0].applicationComplete)
       progressName = "Application Complete";
-
+    if (apps.data[0].bad_approvalstatus === "Approved")
+      progressName = "Application approved";
     setStep(progressName);
   }, [applicationData]);
 
@@ -167,7 +169,11 @@ const ProfileProgress = ({ state, actions, libraries, userStatus }) => {
         <ServeActions />
       </div>
 
-      <ServeProgressBar />
+      {apps.data > 0 && apps.data[0].bad_approvalstatus === "Approved" ? (
+        <PaymentNotification application={apps.data[0]} />
+      ) : (
+        <ServeProgressBar />
+      )}
     </div>
   );
 };
