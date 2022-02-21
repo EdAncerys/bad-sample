@@ -354,7 +354,10 @@ const updateMembershipApplication = ({
       application.value = data.bad_proposer1;
     if (data.bad_proposer2 && application.name === "bad_proposer2")
       application.value = data.bad_proposer2;
-    if (data.bad_mrpcqualified && application.name === "bad_mrpcqualified")
+    if (
+      data.bad_mrpcqualified !== undefined &&
+      application.name === "bad_mrpcqualified"
+    )
       application.value = data.bad_mrpcqualified;
     if (data.sky_cvurl && application.name === "sky_cvurl")
       application.value = data.sky_cvurl;
