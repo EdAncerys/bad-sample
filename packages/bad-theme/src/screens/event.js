@@ -14,10 +14,15 @@ import Instagram from "../img/svg/instagramBlack.svg";
 import Linkedin from "../img/svg/linkedinBlack.svg";
 import Connect from "../img/svg/connectBlack.svg";
 import WebPage from "../img/svg/webPageBlack.svg";
+import BadBadgeLogo from "../img/svg/badBadgeLogo.svg";
+
+import date from "date-and-time";
+const DATE_MODULE = date;
+
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT -------------------------------------------------------------------
-import { useAppDispatch, setEnquireAction } from "../context";
+import { useAppDispatch, setEnquireAction, setGoToAction } from "../context";
 
 const Event = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -122,10 +127,15 @@ const Event = ({ state, actions, libraries }) => {
 
                 const ServeDate = () => {
                   if (!date) return null;
+                  const dateObject = new Date(date);
+                  const formattedDate = DATE_MODULE.format(
+                    dateObject,
+                    "DD MMM YYYY"
+                  );
 
                   return (
                     <div style={styles.date}>
-                      <Html2React html={date} />
+                      <Html2React html={formattedDate} />
                     </div>
                   );
                 };
@@ -327,6 +337,50 @@ const Event = ({ state, actions, libraries }) => {
     );
   };
 
+  const ServeRegisterBanner = () => {
+    return (
+      <div
+        style={{
+          backgroundColor: colors.primary,
+          color: colors.white,
+          marginTop: `2em`,
+          padding: `2em`,
+        }}
+      >
+        <div style={{ width: 100, height: 100, overflow: "hidden" }}>
+          <Image
+            src={BadBadgeLogo}
+            alt="BAD"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
+          />
+        </div>
+        <div
+          className="primary-title"
+          style={{ padding: `1em 0`, fontSize: 20, color: colors.white }}
+        >
+          Not a Member of British Association Dermatology?
+        </div>
+
+        <div
+          className="blue-btn"
+          style={{
+            backgroundColor: colors.white,
+            color: colors.primary,
+            width: "fit-content",
+            paddingTop: `1em`,
+          }}
+          onClick={() => setGoToAction({ path: "/membership", actions })}
+        >
+          Join Us Here
+        </div>
+      </div>
+    );
+  };
+
   return (
     <BlockWrapper>
       <div style={{ backgroundColor: colors.white }}>
@@ -342,7 +396,10 @@ const Event = ({ state, actions, libraries }) => {
               <ServeSummary />
               <ServeSocials />
             </div>
-            <div className="shadow"></div>
+            <div className="flex-col">
+              <div className="flex shadow"></div>
+              <ServeRegisterBanner />
+            </div>
           </div>
         </div>
       </div>

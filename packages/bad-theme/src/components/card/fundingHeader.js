@@ -43,9 +43,7 @@ const FundingHeader = ({ state, actions, libraries, fundingHeader }) => {
     if (!opening_date) return null;
 
     const dateObject = new Date(opening_date);
-    const formattedDate = DATE_MODULE.format(dateObject, "DD MMMM");
-
-    console.log(formattedDate);
+    const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
 
     return (
       <div
