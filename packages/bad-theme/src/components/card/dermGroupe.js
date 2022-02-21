@@ -50,14 +50,13 @@ const DermGroupe = ({ state, actions, libraries, dermGroupe }) => {
         style={{ paddingBottom: padding }}
       >
         <div style={{ fontSize: 20 }}>Contact Email:</div>
-        <div className="title-link-animation">
-          <Link
-            link={`mailto:${email}?subject =BAD contact`}
-            target="_blank"
-            style={styles.link}
-          >
+        <div
+          className="title-link-animation"
+          onClick={() => (document.location = "mailto:" + email)}
+        >
+          <div style={styles.link}>
             <Html2React html={email} />
-          </Link>
+          </div>
         </div>
       </div>
     );

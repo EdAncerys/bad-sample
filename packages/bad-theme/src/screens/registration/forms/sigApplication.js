@@ -55,6 +55,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     py3_insertnhsnetemailaddress: true,
   });
   const [isEmail, setIsEmail] = useState(false);
+  const [applicationType, setType] = useState("SIG Application");
 
   // ⏬ populate form data values from applicationData
   useEffect(async () => {
@@ -90,6 +91,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
         });
       if (data.name === "py3_insertnhsnetemailaddress")
         handleSetData({ data, name: "py3_insertnhsnetemailaddress" });
+
+      if (data.bad_categorytype) setType(data.bad_categorytype);
+      if (data._bad_sigid_value) setType(data._bad_sigid_value);
     });
 
     // ⏬ validate inputs
@@ -197,6 +201,23 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
   return (
     <div>
+      <div
+        className="primary-title"
+        style={{
+          fontSize: 22,
+          paddingTop: `1em`,
+          marginTop: `1em`,
+          borderTop: `1px solid ${colors.silverFillTwo}`,
+        }}
+      >
+        Category Selected: <span>{applicationType}</span>
+      </div>
+      <div style={{ paddingTop: `0.75em` }}>
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+        industry. Lorem Ipsum has been the industry's standard dummy text ever
+        since the 1500s, when an unknown printer took a galley of type and
+        scrambled it to make a type specimen book.
+      </div>
       <form>
         <div style={{ padding: `2em 1em` }}>
           {inputValidator.bad_qualifications && (
@@ -224,8 +245,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 checked={formData.bad_hasmedicallicence}
                 onChange={handleInputChange}
                 type="checkbox"
-                className="form-check-input"
-                style={styles.checkBox}
+                className="form-check-input check-box"
               />
             </div>
           )}
@@ -238,8 +258,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 checked={formData.bad_isbadmember}
                 onChange={handleInputChange}
                 type="checkbox"
-                className="form-check-input"
-                style={styles.checkBox}
+                className="form-check-input check-box"
               />
             </div>
           )}
@@ -247,7 +266,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
           {inputValidator.bad_interestinfieldquestion && (
             <div>
               <label className="form-label">
-                Describe your interest in (SIG name)
+                Describe your interest in {applicationType}
               </label>
               <textarea
                 name="bad_interestinfieldquestion"
@@ -262,7 +281,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.py3_whatukbasedroleareyou && (
             <div>
-              <label style={styles.subTitle}>I identify myself as</label>
+              <label style={styles.subTitle}>UK/Overseas role</label>
               <Form.Select
                 name="py3_whatukbasedroleareyou"
                 value={formData.py3_whatukbasedroleareyou}
@@ -354,8 +373,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 checked={formData.bad_includeinthebssciiemaildiscussionforum}
                 onChange={handleInputChange}
                 type="checkbox"
-                className="form-check-input"
-                style={styles.checkBox}
+                className="form-check-input check-box"
               />
 
               {isEmail && (
@@ -381,12 +399,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 };
 
 const styles = {
-  checkBox: {
-    borderRadius: "50%",
-    width: 20,
-    height: 20,
-    margin: `0 10px 0 0`,
-  },
+  container: {},
 };
 
 export default connect(SIGApplication);

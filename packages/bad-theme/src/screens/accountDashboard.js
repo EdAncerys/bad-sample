@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useLayoutEffect, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import BlockBuilder from "../components/builder/blockBuilder";
@@ -13,6 +13,8 @@ import Billing from "../components/dashboard/pages/billing";
 import Settings from "../components/dashboard/pages/settings";
 
 import BlockWrapper from "../components/blockWrapper";
+// CONTEXT ------------------------------------------------------------------
+import { getDirectDebitAction, useAppState, useAppDispatch } from "../context";
 
 import { handleGetCookie } from "../helpers/cookie";
 
@@ -24,13 +26,36 @@ const AccountDashboard = ({ state, actions, libraries }) => {
 
   const [dashboardPath, setDashboardPath] = useState("Dashboard");
   const [applicationStatus, setApplicationStatus] = useState();
+  const dispatch = useAppDispatch();
+  const { isActiveUser } = useAppState();
+
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
   const wpBlocks = page.acf.blocks;
 
+  const [dashboardPath, setDashboardPath] = useState("Dashboard");
+  const [visible, setVisible] = useState(true);
+
   const [isReady, SetReady] = useState(null);
 
+  const useEffectRef = useRef(null);
+
+  useEffect(async () => {
+    if (!isActiveUser) return null;
+
+    await getDirectDebitAction({
+      state,
+      dispatch,
+      id: isActiveUser.contactid,
+    });
+
+    return () => {
+      useEffectRef.current = false; // clean up function
+    };
+  }, []);
+
   // prevent dashboard actions to load before all server side mutations loaded
+  // allow css to load
   useLayoutEffect(() => {
     SetReady(true);
   }, []);
@@ -74,6 +99,8 @@ const AccountDashboard = ({ state, actions, libraries }) => {
           <Billing
             dashboardPath={dashboardPath}
             userStatus={applicationStatus}
+            visible={visible}
+            setVisible={setVisible}
           />
           <Settings dashboardPath={dashboardPath} />
         </BlockWrapper>

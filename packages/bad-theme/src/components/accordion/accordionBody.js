@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import parse from "html-react-parser";
@@ -17,6 +17,7 @@ import {
   setGoToAction,
   sendEmailEnquireAction,
   handleApplyForMembershipAction,
+  anchorScrapper,
 } from "../../context";
 
 const AccordionBody = ({
@@ -56,6 +57,11 @@ const AccordionBody = ({
 
   if (fundingBlock) body = block.acf ? block.acf.overview : null;
   if (fundingBlock) link = { url: block.acf.external_application_link };
+
+  useEffect(() => {
+    // ⬇️ anchor tag scrapper
+    anchorScrapper();
+  }, []);
 
   // HANDLERS ----------------------------------------------------
   const handleApply = async () => {

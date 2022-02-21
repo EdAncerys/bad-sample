@@ -52,8 +52,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
               <input
                 id="badEmailAlerts"
                 type="checkbox"
-                className="form-check-input"
-                style={styles.checkBox}
+                className="form-check-input check-box"
               />
               <div style={styles.textInfo}>BAD Email Alerts</div>
             </div>
@@ -63,8 +62,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
               <input
                 id="badECircular"
                 type="checkbox"
-                className="form-check-input"
-                style={styles.checkBox}
+                className="form-check-input check-box"
               />
               <div style={styles.textInfo}>BAD e-circular</div>
             </div>
@@ -74,8 +72,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
               <input
                 id="badAlerts"
                 type="checkbox"
-                className="form-check-input"
-                style={styles.checkBox}
+                className="form-check-input check-box"
               />
               <div style={styles.textInfo}>BAD Alerts</div>
             </div>
@@ -85,8 +82,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
               <input
                 id="presidentsBullate"
                 type="checkbox"
-                className="form-check-input"
-                style={styles.checkBox}
+                className="form-check-input check-box"
               />
               <div style={styles.textInfo}>Presidents Bullate</div>
             </div>
@@ -100,8 +96,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
               <input
                 id="phone"
                 type="checkbox"
-                className="form-check-input"
-                style={styles.checkBox}
+                className="form-check-input check-box"
               />
               <div style={styles.textInfo}>Phone</div>
             </div>
@@ -111,8 +106,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
               <input
                 id="email"
                 type="checkbox"
-                className="form-check-input"
-                style={styles.checkBox}
+                className="form-check-input check-box"
               />
               <div style={styles.textInfo}>Email</div>
             </div>
@@ -124,8 +118,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
               <input
                 id="badAllContactBlock"
                 type="checkbox"
-                className="form-check-input"
-                style={styles.checkBox}
+                className="form-check-input check-box"
               />
               <div style={styles.textInfo}>
                 I confirm I wish to universally block any and all contact from
@@ -170,12 +163,6 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
 };
 
 const styles = {
-  checkBox: {
-    width: 20,
-    height: 20,
-    paddingRight: 10,
-    margin: `auto 0`,
-  },
   textInfo: {
     fontSize: 12,
     paddingLeft: `1em`,

@@ -124,10 +124,7 @@ const CreateAccount = ({ state, actions }) => {
         <input type="checkbox" className="form-check-input" />
         <label className="form-check-label">Check me out</label>
       </div>
-      <div
-        className="btn-primary"
-        onClick={handleCreateAccount}
-      >
+      <div className="blue-btn" onClick={handleCreateAccount}>
         Create Account
       </div>
     </div>

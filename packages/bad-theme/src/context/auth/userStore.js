@@ -336,7 +336,7 @@ const updateMembershipApplication = ({
     if (data.py3_dateofbirth && application.name === "py3_dateofbirth")
       application.value = data.py3_dateofbirth;
 
-    //⏬ category section of the application process
+    //⏬ professional section of the application process
     if (data.py3_gmcnumber && application.name === "py3_gmcnumber")
       application.value = data.py3_gmcnumber;
     if (
@@ -362,6 +362,18 @@ const updateMembershipApplication = ({
       application.value = data.sky_newhospitalname;
     if (data.sky_newhospitaltype && application.name === "sky_newhospitaltype")
       application.value = data.sky_newhospitaltype;
+    if (
+      data.bad_newhospitaladded &&
+      application.name === "bad_newhospitaladded"
+    )
+      application.value = data.bad_newhospitaladded;
+    if (data.sky_newhospitalname && application.name === "sky_newhospitalname")
+      application.value = data.sky_newhospitalname;
+    if (
+      data.bad_expectedyearofqualification &&
+      application.name === "bad_expectedyearofqualification"
+    )
+      application.value = data.bad_expectedyearofqualification;
 
     //⏬ SIG section of the application process
     if (data.bad_qualifications && application.name === "bad_qualifications")
@@ -418,6 +430,11 @@ const updateMembershipApplication = ({
       application.name === "py3_constitutionagreement"
     )
       application.value = data.py3_constitutionagreement;
+    if (
+      data.bad_readpolicydocument !== undefined &&
+      application.name === "bad_readpolicydocument"
+    )
+      application.value = data.bad_readpolicydocument;
   });
 
   console.log("User Input Data ", data); // debug

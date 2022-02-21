@@ -38,7 +38,7 @@ import Error from "./error";
 import Loading from "../components/loading";
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState } from "../context";
+import { useAppDispatch, useAppState, anchorScrapper } from "../context";
 import { useCookies } from "react-cookie";
 
 const App = ({ state, actions }) => {
@@ -48,6 +48,11 @@ const App = ({ state, actions }) => {
   let endPoint = state.router.link;
   const data = state.source.get(endPoint);
   console.log("INDEX data", data); // debug
+
+  useEffect(() => {
+    // ⬇️ anchor tag scrapper
+    anchorScrapper();
+  }, [endPoint]);
 
   // RETURN ------------------------------------------------------------
   return (

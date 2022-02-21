@@ -445,12 +445,6 @@ const styles = {
     textUnderlineOffset: 5,
     cursor: "pointer",
   },
-  checkBox: {
-    borderRadius: "50%",
-    width: 20,
-    height: 20,
-    marginTop: 10,
-  },
   infoTitle: {
     fontSize: 10,
     margin: `1em 0`,

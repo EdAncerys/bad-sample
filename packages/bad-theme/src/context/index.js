@@ -33,6 +33,10 @@ import { updateAddressAction } from "./auth/updateAddress";
 import { sendFileToS3Action } from "./auth/saveFileToS3";
 import { getBADMembershipSubscriptionData } from "./auth/getBADMembershipSubscriptionData";
 import {
+  getDirectDebitAction,
+  createDirectDebitAction,
+} from "./auth/directDebit";
+import {
   setUserStoreAction,
   getUserStoreAction,
   setCompleteUserApplicationAction,
@@ -47,6 +51,7 @@ import {
 } from "./auth/rssFeed";
 import { useIsMounted } from "../helpers/useIsMounted";
 import { errorHandler } from "../helpers/errorHandler";
+import { anchorScrapper } from "../helpers/contentScrapper";
 
 export {
   AppProvider,
@@ -88,4 +93,7 @@ export {
   validateMembershipFormAction,
   useIsMounted,
   errorHandler,
+  getDirectDebitAction,
+  createDirectDebitAction,
+  anchorScrapper,
 };

@@ -2,18 +2,37 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
+// CONTEXT ------------------------------------------------------------------
+import { useAppState } from "../../context";
 
 const DirectDebitNotification = ({
   state,
   actions,
   libraries,
   setPage,
+  visible,
+  setVisible,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const marginHorizontal = state.theme.marginHorizontal;
+  const { isDirectDebit } = useAppState();
+
   const marginVertical = state.theme.marginVertical;
-  const PAYMENTS = [1, 2, 3];
+
+  const [isDebitSetup, setDebitSetup] = useState(false);
+
+  if (!visible || !isDirectDebit || isDebitSetup) return null;
+
+  useEffect(() => {
+    if (!isDirectDebit) return null;
+    let debitStatus = false;
+
+    isDirectDebit.map((debit) => {
+      if (debit.statecode === "Active") debitStatus = true;
+    });
+
+    setDebitSetup(debitStatus);
+  }, []);
 
   // HELPERS ----------------------------------------------------------------
   const handlePayment = () => {
@@ -23,10 +42,19 @@ const DirectDebitNotification = ({
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
     return (
-      <div style={{ margin: `auto 0`, width: marginHorizontal * 2 }}>
+      <div className="flex" style={{ margin: `auto 0` }}>
         <div style={{ padding: `0 2em` }}>
           <div type="submit" className="blue-btn" onClick={handlePayment}>
             Setup Direct Debit
+          </div>
+        </div>
+        <div>
+          <div
+            type="submit"
+            className="transparent-btn"
+            onClick={() => setVisible(false)}
+          >
+            Dismiss
           </div>
         </div>
       </div>
@@ -57,9 +85,7 @@ const DirectDebitNotification = ({
 };
 
 const styles = {
-  text: {
-    fontSize: 12,
-  },
+  container: {},
 };
 
 export default connect(DirectDebitNotification);

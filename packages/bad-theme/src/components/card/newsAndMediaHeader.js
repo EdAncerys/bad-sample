@@ -142,7 +142,7 @@ const NewsAndMediaHeader = ({
     const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
 
     return (
-      <div style={{ padding: `0.5em 0` }}>
+      <div style={{ padding: `1em 0` }}>
         <Html2React html={formattedDate} />
       </div>
     );
@@ -178,7 +178,7 @@ const NewsAndMediaHeader = ({
 
     return (
       <div style={{ padding: `1em 1.5em 0` }}>
-        <div style={{ paddingBottom: `1em` }}>
+        <div style={{ paddingBottom: `1.5em` }}>
           <div className="flex">
             <div className="flex-col">
               <ServeCategory />

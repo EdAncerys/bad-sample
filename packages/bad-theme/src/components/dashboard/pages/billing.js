@@ -7,7 +7,15 @@ import BillingHistory from "../billingHistory";
 import OrderSummary from "../orderSummary";
 import DirectDebitSetup from "../directDebitSetup";
 
-const Billing = ({ state, actions, libraries, dashboardPath, userStatus }) => {
+const Billing = ({
+  state,
+  actions,
+  libraries,
+  dashboardPath,
+  visible,
+  setVisible,
+  userStatus,
+}) => {
   const [page, setPage] = useState({ page: "billing" });
 
   if (dashboardPath !== "Billing") return null;
@@ -20,8 +28,13 @@ const Billing = ({ state, actions, libraries, dashboardPath, userStatus }) => {
 
     return (
       <div>
-        <DirectDebitNotification setPage={setPage} />
+        <DirectDebitNotification
+          setPage={setPage}
+          visible={visible}
+          setVisible={setVisible}
+        />
         <Payments setPage={setPage} subscriptions={userStatus} />
+
         <BillingHistory />
       </div>
     );

@@ -156,8 +156,7 @@ const Form = ({ state, actions }) => {
             <input
               id="agreeTermsAndConditions"
               type="checkbox"
-              className="form-check-input"
-              style={styles.checkBox}
+              className="form-check-input check-box"
             />
             <div style={styles.textInfo}>
               I Agree with the{" "}
@@ -168,8 +167,7 @@ const Form = ({ state, actions }) => {
             <input
               id="agreeMarketing"
               type="checkbox"
-              className="form-check-input"
-              style={styles.checkBox}
+              className="form-check-input check-box"
             />
             <div style={styles.textInfo}>
               I Agree with the <span style={styles.tcAgreement}>Marketing</span>
@@ -199,12 +197,6 @@ const styles = {
   tcAgreement: {
     boxShadow: `inset 0 -2px ${colors.darkSilver}`,
     cursor: "pointer",
-  },
-  checkBox: {
-    borderRadius: "50%",
-    width: 20,
-    height: 20,
-    marginRight: 10,
   },
   textInfo: {
     textInfo: 12,
