@@ -51,6 +51,7 @@ import {
 } from "./auth/rssFeed";
 import { useIsMounted } from "../helpers/useIsMounted";
 import { errorHandler } from "../helpers/errorHandler";
+import { anchorScrapper } from "../helpers/contentScrapper";
 
 export {
   AppProvider,
@@ -94,4 +95,5 @@ export {
   errorHandler,
   getDirectDebitAction,
   createDirectDebitAction,
+  anchorScrapper,
 };
