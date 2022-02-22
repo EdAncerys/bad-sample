@@ -2,6 +2,12 @@ import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import Link from "@frontity/components/link";
+import {
+  FacebookShareButton,
+  TwitterShareButton,
+  LinkedinShareButton,
+} from "react-share";
+import * as Add2Calendar from "add2calendar";
 
 import { colors } from "../../config/imports";
 import date from "date-and-time";
@@ -22,19 +28,22 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
   if (!authorInfo) return null;
 
   const mountedRef = useRef(true);
-  const [category, setCategory] = useState(null);
+  const [tagData, setTagData] = useState(null);
   const ICON_WIDTH = 100;
-  const { categories, date, modified } = authorInfo;
+  const { date, modified, tags, content } = authorInfo;
   const { press_release_authors } = authorInfo.acf;
+  const title = authorInfo.title ? authorInfo.title.rendered : null;
+
+  const shareUrl = state.auth.APP_URL + state.router.link;
+  const shareTitle = title || "BAD";
+
+  console.log(authorInfo);
 
   useEffect(async () => {
     if (state.source.category) {
-      const CATEGORY = Object.values(state.source.category);
-      const filter = CATEGORY.filter(
-        (item) => item.id === Number(categories[0])
-      );
-      const categoryName = filter[0].name;
-      setCategory(categoryName);
+      const TAG = Object.values(state.source.tag);
+
+      setTagData(TAG);
     }
 
     return () => {
@@ -42,11 +51,46 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
     };
   }, []);
 
+  // HANDLERS --------------------------------------------
+  const singleEventArgs = {
+    title: shareTitle,
+    start: date,
+    end: date,
+    // location: "London, UK",
+    description: content.rendered,
+    isAllDay: false,
+  };
+  const singleEvent = new Add2Calendar(singleEventArgs);
+  console.log("------", singleEvent.getOutlookUrl());
+
+  const copyToClipboard = (e) => {
+    const link = e.target.name;
+    console.log(link);
+
+    var input = document.body.appendChild(document.createElement("input"));
+    input.value = link;
+    input.focus();
+    input.select();
+    document.execCommand("copy");
+    input.parentNode.removeChild(input);
+  };
+
   // SERVERS ---------------------------------------------
   const ServeDate = () => {
     if (!date || !modified) return null;
     const datePublished = new Date(date);
-    const dateModified = new Date(date);
+    const dateModified = new Date(modified);
+
+    const ServeModified = () => {
+      if (datePublished === dateModified) return null;
+
+      return (
+        <div style={styles.container}>
+          <div>Modified -</div>
+          <Html2React html={DATE_MODULE.format(dateModified, "DD/MMM/YYYY")} />
+        </div>
+      );
+    };
 
     return (
       <div
@@ -61,10 +105,7 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
           <div>Published -</div>
           <Html2React html={DATE_MODULE.format(datePublished, "DD/MMM/YYYY")} />
         </div>
-        <div style={styles.container}>
-          <div>Modified -</div>
-          <Html2React html={DATE_MODULE.format(dateModified, "DD/MMM/YYYY")} />
-        </div>
+        <ServeModified />
       </div>
     );
   };
@@ -102,6 +143,7 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
 
     const ServeName = () => {
       const name = press_release_authors[0].press_release_author_name;
+      if (!name) return null;
 
       return (
         <div style={{ fontWeight: "bold", padding: `1em 0` }}>
@@ -112,6 +154,7 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
 
     const ServeHospital = () => {
       const hospital = press_release_authors[0].press_release_author_hospital;
+      if (!hospital) return null;
 
       return (
         <div>
@@ -142,33 +185,50 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
       >
         <div className="flex" style={{ justifyContent: "space-between" }}>
           <div style={styles.socials}>
-            <Link link={`https://www.facebook.com/`} target="_blank">
+            <FacebookShareButton
+              url={shareUrl}
+              quote={shareTitle}
+              className="Demo__some-network__share-button"
+            >
               <Image src={Facebook} className="d-block h-100" alt="Facebook" />
-            </Link>
+            </FacebookShareButton>
           </div>
           <div style={styles.socials}>
-            <Link link={`https://www.twitter.com/`} target="_blank">
+            <TwitterShareButton
+              url={shareUrl}
+              title={shareTitle}
+              className="Demo__some-network__share-button"
+            >
               <Image src={Twitter} className="d-block h-100" alt="Twitter" />
-            </Link>
+            </TwitterShareButton>
           </div>
-          <div style={styles.socials}>
-            <Link link={`https://www.instagram.com/`} target="_blank">
+          {/* <div style={styles.socials}>
+            <LinkedinShareButton
+              url={shareUrl}
+              className="Demo__some-network__share-button"
+            >
               <Image
                 src={Instagram}
                 className="d-block h-100"
                 alt="Instagram"
               />
-            </Link>
-          </div>
+            </LinkedinShareButton>
+          </div> */}
           <div style={styles.socials}>
-            <Link link={`https://www.linkedin.com/`} target="_blank">
+            <LinkedinShareButton
+              url={shareUrl}
+              className="Demo__some-network__share-button"
+            >
               <Image src={Linkedin} className="d-block h-100" alt="Instagram" />
-            </Link>
+            </LinkedinShareButton>
           </div>
-          <div style={styles.socials}>
-            <Link link={`https://www.linkedin.com/`} target="_blank">
-              <Image src={Connect} className="d-block h-100" alt="Instagram" />
-            </Link>
+          <div style={styles.socials} onClick={copyToClipboard}>
+            <Image
+              src={Connect}
+              className="d-block h-100"
+              alt="Instagram"
+              name={`${shareTitle}`}
+            />
           </div>
           <div style={styles.socials}>
             <Link link={`https://www.linkedin.com/`} target="_blank">
@@ -181,6 +241,8 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
   };
 
   const ServeTopics = () => {
+    if (!tags.length || !tagData) return null;
+
     return (
       <div
         className="primary-title"
@@ -191,6 +253,18 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
         }}
       >
         Topics
+        <div className="flex" style={{ fontSize: 16, paddingTop: `1em` }}>
+          {tags.map((tag, key) => {
+            const filter = tagData.filter((item) => item.id === Number(tag));
+            const categoryName = filter[0].name;
+
+            return (
+              <div key={key} style={{ paddingRight: 10 }}>
+                {categoryName}
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   };
@@ -211,6 +285,9 @@ const styles = {
     gridTemplateColumns: `1fr 2fr`,
     gap: 20,
     padding: `0.5em 0`,
+  },
+  socials: {
+    display: "grid",
   },
 };
 
