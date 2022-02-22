@@ -189,21 +189,32 @@ const Venue = ({ state, actions, libraries }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <BlockWrapper>
-      <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
-        <PromoBlock
-          block={{
-            title: venue.title.rendered,
-            body: excerpt,
-            background_image: gallery[0],
-            padding: "small",
-          }}
-          disableMargin
-        />
-        <ServeInfo />
-        <MultiPhotoBlock block={gallery} />
+    <div>
+      <div
+        style={{
+          padding: `0 ${marginVertical}px`,
+          backgroundColor: colors.bgNavy,
+        }}
+      >
+        <BlockWrapper>
+          <PromoBlock
+            block={{
+              title: venue.title.rendered,
+              body: excerpt,
+              background_image: gallery[0],
+              padding: "small",
+            }}
+            disableMargin
+          />
+        </BlockWrapper>
       </div>
-    </BlockWrapper>
+      <BlockWrapper>
+        <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
+          <ServeInfo />
+          <MultiPhotoBlock block={gallery} />
+        </div>
+      </BlockWrapper>
+    </div>
   );
 };
 
@@ -211,7 +222,7 @@ const styles = {
   infoContainer: {
     display: "grid",
     gridTemplateColumns: `1fr 1fr`,
-    gap: 20,
+    gap: `10em`,
   },
 };
 

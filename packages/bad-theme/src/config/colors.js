@@ -22,6 +22,7 @@ export const colors = {
   footer: "#292929",
   // background colours
   bgLight: "rgb(230,230,230, 0.7)",
+  bgNavy: "#EFF7F9",
   // app Colours
   maroon: "#842057",
   pink: "#EF476F",
