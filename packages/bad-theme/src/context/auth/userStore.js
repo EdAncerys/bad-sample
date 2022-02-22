@@ -138,6 +138,39 @@ export const getUserStoreAction = async ({ state, isActiveUser }) => {
   }
 };
 
+export const deleteUserStoreAction = async ({ state, isActiveUser }) => {
+  console.log("deleteUserStoreAction triggered");
+
+  try {
+    const { contactid } = isActiveUser;
+    if (!contactid)
+      throw new Error("Cannot set user store. Contactid is missing.");
+
+    const URL = state.auth.APP_HOST + `/store/${contactid}/applications`;
+    const jwt = await authenticateAppAction({ state });
+
+    const requestOptions = {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${jwt}` },
+    };
+
+    const response = await fetch(URL, requestOptions);
+    const userStore = await response.json();
+
+    if (userStore.success) {
+      console.log("⏬ Membership Record Successfully Deleted ⏬");
+      console.log(userStore.data);
+      return userStore.data;
+    } else {
+      console.log("⏬ Membership Record Not Found ⏬");
+      console.log(userStore.data);
+      return null;
+    }
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
 export const createDynamicsApplicationAction = async ({ state, contactid }) => {
   console.log("createDynamicsApplicationAction triggered");
 
@@ -222,6 +255,8 @@ export const setCompleteUserApplicationAction = async ({
     const data = await response.json();
 
     if (data.success) {
+      await deleteUserStoreAction({ state, isActiveUser });
+
       console.log("⏬ Membership Completed ⏬");
       console.log(data);
     } else {
