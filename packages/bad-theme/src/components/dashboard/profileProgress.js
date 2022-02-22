@@ -10,9 +10,7 @@ import CheckMarkGreen from "../../img/svg/checkMarkGreen.svg";
 import PaymentNotification from "./paymentNotification";
 // CONTEXT ----------------------------------------------------------------
 import { useAppState, setGoToAction } from "../../context";
-const ProfileProgress = ({ state, actions, libraries, userStatus }) => {
-  const { apps } = userStatus;
-
+const ProfileProgress = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { applicationData, isActiveUser } = useAppState();
@@ -23,8 +21,8 @@ const ProfileProgress = ({ state, actions, libraries, userStatus }) => {
   const [applicationStep, setStep] = useState("Start new application");
 
   useEffect(() => {
-    if (!applicationData) return null;
-
+    // if (!applicationData) return null - we need to check if the data exists in the API
+    if (!applicationData && apps.data.length === 0) return null; //if there is no application data and no active applications in the API - then return null
     let progressName = "";
     if (applicationData[0].stepOne) progressName = "Step 1 - The Process";
     if (applicationData[0].stepTwo)
@@ -36,8 +34,7 @@ const ProfileProgress = ({ state, actions, libraries, userStatus }) => {
     if (applicationData[0].stepFive) progressName = "Step 5 - SIG Questions";
     if (applicationData[0].applicationComplete)
       progressName = "Application Complete";
-    if (apps.data[0].bad_approvalstatus === "Approved")
-      progressName = "Application approved";
+
     setStep(progressName);
   }, [applicationData]);
 
@@ -168,12 +165,7 @@ const ProfileProgress = ({ state, actions, libraries, userStatus }) => {
         </div>
         <ServeActions />
       </div>
-
-      {apps.data > 0 && apps.data[0].bad_approvalstatus === "Approved" ? (
-        <PaymentNotification application={apps.data[0]} />
-      ) : (
-        <ServeProgressBar />
-      )}
+      <ServeProgressBar />
     </div>
   );
 };

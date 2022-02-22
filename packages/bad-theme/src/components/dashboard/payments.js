@@ -7,8 +7,10 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+  if (!subscriptions) return null;
+  if (subscriptions.subs.data.length === 0) return null;
   const { subs } = subscriptions;
-  console.log(subs);
+
   // HELPERS ----------------------------------------------------------------
   const handlePayment = async ({ core_membershipsubscriptionid }) => {
     const cookie = handleGetCookie({ name: `BAD-WebApp` });

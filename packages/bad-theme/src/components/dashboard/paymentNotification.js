@@ -67,7 +67,7 @@ const PaymentNotification = ({
         gridTemplateColumns: `1fr auto`,
         gap: "1em",
         padding: `1em`,
-        marginBottom: `${marginVertical}px`,
+        padding: 30,
       }}
     >
       <div

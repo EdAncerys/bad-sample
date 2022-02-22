@@ -24,7 +24,6 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   const cookie = handleGetCookie({ name: `BAD-WebApp` });
   const { contactid, jwt } = cookie;
 
-  const [dashboardPath, setDashboardPath] = useState("Dashboard");
   const [applicationStatus, setApplicationStatus] = useState();
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
@@ -79,7 +78,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
     fetchApplicationBillingStatus();
   }, []);
   if (!isReady) return null;
-
+  if (!cookie) return null;
   return (
     <div className="flex-col">
       <div className="flex-col">

@@ -28,11 +28,11 @@ const Billing = ({
 
     return (
       <div>
-        <DirectDebitNotification
+        {/* <DirectDebitNotification
           setPage={setPage}
           visible={visible}
           setVisible={setVisible}
-        />
+        /> */}
         <Payments setPage={setPage} subscriptions={userStatus} />
 
         <BillingHistory />
