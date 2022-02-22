@@ -364,3 +364,10 @@ https://codebeautify.org/
   z-index: 1;
   color: #80b918;
 }
+
+.body-limit {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
