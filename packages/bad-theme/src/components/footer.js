@@ -120,16 +120,6 @@ const Footer = ({ state, actions }) => {
               target="_blank"
               style={styles.footerLink}
             >
-              Equal Opportunities Policy
-            </Link>
-            <ServeDivider />
-          </div>
-          <div className="footer-title-link" style={styles.footerLink}>
-            <Link
-              link={`https://skylarkcreative.co.uk/`}
-              target="_blank"
-              style={styles.footerLink}
-            >
               Privacy Policy
             </Link>
             <ServeDivider />
