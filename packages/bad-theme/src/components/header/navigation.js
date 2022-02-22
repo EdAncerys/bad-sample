@@ -135,6 +135,8 @@ const Navigation = ({ state, actions, libraries }) => {
               {child_items.map((item, key) => {
                 const { title, url, slug, child_items } = item;
 
+                let subChildTitle = title.replace(/’/g, "");
+
                 return (
                   <li key={key} className="flex-row" style={{ width: "100%" }}>
                     <a
@@ -149,7 +151,7 @@ const Navigation = ({ state, actions, libraries }) => {
                     >
                       <div className="flex">
                         <div className="menu-title">
-                          <Html2React html={title} />
+                          <Html2React html={subChildTitle} />
                         </div>
                       </div>
                     </a>

@@ -31,7 +31,7 @@ const TypeFilters = ({
       <div
         className="flex primary-title"
         style={{
-          fontSize: 30,
+          fontSize: 20,
           alignItems: "center",
         }}
       >
