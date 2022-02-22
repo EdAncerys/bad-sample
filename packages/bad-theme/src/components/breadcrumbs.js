@@ -11,16 +11,14 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
   const endPoint = state.router.link;
   const data = state.source.get(endPoint);
 
-  
   const [wpMenu, setWpMenu] = useState([]);
-  
+
   if (endPoint.includes("/redirect/")) return null;
   const marginHorizontal = state.theme.marginHorizontal;
   const directions = endPoint.split("/").slice(1, -1);
   const directionLength = directions.length;
   const MARGIN = 10;
   let KEY = 0;
-  
 
   useEffect(() => {
     // getting wp menu from state
@@ -57,8 +55,11 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
       if (goToLink === "/derm_groups_charity")
         goToLink = "/derm-groups-charity";
       if (goToLink === "/venues") goToLink = "/events-content/venues";
+      if (goToLink === "/events-content/venues")
+        goToLink = "/events-content/venue-hire";
 
-      console.log(goToLink);
+      // console.log(titleName); // debug
+      // console.log(goToLink); // debug
 
       actions.router.set(`${goToLink}`);
     };
