@@ -6,6 +6,7 @@ import BlockBuilder from "../components/builder/blockBuilder";
 import { muiQuery } from "../context";
 import PromoBlock from "../components/promoBlock";
 import MultiPhotoBlock from "../components/multiPhotoBlock";
+import GalleryCarousel from "../components/card/galleryCarousel";
 // CONTEXT -------------------------------------------------------------------
 import { useAppDispatch, setEnquireAction } from "../context";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
@@ -211,7 +212,11 @@ const Venue = ({ state, actions, libraries }) => {
       <BlockWrapper>
         <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
           <ServeInfo />
-          <MultiPhotoBlock block={gallery} />
+          <GalleryCarousel
+            gallery={gallery}
+            height={state.theme.bannerHeight * 1.5}
+            padding={`${marginVertical}px 0`}
+          />
         </div>
       </BlockWrapper>
     </div>
