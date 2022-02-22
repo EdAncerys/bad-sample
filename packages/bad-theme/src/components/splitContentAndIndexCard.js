@@ -11,7 +11,6 @@ import TitleBlock from "./titleBlock";
 const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  
   const {
     body,
     title,
@@ -21,12 +20,12 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
     disable_vertical_padding,
     limit_body_length,
   } = block;
-  
+
   const [limit, setLimit] = useState(limit_body_length);
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
-  
+
   if (!block) return <Loading />;
 
   // SERVERS -----------------------------------------------------
@@ -36,7 +35,7 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
 
       // Adjust body max string Length
       let bodyPreview = body;
-      const maxLength = 3000;
+      const maxLength = 1500;
       if (body.length > maxLength && limit)
         bodyPreview = `${body.substring(0, maxLength)}...`;
 
