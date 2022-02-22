@@ -313,13 +313,11 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
             <Card
               key={key}
               videoGuide={block}
-              // title={title.rendered}
-              // publicationDate={date}
               body={content.rendered}
               colour={colour}
               limitBodyLength
               bodyLimit={100}
-              // cardMinHeight={250}
+              cardMinHeight={250}
               shadow
             />
           );

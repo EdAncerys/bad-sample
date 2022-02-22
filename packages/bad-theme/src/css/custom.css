@@ -352,3 +352,15 @@ https://codebeautify.org/
   padding-top: 0.5em;
   transition: all 0.25s ease-in-out;
 }
+
+.clipboard-reference {
+  position: relative;
+}
+.clipboard-reference::after {
+  content: "Copied!";
+  position: absolute;
+  width: 60px;
+  left: 0;
+  z-index: 1;
+  color: #80b918;
+}
