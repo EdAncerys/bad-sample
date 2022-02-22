@@ -105,7 +105,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
       <div
         style={{
           position: "absolute",
-          zIndex: 1,
+          zIndex: 9,
           width: OVERLAY_WIDTH,
         }}
       >
@@ -132,7 +132,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
             display: "grid",
             alignItems: "center",
             position: "absolute",
-            zIndex: 99,
+            zIndex: 9,
             width: !background_image ? CONTENT_WIDTH / 1.5 : CONTENT_WIDTH / 2, // if no img provided defaults to diff width
             height: BANNER_HEIGHT,
           }}
@@ -183,8 +183,10 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           zIndex: 9,
         }}
       >
-        <ServeBannerOverLay />
-        <ServeButtonsOverLay />
+        <div style={{ position: "relative" }}>
+          <ServeBannerOverLay />
+          <ServeButtonsOverLay />
+        </div>
       </div>
     );
   };

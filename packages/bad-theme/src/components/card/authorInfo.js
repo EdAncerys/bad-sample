@@ -37,8 +37,6 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
   const shareUrl = state.auth.APP_URL + state.router.link;
   const shareTitle = title || "BAD";
 
-  console.log(authorInfo);
-
   useEffect(async () => {
     if (state.source.category) {
       const TAG = Object.values(state.source.tag);
@@ -61,11 +59,9 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
     isAllDay: false,
   };
   const singleEvent = new Add2Calendar(singleEventArgs);
-  console.log("------", singleEvent.getOutlookUrl());
 
   const copyToClipboard = (e) => {
     const link = e.target.name;
-    console.log(link);
 
     var input = document.body.appendChild(document.createElement("input"));
     input.value = link;

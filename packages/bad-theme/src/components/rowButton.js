@@ -22,10 +22,13 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
     allow_attachments,
     recipients,
     link_id,
+    file_link,
   } = block;
   const THEME = colour || colors.primary;
   let LABEL = title;
   if (!title && link) LABEL = link.title;
+
+  console.log("----", block);
 
   // SERVERS --------------------------------------------
   const ServeFooter = () => {
@@ -102,6 +105,7 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
       }}
       onClick={() => {
         if (link_id) return null;
+        if (file_link) window.open(file_link.url);
         if (onClick) {
           onClick();
           return;
