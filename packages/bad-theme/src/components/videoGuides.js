@@ -278,7 +278,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           >
             <div className="flex-row">
               <SearchContainer
-                title={"Search for Dermatology Groups & Charities"}
+                title="Search for Videos"
                 searchFilterRef={searchFilterRef}
                 handleSearch={handleSearch}
               />
