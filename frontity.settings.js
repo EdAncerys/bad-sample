@@ -102,6 +102,11 @@ const settings = {
               endpoint: "memberships",
               archive: "/memberships",
             },
+            {
+              type: "videos",
+              endpoint: "videos",
+              archive: "/videos",
+            },
           ],
           taxonomies: [
             {

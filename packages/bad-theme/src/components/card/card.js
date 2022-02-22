@@ -7,6 +7,7 @@ import CardBody from "./cardBody";
 import CardActions from "./cardActions";
 import JournalCard from "../home/journalCard";
 import PromoHeader from "./promoHeader";
+import VideoGuide from "./videoGuide";
 import GalleryCarousel from "./galleryCarousel";
 import VenueInfo from "./venueInfo";
 import NewsArticleHeader from "./newsArticleHeader";
@@ -77,6 +78,7 @@ const Card = ({
   dermGroupe,
   downloads,
   fundingHeader,
+  videoGuide,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
@@ -264,6 +266,7 @@ const Card = ({
       }}
     >
       <PromoHeader fundingPromo={fundingPromo} />
+      <VideoGuide videoGuide={videoGuide} />
       <FundingHeader fundingHeader={fundingHeader} />
       <ImageAndPromoCard imageAndPromoCard={imageAndPromoCard} />
       <NewsAndMediaHeader newsAndMediaInfo={newsAndMediaInfo} layout={layout} />
