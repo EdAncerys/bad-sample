@@ -10,8 +10,10 @@ import BlockWrapper from "../blockWrapper";
 
 const Navigation = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
   const [wpMainMenu, setWpMainMenu] = useState([]);
   const [wpMoreMenu, setWpMoreMenu] = useState([]);
+  const useEffectRef = useRef(false);
 
   const MAIN_NAV_LENGTH = 6; // main navigation length config
   const BANNER_HEIGHT = state.theme.bannerHeight;
@@ -21,14 +23,24 @@ const Navigation = ({ state, actions, libraries }) => {
   const activeMenu = useRef(null);
   const activeChildMenu = useRef(null);
 
-  useEffect(() => {
+  useEffect(async () => {
     // getting wp menu from state
     const data = state.theme.menu;
     if (!data) return;
     const dataLength = data.length;
 
-    setWpMainMenu(data.slice(0, MAIN_NAV_LENGTH)); // main menu to display
+    const wpMainMenu = data.slice(0, MAIN_NAV_LENGTH);
+    // ⬇️ main menu content pre fetch
+    await Promise.all(
+      wpMainMenu.map(({ slug }) => actions.source.fetch(`/${slug}`))
+    );
+
+    setWpMainMenu(wpMainMenu); // main menu to display
     setWpMoreMenu(data.slice(MAIN_NAV_LENGTH, dataLength)); // more menu into dropdown
+
+    return () => {
+      useEffectRef.current = false; // clean up function
+    };
   }, [state.theme.menu]);
 
   if (!wpMoreMenu.length || !wpMainMenu.length)
@@ -298,7 +310,11 @@ const Navigation = ({ state, actions, libraries }) => {
     return (
       <div className="flex main-menu-container" style={styles.container}>
         {wpMainMenu.map((item, key) => {
-          const { title, slug, url, child_items } = item;
+          const { title, slug, url, object_id } = item;
+          let menuFeatured = null;
+          const menuItem = state.source["page"][Number(object_id)];
+          if (menuItem) menu_featured = menuItem.menu_featured;
+          console.log(menuItem); // debug
 
           return (
             <ul

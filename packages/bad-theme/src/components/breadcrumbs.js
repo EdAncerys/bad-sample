@@ -59,7 +59,7 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
         goToLink = "/events-content/venue-hire";
 
       // console.log(titleName); // debug
-      // console.log(goToLink); // debug
+      // console.log(item); // debug
 
       actions.router.set(`${goToLink}`);
     };

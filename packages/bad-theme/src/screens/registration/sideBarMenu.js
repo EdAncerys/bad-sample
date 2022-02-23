@@ -23,6 +23,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
     let applicationCategory = "";
     applicationData.map((data) => {
       if (data.name === "bad_organisedfor") applicationCategory = data.value;
+      return "";
     });
 
     return applicationCategory;
