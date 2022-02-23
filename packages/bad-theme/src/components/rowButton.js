@@ -43,24 +43,6 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
     );
   };
 
-  const ServeAnchorLink = () => {
-    if (!link_id) return null;
-
-    return (
-      <a
-        style={{
-          position: "absolute",
-          width: "100%",
-          height: "100%",
-          top: 0,
-          left: 0,
-          zIndex: 1,
-        }}
-        href={`#${link_id}`}
-      />
-    );
-  };
-
   const ServeButton = () => {
     return (
       <div className="flex-col">
@@ -104,8 +86,14 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
         position: "relative",
       }}
       onClick={() => {
-        if (link_id) return null;
-        if (file_link) window.open(file_link.url);
+        if (link_id) {
+          window.location.href = "#" + link_id;
+          return;
+        }
+        if (file_link) {
+          window.open(file_link.url);
+          return;
+        }
         if (onClick) {
           onClick();
           return;
@@ -117,10 +105,12 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
           });
           return;
         }
-        if (link) setGoToAction({ path: link.url, actions });
+        if (link) {
+          setGoToAction({ path: link.url, actions });
+          return;
+        }
       }}
     >
-      <ServeAnchorLink />
       <ServeButton />
     </div>
   );
