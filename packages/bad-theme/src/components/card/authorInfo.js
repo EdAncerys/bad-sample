@@ -11,7 +11,7 @@ import * as Add2Calendar from "add2calendar";
 
 import { colors } from "../../config/imports";
 import date from "date-and-time";
-import { setGoToAction } from "../../context";
+import ShareToSocials from "./shareToSocials";
 
 import Facebook from "../../img/svg/facebookBlack.svg";
 import Twitter from "../../img/svg/twitterBlack.svg";
@@ -159,79 +159,21 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
       );
     };
 
+    const isAuthor =
+      press_release_authors[0].press_release_author_name ||
+      press_release_authors[0].press_release_author_photo ||
+      press_release_authors[0].press_release_author_hospital;
+
     return (
       <div>
-        <div className="primary-title" style={{ fontSize: 20 }}>
-          Author
-        </div>
+        {isAuthor && (
+          <div className="primary-title" style={{ fontSize: 20 }}>
+            Author
+          </div>
+        )}
         <ServeProfilePhoto />
         <ServeName />
         <ServeHospital />
-      </div>
-    );
-  };
-
-  const ServeSocials = () => {
-    return (
-      <div
-        style={{
-          padding: `1em 0`,
-          borderTop: `1px solid ${colors.lightSilver}`,
-        }}
-      >
-        <div className="flex" style={{ justifyContent: "space-between" }}>
-          <div style={styles.socials}>
-            <FacebookShareButton
-              url={shareUrl}
-              quote={shareTitle}
-              className="Demo__some-network__share-button"
-            >
-              <Image src={Facebook} className="d-block h-100" alt="Facebook" />
-            </FacebookShareButton>
-          </div>
-          <div style={styles.socials}>
-            <TwitterShareButton
-              url={shareUrl}
-              title={shareTitle}
-              className="Demo__some-network__share-button"
-            >
-              <Image src={Twitter} className="d-block h-100" alt="Twitter" />
-            </TwitterShareButton>
-          </div>
-          {/* <div style={styles.socials}>
-            <LinkedinShareButton
-              url={shareUrl}
-              className="Demo__some-network__share-button"
-            >
-              <Image
-                src={Instagram}
-                className="d-block h-100"
-                alt="Instagram"
-              />
-            </LinkedinShareButton>
-          </div> */}
-          <div style={styles.socials}>
-            <LinkedinShareButton
-              url={shareUrl}
-              className="Demo__some-network__share-button"
-            >
-              <Image src={Linkedin} className="d-block h-100" alt="Instagram" />
-            </LinkedinShareButton>
-          </div>
-          <div style={styles.socials} onClick={copyToClipboard}>
-            <Image
-              src={Connect}
-              className="d-block h-100"
-              alt="Instagram"
-              name={`${shareTitle}`}
-            />
-          </div>
-          <div style={styles.socials}>
-            <Link link={`https://www.linkedin.com/`} target="_blank">
-              <Image src={WebPage} className="d-block h-100" alt="Instagram" />
-            </Link>
-          </div>
-        </div>
       </div>
     );
   };
@@ -246,6 +188,7 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
           fontSize: 20,
           fontWeight: "bold",
           padding: `0.5em 0`,
+          borderBottom: `1px solid ${colors.lightSilver}`,
         }}
       >
         Topics
@@ -270,7 +213,12 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
       <ServeProfile />
       <ServeDate />
       <ServeTopics />
-      <ServeSocials />
+      <ShareToSocials
+        title={shareTitle}
+        shareUrl={shareUrl}
+        date={date}
+        description={content.rendered}
+      />
     </div>
   );
 };
@@ -284,6 +232,7 @@ const styles = {
   },
   socials: {
     display: "grid",
+    cursor: "pointer",
   },
 };
 

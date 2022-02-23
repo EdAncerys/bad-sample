@@ -444,9 +444,9 @@ const Navigation = ({ state, actions, libraries }) => {
             }
           });
 
-          console.log("featuredId", featuredId); // debug
-          console.log("featuredBannerOne", featuredBannerOne); // debug
-          console.log("featuredBannerTwo", featuredBannerTwo); // debug
+          // console.log("featuredId", featuredId); // debug
+          // console.log("featuredBannerOne", featuredBannerOne); // debug
+          // console.log("featuredBannerTwo", featuredBannerTwo); // debug
 
           return (
             <ul
