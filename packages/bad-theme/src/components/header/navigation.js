@@ -15,7 +15,7 @@ const Navigation = ({ state, actions, libraries }) => {
   const [wpMoreMenu, setWpMoreMenu] = useState([]);
   const useEffectRef = useRef(false);
   // ⬇️ getting wp menu & featuredMenu from state
-  const data = state.theme.menu;
+  const menuData = state.theme.menu;
   const featuredMenu = state.source.menu_featured;
 
   const MAIN_NAV_LENGTH = 6; // main navigation length config
@@ -27,13 +27,15 @@ const Navigation = ({ state, actions, libraries }) => {
   const activeChildMenu = useRef(null);
 
   useEffect(async () => {
-    if (!data) return;
-    const dataLength = data.length;
+    if (!menuData) return;
+    const menuLength = menuData.length;
 
-    const wpMainMenu = data.slice(0, MAIN_NAV_LENGTH);
-    const wpMoreMenu = data.slice(MAIN_NAV_LENGTH, dataLength);
+    const wpMainMenu = menuData.slice(0, MAIN_NAV_LENGTH);
+    const wpMoreMenu = menuData.slice(MAIN_NAV_LENGTH, menuLength);
     // ⬇️ menu page content pre fetch
-    await Promise.all(data.map(({ slug }) => actions.source.fetch(`/${slug}`)));
+    await Promise.all(
+      menuData.map(({ slug }) => actions.source.fetch(`/${slug}`))
+    );
 
     setWpMainMenu(wpMainMenu); // main menu to display
     setWpMoreMenu(wpMoreMenu); // more menu into dropdown
@@ -313,23 +315,31 @@ const Navigation = ({ state, actions, libraries }) => {
           const { title, slug, url, object_id } = item;
           let isMenuFeatured = null;
           let featuredId = null; // id associating with featured menu
+          let featuredBanner = null; // featured menu item
 
           if (featuredMenu)
             Object.values(featuredMenu).map((featured) => {
+              // 🔗 link to featured menu to wpMainMenu
               if (featured.slug === slug) {
                 isMenuFeatured = true;
                 featuredId = featured.id;
               }
             });
-          if (data)
-            data.map(({object_id}) => {
-              const pageItem = state.source['page'][Number(object_id)]
-              console.log(object_id);
+          if (menuData)
+            menuData.map(({ object_id }) => {
+              const pageItem = state.source["page"][Number(object_id)];
+              const { menu_featured } = pageItem;
+
+              if (!!menu_featured.length) {
+                console.log(pageItem);
+                if (menu_featured.includes(featuredId))
+                  if (!featuredBanner) featuredBanner = pageItem;
+              }
             });
           // const menuItem = state.source["page"][Number(object_id)];
           // if (menuItem && menuItem.menu_featured)
           //   menu_featured = menuItem.menu_featured;
-          console.log(featuredId); // debug
+          console.log(featuredBanner); // debug
 
           return (
             <ul
