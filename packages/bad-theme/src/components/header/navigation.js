@@ -3,7 +3,7 @@ import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import { setGoToAction } from "../../context";
+import { setGoToAction, getWpPagesAction } from "../../context";
 
 import NavBarDropDownContent from "./navDropDownContent";
 import BlockWrapper from "../blockWrapper";
@@ -126,7 +126,12 @@ const Navigation = ({ state, actions, libraries }) => {
 
   // SERVERS -----------------------------------------------------
   const ServeMenu = ({ secondaryMenu }) => {
-    const ServeChildMenu = ({ item, parentSlug, featuredBanner }) => {
+    const ServeChildMenu = ({
+      item,
+      parentSlug,
+      featuredBannerOne,
+      featuredBannerTwo,
+    }) => {
       const { title, slug, url, child_items } = item;
 
       if (!child_items) return null;
@@ -146,7 +151,7 @@ const Navigation = ({ state, actions, libraries }) => {
               position: "absolute",
               zIndex: 1,
               top: `5%`,
-              width: "30%",
+              width: "32%",
               height: "90%",
               marginLeft: "32%",
               backgroundColor: colors.lightSilver,
@@ -212,10 +217,10 @@ const Navigation = ({ state, actions, libraries }) => {
         );
       };
 
-      const ServeFeaturedMenu = () => {
-        if (!featuredBanner) return null;
+      const ServeFeaturedMenuOne = () => {
+        if (!featuredBannerOne) return null;
 
-        const { title, content, featured_media, link } = featuredBanner;
+        const { title, content, featured_media, link } = featuredBannerOne;
 
         return (
           <div
@@ -229,7 +234,37 @@ const Navigation = ({ state, actions, libraries }) => {
             }}
           >
             <Card
-              featuredBanner={featuredBanner}
+              featuredBanner={featuredBannerOne}
+              title={title ? title.rendered : null}
+              body={content ? content.rendered : null}
+              link_label="Read More"
+              link={link}
+              cardHeight="90%"
+              colour={colors.white}
+              shadow // optional param
+            />
+          </div>
+        );
+      };
+
+      const ServeFeaturedMenuTwo = () => {
+        if (!featuredBannerTwo) return null;
+
+        const { title, content, featured_media, link } = featuredBannerTwo;
+
+        return (
+          <div
+            style={{
+              position: "absolute",
+              zIndex: 1,
+              height: "90%",
+              width: "30%",
+              left: `66%`,
+              margin: `0 1em`,
+            }}
+          >
+            <Card
+              featuredBanner={featuredBannerTwo}
               title={title ? title.rendered : null}
               body={content ? content.rendered : null}
               link_label="Read More"
@@ -258,7 +293,8 @@ const Navigation = ({ state, actions, libraries }) => {
             }}
           >
             <ServeDivider />
-            <ServeFeaturedMenu />
+            <ServeFeaturedMenuOne />
+            <ServeFeaturedMenuTwo />
 
             {child_items.map((item, key) => {
               const { title, url, slug, child_items } = item;
@@ -316,6 +352,7 @@ const Navigation = ({ state, actions, libraries }) => {
                     </div>
                     <ServeMenuArrow />
                   </a>
+
                   <ServeSubChildMenu
                     parentKey={key}
                     child_items={child_items}
@@ -362,12 +399,16 @@ const Navigation = ({ state, actions, libraries }) => {
         {wpMainMenu.map((item, key) => {
           const { title, slug, url, object_id } = item;
           let featuredId = null; // id associating with featured menu
-          let featuredBanner = null; // featured menu item
+          let featuredBannerOne = null; // featured menu item
+          let featuredBannerTwo = null; // featured menu item
 
           if (featuredMenu)
             Object.values(featuredMenu).map((featured) => {
               // 🔗 link to featured menu item to wpMainMenu
-              if (featured.slug === slug) featuredId = featured.id;
+              if (featured.slug === slug) {
+                console.log(slug); // debug
+                featuredId = featured.id;
+              }
             });
 
           flatMenu.map(({ object, object_id }) => {
@@ -376,24 +417,36 @@ const Navigation = ({ state, actions, libraries }) => {
             const pageItem = state.source[object][Number(object_id)]; // getting page item
             if (!pageItem.menu_featured) return;
             const { menu_featured, modified } = pageItem;
-            const isFeatured = menu_featured.length > 0;
 
             if (menu_featured.includes(featuredId)) {
-              if (!featuredBanner) {
-                featuredBanner = pageItem;
-              } else {
-                const modifiedDate = new Date(modified);
-                const featuredModifiedDate = new Date(featuredBanner.modified);
+              if (!featuredBannerOne) {
+                featuredBannerOne = pageItem;
+                return;
+              }
+              if (!featuredBannerTwo) {
+                featuredBannerTwo = pageItem;
+                return;
+              }
 
-                // replace if modified date is newer
-                if (modifiedDate > featuredModifiedDate)
-                  featuredBanner = pageItem;
+              const modifiedDate = new Date(modified);
+              const fmDateOne = new Date(featuredBannerOne.modified);
+              const fmDateTwo = new Date(featuredBannerTwo.modified);
+
+              // replace if modified date is newer
+              if (modifiedDate > fmDateOne) {
+                featuredBannerOne = pageItem;
+                return;
+              }
+              if (modifiedDate > fmDateTwo) {
+                featuredBannerTwo = pageItem;
+                return;
               }
             }
           });
 
-          // console.log(featuredId); // debug
-          // console.log(featuredBanner); // debug
+          console.log("featuredId", featuredId); // debug
+          console.log("featuredBannerOne", featuredBannerOne); // debug
+          console.log("featuredBannerTwo", featuredBannerTwo); // debug
 
           return (
             <ul
@@ -423,7 +476,8 @@ const Navigation = ({ state, actions, libraries }) => {
                 <ServeChildMenu
                   item={item}
                   parentSlug={slug}
-                  featuredBanner={featuredBanner}
+                  featuredBannerOne={featuredBannerOne}
+                  featuredBannerTwo={featuredBannerTwo}
                 />
               </li>
             </ul>
