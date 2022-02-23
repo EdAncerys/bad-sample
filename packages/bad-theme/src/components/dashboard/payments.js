@@ -3,23 +3,60 @@ import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 import { handleGetCookie } from "../../helpers/cookie";
+
+import PaymentModal from "./paymentModal";
 const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
+  //component state
+  const [paymentUrl, setPaymentUrl] = useState("");
+  const [liveSubscriptions, setLiveSubscriptions] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  // import values from the global state
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+
+  const cookie = handleGetCookie({ name: `BAD-WebApp` });
+  const { contactid, jwt } = cookie;
+  useEffect(() => {
+    console.log("PAYMENTS TRIGGERED");
+    const fetchApplicationBillingStatus = async () => {
+      const getUserApplicationData = await fetch(
+        state.auth.APP_HOST +
+          "/applications/billing/c1bfc5c0-87d1-ea11-a812-000d3a2ab5a1",
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+
+      const json = await getUserApplicationData.json();
+      if (json) setLiveSubscriptions(json);
+    };
+    fetchApplicationBillingStatus();
+
+    setLoading(false);
+  }, [liveSubscriptions]);
+  // when should I return null ?
   if (!subscriptions) return null;
   if (subscriptions.subs.data.length === 0) return null;
+  if (!liveSubscriptions) return "Loading";
   const { subs } = subscriptions;
+
+  //the url for redirect
+  const the_url =
+    state.auth.ENVIRONMENT === "DEVELOPMENT"
+      ? "http://localhost:3000/"
+      : state.auth.BASE_URL;
 
   // HELPERS ----------------------------------------------------------------
   const handlePayment = async ({ core_membershipsubscriptionid }) => {
-    const cookie = handleGetCookie({ name: `BAD-WebApp` });
-    const { contactid, jwt } = cookie;
-
     const fetchVendorId = await fetch(
       state.auth.APP_HOST +
         "/sagepay/test/subscription/" +
-        core_membershipsubscriptionid,
+        core_membershipsubscriptionid +
+        `?redirecturl=${the_url}payment-confirmation`,
       {
         method: "POST",
         headers: {
@@ -31,31 +68,58 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
       const json = await fetchVendorId.json();
       const url =
         json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
-      window.open(url);
+      setPaymentUrl(url);
     }
     // setPage({ page: "directDebit", data: block });
   };
 
+  const resetPaymentUrl = () => {
+    setPaymentUrl(null);
+    setLiveSubscriptions(null);
+    console.log("RESET PAYMENT URL TRIGGERED");
+  };
+
   // SERVERS ---------------------------------------------
   const ServePayments = ({ block, item }) => {
-    const ServeActions = () => {
-      const { bad_outstandingpayments, core_membershipsubscriptionid } = block;
+    const ServeStatusOrAction = () => {
+      // get important data
+      const {
+        bad_outstandingpayments,
+        core_membershipsubscriptionid,
+        bad_sagepayid,
+      } = block;
+      // is outstanding payments greater than 0?
       const stringAmountToPay = bad_outstandingpayments.replace(
         /[^0-9.-]+/g,
         ""
       );
       const amountToPay = Number(stringAmountToPay);
       const outstanding = amountToPay > 0;
+
+      const ServePayButton = () => {
+        if (bad_sagepayid) return null;
+        return (
+          <div
+            type="submit"
+            className="blue-btn"
+            onClick={() => handlePayment({ core_membershipsubscriptionid })}
+          >
+            Pay now
+          </div>
+        );
+      };
+
+      const ServePaymentStatus = () => {
+        if (!bad_sagepayid) return null;
+        if (bad_sagepayid && outstanding)
+          return "Your payment is being processed";
+        if (bad_sagepayid && !outstanding) return "Paid";
+      };
       return (
         <div style={{ margin: `auto 0`, width: marginHorizontal * 2 }}>
           <div style={{ padding: `0 2em` }}>
-            <div
-              type="submit"
-              className="blue-btn"
-              onClick={() => handlePayment({ core_membershipsubscriptionid })}
-            >
-              {outstanding ? "Pay now" : "Already paid"}
-            </div>
+            <ServePayButton />
+            <ServePaymentStatus />
           </div>
         </div>
       );
@@ -89,7 +153,7 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
     return (
       <div className="flex-row">
         <ServeInfo />
-        <ServeActions />
+        <ServeStatusOrAction />
       </div>
     );
   };
@@ -103,6 +167,10 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
       className="shadow"
       style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
     >
+      <PaymentModal
+        payment_url={paymentUrl}
+        resetPaymentUrl={resetPaymentUrl}
+      />
       <div className="primary-title" style={{ fontSize: 20 }}>
         Active subscriptions:
       </div>
@@ -111,7 +179,7 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
       ) : (
         <ServeSubTitle title="Invoices" />
       )}
-      {subs.data.map((block, key) => {
+      {liveSubscriptions.subs.data.map((block, key) => {
         return <ServePayments key={key} block={block} item={key} />;
       })}
     </div>

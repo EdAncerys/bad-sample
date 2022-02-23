@@ -3,6 +3,7 @@ import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 import { handleGetCookie } from "../../helpers/cookie";
+import PaymentModal from "./paymentModal";
 const PaymentNotification = ({
   state,
   actions,
@@ -10,19 +11,22 @@ const PaymentNotification = ({
   setPage,
   application,
 }) => {
+  const [paymentUrl, setPaymentUrl] = useState(null);
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
-  const PAYMENTS = [1, 2, 3];
 
   // HELPERS ----------------------------------------------------------------
+
   const handlePayment = async ({ sage_id }) => {
     const cookie = handleGetCookie({ name: `BAD-WebApp` });
     const { contactid, jwt } = cookie;
 
     const fetchVendorId = await fetch(
-      state.auth.APP_HOST + "/sagepay/test/application/" + sage_id,
+      state.auth.APP_HOST +
+        "/sagepay/test/application/" +
+        sage_id +
+        `?redirecturl=${the_url}payment-confirmation`,
       {
         method: "POST",
         headers: {
@@ -34,7 +38,7 @@ const PaymentNotification = ({
       const json = await fetchVendorId.json();
       const url =
         json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
-      window.open(url);
+      setPaymentUrl(url);
     }
     // setPage({ page: "directDebit", data: block });
   };
@@ -77,6 +81,7 @@ const PaymentNotification = ({
         Your application has been approved. Now it is time to pay!
       </div>
       <ServeActions />
+      <PaymentModal payment_url={paymentUrl} />
     </div>
   );
 };

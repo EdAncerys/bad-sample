@@ -33,6 +33,7 @@ import EventsLandingPage from "./eventsLandingPage";
 import Venue from "./venue";
 import DermGroupsCharity from "./dermGroupsCharity";
 import Covid from "./covid";
+import PaymentConfirmation from "./paymentConfirmation";
 // SCREEN HELPERS ---------------------------------------------------------
 import Error from "./error";
 import Loading from "../components/loading";
@@ -56,71 +57,78 @@ const App = ({ state, actions }) => {
 
   // RETURN ------------------------------------------------------------
   return (
-    <div
-      onClick={(e) => {
-        state.theme.childMenuRef = ""; // reset child menu ref value
-        state.theme.activeDropDownRef = "menu reset"; // reset menu ref value
-        state.theme.pilFilter = null; // reset pil filter
-      }}
-    >
-      <div style={{ ...styles.container }}>
-        <Header />
-        <Breadcrumbs />
-        <BlockWrapper>
-          <LoginModal />
-          <CreateAccountModal />
-          <EnquireModal />
-        </BlockWrapper>
+    <Switch>
+      <PaymentConfirmation
+        when={state.router.link === "/payment-confirmation/"}
+      />
+      <div
+        onClick={(e) => {
+          state.theme.childMenuRef = ""; // reset child menu ref value
+          state.theme.activeDropDownRef = "menu reset"; // reset menu ref value
+          state.theme.pilFilter = null; // reset pil filter
+        }}
+      >
+        <div style={{ ...styles.container }}>
+          <Header />
+          <Breadcrumbs />
+          <BlockWrapper>
+            <LoginModal />
+            <CreateAccountModal />
+            <EnquireModal />
+          </BlockWrapper>
 
-        <div className="flex-col">
-          <Switch>
-            <Loading when={data.isFetching} />
-            <Error when={data.isError} />
-            <BlocksPage when={data.route.includes("blocks")} />
+          <div className="flex-col">
+            <Switch>
+              <Loading when={data.isFetching} />
+              <Error when={data.isError} />
+              <BlocksPage when={data.route.includes("blocks")} />
 
-            <Login when={endPoint === "/login/"} />
-            <CreateAccount when={endPoint === "/create-account/"} />
+              <Login when={endPoint === "/login/"} />
+              <CreateAccount when={endPoint === "/create-account/"} />
 
-            <AccountDashboard
-              when={endPoint === "/dashboard/" && isActiveUser}
-            />
-            <Contact when={endPoint === "/contact-us/"} />
-            <RegistrationStepOne
-              when={endPoint === "/membership/step-1-the-process/"}
-            />
-            <RegistrationStepTwo
-              when={endPoint === "/membership/step-2-personal-information/"}
-            />
-            <RegistrationStepThree
-              when={endPoint === "/membership/step-3-category-selection/"}
-            />
-            <RegistrationStepFour
-              when={endPoint === "/membership/step-4-professional-details/"}
-            />
-            <RegistrationStepFive
-              when={endPoint === "/membership/step-5-sig-questions/"}
-            />
-            <RegistrationComplete
-              when={endPoint === "/membership/final-step-thank-you/"}
-            />
-            <EventsLandingPage when={endPoint === "/events/"} />
-            <PilsArchive when={endPoint === "/patient-information-leaflets/"} />
+              <AccountDashboard
+                when={endPoint === "/dashboard/" && isActiveUser}
+              />
+              <Contact when={endPoint === "/contact-us/"} />
+              <RegistrationStepOne
+                when={endPoint === "/membership/step-1-the-process/"}
+              />
+              <RegistrationStepTwo
+                when={endPoint === "/membership/step-2-personal-information/"}
+              />
+              <RegistrationStepThree
+                when={endPoint === "/membership/step-3-category-selection/"}
+              />
+              <RegistrationStepFour
+                when={endPoint === "/membership/step-4-professional-details/"}
+              />
+              <RegistrationStepFive
+                when={endPoint === "/membership/step-5-sig-questions/"}
+              />
+              <RegistrationComplete
+                when={endPoint === "/membership/final-step-thank-you/"}
+              />
+              <EventsLandingPage when={endPoint === "/events/"} />
+              <PilsArchive
+                when={endPoint === "/patient-information-leaflets/"}
+              />
 
-            <Pils when={data.isPils} />
-            <Event when={data.isEvents} />
-            <Venue when={data.isVenues} />
-            <DermGroupsCharity when={data.isDermGroupsCharity} />
-            <Covid when={data.isCovid19} />
+              <Pils when={data.isPils} />
+              <Event when={data.isEvents} />
+              <Venue when={data.isVenues} />
+              <DermGroupsCharity when={data.isDermGroupsCharity} />
+              <Covid when={data.isCovid19} />
 
-            <Home when={data.isHome} />
+              <Home when={data.isHome} />
 
-            <Post when={data.isPost} />
-            <Page when={data.isPage} />
-          </Switch>
+              <Post when={data.isPost} />
+              <Page when={data.isPage} />
+            </Switch>
+          </div>
+          <Footer />
         </div>
-        <Footer />
       </div>
-    </div>
+    </Switch>
   );
 };
 
