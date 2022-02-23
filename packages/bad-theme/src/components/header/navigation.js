@@ -7,12 +7,15 @@ import { setGoToAction } from "../../context";
 
 import NavBarDropDownContent from "./navDropDownContent";
 import BlockWrapper from "../blockWrapper";
+import Loading from "../loading";
+import Card from "../../components/card/card";
 
 const Navigation = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const [wpMainMenu, setWpMainMenu] = useState([]);
   const [wpMoreMenu, setWpMoreMenu] = useState([]);
+  const [flatMenu, setFlatMenu] = useState([]);
   const useEffectRef = useRef(false);
   // ⬇️ getting wp menu & featuredMenu from state
   const menuData = state.theme.menu;
@@ -29,14 +32,24 @@ const Navigation = ({ state, actions, libraries }) => {
   useEffect(async () => {
     if (!menuData) return;
     const menuLength = menuData.length;
+    let flatMenu = [];
 
     const wpMainMenu = menuData.slice(0, MAIN_NAV_LENGTH);
     const wpMoreMenu = menuData.slice(MAIN_NAV_LENGTH, menuLength);
+    menuData.map((item) => {
+      flatMenu.push(item); // add main menu item
+      if (item.child_items) {
+        item.child_items.map((child) => {
+          flatMenu.push(child); // add child menu item
+        });
+      }
+    });
     // ⬇️ menu page content pre fetch
     await Promise.all(
-      menuData.map(({ slug }) => actions.source.fetch(`/${slug}`))
+      flatMenu.map(({ slug }) => actions.source.fetch(`/${slug}`))
     );
 
+    setFlatMenu(flatMenu); // set flat menu
     setWpMainMenu(wpMainMenu); // main menu to display
     setWpMoreMenu(wpMoreMenu); // more menu into dropdown
 
@@ -46,7 +59,11 @@ const Navigation = ({ state, actions, libraries }) => {
   }, [state.theme.menu]);
 
   if (!wpMoreMenu.length || !wpMainMenu.length)
-    return <div style={{ height: 60 }} />;
+    return (
+      <div style={{ height: 60 }}>
+        <Loading padding="0px" />
+      </div>
+    );
 
   // HANDLERS ----------------------------------------------------
   const handleBoxShadow = (slug) => {
@@ -109,7 +126,7 @@ const Navigation = ({ state, actions, libraries }) => {
 
   // SERVERS -----------------------------------------------------
   const ServeMenu = ({ secondaryMenu }) => {
-    const ServeChildMenu = ({ item, parentSlug }) => {
+    const ServeChildMenu = ({ item, parentSlug, featuredBanner }) => {
       const { title, slug, url, child_items } = item;
 
       if (!child_items) return null;
@@ -195,6 +212,36 @@ const Navigation = ({ state, actions, libraries }) => {
         );
       };
 
+      const ServeFeaturedMenu = () => {
+        if (!featuredBanner) return null;
+
+        const { title, content, featured_media, link } = featuredBanner;
+
+        return (
+          <div
+            style={{
+              position: "absolute",
+              zIndex: 1,
+              height: "90%",
+              width: "30%",
+              left: `35%`,
+              margin: `0 1em`,
+            }}
+          >
+            <Card
+              featuredBanner={featuredBanner}
+              title={title ? title.rendered : null}
+              body={content ? content.rendered : null}
+              link_label="Read More"
+              link={link}
+              cardHeight="90%"
+              colour={colors.white}
+              shadow // optional param
+            />
+          </div>
+        );
+      };
+
       return (
         <ul
           id={`${slugID}-child-menu`}
@@ -211,6 +258,7 @@ const Navigation = ({ state, actions, libraries }) => {
             }}
           >
             <ServeDivider />
+            <ServeFeaturedMenu />
 
             {child_items.map((item, key) => {
               const { title, url, slug, child_items } = item;
@@ -313,33 +361,39 @@ const Navigation = ({ state, actions, libraries }) => {
       <div className="flex main-menu-container" style={styles.container}>
         {wpMainMenu.map((item, key) => {
           const { title, slug, url, object_id } = item;
-          let isMenuFeatured = null;
           let featuredId = null; // id associating with featured menu
           let featuredBanner = null; // featured menu item
 
           if (featuredMenu)
             Object.values(featuredMenu).map((featured) => {
-              // 🔗 link to featured menu to wpMainMenu
-              if (featured.slug === slug) {
-                isMenuFeatured = true;
-                featuredId = featured.id;
-              }
+              // 🔗 link to featured menu item to wpMainMenu
+              if (featured.slug === slug) featuredId = featured.id;
             });
-          if (menuData)
-            menuData.map(({ object_id }) => {
-              const pageItem = state.source["page"][Number(object_id)];
-              const { menu_featured } = pageItem;
 
-              if (!!menu_featured.length) {
-                console.log(pageItem);
-                if (menu_featured.includes(featuredId))
-                  if (!featuredBanner) featuredBanner = pageItem;
+          flatMenu.map(({ object, object_id }) => {
+            if (object !== "page") return; // only page object
+
+            const pageItem = state.source[object][Number(object_id)]; // getting page item
+            if (!pageItem.menu_featured) return;
+            const { menu_featured, modified } = pageItem;
+            const isFeatured = menu_featured.length > 0;
+
+            if (menu_featured.includes(featuredId)) {
+              if (!featuredBanner) {
+                featuredBanner = pageItem;
+              } else {
+                const modifiedDate = new Date(modified);
+                const featuredModifiedDate = new Date(featuredBanner.modified);
+
+                // replace if modified date is newer
+                if (modifiedDate > featuredModifiedDate)
+                  featuredBanner = pageItem;
               }
-            });
-          // const menuItem = state.source["page"][Number(object_id)];
-          // if (menuItem && menuItem.menu_featured)
-          //   menu_featured = menuItem.menu_featured;
-          console.log(featuredBanner); // debug
+            }
+          });
+
+          // console.log(featuredId); // debug
+          // console.log(featuredBanner); // debug
 
           return (
             <ul
@@ -366,7 +420,11 @@ const Navigation = ({ state, actions, libraries }) => {
                 >
                   <Html2React html={title} />
                 </a>
-                <ServeChildMenu item={item} parentSlug={slug} />
+                <ServeChildMenu
+                  item={item}
+                  parentSlug={slug}
+                  featuredBanner={featuredBanner}
+                />
               </li>
             </ul>
           );

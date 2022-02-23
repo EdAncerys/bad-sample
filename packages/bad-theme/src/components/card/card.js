@@ -21,6 +21,7 @@ import TweetInfo from "./tweetInfo";
 import FadDirectory from "./fadDirectory";
 import DermGroupe from "./dermGroupe";
 import FundingHeader from "./fundingHeader";
+import FeaturedBanner from "./featuredBanner";
 
 import GeneralModal from "../elections/generalModal";
 import DownloadFileBlock from "../downloadFileBlock";
@@ -79,6 +80,7 @@ const Card = ({
   downloads,
   fundingHeader,
   videoGuide,
+  featuredBanner,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
@@ -266,6 +268,7 @@ const Card = ({
       }}
     >
       <PromoHeader fundingPromo={fundingPromo} />
+      <FeaturedBanner featuredBanner={featuredBanner} />
       <VideoGuide videoGuide={videoGuide} />
       <FundingHeader fundingHeader={fundingHeader} />
       <ImageAndPromoCard imageAndPromoCard={imageAndPromoCard} />
