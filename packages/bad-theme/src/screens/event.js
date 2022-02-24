@@ -4,8 +4,6 @@ import Image from "@frontity/components/image";
 import Link from "@frontity/components/link";
 
 import { colors } from "../config/imports";
-import { muiQuery } from "../context";
-import { setGoToAction } from "../context";
 import RowButton from "../components/rowButton";
 
 import Facebook from "../img/svg/facebookBlack.svg";

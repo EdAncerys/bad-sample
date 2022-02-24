@@ -37,7 +37,7 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
     fetchApplicationBillingStatus();
 
     setLoading(false);
-  }, [liveSubscriptions]);
+  }, []);
   // when should I return null ?
   if (!subscriptions) return null;
   if (subscriptions.subs.data.length === 0) return null;
@@ -66,6 +66,7 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
     );
     if (fetchVendorId.ok) {
       const json = await fetchVendorId.json();
+      console.log(json);
       const url =
         json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
       setPaymentUrl(url);

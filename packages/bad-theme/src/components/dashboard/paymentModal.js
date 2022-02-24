@@ -19,6 +19,7 @@ import {
 } from "../../context";
 
 const PaymentModal = ({ state, actions, payment_url, resetPaymentUrl }) => {
+  console.log(payment_url);
   if (!payment_url) return null;
   const iFrameHandler = async (e) => {
     const iFrame = e.currentTarget;
