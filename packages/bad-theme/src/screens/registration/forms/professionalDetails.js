@@ -188,7 +188,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         "py3_otherregulatorybodyreference",
         "py3_ntnno",
         "bad_currentpost",
-        "bad_mrpcqualified",
       ],
     });
 
@@ -429,7 +428,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                 className="form-control input"
                 placeholder="New Hospital Name"
               />
-              <FormError id="bad_mrpcqualified" />
+              <FormError id="sky_newhospitalname" />
             </div>
           )}
 
@@ -501,17 +500,15 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             }}
           >
             {inputValidator.bad_mrpcqualified && (
-              <div>
-                <label className="required form-label">MRCP</label>
+              <div className="flex-col">
+                <label className="form-label">MRCP Qualified</label>
                 <input
                   name="bad_mrpcqualified"
-                  value={formData.bad_mrpcqualified}
+                  checked={formData.bad_mrpcqualified}
                   onChange={handleInputChange}
-                  type="text"
-                  className="form-control input"
-                  placeholder="MRCP"
+                  type="checkbox"
+                  className="form-check-input check-box"
                 />
-                <FormError id="bad_mrpcqualified" />
               </div>
             )}
 

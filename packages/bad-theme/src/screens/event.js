@@ -1,17 +1,11 @@
 import { useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
-import Link from "@frontity/components/link";
 
 import { colors } from "../config/imports";
 import RowButton from "../components/rowButton";
+import ShareToSocials from "../components/card/shareToSocials";
 
-import Facebook from "../img/svg/facebookBlack.svg";
-import Twitter from "../img/svg/twitterBlack.svg";
-import Instagram from "../img/svg/instagramBlack.svg";
-import Linkedin from "../img/svg/linkedinBlack.svg";
-import Connect from "../img/svg/connectBlack.svg";
-import WebPage from "../img/svg/webPageBlack.svg";
 import BadBadgeLogo from "../img/svg/badBadgeLogo.svg";
 
 import date from "date-and-time";
@@ -83,7 +77,7 @@ const Event = ({ state, actions, libraries }) => {
     contact_allow_attachments,
   } = event.acf;
   const { title } = event;
-  console.log(event.acf);
+  console.log(event);
   // SERVERS ----------------------------------------------
   const ServeTitle = () => {
     if (!title) return null;
@@ -290,66 +284,66 @@ const Event = ({ state, actions, libraries }) => {
     );
   };
 
-  const ServeSocials = () => {
-    return (
-      <div className="flex-col" style={{ width: !lg ? `50%` : `100%` }}>
-        <div
-          className={!lg ? "flex-row" : "flex-col"}
-          style={{
-            flexDirection: "column-reverse",
-            justifyContent: "space-between",
-            padding: `2em 0 0 0`,
-          }}
-        >
-          <div
-            className="primary-title"
-            style={{ fontSize: 20, marginTop: !lg ? null : "1em" }}
-          >
-            Share
-          </div>
-          <div className="primary-title" style={{ fontSize: 20 }}>
-            Add to calendar
-          </div>
-        </div>
-        <div className="flex" style={{ justifyContent: "space-between" }}>
-          <div style={styles.socials}>
-            <Link link={`https://www.facebook.com/`} target="_blank">
-              <Image src={Facebook} className="d-block h-100" alt="Facebook" />
-            </Link>
-          </div>
-          <div style={styles.socials}>
-            <Link link={`https://www.twitter.com/`} target="_blank">
-              <Image src={Twitter} className="d-block h-100" alt="Twitter" />
-            </Link>
-          </div>
-          <div style={styles.socials}>
-            <Link link={`https://www.instagram.com/`} target="_blank">
-              <Image
-                src={Instagram}
-                className="d-block h-100"
-                alt="Instagram"
-              />
-            </Link>
-          </div>
-          <div style={styles.socials}>
-            <Link link={`https://www.linkedin.com/`} target="_blank">
-              <Image src={Linkedin} className="d-block h-100" alt="Instagram" />
-            </Link>
-          </div>
-          <div style={styles.socials}>
-            <Link link={`https://www.linkedin.com/`} target="_blank">
-              <Image src={Connect} className="d-block h-100" alt="Instagram" />
-            </Link>
-          </div>
-          <div style={styles.socials}>
-            <Link link={`https://www.linkedin.com/`} target="_blank">
-              <Image src={WebPage} className="d-block h-100" alt="Instagram" />
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  };
+  // const ServeSocials = () => {
+  //   return (
+  //     <div className="flex-col" style={{ width: !lg ? `50%` : `100%` }}>
+  //       <div
+  //         className={!lg ? "flex-row" : "flex-col"}
+  //         style={{
+  //           flexDirection: "column-reverse",
+  //           justifyContent: "space-between",
+  //           padding: `2em 0 0 0`,
+  //         }}
+  //       >
+  //         <div
+  //           className="primary-title"
+  //           style={{ fontSize: 20, marginTop: !lg ? null : "1em" }}
+  //         >
+  //           Share
+  //         </div>
+  //         <div className="primary-title" style={{ fontSize: 20 }}>
+  //           Add to calendar
+  //         </div>
+  //       </div>
+  //       <div className="flex" style={{ justifyContent: "space-between" }}>
+  //         <div style={styles.socials}>
+  //           <Link link={`https://www.facebook.com/`} target="_blank">
+  //             <Image src={Facebook} className="d-block h-100" alt="Facebook" />
+  //           </Link>
+  //         </div>
+  //         <div style={styles.socials}>
+  //           <Link link={`https://www.twitter.com/`} target="_blank">
+  //             <Image src={Twitter} className="d-block h-100" alt="Twitter" />
+  //           </Link>
+  //         </div>
+  //         <div style={styles.socials}>
+  //           <Link link={`https://www.instagram.com/`} target="_blank">
+  //             <Image
+  //               src={Instagram}
+  //               className="d-block h-100"
+  //               alt="Instagram"
+  //             />
+  //           </Link>
+  //         </div>
+  //         <div style={styles.socials}>
+  //           <Link link={`https://www.linkedin.com/`} target="_blank">
+  //             <Image src={Linkedin} className="d-block h-100" alt="Instagram" />
+  //           </Link>
+  //         </div>
+  //         <div style={styles.socials}>
+  //           <Link link={`https://www.linkedin.com/`} target="_blank">
+  //             <Image src={Connect} className="d-block h-100" alt="Instagram" />
+  //           </Link>
+  //         </div>
+  //         <div style={styles.socials}>
+  //           <Link link={`https://www.linkedin.com/`} target="_blank">
+  //             <Image src={WebPage} className="d-block h-100" alt="Instagram" />
+  //           </Link>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // };
 
   const ServeRegisterBanner = () => {
     return (
@@ -391,6 +385,32 @@ const Event = ({ state, actions, libraries }) => {
         >
           Join Us Here
         </div>
+      </div>
+    );
+  };
+
+  const ServeSocials = () => {
+    const shareUrl = state.auth.APP_URL + state.router.link;
+
+    return (
+      <div className="flex-col" style={{ width: `50%` }}>
+        <div
+          className="flex-row"
+          style={{ justifyContent: "space-between", padding: `2em 0` }}
+        >
+          <div className="primary-title" style={{ fontSize: 20 }}>
+            Share
+          </div>
+          <div className="primary-title" style={{ fontSize: 20 }}>
+            Add to calendar
+          </div>
+        </div>
+        <ShareToSocials
+          shareTitle={title.rendered}
+          shareUrl={shareUrl}
+          date={date}
+          description={<Html2React html={summary} />}
+        />
       </div>
     );
   };

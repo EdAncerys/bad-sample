@@ -34,7 +34,10 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   // RETURN ---------------------------------------------------
   return (
     <BlockWrapper>
-      <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
+      <div
+        className="text-body"
+        style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}
+      >
         <ServeContent />
       </div>
     </BlockWrapper>

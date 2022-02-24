@@ -21,7 +21,7 @@ const VenueInfo = ({ state, actions, libraries, venueInfo }) => {
 
     return (
       <div
-        className="primary-title"
+        className="primary-title title-link-animation"
         style={{ fontSize: 22, cursor: "pointer" }}
         onClick={() => setGoToAction({ path: link, actions })}
       >

@@ -15,7 +15,6 @@ const NewsCarouselComponent = ({
   actions,
   libraries,
   block,
-  newsList,
   categoryList,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -24,7 +23,7 @@ const NewsCarouselComponent = ({
 
   const { post_limit, disable_vertical_padding } = block;
 
-  const BLOCK_PAIRS = newsList.flatMap((_, i, a) =>
+  const BLOCK_PAIRS = block.flatMap((_, i, a) =>
     i % 2 ? [] : [a.slice(i, i + 2)]
   ); // split data in array of pairs
   const BANNER_HEIGHT = state.theme.bannerHeight;
@@ -136,7 +135,7 @@ const NewsCarouselComponent = ({
 
     return (
       <Carousel className="news-carousel">
-        {newsList.map((block, key) => {
+        {block.map((block, key) => {
           const { date, categories, excerpt, link, featured_media } = block;
 
           const media = state.source.attachment[featured_media];

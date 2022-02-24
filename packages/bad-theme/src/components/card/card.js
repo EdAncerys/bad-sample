@@ -7,6 +7,7 @@ import CardBody from "./cardBody";
 import CardActions from "./cardActions";
 import JournalCard from "../home/journalCard";
 import PromoHeader from "./promoHeader";
+import VideoGuide from "./videoGuide";
 import GalleryCarousel from "./galleryCarousel";
 import VenueInfo from "./venueInfo";
 import NewsArticleHeader from "./newsArticleHeader";
@@ -20,6 +21,7 @@ import TweetInfo from "./tweetInfo";
 import FadDirectory from "./fadDirectory";
 import DermGroupe from "./dermGroupe";
 import FundingHeader from "./fundingHeader";
+import FeaturedBanner from "./featuredBanner";
 
 import GeneralModal from "../elections/generalModal";
 import DownloadFileBlock from "../downloadFileBlock";
@@ -77,6 +79,8 @@ const Card = ({
   dermGroupe,
   downloads,
   fundingHeader,
+  videoGuide,
+  featuredBanner,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
@@ -264,6 +268,8 @@ const Card = ({
       }}
     >
       <PromoHeader fundingPromo={fundingPromo} />
+      <FeaturedBanner featuredBanner={featuredBanner} />
+      <VideoGuide videoGuide={videoGuide} />
       <FundingHeader fundingHeader={fundingHeader} />
       <ImageAndPromoCard imageAndPromoCard={imageAndPromoCard} />
       <NewsAndMediaHeader newsAndMediaInfo={newsAndMediaInfo} layout={layout} />

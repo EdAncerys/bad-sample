@@ -26,6 +26,7 @@ import {
   handleApplyForMembershipAction,
   validateMembershipFormAction,
 } from "./actions/memberships";
+import { getWpPagesAction } from "./actions/getWpPages";
 import { getTweetsAction } from "./auth/getTweets";
 import { getFadAction } from "./auth/getFAD";
 import { updateProfileAction } from "./auth/updateProfile";
@@ -96,4 +97,5 @@ export {
   getDirectDebitAction,
   createDirectDebitAction,
   anchorScrapper,
+  getWpPagesAction,
 };

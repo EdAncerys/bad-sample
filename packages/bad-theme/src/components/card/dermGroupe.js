@@ -16,6 +16,27 @@ const DermGroupe = ({ state, actions, libraries, dermGroupe }) => {
 
   const { email, logo, telephone_helpline, website_url } = dermGroupe;
 
+  // HANDLERS --------------------------------------------
+  const copyToClipboard = (e) => {
+    document.location = "mailto:" + email; // open default email client
+
+    const emailValue = e.target.innerText;
+    const clipboard = document.querySelector(`.clipboard-reference`); // placeholder selector
+
+    // set user notification if email client is not available & copy to clipboard
+    clipboard.classList.remove("d-none");
+    setTimeout(() => {
+      clipboard.classList.add("d-none");
+    }, 1000);
+
+    var input = document.body.appendChild(document.createElement("input"));
+    input.value = emailValue;
+    input.focus();
+    input.select();
+    document.execCommand("copy");
+    input.parentNode.removeChild(input);
+  };
+
   // SERVERS ---------------------------------------------
   const ServeCardImage = () => {
     if (!logo) return null;
@@ -51,12 +72,14 @@ const DermGroupe = ({ state, actions, libraries, dermGroupe }) => {
       >
         <div style={{ fontSize: 20 }}>Contact Email:</div>
         <div
+          email={email}
           className="title-link-animation"
-          onClick={() => (document.location = "mailto:" + email)}
+          onClick={copyToClipboard}
         >
           <div style={styles.link}>
             <Html2React html={email} />
           </div>
+          <span className="clipboard-reference d-none" />
         </div>
       </div>
     );

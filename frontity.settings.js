@@ -93,14 +93,14 @@ const settings = {
               archive: "/funding_awards",
             },
             {
-              type: "menu_featured",
-              endpoint: "menu_featured",
-              archive: "/menu_featured",
-            },
-            {
               type: "memberships",
               endpoint: "memberships",
               archive: "/memberships",
+            },
+            {
+              type: "videos",
+              endpoint: "videos",
+              archive: "/videos",
             },
           ],
           taxonomies: [

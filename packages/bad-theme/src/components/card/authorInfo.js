@@ -5,14 +5,7 @@ import Link from "@frontity/components/link";
 
 import { colors } from "../../config/imports";
 import date from "date-and-time";
-import { setGoToAction } from "../../context";
-
-import Facebook from "../../img/svg/facebookBlack.svg";
-import Twitter from "../../img/svg/twitterBlack.svg";
-import Instagram from "../../img/svg/instagramBlack.svg";
-import Linkedin from "../../img/svg/linkedinBlack.svg";
-import Connect from "../../img/svg/connectBlack.svg";
-import WebPage from "../../img/svg/webPageBlack.svg";
+import ShareToSocials from "./shareToSocials";
 
 const DATE_MODULE = date;
 
@@ -22,19 +15,20 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
   if (!authorInfo) return null;
 
   const mountedRef = useRef(true);
-  const [category, setCategory] = useState(null);
+  const [tagData, setTagData] = useState(null);
   const ICON_WIDTH = 100;
-  const { categories, date, modified } = authorInfo;
+  const { date, modified, tags, content } = authorInfo;
   const { press_release_authors } = authorInfo.acf;
+  const title = authorInfo.title ? authorInfo.title.rendered : null;
+
+  const shareUrl = state.auth.APP_URL + state.router.link;
+  const shareTitle = title || "BAD";
 
   useEffect(async () => {
     if (state.source.category) {
-      const CATEGORY = Object.values(state.source.category);
-      const filter = CATEGORY.filter(
-        (item) => item.id === Number(categories[0])
-      );
-      const categoryName = filter[0].name;
-      setCategory(categoryName);
+      const TAG = Object.values(state.source.tag);
+
+      setTagData(TAG);
     }
 
     return () => {
@@ -46,7 +40,18 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
   const ServeDate = () => {
     if (!date || !modified) return null;
     const datePublished = new Date(date);
-    const dateModified = new Date(date);
+    const dateModified = new Date(modified);
+
+    const ServeModified = () => {
+      if (datePublished === dateModified) return null;
+
+      return (
+        <div style={styles.container}>
+          <div>Modified -</div>
+          <Html2React html={DATE_MODULE.format(dateModified, "DD/MMM/YYYY")} />
+        </div>
+      );
+    };
 
     return (
       <div
@@ -61,10 +66,7 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
           <div>Published -</div>
           <Html2React html={DATE_MODULE.format(datePublished, "DD/MMM/YYYY")} />
         </div>
-        <div style={styles.container}>
-          <div>Modified -</div>
-          <Html2React html={DATE_MODULE.format(dateModified, "DD/MMM/YYYY")} />
-        </div>
+        <ServeModified />
       </div>
     );
   };
@@ -102,6 +104,7 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
 
     const ServeName = () => {
       const name = press_release_authors[0].press_release_author_name;
+      if (!name) return null;
 
       return (
         <div style={{ fontWeight: "bold", padding: `1em 0` }}>
@@ -112,6 +115,7 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
 
     const ServeHospital = () => {
       const hospital = press_release_authors[0].press_release_author_hospital;
+      if (!hospital) return null;
 
       return (
         <div>
@@ -120,11 +124,18 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
       );
     };
 
+    const isAuthor =
+      press_release_authors[0].press_release_author_name ||
+      press_release_authors[0].press_release_author_photo ||
+      press_release_authors[0].press_release_author_hospital;
+
     return (
       <div>
-        <div className="primary-title" style={{ fontSize: 20 }}>
-          Author
-        </div>
+        {isAuthor && (
+          <div className="primary-title" style={{ fontSize: 20 }}>
+            Author
+          </div>
+        )}
         <ServeProfilePhoto />
         <ServeName />
         <ServeHospital />
@@ -132,55 +143,9 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
     );
   };
 
-  const ServeSocials = () => {
-    return (
-      <div
-        style={{
-          padding: `1em 0`,
-          borderTop: `1px solid ${colors.lightSilver}`,
-        }}
-      >
-        <div className="flex" style={{ justifyContent: "space-between" }}>
-          <div style={styles.socials}>
-            <Link link={`https://www.facebook.com/`} target="_blank">
-              <Image src={Facebook} className="d-block h-100" alt="Facebook" />
-            </Link>
-          </div>
-          <div style={styles.socials}>
-            <Link link={`https://www.twitter.com/`} target="_blank">
-              <Image src={Twitter} className="d-block h-100" alt="Twitter" />
-            </Link>
-          </div>
-          <div style={styles.socials}>
-            <Link link={`https://www.instagram.com/`} target="_blank">
-              <Image
-                src={Instagram}
-                className="d-block h-100"
-                alt="Instagram"
-              />
-            </Link>
-          </div>
-          <div style={styles.socials}>
-            <Link link={`https://www.linkedin.com/`} target="_blank">
-              <Image src={Linkedin} className="d-block h-100" alt="Instagram" />
-            </Link>
-          </div>
-          <div style={styles.socials}>
-            <Link link={`https://www.linkedin.com/`} target="_blank">
-              <Image src={Connect} className="d-block h-100" alt="Instagram" />
-            </Link>
-          </div>
-          <div style={styles.socials}>
-            <Link link={`https://www.linkedin.com/`} target="_blank">
-              <Image src={WebPage} className="d-block h-100" alt="Instagram" />
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   const ServeTopics = () => {
+    if (!tags.length || !tagData) return null;
+
     return (
       <div
         className="primary-title"
@@ -188,9 +153,22 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
           fontSize: 20,
           fontWeight: "bold",
           padding: `0.5em 0`,
+          borderBottom: `1px solid ${colors.lightSilver}`,
         }}
       >
         Topics
+        <div className="flex" style={{ fontSize: 16, paddingTop: `1em` }}>
+          {tags.map((tag, key) => {
+            const filter = tagData.filter((item) => item.id === Number(tag));
+            const categoryName = filter[0].name;
+
+            return (
+              <div key={key} style={{ paddingRight: 10 }}>
+                {categoryName}
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   };
@@ -200,7 +178,12 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
       <ServeProfile />
       <ServeDate />
       <ServeTopics />
-      <ServeSocials />
+      <ShareToSocials
+        shareTitle={shareTitle}
+        shareUrl={shareUrl}
+        date={date}
+        description={content.rendered}
+      />
     </div>
   );
 };
@@ -211,6 +194,10 @@ const styles = {
     gridTemplateColumns: `1fr 2fr`,
     gap: 20,
     padding: `0.5em 0`,
+  },
+  socials: {
+    display: "grid",
+    cursor: "pointer",
   },
 };
 

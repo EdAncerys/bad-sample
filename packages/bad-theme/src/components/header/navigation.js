@@ -3,15 +3,23 @@ import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import { setGoToAction } from "../../context";
+import { setGoToAction, getWpPagesAction } from "../../context";
 
 import NavBarDropDownContent from "./navDropDownContent";
 import BlockWrapper from "../blockWrapper";
+import Loading from "../loading";
+import Card from "../../components/card/card";
 
 const Navigation = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
   const [wpMainMenu, setWpMainMenu] = useState([]);
   const [wpMoreMenu, setWpMoreMenu] = useState([]);
+  const [flatMenu, setFlatMenu] = useState([]);
+  const useEffectRef = useRef(false);
+  // ⬇️ getting wp menu & featuredMenu from state
+  const menuData = state.theme.menu;
+  const featuredMenu = state.source.menu_featured;
 
   const MAIN_NAV_LENGTH = 6; // main navigation length config
   const BANNER_HEIGHT = state.theme.bannerHeight;
@@ -21,18 +29,41 @@ const Navigation = ({ state, actions, libraries }) => {
   const activeMenu = useRef(null);
   const activeChildMenu = useRef(null);
 
-  useEffect(() => {
-    // getting wp menu from state
-    const data = state.theme.menu;
-    if (!data) return;
-    const dataLength = data.length;
+  useEffect(async () => {
+    if (!menuData) return;
+    const menuLength = menuData.length;
+    let flatMenu = [];
 
-    setWpMainMenu(data.slice(0, MAIN_NAV_LENGTH)); // main menu to display
-    setWpMoreMenu(data.slice(MAIN_NAV_LENGTH, dataLength)); // more menu into dropdown
+    const wpMainMenu = menuData.slice(0, MAIN_NAV_LENGTH);
+    const wpMoreMenu = menuData.slice(MAIN_NAV_LENGTH, menuLength);
+    menuData.map((item) => {
+      flatMenu.push(item); // add main menu item
+      if (item.child_items) {
+        item.child_items.map((child) => {
+          flatMenu.push(child); // add child menu item
+        });
+      }
+    });
+    // ⬇️ menu page content pre fetch
+    await Promise.all(
+      flatMenu.map(({ slug }) => actions.source.fetch(`/${slug}`))
+    );
+
+    setFlatMenu(flatMenu); // set flat menu
+    setWpMainMenu(wpMainMenu); // main menu to display
+    setWpMoreMenu(wpMoreMenu); // more menu into dropdown
+
+    return () => {
+      useEffectRef.current = false; // clean up function
+    };
   }, [state.theme.menu]);
 
   if (!wpMoreMenu.length || !wpMainMenu.length)
-    return <div style={{ height: 60 }} />;
+    return (
+      <div style={{ height: 60 }}>
+        <Loading padding="0px" />
+      </div>
+    );
 
   // HANDLERS ----------------------------------------------------
   const handleBoxShadow = (slug) => {
@@ -95,7 +126,12 @@ const Navigation = ({ state, actions, libraries }) => {
 
   // SERVERS -----------------------------------------------------
   const ServeMenu = ({ secondaryMenu }) => {
-    const ServeChildMenu = ({ item, parentSlug }) => {
+    const ServeChildMenu = ({
+      item,
+      parentSlug,
+      featuredBannerOne,
+      featuredBannerTwo,
+    }) => {
       const { title, slug, url, child_items } = item;
 
       if (!child_items) return null;
@@ -115,7 +151,7 @@ const Navigation = ({ state, actions, libraries }) => {
               position: "absolute",
               zIndex: 1,
               top: `5%`,
-              width: "30%",
+              width: "32%",
               height: "90%",
               marginLeft: "32%",
               backgroundColor: colors.lightSilver,
@@ -135,6 +171,8 @@ const Navigation = ({ state, actions, libraries }) => {
               {child_items.map((item, key) => {
                 const { title, url, slug, child_items } = item;
 
+                let subChildTitle = title.replace(/’/g, "");
+
                 return (
                   <li key={key} className="flex-row" style={{ width: "100%" }}>
                     <a
@@ -149,7 +187,7 @@ const Navigation = ({ state, actions, libraries }) => {
                     >
                       <div className="flex">
                         <div className="menu-title">
-                          <Html2React html={title} />
+                          <Html2React html={subChildTitle} />
                         </div>
                       </div>
                     </a>
@@ -179,6 +217,66 @@ const Navigation = ({ state, actions, libraries }) => {
         );
       };
 
+      const ServeFeaturedMenuOne = () => {
+        if (!featuredBannerOne) return null;
+
+        const { title, content, featured_media, link } = featuredBannerOne;
+
+        return (
+          <div
+            style={{
+              position: "absolute",
+              zIndex: 1,
+              height: "90%",
+              width: "30%",
+              left: `35%`,
+              margin: `0 1em`,
+            }}
+          >
+            <Card
+              featuredBanner={featuredBannerOne}
+              title={title ? title.rendered : null}
+              body={content ? content.rendered : null}
+              link_label="Read More"
+              link={link}
+              cardHeight="90%"
+              colour={colors.white}
+              shadow // optional param
+            />
+          </div>
+        );
+      };
+
+      const ServeFeaturedMenuTwo = () => {
+        if (!featuredBannerTwo) return null;
+
+        const { title, content, featured_media, link } = featuredBannerTwo;
+
+        return (
+          <div
+            style={{
+              position: "absolute",
+              zIndex: 1,
+              height: "90%",
+              width: "30%",
+              left: `66%`,
+              margin: `0 1em`,
+            }}
+          >
+            <Card
+              featuredBanner={featuredBannerTwo}
+              title={title ? title.rendered : null}
+              body={content ? content.rendered : null}
+              link_label="Read More"
+              link={link}
+              cardHeight="90%"
+              colour={colors.white}
+              shadow // optional param
+            />
+          </div>
+        );
+      };
+
       return (
         <ul
           id={`${slugID}-child-menu`}
@@ -195,6 +293,8 @@ const Navigation = ({ state, actions, libraries }) => {
             }}
           >
             <ServeDivider />
+            <ServeFeaturedMenuOne />
+            <ServeFeaturedMenuTwo />
 
             {child_items.map((item, key) => {
               const { title, url, slug, child_items } = item;
@@ -252,6 +352,7 @@ const Navigation = ({ state, actions, libraries }) => {
                     </div>
                     <ServeMenuArrow />
                   </a>
+
                   <ServeSubChildMenu
                     parentKey={key}
                     child_items={child_items}
@@ -296,7 +397,57 @@ const Navigation = ({ state, actions, libraries }) => {
     return (
       <div className="flex main-menu-container" style={styles.container}>
         {wpMainMenu.map((item, key) => {
-          const { title, slug, url, child_items } = item;
+          const { title, slug, url, object_id } = item;
+          let featuredId = null; // id associating with featured menu
+          let featuredBannerOne = null; // featured menu item
+          let featuredBannerTwo = null; // featured menu item
+
+          if (featuredMenu)
+            Object.values(featuredMenu).map((featured) => {
+              // 🔗 link to featured menu item to wpMainMenu
+              if (featured.slug === slug) {
+                console.log(slug); // debug
+                featuredId = featured.id;
+              }
+            });
+
+          flatMenu.map(({ object, object_id }) => {
+            if (object !== "page") return; // only page object
+
+            const pageItem = state.source[object][Number(object_id)]; // getting page item
+            if (!pageItem && !pageItem.menu_featured) return; // if page item not found or not featured
+
+            const { menu_featured, modified } = pageItem;
+
+            if (menu_featured.includes(featuredId)) {
+              if (!featuredBannerOne) {
+                featuredBannerOne = pageItem;
+                return;
+              }
+              if (!featuredBannerTwo) {
+                featuredBannerTwo = pageItem;
+                return;
+              }
+
+              const modifiedDate = new Date(modified);
+              const fmDateOne = new Date(featuredBannerOne.modified);
+              const fmDateTwo = new Date(featuredBannerTwo.modified);
+
+              // replace if modified date is newer
+              if (modifiedDate > fmDateOne) {
+                featuredBannerOne = pageItem;
+                return;
+              }
+              if (modifiedDate > fmDateTwo) {
+                featuredBannerTwo = pageItem;
+                return;
+              }
+            }
+          });
+
+          // console.log("featuredId", featuredId); // debug
+          // console.log("featuredBannerOne", featuredBannerOne); // debug
+          // console.log("featuredBannerTwo", featuredBannerTwo); // debug
 
           return (
             <ul
@@ -323,7 +474,12 @@ const Navigation = ({ state, actions, libraries }) => {
                 >
                   <Html2React html={title} />
                 </a>
-                <ServeChildMenu item={item} parentSlug={slug} />
+                <ServeChildMenu
+                  item={item}
+                  parentSlug={slug}
+                  featuredBannerOne={featuredBannerOne}
+                  featuredBannerTwo={featuredBannerTwo}
+                />
               </li>
             </ul>
           );

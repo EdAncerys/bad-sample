@@ -10,16 +10,21 @@ const NewsBlock = ({
   state,
   actions,
   libraries,
-  newsList,
   categoryList,
   block,
+  layout,
 }) => {
-  const { layout, post_limit, category_filter, colour } = block;
+  const { post_limit, category_filter, colour } = block;
   const isLayoutTwo = layout === "layout_two";
   const isLayoutThree = layout === "layout_three";
   const isLayoutFour = layout === "layout_four";
 
   const { sm, md, lg, xl } = muiQuery();
+  console.log("block length", block.length);
+  console.log("layout", layout);
+  console.log("isLayoutTwo", isLayoutTwo);
+  console.log("isLayoutThree", isLayoutThree);
+  console.log("isLayoutFour", isLayoutFour);
 
   // RETURN ---------------------------------------------
   return (
@@ -38,12 +43,8 @@ const NewsBlock = ({
             }
       }
     >
-      {newsList.map((block, key) => {
+      {block.map((block, key) => {
         const { categories, link, title, featured_media } = block;
-        const filter = categoryList.filter(
-          (item) => item.id === Number(categories[0])
-        );
-        const categoryName = filter[0].name;
 
         const ServeImage = () => {
           if (!featured_media) return null;
@@ -70,12 +71,6 @@ const NewsBlock = ({
             </div>
           );
         };
-
-        if (
-          !categories.includes(Number(category_filter)) &&
-          Number(category_filter) !== 0
-        )
-          return null;
 
         if (isLayoutTwo)
           return (

@@ -46,6 +46,7 @@ import CPTBlock from "../cptBlock";
 import RSSFeed from "../rssFeed";
 import FundingBlock from "../fundingBlock";
 import BADMemberships from "../badMemberships";
+import VideoGuides from "../videoGuides";
 
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   // console.log("BLOCKS: ", blocks); // debug
@@ -84,6 +85,14 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
       {blocks.map((block, key) => {
         const { acf_fc_layout } = block;
         console.log("CONTENT BLOCK", block); // debug
+
+        if (acf_fc_layout === "video_guide_block")
+          return (
+            <div key={key + 1} background={block.background_colour}>
+              <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+              <VideoGuides key={key} block={block} />
+            </div>
+          );
 
         if (acf_fc_layout === "membership_accordion")
           return (

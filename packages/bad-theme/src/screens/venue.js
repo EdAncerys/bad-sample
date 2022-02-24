@@ -6,6 +6,7 @@ import BlockBuilder from "../components/builder/blockBuilder";
 import PromoBlock from "../components/promoBlock";
 import MultiPhotoBlock from "../components/multiPhotoBlock";
 import Card from "../components/card/card";
+import GalleryCarousel from "../components/card/galleryCarousel";
 // CONTEXT -------------------------------------------------------------------
 import { useAppDispatch, setEnquireAction, muiQuery } from "../context";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
@@ -223,21 +224,36 @@ const Venue = ({ state, actions, libraries }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <BlockWrapper>
-      <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
-        <PromoBlock
-          block={{
-            title: venue.title.rendered,
-            body: excerpt,
-            background_image: gallery[0],
-            padding: "small",
-          }}
-          disableMargin
-        />
-        <ServeInfo />
-        <Card gallery={gallery} />
+    <div>
+      <div
+        style={{
+          padding: `0 ${marginVertical}px`,
+          backgroundColor: colors.bgNavy,
+        }}
+      >
+        <BlockWrapper>
+          <PromoBlock
+            block={{
+              title: venue.title.rendered,
+              body: excerpt,
+              background_image: gallery[0],
+              padding: "small",
+            }}
+            disableMargin
+          />
+        </BlockWrapper>
       </div>
-    </BlockWrapper>
+      <BlockWrapper>
+        <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
+          <ServeInfo />
+          <GalleryCarousel
+            gallery={gallery}
+            height={state.theme.bannerHeight * 1.5}
+            padding={`${marginVertical}px 0`}
+          />
+        </div>
+      </BlockWrapper>
+    </div>
   );
 };
 
@@ -245,7 +261,7 @@ const styles = {
   infoContainer: {
     display: "grid",
     gridTemplateColumns: `1fr 1fr`,
-    gap: 20,
+    gap: `10em`,
   },
   venueDetailsMobile: {
     display: "grid",

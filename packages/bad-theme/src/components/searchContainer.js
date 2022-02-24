@@ -42,7 +42,7 @@ const SearchContainer = ({
       <div
         className="primary-title"
         style={{
-          fontSize: !lg ? 36 : 25,
+          fontSize: !lg ? 26 : 25,
           alignItems: "center",
           paddingBottom: `0.5em`,
         }}

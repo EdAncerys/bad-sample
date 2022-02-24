@@ -10,8 +10,6 @@ import BlockWrapper from "./blockWrapper";
 import SearchContainer from "./searchContainer";
 import TypeFilters from "./typeFilters";
 
-import { muiQuery } from "../context";
-
 import CloseIcon from "@mui/icons-material/Close";
 
 const CPTBlock = ({ state, actions, libraries, block }) => {
@@ -25,8 +23,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   const [guidanceFilter, setGuidanceFilter] = useState(null);
 
   if (!block) return <Loading />;
-
-  const { sm, md, lg, xl } = muiQuery();
 
   const {
     colour,
@@ -49,13 +45,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 
-  const isCovid_19 = acf_fc_layout === "covid_loop_block";
-  let postPath = `derm_groups_charity`;
-  let typePath = `dermo_group_type`;
-  if (isCovid_19) {
-    postPath = `covid_19`;
-    typePath = `guidance`;
-  }
+  let postPath = `videos`;
 
   let PADDING = `${marginVertical}px 0`;
   if (add_search_function) PADDING = `0 0 ${marginVertical}px 0`;
@@ -63,32 +53,29 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
     const path = `/${postPath}/`;
-    await actions.source.fetch(path); // fetch CPT dermGroupeData
+    await actions.source.fetch(path); // fetch CPT videoData
 
-    let dermGroupeData = state.source.get(path);
-    const { totalPages, page, next } = dermGroupeData; // check if dermGroupeData have multiple pages
-    // fetch dermGroupeData via wp API page by page
+    let videoData = state.source.get(path);
+    const { totalPages, page, next } = videoData; // check if videoData have multiple pages
+    // fetch videoData via wp API page by page
     let isThereNextPage = next;
     while (isThereNextPage) {
       await actions.source.fetch(isThereNextPage); // fetch next page
       const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
       isThereNextPage = nextPage;
     }
-    const GROUPE_DATA = Object.values(state.source[postPath]);
-    const GROUPE_TYPE = Object.values(state.source[typePath]);
-    if (isCovid_19)
-      setGuidanceCategory(Object.values(state.source.guidance_category)); // set additional filter option to COVID-19
+    const DATA = Object.values(state.source[postPath]);
+    console.log("Data", DATA); // debug
 
     const limit = post_limit || LIMIT;
-    setPostListData(GROUPE_DATA.slice(0, Number(limit))); // apply limit on posts
-    setGroupeType(GROUPE_TYPE);
+    setPostListData(DATA.slice(0, Number(limit))); // apply limit on posts
 
     return () => {
       searchFilterRef.current = false; // clean up function
     };
   }, []);
   // DATA pre FETCH ---------------------------------------------------------
-  if (!postListData || !groupeType) return <Loading />;
+  if (!postListData) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
   const handleLoadMoreFilter = async () => {
@@ -96,9 +83,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     let data = Object.values(state.source[postPath]);
 
     if (!loadMoreRef.current) {
-      // if (!!currentSearchFilterRef.current || !!typeFilterRef.current)
-      //   data = postListData;
-
       loadMoreRef.current = data;
       setPostListData(data);
     } else {
@@ -117,12 +101,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     if (categoryId) {
       data = data.filter((item) =>
         item.guidance_category.includes(Number(categoryId))
-      );
-    }
-
-    if (typeFilterRef.current) {
-      data = data.filter((item) =>
-        item[typePath].includes(typeFilterRef.current)
       );
     }
 
@@ -168,15 +146,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
         return title || content;
       });
-
-    if (input) {
-      data = data.filter((item) => {
-        const list = item[typePath];
-        if (list.includes(input)) return item;
-      });
-
-      setPostListData(data);
-    }
   };
 
   const handleClearSearchFilter = () => {
@@ -303,17 +272,13 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           <div
             style={{
               padding: `0 ${marginHorizontal}px`,
-              width: isCovid_19 ? "100%" : `70%`,
+              width: "100%",
             }}
             className="no-selector"
           >
             <div className="flex-row">
               <SearchContainer
-                title={
-                  isCovid_19
-                    ? "Search for COVID 19 Resources"
-                    : "Search for Dermatology Groups & Charities"
-                }
+                title="Search for Videos"
                 searchFilterRef={searchFilterRef}
                 handleSearch={handleSearch}
               />
@@ -339,24 +304,19 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   const ServeLayout = () => {
     return (
-      <div style={!lg ? styles.container : styles.containerMobile}>
+      <div style={styles.container}>
         {postListData.map((block, key) => {
           const { title, content, link, date, dermo_group_type } = block;
           const redirect = block.acf.redirect_url;
-          const file = block.acf.file_download;
-          const cardLink = redirect.url || link;
 
           return (
             <Card
               key={key}
-              title={title.rendered}
-              publicationDate={date}
-              body={isCovid_19 ? null : !lg ? content.rendered : null}
-              link_label="Read More"
-              link={file ? null : cardLink}
-              downloadFile={file ? { file, label: "Download" } : null}
+              videoGuide={block}
+              body={content.rendered}
               colour={colour}
               limitBodyLength
+              bodyLimit={100}
               cardMinHeight={250}
               shadow
             />
@@ -399,18 +359,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
         backgroundColor: background_colour,
       }}
     >
-      <BlockWrapper>
-        <div style={{ padding: `0 ${marginHorizontal}px` }}>
-          <TitleBlock
-            block={block}
-            margin={{
-              marginBottom: `${
-                add_search_function ? 0 : state.theme.marginVertical
-              }px`,
-            }}
-          />
-        </div>
-      </BlockWrapper>
       <ServeFilter />
       <BlockWrapper>
         <div style={{ padding: `0 ${marginHorizontal}px` }}>
@@ -425,13 +373,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 const styles = {
   container: {
     display: "grid",
-    gridTemplateColumns: `repeat(4, 1fr)`,
-    justifyContent: "space-between",
-    gap: 20,
-  },
-  containerMobile: {
-    display: "grid",
-    gridTemplateColumns: `repeat(1, 1fr)`,
+    gridTemplateColumns: `repeat(2, 1fr)`,
     justifyContent: "space-between",
     gap: 20,
   },

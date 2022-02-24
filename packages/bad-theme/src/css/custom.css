@@ -359,4 +359,22 @@ https://codebeautify.org/
 }
 .shadow-on-hover:hover {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+.clipboard-reference {
+  position: relative;
+}
+.clipboard-reference::after {
+  content: "Copied!";
+  position: absolute;
+  width: 60px;
+  left: 0;
+  z-index: 1;
+  color: #80b918;
+}
+
+.body-limit {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }

@@ -138,7 +138,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
       <div
         style={{
           position: "absolute",
-          zIndex: 1,
+          zIndex: 9,
           width: OVERLAY_WIDTH,
         }}
       >

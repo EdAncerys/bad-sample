@@ -159,14 +159,9 @@ const AccordionHeader = ({
   const ServePreview = () => {
     if (guidelines || !preview || !body) return null;
 
-    // Manage max string Length
-    const MAX_LENGTH = 140;
-    let bodyPreview = `${body.substring(0, MAX_LENGTH)}...`;
-    if (body.length < MAX_LENGTH) bodyPreview = body;
-
     return (
       <div
-        className="text-body"
+        className="text-body body-limit"
         id={`preview-id-${uniqueId}`}
         style={{
           paddingTop: `1em`,
@@ -176,7 +171,7 @@ const AccordionHeader = ({
           transitionDelay: `1s`,
         }}
       >
-        <Html2React html={bodyPreview} />
+        <Html2React html={body} />
       </div>
     );
   };

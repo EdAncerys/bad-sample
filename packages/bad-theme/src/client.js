@@ -15,6 +15,7 @@ import {
 // CONTEXT ----------------------------------------------------------------
 import { initialState } from "../src/context/reducer";
 import { getMembershipDataAction } from "../src/context";
+import { handleSetCookie } from "./helpers/cookie";
 
 const BADTheme = {
   name: "bad-theme",
@@ -77,6 +78,14 @@ const BADTheme = {
 
         // handle auth login auth via cookies
         await authLogViaCookie({ state, initialState });
+
+        // ⬇️ handle set cookie fro video guide block to do silent login
+        // https://www.skinhealthinfo.org.uk/support-resources/video-guides/
+        handleSetCookie({
+          name: "vuid",
+          value: "pl2063596275.1804324093",
+          domain: ".vimeo.com",
+        });
 
         // pre load fonts from google
         import("webfontloader").then((WebFontLoader) => {

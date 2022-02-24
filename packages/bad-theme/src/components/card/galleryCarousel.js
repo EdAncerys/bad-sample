@@ -6,15 +6,25 @@ import ReactPlayer from "react-player";
 
 import { colors } from "../../config/imports";
 
-const GalleryCarousel = ({ state, actions, libraries, gallery }) => {
+const GalleryCarousel = ({
+  state,
+  actions,
+  libraries,
+  gallery,
+  height,
+  padding,
+}) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-  const BANNER_HEIGHT = 370;
 
+  let carouselPadding = 0;
+  if (padding) carouselPadding = padding;
+  let carouselHeight = 370;
+  if (height) carouselHeight = height;
   if (!gallery) return null;
 
   // RETURN ---------------------------------------------------
   return (
-    <div>
+    <div style={{ padding: carouselPadding }}>
       <Carousel interval={null} className="gallery-carousel">
         {gallery.map((block, key) => {
           const { subtype, url, title } = block;
@@ -65,7 +75,7 @@ const GalleryCarousel = ({ state, actions, libraries, gallery }) => {
               <div
                 style={{
                   position: "relative",
-                  height: BANNER_HEIGHT,
+                  height: carouselHeight,
                 }}
               >
                 <ServeCardImage />
