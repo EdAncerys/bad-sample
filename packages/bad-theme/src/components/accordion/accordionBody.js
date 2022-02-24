@@ -217,8 +217,6 @@ const AccordionBody = ({
   const ServeGoToLink = () => {
     if (!link || guidelines) return null;
 
-    console.log(link);
-
     let linkLabel = "External Link";
     if (link_label) linkLabel = link_label;
 
@@ -242,7 +240,7 @@ const AccordionBody = ({
             />
           </div>
           <div
-            className="caps-btn"
+            className="caps-btn-no-underline"
             style={{ boxShadow: "none" }}
             onClick={() => setGoToAction({ path: link.url, actions })}
           >
@@ -278,7 +276,7 @@ const AccordionBody = ({
                 />
               </div>
               <div
-                className="caps-btn"
+                className="caps-btn-no-underline"
                 style={{ boxShadow: "none" }}
                 onClick={() => setGoToAction({ path: link.url, actions })}
               >
