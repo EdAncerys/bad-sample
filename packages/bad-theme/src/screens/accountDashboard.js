@@ -98,7 +98,10 @@ const AccountDashboard = ({ state, actions, libraries }) => {
               setDashboardPath={setDashboardPath}
             />
           )}
-          <Dashboard dashboardPath={dashboardPath} />
+          <Dashboard
+            dashboardPath={dashboardPath}
+            userStatus={applicationStatus}
+          />
           <DashboardEvents dashboardPath={dashboardPath} />
           <Membership dashboardPath={dashboardPath} />
           <MyAccount dashboardPath={dashboardPath} />

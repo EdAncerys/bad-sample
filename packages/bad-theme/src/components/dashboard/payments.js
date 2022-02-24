@@ -22,8 +22,7 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
     console.log("PAYMENTS TRIGGERED");
     const fetchApplicationBillingStatus = async () => {
       const getUserApplicationData = await fetch(
-        state.auth.APP_HOST +
-          "/applications/billing/c1bfc5c0-87d1-ea11-a812-000d3a2ab5a1",
+        state.auth.APP_HOST + "/applications/billing/" + contactid,
         {
           headers: {
             Authorization: `Bearer ${jwt}`,
@@ -37,7 +36,7 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
     fetchApplicationBillingStatus();
 
     setLoading(false);
-  }, []);
+  }, [loading]);
   // when should I return null ?
   if (!subscriptions) return null;
   if (subscriptions.subs.data.length === 0) return null;
@@ -76,7 +75,7 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
 
   const resetPaymentUrl = () => {
     setPaymentUrl(null);
-    setLiveSubscriptions(null);
+    setLoading(true);
     console.log("RESET PAYMENT URL TRIGGERED");
   };
 
@@ -162,7 +161,7 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
   const ServeSubTitle = ({ title }) => {
     return <div style={{ padding: `1em 0` }}>{title}</div>;
   };
-
+  if (liveSubscriptions) console.log(liveSubscriptions);
   return (
     <div
       className="shadow"
@@ -175,7 +174,7 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
       <div className="primary-title" style={{ fontSize: 20 }}>
         Active subscriptions:
       </div>
-      {subs.length === 0 ? (
+      {liveSubscriptions.subs.data.length === 0 ? (
         <ServeSubTitle title="No active subscriptions at the moment" />
       ) : (
         <ServeSubTitle title="Invoices" />
