@@ -57,7 +57,7 @@ const NewsAndMediaHeader = ({
   if (category === "Uncategorized" || category === "Presidential Bulletin")
     SERVE_ICON = Bulletins;
   if (category === "Official Response") SERVE_ICON = Responses;
-  if (category === "Podcasts") SERVE_ICON = Podcasts;
+  if (category === "Podcast") SERVE_ICON = Podcasts;
   if (category === "E-Circular") SERVE_ICON = eCircular;
   if (category === "Insights") SERVE_ICON = Insights;
   if (category === "News &amp; Updates") SERVE_ICON = Updates;

@@ -60,7 +60,9 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   useEffect(() => {
     if (!state.source.post) return null;
 
-    let POST_LIST = Object.values(state.source.post); // add filterList object to data array
+    let POST_LIST = Object.values(state.source.post);
+    // apply date filter
+    POST_LIST = POST_LIST.sort((a, b) => new Date(b.date) - new Date(a.date));
     if (post_limit) POST_LIST = POST_LIST.slice(0, Number(post_limit)); // apply limit on posts
 
     if (state.source.category) {
