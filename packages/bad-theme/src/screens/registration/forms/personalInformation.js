@@ -23,6 +23,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser } = useAppState();
 
+  const [genderList, setGenderList] = useState([]);
   const [formData, setFormData] = useState({
     py3_title: "",
     py3_firstname: "",
@@ -73,8 +74,10 @@ const PersonalDetails = ({ state, actions, libraries }) => {
         handleSetData({ data, name: "py3_firstname" });
       if (data.name === "py3_lastname")
         handleSetData({ data, name: "py3_lastname" });
-      if (data.name === "py3_gender")
+      if (data.name === "py3_gender") {
         handleSetData({ data, name: "py3_gender" });
+        setGenderList(data.info.Choices);
+      }
       if (data.name === "py3_email") handleSetData({ data, name: "py3_email" });
       if (data.name === "py3_mobilephone")
         handleSetData({ data, name: "py3_mobilephone" });
@@ -335,16 +338,13 @@ const PersonalDetails = ({ state, actions, libraries }) => {
                   <option value="" hidden>
                     Male, Female, Transgender, Prefer Not To Answer
                   </option>
-                  <option value="215500000">Male</option>
-                  <option value="215500001">Female</option>
-                  <option value="215500004">Transgender Male</option>
-                  <option value="215500003">Transgender Female</option>
-                  <option value="215500005">
-                    Gender Variant/Non-Conforming
-                  </option>
-                  <option value="215500006">Not Listed</option>
-                  <option value="215500007">Prefer Not To Answer</option>
-                  <option value="215500002">Unknown</option>
+                  {genderList.map((item, key) => {
+                    return (
+                      <option key={key} value={item.value}>
+                        {item.Label}
+                      </option>
+                    );
+                  })}
                 </Form.Select>
                 <FormError id="py3_gender" />
               </div>
