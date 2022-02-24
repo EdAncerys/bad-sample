@@ -87,7 +87,6 @@ const VideoGuide = ({ state, actions, libraries, videoGuide }) => {
         style={{
           width: "100%",
           minHeight: 350,
-          backgroundColor: colors.lightSilver,
           overflow: "auto",
         }}
       >
