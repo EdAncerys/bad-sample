@@ -10,6 +10,8 @@ import date from "date-and-time";
 const DATE_MODULE = date;
 
 import DownloadFileBlock from "../downloadFileBlock";
+
+import { muiQuery } from "../../context";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -33,6 +35,7 @@ const AccordionBody = ({
   membershipApplications,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, idFilter } = useAppState();
@@ -136,7 +139,10 @@ const AccordionBody = ({
     if (!gsLinks) return null;
 
     return (
-      <div className="flex-row" style={{ width: "50%", flexWrap: "wrap" }}>
+      <div
+        className="flex-row"
+        style={{ width: !lg ? "50%" : "100%", flexWrap: "wrap" }}
+      >
         {gsLinks.map((button_link, key) => {
           return <ServeLink key={key} button_link={button_link} />;
         })}
@@ -611,7 +617,7 @@ const AccordionBody = ({
     );
   };
 
-  let COLUMNS = `1fr 400px`;
+  let COLUMNS = !lg ? `1fr 400px` : `1fr`;
   if (!gsDocument_uploads && !downloads && !link) COLUMNS = `1fr`;
 
   const ServeBodyActions = () => {

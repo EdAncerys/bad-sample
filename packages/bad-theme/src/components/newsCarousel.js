@@ -6,6 +6,7 @@ import { colors } from "../config/imports";
 
 import Loading from "./loading";
 
+import { muiQuery } from "../context";
 import Card from "./card/card";
 import LeftIcon from "../img/svg/leftIcon.svg";
 import RightIcon from "../img/svg/rightIcon.svg";
@@ -14,6 +15,8 @@ const NewsCarousel = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
+
+  const { sm, md, lg, xl } = muiQuery();
 
   const BLOCK_PAIRS = block.news_card.flatMap((_, i, a) =>
     i % 2 ? [] : [a.slice(i, i + 2)]

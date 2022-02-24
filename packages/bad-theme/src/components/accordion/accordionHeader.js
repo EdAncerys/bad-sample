@@ -7,6 +7,8 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { colors } from "../../config/imports";
 
+import { muiQuery } from "../../context";
+
 const AccordionHeader = ({
   state,
   actions,
@@ -20,6 +22,8 @@ const AccordionHeader = ({
   membershipApplications,
   hasPreview,
 }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { guidelines_type, subtitle } = block;
@@ -66,24 +70,88 @@ const AccordionHeader = ({
 
       return (
         <div
-          className="flex"
+          className={!lg ? "flex" : "flex-col"}
           style={{
             fontStyle: "italic",
-            padding: `0 2em`,
+            padding: !lg ? `0 2em` : 0,
+            marginTop: !lg ? null : "1em",
             fontWeight: "normal",
           }}
         >
+          <ServeLogo />
           <Html2React html={subtitle} />
         </div>
       );
     };
 
     return (
-      <div className="flex primary-title" style={{ alignItems: "center" }}>
+      <div
+        className="flex primary-title"
+        style={{
+          alignItems: !lg ? "center" : "flex-start",
+          flexDirection: !lg ? "row" : "column",
+        }}
+      >
         <div style={{ fontSize: 20 }}>
           <Html2React html={title} />
         </div>
         <ServeSubtitle />
+      </div>
+    );
+  };
+
+  const ServeGSUpdateInProgress = () => {
+    if (!gsUpdate_in_progress) return null;
+
+    return (
+      <div>
+        <div className="flex">
+          <div style={styles.divider} />
+          <div style={{ fontStyle: "italic", alignItems: "center" }}>
+            Update in Progress
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const ServeGSDate = () => {
+    if (!gsPublished_date) return null;
+
+    return (
+      <div
+        className={!lg ? "flex" : "flex-row"}
+        style={{
+          fontSize: !lg ? null : 12,
+          paddingLeft: !lg ? `2em` : 0,
+          color: colors.softBlack,
+          alignItems: "center",
+        }}
+      >
+        <div>
+          {!lg ? "Published" : null} <Html2React html={gsPublished_date} />
+        </div>
+        <ServeGSUpdateInProgress />
+      </div>
+    );
+  };
+
+  const ServeGSTitle = () => {
+    if (!gsTitle) return null;
+
+    return (
+      <div
+        className={!lg ? "flex" : "flex-col"}
+        style={{ alignItems: !lg ? "center" : "flex-start" }}
+      >
+        {!lg ? null : <ServeNICELogo />}
+        <div
+          className="primary-title"
+          style={{ fontSize: 20, alignItems: !lg ? "center" : "flex-start" }}
+        >
+          <Html2React html={gsTitle} />
+        </div>
+        <ServeGSDate />
       </div>
     );
   };
@@ -138,11 +206,15 @@ const AccordionHeader = ({
     return (
       <div
         style={{
-          padding: `0.25em`,
-          margin: `0 4em 0 1em`,
+          padding: !lg ? `0.25em` : 0,
+          margin: !lg ? `0 4em 0 1em` : 0,
         }}
       >
-        <Image src={NiceLogo} alt={alt} style={{ height: LOGO_HEIGHT }} />
+        <Image
+          src={NiceLogo}
+          alt={alt}
+          style={{ height: !lg ? LOGO_HEIGHT : LOGO_HEIGHT / 2 }}
+        />
       </div>
     );
   };
@@ -200,8 +272,8 @@ const AccordionHeader = ({
             <ServeTitle />
             <ServeLTTitle />
 
-            <ServeLogo />
-            <ServeNICELogo />
+            {!lg ? <ServeLogo /> : null}
+            {!lg ? <ServeNICELogo /> : null}
             <ServeIcon />
           </div>
         </div>

@@ -4,7 +4,11 @@ import { connect } from "frontity";
 import Loading from "../components/loading";
 import RowButton from "./rowButton";
 
+import { muiQuery } from "../context";
+
 const ButtonsRow = ({ state, actions, style, block, disableMargin }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   if (!block) return <Loading />;
   if (!block.buttons) return null;
 
@@ -23,9 +27,11 @@ const ButtonsRow = ({ state, actions, style, block, disableMargin }) => {
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: `repeat(${BUTTON_COUNT}, 1fr)`,
+        gridTemplateColumns: !lg
+          ? `repeat(${BUTTON_COUNT}, 1fr)`
+          : "repeat(1, 1fr)",
         justifyContent: "space-between",
-        gap: 10,
+        gap: !lg ? 10 : 0,
         margin: disableMargin ? 0 : `${marginVertical}px ${marginHorizontal}px`,
       }}
     >

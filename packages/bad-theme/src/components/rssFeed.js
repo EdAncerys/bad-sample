@@ -17,9 +17,12 @@ import {
   getBJDFeedAction,
   getCEDFeedAction,
   getSHDFeedAction,
+  muiQuery,
 } from "../context";
 
 const RSSFeed = ({ state, actions, libraries, block }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
@@ -193,7 +196,7 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
 
   const ServeLayout = () => {
     return (
-      <div style={styles.container}>
+      <div style={!lg ? styles.container : styles.containerMobile}>
         {feedData.map((block, key) => {
           const { title, category, link, pubDate } = block;
           const doi = block["prism:doi"];
@@ -261,6 +264,12 @@ const styles = {
     gridTemplateColumns: `repeat(4, 1fr)`,
     justifyContent: "space-between",
     gap: 20,
+  },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `repeat(1, 1fr)`,
+    justifyContent: "space-between",
+    gap: 0,
   },
   input: {
     borderRadius: 10,

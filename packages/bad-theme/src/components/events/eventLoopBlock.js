@@ -7,6 +7,7 @@ import Card from "../card/card";
 import TitleBlock from "../titleBlock";
 import { colors } from "../../config/imports";
 
+import { muiQuery } from "../../context";
 const EventLoopBlock = ({
   state,
   actions,
@@ -15,10 +16,12 @@ const EventLoopBlock = ({
   searchFilter,
   gradesFilter,
   locationsFilter,
+  recommended_events,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
+  const { sm, md, lg, xl } = muiQuery();
 
   const {
     post_limit,
@@ -28,6 +31,7 @@ const EventLoopBlock = ({
     grade_filter,
     title,
     colour,
+    passed_grade_filter_id,
   } = block;
 
   const [eventList, setEventList] = useState(null); // event data
@@ -45,8 +49,8 @@ const EventLoopBlock = ({
   if (disable_vertical_padding) marginVertical = 0;
 
   let STYLES = {};
-  if (layoutTwo) STYLES = styles.layoutTwo;
-  if (layoutThree) STYLES = styles.layoutThree;
+  if (layoutTwo) STYLES = !lg ? styles.layoutTwo : styles.layoutTwoMobile;
+  if (layoutThree) STYLES = !lg ? styles.layoutThree : styles.layoutTwoMobile;
 
   // DATA get for EVENTS ----------------------------------------------------------------
   useEffect(async () => {
@@ -66,8 +70,11 @@ const EventLoopBlock = ({
     )[0];
 
     if (GRADE_FILTER_ID) GRADE_FILTER_ID = GRADE_FILTER_ID.id;
-    if (post_limit) EVENT_LIST = EVENT_LIST.slice(0, Number(post_limit)); // apply limit on posts
+    if (passed_grade_filter_id) GRADE_FILTER_ID = passed_grade_filter_id;
 
+    if (post_limit) EVENT_LIST = EVENT_LIST.slice(0, Number(post_limit)); // apply limit on posts
+    if (passed_grade_filter_id && EVENT_LIST.length < post_limit)
+      GRADE_FILTER_ID = null;
     setGradeFilterId(GRADE_FILTER_ID);
 
     // sort events in order by date accenting from
@@ -86,7 +93,8 @@ const EventLoopBlock = ({
     };
   }, [state.source.events]);
   if (!eventList) return <Loading />;
-
+  if (eventList) console.log(eventList);
+  console.log("EVENT LOOP BLOCK BLOCK", block);
   // RETURN ---------------------------------------------
   return (
     <div style={{ paddingBottom: `${marginVertical}px` }}>
@@ -128,7 +136,11 @@ const EventLoopBlock = ({
             const removeMargin = search && key === 0;
             return (
               <div key={key}>
-                <EventListView block={block} removeMargin={removeMargin} />
+                <EventListView
+                  block={block}
+                  removeMargin={removeMargin}
+                  recommended_events={recommended_events ? true : false}
+                />
               </div>
             );
           }
@@ -173,6 +185,11 @@ const styles = {
   layoutTwo: {
     display: "grid",
     gridTemplateColumns: `1fr 1fr`,
+    gap: 20,
+  },
+  layoutTwoMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
     gap: 20,
   },
   layoutThree: {

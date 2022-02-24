@@ -5,7 +5,11 @@ import Card from "./card/card";
 import Loading from "./loading";
 import { colors } from "../config/imports";
 
+import { muiQuery } from "../context";
+
 const FundingPromo = ({ state, actions, libraries, block }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
   if (!block.card) return null;
@@ -24,7 +28,7 @@ const FundingPromo = ({ state, actions, libraries, block }) => {
       return (
         <div
           className="flex primary-title"
-          style={{ fontSize: 36, justifyContent: "center" }}
+          style={{ fontSize: !lg ? 36 : 25, justifyContent: "center" }}
         >
           <Html2React html={title} />
         </div>
@@ -52,7 +56,7 @@ const FundingPromo = ({ state, actions, libraries, block }) => {
         className="flex-col"
         style={{
           justifyContent: "center",
-          padding: `0 6em 2em`,
+          padding: !lg ? `0 6em 2em` : null,
         }}
       >
         <ServeTitle />
@@ -65,7 +69,7 @@ const FundingPromo = ({ state, actions, libraries, block }) => {
   return (
     <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
       <ServeContent />
-      <div style={styles.container}>
+      <div style={!lg ? styles.container : styles.containerMobile}>
         {block.card.map((block, key) => {
           const {
             amount,
@@ -103,6 +107,12 @@ const styles = {
   container: {
     display: "grid",
     gridTemplateColumns: `repeat(3, 1fr)`,
+    justifyContent: "space-between",
+    gap: 20,
+  },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
     justifyContent: "space-between",
     gap: 20,
   },

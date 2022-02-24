@@ -7,6 +7,8 @@ import date from "date-and-time";
 import { colors } from "../../config/imports";
 import ElectionInfo from "./electionInfo";
 
+import { muiQuery } from "../../context";
+
 const DATE_MODULE = date;
 
 const CardBody = ({
@@ -28,6 +30,7 @@ const CardBody = ({
   opacity,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  const { sm, md, lg, xl } = muiQuery();
 
   let CONTENT_ALIGNMENT = 0;
   if (heroBanner) CONTENT_ALIGNMENT = `auto 0`;
@@ -54,7 +57,7 @@ const CardBody = ({
       <div
         className="flex primary-title"
         style={{
-          fontSize: heroBanner ? `2.25rem` : 20,
+          fontSize: heroBanner ? (!lg ? `2.25rem` : 25) : 20,
           minHeight: TITLE_HEIGHT,
           maxHeight: isFrom4Col ? "7em" : "auto", // restricting title height
           overflow: "hidden",
@@ -117,9 +120,9 @@ const CardBody = ({
     return (
       <div className="flex" style={{ paddingTop: `1em` }}>
         {date.map((block, key) => {
-          const { date, end_time, start_time } = block;
+          const { end_time, start_time } = block;
 
-          const dateObject = new Date(date);
+          const dateObject = new Date(block.date);
           const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
 
           return (
@@ -128,10 +131,10 @@ const CardBody = ({
               style={{
                 fontSize: 12,
                 fontWeight: "bold",
-                paddingRight: `1em`,
               }}
             >
               <Html2React html={formattedDate} />
+              {key + 1 < date.length ? " - " : null}
             </div>
           );
         })}

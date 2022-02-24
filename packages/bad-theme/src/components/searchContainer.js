@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../config/imports";
+import { muiQuery } from "../context";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
@@ -19,10 +20,12 @@ const SearchContainer = ({
   onChange,
   inputOnly,
 }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const dispatch = useAppDispatch();
 
   const ctaHeight = 45;
-  const WIDTH = width || "100%";
+  const WIDTH = !lg ? width || "100%" : "100%";
 
   // HANDLERS ---------------------------------------------
   const handleKeyPress = (e) => {
@@ -39,7 +42,7 @@ const SearchContainer = ({
       <div
         className="primary-title"
         style={{
-          fontSize: 36,
+          fontSize: !lg ? 36 : 25,
           alignItems: "center",
           paddingBottom: `0.5em`,
         }}
@@ -83,7 +86,8 @@ const SearchContainer = ({
           style={{
             display: "grid",
             alignItems: "center",
-            paddingLeft: `2em`,
+            paddingLeft: !lg ? `2em` : 0,
+            paddingTop: !lg ? null : "1em",
           }}
         >
           <button type="submit" className="blue-btn" onClick={handleSearch}>
@@ -94,7 +98,7 @@ const SearchContainer = ({
     };
 
     return (
-      <div className="flex-row">
+      <div className={!lg ? "flex-row" : "flex-col"}>
         <div
           className="flex"
           style={{
@@ -111,7 +115,7 @@ const SearchContainer = ({
             type="text"
             className="form-control"
             placeholder="Search"
-            style={styles.input}
+            style={!lg ? styles.input : { padding: "1em" }}
           />
           <div
             className="input-group-text toggle-icon-color"
@@ -138,7 +142,7 @@ const SearchContainer = ({
     <div className="flex no-selector" style={{ padding: padding || `1em 0` }}>
       <div className="flex-col">
         <ServeTitle />
-        <div style={{ width: WIDTH }}>
+        <div style={{ width: !lg ? WIDTH : `100%` }}>
           <ServeSearchContainer />
         </div>
       </div>

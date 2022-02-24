@@ -4,10 +4,14 @@ import { connect } from "frontity";
 import { colors } from "../config/imports";
 import Loading from "../components/loading";
 import DownloadFileBlock from "../components/downloadFileBlock";
+
+import { muiQuery } from "../context";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 
 const Post = ({ state, actions, libraries }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const pil = state.source[data.type][data.id];
@@ -16,7 +20,9 @@ const Post = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
 
   if (!pil) return <Loading />;
-
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  });
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
     if (!pil.title) return null;
@@ -26,7 +32,7 @@ const Post = ({ state, actions, libraries }) => {
         <div
           className="primary-title"
           style={{
-            fontSize: 36,
+            fontSize: !lg ? 36 : 25,
             padding: `0.5em 1em`,
             backgroundColor: colors.white,
             borderBottom: `5px solid ${colors.danger}`,

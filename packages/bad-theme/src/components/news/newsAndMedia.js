@@ -15,7 +15,11 @@ import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchContainer from "../../components/searchContainer";
 
+import { muiQuery } from "../../context";
+
 const NewsAndMedia = ({ state, actions, libraries, block }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
@@ -157,7 +161,11 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       return (
         <div
           className="flex primary-title"
-          style={{ fontSize: 36, alignItems: "center", paddingBottom: `0.5em` }}
+          style={{
+            fontSize: !lg ? 36 : 25,
+            alignItems: "center",
+            paddingBottom: `0.5em`,
+          }}
         >
           Search for News & Media
         </div>
@@ -230,7 +238,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
             padding: `1em 0`,
             alignItems: "center",
             display: "grid",
-            gridTemplateColumns: `100px 1fr 1fr 1fr`,
+            gridTemplateColumns: !lg ? `100px 1fr 1fr 1fr` : "1fr",
             gap: `1em`,
           }}
         >
@@ -342,7 +350,13 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
         className="no-selector"
       >
         <BlockWrapper>
-          <div style={{ position: "relative", padding: `1em 0`, width: `70%` }}>
+          <div
+            style={{
+              position: "relative",
+              padding: !lg ? `1em 0` : `1em`,
+              width: !lg ? `70%` : `100%`,
+            }}
+          >
             <div className="flex-col">
               <ServeTitle />
               <SearchContainer

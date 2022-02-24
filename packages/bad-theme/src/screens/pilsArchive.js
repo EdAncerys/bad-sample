@@ -7,10 +7,14 @@ import { setGoToAction } from "../context";
 import SearchContainer from "../components/searchContainer";
 
 import CloseIcon from "@mui/icons-material/Close";
+
+import { muiQuery } from "../context";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 
 const PilsArchive = ({ state, actions, libraries }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const data = state.source.get(state.router.link);
@@ -40,7 +44,6 @@ const PilsArchive = ({ state, actions, libraries }) => {
     }
 
     setPilList(Object.values(state.source.pils)); // add pill object to data array
-
     return () => {
       searchFilterRef.current = false; // clean up function
     };
@@ -48,7 +51,6 @@ const PilsArchive = ({ state, actions, libraries }) => {
   // DATA pre FETCH ----------------------------------------------------------------
 
   if (!pilList) return <Loading />;
-
   let ALPHABET = [];
   pilList.map((item) => {
     const pilTitle = item.title.rendered;
@@ -105,7 +107,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
         <div
           className="primary-title"
           style={{
-            fontSize: 36,
+            fontSize: !lg ? 36 : 25,
             borderBottom: `1px solid ${colors.darkSilver}`,
           }}
         >
@@ -140,7 +142,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
       return (
         <div
           className="flex primary-title"
-          style={{ fontSize: 36, alignItems: "center" }}
+          style={{ fontSize: !lg ? 36 : 25, alignItems: "center" }}
         >
           <Html2React html={title.rendered} />
         </div>
@@ -151,7 +153,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
       if (!content) return null;
 
       return (
-        <div className="flex-col" style={{ padding: `1em 0`, width: "70%" }}>
+        <div className="flex-col" style={{ padding: `1em 0`, width: "100%" }}>
           <Html2React html={content.rendered} />
         </div>
       );
@@ -221,7 +223,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
       <ServeFilter />
       <BlockWrapper>
         <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
-          <div style={styles.container}>
+          <div style={!lg ? styles.container : styles.containerMobile}>
             {ALPHABET.map((item, key) => {
               return <ServePilsList key={key} item={item} />;
             })}
@@ -236,6 +238,11 @@ const styles = {
   container: {
     display: "grid",
     gridTemplateColumns: `repeat(3, 1fr)`,
+    gap: 20,
+  },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
     gap: 20,
   },
   input: {

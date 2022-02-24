@@ -11,7 +11,11 @@ import TypeFilters from "./typeFilters";
 
 import CloseIcon from "@mui/icons-material/Close";
 
+import { muiQuery } from "../context";
+
 const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   
@@ -151,6 +155,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
           filters={guidelinesType}
           handleSearch={handleTypeSearch}
           typeFilterRef={typeFilterRef}
+          currentFilter={typeFilter}
         />
       </div>
     );
@@ -176,7 +181,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     };
 
     const ServeTypeFilter = () => {
-      if (!typeFilter) return null;
+      if (!typeFilter || lg) return null;
 
       return (
         <div className="shadow filter" style={{ textTransform: "uppercase" }}>

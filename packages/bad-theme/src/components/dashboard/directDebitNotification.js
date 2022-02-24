@@ -14,6 +14,7 @@ const DirectDebitNotification = ({
   setVisible,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  const { sm, md, lg, xl } = muiQuery();
 
   const { isDirectDebit } = useAppState();
 
@@ -43,7 +44,7 @@ const DirectDebitNotification = ({
   const ServeActions = () => {
     return (
       <div className="flex" style={{ margin: `auto 0` }}>
-        <div style={{ padding: `0 2em` }}>
+        <div style={{ padding: !lg ? `0 2em` : "1em" }}>
           <div type="submit" className="blue-btn" onClick={handlePayment}>
             Setup Direct Debit
           </div>
@@ -66,9 +67,9 @@ const DirectDebitNotification = ({
       className="shadow"
       style={{
         display: "grid",
-        gridTemplateColumns: `1fr auto`,
+        gridTemplateColumns: !lg ? `1fr auto` : `1fr`,
         gap: "1em",
-        padding: `2em 4em`,
+        padding: !lg ? `2em 4em` : "1em",
         marginBottom: `${marginVertical}px`,
       }}
     >

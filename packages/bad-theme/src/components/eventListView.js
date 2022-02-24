@@ -6,13 +6,21 @@ import date from "date-and-time";
 
 import Loading from "./loading";
 import { colors } from "../config/imports";
-import { setGoToAction } from "../context";
+import { setGoToAction, muiQuery } from "../context";
 
 const DATE_MODULE = date;
 
-const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
+const EventListView = ({
+  state,
+  actions,
+  libraries,
+  block,
+  removeMargin,
+  recommended_events,
+}) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
+  const { sm, md, lg, xl } = muiQuery();
 
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
@@ -20,7 +28,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
   let MARGIN = `${marginVertical}px 0 0`;
   if (removeMargin) MARGIN = 0;
 
-  const HEIGHT = BANNER_HEIGHT / 1.45;
+  const HEIGHT = !lg ? BANNER_HEIGHT / 1.45 : BANNER_HEIGHT / 2.2;
 
   const {
     date_time,
@@ -73,11 +81,11 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
 
       return (
         <div>
-          <div className="flex">
+          <div className={!lg ? "flex" : "flex-col"}>
             {date_time.map((block, key) => {
-              const { date, end_time, start_time } = block;
+              const { end_time, start_time } = block;
 
-              const dateObject = new Date(date);
+              const dateObject = new Date(block.date);
               const formattedDate = DATE_MODULE.format(
                 dateObject,
                 "DD MMM YYYY"
@@ -87,12 +95,12 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
                 <div
                   key={key}
                   style={{
-                    fontSize: 12,
+                    fontSize: !lg ? 16 : 12,
                     fontWeight: "bold",
-                    paddingRight: `1em`,
                   }}
                 >
                   <Html2React html={formattedDate} />
+                  {key + 1 < date_time.length ? "  -  " : null}
                 </div>
               );
             })}
@@ -112,7 +120,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
       return (
         <div
           className="primary-title"
-          style={{ fontSize: 20, padding: `0.5em 0` }}
+          style={{ fontSize: !lg ? 20 : 17, padding: `0.5em 0` }}
         >
           <Html2React html={titlePreview} />
         </div>
@@ -178,31 +186,39 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
     return (
       <div
         className="flex-col"
-        style={{ padding: `2em 0 2em 2em`, overflowY: "auto", height: HEIGHT }}
+        style={{
+          padding: !lg ? `2em 0 2em 2em` : "1em",
+          overflowY: "auto",
+          height: HEIGHT,
+        }}
       >
         <ServeDate />
         <ServeTitle />
-        <ServeInformation />
-        <ServeSummary />
+        {!lg ? !recommended_events ? <ServeInformation /> : null : null}
+        {!lg ? !recommended_events ? <ServeSummary /> : null : null}
+        <hr />
       </div>
     );
   };
 
   // RETURN ---------------------------------------------------
   return (
-    <div style={{ margin: MARGIN }}>
+    <div
+      style={{ margin: !recommended_events ? MARGIN : 10 }}
+      class="shadow-on-hover"
+    >
       <div
         style={{
-          height: `${HEIGHT}px`,
-          backgroundColor: colors.silverFillOne,
+          height: !recommended_events ? `${HEIGHT}px` : null,
+          backgroundColor: !recommended_events ? colors.silverFillOne : "white",
         }}
       >
         <div
-          style={styles.container}
+          style={!lg ? styles.container : styles.containerMobile}
           onClick={() => setGoToAction({ path: block.link, actions })}
         >
           <ServeCardContent />
-          <ServeCardImage />
+          {!recommended_events ? <ServeCardImage /> : null}
         </div>
       </div>
     </div>
@@ -213,6 +229,12 @@ const styles = {
   container: {
     display: "grid",
     gridTemplateColumns: `2.5fr 1fr`,
+    gap: 20,
+    cursor: "pointer",
+  },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr 1fr`,
     gap: 20,
     cursor: "pointer",
   },

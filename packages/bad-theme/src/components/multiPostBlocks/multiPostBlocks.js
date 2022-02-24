@@ -4,16 +4,19 @@ import { Form } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 
 import PostBlocks from "./postBlocks";
+import ButtonsRow from "../buttonsRow";
 import Loading from "../loading";
 import { colors } from "../../config/imports";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState } from "../../context";
+import { useAppDispatch, useAppState, muiQuery } from "../../context";
 
 const MultiPostBlocks = ({ state, actions, libraries, block }) => {
   if (!block) return <Loading />;
+
+  const { sm, md, lg, xl } = muiQuery();
 
   const [filter, setFilter] = useState(null);
   const [dateFilter, setDateFilter] = useState(null);
@@ -184,6 +187,7 @@ const MultiPostBlocks = ({ state, actions, libraries, block }) => {
   return (
     <div style={{ padding: `0 ${marginHorizontal}px` }}>
       <ServeFilter />
+
       <PostBlocks block={block} filter={filter} dateFilter={dateFilter} />
     </div>
   );

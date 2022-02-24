@@ -3,16 +3,17 @@ import { connect } from "frontity";
 
 import { colors } from "../config/imports";
 import BlockBuilder from "../components/builder/blockBuilder";
-import { muiQuery } from "../context";
 import PromoBlock from "../components/promoBlock";
 import MultiPhotoBlock from "../components/multiPhotoBlock";
+import Card from "../components/card/card";
 // CONTEXT -------------------------------------------------------------------
-import { useAppDispatch, setEnquireAction } from "../context";
+import { useAppDispatch, setEnquireAction, muiQuery } from "../context";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 
 const Venue = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
 
@@ -22,8 +23,6 @@ const Venue = ({ state, actions, libraries }) => {
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-
-  const { sm, md, lg, xl } = muiQuery();
 
   const {
     about_the_venue,
@@ -44,6 +43,7 @@ const Venue = ({ state, actions, libraries }) => {
     contact_public_phone_number,
     form_title,
     form_body,
+    floor,
   } = venue.acf;
 
   // SERVERS ---------------------------------------------------
@@ -123,7 +123,7 @@ const Venue = ({ state, actions, libraries }) => {
         if (!square_footage) return null;
 
         return (
-          <div style={{ paddingTop: `1em` }}>
+          <div style={{ paddingTop: !lg ? `1em` : 0 }}>
             <div className="flex primary-title" style={{ fontSize: 20 }}>
               Square Footage:
             </div>
@@ -151,6 +151,22 @@ const Venue = ({ state, actions, libraries }) => {
         );
       };
 
+      const ServeFloor = () => {
+        if (!floor) return null;
+
+        return (
+          <div style={{ paddingTop: `1em` }}>
+            <div className="flex primary-title" style={{ fontSize: 20 }}>
+              Floor:
+            </div>
+
+            <div className="flex">
+              <Html2React html={floor} /> floor
+            </div>
+          </div>
+        );
+      };
+
       const ServeCatering = () => {
         if (!catering) return null;
 
@@ -168,10 +184,21 @@ const Venue = ({ state, actions, libraries }) => {
       };
 
       return (
-        <div styles={{ padding: `0 3em` }}>
+        <div
+          style={
+            !lg
+              ? { padding: `0 3em` }
+              : {
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  marginTop: "1em",
+                }
+          }
+        >
           <ServeCapacity />
           <ServeSqFootage />
           <ServeAddress />
+          <ServeFloor />
           <ServeCatering />
         </div>
       );
@@ -179,7 +206,14 @@ const Venue = ({ state, actions, libraries }) => {
 
     return (
       <div
-        style={{ ...styles.infoContainer, padding: `${marginVertical}px 0 0` }}
+        style={
+          !lg
+            ? { ...styles.infoContainer, padding: `${marginVertical}px 0 0` }
+            : {
+                ...styles.infoContainerMobile,
+                padding: `${marginVertical}px 0 0`,
+              }
+        }
       >
         <ServeAbout />
         <ServeDetails />
@@ -201,7 +235,7 @@ const Venue = ({ state, actions, libraries }) => {
           disableMargin
         />
         <ServeInfo />
-        <MultiPhotoBlock block={gallery} />
+        <Card gallery={gallery} />
       </div>
     </BlockWrapper>
   );
@@ -212,6 +246,10 @@ const styles = {
     display: "grid",
     gridTemplateColumns: `1fr 1fr`,
     gap: 20,
+  },
+  venueDetailsMobile: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
   },
 };
 

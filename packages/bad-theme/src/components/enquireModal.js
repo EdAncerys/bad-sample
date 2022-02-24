@@ -14,11 +14,12 @@ import {
   useAppState,
   setEnquireAction,
   sendEmailEnquireAction,
+  muiQuery,
 } from "../context";
 
 const EnquireModal = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
+  const { lg } = muiQuery();
   const dispatch = useAppDispatch();
   const { enquireAction } = useAppState();
 
@@ -414,14 +415,14 @@ const EnquireModal = ({ state, actions, libraries }) => {
           className="flex"
           onClick={() => setEnquireAction({ dispatch, enquireAction: null })}
           style={{
-            padding: `2em 4em 1em`,
+            padding: !lg ? `2em 4em 1em` : "1em",
             cursor: "pointer",
             justifyContent: "flex-end",
           }}
         >
           <CloseIcon style={{ fontSize: 24, fill: colors.softBlack }} />
         </div>
-        <div style={styles.container}>
+        <div style={!lg ? styles.container : { display: "grid" }}>
           <ServeModalInfo />
           <ServeModalContent />
         </div>

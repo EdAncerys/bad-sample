@@ -48,6 +48,14 @@
   cursor: pointer;
   transition: all 0.3s ease-in-out;
 }
+.mp-row-button {
+  position: relative;
+  color: #000;
+  font-weight: bold;
+  width: fit-content;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
 .caps-btn::before {
   /* content: attr(value); */
   content: "";

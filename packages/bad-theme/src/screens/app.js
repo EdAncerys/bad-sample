@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Switch from "@frontity/components/switch";
 import { colors } from "../config/imports";
+import { muiQuery } from "../context";
 
 // COMPONENTS ---------------------------------------------------------
 import Header from "../components/header/header";
@@ -55,6 +56,12 @@ const App = ({ state, actions }) => {
     anchorScrapper();
   }, [endPoint]);
 
+  const { sm, md, lg, xl } = muiQuery();
+  // RESPONSIVE --------------------------------------------
+  if (lg) state.theme.marginHorizontal = 10;
+  if (lg) state.theme.marginVertical = 10;
+  if (lg) state.theme.fontSize = 22;
+  if (lg) state.theme.footerHeight = 2;
   // RETURN ------------------------------------------------------------
   return (
     <Switch>

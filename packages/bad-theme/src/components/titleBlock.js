@@ -4,7 +4,7 @@ import { connect } from "frontity";
 import parse from "html-react-parser";
 
 import Loading from "./loading";
-import { setGoToAction } from "../context";
+import { setGoToAction, muiQuery } from "../context";
 
 const TitleBlock = ({
   state,
@@ -16,6 +16,8 @@ const TitleBlock = ({
   margin,
   fontSize,
 }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
@@ -57,7 +59,7 @@ const TitleBlock = ({
       <div
         className="flex primary-title"
         style={{
-          fontSize: fontSize || 36,
+          fontSize: !lg ? fontSize || 36 : 25,
           textAlign: ALIGNMENT,
           justifyContent: ALIGNMENT,
         }}

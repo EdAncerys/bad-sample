@@ -158,7 +158,7 @@ const NewsCarouselComponent = ({
               >
                 <Card
                   newsCarousel={block}
-                  cardWidth="50%"
+                  cardWidth={!lg ? "50%" : "100%"}
                   cardHeight={BANNER_HEIGHT}
                   title={excerpt ? excerpt.rendered : null}
                   colour={colors.danger}

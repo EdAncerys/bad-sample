@@ -6,8 +6,11 @@ import Card from "./card/card";
 import Loading from "./loading";
 import ButtonsRow from "./buttonsRow";
 import FullWidthContentBlock from "./fullWidthContentBlock";
+import { muiQuery } from "../context";
 
 const HeroBanner = ({ state, actions, libraries, block }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   // console.log("HeroBanner Triggered", block); //debug
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -26,15 +29,15 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
     content_height,
     disable_vertical_padding,
   } = block;
-
+  console.log("LAYOUT", pop_out_text);
   let BANNER_HEIGHT = state.theme.bannerHeight;
   const PADDING = state.theme.marginHorizontal;
   const FOOTER_HEIGHT = 50;
   let OVERLAY_WIDTH = "100%";
-  let CARD_WIDTH = "50%";
+  let CARD_WIDTH = !lg ? "50%" : "100%";
   let CARD_HEIGHT = BANNER_HEIGHT - FOOTER_HEIGHT * 2;
   let BODY_LENGTH = 400;
-  const CONTENT_WIDTH = state.theme.contentContainer;
+  const CONTENT_WIDTH = !lg ? state.theme.contentContainer : "100%";
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
@@ -79,7 +82,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
         <div
           className="flex"
           style={{
-            marginLeft: PADDING,
+            marginLeft: !lg ? PADDING : 0,
             marginTop: FOOTER_HEIGHT / 2,
           }}
         >
@@ -97,7 +100,37 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
       </div>
     );
   };
+  const ServeBannerOverLayMobile = () => {
+    if (layout === "full-width") return null;
+    if (!pop_out_text) return null;
 
+    return (
+      <div className="row">
+        <div
+          style={{
+            zIndex: 1,
+          }}
+        >
+          <div
+            className="d-flex justify-content-center"
+            style={{
+              marginTop: "-20%",
+            }}
+          >
+            <Card
+              title={title}
+              body={body}
+              cardWidth="90%"
+              bodyLength={BODY_LENGTH}
+              colour={block.colour}
+              shadow
+              heroBanner
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
   const ServeButtonsOverLay = () => {
     if (!buttons) return null;
 
@@ -120,7 +153,27 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
       </div>
     );
   };
+  const ServeButtonsOverLayMobile = () => {
+    if (!buttons) return null;
 
+    return (
+      <div
+        style={{
+          zIndex: 1,
+          width: OVERLAY_WIDTH,
+        }}
+      >
+        <div
+          style={{
+            margin: `0 ${PADDING}px`,
+            // marginTop: BANNER_HEIGHT - FOOTER_HEIGHT,
+          }}
+        >
+          <ButtonsRow block={block} disableMargin />
+        </div>
+      </div>
+    );
+  };
   const ServeCardContent = () => {
     if (layout === "full-width") return null;
     if (pop_out_text) return <div className="flex" />;
@@ -131,10 +184,18 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           style={{
             display: "grid",
             alignItems: "center",
-            position: "absolute",
+            position: !lg ? "absolute" : pop_out_text ? "absolute" : null,
             zIndex: 99,
-            width: !background_image ? CONTENT_WIDTH / 1.5 : CONTENT_WIDTH / 2, // if no img provided defaults to diff width
-            height: BANNER_HEIGHT,
+            width: !lg
+              ? !background_image
+                ? CONTENT_WIDTH / 1.5
+                : CONTENT_WIDTH / 2
+              : CONTENT_WIDTH, // if no img provided defaults to diff width
+            height: !lg
+              ? BANNER_HEIGHT
+              : background_image
+              ? BANNER_HEIGHT
+              : null,
           }}
         >
           <FullWidthContentBlock block={block} heroBanner />
@@ -183,32 +244,47 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           zIndex: 9,
         }}
       >
-        <ServeBannerOverLay />
+        {!lg ? <ServeBannerOverLay /> : <ServeBannerOverLayMobile />}
         <ServeButtonsOverLay />
       </div>
     );
   };
 
   // RETURN ---------------------------------------------------
-  return (
-    <div
-      className="flex-col "
-      style={{
-        height: BANNER_HEIGHT,
-        backgroundColor: BACKGROUND_COLOUR,
-        margin: `${marginVertical}px 0 ${marginBottom}px`,
-      }}
-    >
-      <div className="flex-row relative">
-        <ServeCardContent />
-        <ServeOverLay />
-        <ServeCardImage />
-      </div>
-      <ServeFooter />
-    </div>
-  );
-};
 
+  if (!lg) {
+    return (
+      <div
+        className="flex-col "
+        style={{
+          height: BANNER_HEIGHT,
+          backgroundColor: BACKGROUND_COLOUR,
+          margin: `${marginVertical}px 0 ${marginBottom}px`,
+        }}
+      >
+        <div className="flex-row relative">
+          <ServeCardContent />
+          <ServeOverLay />
+          <ServeCardImage />
+        </div>
+        <ServeFooter />
+      </div>
+    );
+  } else {
+    return (
+      <>
+        <div className="col-12 col-lg-6">
+          <ServeCardImage />
+        </div>
+        <div className="col-12 col-lg-6">
+          <ServeCardContent />
+          <ServeBannerOverLayMobile />
+          <ServeButtonsOverLayMobile />
+        </div>
+      </>
+    );
+  }
+};
 const styles = {
   container: {},
 };

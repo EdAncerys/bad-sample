@@ -1,17 +1,21 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import { setGoToAction } from "../context";
+import { setGoToAction, muiQuery } from "../context";
 import { colors } from "../config/imports";
 
 import Loading from "./loading";
 import IndexCard from "./indexCard";
 import TitleBlock from "./titleBlock";
+import Dropdown from "react-bootstrap/Dropdown";
 
 const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  
+  if (!block) return <Loading />;
+
+  const { sm, md, lg, xl } = muiQuery();
+
   const {
     body,
     title,
@@ -21,12 +25,12 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
     disable_vertical_padding,
     limit_body_length,
   } = block;
-  
+
   const [limit, setLimit] = useState(limit_body_length);
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
-  
+
   if (!block) return <Loading />;
 
   // SERVERS -----------------------------------------------------
@@ -145,12 +149,57 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
     );
   };
 
+  const ServeMobileDropdown = (card) => {
+    if (!card.card.index_card) return null;
+    console.log("MOBILE DROPDOWN", card);
+    console.log("CARD: ", card.card.index_title);
+    return (
+      <Dropdown>
+        <Dropdown.Toggle
+          id="dropdown-basic"
+          style={{
+            backgroundColor: colors.darkSilver,
+            width: "100%",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            borderRadius: 0,
+            position: "relative",
+            zIndex: 700,
+            padding: "1em",
+            backgroundColor: card.card.colour,
+            border: 0,
+          }}
+          drop="down"
+        >
+          <Html2React html={card.card.card_title} />
+        </Dropdown.Toggle>
+        <Dropdown.Menu style={{ width: "100%" }}>
+          {card.card.index_title.map((item, key) => {
+            return (
+              <Dropdown.Item
+                onClick={() => setGoToAction({ path: item.link.url, actions })}
+                drop="down"
+              >
+                <Html2React html={item.title} />
+              </Dropdown.Item>
+            );
+          })}
+        </Dropdown.Menu>
+      </Dropdown>
+    );
+  };
   // RETURN ---------------------------------------------------
   return (
     <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
-      <div style={styles.container}>
+      <div style={!lg ? styles.container : styles.containerMobile}>
         <ServeContent />
-        <ServeIndexCard />
+        {!lg ? (
+          <ServeIndexCard />
+        ) : (
+          <ServeMobileDropdown card={block.index_card[0]} />
+        )}
       </div>
     </div>
   );
@@ -161,6 +210,12 @@ const styles = {
     display: "grid",
     gridTemplateColumns: `2fr 1fr`,
     justifyContent: "space-between",
+    gap: 20,
+  },
+  containerMobile: {
+    display: "flex",
+    justifyContent: "space-between",
+    flexDirection: "column-reverse",
     gap: 20,
   },
 };

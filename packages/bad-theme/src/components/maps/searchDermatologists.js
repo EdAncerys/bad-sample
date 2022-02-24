@@ -15,10 +15,15 @@ import BlockWrapper from "../blockWrapper";
 import Loading from "../loading";
 import { colors } from "../../config/imports";
 import { v4 as uuidv4 } from "uuid";
+
+import { muiQuery } from "../../context";
+
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, useAppState, setGoToAction } from "../../context";
 
 const SearchDermatologists = ({ state, actions, libraries, block }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const dispatch = useAppDispatch();
 
   const { disable_vertical_padding, background_colour } = block;
@@ -99,7 +104,7 @@ const SearchDermatologists = ({ state, actions, libraries, block }) => {
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
     return (
-      <div className="flex primary-title" style={{ fontSize: 36 }}>
+      <div className="flex primary-title" style={{ fontSize: !lg ? 36 : 25 }}>
         Search For Dermatologists
       </div>
     );

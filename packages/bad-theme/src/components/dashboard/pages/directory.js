@@ -11,7 +11,12 @@ import SearchContainer from "../../searchContainer";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../../blockWrapper";
 // CONTEXT -------------------------------------------------------------------
-import { useAppDispatch, useAppState, getFadAction } from "../../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  getFadAction,
+  muiQuery,
+} from "../../../context";
 
 const Directory = ({ state, actions, libraries, dashboardPath }) => {
   const dispatch = useAppDispatch();
@@ -25,6 +30,8 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
   const loadMoreRef = useRef(null);
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+
+  const { sm, md, lg, xl } = muiQuery();
 
   // DATA pre FETCH ------------------------------------------------------------
   useEffect(async () => {
@@ -118,7 +125,7 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
           <div style={{ padding: `0 ${marginHorizontal}px` }}>
             <SearchContainer
               title="Directory"
-              width="70%"
+              width={!lg ? "70%" : "100%"}
               searchFilterRef={searchFilterRef}
               handleSearch={handleSearch}
             />
@@ -161,7 +168,7 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
       <ServeFilter />
       <BlockWrapper>
         <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
-          <div style={styles.container}>
+          <div style={!lg ? styles.container : styles.containerMobile}>
             {fadData.map((fad, key) => {
               return <ServeFadList key={key} fad={fad} />;
             })}
@@ -177,6 +184,11 @@ const styles = {
   container: {
     display: "grid",
     gridTemplateColumns: `repeat(3, 1fr)`,
+    gap: 20,
+  },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `repeat(1, 1fr)`,
     gap: 20,
   },
   input: {

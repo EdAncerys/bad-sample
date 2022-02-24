@@ -5,6 +5,7 @@ import Link from "@frontity/components/link";
 
 import { colors } from "../config/imports";
 import { muiQuery } from "../context";
+import { setGoToAction } from "../context";
 import RowButton from "../components/rowButton";
 
 import Facebook from "../img/svg/facebookBlack.svg";
@@ -21,9 +22,19 @@ const DATE_MODULE = date;
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT -------------------------------------------------------------------
-import { useAppDispatch, setEnquireAction, setGoToAction } from "../context";
+import EventListView from "../components/eventListView";
+import EventLoopBlock from "../components/events/eventLoopBlock";
+// CONTEXT -------------------------------------------------------------------
+import {
+  useAppDispatch,
+  setEnquireAction,
+  setGoToAction,
+  muiQuery,
+} from "../context";
 
 const Event = ({ state, actions, libraries }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const event = state.source[data.type][data.id];
@@ -32,13 +43,12 @@ const Event = ({ state, actions, libraries }) => {
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-
+  console.log("ALL EVENT DATA", event);
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
     document.documentElement.scrollTop = 0; // for safari
   }, []);
 
-  const { sm, md, lg, xl } = muiQuery();
   const {
     date_time,
     email,
@@ -75,7 +85,7 @@ const Event = ({ state, actions, libraries }) => {
     contact_allow_attachments,
   } = event.acf;
   const { title } = event;
-
+  console.log(event.acf);
   // SERVERS ----------------------------------------------
   const ServeTitle = () => {
     if (!title) return null;
@@ -83,7 +93,7 @@ const Event = ({ state, actions, libraries }) => {
     return (
       <div
         className="primary-title"
-        style={{ fontSize: 36, paddingBottom: `1em` }}
+        style={{ fontSize: !lg ? 36 : 25, paddingBottom: `1em` }}
       >
         <Html2React html={title.rendered} />
       </div>
@@ -284,12 +294,19 @@ const Event = ({ state, actions, libraries }) => {
 
   const ServeSocials = () => {
     return (
-      <div className="flex-col" style={{ width: `50%` }}>
+      <div className="flex-col" style={{ width: !lg ? `50%` : `100%` }}>
         <div
-          className="flex-row"
-          style={{ justifyContent: "space-between", padding: `2em 0` }}
+          className={!lg ? "flex-row" : "flex-col"}
+          style={{
+            flexDirection: "column-reverse",
+            justifyContent: "space-between",
+            padding: `2em 0 0 0`,
+          }}
         >
-          <div className="primary-title" style={{ fontSize: 20 }}>
+          <div
+            className="primary-title"
+            style={{ fontSize: 20, marginTop: !lg ? null : "1em" }}
+          >
             Share
           </div>
           <div className="primary-title" style={{ fontSize: 20 }}>
@@ -384,10 +401,10 @@ const Event = ({ state, actions, libraries }) => {
     <BlockWrapper>
       <div style={{ backgroundColor: colors.white }}>
         <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
-          <div style={styles.container}>
+          <div style={!lg ? styles.container : styles.containerMobile}>
             <div>
               <ServeTitle />
-              <div style={styles.eventInfo}>
+              <div style={!lg ? styles.eventInfo : styles.eventInfoMobile}>
                 <ServeImage />
                 <ServeEventInfo />
               </div>
@@ -398,6 +415,30 @@ const Event = ({ state, actions, libraries }) => {
             <div className="flex-col">
               <div className="flex shadow"></div>
               <ServeRegisterBanner />
+              {/* <div className="shadow">
+                <div style={{ padding: "2em" }}>
+                  <h3>Related events</h3>
+                </div>
+                <EventLoopBlock
+                  block={{
+                    acf_fc_layout: "events_loop_block",
+                    background_colour: "transparent",
+                    disable_vertical_padding: false,
+                    add_search_function: false,
+                    title: "",
+                    body: "",
+                    locations: false,
+                    grades: false,
+                    event_type: false,
+                    layout: "layout_one",
+                    view_all_link: false,
+                    passed_grade_filter_id: event.event_grade[0],
+                    post_limit: "3",
+                    colour: "#F5F6F7",
+                  }}
+                  recommended_events
+                />
+              </div> */}
             </div>
           </div>
         </div>
@@ -439,9 +480,19 @@ const styles = {
     gridTemplateColumns: `2fr 1fr`,
     gap: 20,
   },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
+    gap: 20,
+  },
   eventInfo: {
     display: "grid",
     gridTemplateColumns: `1fr 1fr`,
+    gap: 40,
+  },
+  eventInfoMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
     gap: 40,
   },
   date: {

@@ -10,6 +10,8 @@ import BlockWrapper from "./blockWrapper";
 import SearchContainer from "./searchContainer";
 import TypeFilters from "./typeFilters";
 
+import { muiQuery } from "../context";
+
 import CloseIcon from "@mui/icons-material/Close";
 
 const CPTBlock = ({ state, actions, libraries, block }) => {
@@ -23,6 +25,8 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   const [guidanceFilter, setGuidanceFilter] = useState(null);
 
   if (!block) return <Loading />;
+
+  const { sm, md, lg, xl } = muiQuery();
 
   const {
     colour,
@@ -335,7 +339,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   const ServeLayout = () => {
     return (
-      <div style={styles.container}>
+      <div style={!lg ? styles.container : styles.containerMobile}>
         {postListData.map((block, key) => {
           const { title, content, link, date, dermo_group_type } = block;
           const redirect = block.acf.redirect_url;
@@ -345,7 +349,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               key={key}
               title={title.rendered}
               publicationDate={date}
-              body={isCovid_19 ? null : content.rendered}
+              body={isCovid_19 ? null : !lg ? content.rendered : null}
               link_label="Read More"
               link={redirect ? redirect.url : link}
               colour={colour}
@@ -419,6 +423,12 @@ const styles = {
   container: {
     display: "grid",
     gridTemplateColumns: `repeat(4, 1fr)`,
+    justifyContent: "space-between",
+    gap: 20,
+  },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `repeat(1, 1fr)`,
     justifyContent: "space-between",
     gap: 20,
   },

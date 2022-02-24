@@ -7,9 +7,11 @@ import BlockWrapper from "../components/blockWrapper";
 import { colors } from "../config/imports";
 import MapsComponent from "../components/maps/maps";
 import TitleBlock from "../components/titleBlock";
+import { muiQuery } from "../context";
 
 const AccountDashboard = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  const { sm, md, lg, xl } = muiQuery();
 
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
@@ -86,7 +88,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
           style={{
             display: "grid",
             gap: marginHorizontal,
-            gridTemplateColumns: `1fr 1.5fr`,
+            gridTemplateColumns: !lg ? `1fr 1.5fr` : "1fr",
             justifyContent: "center",
             padding: `${marginVertical}px ${marginHorizontal}px`,
             height: 500,
