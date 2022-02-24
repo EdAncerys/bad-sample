@@ -227,6 +227,7 @@ export const getDynamicsApplicationAction = async ({ state, contactid }) => {
 
 export const setCompleteUserApplicationAction = async ({
   state,
+  dispatch,
   isActiveUser,
 }) => {
   console.log("setCompleteUserApplicationAction triggered");
@@ -248,6 +249,12 @@ export const setCompleteUserApplicationAction = async ({
     const data = await response.json();
 
     if (data.success) {
+      // delete application record from CONTEXT
+      setApplicationDataAction({
+        dispatch,
+        applicationData: null,
+      });
+
       console.log("⏬ Membership Completed ⏬");
       console.log(data);
     } else {

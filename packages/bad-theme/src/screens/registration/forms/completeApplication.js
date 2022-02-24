@@ -4,6 +4,7 @@ import { Form } from "react-bootstrap";
 
 import { ETHNIC_GROUPES } from "../../../config/data";
 import { colors } from "../../../config/imports";
+import ActionPlaceholder from "../../../components/actionPlaceholder";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -21,6 +22,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
   const { applicationData, isActiveUser } = useAppState();
 
   const [ethnicityList, setEthnicityList] = useState([]);
+  const [isFetching, setFetching] = useState(false);
   const [formData, setFormData] = useState({
     bad_ethnicity: "",
     py3_constitutionagreement: "",
@@ -62,6 +64,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
   // HANDLERS --------------------------------------------
   const handleComplete = async () => {
     try {
+      setFetching(true);
       await setUserStoreAction({
         state,
         dispatch,
@@ -73,6 +76,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
 
       await setCompleteUserApplicationAction({
         state,
+        dispatch,
         isActiveUser,
       });
 
@@ -80,6 +84,8 @@ const CompleteApplication = ({ state, actions, libraries }) => {
       if (isActiveUser) setGoToAction({ path: slug, actions });
     } catch (err) {
       console.log(err);
+    } finally {
+      setFetching(false);
     }
   };
 
@@ -113,7 +119,8 @@ const CompleteApplication = ({ state, actions, libraries }) => {
   };
 
   return (
-    <div>
+    <div style={{ position: "relative" }}>
+      <ActionPlaceholder isFetching={isFetching} background="transparent" />
       <form>
         <div style={{ padding: `2em 1em 0` }}>
           {inputValidator.bad_ethnicity && (
