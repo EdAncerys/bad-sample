@@ -339,6 +339,8 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
         {postListData.map((block, key) => {
           const { title, content, link, date, dermo_group_type } = block;
           const redirect = block.acf.redirect_url;
+          const file = block.acf.file_download;
+          const cardLink = redirect.url || link;
 
           return (
             <Card
@@ -347,7 +349,8 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               publicationDate={date}
               body={isCovid_19 ? null : content.rendered}
               link_label="Read More"
-              link={redirect ? redirect.url : link}
+              link={file ? null : cardLink}
+              downloadFile={file ? { file, label: "Download" } : null}
               colour={colour}
               limitBodyLength
               cardMinHeight={250}
