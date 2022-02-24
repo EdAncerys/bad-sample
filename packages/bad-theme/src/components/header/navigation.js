@@ -56,7 +56,7 @@ const Navigation = ({ state, actions, libraries }) => {
     return () => {
       useEffectRef.current = false; // clean up function
     };
-  }, [state.theme.menu]);
+  }, []);
 
   if (!wpMoreMenu.length || !wpMainMenu.length)
     return (

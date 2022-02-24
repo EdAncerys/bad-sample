@@ -8,6 +8,9 @@ import SearchContainer from "../searchContainer";
 import Loading from "../loading";
 import { colors } from "../../config/imports";
 
+import date from "date-and-time";
+const DATE_MODULE = date;
+
 import CloseIcon from "@mui/icons-material/Close";
 
 const Events = ({ state, actions, libraries, block }) => {
@@ -16,6 +19,7 @@ const Events = ({ state, actions, libraries, block }) => {
   const [searchFilter, setSearchFilter] = useState(null);
   const [gradesFilter, setGradesFilter] = useState(null);
   const [locationsFilter, setLocationsFilter] = useState(null);
+  const [yearFilter, setYearFilter] = useState(null);
   const [isReady, setIsReady] = useState(false);
 
   const marginHorizontal = state.theme.marginHorizontal;
@@ -24,6 +28,7 @@ const Events = ({ state, actions, libraries, block }) => {
   const searchFilterRef = useRef(null);
   const gradeRef = useRef(null);
   const locationRef = useRef(null);
+  const yearFilterRef = useRef(null);
 
   const isSearch = block.add_search_function;
   const id = uuidv4();
@@ -47,12 +52,14 @@ const Events = ({ state, actions, libraries, block }) => {
 
     const grade = gradeRef.current.value;
     const location = locationRef.current.value;
+    const year = yearFilterRef.current.value;
 
-    console.log(input, location, grade);
+    console.log(input, location, grade, year);
 
     if (!!input) setSearchFilter(input);
     if (!!grade) setGradesFilter(grade);
     if (!!location) setLocationsFilter(location);
+    if (!!year) setYearFilter(year);
   };
 
   // SERVERS ---------------------------------------------
@@ -95,7 +102,7 @@ const Events = ({ state, actions, libraries, block }) => {
       if (!locations) return null;
 
       return (
-        <div className="flex">
+        <div className="flex" style={{ paddingRight: `1em` }}>
           <Form.Select ref={locationRef} style={styles.input}>
             <option value="" hidden>
               Location
@@ -112,11 +119,49 @@ const Events = ({ state, actions, libraries, block }) => {
       );
     };
 
+    const ServeYearFilter = () => {
+      // get current month
+      const currentMonth = new Date().getMonth();
+      // get array of next 12 months and a year based on current month
+      const months = [...Array(12).keys()].map((item, key) => {
+        let month = currentMonth + key + 1;
+        let year = new Date().getFullYear();
+        if (month > 12) {
+          year++;
+          month = month - 12;
+        }
+        return `${month} 1 ${year}`;
+      });
+
+      console.log("months", months); // debug
+
+      return (
+        <div className="flex">
+          <Form.Select ref={yearFilterRef} style={styles.input}>
+            <option value="" hidden>
+              Filter By Month
+            </option>
+            {months.map((time, key) => {
+              const dateObject = new Date(time);
+              const formattedDate = DATE_MODULE.format(dateObject, "MMMM YYYY");
+
+              return (
+                <option key={key} value={time}>
+                  {formattedDate}
+                </option>
+              );
+            })}
+          </Form.Select>
+        </div>
+      );
+    };
+
     return (
       <div className="flex" style={{ padding: `1em 0`, alignItems: "center" }}>
         <ServeTitle />
         <ServeGradeFilter />
         <ServeLocationFilter />
+        <ServeYearFilter />
       </div>
     );
   };
@@ -186,6 +231,27 @@ const Events = ({ state, actions, libraries, block }) => {
       );
     };
 
+    const ServeSelectedYearFilter = () => {
+      if (!yearFilter) return null;
+      // get current date
+      const dateObject = new Date(yearFilter);
+      const formattedDate = DATE_MODULE.format(dateObject, "MMMM YYYY");
+
+      return (
+        <div className="shadow filter">
+          <div>{formattedDate}</div>
+          <div className="filter-icon" onClick={() => setYearFilter(null)}>
+            <CloseIcon
+              style={{
+                fill: colors.darkSilver,
+                padding: 0,
+              }}
+            />
+          </div>
+        </div>
+      );
+    };
+
     return (
       <div style={{ position: "relative" }} className="no-selector">
         <div className="flex-col" style={{ width: "70%" }}>
@@ -199,6 +265,7 @@ const Events = ({ state, actions, libraries, block }) => {
           <ServeSearchFilter />
           <ServeSelectedGradesFilter />
           <ServeSelectedLocationFilter />
+          <ServeSelectedYearFilter />
         </div>
       </div>
     );
@@ -214,6 +281,7 @@ const Events = ({ state, actions, libraries, block }) => {
         searchFilter={searchFilter}
         gradesFilter={gradesFilter}
         locationsFilter={locationsFilter}
+        yearFilter={yearFilter}
       />
     </div>
   );

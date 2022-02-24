@@ -15,6 +15,7 @@ const EventLoopBlock = ({
   searchFilter,
   gradesFilter,
   locationsFilter,
+  yearFilter,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -114,6 +115,19 @@ const EventLoopBlock = ({
           }
           if (locationsFilter) {
             if (!event_location.includes(Number(locationsFilter))) return null;
+          }
+          if (yearFilter) {
+            // get event month & year start
+            const eventDate = date_time[0].date;
+            const eventMont = new Date(eventDate).getMonth() + 1;
+            const eventYear = new Date(eventDate).getFullYear();
+            // get filter current month & year
+            const filterMont = new Date(yearFilter).getMonth() + 1;
+            const filterYear = new Date(yearFilter).getFullYear();
+
+            // filter events based on mont & year start
+            if (eventMont !== filterMont || eventYear !== filterYear)
+              return null;
           }
 
           if (layoutOne) {
