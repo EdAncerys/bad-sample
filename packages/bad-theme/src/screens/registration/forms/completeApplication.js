@@ -48,10 +48,6 @@ const CompleteApplication = ({ state, actions, libraries }) => {
         handleSetData({ data, name: "bad_ethnicity" });
         setEthnicityList(data.info.Choices);
       }
-      if (data.name === "py3_constitutionagreement")
-        handleSetData({ data, name: "py3_constitutionagreement" });
-      if (data.name === "bad_readpolicydocument")
-        handleSetData({ data, name: "bad_readpolicydocument" });
     });
 
     // ⏬ validate inputs

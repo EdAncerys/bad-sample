@@ -11,9 +11,14 @@ import SearchContainer from "./searchContainer";
 import TypeFilters from "./typeFilters";
 
 import CloseIcon from "@mui/icons-material/Close";
+// CONTEXT ----------------------------------------------------------------
+import { useAppDispatch, useAppState, setCPTBlockAction } from "../context";
 
 const CPTBlock = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
+  const dispatch = useAppDispatch();
+  const { cptBlockFilter } = useAppState();
 
   const [postListData, setPostListData] = useState(null);
   const [groupeType, setGroupeType] = useState(null);
@@ -37,7 +42,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   const currentSearchFilterRef = useRef(null);
   const typeFilterRef = useRef(null);
   const loadMoreRef = useRef(null);
-  const guidanceCategoryRef = useRef("");
 
   const LIMIT = 8;
 
@@ -92,9 +96,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     let data = Object.values(state.source[postPath]);
 
     if (!loadMoreRef.current) {
-      // if (!!currentSearchFilterRef.current || !!typeFilterRef.current)
-      //   data = postListData;
-
       loadMoreRef.current = data;
       setPostListData(data);
     } else {
@@ -108,7 +109,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     currentSearchFilterRef.current = input;
     let data = Object.values(state.source[postPath]);
 
-    const categoryId = guidanceCategoryRef.current.value;
+    const categoryId = cptBlockFilter;
 
     if (categoryId) {
       data = data.filter((item) =>
@@ -116,10 +117,8 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       );
     }
 
-    if (typeFilterRef.current) {
-      data = data.filter((item) =>
-        item[typePath].includes(typeFilterRef.current)
-      );
+    if (cptBlockFilter) {
+      data = data.filter((item) => item[typePath].includes(cptBlockFilter));
     }
 
     if (!!input) {
@@ -135,6 +134,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       });
     }
 
+    console.log(cptBlockFilter);
     setPostListData(data);
     setSearchFilter(input);
     if (categoryId) setGuidanceFilter(categoryId);
@@ -142,7 +142,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   const handleTypeSearch = () => {
     const input = typeFilterRef.current;
-    const categoryId = guidanceCategoryRef.current.value;
+    const categoryId = cptBlockFilter;
     let data = Object.values(state.source[postPath]); // add postListData object to data array
 
     if (categoryId) {
@@ -190,7 +190,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   const handleClearCategoryFilter = () => {
     let data = Object.values(state.source[postPath]); // add postListData object to data array
-    guidanceCategoryRef.current = "";
+    setCPTBlockAction({ dispatch, cptBlockFilter: "" });
     setGuidanceFilter(null);
     setPostListData(data.slice(0, Number(post_limit || LIMIT)));
 
@@ -266,9 +266,11 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
         >
           <select
             name="guidance"
-            ref={guidanceCategoryRef}
-            value={guidanceCategoryRef.current.value}
-            onChange={handleSearch}
+            value={cptBlockFilter}
+            onChange={(e) => {
+              setCPTBlockAction({ dispatch, cptBlockFilter: e.target.value });
+              handleSearch();
+            }}
             className="input"
             style={{ height: 45 }}
           >

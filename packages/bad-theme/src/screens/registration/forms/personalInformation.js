@@ -145,7 +145,6 @@ const PersonalDetails = ({ state, actions, libraries }) => {
         "py3_mobilephone",
         "py3_address1ine1",
         "py3_addresstowncity",
-        "py3_addresscountystate",
         "py3_addresszippostalcode",
         "py3_addresscountry",
       ],

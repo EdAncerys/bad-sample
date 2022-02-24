@@ -14,6 +14,7 @@ export const initialState = {
 
   filter: null,
   idFilter: null,
+  cptBlockFilter: "",
 
   applicationData: null,
 
@@ -56,6 +57,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, idFilter: action.payload };
     case "SET_DIRECT_DEBIT_ACTION":
       return { ...state, isDirectDebit: action.payload };
+    case "SET_CPT_BLOCK_ACTION":
+      return { ...state, cptBlockFilter: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

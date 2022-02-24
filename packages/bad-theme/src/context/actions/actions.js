@@ -45,4 +45,7 @@ export const setApplicationDataAction = ({ dispatch, applicationData }) => {
   dispatch({ type: "SET_APPLICATION_DATA_ACTION", payload: applicationData });
 };
 
-
+export const setCPTBlockAction = ({ dispatch, cptBlockFilter }) => {
+  console.log("setCPTBlockAction triggered"); //debug
+  dispatch({ type: "SET_CPT_BLOCK_ACTION", payload: cptBlockFilter });
+};

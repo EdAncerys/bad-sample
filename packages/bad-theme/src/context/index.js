@@ -6,6 +6,7 @@ import {
   setErrorAction,
   setApplicationDataAction,
   setIDFilterAction,
+  setCPTBlockAction,
 } from "./actions/actions";
 import { muiQuery } from "./mediaQueryContext";
 import {
@@ -98,4 +99,5 @@ export {
   createDirectDebitAction,
   anchorScrapper,
   getWpPagesAction,
+  setCPTBlockAction,
 };
