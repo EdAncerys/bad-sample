@@ -35,13 +35,6 @@ export const setUserStoreAction = async ({
       storeApplication = await getUserStoreAction({ state, isActiveUser });
     }
     if (!storeApplication) {
-      // ⏬⏬  get application record from Dynamics ⏬⏬
-      storeApplication = await getDynamicsApplicationAction({
-        state,
-        contactid,
-      });
-    }
-    if (!storeApplication) {
       // ⏬⏬  creat application record in Dynamics ⏬⏬
       const newApplicationRecord = await createDynamicsApplicationAction({
         state,

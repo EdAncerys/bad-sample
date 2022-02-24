@@ -167,9 +167,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   };
 
   const handleDocUploadChange = async () => {
-    let sky_profilepicture = documentRef.current
-      ? documentRef.current.files[0]
-      : null;
+    let sky_profilepicture = documentRef.current.files[0];
     // const objectURL = URL.createObjectURL(sky_profilepicture);
 
     if (sky_profilepicture)

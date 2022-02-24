@@ -8,8 +8,12 @@ export const sendFileToS3Action = async ({ state, dispatch, attachments }) => {
   const URL = state.auth.APP_HOST + `/s3/profile/image`;
   const jwt = await authenticateAppAction({ state });
 
+  // extract file extension name from attachment
+  const fileExtension = attachments.name.split(".").pop();
+  const uniqueName = uuidv4();
+
   const form = new FormData(); // create form object to sent email content & attachments
-  form.append("profile", attachments, uuidv4());
+  form.append("profile", attachments, `${uniqueName}.${fileExtension}`);
 
   const requestOptions = {
     method: "PUT",
