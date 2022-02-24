@@ -20,6 +20,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser } = useAppState();
 
+  const [ethnicityList, setEthnicityList] = useState([]);
   const [formData, setFormData] = useState({
     bad_ethnicity: "",
     py3_constitutionagreement: "",
@@ -43,8 +44,10 @@ const CompleteApplication = ({ state, actions, libraries }) => {
 
     if (!applicationData) return null;
     applicationData.map((data) => {
-      if (data.name === "bad_ethnicity")
+      if (data.name === "bad_ethnicity") {
         handleSetData({ data, name: "bad_ethnicity" });
+        setEthnicityList(data.info.Choices);
+      }
       if (data.name === "py3_constitutionagreement")
         handleSetData({ data, name: "py3_constitutionagreement" });
       if (data.name === "bad_readpolicydocument")
@@ -129,7 +132,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
                 <option value="" hidden>
                   Ethnic Group
                 </option>
-                {ETHNIC_GROUPES.map((item, key) => {
+                {ethnicityList.map((item, key) => {
                   return (
                     <option key={key} value={item.value}>
                       {item.Label}
