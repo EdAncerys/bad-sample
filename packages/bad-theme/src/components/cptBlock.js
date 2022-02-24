@@ -340,8 +340,8 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           const { title, content, link, date, dermo_group_type } = block;
           const redirect = block.acf.redirect_url;
           const file = block.acf.file_download;
-          let cardLink = null;
-          if (redirect) cardLink = redirect.url || link;
+          let cardLink = link;
+          if (redirect) cardLink = redirect.url;
 
           return (
             <Card
@@ -351,6 +351,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               body={isCovid_19 ? null : content.rendered}
               link_label="Read More"
               link={file ? null : cardLink}
+              link={cardLink}
               downloadFile={file ? { file, label: "Download" } : null}
               colour={colour}
               limitBodyLength
