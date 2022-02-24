@@ -2,23 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import Link from "@frontity/components/link";
-import {
-  FacebookShareButton,
-  TwitterShareButton,
-  LinkedinShareButton,
-} from "react-share";
-import * as Add2Calendar from "add2calendar";
 
 import { colors } from "../../config/imports";
 import date from "date-and-time";
 import ShareToSocials from "./shareToSocials";
-
-import Facebook from "../../img/svg/facebookBlack.svg";
-import Twitter from "../../img/svg/twitterBlack.svg";
-import Instagram from "../../img/svg/instagramBlack.svg";
-import Linkedin from "../../img/svg/linkedinBlack.svg";
-import Connect from "../../img/svg/connectBlack.svg";
-import WebPage from "../../img/svg/webPageBlack.svg";
 
 const DATE_MODULE = date;
 
@@ -48,28 +35,6 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
       mountedRef.current = false; // clean up function
     };
   }, []);
-
-  // HANDLERS --------------------------------------------
-  const singleEventArgs = {
-    title: shareTitle,
-    start: date,
-    end: date,
-    // location: "London, UK",
-    description: content.rendered,
-    isAllDay: false,
-  };
-  const singleEvent = new Add2Calendar(singleEventArgs);
-
-  const copyToClipboard = (e) => {
-    const link = e.target.name;
-
-    var input = document.body.appendChild(document.createElement("input"));
-    input.value = link;
-    input.focus();
-    input.select();
-    document.execCommand("copy");
-    input.parentNode.removeChild(input);
-  };
 
   // SERVERS ---------------------------------------------
   const ServeDate = () => {
@@ -214,7 +179,7 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
       <ServeDate />
       <ServeTopics />
       <ShareToSocials
-        title={shareTitle}
+        shareTitle={shareTitle}
         shareUrl={shareUrl}
         date={date}
         description={content.rendered}

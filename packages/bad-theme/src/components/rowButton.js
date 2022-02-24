@@ -28,8 +28,6 @@ const RowButton = ({ state, actions, libraries, block, onClick }) => {
   let LABEL = title;
   if (!title && link) LABEL = link.title;
 
-  console.log("----", block);
-
   // SERVERS --------------------------------------------
   const ServeFooter = () => {
     return (

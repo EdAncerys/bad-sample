@@ -10,7 +10,6 @@ import {
 import * as Add2Calendar from "add2calendar";
 
 import { colors } from "../../config/imports";
-import date from "date-and-time";
 import { setGoToAction } from "../../context";
 
 import Facebook from "../../img/svg/facebookBlack.svg";
@@ -20,27 +19,29 @@ import Linkedin from "../../img/svg/linkedinBlack.svg";
 import Connect from "../../img/svg/connectBlack.svg";
 import WebPage from "../../img/svg/webPageBlack.svg";
 
-const DATE_MODULE = date;
-
 const ShareToSocials = ({
   state,
   actions,
   shareUrl,
-  title,
+  shareTitle,
   description,
   location,
   date,
 }) => {
+  const title = shareTitle || "BAD";
+  const url = shareUrl || state.auth.APP_URL;
+
   // HANDLERS --------------------------------------------
-  const singleEventArgs = {
-    title: title || "",
-    start: date || "",
-    end: date || "",
-    location: location || "",
-    description: description || "",
-    isAllDay: false,
-  };
-  const singleEvent = new Add2Calendar(singleEventArgs);
+  // ⬇️ add to calendar functionality
+  // const singleEventArgs = {
+  //   title: title || "",
+  //   start: date || new Date(),
+  //   end: date || new Date(),
+  //   location: location || "",
+  //   description: description || "",
+  //   isAllDay: false,
+  // };
+  // const singleEvent = new Add2Calendar(singleEventArgs);
 
   const copyToClipboard = (e) => {
     const link = e.target.name;
@@ -58,7 +59,7 @@ const ShareToSocials = ({
       <div className="flex" style={{ justifyContent: "space-between" }}>
         <div style={styles.socials}>
           <FacebookShareButton
-            url={shareUrl}
+            url={url}
             quote={title}
             className="Demo__some-network__share-button"
           >
@@ -67,7 +68,7 @@ const ShareToSocials = ({
         </div>
         <div style={styles.socials}>
           <TwitterShareButton
-            url={shareUrl}
+            url={url}
             title={title}
             className="Demo__some-network__share-button"
           >
@@ -76,7 +77,7 @@ const ShareToSocials = ({
         </div>
         {/* <div style={styles.socials}>
             <LinkedinShareButton
-              url={shareUrl}
+              url={url}
               className="Demo__some-network__share-button"
             >
               <Image
@@ -88,7 +89,7 @@ const ShareToSocials = ({
           </div> */}
         <div style={styles.socials}>
           <LinkedinShareButton
-            url={shareUrl}
+            url={url}
             className="Demo__some-network__share-button"
           >
             <Image src={Linkedin} className="d-block h-100" alt="Instagram" />

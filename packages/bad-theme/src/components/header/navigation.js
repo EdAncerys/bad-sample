@@ -415,7 +415,8 @@ const Navigation = ({ state, actions, libraries }) => {
             if (object !== "page") return; // only page object
 
             const pageItem = state.source[object][Number(object_id)]; // getting page item
-            if (!pageItem.menu_featured) return;
+            if (!pageItem && !pageItem.menu_featured) return; // if page item not found or not featured
+
             const { menu_featured, modified } = pageItem;
 
             if (menu_featured.includes(featuredId)) {
