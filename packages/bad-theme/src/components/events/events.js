@@ -16,22 +16,18 @@ import CloseIcon from "@mui/icons-material/Close";
 const Events = ({ state, actions, libraries, block }) => {
   const [grades, setGrades] = useState(null); // data
   const [locations, setLocations] = useState(null); // data
-  const [searchFilter, setSearchFilter] = useState(null);
-  const [gradesFilter, setGradesFilter] = useState(null);
-  const [locationsFilter, setLocationsFilter] = useState(null);
-  const [yearFilter, setYearFilter] = useState(null);
-  const [isReady, setIsReady] = useState(false);
+
+  const [searchFilter, setSearchFilter] = useState("");
+  const [gradesFilter, setGradesFilter] = useState("");
+  const [locationsFilter, setLocationsFilter] = useState("");
+  const [yearFilter, setYearFilter] = useState("");
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
   const searchFilterRef = useRef(null);
-  const gradeRef = useRef(null);
-  const locationRef = useRef(null);
-  const yearFilterRef = useRef(null);
 
   const isSearch = block.add_search_function;
-  const id = uuidv4();
 
   useEffect(() => {
     let GRADES = null;
@@ -43,29 +39,17 @@ const Events = ({ state, actions, libraries, block }) => {
 
     setGrades(GRADES);
     setLocations(LOCATIONS);
-    setIsReady(true);
   }, [state.source.event_grade, state.source.event_location]);
 
   // HELPERS ----------------------------------------------------------------
   const handleSearch = () => {
     const input = searchFilterRef.current.value.toLowerCase();
 
-    const grade = gradeRef.current.value;
-    const location = locationRef.current.value;
-    const year = yearFilterRef.current.value;
-
-    console.log(input, location, grade, year);
-
     if (!!input) setSearchFilter(input);
-    if (!!grade) setGradesFilter(grade);
-    if (!!location) setLocationsFilter(location);
-    if (!!year) setYearFilter(year);
   };
 
   // SERVERS ---------------------------------------------
   const ServeFilters = () => {
-    if (!grades && !locations) return null; // props for filter options
-
     const ServeTitle = () => {
       return (
         <div
@@ -82,7 +66,11 @@ const Events = ({ state, actions, libraries, block }) => {
 
       return (
         <div className="flex" style={{ paddingRight: `1em` }}>
-          <Form.Select ref={gradeRef} style={styles.input}>
+          <Form.Select
+            style={styles.input}
+            value={gradesFilter}
+            onChange={(e) => setGradesFilter(e.target.value)}
+          >
             <option value="" hidden>
               Event Grades
             </option>
@@ -103,7 +91,11 @@ const Events = ({ state, actions, libraries, block }) => {
 
       return (
         <div className="flex" style={{ paddingRight: `1em` }}>
-          <Form.Select ref={locationRef} style={styles.input}>
+          <Form.Select
+            style={styles.input}
+            value={locationsFilter}
+            onChange={(e) => setLocationsFilter(e.target.value)}
+          >
             <option value="" hidden>
               Location
             </option>
@@ -133,11 +125,13 @@ const Events = ({ state, actions, libraries, block }) => {
         return `${month} 1 ${year}`;
       });
 
-      console.log("months", months); // debug
-
       return (
         <div className="flex">
-          <Form.Select ref={yearFilterRef} style={styles.input}>
+          <Form.Select
+            style={styles.input}
+            value={yearFilter}
+            onChange={(e) => setYearFilter(e.target.value)}
+          >
             <option value="" hidden>
               Filter By Month
             </option>
@@ -271,7 +265,7 @@ const Events = ({ state, actions, libraries, block }) => {
     );
   };
 
-  if (!isReady) return <Loading />;
+  if (!grades || !locations) return <Loading />;
   // RETURN ---------------------------------------------------
   return (
     <div style={{ padding: `0 ${marginHorizontal}px` }}>
