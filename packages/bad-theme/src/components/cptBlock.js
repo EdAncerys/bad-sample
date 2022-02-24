@@ -340,7 +340,8 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           const { title, content, link, date, dermo_group_type } = block;
           const redirect = block.acf.redirect_url;
           const file = block.acf.file_download;
-          const cardLink = redirect.url || link;
+          let cardLink = null;
+          if (redirect) cardLink = redirect.url || link;
 
           return (
             <Card
