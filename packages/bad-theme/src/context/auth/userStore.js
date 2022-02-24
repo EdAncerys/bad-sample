@@ -255,8 +255,6 @@ export const setCompleteUserApplicationAction = async ({
     const data = await response.json();
 
     if (data.success) {
-      // await deleteUserStoreAction({ state, isActiveUser }); // delete user store application
-
       console.log("⏬ Membership Completed ⏬");
       console.log(data);
     } else {
