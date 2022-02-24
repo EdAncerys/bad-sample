@@ -26,7 +26,9 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     post_limit,
     disable_vertical_padding,
     has_search,
+    category_filter,
   } = block;
+  console.log(block);
 
   const isLayoutOne = layout === "layout_one";
   const ctaHeight = 45;
@@ -60,20 +62,25 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   useEffect(() => {
     if (!state.source.post) return null;
 
-    let POST_LIST = Object.values(state.source.post);
+    let postList = Object.values(state.source.post);
     // apply date filter
-    POST_LIST = POST_LIST.sort((a, b) => new Date(b.date) - new Date(a.date));
-    if (post_limit) POST_LIST = POST_LIST.slice(0, Number(post_limit)); // apply limit on posts
+    postList = postList.sort((a, b) => new Date(b.date) - new Date(a.date));
+    // filter by categories
+    if (category_filter && category_filter !== "0")
+      postList = postList.filter((item) =>
+        item.categories.includes(Number(category_filter))
+      );
 
+    setFilterList(postList);
     if (state.source.category) {
       const CATEGORY = Object.values(state.source.category);
       setCategoryList(CATEGORY);
     }
-
-    setFilterList(POST_LIST);
   }, [state.source.post]);
 
   if (!filterList || !categoryList) return <Loading />;
+
+  if (filterList.length === 0) return null; // hide block if no posts
 
   // HELPERS ----------------------------------------------------------------
   const handleClearFilter = ({
@@ -104,10 +111,10 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
   const handleLoadMoreFilter = () => {
     const limit = post_limit || 6;
-    let POST_LIST = Object.values(state.source.post); // add filterList object to data array
-    if (loadMoreRef.current) POST_LIST = POST_LIST.slice(0, Number(limit)); // apply limit on posts
+    let postList = Object.values(state.source.post); // add filterList object to data array
+    if (loadMoreRef.current) postList = postList.slice(0, Number(limit)); // apply limit on posts
 
-    setFilterList(POST_LIST);
+    setFilterList(postList);
     loadMoreRef.current = !loadMoreRef.current;
   };
 
@@ -368,19 +375,15 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   const ServeLayout = () => {
     if (isLayoutOne)
       return (
-        <NewsCarouselComponent
-          block={block}
-          newsList={filterList}
-          categoryList={categoryList}
-        />
+        <NewsCarouselComponent block={filterList} categoryList={categoryList} />
       );
 
     return (
       <div>
         <NewsBlock
-          block={block}
-          newsList={filterList}
+          block={filterList}
           categoryList={categoryList}
+          layout={layout}
         />
       </div>
     );
