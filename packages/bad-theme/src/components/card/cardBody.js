@@ -56,9 +56,8 @@ const CardBody = ({
     if (limitTitleLength) titlePreview = `${title.slice(0, maxChar)}...`;
 
     const ServePaidIcon = () => {
-      console.log("PAID", videoArchive);
       if (!videoArchive) return null;
-      if (videoArchive.price) return <PaidIcon />;
+      if (videoArchive.acf.price) return <PaidIcon />;
       return null;
     };
     return (
@@ -150,7 +149,21 @@ const CardBody = ({
       </div>
     );
   };
+  const ServeVideoArchiveCategories = () => {
+    if (!videoArchive) return null;
 
+    // const GetCategoriesNames = async () => {
+    //   const fetchCategories = await fetch(
+    //     "http://3.9.193.188/wp-json/wp/v2/event_specialty"
+    //   );
+    //   if (fetchCategories.ok) {
+    //     const json = await fetchCategories.json();
+    //     console.log(json);
+    //   }
+    // };
+    // GetCategoriesNames();
+    return "Error fetching categories";
+  };
   const ServePublicationDate = () => {
     if (!publicationDate) return null;
 
@@ -186,6 +199,7 @@ const CardBody = ({
         <ElectionInfo electionInfo={electionInfo} opacity={opacity} />
         <ServeBody />
         <ServeDate />
+        <ServeVideoArchiveCategories />
       </div>
     </div>
   );

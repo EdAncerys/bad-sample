@@ -14,7 +14,7 @@ const VideoArchive = ({ state, libraries }) => {
 
   const VideoArchive = ({ post }) => {
     const [vimeoCover, setVimeoCover] = React.useState(
-      "http://3.9.193.188/wp-content/uploads/2022/02/VIDEO-LIBRARY.jpg"
+      "https://badadmin.skylarkdev.co/wp-content/uploads/2022/02/VIDEO-LIBRARY.jpg"
     );
 
     if (post.acf.private && !isActiveUser) return null; // If user isn't logged in, the videos set to private will not show
@@ -46,7 +46,7 @@ const VideoArchive = ({ state, libraries }) => {
         url={vimeoCover}
         body={post.content.rendered}
         publicationDate={post.date}
-        videoArchive={post.acf}
+        videoArchive={post}
       />
     );
   };
@@ -54,7 +54,7 @@ const VideoArchive = ({ state, libraries }) => {
   useEffect(() => {
     const fetchHeroBanner = async () => {
       const fetchInfo = await fetch(
-        "http://3.9.193.188/wp-json/wp/v2/pages/7051"
+        "https://badadmin.skylarkdev.co//wp-json/wp/v2/pages/7051"
       );
 
       if (fetchInfo.ok) {
