@@ -70,7 +70,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
 
     setInputValue(input);
     if (input) setFilterData(data);
-    if (!data.length) setFilterData(null);
+    if (!data.length || !input) setFilterData(null);
 
     // console.log("filterData", data); // debug
   };
