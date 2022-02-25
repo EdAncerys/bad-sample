@@ -182,7 +182,7 @@ export const createDynamicsApplicationAction = async ({ state, contactid }) => {
     const response = await fetch(URL, requestOptions);
     const data = await response.json();
 
-    console.log("createDynamicsApplicationAction result", data); // debug
+    // console.log("Dynamics Application result", data); // debug
 
     if (data.success) {
       return data.data;
@@ -212,12 +212,10 @@ export const getDynamicsApplicationAction = async ({ state, contactid }) => {
     const response = await fetch(URL, requestOptions);
     const data = await response.json();
 
-    console.log("⏬ Membership Record In Dynamics not Found ⏬");
-    console.log("createDynamicsApplicationAction result", data); // debug
-
     if (data.success) {
       return data.data;
     } else {
+      console.log("⏬ Membership Record In Dynamics not Found ⏬");
       return null;
     }
   } catch (error) {

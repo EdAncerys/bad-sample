@@ -73,6 +73,14 @@ const AccordionBody = ({
       isActiveUser,
       category: "BAD",
       type: category_types, // application type name
+      membershipApplication: {
+        stepOne: false,
+        stepTwo: false,
+        stepThree: false,
+        stepFour: false,
+        stepFive: false,
+        applicationComplete: false,
+      },
     });
   };
 
