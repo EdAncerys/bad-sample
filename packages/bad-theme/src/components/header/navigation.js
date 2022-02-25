@@ -203,58 +203,32 @@ const Navigation = ({ state, actions, libraries }) => {
         );
       };
 
-      const ServeFeaturedMenuOne = () => {
-        if (!featuredBannerOne) return null;
+      const ServeFeaturedMenu = ({ featuredBannerOne, featuredBannerTwo }) => {
+        if (!featuredBannerOne && !featuredBannerTwo) return null;
 
-        const { title, content, featured_media, link } = featuredBannerOne;
-
-        return (
-          <div
-            style={{
-              position: "absolute",
-              zIndex: 1,
-              height: "90%",
-              width: "30%",
-              left: `35%`,
-              margin: `0 1em`,
-            }}
-          >
-            <Card
-              featuredBanner={featuredBannerOne}
-              title={title ? title.rendered : null}
-              body={content ? content.rendered : null}
-              link_label="Read More"
-              link={link}
-              cardHeight="90%"
-              colour={colors.white}
-              shadow // optional param
-            />
-          </div>
-        );
-      };
-
-      const ServeFeaturedMenuTwo = () => {
-        if (!featuredBannerTwo) return null;
-
-        const { title, content, featured_media, link } = featuredBannerTwo;
+        const { title, content, acf } = featuredBannerOne || featuredBannerTwo;
+        let isLeft = "35%";
+        if (featuredBannerTwo) isLeft = "66.5%";
 
         return (
           <div
             style={{
               position: "absolute",
               zIndex: 1,
-              height: "90%",
+              height: "100%",
               width: "30%",
-              left: `66%`,
+              left: isLeft,
               margin: `0 1em`,
             }}
           >
             <Card
-              featuredBanner={featuredBannerTwo}
+              featuredBanner={featuredBannerOne || featuredBannerTwo}
               title={title ? title.rendered : null}
               body={content ? content.rendered : null}
+              limitBodyLength
+              bodyLimit={150}
               link_label="Read More"
-              link={link}
+              link={acf.link}
               cardHeight="90%"
               colour={colors.white}
               shadow // optional param
@@ -279,8 +253,8 @@ const Navigation = ({ state, actions, libraries }) => {
             }}
           >
             <ServeDivider />
-            <ServeFeaturedMenuOne />
-            <ServeFeaturedMenuTwo />
+            <ServeFeaturedMenu featuredBannerOne={featuredBannerOne} />
+            <ServeFeaturedMenu featuredBannerTwo={featuredBannerTwo} />
 
             {child_items.map((item, key) => {
               const { title, url, slug, child_items } = item;
