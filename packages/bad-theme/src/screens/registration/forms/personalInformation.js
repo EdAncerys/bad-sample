@@ -169,7 +169,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
       data: formData,
     });
 
-    let slug = `/membership/step-3-category-selection/`;
+    let slug = `/membership/step-2-category-selection/`;
     if (isActiveUser) setGoToAction({ path: slug, actions });
 
     // console.log(formData); // debug

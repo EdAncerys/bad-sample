@@ -88,10 +88,10 @@ const App = ({ state, actions }) => {
               when={endPoint === "/membership/step-1-the-process/"}
             />
             <RegistrationStepTwo
-              when={endPoint === "/membership/step-2-personal-information/"}
+              when={endPoint === "/membership/step-2-category-selection/"}
             />
             <RegistrationStepThree
-              when={endPoint === "/membership/step-3-category-selection/"}
+              when={endPoint === "/membership/step-3-personal-information/"}
             />
             <RegistrationStepFour
               when={endPoint === "/membership/step-4-professional-details/"}

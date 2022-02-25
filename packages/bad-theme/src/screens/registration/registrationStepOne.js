@@ -44,7 +44,7 @@ const RegistrationStepOne = ({ state, actions }) => {
     });
     if (isActiveUser)
       setGoToAction({
-        path: `/membership/step-2-personal-information/`,
+        path: `/membership/step-3-personal-information/`,
         actions,
       });
   };
@@ -54,7 +54,10 @@ const RegistrationStepOne = ({ state, actions }) => {
     return (
       <div
         className="flex"
-        style={{ justifyContent: "flex-end", padding: `2em 1em 0 1em` }}
+        style={{
+          justifyContent: "flex-end",
+          padding: `2em 1em 0 1em`,
+        }}
       >
         <div
           className="transparent-btn"
@@ -164,7 +167,7 @@ const styles = {
   },
   wrapper: {
     borderBottom: `1px solid ${colors.silverFillTwo}`,
-    padding: `0 1em 0`,
+    padding: `0 1em 2em`,
   },
   title: {
     fontSize: 20,
