@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { colors } from "../../config/imports";
 import Image from "@frontity/components/image";
-
 import CardBody from "./cardBody";
 import CardActions from "./cardActions";
 import JournalCard from "../home/journalCard";
@@ -81,6 +80,7 @@ const Card = ({
   fundingHeader,
   videoGuide,
   featuredBanner,
+  videoArchive,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
@@ -237,6 +237,7 @@ const Card = ({
           limitTitleLength={limitTitleLength}
           electionInfo={electionInfo}
           opacity={opacity}
+          videoArchive={videoArchive}
         />
         <VideoGalleryInfo videoGalleryInfo={videoGalleryInfo} />
         <ServeDownloads />

@@ -35,6 +35,7 @@ import Venue from "./venue";
 import DermGroupsCharity from "./dermGroupsCharity";
 import Covid from "./covid";
 import PaymentConfirmation from "./paymentConfirmation";
+import VideoArchive from "../components/videoArchive";
 // SCREEN HELPERS ---------------------------------------------------------
 import Error from "./error";
 import Loading from "../components/loading";
@@ -125,7 +126,7 @@ const App = ({ state, actions }) => {
               <Venue when={data.isVenues} />
               <DermGroupsCharity when={data.isDermGroupsCharity} />
               <Covid when={data.isCovid19} />
-
+              <VideoArchive when={endPoint === "/videos/"} />
               <Home when={data.isHome} />
 
               <Post when={data.isPost} />

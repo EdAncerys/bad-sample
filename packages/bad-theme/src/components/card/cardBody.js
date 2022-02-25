@@ -3,6 +3,7 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
 import date from "date-and-time";
+import PaidIcon from "@mui/icons-material/Paid";
 
 import { colors } from "../../config/imports";
 import ElectionInfo from "./electionInfo";
@@ -28,6 +29,7 @@ const CardBody = ({
   limitBodyLength,
   limitTitleLength,
   opacity,
+  videoArchive,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { sm, md, lg, xl } = muiQuery();
@@ -53,6 +55,12 @@ const CardBody = ({
     if (!body && isFrom4Col) titlePreview = `${title.slice(0, 80)}`;
     if (limitTitleLength) titlePreview = `${title.slice(0, maxChar)}...`;
 
+    const ServePaidIcon = () => {
+      console.log("PAID", videoArchive);
+      if (!videoArchive) return null;
+      if (videoArchive.price) return <PaidIcon />;
+      return null;
+    };
     return (
       <div
         className="flex primary-title"
@@ -68,6 +76,7 @@ const CardBody = ({
         }}
       >
         <Html2React html={titlePreview} />
+        <ServePaidIcon />
       </div>
     );
   };
