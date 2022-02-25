@@ -75,20 +75,20 @@ const DashboardNavigation = ({
         <div
           className="dashboard-menu"
           style={{
-            boxShadow: handleUnderline("Directory"),
+            boxShadow: handleUnderline("Members Directory"),
           }}
           onClick={(e) => handleNavigate({ e })}
         >
-          Directory
+          Members Directory
         </div>
         <div
           className="dashboard-menu"
           style={{
-            boxShadow: handleUnderline("My Account"),
+            boxShadow: handleUnderline("My Profile"),
           }}
           onClick={(e) => handleNavigate({ e })}
         >
-          My Account
+          My Profile
         </div>
         <div
           className="dashboard-menu"
@@ -102,11 +102,11 @@ const DashboardNavigation = ({
         <div
           className="dashboard-menu"
           style={{
-            boxShadow: handleUnderline("Settings"),
+            boxShadow: handleUnderline("Preferences"),
           }}
           onClick={(e) => handleNavigate({ e })}
         >
-          Settings
+          Preferences
         </div>
         <div
           className="dashboard-menu"

@@ -25,14 +25,10 @@ const CompleteApplication = ({ state, actions, libraries }) => {
   const [isFetching, setFetching] = useState(false);
   const [formData, setFormData] = useState({
     bad_ethnicity: "",
-    py3_constitutionagreement: "",
-    bad_readpolicydocument: "",
   });
 
   const [inputValidator, setInputValidator] = useState({
     bad_ethnicity: true,
-    py3_constitutionagreement: true,
-    bad_readpolicydocument: true,
   });
 
   // ⏬ populate form data values from applicationData
@@ -97,9 +93,6 @@ const CompleteApplication = ({ state, actions, libraries }) => {
     }));
   };
 
-  const isFormFooter =
-    inputValidator.bad_ethnicity || inputValidator.bad_readpolicydocument;
-
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
     return (
@@ -143,84 +136,6 @@ const CompleteApplication = ({ state, actions, libraries }) => {
                   );
                 })}
               </Form.Select>
-            </div>
-          )}
-
-          {isFormFooter && (
-            <div
-              className="flex-col form-check"
-              style={{
-                margin: `1em 0`,
-                marginTop: `2em`,
-                borderTop: `1px solid ${colors.silverFillTwo}`,
-              }}
-            >
-              {inputValidator.py3_constitutionagreement && (
-                <div
-                  className="flex"
-                  style={{ alignItems: "center", margin: `1em 0` }}
-                >
-                  <div>
-                    <input
-                      name="py3_constitutionagreement"
-                      checked={formData.py3_constitutionagreement}
-                      onChange={handleInputChange}
-                      type="checkbox"
-                      className="form-check-input check-box"
-                    />
-                  </div>
-                  <div>
-                    <label className="form-check-label flex-row">
-                      <div>I agree to the </div>
-                      <div
-                        className="caps-btn required"
-                        style={{ paddingTop: 6, marginLeft: 10 }}
-                      >
-                        BAD Constitution
-                      </div>
-                    </label>
-                  </div>
-                </div>
-              )}
-
-              {inputValidator.bad_readpolicydocument && (
-                <div
-                  className="flex"
-                  style={{ alignItems: "center", margin: `1em 0` }}
-                >
-                  <div>
-                    <input
-                      name="bad_readpolicydocument"
-                      checked={formData.bad_readpolicydocument}
-                      onChange={handleInputChange}
-                      type="checkbox"
-                      className="form-check-input check-box"
-                    />
-                  </div>
-                  <div>
-                    <label className="form-check-label flex-row">
-                      <div>
-                        <div
-                          className="caps-btn required"
-                          style={{
-                            paddingTop: 6,
-                            marginRight: 10,
-                            whiteSpace: "nowrap",
-                            float: "left",
-                          }}
-                        >
-                          I agree - Privacy Notice
-                        </div>
-                        <span>
-                          I agree - Privacy Notice* - justo donec enim diam
-                          vulputate ut pharetra sit. Purus semper eget duis at
-                          tellus at. Sed adipiscing diam.
-                        </span>
-                      </div>
-                    </label>
-                  </div>
-                </div>
-              )}
             </div>
           )}
         </div>

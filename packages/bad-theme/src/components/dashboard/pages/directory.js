@@ -84,7 +84,7 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
     }
   };
 
-  if (dashboardPath !== "Directory") return null; // call after all React hooks
+  if (dashboardPath !== "Members Directory") return null; // call after all React hooks
   if (!fadData) return <Loading />; // awaits data
 
   // SERVERS --------------------------------------------------------
@@ -117,7 +117,7 @@ const Directory = ({ state, actions, libraries, dashboardPath }) => {
         <BlockWrapper>
           <div style={{ padding: `0 ${marginHorizontal}px` }}>
             <SearchContainer
-              title="Directory"
+              title="Members Directory"
               width="70%"
               searchFilterRef={searchFilterRef}
               handleSearch={handleSearch}

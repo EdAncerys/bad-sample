@@ -7,7 +7,7 @@ import PrivacyPreferences from "../privacyPreferences";
 import FindDermatologistOptions from "../findDermatologistOptions";
 
 const Settings = ({ state, actions, libraries, dashboardPath }) => {
-  if (dashboardPath !== "Settings") return null;
+  if (dashboardPath !== "Preferences") return null;
 
   const marginHorizontal = state.theme.marginHorizontal;
 

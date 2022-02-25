@@ -131,7 +131,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
           <div>Step 2 - Personal Information</div>
           <div>Step 3 - Category Selection</div>
           <div>Step 4 - Professional Details</div>
-          <div>Review</div>
+          <div>Application Submitted</div>
         </div>
       </div>
     );

@@ -24,31 +24,10 @@ const RegistrationStepTwo = ({ state, actions }) => {
           <div className="primary-title" style={styles.title}>
             Professional Details
           </div>
-          <div style={{ paddingTop: `0.75em` }}>
-            How it works dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut
-            tellus elementum sagittis vitae et. Justo donec enim diam vulputate
-            ut pharetra sit. Purus semper eget duis at tellus at. Sed adipiscing
-            diam donec adipiscing tristique risus. A cras semper auctor neque
-            vitae tempus quam. Ac auctor augue
-          </div>
           <div>
             <span className="required" />
             Mandatory fields
           </div>
-          <div
-            className="caps-btn"
-            onClick={() =>
-              setGoToAction({
-                path: `/membership/categories-of-membership/`,
-                actions,
-              })
-            }
-            style={{ paddingTop: `1em` }}
-          >
-            BAD membership categories
-          </div>
-
           <ProfessionalDetails />
         </div>
       </div>

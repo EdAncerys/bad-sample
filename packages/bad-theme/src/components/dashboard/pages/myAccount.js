@@ -8,7 +8,7 @@ import UpdateHospitalDetails from "../updateHospitalDetails";
 import UpdateAddress from "../updateAddress";
 
 const MyAccount = ({ state, actions, libraries, dashboardPath }) => {
-  if (dashboardPath !== "My Account") return null;
+  if (dashboardPath !== "My Profile") return null;
 
   const marginHorizontal = state.theme.marginHorizontal;
 

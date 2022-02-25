@@ -75,9 +75,8 @@ const Payments = ({ state, actions, libraries, setPage }) => {
       style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
     >
       <div className="primary-title" style={{ fontSize: 20 }}>
-        Payments:
+        Outstanding Payments:
       </div>
-      <ServeSubTitle title="Invoices" />
       {PAYMENTS.map((block, key) => {
         return <ServePayments key={key} block={block} item={key} />;
       })}

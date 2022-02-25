@@ -50,6 +50,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     sky_newhospitalname: "",
     bad_newhospitaladded: "",
     bad_expectedyearofqualification: "",
+    py3_constitutionagreement: "",
+    bad_readpolicydocument: "",
   });
   const [inputValidator, setInputValidator] = useState({
     py3_gmcnumber: true,
@@ -65,6 +67,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     bad_newhospitaladded: true,
     sky_newhospitalname: true,
     bad_expectedyearofqualification: true,
+    py3_constitutionagreement: true,
+    bad_readpolicydocument: true,
   });
   const [hospitalData, setHospitalData] = useState(null);
   const [selectedHospital, setSelectedHospital] = useState(null);
@@ -242,7 +246,13 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   const isFormFooter =
     inputValidator.bad_mrpcqualified ||
     inputValidator.py3_currentgrade ||
+    inputValidator.py3_constitutionagreement ||
+    inputValidator.bad_readpolicydocument ||
     inputValidator.sky_cvurl;
+
+  const isAgreementForm =
+    inputValidator.py3_constitutionagreement ||
+    inputValidator.bad_readpolicydocument;
 
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
@@ -542,6 +552,83 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                   placeholder="CV Document"
                   accept="*"
                 />
+              </div>
+            )}
+
+            {isAgreementForm && (
+              <div
+                style={{
+                  alignItems: "center",
+                  marginTop: `2em`,
+                  paddingTop: "1em",
+                  borderTop: `1px solid ${colors.silverFillTwo}`,
+                }}
+              >
+                {inputValidator.py3_constitutionagreement && (
+                  <div
+                    className="flex"
+                    style={{ alignItems: "center", margin: `1em 0` }}
+                  >
+                    <div style={{ display: "grid" }}>
+                      <input
+                        name="py3_constitutionagreement"
+                        checked={formData.py3_constitutionagreement}
+                        onChange={handleInputChange}
+                        type="checkbox"
+                        className="form-check-input check-box"
+                      />
+                    </div>
+                    <div>
+                      <label className="form-check-label flex-row">
+                        <div>I agree to the </div>
+                        <div
+                          className="caps-btn required"
+                          style={{ paddingTop: 6, marginLeft: 10 }}
+                        >
+                          BAD Constitution
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                )}
+                {inputValidator.bad_readpolicydocument && (
+                  <div
+                    className="flex"
+                    style={{ alignItems: "center", margin: `1em 0` }}
+                  >
+                    <div>
+                      <input
+                        name="bad_readpolicydocument"
+                        checked={formData.bad_readpolicydocument}
+                        onChange={handleInputChange}
+                        type="checkbox"
+                        className="form-check-input check-box"
+                      />
+                    </div>
+                    <div>
+                      <label className="form-check-label flex-row">
+                        <div>
+                          <div
+                            className="caps-btn required"
+                            style={{
+                              paddingTop: 6,
+                              marginRight: 10,
+                              whiteSpace: "nowrap",
+                              float: "left",
+                            }}
+                          >
+                            I agree - Privacy Notice
+                          </div>
+                          <span>
+                            I agree - Privacy Notice* - justo donec enim diam
+                            vulputate ut pharetra sit. Purus semper eget duis at
+                            tellus at. Sed adipiscing diam.
+                          </span>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
