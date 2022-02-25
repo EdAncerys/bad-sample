@@ -9,7 +9,7 @@ const SearchDropDown = ({
   libraries,
   filter,
   onClickHandler,
-  mapToName,
+  marginTop,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -26,7 +26,7 @@ const SearchDropDown = ({
         zIndex: 99,
         left: 0,
         right: 0,
-        marginTop: 10,
+        marginTop: marginTop || 10,
         border: `1px solid ${colors.silver}`,
         borderRadius: 10,
         backgroundColor: colors.white,

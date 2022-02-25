@@ -60,7 +60,6 @@ const App = ({ state, actions }) => {
       onClick={(e) => {
         state.theme.childMenuRef = ""; // reset child menu ref value
         state.theme.activeDropDownRef = "menu reset"; // reset menu ref value
-        state.theme.pilFilter = null; // reset pil filter
       }}
     >
       <div style={{ ...styles.container }}>

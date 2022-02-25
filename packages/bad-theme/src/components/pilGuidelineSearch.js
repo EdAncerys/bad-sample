@@ -23,6 +23,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
   const [pilData, setPilData] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [filterData, setFilterData] = useState(null);
+  const useEffectRef = useRef(null);
 
   useEffect(async () => {
     const path = `/pils/`;
@@ -41,24 +42,15 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
     setPilData(Object.values(state.source.pils));
 
     return () => {
-      searchFilterRef.current = false; // clean up function
+      useEffectRef.current = false; // clean up function
     };
   }, []);
 
   if (!block || !pilData) return <Loading />; // awaits pre fetch & data
 
   // HELPERS ---------------------------------------------
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter" && e.target.value) {
-      handleSearch(e);
-    }
-  };
-
   const handleSearch = (e) => {
     const input = e.target.value;
-    if (!input) return null;
-
-    console.log("input", input);
 
     let data = pilData;
     data = data.filter((pil) => {
@@ -77,10 +69,10 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
     });
 
     setInputValue(input);
-    setFilterData(data);
+    if (input) setFilterData(data);
+    if (!data.length) setFilterData(null);
 
-    console.log("filterData", data); // debug
-    // state.theme.pilFilter = data;
+    // console.log("filterData", data); // debug
   };
 
   const onClickHandler = ({ item }) => {
@@ -102,8 +94,6 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
   };
 
   const ServeTitle = () => {
-    if (!title) return null;
-
     return (
       <div
         className="primary-title"
@@ -121,24 +111,19 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
   const ServeIcon = () => {
     const searchIcon = <SearchIcon />;
     const closeIcon = <CloseIcon />;
-    const icon = value ? closeIcon : searchIcon;
+    const icon = inputValue ? closeIcon : searchIcon;
 
-    return (
-      <div
-        onClick={() => {
-          setValue(null);
-          searchFilterRef.current.value = "";
-          if (onChange) setFilterAction({ dispatch, filter: null }); // reset main search filter
-        }}
-      >
-        {icon}
-      </div>
-    );
+    const handleClearSearch = () => {
+      if (!inputValue) return;
+
+      setInputValue("");
+      setFilterData(null);
+    };
+
+    return <div onClick={handleClearSearch}>{icon}</div>;
   };
 
-  const ServeSerachButton = () => {
-    if (inputOnly) return null;
-
+  const ServeSearchButton = () => {
     return (
       <div
         style={{
@@ -147,7 +132,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
           paddingLeft: `2em`,
         }}
       >
-        <button type="submit" className="blue-btn" onClick={handleSearch}>
+        <button type="submit" className="blue-btn">
           Search
         </button>
       </div>
@@ -160,10 +145,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
       style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}
       className="no-selector"
     >
-      <div
-        className="shadow"
-        style={{ position: "relative", backgroundColor: colors.white }}
-      >
+      <div className="shadow" style={{ backgroundColor: colors.white }}>
         <div className="flex no-selector" style={{ padding: `2em` }}>
           <div className="flex-col">
             <ServeTitle />
@@ -178,13 +160,11 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
                 }}
               >
                 <input
-                  ref={searchFilterRef}
                   value={inputValue}
-                  onChange={handleKeyPress}
+                  onChange={handleSearch}
                   type="text"
-                  className="form-control"
+                  className="form-control input"
                   placeholder="Search"
-                  style={styles.input}
                 />
                 <div
                   className="input-group-text toggle-icon-color"
@@ -201,16 +181,18 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
                 >
                   <ServeIcon />
                 </div>
+                <SearchDropDown
+                  filter={filterData}
+                  mapToName="title.rendered"
+                  onClickHandler={onClickHandler}
+                  marginTop={ctaHeight + 10}
+                />
               </div>
-              <ServeSerachButton />
+              <ServeSearchButton />
             </div>
           </div>
         </div>
-        <SearchDropDown
-          filter={filterData}
-          mapToName="title.rendered"
-          onClickHandler={onClickHandler}
-        />
+
         <ServeFooter />
       </div>
     </div>
