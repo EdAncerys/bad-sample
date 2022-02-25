@@ -181,7 +181,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
       ...prevFormData,
       ["sky_profilepicture"]: sky_profilepicture,
     }));
-    console.log("sky_profilepicture", sky_profilepicture); // debug
+    // console.log("sky_profilepicture", sky_profilepicture); // debug
   };
 
   const handleInputChange = (e) => {

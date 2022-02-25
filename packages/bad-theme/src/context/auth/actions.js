@@ -19,10 +19,12 @@ export const loginAction = async ({ state, dispatch, transId }) => {
     const response = await getUserAction({ state, dispatch, jwt, transId });
     if (!response) throw new Error("Error login in.");
 
-    setFetchAction({ dispatch, isFetching: false });
     setLoginModalAction({ dispatch, loginModalAction: false });
+    setGoToAction({ path: `/dashboard`, actions });
   } catch (error) {
     console.log("loginAction error", error);
+  } finally {
+    setFetchAction({ dispatch, isFetching: false });
   }
 };
 

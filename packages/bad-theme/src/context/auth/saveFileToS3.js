@@ -1,7 +1,12 @@
 import { v4 as uuidv4 } from "uuid";
 import { authenticateAppAction, setFetchAction } from "../index";
 
-export const sendFileToS3Action = async ({ state, dispatch, attachments }) => {
+export const sendFileToS3Action = async ({
+  state,
+  dispatch,
+  attachments,
+  isPicture,
+}) => {
   console.log("sendFileToS3Action triggered");
 
   setFetchAction({ dispatch, isFetching: true });
@@ -11,9 +16,11 @@ export const sendFileToS3Action = async ({ state, dispatch, attachments }) => {
   // extract file extension name from attachment
   const fileExtension = attachments.name.split(".").pop();
   const uniqueName = uuidv4();
+  let fileName = uniqueName + "." + fileExtension;
+  if (isPicture) fileName = uniqueName;
 
   const form = new FormData(); // create form object to sent email content & attachments
-  form.append("profile", attachments, `${uniqueName}.${fileExtension}`);
+  form.append("profile", attachments, fileName); // append file to form object
 
   const requestOptions = {
     method: "PUT",
