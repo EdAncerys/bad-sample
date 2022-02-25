@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "frontity";
 import Card from "./card/card";
 import BlockWrapper from "./blockWrapper";
 import { useAppState } from "../context";
 import HeroBanner from "../components/heroBanner";
 const VideoArchive = ({ state, libraries }) => {
+  const [heroBannerBlock, setHeroBannerBlock] = useState();
   const { isActiveUser } = useAppState();
   const data = state.source.get(state.router.link);
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -49,21 +50,32 @@ const VideoArchive = ({ state, libraries }) => {
       />
     );
   };
-  return (
-    <BlockWrapper>
-      <HeroBanner
-        block={{
-          background_image:
-            "http://3.9.193.188/wp-content/uploads/2022/02/Clinical-Services_Workforce-Planning_Main-Image.jpg",
+
+  useEffect(() => {
+    const fetchHeroBanner = async () => {
+      const fetchInfo = await fetch(
+        "http://3.9.193.188/wp-json/wp/v2/pages/7051"
+      );
+
+      if (fetchInfo.ok) {
+        const json = await fetchInfo.json();
+        setHeroBannerBlock({
+          background_image: json.acf.hero_banner_picture,
           title: "BAD Video Library",
-          body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam faucibus bibendum ante. Praesent vel fringilla turpis. Etiam lobortis diam dui, sed mollis tellus gravida at. Etiam efficitur mi ut metus maximus, sed accumsan enim sagittis. In ac auctor tellus, quis porttitor velit. Nunc consectetur enim ac tincidunt venenatis. Maecenas vitae sem lobortis, malesuada risus nec, tincidunt metus. Duis tempor, neque vitae malesuada luctus, lorem orci maximus nisl, sagittis interdum orci lectus vel lacus. Nullam aliquam id quam et maximus.",
+          body: json.acf.hero_banner_content,
           content_height: "regular",
           layout: "50-50",
           padding: "small",
           text_align: "left",
           pop_out_text: "true",
-        }}
-      />
+        });
+      }
+    };
+    fetchHeroBanner();
+  }, []);
+  return (
+    <BlockWrapper>
+      <HeroBanner block={heroBannerBlock} />
       <div style={styles.container}>
         {data.items.map((item) => {
           const post = state.source[item.type][item.id];
