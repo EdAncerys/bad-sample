@@ -122,14 +122,14 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
   // HANDLERS --------------------------------------------
   const handleSelectHospital = ({ item }) => {
-    setSelectedHospital(item);
     setFormData((prevFormData) => ({
       ...prevFormData,
-      py3_hospitalid: item.accountid,
+      py3_hospitalid: item.link,
     }));
 
+    setSelectedHospital(item.title);
     setHospitalData(null); // clear hospital data for dropdown
-    console.log(item);
+    console.log("selected hospital", item); // debug
   };
 
   const handleClearHospital = () => {
@@ -142,7 +142,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
   const handleHospitalLookup = async () => {
     const input = hospitalSearchRef.current.value;
-    if (input.length < 2) return; // API call after 2 characters
+    // if (input.length < 2) return; // API call after 2 characters
 
     let hospitalData = await getHospitalsAction({
       state,
@@ -157,6 +157,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     });
 
     if (hospitalData.length > 0) setHospitalData(hospitalData);
+    if (!hospitalData.length || !input) setHospitalData(null);
 
     // console.log("Hospitals", hospitalData); // debug
   };
@@ -370,7 +371,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                           paddingRight: 15,
                         }}
                       >
-                        {selectedHospital.name}
+                        {selectedHospital}
                         <div
                           className="filter-icon"
                           style={{ top: -7 }}
@@ -397,13 +398,11 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                     placeholder="Main Hospital/Place of work"
                   />
                 )}
-                {/* {hospitalData && (
-                  <SearchDropDown
-                    filter={hospitalData}
-                    mapToName="name"
-                    onClickHandler={handleSelectHospital}
-                  />
-                )} */}
+                <SearchDropDown
+                  filter={hospitalData}
+                  mapToName="name"
+                  onClickHandler={handleSelectHospital}
+                />
               </div>
             </div>
           )}
