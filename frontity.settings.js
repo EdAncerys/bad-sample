@@ -102,6 +102,11 @@ const settings = {
               endpoint: "videos",
               archive: "/videos",
             },
+            {
+              type: "menu_features",
+              endpoint: "menu_features",
+              archive: "/menu_features",
+            },
           ],
           taxonomies: [
             {
