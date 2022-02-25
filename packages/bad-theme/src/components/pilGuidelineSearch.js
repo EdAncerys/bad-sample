@@ -3,29 +3,26 @@ import { connect } from "frontity";
 
 import Loading from "./loading";
 import { colors } from "../config/imports";
-import { v4 as uuidv4 } from "uuid";
 import { setGoToAction } from "../context";
 
-import CloseIcon from "@mui/icons-material/Close";
+import SearchDropDown from "./searchDropDown";
 import SearchIcon from "@mui/icons-material/Search";
-import SearchContainer from "./searchContainer";
+import CloseIcon from "@mui/icons-material/Close";
 
 const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const { disable_vertical_padding } = block;
+  const { disable_vertical_padding, colour } = block;
 
-  const searchFilterRef = useRef(true);
   const ctaHeight = 45;
-  const BANNER_HEIGHT = state.theme.bannerHeight;
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 
-  const [uniqueId, setUniqueId] = useState(null);
-  const [isReady, setIsReady] = useState(null);
-  const filter = state.theme.pilFilter;
+  const [pilData, setPilData] = useState(null);
+  const [inputValue, setInputValue] = useState("");
+  const [filterData, setFilterData] = useState(null);
 
   useEffect(async () => {
     const path = `/pils/`;
@@ -41,35 +38,54 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
       isThereNextPage = nextPage;
     }
 
-    setIsReady(true);
+    setPilData(Object.values(state.source.pils));
 
     return () => {
       searchFilterRef.current = false; // clean up function
     };
   }, []);
 
-  // hook applies after React has performed all DOM mutations
-  useLayoutEffect(() => {
-    const blockId = uuidv4(); // add unique id
-    setUniqueId(blockId);
-  }, []);
-
-  if (!block || !isReady) return <Loading />; // awaits pre fetch & data
+  if (!block || !pilData) return <Loading />; // awaits pre fetch & data
 
   // HELPERS ---------------------------------------------
-  const handleInputSearch = () => {
-    const searchInput = document
-      .querySelector(`#pilSearch${uniqueId}`)
-      .value.toLowerCase();
-    if (!searchInput) return null;
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && e.target.value) {
+      handleSearch(e);
+    }
+  };
 
-    const PIL_LIST = Object.values(state.source.pils); // add events object to data array
-    let results = PIL_LIST.filter((event) =>
-      event.title.rendered.toLowerCase().includes(searchInput)
-    );
+  const handleSearch = (e) => {
+    const input = e.target.value;
+    if (!input) return null;
 
-    if (!results.length) results = [{ title: { rendered: "No Pil's Found" } }];
-    state.theme.pilFilter = results;
+    console.log("input", input);
+
+    let data = pilData;
+    data = data.filter((pil) => {
+      const title = pil.title.rendered.toLowerCase().includes(input);
+      const body = pil.content.rendered.toLowerCase().includes(input);
+
+      return title || body;
+    });
+
+    // refactor data to match dropdown format
+    data = data.map((item) => {
+      return {
+        title: item.title.rendered,
+        link: item.link,
+      };
+    });
+
+    setInputValue(input);
+    setFilterData(data);
+
+    console.log("filterData", data); // debug
+    // state.theme.pilFilter = data;
+  };
+
+  const onClickHandler = ({ item }) => {
+    console.log("item", item);
+    setGoToAction({ path: item.link, actions });
   };
 
   // SERVERS ---------------------------------------------
@@ -77,7 +93,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
     return (
       <div
         style={{
-          backgroundColor: colors.primary,
+          backgroundColor: colour,
           height: 5,
           width: "100%",
         }}
@@ -85,92 +101,115 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
     );
   };
 
-  const ServeIcon = () => {
-    if (!filter) {
-      return <SearchIcon />;
-    } else {
-      return (
-        <div style={styles.action}>
-          <div
-            className="search-clear-icon"
-            onClick={() => {
-              state.theme.filter = null;
-              document.querySelector(`#pilSearch${uniqueId}`).value = "";
-            }}
-          >
-            <CloseIcon
-              style={{
-                fill: colors.darkSilver,
-                padding: 0,
-              }}
-            />
-          </div>
-        </div>
-      );
-    }
+  const ServeTitle = () => {
+    if (!title) return null;
+
+    return (
+      <div
+        className="primary-title"
+        style={{
+          fontSize: 26,
+          alignItems: "center",
+          paddingBottom: `0.5em`,
+        }}
+      >
+        Search for Guidelines
+      </div>
+    );
   };
 
-  const ServeDropDown = () => {
-    if (!filter) return null;
+  const ServeIcon = () => {
+    const searchIcon = <SearchIcon />;
+    const closeIcon = <CloseIcon />;
+    const icon = value ? closeIcon : searchIcon;
+
+    return (
+      <div
+        onClick={() => {
+          setValue(null);
+          searchFilterRef.current.value = "";
+          if (onChange) setFilterAction({ dispatch, filter: null }); // reset main search filter
+        }}
+      >
+        {icon}
+      </div>
+    );
+  };
+
+  const ServeSerachButton = () => {
+    if (inputOnly) return null;
 
     return (
       <div
         style={{
-          position: "absolute",
-          zIndex: 10,
-          left: 0,
-          top: ctaHeight,
-          right: 0,
-          marginTop: 10,
-          border: `1px solid ${colors.silver}`,
-          borderRadius: 10,
-          backgroundColor: colors.white,
+          display: "grid",
+          alignItems: "center",
+          paddingLeft: `2em`,
         }}
       >
-        <div className="flex">
-          <div
-            style={{
-              minHeight: ctaHeight,
-              maxHeight: BANNER_HEIGHT / 2,
-              borderRadius: 10,
-              padding: `0.5em 1em`,
-              overflow: "auto",
-            }}
-          >
-            {filter.map((event, key) => {
-              if (!event.title) return null;
-              const { link, title } = event;
-
-              return (
-                <div
-                  className="event-search-title"
-                  key={key}
-                  style={{ padding: `0.5em 0`, cursor: "pointer" }}
-                  onClick={() => {
-                    setGoToAction({ path: link, actions });
-                    state.theme.filter = null;
-                  }}
-                >
-                  <Html2React html={title.rendered} />
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        <button type="submit" className="blue-btn" onClick={handleSearch}>
+          Search
+        </button>
       </div>
     );
   };
 
   // RETURN ---------------------------------------------------
   return (
-    <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }} className="no-selector">
-      <div className="shadow">
-        <SearchContainer
-          title="Search for Guidelines"
-          width="70%"
-          searchFilterRef={searchFilterRef}
-          handleSearch={() => console.log("search")}
-          padding="0 0 2em 2em"
+    <div
+      style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}
+      className="no-selector"
+    >
+      <div
+        className="shadow"
+        style={{ position: "relative", backgroundColor: colors.white }}
+      >
+        <div className="flex no-selector" style={{ padding: `2em` }}>
+          <div className="flex-col">
+            <ServeTitle />
+            <div className="flex-row">
+              <div
+                className="flex"
+                style={{
+                  flex: 1,
+                  height: ctaHeight,
+                  position: "relative",
+                  margin: "auto 0",
+                }}
+              >
+                <input
+                  ref={searchFilterRef}
+                  value={inputValue}
+                  onChange={handleKeyPress}
+                  type="text"
+                  className="form-control"
+                  placeholder="Search"
+                  style={styles.input}
+                />
+                <div
+                  className="input-group-text toggle-icon-color"
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    height: ctaHeight,
+                    border: "none",
+                    background: "transparent",
+                    alignItems: "center",
+                    color: colors.darkSilver,
+                    cursor: "pointer",
+                  }}
+                >
+                  <ServeIcon />
+                </div>
+              </div>
+              <ServeSerachButton />
+            </div>
+          </div>
+        </div>
+        <SearchDropDown
+          filter={filterData}
+          mapToName="title.rendered"
+          onClickHandler={onClickHandler}
         />
         <ServeFooter />
       </div>
@@ -179,10 +218,6 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
 };
 
 const styles = {
-  input: {
-    borderRadius: 10,
-    paddingRight: 35,
-  },
   action: {
     backgroundColor: colors.white,
     borderRadius: 5,

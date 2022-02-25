@@ -13,6 +13,7 @@ const SearchDropDown = ({
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
+  // filter value are one layer deep object with title & link { title: "", link: "" }
   if (!filter) return null;
 
   const ctaHeight = 45;
@@ -43,9 +44,6 @@ const SearchDropDown = ({
           }}
         >
           {filter.map((item, key) => {
-            if (!mapToName) return null;
-            const name = item[mapToName];
-
             return (
               <div
                 className="title-link-animation"
@@ -53,7 +51,7 @@ const SearchDropDown = ({
                 style={{ padding: `0.5em 0`, cursor: "pointer" }}
                 onClick={() => onClickHandler({ item })}
               >
-                <Html2React html={name} />
+                <Html2React html={item.title} />
               </div>
             );
           })}

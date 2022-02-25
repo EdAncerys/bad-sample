@@ -144,13 +144,19 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     const input = hospitalSearchRef.current.value;
     if (input.length < 2) return; // API call after 2 characters
 
-    const hospitalData = await getHospitalsAction({
+    let hospitalData = await getHospitalsAction({
       state,
       input,
     });
+    // refactor hospital data to match dropdown format
+    hospitalData = hospitalData.map((hospital) => {
+      return {
+        title: hospital.name,
+        link: hospital.accountid,
+      };
+    });
 
     if (hospitalData.length > 0) setHospitalData(hospitalData);
-    if (hospitalData.length === 0) setHospitalData(null);
 
     // console.log("Hospitals", hospitalData); // debug
   };
@@ -391,13 +397,13 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                     placeholder="Main Hospital/Place of work"
                   />
                 )}
-                {hospitalData && (
+                {/* {hospitalData && (
                   <SearchDropDown
                     filter={hospitalData}
                     mapToName="name"
                     onClickHandler={handleSelectHospital}
                   />
-                )}
+                )} */}
               </div>
             </div>
           )}
