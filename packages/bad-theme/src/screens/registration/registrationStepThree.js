@@ -283,15 +283,15 @@ const RegistrationStepThree = ({ state, actions }) => {
       <div>
         <div style={styles.wrapper}>
           <div className="primary-title" style={styles.title}>
-            Category Selection
+            Please confirm your category selction. Or if you are unsure of the
+            category you should be applying for please view the membership
+            category descriptions for further clarification.
           </div>
           <div style={{ paddingTop: `0.75em` }}>
-            How it works dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut
-            tellus elementum sagittis vitae et. Justo donec enim diam vulputate
-            ut pharetra sit. Purus semper eget duis at tellus at. Sed adipiscing
-            diam donec adipiscing tristique risus. A cras semper auctor neque
-            vitae tempus quam. Ac auctor augue
+            Your selected category of membership is below. If you would like to
+            change it you can select from the drop down options. Or if you are
+            unsure of the category you should be applying for please view the
+            membership category descriptions for further clarification.
           </div>
           <div
             className="caps-btn"

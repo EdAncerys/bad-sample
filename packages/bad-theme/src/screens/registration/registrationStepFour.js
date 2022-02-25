@@ -46,7 +46,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
             }
             style={{ paddingTop: `1em` }}
           >
-            Memberships Page
+            BAD membership categories
           </div>
 
           <ProfessionalDetails />

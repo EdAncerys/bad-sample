@@ -112,7 +112,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
         }}
       >
         <div className="blue-btn" onClick={handleComplete}>
-          Enter
+          Submit Application
         </div>
       </div>
     );

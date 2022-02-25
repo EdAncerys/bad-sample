@@ -67,6 +67,15 @@ const PersonalDetails = ({ state, actions, libraries }) => {
       }));
     };
 
+    // add profile picture from CONTEXT
+    if (isActiveUser) {
+      const { bad_profile_photo_url } = isActiveUser;
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        sky_profilepicture: bad_profile_photo_url,
+      }));
+    }
+
     if (!applicationData) return null;
     applicationData.map((data) => {
       if (data.name === "py3_title") handleSetData({ data, name: "py3_title" });

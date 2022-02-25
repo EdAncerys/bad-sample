@@ -86,7 +86,7 @@ const HeaderActions = ({ state, actions }) => {
           }
           className="blue-btn"
         >
-          Dashboard
+          My Account
         </button>
       </div>
     );

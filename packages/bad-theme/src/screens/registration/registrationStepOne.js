@@ -84,8 +84,8 @@ const RegistrationStepOne = ({ state, actions }) => {
             The Process
           </div>
           <div style={{ paddingTop: `0.75em` }}>
-            Applying for membership of the BAD is a four-step process. All the
-            details of what you will require for your application are below.
+            Please follow the below steps to complete your application. All of
+            the information required to submit your application is listed below.
           </div>
           <div style={{ paddingTop: `0.75em` }}>
             Once your membership application has been completed, it will be
@@ -107,7 +107,7 @@ const RegistrationStepOne = ({ state, actions }) => {
             }
             style={{ paddingTop: `1em` }}
           >
-            Memberships Page
+            BAD membership categories
           </div>
           <div
             className="primary-title"
@@ -120,29 +120,19 @@ const RegistrationStepOne = ({ state, actions }) => {
           >
             You Will Need:
           </div>
-          <div style={styles.subTitle}>Personal Details:</div>
           <div>
             <ul>
               <li>CV</li>
-              <li>
-                Main Hospital details - please note that you cannot change this
-                after application without a request to the BAD.
-              </li>
-              <li>GMC</li>
-              <li>
-                Current Post - please note that you cannot change this after
-                application without a request to the BAD.
-              </li>
+              <li>Main Hospital details</li>
+              <li>GMC/IMC number (except students)</li>
+              <li>Current Post</li>
               <li>Medical School (for student category only)</li>
-              <li>Do you hold MRCP? (for student category only)</li>
               <li>
-                Supporting Member Details (2 x members for all categories except
-                Medical Students who require only 1)
+                Proposer names (2 x members for all categories except Medical
+                Students who require only 1)
               </li>
             </ul>
           </div>
-
-          <div style={styles.subTitle}>Payment Details</div>
         </div>
         <ServeActions />
       </div>
