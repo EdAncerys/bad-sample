@@ -23,15 +23,11 @@ const VideoGuide = ({ state, actions, libraries, videoGuide }) => {
   // SERVERS ---------------------------------------------
   const ServeAmount = () => {
     if (!price) return null;
+    const size = 40;
 
     return (
       <div style={{ paddingLeft: `0.5em` }}>
-        <div
-          style={{
-            width: 20,
-            height: 20,
-          }}
-        >
+        <div style={{ width: size, height: size }}>
           <Image
             src={Currency}
             style={{
@@ -53,7 +49,7 @@ const VideoGuide = ({ state, actions, libraries, videoGuide }) => {
     return (
       <div className="flex">
         <div
-          className="primary-title"
+          className="flex primary-title"
           style={{ fontSize: 20, lineHeight: "revert" }}
         >
           <Html2React html={title} />
@@ -71,9 +67,7 @@ const VideoGuide = ({ state, actions, libraries, videoGuide }) => {
 
     return (
       <div>
-        <div>
-          <Html2React html={formattedDate} />
-        </div>
+        <Html2React html={formattedDate} />
       </div>
     );
   };
@@ -109,15 +103,7 @@ const VideoGuide = ({ state, actions, libraries, videoGuide }) => {
   return (
     <div className="flex-col">
       <ServeVideo />
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: `1fr auto`,
-          justifyContent: "space-between",
-          gap: 20,
-          padding: `1em 1.5em 0`,
-        }}
-      >
+      <div className="flex-col" style={{ padding: `1em 1.5em 0` }}>
         <ServeTitle />
         <ServeDate />
       </div>

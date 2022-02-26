@@ -80,7 +80,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
   if (!filterList || !categoryList) return <Loading />;
 
-  if (filterList.length === 0) return null; // hide block if no posts
+  if (filterList.length === 0 && !has_search) return null; // hide block if no posts
 
   // HELPERS ----------------------------------------------------------------
   const handleClearFilter = ({
@@ -390,7 +390,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   };
 
   const ServeMoreAction = () => {
-    if (isLayoutOne) return null;
+    if (isLayoutOne || filterList.length === 0) return null;
 
     const value = loadMoreRef.current ? "Less" : " Load More";
 
