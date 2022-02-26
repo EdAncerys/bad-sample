@@ -211,6 +211,10 @@ const Navigation = ({ state, actions, libraries }) => {
         if (featuredBannerTwo) isLeft = "66.5%";
 
         const isFile = acf.file;
+        if (isFile) {
+          console.log(acf);
+          console.log(isFile);
+        }
 
         return (
           <div
@@ -231,6 +235,7 @@ const Navigation = ({ state, actions, libraries }) => {
               bodyLimit={150}
               link_label="Read More"
               link={acf.link}
+              downloadFile={isFile ? { file: isFile } : null} // optional param
               cardHeight="90%"
               colour={colors.white}
               shadow // optional param
