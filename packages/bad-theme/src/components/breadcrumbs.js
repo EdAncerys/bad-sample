@@ -37,6 +37,7 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
       titleName = "Dermatology Groups & Charities";
     if (titleName === "covid_19") titleName = "COVID-19";
     if (titleName === "pils") titleName = "Patient Information Leaflets";
+    if (titleName === "the-bsds") titleName = "The BSDS";
 
     let chevron = (
       <ChevronRightIcon style={{ fontSize: 16, color: colors.darkSilver }} />

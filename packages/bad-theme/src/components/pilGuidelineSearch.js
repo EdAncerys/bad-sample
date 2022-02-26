@@ -50,12 +50,14 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
 
   // HELPERS ---------------------------------------------
   const handleSearch = (e) => {
-    const input = e.target.value;
+    const input = e.target.value.toLowerCase();
 
     let data = pilData;
     data = data.filter((pil) => {
       const title = pil.title.rendered.toLowerCase().includes(input);
       const body = pil.content.rendered.toLowerCase().includes(input);
+
+      // console.log(title, body); // debug
 
       return title || body;
     });

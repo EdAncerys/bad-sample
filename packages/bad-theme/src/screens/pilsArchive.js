@@ -67,9 +67,13 @@ const PilsArchive = ({ state, actions, libraries }) => {
   const handleSearch = () => {
     const input = searchFilterRef.current.value.toLowerCase();
     if (!!input) {
-      const filter = pilList.filter((pil) =>
-        pil.title.rendered.toLowerCase().includes(input)
+      const filter = pilList.filter(
+        (pil) =>
+          pil.title.rendered.toLowerCase().includes(input) ||
+          pil.content.rendered.toLowerCase().includes(input)
       );
+
+      console.log(filter); // debug
 
       setSearchFilter(input);
       setPilList(filter);
@@ -113,15 +117,6 @@ const PilsArchive = ({ state, actions, libraries }) => {
         </div>
         <div style={{ padding: `1em 0` }}>
           {pilList.map((pil, key) => {
-            if (searchFilter) {
-              if (
-                !pil.title.rendered
-                  .toLowerCase()
-                  .includes(searchFilter.toLowerCase())
-              )
-                return null;
-            }
-
             return <ServePil key={key} pil={pil} />;
           })}
         </div>
