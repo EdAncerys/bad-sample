@@ -211,10 +211,6 @@ const Navigation = ({ state, actions, libraries }) => {
         if (featuredBannerTwo) isLeft = "66.5%";
 
         const isFile = acf.file;
-        if (isFile) {
-          console.log(acf);
-          console.log(isFile);
-        }
 
         return (
           <div

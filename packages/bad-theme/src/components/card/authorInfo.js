@@ -148,22 +148,32 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
 
     return (
       <div
-        className="primary-title"
         style={{
-          fontSize: 20,
-          fontWeight: "bold",
           padding: `0.5em 0`,
           borderBottom: `1px solid ${colors.lightSilver}`,
         }}
       >
-        Topics
+        <div
+          className="primary-title"
+          style={{ fontSize: 20, fontWeight: "bold" }}
+        >
+          Topics
+        </div>
         <div className="flex" style={{ fontSize: 16, paddingTop: `1em` }}>
           {tags.map((tag, key) => {
             const filter = tagData.filter((item) => item.id === Number(tag));
             const categoryName = filter[0].name;
 
             return (
-              <div key={key} style={{ paddingRight: 10 }}>
+              <div
+                key={key}
+                style={{
+                  padding: `0.5em`,
+                  marginRight: `1em`,
+                  backgroundColor: colors.lightSilver,
+                  textTransform: "capitalize",
+                }}
+              >
                 {categoryName}
               </div>
             );

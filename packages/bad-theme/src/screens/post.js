@@ -1,10 +1,12 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { connect, styled } from "frontity";
 
 import { colors } from "../config/imports";
 import Card from "../components/card/card";
-// BLOCK WIDTH WRAPPER -------------------------------------------------------
+// BLOCK WIDTH WRAPPER -----------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
+// CONTEXT -----------------------------------------------------------------
+import { setGoToAction } from "../context";
 
 const Post = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -16,7 +18,17 @@ const Post = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
 
   const { categories, title, content, excerpt, link } = post;
-  const { press_release_authors } = post.acf;
+
+  const [postList, setPostList] = useState(null);
+  const [catList, setCatList] = useState(null);
+
+  useEffect(() => {
+    let postList = Object.values(state.source.post);
+    let categoryList = Object.values(state.source.category);
+
+    setPostList(postList);
+    setCatList(categoryList);
+  }, []);
 
   // SERVERS ---------------------------------------------
   const ServeContent = () => {
@@ -24,7 +36,15 @@ const Post = ({ state, actions, libraries }) => {
       if (!title) return null;
 
       return (
-        <div className="flex primary-title" style={{ fontSize: 36 }}>
+        <div
+          className="flex primary-title"
+          style={{
+            fontSize: 36,
+            borderBottom: `1px solid ${colors.lightSilver}`,
+            paddingBottom: `1em`,
+            marginBottom: `1em`,
+          }}
+        >
           <Html2React html={title.rendered} />
         </div>
       );
@@ -49,16 +69,74 @@ const Post = ({ state, actions, libraries }) => {
   };
 
   const ServeSideBar = () => {
+    const ServeRelatedContent = () => {
+      if (!catList || !postList) return null;
+
+      const currentPostCategory = post.categories[0];
+      // get category name from category list
+      let catName = catList.filter(
+        (category) => category.id === Number(currentPostCategory)
+      );
+      if (catName[0]) catName = catName[0].name;
+      // get list of posts where category is the same as the current post
+      let relatedList = postList.filter((post) => {
+        return post.categories.includes(currentPostCategory);
+      });
+      // get latest posts from the list
+      relatedList = postList.slice(0, 3);
+      if (!postList.length) return null; // dont render if no posts
+
+      console.log(relatedList); // debug
+
+      return (
+        <div
+          className="shadow"
+          style={{ marginTop: marginVertical, padding: "1em" }}
+        >
+          <div
+            className="primary-title"
+            style={{ fontSize: 20, padding: "1em 0" }}
+          >
+            Related Content
+          </div>
+          {relatedList.map((post, key) => {
+            return (
+              <div
+                key={key}
+                style={{
+                  marginBottom: `1em`,
+                  borderBottom: `1px solid ${colors.lightSilver}`,
+                }}
+              >
+                <div
+                  style={{
+                    padding: `0.5em`,
+                    backgroundColor: colors.lightSilver,
+                    textTransform: "capitalize",
+                    width: "fit-content",
+                  }}
+                >
+                  {catName}
+                </div>
+
+                <div
+                  className="primary-title"
+                  style={{ fontSize: 16, padding: "1em 0", cursor: "pointer" }}
+                  onClick={() => setGoToAction({ path: post.link, actions })}
+                >
+                  {post.title.rendered}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      );
+    };
+
     return (
-      <div>
-        <Card
-          authorInfo={post}
-          colour={
-            press_release_authors ? press_release_authors[0].colour : null
-          }
-          shadow
-          cardHeight="auto"
-        />
+      <div className="flex-col">
+        <Card authorInfo={post} colour={colors.red} shadow cardHeight="auto" />
+        <ServeRelatedContent />
       </div>
     );
   };
