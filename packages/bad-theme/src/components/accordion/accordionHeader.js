@@ -97,7 +97,7 @@ const AccordionHeader = ({
         id={`preview-id-${uniqueId}`}
         style={{
           paddingTop: `1em`,
-          margin: `0 1.25em`,
+          margin: `1em`,
           color: colors.darkSilver,
           borderTop: `1px solid ${colors.darkSilver}`,
           transitionDelay: `1s`,
