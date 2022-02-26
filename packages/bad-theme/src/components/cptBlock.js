@@ -353,11 +353,11 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               body={isCovid_19 ? null : content.rendered}
               link_label="Read More"
               link={file ? null : cardLink}
-              link={cardLink}
               downloadFile={file ? { file, label: "Download" } : null}
               colour={colour}
               cardMinHeight={250}
               bodyLimit={4}
+              titleLimit={4}
               shadow
             />
           );
