@@ -10,15 +10,16 @@ export const handleSetCookie = ({ name, value, exDays, deleteCookie }) => {
   if (value) cookieValue = JSON.stringify(value);
   if (exDays) cookieExDays = exDays;
 
-  if (deleteCookie) {
-    document.cookie = cookieName + `=; expires=${new Date(0)};`;
-    console.log(`🍪 ${cookieName} successfully deleted`); // debug
-    return;
-  }
+  let cookie = `${cookieName}=${cookieValue};path=/;max-age=${expires};`; // cookie params
+  if (deleteCookie) cookie = `${cookieName}= ;path=/;max-age=${new Date(0)};`; // cookie params
 
-  const cookie = `${cookieName}=${cookieValue};path=/;max-age=${expires};`; // one cookie at a time
   document.cookie = cookie;
-  console.log("🍪  set to: ", cookie); // debug
+
+  if (deleteCookie) {
+    console.log(`🍪 ${cookieName} successfully deleted`); // debug
+  } else {
+    console.log("🍪  set to: ", cookie); // debug
+  }
 };
 
 export const handleGetCookie = ({ name }) => {
