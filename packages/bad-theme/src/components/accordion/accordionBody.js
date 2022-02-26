@@ -651,8 +651,8 @@ const AccordionBody = ({
         <ServeLTTeam />
         <ServeGSSubTitle />
         <ServeGSLink />
-        <ServeGoToLinkRepeater />
         <ServeBodyActions />
+        <ServeGoToLinkRepeater />
         <ApplyForMembership />
       </div>
     </div>
