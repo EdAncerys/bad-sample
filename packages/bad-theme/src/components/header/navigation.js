@@ -227,8 +227,7 @@ const Navigation = ({ state, actions, libraries }) => {
               featuredBanner={featuredBannerOne || featuredBannerTwo}
               title={title ? title.rendered : null}
               body={content ? content.rendered : null}
-              limitBodyLength
-              bodyLimit={150}
+              bodyLimit={4}
               link_label="Read More"
               link={acf.link}
               downloadFile={isFile ? { file: isFile } : null} // optional param

@@ -23,7 +23,6 @@ const CardBody = ({
   TEXT_ALIGN,
   isFrom4Col,
   electionInfo,
-  limitBodyLength,
   limitTitleLength,
   opacity,
 }) => {
@@ -72,21 +71,16 @@ const CardBody = ({
   const ServeBody = () => {
     if (!body) return null;
 
-    let bodyPreview = body;
-    const maxChar = bodyLimit || 76;
-    if (limitBodyLength || isFrom4Col)
-      bodyPreview = `${body.slice(0, maxChar)}...`;
-    if (body.length <= maxChar) bodyPreview = body; // remove limit if string is < maxChar
-
     return (
       <div
+        className="body-limit"
         style={{
           fontSize: 16,
-          overflow: "auto",
           paddingTop: title ? `1em` : 0,
+          WebkitLineClamp: bodyLimit || 2,
         }}
       >
-        <Html2React html={bodyPreview} />
+        <Html2React html={body} />
       </div>
     );
   };

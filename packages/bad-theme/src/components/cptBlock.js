@@ -356,7 +356,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               link={cardLink}
               downloadFile={file ? { file, label: "Download" } : null}
               colour={colour}
-              limitBodyLength
               cardMinHeight={250}
               shadow
             />

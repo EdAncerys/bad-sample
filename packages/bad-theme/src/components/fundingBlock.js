@@ -270,7 +270,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               fundingHeader={block}
               publicationDate={date}
               body={block.acf.overview}
-              bodyLimit={600}
+              bodyLimit={4}
               link_label="Read More"
               link={block.acf.external_application_link}
               colour={colour}
