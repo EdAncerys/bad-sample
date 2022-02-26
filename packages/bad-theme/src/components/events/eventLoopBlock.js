@@ -166,6 +166,7 @@ const EventLoopBlock = ({
                 colour={colour}
                 eventHeader={block.acf}
                 isFrom4Col
+                titleLimit={1}
                 shadow
               />
             );

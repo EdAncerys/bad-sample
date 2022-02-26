@@ -59,7 +59,7 @@ const Card = ({
   layout,
   seatNumber,
   eventHeader,
-  limitTitleLength,
+  titleLimit,
   shadow,
   backgroundColor,
   opacity,
@@ -231,7 +231,7 @@ const Card = ({
           heroBanner={heroBanner}
           TEXT_ALIGN={TEXT_ALIGN}
           isFrom4Col={isFrom4Col}
-          limitTitleLength={limitTitleLength}
+          titleLimit={titleLimit}
           electionInfo={electionInfo}
           opacity={opacity}
         />

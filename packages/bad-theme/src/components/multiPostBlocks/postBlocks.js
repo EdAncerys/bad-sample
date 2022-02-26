@@ -91,7 +91,7 @@ const MultiPostBlock = ({ state, actions, block, filter }) => {
                 form_label={form_label} // optional param
                 form_link={form_link.url} // optional param
                 downloadFile={doc_upload ? { file: doc_upload } : null} // optional param
-                // isFrom4Col={isFrom4Col ? true : null}
+                titleLimit={1}
                 cardMinHeight={isFrom4Col ? 250 : null}
                 shadow // optional param
               />

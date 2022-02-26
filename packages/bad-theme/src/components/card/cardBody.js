@@ -23,7 +23,7 @@ const CardBody = ({
   TEXT_ALIGN,
   isFrom4Col,
   electionInfo,
-  limitTitleLength,
+  titleLimit,
   opacity,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -38,32 +38,22 @@ const CardBody = ({
   const ServeTitle = () => {
     if (!title) return null;
 
-    let TITLE_HEIGHT = "auto";
-    if (isFrom4Col) TITLE_HEIGHT = 60;
-
-    let titlePreview = title;
-    const maxChar = 45;
-    if (title.length > maxChar && isFrom4Col)
-      titlePreview = `${title.slice(0, maxChar)}...`;
-    if (!body) titlePreview = title;
-    if (!body && isFrom4Col) titlePreview = `${title.slice(0, 80)}`;
-    if (limitTitleLength) titlePreview = `${title.slice(0, maxChar)}...`;
-
     return (
       <div
-        className="flex primary-title"
+        className="flex primary-title body-limit"
         style={{
           fontSize: heroBanner ? `2.25rem` : 20,
-          minHeight: TITLE_HEIGHT,
+          minHeight: "auto",
           maxHeight: isFrom4Col ? "7em" : "auto", // restricting title height
           overflow: "hidden",
           fontWeight: "bold",
           color: heroBanner ? colors.trueBlack : colors.softBlack,
           alignItems: "flex-start",
           opacity: opacity || 1,
+          WebkitLineClamp: titleLimit || "unset",
         }}
       >
-        <Html2React html={titlePreview} />
+        <Html2React html={title} />
       </div>
     );
   };
@@ -77,7 +67,7 @@ const CardBody = ({
         style={{
           fontSize: 16,
           paddingTop: title ? `1em` : 0,
-          WebkitLineClamp: bodyLimit || 2,
+          WebkitLineClamp: bodyLimit || "unset",
         }}
       >
         <Html2React html={body} />

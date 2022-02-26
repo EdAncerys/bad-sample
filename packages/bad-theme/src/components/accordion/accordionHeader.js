@@ -101,6 +101,7 @@ const AccordionHeader = ({
           color: colors.darkSilver,
           borderTop: `1px solid ${colors.darkSilver}`,
           transitionDelay: `1s`,
+          WebkitLineClamp: 2,
         }}
       >
         <Html2React html={body} />
