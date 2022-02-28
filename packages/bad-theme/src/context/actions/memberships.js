@@ -83,18 +83,24 @@ export const handleApplyForMembershipAction = async ({
     });
     if (!membershipData) throw new Error("Failed to get membership data");
 
+    console.log(
+      "dynamicsApps",
+      dynamicsApps.filter((app) => app.bad_approvalstatus === "Pending")
+        .length > 0
+    ); // debug
     if (dynamicsApps) {
       // check if user have application pending under reviewed status
-      const isPending = dynamicsApps.filter(
-        (app) => app.bad_approvalstatus === "Pending0"
-      );
-
+      const isPending =
+        dynamicsApps.filter((app) => app.bad_approvalstatus === "Pending")
+          .length > 0;
       // if user have application pending under reviewed status redirect to application list
       if (isPending.length > 0) {
         setGoToAction({ path: "/dashboard", actions });
         return;
       }
     }
+
+    return;
 
     // ⏬ create user application record in Store
     await setUserStoreAction({

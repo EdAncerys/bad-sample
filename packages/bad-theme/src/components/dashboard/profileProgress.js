@@ -22,10 +22,16 @@ const ProfileProgress = ({ state, actions, libraries }) => {
 
   const [applicationStep, setStep] = useState("Start new application");
   // application under review
-  const isUnderReview =
-    dynamicsApps && dynamicsApps[0].bad_approvalstatus === "Pending";
-  const isApproved =
-    dynamicsApps && dynamicsApps[0].bad_approvalstatus === "Approved";
+  let isUnderReview = false;
+  if (dynamicsApps)
+    isUnderReview =
+      dynamicsApps.filter((app) => app.bad_approvalstatus === "Pending")
+        .length > 0;
+  let isApproved = false;
+  if (dynamicsApps)
+    isApproved =
+      dynamicsApps.filter((app) => app.bad_approvalstatus === "Approved")
+        .length > 0;
 
   useEffect(() => {
     if (!applicationData) return null;
