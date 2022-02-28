@@ -4,6 +4,7 @@ import { Form } from "react-bootstrap";
 
 import { ETHNIC_GROUPES } from "../../../config/data";
 import { colors } from "../../../config/imports";
+import ActionPlaceholder from "../../../components/actionPlaceholder";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -20,16 +21,14 @@ const CompleteApplication = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser } = useAppState();
 
+  const [ethnicityList, setEthnicityList] = useState([]);
+  const [isFetching, setFetching] = useState(false);
   const [formData, setFormData] = useState({
     bad_ethnicity: "",
-    py3_constitutionagreement: "",
-    bad_readpolicydocument: "",
   });
 
   const [inputValidator, setInputValidator] = useState({
     bad_ethnicity: true,
-    py3_constitutionagreement: true,
-    bad_readpolicydocument: true,
   });
 
   // ⏬ populate form data values from applicationData
@@ -43,12 +42,10 @@ const CompleteApplication = ({ state, actions, libraries }) => {
 
     if (!applicationData) return null;
     applicationData.map((data) => {
-      if (data.name === "bad_ethnicity")
+      if (data.name === "bad_ethnicity") {
         handleSetData({ data, name: "bad_ethnicity" });
-      if (data.name === "py3_constitutionagreement")
-        handleSetData({ data, name: "py3_constitutionagreement" });
-      if (data.name === "bad_readpolicydocument")
-        handleSetData({ data, name: "bad_readpolicydocument" });
+        setEthnicityList(data.info.Choices);
+      }
     });
 
     // ⏬ validate inputs
@@ -63,6 +60,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
   // HANDLERS --------------------------------------------
   const handleComplete = async () => {
     try {
+      setFetching(true);
       await setUserStoreAction({
         state,
         dispatch,
@@ -74,6 +72,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
 
       await setCompleteUserApplicationAction({
         state,
+        dispatch,
         isActiveUser,
       });
 
@@ -81,6 +80,8 @@ const CompleteApplication = ({ state, actions, libraries }) => {
       if (isActiveUser) setGoToAction({ path: slug, actions });
     } catch (err) {
       console.log(err);
+    } finally {
+      setFetching(false);
     }
   };
 
@@ -91,9 +92,6 @@ const CompleteApplication = ({ state, actions, libraries }) => {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-
-  const isFormFooter =
-    inputValidator.bad_ethnicity || inputValidator.bad_readpolicydocument;
 
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
@@ -107,16 +105,17 @@ const CompleteApplication = ({ state, actions, libraries }) => {
         }}
       >
         <div className="blue-btn" onClick={handleComplete}>
-          Enter
+          Submit Application
         </div>
       </div>
     );
   };
 
   return (
-    <div>
+    <div style={{ position: "relative" }}>
+      <ActionPlaceholder isFetching={isFetching} background="transparent" />
       <form>
-        <div style={{ padding: `2em 1em 0` }}>
+        <div style={{ padding: `2em 1em` }}>
           {inputValidator.bad_ethnicity && (
             <div>
               <label style={styles.subTitle}>What is your Ethnic Group?</label>
@@ -129,7 +128,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
                 <option value="" hidden>
                   Ethnic Group
                 </option>
-                {ETHNIC_GROUPES.map((item, key) => {
+                {ethnicityList.map((item, key) => {
                   return (
                     <option key={key} value={item.value}>
                       {item.Label}
@@ -137,84 +136,6 @@ const CompleteApplication = ({ state, actions, libraries }) => {
                   );
                 })}
               </Form.Select>
-            </div>
-          )}
-
-          {isFormFooter && (
-            <div
-              className="flex-col form-check"
-              style={{
-                margin: `1em 0`,
-                marginTop: `2em`,
-                borderTop: `1px solid ${colors.silverFillTwo}`,
-              }}
-            >
-              {inputValidator.py3_constitutionagreement && (
-                <div
-                  className="flex"
-                  style={{ alignItems: "center", margin: `1em 0` }}
-                >
-                  <div>
-                    <input
-                      name="py3_constitutionagreement"
-                      checked={formData.py3_constitutionagreement}
-                      onChange={handleInputChange}
-                      type="checkbox"
-                      className="form-check-input check-box"
-                    />
-                  </div>
-                  <div>
-                    <label className="form-check-label flex-row">
-                      <div>I agree to the </div>
-                      <div
-                        className="caps-btn required"
-                        style={{ paddingTop: 6, marginLeft: 10 }}
-                      >
-                        BAD Constitution
-                      </div>
-                    </label>
-                  </div>
-                </div>
-              )}
-
-              {inputValidator.bad_readpolicydocument && (
-                <div
-                  className="flex"
-                  style={{ alignItems: "center", margin: `1em 0` }}
-                >
-                  <div>
-                    <input
-                      name="bad_readpolicydocument"
-                      checked={formData.bad_readpolicydocument}
-                      onChange={handleInputChange}
-                      type="checkbox"
-                      className="form-check-input check-box"
-                    />
-                  </div>
-                  <div>
-                    <label className="form-check-label flex-row">
-                      <div>
-                        <div
-                          className="caps-btn required"
-                          style={{
-                            paddingTop: 6,
-                            marginRight: 10,
-                            whiteSpace: "nowrap",
-                            float: "left",
-                          }}
-                        >
-                          I agree - Privacy Notice
-                        </div>
-                        <span>
-                          I agree - Privacy Notice* - justo donec enim diam
-                          vulputate ut pharetra sit. Purus semper eget duis at
-                          tellus at. Sed adipiscing diam.
-                        </span>
-                      </div>
-                    </label>
-                  </div>
-                </div>
-              )}
             </div>
           )}
         </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import { connect } from "frontity";
 
 import ActionPlaceholder from "../actionPlaceholder";
@@ -20,108 +20,73 @@ const UpdateProfile = ({ state, actions, libraries }) => {
   const { isActiveUser } = useAppState();
 
   const [isFetching, setIsFetching] = useState(null);
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    bad_profile_photo_url: "",
+    py3_email: "",
+    password: "",
+  });
+  const documentRef = useRef(null);
 
   const marginVertical = state.theme.marginVertical;
 
   // HELPERS ----------------------------------------------------------------
-  const handleProfileUpdate = async () => {
-    setIsFetching(true);
+  const handleInputChange = (e) => {
+    const { name, value, type, checked, files } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+    // console.log(formData); // debug
+  };
 
-    const firstname = document.querySelector("#fistName").value.trim();
-    const lastname = document.querySelector("#lastName").value.trim();
-    const profilePicture = document.querySelector("#profilePicture").files[0];
-    const password = document.querySelector("#password").value;
-    const email = document.querySelector("#email").value.toLowerCase().trim();
+  const handleDocUploadChange = async (e) => {
+    let bad_profile_photo_url = e.target.files[0];
 
-    let bad_profile_photo_url = "";
-    if (!!profilePicture) {
-      // API call to S3 to get img url
+    if (bad_profile_photo_url)
       bad_profile_photo_url = await sendFileToS3Action({
         state,
         dispatch,
-        attachments: profilePicture,
+        attachments: bad_profile_photo_url,
+        isPicture: true, // 🐞 dont append file type for images bug in S3
       });
+    console.log("bad_profile_photo_url", bad_profile_photo_url); // debug
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      ["bad_profile_photo_url"]: bad_profile_photo_url, // update formData
+    }));
+  };
+
+  const handleProfileUpdate = async () => {
+    setIsFetching(true);
+    console.log("formData", formData); // debug
+
+    const firstname = formData.firstname;
+    const lastname = formData.lastname;
+    const bad_profile_photo_url = formData.bad_profile_photo_url;
+
+    try {
+      const data = Object.assign(
+        {}, // add empty object
+        !!firstname && { firstname },
+        !!lastname && { lastname },
+        !!bad_profile_photo_url && { bad_profile_photo_url }
+      );
+
+      console.log("data", data); // debug
+
+      await updateProfileAction({ state, dispatch, data, isActiveUser });
+      console.log("⬇️ profile details successfully updated ⬇️ "); // debug
+    } catch (error) {
+      console.log("error", error);
+    } finally {
+      setIsFetching(false);
     }
-
-    const data = Object.assign(
-      {}, // add empty object
-      !!firstname && { firstname },
-      !!lastname && { lastname },
-      !!bad_profile_photo_url && { bad_profile_photo_url }
-    );
-
-    await updateProfileAction({ state, dispatch, data, isActiveUser });
-    setIsFetching(false);
   };
 
   // SERVERS ---------------------------------------------
-  const ServeForm = () => {
-    return (
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: !lg ? `1fr 1fr` : `1fr`,
-          gap: 20,
-          padding: `1em 0 0`,
-        }}
-      >
-        <div className="form-group" style={{ display: "grid", gap: 10 }}>
-          <label>Your First Name</label>
-          <input
-            id="fistName"
-            type="text"
-            className="form-control"
-            placeholder="Your First Name"
-            defaultValue={isActiveUser.firstname}
-            style={styles.input}
-          />
-          <label>Your Last Name</label>
-          <input
-            id="lastName"
-            type="text"
-            className="form-control"
-            placeholder="Your Last Name"
-            defaultValue={isActiveUser.lastname}
-            style={styles.input}
-          />
-        </div>
-
-        <div className="form-group" style={{ display: "grid", gap: 10 }}>
-          <label>Your Contact E-mail Address</label>
-          <input
-            id="email"
-            type="email"
-            className="form-control"
-            placeholder="Your Contact E-mail Address"
-            defaultValue={isActiveUser.emailaddress1}
-            style={styles.input}
-            disabled
-          />
-          <label>Password</label>
-          <input
-            id="password"
-            type="password"
-            className="form-control"
-            placeholder="Password"
-            style={styles.input}
-            disabled
-          />
-        </div>
-
-        <div className="form-group" style={{ display: "grid", gap: 10 }}>
-          <label>Your Profile Picture</label>
-          <input
-            id="profilePicture"
-            type="file"
-            className="form-control"
-            style={styles.input}
-            accept="image/png, image/jpeg"
-          />
-        </div>
-      </div>
-    );
-  };
-
   const ServeActions = () => {
     return (
       <div
@@ -145,7 +110,66 @@ const UpdateProfile = ({ state, actions, libraries }) => {
         <div className="primary-title" style={{ fontSize: 20 }}>
           Personal Details:
         </div>
-        <ServeForm />
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: `1fr 1fr`,
+            gap: 20,
+            padding: `1em 0 0`,
+          }}
+        >
+          <div className="form-group" style={{ display: "grid", gap: 10 }}>
+            <label>Your First Name</label>
+            <input
+              name="firstname"
+              value={formData.firstname}
+              onChange={handleInputChange}
+              className="form-control input"
+              placeholder="Your First Name"
+            />
+            <label>Your Last Name</label>
+            <input
+              name="lastname"
+              value={formData.lastname}
+              onChange={handleInputChange}
+              className="form-control input"
+              placeholder="Your Last Name"
+            />
+          </div>
+
+          <div className="form-group" style={{ display: "grid", gap: 10 }}>
+            <label>Your Contact E-mail Address</label>
+            <input
+              name="py3_email"
+              value={formData.py3_email}
+              onChange={handleInputChange}
+              className="form-control input"
+              placeholder="Your Contact E-mail Address"
+              disabled
+            />
+            <label>Password</label>
+            <input
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              className="form-control input"
+              placeholder="Password"
+              disabled
+            />
+          </div>
+
+          <div className="form-group" style={{ display: "grid", gap: 10 }}>
+            <label>Upload A Profile Photo</label>
+            <input
+              ref={documentRef}
+              onChange={handleDocUploadChange}
+              type="file"
+              className="form-control input"
+              placeholder="Profile Photo"
+              accept="image/png, image/jpeg"
+            />
+          </div>
+        </div>
         <ServeActions />
       </div>
     </div>

@@ -42,9 +42,9 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   const handleApply = () => {
     let path = `/membership/step-1-the-process/`;
     if (applicationData && applicationData[0].stepOne)
-      path = `/membership/step-2-personal-information/`;
+      path = `/membership/step-3-personal-information/`;
     if (applicationData && applicationData[0].stepTwo)
-      path = `/membership/step-3-category-selection/`;
+      path = `/membership/step-2-category-selection/`;
     if (applicationData && applicationData[0].stepThree)
       path = `/membership/step-4-professional-details/`;
     if (applicationData && applicationData[0].stepFour)
@@ -131,7 +131,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
           <div>Step 2 - Personal Information</div>
           <div>Step 3 - Category Selection</div>
           <div>Step 4 - Professional Details</div>
-          <div>Review</div>
+          <div>Application Submitted</div>
         </div>
       </div>
     );

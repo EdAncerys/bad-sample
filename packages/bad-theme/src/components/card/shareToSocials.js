@@ -27,6 +27,7 @@ const ShareToSocials = ({
   description,
   location,
   date,
+  isCalendarLink,
 }) => {
   const title = shareTitle || "BAD";
   const url = shareUrl || state.auth.APP_URL;
@@ -103,11 +104,13 @@ const ShareToSocials = ({
             name={`${title}`}
           />
         </div>
-        <div style={styles.socials}>
-          <Link link={`https://www.linkedin.com/`} target="_blank">
-            <Image src={WebPage} className="d-block h-100" alt="Instagram" />
-          </Link>
-        </div>
+        {isCalendarLink && (
+          <div style={styles.socials}>
+            <Link link={`https://www.linkedin.com/`} target="_blank">
+              <Image src={WebPage} className="d-block h-100" alt="Instagram" />
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );

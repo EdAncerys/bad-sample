@@ -375,6 +375,6 @@ https://codebeautify.org/
 .body-limit {
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  /* -webkit-line-clamp: 2; */ /* number of lines to show */
   -webkit-box-orient: vertical;
 }

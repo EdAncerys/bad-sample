@@ -84,7 +84,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
           className="title-link-animation"
           style={{ ...stepOne, padding: `0.5em 0` }}
           onClick={() => {
-            if (slug === "/membership/final-step-thank-you/") return null;
+            // if (slug === "/membership/final-step-thank-you/") return null;
             setGoToAction({
               path: `/membership/step-1-the-process/`,
               actions,
@@ -97,33 +97,30 @@ const SideBarMenu = ({ state, actions, libraries }) => {
           className="title-link-animation"
           style={{ ...stepTwo, padding: `0.5em 0` }}
           onClick={() => {
-            if (slug === "/membership/final-step-thank-you/") return null;
             setGoToAction({
-              path: `/membership/step-2-personal-information/`,
+              path: `/membership/step-2-category-selection/`,
               actions,
             });
           }}
         >
-          Step 2 - Personal Information
+          Step 2 - Category Selection
         </div>
         <div
           className="title-link-animation"
           style={{ ...stepThree, padding: `0.5em 0` }}
           onClick={() => {
-            if (slug === "/membership/final-step-thank-you/") return null;
             setGoToAction({
-              path: `/membership/step-3-category-selection/`,
+              path: `/membership/step-3-personal-information/`,
               actions,
             });
           }}
         >
-          Step 3 - Category Selection
+          Step 3 - Personal Information
         </div>
         <div
           className="title-link-animation"
           style={{ ...stepFour, padding: `0.5em 0` }}
           onClick={() => {
-            if (slug === "/membership/final-step-thank-you/") return null;
             setGoToAction({
               path: `/membership/step-4-professional-details/`,
               actions,

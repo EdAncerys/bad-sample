@@ -69,10 +69,8 @@ const CardActions = ({
 
     return (
       <div onClick={() => setGoToAction({ path: link, actions })}>
-        <div>
-          <div className="caps-btn">
-            <Html2React html={goToLabel} />
-          </div>
+        <div className="caps-btn" style={{ marginTop: "1em" }}>
+          <Html2React html={goToLabel} />
         </div>
       </div>
     );
@@ -86,7 +84,7 @@ const CardActions = ({
 
     return (
       <div onClick={() => setGoToAction({ path: authLink, actions })}>
-        <div className="caps-btn">
+        <div className="caps-btn" style={{ marginTop: "1em" }}>
           <Html2React html={goToLabel} />
         </div>
       </div>
@@ -100,10 +98,8 @@ const CardActions = ({
 
     return (
       <div onClick={handler}>
-        <div>
-          <div className="caps-btn">
-            <Html2React html={goToLabel} />
-          </div>
+        <div className="caps-btn" style={{ marginTop: "1em" }}>
+          <Html2React html={goToLabel} />
         </div>
       </div>
     );

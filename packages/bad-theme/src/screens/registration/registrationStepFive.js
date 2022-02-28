@@ -49,7 +49,7 @@ const RegistrationStepFive = ({ state, actions }) => {
           }
           style={{ paddingTop: `1em` }}
         >
-          Memberships Page
+          BAD membership categories
         </div>
 
         <SIGApplication />

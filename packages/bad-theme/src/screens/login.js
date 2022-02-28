@@ -30,7 +30,7 @@ const login = ({ state, actions }) => {
       const response = await data.json();
       if (response.token) {
         const encryptedJWT = handleEncryption({ jwt: response.token }); // encrypting provided jwt
-        handleSetCookie({ name: "events", value: encryptedJWT }); // set cookie in the browser
+        handleSetCookie({ name: state.auth.COOKIE_NAME, value: encryptedJWT }); // set cookie in the browser
 
         actions.theme.setTaken(response.token);
         actions.theme.setLogin(true);

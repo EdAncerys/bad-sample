@@ -26,8 +26,7 @@ const CardBody = ({
   TEXT_ALIGN,
   isFrom4Col,
   electionInfo,
-  limitBodyLength,
-  limitTitleLength,
+  titleLimit,
   opacity,
   videoArchive,
 }) => {
@@ -62,19 +61,20 @@ const CardBody = ({
     };
     return (
       <div
-        className="flex primary-title"
+        className="flex primary-title body-limit"
         style={{
           fontSize: heroBanner ? (!lg ? `2.25rem` : 25) : 20,
-          minHeight: TITLE_HEIGHT,
+          minHeight: "auto",
           maxHeight: isFrom4Col ? "7em" : "auto", // restricting title height
           overflow: "hidden",
           fontWeight: "bold",
           color: heroBanner ? colors.trueBlack : colors.softBlack,
           alignItems: "flex-start",
           opacity: opacity || 1,
+          WebkitLineClamp: titleLimit || "unset",
         }}
       >
-        <Html2React html={titlePreview} />
+        <Html2React html={title} />
         <ServePaidIcon />
       </div>
     );
@@ -83,21 +83,16 @@ const CardBody = ({
   const ServeBody = () => {
     if (!body) return null;
 
-    let bodyPreview = body;
-    const maxChar = bodyLimit || 76;
-    if (limitBodyLength || isFrom4Col)
-      bodyPreview = `${body.slice(0, maxChar)}...`;
-    if (body.length <= maxChar) bodyPreview = body; // remove limit if string is < maxChar
-
     return (
       <div
+        className="body-limit"
         style={{
           fontSize: 16,
-          overflow: "auto",
           paddingTop: title ? `1em` : 0,
+          WebkitLineClamp: bodyLimit || "unset",
         }}
       >
-        <Html2React html={bodyPreview} />
+        <Html2React html={body} />
       </div>
     );
   };

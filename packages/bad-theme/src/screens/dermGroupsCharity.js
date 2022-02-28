@@ -42,6 +42,14 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
       isActiveUser,
       category: "SIG",
       type: catType || "", // application type name
+      membershipApplication: {
+        stepOne: false,
+        stepTwo: false,
+        stepThree: false,
+        stepFour: false,
+        stepFive: false,
+        applicationComplete: false,
+      },
     });
   };
 

@@ -76,6 +76,14 @@ const AccordionBody = ({
       isActiveUser,
       category: "BAD",
       type: category_types, // application type name
+      membershipApplication: {
+        stepOne: false,
+        stepTwo: false,
+        stepThree: false,
+        stepFour: false,
+        stepFive: false,
+        applicationComplete: false,
+      },
     });
   };
 
@@ -223,8 +231,6 @@ const AccordionBody = ({
   const ServeGoToLink = () => {
     if (!link || guidelines) return null;
 
-    console.log(link);
-
     let linkLabel = "External Link";
     if (link_label) linkLabel = link_label;
 
@@ -248,7 +254,7 @@ const AccordionBody = ({
             />
           </div>
           <div
-            className="caps-btn"
+            className="caps-btn-no-underline"
             style={{ boxShadow: "none" }}
             onClick={() => setGoToAction({ path: link.url, actions })}
           >
@@ -284,7 +290,7 @@ const AccordionBody = ({
                 />
               </div>
               <div
-                className="caps-btn"
+                className="caps-btn-no-underline"
                 style={{ boxShadow: "none" }}
                 onClick={() => setGoToAction({ path: link.url, actions })}
               >
@@ -651,8 +657,8 @@ const AccordionBody = ({
         <ServeLTTeam />
         <ServeGSSubTitle />
         <ServeGSLink />
-        <ServeGoToLinkRepeater />
         <ServeBodyActions />
+        <ServeGoToLinkRepeater />
         <ApplyForMembership />
       </div>
     </div>

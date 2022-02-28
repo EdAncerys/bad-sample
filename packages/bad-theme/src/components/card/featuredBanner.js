@@ -11,20 +11,17 @@ const FeaturedBanner = ({ state, actions, libraries, featuredBanner }) => {
 
   if (!featuredBanner) return null;
 
-  const { title, featured_media } = featuredBanner;
+  const { title, acf } = featuredBanner;
 
   // SERVERS ---------------------------------------------
   const ServeCardImage = () => {
-    if (featured_media === 0) return null;
+    if (!acf.image) return null;
 
-    const media = state.source.attachment[featured_media];
     const alt = title.rendered || "BAD";
-
-    console.log(media);
 
     return (
       <Image
-        src={media ? media.source_url : ""}
+        src={acf.image}
         alt={alt}
         style={{
           width: "100%",

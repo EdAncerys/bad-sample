@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
@@ -30,15 +30,38 @@ const Event = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const event = state.source[data.type][data.id];
+  console.log("event data: ", event); // debug
 
   const dispatch = useAppDispatch();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-  console.log("ALL EVENT DATA", event);
+  const [eventList, setEventList] = useState(null);
+  const [gradeList, setGradeList] = useState(null);
+  const [locationList, setLocationList] = useState(null);
+  const [specialtyList, setSpecialtyList] = useState(null);
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
     document.documentElement.scrollTop = 0; // for safari
+
+    // get related event content
+    let eventList = null;
+    let categoryList = null;
+    let locationList = null;
+    let specialtyList = null;
+    if (state.source.events) eventList = Object.values(state.source.events);
+    if (state.source.event_grade)
+      categoryList = Object.values(state.source.event_grade);
+    if (state.source.event_location)
+      locationList = Object.values(state.source.event_location);
+    if (state.source.event_specialty)
+      specialtyList = Object.values(state.source.event_specialty);
+
+    setEventList(eventList);
+    setGradeList(categoryList);
+    setLocationList(locationList);
+    setSpecialtyList(specialtyList);
   }, []);
 
   const {
@@ -77,7 +100,6 @@ const Event = ({ state, actions, libraries }) => {
     contact_allow_attachments,
   } = event.acf;
   const { title } = event;
-  console.log(event);
   // SERVERS ----------------------------------------------
   const ServeTitle = () => {
     if (!title) return null;
@@ -348,6 +370,7 @@ const Event = ({ state, actions, libraries }) => {
   const ServeRegisterBanner = () => {
     return (
       <div
+        className="shadow"
         style={{
           backgroundColor: colors.primary,
           color: colors.white,
@@ -415,6 +438,102 @@ const Event = ({ state, actions, libraries }) => {
     );
   };
 
+  const ServeSideBar = () => {
+    if (!eventList) return null;
+
+    // get current event taxonomy types
+    const currentPostGrade = event.event_grade[0];
+    const currentPostLocation = event.event_location[0];
+    const currentPostSpecialty = event.event_specialty[0];
+    // get category name from category list
+    let gradeName = "Grade";
+    gradeName = gradeList.filter(
+      (category) => category.id === Number(currentPostGrade)
+    );
+    if (gradeName[0]) gradeName = gradeName[0].name;
+    // get list of events where category is the same as the current event
+    let relatedGradeList = eventList.filter((event) => {
+      return event.event_grade.includes(currentPostGrade);
+    });
+    // get latest events from the list
+    relatedGradeList = eventList.slice(0, 3);
+    if (!eventList.length) return null; // dont render if no events
+
+    // get related event location list from the list
+    let locationName = "Location";
+    locationName = locationList.filter(
+      (location) => location.id === Number(currentPostLocation)
+    );
+    if (locationName[0]) locationName = locationName[0].name;
+    // get list of events where location is the same as the current event
+    let relatedLocationList = eventList.filter((event) => {
+      return event.event_location.includes(currentPostLocation);
+    });
+    // get latest events from the list
+    relatedLocationList = eventList.slice(0, 3);
+
+    const ServeRelatedEvents = ({ list, name }) => {
+      if (!list.length) return null;
+
+      return (
+        <div>
+          {relatedGradeList.map((event, key) => {
+            let eventDate = event.date;
+            if (event.acf.date_time) eventDate = event.acf.date_time[0];
+
+            const dateObject = new Date(eventDate.date);
+            const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
+
+            return (
+              <div
+                key={key}
+                style={{
+                  marginBottom: `1em`,
+                  borderBottom: `1px solid ${colors.lightSilver}`,
+                }}
+              >
+                <div
+                  style={{
+                    padding: `0.5em`,
+                    backgroundColor: colors.lightSilver,
+                    textTransform: "capitalize",
+                    width: "fit-content",
+                  }}
+                >
+                  {formattedDate}
+                </div>
+
+                <div
+                  className="primary-title"
+                  style={{ fontSize: 16, padding: "1em 0", cursor: "pointer" }}
+                  onClick={() => setGoToAction({ path: event.link, actions })}
+                >
+                  {event.title.rendered}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      );
+    };
+
+    return (
+      <div
+        className="shadow"
+        style={{ marginTop: marginVertical, padding: "1em" }}
+      >
+        <div
+          className="primary-title"
+          style={{ fontSize: 20, padding: "1em 0" }}
+        >
+          Related Content
+        </div>
+        <ServeRelatedEvents list={relatedGradeList} name={gradeName} />
+        <ServeRelatedEvents list={relatedLocationList} name={locationName} />
+      </div>
+    );
+  };
+
   return (
     <BlockWrapper>
       <div style={{ backgroundColor: colors.white }}>
@@ -431,7 +550,7 @@ const Event = ({ state, actions, libraries }) => {
               <ServeSocials />
             </div>
             <div className="flex-col">
-              <div className="flex shadow"></div>
+              <ServeSideBar />
               <ServeRegisterBanner />
               {/* <div className="shadow">
                 <div style={{ padding: "2em" }}>

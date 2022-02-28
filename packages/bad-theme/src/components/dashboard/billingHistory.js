@@ -64,7 +64,7 @@ const BillingHistory = ({ state, actions, libraries }) => {
               className="blue-btn"
               onClick={handleDownloadPayment}
             >
-              Download Payment
+              Download Receipt
             </div>
           </div>
         </div>

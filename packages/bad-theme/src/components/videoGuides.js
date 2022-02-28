@@ -315,8 +315,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               videoGuide={block}
               body={content.rendered}
               colour={colour}
-              limitBodyLength
-              bodyLimit={100}
+              bodyLimit={4}
               cardMinHeight={250}
               shadow
             />

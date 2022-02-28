@@ -2,11 +2,11 @@ import { handleGetCookie, handleSetCookie } from "./cookie";
 import { authenticateAppAction, getUserStoreAction } from "../context";
 
 export const authLogViaCookie = async ({ state, initialState }) => {
-  const cookie = handleGetCookie({ name: `BAD-WebApp` });
+  const cookie = handleGetCookie({ name: state.auth.COOKIE_NAME });
 
   // ⏬⏬  user validation & auth ⏬⏬
   if (cookie) {
-    console.log("API to get user data", cookie);
+    console.log("🍪 found", cookie);
     const { jwt, contactid } = cookie;
 
     if (!contactid || !jwt) {
@@ -24,6 +24,8 @@ export const authLogViaCookie = async ({ state, initialState }) => {
 
     try {
       const userResponse = await fetch(URL, requestOptions);
+      if (!userResponse.ok)
+        throw new Error(`${userResponse.statusText} ${userResponse.status}`); // fetch user data from Dynamics
       const userData = await userResponse.json();
 
       const userStoreData = await getUserStoreAction({

@@ -503,7 +503,6 @@ const ElectionBlocks = ({ state, actions, block }) => {
                     isClosedPosition ? colors.silverFillOne : null
                   }
                   opacity={isClosedPosition ? 0.7 : null}
-                  limitBodyLength
                   shadow
                 />
               </div>

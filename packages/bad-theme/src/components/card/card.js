@@ -58,8 +58,7 @@ const Card = ({
   layout,
   seatNumber,
   eventHeader,
-  limitBodyLength,
-  limitTitleLength,
+  titleLimit,
   shadow,
   backgroundColor,
   opacity,
@@ -106,7 +105,6 @@ const Card = ({
   // APPLIES TO BAD ELECTIONS ------------------------------
   if (state.router.link === "/about-the-bad/bad-elections/") {
     CARD_HEIGHT = "200px";
-    limitBodyLength = 300;
     link_label = "Read more";
     ELECTION_BLOCKS = true;
     handler = () => {
@@ -233,8 +231,7 @@ const Card = ({
           heroBanner={heroBanner}
           TEXT_ALIGN={TEXT_ALIGN}
           isFrom4Col={isFrom4Col}
-          limitBodyLength={limitBodyLength}
-          limitTitleLength={limitTitleLength}
+          titleLimit={titleLimit}
           electionInfo={electionInfo}
           opacity={opacity}
           videoArchive={videoArchive}

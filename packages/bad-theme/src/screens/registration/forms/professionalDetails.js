@@ -5,6 +5,7 @@ import { colors } from "../../../config/imports";
 import SearchDropDown from "../../../components/searchDropDown";
 import CloseIcon from "@mui/icons-material/Close";
 import FormError from "../../../components/formError";
+import { Form } from "react-bootstrap";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -50,6 +51,9 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     sky_newhospitalname: "",
     bad_newhospitaladded: "",
     bad_expectedyearofqualification: "",
+    py3_constitutionagreement: "",
+    bad_readpolicydocument: "",
+    sky_newhospitaltype: "",
   });
   const [inputValidator, setInputValidator] = useState({
     py3_gmcnumber: true,
@@ -65,6 +69,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     bad_newhospitaladded: true,
     sky_newhospitalname: true,
     bad_expectedyearofqualification: true,
+    py3_constitutionagreement: true,
+    bad_readpolicydocument: true,
   });
   const [hospitalData, setHospitalData] = useState(null);
   const [selectedHospital, setSelectedHospital] = useState(null);
@@ -122,14 +128,14 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
   // HANDLERS --------------------------------------------
   const handleSelectHospital = ({ item }) => {
-    setSelectedHospital(item);
     setFormData((prevFormData) => ({
       ...prevFormData,
-      py3_hospitalid: item.accountid,
+      py3_hospitalid: item.link,
     }));
 
+    setSelectedHospital(item.title);
     setHospitalData(null); // clear hospital data for dropdown
-    console.log(item);
+    console.log("selected hospital", item); // debug
   };
 
   const handleClearHospital = () => {
@@ -142,15 +148,22 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
   const handleHospitalLookup = async () => {
     const input = hospitalSearchRef.current.value;
-    if (input.length < 2) return; // API call after 2 characters
+    // if (input.length < 2) return; // API call after 2 characters
 
-    const hospitalData = await getHospitalsAction({
+    let hospitalData = await getHospitalsAction({
       state,
       input,
     });
+    // refactor hospital data to match dropdown format
+    hospitalData = hospitalData.map((hospital) => {
+      return {
+        title: hospital.name,
+        link: hospital.accountid,
+      };
+    });
 
     if (hospitalData.length > 0) setHospitalData(hospitalData);
-    if (hospitalData.length === 0) setHospitalData(null);
+    if (!hospitalData.length || !input) setHospitalData(null);
 
     // console.log("Hospitals", hospitalData); // debug
   };
@@ -188,6 +201,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         "py3_otherregulatorybodyreference",
         "py3_ntnno",
         "bad_currentpost",
+        "sky_newhospitaltype",
       ],
     });
 
@@ -235,7 +249,13 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   const isFormFooter =
     inputValidator.bad_mrpcqualified ||
     inputValidator.py3_currentgrade ||
+    inputValidator.py3_constitutionagreement ||
+    inputValidator.bad_readpolicydocument ||
     inputValidator.sky_cvurl;
+
+  const isAgreementForm =
+    inputValidator.py3_constitutionagreement ||
+    inputValidator.bad_readpolicydocument;
 
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
@@ -248,7 +268,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
           className="transparent-btn"
           onClick={() =>
             setGoToAction({
-              path: `/membership/step-3-category-selection/`,
+              path: `/membership/step-3-personal-information/`,
               actions,
             })
           }
@@ -364,7 +384,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                           paddingRight: 15,
                         }}
                       >
-                        {selectedHospital.name}
+                        {selectedHospital}
                         <div
                           className="filter-icon"
                           style={{ top: -7 }}
@@ -391,13 +411,11 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                     placeholder="Main Hospital/Place of work"
                   />
                 )}
-                {hospitalData && (
-                  <SearchDropDown
-                    filter={hospitalData}
-                    mapToName="name"
-                    onClickHandler={handleSelectHospital}
-                  />
-                )}
+                <SearchDropDown
+                  filter={hospitalData}
+                  mapToName="name"
+                  onClickHandler={handleSelectHospital}
+                />
               </div>
             </div>
           )}
@@ -414,6 +432,25 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                 type="checkbox"
                 className="form-check-input check-box"
               />
+            </div>
+          )}
+
+          {formData.bad_newhospitaladded && (
+            <div>
+              <label className="required form-label">Select Type</label>
+              <Form.Select
+                name="sky_newhospitaltype"
+                value={formData.sky_newhospitaltype}
+                onChange={handleInputChange}
+                className="input"
+              >
+                <option value="" hidden>
+                  Hospital / Medical School
+                </option>
+                <option value="Hospital">Hospital</option>
+                <option value="School">Medical School</option>
+              </Form.Select>
+              <FormError id="sky_newhospitaltype" />
             </div>
           )}
 
@@ -537,6 +574,83 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                   placeholder="CV Document"
                   accept="*"
                 />
+              </div>
+            )}
+
+            {isAgreementForm && (
+              <div
+                style={{
+                  alignItems: "center",
+                  marginTop: `2em`,
+                  paddingTop: "1em",
+                  borderTop: `1px solid ${colors.silverFillTwo}`,
+                }}
+              >
+                {inputValidator.py3_constitutionagreement && (
+                  <div
+                    className="flex"
+                    style={{ alignItems: "center", margin: `1em 0` }}
+                  >
+                    <div style={{ display: "grid" }}>
+                      <input
+                        name="py3_constitutionagreement"
+                        checked={formData.py3_constitutionagreement}
+                        onChange={handleInputChange}
+                        type="checkbox"
+                        className="form-check-input check-box"
+                      />
+                    </div>
+                    <div>
+                      <label className="form-check-label flex-row">
+                        <div>I agree to the </div>
+                        <div
+                          className="caps-btn required"
+                          style={{ paddingTop: 6, marginLeft: 10 }}
+                        >
+                          BAD Constitution
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                )}
+                {inputValidator.bad_readpolicydocument && (
+                  <div
+                    className="flex"
+                    style={{ alignItems: "center", margin: `1em 0` }}
+                  >
+                    <div>
+                      <input
+                        name="bad_readpolicydocument"
+                        checked={formData.bad_readpolicydocument}
+                        onChange={handleInputChange}
+                        type="checkbox"
+                        className="form-check-input check-box"
+                      />
+                    </div>
+                    <div>
+                      <label className="form-check-label flex-row">
+                        <div>
+                          <div
+                            className="caps-btn required"
+                            style={{
+                              paddingTop: 6,
+                              marginRight: 10,
+                              whiteSpace: "nowrap",
+                              float: "left",
+                            }}
+                          >
+                            I agree - Privacy Notice
+                          </div>
+                          <span>
+                            I agree - Privacy Notice* - justo donec enim diam
+                            vulputate ut pharetra sit. Purus semper eget duis at
+                            tellus at. Sed adipiscing diam.
+                          </span>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>

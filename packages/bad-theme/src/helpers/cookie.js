@@ -10,15 +10,19 @@ export const handleSetCookie = ({ name, value, exDays, deleteCookie }) => {
   if (value) cookieValue = JSON.stringify(value);
   if (exDays) cookieExDays = exDays;
 
+  let cookie = `${cookieName}=${cookieValue};path=/;max-age=${expires};`; // cookie params
+  // if delete cookie set max-age to 0
   if (deleteCookie) {
-    document.cookie = cookieName + `=; expires=${new Date(0)};`;
-    console.log(`🍪 ${cookieName} successfully deleted`); // debug
-    return;
+    cookie = `${cookieName}= ;path=/;max-age=${new Date(0)};`; // cookie params
   }
 
-  const cookie = `${cookieName}=${cookieValue};path=/;max-age=${expires};`; // one cookie at a time
   document.cookie = cookie;
-  console.log("🍪  set to: ", cookie); // debug
+
+  if (deleteCookie) {
+    console.log(`🍪 ${cookieName} successfully deleted`); // debug
+  } else {
+    console.log("🍪  set to: ", cookie); // debug
+  }
 };
 
 export const handleGetCookie = ({ name }) => {
@@ -26,17 +30,25 @@ export const handleGetCookie = ({ name }) => {
   let cookieName = "";
   if (name) cookieName = name;
 
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${cookieName}=`);
-
-  if (parts.length >= 2) {
-    let COOKIE_VALUE = parts.pop().split(";").shift();
-    COOKIE_VALUE = JSON.parse(COOKIE_VALUE);
-    console.log("🍪 value: ", COOKIE_VALUE);
-    return COOKIE_VALUE;
-  } else {
-    console.log("🍪 not found");
-    return null;
+  try {
+    // get cookie by name
+    let cookie = document.cookie
+      .split("; ")
+      .find((c) => c.startsWith(cookieName));
+    // cookie value
+    let cookieValue = cookie.split("=")[1];
+    // if cookie exists & not empty
+    if (cookie && cookieValue) {
+      cookieValue = JSON.parse(cookieValue);
+      // return cookie value
+      console.log("🍪 value: ", cookieValue); // debug
+      return cookieValue;
+    } else {
+      console.log("🍪 not found || not valid"); // debug
+      return null;
+    }
+  } catch (error) {
+    console.log("error: " + error);
   }
 };
 

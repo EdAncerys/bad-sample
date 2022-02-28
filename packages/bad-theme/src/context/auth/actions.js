@@ -1,5 +1,6 @@
 import { setLoginModalAction, setFetchAction } from "../index";
 import { handleSetCookie } from "../../helpers/cookie";
+import { setGoToAction } from "../index";
 
 export const loginAction = async ({ state, dispatch, transId }) => {
   console.log("loginAction triggered");
@@ -17,11 +18,13 @@ export const loginAction = async ({ state, dispatch, transId }) => {
     // --------------------------------------------------------------------------
     const response = await getUserAction({ state, dispatch, jwt, transId });
     if (!response) throw new Error("Error login in.");
-    
-    setFetchAction({ dispatch, isFetching: false });
+
     setLoginModalAction({ dispatch, loginModalAction: false });
+    setGoToAction({ path: `/dashboard`, actions });
   } catch (error) {
     console.log("loginAction error", error);
+  } finally {
+    setFetchAction({ dispatch, isFetching: false });
   }
 };
 
@@ -139,12 +142,12 @@ export const getUserDataByContactId = async ({
 
 export const logoutAction = async ({ state, actions, dispatch }) => {
   console.log("logoutAction triggered");
+  // ⬇️ stack order important to unmount components correctly
+  handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
+  setGoToAction({ path: `/`, actions });
 
   seJWTAction({ dispatch, jwt: null });
   setActiveUserAction({ dispatch, isActiveUser: null });
-
-  handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
-  actions.router.set(`https://badadmin.skylarkdev.co`);
 };
 
 // SET CONTEXT ---------------------------------------------------

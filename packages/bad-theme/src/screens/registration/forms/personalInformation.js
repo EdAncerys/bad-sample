@@ -23,6 +23,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser } = useAppState();
 
+  const [genderList, setGenderList] = useState([]);
   const [formData, setFormData] = useState({
     py3_title: "",
     py3_firstname: "",
@@ -66,6 +67,15 @@ const PersonalDetails = ({ state, actions, libraries }) => {
       }));
     };
 
+    // add profile picture from CONTEXT
+    if (isActiveUser) {
+      const { bad_profile_photo_url } = isActiveUser;
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        sky_profilepicture: bad_profile_photo_url,
+      }));
+    }
+
     if (!applicationData) return null;
     applicationData.map((data) => {
       if (data.name === "py3_title") handleSetData({ data, name: "py3_title" });
@@ -73,8 +83,10 @@ const PersonalDetails = ({ state, actions, libraries }) => {
         handleSetData({ data, name: "py3_firstname" });
       if (data.name === "py3_lastname")
         handleSetData({ data, name: "py3_lastname" });
-      if (data.name === "py3_gender")
+      if (data.name === "py3_gender") {
         handleSetData({ data, name: "py3_gender" });
+        setGenderList(data.info.Choices);
+      }
       if (data.name === "py3_email") handleSetData({ data, name: "py3_email" });
       if (data.name === "py3_mobilephone")
         handleSetData({ data, name: "py3_mobilephone" });
@@ -142,7 +154,6 @@ const PersonalDetails = ({ state, actions, libraries }) => {
         "py3_mobilephone",
         "py3_address1ine1",
         "py3_addresstowncity",
-        "py3_addresscountystate",
         "py3_addresszippostalcode",
         "py3_addresscountry",
       ],
@@ -158,16 +169,14 @@ const PersonalDetails = ({ state, actions, libraries }) => {
       data: formData,
     });
 
-    let slug = `/membership/step-3-category-selection/`;
+    let slug = `/membership/step-4-professional-details/`;
     if (isActiveUser) setGoToAction({ path: slug, actions });
 
     // console.log(formData); // debug
   };
 
   const handleDocUploadChange = async () => {
-    let sky_profilepicture = documentRef.current
-      ? documentRef.current.files[0]
-      : null;
+    let sky_profilepicture = documentRef.current.files[0];
     // const objectURL = URL.createObjectURL(sky_profilepicture);
 
     if (sky_profilepicture)
@@ -181,7 +190,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
       ...prevFormData,
       ["sky_profilepicture"]: sky_profilepicture,
     }));
-    console.log("sky_profilepicture", sky_profilepicture); // debug
+    // console.log("sky_profilepicture", sky_profilepicture); // debug
   };
 
   const handleInputChange = (e) => {
@@ -204,7 +213,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
           className="transparent-btn"
           onClick={() =>
             setGoToAction({
-              path: `/membership/step-1-the-process/`,
+              path: `/membership/step-2-category-selection/`,
               actions,
             })
           }
@@ -335,16 +344,13 @@ const PersonalDetails = ({ state, actions, libraries }) => {
                   <option value="" hidden>
                     Male, Female, Transgender, Prefer Not To Answer
                   </option>
-                  <option value="215500000">Male</option>
-                  <option value="215500001">Female</option>
-                  <option value="215500004">Transgender Male</option>
-                  <option value="215500003">Transgender Female</option>
-                  <option value="215500005">
-                    Gender Variant/Non-Conforming
-                  </option>
-                  <option value="215500006">Not Listed</option>
-                  <option value="215500007">Prefer Not To Answer</option>
-                  <option value="215500002">Unknown</option>
+                  {genderList.map((item, key) => {
+                    return (
+                      <option key={key} value={item.value}>
+                        {item.Label}
+                      </option>
+                    );
+                  })}
                 </Form.Select>
                 <FormError id="py3_gender" />
               </div>

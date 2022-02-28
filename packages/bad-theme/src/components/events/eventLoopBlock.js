@@ -6,6 +6,12 @@ import EventListView from "../eventListView";
 import Card from "../card/card";
 import TitleBlock from "../titleBlock";
 import { colors } from "../../config/imports";
+// CONTEXT --------------------------------------------------------
+import {
+  useAppDispatch,
+  useAppState,
+  setEventAnchorAction,
+} from "../../context";
 
 import { muiQuery } from "../../context";
 const EventLoopBlock = ({
@@ -17,11 +23,16 @@ const EventLoopBlock = ({
   gradesFilter,
   locationsFilter,
   recommended_events,
+  specialtyFilter,
+  yearFilter,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
   const { sm, md, lg, xl } = muiQuery();
+
+  const dispatch = useAppDispatch();
+  const { eventAnchor } = useAppState();
 
   const {
     post_limit,
@@ -35,9 +46,7 @@ const EventLoopBlock = ({
   } = block;
 
   const [eventList, setEventList] = useState(null); // event data
-  const [grades, setGrades] = useState(null); // data
-  const [locations, setLocations] = useState(null); // data
-  const [types, setTypes] = useState(null); // data
+
   const [gradeFilterId, setGradeFilterId] = useState(null); // data
   const mountedRef = useRef(true);
 
@@ -59,34 +68,36 @@ const EventLoopBlock = ({
       console.log("Error. Failed to fetch events data"); // debug
       return null;
     }
-    let EVENT_LIST = Object.values(state.source.events); // add events object to data array
-    const GRADES = Object.values(state.source.event_grade);
-    const LOCATIONS = Object.values(state.source.event_location);
-    const TYPES = state.source.event_type
-      ? Object.values(state.source.event_type)
-      : null;
-    let GRADE_FILTER_ID = GRADES.filter(
+    let eventList = Object.values(state.source.events); // add events object to data array
+    const grades = Object.values(state.source.event_grade);
+
+    let gradeFilterId = grades.filter(
       (filter) => filter.name === grade_filter
     )[0];
 
-    if (GRADE_FILTER_ID) GRADE_FILTER_ID = GRADE_FILTER_ID.id;
-    if (passed_grade_filter_id) GRADE_FILTER_ID = passed_grade_filter_id;
+    if (gradeFilterId) gradeFilterId = gradeFilterId.id;
+    if (post_limit) eventList = eventList.slice(0, Number(post_limit)); // apply limit on posts
 
-    if (post_limit) EVENT_LIST = EVENT_LIST.slice(0, Number(post_limit)); // apply limit on posts
-    if (passed_grade_filter_id && EVENT_LIST.length < post_limit)
-      GRADE_FILTER_ID = null;
-    setGradeFilterId(GRADE_FILTER_ID);
+    setGradeFilterId(gradeFilterId);
 
     // sort events in order by date accenting from
-    let filterByDate = EVENT_LIST.sort(
+    let filterByDate = eventList.sort(
       (a, b) =>
         new Date(a.acf.date_time[0].date) - new Date(b.acf.date_time[0].date)
     );
 
     setEventList(filterByDate);
-    setGrades(GRADES);
-    setLocations(LOCATIONS);
-    setTypes(TYPES);
+
+    // link to anchor for event
+    if (eventAnchor) {
+      setTimeout(() => {
+        const anchor = document.getElementById(eventAnchor);
+        if (anchor) anchor.scrollIntoView({ behavior: "smooth" });
+      }, 500);
+      console.log("🚀 anchor to event list", eventAnchor); // debug
+
+      setEventAnchorAction({ dispatch, eventAnchor: null }); // reset
+    }
 
     return () => {
       mountedRef.current = false; // clean up function
@@ -109,7 +120,7 @@ const EventLoopBlock = ({
           const title = block.title.rendered;
           const event_grade = block.event_grade;
           const event_location = block.event_location;
-          const event_type = block.event_type;
+          const event_specialty = block.event_specialty;
 
           if (!event_grade.includes(gradeFilterId) && gradeFilterId !== 97)
             return null;
@@ -130,6 +141,22 @@ const EventLoopBlock = ({
           }
           if (locationsFilter) {
             if (!event_location.includes(Number(locationsFilter))) return null;
+          }
+          if (specialtyFilter) {
+            if (!event_specialty.includes(Number(specialtyFilter))) return null;
+          }
+          if (yearFilter) {
+            // get event month & year start
+            const eventDate = date_time[0].date;
+            const eventMont = new Date(eventDate).getMonth() + 1;
+            const eventYear = new Date(eventDate).getFullYear();
+            // get filter current month & year
+            const filterMont = new Date(yearFilter).getMonth() + 1;
+            const filterYear = new Date(yearFilter).getFullYear();
+
+            // filter events based on mont & year start
+            if (eventMont !== filterMont || eventYear !== filterYear)
+              return null;
           }
 
           if (layoutOne) {
@@ -172,6 +199,7 @@ const EventLoopBlock = ({
                 colour={colour}
                 eventHeader={block.acf}
                 isFrom4Col
+                titleLimit={1}
                 shadow
               />
             );

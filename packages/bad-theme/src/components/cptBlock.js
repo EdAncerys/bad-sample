@@ -13,9 +13,14 @@ import TypeFilters from "./typeFilters";
 import { muiQuery } from "../context";
 
 import CloseIcon from "@mui/icons-material/Close";
+// CONTEXT ----------------------------------------------------------------
+import { useAppDispatch, useAppState, setCPTBlockAction } from "../context";
 
 const CPTBlock = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
+  const dispatch = useAppDispatch();
+  const { cptBlockFilter } = useAppState();
 
   const [postListData, setPostListData] = useState(null);
   const [groupeType, setGroupeType] = useState(null);
@@ -41,7 +46,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   const currentSearchFilterRef = useRef(null);
   const typeFilterRef = useRef(null);
   const loadMoreRef = useRef(null);
-  const guidanceCategoryRef = useRef("");
 
   const LIMIT = 8;
 
@@ -74,14 +78,28 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
       isThereNextPage = nextPage;
     }
-    const GROUPE_DATA = Object.values(state.source[postPath]);
-    const GROUPE_TYPE = Object.values(state.source[typePath]);
+    let groupData = Object.values(state.source[postPath]);
+    const groupType = Object.values(state.source[typePath]);
     if (isCovid_19)
       setGuidanceCategory(Object.values(state.source.guidance_category)); // set additional filter option to COVID-19
 
+    // set post lit values from filter value in local storage
+    if (cptBlockFilter) {
+      typeFilterRef.current = cptBlockFilter;
+      groupData = groupData.filter((item) =>
+        item[typePath].includes(cptBlockFilter)
+      );
+    }
+    // clear filter value in local storage
+    setCPTBlockAction({ dispatch, cptBlockFilter: "" });
+
     const limit = post_limit || LIMIT;
-    setPostListData(GROUPE_DATA.slice(0, Number(limit))); // apply limit on posts
-    setGroupeType(GROUPE_TYPE);
+    if (!cptBlockFilter) {
+      setPostListData(groupData.slice(0, Number(limit))); // apply limit on posts
+    } else {
+      setPostListData(groupData);
+    }
+    setGroupeType(groupType);
 
     return () => {
       searchFilterRef.current = false; // clean up function
@@ -96,9 +114,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     let data = Object.values(state.source[postPath]);
 
     if (!loadMoreRef.current) {
-      // if (!!currentSearchFilterRef.current || !!typeFilterRef.current)
-      //   data = postListData;
-
       loadMoreRef.current = data;
       setPostListData(data);
     } else {
@@ -112,7 +127,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     currentSearchFilterRef.current = input;
     let data = Object.values(state.source[postPath]);
 
-    const categoryId = guidanceCategoryRef.current.value;
+    const categoryId = cptBlockFilter;
 
     if (categoryId) {
       data = data.filter((item) =>
@@ -120,10 +135,8 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       );
     }
 
-    if (typeFilterRef.current) {
-      data = data.filter((item) =>
-        item[typePath].includes(typeFilterRef.current)
-      );
+    if (cptBlockFilter) {
+      data = data.filter((item) => item[typePath].includes(cptBlockFilter));
     }
 
     if (!!input) {
@@ -146,14 +159,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   const handleTypeSearch = () => {
     const input = typeFilterRef.current;
-    const categoryId = guidanceCategoryRef.current.value;
     let data = Object.values(state.source[postPath]); // add postListData object to data array
-
-    if (categoryId) {
-      data = data.filter((item) =>
-        item.guidance_category.includes(Number(categoryId))
-      );
-    }
 
     if (currentSearchFilterRef.current)
       data = data.filter((item) => {
@@ -175,6 +181,9 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
         if (list.includes(input)) return item;
       });
 
+      // handle save search filter to local storage
+      setCPTBlockAction({ dispatch, cptBlockFilter: input });
+
       setPostListData(data);
     }
   };
@@ -194,7 +203,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   const handleClearCategoryFilter = () => {
     let data = Object.values(state.source[postPath]); // add postListData object to data array
-    guidanceCategoryRef.current = "";
+    setCPTBlockAction({ dispatch, cptBlockFilter: "" });
     setGuidanceFilter(null);
     setPostListData(data.slice(0, Number(post_limit || LIMIT)));
 
@@ -270,8 +279,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
         >
           <select
             name="guidance"
-            ref={guidanceCategoryRef}
-            value={guidanceCategoryRef.current.value}
+            value={cptBlockFilter}
             onChange={handleSearch}
             className="input"
             style={{ height: 45 }}
@@ -344,7 +352,8 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           const { title, content, link, date, dermo_group_type } = block;
           const redirect = block.acf.redirect_url;
           const file = block.acf.file_download;
-          const cardLink = redirect.url || link;
+          let cardLink = link;
+          if (redirect) cardLink = redirect.url;
 
           return (
             <Card
@@ -356,8 +365,9 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               link={file ? null : cardLink}
               downloadFile={file ? { file, label: "Download" } : null}
               colour={colour}
-              limitBodyLength
               cardMinHeight={250}
+              bodyLimit={4}
+              titleLimit={4}
               shadow
             />
           );

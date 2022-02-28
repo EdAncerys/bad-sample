@@ -51,12 +51,17 @@ const FindDermatologistOptions = ({ state, actions, libraries }) => {
       <div style={{ display: "grid" }}>
         <div className="flex-col">
           <div>
-            <div className="flex-row">
-              <input
-                id="includeInFindDermatologist"
-                type="checkbox"
-                className="form-check-input check-box"
-              />
+            <div
+              className="flex"
+              style={{ alignItems: "center", margin: `1em 0` }}
+            >
+              <div style={{ display: "grid" }}>
+                <input
+                  id="includeInFindDermatologist"
+                  type="checkbox"
+                  className="form-check-input check-box"
+                />
+              </div>
               <div style={styles.textInfo}>
                 I would like to be included in the Find a Dermatologist
                 directory
@@ -183,7 +188,7 @@ const styles = {
     margin: `0.5em 0`,
   },
   textInfo: {
-    paddingLeft: `1em`,
+    paddingLeft: `0.5em`,
   },
 };
 

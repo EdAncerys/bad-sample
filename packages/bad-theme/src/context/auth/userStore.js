@@ -35,13 +35,6 @@ export const setUserStoreAction = async ({
       storeApplication = await getUserStoreAction({ state, isActiveUser });
     }
     if (!storeApplication) {
-      // ⏬⏬  get application record from Dynamics ⏬⏬
-      storeApplication = await getDynamicsApplicationAction({
-        state,
-        contactid,
-      });
-    }
-    if (!storeApplication) {
       // ⏬⏬  creat application record in Dynamics ⏬⏬
       const newApplicationRecord = await createDynamicsApplicationAction({
         state,
@@ -189,7 +182,7 @@ export const createDynamicsApplicationAction = async ({ state, contactid }) => {
     const response = await fetch(URL, requestOptions);
     const data = await response.json();
 
-    console.log("createDynamicsApplicationAction result", data); // debug
+    // console.log("Dynamics Application result", data); // debug
 
     if (data.success) {
       return data.data;
@@ -219,12 +212,10 @@ export const getDynamicsApplicationAction = async ({ state, contactid }) => {
     const response = await fetch(URL, requestOptions);
     const data = await response.json();
 
-    console.log("⏬ Membership Record In Dynamics not Found ⏬");
-    console.log("createDynamicsApplicationAction result", data); // debug
-
     if (data.success) {
       return data.data;
     } else {
+      console.log("⏬ Membership Record In Dynamics not Found ⏬");
       return null;
     }
   } catch (error) {
@@ -234,6 +225,7 @@ export const getDynamicsApplicationAction = async ({ state, contactid }) => {
 
 export const setCompleteUserApplicationAction = async ({
   state,
+  dispatch,
   isActiveUser,
 }) => {
   console.log("setCompleteUserApplicationAction triggered");
@@ -247,7 +239,7 @@ export const setCompleteUserApplicationAction = async ({
     const jwt = await authenticateAppAction({ state });
 
     const requestOptions = {
-      method: "GET",
+      method: "POST",
       headers: { Authorization: `Bearer ${jwt}` },
     };
 
@@ -255,7 +247,11 @@ export const setCompleteUserApplicationAction = async ({
     const data = await response.json();
 
     if (data.success) {
-      await deleteUserStoreAction({ state, isActiveUser });
+      // delete application record from CONTEXT
+      setApplicationDataAction({
+        dispatch,
+        applicationData: null,
+      });
 
       console.log("⏬ Membership Completed ⏬");
       console.log(data);
@@ -398,7 +394,10 @@ const updateMembershipApplication = ({
       application.value = data.sky_cvurl;
     if (data.sky_newhospitalname && application.name === "sky_newhospitalname")
       application.value = data.sky_newhospitalname;
-    if (data.sky_newhospitaltype && application.name === "sky_newhospitaltype")
+    if (
+      data.sky_newhospitaltype !== undefined &&
+      application.name === "sky_newhospitaltype"
+    )
       application.value = data.sky_newhospitaltype;
     if (
       data.bad_newhospitaladded &&

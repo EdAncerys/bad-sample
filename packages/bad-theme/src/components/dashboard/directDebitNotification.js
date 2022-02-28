@@ -22,8 +22,6 @@ const DirectDebitNotification = ({
 
   const [isDebitSetup, setDebitSetup] = useState(false);
 
-  if (!visible || !isDirectDebit || isDebitSetup) return null;
-
   useEffect(() => {
     if (!isDirectDebit) return null;
     let debitStatus = false;
@@ -34,6 +32,8 @@ const DirectDebitNotification = ({
 
     setDebitSetup(debitStatus);
   }, []);
+
+  if (!visible || !isDirectDebit || isDebitSetup) return null;
 
   // HELPERS ----------------------------------------------------------------
   const handlePayment = () => {

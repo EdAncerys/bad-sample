@@ -15,11 +15,10 @@ const Navigation = ({ state, actions, libraries }) => {
 
   const [wpMainMenu, setWpMainMenu] = useState([]);
   const [wpMoreMenu, setWpMoreMenu] = useState([]);
-  const [flatMenu, setFlatMenu] = useState([]);
+  const [featured, setFeatured] = useState([]);
   const useEffectRef = useRef(false);
-  // ⬇️ getting wp menu & featuredMenu from state
+  // ⬇️ getting wp menu & featured from state
   const menuData = state.theme.menu;
-  const featuredMenu = state.source.menu_featured;
 
   const MAIN_NAV_LENGTH = 6; // main navigation length config
   const BANNER_HEIGHT = state.theme.bannerHeight;
@@ -32,32 +31,18 @@ const Navigation = ({ state, actions, libraries }) => {
   useEffect(async () => {
     if (!menuData) return;
     const menuLength = menuData.length;
-    let flatMenu = [];
 
     const wpMainMenu = menuData.slice(0, MAIN_NAV_LENGTH);
     const wpMoreMenu = menuData.slice(MAIN_NAV_LENGTH, menuLength);
-    menuData.map((item) => {
-      flatMenu.push(item); // add main menu item
-      if (item.child_items) {
-        item.child_items.map((child) => {
-          flatMenu.push(child); // add child menu item
-        });
-      }
-    });
-    // ⬇️ menu page content pre fetch
-    Promise.all(
-      flatMenu.map(({ slug }) => actions.source.fetch(`/${slug}`))
-    ).then(() => {
-      setFlatMenu(flatMenu); // set flat menu
-    });
 
     setWpMainMenu(wpMainMenu); // main menu to display
     setWpMoreMenu(wpMoreMenu); // more menu into dropdown
+    setFeatured(Object.values(state.source.menu_features)); // featured posts
 
     return () => {
       useEffectRef.current = false; // clean up function
     };
-  }, [state.theme.menu]);
+  }, []);
 
   if (!wpMoreMenu.length || !wpMainMenu.length)
     return (
@@ -218,58 +203,34 @@ const Navigation = ({ state, actions, libraries }) => {
         );
       };
 
-      const ServeFeaturedMenuOne = () => {
-        if (!featuredBannerOne) return null;
+      const ServeFeaturedMenu = ({ featuredBannerOne, featuredBannerTwo }) => {
+        if (!featuredBannerOne && !featuredBannerTwo) return null;
 
-        const { title, content, featured_media, link } = featuredBannerOne;
+        const { title, content, acf } = featuredBannerOne || featuredBannerTwo;
+        let isLeft = "35%";
+        if (featuredBannerTwo) isLeft = "66.5%";
 
-        return (
-          <div
-            style={{
-              position: "absolute",
-              zIndex: 1,
-              height: "90%",
-              width: "30%",
-              left: `35%`,
-              margin: `0 1em`,
-            }}
-          >
-            <Card
-              featuredBanner={featuredBannerOne}
-              title={title ? title.rendered : null}
-              body={content ? content.rendered : null}
-              link_label="Read More"
-              link={link}
-              cardHeight="90%"
-              colour={colors.white}
-              shadow // optional param
-            />
-          </div>
-        );
-      };
-
-      const ServeFeaturedMenuTwo = () => {
-        if (!featuredBannerTwo) return null;
-
-        const { title, content, featured_media, link } = featuredBannerTwo;
+        const isFile = acf.file;
 
         return (
           <div
             style={{
               position: "absolute",
               zIndex: 1,
-              height: "90%",
+              height: "100%",
               width: "30%",
-              left: `66%`,
+              left: isLeft,
               margin: `0 1em`,
             }}
           >
             <Card
-              featuredBanner={featuredBannerTwo}
+              featuredBanner={featuredBannerOne || featuredBannerTwo}
               title={title ? title.rendered : null}
               body={content ? content.rendered : null}
+              bodyLimit={4}
               link_label="Read More"
-              link={link}
+              link={acf.link}
+              downloadFile={isFile ? { file: isFile } : null} // optional param
               cardHeight="90%"
               colour={colors.white}
               shadow // optional param
@@ -294,8 +255,8 @@ const Navigation = ({ state, actions, libraries }) => {
             }}
           >
             <ServeDivider />
-            <ServeFeaturedMenuOne />
-            <ServeFeaturedMenuTwo />
+            <ServeFeaturedMenu featuredBannerOne={featuredBannerOne} />
+            <ServeFeaturedMenu featuredBannerTwo={featuredBannerTwo} />
 
             {child_items.map((item, key) => {
               const { title, url, slug, child_items } = item;
@@ -367,7 +328,18 @@ const Navigation = ({ state, actions, libraries }) => {
       );
     };
 
-    if (secondaryMenu)
+    if (secondaryMenu) {
+      let featuredBannerOne = null; // featured menu item
+      let featuredBannerTwo = null; // featured menu item
+
+      featured.map((item) => {
+        const id = item.acf.location.split("_")[0];
+        const location = item.acf.location.split("_").pop();
+
+        if (id === "more" && location === "0") featuredBannerOne = item; // featured menu item
+        if (id === "more" && location === "1") featuredBannerTwo = item; // featured menu item
+      });
+
       return (
         <ul className="navbar-nav secondary-menu-container">
           <li
@@ -390,63 +362,33 @@ const Navigation = ({ state, actions, libraries }) => {
             >
               <Html2React html={"More"} />
             </a>
-            <ServeChildMenu item={{ child_items: wpMoreMenu }} />
+            <ServeChildMenu
+              item={{ child_items: wpMoreMenu }}
+              featuredBannerOne={featuredBannerOne}
+              featuredBannerTwo={featuredBannerTwo}
+            />
           </li>
         </ul>
       );
+    }
 
     return (
       <div className="flex main-menu-container" style={styles.container}>
         {wpMainMenu.map((item, key) => {
-          const { title, slug, url, object_id } = item;
-          let featuredId = null; // id associating with featured menu
+          const { title, slug, url, db_id } = item;
           let featuredBannerOne = null; // featured menu item
           let featuredBannerTwo = null; // featured menu item
 
-          if (featuredMenu)
-            Object.values(featuredMenu).map((featured) => {
-              // 🔗 link to featured menu item to wpMainMenu
-              if (featured.slug === slug) {
-                console.log(slug); // debug
-                featuredId = featured.id;
-              }
-            });
+          featured.map((item) => {
+            const id = item.acf.location.split("_")[0];
+            const location = item.acf.location.split("_").pop();
 
-          flatMenu.map(({ object, object_id }) => {
-            if (object !== "page") return; // only page object
-
-            const pageItem = state.source[object][Number(object_id)]; // getting page item
-            if (!pageItem && !pageItem.menu_featured) return; // if page item not found or not featured
-
-            const { menu_featured, modified } = pageItem;
-
-            if (menu_featured.includes(featuredId)) {
-              if (!featuredBannerOne) {
-                featuredBannerOne = pageItem;
-                return;
-              }
-              if (!featuredBannerTwo) {
-                featuredBannerTwo = pageItem;
-                return;
-              }
-
-              const modifiedDate = new Date(modified);
-              const fmDateOne = new Date(featuredBannerOne.modified);
-              const fmDateTwo = new Date(featuredBannerTwo.modified);
-
-              // replace if modified date is newer
-              if (modifiedDate > fmDateOne) {
-                featuredBannerOne = pageItem;
-                return;
-              }
-              if (modifiedDate > fmDateTwo) {
-                featuredBannerTwo = pageItem;
-                return;
-              }
-            }
+            if (Number(id) === db_id && location === "0")
+              featuredBannerOne = item; // featured menu item
+            if (Number(id) === db_id && location === "1")
+              featuredBannerTwo = item; // featured menu item
           });
 
-          // console.log("featuredId", featuredId); // debug
           // console.log("featuredBannerOne", featuredBannerOne); // debug
           // console.log("featuredBannerTwo", featuredBannerTwo); // debug
 

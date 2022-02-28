@@ -163,7 +163,7 @@ const NewsCarouselComponent = ({
                   colour={colors.danger}
                   link={link}
                   link_label="Read More"
-                  limitTitleLength
+                  titleLimit={1}
                   cardHeight="90%"
                   shadow
                 />
