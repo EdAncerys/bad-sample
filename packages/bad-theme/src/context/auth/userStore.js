@@ -400,10 +400,10 @@ const updateMembershipApplication = ({
     )
       application.value = data.sky_newhospitaltype;
     if (
-      data.bad_newhospitaladded &&
-      application.name === "bad_newhospitaladded"
+      data.bad_newhospitalplaceofwork &&
+      application.name === "bad_newhospitalplaceofwork"
     )
-      application.value = data.bad_newhospitaladded;
+      application.value = data.bad_newhospitalplaceofwork;
     if (data.sky_newhospitalname && application.name === "sky_newhospitalname")
       application.value = data.sky_newhospitalname;
     if (

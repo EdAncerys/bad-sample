@@ -35,6 +35,7 @@ import { updateProfileAction } from "./auth/updateProfile";
 import { updateAddressAction } from "./auth/updateAddress";
 import { sendFileToS3Action } from "./auth/saveFileToS3";
 import { getBADMembershipSubscriptionData } from "./auth/getBADMembershipSubscriptionData";
+import { getApplicationStatus } from "./auth/getApplicationStatus";
 import {
   getDirectDebitAction,
   createDirectDebitAction,
@@ -102,4 +103,5 @@ export {
   getWpPagesAction,
   setCPTBlockAction,
   setEventAnchorAction,
+  getApplicationStatus,
 };

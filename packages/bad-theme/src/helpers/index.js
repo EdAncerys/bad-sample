@@ -15,7 +15,10 @@ export const authLogViaCookie = async ({ state, initialState }) => {
       return null;
     }
 
-    const URL = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
+    const catalogueURL =
+      state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
+    const dynamicAppsURL =
+      state.auth.APP_HOST + `/applications/billing/` + contactid;
 
     const requestOptions = {
       method: "GET",
@@ -23,10 +26,16 @@ export const authLogViaCookie = async ({ state, initialState }) => {
     };
 
     try {
-      const userResponse = await fetch(URL, requestOptions);
+      const userResponse = await fetch(catalogueURL, requestOptions); // fetch user data
+      const appsResponse = await fetch(dynamicAppsURL, requestOptions); // fetch dynamic application data
       if (!userResponse.ok)
         throw new Error(`${userResponse.statusText} ${userResponse.status}`); // fetch user data from Dynamics
       const userData = await userResponse.json();
+
+      if (!appsResponse.ok)
+        throw new Error(`${userResponse.statusText} ${userResponse.status}`); // fetch user data from Dynamics
+      const appsData = await appsResponse.json();
+      console.log("🚀 dynamicsApps", appsData.apps.data); // debug
 
       const userStoreData = await getUserStoreAction({
         state,
@@ -37,9 +46,10 @@ export const authLogViaCookie = async ({ state, initialState }) => {
         initialState.applicationData = userStoreData; // populates user application record
       }
 
-      if (userData) {
+      if (userData && appsData) {
         const taken = await authenticateAppAction({ state }); // replace taken with new one
         initialState.isActiveUser = userData; // populates user userResponse
+        initialState.dynamicsApps = appsData.apps.data;
         initialState.jwt = taken; // replace taken with new one
         console.log("initialState", initialState); // debug
 

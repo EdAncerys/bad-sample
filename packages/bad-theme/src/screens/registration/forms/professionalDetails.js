@@ -49,7 +49,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     sky_cvurl: "",
     py3_currentgrade: "",
     sky_newhospitalname: "",
-    bad_newhospitaladded: "",
+    bad_newhospitalplaceofwork: "",
     bad_expectedyearofqualification: "",
     py3_constitutionagreement: "",
     bad_readpolicydocument: "",
@@ -66,7 +66,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     bad_mrpcqualified: true,
     py3_currentgrade: true,
     sky_cvurl: true,
-    bad_newhospitaladded: true,
+    bad_newhospitalplaceofwork: true,
     sky_newhospitalname: true,
     bad_expectedyearofqualification: true,
     py3_constitutionagreement: true,
@@ -420,14 +420,14 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.bad_newhospitaladded && (
+          {inputValidator.bad_newhospitalplaceofwork && (
             <div className="flex-col">
               <label className="form-label">
                 Hospital / Medical School not listed
               </label>
               <input
-                name="bad_newhospitaladded"
-                checked={formData.bad_newhospitaladded}
+                name="bad_newhospitalplaceofwork"
+                checked={formData.bad_newhospitalplaceofwork}
                 onChange={handleInputChange}
                 type="checkbox"
                 className="form-check-input check-box"
@@ -435,7 +435,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {formData.bad_newhospitaladded && (
+          {formData.bad_newhospitalplaceofwork && (
             <div>
               <label className="required form-label">Select Type</label>
               <Form.Select
@@ -454,20 +454,21 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {formData.bad_newhospitaladded && inputValidator.sky_newhospitalname && (
-            <div>
-              <label className="form-label">New Hospital Name</label>
-              <input
-                name="sky_newhospitalname"
-                value={formData.sky_newhospitalname}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="New Hospital Name"
-              />
-              <FormError id="sky_newhospitalname" />
-            </div>
-          )}
+          {formData.bad_newhospitalplaceofwork &&
+            inputValidator.sky_newhospitalname && (
+              <div>
+                <label className="form-label">New Hospital Name</label>
+                <input
+                  name="sky_newhospitalname"
+                  value={formData.sky_newhospitalname}
+                  onChange={handleInputChange}
+                  type="text"
+                  className="form-control input"
+                  placeholder="New Hospital Name"
+                />
+                <FormError id="sky_newhospitalname" />
+              </div>
+            )}
 
           {inputValidator.bad_expectedyearofqualification && (
             <div>
