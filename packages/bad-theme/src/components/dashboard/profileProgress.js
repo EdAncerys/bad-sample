@@ -219,10 +219,10 @@ const ProfileProgress = ({ state, actions, libraries }) => {
             const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
 
             return (
-              <div className="flex-col" style={{ padding: `1em 0` }}>
-                <div className="primary-title">{core_name}</div>
-                <div>{bad_organisedfor}</div>
-                <div>{formattedDate}</div>
+              <div className="flex-col" style={{ paddingTop: `1em` }}>
+                <div className="primary-title">{bad_organisedfor}</div>
+                <div>{core_name}</div>
+                <div>Application Date: {formattedDate}</div>
               </div>
             );
           })}
