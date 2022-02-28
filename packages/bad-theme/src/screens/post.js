@@ -86,8 +86,6 @@ const Post = ({ state, actions, libraries }) => {
       relatedList = postList.slice(0, 3);
       if (!postList.length) return null; // dont render if no posts
 
-      console.log(relatedList); // debug
-
       return (
         <div
           className="shadow"
