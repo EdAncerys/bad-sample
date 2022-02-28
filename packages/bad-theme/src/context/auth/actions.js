@@ -1,6 +1,6 @@
 import { setLoginModalAction, setFetchAction } from "../index";
 import { handleSetCookie } from "../../helpers/cookie";
-import { setGoToAction } from "../index";
+import { setGoToAction, getApplicationStatus } from "../index";
 
 export const loginAction = async ({ state, dispatch, transId }) => {
   console.log("loginAction triggered");
@@ -82,7 +82,7 @@ export const getUserAction = async ({ state, dispatch, jwt, transId }) => {
 };
 
 export const getUserContactId = async ({ state, dispatch, jwt, transId }) => {
-  console.log("getUserTransId triggered");
+  console.log("getUserContactId triggered");
 
   const URL = state.auth.DYNAMICS_BRIDGE;
   const requestOptions = {
@@ -126,6 +126,8 @@ export const getUserDataByContactId = async ({
     const data = await fetch(URL, requestOptions);
     const response = await data.json();
     if (response) {
+      // get application status against user in Dynamic
+      await getApplicationStatus({ state, dispatch, contactid });
       setActiveUserAction({ dispatch, isActiveUser: response });
       handleSetCookie({
         name: state.auth.COOKIE_NAME,

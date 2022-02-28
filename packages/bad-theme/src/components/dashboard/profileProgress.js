@@ -13,7 +13,7 @@ import { useAppState, setGoToAction } from "../../context";
 const ProfileProgress = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const { applicationData, isActiveUser } = useAppState();
+  const { dynamicsApps, applicationData } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
   const ICON_WIDTH = 30;
@@ -42,9 +42,9 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   const handleApply = () => {
     let path = `/membership/step-1-the-process/`;
     if (applicationData && applicationData[0].stepOne)
-      path = `/membership/step-3-personal-information/`;
-    if (applicationData && applicationData[0].stepTwo)
       path = `/membership/step-2-category-selection/`;
+    if (applicationData && applicationData[0].stepTwo)
+      path = `/membership/step-3-personal-information/`;
     if (applicationData && applicationData[0].stepThree)
       path = `/membership/step-4-professional-details/`;
     if (applicationData && applicationData[0].stepFour)
@@ -53,10 +53,18 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     setGoToAction({ path: path, actions });
   };
 
+  // application under review
+  const isUnderReview =
+    dynamicsApps && dynamicsApps[0].bad_approvalstatus === "Pending";
+  // if application data exist & not under review return null
+  if (!applicationData && !isUnderReview) return null;
+
   // SERVERS ---------------------------------------------
   const ServeProgressBar = () => {
     const ServeProgressIcon = ({ complete }) => {
       const alt = complete ? "complete" : "in-progress";
+      let status = complete;
+      if (isUnderReview) status = true;
 
       return (
         <div
@@ -66,7 +74,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
           }}
         >
           <Image
-            src={complete ? CheckMarkGreen : Ellipse}
+            src={status ? CheckMarkGreen : Ellipse}
             alt={alt}
             style={{
               width: "100%",
@@ -138,7 +146,11 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   };
 
   const ServeActions = () => {
-    if (applicationData && applicationData[0].applicationComplete) return null;
+    if (
+      (applicationData && applicationData[0].applicationComplete) ||
+      isUnderReview
+    )
+      return null;
 
     return (
       <div type="submit" className="blue-btn" onClick={handleApply}>
