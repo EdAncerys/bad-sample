@@ -3,6 +3,8 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
 import { colors } from "../../config/imports";
+import date from "date-and-time";
+const DATE_MODULE = date;
 
 import Ellipse from "../../img/svg/ellipse.svg";
 import CheckMarkGreen from "../../img/svg/checkMarkGreen.svg";
@@ -19,6 +21,11 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   const ICON_WIDTH = 30;
 
   const [applicationStep, setStep] = useState("Start new application");
+  // application under review
+  const isUnderReview =
+    dynamicsApps && dynamicsApps[0].bad_approvalstatus === "Pending";
+  const isApproved =
+    dynamicsApps && dynamicsApps[0].bad_approvalstatus === "Approved";
 
   useEffect(() => {
     if (!applicationData) return null;
@@ -33,7 +40,8 @@ const ProfileProgress = ({ state, actions, libraries }) => {
       progressName = "Step 4 - Professional Details";
     if (applicationData[0].stepFive) progressName = "Step 5 - SIG Questions";
     if (applicationData[0].applicationComplete)
-      progressName = "Application Complete";
+      progressName = "Application Submitted";
+    if (isUnderReview) progressName = "Application Under Review";
 
     setStep(progressName);
   }, [applicationData]);
@@ -52,12 +60,6 @@ const ProfileProgress = ({ state, actions, libraries }) => {
 
     setGoToAction({ path: path, actions });
   };
-
-  // application under review
-  const isUnderReview =
-    dynamicsApps && dynamicsApps[0].bad_approvalstatus === "Pending";
-  // if application data exist & not under review return null
-  if (!applicationData && !isUnderReview) return null;
 
   // SERVERS ---------------------------------------------
   const ServeProgressBar = () => {
@@ -159,26 +161,80 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     );
   };
 
-  return (
-    <div
-      className="flex-col shadow"
-      style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
-    >
-      <div className="flex">
-        <div
-          className="flex primary-title"
-          style={{
-            fontSize: 20,
-            fontWeight: "bold",
-            justifyItems: "center",
-          }}
-        >
-          Application Progress - <span>{applicationStep}</span>
-        </div>
-        <ServeActions />
-      </div>
+  const ServeApplicationConsole = () => {
+    if (!applicationData) return null; // if application data exist & not under review return null
 
-      <ServeProgressBar />
+    return (
+      <div
+        className="flex-col shadow"
+        style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
+      >
+        <div className="flex">
+          <div
+            className="flex primary-title"
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+              justifyItems: "center",
+            }}
+          >
+            Application Progress - <span>{applicationStep}</span>
+          </div>
+          <ServeActions />
+        </div>
+
+        <ServeProgressBar />
+      </div>
+    );
+  };
+
+  const ServeApplicationList = () => {
+    if (dynamicsApps && !isApproved) return null; // if application data exist & not under review return null
+
+    return (
+      <div
+        className="flex-col shadow"
+        style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
+      >
+        <div className="flex-col">
+          <div
+            className="flex primary-title"
+            style={{
+              fontSize: 20,
+              justifyItems: "center",
+            }}
+          >
+            Existing Applications
+          </div>
+          {dynamicsApps.map((app) => {
+            const { bad_organisedfor, core_name, createdon } = app;
+
+            // get application date
+            let appData = createdon.split(" ")[0];
+            // split string and revert date with month format
+            appData = appData.split("/");
+            appData = `${appData[1]}/${appData[0]}/${appData[2]}`;
+
+            const dateObject = new Date(appData);
+            const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
+
+            return (
+              <div className="flex-col" style={{ padding: `1em 0` }}>
+                <div className="primary-title">{core_name}</div>
+                <div>{bad_organisedfor}</div>
+                <div>{formattedDate}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div>
+      <ServeApplicationConsole />
+      <ServeApplicationList />
     </div>
   );
 };
