@@ -74,14 +74,28 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
       isThereNextPage = nextPage;
     }
-    const GROUPE_DATA = Object.values(state.source[postPath]);
-    const GROUPE_TYPE = Object.values(state.source[typePath]);
+    let groupData = Object.values(state.source[postPath]);
+    const groupType = Object.values(state.source[typePath]);
     if (isCovid_19)
       setGuidanceCategory(Object.values(state.source.guidance_category)); // set additional filter option to COVID-19
 
+    // set post lit values from filter value in local storage
+    if (cptBlockFilter) {
+      typeFilterRef.current = cptBlockFilter;
+      groupData = groupData.filter((item) =>
+        item[typePath].includes(cptBlockFilter)
+      );
+    }
+    // clear filter value in local storage
+    setCPTBlockAction({ dispatch, cptBlockFilter: "" });
+
     const limit = post_limit || LIMIT;
-    setPostListData(GROUPE_DATA.slice(0, Number(limit))); // apply limit on posts
-    setGroupeType(GROUPE_TYPE);
+    if (!cptBlockFilter) {
+      setPostListData(groupData.slice(0, Number(limit))); // apply limit on posts
+    } else {
+      setPostListData(groupData);
+    }
+    setGroupeType(groupType);
 
     return () => {
       searchFilterRef.current = false; // clean up function
@@ -134,7 +148,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       });
     }
 
-    console.log(cptBlockFilter);
     setPostListData(data);
     setSearchFilter(input);
     if (categoryId) setGuidanceFilter(categoryId);
@@ -142,14 +155,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   const handleTypeSearch = () => {
     const input = typeFilterRef.current;
-    const categoryId = cptBlockFilter;
     let data = Object.values(state.source[postPath]); // add postListData object to data array
-
-    if (categoryId) {
-      data = data.filter((item) =>
-        item.guidance_category.includes(Number(categoryId))
-      );
-    }
 
     if (currentSearchFilterRef.current)
       data = data.filter((item) => {
@@ -170,6 +176,9 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
         const list = item[typePath];
         if (list.includes(input)) return item;
       });
+
+      // handle save search filter to local storage
+      setCPTBlockAction({ dispatch, cptBlockFilter: input });
 
       setPostListData(data);
     }
@@ -267,10 +276,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           <select
             name="guidance"
             value={cptBlockFilter}
-            onChange={(e) => {
-              setCPTBlockAction({ dispatch, cptBlockFilter: e.target.value });
-              handleSearch();
-            }}
+            onChange={handleSearch}
             className="input"
             style={{ height: 45 }}
           >

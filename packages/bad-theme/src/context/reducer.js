@@ -15,9 +15,9 @@ export const initialState = {
   filter: null,
   idFilter: null,
   cptBlockFilter: "",
+  eventAnchor: null,
 
   applicationData: null,
-  eventAnchor: null,
 
   loginModalAction: false,
   createAccountAction: false,
