@@ -29,6 +29,7 @@ const CardBody = ({
   titleLimit,
   opacity,
   videoArchive,
+  limitTitleLength,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { sm, md, lg, xl } = muiQuery();
