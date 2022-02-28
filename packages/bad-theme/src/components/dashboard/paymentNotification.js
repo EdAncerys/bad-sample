@@ -22,6 +22,11 @@ const PaymentNotification = ({
     const cookie = handleGetCookie({ name: `BAD-WebApp` });
     const { contactid, jwt } = cookie;
 
+    const the_url =
+      state.auth.ENVIRONMENT === "DEVELOPMENT"
+        ? "http://localhost:3000/"
+        : state.auth.BASE_URL;
+
     const fetchVendorId = await fetch(
       state.auth.APP_HOST +
         "/sagepay/test/application/" +

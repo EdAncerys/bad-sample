@@ -25,6 +25,13 @@ const Dashboard = ({
 
   // SERVERS ---------------------------------------------
   const ServeDashboard = () => {
+    if (userStatus.apps.data > 0) {
+      const data = userStatus.apps.data;
+      const unapprovedApplications = data.filter(function (singleApplication) {
+        return singleApplication.bad_approvalstatus == "Yes";
+      });
+    }
+
     return (
       <div style={{ padding: `0 ${marginHorizontal}px` }}>
         <Profile />

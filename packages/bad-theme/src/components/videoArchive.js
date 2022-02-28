@@ -27,7 +27,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
   const guidanceCategoryRef = useRef("");
 
   const marginHorizontal = state.theme.marginHorizontal;
-
+  const LIMIT = 6;
   //HANDLERS
   const handleSearch = () => {
     const input = searchFilterRef.current.value.toLowerCase() || searchFilter;
@@ -90,13 +90,15 @@ const VideoArchive = ({ state, actions, libraries }) => {
   };
 
   const handleClearSearchFilter = () => {
-    let data = Object.values(state.source[postPath]); // add postListData object to data array
+    console.log("CLEAR FILTER");
+    let data = state.source.videos; // add postListData object to data array
+    console.log("DATA CLEARER", data);
     setSearchFilter(null);
     searchFilterRef.current = null;
     currentSearchFilterRef.current = null;
 
     if (!typeFilterRef.current) {
-      setPostListData(data.slice(0, Number(post_limit || LIMIT)));
+      setPostData(data.slice(0, Number(LIMIT)));
     } else {
       handleTypeSearch();
     }
@@ -106,7 +108,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
     let data = Object.values(state.source[postPath]); // add postListData object to data array
     guidanceCategoryRef.current = "";
     setGuidanceFilter(null);
-    setPostListData(data.slice(0, Number(post_limit || LIMIT)));
+    setPostListData(data.slice(0, Number(LIMIT)));
 
     handleTypeSearch();
   };
@@ -122,6 +124,20 @@ const VideoArchive = ({ state, actions, libraries }) => {
     }
   };
   // SERVERS
+  const ServeNoVideosFound = () => {
+    return (
+      <div
+        style={{
+          width: "100%",
+          minHeight: "5em",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        "There are no videos found"
+      </div>
+    );
+  };
   const ServeFilter = () => {
     const ServeSearchFilter = () => {
       if (!searchFilter) return null;
@@ -284,8 +300,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
 
   useEffect(() => {
     actions.source.fetch("/videos/");
-    const felicia = state.source["event_specialty"];
-    console.log(felicia);
+
     const fetchHeroBanner = async () => {
       const fetchInfo = await fetch(
         "https://badadmin.skylarkdev.co/wp-json/wp/v2/pages/7051"
@@ -301,8 +316,9 @@ const VideoArchive = ({ state, actions, libraries }) => {
           layout: "50-50",
           padding: "small",
           text_align: "left",
+          colour: colors.orange,
           pop_out_text: "true",
-          background_colour: colors.orange,
+          background_colour: rgb(239, 125, 33, 0.1),
         });
       }
     };
@@ -318,12 +334,30 @@ const VideoArchive = ({ state, actions, libraries }) => {
 
       <BlockWrapper>
         <ServeFilter />
+        {postData ? (
+          <div style={styles.container}>
+            {postData.length > 0 ? (
+              postData.map((item) => {
+                const post = state.source[item.type][item.id];
+                return <VideoArchive post={post} />;
+              })
+            ) : (
+              <ServeNoVideosFound />
+            )}
+          </div>
+        ) : (
+          <ServeNoVideosFound />
+        )}
+        {/* {postData ? 
         <div style={styles.container}>
-          {postData.map((item) => {
-            const post = state.source[item.type][item.id];
-            return <VideoArchive post={post} />;
-          })}
-        </div>
+          {postData.length > 0 ? (
+            postData.map((item) => {
+              const post = state.source[item.type][item.id];
+              return <VideoArchive post={post} />
+            }
+            </div>  : (
+            <ServeNoVideosFound />
+          )} */}
       </BlockWrapper>
     </>
   );
