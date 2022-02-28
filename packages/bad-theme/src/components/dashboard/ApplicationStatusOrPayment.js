@@ -1,13 +1,12 @@
 import PaymentNotification from "./paymentNotification";
 const ApplicationStatusOrPayment = ({ userStatus }) => {
   if (!userStatus) return null;
+
   const { apps, subs } = userStatus;
   console.log("APPS", apps);
-  if (subs.data.length > 0) return null;
-  if (apps.data.length === 0) return null;
-  if (apps.data[0].bad_sagepayid) return null;
+  if (subs.data.length > 0 || apps.data.length === 0) return null;
 
-  if (apps.data[0].bad_approvalstatus === "Approved" && !bad_sagepayid) {
+  if (apps.data[0].bad_approvalstatus === "Approved") {
     return (
       <div className="shadow">
         <PaymentNotification application={apps.data[0]} />

@@ -143,7 +143,6 @@ const Profile = ({ state, actions, libraries }) => {
           fontSize: 20,
           display: "grid",
           gridTemplateColumns: !lg ? `1fr 1fr` : "1fr",
-          gridTemplateRows: !lg ? `repeat(3, 40px)` : null,
           gap: `5px 20px`,
         }}
       >
