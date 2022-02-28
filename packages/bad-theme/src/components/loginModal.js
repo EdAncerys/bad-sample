@@ -45,6 +45,7 @@ const LoginModal = ({ state, actions }) => {
   const iFrameHandler = async (e) => {
     const iFrame = e.currentTarget;
 
+    // development env default login action
     if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
       const jwt = await authenticateAppAction({ state, dispatch });
       await getUserDataByContactId({

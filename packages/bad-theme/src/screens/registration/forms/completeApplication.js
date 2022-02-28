@@ -115,7 +115,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
     <div style={{ position: "relative" }}>
       <ActionPlaceholder isFetching={isFetching} background="transparent" />
       <form>
-        <div style={{ padding: `2em 1em 0` }}>
+        <div style={{ padding: `2em 1em` }}>
           {inputValidator.bad_ethnicity && (
             <div>
               <label style={styles.subTitle}>What is your Ethnic Group?</label>

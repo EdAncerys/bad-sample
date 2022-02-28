@@ -44,7 +44,7 @@ const RegistrationStepOne = ({ state, actions }) => {
     });
     if (isActiveUser)
       setGoToAction({
-        path: `/membership/step-3-personal-information/`,
+        path: `/membership/step-2-category-selection/`,
         actions,
       });
   };

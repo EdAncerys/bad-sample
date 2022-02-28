@@ -5,6 +5,7 @@ import { colors } from "../../../config/imports";
 import SearchDropDown from "../../../components/searchDropDown";
 import CloseIcon from "@mui/icons-material/Close";
 import FormError from "../../../components/formError";
+import { Form } from "react-bootstrap";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -52,6 +53,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     bad_expectedyearofqualification: "",
     py3_constitutionagreement: "",
     bad_readpolicydocument: "",
+    sky_newhospitaltype: "",
   });
   const [inputValidator, setInputValidator] = useState({
     py3_gmcnumber: true,
@@ -199,6 +201,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         "py3_otherregulatorybodyreference",
         "py3_ntnno",
         "bad_currentpost",
+        "sky_newhospitaltype",
       ],
     });
 
@@ -265,7 +268,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
           className="transparent-btn"
           onClick={() =>
             setGoToAction({
-              path: `/membership/step-2-category-selection/`,
+              path: `/membership/step-3-personal-information/`,
               actions,
             })
           }
@@ -429,6 +432,25 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                 type="checkbox"
                 className="form-check-input check-box"
               />
+            </div>
+          )}
+
+          {formData.bad_newhospitaladded && (
+            <div>
+              <label className="required form-label">Select Type</label>
+              <Form.Select
+                name="sky_newhospitaltype"
+                value={formData.sky_newhospitaltype}
+                onChange={handleInputChange}
+                className="input"
+              >
+                <option value="" hidden>
+                  Hospital / Medical School
+                </option>
+                <option value="Hospital">Hospital</option>
+                <option value="School">Medical School</option>
+              </Form.Select>
+              <FormError id="sky_newhospitaltype" />
             </div>
           )}
 

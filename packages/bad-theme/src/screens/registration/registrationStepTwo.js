@@ -102,7 +102,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
       membershipApplication: { stepThree: true }, // set stepOne to complete
       category: formData.bad_organisedfor === "810170000" ? "BAD" : "SIG",
       type: formData.bad_categorytype, // application type name
-      path: `/membership/step-4-professional-details/`,
+      path: `/membership/step-3-personal-information/`,
     });
   };
 
@@ -117,7 +117,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
           className="transparent-btn"
           onClick={() =>
             setGoToAction({
-              path: `/membership/step-3-personal-information/`,
+              path: `/membership/step-1-the-process/`,
               actions,
             })
           }

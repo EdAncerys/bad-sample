@@ -394,7 +394,10 @@ const updateMembershipApplication = ({
       application.value = data.sky_cvurl;
     if (data.sky_newhospitalname && application.name === "sky_newhospitalname")
       application.value = data.sky_newhospitalname;
-    if (data.sky_newhospitaltype && application.name === "sky_newhospitaltype")
+    if (
+      data.sky_newhospitaltype !== undefined &&
+      application.name === "sky_newhospitaltype"
+    )
       application.value = data.sky_newhospitaltype;
     if (
       data.bad_newhospitaladded &&

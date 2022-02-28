@@ -169,7 +169,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
       data: formData,
     });
 
-    let slug = `/membership/step-2-category-selection/`;
+    let slug = `/membership/step-4-professional-details/`;
     if (isActiveUser) setGoToAction({ path: slug, actions });
 
     // console.log(formData); // debug
@@ -213,7 +213,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
           className="transparent-btn"
           onClick={() =>
             setGoToAction({
-              path: `/membership/step-1-the-process/`,
+              path: `/membership/step-2-category-selection/`,
               actions,
             })
           }
