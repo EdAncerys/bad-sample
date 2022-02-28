@@ -158,10 +158,16 @@ const CardBody = ({
     for (let i = 0; i < videoArchive.event_specialty.length; i++) {
       antresto.push(specialties[event_specialties[i]]);
     }
-
+    const ServeSpecialty = ({ name }) => {
+      return (
+        <div style={{ backgroundColor: colors.lightSilver, padding: "1em" }}>
+          {name}
+        </div>
+      );
+    };
     if (specialties) {
       return antresto.map((special) => {
-        return special.name;
+        return <ServeSpecialty name={special.name} />;
       });
     }
 
