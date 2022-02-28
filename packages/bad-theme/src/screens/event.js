@@ -410,6 +410,12 @@ const Event = ({ state, actions, libraries }) => {
       return (
         <div>
           {relatedGradeList.map((event, key) => {
+            let eventDate = event.date;
+            if (event.acf.date_time) eventDate = event.acf.date_time[0];
+
+            const dateObject = new Date(eventDate.date);
+            const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
+
             return (
               <div
                 key={key}
@@ -426,7 +432,7 @@ const Event = ({ state, actions, libraries }) => {
                     width: "fit-content",
                   }}
                 >
-                  {name}
+                  {formattedDate}
                 </div>
 
                 <div
