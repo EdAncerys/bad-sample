@@ -8,7 +8,7 @@ import PaidIcon from "@mui/icons-material/Paid";
 import { colors } from "../../config/imports";
 import ElectionInfo from "./electionInfo";
 
-import { muiQuery } from "../../context";
+import { anchorScrapper, muiQuery } from "../../context";
 
 const DATE_MODULE = date;
 
@@ -149,21 +149,29 @@ const CardBody = ({
       </div>
     );
   };
+
   const ServeVideoArchiveCategories = () => {
     if (!videoArchive) return null;
+    const event_specialties = videoArchive.event_specialty;
+    if (event_specialties.length === 0) return null;
 
-    // const GetCategoriesNames = async () => {
-    //   const fetchCategories = await fetch(
-    //     "http://3.9.193.188/wp-json/wp/v2/event_specialty"
-    //   );
-    //   if (fetchCategories.ok) {
-    //     const json = await fetchCategories.json();
-    //     console.log(json);
-    //   }
-    // };
-    // GetCategoriesNames();
+    const specialties = state.source["event_specialty"];
+
+    let antresto = [];
+
+    for (let i = 0; i < videoArchive.event_specialty.length; i++) {
+      antresto.push(specialties[event_specialties[i]]);
+    }
+
+    if (specialties) {
+      return antresto.map((special) => {
+        return special.name;
+      });
+    }
+
     return "Error fetching categories";
   };
+
   const ServePublicationDate = () => {
     if (!publicationDate) return null;
 

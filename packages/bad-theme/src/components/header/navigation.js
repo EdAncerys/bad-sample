@@ -45,11 +45,12 @@ const Navigation = ({ state, actions, libraries }) => {
       }
     });
     // ⬇️ menu page content pre fetch
-    await Promise.all(
+    Promise.all(
       flatMenu.map(({ slug }) => actions.source.fetch(`/${slug}`))
-    );
+    ).then(() => {
+      setFlatMenu(flatMenu); // set flat menu
+    });
 
-    setFlatMenu(flatMenu); // set flat menu
     setWpMainMenu(wpMainMenu); // main menu to display
     setWpMoreMenu(wpMoreMenu); // more menu into dropdown
 

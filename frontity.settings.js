@@ -109,6 +109,11 @@ const settings = {
               endpoint: "events", // REST API endpoint
               postTypeEndpoint: "events", // endpoint from which posts from this taxonomy are fetched
             },
+            {
+              taxonomy: "event_specialty", // taxonomy slug
+              endpoint: "event_specialty", // REST API endpoint
+              postTypeEndpoint: "event_specialty", // endpoint from which posts from this taxonomy are fetched
+            },
           ],
           // redirections: ["404", "/derm_groups_charity/"],
         },

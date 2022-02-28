@@ -1,18 +1,249 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { connect } from "frontity";
 import Card from "./card/card";
 import BlockWrapper from "./blockWrapper";
 import { useAppState } from "../context";
 import HeroBanner from "../components/heroBanner";
-const VideoArchive = ({ state, libraries }) => {
+import SearchContainer from "./searchContainer";
+import TypeFilters from "./typeFilters";
+import { colors } from "../config/imports";
+import CloseIcon from "@mui/icons-material/Close";
+
+const VideoArchive = ({ state, actions, libraries }) => {
   const [heroBannerBlock, setHeroBannerBlock] = useState();
+  const [guidanceCategory, setGuidanceCategory] = useState(null);
+  const [postData, setPostData] = useState(null);
+  const [searchFilter, setSearchFilter] = useState(null);
+  const [guidanceFilter, setGuidanceFilter] = useState(null);
+  const [groupeType, setGroupeType] = useState(null);
+
   const { isActiveUser } = useAppState();
-  const data = state.source.get(state.router.link);
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  // GET VIMEO COVER
+  const searchFilterRef = useRef(null);
+  const currentSearchFilterRef = useRef(null);
+  const typeFilterRef = useRef(null);
+  const loadMoreRef = useRef(null);
+  const guidanceCategoryRef = useRef("");
 
+  const marginHorizontal = state.theme.marginHorizontal;
+
+  //HANDLERS
+  const handleSearch = () => {
+    const input = searchFilterRef.current.value.toLowerCase() || searchFilter;
+    console.log("INPUCIK", input);
+    currentSearchFilterRef.current = input;
+    let data = state.source.get(state.router.link);
+
+    const categoryId = guidanceCategoryRef.current.value;
+    console.log("KATEGORICZKA", categoryId);
+    console.log(data.items);
+    if (categoryId) {
+      data = data.items.filter((item) =>
+        item.guidance_category.includes(Number(categoryId))
+      );
+    }
+
+    if (!!input) {
+      data = data.items.filter((item) => {
+        let title = item.link;
+        // let content = item.content.rendered;
+
+        if (title) title = title.toLowerCase().includes(input.toLowerCase());
+        // if (content)
+        //   content = content.toLowerCase().includes(input.toLowerCase());
+
+        // return title || content;
+        return title;
+      });
+    }
+    console.log("DATA AFTER FILTER", data);
+    setPostData(data);
+    setSearchFilter(input);
+    if (categoryId) setGuidanceFilter(categoryId);
+  };
+
+  const handleTypeSearch = () => {
+    const input = typeFilterRef.current;
+    const categoryId = guidanceCategoryRef.current.value;
+    let data = Object.values(state.source[postPath]); // add postListData object to data array
+
+    if (categoryId) {
+      data = data.filter((item) =>
+        item.guidance_category.includes(Number(categoryId))
+      );
+    }
+
+    if (currentSearchFilterRef.current)
+      data = data.filter((item) => {
+        let title = item.title.rendered;
+        let content = item.content.rendered;
+        if (title)
+          title = title.toLowerCase().includes(currentSearchFilterRef.current);
+        if (content)
+          content = content
+            .toLowerCase()
+            .includes(currentSearchFilterRef.current);
+
+        return title || content;
+      });
+  };
+
+  const handleClearSearchFilter = () => {
+    let data = Object.values(state.source[postPath]); // add postListData object to data array
+    setSearchFilter(null);
+    searchFilterRef.current = null;
+    currentSearchFilterRef.current = null;
+
+    if (!typeFilterRef.current) {
+      setPostListData(data.slice(0, Number(post_limit || LIMIT)));
+    } else {
+      handleTypeSearch();
+    }
+  };
+
+  const handleClearCategoryFilter = () => {
+    let data = Object.values(state.source[postPath]); // add postListData object to data array
+    guidanceCategoryRef.current = "";
+    setGuidanceFilter(null);
+    setPostListData(data.slice(0, Number(post_limit || LIMIT)));
+
+    handleTypeSearch();
+  };
+
+  const handleClearTypeFilter = () => {
+    typeFilterRef.current = null;
+    let data = Object.values(state.source[postPath]); // add postListData object to data array
+
+    if (!currentSearchFilterRef.current) {
+      setPostListData(data.slice(0, Number(post_limit || LIMIT)));
+    } else {
+      handleSearch();
+    }
+  };
+  // SERVERS
+  const ServeFilter = () => {
+    const ServeSearchFilter = () => {
+      if (!searchFilter) return null;
+
+      return (
+        <>
+          Your search query:{" "}
+          <div className="shadow filter">
+            <div>{searchFilter}</div>
+            <div className="filter-icon" onClick={handleClearSearchFilter}>
+              <CloseIcon
+                style={{
+                  fill: colors.darkSilver,
+                  padding: 0,
+                }}
+              />
+            </div>
+          </div>
+        </>
+      );
+    };
+
+    const ServeGuidanceFilter = () => {
+      if (!guidanceFilter) return null;
+
+      let name = "Category";
+      name = guidanceCategory.filter(
+        (item) => item.id === Number(guidanceFilter)
+      )[0];
+      if (name) name = name.name; // apply category filter name
+
+      return (
+        <div className="shadow filter">
+          <div>{name}</div>
+          <div className="filter-icon" onClick={handleClearCategoryFilter}>
+            <CloseIcon
+              style={{
+                fill: colors.darkSilver,
+                padding: 0,
+              }}
+            />
+          </div>
+        </div>
+      );
+    };
+
+    const ServeGuidanceType = () => {
+      if (!guidanceCategory) return null;
+
+      return (
+        <div
+          style={{
+            marginTop: "auto",
+            // padding: `1em 0 1em ${state.theme.marginVertical}px`,
+          }}
+        >
+          <select
+            name="guidance"
+            ref={guidanceCategoryRef}
+            value={guidanceCategoryRef.current.value}
+            onChange={handleSearch}
+            className="input"
+            style={{ height: 45 }}
+          >
+            <option value="" hidden>
+              Select Guidance Category
+            </option>
+            {guidanceCategory.map((item, key) => {
+              return (
+                <option key={key} value={item.id}>
+                  {item.name}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+      );
+    };
+
+    return (
+      <div
+        style={{
+          backgroundColor: colors.silverFillTwo,
+          // marginBottom: `${state.theme.marginVertical}px`,
+          padding: `2em 0`,
+        }}
+      >
+        <BlockWrapper>
+          <div
+            style={{
+              padding: `0 ${marginHorizontal}px`,
+              width: "100%",
+            }}
+            className="no-selector"
+          >
+            <div className="flex-row">
+              <SearchContainer
+                title="Search for Videos"
+                searchFilterRef={searchFilterRef}
+                handleSearch={handleSearch}
+              />
+              <ServeGuidanceType />
+            </div>
+
+            <div className="flex" style={{ margin: "0.5em 0" }}>
+              <ServeSearchFilter />
+              <ServeGuidanceFilter />
+            </div>
+            <TypeFilters
+              filters={groupeType}
+              handleSearch={handleTypeSearch}
+              typeFilterRef={typeFilterRef}
+              handleClearTypeFilter={handleClearTypeFilter}
+              title="Filter"
+            />
+          </div>
+        </BlockWrapper>
+      </div>
+    );
+  };
   const VideoArchive = ({ post }) => {
+    // GET VIMEO COVER
     const [vimeoCover, setVimeoCover] = React.useState(
       "https://badadmin.skylarkdev.co/wp-content/uploads/2022/02/VIDEO-LIBRARY.jpg"
     );
@@ -36,7 +267,6 @@ const VideoArchive = ({ state, libraries }) => {
     };
 
     useEffect(() => {
-      console.log("USEEFFECT");
       getVimeoCover({ video_url: post.acf.video });
     }, []);
 
@@ -47,14 +277,18 @@ const VideoArchive = ({ state, libraries }) => {
         body={post.content.rendered}
         publicationDate={post.date}
         videoArchive={post}
+        colour={colors.orange}
       />
     );
   };
 
   useEffect(() => {
+    actions.source.fetch("/videos/");
+    const felicia = state.source["event_specialty"];
+    console.log(felicia);
     const fetchHeroBanner = async () => {
       const fetchInfo = await fetch(
-        "https://badadmin.skylarkdev.co//wp-json/wp/v2/pages/7051"
+        "https://badadmin.skylarkdev.co/wp-json/wp/v2/pages/7051"
       );
 
       if (fetchInfo.ok) {
@@ -68,21 +302,30 @@ const VideoArchive = ({ state, libraries }) => {
           padding: "small",
           text_align: "left",
           pop_out_text: "true",
+          background_colour: colors.orange,
         });
       }
     };
+    const data = state.source.get(state.router.link);
+    setPostData(data.items);
+    console.log("DATERO ", data);
     fetchHeroBanner();
   }, []);
+  if (!postData) return null;
   return (
-    <BlockWrapper>
+    <>
       <HeroBanner block={heroBannerBlock} />
-      <div style={styles.container}>
-        {data.items.map((item) => {
-          const post = state.source[item.type][item.id];
-          return <VideoArchive post={post} />;
-        })}
-      </div>
-    </BlockWrapper>
+
+      <BlockWrapper>
+        <ServeFilter />
+        <div style={styles.container}>
+          {postData.map((item) => {
+            const post = state.source[item.type][item.id];
+            return <VideoArchive post={post} />;
+          })}
+        </div>
+      </BlockWrapper>
+    </>
   );
 };
 
