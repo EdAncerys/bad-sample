@@ -33,7 +33,7 @@ export const authLogViaCookie = async ({ state, initialState }) => {
       const userData = await userResponse.json();
 
       if (!appsResponse.ok)
-        throw new Error(`${userResponse.statusText} ${userResponse.status}`); // fetch user data from Dynamics
+        throw new Error(`${appsResponse.statusText} ${appsResponse.status}`); // fetch user data from Dynamics
       const appsData = await appsResponse.json();
       console.log("🚀 dynamicsApps", appsData.apps.data); // debug
 

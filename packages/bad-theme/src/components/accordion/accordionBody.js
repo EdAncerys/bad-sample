@@ -35,7 +35,7 @@ const AccordionBody = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, idFilter } = useAppState();
+  const { applicationData, isActiveUser, dynamicsApps } = useAppState();
 
   const ALL_POSITIONS = Object.values(state.source.leadership_position);
   const ICON_WIDTH = 35;
@@ -71,6 +71,7 @@ const AccordionBody = ({
       dispatch,
       applicationData,
       isActiveUser,
+      dynamicsApps,
       category: "BAD",
       type: category_types, // application type name
       membershipApplication: {
