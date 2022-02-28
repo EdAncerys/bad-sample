@@ -25,6 +25,7 @@ const Dashboard = ({
 
   // SERVERS ---------------------------------------------
   const ServeDashboard = () => {
+    console.log(userStatus);
     return (
       <div style={{ padding: `0 ${marginHorizontal}px` }}>
         <Profile />
