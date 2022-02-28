@@ -13,7 +13,7 @@ import { useAppState, setGoToAction } from "../../context";
 const ProfileProgress = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const { applicationData } = useAppState();
+  const { dynamicsApps, applicationData } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
   const ICON_WIDTH = 30;
@@ -42,9 +42,9 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   const handleApply = () => {
     let path = `/membership/step-1-the-process/`;
     if (applicationData && applicationData[0].stepOne)
-      path = `/membership/step-3-personal-information/`;
-    if (applicationData && applicationData[0].stepTwo)
       path = `/membership/step-2-category-selection/`;
+    if (applicationData && applicationData[0].stepTwo)
+      path = `/membership/step-3-personal-information/`;
     if (applicationData && applicationData[0].stepThree)
       path = `/membership/step-4-professional-details/`;
     if (applicationData && applicationData[0].stepFour)
@@ -52,6 +52,9 @@ const ProfileProgress = ({ state, actions, libraries }) => {
 
     setGoToAction({ path: path, actions });
   };
+
+  // if application data exist, return null
+  if (dynamicsApps) return null;
 
   // SERVERS ---------------------------------------------
   const ServeProgressBar = () => {

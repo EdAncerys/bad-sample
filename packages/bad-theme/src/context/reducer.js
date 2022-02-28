@@ -3,6 +3,7 @@ export const initialState = {
   isError: null,
 
   isActiveUser: null,
+  dynamicsApps: null,
   jwt: null,
 
   tweets: null,
@@ -62,6 +63,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, cptBlockFilter: action.payload };
     case "SET_EVENT_ANCHOR_ACTION":
       return { ...state, eventAnchor: action.payload };
+    case "SET_APPLICATION_ACTION":
+      return { ...state, dynamicsApps: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
