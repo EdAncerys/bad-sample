@@ -162,7 +162,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   };
 
   const ServeApplicationConsole = () => {
-    if (!applicationData) return null; // if application data exist & not under review return null
+    if (!applicationData && !isUnderReview) return null; // if application data exist & not under review return null
 
     return (
       <div
