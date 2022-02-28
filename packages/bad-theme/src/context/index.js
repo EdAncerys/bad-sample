@@ -7,6 +7,7 @@ import {
   setApplicationDataAction,
   setIDFilterAction,
   setCPTBlockAction,
+  setEventAnchorAction,
 } from "./actions/actions";
 import { muiQuery } from "./mediaQueryContext";
 import {
@@ -100,4 +101,5 @@ export {
   anchorScrapper,
   getWpPagesAction,
   setCPTBlockAction,
+  setEventAnchorAction,
 };

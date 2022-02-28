@@ -17,6 +17,7 @@ export const initialState = {
   cptBlockFilter: "",
 
   applicationData: null,
+  eventAnchor: null,
 
   loginModalAction: false,
   createAccountAction: false,
@@ -59,6 +60,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, isDirectDebit: action.payload };
     case "SET_CPT_BLOCK_ACTION":
       return { ...state, cptBlockFilter: action.payload };
+    case "SET_EVENT_ANCHOR_ACTION":
+      return { ...state, eventAnchor: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

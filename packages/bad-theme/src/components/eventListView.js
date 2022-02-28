@@ -6,13 +6,20 @@ import date from "date-and-time";
 
 import Loading from "./loading";
 import { colors } from "../config/imports";
-import { setGoToAction } from "../context";
+// CONTEXT --------------------------------------------------------
+import {
+  useAppDispatch,
+  setGoToAction,
+  setEventAnchorAction,
+} from "../context";
 
 const DATE_MODULE = date;
 
 const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
+
+  const dispatch = useAppDispatch();
 
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
@@ -40,11 +47,19 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
   } = block.acf;
 
   const title = block.title.rendered;
+  const anchor = "id-" + title.replace(/ /g, "-").toLowerCase(); // set title to anchor
+
   const GRADES = Object.values(state.source.event_grade);
   const eventGradeIds = Object.values(block.event_grade);
   const eventGrades = GRADES.filter((item) => {
     if (eventGradeIds.includes(item.id)) return item;
   });
+
+  // HANDLERS ---------------------------------------------------------------
+  const handleClick = () => {
+    setEventAnchorAction({ dispatch, eventAnchor: anchor });
+    setGoToAction({ path: block.link, actions });
+  };
 
   // SERVERS ----------------------------------------------------------------
   const ServeCardImage = () => {
@@ -197,10 +212,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
           backgroundColor: colors.silverFillOne,
         }}
       >
-        <div
-          style={styles.container}
-          onClick={() => setGoToAction({ path: block.link, actions })}
-        >
+        <div id={anchor} style={styles.container} onClick={handleClick}>
           <ServeCardContent />
           <ServeCardImage />
         </div>

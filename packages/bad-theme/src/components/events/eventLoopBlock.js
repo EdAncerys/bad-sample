@@ -6,6 +6,12 @@ import EventListView from "../eventListView";
 import Card from "../card/card";
 import TitleBlock from "../titleBlock";
 import { colors } from "../../config/imports";
+// CONTEXT --------------------------------------------------------
+import {
+  useAppDispatch,
+  useAppState,
+  setEventAnchorAction,
+} from "../../context";
 
 const EventLoopBlock = ({
   state,
@@ -21,6 +27,9 @@ const EventLoopBlock = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
+
+  const dispatch = useAppDispatch();
+  const { eventAnchor } = useAppState();
 
   const {
     post_limit,
@@ -55,25 +64,36 @@ const EventLoopBlock = ({
       console.log("Error. Failed to fetch events data"); // debug
       return null;
     }
-    let EVENT_LIST = Object.values(state.source.events); // add events object to data array
-    const GRADES = Object.values(state.source.event_grade);
+    let eventList = Object.values(state.source.events); // add events object to data array
+    const grades = Object.values(state.source.event_grade);
 
-    let GRADE_FILTER_ID = GRADES.filter(
+    let gradeFilterId = grades.filter(
       (filter) => filter.name === grade_filter
     )[0];
 
-    if (GRADE_FILTER_ID) GRADE_FILTER_ID = GRADE_FILTER_ID.id;
-    if (post_limit) EVENT_LIST = EVENT_LIST.slice(0, Number(post_limit)); // apply limit on posts
+    if (gradeFilterId) gradeFilterId = gradeFilterId.id;
+    if (post_limit) eventList = eventList.slice(0, Number(post_limit)); // apply limit on posts
 
-    setGradeFilterId(GRADE_FILTER_ID);
+    setGradeFilterId(gradeFilterId);
 
     // sort events in order by date accenting from
-    let filterByDate = EVENT_LIST.sort(
+    let filterByDate = eventList.sort(
       (a, b) =>
         new Date(a.acf.date_time[0].date) - new Date(b.acf.date_time[0].date)
     );
 
     setEventList(filterByDate);
+
+    // link to anchor for event
+    if (eventAnchor) {
+      setTimeout(() => {
+        const anchor = document.getElementById(eventAnchor);
+        if (anchor) anchor.scrollIntoView({ behavior: "smooth" });
+      }, 500);
+      console.log("🚀 anchor to event list", eventAnchor); // debug
+
+      setEventAnchorAction({ dispatch, eventAnchor: null }); // reset
+    }
 
     return () => {
       mountedRef.current = false; // clean up function
