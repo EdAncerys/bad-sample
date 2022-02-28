@@ -16,10 +16,12 @@ import CloseIcon from "@mui/icons-material/Close";
 const Events = ({ state, actions, libraries, block }) => {
   const [grades, setGrades] = useState(null); // data
   const [locations, setLocations] = useState(null); // data
+  const [specialty, setSpecialty] = useState(null); // data
 
   const [searchFilter, setSearchFilter] = useState("");
   const [gradesFilter, setGradesFilter] = useState("");
   const [locationsFilter, setLocationsFilter] = useState("");
+  const [specialtyFilter, setSpecialtyFilter] = useState("");
   const [yearFilter, setYearFilter] = useState("");
 
   const marginHorizontal = state.theme.marginHorizontal;
@@ -30,15 +32,19 @@ const Events = ({ state, actions, libraries, block }) => {
   const isSearch = block.add_search_function;
 
   useEffect(() => {
-    let GRADES = null;
-    let LOCATIONS = null;
+    let grades = null;
+    let locations = null;
+    let specialty = null;
     if (state.source.event_grade)
-      GRADES = Object.values(state.source.event_grade);
+      grades = Object.values(state.source.event_grade);
     if (state.source.event_location)
-      LOCATIONS = Object.values(state.source.event_location);
+      locations = Object.values(state.source.event_location);
+    if (state.source.event_specialty)
+      specialty = Object.values(state.source.event_specialty);
 
-    setGrades(GRADES);
-    setLocations(LOCATIONS);
+    setGrades(grades);
+    setLocations(locations);
+    setSpecialty(specialty);
   }, [state.source.event_grade, state.source.event_location]);
 
   // HELPERS ----------------------------------------------------------------
@@ -111,6 +117,31 @@ const Events = ({ state, actions, libraries, block }) => {
       );
     };
 
+    const ServeSpecialtyFilter = () => {
+      if (!specialty) return null;
+
+      return (
+        <div className="flex" style={{ paddingRight: `1em` }}>
+          <Form.Select
+            style={styles.input}
+            value={specialtyFilter}
+            onChange={(e) => setSpecialtyFilter(e.target.value)}
+          >
+            <option value="" hidden>
+              Specialty
+            </option>
+            {specialty.map((item, key) => {
+              return (
+                <option key={key} value={item.id}>
+                  {item.name}
+                </option>
+              );
+            })}
+          </Form.Select>
+        </div>
+      );
+    };
+
     const ServeYearFilter = () => {
       // get current month
       const currentMonth = new Date().getMonth();
@@ -155,6 +186,7 @@ const Events = ({ state, actions, libraries, block }) => {
         <ServeTitle />
         <ServeGradeFilter />
         <ServeLocationFilter />
+        <ServeSpecialtyFilter />
         <ServeYearFilter />
       </div>
     );
@@ -169,7 +201,7 @@ const Events = ({ state, actions, libraries, block }) => {
       return (
         <div className="shadow filter">
           <div>{searchFilter}</div>
-          <div className="filter-icon" onClick={() => setSearchFilter(null)}>
+          <div className="filter-icon" onClick={() => setSearchFilter("")}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -183,14 +215,14 @@ const Events = ({ state, actions, libraries, block }) => {
 
     const ServeSelectedGradesFilter = () => {
       if (!gradesFilter) return null;
-      const GRADES = Object.values(state.source.event_grade);
-      const filter = GRADES.filter((item) => item.id === Number(gradesFilter));
+      const grades = Object.values(state.source.event_grade);
+      const filter = grades.filter((item) => item.id === Number(gradesFilter));
       const name = filter[0].name;
 
       return (
         <div className="shadow filter">
           <div>{name}</div>
-          <div className="filter-icon" onClick={() => setGradesFilter(null)}>
+          <div className="filter-icon" onClick={() => setGradesFilter("")}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -204,8 +236,8 @@ const Events = ({ state, actions, libraries, block }) => {
 
     const ServeSelectedLocationFilter = () => {
       if (!locationsFilter) return null;
-      const LOCATIONS = Object.values(state.source.event_location);
-      const filter = LOCATIONS.filter(
+      const locations = Object.values(state.source.event_location);
+      const filter = locations.filter(
         (item) => item.id === Number(locationsFilter)
       );
       const name = filter[0].name;
@@ -213,7 +245,32 @@ const Events = ({ state, actions, libraries, block }) => {
       return (
         <div className="shadow filter">
           <div>{name}</div>
-          <div className="filter-icon" onClick={() => setLocationsFilter(null)}>
+          <div className="filter-icon" onClick={() => setLocationsFilter("")}>
+            <CloseIcon
+              style={{
+                fill: colors.darkSilver,
+                padding: 0,
+              }}
+            />
+          </div>
+        </div>
+      );
+    };
+
+    const ServeSpecialtyFilter = () => {
+      if (!specialtyFilter) return null;
+
+      const specialty = Object.values(state.source.event_specialty);
+      const filter = specialty.filter(
+        (item) => item.id === Number(specialtyFilter)
+      );
+      let name = "Specialty";
+      if (filter[0]) name = filter[0].name;
+
+      return (
+        <div className="shadow filter">
+          <div>{name}</div>
+          <div className="filter-icon" onClick={() => setSpecialtyFilter("")}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -234,7 +291,7 @@ const Events = ({ state, actions, libraries, block }) => {
       return (
         <div className="shadow filter">
           <div>{formattedDate}</div>
-          <div className="filter-icon" onClick={() => setYearFilter(null)}>
+          <div className="filter-icon" onClick={() => setYearFilter("")}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -259,6 +316,7 @@ const Events = ({ state, actions, libraries, block }) => {
           <ServeSearchFilter />
           <ServeSelectedGradesFilter />
           <ServeSelectedLocationFilter />
+          <ServeSpecialtyFilter />
           <ServeSelectedYearFilter />
         </div>
       </div>
@@ -276,6 +334,7 @@ const Events = ({ state, actions, libraries, block }) => {
         gradesFilter={gradesFilter}
         locationsFilter={locationsFilter}
         yearFilter={yearFilter}
+        specialtyFilter={specialtyFilter}
       />
     </div>
   );

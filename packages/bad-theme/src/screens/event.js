@@ -21,7 +21,7 @@ const Event = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const event = state.source[data.type][data.id];
-  // console.log("event data: ", event); // debug
+  console.log("event data: ", event); // debug
 
   const dispatch = useAppDispatch();
 
@@ -92,7 +92,6 @@ const Event = ({ state, actions, libraries }) => {
     contact_allow_attachments,
   } = event.acf;
   const { title } = event;
-  console.log(event);
 
   // SERVERS ----------------------------------------------
   const ServeTitle = () => {
