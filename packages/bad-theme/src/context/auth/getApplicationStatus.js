@@ -17,7 +17,7 @@ export const getApplicationStatus = async ({ state, dispatch, contactid }) => {
 
     if (data.apps.success) {
       setApplicationStatusAction({ dispatch, dynamicsApps: data.apps.data });
-      console.log("🚀 dynamicsApps", data.apps.data); // debug
+      console.log("🚀 Dynamic Apps Data", data.apps.data); // debug
     }
   } catch (error) {
     console.log("error", error);

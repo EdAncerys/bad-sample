@@ -162,7 +162,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   };
 
   const ServeApplicationConsole = () => {
-    if (!applicationData && !isUnderReview) return null; // if application data exist & not under review return null
+    if (!applicationData || !isUnderReview) return null; // if application data exist & not under review return null
 
     return (
       <div
@@ -189,7 +189,13 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   };
 
   const ServeApplicationList = () => {
-    if (dynamicsApps && !isApproved) return null; // if application data exist & not under review return null
+    if (!dynamicsApps) return null; // if application data exist & not under review return null
+    // see if application list have approved applications and if so show them
+    const approvedApplications = dynamicsApps.filter(
+      (app) => app.bad_approvalstatus === "Approved"
+    );
+    // hide component if application list has no approved applications
+    if (approvedApplications.length === 0) return null;
 
     return (
       <div
@@ -206,8 +212,16 @@ const ProfileProgress = ({ state, actions, libraries }) => {
           >
             Existing Applications
           </div>
-          {dynamicsApps.map((app) => {
-            const { bad_organisedfor, core_name, createdon } = app;
+          {dynamicsApps.map((app, key) => {
+            const {
+              bad_organisedfor,
+              core_name,
+              createdon,
+              bad_approvalstatus,
+            } = app;
+
+            // hide application with not approved status
+            if (bad_approvalstatus !== "Approved") return null;
 
             // get application date
             let appData = createdon.split(" ")[0];
@@ -219,7 +233,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
             const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
 
             return (
-              <div className="flex-col" style={{ paddingTop: `1em` }}>
+              <div key={key} className="flex-col" style={{ paddingTop: `1em` }}>
                 <div className="primary-title">{bad_organisedfor}</div>
                 <div>{core_name}</div>
                 <div>Application Date: {formattedDate}</div>
