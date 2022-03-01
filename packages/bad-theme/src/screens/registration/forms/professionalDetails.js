@@ -238,37 +238,37 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     });
 
     if (!isValid) return null;
-    console.log(formData); // debug
+    // console.log(formData); // debug
 
-    // try {
-    //   setFetching(true);
-    //   const store = await setUserStoreAction({
-    //     state,
-    //     actions,
-    //     dispatch,
-    //     applicationData,
-    //     isActiveUser,
-    //     dynamicsApps,
-    //     membershipApplication: { stepFour: true }, // set stepOne to complete
-    //     data: formData,
-    //   });
+    try {
+      setFetching(true);
+      const store = await setUserStoreAction({
+        state,
+        actions,
+        dispatch,
+        applicationData,
+        isActiveUser,
+        dynamicsApps,
+        membershipApplication: { stepFour: true }, // set stepOne to complete
+        data: formData,
+      });
 
-    //   // set complete application if app = BAD
-    //   if (category === "BAD")
-    //     await setCompleteUserApplicationAction({
-    //       state,
-    //       dispatch,
-    //       isActiveUser,
-    //     });
-    //   setFetching(false);
-    //   if (!store.success) throw new Error("Failed to complete application");
+      // set complete application if app = BAD
+      if (category === "BAD")
+        await setCompleteUserApplicationAction({
+          state,
+          dispatch,
+          isActiveUser,
+        });
+      setFetching(false);
+      if (!store.success) throw new Error("Failed to complete application");
 
-    //   let slug = `/membership/final-step-thank-you/`;
-    //   if (category === "SIG") slug = `/membership/step-5-sig-questions/`;
-    //   if (isActiveUser) setGoToAction({ path: slug, actions });
-    // } catch (error) {
-    //   console.log(error);
-    // }
+      let slug = `/membership/final-step-thank-you/`;
+      if (category === "SIG") slug = `/membership/step-5-sig-questions/`;
+      if (isActiveUser) setGoToAction({ path: slug, actions });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleDocUploadChange = async (e) => {
