@@ -38,6 +38,7 @@ const NewsAndMediaHeader = ({
   const isLayoutTwo = layout === "layout_two";
   const isLayoutThree = layout === "layout_three";
   const isLayoutFour = layout === "layout_four";
+  const isLayoutFive = layout === "layout_five";
 
   useEffect(async () => {
     if (state.source.category) {
@@ -176,7 +177,7 @@ const NewsAndMediaHeader = ({
   };
 
   const ServeLayoutThree = () => {
-    if (!isLayoutThree) return null;
+    if (!isLayoutThree && !isLayoutFive) return null;
 
     return (
       <div style={{ padding: `1em 1.5em 0` }} id="layout-three">

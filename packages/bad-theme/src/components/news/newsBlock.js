@@ -18,30 +18,22 @@ const NewsBlock = ({
   const isLayoutTwo = layout === "layout_two";
   const isLayoutThree = layout === "layout_three";
   const isLayoutFour = layout === "layout_four";
+  const isLayoutFive = layout === "layout_five";
 
-  const { sm, md, lg, xl } = muiQuery();
-  console.log("block length", block.length);
-  console.log("layout", layout);
-  console.log("isLayoutTwo", isLayoutTwo);
-  console.log("isLayoutThree", isLayoutThree);
-  console.log("isLayoutFour", isLayoutFour);
+  // console.log("block length", block.length); // debug
+
+  let gridLayoutType = `1fr`;
+  if (isLayoutFour) gridLayoutType = `repeat(3, 1fr)`;
+  if (isLayoutFive) gridLayoutType = `repeat(4, 1fr)`;
 
   // RETURN ---------------------------------------------
   return (
     <div
-      style={
-        !lg
-          ? {
-              display: "grid",
-              gridTemplateColumns: isLayoutFour ? `1fr` : `repeat(3, 1fr)`,
-              gap: 20,
-            }
-          : {
-              display: "grid",
-              gridTemplateColumns: "repeat(1, 1fr)",
-              gap: 20,
-            }
-      }
+      style={{
+        display: "grid",
+        gridTemplateColumns: gridLayoutType,
+        gap: 20,
+      }}
     >
       {block.map((block, key) => {
         const { categories, link, title, featured_media } = block;
@@ -85,7 +77,7 @@ const NewsBlock = ({
             />
           );
 
-        if (isLayoutThree)
+        if (isLayoutThree || isLayoutFive)
           return (
             <Card
               key={key}

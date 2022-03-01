@@ -75,6 +75,8 @@ const MultiPostBlock = ({ state, actions, block, filter }) => {
             title,
           } = block;
 
+          console.log(block);
+
           if (filter) {
             if (
               !title.toLowerCase().includes(filter) &&
@@ -93,7 +95,7 @@ const MultiPostBlock = ({ state, actions, block, filter }) => {
           return (
             <div key={key} className="flex">
               <Card
-                // cardTitle={isFrom4Col ? null : card_title}
+                cardTitle={isFrom4Col ? null : card_title}
                 title={title}
                 body={body}
                 colour={colour}
@@ -101,11 +103,10 @@ const MultiPostBlock = ({ state, actions, block, filter }) => {
                 link={link.url}
                 url={isFrom4Col ? null : background_image.url} // optional param
                 form_label={form_label} // optional param
-                form_link={form_link.url} // optional param
+                form_link={doc_upload ? null : form_link.url} // optional param
                 downloadFile={doc_upload ? { file: doc_upload } : null} // optional param
-                titleLimit={1}
                 bodyLimit={4}
-                cardMinHeight={isFrom4Col ? 250 : null}
+                cardMinHeight={250}
                 shadow // optional param
               />
             </div>
