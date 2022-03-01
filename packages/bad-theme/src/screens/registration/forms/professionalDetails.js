@@ -273,6 +273,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
   const handleDocUploadChange = async (e) => {
     let sky_cvurl = e.target.files[0];
+    console.log("e", e); // debug
 
     if (sky_cvurl)
       sky_cvurl = await sendFileToS3Action({
@@ -632,7 +633,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                   type="file"
                   className="form-control input"
                   placeholder="CV Document"
-                  accept="*"
+                  accept=".pdf,.doc,.docx"
                 />
               </div>
             )}
