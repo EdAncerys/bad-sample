@@ -5,6 +5,7 @@ import { colors } from "../../config/imports";
 import { handleGetCookie } from "../../helpers/cookie";
 
 import PaymentModal from "./paymentModal";
+import Loading from "../loading";
 const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
   //component state
   const [paymentUrl, setPaymentUrl] = useState("");
@@ -19,7 +20,6 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
   const cookie = handleGetCookie({ name: `BAD-WebApp` });
   const { contactid, jwt } = cookie;
   useEffect(() => {
-    console.log("PAYMENTS TRIGGERED");
     const fetchApplicationBillingStatus = async () => {
       const getUserApplicationData = await fetch(
         state.auth.APP_HOST + "/applications/billing/" + contactid,
@@ -40,7 +40,7 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
   // when should I return null ?
   if (!subscriptions) return null;
   if (subscriptions.subs.data.length === 0) return null;
-  if (!liveSubscriptions) return "Loading";
+  if (!liveSubscriptions) return <Loading />;
   const { subs } = subscriptions;
 
   //the url for redirect
@@ -76,7 +76,6 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
   const resetPaymentUrl = () => {
     setPaymentUrl(null);
     setLoading(true);
-    console.log("RESET PAYMENT URL TRIGGERED");
   };
 
   // SERVERS ---------------------------------------------
@@ -161,7 +160,6 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
   const ServeSubTitle = ({ title }) => {
     return <div style={{ padding: `1em 0` }}>{title}</div>;
   };
-  if (liveSubscriptions) console.log(liveSubscriptions);
   return (
     <div
       className="shadow"
