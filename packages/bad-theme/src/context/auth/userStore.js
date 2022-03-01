@@ -98,9 +98,6 @@ export const setUserStoreAction = async ({
       updatedMembershipData,
     });
     const response = await fetch(URL, requestOptions);
-    console.log("response", response);
-    console.log("requestOptions", requestOptions);
-
     const userStore = await response.json();
     console.log("userStore", userStore);
 
@@ -110,7 +107,7 @@ export const setUserStoreAction = async ({
         applicationData: updatedMembershipData,
       });
       return userStore;
-    } else throw new Error("Error updating user store.");
+    }
   } catch (error) {
     console.log("error", error);
   } finally {

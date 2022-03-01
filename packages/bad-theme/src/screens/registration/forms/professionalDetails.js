@@ -212,7 +212,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     if (!isValid) return null;
 
     setFetching(true);
-    await setUserStoreAction({
+    const store = await setUserStoreAction({
       state,
       actions,
       dispatch,
@@ -223,6 +223,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       data: formData,
     });
     setFetching(false);
+    if (!store.success) return; // if store not saved, return
 
     let slug = `/membership/final-step-thank-you/`;
     if (category === "SIG") slug = `/membership/step-5-sig-questions/`;

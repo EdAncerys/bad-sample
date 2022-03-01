@@ -39,7 +39,7 @@ const RegistrationStepOne = ({ state, actions }) => {
 
   const handleNext = async () => {
     setFetching(true);
-    await setUserStoreAction({
+    const store = await setUserStoreAction({
       state,
       actions,
       dispatch,
@@ -48,6 +48,8 @@ const RegistrationStepOne = ({ state, actions }) => {
       isActiveUser,
     });
     setFetching(false);
+    if (!store.success) return; // if store not saved, return
+
     if (isActiveUser)
       setGoToAction({
         path: `/membership/step-2-category-selection/`,

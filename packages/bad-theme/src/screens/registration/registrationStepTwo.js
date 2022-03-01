@@ -103,7 +103,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
       applicationData,
       isActiveUser,
       dynamicsApps,
-      membershipApplication: { stepThree: true }, // set stepOne to complete
+      membershipApplication: { stepTwo: true }, // set stepOne to complete
       category: formData.bad_organisedfor === "810170000" ? "BAD" : "SIG",
       type: formData.bad_categorytype, // application type name
       path: `/membership/step-3-personal-information/`,

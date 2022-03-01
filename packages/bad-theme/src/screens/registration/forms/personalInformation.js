@@ -164,17 +164,18 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     if (!isValid) return null;
 
     setFetching(true);
-    await setUserStoreAction({
+    const store = await setUserStoreAction({
       state,
       actions,
       dispatch,
       applicationData,
       isActiveUser,
       dynamicsApps,
-      membershipApplication: { stepTwo: true }, // set stepOne to complete
+      membershipApplication: { stepThree: true }, // set stepOne to complete
       data: formData,
     });
     setFetching(false);
+    if (!store.success) return; // if store not saved, return
 
     let slug = `/membership/step-4-professional-details/`;
     if (isActiveUser) setGoToAction({ path: slug, actions });

@@ -142,7 +142,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     if (!isValid) return null;
 
     setFetching(true);
-    await setUserStoreAction({
+    const store = await setUserStoreAction({
       state,
       actions,
       dispatch,
@@ -153,6 +153,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       data: formData,
     });
     setFetching(false);
+    if (!store.success) return; // if store not saved, return
 
     let slug = `/membership/final-step-thank-you/`;
     if (isActiveUser) setGoToAction({ path: slug, actions });
