@@ -93,7 +93,7 @@ const MultiPostBlock = ({ state, actions, block, filter }) => {
           return (
             <div key={key} className="flex">
               <Card
-                cardTitle={isFrom4Col ? null : card_title}
+                // cardTitle={isFrom4Col ? null : card_title}
                 title={title}
                 body={body}
                 colour={colour}
@@ -104,6 +104,7 @@ const MultiPostBlock = ({ state, actions, block, filter }) => {
                 form_link={form_link.url} // optional param
                 downloadFile={doc_upload ? { file: doc_upload } : null} // optional param
                 titleLimit={1}
+                bodyLimit={4}
                 cardMinHeight={isFrom4Col ? 250 : null}
                 shadow // optional param
               />

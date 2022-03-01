@@ -19,6 +19,7 @@ import {
   validateMembershipFormAction,
   setCompleteUserApplicationAction,
   useIsMounted,
+  getHospitalNameAction,
 } from "../../../context";
 
 const ProfessionalDetails = ({ state, actions, libraries }) => {
@@ -51,7 +52,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     sky_cvurl: "",
     py3_currentgrade: "",
     sky_newhospitalname: "",
-    bad_newhospitalplaceofwork: "",
+    bad_newhospitaladded: "",
     bad_expectedyearofqualification: "",
     py3_constitutionagreement: "",
     bad_readpolicydocument: "",
@@ -66,14 +67,16 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     bad_proposer1: true,
     bad_proposer2: true,
     bad_mrpcqualified: true,
-    py3_currentgrade: true,
     sky_cvurl: true,
-    bad_newhospitalplaceofwork: true,
+    py3_currentgrade: true,
     sky_newhospitalname: true,
+    bad_newhospitaladded: true,
     bad_expectedyearofqualification: true,
     py3_constitutionagreement: true,
     bad_readpolicydocument: true,
+    sky_newhospitaltype: true,
   });
+
   const [hospitalData, setHospitalData] = useState(null);
   const [selectedHospital, setSelectedHospital] = useState(null);
   const [applicationType, setType] = useState("");
@@ -82,6 +85,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   const documentRef = useRef(null);
   const hospitalSearchRef = useRef("");
   const useEffectRef = useRef(false);
+  const isHospitalValue = formData.py3_hospitalid;
 
   useEffect(async () => {
     const handleSetFormData = ({ data, name }) => {
@@ -93,6 +97,9 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
     // ⏬ populate form data values from applicationData
     if (!applicationData) return null;
+
+    // hospital id initial value
+    let hospitalId = null;
 
     applicationData.map((data) => {
       if (data.name === "py3_gmcnumber")
@@ -113,10 +120,27 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         handleSetFormData({ data, name: "sky_newhospitalname" });
       if (data.name === "bad_expectedyearofqualification")
         handleSetFormData({ data, name: "bad_expectedyearofqualification" });
+      if (data.name === "py3_hospitalid") {
+        // get hospital id from application data
+        if (data.value) hospitalId = data.value;
+        handleSetFormData({ data, name: "py3_hospitalid" });
+      }
+      // get hospital name from API
 
       if (data.bad_categorytype) setType(data.bad_categorytype); // validate BAD application category type
       if (data._bad_sigid_value) setType(data._bad_sigid_value); // validate SIG application category type
     });
+
+    if (hospitalId) {
+      // get hospital data via API & populate form
+      const hospitalData = await getHospitalNameAction({
+        state,
+        id: hospitalId,
+      });
+      if (hospitalData) {
+        setSelectedHospital(hospitalData.name);
+      }
+    }
 
     // ⏬ validate inputs
     await validateMembershipFormAction({
@@ -199,48 +223,57 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   };
 
   const handleNext = async () => {
+    // check if new hospital value been added
+    const isNewHospital = formData.bad_newhospitaladded;
+
     const isValid = isFormValidated({
       required: [
         "py3_gmcnumber",
         "py3_otherregulatorybodyreference",
         "py3_ntnno",
         "bad_currentpost",
-        "sky_newhospitaltype",
+        isNewHospital ? "sky_newhospitaltype" : null,
+        !isNewHospital ? "py3_hospitalid" : null,
       ],
     });
 
-    // console.log(formData); // debug
     if (!isValid) return null;
+    // console.log(formData); // debug
 
-    setFetching(true);
-    const store = await setUserStoreAction({
-      state,
-      actions,
-      dispatch,
-      applicationData,
-      isActiveUser,
-      dynamicsApps,
-      membershipApplication: { stepFour: true }, // set stepOne to complete
-      data: formData,
-    });
-
-    // set complete application if app = BAD
-    if (category === "BAD")
-      await setCompleteUserApplicationAction({
+    try {
+      setFetching(true);
+      const store = await setUserStoreAction({
         state,
+        actions,
         dispatch,
+        applicationData,
         isActiveUser,
+        dynamicsApps,
+        membershipApplication: { stepFour: true }, // set stepOne to complete
+        data: formData,
       });
-    setFetching(false);
-    if (!store.success) return; // if store not saved, return
 
-    let slug = `/membership/final-step-thank-you/`;
-    if (category === "SIG") slug = `/membership/step-5-sig-questions/`;
-    if (isActiveUser) setGoToAction({ path: slug, actions });
+      // set complete application if app = BAD
+      if (category === "BAD")
+        await setCompleteUserApplicationAction({
+          state,
+          dispatch,
+          isActiveUser,
+        });
+      setFetching(false);
+      if (!store.success) throw new Error("Failed to complete application");
+
+      let slug = `/membership/final-step-thank-you/`;
+      if (category === "SIG") slug = `/membership/step-5-sig-questions/`;
+      if (isActiveUser) setGoToAction({ path: slug, actions });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleDocUploadChange = async (e) => {
     let sky_cvurl = e.target.files[0];
+    console.log("e", e); // debug
 
     if (sky_cvurl)
       sky_cvurl = await sendFileToS3Action({
@@ -262,6 +295,9 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
     }));
+
+    // if checked value for hospital not found clear curet hospital input
+    if (name === "bad_newhospitaladded" && !value) handleClearHospital();
   };
 
   const isFormFooter =
@@ -425,13 +461,16 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                   </div>
                 )}
                 {!selectedHospital && (
-                  <input
-                    ref={hospitalSearchRef}
-                    onChange={handleHospitalLookup}
-                    type="text"
-                    className="form-control input"
-                    placeholder="Main Hospital/Place of work"
-                  />
+                  <div>
+                    <input
+                      ref={hospitalSearchRef}
+                      onChange={handleHospitalLookup}
+                      type="text"
+                      className="form-control input"
+                      placeholder="Main Hospital/Place of work"
+                    />
+                    <FormError id="py3_hospitalid" />
+                  </div>
                 )}
                 <SearchDropDown
                   filter={hospitalData}
@@ -442,14 +481,14 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.bad_newhospitalplaceofwork && (
+          {!isHospitalValue && (
             <div className="flex-col">
               <label className="form-label">
                 Hospital / Medical School not listed
               </label>
               <input
-                name="bad_newhospitalplaceofwork"
-                checked={formData.bad_newhospitalplaceofwork}
+                name="bad_newhospitaladded"
+                checked={formData.bad_newhospitaladded}
                 onChange={handleInputChange}
                 type="checkbox"
                 className="form-check-input check-box"
@@ -457,7 +496,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {formData.bad_newhospitalplaceofwork && (
+          {formData.bad_newhospitaladded && (
             <div>
               <label className="required form-label">Select Type</label>
               <Form.Select
@@ -470,27 +509,26 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                   Hospital / Medical School
                 </option>
                 <option value="Hospital">Hospital</option>
-                <option value="School">Medical School</option>
+                <option value="Medical School">Medical School</option>
               </Form.Select>
               <FormError id="sky_newhospitaltype" />
             </div>
           )}
 
-          {formData.bad_newhospitalplaceofwork &&
-            inputValidator.sky_newhospitalname && (
-              <div>
-                <label className="form-label">New Hospital Name</label>
-                <input
-                  name="sky_newhospitalname"
-                  value={formData.sky_newhospitalname}
-                  onChange={handleInputChange}
-                  type="text"
-                  className="form-control input"
-                  placeholder="New Hospital Name"
-                />
-                <FormError id="sky_newhospitalname" />
-              </div>
-            )}
+          {formData.bad_newhospitaladded && inputValidator.sky_newhospitalname && (
+            <div>
+              <label className="form-label">New Hospital Name</label>
+              <input
+                name="sky_newhospitalname"
+                value={formData.sky_newhospitalname}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="New Hospital Name"
+              />
+              <FormError id="sky_newhospitalname" />
+            </div>
+          )}
 
           {inputValidator.bad_expectedyearofqualification && (
             <div>
@@ -595,7 +633,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                   type="file"
                   className="form-control input"
                   placeholder="CV Document"
-                  accept="*"
+                  accept=".pdf,.doc,.docx"
                 />
               </div>
             )}

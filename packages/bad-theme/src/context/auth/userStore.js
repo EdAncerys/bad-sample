@@ -32,8 +32,11 @@ export const setUserStoreAction = async ({
     // if user have application pending under reviewed status redirect to application list
     if (isPending) {
       console.log("🤖 user have application pending under reviewed status");
-      setGoToAction({ path: "/dashboard/", actions });
-      return;
+      if (state.auth.ENVIRONMENT !== "DEVELOPMENT") {
+        // allow application list only in development env
+        setGoToAction({ path: "/dashboard/", actions });
+        return;
+      }
     }
   }
 
@@ -331,10 +334,10 @@ const updateMembershipApplication = ({
     )
       application.value = data.sky_newhospitaltype;
     if (
-      data.bad_newhospitalplaceofwork &&
-      application.name === "bad_newhospitalplaceofwork"
+      data.bad_newhospitaladded &&
+      application.name === "bad_newhospitaladded"
     )
-      application.value = data.bad_newhospitalplaceofwork;
+      application.value = data.bad_newhospitaladded;
     if (data.sky_newhospitalname && application.name === "sky_newhospitalname")
       application.value = data.sky_newhospitalname;
     if (
