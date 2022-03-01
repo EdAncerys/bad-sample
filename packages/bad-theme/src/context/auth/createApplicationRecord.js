@@ -12,6 +12,7 @@ export const createApplicationRecord = async ({
   if (userStoreData) {
     await setUserStoreAction({
       state,
+      actions,
       dispatch,
       isActiveUser,
       data: userStoreData,
@@ -47,6 +48,7 @@ export const createApplicationRecord = async ({
 
       await setUserStoreAction({
         state,
+        actions,
         dispatch,
         isActiveUser,
         data: applicationData,

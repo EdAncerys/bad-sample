@@ -8,6 +8,7 @@ import {
 
 export const setUserStoreAction = async ({
   state,
+  actions,
   dispatch,
   applicationData,
   isActiveUser,
@@ -103,11 +104,13 @@ export const setUserStoreAction = async ({
     const userStore = await response.json();
     console.log("userStore", userStore);
 
-    if (userStore.success)
+    if (userStore.success) {
       setApplicationDataAction({
         dispatch,
         applicationData: updatedMembershipData,
       });
+      return userStore;
+    } else throw new Error("Error updating user store.");
   } catch (error) {
     console.log("error", error);
   } finally {

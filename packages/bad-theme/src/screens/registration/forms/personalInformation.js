@@ -6,6 +6,7 @@ import { Form } from "react-bootstrap";
 import Avatar from "../../../img/svg/profile.svg";
 import { colors } from "../../../config/imports";
 import FormError from "../../../components/formError";
+import ActionPlaceholder from "../../../components/actionPlaceholder";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -23,6 +24,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, dynamicsApps } = useAppState();
 
+  const [isFetching, setFetching] = useState(false);
   const [genderList, setGenderList] = useState([]);
   const [formData, setFormData] = useState({
     py3_title: "",
@@ -121,6 +123,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   const handleSaveExit = async () => {
     await setUserStoreAction({
       state,
+      actions,
       dispatch,
       applicationData,
       isActiveUser,
@@ -160,8 +163,10 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     });
     if (!isValid) return null;
 
+    setFetching(true);
     await setUserStoreAction({
       state,
+      actions,
       dispatch,
       applicationData,
       isActiveUser,
@@ -169,6 +174,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
       membershipApplication: { stepTwo: true }, // set stepOne to complete
       data: formData,
     });
+    setFetching(false);
 
     let slug = `/membership/step-4-professional-details/`;
     if (isActiveUser) setGoToAction({ path: slug, actions });
@@ -236,7 +242,8 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   };
 
   return (
-    <div>
+    <div style={{ position: "relative" }}>
+      <ActionPlaceholder isFetching={isFetching} background="transparent" />
       <div
         style={{
           display: "grid",

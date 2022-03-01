@@ -6,6 +6,7 @@ import SearchDropDown from "../../../components/searchDropDown";
 import CloseIcon from "@mui/icons-material/Close";
 import FormError from "../../../components/formError";
 import { Form } from "react-bootstrap";
+import ActionPlaceholder from "../../../components/actionPlaceholder";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -75,6 +76,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   const [hospitalData, setHospitalData] = useState(null);
   const [selectedHospital, setSelectedHospital] = useState(null);
   const [applicationType, setType] = useState("");
+  const [isFetching, setFetching] = useState(false);
 
   const documentRef = useRef(null);
   const hospitalSearchRef = useRef("");
@@ -171,6 +173,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   const handleSaveExit = async () => {
     await setUserStoreAction({
       state,
+      actions,
       dispatch,
       applicationData,
       isActiveUser,
@@ -208,8 +211,10 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     // console.log(formData); // debug
     if (!isValid) return null;
 
+    setFetching(true);
     await setUserStoreAction({
       state,
+      actions,
       dispatch,
       applicationData,
       isActiveUser,
@@ -217,6 +222,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       membershipApplication: { stepFour: true }, // set stepOne to complete
       data: formData,
     });
+    setFetching(false);
+
     let slug = `/membership/final-step-thank-you/`;
     if (category === "SIG") slug = `/membership/step-5-sig-questions/`;
     if (isActiveUser) setGoToAction({ path: slug, actions });
@@ -291,7 +298,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   };
 
   return (
-    <div>
+    <div style={{ position: "relative" }}>
+      <ActionPlaceholder isFetching={isFetching} background="transparent" />
       <div
         className="primary-title"
         style={{

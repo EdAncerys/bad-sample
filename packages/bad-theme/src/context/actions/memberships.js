@@ -84,8 +84,9 @@ export const handleApplyForMembershipAction = async ({
           .length > 0;
       // if user have application pending under reviewed status redirect to application list
       if (isPending) {
-        setGoToAction({ path: "/dashboard/", actions });
-        return;
+        console.log("🤖 user have application pending under reviewed status");
+        // setGoToAction({ path: "/dashboard/", actions });
+        // return;
       }
     }
 

@@ -1,16 +1,16 @@
-import { useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 import SideBarMenu from "./sideBarMenu";
 import BlockWrapper from "../../components/blockWrapper";
+import ActionPlaceholder from "../../components/actionPlaceholder";
 // CONTEXT -----------------------------------------------------------------
 import {
   useAppDispatch,
   useAppState,
   setGoToAction,
   setUserStoreAction,
-  setLoginModalAction,
 } from "../../context";
 
 const RegistrationStepOne = ({ state, actions }) => {
@@ -20,6 +20,7 @@ const RegistrationStepOne = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, dynamicsApps } = useAppState();
 
+  const [isFetching, setFetching] = useState(false);
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
@@ -27,6 +28,7 @@ const RegistrationStepOne = ({ state, actions }) => {
   const handleSaveExit = async () => {
     await setUserStoreAction({
       state,
+      actions,
       dispatch,
       applicationData,
       isActiveUser,
@@ -36,13 +38,16 @@ const RegistrationStepOne = ({ state, actions }) => {
   };
 
   const handleNext = async () => {
+    setFetching(true);
     await setUserStoreAction({
       state,
+      actions,
       dispatch,
       applicationData,
       membershipApplication: { stepOne: true }, // set stepOne to complete
       isActiveUser,
     });
+    setFetching(false);
     if (isActiveUser)
       setGoToAction({
         path: `/membership/step-2-category-selection/`,
@@ -82,7 +87,8 @@ const RegistrationStepOne = ({ state, actions }) => {
 
   const ServeContent = () => {
     return (
-      <div>
+      <div style={{ position: "relative" }}>
+        <ActionPlaceholder isFetching={isFetching} background="transparent" />
         <div style={styles.wrapper}>
           <div className="primary-title" style={styles.title}>
             The Process

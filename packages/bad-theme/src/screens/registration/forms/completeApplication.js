@@ -63,6 +63,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
       setFetching(true);
       await setUserStoreAction({
         state,
+        actions,
         dispatch,
         applicationData,
         isActiveUser,
