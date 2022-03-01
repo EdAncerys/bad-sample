@@ -17,19 +17,20 @@ const NewsBlock = ({
   const isLayoutTwo = layout === "layout_two";
   const isLayoutThree = layout === "layout_three";
   const isLayoutFour = layout === "layout_four";
+  const isLayoutFive = layout === "layout_five";
 
-  console.log("block length", block.length);
-  console.log("layout", layout);
-  console.log("isLayoutTwo", isLayoutTwo);
-  console.log("isLayoutThree", isLayoutThree);
-  console.log("isLayoutFour", isLayoutFour);
+  // console.log("block length", block.length); // debug
+
+  let gridLayoutType = `1fr`;
+  if (isLayoutFour) gridLayoutType = `repeat(3, 1fr)`;
+  if (isLayoutFive) gridLayoutType = `repeat(4, 1fr)`;
 
   // RETURN ---------------------------------------------
   return (
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: isLayoutFour ? `1fr` : `repeat(3, 1fr)`,
+        gridTemplateColumns: gridLayoutType,
         gap: 20,
       }}
     >
@@ -75,7 +76,7 @@ const NewsBlock = ({
             />
           );
 
-        if (isLayoutThree)
+        if (isLayoutThree || isLayoutFive)
           return (
             <Card
               key={key}

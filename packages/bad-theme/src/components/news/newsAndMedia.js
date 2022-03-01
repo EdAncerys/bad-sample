@@ -28,7 +28,6 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     has_search,
     category_filter,
   } = block;
-  console.log(block);
 
   const isLayoutOne = layout === "layout_one";
   const ctaHeight = 45;
