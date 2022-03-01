@@ -50,7 +50,7 @@ import {
 } from "./auth/userStore";
 import { getWileyAction } from "./auth/getWiley";
 import { getTestUserAccountsAction } from "./auth/getTestUserAccounts";
-import { getHospitalsAction } from "./auth/getHospitals";
+import { getHospitalsAction, getHospitalNameAction } from "./auth/getHospitals";
 import {
   getBJDFeedAction,
   getCEDFeedAction,
@@ -108,4 +108,5 @@ export {
   setEventAnchorAction,
   getApplicationStatus,
   updateEthnicityAction,
+  getHospitalNameAction,
 };
