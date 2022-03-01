@@ -38,7 +38,7 @@ const AccordionBody = ({
   const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, idFilter } = useAppState();
+  const { applicationData, isActiveUser, dynamicsApps } = useAppState();
 
   const ALL_POSITIONS = Object.values(state.source.leadership_position);
   const ICON_WIDTH = 35;
@@ -74,6 +74,7 @@ const AccordionBody = ({
       dispatch,
       applicationData,
       isActiveUser,
+      dynamicsApps,
       category: "BAD",
       type: category_types, // application type name
       membershipApplication: {

@@ -22,10 +22,19 @@ const ProfileProgress = ({ state, actions, libraries }) => {
 
   const [applicationStep, setStep] = useState("Start new application");
   // application under review
-  const isUnderReview =
-    dynamicsApps && dynamicsApps[0].bad_approvalstatus === "Pending";
-  const isApproved =
-    dynamicsApps && dynamicsApps[0].bad_approvalstatus === "Approved";
+  let isUnderReview = false;
+  let isApproved = false;
+  if (dynamicsApps) {
+    const subsData = dynamicsApps.subs.data; // get approved subs data form dynamic apps
+    const appsData = dynamicsApps.apps.data; // get pending too approve apps data form dynamic apps
+
+    isUnderReview =
+      appsData.filter((item) => item.bad_approvalstatus === "Pending").length >
+      0;
+    isApproved =
+      subsData.filter((item) => item.bad_approvalstatus === "Approved").length >
+      0;
+  }
 
   useEffect(() => {
     // if (!applicationData) return null - we need to check if the data exists in the API
@@ -189,7 +198,11 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   };
 
   const ServeApplicationList = () => {
-    if (dynamicsApps && !isApproved) return null; // if application data exist & not under review return null
+    if (!dynamicsApps) return null; // if application data exist & not under review return null
+    // see if application list have approved applications and if so show them
+    const subsData = dynamicsApps.subs.data; // get subs data form dynamic apps
+    // hide component if application list has no approved applications
+    if (subsData.length === 0) return null;
 
     return (
       <div
@@ -206,8 +219,13 @@ const ProfileProgress = ({ state, actions, libraries }) => {
           >
             Existing Applications
           </div>
-          {dynamicsApps.map((app) => {
-            const { bad_organisedfor, core_name, createdon } = app;
+          {subsData.map((app, key) => {
+            const {
+              bad_organisedfor,
+              core_name,
+              createdon,
+              bad_approvalstatus,
+            } = app;
 
             // get application date
             let appData = createdon.split(" ")[0];
@@ -219,7 +237,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
             const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
 
             return (
-              <div className="flex-col" style={{ paddingTop: `1em` }}>
+              <div key={key} className="flex-col" style={{ paddingTop: `1em` }}>
                 <div className="primary-title">{bad_organisedfor}</div>
                 <div>{core_name}</div>
                 <div>Application Date: {formattedDate}</div>
