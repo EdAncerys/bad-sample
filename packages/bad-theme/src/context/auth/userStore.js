@@ -32,8 +32,8 @@ export const setUserStoreAction = async ({
     // if user have application pending under reviewed status redirect to application list
     if (isPending) {
       console.log("🤖 user have application pending under reviewed status");
-      setGoToAction({ path: "/dashboard/", actions });
-      return;
+      // setGoToAction({ path: "/dashboard/", actions });
+      // return;
     }
   }
 

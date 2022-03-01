@@ -119,7 +119,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
                 <option value="" hidden>
                   Ethnic Group
                 </option>
-                {ethnicityList.map((item, key) => {
+                {ETHNIC_GROUPES.map((item, key) => {
                   return (
                     <option key={key} value={item.value}>
                       {item.Label}
