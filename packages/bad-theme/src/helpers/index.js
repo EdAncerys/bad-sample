@@ -7,12 +7,18 @@ export const authLogViaCookie = async ({ state, initialState }) => {
   // ⏬⏬  user validation & auth ⏬⏬
   if (cookie) {
     console.log("🍪 found", cookie);
-    const { jwt, contactid } = cookie;
+    let { jwt, contactid } = cookie;
 
     if (!contactid || !jwt) {
       console.log("Failed to Auth 🍪 data");
       handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
       return null;
+    }
+
+    if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
+      // dev env testing
+      // contactid = "cc9a332a-3672-ec11-8943-000d3a43c136"; // andy
+      contactid = "969ba377-a398-ec11-b400-000d3aaedef5"; // emilia
     }
 
     const catalogueURL =
@@ -33,9 +39,9 @@ export const authLogViaCookie = async ({ state, initialState }) => {
       const userData = await userResponse.json();
 
       if (!appsResponse.ok)
-        throw new Error(`${userResponse.statusText} ${userResponse.status}`); // fetch user data from Dynamics
+        throw new Error(`${appsResponse.statusText} ${appsResponse.status}`); // fetch user data from Dynamics
       const appsData = await appsResponse.json();
-      console.log("🚀 dynamicsApps", appsData.apps.data); // debug
+      console.log("🚀 dynamicsApps", appsData); // debug
 
       const userStoreData = await getUserStoreAction({
         state,
@@ -49,7 +55,7 @@ export const authLogViaCookie = async ({ state, initialState }) => {
       if (userData && appsData) {
         const taken = await authenticateAppAction({ state }); // replace taken with new one
         initialState.isActiveUser = userData; // populates user userResponse
-        initialState.dynamicsApps = appsData.apps.data;
+        initialState.dynamicsApps = appsData;
         initialState.jwt = taken; // replace taken with new one
         console.log("initialState", initialState); // debug
 

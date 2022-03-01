@@ -2,6 +2,7 @@ import {
   getBADMembershipSubscriptionData,
   setUserStoreAction,
   setGoToAction,
+  setLoginModalAction,
 } from "../index";
 
 export const getMembershipDataAction = async ({ state, actions }) => {
@@ -66,9 +67,29 @@ export const handleApplyForMembershipAction = async ({
   type,
   path,
   membershipApplication,
+  dynamicsApps,
 }) => {
   try {
     // ⏬ get appropriate membership ID
+    if (!isActiveUser) {
+      // validate if isActiveUser 🤖
+      setLoginModalAction({ dispatch, loginModalAction: true });
+      return null;
+    }
+
+    if (dynamicsApps) {
+      const appsData = dynamicsApps.apps.data; // get pending too approve apps data form dynamic apps
+      // check if user have application pending under reviewed status
+      const isPending =
+        appsData.filter((item) => item.bad_approvalstatus === "Pending")
+          .length > 0;
+      // if user have application pending under reviewed status redirect to application list
+      if (isPending) {
+        setGoToAction({ path: "/dashboard/", actions });
+        return;
+      }
+    }
+
     const membershipData = await getBADMembershipSubscriptionData({
       state,
       category,
@@ -91,6 +112,7 @@ export const handleApplyForMembershipAction = async ({
       },
     });
 
+    // ⏬ redirect to application form if active user
     if (isActiveUser)
       setGoToAction({
         path: path || `/membership/step-1-the-process/`,

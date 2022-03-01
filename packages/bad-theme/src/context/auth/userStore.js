@@ -2,7 +2,6 @@ import {
   authenticateAppAction,
   setFetchAction,
   setApplicationDataAction,
-  setLoginModalAction,
 } from "../index";
 
 export const setUserStoreAction = async ({
@@ -14,11 +13,6 @@ export const setUserStoreAction = async ({
   membershipApplication,
 }) => {
   console.log("setUserStoreAction triggered");
-  if (!isActiveUser) {
-    // validate if isActiveUser 🤖
-    setLoginModalAction({ dispatch, loginModalAction: true });
-    return null;
-  }
 
   setFetchAction({ dispatch, isFetching: true });
 
