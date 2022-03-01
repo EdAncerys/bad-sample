@@ -47,7 +47,9 @@ const PaymentNotification = ({
     }
     // setPage({ page: "directDebit", data: block });
   };
-
+  const resetPaymentUrl = () => {
+    setPaymentUrl(null);
+  };
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
     return (
@@ -86,7 +88,10 @@ const PaymentNotification = ({
         Your application has been approved. Now it is time to pay!
       </div>
       <ServeActions />
-      <PaymentModal payment_url={paymentUrl} />
+      <PaymentModal
+        payment_url={paymentUrl}
+        resetPaymentUrl={resetPaymentUrl}
+      />
     </div>
   );
 };
