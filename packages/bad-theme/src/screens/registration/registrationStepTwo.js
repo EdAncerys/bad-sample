@@ -5,6 +5,7 @@ import { colors } from "../../config/imports";
 import SideBarMenu from "./sideBarMenu";
 import { Form } from "react-bootstrap";
 import BlockWrapper from "../../components/blockWrapper";
+import ActionPlaceholder from "../../components/actionPlaceholder";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -20,6 +21,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, dynamicsApps } = useAppState();
 
+  const [isFetching, setFetching] = useState(false);
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
@@ -93,6 +95,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
     }
     console.log("formData", formData); // debug
 
+    setFetching(true);
     await handleApplyForMembershipAction({
       state,
       actions,
@@ -100,11 +103,12 @@ const RegistrationStepTwo = ({ state, actions }) => {
       applicationData,
       isActiveUser,
       dynamicsApps,
-      membershipApplication: { stepThree: true }, // set stepOne to complete
+      membershipApplication: { stepTwo: true }, // set stepOne to complete
       category: formData.bad_organisedfor === "810170000" ? "BAD" : "SIG",
       type: formData.bad_categorytype, // application type name
       path: `/membership/step-3-personal-information/`,
     });
+    setFetching(false);
   };
 
   // SERVERS ---------------------------------------------
@@ -281,7 +285,8 @@ const RegistrationStepTwo = ({ state, actions }) => {
 
   const ServeContent = () => {
     return (
-      <div>
+      <div style={{ position: "relative" }}>
+        <ActionPlaceholder isFetching={isFetching} background="transparent" />
         <div style={styles.wrapper}>
           <div className="primary-title" style={styles.title}>
             Please confirm your category selction. Or if you are unsure of the

@@ -4,6 +4,7 @@ import { Form } from "react-bootstrap";
 
 import { colors } from "../../../config/imports";
 import FormError from "../../../components/formError";
+import ActionPlaceholder from "../../../components/actionPlaceholder";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -56,6 +57,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
   });
   const [isEmail, setIsEmail] = useState(false);
   const [applicationType, setType] = useState("SIG Application");
+  const [isFetching, setFetching] = useState(false);
 
   // ⏬ populate form data values from applicationData
   useEffect(async () => {
@@ -109,6 +111,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const handleSaveExit = async () => {
     await setUserStoreAction({
       state,
+      actions,
       dispatch,
       applicationData,
       isActiveUser,
@@ -138,8 +141,10 @@ const SIGApplication = ({ state, actions, libraries }) => {
     });
     if (!isValid) return null;
 
-    await setUserStoreAction({
+    setFetching(true);
+    const store = await setUserStoreAction({
       state,
+      actions,
       dispatch,
       applicationData,
       isActiveUser,
@@ -147,6 +152,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
       membershipApplication: { stepFive: true }, // set stepOne to complete
       data: formData,
     });
+    setFetching(false);
+    if (!store.success) return; // if store not saved, return
 
     let slug = `/membership/final-step-thank-you/`;
     if (isActiveUser) setGoToAction({ path: slug, actions });
@@ -201,7 +208,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
   };
 
   return (
-    <div>
+    <div style={{ position: "relative" }}>
+      <ActionPlaceholder isFetching={isFetching} background="transparent" />
       <div
         className="primary-title"
         style={{
