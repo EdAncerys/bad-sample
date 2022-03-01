@@ -66,6 +66,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
       dispatch,
       applicationData,
       isActiveUser,
+      dynamicsApps,
       category: formData.bad_organisedfor === "810170000" ? "BAD" : "SIG",
       type: formData.bad_categorytype, // application type name
       path: `/membership/`,

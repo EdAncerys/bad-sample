@@ -3,7 +3,6 @@ import {
   setFetchAction,
   setApplicationDataAction,
   setLoginModalAction,
-  setGoToAction,
 } from "../index";
 
 export const setUserStoreAction = async ({
@@ -32,14 +31,14 @@ export const setUserStoreAction = async ({
       0;
     // if user have application pending under reviewed status redirect to application list
     if (isPending) {
+      console.log("🤖 user have application pending under reviewed status");
       setGoToAction({ path: "/dashboard/", actions });
       return;
     }
   }
 
-  setFetchAction({ dispatch, isFetching: true });
-
   try {
+    setFetchAction({ dispatch, isFetching: true });
     const { contactid } = isActiveUser;
 
     if (!contactid)
@@ -53,12 +52,14 @@ export const setUserStoreAction = async ({
     }
     if (!storeApplication) {
       // ⏬⏬  creat application record in Dynamics ⏬⏬
-      const newApplicationRecord = await createDynamicsApplicationAction({
+      storeApplication = await createDynamicsApplicationAction({
         state,
         contactid,
       });
-      storeApplication = newApplicationRecord;
     }
+
+    // throw error if newApplicationRecord is null
+    if (!storeApplication) throw new Error("Failed to fetch application");
 
     // 🤖 update object with user input data
     const updatedMembershipData = updateMembershipApplication({
@@ -67,46 +68,22 @@ export const setUserStoreAction = async ({
       membershipApplication,
     });
 
-    const URL = state.auth.APP_HOST + `/store/${contactid}/applications`;
-    const jwt = await authenticateAppAction({ state });
-
-    const getCircularReplacer = () => {
-      const seen = new WeakSet();
-      return (key, value) => {
-        if (typeof value === "object" && value !== null) {
-          if (seen.has(value)) {
-            return;
-          }
-          seen.add(value);
-        }
-        return value;
-      };
-    };
-
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${jwt}`,
-      },
-      body: JSON.stringify(updatedMembershipData, getCircularReplacer()),
-    };
-
-    await updateDynamicsApplicationAction({
+    const dynamicsApplication = await updateDynamicsApplicationAction({
       state,
       contactid,
       updatedMembershipData,
     });
-    const response = await fetch(URL, requestOptions);
-    const userStore = await response.json();
-    console.log("userStore", userStore);
 
-    if (userStore.success) {
+    if (dynamicsApplication.success) {
       setApplicationDataAction({
         dispatch,
         applicationData: updatedMembershipData,
       });
-      return userStore;
+
+      console.log("⬇️ application record ", updatedMembershipData);
+      return dynamicsApplication;
+    } else {
+      throw new Error("Failed to update application record");
     }
   } catch (error) {
     console.log("error", error);
@@ -123,7 +100,7 @@ export const getUserStoreAction = async ({ state, isActiveUser }) => {
     if (!contactid)
       throw new Error("Cannot set user store. Contactid is missing.");
 
-    const URL = state.auth.APP_HOST + `/store/${contactid}/applications`;
+    const URL = state.auth.APP_HOST + `/applications/current/${contactid}`;
     const jwt = await authenticateAppAction({ state });
 
     const requestOptions = {
@@ -140,39 +117,6 @@ export const getUserStoreAction = async ({ state, isActiveUser }) => {
       return userStore.data;
     } else {
       console.log("⏬ Membership Record Not Found ⏬");
-      return null;
-    }
-  } catch (error) {
-    console.log("error", error);
-  }
-};
-
-export const deleteUserStoreAction = async ({ state, isActiveUser }) => {
-  console.log("deleteUserStoreAction triggered");
-
-  try {
-    const { contactid } = isActiveUser;
-    if (!contactid)
-      throw new Error("Cannot set user store. Contactid is missing.");
-
-    const URL = state.auth.APP_HOST + `/store/${contactid}/applications`;
-    const jwt = await authenticateAppAction({ state });
-
-    const requestOptions = {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${jwt}` },
-    };
-
-    const response = await fetch(URL, requestOptions);
-    const userStore = await response.json();
-
-    if (userStore.success) {
-      console.log("⏬ Membership Record Successfully Deleted ⏬");
-      console.log(userStore.data);
-      return userStore.data;
-    } else {
-      console.log("⏬ Membership Record Not Found ⏬");
-      console.log(userStore.data);
       return null;
     }
   } catch (error) {
@@ -203,35 +147,6 @@ export const createDynamicsApplicationAction = async ({ state, contactid }) => {
     if (data.success) {
       return data.data;
     } else {
-      return null;
-    }
-  } catch (error) {
-    console.log("error", error);
-  }
-};
-
-export const getDynamicsApplicationAction = async ({ state, contactid }) => {
-  console.log("getDynamicsApplicationAction triggered");
-
-  // ⏬⏬  create application record in dynamics ⏬⏬
-  const URL = state.auth.APP_HOST + `/applications/current/${contactid}`;
-  const jwt = await authenticateAppAction({ state });
-
-  const requestOptions = {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${jwt}`,
-    },
-  };
-
-  try {
-    const response = await fetch(URL, requestOptions);
-    const data = await response.json();
-
-    if (data.success) {
-      return data.data;
-    } else {
-      console.log("⏬ Membership Record In Dynamics not Found ⏬");
       return null;
     }
   } catch (error) {
@@ -305,7 +220,7 @@ export const updateDynamicsApplicationAction = async ({
 
     if (data.success) {
       console.log("⏬ DYNAMICS. Membership Record Successfully Updated ⏬");
-      return data.data;
+      return data;
     } else {
       console.log("⏬ DYNAMICS. Failed to Update Membership Record ⏬");
       return null;

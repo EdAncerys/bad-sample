@@ -13,6 +13,7 @@ import {
   setGoToAction,
   errorHandler,
   validateMembershipFormAction,
+  setCompleteUserApplicationAction,
 } from "../../../context";
 
 const SIGApplication = ({ state, actions, libraries }) => {
@@ -132,21 +133,35 @@ const SIGApplication = ({ state, actions, libraries }) => {
     if (!isValid) return null;
 
     setFetching(true);
-    const store = await setUserStoreAction({
-      state,
-      actions,
-      dispatch,
-      applicationData,
-      isActiveUser,
-      dynamicsApps,
-      membershipApplication: { stepFive: true }, // set stepOne to complete
-      data: formData,
-    });
-    setFetching(false);
-    if (!store.success) return; // if store not saved, return
 
-    let slug = `/membership/final-step-thank-you/`;
-    if (isActiveUser) setGoToAction({ path: slug, actions });
+    try {
+      const store = await setUserStoreAction({
+        state,
+        actions,
+        dispatch,
+        applicationData,
+        isActiveUser,
+        dynamicsApps,
+        membershipApplication: { stepFive: true }, // set stepOne to complete
+        data: formData,
+      });
+
+      if (!store.success)
+        throw new Error("Failed to update application record"); // throw error if store is not successful
+
+      await setCompleteUserApplicationAction({
+        state,
+        dispatch,
+        isActiveUser,
+      });
+
+      let slug = `/membership/final-step-thank-you/`;
+      if (isActiveUser) setGoToAction({ path: slug, actions });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setFetching(false);
+    }
   };
 
   const handleInputChange = (e) => {
@@ -191,7 +206,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
           Save & Exit
         </div>
         <div className="blue-btn" onClick={handleNext}>
-          Next
+          Submit Application
         </div>
       </div>
     );
