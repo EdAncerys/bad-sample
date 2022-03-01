@@ -184,7 +184,12 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
       const ServeCategoryFilter = () => {
         return (
-          <Form.Select ref={categoryFilterRef} style={styles.input}>
+          <Form.Select
+            ref={categoryFilterRef}
+            value={categoryValue}
+            onChange={handleSearch}
+            style={styles.input}
+          >
             <option value="" hidden>
               Category
             </option>
@@ -201,7 +206,12 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
       const ServeDateFilter = () => {
         return (
-          <Form.Select ref={dateFilterRef} style={styles.input}>
+          <Form.Select
+            ref={dateFilterRef}
+            value={dateValue}
+            onChange={handleSearch}
+            style={styles.input}
+          >
             <option value="" hidden>
               Sort By
             </option>
@@ -218,7 +228,12 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
           .map((v, idx) => now - idx);
 
         return (
-          <Form.Select ref={yearFilterRef} style={styles.input}>
+          <Form.Select
+            ref={yearFilterRef}
+            value={yearValue}
+            onChange={handleSearch}
+            style={styles.input}
+          >
             <option value="" hidden>
               Filter By Year
             </option>
