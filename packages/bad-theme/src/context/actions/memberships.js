@@ -85,8 +85,8 @@ export const handleApplyForMembershipAction = async ({
       // if user have application pending under reviewed status redirect to application list
       if (isPending) {
         console.log("🤖 user have application pending under reviewed status");
-        setGoToAction({ path: "/dashboard/", actions });
-        return;
+        // setGoToAction({ path: "/dashboard/", actions });
+        // return;
       }
     }
 
@@ -99,7 +99,7 @@ export const handleApplyForMembershipAction = async ({
     if (!membershipData) throw new Error("Failed to get membership data");
 
     // ⏬ create user application record in Store
-    await setUserStoreAction({
+    const store = await setUserStoreAction({
       state,
       dispatch,
       applicationData,
@@ -114,11 +114,16 @@ export const handleApplyForMembershipAction = async ({
     });
 
     // ⏬ redirect to application form if active user
-    if (isActiveUser)
+    if (isActiveUser && store) {
       setGoToAction({
         path: path || `/membership/step-1-the-process/`,
         actions,
       });
+    } else {
+      console.log("🤖 user is not active");
+      console.log(store);
+      setGoToAction({ path: "/dashboard/", actions });
+    }
   } catch (error) {
     console.log("ERROR: ", error);
   }

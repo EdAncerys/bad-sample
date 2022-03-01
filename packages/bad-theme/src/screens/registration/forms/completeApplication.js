@@ -9,9 +9,8 @@ import ActionPlaceholder from "../../../components/actionPlaceholder";
 import {
   useAppDispatch,
   useAppState,
-  setUserStoreAction,
+  updateEthnicityAction,
   setGoToAction,
-  setCompleteUserApplicationAction,
   validateMembershipFormAction,
 } from "../../../context";
 
@@ -58,22 +57,13 @@ const CompleteApplication = ({ state, actions, libraries }) => {
   }, []);
 
   // HANDLERS --------------------------------------------
-  const handleComplete = async () => {
+  const handleSubmit = async () => {
     try {
       setFetching(true);
-      await setUserStoreAction({
+      // handle update ethnicity for user contact
+      await updateEthnicityAction({
         state,
-        actions,
-        dispatch,
-        applicationData,
-        isActiveUser,
-        membershipApplication: { applicationComplete: true }, // set stepOne to complete
-        data: formData,
-      });
-
-      await setCompleteUserApplicationAction({
-        state,
-        dispatch,
+        data: formData.bad_ethnicity,
         isActiveUser,
       });
 
@@ -105,8 +95,8 @@ const CompleteApplication = ({ state, actions, libraries }) => {
           borderTop: `1px solid ${colors.silverFillTwo}`,
         }}
       >
-        <div className="blue-btn" onClick={handleComplete}>
-          Submit Application
+        <div className="blue-btn" onClick={handleSubmit}>
+          Submit
         </div>
       </div>
     );

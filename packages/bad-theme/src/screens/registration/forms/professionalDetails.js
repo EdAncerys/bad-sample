@@ -17,6 +17,7 @@ import {
   setGoToAction,
   errorHandler,
   validateMembershipFormAction,
+  setCompleteUserApplicationAction,
   useIsMounted,
 } from "../../../context";
 
@@ -113,8 +114,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       if (data.name === "bad_expectedyearofqualification")
         handleSetFormData({ data, name: "bad_expectedyearofqualification" });
 
-      if (data.bad_categorytype) setType(data.bad_categorytype);
-      if (data._bad_sigid_value) setType(data._bad_sigid_value);
+      if (data.bad_categorytype) setType(data.bad_categorytype); // validate BAD application category type
+      if (data._bad_sigid_value) setType(data._bad_sigid_value); // validate SIG application category type
     });
 
     // ⏬ validate inputs
@@ -222,6 +223,14 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       membershipApplication: { stepFour: true }, // set stepOne to complete
       data: formData,
     });
+
+    // set complete application if app = BAD
+    if (category === "BAD")
+      await setCompleteUserApplicationAction({
+        state,
+        dispatch,
+        isActiveUser,
+      });
     setFetching(false);
     if (!store.success) return; // if store not saved, return
 
@@ -268,6 +277,9 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
+    let label = "Next";
+    if (category === "BAD") label = "Submit Application";
+
     return (
       <div
         className="flex"
@@ -292,7 +304,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
           Save & Exit
         </div>
         <div className="blue-btn" onClick={handleNext}>
-          Next
+          {label}
         </div>
       </div>
     );

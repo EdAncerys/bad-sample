@@ -20,7 +20,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser } = useAppState();
+  const { applicationData, isActiveUser, dynamicsApps } = useAppState();
 
   const data = state.source.get(state.router.link);
   const dermGroupe = state.source[data.type][data.id];
@@ -40,6 +40,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
       dispatch,
       applicationData,
       isActiveUser,
+      dynamicsApps,
       category: "SIG",
       type: catType || "", // application type name
       membershipApplication: {
