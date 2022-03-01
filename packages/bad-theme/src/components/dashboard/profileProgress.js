@@ -201,11 +201,8 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     if (!dynamicsApps) return null; // if application data exist & not under review return null
     // see if application list have approved applications and if so show them
     const subsData = dynamicsApps.subs.data; // get subs data form dynamic apps
-    const approvedApplications = subsData.filter(
-      (app) => app.bad_approvalstatus === "Approved"
-    );
     // hide component if application list has no approved applications
-    if (approvedApplications.length === 0) return null;
+    if (subsData.length === 0) return null;
 
     return (
       <div
@@ -229,9 +226,6 @@ const ProfileProgress = ({ state, actions, libraries }) => {
               createdon,
               bad_approvalstatus,
             } = app;
-
-            // hide application with not approved status
-            if (bad_approvalstatus !== "Approved") return null;
 
             // get application date
             let appData = createdon.split(" ")[0];
