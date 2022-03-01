@@ -15,7 +15,12 @@ import Settings from "../components/dashboard/pages/settings";
 
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT ------------------------------------------------------------------
-import { getDirectDebitAction, useAppState, useAppDispatch } from "../context";
+import {
+  getDirectDebitAction,
+  useAppState,
+  useAppDispatch,
+  dynamicsApps,
+} from "../context";
 
 import { handleGetCookie } from "../helpers/cookie";
 

@@ -9,7 +9,6 @@ const DATE_MODULE = date;
 import Ellipse from "../../img/svg/ellipse.svg";
 import CheckMarkGreen from "../../img/svg/checkMarkGreen.svg";
 
-import PaymentNotification from "./paymentNotification";
 // CONTEXT ----------------------------------------------------------------
 import { useAppState, setGoToAction } from "../../context";
 const ProfileProgress = ({ state, actions, libraries }) => {
@@ -23,13 +22,17 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   const [applicationStep, setStep] = useState("Start new application");
   // application under review
   const isUnderReview =
-    dynamicsApps && dynamicsApps[0].bad_approvalstatus === "Pending";
+    dynamicsApps &&
+    dynamicsApps.length > 0 &&
+    dynamicsApps[0].bad_approvalstatus === "Pending";
   const isApproved =
-    dynamicsApps && dynamicsApps[0].bad_approvalstatus === "Approved";
+    dynamicsApps &&
+    dynamicsApps.length > 0 &&
+    dynamicsApps[0].bad_approvalstatus === "Approved";
 
   useEffect(() => {
     // if (!applicationData) return null - we need to check if the data exists in the API
-    if (!applicationData && apps.data.length === 0) return null; //if there is no application data and no active applications in the API - then return null
+    if (!applicationData && dynamicsApps.length === 0) return null; //if there is no application data and no active applications in the API - then return null
     let progressName = "";
     if (applicationData[0].stepOne) progressName = "Step 1 - The Process";
     if (applicationData[0].stepTwo)
