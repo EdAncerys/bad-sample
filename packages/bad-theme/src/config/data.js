@@ -1212,35 +1212,63 @@ export const UK_HOSPITALS = [
 
 export const ETHNIC_GROUPES = [
   {
+    value: 810170011,
+    Label: "African Background",
+  },
+  {
+    value: 810170012,
+    Label: "Arab",
+  },
+  {
+    value: 810170008,
+    Label: "Bangladeshi",
+  },
+  {
+    value: 810170010,
+    Label: "Caribbean",
+  },
+  {
+    value: 810170009,
+    Label: "Chinese",
+  },
+  {
+    value: 810170002,
+    Label: "Gypsy or Irish Traveller",
+  },
+  {
+    value: 810170006,
+    Label: "Indian",
+  },
+  {
+    value: 810170001,
+    Label: "Irish",
+  },
+  {
+    value: 810170007,
+    Label: "Pakistan",
+  },
+  {
     value: 215500000,
-    Label: "Male",
+    Label: "White",
   },
   {
-    value: 215500001,
-    Label: "Female",
+    value: 810170005,
+    Label: "- White and Asian",
   },
   {
-    value: 215500003,
-    Label: "Transgender Female",
+    value: 810170004,
+    Label: "White and Black African",
   },
   {
-    value: 215500004,
-    Label: "Transgender Male",
+    value: 810170003,
+    Label: "White and Black Caribbean",
   },
   {
-    value: 215500005,
-    Label: "Gender Variant/Non-Conforming",
+    value: 810170000,
+    Label: "White British",
   },
   {
-    value: 215500006,
-    Label: "Not Listed",
-  },
-  {
-    value: 215500007,
-    Label: "Prefer Not to Answer",
-  },
-  {
-    value: 215500002,
-    Label: "Unknown",
+    value: 810170013,
+    Label: "Other",
   },
 ];
