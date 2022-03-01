@@ -21,16 +21,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, dynamicsApps } = useAppState();
 
-  const [category, setCategory] = useState(() => {
-    if (!applicationData) return "";
-    let applicationCategory = "";
-    applicationData.map((data) => {
-      if (data.name === "bad_organisedfor") applicationCategory = data.value;
-    });
-
-    return applicationCategory;
-  });
-
   const [formData, setFormData] = useState({
     bad_qualifications: "",
     bad_hasmedicallicence: "",
