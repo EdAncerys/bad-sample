@@ -15,7 +15,8 @@ const DashboardEvents = ({ state, actions, libraries, dashboardPath }) => {
       <TitleBlock
         block={{ text_align: "left", title: "Events I Am Registered For" }}
       />
-      <Events
+      You haven't signed up for any events.
+      {/* <Events
         block={{
           add_search_function: false,
           background_colour: "transparent",
@@ -29,8 +30,7 @@ const DashboardEvents = ({ state, actions, libraries, dashboardPath }) => {
           post_limit: "2",
           view_all_link: false,
         }}
-      />
-
+      /> */}
       <TitleBlock
         block={{
           text_align: "left",

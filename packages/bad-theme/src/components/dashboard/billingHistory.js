@@ -83,19 +83,8 @@ const BillingHistory = ({ state, actions, libraries }) => {
       </div>
     );
   };
-
-  return (
-    <div
-      className="shadow"
-      style={{
-        padding: !lg ? `2em 4em` : "1em",
-        marginBottom: `${marginVertical}px`,
-      }}
-    >
-      <div className="primary-title" style={{ fontSize: 20 }}>
-        Billing History:
-      </div>
-      <ServeSubTitle title="2021" />
+  {
+    /* <ServeSubTitle title="2021" />
       {PAYMENTS.map((block, key) => {
         return <ServePayments key={key} block={block} item={key} />;
       })}
@@ -111,7 +100,21 @@ const BillingHistory = ({ state, actions, libraries }) => {
       <ServeSubTitle title="2020" />
       {PAYMENTS.map((block, key) => {
         return <ServePayments key={key} block={block} item={key} />;
-      })}
+      })} */
+  }
+  return (
+    <div
+      className="shadow"
+      style={{
+        padding: !lg ? `2em 4em` : "1em",
+        marginBottom: `${marginVertical}px`,
+      }}
+    >
+      <div className="primary-title" style={{ fontSize: 20 }}>
+        Billing History:
+      </div>
+      At the moment there is no billing history. It will appear here once it's
+      available.
     </div>
   );
 };
