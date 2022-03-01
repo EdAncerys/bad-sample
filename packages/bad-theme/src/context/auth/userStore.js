@@ -2,6 +2,8 @@ import {
   authenticateAppAction,
   setFetchAction,
   setApplicationDataAction,
+  setLoginModalAction,
+  setGoToAction,
 } from "../index";
 
 export const setUserStoreAction = async ({
@@ -11,8 +13,28 @@ export const setUserStoreAction = async ({
   isActiveUser,
   data,
   membershipApplication,
+  dynamicsApps,
 }) => {
   console.log("setUserStoreAction triggered");
+
+  if (!isActiveUser) {
+    // validate if isActiveUser 🤖
+    setLoginModalAction({ dispatch, loginModalAction: true });
+    return null;
+  }
+
+  if (dynamicsApps) {
+    const appsData = dynamicsApps.apps.data; // get pending too approve apps data form dynamic apps
+    // check if user have application pending under reviewed status
+    const isPending =
+      appsData.filter((item) => item.bad_approvalstatus === "Pending").length >
+      0;
+    // if user have application pending under reviewed status redirect to application list
+    if (isPending) {
+      setGoToAction({ path: "/dashboard/", actions });
+      return;
+    }
+  }
 
   setFetchAction({ dispatch, isFetching: true });
 

@@ -70,7 +70,6 @@ export const handleApplyForMembershipAction = async ({
   dynamicsApps,
 }) => {
   try {
-    // ⏬ get appropriate membership ID
     if (!isActiveUser) {
       // validate if isActiveUser 🤖
       setLoginModalAction({ dispatch, loginModalAction: true });
@@ -90,6 +89,7 @@ export const handleApplyForMembershipAction = async ({
       }
     }
 
+    // ⏬ get appropriate membership ID
     const membershipData = await getBADMembershipSubscriptionData({
       state,
       category,

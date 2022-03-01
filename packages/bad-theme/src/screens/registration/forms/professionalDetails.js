@@ -24,7 +24,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
   const isMounted = useIsMounted();
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser } = useAppState();
+  const { applicationData, isActiveUser, dynamicsApps } = useAppState();
 
   const [category, setCategory] = useState(() => {
     if (!applicationData) return "";
@@ -213,6 +213,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       dispatch,
       applicationData,
       isActiveUser,
+      dynamicsApps,
       membershipApplication: { stepFour: true }, // set stepOne to complete
       data: formData,
     });

@@ -18,7 +18,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
   const page = state.source[data.category][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser } = useAppState();
+  const { applicationData, isActiveUser, dynamicsApps } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -99,6 +99,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
       dispatch,
       applicationData,
       isActiveUser,
+      dynamicsApps,
       membershipApplication: { stepThree: true }, // set stepOne to complete
       category: formData.bad_organisedfor === "810170000" ? "BAD" : "SIG",
       type: formData.bad_categorytype, // application type name

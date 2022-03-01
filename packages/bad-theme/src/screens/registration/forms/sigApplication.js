@@ -18,7 +18,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser } = useAppState();
+  const { applicationData, isActiveUser, dynamicsApps } = useAppState();
 
   const [category, setCategory] = useState(() => {
     if (!applicationData) return "";
@@ -143,6 +143,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       dispatch,
       applicationData,
       isActiveUser,
+      dynamicsApps,
       membershipApplication: { stepFive: true }, // set stepOne to complete
       data: formData,
     });
