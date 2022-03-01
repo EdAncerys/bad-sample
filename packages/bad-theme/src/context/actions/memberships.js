@@ -71,36 +71,31 @@ export const handleApplyForMembershipAction = async ({
 }) => {
   try {
     // ⏬ get appropriate membership ID
-    // if no active user redirect to login page
     if (!isActiveUser) {
+      // validate if isActiveUser 🤖
       setLoginModalAction({ dispatch, loginModalAction: true });
-      return;
+      return null;
     }
+
+    if (dynamicsApps) {
+      const appsData = dynamicsApps.apps.data; // get pending too approve apps data form dynamic apps
+      // check if user have application pending under reviewed status
+      const isPending =
+        appsData.filter((item) => item.bad_approvalstatus === "Pending")
+          .length > 0;
+      // if user have application pending under reviewed status redirect to application list
+      if (isPending) {
+        setGoToAction({ path: "/dashboard/", actions });
+        return;
+      }
+    }
+
     const membershipData = await getBADMembershipSubscriptionData({
       state,
       category,
       type,
     });
     if (!membershipData) throw new Error("Failed to get membership data");
-
-    console.log(
-      "dynamicsApps",
-      dynamicsApps.filter((app) => app.bad_approvalstatus === "Pending")
-        .length > 0
-    ); // debug
-    if (dynamicsApps) {
-      // check if user have application pending under reviewed status
-      const isPending =
-        dynamicsApps.filter((app) => app.bad_approvalstatus === "Pending")
-          .length > 0;
-      // if user have application pending under reviewed status redirect to application list
-      if (isPending.length > 0) {
-        setGoToAction({ path: "/dashboard", actions });
-        return;
-      }
-    }
-
-    return;
 
     // ⏬ create user application record in Store
     await setUserStoreAction({
@@ -117,6 +112,7 @@ export const handleApplyForMembershipAction = async ({
       },
     });
 
+    // ⏬ redirect to application form if active user
     if (isActiveUser)
       setGoToAction({
         path: path || `/membership/step-1-the-process/`,

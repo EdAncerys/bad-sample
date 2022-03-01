@@ -35,7 +35,7 @@ export const authLogViaCookie = async ({ state, initialState }) => {
       if (!appsResponse.ok)
         throw new Error(`${appsResponse.statusText} ${appsResponse.status}`); // fetch user data from Dynamics
       const appsData = await appsResponse.json();
-      console.log("🚀 dynamicsApps", appsData.apps.data); // debug
+      console.log("🚀 dynamicsApps", appsData); // debug
 
       const userStoreData = await getUserStoreAction({
         state,
@@ -49,7 +49,7 @@ export const authLogViaCookie = async ({ state, initialState }) => {
       if (userData && appsData) {
         const taken = await authenticateAppAction({ state }); // replace taken with new one
         initialState.isActiveUser = userData; // populates user userResponse
-        initialState.dynamicsApps = appsData.apps.data;
+        initialState.dynamicsApps = appsData;
         initialState.jwt = taken; // replace taken with new one
         console.log("initialState", initialState); // debug
 

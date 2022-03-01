@@ -21,6 +21,7 @@ export const loginAction = async ({ state, dispatch, transId }) => {
 
     setLoginModalAction({ dispatch, loginModalAction: false });
     setGoToAction({ path: `/dashboard`, actions });
+    return response;
   } catch (error) {
     console.log("loginAction error", error);
   } finally {
@@ -125,18 +126,25 @@ export const getUserDataByContactId = async ({
   try {
     const data = await fetch(URL, requestOptions);
     const response = await data.json();
-    if (response) {
-      // get application status against user in Dynamic
-      await getApplicationStatus({ state, dispatch, contactid });
-      setActiveUserAction({ dispatch, isActiveUser: response });
-      handleSetCookie({
-        name: state.auth.COOKIE_NAME,
-        value: { jwt, contactid },
-      });
-      seJWTAction({ dispatch, jwt });
+    if (!response) throw new Error("Error getting userData.");
 
-      return response;
-    }
+    // get application status against user in Dynamic
+    const dynamicApps = await getApplicationStatus({
+      state,
+      dispatch,
+      contactid,
+    });
+    if (!dynamicApps.apps.success)
+      throw new Error("Error dynamicApps userData.");
+
+    setActiveUserAction({ dispatch, isActiveUser: response });
+    handleSetCookie({
+      name: state.auth.COOKIE_NAME,
+      value: { jwt, contactid },
+    });
+    seJWTAction({ dispatch, jwt });
+
+    return response;
   } catch (error) {
     console.log("error", error);
   }

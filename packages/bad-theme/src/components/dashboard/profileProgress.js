@@ -23,15 +23,18 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   const [applicationStep, setStep] = useState("Start new application");
   // application under review
   let isUnderReview = false;
-  if (dynamicsApps)
-    isUnderReview =
-      dynamicsApps.filter((app) => app.bad_approvalstatus === "Pending")
-        .length > 0;
   let isApproved = false;
-  if (dynamicsApps)
+  if (dynamicsApps) {
+    const subsData = dynamicsApps.subs.data; // get approved subs data form dynamic apps
+    const appsData = dynamicsApps.apps.data; // get pending too approve apps data form dynamic apps
+
+    isUnderReview =
+      appsData.filter((item) => item.bad_approvalstatus === "Pending").length >
+      0;
     isApproved =
-      dynamicsApps.filter((app) => app.bad_approvalstatus === "Approved")
-        .length > 0;
+      subsData.filter((item) => item.bad_approvalstatus === "Approved").length >
+      0;
+  }
 
   useEffect(() => {
     if (!applicationData) return null;
@@ -197,7 +200,8 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   const ServeApplicationList = () => {
     if (!dynamicsApps) return null; // if application data exist & not under review return null
     // see if application list have approved applications and if so show them
-    const approvedApplications = dynamicsApps.filter(
+    const subsData = dynamicsApps.subs.data; // get subs data form dynamic apps
+    const approvedApplications = subsData.filter(
       (app) => app.bad_approvalstatus === "Approved"
     );
     // hide component if application list has no approved applications
@@ -218,7 +222,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
           >
             Existing Applications
           </div>
-          {dynamicsApps.map((app, key) => {
+          {subsData.map((app, key) => {
             const {
               bad_organisedfor,
               core_name,
