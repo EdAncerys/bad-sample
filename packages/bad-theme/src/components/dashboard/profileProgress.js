@@ -23,16 +23,12 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   const [applicationStep, setStep] = useState("Start new application");
   // application under review
   let isUnderReview = false;
-  let isApproved = false;
   if (dynamicsApps) {
     const subsData = dynamicsApps.subs.data; // get approved subs data form dynamic apps
     const appsData = dynamicsApps.apps.data; // get pending too approve apps data form dynamic apps
 
     isUnderReview =
       appsData.filter((item) => item.bad_approvalstatus === "Pending").length >
-      0;
-    isApproved =
-      subsData.filter((item) => item.bad_approvalstatus === "Approved").length >
       0;
   }
 
@@ -171,7 +167,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   };
 
   const ServeApplicationConsole = () => {
-    if (!applicationData || !isUnderReview) return null; // if application data exist & not under review return null
+    if (!isUnderReview) return null; // if application data exist & not under review return null
 
     return (
       <div

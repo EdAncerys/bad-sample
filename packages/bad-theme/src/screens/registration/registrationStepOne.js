@@ -18,7 +18,7 @@ const RegistrationStepOne = ({ state, actions }) => {
   const page = state.source[data.type][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser } = useAppState();
+  const { applicationData, isActiveUser, dynamicsApps } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -30,6 +30,7 @@ const RegistrationStepOne = ({ state, actions }) => {
       dispatch,
       applicationData,
       isActiveUser,
+      dynamicsApps,
     });
     if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
   };
