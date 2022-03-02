@@ -6,7 +6,7 @@ import { handleGetCookie } from "../../helpers/cookie";
 
 import PaymentModal from "./paymentModal";
 import Loading from "../loading";
-const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
+const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   //component state
   const [paymentUrl, setPaymentUrl] = useState("");
   const [liveSubscriptions, setLiveSubscriptions] = useState(null);
@@ -110,9 +110,7 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
 
       const ServePaymentStatus = () => {
         if (!bad_sagepayid) return null;
-        if (bad_sagepayid && outstanding)
-          return "Your payment is being processed";
-        if (bad_sagepayid && !outstanding) return "Paid";
+        if (bad_sagepayid) return "Paid";
       };
       return (
         <div style={{ margin: `auto 0`, width: marginHorizontal * 2 }}>
@@ -127,8 +125,7 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
     const ServeInfo = () => {
       const dataLength = subs.data.length;
       const isLastItem = dataLength === item + 1;
-      const { bad_outstandingpayments_date } = block;
-      const date = bad_outstandingpayments_date.split(" ");
+      const { core_totalamount, core_name } = block;
       return (
         <div
           className="flex"
@@ -140,10 +137,10 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
           }}
         >
           <div className="flex" style={styles.fontSize}>
-            <div>{block.core_name}</div>
+            <div>{core_name}</div>
           </div>
           <div className="flex" style={styles.fontSize}>
-            <div>{date[0]}</div>
+            <div>{core_totalamount}</div>
           </div>
         </div>
       );
@@ -170,12 +167,27 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
         resetPaymentUrl={resetPaymentUrl}
       />
       <div className="primary-title" style={{ fontSize: 20 }}>
+        Active applications:
+      </div>
+      {liveSubscriptions.apps.data.length === 0 ? (
+        <ServeSubTitle title="No active subscriptions at the moment" />
+      ) : (
+        <ServeSubTitle
+          title={dashboard ? "Outstanding applications" : "Invoices"}
+        />
+      )}
+      {liveSubscriptions.apps.data.map((block, key) => {
+        return <ServePayments key={key} block={block} item={key} />;
+      })}
+      <div className="primary-title" style={{ fontSize: 20 }}>
         Active subscriptions:
       </div>
       {liveSubscriptions.subs.data.length === 0 ? (
         <ServeSubTitle title="No active subscriptions at the moment" />
       ) : (
-        <ServeSubTitle title="Invoices" />
+        <ServeSubTitle
+          title={dashboard ? "Outstanding subscriptions" : "Invoices"}
+        />
       )}
       {liveSubscriptions.subs.data.map((block, key) => {
         return <ServePayments key={key} block={block} item={key} />;

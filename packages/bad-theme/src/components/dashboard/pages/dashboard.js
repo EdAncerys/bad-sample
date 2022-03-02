@@ -9,6 +9,7 @@ import { colors } from "../../../config/colors";
 import TitleBlock from "../../titleBlock";
 import Events from "../../events/events";
 import ApplicationStatusOrPayment from "../ApplicationStatusOrPayment";
+import Payments from "../payments";
 
 const Dashboard = ({
   state,
@@ -31,15 +32,44 @@ const Dashboard = ({
         return singleApplication.bad_approvalstatus == "Yes";
       });
     }
+    const ServeApplicationStatus = () => {
+      if (apps.data.length === 0) return null;
+      return (
+        <div>
+          {apps.data.map((item, key) => {
+            return (
+              <ApplicationStatusOrPayment
+                application={userStatus.apps.data[key]}
+              />
+            );
+          })}
+        </div>
+      );
+    };
+    const ServePayments = () => {
+      const outstandingApps =
+        userStatus.apps.data.filter((item) => item.bad_sagepayid !== null)
+          .length > 0;
+      const outstandingSubs =
+        userStatus.apps.data.filter((item) => item.bad_sagepayid !== null)
+          .length > 0;
+      if (!outstandingApps && !outstandingSubs) return "Nothing to pay";
 
+      return (
+        <div>
+          <div className="primary-title" style={{ fontSize: 20 }}>
+            Payments
+            <Payments dashboard />
+          </div>
+        </div>
+      );
+    };
     return (
       <div style={{ padding: `0 ${marginHorizontal}px` }}>
         <Profile />
-        {apps.data.length > 0 || subs.data.length > 0 ? (
-          <ApplicationStatusOrPayment userStatus={userStatus} />
-        ) : (
-          <ProfileProgress />
-        )}
+        <ProfileProgress />
+        <ServeApplicationStatus />
+        <ServePayments />
         <UpdateProfile />
       </div>
     );

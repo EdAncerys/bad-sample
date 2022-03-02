@@ -32,6 +32,8 @@ const ProfileProgress = ({ state, actions, libraries }) => {
       0;
   }
 
+  if (isUnderReview) return null;
+
   useEffect(() => {
     if (!applicationData) return null;
 
