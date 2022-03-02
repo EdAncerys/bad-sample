@@ -112,12 +112,6 @@ const RegistrationStepTwo = ({ state, actions }) => {
     if (!isValid) return null;
     // console.log(formData); // debug
 
-    if (!formData.bad_organisedfor || !formData.bad_categorytype) {
-      console.log("FORM INPUTS NOT VALIDATED");
-      return;
-    }
-    console.log("formData", formData); // debug
-
     setFetching(true);
     await handleApplyForMembershipAction({
       state,

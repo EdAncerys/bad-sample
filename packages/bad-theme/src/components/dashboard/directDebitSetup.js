@@ -5,12 +5,15 @@ import Image from "@frontity/components/image";
 import { colors } from "../../config/imports";
 import DirectDebit from "../../img/svg/directDebit.svg";
 import Loading from "../../components/loading";
+import FormError from "../../components/formError";
+import ActionPlaceholder from "../../components/actionPlaceholder";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
   useAppState,
   getDirectDebitAction,
   createDirectDebitAction,
+  errorHandler,
 } from "../../context";
 
 const DirectDebitSetup = ({ state, actions, libraries, setPage }) => {
@@ -25,6 +28,7 @@ const DirectDebitSetup = ({ state, actions, libraries, setPage }) => {
     core_accountnumber: "",
     core_sortcode: "",
   });
+  const [isFetching, setFetching] = useState(false);
 
   const marginVertical = state.theme.marginVertical;
 
@@ -36,14 +40,6 @@ const DirectDebitSetup = ({ state, actions, libraries, setPage }) => {
       [`py3_email`]: isActiveUser.emailaddress1 || "",
       [`core_name`]: isActiveUser.fullname || "",
     }));
-
-    // // ⏬ validate inputs
-    // validateMembershipFormAction({
-    //   state,
-    //   actions,
-    //   setData: setInputValidator,
-    //   applicationData,
-    // });
   }, []);
 
   if (!isActiveUser) return <Loading />;
@@ -57,28 +53,57 @@ const DirectDebitSetup = ({ state, actions, libraries, setPage }) => {
     }));
   };
 
-  const handleDirectDebitSetup = async () => {
-    const debitResponse = await createDirectDebitAction({
-      state,
-      id: isActiveUser.contactid,
-      data: {
-        bad_transactiontype: "0S",
-        core_name: formData.core_name,
-        core_accountnumber: formData.core_accountnumber,
-        core_sortcode: formData.core_sortcode,
-      },
+  const isFormValidated = ({ required }) => {
+    if (!required && !required.length) return null;
+    let isValid = true;
+
+    required.map((input) => {
+      if (!formData[input]) {
+        errorHandler({ id: `form-error-${input}` });
+        isValid = false;
+      }
     });
 
-    if (debitResponse.success) {
-      await getDirectDebitAction({
+    return isValid;
+  };
+
+  const handleDirectDebitSetup = async () => {
+    // form value validations
+    const isValid = isFormValidated({
+      required: ["core_sortcode", "core_accountnumber"],
+    });
+
+    if (!isValid) return null;
+    console.log(formData); // debug
+
+    try {
+      setFetching(true);
+      const debitResponse = await createDirectDebitAction({
         state,
-        dispatch,
         id: isActiveUser.contactid,
+        data: {
+          bad_transactiontype: "0S",
+          core_name: formData.core_name,
+          core_accountnumber: formData.core_accountnumber,
+          core_sortcode: formData.core_sortcode,
+        },
       });
-      handlePayment();
-    } else {
-      console.log("⬇️ Failed to create direct debit ⬇️");
-      console.log(debitResponse);
+
+      if (debitResponse.success) {
+        await getDirectDebitAction({
+          state,
+          dispatch,
+          id: isActiveUser.contactid,
+        });
+        handlePayment(); // redirect to payment
+      } else {
+        console.log("⬇️ Failed to create direct debit ⬇️");
+        console.log(debitResponse);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setFetching(false);
     }
   };
 
@@ -162,84 +187,89 @@ const DirectDebitSetup = ({ state, actions, libraries, setPage }) => {
   // RETURN ---------------------------------------------
   return (
     <div>
-      <div
-        className="shadow"
-        style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
-      >
-        <div className="primary-title" style={{ fontSize: 20 }}>
-          Direct Debit Details
-        </div>
-        <ServeInfo />
+      <div style={{ position: "relative" }}>
+        <ActionPlaceholder isFetching={isFetching} background="transparent" />
         <div
-          className="primary-title"
-          style={{ fontSize: 20, paddingTop: `1em` }}
+          className="shadow"
+          style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
         >
-          Please enter your direct debit details:
-        </div>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: `1fr 1fr`,
-            gap: `5px 20px`,
-          }}
-        >
+          <div className="primary-title" style={{ fontSize: 20 }}>
+            Direct Debit Details
+          </div>
+          <ServeInfo />
+          <div
+            className="primary-title"
+            style={{ fontSize: 20, paddingTop: `1em` }}
+          >
+            Please enter your direct debit details:
+          </div>
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: `1fr`,
-              gridTemplateRows: `repeat(4, 70px)`,
-              gap: `20px`,
-              paddingTop: `1em`,
+              gridTemplateColumns: `1fr 1fr`,
+              gap: `5px 20px`,
             }}
           >
-            <div>
-              <label>Email</label>
-              <input
-                name="py3_email"
-                value={formData.py3_email}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="First Name"
-              />
-            </div>
-            <div>
-              <label>Account Name</label>
-              <input
-                name="core_name"
-                value={formData.core_name}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="Account Name"
-              />
-            </div>
-            <div>
-              <label>Account Number</label>
-              <input
-                name="core_accountnumber"
-                value={formData.core_accountnumber}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="Account Number"
-              />
-            </div>
-            <div>
-              <label>Sort Code</label>
-              <input
-                name="core_sortcode"
-                value={formData.core_sortcode}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="Sort Code"
-              />
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: `1fr`,
+                gridTemplateRows: `repeat(4, 70px)`,
+                gap: `20px`,
+                paddingTop: `1em`,
+              }}
+            >
+              <div>
+                <label>Email</label>
+                <input
+                  name="py3_email"
+                  value={formData.py3_email}
+                  onChange={handleInputChange}
+                  type="text"
+                  className="form-control input"
+                  placeholder="First Name"
+                />
+              </div>
+              <div>
+                <label>Account Name</label>
+                <input
+                  name="core_name"
+                  value={formData.core_name}
+                  onChange={handleInputChange}
+                  type="text"
+                  className="form-control input"
+                  placeholder="Account Name"
+                />
+              </div>
+              <div>
+                <label>Account Number</label>
+                <input
+                  name="core_accountnumber"
+                  value={formData.core_accountnumber}
+                  onChange={handleInputChange}
+                  type="text"
+                  className="form-control input"
+                  placeholder="Account Number"
+                />
+                <FormError id="core_accountnumber" />
+              </div>
+              <div>
+                <label>Sort Code</label>
+                <input
+                  name="core_sortcode"
+                  value={formData.core_sortcode}
+                  onChange={handleInputChange}
+                  type="text"
+                  className="form-control input"
+                  placeholder="Sort Code"
+                />
+                <FormError id="core_sortcode" />
+              </div>
             </div>
           </div>
+          <ServeConditions />
+          <ServeActions />
         </div>
-        <ServeConditions />
-        <ServeActions />
       </div>
       <div
         className="shadow"
