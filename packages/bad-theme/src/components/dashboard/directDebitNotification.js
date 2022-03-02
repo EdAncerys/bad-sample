@@ -16,7 +16,7 @@ const DirectDebitNotification = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { sm, md, lg, xl } = muiQuery();
 
-  const { isDirectDebit } = useAppState();
+  const { isDirectDebit, dynamicsApps } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
 
@@ -24,16 +24,26 @@ const DirectDebitNotification = ({
 
   useEffect(() => {
     if (!isDirectDebit) return null;
-    let debitStatus = false;
-
-    isDirectDebit.map((debit) => {
-      if (debit.statecode === "Active") debitStatus = true;
-    });
+    // if direct status is status is Active, set debit setup to true
+    let debitStatus = isDirectDebit.filter(
+      (debit) => debit.statecode === "Active"
+    );
+    // set tu truthy if debit status is active
+    debitStatus = debitStatus.length > 0;
 
     setDebitSetup(debitStatus);
-  }, []);
+  }, [isDirectDebit]);
 
-  if (!visible || !isDirectDebit || isDebitSetup) return null;
+  // if no approved membership, return dont show direct debit
+  let isApprovedMemberships = false;
+  if (dynamicsApps && dynamicsApps.subs.data.length > 0)
+    isApprovedMemberships = true;
+  // conditional rendering of direct debit component
+  let isSetupDirectDebit = false;
+  if (!visible) isSetupDirectDebit = true;
+  if (isDebitSetup) isSetupDirectDebit = true;
+
+  if (isSetupDirectDebit || !isApprovedMemberships) return null;
 
   // HELPERS ----------------------------------------------------------------
   const handlePayment = () => {

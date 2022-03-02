@@ -29,10 +29,7 @@ export const createDirectDebitAction = async ({ state, id, data }) => {
   const URL = state.auth.APP_HOST + `/bankaccount/${id}`;
   const jwt = await authenticateAppAction({ state });
 
-  console.log("data", data);
-  // console.log("core_name", data.core_name);
-  // console.log("core_accountnumber", data.core_accountnumber);
-  // console.log("core_sortcode", data.core_sortcode);
+  // console.log("data", data); // debug
 
   const requestOptions = {
     method: "POST",
