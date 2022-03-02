@@ -22,7 +22,8 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   useEffect(() => {
     const fetchApplicationBillingStatus = async () => {
       const getUserApplicationData = await fetch(
-        state.auth.APP_HOST + "/applications/billing/" + contactid,
+        state.auth.APP_HOST +
+          "/applications/billing/84590b32-9490-ec11-b400-000d3a22037e",
         {
           headers: {
             Authorization: `Bearer ${jwt}`,
@@ -80,6 +81,9 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
   // SERVERS ---------------------------------------------
   const ServePayments = ({ block, item }) => {
+    console.log("SP_BLOCK", block);
+    console.log("SP_ITEM", item);
+    if (dashboard && block.bad_sagepayid !== null) return null;
     const ServeStatusOrAction = () => {
       // get important data
       const {
@@ -88,12 +92,12 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
         bad_sagepayid,
       } = block;
       // is outstanding payments greater than 0?
-      const stringAmountToPay = bad_outstandingpayments.replace(
-        /[^0-9.-]+/g,
-        ""
-      );
-      const amountToPay = Number(stringAmountToPay);
-      const outstanding = amountToPay > 0;
+      // const stringAmountToPay = bad_outstandingpayments.replace(
+      //   /[^0-9.-]+/g,
+      //   ""
+      // );
+      // const amountToPay = Number(stringAmountToPay);
+      // const outstanding = amountToPay > 0;
 
       const ServePayButton = () => {
         if (bad_sagepayid) return null;
@@ -157,6 +161,29 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   const ServeSubTitle = ({ title }) => {
     return <div style={{ padding: `1em 0` }}>{title}</div>;
   };
+
+  const ServeListOfPayments = ({ type }) => {
+    const zeroObjects =
+      type === "applications"
+        ? liveSubscriptions.apps.data.length === 0
+        : liveSubscriptions.subs.data.length === 0;
+    const appsOrSubs = type === "applications" ? "apps" : "subs";
+    return (
+      <div>
+        <div className="primary-title" style={{ fontSize: 20 }}>
+          Active {type}:
+        </div>
+        {zeroObjects ? (
+          <ServeSubTitle title="No active entries at the moment" />
+        ) : (
+          <ServeSubTitle title={"Invoices"} />
+        )}
+        {liveSubscriptions[appsOrSubs].data.map((block, key) => {
+          return <ServePayments key={key} block={block} item={key} />;
+        })}
+      </div>
+    );
+  };
   return (
     <div
       className="shadow"
@@ -166,32 +193,8 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
         payment_url={paymentUrl}
         resetPaymentUrl={resetPaymentUrl}
       />
-      <div className="primary-title" style={{ fontSize: 20 }}>
-        Active applications:
-      </div>
-      {liveSubscriptions.apps.data.length === 0 ? (
-        <ServeSubTitle title="No active subscriptions at the moment" />
-      ) : (
-        <ServeSubTitle
-          title={dashboard ? "Outstanding applications" : "Invoices"}
-        />
-      )}
-      {liveSubscriptions.apps.data.map((block, key) => {
-        return <ServePayments key={key} block={block} item={key} />;
-      })}
-      <div className="primary-title" style={{ fontSize: 20 }}>
-        Active subscriptions:
-      </div>
-      {liveSubscriptions.subs.data.length === 0 ? (
-        <ServeSubTitle title="No active subscriptions at the moment" />
-      ) : (
-        <ServeSubTitle
-          title={dashboard ? "Outstanding subscriptions" : "Invoices"}
-        />
-      )}
-      {liveSubscriptions.subs.data.map((block, key) => {
-        return <ServePayments key={key} block={block} item={key} />;
-      })}
+      <ServeListOfPayments type="applications" />
+      <ServeListOfPayments type="subscriptions" />
     </div>
   );
 };

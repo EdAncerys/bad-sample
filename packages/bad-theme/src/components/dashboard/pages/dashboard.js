@@ -47,20 +47,22 @@ const Dashboard = ({
       );
     };
     const ServePayments = () => {
+      console.log("SERVEPAYMENTS", userStatus);
       const outstandingApps =
         userStatus.apps.data.filter((item) => item.bad_sagepayid !== null)
           .length > 0;
       const outstandingSubs =
-        userStatus.apps.data.filter((item) => item.bad_sagepayid !== null)
+        userStatus.subs.data.filter((item) => item.bad_sagepayid !== null)
           .length > 0;
       if (!outstandingApps && !outstandingSubs) return "Nothing to pay";
 
       return (
         <div>
-          <div className="primary-title" style={{ fontSize: 20 }}>
-            Payments
-            <Payments dashboard />
-          </div>
+          <TitleBlock
+            block={{ text_align: "left", title: "Payments" }}
+            disableHorizontalMargin
+          />
+          <Payments subscriptions={userStatus} dashboard />
         </div>
       );
     };

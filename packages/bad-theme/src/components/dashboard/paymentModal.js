@@ -38,6 +38,7 @@ const PaymentModal = ({ state, actions, payment_url, resetPaymentUrl }) => {
       const iqs = new URLSearchParams(iFrame.contentWindow.location.search);
       console.log("iFrameRef iqs", iqs);
       resetPaymentUrl();
+
       if (iqs && iqs.has("transId")) {
         const transId = iqs.get("transId");
         console.log("*** WE FOUND A TRANSACTION ID IN THE IFRAME ** ", transId);
