@@ -15,6 +15,7 @@ const PaymentNotification = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const marginHorizontal = state.theme.marginHorizontal;
+  const marginVertical = state.theme.marginVertical;
 
   // HELPERS ----------------------------------------------------------------
 
@@ -77,8 +78,8 @@ const PaymentNotification = ({
         display: "grid",
         gridTemplateColumns: `1fr auto`,
         gap: "1em",
-        padding: `1em`,
-        padding: 30,
+        padding: `2em 4em`,
+        marginBottom: `${marginVertical}px`,
       }}
     >
       <div
