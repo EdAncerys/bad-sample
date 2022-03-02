@@ -32,7 +32,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
   const FOOTER_HEIGHT = 50;
   let OVERLAY_WIDTH = "100%";
   let CARD_WIDTH = "50%";
-  let CARD_HEIGHT = BANNER_HEIGHT - FOOTER_HEIGHT * 2;
+  let CARD_HEIGHT = BANNER_HEIGHT - FOOTER_HEIGHT * 3;
   let BODY_LENGTH = 400;
   const CONTENT_WIDTH = state.theme.contentContainer;
   const marginHorizontal = state.theme.marginHorizontal;
