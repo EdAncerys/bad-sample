@@ -71,7 +71,8 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   useEffect(() => {
     const fetchApplicationBillingStatus = async () => {
       const getUserApplicationData = await fetch(
-        state.auth.APP_HOST + "/applications/billing/" + contactid,
+        state.auth.APP_HOST +
+          "/applications/billing/84590b32-9490-ec11-b400-000d3a22037e",
         {
           headers: {
             Authorization: `Bearer ${jwt}`,

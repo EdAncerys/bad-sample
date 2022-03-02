@@ -53,7 +53,6 @@ const PaymentModal = ({ state, actions, payment_url, resetPaymentUrl }) => {
   return (
     <Modal size="xl" centered show={payment_url ? true : false}>
       <Modal.Body>
-        {window.location.href}
         <iframe
           className="contain"
           id="badLoginIframe"
