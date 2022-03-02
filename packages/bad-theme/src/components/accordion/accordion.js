@@ -38,8 +38,10 @@ const AccordionComponent = ({
 
   let isBADApproved = false;
   if (dynamicsApps && dynamicsApps.subs.data.length > 0) isBADApproved = true;
+  let isForBADMembersOnly = false;
+  if (approved_bad_members_only && !isBADApproved) isForBADMembersOnly = true;
 
-  if (!accordion_item || !isBADApproved) return null; // defensive programming
+  if (!accordion_item || isForBADMembersOnly) return null; // defensive programming
 
   // SERVERS ---------------------------------------------
   const ServeAccordion = ({ block }) => {
@@ -134,7 +136,7 @@ const AccordionComponent = ({
   return (
     <div style={{ margin: `0 ${marginHorizontal}px` }}>
       {accordion_item.map((block, key) => {
-        // console.log(block); // debug
+        console.log(block); // debug
 
         return <ServeAccordion key={key} block={block} />;
       })}

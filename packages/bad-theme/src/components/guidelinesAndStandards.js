@@ -14,17 +14,16 @@ import CloseIcon from "@mui/icons-material/Close";
 const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  
   const searchFilterRef = useRef(null);
   const currentSearchFilterRef = useRef(null);
   const typeFilterRef = useRef(null);
-  
+
   const [searchFilter, setSearchFilter] = useState(null);
   const [typeFilter, setTypeFilter] = useState(null);
-  
+
   const [guidelinesList, setGuidelinesList] = useState(null);
   const [guidelinesType, setGuidelinesType] = useState(null);
-  
+
   if (!block) return <Loading />;
 
   const { disable_vertical_padding, background_colour } = block;
@@ -48,10 +47,11 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
       isThereNextPage = nextPage;
     }
 
-    const GUIDELINES_TYPE = Object.values(state.source.guidelines_type);
-    const GUIDELINES_LIST = Object.values(state.source.guidelines_standards); // add guidelines object to data array
-    setGuidelinesType(GUIDELINES_TYPE);
-    setGuidelinesList(GUIDELINES_LIST);
+    const guideType = Object.values(state.source.guidelines_type);
+    const guideList = Object.values(state.source.guidelines_standards); // add guidelines object to data array
+
+    setGuidelinesType(guideType);
+    setGuidelinesList(guideList);
 
     return () => {
       searchFilterRef.current = false; // clean up function
@@ -194,7 +194,10 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     };
 
     return (
-      <div style={{ backgroundColor: colors.silverFillTwo }}  className="no-selector">
+      <div
+        style={{ backgroundColor: colors.silverFillTwo }}
+        className="no-selector"
+      >
         <BlockWrapper>
           <div
             className="flex-col"
