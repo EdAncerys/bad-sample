@@ -23,6 +23,7 @@ const DirectDebitNotification = ({
 
   useEffect(() => {
     if (!isDirectDebit) return null;
+    console.log("isDirectDebit", isDirectDebit);
     // if direct status is status is Active, set debit setup to true
     let debitStatus = isDirectDebit.filter(
       (debit) => debit.statecode === "Active"
