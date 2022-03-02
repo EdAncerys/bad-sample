@@ -1,9 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 // CONTEXT ------------------------------------------------------------------
-import { useAppState } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  getApplicationStatus,
+  getDirectDebitAction,
+} from "../../context";
 
 const DirectDebitNotification = ({
   state,
@@ -15,15 +20,29 @@ const DirectDebitNotification = ({
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const { isDirectDebit, dynamicsApps } = useAppState();
+  const dispatch = useAppDispatch();
+  const { isDirectDebit, dynamicsApps, isActiveUser } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
 
   const [isDebitSetup, setDebitSetup] = useState(false);
+  const useEffectRef = useRef(null);
 
-  useEffect(() => {
-    if (!isDirectDebit) return null;
-    console.log("isDirectDebit", isDirectDebit);
+  useEffect(async () => {
+    if (!dynamicsApps)
+      await getApplicationStatus({
+        state,
+        dispatch,
+        contactid: isActiveUser.contactid,
+      });
+
+    if (!isDirectDebit)
+      await getDirectDebitAction({
+        state,
+        dispatch,
+        id: isActiveUser.contactid,
+      });
+    console.log("isDirectDebit", isDirectDebit); // debug
     // if direct status is status is Active, set debit setup to true
     let debitStatus = isDirectDebit.filter(
       (debit) => debit.statecode === "Active"
@@ -32,7 +51,11 @@ const DirectDebitNotification = ({
     debitStatus = debitStatus.length > 0;
 
     setDebitSetup(debitStatus);
-  }, [isDirectDebit]);
+
+    return () => {
+      useEffectRef.current = false; // clean up function
+    };
+  }, [isDirectDebit, isActiveUser]);
 
   // if no approved membership, return dont show direct debit
   let isApprovedMemberships = false;
@@ -43,6 +66,10 @@ const DirectDebitNotification = ({
   if (!visible) isSetupDirectDebit = true;
   if (isDebitSetup) isSetupDirectDebit = true;
 
+  console.log("⬇️ isSetupDirectDebit", isSetupDirectDebit);
+  console.log("⬇️ isApprovedMemberships", isApprovedMemberships);
+
+  // if direct debit setup or no approved applications, return null
   if (isSetupDirectDebit || !isApprovedMemberships) return null;
 
   // HELPERS ----------------------------------------------------------------
