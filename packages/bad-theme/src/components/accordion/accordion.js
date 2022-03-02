@@ -8,6 +8,8 @@ import Loading from "../loading";
 import AccordionHeader from "./accordionHeader";
 import AccordionBody from "./accordionBody";
 import ActionPlaceholder from "../actionPlaceholder";
+// CONTEXT ----------------------------------------------------------------
+import { useAppState } from "../../context";
 
 const AccordionComponent = ({
   state,
@@ -23,13 +25,21 @@ const AccordionComponent = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
 
-  const { disable_vertical_padding, accordion_item } = block;
-
-  if (!accordion_item) return null; // defensive programming
+  const { dynamicsApps } = useAppState();
+  const {
+    disable_vertical_padding,
+    accordion_item,
+    approved_bad_members_only,
+  } = block;
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical / 4;
   if (disable_vertical_padding) marginVertical = 0;
+
+  let isBADApproved = false;
+  if (dynamicsApps && dynamicsApps.subs.data.length > 0) isBADApproved = true;
+
+  if (!accordion_item || !isBADApproved) return null; // defensive programming
 
   // SERVERS ---------------------------------------------
   const ServeAccordion = ({ block }) => {
