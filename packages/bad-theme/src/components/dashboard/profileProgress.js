@@ -61,7 +61,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     if (applicationData && applicationData[0].stepThree)
       path = `/membership/step-4-professional-details/`;
     if (applicationData && applicationData[0].stepFour)
-      path = `/membership/final-step-thank-you/`;
+      path = `/membership/thank-you/`;
 
     setGoToAction({ path: path, actions });
   };

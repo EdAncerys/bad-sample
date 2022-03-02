@@ -1,22 +1,24 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
+import { Form } from "react-bootstrap";
 
 import { colors } from "../../config/imports";
 import SideBarMenu from "./sideBarMenu";
-import { Form } from "react-bootstrap";
 import BlockWrapper from "../../components/blockWrapper";
 import ActionPlaceholder from "../../components/actionPlaceholder";
-// CONTEXT ----------------------------------------------------------------
+import FormError from "../../components/formError";
+// CONTEXT -----------------------------------------------------------------
 import {
   useAppDispatch,
   useAppState,
   setGoToAction,
   handleApplyForMembershipAction,
+  errorHandler,
 } from "../../context";
 
 const RegistrationStepTwo = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
-  const page = state.source[data.category][data.id];
+  const page = state.source[data.type][data.id];
 
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, dynamicsApps } = useAppState();
@@ -24,7 +26,6 @@ const RegistrationStepTwo = ({ state, actions }) => {
   const [isFetching, setFetching] = useState(false);
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-
   const [formData, setFormData] = useState({
     bad_organisedfor: "",
     bad_categorytype: "",
@@ -88,8 +89,29 @@ const RegistrationStepTwo = ({ state, actions }) => {
     }));
   };
 
+  const isFormValidated = ({ required }) => {
+    if (!required && !required.length) return null;
+    let isValid = true;
+
+    required.map((input) => {
+      if (!formData[input]) {
+        errorHandler({ id: `form-error-${input}` });
+        isValid = false;
+      }
+    });
+
+    return isValid;
+  };
+
   const handleNext = async () => {
     // form value validations
+    const isValid = isFormValidated({
+      required: ["bad_organisedfor", "bad_categorytype"],
+    });
+
+    if (!isValid) return null;
+    // console.log(formData); // debug
+
     if (!formData.bad_organisedfor || !formData.bad_categorytype) {
       console.log("FORM INPUTS NOT VALIDATED");
       return;
@@ -117,16 +139,14 @@ const RegistrationStepTwo = ({ state, actions }) => {
     return (
       <div
         className="flex"
-        style={{ justifyContent: "flex-end", padding: `2em 1em 0 1em` }}
+        style={{
+          justifyContent: "flex-end",
+          padding: `2em 1em 0 1em`,
+        }}
       >
         <div
           className="transparent-btn"
-          onClick={() =>
-            setGoToAction({
-              path: `/membership/step-1-the-process/`,
-              actions,
-            })
-          }
+          onClick={() => setGoToAction({ path: `/membership/`, actions })}
         >
           Back
         </div>
@@ -156,7 +176,6 @@ const RegistrationStepTwo = ({ state, actions }) => {
             value={formData.bad_categorytype}
             onChange={handleChange}
             className="input"
-            // disabled
           >
             <option value="" hidden>
               Membership Category
@@ -174,9 +193,8 @@ const RegistrationStepTwo = ({ state, actions }) => {
             <option value="Student">Student</option>
             <option value="Honorary">Honorary</option>
             <option value="Honorary Overseas">Honorary Overseas</option>
-            {/* only for change of membership */}
-            {/* <option value="Retired">Retired</option> */}
           </Form.Select>
+          <FormError id="bad_categorytype" />
         </div>
       );
     };
@@ -192,7 +210,6 @@ const RegistrationStepTwo = ({ state, actions }) => {
             value={formData.bad_categorytype}
             onChange={handleChange}
             className="input"
-            // disabled
           >
             <option value="" hidden>
               Membership Category
@@ -249,6 +266,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
             <option value="Full:The Dowling Club">The Dowling Club</option>
             <option value="Full:DermpathPRO">DERMPATHPRO</option>
           </Form.Select>
+          <FormError id="bad_categorytype" />
         </div>
       );
     };
@@ -277,39 +295,10 @@ const RegistrationStepTwo = ({ state, actions }) => {
           <option value="810170000">BAD Membership</option>
           <option value="810170001">SIG Membership</option>
         </Form.Select>
+        <FormError id="bad_organisedfor" />
 
         <ServeBADMembershipCategory />
         <ServeSIGMembershipCategory />
-      </div>
-    );
-  };
-
-  const ServeContent = () => {
-    return (
-      <div style={{ position: "relative" }}>
-        <ActionPlaceholder isFetching={isFetching} background="transparent" />
-        <div style={styles.wrapper}>
-          <div className="primary-title" style={styles.title}>
-            Please confirm your category selction. Or if you are unsure of the
-            category you should be applying for please view the membership
-            category descriptions for further clarification.
-          </div>
-          <div style={{ paddingTop: `0.75em` }}>
-            Your selected category of membership is below. If you would like to
-            change it you can select from the drop down options. Or if you are
-            unsure of the category you should be applying for please view the
-            membership category descriptions for further clarification.
-          </div>
-          <div
-            className="caps-btn"
-            onClick={() => setGoToAction({ path: `/membership/`, actions })}
-            style={{ paddingTop: `1em` }}
-          >
-            Memberships Categories
-          </div>
-          <ServeForm />
-        </div>
-        <ServeActions />
       </div>
     );
   };
@@ -323,7 +312,35 @@ const RegistrationStepTwo = ({ state, actions }) => {
       >
         <div style={styles.container}>
           <SideBarMenu />
-          <ServeContent />
+          <div style={{ position: "relative" }}>
+            <ActionPlaceholder
+              isFetching={isFetching}
+              background="transparent"
+            />
+            <div style={styles.wrapper}>
+              <div className="primary-title" style={styles.title}>
+                Please confirm your category selction. Or if you are unsure of
+                the category you should be applying for please view the
+                membership category descriptions for further clarification.
+              </div>
+              <div style={{ paddingTop: `0.75em` }}>
+                Your selected category of membership is below. If you would like
+                to change it you can select from the drop down options. Or if
+                you are unsure of the category you should be applying for please
+                view the membership category descriptions for further
+                clarification.
+              </div>
+              <div
+                className="caps-btn"
+                onClick={() => setGoToAction({ path: `/membership/`, actions })}
+                style={{ paddingTop: `1em` }}
+              >
+                Memberships Categories
+              </div>
+              <ServeForm />
+            </div>
+            <ServeActions />
+          </div>
         </div>
       </div>
     </BlockWrapper>
@@ -338,13 +355,15 @@ const styles = {
     gap: 20,
   },
   wrapper: {
-    padding: `0 1em 2em 1em`,
+    borderBottom: `1px solid ${colors.silverFillTwo}`,
+    padding: `0 1em 2em`,
   },
   title: {
     fontSize: 20,
   },
-  input: {
-    borderRadius: 10,
+  subTitle: {
+    fontWeight: "bold",
+    padding: `0.75em 0`,
   },
 };
 

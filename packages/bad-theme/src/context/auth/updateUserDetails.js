@@ -52,8 +52,9 @@ export const updateAddressAction = async ({
 
 export const updateEthnicityAction = async ({ state, data, isActiveUser }) => {
   console.log("updateEthnicityAction triggered");
-  const { contactid } = isActiveUser;
+  if (!isActiveUser) throw new Error("isActiveUser is required");
 
+  const { contactid } = isActiveUser;
   const URL = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
 
   // --------------------------------------------------------------------------
