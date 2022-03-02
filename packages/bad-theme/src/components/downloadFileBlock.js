@@ -43,14 +43,11 @@ const DownloadFileBlock = ({
     if (label) fileName = label;
 
     return (
-      <div style={{ display: "grid" }}>
-        <a
-          href={file.url}
-          target="_blank"
-          className={isBtnStyle ? "" : "caps-btn"}
-          style={styles.link}
-          download
-        >
+      <div
+        className={isBtnStyle ? "" : "caps-btn-no-underline"}
+        style={{ display: "grid", boxShadow: "none" }}
+      >
+        <a href={file.url} target="_blank" style={styles.link} download>
           <Html2React html={fileName} />
         </a>
       </div>
@@ -65,11 +62,13 @@ const DownloadFileBlock = ({
     if (title) fileName = title;
 
     return (
-      <div style={{ display: "grid" }}>
+      <div
+        className="caps-btn-no-underline"
+        style={{ display: "grid", boxShadow: "none" }}
+      >
         <a
           href={guidline_file.url}
           target="_blank"
-          className="caps-btn"
           style={styles.link}
           download
         >

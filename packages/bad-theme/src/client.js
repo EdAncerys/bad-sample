@@ -73,8 +73,6 @@ const BADTheme = {
         await getLeadershipTeamData({ state, actions });
         // pre fetch events data
         await getEventsData({ state, actions });
-        // pre fetch membership data
-        await getMembershipDataAction({ state, actions });
 
         // handle auth login auth via cookies
         await authLogViaCookie({ state, initialState });
@@ -100,6 +98,9 @@ const BADTheme = {
 
       afterCSR: async ({ state, actions }) => {
         console.log("afterCSR triggered"); // debug
+
+        // pre fetch membership data
+        await getMembershipDataAction({ state, actions });
       },
     },
   },
