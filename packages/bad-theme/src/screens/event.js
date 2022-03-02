@@ -100,7 +100,11 @@ const Event = ({ state, actions, libraries }) => {
     return (
       <div
         className="primary-title"
-        style={{ fontSize: 36, paddingBottom: `1em` }}
+        style={{
+          fontSize: 36,
+          paddingBottom: `${marginVertical}px`,
+          textAlign: "center",
+        }}
       >
         <Html2React html={title.rendered} />
       </div>
@@ -450,10 +454,7 @@ const Event = ({ state, actions, libraries }) => {
     };
 
     return (
-      <div
-        className="shadow"
-        style={{ marginTop: marginVertical, padding: "1em" }}
-      >
+      <div className="shadow" style={{ padding: "1em" }}>
         <div
           className="primary-title"
           style={{ fontSize: 20, padding: "1em 0" }}
@@ -470,9 +471,9 @@ const Event = ({ state, actions, libraries }) => {
     <BlockWrapper>
       <div style={{ backgroundColor: colors.white }}>
         <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
+          <ServeTitle />
           <div style={styles.container}>
             <div>
-              <ServeTitle />
               <div style={styles.eventInfo}>
                 <ServeImage />
                 <ServeEventInfo />
