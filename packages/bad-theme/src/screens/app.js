@@ -36,6 +36,7 @@ import DermGroupsCharity from "./dermGroupsCharity";
 import Covid from "./covid";
 import PaymentConfirmation from "./paymentConfirmation";
 import VideoArchive from "../components/videoArchive";
+import Video from "../components/video";
 // SCREEN HELPERS ---------------------------------------------------------
 import Error from "./error";
 import Loading from "../components/loading";
@@ -131,6 +132,7 @@ const App = ({ state, actions }) => {
 
               <Post when={data.isPost} />
               <Page when={data.isPage} />
+              <Video when={data.isVideos} />
             </Switch>
           </div>
           <Footer />

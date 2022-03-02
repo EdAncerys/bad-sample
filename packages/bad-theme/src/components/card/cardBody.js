@@ -57,7 +57,8 @@ const CardBody = ({
 
     const ServePaidIcon = () => {
       if (!videoArchive) return null;
-      if (videoArchive.acf.price) return <PaidIcon />;
+      if (videoArchive.acf.private && videoArchive.acf.price)
+        return <PaidIcon />;
       return null;
     };
     return (
