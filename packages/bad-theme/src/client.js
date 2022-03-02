@@ -35,6 +35,7 @@ const BADTheme = {
       bannerHeight: 425, // px units
       marginHorizontal: 100, // px units
       marginVertical: 40, // px units
+      notification: false,
     },
     auth: {
       ENVIRONMENT: process.env.ENVIRONMENT,
@@ -63,15 +64,8 @@ const BADTheme = {
           actions.source.fetch(`/home-page`), // pre fetch home page CONTENT
           actions.source.fetch(`/menu_features`), // pre fetch menu featured CPT
         ]);
-        // notification
-        setNotification: ({ state }) => {
-          state.theme.notification = true;
-          setTimeout(() => {
-            state.theme.notification = false;
-          }, 3000);
-        },
-          // pre fetch WP MENU --------------------------------------------------------------
-          await getWPMenu({ state, actions });
+        // pre fetch WP MENU --------------------------------------------------------------
+        await getWPMenu({ state, actions });
 
         // pre fetch post data
         await getPostData({ state, actions });
@@ -103,7 +97,13 @@ const BADTheme = {
           });
         });
       },
-
+      // notification
+      setNotification: ({ state }) => {
+        state.theme.notification = true;
+        setTimeout(() => {
+          state.theme.notification = false;
+        }, 3000);
+      },
       afterCSR: async ({ state, actions }) => {
         console.log("afterCSR triggered"); // debug
       },

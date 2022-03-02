@@ -54,7 +54,7 @@ const Dashboard = ({
       const outstandingSubs =
         userStatus.subs.data.filter((item) => item.bad_sagepayid !== null)
           .length > 0;
-      if (!outstandingApps && !outstandingSubs) return "Nothing to pay";
+      if (!outstandingApps && !outstandingSubs) return null;
 
       return <Payments subscriptions={userStatus} dashboard />;
     };

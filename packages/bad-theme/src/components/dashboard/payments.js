@@ -51,11 +51,20 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       : state.auth.APP_URL;
 
   // HELPERS ----------------------------------------------------------------
-  const handlePayment = async ({ core_membershipsubscriptionid }) => {
+  const handlePayment = async ({
+    core_membershipsubscriptionid,
+    core_membershipapplicationid,
+  }) => {
+    const type = core_membershipsubscriptionid || core_membershipapplicationid;
+    console.log("TYPE:", type);
+    const sagepayUrl = core_membershipsubscriptionid
+      ? "/sagepay/test/subscription/"
+      : "/sagepay/test/application/";
+    console.log("SPURL", sagepayUrl);
     const fetchVendorId = await fetch(
       state.auth.APP_HOST +
-        "/sagepay/test/subscription/" +
-        core_membershipsubscriptionid +
+        sagepayUrl +
+        type +
         `?redirecturl=${the_url}/payment-confirmation`,
       {
         method: "POST",
@@ -89,6 +98,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       const {
         bad_outstandingpayments,
         core_membershipsubscriptionid,
+        core_membershipapplicationid,
         bad_sagepayid,
       } = block;
       // is outstanding payments greater than 0?
@@ -105,7 +115,12 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
           <div
             type="submit"
             className="blue-btn"
-            onClick={() => handlePayment({ core_membershipsubscriptionid })}
+            onClick={() =>
+              handlePayment({
+                core_membershipsubscriptionid,
+                core_membershipapplicationid,
+              })
+            }
           >
             Pay now
           </div>
@@ -174,7 +189,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
           className="primary-title"
           style={{ fontSize: 20, paddingTop: `2em` }}
         >
-          Active {type}:
+          {dashboard ? "Outstanding payments" : `Active ${type}:`}
         </div>
         {zeroObjects ? (
           <ServeSubTitle title="No active entries at the moment" />
@@ -207,7 +222,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
           payment_url={paymentUrl}
           resetPaymentUrl={resetPaymentUrl}
         />
-        <ServeListOfPayments type="applications" />
+        {!dashboard && <ServeListOfPayments type="applications" />}
         <ServeListOfPayments type="subscriptions" />
       </div>
     </div>
