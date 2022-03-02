@@ -25,13 +25,13 @@ const PaymentNotification = ({
     const the_url =
       state.auth.ENVIRONMENT === "DEVELOPMENT"
         ? "http://localhost:3000/"
-        : state.auth.BASE_URL;
+        : state.auth.APP_URL;
 
     const fetchVendorId = await fetch(
       state.auth.APP_HOST +
         "/sagepay/test/application/" +
         sage_id +
-        `?redirecturl=${the_url}payment-confirmation`,
+        `?redirecturl=${the_url}/payment-confirmation`,
       {
         method: "POST",
         headers: {

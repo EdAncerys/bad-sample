@@ -47,7 +47,7 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
   const the_url =
     state.auth.ENVIRONMENT === "DEVELOPMENT"
       ? "http://localhost:3000/"
-      : state.auth.BASE_URL;
+      : state.auth.APP_URL;
 
   // HELPERS ----------------------------------------------------------------
   const handlePayment = async ({ core_membershipsubscriptionid }) => {
@@ -55,7 +55,7 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
       state.auth.APP_HOST +
         "/sagepay/test/subscription/" +
         core_membershipsubscriptionid +
-        `?redirecturl=${the_url}payment-confirmation`,
+        `?redirecturl=${the_url}/payment-confirmation`,
       {
         method: "POST",
         headers: {

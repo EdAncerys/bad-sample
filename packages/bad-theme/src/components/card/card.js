@@ -24,6 +24,7 @@ import FeaturedBanner from "./featuredBanner";
 
 import GeneralModal from "../elections/generalModal";
 import DownloadFileBlock from "../downloadFileBlock";
+import { setGoToAction } from "../../context";
 
 const Card = ({
   state,
@@ -80,6 +81,7 @@ const Card = ({
   videoGuide,
   featuredBanner,
   videoArchive,
+  video,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
@@ -170,7 +172,10 @@ const Card = ({
     if (imgHeight) STYLES = { height: imgHeight };
 
     return (
-      <div style={{ ...STYLES, width: "100%" }}>
+      <div
+        style={{ ...STYLES, width: "100%" }}
+        onClick={() => setGoToAction({ path: link, actions })}
+      >
         <Image
           src={url}
           alt={alt}
@@ -178,8 +183,25 @@ const Card = ({
             width: "100%",
             height: "100%",
             objectFit: "cover",
+            cursor: link ? "pointer" : null,
           }}
         />
+        {video ? (
+          <div
+            style={{
+              position: "relative",
+              top: "-50%",
+              left: "50%",
+              color: "white",
+            }}
+          >
+            {video.acf.price ? (
+              <LockIcon sx={{ fontSize: 50 }} />
+            ) : (
+              <PlayCircleOutlineIcon sx={{ fontSize: 50 }} />
+            )}
+          </div>
+        ) : null}
       </div>
     );
   };
@@ -221,6 +243,7 @@ const Card = ({
         <FadDirectory fadDirectory={fadDirectory} />
         <DermGroupe dermGroupe={dermGroupe} />
         <ServeJournalCard />
+
         <CardBody
           title={title}
           body={body}

@@ -260,6 +260,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
   };
   const VideoArchive = ({ post }) => {
     // GET VIMEO COVER
+    console.log("VIDEO POST", post);
     const [vimeoCover, setVimeoCover] = React.useState(
       "https://badadmin.skylarkdev.co/wp-content/uploads/2022/02/VIDEO-LIBRARY.jpg"
     );
@@ -294,6 +295,8 @@ const VideoArchive = ({ state, actions, libraries }) => {
         publicationDate={post.date}
         videoArchive={post}
         colour={colors.orange}
+        link={post.link}
+        onClick={() => setGoToAction({ path: post.link, actions })}
       />
     );
   };
@@ -318,7 +321,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
           text_align: "left",
           colour: colors.orange,
           pop_out_text: "true",
-          background_colour: rgb(239, 125, 33, 0.1),
+          background_colour: "rgb(239, 125, 33, 0.1)",
         });
       }
     };
