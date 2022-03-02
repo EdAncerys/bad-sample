@@ -66,7 +66,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
           className="title-link-animation"
           style={{ ...stepFive, padding: `0.5em 0` }}
           onClick={() => {
-            if (slug === "/membership/final-step-thank-you/") return null;
+            if (slug === "/membership/thank-you/") return null;
             setGoToAction({
               path: `/membership/step-5-sig-questions/`,
               actions,
@@ -84,7 +84,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
           className="title-link-animation"
           style={{ ...stepOne, padding: `0.5em 0` }}
           onClick={() => {
-            // if (slug === "/membership/final-step-thank-you/") return null;
+            // if (slug === "/membership/thank-you/") return null;
             setGoToAction({
               path: `/membership/step-1-the-process/`,
               actions,

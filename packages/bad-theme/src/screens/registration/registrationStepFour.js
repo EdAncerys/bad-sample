@@ -1,9 +1,5 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import { Form } from "react-bootstrap";
-
-import { colors } from "../../config/imports";
 import SideBarMenu from "./sideBarMenu";
 
 import BlockWrapper from "../../components/blockWrapper";

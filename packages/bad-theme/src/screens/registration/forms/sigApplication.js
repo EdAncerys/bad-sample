@@ -155,7 +155,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         isActiveUser,
       });
 
-      let slug = `/membership/final-step-thank-you/`;
+      let slug = `/membership/thank-you/`;
       if (isActiveUser) setGoToAction({ path: slug, actions });
     } catch (error) {
       console.log(error);
