@@ -181,12 +181,10 @@ const RegistrationStepTwo = ({ state, actions }) => {
             <option value="Associate">Associate</option>
             <option value="Associate Overseas">Associate Overseas</option>
             <option value="GP">GP</option>
-            <option value="Scientist and Allied Health Care Professionals">
-              Scientist and Allied Health Care Professionals
+            <option value="Scientist and Allied Healthcare Professional">
+              Scientist and Allied Healthcare Professional
             </option>
             <option value="Student">Student</option>
-            <option value="Honorary">Honorary</option>
-            <option value="Honorary Overseas">Honorary Overseas</option>
           </Form.Select>
           <FormError id="bad_categorytype" />
         </div>
