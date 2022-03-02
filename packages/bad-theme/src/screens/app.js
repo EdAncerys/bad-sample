@@ -20,13 +20,12 @@ import Home from "./home";
 import PilsArchive from "./pilsArchive";
 import Pils from "./pils";
 import BlocksPage from "../Test/blocksPage";
-import Registration from "./registration/registration";
 import RegistrationStepOne from "./registration/registrationStepOne";
 import RegistrationStepTwo from "./registration/registrationStepTwo";
 import RegistrationStepThree from "./registration/registrationStepThree";
 import RegistrationStepFour from "./registration/registrationStepFour";
 import RegistrationStepFive from "./registration/registrationStepFive";
-import RegistrationComplete from "./registration/registrationComplete";
+import ThankYou from "./registration/thankYouPage";
 import AccountDashboard from "./accountDashboard";
 import Event from "./event";
 import EventsLandingPage from "./eventsLandingPage";
@@ -99,9 +98,7 @@ const App = ({ state, actions }) => {
             <RegistrationStepFive
               when={endPoint === "/membership/step-5-sig-questions/"}
             />
-            <RegistrationComplete
-              when={endPoint === "/membership/final-step-thank-you/"}
-            />
+            <ThankYou when={endPoint === "/membership/thank-you/"} />
             <EventsLandingPage when={endPoint === "/events/"} />
             <PilsArchive when={endPoint === "/patient-information-leaflets/"} />
 

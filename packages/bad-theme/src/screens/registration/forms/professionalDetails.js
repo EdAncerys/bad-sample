@@ -263,7 +263,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       setFetching(false);
       if (!store.success) throw new Error("Failed to complete application");
 
-      let slug = `/membership/final-step-thank-you/`;
+      let slug = `/membership/thank-you/`;
       if (category === "SIG") slug = `/membership/step-5-sig-questions/`;
       if (isActiveUser) setGoToAction({ path: slug, actions });
     } catch (error) {

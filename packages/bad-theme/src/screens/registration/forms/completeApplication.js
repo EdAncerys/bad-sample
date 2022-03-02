@@ -12,6 +12,7 @@ import {
   updateEthnicityAction,
   setGoToAction,
   validateMembershipFormAction,
+  setLoginModalAction,
 } from "../../../context";
 
 const CompleteApplication = ({ state, actions, libraries }) => {
@@ -58,6 +59,12 @@ const CompleteApplication = ({ state, actions, libraries }) => {
 
   // HANDLERS --------------------------------------------
   const handleSubmit = async () => {
+    if (!isActiveUser) {
+      // validate if isActiveUser 🤖
+      setLoginModalAction({ dispatch, loginModalAction: true });
+      return null;
+    }
+
     try {
       setFetching(true);
       // handle update ethnicity for user contact

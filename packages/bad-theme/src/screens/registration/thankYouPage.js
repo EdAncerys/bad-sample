@@ -1,16 +1,15 @@
-import { useState } from "react";
 import { connect } from "frontity";
-import Image from "@frontity/components/image";
 
+import Image from "@frontity/components/image";
 import SideBarMenu from "./sideBarMenu";
-import BlockWrapper from "../../components/blockWrapper";
 import CheckMark from "../../img/svg/checkMark.svg";
 
+import BlockWrapper from "../../components/blockWrapper";
 import CompleteApplication from "./forms/completeApplication";
 
-const RegistrationComplete = ({ state, actions }) => {
+const RegistrationStepTwo = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
-  const page = state.source[data.category][data.id];
+  const page = state.source[data.type][data.id];
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -19,17 +18,19 @@ const RegistrationComplete = ({ state, actions }) => {
   const ServeContent = () => {
     return (
       <div>
-        <div style={styles.wrapper}>
-          <div style={{ width: 60, maxHeight: 60, marginBottom: `1em` }}>
-            <Image
-              src={CheckMark}
-              alt="BAD Complete"
-              style={{
-                width: "100%",
-                height: "100%",
-              }}
-            />
-          </div>
+        <div style={{ padding: `0 1em 0` }}>
+          {CheckMark && (
+            <div style={{ width: 60, maxHeight: 60, marginBottom: `1em` }}>
+              <Image
+                src={CheckMark}
+                alt="BAD Complete"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
+              />
+            </div>
+          )}
           <div className="primary-title" style={styles.title}>
             Thank You
           </div>
@@ -81,12 +82,9 @@ const styles = {
     justifyContent: "space-between",
     gap: 20,
   },
-  wrapper: {
-    padding: `0 1em`,
-  },
   title: {
     fontSize: 20,
   },
 };
 
-export default connect(RegistrationComplete);
+export default connect(RegistrationStepTwo);
