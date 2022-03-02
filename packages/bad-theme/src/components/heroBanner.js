@@ -154,6 +154,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
       </div>
     );
   };
+
   const ServeButtonsOverLayMobile = () => {
     if (!buttons) return null;
 
@@ -185,8 +186,8 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           style={{
             display: "grid",
             alignItems: "center",
-            position: !lg ? "absolute" : pop_out_text ? "absolute" : null,
-            zIndex: 99,
+            position: "absolute",
+            zIndex: 9,
             width: !lg
               ? !background_image
                 ? CONTENT_WIDTH / 1.5
@@ -245,8 +246,10 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           zIndex: 9,
         }}
       >
-        {!lg ? <ServeBannerOverLay /> : <ServeBannerOverLayMobile />}
-        <ServeButtonsOverLay />
+        <div style={{ position: "relative" }}>
+          {!lg ? <ServeBannerOverLay /> : <ServeBannerOverLayMobile />}
+          <ServeButtonsOverLay />
+        </div>
       </div>
     );
   };
