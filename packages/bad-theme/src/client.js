@@ -63,9 +63,15 @@ const BADTheme = {
           actions.source.fetch(`/home-page`), // pre fetch home page CONTENT
           actions.source.fetch(`/menu_features`), // pre fetch menu featured CPT
         ]);
-
-        // pre fetch WP MENU --------------------------------------------------------------
-        await getWPMenu({ state, actions });
+        // notification
+        setNotification: ({ state }) => {
+          state.theme.notification = true;
+          setTimeout(() => {
+            state.theme.notification = false;
+          }, 3000);
+        },
+          // pre fetch WP MENU --------------------------------------------------------------
+          await getWPMenu({ state, actions });
 
         // pre fetch post data
         await getPostData({ state, actions });

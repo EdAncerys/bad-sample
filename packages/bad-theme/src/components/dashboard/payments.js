@@ -6,7 +6,7 @@ import { handleGetCookie } from "../../helpers/cookie";
 
 import PaymentModal from "./paymentModal";
 import Loading from "../loading";
-const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
+const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   //component state
   const [paymentUrl, setPaymentUrl] = useState("");
   const [liveSubscriptions, setLiveSubscriptions] = useState(null);
@@ -22,7 +22,8 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
   useEffect(() => {
     const fetchApplicationBillingStatus = async () => {
       const getUserApplicationData = await fetch(
-        state.auth.APP_HOST + "/applications/billing/" + contactid,
+        state.auth.APP_HOST +
+          "/applications/billing/84590b32-9490-ec11-b400-000d3a22037e",
         {
           headers: {
             Authorization: `Bearer ${jwt}`,
@@ -80,6 +81,9 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
 
   // SERVERS ---------------------------------------------
   const ServePayments = ({ block, item }) => {
+    console.log("SP_BLOCK", block);
+    console.log("SP_ITEM", item);
+    if (dashboard && block.bad_sagepayid !== null) return null;
     const ServeStatusOrAction = () => {
       // get important data
       const {
@@ -88,12 +92,12 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
         bad_sagepayid,
       } = block;
       // is outstanding payments greater than 0?
-      const stringAmountToPay = bad_outstandingpayments.replace(
-        /[^0-9.-]+/g,
-        ""
-      );
-      const amountToPay = Number(stringAmountToPay);
-      const outstanding = amountToPay > 0;
+      // const stringAmountToPay = bad_outstandingpayments.replace(
+      //   /[^0-9.-]+/g,
+      //   ""
+      // );
+      // const amountToPay = Number(stringAmountToPay);
+      // const outstanding = amountToPay > 0;
 
       const ServePayButton = () => {
         if (bad_sagepayid) return null;
@@ -110,9 +114,7 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
 
       const ServePaymentStatus = () => {
         if (!bad_sagepayid) return null;
-        if (bad_sagepayid && outstanding)
-          return "Your payment is being processed";
-        if (bad_sagepayid && !outstanding) return "Paid";
+        if (bad_sagepayid) return "Paid";
       };
       return (
         <div style={{ margin: `auto 0`, width: marginHorizontal * 2 }}>
@@ -127,8 +129,7 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
     const ServeInfo = () => {
       const dataLength = subs.data.length;
       const isLastItem = dataLength === item + 1;
-      const { bad_outstandingpayments_date } = block;
-      const date = bad_outstandingpayments_date.split(" ");
+      const { core_totalamount, core_name } = block;
       return (
         <div
           className="flex"
@@ -140,10 +141,10 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
           }}
         >
           <div className="flex" style={styles.fontSize}>
-            <div>{block.core_name}</div>
+            <div>{core_name}</div>
           </div>
           <div className="flex" style={styles.fontSize}>
-            <div>{date[0]}</div>
+            <div>{core_totalamount}</div>
           </div>
         </div>
       );
@@ -160,6 +161,29 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
   const ServeSubTitle = ({ title }) => {
     return <div style={{ padding: `1em 0` }}>{title}</div>;
   };
+
+  const ServeListOfPayments = ({ type }) => {
+    const zeroObjects =
+      type === "applications"
+        ? liveSubscriptions.apps.data.length === 0
+        : liveSubscriptions.subs.data.length === 0;
+    const appsOrSubs = type === "applications" ? "apps" : "subs";
+    return (
+      <div>
+        <div className="primary-title" style={{ fontSize: 20 }}>
+          Active {type}:
+        </div>
+        {zeroObjects ? (
+          <ServeSubTitle title="No active entries at the moment" />
+        ) : (
+          <ServeSubTitle title={"Invoices"} />
+        )}
+        {liveSubscriptions[appsOrSubs].data.map((block, key) => {
+          return <ServePayments key={key} block={block} item={key} />;
+        })}
+      </div>
+    );
+  };
   return (
     <div
       className="shadow"
@@ -169,17 +193,8 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
         payment_url={paymentUrl}
         resetPaymentUrl={resetPaymentUrl}
       />
-      <div className="primary-title" style={{ fontSize: 20 }}>
-        Active subscriptions:
-      </div>
-      {liveSubscriptions.subs.data.length === 0 ? (
-        <ServeSubTitle title="No active subscriptions at the moment" />
-      ) : (
-        <ServeSubTitle title="Invoices" />
-      )}
-      {liveSubscriptions.subs.data.map((block, key) => {
-        return <ServePayments key={key} block={block} item={key} />;
-      })}
+      <ServeListOfPayments type="applications" />
+      <ServeListOfPayments type="subscriptions" />
     </div>
   );
 };

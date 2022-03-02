@@ -85,7 +85,8 @@ const PaymentNotification = ({
         className="primary-title flex"
         style={{ fontSize: 20, alignItems: "center" }}
       >
-        Your application has been approved. Now it is time to pay!
+        Your application for {application.core_name} has been approved. Now it
+        is time to pay!
       </div>
       <ServeActions />
       <PaymentModal
