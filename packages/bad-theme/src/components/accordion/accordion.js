@@ -136,7 +136,7 @@ const AccordionComponent = ({
   return (
     <div style={{ margin: `0 ${marginHorizontal}px` }}>
       {accordion_item.map((block, key) => {
-        console.log(block); // debug
+        // console.log(block); // debug
 
         return <ServeAccordion key={key} block={block} />;
       })}

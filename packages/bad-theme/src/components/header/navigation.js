@@ -5,7 +5,6 @@ import { colors } from "../../config/imports";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { setGoToAction, getWpPagesAction } from "../../context";
 
-import NavBarDropDownContent from "./navDropDownContent";
 import BlockWrapper from "../blockWrapper";
 import Loading from "../loading";
 import Card from "../../components/card/card";
@@ -126,7 +125,7 @@ const Navigation = ({ state, actions, libraries }) => {
 
       const menuLength = child_items.length;
 
-      const ServeSubChildMenu = ({ child_items, parentKey, slug }) => {
+      const ServeSubChildMenu = ({ child_items, parent, slug }) => {
         if (!child_items) return null;
 
         return (
@@ -153,6 +152,27 @@ const Navigation = ({ state, actions, libraries }) => {
               handleSubMenu({ slug, removeMenu: true });
             }}
           >
+            <div className="nav-item dropdown">
+              <a
+                className="nav-link dropdown-toggle"
+                style={{
+                  ...styles.link,
+                  borderBottom: `1px solid ${colors.silverFillTwo}`,
+                  fontWeight: "bold",
+                  marginRight: 30,
+                }}
+                // onClick={() => setGoToAction({ path: parent.slug, actions })}
+                onClick={() =>
+                  handleOnClickNavigation({
+                    path: parent.url,
+                    parentSlug: parent.slug,
+                  })
+                }
+              >
+                <Html2React html={parent.title} />
+              </a>
+            </div>
+
             <div style={{ paddingRight: `2em` }}>
               {child_items.map((item, key) => {
                 const { title, url, slug, child_items } = item;
@@ -281,7 +301,10 @@ const Navigation = ({ state, actions, libraries }) => {
                 <li
                   key={key}
                   className="flex-row"
-                  style={{ width: "100%" }}
+                  style={{
+                    width: "100%",
+                    borderBottom: `1px solid ${colors.silverFillTwo}`,
+                  }}
                   onMouseEnter={() => {
                     activeChildMenu.current = slug;
                     handleSubMenu({ slug });
@@ -316,9 +339,9 @@ const Navigation = ({ state, actions, libraries }) => {
                   </a>
 
                   <ServeSubChildMenu
-                    parentKey={key}
                     child_items={child_items}
                     slug={slug}
+                    parent={item}
                   />
                 </li>
               );
