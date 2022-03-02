@@ -3,6 +3,7 @@ import {
   setFetchAction,
   setApplicationDataAction,
   setLoginModalAction,
+  getApplicationStatus,
 } from "../index";
 
 export const setUserStoreAction = async ({
@@ -181,6 +182,12 @@ export const setCompleteUserApplicationAction = async ({
     const data = await response.json();
 
     if (data.success) {
+      // get application status for current contact
+      await getApplicationStatus({
+        state,
+        dispatch,
+        id: contactid,
+      });
       // delete application record from CONTEXT
       setApplicationDataAction({
         dispatch,
