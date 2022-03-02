@@ -6,6 +6,7 @@ import { handleGetCookie } from "../../helpers/cookie";
 
 import PaymentModal from "./paymentModal";
 import Loading from "../loading";
+import TitleBlock from "../titleBlock";
 const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   //component state
   const [paymentUrl, setPaymentUrl] = useState("");
@@ -169,7 +170,10 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     const appsOrSubs = type === "applications" ? "apps" : "subs";
     return (
       <div>
-        <div className="primary-title" style={{ fontSize: 20 }}>
+        <div
+          className="primary-title"
+          style={{ fontSize: 20, paddingTop: `2em` }}
+        >
           Active {type}:
         </div>
         {zeroObjects ? (
@@ -184,16 +188,28 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     );
   };
   return (
-    <div
-      className="shadow"
-      style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
-    >
-      <PaymentModal
-        payment_url={paymentUrl}
-        resetPaymentUrl={resetPaymentUrl}
-      />
-      <ServeListOfPayments type="applications" />
-      <ServeListOfPayments type="subscriptions" />
+    <div className="shadow">
+      {dashboard && (
+        <div style={{ padding: `1em 4em 0 4em` }}>
+          <TitleBlock
+            block={{ text_align: "left", title: "Payments" }}
+            disableHorizontalMargin
+          />
+        </div>
+      )}
+      <div
+        style={{
+          padding: `0 4em 2em 4em`,
+          marginBottom: `${marginVertical}px`,
+        }}
+      >
+        <PaymentModal
+          payment_url={paymentUrl}
+          resetPaymentUrl={resetPaymentUrl}
+        />
+        <ServeListOfPayments type="applications" />
+        <ServeListOfPayments type="subscriptions" />
+      </div>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { connect } from "frontity";
 import { colors } from "../../config/imports";
 // CONTEXT ------------------------------------------------------------------
 import {
+  muiQuery,
   useAppDispatch,
   useAppState,
   getApplicationStatus,

@@ -26,7 +26,7 @@ const ApplicationStatusOrPayment = ({ application }) => {
   //   );
   // }
 
-  return "There should be something displayed here";
+  return null;
 };
 
 export default ApplicationStatusOrPayment;

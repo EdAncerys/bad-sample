@@ -56,15 +56,7 @@ const Dashboard = ({
           .length > 0;
       if (!outstandingApps && !outstandingSubs) return "Nothing to pay";
 
-      return (
-        <div>
-          <TitleBlock
-            block={{ text_align: "left", title: "Payments" }}
-            disableHorizontalMargin
-          />
-          <Payments subscriptions={userStatus} dashboard />
-        </div>
-      );
+      return <Payments subscriptions={userStatus} dashboard />;
     };
     return (
       <div style={{ padding: `0 ${marginHorizontal}px` }}>
