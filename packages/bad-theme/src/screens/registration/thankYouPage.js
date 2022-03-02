@@ -7,7 +7,7 @@ import CheckMark from "../../img/svg/checkMark.svg";
 import BlockWrapper from "../../components/blockWrapper";
 import CompleteApplication from "./forms/completeApplication";
 
-const RegistrationStepTwo = ({ state, actions }) => {
+const RegistrationThankYouPage = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
 
@@ -87,4 +87,4 @@ const styles = {
   },
 };
 
-export default connect(RegistrationStepTwo);
+export default connect(RegistrationThankYouPage);
