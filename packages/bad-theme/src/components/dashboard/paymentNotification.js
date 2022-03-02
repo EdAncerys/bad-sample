@@ -31,7 +31,7 @@ const PaymentNotification = ({
       state.auth.APP_HOST +
         "/sagepay/test/application/" +
         sage_id +
-        `?redirecturl=${the_url}payment-confirmation`,
+        `?redirecturl=${the_url}/payment-confirmation`,
       {
         method: "POST",
         headers: {

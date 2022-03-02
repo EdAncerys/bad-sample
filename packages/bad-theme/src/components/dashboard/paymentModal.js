@@ -52,10 +52,20 @@ const PaymentModal = ({ state, actions, payment_url, resetPaymentUrl }) => {
   };
   return (
     <Modal size="xl" centered show={payment_url ? true : false}>
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "flex-end",
+          cursor: "pointer",
+        }}
+      >
+        <CloseIcon onClick={resetPaymentUrl} />
+      </div>
       <Modal.Body>
         <iframe
           className="contain"
-          id="badLoginIframe"
+          id="badPaymentFrame"
           onLoad={iFrameHandler}
           width="100%"
           height="1000"

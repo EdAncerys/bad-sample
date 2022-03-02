@@ -55,7 +55,7 @@ const Payments = ({ state, actions, libraries, setPage, subscriptions }) => {
       state.auth.APP_HOST +
         "/sagepay/test/subscription/" +
         core_membershipsubscriptionid +
-        `?redirecturl=${the_url}payment-confirmation`,
+        `?redirecturl=${the_url}/payment-confirmation`,
       {
         method: "POST",
         headers: {
