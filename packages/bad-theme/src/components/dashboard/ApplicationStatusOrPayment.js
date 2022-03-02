@@ -15,16 +15,16 @@ const ApplicationStatusOrPayment = ({ application }) => {
     );
   }
 
-  if (application.bad_approvalstatus === "Pending") {
-    return (
-      <div className="shadow" style={{ padding: 30 }}>
-        <div className="primary-title" style={{ fontSize: 20 }}>
-          Your application for {application.core_name} has been sent and is
-          pending approval.
-        </div>
-      </div>
-    );
-  }
+  // if (application.bad_approvalstatus === "Pending") {
+  //   return (
+  //     <div className="shadow" style={{ padding: 30 }}>
+  //       <div className="primary-title" style={{ fontSize: 20 }}>
+  //         Your application for {application.core_name} has been sent and is
+  //         pending approval.
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return "There should be something displayed here";
 };
