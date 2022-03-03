@@ -27,6 +27,7 @@
     "add2calendar": "^1.1.7",
     "bad-theme": "file:packages/bad-theme",
     "bcryptjs": "^2.4.3",
+    "calendar-link": "^2.1.1",
     "date-and-time": "^2.0.1",
     "dotenv": "^10.0.0",
     "frontity": "^1.17.1",

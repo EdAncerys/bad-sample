@@ -190,9 +190,10 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
       <ServeTopics />
       <ShareToSocials
         shareTitle={shareTitle}
+        description={content.rendered}
         shareUrl={shareUrl}
         date={date}
-        description={content.rendered}
+        isCalendarLink
       />
     </div>
   );
