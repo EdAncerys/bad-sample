@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { connect, styled } from "frontity";
+import { useState, useEffect, useRef } from "react";
+import { connect } from "frontity";
 
 import { colors } from "../config/imports";
 import Card from "../components/card/card";
@@ -7,6 +7,7 @@ import Card from "../components/card/card";
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT -----------------------------------------------------------------
 import { setGoToAction } from "../context";
+import { getPostData } from "../helpers";
 
 const Post = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -21,13 +22,33 @@ const Post = ({ state, actions, libraries }) => {
 
   const [postList, setPostList] = useState(null);
   const [catList, setCatList] = useState(null);
+  const useEffectRef = useRef(null);
 
-  useEffect(() => {
-    let postList = Object.values(state.source.post);
+  useEffect(async () => {
+    // pre fetch post data
+    let iteration = 0;
+    let data = state.source.post;
+    while (!!data) {
+      // if iteration is greater than 10, break
+      if (iteration > 10) break;
+      // set timeout for async
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      await getPostData({ state, actions });
+      data = state.source.post;
+      iteration++;
+    }
+
+    // if !data then break
+    if (!data) return;
+    let postList = Object.values(data);
     let categoryList = Object.values(state.source.category);
 
     setPostList(postList);
     setCatList(categoryList);
+
+    return () => {
+      useEffectRef.current = false; // clean up function
+    };
   }, []);
 
   // SERVERS ---------------------------------------------

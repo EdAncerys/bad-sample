@@ -9,7 +9,6 @@ import {
   authLogViaCookie,
   getWPMenu,
   getEventsData,
-  getPostData,
   getLeadershipTeamData,
 } from "./helpers";
 // CONTEXT ----------------------------------------------------------------
@@ -66,8 +65,6 @@ const BADTheme = {
         // pre fetch WP MENU --------------------------------------------------------------
         await getWPMenu({ state, actions });
 
-        // pre fetch post data
-        await getPostData({ state, actions });
         // pre fetch leadership_team data
         await getLeadershipTeamData({ state, actions });
         // pre fetch events data
