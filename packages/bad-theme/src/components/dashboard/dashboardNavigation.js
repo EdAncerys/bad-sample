@@ -20,7 +20,8 @@ const DashboardNavigation = ({ state, actions, libraries }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handleNavigate = ({ e }) => {
-    const menuItem = e.target.innerText;
+    let menuItem = e.target.innerText;
+    if (menuItem === "Log Out") menuItem = "Dashboard"; // If the user clicks on "Log Out" then we want to set the dashboard path to "Dashboard" instead of "Log Out".
     setDashboardPathAction({ dispatch, dashboardPath: menuItem });
   };
 

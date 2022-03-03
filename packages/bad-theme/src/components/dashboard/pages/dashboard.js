@@ -17,6 +17,8 @@ const Dashboard = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { dashboardPath, dynamicsApps } = useAppState();
 
+  console.log("==========================", dashboardPath);
+
   if (dashboardPath !== "Dashboard") return null;
 
   const marginHorizontal = state.theme.marginHorizontal;
