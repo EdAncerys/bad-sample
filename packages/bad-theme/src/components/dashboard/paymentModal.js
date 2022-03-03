@@ -8,15 +8,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import { colors } from "../../config/imports";
 // CONTEXT ----------------------------------------------------------------
-import {
-  useAppDispatch,
-  useAppState,
-  setLoginModalAction,
-  setCreateAccountModalAction,
-  loginAction,
-  getUserDataByContactId,
-  authenticateAppAction,
-} from "../../context";
+import { setErrorAction } from "../../context";
 
 const PaymentModal = ({ state, actions, payment_url, resetPaymentUrl }) => {
   console.log(payment_url);
@@ -38,7 +30,10 @@ const PaymentModal = ({ state, actions, payment_url, resetPaymentUrl }) => {
       const iqs = new URLSearchParams(iFrame.contentWindow.location.search);
       console.log("iFrameRef iqs", iqs);
       resetPaymentUrl();
-
+      setErrorAction({
+        dispatch,
+        isError: { message: "Your payment has been accepted." },
+      });
       if (iqs && iqs.has("transId")) {
         const transId = iqs.get("transId");
         console.log("*** WE FOUND A TRANSACTION ID IN THE IFRAME ** ", transId);
