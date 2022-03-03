@@ -14,7 +14,6 @@ import {
 } from "./helpers";
 // CONTEXT ----------------------------------------------------------------
 import { initialState } from "../src/context/reducer";
-import { getMembershipDataAction } from "../src/context";
 import { handleSetCookie } from "./helpers/cookie";
 
 const BADTheme = {
@@ -73,13 +72,11 @@ const BADTheme = {
         await getLeadershipTeamData({ state, actions });
         // pre fetch events data
         await getEventsData({ state, actions });
-        // pre fetch membership data
-        await getMembershipDataAction({ state, actions });
 
         // handle auth login auth via cookies
         await authLogViaCookie({ state, initialState });
 
-        // ⬇️ handle set cookie fro video guide block to do silent login
+        // ⬇️ handle set cookie for video guide block. Silent auth login
         // https://www.skinhealthinfo.org.uk/support-resources/video-guides/
         handleSetCookie({
           name: "vuid",

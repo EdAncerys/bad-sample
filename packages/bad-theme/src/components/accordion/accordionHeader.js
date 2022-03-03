@@ -195,7 +195,18 @@ const AccordionHeader = ({
 
   const ServeNICELogo = () => {
     if (!guidelines_type) return null;
-    if (!guidelines_type.includes(87)) return null;
+
+    let guidelinesList = null;
+    let niceId = null;
+    if (state.source.guidelines_type)
+      guidelinesList = Object.values(state.source.guidelines_type);
+    // get NICE guidelines list
+    if (guidelinesList) {
+      let nice = guidelinesList.filter((item) => item.name.includes("NICE"));
+      if (nice.length > 0) niceId = nice[0].id;
+    }
+    // if NICE guidelines id includes guidelines_type render component
+    if (!guidelines_type.includes(niceId)) return null;
 
     const alt = "Nice";
 
@@ -280,15 +291,7 @@ const AccordionHeader = ({
 };
 
 const styles = {
-  divider: {
-    margin: `2px 0.5em`,
-    borderRight: `1px solid ${colors.darkSilver}`,
-  },
-  previewIcon: {
-    fontSize: 12,
-    textTransform: "uppercase",
-    height: "100%",
-  },
+  container: {},
 };
 
 export default connect(AccordionHeader);
