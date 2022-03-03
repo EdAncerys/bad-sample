@@ -8,8 +8,13 @@ import { colors } from "../../../config/colors";
 
 import TitleBlock from "../../titleBlock";
 import Events from "../../events/events";
+// CONTEXT ------------------------------------------------------------------
+import { useAppState, useAppDispatch } from "../../../context";
 
-const Dashboard = ({ state, actions, libraries, dashboardPath }) => {
+const Dashboard = ({ state, actions, libraries }) => {
+  const dispatch = useAppDispatch();
+  const { dashboardPath } = useAppState();
+
   if (dashboardPath !== "Dashboard") return null;
 
   const marginHorizontal = state.theme.marginHorizontal;

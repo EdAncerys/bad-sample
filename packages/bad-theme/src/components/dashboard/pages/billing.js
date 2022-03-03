@@ -6,15 +6,13 @@ import Payments from "../payments";
 import BillingHistory from "../billingHistory";
 import OrderSummary from "../orderSummary";
 import DirectDebitSetup from "../directDebitSetup";
+// CONTEXT ------------------------------------------------------------------
+import { useAppState, useAppDispatch } from "../../../context";
 
-const Billing = ({
-  state,
-  actions,
-  libraries,
-  dashboardPath,
-  visible,
-  setVisible,
-}) => {
+const Billing = ({ state, actions, libraries, visible, setVisible }) => {
+  const dispatch = useAppDispatch();
+  const { dashboardPath } = useAppState();
+
   const [page, setPage] = useState({ page: "billing" });
 
   if (dashboardPath !== "Billing") return null;

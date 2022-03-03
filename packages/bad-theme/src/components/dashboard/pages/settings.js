@@ -5,8 +5,13 @@ import { colors } from "../../../config/colors";
 
 import PrivacyPreferences from "../privacyPreferences";
 import FindDermatologistOptions from "../findDermatologistOptions";
+// CONTEXT ------------------------------------------------------------------
+import { useAppState, useAppDispatch } from "../../../context";
 
-const Settings = ({ state, actions, libraries, dashboardPath }) => {
+const Settings = ({ state, actions, libraries }) => {
+  const dispatch = useAppDispatch();
+  const { dashboardPath } = useAppState();
+
   if (dashboardPath !== "Preferences") return null;
 
   const marginHorizontal = state.theme.marginHorizontal;

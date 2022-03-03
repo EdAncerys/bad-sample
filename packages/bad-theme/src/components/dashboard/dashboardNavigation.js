@@ -3,16 +3,16 @@ import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, logoutAction } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  logoutAction,
+  setDashboardPathAction,
+} from "../../context";
 
-const DashboardNavigation = ({
-  state,
-  actions,
-  libraries,
-  dashboardPath,
-  setDashboardPath,
-}) => {
+const DashboardNavigation = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
+  const { dashboardPath } = useAppState();
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const marginHorizontal = state.theme.marginHorizontal;
@@ -21,7 +21,7 @@ const DashboardNavigation = ({
   // HELPERS ----------------------------------------------------------------
   const handleNavigate = ({ e }) => {
     const menuItem = e.target.innerText;
-    setDashboardPath(menuItem);
+    setDashboardPathAction({ dispatch, dashboardPath: menuItem });
   };
 
   const handleUnderline = (path) => {

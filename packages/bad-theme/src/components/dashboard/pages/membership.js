@@ -2,8 +2,13 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import ProfileProgress from "../profileProgress";
+// CONTEXT ------------------------------------------------------------------
+import { useAppState, useAppDispatch } from "../../../context";
 
-const Membership = ({ state, actions, libraries, dashboardPath }) => {
+const Membership = ({ state, actions, libraries }) => {
+  const dispatch = useAppDispatch();
+  const { dashboardPath } = useAppState();
+
   if (dashboardPath !== "Membership") return null;
 
   const marginHorizontal = state.theme.marginHorizontal;

@@ -54,3 +54,8 @@ export const setEventAnchorAction = ({ dispatch, eventAnchor }) => {
   console.log("setEventAnchorAction triggered"); //debug
   dispatch({ type: "SET_EVENT_ANCHOR_ACTION", payload: eventAnchor });
 };
+
+export const setDashboardPathAction = ({ dispatch, dashboardPath }) => {
+  console.log("setDashboardPathAction triggered"); //debug
+  dispatch({ type: "SET_DASHBOARD_PATH_ACTION", payload: dashboardPath });
+};

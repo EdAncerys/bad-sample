@@ -20,13 +20,13 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { isActiveUser } = useAppState();
+  const { isActiveUser, dashboardPath } = useAppState();
 
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
   const wpBlocks = page.acf.blocks;
 
-  const [dashboardPath, setDashboardPath] = useState("Dashboard");
+  // const [dashboardPath, setDashboardPath] = useState("Dashboard");
   const [visible, setVisible] = useState(true);
 
   const [isReady, SetReady] = useState(null);
@@ -58,24 +58,17 @@ const AccountDashboard = ({ state, actions, libraries }) => {
     <div className="flex-col">
       <div className="flex-col">
         <BlockWrapper>
-          <DashboardNavigation
-            dashboardPath={dashboardPath}
-            setDashboardPath={setDashboardPath}
-          />
+          <DashboardNavigation />
 
-          <Dashboard dashboardPath={dashboardPath} />
-          <DashboardEvents dashboardPath={dashboardPath} />
-          <Membership dashboardPath={dashboardPath} />
-          <MyAccount dashboardPath={dashboardPath} />
-          <Billing
-            dashboardPath={dashboardPath}
-            visible={visible}
-            setVisible={setVisible}
-          />
-          <Settings dashboardPath={dashboardPath} />
+          <Dashboard />
+          <DashboardEvents />
+          <Membership />
+          <MyAccount />
+          <Billing visible={visible} setVisible={setVisible} />
+          <Settings />
         </BlockWrapper>
 
-        <Directory dashboardPath={dashboardPath} />
+        <Directory />
       </div>
 
       <BlockBuilder blocks={wpBlocks} />

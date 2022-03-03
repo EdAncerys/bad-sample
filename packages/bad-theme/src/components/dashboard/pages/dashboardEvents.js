@@ -5,8 +5,13 @@ import { colors } from "../../../config/colors";
 
 import TitleBlock from "../../titleBlock";
 import Events from "../../events/events";
+// CONTEXT ------------------------------------------------------------------
+import { useAppState, useAppDispatch } from "../../../context";
 
-const DashboardEvents = ({ state, actions, libraries, dashboardPath }) => {
+const DashboardEvents = ({ state, actions, libraries }) => {
+  const dispatch = useAppDispatch();
+  const { dashboardPath } = useAppState();
+
   if (dashboardPath !== "Events") return null;
 
   // RETURN ---------------------------------------------

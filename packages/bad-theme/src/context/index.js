@@ -8,6 +8,7 @@ import {
   setIDFilterAction,
   setCPTBlockAction,
   setEventAnchorAction,
+  setDashboardPathAction,
 } from "./actions/actions";
 import { muiQuery } from "./mediaQueryContext";
 import {
@@ -109,4 +110,5 @@ export {
   getApplicationStatus,
   updateEthnicityAction,
   getHospitalNameAction,
+  setDashboardPathAction,
 };

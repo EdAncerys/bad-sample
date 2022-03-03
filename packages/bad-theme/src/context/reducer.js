@@ -17,6 +17,7 @@ export const initialState = {
   idFilter: null,
   cptBlockFilter: "",
   eventAnchor: null,
+  dashboardPath: "Dashboard",
 
   applicationData: null,
 
@@ -65,6 +66,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, eventAnchor: action.payload };
     case "SET_APPLICATION_ACTION":
       return { ...state, dynamicsApps: action.payload };
+    case "SET_DASHBOARD_PATH_ACTION":
+      return { ...state, dashboardPath: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
