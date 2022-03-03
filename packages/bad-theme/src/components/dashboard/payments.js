@@ -185,10 +185,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     const appsOrSubs = type === "applications" ? "apps" : "subs";
     return (
       <div>
-        <div
-          className="primary-title"
-          style={{ fontSize: 20 }}
-        >
+        <div className="primary-title" style={{ fontSize: 20 }}>
           {dashboard ? "Outstanding payments" : `Active ${type}:`}
         </div>
         {zeroObjects ? (

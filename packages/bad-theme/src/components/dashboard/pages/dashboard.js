@@ -57,9 +57,14 @@ const Dashboard = ({ state, actions, libraries }) => {
         dynamicsApps.apps.data.filter((item) => item.bad_sagepayid !== null)
           .length > 0;
       const outstandingSubs =
-        dynamicsApps.subs.data.filter((item) => item.bad_sagepayid !== null)
+        dynamicsApps.subs.data.filter((item) => item.bad_sagepayid === null)
           .length > 0;
-      if (!outstandingApps && !outstandingSubs) return null;
+      const subsies = dynamicsApps.subs.data.filter(
+        (item) => item.bad_sagepayid !== null
+      );
+
+      console.log(subsies);
+      if (!outstandingSubs) return null;
 
       return <Payments subscriptions={dynamicsApps} dashboard />;
     };
