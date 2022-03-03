@@ -12,7 +12,6 @@ import {
   useAppState,
   getDirectDebitAction,
   createDirectDebitAction,
-  errorHandler,
   setErrorAction,
   setDebitHandlerAction,
 } from "../../context";

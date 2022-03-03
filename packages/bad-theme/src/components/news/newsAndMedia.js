@@ -1,7 +1,6 @@
 import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Form } from "react-bootstrap";
-import { v4 as uuidv4 } from "uuid";
 import parse from "html-react-parser";
 
 import NewsBlock from "./newsBlock";
@@ -33,8 +32,6 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   const isLayoutOne = layout === "layout_one";
   const ctaHeight = 45;
 
-  const [uniqueId, setUniqueId] = useState(null);
-
   const [filterList, setFilterList] = useState(null);
   const [categoryList, setCategoryList] = useState(null);
 
@@ -53,38 +50,33 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 
-  // hook applies after React has performed all DOM mutations
-  useLayoutEffect(() => {
-    const blockId = uuidv4(); // add unique id
-    setUniqueId(blockId);
-  }, []);
-
   useEffect(async () => {
     // pre fetch post data
     let iteration = 0;
-    let data = state.source.post;
-    while (!!data) {
+    let data = Object.values(state.source.post);
+    while (data.length === 0) {
       // if iteration is greater than 10, break
       if (iteration > 10) break;
       // set timeout for async
       await new Promise((resolve) => setTimeout(resolve, 500));
       await getPostData({ state, actions });
-      data = state.source.post;
+      data = Object.values(state.source.post);
       iteration++;
     }
 
     // if !data then break
-    if (!!data) return;
-    let postList = Object.values(data);
+    if (data.length === 0) return;
+
+    console.log("data: ", data); // debug
     // apply date filter
-    postList = postList.sort((a, b) => new Date(b.date) - new Date(a.date));
+    data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
     // filter by categories
     if (category_filter && category_filter !== "0")
-      postList = postList.filter((item) =>
+      data = data.filter((item) =>
         item.categories.includes(Number(category_filter))
       );
 
-    setFilterList(postList);
+    setFilterList(data);
     if (state.source.category) {
       const CATEGORY = Object.values(state.source.category);
       setCategoryList(CATEGORY);
