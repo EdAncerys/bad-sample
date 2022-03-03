@@ -11,9 +11,7 @@ import { useAppState, useAppDispatch } from "../../../context";
 
 const Billing = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
-  const { dashboardPath } = useAppState();
-
-  const [page, setPage] = useState({ page: "billing" });
+  const { dashboardPath, directDebitPath } = useAppState();
 
   if (dashboardPath !== "Billing") return null;
 
@@ -21,29 +19,27 @@ const Billing = ({ state, actions, libraries }) => {
 
   // SERVERS ---------------------------------------------
   const ServeDashboard = () => {
-    if (page.page !== "billing") return null;
+    if (directDebitPath.page !== "billing") return null;
 
     return (
       <div>
-        <DirectDebitNotification
-          setPage={setPage}
-        />
-        <Payments setPage={setPage} />
+        <DirectDebitNotification />
+        <Payments />
         <BillingHistory />
       </div>
     );
   };
 
   const ServeOrderSummary = () => {
-    if (page.page !== "directDebit") return null;
+    if (directDebitPath.page !== "directDebit") return null;
 
-    return <OrderSummary setPage={setPage} />;
+    return <OrderSummary />;
   };
 
   const ServeDirectDebitSetup = () => {
-    if (page.page !== "directDebitSetup") return null;
+    if (directDebitPath.page !== "directDebitSetup") return null;
 
-    return <DirectDebitSetup setPage={setPage} />;
+    return <DirectDebitSetup />;
   };
 
   // RETURN ---------------------------------------------

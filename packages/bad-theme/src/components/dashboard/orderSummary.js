@@ -6,8 +6,10 @@ import { Form } from "react-bootstrap";
 
 import { UK_COUNTIES } from "../../config/data";
 import { UK_COUNTRIES } from "../../config/data";
+// CONTEXT ----------------------------------------------------------------
+import { setDebitHandlerAction } from "../../context";
 
-const OrderSummary = ({ state, actions, libraries, setPage }) => {
+const OrderSummary = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const marginVertical = state.theme.marginVertical;
@@ -41,7 +43,7 @@ const OrderSummary = ({ state, actions, libraries, setPage }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handlePayment = () => {
-    setPage({ page: "billing" });
+    setDebitHandlerAction({ dispatch, directDebitPath: { page: "billing" } });
   };
 
   // SERVERS ---------------------------------------------

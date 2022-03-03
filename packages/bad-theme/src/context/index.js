@@ -10,6 +10,7 @@ import {
   setEventAnchorAction,
   setDashboardPathAction,
   setNotificationAction,
+  setDebitHandlerAction,
 } from "./actions/actions";
 import { muiQuery } from "./mediaQueryContext";
 import {
@@ -113,4 +114,5 @@ export {
   getHospitalNameAction,
   setDashboardPathAction,
   setNotificationAction,
+  setDebitHandlerAction,
 };

@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
+// CONTEXT ----------------------------------------------------------------
+import { setDebitHandlerAction } from "../../context";
 
-const Payments = ({ state, actions, libraries, setPage }) => {
+const Payments = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const marginHorizontal = state.theme.marginHorizontal;
@@ -12,7 +14,10 @@ const Payments = ({ state, actions, libraries, setPage }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handlePayment = ({ block }) => {
-    setPage({ page: "directDebit", data: block });
+    setDebitHandlerAction({
+      dispatch,
+      directDebitPath: { page: "directDebit", data: block },
+    });
   };
 
   // SERVERS ---------------------------------------------
@@ -63,10 +68,6 @@ const Payments = ({ state, actions, libraries, setPage }) => {
         <ServeActions />
       </div>
     );
-  };
-
-  const ServeSubTitle = ({ title }) => {
-    return <div style={{ padding: `1em 0` }}>{title}</div>;
   };
 
   return (

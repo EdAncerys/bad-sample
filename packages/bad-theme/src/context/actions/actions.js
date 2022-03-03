@@ -64,3 +64,8 @@ export const setNotificationAction = ({ dispatch, isVisibleNotification }) => {
   console.log("setNotificationAction triggered"); //debug
   dispatch({ type: "SET_DEBIT_NOTIFICATION_ACTION", payload: isVisibleNotification });
 };
+
+export const setDebitHandlerAction = ({ dispatch, directDebitPath }) => {
+  console.log("setDebitHandlerAction triggered"); //debug
+  dispatch({ type: "SET_DEBIT_HANDLER_ACTION", payload: directDebitPath });
+};

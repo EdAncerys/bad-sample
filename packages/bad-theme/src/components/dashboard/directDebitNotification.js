@@ -9,9 +9,10 @@ import {
   getApplicationStatus,
   getDirectDebitAction,
   setNotificationAction,
+  setDebitHandlerAction,
 } from "../../context";
 
-const DirectDebitNotification = ({ state, actions, libraries, setPage }) => {
+const DirectDebitNotification = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
@@ -69,7 +70,10 @@ const DirectDebitNotification = ({ state, actions, libraries, setPage }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handlePayment = () => {
-    setPage({ page: "directDebitSetup" });
+    setDebitHandlerAction({
+      dispatch,
+      directDebitPath: { page: "directDebitSetup" },
+    });
   };
 
   // SERVERS ---------------------------------------------
