@@ -25,7 +25,8 @@ import FeaturedBanner from "./featuredBanner";
 import GeneralModal from "../elections/generalModal";
 import DownloadFileBlock from "../downloadFileBlock";
 import { setGoToAction } from "../../context";
-
+import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
+import LockIcon from "@mui/icons-material/Lock";
 const Card = ({
   state,
   actions,
@@ -81,6 +82,8 @@ const Card = ({
   videoGuide,
   featuredBanner,
   videoArchive,
+  noVideoCategory,
+  shareToSocials,
   video,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -165,6 +168,7 @@ const Card = ({
   };
 
   const ServeCardImage = () => {
+    if (videoArchive) return null;
     if (!url) return null;
     const alt = title || "BAD";
 
@@ -186,26 +190,62 @@ const Card = ({
             cursor: link ? "pointer" : null,
           }}
         />
-        {video ? (
-          <div
-            style={{
-              position: "relative",
-              top: "-50%",
-              left: "50%",
-              color: "white",
-            }}
-          >
-            {video.acf.price ? (
-              <LockIcon sx={{ fontSize: 50 }} />
-            ) : (
-              <PlayCircleOutlineIcon sx={{ fontSize: 50 }} />
-            )}
-          </div>
-        ) : null}
       </div>
     );
   };
+  const ServeVideoCover = () => {
+    if (!videoArchive) return null;
+    if (!url) return null;
+    const [vimeoCover, setVimeoCover] = useState(
+      "https://badadmin.skylarkdev.co/wp-content/uploads/2022/02/VIDEO-LIBRARY.jpg"
+    );
+    const alt = title || "BAD";
 
+    let STYLES = { minHeight: 200, maxHeight: 300 };
+    if (imgHeight) STYLES = { height: imgHeight };
+    const getVimeoCover = async ({ video_url }) => {
+      console.log("VIDEOURL", video_url);
+      // Example URL: https://player.vimeo.com/video/382577680?h=8f166cf506&color=5b89a3&title=0&byline=0&portrait=0
+      const reg = /\d+/g;
+      const videoId = video_url.match(reg);
+      console.log("VIDELOID", videoId);
+      const fetchVideoData = await fetch(
+        `http://vimeo.com/api/v2/video/${videoId[0]}.json`
+      );
+      if (fetchVideoData.ok) {
+        const json = await fetchVideoData.json();
+        console.log(json[0].thumbnail_medium);
+        setVimeoCover(json[0].thumbnail_large);
+      }
+    };
+
+    useEffect(() => {
+      getVimeoCover({ video_url: videoArchive.acf.video });
+    }, []);
+    return (
+      <div
+        style={{ position: "relative", cursor: "pointer" }}
+        onClick={() => setGoToAction({ path: link, actions })}
+      >
+        <Image src={vimeoCover} alt="Submit" style={{ width: "100%" }} />
+        <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            color: "white",
+          }}
+        >
+          <PlayCircleOutlineIcon
+            sx={{ fontSize: 80 }}
+            onClick={() => setLoadVideo(true)}
+            style={{ cursor: "pointer" }}
+          />
+        </div>
+      </div>
+    );
+  };
   const ServeCardHeader = () => {
     if (url) return null;
     if (!cardTitle) return null;
@@ -258,6 +298,8 @@ const Card = ({
           electionInfo={electionInfo}
           opacity={opacity}
           videoArchive={videoArchive}
+          noVideoCategory={noVideoCategory}
+          shareToSocials={shareToSocials}
         />
         <VideoGalleryInfo videoGalleryInfo={videoGalleryInfo} />
         <ServeDownloads />
@@ -298,6 +340,7 @@ const Card = ({
       <NewsArticleHeader newsArticle={newsArticle} />
       <NewsCarousel newsCarousel={newsCarousel} />
       <ServeCardImage />
+      <ServeVideoCover />
       <ServeContent />
       <ServeFooter />
     </div>

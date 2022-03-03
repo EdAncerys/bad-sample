@@ -267,26 +267,6 @@ const VideoArchive = ({ state, actions, libraries }) => {
 
     if (post.acf.private && !isActiveUser) return null; // If user isn't logged in, the videos set to private will not show
 
-    const getVimeoCover = async ({ video_url }) => {
-      console.log("VIDEOURL", video_url);
-      // Example URL: https://player.vimeo.com/video/382577680?h=8f166cf506&color=5b89a3&title=0&byline=0&portrait=0
-      const reg = /\d+/g;
-      const videoId = video_url.match(reg);
-      console.log("VIDELOID", videoId);
-      const fetchVideoData = await fetch(
-        `http://vimeo.com/api/v2/video/${videoId[0]}.json`
-      );
-      if (fetchVideoData.ok) {
-        const json = await fetchVideoData.json();
-        console.log(json[0].thumbnail_medium);
-        setVimeoCover(json[0].thumbnail_large);
-      }
-    };
-
-    useEffect(() => {
-      getVimeoCover({ video_url: post.acf.video });
-    }, []);
-
     return (
       <Card
         title={post.title.rendered}
@@ -296,6 +276,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
         videoArchive={post}
         colour={colors.orange}
         link={post.link}
+        link_label="watch"
         onClick={() => setGoToAction({ path: post.link, actions })}
       />
     );
