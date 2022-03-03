@@ -13,24 +13,26 @@ import Payments from "../payments";
 // CONTEXT ------------------------------------------------------------------
 import { useAppState, useAppDispatch } from "../../../context";
 
-const Dashboard = ({ state, actions, libraries, userStatus }) => {
+const Dashboard = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
-  const { dashboardPath } = useAppState();
+  const { dashboardPath, dynamicsApps } = useAppState();
 
   if (dashboardPath !== "Dashboard") return null;
-  if (!userStatus) return null;
 
-  const { apps, subs } = userStatus;
   const marginHorizontal = state.theme.marginHorizontal;
 
   // SERVERS ---------------------------------------------
   const ServeDashboard = () => {
-    if (userStatus.apps.data > 0) {
-      const data = userStatus.apps.data;
+    if (!dynamicsApps) return null;
+    const { apps, subs } = dynamicsApps;
+
+    if (dynamicsApps.apps.data > 0) {
+      const data = dynamicsApps.apps.data;
       const unapprovedApplications = data.filter(function (singleApplication) {
         return singleApplication.bad_approvalstatus == "Yes";
       });
     }
+
     const ServeApplicationStatus = () => {
       if (apps.data.length === 0) return null;
       return (
@@ -38,25 +40,27 @@ const Dashboard = ({ state, actions, libraries, userStatus }) => {
           {apps.data.map((item, key) => {
             return (
               <ApplicationStatusOrPayment
-                application={userStatus.apps.data[key]}
+                application={dynamicsApps.apps.data[key]}
               />
             );
           })}
         </div>
       );
     };
+
     const ServePayments = () => {
-      console.log("SERVEPAYMENTS", userStatus);
+      console.log("SERVEPAYMENTS", dynamicsApps);
       const outstandingApps =
-        userStatus.apps.data.filter((item) => item.bad_sagepayid !== null)
+        dynamicsApps.apps.data.filter((item) => item.bad_sagepayid !== null)
           .length > 0;
       const outstandingSubs =
-        userStatus.subs.data.filter((item) => item.bad_sagepayid !== null)
+        dynamicsApps.subs.data.filter((item) => item.bad_sagepayid !== null)
           .length > 0;
       if (!outstandingApps && !outstandingSubs) return null;
 
-      return <Payments subscriptions={userStatus} dashboard />;
+      return <Payments subscriptions={dynamicsApps} dashboard />;
     };
+
     return (
       <div style={{ padding: `0 ${marginHorizontal}px` }}>
         <Profile />

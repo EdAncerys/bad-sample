@@ -4,7 +4,6 @@ import { connect } from "frontity";
 import BlockBuilder from "../components/builder/blockBuilder";
 
 import DashboardNavigation from "../components/dashboard/dashboardNavigation";
-import DashboardNavigationMobile from "../components/dashboard/dashboardNavigationMobile";
 import Dashboard from "../components/dashboard/pages/dashboard";
 import DashboardEvents from "../components/dashboard/pages/dashboardEvents";
 import Directory from "../components/dashboard/pages/directory";
@@ -16,25 +15,15 @@ import Settings from "../components/dashboard/pages/settings";
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT ------------------------------------------------------------------
 import {
-  getDirectDebitAction,
   useAppState,
   useAppDispatch,
-  dynamicsApps,
+  getDirectDebitAction,
+  getApplicationStatus,
 } from "../context";
-
-import { handleGetCookie } from "../helpers/cookie";
-
-import { muiQuery } from "../context";
-import { Alert } from "react-bootstrap";
 
 const AccountDashboard = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-  const { sm, md, lg, xl } = muiQuery();
 
-  const cookie = handleGetCookie({ name: `BAD-WebApp` });
-  const { contactid, jwt } = cookie;
-
-  const [applicationStatus, setApplicationStatus] = useState();
   const dispatch = useAppDispatch();
   const { isActiveUser, dashboardPath } = useAppState();
 
@@ -53,6 +42,11 @@ const AccountDashboard = ({ state, actions, libraries }) => {
       dispatch,
       id: isActiveUser.contactid,
     });
+    await getApplicationStatus({
+      state,
+      dispatch,
+      contactid: isActiveUser.contactid,
+    });
 
     return () => {
       useEffectRef.current = false; // clean up function
@@ -64,41 +58,11 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   useLayoutEffect(() => {
     setReady(true);
   }, []);
-
-  useEffect(() => {
-    const fetchApplicationBillingStatus = async () => {
-      const getUserApplicationData = await fetch(
-        state.auth.APP_HOST + "/applications/billing/" + contactid,
-        {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
-        }
-      );
-
-      const json = await getUserApplicationData.json();
-      if (json) setApplicationStatus(json);
-    };
-
-    fetchApplicationBillingStatus();
-  }, []);
   if (!isReady) return null;
-  if (!cookie) return null;
+
   return (
     <div className="flex-col">
       <div className="flex-col">
-        {/* {state.theme.notification ? (
-          <div
-            style={{
-              position: "fixed",
-              bottom: "10px",
-              left: "10px",
-              zIndex: 800,
-            }}
-          >
-            <Alert variant="success">Your payment has been confirmed</Alert>
-          </div>
-        ) : null} */}
         <BlockWrapper>
           {/* {!lg ? (
             <DashboardNavigation
