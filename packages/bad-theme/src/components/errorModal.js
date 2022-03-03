@@ -28,7 +28,6 @@ const ErrorModal = ({ state, actions }) => {
           className="flex"
           style={{
             justifyContent: "flex-end",
-            paddingTop: `2em`,
           }}
         >
           <div className="blue-btn" onClick={actionHandler}>
@@ -52,8 +51,8 @@ const ErrorModal = ({ state, actions }) => {
             {CheckMark && (
               <div
                 style={{
-                  width: 180,
-                  maxHeight: 180,
+                  width: 250,
+                  maxHeight: 250,
                   margin: "0 auto",
                 }}
               >
@@ -73,7 +72,8 @@ const ErrorModal = ({ state, actions }) => {
               style={{
                 display: "grid",
                 textAlign: "center",
-                paddingTop: `3em`,
+                padding: `2em 0`,
+                fontSize: 24,
               }}
             >
               {message}
