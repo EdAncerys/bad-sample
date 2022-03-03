@@ -226,7 +226,11 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
       <ServeFilter />
       <BlockWrapper>
         <ServeType />
-        <Accordion block={{ accordion_item: guidelinesList }} guidelines />
+        <Accordion
+          block={{ accordion_item: guidelinesList }}
+          guidelines
+          hasPublishDate
+        />
       </BlockWrapper>
     </div>
   );

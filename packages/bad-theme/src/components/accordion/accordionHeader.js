@@ -2,6 +2,9 @@ import { useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
+import date from "date-and-time";
+const DATE_MODULE = date;
+
 import NiceLogo from "../../img/placeholders/niceLogo.svg";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -19,10 +22,11 @@ const AccordionHeader = ({
   uniqueId,
   membershipApplications,
   hasPreview,
+  hasPublishDate,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const { guidelines_type, subtitle } = block;
+  const { guidelines_type, subtitle, date } = block;
   const LOGO_HEIGHT = 45;
 
   let preview = block.preview;
@@ -66,7 +70,6 @@ const AccordionHeader = ({
 
       return (
         <div
-          className="flex"
           style={{
             fontStyle: "italic",
             padding: `0 2em`,
@@ -79,7 +82,10 @@ const AccordionHeader = ({
     };
 
     return (
-      <div className="flex primary-title" style={{ alignItems: "center" }}>
+      <div
+        className="primary-title"
+        style={{ alignItems: "center", lineHeight: "unset" }}
+      >
         <div style={{ fontSize: 20 }}>
           <Html2React html={title} />
         </div>
@@ -116,7 +122,7 @@ const AccordionHeader = ({
     return (
       <div
         style={{
-          padding: `0.25em`,
+          padding: "0 2em",
           margin: `0 4em 0 1em`,
         }}
       >
@@ -145,7 +151,7 @@ const AccordionHeader = ({
     return (
       <div
         style={{
-          padding: `0.25em`,
+          padding: "0 2em",
           margin: `0 4em 0 1em`,
         }}
       >
@@ -177,14 +183,36 @@ const AccordionHeader = ({
 
     return (
       <div
-        className="flex primary-title"
+        className="primary-title"
         style={{
           fontSize: 20,
           alignItems: "center",
           justifyContent: ALIGNMENT,
+          padding: "0 2em",
+          lineHeight: "unset",
         }}
       >
         <Html2React html={ltTitle} />
+      </div>
+    );
+  };
+
+  const ServePublishedDate = () => {
+    if (!hasPublishDate) return null;
+
+    const dateObject = new Date(date);
+    const formattedDate = DATE_MODULE.format(dateObject, "MMMM YYYY");
+
+    return (
+      <div
+        style={{
+          alignItems: "center",
+          paddingLeft: "2em",
+          whiteSpace: "nowrap",
+          paddingTop: 4, // compensate line height
+        }}
+      >
+        Published {formattedDate}
       </div>
     );
   };
@@ -204,11 +232,14 @@ const AccordionHeader = ({
             style={{ margin: 0, padding: `0.5em 1.25em`, alignItems: "center" }}
             data-mdb-toggle="collapse"
           >
-            <ServeTitle />
-            <ServeLTTitle />
+            <div className="flex">
+              <ServeTitle />
+              <ServeLTTitle />
+              <ServePublishedDate />
 
-            <ServeLogo />
-            <ServeNICELogo />
+              <ServeLogo />
+              <ServeNICELogo />
+            </div>
             <ServeIcon />
           </div>
         </div>

@@ -21,6 +21,7 @@ const AccordionComponent = ({
   fundingBlock,
   membershipApplications,
   hasPreview,
+  hasPublishDate,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
@@ -117,6 +118,7 @@ const AccordionComponent = ({
             fundingBlock={fundingBlock}
             membershipApplications={membershipApplications}
             hasPreview={hasPreview}
+            hasPublishDate={hasPublishDate}
           />
           <AccordionBody
             block={block}
