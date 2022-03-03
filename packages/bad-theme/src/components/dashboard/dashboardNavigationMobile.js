@@ -2,35 +2,26 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
-// CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, logoutAction } from "../../context";
 import { Dropdown } from "react-bootstrap";
+// CONTEXT ----------------------------------------------------------------
+import {
+  useAppDispatch,
+  useAppState,
+  logoutAction,
+  setDashboardPathAction,
+} from "../../context";
 
-const DashboardNavigationMobile = ({
-  state,
-  actions,
-  libraries,
-  dashboardPath,
-  setDashboardPath,
-}) => {
-  const dispatch = useAppDispatch();
+const DashboardNavigationMobile = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
+  const dispatch = useAppDispatch();
+  const { dashboardPath } = useAppState();
 
   // HELPERS ----------------------------------------------------------------
   const handleNavigate = ({ e }) => {
-    const menuItem = e.target.innerText;
-    setDashboardPath(menuItem);
-  };
-
-  const handleUnderline = (path) => {
-    if (path === dashboardPath) {
-      return `inset 0 -2px ${colors.darkSilver}`;
-    } else {
-      return "none";
-    }
+    let menuItem = e.target.innerText;
+    if (menuItem === "Log Out") menuItem = "Dashboard"; // If the user clicks on "Log Out" then we want to set the dashboard path to "Dashboard" instead of "Log Out".
+    setDashboardPathAction({ dispatch, dashboardPath: menuItem });
   };
 
   return (
