@@ -7,6 +7,7 @@ import { colors } from "../config/imports";
 import Header from "../components/header/header";
 import Footer from "../components/footer";
 import LoginModal from "../components/loginModal";
+import ErrorModal from "../components/errorModal";
 import EnquireModal from "../components/enquireModal";
 import CreateAccountModal from "../components/createAccount/createAccountModal";
 import Breadcrumbs from "../components/breadcrumbs";
@@ -66,6 +67,7 @@ const App = ({ state, actions }) => {
         <Breadcrumbs />
         <BlockWrapper>
           <LoginModal />
+          <ErrorModal />
           <CreateAccountModal />
           <EnquireModal />
         </BlockWrapper>
