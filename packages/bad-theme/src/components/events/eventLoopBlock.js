@@ -12,6 +12,7 @@ import {
   useAppState,
   setEventAnchorAction,
 } from "../../context";
+import { getEventsData } from "../../helpers";
 
 import { muiQuery } from "../../context";
 const EventLoopBlock = ({
@@ -48,7 +49,7 @@ const EventLoopBlock = ({
   const [eventList, setEventList] = useState(null); // event data
 
   const [gradeFilterId, setGradeFilterId] = useState(null); // data
-  const mountedRef = useRef(true);
+  const useEffectRef = useRef(null);
 
   const layoutOne = layout === "layout_one";
   const layoutTwo = layout === "layout_two";
@@ -63,12 +64,23 @@ const EventLoopBlock = ({
 
   // DATA get for EVENTS ----------------------------------------------------------------
   useEffect(async () => {
-    // events data pre fetch via beforeCSR
-    if (!state.source.events) {
-      console.log("Error. Failed to fetch events data"); // debug
-      return null;
+    // pre fetch events data
+    let iteration = 0;
+    let data = state.source.events;
+
+    while (!data) {
+      // if iteration is greater than 10, break
+      if (iteration > 10) break;
+      // set timeout for async
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      await getEventsData({ state, actions });
+      data = state.source.post;
+      iteration++;
     }
-    let eventList = Object.values(state.source.events); // add events object to data array
+
+    // if !data then break
+    if (!data) return;
+    let eventList = Object.values(data);
     const grades = Object.values(state.source.event_grade);
 
     let gradeFilterId = grades.filter(
@@ -78,15 +90,14 @@ const EventLoopBlock = ({
     if (gradeFilterId) gradeFilterId = gradeFilterId.id;
     if (post_limit) eventList = eventList.slice(0, Number(post_limit)); // apply limit on posts
 
-    setGradeFilterId(gradeFilterId);
-
     // sort events in order by date accenting from
-    let filterByDate = eventList.sort(
+    eventList = eventList.sort(
       (a, b) =>
         new Date(a.acf.date_time[0].date) - new Date(b.acf.date_time[0].date)
     );
 
-    setEventList(filterByDate);
+    setEventList(eventList);
+    setGradeFilterId(gradeFilterId);
 
     // link to anchor for event
     if (eventAnchor) {
@@ -100,9 +111,10 @@ const EventLoopBlock = ({
     }
 
     return () => {
-      mountedRef.current = false; // clean up function
+      useEffectRef.current = false; // clean up function
     };
-  }, [state.source.events]);
+  }, []);
+
   if (!eventList) return <Loading />;
   if (eventList) console.log(eventList);
   console.log("EVENT LOOP BLOCK BLOCK", block);

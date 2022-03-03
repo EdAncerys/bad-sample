@@ -11,9 +11,10 @@ import Loading from "../loading";
 import { colors } from "../../config/imports";
 import BlockWrapper from "../blockWrapper";
 
-import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchContainer from "../../components/searchContainer";
+// CONTEXT -----------------------------------------------------------------
+import { getPostData } from "../../helpers";
 
 import { muiQuery } from "../../context";
 
@@ -46,11 +47,11 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   const [dateValue, setDateValue] = useState(null);
   const [yearValue, setYearValue] = useState(null);
 
-  const searchFilterRef = useRef(null);
-  const categoryFilterRef = useRef(null);
-  const dateFilterRef = useRef(null);
-  const yearFilterRef = useRef(null);
-  const loadMoreRef = useRef(false);
+  const searchFilterRef = useRef("");
+  const categoryFilterRef = useRef("");
+  const dateFilterRef = useRef("");
+  const yearFilterRef = useRef("");
+  const loadMoreRef = useRef("");
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -62,10 +63,23 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     setUniqueId(blockId);
   }, []);
 
-  useEffect(() => {
-    if (!state.source.post) return null;
+  useEffect(async () => {
+    // pre fetch post data
+    let iteration = 0;
+    let data = state.source.post;
+    while (!!data) {
+      // if iteration is greater than 10, break
+      if (iteration > 10) break;
+      // set timeout for async
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      await getPostData({ state, actions });
+      data = state.source.post;
+      iteration++;
+    }
 
-    let postList = Object.values(state.source.post);
+    // if !data then break
+    if (!!data) return;
+    let postList = Object.values(data);
     // apply date filter
     postList = postList.sort((a, b) => new Date(b.date) - new Date(a.date));
     // filter by categories
@@ -79,7 +93,11 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       const CATEGORY = Object.values(state.source.category);
       setCategoryList(CATEGORY);
     }
-  }, [state.source.post]);
+
+    return () => {
+      searchFilterRef.current = ""; // clean up function
+    };
+  }, []);
 
   if (!filterList || !categoryList) return <Loading />;
 

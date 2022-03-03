@@ -8,6 +8,7 @@ import { muiQuery } from "../context";
 import Header from "../components/header/header";
 import Footer from "../components/footer";
 import LoginModal from "../components/loginModal";
+import ErrorModal from "../components/errorModal";
 import EnquireModal from "../components/enquireModal";
 import CreateAccountModal from "../components/createAccount/createAccountModal";
 import Breadcrumbs from "../components/breadcrumbs";
@@ -73,7 +74,6 @@ const App = ({ state, actions }) => {
         onClick={(e) => {
           state.theme.childMenuRef = ""; // reset child menu ref value
           state.theme.activeDropDownRef = "menu reset"; // reset menu ref value
-          state.theme.pilFilter = null; // reset pil filter
         }}
       >
         <div style={{ ...styles.container }}>
@@ -81,6 +81,7 @@ const App = ({ state, actions }) => {
           <Breadcrumbs />
           <BlockWrapper>
             <LoginModal />
+            <ErrorModal />
             <CreateAccountModal />
             <EnquireModal />
           </BlockWrapper>
@@ -94,28 +95,30 @@ const App = ({ state, actions }) => {
               <Login when={endPoint === "/login/"} />
               <CreateAccount when={endPoint === "/create-account/"} />
 
-            <AccountDashboard
-              when={endPoint === "/dashboard/" && isActiveUser}
-            />
-            <Contact when={endPoint === "/contact-us/"} />
-            <RegistrationStepOne
-              when={endPoint === "/membership/step-1-the-process/"}
-            />
-            <RegistrationStepTwo
-              when={endPoint === "/membership/step-2-category-selection/"}
-            />
-            <RegistrationStepThree
-              when={endPoint === "/membership/step-3-personal-information/"}
-            />
-            <RegistrationStepFour
-              when={endPoint === "/membership/step-4-professional-details/"}
-            />
-            <RegistrationStepFive
-              when={endPoint === "/membership/step-5-sig-questions/"}
-            />
-            <ThankYou when={endPoint === "/membership/thank-you/"} />
-            <EventsLandingPage when={endPoint === "/events/"} />
-            <PilsArchive when={endPoint === "/patient-information-leaflets/"} />
+              <AccountDashboard
+                when={endPoint === "/dashboard/" && isActiveUser}
+              />
+              <Contact when={endPoint === "/contact-us/"} />
+              <RegistrationStepOne
+                when={endPoint === "/membership/step-1-the-process/"}
+              />
+              <RegistrationStepTwo
+                when={endPoint === "/membership/step-2-category-selection/"}
+              />
+              <RegistrationStepThree
+                when={endPoint === "/membership/step-3-personal-information/"}
+              />
+              <RegistrationStepFour
+                when={endPoint === "/membership/step-4-professional-details/"}
+              />
+              <RegistrationStepFive
+                when={endPoint === "/membership/step-5-sig-questions/"}
+              />
+              <ThankYou when={endPoint === "/membership/thank-you/"} />
+              <EventsLandingPage when={endPoint === "/events/"} />
+              <PilsArchive
+                when={endPoint === "/patient-information-leaflets/"}
+              />
 
               <Pils when={data.isPils} />
               <Event when={data.isEvents} />

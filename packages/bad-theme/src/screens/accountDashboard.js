@@ -36,17 +36,13 @@ const AccountDashboard = ({ state, actions, libraries }) => {
 
   const [applicationStatus, setApplicationStatus] = useState();
   const dispatch = useAppDispatch();
-  const { isActiveUser } = useAppState();
+  const { isActiveUser, dashboardPath } = useAppState();
 
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
   const wpBlocks = page.acf.blocks;
 
-  const [dashboardPath, setDashboardPath] = useState("Dashboard");
-  const [visible, setVisible] = useState(true);
-
-  const [isReady, SetReady] = useState(null);
-
+  const [isReady, setReady] = useState(null);
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
@@ -66,7 +62,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   // prevent dashboard actions to load before all server side mutations loaded
   // allow css to load
   useLayoutEffect(() => {
-    SetReady(true);
+    setReady(true);
   }, []);
 
   useEffect(() => {
@@ -91,7 +87,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   return (
     <div className="flex-col">
       <div className="flex-col">
-        {state.theme.notification ? (
+        {/* {state.theme.notification ? (
           <div
             style={{
               position: "fixed",
@@ -102,36 +98,29 @@ const AccountDashboard = ({ state, actions, libraries }) => {
           >
             <Alert variant="success">Your payment has been confirmed</Alert>
           </div>
-        ) : null}
+        ) : null} */}
         <BlockWrapper>
-          {!lg ? (
+          {/* {!lg ? (
             <DashboardNavigation
-              dashboardPath={dashboardPath}
-              setDashboardPath={setDashboardPath}
+          
             />
           ) : (
             <DashboardNavigationMobile
               dashboardPath={dashboardPath}
               setDashboardPath={setDashboardPath}
             />
-          )}
-          <Dashboard
-            dashboardPath={dashboardPath}
-            userStatus={applicationStatus}
-          />
-          <DashboardEvents dashboardPath={dashboardPath} />
-          <Membership dashboardPath={dashboardPath} />
-          <MyAccount dashboardPath={dashboardPath} />
-          <Billing
-            dashboardPath={dashboardPath}
-            userStatus={applicationStatus}
-            visible={visible}
-            setVisible={setVisible}
-          />
-          <Settings dashboardPath={dashboardPath} />
+          )} */}
+          <DashboardNavigation />
+
+          <Dashboard />
+          <DashboardEvents />
+          <Membership />
+          <MyAccount />
+          <Billing />
+          <Settings />
         </BlockWrapper>
 
-        <Directory dashboardPath={dashboardPath} />
+        <Directory />
       </div>
 
       <BlockBuilder blocks={wpBlocks} />

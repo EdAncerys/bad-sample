@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import parse from "html-react-parser";
@@ -9,6 +9,7 @@ import LINK from "../../img/svg/badLink.svg";
 import date from "date-and-time";
 const DATE_MODULE = date;
 
+import Loading from "../../components/loading";
 import DownloadFileBlock from "../downloadFileBlock";
 
 import { muiQuery } from "../../context";
@@ -21,6 +22,7 @@ import {
   handleApplyForMembershipAction,
   anchorScrapper,
 } from "../../context";
+import { getLeadershipTeamData } from "../../helpers";
 
 const AccordionBody = ({
   state,
@@ -40,7 +42,6 @@ const AccordionBody = ({
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, dynamicsApps } = useAppState();
 
-  const ALL_POSITIONS = Object.values(state.source.leadership_position);
   const ICON_WIDTH = 35;
   const {
     downloads,
@@ -51,6 +52,8 @@ const AccordionBody = ({
     recipients,
     category_types,
     links,
+    gradesList,
+    positionList,
   } = block;
 
   let body = block.body;
@@ -130,7 +133,6 @@ const AccordionBody = ({
   if (leadershipBlock) {
     ltBody = block.block.intro_text;
     LT_LAYOUT = block.block.layout;
-    ALL_GRADES = state.source.leadership_grade;
   }
   // LEadership team & Standards --------------------------------
 
@@ -463,12 +465,12 @@ const AccordionBody = ({
       };
 
       const ServePosition = () => {
-        if (!positionId[0]) return null;
+        if (!positionId[0] || !positionList) return null;
 
-        const positionData = ALL_POSITIONS.filter(
+        const position = positionList.filter(
           (position) => position.id === positionId[0]
         );
-        const positionName = positionData[0].name;
+        const positionName = position[0].name;
 
         return (
           <div>
@@ -544,11 +546,11 @@ const AccordionBody = ({
     let isListLayout = true;
     if (LT_LAYOUT === "officer") isListLayout = false;
     if (LT_LAYOUT === "senior-management") isListLayout = false;
-    const jobRole = Object.values(ALL_GRADES).filter(
-      (job) => job.slug === LT_LAYOUT
-    );
+    let jobRole = null;
+    if (gradesList)
+      jobRole = gradesList.filter((job) => job.slug === LT_LAYOUT);
     let rolId = 0;
-    if (jobRole[0]) rolId = jobRole[0].id;
+    if (jobRole && jobRole[0]) rolId = jobRole[0].id;
 
     if (isListLayout)
       return (

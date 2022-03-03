@@ -14,9 +14,11 @@ import {
   getDirectDebitAction,
   createDirectDebitAction,
   errorHandler,
+  setErrorAction,
+  setDebitHandlerAction,
 } from "../../context";
 
-const DirectDebitSetup = ({ state, actions, libraries, setPage }) => {
+const DirectDebitSetup = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
@@ -75,41 +77,42 @@ const DirectDebitSetup = ({ state, actions, libraries, setPage }) => {
 
     if (!isValid) return null;
     console.log(formData); // debug
+    setErrorAction({ dispatch, isError: { message: "hello" } });
 
-    try {
-      setFetching(true);
-      const debitResponse = await createDirectDebitAction({
-        state,
-        id: isActiveUser.contactid,
-        data: {
-          bad_transactiontype: "0S",
-          core_name: formData.core_name,
-          core_accountnumber: formData.core_accountnumber,
-          core_sortcode: formData.core_sortcode,
-        },
-      });
+    // try {
+    //   setFetching(true);
+    //   const debitResponse = await createDirectDebitAction({
+    //     state,
+    //     id: isActiveUser.contactid,
+    //     data: {
+    //       bad_transactiontype: "0S",
+    //       core_name: formData.core_name,
+    //       core_accountnumber: formData.core_accountnumber,
+    //       core_sortcode: formData.core_sortcode,
+    //     },
+    //   });
 
-      if (debitResponse.success) {
-        await getDirectDebitAction({
-          state,
-          dispatch,
-          id: isActiveUser.contactid,
-        });
-        handlePayment(); // redirect to payment
-      } else {
-        console.log("⬇️ Failed to create direct debit ⬇️");
-        console.log(debitResponse);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setFetching(false);
-    }
+    //   if (debitResponse.success) {
+    //     await getDirectDebitAction({
+    //       state,
+    //       dispatch,
+    //       id: isActiveUser.contactid,
+    //     });
+    //     handlePayment(); // redirect to payment
+    //   } else {
+    //     console.log("⬇️ Failed to create direct debit ⬇️");
+    //     console.log(debitResponse);
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // } finally {
+    //   setFetching(false);
+    // }
   };
 
   // HELPERS ----------------------------------------------------------------
   const handlePayment = () => {
-    setPage({ page: "billing" });
+    setDebitHandlerAction({ dispatch, directDebitPath: { page: "billing" } });
   };
 
   // SERVERS ---------------------------------------------

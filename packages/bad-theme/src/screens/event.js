@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
@@ -14,15 +14,13 @@ const DATE_MODULE = date;
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT -------------------------------------------------------------------
-import EventListView from "../components/eventListView";
-import EventLoopBlock from "../components/events/eventLoopBlock";
-// CONTEXT -------------------------------------------------------------------
 import {
   useAppDispatch,
   setEnquireAction,
   setGoToAction,
   muiQuery,
 } from "../context";
+import { getEventsData } from "../helpers";
 
 const Event = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
@@ -40,8 +38,9 @@ const Event = ({ state, actions, libraries }) => {
   const [gradeList, setGradeList] = useState(null);
   const [locationList, setLocationList] = useState(null);
   const [specialtyList, setSpecialtyList] = useState(null);
+  const useEffectRef = useRef(null);
 
-  useEffect(() => {
+  useEffect(async () => {
     window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
     document.documentElement.scrollTop = 0; // for safari
 
@@ -50,7 +49,25 @@ const Event = ({ state, actions, libraries }) => {
     let categoryList = null;
     let locationList = null;
     let specialtyList = null;
-    if (state.source.events) eventList = Object.values(state.source.events);
+
+    // pre fetch events data
+    let iteration = 0;
+    let data = state.source.events;
+
+    while (!data) {
+      // if iteration is greater than 10, break
+      if (iteration > 10) break;
+      // set timeout for async
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      await getEventsData({ state, actions });
+      data = state.source.post;
+      iteration++;
+    }
+
+    // if !data then break
+    if (!data) return;
+    eventList = Object.values(data);
+
     if (state.source.event_grade)
       categoryList = Object.values(state.source.event_grade);
     if (state.source.event_location)
@@ -58,10 +75,16 @@ const Event = ({ state, actions, libraries }) => {
     if (state.source.event_specialty)
       specialtyList = Object.values(state.source.event_specialty);
 
+    console.log("eventList: ", eventList); // debug
+
     setEventList(eventList);
     setGradeList(categoryList);
     setLocationList(locationList);
     setSpecialtyList(specialtyList);
+
+    return () => {
+      useEffectRef.current = false; // clean up function
+    };
   }, []);
 
   const {

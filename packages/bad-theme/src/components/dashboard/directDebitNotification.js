@@ -9,21 +9,17 @@ import {
   useAppState,
   getApplicationStatus,
   getDirectDebitAction,
+  setNotificationAction,
+  setDebitHandlerAction,
 } from "../../context";
 
-const DirectDebitNotification = ({
-  state,
-  actions,
-  libraries,
-  setPage,
-  visible,
-  setVisible,
-}) => {
+const DirectDebitNotification = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const { isDirectDebit, dynamicsApps, isActiveUser } = useAppState();
+  const { isDirectDebit, dynamicsApps, isActiveUser, isVisibleNotification } =
+    useAppState();
 
   const marginVertical = state.theme.marginVertical;
 
@@ -65,18 +61,21 @@ const DirectDebitNotification = ({
     isApprovedMemberships = true;
   // conditional rendering of direct debit component
   let isSetupDirectDebit = false;
-  if (!visible) isSetupDirectDebit = true;
+  if (!isVisibleNotification) isSetupDirectDebit = true;
   if (isDebitSetup) isSetupDirectDebit = true;
 
   console.log("⬇️ isSetupDirectDebit", isSetupDirectDebit);
   console.log("⬇️ isApprovedMemberships", isApprovedMemberships);
 
   // if direct debit setup or no approved applications, return null
-  if (isSetupDirectDebit || !isApprovedMemberships) return null;
+  // if (isSetupDirectDebit || !isApprovedMemberships) return null;
 
   // HELPERS ----------------------------------------------------------------
   const handlePayment = () => {
-    setPage({ page: "directDebitSetup" });
+    setDebitHandlerAction({
+      dispatch,
+      directDebitPath: { page: "directDebitSetup" },
+    });
   };
 
   // SERVERS ---------------------------------------------
@@ -92,7 +91,9 @@ const DirectDebitNotification = ({
           <div
             type="submit"
             className="transparent-btn"
-            onClick={() => setVisible(false)}
+            onClick={() =>
+              setNotificationAction({ dispatch, isVisibleNotification: false })
+            }
           >
             Dismiss
           </div>

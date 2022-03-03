@@ -6,8 +6,13 @@ import { colors } from "../../../config/colors";
 import UpdateProfile from "../updateProfile";
 import UpdateHospitalDetails from "../updateHospitalDetails";
 import UpdateAddress from "../updateAddress";
+// CONTEXT ------------------------------------------------------------------
+import { useAppState, useAppDispatch } from "../../../context";
 
-const MyAccount = ({ state, actions, libraries, dashboardPath }) => {
+const MyAccount = ({ state, actions, libraries }) => {
+  const dispatch = useAppDispatch();
+  const { dashboardPath } = useAppState();
+
   if (dashboardPath !== "My Profile") return null;
 
   const marginHorizontal = state.theme.marginHorizontal;

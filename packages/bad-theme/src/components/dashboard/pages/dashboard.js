@@ -10,14 +10,13 @@ import TitleBlock from "../../titleBlock";
 import Events from "../../events/events";
 import ApplicationStatusOrPayment from "../ApplicationStatusOrPayment";
 import Payments from "../payments";
+// CONTEXT ------------------------------------------------------------------
+import { useAppState, useAppDispatch } from "../../../context";
 
-const Dashboard = ({
-  state,
-  actions,
-  libraries,
-  dashboardPath,
-  userStatus,
-}) => {
+const Dashboard = ({ state, actions, libraries, userStatus }) => {
+  const dispatch = useAppDispatch();
+  const { dashboardPath } = useAppState();
+
   if (dashboardPath !== "Dashboard") return null;
   if (!userStatus) return null;
 

@@ -17,6 +17,9 @@ export const initialState = {
   idFilter: null,
   cptBlockFilter: "",
   eventAnchor: null,
+  dashboardPath: "Dashboard",
+  directDebitPath: { page: "billing" },
+  isVisibleNotification: true,
 
   applicationData: null,
 
@@ -65,6 +68,12 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, eventAnchor: action.payload };
     case "SET_APPLICATION_ACTION":
       return { ...state, dynamicsApps: action.payload };
+    case "SET_DASHBOARD_PATH_ACTION":
+      return { ...state, dashboardPath: action.payload };
+    case "SET_DEBIT_NOTIFICATION_ACTION":
+      return { ...state, isVisibleNotification: action.payload };
+    case "SET_DEBIT_HANDLER_ACTION":
+      return { ...state, directDebitPath: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

@@ -54,3 +54,18 @@ export const setEventAnchorAction = ({ dispatch, eventAnchor }) => {
   console.log("setEventAnchorAction triggered"); //debug
   dispatch({ type: "SET_EVENT_ANCHOR_ACTION", payload: eventAnchor });
 };
+
+export const setDashboardPathAction = ({ dispatch, dashboardPath }) => {
+  console.log("setDashboardPathAction triggered"); //debug
+  dispatch({ type: "SET_DASHBOARD_PATH_ACTION", payload: dashboardPath });
+};
+
+export const setNotificationAction = ({ dispatch, isVisibleNotification }) => {
+  console.log("setNotificationAction triggered"); //debug
+  dispatch({ type: "SET_DEBIT_NOTIFICATION_ACTION", payload: isVisibleNotification });
+};
+
+export const setDebitHandlerAction = ({ dispatch, directDebitPath }) => {
+  console.log("setDebitHandlerAction triggered"); //debug
+  dispatch({ type: "SET_DEBIT_HANDLER_ACTION", payload: directDebitPath });
+};

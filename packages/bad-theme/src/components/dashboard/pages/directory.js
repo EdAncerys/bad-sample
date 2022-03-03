@@ -18,9 +18,10 @@ import {
   muiQuery,
 } from "../../../context";
 
-const Directory = ({ state, actions, libraries, dashboardPath }) => {
+const Directory = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
-  const { fad } = useAppState();
+  const { fad, dashboardPath } = useAppState();
+
   const LIMIT = 9;
 
   const [searchFilter, setSearchFilter] = useState(null);
