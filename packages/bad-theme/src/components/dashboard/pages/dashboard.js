@@ -40,6 +40,7 @@ const Dashboard = ({ state, actions, libraries }) => {
           {apps.data.map((item, key) => {
             return (
               <ApplicationStatusOrPayment
+                key={key}
                 application={dynamicsApps.apps.data[key]}
               />
             );
