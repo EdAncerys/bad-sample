@@ -5,7 +5,7 @@ import { colors } from "../config/imports";
 import Loading from "./loading";
 import Accordion from "./accordion/accordion";
 // CONTEXT ----------------------------------------------------------------
-import { useAppState } from "../context";
+import { getMembershipDataAction } from "../context";
 
 const BADMemberships = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -21,6 +21,10 @@ const BADMemberships = ({ state, actions, libraries, block }) => {
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
+    // pre fetch membership data
+    if (!state.source.memberships)
+      await getMembershipDataAction({ state, actions });
+
     const membershipTypes = Object.values(state.source.memberships);
     if (!membershipTypes) return null;
 

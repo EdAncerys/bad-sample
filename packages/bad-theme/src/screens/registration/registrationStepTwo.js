@@ -6,6 +6,7 @@ import { colors } from "../../config/imports";
 import SideBarMenu from "./sideBarMenu";
 import BlockWrapper from "../../components/blockWrapper";
 import ActionPlaceholder from "../../components/actionPlaceholder";
+import Loading from "../../components/loading";
 import FormError from "../../components/formError";
 // CONTEXT -----------------------------------------------------------------
 import {
@@ -14,6 +15,7 @@ import {
   setGoToAction,
   handleApplyForMembershipAction,
   errorHandler,
+  getMembershipDataAction,
 } from "../../context";
 
 const RegistrationStepTwo = ({ state, actions }) => {
@@ -23,6 +25,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, dynamicsApps } = useAppState();
 
+  const [membershipData, setMembershipData] = useState(false);
   const [isFetching, setFetching] = useState(false);
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -33,6 +36,14 @@ const RegistrationStepTwo = ({ state, actions }) => {
 
   // ⏬ populate form data values from applicationData
   useEffect(async () => {
+    // pre fetch membership data
+    if (!state.source.memberships)
+      await getMembershipDataAction({ state, actions });
+    const membershipData = Object.values(state.source.memberships);
+    setMembershipData(membershipData);
+
+    // populate form data values from applicationData
+    if (!applicationData) return null;
     const handleSetData = ({ data, name }) => {
       console.log(name);
       setFormData((prevFormData) => ({
@@ -41,7 +52,6 @@ const RegistrationStepTwo = ({ state, actions }) => {
       }));
     };
 
-    if (!applicationData) return null;
     const isSIG = applicationData[0].bad_organisedfor === "SIG";
 
     applicationData.map((data) => {
@@ -159,6 +169,8 @@ const RegistrationStepTwo = ({ state, actions }) => {
   };
 
   const ServeForm = () => {
+    if (!membershipData) return <Loading />;
+
     const ServeBADMembershipCategory = () => {
       if (formData.bad_organisedfor !== "810170000") return null;
 
@@ -174,17 +186,16 @@ const RegistrationStepTwo = ({ state, actions }) => {
             <option value="" hidden>
               Membership Category
             </option>
-            <option value="Ordinary">Ordinary</option>
-            <option value="Ordinary SAS">Ordinary SAS</option>
-            <option value="Trainee">Trainee</option>
-            <option value="Associate Trainee">Associate Trainee</option>
-            <option value="Associate">Associate</option>
-            <option value="Associate Overseas">Associate Overseas</option>
-            <option value="GP">GP</option>
-            <option value="Scientist and Allied Healthcare Professional">
-              Scientist and Allied Healthcare Professional
-            </option>
-            <option value="Student">Student</option>
+            {membershipData.map((item, key) => {
+              const { bad_or_sig, category_types } = item.acf;
+              if (bad_or_sig !== "bad") return null;
+
+              return (
+                <option key={key} value={category_types}>
+                  {category_types}
+                </option>
+              );
+            })}
           </Form.Select>
           <FormError id="bad_categorytype" />
         </div>
@@ -206,57 +217,18 @@ const RegistrationStepTwo = ({ state, actions }) => {
             <option value="" hidden>
               Membership Category
             </option>
+            {membershipData.map((item, key) => {
+              const { bad_or_sig, category_types } = item.acf;
+              if (bad_or_sig !== "sig") return null;
+              // get SIG membership categories name from custom object
+              let typeName = category_types.split(":")[1];
 
-            <option value="Full:British Cosmetic Dermatology Group">
-              British Cosmetic Dermatology Group
-            </option>
-            <option value="Full:British Hair and Nails Society">
-              British Hair and Nails Society
-            </option>
-            <option value="Full:British Photodermatology Group">
-              British Photodermatology Group
-            </option>
-            <option value="Full:British Society of Cutaneous Allergy">
-              British Society of Cutaneous Allergy
-            </option>
-            <option value="Full:British Society of Cutaneous Allergy Overseas">
-              British Society of Cutaneous Allergy Overseas
-            </option>
-            <option value="Full:British Society for Dermatopathology">
-              British Society for Dermatopathology
-            </option>
-            <option value="Full:British Society for Dermatological Surgery">
-              British Society for Dermatological Surgery
-            </option>
-            <option value="Full:British Society for Dermatological Surgery Associate">
-              British Society for Dermatological Surgery Associate
-            </option>
-            <option value="Full:British Society for Dermatological Surgery International">
-              British Society for Dermatological Surgery International
-            </option>
-            <option value="Full:British Society for Dermatological Surgery Trainnee">
-              British Society for Dermatological Surgery Trainnee
-            </option>
-            <option value="Full:British Society for Investigative Dermatology">
-              British Society for Investigative Dermatology
-            </option>
-            <option value="Full:British Society for Medical Dermatology">
-              British Society for Medical Dermatology
-            </option>
-            <option value="Full:British Society for Medical Dermatology Associate">
-              British Society for Medical Dermatology Associate
-            </option>
-            <option value="Full:British Society for Paediatric Dermatology">
-              British Society for Paediatric Dermatology
-            </option>
-            <option value="Full:British Society for Paediatric Dermatology Trainee">
-              British Society for Paediatric Dermatology Trainee
-            </option>
-            <option value="Full:British Society for Skin Care in Immunocompromised Individuals">
-              British Society for Skin Care in Immunocompromised Individuals
-            </option>
-            <option value="Full:The Dowling Club">The Dowling Club</option>
-            <option value="Full:DermpathPRO">DERMPATHPRO</option>
+              return (
+                <option key={key} value={category_types}>
+                  {typeName}
+                </option>
+              );
+            })}
           </Form.Select>
           <FormError id="bad_categorytype" />
         </div>
