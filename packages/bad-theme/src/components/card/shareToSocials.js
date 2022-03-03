@@ -29,12 +29,12 @@ const ShareToSocials = ({
   date,
   isCalendarLink,
 }) => {
-  console.log(date);
-
   const title = shareTitle || "BAD";
   const url = shareUrl || state.auth.APP_URL;
   const eventDate = date || new Date();
   const eventDescription = description || "BAD";
+  // location name replace html tags form string
+  const eventLocation = location.replace(/<[^>]*>/g, "") || "BAD";
 
   // HANDLERS --------------------------------------------
   // ⬇️ add to calendar functionality
@@ -43,11 +43,10 @@ const ShareToSocials = ({
     description: eventDescription,
     start: eventDate,
     allDay: true,
-    location: location || "",
+    location: eventLocation,
     // duration: [1, "day"],
   };
   const add2Calendar = outlook(event);
-  console.log(add2Calendar);
   console.log(google(event));
 
   const copyToClipboard = (e) => {

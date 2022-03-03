@@ -374,9 +374,6 @@ const Event = ({ state, actions, libraries }) => {
   const ServeSocials = () => {
     const shareUrl = state.auth.APP_URL + state.router.link;
 
-    // location name replace html tags form string
-    const locationName = venue.replace(/<[^>]*>/g, "");
-
     // event start date
     let startDate = new Date();
     if (date_time) startDate = Object.values(date_time)[0].date;
@@ -397,10 +394,10 @@ const Event = ({ state, actions, libraries }) => {
         <div className="flex-col" style={{ width: `75%` }}>
           <ShareToSocials
             shareTitle={title.rendered}
+            description={summary}
             shareUrl={shareUrl}
             date={startDate}
-            location={locationName}
-            description={summary}
+            location={venue}
             isCalendarLink
           />
         </div>

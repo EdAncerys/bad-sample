@@ -13,7 +13,7 @@ const NewsBlock = ({
   block,
   layout,
 }) => {
-  const { post_limit, category_filter, colour } = block;
+  const { post_limit, category_filter } = block;
   const isLayoutTwo = layout === "layout_two";
   const isLayoutThree = layout === "layout_three";
   const isLayoutFour = layout === "layout_four";
@@ -71,7 +71,7 @@ const NewsBlock = ({
               link={link}
               newsAndMediaInfo={block}
               layout={layout}
-              colour={colour}
+              colour={colors.pink}
               shadow
             />
           );
@@ -85,7 +85,7 @@ const NewsBlock = ({
               newsAndMediaInfo={block}
               layout={layout}
               cardHeight={290}
-              colour={colour}
+              colour={colors.pink}
               shadow
             />
           );
@@ -95,7 +95,7 @@ const NewsBlock = ({
             <div
               key={key}
               className="flex shadow"
-              style={{ borderBottom: `5px solid ${colour}` }}
+              style={{ borderBottom: `5px solid ${colors.pink}` }}
             >
               <ServeImage />
               <Card
@@ -105,7 +105,7 @@ const NewsBlock = ({
                 newsAndMediaInfo={block}
                 padding="1.5em 3em"
                 layout={layout}
-                colour={colour}
+                colour={colors.pink}
                 disableFooter
               />
             </div>
