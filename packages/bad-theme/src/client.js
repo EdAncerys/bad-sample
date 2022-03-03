@@ -5,12 +5,7 @@ import iframe from "@frontity/html2react/processors/iframe";
 import link from "@frontity/html2react/processors/link";
 import menuHandler from "./handlers/menu-handler";
 
-import {
-  authLogViaCookie,
-  getWPMenu,
-  getEventsData,
-  getLeadershipTeamData,
-} from "./helpers";
+import { authLogViaCookie, getWPMenu, getLeadershipTeamData } from "./helpers";
 // CONTEXT ----------------------------------------------------------------
 import { initialState } from "../src/context/reducer";
 import { handleSetCookie } from "./helpers/cookie";
@@ -67,8 +62,6 @@ const BADTheme = {
 
         // pre fetch leadership_team data
         await getLeadershipTeamData({ state, actions });
-        // pre fetch events data
-        await getEventsData({ state, actions });
 
         // handle auth login auth via cookies
         await authLogViaCookie({ state, initialState });

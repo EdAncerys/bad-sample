@@ -39,7 +39,7 @@ const Post = ({ state, actions, libraries }) => {
     }
 
     // if !data then break
-    if (!data) return;
+    if (!!data) return;
     let postList = Object.values(data);
     let categoryList = Object.values(state.source.category);
 

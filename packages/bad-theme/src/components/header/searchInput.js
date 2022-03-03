@@ -19,7 +19,6 @@ const SearchInput = ({ state, actions, libraries }) => {
   const { filter } = useAppState();
 
   const searchFilterRef = useRef(null);
-  const eventList = Object.values(state.source.events); // add events object to data array
 
   // HELPERS ---------------------------------------------
   const onClickHandler = ({ link }) => {
@@ -31,12 +30,12 @@ const SearchInput = ({ state, actions, libraries }) => {
     const input = searchFilterRef.current.value.toLowerCase();
     if (!input) return null;
 
-    let filter = eventList.filter((event) =>
-      event.title.rendered.toLowerCase().includes(input)
-    );
+    // let filter = eventList.filter((event) =>
+    //   event.title.rendered.toLowerCase().includes(input)
+    // );
 
-    if (!filter.length) filter = [{ title: { rendered: "No Results" } }];
-    setFilterAction({ dispatch, filter });
+    // if (!filter.length) filter = [{ title: { rendered: "No Results" } }];
+    // setFilterAction({ dispatch, filter });
     console.log(input);
   };
 

@@ -74,7 +74,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     }
 
     // if !data then break
-    if (!data) return;
+    if (!!data) return;
     let postList = Object.values(data);
     // apply date filter
     postList = postList.sort((a, b) => new Date(b.date) - new Date(a.date));

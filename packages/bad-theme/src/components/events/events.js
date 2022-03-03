@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Form } from "react-bootstrap";
-import { v4 as uuidv4 } from "uuid";
 
 import EventLoopBlock from "./eventLoopBlock";
 import SearchContainer from "../searchContainer";
@@ -12,6 +11,8 @@ import date from "date-and-time";
 const DATE_MODULE = date;
 
 import CloseIcon from "@mui/icons-material/Close";
+// CONTEXT --------------------------------------------------------
+import { getEventsData } from "../../helpers";
 
 const Events = ({ state, actions, libraries, block }) => {
   const [grades, setGrades] = useState(null); // data
@@ -27,11 +28,25 @@ const Events = ({ state, actions, libraries, block }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  const searchFilterRef = useRef(null);
+  const searchFilterRef = useRef("");
 
   const isSearch = block.add_search_function;
 
-  useEffect(() => {
+  useEffect(async () => {
+    // pre fetch events data
+    let iteration = 0;
+    let data = state.source.events;
+
+    while (!data) {
+      // if iteration is greater than 10, break
+      if (iteration > 10) break;
+      // set timeout for async
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      await getEventsData({ state, actions });
+      data = state.source.post;
+      iteration++;
+    }
+
     let grades = null;
     let locations = null;
     let specialty = null;
@@ -45,6 +60,10 @@ const Events = ({ state, actions, libraries, block }) => {
     setGrades(grades);
     setLocations(locations);
     setSpecialty(specialty);
+
+    return () => {
+      searchFilterRef.current = ""; // clean up function
+    };
   }, [state.source.event_grade, state.source.event_location]);
 
   // HELPERS ----------------------------------------------------------------
