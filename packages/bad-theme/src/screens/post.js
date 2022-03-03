@@ -3,13 +3,10 @@ import { connect } from "frontity";
 
 import { colors } from "../config/imports";
 import Card from "../components/card/card";
-
-import { muiQuery } from "../context";
-// BLOCK WIDTH WRAPPER -------------------------------------------------------
 // BLOCK WIDTH WRAPPER -----------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT -----------------------------------------------------------------
-import { setGoToAction } from "../context";
+import { setGoToAction, muiQuery } from "../context";
 import { getPostData } from "../helpers";
 
 const Post = ({ state, actions, libraries }) => {
@@ -56,16 +53,25 @@ const Post = ({ state, actions, libraries }) => {
   }, []);
 
   // SERVERS ---------------------------------------------
-  const ServeTitle = () => {
-    if (!title) return null;
-
-    return (
-      <div className="flex primary-title" style={{ fontSize: !lg ? 36 : 25 }}>
-        <Html2React html={title.rendered} />
-      </div>
-    );
-  };
   const ServeContent = () => {
+    const ServeTitle = () => {
+      if (!title) return null;
+
+      return (
+        <div
+          className="flex primary-title"
+          style={{
+            fontSize: 36,
+            borderBottom: `1px solid ${colors.lightSilver}`,
+            paddingBottom: `1em`,
+            marginBottom: `1em`,
+          }}
+        >
+          <Html2React html={title.rendered} />
+        </div>
+      );
+    };
+
     const ServeBody = () => {
       if (!content) return null;
 
@@ -176,7 +182,6 @@ const Post = ({ state, actions, libraries }) => {
       >
         <ServeContent />
         <ServeSideBar />
-        {!lg ? null : <ServeTitle />}
       </div>
     </BlockWrapper>
   );
