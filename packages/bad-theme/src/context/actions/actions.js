@@ -59,3 +59,8 @@ export const setDashboardPathAction = ({ dispatch, dashboardPath }) => {
   console.log("setDashboardPathAction triggered"); //debug
   dispatch({ type: "SET_DASHBOARD_PATH_ACTION", payload: dashboardPath });
 };
+
+export const setNotificationAction = ({ dispatch, isVisibleNotification }) => {
+  console.log("setNotificationAction triggered"); //debug
+  dispatch({ type: "SET_DEBIT_NOTIFICATION_ACTION", payload: isVisibleNotification });
+};

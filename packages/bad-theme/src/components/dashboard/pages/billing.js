@@ -9,7 +9,7 @@ import DirectDebitSetup from "../directDebitSetup";
 // CONTEXT ------------------------------------------------------------------
 import { useAppState, useAppDispatch } from "../../../context";
 
-const Billing = ({ state, actions, libraries, visible, setVisible }) => {
+const Billing = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { dashboardPath } = useAppState();
 
@@ -27,8 +27,6 @@ const Billing = ({ state, actions, libraries, visible, setVisible }) => {
       <div>
         <DirectDebitNotification
           setPage={setPage}
-          visible={visible}
-          setVisible={setVisible}
         />
         <Payments setPage={setPage} />
         <BillingHistory />

@@ -26,11 +26,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   const page = state.source[data.type][data.id];
   const wpBlocks = page.acf.blocks;
 
-  // const [dashboardPath, setDashboardPath] = useState("Dashboard");
-  const [visible, setVisible] = useState(true);
-
-  const [isReady, SetReady] = useState(null);
-
+  const [isReady, setReady] = useState(null);
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
@@ -50,7 +46,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   // prevent dashboard actions to load before all server side mutations loaded
   // allow css to load
   useLayoutEffect(() => {
-    SetReady(true);
+    setReady(true);
   }, []);
   if (!isReady) return null;
 
@@ -64,7 +60,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
           <DashboardEvents />
           <Membership />
           <MyAccount />
-          <Billing visible={visible} setVisible={setVisible} />
+          <Billing />
           <Settings />
         </BlockWrapper>
 

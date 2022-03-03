@@ -18,6 +18,7 @@ export const initialState = {
   cptBlockFilter: "",
   eventAnchor: null,
   dashboardPath: "Dashboard",
+  isVisibleNotification: true,
 
   applicationData: null,
 
@@ -68,6 +69,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, dynamicsApps: action.payload };
     case "SET_DASHBOARD_PATH_ACTION":
       return { ...state, dashboardPath: action.payload };
+    case "SET_DEBIT_NOTIFICATION_ACTION":
+      return { ...state, isVisibleNotification: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
