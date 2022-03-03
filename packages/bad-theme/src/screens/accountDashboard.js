@@ -11,6 +11,7 @@ import Membership from "../components/dashboard/pages/membership";
 import MyAccount from "../components/dashboard/pages/myAccount";
 import Billing from "../components/dashboard/pages/billing";
 import Settings from "../components/dashboard/pages/settings";
+import DashboardNavigationMobile from "../components/dashboard/dashboardNavigationMobile";
 
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT ------------------------------------------------------------------
@@ -19,10 +20,13 @@ import {
   useAppDispatch,
   getDirectDebitAction,
   getApplicationStatus,
+  muiQuery,
 } from "../context";
 
 const AccountDashboard = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
+  const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
   const { isActiveUser, dashboardPath } = useAppState();
@@ -64,18 +68,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
     <div className="flex-col">
       <div className="flex-col">
         <BlockWrapper>
-          {/* {!lg ? (
-            <DashboardNavigation
-          
-            />
-          ) : (
-            <DashboardNavigationMobile
-              dashboardPath={dashboardPath}
-              setDashboardPath={setDashboardPath}
-            />
-          )} */}
-          <DashboardNavigation />
-
+          {!lg ? <DashboardNavigation /> : <DashboardNavigationMobile />}
           <Dashboard />
           <DashboardEvents />
           <Membership />

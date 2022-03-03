@@ -6,19 +6,15 @@ import { colors } from "../../config/imports";
 import DirectDebit from "../../img/svg/directDebit.svg";
 import Loading from "../../components/loading";
 import FormError from "../../components/formError";
-import ActionPlaceholder from "../../components/actionPlaceholder";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
   useAppState,
-  getDirectDebitAction,
-  createDirectDebitAction,
   errorHandler,
-  setErrorAction,
   setDebitHandlerAction,
 } from "../../context";
 
-const DirectDebitSetup = ({ state, actions, libraries }) => {
+const DirectDebitPayment = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
@@ -72,63 +68,48 @@ const DirectDebitSetup = ({ state, actions, libraries }) => {
   const handleDirectDebitSetup = async () => {
     // form value validations
     const isValid = isFormValidated({
-      required: ["core_sortcode", "core_accountnumber"],
+      required: [
+        "py3_email",
+        "core_name",
+        "core_sortcode",
+        "core_accountnumber",
+      ],
     });
 
     if (!isValid) return null;
     console.log(formData); // debug
-    setErrorAction({ dispatch, isError: { message: "hello" } });
 
-    // try {
-    //   setFetching(true);
-    //   const debitResponse = await createDirectDebitAction({
-    //     state,
-    //     id: isActiveUser.contactid,
-    //     data: {
-    //       bad_transactiontype: "0S",
-    //       core_name: formData.core_name,
-    //       core_accountnumber: formData.core_accountnumber,
-    //       core_sortcode: formData.core_sortcode,
-    //     },
-    //   });
-
-    //   if (debitResponse.success) {
-    //     await getDirectDebitAction({
-    //       state,
-    //       dispatch,
-    //       id: isActiveUser.contactid,
-    //     });
-    //     handlePayment(); // redirect to payment
-    //   } else {
-    //     console.log("⬇️ Failed to create direct debit ⬇️");
-    //     console.log(debitResponse);
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // } finally {
-    //   setFetching(false);
-    // }
+    setDebitHandlerAction({
+      dispatch,
+      directDebitPath: { page: "directDebitPayment", data: formData },
+    });
   };
 
   // HELPERS ----------------------------------------------------------------
-  const handlePayment = () => {
+  const handleCancel = () => {
     setDebitHandlerAction({ dispatch, directDebitPath: { page: "billing" } });
   };
 
   // SERVERS ---------------------------------------------
   const ServeInfo = () => {
     return (
-      <div style={{ padding: `1em 0` }}>
-        By submitting this direct debit request you are verifying that you are
-        the account holder and therefore the payer and also that you are the
-        only person required to authorise debits from the account. If you are
-        not the account holder or more than one person has to authorise debits
-        from the account then you must complete a paper direct debit mandate. If
-        this is the case, please contact us at membership@bad.org.uk to arrange.
-        When you set up your direct debit all of you BAD and Special Interest
-        Groups subscriptions will be collected via this method. Your
-        instructions will be collected on the 1st January each year, or nearest
-        working day thereafter.
+      <div>
+        <div style={{ padding: `1em 0` }}>
+          By submitting this direct debit request you are verifying that you are
+          the account holder and therefore the payer and also that you are the
+          only person required to authorise debits from the account. If you are
+          not the account holder or more than one person has to authorise debits
+          from the account then you must complete a paper direct debit mandate.
+          If this is the case, please contact us at membership@bad.org.uk to
+          arrange. When you set up your direct debit all of you BAD and Special
+          Interest Groups subscriptions will be collected via this method. Your
+          instructions will be collected on the 1st January each year, or
+          nearest working day thereafter.
+        </div>
+        <div>
+          <span className="required" />
+          Mandatory fields
+        </div>
       </div>
     );
   };
@@ -145,7 +126,7 @@ const DirectDebitSetup = ({ state, actions, libraries }) => {
     );
   };
 
-  const ServeImage = () => {
+  const ServeDirectDebitInfo = () => {
     if (!DirectDebit) return null;
 
     return (
@@ -172,7 +153,7 @@ const DirectDebitSetup = ({ state, actions, libraries }) => {
           type="submit"
           className="transparent-btn"
           style={{ marginRight: `2em` }}
-          onClick={handlePayment}
+          onClick={handleCancel}
         >
           Cancel
         </div>
@@ -190,89 +171,88 @@ const DirectDebitSetup = ({ state, actions, libraries }) => {
   // RETURN ---------------------------------------------
   return (
     <div>
-      <div style={{ position: "relative" }}>
-        <ActionPlaceholder isFetching={isFetching} background="transparent" />
+      <div
+        className="shadow"
+        style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
+      >
+        <div className="primary-title" style={{ fontSize: 36 }}>
+          Direct Debit Details
+        </div>
+        <ServeInfo />
         <div
-          className="shadow"
-          style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
+          className="primary-title"
+          style={{ fontSize: 20, paddingTop: `1em` }}
         >
-          <div className="primary-title" style={{ fontSize: 20 }}>
-            Direct Debit Details
-          </div>
-          <ServeInfo />
-          <div
-            className="primary-title"
-            style={{ fontSize: 20, paddingTop: `1em` }}
-          >
-            Please enter your direct debit details:
-          </div>
+          Please enter your direct debit details:
+        </div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: `1fr 1fr`,
+            gap: `5px 20px`,
+          }}
+        >
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: `1fr 1fr`,
-              gap: `5px 20px`,
+              gridTemplateColumns: `1fr`,
+              gridTemplateRows: `repeat(4, 70px)`,
+              gap: `20px`,
+              paddingTop: `1em`,
             }}
           >
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: `1fr`,
-                gridTemplateRows: `repeat(4, 70px)`,
-                gap: `20px`,
-                paddingTop: `1em`,
-              }}
-            >
-              <div>
-                <label>Email</label>
-                <input
-                  name="py3_email"
-                  value={formData.py3_email}
-                  onChange={handleInputChange}
-                  type="text"
-                  className="form-control input"
-                  placeholder="First Name"
-                />
-              </div>
-              <div>
-                <label>Account Name</label>
-                <input
-                  name="core_name"
-                  value={formData.core_name}
-                  onChange={handleInputChange}
-                  type="text"
-                  className="form-control input"
-                  placeholder="Account Name"
-                />
-              </div>
-              <div>
-                <label>Account Number</label>
-                <input
-                  name="core_accountnumber"
-                  value={formData.core_accountnumber}
-                  onChange={handleInputChange}
-                  type="text"
-                  className="form-control input"
-                  placeholder="Account Number"
-                />
-                <FormError id="core_accountnumber" />
-              </div>
-              <div>
-                <label>Sort Code</label>
-                <input
-                  name="core_sortcode"
-                  value={formData.core_sortcode}
-                  onChange={handleInputChange}
-                  type="text"
-                  className="form-control input"
-                  placeholder="Sort Code"
-                />
-                <FormError id="core_sortcode" />
-              </div>
+            <div>
+              <label className="required">Email</label>
+              <input
+                name="py3_email"
+                value={formData.py3_email}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="First Name"
+              />
+              <FormError id="py3_email" />
+            </div>
+            <div>
+              <label className="required">Account Name</label>
+              <input
+                name="core_name"
+                value={formData.core_name}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Account Name"
+              />
+              <FormError id="core_name" />
+            </div>
+            <div>
+              <label className="required">Account Number</label>
+              <input
+                name="core_accountnumber"
+                value={formData.core_accountnumber}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Account Number"
+              />
+              <FormError id="core_accountnumber" />
+            </div>
+            <div>
+              <label className="required">Sort Code</label>
+              <input
+                name="core_sortcode"
+                value={formData.core_sortcode}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Sort Code"
+              />
+              <FormError id="core_sortcode" />
             </div>
           </div>
-          <ServeConditions />
-          <ServeActions />
         </div>
+        <ServeConditions />
+        <ServeActions />
       </div>
       <div
         className="shadow"
@@ -281,7 +261,7 @@ const DirectDebitSetup = ({ state, actions, libraries }) => {
         <div className="primary-title" style={{ fontSize: 20 }}>
           Your payments are protected by the direct debit guarantee:
         </div>
-        <ServeImage />
+        <ServeDirectDebitInfo />
       </div>
     </div>
   );
@@ -298,4 +278,4 @@ const styles = {
   },
 };
 
-export default connect(DirectDebitSetup);
+export default connect(DirectDebitPayment);

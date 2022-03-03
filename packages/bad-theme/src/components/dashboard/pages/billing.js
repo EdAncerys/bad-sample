@@ -6,6 +6,7 @@ import Payments from "../payments";
 import BillingHistory from "../billingHistory";
 import OrderSummary from "../orderSummary";
 import DirectDebitSetup from "../directDebitSetup";
+import DirectDebitPayment from "../directDebitPayment";
 // CONTEXT ------------------------------------------------------------------
 import { useAppState, useAppDispatch } from "../../../context";
 
@@ -42,12 +43,19 @@ const Billing = ({ state, actions, libraries }) => {
     return <DirectDebitSetup />;
   };
 
+  const ServeDirectDebitPayment = () => {
+    if (directDebitPath.page !== "directDebitPayment") return null;
+
+    return <DirectDebitPayment />;
+  };
+
   // RETURN ---------------------------------------------
   return (
     <div style={{ padding: `0 ${marginHorizontal}px` }}>
       <ServeDashboard />
       <ServeOrderSummary />
       <ServeDirectDebitSetup />
+      <ServeDirectDebitPayment />
     </div>
   );
 };

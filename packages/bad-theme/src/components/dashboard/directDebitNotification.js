@@ -40,7 +40,7 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
         dispatch,
         id: isActiveUser.contactid,
       });
-    console.log("isDirectDebit", isDirectDebit); // debug
+
     // if direct status is status is Active, set debit setup to true
     let debitStatus = isDirectDebit.filter(
       (debit) => debit.statecode === "Active"
@@ -68,7 +68,7 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
   console.log("⬇️ isApprovedMemberships", isApprovedMemberships);
 
   // if direct debit setup or no approved applications, return null
-  // if (isSetupDirectDebit || !isApprovedMemberships) return null;
+  if (isSetupDirectDebit || !isApprovedMemberships) return null;
 
   // HELPERS ----------------------------------------------------------------
   const handlePayment = () => {
