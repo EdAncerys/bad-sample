@@ -8,7 +8,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import { colors } from "../../config/imports";
 // CONTEXT ----------------------------------------------------------------
-import { setErrorAction } from "../../context";
+import { setErrorAction, getApplicationStatus } from "../../context";
 
 const PaymentModal = ({ state, actions, payment_url, resetPaymentUrl }) => {
   console.log(payment_url);
@@ -34,6 +34,12 @@ const PaymentModal = ({ state, actions, payment_url, resetPaymentUrl }) => {
         dispatch,
         isError: { message: "Your payment has been accepted." },
       });
+      await getApplicationStatus({
+        state,
+        dispatch,
+        contactid: isActiveUser.contactid,
+      });
+      resetPaymentUrl();
       if (iqs && iqs.has("transId")) {
         const transId = iqs.get("transId");
         console.log("*** WE FOUND A TRANSACTION ID IN THE IFRAME ** ", transId);
