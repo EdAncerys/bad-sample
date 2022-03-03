@@ -5,7 +5,7 @@ import iframe from "@frontity/html2react/processors/iframe";
 import link from "@frontity/html2react/processors/link";
 import menuHandler from "./handlers/menu-handler";
 
-import { authLogViaCookie, getWPMenu, getLeadershipTeamData } from "./helpers";
+import { authLogViaCookie, getWPMenu } from "./helpers";
 // CONTEXT ----------------------------------------------------------------
 import { initialState } from "../src/context/reducer";
 import { handleSetCookie } from "./helpers/cookie";
@@ -59,9 +59,6 @@ const BADTheme = {
 
         // pre fetch WP MENU --------------------------------------------------------------
         await getWPMenu({ state, actions });
-
-        // pre fetch leadership_team data
-        await getLeadershipTeamData({ state, actions });
 
         // handle auth login auth via cookies
         await authLogViaCookie({ state, initialState });
