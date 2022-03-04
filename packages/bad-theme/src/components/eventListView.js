@@ -27,7 +27,7 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
   let MARGIN = `${marginVertical}px 0 0`;
   if (removeMargin) MARGIN = 0;
 
-  const HEIGHT = BANNER_HEIGHT / 1.45;
+  const HEIGHT = BANNER_HEIGHT / 1.4;
 
   const {
     date_time,
@@ -119,17 +119,12 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
     const ServeTitle = () => {
       if (!title) return null;
 
-      // Manage max string Length
-      const MAX_LENGTH = 70;
-      let titlePreview = `${title.substring(0, MAX_LENGTH)}...`;
-      if (title.length < MAX_LENGTH) titlePreview = title;
-
       return (
         <div
-          className="primary-title"
-          style={{ fontSize: 20, padding: `0.5em 0` }}
+          className="primary-title body-limit"
+          style={{ fontSize: 20, padding: `0.5em 0`, WebkitLineClamp: 1 }}
         >
-          <Html2React html={titlePreview} />
+          <Html2React html={title} />
         </div>
       );
     };
@@ -183,8 +178,13 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
     const ServeSummary = () => {
       if (!preview_summary) return null;
 
+      console.log(preview_summary.length);
+
       return (
-        <div className="flex-col" style={{ justifyItems: "center" }}>
+        <div
+          className="body-limit"
+          style={{ justifyItems: "center", WebkitLineClamp: 4 }}
+        >
           <Html2React html={preview_summary} />
         </div>
       );
