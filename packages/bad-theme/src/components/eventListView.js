@@ -178,8 +178,6 @@ const EventListView = ({ state, actions, libraries, block, removeMargin }) => {
     const ServeSummary = () => {
       if (!preview_summary) return null;
 
-      console.log(preview_summary.length);
-
       return (
         <div
           className="body-limit"

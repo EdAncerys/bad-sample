@@ -34,7 +34,7 @@ const ShareToSocials = ({
   const url = shareUrl || state.auth.APP_URL;
   const eventDate = date || new Date();
   const eventDescription = description || "BAD";
-  const eventLocation = "BAD";
+  let eventLocation = "BAD";
   // location name replace html tags form string
   if (location) eventLocation = location.replace(/<[^>]*>?/gm, "");
 
