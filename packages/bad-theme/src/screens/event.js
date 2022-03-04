@@ -348,7 +348,6 @@ const Event = ({ state, actions, libraries }) => {
         style={{
           backgroundColor: colors.primary,
           color: colors.white,
-          marginTop: `2em`,
           padding: `2em`,
         }}
       >
@@ -434,6 +433,7 @@ const Event = ({ state, actions, libraries }) => {
     const currentPostGrade = event.event_grade[0];
     const currentPostLocation = event.event_location[0];
     const currentPostSpecialty = event.event_specialty[0];
+
     // get category name from category list
     let gradeName = "Grade";
     gradeName = gradeList.filter(
@@ -461,7 +461,7 @@ const Event = ({ state, actions, libraries }) => {
     // get latest events from the list
     relatedLocationList = eventList.slice(0, 3);
 
-    const ServeRelatedEvents = ({ list, name }) => {
+    const ServeRelatedEvents = ({ list }) => {
       if (!list.length) return null;
 
       return (
@@ -469,7 +469,6 @@ const Event = ({ state, actions, libraries }) => {
           {relatedGradeList.map((event, key) => {
             let eventDate = event.date;
             if (event.acf.date_time) eventDate = event.acf.date_time[0];
-            if (id === event.id) return null;
 
             const dateObject = new Date(eventDate.date);
             const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
@@ -519,8 +518,11 @@ const Event = ({ state, actions, libraries }) => {
       );
     };
 
+    if (!relatedGradeList.length && !relatedLocationList.length) return null;
+    console.log(relatedGradeList, relatedLocationList);
+
     return (
-      <div>
+      <div style={{ marginBottom: "2em" }}>
         <div className="shadow" style={{ padding: "1em" }}>
           <div
             className="primary-title"
@@ -528,8 +530,8 @@ const Event = ({ state, actions, libraries }) => {
           >
             Related Content
           </div>
-          <ServeRelatedEvents list={relatedGradeList} name={gradeName} />
-          <ServeRelatedEvents list={relatedLocationList} name={locationName} />
+          <ServeRelatedEvents list={relatedGradeList} />
+          <ServeRelatedEvents list={relatedLocationList} />
         </div>
         <ServeFooter />
       </div>
@@ -540,9 +542,9 @@ const Event = ({ state, actions, libraries }) => {
     <BlockWrapper>
       <div style={{ backgroundColor: colors.white }}>
         <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
-          <ServeTitle />
           <div style={!lg ? styles.container : styles.containerMobile}>
             <div>
+              <ServeTitle />
               <div style={!lg ? styles.eventInfo : styles.eventInfoMobile}>
                 <ServeImage />
                 <ServeEventInfo />
@@ -554,30 +556,6 @@ const Event = ({ state, actions, libraries }) => {
             <div className="flex-col">
               <ServeSideBar />
               <ServeRegisterBanner />
-              {/* <div className="shadow">
-                <div style={{ padding: "2em" }}>
-                  <h3>Related events</h3>
-                </div>
-                <EventLoopBlock
-                  block={{
-                    acf_fc_layout: "events_loop_block",
-                    background_colour: "transparent",
-                    disable_vertical_padding: false,
-                    add_search_function: false,
-                    title: "",
-                    body: "",
-                    locations: false,
-                    grades: false,
-                    event_type: false,
-                    layout: "layout_one",
-                    view_all_link: false,
-                    passed_grade_filter_id: event.event_grade[0],
-                    post_limit: "3",
-                    colour: "#F5F6F7",
-                  }}
-                  recommended_events
-                />
-              </div> */}
             </div>
           </div>
         </div>
