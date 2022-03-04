@@ -5,7 +5,7 @@ import Profile from "../profile";
 import ProfileProgress from "../profileProgress";
 import UpdateProfile from "../updateProfile";
 import { colors } from "../../../config/colors";
-
+import Loading from "../../loading";
 import TitleBlock from "../../titleBlock";
 import Events from "../../events/events";
 import ApplicationStatusOrPayment from "../ApplicationStatusOrPayment";
@@ -34,14 +34,20 @@ const Dashboard = ({ state, actions, libraries }) => {
     }
 
     const ServeApplicationStatus = () => {
+      const [applications, setApplications] = useState();
+      console.log(dynamicsApps);
+      useEffect(() => {
+        setApplications(dynamicsApps.apps);
+      }, [dynamicsApps]);
       if (apps.data.length === 0) return null;
+      if (!applications) return <Loading />;
       return (
         <div>
-          {apps.data.map((item, key) => {
+          {applications.data.map((item, key) => {
             return (
               <ApplicationStatusOrPayment
                 key={key}
-                application={dynamicsApps.apps.data[key]}
+                application={applications.data[key]}
               />
             );
           })}

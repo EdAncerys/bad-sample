@@ -8,10 +8,16 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import { colors } from "../../config/imports";
 // CONTEXT ----------------------------------------------------------------
-import { setErrorAction, getApplicationStatus } from "../../context";
-
+import {
+  setErrorAction,
+  getApplicationStatus,
+  useAppDispatch,
+  useAppState,
+} from "../../context";
 const PaymentModal = ({ state, actions, payment_url, resetPaymentUrl }) => {
-  console.log(payment_url);
+  const dispatch = useAppDispatch();
+  const { isActiveUser } = useAppState();
+
   if (!payment_url) return null;
   const iFrameHandler = async (e) => {
     const iFrame = e.currentTarget;
@@ -29,7 +35,7 @@ const PaymentModal = ({ state, actions, payment_url, resetPaymentUrl }) => {
 
       const iqs = new URLSearchParams(iFrame.contentWindow.location.search);
       console.log("iFrameRef iqs", iqs);
-      resetPaymentUrl();
+
       setErrorAction({
         dispatch,
         isError: { message: "Your payment has been accepted." },
