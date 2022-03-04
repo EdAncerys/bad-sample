@@ -30,7 +30,7 @@ const AccordionHeader = ({
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const { guidelines_type, subtitle, date } = block;
+  const { guidelines_type, subtitle, date, acf } = block;
   const LOGO_HEIGHT = 45;
 
   let preview = block.preview;
@@ -45,6 +45,8 @@ const AccordionHeader = ({
 
   let logo = block.logo;
   if (fundingBlock) logo = block.acf.logo;
+
+  let niceAccredited = acf.nice_accredited;
 
   const isActive = useRef(false);
 
@@ -199,21 +201,9 @@ const AccordionHeader = ({
   };
 
   const ServeNICELogo = () => {
-    if (!guidelines_type) return null;
+    if (!niceAccredited) return null;
 
-    let guidelinesList = null;
-    let niceId = null;
-    if (state.source.guidelines_type)
-      guidelinesList = Object.values(state.source.guidelines_type);
-    // get NICE guidelines list
-    if (guidelinesList) {
-      let nice = guidelinesList.filter((item) => item.name.includes("NICE"));
-      if (nice.length > 0) niceId = nice[0].id;
-    }
-    // if NICE guidelines id includes guidelines_type render component
-    if (!guidelines_type.includes(niceId)) return null;
-
-    const alt = "Nice";
+    const alt = "NICE";
 
     return (
       <div
@@ -280,7 +270,7 @@ const AccordionHeader = ({
         style={{
           display: "grid",
           alignItems: "center",
-          paddingLeft: "2em",
+          padding: niceAccredited ? "0 0 0 2em" : "0 2em",
           whiteSpace: "nowrap",
           paddingTop: 4, // compensate line height
         }}

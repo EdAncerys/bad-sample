@@ -122,8 +122,6 @@ const Event = ({ state, actions, libraries }) => {
   } = event.acf;
   const { title, id } = event;
 
-  console.log(id);
-
   // SERVERS ----------------------------------------------
   const ServeTitle = () => {
     if (!title) return null;
@@ -278,6 +276,16 @@ const Event = ({ state, actions, libraries }) => {
   };
 
   const ServeRegisterLink = () => {
+    let isArchive = false;
+    if (date_time) {
+      // loop through date_time and check if date is in the past
+      date_time.forEach((date) => {
+        if (new Date(date.date) < new Date()) isArchive = true;
+      });
+    }
+    // dont display component if event isArchive
+    if (isArchive) return null;
+
     return (
       <div
         className="flex"
@@ -461,7 +469,6 @@ const Event = ({ state, actions, libraries }) => {
           {relatedGradeList.map((event, key) => {
             let eventDate = event.date;
             if (event.acf.date_time) eventDate = event.acf.date_time[0];
-            console.log(event);
             if (id === event.id) return null;
 
             const dateObject = new Date(eventDate.date);
