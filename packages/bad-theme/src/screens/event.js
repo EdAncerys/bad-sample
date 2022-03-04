@@ -333,67 +333,6 @@ const Event = ({ state, actions, libraries }) => {
     );
   };
 
-  // const ServeSocials = () => {
-  //   return (
-  //     <div className="flex-col" style={{ width: !lg ? `50%` : `100%` }}>
-  //       <div
-  //         className={!lg ? "flex-row" : "flex-col"}
-  //         style={{
-  //           flexDirection: "column-reverse",
-  //           justifyContent: "space-between",
-  //           padding: `2em 0 0 0`,
-  //         }}
-  //       >
-  //         <div
-  //           className="primary-title"
-  //           style={{ fontSize: 20, marginTop: !lg ? null : "1em" }}
-  //         >
-  //           Share
-  //         </div>
-  //         <div className="primary-title" style={{ fontSize: 20 }}>
-  //           Add to calendar
-  //         </div>
-  //       </div>
-  //       <div className="flex" style={{ justifyContent: "space-between" }}>
-  //         <div style={styles.socials}>
-  //           <Link link={`https://www.facebook.com/`} target="_blank">
-  //             <Image src={Facebook} className="d-block h-100" alt="Facebook" />
-  //           </Link>
-  //         </div>
-  //         <div style={styles.socials}>
-  //           <Link link={`https://www.twitter.com/`} target="_blank">
-  //             <Image src={Twitter} className="d-block h-100" alt="Twitter" />
-  //           </Link>
-  //         </div>
-  //         <div style={styles.socials}>
-  //           <Link link={`https://www.instagram.com/`} target="_blank">
-  //             <Image
-  //               src={Instagram}
-  //               className="d-block h-100"
-  //               alt="Instagram"
-  //             />
-  //           </Link>
-  //         </div>
-  //         <div style={styles.socials}>
-  //           <Link link={`https://www.linkedin.com/`} target="_blank">
-  //             <Image src={Linkedin} className="d-block h-100" alt="Instagram" />
-  //           </Link>
-  //         </div>
-  //         <div style={styles.socials}>
-  //           <Link link={`https://www.linkedin.com/`} target="_blank">
-  //             <Image src={Connect} className="d-block h-100" alt="Instagram" />
-  //           </Link>
-  //         </div>
-  //         <div style={styles.socials}>
-  //           <Link link={`https://www.linkedin.com/`} target="_blank">
-  //             <Image src={WebPage} className="d-block h-100" alt="Instagram" />
-  //           </Link>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // };
-
   const ServeRegisterBanner = () => {
     return (
       <div
