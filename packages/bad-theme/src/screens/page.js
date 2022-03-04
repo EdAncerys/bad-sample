@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../config/imports";
@@ -14,6 +14,11 @@ const Post = ({ state, actions, libraries }) => {
 
   const marginVertical = state.theme.marginVertical;
   const { sm, md, lg, xl } = muiQuery();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
+    document.documentElement.scrollTop = 0; // for safari
+  }, []);
 
   return (
     <div>
