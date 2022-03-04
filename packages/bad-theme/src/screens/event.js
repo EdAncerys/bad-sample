@@ -437,7 +437,14 @@ const Event = ({ state, actions, libraries }) => {
   };
 
   const ServeSocials = () => {
-    const shareUrl = state.auth.APP_URL + state.router.link;
+    // remove first / from string if its exist in the url
+    const removeFirstSlash = (url) => {
+      if (url.startsWith("/")) {
+        return url.substring(1);
+      }
+      return url;
+    };
+    const shareUrl = state.auth.APP_URL + removeFirstSlash(state.router.link);
 
     // event start date
     let startDate = new Date();

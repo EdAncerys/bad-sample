@@ -9,7 +9,6 @@ import {
 } from "react-share";
 
 import { colors } from "../../config/imports";
-import { setGoToAction } from "../../context";
 const { google, outlook, office365, yahoo, ics } = require("calendar-link");
 
 import Facebook from "../../img/svg/facebookBlack.svg";
@@ -18,6 +17,8 @@ import Instagram from "../../img/svg/instagramBlack.svg";
 import Linkedin from "../../img/svg/linkedinBlack.svg";
 import Connect from "../../img/svg/connectBlack.svg";
 import WebPage from "../../img/svg/webPageBlack.svg";
+// CONTEXT ----------------------------------------------------------------
+import { copyToClipboard } from "../../context";
 
 const ShareToSocials = ({
   state,
@@ -47,18 +48,7 @@ const ShareToSocials = ({
     // duration: [1, "day"],
   };
   const add2Calendar = outlook(event);
-  console.log(google(event));
-
-  const copyToClipboard = (e) => {
-    const link = e.target.name;
-
-    var input = document.body.appendChild(document.createElement("input"));
-    input.value = link;
-    input.focus();
-    input.select();
-    document.execCommand("copy");
-    input.parentNode.removeChild(input);
-  };
+  // console.log(google(event)); // google calendar link
 
   return (
     <div style={{ padding: `1em 0` }}>
@@ -106,7 +96,7 @@ const ShareToSocials = ({
             src={Connect}
             className="d-block h-100"
             alt="Connect"
-            name={`${title}`}
+            name={`${url}`}
           />
         </div>
         {isCalendarLink && (
