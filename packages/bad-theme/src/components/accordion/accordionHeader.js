@@ -84,7 +84,7 @@ const AccordionHeader = ({
     return (
       <div
         className="primary-title"
-        style={{ alignItems: "center", lineHeight: "unset" }}
+        style={{ display: "grid", alignItems: "center", lineHeight: "unset" }}
       >
         <div style={{ fontSize: 20 }}>
           <Html2React html={title} />
@@ -151,8 +151,9 @@ const AccordionHeader = ({
     return (
       <div
         style={{
+          display: "grid",
+          alignItems: "center",
           padding: "0 2em",
-          margin: `0 4em 0 1em`,
         }}
       >
         <Image src={NiceLogo} alt={alt} style={{ height: LOGO_HEIGHT }} />
@@ -206,6 +207,7 @@ const AccordionHeader = ({
     return (
       <div
         style={{
+          display: "grid",
           alignItems: "center",
           paddingLeft: "2em",
           whiteSpace: "nowrap",
