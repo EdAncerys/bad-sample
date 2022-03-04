@@ -51,6 +51,7 @@ const App = ({ state, actions }) => {
 
   useEffect(() => {
     // ⬇️ anchor tag scrapper
+
     anchorScrapper();
   }, [endPoint]);
 
