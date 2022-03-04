@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../config/imports";
@@ -12,6 +12,7 @@ import {
   useAppDispatch,
   useAppState,
   handleApplyForMembershipAction,
+  getMembershipDataAction,
 } from "../context";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
@@ -30,11 +31,24 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
 
   const { content, title, acf } = dermGroupe;
-  const memberships = state.source.memberships;
+  const [memberships, setMemberships] = useState(null);
+  const useEffectRef = useRef(null);
 
-  useEffect(() => {
+  useEffect(async () => {
     window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
     document.documentElement.scrollTop = 0; // for safari
+
+    let membershipTypes = state.source.memberships;
+    if (!membershipTypes) await getMembershipDataAction({ state, actions }); // pre fetch membership data
+
+    membershipTypes = Object.values(state.source.memberships);
+    if (membershipTypes.length === 0) return null;
+    console.log(membershipTypes); // debug
+    setMemberships(membershipTypes);
+
+    return () => {
+      useEffectRef.current = false; // clean up function
+    };
   }, []);
 
   // HANDLERS --------------------------------------------------
@@ -78,16 +92,15 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
 
     return (
       <div style={{ paddingTop: `2em` }}>
-        {acf.sigs.map((application, key) => {
-          const applicationData = memberships[application.ID];
-          const catType = applicationData.acf.category_types;
-          console.log(applicationData);
-
-          let applicationName = "SIG Application";
-          if (catType)
-            applicationName =
-              applicationData.acf.category_types.split(":")[1] ||
-              applicationData.acf.category_types; // remove membership type prefix
+        {acf.sigs.map(({ ID, post_title }, key) => {
+          // get current application data from memberships object by id
+          const currentMembership = memberships.find(
+            (membership) => membership.id === ID
+          );
+          const catType = currentMembership
+            ? currentMembership.acf.category_types
+            : null;
+          console.log("currentMembership", catType); // debug
 
           return (
             <div
@@ -96,7 +109,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
               style={{ width: "fit-content", margin: `1em 0` }}
               onClick={() => handleApply({ catType })}
             >
-              <Html2React html={`Apply for ${applicationName} membership`} />
+              <Html2React html={`Apply for ${post_title} membership`} />
             </div>
           );
         })}

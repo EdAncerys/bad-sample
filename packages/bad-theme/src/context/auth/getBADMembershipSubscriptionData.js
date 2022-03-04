@@ -18,7 +18,7 @@ export const getBADMembershipSubscriptionData = async ({
 
   const jwt = await authenticateAppAction({ state });
 
-  console.log(URL);
+  console.log(URL); // debug
 
   const requestOptions = {
     method: "GET",
