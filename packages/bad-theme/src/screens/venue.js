@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../config/imports";
@@ -46,6 +46,11 @@ const Venue = ({ state, actions, libraries }) => {
     form_body,
     floor,
   } = venue.acf;
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
+    document.documentElement.scrollTop = 0; // for safari
+  }, []);
 
   // SERVERS ---------------------------------------------------
   const ServeInfo = () => {

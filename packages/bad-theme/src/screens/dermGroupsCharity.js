@@ -32,6 +32,11 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   const { content, title, acf } = dermGroupe;
   const memberships = state.source.memberships;
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
+    document.documentElement.scrollTop = 0; // for safari
+  }, []);
+
   // HANDLERS --------------------------------------------------
   const handleApply = async ({ catType }) => {
     await handleApplyForMembershipAction({

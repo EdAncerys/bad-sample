@@ -92,8 +92,8 @@ const AccordionHeader = ({
       <div
         className="primary-title"
         style={{
+          display: "grid",
           alignItems: !lg ? "center" : "flex-start",
-          flexDirection: !lg ? "row" : "column",
           lineHeight: "unset",
         }}
       >
@@ -218,8 +218,9 @@ const AccordionHeader = ({
     return (
       <div
         style={{
-          padding: !lg ? `0.25em` : 0,
-          margin: !lg ? `0 4em 0 1em` : 0,
+          display: "grid",
+          alignItems: "center",
+          padding: !lg ? "0 2em" : 0,
         }}
       >
         <Image
@@ -277,6 +278,7 @@ const AccordionHeader = ({
     return (
       <div
         style={{
+          display: "grid",
           alignItems: "center",
           paddingLeft: "2em",
           whiteSpace: "nowrap",
