@@ -115,7 +115,9 @@ const Event = ({ state, actions, libraries }) => {
     contact_message,
     contact_allow_attachments,
   } = event.acf;
-  const { title } = event;
+  const { title, id } = event;
+
+  console.log(id);
 
   // SERVERS ----------------------------------------------
   const ServeTitle = () => {
@@ -454,6 +456,8 @@ const Event = ({ state, actions, libraries }) => {
           {relatedGradeList.map((event, key) => {
             let eventDate = event.date;
             if (event.acf.date_time) eventDate = event.acf.date_time[0];
+            console.log(event);
+            if (id === event.id) return null;
 
             const dateObject = new Date(eventDate.date);
             const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");

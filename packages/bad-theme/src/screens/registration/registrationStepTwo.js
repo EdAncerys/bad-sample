@@ -63,7 +63,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
         setFormData((prevFormData) => ({
           ...prevFormData,
           bad_categorytype: isSIG
-            ? data._bad_sigid_value
+            ? data.bad_categorytype + ":" + data._bad_sigid_value
             : data.bad_categorytype,
         }));
     });
@@ -222,6 +222,8 @@ const RegistrationStepTwo = ({ state, actions }) => {
               if (bad_or_sig !== "sig") return null;
               // get SIG membership categories name from custom object
               let typeName = category_types.split(":")[1];
+              console.log(category_types);
+              console.log("cat name===", formData.bad_categorytype);
 
               return (
                 <option key={key} value={category_types}>
