@@ -45,7 +45,6 @@ const RegistrationStepTwo = ({ state, actions }) => {
     // populate form data values from applicationData
     if (!applicationData) return null;
     const handleSetData = ({ data, name }) => {
-      console.log(name);
       setFormData((prevFormData) => ({
         ...prevFormData,
         [`${name}`]: data.value || "",
@@ -222,8 +221,6 @@ const RegistrationStepTwo = ({ state, actions }) => {
               if (bad_or_sig !== "sig") return null;
               // get SIG membership categories name from custom object
               let typeName = category_types.split(":")[1];
-              console.log(category_types);
-              console.log("cat name===", formData.bad_categorytype);
 
               return (
                 <option key={key} value={category_types}>
