@@ -12,7 +12,7 @@ import { useAppState, useAppDispatch } from "../../../context";
 
 const Billing = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
-  const { dashboardPath, directDebitPath } = useAppState();
+  const { dashboardPath, directDebitPath, dynamicsApps } = useAppState();
 
   if (dashboardPath !== "Billing") return null;
 
@@ -25,7 +25,7 @@ const Billing = ({ state, actions, libraries }) => {
     return (
       <div>
         <DirectDebitNotification />
-        <Payments />
+        <Payments subscriptions={dynamicsApps} />
         <BillingHistory />
       </div>
     );

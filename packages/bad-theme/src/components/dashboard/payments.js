@@ -7,11 +7,15 @@ import { handleGetCookie } from "../../helpers/cookie";
 import PaymentModal from "./paymentModal";
 import Loading from "../loading";
 import TitleBlock from "../titleBlock";
+
+import { useAppState } from "../../context";
 const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   //component state
   const [paymentUrl, setPaymentUrl] = useState("");
   const [liveSubscriptions, setLiveSubscriptions] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const { dashboardPath, directDebitPath, dynamicsApps } = useAppState();
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   // import values from the global state
@@ -20,27 +24,33 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
   const cookie = handleGetCookie({ name: `BAD-WebApp` });
   const { contactid, jwt } = cookie;
+
+  // REPLACE WITH getAPPLICATIONSTATUS
   useEffect(() => {
-    const fetchApplicationBillingStatus = async () => {
-      const getUserApplicationData = await fetch(
-        state.auth.APP_HOST + "/applications/billing/" + contactid,
-        {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
-        }
-      );
+    // const fetchApplicationBillingStatus = async () => {
+    //   const getUserApplicationData = await fetch(
+    //     state.auth.APP_HOST + "/applications/billing/" + contactid,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${jwt}`,
+    //       },
+    //     }
+    //   );
 
-      const json = await getUserApplicationData.json();
-      if (json) setLiveSubscriptions(json);
-    };
-    fetchApplicationBillingStatus();
-
+    //   const json = await getUserApplicationData.json();
+    //   if (json) setLiveSubscriptions(json);
+    // };
+    // fetchApplicationBillingStatus();
+    setLiveSubscriptions(dynamicsApps);
     setLoading(false);
   }, [loading]);
   // when should I return null ?
   if (!subscriptions) return null;
-  if (subscriptions.subs.data.length === 0) return null;
+  if (
+    dynamicsApps.subs.data.length === 0 &&
+    dynamicsApps.apps.data.length === 0
+  )
+    return null;
   if (!liveSubscriptions) return <Loading />;
   const { subs } = subscriptions;
 
@@ -56,16 +66,18 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     core_membershipapplicationid,
   }) => {
     const type = core_membershipsubscriptionid || core_membershipapplicationid;
-    console.log("TYPE:", type);
     const sagepayUrl = core_membershipsubscriptionid
       ? "/sagepay/test/subscription/"
       : "/sagepay/test/application/";
-    console.log("SPURL", sagepayUrl);
+    console.log(
+      "SPURL",
+      sagepayUrl + type + `?redirecturl=${the_url}/payment-confirmation`
+    );
     const fetchVendorId = await fetch(
       state.auth.APP_HOST +
         sagepayUrl +
         type +
-        `?redirecturl=${the_url}/payment-confirmation`,
+        `?redirecturl=${the_url}/payment-confirmation/`,
       {
         method: "POST",
         headers: {
@@ -90,8 +102,6 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
   // SERVERS ---------------------------------------------
   const ServePayments = ({ block, item }) => {
-    console.log("SP_BLOCK", block);
-    console.log("SP_ITEM", item);
     if (dashboard && block.bad_sagepayid !== null) return null;
     const ServeStatusOrAction = () => {
       // get important data
@@ -185,10 +195,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     const appsOrSubs = type === "applications" ? "apps" : "subs";
     return (
       <div>
-        <div
-          className="primary-title"
-          style={{ fontSize: 20 }}
-        >
+        <div className="primary-title" style={{ fontSize: 20 }}>
           {dashboard ? "Outstanding payments" : `Active ${type}:`}
         </div>
         {zeroObjects ? (
@@ -222,6 +229,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
           payment_url={paymentUrl}
           resetPaymentUrl={resetPaymentUrl}
         />
+
         {!dashboard && <ServeListOfPayments type="applications" />}
         <ServeListOfPayments type="subscriptions" />
       </div>
