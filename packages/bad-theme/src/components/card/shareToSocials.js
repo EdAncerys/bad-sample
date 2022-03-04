@@ -34,8 +34,9 @@ const ShareToSocials = ({
   const url = shareUrl || state.auth.APP_URL;
   const eventDate = date || new Date();
   const eventDescription = description || "BAD";
+  const eventLocation = "BAD";
   // location name replace html tags form string
-  const eventLocation = location.replace(/<[^>]*>/g, "") || "BAD";
+  if (location) eventLocation = location.replace(/<[^>]*>?/gm, "");
 
   // HANDLERS --------------------------------------------
   // ⬇️ add to calendar functionality
@@ -48,7 +49,7 @@ const ShareToSocials = ({
     // duration: [1, "day"],
   };
   const add2Calendar = outlook(event);
-  // console.log(google(event)); // google calendar link
+  console.log(google(event)); // google calendar link
 
   return (
     <div style={{ padding: `1em 0` }}>
