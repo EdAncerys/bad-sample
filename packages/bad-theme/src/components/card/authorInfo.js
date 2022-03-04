@@ -21,7 +21,14 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
   const { press_release_authors } = authorInfo.acf;
   const title = authorInfo.title ? authorInfo.title.rendered : null;
 
-  const shareUrl = state.auth.APP_URL + state.router.link;
+   // remove first / from string if its exist in the url
+   const removeFirstSlash = (url) => {
+    if (url.startsWith("/")) {
+      return url.substring(1);
+    }
+    return url;
+  };
+  const shareUrl = state.auth.APP_URL + removeFirstSlash(state.router.link);
   const shareTitle = title || "BAD";
 
   useEffect(async () => {
@@ -190,9 +197,10 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
       <ServeTopics />
       <ShareToSocials
         shareTitle={shareTitle}
+        description={content.rendered}
         shareUrl={shareUrl}
         date={date}
-        description={content.rendered}
+        isCalendarLink
       />
     </div>
   );

@@ -14,17 +14,30 @@ const NewsBlock = ({
   block,
   layout,
 }) => {
-  const { post_limit, category_filter, colour } = block;
+  const { post_limit, category_filter } = block;
+
   const isLayoutTwo = layout === "layout_two";
   const isLayoutThree = layout === "layout_three";
   const isLayoutFour = layout === "layout_four";
   const isLayoutFive = layout === "layout_five";
 
   // console.log("block length", block.length); // debug
-
+  const [eCircularCatId, setECircularCatId] = useState(null);
   let gridLayoutType = `1fr`;
   if (isLayoutFour) gridLayoutType = `repeat(3, 1fr)`;
   if (isLayoutFive) gridLayoutType = `repeat(4, 1fr)`;
+
+  useEffect(() => {
+    if (state.source.category) {
+      const catList = Object.values(state.source.category);
+      // get e-circular category id
+      const eCircularCat = catList.filter((item) => item.name === "E-Circular");
+      // get e-circular category id
+      const eCircularCatId = eCircularCat[0].id;
+
+      setECircularCatId(eCircularCatId);
+    }
+  }, []);
 
   // RETURN ---------------------------------------------
   return (
@@ -36,7 +49,11 @@ const NewsBlock = ({
       }}
     >
       {block.map((block, key) => {
-        const { categories, link, title, featured_media } = block;
+        const { categories, link, title, featured_media, acf } = block;
+        const isECircular = categories[0] === eCircularCatId;
+        let fileUrl = null;
+        if (isECircular && acf.file_uploader)
+          fileUrl = acf.file_uploader[0].file_url;
 
         const ServeImage = () => {
           if (!featured_media) return null;
@@ -72,7 +89,7 @@ const NewsBlock = ({
               link={link}
               newsAndMediaInfo={block}
               layout={layout}
-              colour={colour}
+              colour={colors.pink}
               shadow
             />
           );
@@ -82,11 +99,14 @@ const NewsBlock = ({
             <Card
               key={key}
               link_label="Read More"
-              link={link}
+              link={isECircular ? null : link}
               newsAndMediaInfo={block}
+              downloadFile={
+                fileUrl ? { file: { url: fileUrl }, title: null } : null // download file passed link
+              }
               layout={layout}
-              cardHeight={290}
-              colour={colour}
+              cardMinHeight={290}
+              colour={colors.pink}
               shadow
             />
           );
@@ -96,7 +116,7 @@ const NewsBlock = ({
             <div
               key={key}
               className="flex shadow"
-              style={{ borderBottom: `5px solid ${colour}` }}
+              style={{ borderBottom: `5px solid ${colors.pink}` }}
             >
               <ServeImage />
               <Card
@@ -106,7 +126,7 @@ const NewsBlock = ({
                 newsAndMediaInfo={block}
                 padding="1.5em 3em"
                 layout={layout}
-                colour={colour}
+                colour={colors.pink}
                 disableFooter
               />
             </div>

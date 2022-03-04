@@ -3,13 +3,10 @@ import { connect } from "frontity";
 
 import { colors } from "../config/imports";
 import Card from "../components/card/card";
-
-import { muiQuery } from "../context";
-// BLOCK WIDTH WRAPPER -------------------------------------------------------
 // BLOCK WIDTH WRAPPER -----------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT -----------------------------------------------------------------
-import { setGoToAction } from "../context";
+import { setGoToAction, muiQuery } from "../context";
 import { getPostData } from "../helpers";
 
 const Post = ({ state, actions, libraries }) => {
@@ -32,23 +29,22 @@ const Post = ({ state, actions, libraries }) => {
   useEffect(async () => {
     // pre fetch post data
     let iteration = 0;
-    let data = state.source.post;
-    while (!!data) {
+    let data = Object.values(state.source.post);
+    while (data.length === 0) {
       // if iteration is greater than 10, break
       if (iteration > 10) break;
       // set timeout for async
       await new Promise((resolve) => setTimeout(resolve, 500));
       await getPostData({ state, actions });
-      data = state.source.post;
+      data = Object.values(state.source.post);
       iteration++;
     }
 
     // if !data then break
-    if (!!data) return;
-    let postList = Object.values(data);
+    if (data.length === 0) return;
     let categoryList = Object.values(state.source.category);
 
-    setPostList(postList);
+    setPostList(data);
     setCatList(categoryList);
 
     return () => {
@@ -57,16 +53,25 @@ const Post = ({ state, actions, libraries }) => {
   }, []);
 
   // SERVERS ---------------------------------------------
-  const ServeTitle = () => {
-    if (!title) return null;
-
-    return (
-      <div className="flex primary-title" style={{ fontSize: !lg ? 36 : 25 }}>
-        <Html2React html={title.rendered} />
-      </div>
-    );
-  };
   const ServeContent = () => {
+    const ServeTitle = () => {
+      if (!title) return null;
+
+      return (
+        <div
+          className="flex primary-title"
+          style={{
+            fontSize: 36,
+            borderBottom: `1px solid ${colors.lightSilver}`,
+            paddingBottom: `1em`,
+            marginBottom: `1em`,
+          }}
+        >
+          <Html2React html={title.rendered} />
+        </div>
+      );
+    };
+
     const ServeBody = () => {
       if (!content) return null;
 
@@ -177,7 +182,6 @@ const Post = ({ state, actions, libraries }) => {
       >
         <ServeContent />
         <ServeSideBar />
-        {!lg ? null : <ServeTitle />}
       </div>
     </BlockWrapper>
   );

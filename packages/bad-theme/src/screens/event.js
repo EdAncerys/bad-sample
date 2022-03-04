@@ -28,7 +28,7 @@ const Event = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const event = state.source[data.type][data.id];
-  console.log("event data: ", event); // debug
+  // console.log("event data: ", event); // debug
 
   const dispatch = useAppDispatch();
 
@@ -74,8 +74,6 @@ const Event = ({ state, actions, libraries }) => {
       locationList = Object.values(state.source.event_location);
     if (state.source.event_specialty)
       specialtyList = Object.values(state.source.event_specialty);
-
-    console.log("eventList: ", eventList); // debug
 
     setEventList(eventList);
     setGradeList(categoryList);
@@ -133,7 +131,6 @@ const Event = ({ state, actions, libraries }) => {
         style={{
           fontSize: !lg ? 36 : 25,
           paddingBottom: `${marginVertical}px`,
-          textAlign: "center",
         }}
       >
         <Html2React html={title.rendered} />
@@ -440,13 +437,24 @@ const Event = ({ state, actions, libraries }) => {
   };
 
   const ServeSocials = () => {
-    const shareUrl = state.auth.APP_URL + state.router.link;
+    // remove first / from string if its exist in the url
+    const removeFirstSlash = (url) => {
+      if (url.startsWith("/")) {
+        return url.substring(1);
+      }
+      return url;
+    };
+    const shareUrl = state.auth.APP_URL + removeFirstSlash(state.router.link);
+
+    // event start date
+    let startDate = new Date();
+    if (date_time) startDate = Object.values(date_time)[0].date;
 
     return (
-      <div className="flex-col" style={{ width: `50%` }}>
+      <div className="flex-col" style={{ width: `55%` }}>
         <div
           className="flex-row"
-          style={{ justifyContent: "space-between", padding: `2em 0` }}
+          style={{ justifyContent: "space-between", padding: `2em 0 0 0` }}
         >
           <div className="primary-title" style={{ fontSize: 20 }}>
             Share
@@ -455,12 +463,16 @@ const Event = ({ state, actions, libraries }) => {
             Add to calendar
           </div>
         </div>
-        <ShareToSocials
-          shareTitle={title.rendered}
-          shareUrl={shareUrl}
-          date={date}
-          description={<Html2React html={summary} />}
-        />
+        <div className="flex-col" style={{ width: `75%` }}>
+          <ShareToSocials
+            shareTitle={title.rendered}
+            description={summary}
+            shareUrl={shareUrl}
+            date={startDate}
+            location={venue}
+            isCalendarLink
+          />
+        </div>
       </div>
     );
   };
@@ -544,16 +556,31 @@ const Event = ({ state, actions, libraries }) => {
       );
     };
 
-    return (
-      <div className="shadow" style={{ padding: "1em" }}>
+    const ServeFooter = () => {
+      return (
         <div
-          className="primary-title"
-          style={{ fontSize: 20, padding: "1em 0" }}
-        >
-          Related Content
+          style={{
+            backgroundColor: colors.turquoise,
+            height: 5,
+            width: "100%",
+          }}
+        />
+      );
+    };
+
+    return (
+      <div>
+        <div className="shadow" style={{ padding: "1em" }}>
+          <div
+            className="primary-title"
+            style={{ fontSize: 20, padding: "1em 0" }}
+          >
+            Related Content
+          </div>
+          <ServeRelatedEvents list={relatedGradeList} name={gradeName} />
+          <ServeRelatedEvents list={relatedLocationList} name={locationName} />
         </div>
-        <ServeRelatedEvents list={relatedGradeList} name={gradeName} />
-        <ServeRelatedEvents list={relatedLocationList} name={locationName} />
+        <ServeFooter />
       </div>
     );
   };

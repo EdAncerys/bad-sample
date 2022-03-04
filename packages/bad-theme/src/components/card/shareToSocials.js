@@ -7,10 +7,9 @@ import {
   TwitterShareButton,
   LinkedinShareButton,
 } from "react-share";
-import * as Add2Calendar from "add2calendar";
 
 import { colors } from "../../config/imports";
-import { setGoToAction } from "../../context";
+const { google, outlook, office365, yahoo, ics } = require("calendar-link");
 
 import Facebook from "../../img/svg/facebookBlack.svg";
 import Twitter from "../../img/svg/twitterBlack.svg";
@@ -18,6 +17,8 @@ import Instagram from "../../img/svg/instagramBlack.svg";
 import Linkedin from "../../img/svg/linkedinBlack.svg";
 import Connect from "../../img/svg/connectBlack.svg";
 import WebPage from "../../img/svg/webPageBlack.svg";
+// CONTEXT ----------------------------------------------------------------
+import { copyToClipboard } from "../../context";
 
 const ShareToSocials = ({
   state,
@@ -31,29 +32,24 @@ const ShareToSocials = ({
 }) => {
   const title = shareTitle || "BAD";
   const url = shareUrl || state.auth.APP_URL;
+  const eventDate = date || new Date();
+  const eventDescription = description || "BAD";
+  let eventLocation = "BAD";
+  // location name replace html tags form string
+  if (location) eventLocation = location.replace(/<[^>]*>?/gm, "");
 
   // HANDLERS --------------------------------------------
   // ⬇️ add to calendar functionality
-  // const singleEventArgs = {
-  //   title: title || "",
-  //   start: date || new Date(),
-  //   end: date || new Date(),
-  //   location: location || "",
-  //   description: description || "",
-  //   isAllDay: false,
-  // };
-  // const singleEvent = new Add2Calendar(singleEventArgs);
-
-  const copyToClipboard = (e) => {
-    const link = e.target.name;
-
-    var input = document.body.appendChild(document.createElement("input"));
-    input.value = link;
-    input.focus();
-    input.select();
-    document.execCommand("copy");
-    input.parentNode.removeChild(input);
+  const event = {
+    title: title,
+    description: eventDescription,
+    start: eventDate,
+    allDay: true,
+    location: eventLocation,
+    // duration: [1, "day"],
   };
+  const add2Calendar = outlook(event);
+  console.log(google(event)); // google calendar link
 
   return (
     <div style={{ padding: `1em 0` }}>
@@ -101,12 +97,12 @@ const ShareToSocials = ({
             src={Connect}
             className="d-block h-100"
             alt="Connect"
-            name={`${title}`}
+            name={`${url}`}
           />
         </div>
         {isCalendarLink && (
           <div style={styles.socials}>
-            <Link link={`https://www.linkedin.com/`} target="_blank">
+            <Link link={add2Calendar} target="_blank">
               <Image src={WebPage} className="d-block h-100" alt="Instagram" />
             </Link>
           </div>

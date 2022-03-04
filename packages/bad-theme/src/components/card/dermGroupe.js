@@ -3,11 +3,11 @@ import { connect } from "frontity";
 
 import Image from "@frontity/components/image";
 import Link from "@frontity/components/link";
-
 import { colors } from "../../config/imports";
-import { setGoToAction } from "../../context";
 
 import ProfileAvatar from "../../img/svg/profile.svg";
+// CONTEXT ----------------------------------------------------------------
+import { setGoToAction, copyToClipboard } from "../../context";
 
 const DermGroupe = ({ state, actions, libraries, dermGroupe }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -17,24 +17,18 @@ const DermGroupe = ({ state, actions, libraries, dermGroupe }) => {
   const { email, logo, telephone_helpline, website_url } = dermGroupe;
 
   // HANDLERS --------------------------------------------
-  const copyToClipboard = (e) => {
-    document.location = "mailto:" + email; // open default email client
+  const mailToClient = (e) => {
+    copyToClipboard(e);
 
+    // set user notification if email client is not available & copy to clipboard
     const emailValue = e.target.innerText;
     const clipboard = document.querySelector(`.clipboard-reference`); // placeholder selector
 
-    // set user notification if email client is not available & copy to clipboard
+    document.location = "mailto:" + emailValue; // open default email client
     clipboard.classList.remove("d-none");
     setTimeout(() => {
       clipboard.classList.add("d-none");
     }, 1000);
-
-    var input = document.body.appendChild(document.createElement("input"));
-    input.value = emailValue;
-    input.focus();
-    input.select();
-    document.execCommand("copy");
-    input.parentNode.removeChild(input);
   };
 
   // SERVERS ---------------------------------------------
@@ -74,7 +68,7 @@ const DermGroupe = ({ state, actions, libraries, dermGroupe }) => {
         <div
           email={email}
           className="title-link-animation"
-          onClick={copyToClipboard}
+          onClick={mailToClient}
         >
           <div style={styles.link}>
             <Html2React html={email} />
