@@ -27,9 +27,6 @@ const Post = ({ state, actions, libraries }) => {
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
-    window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
-    document.documentElement.scrollTop = 0; // for safari
-
     // pre fetch post data
     let iteration = 0;
     let data = Object.values(state.source.post);
