@@ -53,8 +53,8 @@ const LoginModal = ({ state, actions }) => {
         dispatch,
         jwt,
         // contactid: "cc9a332a-3672-ec11-8943-000d3a43c136", // andy testing account
-        contactid: "84590b32-9490-ec11-b400-000d3a22037e", // mandy
-        // contactid: "0786df85-618f-ec11-b400-000d3a22037e", // Chris
+        // contactid: "84590b32-9490-ec11-b400-000d3a22037e", // mandy
+        contactid: "0786df85-618f-ec11-b400-000d3a22037e", // Chris
         // contactid: "969ba377-a398-ec11-b400-000d3aaedef5", // emilia
       });
       setLoginModalAction({ dispatch, loginModalAction: false });
