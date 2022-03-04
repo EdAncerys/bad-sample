@@ -83,7 +83,7 @@ const DownloadFileBlock = ({
     if (type && type === "Button") return null;
 
     let fileType = "";
-    if (file) fileType = file.subtype;
+    if (file) fileType = file.subtype || "";
     if (guidline_file) fileType = guidline_file.subtype;
 
     let FILE_ICON = PDF;
