@@ -30,6 +30,8 @@ const SideBarMenu = ({ state, actions, libraries }) => {
     return applicationCategory;
   });
 
+  console.log(category);
+
   let stepOne,
     stepTwo,
     stepThree,
@@ -83,7 +85,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
             });
           }}
         >
-          Step 5 - SIG Questions
+          Step TBC - SIG Questions
         </div>
       );
     };
@@ -115,30 +117,34 @@ const SideBarMenu = ({ state, actions, libraries }) => {
         >
           Step 2 - Category Selection
         </div>
-        <div
-          className="title-link-animation"
-          style={{ ...stepThree, padding: `0.5em 0` }}
-          onClick={() => {
-            setGoToAction({
-              path: `/membership/step-3-personal-information/`,
-              actions,
-            });
-          }}
-        >
-          Step 3 - Personal Information
-        </div>
-        <div
-          className="title-link-animation"
-          style={{ ...stepFour, padding: `0.5em 0` }}
-          onClick={() => {
-            setGoToAction({
-              path: `/membership/step-4-professional-details/`,
-              actions,
-            });
-          }}
-        >
-          Step 4 - Professional Details
-        </div>
+        {category === "810170000" && (
+          <div>
+            <div
+              className="title-link-animation"
+              style={{ ...stepThree, padding: `0.5em 0` }}
+              onClick={() => {
+                setGoToAction({
+                  path: `/membership/step-3-personal-information/`,
+                  actions,
+                });
+              }}
+            >
+              Step 3 - Personal Information
+            </div>
+            <div
+              className="title-link-animation"
+              style={{ ...stepFour, padding: `0.5em 0` }}
+              onClick={() => {
+                setGoToAction({
+                  path: `/membership/step-4-professional-details/`,
+                  actions,
+                });
+              }}
+            >
+              Step 4 - Professional Details
+            </div>
+          </div>
+        )}
         <ServeStepFive />
       </div>
     );
