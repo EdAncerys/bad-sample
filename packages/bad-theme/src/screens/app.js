@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Switch from "@frontity/components/switch";
-import Image from "@frontity/components/image";
 import { colors } from "../config/imports";
 
 // COMPONENTS ---------------------------------------------------------
@@ -13,6 +12,7 @@ import EnquireModal from "../components/enquireModal";
 import CreateAccountModal from "../components/createAccount/createAccountModal";
 import Breadcrumbs from "../components/breadcrumbs";
 import CreateAccount from "./createAccount";
+import AnimatedPlaceholder from "../components/animatedPlaceholder";
 // SCREENS --------------------------------------------------------------
 import Post from "./post";
 import Page from "./page";
@@ -55,38 +55,7 @@ const App = ({ state, actions }) => {
   }, [endPoint]);
 
   // show placeholder logo while pre fetch user data
-  if (false) {
-    return (
-      <div
-        className="no-selector"
-        style={{
-          display: "grid",
-          width: "100%",
-          height: "100vh",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <div
-          style={{
-            width: 400,
-            height: 400,
-            overflow: "hidden",
-            backgroundColor: "pink",
-          }}
-        >
-          <Image
-            src={Placeholder}
-            alt="BAD Placeholder"
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-          />
-        </div>
-      </div>
-    );
-  }
+  // if (isPlaceholder) return <AnimatedPlaceholder />;
 
   // RETURN ------------------------------------------------------------
   return (

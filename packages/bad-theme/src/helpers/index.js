@@ -1,6 +1,11 @@
 import { handleGetCookie, handleSetCookie } from "./cookie";
 import { authenticateAppAction, getUserStoreAction } from "../context";
 
+const fetchCompleteHandler = ({ initialState }) => {
+  console.log("⬇️ user date pre fetch completed");
+  initialState.isPlaceholder = false;
+};
+
 export const authLogViaCookie = async ({ state, initialState }) => {
   const cookie = handleGetCookie({ name: state.auth.COOKIE_NAME });
 
@@ -67,7 +72,11 @@ export const authLogViaCookie = async ({ state, initialState }) => {
     } catch (error) {
       console.log("error", error);
       handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
+    } finally {
+      fetchCompleteHandler({ initialState });
     }
+  } else {
+    fetchCompleteHandler({ initialState });
   }
 };
 
@@ -83,6 +92,7 @@ export const getWPMenu = async ({ state, actions }) => {
       console.log("error: " + error);
     }
   } else {
+    console.log("menu already pre fetched from wp"); // debug
     state.theme.menu = JSON.parse(menu);
   }
 };
