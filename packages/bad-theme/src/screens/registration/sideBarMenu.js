@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 import { setGoToAction } from "../../context";
+import Loading from "../../components/loading";
 // CONTEXT ----------------------------------------------------------------
 import { useAppState } from "../../context";
 
@@ -10,7 +11,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const slug = state.router.link;
 
-  const { applicationData } = useAppState();
+  const { applicationData, isActiveUser } = useAppState();
 
   const defaultStyle = {};
   const activeStyle = {
@@ -29,6 +30,8 @@ const SideBarMenu = ({ state, actions, libraries }) => {
     return applicationCategory;
   });
 
+  console.log(category);
+
   let stepOne,
     stepTwo,
     stepThree,
@@ -40,6 +43,15 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   if (slug.includes("step-3")) stepThree = activeStyle;
   if (slug.includes("step-4")) stepFour = activeStyle;
   if (slug.includes("step-5")) stepFive = activeStyle;
+
+  useEffect(() => {
+    // redirect to / if !isActiveUser || !applicationData
+    if (!isActiveUser || !applicationData)
+      setGoToAction({ path: `/`, actions });
+  }, [isActiveUser, applicationData]);
+
+  // return loading placeholder if if !isActiveUser || !applicationData
+  if (!isActiveUser || !applicationData) return <Loading />;
 
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
@@ -73,7 +85,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
             });
           }}
         >
-          Step 5 - SIG Questions
+          Step TBC - SIG Questions
         </div>
       );
     };
@@ -105,30 +117,34 @@ const SideBarMenu = ({ state, actions, libraries }) => {
         >
           Step 2 - Category Selection
         </div>
-        <div
-          className="title-link-animation"
-          style={{ ...stepThree, padding: `0.5em 0` }}
-          onClick={() => {
-            setGoToAction({
-              path: `/membership/step-3-personal-information/`,
-              actions,
-            });
-          }}
-        >
-          Step 3 - Personal Information
-        </div>
-        <div
-          className="title-link-animation"
-          style={{ ...stepFour, padding: `0.5em 0` }}
-          onClick={() => {
-            setGoToAction({
-              path: `/membership/step-4-professional-details/`,
-              actions,
-            });
-          }}
-        >
-          Step 4 - Professional Details
-        </div>
+        {category === "810170000" && (
+          <div>
+            <div
+              className="title-link-animation"
+              style={{ ...stepThree, padding: `0.5em 0` }}
+              onClick={() => {
+                setGoToAction({
+                  path: `/membership/step-3-personal-information/`,
+                  actions,
+                });
+              }}
+            >
+              Step 3 - Personal Information
+            </div>
+            <div
+              className="title-link-animation"
+              style={{ ...stepFour, padding: `0.5em 0` }}
+              onClick={() => {
+                setGoToAction({
+                  path: `/membership/step-4-professional-details/`,
+                  actions,
+                });
+              }}
+            >
+              Step 4 - Professional Details
+            </div>
+          </div>
+        )}
         <ServeStepFive />
       </div>
     );

@@ -121,6 +121,10 @@ const RegistrationStepTwo = ({ state, actions }) => {
     if (!isValid) return null;
     // console.log(formData); // debug
 
+    let path = `/membership/step-3-personal-information/`;
+    if (formData.bad_organisedfor === "810170001")
+      path = `/membership/step-5-sig-questions/`;
+
     setFetching(true);
     await handleApplyForMembershipAction({
       state,
@@ -132,7 +136,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
       membershipApplication: { stepTwo: true }, // set stepOne to complete
       category: formData.bad_organisedfor === "810170000" ? "BAD" : "SIG",
       type: formData.bad_categorytype, // application type name
-      path: `/membership/step-3-personal-information/`,
+      path,
     });
     setFetching(false);
   };

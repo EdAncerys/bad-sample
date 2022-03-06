@@ -1,7 +1,16 @@
 import { handleGetCookie, handleSetCookie } from "./cookie";
-import { authenticateAppAction, getUserStoreAction } from "../context";
+import {
+  authenticateAppAction,
+  getUserStoreAction,
+  getUserDataByContactId,
+} from "../context";
 
-export const authLogViaCookie = async ({ state, initialState }) => {
+const fetchCompleteHandler = ({ initialState }) => {
+  console.log("⬇️ user pre-fetch completed");
+  initialState.isPlaceholder = false;
+};
+
+export const authCookieActionBeforeCSR = async ({ state, initialState }) => {
   const cookie = handleGetCookie({ name: state.auth.COOKIE_NAME });
 
   // ⏬⏬  user validation & auth ⏬⏬
@@ -67,6 +76,41 @@ export const authLogViaCookie = async ({ state, initialState }) => {
     } catch (error) {
       console.log("error", error);
       handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
+    } finally {
+      fetchCompleteHandler({ initialState });
+    }
+  } else {
+    fetchCompleteHandler({ initialState });
+  }
+};
+
+export const authCookieActionAfterCSR = async ({ state, dispatch }) => {
+  const cookie = handleGetCookie({ name: state.auth.COOKIE_NAME });
+
+  // ⏬⏬  user validation & auth ⏬⏬
+  if (cookie) {
+    console.log("🍪 found", cookie);
+    let { jwt, contactid } = cookie;
+
+    if (!contactid || !jwt) {
+      console.log("Failed to Auth 🍪 data");
+      handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
+      return null;
+    }
+
+    try {
+      const userData = await getUserDataByContactId({
+        state,
+        dispatch,
+        jwt,
+        contactid,
+      });
+      if (!userData) throw new Error("Error getting userData.");
+
+      console.log("⬇️ userData successfully pre-fetched", userData); // debug
+    } catch (error) {
+      console.log("error", error);
+      handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
     }
   }
 };
@@ -83,6 +127,7 @@ export const getWPMenu = async ({ state, actions }) => {
       console.log("error: " + error);
     }
   } else {
+    console.log("menu already pre fetched from wp"); // debug
     state.theme.menu = JSON.parse(menu);
   }
 };

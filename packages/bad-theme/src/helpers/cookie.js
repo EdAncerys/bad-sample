@@ -26,6 +26,7 @@ export const handleSetCookie = ({ name, value, exDays, deleteCookie }) => {
 };
 
 export const handleGetCookie = ({ name }) => {
+  console.log("handleGetCookie triggered");
   // setting defaults
   let cookieName = "";
   if (name) cookieName = name;

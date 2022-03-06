@@ -5,7 +5,7 @@ import iframe from "@frontity/html2react/processors/iframe";
 import link from "@frontity/html2react/processors/link";
 import menuHandler from "./handlers/menu-handler";
 
-import { authLogViaCookie, getWPMenu } from "./helpers";
+import { authCookieActionBeforeCSR, getWPMenu } from "./helpers";
 // CONTEXT ----------------------------------------------------------------
 import { initialState } from "../src/context/reducer";
 import { handleSetCookie } from "./helpers/cookie";
@@ -57,11 +57,12 @@ const BADTheme = {
           actions.source.fetch(`/home-page`), // pre fetch home page CONTENT
           actions.source.fetch(`/menu_features`), // pre fetch menu featured CPT
         ]);
-        // pre fetch WP MENU --------------------------------------------------------------
-        await getWPMenu({ state, actions });
 
-        // handle auth login auth via cookies
-        await authLogViaCookie({ state, initialState });
+        // pre fetch WP MENU
+        // await getWPMenu({ state, actions });
+
+        // handle auth login auth via cookies beforeCSR method
+        // await authCookieActionBeforeCSR({ state, initialState });
 
         // ⬇️ handle set cookie for video guide block. Silent auth login
         // https://www.skinhealthinfo.org.uk/support-resources/video-guides/

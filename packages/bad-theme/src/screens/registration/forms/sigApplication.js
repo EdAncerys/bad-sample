@@ -191,7 +191,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
           className="transparent-btn"
           onClick={() =>
             setGoToAction({
-              path: `/membership/step-4-professional-details/`,
+              path: `/membership/step-2-category-selection/`,
               actions,
             })
           }

@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Switch from "@frontity/components/switch";
-import Image from "@frontity/components/image";
 import { colors } from "../config/imports";
 import { muiQuery } from "../context";
+import { useTransition, animated } from "react-spring";
 
 // COMPONENTS ---------------------------------------------------------
 import Header from "../components/header/header";
@@ -14,6 +14,7 @@ import EnquireModal from "../components/enquireModal";
 import CreateAccountModal from "../components/createAccount/createAccountModal";
 import Breadcrumbs from "../components/breadcrumbs";
 import CreateAccount from "./createAccount";
+import AnimatedPlaceholder from "../components/animatedPlaceholder";
 // SCREENS --------------------------------------------------------------
 import Post from "./post";
 import Page from "./page";
@@ -43,7 +44,14 @@ import Error from "./error";
 import Loading from "../components/loading";
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, anchorScrapper } from "../context";
+import {
+  useAppDispatch,
+  useAppState,
+  anchorScrapper,
+  authCookieActionAfterCSR,
+  getWPMenu,
+  setPlaceholderAction,
+} from "../context";
 
 const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
@@ -53,53 +61,126 @@ const App = ({ state, actions }) => {
   const data = state.source.get(endPoint);
   console.log("INDEX data", data); // debug
 
+  const useEffectRef = useRef(true);
+
+  useEffect(async () => {
+    if (!isPlaceholder) return; // trigger only once
+    // ⬇️  get user data if cookie is set
+    await authCookieActionAfterCSR({ state, dispatch });
+    // ⬇️  pre-fetch app menu from wp
+    await getWPMenu({ state, actions });
+    // ⬇️  set placeholder after async actions to false
+    setPlaceholderAction({ dispatch, isPlaceholder: false });
+
+    return () => {
+      useEffectRef.current = false; // clean up function
+    };
+  }, []);
+
   useEffect(() => {
     // ⬇️ anchor tag scrapper
     anchorScrapper();
   }, [endPoint]);
 
-  const { sm, md, lg, xl } = muiQuery();
-  // RESPONSIVE --------------------------------------------
-  if (lg) state.theme.marginHorizontal = 10;
-  if (lg) state.theme.marginVertical = 10;
-  if (lg) state.theme.fontSize = 22;
-  if (lg) state.theme.footerHeight = 2;
+const { sm, md, lg, xl } = muiQuery();
+// RESPONSIVE --------------------------------------------
+if (lg) state.theme.marginHorizontal = 10;
+if (lg) state.theme.marginVertical = 10;
+if (lg) state.theme.fontSize = 22;
+if (lg) state.theme.footerHeight = 2;
 
-  // show placeholder logo while pre fetch user data
-  if (false) {
-    return (
-      <div
-        className="no-selector"
-        style={{
-          display: "grid",
-          width: "100%",
-          height: "100vh",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
+  const transitions = useTransition(isPlaceholder, {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
+    reverse: isPlaceholder,
+    delay: 200,
+    config: { mass: 1, tension: 280, friction: 120 },
+  });
+
+  // ⬇️  handle application animation before data pre fetch
+  // show placeholder logo while pre fetch user data is completed
+  // RETURN --------------------------------------------------------------------
+  return transitions(({ opacity }, appContent) =>
+    appContent ? (
+      <animated.div
+        style={{ opacity: opacity.to({ range: [0.0, 1.0], output: [0.1, 1] }) }}
+      >
+        <AnimatedPlaceholder />
+      </animated.div>
+    ) : (
+      <animated.div
+        style={{ opacity: opacity.to({ range: [0.0, 1.0], output: [0.1, 1] }) }}
       >
         <div
-          style={{
-            width: 400,
-            height: 400,
-            overflow: "hidden",
-            backgroundColor: "pink",
+          onClick={(e) => {
+            state.theme.childMenuRef = ""; // reset child menu ref value
+            state.theme.activeDropDownRef = "menu reset"; // reset menu ref value
           }}
         >
-          <Image
-            src={Placeholder}
-            alt="BAD Placeholder"
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-          />
-        </div>
-      </div>
-    );
-  }
+          <div style={{ ...styles.container }}>
+            <Header />
+            <Breadcrumbs />
+            <BlockWrapper>
+              <LoginModal />
+              <ErrorModal />
+              <CreateAccountModal />
+              <EnquireModal />
+            </BlockWrapper>
 
-  // RETURN ------------------------------------------------------------
+            <div className="flex-col">
+              <Switch>
+                <Loading when={data.isFetching} />
+                <Error when={data.isError} />
+                <BlocksPage when={data.route.includes("blocks")} />
+
+                <Login when={endPoint === "/login/"} />
+                <CreateAccount when={endPoint === "/create-account/"} />
+
+                <AccountDashboard
+                  when={endPoint === "/dashboard/" && isActiveUser}
+                />
+                <Contact when={endPoint === "/contact-us/"} />
+                <RegistrationStepOne
+                  when={endPoint === "/membership/step-1-the-process/"}
+                />
+                <RegistrationStepTwo
+                  when={endPoint === "/membership/step-2-category-selection/"}
+                />
+                <RegistrationStepThree
+                  when={endPoint === "/membership/step-3-personal-information/"}
+                />
+                <RegistrationStepFour
+                  when={endPoint === "/membership/step-4-professional-details/"}
+                />
+                <RegistrationStepFive
+                  when={endPoint === "/membership/step-5-sig-questions/"}
+                />
+                <ThankYou when={endPoint === "/membership/thank-you/"} />
+                <EventsLandingPage when={endPoint === "/events/"} />
+                <PilsArchive
+                  when={endPoint === "/patient-information-leaflets/"}
+                />
+
+                <Pils when={data.isPils} />
+                <Event when={data.isEvents} />
+                <Venue when={data.isVenues} />
+                <DermGroupsCharity when={data.isDermGroupsCharity} />
+                <Covid when={data.isCovid19} />
+
+                <Home when={data.isHome} />
+
+                <Post when={data.isPost} />
+                <Page when={data.isPage} />
+              </Switch>
+            </div>
+            <Footer />
+          </div>
+        </div>
+      </animated.div>
+    )
+  );
+
   return (
     <Switch>
       <PaymentConfirmation

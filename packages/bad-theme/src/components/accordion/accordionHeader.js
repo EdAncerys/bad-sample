@@ -46,7 +46,8 @@ const AccordionHeader = ({
   let logo = block.logo;
   if (fundingBlock) logo = block.acf.logo;
 
-  let niceAccredited = acf.nice_accredited;
+  let niceAccredited = false;
+  if (acf && acf.nice_accredited) niceAccredited = acf.nice_accredited;
 
   const isActive = useRef(false);
 
