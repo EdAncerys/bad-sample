@@ -5,6 +5,7 @@ export const initialState = {
   isActiveUser: null,
   dynamicsApps: null,
   jwt: null,
+  isPlaceholder: true,
 
   tweets: null,
   fad: null,
