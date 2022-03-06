@@ -35,6 +35,8 @@ export const handleGetCookie = ({ name }) => {
     let cookie = document.cookie
       .split("; ")
       .find((c) => c.startsWith(cookieName));
+    //if !cookie then return null
+    if (!cookie) return null;
     // cookie value
     let cookieValue = cookie.split("=")[1];
     // if cookie exists & not empty

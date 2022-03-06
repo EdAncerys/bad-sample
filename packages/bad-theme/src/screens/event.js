@@ -442,11 +442,11 @@ const Event = ({ state, actions, libraries }) => {
     if (gradeName[0]) gradeName = gradeName[0].name;
     // get list of events where category is the same as the current event
     let relatedGradeList = eventList.filter((event) => {
-      return event.event_grade.includes(currentPostGrade);
+      // return events that not current event id & include the same category  as the current event
+      return event.id !== id && event.event_grade.includes(currentPostGrade);
     });
     // get latest events from the list
-    relatedGradeList = eventList.slice(0, 3);
-    if (!eventList.length) return null; // dont render if no events
+    relatedGradeList = relatedGradeList.slice(0, 3);
 
     // get related event location list from the list
     let locationName = "Location";
@@ -456,10 +456,11 @@ const Event = ({ state, actions, libraries }) => {
     if (locationName[0]) locationName = locationName[0].name;
     // get list of events where location is the same as the current event
     let relatedLocationList = eventList.filter((event) => {
-      return event.event_location.includes(currentPostLocation);
+      // return events that not current event id & include the same category  as the current event
+      return event.id !== id && event.event_grade.includes(currentPostGrade);
     });
     // get latest events from the list
-    relatedLocationList = eventList.slice(0, 3);
+    relatedLocationList = relatedLocationList.slice(0, 3);
 
     const ServeRelatedEvents = ({ list }) => {
       if (!list.length) return null;
@@ -519,7 +520,6 @@ const Event = ({ state, actions, libraries }) => {
     };
 
     if (!relatedGradeList.length && !relatedLocationList.length) return null;
-    console.log(relatedGradeList, relatedLocationList);
 
     return (
       <div style={{ marginBottom: "2em" }}>
