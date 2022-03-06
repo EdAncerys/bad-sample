@@ -3,7 +3,6 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
 import { colors } from "../config/imports";
-import { muiQuery } from "../context";
 import RowButton from "../components/rowButton";
 import ShareToSocials from "../components/card/shareToSocials";
 
@@ -15,10 +14,17 @@ const DATE_MODULE = date;
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT -------------------------------------------------------------------
-import { useAppDispatch, setEnquireAction, setGoToAction } from "../context";
+import {
+  useAppDispatch,
+  setEnquireAction,
+  setGoToAction,
+  muiQuery,
+} from "../context";
 import { getEventsData } from "../helpers";
 
 const Event = ({ state, actions, libraries }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const event = state.source[data.type][data.id];
@@ -79,7 +85,6 @@ const Event = ({ state, actions, libraries }) => {
     };
   }, []);
 
-  const { sm, md, lg, xl } = muiQuery();
   const {
     date_time,
     email,
@@ -125,7 +130,7 @@ const Event = ({ state, actions, libraries }) => {
       <div
         className="primary-title"
         style={{
-          fontSize: 36,
+          fontSize: !lg ? 36 : 25,
           paddingBottom: `${marginVertical}px`,
         }}
       >
@@ -343,7 +348,6 @@ const Event = ({ state, actions, libraries }) => {
         style={{
           backgroundColor: colors.primary,
           color: colors.white,
-          marginTop: `2em`,
           padding: `2em`,
         }}
       >
@@ -429,6 +433,7 @@ const Event = ({ state, actions, libraries }) => {
     const currentPostGrade = event.event_grade[0];
     const currentPostLocation = event.event_location[0];
     const currentPostSpecialty = event.event_specialty[0];
+
     // get category name from category list
     let gradeName = "Grade";
     gradeName = gradeList.filter(
@@ -437,11 +442,11 @@ const Event = ({ state, actions, libraries }) => {
     if (gradeName[0]) gradeName = gradeName[0].name;
     // get list of events where category is the same as the current event
     let relatedGradeList = eventList.filter((event) => {
-      return event.event_grade.includes(currentPostGrade);
+      // return events that not current event id & include the same category  as the current event
+      return event.id !== id && event.event_grade.includes(currentPostGrade);
     });
     // get latest events from the list
-    relatedGradeList = eventList.slice(0, 3);
-    if (!eventList.length) return null; // dont render if no events
+    relatedGradeList = relatedGradeList.slice(0, 3);
 
     // get related event location list from the list
     let locationName = "Location";
@@ -451,12 +456,13 @@ const Event = ({ state, actions, libraries }) => {
     if (locationName[0]) locationName = locationName[0].name;
     // get list of events where location is the same as the current event
     let relatedLocationList = eventList.filter((event) => {
-      return event.event_location.includes(currentPostLocation);
+      // return events that not current event id & include the same category  as the current event
+      return event.id !== id && event.event_grade.includes(currentPostGrade);
     });
     // get latest events from the list
-    relatedLocationList = eventList.slice(0, 3);
+    relatedLocationList = relatedLocationList.slice(0, 3);
 
-    const ServeRelatedEvents = ({ list, name }) => {
+    const ServeRelatedEvents = ({ list }) => {
       if (!list.length) return null;
 
       return (
@@ -464,7 +470,6 @@ const Event = ({ state, actions, libraries }) => {
           {relatedGradeList.map((event, key) => {
             let eventDate = event.date;
             if (event.acf.date_time) eventDate = event.acf.date_time[0];
-            if (id === event.id) return null;
 
             const dateObject = new Date(eventDate.date);
             const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
@@ -514,8 +519,10 @@ const Event = ({ state, actions, libraries }) => {
       );
     };
 
+    if (!relatedGradeList.length && !relatedLocationList.length) return null;
+
     return (
-      <div>
+      <div style={{ marginBottom: "2em" }}>
         <div className="shadow" style={{ padding: "1em" }}>
           <div
             className="primary-title"
@@ -523,8 +530,8 @@ const Event = ({ state, actions, libraries }) => {
           >
             Related Content
           </div>
-          <ServeRelatedEvents list={relatedGradeList} name={gradeName} />
-          <ServeRelatedEvents list={relatedLocationList} name={locationName} />
+          <ServeRelatedEvents list={relatedGradeList} />
+          <ServeRelatedEvents list={relatedLocationList} />
         </div>
         <ServeFooter />
       </div>
@@ -535,10 +542,10 @@ const Event = ({ state, actions, libraries }) => {
     <BlockWrapper>
       <div style={{ backgroundColor: colors.white }}>
         <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
-          <ServeTitle />
-          <div style={styles.container}>
+          <div style={!lg ? styles.container : styles.containerMobile}>
             <div>
-              <div style={styles.eventInfo}>
+              <ServeTitle />
+              <div style={!lg ? styles.eventInfo : styles.eventInfoMobile}>
                 <ServeImage />
                 <ServeEventInfo />
               </div>
@@ -590,9 +597,19 @@ const styles = {
     gridTemplateColumns: `2fr 1fr`,
     gap: 20,
   },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
+    gap: 20,
+  },
   eventInfo: {
     display: "grid",
     gridTemplateColumns: `1fr 1fr`,
+    gap: 40,
+  },
+  eventInfoMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
     gap: 40,
   },
   date: {
