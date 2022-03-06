@@ -38,6 +38,8 @@ export const handleGetCookie = ({ name }) => {
     //if !cookie then return null
     if (!cookie) return null;
     // cookie value
+    //if !cookie then return null
+    if (!cookie) return null;
     let cookieValue = cookie.split("=")[1];
     // if cookie exists & not empty
     if (cookie && cookieValue) {

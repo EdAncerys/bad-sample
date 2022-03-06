@@ -71,7 +71,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     // if !data then break
     if (data.length === 0) return;
 
-    console.log("data: ", data); // debug
+    // console.log("data: ", data); // debug
     // apply date filter
     data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
     // filter by categories

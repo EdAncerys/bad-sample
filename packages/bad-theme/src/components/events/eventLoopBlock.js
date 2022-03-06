@@ -142,8 +142,10 @@ const EventLoopBlock = ({
               if (new Date(date.date) < new Date()) isArchive = true;
             });
           }
-          // if page is event archive break out of loop
+          // ⬇️ if page is event archive break out of loop
           if (events_archive && !isArchive) return null;
+          // ⬇️  dont return past events if page is not archive
+          if (!events_archive && isArchive) return null;
 
           if (!event_grade.includes(gradeFilterId) && gradeFilterId !== 97)
             return null;
