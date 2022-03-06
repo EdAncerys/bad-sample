@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 import { setGoToAction } from "../../context";
+import Loading from "../../components/loading";
 // CONTEXT ----------------------------------------------------------------
 import { useAppState } from "../../context";
 
@@ -10,7 +11,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const slug = state.router.link;
 
-  const { applicationData } = useAppState();
+  const { applicationData, isActiveUser } = useAppState();
 
   const defaultStyle = {};
   const activeStyle = {
@@ -40,6 +41,15 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   if (slug.includes("step-3")) stepThree = activeStyle;
   if (slug.includes("step-4")) stepFour = activeStyle;
   if (slug.includes("step-5")) stepFive = activeStyle;
+
+  useEffect(() => {
+    // redirect to / if !isActiveUser || !applicationData
+    if (!isActiveUser || !applicationData)
+      setGoToAction({ path: `/`, actions });
+  }, [isActiveUser, applicationData]);
+
+  // return loading placeholder if if !isActiveUser || !applicationData
+  if (!isActiveUser || !applicationData) return <Loading />;
 
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
