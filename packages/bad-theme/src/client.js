@@ -57,8 +57,8 @@ const BADTheme = {
           actions.source.fetch(`/menu_features`), // pre fetch menu featured CPT
         ]);
 
-        // pre fetch WP MENU --------------------------------------------------------------
-        await getWPMenu({ state, actions });
+        // pre fetch WP MENU
+        // await getWPMenu({ state, actions });
 
         // handle auth login auth via cookies beforeCSR method
         // await authCookieActionBeforeCSR({ state, initialState });

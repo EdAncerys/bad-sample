@@ -16,19 +16,17 @@ const Navigation = ({ state, actions, libraries }) => {
   const [wpMoreMenu, setWpMoreMenu] = useState([]);
   const [featured, setFeatured] = useState([]);
   const useEffectRef = useRef(false);
-  // ⬇️ getting wp menu & featured from state
-  const menuData = state.theme.menu;
 
   const MAIN_NAV_LENGTH = 6; // main navigation length config
-  const BANNER_HEIGHT = state.theme.bannerHeight;
-  const marginHorizontal = state.theme.marginHorizontal;
 
   // active menu slug ref
   const activeMenu = useRef(null);
   const activeChildMenu = useRef(null);
 
   useEffect(async () => {
-    if (!menuData) return;
+    // ⬇️ getting wp menu & featured from state
+    if (!state.theme.menu) return;
+    const menuData = state.theme.menu;
     const menuLength = menuData.length;
 
     const wpMainMenu = menuData.slice(0, MAIN_NAV_LENGTH);
@@ -41,7 +39,7 @@ const Navigation = ({ state, actions, libraries }) => {
     return () => {
       useEffectRef.current = false; // clean up function
     };
-  }, []);
+  }, [state.theme.menu]);
 
   if (!wpMoreMenu.length || !wpMainMenu.length)
     return (

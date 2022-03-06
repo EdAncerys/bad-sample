@@ -3,7 +3,6 @@ import {
   authenticateAppAction,
   getUserStoreAction,
   getUserDataByContactId,
-  setPlaceholderAction,
 } from "../context";
 
 const fetchCompleteHandler = ({ initialState }) => {
@@ -112,11 +111,7 @@ export const authCookieActionAfterCSR = async ({ state, dispatch }) => {
     } catch (error) {
       console.log("error", error);
       handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
-    } finally {
-      setPlaceholderAction({ dispatch, isPlaceholder: false });
     }
-  } else {
-    setPlaceholderAction({ dispatch, isPlaceholder: false });
   }
 };
 

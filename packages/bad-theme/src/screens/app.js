@@ -45,13 +45,13 @@ import {
   useAppState,
   anchorScrapper,
   authCookieActionAfterCSR,
+  getWPMenu,
+  setPlaceholderAction,
 } from "../context";
 
 const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { isActiveUser, isPlaceholder } = useAppState();
-
-  console.log(isPlaceholder);
 
   let endPoint = state.router.link;
   const data = state.source.get(endPoint);
@@ -60,11 +60,16 @@ const App = ({ state, actions }) => {
   const useEffectRef = useRef(true);
 
   useEffect(async () => {
+    if (!isPlaceholder) return; // trigger only once
     // ⬇️  get user data if cookie is set
     await authCookieActionAfterCSR({ state, dispatch });
+    // ⬇️  pre-fetch app menu from wp
+    await getWPMenu({ state, actions });
+    // ⬇️  set placeholder after async actions to false
+    setPlaceholderAction({ dispatch, isPlaceholder: false });
 
     return () => {
-      searchFilterRef.current = false; // clean up function
+      useEffectRef.current = false; // clean up function
     };
   }, []);
 
@@ -72,17 +77,6 @@ const App = ({ state, actions }) => {
     // ⬇️ anchor tag scrapper
     anchorScrapper();
   }, [endPoint]);
-
-  // if (isPlaceholder) return <AnimatedPlaceholder />;
-
-  // const [toggle, set] = useState(true);
-
-  // // toggle value on setTimeout for loading screen
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     set(false);
-  //   }, 3000);
-  // }, []);
 
   const transitions = useTransition(isPlaceholder, {
     from: { opacity: 0 },
