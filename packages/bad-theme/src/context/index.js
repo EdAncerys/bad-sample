@@ -11,6 +11,7 @@ import {
   setDashboardPathAction,
   setNotificationAction,
   setDebitHandlerAction,
+  setPlaceholderAction,
 } from "./actions/actions";
 import { muiQuery } from "./mediaQueryContext";
 import {
@@ -63,6 +64,7 @@ import { useIsMounted } from "../helpers/useIsMounted";
 import { errorHandler } from "../helpers/errorHandler";
 import { anchorScrapper } from "../helpers/contentScrapper";
 import { copyToClipboard } from "../helpers/domEvents";
+import { authCookieActionAfterCSR } from "../helpers";
 
 export {
   AppProvider,
@@ -117,4 +119,6 @@ export {
   setNotificationAction,
   setDebitHandlerAction,
   copyToClipboard,
+  authCookieActionAfterCSR,
+  setPlaceholderAction,
 };

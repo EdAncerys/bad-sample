@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Switch from "@frontity/components/switch";
 import { colors } from "../config/imports";
+import { useTransition, animated } from "react-spring";
 
 // COMPONENTS ---------------------------------------------------------
 import Header from "../components/header/header";
@@ -39,25 +40,142 @@ import Error from "./error";
 import Loading from "../components/loading";
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, anchorScrapper } from "../context";
+import {
+  useAppDispatch,
+  useAppState,
+  anchorScrapper,
+  authCookieActionAfterCSR,
+} from "../context";
 
 const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { isActiveUser, isPlaceholder } = useAppState();
 
+  console.log(isPlaceholder);
+
   let endPoint = state.router.link;
   const data = state.source.get(endPoint);
   console.log("INDEX data", data); // debug
+
+  const useEffectRef = useRef(true);
+
+  useEffect(async () => {
+    // ⬇️  get user data if cookie is set
+    await authCookieActionAfterCSR({ state, dispatch });
+
+    return () => {
+      searchFilterRef.current = false; // clean up function
+    };
+  }, []);
 
   useEffect(() => {
     // ⬇️ anchor tag scrapper
     anchorScrapper();
   }, [endPoint]);
 
-  // show placeholder logo while pre fetch user data
   // if (isPlaceholder) return <AnimatedPlaceholder />;
 
-  // RETURN ------------------------------------------------------------
+  // const [toggle, set] = useState(true);
+
+  // // toggle value on setTimeout for loading screen
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     set(false);
+  //   }, 3000);
+  // }, []);
+
+  const transitions = useTransition(isPlaceholder, {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
+    reverse: isPlaceholder,
+    delay: 200,
+    config: { mass: 1, tension: 280, friction: 120 },
+  });
+
+  // ⬇️  handle application animation before data pre fetch
+  // show placeholder logo while pre fetch user data is completed
+  // RETURN --------------------------------------------------------------------
+  return transitions(({ opacity }, appContent) =>
+    appContent ? (
+      <animated.div
+        style={{ opacity: opacity.to({ range: [0.0, 1.0], output: [0.1, 1] }) }}
+      >
+        <AnimatedPlaceholder />
+      </animated.div>
+    ) : (
+      <animated.div
+        style={{ opacity: opacity.to({ range: [0.0, 1.0], output: [0.1, 1] }) }}
+      >
+        <div
+          onClick={(e) => {
+            state.theme.childMenuRef = ""; // reset child menu ref value
+            state.theme.activeDropDownRef = "menu reset"; // reset menu ref value
+          }}
+        >
+          <div style={{ ...styles.container }}>
+            <Header />
+            <Breadcrumbs />
+            <BlockWrapper>
+              <LoginModal />
+              <ErrorModal />
+              <CreateAccountModal />
+              <EnquireModal />
+            </BlockWrapper>
+
+            <div className="flex-col">
+              <Switch>
+                <Loading when={data.isFetching} />
+                <Error when={data.isError} />
+                <BlocksPage when={data.route.includes("blocks")} />
+
+                <Login when={endPoint === "/login/"} />
+                <CreateAccount when={endPoint === "/create-account/"} />
+
+                <AccountDashboard
+                  when={endPoint === "/dashboard/" && isActiveUser}
+                />
+                <Contact when={endPoint === "/contact-us/"} />
+                <RegistrationStepOne
+                  when={endPoint === "/membership/step-1-the-process/"}
+                />
+                <RegistrationStepTwo
+                  when={endPoint === "/membership/step-2-category-selection/"}
+                />
+                <RegistrationStepThree
+                  when={endPoint === "/membership/step-3-personal-information/"}
+                />
+                <RegistrationStepFour
+                  when={endPoint === "/membership/step-4-professional-details/"}
+                />
+                <RegistrationStepFive
+                  when={endPoint === "/membership/step-5-sig-questions/"}
+                />
+                <ThankYou when={endPoint === "/membership/thank-you/"} />
+                <EventsLandingPage when={endPoint === "/events/"} />
+                <PilsArchive
+                  when={endPoint === "/patient-information-leaflets/"}
+                />
+
+                <Pils when={data.isPils} />
+                <Event when={data.isEvents} />
+                <Venue when={data.isVenues} />
+                <DermGroupsCharity when={data.isDermGroupsCharity} />
+                <Covid when={data.isCovid19} />
+
+                <Home when={data.isHome} />
+
+                <Post when={data.isPost} />
+                <Page when={data.isPage} />
+              </Switch>
+            </div>
+            <Footer />
+          </div>
+        </div>
+      </animated.div>
+    )
+  );
+
   return (
     <div
       onClick={(e) => {

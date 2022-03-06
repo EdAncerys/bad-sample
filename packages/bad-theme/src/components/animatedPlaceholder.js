@@ -10,17 +10,7 @@ import { colors } from "../config/imports";
 const AnimatedPlaceholder = ({ state, actions }) => {
   const { isPlaceholder } = useAppState();
 
-  const [flip, set] = useState(false);
-
   // HELPERS ---------------------------------------------
-
-  const styles = useSpring({
-    to: [{ opacity: 1 }],
-    from: { opacity: 0 },
-    config: { delay: 200, duration: 4000 },
-    reset: true,
-    reverse: isPlaceholder,
-  });
 
   return (
     <div
@@ -35,26 +25,24 @@ const AnimatedPlaceholder = ({ state, actions }) => {
         justifyContent: "center",
       }}
     >
-      <animated.div style={styles}>
-        <div
+      <div
+        style={{
+          width: "90vw",
+          maxWidth: state.theme.contentContainer,
+          height: "100%",
+          overflow: "hidden",
+          margin: "0 auto",
+        }}
+      >
+        <Image
+          src={Placeholder}
+          alt="BAD Placeholder"
           style={{
-            width: "90vw",
-            maxWidth: state.theme.contentContainer,
+            width: "100%",
             height: "100%",
-            overflow: "hidden",
-            margin: "0 auto",
           }}
-        >
-          <Image
-            src={Placeholder}
-            alt="BAD Placeholder"
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-          />
-        </div>
-      </animated.div>
+        />
+      </div>
     </div>
   );
 };

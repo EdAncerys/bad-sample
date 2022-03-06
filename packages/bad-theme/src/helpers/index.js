@@ -1,12 +1,17 @@
 import { handleGetCookie, handleSetCookie } from "./cookie";
-import { authenticateAppAction, getUserStoreAction } from "../context";
+import {
+  authenticateAppAction,
+  getUserStoreAction,
+  getUserDataByContactId,
+  setPlaceholderAction,
+} from "../context";
 
 const fetchCompleteHandler = ({ initialState }) => {
-  console.log("⬇️ user date pre fetch completed");
+  console.log("⬇️ user pre-fetch completed");
   initialState.isPlaceholder = false;
 };
 
-export const authLogViaCookie = async ({ state, initialState }) => {
+export const authCookieActionBeforeCSR = async ({ state, initialState }) => {
   const cookie = handleGetCookie({ name: state.auth.COOKIE_NAME });
 
   // ⏬⏬  user validation & auth ⏬⏬
@@ -77,6 +82,41 @@ export const authLogViaCookie = async ({ state, initialState }) => {
     }
   } else {
     fetchCompleteHandler({ initialState });
+  }
+};
+
+export const authCookieActionAfterCSR = async ({ state, dispatch }) => {
+  const cookie = handleGetCookie({ name: state.auth.COOKIE_NAME });
+
+  // ⏬⏬  user validation & auth ⏬⏬
+  if (cookie) {
+    console.log("🍪 found", cookie);
+    let { jwt, contactid } = cookie;
+
+    if (!contactid || !jwt) {
+      console.log("Failed to Auth 🍪 data");
+      handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
+      return null;
+    }
+
+    try {
+      const userData = await getUserDataByContactId({
+        state,
+        dispatch,
+        jwt,
+        contactid,
+      });
+      if (!userData) throw new Error("Error getting userData.");
+
+      console.log("⬇️ userData successfully pre-fetched", userData); // debug
+    } catch (error) {
+      console.log("error", error);
+      handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
+    } finally {
+      setPlaceholderAction({ dispatch, isPlaceholder: false });
+    }
+  } else {
+    setPlaceholderAction({ dispatch, isPlaceholder: false });
   }
 };
 

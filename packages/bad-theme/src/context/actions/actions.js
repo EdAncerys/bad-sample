@@ -62,10 +62,18 @@ export const setDashboardPathAction = ({ dispatch, dashboardPath }) => {
 
 export const setNotificationAction = ({ dispatch, isVisibleNotification }) => {
   console.log("setNotificationAction triggered"); //debug
-  dispatch({ type: "SET_DEBIT_NOTIFICATION_ACTION", payload: isVisibleNotification });
+  dispatch({
+    type: "SET_DEBIT_NOTIFICATION_ACTION",
+    payload: isVisibleNotification,
+  });
 };
 
 export const setDebitHandlerAction = ({ dispatch, directDebitPath }) => {
   console.log("setDebitHandlerAction triggered"); //debug
   dispatch({ type: "SET_DEBIT_HANDLER_ACTION", payload: directDebitPath });
+};
+
+export const setPlaceholderAction = ({ dispatch, isPlaceholder }) => {
+  console.log("setPlaceholderAction triggered"); //debug
+  dispatch({ type: "SET_PLACEHOLDER_ACTION", payload: isPlaceholder });
 };

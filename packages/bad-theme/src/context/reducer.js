@@ -75,6 +75,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, isVisibleNotification: action.payload };
     case "SET_DEBIT_HANDLER_ACTION":
       return { ...state, directDebitPath: action.payload };
+    case "SET_PLACEHOLDER_ACTION":
+      return { ...state, isPlaceholder: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
