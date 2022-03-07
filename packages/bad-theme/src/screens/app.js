@@ -37,6 +37,7 @@ import Covid from "./covid";
 import PaymentConfirmation from "./paymentConfirmation";
 import VideoArchive from "../components/videoArchive";
 import Video from "../components/video";
+import FindADermatologist from "../components/findADermatologist";
 // SCREEN HELPERS ---------------------------------------------------------
 import Error from "./error";
 import Loading from "../components/loading";
@@ -127,7 +128,9 @@ const App = ({ state, actions }) => {
               <Covid when={data.isCovid19} />
               <VideoArchive when={endPoint === "/videos/"} />
               <Home when={data.isHome} />
-
+              <FindADermatologist
+                when={endPoint === "/find-a-dermatologist/"}
+              />
               <Post when={data.isPost} />
               <Page when={data.isPage} />
               <Video when={data.isVideos} />
