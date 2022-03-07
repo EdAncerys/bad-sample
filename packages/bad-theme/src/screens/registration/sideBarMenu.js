@@ -83,8 +83,6 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   };
 
   const ServeContent = () => {
-    console.log("form", form);
-
     const ServeStepFive = () => {
       if (form.bad_organisedfor !== "810170001") return null; // SIG application link
 

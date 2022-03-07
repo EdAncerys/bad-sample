@@ -91,6 +91,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const [genderList, setGenderList] = useState([]);
 
   const [hospitalData, setHospitalData] = useState(null);
+  const [canChangeHospital, setCanChangeHospital] = useState(true); // allow user to change hospital is no BAD applications are found
   const [selectedHospital, setSelectedHospital] = useState(null);
   const isHospitalValue = formData.py3_hospitalid;
   const hospitalSearchRef = useRef("");
@@ -110,6 +111,18 @@ const SIGApplication = ({ state, actions, libraries }) => {
         [`${name}`]: data.value || "",
       }));
     };
+
+    if (dynamicsApps) {
+      const subsData = dynamicsApps.subs.data; // get subs/approved apps data form dynamic apps
+      // check if user have application under BAD as approved status
+      const isApprovedBAD =
+        subsData.filter((item) => item.bad_organisedfor === "BAD").length > 0;
+      // if user have application pending under reviewed status redirect to application list
+      if (isApprovedBAD) {
+        console.log("🤖 user have BAD application approved");
+        setCanChangeHospital(false);
+      }
+    }
 
     // hospital id initial value
     let hospitalId = null;
@@ -769,19 +782,21 @@ const SIGApplication = ({ state, actions, libraries }) => {
                         }}
                       >
                         {selectedHospital}
-                        <div
-                          className="filter-icon"
-                          style={{ top: -7 }}
-                          onClick={handleClearHospital}
-                        >
-                          <CloseIcon
-                            style={{
-                              fill: colors.darkSilver,
-                              padding: 0,
-                              width: "0.7em",
-                            }}
-                          />
-                        </div>
+                        {canChangeHospital && (
+                          <div
+                            className="filter-icon"
+                            style={{ top: -7 }}
+                            onClick={handleClearHospital}
+                          >
+                            <CloseIcon
+                              style={{
+                                fill: colors.darkSilver,
+                                padding: 0,
+                                width: "0.7em",
+                              }}
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

@@ -249,24 +249,6 @@ const RegistrationStepTwo = ({ state, actions }) => {
           borderTop: `1px solid ${colors.silverFillTwo}`,
         }}
       >
-        <label className="bold">Membership Type</label>
-        {/* <Form.Select
-          name="bad_organisedfor"
-          value={formData.bad_organisedfor}
-          onChange={handleChange}
-          className="input"
-        >
-          <option value="null" hidden>
-            Membership Type
-          </option>
-          <option value="810170000">BAD Membership</option>
-          <option value="810170001">SIG Membership</option>
-        </Form.Select>
-        <FormError id="bad_organisedfor" /> */}
-        {/* <div className="form-select input" style={{ backgroundImage: "none" }}>
-          BAD Membership
-        </div> */}
-
         <ServeBADMembershipCategory />
         <ServeSIGMembershipCategory />
       </div>
