@@ -35,6 +35,7 @@ import DermGroupsCharity from "./dermGroupsCharity";
 import Covid from "./covid";
 import PaymentConfirmation from "./paymentConfirmation";
 import VideoArchive from "../components/videoArchive";
+import VideoGuides from "../components/videoGuides";
 import Video from "../components/video";
 // SCREEN HELPERS ---------------------------------------------------------
 import Error from "./error";
@@ -94,28 +95,30 @@ const App = ({ state, actions }) => {
               <Login when={endPoint === "/login/"} />
               <CreateAccount when={endPoint === "/create-account/"} />
 
-            <AccountDashboard
-              when={endPoint === "/dashboard/" && isActiveUser}
-            />
-            <Contact when={endPoint === "/contact-us/"} />
-            <RegistrationStepOne
-              when={endPoint === "/membership/step-1-the-process/"}
-            />
-            <RegistrationStepTwo
-              when={endPoint === "/membership/step-2-category-selection/"}
-            />
-            <RegistrationStepThree
-              when={endPoint === "/membership/step-3-personal-information/"}
-            />
-            <RegistrationStepFour
-              when={endPoint === "/membership/step-4-professional-details/"}
-            />
-            <RegistrationStepFive
-              when={endPoint === "/membership/step-5-sig-questions/"}
-            />
-            <ThankYou when={endPoint === "/membership/thank-you/"} />
-            <EventsLandingPage when={endPoint === "/events/"} />
-            <PilsArchive when={endPoint === "/patient-information-leaflets/"} />
+              <AccountDashboard
+                when={endPoint === "/dashboard/" && isActiveUser}
+              />
+              <Contact when={endPoint === "/contact-us/"} />
+              <RegistrationStepOne
+                when={endPoint === "/membership/step-1-the-process/"}
+              />
+              <RegistrationStepTwo
+                when={endPoint === "/membership/step-2-category-selection/"}
+              />
+              <RegistrationStepThree
+                when={endPoint === "/membership/step-3-personal-information/"}
+              />
+              <RegistrationStepFour
+                when={endPoint === "/membership/step-4-professional-details/"}
+              />
+              <RegistrationStepFive
+                when={endPoint === "/membership/step-5-sig-questions/"}
+              />
+              <ThankYou when={endPoint === "/membership/thank-you/"} />
+              <EventsLandingPage when={endPoint === "/events/"} />
+              <PilsArchive
+                when={endPoint === "/patient-information-leaflets/"}
+              />
 
               <Pils when={data.isPils} />
               <Event when={data.isEvents} />

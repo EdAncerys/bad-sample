@@ -52,7 +52,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
-    const path = `/${postPath}/`;
+    const path = `/videos/`;
     await actions.source.fetch(path); // fetch CPT videoData
 
     let videoData = state.source.get(path);

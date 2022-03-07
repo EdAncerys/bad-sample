@@ -8,121 +8,112 @@ import SearchContainer from "./searchContainer";
 import TypeFilters from "./typeFilters";
 import { colors } from "../config/imports";
 import CloseIcon from "@mui/icons-material/Close";
-
+import { Dropdown } from "react-bootstrap";
 const VideoArchive = ({ state, actions, libraries }) => {
   const [heroBannerBlock, setHeroBannerBlock] = useState();
   const [guidanceCategory, setGuidanceCategory] = useState(null);
   const [postData, setPostData] = useState(null);
   const [searchFilter, setSearchFilter] = useState(null);
-  const [guidanceFilter, setGuidanceFilter] = useState(null);
-  const [groupeType, setGroupeType] = useState(null);
+  const [filters, setFilters] = useState();
 
   const { isActiveUser } = useAppState();
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const searchFilterRef = useRef(null);
-  const currentSearchFilterRef = useRef(null);
-  const typeFilterRef = useRef(null);
-  const loadMoreRef = useRef(null);
-  const guidanceCategoryRef = useRef("");
-
+  // const currentSearchFilterRef = useRef(null);
+  // const typeFilterRef = useRef(null);
+  // const loadMoreRef = useRef(null);
+  // const specialtyRef = useRef(null);
+  // const useEffectRef = useRef(null);
+  // const categoryFilter = null;
+  const guidanceFilter = null;
   const marginHorizontal = state.theme.marginHorizontal;
-  const LIMIT = 6;
-  //HANDLERS
-  const handleSearch = () => {
-    const input = searchFilterRef.current.value.toLowerCase() || searchFilter;
-    console.log("INPUCIK", input);
-    currentSearchFilterRef.current = input;
-    let data = state.source.get(state.router.link);
+  // const LIMIT = 6;
 
-    const categoryId = guidanceCategoryRef.current.value;
-    console.log("KATEGORICZKA", categoryId);
-    console.log(data.items);
-    if (categoryId) {
-      data = data.items.filter((item) =>
-        item.guidance_category.includes(Number(categoryId))
+  const ServeFilterMenu = () => {
+    const SpecialtyFilters = () => {
+      if (!state.source.event_specialty) return null;
+      const event_specialty = state.source.get("/event_specialty/");
+      const data = Object.values(state.source.event_specialty);
+      console.log("EVENT SPECIALTIES", data[1]);
+
+      return (
+        <div>
+          <select
+            name="specialty-filters"
+            id="specialty-filters"
+            onChange={(e) => {
+              console.log("ONCHANGE", filters);
+              console.log("EVENT_ONCHANGE", e.target.value);
+              setFilters((filters) => ({
+                ...filters,
+                specialty: e.target.value,
+              }));
+            }}
+          >
+            <option value="">All specialties</option>
+            {data.map((item) => {
+              return <option value={item.id}>{item.name}</option>;
+            })}
+          </select>
+        </div>
       );
-    }
+    };
+    const GradeFilters = () => {
+      if (!state.source.event_grade) return null;
+      const data = Object.values(state.source.event_grade);
 
-    if (!!input) {
-      data = data.items.filter((item) => {
-        let title = item.link;
-        // let content = item.content.rendered;
-
-        if (title) title = title.toLowerCase().includes(input.toLowerCase());
-        // if (content)
-        //   content = content.toLowerCase().includes(input.toLowerCase());
-
-        // return title || content;
-        return title;
-      });
-    }
-    console.log("DATA AFTER FILTER", data);
-    setPostData(data);
-    setSearchFilter(input);
-    if (categoryId) setGuidanceFilter(categoryId);
-  };
-
-  const handleTypeSearch = () => {
-    const input = typeFilterRef.current;
-    const categoryId = guidanceCategoryRef.current.value;
-    let data = Object.values(state.source[postPath]); // add postListData object to data array
-
-    if (categoryId) {
-      data = data.filter((item) =>
-        item.guidance_category.includes(Number(categoryId))
+      console.log("EVENT SPECIALTIES", data[1]);
+      return (
+        <div>
+          <select
+            name="event-grades"
+            id="event-grades"
+            onChange={(e, filters) => {
+              console.log("ONCHANGE", filters);
+              console.log("EVENT_ONCHANGE", e);
+              setFilters(...filters, { specialty: e.target.value });
+            }}
+          >
+            <option value="">Grade Filters</option>
+            {data.map((item) => {
+              return <option value={item.id}>{item.name}</option>;
+            })}
+          </select>
+        </div>
       );
-    }
-
-    if (currentSearchFilterRef.current)
-      data = data.filter((item) => {
-        let title = item.title.rendered;
-        let content = item.content.rendered;
-        if (title)
-          title = title.toLowerCase().includes(currentSearchFilterRef.current);
-        if (content)
-          content = content
-            .toLowerCase()
-            .includes(currentSearchFilterRef.current);
-
-        return title || content;
-      });
+    };
+    const PaymentFilters = () => {
+      const paymentType = ["Paid", "Free", "Free to BAD"];
+      return (
+        <div>
+          <select
+            name="payments"
+            id="payments"
+            onChange={(e, filters) => {
+              console.log("ONCHANGE", filters);
+              console.log("EVENT_ONCHANGE", e);
+              setFilters(...filters, { specialty: e.target.value });
+            }}
+          >
+            <option value="">Video type</option>
+            {paymentType.map((item) => {
+              return <option value={item}>{item}</option>;
+            })}
+          </select>
+        </div>
+      );
+    };
+    return (
+      <div>
+        <div className="primary-title">Filters: </div>
+        <SpecialtyFilters />
+        <GradeFilters />
+        <PaymentFilters />
+      </div>
+    );
   };
 
-  const handleClearSearchFilter = () => {
-    console.log("CLEAR FILTER");
-    let data = state.source.videos; // add postListData object to data array
-    console.log("DATA CLEARER", data);
-    setSearchFilter(null);
-    searchFilterRef.current = null;
-    currentSearchFilterRef.current = null;
-
-    if (!typeFilterRef.current) {
-      setPostData(data.slice(0, Number(LIMIT)));
-    } else {
-      handleTypeSearch();
-    }
-  };
-
-  const handleClearCategoryFilter = () => {
-    let data = Object.values(state.source[postPath]); // add postListData object to data array
-    guidanceCategoryRef.current = "";
-    setGuidanceFilter(null);
-    setPostListData(data.slice(0, Number(LIMIT)));
-
-    handleTypeSearch();
-  };
-
-  const handleClearTypeFilter = () => {
-    typeFilterRef.current = null;
-    let data = Object.values(state.source[postPath]); // add postListData object to data array
-
-    if (!currentSearchFilterRef.current) {
-      setPostListData(data.slice(0, Number(post_limit || LIMIT)));
-    } else {
-      handleSearch();
-    }
-  };
   // SERVERS
   const ServeNoVideosFound = () => {
     return (
@@ -185,7 +176,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
     };
 
     const ServeGuidanceType = () => {
-      if (!guidanceCategory) return null;
+      if (!filters.specialty) return null;
 
       return (
         <div
@@ -196,9 +187,8 @@ const VideoArchive = ({ state, actions, libraries }) => {
         >
           <select
             name="guidance"
-            ref={guidanceCategoryRef}
-            value={guidanceCategoryRef.current.value}
-            onChange={handleSearch}
+            ref={filters.specialty}
+            value={filters.specialty}
             className="input"
             style={{ height: 45 }}
           >
@@ -237,35 +227,26 @@ const VideoArchive = ({ state, actions, libraries }) => {
               <SearchContainer
                 title="Search for Videos"
                 searchFilterRef={searchFilterRef}
-                handleSearch={handleSearch}
+                // handleSearch={handleSearch}
               />
-              <ServeGuidanceType />
+              {/* <ServeGuidanceType /> */}
+              <ServeFilter />
             </div>
 
             <div className="flex" style={{ margin: "0.5em 0" }}>
-              <ServeSearchFilter />
-              <ServeGuidanceFilter />
+              {/* <ServeFilterMenu /> */}
+              {/* <ServeSearchFilter /> */}
+              {/* <ServeGuidanceFilter /> */}
             </div>
-            <TypeFilters
-              filters={groupeType}
-              handleSearch={handleTypeSearch}
-              typeFilterRef={typeFilterRef}
-              handleClearTypeFilter={handleClearTypeFilter}
-              title="Filter"
-            />
           </div>
         </BlockWrapper>
       </div>
     );
   };
-  const VideoArchive = ({ post }) => {
+  const VideoArchivePost = ({ post }) => {
     // GET VIMEO COVER
-    console.log("VIDEO POST", post);
-    const [vimeoCover, setVimeoCover] = React.useState(
-      "https://badadmin.skylarkdev.co/wp-content/uploads/2022/02/VIDEO-LIBRARY.jpg"
-    );
-
-    if (post.acf.private && !isActiveUser) return null; // If user isn't logged in, the videos set to private will not show
+    const vimeoCover =
+      "https://badadmin.skylarkdev.co/wp-content/uploads/2022/02/VIDEO-LIBRARY.jpg";
 
     return (
       <Card
@@ -282,8 +263,9 @@ const VideoArchive = ({ state, actions, libraries }) => {
     );
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     actions.source.fetch("/videos/");
+    actions.source.fetch("/event_specialty/");
 
     const fetchHeroBanner = async () => {
       const fetchInfo = await fetch(
@@ -306,12 +288,14 @@ const VideoArchive = ({ state, actions, libraries }) => {
         });
       }
     };
+
     const data = state.source.get(state.router.link);
     setPostData(data.items);
+
     console.log("DATERO ", data);
     fetchHeroBanner();
   }, []);
-  if (!postData) return null;
+
   return (
     <>
       <HeroBanner block={heroBannerBlock} />
@@ -323,7 +307,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
             {postData.length > 0 ? (
               postData.map((item) => {
                 const post = state.source[item.type][item.id];
-                return <VideoArchive post={post} />;
+                return <VideoArchivePost post={post} />;
               })
             ) : (
               <ServeNoVideosFound />

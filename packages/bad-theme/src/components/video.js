@@ -8,9 +8,12 @@ import { colors } from "../config/colors";
 import Image from "@frontity/components/image";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import LockIcon from "@mui/icons-material/Lock";
+import { useAppState } from "../context";
 const Video = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
+
+  const { isActiveUser } = useAppState();
 
   if (!post) return loading;
   // STATE
@@ -88,6 +91,15 @@ const Video = ({ state, actions }) => {
     };
     const ServeDateAndPrice = () => {
       const ServePrice = () => {
+        if (!isActiveUser)
+          return (
+            <div
+              className="primary-title"
+              style={{ fontSize: 20, display: "flex", alignItems: "center" }}
+            >
+              Login to watch or buy
+            </div>
+          );
         if (post.acf.private && post.acf.price)
           return (
             <div
