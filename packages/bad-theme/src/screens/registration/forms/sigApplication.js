@@ -307,38 +307,37 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
     if (!isValid) return null;
 
-    console.log("formData", formData); // debug
+    // console.log("formData", formData); // debug
 
-    // setFetching(true);
+    try {
+      setFetching(true);
+      const store = await setUserStoreAction({
+        state,
+        actions,
+        dispatch,
+        applicationData,
+        isActiveUser,
+        dynamicsApps,
+        membershipApplication: { stepFive: true }, // set stepOne to complete
+        data: formData,
+      });
 
-    // try {
-    //   const store = await setUserStoreAction({
-    //     state,
-    //     actions,
-    //     dispatch,
-    //     applicationData,
-    //     isActiveUser,
-    //     dynamicsApps,
-    //     membershipApplication: { stepFive: true }, // set stepOne to complete
-    //     data: formData,
-    //   });
+      if (!store.success)
+        throw new Error("Failed to update application record"); // throw error if store is not successful
 
-    //   if (!store.success)
-    //     throw new Error("Failed to update application record"); // throw error if store is not successful
+      await setCompleteUserApplicationAction({
+        state,
+        dispatch,
+        isActiveUser,
+      });
 
-    //   await setCompleteUserApplicationAction({
-    //     state,
-    //     dispatch,
-    //     isActiveUser,
-    //   });
-
-    //   let slug = `/membership/thank-you/`;
-    //   if (isActiveUser) setGoToAction({ path: slug, actions });
-    // } catch (error) {
-    //   console.log(error);
-    // } finally {
-    //   setFetching(false);
-    // }
+      let slug = `/membership/thank-you/`;
+      if (isActiveUser) setGoToAction({ path: slug, actions });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setFetching(false);
+    }
   };
 
   const handleInputChange = (e) => {
@@ -598,6 +597,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
               type="text"
               className="form-control input"
               placeholder="Address Line 2"
+              style={{ margin: "0.5em 0" }}
             />
           )}
           {inputValidator.py3_addresstowncity && (
@@ -609,6 +609,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 type="text"
                 className="form-control input"
                 placeholder="City"
+                style={{ margin: "0.5em 0" }}
               />
               <FormError id="py3_addresstowncity" />
             </div>
@@ -622,6 +623,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 type="text"
                 className="form-control input"
                 placeholder="County/State"
+                style={{ margin: "0.5em 0" }}
               />
               <FormError id="py3_addresscountystate" />
             </div>
@@ -635,6 +637,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 type="text"
                 className="form-control input"
                 placeholder="Postcode/Zip"
+                style={{ margin: "0.5em 0" }}
               />
               <FormError id="py3_addresszippostalcode" />
             </div>
@@ -648,6 +651,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 type="text"
                 className="form-control input"
                 placeholder="Country"
+                style={{ margin: "0.5em 0" }}
               />
               <FormError id="py3_addresscountry" />
             </div>
