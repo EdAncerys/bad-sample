@@ -263,9 +263,9 @@ const RegistrationStepTwo = ({ state, actions }) => {
           <option value="810170001">SIG Membership</option>
         </Form.Select>
         <FormError id="bad_organisedfor" /> */}
-        <div className="form-select input" style={{ backgroundImage: "none" }}>
+        {/* <div className="form-select input" style={{ backgroundImage: "none" }}>
           BAD Membership
-        </div>
+        </div> */}
 
         <ServeBADMembershipCategory />
         <ServeSIGMembershipCategory />
