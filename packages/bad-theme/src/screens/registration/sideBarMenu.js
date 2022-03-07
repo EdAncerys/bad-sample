@@ -69,7 +69,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
       <div
         className="primary-title"
         style={{
-          fontSize: 22,
+          fontSize: 20,
           borderBottom: `1px solid ${colors.silverFillTwo}`,
           padding: `0 1em 1em 0`,
         }}

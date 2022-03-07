@@ -48,7 +48,7 @@ const SocialIcons = ({ state, actions, libraries, block }) => {
       <div className="flex" style={{ justifyContent: "center" }}>
         <div
           className="primary-title"
-          style={{ fontSize: 24, paddingBottom: `1em` }}
+          style={{ fontSize: 26, paddingBottom: `1em` }}
         >
           <Html2React html={title} />
         </div>

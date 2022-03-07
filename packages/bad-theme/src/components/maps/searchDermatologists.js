@@ -99,7 +99,7 @@ const SearchDermatologists = ({ state, actions, libraries, block }) => {
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
     return (
-      <div className="flex primary-title" style={{ fontSize: 36 }}>
+      <div className="flex primary-title" style={{ fontSize: 26 }}>
         Search For Dermatologists
       </div>
     );

@@ -28,7 +28,7 @@ const styles = {
     paddingTop: "5%",
   },
   title: {
-    fontSize: 40,
+    fontSize: 26,
     fontWeight: "500",
     color: colors.primary,
   },

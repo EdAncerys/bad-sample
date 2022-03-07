@@ -85,7 +85,7 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
         <div
           className="primary-title"
           style={{
-            fontSize: 24,
+            fontSize: 26,
             paddingTop: `1em`,
           }}
         >

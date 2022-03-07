@@ -57,7 +57,7 @@ const TitleBlock = ({
       <div
         className="flex primary-title"
         style={{
-          fontSize: fontSize || 36,
+          fontSize: fontSize || 26,
           textAlign: ALIGNMENT,
           justifyContent: ALIGNMENT,
         }}

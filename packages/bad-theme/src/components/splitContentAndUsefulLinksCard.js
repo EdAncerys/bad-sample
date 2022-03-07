@@ -96,7 +96,7 @@ const SplitContentAndUsefulLinksCard = ({
         <div
           className="primary-title"
           style={{
-            fontSize: 24,
+            fontSize: 26,
             fontWeight: "bold",
             paddingTop: `1em`,
           }}

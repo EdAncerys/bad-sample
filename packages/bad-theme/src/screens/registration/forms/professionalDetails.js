@@ -352,7 +352,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       <div
         className="primary-title"
         style={{
-          fontSize: 22,
+          fontSize: 20,
           paddingTop: `1em`,
           marginTop: `1em`,
           borderTop: `1px solid ${colors.silverFillTwo}`,

@@ -116,7 +116,7 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
                   <div
                     className="flex primary-title"
                     style={{
-                      fontSize: 22,
+                      fontSize: 20,
                       alignItems: "center",
                       overflow: "hidden",
                     }}
