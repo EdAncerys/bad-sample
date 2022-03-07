@@ -41,6 +41,38 @@ const SIGApplication = ({ state, actions, libraries }) => {
     py3_insertnhsnetemailaddress: "",
   });
   const [inputValidator, setInputValidator] = useState({
+    py3_title: true,
+    py3_firstname: true,
+    py3_lastname: true,
+    py3_gender: true,
+    py3_email: true,
+    py3_mobilephone: true,
+    py3_address1ine1: true,
+    py3_addressline2: true,
+    py3_addresstowncity: true,
+    py3_addresscountystate: true,
+    py3_addresszippostalcode: true,
+    py3_addresscountry: true,
+    sky_profilepicture: true,
+    py3_dateofbirth: true,
+
+    py3_gmcnumber: true,
+    py3_otherregulatorybodyreference: true,
+    py3_ntnno: true,
+    bad_currentpost: true,
+    py3_hospitalid: true,
+    bad_proposer1: true,
+    bad_proposer2: true,
+    bad_mrpcqualified: true,
+    sky_cvurl: true,
+    py3_currentgrade: true,
+    sky_newhospitalname: true,
+    bad_newhospitaladded: true,
+    bad_expectedyearofqualification: true,
+    py3_constitutionagreement: true,
+    bad_readpolicydocument: true,
+    sky_newhospitaltype: true,
+
     bad_qualifications: true,
     bad_hasmedicallicence: true,
     bad_isbadmember: true,
@@ -307,37 +339,37 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
     if (!isValid) return null;
 
-    // console.log("formData", formData); // debug
+    console.log("formData", formData); // debug
 
-    try {
-      setFetching(true);
-      const store = await setUserStoreAction({
-        state,
-        actions,
-        dispatch,
-        applicationData,
-        isActiveUser,
-        dynamicsApps,
-        membershipApplication: { stepFive: true }, // set stepOne to complete
-        data: formData,
-      });
+    // try {
+    //   setFetching(true);
+    //   const store = await setUserStoreAction({
+    //     state,
+    //     actions,
+    //     dispatch,
+    //     applicationData,
+    //     isActiveUser,
+    //     dynamicsApps,
+    //     membershipApplication: { stepFive: true }, // set stepOne to complete
+    //     data: formData,
+    //   });
 
-      if (!store.success)
-        throw new Error("Failed to update application record"); // throw error if store is not successful
+    //   if (!store.success)
+    //     throw new Error("Failed to update application record"); // throw error if store is not successful
 
-      await setCompleteUserApplicationAction({
-        state,
-        dispatch,
-        isActiveUser,
-      });
+    //   await setCompleteUserApplicationAction({
+    //     state,
+    //     dispatch,
+    //     isActiveUser,
+    //   });
 
-      let slug = `/membership/thank-you/`;
-      if (isActiveUser) setGoToAction({ path: slug, actions });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setFetching(false);
-    }
+    //   let slug = `/membership/thank-you/`;
+    //   if (isActiveUser) setGoToAction({ path: slug, actions });
+    // } catch (error) {
+    //   console.log(error);
+    // } finally {
+    //   setFetching(false);
+    // }
   };
 
   const handleInputChange = (e) => {
@@ -409,7 +441,13 @@ const SIGApplication = ({ state, actions, libraries }) => {
             const { bad_or_sig, category_types } = item.acf;
             if (bad_or_sig !== "sig") return null;
             // get SIG membership categories name from custom object
-            let typeName = category_types.split(":")[1];
+            // if typeName includes Full replace with empty string
+            // change prefix for names with " - ", eg. "Tarainee - Time"
+            let typeName = category_types
+              .replace(/Full:/g, "")
+              .replace(/:/g, " - ");
+            // if applicationType name dont include category_types return null
+            if (!typeName.includes(applicationType)) return null;
 
             return (
               <option key={key} value={category_types}>
@@ -445,15 +483,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
       </div>
       <form>
         <div style={{ padding: `2em 1em` }}>
-          <label className="bold" style={{ padding: "0.5em 0" }}>
-            Membership Type
-          </label>
-          <div
-            className="form-select input"
-            style={{ backgroundImage: "none" }}
-          >
-            SIG Membership
-          </div>
           <ServeSIGMembershipCategory />
 
           {inputValidator.py3_title && (
