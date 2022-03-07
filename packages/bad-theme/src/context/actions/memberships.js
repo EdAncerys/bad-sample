@@ -32,12 +32,12 @@ export const validateMembershipFormAction = async ({
     }));
   };
 
+  if (!state.source.memberships) return null;
+  if (!applicationData) return null;
+
   // ⏬ validate inputs
   const membershipTypes = Object.values(state.source.memberships);
   // console.log("membershipTypes", membershipTypes); // debug
-
-  if (!membershipTypes) return null;
-  if (!applicationData) return null;
 
   membershipTypes.map((membership) => {
     // validate application type against store object

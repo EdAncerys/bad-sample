@@ -70,6 +70,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
         stepFive: false,
         applicationComplete: false,
       },
+      path: "/membership/step-5-sig-questions/", // redirect to SIG form page
     });
   };
 

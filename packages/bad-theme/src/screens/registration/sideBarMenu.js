@@ -19,18 +19,21 @@ const SideBarMenu = ({ state, actions, libraries }) => {
     color: colors.blue,
   };
 
-  const [category, setCategory] = useState(() => {
-    if (!applicationData) return "";
-    let applicationCategory = "";
+  const [form, setForm] = useState(() => {
+    let form = {
+      bad_organisedfor: "",
+      _bad_sigid_value: "Form", // fall back value
+    };
+
+    if (!applicationData) return form;
+
     applicationData.map((data) => {
-      if (data.name === "bad_organisedfor") applicationCategory = data.value;
-      return "";
+      if (data.name === "bad_organisedfor") form.bad_organisedfor = data.value;
+      if (data._bad_sigid_value) form._bad_sigid_value = data._bad_sigid_value;
     });
 
-    return applicationCategory;
+    return form;
   });
-
-  console.log(category);
 
   let stepOne,
     stepTwo,
@@ -44,21 +47,21 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   if (slug.includes("step-4")) stepFour = activeStyle;
   if (slug.includes("step-5")) stepFive = activeStyle;
 
-  useEffect(() => {
-    // redirect to /dashboard if isActiveUser && !applicationData
-    if (isActiveUser && !applicationData) {
-      console.log(
-        "⬇️ user have no application data created - redirect to /dashboard"
-      );
-      setGoToAction({ path: `/dashboard/`, actions });
-      return;
-    }
-    // redirect to / if !isActiveUser || !applicationData
-    if (!isActiveUser) {
-      console.log("⬇️ no user - redirect to /");
-      setGoToAction({ path: `/`, actions });
-    }
-  }, [isActiveUser, applicationData]);
+  // useEffect(() => {
+  //   // redirect to /dashboard if isActiveUser && !applicationData
+  //   if (isActiveUser && !applicationData) {
+  //     console.log(
+  //       "⬇️ user have no application data created - redirect to /dashboard"
+  //     );
+  //     setGoToAction({ path: `/dashboard/`, actions });
+  //     return;
+  //   }
+  //   // redirect to / if !isActiveUser || !applicationData
+  //   if (!isActiveUser) {
+  //     console.log("⬇️ no user - redirect to /");
+  //     setGoToAction({ path: `/`, actions });
+  //   }
+  // }, [isActiveUser, applicationData]);
 
   // return loading placeholder if if !isActiveUser || !applicationData
   if (!isActiveUser || !applicationData) return <Loading />;
@@ -80,8 +83,10 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   };
 
   const ServeContent = () => {
+    console.log("form", form);
+
     const ServeStepFive = () => {
-      if (category !== "810170001") return null; // SIG application link
+      if (form.bad_organisedfor !== "810170001") return null; // SIG application link
 
       return (
         <div
@@ -95,40 +100,40 @@ const SideBarMenu = ({ state, actions, libraries }) => {
             });
           }}
         >
-          Step TBC - SIG Questions
+          <span>{form._bad_sigid_value}</span> - SIG Questions
         </div>
       );
     };
 
     return (
       <div style={{ padding: `2em 0` }}>
-        <div
-          className="title-link-animation"
-          style={{ ...stepOne, padding: `0.5em 0` }}
-          onClick={() => {
-            // if (slug === "/membership/thank-you/") return null;
-            setGoToAction({
-              path: `/membership/step-1-the-process/`,
-              actions,
-            });
-          }}
-        >
-          Step 1 - The Process
-        </div>
-        <div
-          className="title-link-animation"
-          style={{ ...stepTwo, padding: `0.5em 0` }}
-          onClick={() => {
-            setGoToAction({
-              path: `/membership/step-2-category-selection/`,
-              actions,
-            });
-          }}
-        >
-          Step 2 - Category Selection
-        </div>
-        {category === "810170000" && (
+        {form.bad_organisedfor === "810170000" && (
           <div>
+            <div
+              className="title-link-animation"
+              style={{ ...stepOne, padding: `0.5em 0` }}
+              onClick={() => {
+                // if (slug === "/membership/thank-you/") return null;
+                setGoToAction({
+                  path: `/membership/step-1-the-process/`,
+                  actions,
+                });
+              }}
+            >
+              Step 1 - The Process
+            </div>
+            <div
+              className="title-link-animation"
+              style={{ ...stepTwo, padding: `0.5em 0` }}
+              onClick={() => {
+                setGoToAction({
+                  path: `/membership/step-2-category-selection/`,
+                  actions,
+                });
+              }}
+            >
+              Step 2 - Category Selection
+            </div>
             <div
               className="title-link-animation"
               style={{ ...stepThree, padding: `0.5em 0` }}
