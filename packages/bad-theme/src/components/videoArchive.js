@@ -5,19 +5,15 @@ import BlockWrapper from "./blockWrapper";
 import { useAppState } from "../context";
 import HeroBanner from "../components/heroBanner";
 import SearchContainer from "./searchContainer";
-import TypeFilters from "./typeFilters";
 import { colors } from "../config/imports";
 import CloseIcon from "@mui/icons-material/Close";
-import { Dropdown } from "react-bootstrap";
+import Loading from "../components/loading";
 const VideoArchive = ({ state, actions, libraries }) => {
   const [heroBannerBlock, setHeroBannerBlock] = useState();
   const [guidanceCategory, setGuidanceCategory] = useState(null);
   const [postData, setPostData] = useState(null);
   const [searchFilter, setSearchFilter] = useState(null);
   const [filters, setFilters] = useState();
-
-  const { isActiveUser } = useAppState();
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const searchFilterRef = useRef(null);
   // const currentSearchFilterRef = useRef(null);
@@ -33,24 +29,11 @@ const VideoArchive = ({ state, actions, libraries }) => {
   const ServeFilterMenu = () => {
     const SpecialtyFilters = () => {
       if (!state.source.event_specialty) return null;
-      const event_specialty = state.source.get("/event_specialty/");
       const data = Object.values(state.source.event_specialty);
-      console.log("EVENT SPECIALTIES", data[1]);
 
       return (
         <div>
-          <select
-            name="specialty-filters"
-            id="specialty-filters"
-            onChange={(e) => {
-              console.log("ONCHANGE", filters);
-              console.log("EVENT_ONCHANGE", e.target.value);
-              setFilters((filters) => ({
-                ...filters,
-                specialty: e.target.value,
-              }));
-            }}
-          >
+          <select name="specialty-filters" id="specialty-filters">
             <option value="">All specialties</option>
             {data.map((item) => {
               return <option value={item.id}>{item.name}</option>;
@@ -63,18 +46,9 @@ const VideoArchive = ({ state, actions, libraries }) => {
       if (!state.source.event_grade) return null;
       const data = Object.values(state.source.event_grade);
 
-      console.log("EVENT SPECIALTIES", data[1]);
       return (
         <div>
-          <select
-            name="event-grades"
-            id="event-grades"
-            onChange={(e, filters) => {
-              console.log("ONCHANGE", filters);
-              console.log("EVENT_ONCHANGE", e);
-              setFilters(...filters, { specialty: e.target.value });
-            }}
-          >
+          <select name="event-grades" id="event-grades">
             <option value="">Grade Filters</option>
             {data.map((item) => {
               return <option value={item.id}>{item.name}</option>;
@@ -87,15 +61,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
       const paymentType = ["Paid", "Free", "Free to BAD"];
       return (
         <div>
-          <select
-            name="payments"
-            id="payments"
-            onChange={(e, filters) => {
-              console.log("ONCHANGE", filters);
-              console.log("EVENT_ONCHANGE", e);
-              setFilters(...filters, { specialty: e.target.value });
-            }}
-          >
+          <select name="payments" id="payments">
             <option value="">Video type</option>
             {paymentType.map((item) => {
               return <option value={item}>{item}</option>;
@@ -230,7 +196,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
                 // handleSearch={handleSearch}
               />
               {/* <ServeGuidanceType /> */}
-              <ServeFilter />
+              {/* <ServeFilter /> */}
             </div>
 
             <div className="flex" style={{ margin: "0.5em 0" }}>
@@ -295,7 +261,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
     console.log("DATERO ", data);
     fetchHeroBanner();
   }, []);
-
+  if (!postData) return <Loading />;
   return (
     <>
       <HeroBanner block={heroBannerBlock} />
@@ -338,6 +304,7 @@ const styles = {
     justifyContent: "space-between",
     gap: 20,
     marginBottom: 10,
+    marginTop: 20,
   },
 };
 export default connect(VideoArchive);
