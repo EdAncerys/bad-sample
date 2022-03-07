@@ -282,12 +282,26 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
     const isValid = isFormValidated({
       required: [
+        "bad_organisedfor",
+        "bad_categorytype",
+
         "py3_gmcnumber",
         "py3_otherregulatorybodyreference",
         "py3_ntnno",
         "bad_currentpost",
         isNewHospital ? "sky_newhospitaltype" : null,
         !isNewHospital ? "py3_hospitalid" : null,
+
+        "py3_title",
+        "py3_firstname",
+        "py3_lastname",
+        "py3_gender",
+        "py3_email",
+        "py3_mobilephone",
+        "py3_address1ine1",
+        "py3_addresstowncity",
+        "py3_addresszippostalcode",
+        "py3_addresscountry",
       ],
     });
 
@@ -559,6 +573,83 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 placeholder="Mobile Number"
               />
               <FormError id="py3_mobilephone" />
+            </div>
+          )}
+          {inputValidator.py3_address1ine1 && (
+            <div>
+              <label className="required form-label">Home Address</label>
+              <input
+                name="py3_address1ine1"
+                value={formData.py3_address1ine1}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Address Line 1"
+              />
+              <FormError id="py3_address1ine1" />
+            </div>
+          )}
+
+          {inputValidator.py3_addressline2 && (
+            <input
+              name="py3_addressline2"
+              value={formData.py3_addressline2}
+              onChange={handleInputChange}
+              type="text"
+              className="form-control input"
+              placeholder="Address Line 2"
+            />
+          )}
+          {inputValidator.py3_addresstowncity && (
+            <div>
+              <input
+                name="py3_addresstowncity"
+                value={formData.py3_addresstowncity}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="City"
+              />
+              <FormError id="py3_addresstowncity" />
+            </div>
+          )}
+          {inputValidator.py3_addresscountystate && (
+            <div>
+              <input
+                name="py3_addresscountystate"
+                value={formData.py3_addresscountystate}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="County/State"
+              />
+              <FormError id="py3_addresscountystate" />
+            </div>
+          )}
+          {inputValidator.py3_addresszippostalcode && (
+            <div>
+              <input
+                name="py3_addresszippostalcode"
+                value={formData.py3_addresszippostalcode}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Postcode/Zip"
+              />
+              <FormError id="py3_addresszippostalcode" />
+            </div>
+          )}
+          {inputValidator.py3_addresscountry && (
+            <div>
+              <input
+                name="py3_addresscountry"
+                value={formData.py3_addresscountry}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Country"
+              />
+              <FormError id="py3_addresscountry" />
             </div>
           )}
 
