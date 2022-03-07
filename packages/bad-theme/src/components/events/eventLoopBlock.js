@@ -147,7 +147,11 @@ const EventLoopBlock = ({
           // ⬇️  dont return past events if page is not archive
           if (!events_archive && isArchive) return null;
 
-          if (!event_grade.includes(gradeFilterId) && gradeFilterId !== 97)
+          if (
+            event_grade &&
+            !event_grade.includes(gradeFilterId) &&
+            gradeFilterId !== 97
+          )
             return null;
           if (!!searchFilter) {
             if (!title && !summary) return null;
