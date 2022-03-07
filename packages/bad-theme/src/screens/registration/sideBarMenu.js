@@ -45,9 +45,19 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   if (slug.includes("step-5")) stepFive = activeStyle;
 
   useEffect(() => {
+    // redirect to /dashboard if isActiveUser && !applicationData
+    if (isActiveUser && !applicationData) {
+      console.log(
+        "⬇️ user have no application data created - redirect to /dashboard"
+      );
+      setGoToAction({ path: `/dashboard/`, actions });
+      return;
+    }
     // redirect to / if !isActiveUser || !applicationData
-    if (!isActiveUser || !applicationData)
+    if (!isActiveUser) {
+      console.log("⬇️ no user - redirect to /");
       setGoToAction({ path: `/`, actions });
+    }
   }, [isActiveUser, applicationData]);
 
   // return loading placeholder if if !isActiveUser || !applicationData
