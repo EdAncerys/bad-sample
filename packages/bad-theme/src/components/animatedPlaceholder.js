@@ -28,7 +28,7 @@ const AnimatedPlaceholder = ({ state, actions }) => {
       <div
         style={{
           width: "90vw",
-          maxWidth: state.theme.contentContainer,
+          maxWidth: state.theme.contentContainer / 2,
           height: "100%",
           overflow: "hidden",
           margin: "0 auto",

@@ -31,6 +31,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     py3_firstname: "",
     py3_lastname: "",
     py3_gender: "",
+    py3_dateofbirth: "",
     py3_email: "",
     py3_mobilephone: "",
     py3_address1ine1: "",
@@ -40,7 +41,6 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     py3_addresszippostalcode: "",
     py3_addresscountry: "",
     sky_profilepicture: "",
-    py3_dateofbirth: "",
   });
   const [inputValidator, setInputValidator] = useState({
     py3_title: true,

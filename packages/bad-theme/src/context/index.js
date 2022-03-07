@@ -51,6 +51,7 @@ import {
   setUserStoreAction,
   getUserStoreAction,
   setCompleteUserApplicationAction,
+  getUserApplicationAction,
 } from "./auth/userStore";
 import { getWileyAction } from "./auth/getWiley";
 import { getTestUserAccountsAction } from "./auth/getTestUserAccounts";
@@ -122,4 +123,5 @@ export {
   authCookieActionAfterCSR,
   setPlaceholderAction,
   getWPMenu,
+  getUserApplicationAction,
 };

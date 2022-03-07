@@ -250,7 +250,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
         }}
       >
         <label className="bold">Membership Type</label>
-        <Form.Select
+        {/* <Form.Select
           name="bad_organisedfor"
           value={formData.bad_organisedfor}
           onChange={handleChange}
@@ -262,7 +262,10 @@ const RegistrationStepTwo = ({ state, actions }) => {
           <option value="810170000">BAD Membership</option>
           <option value="810170001">SIG Membership</option>
         </Form.Select>
-        <FormError id="bad_organisedfor" />
+        <FormError id="bad_organisedfor" /> */}
+        <div className="form-select input" style={{ backgroundImage: "none" }}>
+          BAD Membership
+        </div>
 
         <ServeBADMembershipCategory />
         <ServeSIGMembershipCategory />
