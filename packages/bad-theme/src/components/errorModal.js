@@ -73,7 +73,7 @@ const ErrorModal = ({ state, actions }) => {
                 display: "grid",
                 textAlign: "center",
                 padding: `2em 0`,
-                fontSize: 24,
+                fontSize: 26,
               }}
             >
               {message}

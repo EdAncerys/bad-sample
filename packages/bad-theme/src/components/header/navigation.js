@@ -34,7 +34,8 @@ const Navigation = ({ state, actions, libraries }) => {
 
     setWpMainMenu(wpMainMenu); // main menu to display
     setWpMoreMenu(wpMoreMenu); // more menu into dropdown
-    setFeatured(Object.values(state.source.menu_features)); // featured posts
+    if (state.source.menu_features)
+      setFeatured(Object.values(state.source.menu_features)); // cpt for menu content
 
     return () => {
       useEffectRef.current = false; // clean up function

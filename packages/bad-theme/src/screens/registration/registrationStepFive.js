@@ -59,7 +59,7 @@ const styles = {
     gap: 20,
   },
   title: {
-    fontSize: 22,
+    fontSize: 20,
   },
 };
 

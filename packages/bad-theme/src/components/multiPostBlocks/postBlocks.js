@@ -36,7 +36,7 @@ const MultiPostBlock = ({ state, actions, block, filter }) => {
 
     return (
       <div className="flex-col">
-        <div className="primary-title" style={{ fontSize: 24 }}>
+        <div className="primary-title" style={{ fontSize: 26 }}>
           Sorry, no results were found for '{filter}'
         </div>
         <div>

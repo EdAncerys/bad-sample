@@ -14,18 +14,22 @@ const NewsBlock = ({
   block,
   layout,
 }) => {
-  const { post_limit, category_filter } = block;
+  const { post_limit, disable_vertical_padding } = block;
 
   const isLayoutTwo = layout === "layout_two";
   const isLayoutThree = layout === "layout_three";
   const isLayoutFour = layout === "layout_four";
   const isLayoutFive = layout === "layout_five";
 
-  // console.log("block length", block.length); // debug
+  console.log("layout", block); // debug
   const [eCircularCatId, setECircularCatId] = useState(null);
   let gridLayoutType = `1fr`;
-  if (isLayoutFour) gridLayoutType = `repeat(3, 1fr)`;
+  if (isLayoutFour || isLayoutThree) gridLayoutType = `repeat(3, 1fr)`;
   if (isLayoutFive) gridLayoutType = `repeat(4, 1fr)`;
+
+  const marginHorizontal = state.theme.marginHorizontal;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
 
   useEffect(() => {
     if (state.source.category) {
@@ -46,6 +50,7 @@ const NewsBlock = ({
         display: "grid",
         gridTemplateColumns: gridLayoutType,
         gap: 20,
+        margin: `${marginVertical}px ${marginHorizontal}px`,
       }}
     >
       {block.map((block, key) => {
