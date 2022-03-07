@@ -119,6 +119,9 @@ export const getWPMenu = async ({ state, actions }) => {
   const menu = sessionStorage.getItem("badMenu"); // checking if menu already pre fetched from wp
   if (!menu) {
     try {
+      // pre-fetch custom post types for menus (for wp menu)
+      await actions.source.fetch(`/menu_features`);
+      // pre-fetch wp menu
       await actions.source.fetch(`${state.theme.menuUrl}`);
       const badMenu = await state.source.data["/menu/primary-menu/"].items;
       state.theme.menu = badMenu; // replacing menu stored in sessions with state var

@@ -70,7 +70,7 @@ const App = ({ state, actions }) => {
     // get current time & compare how long pre-fetch took before  setting placeholder
     const timeTaken = new Date().getTime() - currentTime;
     // if time taken is less than 3s await for remaining time before proceeding
-    // console.log("timeTaken", timeTaken); // debug
+    console.log("timeTaken", timeTaken); // debug
     if (timeTaken < 3000) {
       await new Promise((resolve) => setTimeout(resolve, 3000 - timeTaken));
     }
