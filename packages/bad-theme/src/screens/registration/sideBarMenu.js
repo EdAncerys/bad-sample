@@ -93,7 +93,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
           onClick={() => {
             if (slug === "/membership/thank-you/") return null;
             setGoToAction({
-              path: `/membership/step-5-sig-questions/`,
+              path: `/membership/sig-questions/`,
               actions,
             });
           }}

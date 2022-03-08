@@ -102,6 +102,7 @@ const App = ({ state, actions }) => {
   return transitions(({ opacity }, appContent) =>
     appContent ? (
       <animated.div
+        className="no-selector"
         style={{ opacity: opacity.to({ range: [0.0, 1.0], output: [0.1, 1] }) }}
       >
         <AnimatedPlaceholder />
@@ -152,7 +153,7 @@ const App = ({ state, actions }) => {
                   when={endPoint === "/membership/step-4-professional-details/"}
                 />
                 <RegistrationStepFive
-                  when={endPoint === "/membership/step-5-sig-questions/"}
+                  when={endPoint === "/membership/sig-questions/"}
                 />
                 <ThankYou when={endPoint === "/membership/thank-you/"} />
                 <EventsLandingPage when={endPoint === "/events/"} />
@@ -222,7 +223,7 @@ const App = ({ state, actions }) => {
               when={endPoint === "/membership/step-4-professional-details/"}
             />
             <RegistrationStepFive
-              when={endPoint === "/membership/step-5-sig-questions/"}
+              when={endPoint === "/membership/sig-questions/"}
             />
             <ThankYou when={endPoint === "/membership/thank-you/"} />
             <EventsLandingPage when={endPoint === "/events/"} />

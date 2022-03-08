@@ -123,7 +123,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
 
     let path = `/membership/step-3-personal-information/`;
     if (formData.bad_organisedfor === "810170001")
-      path = `/membership/step-5-sig-questions/`;
+      path = `/membership/sig-questions/`;
 
     setFetching(true);
     await handleApplyForMembershipAction({
