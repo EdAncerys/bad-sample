@@ -3,21 +3,69 @@ import { connect } from "frontity";
 import Loading from "./loading";
 import BlockWrapper from "./blockWrapper";
 import Card from "./card/card";
+import ShareToSocials from "./card/shareToSocials";
 import { colors } from "../config/colors";
 import Image from "@frontity/components/image";
-
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import LockIcon from "@mui/icons-material/Lock";
+import { useAppState } from "../context";
+import { handleGetCookie } from "../helpers/cookie";
+import PaymentModal from "./dashboard/paymentModal";
 const Video = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
 
-  if (!post) return loading;
+  const { isActiveUser } = useAppState();
+
+  console.log(isActiveUser);
+  if (!post) return <Loading />;
+
+  console.log(post);
   // STATE
   const [loadVideo, setLoadVideo] = React.useState(false);
+  const [videoStatus, setVideoStatus] = React.useState("");
+  const [paymentUrl, setPaymentUrl] = React.useState("");
   // HELPERS
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+
+  //HELPERS
+  const handlePayment = async () => {
+    const cookie = handleGetCookie({ name: `BAD-WebApp` });
+    const { contactid, jwt } = cookie;
+
+    const the_url =
+      state.auth.ENVIRONMENT === "DEVELOPMENT"
+        ? "http://localhost:3000/"
+        : state.auth.APP_URL;
+
+    const fetchVendorId = await fetch(
+      state.auth.APP_HOST +
+        "/sagepay/test/video/" +
+        contactid +
+        "/" +
+        post.acf.event_id +
+        "/" +
+        post.acf.price +
+        `?redirecturl=${the_url}payment-confirmation`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+    if (fetchVendorId.ok) {
+      const json = await fetchVendorId.json();
+      const url =
+        json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
+      setPaymentUrl(url);
+    }
+    // setPage({ page: "directDebit", data: block });
+  };
+  const resetPaymentUrl = () => {
+    setPaymentUrl(null);
+  };
   //SERVERS
   const ServeTitle = () => {
     return (
@@ -28,13 +76,32 @@ const Video = ({ state, actions }) => {
   };
   const ServeContent = () => {
     const ServeImage = () => {
+      const [videoCover, setVideoCover] = React.useState(
+        "https://badadmin.skylarkdev.co/wp-content/uploads/2022/02/VIDEO-LIBRARY.jpg"
+      );
+      const getVimeoCover = async ({ video_url }) => {
+        console.log("VIDEOURL", video_url);
+        // Example URL: https://player.vimeo.com/video/382577680?h=8f166cf506&color=5b89a3&title=0&byline=0&portrait=0
+        const reg = /\d+/g;
+        const videoId = video_url.match(reg);
+        console.log("VIDELOID", videoId);
+        const fetchVideoData = await fetch(
+          `http://vimeo.com/api/v2/video/${videoId[0]}.json`
+        );
+        if (fetchVideoData.ok) {
+          const json = await fetchVideoData.json();
+          console.log(json[0].thumbnail_medium);
+          setVideoCover(json[0].thumbnail_large);
+        }
+      };
+
+      React.useEffect(() => {
+        getVimeoCover({ video_url: post.acf.video });
+      }, []);
+
       return (
         <div style={{ position: "relative" }}>
-          <Image
-            src="https://i.vimeocdn.com/video/843761302-3d7f394aea80c28b923cee943e3a6be6c0f23410043d41daf399c9a57d19a191-d_640"
-            alt="Submit"
-            style={{ width: "100%" }}
-          />
+          <Image src={videoCover} alt="Submit" style={{ width: "100%" }} />
           <div
             style={{
               position: "absolute",
@@ -44,13 +111,14 @@ const Video = ({ state, actions }) => {
               color: "white",
             }}
           >
-            {post.acf.price ? (
-              <LockIcon sx={{ fontSize: 80 }} />
+            {!videoStatus || videoStatus === "locked" ? (
+              <LockIcon sx={{ fontSize: 80 }} className="shadow" />
             ) : (
               <PlayCircleOutlineIcon
                 sx={{ fontSize: 80 }}
                 onClick={() => setLoadVideo(true)}
                 style={{ cursor: "pointer" }}
+                className="shadow"
               />
             )}
           </div>
@@ -60,7 +128,7 @@ const Video = ({ state, actions }) => {
     const ServeVideo = () => {
       return (
         <iframe
-          src="https://player.vimeo.com/video/672488584?h=67e27d0e43"
+          src={post.acf.video}
           width="100%"
           height="400"
           frameborder="0"
@@ -71,14 +139,32 @@ const Video = ({ state, actions }) => {
     };
     const ServeDateAndPrice = () => {
       const ServePrice = () => {
-        if (post.acf.price)
+        if (!videoStatus || !isActiveUser)
+          return (
+            <div
+              className="primary-title"
+              style={{ fontSize: 20, display: "flex", alignItems: "center" }}
+            >
+              {post.acf.private ? "Login to watch or buy" : "Free to watch"}
+            </div>
+          );
+        if (isActiveUser && post.acf.private && videoStatus === "locked")
           return (
             <div
               type="submit"
               className="blue-btn"
-              onClick={() => setLoadVideo(true)}
+              onClick={() => handlePayment()}
             >
               Buy for £{post.acf.price}
+            </div>
+          );
+        if (post.acf.private && videoStatus === "unlocked")
+          return (
+            <div
+              className="primary-title"
+              style={{ fontSize: 20, display: "flex", alignItems: "center" }}
+            >
+              You own the video
             </div>
           );
         return (
@@ -107,7 +193,7 @@ const Video = ({ state, actions }) => {
       );
     };
     return (
-      <div>
+      <div className="shadow">
         {loadVideo ? <ServeVideo /> : <ServeImage />}
         <ServeDateAndPrice />
       </div>
@@ -122,29 +208,87 @@ const Video = ({ state, actions }) => {
         }}
         colour={colors.orange}
         onClick={() => setGoToAction({ path: post.link, actions })}
+        shareToSocials
       />
     );
   };
   const RelatedVideos = () => {
-    return <p>No content</p>;
+    const videosy = [1, 2];
+    return videosy.map((vid) => {
+      return (
+        <Card
+          title="Video Example"
+          url="https://i.vimeocdn.com/video/843761302-3d7f394aea80c28b923cee943e3a6be6c0f23410043d41daf399c9a57d19a191-d_640"
+          body="Lorem ipsum festilia"
+          colour={colors.orange}
+          videoArchive={post}
+          noVideoCategory
+          onClick={() => setGoToAction({ path: post.link, actions })}
+        />
+      );
+    });
   };
   React.useEffect(() => {
     actions.source.fetch("/videos/");
-    console.log(window.location.href);
-  });
+
+    const checkVideoStatus = async () => {
+      const cookie = handleGetCookie({ name: `BAD-WebApp` });
+      const { contactid, jwt } = cookie;
+      if (!post.acf.private) {
+        setVideoStatus("unlocked");
+        return true;
+      }
+      if (!isActiveUser) {
+        setVideoStatus("locked");
+        return true;
+      }
+      if (post.acf.private && post.acf.price) {
+        const url =
+          state.auth.APP_HOST +
+          "/videvent/" +
+          isActiveUser.contactid +
+          "/" +
+          post.acf.event_id;
+        console.log("URL FOR CHECKING", url);
+        const fetching = await fetch(url, {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        });
+        if (fetching.ok) {
+          const json = await fetching.json();
+          console.log("VIDEOFETCH", json);
+          if (json.success === false) setVideoStatus("locked");
+          if (json.data.entity.bad_confirmationid) setVideoStatus("unlocked");
+          return true;
+        } else {
+          setVideoStatus("locked");
+          return true;
+        }
+      }
+      setVideoStatus("locked");
+      return true;
+    };
+    checkVideoStatus();
+  }, [isActiveUser, paymentUrl]);
+  if (!videoStatus) return <Loading />;
   return (
     <BlockWrapper>
+      <PaymentModal
+        payment_url={paymentUrl}
+        resetPaymentUrl={resetPaymentUrl}
+      />
       <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
         <ServeTitle />
         <div style={styles.container}>
-          <div className="shadow">
+          <div>
             <ServeContent />
             <ServeBody />
           </div>
-          <div className="shadow">
+          <div style={{ display: "grid", gridTemplateColumns: "1fr" }}>
             <div
               className="primary-title"
-              style={{ fontSize: 20, padding: "1em 0" }}
+              style={{ fontSize: 20, padding: "1em" }}
             >
               Related videos
             </div>

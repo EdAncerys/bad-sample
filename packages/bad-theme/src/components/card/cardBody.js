@@ -7,6 +7,7 @@ import PaidIcon from "@mui/icons-material/Paid";
 
 import { colors } from "../../config/imports";
 import ElectionInfo from "./electionInfo";
+import ShareToSocials from "./shareToSocials";
 
 import { anchorScrapper, muiQuery } from "../../context";
 
@@ -30,6 +31,8 @@ const CardBody = ({
   opacity,
   videoArchive,
   limitTitleLength,
+  noVideoCategory,
+  shareToSocials,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { sm, md, lg, xl } = muiQuery();
@@ -56,7 +59,7 @@ const CardBody = ({
     if (limitTitleLength) titlePreview = `${title.slice(0, maxChar)}...`;
 
     const ServePaidIcon = () => {
-      if (!videoArchive) return null;
+      if (!videoArchive || !videoArchive.acf) return null;
       if (videoArchive.acf.private && videoArchive.acf.price)
         return <PaidIcon />;
       return null;
@@ -148,7 +151,8 @@ const CardBody = ({
   };
 
   const ServeVideoArchiveCategories = () => {
-    if (!videoArchive) return null;
+    if (!videoArchive || !videoArchive.event_specialty) return null;
+    if (noVideoCategory) return null;
     const event_specialties = videoArchive.event_specialty;
     if (event_specialties.length === 0) return null;
 
@@ -166,12 +170,23 @@ const CardBody = ({
         </div>
       );
     };
-    if (specialties) {
-      return antresto.map((special) => {
-        return <ServeSpecialty name={special.name} />;
-      });
-    }
-
+    if (specialties)
+      return (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr 1fr",
+            gap: 20,
+            marginTop: "1em",
+            marginBottom: "1em",
+          }}
+        >
+          {specialties &&
+            antresto.map((special) => {
+              return <ServeSpecialty name={special.name} />;
+            })}
+        </div>
+      );
     return "Error fetching categories";
   };
 
@@ -195,6 +210,18 @@ const CardBody = ({
     );
   };
 
+  const ServeSocials = () => {
+    if (!shareToSocials) return null;
+    return (
+      <div style={{ width: "50%" }}>
+        <div className="primary-title" style={{ fontSize: 20 }}>
+          Share
+        </div>
+        <ShareToSocials />
+      </div>
+    );
+  };
+
   return (
     <div
       className="flex-col"
@@ -211,6 +238,7 @@ const CardBody = ({
         <ServeBody />
         <ServeDate />
         <ServeVideoArchiveCategories />
+        <ServeSocials />
       </div>
     </div>
   );
