@@ -7,41 +7,56 @@ import Card from "react-bootstrap/Card";
 import BlockWrapper from "./blockWrapper";
 import { useAccordionButton } from "react-bootstrap/AccordionButton";
 import { handleGetCookie } from "../helpers/cookie";
-import { useAppState } from "../context";
-
+import { useAppState, authenticateAppAction, useAppDispatch } from "../context";
+import MapsComponent from "./maps/maps";
 import Loading from "./loading";
 const FindADermatologist = ({ state }) => {
-  const [postCode, setPostCode] = React.useState();
-  const [name, setName] = React.useState();
+  const marginVertical = state.theme.marginVertical;
+  const marginHorizontal = state.theme.marginHorizontal;
+  let MARGIN = `${marginVertical}px ${marginHorizontal}px`;
+
+  const [query, setQuery] = React.useState();
 
   const [filteredDermatologists, setFilteredDermatologists] = React.useState();
-  const distance = null;
-  const { isActiveUser } = useAppState();
-  const cookie = handleGetCookie({ name: `BAD-WebApp` });
-  const { contactid, jwt } = cookie;
+  const dispatch = useAppDispatch();
+  const jwt = authenticateAppAction({ dispatch, state });
 
   React.useEffect(() => {
-    const fetchDermatologists = async () => {
-      const fetching = await fetch(
-        state.auth.APP_HOST + "/catalogue/fad/" + postCode.toLowerCase(),
-        {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
-        }
-      );
+    const fetchDermatologistsByPostCode = async () => {
+      const post_code = query.value.split(" ").join("");
+      console.log(post_code);
+      const url = state.auth.APP_HOST + "/catalogue/fad/" + post_code;
+      console.log("JWT", jwt);
+      console.log("URL", url);
+      const fetching = await fetch(url, {
+        headers: {
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkNNRXJOX1FMa29qTkZKRF9RbzFWUyIsInVzZXJuYW1lIjoiY2hyaXMuY3VsbGVuIiwiZW1haWwiOiJjaHJpc2N1bGxlbjQyQGdtYWlsLmNvbSIsInNjb3BlIjoiYWRtaW4iLCJkaXNwbGF5bmFtZSI6IkNocmlzIiwiaWF0IjoxNjQ2NzM3NTM1LCJleHAiOjE2NDY3NDExMzUsImF1ZCI6IkJBRDpTS1lMQVJLOndlYmFwcCIsImlzcyI6ImR5bmFtaWNzLmJyaWRnZS5za3lsYXJrIn0.L4TJhGXCr7Yr7BZCiAuA-ceeTvVGgONVxiZj35NffIk`,
+        },
+      });
       if (fetching.ok) {
         const json = await fetching.json();
-        setFilteredDermatologists(json);
+        console.log("JSON", json);
+        const data = json.data;
+        const sorted = data.sort(function (a, b) {
+          var keyA = new Date(a.updated_at),
+            keyB = new Date(b.updated_at);
+          // Compare the 2 dates
+          if (keyA < keyB) return -1;
+          if (keyA > keyB) return 1;
+          return 0;
+        });
+
+        setFilteredDermatologists(sorted);
       }
     };
-    if (postCode) fetchDermatologists();
-  }, [postCode, name]);
+    if (query && query.type === "pc") fetchDermatologistsByPostCode();
+    if (query && query.type === "name") fetchDermatologistsByName();
+  }, [query]);
   const CardHeader = ({ derm }) => {
     const ServeHeadline = () => {
       return (
         <div className="primary-title" style={{ fontSize: 20 }}>
-          {derm.fullName} | {derm.address1_addressid}
+          {derm.firstname + " " + derm.lastname}
         </div>
       );
     };
@@ -49,8 +64,8 @@ const FindADermatologist = ({ state }) => {
       return <div>{derm.address1_composite}</div>;
     };
     const ServeDistance = () => {
-      if (!distance) return null;
-      return <div>{derm.distance}</div>;
+      if (!derm.distance) return null;
+      return <div>{derm.distance * 0.000621371} miles away</div>;
     };
     return (
       <div style={styles.dermatologistContainer}>
@@ -69,17 +84,28 @@ const FindADermatologist = ({ state }) => {
   }
   const ServeSearchOptions = () => {
     const ServeSearchByName = () => {
+      const [name, setName] = React.useState("");
       return (
         <div className="flex-row">
-          Name:
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              setName("E147TP");
+              setQuery({
+                type: "name",
+                value: name,
+              });
             }}
             className="flex-row"
           >
-            <input type="text" placeholder="Search by Name" />
+            <input
+              type="text"
+              placeholder="Search by Name"
+              value={name}
+              className="form-control"
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+            />
             <button type="submit" className="blue-btn">
               Search
             </button>
@@ -88,17 +114,28 @@ const FindADermatologist = ({ state }) => {
       );
     };
     const ServeSearchByPostCode = () => {
+      const [pc, setPC] = React.useState("");
       return (
         <div className="flex-row">
-          Postcode:
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              setPostCode("E147TP");
+              setQuery({
+                type: "pc",
+                value: pc,
+              });
             }}
             className="flex-row"
           >
-            <input type="text" placeholder="Postcode" />
+            <input
+              type="text"
+              placeholder="Postcode"
+              className="form-control"
+              value={pc}
+              onChange={(e) => {
+                setPC(e.target.value);
+              }}
+            />
             <button type="submit" className="blue-btn">
               Search
             </button>
@@ -108,8 +145,15 @@ const FindADermatologist = ({ state }) => {
     };
     return (
       <div
-        className="flex-row"
-        style={{ backgroundColor: colors.darkSilver, padding: 10 }}
+        style={{
+          backgroundColor: colors.silver,
+          padding: 10,
+          padding: MARGIN,
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: 20,
+          marginTop: 20,
+        }}
       >
         <ServeSearchByPostCode />
         <ServeSearchByName />
@@ -117,18 +161,21 @@ const FindADermatologist = ({ state }) => {
     );
   };
   const ServeAccordionListOfDerms = () => {
-    if (!postCode && !name) return null;
+    if (!query) return null;
     if (!filteredDermatologists) return <Loading />;
-    const SingleDerm = ({ derm }) => {
+    console.log("DERMI", filteredDermatologists);
+    const SingleDerm = ({ derm, id }) => {
+      if (!derm.distance) return null;
+      console.log("DERMHIT");
       return (
         <Card>
           <Card.Header>
-            <CustomToggle eventKey="0">
+            <CustomToggle eventKey={id}>
               <CardHeader derm={derm} />
             </CustomToggle>
           </Card.Header>
-          <Accordion.Collapse eventKey="0">
-            <Card.Body>Hello! I'm the body</Card.Body>
+          <Accordion.Collapse eventKey={id}>
+            <Card.Body>{derm.emailaddress1}</Card.Body>
           </Accordion.Collapse>
         </Card>
       );
@@ -136,20 +183,37 @@ const FindADermatologist = ({ state }) => {
     return (
       <>
         <Accordion>
-          {filteredDermatologists.map((derm) => {
-            <SingleDerm derm={derm} />;
+          {filteredDermatologists.map((derm, key) => {
+            console.log("DERM!", derm);
+            return <SingleDerm derm={derm} id={key} key={key} />;
           })}
         </Accordion>
       </>
     );
   };
+  const ServeMap = () => {
+    return (
+      <div style={{ height: 300 }}>
+        <MapsComponent markers />
+      </div>
+    );
+  };
+  const ServeYouSearched = () => {
+    if (!query) return null;
+    return (
+      <div
+        className="primary-title"
+        style={{ fontSize: 25, marginTop: 10, marginBottom: 10 }}
+      >
+        You searched for {query.value.toUpperCase()}
+      </div>
+    );
+  };
   return (
     <BlockWrapper>
       <ServeSearchOptions />
-      <img
-        src="https://complianz.io/wp-content/uploads/2020/05/Screenshot-2021-09-23-at-13.39.36.png"
-        alt="Map"
-      />
+      <ServeYouSearched />
+      <ServeMap />
       <ServeAccordionListOfDerms />
     </BlockWrapper>
   );

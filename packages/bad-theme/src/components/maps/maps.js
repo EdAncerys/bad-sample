@@ -14,15 +14,25 @@ import { colors } from "../../config/imports";
 
 const LIBRARIES = ["places"];
 
-const MapsComponent = ({ state, actions, libraries, zoom, center }) => {
+const MapsComponent = ({
+  state,
+  actions,
+  libraries,
+  zoom,
+  center,
+  markers,
+}) => {
   // const { isLoaded } = useJsApiLoader({
   //   googleMapsApiKey: state.auth.GOOGLE_API_KEY,
   // });
 
+  const CENTER = center || { lat: 51.5072, lng: -0.1276 };
+  const ZOOM = zoom || 10;
+
   const containerStyle = {
     width: "100%",
     height: "100%",
-    borderRadius: 10,
+    borderRadius: markers ? 0 : 10,
   };
 
   return (
@@ -30,8 +40,10 @@ const MapsComponent = ({ state, actions, libraries, zoom, center }) => {
       googleMapsApiKey={state.auth.GOOGLE_API_KEY}
       libraries={LIBRARIES}
     >
-      <GoogleMap center={center} zoom={zoom} mapContainerStyle={containerStyle}>
-        <Marker markerLabel={{ text: "Google Map" }} position={center} />
+      <GoogleMap center={CENTER} zoom={ZOOM} mapContainerStyle={containerStyle}>
+        {!markers && (
+          <Marker markerLabel={{ text: "Google Map" }} position={CENTER} />
+        )}
       </GoogleMap>
     </LoadScript>
   );
