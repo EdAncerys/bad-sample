@@ -136,8 +136,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
     await getMembershipDataAction({ state, actions });
     let membershipData = null;
 
-    if (state.source.memberships)
-      membershipData = Object.values(state.source.memberships);
+    if (state.source.sig_group)
+      membershipData = Object.values(state.source.sig_group);
     setMembershipData(membershipData);
 
     const handleSetFormData = ({ data, name }) => {

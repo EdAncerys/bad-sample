@@ -75,14 +75,14 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   };
 
   const ApplyForMembership = () => {
-    if (!dermo_group_type && dermo_group_type.length === 0) return null;
+    if (!acf.sigs) return null;
 
-    let membershipTypes = Object.values(state.source.dermo_group_type);
-    console.log(membershipTypes); // debug
+    // let sigGroupeTypes = Object.values(state.source.sig_group);
+    // console.log(sigGroupeTypes); // debug
 
     return (
       <div style={{ paddingTop: `2em` }}>
-        {membershipTypes.map(({ name }, key) => {
+        {/* {sigGroupeTypes.map(({ name }, key) => {
           // get current application data from memberships object by id
           // console.log(type); // debug
 
@@ -96,7 +96,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
               <Html2React html={`Apply for ${name} membership`} />
             </div>
           );
-        })}
+        })} */}
       </div>
     );
   };

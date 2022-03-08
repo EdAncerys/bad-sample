@@ -105,7 +105,14 @@ export const handleApplyForMembershipAction = async ({
       }
     }
 
-    let membershipData = []; // membership data
+    // default application data
+    let membershipData = {
+      bad_organisedfor: "SIG",
+      bad_categorytype: type,
+      core_membershipsubscriptionplanid: "",
+      core_name: "",
+    }; // membership data
+
     if (isBADApp) {
       // ⏬ get appropriate membership ID for BAD applications only
       const response = await getBADMembershipSubscriptionData({
@@ -113,7 +120,7 @@ export const handleApplyForMembershipAction = async ({
         category,
         type,
       });
-      console.log('getBADMembershipSubscriptionData', response)
+      console.log("getBADMembershipSubscriptionData", response);
       if (!response) throw new Error("Failed to get membership data");
       membershipData = response;
     }
@@ -128,7 +135,7 @@ export const handleApplyForMembershipAction = async ({
       data: {
         bad_organisedfor: isBADApp ? "810170000" : "810170001", // BAD members category
         core_membershipsubscriptionplanid:
-          membershipData.core_membershipsubscriptionplanid || '', // type of membership for application
+          membershipData.core_membershipsubscriptionplanid || "", // type of membership for application
         bad_applicationfor: "810170000", // silent assignment
       },
     });
