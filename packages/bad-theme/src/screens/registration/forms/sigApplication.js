@@ -136,8 +136,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
     await getMembershipDataAction({ state, actions });
     let membershipData = null;
 
-    if (state.source.sig_group)
-      membershipData = Object.values(state.source.sig_group);
+    if (state.source.memberships)
+      membershipData = Object.values(state.source.memberships);
     setMembershipData(membershipData);
 
     const handleSetFormData = ({ data, name }) => {
@@ -223,7 +223,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         handleSetFormData({ data, name: "py3_hospitalid" });
       }
 
-      if (data._bad_sigid_value) setType(data._bad_sigid_value); // validate SIG application category type
+      if (data.bad_categorytype) setType(data.bad_categorytype); // validate SIG application category type
       // populate form data with application category:type
       // leave empty for SIG application category for user to select from the list
       // if (data.bad_categorytype)
@@ -420,29 +420,29 @@ const SIGApplication = ({ state, actions, libraries }) => {
       }
       console.log("sigAppliaction", sigAppliaction); // debug
 
-      // const store = await setUserStoreAction({
-      //   state,
-      //   actions,
-      //   dispatch,
-      //   applicationData,
-      //   isActiveUser,
-      //   dynamicsApps,
-      //   membershipApplication: { stepFive: true }, // set stepOne to complete
-      //   data: sigAppliaction,
-      // });
+      const store = await setUserStoreAction({
+        state,
+        actions,
+        dispatch,
+        applicationData,
+        isActiveUser,
+        dynamicsApps,
+        membershipApplication: { stepFive: true }, // set stepOne to complete
+        data: sigAppliaction,
+      });
 
-      // if (!store.success)
-      //   throw new Error("Failed to update application record"); // throw error if store is not successful
+      if (!store.success)
+        throw new Error("Failed to update application record"); // throw error if store is not successful
 
-      // complete application step
-      // await setCompleteUserApplicationAction({
-      //   state,
-      //   dispatch,
-      //   isActiveUser,
-      // });
+      // complete application & submit to Dynamics
+      await setCompleteUserApplicationAction({
+        state,
+        dispatch,
+        isActiveUser,
+      });
 
-      // let slug = `/membership/thank-you/`;
-      // if (isActiveUser) setGoToAction({ path: slug, actions });
+      let slug = `/membership/thank-you/`;
+      if (isActiveUser) setGoToAction({ path: slug, actions });
     } catch (error) {
       console.log(error);
     } finally {

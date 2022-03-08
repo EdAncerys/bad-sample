@@ -22,7 +22,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
 
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, dynamicsApps } = useAppState();
-  const [sigGroup, setGroupe] = useSate(null);
+  const [sigGroup, setGroupe] = useState(null);
 
   const data = state.source.get(state.router.link);
   const dermGroupe = state.source[data.type][data.id];
@@ -42,7 +42,6 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
 
     let sigGroupe = Object.values(state.source.sig_group);
     setGroupe(sigGroupe);
-    console.log("sigGroupe", sigGroupe); // debug
 
     return () => {
       useEffectRef.current = false; // clean up function
@@ -82,28 +81,28 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   };
 
   const ApplyForMembership = () => {
-    if (!acf.sigs || sigGroup) return null;
+    if (!acf.sigs || !sigGroup) return null;
 
-    // let sigGroupeTypes = Object.values(state.source.sig_group);
-    // console.log(sigGroupeTypes); // debug
+    // filter sig by id and return name of the groupe
+    const sig = sigGroup.filter((sig) => sig.id === acf.sigs[0]);
+    // if sig data is empty then return null  
+    if (!sig.length) return null;
+    console.log("sig", sig); // debug
+    let sigAppName = "";
+    if (sig.length > 0) {
+      sigAppName = sig[0].name;
+    }
+
 
     return (
       <div style={{ paddingTop: `2em` }}>
-        {/* {sigGroupeTypes.map(({ name }, key) => {
-          // get current application data from memberships object by id
-          // console.log(type); // debug
-
-          return (
-            <div
-              key={key}
-              className="blue-btn"
-              style={{ width: "fit-content", margin: `1em 0` }}
-              onClick={() => handleApply({ catType: name })}
-            >
-              <Html2React html={`Apply for ${name} membership`} />
-            </div>
-          );
-        })} */}
+        <div
+          className="blue-btn"
+          style={{ width: "fit-content", margin: `1em 0` }}
+          onClick={() => handleApply({ catType: sigAppName })}
+        >
+          <Html2React html={`Apply for ${sigAppName} membership`} />
+        </div>
       </div>
     );
   };
