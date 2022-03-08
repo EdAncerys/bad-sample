@@ -270,7 +270,7 @@ const Video = ({ state, actions }) => {
       return true;
     };
     checkVideoStatus();
-  }, [isActiveUser]);
+  }, [isActiveUser, paymentUrl]);
   if (!videoStatus) return <Loading />;
   return (
     <BlockWrapper>
