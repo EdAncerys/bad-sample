@@ -91,12 +91,12 @@ const App = ({ state, actions }) => {
     anchorScrapper();
   }, [endPoint]);
 
-const { sm, md, lg, xl } = muiQuery();
-// RESPONSIVE --------------------------------------------
-if (lg) state.theme.marginHorizontal = 10;
-if (lg) state.theme.marginVertical = 10;
-if (lg) state.theme.fontSize = 22;
-if (lg) state.theme.footerHeight = 2;
+  const { sm, md, lg, xl } = muiQuery();
+  // RESPONSIVE --------------------------------------------
+  if (lg) state.theme.marginHorizontal = 10;
+  if (lg) state.theme.marginVertical = 10;
+  if (lg) state.theme.fontSize = 22;
+  if (lg) state.theme.footerHeight = 2;
 
   const transitions = useTransition(isPlaceholder, {
     from: { opacity: 0 },
@@ -113,6 +113,7 @@ if (lg) state.theme.footerHeight = 2;
   return transitions(({ opacity }, appContent) =>
     appContent ? (
       <animated.div
+        className="no-selector"
         style={{ opacity: opacity.to({ range: [0.0, 1.0], output: [0.1, 1] }) }}
       >
         <AnimatedPlaceholder />
@@ -163,7 +164,7 @@ if (lg) state.theme.footerHeight = 2;
                   when={endPoint === "/membership/step-4-professional-details/"}
                 />
                 <RegistrationStepFive
-                  when={endPoint === "/membership/step-5-sig-questions/"}
+                  when={endPoint === "/membership/sig-questions/"}
                 />
                 <ThankYou when={endPoint === "/membership/thank-you/"} />
                 <EventsLandingPage when={endPoint === "/events/"} />
@@ -188,80 +189,6 @@ if (lg) state.theme.footerHeight = 2;
         </div>
       </animated.div>
     )
-  );
-
-  return (
-    <Switch>
-      <PaymentConfirmation
-        when={state.router.link === "/payment-confirmation/"}
-      />
-      <div
-        onClick={(e) => {
-          state.theme.childMenuRef = ""; // reset child menu ref value
-          state.theme.activeDropDownRef = "menu reset"; // reset menu ref value
-        }}
-      >
-        <div style={{ ...styles.container }}>
-          <Header />
-          <Breadcrumbs />
-          <BlockWrapper>
-            <LoginModal />
-            <ErrorModal />
-            <CreateAccountModal />
-            <EnquireModal />
-          </BlockWrapper>
-
-          <div className="flex-col">
-            <Switch>
-              <Loading when={data.isFetching} />
-              <Error when={data.isError} />
-              <BlocksPage when={data.route.includes("blocks")} />
-
-              <Login when={endPoint === "/login/"} />
-              <CreateAccount when={endPoint === "/create-account/"} />
-
-              <AccountDashboard
-                when={endPoint === "/dashboard/" && isActiveUser}
-              />
-              <Contact when={endPoint === "/contact-us/"} />
-              <RegistrationStepOne
-                when={endPoint === "/membership/step-1-the-process/"}
-              />
-              <RegistrationStepTwo
-                when={endPoint === "/membership/step-2-category-selection/"}
-              />
-              <RegistrationStepThree
-                when={endPoint === "/membership/step-3-personal-information/"}
-              />
-              <RegistrationStepFour
-                when={endPoint === "/membership/step-4-professional-details/"}
-              />
-              <RegistrationStepFive
-                when={endPoint === "/membership/step-5-sig-questions/"}
-              />
-              <ThankYou when={endPoint === "/membership/thank-you/"} />
-              <EventsLandingPage when={endPoint === "/events/"} />
-              <PilsArchive
-                when={endPoint === "/patient-information-leaflets/"}
-              />
-
-              <Pils when={data.isPils} />
-              <Event when={data.isEvents} />
-              <Venue when={data.isVenues} />
-              <DermGroupsCharity when={data.isDermGroupsCharity} />
-              <Covid when={data.isCovid19} />
-              <VideoArchive when={endPoint === "/videos/"} />
-              <Home when={data.isHome} />
-
-              <Post when={data.isPost} />
-              <Page when={data.isPage} />
-              <Video when={data.isVideos} />
-            </Switch>
-          </div>
-          <Footer />
-        </div>
-      </div>
-    </Switch>
   );
 };
 

@@ -19,6 +19,7 @@ import {
   getMembershipDataAction,
   getHospitalNameAction,
   getHospitalsAction,
+  getBADMembershipSubscriptionData,
 } from "../../../context";
 
 const SIGApplication = ({ state, actions, libraries }) => {
@@ -28,6 +29,38 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const { applicationData, isActiveUser, dynamicsApps } = useAppState();
 
   const [formData, setFormData] = useState({
+    py3_title: "",
+    py3_firstname: "",
+    py3_lastname: "",
+    py3_gender: "",
+    py3_dateofbirth: "",
+    py3_email: "",
+    py3_mobilephone: "",
+    py3_address1ine1: "",
+    py3_addressline2: "",
+    py3_addresstowncity: "",
+    py3_addresscountystate: "",
+    py3_addresszippostalcode: "",
+    py3_addresscountry: "",
+    sky_profilepicture: "",
+
+    py3_gmcnumber: "",
+    py3_otherregulatorybodyreference: "",
+    py3_ntnno: "",
+    bad_currentpost: "",
+    py3_hospitalid: "",
+    bad_proposer1: "",
+    bad_proposer2: "",
+    bad_mrpcqualified: "",
+    sky_cvurl: "",
+    py3_currentgrade: "",
+    sky_newhospitalname: "",
+    bad_newhospitaladded: "",
+    bad_expectedyearofqualification: "",
+    py3_constitutionagreement: "",
+    bad_readpolicydocument: "",
+    sky_newhospitaltype: "",
+
     bad_categorytype: "",
     bad_qualifications: "",
     bad_hasmedicallicence: "",
@@ -41,6 +74,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
     py3_insertnhsnetemailaddress: "",
   });
   const [inputValidator, setInputValidator] = useState({
+    bad_categorytype: true,
+
     py3_title: true,
     py3_firstname: true,
     py3_lastname: true,
@@ -91,6 +126,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const [genderList, setGenderList] = useState([]);
 
   const [hospitalData, setHospitalData] = useState(null);
+  const [canChangeHospital, setCanChangeHospital] = useState(true); // allow user to change hospital is no BAD applications are found
   const [selectedHospital, setSelectedHospital] = useState(null);
   const isHospitalValue = formData.py3_hospitalid;
   const hospitalSearchRef = useRef("");
@@ -105,11 +141,27 @@ const SIGApplication = ({ state, actions, libraries }) => {
     setMembershipData(membershipData);
 
     const handleSetFormData = ({ data, name }) => {
+      let value = data.value;
+      // validate gender input field if name is py3_gender & value = 1 replace with ''
+      if (name === "py3_gender" && value === 1) value = "";
+
       setFormData((prevFormData) => ({
         ...prevFormData,
-        [`${name}`]: data.value || "",
+        [`${name}`]: value || "",
       }));
     };
+
+    if (dynamicsApps) {
+      const subsData = dynamicsApps.subs.data; // get subs/approved apps data form dynamic apps
+      // check if user have application under BAD as approved status
+      const isApprovedBAD =
+        subsData.filter((item) => item.bad_organisedfor === "BAD").length > 0;
+      // if user have application pending under reviewed status redirect to application list
+      if (isApprovedBAD) {
+        console.log("🤖 user have BAD application approved");
+        setCanChangeHospital(false);
+      }
+    }
 
     // hospital id initial value
     let hospitalId = null;
@@ -170,10 +222,14 @@ const SIGApplication = ({ state, actions, libraries }) => {
         if (data.value) hospitalId = data.value;
         handleSetFormData({ data, name: "py3_hospitalid" });
       }
-      // get hospital name from API
 
-      if (data.bad_categorytype) setType(data.bad_categorytype); // validate BAD application category type
       if (data._bad_sigid_value) setType(data._bad_sigid_value); // validate SIG application category type
+      // populate form data with application category:type
+      if (data.bad_categorytype)
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          bad_categorytype: data.bad_categorytype + ":" + data._bad_sigid_value,
+        }));
 
       // SIG membership information step
       if (data.name === "bad_qualifications")
@@ -295,12 +351,10 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (name === "bad_organisedfor")
-      // reset form on category change
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        bad_categorytype: "",
-      }));
+    if (name === "bad_organisedfor") {
+      // handle new id prefetch
+      console.log("handle new id prefetch");
+    }
 
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -311,6 +365,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const handleNext = async () => {
     // check if new hospital value been added
     const isNewHospital = formData.bad_newhospitaladded;
+    let sigAppliaction = formData;
 
     const isValid = isFormValidated({
       required: [
@@ -338,44 +393,69 @@ const SIGApplication = ({ state, actions, libraries }) => {
     });
 
     if (!isValid) return null;
+    // console.log("formData", formData); // debug
 
-    console.log("formData", formData); // debug
+    try {
+      setFetching(true);
+      // ⏬ get appropriate membership ID
+      const membershipData = await getBADMembershipSubscriptionData({
+        state,
+        category: "SIG",
+        type: formData.bad_categorytype,
+      });
+      // if membershipData aupdate application id & procced to next step
+      if (!membershipData) {
+        // reset membershipData for dropdown to trigger an Error
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          bad_categorytype: "",
+        }));
+        throw new Error("Failed to get membership data");
+      }
+      if (membershipData) {
+        // update application object with feched membership id
+        sigAppliaction.bad_categorytype =
+          membershipData.core_membershipsubscriptionplanid;
+      }
 
-    // try {
-    //   setFetching(true);
-    //   const store = await setUserStoreAction({
-    //     state,
-    //     actions,
-    //     dispatch,
-    //     applicationData,
-    //     isActiveUser,
-    //     dynamicsApps,
-    //     membershipApplication: { stepFive: true }, // set stepOne to complete
-    //     data: formData,
-    //   });
+      const store = await setUserStoreAction({
+        state,
+        actions,
+        dispatch,
+        applicationData,
+        isActiveUser,
+        dynamicsApps,
+        membershipApplication: { stepFive: true }, // set stepOne to complete
+        data: sigAppliaction,
+      });
 
-    //   if (!store.success)
-    //     throw new Error("Failed to update application record"); // throw error if store is not successful
+      if (!store.success)
+        throw new Error("Failed to update application record"); // throw error if store is not successful
 
-    //   await setCompleteUserApplicationAction({
-    //     state,
-    //     dispatch,
-    //     isActiveUser,
-    //   });
+      await setCompleteUserApplicationAction({
+        state,
+        dispatch,
+        isActiveUser,
+      });
 
-    //   let slug = `/membership/thank-you/`;
-    //   if (isActiveUser) setGoToAction({ path: slug, actions });
-    // } catch (error) {
-    //   console.log(error);
-    // } finally {
-    //   setFetching(false);
-    // }
+      let slug = `/membership/thank-you/`;
+      if (isActiveUser) setGoToAction({ path: slug, actions });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setFetching(false);
+    }
   };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    if (name === "bad_includeinthebssciiemaildiscussionforum" && checked) {
+    // if input value py3_insertnhsnetemailaddress in wp set to show proceed
+    if (
+      name === "bad_includeinthebssciiemaildiscussionforum" &&
+      checked &&
+      inputValidator.py3_insertnhsnetemailaddress
+    ) {
       setIsEmail(true);
     }
     if (name === "bad_includeinthebssciiemaildiscussionforum" && !checked) {
@@ -425,7 +505,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
     return (
       <div>
-        <label className="bold" style={{ padding: "0.5em 0" }}>
+        <label className="bold required" style={{ padding: "0.5em 0" }}>
           Membership Category
         </label>
         <Form.Select
@@ -769,19 +849,21 @@ const SIGApplication = ({ state, actions, libraries }) => {
                         }}
                       >
                         {selectedHospital}
-                        <div
-                          className="filter-icon"
-                          style={{ top: -7 }}
-                          onClick={handleClearHospital}
-                        >
-                          <CloseIcon
-                            style={{
-                              fill: colors.darkSilver,
-                              padding: 0,
-                              width: "0.7em",
-                            }}
-                          />
-                        </div>
+                        {canChangeHospital && (
+                          <div
+                            className="filter-icon"
+                            style={{ top: -7 }}
+                            onClick={handleClearHospital}
+                          >
+                            <CloseIcon
+                              style={{
+                                fill: colors.darkSilver,
+                                padding: 0,
+                                width: "0.7em",
+                              }}
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

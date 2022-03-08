@@ -63,9 +63,13 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   // ⏬ populate form data values from applicationData
   useEffect(() => {
     const handleSetData = ({ data, name }) => {
+      let value = data.value;
+      // validate gender input field if name is py3_gender & value = 1 replace with ''
+      if (name === "py3_gender" && value === 1) value = "";
+
       setFormData((prevFormData) => ({
         ...prevFormData,
-        [`${name}`]: data.value || "",
+        [`${name}`]: value || "",
       }));
     };
 

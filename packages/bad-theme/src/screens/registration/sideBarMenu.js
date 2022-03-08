@@ -83,8 +83,6 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   };
 
   const ServeContent = () => {
-    console.log("form", form);
-
     const ServeStepFive = () => {
       if (form.bad_organisedfor !== "810170001") return null; // SIG application link
 
@@ -95,7 +93,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
           onClick={() => {
             if (slug === "/membership/thank-you/") return null;
             setGoToAction({
-              path: `/membership/step-5-sig-questions/`,
+              path: `/membership/sig-questions/`,
               actions,
             });
           }}
