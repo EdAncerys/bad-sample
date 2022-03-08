@@ -84,15 +84,13 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
     if (!acf.sigs || !sigGroup) return null;
 
     // filter sig by id and return name of the groupe
-    const sig = sigGroup.filter((sig) => sig.id === acf.sigs[0]);
-    // if sig data is empty then return null  
+    const sig = sigGroup.filter((sig) => sig.id === acf.sigs);
+    // if sig data is empty then return null
     if (!sig.length) return null;
-    console.log("sig", sig); // debug
     let sigAppName = "";
     if (sig.length > 0) {
       sigAppName = sig[0].name;
     }
-
 
     return (
       <div style={{ paddingTop: `2em` }}>
