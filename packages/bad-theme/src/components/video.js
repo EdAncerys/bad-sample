@@ -232,7 +232,7 @@ const Video = ({ state, actions }) => {
     actions.source.fetch("/videos/");
 
     const checkVideoStatus = async () => {
-      const cookie = handleGetCookie({ name: `BAD-WebApp` });
+      const cookie = await handleGetCookie({ name: `BAD-WebApp` });
       const { contactid, jwt } = cookie;
       if (!post.acf.private) {
         setVideoStatus("unlocked");
