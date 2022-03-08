@@ -38,6 +38,7 @@ import DermGroupsCharity from "./dermGroupsCharity";
 import Covid from "./covid";
 import PaymentConfirmation from "./paymentConfirmation";
 import VideoArchive from "../components/videoArchive";
+import VideoGuides from "../components/videoGuides";
 import Video from "../components/video";
 // SCREEN HELPERS ---------------------------------------------------------
 import Error from "./error";
@@ -177,11 +178,13 @@ const App = ({ state, actions }) => {
                 <Venue when={data.isVenues} />
                 <DermGroupsCharity when={data.isDermGroupsCharity} />
                 <Covid when={data.isCovid19} />
+                <VideoArchive when={endPoint === "/videos/"} />
 
                 <Home when={data.isHome} />
 
                 <Post when={data.isPost} />
                 <Page when={data.isPage} />
+                <Video when={data.isVideos} />
               </Switch>
             </div>
             <Footer />
