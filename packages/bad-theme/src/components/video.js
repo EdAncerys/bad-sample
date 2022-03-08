@@ -16,10 +16,10 @@ const Video = ({ state, actions }) => {
   const post = state.source[data.type][data.id];
 
   const { isActiveUser } = useAppState();
-  const cookie = handleGetCookie({ name: `BAD-WebApp` });
 
   console.log(isActiveUser);
   if (!post) return <Loading />;
+
   console.log(post);
   // STATE
   const [loadVideo, setLoadVideo] = React.useState(false);
@@ -111,7 +111,7 @@ const Video = ({ state, actions }) => {
               color: "white",
             }}
           >
-            {!videoStatus && videoStatus === "locked" ? (
+            {!videoStatus || videoStatus === "locked" ? (
               <LockIcon sx={{ fontSize: 80 }} className="shadow" />
             ) : (
               <PlayCircleOutlineIcon
@@ -139,7 +139,7 @@ const Video = ({ state, actions }) => {
     };
     const ServeDateAndPrice = () => {
       const ServePrice = () => {
-        if (!videoStatus)
+        if (!videoStatus || !isActiveUser)
           return (
             <div
               className="primary-title"
@@ -148,7 +148,7 @@ const Video = ({ state, actions }) => {
               {post.acf.private ? "Login to watch or buy" : "Free to watch"}
             </div>
           );
-        if (post.acf.private && videoStatus === "locked")
+        if (isActiveUser && post.acf.private && videoStatus === "locked")
           return (
             <div
               type="submit"
@@ -230,10 +230,18 @@ const Video = ({ state, actions }) => {
   };
   React.useEffect(() => {
     actions.source.fetch("/videos/");
-    const { contactid, jwt } = cookie;
+
     const checkVideoStatus = async () => {
-      if (!isActiveUser) setVideoStatus("");
-      if (!post.acf.video_id) setVideoStatus("locked");
+      const cookie = handleGetCookie({ name: `BAD-WebApp` });
+      const { contactid, jwt } = cookie;
+      if (!post.acf.private) {
+        setVideoStatus("unlocked");
+        return true;
+      }
+      if (!isActiveUser) {
+        setVideoStatus("locked");
+        return true;
+      }
       if (post.acf.private && post.acf.price) {
         const url =
           state.auth.APP_HOST +
@@ -262,7 +270,8 @@ const Video = ({ state, actions }) => {
       return true;
     };
     checkVideoStatus();
-  }, []);
+  }, [isActiveUser]);
+  if (!videoStatus) return <Loading />;
   return (
     <BlockWrapper>
       <PaymentModal
