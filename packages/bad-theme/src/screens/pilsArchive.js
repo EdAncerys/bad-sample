@@ -42,7 +42,6 @@ const PilsArchive = ({ state, actions, libraries }) => {
     // if pils not found return
     if (!state.source.pils) return;
     let pilData = Object.values(state.source.pils);
-    console.log("pilData", pilData); // debug
 
     // sort pils alphabetically by title
     pilData.sort((a, b) => {
@@ -90,8 +89,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
           pil.title.rendered.toLowerCase().includes(input) ||
           pil.content.rendered.toLowerCase().includes(input)
       );
-
-      console.log(filter); // debug
+      // console.log(filter); // debug
 
       setSearchFilter(input);
       setPilList(filter);

@@ -26,7 +26,7 @@ const AccordionHeader = ({
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const { guidelines_type, subtitle, date, acf } = block;
+  const { guidelines_type, subtitle, acf } = block;
   const LOGO_HEIGHT = 45;
 
   let preview = block.preview;
@@ -192,8 +192,12 @@ const AccordionHeader = ({
   const ServePublishedDate = () => {
     if (!hasPublishDate) return null;
 
+    const date = acf.published_date;
     const dateObject = new Date(date);
     const formattedDate = DATE_MODULE.format(dateObject, "MMMM YYYY");
+
+    console.log(date);
+    console.log(dateObject);
 
     return (
       <div
@@ -202,7 +206,7 @@ const AccordionHeader = ({
           alignItems: "center",
           padding: niceAccredited ? "0 0 0 2em" : "0 2em",
           whiteSpace: "nowrap",
-          paddingTop: 4, // compensate line height
+          paddingBottom: 4, // compensate line height
         }}
       >
         Published {formattedDate}
