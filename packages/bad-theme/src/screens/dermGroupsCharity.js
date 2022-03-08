@@ -12,7 +12,7 @@ import {
   useAppDispatch,
   useAppState,
   handleApplyForMembershipAction,
-  getMembershipDataAction,
+  getSIGGroupeData,
 } from "../context";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
@@ -22,6 +22,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
 
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, dynamicsApps } = useAppState();
+  const [sigGroup, setGroupe] = useSate(null);
 
   const data = state.source.get(state.router.link);
   const dermGroupe = state.source[data.type][data.id];
@@ -30,12 +31,18 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  const { content, title, dermo_group_type, acf } = dermGroupe;
+  const { content, title, acf } = dermGroupe;
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
-    window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
-    document.documentElement.scrollTop = 0; // for safari
+    if (!state.source.sig_group) {
+      // pre-fetch SIG groupe data
+      await getSIGGroupeData({ state, actions });
+    }
+
+    let sigGroupe = Object.values(state.source.sig_group);
+    setGroupe(sigGroupe);
+    console.log("sigGroupe", sigGroupe); // debug
 
     return () => {
       useEffectRef.current = false; // clean up function
@@ -75,7 +82,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   };
 
   const ApplyForMembership = () => {
-    if (!acf.sigs) return null;
+    if (!acf.sigs || sigGroup) return null;
 
     // let sigGroupeTypes = Object.values(state.source.sig_group);
     // console.log(sigGroupeTypes); // debug
