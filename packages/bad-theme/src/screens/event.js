@@ -307,17 +307,19 @@ const Event = ({ state, actions, libraries }) => {
             setEnquireAction({
               dispatch,
               enquireAction: {
-                register_public_email,
-                register_public_phone_number,
-                register_form_title,
-                register_form_body,
-                register_full_name,
-                register_email,
-                register_phone_number,
-                register_subject,
-                register_subject_dropdown_options,
-                register_message,
-                register_allow_attachments,
+                contact_public_email: contact_public_email || "bad@contact.org",
+                contact_public_phone_number:
+                  contact_public_phone_number || "+1 (123) 456-7890",
+                contact_form_title: contact_form_title || "Event Contact Form",
+                contact_form_body:
+                  contact_form_body || `Register for ${title.rendered} event.`,
+                contact_full_name: contact_full_name || true,
+                contact_email: contact_email || true,
+                contact_phone_number: contact_phone_number || true,
+                contact_subject: contact_subject || true,
+                contact_subject_dropdown_options,
+                contact_message: contact_message || true,
+                contact_allow_attachments,
               },
             })
           }
@@ -570,16 +572,19 @@ const Event = ({ state, actions, libraries }) => {
             setEnquireAction({
               dispatch,
               enquireAction: {
-                contact_public_email,
-                contact_public_phone_number,
-                contact_form_title,
-                contact_form_body,
-                contact_full_name,
-                contact_email,
-                contact_phone_number,
-                contact_subject,
+                contact_public_email: contact_public_email || "bad@contact.org",
+                contact_public_phone_number:
+                  contact_public_phone_number || "+1 (123) 456-7890",
+                contact_form_title:
+                  contact_form_title || "Event Information Form",
+                contact_form_body:
+                  contact_form_body || `Enquire about ${title.rendered} event.`,
+                contact_full_name: contact_full_name || true,
+                contact_email: contact_email || true,
+                contact_phone_number: contact_phone_number || true,
+                contact_subject: contact_subject || true,
                 contact_subject_dropdown_options,
-                contact_message,
+                contact_message: contact_message || true,
                 contact_allow_attachments,
               },
             })
