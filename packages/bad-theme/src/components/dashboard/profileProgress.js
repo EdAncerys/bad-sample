@@ -39,7 +39,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     let progressName = "";
     // if application record & no steps completed return application name
     if (appData.bad_categorytype) {
-      progressName = `- Started ${appData.bad_categorytype} application`;
+      progressName = ` - Started ${appData.bad_categorytype} application`;
     }
 
     if (appData.stepOne) progressName = "Step 1 - The Process";
@@ -61,12 +61,23 @@ const ProfileProgress = ({ state, actions, libraries }) => {
       path = `/membership/step-4-professional-details/`;
     if (applicationData && applicationData[0].stepFour)
       path = `/membership/thank-you/`;
+    // SIG application path
+    if (applicationData && applicationData[0].bad_organisedfor === "SIG")
+      path = `/membership/sig-questions/`;
 
     setGoToAction({ path: path, actions });
   };
 
   // SERVERS ---------------------------------------------
   const ServeProgressBar = () => {
+    if (!applicationData) return null;
+
+    const appData = applicationData[0]; // application info data
+    const isSIG = appData.bad_organisedfor === "SIG";
+
+    // dont display for SIG applications
+    if (isSIG) return null;
+
     const ServeProgressIcon = ({ complete }) => {
       const alt = complete ? "complete" : "in-progress";
       let status = complete;
@@ -113,23 +124,11 @@ const ProfileProgress = ({ state, actions, libraries }) => {
               justifyItems: "center",
             }}
           >
-            <ServeProgressIcon
-              complete={applicationData && applicationData[0].stepOne}
-            />
-            <ServeProgressIcon
-              complete={applicationData && applicationData[0].stepTwo}
-            />
-            <ServeProgressIcon
-              complete={applicationData && applicationData[0].stepThree}
-            />
-            <ServeProgressIcon
-              complete={applicationData && applicationData[0].stepFour}
-            />
-            <ServeProgressIcon
-              complete={
-                applicationData && applicationData[0].applicationComplete
-              }
-            />
+            <ServeProgressIcon complete={appData.stepOne} />
+            <ServeProgressIcon complete={appData.stepTwo} />
+            <ServeProgressIcon complete={appData.stepThree} />
+            <ServeProgressIcon complete={appData.stepFour} />
+            <ServeProgressIcon complete={appData.applicationComplete} />
           </div>
         </div>
       );
@@ -173,6 +172,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
               fontSize: 20,
               fontWeight: "bold",
               justifyItems: "center",
+              lineHeight: "unset",
             }}
           >
             Application Progress <span>{applicationStep}</span>

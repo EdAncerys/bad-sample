@@ -98,7 +98,7 @@ export const handleApplyForMembershipAction = async ({
       console.log(
         "🤖 user have application in progress. Redirect to Dashboard"
       );
-      if (state.auth.ENVIRONMENT !== "DEVELOPMENT") {
+      if (!applicationData[0].stepOne) {
         // allow application list only in development env
         setGoToAction({ path: "/dashboard/", actions });
         return;
