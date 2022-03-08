@@ -3,6 +3,9 @@ import { authenticateAppAction, setFetchAction } from "../index";
 export const getApplicationStatus = async ({ state, dispatch, contactid }) => {
   console.log("getApplicationStatus triggered");
 
+  // if contactid is not provided then throw error
+  if (!contactid) throw new Error("contactid is required");
+
   const URL = state.auth.APP_HOST + `/applications/billing/` + contactid;
   const jwt = await authenticateAppAction({ state });
 

@@ -12,7 +12,7 @@ import {
   useAppDispatch,
   useAppState,
   handleApplyForMembershipAction,
-  getMembershipDataAction,
+  getSIGGroupeData,
 } from "../context";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
@@ -22,6 +22,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
 
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, dynamicsApps } = useAppState();
+  const [sigGroup, setGroupe] = useState(null);
 
   const data = state.source.get(state.router.link);
   const dermGroupe = state.source[data.type][data.id];
@@ -31,20 +32,16 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
 
   const { content, title, acf } = dermGroupe;
-  const [memberships, setMemberships] = useState(null);
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
-    window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
-    document.documentElement.scrollTop = 0; // for safari
+    if (!state.source.sig_group) {
+      // pre-fetch SIG groupe data
+      await getSIGGroupeData({ state, actions });
+    }
 
-    let membershipTypes = state.source.memberships;
-    if (!membershipTypes) await getMembershipDataAction({ state, actions }); // pre fetch membership data
-
-    membershipTypes = Object.values(state.source.memberships);
-    if (membershipTypes.length === 0) return null;
-    console.log(membershipTypes); // debug
-    setMemberships(membershipTypes);
+    let sigGroupe = Object.values(state.source.sig_group);
+    setGroupe(sigGroupe);
 
     return () => {
       useEffectRef.current = false; // clean up function
@@ -64,11 +61,6 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
       type: catType || "", // application type name
       membershipApplication: {
         stepOne: false,
-        stepTwo: false,
-        stepThree: false,
-        stepFour: false,
-        stepFive: false,
-        applicationComplete: false,
       },
       path: "/membership/sig-questions/", // redirect to SIG form page
     });
@@ -89,31 +81,28 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   };
 
   const ApplyForMembership = () => {
-    if (!acf.sigs || !memberships) return null;
+    if (!acf.sigs || !sigGroup) return null;
+
+    // filter sig by id and return name of the groupe
+    const sig = sigGroup.filter((sig) => sig.id === acf.sigs[0]);
+    // if sig data is empty then return null  
+    if (!sig.length) return null;
+    console.log("sig", sig); // debug
+    let sigAppName = "";
+    if (sig.length > 0) {
+      sigAppName = sig[0].name;
+    }
+
 
     return (
       <div style={{ paddingTop: `2em` }}>
-        {acf.sigs.map(({ ID, post_title }, key) => {
-          // get current application data from memberships object by id
-          const currentMembership = memberships.find(
-            (membership) => membership.id === ID
-          );
-          const catType = currentMembership
-            ? currentMembership.acf.category_types
-            : null;
-          console.log("currentMembership", catType); // debug
-
-          return (
-            <div
-              key={key}
-              className="blue-btn"
-              style={{ width: "fit-content", margin: `1em 0` }}
-              onClick={() => handleApply({ catType })}
-            >
-              <Html2React html={`Apply for ${post_title} membership`} />
-            </div>
-          );
-        })}
+        <div
+          className="blue-btn"
+          style={{ width: "fit-content", margin: `1em 0` }}
+          onClick={() => handleApply({ catType: sigAppName })}
+        >
+          <Html2React html={`Apply for ${sigAppName} membership`} />
+        </div>
       </div>
     );
   };

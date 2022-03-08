@@ -107,6 +107,11 @@ const settings = {
               endpoint: "menu_features",
               archive: "/menu_features",
             },
+            {
+              type: "sig_group",
+              endpoint: "sig_group",
+              archive: "/sig_group",
+            },
           ],
           taxonomies: [
             {

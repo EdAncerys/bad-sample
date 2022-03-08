@@ -39,6 +39,7 @@ const Directory = ({ state, actions, libraries }) => {
     if (!fad) {
       // fetch data via API
       const data = await getFadAction({ state, dispatch });
+
       setFadData(data.slice(0, Number(LIMIT)));
     } else {
       setFadData(fad.slice(0, Number(LIMIT)));

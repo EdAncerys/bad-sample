@@ -223,13 +223,14 @@ const SIGApplication = ({ state, actions, libraries }) => {
         handleSetFormData({ data, name: "py3_hospitalid" });
       }
 
-      if (data._bad_sigid_value) setType(data._bad_sigid_value); // validate SIG application category type
+      if (data.bad_categorytype) setType(data.bad_categorytype); // validate SIG application category type
       // populate form data with application category:type
-      if (data.bad_categorytype)
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          bad_categorytype: data.bad_categorytype + ":" + data._bad_sigid_value,
-        }));
+      // leave empty for SIG application category for user to select from the list
+      // if (data.bad_categorytype)
+      //   setFormData((prevFormData) => ({
+      //     ...prevFormData,
+      //     bad_categorytype: data.bad_categorytype + ":" + data._bad_sigid_value,
+      //   }));
 
       // SIG membership information step
       if (data.name === "bad_qualifications")
@@ -393,7 +394,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     });
 
     if (!isValid) return null;
-    // console.log("formData", formData); // debug
+    console.log("formData", formData); // debug
 
     try {
       setFetching(true);
@@ -417,6 +418,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         sigAppliaction.bad_categorytype =
           membershipData.core_membershipsubscriptionplanid;
       }
+      console.log("sigAppliaction", sigAppliaction); // debug
 
       const store = await setUserStoreAction({
         state,
@@ -432,6 +434,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       if (!store.success)
         throw new Error("Failed to update application record"); // throw error if store is not successful
 
+      // complete application & submit to Dynamics
       await setCompleteUserApplicationAction({
         state,
         dispatch,
