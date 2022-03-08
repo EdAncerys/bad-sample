@@ -225,11 +225,12 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
       if (data._bad_sigid_value) setType(data._bad_sigid_value); // validate SIG application category type
       // populate form data with application category:type
-      if (data.bad_categorytype)
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          bad_categorytype: data.bad_categorytype + ":" + data._bad_sigid_value,
-        }));
+      // leave empty for SIG application category for user to select from the list
+      // if (data.bad_categorytype)
+      //   setFormData((prevFormData) => ({
+      //     ...prevFormData,
+      //     bad_categorytype: data.bad_categorytype + ":" + data._bad_sigid_value,
+      //   }));
 
       // SIG membership information step
       if (data.name === "bad_qualifications")
@@ -393,7 +394,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     });
 
     if (!isValid) return null;
-    // console.log("formData", formData); // debug
+    console.log("formData", formData); // debug
 
     try {
       setFetching(true);
@@ -417,29 +418,31 @@ const SIGApplication = ({ state, actions, libraries }) => {
         sigAppliaction.bad_categorytype =
           membershipData.core_membershipsubscriptionplanid;
       }
+      console.log("sigAppliaction", sigAppliaction); // debug
 
-      const store = await setUserStoreAction({
-        state,
-        actions,
-        dispatch,
-        applicationData,
-        isActiveUser,
-        dynamicsApps,
-        membershipApplication: { stepFive: true }, // set stepOne to complete
-        data: sigAppliaction,
-      });
+      // const store = await setUserStoreAction({
+      //   state,
+      //   actions,
+      //   dispatch,
+      //   applicationData,
+      //   isActiveUser,
+      //   dynamicsApps,
+      //   membershipApplication: { stepFive: true }, // set stepOne to complete
+      //   data: sigAppliaction,
+      // });
 
-      if (!store.success)
-        throw new Error("Failed to update application record"); // throw error if store is not successful
+      // if (!store.success)
+      //   throw new Error("Failed to update application record"); // throw error if store is not successful
 
-      await setCompleteUserApplicationAction({
-        state,
-        dispatch,
-        isActiveUser,
-      });
+      // complete application step
+      // await setCompleteUserApplicationAction({
+      //   state,
+      //   dispatch,
+      //   isActiveUser,
+      // });
 
-      let slug = `/membership/thank-you/`;
-      if (isActiveUser) setGoToAction({ path: slug, actions });
+      // let slug = `/membership/thank-you/`;
+      // if (isActiveUser) setGoToAction({ path: slug, actions });
     } catch (error) {
       console.log(error);
     } finally {

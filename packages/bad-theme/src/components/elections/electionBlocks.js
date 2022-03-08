@@ -474,10 +474,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
 
           return (
             <div key={key} className="flex" style={{ position: "relative" }}>
-              <div
-                className="flex"
-                // style={{ opacity: isClosedPosition ? 0.7 : 1 }}
-              >
+              <div className="flex">
                 <Card
                   cardTitle={GRADE_NAME}
                   title={title.rendered}
@@ -500,6 +497,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
                     isClosedPosition ? colors.silverFillOne : null
                   }
                   opacity={isClosedPosition ? 0.7 : null}
+                  bodyLimit={6}
                   shadow
                 />
               </div>

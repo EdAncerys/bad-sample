@@ -30,21 +30,12 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  const { content, title, acf } = dermGroupe;
-  const [memberships, setMemberships] = useState(null);
+  const { content, title, dermo_group_type, acf } = dermGroupe;
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
     window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
     document.documentElement.scrollTop = 0; // for safari
-
-    let membershipTypes = state.source.memberships;
-    if (!membershipTypes) await getMembershipDataAction({ state, actions }); // pre fetch membership data
-
-    membershipTypes = Object.values(state.source.memberships);
-    if (membershipTypes.length === 0) return null;
-    console.log(membershipTypes); // debug
-    setMemberships(membershipTypes);
 
     return () => {
       useEffectRef.current = false; // clean up function
@@ -64,11 +55,6 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
       type: catType || "", // application type name
       membershipApplication: {
         stepOne: false,
-        stepTwo: false,
-        stepThree: false,
-        stepFour: false,
-        stepFive: false,
-        applicationComplete: false,
       },
       path: "/membership/sig-questions/", // redirect to SIG form page
     });
@@ -89,28 +75,25 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   };
 
   const ApplyForMembership = () => {
-    if (!acf.sigs || !memberships) return null;
+    if (!dermo_group_type && dermo_group_type.length === 0) return null;
+
+    let membershipTypes = Object.values(state.source.dermo_group_type);
+    console.log(membershipTypes); // debug
 
     return (
       <div style={{ paddingTop: `2em` }}>
-        {acf.sigs.map(({ ID, post_title }, key) => {
+        {membershipTypes.map(({ name }, key) => {
           // get current application data from memberships object by id
-          const currentMembership = memberships.find(
-            (membership) => membership.id === ID
-          );
-          const catType = currentMembership
-            ? currentMembership.acf.category_types
-            : null;
-          console.log("currentMembership", catType); // debug
+          // console.log(type); // debug
 
           return (
             <div
               key={key}
               className="blue-btn"
               style={{ width: "fit-content", margin: `1em 0` }}
-              onClick={() => handleApply({ catType })}
+              onClick={() => handleApply({ catType: name })}
             >
-              <Html2React html={`Apply for ${post_title} membership`} />
+              <Html2React html={`Apply for ${name} membership`} />
             </div>
           );
         })}
