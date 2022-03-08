@@ -20,7 +20,7 @@ const NewsBlock = ({
   const isLayoutFour = layout === "layout_four";
   const isLayoutFive = layout === "layout_five";
 
-  console.log("layout", block); // debug
+  // console.log("layout", block); // debug
   const [eCircularCatId, setECircularCatId] = useState(null);
   let gridLayoutType = `1fr`;
   if (isLayoutFour || isLayoutThree) gridLayoutType = `repeat(3, 1fr)`;

@@ -39,7 +39,25 @@ const PilsArchive = ({ state, actions, libraries }) => {
       isThereNextPage = nextPage;
     }
 
-    setPilList(Object.values(state.source.pils)); // add pill object to data array
+    // if pils not found return
+    if (!state.source.pils) return;
+    let pilData = Object.values(state.source.pils);
+    console.log("pilData", pilData); // debug
+
+    // sort pils alphabetically by title
+    pilData.sort((a, b) => {
+      const nameA = a.title.rendered.toUpperCase(); // ignore upper and lowercase
+      const nameB = b.title.rendered.toUpperCase(); // ignore upper and lowercase
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+      return 0;
+    });
+
+    setPilList(pilData); // add pill object to data array
 
     return () => {
       searchFilterRef.current = false; // clean up function
@@ -90,7 +108,9 @@ const PilsArchive = ({ state, actions, libraries }) => {
     const ServePil = ({ pil }) => {
       const { link, title } = pil;
       if (!title.rendered) return null;
-      if (item !== title.rendered[0] && isNaN(title.rendered[0])) return null;
+      // if item dont match first letter of the title.rendered return null
+      if (item !== title.rendered[0].toUpperCase() && isNaN(title.rendered[0]))
+        return null;
       if (item !== "0-9" && !isNaN(title.rendered[0])) return null;
 
       return (
