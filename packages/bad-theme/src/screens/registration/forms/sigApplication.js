@@ -441,11 +441,12 @@ const SIGApplication = ({ state, actions, libraries }) => {
         throw new Error("Failed to update application record"); // throw error if store is not successful
 
       // complete application & submit to Dynamics
-      await setCompleteUserApplicationAction({
+      const appsResponse = await setCompleteUserApplicationAction({
         state,
         dispatch,
         isActiveUser,
       });
+      if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
 
       let slug = `/membership/thank-you/`;
       if (isActiveUser) setGoToAction({ path: slug, actions });

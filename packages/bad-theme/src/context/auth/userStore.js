@@ -128,7 +128,11 @@ export const getUserStoreAction = async ({ state, isActiveUser }) => {
   }
 };
 
-export const getUserApplicationAction = async ({ state, dispatch, contactid }) => {
+export const getUserApplicationAction = async ({
+  state,
+  dispatch,
+  contactid,
+}) => {
   console.log("getUserApplicationAction triggered");
 
   try {
@@ -229,8 +233,11 @@ export const setCompleteUserApplicationAction = async ({
 
       console.log("⏬ Membership Completed ⏬");
       console.log(data);
+
+      return data;
     } else {
       console.log("⏬ Failed to Create Membership ⏬");
+      console.log(response);
       console.log(data);
     }
   } catch (error) {
