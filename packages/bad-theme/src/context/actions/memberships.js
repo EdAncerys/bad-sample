@@ -3,6 +3,7 @@ import {
   setUserStoreAction,
   setGoToAction,
   setLoginModalAction,
+  setErrorAction,
 } from "../index";
 
 export const getMembershipDataAction = async ({ state, actions }) => {
@@ -83,6 +84,18 @@ export const handleApplyForMembershipAction = async ({
       const isPending =
         appsData.filter((item) => item.bad_approvalstatus === "Pending")
           .length > 0;
+      const isSIGPending =
+        appsData.filter((item) => item.bad_organisedfor === "SIG").length > 0;
+
+      // if User have SIG under review isSIGPending = true redirect to dashboard page & notify
+      if (isSIGPending) {
+        setGoToAction({ path: "/dashboard/", actions });
+        setErrorAction({
+          dispatch,
+          isError: { message: "You have SIG application under review" },
+        });
+        return;
+      }
 
       if (isPending) {
         console.log("🤖 user have application pending under reviewed status"); // debug

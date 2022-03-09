@@ -17,6 +17,8 @@ const ProfileProgress = ({ state, actions, libraries }) => {
 
   const { dynamicsApps, applicationData } = useAppState();
 
+  console.log("dynamicsApps", dynamicsApps); // debug
+
   const marginVertical = state.theme.marginVertical;
   const ICON_WIDTH = 30;
 
