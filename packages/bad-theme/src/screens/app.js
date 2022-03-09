@@ -40,6 +40,7 @@ import PaymentConfirmation from "./paymentConfirmation";
 import VideoArchive from "../components/videoArchive";
 import VideoGuides from "../components/videoGuides";
 import Video from "../components/video";
+import FindADermatologist from "../components/findADermatologist";
 // SCREEN HELPERS ---------------------------------------------------------
 import Error from "./error";
 import Loading from "../components/loading";
@@ -176,7 +177,9 @@ const App = ({ state, actions }) => {
                 <DermGroupsCharity when={data.isDermGroupsCharity} />
                 <Covid when={data.isCovid19} />
                 <VideoArchive when={endPoint === "/videos/"} />
-
+                <FindADermatologist
+                  when={endPoint === "/find-a-dermatologist/"}
+                />
                 <Home when={data.isHome} />
 
                 <Post when={data.isPost} />
