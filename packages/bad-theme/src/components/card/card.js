@@ -210,7 +210,7 @@ const Card = ({
       const videoId = video_url.match(reg);
       console.log("VIDELOID", videoId);
       const fetchVideoData = await fetch(
-        `http://vimeo.com/api/v2/video/${videoId[0]}.json`
+        `https://vimeo.com/api/v2/video/${videoId[0]}.json`
       );
       if (fetchVideoData.ok) {
         const json = await fetchVideoData.json();
