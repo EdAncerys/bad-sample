@@ -11,9 +11,13 @@ import { colors } from "../../config/imports";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import ElectionModal from "./electionModal";
+// CONTEXT ------------------------------------------------
+import { useAppDispatch, setEnquireAction } from "../../context";
 
 const ElectionBlocks = ({ state, actions, block }) => {
   if (!block) return <Loading />;
+
+  const dispatch = useAppDispatch();
 
   const {
     text_align,
@@ -83,6 +87,29 @@ const ElectionBlocks = ({ state, actions, block }) => {
   if (!electionList) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
+  const handleContactForm = ({ isClosedPosition, block }) => {
+    let positionName = "Position";
+    if (block.title.rendered) positionName = block.title.rendered;
+
+    if (isClosedPosition)
+      setEnquireAction({
+        dispatch,
+        enquireAction: {
+          contact_public_email: "bad@contact.org",
+          contact_public_phone_number: "+1 (123) 456-7890",
+          contact_form_title: "Notification Form",
+          contact_form_body: `Notify when ${positionName} position is open.`,
+          contact_full_name: true,
+          contact_email: true,
+          contact_phone_number: true,
+          contact_subject: true,
+          contact_message: true,
+          recipients: [{ email: "bad@email.com" }],
+        },
+      });
+    if (!isClosedPosition) handleElectionModal({ block });
+  };
+
   const handleInputSearch = () => {
     const searchInput = document.querySelector(`#searchInput${uniqueId}`).value;
 
@@ -435,8 +462,14 @@ const ElectionBlocks = ({ state, actions, block }) => {
       <div style={styles.container}>
         {electionList.map((block, key) => {
           const { title, election_grade, election_roles } = block;
-          const { closing_date, cta, description, nomination_form_upload } =
-            block.acf;
+          const {
+            closing_date,
+            cta,
+            description,
+            nomination_form_upload,
+            election_status,
+          } = block.acf;
+          // console.log("block", block); // debug
 
           // taxonomy grade name filtering
           const filter = gradeList.filter(
@@ -445,10 +478,8 @@ const ElectionBlocks = ({ state, actions, block }) => {
           let GRADE_NAME = null;
           if (filter[0]) GRADE_NAME = filter[0].name;
 
-          // elections closing date
-          const today = new Date();
-          const electionClosingDate = new Date(closing_date);
-          const isClosedPosition = today > electionClosingDate;
+          // elections closing date condition
+          const isClosedPosition = election_status === "closed";
 
           if (searchFilter) {
             if (
@@ -480,16 +511,11 @@ const ElectionBlocks = ({ state, actions, block }) => {
                   title={title.rendered}
                   body={isClosedPosition ? null : description}
                   colour={colors.primary}
-                  cardHeight="100%"
                   electionInfo={block}
                   link_label={
                     isClosedPosition ? "Notify me when position is open" : cta
                   }
-                  handler={
-                    isClosedPosition
-                      ? () => console.log("Notify user")
-                      : () => handleElectionModal({ block })
-                  }
+                  handler={() => handleContactForm({ isClosedPosition, block })}
                   form_label="Nomination Form"
                   form_link={isClosedPosition ? null : nomination_form_upload}
                   cardMinHeight={370}

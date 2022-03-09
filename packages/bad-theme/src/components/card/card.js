@@ -102,22 +102,6 @@ const Card = ({
   if (removePadding) PADDING = 0;
   if (padding) PADDING = padding;
 
-  // APPLIES TO BAD ELECTIONS ------------------------------
-  if (state.router.link === "/about-the-bad/bad-elections/") {
-    CARD_HEIGHT = "200px";
-    link_label = "Read more";
-    ELECTION_BLOCKS = true;
-    handler = () => {
-      modalData
-        ? setModalData(null)
-        : setModalData({
-            body,
-            link,
-            title,
-          });
-    };
-  }
-
   // SERVERS ----------------------------------------------
   const ServeFooter = () => {
     if (disableFooter) return null;
