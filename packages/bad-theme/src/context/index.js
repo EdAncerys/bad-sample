@@ -42,7 +42,10 @@ import {
 } from "./auth/updateUserDetails";
 import { sendFileToS3Action } from "./auth/saveFileToS3";
 import { getBADMembershipSubscriptionData } from "./auth/getBADMembershipSubscriptionData";
-import { getApplicationStatus } from "./auth/getApplicationStatus";
+import {
+  getApplicationStatus,
+  setApplicationStatusAction,
+} from "./auth/getApplicationStatus";
 import {
   getDirectDebitAction,
   createDirectDebitAction,
@@ -52,6 +55,7 @@ import {
   getUserStoreAction,
   setCompleteUserApplicationAction,
   getUserApplicationAction,
+  deleteApplicationRecordAction,
 } from "./auth/userStore";
 import { getWileyAction } from "./auth/getWiley";
 import { getTestUserAccountsAction } from "./auth/getTestUserAccounts";
@@ -129,4 +133,6 @@ export {
   getWPMenu,
   getUserApplicationAction,
   getSIGGroupeData,
+  deleteApplicationRecordAction,
+  setApplicationStatusAction,
 };

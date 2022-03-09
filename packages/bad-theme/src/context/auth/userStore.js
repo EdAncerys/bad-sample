@@ -5,6 +5,7 @@ import {
   setLoginModalAction,
   getApplicationStatus,
   setErrorAction,
+  setApplicationStatusAction,
   setGoToAction,
 } from "../index";
 
@@ -270,6 +271,51 @@ export const updateDynamicsApplicationAction = async ({
       return data;
     } else {
       console.log("⏬ DYNAMICS. Failed to Update Membership Record ⏬");
+      return null;
+    }
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
+export const deleteApplicationRecordAction = async ({
+  state,
+  dispatch,
+  contactid,
+}) => {
+  console.log("deleteApplicationRecord triggered");
+
+  try {
+    if (!contactid)
+      throw new Error(
+        "Cannot delete application record. Contactid is missing."
+      );
+
+    // userStore endpoint API
+    const URL = state.auth.APP_HOST + `/applications/current/${contactid}`;
+    const jwt = await authenticateAppAction({ state });
+
+    const requestOptions = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${jwt}`,
+      },
+      body: JSON.stringify(updatedMembershipData),
+    };
+
+    const response = await fetch(URL, requestOptions);
+    const data = await response.json();
+
+    if (data.success) {
+      console.log("⏬ DYNAMICS. Membership Record Successfully Deleted ⏬");
+      console.log(data);
+      setApplicationStatusAction({ dispatch, dynamicsApps: null });
+
+      return data;
+    } else {
+      console.log("⏬ DYNAMICS. Failed to Delete Membership Record ⏬");
+      console.log(data);
       return null;
     }
   } catch (error) {

@@ -347,19 +347,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
     // console.log("Hospitals", hospitalData); // debug
   };
 
-  const handleSaveExit = async () => {
-    await setUserStoreAction({
-      state,
-      actions,
-      dispatch,
-      applicationData,
-      isActiveUser,
-      data: formData,
-    });
-
-    if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
-  };
-
   const isFormValidated = ({ required }) => {
     if (!required && !required.length) return null;
     let isValid = true;
@@ -512,13 +499,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         >
           Back
         </div>
-        <div
-          className="transparent-btn"
-          style={{ margin: `0 1em` }}
-          onClick={handleSaveExit}
-        >
-          Save & Exit
-        </div>
+
         <div className="blue-btn" onClick={handleNext}>
           Submit Application
         </div>
