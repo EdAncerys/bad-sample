@@ -38,14 +38,14 @@ export const validateMembershipFormAction = async ({
 
   // ⏬ validate inputs
   const membershipTypes = Object.values(state.source.memberships);
-  // console.log("membershipTypes", membershipTypes); // debug
+  console.log("membershipTypes", membershipTypes); // debug
 
   membershipTypes.map((membership) => {
     // validate application type against store object
     const applicationType =
       membership.acf.category_types === applicationData[0].bad_categorytype ||
       membership.acf.category_types.split(":")[1] ===
-        applicationData[0]._bad_sigid_value;
+        applicationData[0].bad_categorytype;
 
     if (applicationType) {
       const applicationForm = membership.acf;

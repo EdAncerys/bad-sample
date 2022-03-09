@@ -1071,7 +1071,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 </option>
                 <option value="Hair">Hair</option>
                 <option value="Nails">Nails</option>
-                <option value="UK based Consultant">UK based Consultant</option>
                 <option value="Both">Both</option>
               </Form.Select>
             </div>
