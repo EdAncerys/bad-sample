@@ -30,6 +30,7 @@ const FullWidthContentBlock = ({
     title,
     disable_vertical_padding,
     downloads,
+    file,
   } = block;
 
   const BANNER_HEIGHT = state.theme.bannerHeight;
@@ -129,6 +130,23 @@ const FullWidthContentBlock = ({
     );
   };
 
+  const ServeFileDownload = () => {
+    if (!file) return null;
+
+    return (
+      <div
+        style={{
+          display: "grid",
+          gap: `1em`,
+          padding: `1em 0`,
+          justifyContent: ALIGNMENT,
+        }}
+      >
+        <DownloadFileBlock block={{ file }} disableMargin />
+      </div>
+    );
+  };
+
   // RETURN ---------------------------------------------------
   return (
     <div
@@ -145,6 +163,7 @@ const FullWidthContentBlock = ({
         <ServeTitle />
         <ServeCardBody />
         <ServeDownloads />
+        <ServeFileDownload />
         <ServeActions />
       </div>
     </div>
