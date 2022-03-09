@@ -6,6 +6,7 @@ import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
 import BlockWrapper from "./blockWrapper";
 import { useAccordionButton } from "react-bootstrap/AccordionButton";
+import AccordionContext from "react-bootstrap/AccordionContext";
 import { handleGetCookie } from "../helpers/cookie";
 import { useAppState, authenticateAppAction, useAppDispatch } from "../context";
 import MapsComponent from "./maps/maps";
@@ -19,15 +20,21 @@ const FindADermatologist = ({ state }) => {
   const [query, setQuery] = React.useState();
 
   const [filteredDermatologists, setFilteredDermatologists] = React.useState();
+  const [loading, setLoading] = React.useState(true);
   const dispatch = useAppDispatch();
-  const query_limit = React.useRef(10);
+  const query_limit = React.useRef(5);
+  const enough = React.useRef(false);
   React.useEffect(async () => {
     const fetchDermatologistsByPostCode = async () => {
       const jwt = await authenticateAppAction({ dispatch, state });
       console.log("QUERY VALUE POSTCODE", query);
       const post_code = query.value.split(" ").join("");
       console.log(post_code);
-      const url = state.auth.APP_HOST + "/catalogue/fad/" + post_code;
+      const url =
+        state.auth.APP_HOST +
+        "/catalogue/fad/" +
+        post_code +
+        `?limit=${query_limit.current}`;
       console.log("JWT", jwt);
       console.log("URL", url);
       const fetching = await fetch(url, {
@@ -43,19 +50,43 @@ const FindADermatologist = ({ state }) => {
         setFilteredDermatologists(data);
       }
     };
+    const fetchDermatologistsByName = async () => {
+      const jwt = await authenticateAppAction({ dispatch, state });
+
+      const url = state.auth.APP_HOST + "/catalogue/fad";
+      const fetching = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+
+      if (fetching.ok) {
+        const json = await fetching.json();
+
+        const data = json.data;
+        const filteredData = data.filter((item) =>
+          item.fullname.includes(query.value)
+        );
+        console.log("FILTERED", filteredData);
+        setFilteredDermatologists(filteredData);
+      }
+    };
+
     if (query && query.type === "pc") fetchDermatologistsByPostCode();
-    if (query && query.type === "name")
-      alert("I wish this function was implemented!");
+    if (query && query.type === "name") fetchDermatologistsByName();
+    setLoading(false);
   }, [query]);
 
   const handleLoadMore = async () => {
+    setLoading(true);
     const jwt = await authenticateAppAction({ dispatch, state });
     const post_code = query.value.split(" ").join("");
     const url =
       state.auth.APP_HOST +
       "/catalogue/fad/" +
       post_code +
-      `?limit=10&skip=${query_limit}`;
+      `?limit=5&skip=${query_limit.current}`;
+    console.log("URL_LOADMORE", url);
     const more = await fetch(url, {
       headers: {
         Authorization: `Bearer ${jwt}`,
@@ -64,11 +95,15 @@ const FindADermatologist = ({ state }) => {
 
     if (more.ok) {
       const json = await more.json();
-
+      console.log(json.data);
+      if (json.data.length === 0) enough.current = true;
       setFilteredDermatologists((filteredDermatologists) => [
         ...filteredDermatologists,
-        json.data,
+        ...json.data,
       ]);
+      query_limit.current += 10;
+      setLoading(false);
+      console.log(filteredDermatologists);
     }
   };
   const CardHeader = ({ derm, id }) => {
@@ -90,11 +125,14 @@ const FindADermatologist = ({ state }) => {
         </div>
       );
     };
-
     const ServeActions = () => {
+      const { activeEventKey } = React.useContext(AccordionContext);
+
       return (
-        <div className="flex-row">
-          <div className="caps-btn">View more</div>
+        <div className="flex-row" style={{ alignItems: "flex-end" }}>
+          <div className="caps-btn">
+            {activeEventKey === id ? "Show less" : "Show more"}
+          </div>
         </div>
       );
     };
@@ -103,7 +141,7 @@ const FindADermatologist = ({ state }) => {
         <div className="primary-title" style={styles.number}>
           {id + 1}
         </div>
-        <div style={{ padding: 20 }}>
+        <div style={{ padding: 20, display: "flex", flexDirection: "column" }}>
           <ServeHeadline />
           <ServeDistance />
           <ServeAddress />
@@ -112,9 +150,13 @@ const FindADermatologist = ({ state }) => {
       </div>
     );
   };
-  function CustomToggle({ children, eventKey }) {
-    const decoratedOnClick = useAccordionButton(eventKey, () =>
-      console.log("totally custom!")
+
+  function CustomToggle({ children, eventKey, callback }) {
+    const { activeEventKey } = React.useContext(AccordionContext);
+
+    const decoratedOnClick = useAccordionButton(
+      eventKey,
+      () => callback && callback(eventKey)
     );
 
     return <div onClick={decoratedOnClick}>{children}</div>;
@@ -189,7 +231,10 @@ const FindADermatologist = ({ state }) => {
           marginTop: 20,
         }}
       >
-        <div className="primary-title" style={{ fontSize: "2.25rem" }}>
+        <div
+          className="primary-title"
+          style={{ fontSize: "2.25rem", marginBottom: 20 }}
+        >
           Search for dermatologists
         </div>
         <div
@@ -206,10 +251,15 @@ const FindADermatologist = ({ state }) => {
     if (!filteredDermatologists) return <Loading />;
     console.log("DERMI", filteredDermatologists);
     const SingleDerm = ({ derm, id }) => {
-      if (!derm.distance) return null;
+      if (query.type === "pc" && !derm.distance) return null;
       const ServeBiography = () => {
         if (!derm.bad_findadermatologisttext) return null;
-        return <div>{derm.bad_findadermatologisttext}</div>;
+        return (
+          <div style={{ marginTop: 20 }}>
+            <div className="primary-title">Bio</div>
+            {derm.bad_findadermatologisttext}
+          </div>
+        );
       };
 
       const ServeEmail = () => {
@@ -223,11 +273,17 @@ const FindADermatologist = ({ state }) => {
       const ServeUrls = () => {
         if (!derm.bad_web1 && !derm.bad_web2 && !derm.bad_web3) return null;
         return (
-          <div>
+          <div style={{ marginTop: 20 }}>
             <div className="primary-title">Private Practice Links</div>
-            <div className="menu-title">{derm.bad_web1}</div>
-            <div className="menu-title">{derm.bad_web2}</div>
-            <div className="menu-title">{derm.bad_web3}</div>
+            <div className="menu-title">
+              <a href={derm.bad_web1}>{derm.bad_web1}</a>
+            </div>
+            <div className="menu-title">
+              <a href={derm.bad_web2}>{derm.bad_web2}</a>
+            </div>
+            <div className="menu-title">
+              <a href={derm.bad_web3}>{derm.bad_web3}</a>
+            </div>
           </div>
         );
       };
@@ -266,6 +322,23 @@ const FindADermatologist = ({ state }) => {
         </Card>
       );
     };
+    const ServeLoadMoreButton = () => {
+      if (loading) return <Loading />;
+      if (query.type === "name") return null;
+      if (enough.current) return "There is no more records to show";
+      return (
+        <div
+          className="blue-btn"
+          onClick={() => {
+            handleLoadMore();
+            console.log("QUERY_LIMIT", query_limit.current);
+          }}
+          style={{ width: 150 }}
+        >
+          Load more
+        </div>
+      );
+    };
     return (
       <>
         <Accordion style={{ border: 0 }}>
@@ -275,14 +348,10 @@ const FindADermatologist = ({ state }) => {
           })}
         </Accordion>
         <div
-          className="blue-btn"
-          onClick={() => {
-            query_limit.current += 10;
-            handleLoadMore();
-            console.log("QUERY_LIMIT", query_limit.current);
-          }}
+          className="d-flex justify-content-center"
+          style={{ marginTop: 20, marginBottom: 20 }}
         >
-          Load more ({query_limit.current})
+          <ServeLoadMoreButton />
         </div>
       </>
     );
