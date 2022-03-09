@@ -38,7 +38,7 @@ export const validateMembershipFormAction = async ({
 
   // ⏬ validate inputs
   const membershipTypes = Object.values(state.source.memberships);
-  console.log("membershipTypes", membershipTypes); // debug
+  // console.log("membershipTypes", membershipTypes); // debug
 
   membershipTypes.map((membership) => {
     // validate application type against store object

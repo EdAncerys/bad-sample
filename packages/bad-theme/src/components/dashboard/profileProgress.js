@@ -189,7 +189,6 @@ const ProfileProgress = ({ state, actions, libraries }) => {
 
   const ServeApplicationList = () => {
     if (!dynamicsApps) return null; // if application data exist & not under review return null
-    console.log(dynamicsApps);
     // see if application list have approved applications and if so show them
     const subsData = dynamicsApps.subs.data; // get subs data form dynamic apps
     // hide component if application list has no approved applications

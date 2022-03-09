@@ -132,11 +132,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
   // ⏬ populate form data values from applicationData
   useEffect(async () => {
     await getMembershipDataAction({ state, actions });
-    let membershipData = null;
-
-    if (state.source.memberships)
-      membershipData = Object.values(state.source.memberships);
-    setMembershipData(membershipData);
+    let membershipData = state.source.memberships;
+    let applicationType = null;
 
     const handleSetFormData = ({ data, name }) => {
       let value = data.value;
@@ -215,14 +212,10 @@ const SIGApplication = ({ state, actions, libraries }) => {
         handleSetFormData({ data, name: "py3_hospitalid" });
       }
 
-      if (data.bad_categorytype) setType(data.bad_categorytype); // validate SIG application category type
-      // populate form data with application category:type
-      // leave empty for SIG application category for user to select from the list
-      // if (data.bad_categorytype)
-      //   setFormData((prevFormData) => ({
-      //     ...prevFormData,
-      //     bad_categorytype: data.bad_categorytype + ":" + data._bad_sigid_value,
-      //   }));
+      if (data.bad_categorytype) {
+        applicationType = data.bad_categorytype;
+        setType(data.bad_categorytype); // validate SIG application category type
+      }
 
       // SIG membership information step
       if (data.name === "bad_qualifications")
@@ -262,6 +255,27 @@ const SIGApplication = ({ state, actions, libraries }) => {
       if (hospitalData) {
         setSelectedHospital(hospitalData.name);
       }
+    }
+
+    if (membershipData) {
+      membershipData = Object.values(membershipData);
+      // filter memberships data & return memberships that includes applicationType
+      membershipData = membershipData.filter((item) =>
+        item.acf.category_types.includes(applicationType)
+      );
+    }
+    setMembershipData(membershipData);
+    // console.log("membershipData", membershipData);
+    // check if application category have only one application
+    let isSingleApp = false;
+    if (membershipData) isSingleApp = membershipData.length === 1;
+    // if application category have only one application set formData to that application
+    if (isSingleApp) {
+      console.log("membershipData", membershipData[0].acf.category_types); // debug')
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        bad_categorytype: membershipData[0].acf.category_types,
+      }));
     }
 
     // ⏬ validate inputs
@@ -514,19 +528,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
   const ServeSIGMembershipCategory = () => {
     if (!membershipData) return null;
-    // filter aplication data to match membership groupse data
-    const membershipDataFiltered = membershipData.filter((membership) => {
-      // membership.core_membershipgroupid === formData.bad_categorytype
-      let appTitle = membership.acf.category_types
-        .replace(/Full:/g, "")
-        .replace(/:/g, " - ");
-
-      let isPartOfGroupe = appTitle.includes(applicationType);
-
-      return isPartOfGroupe;
-    });
-
-    console.log("membershipDataFiltered", membershipDataFiltered); // debug')
 
     return (
       <div>
@@ -553,6 +554,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
               .replace(/:/g, " - ");
             // if applicationType name dont include category_types return null
             if (!typeName.includes(applicationType)) return null;
+            console.log(category_types);
 
             return (
               <option key={key} value={category_types}>
