@@ -5,6 +5,7 @@ import {
   setLoginModalAction,
   getApplicationStatus,
   setErrorAction,
+  setGoToAction,
 } from "../index";
 
 export const setUserStoreAction = async ({
