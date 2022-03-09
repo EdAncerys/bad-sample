@@ -17,11 +17,11 @@ const AnimatedPlaceholder = ({ state, actions, opacity }) => {
     <div
       className="no-selector"
       style={{
+        position: "absolute",
         backgroundColor: colors.white, // content background color
         color: colors.softBlack,
         display: "grid",
         width: "100%",
-        height: "100vh",
         alignItems: "center",
         justifyContent: "center",
         gridTemplateRows: "30vh 300px 100px",
