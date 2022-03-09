@@ -5,6 +5,7 @@ import parse from "html-react-parser";
 import { colors } from "../../config/imports";
 import DownloadFileBlock from "../downloadFileBlock";
 import ActionPlaceholder from "../actionPlaceholder";
+// CONTEXT ------------------------------------------------
 import {
   useAppDispatch,
   useAppState,
@@ -98,7 +99,7 @@ const CardActions = ({
 
     return (
       <div onClick={handler}>
-        <div className="caps-btn" style={{ marginTop: "1em" }}>
+        <div className="caps-btn">
           <Html2React html={goToLabel} />
         </div>
       </div>
@@ -112,17 +113,15 @@ const CardActions = ({
     if (form_label) goToLabel = form_label;
 
     return (
-      <div>
-        <div className="caps-btn">
-          <a
-            href={form_link}
-            target="_blank"
-            download
-            style={{ color: colors.softBlack }}
-          >
-            <Html2React html={goToLabel} />
-          </a>
-        </div>
+      <div className="caps-btn-no-underline" style={{ display: "grid" }}>
+        <a
+          href={form_link}
+          target="_blank"
+          style={{ color: "inherit" }}
+          download
+        >
+          <Html2React html={goToLabel} />
+        </a>
       </div>
     );
   };

@@ -320,6 +320,7 @@ const Event = ({ state, actions, libraries }) => {
                 contact_subject_dropdown_options,
                 contact_message: contact_message || true,
                 contact_allow_attachments,
+                recipients: [{ email: "bad@email.com" }],
               },
             })
           }
@@ -586,6 +587,7 @@ const Event = ({ state, actions, libraries }) => {
                 contact_subject_dropdown_options,
                 contact_message: contact_message || true,
                 contact_allow_attachments,
+                recipients: [{ email: "bad@email.com" }],
               },
             })
           }

@@ -4,6 +4,7 @@ import {
   setApplicationDataAction,
   setLoginModalAction,
   getApplicationStatus,
+  setErrorAction,
 } from "../index";
 
 export const setUserStoreAction = async ({
@@ -199,8 +200,15 @@ export const setCompleteUserApplicationAction = async ({
   state,
   dispatch,
   isActiveUser,
+  applicationData,
 }) => {
   console.log("setCompleteUserApplicationAction triggered");
+
+  let confirmationMsg = "Application been successfully submitted!";
+  if (applicationData) {
+    const type = applicationData[0].bad_categorytype;
+    confirmationMsg = `${type} application been successfully submitted!`;
+  }
 
   try {
     const { contactid } = isActiveUser;
@@ -233,6 +241,11 @@ export const setCompleteUserApplicationAction = async ({
 
       console.log("⏬ Membership Completed ⏬");
       console.log(data);
+
+      setErrorAction({
+        dispatch,
+        isError: { message: confirmationMsg },
+      });
 
       return data;
     } else {

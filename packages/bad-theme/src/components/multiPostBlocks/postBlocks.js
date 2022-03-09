@@ -104,7 +104,7 @@ const MultiPostBlock = ({ state, actions, block, filter }) => {
                 form_link={doc_upload ? null : form_link.url} // optional param
                 downloadFile={doc_upload ? { file: doc_upload } : null} // optional param
                 bodyLimit={4}
-                cardMinHeight={250}
+                cardMinHeight={280}
                 shadow // optional param
               />
             </div>

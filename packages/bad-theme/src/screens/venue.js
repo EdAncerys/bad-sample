@@ -45,6 +45,7 @@ const Venue = ({ state, actions, libraries }) => {
     form_title,
     form_body,
     floor,
+    recipients,
   } = venue.acf;
 
   useEffect(() => {
@@ -89,6 +90,7 @@ const Venue = ({ state, actions, libraries }) => {
                     subject_dropdown_options,
                     message,
                     allow_attachments,
+                    recipients
                   },
                 })
               }

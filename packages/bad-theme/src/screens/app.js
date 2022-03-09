@@ -113,11 +113,8 @@ const App = ({ state, actions }) => {
   // RETURN --------------------------------------------------------------------
   return transitions(({ opacity }, appContent) =>
     appContent ? (
-      <animated.div
-        className="no-selector"
-        style={{ opacity: opacity.to({ range: [0.0, 1.0], output: [0.1, 1] }) }}
-      >
-        <AnimatedPlaceholder />
+      <animated.div className="no-selector">
+        <AnimatedPlaceholder opacity={opacity} />
       </animated.div>
     ) : (
       <animated.div
