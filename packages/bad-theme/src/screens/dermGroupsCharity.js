@@ -61,6 +61,9 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
       type: catType || "", // application type name
       membershipApplication: {
         stepOne: false,
+        stepTwo: false,
+        stepThree: false,
+        stepFour: false,
       },
       path: "/membership/sig-questions/", // redirect to SIG form page
     });

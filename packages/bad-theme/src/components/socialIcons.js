@@ -18,6 +18,7 @@ const SocialIcons = ({ state, actions, libraries, block }) => {
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 
+  const iconWidth = 80;
   let COLUMNS_NUMBER = `1fr`;
   if (links_per_row === "Two") COLUMNS_NUMBER = ` 1fr 1fr`;
   if (links_per_row === "Three") COLUMNS_NUMBER = ` 1fr 1fr 1fr`;
@@ -28,14 +29,18 @@ const SocialIcons = ({ state, actions, libraries, block }) => {
     return (
       <div style={styles.socials}>
         <Link link={url} target="_blank">
-          <Image
-            src={icon}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-            }}
-          />
+          <div
+            className="toggle-icon-scale"
+            style={{ maxWidth: iconWidth, height: iconWidth }}
+          >
+            <Image
+              src={icon}
+              style={{
+                width: "100%",
+                height: "100%",
+              }}
+            />
+          </div>
         </Link>
       </div>
     );

@@ -20,6 +20,7 @@ import {
   getHospitalNameAction,
   getHospitalsAction,
   getBADMembershipSubscriptionData,
+  sendFileToS3Action,
 } from "../../../context";
 
 const SIGApplication = ({ state, actions, libraries }) => {
@@ -45,8 +46,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
     sky_profilepicture: "",
 
     py3_gmcnumber: "",
-    py3_otherregulatorybodyreference: "",
-    py3_ntnno: "",
     bad_currentpost: "",
     py3_hospitalid: "",
     bad_proposer1: "",
@@ -56,7 +55,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
     py3_currentgrade: "",
     sky_newhospitalname: "",
     bad_newhospitaladded: "",
-    bad_expectedyearofqualification: "",
     py3_constitutionagreement: "",
     bad_readpolicydocument: "",
     sky_newhospitaltype: "",
@@ -92,8 +90,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
     py3_dateofbirth: true,
 
     py3_gmcnumber: true,
-    py3_otherregulatorybodyreference: true,
-    py3_ntnno: true,
     bad_currentpost: true,
     py3_hospitalid: true,
     bad_proposer1: true,
@@ -103,7 +99,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
     py3_currentgrade: true,
     sky_newhospitalname: true,
     bad_newhospitaladded: true,
-    bad_expectedyearofqualification: true,
     py3_constitutionagreement: true,
     bad_readpolicydocument: true,
     sky_newhospitaltype: true,
@@ -130,6 +125,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const [selectedHospital, setSelectedHospital] = useState(null);
   const isHospitalValue = formData.py3_hospitalid;
   const hospitalSearchRef = useRef("");
+  const documentRef = useRef(null);
 
   // ⏬ populate form data values from applicationData
   useEffect(async () => {
@@ -201,10 +197,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
       // professional information step
       if (data.name === "py3_gmcnumber")
         handleSetFormData({ data, name: "py3_gmcnumber" });
-      if (data.name === "py3_otherregulatorybodyreference")
-        handleSetFormData({ data, name: "py3_otherregulatorybodyreference" });
-      if (data.name === "py3_ntnno")
-        handleSetFormData({ data, name: "py3_ntnno" });
       if (data.name === "bad_currentpost")
         handleSetFormData({ data, name: "bad_currentpost" });
       if (data.name === "bad_proposer1")
@@ -215,8 +207,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
         handleSetFormData({ data, name: "bad_mrpcqualified" });
       if (data.name === "sky_newhospitalname")
         handleSetFormData({ data, name: "sky_newhospitalname" });
-      if (data.name === "bad_expectedyearofqualification")
-        handleSetFormData({ data, name: "bad_expectedyearofqualification" });
       if (data.name === "py3_hospitalid") {
         // get hospital id from application data
         if (data.value) hospitalId = data.value;
@@ -301,6 +291,24 @@ const SIGApplication = ({ state, actions, libraries }) => {
     }));
   };
 
+  const handleDocUploadChange = async (e) => {
+    let sky_cvurl = e.target.files[0];
+    console.log("e", e); // debug
+
+    if (sky_cvurl)
+      sky_cvurl = await sendFileToS3Action({
+        state,
+        dispatch,
+        attachments: sky_cvurl,
+      });
+    console.log("sky_cvurl", sky_cvurl); // debug
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      ["sky_cvurl"]: sky_cvurl,
+    }));
+  };
+
   const handleHospitalLookup = async () => {
     const input = hospitalSearchRef.current.value;
     // if (input.length < 2) return; // API call after 2 characters
@@ -374,8 +382,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
         "bad_categorytype",
 
         "py3_gmcnumber",
-        "py3_otherregulatorybodyreference",
-        "py3_ntnno",
         "bad_currentpost",
         isNewHospital ? "sky_newhospitaltype" : null,
         !isNewHospital ? "py3_hospitalid" : null,
@@ -435,11 +441,12 @@ const SIGApplication = ({ state, actions, libraries }) => {
         throw new Error("Failed to update application record"); // throw error if store is not successful
 
       // complete application & submit to Dynamics
-      await setCompleteUserApplicationAction({
+      const appsResponse = await setCompleteUserApplicationAction({
         state,
         dispatch,
         isActiveUser,
       });
+      if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
 
       let slug = `/membership/thank-you/`;
       if (isActiveUser) setGoToAction({ path: slug, actions });
@@ -558,12 +565,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       >
         Category Selected: <span>{applicationType}</span>
       </div>
-      <div style={{ paddingTop: `0.75em` }}>
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry's standard dummy text ever
-        since the 1500s, when an unknown printer took a galley of type and
-        scrambled it to make a type specimen book.
-      </div>
+
       <form>
         <div style={{ padding: `2em 1em` }}>
           <ServeSIGMembershipCategory />
@@ -686,6 +688,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
               <FormError id="py3_mobilephone" />
             </div>
           )}
+
           {inputValidator.py3_address1ine1 && (
             <div>
               <label className="required form-label">Home Address</label>
@@ -712,6 +715,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
               style={{ margin: "0.5em 0" }}
             />
           )}
+
           {inputValidator.py3_addresstowncity && (
             <div>
               <input
@@ -726,6 +730,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
               <FormError id="py3_addresstowncity" />
             </div>
           )}
+
           {inputValidator.py3_addresscountystate && (
             <div>
               <input
@@ -740,6 +745,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
               <FormError id="py3_addresscountystate" />
             </div>
           )}
+
           {inputValidator.py3_addresszippostalcode && (
             <div>
               <input
@@ -754,6 +760,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
               <FormError id="py3_addresszippostalcode" />
             </div>
           )}
+
           {inputValidator.py3_addresscountry && (
             <div>
               <input
@@ -771,6 +778,34 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {/* Profesonal Information Questions ------------------------- */}
 
+          {inputValidator.bad_proposer1 && (
+            <div>
+              <label className="form-label">Supporting Member 1</label>
+              <input
+                name="bad_proposer1"
+                value={formData.bad_proposer1}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="MRCP"
+              />
+            </div>
+          )}
+
+          {inputValidator.bad_proposer2 && (
+            <div>
+              <label className="form-label">Supporting Member 2</label>
+              <input
+                name="bad_proposer2"
+                value={formData.bad_proposer2}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="MRCP"
+              />
+            </div>
+          )}
+
           {inputValidator.py3_gmcnumber && (
             <div>
               <label className="required form-label">GMC Number</label>
@@ -783,38 +818,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 placeholder="GMC Number"
               />
               <FormError id="py3_gmcnumber" />
-            </div>
-          )}
-
-          {inputValidator.py3_otherregulatorybodyreference && (
-            <div>
-              <label className="required form-label">
-                Regulatory Body Registration Number
-              </label>
-              <input
-                name="py3_otherregulatorybodyreference"
-                value={formData.py3_otherregulatorybodyreference}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="Regulatory Body Registration Number"
-              />
-              <FormError id="py3_otherregulatorybodyreference" />
-            </div>
-          )}
-
-          {inputValidator.py3_ntnno && (
-            <div>
-              <label className="required form-label">NTN Number</label>
-              <input
-                name="py3_ntnno"
-                value={formData.py3_ntnno}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="NTN Number"
-              />
-              <FormError id="py3_ntnno" />
             </div>
           )}
 
@@ -941,24 +944,36 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.bad_expectedyearofqualification && (
+          {inputValidator.sky_cvurl && (
             <div>
-              <label className="form-label">
-                Expected Year of Qualification
-              </label>
+              <label className="form-label">Upload Your CV</label>
               <input
-                name="bad_expectedyearofqualification"
-                value={formData.bad_expectedyearofqualification}
-                onChange={handleInputChange}
-                type="text"
+                ref={documentRef}
+                onChange={handleDocUploadChange}
+                type="file"
                 className="form-control input"
-                placeholder="Expected Year of Qualification"
+                placeholder="CV Document"
+                accept=".pdf,.doc,.docx"
               />
-              <FormError id="bad_currentpost" />
             </div>
           )}
 
           {/* SIG Questions -------------------------------------------- */}
+
+          {inputValidator.py3_currentgrade && (
+            <div>
+              <label className="form-label">Current Grade</label>
+              <input
+                name="py3_currentgrade"
+                value={formData.py3_currentgrade}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="MRCP"
+              />
+            </div>
+          )}
+
           {inputValidator.bad_qualifications && (
             <div>
               <label className="required form-label">Qualification</label>
@@ -1128,6 +1143,45 @@ const SIGApplication = ({ state, actions, libraries }) => {
                   />
                 </div>
               )}
+            </div>
+          )}
+
+          {inputValidator.bad_readpolicydocument && (
+            <div
+              className="flex"
+              style={{ alignItems: "center", margin: `1em 0` }}
+            >
+              <div>
+                <input
+                  name="bad_readpolicydocument"
+                  checked={formData.bad_readpolicydocument}
+                  onChange={handleInputChange}
+                  type="checkbox"
+                  className="form-check-input check-box"
+                />
+              </div>
+              <div>
+                <label className="form-check-label flex-row">
+                  <div>
+                    <div
+                      className="caps-btn required"
+                      style={{
+                        paddingTop: 6,
+                        marginRight: 10,
+                        whiteSpace: "nowrap",
+                        float: "left",
+                      }}
+                    >
+                      I agree - Privacy Notice
+                    </div>
+                    <span>
+                      I agree - Privacy Notice* - justo donec enim diam
+                      vulputate ut pharetra sit. Purus semper eget duis at
+                      tellus at. Sed adipiscing diam.
+                    </span>
+                  </div>
+                </label>
+              </div>
             </div>
           )}
         </div>

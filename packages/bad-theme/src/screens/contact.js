@@ -83,21 +83,23 @@ const AccountDashboard = ({ state, actions, libraries }) => {
 
   return (
     <div className="flex-col">
-      <BlockWrapper>
-        <div
-          style={{
-            display: "grid",
-            gap: marginHorizontal,
-            gridTemplateColumns: !lg ? `1fr 1.5fr` : "1fr",
-            justifyContent: "center",
-            padding: `${marginVertical}px ${marginHorizontal}px`,
-            height: 500,
-          }}
-        >
-          <ServeInfo />
-          <ServeMaps />
-        </div>
-      </BlockWrapper>
+      <div style={{ backgroundColor: colors.bgNavy }}>
+        <BlockWrapper>
+          <div
+            style={{
+              display: "grid",
+              gap: marginHorizontal,
+              gridTemplateColumns: !lg ? `1fr 1.5fr` : "1fr",
+              justifyContent: "center",
+              padding: `${marginVertical}px ${marginHorizontal}px`,
+              height: 500,
+            }}
+          >
+            <ServeInfo />
+            <ServeMaps />
+          </div>
+        </BlockWrapper>
+      </div>
 
       <BlockBuilder blocks={wpBlocks} />
     </div>

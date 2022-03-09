@@ -27,6 +27,7 @@ const DownloadFileBlock = ({
 
   const { file, guidline_file, disable_vertical_padding, title, label, type } =
     block;
+  // console.log("file block", block); // debug
 
   const ICON_WIDTH = 35;
   const isBtnStyle = type && type === "Button";

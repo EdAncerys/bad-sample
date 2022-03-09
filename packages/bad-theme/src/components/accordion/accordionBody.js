@@ -85,8 +85,6 @@ const AccordionBody = ({
         stepTwo: false,
         stepThree: false,
         stepFour: false,
-        stepFive: false,
-        applicationComplete: false,
       },
     });
   };

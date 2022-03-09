@@ -54,7 +54,7 @@ const ShareToSocials = ({
   return (
     <div style={{ padding: `1em 0` }}>
       <div className="flex" style={{ justifyContent: "space-between" }}>
-        <div style={styles.socials}>
+        <div className="toggle-icon-scale" style={styles.socials}>
           <FacebookShareButton
             url={url}
             quote={title}
@@ -63,7 +63,7 @@ const ShareToSocials = ({
             <Image src={Facebook} className="d-block h-100" alt="Facebook" />
           </FacebookShareButton>
         </div>
-        <div style={styles.socials}>
+        <div className="toggle-icon-scale" style={styles.socials}>
           <TwitterShareButton
             url={url}
             title={title}
@@ -84,7 +84,7 @@ const ShareToSocials = ({
               />
             </LinkedinShareButton>
           </div> */}
-        <div style={styles.socials}>
+        <div className="toggle-icon-scale" style={styles.socials}>
           <LinkedinShareButton
             url={url}
             className="Demo__some-network__share-button"
@@ -92,7 +92,11 @@ const ShareToSocials = ({
             <Image src={Linkedin} className="d-block h-100" alt="Instagram" />
           </LinkedinShareButton>
         </div>
-        <div style={styles.socials} onClick={copyToClipboard}>
+        <div
+          className="toggle-icon-scale"
+          style={styles.socials}
+          onClick={copyToClipboard}
+        >
           <Image
             src={Connect}
             className="d-block h-100"
@@ -101,7 +105,7 @@ const ShareToSocials = ({
           />
         </div>
         {isCalendarLink && (
-          <div style={styles.socials}>
+          <div className="toggle-icon-scale" style={styles.socials}>
             <Link link={add2Calendar} target="_blank">
               <Image src={WebPage} className="d-block h-100" alt="Instagram" />
             </Link>
