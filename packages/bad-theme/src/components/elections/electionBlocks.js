@@ -497,11 +497,10 @@ const ElectionBlocks = ({ state, actions, block }) => {
                     isClosedPosition ? colors.silverFillOne : null
                   }
                   opacity={isClosedPosition ? 0.7 : null}
-                  bodyLimit={6}
+                  bodyLimit={4}
                   shadow
                 />
               </div>
-              {/* <ServeFooterActions isClosedPosition={isClosedPosition} /> */}
             </div>
           );
         })}
