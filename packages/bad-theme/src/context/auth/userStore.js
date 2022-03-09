@@ -26,23 +26,6 @@ export const setUserStoreAction = async ({
     return null;
   }
 
-  if (dynamicsApps) {
-    const appsData = dynamicsApps.apps.data; // get pending too approve apps data form dynamic apps
-    // check if user have application pending under reviewed status
-    const isPending =
-      appsData.filter((item) => item.bad_approvalstatus === "Pending").length >
-      0;
-    // if user have application pending under reviewed status redirect to application list
-    if (isPending) {
-      console.log("🤖 user have application pending under reviewed status");
-      if (state.auth.ENVIRONMENT !== "DEVELOPMENT") {
-        // allow application list only in development env
-        setGoToAction({ path: "/dashboard/", actions });
-        return;
-      }
-    }
-  }
-
   try {
     setFetchAction({ dispatch, isFetching: true });
     const { contactid } = isActiveUser;

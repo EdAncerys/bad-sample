@@ -514,6 +514,19 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
   const ServeSIGMembershipCategory = () => {
     if (!membershipData) return null;
+    // filter aplication data to match membership groupse data
+    const membershipDataFiltered = membershipData.filter((membership) => {
+      // membership.core_membershipgroupid === formData.bad_categorytype
+      let appTitle = membership.acf.category_types
+        .replace(/Full:/g, "")
+        .replace(/:/g, " - ");
+
+      let isPartOfGroupe = appTitle.includes(applicationType);
+
+      return isPartOfGroupe;
+    });
+
+    console.log("membershipDataFiltered", membershipDataFiltered); // debug')
 
     return (
       <div>
