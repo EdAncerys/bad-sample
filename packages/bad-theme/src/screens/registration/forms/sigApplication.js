@@ -30,6 +30,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const { applicationData, isActiveUser, dynamicsApps } = useAppState();
 
   const [formData, setFormData] = useState({
+    core_membershipsubscriptionplanid: "",
+
     py3_title: "",
     py3_firstname: "",
     py3_lastname: "",
@@ -418,10 +420,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
           bad_categorytype: "",
         }));
         throw new Error("Failed to get membership data");
-      }
-      if (membershipData) {
+      } else {
         // update application object with feched membership id
-        sigAppliaction.bad_categorytype =
+        sigAppliaction.core_membershipsubscriptionplanid =
           membershipData.core_membershipsubscriptionplanid;
       }
       console.log("sigAppliaction", sigAppliaction); // debug
@@ -433,7 +434,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         applicationData,
         isActiveUser,
         dynamicsApps,
-        membershipApplication: { stepFive: true }, // set stepOne to complete
+        membershipApplication: { sigApp: true }, // set stepOne to complete
         data: sigAppliaction,
       });
 
@@ -445,6 +446,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         state,
         dispatch,
         isActiveUser,
+        applicationData,
       });
       if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
 

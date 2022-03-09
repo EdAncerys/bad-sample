@@ -272,6 +272,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         state,
         dispatch,
         isActiveUser,
+        applicationData,
       });
       if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
 

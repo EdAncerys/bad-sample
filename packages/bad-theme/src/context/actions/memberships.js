@@ -87,16 +87,6 @@ export const handleApplyForMembershipAction = async ({
       const isSIGPending =
         appsData.filter((item) => item.bad_organisedfor === "SIG").length > 0;
 
-      // if User have SIG under review isSIGPending = true redirect to dashboard page & notify
-      if (isSIGPending) {
-        setGoToAction({ path: "/dashboard/", actions });
-        setErrorAction({
-          dispatch,
-          isError: { message: "You have SIG application under review" },
-        });
-        return;
-      }
-
       if (isPending) {
         console.log("🤖 user have application pending under reviewed status"); // debug
       } else {
