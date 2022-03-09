@@ -10,6 +10,7 @@ import { handleGetCookie } from "../helpers/cookie";
 import { useAppState, authenticateAppAction, useAppDispatch } from "../context";
 import MapsComponent from "./maps/maps";
 import Loading from "./loading";
+import { grid } from "@mui/system";
 const FindADermatologist = ({ state }) => {
   const marginVertical = state.theme.marginVertical;
   const marginHorizontal = state.theme.marginHorizontal;
@@ -19,10 +20,11 @@ const FindADermatologist = ({ state }) => {
 
   const [filteredDermatologists, setFilteredDermatologists] = React.useState();
   const dispatch = useAppDispatch();
-  const jwt = authenticateAppAction({ dispatch, state });
-
-  React.useEffect(() => {
+  const query_limit = React.useRef(10);
+  React.useEffect(async () => {
     const fetchDermatologistsByPostCode = async () => {
+      const jwt = await authenticateAppAction({ dispatch, state });
+      console.log("QUERY VALUE POSTCODE", query);
       const post_code = query.value.split(" ").join("");
       console.log(post_code);
       const url = state.auth.APP_HOST + "/catalogue/fad/" + post_code;
@@ -30,29 +32,46 @@ const FindADermatologist = ({ state }) => {
       console.log("URL", url);
       const fetching = await fetch(url, {
         headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkNNRXJOX1FMa29qTkZKRF9RbzFWUyIsInVzZXJuYW1lIjoiY2hyaXMuY3VsbGVuIiwiZW1haWwiOiJjaHJpc2N1bGxlbjQyQGdtYWlsLmNvbSIsInNjb3BlIjoiYWRtaW4iLCJkaXNwbGF5bmFtZSI6IkNocmlzIiwiaWF0IjoxNjQ2NzM3NTM1LCJleHAiOjE2NDY3NDExMzUsImF1ZCI6IkJBRDpTS1lMQVJLOndlYmFwcCIsImlzcyI6ImR5bmFtaWNzLmJyaWRnZS5za3lsYXJrIn0.L4TJhGXCr7Yr7BZCiAuA-ceeTvVGgONVxiZj35NffIk`,
+          Authorization: `Bearer ${jwt}`,
         },
       });
       if (fetching.ok) {
         const json = await fetching.json();
         console.log("JSON", json);
         const data = json.data;
-        const sorted = data.sort(function (a, b) {
-          var keyA = new Date(a.updated_at),
-            keyB = new Date(b.updated_at);
-          // Compare the 2 dates
-          if (keyA < keyB) return -1;
-          if (keyA > keyB) return 1;
-          return 0;
-        });
 
-        setFilteredDermatologists(sorted);
+        setFilteredDermatologists(data);
       }
     };
     if (query && query.type === "pc") fetchDermatologistsByPostCode();
-    if (query && query.type === "name") fetchDermatologistsByName();
+    if (query && query.type === "name")
+      alert("I wish this function was implemented!");
   }, [query]);
-  const CardHeader = ({ derm }) => {
+
+  const handleLoadMore = async () => {
+    const jwt = await authenticateAppAction({ dispatch, state });
+    const post_code = query.value.split(" ").join("");
+    const url =
+      state.auth.APP_HOST +
+      "/catalogue/fad/" +
+      post_code +
+      `?limit=10&skip=${query_limit}`;
+    const more = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+
+    if (more.ok) {
+      const json = await more.json();
+
+      setFilteredDermatologists((filteredDermatologists) => [
+        ...filteredDermatologists,
+        json.data,
+      ]);
+    }
+  };
+  const CardHeader = ({ derm, id }) => {
     const ServeHeadline = () => {
       return (
         <div className="primary-title" style={{ fontSize: 20 }}>
@@ -65,13 +84,31 @@ const FindADermatologist = ({ state }) => {
     };
     const ServeDistance = () => {
       if (!derm.distance) return null;
-      return <div>{derm.distance * 0.000621371} miles away</div>;
+      return (
+        <div style={{ color: colors.blue, fontStyle: "italic" }}>
+          {derm.distanceDisplay} Away
+        </div>
+      );
+    };
+
+    const ServeActions = () => {
+      return (
+        <div className="flex-row">
+          <div className="caps-btn">View more</div>
+        </div>
+      );
     };
     return (
       <div style={styles.dermatologistContainer}>
-        <ServeHeadline />
-        <ServeDistance />
-        <ServeAddress />
+        <div className="primary-title" style={styles.number}>
+          {id + 1}
+        </div>
+        <div style={{ padding: 20 }}>
+          <ServeHeadline />
+          <ServeDistance />
+          <ServeAddress />
+          <ServeActions />
+        </div>
       </div>
     );
   };
@@ -136,7 +173,7 @@ const FindADermatologist = ({ state }) => {
                 setPC(e.target.value);
               }}
             />
-            <button type="submit" className="blue-btn">
+            <button type="submit" className="blue-btn" disabled={!pc && true}>
               Search
             </button>
           </form>
@@ -149,14 +186,18 @@ const FindADermatologist = ({ state }) => {
           backgroundColor: colors.silver,
           padding: 10,
           padding: MARGIN,
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 20,
           marginTop: 20,
         }}
       >
-        <ServeSearchByPostCode />
-        <ServeSearchByName />
+        <div className="primary-title" style={{ fontSize: "2.25rem" }}>
+          Search for dermatologists
+        </div>
+        <div
+          style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}
+        >
+          <ServeSearchByPostCode />
+          <ServeSearchByName />
+        </div>
       </div>
     );
   };
@@ -166,35 +207,90 @@ const FindADermatologist = ({ state }) => {
     console.log("DERMI", filteredDermatologists);
     const SingleDerm = ({ derm, id }) => {
       if (!derm.distance) return null;
-      console.log("DERMHIT");
+      const ServeBiography = () => {
+        if (!derm.bad_findadermatologisttext) return null;
+        return <div>{derm.bad_findadermatologisttext}</div>;
+      };
+
+      const ServeEmail = () => {
+        return (
+          <div className="primary-title" style={{ color: colors.navy }}>
+            {derm.emailaddress1}
+          </div>
+        );
+      };
+
+      const ServeUrls = () => {
+        if (!derm.bad_web1 && !derm.bad_web2 && !derm.bad_web3) return null;
+        return (
+          <div>
+            <div className="primary-title">Private Practice Links</div>
+            <div className="menu-title">{derm.bad_web1}</div>
+            <div className="menu-title">{derm.bad_web2}</div>
+            <div className="menu-title">{derm.bad_web3}</div>
+          </div>
+        );
+      };
       return (
-        <Card>
-          <Card.Header>
+        <Card
+          style={{
+            backgroundColor: colors.lightSilver,
+            borderRadius: 0,
+            marginTop: 20,
+            border: 0,
+          }}
+        >
+          <Card.Header style={{ padding: 0, border: 0 }}>
             <CustomToggle eventKey={id}>
-              <CardHeader derm={derm} />
+              <CardHeader derm={derm} id={id} />
             </CustomToggle>
           </Card.Header>
           <Accordion.Collapse eventKey={id}>
-            <Card.Body>{derm.emailaddress1}</Card.Body>
+            <Card.Body>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 4fr",
+                  gap: 20,
+                }}
+              >
+                <div></div>
+                <div>
+                  <ServeEmail />
+                  <ServeBiography />
+                  <ServeUrls />
+                </div>
+              </div>
+            </Card.Body>
           </Accordion.Collapse>
         </Card>
       );
     };
     return (
       <>
-        <Accordion>
+        <Accordion style={{ border: 0 }}>
           {filteredDermatologists.map((derm, key) => {
             console.log("DERM!", derm);
             return <SingleDerm derm={derm} id={key} key={key} />;
           })}
         </Accordion>
+        <div
+          className="blue-btn"
+          onClick={() => {
+            query_limit.current += 10;
+            handleLoadMore();
+            console.log("QUERY_LIMIT", query_limit.current);
+          }}
+        >
+          Load more ({query_limit.current})
+        </div>
       </>
     );
   };
   const ServeMap = () => {
     return (
       <div style={{ height: 300 }}>
-        <MapsComponent markers />
+        <MapsComponent markers={filteredDermatologists} />
       </div>
     );
   };
@@ -221,6 +317,18 @@ const FindADermatologist = ({ state }) => {
 const styles = {
   dermatologistContainer: {
     backgroundColor: colors.lightSilver,
+    minHeight: 150,
+    display: "grid",
+    gridTemplateColumns: "1fr 4fr",
+    gap: 20,
+    padding: 0,
+  },
+  number: {
+    backgroundColor: "white",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontSize: 40,
   },
 };
 export default connect(FindADermatologist);

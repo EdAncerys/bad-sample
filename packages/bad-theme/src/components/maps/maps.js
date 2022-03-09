@@ -34,16 +34,39 @@ const MapsComponent = ({
     height: "100%",
     borderRadius: markers ? 0 : 10,
   };
+  const ServeMarkersOnTheMap = () => {
+    console.log(markers);
+    if (!markers)
+      return <Marker markerLabel={{ text: "Google Map" }} position={CENTER} />;
+    if (markers.length === 0) return null;
 
+    return markers.map((derm) => {
+      if (!derm.address1_lattitude || !derm.address1_longitude) return null;
+      const POSITION = {
+        lat: Number(derm.address1_lattitude),
+        lng: Number(derm.address1_longitude),
+      };
+      return <Marker markerLabel={{ text: "Johny" }} position={POSITION} />;
+    });
+  };
   return (
     <LoadScript
       googleMapsApiKey={state.auth.GOOGLE_API_KEY}
       libraries={LIBRARIES}
     >
       <GoogleMap center={CENTER} zoom={ZOOM} mapContainerStyle={containerStyle}>
-        {!markers && (
-          <Marker markerLabel={{ text: "Google Map" }} position={CENTER} />
-        )}
+        {markers &&
+          markers.map((derm) => {
+            if (!derm.address1_lattitude || !derm.address1_longitude)
+              return null;
+            const POSITION = {
+              lat: Number(derm.address1_lattitude),
+              lng: Number(derm.address1_longitude),
+            };
+            return (
+              <Marker markerLabel={{ text: "Johny" }} position={POSITION} />
+            );
+          })}
       </GoogleMap>
     </LoadScript>
   );
