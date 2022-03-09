@@ -223,7 +223,7 @@ export const setCompleteUserApplicationAction = async ({
       await getApplicationStatus({
         state,
         dispatch,
-        id: contactid,
+        contactid,
       });
       // delete application record from CONTEXT
       setApplicationDataAction({

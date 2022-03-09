@@ -241,9 +241,15 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   const ServeSubmittedApplicationList = () => {
     if (!dynamicsApps) return null; // if application data exist & not under review return null
     // see if application list have approved applications and if so show them
-    const appsData = dynamicsApps.apps.data; // get subs data form dynamic apps
+    let appsData = dynamicsApps.apps.data; // get subs data form dynamic apps
     // hide component if application list has no approved applications
     if (appsData.length === 0) return null;
+    // sort by application date created newest by default
+    appsData = appsData.sort((a, b) => {
+      const dateA = new Date(a.createdon);
+      const dateB = new Date(b.createdon);
+      return dateB - dateA;
+    });
 
     return (
       <div
