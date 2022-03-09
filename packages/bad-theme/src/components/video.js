@@ -47,7 +47,7 @@ const Video = ({ state, actions }) => {
         post.acf.event_id +
         "/" +
         post.acf.price +
-        `?redirecturl=${the_url}payment-confirmation`,
+        `?redirecturl=${the_url}/payment-confirmation`,
       {
         method: "POST",
         headers: {
