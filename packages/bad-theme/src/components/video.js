@@ -8,7 +8,7 @@ import { colors } from "../config/colors";
 import Image from "@frontity/components/image";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import LockIcon from "@mui/icons-material/Lock";
-import { useAppState } from "../context";
+import { useAppState, useAppDispatch, authenticateAppAction } from "../context";
 import { handleGetCookie } from "../helpers/cookie";
 import PaymentModal from "./dashboard/paymentModal";
 const Video = ({ state, actions }) => {
@@ -16,7 +16,7 @@ const Video = ({ state, actions }) => {
   const post = state.source[data.type][data.id];
 
   const { isActiveUser } = useAppState();
-
+  const dispatch = useAppDispatch();
   console.log(isActiveUser);
   if (!post) return <Loading />;
 
@@ -228,48 +228,43 @@ const Video = ({ state, actions }) => {
       );
     });
   };
-  React.useEffect(() => {
+  React.useEffect(async () => {
     actions.source.fetch("/videos/");
 
-    const checkVideoStatus = async () => {
-      const cookie = await handleGetCookie({ name: `BAD-WebApp` });
-      const { contactid, jwt } = cookie;
-      if (!post.acf.private) {
-        setVideoStatus("unlocked");
+    const jwt = await authenticateAppAction({ state, dispatch });
+    console.log("JWT:", jwt);
+
+    if (!post.acf.private) {
+      setVideoStatus("unlocked");
+      return true;
+    }
+    if (!isActiveUser) {
+      setVideoStatus("locked");
+      return true;
+    }
+    if (isActiveUser && post.acf.price) {
+      const url =
+        state.auth.APP_HOST +
+        "/videvent/" +
+        isActiveUser.contactid +
+        "/" +
+        post.acf.event_id;
+      const fetching = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+      if (fetching.ok) {
+        const json = await fetching.json();
+        if (json.success === false) setVideoStatus("locked");
+        if (json.data.entity.bad_confirmationid) setVideoStatus("unlocked");
         return true;
-      }
-      if (!isActiveUser) {
+      } else {
         setVideoStatus("locked");
         return true;
       }
-      if (post.acf.private && post.acf.price) {
-        const url =
-          state.auth.APP_HOST +
-          "/videvent/" +
-          isActiveUser.contactid +
-          "/" +
-          post.acf.event_id;
-        console.log("URL FOR CHECKING", url);
-        const fetching = await fetch(url, {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
-        });
-        if (fetching.ok) {
-          const json = await fetching.json();
-          console.log("VIDEOFETCH", json);
-          if (json.success === false) setVideoStatus("locked");
-          if (json.data.entity.bad_confirmationid) setVideoStatus("unlocked");
-          return true;
-        } else {
-          setVideoStatus("locked");
-          return true;
-        }
-      }
-      setVideoStatus("locked");
-      return true;
-    };
-    checkVideoStatus();
+    }
+    setVideoStatus("locked");
   }, [isActiveUser, paymentUrl]);
   if (!videoStatus) return <Loading />;
   return (
