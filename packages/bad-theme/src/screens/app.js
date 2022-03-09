@@ -14,6 +14,7 @@ import CreateAccountModal from "../components/createAccount/createAccountModal";
 import Breadcrumbs from "../components/breadcrumbs";
 import CreateAccount from "./createAccount";
 import AnimatedPlaceholder from "../components/animatedPlaceholder";
+import CircularProgress from "@mui/material/CircularProgress";
 // SCREENS --------------------------------------------------------------
 import Post from "./post";
 import Page from "./page";
@@ -101,12 +102,38 @@ const App = ({ state, actions }) => {
   // RETURN --------------------------------------------------------------------
   return transitions(({ opacity }, appContent) =>
     appContent ? (
-      <animated.div
+      <div
         className="no-selector"
-        style={{ opacity: opacity.to({ range: [0.0, 1.0], output: [0.1, 1] }) }}
+        style={{
+          backgroundColor: colors.white, // content background color
+          display: "grid",
+          width: "100%",
+          paddingTop: "40%",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
       >
-        <AnimatedPlaceholder />
-      </animated.div>
+        <animated.div
+          className="no-selector"
+          style={{
+            opacity: opacity.to({ range: [0.0, 1.0], output: [0.1, 1] }),
+          }}
+        >
+          <AnimatedPlaceholder />
+        </animated.div>
+        <div
+          style={{
+            display: "grid",
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+            paddingTop: "2em",
+            color: colors.primary,
+          }}
+        >
+          <CircularProgress color="inherit" />
+        </div>
+      </div>
     ) : (
       <animated.div
         style={{ opacity: opacity.to({ range: [0.0, 1.0], output: [0.1, 1] }) }}

@@ -13,18 +13,7 @@ const AnimatedPlaceholder = ({ state, actions }) => {
   // HELPERS ---------------------------------------------
 
   return (
-    <div
-      className="no-selector"
-      style={{
-        backgroundColor: colors.white, // content background color
-        color: colors.softBlack,
-        display: "grid",
-        width: "100%",
-        height: "100vh",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
+    <div>
       <div
         style={{
           width: "90vw",
