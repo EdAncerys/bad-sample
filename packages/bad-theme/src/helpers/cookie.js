@@ -26,6 +26,7 @@ export const handleSetCookie = ({ name, value, exDays, deleteCookie }) => {
 };
 
 export const handleGetCookie = ({ name }) => {
+  console.log("handleGetCookie triggered");
   // setting defaults
   let cookieName = "";
   if (name) cookieName = name;
@@ -35,7 +36,11 @@ export const handleGetCookie = ({ name }) => {
     let cookie = document.cookie
       .split("; ")
       .find((c) => c.startsWith(cookieName));
+    //if !cookie then return null
+    if (!cookie) return null;
     // cookie value
+    //if !cookie then return null
+    if (!cookie) return null;
     let cookieValue = cookie.split("=")[1];
     // if cookie exists & not empty
     if (cookie && cookieValue) {

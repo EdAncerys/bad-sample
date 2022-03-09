@@ -52,7 +52,15 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     }
 
     const guideType = Object.values(state.source.guidelines_type);
-    const guideList = Object.values(state.source.guidelines_standards); // add guidelines object to data array
+    let guideList = Object.values(state.source.guidelines_standards); // add guidelines object to data array
+    // sort guidelines in alphabetically order by title name
+    guideList = guideList.sort((a, b) => {
+      const nameA = a.title.rendered.toUpperCase();
+      const nameB = b.title.rendered.toUpperCase();
+      if (nameA < nameB) return -1;
+      if (nameA > nameB) return 1;
+      return 0;
+    });
 
     setGuidelinesType(guideType);
     setGuidelinesList(guideList);
@@ -96,6 +104,14 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     let name = guidelinesType.filter((item) => item.id === input)[0];
     if (name) name = name.name;
     let guidelinesList = Object.values(state.source.guidelines_standards);
+    // sort guidelines in alphabetically order by title name
+    guidelinesList = guidelinesList.sort((a, b) => {
+      const nameA = a.title.rendered.toUpperCase();
+      const nameB = b.title.rendered.toUpperCase();
+      if (nameA < nameB) return -1;
+      if (nameA > nameB) return 1;
+      return 0;
+    });
 
     if (currentSearchFilterRef.current)
       guidelinesList = guidelinesList.filter((item) => {

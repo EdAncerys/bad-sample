@@ -120,7 +120,8 @@ const Event = ({ state, actions, libraries }) => {
     contact_message,
     contact_allow_attachments,
   } = event.acf;
-  const { title } = event;
+  const { title, id } = event;
+
   // SERVERS ----------------------------------------------
   const ServeTitle = () => {
     if (!title) return null;
@@ -129,7 +130,7 @@ const Event = ({ state, actions, libraries }) => {
       <div
         className="primary-title"
         style={{
-          fontSize: !lg ? 36 : 25,
+          fontSize: !lg ? 26 : 20,
           paddingBottom: `${marginVertical}px`,
         }}
       >
@@ -275,6 +276,16 @@ const Event = ({ state, actions, libraries }) => {
   };
 
   const ServeRegisterLink = () => {
+    let isArchive = false;
+    if (date_time) {
+      // loop through date_time and check if date is in the past
+      date_time.forEach((date) => {
+        if (new Date(date.date) < new Date()) isArchive = true;
+      });
+    }
+    // dont display component if event isArchive
+    if (isArchive) return null;
+
     return (
       <div
         className="flex"
@@ -296,17 +307,19 @@ const Event = ({ state, actions, libraries }) => {
             setEnquireAction({
               dispatch,
               enquireAction: {
-                register_public_email,
-                register_public_phone_number,
-                register_form_title,
-                register_form_body,
-                register_full_name,
-                register_email,
-                register_phone_number,
-                register_subject,
-                register_subject_dropdown_options,
-                register_message,
-                register_allow_attachments,
+                contact_public_email: contact_public_email || "bad@contact.org",
+                contact_public_phone_number:
+                  contact_public_phone_number || "+1 (123) 456-7890",
+                contact_form_title: contact_form_title || "Event Contact Form",
+                contact_form_body:
+                  contact_form_body || `Register for ${title.rendered} event.`,
+                contact_full_name: contact_full_name || true,
+                contact_email: contact_email || true,
+                contact_phone_number: contact_phone_number || true,
+                contact_subject: contact_subject || true,
+                contact_subject_dropdown_options,
+                contact_message: contact_message || true,
+                contact_allow_attachments,
               },
             })
           }
@@ -330,67 +343,6 @@ const Event = ({ state, actions, libraries }) => {
     );
   };
 
-  // const ServeSocials = () => {
-  //   return (
-  //     <div className="flex-col" style={{ width: !lg ? `50%` : `100%` }}>
-  //       <div
-  //         className={!lg ? "flex-row" : "flex-col"}
-  //         style={{
-  //           flexDirection: "column-reverse",
-  //           justifyContent: "space-between",
-  //           padding: `2em 0 0 0`,
-  //         }}
-  //       >
-  //         <div
-  //           className="primary-title"
-  //           style={{ fontSize: 20, marginTop: !lg ? null : "1em" }}
-  //         >
-  //           Share
-  //         </div>
-  //         <div className="primary-title" style={{ fontSize: 20 }}>
-  //           Add to calendar
-  //         </div>
-  //       </div>
-  //       <div className="flex" style={{ justifyContent: "space-between" }}>
-  //         <div style={styles.socials}>
-  //           <Link link={`https://www.facebook.com/`} target="_blank">
-  //             <Image src={Facebook} className="d-block h-100" alt="Facebook" />
-  //           </Link>
-  //         </div>
-  //         <div style={styles.socials}>
-  //           <Link link={`https://www.twitter.com/`} target="_blank">
-  //             <Image src={Twitter} className="d-block h-100" alt="Twitter" />
-  //           </Link>
-  //         </div>
-  //         <div style={styles.socials}>
-  //           <Link link={`https://www.instagram.com/`} target="_blank">
-  //             <Image
-  //               src={Instagram}
-  //               className="d-block h-100"
-  //               alt="Instagram"
-  //             />
-  //           </Link>
-  //         </div>
-  //         <div style={styles.socials}>
-  //           <Link link={`https://www.linkedin.com/`} target="_blank">
-  //             <Image src={Linkedin} className="d-block h-100" alt="Instagram" />
-  //           </Link>
-  //         </div>
-  //         <div style={styles.socials}>
-  //           <Link link={`https://www.linkedin.com/`} target="_blank">
-  //             <Image src={Connect} className="d-block h-100" alt="Instagram" />
-  //           </Link>
-  //         </div>
-  //         <div style={styles.socials}>
-  //           <Link link={`https://www.linkedin.com/`} target="_blank">
-  //             <Image src={WebPage} className="d-block h-100" alt="Instagram" />
-  //           </Link>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // };
-
   const ServeRegisterBanner = () => {
     return (
       <div
@@ -398,7 +350,6 @@ const Event = ({ state, actions, libraries }) => {
         style={{
           backgroundColor: colors.primary,
           color: colors.white,
-          marginTop: `2em`,
           padding: `2em`,
         }}
       >
@@ -484,6 +435,7 @@ const Event = ({ state, actions, libraries }) => {
     const currentPostGrade = event.event_grade[0];
     const currentPostLocation = event.event_location[0];
     const currentPostSpecialty = event.event_specialty[0];
+
     // get category name from category list
     let gradeName = "Grade";
     gradeName = gradeList.filter(
@@ -492,11 +444,11 @@ const Event = ({ state, actions, libraries }) => {
     if (gradeName[0]) gradeName = gradeName[0].name;
     // get list of events where category is the same as the current event
     let relatedGradeList = eventList.filter((event) => {
-      return event.event_grade.includes(currentPostGrade);
+      // return events that not current event id & include the same category  as the current event
+      return event.id !== id && event.event_grade.includes(currentPostGrade);
     });
     // get latest events from the list
-    relatedGradeList = eventList.slice(0, 3);
-    if (!eventList.length) return null; // dont render if no events
+    relatedGradeList = relatedGradeList.slice(0, 3);
 
     // get related event location list from the list
     let locationName = "Location";
@@ -506,12 +458,13 @@ const Event = ({ state, actions, libraries }) => {
     if (locationName[0]) locationName = locationName[0].name;
     // get list of events where location is the same as the current event
     let relatedLocationList = eventList.filter((event) => {
-      return event.event_location.includes(currentPostLocation);
+      // return events that not current event id & include the same category  as the current event
+      return event.id !== id && event.event_grade.includes(currentPostGrade);
     });
     // get latest events from the list
-    relatedLocationList = eventList.slice(0, 3);
+    relatedLocationList = relatedLocationList.slice(0, 3);
 
-    const ServeRelatedEvents = ({ list, name }) => {
+    const ServeRelatedEvents = ({ list }) => {
       if (!list.length) return null;
 
       return (
@@ -568,8 +521,10 @@ const Event = ({ state, actions, libraries }) => {
       );
     };
 
+    if (!relatedGradeList.length && !relatedLocationList.length) return null;
+
     return (
-      <div>
+      <div style={{ marginBottom: "2em" }}>
         <div className="shadow" style={{ padding: "1em" }}>
           <div
             className="primary-title"
@@ -577,8 +532,8 @@ const Event = ({ state, actions, libraries }) => {
           >
             Related Content
           </div>
-          <ServeRelatedEvents list={relatedGradeList} name={gradeName} />
-          <ServeRelatedEvents list={relatedLocationList} name={locationName} />
+          <ServeRelatedEvents list={relatedGradeList} />
+          <ServeRelatedEvents list={relatedLocationList} />
         </div>
         <ServeFooter />
       </div>
@@ -589,9 +544,9 @@ const Event = ({ state, actions, libraries }) => {
     <BlockWrapper>
       <div style={{ backgroundColor: colors.white }}>
         <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
-          <ServeTitle />
           <div style={!lg ? styles.container : styles.containerMobile}>
             <div>
+              <ServeTitle />
               <div style={!lg ? styles.eventInfo : styles.eventInfoMobile}>
                 <ServeImage />
                 <ServeEventInfo />
@@ -603,30 +558,6 @@ const Event = ({ state, actions, libraries }) => {
             <div className="flex-col">
               <ServeSideBar />
               <ServeRegisterBanner />
-              {/* <div className="shadow">
-                <div style={{ padding: "2em" }}>
-                  <h3>Related events</h3>
-                </div>
-                <EventLoopBlock
-                  block={{
-                    acf_fc_layout: "events_loop_block",
-                    background_colour: "transparent",
-                    disable_vertical_padding: false,
-                    add_search_function: false,
-                    title: "",
-                    body: "",
-                    locations: false,
-                    grades: false,
-                    event_type: false,
-                    layout: "layout_one",
-                    view_all_link: false,
-                    passed_grade_filter_id: event.event_grade[0],
-                    post_limit: "3",
-                    colour: "#F5F6F7",
-                  }}
-                  recommended_events
-                />
-              </div> */}
             </div>
           </div>
         </div>
@@ -641,16 +572,19 @@ const Event = ({ state, actions, libraries }) => {
             setEnquireAction({
               dispatch,
               enquireAction: {
-                contact_public_email,
-                contact_public_phone_number,
-                contact_form_title,
-                contact_form_body,
-                contact_full_name,
-                contact_email,
-                contact_phone_number,
-                contact_subject,
+                contact_public_email: contact_public_email || "bad@contact.org",
+                contact_public_phone_number:
+                  contact_public_phone_number || "+1 (123) 456-7890",
+                contact_form_title:
+                  contact_form_title || "Event Information Form",
+                contact_form_body:
+                  contact_form_body || `Enquire about ${title.rendered} event.`,
+                contact_full_name: contact_full_name || true,
+                contact_email: contact_email || true,
+                contact_phone_number: contact_phone_number || true,
+                contact_subject: contact_subject || true,
                 contact_subject_dropdown_options,
-                contact_message,
+                contact_message: contact_message || true,
                 contact_allow_attachments,
               },
             })

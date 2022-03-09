@@ -43,7 +43,7 @@ const EventLoopBlock = ({
     grade_filter,
     title,
     colour,
-    passed_grade_filter_id,
+    events_archive,
   } = block;
 
   const [eventList, setEventList] = useState(null); // event data
@@ -134,7 +134,24 @@ const EventLoopBlock = ({
           const event_location = block.event_location;
           const event_specialty = block.event_specialty;
 
-          if (!event_grade.includes(gradeFilterId) && gradeFilterId !== 97)
+          // if page is set to events_archive return only events that date is in the past
+          let isArchive = false;
+          if (date_time) {
+            // loop through date_time and check if date is in the past
+            date_time.forEach((date) => {
+              if (new Date(date.date) < new Date()) isArchive = true;
+            });
+          }
+          // ⬇️ if page is event archive break out of loop
+          if (events_archive && !isArchive) return null;
+          // ⬇️  dont return past events if page is not archive
+          if (!events_archive && isArchive) return null;
+
+          if (
+            event_grade &&
+            !event_grade.includes(gradeFilterId) &&
+            gradeFilterId !== 97
+          )
             return null;
           if (!!searchFilter) {
             if (!title && !summary) return null;

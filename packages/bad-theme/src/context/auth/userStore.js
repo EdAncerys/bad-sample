@@ -128,6 +128,43 @@ export const getUserStoreAction = async ({ state, isActiveUser }) => {
   }
 };
 
+export const getUserApplicationAction = async ({
+  state,
+  dispatch,
+  contactid,
+}) => {
+  console.log("getUserApplicationAction triggered");
+
+  try {
+    if (!contactid)
+      throw new Error("Cannot get user store. Contactid is missing.");
+
+    const URL = state.auth.APP_HOST + `/applications/current/${contactid}`;
+    const jwt = await authenticateAppAction({ state });
+
+    const requestOptions = {
+      method: "GET",
+      headers: { Authorization: `Bearer ${jwt}` },
+    };
+
+    const response = await fetch(URL, requestOptions);
+    const userStore = await response.json();
+
+    if (userStore.success) {
+      console.log("⏬ Membership Record ⏬");
+      console.log(userStore.data);
+
+      // set application data to context
+      setApplicationDataAction({ dispatch, applicationData: userStore.data });
+    } else {
+      console.log("⏬ Membership Record Not Found ⏬");
+      return null;
+    }
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
 export const createDynamicsApplicationAction = async ({ state, contactid }) => {
   console.log("createDynamicsApplicationAction triggered");
 
@@ -186,7 +223,7 @@ export const setCompleteUserApplicationAction = async ({
       await getApplicationStatus({
         state,
         dispatch,
-        id: contactid,
+        contactid,
       });
       // delete application record from CONTEXT
       setApplicationDataAction({
@@ -196,8 +233,11 @@ export const setCompleteUserApplicationAction = async ({
 
       console.log("⏬ Membership Completed ⏬");
       console.log(data);
+
+      return data;
     } else {
       console.log("⏬ Failed to Create Membership ⏬");
+      console.log(response);
       console.log(data);
     }
   } catch (error) {

@@ -48,7 +48,7 @@ const TweetInfo = ({ state, actions, libraries, tweetInfo }) => {
     return (
       <div
         className="flex primary-title"
-        style={{ fontSize: 22 }}
+        style={{ fontSize: 20 }}
         onClick={() => setGoToAction({ path: profile_image_url, actions })}
       >
         <Html2React html={name} />
@@ -60,7 +60,7 @@ const TweetInfo = ({ state, actions, libraries, tweetInfo }) => {
     if (!author_name) return null;
 
     return (
-      <div style={{ fontSize: 22 }}>
+      <div style={{ fontSize: 20 }}>
         @<Html2React html={author_name} />
       </div>
     );

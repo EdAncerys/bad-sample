@@ -42,7 +42,6 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
     add_search_function,
   } = block;
 
-
   const searchFilterRef = useRef(null);
   const currentSearchFilterRef = useRef(null);
   const loadMoreRef = useRef(null);
@@ -57,10 +56,14 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
   const isCED = acf_fc_layout === "ced_feed";
   const isSHD = acf_fc_layout === "shd_feed";
 
-  let feedTitle = "Search for British Journal of Dermatology Articles";
+  let feedTitle =
+    "Search for recently published British Journal of Dermatology Articles";
   if (isCED)
-    feedTitle = "Search for Clinical and Experimental Dermatology Articles";
-  if (isSHD) feedTitle = "Search for Skin Health and Disease Articles";
+    feedTitle =
+      "Search for recently published Clinical and Experimental Dermatology Articles";
+  if (isSHD)
+    feedTitle =
+      "Search for recently published Skin Health and Disease Articles";
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
@@ -200,7 +203,7 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
         {feedData.map((block, key) => {
           const { title, category, link, pubDate } = block;
           const doi = block["prism:doi"];
-          console.log(block);
+          // console.log(block); // debug
 
           // HANDLERS -----------------------------------------------------
           if (searchFilter) {

@@ -1,7 +1,16 @@
 import { handleGetCookie, handleSetCookie } from "./cookie";
-import { authenticateAppAction, getUserStoreAction } from "../context";
+import {
+  authenticateAppAction,
+  getUserStoreAction,
+  getUserDataByContactId,
+} from "../context";
 
-export const authLogViaCookie = async ({ state, initialState }) => {
+const fetchCompleteHandler = ({ initialState }) => {
+  console.log("⬇️ user pre-fetch completed");
+  initialState.isPlaceholder = false;
+};
+
+export const authCookieActionBeforeCSR = async ({ state, initialState }) => {
   const cookie = handleGetCookie({ name: state.auth.COOKIE_NAME });
 
   // ⏬⏬  user validation & auth ⏬⏬
@@ -67,14 +76,53 @@ export const authLogViaCookie = async ({ state, initialState }) => {
     } catch (error) {
       console.log("error", error);
       handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
+    } finally {
+      fetchCompleteHandler({ initialState });
+    }
+  } else {
+    fetchCompleteHandler({ initialState });
+  }
+};
+
+export const authCookieActionAfterCSR = async ({ state, dispatch }) => {
+  const cookie = handleGetCookie({ name: state.auth.COOKIE_NAME });
+
+  // ⏬⏬  user validation & auth ⏬⏬
+  if (cookie) {
+    console.log("🍪 found", cookie);
+    let { jwt, contactid } = cookie;
+
+    if (!contactid || !jwt) {
+      console.log("Failed to Auth 🍪 data");
+      handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
+      return null;
+    }
+
+    try {
+      const userData = await getUserDataByContactId({
+        state,
+        dispatch,
+        jwt,
+        contactid,
+      });
+      if (!userData) throw new Error("Error getting userData.");
+
+      console.log("⬇️ userData successfully pre-fetched", userData); // debug
+    } catch (error) {
+      console.log("error", error);
+      handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
     }
   }
 };
 
 export const getWPMenu = async ({ state, actions }) => {
   const menu = sessionStorage.getItem("badMenu"); // checking if menu already pre fetched from wp
+  // pre-fetch custom post types for menus (for wp menu)
+  await actions.source.fetch(`/menu_features`);
+
   if (!menu) {
     try {
+      // pre-fetch wp menu
       await actions.source.fetch(`${state.theme.menuUrl}`);
       const badMenu = await state.source.data["/menu/primary-menu/"].items;
       state.theme.menu = badMenu; // replacing menu stored in sessions with state var
@@ -83,6 +131,7 @@ export const getWPMenu = async ({ state, actions }) => {
       console.log("error: " + error);
     }
   } else {
+    console.log("menu already pre fetched from wp"); // debug
     state.theme.menu = JSON.parse(menu);
   }
 };
@@ -116,6 +165,19 @@ export const getPostData = async ({ state, actions }) => {
 export const getLeadershipTeamData = async ({ state, actions }) => {
   await actions.source.fetch(`/leadership_team/`); // fetch CPT leadershipTeam
   const leadershipTeam = state.source.get(`/leadership_team/`);
+  const leadershipTeamNextPage = leadershipTeam.next; // check if leadershipTeam have multiple pages
+  // fetch leadershipTeam via wp API page by page
+  let isThereNextLeadershipPage = leadershipTeamNextPage;
+  while (isThereNextLeadershipPage) {
+    await actions.source.fetch(isThereNextLeadershipPage); // fetch next page
+    const nextPage = state.source.get(isThereNextLeadershipPage).next; // check ifNext page & set next page
+    isThereNextLeadershipPage = nextPage;
+  }
+};
+
+export const getSIGGroupeData = async ({ state, actions }) => {
+  await actions.source.fetch(`/sig_group/`); // fetch CPT leadershipTeam
+  const leadershipTeam = state.source.get(`/sig_group/`);
   const leadershipTeamNextPage = leadershipTeam.next; // check if leadershipTeam have multiple pages
   // fetch leadershipTeam via wp API page by page
   let isThereNextLeadershipPage = leadershipTeamNextPage;

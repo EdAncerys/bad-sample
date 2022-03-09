@@ -71,7 +71,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     // if !data then break
     if (data.length === 0) return;
 
-    console.log("data: ", data); // debug
+    // console.log("data: ", data); // debug
     // apply date filter
     data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
     // filter by categories
@@ -179,11 +179,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       return (
         <div
           className="flex primary-title"
-          style={{
-            fontSize: !lg ? 36 : 25,
-            alignItems: "center",
-            paddingBottom: `0.5em`,
-          }}
+          style={{ fontSize: 26, alignItems: "center", paddingBottom: `0.5em` }}
         >
           Search for News & Media
         </div>

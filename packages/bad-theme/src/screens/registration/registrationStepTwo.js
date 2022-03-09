@@ -45,7 +45,6 @@ const RegistrationStepTwo = ({ state, actions }) => {
     // populate form data values from applicationData
     if (!applicationData) return null;
     const handleSetData = ({ data, name }) => {
-      console.log(name);
       setFormData((prevFormData) => ({
         ...prevFormData,
         [`${name}`]: data.value || "",
@@ -63,7 +62,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
         setFormData((prevFormData) => ({
           ...prevFormData,
           bad_categorytype: isSIG
-            ? data._bad_sigid_value
+            ? data.bad_categorytype + ":" + data._bad_sigid_value
             : data.bad_categorytype,
         }));
     });
@@ -122,6 +121,10 @@ const RegistrationStepTwo = ({ state, actions }) => {
     if (!isValid) return null;
     // console.log(formData); // debug
 
+    let path = `/membership/step-3-personal-information/`;
+    if (formData.bad_organisedfor === "810170001")
+      path = `/membership/sig-questions/`;
+
     setFetching(true);
     await handleApplyForMembershipAction({
       state,
@@ -133,7 +136,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
       membershipApplication: { stepTwo: true }, // set stepOne to complete
       category: formData.bad_organisedfor === "810170000" ? "BAD" : "SIG",
       type: formData.bad_categorytype, // application type name
-      path: `/membership/step-3-personal-information/`,
+      path,
     });
     setFetching(false);
   };
@@ -246,21 +249,6 @@ const RegistrationStepTwo = ({ state, actions }) => {
           borderTop: `1px solid ${colors.silverFillTwo}`,
         }}
       >
-        <label className="bold">Membership Type</label>
-        <Form.Select
-          name="bad_organisedfor"
-          value={formData.bad_organisedfor}
-          onChange={handleChange}
-          className="input"
-        >
-          <option value="null" hidden>
-            Membership Type
-          </option>
-          <option value="810170000">BAD Membership</option>
-          <option value="810170001">SIG Membership</option>
-        </Form.Select>
-        <FormError id="bad_organisedfor" />
-
         <ServeBADMembershipCategory />
         <ServeSIGMembershipCategory />
       </div>

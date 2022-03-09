@@ -1,6 +1,10 @@
 import { setLoginModalAction, setFetchAction } from "../index";
 import { handleSetCookie } from "../../helpers/cookie";
-import { setGoToAction, getApplicationStatus } from "../index";
+import {
+  setGoToAction,
+  getApplicationStatus,
+  getUserApplicationAction,
+} from "../index";
 
 export const loginAction = async ({ state, dispatch, transId }) => {
   console.log("loginAction triggered");
@@ -127,6 +131,9 @@ export const getUserDataByContactId = async ({
     const data = await fetch(URL, requestOptions);
     const response = await data.json();
     if (!response) throw new Error("Error getting userData.");
+
+    // pre-fetch application data & populate to context store
+    await getUserApplicationAction({ state, dispatch, contactid });
 
     // get application status against user in Dynamic
     const dynamicApps = await getApplicationStatus({

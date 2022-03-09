@@ -68,7 +68,7 @@ const CardFS = ({
           <div
             className="primary-title"
             style={{
-              fontSize: 28,
+              fontSize: 26,
               marginLeft: "1em",
               textAlign: "start",
             }}

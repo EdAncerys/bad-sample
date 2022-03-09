@@ -110,7 +110,7 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
                       <div
                         className="primary-title"
                         style={{
-                          fontSize: 40,
+                          fontSize: 40, // exception for timeline date
                           zIndex: 12,
                         }}
                         className="col-4"

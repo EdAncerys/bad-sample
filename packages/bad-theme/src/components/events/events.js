@@ -125,7 +125,7 @@ const Events = ({ state, actions, libraries, block }) => {
       return (
         <div
           className="flex"
-          style={{ marginTop: !lg ? null : "1em", width: "100%" }}
+          style={{ paddingRight: !lg ? `1em` : 0, width: "100%" }}
         >
           <Form.Select
             style={styles.input}
@@ -176,7 +176,7 @@ const Events = ({ state, actions, libraries, block }) => {
       // get current month
       const currentMonth = new Date().getMonth();
       // get array of next 12 months and a year based on current month
-      const months = [...Array(12).keys()].map((item, key) => {
+      const monthsFeature = [...Array(12).keys()].map((item, key) => {
         let month = currentMonth + key + 1;
         let year = new Date().getFullYear();
         if (month > 12) {
@@ -185,6 +185,20 @@ const Events = ({ state, actions, libraries, block }) => {
         }
         return `${month} 1 ${year}`;
       });
+
+      // get array of past 12 months and a year based on current month
+      const monthsPast = [...Array(12).keys()].map((item, key) => {
+        let month = currentMonth - key;
+        let year = new Date().getFullYear();
+        if (month < 1) {
+          year--;
+          month = month + 12;
+        }
+        return `${month} 1 ${year}`;
+      });
+
+      let eventSearchMonth = monthsFeature;
+      if (block.events_archive) eventSearchMonth = monthsPast;
 
       return (
         <div className="flex">
@@ -196,7 +210,7 @@ const Events = ({ state, actions, libraries, block }) => {
             <option value="" hidden>
               Filter By Month
             </option>
-            {months.map((time, key) => {
+            {eventSearchMonth.map((time, key) => {
               const dateObject = new Date(time);
               const formattedDate = DATE_MODULE.format(dateObject, "MMMM YYYY");
 

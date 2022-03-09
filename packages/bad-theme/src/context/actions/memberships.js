@@ -3,6 +3,7 @@ import {
   setUserStoreAction,
   setGoToAction,
   setLoginModalAction,
+  setErrorAction,
 } from "../index";
 
 export const getMembershipDataAction = async ({ state, actions }) => {
@@ -32,12 +33,12 @@ export const validateMembershipFormAction = async ({
     }));
   };
 
+  if (!state.source.memberships) return null;
+  if (!applicationData) return null;
+
   // ⏬ validate inputs
   const membershipTypes = Object.values(state.source.memberships);
   // console.log("membershipTypes", membershipTypes); // debug
-
-  if (!membershipTypes) return null;
-  if (!applicationData) return null;
 
   membershipTypes.map((membership) => {
     // validate application type against store object
@@ -75,6 +76,7 @@ export const handleApplyForMembershipAction = async ({
       setLoginModalAction({ dispatch, loginModalAction: true });
       return null;
     }
+    const isBADApp = category === "BAD"; // check if isBADApp
 
     if (dynamicsApps) {
       const appsData = dynamicsApps.apps.data; // get pending too approve apps data form dynamic apps
@@ -82,24 +84,59 @@ export const handleApplyForMembershipAction = async ({
       const isPending =
         appsData.filter((item) => item.bad_approvalstatus === "Pending")
           .length > 0;
-      // if user have application pending under reviewed status redirect to application list
+      const isSIGPending =
+        appsData.filter((item) => item.bad_organisedfor === "SIG").length > 0;
+
+      // if User have SIG under review isSIGPending = true redirect to dashboard page & notify
+      if (isSIGPending) {
+        setGoToAction({ path: "/dashboard/", actions });
+        setErrorAction({
+          dispatch,
+          isError: { message: "You have SIG application under review" },
+        });
+        return;
+      }
+
       if (isPending) {
-        console.log("🤖 user have application pending under reviewed status");
-        if (state.auth.ENVIRONMENT !== "DEVELOPMENT") {
-          // allow application list only in development env
-          setGoToAction({ path: "/dashboard/", actions });
-          return;
-        }
+        console.log("🤖 user have application pending under reviewed status"); // debug
+      } else {
+        console.log(
+          "🤖 user have NO pending applications under reviewed status"
+        ); // debug
       }
     }
 
-    // ⏬ get appropriate membership ID
-    const membershipData = await getBADMembershipSubscriptionData({
-      state,
-      category,
-      type,
-    });
-    if (!membershipData) throw new Error("Failed to get membership data");
+    if (applicationData) {
+      // if user have application in progress redirect to dashboard
+      console.log(
+        "🤖 user have application in progress. Redirect to Dashboard"
+      );
+      if (!applicationData[0].stepOne) {
+        // allow application list only in development env
+        setGoToAction({ path: "/dashboard/", actions });
+        return;
+      }
+    }
+
+    // default application data
+    let membershipData = {
+      bad_organisedfor: "SIG",
+      bad_categorytype: type,
+      core_membershipsubscriptionplanid: "",
+      core_name: "",
+    }; // membership data
+
+    if (isBADApp) {
+      // ⏬ get appropriate membership ID for BAD applications only
+      const response = await getBADMembershipSubscriptionData({
+        state,
+        category,
+        type,
+      });
+      console.log("getBADMembershipSubscriptionData", response);
+      if (!response) throw new Error("Failed to get membership data");
+      membershipData = response;
+    }
 
     // ⏬ create user application record in Store
     const store = await setUserStoreAction({
@@ -109,9 +146,9 @@ export const handleApplyForMembershipAction = async ({
       isActiveUser,
       membershipApplication: { ...membershipData, ...membershipApplication },
       data: {
-        bad_organisedfor: category === "BAD" ? "810170000" : "810170001", // BAD members category
+        bad_organisedfor: isBADApp ? "810170000" : "810170001", // BAD members category
         core_membershipsubscriptionplanid:
-          membershipData.core_membershipsubscriptionplanid, // type of membership for application
+          membershipData.core_membershipsubscriptionplanid || "", // type of membership for application
         bad_applicationfor: "810170000", // silent assignment
       },
     });

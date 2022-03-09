@@ -20,8 +20,6 @@ const HeaderActions = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
 
-  const isDevelopment = state.auth.ENVIRONMENT;
-
   const [isReady, SetReady] = useState(null);
 
   // hook applies after React has performed all DOM mutations

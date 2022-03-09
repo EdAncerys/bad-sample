@@ -78,6 +78,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   });
 
   const [hospitalData, setHospitalData] = useState(null);
+  const [canChangeHospital, setCanChangeHospital] = useState(true); // allow user to change hospital is no BAD applications are found
   const [selectedHospital, setSelectedHospital] = useState(null);
   const [applicationType, setType] = useState("");
   const [isFetching, setFetching] = useState(false);
@@ -97,6 +98,18 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
     // ⏬ populate form data values from applicationData
     if (!applicationData) return null;
+
+    if (dynamicsApps) {
+      const subsData = dynamicsApps.subs.data; // get subs/approved apps data form dynamic apps
+      // check if user have application under BAD as approved status
+      const isApprovedBAD =
+        subsData.filter((item) => item.bad_organisedfor === "BAD").length > 0;
+      // if user have application pending under reviewed status redirect to application list
+      if (isApprovedBAD) {
+        console.log("🤖 user have BAD application approved");
+        setCanChangeHospital(false);
+      }
+    }
 
     // hospital id initial value
     let hospitalId = null;
@@ -252,22 +265,23 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         membershipApplication: { stepFour: true }, // set stepOne to complete
         data: formData,
       });
+      if (!store.success) throw new Error("Failed to update application");
 
       // set complete application if app = BAD
-      if (category === "BAD")
-        await setCompleteUserApplicationAction({
-          state,
-          dispatch,
-          isActiveUser,
-        });
-      setFetching(false);
-      if (!store.success) throw new Error("Failed to complete application");
+      const appsResponse = await setCompleteUserApplicationAction({
+        state,
+        dispatch,
+        isActiveUser,
+      });
+      if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
 
       let slug = `/membership/thank-you/`;
-      if (category === "SIG") slug = `/membership/step-5-sig-questions/`;
+      if (category === "SIG") slug = `/membership/sig-questions/`;
       if (isActiveUser) setGoToAction({ path: slug, actions });
     } catch (error) {
       console.log(error);
+    } finally {
+      setFetching(false);
     }
   };
 
@@ -352,7 +366,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       <div
         className="primary-title"
         style={{
-          fontSize: 22,
+          fontSize: 20,
           paddingTop: `1em`,
           marginTop: `1em`,
           borderTop: `1px solid ${colors.silverFillTwo}`,
@@ -443,19 +457,22 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                         }}
                       >
                         {selectedHospital}
-                        <div
-                          className="filter-icon"
-                          style={{ top: -7 }}
-                          onClick={handleClearHospital}
-                        >
-                          <CloseIcon
-                            style={{
-                              fill: colors.darkSilver,
-                              padding: 0,
-                              width: "0.7em",
-                            }}
-                          />
-                        </div>
+
+                        {canChangeHospital && (
+                          <div
+                            className="filter-icon"
+                            style={{ top: -7 }}
+                            onClick={handleClearHospital}
+                          >
+                            <CloseIcon
+                              style={{
+                                fill: colors.darkSilver,
+                                padding: 0,
+                                width: "0.7em",
+                              }}
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

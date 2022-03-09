@@ -17,10 +17,12 @@ const ProfileProgress = ({ state, actions, libraries }) => {
 
   const { dynamicsApps, applicationData } = useAppState();
 
+  console.log("dynamicsApps", dynamicsApps); // debug
+
   const marginVertical = state.theme.marginVertical;
   const ICON_WIDTH = 30;
 
-  const [applicationStep, setStep] = useState("Start new application");
+  const [applicationStep, setStep] = useState("Application");
   // application under review
   let isUnderReview = false;
   if (dynamicsApps) {
@@ -37,18 +39,17 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   useEffect(() => {
     if (!applicationData) return null;
 
+    const appData = applicationData[0]; // application info data
     let progressName = "";
-    if (applicationData[0].stepOne) progressName = "Step 1 - The Process";
-    if (applicationData[0].stepTwo)
-      progressName = "Step 2 - Personal Information";
-    if (applicationData[0].stepThree)
-      progressName = "Step 3 - Category Selection";
-    if (applicationData[0].stepFour)
-      progressName = "Step 4 - Professional Details";
-    if (applicationData[0].stepFive) progressName = "Step 5 - SIG Questions";
-    if (applicationData[0].applicationComplete)
-      progressName = "Application Submitted";
-    if (isUnderReview) progressName = "Application Under Review";
+    // if application record & no steps completed return application name
+    if (appData.bad_categorytype) {
+      progressName = ` - Started ${appData.bad_categorytype} application`;
+    }
+
+    if (appData.stepOne) progressName = "Step 1 - The Process";
+    if (appData.stepTwo) progressName = "Step 2 - Personal Information";
+    if (appData.stepThree) progressName = "Step 3 - Category Selection";
+    if (appData.stepFour) progressName = "Step 4 - Professional Details";
 
     setStep(progressName);
   }, [applicationData]);
@@ -64,16 +65,26 @@ const ProfileProgress = ({ state, actions, libraries }) => {
       path = `/membership/step-4-professional-details/`;
     if (applicationData && applicationData[0].stepFour)
       path = `/membership/thank-you/`;
+    // SIG application path
+    if (applicationData && applicationData[0].bad_organisedfor === "SIG")
+      path = `/membership/sig-questions/`;
 
     setGoToAction({ path: path, actions });
   };
 
   // SERVERS ---------------------------------------------
   const ServeProgressBar = () => {
+    if (!applicationData) return null;
+
+    const appData = applicationData[0]; // application info data
+    const isSIG = appData.bad_organisedfor === "SIG";
+
+    // dont display for SIG applications
+    if (isSIG) return null;
+
     const ServeProgressIcon = ({ complete }) => {
       const alt = complete ? "complete" : "in-progress";
       let status = complete;
-      if (isUnderReview) status = true;
 
       return (
         <div
@@ -110,30 +121,18 @@ const ProfileProgress = ({ state, actions, libraries }) => {
               position: "absolute",
               zIndex: 1,
               display: "grid",
-              gridTemplateColumns: `0.5fr 1fr 1fr 1fr 1fr`,
+              gridTemplateColumns: `${ICON_WIDTH}px 1.3fr ${ICON_WIDTH}px 1.3fr ${ICON_WIDTH}px`,
               width: "100%",
               left: 0,
               top: -ICON_WIDTH / 3,
-              justifyItems: "flex-end",
+              justifyItems: "center",
             }}
           >
-            <ServeProgressIcon
-              complete={applicationData && applicationData[0].stepOne}
-            />
-            <ServeProgressIcon
-              complete={applicationData && applicationData[0].stepTwo}
-            />
-            <ServeProgressIcon
-              complete={applicationData && applicationData[0].stepThree}
-            />
-            <ServeProgressIcon
-              complete={applicationData && applicationData[0].stepFour}
-            />
-            <ServeProgressIcon
-              complete={
-                applicationData && applicationData[0].applicationComplete
-              }
-            />
+            <ServeProgressIcon complete={appData.stepOne} />
+            <ServeProgressIcon complete={appData.stepTwo} />
+            <ServeProgressIcon complete={appData.stepThree} />
+            <ServeProgressIcon complete={appData.stepFour} />
+            <ServeProgressIcon complete={appData.applicationComplete} />
           </div>
         </div>
       );
@@ -155,12 +154,6 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   };
 
   const ServeActions = () => {
-    if (
-      (applicationData && applicationData[0].applicationComplete) ||
-      isUnderReview
-    )
-      return null;
-
     return (
       <div type="submit" className="blue-btn" onClick={handleApply}>
         Application
@@ -169,7 +162,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   };
 
   const ServeApplicationConsole = () => {
-    if (!isUnderReview) return null; // if application data exist & not under review return null
+    if (!applicationData) return null; // if no applicationData return null
 
     return (
       <div
@@ -183,9 +176,10 @@ const ProfileProgress = ({ state, actions, libraries }) => {
               fontSize: 20,
               fontWeight: "bold",
               justifyItems: "center",
+              lineHeight: "unset",
             }}
           >
-            Application Progress - <span>{applicationStep}</span>
+            Application Progress <span>{applicationStep}</span>
           </div>
           <ServeActions />
         </div>
@@ -197,6 +191,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
 
   const ServeApplicationList = () => {
     if (!dynamicsApps) return null; // if application data exist & not under review return null
+    console.log(dynamicsApps);
     // see if application list have approved applications and if so show them
     const subsData = dynamicsApps.subs.data; // get subs data form dynamic apps
     // hide component if application list has no approved applications
@@ -247,10 +242,69 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     );
   };
 
+  const ServeSubmittedApplicationList = () => {
+    if (!dynamicsApps) return null; // if application data exist & not under review return null
+    // see if application list have approved applications and if so show them
+    let appsData = dynamicsApps.apps.data; // get subs data form dynamic apps
+    // hide component if application list has no approved applications
+    if (appsData.length === 0) return null;
+    // sort by application date created newest by default
+    appsData = appsData.sort((a, b) => {
+      const dateA = new Date(a.createdon);
+      const dateB = new Date(b.createdon);
+      return dateB - dateA;
+    });
+
+    return (
+      <div
+        className="flex-col shadow"
+        style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
+      >
+        <div className="flex-col">
+          <div
+            className="flex primary-title"
+            style={{
+              fontSize: 20,
+              justifyItems: "center",
+            }}
+          >
+            Pending For Approval Applications
+          </div>
+          {appsData.map((app, key) => {
+            const {
+              bad_organisedfor,
+              core_name,
+              createdon,
+              bad_approvalstatus,
+            } = app;
+
+            // get application date
+            let appData = createdon.split(" ")[0];
+            // split string and revert date with month format
+            appData = appData.split("/");
+            appData = `${appData[1]}/${appData[0]}/${appData[2]}`;
+
+            const dateObject = new Date(appData);
+            const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
+
+            return (
+              <div key={key} className="flex-col" style={{ paddingTop: `1em` }}>
+                <div className="primary-title">{bad_organisedfor}</div>
+                <div>{core_name}</div>
+                <div>Application Date: {formattedDate}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div>
       <ServeApplicationConsole />
       <ServeApplicationList />
+      <ServeSubmittedApplicationList />
     </div>
   );
 };
