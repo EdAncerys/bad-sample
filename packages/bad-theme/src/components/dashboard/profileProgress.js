@@ -49,7 +49,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     let progressName = "";
     // if application record & no steps completed return application name
     if (appData.bad_categorytype) {
-      progressName = ` - Started ${appData.bad_categorytype} application`;
+      progressName = `- Started ${appData.bad_categorytype} application`;
     }
 
     if (appData.stepOne) progressName = "Step 1 - The Process";
@@ -189,7 +189,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
             Cancel Application
           </div>
           <div type="submit" className="blue-btn" onClick={handleApply}>
-            Application
+            Continue Application
           </div>
         </div>
       </div>
@@ -219,7 +219,8 @@ const ProfileProgress = ({ state, actions, libraries }) => {
                 lineHeight: "unset",
               }}
             >
-              Application Progress <span>{applicationStep}</span>
+              Application Progress
+              <span style={{ paddingLeft: "0.5em" }}>{applicationStep}</span>
             </div>
             <ServeActions />
           </div>

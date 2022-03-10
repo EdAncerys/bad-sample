@@ -101,9 +101,19 @@ export const handleApplyForMembershipAction = async ({
       console.log(
         "🤖 user have application in progress. Redirect to Dashboard"
       );
+      // allow application to refetch id for BAD apps step 2 only
       if (!applicationData[0].stepOne) {
-        // allow application list only in development env
-        setGoToAction({ path: "/dashboard/", actions });
+        let confirmationMsg = `You already have application open and unsubmitted! Please go to your dashboard to continue or cancel this application`;
+        if (applicationData) {
+          const type = applicationData[0].bad_categorytype;
+          confirmationMsg = `You already have ${type} application open and unsubmitted! Please go to your dashboard to continue or cancel this application`;
+        }
+        // if user have existing application show error msg
+        setErrorAction({
+          dispatch,
+          isError: { message: confirmationMsg, goToDashboard: true },
+        });
+
         return;
       }
     }
