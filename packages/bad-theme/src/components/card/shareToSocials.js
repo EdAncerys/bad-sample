@@ -106,7 +106,11 @@ const ShareToSocials = ({
         </div>
         {isCalendarLink && (
           <div className="toggle-icon-scale" style={styles.socials}>
-            <Link link={add2Calendar} target="_blank">
+            <Link
+              link={add2Calendar}
+              target="_blank"
+              style={{ boxShadow: "none" }}
+            >
               <Image src={WebPage} className="d-block h-100" alt="Instagram" />
             </Link>
           </div>

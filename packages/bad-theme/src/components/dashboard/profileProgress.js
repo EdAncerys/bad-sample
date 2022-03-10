@@ -5,22 +5,30 @@ import Image from "@frontity/components/image";
 import { colors } from "../../config/imports";
 import date from "date-and-time";
 const DATE_MODULE = date;
+import ActionPlaceholder from "../../components/actionPlaceholder";
 
 import Ellipse from "../../img/svg/ellipse.svg";
 import CheckMarkGreen from "../../img/svg/checkMarkGreen.svg";
 
 // CONTEXT ----------------------------------------------------------------
-import { useAppState, setGoToAction } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setGoToAction,
+  deleteApplicationAction,
+} from "../../context";
 
 const ProfileProgress = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const { dynamicsApps, applicationData } = useAppState();
+  const { dynamicsApps, applicationData, isActiveUser } = useAppState();
+  const dispatch = useAppDispatch();
 
-  console.log("dynamicsApps", dynamicsApps); // debug
+  // console.log("dynamicsApps", dynamicsApps); // debug
 
   const marginVertical = state.theme.marginVertical;
   const ICON_WIDTH = 30;
+  const [isFetching, setFetching] = useState(false);
 
   const [applicationStep, setStep] = useState("Application");
   // application under review
@@ -43,7 +51,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     let progressName = "";
     // if application record & no steps completed return application name
     if (appData.bad_categorytype) {
-      progressName = ` - Started ${appData.bad_categorytype} application`;
+      progressName = `- Started ${appData.bad_categorytype} application`;
     }
 
     if (appData.stepOne) progressName = "Step 1 - The Process";
@@ -70,6 +78,23 @@ const ProfileProgress = ({ state, actions, libraries }) => {
       path = `/membership/sig-questions/`;
 
     setGoToAction({ path: path, actions });
+  };
+
+  const handleCancelApplication = async () => {
+    // call to API to delete Application
+    try {
+      setFetching(true);
+      await deleteApplicationAction({
+        state,
+        dispatch,
+        applicationData,
+        contactid: isActiveUser.contactid,
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setFetching(false);
+    }
   };
 
   // SERVERS ---------------------------------------------
@@ -155,8 +180,20 @@ const ProfileProgress = ({ state, actions, libraries }) => {
 
   const ServeActions = () => {
     return (
-      <div type="submit" className="blue-btn" onClick={handleApply}>
-        Application
+      <div>
+        <div className="flex">
+          <div
+            type="submit"
+            className="blue-btn"
+            onClick={handleCancelApplication}
+            style={{ marginRight: "1em", backgroundColor: colors.danger }}
+          >
+            Cancel Application
+          </div>
+          <div type="submit" className="blue-btn" onClick={handleApply}>
+            Continue Application
+          </div>
+        </div>
       </div>
     );
   };
@@ -165,33 +202,39 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     if (!applicationData) return null; // if no applicationData return null
 
     return (
-      <div
-        className="flex-col shadow"
-        style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
-      >
-        <div className="flex">
-          <div
-            className="flex primary-title"
-            style={{
-              fontSize: 20,
-              fontWeight: "bold",
-              justifyItems: "center",
-              lineHeight: "unset",
-            }}
-          >
-            Application Progress <span>{applicationStep}</span>
+      <div style={{ position: "relative" }}>
+        <ActionPlaceholder isFetching={isFetching} background="transparent" />
+        <div
+          className="flex-col shadow"
+          style={{
+            padding: `2em 4em`,
+            marginBottom: `${marginVertical}px`,
+          }}
+        >
+          <div className="flex" style={{ alignItems: "center" }}>
+            <div
+              className="flex primary-title"
+              style={{
+                fontSize: 20,
+                fontWeight: "bold",
+                justifyItems: "center",
+                lineHeight: "unset",
+              }}
+            >
+              Application Progress
+              <span style={{ paddingLeft: "0.5em" }}>{applicationStep}</span>
+            </div>
+            <ServeActions />
           </div>
-          <ServeActions />
-        </div>
 
-        <ServeProgressBar />
+          <ServeProgressBar />
+        </div>
       </div>
     );
   };
 
   const ServeApplicationList = () => {
     if (!dynamicsApps) return null; // if application data exist & not under review return null
-    console.log(dynamicsApps);
     // see if application list have approved applications and if so show them
     const subsData = dynamicsApps.subs.data; // get subs data form dynamic apps
     // hide component if application list has no approved applications

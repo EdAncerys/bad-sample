@@ -52,6 +52,7 @@ import {
   getUserStoreAction,
   setCompleteUserApplicationAction,
   getUserApplicationAction,
+  deleteApplicationAction,
 } from "./auth/userStore";
 import { getWileyAction } from "./auth/getWiley";
 import { getTestUserAccountsAction } from "./auth/getTestUserAccounts";
@@ -129,4 +130,5 @@ export {
   getWPMenu,
   getUserApplicationAction,
   getSIGGroupeData,
+  deleteApplicationAction,
 };
