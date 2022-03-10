@@ -65,8 +65,7 @@ const Directory = ({ state, actions, libraries }) => {
     try {
       setIsFetching(true);
       // API call to update profile preferences
-      // await updateProfileAction({ state, dispatch, data, isActiveUser });
-      await getFadAction({ state, dispatch });
+      await updateProfileAction({ state, dispatch, data, isActiveUser });
     } catch (error) {
       console.log(error);
     } finally {
