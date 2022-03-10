@@ -35,10 +35,10 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   const [filterList, setFilterList] = useState(null);
   const [categoryList, setCategoryList] = useState(null);
 
-  const [searchValue, setSearchValue] = useState(null);
-  const [categoryValue, setCategoryValue] = useState(null);
-  const [dateValue, setDateValue] = useState(null);
-  const [yearValue, setYearValue] = useState(null);
+  const [searchValue, setSearchValue] = useState("");
+  const [categoryValue, setCategoryValue] = useState("");
+  const [dateValue, setDateValue] = useState("");
+  const [yearValue, setYearValue] = useState("");
 
   const searchFilterRef = useRef("");
   const categoryFilterRef = useRef("");
@@ -67,19 +67,21 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     // if !data then break
     if (data.length === 0) return;
 
-    // console.log("data: ", data); // debug
-    // apply date filter
-    data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
     // filter by categories
     if (category_filter && category_filter !== "0")
       data = data.filter((item) =>
         item.categories.includes(Number(category_filter))
       );
 
+    // apply sort by date functionality
+    data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+    // console.log("category_filter: ", category_filter); // debug
+    // console.log("data: ", data); // debug
+
     setFilterList(data);
     if (state.source.category) {
-      const CATEGORY = Object.values(state.source.category);
-      setCategoryList(CATEGORY);
+      const catList = Object.values(state.source.category);
+      setCategoryList(catList);
     }
 
     return () => {
@@ -121,6 +123,8 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   const handleLoadMoreFilter = () => {
     const limit = post_limit || 6;
     let postList = Object.values(state.source.post); // add filterList object to data array
+    // apply sort by date functionality
+    postList = postList.sort((a, b) => new Date(b.date) - new Date(a.date));
     if (loadMoreRef.current) postList = postList.slice(0, Number(limit)); // apply limit on posts
 
     setFilterList(postList);
@@ -135,6 +139,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     const year = yearFilterRef.current.value;
 
     let filter = Object.values(state.source.post);
+    filter = filter.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     if (input) {
       const INPUT = input.toLowerCase();
@@ -148,7 +153,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
         news.categories.includes(Number(category))
       );
 
-    // apply date filter
+    // apply date filter & sort by date latest first
     if (date === "Date Descending")
       filter = filter.sort((a, b) => new Date(b.date) - new Date(a.date));
     if (date === "Date Ascending")

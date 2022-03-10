@@ -95,7 +95,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
       setEnquireAction({
         dispatch,
         enquireAction: {
-          contact_public_email: "bad@contact.org",
+          contact_public_email: "harriet@bag.org.uk",
           contact_public_phone_number: "+1 (123) 456-7890",
           contact_form_title: "Notification Form",
           contact_form_body: `Notify when ${positionName} position is open.`,
@@ -104,7 +104,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
           contact_phone_number: true,
           contact_subject: true,
           contact_message: true,
-          recipients: [{ email: "bad@email.com" }],
+          recipients: [{ email: "harriet@bag.org.uk" }],
         },
       });
     if (!isClosedPosition) handleElectionModal({ block });

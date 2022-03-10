@@ -307,7 +307,7 @@ const Event = ({ state, actions, libraries }) => {
             setEnquireAction({
               dispatch,
               enquireAction: {
-                contact_public_email: contact_public_email || "bad@contact.org",
+                contact_public_email: contact_public_email || "conference@bad.org.uk",
                 contact_public_phone_number:
                   contact_public_phone_number || "+1 (123) 456-7890",
                 contact_form_title: contact_form_title || "Event Contact Form",
@@ -320,7 +320,7 @@ const Event = ({ state, actions, libraries }) => {
                 contact_subject_dropdown_options,
                 contact_message: contact_message || true,
                 contact_allow_attachments,
-                recipients: [{ email: "bad@email.com" }],
+                recipients: [{ email: 'conference@bad.org.uk' }],
               },
             })
           }
@@ -573,7 +573,7 @@ const Event = ({ state, actions, libraries }) => {
             setEnquireAction({
               dispatch,
               enquireAction: {
-                contact_public_email: contact_public_email || "bad@contact.org",
+                contact_public_email: contact_public_email || "conference@bad.org.uk",
                 contact_public_phone_number:
                   contact_public_phone_number || "+1 (123) 456-7890",
                 contact_form_title:
@@ -587,7 +587,7 @@ const Event = ({ state, actions, libraries }) => {
                 contact_subject_dropdown_options,
                 contact_message: contact_message || true,
                 contact_allow_attachments,
-                recipients: [{ email: "bad@email.com" }],
+                recipients: [{ email: "conference@bad.org.uk" }],
               },
             })
           }

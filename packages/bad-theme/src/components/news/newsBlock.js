@@ -54,6 +54,8 @@ const NewsBlock = ({
     >
       {block.map((block, key) => {
         const { categories, link, title, featured_media, acf } = block;
+        // console.log("block", block); // debug
+
         const isECircular = categories[0] === eCircularCatId;
         let fileUrl = null;
         if (isECircular && acf.file_uploader)
