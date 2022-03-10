@@ -31,7 +31,10 @@ const FullWidthContentBlock = ({
     disable_vertical_padding,
     downloads,
     file,
+    button_label,
+    button_type,
   } = block;
+  console.log("block", block); // debug
 
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
@@ -142,7 +145,10 @@ const FullWidthContentBlock = ({
           justifyContent: ALIGNMENT,
         }}
       >
-        <DownloadFileBlock block={{ file }} disableMargin />
+        <DownloadFileBlock
+          block={{ file, label: button_label, type: button_type }}
+          disableMargin
+        />
       </div>
     );
   };

@@ -50,11 +50,11 @@ const ElectionModal = ({
     setEnquireAction({
       dispatch,
       enquireAction: {
-        contact_public_email: contact_public_email || "conference@bad.org.uk",
+        contact_public_email: contact_public_email || "harriet@bag.org.uk",
         contact_public_phone_number:
           contact_public_phone_number || "+1 (123) 456-7890",
-        form_title: contact_form_title || "Event Contact Form",
-        form_body: contact_form_body || `Register for ${title.rendered} event.`,
+        form_title: contact_form_title || "Application Form",
+        form_body: contact_form_body || `Apply to ${title.rendered} position.`,
         full_name: contact_full_name || true,
         email_address: contact_email || true,
         phone_number: contact_phone_number || true,
