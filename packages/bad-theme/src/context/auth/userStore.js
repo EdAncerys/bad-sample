@@ -277,6 +277,65 @@ export const updateDynamicsApplicationAction = async ({
   }
 };
 
+export const deleteApplicationAction = async ({
+  state,
+  dispatch,
+  contactid,
+  applicationData,
+}) => {
+  console.log("deleteApplicationRecord triggered");
+
+  let confirmationMsg = "Application been successfully deleted!";
+  if (applicationData) {
+    const type = applicationData[0].bad_categorytype;
+    confirmationMsg = `${type} application been successfully deleted!`;
+  }
+
+  try {
+    if (!contactid)
+      throw new Error(
+        "Cannot delete application record. Contactid is missing."
+      );
+
+    // userStore endpoint API
+    const URL = state.auth.APP_HOST + `/applications/current/${contactid}`;
+    const jwt = await authenticateAppAction({ state });
+
+    const requestOptions = {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    };
+
+    const response = await fetch(URL, requestOptions);
+    const data = await response.json();
+
+    if (data.success) {
+      console.log("⏬ DYNAMICS. Membership Record Successfully Deleted ⏬");
+      console.log(data);
+      // delete application record from CONTEXT
+      setApplicationDataAction({
+        dispatch,
+        applicationData: null,
+      });
+      // show confirmation msg
+      setErrorAction({
+        dispatch,
+        isError: { message: confirmationMsg },
+      });
+
+      return data;
+    } else {
+      console.log("⏬ DYNAMICS. Failed to Delete Membership Record ⏬");
+      console.log(data);
+      return null;
+    }
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
 const updateMembershipApplication = ({
   storeApplication,
   data,

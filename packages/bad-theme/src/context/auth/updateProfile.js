@@ -35,6 +35,8 @@ export const updateProfileAction = async ({
   try {
     const data = await fetch(URL, requestOptions);
     const response = await data.json();
+    if (!response) throw new Error("Error updating profile.");
+
     if (response.success) {
       await getUserDataByContactId({
         state,

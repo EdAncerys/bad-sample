@@ -5,7 +5,12 @@ import { colors } from "../config/imports";
 import Image from "@frontity/components/image";
 import CheckMark from "../img/svg/checkMark.svg";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setErrorAction } from "../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setErrorAction,
+  setGoToAction,
+} from "../context";
 
 const ErrorModal = ({ state, actions }) => {
   const dispatch = useAppDispatch();
@@ -20,8 +25,27 @@ const ErrorModal = ({ state, actions }) => {
     setErrorAction({ dispatch, isError: null });
   };
 
+  const gotToActionHandler = () => {
+    setGoToAction({ path: "/dashboard/", actions });
+    setErrorAction({ dispatch, isError: null });
+  };
+
   // SERVERS --------------------------------------------------
   const ServeActions = () => {
+    const DashboardAction = () => {
+      if (!isError.goToDashboard) return null;
+
+      return (
+        <div
+          className="blue-btn"
+          style={{ marginRight: "1em" }}
+          onClick={gotToActionHandler}
+        >
+          Dashboard
+        </div>
+      );
+    };
+
     return (
       <div>
         <div
@@ -30,6 +54,7 @@ const ErrorModal = ({ state, actions }) => {
             justifyContent: "flex-end",
           }}
         >
+          <DashboardAction />
           <div className="blue-btn" onClick={actionHandler}>
             Close
           </div>

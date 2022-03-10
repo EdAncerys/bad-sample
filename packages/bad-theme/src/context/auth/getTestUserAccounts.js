@@ -16,6 +16,7 @@ export const getTestUserAccountsAction = async ({ state }) => {
   try {
     const data = await fetch(URL, requestOptions);
     const result = await data.json();
+    if (!result) throw new Error("Error getting userData.");
 
     console.log("getTestUserAccountsAction result", result); // debug
 
