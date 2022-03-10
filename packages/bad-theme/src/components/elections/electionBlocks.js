@@ -100,8 +100,6 @@ const ElectionBlocks = ({ state, actions, block }) => {
   };
 
   const handleContactForm = ({ isClosedPosition, block }) => {
-    console.log("block", block); // debug
-
     const {
       contact_public_email,
       contact_public_phone_number,
@@ -115,7 +113,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
       contact_message,
       contact_allow_attachments,
       contact_recipients,
-    } = block;
+    } = block.acf;
 
     let positionName = "Position";
     if (block.title.rendered) positionName = block.title.rendered;
@@ -370,6 +368,30 @@ const ElectionBlocks = ({ state, actions, block }) => {
       );
     };
 
+    const ServeFilterValues = () => {
+      if (
+        !searchFilter ||
+        !gradeFilter ||
+        !roleFilter ||
+        !openPositions ||
+        !dateFilter
+      )
+        return null;
+
+      return (
+        <div
+          className="flex"
+          style={{ margin: "0.5em 0", position: "relative" }}
+        >
+          <ServeSearchFilter />
+          <ServeDropDownGradeFilter />
+          <ServeDropDownRoleFilter />
+          <ServeOpenPositionsFilter />
+          <ServeDropDownFilterFour />
+        </div>
+      );
+    };
+
     return (
       <div style={{ position: "relative" }} className="no-selector">
         <div className="flex-col" style={{ width: "70%" }}>
@@ -379,17 +401,8 @@ const ElectionBlocks = ({ state, actions, block }) => {
           />
           <ServeFilters />
         </div>
-        <div
-          className="flex"
-          style={{ margin: "0.5em 0 1.5em 0", position: "relative" }}
-        >
-          <ServeSearchFilter />
-          <ServeDropDownGradeFilter />
-          <ServeDropDownRoleFilter />
-          <ServeOpenPositionsFilter />
-          <ServeDropDownFilterFour />
-        </div>
-        <div className="flex" style={{ marginBottom: "2em" }}>
+        <ServeFilterValues />
+        <div className="flex" style={{ margin: "1em 0 2em 0" }}>
           <ServeOpenPositionBtnFilter />
         </div>
       </div>
@@ -406,14 +419,9 @@ const ElectionBlocks = ({ state, actions, block }) => {
       <div style={styles.container}>
         {electionList.map((block, key) => {
           const { title, election_grade, election_roles } = block;
-          const {
-            closing_date,
-            cta,
-            description,
-            nomination_form_upload,
-            election_status,
-          } = block.acf;
-          console.log("block", block); // debug
+          const { cta, description, nomination_form_upload, election_status } =
+            block.acf;
+          // console.log("block", block); // debug
 
           // taxonomy grade name filtering
           const filter = gradeList.filter(
