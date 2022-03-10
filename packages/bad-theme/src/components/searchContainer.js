@@ -12,6 +12,7 @@ const SearchContainer = ({
   state,
   actions,
   title,
+  subTitle,
   width,
   searchFilterRef,
   handleSearch,
@@ -49,6 +50,23 @@ const SearchContainer = ({
     );
   };
 
+  const ServeSubTitle = () => {
+    if (!subTitle) return null;
+
+    return (
+      <div
+        className="primary-title"
+        style={{
+          fontSize: 20,
+          alignItems: "center",
+          paddingBottom: `0.5em`,
+        }}
+      >
+        {subTitle}
+      </div>
+    );
+  };
+
   const ServeSearchContainer = () => {
     const [value, setValue] = useState(null);
 
@@ -75,7 +93,7 @@ const SearchContainer = ({
       );
     };
 
-    const ServeSerachButton = () => {
+    const ServeSearchButton = () => {
       if (inputOnly) return null;
 
       return (
@@ -129,7 +147,7 @@ const SearchContainer = ({
             <ServeIcon />
           </div>
         </div>
-        <ServeSerachButton />
+        <ServeSearchButton />
       </div>
     );
   };
@@ -138,6 +156,7 @@ const SearchContainer = ({
     <div className="flex no-selector" style={{ padding: padding || `1em 0` }}>
       <div className="flex-col">
         <ServeTitle />
+        <ServeSubTitle />
         <div style={{ width: WIDTH }}>
           <ServeSearchContainer />
         </div>

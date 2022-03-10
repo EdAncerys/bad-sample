@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import Image from "@frontity/components/image";
 
 import { colors } from "../../config/imports";
 import { setGoToAction } from "../../context";
-
+import Loading from "../loading";
 import ProfileAvatar from "../../img/svg/profile.svg";
 
 const FadDirectory = ({ state, actions, libraries, fadDirectory }) => {
@@ -13,18 +13,20 @@ const FadDirectory = ({ state, actions, libraries, fadDirectory }) => {
 
   if (!fadDirectory) return null;
 
+  console.log("fadDirectory", fadDirectory);
+
   const {
     fullname,
     emailaddress1,
     bad_mainhosptialweb,
-    bad_findadermatologisttext,
+    jobtitle,
     contactid,
     profile_image_url,
   } = fadDirectory;
 
   // SERVERS ---------------------------------------------
   const ServeCardImage = () => {
-    const alt = contactid || "BAD";
+    const alt = fullname || "BAD";
 
     const IMG_WIDTH = 75;
 
@@ -71,18 +73,37 @@ const FadDirectory = ({ state, actions, libraries, fadDirectory }) => {
     if (!emailaddress1) return null;
 
     return (
-      <div className="flex" style={{ paddingBottom: `0.5em` }}>
+      <div className="flex">
         <Html2React html={emailaddress1} />
       </div>
     );
   };
 
   const ServeJobTitle = () => {
-    if (!bad_findadermatologisttext) return null;
+    if (!jobtitle) return null;
 
     return (
-      <div className="flex primary-title">
-        <Html2React html={bad_findadermatologisttext} />
+      <div className="flex">
+        <Html2React html={jobtitle} />
+      </div>
+    );
+  };
+
+  const ServeHospital = () => {
+    const hospitalName =
+      fadDirectory[
+        "_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"
+      ];
+
+    if (!hospitalName) return null;
+
+    return (
+      <div
+        className="flex"
+        onClick={() => setGoToAction({ path: bad_mainhosptialweb, actions })}
+        style={{ cursor: "pointer" }}
+      >
+        <Html2React html={hospitalName} />
       </div>
     );
   };
@@ -105,8 +126,9 @@ const FadDirectory = ({ state, actions, libraries, fadDirectory }) => {
     <div className="flex-col">
       <ServeCardImage />
       <ServeFullName />
-      <ServeEmail />
       <ServeJobTitle />
+      <ServeEmail />
+      <ServeHospital />
       <ServeHospitalUrl />
     </div>
   );

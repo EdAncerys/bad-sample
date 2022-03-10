@@ -65,16 +65,15 @@ const UpdateProfile = ({ state, actions, libraries }) => {
     const lastname = formData.lastname;
     const bad_profile_photo_url = formData.bad_profile_photo_url;
 
+    const data = Object.assign(
+      {}, // add empty object
+      !!firstname && { firstname },
+      !!lastname && { lastname },
+      !!bad_profile_photo_url && { bad_profile_photo_url }
+    );
+    console.log("data", data); // debug
+
     try {
-      const data = Object.assign(
-        {}, // add empty object
-        !!firstname && { firstname },
-        !!lastname && { lastname },
-        !!bad_profile_photo_url && { bad_profile_photo_url }
-      );
-
-      console.log("data", data); // debug
-
       await updateProfileAction({ state, dispatch, data, isActiveUser });
       console.log("⬇️ profile details successfully updated ⬇️ "); // debug
     } catch (error) {
@@ -103,7 +102,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
       className="shadow"
       style={{ position: "relative", marginBottom: `${marginVertical}px` }}
     >
-      <ActionPlaceholder isFetching={isFetching} />
+      <ActionPlaceholder isFetching={isFetching} background="transparent" />
       <div style={{ padding: `2em 4em` }}>
         <div className="primary-title" style={{ fontSize: 20 }}>
           Personal Details:
