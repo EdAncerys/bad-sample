@@ -209,7 +209,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
             marginBottom: `${marginVertical}px`,
           }}
         >
-          <div className="flex">
+          <div className="flex" style={{ alignItems: "center" }}>
             <div
               className="flex primary-title"
               style={{

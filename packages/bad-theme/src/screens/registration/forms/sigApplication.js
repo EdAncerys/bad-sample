@@ -118,6 +118,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
   });
   const [isEmail, setIsEmail] = useState(false);
   const [applicationType, setType] = useState("SIG Application");
+  const [readPolicyDoc, setReadPolicyDoc] = useState("");
   const [isFetching, setFetching] = useState(false);
   const [membershipData, setMembershipData] = useState(false);
   const [genderList, setGenderList] = useState([]);
@@ -265,7 +266,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
       );
     }
     setMembershipData(membershipData);
-    // console.log("membershipData", membershipData);
     // check if application category have only one application
     let isSingleApp = false;
     if (membershipData) isSingleApp = membershipData.length === 1;
@@ -276,6 +276,11 @@ const SIGApplication = ({ state, actions, libraries }) => {
         ...prevFormData,
         bad_categorytype: membershipData[0].acf.category_types,
       }));
+      // update policy link agains app data
+      handlePolicyLinkUpdate({
+        membershipData,
+        value: membershipData[0].acf.category_types,
+      });
     }
 
     // ⏬ validate inputs
@@ -309,7 +314,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
   const handleDocUploadChange = async (e) => {
     let sky_cvurl = e.target.files[0];
-    console.log("e", e); // debug
+    // console.log("e", e); // debug
 
     if (sky_cvurl)
       sky_cvurl = await sendFileToS3Action({
@@ -361,17 +366,36 @@ const SIGApplication = ({ state, actions, libraries }) => {
     return isValid;
   };
 
+  const handlePolicyLinkUpdate = ({ membershipData, value }) => {
+    // filter memberships data & return memberships that includes applicationType
+    console.log(membershipData);
+    const filteredMembershipData = membershipData.filter(
+      (item) => item.acf.category_types === value
+    );
+
+    let policyLink = "";
+    // if have membership app data update policy field with link to policy
+    if (filteredMembershipData.length)
+      policyLink =
+        filteredMembershipData[0].acf.sig_readpolicydocument_url_email;
+    console.log("filteredMembershipData", filteredMembershipData); // debug
+    console.log("policyLink", policyLink); // debug
+
+    setReadPolicyDoc(policyLink);
+  };
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (name === "bad_organisedfor") {
-      // handle new id prefetch
-      console.log("handle new id prefetch");
-    }
 
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
     }));
+
+    if (membershipData) {
+      // update policy link agains app data
+      handlePolicyLinkUpdate({ membershipData, value });
+    }
   };
 
   const handleNext = async () => {
@@ -545,6 +569,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
       </div>
     );
   };
+
+  const isPolicy = inputValidator.bad_readpolicydocument && !!readPolicyDoc;
 
   return (
     <div style={{ position: "relative" }}>
@@ -726,21 +752,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_addresscountystate && (
-            <div>
-              <input
-                name="py3_addresscountystate"
-                value={formData.py3_addresscountystate}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="County/State"
-                style={{ margin: "0.5em 0" }}
-              />
-              <FormError id="py3_addresscountystate" />
-            </div>
-          )}
-
           {inputValidator.py3_addresszippostalcode && (
             <div>
               <input
@@ -753,6 +764,21 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 style={{ margin: "0.5em 0" }}
               />
               <FormError id="py3_addresszippostalcode" />
+            </div>
+          )}
+
+          {inputValidator.py3_addresscountystate && (
+            <div>
+              <input
+                name="py3_addresscountystate"
+                value={formData.py3_addresscountystate}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="County/State"
+                style={{ margin: "0.5em 0" }}
+              />
+              <FormError id="py3_addresscountystate" />
             </div>
           )}
 
@@ -772,49 +798,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
           )}
 
           {/* Profesonal Information Questions ------------------------- */}
-
-          {inputValidator.bad_proposer1 && (
-            <div>
-              <label className="form-label">Supporting Member 1</label>
-              <input
-                name="bad_proposer1"
-                value={formData.bad_proposer1}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="MRCP"
-              />
-            </div>
-          )}
-
-          {inputValidator.bad_proposer2 && (
-            <div>
-              <label className="form-label">Supporting Member 2</label>
-              <input
-                name="bad_proposer2"
-                value={formData.bad_proposer2}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="MRCP"
-              />
-            </div>
-          )}
-
-          {inputValidator.py3_gmcnumber && (
-            <div>
-              <label className="required form-label">GMC Number</label>
-              <input
-                name="py3_gmcnumber"
-                value={formData.py3_gmcnumber}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="GMC Number"
-              />
-              <FormError id="py3_gmcnumber" />
-            </div>
-          )}
 
           {inputValidator.bad_currentpost && (
             <div>
@@ -953,14 +936,12 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {/* SIG Questions -------------------------------------------- */}
-
-          {inputValidator.py3_currentgrade && (
+          {inputValidator.bad_proposer1 && (
             <div>
-              <label className="form-label">Current Grade</label>
+              <label className="form-label">Supporting Member 1</label>
               <input
-                name="py3_currentgrade"
-                value={formData.py3_currentgrade}
+                name="bad_proposer1"
+                value={formData.bad_proposer1}
                 onChange={handleInputChange}
                 type="text"
                 className="form-control input"
@@ -969,35 +950,21 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.bad_qualifications && (
+          {inputValidator.bad_proposer2 && (
             <div>
-              <label className="required form-label">Qualification</label>
+              <label className="form-label">Supporting Member 2</label>
               <input
-                name="bad_qualifications"
-                value={formData.bad_qualifications}
+                name="bad_proposer2"
+                value={formData.bad_proposer2}
                 onChange={handleInputChange}
                 type="text"
                 className="form-control input"
-                placeholder="Qualification"
+                placeholder="MRCP"
               />
-              <FormError id="bad_qualifications" />
             </div>
           )}
 
-          {inputValidator.bad_hasmedicallicence && (
-            <div className="flex-col">
-              <label className="form-label">
-                License to practice medicine (Y/N)
-              </label>
-              <input
-                name="bad_hasmedicallicence"
-                checked={formData.bad_hasmedicallicence}
-                onChange={handleInputChange}
-                type="checkbox"
-                className="form-check-input check-box"
-              />
-            </div>
-          )}
+          {/* SIG Questions -------------------------------------------- */}
 
           {inputValidator.bad_isbadmember && (
             <div className="flex-col">
@@ -1025,6 +992,65 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 className="form-control input"
                 placeholder={`Describe your interest in (SIG name)`}
               ></textarea>
+            </div>
+          )}
+
+          {inputValidator.bad_qualifications && (
+            <div>
+              <label className="required form-label">Qualification</label>
+              <input
+                name="bad_qualifications"
+                value={formData.bad_qualifications}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="Qualification"
+              />
+              <FormError id="bad_qualifications" />
+            </div>
+          )}
+
+          {inputValidator.py3_gmcnumber && (
+            <div>
+              <label className="required form-label">GMC Number</label>
+              <input
+                name="py3_gmcnumber"
+                value={formData.py3_gmcnumber}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="GMC Number"
+              />
+              <FormError id="py3_gmcnumber" />
+            </div>
+          )}
+
+          {inputValidator.py3_currentgrade && (
+            <div>
+              <label className="form-label">Current Grade</label>
+              <input
+                name="py3_currentgrade"
+                value={formData.py3_currentgrade}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="MRCP"
+              />
+            </div>
+          )}
+
+          {inputValidator.bad_hasmedicallicence && (
+            <div className="flex-col">
+              <label className="form-label">
+                License to practice medicine (Y/N)
+              </label>
+              <input
+                name="bad_hasmedicallicence"
+                checked={formData.bad_hasmedicallicence}
+                onChange={handleInputChange}
+                type="checkbox"
+                className="form-check-input check-box"
+              />
             </div>
           )}
 
@@ -1113,16 +1139,22 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.bad_includeinthebssciiemaildiscussionforum && (
             <div className="flex-col">
-              <label className="form-label">
-                Do you want to be part of the BSSCII discussion form?
-              </label>
-              <input
-                name="bad_includeinthebssciiemaildiscussionforum"
-                checked={formData.bad_includeinthebssciiemaildiscussionforum}
-                onChange={handleInputChange}
-                type="checkbox"
-                className="form-check-input check-box"
-              />
+              <div className="flex">
+                <div style={{ display: "grid", alignItems: "center" }}>
+                  <input
+                    name="bad_includeinthebssciiemaildiscussionforum"
+                    checked={
+                      formData.bad_includeinthebssciiemaildiscussionforum
+                    }
+                    onChange={handleInputChange}
+                    type="checkbox"
+                    className="form-check-input check-box"
+                  />
+                </div>
+                <label className="form-label">
+                  Do you want to be part of the BSSCII discussion form?
+                </label>
+              </div>
 
               {isEmail && (
                 <div>
@@ -1140,12 +1172,12 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.bad_readpolicydocument && (
+          {isPolicy && (
             <div
               className="flex"
               style={{ alignItems: "center", margin: `1em 0` }}
             >
-              <div>
+              <div style={{ display: "grid" }}>
                 <input
                   name="bad_readpolicydocument"
                   checked={formData.bad_readpolicydocument}
@@ -1156,24 +1188,22 @@ const SIGApplication = ({ state, actions, libraries }) => {
               </div>
               <div>
                 <label className="form-check-label flex-row">
-                  <div>
-                    <div
-                      className="caps-btn required"
-                      style={{
-                        paddingTop: 6,
-                        marginRight: 10,
-                        whiteSpace: "nowrap",
-                        float: "left",
-                      }}
-                    >
-                      I agree - Privacy Notice
-                    </div>
-                    <span>
-                      I agree - Privacy Notice* - justo donec enim diam
-                      vulputate ut pharetra sit. Purus semper eget duis at
-                      tellus at. Sed adipiscing diam.
-                    </span>
-                  </div>
+                  Please refer to
+                  <span
+                    className="caps-btn-no-underline"
+                    style={{
+                      display: "grid",
+                      alignItems: "center",
+                      margin: "0 0.5em",
+                      paddingTop: 4,
+                    }}
+                    onClick={() =>
+                      setGoToAction({ path: readPolicyDoc, actions })
+                    }
+                  >
+                    here
+                  </span>
+                  {`for the ${applicationType} Privacy Policy`}
                 </label>
               </div>
             </div>
