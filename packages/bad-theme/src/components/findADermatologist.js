@@ -21,9 +21,11 @@ const FindADermatologist = ({ state, block }) => {
 
   const [filteredDermatologists, setFilteredDermatologists] = React.useState();
   const [loading, setLoading] = React.useState(true);
+  const [dermOnFocus, setDermOnFocus] = React.useState(null);
   const dispatch = useAppDispatch();
   const query_limit = React.useRef(5);
   const enough = React.useRef(false);
+  const mapCentre = React.useRef(null);
   React.useEffect(async () => {
     const fetchDermatologistsByPostCode = async () => {
       const jwt = await authenticateAppAction({ dispatch, state });
@@ -136,6 +138,7 @@ const FindADermatologist = ({ state, block }) => {
         </div>
       );
     };
+
     return (
       <div style={styles.dermatologistContainer}>
         <div className="primary-title" style={styles.number}>
@@ -288,6 +291,23 @@ const FindADermatologist = ({ state, block }) => {
           </div>
         );
       };
+      const ServeShowOnMap = () => {
+        return (
+          <div className="flex-row" style={{ alignItems: "flex-end" }}>
+            <div
+              className="caps-btn"
+              onClick={() =>
+                setDermOnFocus({
+                  lat: Number(derm.address1_latitude),
+                  lng: Number(derm.address1_longitude),
+                })
+              }
+            >
+              Show on map
+            </div>
+          </div>
+        );
+      };
       return (
         <Card
           style={{
@@ -316,6 +336,7 @@ const FindADermatologist = ({ state, block }) => {
                   <ServeEmail />
                   <ServeBiography />
                   <ServeUrls />
+                  <ServeShowOnMap />
                 </div>
               </div>
             </Card.Body>
@@ -376,7 +397,11 @@ const FindADermatologist = ({ state, block }) => {
   const ServeMap = () => {
     return (
       <div style={{ height: 300, marginTop: 20, marginBottom: 20 }}>
-        <MapsComponent markers={filteredDermatologists} />
+        <MapsComponent
+          markers={filteredDermatologists}
+          center={dermOnFocus}
+          zoom={dermOnFocus ? 14 : 10}
+        />
       </div>
     );
   };
