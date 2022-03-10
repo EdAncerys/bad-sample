@@ -12,7 +12,7 @@ import { useAppState, authenticateAppAction, useAppDispatch } from "../context";
 import MapsComponent from "./maps/maps";
 import Loading from "./loading";
 import { grid } from "@mui/system";
-const FindADermatologist = ({ state }) => {
+const FindADermatologist = ({ state, block }) => {
   const marginVertical = state.theme.marginVertical;
   const marginHorizontal = state.theme.marginHorizontal;
   let MARGIN = `${marginVertical}px ${marginHorizontal}px`;
@@ -21,9 +21,11 @@ const FindADermatologist = ({ state }) => {
 
   const [filteredDermatologists, setFilteredDermatologists] = React.useState();
   const [loading, setLoading] = React.useState(true);
+  const [dermOnFocus, setDermOnFocus] = React.useState(null);
   const dispatch = useAppDispatch();
   const query_limit = React.useRef(5);
   const enough = React.useRef(false);
+  const mapCentre = React.useRef(null);
   React.useEffect(async () => {
     const fetchDermatologistsByPostCode = async () => {
       const jwt = await authenticateAppAction({ dispatch, state });
@@ -46,7 +48,7 @@ const FindADermatologist = ({ state }) => {
         const json = await fetching.json();
         console.log("JSON", json);
         const data = json.data;
-
+        console.log("DATERO", data);
         setFilteredDermatologists(data);
       }
     };
@@ -136,6 +138,7 @@ const FindADermatologist = ({ state }) => {
         </div>
       );
     };
+
     return (
       <div style={styles.dermatologistContainer}>
         <div className="primary-title" style={styles.number}>
@@ -250,6 +253,7 @@ const FindADermatologist = ({ state }) => {
     if (!query) return null;
     if (!filteredDermatologists) return <Loading />;
     console.log("DERMI", filteredDermatologists);
+
     const SingleDerm = ({ derm, id }) => {
       if (query.type === "pc" && !derm.distance) return null;
       const ServeBiography = () => {
@@ -287,6 +291,23 @@ const FindADermatologist = ({ state }) => {
           </div>
         );
       };
+      const ServeShowOnMap = () => {
+        return (
+          <div className="flex-row" style={{ alignItems: "flex-end" }}>
+            <div
+              className="caps-btn"
+              onClick={() =>
+                setDermOnFocus({
+                  lat: Number(derm.address1_latitude),
+                  lng: Number(derm.address1_longitude),
+                })
+              }
+            >
+              Show on map
+            </div>
+          </div>
+        );
+      };
       return (
         <Card
           style={{
@@ -311,10 +332,11 @@ const FindADermatologist = ({ state }) => {
                 }}
               >
                 <div></div>
-                <div>
+                <div style={{ padding: 10 }}>
                   <ServeEmail />
                   <ServeBiography />
                   <ServeUrls />
+                  <ServeShowOnMap />
                 </div>
               </div>
             </Card.Body>
@@ -322,10 +344,16 @@ const FindADermatologist = ({ state }) => {
         </Card>
       );
     };
+
     const ServeLoadMoreButton = () => {
       if (loading) return <Loading />;
-      if (query.type === "name") return null;
+      if (query.type === "name" && filteredDermatologists.length > 0)
+        return null;
+      if (query.type === "name" && filteredDermatologists.length === 0)
+        return "No records found with this query";
+
       if (enough.current) return "There is no more records to show";
+
       return (
         <div
           className="blue-btn"
@@ -339,8 +367,18 @@ const FindADermatologist = ({ state }) => {
         </div>
       );
     };
+    const ServeInfo = () => {
+      if (!query) return null;
+      let info = "";
+      if (query.type === "name")
+        info = "Your query returned the following dermatologists:";
+      if (query.type === "pc") info = "Your nearest dermatologists are:";
+
+      return <div className="primary-title">{info}</div>;
+    };
     return (
       <>
+        <ServeInfo />
         <Accordion style={{ border: 0 }}>
           {filteredDermatologists.map((derm, key) => {
             console.log("DERM!", derm);
@@ -358,8 +396,12 @@ const FindADermatologist = ({ state }) => {
   };
   const ServeMap = () => {
     return (
-      <div style={{ height: 300 }}>
-        <MapsComponent markers={filteredDermatologists} />
+      <div style={{ height: 300, marginTop: 20, marginBottom: 20 }}>
+        <MapsComponent
+          markers={filteredDermatologists}
+          center={dermOnFocus}
+          zoom={dermOnFocus ? 14 : 10}
+        />
       </div>
     );
   };
@@ -370,7 +412,7 @@ const FindADermatologist = ({ state }) => {
         className="primary-title"
         style={{ fontSize: 25, marginTop: 10, marginBottom: 10 }}
       >
-        You searched for {query.value.toUpperCase()}
+        You searched for "{query.value.toUpperCase()}"
       </div>
     );
   };
@@ -398,6 +440,8 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     fontSize: 40,
+    border: `20px ${colors.lightSilver}`,
+    borderStyle: "solid",
   },
 };
 export default connect(FindADermatologist);

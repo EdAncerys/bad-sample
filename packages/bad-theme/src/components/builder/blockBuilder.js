@@ -47,6 +47,7 @@ import RSSFeed from "../rssFeed";
 import FundingBlock from "../fundingBlock";
 import BADMemberships from "../badMemberships";
 import VideoGuides from "../videoGuides";
+import FindADermatologist from "../findADermatologist";
 
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   // console.log("BLOCKS: ", blocks); // debug
@@ -427,6 +428,14 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
             <div key={key + 1}>
               <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
               <HomeBannerCarousel key={key} block={block} />
+            </div>
+          );
+
+        if (acf_fc_layout === "find_a_dermatologist_block")
+          return (
+            <div key={key + 1}>
+              <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+              <FindADermatologist key={key} block={block} />
             </div>
           );
 

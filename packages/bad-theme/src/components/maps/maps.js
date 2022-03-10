@@ -35,18 +35,30 @@ const MapsComponent = ({
     borderRadius: markers ? 0 : 10,
   };
   const ServeMarkersOnTheMap = () => {
-    console.log(markers);
+    console.log("MARKERO", markers);
     if (!markers)
       return <Marker markerLabel={{ text: "Google Map" }} position={CENTER} />;
     if (markers.length === 0) return null;
 
-    return markers.map((derm) => {
-      if (!derm.address1_lattitude || !derm.address1_longitude) return null;
+    return markers.map((derm, key) => {
+      if (!derm.address1_latitude || !derm.address1_longitude) return null;
       const POSITION = {
-        lat: Number(derm.address1_lattitude),
+        lat: Number(derm.address1_latitude),
         lng: Number(derm.address1_longitude),
       };
-      return <Marker markerLabel={{ text: "Johny" }} position={POSITION} />;
+      const marker_key = key + 1;
+      const marker_label = marker_key.toString();
+      return (
+        <Marker
+          markerLabel={{ text: "Johny" }}
+          position={POSITION}
+          label={{ text: marker_label, color: "white" }}
+          title="Pedalka"
+          options={{
+            fillColor: "lightblue",
+          }}
+        />
+      );
     });
   };
   return (
@@ -55,18 +67,7 @@ const MapsComponent = ({
       libraries={LIBRARIES}
     >
       <GoogleMap center={CENTER} zoom={ZOOM} mapContainerStyle={containerStyle}>
-        {markers &&
-          markers.map((derm) => {
-            if (!derm.address1_lattitude || !derm.address1_longitude)
-              return null;
-            const POSITION = {
-              lat: Number(derm.address1_lattitude),
-              lng: Number(derm.address1_longitude),
-            };
-            return (
-              <Marker markerLabel={{ text: "Johny" }} position={POSITION} />
-            );
-          })}
+        <ServeMarkersOnTheMap />
       </GoogleMap>
     </LoadScript>
   );
