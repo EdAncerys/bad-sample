@@ -34,7 +34,7 @@ const FullWidthContentBlock = ({
     button_label,
     button_type,
   } = block;
-  console.log("block", block); // debug
+  // console.log("block", block); // debug
 
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
@@ -61,7 +61,10 @@ const FullWidthContentBlock = ({
 
     return (
       <div>
-        <div className="primary-title" style={{ fontSize: 36 }}>
+        <div
+          className="primary-title"
+          style={{ fontSize: heroBanner ? 36 : 26 }}
+        >
           <Html2React html={title} />
         </div>
       </div>

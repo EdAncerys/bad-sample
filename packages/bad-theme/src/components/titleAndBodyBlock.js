@@ -27,7 +27,7 @@ const TitleAndBodyBlock = ({ state, actions, libraries, block }) => {
       <div
         className="flex primary-title"
         style={{
-          fontSize: 36,
+          fontSize: 26,
           textAlign: ALIGNMENT,
           justifyContent: ALIGNMENT,
         }}

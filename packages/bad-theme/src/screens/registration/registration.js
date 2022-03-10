@@ -22,7 +22,7 @@ const Registration = ({ state }) => {
 const styles = {
   title: {
     textAlign: "center",
-    fontSize: 36,
+    fontSize: 26,
     fontWeight: "500",
     color: colors.primary,
   },
