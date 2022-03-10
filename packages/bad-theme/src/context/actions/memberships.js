@@ -69,6 +69,7 @@ export const handleApplyForMembershipAction = async ({
   path,
   membershipApplication,
   dynamicsApps,
+  canUpdateApplication,
 }) => {
   try {
     if (!isActiveUser) {
@@ -102,7 +103,7 @@ export const handleApplyForMembershipAction = async ({
         "🤖 user have application in progress. Redirect to Dashboard"
       );
       // allow application to refetch id for BAD apps step 2 only
-      if (!applicationData[0].stepOne) {
+      if (!canUpdateApplication) {
         let confirmationMsg = `You already have application open and unsubmitted! Please go to your dashboard to continue or cancel this application`;
         if (applicationData) {
           const type = applicationData[0].bad_categorytype;
@@ -111,7 +112,11 @@ export const handleApplyForMembershipAction = async ({
         // if user have existing application show error msg
         setErrorAction({
           dispatch,
-          isError: { message: confirmationMsg, goToDashboard: true },
+          isError: {
+            message: confirmationMsg,
+            goToDashboard: true,
+            image: "Error",
+          },
         });
 
         return;
@@ -162,7 +167,13 @@ export const handleApplyForMembershipAction = async ({
     } else {
       console.log("🤖 user is not active");
       console.log(store);
-      setGoToAction({ path: "/dashboard/", actions });
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: "Only registered users can apply for membership.",
+          image: "Error",
+        },
+      });
     }
   } catch (error) {
     console.log("ERROR: ", error);
