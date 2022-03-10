@@ -35,6 +35,8 @@ export const updateAddressAction = async ({
   try {
     const data = await fetch(URL, requestOptions);
     const response = await data.json();
+    if (!response) throw new Error("Error updating profile.");
+
     if (response.success) {
       await getUserDataByContactId({
         state,
@@ -76,6 +78,8 @@ export const updateEthnicityAction = async ({ state, data, isActiveUser }) => {
   try {
     const data = await fetch(URL, requestOptions);
     const response = await data.json();
+    if (!response) throw new Error("Error updating profile.");
+
     if (response.success) {
       console.log("⬇️ user recorded successfully updated", response);
       return response;

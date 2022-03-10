@@ -5,7 +5,6 @@ import {
   setLoginModalAction,
   getApplicationStatus,
   setErrorAction,
-  setApplicationStatusAction,
   setGoToAction,
 } from "../index";
 
@@ -278,12 +277,19 @@ export const updateDynamicsApplicationAction = async ({
   }
 };
 
-export const deleteApplicationRecordAction = async ({
+export const deleteApplicationAction = async ({
   state,
   dispatch,
   contactid,
+  applicationData,
 }) => {
   console.log("deleteApplicationRecord triggered");
+
+  let confirmationMsg = "Application been successfully deleted!";
+  if (applicationData) {
+    const type = applicationData[0].bad_categorytype;
+    confirmationMsg = `${type} application been successfully deleted!`;
+  }
 
   try {
     if (!contactid)
@@ -298,10 +304,8 @@ export const deleteApplicationRecordAction = async ({
     const requestOptions = {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${jwt}`,
       },
-      body: JSON.stringify(updatedMembershipData),
     };
 
     const response = await fetch(URL, requestOptions);
@@ -310,7 +314,16 @@ export const deleteApplicationRecordAction = async ({
     if (data.success) {
       console.log("⏬ DYNAMICS. Membership Record Successfully Deleted ⏬");
       console.log(data);
-      setApplicationStatusAction({ dispatch, dynamicsApps: null });
+      // delete application record from CONTEXT
+      setApplicationDataAction({
+        dispatch,
+        applicationData: null,
+      });
+      // show confirmation msg
+      setErrorAction({
+        dispatch,
+        isError: { message: confirmationMsg },
+      });
 
       return data;
     } else {

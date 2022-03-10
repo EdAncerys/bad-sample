@@ -11,7 +11,12 @@ import Ellipse from "../../img/svg/ellipse.svg";
 import CheckMarkGreen from "../../img/svg/checkMarkGreen.svg";
 
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setGoToAction } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setGoToAction,
+  deleteApplicationAction,
+} from "../../context";
 
 const ProfileProgress = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -77,9 +82,10 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     // call to API to delete Application
     try {
       setFetching(true);
-      const result = await deleteApplicationRecordAction({
+      await deleteApplicationAction({
         state,
         dispatch,
+        applicationData,
         contactid: isActiveUser.contactid,
       });
     } catch (error) {

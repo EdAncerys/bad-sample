@@ -490,9 +490,10 @@ const SIGApplication = ({ state, actions, libraries }) => {
       >
         <div
           className="transparent-btn"
+          style={{ marginRight: "1em" }}
           onClick={() =>
             setGoToAction({
-              path: `/membership/step-2-category-selection/`,
+              path: `/dashboard/`,
               actions,
             })
           }
@@ -526,16 +527,12 @@ const SIGApplication = ({ state, actions, libraries }) => {
           </option>
           {membershipData.map((item, key) => {
             const { bad_or_sig, category_types } = item.acf;
-            if (bad_or_sig !== "sig") return null;
             // get SIG membership categories name from custom object
             // if typeName includes Full replace with empty string
             // change prefix for names with " - ", eg. "Tarainee - Time"
             let typeName = category_types
               .replace(/Full:/g, "")
               .replace(/:/g, " - ");
-            // if applicationType name dont include category_types return null
-            if (!typeName.includes(applicationType)) return null;
-            console.log(category_types);
 
             return (
               <option key={key} value={category_types}>
