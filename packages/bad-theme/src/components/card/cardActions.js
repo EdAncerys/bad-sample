@@ -94,6 +94,7 @@ const CardActions = ({
 
   const ServeHandlerAction = () => {
     if (!handler) return null;
+
     let goToLabel = "More";
     if (link_label) goToLabel = link_label;
 
