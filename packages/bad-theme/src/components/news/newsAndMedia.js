@@ -39,16 +39,16 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   const [filterList, setFilterList] = useState(null);
   const [categoryList, setCategoryList] = useState(null);
 
-  const [searchValue, setSearchValue] = useState(null);
-  const [categoryValue, setCategoryValue] = useState(null);
-  const [dateValue, setDateValue] = useState(null);
-  const [yearValue, setYearValue] = useState(null);
+  const [searchValue, setSearchValue] = useState("");
+  const [categoryValue, setCategoryValue] = useState("");
+  const [dateValue, setDateValue] = useState("");
+  const [yearValue, setYearValue] = useState("");
 
   const searchFilterRef = useRef("");
   const categoryFilterRef = useRef("");
   const dateFilterRef = useRef("");
   const yearFilterRef = useRef("");
-  const loadMoreRef = useRef("");
+  const loadMoreRef = useRef(true);
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -71,19 +71,23 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     // if !data then break
     if (data.length === 0) return;
 
-    // console.log("data: ", data); // debug
-    // apply date filter
-    data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
     // filter by categories
-    if (category_filter && category_filter !== "0")
-      data = data.filter((item) =>
-        item.categories.includes(Number(category_filter))
-      );
+    // if (category_filter && category_filter !== "0")
+    //   data = data.filter((item) =>
+    //     item.categories.includes(Number(category_filter))
+    //   );
+
+    // apply sort by date functionality
+    data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+    if (post_limit) data = data.slice(0, Number(post_limit)); // apply limit on posts
+    console.log("category_filter: ", category_filter); // debug
+    console.log("post_limit: ", post_limit); // debug
+    console.log("data: ", data); // debug
 
     setFilterList(data);
     if (state.source.category) {
-      const CATEGORY = Object.values(state.source.category);
-      setCategoryList(CATEGORY);
+      const catList = Object.values(state.source.category);
+      setCategoryList(catList);
     }
 
     return () => {
@@ -123,12 +127,35 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   };
 
   const handleLoadMoreFilter = () => {
-    const limit = post_limit || 6;
-    let postList = Object.values(state.source.post); // add filterList object to data array
-    if (loadMoreRef.current) postList = postList.slice(0, Number(limit)); // apply limit on posts
+    let data = Object.values(state.source.post); // add filterList object to data array
+    // filter by categories
+    // if (category_filter && category_filter !== "0")
+    //   data = data.filter((item) =>
+    //     item.categories.includes(Number(category_filter))
+    //   );
+    // apply sort by date functionality
+    data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-    setFilterList(postList);
-    loadMoreRef.current = !loadMoreRef.current;
+    // if (loadMoreRef.current) data = data.slice(0, Number(limit)); // apply limit on posts
+    // // filter by categories
+    // if (category_filter && category_filter !== "0")
+    //   data = data.filter((item) =>
+    //     item.categories.includes(Number(category_filter))
+    //   );
+
+    // if loadMore is truthy display all filterList posts
+    if (loadMoreRef.current) {
+      setFilterList(data);
+      loadMoreRef.current = false;
+    } else {
+      // if loadMore is falsy display only limit posts
+      if (post_limit) data = data.slice(0, Number(post_limit)); // apply limit on posts
+      setFilterList(data);
+      loadMoreRef.current = true;
+    }
+
+    // setFilterList(data);
+    // loadMoreRef.current = !loadMoreRef.current;
   };
 
   const handleSearch = () => {
@@ -139,6 +166,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     const year = yearFilterRef.current.value;
 
     let filter = Object.values(state.source.post);
+    filter = filter.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     if (input) {
       const INPUT = input.toLowerCase();
@@ -152,7 +180,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
         news.categories.includes(Number(category))
       );
 
-    // apply date filter
+    // apply date filter & sort by date latest first
     if (date === "Date Descending")
       filter = filter.sort((a, b) => new Date(b.date) - new Date(a.date));
     if (date === "Date Ascending")
@@ -424,9 +452,16 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   };
 
   const ServeMoreAction = () => {
-    if (isLayoutOne || filterList.length === 0) return null;
+    // if filterList is empty || lest than post_limit return null
+    if (
+      isLayoutOne ||
+      filterList.length === 0 ||
+      filterList.length < post_limit ||
+      !post_limit
+    )
+      return null;
 
-    const value = loadMoreRef.current ? "Less" : " Load More";
+    const value = !loadMoreRef.current ? "Less" : " Load More";
 
     return (
       <div
