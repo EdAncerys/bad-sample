@@ -107,6 +107,7 @@ const Event = ({ state, actions, libraries }) => {
     register_subject_dropdown_options,
     register_message,
     register_allow_attachments,
+    register_recipients,
 
     contact_public_email,
     contact_public_phone_number,
@@ -122,7 +123,7 @@ const Event = ({ state, actions, libraries }) => {
     contact_recipients,
   } = event.acf;
   const { title, id } = event;
-  console.log("event", event); // debug
+  // console.log("event", event); // debug
 
   // SERVERS ----------------------------------------------
   const ServeTitle = () => {
@@ -310,20 +311,21 @@ const Event = ({ state, actions, libraries }) => {
               dispatch,
               enquireAction: {
                 contact_public_email:
-                  contact_public_email || "conference@bad.org.uk",
+                  register_public_email || "conference@bad.org.uk",
                 contact_public_phone_number:
-                  contact_public_phone_number || "+1 (123) 456-7890",
-                contact_form_title: contact_form_title || "Event Contact Form",
-                contact_form_body:
-                  contact_form_body || `Register for ${title.rendered} event.`,
-                contact_full_name: contact_full_name || true,
-                contact_email: contact_email || true,
-                contact_phone_number: contact_phone_number || true,
-                contact_subject: contact_subject || true,
-                contact_subject_dropdown_options,
-                contact_message: contact_message || true,
-                contact_allow_attachments,
-                recipients: contact_recipients || [
+                  register_public_phone_number || "+1 (123) 456-7890",
+                form_title: register_form_title || "Event Contact Form",
+                form_body:
+                  register_form_body || `Register for ${title.rendered} event.`,
+                full_name: register_full_name || true,
+                email_address: register_email || true,
+                phone_number: register_phone_number || true,
+                subject: register_subject || true,
+                register_subject_dropdown_options,
+                message: register_message || true,
+                register_allow_attachments,
+                allow_attachments: register_allow_attachments,
+                recipients: register_recipients || [
                   { email: "conference@bad.org.uk" },
                 ],
               },
@@ -582,17 +584,16 @@ const Event = ({ state, actions, libraries }) => {
                   contact_public_email || "conference@bad.org.uk",
                 contact_public_phone_number:
                   contact_public_phone_number || "+1 (123) 456-7890",
-                contact_form_title:
-                  contact_form_title || "Event Information Form",
-                contact_form_body:
+                form_title: contact_form_title || "Event Information Form",
+                form_body:
                   contact_form_body || `Enquire about ${title.rendered} event.`,
-                contact_full_name: contact_full_name || true,
-                contact_email: contact_email || true,
-                contact_phone_number: contact_phone_number || true,
-                contact_subject: contact_subject || true,
+                full_name: contact_full_name || true,
+                email_address: contact_email || true,
+                phone_number: contact_phone_number || true,
+                subject: contact_subject || true,
                 contact_subject_dropdown_options,
-                contact_message: contact_message || true,
-                contact_allow_attachments,
+                message: contact_message || true,
+                allow_attachments: contact_allow_attachments,
                 recipients: contact_recipients || [
                   { email: "conference@bad.org.uk" },
                 ],

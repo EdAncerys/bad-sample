@@ -89,10 +89,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
 
     const ServeFileUpload = () => {
       let attachments = enquireAction.allow_attachments;
-      if (enquireAction.register_allow_attachments)
-        attachments = enquireAction.register_allow_attachments;
-      if (enquireAction.contact_allow_attachments)
-        attachments = enquireAction.contact_allow_attachments;
 
       if (!attachments) return null;
 
@@ -126,10 +122,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
 
       const ServeFullName = () => {
         let fullName = enquireAction.full_name;
-        if (enquireAction.register_full_name)
-          fullName = enquireAction.register_full_name;
-        if (enquireAction.contact_full_name)
-          fullName = enquireAction.contact_full_name;
 
         if (!fullName) return null;
 
@@ -147,8 +139,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
 
       const ServeEmail = () => {
         let email = enquireAction.email_address;
-        if (enquireAction.register_email) email = enquireAction.register_email;
-        if (enquireAction.contact_email) email = enquireAction.contact_email;
 
         if (!email) return null;
 
@@ -166,10 +156,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
 
       const ServeNumber = () => {
         let phoneNumber = enquireAction.phone_number;
-        if (enquireAction.register_phone_number)
-          phoneNumber = enquireAction.register_phone_number;
-        if (enquireAction.contact_phone_number)
-          phoneNumber = enquireAction.contact_phone_number;
 
         if (!phoneNumber) return null;
 
@@ -187,10 +173,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
 
       const ServeSubject = () => {
         let subject = enquireAction.subject;
-        if (enquireAction.register_subject)
-          subject = enquireAction.register_subject;
-        if (enquireAction.contact_subject)
-          subject = enquireAction.contact_subject;
 
         if (!subject) return null;
 
@@ -208,10 +190,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
 
       const ServeSubjectDropDown = () => {
         let dropdown = enquireAction.subject_dropdown_options;
-        if (enquireAction.register_subject_dropdown_options)
-          dropdown = enquireAction.register_subject_dropdown_options;
-        if (enquireAction.contact_subject_dropdown_options)
-          dropdown = enquireAction.contact_subject_dropdown_options;
 
         if (!dropdown) return null;
 
@@ -239,10 +217,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
 
       const ServeMessage = () => {
         let message = enquireAction.message;
-        if (enquireAction.register_message)
-          message = enquireAction.register_message;
-        if (enquireAction.contact_message)
-          message = enquireAction.contact_message;
 
         if (!message) return null;
 
@@ -276,10 +250,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
     const ServeFormHeader = () => {
       const ServeFormTitle = () => {
         let title = enquireAction.form_title;
-        if (enquireAction.register_form_title)
-          title = enquireAction.register_form_title;
-        if (enquireAction.contact_form_title)
-          title = enquireAction.contact_form_title;
 
         if (!title) return null;
 
@@ -292,10 +262,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
 
       const ServeFormBody = () => {
         let body = enquireAction.form_body;
-        if (enquireAction.register_form_body)
-          body = enquireAction.register_form_body;
-        if (enquireAction.contact_form_body)
-          body = enquireAction.contact_form_body;
 
         if (!body) return null;
 
@@ -334,10 +300,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
 
     const ServePublicEmail = () => {
       let email = enquireAction.contact_public_email;
-      if (enquireAction.register_public_email)
-        email = enquireAction.register_public_email;
-      if (enquireAction.contact_public_email)
-        email = enquireAction.contact_public_email;
 
       if (!email) return null;
 
@@ -355,8 +317,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
 
     const ServePublicPhone = () => {
       let phoneNumber = enquireAction.contact_public_phone_number;
-      if (enquireAction.register_public_phone_number)
-        phoneNumber = enquireAction.register_public_phone_number;
 
       if (!phoneNumber) return null;
 

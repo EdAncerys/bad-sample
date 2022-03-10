@@ -1,14 +1,13 @@
 import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Form } from "react-bootstrap";
-import { v4 as uuidv4 } from "uuid";
 
 import Card from "../card/card";
 import TitleBlock from "../titleBlock";
 import Loading from "../loading";
 import { colors } from "../../config/imports";
 
-import SearchIcon from "@mui/icons-material/Search";
+import SearchContainer from "../searchContainer";
 import CloseIcon from "@mui/icons-material/Close";
 import ElectionModal from "./electionModal";
 // CONTEXT ------------------------------------------------
@@ -32,14 +31,14 @@ const ElectionBlocks = ({ state, actions, block }) => {
   const [gradeList, setGradeList] = useState(null); // data
   const [roleList, setRoleList] = useState(null); // data
   const [modalData, setModalData] = useState(null);
+  const searchFilterRef = useRef("");
   const mountedRef = useRef(true);
 
-  const [searchFilter, setSearchFilter] = useState(null);
-  const [gradeFilter, setGradeFilter] = useState(null);
-  const [roleFilter, setRoleFilter] = useState(null);
-  const [openPositions, serOpenPositions] = useState(null);
-  const [dateFilter, setDateFilter] = useState(null);
-  const [uniqueId, setUniqueId] = useState(null);
+  const [searchFilter, setSearchFilter] = useState("");
+  const [gradeFilter, setGradeFilter] = useState("");
+  const [roleFilter, setRoleFilter] = useState("");
+  const [openPositions, setOpenPositions] = useState("");
+  const [dateFilter, setDateFilter] = useState("");
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -48,12 +47,6 @@ const ElectionBlocks = ({ state, actions, block }) => {
   const isSearch = has_search;
   const isPosition = positions_filter;
   const isOpen = opened_or_closed_filter;
-  const ctaHeight = 45;
-
-  useLayoutEffect(() => {
-    const blockId = uuidv4(); // add unique uniqueId
-    setUniqueId(blockId);
-  }, []);
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
@@ -70,14 +63,14 @@ const ElectionBlocks = ({ state, actions, block }) => {
       isThereNextPage = nextPage;
     }
 
-    const ELECTION_LIST = Object.values(state.source.elections); // add electionData object to data array
-    setElectionList(ELECTION_LIST);
+    const electionList = Object.values(state.source.elections); // add electionData object to data array
+    setElectionList(electionList);
     // get taxonomy data for elections
-    const GRADES = Object.values(state.source.election_grade);
-    const ROLES = Object.values(state.source.election_roles);
+    const electionGrade = Object.values(state.source.election_grade);
+    const electionRoles = Object.values(state.source.election_roles);
 
-    setGradeList(GRADES);
-    setRoleList(ROLES);
+    setGradeList(electionGrade);
+    setRoleList(electionRoles);
 
     return () => {
       mountedRef.current = false; // clean up function
@@ -87,7 +80,43 @@ const ElectionBlocks = ({ state, actions, block }) => {
   if (!electionList) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
+  const dateFilterHandler = (e) => {
+    const { value } = e.target;
+    // date filter for elections
+    if (value === "Date Ascending") {
+      const sortedList = electionList.sort((a, b) => {
+        return new Date(a.date) - new Date(b.date);
+      });
+      setElectionList(sortedList);
+    }
+    if (value === "Date Descending") {
+      const sortedList = electionList.sort((a, b) => {
+        return new Date(b.date) - new Date(a.date);
+      });
+      setElectionList(sortedList);
+    }
+
+    setDateFilter(value);
+  };
+
   const handleContactForm = ({ isClosedPosition, block }) => {
+    console.log("block", block); // debug
+
+    const {
+      contact_public_email,
+      contact_public_phone_number,
+      contact_form_title,
+      contact_form_body,
+      contact_full_name,
+      contact_email,
+      contact_phone_number,
+      contact_subject,
+      contact_subject_dropdown_options,
+      contact_message,
+      contact_allow_attachments,
+      contact_recipients,
+    } = block;
+
     let positionName = "Position";
     if (block.title.rendered) positionName = block.title.rendered;
 
@@ -95,50 +124,29 @@ const ElectionBlocks = ({ state, actions, block }) => {
       setEnquireAction({
         dispatch,
         enquireAction: {
-          contact_public_email: "harriet@bag.org.uk",
-          contact_public_phone_number: "+1 (123) 456-7890",
-          contact_form_title: "Notification Form",
-          contact_form_body: `Notify when ${positionName} position is open.`,
-          contact_full_name: true,
-          contact_email: true,
-          contact_phone_number: true,
-          contact_subject: true,
-          contact_message: true,
-          recipients: [{ email: "harriet@bag.org.uk" }],
+          contact_public_email: contact_public_email || "harriet@bag.org.uk",
+          contact_public_phone_number:
+            contact_public_phone_number || "+1 (123) 456-7890",
+          form_title: contact_form_title || "Notification Form",
+          form_body:
+            contact_form_body ||
+            `Notify when ${positionName} position is open.`,
+          full_name: contact_full_name || true,
+          email_address: contact_email || true,
+          phone_number: contact_phone_number || true,
+          subject: contact_subject || true,
+          subject_dropdown_options: contact_subject_dropdown_options,
+          message: contact_message || true,
+          allow_attachments: contact_allow_attachments,
+          recipients: contact_recipients || [{ email: "harriet@bag.org.uk" }],
         },
       });
     if (!isClosedPosition) handleElectionModal({ block });
   };
 
-  const handleInputSearch = () => {
-    const searchInput = document.querySelector(`#searchInput${uniqueId}`).value;
-
-    const serveGradeFilter = document.querySelector(
-      `#serveGradeFilter${uniqueId}`
-    ).value;
-    const serveRoleFilter = document.querySelector(
-      `#serveRoleFilter${uniqueId}`
-    ).value;
-    const serveDateFilter = document.querySelector(
-      `#serveDateFilter${uniqueId}`
-    ).value;
-
-    if (!!searchInput) setSearchFilter(searchInput);
-    if (!!serveGradeFilter) setGradeFilter(serveGradeFilter);
-    if (!!serveRoleFilter) setRoleFilter(serveRoleFilter);
-    if (!!serveDateFilter) {
-      setDateFilter(serveDateFilter);
-      // apply date filter
-      let filter = electionList.sort(
-        (a, b) => new Date(a.acf.closing_date) - new Date(b.acf.closing_date)
-      );
-      if (serveDateFilter === "Date Descending") {
-        filter = electionList.sort(
-          (a, b) => new Date(b.acf.closing_date) - new Date(a.acf.closing_date)
-        );
-      }
-      setElectionList(filter);
-    }
+  const handleSearch = () => {
+    const input = searchFilterRef.current.value;
+    setSearchFilter(input);
   };
 
   const handleElectionModal = ({ block }) => {
@@ -148,60 +156,6 @@ const ElectionBlocks = ({ state, actions, block }) => {
   // SERVERS ---------------------------------------------
   const ServeFilter = () => {
     if (!isSearch) return null;
-
-    const ServeSearchContainer = () => {
-      return (
-        <div className="flex-row">
-          <div
-            className="flex"
-            style={{
-              flex: 1,
-              height: ctaHeight,
-              position: "relative",
-              margin: "auto 0",
-            }}
-          >
-            <input
-              id={`searchInput${uniqueId}`}
-              type="text"
-              className="form-control"
-              placeholder="Find An Event"
-              style={styles.input}
-            />
-            <div
-              className="input-group-text toggle-icon-color"
-              style={{
-                position: "absolute",
-                right: 0,
-                height: ctaHeight,
-                border: "none",
-                background: "transparent",
-                alignItems: "center",
-                color: colors.darkSilver,
-                cursor: "pointer",
-              }}
-            >
-              <SearchIcon />
-            </div>
-          </div>
-          <div
-            style={{
-              display: "grid",
-              alignItems: "center",
-              paddingLeft: `2em`,
-            }}
-          >
-            <button
-              type="submit"
-              className="blue-btn"
-              onClick={handleInputSearch}
-            >
-              Search
-            </button>
-          </div>
-        </div>
-      );
-    };
 
     const ServeFilters = () => {
       if (!gradeList && !roleList) return null; // props for filter options
@@ -218,14 +172,15 @@ const ElectionBlocks = ({ state, actions, block }) => {
         );
       };
 
-      const ServeFilterOne = () => {
+      const ServeGradeFilter = () => {
         if (!gradeList) return null;
 
         return (
           <div className="flex" style={{ paddingRight: `1em` }}>
             <Form.Select
-              id={`serveGradeFilter${uniqueId}`}
               style={styles.input}
+              value={gradeFilter}
+              onChange={(e) => setGradeFilter(e.target.value)}
             >
               <option value="null" hidden>
                 Election Grades
@@ -242,12 +197,16 @@ const ElectionBlocks = ({ state, actions, block }) => {
         );
       };
 
-      const ServeFilterTwo = () => {
+      const ServeRoleFilter = () => {
         if (!roleList) return null;
 
         return (
           <div className="flex" style={{ paddingRight: `1em` }}>
-            <Form.Select id={`serveRoleFilter${uniqueId}`} style={styles.input}>
+            <Form.Select
+              style={styles.input}
+              value={roleFilter}
+              onChange={(e) => setRoleFilter(e.target.value)}
+            >
               <option value="null" hidden>
                 Election Role
               </option>
@@ -266,7 +225,11 @@ const ElectionBlocks = ({ state, actions, block }) => {
       const ServeDateFilter = () => {
         return (
           <div className="flex">
-            <Form.Select id={`serveDateFilter${uniqueId}`} style={styles.input}>
+            <Form.Select
+              style={styles.input}
+              value={dateFilter}
+              onChange={dateFilterHandler}
+            >
               <option value="null" hidden>
                 Sort By
               </option>
@@ -283,8 +246,8 @@ const ElectionBlocks = ({ state, actions, block }) => {
           style={{ padding: `1em 0`, alignItems: "center" }}
         >
           <ServeTitle />
-          <ServeFilterOne />
-          <ServeFilterTwo />
+          <ServeGradeFilter />
+          <ServeRoleFilter />
           <ServeDateFilter />
         </div>
       );
@@ -296,7 +259,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
       return (
         <div className="shadow filter">
           <div>{searchFilter}</div>
-          <div className="filter-icon" onClick={() => setSearchFilter(null)}>
+          <div className="filter-icon" onClick={() => setSearchFilter("")}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -317,7 +280,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
       return (
         <div className="shadow filter">
           <div>{name}</div>
-          <div className="filter-icon" onClick={() => setGradeFilter(null)}>
+          <div className="filter-icon" onClick={() => setGradeFilter("")}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -338,7 +301,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
       return (
         <div className="shadow filter">
           <div>{name}</div>
-          <div className="filter-icon" onClick={() => setRoleFilter(null)}>
+          <div className="filter-icon" onClick={() => setRoleFilter("")}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -350,13 +313,13 @@ const ElectionBlocks = ({ state, actions, block }) => {
       );
     };
 
-    const ServeBtnFilter = () => {
+    const ServeOpenPositionsFilter = () => {
       if (!openPositions) return null;
 
       return (
-        <div className="shadow" style={styles.action}>
-          <div>Open Positions</div>
-          <div className="filter-icon" onClick={() => serOpenPositions(null)}>
+        <div className="shadow filter">
+          <div>{openPositions}</div>
+          <div className="filter-icon" onClick={() => setOpenPositions(false)}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -374,14 +337,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
       return (
         <div className="shadow filter">
           <div>{dateFilter}</div>
-          <div
-            className="filter-icon"
-            onClick={() => {
-              setDateFilter(null);
-              const ELECTION_LIST = Object.values(state.source.elections); // add electionData object to data array
-              setElectionList(ELECTION_LIST);
-            }}
-          >
+          <div className="filter-icon" onClick={() => setDateFilter("")}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -406,7 +362,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
               padding: `1em 2em`,
               cursor: "pointer",
             }}
-            onClick={() => serOpenPositions(!openPositions)}
+            onClick={() => setOpenPositions("Open Positions")}
           >
             Only Show Open Positions
           </div>
@@ -415,39 +371,27 @@ const ElectionBlocks = ({ state, actions, block }) => {
     };
 
     return (
-      <div style={{ position: "relative", padding: `1em 0`, width: `70%` }}>
-        <div className="flex-col">
-          <ServeSearchContainer />
+      <div style={{ position: "relative" }} className="no-selector">
+        <div className="flex-col" style={{ width: "70%" }}>
+          <SearchContainer
+            searchFilterRef={searchFilterRef}
+            handleSearch={handleSearch}
+          />
           <ServeFilters />
         </div>
-        <div className="flex" style={{ marginTop: "0.5em" }}>
+        <div
+          className="flex"
+          style={{ margin: "0.5em 0 1.5em 0", position: "relative" }}
+        >
           <ServeSearchFilter />
           <ServeDropDownGradeFilter />
           <ServeDropDownRoleFilter />
-          <ServeBtnFilter />
+          <ServeOpenPositionsFilter />
           <ServeDropDownFilterFour />
         </div>
-        <div className="flex" style={{ marginTop: "1em" }}>
+        <div className="flex" style={{ marginBottom: "2em" }}>
           <ServeOpenPositionBtnFilter />
         </div>
-      </div>
-    );
-  };
-
-  const ServeFooterActions = ({ isClosedPosition }) => {
-    if (!isClosedPosition) return null;
-
-    return (
-      <div
-        value="Notify me when position is open"
-        className="caps-btn"
-        style={{
-          position: "absolute",
-          bottom: 38,
-          left: 32,
-        }}
-      >
-        Notify me when position is open
       </div>
     );
   };
@@ -469,7 +413,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
             nomination_form_upload,
             election_status,
           } = block.acf;
-          // console.log("block", block); // debug
+          console.log("block", block); // debug
 
           // taxonomy grade name filtering
           const filter = gradeList.filter(
@@ -483,10 +427,8 @@ const ElectionBlocks = ({ state, actions, block }) => {
 
           if (searchFilter) {
             if (
-              !title.rendered
-                .toLowerCase()
-                .includes(searchFilter.toLowerCase()) &&
-              !description.toLowerCase().includes(searchFilter.toLowerCase())
+              !title.rendered.toLowerCase().includes(searchFilter) ||
+              !description.toLowerCase().includes(searchFilter)
             )
               return null;
           }
@@ -498,9 +440,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
             if (!election_roles.includes(Number(roleFilter))) return null;
           }
           if (openPositions) {
-            const date = new Date();
-            const electionDate = new Date(closing_date);
-            if (date >= electionDate) return null;
+            if (election_status !== "open") return null;
           }
 
           return (
