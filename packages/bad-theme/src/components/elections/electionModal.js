@@ -7,6 +7,8 @@ import { colors } from "../../config/imports";
 import { setGoToAction } from "../../context";
 
 import CloseIcon from "@mui/icons-material/Close";
+// CONTEXT ------------------------------------------------
+import { useAppDispatch, setEnquireAction } from "../../context";
 
 const ElectionModal = ({
   state,
@@ -16,14 +18,54 @@ const ElectionModal = ({
   setModalData,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  const dispatch = useAppDispatch();
 
   if (!modalData) return null;
 
-  const { title, link } = modalData;
+  const { title } = modalData;
   const { description, nomination_form_upload, job_description_upload } =
     modalData.acf;
+
   // HELPERS ---------------------------------------------
-  console.log(modalData);
+  const handleApply = () => {
+    setModalData(null);
+
+    const {
+      contact_public_email,
+      contact_public_phone_number,
+      contact_form_title,
+      contact_form_body,
+      contact_full_name,
+      contact_email,
+      contact_phone_number,
+      contact_subject,
+      contact_subject_dropdown_options,
+      contact_message,
+      contact_allow_attachments,
+      contact_recipients,
+    } = modalData.acf;
+
+    console.log(modalData);
+
+    setEnquireAction({
+      dispatch,
+      enquireAction: {
+        contact_public_email: contact_public_email || "conference@bad.org.uk",
+        contact_public_phone_number:
+          contact_public_phone_number || "+1 (123) 456-7890",
+        form_title: contact_form_title || "Event Contact Form",
+        form_body: contact_form_body || `Register for ${title.rendered} event.`,
+        full_name: contact_full_name || true,
+        email_address: contact_email || true,
+        phone_number: contact_phone_number || true,
+        subject: contact_subject || true,
+        subject_dropdown_options: contact_subject_dropdown_options,
+        message: contact_message || true,
+        allow_attachments: contact_allow_attachments,
+        recipients: contact_recipients || [{ email: "harriet@bag.org.uk" }],
+      },
+    });
+  };
 
   // SERVERS --------------------------------------------------
   const ServeModalContent = () => {
@@ -71,6 +113,7 @@ const ElectionModal = ({
           </div>
         );
       };
+
       const ServeJobDescriptionDownload = () => {
         if (!job_description_upload) return null;
 
@@ -87,6 +130,15 @@ const ElectionModal = ({
           </div>
         );
       };
+
+      const ServeSubmitApplication = () => {
+        return (
+          <div className="blue-btn" onClick={handleApply}>
+            Submit your application
+          </div>
+        );
+      };
+
       return (
         <Modal.Footer
           style={{
@@ -98,6 +150,7 @@ const ElectionModal = ({
         >
           <ServeFormDownload />
           <ServeJobDescriptionDownload />
+          <ServeSubmitApplication />
         </Modal.Footer>
       );
     };

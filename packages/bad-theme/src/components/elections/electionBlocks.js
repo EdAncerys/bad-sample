@@ -17,7 +17,6 @@ const ElectionBlocks = ({ state, actions, block }) => {
   if (!block) return <Loading />;
 
   const dispatch = useAppDispatch();
-
   const {
     text_align,
     has_search,
@@ -370,10 +369,10 @@ const ElectionBlocks = ({ state, actions, block }) => {
 
     const ServeFilterValues = () => {
       if (
-        !searchFilter ||
-        !gradeFilter ||
-        !roleFilter ||
-        !openPositions ||
+        !searchFilter &&
+        !gradeFilter &&
+        !roleFilter &&
+        !openPositions &&
         !dateFilter
       )
         return null;
@@ -464,8 +463,19 @@ const ElectionBlocks = ({ state, actions, block }) => {
                     isClosedPosition ? "Notify me when position is open" : cta
                   }
                   handler={() => handleContactForm({ isClosedPosition, block })}
-                  form_label="Nomination Form"
-                  form_link={isClosedPosition ? null : nomination_form_upload}
+                  // form_label="Nomination Form"
+                  // form_link={isClosedPosition ? null : nomination_form_upload}
+                  downloadFile={
+                    !isClosedPosition
+                      ? {
+                          file: {
+                            url: nomination_form_upload,
+                            subtype: nomination_form_upload.split(".")[1],
+                            title: "Nomination Form",
+                          },
+                        }
+                      : null
+                  }
                   cardMinHeight={370}
                   backgroundColor={
                     isClosedPosition ? colors.silverFillOne : null

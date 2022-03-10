@@ -321,9 +321,8 @@ const Event = ({ state, actions, libraries }) => {
                 email_address: register_email || true,
                 phone_number: register_phone_number || true,
                 subject: register_subject || true,
-                register_subject_dropdown_options,
+                subject_dropdown_options: register_subject_dropdown_options,
                 message: register_message || true,
-                register_allow_attachments,
                 allow_attachments: register_allow_attachments,
                 recipients: register_recipients || [
                   { email: "conference@bad.org.uk" },
