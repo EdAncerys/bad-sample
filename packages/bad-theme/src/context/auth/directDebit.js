@@ -23,6 +23,33 @@ export const getDirectDebitAction = async ({ state, dispatch, id }) => {
   }
 };
 
+export const getInvoiceAction = async ({ state, isActiveUser }) => {
+  console.log("getInvoiceAction triggered");
+
+  const { contactid } = isActiveUser;
+  if (!contactid) throw new Error("Cannot get receipts. Contactid is missing.");
+
+  const jwt = await authenticateAppAction({ state });
+  const URL =
+    state.auth.APP_HOST +
+    `/utils/pdf/sample?contactid=${contactid}&token=${jwt}`;
+
+  const requestOptions = {
+    method: "GET",
+    headers: { Authorization: `Bearer ${jwt}` },
+  };
+
+  try {
+    const response = await fetch(URL, requestOptions);
+    console.log("⬇️ invoice data ⬇️ "); // debug
+    console.log(response.url); // debug
+
+    if (response.ok) return response.url;
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
 export const createDirectDebitAction = async ({ state, id, data }) => {
   console.log("createDirectDebitAction triggered");
 

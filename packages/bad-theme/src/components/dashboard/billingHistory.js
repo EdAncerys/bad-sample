@@ -1,44 +1,123 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
+import ActionPlaceholder from "../actionPlaceholder";
 import { colors } from "../../config/imports";
 import { padding } from "@mui/system";
+// CONTEXT ----------------------------------------------------------------
+import {
+  useAppDispatch,
+  useAppState,
+  muiQuery,
+  getInvoiceAction,
+} from "../../context";
 
-import { muiQuery } from "../../context";
 const BillingHistory = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-  const { sm, md, lg, xl } = muiQuery();
 
+  const { sm, md, lg, xl } = muiQuery();
+  const dispatch = useAppDispatch();
+  const { dynamicsApps, isActiveUser } = useAppState();
+
+  const [isFetching, setIsFetching] = useState(null);
+  const [subApps, setSubApps] = useState([]);
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
   const PAYMENTS = [1, 2, 3];
+  const useEffectRef = useRef(null);
+
+  useEffect(async () => {
+    if (!dynamicsApps)
+      await getApplicationStatus({
+        state,
+        dispatch,
+        contactid: isActiveUser.contactid,
+      });
+
+    // get approved memberships
+    if (dynamicsApps) setSubApps(dynamicsApps.subs.data);
+    console.log("dynamicsApps", dynamicsApps.subs.data);
+
+    return () => {
+      useEffectRef.current = false; // clean up function
+    };
+  }, []);
 
   // HELPERS ----------------------------------------------------------------
-  const handleDownloadPayment = () => {
-    console.log("API call download payment");
+  const handleDownloadPayment = async () => {
+    try {
+      setIsFetching(true);
+      const url = await getInvoiceAction({ state, isActiveUser });
+      // await for link to download & open in new window to download
+      window.open(url, "_blank");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsFetching(false);
+    }
   };
 
   // SERVERS ---------------------------------------------
-  const ServePayments = ({ block, item }) => {
-    const ServeInfo = () => {
-      const isLastItem = PAYMENTS.length === item + 1;
+  const ServeDownloadAction = ({ title, currentPayYear, item }) => {
+    // get current year from endon
+    const currentYear = new Date().getFullYear();
+    console.log("currentPayYear", currentPayYear);
 
-      return (
+    return (
+      <div style={{ marginLeft: `auto` }}>
         <div
           className="flex"
-          style={{
-            borderBottom: isLastItem
-              ? "none"
-              : `1px solid ${colors.darkSilver}`,
-            padding: `1em`,
-            marginRight: marginHorizontal * 2,
-          }}
+          style={{ alignItems: "center", padding: "0 2em" }}
         >
-          <div className="flex" style={styles.textInfo}>
-            <div>Details of the invoice to be paid.</div>
+          <div
+            type="submit"
+            className="blue-btn"
+            onClick={handleDownloadPayment}
+          >
+            Download Receipt
           </div>
-          <div className="flex" style={styles.textInfo}>
-            <div>01/12/2021</div>
+        </div>
+      </div>
+    );
+  };
+
+  const ServePayments = ({ block, item }) => {
+    const ServeInfo = () => {
+      const isLastItem = subApps.length === item + 1; // item length helper
+      const isFirst = item === 0; // item length helper
+      const { core_name, core_totalamount, core_endon } = block; // get block props
+      // get current year from endon
+      const currentPayYear = new Date(core_endon).getFullYear();
+      console.log(currentPayYear);
+
+      return (
+        <div className="flex-col">
+          {isFirst && (
+            <ServeDownloadAction
+              title={currentPayYear}
+              currentPayYear={currentPayYear}
+              item={item}
+            />
+          )}
+          <div
+            className="flex"
+            style={{
+              borderBottom: isLastItem
+                ? "none"
+                : `1px solid ${colors.darkSilver}`,
+              padding: `1em`,
+              marginRight: marginHorizontal * 2,
+            }}
+          >
+            <div className="flex" style={styles.textInfo}>
+              <div>{core_name}</div>
+            </div>
+            <div className="flex" style={styles.textInfo}>
+              <div>{core_endon}</div>
+            </div>
+            <div className="flex" style={styles.textInfo}>
+              <div>{core_totalamount}</div>
+            </div>
           </div>
         </div>
       );
@@ -51,70 +130,39 @@ const BillingHistory = ({ state, actions, libraries }) => {
     );
   };
 
-  const ServeSubTitle = ({ title }) => {
-    const ServeActions = () => {
-      return (
-        <div style={{ margin: `auto 0` }}>
-          <div
-            className="flex"
-            style={{ alignItems: "center", padding: !lg ? `0 2em` : 0 }}
-          >
-            <div
-              type="submit"
-              className="blue-btn"
-              onClick={handleDownloadPayment}
-            >
-              Download Receipt
-            </div>
-          </div>
-        </div>
-      );
-    };
-
+  // if no approved applications return placeholder with message
+  if (!subApps.length)
     return (
       <div
-        className="flex"
-        style={{ padding: `1em 0`, flexDirection: !lg ? null : "column" }}
+        className="shadow"
+        style={{
+          padding: !lg ? `2em 4em` : "1em",
+          marginBottom: `${marginVertical}px`,
+        }}
       >
-        <div className="flex" style={{ justifyItems: "center" }}>
-          {title}
+        <div className="primary-title" style={{ fontSize: 20 }}>
+          Billing History:
         </div>
-        <ServeActions />
+        <div style={{ paddingTop: "1em" }}>
+          No billing history available. It will appear here once it's available.
+        </div>
       </div>
     );
-  };
-  {
-    /* <ServeSubTitle title="2021" />
-      {PAYMENTS.map((block, key) => {
-        return <ServePayments key={key} block={block} item={key} />;
-      })}
 
-      <div
-        className="flex"
-        style={{
-          borderBottom: `1px solid ${colors.darkSilver}`,
-          margin: `1em 0`,
-        }}
-      />
-
-      <ServeSubTitle title="2020" />
-      {PAYMENTS.map((block, key) => {
-        return <ServePayments key={key} block={block} item={key} />;
-      })} */
-  }
   return (
-    <div
-      className="shadow"
-      style={{
-        padding: !lg ? `2em 4em` : "1em",
-        marginBottom: `${marginVertical}px`,
-      }}
-    >
-      <div className="primary-title" style={{ fontSize: 20 }}>
-        Billing History:
+    <div style={{ position: "relative" }}>
+      <ActionPlaceholder isFetching={isFetching} background="transparent" />
+      <div
+        className="shadow"
+        style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
+      >
+        <div className="primary-title" style={{ fontSize: 20 }}>
+          Billing History:
+        </div>
+        {subApps.map((block, key) => {
+          return <ServePayments key={key} block={block} item={key} />;
+        })}
       </div>
-      At the moment there is no billing history. It will appear here once it's
-      available.
     </div>
   );
 };

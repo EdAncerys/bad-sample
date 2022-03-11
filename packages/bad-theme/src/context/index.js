@@ -47,6 +47,7 @@ import { getApplicationStatus } from "./auth/getApplicationStatus";
 import {
   getDirectDebitAction,
   createDirectDebitAction,
+  getInvoiceAction,
 } from "./auth/directDebit";
 import {
   setUserStoreAction,
@@ -134,4 +135,5 @@ export {
   getSIGGroupeData,
   deleteApplicationAction,
   getUserDataFromDynamics,
+  getInvoiceAction,
 };
