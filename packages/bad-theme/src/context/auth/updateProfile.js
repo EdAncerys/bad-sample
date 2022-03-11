@@ -38,6 +38,9 @@ export const updateProfileAction = async ({
     if (!response) throw new Error("Error updating profile.");
 
     if (response.success) {
+      console.log("⬇️ profile details successfully updated ⬇️ "); // debug
+      console.log(response); // debug
+      // update user profile in context
       await getUserDataByContactId({
         state,
         dispatch,

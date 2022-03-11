@@ -101,7 +101,6 @@ const UpdateProfile = ({ state, actions, libraries }) => {
 
     try {
       await updateProfileAction({ state, dispatch, data, isActiveUser });
-      console.log("⬇️ profile details successfully updated ⬇️ "); // debug
     } catch (error) {
       console.log("error", error);
     } finally {
