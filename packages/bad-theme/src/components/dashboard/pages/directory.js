@@ -7,6 +7,7 @@ import Loading from "../../loading";
 import { colors } from "../../../config/colors";
 import Card from "../../card/card";
 import SearchContainer from "../../searchContainer";
+import ActionPlaceholder from "../../actionPlaceholder";
 
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../../blockWrapper";
@@ -16,16 +17,19 @@ import {
   useAppState,
   getFadAction,
   muiQuery,
+  setFadAction,
+  updateProfileAction,
 } from "../../../context";
 
 const Directory = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
-  const { fad, dashboardPath } = useAppState();
+  const { fad, dashboardPath, isActiveUser } = useAppState();
 
   const LIMIT = 9;
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [fadData, setFadData] = useState(null);
+  const [isFetching, setIsFetching] = useState(null);
 
   const searchFilterRef = useRef(null);
   const loadMoreRef = useRef(null);
@@ -39,6 +43,8 @@ const Directory = ({ state, actions, libraries }) => {
     if (!fad) {
       // fetch data via API
       const data = await getFadAction({ state, dispatch });
+      // set fad data in context of app
+      setFadAction({ dispatch, fad: data });
 
       setFadData(data.slice(0, Number(LIMIT)));
     } else {
@@ -51,6 +57,25 @@ const Directory = ({ state, actions, libraries }) => {
   }, [fad]);
 
   // HANDLERS -------------------------------------------------------------------
+  const handlePreferenceUpdate = async () => {
+    if (!isActiveUser) return;
+    const data = Object.assign(
+      {}, // add empty object
+      { bad_memberdirectory: !isActiveUser.bad_memberdirectory }
+    );
+    console.log("data", data); // debug
+
+    try {
+      setIsFetching(true);
+      // API call to update profile preferences
+      await updateProfileAction({ state, dispatch, data, isActiveUser });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
   const handleClearSearchFilter = () => {
     setSearchFilter(null);
     searchFilterRef.current = null;
@@ -66,11 +91,17 @@ const Directory = ({ state, actions, libraries }) => {
       data = data.filter((item) => {
         let fullname = item.fullname;
         let email = item.emailaddress1;
+        let hospitalName =
+          item[
+            "_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"
+          ];
 
         if (fullname) fullname = fullname.toLowerCase().includes(input);
         if (email) email = email.toLowerCase().includes(input);
+        if (hospitalName)
+          hospitalName = hospitalName.toLowerCase().includes(input);
 
-        return fullname || email;
+        return fullname || email || hospitalName;
       });
     }
 
@@ -80,16 +111,13 @@ const Directory = ({ state, actions, libraries }) => {
 
   const handleLoadMoreFilter = async () => {
     if (fadData.length < LIMIT) return;
-    let data = fad;
 
     if (!loadMoreRef.current) {
-      loadMoreRef.current = data;
-      setFadData(data);
-      console.log(loadMoreRef.current.length);
+      loadMoreRef.current = true;
+      setFadData(fad);
     } else {
-      setFadData(loadMoreRef.current.slice(0, Number(LIMIT)));
-      loadMoreRef.current = null;
-      console.log(loadMoreRef.current);
+      setFadData(fad.slice(0, Number(LIMIT)));
+      loadMoreRef.current = false;
     }
   };
 
@@ -127,6 +155,7 @@ const Directory = ({ state, actions, libraries }) => {
           <div style={{ padding: `0 ${marginHorizontal}px` }}>
             <SearchContainer
               title="Members Directory"
+              subTitle="Search either by name or main place of work to find contact details of colleagues who have opted in to this service"
               width={!lg ? "70%" : "100%"}
               searchFilterRef={searchFilterRef}
               handleSearch={handleSearch}
@@ -164,9 +193,67 @@ const Directory = ({ state, actions, libraries }) => {
     );
   };
 
+  const ServePreferences = () => {
+    if (!isActiveUser) return null;
+
+    // directory agreement field
+    const { bad_memberdirectory } = isActiveUser;
+
+    if (!bad_memberdirectory) {
+      return (
+        <div style={{ position: "relative" }}>
+          <ActionPlaceholder
+            isFetching={isFetching}
+            background="transparent"
+            bottom="-30px"
+            height="auto"
+          />
+          <div
+            className="blue-btn"
+            style={{ marginRight: "1em", width: "fit-content" }}
+            onClick={handlePreferenceUpdate}
+          >
+            Opt-in
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div style={{ position: "relative" }}>
+        <ActionPlaceholder
+          isFetching={isFetching}
+          background="transparent"
+          bottom="-30px"
+          height="auto"
+        />
+        <div
+          className="blue-btn"
+          style={{
+            marginRight: "1em",
+            width: "fit-content",
+            backgroundColor: colors.danger,
+          }}
+          onClick={handlePreferenceUpdate}
+        >
+          Opt-out
+        </div>
+      </div>
+    );
+  };
+
   // RETURN ---------------------------------------------
   return (
     <div>
+      <BlockWrapper>
+        <div
+          style={{
+            margin: `0 ${marginHorizontal}px ${marginVertical}px ${marginHorizontal}px`,
+          }}
+        >
+          <ServePreferences />
+        </div>
+      </BlockWrapper>
       <ServeFilter />
       <BlockWrapper>
         <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>

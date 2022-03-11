@@ -32,7 +32,10 @@ const FullWidthContentBlock = ({
     disable_vertical_padding,
     downloads,
     file,
+    button_label,
+    button_type,
   } = block;
+  // console.log("block", block); // debug
 
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
@@ -57,9 +60,12 @@ const FullWidthContentBlock = ({
   const ServeTitle = () => {
     if (!title) return null;
 
+    let fontSize = heroBanner ? 36 : 26;
+    if (!lg) fontSize = 26;
+
     return (
       <div>
-        <div className="primary-title" style={{ fontSize: !lg ? 36 : 25 }}>
+        <div className="primary-title" style={{ fontSize: fontSize }}>
           <Html2React html={title} />
         </div>
       </div>
@@ -143,7 +149,10 @@ const FullWidthContentBlock = ({
           justifyContent: ALIGNMENT,
         }}
       >
-        <DownloadFileBlock block={{ file }} disableMargin />
+        <DownloadFileBlock
+          block={{ file, label: button_label, type: button_type }}
+          disableMargin
+        />
       </div>
     );
   };

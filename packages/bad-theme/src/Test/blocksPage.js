@@ -36,7 +36,7 @@ const BlocksPage = ({ state }) => {
 
 const styles = {
   title: {
-    fontSize: 36,
+    fontSize: 26,
     textAlign: "center",
     fontWeight: "500",
     color: colors.primary,

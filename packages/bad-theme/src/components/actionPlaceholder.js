@@ -6,7 +6,7 @@ import CheckMark from "../img/svg/checkMarkGreen.svg";
 import Loading from "./loading";
 import { colors } from "../config/imports";
 
-const ActionPlaceholder = ({ isFetching, background }) => {
+const ActionPlaceholder = ({ isFetching, background, bottom, height }) => {
   if (!isFetching) return null;
 
   // SERVERS ---------------------------------------------
@@ -33,10 +33,11 @@ const ActionPlaceholder = ({ isFetching, background }) => {
         position: "absolute",
         zIndex: 1,
         width: "100%",
-        height: "100%",
+        height: height || "100%",
         display: "grid",
         justifyItems: "center",
         backgroundColor: background || colors.bgLight,
+        bottom: bottom || "auto",
       }}
     >
       <Loading />

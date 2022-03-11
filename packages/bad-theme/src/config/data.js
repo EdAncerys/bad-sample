@@ -1210,7 +1210,7 @@ export const UK_HOSPITALS = [
   },
 ];
 
-export const ETHNIC_GROUPES = [
+export const ETHNIC_GROUPS = [
   {
     value: 810170011,
     Label: "African Background",
@@ -1270,5 +1270,40 @@ export const ETHNIC_GROUPES = [
   {
     value: 810170013,
     Label: "Other",
+  },
+];
+
+export const GENDER_GROUPS = [
+  {
+    value: 215500000,
+    Label: "Male",
+  },
+  {
+    value: 215500001,
+    Label: "Female",
+  },
+  {
+    value: 215500003,
+    Label: "Transgender Female",
+  },
+  {
+    value: 215500004,
+    Label: "Transgender Male",
+  },
+  {
+    value: 215500005,
+    Label: "Gender Variant/Non-Conforming",
+  },
+  {
+    value: 215500006,
+    Label: "Not Listed",
+  },
+  {
+    value: 215500007,
+    Label: "Prefer Not to Answer",
+  },
+  {
+    value: 215500002,
+    Label: "Unknown",
   },
 ];

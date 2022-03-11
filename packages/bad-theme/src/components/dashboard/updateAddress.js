@@ -140,7 +140,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
       <ActionPlaceholder isFetching={isFetching} />
       <div style={{ padding: `2em 4em` }}>
         <div className="primary-title" style={{ fontSize: 20 }}>
-        Home Address Details:
+          Contact Details:
         </div>
         <ServeForm />
         <ServeActions />

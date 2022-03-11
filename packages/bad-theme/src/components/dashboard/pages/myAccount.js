@@ -17,21 +17,16 @@ const MyAccount = ({ state, actions, libraries }) => {
 
   const marginHorizontal = state.theme.marginHorizontal;
 
+  // HELPERS ---------------------------------------------
+
   // SERVERS ---------------------------------------------
-  const ServeDashboard = () => {
-    return (
-      <div style={{ padding: `0 ${marginHorizontal}px` }}>
-        <UpdateProfile />
-        <UpdateHospitalDetails />
-        <UpdateAddress />
-      </div>
-    );
-  };
 
   // RETURN ---------------------------------------------
   return (
-    <div>
-      <ServeDashboard />
+    <div style={{ padding: `0 ${marginHorizontal}px` }}>
+      <UpdateProfile />
+      <UpdateHospitalDetails />
+      <UpdateAddress />
     </div>
   );
 };

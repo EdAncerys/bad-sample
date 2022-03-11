@@ -4,7 +4,12 @@ import Image from "@frontity/components/image";
 
 import ProfileAvatar from "../../img/svg/profile.svg";
 // CONTEXT ----------------------------------------------------------------
-import { useAppState, muiQuery } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setDashboardPathAction,
+  muiQuery,
+} from "../../context";
 
 const Profile = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
@@ -12,8 +17,9 @@ const Profile = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { isActiveUser } = useAppState();
-  console.log(useAppState());
   const marginVertical = state.theme.marginVertical;
+  const dispatch = useAppDispatch();
+
   // SERVERS ---------------------------------------------
   const ServeProfileAvatar = () => {
     if (!isActiveUser) return null;
@@ -52,7 +58,7 @@ const Profile = ({ state, actions, libraries }) => {
     const { fullname } = isActiveUser;
 
     return (
-      <div className="primary-title" style={{ fontSize: !lg ? 36 : 25 }}>
+      <div className="primary-title" style={{ fontSize: 26 }}>
         <Html2React html={fullname} />
       </div>
     );
@@ -68,6 +74,10 @@ const Profile = ({ state, actions, libraries }) => {
       address2_city,
       address2_postalcode,
       address2_country,
+      bad_memberid,
+      jobtitle,
+      mobilephone,
+      py3_currentplaceofwork,
     } = isActiveUser;
 
     const ServeEmail = () => {
@@ -77,6 +87,67 @@ const Profile = ({ state, actions, libraries }) => {
         <div style={styles.container}>
           <span className="primary-title">Email: </span>
           <Html2React html={emailaddress1} />
+        </div>
+      );
+    };
+
+    const ServeMembershipNumber = () => {
+      if (!bad_memberid) return null;
+
+      return (
+        <div style={styles.container}>
+          <span className="primary-title">Membership Number: </span>
+          <Html2React html={bad_memberid} />
+        </div>
+      );
+    };
+
+    const ServeJobTitle = () => {
+      if (!jobtitle) return null;
+
+      return (
+        <div style={styles.container}>
+          <span className="primary-title">Job Title: </span>
+          <Html2React html={jobtitle} />
+        </div>
+      );
+    };
+
+    const ServeMobile = () => {
+      if (!mobilephone) return null;
+
+      return (
+        <div style={styles.container}>
+          <span className="primary-title">Mobile:</span>
+          <Html2React html={mobilephone} />
+        </div>
+      );
+    };
+
+    const ServePlaceOfWork = () => {
+      if (!py3_currentplaceofwork) return null;
+
+      return (
+        <div style={styles.container}>
+          <span className="primary-title">
+            Main Place of work / Medical School:
+          </span>
+          <Html2React html={py3_currentplaceofwork} />
+        </div>
+      );
+    };
+
+    const ServeBadCategory = () => {
+      const memebershpCategory =
+        isActiveUser[
+          "_bad_currentbadsubscrptionid_value@OData.Community.Display.V1.FormattedValue"
+        ];
+      if (!memebershpCategory) return null;
+
+      return (
+        <div style={styles.container}>
+          <span className="primary-title">BAD Membership Category: </span>
+          <Html2React html={memebershpCategory} />
         </div>
       );
     };
@@ -146,12 +217,27 @@ const Profile = ({ state, actions, libraries }) => {
           gap: `5px 20px`,
         }}
       >
+        <ServeMembershipNumber />
+        <ServeBadCategory />
+        <ServeJobTitle />
         <ServeEmail />
+        <ServeMobile />
+        <ServePlaceOfWork />
         <ServeAddressOne />
         <ServeAddressTwo />
         <ServeCity />
         <ServePostcode />
         <ServeCountry />
+
+        <div
+          className="blue-btn"
+          style={{ marginTop: "1em", width: "fit-content" }}
+          onClick={() =>
+            setDashboardPathAction({ dispatch, dashboardPath: "My Profile" })
+          }
+        >
+          Edit
+        </div>
       </div>
     );
   };

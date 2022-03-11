@@ -25,6 +25,7 @@ import {
   authenticateAppAction,
   getUserAction,
   getUserDataByContactId,
+  getUserDataFromDynamics,
 } from "./auth/actions";
 import { sendEmailEnquireAction } from "./auth/sendEnquire";
 import {
@@ -34,7 +35,7 @@ import {
 } from "./actions/memberships";
 import { getWpPagesAction } from "./actions/getWpPages";
 import { getTweetsAction } from "./auth/getTweets";
-import { getFadAction } from "./auth/getFAD";
+import { getFadAction, setFadAction } from "./auth/getFAD";
 import { updateProfileAction } from "./auth/updateProfile";
 import {
   updateAddressAction,
@@ -90,6 +91,7 @@ export {
   setErrorAction,
   getTweetsAction,
   getFadAction,
+  setFadAction,
   getUserAction,
   getUserDataByContactId,
   updateProfileAction,
@@ -131,4 +133,5 @@ export {
   getUserApplicationAction,
   getSIGGroupeData,
   deleteApplicationAction,
+  getUserDataFromDynamics,
 };

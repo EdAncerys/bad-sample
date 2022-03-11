@@ -157,6 +157,29 @@ export const getUserDataByContactId = async ({
   }
 };
 
+export const getUserDataFromDynamics = async ({ state, jwt, contactid }) => {
+  console.log("getUserDataByContactId triggered");
+
+  const URL = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
+
+  const requestOptions = {
+    method: "GET",
+    headers: { Authorization: "Bearer " + jwt },
+  };
+
+  try {
+    const data = await fetch(URL, requestOptions);
+    const response = await data.json();
+    if (!response) throw new Error("Error getting userData.");
+    // console.log("⏬ FED data successfully fetched ⏬");
+    // console.log(response);
+
+    return response;
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
 export const logoutAction = async ({ state, actions, dispatch }) => {
   console.log("logoutAction triggered");
   // ⬇️ stack order important to unmount components correctly

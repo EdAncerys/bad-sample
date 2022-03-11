@@ -14,8 +14,8 @@ export const getDirectDebitAction = async ({ state, dispatch, id }) => {
   try {
     const response = await fetch(URL, requestOptions);
     const data = await response.json();
+    // console.log("getDirectDebitAction data", data); // debug
 
-    console.log("getDirectDebitAction data", data); // debug
     if (data.success)
       setDirectDebitAction({ dispatch, isDirectDebit: data.data });
   } catch (error) {
@@ -43,8 +43,7 @@ export const createDirectDebitAction = async ({ state, id, data }) => {
   try {
     const response = await fetch(URL, requestOptions);
     const data = await response.json();
-
-    console.log("createDirectDebitAction data", data); // debug
+    // console.log("createDirectDebitAction data", data); // debug
 
     return data;
   } catch (error) {

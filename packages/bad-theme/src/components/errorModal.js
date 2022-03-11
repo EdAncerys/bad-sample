@@ -4,6 +4,7 @@ import { Modal } from "react-bootstrap";
 import { colors } from "../config/imports";
 import Image from "@frontity/components/image";
 import CheckMark from "../img/svg/checkMark.svg";
+import Error from "../img/svg/error.svg";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -64,7 +65,35 @@ const ErrorModal = ({ state, actions }) => {
   };
 
   const ServeModalContent = () => {
-    const { message } = isError;
+    const { message, image } = isError;
+
+    const ServeImage = () => {
+      // error msg image options
+      const errorImage = {
+        Error,
+        CheckMark,
+      };
+      let modalImage = image ? errorImage[image] : CheckMark;
+
+      return (
+        <div
+          style={{
+            width: 250,
+            maxHeight: 250,
+            margin: "0 auto",
+          }}
+        >
+          <Image
+            src={modalImage}
+            alt="BAD Error Image"
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        </div>
+      );
+    };
 
     return (
       <div
@@ -73,24 +102,7 @@ const ErrorModal = ({ state, actions }) => {
       >
         <div className="flex-col">
           <Modal.Body className="flex-col">
-            {CheckMark && (
-              <div
-                style={{
-                  width: 250,
-                  maxHeight: 250,
-                  margin: "0 auto",
-                }}
-              >
-                <Image
-                  src={CheckMark}
-                  alt="BAD Complete"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                  }}
-                />
-              </div>
-            )}
+            <ServeImage />
 
             <div
               className="flex primary-title"
