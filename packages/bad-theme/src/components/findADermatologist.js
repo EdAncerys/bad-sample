@@ -66,9 +66,9 @@ const FindADermatologist = ({ state, block }) => {
         const json = await fetching.json();
 
         const data = json.data;
-        const filteredData = data.filter((item) =>
-          item.fullname.includes(query.value)
-        );
+        const regex = new RegExp(query.value, "gi");
+
+        const filteredData = data.filter((item) => item.fullname.match(regex));
         console.log("FILTERED", filteredData);
         setFilteredDermatologists(filteredData);
       }
