@@ -2,7 +2,7 @@
 
   tooltip html example
    <span
-      className="popup"
+      className="tulip-pop"
       citations="Description..."
     >
       Anna IT Solutions
@@ -24,35 +24,34 @@
     <span class='link-icon' />
 
  **/
-html {
-  overflow-y: scroll;
-}
-.popup {
+
+.tulip-pop {
   display: inline-block;
   position: relative;
   cursor: pointer;
   box-sizing: border-box;
   transition: all 0.25s ease-in-out;
 }
-.popup:hover {
+.tulip-pop:hover {
   color: #069;
 }
 /*the tip*/
-.popup:before {
+.tulip-pop:before {
   content: attr(citations);
   font-size: 14px;
   position: absolute;
-  background: #ced4da;
+  background: #e9ecef;
   line-height: 1.2em;
-  padding: 0.5em;
+  padding: 0.5em 1em;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-  min-width: 200px;
-  text-align: center;
+  /* min-width: 200px; */
+  width: 250px;
+  text-align: start;
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s ease-in-out;
 }
-.popup:after {
+.tulip-pop:after {
   width: 0;
   height: 0;
   border-style: solid;
@@ -62,67 +61,68 @@ html {
   visibility: hidden;
   transition: all 0.3s ease-in-out;
 }
-.popup:hover:before,
-.popup:hover:after {
+/* main hoover config */
+.tulip-pop:hover:before,
+.tulip-pop:hover:after {
   visibility: visible;
   opacity: 1;
 }
 /*top*/
-.popup.tip-top:before {
+.tulip-pop.tip-top:before {
   top: 0;
   left: 50%;
   transform: translate(-50%, calc(-100% - 8px));
   box-sizing: border-box;
   border-radius: 3px;
 }
-.popup.tip-top:after {
+.tulip-pop.tip-top:after {
   border-width: 8px 8px 0 8px;
-  border-color: #ced4da transparent transparent transparent;
+  border-color: transparent #e9ecef transparent transparent;
   top: -8px;
   left: 50%;
   transform: translate(-50%, 0);
 }
 /*bottom*/
-.popup.tip-bottom:before {
+.tulip-pop.tip-bottom:before {
   bottom: 0;
   left: 50%;
   transform: translate(-50%, calc(100% + 8px));
   box-sizing: border-box;
   border-radius: 3px;
 }
-.popup.tip-bottom:after {
+.tulip-pop.tip-bottom:after {
   border-width: 0 8px 8px 8px;
-  border-color: transparent transparent rgba(10, 20, 30, 0.85) transparent;
+  border-color: transparent transparent #e9ecef transparent;
   bottom: -8px;
   left: 50%;
   transform: translate(-50%, 0);
 }
 /*left*/
-.popup.tip-left:before {
+.tulip-pop.tip-left:before {
   left: 0;
   top: 50%;
   transform: translate(calc(-100% - 8px), -50%);
   box-sizing: border-box;
   border-radius: 3px;
 }
-.popup.tip-left:after {
+.tulip-pop.tip-left:after {
   border-width: 8px 0 8px 8px;
-  border-color: transparent transparent transparent rgba(10, 20, 30, 0.85);
+  border-color: transparent transparent transparent #e9ecef;
   left: -8px;
   top: 50%;
   transform: translate(0, -50%);
 }
 /*right*/
-.popup:before {
+.tulip-pop:before {
   right: 0;
   top: 50%;
   transform: translate(calc(100% + 8px), -50%);
   box-sizing: border-box;
   border-radius: 3px;
 }
-.popup:after {
+.tulip-pop:after {
   border-width: 8px 8px 8px 0;
-  border-color: transparent #ced4da transparent transparent;
+  border-color: transparent #e9ecef transparent transparent;
   right: -8px;
   top: 50%;
   transform: translate(0, -50%);

@@ -57,6 +57,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     py3_constitutionagreement: "",
     bad_readpolicydocument: "",
     sky_newhospitaltype: "",
+    py3_badCategory: "",
   });
   const [inputValidator, setInputValidator] = useState({
     py3_gmcnumber: true,
@@ -75,6 +76,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     py3_constitutionagreement: true,
     bad_readpolicydocument: true,
     sky_newhospitaltype: true,
+    py3_badCategory: true,
   });
 
   const [hospitalData, setHospitalData] = useState(null);
@@ -247,6 +249,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         "bad_currentpost",
         isNewHospital ? "sky_newhospitaltype" : null,
         !isNewHospital ? "py3_hospitalid" : null,
+
+        "py3_badCategory",
       ],
     });
 
@@ -665,6 +669,36 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                   borderTop: `1px solid ${colors.silverFillTwo}`,
                 }}
               >
+                <div>
+                  <div
+                    className="flex"
+                    style={{ alignItems: "center", margin: `1em 0` }}
+                  >
+                    <div style={{ display: "grid" }}>
+                      <input
+                        name="py3_badCategory"
+                        checked={formData.py3_badCategory}
+                        onChange={handleInputChange}
+                        type="checkbox"
+                        className="form-check-input check-box"
+                      />
+                    </div>
+                    <div
+                      className="tulip-pop"
+                      citations="A member only service to search for the contact email of fellow BAD members"
+                      style={{ color: "inherit" }}
+                    >
+                      Include in Members directory
+                      <span
+                        style={{ color: colors.danger, padding: "0 0.5em" }}
+                      >
+                        field inactive
+                      </span>
+                    </div>
+                  </div>
+                  <FormError id="py3_badCategory" />
+                </div>
+
                 {inputValidator.py3_constitutionagreement && (
                   <div
                     className="flex"
