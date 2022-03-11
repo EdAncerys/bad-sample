@@ -83,7 +83,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
     >
       <div className="primary-title" style={{ fontSize: 20 }}>
-        Hospital Details:
+        Professional Information:
       </div>
       <ServeForm />
       <ServeActions />

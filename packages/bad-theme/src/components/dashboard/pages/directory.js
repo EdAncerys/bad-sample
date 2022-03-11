@@ -204,6 +204,7 @@ const Directory = ({ state, actions, libraries }) => {
             isFetching={isFetching}
             background="transparent"
             bottom="-30px"
+            height="auto"
           />
           <div
             className="blue-btn"
@@ -222,6 +223,7 @@ const Directory = ({ state, actions, libraries }) => {
           isFetching={isFetching}
           background="transparent"
           bottom="-30px"
+          height="auto"
         />
         <div
           className="blue-btn"

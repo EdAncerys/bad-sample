@@ -16,6 +16,7 @@ const Profile = ({ state, actions, libraries }) => {
   const { isActiveUser } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
+  const dispatch = useAppDispatch();
 
   // SERVERS ---------------------------------------------
   const ServeProfileAvatar = () => {
@@ -23,7 +24,6 @@ const Profile = ({ state, actions, libraries }) => {
 
     const { bad_listname, bad_profile_photo_url } = isActiveUser;
 
-    const dispatch = useAppDispatch();
     const alt = bad_listname || "Profile Picture";
 
     return (

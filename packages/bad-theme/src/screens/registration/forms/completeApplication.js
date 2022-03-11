@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { Form } from "react-bootstrap";
 
-import { ETHNIC_GROUPES } from "../../../config/data";
+import { ETHNIC_GROUPS } from "../../../config/data";
 import { colors } from "../../../config/imports";
 import ActionPlaceholder from "../../../components/actionPlaceholder";
 // CONTEXT ----------------------------------------------------------------
@@ -126,7 +126,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
                 <option value="" hidden>
                   Ethnic Group
                 </option>
-                {ETHNIC_GROUPES.map((item, key) => {
+                {ETHNIC_GROUPS.map((item, key) => {
                   return (
                     <option key={key} value={item.value}>
                       {item.Label}
