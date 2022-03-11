@@ -70,11 +70,6 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         recipients: [{ email: "ed@skylarkcreative.co.uk" }],
       },
     });
-
-    setErrorAction({
-      dispatch,
-      isError: { message: "Your request been submitted successfully." },
-    });
   };
 
   const handleProfileUpdate = async () => {

@@ -21,8 +21,8 @@ import {
 const ProfileProgress = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const { dynamicsApps, applicationData, isActiveUser } = useAppState();
   const dispatch = useAppDispatch();
+  const { dynamicsApps, applicationData, isActiveUser } = useAppState();
 
   // console.log("dynamicsApps", dynamicsApps); // debug
 
