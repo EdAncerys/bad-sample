@@ -590,7 +590,6 @@ const Event = ({ state, actions, libraries }) => {
                 email_address: contact_email || true,
                 phone_number: contact_phone_number || true,
                 subject: contact_subject || true,
-                contact_subject_dropdown_options,
                 message: contact_message || true,
                 allow_attachments: contact_allow_attachments,
                 recipients: contact_recipients || [

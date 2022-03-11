@@ -28,6 +28,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
     bad_profile_photo_url: "",
     birthdate: "",
     gendercode: "",
+
     py3_ethnicity: "",
   });
   const documentRef = useRef(null);
@@ -47,8 +48,8 @@ const UpdateProfile = ({ state, actions, libraries }) => {
     // populate profile information form Dynamics records
     if (isActiveUser.firstname) handleSetData({ name: "firstname" });
     if (isActiveUser.lastname) handleSetData({ name: "lastname" });
-    if (isActiveUser.birthdate) handleSetData({ name: "birthdate" });
     if (isActiveUser.gendercode) handleSetData({ name: "gendercode" });
+    if (isActiveUser.py3_ethnicity) handleSetData({ name: "py3_ethnicity" });
   }, [isActiveUser]);
 
   // HELPERS ----------------------------------------------------------------
@@ -58,7 +59,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
     }));
-    // console.log(formData); // debug
+    console.log(value); // debug
   };
 
   const handleDocUploadChange = async (e) => {
@@ -82,13 +83,13 @@ const UpdateProfile = ({ state, actions, libraries }) => {
   const handleProfileUpdate = async () => {
     // console.log("formData", formData); // debug
 
-    setIsFetching(true);
     const firstname = formData.firstname;
     const lastname = formData.lastname;
     const bad_profile_photo_url = formData.bad_profile_photo_url;
     const birthdate = formData.birthdate;
     const gendercode = formData.gendercode;
     const py3_ethnicity = formData.py3_ethnicity;
+    // const bad_ethnicity = formData.py3_ethnicity; // application field value
 
     const data = Object.assign(
       {}, // add empty object
@@ -99,11 +100,11 @@ const UpdateProfile = ({ state, actions, libraries }) => {
       !!gendercode && { gendercode },
       !!py3_ethnicity && { py3_ethnicity }
     );
-    console.log("data", data); // debug
+    // console.log("data", data); // debug
 
     try {
+      setIsFetching(true);
       await updateProfileAction({ state, dispatch, data, isActiveUser });
-      console.log("⬇️ profile details successfully updated ⬇️ "); // debug
     } catch (error) {
       console.log("error", error);
     } finally {
@@ -144,8 +145,8 @@ const UpdateProfile = ({ state, actions, libraries }) => {
           }}
         >
           <div>
-            <label>Your First Name</label>
-            <div style={styles.wrapper}>
+            <div>
+              <label>Your First Name</label>
               <input
                 name="firstname"
                 value={formData.firstname}
@@ -164,7 +165,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
                 placeholder="Your Last Name"
               />
             </div>
-            <div style={styles.wrapper}>
+            <div>
               <label>Upload A Profile Photo</label>
               <input
                 ref={documentRef}
@@ -178,7 +179,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
           </div>
 
           <div>
-            <div style={styles.wrapper}>
+            <div>
               <label>Date Of Birth</label>
               <input
                 name="birthdate"
@@ -196,7 +197,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
                 value={formData.py3_gender}
                 onChange={handleInputChange}
                 className="input"
-                disabled
+                // disabled
               >
                 <option value="" hidden>
                   Male, Female, Transgender, Prefer Not To Answer
@@ -210,14 +211,13 @@ const UpdateProfile = ({ state, actions, libraries }) => {
                 })}
               </Form.Select>
             </div>
-            <div style={styles.wrapper}>
+            <div>
               <label style={styles.subTitle}>What is your Ethnic Group?</label>
               <Form.Select
                 name="py3_ethnicity"
                 value={formData.py3_ethnicity}
                 onChange={handleInputChange}
                 className="input"
-                disabled
               >
                 <option value="" hidden>
                   Ethnic Group
