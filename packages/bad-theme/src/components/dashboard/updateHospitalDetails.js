@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
+import ActionPlaceholder from "../actionPlaceholder";
 
 import { colors } from "../../config/imports";
 // CONTEXT ----------------------------------------------------------------
@@ -20,7 +21,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
   const [isFetching, setIsFetching] = useState(null);
   const [formData, setFormData] = useState({
-    py3_currentplaceofwork: "",
+    address1_line1: "",
     bad_gmcno: "",
     bad_ntnno: "",
   });
@@ -37,8 +38,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     };
 
     // populate profile information form Dynamics records
-    if (isActiveUser.py3_currentplaceofwork)
-      handleSetData({ name: "py3_currentplaceofwork" });
+    if (isActiveUser.address1_line1) handleSetData({ name: "address1_line1" });
     if (isActiveUser.bad_gmcno) handleSetData({ name: "bad_gmcno" });
     if (isActiveUser.bad_ntnno) handleSetData({ name: "bad_ntnno" });
   }, [isActiveUser]);
@@ -81,13 +81,13 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     // console.log("formData", formData); // debug
 
     setIsFetching(true);
-    // const py3_currentplaceofwork = formData.py3_currentplaceofwork;
+    // const address1_line1 = formData.address1_line1;
     const bad_gmcno = formData.bad_gmcno;
     const bad_ntnno = formData.bad_ntnno;
 
     const data = Object.assign(
       {}, // add empty object
-      // !!py3_currentplaceofwork && { py3_currentplaceofwork },
+      // !!address1_line1 && { address1_line1 },
       !!bad_gmcno && { bad_gmcno },
       !!bad_ntnno && { bad_ntnno }
     );
@@ -125,60 +125,66 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   };
 
   return (
-    <div
-      className="shadow"
-      style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
-    >
-      <div className="primary-title" style={{ fontSize: 20 }}>
-        Professional Information:
-      </div>
+    <div style={{ position: "relative" }}>
+      <ActionPlaceholder isFetching={isFetching} background="transparent" />
       <div
+        className="shadow"
         style={{
-          display: "grid",
-          gridTemplateColumns: `1fr 1fr`,
-          gap: 20,
-          padding: `1em 0 0`,
+          padding: `2em 4em`,
+          marginBottom: `${marginVertical}px`,
         }}
       >
-        <div>
-          <div>
-            <label>GMC / IMC Number</label>
-            <input
-              name="bad_gmcno"
-              value={formData.bad_gmcno}
-              onChange={handleInputChange}
-              className="form-control input"
-              placeholder="GMC / IMC Number"
-            />
-          </div>
-          <div style={styles.wrapper}>
-            <label>NTN Number</label>
-            <input
-              name="bad_ntnno"
-              type="text"
-              value={formData.bad_ntnno}
-              onChange={handleInputChange}
-              className="form-control input"
-              placeholder="NTN Number"
-            />
-          </div>
+        <div className="primary-title" style={{ fontSize: 20 }}>
+          Professional Information:
         </div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: `1fr 1fr`,
+            gap: 20,
+            padding: `1em 0 0`,
+          }}
+        >
+          <div>
+            <div>
+              <label>GMC / IMC Number</label>
+              <input
+                name="bad_gmcno"
+                value={formData.bad_gmcno}
+                onChange={handleInputChange}
+                className="form-control input"
+                placeholder="GMC / IMC Number"
+              />
+            </div>
+            <div style={styles.wrapper}>
+              <label>NTN Number</label>
+              <input
+                name="bad_ntnno"
+                type="text"
+                value={formData.bad_ntnno}
+                onChange={handleInputChange}
+                className="form-control input"
+                placeholder="NTN Number"
+              />
+            </div>
+          </div>
 
-        <div>
           <div>
-            <label>Main Place of work / Medical School</label>
-            <input
-              name="py3_currentplaceofwork"
-              value={formData.py3_currentplaceofwork}
-              onChange={handleInputChange}
-              className="form-control input"
-              placeholder="Main Place of work / Medical School"
-              disabled
-            />
+            <div>
+              <label>Main Place of work / Medical School</label>
+              <input
+                name="address1_line1"
+                value={formData.address1_line1}
+                onChange={handleInputChange}
+                className="form-control input"
+                placeholder="Main Place of work / Medical School"
+                disabled
+              />
+            </div>
           </div>
         </div>
+        <ServeActions />
       </div>
-      <ServeActions />
     </div>
   );
 };

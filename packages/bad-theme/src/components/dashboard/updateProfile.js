@@ -81,7 +81,6 @@ const UpdateProfile = ({ state, actions, libraries }) => {
   const handleProfileUpdate = async () => {
     // console.log("formData", formData); // debug
 
-    setIsFetching(true);
     const firstname = formData.firstname;
     const lastname = formData.lastname;
     const bad_profile_photo_url = formData.bad_profile_photo_url;
@@ -102,6 +101,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
     // console.log("data", data); // debug
 
     try {
+      setIsFetching(true);
       await updateProfileAction({ state, dispatch, data, isActiveUser });
     } catch (error) {
       console.log("error", error);
