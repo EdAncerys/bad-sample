@@ -19,11 +19,45 @@ const UpdateAddress = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
 
-  const [isFetching, setIsFetching] = useState(null);
-
   const marginVertical = state.theme.marginVertical;
+  const [isFetching, setIsFetching] = useState(null);
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    bad_profile_photo_url: "",
+    birthdate: "",
+    gendercode: "",
+
+    py3_ethnicity: "",
+  });
+
+  useEffect(() => {
+    if (!isActiveUser) return null;
+
+    // map through user & update formData with values
+    const handleSetData = ({ name }) => {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [`${name}`]: isActiveUser[`${name}`] || "",
+      }));
+    };
+
+    // populate profile information form Dynamics records
+    if (isActiveUser.firstname) handleSetData({ name: "firstname" });
+    if (isActiveUser.lastname) handleSetData({ name: "lastname" });
+    if (isActiveUser.gendercode) handleSetData({ name: "gendercode" });
+    if (isActiveUser.py3_ethnicity) handleSetData({ name: "py3_ethnicity" });
+  }, [isActiveUser]);
 
   // HELPERS ----------------------------------------------------------------
+  const handleInputChange = (e) => {
+    const { name, value, type, checked, files } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+    console.log(value); // debug
+  };
   const handleAddressUpdate = async () => {
     setIsFetching(true);
 

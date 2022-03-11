@@ -7,6 +7,8 @@ import {
   useAppDispatch,
   useAppState,
   updateProfileAction,
+  setEnquireAction,
+  setErrorAction,
 } from "../../context";
 
 const UpdateHospitalDetails = ({ state, actions, libraries }) => {
@@ -51,8 +53,28 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     console.log(value); // debug
   };
 
-  const handleContactForm = () => {
-    console.log("API contact form");
+  const handleContactForm = async () => {
+    await setEnquireAction({
+      dispatch,
+      enquireAction: {
+        contact_public_email: "harriet@bag.org.uk",
+        contact_public_phone_number: "+1 (123) 456-7890",
+        form_title: "Main Place of work / Medical School Change Form",
+        form_body: `Request Main Place of work / Medical School change.`,
+        full_name: true,
+        email_address: true,
+        phone_number: true,
+        subject: true,
+
+        message: true,
+        recipients: [{ email: "ed@skylarkcreative.co.uk" }],
+      },
+    });
+
+    setErrorAction({
+      dispatch,
+      isError: { message: "Your request been submitted successfully." },
+    });
   };
 
   const handleProfileUpdate = async () => {
@@ -81,8 +103,35 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   };
 
   // SERVERS ---------------------------------------------
-  const ServeForm = () => {
+  const ServeActions = () => {
     return (
+      <div
+        className="flex"
+        style={{ justifyContent: "flex-end", padding: `2em 0 0` }}
+      >
+        <div
+          type="submit"
+          className="blue-btn"
+          style={{ marginRight: "1em" }}
+          onClick={handleContactForm}
+        >
+          Request To Edit
+        </div>
+        <div type="submit" className="blue-btn" onClick={handleProfileUpdate}>
+          Save
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div
+      className="shadow"
+      style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
+    >
+      <div className="primary-title" style={{ fontSize: 20 }}>
+        Professional Information:
+      </div>
       <div
         style={{
           display: "grid",
@@ -129,39 +178,6 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
           </div>
         </div>
       </div>
-    );
-  };
-
-  const ServeActions = () => {
-    return (
-      <div
-        className="flex"
-        style={{ justifyContent: "flex-end", padding: `2em 0 0` }}
-      >
-        <div
-          type="submit"
-          className="blue-btn"
-          style={{ marginRight: "1em" }}
-          onClick={handleProfileUpdate}
-        >
-          Save
-        </div>
-        <div type="submit" className="blue-btn" onClick={handleContactForm}>
-          Request To Edit
-        </div>
-      </div>
-    );
-  };
-
-  return (
-    <div
-      className="shadow"
-      style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
-    >
-      <div className="primary-title" style={{ fontSize: 20 }}>
-        Professional Information:
-      </div>
-      <ServeForm />
       <ServeActions />
     </div>
   );
