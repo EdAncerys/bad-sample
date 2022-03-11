@@ -395,6 +395,14 @@ const SIGApplication = ({ state, actions, libraries }) => {
     if (membershipData) {
       // update policy link agains app data
       handlePolicyLinkUpdate({ membershipData, value });
+
+      // ⏬ validate inputs
+      validateMembershipFormAction({
+        state,
+        actions,
+        setData: setInputValidator,
+        applicationData,
+      });
     }
   };
 
@@ -1056,7 +1064,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.py3_whatukbasedroleareyou && (
             <div>
-              <label style={styles.subTitle}>UK/Overseas role</label>
+              <label style={styles.subTitle}>UK / Overseas role</label>
               <Form.Select
                 name="py3_whatukbasedroleareyou"
                 value={formData.py3_whatukbasedroleareyou}
