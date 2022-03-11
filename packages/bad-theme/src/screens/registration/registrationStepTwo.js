@@ -18,7 +18,9 @@ import {
   getMembershipDataAction,
 } from "../../context";
 
-const RegistrationStepTwo = ({ state, actions }) => {
+const RegistrationStepTwo = ({ state, actions, libraries }) => {
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
 
@@ -33,6 +35,7 @@ const RegistrationStepTwo = ({ state, actions }) => {
     bad_organisedfor: "",
     bad_categorytype: "",
   });
+  const [bodyCopy, setBodyCopy] = useState("");
 
   // ⏬ populate form data values from applicationData
   useEffect(async () => {
@@ -52,20 +55,31 @@ const RegistrationStepTwo = ({ state, actions }) => {
     };
 
     const isSIG = applicationData[0].bad_organisedfor === "SIG";
+    let appType = null;
 
     applicationData.map((data) => {
       // set data from Dynamics membership object
       if (data.name === "bad_organisedfor")
         handleSetData({ data, name: "bad_organisedfor" });
       // set data from custom object type based on CATEGORY
-      if (data.bad_categorytype)
+      if (data.bad_categorytype) {
         setFormData((prevFormData) => ({
           ...prevFormData,
           bad_categorytype: isSIG
             ? data.bad_categorytype + ":" + data._bad_sigid_value
             : data.bad_categorytype,
         }));
+        appType = data.bad_categorytype;
+      }
     });
+
+    // loop through membershipData & set bodyCopy to match current membership data
+    if (membershipData && appType) {
+      const membership = membershipData.find(
+        (membership) => membership.acf.category_types === appType
+      );
+      if (membership) setBodyCopy(membership.acf.body_copy);
+    }
   }, []);
 
   // HANDLERS --------------------------------------------
@@ -96,6 +110,15 @@ const RegistrationStepTwo = ({ state, actions }) => {
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
     }));
+
+    // set body copy to match current membership data
+    if (membershipData) {
+      const membership = membershipData.find(
+        (membership) => membership.acf.category_types === value
+      );
+      if (membership) setBodyCopy(membership.acf.body_copy);
+    }
+    console.log(value);
   };
 
   const isFormValidated = ({ required }) => {
@@ -180,28 +203,35 @@ const RegistrationStepTwo = ({ state, actions }) => {
 
       return (
         <div>
-          <label className="bold">Membership Category</label>
-          <Form.Select
-            name="bad_categorytype"
-            value={formData.bad_categorytype}
-            onChange={handleChange}
-            className="input"
-          >
-            <option value="" hidden>
-              Membership Category
-            </option>
-            {membershipData.map((item, key) => {
-              const { bad_or_sig, category_types } = item.acf;
-              if (bad_or_sig !== "bad") return null;
+          <div>
+            <label className="bold">Membership Category</label>
+            <Form.Select
+              name="bad_categorytype"
+              value={formData.bad_categorytype}
+              onChange={handleChange}
+              className="input"
+            >
+              <option value="" hidden>
+                Membership Category
+              </option>
+              {membershipData.map((item, key) => {
+                const { bad_or_sig, category_types } = item.acf;
+                if (bad_or_sig !== "bad") return null;
 
-              return (
-                <option key={key} value={category_types}>
-                  {category_types}
-                </option>
-              );
-            })}
-          </Form.Select>
-          <FormError id="bad_categorytype" />
+                return (
+                  <option key={key} value={category_types}>
+                    {category_types}
+                  </option>
+                );
+              })}
+            </Form.Select>
+            <FormError id="bad_categorytype" />
+          </div>
+          {bodyCopy && (
+            <div style={{ paddingTop: "2em" }}>
+              <Html2React html={bodyCopy} />
+            </div>
+          )}
         </div>
       );
     };
