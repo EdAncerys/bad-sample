@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Form } from "react-bootstrap";
+import Link from "@frontity/components/link";
 
 import { colors } from "../../config/imports";
 import SideBarMenu from "./sideBarMenu";
@@ -302,24 +303,21 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
             />
             <div style={styles.wrapper}>
               <div className="primary-title" style={styles.title}>
+                Category Selection
+              </div>
+              <div style={{ paddingTop: `0.75em` }}>
                 Please confirm your category selction. Or if you are unsure of
                 the category you should be applying for please view the
                 membership category descriptions for further clarification.
               </div>
-              <div style={{ paddingTop: `0.75em` }}>
-                Your selected category of membership is below. If you would like
-                to change it you can select from the drop down options. Or if
-                you are unsure of the category you should be applying for please
-                view the membership category descriptions for further
-                clarification.
-              </div>
-              <div
+              <Link
+                link={`/membership/`}
+                target="_blank"
                 className="caps-btn"
-                onClick={() => setGoToAction({ path: `/membership/`, actions })}
-                style={{ paddingTop: `1em` }}
+                style={{ padding: `0.5em 0` }}
               >
                 Memberships Categories
-              </div>
+              </Link>
               <ServeForm />
             </div>
             <ServeActions />
