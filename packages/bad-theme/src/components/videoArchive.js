@@ -7,13 +7,18 @@ import HeroBanner from "../components/heroBanner";
 import SearchContainer from "./searchContainer";
 import { colors } from "../config/imports";
 import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from "@mui/icons-material/Search";
+
 import Loading from "../components/loading";
+import { muiQuery } from "../context";
 const VideoArchive = ({ state, actions, libraries }) => {
   const [heroBannerBlock, setHeroBannerBlock] = useState();
   const [guidanceCategory, setGuidanceCategory] = useState(null);
   const [postData, setPostData] = useState(null);
-  const [searchFilter, setSearchFilter] = useState(null);
+
   const [filters, setFilters] = useState();
+
+  const { sm, md, lg, xl } = muiQuery();
 
   const searchFilterRef = useRef(null);
   const currentSearchFilterRef = useRef(null);
@@ -26,19 +31,45 @@ const VideoArchive = ({ state, actions, libraries }) => {
   const categoryFilter = null;
   const guidanceFilter = null;
   const marginHorizontal = state.theme.marginHorizontal;
+  const marginVertical = state.theme.marginVertical;
+  const inputSize = 20;
   // const LIMIT = 6;
 
   const handleFilters = () => {
-    const unfilteredVideos = Object.values(state.source.videos);
+    let unfilteredVideos = Object.values(state.source.videos);
     console.log("UNFILTERED:", specialtyFilter.current);
+
     const filteredVideos = unfilteredVideos.filter((video) => {
       if (specialtyFilter.current)
         return video.event_specialty.includes(Number(specialtyFilter.current));
-      if (paidFilter.current === "paid") return video.acf.price !== null;
-      if (paidFilter.current === "free") return video.acf.price === null;
+      if (paidFilter.current) {
+        if (paidFilter.current === "paid") return video.acf.private === true;
+        if (paidFilter.current === "free")
+          return video.acf.private === false || !video.acf.private;
+      }
     });
+    if (specialtyFilter.current === "all") {
+      setPostData(unfilteredVideos);
+      return true;
+    }
+    if (paidFilter.current === "all") {
+      setPostData(unfilteredVideos);
+      return true;
+    }
     setPostData(filteredVideos);
     console.log(filteredVideos);
+  };
+  const handleSearch = (e, searchFilter) => {
+    e.preventDefault();
+    let unfilteredVideos = Object.values(state.source.videos);
+
+    const regex = new RegExp(searchFilter, "gi");
+    const filteredVideos = unfilteredVideos.filter((video) => {
+      return (
+        video.title.rendered.match(regex) || video.content.rendered.match(regex)
+      );
+    });
+    setPostData(filteredVideos);
   };
   const ServeFilterMenu = () => {
     const SpecialtyFilters = () => {
@@ -57,11 +88,13 @@ const VideoArchive = ({ state, actions, libraries }) => {
               specialtyFilter.current = value;
               handleFilters();
             }}
+            style={styles.dropdown}
           >
-            <option value="">All specialties</option>
+            <option value="">Specialties</option>
             {data.map((item) => {
               return <option value={item.id}>{item.name}</option>;
             })}
+            <option value="all">All specialties</option>
           </select>
         </div>
       );
@@ -89,18 +122,40 @@ const VideoArchive = ({ state, actions, libraries }) => {
       const paymentType = ["Paid", "Free"];
       return (
         <div>
-          <select className="form-control" name="payments" id="payments">
-            <option value="">Video type</option>
+          <select
+            className="form-control"
+            name="payments"
+            id="payments-filters"
+            onChange={() => {
+              const select = document.getElementById("payments-filters");
+              const value = select.options[select.selectedIndex].value;
+              paidFilter.current = value;
+              handleFilters();
+            }}
+            style={{ ...styles.dropdown, height: inputSize }}
+          >
+            <option>Video type</option>
+            <option value="all">All videos</option>
             {paymentType.map((item) => {
-              return <option value={item}>{item}</option>;
+              return <option value={item.toLowerCase()}>{item}</option>;
             })}
           </select>
         </div>
       );
     };
     return (
-      <div>
-        <div className="primary-title">Filters: </div>
+      <div
+        style={{
+          display: "flex",
+          gap: 20,
+        }}
+      >
+        <div
+          className="primary-title"
+          style={{ display: "flex", alignItems: "center" }}
+        >
+          Filters:{" "}
+        </div>
         <SpecialtyFilters />
         <GradeFilters />
         <PaymentFilters />
@@ -123,117 +178,77 @@ const VideoArchive = ({ state, actions, libraries }) => {
       </div>
     );
   };
-  const ServeFilter = () => {
-    const ServeSearchFilter = () => {
-      if (!searchFilter) return null;
+  const ServeSearchFilter = () => {
+    const [searchFilter, setSearchFilter] = useState("");
+    const ServeIcon = () => {
+      const searchIcon = <SearchIcon />;
+      const closeIcon = <CloseIcon />;
+      const icon = searchFilter ? closeIcon : searchIcon;
 
       return (
-        <>
-          Your search query:{" "}
-          <div className="shadow filter">
-            <div>{searchFilter}</div>
-            <div className="filter-icon" onClick={handleClearSearchFilter}>
-              <CloseIcon
-                style={{
-                  fill: colors.darkSilver,
-                  padding: 0,
-                }}
-              />
-            </div>
-          </div>
-        </>
-      );
-    };
-
-    const ServeGuidanceFilter = () => {
-      if (!guidanceFilter) return null;
-
-      let name = "Category";
-      name = guidanceCategory.filter(
-        (item) => item.id === Number(guidanceFilter)
-      )[0];
-      if (name) name = name.name; // apply category filter name
-
-      return (
-        <div className="shadow filter">
-          <div>{name}</div>
-          <div className="filter-icon" onClick={handleClearCategoryFilter}>
-            <CloseIcon
-              style={{
-                fill: colors.darkSilver,
-                padding: 0,
-              }}
-            />
-          </div>
+        <div
+          onClick={() => {
+            setSearchFilter(null);
+            searchFilterRef.current.value = "";
+            if (onChange) setFilterAction({ dispatch, filter: null }); // reset main search filter
+          }}
+        >
+          {icon}
         </div>
       );
     };
 
-    const ServeGuidanceType = () => {
-      if (!filters.specialty) return null;
-
+    const ServeSerachButton = () => {
       return (
         <div
           style={{
-            marginTop: "auto",
-            // padding: `1em 0 1em ${state.theme.marginVertical}px`,
+            display: "grid",
+            alignItems: "center",
+            paddingLeft: !lg ? `2em` : 0,
+            paddingTop: !lg ? null : "1em",
           }}
         >
-          <select
-            name="guidance"
-            ref={filters.specialty}
-            value={filters.specialty}
-            className="input"
-            style={{ height: 45 }}
-          >
-            <option value="" hidden>
-              Select Guidance Category
-            </option>
-            {guidanceCategory.map((item, key) => {
-              return (
-                <option key={key} value={item.id}>
-                  {item.name}
-                </option>
-              );
-            })}
-          </select>
+          <button type="submit" className="blue-btn">
+            Search
+          </button>
         </div>
       );
     };
 
     return (
       <div
-        style={{
-          backgroundColor: colors.silverFillTwo,
-          // marginBottom: `${state.theme.marginVertical}px`,
-          padding: `2em 0`,
-        }}
+        className={!lg ? "flex-row" : "flex-col"}
+        style={{ marginBottom: 20 }}
       >
-        <BlockWrapper>
+        <form
+          onSubmit={(e) => handleSearch(e, searchFilter)}
+          style={{ display: "flex" }}
+        >
+          <input
+            ref={searchFilterRef}
+            onChange={(e) => setSearchFilter(e.target.value)}
+            type="text"
+            className="form-control"
+            placeholder="Search"
+            style={!lg ? styles.input : { padding: "1em" }}
+            value={searchFilter}
+          />
           <div
+            className="input-group-text toggle-icon-color"
             style={{
-              padding: `0 ${marginHorizontal}px`,
-              width: "100%",
+              position: "absolute",
+              right: 0,
+              border: "none",
+              background: "transparent",
+              alignItems: "center",
+              color: colors.darkSilver,
+              cursor: "pointer",
             }}
-            className="no-selector"
           >
-            <div className="flex-row">
-              <SearchContainer
-                title="Search for Videos"
-                searchFilterRef={searchFilterRef}
-                // handleSearch={handleSearch}
-              />
-              {/* <ServeGuidanceType /> */}
-              {/* <ServeFilter /> */}
-            </div>
-
-            <div className="flex" style={{ margin: "0.5em 0" }}>
-              <ServeFilterMenu />
-              {/* <ServeSearchFilter /> */}
-              {/* <ServeGuidanceFilter /> */}
-            </div>
+            <ServeIcon />
           </div>
-        </BlockWrapper>
+          <ServeSerachButton />
+        </form>
       </div>
     );
   };
@@ -294,8 +309,25 @@ const VideoArchive = ({ state, actions, libraries }) => {
     <>
       <HeroBanner block={heroBannerBlock} />
 
+      <div
+        style={{
+          backgroundColor: colors.lightSilver,
+          paddingTop: marginVertical,
+          paddingBottom: marginVertical,
+        }}
+      >
+        <BlockWrapper>
+          <div
+            className="primary-title"
+            style={{ fontSize: "2.25rem", marginBottom: 20 }}
+          >
+            Search for videos
+          </div>
+          <ServeSearchFilter />
+          <ServeFilterMenu />
+        </BlockWrapper>
+      </div>
       <BlockWrapper>
-        <ServeFilter />
         {postData ? (
           <div style={styles.container}>
             {postData.length > 0 ? (
@@ -310,7 +342,9 @@ const VideoArchive = ({ state, actions, libraries }) => {
         ) : (
           <ServeNoVideosFound />
         )}
-        {/* {postData ? 
+      </BlockWrapper>
+
+      {/* {postData ? 
         <div style={styles.container}>
           {postData.length > 0 ? (
             postData.map((item) => {
@@ -320,7 +354,6 @@ const VideoArchive = ({ state, actions, libraries }) => {
             </div>  : (
             <ServeNoVideosFound />
           )} */}
-      </BlockWrapper>
     </>
   );
 };
@@ -333,6 +366,10 @@ const styles = {
     gap: 20,
     marginBottom: 10,
     marginTop: 20,
+  },
+  dropdown: {
+    width: 150,
+    height: "25px",
   },
 };
 export default connect(VideoArchive);
