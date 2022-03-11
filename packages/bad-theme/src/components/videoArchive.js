@@ -16,16 +16,30 @@ const VideoArchive = ({ state, actions, libraries }) => {
   const [filters, setFilters] = useState();
 
   const searchFilterRef = useRef(null);
-  // const currentSearchFilterRef = useRef(null);
-  // const typeFilterRef = useRef(null);
-  // const loadMoreRef = useRef(null);
-  // const specialtyRef = useRef(null);
-  // const useEffectRef = useRef(null);
-  // const categoryFilter = null;
+  const currentSearchFilterRef = useRef(null);
+  const typeFilterRef = useRef(null);
+  const loadMoreRef = useRef(null);
+  const specialtyRef = useRef(null);
+  const useEffectRef = useRef(null);
+  const specialtyFilter = useRef(null);
+  const paidFilter = useRef(null);
+  const categoryFilter = null;
   const guidanceFilter = null;
   const marginHorizontal = state.theme.marginHorizontal;
   // const LIMIT = 6;
 
+  const handleFilters = () => {
+    const unfilteredVideos = Object.values(state.source.videos);
+    console.log("UNFILTERED:", specialtyFilter.current);
+    const filteredVideos = unfilteredVideos.filter((video) => {
+      if (specialtyFilter.current)
+        return video.event_specialty.includes(Number(specialtyFilter.current));
+      if (paidFilter.current === "paid") return video.acf.price !== null;
+      if (paidFilter.current === "free") return video.acf.price === null;
+    });
+    setPostData(filteredVideos);
+    console.log(filteredVideos);
+  };
   const ServeFilterMenu = () => {
     const SpecialtyFilters = () => {
       if (!state.source.event_specialty) return null;
@@ -33,7 +47,17 @@ const VideoArchive = ({ state, actions, libraries }) => {
 
       return (
         <div>
-          <select name="specialty-filters" id="specialty-filters">
+          <select
+            className="form-control"
+            name="specialty-filters"
+            id="specialty-filters"
+            onChange={() => {
+              const select = document.getElementById("specialty-filters");
+              const value = select.options[select.selectedIndex].value;
+              specialtyFilter.current = value;
+              handleFilters();
+            }}
+          >
             <option value="">All specialties</option>
             {data.map((item) => {
               return <option value={item.id}>{item.name}</option>;
@@ -48,7 +72,11 @@ const VideoArchive = ({ state, actions, libraries }) => {
 
       return (
         <div>
-          <select name="event-grades" id="event-grades">
+          <select
+            className="form-control"
+            name="event-grades"
+            id="event-grades"
+          >
             <option value="">Grade Filters</option>
             {data.map((item) => {
               return <option value={item.id}>{item.name}</option>;
@@ -58,10 +86,10 @@ const VideoArchive = ({ state, actions, libraries }) => {
       );
     };
     const PaymentFilters = () => {
-      const paymentType = ["Paid", "Free", "Free to BAD"];
+      const paymentType = ["Paid", "Free"];
       return (
         <div>
-          <select name="payments" id="payments">
+          <select className="form-control" name="payments" id="payments">
             <option value="">Video type</option>
             {paymentType.map((item) => {
               return <option value={item}>{item}</option>;
@@ -200,7 +228,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
             </div>
 
             <div className="flex" style={{ margin: "0.5em 0" }}>
-              {/* <ServeFilterMenu /> */}
+              <ServeFilterMenu />
               {/* <ServeSearchFilter /> */}
               {/* <ServeGuidanceFilter /> */}
             </div>
