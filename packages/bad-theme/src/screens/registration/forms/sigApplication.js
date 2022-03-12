@@ -7,6 +7,7 @@ import FormError from "../../../components/formError";
 import ActionPlaceholder from "../../../components/actionPlaceholder";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchDropDown from "../../../components/searchDropDown";
+import { sigAppFileds } from "../../../config/data";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -31,6 +32,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
   const [formData, setFormData] = useState({
     core_membershipsubscriptionplanid: "",
+    bad_categorytype: "",
 
     py3_title: "",
     py3_firstname: "",
@@ -42,75 +44,62 @@ const SIGApplication = ({ state, actions, libraries }) => {
     py3_address1ine1: "",
     py3_addressline2: "",
     py3_addresstowncity: "",
-    py3_addresscountystate: "",
     py3_addresszippostalcode: "",
+    py3_addresscountystate: "",
     py3_addresscountry: "",
-    sky_profilepicture: "",
-
     py3_gmcnumber: "",
     bad_currentpost: "",
     py3_hospitalid: "",
+    bad_newhospitaladded: "",
+    sky_newhospitalname: "",
     bad_proposer1: "",
     bad_proposer2: "",
-    bad_mrpcqualified: "",
     sky_cvurl: "",
-    py3_currentgrade: "",
-    sky_newhospitalname: "",
-    bad_newhospitaladded: "",
-    py3_constitutionagreement: "",
     bad_readpolicydocument: "",
-    sky_newhospitaltype: "",
-
-    bad_categorytype: "",
+    sig_readpolicydocument_url_email: "",
+    py3_currentgrade: "",
     bad_qualifications: "",
     bad_hasmedicallicence: "",
     bad_isbadmember: "",
-    bad_interestinfieldquestion: "",
     py3_whatukbasedroleareyou: "",
     py3_speciality: "",
+    bad_interestinfieldquestion: "",
     bad_otherjointclinics: "",
     bad_mainareaofinterest: "",
     bad_includeinthebssciiemaildiscussionforum: "",
     py3_insertnhsnetemailaddress: "",
   });
   const [inputValidator, setInputValidator] = useState({
-    bad_categorytype: true,
-
     py3_title: true,
     py3_firstname: true,
     py3_lastname: true,
     py3_gender: true,
+    py3_dateofbirth: true,
     py3_email: true,
     py3_mobilephone: true,
     py3_address1ine1: true,
     py3_addressline2: true,
     py3_addresstowncity: true,
-    py3_addresscountystate: true,
     py3_addresszippostalcode: true,
+    py3_addresscountystate: true,
     py3_addresscountry: true,
-    sky_profilepicture: true,
-    py3_dateofbirth: true,
-
     py3_gmcnumber: true,
     bad_currentpost: true,
     py3_hospitalid: true,
+    bad_newhospitaladded: true,
+    sky_newhospitalname: true,
     bad_proposer1: true,
     bad_proposer2: true,
-    bad_mrpcqualified: true,
     sky_cvurl: true,
-    py3_currentgrade: true,
-    sky_newhospitalname: true,
-    bad_newhospitaladded: true,
-    py3_constitutionagreement: true,
     bad_readpolicydocument: true,
-    sky_newhospitaltype: true,
-
+    sig_readpolicydocument_url_email: true,
+    py3_currentgrade: true,
     bad_qualifications: true,
     bad_hasmedicallicence: true,
     bad_isbadmember: true,
-    bad_interestinfieldquestion: true,
     py3_whatukbasedroleareyou: true,
     py3_speciality: true,
+    bad_interestinfieldquestion: true,
     bad_otherjointclinics: true,
     bad_mainareaofinterest: true,
     bad_includeinthebssciiemaildiscussionforum: true,
@@ -132,9 +121,16 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
   // ⏬ populate form data values from applicationData
   useEffect(async () => {
-    await getMembershipDataAction({ state, actions });
-    let membershipData = state.source.memberships;
+    // app type name & hospital id initial values
     let applicationType = null;
+    let hospitalId = null;
+    let membershipData = state.source.memberships;
+
+    if (!membershipData) {
+      await getMembershipDataAction({ state, actions });
+      membershipData = state.source.memberships;
+    }
+    membershipData = Object.values(membershipData);
 
     const handleSetFormData = ({ data, name }) => {
       let value = data.value;
@@ -159,94 +155,29 @@ const SIGApplication = ({ state, actions, libraries }) => {
       }
     }
 
-    // hospital id initial value
-    let hospitalId = null;
-
     if (!applicationData) return null;
+
+    // pre-fill application input fields with data from applicationData
     applicationData.map((data) => {
-      // personal information step
-      if (data.name === "py3_title")
-        handleSetFormData({ data, name: "py3_title" });
-      if (data.name === "py3_firstname")
-        handleSetFormData({ data, name: "py3_firstname" });
-      if (data.name === "py3_lastname")
-        handleSetFormData({ data, name: "py3_lastname" });
-      if (data.name === "py3_gender") {
-        handleSetFormData({ data, name: "py3_gender" });
-        setGenderList(data.info.Choices);
-      }
-      if (data.name === "py3_email")
-        handleSetFormData({ data, name: "py3_email" });
-      if (data.name === "py3_mobilephone")
-        handleSetFormData({ data, name: "py3_mobilephone" });
-      if (data.name === "py3_address1ine1")
-        handleSetFormData({ data, name: "py3_address1ine1" });
-      if (data.name === "py3_addressline2")
-        handleSetFormData({ data, name: "py3_addressline2" });
-      if (data.name === "py3_addresstowncity")
-        handleSetFormData({ data, name: "py3_addresstowncity" });
-      if (data.name === "py3_addresscountystate")
-        handleSetFormData({ data, name: "py3_addresscountystate" });
-      if (data.name === "py3_addresszippostalcode")
-        handleSetFormData({ data, name: "py3_addresszippostalcode" });
-      if (data.name === "py3_addresscountry")
-        handleSetFormData({ data, name: "py3_addresscountry" });
-      if (data.name === "py3_dateofbirth")
-        handleSetFormData({ data, name: "py3_dateofbirth" });
+      // ⬇️  map sigApp fields against applicationData & set formData with field name & value
+      sigAppFileds.map((item) => {
+        if (item.name === "sky_cvurl") return; // cv url field is not required
+        if (data.name === item) {
+          handleSetFormData({ data, name: item });
+        }
+      });
 
-      // professional information step
-      if (data.name === "py3_gmcnumber")
-        handleSetFormData({ data, name: "py3_gmcnumber" });
-      if (data.name === "bad_currentpost")
-        handleSetFormData({ data, name: "bad_currentpost" });
-      if (data.name === "bad_proposer1")
-        handleSetFormData({ data, name: "bad_proposer1" });
-      if (data.name === "bad_proposer2")
-        handleSetFormData({ data, name: "bad_proposer2" });
-      if (data.name === "bad_mrpcqualified")
-        handleSetFormData({ data, name: "bad_mrpcqualified" });
-      if (data.name === "sky_newhospitalname")
-        handleSetFormData({ data, name: "sky_newhospitalname" });
+      // set hospital id if exists
       if (data.name === "py3_hospitalid") {
-        // get hospital id from application data
         if (data.value) hospitalId = data.value;
-        handleSetFormData({ data, name: "py3_hospitalid" });
       }
-
+      // set app type name
       if (data.bad_categorytype) {
         applicationType = data.bad_categorytype;
         setType(data.bad_categorytype); // validate SIG application category type
       }
-
-      // SIG membership information step
-      if (data.name === "bad_qualifications")
-        handleSetFormData({ data, name: "bad_qualifications" });
-      if (data.name === "bad_hasmedicallicence")
-        handleSetFormData({ data, name: "bad_hasmedicallicence" });
-      if (data.name === "bad_isbadmember")
-        handleSetFormData({ data, name: "bad_isbadmember" });
-      if (data.name === "bad_interestinfieldquestion")
-        handleSetFormData({ data, name: "bad_interestinfieldquestion" });
-      if (data.name === "py3_whatukbasedroleareyou")
-        handleSetFormData({ data, name: "py3_whatukbasedroleareyou" });
-      if (data.name === "py3_speciality")
-        handleSetFormData({ data, name: "py3_speciality" });
-      if (data.name === "bad_otherjointclinics")
-        handleSetFormData({ data, name: "bad_otherjointclinics" });
-      if (data.name === "bad_mainareaofinterest")
-        handleSetFormData({ data, name: "bad_mainareaofinterest" });
-      if (data.name === "bad_includeinthebssciiemaildiscussionforum")
-        handleSetFormData({
-          data,
-          name: "bad_includeinthebssciiemaildiscussionforum",
-        });
-      if (data.name === "py3_insertnhsnetemailaddress")
-        handleSetFormData({ data, name: "py3_insertnhsnetemailaddress" });
-
-      if (data.bad_categorytype) setType(data.bad_categorytype);
-      if (data._bad_sigid_value) setType(data._bad_sigid_value);
     });
-
+    // apply app additional logic after mapping apps data
     if (hospitalId) {
       // get hospital data via API & populate form
       const hospitalData = await getHospitalNameAction({
@@ -259,37 +190,40 @@ const SIGApplication = ({ state, actions, libraries }) => {
     }
 
     if (membershipData) {
-      membershipData = Object.values(membershipData);
       // filter memberships data & return memberships that includes applicationType
       membershipData = membershipData.filter((item) =>
         item.acf.category_types.includes(applicationType)
       );
     }
-    setMembershipData(membershipData);
+
     // check if application category have only one application
     let isSingleApp = false;
     if (membershipData) isSingleApp = membershipData.length === 1;
     // if application category have only one application set formData to that application
     if (isSingleApp) {
-      console.log("membershipData", membershipData[0].acf.category_types); // debug')
+      const type = membershipData[0].acf.category_types;
+      console.log("type", type); // debug
       setFormData((prevFormData) => ({
         ...prevFormData,
-        bad_categorytype: membershipData[0].acf.category_types,
+        bad_categorytype: type,
       }));
       // update policy link agains app data
       handlePolicyLinkUpdate({
         membershipData,
-        value: membershipData[0].acf.category_types,
+        value: type,
+      });
+      // ⏬  validate inputs for single application only
+      validateMembershipFormAction({
+        state,
+        setData: setInputValidator,
+        applicationData,
       });
     }
+    setMembershipData(membershipData); // set membership data
 
-    // ⏬ validate inputs
-    validateMembershipFormAction({
-      state,
-      actions,
-      setData: setInputValidator,
-      applicationData,
-    });
+    console.log("isSingleApp", isSingleApp);
+    console.log("applicationType", applicationType);
+    console.log("membershipData", membershipData);
   }, []);
 
   // HANDLERS --------------------------------------------
@@ -368,7 +302,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
   const handlePolicyLinkUpdate = ({ membershipData, value }) => {
     // filter memberships data & return memberships that includes applicationType
-    console.log(membershipData);
     const filteredMembershipData = membershipData.filter(
       (item) => item.acf.category_types === value
     );
@@ -378,13 +311,12 @@ const SIGApplication = ({ state, actions, libraries }) => {
     if (filteredMembershipData.length)
       policyLink =
         filteredMembershipData[0].acf.sig_readpolicydocument_url_email;
-    console.log("filteredMembershipData", filteredMembershipData); // debug
     console.log("policyLink", policyLink); // debug
 
     setReadPolicyDoc(policyLink);
   };
 
-  const handleChange = (e) => {
+  const handleMemTypeChange = (e) => {
     const { name, value, type, checked } = e.target;
 
     setFormData((prevFormData) => ({
@@ -392,6 +324,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
       [name]: type === "checkbox" ? checked : value,
     }));
 
+    console.log("value", value);
+    console.log("membershipData", membershipData);
     if (membershipData) {
       // update policy link agains app data
       handlePolicyLinkUpdate({ membershipData, value });
@@ -402,6 +336,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         actions,
         setData: setInputValidator,
         applicationData,
+        membershipTypeChange: value,
       });
     }
   };
@@ -551,7 +486,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         <Form.Select
           name="bad_categorytype"
           value={formData.bad_categorytype}
-          onChange={handleChange}
+          onChange={handleMemTypeChange}
           className="input"
         >
           <option value="" hidden>

@@ -22,9 +22,9 @@ export const getMembershipDataAction = async ({ state, actions }) => {
 
 export const validateMembershipFormAction = async ({
   state,
-  actions,
   setData,
   applicationData,
+  membershipTypeChange,
 }) => {
   const handleSetInputData = ({ data, name }) => {
     setData((prevFormData) => ({
@@ -33,23 +33,23 @@ export const validateMembershipFormAction = async ({
     }));
   };
 
-  if (!state.source.memberships) return null;
-  if (!applicationData) return null;
+  if (!state.source.memberships || !applicationData) return null;
 
   // ⏬ validate inputs
   const membershipTypes = Object.values(state.source.memberships);
   // console.log("membershipTypes", membershipTypes); // debug
+  let type = applicationData[0].bad_categorytype;
+  if (membershipTypeChange) type = membershipTypeChange; // apply for SIGs change of memberships
 
   membershipTypes.map((membership) => {
-    // validate application type against store object
-    const applicationType =
-      membership.acf.category_types === applicationData[0].bad_categorytype ||
-      membership.acf.category_types.split(":")[1] ===
-        applicationData[0].bad_categorytype;
+    // validate application type against store object for BAD & SIGs
+    let appType =
+      membership.acf.category_types === type ||
+      membership.acf.category_types.split(":")[1] === type;
 
-    if (applicationType) {
+    if (appType) {
       const applicationForm = membership.acf;
-      // console.log(applicationForm); // debug
+      console.log("applicationForm", applicationForm); // debug
 
       Object.keys(applicationForm).map((keyName) => {
         handleSetInputData({ data: applicationForm, name: keyName });
