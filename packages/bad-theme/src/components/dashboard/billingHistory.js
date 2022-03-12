@@ -58,17 +58,19 @@ const BillingHistory = ({ state, actions, libraries }) => {
   };
 
   // SERVERS ---------------------------------------------
-  const ServeDownloadAction = ({ title, currentPayYear, item }) => {
-    // get current year from endon
+  const ServeDownloadAction = ({ currentPayYear, isFirst }) => {
+    if (!isFirst) return null;
+    // if currentPayYear is not current year, return null
+    // get current year from date
     const currentYear = new Date().getFullYear();
-    console.log("currentPayYear", currentPayYear);
+    if (Number(currentPayYear) !== currentYear) return null;
 
     return (
-      <div style={{ marginLeft: `auto` }}>
-        <div
-          className="flex"
-          style={{ alignItems: "center", padding: "0 2em" }}
-        >
+      <div className="flex" style={{ padding: "1em 0" }}>
+        <div className="flex" style={{ display: "grid", alignItems: "center" }}>
+          {currentPayYear}
+        </div>
+        <div style={{ alignItems: "center", padding: "0 2em" }}>
           <div
             type="submit"
             className="blue-btn"
@@ -85,20 +87,17 @@ const BillingHistory = ({ state, actions, libraries }) => {
     const ServeInfo = () => {
       const isLastItem = subApps.length === item + 1; // item length helper
       const isFirst = item === 0; // item length helper
-      const { core_name, core_totalamount, core_endon } = block; // get block props
-      // get current year from endon
-      const currentPayYear = new Date(core_endon).getFullYear();
-      console.log(currentPayYear);
+      const { core_name, core_totalamount, core_endon, bad_sagepayid } = block; // get block props
+      // for core_endon date string & reverse month and day
+      const [month, day, year] = core_endon.split("/");
+      // EU format year
+      const date = `${month}/${day}/${year}`;
+      // ⬇️ if !bad_sagepayid then dont display entry
+      if (!bad_sagepayid) return null;
 
       return (
         <div className="flex-col">
-          {isFirst && (
-            <ServeDownloadAction
-              title={currentPayYear}
-              currentPayYear={currentPayYear}
-              item={item}
-            />
-          )}
+          <ServeDownloadAction currentPayYear={year} isFirst={isFirst} />
           <div
             className="flex"
             style={{
