@@ -10,6 +10,7 @@ import {
   useAppDispatch,
   useAppState,
   updateProfileAction,
+  setErrorAction,
 } from "../../context";
 
 const UpdateAddress = ({ state, actions, libraries }) => {
@@ -85,8 +86,22 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     try {
       setIsFetching(true);
       await updateProfileAction({ state, dispatch, data, isActiveUser });
+
+      // display error message
+      setErrorAction({
+        dispatch,
+        isError: { message: `Contact details updated successfully` },
+      });
     } catch (error) {
       console.log("error", error);
+
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Failed to update contact details. Please try again.`,
+          image: "Error",
+        },
+      });
     } finally {
       setIsFetching(false);
     }

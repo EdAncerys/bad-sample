@@ -90,8 +90,20 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
 
     try {
       await updateProfileAction({ state, dispatch, data, isActiveUser });
+      // display error message
+      setErrorAction({
+        dispatch,
+        isError: { message: `Professional information updated successfully` },
+      });
     } catch (error) {
       console.log("error", error);
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Failed to update professional information. Please try again.`,
+          image: "Error",
+        },
+      });
     } finally {
       setIsFetching(false);
     }

@@ -11,6 +11,7 @@ import {
   useAppState,
   sendFileToS3Action,
   updateProfileAction,
+  setErrorAction,
 } from "../../context";
 
 const UpdateProfile = ({ state, actions, libraries }) => {
@@ -103,8 +104,21 @@ const UpdateProfile = ({ state, actions, libraries }) => {
     try {
       setIsFetching(true);
       await updateProfileAction({ state, dispatch, data, isActiveUser });
+
+      // display error message
+      setErrorAction({
+        dispatch,
+        isError: { message: `Personal information updated successfully` },
+      });
     } catch (error) {
       console.log("error", error);
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Failed to update personal information. Please try again.`,
+          image: "Error",
+        },
+      });
     } finally {
       setIsFetching(false);
     }
