@@ -8,16 +8,15 @@ import PaymentModal from "./paymentModal";
 import Loading from "../loading";
 import TitleBlock from "../titleBlock";
 
-import { useAppState } from "../../context";
+import { useAppState, getApplicationStatus } from "../../context";
 const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   //component state
   const [paymentUrl, setPaymentUrl] = useState("");
   const [liveSubscriptions, setLiveSubscriptions] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const { dashboardPath, directDebitPath, dynamicsApps } = useAppState();
+  const { dynamicsApps, isActiveUser } = useAppState();
 
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   // import values from the global state
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -54,10 +53,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     const sagepayUrl = core_membershipsubscriptionid
       ? "/sagepay/test/subscription/"
       : "/sagepay/test/application/";
-    console.log(
-      "SPURL",
-      sagepayUrl + type + `?redirecturl=${the_url}/payment-confirmation`
-    );
+
     const fetchVendorId = await fetch(
       state.auth.APP_HOST +
         sagepayUrl +
@@ -70,14 +66,22 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
         },
       }
     );
+
     if (fetchVendorId.ok) {
       const json = await fetchVendorId.json();
       console.log(json);
       const url =
         json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
       setPaymentUrl(url);
+
+      // update application status for the user
+      if (isActiveUser)
+        await getApplicationStatus({
+          state,
+          dispatch,
+          contactid: isActiveUser.contactid,
+        });
     }
-    // setPage({ page: "directDebit", data: block });
   };
 
   const resetPaymentUrl = () => {
