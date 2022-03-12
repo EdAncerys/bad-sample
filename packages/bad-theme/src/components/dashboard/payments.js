@@ -25,22 +25,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   const cookie = handleGetCookie({ name: `BAD-WebApp` });
   const { contactid, jwt } = cookie;
 
-  // REPLACE WITH getAPPLICATIONSTATUS
   useEffect(() => {
-    // const fetchApplicationBillingStatus = async () => {
-    //   const getUserApplicationData = await fetch(
-    //     state.auth.APP_HOST + "/applications/billing/" + contactid,
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${jwt}`,
-    //       },
-    //     }
-    //   );
-
-    //   const json = await getUserApplicationData.json();
-    //   if (json) setLiveSubscriptions(json);
-    // };
-    // fetchApplicationBillingStatus();
     setLiveSubscriptions(dynamicsApps);
     setLoading(false);
   }, [loading]);
@@ -111,13 +96,6 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
         core_membershipapplicationid,
         bad_sagepayid,
       } = block;
-      // is outstanding payments greater than 0?
-      // const stringAmountToPay = bad_outstandingpayments.replace(
-      //   /[^0-9.-]+/g,
-      //   ""
-      // );
-      // const amountToPay = Number(stringAmountToPay);
-      // const outstanding = amountToPay > 0;
 
       const ServePayButton = () => {
         if (bad_sagepayid) return null;
@@ -195,13 +173,16 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     const appsOrSubs = type === "applications" ? "apps" : "subs";
     return (
       <div>
-        <div className="primary-title" style={{ fontSize: 20 }}>
+        <div
+          className="primary-title"
+          style={{ fontSize: 26, paddingTop: "2em" }}
+        >
           {dashboard ? "Outstanding payments" : `Active ${type}:`}
         </div>
         {zeroObjects ? (
-          <ServeSubTitle title="No active entries at the moment" />
+          <ServeSubTitle title="No active subscriptions found" />
         ) : (
-          <ServeSubTitle title={"Invoices"} />
+          <ServeSubTitle title="Invoices" />
         )}
         {liveSubscriptions[appsOrSubs].data.map((block, key) => {
           return <ServePayments key={key} block={block} item={key} />;
