@@ -1,12 +1,10 @@
 //
 
-import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 
 import CloseIcon from "@mui/icons-material/Close";
 
-import { colors } from "../../config/imports";
 // CONTEXT ----------------------------------------------------------------
 import {
   setErrorAction,
@@ -85,13 +83,7 @@ const PaymentModal = ({ state, actions, payment_url, resetPaymentUrl }) => {
 };
 
 const styles = {
-  container: {
-    position: "absolute",
-    zIndex: 700,
-    top: 10,
-    left: 10,
-    width: "100%",
-  },
+  container: {},
 };
 
 export default connect(PaymentModal);

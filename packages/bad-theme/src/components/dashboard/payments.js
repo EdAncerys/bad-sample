@@ -179,7 +179,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       <div>
         <div
           className="primary-title"
-          style={{ fontSize: 26, paddingTop: "2em" }}
+          style={{ fontSize: 20, paddingTop: "2em" }}
         >
           {dashboard ? "Outstanding payments" : `Active ${type}:`}
         </div>

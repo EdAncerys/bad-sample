@@ -19,6 +19,7 @@ import {
   muiQuery,
   setFadAction,
   updateProfileAction,
+  setErrorAction,
 } from "../../../context";
 
 const Directory = ({ state, actions, libraries }) => {
@@ -68,9 +69,30 @@ const Directory = ({ state, actions, libraries }) => {
     try {
       setIsFetching(true);
       // API call to update profile preferences
-      await updateProfileAction({ state, dispatch, data, isActiveUser });
+      const response = await updateProfileAction({
+        state,
+        dispatch,
+        data,
+        isActiveUser,
+      });
+      if (!response) throw new Error("Error updating profile");
+
+      // display error message
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Members directory preferences updated successfully`,
+        },
+      });
     } catch (error) {
       console.log(error);
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Failed to update members directory preferences. Please try again.`,
+          image: "Error",
+        },
+      });
     } finally {
       setIsFetching(false);
     }

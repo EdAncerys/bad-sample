@@ -23,6 +23,7 @@ export const initialState = {
   isVisibleNotification: true,
 
   applicationData: null,
+  applicationChangeData: null,
 
   loginModalAction: false,
   createAccountAction: false,
@@ -59,6 +60,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, filter: action.payload };
     case "SET_APPLICATION_DATA_ACTION":
       return { ...state, applicationData: action.payload };
+    case "SET_CHANGE_APPLICATION_DATA_ACTION":
+      return { ...state, applicationChangeData: action.payload };
     case "SET_ID_FILTER_ACTION":
       return { ...state, idFilter: action.payload };
     case "SET_DIRECT_DEBIT_ACTION":

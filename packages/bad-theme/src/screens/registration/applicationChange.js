@@ -4,7 +4,6 @@ import { Form } from "react-bootstrap";
 import Link from "@frontity/components/link";
 
 import { colors } from "../../config/imports";
-import SideBarMenu from "./sideBarMenu";
 import BlockWrapper from "../../components/blockWrapper";
 import ActionPlaceholder from "../../components/actionPlaceholder";
 import Loading from "../../components/loading";
@@ -14,65 +13,67 @@ import {
   useAppDispatch,
   useAppState,
   setGoToAction,
-  handleApplyForMembershipAction,
+  setErrorAction,
   errorHandler,
   getMembershipDataAction,
+  getApplicationStatus,
 } from "../../context";
 
-const RegistrationStepTwo = ({ state, actions, libraries }) => {
+const ApplicationChange = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, dynamicsApps } = useAppState();
+  const { applicationChangeData, isActiveUser, dynamicsApps } = useAppState();
 
   const [membershipData, setMembershipData] = useState(false);
   const [isFetching, setFetching] = useState(false);
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
   const [formData, setFormData] = useState({
-    bad_organisedfor: "",
+    bad_organisedfor: "810170000",
     bad_categorytype: "",
   });
   const [bodyCopy, setBodyCopy] = useState("");
 
-  // ⏬ populate form data values from applicationData
+  // ⏬ populate form data values from applicationChangeData
   useEffect(async () => {
-    // pre fetch membership data
+    // redirect to /dashboard if isActiveUser && !applicationData
+    if (isActiveUser && !applicationChangeData) {
+      console.log(
+        "⬇️ user have no application data created - redirect to /dashboard"
+      );
+      setGoToAction({ path: `/dashboard/`, actions });
+      return;
+    }
+    // redirect to / if !isActiveUser || !applicationData
+    if (!isActiveUser) {
+      console.log("⬇️ no user - redirect to /");
+      setGoToAction({ path: `/`, actions });
+    }
+    if (!applicationChangeData) return null;
+
+    // pre fetch membership data if not already present
     if (!state.source.memberships)
       await getMembershipDataAction({ state, actions });
     const membershipData = Object.values(state.source.memberships);
     setMembershipData(membershipData);
 
-    // populate form data values from applicationData
-    if (!applicationData) return null;
-    const handleSetData = ({ data, name }) => {
+    // API to get membership data based in app ID
+
+    // populate form data values from applicationChangeData
+    let appType = null;
+    // set data from applicationChangeData object
+    if (applicationChangeData) {
+      // get application type from applicationChangeData object
+      appType = applicationChangeData.bad_categorytype;
       setFormData((prevFormData) => ({
         ...prevFormData,
-        [`${name}`]: data.value || "",
+        bad_categorytype: appType || "",
       }));
-    };
-
-    const isSIG = applicationData[0].bad_organisedfor === "SIG";
-    let appType = null;
-
-    applicationData.map((data) => {
-      // set data from Dynamics membership object
-      if (data.name === "bad_organisedfor")
-        handleSetData({ data, name: "bad_organisedfor" });
-      // set data from custom object type based on CATEGORY
-      if (data.bad_categorytype) {
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          bad_categorytype: isSIG
-            ? data.bad_categorytype + ":" + data._bad_sigid_value
-            : data.bad_categorytype,
-        }));
-        appType = data.bad_categorytype;
-      }
-    });
+    }
 
     // loop through membershipData & set bodyCopy to match current membership data
     if (membershipData && appType) {
@@ -84,20 +85,6 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
   }, []);
 
   // HANDLERS --------------------------------------------
-  const handleSaveExit = async () => {
-    await handleApplyForMembershipAction({
-      state,
-      actions,
-      dispatch,
-      applicationData,
-      isActiveUser,
-      dynamicsApps,
-      category: formData.bad_organisedfor === "810170000" ? "BAD" : "SIG",
-      type: formData.bad_categorytype, // application type name
-      path: `/membership/`,
-    });
-  };
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (name === "bad_organisedfor")
@@ -119,7 +106,7 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
       );
       if (membership) setBodyCopy(membership.acf.body_copy);
     }
-    console.log(value);
+    // console.log(value); // debug
   };
 
   const isFormValidated = ({ required }) => {
@@ -136,32 +123,34 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
     return isValid;
   };
 
-  const handleNext = async () => {
+  const handleApplicationChange = async () => {
     // form value validations
     const isValid = isFormValidated({
-      required: ["bad_organisedfor", "bad_categorytype"],
+      required: ["bad_categorytype"],
     });
 
     if (!isValid) return null;
     // console.log(formData); // debug
-    let path = `/membership/step-3-personal-information/`;
-    if (formData.bad_organisedfor === "810170001")
-      path = `/membership/sig-questions/`;
+    let path = `/dashboard/`;
 
     try {
       setFetching(true);
-      await handleApplyForMembershipAction({
+      // API to change memberships from applicationChangeData
+
+      // fetch new dynamicsApps data from API
+      await getApplicationStatus({
         state,
-        actions,
         dispatch,
-        applicationData,
-        isActiveUser,
-        dynamicsApps,
-        membershipApplication: { stepTwo: true }, // set stepOne to complete
-        category: formData.bad_organisedfor === "810170000" ? "BAD" : "SIG",
-        type: formData.bad_categorytype, // application type name
-        path,
-        canUpdateApplication: true,
+        contactid: isActiveUser.contactid,
+      });
+      // redirect to dashboard
+      setGoToAction({ path, actions });
+      // display error message
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Application been changed to BAD ${formData.bad_categorytype}.`,
+        },
       });
     } catch (error) {
       console.log(error);
@@ -182,19 +171,14 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
       >
         <div
           className="transparent-btn"
-          onClick={() => setGoToAction({ path: `/membership/`, actions })}
+          style={{ marginRight: "2em" }}
+          onClick={() => setGoToAction({ path: `/dashboard/`, actions })}
         >
           Back
         </div>
-        <div
-          className="transparent-btn"
-          style={{ margin: `0 1em` }}
-          onClick={handleSaveExit}
-        >
-          Save & Exit
-        </div>
-        <div className="blue-btn" onClick={handleNext}>
-          Next
+
+        <div className="blue-btn" onClick={handleApplicationChange}>
+          Submit Change
         </div>
       </div>
     );
@@ -241,39 +225,6 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
       );
     };
 
-    const ServeSIGMembershipCategory = () => {
-      if (formData.bad_organisedfor !== "810170001") return null;
-
-      return (
-        <div>
-          <label className="bold">Membership Category</label>
-          <Form.Select
-            name="bad_categorytype"
-            value={formData.bad_categorytype}
-            onChange={handleChange}
-            className="input"
-          >
-            <option value="" hidden>
-              Membership Category
-            </option>
-            {membershipData.map((item, key) => {
-              const { bad_or_sig, category_types } = item.acf;
-              if (bad_or_sig !== "sig") return null;
-              // get SIG membership categories name from custom object
-              let typeName = category_types.split(":")[1];
-
-              return (
-                <option key={key} value={category_types}>
-                  {typeName}
-                </option>
-              );
-            })}
-          </Form.Select>
-          <FormError id="bad_categorytype" />
-        </div>
-      );
-    };
-
     return (
       <div
         className="form-group"
@@ -286,7 +237,28 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
         }}
       >
         <ServeBADMembershipCategory />
-        <ServeSIGMembershipCategory />
+      </div>
+    );
+  };
+
+  const ServeContent = () => {
+    if (!applicationChangeData) return null;
+
+    return (
+      <div>
+        <div
+          className="primary-title"
+          style={{
+            fontSize: 20,
+            borderBottom: `1px solid ${colors.silverFillTwo}`,
+            padding: `0 1em 1em 0`,
+          }}
+        >
+          BAD membership change
+        </div>
+        <div className="title-link-animation" style={{ padding: `2em 0` }}>
+          Current BAD membership: {applicationChangeData.bad_categorytype}
+        </div>
       </div>
     );
   };
@@ -299,7 +271,15 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
         }}
       >
         <div style={styles.container}>
-          <SideBarMenu />
+          <div
+            className="flex-col"
+            style={{
+              paddingRight: `4em`,
+              borderRight: `1px solid ${colors.silverFillTwo}`,
+            }}
+          >
+            <ServeContent />
+          </div>
           <div style={{ position: "relative" }}>
             <ActionPlaceholder
               isFetching={isFetching}
@@ -352,4 +332,4 @@ const styles = {
   },
 };
 
-export default connect(RegistrationStepTwo);
+export default connect(ApplicationChange);

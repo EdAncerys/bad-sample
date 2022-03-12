@@ -29,6 +29,7 @@ import RegistrationStepTwo from "./registration/registrationStepTwo";
 import RegistrationStepThree from "./registration/registrationStepThree";
 import RegistrationStepFour from "./registration/registrationStepFour";
 import RegistrationStepFive from "./registration/registrationStepFive";
+import ApplicationChange from "./registration/applicationChange";
 import ThankYou from "./registration/thankYouPage";
 import AccountDashboard from "./accountDashboard";
 import Event from "./event";
@@ -155,6 +156,9 @@ const App = ({ state, actions }) => {
                 />
                 <RegistrationStepTwo
                   when={endPoint === "/membership/step-2-category-selection/"}
+                />
+                <ApplicationChange
+                  when={endPoint === "/membership/application-change/"}
                 />
                 <RegistrationStepThree
                   when={endPoint === "/membership/step-3-personal-information/"}

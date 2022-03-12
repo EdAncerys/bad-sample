@@ -47,6 +47,8 @@ export const updateProfileAction = async ({
         jwt,
         contactid,
       });
+
+      return response;
     }
   } catch (error) {
     console.log("error", error);

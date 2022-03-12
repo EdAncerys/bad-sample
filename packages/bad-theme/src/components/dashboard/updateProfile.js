@@ -12,6 +12,7 @@ import {
   sendFileToS3Action,
   updateProfileAction,
   muiQuery,
+  setErrorAction,
 } from "../../context";
 
 const UpdateProfile = ({ state, actions, libraries }) => {
@@ -49,6 +50,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
     if (isActiveUser.firstname) handleSetData({ name: "firstname" });
     if (isActiveUser.lastname) handleSetData({ name: "lastname" });
     if (isActiveUser.gendercode) handleSetData({ name: "gendercode" });
+    if (isActiveUser.birthdate) handleSetData({ name: "birthdate" });
     if (isActiveUser.py3_ethnicity) handleSetData({ name: "py3_ethnicity" });
   }, [isActiveUser]);
 
@@ -59,7 +61,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
     }));
-    console.log(value); // debug
+    // console.log(value); // debug
   };
 
   const handleDocUploadChange = async (e) => {
@@ -104,9 +106,27 @@ const UpdateProfile = ({ state, actions, libraries }) => {
 
     try {
       setIsFetching(true);
-      await updateProfileAction({ state, dispatch, data, isActiveUser });
+      const response = await updateProfileAction({
+        state,
+        dispatch,
+        data,
+        isActiveUser,
+      });
+      if (!response) throw new Error("Error updating profile");
+      // display error message
+      setErrorAction({
+        dispatch,
+        isError: { message: `Personal information updated successfully` },
+      });
     } catch (error) {
       console.log("error", error);
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Failed to update personal information. Please try again.`,
+          image: "Error",
+        },
+      });
     } finally {
       setIsFetching(false);
     }
@@ -193,8 +213,8 @@ const UpdateProfile = ({ state, actions, libraries }) => {
             <div style={styles.wrapper}>
               <label>Gender</label>
               <Form.Select
-                name="py3_gender"
-                value={formData.py3_gender}
+                name="gendercode"
+                value={formData.gendercode}
                 onChange={handleInputChange}
                 className="input"
                 // disabled

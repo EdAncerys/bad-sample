@@ -20,7 +20,16 @@ const DashboardEvents = ({ state, actions, libraries }) => {
       <TitleBlock
         block={{ text_align: "left", title: "Events I Am Registered For" }}
       />
-      You haven't signed up for any events.
+
+      <TitleBlock
+        block={{
+          text_align: "left",
+          title: "You haven't signed up for any events.",
+        }}
+        fontSize="16px"
+        margin="0 0 2em 0"
+      />
+
       {/* <Events
         block={{
           add_search_function: false,
@@ -36,6 +45,7 @@ const DashboardEvents = ({ state, actions, libraries }) => {
           view_all_link: false,
         }}
       /> */}
+
       <TitleBlock
         block={{
           text_align: "left",

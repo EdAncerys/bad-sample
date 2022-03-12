@@ -149,7 +149,7 @@ export const getUserDataByContactId = async ({
       value: { jwt, contactid },
     });
     seJWTAction({ dispatch, jwt });
-
+    console.log("⬇️ user details successfully updated ⬇️ "); // debug
     return response;
   } catch (error) {
     console.log("error", error);

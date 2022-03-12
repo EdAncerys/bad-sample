@@ -22,58 +22,52 @@ const Dashboard = ({ state, actions, libraries }) => {
   const marginHorizontal = state.theme.marginHorizontal;
 
   // SERVERS ---------------------------------------------
-  const ServeDashboard = () => {
+  const ServeApplicationStatus = () => {
     if (!dynamicsApps) return null;
     const { apps, subs } = dynamicsApps;
 
-    if (dynamicsApps.apps.data > 0) {
-      const data = dynamicsApps.apps.data;
-      const unapprovedApplications = data.filter(function (singleApplication) {
-        return singleApplication.bad_approvalstatus == "Yes";
-      });
-    }
+    const [applications, setApplications] = useState();
 
-    const ServeApplicationStatus = () => {
-      const [applications, setApplications] = useState();
-      console.log(dynamicsApps);
-      useEffect(() => {
-        setApplications(dynamicsApps.apps);
-      }, [dynamicsApps]);
-      if (apps.data.length === 0) return null;
-      if (!applications) return <Loading />;
-      return (
-        <div>
-          {applications.data.map((item, key) => {
-            return (
-              <ApplicationStatusOrPayment
-                key={key}
-                application={applications.data[key]}
-              />
-            );
-          })}
-        </div>
-      );
-    };
-
-    const ServePayments = () => {
-      console.log("SERVEPAYMENTS", dynamicsApps);
-      const outstandingApps =
-        dynamicsApps.apps.data.filter((item) => item.bad_sagepayid !== null)
-          .length > 0;
-      const outstandingSubs =
-        dynamicsApps.subs.data.filter((item) => item.bad_sagepayid === null)
-          .length > 0;
-      const subsies = dynamicsApps.subs.data.filter(
-        (item) => item.bad_sagepayid !== null
-      );
-
-      console.log(subsies);
-      if (!outstandingSubs) return null;
-
-      return <Payments subscriptions={dynamicsApps} dashboard />;
-    };
-
+    useEffect(() => {
+      setApplications(dynamicsApps.apps);
+    }, [dynamicsApps]);
+    if (apps.data.length === 0) return null;
+    if (!applications) return <Loading />;
     return (
+      <div>
+        {applications.data.map((item, key) => {
+          return (
+            <ApplicationStatusOrPayment
+              key={key}
+              application={applications.data[key]}
+            />
+          );
+        })}
+      </div>
+    );
+  };
+
+  const ServePayments = () => {
+    if (!dynamicsApps) return null;
+
+    const outstandingApps =
+      dynamicsApps.apps.data.filter((item) => item.bad_sagepayid !== null)
+        .length > 0;
+    const outstandingSubs =
+      dynamicsApps.subs.data.filter((item) => item.bad_sagepayid === null)
+        .length > 0;
+    const subsies = dynamicsApps.subs.data.filter(
+      (item) => item.bad_sagepayid !== null
+    );
+
+    if (!outstandingSubs) return null;
+
+    return <Payments subscriptions={dynamicsApps} dashboard />;
+  };
+
+  // RETURN ---------------------------------------------
+  return (
+    <div>
       <div style={{ padding: `0 ${marginHorizontal}px` }}>
         <Profile />
         <ProfileProgress />
@@ -81,13 +75,6 @@ const Dashboard = ({ state, actions, libraries }) => {
         <ServePayments />
         <UpdateProfile />
       </div>
-    );
-  };
-
-  // RETURN ---------------------------------------------
-  return (
-    <div>
-      <ServeDashboard />
 
       <TitleBlock block={{ text_align: "left", title: "Upcoming Events" }} />
       <Events

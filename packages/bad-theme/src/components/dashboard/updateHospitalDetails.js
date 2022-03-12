@@ -61,13 +61,9 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         contact_public_phone_number: "+1 (123) 456-7890",
         form_title: "Main Place of work / Medical School Change Form",
         form_body: `Request Main Place of work / Medical School change.`,
-        full_name: true,
-        email_address: true,
-        phone_number: true,
-        subject: true,
-
         message: true,
         recipients: [{ email: "ed@skylarkcreative.co.uk" }],
+        isHospitalChange: true,
       },
     });
   };
@@ -89,9 +85,27 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     console.log("data", data); // debug
 
     try {
-      await updateProfileAction({ state, dispatch, data, isActiveUser });
+      const response = await updateProfileAction({
+        state,
+        dispatch,
+        data,
+        isActiveUser,
+      });
+      if (!response) throw new Error("Error updating profile");
+      // display error message
+      setErrorAction({
+        dispatch,
+        isError: { message: `Professional information updated successfully` },
+      });
     } catch (error) {
       console.log("error", error);
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Failed to update professional information. Please try again.`,
+          image: "Error",
+        },
+      });
     } finally {
       setIsFetching(false);
     }
