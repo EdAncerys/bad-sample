@@ -208,15 +208,7 @@ const Profile = ({ state, actions, libraries }) => {
     };
 
     return (
-      <div
-        style={{
-          paddingTop: `1em`,
-          fontSize: 20,
-          display: "grid",
-          gridTemplateColumns: !lg ? `1fr 1fr` : "1fr",
-          gap: `5px 20px`,
-        }}
-      >
+      <div style={{ paddingTop: `1em`, fontSize: 20 }}>
         <ServeMembershipNumber />
         <ServeBadCategory />
         <ServeJobTitle />

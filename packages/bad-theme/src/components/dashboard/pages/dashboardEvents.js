@@ -27,7 +27,6 @@ const DashboardEvents = ({ state, actions, libraries }) => {
           title: "You haven't signed up for any events.",
         }}
         fontSize="16px"
-        margin="0 0 2em 0"
       />
 
       {/* <Events
