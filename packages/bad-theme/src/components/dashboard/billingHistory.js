@@ -70,7 +70,7 @@ const BillingHistory = ({ state, actions, libraries }) => {
         <div className="flex" style={{ display: "grid", alignItems: "center" }}>
           {currentPayYear}
         </div>
-        <div style={{ alignItems: "center", padding: "0 2em" }}>
+        <div style={{ alignItems: "center" }}>
           <div
             type="submit"
             className="blue-btn"

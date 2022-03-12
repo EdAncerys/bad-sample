@@ -16,6 +16,7 @@ import {
   useAppState,
   setGoToAction,
   deleteApplicationAction,
+  setChangeApplicationDataAction,
 } from "../../context";
 
 const ProfileProgress = ({ state, actions, libraries }) => {
@@ -93,6 +94,16 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     } finally {
       setFetching(false);
     }
+  };
+
+  const handleUpdateMembershipApplication = ({ app }) => {
+    setChangeApplicationDataAction({
+      dispatch,
+      applicationChangeData: app,
+    });
+
+    console.log(app); // debug
+    setGoToAction({ path: "/membership/application-change/", actions }); // go to application change page
   };
 
   // SERVERS ---------------------------------------------
@@ -260,7 +271,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
               createdon,
               bad_approvalstatus,
             } = app;
-
+            // console.log("application data", app); // debug
             // get application date
             let appData = createdon.split(" ")[0];
             // split string and revert date with month format
@@ -270,11 +281,36 @@ const ProfileProgress = ({ state, actions, libraries }) => {
             const dateObject = new Date(appData);
             const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
 
+            const ServeChangeApplicationAction = () => {
+              // only return if bad_organisedfor is BAD
+              if (bad_organisedfor !== "BAD") return null;
+
+              return (
+                <div style={{ display: "grid", alignItems: "center" }}>
+                  <div
+                    type="submit"
+                    className="blue-btn"
+                    onClick={() => handleUpdateMembershipApplication({ app })}
+                  >
+                    Change Application Type
+                  </div>
+                </div>
+              );
+            };
+
             return (
               <div key={key} className="flex-col" style={{ paddingTop: `1em` }}>
-                <div className="primary-title">{bad_organisedfor}</div>
-                <div>{core_name}</div>
-                <div>Application Date: {formattedDate}</div>
+                <div className="flex">
+                  <div
+                    className="flex"
+                    style={{ display: "grid", alignItems: "center" }}
+                  >
+                    <div className="primary-title">{bad_organisedfor}</div>
+                    <div>{core_name}</div>
+                    <div>Application Date: {formattedDate}</div>
+                  </div>
+                  <ServeChangeApplicationAction />
+                </div>
               </div>
             );
           })}
