@@ -89,7 +89,13 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     console.log("data", data); // debug
 
     try {
-      await updateProfileAction({ state, dispatch, data, isActiveUser });
+      const response = await updateProfileAction({
+        state,
+        dispatch,
+        data,
+        isActiveUser,
+      });
+      if (!response) throw new Error("Error updating profile");
       // display error message
       setErrorAction({
         dispatch,

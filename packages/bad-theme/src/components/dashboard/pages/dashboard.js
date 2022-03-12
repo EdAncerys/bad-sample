@@ -13,27 +13,22 @@ import { useAppState, useAppDispatch } from "../../../context";
 
 const Dashboard = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
-  const { dashboardPath } = useAppState();
+  const { dashboardPath, isActiveUser } = useAppState();
 
   if (dashboardPath !== "Dashboard") return null;
 
   const marginHorizontal = state.theme.marginHorizontal;
 
   // SERVERS ---------------------------------------------
-  const ServeDashboard = () => {
-    return (
+
+  // RETURN ---------------------------------------------
+  return (
+    <div>
       <div style={{ padding: `0 ${marginHorizontal}px` }}>
         <Profile />
         <ProfileProgress />
         <UpdateProfile />
       </div>
-    );
-  };
-
-  // RETURN ---------------------------------------------
-  return (
-    <div>
-      <ServeDashboard />
 
       <TitleBlock block={{ text_align: "left", title: "Upcoming Events" }} />
       <Events
