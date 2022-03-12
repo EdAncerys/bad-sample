@@ -5,7 +5,7 @@ import { Modal } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 import CloseIcon from "@mui/icons-material/Close";
 import { Form } from "react-bootstrap";
-
+import SearchDropDown from "./searchDropDown";
 import { colors } from "../config/imports";
 import ActionPlaceholder from "./actionPlaceholder";
 // CONTEXT ----------------------------------------------------------------
@@ -14,16 +14,22 @@ import {
   useAppState,
   setEnquireAction,
   sendEmailEnquireAction,
+  getHospitalsAction,
+  setErrorAction,
 } from "../context";
 
 const EnquireModal = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { enquireAction } = useAppState();
+  const { enquireAction, isActiveUser } = useAppState();
 
   const [uniqueId, setUniqueId] = useState(null);
   const [isFetching, setIsFetching] = useState(null);
+
+  const [hospitalData, setHospitalData] = useState(null);
+  const [selectedHospital, setSelectedHospital] = useState(null);
+  const hospitalSearchRef = useRef("");
 
   // hook applies after React has performed all DOM mutations
   useLayoutEffect(() => {
@@ -33,8 +39,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
 
   // HANDLERS ----------------------------------------------------
   const handleContactFormSubmit = async () => {
-    setIsFetching(true);
-
     const isFullName = document.querySelector(`#full-name-${uniqueId}`);
     const isEmail = document.querySelector(`#email-${uniqueId}`);
     const isPhoneNumber = document.querySelector(`#phone-number-${uniqueId}`);
@@ -63,7 +67,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
     if (isMessage) message = isMessage.value;
     if (isFileUpload) attachments = isFileUpload.files;
 
-    const formData = {
+    let formData = {
       fullName,
       email,
       phoneNumber,
@@ -71,26 +75,162 @@ const EnquireModal = ({ state, actions, libraries }) => {
       subjectDropDown,
       message,
     };
+    // if change of hospital update form object
+    if (enquireAction.isHospitalChange)
+      formData = {
+        subject: "Hospital Change Request",
+        hospitalName: selectedHospital,
+        message,
+        userData: isActiveUser,
+      };
     const recipients = enquireAction.recipients;
+    // console.log("formData", formData); // debug
+    // console.log("recipients", recipients); // debug
 
-    await sendEmailEnquireAction({
+    try {
+      setIsFetching(true);
+      const response = await sendEmailEnquireAction({
+        state,
+        dispatch,
+        formData,
+        attachments,
+        recipients,
+      });
+      if (!response) throw new Error("Error sending email");
+
+      if (enquireAction.isHospitalChange)
+        setErrorAction({
+          dispatch,
+          isError: {
+            message: `Hospital change request to ${selectedHospital} submitted successfully.`,
+          },
+        });
+    } catch (error) {
+      console.log(error);
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Failed to send message. Please try again.`,
+          image: "Error",
+        },
+      });
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  const handleHospitalLookup = async () => {
+    const input = hospitalSearchRef.current.value;
+    // if (input.length < 2) return; // API call after 2 characters
+
+    let hospitalData = await getHospitalsAction({
       state,
-      dispatch,
-      formData,
-      attachments,
-      recipients,
+      input,
     });
-    setIsFetching(false);
+    // refactor hospital data to match dropdown format
+    hospitalData = hospitalData.map((hospital) => {
+      return {
+        title: hospital.name,
+        link: hospital.accountid,
+      };
+    });
+
+    if (hospitalData.length > 0) setHospitalData(hospitalData);
+    if (!hospitalData.length || !input) setHospitalData(null);
+
+    // console.log("Hospitals", hospitalData); // debug
+  };
+
+  const handleSelectHospital = ({ item }) => {
+    setSelectedHospital(item.title);
+    setHospitalData(null); // clear hospital data for dropdown
+    console.log("selected hospital", item); // debug
   };
 
   // SERVERS --------------------------------------------------
+  const ServeHeaderActions = () => {
+    return (
+      <div
+        className="flex"
+        onClick={() => setEnquireAction({ dispatch, enquireAction: null })}
+        style={{
+          padding: `2em 4em 1em`,
+          cursor: "pointer",
+          justifyContent: "flex-end",
+        }}
+      >
+        <CloseIcon style={{ fontSize: 24, fill: colors.softBlack }} />
+      </div>
+    );
+  };
+
+  const ServeMessage = () => {
+    if (!enquireAction.message) return null;
+
+    return (
+      <div style={styles.inputContainer}>
+        <label className="form-label">Message</label>
+        <textarea
+          id={`message-${uniqueId}`}
+          type="text"
+          rows="3"
+          className="form-control"
+        />
+      </div>
+    );
+  };
+
+  const ServeActions = () => {
+    return (
+      <Modal.Footer
+        style={{ justifyContent: "flex-start", padding: `1em 0 0` }}
+      >
+        <div className="blue-btn" onClick={handleContactFormSubmit}>
+          Submit
+        </div>
+      </Modal.Footer>
+    );
+  };
+
+  const ServeFormHeader = () => {
+    const ServeFormTitle = () => {
+      if (!enquireAction.form_title) return null;
+
+      return (
+        <div className="primary-title" style={{ fontSize: 20 }}>
+          <Html2React html={enquireAction.form_title} />
+        </div>
+      );
+    };
+
+    const ServeFormBody = () => {
+      if (!enquireAction.form_body) return null;
+
+      return (
+        <div style={{ paddingTop: `1em` }}>
+          <Html2React html={enquireAction.form_body} />
+        </div>
+      );
+    };
+
+    return (
+      <div
+        style={{
+          borderBottom: `1px solid ${colors.darkSilver}`,
+          paddingBottom: `2em`,
+        }}
+      >
+        <ServeFormTitle />
+        <ServeFormBody />
+      </div>
+    );
+  };
+
   const ServeModalContent = () => {
     if (!enquireAction) return null;
 
     const ServeFileUpload = () => {
-      let attachments = enquireAction.allow_attachments;
-
-      if (!attachments) return null;
+      if (!enquireAction.allow_attachments) return null;
 
       return (
         <div style={styles.inputContainer}>
@@ -108,22 +248,8 @@ const EnquireModal = ({ state, actions, libraries }) => {
     const ServeForm = () => {
       if (!enquireAction) return null;
 
-      const ServeActions = () => {
-        return (
-          <Modal.Footer
-            style={{ justifyContent: "flex-start", padding: `1em 0 0` }}
-          >
-            <div className="blue-btn" onClick={handleContactFormSubmit}>
-              Submit
-            </div>
-          </Modal.Footer>
-        );
-      };
-
       const ServeFullName = () => {
-        let fullName = enquireAction.full_name;
-
-        if (!fullName) return null;
+        if (!enquireAction.full_name) return null;
 
         return (
           <div style={styles.inputContainer}>
@@ -138,9 +264,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
       };
 
       const ServeEmail = () => {
-        let email = enquireAction.email_address;
-
-        if (!email) return null;
+        if (!enquireAction.email_address) return null;
 
         return (
           <div style={styles.inputContainer}>
@@ -155,9 +279,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
       };
 
       const ServeNumber = () => {
-        let phoneNumber = enquireAction.phone_number;
-
-        if (!phoneNumber) return null;
+        if (!enquireAction.phone_number) return null;
 
         return (
           <div style={styles.inputContainer}>
@@ -172,9 +294,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
       };
 
       const ServeSubject = () => {
-        let subject = enquireAction.subject;
-
-        if (!subject) return null;
+        if (!enquireAction.subject) return null;
 
         return (
           <div style={styles.inputContainer}>
@@ -189,9 +309,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
       };
 
       const ServeSubjectDropDown = () => {
-        let dropdown = enquireAction.subject_dropdown_options;
-
-        if (!dropdown) return null;
+        if (!enquireAction.subject_dropdown_options) return null;
 
         return (
           <div style={styles.inputContainer}>
@@ -215,24 +333,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
         );
       };
 
-      const ServeMessage = () => {
-        let message = enquireAction.message;
-
-        if (!message) return null;
-
-        return (
-          <div style={styles.inputContainer}>
-            <label className="form-label">Message</label>
-            <textarea
-              id={`message-${uniqueId}`}
-              type="text"
-              rows="3"
-              className="form-control"
-            />
-          </div>
-        );
-      };
-
       return (
         <form>
           <ServeFullName />
@@ -244,44 +344,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
           <ServeFileUpload />
           <ServeActions />
         </form>
-      );
-    };
-
-    const ServeFormHeader = () => {
-      const ServeFormTitle = () => {
-        let title = enquireAction.form_title;
-
-        if (!title) return null;
-
-        return (
-          <div className="primary-title" style={{ fontSize: 20 }}>
-            <Html2React html={title} />
-          </div>
-        );
-      };
-
-      const ServeFormBody = () => {
-        let body = enquireAction.form_body;
-
-        if (!body) return null;
-
-        return (
-          <div style={{ paddingTop: `1em` }}>
-            <Html2React html={body} />
-          </div>
-        );
-      };
-
-      return (
-        <div
-          style={{
-            borderBottom: `1px solid ${colors.darkSilver}`,
-            paddingBottom: `2em`,
-          }}
-        >
-          <ServeFormTitle />
-          <ServeFormBody />
-        </div>
       );
     };
 
@@ -363,24 +425,88 @@ const EnquireModal = ({ state, actions, libraries }) => {
     );
   };
 
+  if (enquireAction && enquireAction.isHospitalChange) {
+    return (
+      <Modal show={enquireAction} size="xl" centered>
+        <div
+          style={{
+            backgroundColor: colors.silverFillOne,
+            position: "relative",
+          }}
+        >
+          <ActionPlaceholder isFetching={isFetching} background="transparent" />
+          <ServeHeaderActions />
+          <div style={styles.container}>
+            <ServeModalInfo />
+            <div style={styles.inputContainer}>
+              <ServeFormHeader />
+
+              <label className="form-label">
+                Main Place of Work / Medical School
+              </label>
+              <div style={{ position: "relative" }}>
+                {selectedHospital && (
+                  <div className="form-control input">
+                    <div className="flex-row">
+                      <div
+                        style={{
+                          position: "relative",
+                          width: "fit-content",
+                          paddingRight: 15,
+                        }}
+                      >
+                        {selectedHospital}
+                        <div
+                          className="filter-icon"
+                          style={{ top: -7 }}
+                          onClick={() => setSelectedHospital(null)}
+                        >
+                          <CloseIcon
+                            style={{
+                              fill: colors.darkSilver,
+                              padding: 0,
+                              width: "0.7em",
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {!selectedHospital && (
+                  <div>
+                    <input
+                      ref={hospitalSearchRef}
+                      onChange={handleHospitalLookup}
+                      type="text"
+                      className="form-control input"
+                      placeholder="Main Hospital/Place of work"
+                    />
+                  </div>
+                )}
+                <SearchDropDown
+                  filter={hospitalData}
+                  mapToName="name"
+                  onClickHandler={handleSelectHospital}
+                />
+              </div>
+              <ServeMessage />
+              <ServeActions />
+            </div>
+          </div>
+        </div>
+      </Modal>
+    );
+  }
+
   // RETURN ---------------------------------------------------
   return (
     <Modal show={enquireAction} size="xl" centered>
       <div
         style={{ backgroundColor: colors.silverFillOne, position: "relative" }}
       >
-        <ActionPlaceholder isFetching={isFetching} />
-        <div
-          className="flex"
-          onClick={() => setEnquireAction({ dispatch, enquireAction: null })}
-          style={{
-            padding: `2em 4em 1em`,
-            cursor: "pointer",
-            justifyContent: "flex-end",
-          }}
-        >
-          <CloseIcon style={{ fontSize: 24, fill: colors.softBlack }} />
-        </div>
+        <ActionPlaceholder isFetching={isFetching} background="transparent" />
+        <ServeHeaderActions />
         <div style={styles.container}>
           <ServeModalInfo />
           <ServeModalContent />

@@ -61,13 +61,9 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         contact_public_phone_number: "+1 (123) 456-7890",
         form_title: "Main Place of work / Medical School Change Form",
         form_body: `Request Main Place of work / Medical School change.`,
-        full_name: true,
-        email_address: true,
-        phone_number: true,
-        subject: true,
-
         message: true,
         recipients: [{ email: "ed@skylarkcreative.co.uk" }],
+        isHospitalChange: true,
       },
     });
   };
