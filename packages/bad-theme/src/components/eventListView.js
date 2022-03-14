@@ -214,7 +214,6 @@ const EventListView = ({
         <ServeTitle />
         {!lg ? !recommended_events ? <ServeInformation /> : null : null}
         {!lg ? !recommended_events ? <ServeSummary /> : null : null}
-        <hr />
       </div>
     );
   };
