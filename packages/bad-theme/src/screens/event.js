@@ -53,6 +53,20 @@ const Event = ({ state, actions, libraries }) => {
     // pre fetch events data
     let iteration = 0;
     let data = state.source.events;
+    console.log("event data: ", data); // debug
+    let isCurrentOnly = false;
+    // on page re-fresh check if is current only
+    if (data && Object.keys(data).length === 1) isCurrentOnly = true;
+
+    while (!data || isCurrentOnly) {
+      // if iteration is greater than 10, break
+      if (iteration > 10) break;
+      // set timeout for async
+      await getEventsData({ state, actions });
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      data = state.source.post;
+      iteration++;
+    }
 
     // if !data then break
     if (!data) return;
@@ -286,7 +300,7 @@ const Event = ({ state, actions, libraries }) => {
           backgroundColor: colors.silverFillOne,
           justifyContent: "center",
           padding: `2em`,
-          marginTop: `2em`,
+          margin: `2em 0`,
         }}
       >
         <div
@@ -332,10 +346,7 @@ const Event = ({ state, actions, libraries }) => {
 
     return (
       <div className="text-body">
-        <div
-          className="primary-title"
-          style={{ fontSize: 20, marginTop: `2em` }}
-        >
+        <div className="primary-title" style={{ fontSize: 20 }}>
           Summary
         </div>
         <Html2React html={summary} />
@@ -429,7 +440,7 @@ const Event = ({ state, actions, libraries }) => {
   };
 
   const ServeSideBar = () => {
-    if (!eventList) return null;
+    if (!eventList || !locationList) return null;
 
     // get current event taxonomy types
     const currentPostGrade = event.event_grade[0];
