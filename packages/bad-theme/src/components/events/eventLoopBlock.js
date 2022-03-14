@@ -68,16 +68,6 @@ const EventLoopBlock = ({
     let iteration = 0;
     let data = state.source.events;
 
-    while (!data) {
-      // if iteration is greater than 10, break
-      if (iteration > 10) break;
-      // set timeout for async
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      await getEventsData({ state, actions });
-      data = state.source.post;
-      iteration++;
-    }
-
     // if !data then break
     if (!data) return;
     let eventList = Object.values(data);
@@ -96,6 +86,7 @@ const EventLoopBlock = ({
         new Date(a.acf.date_time[0].date) - new Date(b.acf.date_time[0].date)
     );
 
+    console.log("🚀 event list", eventList.length); // debug
     setEventList(eventList);
     setGradeFilterId(gradeFilterId);
 
@@ -144,15 +135,13 @@ const EventLoopBlock = ({
               if (new Date(date.date) < new Date()) isArchive = true;
             });
           }
-          // ⬇️ if events_archive is event archive break out of loop
+
+          // ⬇️ if events_archive show only past events else break
           if (events_archive) {
             if (!isArchive) return null;
           } else {
             if (isArchive) return null;
           }
-
-          // // ⬇️  dont return past events if page is not archive
-          // if (!events_archive && isArchive) return null;
 
           if (
             event_grade &&
