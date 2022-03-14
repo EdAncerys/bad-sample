@@ -116,8 +116,8 @@ const Footer = ({ state, actions }) => {
           </div>
           <div className="footer-title-link" style={styles.footerLink}>
             <Link
-              link={`https://skylarkcreative.co.uk/`}
-              target="_blank"
+              link={`privacy-policy`}
+              // target="_blank"
               style={styles.footerLink}
             >
               Privacy Policy

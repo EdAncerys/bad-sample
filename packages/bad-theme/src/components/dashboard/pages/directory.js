@@ -215,9 +215,8 @@ const Directory = ({ state, actions, libraries }) => {
   const ServePreferences = () => {
     if (!isActiveUser) return null;
 
-    // directory agreement field
+    // directory agreement field for user
     const { bad_memberdirectory } = isActiveUser;
-    // console.log("bad_memberdirectory", bad_memberdirectory); // debug
     // check if user have BAD memberships approved in dynamics apps
     let isBADMember = false;
     if (dynamicsApps) {
@@ -229,7 +228,7 @@ const Directory = ({ state, actions, libraries }) => {
       if (badApps.length) isBADMember = true;
     }
     // dont display action if user is not BAD member
-    console.log("isBADMember", isBADMember); // debug
+    // console.log("isBADMember", isBADMember); // debug
     if (!isBADMember) return null;
 
     if (!bad_memberdirectory) {
