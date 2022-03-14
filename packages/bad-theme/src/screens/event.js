@@ -296,7 +296,7 @@ const Event = ({ state, actions, libraries }) => {
           backgroundColor: colors.silverFillOne,
           justifyContent: "center",
           padding: `2em`,
-          margin: `2em 0`,
+          marginTop: `2em`,
         }}
       >
         <div
@@ -342,7 +342,10 @@ const Event = ({ state, actions, libraries }) => {
 
     return (
       <div className="text-body">
-        <div className="primary-title" style={{ fontSize: 20 }}>
+        <div
+          className="primary-title"
+          style={{ fontSize: 20, marginTop: `2em` }}
+        >
           Summary
         </div>
         <Html2React html={summary} />
