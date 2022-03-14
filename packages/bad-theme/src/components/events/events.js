@@ -64,7 +64,7 @@ const Events = ({ state, actions, libraries, block }) => {
     return () => {
       searchFilterRef.current = ""; // clean up function
     };
-  }, [state.source.event_grade, state.source.event_location]);
+  }, []);
 
   // HELPERS ----------------------------------------------------------------
   const handleSearch = () => {

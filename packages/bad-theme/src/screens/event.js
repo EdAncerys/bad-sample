@@ -54,16 +54,6 @@ const Event = ({ state, actions, libraries }) => {
     let iteration = 0;
     let data = state.source.events;
 
-    while (!data) {
-      // if iteration is greater than 10, break
-      if (iteration > 10) break;
-      // set timeout for async
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      await getEventsData({ state, actions });
-      data = state.source.post;
-      iteration++;
-    }
-
     // if !data then break
     if (!data) return;
     eventList = Object.values(data);

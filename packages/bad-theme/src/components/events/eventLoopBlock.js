@@ -64,18 +64,6 @@ const EventLoopBlock = ({
     // pre fetch events data
     let iteration = 0;
     let data = state.source.events;
-    console.log("🚀 data", data); // debug
-    // if event is not set || empty fetch event data
-    while (!data || Object.keys(data).length === 0) {
-      // if iteration is greater than 10, break
-      if (iteration > 10) break;
-      // set timeout for async
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      await getEventsData({ state, actions });
-      data = state.source.events;
-      console.log("🚀 🚀 🚀 🚀 new event list", Object.values(data).length); // debug
-      iteration++;
-    }
 
     // if !data then break
     if (!data) return;
