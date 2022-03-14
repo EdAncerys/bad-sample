@@ -54,6 +54,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     sky_newhospitalname: "",
     bad_proposer1: "",
     bad_proposer2: "",
+    py3_ntnno: "",
     sky_cvurl: "",
     bad_readpolicydocument: "",
     sig_readpolicydocument_url_email: "",
@@ -90,6 +91,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     sky_newhospitalname: true,
     bad_proposer1: true,
     bad_proposer2: true,
+    py3_ntnno: true,
     sky_cvurl: true,
     bad_readpolicydocument: true,
     sig_readpolicydocument_url_email: true,
@@ -366,6 +368,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         "py3_addresstowncity",
         "py3_addresszippostalcode",
         "py3_addresscountry",
+        "py3_ntnno",
       ],
     });
 
@@ -756,6 +759,26 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 placeholder="Current job title"
               />
               <FormError id="bad_currentpost" />
+            </div>
+          )}
+
+          {inputValidator.py3_ntnno && (
+            <div>
+              <div className="flex-col">
+                <label className="required form-label">NTN Number</label>
+                <label className="form-label">
+                  if NTN is not applicable, please state current trainee route
+                </label>
+              </div>
+              <input
+                name="py3_ntnno"
+                value={formData.py3_ntnno}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="NTN Number"
+              />
+              <FormError id="py3_ntnno" />
             </div>
           )}
 

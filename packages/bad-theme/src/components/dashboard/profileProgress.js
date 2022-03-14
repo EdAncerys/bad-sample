@@ -292,7 +292,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
                     className="blue-btn"
                     onClick={() => handleUpdateMembershipApplication({ app })}
                   >
-                    Change Application Type
+                    Apply for BAD category change
                   </div>
                 </div>
               );
