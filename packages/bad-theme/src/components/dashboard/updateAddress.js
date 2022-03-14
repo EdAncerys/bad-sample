@@ -29,6 +29,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     address1_city: "",
     address1_country: "",
     address1_postalcode: "",
+    preferredcontactmethodcode: "", // TBC field name
   });
 
   useEffect(() => {
@@ -52,6 +53,8 @@ const UpdateAddress = ({ state, actions, libraries }) => {
       handleSetData({ name: "address1_country" });
     if (isActiveUser.address1_postalcode)
       handleSetData({ name: "address1_postalcode" });
+    if (isActiveUser.preferredcontactmethodcode)
+      handleSetData({ name: "preferredcontactmethodcode" });
   }, [isActiveUser]);
 
   // HELPERS ----------------------------------------------------------------
@@ -71,6 +74,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     const address1_city = formData.address1_city;
     const address1_country = formData.address1_country;
     const address1_postalcode = formData.address1_postalcode;
+    const preferredcontactmethodcode = formData.preferredcontactmethodcode;
 
     const data = Object.assign(
       {}, // add empty object
@@ -80,7 +84,8 @@ const UpdateAddress = ({ state, actions, libraries }) => {
       !!mobilephone && { mobilephone },
       !!address1_city && { address1_city },
       !!address1_country && { address1_country },
-      !!address1_postalcode && { address1_postalcode }
+      !!address1_postalcode && { address1_postalcode },
+      !!preferredcontactmethodcode && { preferredcontactmethodcode }
     );
 
     try {
@@ -310,6 +315,21 @@ const UpdateAddress = ({ state, actions, libraries }) => {
                   className="form-control input"
                   placeholder="Postcode"
                 />
+              </div>
+              <div style={styles.wrapper}>
+                <label>Preferred mailing option</label>
+                <Form.Select
+                  name="preferredcontactmethodcode"
+                  value={formData.preferredcontactmethodcode}
+                  onChange={handleInputChange}
+                  className="input"
+                >
+                  <option value="" hidden>
+                    Preferred mailing option
+                  </option>
+                  <option value="1">Home</option>
+                  <option value="2">Work</option>
+                </Form.Select>
               </div>
             </div>
           </div>
