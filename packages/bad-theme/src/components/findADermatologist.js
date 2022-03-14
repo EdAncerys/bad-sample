@@ -50,6 +50,7 @@ const FindADermatologist = ({ state, block }) => {
         const data = json.data;
         console.log("DATERO", data);
         setFilteredDermatologists(data);
+        handleFocusOnThePostCode();
       }
     };
     const fetchDermatologistsByName = async () => {
@@ -79,6 +80,28 @@ const FindADermatologist = ({ state, block }) => {
     setLoading(false);
   }, [query]);
 
+  const handleFocusOnThePostCode = async () => {
+    const jwt = await authenticateAppAction({ state, dispatch });
+    console.log("DZEJDABLJUTI", jwt);
+
+    const post_code = await fetch(
+      state.auth.APP_HOST + "/catalogue/ukpostcode/" + query.value,
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+
+    if (post_code.ok) {
+      const json = await post_code.json();
+      setDermOnFocus({
+        lat: Number(json.data.location.lattitude),
+        lng: Number(json.data.location.longitude),
+      });
+      console.log("DERONFOC", dermOnFocus);
+    }
+  };
   const handleLoadMore = async () => {
     setLoading(true);
     const jwt = await authenticateAppAction({ dispatch, state });
@@ -195,6 +218,7 @@ const FindADermatologist = ({ state, block }) => {
         </div>
       );
     };
+
     const ServeSearchByPostCode = () => {
       const [pc, setPC] = React.useState("");
       return (
@@ -298,8 +322,8 @@ const FindADermatologist = ({ state, block }) => {
               className="caps-btn"
               onClick={() =>
                 setDermOnFocus({
-                  lat: Number(derm.address1_latitude),
-                  lng: Number(derm.address1_longitude),
+                  lat: Number(derm.cordinates.lat),
+                  lng: Number(derm.cordinates.lng),
                 })
               }
             >
@@ -308,6 +332,7 @@ const FindADermatologist = ({ state, block }) => {
           </div>
         );
       };
+
       return (
         <Card
           style={{
