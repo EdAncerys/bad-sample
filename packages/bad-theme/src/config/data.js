@@ -1345,3 +1345,21 @@ export const sigAppFileds = [
   "bad_includeinthebssciiemaildiscussionforum",
   "py3_insertnhsnetemailaddress",
 ];
+
+export const proAppFileds = [
+  "py3_gmcnumber",
+  "py3_otherregulatorybodyreference",
+  "py3_ntnno",
+  "bad_currentpost",
+  "py3_hospitalid",
+  "bad_proposer1",
+  "bad_proposer2",
+  "bad_mrpcqualified",
+  "sky_cvurl",
+  "py3_currentgrade",
+  "sky_newhospitalname",
+  "bad_newhospitaladded",
+  "bad_expectedyearofqualification",
+  "sky_newhospitaltype",
+  "bad_memberdirectory",
+];

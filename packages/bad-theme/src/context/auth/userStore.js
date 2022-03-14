@@ -498,6 +498,12 @@ const updateMembershipApplication = ({
     )
       application.value = data.py3_insertnhsnetemailaddress;
 
+    //⏬ BAD change of category of the application process
+    // if (data.core_membershipsubscriptionid) {
+    //   application.name === "core_membershipsubscriptionid";
+    //   application.value = data.py3_insertnhsnetemailaddress;
+    // }
+
     //⏬ complete & submit of the application process
     if (data.bad_ethnicity && application.name === "bad_ethnicity")
       application.value = data.bad_ethnicity;

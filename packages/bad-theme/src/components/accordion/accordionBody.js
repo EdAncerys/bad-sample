@@ -19,6 +19,7 @@ import {
   sendEmailEnquireAction,
   handleApplyForMembershipAction,
   anchorScrapper,
+  setErrorAction,
 } from "../../context";
 import { getLeadershipTeamData } from "../../helpers";
 
@@ -68,22 +69,34 @@ const AccordionBody = ({
 
   // HANDLERS ----------------------------------------------------
   const handleApply = async () => {
-    await handleApplyForMembershipAction({
-      state,
-      actions,
-      dispatch,
-      applicationData,
-      isActiveUser,
-      dynamicsApps,
-      category: "BAD",
-      type: category_types, // application type name
-      membershipApplication: {
-        stepOne: false,
-        stepTwo: false,
-        stepThree: false,
-        stepFour: false,
-      },
-    });
+    try {
+      await handleApplyForMembershipAction({
+        state,
+        actions,
+        dispatch,
+        applicationData,
+        isActiveUser,
+        dynamicsApps,
+        category: "BAD",
+        type: category_types, // application type name
+        membershipApplication: {
+          stepOne: false,
+          stepTwo: false,
+          stepThree: false,
+          stepFour: false,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `There was an error creating your application. Please try again.`,
+          image: "Error",
+        },
+      });
+    }
   };
 
   const handleContactFormSubmit = async () => {

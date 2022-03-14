@@ -16,7 +16,7 @@ import {
   useAppState,
   setGoToAction,
   deleteApplicationAction,
-  setChangeApplicationDataAction,
+  handleApplyForMembershipAction,
   setErrorAction,
 } from "../../context";
 
@@ -31,6 +31,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
   const ICON_WIDTH = 30;
   const [isFetching, setFetching] = useState(false);
+  const [isFetching2, setFetching2] = useState(false);
 
   const [applicationStep, setStep] = useState("Application");
   // application under review
@@ -58,6 +59,8 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     if (appData.stepTwo) progressName = "Step 2 - Personal Information";
     if (appData.stepThree) progressName = "Step 3 - Category Selection";
     if (appData.stepFour) progressName = "Step 4 - Professional Details";
+    if (appData.changeAppCategory)
+      progressName = ` - BAD ${appData.bad_categorytype} membership category change`;
 
     setStep(progressName);
   }, [applicationData]);
@@ -76,6 +79,9 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     // SIG application path
     if (applicationData && applicationData[0].bad_organisedfor === "SIG")
       path = `/membership/sig-questions/`;
+    // BAD application category change path
+    if (applicationData && applicationData[0].changeAppCategory)
+      path = `/membership/application-change/`;
 
     setGoToAction({ path: path, actions });
   };
@@ -97,7 +103,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     }
   };
 
-  const handleUpdateMembershipApplication = ({ app }) => {
+  const handleUpdateMembershipApplication = async ({ app }) => {
     // if user have application in progress break & display error
     if (applicationData) {
       const type = applicationData[0].bad_categorytype;
@@ -113,13 +119,42 @@ const ProfileProgress = ({ state, actions, libraries }) => {
       return;
     }
 
-    setChangeApplicationDataAction({
-      dispatch,
-      applicationChangeData: app,
-    });
+    // handle create new application in Dynamics
+    try {
+      setFetching2(true);
+      const appData = await handleApplyForMembershipAction({
+        state,
+        actions,
+        dispatch,
+        applicationData,
+        isActiveUser,
+        dynamicsApps,
+        category: "BAD",
+        type: app.bad_categorytype, //🤖 application type name from appData
+        membershipApplication: {
+          stepOne: false,
+          stepTwo: false,
+          stepThree: false,
+          stepFour: false,
+          changeAppCategory: app, // change of application
+        },
+        path: "/membership/application-change/", // redirect to application change page
+        changeAppCategory: app, // change of application
+      });
+      if (!appData) throw new Error("Failed to create application");
+    } catch (error) {
+      console.log(error);
 
-    console.log(app); // debug
-    setGoToAction({ path: "/membership/application-change/", actions }); // go to application change page
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: "Failed to create application record. Please try again.",
+          image: "Error",
+        },
+      });
+    } finally {
+      setFetching2(false);
+    }
   };
 
   // SERVERS ---------------------------------------------
@@ -128,9 +163,10 @@ const ProfileProgress = ({ state, actions, libraries }) => {
 
     const appData = applicationData[0]; // application info data
     const isSIG = appData.bad_organisedfor === "SIG";
+    const isBADCategoryChange = appData.changeAppCategory;
 
-    // dont display for SIG applications
-    if (isSIG) return null;
+    // dont display for SIG || BAD cat change applications
+    if (isSIG || isBADCategoryChange) return null;
 
     const ServeProgressIcon = ({ complete }) => {
       const alt = complete ? "complete" : "in-progress";
@@ -266,70 +302,80 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     if (subsData.length === 0) return null;
 
     return (
-      <div
-        className="flex-col shadow"
-        style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
-      >
-        <div className="flex-col">
-          <div
-            className="flex primary-title"
-            style={{
-              fontSize: 20,
-              justifyItems: "center",
-            }}
-          >
-            Existing Applications
-          </div>
-          {subsData.map((app, key) => {
-            const {
-              bad_organisedfor,
-              core_name,
-              createdon,
-              bad_approvalstatus,
-            } = app;
-            // console.log("application data", app); // debug
-            // get application date
-            let appData = createdon.split(" ")[0];
-            // split string and revert date with month format
-            appData = appData.split("/");
-            appData = `${appData[1]}/${appData[0]}/${appData[2]}`;
+      <div style={{ position: "relative" }}>
+        <ActionPlaceholder isFetching={isFetching2} background="transparent" />
+        <div
+          className="flex-col shadow"
+          style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
+        >
+          <div className="flex-col">
+            <div
+              className="flex primary-title"
+              style={{
+                fontSize: 20,
+                justifyItems: "center",
+              }}
+            >
+              Existing Applications
+            </div>
+            {subsData.map((app, key) => {
+              const {
+                bad_organisedfor,
+                core_name,
+                createdon,
+                bad_approvalstatus,
+              } = app;
+              // console.log("application data", app); // debug
+              // get application date
+              let appData = createdon.split(" ")[0];
+              // split string and revert date with month format
+              appData = appData.split("/");
+              appData = `${appData[1]}/${appData[0]}/${appData[2]}`;
 
-            const dateObject = new Date(appData);
-            const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
+              const dateObject = new Date(appData);
+              const formattedDate = DATE_MODULE.format(
+                dateObject,
+                "DD MMM YYYY"
+              );
 
-            const ServeChangeApplicationAction = () => {
-              // only return if bad_organisedfor is BAD
-              if (bad_organisedfor !== "BAD") return null;
+              const ServeChangeApplicationAction = () => {
+                // only return if bad_organisedfor is BAD
+                if (bad_organisedfor !== "BAD") return null;
+
+                return (
+                  <div style={{ display: "grid", alignItems: "center" }}>
+                    <div
+                      type="submit"
+                      className="blue-btn"
+                      onClick={() => handleUpdateMembershipApplication({ app })}
+                    >
+                      Apply for BAD category change
+                    </div>
+                  </div>
+                );
+              };
 
               return (
-                <div style={{ display: "grid", alignItems: "center" }}>
-                  <div
-                    type="submit"
-                    className="blue-btn"
-                    onClick={() => handleUpdateMembershipApplication({ app })}
-                  >
-                    Apply for BAD category change
+                <div
+                  key={key}
+                  className="flex-col"
+                  style={{ paddingTop: `1em` }}
+                >
+                  <div className="flex">
+                    <div
+                      className="flex"
+                      style={{ display: "grid", alignItems: "center" }}
+                    >
+                      <div className="primary-title">{bad_organisedfor}</div>
+                      <div>{core_name}</div>
+                      <div>Application Date: {formattedDate}</div>
+                    </div>
+                    <ServeChangeApplicationAction />
                   </div>
                 </div>
               );
-            };
-
-            return (
-              <div key={key} className="flex-col" style={{ paddingTop: `1em` }}>
-                <div className="flex">
-                  <div
-                    className="flex"
-                    style={{ display: "grid", alignItems: "center" }}
-                  >
-                    <div className="primary-title">{bad_organisedfor}</div>
-                    <div>{core_name}</div>
-                    <div>Application Date: {formattedDate}</div>
-                  </div>
-                  <ServeChangeApplicationAction />
-                </div>
-              </div>
-            );
-          })}
+            })}
+          </div>
         </div>
       </div>
     );
