@@ -12,8 +12,7 @@ const FadDirectory = ({ state, actions, libraries, fadDirectory }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!fadDirectory) return null;
-
-  console.log("fadDirectory", fadDirectory);
+  // console.log("fadDirectory", fadDirectory); // debug
 
   const {
     fullname,

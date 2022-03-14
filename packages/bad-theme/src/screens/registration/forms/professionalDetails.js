@@ -57,7 +57,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     py3_constitutionagreement: "",
     bad_readpolicydocument: "",
     sky_newhospitaltype: "",
-    py3_badCategory: "",
+    bad_memberdirectory: "",
   });
   const [inputValidator, setInputValidator] = useState({
     py3_gmcnumber: true,
@@ -76,7 +76,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     py3_constitutionagreement: true,
     bad_readpolicydocument: true,
     sky_newhospitaltype: true,
-    py3_badCategory: true,
+    bad_memberdirectory: true,
   });
 
   const [hospitalData, setHospitalData] = useState(null);
@@ -253,44 +253,43 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         !isNewHospital ? "py3_hospitalid" : null,
         isAssociateType ? "bad_proposer1" : null,
         isAssociateType ? "bad_proposer2" : null,
-        "py3_badCategory",
       ],
     });
 
     if (!isValid) return null;
-    // console.log(formData); // debug
+    console.log(formData); // debug
 
-    try {
-      setFetching(true);
-      const store = await setUserStoreAction({
-        state,
-        actions,
-        dispatch,
-        applicationData,
-        isActiveUser,
-        dynamicsApps,
-        membershipApplication: { stepFour: true }, // set stepOne to complete
-        data: formData,
-      });
-      if (!store.success) throw new Error("Failed to update application");
+    // try {
+    //   setFetching(true);
+    //   const store = await setUserStoreAction({
+    //     state,
+    //     actions,
+    //     dispatch,
+    //     applicationData,
+    //     isActiveUser,
+    //     dynamicsApps,
+    //     membershipApplication: { stepFour: true }, // set stepOne to complete
+    //     data: formData,
+    //   });
+    //   if (!store.success) throw new Error("Failed to update application");
 
-      // set complete application if app = BAD
-      const appsResponse = await setCompleteUserApplicationAction({
-        state,
-        dispatch,
-        isActiveUser,
-        applicationData,
-      });
-      if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
+    //   // set complete application if app = BAD
+    //   const appsResponse = await setCompleteUserApplicationAction({
+    //     state,
+    //     dispatch,
+    //     isActiveUser,
+    //     applicationData,
+    //   });
+    //   if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
 
-      let slug = `/membership/thank-you/`;
-      if (category === "SIG") slug = `/membership/sig-questions/`;
-      if (isActiveUser) setGoToAction({ path: slug, actions });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setFetching(false);
-    }
+    //   let slug = `/membership/thank-you/`;
+    //   if (category === "SIG") slug = `/membership/sig-questions/`;
+    //   if (isActiveUser) setGoToAction({ path: slug, actions });
+    // } catch (error) {
+    //   console.log(error);
+    // } finally {
+    //   setFetching(false);
+    // }
   };
 
   const handleDocUploadChange = async (e) => {
@@ -709,8 +708,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                   >
                     <div style={{ display: "grid" }}>
                       <input
-                        name="py3_badCategory"
-                        checked={formData.py3_badCategory}
+                        name="bad_memberdirectory"
+                        checked={formData.bad_memberdirectory}
                         onChange={handleInputChange}
                         type="checkbox"
                         className="form-check-input check-box"
@@ -722,14 +721,9 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                       style={{ color: "inherit" }}
                     >
                       Include in Members directory
-                      <span
-                        style={{ color: colors.danger, padding: "0 0.5em" }}
-                      >
-                        field inactive
-                      </span>
                     </div>
                   </div>
-                  <FormError id="py3_badCategory" />
+                  <FormError id="bad_memberdirectory" />
                 </div>
 
                 {inputValidator.py3_constitutionagreement && (
