@@ -113,6 +113,7 @@ const EventLoopBlock = ({
   }, []);
 
   if (!eventList) return <Loading />;
+  console.log("🚀 event list", eventList); // debug
 
   // RETURN ---------------------------------------------
   return (
@@ -138,10 +139,15 @@ const EventLoopBlock = ({
               if (new Date(date.date) < new Date()) isArchive = true;
             });
           }
-          // ⬇️ if page is event archive break out of loop
-          if (events_archive && !isArchive) return null;
-          // ⬇️  dont return past events if page is not archive
-          if (!events_archive && isArchive) return null;
+          // ⬇️ if events_archive is event archive break out of loop
+          if (events_archive) {
+            if (!isArchive) return null;
+          } else {
+            if (isArchive) return null;
+          }
+
+          // // ⬇️  dont return past events if page is not archive
+          // if (!events_archive && isArchive) return null;
 
           if (
             event_grade &&
