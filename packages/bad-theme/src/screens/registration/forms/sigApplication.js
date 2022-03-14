@@ -369,6 +369,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         "py3_addresszippostalcode",
         "py3_addresscountry",
         "py3_ntnno",
+        "bad_readpolicydocument",
       ],
     });
 
@@ -1139,39 +1140,42 @@ const SIGApplication = ({ state, actions, libraries }) => {
           )}
 
           {isPolicy && (
-            <div
-              className="flex"
-              style={{ alignItems: "center", margin: `1em 0` }}
-            >
-              <div style={{ display: "grid" }}>
-                <input
-                  name="bad_readpolicydocument"
-                  checked={formData.bad_readpolicydocument}
-                  onChange={handleInputChange}
-                  type="checkbox"
-                  className="form-check-input check-box"
-                />
+            <div>
+              <div
+                className="flex"
+                style={{ alignItems: "center", margin: `1em 0` }}
+              >
+                <div style={{ display: "grid" }}>
+                  <input
+                    name="bad_readpolicydocument"
+                    checked={formData.bad_readpolicydocument}
+                    onChange={handleInputChange}
+                    type="checkbox"
+                    className="form-check-input check-box"
+                  />
+                </div>
+                <div>
+                  <label className="form-check-label flex-row">
+                    Please refer to
+                    <span
+                      className="caps-btn-no-underline"
+                      style={{
+                        display: "grid",
+                        alignItems: "center",
+                        margin: "0 0.5em",
+                        paddingTop: 4,
+                      }}
+                      onClick={() =>
+                        setGoToAction({ path: readPolicyDoc, actions })
+                      }
+                    >
+                      here
+                    </span>
+                    {`for the ${applicationType} Privacy Policy`}
+                  </label>
+                </div>
               </div>
-              <div>
-                <label className="form-check-label flex-row">
-                  Please refer to
-                  <span
-                    className="caps-btn-no-underline"
-                    style={{
-                      display: "grid",
-                      alignItems: "center",
-                      margin: "0 0.5em",
-                      paddingTop: 4,
-                    }}
-                    onClick={() =>
-                      setGoToAction({ path: readPolicyDoc, actions })
-                    }
-                  >
-                    here
-                  </span>
-                  {`for the ${applicationType} Privacy Policy`}
-                </label>
-              </div>
+              <FormError id="bad_readpolicydocument" />
             </div>
           )}
         </div>

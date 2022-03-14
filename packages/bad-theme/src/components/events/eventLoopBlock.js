@@ -86,7 +86,7 @@ const EventLoopBlock = ({
         new Date(a.acf.date_time[0].date) - new Date(b.acf.date_time[0].date)
     );
 
-    console.log("🚀 event list", eventList.length); // debug
+    // console.log("🚀 event list", eventList.length); // debug
     setEventList(eventList);
     setGradeFilterId(gradeFilterId);
 
@@ -96,7 +96,7 @@ const EventLoopBlock = ({
         const anchor = document.getElementById(eventAnchor);
         if (anchor) anchor.scrollIntoView({ behavior: "smooth" });
       }, 500);
-      console.log("🚀 anchor to event list", eventAnchor); // debug
+      // console.log("🚀 anchor to event list", eventAnchor); // debug
 
       setEventAnchorAction({ dispatch, eventAnchor: null }); // reset
     }
@@ -107,9 +107,7 @@ const EventLoopBlock = ({
   }, []);
 
   if (!eventList) return <Loading />;
-  if (eventList) console.log(eventList);
-  console.log("EVENT LOOP BLOCK BLOCK", block);
-  console.log("🚀 event list", eventList); // debug
+  // console.log("🚀 event list", eventList); // debug
 
   // RETURN ---------------------------------------------
   return (

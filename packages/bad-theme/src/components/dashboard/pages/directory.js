@@ -24,7 +24,7 @@ import {
 
 const Directory = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
-  const { fad, dashboardPath, isActiveUser } = useAppState();
+  const { fad, dashboardPath, isActiveUser, dynamicsApps } = useAppState();
 
   const LIMIT = 9;
 
@@ -218,8 +218,21 @@ const Directory = ({ state, actions, libraries }) => {
   const ServePreferences = () => {
     if (!isActiveUser) return null;
 
-    // directory agreement field
+    // directory agreement field for user
     const { bad_memberdirectory } = isActiveUser;
+    // check if user have BAD memberships approved in dynamics apps
+    let isBADMember = false;
+    if (dynamicsApps) {
+      let badApps = dynamicsApps.subs.data.filter((app) => {
+        let hasBADMemberships = app.bad_organisedfor === "BAD";
+
+        return hasBADMemberships;
+      });
+      if (badApps.length) isBADMember = true;
+    }
+    // dont display action if user is not BAD member
+    // console.log("isBADMember", isBADMember); // debug
+    if (!isBADMember) return null;
 
     if (!bad_memberdirectory) {
       return (
