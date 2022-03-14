@@ -229,6 +229,7 @@ const Video = ({ state, actions }) => {
     });
   };
   React.useEffect(async () => {
+    //Not the greatest idea to make useEffect async
     actions.source.fetch("/videos/");
 
     const jwt = await authenticateAppAction({ state, dispatch });
