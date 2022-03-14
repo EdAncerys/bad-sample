@@ -259,39 +259,39 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     });
 
     if (!isValid) return null;
-    console.log(formData); // debug
+    // console.log(formData); // debug
 
-    // try {
-    //   setFetching(true);
-    //   const store = await setUserStoreAction({
-    //     state,
-    //     actions,
-    //     dispatch,
-    //     applicationData,
-    //     isActiveUser,
-    //     dynamicsApps,
-    //     membershipApplication: { stepFour: true }, // set stepOne to complete
-    //     data: formData,
-    //   });
-    //   if (!store.success) throw new Error("Failed to update application");
+    try {
+      setFetching(true);
+      const store = await setUserStoreAction({
+        state,
+        actions,
+        dispatch,
+        applicationData,
+        isActiveUser,
+        dynamicsApps,
+        membershipApplication: { stepFour: true }, // set stepOne to complete
+        data: formData,
+      });
+      if (!store.success) throw new Error("Failed to update application");
 
-    //   // set complete application if app = BAD
-    //   const appsResponse = await setCompleteUserApplicationAction({
-    //     state,
-    //     dispatch,
-    //     isActiveUser,
-    //     applicationData,
-    //   });
-    //   if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
+      // set complete application if app = BAD
+      const appsResponse = await setCompleteUserApplicationAction({
+        state,
+        dispatch,
+        isActiveUser,
+        applicationData,
+      });
+      if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
 
-    //   let slug = `/membership/thank-you/`;
-    //   if (category === "SIG") slug = `/membership/sig-questions/`;
-    //   if (isActiveUser) setGoToAction({ path: slug, actions });
-    // } catch (error) {
-    //   console.log(error);
-    // } finally {
-    //   setFetching(false);
-    // }
+      let slug = `/membership/thank-you/`;
+      if (category === "SIG") slug = `/membership/sig-questions/`;
+      if (isActiveUser) setGoToAction({ path: slug, actions });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setFetching(false);
+    }
   };
 
   const handleDocUploadChange = async (e) => {
