@@ -765,9 +765,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
           {inputValidator.py3_ntnno && (
             <div>
               <div className="flex-col">
-                <label className="required form-label">NTN Number</label>
-                <label className="form-label">
-                  if NTN is not applicable, please state current trainee route
+                <label className="required form-label">
+                  NTN Number (if NTN is not applicable, please state current
+                  trainee route)
                 </label>
               </div>
               <input

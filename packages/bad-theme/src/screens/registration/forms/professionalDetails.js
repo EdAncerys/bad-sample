@@ -240,6 +240,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   const handleNext = async () => {
     // check if new hospital value been added
     const isNewHospital = formData.bad_newhospitaladded;
+    // check if isAssociateType to apply mandatory fields
+    const isAssociateType = applicationType.includes("Associate");
 
     const isValid = isFormValidated({
       required: [
@@ -249,7 +251,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         "bad_currentpost",
         isNewHospital ? "sky_newhospitaltype" : null,
         !isNewHospital ? "py3_hospitalid" : null,
-
+        isAssociateType ? "bad_proposer1" : null,
+        isAssociateType ? "bad_proposer2" : null,
         "py3_badCategory",
       ],
     });
@@ -383,7 +386,11 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         <div style={{ padding: `2em 1em` }}>
           {inputValidator.py3_gmcnumber && (
             <div>
-              <label className="required form-label">GMC Number</label>
+              <label className="required form-label">
+                {applicationType === "Associate Overseas"
+                  ? "GMC number or International equivalent"
+                  : "GMC number"}
+              </label>
               <input
                 name="py3_gmcnumber"
                 value={formData.py3_gmcnumber}
@@ -573,41 +580,67 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         {inputValidator.bad_proposer1 && (
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: `repeat(2, 1fr)`,
-              gap: 20,
               padding: `1em 1em 2em 1em`,
               borderTop: `1px solid ${colors.silverFillTwo}`,
               borderBottom: `1px solid ${colors.silverFillTwo}`,
             }}
           >
-            {inputValidator.bad_proposer1 && (
-              <div>
-                <label className="form-label">Supporting Member 1</label>
-                <input
-                  name="bad_proposer1"
-                  value={formData.bad_proposer1}
-                  onChange={handleInputChange}
-                  type="text"
-                  className="form-control input"
-                  placeholder="MRCP"
-                />
-              </div>
-            )}
+            <label className="form-label">
+              Proposers must be BSDS Ordinary members
+            </label>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: `repeat(2, 1fr)`,
+                gap: 20,
+              }}
+            >
+              {inputValidator.bad_proposer1 && (
+                <div>
+                  <label
+                    className={`${
+                      applicationType.includes("Associate")
+                        ? "required form-label"
+                        : "form-label"
+                    }`}
+                  >
+                    Supporting Member 1
+                  </label>
+                  <input
+                    name="bad_proposer1"
+                    value={formData.bad_proposer1}
+                    onChange={handleInputChange}
+                    type="text"
+                    className="form-control input"
+                    placeholder="MRCP"
+                  />
+                  <FormError id="bad_proposer1" />
+                </div>
+              )}
 
-            {inputValidator.bad_proposer2 && (
-              <div>
-                <label className="form-label">Supporting Member 2</label>
-                <input
-                  name="bad_proposer2"
-                  value={formData.bad_proposer2}
-                  onChange={handleInputChange}
-                  type="text"
-                  className="form-control input"
-                  placeholder="MRCP"
-                />
-              </div>
-            )}
+              {inputValidator.bad_proposer2 && (
+                <div>
+                  <label
+                    className={`${
+                      applicationType.includes("Associate")
+                        ? "required form-label"
+                        : "form-label"
+                    }`}
+                  >
+                    Supporting Member 2
+                  </label>
+                  <input
+                    name="bad_proposer2"
+                    value={formData.bad_proposer2}
+                    onChange={handleInputChange}
+                    type="text"
+                    className="form-control input"
+                    placeholder="MRCP"
+                  />
+                  <FormError id="bad_proposer2" />
+                </div>
+              )}
+            </div>
           </div>
         )}
 
