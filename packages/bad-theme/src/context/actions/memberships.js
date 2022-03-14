@@ -22,6 +22,7 @@ export const getMembershipDataAction = async ({ state, actions }) => {
 
 export const validateMembershipFormAction = async ({
   state,
+  actions,
   setData,
   applicationData,
   membershipTypeChange,
@@ -33,11 +34,14 @@ export const validateMembershipFormAction = async ({
     }));
   };
 
-  if (!state.source.memberships || !applicationData) return null;
+  if (!applicationData) return null;
 
-  // ⏬ validate inputs
+  // ⏬ validate inputs & pre fetch membership data
+  if (!state.source.memberships)
+    await getMembershipDataAction({ state, actions });
   const membershipTypes = Object.values(state.source.memberships);
-  // console.log("membershipTypes", membershipTypes); // debug
+  // console.log("⬇️ membershipTypes", membershipTypes); // debug
+
   let type = applicationData[0].bad_categorytype;
   if (membershipTypeChange) type = membershipTypeChange; // apply for SIGs change of memberships
 

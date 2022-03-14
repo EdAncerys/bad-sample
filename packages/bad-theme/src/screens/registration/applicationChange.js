@@ -287,12 +287,13 @@ const ApplicationChange = ({ state, actions, libraries }) => {
             />
             <div style={styles.wrapper}>
               <div className="primary-title" style={styles.title}>
-                Category Selection
+                Change of Category Application
               </div>
               <div style={{ paddingTop: `0.75em` }}>
-                Please confirm your category selction. Or if you are unsure of
-                the category you should be applying for please view the
-                membership category descriptions for further clarification.
+                If you are a current BAD member and now need to change your
+                membership category you can apply to do so here. All changes of
+                category applications must be approved by the BAD Executive
+                committee.
               </div>
               <Link
                 link={`/membership/`}
