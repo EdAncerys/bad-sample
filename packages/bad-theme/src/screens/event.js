@@ -297,7 +297,7 @@ const Event = ({ state, actions, libraries }) => {
       <div
         className="flex"
         style={{
-          backgroundColor: colors.silverFillOne,
+          // backgroundColor: colors.silverFillOne, // optional background color
           justifyContent: "center",
           padding: `2em`,
           margin: `2em 0`,
