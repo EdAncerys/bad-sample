@@ -17,6 +17,7 @@ import {
   setGoToAction,
   deleteApplicationAction,
   setChangeApplicationDataAction,
+  setErrorAction,
 } from "../../context";
 
 const ProfileProgress = ({ state, actions, libraries }) => {
@@ -97,6 +98,21 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   };
 
   const handleUpdateMembershipApplication = ({ app }) => {
+    // if user have application in progress break & display error
+    if (applicationData) {
+      const type = applicationData[0].bad_categorytype;
+      const confirmationMsg = `You already have ${type} application open and unsubmitted! Please complete it before changing BAD application category.`;
+
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: confirmationMsg,
+          image: "Error",
+        },
+      });
+      return;
+    }
+
     setChangeApplicationDataAction({
       dispatch,
       applicationChangeData: app,
