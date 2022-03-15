@@ -357,16 +357,16 @@ const ApplicationChange = ({ state, actions, libraries }) => {
       appFromData.core_membershipsubscriptionid = previousAppId;
       console.log("appFromData", appFromData); // debug
 
-      const store = await setUserStoreAction({
-        state,
-        actions,
-        dispatch,
-        applicationData,
-        isActiveUser,
-        dynamicsApps,
-        data: appFromData,
-      });
-      if (!store.success) throw new Error("Failed to update application");
+      // const store = await setUserStoreAction({
+      //   state,
+      //   actions,
+      //   dispatch,
+      //   applicationData,
+      //   isActiveUser,
+      //   dynamicsApps,
+      //   data: appFromData,
+      // });
+      // if (!store.success) throw new Error("Failed to update application");
 
       // // set complete application if app = BAD
       // const appsResponse = await setCompleteUserApplicationAction({

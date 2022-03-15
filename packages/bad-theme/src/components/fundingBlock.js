@@ -132,8 +132,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     const input = typeFilterRef.current;
     let data = Object.values(state.source[postPath]); // add postListData object to data array
 
-    console.log("handleTypeSearch", data);
-
     if (currentSearchFilterRef.current)
       data = data.filter((item) => {
         let title = item.title;
