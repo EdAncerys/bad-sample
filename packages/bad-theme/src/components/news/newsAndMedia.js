@@ -67,18 +67,9 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     // if !data then break
     if (data.length === 0) return;
 
-    // filter by categories
-    // if (category_filter && category_filter !== "0")
-    //   data = data.filter((item) =>
-    //     item.categories.includes(Number(category_filter))
-    //   );
-
     // apply sort by date functionality
     data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
     if (post_limit) data = data.slice(0, Number(post_limit)); // apply limit on posts
-    console.log("category_filter: ", category_filter); // debug
-    console.log("post_limit: ", post_limit); // debug
-    console.log("data: ", data); // debug
 
     setFilterList(data);
     if (state.source.category) {
@@ -149,9 +140,6 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       setFilterList(data);
       loadMoreRef.current = true;
     }
-
-    // setFilterList(data);
-    // loadMoreRef.current = !loadMoreRef.current;
   };
 
   const handleSearch = () => {
