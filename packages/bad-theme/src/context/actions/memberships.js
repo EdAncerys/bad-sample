@@ -119,7 +119,7 @@ export const handleApplyForMembershipAction = async ({
           dispatch,
           isError: {
             message: confirmationMsg,
-            goToDashboard: true,
+            goToPath: { label: "Dashboard", path: "/dashboard/" },
             image: "Error",
           },
         });
