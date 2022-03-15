@@ -296,6 +296,7 @@ const Card = ({
           downloadFile={downloadFile}
           handler={handler}
           electionBlocks={ELECTION_BLOCKS}
+          videoArchive={videoArchive}
         />
       </div>
     );

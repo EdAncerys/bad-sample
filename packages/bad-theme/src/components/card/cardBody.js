@@ -152,7 +152,7 @@ const CardBody = ({
               style={{
                 fontSize: 12,
                 fontWeight: "bold",
-                textTransform: videoArchive ? "capitalize" : null,
+                textTransform: videoArchive ? "uppercase" : null,
               }}
             >
               <Html2React html={formattedDate} />
@@ -179,7 +179,16 @@ const CardBody = ({
     }
     const ServeSpecialty = ({ name }) => {
       return (
-        <div style={{ backgroundColor: colors.lightSilver, padding: "1em" }}>
+        <div
+          style={{
+            backgroundColor: colors.silverFillOne,
+            padding: "1em",
+            textTransform: "uppercase",
+            fontSize: 12,
+            color: colors.darkSilver,
+          }}
+          className="primary-title"
+        >
           {name}
         </div>
       );
@@ -216,6 +225,7 @@ const CardBody = ({
           style={{
             fontSize: 12,
             fontWeight: "bold",
+            textTransform: videoArchive ? "uppercase" : null,
           }}
         >
           <Html2React html={formattedDate} />
