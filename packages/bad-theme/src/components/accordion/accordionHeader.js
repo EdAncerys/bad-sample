@@ -45,6 +45,10 @@ const AccordionHeader = ({
   let niceAccredited = false;
   if (acf && acf.nice_accredited) niceAccredited = acf.nice_accredited;
 
+  let updateInProgress = false;
+  if (acf && acf.update_in_progress) niceAccredited = acf.update_in_progress;
+  console.log(acf.update_in_progress);
+
   const isActive = useRef(false);
 
   // Guidelines & Standards --------------------------------
@@ -114,6 +118,23 @@ const AccordionHeader = ({
         }}
       >
         <Html2React html={body} />
+      </div>
+    );
+  };
+
+  const ServeUpdateInProgress = () => {
+    if (!acf.update_in_progress) return null;
+
+    return (
+      <div
+        style={{
+          display: "grid",
+          alignItems: "center",
+          padding: "0 0 4px 2em",
+          lineHeight: "unset",
+        }}
+      >
+        <Html2React html={`Update in progress`} />
       </div>
     );
   };
@@ -196,9 +217,6 @@ const AccordionHeader = ({
     const dateObject = new Date(date);
     const formattedDate = DATE_MODULE.format(dateObject, "MMMM YYYY");
 
-    console.log(date);
-    console.log(dateObject);
-
     return (
       <div
         style={{
@@ -233,6 +251,7 @@ const AccordionHeader = ({
               <ServeTitle />
               <ServeLTTitle />
               <ServePublishedDate />
+              <ServeUpdateInProgress />
 
               <ServeLogo />
               <ServeNICELogo />
