@@ -132,7 +132,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
               paidFilter.current = value;
               handleFilters();
             }}
-            style={{ ...styles.dropdown, height: inputSize }}
+            style={styles.dropdown}
           >
             <option>Video type</option>
             <option value="all">All videos</option>
@@ -159,6 +159,14 @@ const VideoArchive = ({ state, actions, libraries }) => {
         <SpecialtyFilters />
         <GradeFilters />
         <PaymentFilters />
+        <div
+          onClick={() => {
+            specialtyFilter.current = null;
+            paidFilter.current = null;
+          }}
+        >
+          Reset Filters
+        </div>
       </div>
     );
   };
@@ -222,7 +230,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
       >
         <form
           onSubmit={(e) => handleSearch(e, searchFilter)}
-          style={{ display: "flex" }}
+          style={{ display: "flex", width: "50%" }}
         >
           <input
             ref={searchFilterRef}
@@ -230,7 +238,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
             type="text"
             className="form-control"
             placeholder="Search"
-            style={!lg ? styles.input : { padding: "1em" }}
+            style={!lg ? { width: "50%" } : { padding: "1em" }}
             value={searchFilter}
           />
           <div
@@ -245,7 +253,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
               cursor: "pointer",
             }}
           >
-            <ServeIcon />
+            {/* <ServeIcon /> */}
           </div>
           <ServeSerachButton />
         </form>
@@ -369,7 +377,7 @@ const styles = {
   },
   dropdown: {
     width: 150,
-    height: "25px",
+    height: "40px",
   },
 };
 export default connect(VideoArchive);
