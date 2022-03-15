@@ -333,7 +333,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     });
 
     if (!isValid) return null;
-    let path = `/dashboard/`;
     // ⬇️ set new application data object
     let appFromData = { ...formData };
 

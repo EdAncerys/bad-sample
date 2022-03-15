@@ -1,3 +1,6 @@
+// ⬇️ refactor all pick lists point form
+// {{host}}/catalogue/fields/core_membershipapplication
+
 export const DATA = [
   {
     id: 1,
@@ -1344,6 +1347,17 @@ export const sigAppFileds = [
   "bad_mainareaofinterest",
   "bad_includeinthebssciiemaildiscussionforum",
   "py3_insertnhsnetemailaddress",
+];
+
+export const prefMailingOption = [
+  {
+    value: 1, // TBC value reange
+    Label: "Main Hospital",
+  },
+  {
+    value: 2,
+    Label: "Home",
+  },
 ];
 
 export const proAppFileds = [
