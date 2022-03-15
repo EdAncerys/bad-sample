@@ -135,7 +135,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       data = data.filter((item) => item[typePath].includes(cptBlockFilter));
     }
 
-    if (!!input) {
+    if (input) {
       data = data.filter((item) => {
         let title = item.title.rendered;
         let content = item.content.rendered;
