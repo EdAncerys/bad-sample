@@ -116,7 +116,7 @@ const Profile = ({ state, actions, libraries }) => {
 
       return (
         <div style={styles.container}>
-          <span className="primary-title">Mobile:</span>
+          <span className="primary-title">Mobile: </span>
           <Html2React html={mobilephone} />
         </div>
       );
