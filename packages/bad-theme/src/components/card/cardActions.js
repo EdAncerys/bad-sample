@@ -25,6 +25,7 @@ const CardActions = ({
   handler,
   electionBlocks,
   rssFeedLink,
+  videoArchive,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -149,7 +150,7 @@ const CardActions = ({
         </div>
       </div>
     );
-
+  if (videoArchive) return null;
   return (
     <div>
       <div
