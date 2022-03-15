@@ -3,7 +3,11 @@ import { connect } from "frontity";
 import { Form } from "react-bootstrap";
 
 import ActionPlaceholder from "../actionPlaceholder";
-import { UK_COUNTIES, UK_COUNTRIES } from "../../config/data";
+import {
+  UK_COUNTIES,
+  UK_COUNTRIES,
+  prefMailingOption,
+} from "../../config/data";
 import { colors } from "../../config/imports";
 // CONTEXT ----------------------------------------------------------------
 import {
@@ -327,8 +331,13 @@ const UpdateAddress = ({ state, actions, libraries }) => {
                   <option value="" hidden>
                     Preferred mailing option
                   </option>
-                  <option value="1">Home</option>
-                  <option value="2">Work</option>
+                  {prefMailingOption.map((item, key) => {
+                    return (
+                      <option key={key} value={item.value}>
+                        {item.Label}
+                      </option>
+                    );
+                  })}
                 </Form.Select>
               </div>
             </div>

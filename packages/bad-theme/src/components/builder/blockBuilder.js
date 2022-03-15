@@ -401,10 +401,10 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
         if (acf_fc_layout === "accordion")
           return (
-            <BlockWrapper key={key + 1} background={block.background_colour}>
+            <div key={key + 1} background={block.background_colour}>
               <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
               <Accordion key={key} block={block} />
-            </BlockWrapper>
+            </div>
           );
 
         if (acf_fc_layout === "journal_promo_block")

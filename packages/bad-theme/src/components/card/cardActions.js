@@ -11,6 +11,8 @@ import {
   useAppState,
   setGoToAction,
   getWileyAction,
+  setErrorAction,
+  setLoginModalAction,
 } from "../../context";
 
 const CardActions = ({
@@ -62,6 +64,42 @@ const CardActions = ({
     };
   }, [isActiveUser]);
 
+  const handelLogin = () => {
+    setErrorAction({ dispatch, isError: null });
+    setLoginModalAction({ dispatch, loginModalAction: true });
+  };
+
+  const handelRedirect = () => {
+    setErrorAction({ dispatch, isError: null });
+    setGoToAction({ path: authLink, actions });
+  };
+
+  const handleFeedLink = () => {
+    // check if logged in user exists || otherwise error notification
+    if (!isActiveUser) {
+      // track notification error action
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Remember to log in to the BAD website in order to have full access to Wiley Publications.`,
+          image: "Error",
+          action: [
+            {
+              label: "Read Publication",
+              handler: handelRedirect,
+            },
+            { label: "Login", handler: handelLogin },
+          ],
+        },
+      });
+
+      return;
+    }
+    console.log("API link", authLink); // debug
+
+    setGoToAction({ path: authLink, actions });
+  };
+
   // SERVERS ---------------------------------------------
   const ServeReadMoreAction = () => {
     if (!link || electionBlocks) return null;
@@ -84,7 +122,7 @@ const CardActions = ({
     if (link_label) goToLabel = link_label;
 
     return (
-      <div onClick={() => setGoToAction({ path: authLink, actions })}>
+      <div onClick={handleFeedLink}>
         <div className="caps-btn" style={{ marginTop: "1em" }}>
           <Html2React html={goToLabel} />
         </div>

@@ -26,23 +26,46 @@ const ErrorModal = ({ state, actions }) => {
     setErrorAction({ dispatch, isError: null });
   };
 
-  const gotToActionHandler = () => {
-    setGoToAction({ path: "/dashboard/", actions });
+  const gotToActionHandler = ({ path }) => {
+    setGoToAction({ path, actions });
     setErrorAction({ dispatch, isError: null });
   };
 
   // SERVERS --------------------------------------------------
   const ServeActions = () => {
-    const DashboardAction = () => {
-      if (!isError.goToDashboard) return null;
+    const ServeGoToAction = () => {
+      if (!isError.goToPath) return null;
 
       return (
         <div
           className="blue-btn"
           style={{ marginRight: "1em" }}
-          onClick={gotToActionHandler}
+          onClick={() => gotToActionHandler({ path: isError.goToPath.path })}
         >
-          Dashboard
+          {isError.goToPath.label}
+        </div>
+      );
+    };
+
+    const ServeAction = () => {
+      if (!isError.action) return null;
+
+      return (
+        <div>
+          <div className="flex">
+            {isError.action.map((action, index) => {
+              return (
+                <div
+                  key={index}
+                  className="blue-btn"
+                  style={{ marginRight: "1em" }}
+                  onClick={action.handler}
+                >
+                  {action.label}
+                </div>
+              );
+            })}
+          </div>
         </div>
       );
     };
@@ -55,7 +78,8 @@ const ErrorModal = ({ state, actions }) => {
             justifyContent: "flex-end",
           }}
         >
-          <DashboardAction />
+          <ServeGoToAction />
+          <ServeAction />
           <div className="blue-btn" onClick={actionHandler}>
             Close
           </div>

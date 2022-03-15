@@ -147,13 +147,17 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     });
 
     if (hospitalId) {
-      // get hospital data via API & populate form
-      const hospitalData = await getHospitalNameAction({
-        state,
-        id: hospitalId,
-      });
-      if (hospitalData) {
-        setSelectedHospital(hospitalData.name);
+      try {
+        // get hospital data via API & populate form
+        const hospitalData = await getHospitalNameAction({
+          state,
+          id: hospitalId,
+        });
+        if (hospitalData) {
+          setSelectedHospital(hospitalData.name);
+        }
+      } catch (error) {
+        console.log("🤖 error", error);
       }
     }
 
@@ -170,14 +174,16 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
   // HANDLERS --------------------------------------------
   const handleSelectHospital = ({ item }) => {
+    setSelectedHospital(item.title);
+    setHospitalData(null); // clear hospital data for dropdown
+    console.log("selected hospital", item); // debug
+
+    // guard if user have BAD apps approved dont allow hospital lookup
+    if (!canChangeHospital) return;
     setFormData((prevFormData) => ({
       ...prevFormData,
       py3_hospitalid: item.link,
     }));
-
-    setSelectedHospital(item.title);
-    setHospitalData(null); // clear hospital data for dropdown
-    console.log("selected hospital", item); // debug
   };
 
   const handleClearHospital = () => {
