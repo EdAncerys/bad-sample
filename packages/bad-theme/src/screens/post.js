@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { colors } from "../config/imports";
 import Card from "../components/card/card";
 // BLOCK WIDTH WRAPPER -----------------------------------------------------
@@ -28,7 +29,8 @@ const Post = ({ state, actions, libraries }) => {
     // pre fetch post data
     let iteration = 0;
     let data = Object.values(state.source.post);
-    while (data.length === 0) {
+    // if no posts or isSingle post fetch data
+    while (data.length === 0 || data.length === 1) {
       // if iteration is greater than 10, break
       if (iteration > 10) break;
       // set timeout for async
@@ -49,6 +51,12 @@ const Post = ({ state, actions, libraries }) => {
       useEffectRef.current = false; // clean up function
     };
   }, []);
+
+  // HANDLERS --------------------------------------------
+  const handleGoToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
+    document.documentElement.scrollTop = 0; // for safari
+  };
 
   // SERVERS ---------------------------------------------
   const ServeContent = () => {
@@ -84,6 +92,20 @@ const Post = ({ state, actions, libraries }) => {
       <div className="text-body">
         <ServeTitle />
         <ServeBody />
+
+        <div
+          style={{
+            padding: "2em 0",
+            borderBottom: `1px solid ${colors.lightSilver}`,
+          }}
+          onClick={handleGoToTop}
+        >
+          <div className="caps-btn">
+            <ArrowUpwardIcon className="caps-btn-icon" />
+            <span>Return Back To Top</span>
+            <ArrowUpwardIcon className="caps-btn-icon" />
+          </div>
+        </div>
       </div>
     );
   };

@@ -8,21 +8,27 @@ import date from "date-and-time";
 import ShareToSocials from "./shareToSocials";
 
 const DATE_MODULE = date;
+// CONTEXT ----------------------------------------------------------------
+import { copyToClipboard } from "../../context";
 
 const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!authorInfo) return null;
+  console.log("authorInfo: ", authorInfo); // debug
+
+  const { date, modified, tags, content } = authorInfo;
+  const { press_release_authors, show_modified_date } = authorInfo.acf;
 
   const mountedRef = useRef(true);
   const [tagData, setTagData] = useState(null);
+  const [podcastId, setPodcastId] = useState(null);
+
   const ICON_WIDTH = 100;
-  const { date, modified, tags, content } = authorInfo;
-  const { press_release_authors } = authorInfo.acf;
   const title = authorInfo.title ? authorInfo.title.rendered : null;
 
-   // remove first / from string if its exist in the url
-   const removeFirstSlash = (url) => {
+  // remove first / from string if its exist in the url
+  const removeFirstSlash = (url) => {
     if (url.startsWith("/")) {
       return url.substring(1);
     }
@@ -33,15 +39,41 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
 
   useEffect(async () => {
     if (state.source.category) {
-      const TAG = Object.values(state.source.tag);
+      // get post tags
+      const tagNames = Object.values(state.source.tag);
+      // get Podcast category id
+      const categoryData = Object.values(state.source.category);
+      let podcastCatId = categoryData.filter((cat) => cat.name === "Podcast");
 
-      setTagData(TAG);
+      if (podcastCatId.length > 0) {
+        podcastCatId = podcastCatId[0].id;
+      } else {
+        podcastCatId = null;
+      }
+
+      setTagData(tagNames);
+      setPodcastId(podcastCatId);
     }
 
     return () => {
       mountedRef.current = false; // clean up function
     };
   }, []);
+
+  // HANDLERS --------------------------------------------
+  const mailToClient = (e) => {
+    copyToClipboard(e);
+
+    // set user notification if email client is not available & copy to clipboard
+    const emailValue = e.target.innerText;
+    const clipboard = document.querySelector(`.clipboard-reference`); // placeholder selector
+
+    document.location = "mailto:" + emailValue; // open default email client
+    clipboard.classList.remove("d-none");
+    setTimeout(() => {
+      clipboard.classList.add("d-none");
+    }, 1000);
+  };
 
   // SERVERS ---------------------------------------------
   const ServeDate = () => {
@@ -50,7 +82,7 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
     const dateModified = new Date(modified);
 
     const ServeModified = () => {
-      if (datePublished === dateModified) return null;
+      if (datePublished === dateModified || !show_modified_date) return null;
 
       return (
         <div style={styles.container}>
@@ -81,11 +113,11 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
   const ServeProfile = () => {
     if (!press_release_authors) return null;
 
-    const ServeProfilePhoto = () => {
-      if (!press_release_authors[0].press_release_author_photo) return null;
+    const ServeProfilePhoto = ({ author }) => {
+      if (!author.press_release_author_photo) return null;
 
-      const alt = press_release_authors[0].press_release_author_name || "BAD";
-      const url = press_release_authors[0].press_release_author_photo.url;
+      const alt = author.press_release_author_name || "BAD";
+      const url = author.press_release_author_photo.url;
 
       return (
         <div
@@ -103,49 +135,71 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
             style={{
               width: "100%",
               height: "100%",
+              objectFit: "cover",
             }}
           />
         </div>
       );
     };
 
-    const ServeName = () => {
-      const name = press_release_authors[0].press_release_author_name;
-      if (!name) return null;
+    const ServeName = ({ author }) => {
+      if (!author.press_release_author_name) return null;
 
       return (
-        <div style={{ fontWeight: "bold", padding: `1em 0` }}>
-          <Html2React html={name} />
+        <div style={{ fontWeight: "bold", padding: `0.5em 0` }}>
+          <Html2React html={author.press_release_author_name} />
         </div>
       );
     };
 
-    const ServeHospital = () => {
-      const hospital = press_release_authors[0].press_release_author_hospital;
-      if (!hospital) return null;
+    const ServeEmail = ({ author }) => {
+      if (!author.email) return null;
+
+      return (
+        <div
+          email={author.email}
+          className="title-link-animation"
+          onClick={mailToClient}
+          style={{ marginBottom: `0.5em` }}
+        >
+          <div style={styles.link}>
+            <Html2React html={author.email} />
+          </div>
+          <span className="clipboard-reference d-none" />
+        </div>
+      );
+    };
+
+    const ServeHospital = ({ author }) => {
+      if (!author.press_release_author_hospital) return null;
 
       return (
         <div>
-          <Html2React html={hospital} />
+          <Html2React html={author.press_release_author_hospital} />
         </div>
       );
     };
 
-    const isAuthor =
-      press_release_authors[0].press_release_author_name ||
-      press_release_authors[0].press_release_author_photo ||
-      press_release_authors[0].press_release_author_hospital;
+    const isPodcast = authorInfo.categories.includes(podcastId);
+
+    let postUserTitle = "Author";
+    if (isPodcast) postUserTitle = "Guests";
 
     return (
       <div>
-        {isAuthor && (
-          <div className="primary-title" style={{ fontSize: 20 }}>
-            Author
-          </div>
-        )}
-        <ServeProfilePhoto />
-        <ServeName />
-        <ServeHospital />
+        <div className="primary-title" style={{ fontSize: 20 }}>
+          {postUserTitle}
+        </div>
+        {press_release_authors.map((author, index) => {
+          return (
+            <div key={index}>
+              <ServeProfilePhoto author={author} />
+              <ServeName author={author} />
+              <ServeHospital author={author} />
+              <ServeEmail author={author} />
+            </div>
+          );
+        })}
       </div>
     );
   };
