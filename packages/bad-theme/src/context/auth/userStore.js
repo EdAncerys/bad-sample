@@ -185,6 +185,7 @@ export const setCompleteUserApplicationAction = async ({
   dispatch,
   isActiveUser,
   applicationData,
+  changeAppCategory,
 }) => {
   console.log("setCompleteUserApplicationAction triggered");
 
@@ -192,6 +193,10 @@ export const setCompleteUserApplicationAction = async ({
   if (applicationData) {
     const type = applicationData[0].bad_categorytype;
     confirmationMsg = `${type} application been successfully submitted!`;
+  }
+  if (changeAppCategory && applicationData) {
+    // change of category for BAD application error message
+    confirmationMsg = `Application change to ${changeAppCategory.bad_categorytype} from ${applicationData[0].bad_categorytype} been successfully submitted!`;
   }
 
   try {

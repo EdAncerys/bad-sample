@@ -368,24 +368,12 @@ const ApplicationChange = ({ state, actions, libraries }) => {
         dispatch,
         isActiveUser,
         applicationData,
+        changeAppCategory: appFromData,
       });
       if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
 
-      // // fetch new dynamicsApps data from API
-      // await getApplicationStatus({
-      //   state,
-      //   dispatch,
-      //   contactid: isActiveUser.contactid,
-      // });
-      // // redirect to dashboard
-      // setGoToAction({ path, actions });
-      // // display error message
-      // setErrorAction({
-      //   dispatch,
-      //   isError: {
-      //     message: `Application been changed to BAD ${formData.bad_categorytype}.`,
-      //   },
-      // });
+      // redirect to dashboard
+      setGoToAction({ path: `/dashboard/`, actions });
     } catch (error) {
       console.log(error);
       setErrorAction({
@@ -476,6 +464,16 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     );
   };
 
+  const ServeAppName = () => {
+    if (!applicationData) return null;
+
+    return (
+      <span style={{ paddingLeft: "0.5em" }}>
+        {applicationData[0].bad_categorytype}
+      </span>
+    );
+  };
+
   return (
     <BlockWrapper>
       <div
@@ -524,8 +522,8 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                     className="primary-title"
                     style={{ padding: `1em 0`, fontSize: 20 }}
                   >
-                    Current BAD membership:{" "}
-                    {applicationData[0].bad_categorytype}
+                    Current BAD membership:
+                    <ServeAppName />
                   </div>
                   <label className="bold">Change Membership Category to</label>
                   <Form.Select
