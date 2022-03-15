@@ -193,7 +193,13 @@ const ApplicationChange = ({ state, actions, libraries }) => {
       return (
         <div>
           <div>
-            <label className="bold">Membership Category</label>
+            <div
+              className="primary-title"
+              style={{ padding: `1em 0`, fontSize: 20 }}
+            >
+              Current BAD membership: {applicationChangeData.bad_categorytype}
+            </div>
+            <label className="bold">Change Membership Category to</label>
             <Form.Select
               name="bad_categorytype"
               value={formData.bad_categorytype}
@@ -257,7 +263,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
           BAD membership change
         </div>
         <div className="title-link-animation" style={{ padding: `2em 0` }}>
-          Current BAD membership: {applicationChangeData.bad_categorytype}
+          Form - BAD Category Change Questions
         </div>
       </div>
     );
@@ -287,12 +293,13 @@ const ApplicationChange = ({ state, actions, libraries }) => {
             />
             <div style={styles.wrapper}>
               <div className="primary-title" style={styles.title}>
-                Category Selection
+                Change of Category Application
               </div>
               <div style={{ paddingTop: `0.75em` }}>
-                Please confirm your category selction. Or if you are unsure of
-                the category you should be applying for please view the
-                membership category descriptions for further clarification.
+                If you are a current BAD member and now need to change your
+                membership category you can apply to do so here. All changes of
+                category applications must be approved by the BAD Executive
+                committee.
               </div>
               <Link
                 link={`/membership/`}

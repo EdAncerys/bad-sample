@@ -12,16 +12,14 @@ const FadDirectory = ({ state, actions, libraries, fadDirectory }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!fadDirectory) return null;
-
-  console.log("fadDirectory", fadDirectory);
+  // console.log("fadDirectory", fadDirectory); // debug
 
   const {
     fullname,
     emailaddress1,
     bad_mainhosptialweb,
     jobtitle,
-    contactid,
-    profile_image_url,
+    bad_profile_photo_url,
   } = fadDirectory;
 
   // SERVERS ---------------------------------------------
@@ -43,7 +41,7 @@ const FadDirectory = ({ state, actions, libraries, fadDirectory }) => {
           }}
         >
           <Image
-            src={profile_image_url || ProfileAvatar}
+            src={bad_profile_photo_url || ProfileAvatar}
             alt={alt}
             style={{
               width: "100%",

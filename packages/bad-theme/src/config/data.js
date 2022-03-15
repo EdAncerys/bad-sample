@@ -1329,6 +1329,7 @@ export const sigAppFileds = [
   "sky_newhospitalname",
   "bad_proposer1",
   "bad_proposer2",
+  "py3_ntnno",
   "sky_cvurl",
   "bad_readpolicydocument",
   "sig_readpolicydocument_url_email",

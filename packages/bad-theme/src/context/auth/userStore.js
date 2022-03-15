@@ -448,6 +448,8 @@ const updateMembershipApplication = ({
       application.name === "bad_expectedyearofqualification"
     )
       application.value = data.bad_expectedyearofqualification;
+    if (data.bad_memberdirectory && application.name === "bad_memberdirectory")
+      application.value = data.bad_memberdirectory;
 
     //⏬ SIG section of the application process
     if (data.bad_qualifications && application.name === "bad_qualifications")
