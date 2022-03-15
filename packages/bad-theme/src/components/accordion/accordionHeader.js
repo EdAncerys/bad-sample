@@ -47,7 +47,6 @@ const AccordionHeader = ({
 
   let updateInProgress = false;
   if (acf && acf.update_in_progress) niceAccredited = acf.update_in_progress;
-  console.log(acf.update_in_progress);
 
   const isActive = useRef(false);
 
@@ -123,7 +122,7 @@ const AccordionHeader = ({
   };
 
   const ServeUpdateInProgress = () => {
-    if (!acf.update_in_progress) return null;
+    if (acf && !acf.update_in_progress) return null;
 
     return (
       <div
