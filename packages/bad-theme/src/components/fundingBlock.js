@@ -20,7 +20,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   const [groupeType, setGroupeType] = useState(null);
 
   const [searchFilter, setSearchFilter] = useState(null);
-  
+
   const searchFilterRef = useRef(null);
   const currentSearchFilterRef = useRef(null);
   const typeFilterRef = useRef(null);
@@ -38,8 +38,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     preview,
     funding_filter,
   } = block;
-
-
 
   const LIMIT = 100; // max limit
 
@@ -103,7 +101,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   };
 
   const handleSearch = () => {
-    const input = searchFilterRef.current.value.toLowerCase() || searchFilter;
+    const input = searchFilterRef.current.value || searchFilter;
     currentSearchFilterRef.current = input;
     let data = Object.values(state.source[postPath]);
 
@@ -113,7 +111,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       );
     }
 
-    if (!!input) {
+    if (input) {
       data = data.filter((item) => {
         let title = item.title.rendered;
         let content = item.acf.overview;
@@ -134,18 +132,29 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     const input = typeFilterRef.current;
     let data = Object.values(state.source[postPath]); // add postListData object to data array
 
+    console.log("handleTypeSearch", data);
+
     if (currentSearchFilterRef.current)
       data = data.filter((item) => {
-        let title = item.title.rendered;
-        let content = item.content.rendered;
+        let title = item.title;
+        if (title) title = title.rendered;
+        let content = item.content;
+        if (content) content = content.rendered;
+        let overview = item.acf;
+        if (overview) overview = overview.overview;
+
         if (title)
           title = title.toLowerCase().includes(currentSearchFilterRef.current);
         if (content)
           content = content
             .toLowerCase()
             .includes(currentSearchFilterRef.current);
+        if (overview)
+          overview = overview
+            .toLowerCase()
+            .includes(currentSearchFilterRef.current);
 
-        return title || content;
+        return title || content || overview;
       });
 
     if (input) {
