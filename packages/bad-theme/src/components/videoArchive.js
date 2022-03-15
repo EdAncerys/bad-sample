@@ -165,7 +165,17 @@ const VideoArchive = ({ state, actions, libraries }) => {
             paidFilter.current = null;
           }}
         >
-          Reset Filters
+          <div
+            onClick={() => {
+              paidFilter.current = "all";
+              specialtyFilter.current = "all";
+              handleFilters();
+            }}
+          >
+            <div style={{ cursor: "pointer", textDecoration: "underline" }}>
+              Reset Filters
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -230,7 +240,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
       >
         <form
           onSubmit={(e) => handleSearch(e, searchFilter)}
-          style={{ display: "flex", width: "50%" }}
+          style={{ display: "flex", width: "100%" }}
         >
           <input
             ref={searchFilterRef}
