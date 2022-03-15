@@ -106,8 +106,6 @@ const EventLoopBlock = ({
   }, []);
 
   if (!eventList) return <Loading />;
-  console.log("🚀 block", block); // debug
-  console.log("🚀 event list", eventList); // debug
 
   // RETURN ---------------------------------------------
   return (

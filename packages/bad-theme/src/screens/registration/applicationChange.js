@@ -24,6 +24,7 @@ import {
   getHospitalNameAction,
   getBADMembershipSubscriptionData,
   setUserStoreAction,
+  setCompleteUserApplicationAction,
 } from "../../context";
 
 const ApplicationChange = ({ state, actions, libraries }) => {
@@ -41,8 +42,8 @@ const ApplicationChange = ({ state, actions, libraries }) => {
   const [formData, setFormData] = useState({
     bad_organisedfor: "810170000",
     bad_categorytype: "",
-    core_membershipsubscriptionplanid: "",
-    core_membershipsubscriptionid: "",
+    bad_existingsubscriptionid: "", // current subscription id
+    core_membershipsubscriptionplanid: "", // new subscription plan id
 
     py3_gmcnumber: "",
     py3_otherregulatorybodyreference: "",
@@ -334,7 +335,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     if (!isValid) return null;
     let path = `/dashboard/`;
     // ⬇️ set new application data object
-    let appFromData = formData;
+    let appFromData = { ...formData };
 
     try {
       setFetching(true);
@@ -346,36 +347,30 @@ const ApplicationChange = ({ state, actions, libraries }) => {
       });
       if (!response) throw new Error("Failed to get membership data");
 
-      // ⬇️  update application object with new membership ID
+      // ⬇️  update application object with new membership ID ⬇️
       appFromData.core_membershipsubscriptionplanid =
         response.core_membershipsubscriptionplanid;
-      // ⬇️  update application object with previous membership ID
-      let previousAppId = "";
-      if (applicationData[0] && applicationData[0].changeAppCategory)
-        previousAppId =
-          applicationData[0].changeAppCategory.core_membershipsubscriptionid;
-      appFromData.core_membershipsubscriptionid = previousAppId;
       console.log("appFromData", appFromData); // debug
 
-      // const store = await setUserStoreAction({
-      //   state,
-      //   actions,
-      //   dispatch,
-      //   applicationData,
-      //   isActiveUser,
-      //   dynamicsApps,
-      //   data: appFromData,
-      // });
-      // if (!store.success) throw new Error("Failed to update application");
+      const store = await setUserStoreAction({
+        state,
+        actions,
+        dispatch,
+        applicationData,
+        isActiveUser,
+        dynamicsApps,
+        data: appFromData,
+      });
+      if (!store.success) throw new Error("Failed to update application");
 
-      // // set complete application if app = BAD
-      // const appsResponse = await setCompleteUserApplicationAction({
-      //   state,
-      //   dispatch,
-      //   isActiveUser,
-      //   applicationData,
-      // });
-      // if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
+      // set complete application if app = BAD
+      const appsResponse = await setCompleteUserApplicationAction({
+        state,
+        dispatch,
+        isActiveUser,
+        applicationData,
+      });
+      if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
 
       // // fetch new dynamicsApps data from API
       // await getApplicationStatus({

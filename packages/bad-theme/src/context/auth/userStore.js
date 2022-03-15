@@ -499,6 +499,11 @@ const updateMembershipApplication = ({
       application.value = data.py3_insertnhsnetemailaddress;
 
     //⏬ BAD change of category of the application process
+    if (
+      data.bad_existingsubscriptionid &&
+      application.name === "bad_existingsubscriptionid"
+    )
+      application.value = data.bad_existingsubscriptionid;
 
     //⏬ complete & submit of the application process
     if (data.bad_ethnicity && application.name === "bad_ethnicity")
