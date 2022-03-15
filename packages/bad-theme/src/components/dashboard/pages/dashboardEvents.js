@@ -73,23 +73,25 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
             padding: `${marginVertical}px ${marginHorizontal}px`,
           }}
         >
-          {listOfEvents.map((item, key) => {
-            console.log(item);
-            return (
-              <Card
-                key={key}
-                title={item.title.rendered}
-                url={item.acf.image || DEFAULT_IMAGE}
-                imgHeight={200}
-                link_label="Go to the event's page"
-                link={item.acf.registration_page_link}
-                date={item.acf.date_time}
-                seatNumber="seatNumber"
-                cardHeight="100%"
-                shadow
-              />
-            );
-          })}
+          {listOfEvents.length > 0
+            ? listOfEvents.map((item, key) => {
+                console.log(item);
+                return (
+                  <Card
+                    key={key}
+                    title={item.title.rendered}
+                    url={item.acf.image || DEFAULT_IMAGE}
+                    imgHeight={200}
+                    link_label="Go to the event's page"
+                    link={item.acf.registration_page_link}
+                    date={item.acf.date_time}
+                    seatNumber="seatNumber"
+                    cardHeight="100%"
+                    shadow
+                  />
+                );
+              })
+            : "You are not registered for any events"}
         </div>
       </BlockWrapper>
       <TitleBlock
@@ -110,7 +112,7 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
           grades: false,
           layout: "layout_two",
           locations: false,
-          post_limit: "4",
+          post_limit: "2",
           view_all_link: false,
         }}
       />

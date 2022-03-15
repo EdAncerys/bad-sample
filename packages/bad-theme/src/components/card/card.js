@@ -84,7 +84,6 @@ const Card = ({
   videoArchive,
   noVideoCategory,
   shareToSocials,
-  video,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
@@ -180,6 +179,7 @@ const Card = ({
   const ServeVideoCover = () => {
     if (!videoArchive) return null;
     if (!url) return null;
+    console.log("VA FROM CARD", videoArchive);
     const [vimeoCover, setVimeoCover] = useState(
       "https://badadmin.skylarkdev.co/wp-content/uploads/2022/02/VIDEO-LIBRARY.jpg"
     );
@@ -187,7 +187,8 @@ const Card = ({
 
     let STYLES = { minHeight: 200, maxHeight: 300 };
     if (imgHeight) STYLES = { height: imgHeight };
-    const getVimeoCover = async ({ video_url }) => {
+    const getVimeoCover = async () => {
+      const video_url = videoArchive.acf.video;
       console.log("VIDEOURL", video_url);
       // Example URL: https://player.vimeo.com/video/382577680?h=8f166cf506&color=5b89a3&title=0&byline=0&portrait=0
       const reg = /\d+/g;
@@ -204,7 +205,7 @@ const Card = ({
     };
 
     useEffect(() => {
-      getVimeoCover({ video_url: videoArchive.acf.video });
+      getVimeoCover();
     }, []);
     return (
       <div
@@ -296,6 +297,7 @@ const Card = ({
           downloadFile={downloadFile}
           handler={handler}
           electionBlocks={ELECTION_BLOCKS}
+          videoArchive={videoArchive}
         />
       </div>
     );

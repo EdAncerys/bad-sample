@@ -213,22 +213,26 @@ const Video = ({ state, actions }) => {
     );
   };
   const RelatedVideos = () => {
-    const videosy = [1, 2];
-    return videosy.map((vid) => {
+    const videos_list = Object.values(state.source.videos);
+    const related_videos_to_show = videos_list.slice(0, 2);
+    return related_videos_to_show.map((vid) => {
+      if (vid.id === post.id) vid = videos_list[2];
       return (
         <Card
-          title="Video Example"
+          title={vid.title.rendered}
           url="https://i.vimeocdn.com/video/843761302-3d7f394aea80c28b923cee943e3a6be6c0f23410043d41daf399c9a57d19a191-d_640"
-          body="Lorem ipsum festilia"
+          body={vid.content.rendered}
           colour={colors.orange}
-          videoArchive={post}
+          videoArchive={vid}
+          link={vid.link}
           noVideoCategory
-          onClick={() => setGoToAction({ path: post.link, actions })}
+          onClick={() => setGoToAction({ path: vid.link, actions })}
         />
       );
     });
   };
   React.useEffect(async () => {
+    //Not the greatest idea to make useEffect async
     actions.source.fetch("/videos/");
 
     const jwt = await authenticateAppAction({ state, dispatch });

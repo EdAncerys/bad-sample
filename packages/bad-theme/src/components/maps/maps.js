@@ -41,10 +41,10 @@ const MapsComponent = ({
     if (markers.length === 0) return null;
 
     return markers.map((derm, key) => {
-      if (!derm.address1_latitude || !derm.address1_longitude) return null;
+      if (!derm.distance) return null;
       const POSITION = {
-        lat: Number(derm.address1_latitude),
-        lng: Number(derm.address1_longitude),
+        lat: Number(derm.cordinates.lat),
+        lng: Number(derm.cordinates.lng),
       };
       const marker_key = key + 1;
       const marker_label = marker_key.toString();

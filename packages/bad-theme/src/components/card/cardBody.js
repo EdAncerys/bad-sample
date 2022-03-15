@@ -3,7 +3,8 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
 import date from "date-and-time";
-import PaidIcon from "@mui/icons-material/Paid";
+import { CurrencyPoundRounded } from "@mui/icons-material";
+import PoundSterling from "../../img/svg/pound-sterling.svg";
 
 import { colors } from "../../config/imports";
 import ElectionInfo from "./electionInfo";
@@ -61,12 +62,23 @@ const CardBody = ({
     const ServePaidIcon = () => {
       if (!videoArchive || !videoArchive.acf) return null;
       if (videoArchive.acf.private && videoArchive.acf.price)
-        return <PaidIcon />;
+        return (
+          <svg width="25" height="25" style={{ color: "red", marginLeft: 10 }}>
+            <image
+              href={PoundSterling}
+              src="yourfallback.png"
+              width="25"
+              height="25"
+            />
+          </svg>
+        );
       return null;
     };
     return (
       <div
-        className="flex primary-title body-limit"
+        className={
+          videoArchive ? "flex primary-title" : "flex primary-title body-limit"
+        }
         style={{
           fontSize: heroBanner ? (!lg ? `2.25rem` : 25) : 20,
           minHeight: "auto",
@@ -77,6 +89,7 @@ const CardBody = ({
           alignItems: "flex-start",
           opacity: opacity || 1,
           WebkitLineClamp: titleLimit || "unset",
+          justifyContent: "space-between",
         }}
       >
         <Html2React html={title} />
@@ -139,6 +152,7 @@ const CardBody = ({
               style={{
                 fontSize: 12,
                 fontWeight: "bold",
+                textTransform: videoArchive ? "uppercase" : null,
               }}
             >
               <Html2React html={formattedDate} />
@@ -165,7 +179,16 @@ const CardBody = ({
     }
     const ServeSpecialty = ({ name }) => {
       return (
-        <div style={{ backgroundColor: colors.lightSilver, padding: "1em" }}>
+        <div
+          style={{
+            backgroundColor: colors.silverFillOne,
+            padding: "1em",
+            textTransform: "uppercase",
+            fontSize: 12,
+            color: colors.darkSilver,
+          }}
+          className="primary-title"
+        >
           {name}
         </div>
       );
@@ -202,6 +225,7 @@ const CardBody = ({
           style={{
             fontSize: 12,
             fontWeight: "bold",
+            textTransform: videoArchive ? "uppercase" : null,
           }}
         >
           <Html2React html={formattedDate} />
