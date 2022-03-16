@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../config/imports";
@@ -19,14 +19,15 @@ const Post = ({ state, actions, libraries }) => {
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-
-  if (!pil) return <Loading />;
+  const [position, setPosition] = useState(null);
 
   useEffect(() => {
-    // window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
-    // document.documentElement.scrollTop = 0; // for safari
+    window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
+    document.documentElement.scrollTop = 0; // for safari
+    setPosition(true);
   }, []);
 
+  if (!pil || !position) return <Loading />;
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
     if (!pil.title) return null;
