@@ -15,22 +15,15 @@ const VideoArchive = ({ state, actions, libraries }) => {
   const [heroBannerBlock, setHeroBannerBlock] = useState();
   const [guidanceCategory, setGuidanceCategory] = useState(null);
   const [postData, setPostData] = useState(null);
-
   const [filters, setFilters] = useState();
 
   const { sm, md, lg, xl } = muiQuery();
 
   const searchFilterRef = useRef(null);
-  const currentSearchFilterRef = useRef(null);
-  const typeFilterRef = useRef(null);
-  const loadMoreRef = useRef(null);
-  const specialtyRef = useRef(null);
-  const useEffectRef = useRef(null);
   const specialtyFilter = useRef(null);
+  const allVideos = useRef(null);
   const paidFilter = useRef(null);
-  const categoryFilter = null;
-  const guidanceFilter = null;
-  const marginHorizontal = state.theme.marginHorizontal;
+
   const marginVertical = state.theme.marginVertical;
   const inputSize = 20;
   // const LIMIT = 6;
@@ -128,6 +121,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
             id="payments-filters"
             onChange={() => {
               const select = document.getElementById("payments-filters");
+              setFilters({ payments: select });
               const value = select.options[select.selectedIndex].value;
               paidFilter.current = value;
               handleFilters();
@@ -317,6 +311,8 @@ const VideoArchive = ({ state, actions, libraries }) => {
     };
 
     const data = state.source.get(state.router.link);
+    allVideos.current = data.items;
+    console.log("ALLKARA", allVideos.current);
     setPostData(data.items);
 
     console.log("DATERO ", data);
