@@ -3,6 +3,7 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
 import { colors } from "../../config/imports";
+// CONTEXT -------------------------------------
 import { setGoToAction } from "../../context";
 
 const JournalCard = ({
@@ -18,8 +19,16 @@ const JournalCard = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const CARD_WIDTH = "30%";
   const IMG_WIDTH = 75;
+  const isShadow = shadow ? "shadow" : "";
 
   if (!image && !title) return null; // do not render card if content not provided
+
+  // HANDLERS ---------------------------------------------
+  const handleCardAction = () => {
+    if (link) {
+      setGoToAction({ path: link.url, actions });
+    }
+  };
 
   // SERVERS ---------------------------------------------
   const ServeCardContent = () => {
@@ -119,11 +128,12 @@ const JournalCard = ({
   // RETURN ----------------------------------------------------------------
   return (
     <div
-      className={`${shadow ? "shadow" : ""}`}
+      className={`${isShadow} ${link ? "card-wrapper" : ""}`} // card wrapper as clickable card if link is set
       style={{
         minWidth: CARD_WIDTH,
         width: "100%",
       }}
+      onClick={handleCardAction}
     >
       <div
         className="flex-row"

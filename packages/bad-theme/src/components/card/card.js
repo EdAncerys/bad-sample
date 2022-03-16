@@ -88,7 +88,7 @@ const Card = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
   const THEME = colour || colors.primary;
-  const SHADOW = shadow ? "shadow" : "";
+  const isShadow = shadow ? "shadow" : "";
   const [modalData, setModalData] = useState();
 
   let CARD_HEIGHT = "100%";
@@ -313,7 +313,7 @@ const Card = ({
   // RETURN ----------------------------------------------------
   return (
     <div
-      className={`${SHADOW} ${link ? "card-wrapper" : ""}`} // card wrapper as clickable card if link is set
+      className={`${isShadow} ${link ? "card-wrapper" : ""}`} // card wrapper as clickable card if link is set
       style={{
         ...styles.card,
         backgroundColor: backgroundColor || colors.white,
