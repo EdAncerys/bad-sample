@@ -38,8 +38,6 @@ const DownloadFileBlock = ({
   // SERVERS ---------------------------------------------
   const ServeActions = ({ file, label }) => {
     if (!file) return null;
-    console.log("file", file); // debug
-    console.log("label", label); // debug
 
     let fileName = "Download";
     if (file.title) fileName = file.title;

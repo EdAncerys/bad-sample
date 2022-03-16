@@ -132,7 +132,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
     );
   };
   const ServeButtonsOverLay = () => {
-    if (!buttons) return null;
+    if (!buttons || !add_buttons) return null;
 
     return (
       <div

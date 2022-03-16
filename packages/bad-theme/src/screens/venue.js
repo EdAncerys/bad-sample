@@ -49,8 +49,8 @@ const Venue = ({ state, actions, libraries }) => {
   } = venue.acf;
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
-    document.documentElement.scrollTop = 0; // for safari
+    // window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
+    // document.documentElement.scrollTop = 0; // for safari
   }, []);
 
   // SERVERS ---------------------------------------------------
@@ -90,7 +90,7 @@ const Venue = ({ state, actions, libraries }) => {
                     subject_dropdown_options,
                     message,
                     allow_attachments,
-                    recipients
+                    recipients,
                   },
                 })
               }

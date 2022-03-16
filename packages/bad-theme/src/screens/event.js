@@ -41,8 +41,8 @@ const Event = ({ state, actions, libraries }) => {
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
-    window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
-    document.documentElement.scrollTop = 0; // for safari
+    // window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
+    // document.documentElement.scrollTop = 0; // for safari
 
     // get related event content
     let eventList = null;

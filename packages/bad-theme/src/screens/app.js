@@ -68,9 +68,7 @@ const App = ({ state, actions }) => {
 
   useEffect(() => {
     // ⬇️ restore scroll history to manual position ⬇️
-    console.log("window object", window.history);
     window.history.scrollRestoration = "manual";
-    // window.scrollTo(0, 0);
   }, [endPoint]);
 
   useEffect(async () => {

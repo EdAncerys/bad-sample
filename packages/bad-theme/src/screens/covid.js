@@ -19,8 +19,8 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   const { content, title, acf } = dermGroupe;
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
-    document.documentElement.scrollTop = 0; // for safari
+    // window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
+    // document.documentElement.scrollTop = 0; // for safari
   }, []);
 
   // SERVERS ---------------------------------------------------

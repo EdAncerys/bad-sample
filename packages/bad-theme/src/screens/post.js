@@ -29,8 +29,8 @@ const Post = ({ state, actions, libraries }) => {
 
   useEffect(async () => {
     // default to scrolling to top on page load
-    window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
-    document.documentElement.scrollTop = 0; // for safari
+    // window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
+    // document.documentElement.scrollTop = 0; // for safari
 
     // pre fetch post data
     let iteration = 0;
