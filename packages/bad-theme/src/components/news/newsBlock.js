@@ -75,10 +75,9 @@ const NewsBlock = ({
         const { categories, link, title, featured_media, acf } = block;
         // console.log("block", block); // debug
 
-        const isECircular = categories[0] === eCircularCatId;
-        let fileUrl = null;
-        if (isECircular && acf.file_uploader)
-          fileUrl = acf.file_uploader[0].file_url;
+        const isECircular = categories.includes(eCircularCatId);
+        let fileBlock = null;
+        if (isECircular && acf.file_uploader) fileBlock = acf.file_uploader;
 
         const ServeImage = () => {
           if (!featured_media) return null;
@@ -126,9 +125,7 @@ const NewsBlock = ({
               link_label="Read More"
               link={isECircular ? null : link}
               newsAndMediaInfo={block}
-              downloadFile={
-                fileUrl ? { file: { url: fileUrl }, title: null } : null // download file passed link
-              }
+              downloadFile={isECircular ? fileBlock : null} // download file passed link
               layout={layout}
               cardMinHeight={290}
               colour={colors.pink}

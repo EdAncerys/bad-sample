@@ -26,6 +26,10 @@ const Post = ({ state, actions, libraries }) => {
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
+    // default to scrolling to top on page load
+    window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
+    document.documentElement.scrollTop = 0; // for safari
+
     // pre fetch post data
     let iteration = 0;
     let data = Object.values(state.source.post);
@@ -80,10 +84,33 @@ const Post = ({ state, actions, libraries }) => {
 
     const ServeBody = () => {
       if (!content) return null;
+      const bodyLength = content.rendered.length;
+
+      const ServeBackAction = () => {
+        // dont render if body length is less than 2500
+        if (bodyLength < 2500) return null;
+
+        return (
+          <div
+            style={{
+              padding: "2em 0",
+              borderBottom: `1px solid ${colors.lightSilver}`,
+            }}
+            onClick={handleGoToTop}
+          >
+            <div className="caps-btn">
+              <ArrowUpwardIcon className="caps-btn-icon" />
+              <span>Return Back To Top</span>
+              <ArrowUpwardIcon className="caps-btn-icon" />
+            </div>
+          </div>
+        );
+      };
 
       return (
         <div className="flex-col">
           <Html2React html={content.rendered} />
+          <ServeBackAction />
         </div>
       );
     };
@@ -92,20 +119,6 @@ const Post = ({ state, actions, libraries }) => {
       <div className="text-body">
         <ServeTitle />
         <ServeBody />
-
-        <div
-          style={{
-            padding: "2em 0",
-            borderBottom: `1px solid ${colors.lightSilver}`,
-          }}
-          onClick={handleGoToTop}
-        >
-          <div className="caps-btn">
-            <ArrowUpwardIcon className="caps-btn-icon" />
-            <span>Return Back To Top</span>
-            <ArrowUpwardIcon className="caps-btn-icon" />
-          </div>
-        </div>
       </div>
     );
   };
