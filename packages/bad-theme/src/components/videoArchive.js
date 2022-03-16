@@ -15,32 +15,25 @@ const VideoArchive = ({ state, actions, libraries }) => {
   const [heroBannerBlock, setHeroBannerBlock] = useState();
   const [guidanceCategory, setGuidanceCategory] = useState(null);
   const [postData, setPostData] = useState(null);
+
   const [filters, setFilters] = useState();
 
   const { sm, md, lg, xl } = muiQuery();
 
   const searchFilterRef = useRef(null);
-  const specialtyFilter = useRef(null);
-  const allVideos = useRef(null);
-  const paidFilter = useRef(null);
 
+  const specialtyFilter = useRef(null);
+  const paidFilter = useRef(null);
+  const gradeFilter = useRef(null);
+  const allVideos = useRef(null);
   const marginVertical = state.theme.marginVertical;
   const inputSize = 20;
   // const LIMIT = 6;
 
   const handleFilters = () => {
+    const data = state.source.get(state.router.link);
     let unfilteredVideos = Object.values(state.source.videos);
-    console.log("UNFILTERED:", specialtyFilter.current);
 
-    const filteredVideos = unfilteredVideos.filter((video) => {
-      if (specialtyFilter.current)
-        return video.event_specialty.includes(Number(specialtyFilter.current));
-      if (paidFilter.current) {
-        if (paidFilter.current === "paid") return video.acf.private === true;
-        if (paidFilter.current === "free")
-          return video.acf.private === false || !video.acf.private;
-      }
-    });
     if (specialtyFilter.current === "all") {
       setPostData(unfilteredVideos);
       return true;
@@ -49,7 +42,29 @@ const VideoArchive = ({ state, actions, libraries }) => {
       setPostData(unfilteredVideos);
       return true;
     }
-    setPostData(filteredVideos);
+
+    console.log("UNFILTERED:", specialtyFilter.current);
+
+    const filteredVideos = unfilteredVideos.filter((video) => {
+      if (
+        specialtyFilter.current &&
+        !video.event_specialty.includes(Number(specialtyFilter.current))
+      )
+        return false;
+      if (
+        gradeFilter.current &&
+        !video.event_grade.includes(Number(gradeFilter.current))
+      )
+        return false;
+      if (paidFilter.current) {
+        if (paidFilter.current === "paid") return video.acf.private === true;
+        if (paidFilter.current === "free")
+          return video.acf.private === !video.acf.private;
+      }
+      return true;
+    });
+
+    setPostData(data.items);
     console.log(filteredVideos);
   };
   const handleSearch = (e, searchFilter) => {
@@ -75,6 +90,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
             className="form-control"
             name="specialty-filters"
             id="specialty-filters"
+            value={specialtyFilter.current}
             onChange={() => {
               const select = document.getElementById("specialty-filters");
               const value = select.options[select.selectedIndex].value;
@@ -102,6 +118,14 @@ const VideoArchive = ({ state, actions, libraries }) => {
             className="form-control"
             name="event-grades"
             id="event-grades"
+            style={styles.dropdown}
+            value={gradeFilter.current}
+            onChange={() => {
+              const select = document.getElementById("event-grades");
+              const value = select.options[select.selectedIndex].value;
+              gradeFilter.current = value;
+              handleFilters();
+            }}
           >
             <option value="">Grade Filters</option>
             {data.map((item) => {
@@ -119,9 +143,9 @@ const VideoArchive = ({ state, actions, libraries }) => {
             className="form-control"
             name="payments"
             id="payments-filters"
+            value={paidFilter.current}
             onChange={() => {
               const select = document.getElementById("payments-filters");
-              setFilters({ payments: select });
               const value = select.options[select.selectedIndex].value;
               paidFilter.current = value;
               handleFilters();
@@ -157,19 +181,15 @@ const VideoArchive = ({ state, actions, libraries }) => {
           onClick={() => {
             specialtyFilter.current = null;
             paidFilter.current = null;
+            gradeFilter.current = null;
+            handleFilters();
+          }}
+          style={{
+            cursor: "pointer",
+            textDecoration: "underline",
           }}
         >
-          <div
-            onClick={() => {
-              paidFilter.current = "all";
-              specialtyFilter.current = "all";
-              handleFilters();
-            }}
-          >
-            <div style={{ cursor: "pointer", textDecoration: "underline" }}>
-              Reset Filters
-            </div>
-          </div>
+          Reset Filters
         </div>
       </div>
     );
@@ -234,7 +254,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
       >
         <form
           onSubmit={(e) => handleSearch(e, searchFilter)}
-          style={{ display: "flex", width: "100%" }}
+          style={{ display: "flex", width: "50%" }}
         >
           <input
             ref={searchFilterRef}
@@ -312,7 +332,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
 
     const data = state.source.get(state.router.link);
     allVideos.current = data.items;
-    console.log("ALLKARA", allVideos.current);
+    console.log("ALLERKA", allVideos.current);
     setPostData(data.items);
 
     console.log("DATERO ", data);
