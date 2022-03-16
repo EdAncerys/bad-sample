@@ -222,7 +222,7 @@ const EventListView = ({
   return (
     <div
       style={{ margin: !recommended_events ? MARGIN : 10 }}
-      class="shadow-on-hover"
+      className="shadow-on-hover"
     >
       <div
         style={{
