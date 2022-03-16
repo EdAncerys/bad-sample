@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { colors } from "../config/imports";
 import Card from "../components/card/card";
+import ScrollTop from "../components/scrollTop";
 // BLOCK WIDTH WRAPPER -----------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT -----------------------------------------------------------------
@@ -56,12 +56,6 @@ const Post = ({ state, actions, libraries }) => {
     };
   }, []);
 
-  // HANDLERS --------------------------------------------
-  const handleGoToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
-    document.documentElement.scrollTop = 0; // for safari
-  };
-
   // SERVERS ---------------------------------------------
   const ServeContent = () => {
     const ServeTitle = () => {
@@ -86,31 +80,10 @@ const Post = ({ state, actions, libraries }) => {
       if (!content) return null;
       const bodyLength = content.rendered.length;
 
-      const ServeBackAction = () => {
-        // dont render if body length is less than 2500
-        if (bodyLength < 2500) return null;
-
-        return (
-          <div
-            style={{
-              padding: "2em 0",
-              borderBottom: `1px solid ${colors.lightSilver}`,
-            }}
-            onClick={handleGoToTop}
-          >
-            <div className="caps-btn">
-              <ArrowUpwardIcon className="caps-btn-icon" />
-              <span>Return Back To Top</span>
-              <ArrowUpwardIcon className="caps-btn-icon" />
-            </div>
-          </div>
-        );
-      };
-
       return (
         <div className="flex-col">
           <Html2React html={content.rendered} />
-          <ServeBackAction />
+          {bodyLength > 2500 && <ScrollTop />}
         </div>
       );
     };

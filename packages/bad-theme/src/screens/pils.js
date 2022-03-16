@@ -4,6 +4,7 @@ import { connect } from "frontity";
 import { colors } from "../config/imports";
 import Loading from "../components/loading";
 import DownloadFileBlock from "../components/downloadFileBlock";
+import ScrollTop from "../components/scrollTop";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 
@@ -45,8 +46,8 @@ const Post = ({ state, actions, libraries }) => {
 
   const ServeBody = () => {
     if (!pil.content) return null;
-
-    console.log(pil.content);
+    const bodyLength = pil.content.rendered.length;
+    console.log("body length: ", bodyLength); // debug
 
     return (
       <div
@@ -57,6 +58,7 @@ const Post = ({ state, actions, libraries }) => {
         }}
       >
         <Html2React html={pil.content.rendered} />
+        {bodyLength > 2500 && <ScrollTop />}
       </div>
     );
   };
