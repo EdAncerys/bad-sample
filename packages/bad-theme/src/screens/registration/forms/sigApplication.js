@@ -181,13 +181,17 @@ const SIGApplication = ({ state, actions, libraries }) => {
     });
     // apply app additional logic after mapping apps data
     if (hospitalId) {
-      // get hospital data via API & populate form
-      const hospitalData = await getHospitalNameAction({
-        state,
-        id: hospitalId,
-      });
-      if (hospitalData) {
-        setSelectedHospital(hospitalData.name);
+      try {
+        // get hospital data via API & populate form
+        const hospitalData = await getHospitalNameAction({
+          state,
+          id: hospitalId,
+        });
+        if (hospitalData) {
+          setSelectedHospital(hospitalData.name);
+        }
+      } catch (error) {
+        console.log("🤖 error", error);
       }
     }
 
@@ -326,8 +330,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
       [name]: type === "checkbox" ? checked : value,
     }));
 
-    console.log("value", value);
-    console.log("membershipData", membershipData);
     if (membershipData) {
       // update policy link agains app data
       handlePolicyLinkUpdate({ membershipData, value });

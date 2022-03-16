@@ -3,6 +3,7 @@ import { connect } from "frontity";
 
 import { colors } from "../config/imports";
 import Card from "../components/card/card";
+import ScrollTop from "../components/scrollTop";
 // BLOCK WIDTH WRAPPER -----------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT -----------------------------------------------------------------
@@ -27,10 +28,15 @@ const Post = ({ state, actions, libraries }) => {
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
+    // default to scrolling to top on page load
+    window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
+    document.documentElement.scrollTop = 0; // for safari
+
     // pre fetch post data
     let iteration = 0;
     let data = Object.values(state.source.post);
-    while (data.length === 0) {
+    // if no posts or isSingle post fetch data
+    while (data.length === 0 || data.length === 1) {
       // if iteration is greater than 10, break
       if (iteration > 10) break;
       // set timeout for async
@@ -74,10 +80,12 @@ const Post = ({ state, actions, libraries }) => {
 
     const ServeBody = () => {
       if (!content) return null;
+      const bodyLength = content.rendered.length;
 
       return (
         <div className="flex-col">
           <Html2React html={content.rendered} />
+          {bodyLength > 2500 && <ScrollTop />}
         </div>
       );
     };

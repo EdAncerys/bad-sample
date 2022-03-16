@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
@@ -23,6 +23,8 @@ const NewsBlock = ({
 
   // console.log("layout", block); // debug
   const [eCircularCatId, setECircularCatId] = useState(null);
+  const useEffectRef = useRef(null);
+
   let gridLayoutType = `1fr`;
   if (isLayoutFour || isLayoutThree) gridLayoutType = `repeat(3, 1fr)`;
   if (isLayoutFive) gridLayoutType = `repeat(4, 1fr)`;
@@ -31,7 +33,20 @@ const NewsBlock = ({
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 
-  useEffect(() => {
+  useEffect(async () => {
+    // pre fetch post data
+    let iteration = 0;
+    let data = Object.values(state.source.post);
+    while (data.length === 0) {
+      // if iteration is greater than 10, break
+      if (iteration > 10) break;
+      // set timeout for async
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      await getPostData({ state, actions });
+      data = Object.values(state.source.post);
+      iteration++;
+    }
+
     if (state.source.category) {
       const catList = Object.values(state.source.category);
       // get e-circular category id
@@ -41,6 +56,10 @@ const NewsBlock = ({
 
       setECircularCatId(eCircularCatId);
     }
+
+    return () => {
+      useEffectRef.current = false; // clean up function
+    };
   }, []);
 
   // RETURN ---------------------------------------------
@@ -57,10 +76,9 @@ const NewsBlock = ({
         const { categories, link, title, featured_media, acf } = block;
         // console.log("block", block); // debug
 
-        const isECircular = categories[0] === eCircularCatId;
-        let fileUrl = null;
-        if (isECircular && acf.file_uploader)
-          fileUrl = acf.file_uploader[0].file_url;
+        const isECircular = categories.includes(eCircularCatId);
+        let fileBlock = null;
+        if (isECircular && acf.file_uploader) fileBlock = acf.file_uploader;
 
         const ServeImage = () => {
           if (!featured_media) return null;
@@ -108,9 +126,7 @@ const NewsBlock = ({
               link_label="Read More"
               link={isECircular ? null : link}
               newsAndMediaInfo={block}
-              downloadFile={
-                fileUrl ? { file: { url: fileUrl }, title: null } : null // download file passed link
-              }
+              downloadFile={isECircular ? fileBlock : null} // download file passed link
               layout={layout}
               cardMinHeight={290}
               colour={colors.pink}

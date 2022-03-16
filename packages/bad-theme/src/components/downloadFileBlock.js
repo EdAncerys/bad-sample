@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import parse from "html-react-parser";
 
 import { colors } from "../config/imports";
 import Image from "@frontity/components/image";
@@ -27,18 +26,20 @@ const DownloadFileBlock = ({
 
   const { file, guidline_file, disable_vertical_padding, title, label, type } =
     block;
-  // console.log("file block", block); // debug
-
   const ICON_WIDTH = 35;
   const isBtnStyle = type && type === "Button";
+  // check if block length is greater than 1
+  const isIterable = block[0];
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 
   // SERVERS ---------------------------------------------
-  const ServeActions = () => {
+  const ServeActions = ({ file, label }) => {
     if (!file) return null;
+    console.log("file", file); // debug
+    console.log("label", label); // debug
 
     let fileName = "Download";
     if (file.title) fileName = file.title;
@@ -47,7 +48,7 @@ const DownloadFileBlock = ({
     return (
       <div
         className={isBtnStyle ? "" : "caps-btn-no-underline"}
-        style={{ display: "grid", boxShadow: "none" }}
+        style={{ display: "grid", alignItems: "center", boxShadow: "none" }}
       >
         <a href={file.url} target="_blank" style={styles.link} download>
           <Html2React html={fileName} />
@@ -56,7 +57,7 @@ const DownloadFileBlock = ({
     );
   };
 
-  const ServeGSActions = () => {
+  const ServeGSActions = ({ guidelines, guidline_file, title }) => {
     if (!guidline_file) return null;
 
     let fileName = "Read Guideline";
@@ -80,9 +81,8 @@ const DownloadFileBlock = ({
     );
   };
 
-  const ServeIcon = () => {
-    if (!file && !guidline_file) return null;
-    if (type && type === "Button") return null;
+  const ServeIcon = ({ file, guidline_file }) => {
+    if ((!file && !guidline_file) || isBtnStyle) return null;
 
     let fileType = "";
     if (file) fileType = file.subtype || "";
@@ -107,6 +107,41 @@ const DownloadFileBlock = ({
     );
   };
 
+  const ServeDownloadActions = () => {
+    if (isIterable)
+      return (
+        <div className="flex-col">
+          {block.map((block, key) => {
+            const { file, label, guidline_file, guidelines, title } = block;
+
+            return (
+              <div className="flex" key={key} style={{ padding: "0.5em 0" }}>
+                <ServeIcon file={file} guidline_file={guidline_file} />
+                <ServeActions file={file} label={label} />
+                <ServeGSActions
+                  guidelines={guidelines}
+                  guidline_file={guidline_file}
+                  title={title}
+                />
+              </div>
+            );
+          })}
+        </div>
+      );
+
+    return (
+      <div className="flex">
+        <ServeIcon file={file} guidline_file={guidline_file} />
+        <ServeActions file={file} label={label} />
+        <ServeGSActions
+          guidelines={guidelines}
+          guidline_file={guidline_file}
+          title={title}
+        />
+      </div>
+    );
+  };
+
   return (
     <div
       style={{
@@ -120,9 +155,7 @@ const DownloadFileBlock = ({
           width: isBtnStyle ? "fit-content" : "auto",
         }}
       >
-        <ServeIcon />
-        <ServeActions />
-        <ServeGSActions />
+        <ServeDownloadActions />
       </div>
     </div>
   );

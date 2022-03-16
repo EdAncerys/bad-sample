@@ -51,21 +51,24 @@ const Event = ({ state, actions, libraries }) => {
     let specialtyList = null;
 
     // pre fetch events data
-    let iteration = 0;
     let data = state.source.events;
-    console.log("event data: ", data); // debug
     let isCurrentOnly = false;
     // on page re-fresh check if is current only
     if (data && Object.keys(data).length === 1) isCurrentOnly = true;
+    if (isCurrentOnly) {
+      await getEventsData({ state, actions });
+    }
 
-    while (!data || isCurrentOnly) {
+    let iteration = 0;
+    while (!data) {
       // if iteration is greater than 10, break
       if (iteration > 10) break;
       // set timeout for async
       await getEventsData({ state, actions });
       await new Promise((resolve) => setTimeout(resolve, 500));
-      data = state.source.post;
+      data = state.source.events;
       iteration++;
+      console.log("🚀 ", iteration);
     }
 
     // if !data then break
@@ -346,7 +349,10 @@ const Event = ({ state, actions, libraries }) => {
 
     return (
       <div className="text-body">
-        <div className="primary-title" style={{ fontSize: 20 }}>
+        <div
+          className="primary-title"
+          style={{ fontSize: 20, paddingTop: "2em" }}
+        >
           Summary
         </div>
         <Html2React html={summary} />

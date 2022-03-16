@@ -19,7 +19,7 @@ export const getFadAction = async ({ state, dispatch }) => {
     if (result.success) {
       const fad = result.data;
       console.log("⏬ FED data successfully fetched ⏬");
-      console.log(fad);
+      // console.log(fad);
 
       return fad;
     }

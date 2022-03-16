@@ -106,6 +106,13 @@ const Card = ({
   if (removePadding) PADDING = 0;
   if (padding) PADDING = padding;
 
+  // HANDLERS ---------------------------------------------
+  const handleCardAction = () => {
+    if (link) {
+      setGoToAction({ path: link, actions });
+    }
+  };
+
   // SERVERS ----------------------------------------------
   const ServeFooter = () => {
     if (disableFooter) return null;
@@ -306,7 +313,7 @@ const Card = ({
   // RETURN ----------------------------------------------------
   return (
     <div
-      className={SHADOW}
+      className={`${SHADOW} ${link ? "card-wrapper" : ""}`} // card wrapper as clickable card if link is set
       style={{
         ...styles.card,
         backgroundColor: backgroundColor || colors.white,
@@ -315,6 +322,7 @@ const Card = ({
         minHeight: MIN_CARD_HEIGHT,
         position: "relative",
       }}
+      onClick={handleCardAction}
     >
       <PromoHeader fundingPromo={fundingPromo} />
       <FeaturedBanner featuredBanner={featuredBanner} />

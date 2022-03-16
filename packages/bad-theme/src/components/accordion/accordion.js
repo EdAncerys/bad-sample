@@ -1,13 +1,16 @@
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { connect } from "frontity";
+import CloseIcon from "@mui/icons-material/Close";
 
 import { v4 as uuidv4 } from "uuid";
 
+import { colors } from "../../config/imports";
 import Loading from "../loading";
-
 import AccordionHeader from "./accordionHeader";
 import AccordionBody from "./accordionBody";
 import ActionPlaceholder from "../actionPlaceholder";
+import BlockWrapper from "../blockWrapper";
+import SearchContainer from "../searchContainer";
 // CONTEXT ----------------------------------------------------------------
 import { useAppState } from "../../context";
 
@@ -31,7 +34,12 @@ const AccordionComponent = ({
     disable_vertical_padding,
     accordion_item,
     approved_bad_members_only,
+    add_search_function,
   } = block;
+
+  const [searchFilter, setSearchFilter] = useState(accordion_item);
+  const [searchInput, setInput] = useState(null);
+  const searchFilterRef = useRef(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical / 4;
@@ -44,7 +52,87 @@ const AccordionComponent = ({
 
   if (!accordion_item || isForBADMembersOnly) return null; // defensive programming
 
+  // HANDLERS ---------------------------------------------
+  const handleSearch = () => {
+    const input = searchFilterRef.current.value;
+    let filter = accordion_item;
+
+    if (input) {
+      filter = filter.filter((item) => {
+        let title = item.title;
+        let body = item.content;
+
+        if (title) title = title.toLowerCase().includes(input.toLowerCase());
+        if (body) body = content.toLowerCase().includes(input.toLowerCase());
+
+        return title || body;
+      });
+    }
+
+    setSearchFilter(filter);
+    setInput(input);
+  };
+
+  const handleClearSearchFilter = () => {
+    setSearchFilter(accordion_item);
+    setInput(null);
+  };
+
   // SERVERS ---------------------------------------------
+  const ServeAccordionSearchFilter = () => {
+    if (!add_search_function) return null;
+
+    const ServeSearchFilter = () => {
+      if (!searchInput) return null;
+
+      return (
+        <div className="shadow filter">
+          <div>{searchInput}</div>
+          <div className="filter-icon" onClick={handleClearSearchFilter}>
+            <CloseIcon
+              style={{
+                fill: colors.darkSilver,
+                padding: 0,
+              }}
+            />
+          </div>
+        </div>
+      );
+    };
+
+    return (
+      <div
+        style={{
+          margin: `${marginVertical}px `,
+          backgroundColor: colors.silverFillTwo,
+          padding: "2em 0",
+        }}
+      >
+        <BlockWrapper>
+          <div
+            style={{
+              padding: `0 ${marginHorizontal}px`,
+              width: `70%`,
+            }}
+            className="no-selector"
+          >
+            <div className="flex-row">
+              <SearchContainer
+                title={`Search for content`}
+                searchFilterRef={searchFilterRef}
+                handleSearch={handleSearch}
+              />
+            </div>
+
+            <div className="flex" style={{ margin: "0.5em 0" }}>
+              <ServeSearchFilter />
+            </div>
+          </div>
+        </BlockWrapper>
+      </div>
+    );
+  };
+
   const ServeAccordion = ({ block }) => {
     const [uniqueId, setUniqueId] = useState(null);
     const [isFetching, setFetching] = useState(null);
@@ -102,7 +190,7 @@ const AccordionComponent = ({
         className="accordion shadow"
         style={{ position: "relative", margin: `${marginVertical}px 0` }}
       >
-        <ActionPlaceholder isFetching={isFetching} />
+        <ActionPlaceholder isFetching={isFetching} background="transparent" />
         <div
           className="accordion-item"
           id={uniqueId}
@@ -136,12 +224,17 @@ const AccordionComponent = ({
 
   // RETURN ----------------------------------------------------
   return (
-    <div style={{ margin: `0 ${marginHorizontal}px` }}>
-      {accordion_item.map((block, key) => {
-        // console.log(block); // debug
+    <div>
+      <ServeAccordionSearchFilter />
+      <BlockWrapper>
+        <div style={{ margin: `0 ${marginHorizontal}px` }}>
+          {searchFilter.map((block, key) => {
+            // console.log("🚀 accordion block", block); // debug
 
-        return <ServeAccordion key={key} block={block} />;
-      })}
+            return <ServeAccordion key={key} block={block} />;
+          })}
+        </div>
+      </BlockWrapper>
     </div>
   );
 };
