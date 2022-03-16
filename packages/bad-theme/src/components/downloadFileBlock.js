@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import parse from "html-react-parser";
 
 import { colors } from "../config/imports";
 import Image from "@frontity/components/image";

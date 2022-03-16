@@ -49,7 +49,7 @@ const ShareToSocials = ({
     // duration: [1, "day"],
   };
   const add2Calendar = outlook(event);
-  console.log(google(event)); // google calendar link
+  // console.log(google(event)); // google calendar link
 
   return (
     <div style={{ padding: `1em 0` }}>
