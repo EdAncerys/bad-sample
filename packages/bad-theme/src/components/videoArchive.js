@@ -3,7 +3,6 @@ import { connect } from "frontity";
 import Card from "./card/card";
 import BlockWrapper from "./blockWrapper";
 import { useAppState } from "../context";
-import HeroBanner from "../components/heroBanner";
 import SearchContainer from "./searchContainer";
 import { colors } from "../config/imports";
 import CloseIcon from "@mui/icons-material/Close";
@@ -12,7 +11,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import Loading from "../components/loading";
 import { muiQuery } from "../context";
 const VideoArchive = ({ state, actions, libraries }) => {
-  const [heroBannerBlock, setHeroBannerBlock] = useState();
   const [guidanceCategory, setGuidanceCategory] = useState(null);
   const [postData, setPostData] = useState(null);
 
@@ -284,38 +282,38 @@ const VideoArchive = ({ state, actions, libraries }) => {
     actions.source.fetch("/videos/");
     actions.source.fetch("/event_specialty/");
 
-    const fetchHeroBanner = async () => {
-      const fetchInfo = await fetch(
-        "https://badadmin.skylarkdev.co/wp-json/wp/v2/pages/7051"
-      );
+    // const fetchHeroBanner = async () => {
+    //   const fetchInfo = await fetch(
+    //     "https://badadmin.skylarkdev.co/wp-json/wp/v2/pages/7051"
+    //   );
 
-      if (fetchInfo.ok) {
-        const json = await fetchInfo.json();
-        setHeroBannerBlock({
-          background_image: json.acf.hero_banner_picture,
-          title: "BAD Video Library",
-          body: json.acf.hero_banner_content,
-          content_height: "regular",
-          layout: "50-50",
-          padding: "small",
-          text_align: "left",
-          colour: colors.orange,
-          pop_out_text: "true",
-          background_colour: "rgb(239, 125, 33, 0.1)",
-        });
-      }
-    };
+    //   if (fetchInfo.ok) {
+    //     const json = await fetchInfo.json();
+    //     setHeroBannerBlock({
+    //       background_image: json.acf.hero_banner_picture,
+    //       title: "BAD Video Library",
+    //       body: json.acf.hero_banner_content,
+    //       content_height: "regular",
+    //       layout: "50-50",
+    //       padding: "small",
+    //       text_align: "left",
+    //       colour: colors.orange,
+    //       pop_out_text: "true",
+    //       background_colour: "rgb(239, 125, 33, 0.1)",
+    //     });
+    //   }
+    // };
 
     const data = state.source.get(state.router.link);
     setPostData(data.items);
 
     console.log("DATERO ", data);
-    fetchHeroBanner();
+    // fetchHeroBanner();
   }, []);
   if (!postData) return <Loading />;
   return (
     <>
-      <HeroBanner block={heroBannerBlock} />
+      {/* <HeroBanner block={heroBannerBlock} /> */}
 
       <div
         style={{
