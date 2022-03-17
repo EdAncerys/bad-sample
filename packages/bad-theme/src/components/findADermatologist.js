@@ -26,6 +26,7 @@ const FindADermatologist = ({ state, block }) => {
   const query_limit = React.useRef(5);
   const enough = React.useRef(false);
   const mapCentre = React.useRef(null);
+  let crutent = 0;
   React.useEffect(async () => {
     const fetchDermatologistsByPostCode = async () => {
       const jwt = await authenticateAppAction({ dispatch, state });
@@ -63,7 +64,28 @@ const FindADermatologist = ({ state, block }) => {
         handleFocusOnThePostCode();
       }
     };
+    const handleFocusOnThePostCode = async () => {
+      const jwt = await authenticateAppAction({ state, dispatch });
+      console.log("DZEJDABLJUTI", jwt);
 
+      const post_code = await fetch(
+        state.auth.APP_HOST + "/catalogue/ukpostcode/" + query.value,
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+
+      if (post_code.ok) {
+        const json = await post_code.json();
+        setDermOnFocus({
+          lat: Number(json.data.location.lattitude),
+          lng: Number(json.data.location.longitude),
+        });
+        console.log("DERONFOC", dermOnFocus);
+      }
+    };
     const fetchDermatologistsByName = async () => {
       const jwt = await authenticateAppAction({ dispatch, state });
 
@@ -395,7 +417,6 @@ const FindADermatologist = ({ state, block }) => {
         <ServeInfo />
         <Accordion style={{ border: 0 }}>
           {filteredDermatologists.map((derm, key) => {
-            let crutent = 0;
             if (
               key > 0 &&
               derm.address1_postalcode !==

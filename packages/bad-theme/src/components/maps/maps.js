@@ -43,8 +43,14 @@ const MapsComponent = ({
     if (!markers)
       return <Marker markerLabel={{ text: "Google Map" }} position={CENTER} />;
     if (markers.length === 0) return null;
-
+    let marker_key = 1;
     return markers.map((derm, key) => {
+      if (
+        key > 0 &&
+        derm.address1_postalcode !== markers[key - 1].address1_postalcode
+      ) {
+        marker_key += 1;
+      }
       if (queryType === "pc" && !derm.distance) return null;
       const POSITION =
         queryType === "pc"
@@ -53,7 +59,7 @@ const MapsComponent = ({
               lng: Number(derm.cordinates.lng),
             }
           : { lat: 51.5072, lng: -0.1276 };
-      const marker_key = key + 1;
+
       const marker_label = marker_key.toString();
       return (
         <Marker
