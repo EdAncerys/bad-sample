@@ -19,7 +19,7 @@ const RowButton = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const dispatch = useAppDispatch();
 
-  const {
+  let {
     title,
     colour,
     link,
@@ -30,8 +30,14 @@ const RowButton = ({
     file_link,
   } = block;
 
-  console.log("row contact_form", block.recipients); // debug
-  console.log("contactList", state.contactList); // debug
+  // initialize new enquireAction object
+  let enquireAction = { ...block };
+  // default to defaultContactList if no recipients are set
+  if (!enquireAction.recipients) {
+    // recipients = state.theme.defaultContactList;
+    console.log("📧 contact list", state.contactList.defaultContactList); // debug
+    enquireAction.recipients = state.contactList.defaultContactList;
+  }
 
   const THEME = colour || colors.primary;
   let LABEL = title;
@@ -111,9 +117,7 @@ const RowButton = ({
           setEnquireAction({
             dispatch,
             // ⬇️ contact form config. Defaults to general contacts if values not provided to contact form ⬇️
-            enquireAction: block.recipients
-              ? block
-              : (block.recipients = state.contactList.defaultContactList),
+            enquireAction,
           });
           return;
         }
