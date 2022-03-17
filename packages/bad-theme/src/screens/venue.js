@@ -96,7 +96,8 @@ const Venue = ({ state, actions, libraries }) => {
                     subject_dropdown_options,
                     message,
                     allow_attachments,
-                    recipients,
+                    recipients:
+                      recipients || state.contactList.defaultContactList,
                   },
                 })
               }

@@ -30,10 +30,8 @@ const RowButton = ({
     file_link,
   } = block;
 
-  // block.email_address = [{ email: "ed@skylarkcreative.co.uk" }];
   console.log("row contact_form", block.recipients); // debug
   console.log("contactList", state.contactList); // debug
-  console.log("ENVIRONMENT", state.auth.ENVIRONMENT); // debug
 
   const THEME = colour || colors.primary;
   let LABEL = title;

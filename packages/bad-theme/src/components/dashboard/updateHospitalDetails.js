@@ -62,7 +62,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         form_title: "Main Place of work / Medical School Change Form",
         form_body: `Request Main Place of work / Medical School change.`,
         message: true,
-        recipients: [{ email: "ed@skylarkcreative.co.uk" }],
+        recipients: state.contactList.defaultContactList,
         isHospitalChange: true,
       },
     });

@@ -330,9 +330,8 @@ const Event = ({ state, actions, libraries }) => {
                 subject_dropdown_options: register_subject_dropdown_options,
                 message: register_message || true,
                 allow_attachments: register_allow_attachments,
-                recipients: register_recipients || [
-                  { email: "conference@bad.org.uk" },
-                ],
+                recipients:
+                  register_recipients || state.contactList.defaultContactList,
               },
             })
           }
@@ -601,9 +600,8 @@ const Event = ({ state, actions, libraries }) => {
                 subject: contact_subject || true,
                 message: contact_message || true,
                 allow_attachments: contact_allow_attachments,
-                recipients: contact_recipients || [
-                  { email: "conference@bad.org.uk" },
-                ],
+                recipients:
+                  contact_recipients || state.contactList.defaultContactList,
               },
             })
           }
