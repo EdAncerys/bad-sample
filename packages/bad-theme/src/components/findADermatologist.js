@@ -26,6 +26,7 @@ const FindADermatologist = ({ state, block }) => {
   const query_limit = React.useRef(5);
   const enough = React.useRef(false);
   const mapCentre = React.useRef(null);
+  let crutent = 0;
   React.useEffect(async () => {
     const fetchDermatologistsByPostCode = async () => {
       const jwt = await authenticateAppAction({ dispatch, state });
@@ -49,8 +50,40 @@ const FindADermatologist = ({ state, block }) => {
         console.log("JSON", json);
         const data = json.data;
         console.log("DATERO", data);
+        const result = data.reduce((acc, derm) => {
+          return {
+            ...acc,
+            [derm.address1_postalcode]: [
+              ...(acc[derm.address1_postalcode] || []),
+              derm,
+            ],
+          };
+        }, {});
+        console.log("REDUCTION", result);
         setFilteredDermatologists(data);
         handleFocusOnThePostCode();
+      }
+    };
+    const handleFocusOnThePostCode = async () => {
+      const jwt = await authenticateAppAction({ state, dispatch });
+      console.log("DZEJDABLJUTI", jwt);
+
+      const post_code = await fetch(
+        state.auth.APP_HOST + "/catalogue/ukpostcode/" + query.value,
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+
+      if (post_code.ok) {
+        const json = await post_code.json();
+        setDermOnFocus({
+          lat: Number(json.data.location.lattitude),
+          lng: Number(json.data.location.longitude),
+        });
+        console.log("DERONFOC", dermOnFocus);
       }
     };
     const fetchDermatologistsByName = async () => {
@@ -65,12 +98,12 @@ const FindADermatologist = ({ state, block }) => {
 
       if (fetching.ok) {
         const json = await fetching.json();
-
         const data = json.data;
         const regex = new RegExp(query.value, "gi");
 
         const filteredData = data.filter((item) => item.fullname.match(regex));
         console.log("FILTERED", filteredData);
+
         setFilteredDermatologists(filteredData);
       }
     };
@@ -80,28 +113,6 @@ const FindADermatologist = ({ state, block }) => {
     setLoading(false);
   }, [query]);
 
-  const handleFocusOnThePostCode = async () => {
-    const jwt = await authenticateAppAction({ state, dispatch });
-    console.log("DZEJDABLJUTI", jwt);
-
-    const post_code = await fetch(
-      state.auth.APP_HOST + "/catalogue/ukpostcode/" + query.value,
-      {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      }
-    );
-
-    if (post_code.ok) {
-      const json = await post_code.json();
-      setDermOnFocus({
-        lat: Number(json.data.location.lattitude),
-        lng: Number(json.data.location.longitude),
-      });
-      console.log("DERONFOC", dermOnFocus);
-    }
-  };
   const handleLoadMore = async () => {
     setLoading(true);
     const jwt = await authenticateAppAction({ dispatch, state });
@@ -406,8 +417,14 @@ const FindADermatologist = ({ state, block }) => {
         <ServeInfo />
         <Accordion style={{ border: 0 }}>
           {filteredDermatologists.map((derm, key) => {
-            console.log("DERM!", derm);
-            return <SingleDerm derm={derm} id={key} key={key} />;
+            if (
+              key > 0 &&
+              derm.address1_postalcode !==
+                filteredDermatologists[key - 1].address1_postalcode
+            ) {
+              crutent += 1;
+            }
+            return <SingleDerm derm={derm} id={crutent} key={key} />;
           })}
         </Accordion>
         <div
@@ -426,6 +443,7 @@ const FindADermatologist = ({ state, block }) => {
           markers={filteredDermatologists}
           center={dermOnFocus}
           zoom={dermOnFocus ? 14 : 10}
+          queryType={query ? query.type : null}
         />
       </div>
     );
