@@ -282,6 +282,8 @@ const VideoArchive = ({ state, actions, libraries }) => {
     actions.source.fetch("/videos/");
     actions.source.fetch("/event_specialty/");
 
+    console.log("Use effect trigerred");
+
     // const fetchHeroBanner = async () => {
     //   const fetchInfo = await fetch(
     //     "https://badadmin.skylarkdev.co/wp-json/wp/v2/pages/7051"
@@ -304,7 +306,9 @@ const VideoArchive = ({ state, actions, libraries }) => {
     //   }
     // };
 
-    const data = state.source.get(state.router.link);
+    // const data = state.source.get(state.router.link);
+    const data = state.source.videos;
+
     setPostData(data.items);
 
     console.log("DATERO ", data);

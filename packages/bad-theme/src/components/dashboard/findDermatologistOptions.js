@@ -3,16 +3,49 @@ import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 
-import { muiQuery } from "../../context";
+import {
+  muiQuery,
+  useAppState,
+  authenticateAppAction,
+  useAppDispatch,
+} from "../../context";
+import { handleGetCookie } from "../../helpers/cookie";
+import Loading from "../loading";
 const FindDermatologistOptions = ({ state, actions, libraries }) => {
+  const [fadData, setFadData] = useState();
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { sm, md, lg, xl } = muiQuery();
 
   const marginVertical = state.theme.marginVertical;
+  const { fad, dashboardPath, isActiveUser } = useAppState();
+  const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    const getCurrentUserFadData = async () => {
+      const cookie = await handleGetCookie({ name: `BAD-WebApp` });
+      const { contactid, jwt } = cookie;
+
+      const fetchData = await fetch(
+        state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+
+      if (fetchData.ok) {
+        const json = await fetchData.json();
+        setFadData(json);
+      }
+    };
+    getCurrentUserFadData();
+  }, []);
+
+  if (!fadData) return <Loading />;
   // HELPERS ----------------------------------------------------------------
   const handlePreferenceUpdate = () => {
-    const includeInFindDermatologist = document.querySelector(
+    const bad_includeinfindadermatologist = document.querySelector(
       "#includeInFindDermatologist"
     ).checked;
     const mainHospitalWebAddress = document.querySelector(
@@ -27,13 +60,19 @@ const FindDermatologistOptions = ({ state, actions, libraries }) => {
     const privatePracticeWebAddressThree = document.querySelector(
       "#privatePracticeWebAddressThree"
     ).value;
+    const address3_postalcode = document.querySelector(
+      "#address3_postalcode"
+    ).value;
+    const address3_line1 = document.querySelector("#address3_line1").value;
+    const address3_line2 = document.querySelector("#address3_line2").value;
+    const address3_city = document.querySelector("#address3_city").value;
 
     const aboutText = document.querySelector("#aboutText").value;
     const compositeText = document.querySelector("#compositeText").value;
     const contactBlurb = document.querySelector("#contactBlurb").value;
 
     const updatePreferences = {
-      includeInFindDermatologist,
+      bad_includeinfindadermatologist,
       mainHospitalWebAddress,
       privatePracticeWebAddressOne,
       privatePracticeWebAddressTwo,
@@ -41,6 +80,10 @@ const FindDermatologistOptions = ({ state, actions, libraries }) => {
       aboutText,
       compositeText,
       contactBlurb,
+      address3_postalcode,
+      address3_line1,
+      address3_line2,
+      address3_city,
     };
     console.log("updatePreferences", updatePreferences);
   };
@@ -60,6 +103,17 @@ const FindDermatologistOptions = ({ state, actions, libraries }) => {
                   id="includeInFindDermatologist"
                   type="checkbox"
                   className="form-check-input check-box"
+                  checked={
+                    fadData.bad_includeinfindadermatologist ? true : false
+                  }
+                  onChange={() => {
+                    const data = {
+                      ...fadData,
+                      bad_includeinfindadermatologist:
+                        !fadData.bad_includeinfindadermatologist,
+                    };
+                    setFadData(data);
+                  }}
                 />
               </div>
               <div style={styles.textInfo}>
@@ -68,7 +122,85 @@ const FindDermatologistOptions = ({ state, actions, libraries }) => {
               </div>
             </div>
           </div>
-
+          <div style={{ paddingTop: `1em` }}>
+            Practice address to show in the directory
+          </div>
+          <div>
+            <div className="flex-col">
+              <input
+                id="address3_line1"
+                type="text"
+                className="form-control"
+                placeholder="Address Line 1"
+                style={styles.input}
+                value={fadData.address3_line1 ? fadData.address3_line1 : ""}
+                onChange={(e) => {
+                  const data = {
+                    ...fadData,
+                    address3_line1: e.target.value,
+                  };
+                  setFadData(data);
+                }}
+              />
+              <input
+                id="address3_line2"
+                type="text"
+                className="form-control"
+                placeholder="Address Line 2"
+                style={styles.input}
+                value={fadData.address3_line2 ? fad.address3_line2 : ""}
+                onChange={(e) => {
+                  const data = {
+                    ...fadData,
+                    address3_line2: e.target.value,
+                  };
+                  setFadData(data);
+                }}
+              />
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: 20,
+                }}
+              >
+                <input
+                  id="address3_postalcode"
+                  type="text"
+                  className="form-control"
+                  placeholder="Post Code"
+                  style={styles.input}
+                  value={
+                    fadData.address3_postalcode
+                      ? fadData.address3_postalcode
+                      : ""
+                  }
+                  onChange={(e) => {
+                    const data = {
+                      ...fadData,
+                      address3_postalcode: e.target.value,
+                    };
+                    setFadData(data);
+                  }}
+                />
+                <input
+                  id="address3_city"
+                  type="text"
+                  className="form-control"
+                  placeholder="City"
+                  style={styles.input}
+                  value={fadData.address3_city ? fadData.address3_city : ""}
+                  onChange={(e) => {
+                    const data = {
+                      ...fadData,
+                      address3_city: e.target.value,
+                    };
+                    setFadData(data);
+                  }}
+                />
+              </div>
+            </div>
+          </div>
           <div style={{ paddingTop: `1em` }}>Website Address</div>
           <div>
             <div className="flex-col">
