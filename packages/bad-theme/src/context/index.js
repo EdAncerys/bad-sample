@@ -1,6 +1,7 @@
 import { AppProvider, useAppDispatch, useAppState } from "./context";
 import {
   setGoToAction,
+  setLinkWrapperAction,
   setFilterAction,
   setFetchAction,
   setErrorAction,
@@ -80,6 +81,7 @@ export {
   useAppState,
   muiQuery,
   setGoToAction,
+  setLinkWrapperAction,
   setLoginModalAction,
   setCreateAccountModalAction,
   setEnquireAction,

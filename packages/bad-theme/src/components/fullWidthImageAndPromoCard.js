@@ -1,35 +1,29 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
+import Link from "@frontity/components/link";
 import Card from "./card/card";
 import Loading from "./loading";
 // CONTEXT -------------------------------------
-import { setGoToAction } from "../context";
+import { setLinkWrapperAction } from "../context";
 
 const FullWidthImageAndPromoCard = ({ state, actions, block }) => {
   if (!block) return <Loading />;
 
   const { body, colour, image, disable_vertical_padding, link } = block;
-  console.log("promo card", block);
+  // console.log("promo card", block); // debug
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 
-  // HANDLERS ---------------------------------------------
-  const handleCardAction = () => {
-    if (link) {
-      setGoToAction({ path: link.url, actions });
-    }
-  };
-
   // RETURN ---------------------------------------------------
   return (
     <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
       <div className="flex">
-        <div
-          className={`flex ${link ? "card-wrapper" : ""}`}
-          onClick={handleCardAction}
+        <a
+          className={`flex card-wrapper`}
+          href={setLinkWrapperAction({ path: link.url })}
         >
           <Card
             imageAndPromoCard={block}
@@ -37,7 +31,7 @@ const FullWidthImageAndPromoCard = ({ state, actions, block }) => {
             removePadding
             shadow // optional param
           />
-        </div>
+        </a>
       </div>
     </div>
   );
