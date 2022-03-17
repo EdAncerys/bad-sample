@@ -8,6 +8,7 @@ const ScrollTop = ({ state, actions, libraries }) => {
 
   // HANDLERS --------------------------------------------
   const handleGoToTop = () => {
+    // ⬇️ on component load defaults to window position TOP
     window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
     document.documentElement.scrollTop = 0; // for safari
   };

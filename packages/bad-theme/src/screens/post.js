@@ -4,6 +4,7 @@ import { connect } from "frontity";
 import { colors } from "../config/imports";
 import Card from "../components/card/card";
 import ScrollTop from "../components/scrollTop";
+import Loading from "../components/loading";
 // BLOCK WIDTH WRAPPER -----------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT -----------------------------------------------------------------
@@ -25,12 +26,13 @@ const Post = ({ state, actions, libraries }) => {
 
   const [postList, setPostList] = useState(null);
   const [catList, setCatList] = useState(null);
+  const [position, setPosition] = useState(null);
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
-    // default to scrolling to top on page load
-    // window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
-    // document.documentElement.scrollTop = 0; // for safari
+    // ⬇️ on component load defaults to window position TOP
+    window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
+    document.documentElement.scrollTop = 0; // for safari
 
     // pre fetch post data
     let iteration = 0;
@@ -52,11 +54,14 @@ const Post = ({ state, actions, libraries }) => {
 
     setPostList(data);
     setCatList(categoryList);
+    setPosition(true);
 
     return () => {
       useEffectRef.current = false; // clean up function
     };
   }, []);
+
+  if (!position) return <Loading />;
 
   // SERVERS ---------------------------------------------
   const ServeContent = () => {

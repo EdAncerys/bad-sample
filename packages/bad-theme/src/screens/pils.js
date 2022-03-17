@@ -22,6 +22,7 @@ const Post = ({ state, actions, libraries }) => {
   const [position, setPosition] = useState(null);
 
   useEffect(() => {
+    // ⬇️ on component load defaults to window position TOP
     window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
     document.documentElement.scrollTop = 0; // for safari
     setPosition(true);

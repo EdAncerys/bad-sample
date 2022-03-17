@@ -18,8 +18,8 @@ import { muiQuery } from "../../context";
 
 const Events = ({ state, actions, libraries, block }) => {
   const { sm, md, lg, xl } = muiQuery();
+  // console.log("EVENTS BLOCK: ", block);
 
-  console.log("EVENTS BLOCK: ", block);
   const [grades, setGrades] = useState(null); // data
   const [locations, setLocations] = useState(null); // data
   const [specialty, setSpecialty] = useState(null); // data

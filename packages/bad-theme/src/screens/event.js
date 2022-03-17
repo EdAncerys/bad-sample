@@ -5,7 +5,7 @@ import Image from "@frontity/components/image";
 import { colors } from "../config/imports";
 import RowButton from "../components/rowButton";
 import ShareToSocials from "../components/card/shareToSocials";
-
+import Loading from "../components/loading";
 import BadBadgeLogo from "../img/svg/badBadgeLogo.svg";
 
 import date from "date-and-time";
@@ -37,18 +37,18 @@ const Event = ({ state, actions, libraries }) => {
   const [eventList, setEventList] = useState(null);
   const [gradeList, setGradeList] = useState(null);
   const [locationList, setLocationList] = useState(null);
-  const [specialtyList, setSpecialtyList] = useState(null);
+  const [position, setPosition] = useState(null);
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
-    // window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
-    // document.documentElement.scrollTop = 0; // for safari
+    // ⬇️ on component load defaults to window position TOP
+    window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
+    document.documentElement.scrollTop = 0; // for safari
 
     // get related event content
     let eventList = null;
     let categoryList = null;
     let locationList = null;
-    let specialtyList = null;
 
     // pre fetch events data
     let data = state.source.events;
@@ -79,13 +79,11 @@ const Event = ({ state, actions, libraries }) => {
       categoryList = Object.values(state.source.event_grade);
     if (state.source.event_location)
       locationList = Object.values(state.source.event_location);
-    if (state.source.event_specialty)
-      specialtyList = Object.values(state.source.event_specialty);
 
     setEventList(eventList);
     setGradeList(categoryList);
     setLocationList(locationList);
-    setSpecialtyList(specialtyList);
+    setPosition(true);
 
     return () => {
       useEffectRef.current = false; // clean up function
@@ -131,6 +129,7 @@ const Event = ({ state, actions, libraries }) => {
   } = event.acf;
   const { title, id } = event;
   // console.log("event", event); // debug
+  if (!position) return <Loading />;
 
   // SERVERS ----------------------------------------------
   const ServeTitle = () => {

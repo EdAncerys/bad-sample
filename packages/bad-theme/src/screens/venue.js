@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../config/imports";
@@ -7,6 +7,7 @@ import PromoBlock from "../components/promoBlock";
 import MultiPhotoBlock from "../components/multiPhotoBlock";
 import Card from "../components/card/card";
 import GalleryCarousel from "../components/card/galleryCarousel";
+import Loading from "../components/loading";
 // CONTEXT -------------------------------------------------------------------
 import { useAppDispatch, setEnquireAction, muiQuery } from "../context";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
@@ -24,6 +25,7 @@ const Venue = ({ state, actions, libraries }) => {
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+  const [position, setPosition] = useState(null);
 
   const {
     about_the_venue,
@@ -49,9 +51,13 @@ const Venue = ({ state, actions, libraries }) => {
   } = venue.acf;
 
   useEffect(() => {
-    // window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
-    // document.documentElement.scrollTop = 0; // for safari
+    // ⬇️ on component load defaults to window position TOP
+    window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
+    document.documentElement.scrollTop = 0; // for safari
+    setPosition(true);
   }, []);
+
+  if (!position) return <Loading />;
 
   // SERVERS ---------------------------------------------------
   const ServeInfo = () => {
