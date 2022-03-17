@@ -1,3 +1,6 @@
+// ⬇️ refactor all pick lists point form
+// {{host}}/catalogue/fields/core_membershipapplication
+
 export const DATA = [
   {
     id: 1,
@@ -1329,6 +1332,7 @@ export const sigAppFileds = [
   "sky_newhospitalname",
   "bad_proposer1",
   "bad_proposer2",
+  "py3_ntnno",
   "sky_cvurl",
   "bad_readpolicydocument",
   "sig_readpolicydocument_url_email",
@@ -1343,4 +1347,33 @@ export const sigAppFileds = [
   "bad_mainareaofinterest",
   "bad_includeinthebssciiemaildiscussionforum",
   "py3_insertnhsnetemailaddress",
+];
+
+export const prefMailingOption = [
+  {
+    value: 1, // TBC value reange
+    Label: "Main Hospital",
+  },
+  {
+    value: 2,
+    Label: "Home",
+  },
+];
+
+export const proAppFileds = [
+  "py3_gmcnumber",
+  "py3_otherregulatorybodyreference",
+  "py3_ntnno",
+  "bad_currentpost",
+  "py3_hospitalid",
+  "bad_proposer1",
+  "bad_proposer2",
+  "bad_mrpcqualified",
+  "sky_cvurl",
+  "py3_currentgrade",
+  "sky_newhospitalname",
+  "bad_newhospitaladded",
+  "bad_expectedyearofqualification",
+  "sky_newhospitaltype",
+  "bad_memberdirectory",
 ];

@@ -50,6 +50,7 @@ const EventLoopBlock = ({
 
   const [gradeFilterId, setGradeFilterId] = useState(null); // data
   const useEffectRef = useRef(null);
+  const postLimitRef = useRef(0);
 
   const layoutOne = layout === "layout_one";
   const layoutTwo = layout === "layout_two";
@@ -68,16 +69,6 @@ const EventLoopBlock = ({
     let iteration = 0;
     let data = state.source.events;
 
-    while (!data) {
-      // if iteration is greater than 10, break
-      if (iteration > 10) break;
-      // set timeout for async
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      await getEventsData({ state, actions });
-      data = state.source.post;
-      iteration++;
-    }
-
     // if !data then break
     if (!data) return;
     let eventList = Object.values(data);
@@ -88,7 +79,8 @@ const EventLoopBlock = ({
     )[0];
 
     if (gradeFilterId) gradeFilterId = gradeFilterId.id;
-    if (post_limit) eventList = eventList.slice(0, Number(post_limit)); // apply limit on posts
+
+    // if (post_limit) eventList = eventList.slice(0, Number(post_limit)); // apply limit on posts
 
     // sort events in order by date accenting from
     eventList = eventList.sort(
@@ -96,6 +88,7 @@ const EventLoopBlock = ({
         new Date(a.acf.date_time[0].date) - new Date(b.acf.date_time[0].date)
     );
 
+    // console.log("🚀 event list", eventList.length); // debug
     setEventList(eventList);
     setGradeFilterId(gradeFilterId);
 
@@ -105,7 +98,7 @@ const EventLoopBlock = ({
         const anchor = document.getElementById(eventAnchor);
         if (anchor) anchor.scrollIntoView({ behavior: "smooth" });
       }, 500);
-      console.log("🚀 anchor to event list", eventAnchor); // debug
+      // console.log("🚀 anchor to event list", eventAnchor); // debug
 
       setEventAnchorAction({ dispatch, eventAnchor: null }); // reset
     }
@@ -116,8 +109,7 @@ const EventLoopBlock = ({
   }, []);
 
   if (!eventList) return <Loading />;
-  if (eventList) console.log(eventList);
-  console.log("EVENT LOOP BLOCK BLOCK", block);
+
   // RETURN ---------------------------------------------
   return (
     <div style={{ paddingBottom: `${marginVertical}px` }}>
@@ -142,18 +134,16 @@ const EventLoopBlock = ({
               if (new Date(date.date) < new Date()) isArchive = true;
             });
           }
-          // ⬇️ if page is event archive break out of loop
-          if (events_archive && !isArchive) return null;
-          // ⬇️  dont return past events if page is not archive
-          if (!events_archive && isArchive) return null;
+          // ⬇️ if events_archive show only past events else break
+          if (events_archive) {
+            if (!isArchive) return null;
+          } else {
+            if (isArchive) return null;
+          }
+          // ⬇️ show only events that grades matching filter grade
+          if (event_grade && !event_grade.includes(gradeFilterId)) return null;
 
-          if (
-            event_grade &&
-            !event_grade.includes(gradeFilterId) &&
-            gradeFilterId !== 97
-          )
-            return null;
-          if (!!searchFilter) {
+          if (searchFilter) {
             if (!title && !summary) return null;
             if (
               title
@@ -164,7 +154,7 @@ const EventLoopBlock = ({
             )
               return null;
           }
-          // select filtering config
+          // ⬇️ user select filtering
           if (gradesFilter) {
             if (!event_grade.includes(Number(gradesFilter))) return null;
           }
@@ -186,6 +176,12 @@ const EventLoopBlock = ({
             // filter events based on mont & year start
             if (eventMont !== filterMont || eventYear !== filterYear)
               return null;
+          }
+
+          // ⬇️ if post_limit is set then show only post_limit posts
+          if (post_limit) {
+            if (postLimitRef.current >= post_limit) return null;
+            postLimitRef.current++;
           }
 
           if (layoutOne) {

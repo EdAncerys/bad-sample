@@ -22,6 +22,7 @@ export const getMembershipDataAction = async ({ state, actions }) => {
 
 export const validateMembershipFormAction = async ({
   state,
+  actions,
   setData,
   applicationData,
   membershipTypeChange,
@@ -33,11 +34,14 @@ export const validateMembershipFormAction = async ({
     }));
   };
 
-  if (!state.source.memberships || !applicationData) return null;
+  if (!applicationData) return null;
 
-  // ⏬ validate inputs
+  // ⏬ validate inputs & pre fetch membership data
+  if (!state.source.memberships)
+    await getMembershipDataAction({ state, actions });
   const membershipTypes = Object.values(state.source.memberships);
-  // console.log("membershipTypes", membershipTypes); // debug
+  // console.log("⬇️ membershipTypes", membershipTypes); // debug
+
   let type = applicationData[0].bad_categorytype;
   if (membershipTypeChange) type = membershipTypeChange; // apply for SIGs change of memberships
 
@@ -70,6 +74,7 @@ export const handleApplyForMembershipAction = async ({
   membershipApplication,
   dynamicsApps,
   canUpdateApplication,
+  changeAppCategory,
 }) => {
   try {
     if (!isActiveUser) {
@@ -114,7 +119,7 @@ export const handleApplyForMembershipAction = async ({
           dispatch,
           isError: {
             message: confirmationMsg,
-            goToDashboard: true,
+            goToPath: { label: "Dashboard", path: "/dashboard/" },
             image: "Error",
           },
         });
@@ -142,6 +147,20 @@ export const handleApplyForMembershipAction = async ({
       if (!response) throw new Error("Failed to get membership data");
       membershipData = response;
     }
+    // set application id for apps
+    let applicationId = membershipData.core_membershipsubscriptionplanid;
+    // for change of category type then add application id for current application
+    let bad_existingsubscriptionid = "";
+    if (changeAppCategory) {
+      // ⬇️ get existing subscription id for BAD apps & populate as current application id
+      bad_existingsubscriptionid =
+        changeAppCategory.core_membershipsubscriptionid;
+      // get & assign membership id form old application record
+      applicationId = ""; // reset user app category change
+    }
+    console.log("🚀 applicationId", applicationId); // debug
+    console.log("🚀 changeAppCategory", changeAppCategory); // debug
+    console.log("🚀 bad_existingsubscriptionid", bad_existingsubscriptionid); // debug
 
     // ⏬ create user application record in Store
     const store = await setUserStoreAction({
@@ -152,9 +171,9 @@ export const handleApplyForMembershipAction = async ({
       membershipApplication: { ...membershipData, ...membershipApplication },
       data: {
         bad_organisedfor: isBADApp ? "810170000" : "810170001", // BAD members category
-        core_membershipsubscriptionplanid:
-          membershipData.core_membershipsubscriptionplanid || "", // type of membership for application
-        bad_applicationfor: "810170000", // silent assignment
+        core_membershipsubscriptionplanid: applicationId || "", // typeID of membership for application
+        bad_existingsubscriptionid, // existing subscription id for BAD apps
+        bad_applicationfor: changeAppCategory ? "810170001" : "810170000", // for new apps 810170000 for change of cat for BAD and 810170001
       },
     });
 
@@ -175,6 +194,8 @@ export const handleApplyForMembershipAction = async ({
         },
       });
     }
+
+    return store; // return store
   } catch (error) {
     console.log("ERROR: ", error);
   }

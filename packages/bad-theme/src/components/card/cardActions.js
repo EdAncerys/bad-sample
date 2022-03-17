@@ -11,6 +11,8 @@ import {
   useAppState,
   setGoToAction,
   getWileyAction,
+  setErrorAction,
+  setLoginModalAction,
 } from "../../context";
 
 const CardActions = ({
@@ -44,24 +46,64 @@ const CardActions = ({
   useEffect(async () => {
     if (!rssFeedLink) return null;
 
-    setFetching(true);
     const { link, doi } = rssFeedLink;
     let authLink = link;
 
-    // ⏬⏬  validate auth link for users via wiley ⏬⏬
-    // ammend link to wiley if user is logged in && user is a wiley user
-    if (isActiveUser) {
-      const wileyLink = await getWileyAction({ state, dispatch, doi });
-      if (wileyLink) authLink = wileyLink;
-    }
+    try {
+      setFetching(true);
 
-    setAuthLink(link); // set auth link via wiley
-    setFetching(false);
+      // ⏬⏬  validate auth link for users via wiley ⏬⏬
+      // get auth link to wiley if user is BAD member & logged in
+      if (isActiveUser) {
+        const wileyLink = await getWileyAction({ state, doi, isActiveUser });
+        if (wileyLink) authLink = wileyLink;
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setAuthLink(authLink); // set auth link via wiley
+      setFetching(false);
+    }
 
     return () => {
       useEffectRef.current = false; // clean up function
     };
   }, [isActiveUser]);
+
+  const handelLogin = () => {
+    setErrorAction({ dispatch, isError: null });
+    setLoginModalAction({ dispatch, loginModalAction: true });
+  };
+
+  const handelRedirect = () => {
+    setErrorAction({ dispatch, isError: null });
+    setGoToAction({ path: authLink, actions });
+  };
+
+  const handleFeedLink = () => {
+    // check if logged in user exists || otherwise error notification
+    if (!isActiveUser) {
+      // track notification error action
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Remember to log in to the BAD website in order to have full access to Wiley Publications.`,
+          image: "Error",
+          action: [
+            {
+              label: "Read Publication",
+              handler: handelRedirect,
+            },
+            { label: "Login", handler: handelLogin },
+          ],
+        },
+      });
+
+      return;
+    }
+
+    setGoToAction({ path: authLink, actions });
+  };
 
   // SERVERS ---------------------------------------------
   const ServeReadMoreAction = () => {
@@ -85,7 +127,7 @@ const CardActions = ({
     if (link_label) goToLabel = link_label;
 
     return (
-      <div onClick={() => setGoToAction({ path: authLink, actions })}>
+      <div onClick={handleFeedLink}>
         <div className="caps-btn" style={{ marginTop: "1em" }}>
           <Html2React html={goToLabel} />
         </div>

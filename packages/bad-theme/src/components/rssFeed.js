@@ -222,6 +222,8 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
               link_label="Read More"
               rssFeedLink={{ link, doi }}
               colour={colour}
+              titleLimit={6}
+              cardMinHeight={280}
               shadow
             />
           );

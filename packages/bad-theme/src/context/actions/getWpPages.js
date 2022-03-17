@@ -12,11 +12,6 @@ export const getWpPagesAction = async () => {
     const result = await data.json();
 
     console.log(result);
-
-    // if (result.value) {
-
-    //   return fad;
-    // }
   } catch (error) {
     console.log("error", error);
   }

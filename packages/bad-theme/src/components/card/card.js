@@ -27,6 +27,8 @@ import DownloadFileBlock from "../downloadFileBlock";
 import { setGoToAction } from "../../context";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import LockIcon from "@mui/icons-material/Lock";
+import { setLinkWrapperAction } from "../../context";
+
 const Card = ({
   state,
   actions,
@@ -88,7 +90,7 @@ const Card = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
   const THEME = colour || colors.primary;
-  const SHADOW = shadow ? "shadow" : "";
+  const isShadow = shadow ? "shadow" : "";
   const [modalData, setModalData] = useState();
 
   let CARD_HEIGHT = "100%";
@@ -106,15 +108,17 @@ const Card = ({
   if (removePadding) PADDING = 0;
   if (padding) PADDING = padding;
 
+  // HANDLERS ---------------------------------------------
+
   // SERVERS ----------------------------------------------
   const ServeFooter = () => {
     if (disableFooter) return null;
 
     return (
       <div
+        className="bad-card-footer"
         style={{
           backgroundColor: THEME,
-          height: 5,
           width: "100%",
           opacity: opacity || 1,
         }}
@@ -305,8 +309,8 @@ const Card = ({
 
   // RETURN ----------------------------------------------------
   return (
-    <div
-      className={SHADOW}
+    <a
+      className={`${isShadow} card-wrapper`} // card wrapper as clickable card if link is set
       style={{
         ...styles.card,
         backgroundColor: backgroundColor || colors.white,
@@ -315,6 +319,7 @@ const Card = ({
         minHeight: MIN_CARD_HEIGHT,
         position: "relative",
       }}
+      href={setLinkWrapperAction({ path: link })}
     >
       <PromoHeader fundingPromo={fundingPromo} />
       <FeaturedBanner featuredBanner={featuredBanner} />
@@ -329,7 +334,7 @@ const Card = ({
       <ServeVideoCover />
       <ServeContent />
       <ServeFooter />
-    </div>
+    </a>
   );
 };
 

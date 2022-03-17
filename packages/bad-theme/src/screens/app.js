@@ -66,6 +66,11 @@ const App = ({ state, actions }) => {
 
   const useEffectRef = useRef(true);
 
+  useEffect(() => {
+    // ⬇️ restore scroll history to manual position ⬇️
+    window.history.scrollRestoration = "manual";
+  }, [endPoint]);
+
   useEffect(async () => {
     // get current time & save it to variable
     const currentTime = new Date().getTime();

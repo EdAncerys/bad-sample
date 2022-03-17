@@ -54,6 +54,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     sky_newhospitalname: "",
     bad_proposer1: "",
     bad_proposer2: "",
+    py3_ntnno: "",
     sky_cvurl: "",
     bad_readpolicydocument: "",
     sig_readpolicydocument_url_email: "",
@@ -90,6 +91,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     sky_newhospitalname: true,
     bad_proposer1: true,
     bad_proposer2: true,
+    py3_ntnno: true,
     sky_cvurl: true,
     bad_readpolicydocument: true,
     sig_readpolicydocument_url_email: true,
@@ -179,13 +181,17 @@ const SIGApplication = ({ state, actions, libraries }) => {
     });
     // apply app additional logic after mapping apps data
     if (hospitalId) {
-      // get hospital data via API & populate form
-      const hospitalData = await getHospitalNameAction({
-        state,
-        id: hospitalId,
-      });
-      if (hospitalData) {
-        setSelectedHospital(hospitalData.name);
+      try {
+        // get hospital data via API & populate form
+        const hospitalData = await getHospitalNameAction({
+          state,
+          id: hospitalId,
+        });
+        if (hospitalData) {
+          setSelectedHospital(hospitalData.name);
+        }
+      } catch (error) {
+        console.log("🤖 error", error);
       }
     }
 
@@ -324,8 +330,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
       [name]: type === "checkbox" ? checked : value,
     }));
 
-    console.log("value", value);
-    console.log("membershipData", membershipData);
     if (membershipData) {
       // update policy link agains app data
       handlePolicyLinkUpdate({ membershipData, value });
@@ -366,6 +370,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
         "py3_addresstowncity",
         "py3_addresszippostalcode",
         "py3_addresscountry",
+        "py3_ntnno",
+        "bad_readpolicydocument",
       ],
     });
 
@@ -759,6 +765,26 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
+          {inputValidator.py3_ntnno && (
+            <div>
+              <div className="flex-col">
+                <label className="required form-label">
+                  NTN Number (if NTN is not applicable, please state current
+                  trainee route)
+                </label>
+              </div>
+              <input
+                name="py3_ntnno"
+                value={formData.py3_ntnno}
+                onChange={handleInputChange}
+                type="text"
+                className="form-control input"
+                placeholder="NTN Number"
+              />
+              <FormError id="py3_ntnno" />
+            </div>
+          )}
+
           {inputValidator.py3_hospitalid && (
             <div>
               <label className="form-label">
@@ -1116,39 +1142,42 @@ const SIGApplication = ({ state, actions, libraries }) => {
           )}
 
           {isPolicy && (
-            <div
-              className="flex"
-              style={{ alignItems: "center", margin: `1em 0` }}
-            >
-              <div style={{ display: "grid" }}>
-                <input
-                  name="bad_readpolicydocument"
-                  checked={formData.bad_readpolicydocument}
-                  onChange={handleInputChange}
-                  type="checkbox"
-                  className="form-check-input check-box"
-                />
+            <div>
+              <div
+                className="flex"
+                style={{ alignItems: "center", margin: `1em 0` }}
+              >
+                <div style={{ display: "grid" }}>
+                  <input
+                    name="bad_readpolicydocument"
+                    checked={formData.bad_readpolicydocument}
+                    onChange={handleInputChange}
+                    type="checkbox"
+                    className="form-check-input check-box"
+                  />
+                </div>
+                <div>
+                  <label className="form-check-label flex-row">
+                    Please refer to
+                    <span
+                      className="caps-btn-no-underline"
+                      style={{
+                        display: "grid",
+                        alignItems: "center",
+                        margin: "0 0.5em",
+                        paddingTop: 4,
+                      }}
+                      onClick={() =>
+                        setGoToAction({ path: readPolicyDoc, actions })
+                      }
+                    >
+                      here
+                    </span>
+                    {`for the ${applicationType} Privacy Policy`}
+                  </label>
+                </div>
               </div>
-              <div>
-                <label className="form-check-label flex-row">
-                  Please refer to
-                  <span
-                    className="caps-btn-no-underline"
-                    style={{
-                      display: "grid",
-                      alignItems: "center",
-                      margin: "0 0.5em",
-                      paddingTop: 4,
-                    }}
-                    onClick={() =>
-                      setGoToAction({ path: readPolicyDoc, actions })
-                    }
-                  >
-                    here
-                  </span>
-                  {`for the ${applicationType} Privacy Policy`}
-                </label>
-              </div>
+              <FormError id="bad_readpolicydocument" />
             </div>
           )}
         </div>

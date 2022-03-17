@@ -61,8 +61,8 @@ const ElectionModal = ({
         subject: contact_subject || true,
         subject_dropdown_options: contact_subject_dropdown_options,
         message: contact_message || true,
-        allow_attachments: contact_allow_attachments,
-        recipients: contact_recipients || [{ email: "harriet@bag.org.uk" }],
+        allow_attachments: contact_allow_attachments || true,
+        recipients: contact_recipients || state.contactList.defaultContactList,
       },
     });
   };

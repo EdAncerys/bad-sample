@@ -3,6 +3,8 @@ import { connect } from "frontity";
 
 import { colors } from "../config/imports";
 import Card from "../components/card/card";
+import ScrollTop from "../components/scrollTop";
+import Loading from "../components/loading";
 // BLOCK WIDTH WRAPPER -----------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT -----------------------------------------------------------------
@@ -24,13 +26,19 @@ const Post = ({ state, actions, libraries }) => {
 
   const [postList, setPostList] = useState(null);
   const [catList, setCatList] = useState(null);
+  const [position, setPosition] = useState(null);
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
+    // ⬇️ on component load defaults to window position TOP
+    window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
+    document.documentElement.scrollTop = 0; // for safari
+
     // pre fetch post data
     let iteration = 0;
     let data = Object.values(state.source.post);
-    while (data.length === 0) {
+    // if no posts or isSingle post fetch data
+    while (data.length === 0 || data.length === 1) {
       // if iteration is greater than 10, break
       if (iteration > 10) break;
       // set timeout for async
@@ -46,11 +54,14 @@ const Post = ({ state, actions, libraries }) => {
 
     setPostList(data);
     setCatList(categoryList);
+    setPosition(true);
 
     return () => {
       useEffectRef.current = false; // clean up function
     };
   }, []);
+
+  if (!position) return <Loading />;
 
   // SERVERS ---------------------------------------------
   const ServeContent = () => {
@@ -74,10 +85,12 @@ const Post = ({ state, actions, libraries }) => {
 
     const ServeBody = () => {
       if (!content) return null;
+      const bodyLength = content.rendered.length;
 
       return (
         <div className="flex-col">
           <Html2React html={content.rendered} />
+          {bodyLength > 2500 && <ScrollTop />}
         </div>
       );
     };

@@ -45,7 +45,6 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   if (slug.includes("step-2")) stepTwo = activeStyle;
   if (slug.includes("step-3")) stepThree = activeStyle;
   if (slug.includes("step-4")) stepFour = activeStyle;
-  if (slug.includes("step-5")) stepFive = activeStyle;
 
   useEffect(() => {
     // redirect to /dashboard if isActiveUser && !applicationData
@@ -60,6 +59,25 @@ const SideBarMenu = ({ state, actions, libraries }) => {
     if (!isActiveUser) {
       console.log("⬇️ no user - redirect to /");
       setGoToAction({ path: `/`, actions });
+    }
+    // auth/manage application steps for apps & redirects
+    if (applicationData) {
+      const appData = applicationData[0];
+      if (slug.includes("step-2") && !appData.stepOne)
+        stepTwo = setGoToAction({
+          path: `/membership/step-1-the-process/`,
+          actions,
+        });
+      if (slug.includes("step-3") && !appData.stepTwo)
+        stepTwo = setGoToAction({
+          path: `/membership/step-2-category-selection/`,
+          actions,
+        });
+      if (slug.includes("step-4") && !appData.stepThree)
+        stepTwo = setGoToAction({
+          path: `/membership/step-3-personal-information/`,
+          actions,
+        });
     }
   }, [isActiveUser, applicationData]);
 

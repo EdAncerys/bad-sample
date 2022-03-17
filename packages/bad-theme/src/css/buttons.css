@@ -58,6 +58,9 @@
   cursor: pointer;
   transition: all 0.3s ease-in-out;
 }
+.caps-btn-icon {
+  color: #404040;
+}
 .caps-btn::before {
   /* content: attr(value); */
   content: "";
@@ -79,6 +82,8 @@
   -webkit-text-fill-color: transparent;
   -moz-text-fill-color: transparent;
 }
+.caps-btn-icon:hover,
+.caps-btn:hover .caps-btn-icon,
 .caps-btn:hover,
 .caps-btn-no-underline:hover {
   color: #3882cd;

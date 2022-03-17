@@ -57,7 +57,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     py3_constitutionagreement: "",
     bad_readpolicydocument: "",
     sky_newhospitaltype: "",
-    py3_badCategory: "",
+    bad_memberdirectory: "",
   });
   const [inputValidator, setInputValidator] = useState({
     py3_gmcnumber: true,
@@ -76,7 +76,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     py3_constitutionagreement: true,
     bad_readpolicydocument: true,
     sky_newhospitaltype: true,
-    py3_badCategory: true,
+    bad_memberdirectory: true,
   });
 
   const [hospitalData, setHospitalData] = useState(null);
@@ -147,13 +147,17 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     });
 
     if (hospitalId) {
-      // get hospital data via API & populate form
-      const hospitalData = await getHospitalNameAction({
-        state,
-        id: hospitalId,
-      });
-      if (hospitalData) {
-        setSelectedHospital(hospitalData.name);
+      try {
+        // get hospital data via API & populate form
+        const hospitalData = await getHospitalNameAction({
+          state,
+          id: hospitalId,
+        });
+        if (hospitalData) {
+          setSelectedHospital(hospitalData.name);
+        }
+      } catch (error) {
+        console.log("🤖 error", error);
       }
     }
 
@@ -170,14 +174,16 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
   // HANDLERS --------------------------------------------
   const handleSelectHospital = ({ item }) => {
+    setSelectedHospital(item.title);
+    setHospitalData(null); // clear hospital data for dropdown
+    console.log("selected hospital", item); // debug
+
+    // guard if user have BAD apps approved dont allow hospital lookup
+    if (!canChangeHospital) return;
     setFormData((prevFormData) => ({
       ...prevFormData,
       py3_hospitalid: item.link,
     }));
-
-    setSelectedHospital(item.title);
-    setHospitalData(null); // clear hospital data for dropdown
-    console.log("selected hospital", item); // debug
   };
 
   const handleClearHospital = () => {
@@ -240,6 +246,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   const handleNext = async () => {
     // check if new hospital value been added
     const isNewHospital = formData.bad_newhospitaladded;
+    // check if isAssociateType to apply mandatory fields
+    const isAssociateType = applicationType.includes("Associate");
 
     const isValid = isFormValidated({
       required: [
@@ -249,8 +257,10 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         "bad_currentpost",
         isNewHospital ? "sky_newhospitaltype" : null,
         !isNewHospital ? "py3_hospitalid" : null,
-
-        "py3_badCategory",
+        isAssociateType ? "bad_proposer1" : null,
+        isAssociateType ? "bad_proposer2" : null,
+        "py3_constitutionagreement",
+        "bad_readpolicydocument",
       ],
     });
 
@@ -328,7 +338,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
   const isAgreementForm =
     inputValidator.py3_constitutionagreement ||
-    inputValidator.bad_readpolicydocument;
+    inputValidator.bad_readpolicydocument ||
+    inputValidator.bad_memberdirectory;
 
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
@@ -383,7 +394,11 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         <div style={{ padding: `2em 1em` }}>
           {inputValidator.py3_gmcnumber && (
             <div>
-              <label className="required form-label">GMC Number</label>
+              <label className="required form-label">
+                {applicationType === "Associate Overseas"
+                  ? "GMC number or International equivalent"
+                  : "GMC number"}
+              </label>
               <input
                 name="py3_gmcnumber"
                 value={formData.py3_gmcnumber}
@@ -573,41 +588,67 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         {inputValidator.bad_proposer1 && (
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: `repeat(2, 1fr)`,
-              gap: 20,
               padding: `1em 1em 2em 1em`,
               borderTop: `1px solid ${colors.silverFillTwo}`,
               borderBottom: `1px solid ${colors.silverFillTwo}`,
             }}
           >
-            {inputValidator.bad_proposer1 && (
-              <div>
-                <label className="form-label">Supporting Member 1</label>
-                <input
-                  name="bad_proposer1"
-                  value={formData.bad_proposer1}
-                  onChange={handleInputChange}
-                  type="text"
-                  className="form-control input"
-                  placeholder="MRCP"
-                />
-              </div>
-            )}
+            <label className="form-label">
+              Proposers must be BSDS Ordinary members
+            </label>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: `repeat(2, 1fr)`,
+                gap: 20,
+              }}
+            >
+              {inputValidator.bad_proposer1 && (
+                <div>
+                  <label
+                    className={`${
+                      applicationType.includes("Associate")
+                        ? "required form-label"
+                        : "form-label"
+                    }`}
+                  >
+                    Supporting Member 1
+                  </label>
+                  <input
+                    name="bad_proposer1"
+                    value={formData.bad_proposer1}
+                    onChange={handleInputChange}
+                    type="text"
+                    className="form-control input"
+                    placeholder="MRCP"
+                  />
+                  <FormError id="bad_proposer1" />
+                </div>
+              )}
 
-            {inputValidator.bad_proposer2 && (
-              <div>
-                <label className="form-label">Supporting Member 2</label>
-                <input
-                  name="bad_proposer2"
-                  value={formData.bad_proposer2}
-                  onChange={handleInputChange}
-                  type="text"
-                  className="form-control input"
-                  placeholder="MRCP"
-                />
-              </div>
-            )}
+              {inputValidator.bad_proposer2 && (
+                <div>
+                  <label
+                    className={`${
+                      applicationType.includes("Associate")
+                        ? "required form-label"
+                        : "form-label"
+                    }`}
+                  >
+                    Supporting Member 2
+                  </label>
+                  <input
+                    name="bad_proposer2"
+                    value={formData.bad_proposer2}
+                    onChange={handleInputChange}
+                    type="text"
+                    className="form-control input"
+                    placeholder="MRCP"
+                  />
+                  <FormError id="bad_proposer2" />
+                </div>
+              )}
+            </div>
           </div>
         )}
 
@@ -669,99 +710,108 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                   borderTop: `1px solid ${colors.silverFillTwo}`,
                 }}
               >
-                <div>
-                  <div
-                    className="flex"
-                    style={{ alignItems: "center", margin: `1em 0` }}
-                  >
-                    <div style={{ display: "grid" }}>
-                      <input
-                        name="py3_badCategory"
-                        checked={formData.py3_badCategory}
-                        onChange={handleInputChange}
-                        type="checkbox"
-                        className="form-check-input check-box"
-                      />
-                    </div>
+                {inputValidator.bad_memberdirectory && (
+                  <div>
                     <div
-                      className="tulip-pop"
-                      citations="A member only service to search for the contact email of fellow BAD members"
-                      style={{ color: "inherit" }}
+                      className="flex"
+                      style={{ alignItems: "center", margin: `1em 0` }}
                     >
-                      Include in Members directory
-                      <span
-                        style={{ color: colors.danger, padding: "0 0.5em" }}
+                      <div style={{ display: "grid" }}>
+                        <input
+                          name="bad_memberdirectory"
+                          checked={formData.bad_memberdirectory}
+                          onChange={handleInputChange}
+                          type="checkbox"
+                          className="form-check-input check-box"
+                        />
+                      </div>
+                      <div
+                        className="tulip-pop"
+                        citations="A member only service to search for the contact email of fellow BAD members"
+                        style={{ color: "inherit" }}
                       >
-                        field inactive
-                      </span>
+                        Include in Members directory
+                      </div>
                     </div>
+                    <FormError id="bad_memberdirectory" />
                   </div>
-                  <FormError id="py3_badCategory" />
-                </div>
+                )}
 
                 {inputValidator.py3_constitutionagreement && (
-                  <div
-                    className="flex"
-                    style={{ alignItems: "center", margin: `1em 0` }}
-                  >
-                    <div style={{ display: "grid" }}>
-                      <input
-                        name="py3_constitutionagreement"
-                        checked={formData.py3_constitutionagreement}
-                        onChange={handleInputChange}
-                        type="checkbox"
-                        className="form-check-input check-box"
-                      />
+                  <div>
+                    <div
+                      className="flex"
+                      style={{ alignItems: "center", margin: `1em 0` }}
+                    >
+                      <div style={{ display: "grid" }}>
+                        <input
+                          name="py3_constitutionagreement"
+                          checked={formData.py3_constitutionagreement}
+                          onChange={handleInputChange}
+                          type="checkbox"
+                          className="form-check-input check-box"
+                        />
+                      </div>
+                      <div>
+                        <label className="form-check-label flex-row">
+                          <div>I agree to the </div>
+                          <div
+                            className="caps-btn required"
+                            style={{ paddingTop: 6, marginLeft: 10 }}
+                          >
+                            BAD Constitution
+                          </div>
+                        </label>
+                      </div>
                     </div>
-                    <div>
-                      <label className="form-check-label flex-row">
-                        <div>I agree to the </div>
-                        <div
-                          className="caps-btn required"
-                          style={{ paddingTop: 6, marginLeft: 10 }}
-                        >
-                          BAD Constitution
-                        </div>
-                      </label>
-                    </div>
+                    <FormError id="py3_constitutionagreement" />
                   </div>
                 )}
                 {inputValidator.bad_readpolicydocument && (
-                  <div
-                    className="flex"
-                    style={{ alignItems: "center", margin: `1em 0` }}
-                  >
-                    <div>
-                      <input
-                        name="bad_readpolicydocument"
-                        checked={formData.bad_readpolicydocument}
-                        onChange={handleInputChange}
-                        type="checkbox"
-                        className="form-check-input check-box"
-                      />
-                    </div>
-                    <div>
-                      <label className="form-check-label flex-row">
-                        <div>
-                          <div
-                            className="caps-btn required"
-                            style={{
-                              paddingTop: 6,
-                              marginRight: 10,
-                              whiteSpace: "nowrap",
-                              float: "left",
-                            }}
-                          >
-                            I agree - Privacy Notice
+                  <div>
+                    <div
+                      className="flex"
+                      style={{ alignItems: "center", margin: `1em 0` }}
+                    >
+                      <div>
+                        <input
+                          name="bad_readpolicydocument"
+                          checked={formData.bad_readpolicydocument}
+                          onChange={handleInputChange}
+                          type="checkbox"
+                          className="form-check-input check-box"
+                        />
+                      </div>
+                      <div>
+                        <label className="form-check-label flex-row">
+                          <div>
+                            <div
+                              className="caps-btn required"
+                              style={{
+                                paddingTop: 6,
+                                marginRight: 10,
+                                whiteSpace: "nowrap",
+                                float: "left",
+                              }}
+                              onClick={() =>
+                                setGoToAction({
+                                  path: `/privacy-policy/`,
+                                  actions,
+                                })
+                              }
+                            >
+                              I agree - Privacy Notice
+                            </div>
+                            <span>
+                              I agree - Privacy Notice* - justo donec enim diam
+                              vulputate ut pharetra sit. Purus semper eget duis
+                              at tellus at. Sed adipiscing diam.
+                            </span>
                           </div>
-                          <span>
-                            I agree - Privacy Notice* - justo donec enim diam
-                            vulputate ut pharetra sit. Purus semper eget duis at
-                            tellus at. Sed adipiscing diam.
-                          </span>
-                        </div>
-                      </label>
+                        </label>
+                      </div>
                     </div>
+                    <FormError id="bad_readpolicydocument" />
                   </div>
                 )}
               </div>

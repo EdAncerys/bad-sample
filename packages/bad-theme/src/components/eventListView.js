@@ -214,7 +214,6 @@ const EventListView = ({
         <ServeTitle />
         {!lg ? !recommended_events ? <ServeInformation /> : null : null}
         {!lg ? !recommended_events ? <ServeSummary /> : null : null}
-        {!lg ? null : <hr />}
       </div>
     );
   };
@@ -223,7 +222,7 @@ const EventListView = ({
   return (
     <div
       style={{ margin: !recommended_events ? MARGIN : 10 }}
-      class="shadow-on-hover"
+      className="shadow-on-hover"
     >
       <div
         style={{

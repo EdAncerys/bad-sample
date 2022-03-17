@@ -5,7 +5,7 @@ import Image from "@frontity/components/image";
 import { colors } from "../config/imports";
 import RowButton from "../components/rowButton";
 import ShareToSocials from "../components/card/shareToSocials";
-
+import Loading from "../components/loading";
 import BadBadgeLogo from "../img/svg/badBadgeLogo.svg";
 
 import date from "date-and-time";
@@ -37,10 +37,11 @@ const Event = ({ state, actions, libraries }) => {
   const [eventList, setEventList] = useState(null);
   const [gradeList, setGradeList] = useState(null);
   const [locationList, setLocationList] = useState(null);
-  const [specialtyList, setSpecialtyList] = useState(null);
+  const [position, setPosition] = useState(null);
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
+    // ⬇️ on component load defaults to window position TOP
     window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
     document.documentElement.scrollTop = 0; // for safari
 
@@ -48,20 +49,26 @@ const Event = ({ state, actions, libraries }) => {
     let eventList = null;
     let categoryList = null;
     let locationList = null;
-    let specialtyList = null;
 
     // pre fetch events data
-    let iteration = 0;
     let data = state.source.events;
+    let isCurrentOnly = false;
+    // on page re-fresh check if is current only
+    if (data && Object.keys(data).length === 1) isCurrentOnly = true;
+    if (isCurrentOnly) {
+      await getEventsData({ state, actions });
+    }
 
+    let iteration = 0;
     while (!data) {
       // if iteration is greater than 10, break
       if (iteration > 10) break;
       // set timeout for async
-      await new Promise((resolve) => setTimeout(resolve, 500));
       await getEventsData({ state, actions });
-      data = state.source.post;
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      data = state.source.events;
       iteration++;
+      console.log("🚀 ", iteration);
     }
 
     // if !data then break
@@ -72,13 +79,11 @@ const Event = ({ state, actions, libraries }) => {
       categoryList = Object.values(state.source.event_grade);
     if (state.source.event_location)
       locationList = Object.values(state.source.event_location);
-    if (state.source.event_specialty)
-      specialtyList = Object.values(state.source.event_specialty);
 
     setEventList(eventList);
     setGradeList(categoryList);
     setLocationList(locationList);
-    setSpecialtyList(specialtyList);
+    setPosition(true);
 
     return () => {
       useEffectRef.current = false; // clean up function
@@ -124,6 +129,7 @@ const Event = ({ state, actions, libraries }) => {
   } = event.acf;
   const { title, id } = event;
   // console.log("event", event); // debug
+  if (!position) return <Loading />;
 
   // SERVERS ----------------------------------------------
   const ServeTitle = () => {
@@ -293,7 +299,7 @@ const Event = ({ state, actions, libraries }) => {
       <div
         className="flex"
         style={{
-          backgroundColor: colors.silverFillOne,
+          // backgroundColor: colors.silverFillOne, // optional background color
           justifyContent: "center",
           padding: `2em`,
           margin: `2em 0`,
@@ -324,9 +330,8 @@ const Event = ({ state, actions, libraries }) => {
                 subject_dropdown_options: register_subject_dropdown_options,
                 message: register_message || true,
                 allow_attachments: register_allow_attachments,
-                recipients: register_recipients || [
-                  { email: "conference@bad.org.uk" },
-                ],
+                recipients:
+                  register_recipients || state.contactList.defaultContactList,
               },
             })
           }
@@ -342,7 +347,10 @@ const Event = ({ state, actions, libraries }) => {
 
     return (
       <div className="text-body">
-        <div className="primary-title" style={{ fontSize: 20 }}>
+        <div
+          className="primary-title"
+          style={{ fontSize: 20, paddingTop: "2em" }}
+        >
           Summary
         </div>
         <Html2React html={summary} />
@@ -436,7 +444,7 @@ const Event = ({ state, actions, libraries }) => {
   };
 
   const ServeSideBar = () => {
-    if (!eventList) return null;
+    if (!eventList || !locationList) return null;
 
     // get current event taxonomy types
     const currentPostGrade = event.event_grade[0];
@@ -592,9 +600,8 @@ const Event = ({ state, actions, libraries }) => {
                 subject: contact_subject || true,
                 message: contact_message || true,
                 allow_attachments: contact_allow_attachments,
-                recipients: contact_recipients || [
-                  { email: "conference@bad.org.uk" },
-                ],
+                recipients:
+                  contact_recipients || state.contactList.defaultContactList,
               },
             })
           }

@@ -1,22 +1,33 @@
+const pathOne = `http://3.9.193.188`;
+const pathTwo = `https://badadmin.skylarkdev.co`;
+
 export const setGoToAction = async ({ path, actions }) => {
   if (!path || !actions) return null;
 
   // console.log("setGoToAction triggered", path); // debug
 
-  const END_POINT_ONE = `http://3.9.193.188`;
-  const END_POINT_TWO = `https://badadmin.skylarkdev.co`;
-
   let isExternalLink = true;
-  if (path.includes(END_POINT_ONE)) isExternalLink = false;
-  if (path.includes(END_POINT_TWO)) isExternalLink = false;
+  if (path.includes(pathOne)) isExternalLink = false;
+  if (path.includes(pathTwo)) isExternalLink = false;
 
   if (path.includes(`www`) && !path.includes(`http`) && isExternalLink)
     return window.open(`https://` + path, "_blank"); // handle external links without https pre fix
   if (!path.includes(`www`) && !path.includes(`http`) && isExternalLink)
-    return actions.router.set(END_POINT_TWO + path); // internal link no pre fix
+    return actions.router.set(pathTwo + path); // internal link no pre fix
   if (isExternalLink) return window.open(path, "_blank"); // handle external links
 
   actions.router.set(path);
+};
+
+export const setLinkWrapperAction = ({ path }) => {
+  if (!path) return "#;"; // by default anchor tag will not be clickable
+  // if (!path) return "javascript:void(0)"; // by default anchor tag will not be clickable
+  let newPath = path;
+  // if path includes pathOne || pathTwo strip path and set newPath
+  if (path.includes(pathOne)) newPath = path.replace(pathOne, "");
+  if (path.includes(pathTwo)) newPath = path.replace(pathTwo, "");
+
+  return newPath;
 };
 
 // SET CONTEXT ---------------------------------------------------
@@ -43,17 +54,6 @@ export const setErrorAction = ({ dispatch, isError }) => {
 export const setApplicationDataAction = ({ dispatch, applicationData }) => {
   console.log("setApplicationDataAction triggered"); //debug
   dispatch({ type: "SET_APPLICATION_DATA_ACTION", payload: applicationData });
-};
-
-export const setChangeApplicationDataAction = ({
-  dispatch,
-  applicationChangeData,
-}) => {
-  console.log("setChangeApplicationDataAction triggered"); //debug
-  dispatch({
-    type: "SET_CHANGE_APPLICATION_DATA_ACTION",
-    payload: applicationChangeData,
-  });
 };
 
 export const setCPTBlockAction = ({ dispatch, cptBlockFilter }) => {

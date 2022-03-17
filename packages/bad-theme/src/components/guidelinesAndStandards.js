@@ -225,7 +225,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
             style={{ padding: `0 ${marginHorizontal}px` }}
           >
             <SearchContainer
-              title="Search for Guidelines"
+              title="Search for Guidelines and PILS"
               width="70%"
               searchFilterRef={searchFilterRef}
               handleSearch={handleSearch}

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../config/imports";
@@ -6,6 +6,7 @@ import Loading from "../components/loading";
 import DownloadFileBlock from "../components/downloadFileBlock";
 
 import { muiQuery } from "../context";
+import ScrollTop from "../components/scrollTop";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 
@@ -18,14 +19,16 @@ const Post = ({ state, actions, libraries }) => {
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-
-  if (!pil) return <Loading />;
+  const [position, setPosition] = useState(null);
 
   useEffect(() => {
+    // ⬇️ on component load defaults to window position TOP
     window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
     document.documentElement.scrollTop = 0; // for safari
+    setPosition(true);
   }, []);
 
+  if (!pil || !position) return <Loading />;
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
     if (!pil.title) return null;
@@ -49,8 +52,8 @@ const Post = ({ state, actions, libraries }) => {
 
   const ServeBody = () => {
     if (!pil.content) return null;
-
-    console.log(pil.content);
+    const bodyLength = pil.content.rendered.length;
+    console.log("body length: ", bodyLength); // debug
 
     return (
       <div
@@ -61,6 +64,7 @@ const Post = ({ state, actions, libraries }) => {
         }}
       >
         <Html2React html={pil.content.rendered} />
+        {bodyLength > 2500 && <ScrollTop />}
       </div>
     );
   };

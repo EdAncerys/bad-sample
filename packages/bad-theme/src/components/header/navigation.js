@@ -3,7 +3,8 @@ import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import { setGoToAction, getWpPagesAction } from "../../context";
+import { setGoToAction } from "../../context";
+import Link from "@frontity/components/link";
 
 import BlockWrapper from "../blockWrapper";
 import Loading from "../loading";
@@ -99,13 +100,11 @@ const Navigation = ({ state, actions, libraries }) => {
     }
   };
 
-  const handleOnClickNavigation = ({ path, parentSlug }) => {
+  const handleOnClickNavigation = ({ parentSlug }) => {
     const childMenuSelector = document.querySelector(
       `#${parentSlug}-child-menu`
     );
-
     if (childMenuSelector) childMenuSelector.style.display = "none";
-    if (path) setGoToAction({ path, actions });
   };
 
   // SERVERS -----------------------------------------------------
@@ -152,7 +151,7 @@ const Navigation = ({ state, actions, libraries }) => {
             }}
           >
             <div className="nav-item dropdown">
-              <a
+              <Link
                 className="nav-link dropdown-toggle"
                 style={{
                   ...styles.link,
@@ -160,16 +159,15 @@ const Navigation = ({ state, actions, libraries }) => {
                   fontWeight: "bold",
                   marginRight: 30,
                 }}
-                // onClick={() => setGoToAction({ path: parent.slug, actions })}
                 onClick={() =>
                   handleOnClickNavigation({
-                    path: parent.url,
                     parentSlug: parent.slug,
                   })
                 }
+                link={parent.url}
               >
                 <Html2React html={parent.title} />
-              </a>
+              </Link>
             </div>
 
             <div style={{ paddingRight: `2em` }}>
@@ -180,22 +178,22 @@ const Navigation = ({ state, actions, libraries }) => {
 
                 return (
                   <li key={key} className="flex-row" style={{ width: "100%" }}>
-                    <a
+                    <Link
                       className="flex-row dropdown-item"
                       style={styles.link}
                       onClick={() =>
                         handleOnClickNavigation({
-                          path: url,
                           parentSlug: parentSlug || "more",
                         })
                       }
+                      link={url}
                     >
                       <div className="flex">
                         <div className="menu-title">
                           <Html2React html={subChildTitle} />
                         </div>
                       </div>
-                    </a>
+                    </Link>
                   </li>
                 );
               })}
@@ -319,15 +317,15 @@ const Navigation = ({ state, actions, libraries }) => {
                     }
                   }}
                 >
-                  <a
+                  <Link
                     className="flex-row dropdown-item"
                     style={{ ...styles.link, fontWeight: "bold" }}
                     onClick={() =>
                       handleOnClickNavigation({
-                        path: url,
                         parentSlug: parentSlug || "more",
                       })
                     }
+                    link={url}
                   >
                     <div className="flex">
                       <div className="menu-title">
@@ -335,7 +333,7 @@ const Navigation = ({ state, actions, libraries }) => {
                       </div>
                     </div>
                     <ServeMenuArrow />
-                  </a>
+                  </Link>
 
                   <ServeSubChildMenu
                     child_items={child_items}
@@ -430,15 +428,18 @@ const Navigation = ({ state, actions, libraries }) => {
               }}
             >
               <li className="nav-item dropdown">
-                <a
+                <Link
                   className="nav-link dropdown-toggle"
                   style={styles.link}
                   onClick={() =>
-                    handleOnClickNavigation({ path: url, parentSlug: slug })
+                    handleOnClickNavigation({
+                      parentSlug: slug,
+                    })
                   }
+                  link={url}
                 >
                   <Html2React html={title} />
-                </a>
+                </Link>
                 <ServeChildMenu
                   item={item}
                   parentSlug={slug}

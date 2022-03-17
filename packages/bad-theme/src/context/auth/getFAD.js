@@ -1,8 +1,4 @@
-import {
-  authenticateAppAction,
-  setFetchAction,
-  getUserDataFromDynamics,
-} from "../index";
+import { authenticateAppAction, setFetchAction } from "../index";
 
 export const getFadAction = async ({ state, dispatch }) => {
   console.log("getFadAction triggered");
@@ -21,28 +17,11 @@ export const getFadAction = async ({ state, dispatch }) => {
     const result = await data.json();
 
     if (result.success) {
-      console.log("⏬ FED data successfully fetched ⏬");
       const fad = result.data;
-      // map through fad data and fetch user data from dynamics and update fad data with user data
-      const fads = fad.map(async (fad) => {
-        const userData = await getUserDataFromDynamics({
-          state,
-          dispatch,
-          jwt,
-          contactid: fad.contactid,
-        });
-        if (!userData) throw new Error("Error getting userData.");
+      console.log("⏬ FED data successfully fetched ⏬");
+      // console.log(fad);
 
-        const fadData = { ...fad, ...userData };
-        // console.log("fadData", fadData); // debug
-
-        return fadData;
-      });
-      // await fads data
-      const fadData = await Promise.all(fads);
-      // console.log("fadData", fadData); // debug
-
-      return fadData;
+      return fad;
     }
   } catch (error) {
     console.log("error", error);

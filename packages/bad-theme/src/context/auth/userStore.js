@@ -185,6 +185,7 @@ export const setCompleteUserApplicationAction = async ({
   dispatch,
   isActiveUser,
   applicationData,
+  changeAppCategory,
 }) => {
   console.log("setCompleteUserApplicationAction triggered");
 
@@ -192,6 +193,10 @@ export const setCompleteUserApplicationAction = async ({
   if (applicationData) {
     const type = applicationData[0].bad_categorytype;
     confirmationMsg = `${type} application been successfully submitted!`;
+  }
+  if (changeAppCategory && applicationData) {
+    // change of category for BAD application error message
+    confirmationMsg = `Application change to ${changeAppCategory.bad_categorytype} from ${applicationData[0].bad_categorytype} been successfully submitted!`;
   }
 
   try {
@@ -448,6 +453,8 @@ const updateMembershipApplication = ({
       application.name === "bad_expectedyearofqualification"
     )
       application.value = data.bad_expectedyearofqualification;
+    if (data.bad_memberdirectory && application.name === "bad_memberdirectory")
+      application.value = data.bad_memberdirectory;
 
     //⏬ SIG section of the application process
     if (data.bad_qualifications && application.name === "bad_qualifications")
@@ -495,6 +502,13 @@ const updateMembershipApplication = ({
       application.name === "py3_insertnhsnetemailaddress"
     )
       application.value = data.py3_insertnhsnetemailaddress;
+
+    //⏬ BAD change of category of the application process
+    if (
+      data.bad_existingsubscriptionid &&
+      application.name === "bad_existingsubscriptionid"
+    )
+      application.value = data.bad_existingsubscriptionid;
 
     //⏬ complete & submit of the application process
     if (data.bad_ethnicity && application.name === "bad_ethnicity")
