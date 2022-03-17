@@ -137,7 +137,8 @@ const ElectionBlocks = ({ state, actions, block }) => {
           subject_dropdown_options: contact_subject_dropdown_options,
           message: contact_message || true,
           allow_attachments: contact_allow_attachments,
-          recipients: contact_recipients || state.contactList.ELECTION_CONTACTS,
+          recipients:
+            contact_recipients || state.contactList.defaultContactList,
         },
       });
     if (!isClosedPosition) handleElectionModal({ block });
