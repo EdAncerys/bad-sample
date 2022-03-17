@@ -1,6 +1,7 @@
 import { AppProvider, useAppDispatch, useAppState } from "./context";
 import {
   setGoToAction,
+  setLinkWrapperAction,
   setFilterAction,
   setFetchAction,
   setErrorAction,
@@ -48,6 +49,7 @@ import {
   getDirectDebitAction,
   createDirectDebitAction,
   getInvoiceAction,
+  getProofOfMembershipAction,
 } from "./auth/directDebit";
 import {
   setUserStoreAction,
@@ -80,6 +82,7 @@ export {
   useAppState,
   muiQuery,
   setGoToAction,
+  setLinkWrapperAction,
   setLoginModalAction,
   setCreateAccountModalAction,
   setEnquireAction,
@@ -136,4 +139,5 @@ export {
   deleteApplicationAction,
   getUserDataFromDynamics,
   getInvoiceAction,
+  getProofOfMembershipAction,
 };

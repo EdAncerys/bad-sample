@@ -1,9 +1,15 @@
 import { authenticateAppAction } from "../index";
 
-export const getWileyAction = async ({ state, doi }) => {
+export const getWileyAction = async ({ state, doi, isActiveUser }) => {
   console.log("getWileyAction triggered");
 
-  const URL = state.auth.APP_HOST + `/wiley`;
+  let isValidId = "";
+  // get wiley link for BAD members
+  if (isActiveUser) {
+    isValidId = isActiveUser.contactid;
+  }
+
+  const URL = state.auth.APP_HOST + `/wiley?contactid=${isValidId}`;
   const jwt = await authenticateAppAction({ state });
 
   const requestOptions = {
@@ -18,8 +24,8 @@ export const getWileyAction = async ({ state, doi }) => {
   try {
     const data = await fetch(URL, requestOptions);
     const wiley = await data.json();
-
     // console.log("getWileyAction wiley", wiley); // debug
+    // if (wiley.tps) console.log("secure link 👌 wia wileys"); // debug
 
     if (wiley.success) return wiley.data;
     return null;

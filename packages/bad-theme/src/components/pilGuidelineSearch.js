@@ -108,7 +108,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
           paddingBottom: `0.5em`,
         }}
       >
-        Search for Guidelines
+        Search for Guidelines and PILS
       </div>
     );
   };

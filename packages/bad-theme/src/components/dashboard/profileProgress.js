@@ -18,6 +18,7 @@ import {
   deleteApplicationAction,
   handleApplyForMembershipAction,
   setErrorAction,
+  getProofOfMembershipAction,
 } from "../../context";
 
 const ProfileProgress = ({ state, actions, libraries }) => {
@@ -154,6 +155,25 @@ const ProfileProgress = ({ state, actions, libraries }) => {
           image: "Error",
         },
       });
+    } finally {
+      setFetching2(false);
+    }
+  };
+
+  const handleDownloadConfirmationPDF = async ({ app }) => {
+    console.log(app);
+
+    try {
+      setFetching2(true);
+      const url = await getProofOfMembershipAction({
+        state,
+        core_membershipsubscriptionid: app.core_membershipsubscriptionid,
+        isActiveUser,
+      });
+      // await for link to download & open in new window to download
+      window.open(url, "_blank");
+    } catch (error) {
+      console.log(error);
     } finally {
       setFetching2(false);
     }
@@ -345,13 +365,36 @@ const ProfileProgress = ({ state, actions, libraries }) => {
                 if (bad_organisedfor !== "BAD") return null;
 
                 return (
-                  <div style={{ display: "grid", alignItems: "center" }}>
+                  <div
+                    style={{
+                      display: "grid",
+                      alignItems: "center",
+                      marginRight: "2em",
+                    }}
+                  >
                     <div
                       type="submit"
                       className="blue-btn"
                       onClick={() => handleUpdateMembershipApplication({ app })}
                     >
                       Apply for BAD category change
+                    </div>
+                  </div>
+                );
+              };
+
+              const ServeMembershipConfirmationAction = () => {
+                // only return if bad_organisedfor is BAD
+                // if (bad_organisedfor !== "BAD") return null;
+
+                return (
+                  <div style={{ display: "grid", alignItems: "center" }}>
+                    <div
+                      type="submit"
+                      className="blue-btn"
+                      onClick={() => handleDownloadConfirmationPDF({ app })}
+                    >
+                      Membership Confirmation PDF
                     </div>
                   </div>
                 );
@@ -373,6 +416,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
                       <div>Application Date: {formattedDate}</div>
                     </div>
                     <ServeChangeApplicationAction />
+                    <ServeMembershipConfirmationAction />
                   </div>
                 </div>
               );

@@ -27,6 +27,8 @@ import DownloadFileBlock from "../downloadFileBlock";
 import { setGoToAction } from "../../context";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import LockIcon from "@mui/icons-material/Lock";
+import { setLinkWrapperAction } from "../../context";
+
 const Card = ({
   state,
   actions,
@@ -107,11 +109,6 @@ const Card = ({
   if (padding) PADDING = padding;
 
   // HANDLERS ---------------------------------------------
-  const handleCardAction = () => {
-    if (link) {
-      setGoToAction({ path: link, actions });
-    }
-  };
 
   // SERVERS ----------------------------------------------
   const ServeFooter = () => {
@@ -119,9 +116,9 @@ const Card = ({
 
     return (
       <div
+        className="bad-card-footer"
         style={{
           backgroundColor: THEME,
-          height: 5,
           width: "100%",
           opacity: opacity || 1,
         }}
@@ -312,8 +309,8 @@ const Card = ({
 
   // RETURN ----------------------------------------------------
   return (
-    <div
-      className={`${isShadow} ${link ? "card-wrapper" : ""}`} // card wrapper as clickable card if link is set
+    <a
+      className={`${isShadow} card-wrapper`} // card wrapper as clickable card if link is set
       style={{
         ...styles.card,
         backgroundColor: backgroundColor || colors.white,
@@ -322,7 +319,7 @@ const Card = ({
         minHeight: MIN_CARD_HEIGHT,
         position: "relative",
       }}
-      onClick={handleCardAction}
+      href={setLinkWrapperAction({ path: link })}
     >
       <PromoHeader fundingPromo={fundingPromo} />
       <FeaturedBanner featuredBanner={featuredBanner} />
@@ -337,7 +334,7 @@ const Card = ({
       <ServeVideoCover />
       <ServeContent />
       <ServeFooter />
-    </div>
+    </a>
   );
 };
 

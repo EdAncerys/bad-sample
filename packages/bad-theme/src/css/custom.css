@@ -34,10 +34,19 @@
 /* card component animations */
 .card-wrapper {
   cursor: pointer;
+  color: inherit;
   transition: all 0.3s ease-in-out;
 }
 .card-wrapper:hover {
-  transform: scale(1.01);
+  color: inherit;
+  transform: scale(0.99);
+}
+.bad-card-footer {
+  height: 5px;
+  transition: all 0.3s ease-in-out;
+}
+.card-wrapper:hover .bad-card-footer {
+  height: 7px;
 }
 
 .tulip-pop {
@@ -45,7 +54,7 @@
   position: relative;
   cursor: pointer;
   box-sizing: border-box;
-  transition: all 0.25s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 .tulip-pop:hover {
   color: #069;

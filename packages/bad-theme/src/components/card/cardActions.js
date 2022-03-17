@@ -46,19 +46,24 @@ const CardActions = ({
   useEffect(async () => {
     if (!rssFeedLink) return null;
 
-    setFetching(true);
     const { link, doi } = rssFeedLink;
     let authLink = link;
 
-    // ⏬⏬  validate auth link for users via wiley ⏬⏬
-    // ammend link to wiley if user is logged in && user is a wiley user
-    if (isActiveUser) {
-      const wileyLink = await getWileyAction({ state, dispatch, doi });
-      if (wileyLink) authLink = wileyLink;
-    }
+    try {
+      setFetching(true);
 
-    setAuthLink(link); // set auth link via wiley
-    setFetching(false);
+      // ⏬⏬  validate auth link for users via wiley ⏬⏬
+      // get auth link to wiley if user is BAD member & logged in
+      if (isActiveUser) {
+        const wileyLink = await getWileyAction({ state, doi, isActiveUser });
+        if (wileyLink) authLink = wileyLink;
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setAuthLink(authLink); // set auth link via wiley
+      setFetching(false);
+    }
 
     return () => {
       useEffectRef.current = false; // clean up function
@@ -96,7 +101,6 @@ const CardActions = ({
 
       return;
     }
-    console.log("API link", authLink); // debug
 
     setGoToAction({ path: authLink, actions });
   };

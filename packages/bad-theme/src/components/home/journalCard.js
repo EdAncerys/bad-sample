@@ -4,7 +4,7 @@ import Image from "@frontity/components/image";
 
 import { colors } from "../../config/imports";
 // CONTEXT -------------------------------------
-import { setGoToAction } from "../../context";
+import { setGoToAction, setLinkWrapperAction } from "../../context";
 
 const JournalCard = ({
   state,
@@ -22,13 +22,6 @@ const JournalCard = ({
   const isShadow = shadow ? "shadow" : "";
 
   if (!image && !title) return null; // do not render card if content not provided
-
-  // HANDLERS ---------------------------------------------
-  const handleCardAction = () => {
-    if (link) {
-      setGoToAction({ path: link.url, actions });
-    }
-  };
 
   // SERVERS ---------------------------------------------
   const ServeCardContent = () => {
@@ -127,13 +120,13 @@ const JournalCard = ({
 
   // RETURN ----------------------------------------------------------------
   return (
-    <div
-      className={`${isShadow} ${link ? "card-wrapper" : ""}`} // card wrapper as clickable card if link is set
+    <a
+      className={`${isShadow} card-wrapper`}
+      href={setLinkWrapperAction({ path: link.url })}
       style={{
         minWidth: CARD_WIDTH,
         width: "100%",
       }}
-      onClick={handleCardAction}
     >
       <div
         className="flex-row"
@@ -145,7 +138,7 @@ const JournalCard = ({
         <ServeCardImage />
         <ServeCardContent />
       </div>
-    </div>
+    </a>
   );
 };
 

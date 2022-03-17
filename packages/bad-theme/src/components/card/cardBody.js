@@ -31,7 +31,6 @@ const CardBody = ({
   titleLimit,
   opacity,
   videoArchive,
-  limitTitleLength,
   noVideoCategory,
   shareToSocials,
 }) => {
@@ -48,17 +47,6 @@ const CardBody = ({
   const ServeTitle = () => {
     if (!title) return null;
 
-    let TITLE_HEIGHT = "auto";
-    if (isFrom4Col) TITLE_HEIGHT = 60;
-
-    let titlePreview = title;
-    const maxChar = 45;
-    if (title.length > maxChar && isFrom4Col)
-      titlePreview = `${title.slice(0, maxChar)}...`;
-    if (!body) titlePreview = title;
-    if (!body && isFrom4Col) titlePreview = `${title.slice(0, 80)}`;
-    if (limitTitleLength) titlePreview = `${title.slice(0, maxChar)}...`;
-
     const ServePaidIcon = () => {
       if (!videoArchive || !videoArchive.acf) return null;
       if (videoArchive.acf.private && videoArchive.acf.price)
@@ -74,6 +62,7 @@ const CardBody = ({
         );
       return null;
     };
+
     return (
       <div
         className={
