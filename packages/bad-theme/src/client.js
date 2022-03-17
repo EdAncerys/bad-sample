@@ -44,9 +44,11 @@ const BADTheme = {
       APP_URL: process.env.APP_URL,
       COOKIE_NAME: "BAD-WebApp",
     },
-    autoPrefetch: "hover", // values: no | hover | in-view | all
-    context: {
-      transId: null,
+    contactList: {
+      venueHireContacts: [{ email: "conference@bad.org.uk" }],
+      eventContacts: [{ email: "conference@bad.org.uk" }],
+      electionContacts: [{ email: "conference@bad.org.uk" }],
+      generalContacts: process.env.GENERAL_CONTACTS,
     },
   },
   actions: {

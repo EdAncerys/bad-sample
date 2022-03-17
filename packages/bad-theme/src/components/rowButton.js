@@ -31,6 +31,11 @@ const RowButton = ({
     link_id,
     file_link,
   } = block;
+
+  // block.email_address = [{ email: "ed@skylarkcreative.co.uk" }];
+  // console.log("row button", block); // debug
+  // console.log("row button", state.contacts); // debug
+
   const THEME = colour || colors.primary;
   let LABEL = title;
   if (!title && link) LABEL = link.title;
@@ -108,7 +113,11 @@ const RowButton = ({
         if (contact_form) {
           setEnquireAction({
             dispatch,
+            // ⬇️ contact form config. Defaults to general contacts if values not provided to contact form ⬇️
             enquireAction: block,
+            //   enquireAction: block.email_address
+            //     ? block
+            //     : (block.email_address = [{ email: "ed@skylarkcreative.co.uk" }]),
           });
           return;
         }
