@@ -37,7 +37,10 @@ const RowButton = ({
     // recipients = state.theme.defaultContactList;
     console.log("📧 contact list", state.contactList.defaultContactList); // debug
     enquireAction.recipients = state.contactList.defaultContactList;
+    // enquireAction.recipients = [{ email: "ed@skylarkcreative.co.uk" }];
   }
+  console.log("📧 fallBack list", state.contactList); // debug
+  console.log("📧 recipients list", block.recipients); // debug
 
   const THEME = colour || colors.primary;
   let LABEL = title;
