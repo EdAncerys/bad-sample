@@ -53,8 +53,8 @@ const FindADermatologist = ({ state, block }) => {
         const result = data.reduce((acc, derm) => {
           return {
             ...acc,
-            [derm.address1_postalcode]: [
-              ...(acc[derm.address1_postalcode] || []),
+            [derm.address3_postalcode]: [
+              ...(acc[derm.address3_postalcode] || []),
               derm,
             ],
           };
@@ -151,7 +151,7 @@ const FindADermatologist = ({ state, block }) => {
       );
     };
     const ServeAddress = () => {
-      return <div>{derm.address1_composite}</div>;
+      return <div>{derm.address3_composite}</div>;
     };
     const ServeDistance = () => {
       if (!derm.distance) return null;
@@ -419,8 +419,8 @@ const FindADermatologist = ({ state, block }) => {
           {filteredDermatologists.map((derm, key) => {
             if (
               key > 0 &&
-              derm.address1_postalcode !==
-                filteredDermatologists[key - 1].address1_postalcode
+              derm.address3_postalcode !==
+                filteredDermatologists[key - 1].address3_postalcode
             ) {
               crutent += 1;
             }

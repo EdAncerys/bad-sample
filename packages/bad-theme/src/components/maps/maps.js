@@ -46,19 +46,17 @@ const MapsComponent = ({
     let marker_key = 1;
     return markers.map((derm, key) => {
       if (
-        key > 0 &&
-        derm.address1_postalcode !== markers[key - 1].address1_postalcode
+        queryType === "name" ||
+        (key > 0 &&
+          derm.address3_postalcode !== markers[key - 1].address3_postalcode)
       ) {
         marker_key += 1;
       }
       if (queryType === "pc" && !derm.distance) return null;
-      const POSITION =
-        queryType === "pc"
-          ? {
-              lat: Number(derm.cordinates.lat),
-              lng: Number(derm.cordinates.lng),
-            }
-          : { lat: 51.5072, lng: -0.1276 };
+      const POSITION = queryType === "pc" && {
+        lat: Number(derm.cordinates.lat),
+        lng: Number(derm.cordinates.lng),
+      };
 
       const marker_label = marker_key.toString();
       return (
