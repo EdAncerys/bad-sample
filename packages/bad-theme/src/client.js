@@ -48,7 +48,7 @@ const BADTheme = {
       venueHireContacts: [{ email: "conference@bad.org.uk" }],
       eventContacts: [{ email: "conference@bad.org.uk" }],
       electionContacts: [{ email: "conference@bad.org.uk" }],
-      generalContacts: process.env.GENERAL_CONTACTS,
+      defaultContactList: process.env.DEFAULT_CONTACT_LIST,
     },
   },
   actions: {

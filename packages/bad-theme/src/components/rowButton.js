@@ -16,8 +16,6 @@ const RowButton = ({
   onClick,
   multiPostRowButtons,
 }) => {
-  // block: object
-  // onClick action
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const dispatch = useAppDispatch();
 
@@ -33,8 +31,9 @@ const RowButton = ({
   } = block;
 
   // block.email_address = [{ email: "ed@skylarkcreative.co.uk" }];
-  // console.log("row button", block); // debug
-  // console.log("row button", state.contacts); // debug
+  console.log("row contact_form", block.recipients); // debug
+  console.log("contactList", state.contactList); // debug
+  console.log("ENVIRONMENT", state.auth.ENVIRONMENT); // debug
 
   const THEME = colour || colors.primary;
   let LABEL = title;
@@ -114,10 +113,9 @@ const RowButton = ({
           setEnquireAction({
             dispatch,
             // ⬇️ contact form config. Defaults to general contacts if values not provided to contact form ⬇️
-            enquireAction: block,
-            //   enquireAction: block.email_address
-            //     ? block
-            //     : (block.email_address = [{ email: "ed@skylarkcreative.co.uk" }]),
+            enquireAction: block.recipients
+              ? block
+              : (block.recipients = state.contactList.defaultContactList),
           });
           return;
         }
