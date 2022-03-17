@@ -50,6 +50,38 @@ export const getInvoiceAction = async ({ state, isActiveUser }) => {
   }
 };
 
+export const getProofOfMembershipAction = async ({
+  state,
+  core_membershipsubscriptionid,
+  isActiveUser,
+}) => {
+  console.log("getProofOfMembershipAction triggered");
+
+  const { contactid } = isActiveUser;
+  if (!contactid)
+    throw new Error("Cannot get membership proof. Contactid is missing.");
+
+  const jwt = await authenticateAppAction({ state });
+  const URL =
+    state.auth.APP_HOST +
+    `/utils/pdf/confirm?contactid=${contactid}&subid=${core_membershipsubscriptionid}&token=${jwt}`;
+
+  const requestOptions = {
+    method: "GET",
+    headers: { Authorization: `Bearer ${jwt}` },
+  };
+
+  try {
+    const response = await fetch(URL, requestOptions);
+    console.log("⬇️ membership data ⬇️ "); // debug
+    console.log(response.url); // debug
+
+    if (response.ok) return response.url;
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
 export const createDirectDebitAction = async ({ state, id, data }) => {
   console.log("createDirectDebitAction triggered");
 

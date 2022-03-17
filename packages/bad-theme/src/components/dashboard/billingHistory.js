@@ -19,7 +19,7 @@ const BillingHistory = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { dynamicsApps, isActiveUser } = useAppState();
 
-  const [isFetching, setIsFetching] = useState(null);
+  const [isFetching, setFetching] = useState(null);
   const [subApps, setSubApps] = useState([]);
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -46,14 +46,14 @@ const BillingHistory = ({ state, actions, libraries }) => {
   // HELPERS ----------------------------------------------------------------
   const handleDownloadPayment = async () => {
     try {
-      setIsFetching(true);
+      setFetching(true);
       const url = await getInvoiceAction({ state, isActiveUser });
       // await for link to download & open in new window to download
       window.open(url, "_blank");
     } catch (error) {
       console.log(error);
     } finally {
-      setIsFetching(false);
+      setFetching(false);
     }
   };
 

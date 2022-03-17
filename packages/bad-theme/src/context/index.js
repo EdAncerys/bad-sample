@@ -49,6 +49,7 @@ import {
   getDirectDebitAction,
   createDirectDebitAction,
   getInvoiceAction,
+  getProofOfMembershipAction,
 } from "./auth/directDebit";
 import {
   setUserStoreAction,
@@ -138,4 +139,5 @@ export {
   deleteApplicationAction,
   getUserDataFromDynamics,
   getInvoiceAction,
+  getProofOfMembershipAction,
 };
