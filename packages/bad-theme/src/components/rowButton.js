@@ -39,8 +39,6 @@ const RowButton = ({
     enquireAction.recipients = state.contactList.defaultContactList;
     // enquireAction.recipients = [{ email: "ed@skylarkcreative.co.uk" }];
   }
-  console.log("📧 fallBack list", state.contactList); // debug
-  console.log("📧 recipients list", block.recipients); // debug
 
   const THEME = colour || colors.primary;
   let LABEL = title;

@@ -41,9 +41,7 @@ const HeaderActions = ({ state, actions }) => {
       <div className="flex">
         <div
           style={{ width: 385, height: 90, cursor: "pointer" }}
-          onClick={() =>
-            setGoToAction({ path: `https://badadmin.skylarkdev.co/`, actions })
-          }
+          onClick={() => setGoToAction({ path: `/`, actions })}
         >
           {useMemo(() => (
             <Image src={BADLogo} className="d-block h-100" alt="BAD Logo" />
@@ -78,7 +76,7 @@ const HeaderActions = ({ state, actions }) => {
         <button
           onClick={() =>
             setGoToAction({
-              path: `https://badadmin.skylarkdev.co/dashboard`,
+              path: `/dashboard/`,
               actions,
             })
           }
