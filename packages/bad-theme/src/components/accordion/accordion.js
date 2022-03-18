@@ -206,7 +206,6 @@ const AccordionComponent = ({
             fundingBlock={fundingBlock}
             membershipApplications={membershipApplications}
             hasPreview={hasPreview}
-            hasPublishDate={hasPublishDate}
           />
           <AccordionBody
             block={block}
@@ -216,6 +215,7 @@ const AccordionComponent = ({
             setFetching={setFetching}
             fundingBlock={fundingBlock}
             membershipApplications={membershipApplications}
+            hasPublishDate={hasPublishDate}
           />
         </div>
       </div>
