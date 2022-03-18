@@ -7,6 +7,7 @@ import date from "date-and-time";
 const DATE_MODULE = date;
 import ActionPlaceholder from "../../components/actionPlaceholder";
 import SubmittedApplications from "./submittedApplications";
+import ApplicationList from "./applicationList";
 
 import Ellipse from "../../img/svg/ellipse.svg";
 import CheckMarkGreen from "../../img/svg/checkMarkGreen.svg";
@@ -17,9 +18,6 @@ import {
   useAppState,
   setGoToAction,
   deleteApplicationAction,
-  handleApplyForMembershipAction,
-  setErrorAction,
-  getProofOfMembershipAction,
 } from "../../context";
 
 const ProfileProgress = ({ state, actions, libraries }) => {
@@ -33,7 +31,6 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
   const ICON_WIDTH = 30;
   const [isFetching, setFetching] = useState(false);
-  const [isFetching2, setFetching2] = useState(false);
 
   const [applicationStep, setStep] = useState("Application");
   // application under review
@@ -104,77 +101,6 @@ const ProfileProgress = ({ state, actions, libraries }) => {
       console.log(error);
     } finally {
       setFetching(false);
-    }
-  };
-
-  const handleUpdateMembershipApplication = async ({ app }) => {
-    // if user have application in progress break & display error
-    if (applicationData) {
-      const type = applicationData[0].bad_categorytype;
-      const confirmationMsg = `You already have ${type} application open and unsubmitted! Please complete it before changing BAD application category.`;
-
-      setErrorAction({
-        dispatch,
-        isError: {
-          message: confirmationMsg,
-          image: "Error",
-        },
-      });
-      return;
-    }
-
-    // handle create new application in Dynamics
-    try {
-      setFetching2(true);
-      const appData = await handleApplyForMembershipAction({
-        state,
-        actions,
-        dispatch,
-        applicationData,
-        isActiveUser,
-        dynamicsApps,
-        category: "BAD",
-        type: app.bad_categorytype, //🤖 application type name from appData
-        membershipApplication: {
-          stepOne: false,
-          stepTwo: false,
-          stepThree: false,
-          stepFour: false,
-          changeAppCategory: app, // change of application
-        },
-        path: "/membership/application-change/", // redirect to application change page
-        changeAppCategory: app, // change of application
-      });
-      if (!appData) throw new Error("Failed to create application");
-    } catch (error) {
-      console.log(error);
-
-      setErrorAction({
-        dispatch,
-        isError: {
-          message: "Failed to create application record. Please try again.",
-          image: "Error",
-        },
-      });
-    } finally {
-      setFetching2(false);
-    }
-  };
-
-  const handleDownloadConfirmationPDF = async ({ app }) => {
-    try {
-      setFetching2(true);
-      const url = await getProofOfMembershipAction({
-        state,
-        core_membershipsubscriptionid: app.core_membershipsubscriptionid,
-        isActiveUser,
-      });
-      // await for link to download & open in new window to download
-      window.open(url, "_blank");
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setFetching2(false);
     }
   };
 
@@ -315,135 +241,10 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     );
   };
 
-  const ServeApplicationList = () => {
-    if (!dynamicsApps) return null; // if application data exist & not under review return null
-    // see if application list have approved applications and if so show them
-    const subsData = dynamicsApps.subs.data; // get subs data form dynamic apps
-    // hide component if application list has no approved applications
-    if (subsData.length === 0) return null;
-
-    return (
-      <div style={{ position: "relative" }}>
-        <ActionPlaceholder isFetching={isFetching2} background="transparent" />
-        <div
-          className="flex-col shadow"
-          style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
-        >
-          <div className="flex-col">
-            <div
-              className="flex primary-title"
-              style={{
-                fontSize: 20,
-                justifyItems: "center",
-              }}
-            >
-              Existing Applications
-            </div>
-            {subsData.map((app, key) => {
-              const {
-                bad_organisedfor,
-                core_name,
-                createdon,
-                bad_approvalstatus,
-              } = app;
-              // console.log("application data", app); // debug
-              // get application date
-              let appData = createdon.split(" ")[0];
-              // split string and revert date with month format
-              appData = appData.split("/");
-              appData = `${appData[1]}/${appData[0]}/${appData[2]}`;
-
-              const dateObject = new Date(appData);
-              const formattedDate = DATE_MODULE.format(
-                dateObject,
-                "DD MMM YYYY"
-              );
-
-              const ServeChangeApplicationAction = () => {
-                // return if bad_organisedfor is BAD & in dashboard only
-                if (bad_organisedfor !== "BAD" || dashboardPath !== "Dashboard")
-                  return null;
-
-                const ServePendingStatus = () => {
-                  return (
-                    <div
-                      style={{
-                        fontSize: "1.2em",
-                        color: colors.danger,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Pending
-                    </div>
-                  );
-                };
-
-                return (
-                  <div
-                    style={{
-                      display: "grid",
-                      alignItems: "center",
-                      marginRight: "2em",
-                    }}
-                  >
-                    <div
-                      type="submit"
-                      className="blue-btn"
-                      onClick={() => handleUpdateMembershipApplication({ app })}
-                    >
-                      Apply for BAD category change
-                    </div>
-                  </div>
-                );
-              };
-
-              const ServeMembershipConfirmationAction = () => {
-                if (dashboardPath === "Dashboard") return null;
-
-                return (
-                  <div style={{ display: "grid", alignItems: "center" }}>
-                    <div
-                      type="submit"
-                      className="blue-btn"
-                      onClick={() => handleDownloadConfirmationPDF({ app })}
-                    >
-                      Membership Confirmation PDF
-                    </div>
-                  </div>
-                );
-              };
-
-              return (
-                <div
-                  key={key}
-                  className="flex-col"
-                  style={{ paddingTop: `1em` }}
-                >
-                  <div className="flex">
-                    <div
-                      className="flex"
-                      style={{ display: "grid", alignItems: "center" }}
-                    >
-                      <div className="primary-title">{bad_organisedfor}</div>
-                      <div>{core_name}</div>
-                      <div>Application Date: {formattedDate}</div>
-                    </div>
-                    <ServeChangeApplicationAction />
-                    <ServeMembershipConfirmationAction />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div>
       <ServeApplicationConsole />
-      <ServeApplicationList />
+      <ApplicationList />
       <SubmittedApplications />
     </div>
   );
