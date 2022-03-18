@@ -10,7 +10,6 @@ import BadBadgeLogo from "../img/svg/badBadgeLogo.svg";
 
 import date from "date-and-time";
 const DATE_MODULE = date;
-
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT -------------------------------------------------------------------
@@ -19,12 +18,13 @@ import {
   setEnquireAction,
   setGoToAction,
   muiQuery,
+  useAppState,
 } from "../context";
 import { getEventsData } from "../helpers";
 
 const Event = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
-
+  const { isActiveUser } = useAppState();
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const event = state.source[data.type][data.id];
@@ -98,6 +98,7 @@ const Event = ({ state, actions, libraries }) => {
     layout,
     organizer,
     registration_page_link,
+    registration_type,
     scientific_committee,
     summary,
     venue,
@@ -285,6 +286,7 @@ const Event = ({ state, actions, libraries }) => {
   };
 
   const ServeRegisterLink = () => {
+    if (!registration_page_link) return null;
     let isArchive = false;
     if (date_time) {
       // loop through date_time and check if date is in the past
@@ -294,7 +296,16 @@ const Event = ({ state, actions, libraries }) => {
     }
     // dont display component if event isArchive
     if (isArchive) return null;
-
+    const ServeInformationForUser = () => {
+      console.log("ACTIVE USERO", isActiveUser);
+      if (registration_type === "events_force" && !isActiveUser) {
+        return "Please login to your BAD account and use your registered email address for signing up to this event, this will enable us to link your registration to your BAD account";
+      }
+      if (registration_type === "events_force" && isActiveUser) {
+        return `Please ensure you register for this event using you ${isActiveUser.emailaddress1} email address in order to link your registration to your BAD account`;
+      }
+      return null;
+    };
     return (
       <div
         className="flex"
@@ -303,41 +314,23 @@ const Event = ({ state, actions, libraries }) => {
           justifyContent: "center",
           padding: `2em`,
           margin: `2em 0`,
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
-        <div
+        <ServeInformationForUser />
+        <a
           className="blue-btn"
           style={{
             backgroundColor: colors.primary,
             color: colors.white,
             padding: `1em 2em`,
+            width: 200,
           }}
-          onClick={() =>
-            setEnquireAction({
-              dispatch,
-              enquireAction: {
-                contact_public_email:
-                  register_public_email || "conference@bad.org.uk",
-                contact_public_phone_number:
-                  register_public_phone_number || "+1 (123) 456-7890",
-                form_title: register_form_title || "Event Contact Form",
-                form_body:
-                  register_form_body || `Register for ${title.rendered} event.`,
-                full_name: register_full_name || true,
-                email_address: register_email || true,
-                phone_number: register_phone_number || true,
-                subject: register_subject || true,
-                subject_dropdown_options: register_subject_dropdown_options,
-                message: register_message || true,
-                allow_attachments: register_allow_attachments,
-                recipients:
-                  register_recipients || state.contactList.defaultContactList,
-              },
-            })
-          }
+          href={registration_page_link}
         >
-          Register for this Event
-        </div>
+          Register for Event
+        </a>
       </div>
     );
   };
