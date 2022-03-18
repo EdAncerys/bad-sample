@@ -33,6 +33,7 @@ import {
   getMembershipDataAction,
   handleApplyForMembershipAction,
   validateMembershipFormAction,
+  handleValidateMembershipChangeAction,
 } from "./actions/memberships";
 import { getWpPagesAction } from "./actions/getWpPages";
 import { getTweetsAction } from "./auth/getTweets";
@@ -140,4 +141,5 @@ export {
   getUserDataFromDynamics,
   getInvoiceAction,
   getProofOfMembershipAction,
+  handleValidateMembershipChangeAction,
 };

@@ -5,7 +5,7 @@ import { colors } from "../../config/imports";
 import date from "date-and-time";
 const DATE_MODULE = date;
 import ActionPlaceholder from "../actionPlaceholder";
-
+import Loading from "../loading";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -14,7 +14,9 @@ import {
   handleApplyForMembershipAction,
   setErrorAction,
   getProofOfMembershipAction,
+  handleValidateMembershipChangeAction,
 } from "../../context";
+import { is } from "@react-spring/shared";
 
 const ApplicationList = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -131,9 +133,9 @@ const ApplicationList = ({ state, actions, libraries }) => {
               bad_organisedfor,
               core_name,
               createdon,
-              bad_approvalstatus,
+              core_membershipsubscriptionid,
             } = app;
-            // console.log("application data", app); // debug
+            console.log("application data", app); // debug
             // get application date
             let appData = createdon.split(" ")[0];
             // split string and revert date with month format
@@ -147,20 +149,50 @@ const ApplicationList = ({ state, actions, libraries }) => {
               // return if bad_organisedfor is BAD & in dashboard only
               if (bad_organisedfor !== "BAD" || dashboardPath !== "Dashboard")
                 return null;
+              const [appStatus, setStatus] = useState(null);
 
-              const ServePendingStatus = () => {
+              // check if application been previously submitted
+              useEffect(async () => {
+                try {
+                  let isSubmitted = await handleValidateMembershipChangeAction({
+                    state,
+                    core_membershipsubscriptionid,
+                    isActiveUser,
+                  });
+
+                  if (isSubmitted) {
+                    // check if user have submitted application for this category
+                    isSubmitted = isSubmitted.filter((app) => {
+                      return (
+                        app._bad_existingsubscriptionid_value ===
+                        core_membershipsubscriptionid
+                      );
+                    });
+                  }
+
+                  console.log("isSubmitted", isSubmitted);
+                  setStatus(isSubmitted);
+                } catch (error) {
+                  console.log(error);
+                }
+              }, []);
+
+              if (!appStatus) return <Loading />;
+
+              if (appStatus.length > 0)
                 return (
                   <div
+                    className="primary-title"
                     style={{
-                      fontSize: "1.2em",
-                      color: colors.danger,
+                      fontSize: 20,
                       fontWeight: "bold",
+                      justifyItems: "center",
+                      lineHeight: "unset",
                     }}
                   >
-                    Pending
+                    BAD category change pending approval.
                   </div>
                 );
-              };
 
               return (
                 <div

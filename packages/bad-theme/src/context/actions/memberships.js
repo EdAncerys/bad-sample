@@ -4,6 +4,7 @@ import {
   setGoToAction,
   setLoginModalAction,
   setErrorAction,
+  authenticateAppAction,
 } from "../index";
 
 export const getMembershipDataAction = async ({ state, actions }) => {
@@ -196,6 +197,40 @@ export const handleApplyForMembershipAction = async ({
     }
 
     return store; // return store
+  } catch (error) {
+    console.log("ERROR: ", error);
+  }
+};
+
+export const handleValidateMembershipChangeAction = async ({
+  state,
+  isActiveUser,
+  core_membershipsubscriptionid,
+}) => {
+  try {
+    if (!isActiveUser || !core_membershipsubscriptionid)
+      throw new Error("Must have valid user & membership id"); // validate if isActiveUser 🤖
+    const { contactid } = isActiveUser;
+
+    // ⏬ check if user have application change of category submitted
+    const URL =
+      state.auth.APP_HOST +
+      `/catalogue/data/core_membershipapplications?$filter=statuscode eq 1 and _core_contactid_value eq ${contactid} and _bad_existingsubscriptionid_value eq ${core_membershipsubscriptionid}&$select=_bad_existingsubscriptionid_value`;
+    const jwt = await authenticateAppAction({ state });
+
+    const requestOptions = {
+      method: "GET",
+      headers: { Authorization: `Bearer ${jwt}` },
+    };
+
+    const data = await fetch(URL, requestOptions);
+    const result = await data.json();
+
+    // ⏬ submitted application data for change of category
+    console.log("⏬ submitted application data", result);
+    if (result.value) {
+      return result.value; // return application data
+    }
   } catch (error) {
     console.log("ERROR: ", error);
   }
