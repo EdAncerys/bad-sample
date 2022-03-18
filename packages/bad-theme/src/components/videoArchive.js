@@ -63,7 +63,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
       return true;
     });
 
-    setPostData(data.items);
+    setPostData(filteredVideos);
     console.log(filteredVideos);
   };
   const handleSearch = (e, searchFilter) => {
