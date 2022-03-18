@@ -271,6 +271,7 @@ const Video = ({ state, actions }) => {
     setVideoStatus("locked");
   }, [isActiveUser, paymentUrl]);
   if (!videoStatus) return <Loading />;
+  if (!state.source.videos) return <Loading />;
   return (
     <BlockWrapper>
       <PaymentModal
