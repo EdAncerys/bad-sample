@@ -56,6 +56,7 @@ const FindDermatologistOptions = ({ state }) => {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(fadData),
     });
