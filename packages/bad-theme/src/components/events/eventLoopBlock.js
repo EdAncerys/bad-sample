@@ -75,7 +75,8 @@ const EventLoopBlock = ({
     const grades = Object.values(state.source.event_grade);
 
     let gradeFilter = [];
-    if (grades)
+    let isArray = Array.isArray(grade_filter); // verify data type
+    if (grades && isArray) {
       grades.filter((filter) => {
         // map grade_filter & if grade name matches grade_filter then return id
         grade_filter.map((grade) => {
@@ -83,6 +84,7 @@ const EventLoopBlock = ({
             gradeFilter.push(filter.id);
         });
       });
+    }
 
     console.log("gradeFilter", gradeFilter); // debug
     // sort events in order by date accenting from
