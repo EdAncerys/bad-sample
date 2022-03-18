@@ -96,7 +96,6 @@ const Card = ({
 
   let CARD_HEIGHT = "100%";
   let ELECTION_BLOCKS = false;
-  if (title || body) CARD_HEIGHT = "auto";
   if (cardHeight) CARD_HEIGHT = cardHeight;
 
   let MIN_CARD_HEIGHT = "auto";
@@ -266,7 +265,7 @@ const Card = ({
 
   const ServeContent = () => {
     return (
-      <div className="flex-col" style={{ padding: PADDING }}>
+      <div className="flex-col" style={{ padding: PADDING, height: "100%" }}>
         <GeneralModal modalData={modalData} handler={handler} />
         <ServeCardHeader />
         <EventCardHeader eventHeader={eventHeader} />
@@ -311,6 +310,35 @@ const Card = ({
     );
   };
 
+  // ⬇️ custom card wrapper for the card
+  const CardWrapper = ({ children }) => {
+    if (downloadFile)
+      return (
+        <a
+          style={{ boxShadow: "none" }}
+          // href={file.url}
+          onClick={() => console.log(downloadFile)}
+          target="_blank"
+          download
+        >
+          <div
+          // styles={cardStyles}
+          >
+            {children}
+          </div>
+        </a>
+      );
+
+    return (
+      <div
+        // styles={cardStyles}
+        onClick={() => setGoToAction({ path: link, actions })}
+      >
+        {children}
+      </div>
+    );
+  };
+
   // RETURN ----------------------------------------------------
   return (
     <div
@@ -321,10 +349,8 @@ const Card = ({
         width: cardWidth || "100%",
         height: CARD_HEIGHT,
         minHeight: MIN_CARD_HEIGHT,
-        position: "relative",
       }}
-      // href={setLinkWrapperAction({ path: link })} // anchor tag solution have reload issues
-      onClick={() => setGoToAction({ path: link, actions })}
+      onClick={() => setGoToAction({ path: link, actions, downloadFile })}
     >
       <PromoHeader fundingPromo={fundingPromo} />
       <FeaturedBanner featuredBanner={featuredBanner} />
@@ -348,6 +374,7 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     overflow: "hidden",
+    position: "relative",
   },
   footerActionTitle: {
     borderBottom: `1px solid ${colors.softBlack}`,

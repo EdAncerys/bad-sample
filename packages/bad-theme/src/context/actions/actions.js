@@ -1,11 +1,15 @@
 const pathOne = `http://3.9.193.188`;
 const pathTwo = `https://badadmin.skylarkdev.co`;
 
-export const setGoToAction = async ({ path, actions }) => {
-  if (!path || !actions) return null;
+export const setGoToAction = async ({ path, actions, downloadFile }) => {
+  if (!path && !downloadFile) return null;
+  // console.log("setGoToAction triggered", path, downloadFile); // debug
 
-  // console.log("setGoToAction triggered", path); // debug
-
+  if (downloadFile) {
+    // ⬇️  download file ⬇️
+    const { file } = downloadFile;
+    window.open(file.url, "_blank");
+  }
   let isExternalLink = true;
   if (path.includes(pathOne)) isExternalLink = false;
   if (path.includes(pathTwo)) isExternalLink = false;
