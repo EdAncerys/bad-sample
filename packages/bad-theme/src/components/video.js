@@ -8,7 +8,12 @@ import { colors } from "../config/colors";
 import Image from "@frontity/components/image";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import LockIcon from "@mui/icons-material/Lock";
-import { useAppState, useAppDispatch, authenticateAppAction } from "../context";
+import {
+  useAppState,
+  useAppDispatch,
+  authenticateAppAction,
+  setEnquireAction,
+} from "../context";
 import { handleGetCookie } from "../helpers/cookie";
 import PaymentModal from "./dashboard/paymentModal";
 const Video = ({ state, actions }) => {
@@ -227,6 +232,8 @@ const Video = ({ state, actions }) => {
           link={vid.link}
           noVideoCategory
           onClick={() => setGoToAction({ path: vid.link, actions })}
+          cardHeight={500}
+          disableCardAnimation
         />
       );
     });
@@ -272,6 +279,17 @@ const Video = ({ state, actions }) => {
   }, [isActiveUser, paymentUrl]);
   if (!videoStatus) return <Loading />;
   if (!state.source.videos) return <Loading />;
+
+  const handleProblemEnquiry = () => {
+    setEnquireAction({
+      dispatch,
+      enquireAction: {
+        contact_public_email: "comms@bag.org.uk",
+        message: true,
+        allow_attachments: true,
+      },
+    });
+  };
   return (
     <BlockWrapper>
       <PaymentModal
@@ -284,6 +302,13 @@ const Video = ({ state, actions }) => {
           <div>
             <ServeContent />
             <ServeBody />
+            <div
+              onClick={handleProblemEnquiry}
+              className="caps-btn"
+              style={{ padding: 10 }}
+            >
+              I have a problem with this video
+            </div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr" }}>
             <div

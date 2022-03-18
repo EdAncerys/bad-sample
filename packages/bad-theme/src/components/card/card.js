@@ -347,7 +347,7 @@ const Card = ({
         ...styles.card,
         backgroundColor: backgroundColor || colors.white,
         width: cardWidth || "100%",
-        height: CARD_HEIGHT,
+        height: videoArchive ? null : CARD_HEIGHT,
         minHeight: MIN_CARD_HEIGHT,
       }}
       onClick={() => setGoToAction({ path: link, actions, downloadFile })}
