@@ -11,7 +11,7 @@ import {
 import Loading from "../loading";
 import PinIcon from "../../img/svg/pinIcon.svg";
 import { colors } from "../../config/imports";
-
+import { useAppDispatch, authenticateAppAction } from "../../context";
 const LIBRARIES = ["places"];
 
 const MapsComponent = ({
@@ -21,10 +21,12 @@ const MapsComponent = ({
   zoom,
   center,
   markers,
+  queryType,
 }) => {
   // const { isLoaded } = useJsApiLoader({
   //   googleMapsApiKey: state.auth.GOOGLE_API_KEY,
   // });
+  const dispatch = useAppDispatch();
 
   const CENTER = center || { lat: 51.5072, lng: -0.1276 };
   const ZOOM = zoom || 10;
@@ -34,26 +36,35 @@ const MapsComponent = ({
     height: "100%",
     borderRadius: markers ? 0 : 10,
   };
+  const fetchPostCodeCoordinates = async () => {
+    return { lat: 51.5072, lng: -0.1276 };
+  };
   const ServeMarkersOnTheMap = () => {
-    console.log("MARKERO", markers);
     if (!markers)
       return <Marker markerLabel={{ text: "Google Map" }} position={CENTER} />;
     if (markers.length === 0) return null;
-
+    let marker_key = 1;
     return markers.map((derm, key) => {
-      if (!derm.distance) return null;
-      const POSITION = {
+      if (
+        queryType === "name" ||
+        (key > 0 &&
+          derm.address3_postalcode !== markers[key - 1].address3_postalcode)
+      ) {
+        marker_key += 1;
+      }
+      if (queryType === "pc" && !derm.distance) return null;
+      const POSITION = queryType === "pc" && {
         lat: Number(derm.cordinates.lat),
         lng: Number(derm.cordinates.lng),
       };
-      const marker_key = key + 1;
+
       const marker_label = marker_key.toString();
       return (
         <Marker
           markerLabel={{ text: "Johny" }}
           position={POSITION}
-          label={{ text: marker_label, color: "white" }}
-          title="Pedalka"
+          label={{ text: marker_label, color: "white", border: "black" }}
+          title={"Pedalka"}
           options={{
             fillColor: "lightblue",
           }}

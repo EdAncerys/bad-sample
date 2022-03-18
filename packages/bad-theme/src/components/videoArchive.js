@@ -2,8 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import { connect } from "frontity";
 import Card from "./card/card";
 import BlockWrapper from "./blockWrapper";
+import HeroBanner from "./heroBanner";
 import { useAppState } from "../context";
-import HeroBanner from "../components/heroBanner";
 import SearchContainer from "./searchContainer";
 import { colors } from "../config/imports";
 import CloseIcon from "@mui/icons-material/Close";
@@ -12,10 +12,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import Loading from "../components/loading";
 import { muiQuery } from "../context";
 const VideoArchive = ({ state, actions, libraries }) => {
-  const [heroBannerBlock, setHeroBannerBlock] = useState();
   const [guidanceCategory, setGuidanceCategory] = useState(null);
   const [postData, setPostData] = useState(null);
-
+  const [heroBannerBlock, setHeroBannerBlock] = useState(null);
   const [filters, setFilters] = useState();
 
   const { sm, md, lg, xl } = muiQuery();
@@ -64,7 +63,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
       return true;
     });
 
-    setPostData(data.items);
+    setPostData(filteredVideos);
     console.log(filteredVideos);
   };
   const handleSearch = (e, searchFilter) => {
@@ -300,6 +299,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
         link={post.link}
         link_label="watch"
         onClick={() => setGoToAction({ path: post.link, actions })}
+        shadow
       />
     );
   };
@@ -307,6 +307,8 @@ const VideoArchive = ({ state, actions, libraries }) => {
   useEffect(async () => {
     actions.source.fetch("/videos/");
     actions.source.fetch("/event_specialty/");
+
+    console.log("Use effect trigerred");
 
     const fetchHeroBanner = async () => {
       const fetchInfo = await fetch(
@@ -331,11 +333,11 @@ const VideoArchive = ({ state, actions, libraries }) => {
     };
 
     const data = state.source.get(state.router.link);
-    allVideos.current = data.items;
-    console.log("ALLERKA", allVideos.current);
+    // const data = state.source.get("/videos/");
+
     setPostData(data.items);
 
-    console.log("DATERO ", data);
+    console.log("DATERO ", data.items);
     fetchHeroBanner();
   }, []);
   if (!postData) return <Loading />;

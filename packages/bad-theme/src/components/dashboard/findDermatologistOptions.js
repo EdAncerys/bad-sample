@@ -1,48 +1,133 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer, useCallback } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 
-import { muiQuery } from "../../context";
+import { muiQuery, setErrorAction, useAppDispatch } from "../../context";
+import { handleGetCookie } from "../../helpers/cookie";
+import Loading from "../loading";
+function enhancedReducer(fadState, updateArg) {
+  // check if the type of update argument is a callback function
+  if (updateArg.constructor === Function) {
+    return { ...fadState, ...updateArg(fadState) };
+  }
+
+  // if the type of update argument is an object
+  if (updateArg.constructor === Object) {
+    // does the update object have _path and _value as it's keys
+    // if yes then use them to update deep object values
+    if (has(updateArg, "_path") && has(updateArg, "_value")) {
+      const { _path, _value } = updateArg;
+
+      return produce(fadState, (draft) => {
+        set(draft, _path, _value);
+      });
+    } else {
+      return { ...fadState, ...updateArg };
+    }
+  }
+}
 const FindDermatologistOptions = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  const [fadData, setFadData] = useState();
+
   const { sm, md, lg, xl } = muiQuery();
+  const dispatch = useAppDispatch();
 
   const marginVertical = state.theme.marginVertical;
 
-  // HELPERS ----------------------------------------------------------------
-  const handlePreferenceUpdate = () => {
-    const includeInFindDermatologist = document.querySelector(
-      "#includeInFindDermatologist"
-    ).checked;
-    const mainHospitalWebAddress = document.querySelector(
-      "#mainHospitalWebAddress"
-    ).value;
-    const privatePracticeWebAddressOne = document.querySelector(
-      "#privatePracticeWebAddressOne"
-    ).value;
-    const privatePracticeWebAddressTwo = document.querySelector(
-      "#privatePracticeWebAddressTwo"
-    ).value;
-    const privatePracticeWebAddressThree = document.querySelector(
-      "#privatePracticeWebAddressThree"
-    ).value;
+  useEffect(() => {
+    const getCurrentUserFadData = async () => {
+      const cookie = await handleGetCookie({ name: `BAD-WebApp` });
+      const { contactid, jwt } = cookie;
 
-    const aboutText = document.querySelector("#aboutText").value;
-    const compositeText = document.querySelector("#compositeText").value;
-    const contactBlurb = document.querySelector("#contactBlurb").value;
+      const fetchData = await fetch(
+        state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
 
-    const updatePreferences = {
-      includeInFindDermatologist,
-      mainHospitalWebAddress,
-      privatePracticeWebAddressOne,
-      privatePracticeWebAddressTwo,
-      privatePracticeWebAddressThree,
-      aboutText,
-      compositeText,
-      contactBlurb,
+      if (fetchData.ok) {
+        const json = await fetchData.json();
+        setFadData({
+          bad_includeinfindadermatologist: json.bad_includeinfindadermatologist,
+          address3_postalcode: json.address3_postalcode || "",
+          address3_line1: json.address3_line1 || "",
+          address3_line2: json.address3_line2 || "",
+          address3_city: json.address3_city || "",
+          bad_mainhosptialweb: json.bad_mainhosptialweb || "",
+          bad_web3: json.bad_web3 || "",
+          bad_web2: json.bad_web2 || "",
+          bad_web1: json.bad_web1 || "",
+        });
+      }
     };
-    console.log("updatePreferences", updatePreferences);
+    getCurrentUserFadData();
+  }, []);
+  if (!fadData) return <Loading />;
+  const [fadState, updateState] = useReducer(enhancedReducer, fadData);
+  const updateForm = useCallback(({ target: { value, name, type } }) => {
+    const updatePath = name.split(".");
+
+    // if the input is a checkbox then use callback function to update
+    // the toggle state based on previous state
+    if (type === "checkbox") {
+      updateState((prevState) => ({
+        [name]: !prevState[name],
+      }));
+
+      return;
+    }
+
+    // if we have to update the root level nodes in the form
+    if (updatePath.length === 1) {
+      const [key] = updatePath;
+
+      updateState({
+        [key]: value,
+      });
+    }
+
+    // if we have to update nested nodes in the form object
+    // use _path and _value to update them.
+    if (updatePath.length === 2) {
+      updateState({
+        _path: updatePath,
+        _value: value,
+      });
+    }
+  }, []);
+  if (!fadData) return <Loading />;
+  // HELPERS ----------------------------------------------------------------
+  const handlePreferenceUpdate = async () => {
+    const cookie = await handleGetCookie({ name: `BAD-WebApp` });
+    const { contactid, jwt } = cookie;
+
+    const submitUpdate = await fetch(
+      state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+
+    if (submitUpdate.ok) {
+      const json = await submitUpdate.json();
+      json.success
+        ? setErrorAction({
+            dispatch,
+            isError: { message: "Updated" },
+          })
+        : setErrorAction({
+            dispatch,
+            isError: { message: "There was an error processing the update" },
+          });
+      console.log("UPDATED?", json);
+    }
   };
 
   // SERVERS ---------------------------------------------
@@ -60,6 +145,10 @@ const FindDermatologistOptions = ({ state, actions, libraries }) => {
                   id="includeInFindDermatologist"
                   type="checkbox"
                   className="form-check-input check-box"
+                  checked={
+                    fadState.bad_includeinfindadermatologist ? true : false
+                  }
+                  onChange={updateForm}
                 />
               </div>
               <div style={styles.textInfo}>
@@ -68,7 +157,55 @@ const FindDermatologistOptions = ({ state, actions, libraries }) => {
               </div>
             </div>
           </div>
-
+          <div style={{ paddingTop: `1em` }}>
+            Practice address to show in the directory
+          </div>
+          <div>
+            <div className="flex-col">
+              <input
+                id="address3_line1"
+                name="address3_line1"
+                type="text"
+                className="form-control"
+                placeholder="Address Line 1"
+                style={styles.input}
+                value={fadState.address3_line1}
+                onChange={updateForm}
+              />
+              <input
+                id="address3_line2"
+                type="text"
+                className="form-control"
+                placeholder="Address Line 2"
+                style={styles.input}
+                value={fadData.address3_line2}
+              />
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: 20,
+                }}
+              >
+                <input
+                  id="address3_postalcode"
+                  type="text"
+                  className="form-control"
+                  placeholder="Post Code"
+                  style={styles.input}
+                  value={fadData.address3_postalcode}
+                />
+                <input
+                  id="address3_city"
+                  type="text"
+                  className="form-control"
+                  placeholder="City"
+                  style={styles.input}
+                  value={fadData.address3_city ? fadData.address3_city : ""}
+                />
+              </div>
+            </div>
+          </div>
           <div style={{ paddingTop: `1em` }}>Website Address</div>
           <div>
             <div className="flex-col">
@@ -146,7 +283,7 @@ const FindDermatologistOptions = ({ state, actions, libraries }) => {
         <div
           type="submit"
           className="blue-btn"
-          onClick={handlePreferenceUpdate}
+          onClick={() => handlePreferenceUpdate()}
         >
           Update
         </div>

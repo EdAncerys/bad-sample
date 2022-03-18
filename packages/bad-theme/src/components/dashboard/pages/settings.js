@@ -4,7 +4,7 @@ import { connect } from "frontity";
 import { colors } from "../../../config/colors";
 
 import PrivacyPreferences from "../privacyPreferences";
-import FindDermatologistOptions from "../findDermatologistOptions";
+import FindDermatologistOptions from "../findDermOptions";
 // CONTEXT ------------------------------------------------------------------
 import { useAppState, useAppDispatch } from "../../../context";
 

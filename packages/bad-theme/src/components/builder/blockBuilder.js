@@ -48,7 +48,7 @@ import FundingBlock from "../fundingBlock";
 import BADMemberships from "../badMemberships";
 import VideoGuides from "../videoGuides";
 import FindADermatologist from "../findADermatologist";
-
+import VideoArchive from "../videoArchive";
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   // console.log("BLOCKS: ", blocks); // debug
 
@@ -420,6 +420,14 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
             <BlockWrapper key={key + 1} background={block.background_colour}>
               <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
               <FullWidthContentBlock key={key} block={block} />
+            </BlockWrapper>
+          );
+
+        if (acf_fc_layout === "video_archive")
+          return (
+            <BlockWrapper key={key + 1} background={block.background_colour}>
+              <ServeBlockTitle acf_fc_layout={acf_fc_layout} />
+              <VideoArchive key={key} block={block} />
             </BlockWrapper>
           );
 
