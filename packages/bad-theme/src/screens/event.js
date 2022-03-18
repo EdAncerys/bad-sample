@@ -302,7 +302,15 @@ const Event = ({ state, actions, libraries }) => {
         return "Please login to your BAD account and use your registered email address for signing up to this event, this will enable us to link your registration to your BAD account";
       }
       if (registration_type === "events_force" && isActiveUser) {
-        return `Please ensure you register for this event using you ${isActiveUser.emailaddress1} email address in order to link your registration to your BAD account`;
+        return (
+          <div>
+            Please ensure you register for this event using your
+            <span className="primary-title">
+              {" " + isActiveUser.emailaddress1}
+            </span>{" "}
+            email address in order to link your registration to your BAD account
+          </div>
+        );
       }
       return null;
     };
