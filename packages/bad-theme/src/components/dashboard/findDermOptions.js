@@ -49,17 +49,16 @@ const FindDermatologistOptions = ({ state }) => {
   const handlePreferenceUpdate = async () => {
     const cookie = await handleGetCookie({ name: `BAD-WebApp` });
     const { contactid, jwt } = cookie;
+    const url = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
 
-    const submitUpdate = await fetch(
-      state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`,
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-        body: JSON.stringify(fadData),
-      }
-    );
+    console.log("URLKA", url);
+    const submitUpdate = await fetch(url, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+      body: JSON.stringify(fadData),
+    });
 
     if (submitUpdate.ok) {
       const json = await submitUpdate.json();

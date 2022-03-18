@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { connect } from "frontity";
 import Card from "./card/card";
 import BlockWrapper from "./blockWrapper";
+import HeroBanner from "./heroBanner";
 import { useAppState } from "../context";
 import SearchContainer from "./searchContainer";
 import { colors } from "../config/imports";
@@ -13,7 +14,7 @@ import { muiQuery } from "../context";
 const VideoArchive = ({ state, actions, libraries }) => {
   const [guidanceCategory, setGuidanceCategory] = useState(null);
   const [postData, setPostData] = useState(null);
-
+  const [heroBannerBlock, setHeroBannerBlock] = useState(null);
   const [filters, setFilters] = useState();
 
   const { sm, md, lg, xl } = muiQuery();
@@ -298,6 +299,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
         link={post.link}
         link_label="watch"
         onClick={() => setGoToAction({ path: post.link, actions })}
+        shadow
       />
     );
   };
@@ -308,40 +310,40 @@ const VideoArchive = ({ state, actions, libraries }) => {
 
     console.log("Use effect trigerred");
 
-    // const fetchHeroBanner = async () => {
-    //   const fetchInfo = await fetch(
-    //     "https://badadmin.skylarkdev.co/wp-json/wp/v2/pages/7051"
-    //   );
+    const fetchHeroBanner = async () => {
+      const fetchInfo = await fetch(
+        "https://badadmin.skylarkdev.co/wp-json/wp/v2/pages/7051"
+      );
 
-    //   if (fetchInfo.ok) {
-    //     const json = await fetchInfo.json();
-    //     setHeroBannerBlock({
-    //       background_image: json.acf.hero_banner_picture,
-    //       title: "BAD Video Library",
-    //       body: json.acf.hero_banner_content,
-    //       content_height: "regular",
-    //       layout: "50-50",
-    //       padding: "small",
-    //       text_align: "left",
-    //       colour: colors.orange,
-    //       pop_out_text: "true",
-    //       background_colour: "rgb(239, 125, 33, 0.1)",
-    //     });
-    //   }
-    // };
+      if (fetchInfo.ok) {
+        const json = await fetchInfo.json();
+        setHeroBannerBlock({
+          background_image: json.acf.hero_banner_picture,
+          title: "BAD Video Library",
+          body: json.acf.hero_banner_content,
+          content_height: "regular",
+          layout: "50-50",
+          padding: "small",
+          text_align: "left",
+          colour: colors.orange,
+          pop_out_text: "true",
+          background_colour: "rgb(239, 125, 33, 0.1)",
+        });
+      }
+    };
 
-    // const data = state.source.get(state.router.link);
-    const data = state.source.videos;
+    const data = state.source.get(state.router.link);
+    // const data = state.source.get("/videos/");
 
     setPostData(data.items);
 
-    console.log("DATERO ", data);
-    // fetchHeroBanner();
+    console.log("DATERO ", data.items);
+    fetchHeroBanner();
   }, []);
   if (!postData) return <Loading />;
   return (
     <>
-      {/* <HeroBanner block={heroBannerBlock} /> */}
+      <HeroBanner block={heroBannerBlock} />
 
       <div
         style={{

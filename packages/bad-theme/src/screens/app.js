@@ -185,7 +185,7 @@ const App = ({ state, actions }) => {
                 <Venue when={data.isVenues} />
                 <DermGroupsCharity when={data.isDermGroupsCharity} />
                 <Covid when={data.isCovid19} />
-                {/* <VideoArchive when={endPoint === "/videos/"} /> */}
+                <VideoArchive when={endPoint === "/videos/"} />
                 {/* <FindADermatologist
                   when={endPoint === "/find-a-dermatologist/"}
                 /> */}
