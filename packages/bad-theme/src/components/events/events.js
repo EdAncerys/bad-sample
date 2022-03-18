@@ -158,7 +158,7 @@ const Events = ({ state, actions, libraries, block }) => {
             onChange={(e) => setSpecialtyFilter(e.target.value)}
           >
             <option value="" hidden>
-              Specialty
+              Event Topic
             </option>
             {specialty.map((item, key) => {
               return (

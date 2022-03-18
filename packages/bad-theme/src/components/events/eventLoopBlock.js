@@ -75,7 +75,7 @@ const EventLoopBlock = ({
     const grades = Object.values(state.source.event_grade);
 
     let gradeFilterId = grades.filter(
-      (filter) => filter.name === grade_filter
+      (filter) => filter.name.toLowerCase() === grade_filter.toLowerCase()
     )[0];
 
     if (gradeFilterId) gradeFilterId = gradeFilterId.id;
@@ -83,10 +83,11 @@ const EventLoopBlock = ({
     // if (post_limit) eventList = eventList.slice(0, Number(post_limit)); // apply limit on posts
 
     // sort events in order by date accenting from
-    eventList = eventList.sort(
-      (a, b) =>
-        new Date(a.acf.date_time[0].date) - new Date(b.acf.date_time[0].date)
-    );
+    eventList = eventList.sort((a, b) => {
+      // if !date_time return null;
+      if (!a.date_time || !b.date_time) return null;
+      new Date(a.acf.date_time[0].date) - new Date(b.acf.date_time[0].date);
+    });
 
     // console.log("🚀 event list", eventList.length); // debug
     setEventList(eventList);
