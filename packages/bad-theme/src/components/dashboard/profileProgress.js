@@ -25,8 +25,8 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { dynamicsApps, applicationData, isActiveUser } = useAppState();
-
+  const { dynamicsApps, applicationData, isActiveUser, dashboardPath } =
+    useAppState();
   // console.log("dynamicsApps", dynamicsApps); // debug
 
   const marginVertical = state.theme.marginVertical;
@@ -161,8 +161,6 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   };
 
   const handleDownloadConfirmationPDF = async ({ app }) => {
-    console.log(app);
-
     try {
       setFetching2(true);
       const url = await getProofOfMembershipAction({
@@ -361,8 +359,9 @@ const ProfileProgress = ({ state, actions, libraries }) => {
               );
 
               const ServeChangeApplicationAction = () => {
-                // only return if bad_organisedfor is BAD
-                if (bad_organisedfor !== "BAD") return null;
+                // return if bad_organisedfor is BAD & in dashboard only
+                if (bad_organisedfor !== "BAD" || dashboardPath !== "Dashboard")
+                  return null;
 
                 return (
                   <div
@@ -384,8 +383,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
               };
 
               const ServeMembershipConfirmationAction = () => {
-                // only return if bad_organisedfor is BAD
-                // if (bad_organisedfor !== "BAD") return null;
+                if (dashboardPath === "Dashboard") return null;
 
                 return (
                   <div style={{ display: "grid", alignItems: "center" }}>

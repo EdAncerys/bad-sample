@@ -86,6 +86,7 @@ const Card = ({
   videoArchive,
   noVideoCategory,
   shareToSocials,
+  disableCardAnimation,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
@@ -107,6 +108,9 @@ const Card = ({
   if (newsAndMediaInfo) PADDING = `0 1.5em 1.5em`;
   if (removePadding) PADDING = 0;
   if (padding) PADDING = padding;
+
+  let isCardAnimation = "card-wrapper";
+  if (disableCardAnimation) isCardAnimation = "";
 
   // HANDLERS ---------------------------------------------
 
@@ -310,7 +314,7 @@ const Card = ({
   // RETURN ----------------------------------------------------
   return (
     <div
-      className={`${isShadow} card-wrapper`} // card wrapper as clickable card if link is set
+      className={`${isShadow} ${isCardAnimation}`} // card wrapper as clickable card if link is set
       style={{
         ...styles.card,
         backgroundColor: backgroundColor || colors.white,
