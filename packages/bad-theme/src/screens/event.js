@@ -313,7 +313,7 @@ const Event = ({ state, actions, libraries }) => {
           // backgroundColor: colors.silverFillOne, // optional background color
           justifyContent: "center",
           padding: `2em`,
-          margin: `2em 0`,
+          margin: `0`,
           flexDirection: "column",
           alignItems: "center",
         }}
@@ -326,6 +326,7 @@ const Event = ({ state, actions, libraries }) => {
             color: colors.white,
             padding: `1em 2em`,
             width: 200,
+            marginTop: 10,
           }}
           href={registration_page_link}
         >
@@ -342,7 +343,7 @@ const Event = ({ state, actions, libraries }) => {
       <div className="text-body">
         <div
           className="primary-title"
-          style={{ fontSize: 20, paddingTop: "2em" }}
+          style={{ fontSize: 20, paddingTop: "1em" }}
         >
           Summary
         </div>
