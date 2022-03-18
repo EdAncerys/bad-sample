@@ -44,8 +44,7 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
         json.data.map((event) => {
           filteredEvents.push(event.bad_eventid);
         });
-        console.log("FILTERYD", filteredEvents);
-        console.log("ALLKA", allEvents);
+
         const filteredCompletely = allEvents.filter((item) => {
           return filteredEvents.includes(item.acf.events_force_id);
         });

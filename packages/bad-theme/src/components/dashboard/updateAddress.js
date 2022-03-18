@@ -1,7 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Form } from "react-bootstrap";
 
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from "react-places-autocomplete";
 import ActionPlaceholder from "../actionPlaceholder";
 import {
   UK_COUNTIES,
@@ -26,8 +30,9 @@ const UpdateAddress = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
   const [isFetching, setIsFetching] = useState(null);
   const [formData, setFormData] = useState({
-    address2_line1: "",
-    address2_line2: "",
+    test_address: "",
+    address1_line1: "",
+    address1_line2: "",
     emailaddress1: "",
     mobilephone: "",
     address1_city: "",
@@ -48,8 +53,8 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     };
 
     // populate profile information form Dynamics records
-    if (isActiveUser.address2_line1) handleSetData({ name: "address2_line1" });
-    if (isActiveUser.address2_line2) handleSetData({ name: "address2_line2" });
+    if (isActiveUser.address1_line1) handleSetData({ name: "address1_line1" });
+    if (isActiveUser.address1_line2) handleSetData({ name: "address1_line2" });
     if (isActiveUser.emailaddress1) handleSetData({ name: "emailaddress1" });
     if (isActiveUser.mobilephone) handleSetData({ name: "mobilephone" });
     if (isActiveUser.address1_city) handleSetData({ name: "address1_city" });
@@ -71,8 +76,8 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     console.log(value); // debug
   };
   const handleAddressUpdate = async () => {
-    const address2_line1 = formData.address2_line1;
-    const address2_line2 = formData.address2_line2;
+    const address1_line1 = formData.address1_line1;
+    const address1_line2 = formData.address1_line2;
     const emailaddress1 = formData.emailaddress1;
     const mobilephone = formData.mobilephone;
     const address1_city = formData.address1_city;
@@ -82,8 +87,8 @@ const UpdateAddress = ({ state, actions, libraries }) => {
 
     const data = Object.assign(
       {}, // add empty object
-      !!address2_line1 && { address2_line1 },
-      !!address2_line2 && { address2_line2 },
+      !!address1_line1 && { address1_line1 },
+      !!address1_line2 && { address1_line2 },
       !!emailaddress1 && { emailaddress1 },
       !!mobilephone && { mobilephone },
       !!address1_city && { address1_city },
@@ -121,79 +126,39 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     }
   };
 
-  // SERVERS ---------------------------------------------
-  const ServeForm = () => {
-    return (
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: `1fr 1fr`,
-          gap: 20,
-          padding: `1em 0 0`,
-        }}
-      >
-        <div className="form-group" style={{ display: "grid", gap: 10 }}>
-          <label>Address Line 1</label>
-          <input
-            id="addressLineOne"
-            type="text"
-            className="form-control"
-            placeholder="Address Line 1"
-            defaultValue={isActiveUser.address2_line1}
-            style={styles.input}
-          />
-          <label>Address Line 2</label>
-          <input
-            id="addressLineTwo"
-            type="text"
-            className="form-control"
-            placeholder="Address Line 2"
-            defaultValue={isActiveUser.address2_line2}
-            style={styles.input}
-          />
-        </div>
-
-        <div className="form-group" style={{ display: "grid", gap: 10 }}>
-          <label>City</label>
-          <select name="cars" id="city" style={styles.input}>
-            <option>County/State</option>
-            {UK_COUNTIES.map((item, key) => {
-              return (
-                <option key={key} value={item}>
-                  {item}
-                </option>
-              );
-            })}
-          </select>
-
-          <label>Country</label>
-          <select name="cars" id="country" style={styles.input}>
-            <option>County/State</option>
-            {UK_COUNTRIES.map((item, key) => {
-              return (
-                <option key={key} value={item}>
-                  {item}
-                </option>
-              );
-            })}
-          </select>
-        </div>
-
-        <div className="form-group" style={{ display: "grid", gap: 10 }}>
-          <label>Postcode</label>
-          <input
-            id="postcode"
-            type="text"
-            className="form-control"
-            placeholder="Postcode"
-            defaultValue={isActiveUser.address2_postalcode}
-            style={styles.input}
-          />
-        </div>
-      </div>
-    );
+  const onChangeHandler = (e) => {
+    console.log(e);
+    // setFormData((prevFormData) => ({
+    //   ...prevFormData,
+    //   test_address: address,
+    // }));
   };
 
+  const handleSelect = async (address) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      test_address: address,
+    }));
+    const results = await geocodeByAddress(address);
+    const latLng = await getLatLng(results[0]);
+    console.log(latLng);
+  };
+
+  const handleChange = (address) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      test_address: address,
+    }));
+  };
+
+  const handleCloseClick = () => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      test_address: "",
+    }));
+  };
+
+  // SERVERS ---------------------------------------------
   const ServeActions = () => {
     return (
       <div
@@ -215,6 +180,66 @@ const UpdateAddress = ({ state, actions, libraries }) => {
           <div className="primary-title" style={{ fontSize: 20 }}>
             Contact Details:
           </div>
+
+          {/* <PlacesAutocomplete
+            // onChange={(e) => onChangeHandler(e)}
+            onChange={handleChange}
+            value={formData.test_address}
+            onSelect={handleSelect}
+            // onError={this.handleError}
+            // shouldFetchSuggestions={address.length > 2}
+          >
+            {({ getInputProps, suggestions, getSuggestionItemProps }) => {
+              return (
+                <div className="Demo__search-bar-container">
+                  <div className="Demo__search-input-container">
+                    <input
+                      {...getInputProps({
+                        placeholder: "Search Places...",
+                        className: "Demo__search-input",
+                      })}
+                    />
+                    {formData.test_address.length > 0 && (
+                      <button
+                        className="Demo__clear-button"
+                        onClick={handleCloseClick}
+                      >
+                        x
+                      </button>
+                    )}
+                  </div>
+                  {suggestions.length > 0 && (
+                    <div className="Demo__autocomplete-container">
+                      {suggestions.map((suggestion) => {
+                        const className = classnames("Demo__suggestion-item", {
+                          "Demo__suggestion-item--active": suggestion.active,
+                        });
+
+                        return (
+                          <div
+                            {...getSuggestionItemProps(suggestion, {
+                              className,
+                            })}
+                          >
+                            <strong>
+                              {suggestion.formattedSuggestion.mainText}
+                            </strong>{" "}
+                            <small>
+                              {suggestion.formattedSuggestion.secondaryText}
+                            </small>
+                          </div>
+                        );
+                      })}
+                      <div className="Demo__dropdown-footer">
+                        <div>x?</div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            }}
+          </PlacesAutocomplete> */}
+
           <div
             style={{
               display: "grid",
@@ -227,8 +252,8 @@ const UpdateAddress = ({ state, actions, libraries }) => {
               <div>
                 <label>Address Line 1</label>
                 <input
-                  name="address2_line1"
-                  value={formData.address2_line1}
+                  name="address1_line1"
+                  value={formData.address1_line1}
                   onChange={handleInputChange}
                   className="form-control input"
                   placeholder="Address Line 1"
@@ -237,8 +262,8 @@ const UpdateAddress = ({ state, actions, libraries }) => {
               <div style={styles.wrapper}>
                 <label>Address Line 2</label>
                 <input
-                  name="address2_line2"
-                  value={formData.address2_line2}
+                  name="address1_line2"
+                  value={formData.address1_line2}
                   onChange={handleInputChange}
                   className="form-control input"
                   placeholder="Address Line 2"
