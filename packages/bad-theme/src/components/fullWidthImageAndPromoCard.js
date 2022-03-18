@@ -5,7 +5,7 @@ import Link from "@frontity/components/link";
 import Card from "./card/card";
 import Loading from "./loading";
 // CONTEXT -------------------------------------
-import { setLinkWrapperAction } from "../context";
+import { setLinkWrapperAction, setGoToAction } from "../context";
 
 const FullWidthImageAndPromoCard = ({ state, actions, block }) => {
   if (!block) return <Loading />;
@@ -21,9 +21,10 @@ const FullWidthImageAndPromoCard = ({ state, actions, block }) => {
   return (
     <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
       <div className="flex">
-        <a
+        <div
           className={`flex card-wrapper`}
-          href={setLinkWrapperAction({ path: link.url })}
+          // href={setLinkWrapperAction({ path: link.url })}
+          onClick={() => setGoToAction({ path: link.url, actions })}
         >
           <Card
             imageAndPromoCard={block}
@@ -31,7 +32,7 @@ const FullWidthImageAndPromoCard = ({ state, actions, block }) => {
             removePadding
             shadow // optional param
           />
-        </a>
+        </div>
       </div>
     </div>
   );

@@ -36,6 +36,7 @@
     "react-bootstrap": "^2.0.2",
     "react-cookie": "^4.1.1",
     "react-google-places-autocomplete": "^3.3.2",
+    "react-places-autocomplete": "^7.3.0",
     "react-player": "^2.9.0",
     "react-share": "^4.4.0",
     "react-spring": "^9.4.3",

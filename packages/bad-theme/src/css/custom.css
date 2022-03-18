@@ -39,14 +39,14 @@
 }
 .card-wrapper:hover {
   color: inherit;
-  transform: scale(0.99);
+  transform: scale(0.995);
 }
 .bad-card-footer {
   height: 5px;
   transition: all 0.3s ease-in-out;
 }
 .card-wrapper:hover .bad-card-footer {
-  height: 7px;
+  /* footer animation  */
 }
 
 .tulip-pop {

@@ -26,7 +26,7 @@ export const setLinkWrapperAction = ({ path }) => {
   // if path includes pathOne || pathTwo strip path and set newPath
   if (path.includes(pathOne)) newPath = path.replace(pathOne, "");
   if (path.includes(pathTwo)) newPath = path.replace(pathTwo, "");
-
+  console.log("newPath", newPath); // debug
   return newPath;
 };
 

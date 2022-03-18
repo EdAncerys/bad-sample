@@ -120,13 +120,14 @@ const JournalCard = ({
 
   // RETURN ----------------------------------------------------------------
   return (
-    <a
+    <div
       className={`${isShadow} card-wrapper`}
-      href={setLinkWrapperAction({ path: link.url })}
       style={{
         minWidth: CARD_WIDTH,
         width: "100%",
       }}
+      // href={setLinkWrapperAction({ path: link.url })}
+      onClick={() => setGoToAction({ path: link.url, actions })}
     >
       <div
         className="flex-row"
@@ -138,7 +139,7 @@ const JournalCard = ({
         <ServeCardImage />
         <ServeCardContent />
       </div>
-    </a>
+    </div>
   );
 };
 

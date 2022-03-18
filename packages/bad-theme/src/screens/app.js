@@ -46,6 +46,7 @@ import FindADermatologist from "../components/findADermatologist";
 import Error from "./error";
 import Loading from "../components/loading";
 import BlockWrapper from "../components/blockWrapper";
+import { useScript } from "../hooks/useScript";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -59,6 +60,11 @@ import {
 const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { isActiveUser, isPlaceholder } = useAppState();
+
+  // ⬇️ import custom hook for Google API ⬇️
+  // useScript({
+  //   url: `https://maps.googleapis.com/maps/api/js?key=${state.auth.GOOGLE_API_KEY}&libraries=places`,
+  // });
 
   let endPoint = state.router.link;
   const data = state.source.get(endPoint);
