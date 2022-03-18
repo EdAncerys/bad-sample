@@ -23,7 +23,6 @@ const FullWidthImageAndPromoCard = ({ state, actions, block }) => {
       <div className="flex">
         <div
           className={`flex card-wrapper`}
-          // href={setLinkWrapperAction({ path: link.url })}
           onClick={() => setGoToAction({ path: link.url, actions })}
         >
           <Card

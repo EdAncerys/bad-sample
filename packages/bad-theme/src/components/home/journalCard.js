@@ -126,7 +126,6 @@ const JournalCard = ({
         minWidth: CARD_WIDTH,
         width: "100%",
       }}
-      // href={setLinkWrapperAction({ path: link.url })}
       onClick={() => setGoToAction({ path: link.url, actions })}
     >
       <div
