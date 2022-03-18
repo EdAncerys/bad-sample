@@ -24,10 +24,10 @@ import FeaturedBanner from "./featuredBanner";
 
 import GeneralModal from "../elections/generalModal";
 import DownloadFileBlock from "../downloadFileBlock";
-import { setGoToAction } from "../../context";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import LockIcon from "@mui/icons-material/Lock";
-import { setLinkWrapperAction } from "../../context";
+// CONTEXT ----------------------------------------------------------------
+import { setLinkWrapperAction, setGoToAction } from "../../context";
 
 const Card = ({
   state,
@@ -309,7 +309,7 @@ const Card = ({
 
   // RETURN ----------------------------------------------------
   return (
-    <a
+    <div
       className={`${isShadow} card-wrapper`} // card wrapper as clickable card if link is set
       style={{
         ...styles.card,
@@ -319,7 +319,8 @@ const Card = ({
         minHeight: MIN_CARD_HEIGHT,
         position: "relative",
       }}
-      href={setLinkWrapperAction({ path: link })}
+      // href={setLinkWrapperAction({ path: link })} // anchor tag solution have reload issues
+      onClick={() => setGoToAction({ path: link, actions })}
     >
       <PromoHeader fundingPromo={fundingPromo} />
       <FeaturedBanner featuredBanner={featuredBanner} />
@@ -334,7 +335,7 @@ const Card = ({
       <ServeVideoCover />
       <ServeContent />
       <ServeFooter />
-    </a>
+    </div>
   );
 };
 
