@@ -20,6 +20,7 @@ import {
   setCreateAccountModalAction,
   setEnquireAction,
 } from "./actions/navigation";
+import { getPILsDataAction, getGuidelinesDataAction } from "./actions/getCPT";
 import {
   loginAction,
   logoutAction,
@@ -142,4 +143,6 @@ export {
   getInvoiceAction,
   getProofOfMembershipAction,
   handleValidateMembershipChangeAction,
+  getPILsDataAction,
+  getGuidelinesDataAction,
 };

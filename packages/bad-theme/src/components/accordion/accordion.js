@@ -27,6 +27,7 @@ const AccordionComponent = ({
   hasPublishDate,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
   if (!block) return <Loading />;
 
   const { dynamicsApps } = useAppState();
@@ -136,10 +137,14 @@ const AccordionComponent = ({
   const ServeAccordion = ({ block }) => {
     const [uniqueId, setUniqueId] = useState(null);
     const [isFetching, setFetching] = useState(null);
+    // console.log("block", block); // debug
 
     // hook applies after React has performed all DOM mutations
     useLayoutEffect(() => {
-      const blockId = uuidv4(); // add unique id
+      let blockId = uuidv4(); // add unique id
+      // ⬇️ if guidelines set block id to guidelines id
+      if (guidelines) blockId = block.id;
+
       setUniqueId(blockId);
     }, []);
 

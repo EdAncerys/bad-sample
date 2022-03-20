@@ -10,6 +10,7 @@ const SearchDropDown = ({
   filter,
   onClickHandler,
   marginTop,
+  margin,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -21,6 +22,7 @@ const SearchDropDown = ({
 
   return (
     <div
+      className="input"
       style={{
         position: "absolute",
         zIndex: 99,
@@ -28,7 +30,6 @@ const SearchDropDown = ({
         right: 0,
         marginTop: marginTop || 10,
         border: `1px solid ${colors.silver}`,
-        borderRadius: 10,
         backgroundColor: colors.white,
       }}
     >
@@ -44,14 +45,26 @@ const SearchDropDown = ({
           }}
         >
           {filter.map((item, key) => {
+            const { title, type } = item;
+            // define subtitle options
+            let typeName = "Type Name";
+            if (type === "pils") typeName = "See in PILS";
+            if (type === "guidelines_standards")
+              typeName = "See in Guidelines & Standards";
+
             return (
               <div
-                className="title-link-animation"
+                className="flex-row title-link-animation"
                 key={key}
                 style={{ padding: `0.5em 0`, cursor: "pointer" }}
                 onClick={() => onClickHandler({ item })}
               >
-                <Html2React html={item.title} />
+                <Html2React html={title} />.
+                {type && (
+                  <span style={{ padding: `0 0.5em` }}>
+                    <Html2React html={typeName} />
+                  </span>
+                )}
               </div>
             );
           })}

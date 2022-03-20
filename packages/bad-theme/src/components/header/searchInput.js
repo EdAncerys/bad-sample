@@ -21,30 +21,6 @@ const SearchInput = ({ state, actions, libraries }) => {
   const searchFilterRef = useRef(null);
 
   // HELPERS ---------------------------------------------
-  const onClickHandler = ({ link }) => {
-    setGoToAction({ path: link, actions });
-    setFilterAction({ dispatch, filter: null });
-  };
-
-  const handleSearch = () => {
-    const input = searchFilterRef.current.value.toLowerCase();
-    if (!input) return null;
-
-    // let filter = eventList.filter((event) =>
-    //   event.title.rendered.toLowerCase().includes(input)
-    // );
-
-    // if (!filter.length) filter = [{ title: { rendered: "No Results" } }];
-    // setFilterAction({ dispatch, filter });
-    console.log(input);
-  };
-
-  const handleMouseLeave = () => {
-    if (!searchFilterRef.current.value) return null;
-
-    searchFilterRef.current.value = null;
-    setFilterAction({ dispatch, filter: null });
-  };
 
   // RETURN ---------------------------------------------
   return (
@@ -58,7 +34,6 @@ const SearchInput = ({ state, actions, libraries }) => {
         onChange
         inputOnly
       />
-      {/* <SearchDropDown filter={filter} onClickHandler={onClickHandler} /> */}
     </div>
   );
 };

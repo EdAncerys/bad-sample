@@ -10,13 +10,11 @@ import SearchContainer from "./searchContainer";
 import TypeFilters from "./typeFilters";
 
 import CloseIcon from "@mui/icons-material/Close";
-
-import { muiQuery } from "../context";
+// CONTEXT ---------------------------------------------------------------
+import { muiQuery, getGuidelinesDataAction } from "../context";
 
 const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
   const { sm, md, lg, xl } = muiQuery();
-
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const searchFilterRef = useRef(null);
   const currentSearchFilterRef = useRef(null);
@@ -38,21 +36,14 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
-    const path = `/guidelines_standards/`;
-    await actions.source.fetch(path); // fetch CPT guidelines
-
-    const guidelines = state.source.get(path);
-    const { totalPages, page, next } = guidelines; // check if guidelines have multiple pages
-    // fetch guidelines via wp API page by page
-    let isThereNextPage = next;
-    while (isThereNextPage) {
-      await actions.source.fetch(isThereNextPage); // fetch next page
-      const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
-      isThereNextPage = nextPage;
+    let guidelines = state.source.guidelines_standards;
+    if (!guidelines) {
+      await getGuidelinesDataAction({ state, actions });
+      guidelines = state.source.guidelines_standards;
     }
 
     const guideType = Object.values(state.source.guidelines_type);
-    let guideList = Object.values(state.source.guidelines_standards); // add guidelines object to data array
+    let guideList = Object.values(guidelines); // add guidelines object to data array
     // sort guidelines in alphabetically order by title name
     guideList = guideList.sort((a, b) => {
       const nameA = a.title.rendered.toUpperCase();
