@@ -184,10 +184,8 @@ const ApplicationList = ({ state, actions, libraries }) => {
                   <div
                     className="primary-title"
                     style={{
-                      fontSize: 20,
                       fontWeight: "bold",
                       justifyItems: "center",
-                      lineHeight: "unset",
                     }}
                   >
                     BAD category change pending approval.

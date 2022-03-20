@@ -45,6 +45,7 @@ const EventLoopBlock = ({
     colour,
     events_archive,
   } = block;
+  // console.log("block", colour); // debug
 
   const [eventList, setEventList] = useState(null); // event data
 
