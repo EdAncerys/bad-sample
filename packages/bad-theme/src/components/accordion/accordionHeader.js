@@ -119,7 +119,6 @@ const AccordionHeader = ({
   };
 
   const ServeUpdateInProgress = () => {
-    console.log("ServeUpdateInProgress", guidelines);
     if ((acf && !acf.update_in_progress) || !guidelines) return null;
 
     return (

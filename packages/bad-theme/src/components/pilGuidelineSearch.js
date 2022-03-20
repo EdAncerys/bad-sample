@@ -10,14 +10,17 @@ import CloseIcon from "@mui/icons-material/Close";
 
 // CONTEXT -----------------------------------------------------------
 import {
+  useAppDispatch,
   getPILsDataAction,
   getGuidelinesDataAction,
   setGoToAction,
+  setIDFilterAction,
 } from "../context";
 
 const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
+  const dispatch = useAppDispatch();
   const { disable_vertical_padding, colour } = block;
   const ctaHeight = 45;
   const marginHorizontal = state.theme.marginHorizontal;
@@ -113,7 +116,9 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
   const selectHandler = ({ item }) => {
     const isGuidelines = item.type === "guidelines_standards";
     console.log("item", item);
-    // if (isGuidelines) return;
+    if (isGuidelines) {
+      setIDFilterAction({ dispatch, idFilter: item.id });
+    }
 
     setGoToAction({ path: item.link, actions });
   };

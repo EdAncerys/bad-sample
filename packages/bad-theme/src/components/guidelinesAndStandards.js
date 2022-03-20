@@ -11,10 +11,19 @@ import TypeFilters from "./typeFilters";
 
 import CloseIcon from "@mui/icons-material/Close";
 // CONTEXT ---------------------------------------------------------------
-import { muiQuery, getGuidelinesDataAction } from "../context";
+import {
+  useAppDispatch,
+  useAppState,
+  muiQuery,
+  getGuidelinesDataAction,
+  setIDFilterAction,
+} from "../context";
 
 const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
   const { sm, md, lg, xl } = muiQuery();
+
+  const dispatch = useAppDispatch();
+  const { idFilter } = useAppState();
 
   const searchFilterRef = useRef(null);
   const currentSearchFilterRef = useRef(null);
@@ -60,11 +69,36 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
       searchFilterRef.current = false; // clean up function
     };
   }, []);
+
+  useEffect(() => {
+    // if idFilter is set get to accordion item with that id
+    if (idFilter) {
+      // give DOM time to update & render
+      setTimeout(() => {
+        // get dom element with idFilter
+        const accordion = document.getElementById(idFilter);
+        const accordionBody = document.getElementById(
+          `accordion-body-${idFilter}`
+        );
+
+        // if dom element exists scroll to it & set
+        if (accordionBody) {
+          accordionBody.classList.add("show"); // set it open on load
+          // scroll to accordion item
+          accordion.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      }, 100);
+    }
+  }, []);
   // DATA pre FETCH ----------------------------------------------------------------
   if (!guidelinesList) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
   const handleSearch = () => {
+    // if (idFilter) setIDFilterAction({ dispatch, idFilter: null }); // reset ID filter
     const input = searchFilterRef.current.value || searchFilter;
     currentSearchFilterRef.current = input;
     let guidelinesList = Object.values(state.source.guidelines_standards);
@@ -119,14 +153,14 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
       });
 
     if (input) {
-      const filter = guidelinesList.filter((item) => {
+      guidelinesList = guidelinesList.filter((item) => {
         const list = item.guidelines_type;
         if (list.includes(input)) return item;
       });
-
-      setTypeFilter(name);
-      setGuidelinesList(filter);
     }
+    console.log(guidelinesList);
+    setTypeFilter(name);
+    setGuidelinesList(guidelinesList);
   };
 
   const handleClearTypeFilter = () => {

@@ -56,15 +56,17 @@ const SearchDropDown = ({
               <div
                 className="flex-row title-link-animation"
                 key={key}
-                style={{ padding: `0.5em 0`, cursor: "pointer" }}
+                style={{
+                  padding: `0.5em 0`,
+                  cursor: "pointer",
+                  flexWrap: "wrap",
+                }}
                 onClick={() => onClickHandler({ item })}
               >
-                <Html2React html={title} />.
-                {type && (
-                  <span style={{ padding: `0 0.5em` }}>
-                    <Html2React html={typeName} />
-                  </span>
-                )}
+                <span style={{ paddingRight: `0.5em` }}>
+                  <Html2React html={title} />.
+                </span>
+                {type && <Html2React html={typeName} />}
               </div>
             );
           })}
