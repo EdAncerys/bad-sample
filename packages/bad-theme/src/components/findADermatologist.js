@@ -151,7 +151,12 @@ const FindADermatologist = ({ state, block }) => {
       );
     };
     const ServeAddress = () => {
-      return <div>{derm.address3_composite}</div>;
+      return (
+        <div>
+          {derm.address3_line1} {derm.address3_line2}, {derm.address3_city}{" "}
+          {derm.address3_postalcode}
+        </div>
+      );
     };
     const ServeDistance = () => {
       if (!derm.distance) return null;
@@ -301,8 +306,14 @@ const FindADermatologist = ({ state, block }) => {
 
       const ServeEmail = () => {
         return (
-          <div className="primary-title" style={{ color: colors.navy }}>
-            {derm.emailaddress1}
+          <div className="primary-title mb-2" style={{ color: colors.navy }}>
+            <div className="primary-title">Address</div>
+            <div>
+              <p>{derm.address3_line1}</p> <p>{derm.address3_line2},</p>
+              <p>
+                {derm.address3_city} {derm.address3_postalcode}
+              </p>
+            </div>
           </div>
         );
       };
@@ -326,7 +337,7 @@ const FindADermatologist = ({ state, block }) => {
       };
       const ServeShowOnMap = () => {
         return (
-          <div className="flex-row" style={{ alignItems: "flex-end" }}>
+          <div className="flex-row mt-2" style={{ alignItems: "flex-end" }}>
             <div
               className="caps-btn"
               onClick={() =>
@@ -416,9 +427,10 @@ const FindADermatologist = ({ state, block }) => {
         <Accordion style={{ border: 0 }}>
           {filteredDermatologists.map((derm, key) => {
             if (
-              key > 0 &&
-              derm.address3_postalcode !==
-                filteredDermatologists[key - 1].address3_postalcode
+              (key > 0 &&
+                derm.address3_postalcode !==
+                  filteredDermatologists[key - 1].address3_postalcode) ||
+              (key > 0 && !derm.distance)
             ) {
               crutent += 1;
             }
