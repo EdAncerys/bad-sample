@@ -52,13 +52,16 @@ const HeaderActions = ({ state, actions, libraries }) => {
     setSearchFilter(input);
 
     try {
-      const result = await appSearchAction({ query: input });
-      console.log(result);
+      const result = await appSearchAction({ state, query: input });
+      console.log(result); // debug
 
       // ⬇️ set data search with request
-      if (result.length > 0) {
+      if (result && result.length > 0) {
         // set data to match dropdown format
         const data = result.map((item) => {
+          // ⬇️ filter empty content from search results
+          // if (item.acf && !item.acf.blocks && item) return null;
+
           return {
             id: item.id,
             title: item.title.rendered,
@@ -80,11 +83,12 @@ const HeaderActions = ({ state, actions, libraries }) => {
   const redirectHandler = ({ item }) => {
     console.log(item);
     let path = item.url;
-    const wpPath = "https://bad.skylarkdev.digital";
-
+    const wpPath = state.auth.WP_HOST;
     path = path.replace(wpPath, ""); // strip down wp path
+
     // ⬇️ redirect to url with path ⬇️
     setGoToAction({ path, actions });
+    clearSearchHandler(); // clear search input
   };
 
   const clearSearchHandler = () => {

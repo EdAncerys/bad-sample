@@ -104,7 +104,11 @@ const App = ({ state, actions }) => {
   useEffect(() => {
     // ⬇️ anchor tag scrapper
     anchorScrapper();
-    if (idFilter) setIDFilterAction({ dispatch, idFilter: null }); // reset filter id on page change
+
+    // ⬇️  clearing id reference
+    const slug = "/guidelines-and-standards/clinical-guidelines/";
+    if (idFilter && endPoint !== slug)
+      setIDFilterAction({ dispatch, idFilter: null }); // reset filter id on page change
   }, [endPoint]);
 
   const { sm, md, lg, xl } = muiQuery();
