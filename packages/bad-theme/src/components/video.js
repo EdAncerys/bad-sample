@@ -296,6 +296,11 @@ const Video = ({ state, actions, libraries }) => {
         contact_public_email: "comms@bag.org.uk",
         message: true,
         allow_attachments: true,
+        recipients: [
+          {
+            email: "dominik@skylarkcreative.co.uk",
+          },
+        ],
       },
     });
   };
