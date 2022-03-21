@@ -321,7 +321,7 @@ const Video = ({ state, actions, libraries }) => {
               className="caps-btn"
               style={{ padding: 10 }}
             >
-              I have a problem with this video
+              Having trouble viewing this video?
             </div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr" }}>
