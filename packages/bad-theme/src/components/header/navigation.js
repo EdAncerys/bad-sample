@@ -233,7 +233,6 @@ const Navigation = ({ state, actions, libraries }) => {
         if (!featuredBannerOne && !featuredBannerTwo) return null;
 
         const { title, content, acf } = featuredBannerOne || featuredBannerTwo;
-        console.log("acf", acf); // debug
         let isLeft = "35%";
         if (featuredBannerTwo) isLeft = "66.5%";
 

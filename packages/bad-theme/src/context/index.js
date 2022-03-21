@@ -77,6 +77,7 @@ import {
   authCookieActionAfterCSR,
   getWPMenu,
   getSIGGroupeData,
+  getLeadershipTeamData,
 } from "../helpers";
 
 export {
@@ -147,4 +148,5 @@ export {
   getPILsDataAction,
   getGuidelinesDataAction,
   appSearchAction,
+  getLeadershipTeamData,
 };
