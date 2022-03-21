@@ -8,12 +8,21 @@ import { colors } from "../config/colors";
 import Image from "@frontity/components/image";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import LockIcon from "@mui/icons-material/Lock";
-import { useAppState, useAppDispatch, authenticateAppAction } from "../context";
+import defaultCover from "../img/png/video_default.jpg";
+
+import {
+  useAppState,
+  useAppDispatch,
+  authenticateAppAction,
+  setEnquireAction,
+} from "../context";
 import { handleGetCookie } from "../helpers/cookie";
 import PaymentModal from "./dashboard/paymentModal";
-const Video = ({ state, actions }) => {
+const Video = ({ state, actions, libraries }) => {
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
+
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { isActiveUser } = useAppState();
   const dispatch = useAppDispatch();
@@ -70,15 +79,15 @@ const Video = ({ state, actions }) => {
   const ServeTitle = () => {
     return (
       <div style={{ marginTop: "1em", marginBottom: "1em" }}>
-        <h1>{post.title.rendered}</h1>
+        <h1>
+          <Html2React html={post.title.rendered} />
+        </h1>
       </div>
     );
   };
   const ServeContent = () => {
     const ServeImage = () => {
-      const [videoCover, setVideoCover] = React.useState(
-        "https://badadmin.skylarkdev.co/wp-content/uploads/2022/02/VIDEO-LIBRARY.jpg"
-      );
+      const [videoCover, setVideoCover] = React.useState(defaultCover);
       const getVimeoCover = async ({ video_url }) => {
         console.log("VIDEOURL", video_url);
         // Example URL: https://player.vimeo.com/video/382577680?h=8f166cf506&color=5b89a3&title=0&byline=0&portrait=0
@@ -141,11 +150,14 @@ const Video = ({ state, actions }) => {
       const ServePrice = () => {
         if (!videoStatus || !isActiveUser)
           return (
-            <div
-              className="primary-title"
-              style={{ fontSize: 20, display: "flex", alignItems: "center" }}
-            >
-              {post.acf.private ? "Login to watch or buy" : "Free to watch"}
+            <div>
+              <div
+                className="primary-title"
+                style={{ fontSize: 20, display: "flex", alignItems: "center" }}
+              >
+                {post.acf.private ? "Login to watch or buy" : "Free to watch"}
+              </div>
+              {post.acf.private && `£${post.acf.price}`}
             </div>
           );
         if (isActiveUser && post.acf.private && videoStatus === "locked")
@@ -209,12 +221,14 @@ const Video = ({ state, actions }) => {
         colour={colors.orange}
         onClick={() => setGoToAction({ path: post.link, actions })}
         shareToSocials
+        disableCardAnimation
       />
     );
   };
   const RelatedVideos = () => {
     const videos_list = Object.values(state.source.videos);
     const related_videos_to_show = videos_list.slice(0, 2);
+    if (!state.source.videos) return null;
     return related_videos_to_show.map((vid) => {
       if (vid.id === post.id) vid = videos_list[2];
       return (
@@ -227,6 +241,8 @@ const Video = ({ state, actions }) => {
           link={vid.link}
           noVideoCategory
           onClick={() => setGoToAction({ path: vid.link, actions })}
+          cardHeight={500}
+          disableCardAnimation
         />
       );
     });
@@ -272,6 +288,17 @@ const Video = ({ state, actions }) => {
   }, [isActiveUser, paymentUrl]);
   if (!videoStatus) return <Loading />;
   if (!state.source.videos) return <Loading />;
+
+  const handleProblemEnquiry = () => {
+    setEnquireAction({
+      dispatch,
+      enquireAction: {
+        contact_public_email: "comms@bag.org.uk",
+        message: true,
+        allow_attachments: true,
+      },
+    });
+  };
   return (
     <BlockWrapper>
       <PaymentModal
@@ -284,6 +311,13 @@ const Video = ({ state, actions }) => {
           <div>
             <ServeContent />
             <ServeBody />
+            <div
+              onClick={handleProblemEnquiry}
+              className="caps-btn"
+              style={{ padding: 10 }}
+            >
+              I have a problem with this video
+            </div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr" }}>
             <div

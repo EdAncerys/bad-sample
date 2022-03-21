@@ -302,35 +302,70 @@ const Event = ({ state, actions, libraries }) => {
         return "Please login to your BAD account and use your registered email address for signing up to this event, this will enable us to link your registration to your BAD account";
       }
       if (registration_type === "events_force" && isActiveUser) {
-        return `Please ensure you register for this event using you ${isActiveUser.emailaddress1} email address in order to link your registration to your BAD account`;
+        return (
+          <div>
+            Please ensure you register for this event using your
+            <span className="primary-title">
+              {" " + isActiveUser.emailaddress1}
+            </span>{" "}
+            email address in order to link your registration to your BAD account
+          </div>
+        );
       }
       return null;
+    };
+
+    const handleRegistrationClick = () => {
+      if (
+        registration_type === "events_force" ||
+        registration_type === "external"
+      ) {
+        location.href = registration_page_link;
+      }
+      if (registration_type === "email") {
+        setEnquireAction({
+          dispatch,
+          enquireAction: {
+            contact_public_email: "conference@bad.org.uk",
+            form_title: register_form_title || "Event Contact Form",
+            form_body:
+              register_form_body || `Register for ${title.rendered} event.`,
+            subject: `Registration for ${title.rendered} event.`,
+            full_name: register_full_name || true,
+            email_address: register_email || true,
+            phone_number: register_phone_number || true,
+            recipients: state.contactList.defaultContactList,
+            registerForEvent: title.rendered,
+          },
+        });
+      }
     };
     return (
       <div
         className="flex"
         style={{
-          // backgroundColor: colors.silverFillOne, // optional background color
+          // backgroundColor: colors.lightSilver, // optional background color
           justifyContent: "center",
           padding: `2em`,
-          margin: `2em 0`,
+          margin: `0`,
           flexDirection: "column",
           alignItems: "center",
         }}
       >
         <ServeInformationForUser />
-        <a
+        <button
           className="blue-btn"
           style={{
             backgroundColor: colors.primary,
             color: colors.white,
             padding: `1em 2em`,
             width: 200,
+            marginTop: 10,
           }}
-          href={registration_page_link}
+          onClick={handleRegistrationClick}
         >
           Register for Event
-        </a>
+        </button>
       </div>
     );
   };
@@ -342,7 +377,7 @@ const Event = ({ state, actions, libraries }) => {
       <div className="text-body">
         <div
           className="primary-title"
-          style={{ fontSize: 20, paddingTop: "2em" }}
+          style={{ fontSize: 20, paddingTop: "1em" }}
         >
           Summary
         </div>
@@ -550,7 +585,7 @@ const Event = ({ state, actions, libraries }) => {
 
   return (
     <BlockWrapper>
-      <div style={{ backgroundColor: colors.white }}>
+      <div style={{ backgroundColor: colors.silverFillOne }}>
         <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
           <div style={!lg ? styles.container : styles.containerMobile}>
             <div>
