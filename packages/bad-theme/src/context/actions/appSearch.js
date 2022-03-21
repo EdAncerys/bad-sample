@@ -5,7 +5,7 @@ export const appSearchAction = async ({ query }) => {
   if (!query || query.length < 2) return; // restrict API call if less then 2 characters
   await new Promise((resolve) => setTimeout(resolve, 500)); // set delay on API call
 
-  const URL = `http://3.9.193.188/wp-json/relevanssi/v1/search?keyword=${query}`;
+  const URL = `https://bad.skylarkdev.digital/wp-json/relevanssi/v1/search?keyword=${query}`;
 
   const requestOptions = {
     method: "GET",

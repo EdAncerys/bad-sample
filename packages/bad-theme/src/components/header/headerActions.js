@@ -80,7 +80,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
   const redirectHandler = ({ item }) => {
     console.log(item);
     let path = item.url;
-    const wpPath = "http://3.9.193.188";
+    const wpPath = "https://bad.skylarkdev.digital";
 
     path = path.replace(wpPath, ""); // strip down wp path
     // ⬇️ redirect to url with path ⬇️
