@@ -297,13 +297,18 @@ const Event = ({ state, actions, libraries }) => {
     // dont display component if event isArchive
     if (isArchive) return null;
     const ServeInformationForUser = () => {
-      console.log("ACTIVE USERO", isActiveUser);
       if (registration_type === "events_force" && !isActiveUser) {
-        return "Please login to your BAD account and use your registered email address for signing up to this event, this will enable us to link your registration to your BAD account";
+        return (
+          <div style={{ padding: "1em 0" }}>
+            "Please login to your BAD account and use your registered email
+            address for signing up to this event, this will enable us to link
+            your registration to your BAD account"
+          </div>
+        );
       }
       if (registration_type === "events_force" && isActiveUser) {
         return (
-          <div>
+          <div style={{ padding: "1em 0" }}>
             Please ensure you register for this event using your
             <span className="primary-title">
               {" " + isActiveUser.emailaddress1}
@@ -491,7 +496,7 @@ const Event = ({ state, actions, libraries }) => {
       // return events that not current event id & include the same category  as the current event
       return event.id !== id && event.event_grade.includes(currentPostGrade);
     });
-    // map through relatedLocationList and get ids of the events
+    // map through rendered event list and get ids of the events
     relatedGradeList.map((event) => {
       eventListIds.push(event.id);
     });
