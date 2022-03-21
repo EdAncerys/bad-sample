@@ -154,7 +154,7 @@ const Event = ({ state, actions, libraries }) => {
     const alt = title.rendered || "BAD";
 
     return (
-      <div style={{ width: "100%", height: 350 }}>
+      <div style={{ width: "100%", height: 350, backgroundColor: "white" }}>
         <Image
           src={image}
           alt={alt}
@@ -582,7 +582,7 @@ const Event = ({ state, actions, libraries }) => {
     if (!relatedGradeList.length && !relatedLocationList.length) return null;
 
     return (
-      <div style={{ marginBottom: "2em" }}>
+      <div style={{ marginBottom: "2em", backgroundColor: "white" }}>
         <div className="shadow" style={{ padding: "1em" }}>
           <div
             className="primary-title"
@@ -621,7 +621,12 @@ const Event = ({ state, actions, libraries }) => {
         </div>
       </div>
 
-      <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
+      <div
+        style={{
+          padding: `${marginVertical}px ${marginHorizontal}px`,
+          backgroundColor: colors.darkSilver,
+        }}
+      >
         <RowButton
           block={{
             title: "If you would like more information please contact us",
