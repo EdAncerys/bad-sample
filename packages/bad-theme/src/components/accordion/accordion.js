@@ -27,6 +27,7 @@ const AccordionComponent = ({
   hasPublishDate,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
   if (!block) return <Loading />;
 
   const { dynamicsApps } = useAppState();
@@ -36,8 +37,9 @@ const AccordionComponent = ({
     approved_bad_members_only,
     add_search_function,
   } = block;
+  // console.log("accordion_item", accordion_item); //debug
 
-  const [searchFilter, setSearchFilter] = useState(accordion_item);
+  const [searchFilter, setSearchFilter] = useState(null);
   const [searchInput, setInput] = useState(null);
   const searchFilterRef = useRef(null);
 
@@ -50,7 +52,12 @@ const AccordionComponent = ({
   let isForBADMembersOnly = false;
   if (approved_bad_members_only && !isBADApproved) isForBADMembersOnly = true;
 
-  if (!accordion_item || isForBADMembersOnly) return null; // defensive programming
+  useLayoutEffect(() => {
+    // ⬇️ re-set accordion data state on data change
+    setSearchFilter(accordion_item);
+  }, [accordion_item]);
+
+  if (!searchFilter || isForBADMembersOnly) return null; // defensive programming
 
   // HANDLERS ---------------------------------------------
   const handleSearch = () => {
@@ -136,10 +143,14 @@ const AccordionComponent = ({
   const ServeAccordion = ({ block }) => {
     const [uniqueId, setUniqueId] = useState(null);
     const [isFetching, setFetching] = useState(null);
+    // console.log("block", block); // debug
 
     // hook applies after React has performed all DOM mutations
     useLayoutEffect(() => {
-      const blockId = uuidv4(); // add unique id
+      let blockId = uuidv4(); // add unique id
+      // ⬇️ if guidelines set block id to guidelines id
+      if (guidelines) blockId = block.id;
+
       setUniqueId(blockId);
     }, []);
 
@@ -206,7 +217,6 @@ const AccordionComponent = ({
             fundingBlock={fundingBlock}
             membershipApplications={membershipApplications}
             hasPreview={hasPreview}
-            hasPublishDate={hasPublishDate}
           />
           <AccordionBody
             block={block}
@@ -216,6 +226,7 @@ const AccordionComponent = ({
             setFetching={setFetching}
             fundingBlock={fundingBlock}
             membershipApplications={membershipApplications}
+            hasPublishDate={hasPublishDate}
           />
         </div>
       </div>

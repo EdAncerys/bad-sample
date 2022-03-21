@@ -45,10 +45,11 @@ const EventLoopBlock = ({
     colour,
     events_archive,
   } = block;
+  // console.log("block", colour); // debug
 
   const [eventList, setEventList] = useState(null); // event data
 
-  const [gradeFilterId, setGradeFilterId] = useState(null); // data
+  const [gradeFilter, setGradeFilterId] = useState(null); // data
   const useEffectRef = useRef(null);
   const postLimitRef = useRef(0);
 
@@ -74,23 +75,29 @@ const EventLoopBlock = ({
     let eventList = Object.values(data);
     const grades = Object.values(state.source.event_grade);
 
-    let gradeFilterId = grades.filter(
-      (filter) => filter.name === grade_filter
-    )[0];
+    let gradeFilter = [];
+    let isArray = Array.isArray(grade_filter); // verify data type
+    if (grades && isArray) {
+      grades.filter((filter) => {
+        // map grade_filter & if grade name matches grade_filter then return id
+        grade_filter.map((grade) => {
+          if (filter.name.toLowerCase() === grade.toLowerCase())
+            gradeFilter.push(filter.id);
+        });
+      });
+    }
 
-    if (gradeFilterId) gradeFilterId = gradeFilterId.id;
-
-    // if (post_limit) eventList = eventList.slice(0, Number(post_limit)); // apply limit on posts
-
+    console.log("gradeFilter", gradeFilter); // debug
     // sort events in order by date accenting from
-    eventList = eventList.sort(
-      (a, b) =>
-        new Date(a.acf.date_time[0].date) - new Date(b.acf.date_time[0].date)
-    );
+    eventList = eventList.sort((a, b) => {
+      // if !date_time return null;
+      if (!a.date_time || !b.date_time) return null;
+      new Date(a.acf.date_time[0].date) - new Date(b.acf.date_time[0].date);
+    });
 
     // console.log("🚀 event list", eventList.length); // debug
     setEventList(eventList);
-    setGradeFilterId(gradeFilterId);
+    setGradeFilterId(gradeFilter);
 
     // link to anchor for event
     if (eventAnchor) {
@@ -140,8 +147,17 @@ const EventLoopBlock = ({
           } else {
             if (isArchive) return null;
           }
-          // ⬇️ show only events that grades matching filter grade
-          if (event_grade && !event_grade.includes(gradeFilterId)) return null;
+          // ⬇️ show only events that event_grade object have in common gradeFilter
+          if (gradeFilter.length > 0) {
+            if (!event_grade) return null;
+            let grade_match = false;
+            event_grade.forEach((grade) => {
+              gradeFilter.forEach((filter) => {
+                if (grade === filter) grade_match = true;
+              });
+            });
+            if (!grade_match) return null;
+          }
 
           if (searchFilter) {
             if (!title && !summary) return null;

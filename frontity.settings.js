@@ -31,7 +31,8 @@ const settings = {
       name: "@frontity/wp-source",
       state: {
         source: {
-          url: "https://badadmin.skylarkdev.co/", // production url
+          url: "https://bad.skylarkdev.digital/", // production url
+          // url: "https://badadmin.skylarkdev.co/", // development url
           // api: "https://app-5efddb43c1ac181508283e93.closte.com/wp-json", // frontity example api
           params: {
             per_page: 25, // limit per page fetch request

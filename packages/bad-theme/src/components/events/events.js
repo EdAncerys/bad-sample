@@ -93,6 +93,24 @@ const Events = ({ state, actions, libraries, block }) => {
 
     const ServeGradeFilter = () => {
       if (!grades) return null;
+      // sort grades alphabetically by name
+      const sortedGrades = grades.sort((a, b) => {
+        return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+      });
+      // custom sort grades by name in order based on array of grades
+      const sortedGradesCustom = grades.sort((a, b) => {
+        const order = [
+          "All Levels",
+          "Consultants",
+          "Dermatology Trainees",
+          "GPs",
+          "SAS Doctors",
+          "CESR Candidates",
+          "Allied Healthcare Professionals",
+          "Medical Students",
+        ];
+        return order.indexOf(a.name) - order.indexOf(b.name);
+      });
 
       return (
         <div
@@ -107,7 +125,7 @@ const Events = ({ state, actions, libraries, block }) => {
             <option value="" hidden>
               Event Grades
             </option>
-            {grades.map((item, key) => {
+            {sortedGradesCustom.map((item, key) => {
               return (
                 <option key={key} value={item.id}>
                   {item.name}
@@ -121,6 +139,12 @@ const Events = ({ state, actions, libraries, block }) => {
 
     const ServeLocationFilter = () => {
       if (!locations) return null;
+      // sort locations alphabetically & if name includes online then move to top
+      const sortedLocations = locations.sort((a, b) => {
+        if (a.name.toLowerCase().includes("online")) return -1;
+        if (b.name.toLowerCase().includes("online")) return 1;
+        return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+      });
 
       return (
         <div
@@ -135,7 +159,7 @@ const Events = ({ state, actions, libraries, block }) => {
             <option value="" hidden>
               Location
             </option>
-            {locations.map((item, key) => {
+            {sortedLocations.map((item, key) => {
               return (
                 <option key={key} value={item.id}>
                   {item.name}
@@ -149,6 +173,10 @@ const Events = ({ state, actions, libraries, block }) => {
 
     const ServeSpecialtyFilter = () => {
       if (!specialty) return null;
+      // sort locations alphabetically
+      const sortedSpecialty = specialty.sort((a, b) => {
+        return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+      });
 
       return (
         <div className="flex" style={{ paddingRight: `1em` }}>
@@ -158,9 +186,9 @@ const Events = ({ state, actions, libraries, block }) => {
             onChange={(e) => setSpecialtyFilter(e.target.value)}
           >
             <option value="" hidden>
-              Specialty
+              Event Topic
             </option>
-            {specialty.map((item, key) => {
+            {sortedSpecialty.map((item, key) => {
               return (
                 <option key={key} value={item.id}>
                   {item.name}

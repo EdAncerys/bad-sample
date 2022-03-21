@@ -506,7 +506,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
                 )}
                 <SearchDropDown
                   filter={hospitalData}
-                  mapToName="name"
                   onClickHandler={handleSelectHospital}
                 />
               </div>

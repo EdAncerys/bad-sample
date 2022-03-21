@@ -58,7 +58,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       dispatch,
       enquireAction: {
         contact_public_email: "harriet@bag.org.uk",
-        contact_public_phone_number: "+1 (123) 456-7890",
+        // contact_public_phone_number: "+1 (123) 456-7890",
         form_title: "Main Place of work / Medical School Change Form",
         form_body: `Request Main Place of work / Medical School change.`,
         message: true,

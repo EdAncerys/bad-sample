@@ -2,10 +2,7 @@ import { useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
-import date from "date-and-time";
-const DATE_MODULE = date;
-
-import NiceLogo from "../../img/placeholders/niceLogo.svg";
+import NiceLogo from "../../img/svg/niceLogo.svg";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { colors } from "../../config/imports";
@@ -24,14 +21,13 @@ const AccordionHeader = ({
   uniqueId,
   membershipApplications,
   hasPreview,
-  hasPublishDate,
 }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const { guidelines_type, subtitle, acf } = block;
-  const LOGO_HEIGHT = 45;
+  const { subtitle, acf } = block;
+  const LOGO_HEIGHT = 35;
 
   let preview = block.preview;
   if (hasPreview) preview = hasPreview;
@@ -49,19 +45,7 @@ const AccordionHeader = ({
   let niceAccredited = false;
   if (acf && acf.nice_accredited) niceAccredited = acf.nice_accredited;
 
-  let updateInProgress = false;
-  if (acf && acf.update_in_progress) niceAccredited = acf.update_in_progress;
-
   const isActive = useRef(false);
-
-  // Guidelines & Standards --------------------------------
-  let gsPublished_date = null;
-  let gsUpdate_in_progress = null;
-
-  if (guidelines) {
-    gsPublished_date = block.acf.published_date;
-    gsUpdate_in_progress = block.acf.update_in_progress;
-  }
 
   // LEadership team & Standards --------------------------------
   let ltTitle = null;
@@ -82,6 +66,7 @@ const AccordionHeader = ({
         <div
           className={!lg ? "flex" : "flex-col"}
           style={{
+            display: "grid",
             fontStyle: "italic",
             padding: !lg ? `0 2em` : 0,
             marginTop: !lg ? null : "1em",
@@ -95,74 +80,19 @@ const AccordionHeader = ({
     };
 
     return (
-      <div
-        className="primary-title"
-        style={{
-          display: "grid",
-          alignItems: !lg ? "center" : "flex-start",
-          lineHeight: "unset",
-        }}
-      >
-        <div style={{ fontSize: 20 }}>
-          <Html2React html={title} />
-        </div>
-        <ServeSubtitle />
-      </div>
-    );
-  };
-
-  const ServeGSUpdateInProgress = () => {
-    if (!gsUpdate_in_progress) return null;
-
-    return (
       <div>
-        <div className="flex">
-          <div style={styles.divider} />
-          <div style={{ fontStyle: "italic", alignItems: "center" }}>
-            Update in Progress
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const ServeGSDate = () => {
-    if (!gsPublished_date) return null;
-
-    return (
-      <div
-        className={!lg ? "flex" : "flex-row"}
-        style={{
-          fontSize: !lg ? null : 12,
-          paddingLeft: !lg ? `2em` : 0,
-          color: colors.softBlack,
-          alignItems: "center",
-        }}
-      >
-        <div>
-          {!lg ? "Published" : null} <Html2React html={gsPublished_date} />
-        </div>
-        <ServeGSUpdateInProgress />
-      </div>
-    );
-  };
-
-  const ServeGSTitle = () => {
-    if (!gsTitle) return null;
-
-    return (
-      <div
-        className={!lg ? "flex" : "flex-col"}
-        style={{ alignItems: !lg ? "center" : "flex-start" }}
-      >
-        {!lg ? null : <ServeNICELogo />}
         <div
-          className="primary-title"
-          style={{ fontSize: 20, alignItems: !lg ? "center" : "flex-start" }}
+          className="flex primary-title"
+          style={{
+            alignItems: !lg ? "center" : "flex-start",
+            lineHeight: "unset",
+          }}
         >
-          <Html2React html={gsTitle} />
+          <div style={{ fontSize: 20 }}>
+            <Html2React html={title} />
+          </div>
+          <ServeSubtitle />
         </div>
-        <ServeGSDate />
       </div>
     );
   };
@@ -189,7 +119,7 @@ const AccordionHeader = ({
   };
 
   const ServeUpdateInProgress = () => {
-    if (acf && !acf.update_in_progress) return null;
+    if ((acf && !acf.update_in_progress) || !guidelines) return null;
 
     return (
       <div
@@ -280,28 +210,6 @@ const AccordionHeader = ({
     );
   };
 
-  const ServePublishedDate = () => {
-    if (!hasPublishDate) return null;
-
-    const date = acf.published_date;
-    const dateObject = new Date(date);
-    const formattedDate = DATE_MODULE.format(dateObject, "MMMM YYYY");
-
-    return (
-      <div
-        style={{
-          display: "grid",
-          alignItems: "center",
-          padding: niceAccredited ? "0 0 0 2em" : "0 2em",
-          whiteSpace: "nowrap",
-          paddingBottom: 4, // compensate line height
-        }}
-      >
-        Published {formattedDate}
-      </div>
-    );
-  };
-
   return (
     <div style={{ position: "relative" }}>
       <div className="accordion-header">
@@ -320,7 +228,6 @@ const AccordionHeader = ({
             <div className="flex">
               <ServeTitle />
               <ServeLTTitle />
-              <ServePublishedDate />
               <ServeUpdateInProgress />
 
               {!lg ? <ServeLogo /> : null}

@@ -55,11 +55,12 @@ import {
   authCookieActionAfterCSR,
   getWPMenu,
   setPlaceholderAction,
+  setIDFilterAction,
 } from "../context";
 
 const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
-  const { isActiveUser, isPlaceholder } = useAppState();
+  const { isActiveUser, isPlaceholder, idFilter } = useAppState();
 
   // ⬇️ import custom hook for Google API ⬇️
   // useScript({
@@ -103,6 +104,7 @@ const App = ({ state, actions }) => {
   useEffect(() => {
     // ⬇️ anchor tag scrapper
     anchorScrapper();
+    if (idFilter) setIDFilterAction({ dispatch, idFilter: null }); // reset filter id on page change
   }, [endPoint]);
 
   const { sm, md, lg, xl } = muiQuery();

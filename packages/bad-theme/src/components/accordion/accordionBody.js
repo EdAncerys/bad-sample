@@ -36,6 +36,7 @@ const AccordionBody = ({
   uniqueId,
   setFetching,
   membershipApplications,
+  hasPublishDate,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { sm, md, lg, xl } = muiQuery();
@@ -55,6 +56,7 @@ const AccordionBody = ({
     links,
     gradesList,
     positionList,
+    acf,
   } = block;
 
   let body = block.body;
@@ -168,6 +170,28 @@ const AccordionBody = ({
         {gsLinks.map((button_link, key) => {
           return <ServeLink key={key} button_link={button_link} />;
         })}
+      </div>
+    );
+  };
+
+  const ServePublishedDate = () => {
+    if (!hasPublishDate || !acf) return null;
+
+    const niceAccredited = acf.nice_accredited;
+    const date = acf.published_date;
+    const dateObject = new Date(date);
+    const formattedDate = DATE_MODULE.format(dateObject, "MMMM YYYY");
+
+    return (
+      <div
+        style={{
+          display: "grid",
+          alignItems: "center",
+          whiteSpace: "nowrap",
+          paddingBottom: 4, // compensate line height
+        }}
+      >
+        Published {formattedDate}
       </div>
     );
   };
@@ -664,6 +688,8 @@ const AccordionBody = ({
         className="accordion-body"
         style={{ margin: `0 1.25em`, padding: `1em 0` }}
       >
+        <ServePublishedDate />
+
         <ServeBody />
         <ServeLTBody />
 

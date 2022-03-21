@@ -617,8 +617,7 @@ const Event = ({ state, actions, libraries }) => {
               enquireAction: {
                 contact_public_email:
                   contact_public_email || "conference@bad.org.uk",
-                contact_public_phone_number:
-                  contact_public_phone_number || "+1 (123) 456-7890",
+                contact_public_phone_number,
                 form_title: contact_form_title || "Event Information Form",
                 form_body:
                   contact_form_body || `Enquire about ${title.rendered} event.`,
