@@ -3,19 +3,21 @@ import { connect } from "frontity";
 import Card from "./card/card";
 import BlockWrapper from "./blockWrapper";
 import HeroBanner from "./heroBanner";
-import { useAppState } from "../context";
 import SearchContainer from "./searchContainer";
 import { colors } from "../config/imports";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
+import defaultCover from "../img/png/video_default.jpg";
 
 import Loading from "../components/loading";
-import { muiQuery } from "../context";
+import { muiQuery, useAppState } from "../context";
 const VideoArchive = ({ state, actions, libraries }) => {
   const [guidanceCategory, setGuidanceCategory] = useState(null);
   const [postData, setPostData] = useState(null);
   const [heroBannerBlock, setHeroBannerBlock] = useState(null);
   const [filters, setFilters] = useState();
+
+  const { isActiveUser } = useAppState();
 
   const { sm, md, lg, xl } = muiQuery();
 
@@ -284,14 +286,13 @@ const VideoArchive = ({ state, actions, libraries }) => {
     );
   };
   const VideoArchivePost = ({ post }) => {
+    if (post.acf.members & !isActiveUser) return null;
     // GET VIMEO COVER
-    const vimeoCover =
-      "https://badadmin.skylarkdev.co/wp-content/uploads/2022/02/VIDEO-LIBRARY.jpg";
 
     return (
       <Card
         title={post.title.rendered}
-        url={vimeoCover}
+        url={defaultCover}
         body={post.content.rendered}
         publicationDate={post.date}
         videoArchive={post}
@@ -312,7 +313,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
 
     const fetchHeroBanner = async () => {
       const fetchInfo = await fetch(
-        "https://badadmin.skylarkdev.co/wp-json/wp/v2/pages/7051"
+        state.source.url + "/wp-json/wp/v2/pages/7051"
       );
 
       if (fetchInfo.ok) {
@@ -327,7 +328,6 @@ const VideoArchive = ({ state, actions, libraries }) => {
           text_align: "left",
           colour: colors.orange,
           pop_out_text: "true",
-          background_colour: "rgb(239, 125, 33, 0.1)",
           disable_vertical_padding: true,
         });
       }
@@ -344,7 +344,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
   if (!postData) return <Loading />;
   return (
     <>
-      <BlockWrapper>
+      <BlockWrapper background="rgb(239, 125, 33, 0.1)">
         <HeroBanner block={heroBannerBlock} />
       </BlockWrapper>
       <div

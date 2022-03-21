@@ -21,7 +21,7 @@ import FadDirectory from "./fadDirectory";
 import DermGroupe from "./dermGroupe";
 import FundingHeader from "./fundingHeader";
 import FeaturedBanner from "./featuredBanner";
-
+import defaultVideoCover from "../../img/png/video_default.jpg";
 import GeneralModal from "../elections/generalModal";
 import DownloadFileBlock from "../downloadFileBlock";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
@@ -187,9 +187,7 @@ const Card = ({
     if (!videoArchive) return null;
     if (!url) return null;
     console.log("VA FROM CARD", videoArchive);
-    const [vimeoCover, setVimeoCover] = useState(
-      "https://badadmin.skylarkdev.co/wp-content/uploads/2022/02/VIDEO-LIBRARY.jpg"
-    );
+    const [vimeoCover, setVimeoCover] = useState(defaultVideoCover);
     const alt = title || "BAD";
 
     let STYLES = { minHeight: 200, maxHeight: 300 };

@@ -8,6 +8,8 @@ import { colors } from "../config/colors";
 import Image from "@frontity/components/image";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import LockIcon from "@mui/icons-material/Lock";
+import defaultCover from "../img/png/video_default.jpg";
+
 import {
   useAppState,
   useAppDispatch,
@@ -85,9 +87,7 @@ const Video = ({ state, actions, libraries }) => {
   };
   const ServeContent = () => {
     const ServeImage = () => {
-      const [videoCover, setVideoCover] = React.useState(
-        "https://badadmin.skylarkdev.co/wp-content/uploads/2022/02/VIDEO-LIBRARY.jpg"
-      );
+      const [videoCover, setVideoCover] = React.useState(defaultCover);
       const getVimeoCover = async ({ video_url }) => {
         console.log("VIDEOURL", video_url);
         // Example URL: https://player.vimeo.com/video/382577680?h=8f166cf506&color=5b89a3&title=0&byline=0&portrait=0
