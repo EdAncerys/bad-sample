@@ -2,10 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import Loading from "../components/loading";
+import SearchDropDown from "../components/searchDropDown";
 import { colors } from "../config/imports";
 import { setGoToAction } from "../context";
-import SearchContainer from "../components/searchContainer";
 
+import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 // CONTEXT -----------------------------------------------------------
 import { muiQuery, getPILsDataAction } from "../context";
@@ -22,12 +23,14 @@ const PilsArchive = ({ state, actions, libraries }) => {
   // console.log("pageData ", data); // debug
 
   const [searchFilter, setSearchFilter] = useState(null);
+  const [searchInput, setInput] = useState("");
+  const [searchPhrase, setPhrase] = useState("");
   const [pilList, setPilList] = useState(null);
-
-  const searchFilterRef = useRef(true);
+  const useEffectRef = useRef(true);
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+  const ctaHeight = 45;
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
@@ -57,7 +60,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
     setPilList(pilData); // add pill object to data array
 
     return () => {
-      searchFilterRef.current = false; // clean up function
+      useEffectRef.current = false; // clean up function
     };
   }, []);
   // DATA pre FETCH ----------------------------------------------------------------
@@ -78,24 +81,82 @@ const PilsArchive = ({ state, actions, libraries }) => {
   ALPHABET.sort(); // sorts array alphabetically
 
   // HELPERS ----------------------------------------------------------------
-  const handleSearch = () => {
-    const input = searchFilterRef.current.value.toLowerCase();
-    if (!!input) {
-      const filter = pilList.filter(
+  const handleSearch = (e) => {
+    const input = e.target.value.toLowerCase();
+    let filter = [];
+
+    if (input) {
+      filter = pilList.filter(
         (pil) =>
           pil.title.rendered.toLowerCase().includes(input) ||
           pil.content.rendered.toLowerCase().includes(input)
       );
-      // console.log(filter); // debug
+      // ⬇️ convert filter to dropdown object format
+      filter = filter.map((item) => {
+        return {
+          id: item.id,
+          title: item.title.rendered,
+          url: item.link,
+        };
+      });
 
-      setSearchFilter(input);
-      setPilList(filter);
+      // setPilList(filter);
     }
+
+    if (filter.length) {
+      setSearchFilter(filter);
+    } else {
+      setSearchFilter(null);
+    }
+    setInput(input);
   };
 
   const handleClearFilter = () => {
     setSearchFilter(null);
+    setInput("");
+    setPhrase("");
     setPilList(Object.values(state.source.pils));
+  };
+
+  const dropDownHandler = ({ item }) => {
+    // console.log(item); // debug
+    setGoToAction({ path: item.url, actions });
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && e.target.value) {
+      const input = e.target.value.toLowerCase();
+
+      if (input) {
+        let filter = pilList.filter(
+          (pil) =>
+            pil.title.rendered.toLowerCase().includes(input) ||
+            pil.content.rendered.toLowerCase().includes(input)
+        );
+        setPhrase(input);
+        setPilList(filter);
+        setSearchFilter(null);
+      }
+    }
+  };
+
+  const handleSearchPress = () => {
+    // get element input pils-search-input and convert to lowercase
+    const input = document
+      .getElementById("pils-search-input")
+      .value.toLowerCase();
+
+    if (input) {
+      let filter = pilList.filter(
+        (pil) =>
+          pil.title.rendered.toLowerCase().includes(input) ||
+          pil.content.rendered.toLowerCase().includes(input)
+      );
+
+      setPhrase(input);
+      setPilList(filter);
+      setSearchFilter(null);
+    }
   };
 
   // SERVERS --------------------------------------------------------
@@ -177,26 +238,55 @@ const PilsArchive = ({ state, actions, libraries }) => {
     );
   };
 
-  const ServeFilter = () => {
-    const ServeSearchFilter = () => {
-      if (!searchFilter) return null;
+  const ServeSearchButton = () => {
+    return (
+      <div
+        style={{
+          display: "grid",
+          alignItems: "center",
+          paddingLeft: !lg ? `2em` : 0,
+          paddingTop: !lg ? null : "1em",
+        }}
+      >
+        <button type="submit" className="blue-btn" onClick={handleSearchPress}>
+          Search
+        </button>
+      </div>
+    );
+  };
 
-      return (
-        <div className="shadow filter">
-          <div>{searchFilter}</div>
-          <div className="filter-icon" onClick={handleClearFilter}>
-            <CloseIcon
-              style={{
-                fill: colors.darkSilver,
-                padding: 0,
-              }}
-            />
-          </div>
-        </div>
-      );
-    };
+  const ServeSearchFilter = () => {
+    if (!searchPhrase) return null;
 
     return (
+      <div className="shadow filter">
+        <div>{searchPhrase}</div>
+        <div className="filter-icon" onClick={handleClearFilter}>
+          <CloseIcon
+            style={{
+              fill: colors.darkSilver,
+              padding: 0,
+            }}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  const ServeIcon = () => {
+    const searchIcon = <SearchIcon />;
+    const closeIcon = <CloseIcon />;
+    const icon = searchFilter ? closeIcon : searchIcon;
+
+    return <div onClick={handleClearFilter}>{icon}</div>;
+  };
+
+  // RETURN ----------------------------------------------------------------
+  return (
+    <div>
+      <BlockWrapper>
+        <ServeInfo />
+      </BlockWrapper>
       <div
         style={{
           backgroundColor: colors.silverFillTwo,
@@ -207,28 +297,55 @@ const PilsArchive = ({ state, actions, libraries }) => {
       >
         <BlockWrapper>
           <div style={{ padding: `0 ${marginHorizontal}px` }}>
-            <SearchContainer
-              title="Search for Patient Information Leaflets"
-              width="70%"
-              searchFilterRef={searchFilterRef}
-              handleSearch={handleSearch}
-            />
-            <div className="flex" style={{ margin: "0.5em 0" }}>
+            <div style={{ position: "relative", width: "70%" }}>
+              <div className="flex-row">
+                <div
+                  className="flex"
+                  style={{
+                    flex: 1,
+                    height: ctaHeight,
+                    position: "relative",
+                    margin: "auto 0",
+                  }}
+                >
+                  <input
+                    id="pils-search-input"
+                    value={searchInput}
+                    onChange={handleSearch}
+                    onKeyPress={(e) => handleKeyPress(e)}
+                    type="text"
+                    className="form-control input"
+                    placeholder="Search"
+                  />
+                  <div
+                    className="input-group-text toggle-icon-color"
+                    style={{
+                      position: "absolute",
+                      right: 0,
+                      height: ctaHeight,
+                      border: "none",
+                      background: "transparent",
+                      alignItems: "center",
+                      color: colors.darkSilver,
+                      cursor: "pointer",
+                    }}
+                  >
+                    <ServeIcon />
+                  </div>
+                </div>
+                <ServeSearchButton />
+              </div>
+              <SearchDropDown
+                filter={searchFilter}
+                onClickHandler={dropDownHandler}
+              />
+            </div>
+            <div className="flex" style={{ marginTop: "1em" }}>
               <ServeSearchFilter />
             </div>
           </div>
         </BlockWrapper>
       </div>
-    );
-  };
-
-  // RETURN ----------------------------------------------------------------
-  return (
-    <div>
-      <BlockWrapper>
-        <ServeInfo />
-      </BlockWrapper>
-      <ServeFilter />
       <BlockWrapper>
         <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
           <div style={!lg ? styles.container : styles.containerMobile}>
