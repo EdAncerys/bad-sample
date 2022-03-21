@@ -95,6 +95,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
             colour={block.colour}
             shadow
             heroBanner
+            disableCardAnimation
           />
         </div>
       </div>
@@ -125,6 +126,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
               colour={block.colour}
               shadow
               heroBanner
+              disableCardAnimation
             />
           </div>
         </div>
