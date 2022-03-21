@@ -233,10 +233,15 @@ const Navigation = ({ state, actions, libraries }) => {
         if (!featuredBannerOne && !featuredBannerTwo) return null;
 
         const { title, content, acf } = featuredBannerOne || featuredBannerTwo;
+        console.log("acf", acf); // debug
         let isLeft = "35%";
         if (featuredBannerTwo) isLeft = "66.5%";
 
         const isFile = acf.file;
+        let linkPath = acf.link;
+        const wpHost = state.auth.WP_HOST;
+        // strip down trailing host from url
+        if (linkPath.includes(wpHost)) linkPath = linkPath.replace(wpHost, "");
 
         return (
           <div
@@ -255,7 +260,7 @@ const Navigation = ({ state, actions, libraries }) => {
               body={content ? content.rendered : null}
               bodyLimit={4}
               link_label="Read More"
-              link={acf.link}
+              link={linkPath}
               downloadFile={isFile ? { file: isFile } : null} // optional param
               cardHeight="90%"
               colour={colors.white}
