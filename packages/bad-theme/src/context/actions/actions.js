@@ -11,12 +11,12 @@ export const setGoToAction = async ({ path, actions, downloadFile }) => {
     window.open(file.url, "_blank");
   }
   let isExternalLink = true;
-  if (path.includes(pathOne)) isExternalLink = false;
-  if (path.includes(pathTwo)) isExternalLink = false;
+  if (path && path.includes(pathOne)) isExternalLink = false;
+  if (path && path.includes(pathTwo)) isExternalLink = false;
 
-  if (path.includes(`www`) && !path.includes(`http`) && isExternalLink)
+  if (path && path.includes(`www`) && !path.includes(`http`) && isExternalLink)
     return window.open(`https://` + path, "_blank"); // handle external links without https pre fix
-  if (!path.includes(`www`) && !path.includes(`http`) && isExternalLink)
+  if (path && !path.includes(`www`) && !path.includes(`http`) && isExternalLink)
     return actions.router.set(pathTwo + path); // internal link no pre fix
   if (isExternalLink) return window.open(path, "_blank"); // handle external links
 

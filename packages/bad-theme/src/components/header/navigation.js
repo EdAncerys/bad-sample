@@ -19,6 +19,7 @@ const Navigation = ({ state, actions, libraries }) => {
   const useEffectRef = useRef(false);
 
   const MAIN_NAV_LENGTH = 6; // main navigation length config
+  const host = "https://badadmin.skylarkdev.co/";
 
   // active menu slug ref
   const activeMenu = useRef(null);
@@ -126,6 +127,10 @@ const Navigation = ({ state, actions, libraries }) => {
       const ServeSubChildMenu = ({ child_items, parent, slug }) => {
         if (!child_items) return null;
 
+        let linkPath = parent.url;
+        // strip down trailing host from url
+        if (linkPath.includes(host)) linkPath = linkPath.replace(host, "");
+
         return (
           <ul
             id={`${slug}-submenu`}
@@ -164,7 +169,7 @@ const Navigation = ({ state, actions, libraries }) => {
                     parentSlug: parent.slug,
                   })
                 }
-                link={parent.url}
+                link={linkPath}
               >
                 <Html2React html={parent.title} />
               </Link>
@@ -175,6 +180,10 @@ const Navigation = ({ state, actions, libraries }) => {
                 const { title, url, slug, child_items } = item;
 
                 let subChildTitle = title.replace(/’/g, "");
+                let linkPath = url;
+                // strip down trailing host from url
+                if (linkPath.includes(host))
+                  linkPath = linkPath.replace(host, "");
 
                 return (
                   <li key={key} className="flex-row" style={{ width: "100%" }}>
@@ -186,7 +195,7 @@ const Navigation = ({ state, actions, libraries }) => {
                           parentSlug: parentSlug || "more",
                         })
                       }
-                      link={url}
+                      link={linkPath}
                     >
                       <div className="flex">
                         <div className="menu-title">
@@ -278,6 +287,11 @@ const Navigation = ({ state, actions, libraries }) => {
             {child_items.map((item, key) => {
               const { title, url, slug, child_items } = item;
 
+              let linkPath = url;
+              // strip down trailing host from url
+              if (linkPath.includes(host))
+                linkPath = linkPath.replace(host, "");
+
               const ServeMenuArrow = () => {
                 if (!child_items) return null;
 
@@ -325,7 +339,7 @@ const Navigation = ({ state, actions, libraries }) => {
                         parentSlug: parentSlug || "more",
                       })
                     }
-                    link={url}
+                    link={linkPath}
                   >
                     <div className="flex">
                       <div className="menu-title">
@@ -409,7 +423,10 @@ const Navigation = ({ state, actions, libraries }) => {
               featuredBannerTwo = item; // featured menu item
           });
 
-          // console.log("featuredBannerOne", featuredBannerOne); // debug
+          let linkPath = url;
+          // strip down trailing host from url
+          if (linkPath.includes(host)) linkPath = linkPath.replace(host, "");
+          // console.log("url", url); // debug
           // console.log("featuredBannerTwo", featuredBannerTwo); // debug
 
           return (
@@ -436,7 +453,7 @@ const Navigation = ({ state, actions, libraries }) => {
                       parentSlug: slug,
                     })
                   }
-                  link={url}
+                  link={linkPath}
                 >
                   <Html2React html={title} />
                 </Link>
