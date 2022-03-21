@@ -7,9 +7,9 @@ import { setGoToAction } from "../context";
 import SearchContainer from "../components/searchContainer";
 
 import CloseIcon from "@mui/icons-material/Close";
-
-import { muiQuery } from "../context";
-// BLOCK WIDTH WRAPPER -------------------------------------------------------
+// CONTEXT -----------------------------------------------------------
+import { muiQuery, getPILsDataAction } from "../context";
+// BLOCK WIDTH WRAPPER -----------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 
 const PilsArchive = ({ state, actions, libraries }) => {
@@ -31,21 +31,15 @@ const PilsArchive = ({ state, actions, libraries }) => {
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
-    // fetch data via wp API page by page
-    await actions.source.fetch(`/pils/`); // fetch pil archive page content
-    let pilArhive = await state.source.get(`/pils/`);
-    const { totalPages, page, next } = pilArhive; // check if data have multiple pages
-
-    let isThereNextPage = next;
-    while (isThereNextPage) {
-      await actions.source.fetch(isThereNextPage); // fetch next page
-      const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
-      isThereNextPage = nextPage;
+    let pils = state.source.pils;
+    if (!pils) {
+      await getPILsDataAction({ state, actions });
+      pils = state.source.pils;
     }
 
     // if pils not found return
-    if (!state.source.pils) return;
-    let pilData = Object.values(state.source.pils);
+    if (!pils) return;
+    let pilData = Object.values(pils);
 
     // sort pils alphabetically by title
     pilData.sort((a, b) => {

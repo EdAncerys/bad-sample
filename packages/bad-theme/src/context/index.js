@@ -20,6 +20,8 @@ import {
   setCreateAccountModalAction,
   setEnquireAction,
 } from "./actions/navigation";
+import { getPILsDataAction, getGuidelinesDataAction } from "./actions/getCPT";
+import { appSearchAction } from "./actions/appSearch";
 import {
   loginAction,
   logoutAction,
@@ -33,6 +35,7 @@ import {
   getMembershipDataAction,
   handleApplyForMembershipAction,
   validateMembershipFormAction,
+  handleValidateMembershipChangeAction,
 } from "./actions/memberships";
 import { getWpPagesAction } from "./actions/getWpPages";
 import { getTweetsAction } from "./auth/getTweets";
@@ -140,4 +143,8 @@ export {
   getUserDataFromDynamics,
   getInvoiceAction,
   getProofOfMembershipAction,
+  handleValidateMembershipChangeAction,
+  getPILsDataAction,
+  getGuidelinesDataAction,
+  appSearchAction,
 };

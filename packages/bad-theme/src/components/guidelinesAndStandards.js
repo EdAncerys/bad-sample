@@ -10,13 +10,20 @@ import SearchContainer from "./searchContainer";
 import TypeFilters from "./typeFilters";
 
 import CloseIcon from "@mui/icons-material/Close";
-
-import { muiQuery } from "../context";
+// CONTEXT ---------------------------------------------------------------
+import {
+  useAppDispatch,
+  useAppState,
+  muiQuery,
+  getGuidelinesDataAction,
+  setIDFilterAction,
+} from "../context";
 
 const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
   const { sm, md, lg, xl } = muiQuery();
 
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  const dispatch = useAppDispatch();
+  const { idFilter } = useAppState();
 
   const searchFilterRef = useRef(null);
   const currentSearchFilterRef = useRef(null);
@@ -38,21 +45,14 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
-    const path = `/guidelines_standards/`;
-    await actions.source.fetch(path); // fetch CPT guidelines
-
-    const guidelines = state.source.get(path);
-    const { totalPages, page, next } = guidelines; // check if guidelines have multiple pages
-    // fetch guidelines via wp API page by page
-    let isThereNextPage = next;
-    while (isThereNextPage) {
-      await actions.source.fetch(isThereNextPage); // fetch next page
-      const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
-      isThereNextPage = nextPage;
+    let guidelines = state.source.guidelines_standards;
+    if (!guidelines) {
+      await getGuidelinesDataAction({ state, actions });
+      guidelines = state.source.guidelines_standards;
     }
 
     const guideType = Object.values(state.source.guidelines_type);
-    let guideList = Object.values(state.source.guidelines_standards); // add guidelines object to data array
+    let guideList = Object.values(guidelines); // add guidelines object to data array
     // sort guidelines in alphabetically order by title name
     guideList = guideList.sort((a, b) => {
       const nameA = a.title.rendered.toUpperCase();
@@ -69,11 +69,36 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
       searchFilterRef.current = false; // clean up function
     };
   }, []);
+
+  useEffect(() => {
+    // if idFilter is set get to accordion item with that id
+    if (idFilter) {
+      // give DOM time to update & render
+      setTimeout(() => {
+        // get dom element with idFilter
+        const accordion = document.getElementById(idFilter);
+        const accordionBody = document.getElementById(
+          `accordion-body-${idFilter}`
+        );
+
+        // if dom element exists scroll to it & set
+        if (accordionBody) {
+          accordionBody.classList.add("show"); // set it open on load
+          // scroll to accordion item
+          accordion.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      }, 100);
+    }
+  }, []);
   // DATA pre FETCH ----------------------------------------------------------------
   if (!guidelinesList) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
   const handleSearch = () => {
+    // if (idFilter) setIDFilterAction({ dispatch, idFilter: null }); // reset ID for filter
     const input = searchFilterRef.current.value || searchFilter;
     currentSearchFilterRef.current = input;
     let guidelinesList = Object.values(state.source.guidelines_standards);
@@ -94,6 +119,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
         return title || subtitle;
       });
+
       setSearchFilter(input);
       setGuidelinesList(filter);
     }
@@ -128,14 +154,14 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
       });
 
     if (input) {
-      const filter = guidelinesList.filter((item) => {
+      guidelinesList = guidelinesList.filter((item) => {
         const list = item.guidelines_type;
         if (list.includes(input)) return item;
       });
-
-      setTypeFilter(name);
-      setGuidelinesList(filter);
     }
+
+    setTypeFilter(name);
+    setGuidelinesList(guidelinesList);
   };
 
   const handleClearTypeFilter = () => {

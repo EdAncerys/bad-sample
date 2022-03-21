@@ -51,8 +51,7 @@ const ElectionModal = ({
       dispatch,
       enquireAction: {
         contact_public_email: contact_public_email || "harriet@bag.org.uk",
-        contact_public_phone_number:
-          contact_public_phone_number || "+1 (123) 456-7890",
+        contact_public_phone_number,
         form_title: contact_form_title || "Application Form",
         form_body: contact_form_body || `Apply to ${title.rendered} position.`,
         full_name: contact_full_name || true,

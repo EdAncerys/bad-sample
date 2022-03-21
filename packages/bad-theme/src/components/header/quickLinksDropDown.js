@@ -47,7 +47,6 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
         id="quick-link-menu"
         className="dropdown-menu dropdown-menu-end shadow quick-link"
         style={{
-          paddingBottom: `2em`,
           marginTop: `1em`,
           border: "none",
           backgroundColor: colors.lightSilver,

@@ -10,6 +10,7 @@ const SearchDropDown = ({
   filter,
   onClickHandler,
   marginTop,
+  margin,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -21,6 +22,7 @@ const SearchDropDown = ({
 
   return (
     <div
+      className="input"
       style={{
         position: "absolute",
         zIndex: 99,
@@ -28,7 +30,6 @@ const SearchDropDown = ({
         right: 0,
         marginTop: marginTop || 10,
         border: `1px solid ${colors.silver}`,
-        borderRadius: 10,
         backgroundColor: colors.white,
       }}
     >
@@ -44,14 +45,34 @@ const SearchDropDown = ({
           }}
         >
           {filter.map((item, key) => {
+            const { title, type } = item;
+            // console.log("item", item); // debug
+
+            // ⬇️ define subtitle name based on type
+            let typeName = "";
+            if (type === "derm_groups_charity")
+              typeName = "See Dermatology Groups & Charities";
+            if (type === "covid_19") typeName = "See in COVID 19";
+            if (type === "pils") typeName = "See in PILS";
+            if (type === "post") typeName = "See in Posts";
+            if (type === "guidelines_standards")
+              typeName = "See in Guidelines & Standards";
+
             return (
               <div
-                className="title-link-animation"
+                className="flex-row title-link-animation"
                 key={key}
-                style={{ padding: `0.5em 0`, cursor: "pointer" }}
+                style={{
+                  padding: `0.5em 0`,
+                  cursor: "pointer",
+                  flexWrap: "wrap",
+                }}
                 onClick={() => onClickHandler({ item })}
               >
-                <Html2React html={item.title} />
+                <span style={{ paddingRight: `0.5em` }}>
+                  <Html2React html={title} />.
+                </span>
+                {type && <Html2React html={typeName} />}
               </div>
             );
           })}

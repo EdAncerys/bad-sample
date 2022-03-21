@@ -40,9 +40,9 @@ export const setFilterAction = ({ dispatch, filter }) => {
   dispatch({ type: "SET_FILTER_ACTION", payload: filter });
 };
 
-export const setIDFilterAction = ({ dispatch, filter }) => {
+export const setIDFilterAction = ({ dispatch, idFilter }) => {
   console.log("setIDFilterAction triggered"); //debug
-  dispatch({ type: "SET_ID_FILTER_ACTION", payload: filter });
+  dispatch({ type: "SET_ID_FILTER_ACTION", payload: idFilter });
 };
 
 export const setFetchAction = ({ dispatch, isFetching }) => {

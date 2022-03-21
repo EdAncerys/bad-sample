@@ -38,6 +38,8 @@ const FadDirectory = ({ state, actions, libraries, fadDirectory }) => {
             height: IMG_WIDTH,
             width: IMG_WIDTH,
             borderRadius: "50%",
+            overflow: "hidden",
+            border: `1px solid ${colors.silver}`,
           }}
         >
           <Image

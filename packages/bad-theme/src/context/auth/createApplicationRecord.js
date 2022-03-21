@@ -43,7 +43,7 @@ export const createApplicationRecord = async ({
     // console.log("createApplicationRecord result", result); // debug
 
     if (result.success) {
-      // ⏬⏬  getting new user record ⏬⏬
+      // ⏬  getting new user record ⏬
       const applicationData = await getApplicationRecord({ jwt, contactid });
 
       await setUserStoreAction({

@@ -100,6 +100,10 @@ export const MENU_DATA = [
     title: "SHD Journal",
     url: "https://onlinelibrary.wiley.com/journal/2690442x?gclid=Cj0KCQiAu62QBhC7ARIsALXijXT-nKH8mRIKSZ4IT5dxjWslV4XzyQAxYppPvYNY4K-b9GR6IDtR7X0aAq8hEALw_wcB",
   },
+  {
+    title: "BAD Video Library",
+    url: "/videos/",
+  },
 ];
 
 export const ALPHABET = [

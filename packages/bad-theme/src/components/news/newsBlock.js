@@ -52,7 +52,8 @@ const NewsBlock = ({
       // get e-circular category id
       const eCircularCat = catList.filter((item) => item.name === "E-Circular");
       // get e-circular category id
-      const eCircularCatId = eCircularCat[0].id;
+      let eCircularCatId = null;
+      if (eCircularCat[0]) eCircularCatId = eCircularCat[0].id;
 
       setECircularCatId(eCircularCatId);
     }
