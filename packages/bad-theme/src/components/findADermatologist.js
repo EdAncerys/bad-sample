@@ -264,9 +264,7 @@ const FindADermatologist = ({ state, block }) => {
       <div
         style={{
           backgroundColor: colors.silver,
-          padding: 10,
           padding: MARGIN,
-          marginTop: 20,
         }}
       >
         <div
@@ -460,12 +458,16 @@ const FindADermatologist = ({ state, block }) => {
     );
   };
   return (
-    <BlockWrapper>
-      <ServeSearchOptions />
-      <ServeYouSearched />
-      <ServeMap />
-      <ServeAccordionListOfDerms />
-    </BlockWrapper>
+    <>
+      <BlockWrapper background={colors.silver}>
+        <ServeSearchOptions />
+      </BlockWrapper>
+      <BlockWrapper>
+        <ServeYouSearched />
+        <ServeMap />
+        <ServeAccordionListOfDerms />
+      </BlockWrapper>
+    </>
   );
 };
 const styles = {
