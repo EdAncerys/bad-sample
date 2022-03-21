@@ -28,6 +28,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   const [isReady, SetReady] = useState(null);
   const [filter, setFilter] = useState(null);
+  const [searchFilter, setSearchFilter] = useState("");
   const searchRef = useRef("");
 
   const ctaHeight = 45;
@@ -48,6 +49,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
   // HANDLERS --------------------------------------------
   const handleSearchLookup = async () => {
     const input = searchRef.current.value.toLowerCase();
+    setSearchFilter(input);
 
     try {
       const result = await appSearchAction({ query: input });
@@ -83,6 +85,12 @@ const HeaderActions = ({ state, actions, libraries }) => {
     path = path.replace(wpPath, ""); // strip down wp path
     // ⬇️ redirect to url with path ⬇️
     setGoToAction({ path, actions });
+  };
+
+  const clearSearchHandler = () => {
+    searchRef.current.value = "";
+    setFilter(null);
+    setSearchFilter("");
   };
 
   // SERVERS ----------------------------------------------------
@@ -126,18 +134,9 @@ const HeaderActions = ({ state, actions, libraries }) => {
   const ServeIcon = () => {
     const searchIcon = <SearchIcon />;
     const closeIcon = <CloseIcon />;
-    const icon = filter ? closeIcon : searchIcon;
+    const icon = searchFilter ? closeIcon : searchIcon;
 
-    return (
-      <div
-        onClick={() => {
-          searchRef.current.value = "";
-          setFilter(null);
-        }}
-      >
-        {icon}
-      </div>
-    );
+    return <div onClick={clearSearchHandler}>{icon}</div>;
   };
 
   return (
@@ -173,6 +172,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
               >
                 <input
                   ref={searchRef}
+                  value={searchFilter}
                   onChange={handleSearchLookup}
                   type="text"
                   className="form-control input"
