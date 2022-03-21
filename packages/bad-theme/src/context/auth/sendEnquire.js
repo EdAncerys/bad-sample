@@ -18,7 +18,7 @@ export const sendEmailEnquireAction = async ({
   const jwt = await authenticateAppAction({ state });
 
   try {
-    if (!recipients) throw new Error("No Receipients Provided");
+    if (!recipients) throw new Error("No Recipients Provided");
 
     let recipientsArray = [];
     recipients.map((item) => {
@@ -27,16 +27,18 @@ export const sendEmailEnquireAction = async ({
 
     const recipientsList = recipientsArray.toString();
 
-    let fileAttachmentList = [];
+    let fileAttachmentList = null;
     if (attachments) fileAttachmentList = Object.values(attachments); // add attachments to array
 
     const form = new FormData(); // create form object to sent email content & attachments
     form.append("email", recipientsList);
     form.append("template", "SampleEmailTemplate");
     form.append("data", `${formData}`);
-    fileAttachmentList.map((file) => {
-      form.append("attachments", file, file.name);
-    });
+    // map files if attachments are provided
+    if (fileAttachmentList)
+      fileAttachmentList.map((file) => {
+        form.append("attachments", file, file.name);
+      });
 
     const requestOptions = {
       method: "POST",

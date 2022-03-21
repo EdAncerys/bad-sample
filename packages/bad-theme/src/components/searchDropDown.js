@@ -16,6 +16,7 @@ const SearchDropDown = ({
 
   // filter value are one layer deep object with title & link { title: "", link: "" }
   if (!filter) return null;
+  console.log("filter", filter); // debug
 
   const ctaHeight = 45;
   const BANNER_HEIGHT = state.theme.bannerHeight;

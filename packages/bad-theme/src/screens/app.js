@@ -56,6 +56,7 @@ import {
   getWPMenu,
   setPlaceholderAction,
   setIDFilterAction,
+  getLeadershipTeamData,
 } from "../context";
 
 const App = ({ state, actions }) => {
@@ -86,6 +87,8 @@ const App = ({ state, actions }) => {
     await authCookieActionAfterCSR({ state, dispatch });
     // ⬇️  pre-fetch app menu from wp
     await getWPMenu({ state, actions });
+    // ⬇️  get leadership data
+    await getLeadershipTeamData({ state, actions });
     // get current time & compare how long pre-fetch took before  setting placeholder
     const timeTaken = new Date().getTime() - currentTime;
     // if time taken is less than 3s await for remaining time before proceeding
