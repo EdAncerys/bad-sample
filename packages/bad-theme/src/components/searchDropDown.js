@@ -46,9 +46,15 @@ const SearchDropDown = ({
         >
           {filter.map((item, key) => {
             const { title, type } = item;
-            // define subtitle options
-            let typeName = "Type Name";
+            // console.log("item", item); // debug
+
+            // ⬇️ define subtitle name based on type
+            let typeName = "";
+            if (type === "derm_groups_charity")
+              typeName = "See Dermatology Groups & Charities";
+            if (type === "covid_19") typeName = "See in COVID 19";
             if (type === "pils") typeName = "See in PILS";
+            if (type === "post") typeName = "See in Posts";
             if (type === "guidelines_standards")
               typeName = "See in Guidelines & Standards";
 

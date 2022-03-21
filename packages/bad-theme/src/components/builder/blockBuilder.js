@@ -167,8 +167,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
             </div>
           );
 
-        // if (acf_fc_layout === "pils_and_guidelines_search_block")
-        if (acf_fc_layout === "guideline_search_block")
+        if (acf_fc_layout === "pils_and_guidelines_search_block")
           return (
             <BlockWrapper key={key + 1} background={block.background_colour}>
               <ServeBlockTitle acf_fc_layout={acf_fc_layout} />

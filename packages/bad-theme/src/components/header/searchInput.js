@@ -3,7 +3,6 @@ import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 import SearchContainer from "../searchContainer";
-import SearchDropDown from "../searchDropDown";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,

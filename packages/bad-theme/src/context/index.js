@@ -21,6 +21,7 @@ import {
   setEnquireAction,
 } from "./actions/navigation";
 import { getPILsDataAction, getGuidelinesDataAction } from "./actions/getCPT";
+import { appSearchAction } from "./actions/appSearch";
 import {
   loginAction,
   logoutAction,
@@ -145,4 +146,5 @@ export {
   handleValidateMembershipChangeAction,
   getPILsDataAction,
   getGuidelinesDataAction,
+  appSearchAction,
 };
