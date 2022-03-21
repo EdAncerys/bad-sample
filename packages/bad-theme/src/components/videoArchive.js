@@ -343,8 +343,9 @@ const VideoArchive = ({ state, actions, libraries }) => {
   if (!postData) return <Loading />;
   return (
     <>
-      <HeroBanner block={heroBannerBlock} />
-
+      <BlockWrapper>
+        <HeroBanner block={heroBannerBlock} />
+      </BlockWrapper>
       <div
         style={{
           backgroundColor: colors.lightSilver,
