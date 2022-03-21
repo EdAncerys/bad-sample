@@ -175,8 +175,8 @@ const CardBody = ({
             textTransform: "uppercase",
             fontSize: 12,
             color: colors.darkSilver,
+            textAlign: "center",
           }}
-          className="primary-title"
         >
           {name}
         </div>

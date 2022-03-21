@@ -16,9 +16,11 @@ import {
 } from "../context";
 import { handleGetCookie } from "../helpers/cookie";
 import PaymentModal from "./dashboard/paymentModal";
-const Video = ({ state, actions }) => {
+const Video = ({ state, actions, libraries }) => {
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
+
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { isActiveUser } = useAppState();
   const dispatch = useAppDispatch();
@@ -75,7 +77,9 @@ const Video = ({ state, actions }) => {
   const ServeTitle = () => {
     return (
       <div style={{ marginTop: "1em", marginBottom: "1em" }}>
-        <h1>{post.title.rendered}</h1>
+        <h1>
+          <Html2React html={post.title.rendered} />
+        </h1>
       </div>
     );
   };
@@ -146,11 +150,14 @@ const Video = ({ state, actions }) => {
       const ServePrice = () => {
         if (!videoStatus || !isActiveUser)
           return (
-            <div
-              className="primary-title"
-              style={{ fontSize: 20, display: "flex", alignItems: "center" }}
-            >
-              {post.acf.private ? "Login to watch or buy" : "Free to watch"}
+            <div>
+              <div
+                className="primary-title"
+                style={{ fontSize: 20, display: "flex", alignItems: "center" }}
+              >
+                {post.acf.private ? "Login to watch or buy" : "Free to watch"}
+              </div>
+              {post.acf.private && `£${post.acf.price}`}
             </div>
           );
         if (isActiveUser && post.acf.private && videoStatus === "locked")
@@ -214,6 +221,7 @@ const Video = ({ state, actions }) => {
         colour={colors.orange}
         onClick={() => setGoToAction({ path: post.link, actions })}
         shareToSocials
+        disableCardAnimation
       />
     );
   };
