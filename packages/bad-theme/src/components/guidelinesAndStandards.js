@@ -98,7 +98,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handleSearch = () => {
-    // if (idFilter) setIDFilterAction({ dispatch, idFilter: null }); // reset ID filter
+    // if (idFilter) setIDFilterAction({ dispatch, idFilter: null }); // reset ID for filter
     const input = searchFilterRef.current.value || searchFilter;
     currentSearchFilterRef.current = input;
     let guidelinesList = Object.values(state.source.guidelines_standards);
@@ -119,6 +119,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
         return title || subtitle;
       });
+
       setSearchFilter(input);
       setGuidelinesList(filter);
     }
@@ -158,7 +159,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
         if (list.includes(input)) return item;
       });
     }
-    console.log(guidelinesList);
+
     setTypeFilter(name);
     setGuidelinesList(guidelinesList);
   };

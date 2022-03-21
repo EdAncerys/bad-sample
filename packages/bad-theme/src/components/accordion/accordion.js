@@ -37,8 +37,9 @@ const AccordionComponent = ({
     approved_bad_members_only,
     add_search_function,
   } = block;
+  // console.log("accordion_item", accordion_item); //debug
 
-  const [searchFilter, setSearchFilter] = useState(accordion_item);
+  const [searchFilter, setSearchFilter] = useState(null);
   const [searchInput, setInput] = useState(null);
   const searchFilterRef = useRef(null);
 
@@ -51,7 +52,12 @@ const AccordionComponent = ({
   let isForBADMembersOnly = false;
   if (approved_bad_members_only && !isBADApproved) isForBADMembersOnly = true;
 
-  if (!accordion_item || isForBADMembersOnly) return null; // defensive programming
+  useLayoutEffect(() => {
+    // ⬇️ re-set accordion data state on data change
+    setSearchFilter(accordion_item);
+  }, [accordion_item]);
+
+  if (!searchFilter || isForBADMembersOnly) return null; // defensive programming
 
   // HANDLERS ---------------------------------------------
   const handleSearch = () => {
