@@ -478,6 +478,7 @@ const Event = ({ state, actions, libraries }) => {
     const currentPostGrade = event.event_grade[0];
     const currentPostLocation = event.event_location[0];
     const currentPostSpecialty = event.event_specialty[0];
+    const eventListIds = [];
 
     // get category name from category list
     let gradeName = "Grade";
@@ -490,6 +491,10 @@ const Event = ({ state, actions, libraries }) => {
       // return events that not current event id & include the same category  as the current event
       return event.id !== id && event.event_grade.includes(currentPostGrade);
     });
+    // map through relatedLocationList and get ids of the events
+    relatedGradeList.map((event) => {
+      eventListIds.push(event.id);
+    });
     // get latest events from the list
     relatedGradeList = relatedGradeList.slice(0, 3);
 
@@ -501,9 +506,14 @@ const Event = ({ state, actions, libraries }) => {
     if (locationName[0]) locationName = locationName[0].name;
     // get list of events where location is the same as the current event
     let relatedLocationList = eventList.filter((event) => {
-      // return events that not current event id & include the same category  as the current event
-      return event.id !== id && event.event_grade.includes(currentPostGrade);
+      // return events that not current event id & include the same category  as the current event & not already in the list of ids
+      return (
+        event.id !== id &&
+        event.event_location.includes(currentPostLocation) &&
+        !eventListIds.includes(event.id)
+      );
     });
+
     // get latest events from the list
     relatedLocationList = relatedLocationList.slice(0, 3);
 
