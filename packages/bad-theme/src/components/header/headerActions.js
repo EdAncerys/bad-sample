@@ -131,7 +131,6 @@ const HeaderActions = ({ state, actions, libraries }) => {
     return (
       <div
         onClick={() => {
-          setValue(null);
           searchRef.current.value = "";
           setFilter(null);
         }}
