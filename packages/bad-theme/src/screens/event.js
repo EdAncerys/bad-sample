@@ -154,7 +154,7 @@ const Event = ({ state, actions, libraries }) => {
     const alt = title.rendered || "BAD";
 
     return (
-      <div style={{ width: "100%", height: 350 }}>
+      <div style={{ width: "100%", height: 350, backgroundColor: "white" }}>
         <Image
           src={image}
           alt={alt}
@@ -297,13 +297,18 @@ const Event = ({ state, actions, libraries }) => {
     // dont display component if event isArchive
     if (isArchive) return null;
     const ServeInformationForUser = () => {
-      console.log("ACTIVE USERO", isActiveUser);
       if (registration_type === "events_force" && !isActiveUser) {
-        return "Please login to your BAD account and use your registered email address for signing up to this event, this will enable us to link your registration to your BAD account";
+        return (
+          <div style={{ padding: "1em 0" }}>
+            "Please login to your BAD account and use your registered email
+            address for signing up to this event, this will enable us to link
+            your registration to your BAD account"
+          </div>
+        );
       }
       if (registration_type === "events_force" && isActiveUser) {
         return (
-          <div>
+          <div style={{ padding: "1em 0" }}>
             Please ensure you register for this event using your
             <span className="primary-title">
               {" " + isActiveUser.emailaddress1}
@@ -478,6 +483,7 @@ const Event = ({ state, actions, libraries }) => {
     const currentPostGrade = event.event_grade[0];
     const currentPostLocation = event.event_location[0];
     const currentPostSpecialty = event.event_specialty[0];
+    const eventListIds = [];
 
     // get category name from category list
     let gradeName = "Grade";
@@ -490,6 +496,10 @@ const Event = ({ state, actions, libraries }) => {
       // return events that not current event id & include the same category  as the current event
       return event.id !== id && event.event_grade.includes(currentPostGrade);
     });
+    // map through rendered event list and get ids of the events
+    relatedGradeList.map((event) => {
+      eventListIds.push(event.id);
+    });
     // get latest events from the list
     relatedGradeList = relatedGradeList.slice(0, 3);
 
@@ -501,9 +511,14 @@ const Event = ({ state, actions, libraries }) => {
     if (locationName[0]) locationName = locationName[0].name;
     // get list of events where location is the same as the current event
     let relatedLocationList = eventList.filter((event) => {
-      // return events that not current event id & include the same category  as the current event
-      return event.id !== id && event.event_grade.includes(currentPostGrade);
+      // return events that not current event id & include the same category  as the current event & not already in the list of ids
+      return (
+        event.id !== id &&
+        event.event_location.includes(currentPostLocation) &&
+        !eventListIds.includes(event.id)
+      );
     });
+
     // get latest events from the list
     relatedLocationList = relatedLocationList.slice(0, 3);
 
@@ -567,7 +582,7 @@ const Event = ({ state, actions, libraries }) => {
     if (!relatedGradeList.length && !relatedLocationList.length) return null;
 
     return (
-      <div style={{ marginBottom: "2em" }}>
+      <div style={{ marginBottom: "2em", backgroundColor: "white" }}>
         <div className="shadow" style={{ padding: "1em" }}>
           <div
             className="primary-title"
@@ -606,7 +621,12 @@ const Event = ({ state, actions, libraries }) => {
         </div>
       </div>
 
-      <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
+      <div
+        style={{
+          padding: `${marginVertical}px ${marginHorizontal}px`,
+          backgroundColor: colors.darkSilver,
+        }}
+      >
         <RowButton
           block={{
             title: "If you would like more information please contact us",

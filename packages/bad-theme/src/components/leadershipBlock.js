@@ -19,6 +19,7 @@ const LeadershipBlock = ({ state, actions, block }) => {
     // pre fetch leadership_team data
     let iteration = 0;
     let data = state.source.leadership_team;
+
     while (!data) {
       // if iteration is greater than 10, break
       if (iteration > 10) break;
@@ -28,6 +29,7 @@ const LeadershipBlock = ({ state, actions, block }) => {
       data = state.source.leadership_team;
       iteration++;
     }
+
     // if !data then break
     if (!data) return;
 
@@ -41,7 +43,7 @@ const LeadershipBlock = ({ state, actions, block }) => {
     return () => {
       mountedRef.current = false; // clean up function
     };
-  }, []);
+  }, [state.source.leadership_team]);
 
   if (!leadershipList) return <Loading />;
 
