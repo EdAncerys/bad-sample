@@ -328,6 +328,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
           colour: colors.orange,
           pop_out_text: "true",
           background_colour: "rgb(239, 125, 33, 0.1)",
+          disable_vertical_padding: true,
         });
       }
     };

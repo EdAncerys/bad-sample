@@ -215,6 +215,7 @@ const Video = ({ state, actions }) => {
   const RelatedVideos = () => {
     const videos_list = Object.values(state.source.videos);
     const related_videos_to_show = videos_list.slice(0, 2);
+    if (!state.source.videos) return null;
     return related_videos_to_show.map((vid) => {
       if (vid.id === post.id) vid = videos_list[2];
       return (
