@@ -314,11 +314,37 @@ const Event = ({ state, actions, libraries }) => {
       }
       return null;
     };
+
+    const handleRegistrationClick = () => {
+      if (
+        registration_type === "events_force" ||
+        registration_type === "external"
+      ) {
+        location.href = registration_page_link;
+      }
+      if (registration_type === "email") {
+        setEnquireAction({
+          dispatch,
+          enquireAction: {
+            contact_public_email: "conference@bad.org.uk",
+            form_title: register_form_title || "Event Contact Form",
+            form_body:
+              register_form_body || `Register for ${title.rendered} event.`,
+            subject: `Registration for ${title.rendered} event.`,
+            full_name: register_full_name || true,
+            email_address: register_email || true,
+            phone_number: register_phone_number || true,
+            recipients: state.contactList.defaultContactList,
+            registerForEvent: title.rendered,
+          },
+        });
+      }
+    };
     return (
       <div
         className="flex"
         style={{
-          // backgroundColor: colors.silverFillOne, // optional background color
+          // backgroundColor: colors.lightSilver, // optional background color
           justifyContent: "center",
           padding: `2em`,
           margin: `0`,
@@ -327,7 +353,7 @@ const Event = ({ state, actions, libraries }) => {
         }}
       >
         <ServeInformationForUser />
-        <a
+        <button
           className="blue-btn"
           style={{
             backgroundColor: colors.primary,
@@ -336,10 +362,10 @@ const Event = ({ state, actions, libraries }) => {
             width: 200,
             marginTop: 10,
           }}
-          href={registration_page_link}
+          onClick={handleRegistrationClick}
         >
           Register for Event
-        </a>
+        </button>
       </div>
     );
   };
@@ -559,7 +585,7 @@ const Event = ({ state, actions, libraries }) => {
 
   return (
     <BlockWrapper>
-      <div style={{ backgroundColor: colors.white }}>
+      <div style={{ backgroundColor: colors.silverFillOne }}>
         <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
           <div style={!lg ? styles.container : styles.containerMobile}>
             <div>

@@ -84,6 +84,14 @@ const EnquireModal = ({ state, actions, libraries }) => {
         message,
         userData: isActiveUser,
       };
+    if (enquireAction.registerForEvent)
+      formData = {
+        subject,
+        fullName,
+        email,
+        phoneNumber,
+        userData: isActiveUser,
+      };
     const recipients = enquireAction.recipients;
     // console.log("formData", formData); // debug
     // console.log("recipients", recipients); // debug
@@ -104,6 +112,14 @@ const EnquireModal = ({ state, actions, libraries }) => {
           dispatch,
           isError: {
             message: `Hospital change request to ${selectedHospital} submitted successfully.`,
+          },
+        });
+
+      if (enquireAction.registerForEvent)
+        setErrorAction({
+          dispatch,
+          isError: {
+            message: `You have successfully registered for ${enquireAction.registerForEvent}.`,
           },
         });
     } catch (error) {
@@ -187,7 +203,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
         style={{ justifyContent: "flex-start", padding: `1em 0 0` }}
       >
         <div className="blue-btn" onClick={handleContactFormSubmit}>
-          Submit
+          {enquireAction.registerForEvent ? "Register" : "Submit"}
         </div>
       </Modal.Footer>
     );
@@ -298,7 +314,10 @@ const EnquireModal = ({ state, actions, libraries }) => {
         if (!enquireAction.subject) return null;
 
         return (
-          <div style={styles.inputContainer}>
+          <div
+            style={styles.inputContainer}
+            hidden={enquireAction.registerForEvent}
+          >
             <label className="form-label">Subject</label>
             <input
               id={`subject-${uniqueId}`}
