@@ -119,7 +119,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
         setErrorAction({
           dispatch,
           isError: {
-            message: `You have successfully registered for ${enquireAction.registerForEvent}.`,
+            message: `You have successfully registered your interest for ${enquireAction.registerForEvent}. We will be in touch soon.`,
           },
         });
     } catch (error) {
