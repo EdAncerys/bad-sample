@@ -171,7 +171,7 @@ const ApplicationList = ({ state, actions, libraries }) => {
                   }
 
                   console.log("isSubmitted", isSubmitted);
-                  setStatus(isSubmitted);
+                  setStatus(isSubmitted); // set status to submitted
                 } catch (error) {
                   console.log(error);
                 }

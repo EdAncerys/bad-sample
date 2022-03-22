@@ -464,7 +464,7 @@ const FindADermatologist = ({ state, block }) => {
     return (
       <div
         className="primary-title"
-        style={{ fontSize: 25, marginTop: 10, marginBottom: 10 }}
+        style={{ fontSize: 24, marginTop: 10, marginBottom: 10 }}
       >
         You searched for "{query.value.toUpperCase()}"
       </div>

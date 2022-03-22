@@ -20,6 +20,7 @@ import {
   setGoToAction,
   appSearchAction,
   setAppSearchDataAction,
+  setAppSearchPhraseAction,
 } from "../../context";
 
 const HeaderActions = ({ state, actions, libraries }) => {
@@ -97,12 +98,19 @@ const HeaderActions = ({ state, actions, libraries }) => {
     setSearchFilter("");
   };
 
-  const takeToSearchHandler = ({ filter }) => {
+  const takeToSearchHandler = () => {
     // set search data in context state
     setAppSearchDataAction({ dispatch, appSearchData: filter });
+    setAppSearchPhraseAction({ dispatch, appSearchPhrase: searchFilter });
+    clearSearchHandler(); // clear search input
     // ⬇️ redirect to url with path ⬇️
     setGoToAction({ path: "/search/", actions });
-    clearSearchHandler(); // clear search input
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && e.target.value) {
+      takeToSearchHandler();
+    }
   };
 
   // SERVERS ----------------------------------------------------
@@ -191,6 +199,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
                   ref={searchRef}
                   value={searchFilter}
                   onChange={handleSearchLookup}
+                  onKeyPress={(e) => handleKeyPress(e)}
                   type="text"
                   className="form-control input"
                   placeholder="Search"

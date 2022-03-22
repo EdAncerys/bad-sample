@@ -94,12 +94,6 @@ const TypeFilters = ({
   };
 
   const ServeFilterMobile = () => {
-    const getFilterName = () => {
-      filters.filter((item) => {
-        return item.id === 86;
-      });
-    };
-    console.log(filters);
     return (
       <div className="flex-row" style={{ flexWrap: "wrap" }}>
         <ServeAllFilter />
@@ -137,27 +131,6 @@ const TypeFilters = ({
             })}
           </Dropdown.Menu>
         </Dropdown>
-        {/* {filters.map((type, key) => {
-          return (
-            <div
-              key={key}
-              className="shadow filter-action"
-              onClick={() => handleSetTypeFilter({ id: type.id })}
-              style={{
-                backgroundColor:
-                  typeFilterRef.current === type.id
-                    ? colors.primary
-                    : colors.white,
-                color:
-                  typeFilterRef.current === type.id
-                    ? colors.white
-                    : colors.softBlack,
-              }}
-            >
-              <Html2React html={type.name} />
-            </div>
-          );
-        })} */}
       </div>
     );
   };

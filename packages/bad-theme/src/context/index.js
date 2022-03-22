@@ -4,6 +4,7 @@ import {
   setLinkWrapperAction,
   setFilterAction,
   setAppSearchDataAction,
+  setAppSearchPhraseAction,
   setFetchAction,
   setErrorAction,
   setApplicationDataAction,
@@ -151,4 +152,5 @@ export {
   appSearchAction,
   getLeadershipTeamData,
   setAppSearchDataAction,
+  setAppSearchPhraseAction,
 };
