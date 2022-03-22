@@ -9,8 +9,9 @@ const SearchDropDown = ({
   libraries,
   filter,
   onClickHandler,
+  actionHandler,
   marginTop,
-  margin,
+  isAppSearch,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -45,6 +46,16 @@ const SearchDropDown = ({
             overflow: "auto",
           }}
         >
+          {isAppSearch && (
+            <div
+              className="flex transparent-btn"
+              style={{ padding: `0.5em 0`, cursor: "pointer" }}
+              onClick={() => actionHandler({ filter })}
+            >
+              See All Results
+            </div>
+          )}
+
           {filter.map((item, key) => {
             const { title, type } = item;
             // console.log("item", item); // debug

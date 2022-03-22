@@ -3,6 +3,7 @@ import {
   setGoToAction,
   setLinkWrapperAction,
   setFilterAction,
+  setAppSearchDataAction,
   setFetchAction,
   setErrorAction,
   setApplicationDataAction,
@@ -149,4 +150,5 @@ export {
   getGuidelinesDataAction,
   appSearchAction,
   getLeadershipTeamData,
+  setAppSearchDataAction,
 };

@@ -40,6 +40,11 @@ export const setFilterAction = ({ dispatch, filter }) => {
   dispatch({ type: "SET_FILTER_ACTION", payload: filter });
 };
 
+export const setAppSearchDataAction = ({ dispatch, appSearchData }) => {
+  console.log("setFilterAction triggered"); //debug
+  dispatch({ type: "SET_APP_SEARCH_DATA_ACTION", payload: appSearchData });
+};
+
 export const setIDFilterAction = ({ dispatch, idFilter }) => {
   console.log("setIDFilterAction triggered"); //debug
   dispatch({ type: "SET_ID_FILTER_ACTION", payload: idFilter });

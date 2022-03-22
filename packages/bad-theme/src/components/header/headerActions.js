@@ -11,6 +11,7 @@ import Loading from "../../components/loading";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
+import CircularProgress from "@mui/material/CircularProgress";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -18,6 +19,7 @@ import {
   setLoginModalAction,
   setGoToAction,
   appSearchAction,
+  setAppSearchDataAction,
 } from "../../context";
 
 const HeaderActions = ({ state, actions, libraries }) => {
@@ -28,6 +30,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   const [isReady, SetReady] = useState(null);
   const [filter, setFilter] = useState(null);
+  const [isFetching, setFetching] = useState(null);
   const [searchFilter, setSearchFilter] = useState("");
   const searchRef = useRef("");
 
@@ -52,16 +55,12 @@ const HeaderActions = ({ state, actions, libraries }) => {
     setSearchFilter(input);
 
     try {
+      setFetching(true);
       const result = await appSearchAction({ state, query: input });
-      console.log(result); // debug
 
-      // ⬇️ set data search with request
       if (result && result.length > 0) {
-        // set data to match dropdown format
+        // ⬇️  set data to match dropdown format
         const data = result.map((item) => {
-          // ⬇️ filter empty content from search results
-          // if (item.acf && !item.acf.blocks && item) return null;
-
           return {
             id: item.id,
             title: item.title.rendered,
@@ -70,13 +69,14 @@ const HeaderActions = ({ state, actions, libraries }) => {
           };
         });
 
-        // set data to state
         setFilter(data);
       } else {
         setFilter(null);
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setFetching(false);
     }
   };
 
@@ -95,6 +95,14 @@ const HeaderActions = ({ state, actions, libraries }) => {
     searchRef.current.value = "";
     setFilter(null);
     setSearchFilter("");
+  };
+
+  const takeToSearchHandler = ({ filter }) => {
+    // set search data in context state
+    setAppSearchDataAction({ dispatch, appSearchData: filter });
+    // ⬇️ redirect to url with path ⬇️
+    setGoToAction({ path: "/search/", actions });
+    clearSearchHandler(); // clear search input
   };
 
   // SERVERS ----------------------------------------------------
@@ -139,6 +147,11 @@ const HeaderActions = ({ state, actions, libraries }) => {
     const searchIcon = <SearchIcon />;
     const closeIcon = <CloseIcon />;
     const icon = searchFilter ? closeIcon : searchIcon;
+
+    if (isFetching)
+      return (
+        <CircularProgress color="inherit" style={{ width: 25, height: 25 }} />
+      );
 
     return <div onClick={clearSearchHandler}>{icon}</div>;
   };
@@ -201,6 +214,8 @@ const HeaderActions = ({ state, actions, libraries }) => {
               <SearchDropDown
                 filter={filter}
                 onClickHandler={redirectHandler}
+                actionHandler={takeToSearchHandler}
+                isAppSearch
               />
             </div>
 

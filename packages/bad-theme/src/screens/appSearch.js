@@ -5,17 +5,29 @@ import { colors } from "../config/imports";
 import Loading from "../components/loading";
 import DownloadFileBlock from "../components/downloadFileBlock";
 
-import { muiQuery } from "../context";
 import ScrollTop from "../components/scrollTop";
+import BlockBuilder from "../components/builder/blockBuilder";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
+// CONTEXT ----------------------------------------------------------------
+import {
+  useAppDispatch,
+  useAppState,
+  setGoToAction,
+  muiQuery,
+} from "../context";
 
-const Pils = ({ state, actions, libraries }) => {
+const AppSearch = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
+
+  const dispatch = useAppDispatch();
+  const { appSearchData } = useAppState();
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
-  const pil = state.source[data.type][data.id];
+  const page = state.source[data.type][data.id];
+  const wpBlocks = page.acf.blocks;
+  console.log("page", page); // debug
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -28,10 +40,11 @@ const Pils = ({ state, actions, libraries }) => {
     setPosition(true);
   }, []);
 
-  if (!pil || !position) return <Loading />;
+  if (!page || !position) return <Loading />;
+
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
-    if (!pil.title) return null;
+    if (!page.title) return null;
 
     return (
       <div className="flex">
@@ -44,16 +57,14 @@ const Pils = ({ state, actions, libraries }) => {
             borderBottom: `5px solid ${colors.danger}`,
           }}
         >
-          <Html2React html={pil.title.rendered} />
+          <Html2React html={page.title.rendered} />
         </div>
       </div>
     );
   };
 
-  const ServeBody = () => {
-    if (!pil.content) return null;
-    const bodyLength = pil.content.rendered.length;
-    console.log("body length: ", bodyLength); // debug
+  const ServeSearchList = () => {
+    if (!appSearchData) return null;
 
     return (
       <div
@@ -63,35 +74,41 @@ const Pils = ({ state, actions, libraries }) => {
           padding: `2em 0`,
         }}
       >
-        <Html2React html={pil.content.rendered} />
-        {bodyLength > 2500 && <ScrollTop />}
-      </div>
-    );
-  };
+        {appSearchData.map((item, index) => {
+          console.log(item); // debug
 
-  const ServeDownload = () => {
-    if (!pil.acf) return null;
+          return (
+            <div
+              key={index}
+              style={{
+                marginBottom: `${marginVertical}px`,
+              }}
+            ></div>
+          );
+        })}
 
-    return (
-      <div style={{ margin: `3em 0 1em` }}>
-        <DownloadFileBlock block={pil.acf} disableMargin />
+        {/* <Html2React html={page.content.rendered} /> */}
+        {/* {bodyLength > 2500 && <ScrollTop />} */}
       </div>
     );
   };
 
   return (
-    <BlockWrapper>
-      <div
-        className="text-body"
-        style={{
-          margin: `${marginVertical}px ${marginHorizontal}px`,
-        }}
-      >
-        <ServeTitle />
-        <ServeDownload />
-        <ServeBody />
-      </div>
-    </BlockWrapper>
+    <div className="flex-col">
+      <BlockWrapper>
+        <div
+          className="text-body"
+          style={{
+            margin: `${marginVertical}px ${marginHorizontal}px`,
+          }}
+        >
+          <ServeTitle />
+          <ServeSearchList />
+        </div>
+      </BlockWrapper>
+
+      <BlockBuilder blocks={wpBlocks} />
+    </div>
   );
 };
 
@@ -99,4 +116,4 @@ const styles = {
   container: {},
 };
 
-export default connect(Pils);
+export default connect(AppSearch);

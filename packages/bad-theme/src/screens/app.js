@@ -23,6 +23,7 @@ import Login from "./login";
 import Home from "./home";
 import PilsArchive from "./pilsArchive";
 import Pils from "./pils";
+import AppSearch from "./appSearch";
 import BlocksPage from "../Test/blocksPage";
 import RegistrationStepOne from "./registration/registrationStepOne";
 import RegistrationStepTwo from "./registration/registrationStepTwo";
@@ -196,6 +197,7 @@ const App = ({ state, actions }) => {
                 />
 
                 <Pils when={data.isPils} />
+                <AppSearch when={endPoint === "/search/"} />
                 <Event when={data.isEvents} />
                 <Venue when={data.isVenues} />
                 <DermGroupsCharity when={data.isDermGroupsCharity} />

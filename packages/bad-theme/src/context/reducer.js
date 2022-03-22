@@ -21,6 +21,7 @@ export const initialState = {
   dashboardPath: "Dashboard",
   directDebitPath: { page: "billing" },
   isVisibleNotification: true,
+  appSearchData: null,
 
   applicationData: null,
 
@@ -57,6 +58,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, shdFeed: action.payload };
     case "SET_FILTER_ACTION":
       return { ...state, filter: action.payload };
+    case "SET_APP_SEARCH_DATA_ACTION":
+      return { ...state, appSearchData: action.payload };
     case "SET_APPLICATION_DATA_ACTION":
       return { ...state, applicationData: action.payload };
     case "SET_ID_FILTER_ACTION":
