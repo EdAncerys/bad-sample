@@ -14,7 +14,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import SearchContainer from "../../components/searchContainer";
 // CONTEXT -----------------------------------------------------------------
 import { getPostData } from "../../helpers";
-
 import { muiQuery } from "../../context";
 
 const NewsAndMedia = ({ state, actions, libraries, block }) => {
