@@ -503,7 +503,6 @@ const Event = ({ state, actions, libraries }) => {
     relatedGradeList.map((event) => {
       eventListIds.push(event.id);
     });
-    console.log(eventListIds);
     // get latest events from the list
     relatedGradeList = relatedGradeList.slice(0, 3);
 
@@ -530,7 +529,7 @@ const Event = ({ state, actions, libraries }) => {
 
       return (
         <div>
-          {relatedGradeList.map((event, key) => {
+          {list.map((event, key) => {
             let eventDate = event.date;
             if (event.acf.date_time) eventDate = event.acf.date_time[0];
 
