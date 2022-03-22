@@ -31,8 +31,8 @@ export const sendEmailEnquireAction = async ({
     if (attachments) fileAttachmentList = Object.values(attachments); // add attachments to array
 
     const form = new FormData(); // create form object to sent email content & attachments
+    form.append("template", "Placeholder"); // default email template
     form.append("email", recipientsList);
-    form.append("template", "SampleEmailTemplate");
     form.append("data", `${formData}`);
     // map files if attachments are provided
     if (fileAttachmentList)
@@ -48,8 +48,12 @@ export const sendEmailEnquireAction = async ({
 
     const data = await fetch(URL, requestOptions);
     const response = await data.json();
+
     if (response.success) {
       return response;
+    } else {
+      console.log("⬇️ Error sending email response"); // debug
+      console.log(response); // debug
     }
   } catch (error) {
     console.log("error", error);
