@@ -325,8 +325,10 @@ const Event = ({ state, actions, libraries }) => {
         registration_type === "events_force" ||
         registration_type === "external"
       ) {
-        location.href = registration_page_link;
+        // open page in new window
+        window.open(registration_page_link, "_blank");
       }
+
       if (registration_type === "email") {
         setEnquireAction({
           dispatch,
@@ -345,6 +347,7 @@ const Event = ({ state, actions, libraries }) => {
         });
       }
     };
+
     return (
       <div
         className="flex"
@@ -500,6 +503,7 @@ const Event = ({ state, actions, libraries }) => {
     relatedGradeList.map((event) => {
       eventListIds.push(event.id);
     });
+    console.log(eventListIds);
     // get latest events from the list
     relatedGradeList = relatedGradeList.slice(0, 3);
 
@@ -512,10 +516,9 @@ const Event = ({ state, actions, libraries }) => {
     // get list of events where location is the same as the current event
     let relatedLocationList = eventList.filter((event) => {
       // return events that not current event id & include the same category  as the current event & not already in the list of ids
+      if (eventListIds.includes(event.id)) return false;
       return (
-        event.id !== id &&
-        event.event_location.includes(currentPostLocation) &&
-        !eventListIds.includes(event.id)
+        event.id !== id && event.event_location.includes(currentPostLocation)
       );
     });
 
