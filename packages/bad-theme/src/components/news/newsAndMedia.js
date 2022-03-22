@@ -31,12 +31,12 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     disable_vertical_padding,
     has_search,
     category_filter,
+    site_section,
   } = block;
 
   const isLayoutOne = layout === "layout_one";
-  const ctaHeight = 45;
 
-  const [filterList, setFilterList] = useState(null);
+  const [postList, setPostList] = useState(null);
   const [categoryList, setCategoryList] = useState(null);
 
   const [searchValue, setSearchValue] = useState("");
@@ -71,11 +71,30 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     // if !data then break
     if (data.length === 0) return;
 
+    // apply category_filter & site_section filters if applicable
+    // return data if site_section array includes filters
+    if (site_section) {
+      data = data.filter((item) => {
+        let postSections = item.site_sections;
+        // check if postSections array contains site_section ids
+        return postSections.some((item) => site_section.includes(item));
+      });
+    }
+    // return data if site_section array includes filters
+    if (category_filter) {
+      data = data.filter((item) => {
+        let categories = item.categories;
+        // check if category_filter array contains site_section ids
+        return categories.some((item) => category_filter.includes(item));
+      });
+    }
     // apply sort by date functionality
     data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
-    if (post_limit) data = data.slice(0, Number(post_limit)); // apply limit on posts
+    if (post_limit && Number(post_limit) !== 0) {
+      data = data.slice(0, Number(post_limit)); // apply limit on posts
+    }
 
-    setFilterList(data);
+    setPostList(data);
     if (state.source.category) {
       const catList = Object.values(state.source.category);
       setCategoryList(catList);
@@ -86,9 +105,9 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     };
   }, []);
 
-  if (!filterList || !categoryList) return <Loading />;
+  if (!postList || !categoryList) return <Loading />;
 
-  if (filterList.length === 0 && !has_search) return null; // hide block if no posts
+  if (postList.length === 0 && !has_search) return null; // hide block if no posts
 
   // HELPERS ----------------------------------------------------------------
   const handleClearFilter = ({
@@ -99,49 +118,55 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   }) => {
     if (clearInput) {
       searchFilterRef.current.value = "";
-      setSearchValue(null);
+      setSearchValue("");
     }
     if (clearCategory) {
       categoryFilterRef.current.value = "";
-      setCategoryValue(null);
+      setCategoryValue("");
     }
     if (clearDate) {
       dateFilterRef.current.value = "";
-      setDateValue(null);
+      setDateValue("");
     }
     if (clearYear) {
       yearFilterRef.current.value = "";
-      setYearValue(null);
+      setYearValue("");
     }
 
     handleSearch();
   };
 
   const handleLoadMoreFilter = () => {
-    let data = Object.values(state.source.post); // add filterList object to data array
-    // filter by categories
-    // if (category_filter && category_filter !== "0")
-    //   data = data.filter((item) =>
-    //     item.categories.includes(Number(category_filter))
-    //   );
+    let data = Object.values(state.source.post); // add postList object to data array
+
     // apply sort by date functionality
     data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+    // apply category_filter & site_section filters if applicable
+    // return data if site_section array includes filters
+    if (site_section) {
+      data = data.filter((item) => {
+        let postSections = item.site_sections;
+        // check if postSections array contains site_section ids
+        return postSections.some((item) => site_section.includes(item));
+      });
+    }
+    // return data if site_section array includes filters
+    if (category_filter) {
+      data = data.filter((item) => {
+        let categories = item.categories;
+        // check if category_filter array contains site_section ids
+        return categories.some((item) => category_filter.includes(item));
+      });
+    }
 
-    // if (loadMoreRef.current) data = data.slice(0, Number(limit)); // apply limit on posts
-    // // filter by categories
-    // if (category_filter && category_filter !== "0")
-    //   data = data.filter((item) =>
-    //     item.categories.includes(Number(category_filter))
-    //   );
-
-    // if loadMore is truthy display all filterList posts
+    // if loadMore is truthy display all postList posts
     if (loadMoreRef.current) {
-      setFilterList(data);
+      setPostList(data);
       loadMoreRef.current = false;
     } else {
       // if loadMore is falsy display only limit posts
       if (post_limit) data = data.slice(0, Number(post_limit)); // apply limit on posts
-      setFilterList(data);
+      setPostList(data);
       loadMoreRef.current = true;
     }
   };
@@ -153,38 +178,54 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     const date = dateFilterRef.current.value;
     const year = yearFilterRef.current.value;
 
-    let filter = Object.values(state.source.post);
-    filter = filter.sort((a, b) => new Date(b.date) - new Date(a.date));
+    let data = Object.values(state.source.post);
+    data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     if (input) {
       const INPUT = input.toLowerCase();
-      filter = filter.filter((news) =>
+      data = data.filter((news) =>
         news.title.rendered.toLowerCase().includes(INPUT)
       );
     }
 
     if (category)
-      filter = filter.filter((news) =>
-        news.categories.includes(Number(category))
-      );
+      data = data.filter((news) => news.categories.includes(Number(category)));
 
     // apply date filter & sort by date latest first
     if (date === "Date Descending")
-      filter = filter.sort((a, b) => new Date(b.date) - new Date(a.date));
+      data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
     if (date === "Date Ascending")
-      filter = filter.sort((a, b) => new Date(a.date) - new Date(b.date));
+      data = data.sort((a, b) => new Date(a.date) - new Date(b.date));
 
     if (year)
-      filter = filter.filter(
+      data = data.filter(
         (news) => new Date(news.date).getFullYear() === Number(year)
       );
+
+    // apply category_filter & site_section filters if applicable
+    // return data if site_section array includes filters
+    if (site_section) {
+      data = data.filter((item) => {
+        let postSections = item.site_sections;
+        // check if postSections array contains site_section ids
+        return postSections.some((item) => site_section.includes(item));
+      });
+    }
+    // return data if site_section array includes filters
+    if (category_filter) {
+      data = data.filter((item) => {
+        let categories = item.categories;
+        // check if category_filter array contains site_section ids
+        return categories.some((item) => category_filter.includes(item));
+      });
+    }
 
     if (input) setSearchValue(input);
     if (category) setCategoryValue(category);
     if (date) setDateValue(date);
     if (year) setYearValue(year);
 
-    setFilterList(filter);
+    setPostList(data);
   };
 
   // SERVERS ---------------------------------------------
@@ -425,13 +466,13 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   const ServeLayout = () => {
     if (isLayoutOne)
       return (
-        <NewsCarouselComponent block={filterList} categoryList={categoryList} />
+        <NewsCarouselComponent block={postList} categoryList={categoryList} />
       );
 
     return (
       <div>
         <NewsBlock
-          block={filterList}
+          block={postList}
           categoryList={categoryList}
           layout={layout}
         />
@@ -440,12 +481,13 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   };
 
   const ServeMoreAction = () => {
-    // if filterList is empty || lest than post_limit return null
+    // if postList is empty || lest than post_limit return null
     if (
       isLayoutOne ||
-      filterList.length === 0 ||
-      filterList.length < post_limit ||
-      !post_limit
+      postList.length === 0 ||
+      postList.length < post_limit ||
+      !post_limit ||
+      post_limit === "0"
     )
       return null;
 
