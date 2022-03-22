@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../config/imports";
+import { Form } from "react-bootstrap";
 import Loading from "../components/loading";
 import SearchContainer from "../components/searchContainer";
 import TypeFilters from "../components/typeFilters";
@@ -34,8 +35,10 @@ const AppSearch = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
   const [position, setPosition] = useState(null);
 
-  const [searchFilter, setSearchFilter] = useState(null);
-  const [typeFilter, setTypeFilter] = useState(null);
+  const [postList, setPostList] = useState(null);
+  const [searchFilter, setSearchFilter] = useState("");
+  const [typeFilter, setTypeFilter] = useState("");
+  const [catTypes, setCatTypes] = useState("");
   const typeFilterRef = useRef(null);
   const searchFilterRef = useRef(null);
 
@@ -43,65 +46,67 @@ const AppSearch = ({ state, actions, libraries }) => {
     // ⬇️ on component load defaults to window position TOP
     window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
     document.documentElement.scrollTop = 0; // for safari
+
+    // set cat types form appSearchData
+    let catTypes = [];
+    // map appSearchData & if have type & is not in catTypes array add to catTypes
+    if (appSearchData)
+      appSearchData.map((item) => {
+        if (item.type && !catTypes.includes(item.type)) {
+          catTypes.push(item.type);
+        }
+      });
+
+    setCatTypes(catTypes);
+    setPostList(appSearchData);
     setPosition(true);
-  }, []);
+    console.log(catTypes);
+  }, [appSearchData]);
 
   if (!page || !position) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
   const handleSearch = () => {
-    // if (idFilter) setIDFilterAction({ dispatch, idFilter: null }); // reset ID for filter
-    const input = searchFilterRef.current.value || searchFilter;
-    currentSearchFilterRef.current = input;
-    let guidelinesList = Object.values(state.source.guidelines_standards);
+    const input = searchFilterRef.current.value.toLowerCase();
 
-    if (typeFilterRef.current)
-      guidelinesList = guidelinesList.filter((item) => {
-        const list = item.guidelines_type;
-        if (list.includes(typeFilterRef.current)) return item;
-      });
+    if (!appSearchData) return;
+    // ⬇️ filter appSearchData by input & typeFilter
+    const filtered = appSearchData.filter((item) => {
+      // if title | type includes input
+      let titleName = item.title;
+      if (item.title.rendered) titleName = item.title.rendered;
 
-    if (!!input) {
-      const INPUT = input.toLowerCase();
-      const filter = guidelinesList.filter((item) => {
-        let title = item.title.rendered;
-        let subtitle = item.acf.subtitle;
-        if (title) title = title.toLowerCase().includes(INPUT);
-        if (subtitle) subtitle = subtitle.toLowerCase().includes(INPUT);
+      if (
+        titleName.toLowerCase().includes(input) ||
+        item.type.toLowerCase().includes(input)
+      ) {
+        return item;
+      }
+    });
 
-        return title || subtitle;
-      });
-
-      setSearchFilter(input);
-      setGuidelinesList(filter);
-    }
+    setSearchFilter(input);
+    setPostList(filtered);
   };
 
   const handleClearTypeFilter = () => {
-    setTypeFilter(null);
-    typeFilterRef.current = null;
-
-    if (!searchFilter) {
-      setGuidelinesList(Object.values(state.source.guidelines_standards));
-    } else {
-      handleSearch();
-    }
+    console.log("handleClearTypeFilter handler");
+    // setTypeFilter(null);
+    // typeFilterRef.current = null;
+    // if (!searchFilter) {
+    //   setGuidelinesList(Object.values(state.source.guidelines_standards));
+    // } else {
+    //   handleSearch();
+    // }
   };
 
   const handleClearSearchFilter = () => {
-    // setSearchFilter(null);
-    // searchFilterRef.current = null;
-    // currentSearchFilterRef.current = null;
-    // if (!typeFilter) {
-    //   setGuidelinesList(Object.values(state.source.guidelines_standards));
-    // } else {
-    //   handleTypeSearch();
-    // }
+    setSearchFilter("");
+    setPostList(appSearchData);
   };
 
   // SERVERS ---------------------------------------------
   const ServeSearchList = () => {
-    if (!appSearchData) return null;
+    if (!postList) return null;
 
     return (
       <div
@@ -111,7 +116,7 @@ const AppSearch = ({ state, actions, libraries }) => {
           padding: `2em 0`,
         }}
       >
-        {appSearchData.map((item, index) => {
+        {postList.map((item, index) => {
           const { title, content, type, url } = item;
           console.log(item); // debug
           let searchTitle = "";
@@ -211,6 +216,8 @@ const AppSearch = ({ state, actions, libraries }) => {
 
   const ServeFilter = () => {
     const ServeSearchFilter = () => {
+      if (!searchFilter) return null;
+
       return (
         <div className="shadow filter">
           <div>{searchFilter}</div>
@@ -244,6 +251,31 @@ const AppSearch = ({ state, actions, libraries }) => {
       );
     };
 
+    const ServeDropDownFilter = () => {
+      if (catTypes && !catTypes.length) return null;
+
+      return (
+        <div style={{ width: "fit-content" }}>
+          <Form.Select
+            value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value)}
+            className="input"
+          >
+            <option value="" hidden>
+              Site Section
+            </option>
+            {catTypes.map((item, key) => {
+              return (
+                <option key={key} value={item}>
+                  {item}
+                </option>
+              );
+            })}
+          </Form.Select>
+        </div>
+      );
+    };
+
     let searchTitle = `You Searched for "${appSearchPhrase}"`;
     if (!appSearchPhrase) searchTitle = `You haven't searched yet`;
 
@@ -264,6 +296,7 @@ const AppSearch = ({ state, actions, libraries }) => {
               handleSearch={handleSearch}
             />
 
+            <ServeDropDownFilter />
             <div className="flex" style={{ padding: "0.5em 0 1em" }}>
               <ServeSearchFilter />
               <ServeTypeFilter />

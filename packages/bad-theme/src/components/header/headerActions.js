@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useLayoutEffect, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
@@ -28,6 +28,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
+  let endPoint = state.router.link;
 
   const [isReady, SetReady] = useState(null);
   const [filter, setFilter] = useState(null);
@@ -100,6 +101,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   const takeToSearchHandler = () => {
     // set search data in context state
+
     setAppSearchDataAction({ dispatch, appSearchData: filter });
     setAppSearchPhraseAction({ dispatch, appSearchPhrase: searchFilter });
     clearSearchHandler(); // clear search input
@@ -108,6 +110,9 @@ const HeaderActions = ({ state, actions, libraries }) => {
   };
 
   const handleKeyPress = (e) => {
+    // dont allow redirect if data is not loaded
+    if (isFetching) return;
+
     if (e.key === "Enter" && e.target.value) {
       takeToSearchHandler();
     }
