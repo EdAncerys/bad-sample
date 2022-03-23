@@ -3,6 +3,7 @@ import { connect, Global, css } from "frontity";
 import bootStrapCSS from "../../css/bootstrap.min.css";
 import { colors } from "../../config/imports";
 // css imports ------------------------------------------------------------
+import "animate.css";
 import globalCSS from "../../css/main.css";
 import carousel from "../../css/carousel.css";
 import accordion from "../../css/accordion.css";
@@ -12,7 +13,6 @@ import custom from "../../css/custom.css";
 import customMobile from "../../css/custom-mobile.css";
 import buttons from "../../css/buttons.css";
 import iFrame from "../../css/iFrame.css";
-
 // COMPONENTS -------------------------------------------------------------
 import HTMLHead from "./htmlHead";
 import HeaderActions from "./headerActions";
