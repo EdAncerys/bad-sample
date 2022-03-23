@@ -263,14 +263,14 @@ const Directory = ({ state, actions, libraries }) => {
       <ServeFilter />
       <BlockWrapper>
         <ServePreferences />
-        <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
+        {/* <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
           <div style={!lg ? styles.container : styles.containerMobile}>
             {fadData.map((fad, key) => {
               return <ServeFadList key={key} fad={fad} />;
             })}
           </div>
           <ServeMoreAction />
-        </div>
+        </div> */}
       </BlockWrapper>
     </div>
   );

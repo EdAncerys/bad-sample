@@ -1,9 +1,9 @@
 export const appSearchAction = async ({ state, query }) => {
   console.log("appSearchAction triggered");
-  console.log("query", query);
+
   let pageNo = 1;
-  let postData = [];
   let perPage = 20;
+  let postData = [];
   let responseLength = perPage;
 
   if (!query || query.length < 2) return; // restrict API call if less then 2 characters
@@ -31,8 +31,6 @@ export const appSearchAction = async ({ state, query }) => {
       // spread response to postData equal to previous postData + new response
       postData = [...postData, ...result];
     }
-
-    console.log(postData.length);
 
     return postData;
   } catch (error) {
