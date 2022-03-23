@@ -192,7 +192,7 @@ export const setCompleteUserApplicationAction = async ({
   let confirmationMsg = "Application been successfully submitted!";
   if (applicationData) {
     const type = applicationData[0].bad_categorytype;
-    confirmationMsg = `${type} application been successfully submitted!`;
+    confirmationMsg = `Your ${type} application has been successfully submitted!`;
   }
   if (changeAppCategory && applicationData) {
     // change of category for BAD application error message
@@ -293,7 +293,7 @@ export const deleteApplicationAction = async ({
   let confirmationMsg = "Application been successfully deleted!";
   if (applicationData) {
     const type = applicationData[0].bad_categorytype;
-    confirmationMsg = `${type} application been successfully deleted!`;
+    confirmationMsg = `Your ${type} application has been successfully deleted!`;
   }
 
   try {

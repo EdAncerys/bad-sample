@@ -3,6 +3,8 @@ import {
   setGoToAction,
   setLinkWrapperAction,
   setFilterAction,
+  setAppSearchDataAction,
+  setAppSearchPhraseAction,
   setFetchAction,
   setErrorAction,
   setApplicationDataAction,
@@ -73,6 +75,7 @@ import { useIsMounted } from "../helpers/useIsMounted";
 import { errorHandler } from "../helpers/errorHandler";
 import { anchorScrapper } from "../helpers/contentScrapper";
 import { copyToClipboard } from "../helpers/domEvents";
+import { postTypeHandler } from "../helpers/postType";
 import {
   authCookieActionAfterCSR,
   getWPMenu,
@@ -149,4 +152,7 @@ export {
   getGuidelinesDataAction,
   appSearchAction,
   getLeadershipTeamData,
+  setAppSearchDataAction,
+  setAppSearchPhraseAction,
+  postTypeHandler,
 };

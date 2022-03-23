@@ -145,6 +145,7 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
 
   if (data.isError) return null;
   if (endPoint === "/") return null; // disable breadcrumbs in home page
+  if (endPoint === "/search/") return null; // disable breadcrumbs in search page
 
   return (
     <BlockWrapper background={colors.lightSilver}>

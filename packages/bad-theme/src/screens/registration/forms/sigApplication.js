@@ -372,6 +372,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         "py3_addresscountry",
         "py3_ntnno",
         "bad_readpolicydocument",
+        "sky_cvurl",
       ],
     });
 
@@ -787,7 +788,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.py3_hospitalid && (
             <div>
-              <label className="form-label">
+              <label className="form-label required">
                 Main Place of Work / Medical School
               </label>
               <div style={{ position: "relative" }}>
@@ -892,7 +893,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.sky_cvurl && (
             <div>
-              <label className="form-label">Upload Your CV</label>
+              <label className="form-label required">Upload Your CV</label>
               <input
                 ref={documentRef}
                 onChange={handleDocUploadChange}
@@ -901,6 +902,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 placeholder="CV Document"
                 accept=".pdf,.doc,.docx"
               />
+              <FormError id="sky_cvurl" />
             </div>
           )}
 
@@ -915,6 +917,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 className="form-control input"
                 placeholder="MRCP"
               />
+              <FormError id="sky_cvurl" />
             </div>
           )}
 

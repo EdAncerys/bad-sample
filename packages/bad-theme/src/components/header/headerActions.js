@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useLayoutEffect, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
@@ -11,6 +11,7 @@ import Loading from "../../components/loading";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
+import CircularProgress from "@mui/material/CircularProgress";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -18,6 +19,8 @@ import {
   setLoginModalAction,
   setGoToAction,
   appSearchAction,
+  setAppSearchDataAction,
+  setAppSearchPhraseAction,
 } from "../../context";
 
 const HeaderActions = ({ state, actions, libraries }) => {
@@ -25,9 +28,11 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
+  let endPoint = state.router.link;
 
   const [isReady, SetReady] = useState(null);
   const [filter, setFilter] = useState(null);
+  const [isFetching, setFetching] = useState(null);
   const [searchFilter, setSearchFilter] = useState("");
   const searchRef = useRef("");
 
@@ -52,16 +57,12 @@ const HeaderActions = ({ state, actions, libraries }) => {
     setSearchFilter(input);
 
     try {
+      setFetching(true);
       const result = await appSearchAction({ state, query: input });
-      console.log(result); // debug
 
-      // ⬇️ set data search with request
       if (result && result.length > 0) {
-        // set data to match dropdown format
+        // ⬇️  set data to match dropdown format
         const data = result.map((item) => {
-          // ⬇️ filter empty content from search results
-          // if (item.acf && !item.acf.blocks && item) return null;
-
           return {
             id: item.id,
             title: item.title.rendered,
@@ -70,18 +71,18 @@ const HeaderActions = ({ state, actions, libraries }) => {
           };
         });
 
-        // set data to state
         setFilter(data);
       } else {
         setFilter(null);
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setFetching(false);
     }
   };
 
   const redirectHandler = ({ item }) => {
-    console.log(item);
     let path = item.url;
     const wpPath = state.auth.WP_HOST;
     path = path.replace(wpPath, ""); // strip down wp path
@@ -95,6 +96,25 @@ const HeaderActions = ({ state, actions, libraries }) => {
     searchRef.current.value = "";
     setFilter(null);
     setSearchFilter("");
+  };
+
+  const takeToSearchHandler = () => {
+    // set search data in context state
+
+    setAppSearchDataAction({ dispatch, appSearchData: filter });
+    setAppSearchPhraseAction({ dispatch, appSearchPhrase: searchFilter });
+    clearSearchHandler(); // clear search input
+    // ⬇️ redirect to url with path ⬇️
+    setGoToAction({ path: "/search/", actions });
+  };
+
+  const handleKeyPress = (e) => {
+    // dont allow redirect if data is not loaded
+    if (isFetching || !filter) return;
+
+    if (e.key === "Enter" && e.target.value) {
+      takeToSearchHandler();
+    }
   };
 
   // SERVERS ----------------------------------------------------
@@ -140,6 +160,11 @@ const HeaderActions = ({ state, actions, libraries }) => {
     const closeIcon = <CloseIcon />;
     const icon = searchFilter ? closeIcon : searchIcon;
 
+    if (isFetching)
+      return (
+        <CircularProgress color="inherit" style={{ width: 25, height: 25 }} />
+      );
+
     return <div onClick={clearSearchHandler}>{icon}</div>;
   };
 
@@ -178,6 +203,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
                   ref={searchRef}
                   value={searchFilter}
                   onChange={handleSearchLookup}
+                  onKeyPress={(e) => handleKeyPress(e)}
                   type="text"
                   className="form-control input"
                   placeholder="Search"
@@ -201,6 +227,8 @@ const HeaderActions = ({ state, actions, libraries }) => {
               <SearchDropDown
                 filter={filter}
                 onClickHandler={redirectHandler}
+                actionHandler={takeToSearchHandler}
+                isAppSearch
               />
             </div>
 

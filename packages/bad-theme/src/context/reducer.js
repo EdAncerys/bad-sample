@@ -22,6 +22,9 @@ export const initialState = {
   directDebitPath: { page: "billing" },
   isVisibleNotification: true,
 
+  appSearchData: null,
+  appSearchPhrase: "",
+
   applicationData: null,
 
   loginModalAction: false,
@@ -57,6 +60,10 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, shdFeed: action.payload };
     case "SET_FILTER_ACTION":
       return { ...state, filter: action.payload };
+    case "SET_APP_SEARCH_DATA_ACTION":
+      return { ...state, appSearchData: action.payload };
+    case "SET_APP_SEARCH_PHRASE_ACTION":
+      return { ...state, appSearchPhrase: action.payload };
     case "SET_APPLICATION_DATA_ACTION":
       return { ...state, applicationData: action.payload };
     case "SET_ID_FILTER_ACTION":

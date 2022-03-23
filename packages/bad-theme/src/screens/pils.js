@@ -10,7 +10,7 @@ import ScrollTop from "../components/scrollTop";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 
-const Post = ({ state, actions, libraries }) => {
+const Pils = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -99,4 +99,4 @@ const styles = {
   container: {},
 };
 
-export default connect(Post);
+export default connect(Pils);
