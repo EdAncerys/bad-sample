@@ -1,22 +1,28 @@
 import { styled, keyframes, css } from "frontity";
+import { CircularProgress } from "@mui/material";
+import { colors } from "../config/colors";
 
-const scale = keyframes`
-  0% {transform: scaley(1.0)}
-  50% {transform: scaley(0.4)}
-  100% {transform: scaley(1.0)}
-`;
+// const scale = keyframes`
+//   0% {transform: scaley(1.0)}
+//   50% {transform: scaley(0.4)}
+//   100% {transform: scaley(1.0)}
+// `;
 
 const Loading = ({ padding }) => {
   const componentPadding = padding || 24;
 
   return (
     <Container style={{ padding: componentPadding }}>
-      <div>
-        <div css={bar(1)} />
-        <div css={bar(2)} />
-        <div css={bar(3)} />
-        <div css={bar(4)} />
-        <div css={bar(5)} />
+      <div
+        style={{
+          display: "grid",
+          width: "100%",
+          alignItems: "center",
+          justifyContent: "center",
+          color: colors.primary,
+        }}
+      >
+        <CircularProgress color="inherit" />
       </div>
     </Container>
   );

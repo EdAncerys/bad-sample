@@ -107,7 +107,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
                   className="banner-transparent-btn"
                   onClick={() => setGoToAction({ path: link.url, actions })}
                 >
-                  <div className="flex">
+                  <div className="first-letter-capital">
                     <Html2React html={LABEL} />
                   </div>
                 </button>
