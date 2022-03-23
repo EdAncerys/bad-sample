@@ -561,7 +561,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                     <div>
                       <label className="required form-label">
                         {applicationType === "Associate Overseas"
-                          ? "GMC number or International equivalent"
+                          ? "GMC / IMC number'"
                           : "GMC number"}
                       </label>
                       <input
@@ -627,7 +627,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
 
                   {inputValidator.py3_hospitalid && (
                     <div>
-                      <label className="form-label">
+                      <label className="form-label required">
                         Main Place of Work / Medical School
                       </label>
                       <div style={{ position: "relative" }}>
@@ -759,7 +759,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                     }}
                   >
                     <label className="form-label">
-                      Proposers must be BSDS Ordinary members
+                      Proposers must be BAD Ordinary or Honorary Working members
                     </label>
                     <div
                       style={{
@@ -777,7 +777,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                                 : "form-label"
                             }`}
                           >
-                            Supporting Member 1
+                            Proposer 1
                           </label>
                           <input
                             name="bad_proposer1"
@@ -800,7 +800,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                                 : "form-label"
                             }`}
                           >
-                            Supporting Member 2
+                            Proposer 2
                           </label>
                           <input
                             name="bad_proposer2"
@@ -895,7 +895,8 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                                 citations="A member only service to search for the contact email of fellow BAD members"
                                 style={{ color: "inherit" }}
                               >
-                                Include in Members directory
+                                Include my details in the BAD Members
+                                'Directory'
                               </div>
                             </div>
                             <FormError id="bad_memberdirectory" />
@@ -919,12 +920,14 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                               </div>
                               <div>
                                 <label className="form-check-label flex-row">
-                                  <div>I agree to the </div>
+                                  <div>
+                                    I have read and agreed to abide by the{" "}
+                                  </div>
                                   <div
                                     className="caps-btn required"
                                     style={{ paddingTop: 6, marginLeft: 10 }}
                                   >
-                                    BAD Constitution
+                                    BAD CONSTITUTION
                                   </div>
                                 </label>
                               </div>
@@ -965,7 +968,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                                         })
                                       }
                                     >
-                                      I agree - Privacy Notice
+                                      I agree to the BAD'S PRIVACY NOTICE
                                     </div>
                                     <span>
                                       I agree - Privacy Notice* - justo donec
