@@ -23,6 +23,7 @@ export const colors = {
   // background colours
   bgLight: "rgb(230,230,230, 0.7)",
   bgNavy: "#EFF7F9",
+  bgPink: "#FCEFF0",
   // app Colours
   maroon: "#842057",
   pink: "#EF476F",

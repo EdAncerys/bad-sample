@@ -17,9 +17,21 @@ const Dashboard = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { dashboardPath, dynamicsApps } = useAppState();
 
+  const marginHorizontal = state.theme.marginHorizontal;
+
+  // const [isBADMember, setIsMember] = useState(false);
+
   if (dashboardPath !== "Dashboard") return null;
 
-  const marginHorizontal = state.theme.marginHorizontal;
+  // useEffect(() => {
+  //   // if dynamic apps check if user have BAD membership
+  //   if (dynamicsApps) {
+  //     const isBADMember = dynamicsApps.subs.data.filter(
+  //       (app) => app.bad_organisedfor === "BAD"
+  //     );
+  //     if (isBADMember.length) setIsMember(true);
+  //   }
+  // }, [dynamicsApps]);
 
   // SERVERS ---------------------------------------------
   const ServeApplicationStatus = () => {
@@ -31,6 +43,7 @@ const Dashboard = ({ state, actions, libraries }) => {
     useEffect(() => {
       setApplications(dynamicsApps.apps);
     }, [dynamicsApps]);
+
     if (apps.data.length === 0) return null;
     if (!applications) return <Loading />;
     return (
