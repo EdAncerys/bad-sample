@@ -53,7 +53,7 @@
   letter-spacing: 2px;
   text-transform: uppercase;
   font-weight: bold;
-  box-shadow: 0 2px #404040;
+  /* box-shadow: 0 2px #404040; */
   width: fit-content;
   cursor: pointer;
   transition: all 0.3s ease-in-out;

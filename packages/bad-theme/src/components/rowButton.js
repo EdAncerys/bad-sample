@@ -67,8 +67,7 @@ const RowButton = ({
     padding: 0,
     cursor: "pointer",
     boxShadow: isHover ? `inset 0 3.25em 0 0 ${THEME}` : null,
-    transitionDuration: 1000,
-    transitionProperty: "all",
+    transition: `box-shadow 1000ms`,
   };
   const ServeButton = () => {
     return (
