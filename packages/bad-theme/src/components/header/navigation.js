@@ -379,7 +379,7 @@ const Navigation = ({ state, actions, libraries }) => {
       });
 
       return (
-        <ul className="navbar-nav secondary-menu-container">
+        <ul className="navbar-nav secondary-menu-container more-btn">
           <li
             className="nav-item dropdown"
             style={{ paddingLeft: `3em` }}
@@ -438,7 +438,7 @@ const Navigation = ({ state, actions, libraries }) => {
               id={`menu-${slug}`}
               key={key}
               className="flex navbar-nav"
-              style={{ justifyContent: "center" }}
+              style={{ justifyContent: "center", paddingBottom: "0.5em" }}
               onMouseEnter={() => {
                 activeMenu.current = slug;
                 handleActiveMenu({ slug });
@@ -479,7 +479,7 @@ const Navigation = ({ state, actions, libraries }) => {
     <BlockWrapper>
       <nav
         className="navbar navbar-expand-lg roboto"
-        style={{ padding: `0.5em 0` }}
+        style={{ padding: `0.5em 0 0 0` }}
       >
         <div className="container-fluid">
           <div className="collapse navbar-collapse" id="navbarNavDropdown">
@@ -501,6 +501,7 @@ const styles = {
     color: colors.softBlack,
     textTransform: "capitalize",
     cursor: "pointer",
+    paddingBottom: "0.5em",
   },
 };
 

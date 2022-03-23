@@ -1,5 +1,3 @@
-import "animate.css";
-
 import { useState } from "react";
 
 import { connect } from "frontity";
