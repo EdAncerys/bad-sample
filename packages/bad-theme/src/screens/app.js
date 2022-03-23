@@ -63,7 +63,7 @@ import {
 const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { isActiveUser, isPlaceholder, idFilter } = useAppState();
-  const { sm, md, lg, xl } = muiQuery();
+  const { sm, md, lg, xl, xxl } = muiQuery();
 
   // ⬇️ import custom hook for Google API ⬇️
   // useScript({
@@ -75,12 +75,15 @@ const App = ({ state, actions }) => {
   console.log("INDEX data", data); // debug
 
   const useEffectRef = useRef(true);
+  // ⬇️ handle container width change ⬇️
+  if (!lg) state.theme.contentContainer = 950;
+  if (!xl) state.theme.contentContainer = 1150;
+  if (!xxl) state.theme.contentContainer = 1350;
+  console.log(xl, lg, md);
 
   useEffect(() => {
     // ⬇️ restore scroll history to manual position ⬇️
     window.history.scrollRestoration = "manual";
-
-    console.log("muiQuery", lg); // debug
   }, [endPoint]);
 
   useEffect(async () => {
