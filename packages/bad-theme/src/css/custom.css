@@ -402,3 +402,10 @@ https://codebeautify.org/
   /* -webkit-line-clamp: 2; */ /* number of lines to show */
   -webkit-box-orient: vertical;
 }
+.carousel-item.carousel-caption {
+  opacity: 0;
+}
+.carousel-item.active.carousel-caption {
+  opacity: 1;
+  transition: opacity 1s !important;
+}
