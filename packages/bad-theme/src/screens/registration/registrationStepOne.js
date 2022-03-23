@@ -101,13 +101,12 @@ const RegistrationStepOne = ({ state, actions }) => {
           </div>
           <div style={{ paddingTop: `0.75em` }}>
             Once your membership application has been completed, it will be
-            reviewed by the BAD’s membership team and then presented to BAD
-            Executive for approval at the quarterly Executive Meeting. You will
-            receive an email on completion of your application detailing when
-            the date of the next meeting, shortly following the meeting you will
-            be contacted with the outcome of the application. Successful
-            applicants will then be prompted to make payment to activate their
-            membership.
+            reviewed by the BAD’s membership team and then presented to the BAD
+            Executive committee for approval at the quarterly Executive Meeting.
+            You will receive an email on completion of your application with the
+            date of the next meeting. Shortly following the meeting you will be
+            contacted with the outcome of the application. Successful applicants
+            will then be prompted to make payment to activate their membership.
           </div>
           <div
             className="caps-btn"
@@ -140,8 +139,8 @@ const RegistrationStepOne = ({ state, actions }) => {
               <li>Current Post</li>
               <li>Medical School (for student category only)</li>
               <li>
-                Proposer names (2 x members for all categories except Medical
-                Students who require only 1)
+                Proposers (two proposers are needed for all applications, with
+                the exception of medical students who only require one)
               </li>
             </ul>
           </div>
