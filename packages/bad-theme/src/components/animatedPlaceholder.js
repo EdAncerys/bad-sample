@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -13,7 +13,7 @@ import { colors } from "../config/imports";
 const AnimatedPlaceholder = ({ state, actions, opacity }) => {
   const { isPlaceholder } = useAppState();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     document.querySelector("#my-svg").removeAttribute("hidden");
     new Vivus("my-svg", {
       type: "oneByOne",
