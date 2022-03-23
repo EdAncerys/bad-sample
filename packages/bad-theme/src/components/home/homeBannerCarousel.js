@@ -1,4 +1,7 @@
+import "animate.css";
+
 import { useState } from "react";
+
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Carousel } from "react-bootstrap";
@@ -107,17 +110,8 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
                   className="banner-transparent-btn"
                   onClick={() => setGoToAction({ path: link.url, actions })}
                 >
-                  <div className="flex">
+                  <div className="first-letter-capital">
                     <Html2React html={LABEL} />
-                  </div>
-                  <div>
-                    <KeyboardArrowRightIcon
-                      style={{
-                        fill: colors.white,
-                        borderRadius: "50%",
-                        padding: 0,
-                      }}
-                    />
                   </div>
                 </button>
               </div>
@@ -191,7 +185,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
                         }}
                       >
                         <div
-                          className="flex-col primary-title"
+                          className="flex-col primary-title animate__animated animate__fadeInLeft animate__delay-1s"
                           style={{
                             fontSize: !lg ? 36 : 26,
                             textAlign: "start",

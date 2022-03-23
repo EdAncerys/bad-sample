@@ -53,7 +53,7 @@
   letter-spacing: 2px;
   text-transform: uppercase;
   font-weight: bold;
-  box-shadow: 0 2px #404040;
+  /* box-shadow: 0 2px #404040; */
   width: fit-content;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
@@ -110,9 +110,9 @@
 .row-btn:hover .caps-btn::before {
   width: 0 !important;
 }
-.row-btn:hover {
+/* .row-btn:hover {
   padding: 1.5em 0.5em 1.5em 1.5em;
-}
+} */
 
 .label {
   font-size: 12px;
@@ -132,6 +132,10 @@
   border-radius: 5px;
   padding: 0.5em 2em;
   transition: all 0.3s ease-in-out;
+  text-transform: lowercase;
+}
+.first-letter-capital:first-letter {
+  text-transform: capitalize;
 }
 .banner-transparent-btn:hover {
   color: #1f335e !important;
