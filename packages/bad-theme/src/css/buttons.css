@@ -110,9 +110,9 @@
 .row-btn:hover .caps-btn::before {
   width: 0 !important;
 }
-.row-btn:hover {
+/* .row-btn:hover {
   padding: 1.5em 0.5em 1.5em 1.5em;
-}
+} */
 
 .label {
   font-size: 12px;
