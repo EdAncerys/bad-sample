@@ -5,6 +5,8 @@ import { Form } from "react-bootstrap";
 import { ETHNIC_GROUPS, GENDER_GROUPS } from "../../config/data";
 import ActionPlaceholder from "../actionPlaceholder";
 import { colors } from "../../config/imports";
+import Image from "@frontity/components/image";
+import ProfileAvatar from "../../img/svg/profile.svg";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -20,7 +22,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const { isActiveUser } = useAppState();
+  const { isActiveUser, dashboardPath } = useAppState();
 
   const [isFetching, setIsFetching] = useState(null);
   const [formData, setFormData] = useState({
@@ -133,11 +135,43 @@ const UpdateProfile = ({ state, actions, libraries }) => {
   };
 
   // SERVERS ---------------------------------------------
+  const ServeProfileAvatar = () => {
+    if (!isActiveUser || dashboardPath === "Dashboard") return null;
+
+    const { bad_listname, bad_profile_photo_url } = isActiveUser;
+    const alt = bad_listname || "Profile Picture";
+    const imgWidth = 350;
+
+    return (
+      <div className="flex" style={{ justifyContent: "flex-end" }}>
+        <div
+          style={{
+            width: imgWidth,
+            height: imgWidth,
+            borderRadius: `50%`,
+            overflow: `hidden`,
+            margin: "3em 0 0 0",
+          }}
+        >
+          <Image
+            src={bad_profile_photo_url || ProfileAvatar}
+            alt={alt}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
+          />
+        </div>
+      </div>
+    );
+  };
+
   const ServeActions = () => {
     return (
       <div
         className="flex"
-        style={{ justifyContent: "flex-end", padding: `2em 0 0` }}
+        style={{ justifyContent: "flex-end", padding: `0 4em 2em 0` }}
       >
         <div type="submit" className="blue-btn" onClick={handleProfileUpdate}>
           Save
@@ -152,109 +186,107 @@ const UpdateProfile = ({ state, actions, libraries }) => {
       style={{ position: "relative", marginBottom: `${marginVertical}px` }}
     >
       <ActionPlaceholder isFetching={isFetching} background="transparent" />
-      <div style={{ padding: `2em 4em` }}>
-        <div className="primary-title" style={{ fontSize: 20 }}>
-          Personal Information:
-        </div>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: `1fr 1fr`,
-            gap: 20,
-            padding: `1em 0 0`,
-          }}
-        >
-          <div>
-            <div>
-              <label>Your First Name</label>
-              <input
-                name="firstname"
-                value={formData.firstname}
-                onChange={handleInputChange}
-                className="form-control input"
-                placeholder="Your First Name"
-              />
-            </div>
-            <div style={styles.wrapper}>
-              <label>Your Last Name</label>
-              <input
-                name="lastname"
-                value={formData.lastname}
-                onChange={handleInputChange}
-                className="form-control input"
-                placeholder="Your Last Name"
-              />
-            </div>
-            <div>
-              <label>Upload A Profile Photo</label>
-              <input
-                ref={documentRef}
-                onChange={handleDocUploadChange}
-                type="file"
-                className="form-control input"
-                placeholder="Profile Photo"
-                accept="image/png, image/jpeg"
-              />
-            </div>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: !lg ? `1fr 1fr` : "1fr",
+          justifyContent: "space-between",
+          gap: 20,
+          padding: !lg ? `2em 4em` : "1em",
+        }}
+      >
+        <div className="flex-col">
+          <div className="primary-title" style={{ fontSize: 20 }}>
+            Personal Information:
           </div>
 
+          <div style={styles.wrapper}>
+            <label>Your First Name</label>
+            <input
+              name="firstname"
+              value={formData.firstname}
+              onChange={handleInputChange}
+              className="form-control input"
+              placeholder="Your First Name"
+            />
+          </div>
           <div>
-            <div>
-              <label>Date Of Birth</label>
-              <input
-                name="birthdate"
-                type="date"
-                value={formData.birthdate}
-                onChange={handleInputChange}
-                className="form-control input"
-                placeholder="Your Date Of Birth"
-              />
-            </div>
-            <div style={styles.wrapper}>
-              <label>Gender</label>
-              <Form.Select
-                name="gendercode"
-                value={formData.gendercode}
-                onChange={handleInputChange}
-                className="input"
-                // disabled
-              >
-                <option value="" hidden>
-                  Male, Female, Transgender, Prefer Not To Answer
-                </option>
-                {GENDER_GROUPS.map((item, key) => {
-                  return (
-                    <option key={key} value={item.value}>
-                      {item.Label}
-                    </option>
-                  );
-                })}
-              </Form.Select>
-            </div>
-            <div>
-              <label style={styles.subTitle}>What is your Ethnic Group?</label>
-              <Form.Select
-                name="py3_ethnicity"
-                value={formData.py3_ethnicity}
-                onChange={handleInputChange}
-                className="input"
-              >
-                <option value="" hidden>
-                  Ethnic Group
-                </option>
-                {ETHNIC_GROUPS.map((item, key) => {
-                  return (
-                    <option key={key} value={item.value}>
-                      {item.Label}
-                    </option>
-                  );
-                })}
-              </Form.Select>
-            </div>
+            <label>Your Last Name</label>
+            <input
+              name="lastname"
+              value={formData.lastname}
+              onChange={handleInputChange}
+              className="form-control input"
+              placeholder="Your Last Name"
+            />
+          </div>
+          <div style={styles.wrapper}>
+            <label>Date Of Birth</label>
+            <input
+              name="birthdate"
+              type="date"
+              value={formData.birthdate}
+              onChange={handleInputChange}
+              className="form-control input"
+              placeholder="Your Date Of Birth"
+            />
+          </div>
+          <div>
+            <label>Gender</label>
+            <Form.Select
+              name="gendercode"
+              value={formData.gendercode}
+              onChange={handleInputChange}
+              className="input"
+              // disabled
+            >
+              <option value="" hidden>
+                Male, Female, Transgender, Prefer Not To Answer
+              </option>
+              {GENDER_GROUPS.map((item, key) => {
+                return (
+                  <option key={key} value={item.value}>
+                    {item.Label}
+                  </option>
+                );
+              })}
+            </Form.Select>
+          </div>
+          <div style={styles.wrapper}>
+            <label>Ethnicity</label>
+            <Form.Select
+              name="py3_ethnicity"
+              value={formData.py3_ethnicity}
+              onChange={handleInputChange}
+              className="input"
+            >
+              <option value="" hidden>
+                Ethnic Group
+              </option>
+              {ETHNIC_GROUPS.map((item, key) => {
+                return (
+                  <option key={key} value={item.value}>
+                    {item.Label}
+                  </option>
+                );
+              })}
+            </Form.Select>
+          </div>
+          <div>
+            <label>Upload A Profile Photo</label>
+            <input
+              ref={documentRef}
+              onChange={handleDocUploadChange}
+              type="file"
+              className="form-control input"
+              placeholder="Profile Photo"
+              accept="image/png, image/jpeg"
+            />
           </div>
         </div>
-        <ServeActions />
+        <ServeProfileAvatar />
       </div>
+      <ServeActions />
     </div>
   );
 };

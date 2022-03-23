@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
-
 import ProfileAvatar from "../../img/svg/profile.svg";
 // CONTEXT ----------------------------------------------------------------
 import {

@@ -24,6 +24,8 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     address1_line1: "",
     bad_gmcno: "",
     bad_ntnno: "",
+    bad_otherregulatorybodyreference: "",
+    jobtitle: "",
   });
 
   useEffect(() => {
@@ -41,6 +43,9 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     if (isActiveUser.address1_line1) handleSetData({ name: "address1_line1" });
     if (isActiveUser.bad_gmcno) handleSetData({ name: "bad_gmcno" });
     if (isActiveUser.bad_ntnno) handleSetData({ name: "bad_ntnno" });
+    if (isActiveUser.bad_otherregulatorybodyreference)
+      handleSetData({ name: "bad_otherregulatorybodyreference" });
+    if (isActiveUser.jobtitle) handleSetData({ name: "jobtitle" });
   }, [isActiveUser]);
 
   // HELPERS ----------------------------------------------------------------
@@ -50,17 +55,17 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
     }));
-    console.log(value); // debug
+    // console.log(value); // debug
   };
 
   const handleContactForm = async () => {
     await setEnquireAction({
       dispatch,
       enquireAction: {
-        contact_public_email: "harriet@bag.org.uk",
+        contact_public_email: "membership@bad.org.uk",
         // contact_public_phone_number: "+1 (123) 456-7890",
-        form_title: "Main Place of work / Medical School Change Form",
-        form_body: `Request Main Place of work / Medical School change.`,
+        form_title: "Edit Professional Details",
+        form_body: `Please use the form below to update us to changes to your professional details. To update your place of work, start typing to select from a list of options. If your place of work is not on the list, type Not Listed and use the message box at the bottom of the form instead`,
         message: true,
         recipients: state.contactList.defaultContactList,
         isHospitalChange: true,
@@ -75,14 +80,16 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     // const address1_line1 = formData.address1_line1;
     const bad_gmcno = formData.bad_gmcno;
     const bad_ntnno = formData.bad_ntnno;
+    const bad_otherregulatorybodyreference =
+      formData.bad_otherregulatorybodyreference;
 
     const data = Object.assign(
       {}, // add empty object
       // !!address1_line1 && { address1_line1 },
       !!bad_gmcno && { bad_gmcno },
-      !!bad_ntnno && { bad_ntnno }
+      !!bad_ntnno && { bad_ntnno },
+      !!bad_otherregulatorybodyreference && { bad_otherregulatorybodyreference }
     );
-    console.log("data", data); // debug
 
     try {
       const response = await updateProfileAction({
@@ -176,6 +183,17 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 placeholder="NTN Number"
               />
             </div>
+            <div>
+              <label>Job Title</label>
+              <input
+                name="jobtitle"
+                value={formData.jobtitle}
+                onChange={handleInputChange}
+                className="form-control input"
+                placeholder="Job Title"
+                disabled
+              />
+            </div>
           </div>
 
           <div>
@@ -188,6 +206,16 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 className="form-control input"
                 placeholder="Main Place of work / Medical School"
                 disabled
+              />
+            </div>
+            <div style={styles.wrapper}>
+              <label>Other regulatory body / label</label>
+              <input
+                name="bad_otherregulatorybodyreference"
+                value={formData.bad_otherregulatorybodyreference}
+                onChange={handleInputChange}
+                className="form-control input"
+                placeholder="Other regulatory body / label"
               />
             </div>
           </div>
