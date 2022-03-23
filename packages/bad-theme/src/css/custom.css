@@ -403,8 +403,33 @@ https://codebeautify.org/
   -webkit-box-orient: vertical;
 }
 
-/* Scroll Track */
-::-webkit-scrollbar {
+/*CAROUSEL ANIMATION */
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    -webkit-transform: translatex(-100px);
+    -moz-transform: translatex(-100px);
+    -o-transform: translatex(-100px);
+    transform: translatex(-100px);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translatex(0);
+    -moz-transform: translatex(0);
+    -o-transform: translatex(0);
+    transform: translatex(0);
+  }
+}
+.carousel-caption {
+  opacity: 0;
+}
+.carousel-item.active .carousel-caption {
+  animation-name: fadeInLeft;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  /* transition: opacity 1s !important; */
+}
+Scroll Track ::-webkit-scrollbar {
   width: 10px;
 }
 /* Track */

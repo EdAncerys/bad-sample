@@ -3,6 +3,7 @@ import { connect } from "frontity";
 import Switch from "@frontity/components/switch";
 import { colors } from "../config/imports";
 import { useTransition, animated } from "react-spring";
+import "animate.css";
 
 // COMPONENTS ---------------------------------------------------------
 import Header from "../components/header/header";

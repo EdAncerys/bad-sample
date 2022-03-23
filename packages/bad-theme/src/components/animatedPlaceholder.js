@@ -14,12 +14,12 @@ const AnimatedPlaceholder = ({ state, actions, opacity }) => {
   const { isPlaceholder } = useAppState();
 
   useEffect(() => {
-    document.querySelector("#my-svg").removeAttribute("hidden");
-    new Vivus("my-svg", {
-      type: "oneByOne",
-      duration: 400,
-      animTimingFunction: Vivus.EASE_OUT,
-    });
+    // document.querySelector("#my-svg").removeAttribute("hidden");
+    // new Vivus("my-svg", {
+    //   type: "oneByOne",
+    //   duration: 400,
+    //   animTimingFunction: Vivus.EASE_OUT,
+    // });
   });
 
   // HELPERS ---------------------------------------------
@@ -63,7 +63,6 @@ const AnimatedPlaceholder = ({ state, actions, opacity }) => {
           data={Logo}
           width="300px"
           height="300px"
-          hidden
         ></object>
       </animated.div>
       <div
