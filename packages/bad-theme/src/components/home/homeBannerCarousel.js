@@ -110,15 +110,6 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
                   <div className="flex">
                     <Html2React html={LABEL} />
                   </div>
-                  <div>
-                    <KeyboardArrowRightIcon
-                      style={{
-                        fill: colors.white,
-                        borderRadius: "50%",
-                        padding: 0,
-                      }}
-                    />
-                  </div>
                 </button>
               </div>
             );
