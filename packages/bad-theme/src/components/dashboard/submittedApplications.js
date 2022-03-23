@@ -23,9 +23,21 @@ const SubmittedApplications = ({ state, actions, libraries }) => {
   if (appsData.length === 0) return null;
   // sort by application date created newest by default
   appsData = appsData.sort((a, b) => {
-    const dateA = new Date(a.createdon);
-    const dateB = new Date(b.createdon);
-    return dateB - dateA;
+    // get date created from application
+    let dateCreatedA = a.createdon;
+    let dateCreatedB = b.createdon;
+    // strip trailing time from date.
+    dateCreatedA = dateCreatedA.split(" ")[0];
+    dateCreatedB = dateCreatedB.split(" ")[0];
+    // for date string reverse month and day
+    const [monthA, dayA, yearA] = dateCreatedA.split("/");
+    const [monthB, dayB, yearB] = dateCreatedB.split("/");
+    // EU format year
+    dateCreatedA = `${dayA}/${monthA}/${yearA}`;
+    dateCreatedB = `${dayB}/${monthB}/${yearB}`;
+
+    // return date created newest first
+    return new Date(dateCreatedB) - new Date(dateCreatedA);
   });
 
   // RETURN ---------------------------------------------
