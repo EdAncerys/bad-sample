@@ -21,6 +21,7 @@ const AnimatedPlaceholder = ({ state, actions, opacity }) => {
       animTimingFunction: Vivus.EASE_OUT,
     });
   });
+
   // HELPERS ---------------------------------------------
   return (
     <div

@@ -143,7 +143,7 @@ const Directory = ({ state, actions, libraries }) => {
     }
   };
 
-  if (dashboardPath !== "Members Directory") return null; // call after all React hooks
+  if (dashboardPath !== "Members' Directory") return null; // call after all React hooks
   if (!fadData) return <Loading />; // awaits data
 
   // SERVERS --------------------------------------------------------
@@ -176,7 +176,7 @@ const Directory = ({ state, actions, libraries }) => {
         <BlockWrapper>
           <div style={{ padding: `0 ${marginHorizontal}px` }}>
             <SearchContainer
-              title="Members Directory"
+              title="Members' Directory"
               subTitle="Search either by name or main place of work to find contact details of colleagues who have opted in to this service"
               width={!lg ? "70%" : "100%"}
               searchFilterRef={searchFilterRef}
@@ -234,28 +234,8 @@ const Directory = ({ state, actions, libraries }) => {
     // console.log("isBADMember", isBADMember); // debug
     if (!isBADMember) return null;
 
-    if (!bad_memberdirectory) {
-      return (
-        <div style={{ position: "relative" }}>
-          <ActionPlaceholder
-            isFetching={isFetching}
-            background="transparent"
-            bottom="-30px"
-            height="auto"
-          />
-          <div
-            className="blue-btn"
-            style={{ marginRight: "1em", width: "fit-content" }}
-            onClick={handlePreferenceUpdate}
-          >
-            Opt-in
-          </div>
-        </div>
-      );
-    }
-
     return (
-      <div style={{ position: "relative" }}>
+      <div style={{ position: "relative", margin: `0 ${marginHorizontal}px` }}>
         <ActionPlaceholder
           isFetching={isFetching}
           background="transparent"
@@ -271,7 +251,7 @@ const Directory = ({ state, actions, libraries }) => {
           }}
           onClick={handlePreferenceUpdate}
         >
-          Opt-out
+          {bad_memberdirectory ? "Opt-in" : "Opt-out"}
         </div>
       </div>
     );
@@ -280,17 +260,9 @@ const Directory = ({ state, actions, libraries }) => {
   // RETURN ---------------------------------------------
   return (
     <div>
-      <BlockWrapper>
-        <div
-          style={{
-            margin: `0 ${marginHorizontal}px ${marginVertical}px ${marginHorizontal}px`,
-          }}
-        >
-          <ServePreferences />
-        </div>
-      </BlockWrapper>
       <ServeFilter />
       <BlockWrapper>
+        <ServePreferences />
         <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
           <div style={!lg ? styles.container : styles.containerMobile}>
             {fadData.map((fad, key) => {
