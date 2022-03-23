@@ -86,7 +86,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
                 type="checkbox"
                 className="form-check-input check-box"
               />
-              <div style={styles.textInfo}>Presidents Bullate</div>
+              <div style={styles.textInfo}>President's Bulletin</div>
             </div>
           </div>
         </div>
@@ -123,8 +123,8 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
                 className="form-check-input check-box"
               />
               <div style={styles.textInfo}>
-                I confirm I wish to universally block any and all contact from
-                the BAD
+                Choose to universally unsubscribe from all BAD membership mass
+                communications
               </div>
             </div>
           </div>
