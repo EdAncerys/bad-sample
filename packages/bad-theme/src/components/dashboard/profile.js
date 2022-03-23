@@ -25,17 +25,18 @@ const Profile = ({ state, actions, libraries }) => {
     if (!isActiveUser) return null;
 
     const { bad_listname, bad_profile_photo_url } = isActiveUser;
-
     const alt = bad_listname || "Profile Picture";
+    const imgWidth = 350;
 
     return (
       <div className="flex" style={{ justifyContent: "flex-end" }}>
         <div
           style={{
-            width: 190,
-            height: 190,
+            width: imgWidth,
+            height: imgWidth,
             borderRadius: `50%`,
             overflow: `hidden`,
+            margin: "3em 0 0 0",
           }}
         >
           <Image
@@ -233,7 +234,7 @@ const Profile = ({ state, actions, libraries }) => {
       className="shadow"
       style={{
         display: "grid",
-        gridTemplateColumns: !lg ? `2fr 1fr` : "1fr",
+        gridTemplateColumns: !lg ? `1fr auto` : "1fr",
         justifyContent: "space-between",
         gap: 20,
         padding: !lg ? `2em 4em` : "1em",

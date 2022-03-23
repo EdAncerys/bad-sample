@@ -66,13 +66,10 @@ const EventLoopBlock = ({
 
   // DATA get for EVENTS ----------------------------------------------------------------
   useEffect(async () => {
-    // pre fetch events data
-    let iteration = 0;
     let data = state.source.events;
 
-    // if !data then break
-    if (!data) return;
     let eventList = Object.values(data);
+    console.log("eventList", eventList); // debug
     const grades = Object.values(state.source.event_grade);
 
     let gradeFilter = [];
@@ -87,7 +84,6 @@ const EventLoopBlock = ({
       });
     }
 
-    console.log("gradeFilter", gradeFilter); // debug
     // sort events in order by date accenting from
     eventList = eventList.sort((a, b) => {
       // if !date_time return null;

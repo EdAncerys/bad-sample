@@ -18,20 +18,9 @@ const Dashboard = ({ state, actions, libraries }) => {
   const { dashboardPath, dynamicsApps } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
-
-  // const [isBADMember, setIsMember] = useState(false);
+  const marginVertical = state.theme.marginVertical;
 
   if (dashboardPath !== "Dashboard") return null;
-
-  // useEffect(() => {
-  //   // if dynamic apps check if user have BAD membership
-  //   if (dynamicsApps) {
-  //     const isBADMember = dynamicsApps.subs.data.filter(
-  //       (app) => app.bad_organisedfor === "BAD"
-  //     );
-  //     if (isBADMember.length) setIsMember(true);
-  //   }
-  // }, [dynamicsApps]);
 
   // SERVERS ---------------------------------------------
   const ServeApplicationStatus = () => {
@@ -80,8 +69,8 @@ const Dashboard = ({ state, actions, libraries }) => {
 
   // RETURN ---------------------------------------------
   return (
-    <div>
-      <div style={{ padding: `0 ${marginHorizontal}px` }}>
+    <div style={{ padding: `0 ${marginHorizontal}px` }}>
+      <div>
         <Profile />
         <ProfileProgress />
         <ServeApplicationStatus />
@@ -89,22 +78,31 @@ const Dashboard = ({ state, actions, libraries }) => {
         <UpdateProfile />
       </div>
 
-      <TitleBlock block={{ text_align: "left", title: "Upcoming Events" }} />
-      <Events
-        block={{
-          add_search_function: false,
-          background_colour: "transparent",
-          colour: colors.turquoise,
-          disable_vertical_padding: false,
-          event_type: false,
-          grade_filter: "All Levels",
-          grades: false,
-          layout: "layout_two",
-          locations: false,
-          post_limit: "2",
-          view_all_link: false,
-        }}
-      />
+      <div
+        className="shadow"
+        style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
+      >
+        <TitleBlock
+          block={{ text_align: "left", title: "Upcoming Events" }}
+          disableMargin
+        />
+        <Events
+          block={{
+            add_search_function: false,
+            background_colour: "transparent",
+            colour: colors.turquoise,
+            disable_vertical_padding: false,
+            event_type: false,
+            grade_filter: "All Levels",
+            grades: false,
+            layout: "layout_three",
+            locations: false,
+            post_limit: "4",
+            view_all_link: false,
+          }}
+          disableMargin
+        />
+      </div>
     </div>
   );
 };
