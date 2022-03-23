@@ -17,6 +17,7 @@ import {
   useAppState,
   setGoToAction,
   muiQuery,
+  postTypeHandler,
 } from "../context";
 
 const AppSearch = ({ state, actions, libraries }) => {
@@ -29,7 +30,6 @@ const AppSearch = ({ state, actions, libraries }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
   const wpBlocks = page.acf.blocks;
-  console.log("appSearchData", appSearchData); // debug
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -39,8 +39,8 @@ const AppSearch = ({ state, actions, libraries }) => {
   const [searchFilter, setSearchFilter] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
   const [catTypes, setCatTypes] = useState("");
-  const typeFilterRef = useRef(null);
-  const searchFilterRef = useRef(null);
+  const typeFilterRef = useRef("");
+  const searchFilterRef = useRef("");
 
   useEffect(() => {
     // ⬇️ on component load defaults to window position TOP
@@ -60,7 +60,6 @@ const AppSearch = ({ state, actions, libraries }) => {
     setCatTypes(catTypes);
     setPostList(appSearchData);
     setPosition(true);
-    console.log(catTypes);
   }, [appSearchData]);
 
   if (!page || !position) return <Loading />;
@@ -68,45 +67,64 @@ const AppSearch = ({ state, actions, libraries }) => {
   // HELPERS ----------------------------------------------------------------
   const handleSearch = () => {
     const input = searchFilterRef.current.value.toLowerCase();
+    const type = typeFilterRef.current.toLowerCase();
 
-    if (!appSearchData) return;
+    if (!appSearchData || !postList) return; // if no data return
+    let data = appSearchData;
     // ⬇️ filter appSearchData by input & typeFilter
-    const filtered = appSearchData.filter((item) => {
-      // if title | type includes input
-      let titleName = item.title;
-      if (item.title.rendered) titleName = item.title.rendered;
+    if (input)
+      data = appSearchData.filter((item) => {
+        // if title | type includes input
+        let titleName = item.title;
+        if (item.title.rendered) titleName = item.title.rendered;
 
-      if (
-        titleName.toLowerCase().includes(input) ||
-        item.type.toLowerCase().includes(input)
-      ) {
-        return item;
-      }
-    });
+        if (
+          titleName.toLowerCase().includes(input) ||
+          item.type.toLowerCase().includes(input)
+        ) {
+          return item;
+        }
+      });
+
+    if (type) {
+      data = data.filter((item) => {
+        if (item.type.toLowerCase().includes(type)) {
+          return item;
+        }
+      });
+    }
 
     setSearchFilter(input);
-    setPostList(filtered);
+    setPostList(data);
+  };
+
+  const handleTypeSearchFilter = (e) => {
+    const input = e.target.value;
+    if (!input) return;
+
+    typeFilterRef.current = input;
+    setTypeFilter(input);
+    handleSearch();
   };
 
   const handleClearTypeFilter = () => {
-    console.log("handleClearTypeFilter handler");
-    // setTypeFilter(null);
-    // typeFilterRef.current = null;
-    // if (!searchFilter) {
-    //   setGuidelinesList(Object.values(state.source.guidelines_standards));
-    // } else {
-    //   handleSearch();
-    // }
+    // clear the typeFilter
+    setTypeFilter("");
+    typeFilterRef.current = "";
+    handleSearch();
   };
 
   const handleClearSearchFilter = () => {
+    // clear search filter
     setSearchFilter("");
-    setPostList(appSearchData);
+    searchFilterRef.current.value = "";
+    handleSearch();
   };
 
   // SERVERS ---------------------------------------------
   const ServeSearchList = () => {
     if (!postList) return null;
+    const listLength = postList.length;
 
     return (
       <div
@@ -118,7 +136,6 @@ const AppSearch = ({ state, actions, libraries }) => {
       >
         {postList.map((item, index) => {
           const { title, content, type, url } = item;
-          console.log(item); // debug
           let searchTitle = "";
           let searchBody = "";
 
@@ -126,7 +143,6 @@ const AppSearch = ({ state, actions, libraries }) => {
           if (title && title.rendered) searchTitle = title.rendered;
           if (content) searchBody = content;
           if (content && content.rendered) searchBody = content.rendered;
-          console.log(searchBody);
 
           const ServeTitle = () => {
             if (!searchTitle) return null;
@@ -143,39 +159,17 @@ const AppSearch = ({ state, actions, libraries }) => {
 
           const ServeType = () => {
             if (!type) return null;
-            let typeName = type;
-            let typeColor = colors.green;
 
             // pre define search colours & type names
-            if (type === "post") {
-              typeName = "Blog Post";
-              typeColor = colors.black;
-            }
-            if (type === "page") {
-              typeName = "Page";
-              typeColor = colors.blue;
-            }
-            if (type === "pils") {
-              typeName = "PILS";
-              typeColor = colors.red;
-            }
-            if (type === "derm_groups_charity") {
-              typeName = "Dermatology Group & Charity";
-            }
-            if (type === "events") {
-              typeName = "Events";
-              typeColor = colors.turquoise;
-            }
-            if (type === "covid_19") {
-              typeName = "COVID-19";
-            }
+            let name = postTypeHandler({ type }).name;
+            let color = postTypeHandler({ type }).color;
 
             return (
               <div
                 className="primary-title"
-                style={{ padding: `0.5em 0`, color: typeColor }}
+                style={{ padding: `0.5em 0`, color }}
               >
-                <Html2React html={typeName} />
+                <Html2React html={name} />
               </div>
             );
           };
@@ -209,7 +203,7 @@ const AppSearch = ({ state, actions, libraries }) => {
           );
         })}
 
-        {/* {bodyLength > 2500 && <ScrollTop />} */}
+        {listLength > 10 && <ScrollTop />}
       </div>
     );
   };
@@ -235,10 +229,11 @@ const AppSearch = ({ state, actions, libraries }) => {
 
     const ServeTypeFilter = () => {
       if (!typeFilter) return null;
+      let name = postTypeHandler({ type: typeFilter }).name;
 
       return (
         <div className="shadow filter" style={{ textTransform: "uppercase" }}>
-          <div>{typeFilter}</div>
+          <div>{name}</div>
           <div className="filter-icon" onClick={handleClearTypeFilter}>
             <CloseIcon
               style={{
@@ -255,23 +250,38 @@ const AppSearch = ({ state, actions, libraries }) => {
       if (catTypes && !catTypes.length) return null;
 
       return (
-        <div style={{ width: "fit-content" }}>
-          <Form.Select
-            value={typeFilter}
-            onChange={(e) => setTypeFilter(e.target.value)}
-            className="input"
+        <div className="flex">
+          <div
+            className="primary-title"
+            style={{
+              display: "grid",
+              alignItems: "center",
+              fontSize: 20,
+              paddingRight: "0.5em",
+            }}
           >
-            <option value="" hidden>
-              Site Section
-            </option>
-            {catTypes.map((item, key) => {
-              return (
-                <option key={key} value={item}>
-                  {item}
-                </option>
-              );
-            })}
-          </Form.Select>
+            Filter:
+          </div>
+          <div style={{ width: "fit-content" }}>
+            <Form.Select
+              value={typeFilter}
+              onChange={handleTypeSearchFilter}
+              className="input"
+            >
+              <option value="" hidden>
+                Site Section
+              </option>
+              {catTypes.map((item, key) => {
+                let name = postTypeHandler({ type: item }).name;
+
+                return (
+                  <option key={key} value={item}>
+                    {name}
+                  </option>
+                );
+              })}
+            </Form.Select>
+          </div>
         </div>
       );
     };
@@ -297,7 +307,7 @@ const AppSearch = ({ state, actions, libraries }) => {
             />
 
             <ServeDropDownFilter />
-            <div className="flex" style={{ padding: "0.5em 0 1em" }}>
+            <div className="flex" style={{ paddingTop: "1.5em" }}>
               <ServeSearchFilter />
               <ServeTypeFilter />
             </div>

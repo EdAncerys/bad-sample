@@ -75,6 +75,7 @@ import { useIsMounted } from "../helpers/useIsMounted";
 import { errorHandler } from "../helpers/errorHandler";
 import { anchorScrapper } from "../helpers/contentScrapper";
 import { copyToClipboard } from "../helpers/domEvents";
+import { postTypeHandler } from "../helpers/postType";
 import {
   authCookieActionAfterCSR,
   getWPMenu,
@@ -153,4 +154,5 @@ export {
   getLeadershipTeamData,
   setAppSearchDataAction,
   setAppSearchPhraseAction,
+  postTypeHandler,
 };

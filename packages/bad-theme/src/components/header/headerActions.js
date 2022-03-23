@@ -83,7 +83,6 @@ const HeaderActions = ({ state, actions, libraries }) => {
   };
 
   const redirectHandler = ({ item }) => {
-    console.log(item);
     let path = item.url;
     const wpPath = state.auth.WP_HOST;
     path = path.replace(wpPath, ""); // strip down wp path
@@ -111,7 +110,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   const handleKeyPress = (e) => {
     // dont allow redirect if data is not loaded
-    if (isFetching) return;
+    if (isFetching || !filter) return;
 
     if (e.key === "Enter" && e.target.value) {
       takeToSearchHandler();
