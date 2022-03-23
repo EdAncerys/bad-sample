@@ -126,7 +126,7 @@ const ApplicationList = ({ state, actions, libraries }) => {
               justifyItems: "center",
             }}
           >
-            Existing Applications
+            Current Subscriptions
           </div>
           {subsData.map((app, key) => {
             const {

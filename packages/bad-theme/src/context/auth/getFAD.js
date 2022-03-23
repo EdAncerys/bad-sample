@@ -1,9 +1,40 @@
 import { authenticateAppAction, setFetchAction } from "../index";
 
-export const getFadAction = async ({ state, dispatch }) => {
+export const getFadAction = async ({ state, dispatch, page }) => {
   console.log("getFadAction triggered");
 
-  let skip = 0;
+  let skip = page || 0;
+  let perPage = 15;
+
+  try {
+    const jwt = await authenticateAppAction({ state });
+    if (!jwt) throw new Error("error authenticating app");
+
+    const requestOptions = {
+      method: "GET",
+      headers: { Authorization: `Bearer ${jwt}` },
+    };
+
+    // while result length is equal perPage, then fetch next page
+    let URL =
+      state.auth.APP_HOST + `/catalogue/fad?limit=${perPage}&skip=${skip}`;
+    const data = await fetch(URL, requestOptions);
+    if (!data) throw new Error("error fetching data form API");
+    const result = await data.json();
+    console.log("getFadAction data", result.data);
+
+    return result.data;
+  } catch (error) {
+    console.log("error", error);
+  } finally {
+    setFetchAction({ dispatch, isFetching: false });
+  }
+};
+
+export const getAllFadAction = async ({ state, dispatch, page }) => {
+  console.log("getFadAction triggered");
+
+  let skip = page || 0;
   let perPage = 20;
   let postData = [];
   let responseLength = perPage;
@@ -17,11 +48,6 @@ export const getFadAction = async ({ state, dispatch }) => {
       headers: { Authorization: `Bearer ${jwt}` },
     };
 
-    // const URL = state.auth.APP_HOST + `/catalogue/fad?limit=${perPage}&skip=${skip}`;
-    // setFetchAction({ dispatch, isFetching: true });
-    // const data = await fetch(URL, requestOptions);
-    // const result = await data.json();
-
     while (responseLength === perPage) {
       // while result length is equal perPage, then fetch next page
       let URL =
@@ -30,22 +56,16 @@ export const getFadAction = async ({ state, dispatch }) => {
       if (!data) throw new Error("error fetching data form API");
       const result = await data.json();
 
-      console.log("length", postData.length);
+      console.log("length", result.data.length);
       console.log("result", result);
 
-      responseLength = result.length;
+      responseLength = result.data.length;
       skip++;
       // spread response to postData equal to previous postData + new response
       postData = [...postData, ...result.data];
     }
 
-    // if (result.success) {
-    //   const fad = result.data;
-    //   console.log("⏬ FED data successfully fetched ⏬");
-    //   // console.log(fad);
-
-    //   return fad;
-    // }
+    return postData;
   } catch (error) {
     console.log("error", error);
   } finally {

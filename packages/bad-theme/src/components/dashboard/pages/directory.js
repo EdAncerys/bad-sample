@@ -2,13 +2,12 @@ import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import CloseIcon from "@mui/icons-material/Close";
-
 import Loading from "../../loading";
 import { colors } from "../../../config/colors";
 import Card from "../../card/card";
 import SearchContainer from "../../searchContainer";
 import ActionPlaceholder from "../../actionPlaceholder";
-
+import ScrollTop from "../../../components/scrollTop";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../../blockWrapper";
 // CONTEXT -------------------------------------------------------------------
@@ -26,14 +25,15 @@ const Directory = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { fad, dashboardPath, isActiveUser, dynamicsApps } = useAppState();
 
-  const LIMIT = 9;
+  const postLimit = 20;
 
   const [searchFilter, setSearchFilter] = useState(null);
-  const [fadData, setFadData] = useState(null);
+  const [fadData, setFadData] = useState([]);
+  const [page, setPage] = useState(0);
   const [isFetching, setIsFetching] = useState(null);
+  const [isGetMore, setGetMore] = useState(null);
 
   const searchFilterRef = useRef(null);
-  const loadMoreRef = useRef(null);
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
@@ -46,16 +46,15 @@ const Directory = ({ state, actions, libraries }) => {
       const data = await getFadAction({ state, dispatch });
       // set fad data in context of app
       setFadAction({ dispatch, fad: data });
-
-      setFadData(data.slice(0, Number(LIMIT)));
+      setFadData(data);
     } else {
-      setFadData(fad.slice(0, Number(LIMIT)));
+      setFadData(fad);
     }
 
     return () => {
       searchFilterRef.current = null; // clean up function
     };
-  }, [fad]);
+  }, []);
 
   // HANDLERS -------------------------------------------------------------------
   const handlePreferenceUpdate = async () => {
@@ -102,7 +101,7 @@ const Directory = ({ state, actions, libraries }) => {
     setSearchFilter(null);
     searchFilterRef.current = null;
 
-    setFadData(fad.slice(0, Number(LIMIT)));
+    setFadData(fad.slice(0, Number(postLimit)));
   };
 
   const handleSearch = () => {
@@ -131,15 +130,28 @@ const Directory = ({ state, actions, libraries }) => {
     setSearchFilter(input);
   };
 
-  const handleLoadMoreFilter = async () => {
-    if (fadData.length < LIMIT) return;
+  const handleLoadMore = async () => {
+    try {
+      setGetMore(true);
 
-    if (!loadMoreRef.current) {
-      loadMoreRef.current = true;
-      setFadData(fad);
-    } else {
-      setFadData(fad.slice(0, Number(LIMIT)));
-      loadMoreRef.current = false;
+      const data = await getFadAction({ state, dispatch, page });
+      // set fad data in context of app
+      setFadAction({ dispatch, fad: data });
+      // increment page iteration counter
+      setPage(page + 1);
+      // set fad data in context of app
+      setFadData([...fadData, ...data]);
+    } catch (error) {
+      console.log(error);
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Failed to load more members. Please try again.`,
+          image: "Error",
+        },
+      });
+    } finally {
+      setGetMore(false);
     }
   };
 
@@ -192,9 +204,7 @@ const Directory = ({ state, actions, libraries }) => {
   };
 
   const ServeMoreAction = () => {
-    if (searchFilter || fadData.length < LIMIT) return null;
-
-    const value = loadMoreRef.current ? "Less" : "Load More";
+    if (isGetMore) return <Loading />;
 
     return (
       <div
@@ -207,9 +217,9 @@ const Directory = ({ state, actions, libraries }) => {
         <button
           type="submit"
           className="transparent-btn"
-          onClick={handleLoadMoreFilter}
+          onClick={handleLoadMore}
         >
-          {value}
+          Load More
         </button>
       </div>
     );
@@ -263,14 +273,15 @@ const Directory = ({ state, actions, libraries }) => {
       <ServeFilter />
       <BlockWrapper>
         <ServePreferences />
-        {/* <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
+        <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
           <div style={!lg ? styles.container : styles.containerMobile}>
             {fadData.map((fad, key) => {
               return <ServeFadList key={key} fad={fad} />;
             })}
           </div>
           <ServeMoreAction />
-        </div> */}
+          {fadData.length > 15 && <ScrollTop />}
+        </div>
       </BlockWrapper>
     </div>
   );

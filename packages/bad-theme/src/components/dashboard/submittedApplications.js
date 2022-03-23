@@ -54,7 +54,7 @@ const SubmittedApplications = ({ state, actions, libraries }) => {
             justifyItems: "center",
           }}
         >
-          Pending For Approval Applications
+          Applications Pending Approval
         </div>
         {appsData.map((app, key) => {
           const { bad_organisedfor, core_name, createdon, bad_approvalstatus } =

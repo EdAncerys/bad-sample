@@ -244,8 +244,8 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   return (
     <div>
       <ServeApplicationConsole />
-      <ApplicationList />
       <SubmittedApplications />
+      <ApplicationList />
     </div>
   );
 };

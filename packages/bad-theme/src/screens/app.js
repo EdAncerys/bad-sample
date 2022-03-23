@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Switch from "@frontity/components/switch";
 import { colors } from "../config/imports";
-import { muiQuery } from "../context";
 import { useTransition, animated } from "react-spring";
 
 // COMPONENTS ---------------------------------------------------------
@@ -58,11 +57,13 @@ import {
   setPlaceholderAction,
   setIDFilterAction,
   getLeadershipTeamData,
+  muiQuery,
 } from "../context";
 
 const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { isActiveUser, isPlaceholder, idFilter } = useAppState();
+  const { sm, md, lg, xl } = muiQuery();
 
   // ⬇️ import custom hook for Google API ⬇️
   // useScript({
@@ -78,6 +79,8 @@ const App = ({ state, actions }) => {
   useEffect(() => {
     // ⬇️ restore scroll history to manual position ⬇️
     window.history.scrollRestoration = "manual";
+
+    console.log("muiQuery", lg); // debug
   }, [endPoint]);
 
   useEffect(async () => {
@@ -115,7 +118,6 @@ const App = ({ state, actions }) => {
       setIDFilterAction({ dispatch, idFilter: null }); // reset filter id on page change
   }, [endPoint]);
 
-  const { sm, md, lg, xl } = muiQuery();
   // RESPONSIVE --------------------------------------------
   if (lg) state.theme.marginHorizontal = 10;
   if (lg) state.theme.marginVertical = 10;
