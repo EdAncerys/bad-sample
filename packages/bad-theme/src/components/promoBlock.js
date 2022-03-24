@@ -106,7 +106,7 @@ const PromoBlock = ({ state, actions, block, disableMargin }) => {
           padding: isAlignLeft ? "0 0 0 20px" : "0 20px 0 0",
         }}
       >
-        <FullWidthContentBlock block={block} disablePadding />
+        <FullWidthContentBlock block={block} disablePadding promoBlock />
       </div>
     );
   };
@@ -115,7 +115,10 @@ const PromoBlock = ({ state, actions, block, disableMargin }) => {
   return (
     <div
       style={{
-        backgroundColor: block.background_colour,
+        // backgroundColor: journals ? "white" : block.background_colour,
+        backgroundColor: "white",
+        marginTop: "2em",
+        marginBottom: "2em",
       }}
     >
       <div
