@@ -19,6 +19,7 @@ import {
   setFadAction,
   updateProfileAction,
   setErrorAction,
+  getAllFadAction,
 } from "../../../context";
 
 const Directory = ({ state, actions, libraries }) => {
@@ -41,6 +42,7 @@ const Directory = ({ state, actions, libraries }) => {
 
   // DATA pre FETCH ------------------------------------------------------------
   useEffect(async () => {
+    // await getAllFadAction({ state, dispatch });
     if (!fad) {
       // fetch data via API
       const data = await getFadAction({ state, dispatch });
