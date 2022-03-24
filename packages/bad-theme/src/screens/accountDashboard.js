@@ -83,8 +83,11 @@ const AccountDashboard = ({ state, actions, libraries }) => {
 
   const ServeDashboardActions = () => {
     let applicationTitle = "Apply for BAD Membership";
-    if (isBADMember)
+    let applicationPath = "/membership/categories-of-membership/";
+    if (isBADMember) {
       applicationTitle = "Apply to Change BAD Membership category";
+      applicationPath = "/membership/step-1-the-process/";
+    }
 
     return (
       <div style={{ backgroundColor: colors.bgPink }}>
@@ -96,7 +99,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
                   {
                     title: applicationTitle,
                     colour: colors.navy,
-                    link: { url: "/membership/categories-of-membership/" },
+                    link: { url: applicationPath },
                   },
                   {
                     title: "Apply for SIG Membership",

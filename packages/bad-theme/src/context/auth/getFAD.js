@@ -35,7 +35,7 @@ export const getAllFadAction = async ({ state, dispatch, page }) => {
   console.log("getFadAction triggered");
 
   let skip = page || 0;
-  let perPage = 20;
+  let perPage = 100;
   let postData = [];
   let responseLength = perPage;
 
@@ -65,6 +65,7 @@ export const getAllFadAction = async ({ state, dispatch, page }) => {
       postData = [...postData, ...result.data];
     }
 
+    console.log("Total posts", postData.length);
     return postData;
   } catch (error) {
     console.log("error", error);

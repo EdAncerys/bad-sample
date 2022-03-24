@@ -41,7 +41,7 @@ import {
 } from "./actions/memberships";
 import { getWpPagesAction } from "./actions/getWpPages";
 import { getTweetsAction } from "./auth/getTweets";
-import { getFadAction, setFadAction } from "./auth/getFAD";
+import { getFadAction, setFadAction, getAllFadAction } from "./auth/getFAD";
 import { updateProfileAction } from "./auth/updateProfile";
 import {
   updateAddressAction,
@@ -102,6 +102,7 @@ export {
   setErrorAction,
   getTweetsAction,
   getFadAction,
+  getAllFadAction,
   setFadAction,
   getUserAction,
   getUserDataByContactId,

@@ -3,7 +3,6 @@ import { connect } from "frontity";
 
 import Profile from "../profile";
 import ProfileProgress from "../profileProgress";
-import UpdateProfile from "../updateProfile";
 import { colors } from "../../../config/colors";
 import Loading from "../../loading";
 import TitleBlock from "../../titleBlock";
@@ -75,7 +74,6 @@ const Dashboard = ({ state, actions, libraries }) => {
         <ProfileProgress />
         <ServeApplicationStatus />
         <ServePayments />
-        <UpdateProfile />
       </div>
 
       <div

@@ -136,7 +136,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
 
   // SERVERS ---------------------------------------------
   const ServeProfileAvatar = () => {
-    if (!isActiveUser || dashboardPath === "Dashboard") return null;
+    if (!isActiveUser) return null;
 
     const { bad_listname, bad_profile_photo_url } = isActiveUser;
     const alt = bad_listname || "Profile Picture";
