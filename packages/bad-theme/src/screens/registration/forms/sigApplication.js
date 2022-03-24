@@ -22,6 +22,7 @@ import {
   getHospitalsAction,
   getBADMembershipSubscriptionData,
   sendFileToS3Action,
+  getEthnicityAction,
 } from "../../../context";
 
 const SIGApplication = ({ state, actions, libraries }) => {
@@ -113,6 +114,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const [isFetching, setFetching] = useState(false);
   const [membershipData, setMembershipData] = useState(false);
   const [genderList, setGenderList] = useState([]);
+  const [isJobEditable, setJobEditable] = useState(true);
 
   const [hospitalData, setHospitalData] = useState(null);
   const [canChangeHospital, setCanChangeHospital] = useState(true); // allow user to change hospital is no BAD applications are found
@@ -167,7 +169,21 @@ const SIGApplication = ({ state, actions, libraries }) => {
         if (data.name === item) {
           handleSetFormData({ data, name: item });
         }
+        // if bad_currentpost is null then set value from user profile data
+        if (!data.bad_currentpost) {
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            [`bad_currentpost`]: isActiveUser.jobtitle,
+          }));
+          // set job title to disabled status
+          setJobEditable(false);
+        }
       });
+      // set gender from picklist from app data
+      if (data.name === "py3_gender") {
+        let list = data.info.Choices;
+        setGenderList(list);
+      }
 
       // set hospital id if exists
       if (data.name === "py3_hospitalid") {
@@ -763,7 +779,13 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 type="text"
                 className="form-control input"
                 placeholder="Current job title"
+                // set field diabled if user have BAD apps
+                disabled={isJobEditable ? false : true}
               />
+              <div style={{ padding: "0.5em 0" }}>
+                If you would like to change your Job TITLE please use the form
+                on your dashboard.
+              </div>
               <FormError id="bad_currentpost" />
             </div>
           )}
@@ -795,7 +817,14 @@ const SIGApplication = ({ state, actions, libraries }) => {
               </label>
               <div style={{ position: "relative" }}>
                 {selectedHospital && (
-                  <div className="form-control input">
+                  <div
+                    className="form-control input"
+                    style={{
+                      backgroundColor: canChangeHospital
+                        ? "transparent"
+                        : colors.disabled,
+                    }}
+                  >
                     <div className="flex-row">
                       <div
                         style={{
@@ -840,6 +869,10 @@ const SIGApplication = ({ state, actions, libraries }) => {
                   filter={hospitalData}
                   onClickHandler={handleSelectHospital}
                 />
+              </div>
+              <div style={{ padding: "0.5em 0" }}>
+                If you would like to change your Medical school / Place of work
+                please use the form on your dashboard.
               </div>
             </div>
           )}

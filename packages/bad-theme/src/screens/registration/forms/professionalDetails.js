@@ -136,7 +136,13 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         if (data.value) hospitalId = data.value;
         handleSetFormData({ data, name: "py3_hospitalid" });
       }
-      // get hospital name from API
+      // if bad_currentpost is null then set value from user profile data
+      if (!data.bad_currentpost) {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          [`bad_currentpost`]: isActiveUser.jobtitle,
+        }));
+      }
 
       if (data.bad_categorytype) setType(data.bad_categorytype); // validate BAD application category type
       if (data._bad_sigid_value) setType(data._bad_sigid_value); // validate SIG application category type

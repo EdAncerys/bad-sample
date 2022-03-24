@@ -175,6 +175,13 @@ const ApplicationChange = ({ state, actions, libraries }) => {
       });
 
       if (data.bad_categorytype) setType(data.bad_categorytype); // validate BAD application category type
+      // if bad_currentpost is null then set value from user profile data
+      if (!data.bad_currentpost) {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          [`bad_currentpost`]: isActiveUser.jobtitle,
+        }));
+      }
     });
 
     if (hospitalId) {
