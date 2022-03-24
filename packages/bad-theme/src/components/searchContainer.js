@@ -6,6 +6,7 @@ import { muiQuery } from "../context";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
+import CircularProgress from "@mui/material/CircularProgress";
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, setFilterAction } from "../context";
 
@@ -20,6 +21,7 @@ const SearchContainer = ({
   padding,
   onChange,
   inputOnly,
+  isFetching,
 }) => {
   const { sm, md, lg, xl } = muiQuery();
 
@@ -30,6 +32,7 @@ const SearchContainer = ({
 
   // HANDLERS ---------------------------------------------
   const handleKeyPress = (e) => {
+    if (isFetching) return;
     if (e.key === "Enter" && e.target.value) {
       handleSearch();
     }
@@ -70,7 +73,7 @@ const SearchContainer = ({
   };
 
   const ServeSearchContainer = () => {
-    const [value, setValue] = useState(null);
+    const [value, setValue] = useState("");
 
     const handleOnChange = ({ e }) => {
       setValue(e.target.value);
@@ -82,10 +85,15 @@ const SearchContainer = ({
       const closeIcon = <CloseIcon />;
       const icon = value ? closeIcon : searchIcon;
 
+      if (isFetching)
+        return (
+          <CircularProgress color="inherit" style={{ width: 25, height: 25 }} />
+        );
+
       return (
         <div
           onClick={() => {
-            setValue(null);
+            setValue("");
             searchFilterRef.current.value = "";
             if (onChange) setFilterAction({ dispatch, filter: null }); // reset main search filter
           }}
@@ -127,6 +135,7 @@ const SearchContainer = ({
         >
           <input
             ref={searchFilterRef}
+            value={value}
             onChange={(e) => handleOnChange({ e })}
             onKeyPress={(e) => handleKeyPress(e)}
             type="text"

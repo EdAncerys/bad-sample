@@ -20,6 +20,7 @@ import {
   updateProfileAction,
   setErrorAction,
   getAllFadAction,
+  getFADSearchAction,
 } from "../../../context";
 
 const Directory = ({ state, actions, libraries }) => {
@@ -29,8 +30,11 @@ const Directory = ({ state, actions, libraries }) => {
   const postLimit = 20;
 
   const [searchFilter, setSearchFilter] = useState(null);
+  const [fadSearchList, setFadSearchList] = useState(null);
   const [fadData, setFadData] = useState([]);
   const [page, setPage] = useState(0);
+
+  const [isSearchFetching, setSearchFetching] = useState(false);
   const [isFetching, setIsFetching] = useState(null);
   const [isGetMore, setGetMore] = useState(null);
 
@@ -110,30 +114,43 @@ const Directory = ({ state, actions, libraries }) => {
     setFadData(fad.slice(0, Number(postLimit)));
   };
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     const input = searchFilterRef.current.value.toLowerCase();
-    let data = fad;
+    if (input.length < 3) return;
+    console.log(input);
 
-    if (!!input) {
-      data = data.filter((item) => {
-        let fullname = item.fullname;
-        let email = item.emailaddress1;
-        let hospitalName =
-          item[
-            "_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"
-          ];
-
-        if (fullname) fullname = fullname.toLowerCase().includes(input);
-        if (email) email = email.toLowerCase().includes(input);
-        if (hospitalName)
-          hospitalName = hospitalName.toLowerCase().includes(input);
-
-        return fullname || email || hospitalName;
-      });
+    try {
+      setSearchFetching(true);
+      await getFADSearchAction({ state, dispatch, query: input });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSearchFetching(false);
     }
 
-    setFadData(data);
-    setSearchFilter(input);
+    // setSearchFilter(input);
+
+    // let data = fad;
+
+    // if (!!input) {
+    //   data = data.filter((item) => {
+    //     let fullname = item.fullname;
+    //     let email = item.emailaddress1;
+    //     let hospitalName =
+    //       item[
+    //         "_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"
+    //       ];
+
+    //     if (fullname) fullname = fullname.toLowerCase().includes(input);
+    //     if (email) email = email.toLowerCase().includes(input);
+    //     if (hospitalName)
+    //       hospitalName = hospitalName.toLowerCase().includes(input);
+
+    //     return fullname || email || hospitalName;
+    //   });
+    // }
+
+    // setFadData(data);
   };
 
   const handleLoadMore = async () => {
@@ -199,6 +216,8 @@ const Directory = ({ state, actions, libraries }) => {
               width={!lg ? "70%" : "100%"}
               searchFilterRef={searchFilterRef}
               handleSearch={handleSearch}
+              onChange={handleSearch}
+              isFetching={isSearchFetching}
             />
             <div className="flex" style={{ margin: "0.5em 0" }}>
               <ServeSearchFilter />

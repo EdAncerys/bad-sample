@@ -7,6 +7,7 @@ export const getFadAction = async ({ state, dispatch, page }) => {
   let perPage = 15;
 
   try {
+    setFetchAction({ dispatch, isFetching: true });
     const jwt = await authenticateAppAction({ state });
     if (!jwt) throw new Error("error authenticating app");
 
@@ -28,6 +29,31 @@ export const getFadAction = async ({ state, dispatch, page }) => {
     console.log("error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
+  }
+};
+
+export const getFADSearchAction = async ({ state, dispatch, query }) => {
+  console.log("getFADSearchAction triggered");
+
+  try {
+    const jwt = await authenticateAppAction({ state });
+    if (!jwt) throw new Error("error authenticating app");
+
+    const requestOptions = {
+      method: "GET",
+      headers: { Authorization: `Bearer ${jwt}` },
+    };
+
+    // while result length is equal perPage, then fetch next page
+    let URL = state.auth.APP_HOST + `/catalogue/fad?search=${query}`;
+    const data = await fetch(URL, requestOptions);
+    if (!data) throw new Error("error fetching data form API");
+    const result = await data.json();
+    console.log("getFadAction data", result.data);
+
+    return result.data;
+  } catch (error) {
+    console.log("error", error);
   }
 };
 
