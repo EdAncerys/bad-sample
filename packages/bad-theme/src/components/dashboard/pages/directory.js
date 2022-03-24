@@ -261,7 +261,7 @@ const Directory = ({ state, actions, libraries }) => {
           }}
           onClick={handlePreferenceUpdate}
         >
-          {bad_memberdirectory ? "Opt-in" : "Opt-out"}
+          {bad_memberdirectory ? "Opt-out" : "Opt-in"}
         </div>
       </div>
     );
