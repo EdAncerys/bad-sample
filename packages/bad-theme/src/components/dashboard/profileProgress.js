@@ -188,19 +188,17 @@ const ProfileProgress = ({ state, actions, libraries }) => {
 
   const ServeActions = () => {
     return (
-      <div>
-        <div className="flex">
-          <div
-            type="submit"
-            className="blue-btn"
-            onClick={handleCancelApplication}
-            style={{ marginRight: "1em", backgroundColor: colors.danger }}
-          >
-            Cancel Application
-          </div>
-          <div type="submit" className="blue-btn" onClick={handleApply}>
-            Continue Application
-          </div>
+      <div className="flex" style={{ paddingTop: "1.5em" }}>
+        <div
+          type="submit"
+          className="blue-btn"
+          onClick={handleCancelApplication}
+          style={{ marginRight: "1em", backgroundColor: colors.danger }}
+        >
+          Cancel Application
+        </div>
+        <div type="submit" className="blue-btn" onClick={handleApply}>
+          Continue Application
         </div>
       </div>
     );
@@ -219,7 +217,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
             marginBottom: `${marginVertical}px`,
           }}
         >
-          <div className="flex" style={{ alignItems: "center" }}>
+          <div className="flex-col">
             <div
               className="flex primary-title"
               style={{
@@ -233,10 +231,9 @@ const ProfileProgress = ({ state, actions, libraries }) => {
               Application Progress
               <span style={{ paddingLeft: "0.5em" }}>{applicationStep}</span>
             </div>
+            <ServeProgressBar />
             <ServeActions />
           </div>
-
-          <ServeProgressBar />
         </div>
       </div>
     );

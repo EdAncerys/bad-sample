@@ -280,9 +280,9 @@ const FindDermatologistOptions = ({ state }) => {
           className="flex"
           style={{ justifyContent: "flex-end", padding: `2em 0 0` }}
         >
-          <button type="submit" className="blue-btn">
+          <div type="submit" className="blue-btn">
             Update
-          </button>
+          </div>
         </div>
       </form>
     </div>
