@@ -56,8 +56,10 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
 
   if (dashboardPath !== "Events") return null;
 
-  // RETURN ---------------------------------------------
   if (!listOfEvents) return <Loading />;
+  console.log("--------------", listOfEvents);
+
+  // RETURN ---------------------------------------------
   return (
     <div>
       <TitleBlock
