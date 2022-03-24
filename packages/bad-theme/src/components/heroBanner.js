@@ -43,6 +43,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
   if (disable_vertical_padding) marginVertical = 0;
   let marginBottom = marginVertical;
   if (buttons) marginBottom = state.theme.marginVertical;
+  if (!add_buttons) marginBottom = 0;
 
   if (content_height === "small")
     BANNER_HEIGHT = state.theme.bannerHeight * 0.75;
