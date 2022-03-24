@@ -112,7 +112,7 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
           className="flex"
           style={{
             marginRight: MARGIN * 2,
-            fontSize: 14,
+            fontSize: 12,
             alignItems: "center",
           }}
         >
@@ -149,10 +149,7 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
 
   return (
     <BlockWrapper background={colors.lightSilver}>
-      <div
-        className="flex"
-        style={{ ...styles.wrapper, padding: `0 ${marginHorizontal}px` }}
-      >
+      <div className="flex" style={{ ...styles.wrapper }}>
         <ServeTitle />
         <ServeNewsMediaPreFix />
         {!lg ? (
@@ -180,7 +177,7 @@ const styles = {
     cursor: "pointer",
   },
   linkValue: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: "bold",
     color: colors.blue,
     textTransform: "capitalize",
