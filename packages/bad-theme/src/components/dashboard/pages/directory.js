@@ -257,7 +257,9 @@ const Directory = ({ state, actions, libraries }) => {
           style={{
             marginRight: "1em",
             width: "fit-content",
-            backgroundColor: colors.danger,
+            backgroundColor: isActiveUser.bad_memberdirectory
+              ? colors.danger
+              : colors.white,
           }}
           onClick={handlePreferenceUpdate}
         >
