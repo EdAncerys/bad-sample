@@ -114,8 +114,8 @@ const Navigation = ({ state, actions, libraries }) => {
   const handleActiveBoxShadow = (slug) => {
     // checking if any of the menu should be highlighted
     const currentLink = state.router.link;
-    const activeSlug = currentLink.match(/(?<=\/).*?(?=\/)/)[0];
-    if (activeSlug === slug) {
+    const activeSlug = currentLink.match(/(?<=\/).*?(?=\/)/);
+    if (activeSlug !== null && activeSlug[0] === slug) {
       return handleBoxShadow(slug);
     }
     return "none";
