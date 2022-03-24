@@ -7,8 +7,8 @@ export const useQuery = ({ state }) => {
   useEffect(() => {
     // ⬇️ handle container width change ⬇️
     // main container width change
-    if (!lg) state.theme.contentContainer = 950;
-    if (!xl) state.theme.contentContainer = 1150;
+    if (!lg) state.theme.contentContainer = 1150;
+    if (!xl) state.theme.contentContainer = 1250;
     if (!xxl) state.theme.contentContainer = 1350;
 
     // other change

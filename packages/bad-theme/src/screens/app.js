@@ -226,8 +226,10 @@ const styles = {
     // apply full height to viewport
     display: "flex",
     flexDirection: "column",
-    minHeight: "100vh",
     margin: "0 auto",
+    minHeight: "100vh",
+    minWidth: "100%",
+    overflow: "hidden",
   },
 };
 

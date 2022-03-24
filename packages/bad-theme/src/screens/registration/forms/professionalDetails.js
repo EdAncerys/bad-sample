@@ -620,7 +620,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                     onChange={handleInputChange}
                     type="text"
                     className="form-control input"
-                    placeholder="MRCP"
+                    placeholder="Name"
                   />
                   <FormError id="bad_proposer1" />
                 </div>
@@ -643,7 +643,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                     onChange={handleInputChange}
                     type="text"
                     className="form-control input"
-                    placeholder="MRCP"
+                    placeholder="Name"
                   />
                   <FormError id="bad_proposer2" />
                 </div>
