@@ -12,9 +12,15 @@ export const useQuery = ({ state }) => {
     if (!xxl) state.theme.contentContainer = 1350;
 
     // other change
-    if (lg) state.theme.marginHorizontal = 10;
-    if (lg) state.theme.marginVertical = 10;
-    if (lg) state.theme.fontSize = 22;
-    if (lg) state.theme.footerHeight = 2;
+    if (lg) {
+      state.theme.marginHorizontal = 10;
+      state.theme.marginVertical = 10;
+      state.theme.fontSize = 22;
+      state.theme.footerHeight = 2;
+    }
+    if (!xl) {
+      state.theme.marginHorizontal = 100;
+      state.theme.marginVertical = 40;
+    }
   }, [sm, md, lg, xl, xxl]);
 };

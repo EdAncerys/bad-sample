@@ -25,7 +25,12 @@ const Profile = ({ state, actions, libraries }) => {
 
     const { bad_listname, bad_profile_photo_url } = isActiveUser;
     const alt = bad_listname || "Profile Picture";
-    const imgWidth = 350;
+    let imgWidth = 350;
+    if (xl) {
+      imgWidth = 200;
+    } else {
+      imgWidth = 350;
+    }
 
     return (
       <div className="flex" style={{ justifyContent: "flex-end" }}>
@@ -120,19 +125,6 @@ const Profile = ({ state, actions, libraries }) => {
         <div className="flex-col" style={styles.container}>
           <span className="primary-title">Mobile: </span>
           <Html2React html={mobilephone} />
-        </div>
-      );
-    };
-
-    const ServePlaceOfWork = () => {
-      if (!py3_currentplaceofwork) return null;
-
-      return (
-        <div className="flex-col" style={styles.container}>
-          <span className="primary-title">
-            Main Place of work / Medical School:
-          </span>
-          <Html2React html={py3_currentplaceofwork} />
         </div>
       );
     };
