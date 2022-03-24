@@ -136,6 +136,7 @@ const AppSearch = ({ state, actions, libraries }) => {
       >
         {postList.map((item, index) => {
           const { title, content, type, url } = item;
+          // console.log("menu", item); // debug
           let searchTitle = "";
           let searchBody = "";
 
@@ -178,8 +179,19 @@ const AppSearch = ({ state, actions, libraries }) => {
             if (!searchBody) return null;
 
             return (
-              <div className="primary-title" style={{ padding: `0.5em 0` }}>
+              <div
+                className="primary-title body-limit"
+                style={{ margin: `0.5em 0`, WebkitLineClamp: 6 }}
+              >
                 <Html2React html={searchBody} />
+              </div>
+            );
+          };
+
+          const ServeAction = () => {
+            return (
+              <div className="caps-btn" style={{ padding: `0.5em 0` }}>
+                See More
               </div>
             );
           };
@@ -199,6 +211,7 @@ const AppSearch = ({ state, actions, libraries }) => {
               <ServeTitle />
               <ServeType />
               <ServeBody />
+              <ServeAction />
             </div>
           );
         })}

@@ -68,6 +68,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
             title: item.title.rendered,
             url: item.link,
             type: item.type,
+            content: item.content.rendered,
           };
         });
 
