@@ -48,6 +48,7 @@ import Error from "./error";
 import Loading from "../components/loading";
 import BlockWrapper from "../components/blockWrapper";
 import { useScript } from "../hooks/useScript";
+import { useQuery } from "../hooks/useQuery";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -75,12 +76,9 @@ const App = ({ state, actions }) => {
   const data = state.source.get(endPoint);
   console.log("INDEX data", data); // debug
 
+  // ⬇️ hook for media queries ⬇️
+  useQuery({ state });
   const useEffectRef = useRef(true);
-  // ⬇️ handle container width change ⬇️
-  if (!lg) state.theme.contentContainer = 950;
-  if (!xl) state.theme.contentContainer = 1150;
-  if (!xxl) state.theme.contentContainer = 1350;
-  console.log(xl, lg, md);
 
   useEffect(() => {
     // ⬇️ restore scroll history to manual position ⬇️
@@ -121,12 +119,6 @@ const App = ({ state, actions }) => {
     if (idFilter && endPoint !== slug)
       setIDFilterAction({ dispatch, idFilter: null }); // reset filter id on page change
   }, [endPoint]);
-
-  // RESPONSIVE --------------------------------------------
-  if (lg) state.theme.marginHorizontal = 10;
-  if (lg) state.theme.marginVertical = 10;
-  if (lg) state.theme.fontSize = 22;
-  if (lg) state.theme.footerHeight = 2;
 
   const transitions = useTransition(isPlaceholder, {
     from: { opacity: 0 },
