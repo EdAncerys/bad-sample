@@ -502,11 +502,13 @@ const SIGApplication = ({ state, actions, libraries }) => {
           {membershipData.map((item, key) => {
             const { bad_or_sig, category_types } = item.acf;
             // get SIG membership categories name from custom object
+            // split string on : and swap first and second value
             // if typeName includes Full replace with empty string
             // change prefix for names with " - ", eg. "Tarainee - Time"
-            let typeName = category_types
-              .replace(/Full:/g, "")
-              .replace(/:/g, " - ");
+            let typeName = category_types.split(":").reverse().join(" - ");
+            // if value include - Full replace with empty string
+            typeName = typeName.replace(" - Full", "");
+            console.log(item);
 
             return (
               <option key={key} value={category_types}>
@@ -915,7 +917,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 onChange={handleInputChange}
                 type="text"
                 className="form-control input"
-                placeholder="MRCP"
+                placeholder="Name"
               />
               <FormError id="sky_cvurl" />
             </div>
@@ -930,7 +932,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 onChange={handleInputChange}
                 type="text"
                 className="form-control input"
-                placeholder="MRCP"
+                placeholder="Name"
               />
             </div>
           )}
@@ -1005,7 +1007,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 onChange={handleInputChange}
                 type="text"
                 className="form-control input"
-                placeholder="MRCP"
+                placeholder="Current Grade"
               />
             </div>
           )}

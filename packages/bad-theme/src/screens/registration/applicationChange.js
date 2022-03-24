@@ -52,7 +52,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     py3_hospitalid: "",
     bad_proposer1: "",
     bad_proposer2: "",
-    bad_mrpcqualified: "",
     sky_cvurl: "",
     py3_currentgrade: "",
     sky_newhospitalname: "",
@@ -71,7 +70,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     py3_hospitalid: true,
     bad_proposer1: true,
     bad_proposer2: true,
-    bad_mrpcqualified: true,
     sky_cvurl: true,
     py3_currentgrade: true,
     sky_newhospitalname: true,
@@ -325,8 +323,8 @@ const ApplicationChange = ({ state, actions, libraries }) => {
         "bad_currentpost",
         isNewHospital ? "sky_newhospitaltype" : null,
         !isNewHospital ? "py3_hospitalid" : null,
-        isAssociateType ? "bad_proposer1" : null,
-        isAssociateType ? "bad_proposer2" : null,
+        "bad_proposer1",
+        "bad_proposer2",
         "py3_constitutionagreement",
         "bad_readpolicydocument",
       ],
@@ -407,7 +405,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
   };
 
   const isFormFooter =
-    inputValidator.bad_mrpcqualified ||
     inputValidator.py3_currentgrade ||
     inputValidator.py3_constitutionagreement ||
     inputValidator.bad_readpolicydocument ||
@@ -770,13 +767,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                     >
                       {inputValidator.bad_proposer1 && (
                         <div>
-                          <label
-                            className={`${
-                              applicationType.includes("Associate")
-                                ? "required form-label"
-                                : "form-label"
-                            }`}
-                          >
+                          <label className="required form-label">
                             Proposer 1
                           </label>
                           <input
@@ -785,7 +776,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                             onChange={handleInputChange}
                             type="text"
                             className="form-control input"
-                            placeholder="MRCP"
+                            placeholder="Name"
                           />
                           <FormError id="bad_proposer1" />
                         </div>
@@ -793,13 +784,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
 
                       {inputValidator.bad_proposer2 && (
                         <div>
-                          <label
-                            className={`${
-                              applicationType.includes("Associate")
-                                ? "required form-label"
-                                : "form-label"
-                            }`}
-                          >
+                          <label className="required form-label">
                             Proposer 2
                           </label>
                           <input
@@ -808,7 +793,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                             onChange={handleInputChange}
                             type="text"
                             className="form-control input"
-                            placeholder="MRCP"
+                            placeholder="Name"
                           />
                           <FormError id="bad_proposer2" />
                         </div>
@@ -825,7 +810,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                       borderBottom: `1px solid ${colors.silverFillTwo}`,
                     }}
                   >
-                    {inputValidator.bad_mrpcqualified && (
+                    {/* {inputValidator.bad_mrpcqualified && (
                       <div className="flex-col">
                         <label className="form-label">MRCP Qualified</label>
                         <input
@@ -836,7 +821,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                           className="form-check-input check-box"
                         />
                       </div>
-                    )}
+                    )} */}
 
                     {inputValidator.py3_currentgrade && (
                       <div>
@@ -895,8 +880,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                                 citations="A member only service to search for the contact email of fellow BAD members"
                                 style={{ color: "inherit" }}
                               >
-                                Include my details in the BAD Members
-                                'Directory'
+                                Include my details in the BAD Members' Directory
                               </div>
                             </div>
                             <FormError id="bad_memberdirectory" />

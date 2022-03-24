@@ -86,7 +86,7 @@ const Directory = ({ state, actions, libraries }) => {
       setErrorAction({
         dispatch,
         isError: {
-          message: `Members directory preferences updated successfully`,
+          message: `Members' Directory preferences updated successfully`,
         },
       });
     } catch (error) {

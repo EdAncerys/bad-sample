@@ -227,6 +227,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
                 fontWeight: "bold",
                 justifyItems: "center",
                 lineHeight: "unset",
+                flexWrap: "wrap",
               }}
             >
               Application Progress
