@@ -135,7 +135,7 @@ const App = ({ state, actions }) => {
   return transitions(({ opacity }, appContent) =>
     appContent ? (
       <animated.div className="no-selector">
-        <AnimatedPlaceholder opacity={opacity} />
+        <AnimatedPlaceholder opacity={opacity} appContent={appContent} />
       </animated.div>
     ) : (
       <animated.div

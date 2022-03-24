@@ -10,16 +10,16 @@ import Placeholder from "../img/svg/badLogoHeader.svg";
 import { useAppState } from "../context";
 import { colors } from "../config/imports";
 
-const AnimatedPlaceholder = ({ state, actions, opacity }) => {
+const AnimatedPlaceholder = ({ state, actions, opacity, appContent }) => {
   const { isPlaceholder } = useAppState();
 
   useEffect(() => {
-    // document.querySelector("#my-svg").removeAttribute("hidden");
-    // new Vivus("my-svg", {
-    //   type: "oneByOne",
-    //   duration: 400,
-    //   animTimingFunction: Vivus.EASE_OUT,
-    // });
+    document.querySelector("#my-svg").removeAttribute("hidden");
+    new Vivus("my-svg", {
+      type: "delayed",
+      duration: 200,
+      animTimingFunction: Vivus.EASE_OUT,
+    });
   });
 
   // HELPERS ---------------------------------------------
@@ -63,6 +63,7 @@ const AnimatedPlaceholder = ({ state, actions, opacity }) => {
           data={Logo}
           width="300px"
           height="300px"
+          hidden
         ></object>
       </animated.div>
       <div

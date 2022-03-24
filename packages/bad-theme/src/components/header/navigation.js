@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
@@ -24,7 +24,7 @@ const Navigation = ({ state, actions, libraries }) => {
   // active menu slug ref
   const activeMenu = useRef(null);
   const activeChildMenu = useRef(null);
-
+  console.log("CURRENT URL", state.router.link);
   useEffect(async () => {
     // ⬇️ getting wp menu & featured from state
     if (!state.theme.menu) return;
@@ -38,7 +38,7 @@ const Navigation = ({ state, actions, libraries }) => {
     setWpMoreMenu(wpMoreMenu); // more menu into dropdown
     if (state.source.menu_features)
       setFeatured(Object.values(state.source.menu_features)); // cpt for menu content
-
+    activeMenu.current;
     return () => {
       useEffectRef.current = false; // clean up function
     };
@@ -74,16 +74,20 @@ const Navigation = ({ state, actions, libraries }) => {
     }
   };
 
-  const handleActiveMenu = ({ slug, removeShadow }) => {
+  const handleActiveMenu = ({ slug, removeShadow, activeSlug }) => {
     const selector = document.querySelector(`#menu-${slug}`);
     const childMenuSelector = document.querySelector(`#${slug}-child-menu`);
     const shadowColor = handleBoxShadow(slug);
 
     if (removeShadow) {
-      if (selector) selector.style.boxShadow = "none";
+      if (selector && !state.router.link.includes(slug))
+        selector.style.boxShadow = "none";
       if (selector) selector.style.color = `${colors.black}`;
       if (childMenuSelector) childMenuSelector.style.display = "none";
       return;
+    }
+    if (activeSlug) {
+      if (selector) selector.style.boxShadow = shadowColor;
     }
     if (activeMenu.current === slug)
       if (selector) selector.style.boxShadow = shadowColor;
@@ -107,7 +111,15 @@ const Navigation = ({ state, actions, libraries }) => {
     );
     if (childMenuSelector) childMenuSelector.style.display = "none";
   };
-
+  const handleActiveBoxShadow = (slug) => {
+    // checking if any of the menu should be highlighted
+    const currentLink = state.router.link;
+    const activeSlug = currentLink.match(/(?<=\/).*?(?=\/)/)[0];
+    if (activeSlug === slug) {
+      return handleBoxShadow(slug);
+    }
+    return "none";
+  };
   // SERVERS -----------------------------------------------------
   const ServeMenu = ({ secondaryMenu }) => {
     const ServeChildMenu = ({
@@ -379,22 +391,24 @@ const Navigation = ({ state, actions, libraries }) => {
       });
 
       return (
-        <ul className="navbar-nav secondary-menu-container more-btn">
+        <ul
+          className="navbar-nav secondary-menu-container more-btn"
+          onMouseEnter={() => {
+            activeMenu.current = null;
+            handleActiveMenu({ slug: "more" });
+          }}
+          onMouseLeave={() => {
+            activeMenu.current = null; // clear Ref hook after handler been triggered only!
+            handleActiveMenu({ slug: "more", removeShadow: true });
+          }}
+        >
           <li
             className="nav-item dropdown"
-            style={{ paddingLeft: `3em` }}
-            onMouseEnter={() => {
-              activeMenu.current = null;
-              handleActiveMenu({ slug: "more" });
-            }}
-            onMouseLeave={() => {
-              activeMenu.current = null; // clear Ref hook after handler been triggered only!
-              handleActiveMenu({ slug: "more", removeShadow: true });
-            }}
+            style={{ paddingRight: "1.5em", paddingLeft: "1.5em" }}
           >
             <a
               id={`menu-more`}
-              className="nav-link dropdown-toggle"
+              className="nav-link"
               style={styles.link}
               onClick={() => handleOnClickNavigation({ parentSlug: "more" })}
             >
@@ -438,7 +452,11 @@ const Navigation = ({ state, actions, libraries }) => {
               id={`menu-${slug}`}
               key={key}
               className="flex navbar-nav"
-              style={{ justifyContent: "center", paddingBottom: "0.5em" }}
+              style={{
+                justifyContent: "center",
+                paddingBottom: "0.5em",
+                boxShadow: handleActiveBoxShadow(slug),
+              }}
               onMouseEnter={() => {
                 activeMenu.current = slug;
                 handleActiveMenu({ slug });
