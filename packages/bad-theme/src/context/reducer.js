@@ -21,6 +21,7 @@ export const initialState = {
   dashboardPath: "Dashboard",
   directDebitPath: { page: "billing" },
   isVisibleNotification: true,
+  ethnicity: null,
 
   appSearchData: null,
   appSearchPhrase: "",
@@ -84,6 +85,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, directDebitPath: action.payload };
     case "SET_PLACEHOLDER_ACTION":
       return { ...state, isPlaceholder: action.payload };
+    case "SET_ETHNICITY_ACTION":
+      return { ...state, ethnicity: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

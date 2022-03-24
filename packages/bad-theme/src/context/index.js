@@ -33,6 +33,7 @@ import {
   getUserDataFromDynamics,
 } from "./auth/actions";
 import { sendEmailEnquireAction } from "./auth/sendEnquire";
+import { getEthnicityAction } from "./auth/getEthnicity";
 import {
   getMembershipDataAction,
   handleApplyForMembershipAction,
@@ -156,4 +157,5 @@ export {
   setAppSearchDataAction,
   setAppSearchPhraseAction,
   postTypeHandler,
+  getEthnicityAction,
 };

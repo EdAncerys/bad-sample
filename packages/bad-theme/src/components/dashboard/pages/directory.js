@@ -42,15 +42,19 @@ const Directory = ({ state, actions, libraries }) => {
 
   // DATA pre FETCH ------------------------------------------------------------
   useEffect(async () => {
-    // await getAllFadAction({ state, dispatch });
-    if (!fad) {
-      // fetch data via API
-      const data = await getFadAction({ state, dispatch });
-      // set fad data in context of app
-      setFadAction({ dispatch, fad: data });
-      setFadData(data);
-    } else {
-      setFadData(fad);
+    try {
+      // await getAllFadAction({ state, dispatch });
+      if (!fad) {
+        // fetch data via API
+        const data = await getFadAction({ state, dispatch });
+        // set fad data in context of app
+        setFadAction({ dispatch, fad: data });
+        setFadData(data);
+      } else {
+        setFadData(fad);
+      }
+    } catch (error) {
+      console.log(error);
     }
 
     return () => {

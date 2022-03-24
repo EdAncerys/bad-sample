@@ -15,6 +15,7 @@ import {
   updateProfileAction,
   muiQuery,
   setErrorAction,
+  getEthnicityAction,
 } from "../../context";
 
 const UpdateProfile = ({ state, actions, libraries }) => {
@@ -22,7 +23,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const { isActiveUser, dashboardPath } = useAppState();
+  const { isActiveUser, ethnicity } = useAppState();
 
   const [isFetching, setIsFetching] = useState(null);
   const [formData, setFormData] = useState({
@@ -36,6 +37,16 @@ const UpdateProfile = ({ state, actions, libraries }) => {
   });
   const documentRef = useRef(null);
   const marginVertical = state.theme.marginVertical;
+  const useEffectRef = useRef(true);
+
+  useEffect(async () => {
+    // ⬇️ get ethnicity choices from Dynamics
+    if (!ethnicity) await getEthnicityAction({ state, dispatch });
+
+    return () => {
+      useEffectRef.current = false; // clean up function
+    };
+  }, []);
 
   useEffect(() => {
     if (!isActiveUser) return null;
@@ -252,26 +263,28 @@ const UpdateProfile = ({ state, actions, libraries }) => {
               })}
             </Form.Select>
           </div>
-          <div style={styles.wrapper}>
-            <label>Ethnicity</label>
-            <Form.Select
-              name="py3_ethnicity"
-              value={formData.py3_ethnicity}
-              onChange={handleInputChange}
-              className="input"
-            >
-              <option value="" hidden>
-                Ethnic Group
-              </option>
-              {ETHNIC_GROUPS.map((item, key) => {
-                return (
-                  <option key={key} value={item.value}>
-                    {item.Label}
-                  </option>
-                );
-              })}
-            </Form.Select>
-          </div>
+          {ethnicity && (
+            <div style={styles.wrapper}>
+              <label>Ethnicity</label>
+              <Form.Select
+                name="py3_ethnicity"
+                value={formData.py3_ethnicity}
+                onChange={handleInputChange}
+                className="input"
+              >
+                <option value="" hidden>
+                  Ethnic Group
+                </option>
+                {ethnicity.map((item, key) => {
+                  return (
+                    <option key={key} value={item.value}>
+                      {item.Label}
+                    </option>
+                  );
+                })}
+              </Form.Select>
+            </div>
+          )}
           <div>
             <label>Upload A Profile Photo</label>
             <input
