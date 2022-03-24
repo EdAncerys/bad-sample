@@ -209,13 +209,13 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
               />
             </div>
             <div style={styles.wrapper}>
-              <label>Other regulatory body / label</label>
+              <label>Other regulatory body</label>
               <input
                 name="bad_otherregulatorybodyreference"
                 value={formData.bad_otherregulatorybodyreference}
                 onChange={handleInputChange}
                 className="form-control input"
-                placeholder="Other regulatory body / label"
+                placeholder="Other regulatory body"
               />
             </div>
           </div>

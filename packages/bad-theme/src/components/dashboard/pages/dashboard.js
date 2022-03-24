@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import Profile from "../profile";
@@ -9,8 +9,10 @@ import TitleBlock from "../../titleBlock";
 import Events from "../../events/events";
 import ApplicationStatusOrPayment from "../ApplicationStatusOrPayment";
 import Payments from "../payments";
+import Card from "../../../components/card/card";
 // CONTEXT ------------------------------------------------------------------
 import { useAppState, useAppDispatch } from "../../../context";
+import { getEventsData } from "../../../helpers";
 
 const Dashboard = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
@@ -19,7 +21,22 @@ const Dashboard = ({ state, actions, libraries }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  if (dashboardPath !== "Dashboard") return null;
+  const [eventList, setEventList] = useState(null); // event data
+  const useEffectRef = useRef(null);
+
+  useEffect(async () => {
+    // pre fetch events data
+    let data = state.source.events;
+    if (!data) await getEventsData({ state, actions });
+    data = state.source.events;
+    // convert to object & return first 2 records
+    const events = Object.values(data).slice(0, 4);
+    setEventList(events);
+
+    return () => {
+      useEffectRef.current = ""; // clean up function
+    };
+  }, []);
 
   // SERVERS ---------------------------------------------
   const ServeApplicationStatus = () => {
@@ -66,6 +83,10 @@ const Dashboard = ({ state, actions, libraries }) => {
     return <Payments subscriptions={dynamicsApps} dashboard />;
   };
 
+  if (dashboardPath !== "Dashboard") return null;
+  if (!eventList) return <Loading />;
+  console.log(eventList);
+
   // RETURN ---------------------------------------------
   return (
     <div style={{ padding: `0 ${marginHorizontal}px` }}>
@@ -84,22 +105,32 @@ const Dashboard = ({ state, actions, libraries }) => {
           block={{ text_align: "left", title: "Upcoming Events" }}
           disableMargin
         />
-        <Events
-          block={{
-            add_search_function: false,
-            background_colour: "transparent",
-            colour: colors.turquoise,
-            disable_vertical_padding: false,
-            event_type: false,
-            grade_filter: "All Levels",
-            grades: false,
-            layout: "layout_three",
-            locations: false,
-            post_limit: "4",
-            view_all_link: false,
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: `repeat(4, 1fr)`,
+            gap: 20,
           }}
-          disableMargin
-        />
+        >
+          {eventList.map((block, key) => {
+            const title = block.title.rendered;
+
+            return (
+              <Card
+                key={key}
+                title={title}
+                link_label="Read More"
+                link={block.link}
+                colour={colors.turquoise}
+                eventHeader={block.acf}
+                isFrom4Col
+                titleLimit={4}
+                shadow
+              />
+            );
+          })}
+        </div>
       </div>
     </div>
   );
