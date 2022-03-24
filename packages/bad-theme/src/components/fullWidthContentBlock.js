@@ -14,6 +14,7 @@ const FullWidthContentBlock = ({
   disableMargin,
   heroBanner,
   disablePadding,
+  promoBlock,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { sm, md, lg, xl } = muiQuery();
@@ -164,7 +165,7 @@ const FullWidthContentBlock = ({
       style={{
         justifyContent: "center",
         textAlign: ALIGNMENT,
-        backgroundColor: BACKGROUND_COLOUR,
+        backgroundColor: promoBlock ? "white" : BACKGROUND_COLOUR,
         minHeight: "auto",
         padding: PADDING,
       }}
