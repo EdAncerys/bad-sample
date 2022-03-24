@@ -165,30 +165,30 @@ const Profile = ({ state, actions, libraries }) => {
       return (
         <div className="flex-col" style={styles.container}>
           <span className="primary-title">Address: </span>
-          <div className="flex">
+          <div className="flex-col">
             {address2_line1 && (
-              <div>
-                <Html2React html={address2_line1} />{" "}
+              <div className="flex">
+                <Html2React html={address2_line1} />
               </div>
             )}
             {address2_line2 && (
-              <div>
-                <Html2React html={address2_line2} />{" "}
+              <div className="flex">
+                <Html2React html={address2_line2} />
               </div>
             )}
             {address2_city && (
-              <div>
-                <Html2React html={address2_city} />{" "}
+              <div className="flex">
+                <Html2React html={address2_city} />
               </div>
             )}
             {address2_postalcode && (
-              <div>
-                <Html2React html={address2_postalcode} />{" "}
+              <div className="flex">
+                <Html2React html={address2_postalcode} />
               </div>
             )}
             {address2_country && (
-              <div>
-                <Html2React html={address2_country} />{" "}
+              <div className="flex">
+                <Html2React html={address2_country} />
               </div>
             )}
           </div>
