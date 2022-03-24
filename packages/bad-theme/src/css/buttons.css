@@ -34,8 +34,8 @@
   transition: all 0.3s ease-in-out;
 }
 .transparent-btn:hover {
-  color: #3882cd;
-  border: 1px solid #3882cd;
+  color: white;
+  box-shadow: inset 0 3.25em 0 0 #1f335e;
 }
 
 .drop-down-btn {

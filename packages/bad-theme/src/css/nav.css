@@ -59,7 +59,14 @@
   background-color: initial !important;
 }
 .more-btn {
-  margin-bottom: 0.5em;
+  padding-bottom: 0.5em;
+  color: rgb(69, 69, 69);
+}
+.more-btn:hover {
+  box-shadow: inset rgb(31, 51, 94) 0px -5px;
+}
+.more-btn:hover a {
+  color: rgb(69, 69, 69);
 }
 /* bootstrap css menu config */
 .container-fluid a {
