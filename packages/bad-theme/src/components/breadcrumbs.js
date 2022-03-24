@@ -170,13 +170,13 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
 
 const styles = {
   wrapper: {
-    height: 75,
+    height: 50,
     flexWrap: "wrap",
     alignItems: "center",
   },
   link: {
     alignItems: "center",
-    fontSize: 14,
+    fontSize: 12,
     cursor: "pointer",
   },
   linkValue: {
