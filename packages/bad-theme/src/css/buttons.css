@@ -90,14 +90,18 @@
   -webkit-text-fill-color: transparent;
   -moz-text-fill-color: transparent;
 }
+
 .caps-btn-icon:hover,
 .caps-btn:hover .caps-btn-icon,
 .caps-btn:hover,
 .caps-btn-no-underline:hover {
   color: #3882cd;
 }
-.caps-btn:hover::before {
+.heading-tile:hover .caps-btn::before {
   width: 100%;
+}
+.heading-tile:hover .caps-btn {
+  color: #3882cd;
 }
 .row-btn {
   padding: 1.5em 1em;
