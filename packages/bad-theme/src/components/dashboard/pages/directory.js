@@ -75,16 +75,13 @@ const Directory = ({ state, actions, libraries }) => {
   const handlePreferenceUpdate = async () => {
     if (!isActiveUser) return;
     let directoryPref = "Opt-in";
-    if (fad.directoryPref === "Opt-in") {
-      directoryPref = "Opt-out";
-    }
+    if (fad.directoryPref === "Opt-in") directoryPref = "Opt-out";
+
+    directoryPref = !isActiveUser.bad_memberdirectory;
 
     const data = Object.assign(
       {}, // add empty object
-      {
-        ["bad_memberdirectory@OData.Community.Display.V1.FormattedValue"]:
-          directoryPref,
-      }
+      { bad_memberdirectory: directoryPref }
     );
     console.log("data", data); // debug
 
@@ -295,13 +292,13 @@ const Directory = ({ state, actions, libraries }) => {
           style={{
             marginRight: "1em",
             width: "fit-content",
-            backgroundColor: isActiveUser.bad_memberdirectory
+            backgroundColor: !bad_memberdirectory
               ? colors.danger
               : colors.white,
           }}
           onClick={handlePreferenceUpdate}
         >
-          {bad_memberdirectory === "Opt-out" ? "Opt-out" : "Opt-in"}
+          {!bad_memberdirectory ? "Opt-out" : "Opt-in"}
         </div>
       </div>
     );

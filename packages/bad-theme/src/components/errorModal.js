@@ -22,6 +22,12 @@ const ErrorModal = ({ state, actions }) => {
   if (!isError) return null; // error handler
 
   // HANDLERS ----------------------------------------------------
+  const handleKeyPress = (e) => {
+    // handle close modal on enter key
+    console.log("key press");
+    if (e.key === "Enter") actionHandler();
+  };
+
   const actionHandler = () => {
     setErrorAction({ dispatch, isError: null });
   };
@@ -80,7 +86,11 @@ const ErrorModal = ({ state, actions }) => {
         >
           <ServeGoToAction />
           <ServeAction />
-          <div className="blue-btn" onClick={actionHandler}>
+          <div
+            className="blue-btn"
+            onClick={actionHandler}
+            onKeyPress={(e) => handleKeyPress(e)}
+          >
             Close
           </div>
         </div>
