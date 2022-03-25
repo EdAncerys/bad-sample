@@ -179,7 +179,14 @@ const Directory = ({ state, actions, libraries }) => {
 
   // SERVERS --------------------------------------------------------
   const ServeFadList = ({ fad }) => {
-    return <Card fadDirectory={fad} colour={colors.primary} shadow />;
+    return (
+      <Card
+        fadDirectory={fad}
+        colour={colors.primary}
+        shadow
+        animationType="none"
+      />
+    );
   };
 
   const ServeSearchFilter = () => {
@@ -296,10 +303,12 @@ const Directory = ({ state, actions, libraries }) => {
     if (searchFadData) return null; // hide on FAD search
 
     return (
-      <div style={!lg ? styles.container : styles.containerMobile}>
-        {fadData.map((fad, key) => {
-          return <ServeFadList key={key} fad={fad} />;
-        })}
+      <div>
+        <div style={!lg ? styles.container : styles.containerMobile}>
+          {fadData.map((fad, key) => {
+            return <ServeFadList key={key} fad={fad} />;
+          })}
+        </div>
         {fadData.length > 15 && <ScrollTop />}
       </div>
     );
@@ -309,10 +318,12 @@ const Directory = ({ state, actions, libraries }) => {
     if (!searchFadData) return null; // hide on FAD search
 
     return (
-      <div style={!lg ? styles.container : styles.containerMobile}>
-        {searchFadData.map((fad, key) => {
-          return <ServeFadList key={key} fad={fad} />;
-        })}
+      <div>
+        <div style={!lg ? styles.container : styles.containerMobile}>
+          {searchFadData.map((fad, key) => {
+            return <ServeFadList key={key} fad={fad} />;
+          })}
+        </div>
         {searchFadData.length > 15 && <ScrollTop />}
       </div>
     );
@@ -404,6 +415,7 @@ const Directory = ({ state, actions, libraries }) => {
             <div>
               <ServeFadMembers />
               <ServeSearchFadMembers />
+
               <ServeMoreAction />
             </div>
           )}
