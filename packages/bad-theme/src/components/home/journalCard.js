@@ -127,7 +127,7 @@ const JournalCard = ({
         minWidth: CARD_WIDTH,
         width: "100%",
       }}
-      data-aos="fade-up"
+      data-aos="fade"
       data-aos-easing="ease-in-sine"
       data-aos-delay={`${delay * 50}`}
       data-aos-duration="1000"
