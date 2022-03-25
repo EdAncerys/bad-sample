@@ -42,13 +42,13 @@ const UsefulLinksCard = ({
       return (
         <div
           className="flex"
-          style={{ justifyContent: "flex-start", padding: `2em 0` }}
+          style={{ justifyContent: "flex-start", paddingBottom: `1em` }}
         >
           <div
             style={{
               fontSize: 12,
               textTransform: "uppercase",
-              padding: 10,
+              padding: "0.5em",
               backgroundColor: colors.lightSilver,
             }}
           >
@@ -61,7 +61,8 @@ const UsefulLinksCard = ({
     const ServeTitle = () => {
       return (
         <div
-          className="primary-title title-link"
+          className="primary-title title-link-animation"
+          // className="primary-title title-link"
           style={{
             fontSize: 20,
             cursor: "pointer",

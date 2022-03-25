@@ -557,7 +557,7 @@ const Event = ({ state, actions, libraries }) => {
                 </div>
 
                 <div
-                  className="primary-title"
+                  className="primary-title title-link-animation"
                   style={{ fontSize: 16, padding: "1em 0", cursor: "pointer" }}
                   onClick={() => setGoToAction({ path: event.link, actions })}
                 >
