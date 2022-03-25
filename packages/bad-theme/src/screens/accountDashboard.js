@@ -90,7 +90,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
     }
 
     return (
-      <div style={{ backgroundColor: colors.bgPink }}>
+      <div>
         <BlockWrapper>
           <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
             <ButtonsRow

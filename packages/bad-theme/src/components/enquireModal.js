@@ -215,7 +215,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
           type="text"
           className="form-control"
           placeholder="Enter your job title"
-          disabled={isActiveUser.jobtitle}
+          // disabled={isActiveUser.jobtitle} // disabled if user has job title
         />
       </div>
     );

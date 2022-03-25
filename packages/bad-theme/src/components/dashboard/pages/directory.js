@@ -37,6 +37,7 @@ const Directory = ({ state, actions, libraries }) => {
   const [inputValue, setInputValue] = useState("");
   const [searchFilter, setFilter] = useState("");
   const [fadData, setFadData] = useState([]);
+  const [searchFadData, setSearchData] = useState(null);
   const [page, setPage] = useState(0);
 
   const [isSearchFetching, setSearchFetching] = useState(false);
@@ -128,7 +129,7 @@ const Directory = ({ state, actions, libraries }) => {
     setInputValue("");
     setFilter("");
 
-    setFadData(fad.slice(0, Number(postLimit)));
+    setSearchData(null); // reset search data
   };
 
   const handleSearch = async () => {
@@ -138,7 +139,7 @@ const Directory = ({ state, actions, libraries }) => {
     try {
       setSearchFetching(true);
       const fad = await getFADSearchAction({ state, dispatch, query: input });
-      setFadData(fad);
+      setSearchData(fad);
     } catch (error) {
       console.log(error);
     } finally {
@@ -225,7 +226,7 @@ const Directory = ({ state, actions, libraries }) => {
   };
 
   const ServeMoreAction = () => {
-    if (fadData.length < postLimit) return null; // dont show if less than limit
+    if (searchFadData) return null; // hide on FAD search
     if (isGetMore) return <Loading />;
 
     return (
@@ -291,6 +292,32 @@ const Directory = ({ state, actions, libraries }) => {
     );
   };
 
+  const ServeFadMembers = () => {
+    if (searchFadData) return null; // hide on FAD search
+
+    return (
+      <div style={!lg ? styles.container : styles.containerMobile}>
+        {fadData.map((fad, key) => {
+          return <ServeFadList key={key} fad={fad} />;
+        })}
+        {fadData.length > 15 && <ScrollTop />}
+      </div>
+    );
+  };
+
+  const ServeSearchFadMembers = () => {
+    if (!searchFadData) return null; // hide on FAD search
+
+    return (
+      <div style={!lg ? styles.container : styles.containerMobile}>
+        {searchFadData.map((fad, key) => {
+          return <ServeFadList key={key} fad={fad} />;
+        })}
+        {searchFadData.length > 15 && <ScrollTop />}
+      </div>
+    );
+  };
+
   // RETURN ---------------------------------------------
   return (
     <div>
@@ -303,7 +330,10 @@ const Directory = ({ state, actions, libraries }) => {
       >
         <BlockWrapper>
           <div style={{ padding: `0 ${marginHorizontal}px` }}>
-            <div className="flex-col" style={{ padding: "1em 0" }}>
+            <div
+              className="flex-col"
+              style={{ padding: "1em 0", width: "75%" }}
+            >
               <TitleBlock
                 block={{
                   text_align: "left",
@@ -372,13 +402,9 @@ const Directory = ({ state, actions, libraries }) => {
           {isSearchFetching && <Loading />}
           {!isSearchFetching && (
             <div>
-              <div style={!lg ? styles.container : styles.containerMobile}>
-                {fadData.map((fad, key) => {
-                  return <ServeFadList key={key} fad={fad} />;
-                })}
-              </div>
+              <ServeFadMembers />
+              <ServeSearchFadMembers />
               <ServeMoreAction />
-              {fadData.length > 15 && <ScrollTop />}
             </div>
           )}
         </div>

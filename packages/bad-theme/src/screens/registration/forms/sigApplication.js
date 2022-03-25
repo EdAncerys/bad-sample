@@ -783,7 +783,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 disabled={isJobEditable ? false : true}
               />
               <div style={{ padding: "0.5em 0" }}>
-                If you would like to change your Job TITLE please use the form
+                If you would like to change your job title please use the form
                 on your dashboard.
               </div>
               <FormError id="bad_currentpost" />

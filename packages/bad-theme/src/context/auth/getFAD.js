@@ -18,7 +18,7 @@ export const getFadAction = async ({ state, dispatch, page }) => {
 
     // while result length is equal perPage, then fetch next page
     let URL =
-      state.auth.APP_HOST + `/catalogue/fad?limit=${perPage}&skip=${skip}`;
+      state.auth.APP_HOST + `/catalogue/fad?limit=${perPage}&skip=${skip}&md`;
     const data = await fetch(URL, requestOptions);
     if (!data) throw new Error("error fetching data form API");
     const result = await data.json();
@@ -45,7 +45,7 @@ export const getFADSearchAction = async ({ state, dispatch, query }) => {
     };
 
     // while result length is equal perPage, then fetch next page
-    let URL = state.auth.APP_HOST + `/catalogue/fad?search=${query}`;
+    let URL = state.auth.APP_HOST + `/catalogue/fad?md&search=${query}`;
     const data = await fetch(URL, requestOptions);
     if (!data) throw new Error("error fetching data form API");
     const result = await data.json();

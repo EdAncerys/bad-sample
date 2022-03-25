@@ -19,6 +19,7 @@ const FadDirectory = ({ state, actions, libraries, fadDirectory }) => {
     emailaddress1,
     bad_mainhosptialweb,
     jobtitle,
+    _parentcustomerid_value,
     bad_profile_photo_url,
   } = fadDirectory;
 
@@ -90,12 +91,7 @@ const FadDirectory = ({ state, actions, libraries, fadDirectory }) => {
   };
 
   const ServeHospital = () => {
-    const hospitalName =
-      fadDirectory[
-        "_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"
-      ];
-
-    if (!hospitalName) return null;
+    if (!_parentcustomerid_value) return null;
 
     return (
       <div
@@ -103,7 +99,7 @@ const FadDirectory = ({ state, actions, libraries, fadDirectory }) => {
         onClick={() => setGoToAction({ path: bad_mainhosptialweb, actions })}
         style={{ cursor: "pointer" }}
       >
-        <Html2React html={hospitalName} />
+        <Html2React html={_parentcustomerid_value} />
       </div>
     );
   };
