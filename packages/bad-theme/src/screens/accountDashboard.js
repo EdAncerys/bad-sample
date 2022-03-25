@@ -125,18 +125,19 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   return (
     <div className="flex-col">
       <div className="flex-col">
-        <BlockWrapper>
-          {!lg ? <DashboardNavigation /> : <DashboardNavigationMobile />}
-          <Dashboard />
-          <DashboardEvents />
-          <Membership />
-          <MyAccount />
-          <Billing />
-          <Settings />
-        </BlockWrapper>
+        <div className="flex-col">
+          <BlockWrapper>
+            {!lg ? <DashboardNavigation /> : <DashboardNavigationMobile />}
+            <Dashboard />
+            <DashboardEvents />
+            <Membership />
+            <MyAccount />
+            <Billing />
+            <Settings />
+          </BlockWrapper>
 
-        <Directory />
-
+          <Directory />
+        </div>
         <ServeDashboardActions />
       </div>
 
