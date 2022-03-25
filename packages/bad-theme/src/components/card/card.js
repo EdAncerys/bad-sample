@@ -351,7 +351,7 @@ const Card = ({
       }}
       onClick={() => setGoToAction({ path: link, actions, downloadFile })}
       data-aos="fade"
-      data-aos-delay={delay * 50}
+      data-aos-delay={`${delay * 50}`}
       data-aos-duration="500"
     >
       <PromoHeader fundingPromo={fundingPromo} />

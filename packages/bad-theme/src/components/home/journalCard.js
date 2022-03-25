@@ -129,7 +129,7 @@ const JournalCard = ({
       }}
       data-aos="fade-up"
       data-aos-easing="ease-in-sine"
-      data-aos-delay={delay * 50}
+      data-aos-delay={`${delay * 50}`}
       data-aos-duration="1000"
       onClick={() => setGoToAction({ path: link.url, actions })}
     >
