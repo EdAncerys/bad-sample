@@ -342,7 +342,7 @@ const Card = ({
   // RETURN ----------------------------------------------------
   return (
     <div
-      className={`${isShadow} ${isCardAnimation}`} // card wrapper as clickable card if link is set
+      className={`${isShadow} ${isCardAnimation} heading-tile`} // card wrapper as clickable card if link is set
       style={{
         ...styles.card,
         backgroundColor: backgroundColor || colors.white,

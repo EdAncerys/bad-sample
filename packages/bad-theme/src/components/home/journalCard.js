@@ -122,7 +122,7 @@ const JournalCard = ({
   // RETURN ----------------------------------------------------------------
   return (
     <div
-      className={`${isShadow} card-wrapper`}
+      className={`${isShadow} card-wrapper heading-tile`}
       style={{
         minWidth: CARD_WIDTH,
         width: "100%",
