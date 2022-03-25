@@ -149,7 +149,7 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
 
   return (
     <BlockWrapper background={colors.lightSilver}>
-      <div className="flex" style={{ ...styles.wrapper, paddingLeft: `35px` }}>
+      <div className="flex" style={{ ...styles.wrapper }}>
         <ServeTitle />
         <ServeNewsMediaPreFix />
         {!lg ? (
