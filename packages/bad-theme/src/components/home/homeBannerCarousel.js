@@ -172,25 +172,27 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
                         bottom: `5em`,
                       }}
                     >
-                      <ServeEventAction />
-                      <div
-                        className="flex"
-                        style={{
-                          alignItems: "center",
-                          height: !lg ? BANNER_HEIGHT / 2 : null,
-                          maxWidth: !lg ? "50%" : "100%",
-                          margin: !lg ? null : "1em 0 1em 0",
-                        }}
-                      >
+                      <div>
+                        <ServeEventAction />
                         <div
-                          className="flex-col primary-title animate__animated animate__fadeInLeft animate__delay-1s"
+                          className="flex"
                           style={{
-                            fontSize: !lg ? 36 : 26,
-                            textAlign: "start",
-                            color: colors.white,
+                            alignItems: "center",
+                            height: !lg ? BANNER_HEIGHT / 2 : null,
+                            maxWidth: !lg ? "50%" : "100%",
+                            margin: !lg ? null : "1em 0 1em 0",
                           }}
                         >
-                          <Html2React html={title} />
+                          <div
+                            className="flex-col primary-title animate__animated animate__fadeInLeft animate__delay-1s"
+                            style={{
+                              fontSize: !lg ? 36 : 26,
+                              textAlign: "start",
+                              color: colors.white,
+                            }}
+                          >
+                            <Html2React html={title} />
+                          </div>
                         </div>
                       </div>
                       <ServeMoreAction />

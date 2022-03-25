@@ -26,6 +26,7 @@
     "@react-google-maps/api": "^2.7.0",
     "add2calendar": "^1.1.7",
     "animate.css": "^4.1.1",
+    "aos": "^3.0.0-beta.6",
     "bad-theme": "file:packages/bad-theme",
     "bcryptjs": "^2.4.3",
     "calendar-link": "^2.1.1",

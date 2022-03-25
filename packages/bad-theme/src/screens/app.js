@@ -3,8 +3,7 @@ import { connect } from "frontity";
 import Switch from "@frontity/components/switch";
 import { colors } from "../config/imports";
 import { useTransition, animated } from "react-spring";
-import "animate.css";
-
+import AOS from "aos";
 // COMPONENTS ---------------------------------------------------------
 import Header from "../components/header/header";
 import Footer from "../components/footer";
@@ -104,7 +103,7 @@ const App = ({ state, actions }) => {
     }
     // ⬇️  set placeholder after async actions to false
     setPlaceholderAction({ dispatch, isPlaceholder: false });
-
+    AOS.init();
     return () => {
       useEffectRef.current = false; // clean up function
     };
