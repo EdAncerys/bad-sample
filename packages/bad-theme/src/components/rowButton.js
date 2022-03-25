@@ -16,6 +16,7 @@ const RowButton = ({
   block,
   onClick,
   multiPostRowButtons,
+  delay,
 }) => {
   const [isHover, setIsHover] = useState(false);
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -67,7 +68,8 @@ const RowButton = ({
     padding: 0,
     cursor: "pointer",
     boxShadow: isHover ? `inset 0 3.25em 0 0 ${THEME}` : null,
-    transition: `box-shadow 1000ms`,
+    transform: isHover ? `translate(5px, 0)` : `translate(0, 0)`,
+    transition: `box-shadow 1000ms ease-out, transform 1000`,
   };
   const ServeButton = () => {
     return (
@@ -109,6 +111,10 @@ const RowButton = ({
         cursor: "pointer",
         position: "relative",
       }}
+      data-aos="fade-up"
+      data-aos-easing="ease-in-sine"
+      data-aos-delay={delay * 50}
+      data-aos-duration="1000"
       onClick={() => {
         if (link_id) {
           window.location.href = "#" + link_id;

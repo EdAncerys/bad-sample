@@ -220,6 +220,7 @@ const EventLoopBlock = ({
                 link={block.link}
                 colour={colour}
                 date={date_time}
+                delay={key}
                 seatNumber="seatNumber"
                 cardHeight="100%"
                 shadow
@@ -229,6 +230,7 @@ const EventLoopBlock = ({
           if (layoutThree)
             return (
               <Card
+                delay={key}
                 key={key}
                 title={title}
                 link_label="Read More"
