@@ -145,13 +145,11 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
 
   if (data.isError) return null;
   if (endPoint === "/") return null; // disable breadcrumbs in home page
+  if (endPoint === "/search/") return null; // disable breadcrumbs in search page
 
   return (
     <BlockWrapper background={colors.lightSilver}>
-      <div
-        className="flex"
-        style={{ ...styles.wrapper, padding: `0 ${marginHorizontal}px` }}
-      >
+      <div className="flex" style={{ ...styles.wrapper }}>
         <ServeTitle />
         <ServeNewsMediaPreFix />
         {!lg ? (
@@ -169,13 +167,13 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
 
 const styles = {
   wrapper: {
-    height: 75,
+    height: 50,
     flexWrap: "wrap",
     alignItems: "center",
   },
   link: {
     alignItems: "center",
-    fontSize: 14,
+    fontSize: 12,
     cursor: "pointer",
   },
   linkValue: {

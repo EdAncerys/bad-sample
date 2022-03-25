@@ -31,6 +31,7 @@ const JournalPromoBlock = ({ state, actions, block }) => {
                 image={image}
                 title={title}
                 link={link}
+                delay={key}
                 shadow
               />
             );

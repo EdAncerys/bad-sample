@@ -144,6 +144,7 @@ const Post = ({ state, actions, libraries }) => {
                 <div
                   style={{
                     padding: `0.5em`,
+                    fontSize: 12,
                     backgroundColor: colors.lightSilver,
                     textTransform: "capitalize",
                     width: "fit-content",

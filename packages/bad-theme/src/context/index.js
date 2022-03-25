@@ -3,6 +3,8 @@ import {
   setGoToAction,
   setLinkWrapperAction,
   setFilterAction,
+  setAppSearchDataAction,
+  setAppSearchPhraseAction,
   setFetchAction,
   setErrorAction,
   setApplicationDataAction,
@@ -31,6 +33,7 @@ import {
   getUserDataFromDynamics,
 } from "./auth/actions";
 import { sendEmailEnquireAction } from "./auth/sendEnquire";
+import { getEthnicityAction } from "./auth/getEthnicity";
 import {
   getMembershipDataAction,
   handleApplyForMembershipAction,
@@ -39,7 +42,12 @@ import {
 } from "./actions/memberships";
 import { getWpPagesAction } from "./actions/getWpPages";
 import { getTweetsAction } from "./auth/getTweets";
-import { getFadAction, setFadAction } from "./auth/getFAD";
+import {
+  getFadAction,
+  setFadAction,
+  getAllFadAction,
+  getFADSearchAction,
+} from "./auth/getFAD";
 import { updateProfileAction } from "./auth/updateProfile";
 import {
   updateAddressAction,
@@ -73,6 +81,7 @@ import { useIsMounted } from "../helpers/useIsMounted";
 import { errorHandler } from "../helpers/errorHandler";
 import { anchorScrapper } from "../helpers/contentScrapper";
 import { copyToClipboard } from "../helpers/domEvents";
+import { postTypeHandler } from "../helpers/postType";
 import {
   authCookieActionAfterCSR,
   getWPMenu,
@@ -99,6 +108,8 @@ export {
   setErrorAction,
   getTweetsAction,
   getFadAction,
+  getAllFadAction,
+  getFADSearchAction,
   setFadAction,
   getUserAction,
   getUserDataByContactId,
@@ -149,4 +160,8 @@ export {
   getGuidelinesDataAction,
   appSearchAction,
   getLeadershipTeamData,
+  setAppSearchDataAction,
+  setAppSearchPhraseAction,
+  postTypeHandler,
+  getEthnicityAction,
 };

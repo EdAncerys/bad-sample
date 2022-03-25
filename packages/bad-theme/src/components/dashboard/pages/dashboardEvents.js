@@ -24,6 +24,7 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
   const dispatch = useAppDispatch();
   const { dashboardPath, isActiveUser } = useAppState();
   if (!isActiveUser) return <Loading />;
+
   useEffect(() => {
     const filterEvents = async () => {
       await actions.source.fetch("/events/");
@@ -56,8 +57,9 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
 
   if (dashboardPath !== "Events") return null;
 
-  // RETURN ---------------------------------------------
   if (!listOfEvents) return <Loading />;
+
+  // RETURN ---------------------------------------------
   return (
     <div>
       <TitleBlock

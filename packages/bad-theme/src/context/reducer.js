@@ -21,6 +21,10 @@ export const initialState = {
   dashboardPath: "Dashboard",
   directDebitPath: { page: "billing" },
   isVisibleNotification: true,
+  ethnicity: null,
+
+  appSearchData: null,
+  appSearchPhrase: "",
 
   applicationData: null,
 
@@ -57,6 +61,10 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, shdFeed: action.payload };
     case "SET_FILTER_ACTION":
       return { ...state, filter: action.payload };
+    case "SET_APP_SEARCH_DATA_ACTION":
+      return { ...state, appSearchData: action.payload };
+    case "SET_APP_SEARCH_PHRASE_ACTION":
+      return { ...state, appSearchPhrase: action.payload };
     case "SET_APPLICATION_DATA_ACTION":
       return { ...state, applicationData: action.payload };
     case "SET_ID_FILTER_ACTION":
@@ -77,6 +85,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, directDebitPath: action.payload };
     case "SET_PLACEHOLDER_ACTION":
       return { ...state, isPlaceholder: action.payload };
+    case "SET_ETHNICITY_ACTION":
+      return { ...state, ethnicity: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

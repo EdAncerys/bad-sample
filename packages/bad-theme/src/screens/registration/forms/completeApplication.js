@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Form } from "react-bootstrap";
 
@@ -13,13 +13,14 @@ import {
   setGoToAction,
   validateMembershipFormAction,
   setLoginModalAction,
+  getEthnicityAction,
 } from "../../../context";
 
 const CompleteApplication = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser } = useAppState();
+  const { applicationData, isActiveUser, ethnicity } = useAppState();
 
   const [ethnicityList, setEthnicityList] = useState([]);
   const [isFetching, setFetching] = useState(false);
@@ -30,6 +31,16 @@ const CompleteApplication = ({ state, actions, libraries }) => {
   const [inputValidator, setInputValidator] = useState({
     bad_ethnicity: true,
   });
+  const useEffectRef = useRef(true);
+
+  useEffect(async () => {
+    // ⬇️ get ethnicity choices from Dynamics
+    if (!ethnicity) await getEthnicityAction({ state, dispatch });
+
+    return () => {
+      useEffectRef.current = false; // clean up function
+    };
+  }, []);
 
   // ⏬ populate form data values from applicationData
   useEffect(async () => {
@@ -112,32 +123,36 @@ const CompleteApplication = ({ state, actions, libraries }) => {
   return (
     <div style={{ position: "relative" }}>
       <ActionPlaceholder isFetching={isFetching} background="transparent" />
-      <form>
-        <div style={{ padding: `2em 1em` }}>
-          {inputValidator.bad_ethnicity && (
-            <div>
-              <label style={styles.subTitle}>What is your Ethnic Group?</label>
-              <Form.Select
-                name="bad_ethnicity"
-                value={formData.bad_ethnicity}
-                onChange={handleInputChange}
-                className="input"
-              >
-                <option value="" hidden>
-                  Ethnic Group
-                </option>
-                {ETHNIC_GROUPS.map((item, key) => {
-                  return (
-                    <option key={key} value={item.value}>
-                      {item.Label}
-                    </option>
-                  );
-                })}
-              </Form.Select>
-            </div>
-          )}
-        </div>
-      </form>
+      {inputValidator.bad_ethnicity && (
+        <form>
+          <div style={{ padding: `2em 1em` }}>
+            {ethnicity && (
+              <div>
+                <label style={styles.subTitle}>
+                  What is your Ethnic Group?
+                </label>
+                <Form.Select
+                  name="bad_ethnicity"
+                  value={formData.bad_ethnicity}
+                  onChange={handleInputChange}
+                  className="input"
+                >
+                  <option value="" hidden>
+                    Ethnic Group
+                  </option>
+                  {ethnicity.map((item, key) => {
+                    return (
+                      <option key={key} value={item.value}>
+                        {item.Label}
+                      </option>
+                    );
+                  })}
+                </Form.Select>
+              </div>
+            )}
+          </div>
+        </form>
+      )}
       <ServeActions />
     </div>
   );

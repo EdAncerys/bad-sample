@@ -188,19 +188,17 @@ const ProfileProgress = ({ state, actions, libraries }) => {
 
   const ServeActions = () => {
     return (
-      <div>
-        <div className="flex">
-          <div
-            type="submit"
-            className="blue-btn"
-            onClick={handleCancelApplication}
-            style={{ marginRight: "1em", backgroundColor: colors.danger }}
-          >
-            Cancel Application
-          </div>
-          <div type="submit" className="blue-btn" onClick={handleApply}>
-            Continue Application
-          </div>
+      <div className="flex" style={{ paddingTop: "1.5em" }}>
+        <div
+          type="submit"
+          className="blue-btn"
+          onClick={handleCancelApplication}
+          style={{ marginRight: "1em", backgroundColor: colors.danger }}
+        >
+          Cancel Application
+        </div>
+        <div type="submit" className="blue-btn" onClick={handleApply}>
+          Continue Application
         </div>
       </div>
     );
@@ -208,6 +206,10 @@ const ProfileProgress = ({ state, actions, libraries }) => {
 
   const ServeApplicationConsole = () => {
     if (!applicationData) return null; // if no applicationData return null
+
+    // get application name & type & concat in string
+    const appData = applicationData[0]; // application info data
+    const appProgress = `${appData.bad_organisedfor} - ${appData.bad_categorytype}: ${applicationStep}`;
 
     return (
       <div style={{ position: "relative" }}>
@@ -219,23 +221,23 @@ const ProfileProgress = ({ state, actions, libraries }) => {
             marginBottom: `${marginVertical}px`,
           }}
         >
-          <div className="flex" style={{ alignItems: "center" }}>
+          <div className="flex-col">
             <div
-              className="flex primary-title"
+              className="flex-col primary-title"
               style={{
                 fontSize: 20,
                 fontWeight: "bold",
                 justifyItems: "center",
                 lineHeight: "unset",
+                flexWrap: "wrap",
               }}
             >
-              Application Progress
-              <span style={{ paddingLeft: "0.5em" }}>{applicationStep}</span>
+              <span>Current Application Progress</span>
+              <span>{appProgress}</span>
             </div>
+            <ServeProgressBar />
             <ServeActions />
           </div>
-
-          <ServeProgressBar />
         </div>
       </div>
     );
@@ -244,8 +246,8 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   return (
     <div>
       <ServeApplicationConsole />
-      <ApplicationList />
       <SubmittedApplications />
+      <ApplicationList />
     </div>
   );
 };

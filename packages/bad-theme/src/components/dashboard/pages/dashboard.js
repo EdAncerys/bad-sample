@@ -1,25 +1,42 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import Profile from "../profile";
 import ProfileProgress from "../profileProgress";
-import UpdateProfile from "../updateProfile";
 import { colors } from "../../../config/colors";
 import Loading from "../../loading";
 import TitleBlock from "../../titleBlock";
 import Events from "../../events/events";
 import ApplicationStatusOrPayment from "../ApplicationStatusOrPayment";
 import Payments from "../payments";
+import Card from "../../../components/card/card";
 // CONTEXT ------------------------------------------------------------------
 import { useAppState, useAppDispatch } from "../../../context";
+import { getEventsData } from "../../../helpers";
 
 const Dashboard = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { dashboardPath, dynamicsApps } = useAppState();
 
-  if (dashboardPath !== "Dashboard") return null;
-
   const marginHorizontal = state.theme.marginHorizontal;
+  const marginVertical = state.theme.marginVertical;
+
+  const [eventList, setEventList] = useState(null); // event data
+  const useEffectRef = useRef(null);
+
+  useEffect(async () => {
+    // pre fetch events data
+    let data = state.source.events;
+    if (!data) await getEventsData({ state, actions });
+    data = state.source.events;
+    // convert to object & return first 2 records
+    const events = Object.values(data).slice(0, 4);
+    setEventList(events);
+
+    return () => {
+      useEffectRef.current = ""; // clean up function
+    };
+  }, []);
 
   // SERVERS ---------------------------------------------
   const ServeApplicationStatus = () => {
@@ -31,6 +48,7 @@ const Dashboard = ({ state, actions, libraries }) => {
     useEffect(() => {
       setApplications(dynamicsApps.apps);
     }, [dynamicsApps]);
+
     if (apps.data.length === 0) return null;
     if (!applications) return <Loading />;
     return (
@@ -65,33 +83,55 @@ const Dashboard = ({ state, actions, libraries }) => {
     return <Payments subscriptions={dynamicsApps} dashboard />;
   };
 
+  if (dashboardPath !== "Dashboard") return null;
+  if (!eventList) return <Loading />;
+  console.log(eventList);
+
   // RETURN ---------------------------------------------
   return (
-    <div>
-      <div style={{ padding: `0 ${marginHorizontal}px` }}>
+    <div style={{ padding: `0 ${marginHorizontal}px` }}>
+      <div>
         <Profile />
         <ProfileProgress />
         <ServeApplicationStatus />
         <ServePayments />
-        <UpdateProfile />
       </div>
 
-      <TitleBlock block={{ text_align: "left", title: "Upcoming Events" }} />
-      <Events
-        block={{
-          add_search_function: false,
-          background_colour: "transparent",
-          colour: colors.turquoise,
-          disable_vertical_padding: false,
-          event_type: false,
-          grade_filter: "All Levels",
-          grades: false,
-          layout: "layout_two",
-          locations: false,
-          post_limit: "2",
-          view_all_link: false,
-        }}
-      />
+      <div
+        className="shadow"
+        style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
+      >
+        <TitleBlock
+          block={{ text_align: "left", title: "Upcoming Events" }}
+          disableMargin
+        />
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: `repeat(4, 1fr)`,
+            gap: 20,
+          }}
+        >
+          {eventList.map((block, key) => {
+            const title = block.title.rendered;
+
+            return (
+              <Card
+                key={key}
+                title={title}
+                link_label="Read More"
+                link={block.link}
+                colour={colors.turquoise}
+                eventHeader={block.acf}
+                isFrom4Col
+                titleLimit={4}
+                shadow
+              />
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 };

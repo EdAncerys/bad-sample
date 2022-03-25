@@ -43,7 +43,20 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
     // pre fetch membership data
     if (!state.source.memberships)
       await getMembershipDataAction({ state, actions });
-    const membershipData = Object.values(state.source.memberships);
+    let membershipData = Object.values(state.source.memberships);
+    // sort memberships by bad_order accenting & if no value push to end
+    membershipData.sort((a, b) => {
+      if (a.acf.bad_order && b.acf.bad_order) {
+        return a.acf.bad_order - b.acf.bad_order;
+      } else if (a.acf.bad_order) {
+        return -1;
+      } else if (b.acf.bad_order) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+
     setMembershipData(membershipData);
 
     // populate form data values from applicationData

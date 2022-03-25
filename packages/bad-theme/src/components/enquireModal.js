@@ -22,8 +22,10 @@ import {
 const EnquireModal = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { lg } = muiQuery();
+
   const dispatch = useAppDispatch();
   const { enquireAction, isActiveUser } = useAppState();
+  console.log("enquireAction", enquireAction); // debug
 
   const [uniqueId, setUniqueId] = useState(null);
   const [isFetching, setIsFetching] = useState(null);
@@ -48,6 +50,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
       `#subject-dropdown-${uniqueId}`
     );
     const isMessage = document.querySelector(`#message-${uniqueId}`);
+    const isJobTitle = document.querySelector(`#job-title-${uniqueId}`);
     const isFileUpload = document.querySelector(`#attachments-${uniqueId}`);
 
     // optional fields
@@ -56,6 +59,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
     let phoneNumber = null;
     let subject = null;
     let subjectDropDown = null;
+    let jobTitle = null;
     let message = null;
     let attachments = null;
 
@@ -65,6 +69,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
     if (isPhoneNumber) phoneNumber = isPhoneNumber.value;
     if (isSubject) subject = isSubject.value;
     if (isSubjectDropDown) subjectDropDown = isSubjectDropDown.value;
+    if (isJobTitle) jobTitle = jobTitle.value;
     if (isMessage) message = isMessage.value;
     if (isFileUpload) attachments = isFileUpload.files;
 
@@ -74,6 +79,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
       phoneNumber,
       subject,
       subjectDropDown,
+      jobTitle,
       message,
     };
     // if change of hospital update form object
@@ -192,6 +198,24 @@ const EnquireModal = ({ state, actions, libraries }) => {
           type="text"
           rows="3"
           className="form-control"
+        />
+      </div>
+    );
+  };
+
+  const ServeJobTitle = () => {
+    if (!enquireAction.job_title) return null;
+
+    return (
+      <div style={styles.inputContainer}>
+        <label className="form-label">Job Title</label>
+        <input
+          id={`job-title-${uniqueId}`}
+          value={isActiveUser.jobtitle}
+          type="text"
+          className="form-control"
+          placeholder="Enter your job title"
+          // disabled={isActiveUser.jobtitle} // disabled if user has job title
         />
       </div>
     );
@@ -360,6 +384,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
           <ServeNumber />
           <ServeSubject />
           <ServeSubjectDropDown />
+          <ServeJobTitle />
           <ServeMessage />
           <ServeFileUpload />
           <ServeActions />
@@ -509,6 +534,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
                   onClickHandler={handleSelectHospital}
                 />
               </div>
+              <ServeJobTitle />
               <ServeMessage />
               <ServeActions />
             </div>

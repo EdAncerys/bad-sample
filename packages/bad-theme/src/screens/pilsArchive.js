@@ -185,7 +185,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
         <div
           className="primary-title"
           style={{
-            fontSize: !lg ? 36 : 25,
+            fontSize: !lg ? 36 : 24,
             borderBottom: `1px solid ${colors.darkSilver}`,
           }}
         >

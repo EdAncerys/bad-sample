@@ -110,6 +110,28 @@ const ApplicationList = ({ state, actions, libraries }) => {
     }
   };
 
+  const handleApplyForMembershipChangeAction = () => {
+    // check if user have application in progress break & display error
+    if (applicationData) {
+      const type = applicationData[0].bad_categorytype;
+      const confirmationMsg = `You already have ${type} application open and unsubmitted! Please complete it before changing BAD application category.`;
+
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: confirmationMsg,
+          image: "Error",
+        },
+      });
+      return;
+    }
+    // otherwise handle create new application in Dynamics & redirect to application page
+    setGoToAction({
+      path: "/membership/step-1-the-process/",
+      actions,
+    });
+  };
+
   // SERVERS ---------------------------------------------
   return (
     <div style={{ position: "relative" }}>
@@ -126,7 +148,7 @@ const ApplicationList = ({ state, actions, libraries }) => {
               justifyItems: "center",
             }}
           >
-            Existing Applications
+            Current Subscriptions
           </div>
           {subsData.map((app, key) => {
             const {
@@ -171,7 +193,7 @@ const ApplicationList = ({ state, actions, libraries }) => {
                   }
 
                   console.log("isSubmitted", isSubmitted);
-                  setStatus(isSubmitted);
+                  setStatus(isSubmitted); // set status to submitted
                 } catch (error) {
                   console.log(error);
                 }
@@ -211,17 +233,28 @@ const ApplicationList = ({ state, actions, libraries }) => {
               );
             };
 
-            const ServeMembershipConfirmationAction = () => {
-              if (dashboardPath === "Dashboard") return null;
+            const ServeMembershipActions = () => {
+              if (dashboardPath === "Dashboard" || bad_organisedfor === "SIG")
+                return null;
 
               return (
                 <div style={{ display: "grid", alignItems: "center" }}>
-                  <div
-                    type="submit"
-                    className="blue-btn"
-                    onClick={() => handleDownloadConfirmationPDF({ app })}
-                  >
-                    Membership Confirmation PDF
+                  <div className="flex">
+                    <div
+                      type="submit"
+                      className="blue-btn"
+                      style={{ marginRight: "1em" }}
+                      onClick={handleApplyForMembershipChangeAction}
+                    >
+                      Apply to change membership
+                    </div>
+                    <div
+                      type="submit"
+                      className="blue-btn"
+                      onClick={() => handleDownloadConfirmationPDF({ app })}
+                    >
+                      Proof of membership certificate
+                    </div>
                   </div>
                 </div>
               );
@@ -239,7 +272,7 @@ const ApplicationList = ({ state, actions, libraries }) => {
                     <div>Application Date: {formattedDate}</div>
                   </div>
                   <ServeChangeApplicationAction />
-                  <ServeMembershipConfirmationAction />
+                  <ServeMembershipActions />
                 </div>
               </div>
             );

@@ -22,6 +22,7 @@ import {
   getHospitalsAction,
   getBADMembershipSubscriptionData,
   sendFileToS3Action,
+  getEthnicityAction,
 } from "../../../context";
 
 const SIGApplication = ({ state, actions, libraries }) => {
@@ -113,6 +114,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const [isFetching, setFetching] = useState(false);
   const [membershipData, setMembershipData] = useState(false);
   const [genderList, setGenderList] = useState([]);
+  const [isJobEditable, setJobEditable] = useState(true);
 
   const [hospitalData, setHospitalData] = useState(null);
   const [canChangeHospital, setCanChangeHospital] = useState(true); // allow user to change hospital is no BAD applications are found
@@ -167,7 +169,21 @@ const SIGApplication = ({ state, actions, libraries }) => {
         if (data.name === item) {
           handleSetFormData({ data, name: item });
         }
+        // if bad_currentpost is null then set value from user profile data
+        if (!data.bad_currentpost) {
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            [`bad_currentpost`]: isActiveUser.jobtitle,
+          }));
+          // set job title to disabled status
+          setJobEditable(false);
+        }
       });
+      // set gender from picklist from app data
+      if (data.name === "py3_gender") {
+        let list = data.info.Choices;
+        setGenderList(list);
+      }
 
       // set hospital id if exists
       if (data.name === "py3_hospitalid") {
@@ -372,6 +388,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         "py3_addresscountry",
         "py3_ntnno",
         "bad_readpolicydocument",
+        "sky_cvurl",
       ],
     });
 
@@ -501,11 +518,13 @@ const SIGApplication = ({ state, actions, libraries }) => {
           {membershipData.map((item, key) => {
             const { bad_or_sig, category_types } = item.acf;
             // get SIG membership categories name from custom object
+            // split string on : and swap first and second value
             // if typeName includes Full replace with empty string
             // change prefix for names with " - ", eg. "Tarainee - Time"
-            let typeName = category_types
-              .replace(/Full:/g, "")
-              .replace(/:/g, " - ");
+            let typeName = category_types.split(":").reverse().join(" - ");
+            // if value include - Full replace with empty string
+            typeName = typeName.replace(" - Full", "");
+            console.log(item);
 
             return (
               <option key={key} value={category_types}>
@@ -760,7 +779,13 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 type="text"
                 className="form-control input"
                 placeholder="Current job title"
+                // set field diabled if user have BAD apps
+                disabled={isJobEditable ? false : true}
               />
+              <div style={{ padding: "0.5em 0" }}>
+                If you would like to change your job title please use the form
+                on your dashboard.
+              </div>
               <FormError id="bad_currentpost" />
             </div>
           )}
@@ -787,12 +812,19 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.py3_hospitalid && (
             <div>
-              <label className="form-label">
+              <label className="form-label required">
                 Main Place of Work / Medical School
               </label>
               <div style={{ position: "relative" }}>
                 {selectedHospital && (
-                  <div className="form-control input">
+                  <div
+                    className="form-control input"
+                    style={{
+                      backgroundColor: canChangeHospital
+                        ? "transparent"
+                        : colors.disabled,
+                    }}
+                  >
                     <div className="flex-row">
                       <div
                         style={{
@@ -837,6 +869,10 @@ const SIGApplication = ({ state, actions, libraries }) => {
                   filter={hospitalData}
                   onClickHandler={handleSelectHospital}
                 />
+              </div>
+              <div style={{ padding: "0.5em 0" }}>
+                If you would like to change your Medical school / Place of work
+                please use the form on your dashboard.
               </div>
             </div>
           )}
@@ -892,7 +928,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.sky_cvurl && (
             <div>
-              <label className="form-label">Upload Your CV</label>
+              <label className="form-label required">Upload Your CV</label>
               <input
                 ref={documentRef}
                 onChange={handleDocUploadChange}
@@ -901,6 +937,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 placeholder="CV Document"
                 accept=".pdf,.doc,.docx"
               />
+              <FormError id="sky_cvurl" />
             </div>
           )}
 
@@ -913,8 +950,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 onChange={handleInputChange}
                 type="text"
                 className="form-control input"
-                placeholder="MRCP"
+                placeholder="Name"
               />
+              <FormError id="sky_cvurl" />
             </div>
           )}
 
@@ -927,7 +965,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 onChange={handleInputChange}
                 type="text"
                 className="form-control input"
-                placeholder="MRCP"
+                placeholder="Name"
               />
             </div>
           )}
@@ -1002,7 +1040,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 onChange={handleInputChange}
                 type="text"
                 className="form-control input"
-                placeholder="MRCP"
+                placeholder="Current Grade"
               />
             </div>
           )}

@@ -48,7 +48,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     py3_hospitalid: "",
     bad_proposer1: "",
     bad_proposer2: "",
-    bad_mrpcqualified: "",
     sky_cvurl: "",
     py3_currentgrade: "",
     sky_newhospitalname: "",
@@ -67,7 +66,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     py3_hospitalid: true,
     bad_proposer1: true,
     bad_proposer2: true,
-    bad_mrpcqualified: true,
     sky_cvurl: true,
     py3_currentgrade: true,
     sky_newhospitalname: true,
@@ -129,8 +127,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         handleSetFormData({ data, name: "bad_proposer1" });
       if (data.name === "bad_proposer2")
         handleSetFormData({ data, name: "bad_proposer2" });
-      if (data.name === "bad_mrpcqualified")
-        handleSetFormData({ data, name: "bad_mrpcqualified" });
       if (data.name === "sky_newhospitalname")
         handleSetFormData({ data, name: "sky_newhospitalname" });
       if (data.name === "bad_expectedyearofqualification")
@@ -140,7 +136,13 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         if (data.value) hospitalId = data.value;
         handleSetFormData({ data, name: "py3_hospitalid" });
       }
-      // get hospital name from API
+      // if bad_currentpost is null then set value from user profile data
+      if (!data.bad_currentpost) {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          [`bad_currentpost`]: isActiveUser.jobtitle,
+        }));
+      }
 
       if (data.bad_categorytype) setType(data.bad_categorytype); // validate BAD application category type
       if (data._bad_sigid_value) setType(data._bad_sigid_value); // validate SIG application category type
@@ -257,10 +259,11 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         "bad_currentpost",
         isNewHospital ? "sky_newhospitaltype" : null,
         !isNewHospital ? "py3_hospitalid" : null,
-        isAssociateType ? "bad_proposer1" : null,
-        isAssociateType ? "bad_proposer2" : null,
+        "bad_proposer1",
+        "bad_proposer2",
         "py3_constitutionagreement",
         "bad_readpolicydocument",
+        "sky_cvurl",
       ],
     });
 
@@ -330,7 +333,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   };
 
   const isFormFooter =
-    inputValidator.bad_mrpcqualified ||
     inputValidator.py3_currentgrade ||
     inputValidator.py3_constitutionagreement ||
     inputValidator.bad_readpolicydocument ||
@@ -462,7 +464,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
           {inputValidator.py3_hospitalid && (
             <div>
-              <label className="form-label">
+              <label className="form-label required">
                 Main Place of Work / Medical School
               </label>
               <div style={{ position: "relative" }}>
@@ -593,7 +595,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             }}
           >
             <label className="form-label">
-              Proposers must be BSDS Ordinary members
+              Proposers must be BAD Ordinary or Honorary Working members
             </label>
             <div
               style={{
@@ -604,22 +606,14 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             >
               {inputValidator.bad_proposer1 && (
                 <div>
-                  <label
-                    className={`${
-                      applicationType.includes("Associate")
-                        ? "required form-label"
-                        : "form-label"
-                    }`}
-                  >
-                    Supporting Member 1
-                  </label>
+                  <label className="required form-label">Proposer 1</label>
                   <input
                     name="bad_proposer1"
                     value={formData.bad_proposer1}
                     onChange={handleInputChange}
                     type="text"
                     className="form-control input"
-                    placeholder="MRCP"
+                    placeholder="Name"
                   />
                   <FormError id="bad_proposer1" />
                 </div>
@@ -627,22 +621,14 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
               {inputValidator.bad_proposer2 && (
                 <div>
-                  <label
-                    className={`${
-                      applicationType.includes("Associate")
-                        ? "required form-label"
-                        : "form-label"
-                    }`}
-                  >
-                    Supporting Member 2
-                  </label>
+                  <label className="required form-label">Proposer 2</label>
                   <input
                     name="bad_proposer2"
                     value={formData.bad_proposer2}
                     onChange={handleInputChange}
                     type="text"
                     className="form-control input"
-                    placeholder="MRCP"
+                    placeholder="Name"
                   />
                   <FormError id="bad_proposer2" />
                 </div>
@@ -659,19 +645,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
               borderBottom: `1px solid ${colors.silverFillTwo}`,
             }}
           >
-            {inputValidator.bad_mrpcqualified && (
-              <div className="flex-col">
-                <label className="form-label">MRCP Qualified</label>
-                <input
-                  name="bad_mrpcqualified"
-                  checked={formData.bad_mrpcqualified}
-                  onChange={handleInputChange}
-                  type="checkbox"
-                  className="form-check-input check-box"
-                />
-              </div>
-            )}
-
             {inputValidator.py3_currentgrade && (
               <div>
                 <label className="form-label">Current Grade</label>
@@ -688,7 +661,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
             {inputValidator.sky_cvurl && (
               <div>
-                <label className="form-label">Upload Your CV</label>
+                <label className="form-label required">Upload Your CV</label>
                 <input
                   ref={documentRef}
                   onChange={handleDocUploadChange}
@@ -697,6 +670,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                   placeholder="CV Document"
                   accept=".pdf,.doc,.docx"
                 />
+                <FormError id="sky_cvurl" />
               </div>
             )}
 
@@ -729,7 +703,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                         citations="A member only service to search for the contact email of fellow BAD members"
                         style={{ color: "inherit" }}
                       >
-                        Include in Members directory
+                        Include my details in the BAD Members' Directory
                       </div>
                     </div>
                     <FormError id="bad_memberdirectory" />
@@ -753,12 +727,12 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                       </div>
                       <div>
                         <label className="form-check-label flex-row">
-                          <div>I agree to the </div>
+                          <div>I have read and agreed to abide by the </div>
                           <div
                             className="caps-btn required"
                             style={{ paddingTop: 6, marginLeft: 10 }}
                           >
-                            BAD Constitution
+                            BAD CONSTITUTION
                           </div>
                         </label>
                       </div>
@@ -772,7 +746,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                       className="flex"
                       style={{ alignItems: "center", margin: `1em 0` }}
                     >
-                      <div>
+                      <div style={{ display: "grid" }}>
                         <input
                           name="bad_readpolicydocument"
                           checked={formData.bad_readpolicydocument}
@@ -783,14 +757,14 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                       </div>
                       <div>
                         <label className="form-check-label flex-row">
-                          <div>
+                          <div className="flex">
+                            <span>I agree to the</span>
                             <div
                               className="caps-btn required"
                               style={{
                                 paddingTop: 6,
-                                marginRight: 10,
+                                marginLeft: 10,
                                 whiteSpace: "nowrap",
-                                float: "left",
                               }}
                               onClick={() =>
                                 setGoToAction({
@@ -799,13 +773,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                                 })
                               }
                             >
-                              I agree - Privacy Notice
+                              BAD'S PRIVACY NOTICE
                             </div>
-                            <span>
-                              I agree - Privacy Notice* - justo donec enim diam
-                              vulputate ut pharetra sit. Purus semper eget duis
-                              at tellus at. Sed adipiscing diam.
-                            </span>
                           </div>
                         </label>
                       </div>

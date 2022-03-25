@@ -16,7 +16,7 @@ import { getEventsData } from "../../helpers";
 
 import { muiQuery } from "../../context";
 
-const Events = ({ state, actions, libraries, block }) => {
+const Events = ({ state, actions, libraries, block, disableMargin }) => {
   const { sm, md, lg, xl } = muiQuery();
   // console.log("EVENTS BLOCK: ", block);
 
@@ -30,11 +30,10 @@ const Events = ({ state, actions, libraries, block }) => {
   const [specialtyFilter, setSpecialtyFilter] = useState("");
   const [yearFilter, setYearFilter] = useState("");
 
-  const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
+  let marginHorizontal = state.theme.marginHorizontal;
+  if (disableMargin) marginHorizontal = 0;
 
   const searchFilterRef = useRef("");
-
   const isSearch = block.add_search_function;
 
   useEffect(async () => {
@@ -42,6 +41,7 @@ const Events = ({ state, actions, libraries, block }) => {
     let iteration = 0;
     let data = state.source.events;
 
+    // pre fetch events to get taxonomies data
     while (!data) {
       // if iteration is greater than 10, break
       if (iteration > 10) break;
@@ -398,7 +398,7 @@ const Events = ({ state, actions, libraries, block }) => {
     );
   };
 
-  if (!grades || !locations) return <Loading />;
+  if (!state.source.events) return <Loading />;
   // RETURN ---------------------------------------------------
   return (
     <div style={{ padding: `0 ${marginHorizontal}px` }}>

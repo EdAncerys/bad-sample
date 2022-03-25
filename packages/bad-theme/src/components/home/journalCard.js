@@ -15,6 +15,7 @@ const JournalCard = ({
   user,
   link,
   shadow,
+  delay,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const CARD_WIDTH = "30%";
@@ -121,11 +122,15 @@ const JournalCard = ({
   // RETURN ----------------------------------------------------------------
   return (
     <div
-      className={`${isShadow} card-wrapper`}
+      className={`${isShadow} card-wrapper heading-tile`}
       style={{
         minWidth: CARD_WIDTH,
         width: "100%",
       }}
+      data-aos="fade-up"
+      data-aos-easing="ease-in-sine"
+      data-aos-delay={`${delay * 50}`}
+      data-aos-duration="1000"
       onClick={() => setGoToAction({ path: link.url, actions })}
     >
       <div

@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Carousel } from "react-bootstrap";
@@ -107,17 +108,8 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
                   className="banner-transparent-btn"
                   onClick={() => setGoToAction({ path: link.url, actions })}
                 >
-                  <div className="flex">
+                  <div className="first-letter-capital">
                     <Html2React html={LABEL} />
-                  </div>
-                  <div>
-                    <KeyboardArrowRightIcon
-                      style={{
-                        fill: colors.white,
-                        borderRadius: "50%",
-                        padding: 0,
-                      }}
-                    />
                   </div>
                 </button>
               </div>
@@ -180,25 +172,27 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
                         bottom: `5em`,
                       }}
                     >
-                      <ServeEventAction />
-                      <div
-                        className="flex"
-                        style={{
-                          alignItems: "center",
-                          height: !lg ? BANNER_HEIGHT / 2 : null,
-                          maxWidth: !lg ? "50%" : "100%",
-                          margin: !lg ? null : "1em 0 1em 0",
-                        }}
-                      >
+                      <div>
+                        <ServeEventAction />
                         <div
-                          className="flex-col primary-title"
+                          className="flex"
                           style={{
-                            fontSize: !lg ? 36 : 26,
-                            textAlign: "start",
-                            color: colors.white,
+                            alignItems: "center",
+                            height: !lg ? BANNER_HEIGHT / 2 : null,
+                            maxWidth: !lg ? "50%" : "100%",
+                            margin: !lg ? null : "1em 0 1em 0",
                           }}
                         >
-                          <Html2React html={title} />
+                          <div
+                            className="flex-col primary-title animate__animated animate__fadeInLeft animate__delay-1s"
+                            style={{
+                              fontSize: !lg ? 36 : 26,
+                              textAlign: "start",
+                              color: colors.white,
+                            }}
+                          >
+                            <Html2React html={title} />
+                          </div>
                         </div>
                       </div>
                       <ServeMoreAction />

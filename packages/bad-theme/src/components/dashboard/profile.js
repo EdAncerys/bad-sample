@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
-
 import ProfileAvatar from "../../img/svg/profile.svg";
 // CONTEXT ----------------------------------------------------------------
 import {
@@ -25,17 +24,23 @@ const Profile = ({ state, actions, libraries }) => {
     if (!isActiveUser) return null;
 
     const { bad_listname, bad_profile_photo_url } = isActiveUser;
-
     const alt = bad_listname || "Profile Picture";
+    let imgWidth = 350;
+    if (xl) {
+      imgWidth = 200;
+    } else {
+      imgWidth = 350;
+    }
 
     return (
       <div className="flex" style={{ justifyContent: "flex-end" }}>
         <div
           style={{
-            width: 190,
-            height: 190,
+            width: imgWidth,
+            height: imgWidth,
             borderRadius: `50%`,
             overflow: `hidden`,
+            margin: "3em 0 0 0",
           }}
         >
           <Image
@@ -84,7 +89,7 @@ const Profile = ({ state, actions, libraries }) => {
       if (!emailaddress1) return null;
 
       return (
-        <div style={styles.container}>
+        <div className="flex-col" style={styles.container}>
           <span className="primary-title">Email: </span>
           <Html2React html={emailaddress1} />
         </div>
@@ -95,7 +100,7 @@ const Profile = ({ state, actions, libraries }) => {
       if (!bad_memberid) return null;
 
       return (
-        <div style={styles.container}>
+        <div className="flex-col" style={styles.container}>
           <span className="primary-title">Membership Number: </span>
           <Html2React html={bad_memberid} />
         </div>
@@ -106,7 +111,7 @@ const Profile = ({ state, actions, libraries }) => {
       if (!jobtitle) return null;
 
       return (
-        <div style={styles.container}>
+        <div className="flex-col" style={styles.container}>
           <span className="primary-title">Job Title: </span>
           <Html2React html={jobtitle} />
         </div>
@@ -117,22 +122,9 @@ const Profile = ({ state, actions, libraries }) => {
       if (!mobilephone) return null;
 
       return (
-        <div style={styles.container}>
+        <div className="flex-col" style={styles.container}>
           <span className="primary-title">Mobile: </span>
           <Html2React html={mobilephone} />
-        </div>
-      );
-    };
-
-    const ServePlaceOfWork = () => {
-      if (!py3_currentplaceofwork) return null;
-
-      return (
-        <div style={styles.container}>
-          <span className="primary-title">
-            Main Place of work / Medical School:
-          </span>
-          <Html2React html={py3_currentplaceofwork} />
         </div>
       );
     };
@@ -145,64 +137,61 @@ const Profile = ({ state, actions, libraries }) => {
       if (!memebershpCategory) return null;
 
       return (
-        <div style={styles.container}>
+        <div className="flex-col" style={styles.container}>
           <span className="primary-title">BAD Membership Category: </span>
           <Html2React html={memebershpCategory} />
         </div>
       );
     };
 
-    const ServeAddressOne = () => {
-      if (!address2_line1) return null;
+    const ServeMainPlaceOfWork = () => {
+      const mainPlaceOfWorkCategory =
+        isActiveUser[
+          "_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"
+        ];
+      if (!mainPlaceOfWorkCategory) return null;
 
       return (
-        <div style={styles.container}>
-          <span className="primary-title">Address Line One: </span>
-          <Html2React html={address2_line1} />
+        <div className="flex-col" style={styles.container}>
+          <span className="primary-title">
+            Main Place of work / Medical School:{" "}
+          </span>
+          <Html2React html={mainPlaceOfWorkCategory} />
         </div>
       );
     };
 
-    const ServeAddressTwo = () => {
-      if (!address2_line2) return null;
-
+    const ServeAddress = () => {
       return (
-        <div style={styles.container}>
-          <span className="primary-title">Address Line Two: </span>
-          <Html2React html={address2_line2} />
-        </div>
-      );
-    };
-
-    const ServeCity = () => {
-      if (!address2_city) return null;
-
-      return (
-        <div style={styles.container}>
-          <span className="primary-title">City: </span>
-          <Html2React html={address2_city} />
-        </div>
-      );
-    };
-
-    const ServePostcode = () => {
-      if (!address2_postalcode) return null;
-
-      return (
-        <div style={styles.container}>
-          <span className="primary-title">Postcode: </span>
-          <Html2React html={address2_postalcode} />
-        </div>
-      );
-    };
-
-    const ServeCountry = () => {
-      if (!address2_country) return null;
-
-      return (
-        <div style={styles.container}>
-          <span className="primary-title">Country: </span>
-          <Html2React html={address2_country} />
+        <div className="flex-col" style={styles.container}>
+          <span className="primary-title">Address: </span>
+          <div className="flex-col">
+            {address2_line1 && (
+              <div className="flex">
+                <Html2React html={address2_line1} />
+              </div>
+            )}
+            {address2_line2 && (
+              <div className="flex">
+                <Html2React html={address2_line2} />
+              </div>
+            )}
+            {address2_city && (
+              <div className="flex">
+                <Html2React html={address2_city} />
+              </div>
+            )}
+            {address2_postalcode && (
+              <div className="flex">
+                <Html2React html={address2_postalcode} />
+              </div>
+            )}
+            {address2_country && (
+              <div className="flex">
+                <Html2React html={address2_country} />
+              </div>
+            )}
+          </div>
         </div>
       );
     };
@@ -211,15 +200,12 @@ const Profile = ({ state, actions, libraries }) => {
       <div style={{ paddingTop: `1em`, fontSize: 20 }}>
         <ServeMembershipNumber />
         <ServeBadCategory />
+        <ServeMainPlaceOfWork />
         <ServeJobTitle />
+
         <ServeEmail />
         <ServeMobile />
-        <ServePlaceOfWork />
-        <ServeAddressOne />
-        <ServeAddressTwo />
-        <ServeCity />
-        <ServePostcode />
-        <ServeCountry />
+        <ServeAddress />
 
         <div
           className="blue-btn"
@@ -239,7 +225,7 @@ const Profile = ({ state, actions, libraries }) => {
       className="shadow"
       style={{
         display: "grid",
-        gridTemplateColumns: !lg ? `2fr 1fr` : "1fr",
+        gridTemplateColumns: !lg ? `1fr auto` : "1fr",
         justifyContent: "space-between",
         gap: 20,
         padding: !lg ? `2em 4em` : "1em",
@@ -264,7 +250,9 @@ const Profile = ({ state, actions, libraries }) => {
 };
 
 const styles = {
-  container: {},
+  container: {
+    padding: "0.5em 0",
+  },
 };
 
 export default connect(Profile);

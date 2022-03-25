@@ -6,7 +6,7 @@ const BlockWrapper = ({ children, state, background, fullWidth }) => {
   const { sm, md, lg, xl } = muiQuery();
   const data = state.source.get(state.router.link);
 
-  const CONTENT_WIDTH = state.theme.contentContainer;
+  const containerWidth = state.theme.contentContainer;
 
   let STYLES = !lg ? { display: "flex", flex: 1 } : null;
 
@@ -24,7 +24,7 @@ const BlockWrapper = ({ children, state, background, fullWidth }) => {
       >
         <div
           style={{
-            width: !lg ? CONTENT_WIDTH : null,
+            width: !lg ? containerWidth : null,
             overflow: !lg ? null : "hidden",
           }}
         >

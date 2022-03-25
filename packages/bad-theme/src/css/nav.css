@@ -9,6 +9,11 @@
   top: 100%;
   margin-top: 0;
 }
+
+.dropdown-menu {
+  margin-top: 0.5em;
+  border-radius: 0;
+}
 .navbar-expand-lg .navbar-nav .nav-link {
   padding-right: 0rem;
   padding-left: 0rem;
@@ -53,7 +58,16 @@
 .quick-link li:hover a {
   background-color: initial !important;
 }
-
+.more-btn {
+  padding-bottom: 0.5em;
+  color: rgb(69, 69, 69);
+}
+.more-btn:hover {
+  box-shadow: inset rgb(31, 51, 94) 0px -5px;
+}
+.more-btn:hover a {
+  color: rgb(69, 69, 69);
+}
 /* bootstrap css menu config */
 .container-fluid a {
   color: #0000;

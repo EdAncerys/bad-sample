@@ -87,6 +87,8 @@ const Card = ({
   noVideoCategory,
   shareToSocials,
   disableCardAnimation,
+  delay,
+  animationType,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
@@ -340,7 +342,7 @@ const Card = ({
   // RETURN ----------------------------------------------------
   return (
     <div
-      className={`${isShadow} ${isCardAnimation}`} // card wrapper as clickable card if link is set
+      className={`${isShadow} ${isCardAnimation} heading-tile`} // card wrapper as clickable card if link is set
       style={{
         ...styles.card,
         backgroundColor: backgroundColor || colors.white,
@@ -349,6 +351,9 @@ const Card = ({
         minHeight: MIN_CARD_HEIGHT,
       }}
       onClick={() => setGoToAction({ path: link, actions, downloadFile })}
+      data-aos={animationType || "fade"}
+      data-aos-delay={`${delay * 50}`}
+      data-aos-duration="500"
     >
       <PromoHeader fundingPromo={fundingPromo} />
       <FeaturedBanner featuredBanner={featuredBanner} />

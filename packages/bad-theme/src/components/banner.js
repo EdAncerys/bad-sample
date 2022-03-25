@@ -44,17 +44,8 @@ const Banner = ({ state, actions, libraries, block }) => {
               className="banner-transparent-btn"
               onClick={() => setGoToAction({ path: link.url, actions })}
             >
-              <div className="flex">
+              <div className="first-letter-capital">
                 <Html2React html={LABEL} />
-              </div>
-              <div>
-                <KeyboardArrowRightIcon
-                  style={{
-                    fill: colors.white,
-                    borderRadius: "50%",
-                    padding: 0,
-                  }}
-                />
               </div>
             </button>
           </div>

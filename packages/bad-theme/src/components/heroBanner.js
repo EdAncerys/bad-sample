@@ -37,12 +37,13 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
   let CARD_WIDTH = !lg ? "50%" : "100%";
   let CARD_HEIGHT = BANNER_HEIGHT - FOOTER_HEIGHT * 3;
   let BODY_LENGTH = 400;
-  const CONTENT_WIDTH = !lg ? state.theme.contentContainer : "100%";
+  const containerWidth = !lg ? state.theme.contentContainer : "100%";
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
   let marginBottom = marginVertical;
   if (buttons) marginBottom = state.theme.marginVertical;
+  if (!add_buttons) marginBottom = 0;
 
   if (content_height === "small")
     BANNER_HEIGHT = state.theme.bannerHeight * 0.75;
@@ -191,9 +192,9 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
             zIndex: 9,
             width: !lg
               ? !background_image
-                ? CONTENT_WIDTH / 1.5
-                : CONTENT_WIDTH / 2
-              : CONTENT_WIDTH, // if no img provided defaults to diff width
+                ? containerWidth / 1.5
+                : containerWidth / 2
+              : containerWidth, // if no img provided defaults to diff width
             height: !lg
               ? BANNER_HEIGHT
               : background_image
@@ -242,7 +243,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
       <div
         style={{
           height: BANNER_HEIGHT,
-          width: CONTENT_WIDTH,
+          width: containerWidth,
           position: "absolute",
           zIndex: 9,
         }}

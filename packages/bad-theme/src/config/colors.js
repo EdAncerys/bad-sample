@@ -20,9 +20,11 @@ export const colors = {
   shade: "rgba(0, 0, 0, 0.25)",
   shadeIntense: "rgba(0, 0, 0, 0.5)",
   footer: "#292929",
+  disabled: "#e9ecef",
   // background colours
   bgLight: "rgb(230,230,230, 0.7)",
   bgNavy: "#EFF7F9",
+  bgPink: "#FCEFF0",
   // app Colours
   maroon: "#842057",
   pink: "#EF476F",

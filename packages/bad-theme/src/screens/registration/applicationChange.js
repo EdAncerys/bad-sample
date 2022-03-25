@@ -52,7 +52,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     py3_hospitalid: "",
     bad_proposer1: "",
     bad_proposer2: "",
-    bad_mrpcqualified: "",
     sky_cvurl: "",
     py3_currentgrade: "",
     sky_newhospitalname: "",
@@ -71,7 +70,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     py3_hospitalid: true,
     bad_proposer1: true,
     bad_proposer2: true,
-    bad_mrpcqualified: true,
     sky_cvurl: true,
     py3_currentgrade: true,
     sky_newhospitalname: true,
@@ -177,6 +175,13 @@ const ApplicationChange = ({ state, actions, libraries }) => {
       });
 
       if (data.bad_categorytype) setType(data.bad_categorytype); // validate BAD application category type
+      // if bad_currentpost is null then set value from user profile data
+      if (!data.bad_currentpost) {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          [`bad_currentpost`]: isActiveUser.jobtitle,
+        }));
+      }
     });
 
     if (hospitalId) {
@@ -325,8 +330,8 @@ const ApplicationChange = ({ state, actions, libraries }) => {
         "bad_currentpost",
         isNewHospital ? "sky_newhospitaltype" : null,
         !isNewHospital ? "py3_hospitalid" : null,
-        isAssociateType ? "bad_proposer1" : null,
-        isAssociateType ? "bad_proposer2" : null,
+        "bad_proposer1",
+        "bad_proposer2",
         "py3_constitutionagreement",
         "bad_readpolicydocument",
       ],
@@ -407,7 +412,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
   };
 
   const isFormFooter =
-    inputValidator.bad_mrpcqualified ||
     inputValidator.py3_currentgrade ||
     inputValidator.py3_constitutionagreement ||
     inputValidator.bad_readpolicydocument ||
@@ -561,7 +565,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                     <div>
                       <label className="required form-label">
                         {applicationType === "Associate Overseas"
-                          ? "GMC number or International equivalent"
+                          ? "GMC / IMC number'"
                           : "GMC number"}
                       </label>
                       <input
@@ -627,7 +631,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
 
                   {inputValidator.py3_hospitalid && (
                     <div>
-                      <label className="form-label">
+                      <label className="form-label required">
                         Main Place of Work / Medical School
                       </label>
                       <div style={{ position: "relative" }}>
@@ -759,7 +763,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                     }}
                   >
                     <label className="form-label">
-                      Proposers must be BSDS Ordinary members
+                      Proposers must be BAD Ordinary or Honorary Working members
                     </label>
                     <div
                       style={{
@@ -770,14 +774,8 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                     >
                       {inputValidator.bad_proposer1 && (
                         <div>
-                          <label
-                            className={`${
-                              applicationType.includes("Associate")
-                                ? "required form-label"
-                                : "form-label"
-                            }`}
-                          >
-                            Supporting Member 1
+                          <label className="required form-label">
+                            Proposer 1
                           </label>
                           <input
                             name="bad_proposer1"
@@ -785,7 +783,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                             onChange={handleInputChange}
                             type="text"
                             className="form-control input"
-                            placeholder="MRCP"
+                            placeholder="Name"
                           />
                           <FormError id="bad_proposer1" />
                         </div>
@@ -793,14 +791,8 @@ const ApplicationChange = ({ state, actions, libraries }) => {
 
                       {inputValidator.bad_proposer2 && (
                         <div>
-                          <label
-                            className={`${
-                              applicationType.includes("Associate")
-                                ? "required form-label"
-                                : "form-label"
-                            }`}
-                          >
-                            Supporting Member 2
+                          <label className="required form-label">
+                            Proposer 2
                           </label>
                           <input
                             name="bad_proposer2"
@@ -808,7 +800,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                             onChange={handleInputChange}
                             type="text"
                             className="form-control input"
-                            placeholder="MRCP"
+                            placeholder="Name"
                           />
                           <FormError id="bad_proposer2" />
                         </div>
@@ -825,7 +817,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                       borderBottom: `1px solid ${colors.silverFillTwo}`,
                     }}
                   >
-                    {inputValidator.bad_mrpcqualified && (
+                    {/* {inputValidator.bad_mrpcqualified && (
                       <div className="flex-col">
                         <label className="form-label">MRCP Qualified</label>
                         <input
@@ -836,7 +828,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                           className="form-check-input check-box"
                         />
                       </div>
-                    )}
+                    )} */}
 
                     {inputValidator.py3_currentgrade && (
                       <div>
@@ -895,7 +887,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                                 citations="A member only service to search for the contact email of fellow BAD members"
                                 style={{ color: "inherit" }}
                               >
-                                Include in Members directory
+                                Include my details in the BAD Members' Directory
                               </div>
                             </div>
                             <FormError id="bad_memberdirectory" />
@@ -919,12 +911,14 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                               </div>
                               <div>
                                 <label className="form-check-label flex-row">
-                                  <div>I agree to the </div>
+                                  <div>
+                                    I have read and agreed to abide by the{" "}
+                                  </div>
                                   <div
                                     className="caps-btn required"
                                     style={{ paddingTop: 6, marginLeft: 10 }}
                                   >
-                                    BAD Constitution
+                                    BAD CONSTITUTION
                                   </div>
                                 </label>
                               </div>
@@ -965,7 +959,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                                         })
                                       }
                                     >
-                                      I agree - Privacy Notice
+                                      I agree to the BAD'S PRIVACY NOTICE
                                     </div>
                                     <span>
                                       I agree - Privacy Notice* - justo donec

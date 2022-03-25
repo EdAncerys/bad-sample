@@ -47,6 +47,8 @@ const LoginModal = ({ state, actions }) => {
 
     // development env default login action
     if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
+      console.log("🤖 DEVELOPMENT ENVIRONMENT 🤖");
+
       const jwt = await authenticateAppAction({ state, dispatch });
       await getUserDataByContactId({
         state,

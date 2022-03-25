@@ -1,5 +1,6 @@
 const pathOne = `http://3.9.193.188`;
 const pathTwo = `https://badadmin.skylarkdev.co`;
+const pathThee = `https://bad.skylarkdev.digital`;
 
 export const setGoToAction = async ({ path, actions, downloadFile }) => {
   if (!path && !downloadFile) return null;
@@ -13,6 +14,7 @@ export const setGoToAction = async ({ path, actions, downloadFile }) => {
   let isExternalLink = true;
   if (path && path.includes(pathOne)) isExternalLink = false;
   if (path && path.includes(pathTwo)) isExternalLink = false;
+  if (path && path.includes(pathThee)) isExternalLink = false;
 
   if (path && path.includes(`www`) && !path.includes(`http`) && isExternalLink)
     return window.open(`https://` + path, "_blank"); // handle external links without https pre fix
@@ -38,6 +40,16 @@ export const setLinkWrapperAction = ({ path }) => {
 export const setFilterAction = ({ dispatch, filter }) => {
   console.log("setFilterAction triggered"); //debug
   dispatch({ type: "SET_FILTER_ACTION", payload: filter });
+};
+
+export const setAppSearchDataAction = ({ dispatch, appSearchData }) => {
+  console.log("setFilterAction triggered"); //debug
+  dispatch({ type: "SET_APP_SEARCH_DATA_ACTION", payload: appSearchData });
+};
+
+export const setAppSearchPhraseAction = ({ dispatch, appSearchPhrase }) => {
+  console.log("setFilterAction triggered"); //debug
+  dispatch({ type: "SET_APP_SEARCH_PHRASE_ACTION", payload: appSearchPhrase });
 };
 
 export const setIDFilterAction = ({ dispatch, idFilter }) => {

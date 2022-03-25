@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../config/imports";
+// CONTEXT ----------------------------------------------------------------
+import { postTypeHandler } from "../context";
 
 const SearchDropDown = ({
   state,
@@ -9,14 +11,15 @@ const SearchDropDown = ({
   libraries,
   filter,
   onClickHandler,
+  actionHandler,
   marginTop,
-  margin,
+  isAppSearch,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   // filter value are one layer deep object with title & link { title: "", link: "" }
   if (!filter) return null;
-  console.log("filter", filter); // debug
+  // console.log("filter", filter); // debug
 
   const ctaHeight = 45;
   const BANNER_HEIGHT = state.theme.bannerHeight;
@@ -45,19 +48,22 @@ const SearchDropDown = ({
             overflow: "auto",
           }}
         >
+          {isAppSearch && (
+            <div
+              className="flex transparent-btn"
+              style={{ padding: `0.5em 0`, cursor: "pointer" }}
+              onClick={() => actionHandler({ filter })}
+            >
+              See All Results
+            </div>
+          )}
+
           {filter.map((item, key) => {
             const { title, type } = item;
             // console.log("item", item); // debug
 
             // ⬇️ define subtitle name based on type
-            let typeName = "";
-            if (type === "derm_groups_charity")
-              typeName = "See Dermatology Groups & Charities";
-            if (type === "covid_19") typeName = "See in COVID 19";
-            if (type === "pils") typeName = "See in PILS";
-            if (type === "post") typeName = "See in Posts";
-            if (type === "guidelines_standards")
-              typeName = "See in Guidelines & Standards";
+            let name = postTypeHandler({ type }).name;
 
             return (
               <div
@@ -73,7 +79,7 @@ const SearchDropDown = ({
                 <span style={{ paddingRight: `0.5em` }}>
                   <Html2React html={title} />.
                 </span>
-                {type && <Html2React html={typeName} />}
+                {type && <Html2React html={name} />}
               </div>
             );
           })}

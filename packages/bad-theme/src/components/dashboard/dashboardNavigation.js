@@ -76,11 +76,11 @@ const DashboardNavigation = ({ state, actions, libraries }) => {
         <div
           className="dashboard-menu"
           style={{
-            boxShadow: handleUnderline("Members Directory"),
+            boxShadow: handleUnderline("Members' Directory"),
           }}
           onClick={(e) => handleNavigate({ e })}
         >
-          Members Directory
+          Members' Directory
         </div>
         <div
           className="dashboard-menu"

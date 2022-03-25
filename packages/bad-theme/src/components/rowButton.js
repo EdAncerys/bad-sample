@@ -3,6 +3,7 @@ import { connect } from "frontity";
 import { colors } from "../config/imports";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import parse from "html-react-parser";
+import { styled, keyframes, css } from "frontity";
 
 import { setGoToAction } from "../context";
 // CONTEXT ----------------------------------------------------------------
@@ -15,7 +16,9 @@ const RowButton = ({
   block,
   onClick,
   multiPostRowButtons,
+  delay,
 }) => {
+  const [isHover, setIsHover] = useState(false);
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const dispatch = useAppDispatch();
 
@@ -56,10 +59,25 @@ const RowButton = ({
       />
     );
   };
-
+  const arrowStyle = {
+    fill: isHover ? "white" : THEME,
+    backgroundColor: isHover ? THEME : "white",
+    borderRadius: `50%`,
+    border: `1px ${THEME}`,
+    borderStyle: `solid`,
+    padding: 0,
+    cursor: "pointer",
+    boxShadow: isHover ? `inset 0 3.25em 0 0 ${THEME}` : null,
+    transform: isHover ? `translate(5px, 0)` : `translate(0, 0)`,
+    transition: `box-shadow 1000ms ease-out, transform 1000`,
+  };
   const ServeButton = () => {
     return (
-      <div className="flex-col">
+      <div
+        className="flex-col"
+        onMouseEnter={() => setIsHover(true)}
+        onMouseLeave={() => setIsHover(false)}
+      >
         <div className="flex-col row-btn">
           <div className="flex-row" style={{ alignItems: "center" }}>
             <div className="flex">
@@ -76,15 +94,7 @@ const RowButton = ({
                 paddingLeft: `1em`,
               }}
             >
-              <KeyboardArrowRightIcon
-                style={{
-                  fill: colors.white,
-                  backgroundColor: THEME,
-                  borderRadius: "50%",
-                  padding: 0,
-                  cursor: "pointer",
-                }}
-              />
+              <KeyboardArrowRightIcon style={arrowStyle} />
             </div>
           </div>
         </div>
@@ -101,6 +111,10 @@ const RowButton = ({
         cursor: "pointer",
         position: "relative",
       }}
+      data-aos="fade-up"
+      data-aos-easing="ease-in-sine"
+      data-aos-delay={`${delay * 50}`}
+      data-aos-duration="1000"
       onClick={() => {
         if (link_id) {
           window.location.href = "#" + link_id;
@@ -136,5 +150,17 @@ const RowButton = ({
 const styles = {
   conteiner: {},
 };
+
+const arrow = (isHover, THEME) => css`
+  fill: ${isHover ? "white" : THEME};
+  background-color: ${isHover ? THEME : "white"};
+  border-radius: 50%;
+  border: 1px ${THEME};
+  border-style: solid;
+  padding: 0;
+  cursor: pointer;
+  box-shadow: ${isHover === true ? `inset 0 3.25em 0 0 ${THEME}` : "none"};
+  transition: all 0.3s ease-in-out;
+`;
 
 export default connect(RowButton);

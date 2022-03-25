@@ -37,7 +37,12 @@ const ButtonsRow = ({ state, actions, style, block, disableMargin }) => {
     >
       {block.buttons.map((block, key) => {
         return (
-          <RowButton key={key} block={block} style={{ cursor: "pointer" }} />
+          <RowButton
+            key={key}
+            delay={key}
+            block={block}
+            style={{ cursor: "pointer" }}
+          />
         );
       })}
     </div>

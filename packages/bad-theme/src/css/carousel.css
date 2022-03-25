@@ -67,3 +67,15 @@
 .carousel:hover a {
   box-shadow: none;
 }
+
+/* gallery-carousel Carousel styling */
+.gallery-carousel .carousel-control-prev-icon,
+.gallery-carousel .carousel-control-next-icon {
+  display: none;
+}
+.gallery-carousel .carousel-control-prev {
+  left: -172px;
+}
+.gallery-carousel .carousel-control-next {
+  right: -172px;
+}

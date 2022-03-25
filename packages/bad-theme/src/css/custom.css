@@ -37,10 +37,10 @@
   color: inherit;
   transition: all 0.3s ease-in-out;
 }
-.card-wrapper:hover {
+/* .card-wrapper:hover {
   color: inherit;
   transform: scale(0.995);
-}
+} */
 .bad-card-footer {
   height: 5px;
   transition: all 0.3s ease-in-out;
@@ -401,4 +401,46 @@ https://codebeautify.org/
   display: -webkit-box;
   /* -webkit-line-clamp: 2; */ /* number of lines to show */
   -webkit-box-orient: vertical;
+}
+
+/*CAROUSEL ANIMATION */
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    -webkit-transform: translatex(-100px);
+    -moz-transform: translatex(-100px);
+    -o-transform: translatex(-100px);
+    transform: translatex(-100px);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translatex(0);
+    -moz-transform: translatex(0);
+    -o-transform: translatex(0);
+    transform: translatex(0);
+  }
+}
+.carousel-caption {
+  opacity: 0;
+}
+.carousel-item.active .carousel-caption {
+  animation-name: fadeInLeft;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  /* transition: opacity 1s !important; */
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  background-color: #f5f5f5;
+}
+::-webkit-scrollbar {
+  width: 12px;
+  background-color: #f5f5f5;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #1e335d;
 }

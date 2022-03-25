@@ -15,10 +15,11 @@ export const MediaProvider = ({ children }) => {
   const sm = useMediaQuery("(max-width:576px)");
   const md = useMediaQuery("(max-width:768px)");
   const lg = useMediaQuery("(max-width:992px)");
-  const xl = useMediaQuery("(max-width:1200px)");
+  const xl = useMediaQuery("(max-width:1250px)");
+  const xxl = useMediaQuery("(max-width:1450px)");
 
   return (
-    <ThemeContext.Provider value={{ sm, md, lg, xl }}>
+    <ThemeContext.Provider value={{ sm, md, lg, xl, xxl }}>
       {children}
     </ThemeContext.Provider>
   );

@@ -2,9 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Switch from "@frontity/components/switch";
 import { colors } from "../config/imports";
-import { muiQuery } from "../context";
 import { useTransition, animated } from "react-spring";
-
+import AOS from "aos";
 // COMPONENTS ---------------------------------------------------------
 import Header from "../components/header/header";
 import Footer from "../components/footer";
@@ -23,6 +22,7 @@ import Login from "./login";
 import Home from "./home";
 import PilsArchive from "./pilsArchive";
 import Pils from "./pils";
+import AppSearch from "./appSearch";
 import BlocksPage from "../Test/blocksPage";
 import RegistrationStepOne from "./registration/registrationStepOne";
 import RegistrationStepTwo from "./registration/registrationStepTwo";
@@ -47,6 +47,7 @@ import Error from "./error";
 import Loading from "../components/loading";
 import BlockWrapper from "../components/blockWrapper";
 import { useScript } from "../hooks/useScript";
+import { useQuery } from "../hooks/useQuery";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -57,11 +58,13 @@ import {
   setPlaceholderAction,
   setIDFilterAction,
   getLeadershipTeamData,
+  muiQuery,
 } from "../context";
 
 const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { isActiveUser, isPlaceholder, idFilter } = useAppState();
+  const { sm, md, lg, xl, xxl } = muiQuery();
 
   // ⬇️ import custom hook for Google API ⬇️
   // useScript({
@@ -72,6 +75,8 @@ const App = ({ state, actions }) => {
   const data = state.source.get(endPoint);
   console.log("INDEX data", data); // debug
 
+  // ⬇️ hook for media queries ⬇️
+  useQuery({ state });
   const useEffectRef = useRef(true);
 
   useEffect(() => {
@@ -98,7 +103,7 @@ const App = ({ state, actions }) => {
     }
     // ⬇️  set placeholder after async actions to false
     setPlaceholderAction({ dispatch, isPlaceholder: false });
-
+    AOS.init();
     return () => {
       useEffectRef.current = false; // clean up function
     };
@@ -113,13 +118,6 @@ const App = ({ state, actions }) => {
     if (idFilter && endPoint !== slug)
       setIDFilterAction({ dispatch, idFilter: null }); // reset filter id on page change
   }, [endPoint]);
-
-  const { sm, md, lg, xl } = muiQuery();
-  // RESPONSIVE --------------------------------------------
-  if (lg) state.theme.marginHorizontal = 10;
-  if (lg) state.theme.marginVertical = 10;
-  if (lg) state.theme.fontSize = 22;
-  if (lg) state.theme.footerHeight = 2;
 
   const transitions = useTransition(isPlaceholder, {
     from: { opacity: 0 },
@@ -136,7 +134,7 @@ const App = ({ state, actions }) => {
   return transitions(({ opacity }, appContent) =>
     appContent ? (
       <animated.div className="no-selector">
-        <AnimatedPlaceholder opacity={opacity} />
+        <AnimatedPlaceholder opacity={opacity} appContent={appContent} />
       </animated.div>
     ) : (
       <animated.div
@@ -196,6 +194,7 @@ const App = ({ state, actions }) => {
                 />
 
                 <Pils when={data.isPils} />
+                <AppSearch when={endPoint === "/search/"} />
                 <Event when={data.isEvents} />
                 <Venue when={data.isVenues} />
                 <DermGroupsCharity when={data.isDermGroupsCharity} />

@@ -5,19 +5,26 @@
   align-items: center;
   justify-content: center;
   font-size: 15px;
-  color: #fff;
-  background-color: #1f335e;
+  color: #1f335e;
+  background-color: transparent;
   min-width: 145px;
   height: 40px;
   padding: 0.75em;
   border-radius: 10px;
   cursor: pointer;
-  border: none;
+  border-color: #1f335e;
+  border-style: solid;
   line-height: normal;
   transition: all 0.3s ease-in-out;
 }
+
+.blue-btn a {
+  color: #1f335e !important;
+}
 .blue-btn:hover {
+  box-shadow: inset 0 3.25em 0 0 #1f335e;
   background-color: rgb(31, 51, 94, 0.9);
+  color: white;
 }
 
 .transparent-btn {
@@ -27,13 +34,14 @@
   transition: all 0.3s ease-in-out;
 }
 .transparent-btn:hover {
-  color: #3882cd;
-  border: 1px solid #3882cd;
+  color: white;
+  box-shadow: inset 0 3.25em 0 0 #1f335e;
 }
 
 .drop-down-btn {
   color: #1f335e;
   background-color: #f0f1f4;
+  border: 0;
   width: 155px;
   transition: all 0.3s ease-in-out;
 }
@@ -45,7 +53,7 @@
   letter-spacing: 2px;
   text-transform: uppercase;
   font-weight: bold;
-  box-shadow: 0 2px #404040;
+  /* box-shadow: 0 2px #404040; */
   width: fit-content;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
@@ -82,14 +90,18 @@
   -webkit-text-fill-color: transparent;
   -moz-text-fill-color: transparent;
 }
+
 .caps-btn-icon:hover,
 .caps-btn:hover .caps-btn-icon,
 .caps-btn:hover,
 .caps-btn-no-underline:hover {
   color: #3882cd;
 }
-.caps-btn:hover::before {
+.heading-tile:hover .caps-btn::before {
   width: 100%;
+}
+.heading-tile:hover .caps-btn {
+  color: #3882cd;
 }
 .row-btn {
   padding: 1.5em 1em;
@@ -102,9 +114,9 @@
 .row-btn:hover .caps-btn::before {
   width: 0 !important;
 }
-.row-btn:hover {
+/* .row-btn:hover {
   padding: 1.5em 0.5em 1.5em 1.5em;
-}
+} */
 
 .label {
   font-size: 12px;
@@ -124,11 +136,15 @@
   border-radius: 5px;
   padding: 0.5em 2em;
   transition: all 0.3s ease-in-out;
+  text-transform: lowercase;
+}
+.first-letter-capital:first-letter {
+  text-transform: capitalize;
 }
 .banner-transparent-btn:hover {
   color: #1f335e !important;
-  border: 1px solid #1f335e !important;
-  background-color: rgb(255, 255, 255, 0.7);
+  box-shadow: inset 0 3.25em 0 0 #fff;
+  background-color: rgb(31, 51, 94, 0.9);
 }
 .banner-transparent-btn:hover .MuiSvgIcon-root {
   fill: #1f335e !important;
