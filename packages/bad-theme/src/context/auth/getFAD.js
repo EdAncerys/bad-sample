@@ -3,8 +3,8 @@ import { authenticateAppAction, setFetchAction } from "../index";
 export const getFadAction = async ({ state, dispatch, page }) => {
   console.log("getFadAction triggered");
 
-  let skip = page || 0;
   let perPage = 15;
+  let skip = page ? page * perPage : 0; // define skip for pagination
 
   try {
     setFetchAction({ dispatch, isFetching: true });
@@ -22,6 +22,7 @@ export const getFadAction = async ({ state, dispatch, page }) => {
     const data = await fetch(URL, requestOptions);
     if (!data) throw new Error("error fetching data form API");
     const result = await data.json();
+    console.log("page", page);
     console.log("getFadAction data", result.data);
 
     return result.data;
