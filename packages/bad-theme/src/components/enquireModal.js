@@ -60,7 +60,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
         ] || "",
       ["bad_memberid"]: isActiveUser.bad_memberid || "",
     }));
-  }, []);
+  }, [isActiveUser]);
 
   if (!enquireAction) return null;
   // HANDLERS ----------------------------------------------------
