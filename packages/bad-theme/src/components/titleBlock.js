@@ -15,6 +15,7 @@ const TitleBlock = ({
   disableHorizontalMargin,
   margin,
   fontSize,
+  styles,
 }) => {
   const { sm, md, lg, xl } = muiQuery();
 
@@ -62,6 +63,7 @@ const TitleBlock = ({
           fontSize: fontSize || 26,
           textAlign: ALIGNMENT,
           justifyContent: ALIGNMENT,
+          ...styles,
         }}
       >
         <Html2React html={title} />

@@ -88,6 +88,7 @@ const Card = ({
   shareToSocials,
   disableCardAnimation,
   delay,
+  animationType,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
@@ -350,8 +351,8 @@ const Card = ({
         minHeight: MIN_CARD_HEIGHT,
       }}
       onClick={() => setGoToAction({ path: link, actions, downloadFile })}
-      data-aos="fade"
-      data-aos-delay={delay * 50}
+      data-aos={animationType || "fade"}
+      data-aos-delay={`${delay * 50}`}
       data-aos-duration="500"
     >
       <PromoHeader fundingPromo={fundingPromo} />

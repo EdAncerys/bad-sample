@@ -25,17 +25,34 @@ const BADMemberships = ({ state, actions, libraries, block }) => {
     if (!state.source.memberships)
       await getMembershipDataAction({ state, actions });
 
-    const membershipTypes = Object.values(state.source.memberships);
+    let membershipTypes = Object.values(state.source.memberships);
     if (!membershipTypes) return null;
 
-    const response = membershipTypes.map((membership) => {
+    membershipTypes = membershipTypes.map((membership) => {
       const data = state.source[membership.type][membership.id];
-
       return data;
     });
+    // filter out bad memberships only
+    membershipTypes = membershipTypes.filter(
+      (membership) => membership.acf.bad_or_sig === "bad"
+    );
+    console.log("membershipTypes", membershipTypes); //debug
+    // sort memberships by bad_order accenting & if no value push to end
+    membershipTypes.sort((a, b) => {
+      if (a.acf.bad_order && b.acf.bad_order) {
+        return a.acf.bad_order - b.acf.bad_order;
+      } else if (a.acf.bad_order) {
+        return -1;
+      } else if (b.acf.bad_order) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
 
+    console.log("membershipTypes", membershipTypes); //debug
     // console.log(response); // debug
-    setMembershipTypes(response);
+    setMembershipTypes(membershipTypes);
 
     return () => {
       useEffectRef.current = false; // clean up function
@@ -48,16 +65,21 @@ const BADMemberships = ({ state, actions, libraries, block }) => {
   return (
     <div className="flex-col" style={{ margin: `${marginVertical}px 0` }}>
       {membershipTypes.map((membership, key) => {
-        const { body_copy, category_types, price, bad_or_sig } = membership.acf; // get the data from the memberships CPT
+        const { body_copy, category_types, price, bad_or_sig, bad_order } =
+          membership.acf; // get the data from the memberships CPT
         const { title } = membership; // get the data from the memberships CPT
+        if (bad_or_sig !== "bad") return null; // filter out the bad memberships
 
-        const accordion_item = {
+        console.log(category_types); // debug
+        console.log(bad_order); // debug
+
+        let accordion_item = {
           title: title,
           subtitle: price,
           body: body_copy,
           category_types,
+          bad_order,
         };
-        if (bad_or_sig !== "bad") return null; // filter out the bad memberships
 
         return (
           <Accordion

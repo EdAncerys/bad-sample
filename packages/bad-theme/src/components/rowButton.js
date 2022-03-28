@@ -87,7 +87,7 @@ const RowButton = ({
       }}
       data-aos="fade"
       data-aos-easing="ease-in-sine"
-      data-aos-delay={delay * 50}
+      data-aos-delay={`${delay * 50}`}
       data-aos-duration="1000"
       onClick={() => {
         if (link_id) {

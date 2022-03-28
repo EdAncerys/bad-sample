@@ -203,9 +203,8 @@ const AccordionComponent = ({
       >
         <ActionPlaceholder isFetching={isFetching} background="transparent" />
         <div
-          className="accordion-item"
+          className="accordion-item shadow"
           id={uniqueId}
-          className="shadow"
           style={{ padding: `0.5em 1em` }}
         >
           <AccordionHeader

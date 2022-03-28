@@ -1,13 +1,17 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
-import CloseIcon from "@mui/icons-material/Close";
 import Loading from "../../loading";
 import { colors } from "../../../config/colors";
 import Card from "../../card/card";
 import SearchContainer from "../../searchContainer";
 import ActionPlaceholder from "../../actionPlaceholder";
 import ScrollTop from "../../../components/scrollTop";
+import TitleBlock from "../../../components/titleBlock";
+import SearchDropDown from "../../../components/searchDropDown";
+import SearchIcon from "@mui/icons-material/Search";
+import CloseIcon from "@mui/icons-material/Close";
+import CircularProgress from "@mui/material/CircularProgress";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../../blockWrapper";
 // CONTEXT -------------------------------------------------------------------
@@ -20,21 +24,26 @@ import {
   updateProfileAction,
   setErrorAction,
   getAllFadAction,
+  getFADSearchAction,
 } from "../../../context";
 
 const Directory = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { fad, dashboardPath, isActiveUser, dynamicsApps } = useAppState();
 
-  const postLimit = 20;
+  const ctaHeight = 45;
 
-  const [searchFilter, setSearchFilter] = useState(null);
+  const [inputValue, setInputValue] = useState("");
+  const [searchFilter, setFilter] = useState("");
   const [fadData, setFadData] = useState([]);
-  const [page, setPage] = useState(0);
+  const [searchFadData, setSearchData] = useState(null);
+  const [page, setPage] = useState(1);
+
+  const [isSearchFetching, setSearchFetching] = useState(false);
   const [isFetching, setIsFetching] = useState(null);
   const [isGetMore, setGetMore] = useState(null);
 
-  const searchFilterRef = useRef(null);
+  const searchFilterRef = useRef("");
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
@@ -65,9 +74,14 @@ const Directory = ({ state, actions, libraries }) => {
   // HANDLERS -------------------------------------------------------------------
   const handlePreferenceUpdate = async () => {
     if (!isActiveUser) return;
+    let directoryPref = "Opt-in";
+    if (fad.directoryPref === "Opt-in") directoryPref = "Opt-out";
+
+    directoryPref = !isActiveUser.bad_memberdirectory;
+
     const data = Object.assign(
       {}, // add empty object
-      { bad_memberdirectory: !isActiveUser.bad_memberdirectory }
+      { bad_memberdirectory: directoryPref }
     );
     console.log("data", data); // debug
 
@@ -86,7 +100,7 @@ const Directory = ({ state, actions, libraries }) => {
       setErrorAction({
         dispatch,
         isError: {
-          message: `Members directory preferences updated successfully`,
+          message: `Members' Directory preferences updated successfully`,
         },
       });
     } catch (error) {
@@ -103,37 +117,40 @@ const Directory = ({ state, actions, libraries }) => {
     }
   };
 
-  const handleClearSearchFilter = () => {
-    setSearchFilter(null);
-    searchFilterRef.current = null;
-
-    setFadData(fad.slice(0, Number(postLimit)));
+  const handleKeyPress = (e) => {
+    if (isSearchFetching) return;
+    if (e.key === "Enter" && searchFilterRef.current.value) {
+      handleSearch();
+    }
   };
 
-  const handleSearch = () => {
-    const input = searchFilterRef.current.value.toLowerCase();
-    let data = fad;
+  const handleChange = () => {
+    setInputValue(searchFilterRef.current.value);
+  };
 
-    if (!!input) {
-      data = data.filter((item) => {
-        let fullname = item.fullname;
-        let email = item.emailaddress1;
-        let hospitalName =
-          item[
-            "_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"
-          ];
+  const handleClearSearchFilter = () => {
+    searchFilterRef.current.value = "";
+    setInputValue("");
+    setFilter("");
 
-        if (fullname) fullname = fullname.toLowerCase().includes(input);
-        if (email) email = email.toLowerCase().includes(input);
-        if (hospitalName)
-          hospitalName = hospitalName.toLowerCase().includes(input);
+    setSearchData(null); // reset search data
+  };
 
-        return fullname || email || hospitalName;
-      });
+  const handleSearch = async () => {
+    const input = searchFilterRef.current.value;
+    if (input.length < 3) return; // data fetch on strings greater than 3
+
+    try {
+      setSearchFetching(true);
+      const fad = await getFADSearchAction({ state, dispatch, query: input });
+      setSearchData(fad);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setInputValue("");
+      setFilter(input);
+      setSearchFetching(false);
     }
-
-    setFadData(data);
-    setSearchFilter(input);
   };
 
   const handleLoadMore = async () => {
@@ -141,12 +158,13 @@ const Directory = ({ state, actions, libraries }) => {
       setGetMore(true);
 
       const data = await getFadAction({ state, dispatch, page });
+      let updatedFad = [...fad, ...data];
       // set fad data in context of app
-      setFadAction({ dispatch, fad: data });
+      setFadAction({ dispatch, fad: updatedFad });
+      // set fad data in context of app
+      setFadData(updatedFad);
       // increment page iteration counter
       setPage(page + 1);
-      // set fad data in context of app
-      setFadData([...fadData, ...data]);
     } catch (error) {
       console.log(error);
       setErrorAction({
@@ -166,50 +184,61 @@ const Directory = ({ state, actions, libraries }) => {
 
   // SERVERS --------------------------------------------------------
   const ServeFadList = ({ fad }) => {
-    return <Card fadDirectory={fad} colour={colors.primary} shadow />;
+    return (
+      <Card
+        fadDirectory={fad}
+        colour={colors.primary}
+        shadow
+        animationType="none"
+      />
+    );
   };
 
-  const ServeFilter = () => {
-    const ServeSearchFilter = () => {
-      if (!searchFilter) return null;
+  const ServeSearchFilter = () => {
+    if (!searchFilter) return null;
 
-      return (
-        <div className="shadow filter">
-          <div>{searchFilter}</div>
-          <div className="filter-icon" onClick={handleClearSearchFilter}>
-            <CloseIcon />
-          </div>
+    return (
+      <div className="shadow filter">
+        <div>{searchFilter}</div>
+        <div className="filter-icon" onClick={handleClearSearchFilter}>
+          <CloseIcon />
         </div>
-      );
-    };
+      </div>
+    );
+  };
 
+  const ServeIcon = () => {
+    const searchIcon = <SearchIcon />;
+    const closeIcon = <CloseIcon />;
+    const icon = inputValue ? closeIcon : searchIcon;
+
+    if (isSearchFetching)
+      return (
+        <CircularProgress color="inherit" style={{ width: 25, height: 25 }} />
+      );
+
+    return <div onClick={handleClearSearchFilter}>{icon}</div>;
+  };
+
+  const ServeSearchButton = () => {
     return (
       <div
         style={{
-          backgroundColor: colors.silverFillTwo,
-          marginBottom: `${state.theme.marginVertical}px`,
+          display: "grid",
+          alignItems: "center",
+          paddingLeft: !lg ? `2em` : 0,
+          paddingTop: !lg ? null : "1em",
         }}
-        className="no-selector"
       >
-        <BlockWrapper>
-          <div style={{ padding: `0 ${marginHorizontal}px` }}>
-            <SearchContainer
-              title="Members' Directory"
-              subTitle="Search either by name or main place of work to find contact details of colleagues who have opted in to this service"
-              width={!lg ? "70%" : "100%"}
-              searchFilterRef={searchFilterRef}
-              handleSearch={handleSearch}
-            />
-            <div className="flex" style={{ margin: "0.5em 0" }}>
-              <ServeSearchFilter />
-            </div>
-          </div>
-        </BlockWrapper>
+        <button type="submit" className="blue-btn" onClick={handleSearch}>
+          Search
+        </button>
       </div>
     );
   };
 
   const ServeMoreAction = () => {
+    if (searchFadData) return null; // hide on FAD search
     if (isGetMore) return <Loading />;
 
     return (
@@ -263,14 +292,44 @@ const Directory = ({ state, actions, libraries }) => {
           style={{
             marginRight: "1em",
             width: "fit-content",
-            backgroundColor: isActiveUser.bad_memberdirectory
+            backgroundColor: !bad_memberdirectory
               ? colors.danger
               : colors.white,
           }}
           onClick={handlePreferenceUpdate}
         >
-          {bad_memberdirectory ? "Opt-out" : "Opt-in"}
+          {!bad_memberdirectory ? "Opt-out" : "Opt-in"}
         </div>
+      </div>
+    );
+  };
+
+  const ServeFadMembers = () => {
+    if (searchFadData) return null; // hide on FAD search
+
+    return (
+      <div>
+        <div style={!lg ? styles.container : styles.containerMobile}>
+          {fadData.map((fad, key) => {
+            return <ServeFadList key={key} fad={fad} />;
+          })}
+        </div>
+        {fadData.length > 15 && <ScrollTop />}
+      </div>
+    );
+  };
+
+  const ServeSearchFadMembers = () => {
+    if (!searchFadData) return null; // hide on FAD search
+
+    return (
+      <div>
+        <div style={!lg ? styles.container : styles.containerMobile}>
+          {searchFadData.map((fad, key) => {
+            return <ServeFadList key={key} fad={fad} />;
+          })}
+        </div>
+        {searchFadData.length > 15 && <ScrollTop />}
       </div>
     );
   };
@@ -278,17 +337,93 @@ const Directory = ({ state, actions, libraries }) => {
   // RETURN ---------------------------------------------
   return (
     <div>
-      <ServeFilter />
+      <div
+        style={{
+          backgroundColor: colors.silverFillTwo,
+          marginBottom: `${state.theme.marginVertical}px`,
+        }}
+        className="no-selector"
+      >
+        <BlockWrapper>
+          <div style={{ padding: `0 ${marginHorizontal}px` }}>
+            <div
+              className="flex-col"
+              style={{ padding: "1em 0", width: "75%" }}
+            >
+              <TitleBlock
+                block={{
+                  text_align: "left",
+                  title: "Members' Directory",
+                }}
+                margin="1em 0"
+              />
+              <TitleBlock
+                block={{
+                  text_align: "left",
+                  title:
+                    "Search either by name or main place of work to find contact details of colleagues who have opted in to this service",
+                }}
+                styles={{ fontSize: 16, fontWeight: "normal" }}
+                margin="0.5em 0"
+              />
+              <div className="flex-row">
+                <div
+                  className="flex"
+                  style={{
+                    flex: 1,
+                    height: ctaHeight,
+                    position: "relative",
+                    margin: "auto 0",
+                  }}
+                >
+                  <input
+                    // id="search-input"
+                    ref={searchFilterRef}
+                    value={inputValue}
+                    onChange={handleChange}
+                    onKeyPress={handleKeyPress}
+                    onClick={handleSearch}
+                    type="text"
+                    className="form-control input"
+                    placeholder="Search"
+                  />
+                  <div
+                    className="input-group-text toggle-icon-color"
+                    style={{
+                      position: "absolute",
+                      right: 0,
+                      height: ctaHeight,
+                      border: "none",
+                      background: "transparent",
+                      alignItems: "center",
+                      color: colors.darkSilver,
+                      cursor: "pointer",
+                    }}
+                  >
+                    <ServeIcon />
+                  </div>
+                </div>
+                <ServeSearchButton />
+              </div>
+            </div>
+            <div className="flex" style={{ margin: "0.5em 0" }}>
+              <ServeSearchFilter />
+            </div>
+          </div>
+        </BlockWrapper>
+      </div>
       <BlockWrapper>
         <ServePreferences />
         <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
-          <div style={!lg ? styles.container : styles.containerMobile}>
-            {fadData.map((fad, key) => {
-              return <ServeFadList key={key} fad={fad} />;
-            })}
-          </div>
-          <ServeMoreAction />
-          {fadData.length > 15 && <ScrollTop />}
+          {isSearchFetching && <Loading />}
+          {!isSearchFetching && (
+            <div>
+              <ServeFadMembers />
+              <ServeSearchFadMembers />
+
+              <ServeMoreAction />
+            </div>
+          )}
         </div>
       </BlockWrapper>
     </div>

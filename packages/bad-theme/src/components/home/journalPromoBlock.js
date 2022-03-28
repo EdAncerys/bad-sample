@@ -24,8 +24,10 @@ const JournalPromoBlock = ({ state, actions, block }) => {
         <div style={!lg ? styles.container : styles.containerMobile}>
           {block.thumbnails.map((block, key) => {
             const { image, link, title } = block;
+
             return (
               <JournalCard
+                key={key}
                 image={image}
                 title={title}
                 link={link}
