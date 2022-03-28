@@ -61,15 +61,15 @@ const RowButton = ({
   };
   const arrowStyle = {
     fill: isHover ? "white" : THEME,
-    backgroundColor: "white",
+    backgroundColor: isHover ? `${THEME}` : "white",
     borderRadius: `50%`,
     border: `1px ${THEME}`,
     borderStyle: `solid`,
     padding: 0,
     cursor: "pointer",
-    boxShadow: isHover ? `inset 0 3.25em 0 0 ${THEME}` : null,
+    boxShadow: isHover ? `inset 0 40px 0 0 ${THEME}` : null,
     transform: isHover ? `translate(5px, 0)` : `translate(0, 0)`,
-    transition: `background-color 1000ms ease-out 50ms`,
+    transition: `background-color 1s, transform 1s`,
   };
   // const ServeButton = () => {
   //   return (

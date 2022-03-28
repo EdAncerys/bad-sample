@@ -17,7 +17,7 @@ const NewsCarousel = ({ state, actions, libraries, block }) => {
   if (!block) return <Loading />;
 
   const { sm, md, lg, xl } = muiQuery();
-
+  const homepage = state.router.link === "/";
   const BLOCK_PAIRS = block.news_card.flatMap((_, i, a) =>
     i % 2 ? [] : [a.slice(i, i + 2)]
   ); // split data in array of pairs
@@ -39,7 +39,7 @@ const NewsCarousel = ({ state, actions, libraries, block }) => {
           top: BANNER_HEIGHT / 2,
           right: right ? 0 : "",
           marginLeft: left ? `-6em` : "auto",
-          marginRight: right ? `-6em` : "auto",
+          marginRight: homepage ? 0 : right ? `-6em` : "auto",
         }}
       >
         <Image className="d-block h-100" src={icon} />
