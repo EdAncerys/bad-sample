@@ -120,6 +120,7 @@ const NewsAndMediaHeader = ({
             height: "100%",
             objectFit: "cover",
           }}
+          className="card-image-animated"
         />
       </div>
     );
