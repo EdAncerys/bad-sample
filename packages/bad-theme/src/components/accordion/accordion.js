@@ -214,8 +214,8 @@ const AccordionComponent = ({
             leadershipBlock={leadershipBlock}
             handleAccordionToggle={handleAccordionToggle}
             fundingBlock={fundingBlock}
-            membershipApplications={membershipApplications}
             hasPreview={hasPreview}
+            membershipApplications={membershipApplications}
           />
           <AccordionBody
             block={block}

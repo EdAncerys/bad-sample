@@ -680,10 +680,7 @@ const AccordionBody = ({
   };
 
   return (
-    <div
-      id={`accordion-body-${uniqueId}`}
-      className="accordion-collapse collapse"
-    >
+    <div id={`accordion-body-${uniqueId}`}>
       <div
         className="accordion-body"
         style={{ margin: `0 1.25em`, padding: `1em 0` }}
@@ -691,7 +688,7 @@ const AccordionBody = ({
         <ServePublishedDate />
         <ServeBody />
         <ServeLTBody />
-        <b>EEEEEEEEY</b>H
+
         <ServeFundingInfo />
         <ServeLTTeam />
         <ServeGSSubTitle />

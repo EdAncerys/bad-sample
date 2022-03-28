@@ -4,7 +4,7 @@ import Image from "@frontity/components/image";
 
 import BlockWrapper from "./blockWrapper";
 import Loading from "./loading";
-import Accordion from "./accordion/accordion";
+import Accordion from "./accordion/alteraccordion";
 import { colors } from "../config/imports";
 import SearchContainer from "./searchContainer";
 import TypeFilters from "./typeFilters";
