@@ -66,10 +66,24 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         // contact_public_phone_number: "+1 (123) 456-7890",
         form_title: "Edit Professional Details",
         form_body: `Please use the form below to update us to changes to your professional details. To update your place of work, start typing to select from a list of options. If your place of work is not on the list, type Not Listed and use the message box at the bottom of the form instead`,
+        emailSubject:
+          "Change of Professional Details Request. Main Place of Work / Medical School",
         job_title: true,
         message: true,
         recipients: state.contactList.defaultContactList,
         isHospitalChange: true,
+        emailTemplate: "ChangeOfHospital",
+
+        // tets form values for email
+        full_name: true,
+        email_address: true,
+        phone_number: true,
+        subject: true,
+        subject_dropdown_options: [
+          "Change of Professional Details Request",
+          "Change of Professional Details Request. Main Place of Work / Medical School",
+        ],
+        allow_attachments: true,
       },
     });
   };

@@ -10,6 +10,8 @@ export const sendEmailEnquireAction = async ({
   formData,
   attachments,
   recipients,
+  emailSubject,
+  template,
 }) => {
   console.log("enquireAction triggered");
 
@@ -24,17 +26,22 @@ export const sendEmailEnquireAction = async ({
     recipients.map((item) => {
       recipientsArray.push(item.email);
     });
-
     const recipientsList = recipientsArray.toString();
 
     let fileAttachmentList = null;
     if (attachments) fileAttachmentList = Object.values(attachments); // add attachments to array
 
+    let subject = "B.A.D Enquiry";
+    if (emailSubject) subject = emailSubject;
+    // append recipientsList to formData
+    formData.recipientsList = recipientsList;
+
     const form = new FormData(); // create form object to sent email content & attachments
-    form.append("template", "Placeholder"); // default email template
+    form.append("template", template || "Placeholder"); // default email template
     form.append("email", recipientsList);
-    form.append("data", `${formData}`);
-    // map files if attachments are provided
+    form.append("data", JSON.stringify(formData));
+    form.append("subject", subject);
+    // map files if attachments are provided Only for email template
     if (fileAttachmentList)
       fileAttachmentList.map((file) => {
         form.append("attachments", file, file.name);
@@ -45,6 +52,8 @@ export const sendEmailEnquireAction = async ({
       headers: { Authorization: `Bearer ${jwt}` },
       body: form,
     };
+    console.log("🚀 📧 form", formData); // debug
+    console.log("🚀 📧 fileAttachmentList", fileAttachmentList); // debug
 
     const data = await fetch(URL, requestOptions);
     const response = await data.json();
