@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/imports";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
@@ -61,7 +61,7 @@ const RowButton = ({
   };
   const arrowStyle = {
     fill: isHover ? "white" : THEME,
-    backgroundColor: isHover ? THEME : "white",
+    backgroundColor: "white",
     borderRadius: `50%`,
     border: `1px ${THEME}`,
     borderStyle: `solid`,
@@ -69,39 +69,13 @@ const RowButton = ({
     cursor: "pointer",
     boxShadow: isHover ? `inset 0 3.25em 0 0 ${THEME}` : null,
     transform: isHover ? `translate(5px, 0)` : `translate(0, 0)`,
-    transition: `box-shadow 1000ms ease-out, transform 1000`,
+    transition: `background-color 1000ms ease-out 50ms`,
   };
-  const ServeButton = () => {
-    return (
-      <div
-        className="flex-col"
-        onMouseEnter={() => setIsHover(true)}
-        onMouseLeave={() => setIsHover(false)}
-      >
-        <div className="flex-col row-btn">
-          <div className="flex-row" style={{ alignItems: "center" }}>
-            <div className="flex">
-              <div
-                className={!multiPostRowButtons ? "caps-btn" : "mp-row-button"}
-              >
-                <Html2React html={LABEL} />
-              </div>
-            </div>
-            <div
-              style={{
-                display: "grid",
-                alignItems: "center",
-                paddingLeft: `1em`,
-              }}
-            >
-              <KeyboardArrowRightIcon style={arrowStyle} />
-            </div>
-          </div>
-        </div>
-        <ServeFooter />
-      </div>
-    );
-  };
+  // const ServeButton = () => {
+  //   return (
+
+  //   );
+  // };
 
   return (
     <div
@@ -111,7 +85,7 @@ const RowButton = ({
         cursor: "pointer",
         position: "relative",
       }}
-      data-aos="fade-up"
+      data-aos="fade"
       data-aos-easing="ease-in-sine"
       data-aos-delay={delay * 50}
       data-aos-duration="1000"
@@ -142,7 +116,33 @@ const RowButton = ({
         }
       }}
     >
-      <ServeButton />
+      <div
+        className="flex-col"
+        onMouseEnter={() => setIsHover(true)}
+        onMouseLeave={() => setIsHover(false)}
+      >
+        <div className="flex-col row-btn">
+          <div className="flex-row" style={{ alignItems: "center" }}>
+            <div className="flex">
+              <div
+                className={!multiPostRowButtons ? "caps-btn" : "mp-row-button"}
+              >
+                <Html2React html={LABEL} />
+              </div>
+            </div>
+            <div
+              style={{
+                display: "grid",
+                alignItems: "center",
+                paddingLeft: `1em`,
+              }}
+            >
+              <KeyboardArrowRightIcon style={arrowStyle} />
+            </div>
+          </div>
+        </div>
+        <ServeFooter />
+      </div>
     </div>
   );
 };
@@ -163,4 +163,4 @@ const arrow = (isHover, THEME) => css`
   transition: all 0.3s ease-in-out;
 `;
 
-export default connect(RowButton);
+export default React.memo(connect(RowButton));
