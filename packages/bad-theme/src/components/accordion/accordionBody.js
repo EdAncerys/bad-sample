@@ -40,7 +40,7 @@ const AccordionBody = ({
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { sm, md, lg, xl } = muiQuery();
-
+  console.log("BODYBLOCK", block);
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, dynamicsApps } = useAppState();
 
@@ -689,10 +689,9 @@ const AccordionBody = ({
         style={{ margin: `0 1.25em`, padding: `1em 0` }}
       >
         <ServePublishedDate />
-
         <ServeBody />
         <ServeLTBody />
-
+        <b>EEEEEEEEY</b>H
         <ServeFundingInfo />
         <ServeLTTeam />
         <ServeGSSubTitle />
