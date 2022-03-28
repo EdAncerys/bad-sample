@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 
@@ -19,12 +20,26 @@ const ErrorModal = ({ state, actions }) => {
 
   const bannerHeight = state.theme.bannerHeight;
 
-  if (!isError) return null; // error handler
-
   // HANDLERS ----------------------------------------------------
+  const handleKeyPress = (e) => {
+    // handle close modal on enter key
+    console.log("key press");
+    if (e.key === "Enter") actionHandler();
+  };
+
   const actionHandler = () => {
     setErrorAction({ dispatch, isError: null });
   };
+
+  // add DOM event listener on key press to close modal
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyPress);
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  });
+
+  if (!isError) return null; // error handler
 
   const gotToActionHandler = ({ path }) => {
     setGoToAction({ path, actions });
@@ -80,7 +95,11 @@ const ErrorModal = ({ state, actions }) => {
         >
           <ServeGoToAction />
           <ServeAction />
-          <div className="blue-btn" onClick={actionHandler}>
+          <div
+            className="blue-btn"
+            onClick={actionHandler}
+            onKeyPress={(e) => handleKeyPress(e)}
+          >
             Close
           </div>
         </div>

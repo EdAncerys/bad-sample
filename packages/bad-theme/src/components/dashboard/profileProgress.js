@@ -207,6 +207,10 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   const ServeApplicationConsole = () => {
     if (!applicationData) return null; // if no applicationData return null
 
+    // get application name & type & concat in string
+    const appData = applicationData[0]; // application info data
+    const appProgress = `${appData.bad_organisedfor} - ${appData.bad_categorytype}: ${applicationStep}`;
+
     return (
       <div style={{ position: "relative" }}>
         <ActionPlaceholder isFetching={isFetching} background="transparent" />
@@ -219,7 +223,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
         >
           <div className="flex-col">
             <div
-              className="flex primary-title"
+              className="flex-col primary-title"
               style={{
                 fontSize: 20,
                 fontWeight: "bold",
@@ -228,8 +232,8 @@ const ProfileProgress = ({ state, actions, libraries }) => {
                 flexWrap: "wrap",
               }}
             >
-              Application Progress
-              <span style={{ paddingLeft: "0.5em" }}>{applicationStep}</span>
+              <span>Current Application Progress</span>
+              <span>{appProgress}</span>
             </div>
             <ServeProgressBar />
             <ServeActions />

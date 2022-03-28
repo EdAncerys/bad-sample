@@ -31,14 +31,13 @@ const Directory = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { fad, dashboardPath, isActiveUser, dynamicsApps } = useAppState();
 
-  const postLimit = 20;
   const ctaHeight = 45;
 
   const [inputValue, setInputValue] = useState("");
   const [searchFilter, setFilter] = useState("");
   const [fadData, setFadData] = useState([]);
   const [searchFadData, setSearchData] = useState(null);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
 
   const [isSearchFetching, setSearchFetching] = useState(false);
   const [isFetching, setIsFetching] = useState(null);
@@ -75,9 +74,14 @@ const Directory = ({ state, actions, libraries }) => {
   // HANDLERS -------------------------------------------------------------------
   const handlePreferenceUpdate = async () => {
     if (!isActiveUser) return;
+    let directoryPref = "Opt-in";
+    if (fad.directoryPref === "Opt-in") directoryPref = "Opt-out";
+
+    directoryPref = !isActiveUser.bad_memberdirectory;
+
     const data = Object.assign(
       {}, // add empty object
-      { bad_memberdirectory: !isActiveUser.bad_memberdirectory }
+      { bad_memberdirectory: directoryPref }
     );
     console.log("data", data); // debug
 
@@ -133,7 +137,7 @@ const Directory = ({ state, actions, libraries }) => {
   };
 
   const handleSearch = async () => {
-    const input = searchFilterRef.current.value.toLowerCase();
+    const input = searchFilterRef.current.value;
     if (input.length < 3) return; // data fetch on strings greater than 3
 
     try {
@@ -154,12 +158,13 @@ const Directory = ({ state, actions, libraries }) => {
       setGetMore(true);
 
       const data = await getFadAction({ state, dispatch, page });
+      let updatedFad = [...fad, ...data];
       // set fad data in context of app
-      setFadAction({ dispatch, fad: data });
+      setFadAction({ dispatch, fad: updatedFad });
+      // set fad data in context of app
+      setFadData(updatedFad);
       // increment page iteration counter
       setPage(page + 1);
-      // set fad data in context of app
-      setFadData([...fadData, ...data]);
     } catch (error) {
       console.log(error);
       setErrorAction({
@@ -287,13 +292,13 @@ const Directory = ({ state, actions, libraries }) => {
           style={{
             marginRight: "1em",
             width: "fit-content",
-            backgroundColor: isActiveUser.bad_memberdirectory
+            backgroundColor: !bad_memberdirectory
               ? colors.danger
               : colors.white,
           }}
           onClick={handlePreferenceUpdate}
         >
-          {bad_memberdirectory ? "Opt-out" : "Opt-in"}
+          {!bad_memberdirectory ? "Opt-out" : "Opt-in"}
         </div>
       </div>
     );
