@@ -20,7 +20,7 @@ const NewsCarouselComponent = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { sm, md, lg, xl } = muiQuery();
-
+  const homepage = state.router.link === "/";
   const { post_limit, disable_vertical_padding } = block;
 
   const BLOCK_PAIRS = block.flatMap((_, i, a) =>
@@ -46,7 +46,7 @@ const NewsCarouselComponent = ({
           top: BANNER_HEIGHT / 2,
           right: right ? 0 : "",
           marginLeft: left ? `-6em` : "auto",
-          marginRight: right ? `-6em` : "auto",
+          marginRight: right ? (homepage ? 0 : `-6em`) : "auto",
         }}
       >
         <Image className="d-block h-100" src={icon} />
@@ -114,8 +114,10 @@ const NewsCarouselComponent = ({
                         cardHeight={BANNER_HEIGHT}
                         colour={colors.danger}
                         link={link}
+                        bodyLimit="100"
                         link_label="Read More"
                         cardHeight="90%"
+                        bodyLimit={homepage ? 4 : null}
                         shadow
                       />
                       <ServeDivider i={0} />
@@ -176,7 +178,12 @@ const NewsCarouselComponent = ({
   };
 
   return (
-    <div style={{ position: "relative" }}>
+    <div
+      style={{
+        position: "relative",
+        padding: homepage ? `0 ${marginHorizontal}px` : null,
+      }}
+    >
       <ServeIcon icon={LeftIcon} left />
       <ServeIcon icon={RightIcon} right />
 
