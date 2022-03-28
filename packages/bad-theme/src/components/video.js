@@ -301,6 +301,9 @@ const Video = ({ state, actions, libraries }) => {
             email: "dominik@skylarkcreative.co.uk",
           },
         ],
+        // default email subject & template name
+        emailSubject: "Viewing Video Issue.",
+        emailTemplate: "StandardEnquiryForm",
       },
     });
   };

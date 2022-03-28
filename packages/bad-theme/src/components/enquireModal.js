@@ -97,22 +97,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
         template: enquireAction.emailTemplate, // email default template
       });
       if (!response) throw new Error("Error sending email");
-
-      if (enquireAction.isHospitalChange)
-        setErrorAction({
-          dispatch,
-          isError: {
-            message: `Hospital change request to ${formData.hospitalChangeName} submitted successfully.`,
-          },
-        });
-
-      if (enquireAction.registerForEvent)
-        setErrorAction({
-          dispatch,
-          isError: {
-            message: `You have successfully registered your interest for ${enquireAction.registerForEvent}. We will be in touch soon.`,
-          },
-        });
     } catch (error) {
       console.log(error);
       setErrorAction({
@@ -124,6 +108,33 @@ const EnquireModal = ({ state, actions, libraries }) => {
       });
     } finally {
       setIsFetching(false);
+
+      if (enquireAction.isHospitalChange) {
+        setErrorAction({
+          dispatch,
+          isError: {
+            message: `Hospital change request to ${formData.hospitalChangeName} submitted successfully.`,
+          },
+        });
+        return;
+      }
+
+      if (enquireAction.registerForEvent) {
+        setErrorAction({
+          dispatch,
+          isError: {
+            message: `You have successfully registered your interest for ${enquireAction.registerForEvent}. We will be in touch soon.`,
+          },
+        });
+        return;
+      }
+
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Your have successfully submitted your enquire. We will be in touch soon.`,
+        },
+      });
     }
   };
 
@@ -382,56 +393,58 @@ const EnquireModal = ({ state, actions, libraries }) => {
               </div>
             )}
 
-            <div>
-              <label className="form-label">
-                Main Place of Work / Medical School
-              </label>
-              <div style={{ position: "relative" }}>
-                {formData.hospitalChangeName && (
-                  <div className="form-control input">
-                    <div className="flex-row">
-                      <div
-                        style={{
-                          position: "relative",
-                          width: "fit-content",
-                          paddingRight: 15,
-                        }}
-                      >
-                        {formData.hospitalChangeName}
+            {enquireAction.isHospitalChange && (
+              <div>
+                <label className="form-label">
+                  Main Place of Work / Medical School
+                </label>
+                <div style={{ position: "relative" }}>
+                  {formData.hospitalChangeName && (
+                    <div className="form-control input">
+                      <div className="flex-row">
                         <div
-                          className="filter-icon"
-                          style={{ top: -7 }}
-                          onClick={() => setSelectedHospital(null)}
+                          style={{
+                            position: "relative",
+                            width: "fit-content",
+                            paddingRight: 15,
+                          }}
                         >
-                          <CloseIcon
-                            style={{
-                              fill: colors.darkSilver,
-                              padding: 0,
-                              width: "0.7em",
-                            }}
-                          />
+                          {formData.hospitalChangeName}
+                          <div
+                            className="filter-icon"
+                            style={{ top: -7 }}
+                            onClick={() => setSelectedHospital(null)}
+                          >
+                            <CloseIcon
+                              style={{
+                                fill: colors.darkSilver,
+                                padding: 0,
+                                width: "0.7em",
+                              }}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
-                {!formData.hospitalChangeName && (
-                  <div>
-                    <input
-                      ref={hospitalSearchRef}
-                      onChange={handleHospitalLookup}
-                      type="text"
-                      className="form-control input"
-                      placeholder="Main Hospital/Place of work"
-                    />
-                  </div>
-                )}
-                <SearchDropDown
-                  filter={hospitalData}
-                  onClickHandler={handleSelectHospital}
-                />
+                  )}
+                  {!formData.hospitalChangeName && (
+                    <div>
+                      <input
+                        ref={hospitalSearchRef}
+                        onChange={handleHospitalLookup}
+                        type="text"
+                        className="form-control input"
+                        placeholder="Main Hospital/Place of work"
+                      />
+                    </div>
+                  )}
+                  <SearchDropDown
+                    filter={hospitalData}
+                    onClickHandler={handleSelectHospital}
+                  />
+                </div>
               </div>
-            </div>
+            )}
 
             {enquireAction.job_title && (
               <div style={styles.inputContainer}>

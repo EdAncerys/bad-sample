@@ -33,8 +33,13 @@ const RowButton = ({
     file_link,
   } = block;
 
-  // initialize new enquireAction object
-  let enquireAction = { ...block };
+  // ⬇️ initialize new enquireAction object & update object with new values
+  let enquireAction = {
+    ...block,
+    // default email subject & template name
+    emailSubject: "Standard Enquiry Form B.A.D WebApp",
+    emailTemplate: "StandardEnquiryForm",
+  };
   // default to defaultContactList if no recipients are set
   if (!enquireAction.recipients) {
     // recipients = state.theme.defaultContactList;

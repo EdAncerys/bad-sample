@@ -338,11 +338,14 @@ const Event = ({ state, actions, libraries }) => {
             form_body:
               register_form_body || `Register for ${title.rendered} event.`,
             subject: `Registration for ${title.rendered} event.`,
-            full_name: register_full_name || true,
-            email_address: register_email || true,
-            phone_number: register_phone_number || true,
+            full_name: true,
+            email_address: true,
+            phone_number: true,
             recipients: state.contactList.defaultContactList,
             registerForEvent: title.rendered,
+            // default email subject & template name
+            emailSubject: `Register for ${title.rendered} event interest.`,
+            emailTemplate: "StandardEnquiryForm",
           },
         });
       }
@@ -644,14 +647,17 @@ const Event = ({ state, actions, libraries }) => {
                 form_title: contact_form_title || "Event Information Form",
                 form_body:
                   contact_form_body || `Enquire about ${title.rendered} event.`,
-                full_name: contact_full_name || true,
-                email_address: contact_email || true,
-                phone_number: contact_phone_number || true,
-                subject: contact_subject || true,
-                message: contact_message || true,
+                full_name: true,
+                email_address: true,
+                phone_number: true,
+                subject: true,
+                message: true,
                 allow_attachments: contact_allow_attachments,
                 recipients:
                   contact_recipients || state.contactList.defaultContactList,
+                // default email subject & template name
+                emailSubject: `Enquire about ${title.rendered} event.`,
+                emailTemplate: "StandardEnquiryForm",
               },
             })
           }

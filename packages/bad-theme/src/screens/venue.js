@@ -98,6 +98,9 @@ const Venue = ({ state, actions, libraries }) => {
                     allow_attachments,
                     recipients:
                       recipients || state.contactList.defaultContactList,
+                    // default email subject & template name
+                    emailSubject: "Standard Enquiry Form B.A.D WebApp",
+                    emailTemplate: "StandardEnquiryForm",
                   },
                 })
               }

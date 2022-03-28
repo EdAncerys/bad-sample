@@ -54,14 +54,17 @@ const ElectionModal = ({
         contact_public_phone_number,
         form_title: contact_form_title || "Application Form",
         form_body: contact_form_body || `Apply to ${title.rendered} position.`,
-        full_name: contact_full_name || true,
-        email_address: contact_email || true,
-        phone_number: contact_phone_number || true,
-        subject: contact_subject || true,
+        full_name: true,
+        email_address: true,
+        phone_number: true,
+        subject: true,
         subject_dropdown_options: contact_subject_dropdown_options,
-        message: contact_message || true,
-        allow_attachments: contact_allow_attachments || true,
+        message: true,
+        allow_attachments: true,
         recipients: contact_recipients || state.contactList.defaultContactList,
+        // default email subject & template name
+        emailSubject: `Apply to ${title.rendered} position.`,
+        emailTemplate: "StandardEnquiryForm",
       },
     });
   };

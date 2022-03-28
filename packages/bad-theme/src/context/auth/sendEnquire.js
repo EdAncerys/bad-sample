@@ -35,6 +35,7 @@ export const sendEmailEnquireAction = async ({
     if (emailSubject) subject = emailSubject;
     // append recipientsList to formData
     formData.recipientsList = recipientsList;
+    formData.subject = subject;
 
     const form = new FormData(); // create form object to sent email content & attachments
     form.append("template", template || "Placeholder"); // default email template

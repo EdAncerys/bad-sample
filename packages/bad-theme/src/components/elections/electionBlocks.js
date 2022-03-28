@@ -138,6 +138,9 @@ const ElectionBlocks = ({ state, actions, block }) => {
           allow_attachments: contact_allow_attachments,
           recipients:
             contact_recipients || state.contactList.defaultContactList,
+          // default email subject & template name
+          emailSubject: `Notify when ${positionName} position is open.`,
+          emailTemplate: "StandardEnquiryForm",
         },
       });
     if (!isClosedPosition) handleElectionModal({ block });
