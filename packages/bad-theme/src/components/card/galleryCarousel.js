@@ -3,8 +3,8 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Carousel } from "react-bootstrap";
 import ReactPlayer from "react-player";
-import LeftIcon from "../../img/svg/carouselIconLeft.svg";
-import RightIcon from "../../img/svg/carouselIconRight.svg";
+import LeftIcon from "../../img/svg/leftIcon.svg";
+import RightIcon from "../../img/svg/rightIcon.svg";
 import { colors } from "../../config/imports";
 
 const GalleryCarousel = ({
@@ -40,6 +40,7 @@ const GalleryCarousel = ({
           right: right ? 0 : "",
           marginLeft: left ? `-4em` : "auto",
           marginRight: right ? `-4em` : "auto",
+          filter: "brightness(100)",
         }}
       >
         <Image className="d-block h-100" src={icon} />

@@ -117,6 +117,7 @@ const NewsCarouselComponent = ({
                         bodyLimit="100"
                         link_label="Read More"
                         cardHeight="90%"
+                        bodyLimit={homepage ? 4 : null}
                         shadow
                       />
                       <ServeDivider i={0} />
