@@ -6,7 +6,11 @@ import { Form } from "react-bootstrap";
 import Avatar from "../../../img/svg/profile.svg";
 import { colors } from "../../../config/imports";
 import FormError from "../../../components/formError";
+import SearchDropDown from "../../../components/searchDropDown";
 import ActionPlaceholder from "../../../components/actionPlaceholder";
+import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from "@mui/icons-material/Search";
+import CircularProgress from "@mui/material/CircularProgress";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -16,6 +20,7 @@ import {
   setGoToAction,
   validateMembershipFormAction,
   errorHandler,
+  googleAutocompleteAction,
 } from "../../../context";
 
 const PersonalDetails = ({ state, actions, libraries }) => {
@@ -25,6 +30,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   const { applicationData, isActiveUser, dynamicsApps } = useAppState();
 
   const [isFetching, setFetching] = useState(false);
+  const [isFetchingAddress, setIsFetchingAddress] = useState(null);
   const [genderList, setGenderList] = useState([]);
   const [formData, setFormData] = useState({
     py3_title: "",
@@ -59,6 +65,11 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     py3_dateofbirth: true,
   });
   const documentRef = useRef(null);
+
+  const [addressData, setAddressData] = useState(null);
+  const [searchInput, setSearchInput] = useState("");
+  const address1Line1Ref = useRef("");
+  const ctaHeight = 40;
 
   // ⏬ populate form data values from applicationData
   useEffect(() => {
@@ -124,6 +135,57 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   }, []);
 
   // HANDLERS --------------------------------------------
+  const handleAddressLookup = async () => {
+    const input = address1Line1Ref.current.value;
+    // update input value before async task
+    setSearchInput(input);
+
+    try {
+      setIsFetchingAddress(true);
+      const data = await googleAutocompleteAction({
+        state,
+        query: input,
+      });
+      // convert data to dropdown format
+      let predictions = [];
+      // check for data returned form API
+      if (data && data.length) {
+        predictions = data.map((item) => ({
+          // get city & country from data source
+          title: item.description,
+        }));
+
+        // set dropdown data
+        if (predictions.length && input.length) {
+          setAddressData(predictions);
+        } else {
+          setAddressData(null);
+        }
+      }
+    } catch (error) {
+      console.log("error", error);
+    } finally {
+      setIsFetchingAddress(false);
+    }
+  };
+
+  const handleSelectAddress = async ({ item }) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      py3_address1ine1: item.title,
+    }));
+  };
+
+  const handleClearAction = () => {
+    // clear search input value
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      py3_address1ine1: "",
+    }));
+    setSearchInput("");
+    setAddressData(null);
+  };
+
   const handleSaveExit = async () => {
     await setUserStoreAction({
       state,
@@ -215,6 +277,19 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   };
 
   // SERVERS ---------------------------------------------
+  const ServeIcon = () => {
+    const searchIcon = <SearchIcon />;
+    const closeIcon = <CloseIcon />;
+    const icon = searchInput ? closeIcon : searchIcon;
+
+    if (isFetchingAddress)
+      return (
+        <CircularProgress color="inherit" style={{ width: 25, height: 25 }} />
+      );
+
+    return <div onClick={handleClearAction}>{icon}</div>;
+  };
+
   const ServeActions = () => {
     return (
       <div
@@ -423,14 +498,79 @@ const PersonalDetails = ({ state, actions, libraries }) => {
             {inputValidator.py3_address1ine1 && (
               <div>
                 <label className="required form-label">Home Address</label>
-                <input
-                  name="py3_address1ine1"
-                  value={formData.py3_address1ine1}
-                  onChange={handleInputChange}
-                  type="text"
-                  className="form-control input"
-                  placeholder="Address Line 1"
-                />
+
+                <div style={{ position: "relative" }}>
+                  {!formData.py3_address1ine1 && (
+                    <div style={{ position: "relative", width: "100%" }}>
+                      <div
+                        className="flex"
+                        style={{
+                          flex: 1,
+                          height: ctaHeight,
+                          position: "relative",
+                          margin: "auto 0",
+                        }}
+                      >
+                        <input
+                          ref={address1Line1Ref}
+                          name="search-input"
+                          value={searchInput}
+                          onChange={handleAddressLookup}
+                          type="text"
+                          className="form-control input"
+                          placeholder="Address Line 1"
+                        />
+                        <div
+                          className="input-group-text toggle-icon-color"
+                          style={{
+                            position: "absolute",
+                            right: 0,
+                            height: ctaHeight,
+                            border: "none",
+                            background: "transparent",
+                            alignItems: "center",
+                            color: colors.darkSilver,
+                            cursor: "pointer",
+                          }}
+                        >
+                          <ServeIcon />
+                        </div>
+                      </div>
+                      <SearchDropDown
+                        filter={addressData}
+                        onClickHandler={handleSelectAddress}
+                      />
+                    </div>
+                  )}
+                  {formData.py3_address1ine1 && (
+                    <div className="form-control input">
+                      <div className="flex-row">
+                        <div
+                          style={{
+                            position: "relative",
+                            width: "fit-content",
+                            paddingRight: 15,
+                          }}
+                        >
+                          {formData.py3_address1ine1}
+                          <div
+                            className="filter-icon"
+                            style={{ top: -7 }}
+                            onClick={handleClearAction}
+                          >
+                            <CloseIcon
+                              style={{
+                                fill: colors.darkSilver,
+                                padding: 0,
+                                width: "0.7em",
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
                 <FormError id="py3_address1ine1" />
               </div>
             )}
