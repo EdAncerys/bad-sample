@@ -375,6 +375,13 @@ const SIGApplication = ({ state, actions, libraries }) => {
     const isNewHospital = formData.bad_newhospitaladded;
     let sigAppliaction = formData;
 
+    // default py3_address1ine1 to ref if value not set by user
+    let isAddressInput = false;
+    if (!formData.py3_address1ine1 && address1Line1Ref.current.value.length) {
+      isAddressInput = true;
+      formData.py3_address1ine1 = address1Line1Ref.current.value;
+    }
+
     const isValid = isFormValidated({
       required: [
         "bad_organisedfor",
@@ -391,7 +398,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         "py3_gender",
         "py3_email",
         "py3_mobilephone",
-        "py3_address1ine1",
+        isAddressInput ? null : "py3_address1ine1",
         "py3_addresstowncity",
         "py3_addresszippostalcode",
         "py3_addresscountry",
