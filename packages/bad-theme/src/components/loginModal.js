@@ -44,9 +44,9 @@ const LoginModal = ({ state, actions }) => {
   // HANDLERS ----------------------------------------------------
   const iFrameHandler = async (e) => {
     const iFrame = e.currentTarget;
-    console.log("IFRAME_URL", state.auth.IFRAME_URL); // debug
-    console.log("APP_USERNAME", state.auth.APP_USERNAME); // debug
-    console.log("APP_PASSWORD", state.auth.APP_PASSWORD); // debug
+    // console.log("IFRAME_URL", state.auth.IFRAME_URL); // debug
+    // console.log("APP_USERNAME", state.auth.APP_USERNAME); // debug
+    // console.log("APP_PASSWORD", state.auth.APP_PASSWORD); // debug
 
     // ⬇️ development env default login action ⬇️
     // if (state.auth.ENVIRONMENT === "DEVELOPMENT") {

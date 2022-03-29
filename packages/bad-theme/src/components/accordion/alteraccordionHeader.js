@@ -7,7 +7,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { colors } from "../../config/imports";
 import AccordionContext from "react-bootstrap/AccordionContext";
-
+// CONTEXT ----------------------------------------------------------------
 import { muiQuery } from "../../context";
 
 const AccordionHeader = ({
@@ -43,8 +43,6 @@ const AccordionHeader = ({
 
   let niceAccredited = false;
   if (acf && acf.nice_accredited) niceAccredited = acf.nice_accredited;
-
-  const isActive = useRef(false);
 
   // LEadership team & Standards --------------------------------
   let ltTitle = null;
@@ -183,9 +181,6 @@ const AccordionHeader = ({
               <AddIcon style={{ fontSize: 48, fill: colors.softBlack }} />
             )}
           </div>
-          {/* <div className="d-none" id={`remove-icon-${uniqueId}`}>
-           
-          </div> */}
         </div>
       </div>
     );

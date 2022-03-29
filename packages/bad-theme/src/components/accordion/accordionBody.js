@@ -5,14 +5,10 @@ import parse from "html-react-parser";
 
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import LINK from "../../img/svg/badLink.svg";
-
+import DownloadFileBlock from "../downloadFileBlock";
 import date from "date-and-time";
 const DATE_MODULE = date;
 
-import Loading from "../../components/loading";
-import DownloadFileBlock from "../downloadFileBlock";
-
-import { muiQuery } from "../../context";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -22,8 +18,8 @@ import {
   handleApplyForMembershipAction,
   anchorScrapper,
   setErrorAction,
+  muiQuery,
 } from "../../context";
-import { getLeadershipTeamData } from "../../helpers";
 
 const AccordionBody = ({
   state,
@@ -40,11 +36,10 @@ const AccordionBody = ({
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { sm, md, lg, xl } = muiQuery();
-  console.log("BODYBLOCK", block);
+
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, dynamicsApps } = useAppState();
 
-  const ICON_WIDTH = 35;
   const {
     downloads,
     button_label,
@@ -63,6 +58,7 @@ const AccordionBody = ({
   let link = block.link;
   let amount = block.acf ? block.acf.amount : null;
   let closingDate = block.acf ? block.acf.closing_date : null;
+  const ICON_WIDTH = 35;
 
   if (fundingBlock) body = block.acf ? block.acf.overview : null;
   if (fundingBlock) link = { url: block.acf.external_application_link };
@@ -136,12 +132,10 @@ const AccordionBody = ({
     gsLinks = block.acf.links;
     gsSubtitle = block.acf.subtitle;
   }
-  // Guidelines & Standards --------------------------------
 
   // LEadership team & Standards --------------------------------
   let ltBody = null;
   let LT_LAYOUT = null;
-  let ALL_GRADES = null;
 
   if (leadershipBlock) {
     ltBody = block.block.intro_text;
@@ -691,7 +685,6 @@ const AccordionBody = ({
         <ServePublishedDate />
         <ServeBody />
         <ServeLTBody />
-        <b>EEEEEEEEY</b>H
         <ServeFundingInfo />
         <ServeLTTeam />
         <ServeGSSubTitle />

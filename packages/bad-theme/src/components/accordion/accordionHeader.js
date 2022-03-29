@@ -25,7 +25,6 @@ const AccordionHeader = ({
 }) => {
   const { sm, md, lg, xl } = muiQuery();
   const { activeEventKey } = React.useContext(AccordionContext);
-  console.log("ACTIVE", activeEventKey);
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { subtitle, acf } = block;

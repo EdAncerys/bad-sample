@@ -241,8 +241,7 @@ const Card = ({
     );
   };
   const ServeCardHeader = () => {
-    if (url) return null;
-    if (!cardTitle) return null;
+    if (!cardTitle || url) return null;
 
     return (
       <div style={{ opacity: opacity || 1 }}>
