@@ -2,23 +2,24 @@ import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Form } from "react-bootstrap";
 
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from "react-places-autocomplete";
+import SearchDropDown from "../../components/searchDropDown";
 import ActionPlaceholder from "../actionPlaceholder";
+import { colors } from "../../config/imports";
+import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from "@mui/icons-material/Search";
+// DATA HELPERS -----------------------------------------------------------
 import {
   UK_COUNTIES,
   UK_COUNTRIES,
   prefMailingOption,
 } from "../../config/data";
-import { colors } from "../../config/imports";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
   useAppState,
   updateProfileAction,
   setErrorAction,
+  googleAutocompleteAction,
 } from "../../context";
 
 const UpdateAddress = ({ state, actions, libraries }) => {
@@ -28,6 +29,11 @@ const UpdateAddress = ({ state, actions, libraries }) => {
   const { isActiveUser } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
+  const [addressData, setAddressData] = useState(null);
+  const [searchInput, setSearchInput] = useState("");
+  const address1Line1Ref = useRef("");
+  const ctaHeight = 40;
+
   const [isFetching, setIsFetching] = useState(null);
   const [formData, setFormData] = useState({
     test_address: "",
@@ -69,14 +75,17 @@ const UpdateAddress = ({ state, actions, libraries }) => {
   // HELPERS ----------------------------------------------------------------
   const handleInputChange = (e) => {
     const { name, value, type, checked, files } = e.target;
+
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
     }));
     console.log(value); // debug
   };
+
   const handleAddressUpdate = async () => {
-    const address1_line1 = formData.address1_line1;
+    let address1_line1 = formData.address1_line1;
+    if (!address1_line1) address1_line1 = address1Line1Ref.current.value; //defaults to input ref value
     const address1_line2 = formData.address1_line2;
     const emailaddress1 = formData.emailaddress1;
     const mobilephone = formData.mobilephone;
@@ -126,36 +135,48 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     }
   };
 
-  const onChangeHandler = (e) => {
-    console.log(e);
-    // setFormData((prevFormData) => ({
-    //   ...prevFormData,
-    //   test_address: address,
-    // }));
+  const handleAddressLookup = async () => {
+    const input = address1Line1Ref.current.value;
+    console.log("API CALL", input);
+    const data = await googleAutocompleteAction({
+      state,
+      query: input,
+    });
+    // convert data to dropdown format
+    let predictions = [];
+    setSearchInput(input);
+    // check for data returned form API
+    if (data && data.length) {
+      predictions = data.map((item) => ({
+        // get city & country from data source
+        title: item.description,
+      }));
+
+      // set dropdown data
+      if (predictions.length && input.length) {
+        setAddressData(predictions);
+      } else {
+        setAddressData(null);
+      }
+    }
   };
 
-  const handleSelect = async (address) => {
+  const handleSelectAddress = async ({ item }) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      test_address: address,
+      address1_line1: item.title,
     }));
-    const results = await geocodeByAddress(address);
-    const latLng = await getLatLng(results[0]);
-    console.log(latLng);
+    console.log(item.title);
   };
 
-  const handleChange = (address) => {
+  const handleClearAction = () => {
+    // clear search input value
     setFormData((prevFormData) => ({
       ...prevFormData,
-      test_address: address,
+      address1_line1: "",
     }));
-  };
-
-  const handleCloseClick = () => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      test_address: "",
-    }));
+    setSearchInput("");
+    setAddressData(null);
   };
 
   // SERVERS ---------------------------------------------
@@ -172,6 +193,19 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     );
   };
 
+  const ServeIcon = () => {
+    const searchIcon = <SearchIcon />;
+    const closeIcon = <CloseIcon />;
+    const icon = searchInput ? closeIcon : searchIcon;
+
+    if (isFetching)
+      return (
+        <CircularProgress color="inherit" style={{ width: 25, height: 25 }} />
+      );
+
+    return <div onClick={handleClearAction}>{icon}</div>;
+  };
+
   return (
     <div style={{ position: "relative" }}>
       <ActionPlaceholder isFetching={isFetching} background="transparent" />
@@ -180,65 +214,6 @@ const UpdateAddress = ({ state, actions, libraries }) => {
           <div className="primary-title" style={{ fontSize: 20 }}>
             Contact Details:
           </div>
-
-          {/* <PlacesAutocomplete
-            // onChange={(e) => onChangeHandler(e)}
-            onChange={handleChange}
-            value={formData.test_address}
-            onSelect={handleSelect}
-            // onError={this.handleError}
-            // shouldFetchSuggestions={address.length > 2}
-          >
-            {({ getInputProps, suggestions, getSuggestionItemProps }) => {
-              return (
-                <div className="Demo__search-bar-container">
-                  <div className="Demo__search-input-container">
-                    <input
-                      {...getInputProps({
-                        placeholder: "Search Places...",
-                        className: "Demo__search-input",
-                      })}
-                    />
-                    {formData.test_address.length > 0 && (
-                      <button
-                        className="Demo__clear-button"
-                        onClick={handleCloseClick}
-                      >
-                        x
-                      </button>
-                    )}
-                  </div>
-                  {suggestions.length > 0 && (
-                    <div className="Demo__autocomplete-container">
-                      {suggestions.map((suggestion) => {
-                        const className = classnames("Demo__suggestion-item", {
-                          "Demo__suggestion-item--active": suggestion.active,
-                        });
-
-                        return (
-                          <div
-                            {...getSuggestionItemProps(suggestion, {
-                              className,
-                            })}
-                          >
-                            <strong>
-                              {suggestion.formattedSuggestion.mainText}
-                            </strong>{" "}
-                            <small>
-                              {suggestion.formattedSuggestion.secondaryText}
-                            </small>
-                          </div>
-                        );
-                      })}
-                      <div className="Demo__dropdown-footer">
-                        <div>x?</div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            }}
-          </PlacesAutocomplete> */}
 
           <div
             style={{
@@ -249,16 +224,80 @@ const UpdateAddress = ({ state, actions, libraries }) => {
             }}
           >
             <div>
-              <div>
+              <div style={{ position: "relative" }}>
                 <label>Address Line 1</label>
-                <input
-                  name="address1_line1"
-                  value={formData.address1_line1}
-                  onChange={handleInputChange}
-                  className="form-control input"
-                  placeholder="Address Line 1"
-                />
+                {!formData.address1_line1 && (
+                  <div style={{ position: "relative", width: "100%" }}>
+                    <div
+                      className="flex"
+                      style={{
+                        flex: 1,
+                        height: ctaHeight,
+                        position: "relative",
+                        margin: "auto 0",
+                      }}
+                    >
+                      <input
+                        ref={address1Line1Ref}
+                        name="search-input"
+                        value={searchInput}
+                        onChange={handleAddressLookup}
+                        type="text"
+                        className="form-control input"
+                        placeholder="Address Line 1"
+                      />
+                      <div
+                        className="input-group-text toggle-icon-color"
+                        style={{
+                          position: "absolute",
+                          right: 0,
+                          height: ctaHeight,
+                          border: "none",
+                          background: "transparent",
+                          alignItems: "center",
+                          color: colors.darkSilver,
+                          cursor: "pointer",
+                        }}
+                      >
+                        <ServeIcon />
+                      </div>
+                    </div>
+                    <SearchDropDown
+                      filter={addressData}
+                      onClickHandler={handleSelectAddress}
+                    />
+                  </div>
+                )}
+                {formData.address1_line1 && (
+                  <div className="form-control input">
+                    <div className="flex-row">
+                      <div
+                        style={{
+                          position: "relative",
+                          width: "fit-content",
+                          paddingRight: 15,
+                        }}
+                      >
+                        {formData.address1_line1}
+                        <div
+                          className="filter-icon"
+                          style={{ top: -7 }}
+                          onClick={handleClearAction}
+                        >
+                          <CloseIcon
+                            style={{
+                              fill: colors.darkSilver,
+                              padding: 0,
+                              width: "0.7em",
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
+
               <div style={styles.wrapper}>
                 <label>Address Line 2</label>
                 <input

@@ -24,6 +24,7 @@ import {
 } from "./actions/navigation";
 import { getPILsDataAction, getGuidelinesDataAction } from "./actions/getCPT";
 import { appSearchAction } from "./actions/appSearch";
+import { googleAutocompleteAction } from "./actions/googleAPI";
 import {
   loginAction,
   logoutAction,
@@ -164,4 +165,5 @@ export {
   setAppSearchPhraseAction,
   postTypeHandler,
   getEthnicityAction,
+  googleAutocompleteAction,
 };
