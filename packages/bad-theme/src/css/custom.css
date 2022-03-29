@@ -42,11 +42,18 @@
   transform: scale(0.995);
 } */
 
-.card-image-animated:hover {
+.card-image-animated {
+  transition: all 0.5s;
+}
+
+.heading-tile:hover .card-image-animated {
   transform: scale(1.1);
 }
 .heading-tile:hover .caps-btn::before {
   width: 100%;
+}
+.heading-tile:hover .card-image-animated::before {
+  transform: scale(1.1);
 }
 .bad-card-footer {
   height: 5px;
