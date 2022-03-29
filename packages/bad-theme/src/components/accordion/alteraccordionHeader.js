@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import React, { useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
@@ -6,6 +6,7 @@ import NiceLogo from "../../img/svg/niceLogo.svg";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { colors } from "../../config/imports";
+import AccordionContext from "react-bootstrap/AccordionContext";
 
 import { muiQuery } from "../../context";
 
@@ -23,11 +24,11 @@ const AccordionHeader = ({
 }) => {
   const { sm, md, lg, xl } = muiQuery();
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  const { activeEventKey } = React.useContext(AccordionContext);
 
   const { subtitle, acf } = block;
   const LOGO_HEIGHT = 35;
 
-  let preview = block.preview;
   if (hasPreview) preview = hasPreview;
 
   let title = block.title;
@@ -176,11 +177,15 @@ const AccordionHeader = ({
       <div>
         <div className="flex">
           <div id={`add-icon-${uniqueId}`}>
-            <AddIcon style={{ fontSize: 48, fill: colors.softBlack }} />
+            {activeEventKey === uniqueId ? (
+              <RemoveIcon style={{ fontSize: 48, fill: colors.softBlack }} />
+            ) : (
+              <AddIcon style={{ fontSize: 48, fill: colors.softBlack }} />
+            )}
           </div>
-          <div className="d-none" id={`remove-icon-${uniqueId}`}>
-            <RemoveIcon style={{ fontSize: 48, fill: colors.softBlack }} />
-          </div>
+          {/* <div className="d-none" id={`remove-icon-${uniqueId}`}>
+           
+          </div> */}
         </div>
       </div>
     );

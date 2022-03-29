@@ -31,7 +31,6 @@ function AlterAccordion({
 
   function CustomToggle({ children, eventKey, callback }) {
     const { activeEventKey } = React.useContext(AccordionContext);
-
     const decoratedOnClick = useAccordionButton(
       eventKey,
       () => callback && callback(eventKey)
@@ -125,11 +124,13 @@ function AlterAccordion({
   };
   return (
     <BlockWrapper>
-      <Accordion style={{ border: 0 }}>
-        {searchFilter.map((block, key) => {
-          return <SingleDerm block={block} key={key} id={key} />;
-        })}
-      </Accordion>
+      <div style={{ padding: "0 100px" }}>
+        <Accordion style={{ border: 0 }}>
+          {searchFilter.map((block, key) => {
+            return <SingleDerm block={block} key={key} id={key} />;
+          })}
+        </Accordion>
+      </div>
     </BlockWrapper>
   );
 }
