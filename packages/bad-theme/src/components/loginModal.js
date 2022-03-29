@@ -89,40 +89,6 @@ const LoginModal = ({ state, actions }) => {
   };
 
   // SERVERS --------------------------------------------------
-  const ServeFormInfo = () => {
-    return (
-      <div>
-        {/* <ServeCloseAction /> */}
-        <div style={{ marginTop: `2em` }}>
-          <div className="mb-4">
-            <div>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </div>
-          </div>
-          <RowButton
-            block={{
-              title: "Not yet registered? Register here",
-            }}
-            onClick={() => {
-              setCreateAccountModalAction({
-                dispatch,
-                createAccountAction: true,
-              });
-              setLoginModalAction({ dispatch, loginModalAction: false });
-            }}
-            buttonWidth="60%"
-          />
-        </div>
-      </div>
-    );
-  };
-
   const ServeModalContent = () => {
     const ServeCloseAction = () => {
       return (

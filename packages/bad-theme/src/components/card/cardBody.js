@@ -153,6 +153,7 @@ const CardBody = ({
   const ServeVideoArchiveCategories = () => {
     if (!videoArchive || !videoArchive.event_specialty) return null;
     if (noVideoCategory) return null;
+
     const event_specialties = videoArchive.event_specialty;
     if (event_specialties.length === 0) return null;
 

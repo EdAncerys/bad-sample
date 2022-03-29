@@ -3,21 +3,22 @@ import { connect } from "frontity";
 import Loading from "./loading";
 import BlockWrapper from "./blockWrapper";
 import Card from "./card/card";
-import ShareToSocials from "./card/shareToSocials";
 import { colors } from "../config/colors";
 import Image from "@frontity/components/image";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import LockIcon from "@mui/icons-material/Lock";
 import defaultCover from "../img/png/video_default.jpg";
+import { handleGetCookie } from "../helpers/cookie";
+import PaymentModal from "./dashboard/paymentModal";
 
+// CONTEXT ----------------------------------------------------------------
 import {
   useAppState,
   useAppDispatch,
   authenticateAppAction,
   setEnquireAction,
 } from "../context";
-import { handleGetCookie } from "../helpers/cookie";
-import PaymentModal from "./dashboard/paymentModal";
+
 const Video = ({ state, actions, libraries }) => {
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
@@ -26,10 +27,9 @@ const Video = ({ state, actions, libraries }) => {
 
   const { isActiveUser } = useAppState();
   const dispatch = useAppDispatch();
-  console.log(isActiveUser);
+
   if (!post) return <Loading />;
 
-  console.log(post);
   // STATE
   const [loadVideo, setLoadVideo] = React.useState(false);
   const [videoStatus, setVideoStatus] = React.useState("");
@@ -75,7 +75,8 @@ const Video = ({ state, actions, libraries }) => {
   const resetPaymentUrl = () => {
     setPaymentUrl(null);
   };
-  //SERVERS
+
+  //SERVERS ----------------------------------------------------
   const ServeTitle = () => {
     return (
       <div style={{ marginTop: "1em", marginBottom: "1em" }}>
@@ -85,6 +86,7 @@ const Video = ({ state, actions, libraries }) => {
       </div>
     );
   };
+
   const ServeContent = () => {
     const ServeImage = () => {
       const [videoCover, setVideoCover] = React.useState(defaultCover);
@@ -93,7 +95,6 @@ const Video = ({ state, actions, libraries }) => {
         // Example URL: https://player.vimeo.com/video/382577680?h=8f166cf506&color=5b89a3&title=0&byline=0&portrait=0
         const reg = /\d+/g;
         const videoId = video_url.match(reg);
-        console.log("VIDELOID", videoId);
         const fetchVideoData = await fetch(
           `https://vimeo.com/api/v2/video/${videoId[0]}.json`
         );
@@ -134,6 +135,7 @@ const Video = ({ state, actions, libraries }) => {
         </div>
       );
     };
+
     const ServeVideo = () => {
       return (
         <iframe
@@ -146,6 +148,7 @@ const Video = ({ state, actions, libraries }) => {
         />
       );
     };
+
     const ServeDateAndPrice = () => {
       const ServePrice = () => {
         if (!videoStatus || !isActiveUser)
@@ -160,6 +163,7 @@ const Video = ({ state, actions, libraries }) => {
               {post.acf.private && `£${post.acf.price}`}
             </div>
           );
+
         if (isActiveUser && post.acf.private && videoStatus === "locked")
           return (
             <div
@@ -170,6 +174,7 @@ const Video = ({ state, actions, libraries }) => {
               Buy for £{post.acf.price}
             </div>
           );
+
         if (post.acf.private && videoStatus === "unlocked")
           return (
             <div
@@ -179,6 +184,7 @@ const Video = ({ state, actions, libraries }) => {
               You own the video
             </div>
           );
+
         return (
           <div
             className="primary-title"
@@ -188,6 +194,7 @@ const Video = ({ state, actions, libraries }) => {
           </div>
         );
       };
+
       return (
         <div
           style={{
@@ -204,6 +211,7 @@ const Video = ({ state, actions, libraries }) => {
         </div>
       );
     };
+
     return (
       <div className="shadow">
         {loadVideo ? <ServeVideo /> : <ServeImage />}
@@ -211,6 +219,7 @@ const Video = ({ state, actions, libraries }) => {
       </div>
     );
   };
+
   const ServeBody = () => {
     return (
       <Card
@@ -225,14 +234,17 @@ const Video = ({ state, actions, libraries }) => {
       />
     );
   };
+
   const RelatedVideos = () => {
     const videos_list = Object.values(state.source.videos);
     const related_videos_to_show = videos_list.slice(0, 2);
     if (!state.source.videos) return null;
-    return related_videos_to_show.map((vid) => {
+    return related_videos_to_show.map((vid, key) => {
       if (vid.id === post.id) vid = videos_list[2];
+
       return (
         <Card
+          key={key}
           title={vid.title.rendered}
           url="https://i.vimeocdn.com/video/843761302-3d7f394aea80c28b923cee943e3a6be6c0f23410043d41daf399c9a57d19a191-d_640"
           body={vid.content.rendered}
@@ -247,6 +259,7 @@ const Video = ({ state, actions, libraries }) => {
       );
     });
   };
+
   React.useEffect(async () => {
     //Not the greatest idea to make useEffect async
     actions.source.fetch("/videos/");
@@ -286,6 +299,7 @@ const Video = ({ state, actions, libraries }) => {
     }
     setVideoStatus("locked");
   }, [isActiveUser, paymentUrl]);
+
   if (!videoStatus) return <Loading />;
   if (!state.source.videos) return <Loading />;
 
@@ -307,6 +321,7 @@ const Video = ({ state, actions, libraries }) => {
       },
     });
   };
+
   return (
     <BlockWrapper>
       <PaymentModal

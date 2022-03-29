@@ -1,38 +1,30 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { connect } from "frontity";
 import Card from "./card/card";
 import BlockWrapper from "./blockWrapper";
 import HeroBanner from "./heroBanner";
-import SearchContainer from "./searchContainer";
 import { colors } from "../config/imports";
-import CloseIcon from "@mui/icons-material/Close";
-import SearchIcon from "@mui/icons-material/Search";
 import defaultCover from "../img/png/video_default.jpg";
-
 import Loading from "../components/loading";
+
+// CONTEXT ----------------------------------------------------------------
 import { muiQuery, useAppState } from "../context";
+
 const VideoArchive = ({ state, actions, libraries }) => {
-  const [guidanceCategory, setGuidanceCategory] = useState(null);
   const [postData, setPostData] = useState(null);
   const [heroBannerBlock, setHeroBannerBlock] = useState(null);
-  const [filters, setFilters] = useState();
 
   const { isActiveUser } = useAppState();
 
   const { sm, md, lg, xl } = muiQuery();
 
-  const searchFilterRef = useRef(null);
-
-  const specialtyFilter = useRef(null);
-  const paidFilter = useRef(null);
-  const gradeFilter = useRef(null);
-  const allVideos = useRef(null);
+  const searchFilterRef = useRef("");
+  const specialtyFilter = useRef("");
+  const paidFilter = useRef("");
+  const gradeFilter = useRef("");
   const marginVertical = state.theme.marginVertical;
-  const inputSize = 20;
-  // const LIMIT = 6;
 
   const handleFilters = () => {
-    const data = state.source.get(state.router.link);
     let unfilteredVideos = Object.values(state.source.videos);
 
     if (specialtyFilter.current === "all") {
@@ -43,8 +35,6 @@ const VideoArchive = ({ state, actions, libraries }) => {
       setPostData(unfilteredVideos);
       return true;
     }
-
-    console.log("UNFILTERED:", specialtyFilter.current);
 
     const filteredVideos = unfilteredVideos.filter((video) => {
       if (
@@ -66,8 +56,8 @@ const VideoArchive = ({ state, actions, libraries }) => {
     });
 
     setPostData(filteredVideos);
-    console.log(filteredVideos);
   };
+
   const handleSearch = (e, searchFilter) => {
     e.preventDefault();
     let unfilteredVideos = Object.values(state.source.videos);
@@ -80,6 +70,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
     });
     setPostData(filteredVideos);
   };
+
   const ServeFilterMenu = () => {
     const SpecialtyFilters = () => {
       if (!state.source.event_specialty) return null;
@@ -101,14 +92,19 @@ const VideoArchive = ({ state, actions, libraries }) => {
             style={styles.dropdown}
           >
             <option value="">Specialties</option>
-            {data.map((item) => {
-              return <option value={item.id}>{item.name}</option>;
+            {data.map((item, key) => {
+              return (
+                <option key={key} value={item.id}>
+                  {item.name}
+                </option>
+              );
             })}
             <option value="all">All specialties</option>
           </select>
         </div>
       );
     };
+
     const GradeFilters = () => {
       if (!state.source.event_grade) return null;
       const data = Object.values(state.source.event_grade);
@@ -136,6 +132,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
         </div>
       );
     };
+
     const PaymentFilters = () => {
       const paymentType = ["Paid", "Free"];
       return (
@@ -155,13 +152,18 @@ const VideoArchive = ({ state, actions, libraries }) => {
           >
             <option>Video type</option>
             <option value="all">All videos</option>
-            {paymentType.map((item) => {
-              return <option value={item.toLowerCase()}>{item}</option>;
+            {paymentType.map((item, key) => {
+              return (
+                <option key={key} value={item.toLowerCase()}>
+                  {item}
+                </option>
+              );
             })}
           </select>
         </div>
       );
     };
+
     return (
       <div
         style={{
@@ -211,25 +213,9 @@ const VideoArchive = ({ state, actions, libraries }) => {
       </div>
     );
   };
+
   const ServeSearchFilter = () => {
     const [searchFilter, setSearchFilter] = useState("");
-    const ServeIcon = () => {
-      const searchIcon = <SearchIcon />;
-      const closeIcon = <CloseIcon />;
-      const icon = searchFilter ? closeIcon : searchIcon;
-
-      return (
-        <div
-          onClick={() => {
-            setSearchFilter(null);
-            searchFilterRef.current.value = "";
-            if (onChange) setFilterAction({ dispatch, filter: null }); // reset main search filter
-          }}
-        >
-          {icon}
-        </div>
-      );
-    };
 
     const ServeSerachButton = () => {
       return (
@@ -277,9 +263,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
               color: colors.darkSilver,
               cursor: "pointer",
             }}
-          >
-            {/* <ServeIcon /> */}
-          </div>
+          ></div>
           <ServeSerachButton />
         </form>
       </div>
@@ -309,8 +293,6 @@ const VideoArchive = ({ state, actions, libraries }) => {
     actions.source.fetch("/videos/");
     actions.source.fetch("/event_specialty/");
 
-    console.log("Use effect trigerred");
-
     const fetchHeroBanner = async () => {
       const fetchInfo = await fetch(
         state.source.url + "/wp-json/wp/v2/pages/7051"
@@ -334,14 +316,13 @@ const VideoArchive = ({ state, actions, libraries }) => {
     };
 
     const data = state.source.get(state.router.link);
-    // const data = state.source.get("/videos/");
-
     setPostData(data.items);
 
-    console.log("DATERO ", data.items);
     fetchHeroBanner();
   }, []);
+
   if (!postData) return <Loading />;
+
   return (
     <>
       <BlockWrapper background="rgb(239, 125, 33, 0.1)">
@@ -369,29 +350,19 @@ const VideoArchive = ({ state, actions, libraries }) => {
         {postData ? (
           <div style={styles.container}>
             {postData.length > 0 ? (
-              postData.map((item) => {
+              postData.map((item, key) => {
                 const post = state.source[item.type][item.id];
-                return <VideoArchivePost post={post} />;
+
+                return <VideoArchivePost key={key} post={post} />;
               })
             ) : (
-              <ServeNoVideosFound />
+              <ServeNoVideosFound key={key} />
             )}
           </div>
         ) : (
-          <ServeNoVideosFound />
+          <ServeNoVideosFound key={key} />
         )}
       </BlockWrapper>
-
-      {/* {postData ? 
-        <div style={styles.container}>
-          {postData.length > 0 ? (
-            postData.map((item) => {
-              const post = state.source[item.type][item.id];
-              return <VideoArchive post={post} />
-            }
-            </div>  : (
-            <ServeNoVideosFound />
-          )} */}
     </>
   );
 };
