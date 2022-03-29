@@ -4,11 +4,9 @@ import { connect } from "frontity";
 import Loading from "../../loading";
 import { colors } from "../../../config/colors";
 import Card from "../../card/card";
-import SearchContainer from "../../searchContainer";
 import ActionPlaceholder from "../../actionPlaceholder";
 import ScrollTop from "../../../components/scrollTop";
 import TitleBlock from "../../../components/titleBlock";
-import SearchDropDown from "../../../components/searchDropDown";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -23,7 +21,6 @@ import {
   setFadAction,
   updateProfileAction,
   setErrorAction,
-  getAllFadAction,
   getFADSearchAction,
 } from "../../../context";
 
@@ -377,7 +374,6 @@ const Directory = ({ state, actions, libraries }) => {
                   }}
                 >
                   <input
-                    // id="search-input"
                     ref={searchFilterRef}
                     value={inputValue}
                     onChange={handleChange}

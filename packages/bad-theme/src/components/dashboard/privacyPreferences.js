@@ -33,7 +33,6 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
       email,
       badAllContactBlock,
     };
-    console.log("updatePreferences", updatePreferences);
   };
 
   // SERVERS ---------------------------------------------

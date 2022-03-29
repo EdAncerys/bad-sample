@@ -1,8 +1,6 @@
 import { useState, useEffect, useReducer, useCallback } from "react";
 import { connect } from "frontity";
 
-import { colors } from "../../config/imports";
-
 import { muiQuery, setErrorAction, useAppDispatch } from "../../context";
 import { handleGetCookie } from "../../helpers/cookie";
 import Loading from "../loading";
@@ -51,7 +49,6 @@ const FindDermatologistOptions = ({ state }) => {
     const { contactid, jwt } = cookie;
     const url = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
 
-    console.log("URLKA", url);
     const submitUpdate = await fetch(url, {
       method: "PATCH",
       headers: {
@@ -72,11 +69,11 @@ const FindDermatologistOptions = ({ state }) => {
             dispatch,
             isError: { message: "There was an error processing the update" },
           });
-      console.log("UPDATED?", json);
     }
   };
 
   if (!fadData) return <Loading />;
+
   return (
     <div
       className="shadow"
@@ -88,7 +85,6 @@ const FindDermatologistOptions = ({ state }) => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          console.log("FADKA", fadData);
           handlePreferenceUpdate();
         }}
       >

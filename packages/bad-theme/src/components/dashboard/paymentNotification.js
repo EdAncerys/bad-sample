@@ -46,7 +46,6 @@ const PaymentNotification = ({
         json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
       setPaymentUrl(url);
     }
-    // setPage({ page: "directDebit", data: block });
   };
   const resetPaymentUrl = () => {
     setPaymentUrl(null);
@@ -99,9 +98,7 @@ const PaymentNotification = ({
 };
 
 const styles = {
-  text: {
-    fontSize: 12,
-  },
+  container: {},
 };
 
 export default connect(PaymentNotification);

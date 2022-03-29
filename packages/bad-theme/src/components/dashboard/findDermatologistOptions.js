@@ -1,8 +1,6 @@
 import { useState, useEffect, useReducer, useCallback } from "react";
 import { connect } from "frontity";
 
-import { colors } from "../../config/imports";
-
 import { muiQuery, setErrorAction, useAppDispatch } from "../../context";
 import { handleGetCookie } from "../../helpers/cookie";
 import Loading from "../loading";
@@ -66,7 +64,9 @@ const FindDermatologistOptions = ({ state, actions, libraries }) => {
     };
     getCurrentUserFadData();
   }, []);
+
   if (!fadData) return <Loading />;
+
   const [fadState, updateState] = useReducer(enhancedReducer, fadData);
   const updateForm = useCallback(({ target: { value, name, type } }) => {
     const updatePath = name.split(".");
@@ -99,7 +99,9 @@ const FindDermatologistOptions = ({ state, actions, libraries }) => {
       });
     }
   }, []);
+
   if (!fadData) return <Loading />;
+
   // HELPERS ----------------------------------------------------------------
   const handlePreferenceUpdate = async () => {
     const cookie = await handleGetCookie({ name: `BAD-WebApp` });

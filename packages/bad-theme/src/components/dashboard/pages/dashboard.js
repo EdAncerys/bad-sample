@@ -85,7 +85,6 @@ const Dashboard = ({ state, actions, libraries }) => {
 
   if (dashboardPath !== "Dashboard") return null;
   if (!eventList) return <Loading />;
-  console.log(eventList);
 
   // RETURN ---------------------------------------------
   return (
