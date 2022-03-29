@@ -44,35 +44,31 @@ const LoginModal = ({ state, actions }) => {
   // HANDLERS ----------------------------------------------------
   const iFrameHandler = async (e) => {
     const iFrame = e.currentTarget;
+    console.log("IFRAME_URL", state.auth.IFRAME_URL); // debug
+    console.log("APP_USERNAME", state.auth.APP_USERNAME); // debug
+    console.log("APP_PASSWORD", state.auth.APP_PASSWORD); // debug
 
-    // development env default login action
-    if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
-      console.log("🤖 DEVELOPMENT ENVIRONMENT 🤖");
+    // ⬇️ development env default login action ⬇️
+    // if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
+    //   console.log("🤖 DEVELOPMENT ENVIRONMENT 🤖");
 
-      const jwt = await authenticateAppAction({ state, dispatch });
-      await getUserDataByContactId({
-        state,
-        dispatch,
-        jwt,
-        // contactid: "cc9a332a-3672-ec11-8943-000d3a43c136", // andy testing account
-        // contactid: "84590b32-9490-ec11-b400-000d3a22037e", // mandy
-        // contactid: "0786df85-618f-ec11-b400-000d3a22037e", // Chris
-        contactid: "969ba377-a398-ec11-b400-000d3aaedef5", // emilia
-      });
-      setLoginModalAction({ dispatch, loginModalAction: false });
-      return;
-    }
+    //   const jwt = await authenticateAppAction({ state, dispatch });
+    //   await getUserDataByContactId({
+    //     state,
+    //     dispatch,
+    //     jwt,
+    //     // contactid: "cc9a332a-3672-ec11-8943-000d3a43c136", // andy testing account
+    //     // contactid: "84590b32-9490-ec11-b400-000d3a22037e", // mandy
+    //     // contactid: "0786df85-618f-ec11-b400-000d3a22037e", // Chris
+    //     contactid: "969ba377-a398-ec11-b400-000d3aaedef5", // emilia
+    //   });
+    //   setLoginModalAction({ dispatch, loginModalAction: false });
+    //   return;
+    // }
 
     try {
       const iFramePath = iFrame.contentWindow.location.pathname;
       // console.log("iFramePath", iFramePath); // debug
-
-      // ⏬⏬  CORS validation on old type browsers ⏬⏬
-      // if (
-      //   !iframeLocation.includes(`3000`) ||
-      //   !iframeLocation.includes(state.auth.APP_URL)
-      // )
-      //   throw new Error("Wrong redirection url");
 
       const iqs = new URLSearchParams(iFrame.contentWindow.location.search);
       console.log("iFrameRef iqs", iqs);
@@ -154,6 +150,7 @@ const LoginModal = ({ state, actions }) => {
             width="100%"
             height="1000"
             src={state.auth.IFRAME_URL}
+            // src="https://britishad.b2clogin.com/BritishAD.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1_signupsignin_uat&client_id=adbed72d-5ee0-49b1-a064-421bdbcd68b2&nonce=defaultNonce&redirect_uri=http://localhost:3000/codecollect&scope=openid&response_type=id_token&prompt=login"
           ></iframe>
         </div>
       );
