@@ -41,6 +41,13 @@
   color: inherit;
   transform: scale(0.995);
 } */
+
+.card-image-animated:hover {
+  transform: scale(1.1);
+}
+.heading-tile:hover .caps-btn::before {
+  width: 100%;
+}
 .bad-card-footer {
   height: 5px;
   transition: all 0.3s ease-in-out;

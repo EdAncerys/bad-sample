@@ -169,7 +169,7 @@ const Card = ({
 
     return (
       <div
-        style={{ ...STYLES, width: "100%" }}
+        style={{ ...STYLES, width: "100%", overflow: "hidden" }}
         onClick={() => setGoToAction({ path: link, actions })}
       >
         <Image
@@ -180,7 +180,9 @@ const Card = ({
             height: "100%",
             objectFit: "cover",
             cursor: link ? "pointer" : null,
+            transition: "transform 1s",
           }}
+          className="card-image-animated"
         />
       </div>
     );
