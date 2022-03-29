@@ -3,9 +3,7 @@ export const googleAutocompleteAction = async ({ state, query }) => {
   // restrict calls if query is less than 2 characters
   if (query.length < 2) return;
 
-  // const GOOGLE_API_KEY = state.auth.GOOGLE_API_KEY;
-  const GOOGLE_API_KEY = "AIzaSyAlcqaKKQfwK8B9xeDVejbJF-DF1ol6pq0";
-
+  const GOOGLE_API_KEY = state.auth.GOOGLE_API_KEY;
   const URL = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${query}&key=${GOOGLE_API_KEY}&components=country:UK`;
 
   // specify headers with CORS policy
@@ -23,10 +21,12 @@ export const googleAutocompleteAction = async ({ state, query }) => {
     const data = await fetch(URL, requestOptions);
     const result = await data.json();
 
-    console.log("result", result); // debug
     if (result.status === "OK") {
       console.log("Google API prediction", result.predictions); // debug
       return result.predictions;
+    } else {
+      console.log("Google API error", result.error_message); // debug
+      return [];
     }
   } catch (error) {
     console.log("error", error);

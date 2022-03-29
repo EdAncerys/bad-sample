@@ -7,6 +7,7 @@ import ActionPlaceholder from "../actionPlaceholder";
 import { colors } from "../../config/imports";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
+import CircularProgress from "@mui/material/CircularProgress";
 // DATA HELPERS -----------------------------------------------------------
 import {
   UK_COUNTIES,
@@ -35,6 +36,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
   const ctaHeight = 40;
 
   const [isFetching, setIsFetching] = useState(null);
+  const [isFetchingAddress, setIsFetchingAddress] = useState(null);
   const [formData, setFormData] = useState({
     test_address: "",
     address1_line1: "",
@@ -137,27 +139,35 @@ const UpdateAddress = ({ state, actions, libraries }) => {
 
   const handleAddressLookup = async () => {
     const input = address1Line1Ref.current.value;
-    console.log("API CALL", input);
-    const data = await googleAutocompleteAction({
-      state,
-      query: input,
-    });
-    // convert data to dropdown format
-    let predictions = [];
+    // update input value before async task
     setSearchInput(input);
-    // check for data returned form API
-    if (data && data.length) {
-      predictions = data.map((item) => ({
-        // get city & country from data source
-        title: item.description,
-      }));
 
-      // set dropdown data
-      if (predictions.length && input.length) {
-        setAddressData(predictions);
-      } else {
-        setAddressData(null);
+    try {
+      setIsFetchingAddress(true);
+      const data = await googleAutocompleteAction({
+        state,
+        query: input,
+      });
+      // convert data to dropdown format
+      let predictions = [];
+      // check for data returned form API
+      if (data && data.length) {
+        predictions = data.map((item) => ({
+          // get city & country from data source
+          title: item.description,
+        }));
+
+        // set dropdown data
+        if (predictions.length && input.length) {
+          setAddressData(predictions);
+        } else {
+          setAddressData(null);
+        }
       }
+    } catch (error) {
+      console.log("error", error);
+    } finally {
+      setIsFetchingAddress(false);
     }
   };
 
@@ -166,7 +176,6 @@ const UpdateAddress = ({ state, actions, libraries }) => {
       ...prevFormData,
       address1_line1: item.title,
     }));
-    console.log(item.title);
   };
 
   const handleClearAction = () => {
@@ -198,7 +207,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     const closeIcon = <CloseIcon />;
     const icon = searchInput ? closeIcon : searchIcon;
 
-    if (isFetching)
+    if (isFetchingAddress)
       return (
         <CircularProgress color="inherit" style={{ width: 25, height: 25 }} />
       );
