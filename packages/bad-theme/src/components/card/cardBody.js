@@ -2,17 +2,16 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
-import date from "date-and-time";
-import { CurrencyPoundRounded } from "@mui/icons-material";
 import PoundSterling from "../../img/svg/pound-sterling.svg";
 
 import { colors } from "../../config/imports";
 import ElectionInfo from "./electionInfo";
 import ShareToSocials from "./shareToSocials";
-
-import { anchorScrapper, muiQuery } from "../../context";
-
+import date from "date-and-time";
 const DATE_MODULE = date;
+
+// CONTEXT ------------------------------------------------
+import { anchorScrapper, muiQuery } from "../../context";
 
 const CardBody = ({
   state,
@@ -130,8 +129,6 @@ const CardBody = ({
     return (
       <div className="flex" style={{ paddingTop: `1em` }}>
         {date.map((block, key) => {
-          const { end_time, start_time } = block;
-
           const dateObject = new Date(block.date);
           const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
 
@@ -162,10 +159,10 @@ const CardBody = ({
     const specialties = state.source["event_specialty"];
 
     let antresto = [];
-
     for (let i = 0; i < videoArchive.event_specialty.length; i++) {
       antresto.push(specialties[event_specialties[i]]);
     }
+
     const ServeSpecialty = ({ name }) => {
       return (
         <div
@@ -182,6 +179,7 @@ const CardBody = ({
         </div>
       );
     };
+
     if (specialties)
       return (
         <div
@@ -199,6 +197,7 @@ const CardBody = ({
             })}
         </div>
       );
+
     return "Error fetching categories";
   };
 
@@ -225,6 +224,7 @@ const CardBody = ({
 
   const ServeSocials = () => {
     if (!shareToSocials) return null;
+
     return (
       <div style={{ width: "50%" }}>
         <div className="primary-title" style={{ fontSize: 20 }}>

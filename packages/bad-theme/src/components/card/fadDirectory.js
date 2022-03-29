@@ -2,17 +2,14 @@ import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import Image from "@frontity/components/image";
-
 import { colors } from "../../config/imports";
 import { setGoToAction } from "../../context";
-import Loading from "../loading";
 import ProfileAvatar from "../../img/svg/profile.svg";
 
 const FadDirectory = ({ state, actions, libraries, fadDirectory }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!fadDirectory) return null;
-  // console.log("fadDirectory", fadDirectory); // debug
 
   const {
     fullname,

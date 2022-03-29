@@ -44,6 +44,9 @@ const LoginModal = ({ state, actions }) => {
   // HANDLERS ----------------------------------------------------
   const iFrameHandler = async (e) => {
     const iFrame = e.currentTarget;
+    // 👉 iFrame have to have correct redirect url se to for redirect to work.
+    // Redirect url set on dynamics server.
+
     // console.log("IFRAME_URL", state.auth.IFRAME_URL); // debug
     // console.log("APP_USERNAME", state.auth.APP_USERNAME); // debug
     // console.log("APP_PASSWORD", state.auth.APP_PASSWORD); // debug

@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import ReactPlayer from "react-player";
@@ -6,8 +5,6 @@ import ReactPlayer from "react-player";
 import Currency from "../../img/svg/currency.svg";
 import date from "date-and-time";
 const DATE_MODULE = date;
-
-import { colors } from "../../config/imports";
 
 const VideoGuide = ({ state, actions, libraries, videoGuide }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -18,7 +15,6 @@ const VideoGuide = ({ state, actions, libraries, videoGuide }) => {
   const date = videoGuide.date;
   const event_video = videoGuide.acf ? videoGuide.acf.event_video : null;
   const video = videoGuide.acf ? videoGuide.acf.video : null;
-  console.log(videoGuide);
 
   // SERVERS ---------------------------------------------
   const ServeAmount = () => {
@@ -36,9 +32,6 @@ const VideoGuide = ({ state, actions, libraries, videoGuide }) => {
             }}
           />
         </div>
-        {/* <div style={{ paddingLeft: `0.5em` }}>
-          <Html2React html={price} />
-        </div> */}
       </div>
     );
   };
@@ -86,13 +79,12 @@ const VideoGuide = ({ state, actions, libraries, videoGuide }) => {
       >
         <ReactPlayer
           url={video}
-          // alt={alt}
           width="100%"
           height="100%"
           style={{
             objectFit: "cover",
           }}
-          // playing
+          // playing // playing prop
           muted
           controls
         />

@@ -25,7 +25,6 @@ import defaultVideoCover from "../../img/png/video_default.jpg";
 import GeneralModal from "../elections/generalModal";
 import DownloadFileBlock from "../downloadFileBlock";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
-import LockIcon from "@mui/icons-material/Lock";
 // CONTEXT ----------------------------------------------------------------
 import { setLinkWrapperAction, setGoToAction } from "../../context";
 
@@ -94,7 +93,6 @@ const Card = ({
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
   const THEME = colour || colors.primary;
   const isShadow = shadow ? "shadow" : "";
-  const [modalData, setModalData] = useState();
 
   let CARD_HEIGHT = "100%";
   let ELECTION_BLOCKS = false;
@@ -190,7 +188,6 @@ const Card = ({
   const ServeVideoCover = () => {
     if (!videoArchive) return null;
     if (!url) return null;
-    console.log("VA FROM CARD", videoArchive);
     const [vimeoCover, setVimeoCover] = useState(defaultVideoCover);
     const alt = title || "BAD";
 
@@ -198,8 +195,6 @@ const Card = ({
     if (imgHeight) STYLES = { height: imgHeight };
     const getVimeoCover = async () => {
       const video_url = videoArchive.acf.video;
-      console.log("VIDEOURL", video_url);
-      // Example URL: https://player.vimeo.com/video/382577680?h=8f166cf506&color=5b89a3&title=0&byline=0&portrait=0
       const reg = /\d+/g;
       const videoId = video_url.match(reg);
       console.log("VIDELOID", videoId);
@@ -216,6 +211,7 @@ const Card = ({
     useEffect(() => {
       getVimeoCover();
     }, []);
+
     return (
       <div
         style={{ position: "relative", cursor: "pointer" }}
@@ -240,6 +236,7 @@ const Card = ({
       </div>
     );
   };
+
   const ServeCardHeader = () => {
     if (!cardTitle || url) return null;
 
@@ -267,7 +264,7 @@ const Card = ({
   const ServeContent = () => {
     return (
       <div className="flex-col" style={{ padding: PADDING, height: "100%" }}>
-        <GeneralModal modalData={modalData} handler={handler} />
+        <GeneralModal handler={handler} />
         <ServeCardHeader />
         <EventCardHeader eventHeader={eventHeader} />
         <VenueInfo venueInfo={venueInfo} />
@@ -307,35 +304,6 @@ const Card = ({
           electionBlocks={ELECTION_BLOCKS}
           videoArchive={videoArchive}
         />
-      </div>
-    );
-  };
-
-  // ⬇️ custom card wrapper for the card
-  const CardWrapper = ({ children }) => {
-    if (downloadFile)
-      return (
-        <a
-          style={{ boxShadow: "none" }}
-          // href={file.url}
-          onClick={() => console.log(downloadFile)}
-          target="_blank"
-          download
-        >
-          <div
-          // styles={cardStyles}
-          >
-            {children}
-          </div>
-        </a>
-      );
-
-    return (
-      <div
-        // styles={cardStyles}
-        onClick={() => setGoToAction({ path: link, actions })}
-      >
-        {children}
       </div>
     );
   };

@@ -4,7 +4,6 @@ import parse from "html-react-parser";
 
 import { colors } from "../../config/imports";
 import DownloadFileBlock from "../downloadFileBlock";
-import ActionPlaceholder from "../actionPlaceholder";
 // CONTEXT ------------------------------------------------
 import {
   useAppDispatch,
@@ -192,7 +191,9 @@ const CardActions = ({
         </div>
       </div>
     );
+
   if (videoArchive) return null;
+
   return (
     <div>
       <div
