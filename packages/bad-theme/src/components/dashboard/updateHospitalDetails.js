@@ -21,7 +21,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
   const [isFetching, setIsFetching] = useState(null);
   const [formData, setFormData] = useState({
-    address1_line1: "",
+    ["_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"]: "",
     bad_gmcno: "",
     bad_ntnno: "",
     bad_otherregulatorybodyreference: "",
@@ -40,7 +40,14 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     };
 
     // populate profile information form Dynamics records
-    if (isActiveUser.address1_line1) handleSetData({ name: "address1_line1" });
+    if (
+      isActiveUser[
+        "_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"
+      ]
+    )
+      handleSetData({
+        name: "_parentcustomerid_value@OData.Community.Display.V1.FormattedValue",
+      });
     if (isActiveUser.bad_gmcno) handleSetData({ name: "bad_gmcno" });
     if (isActiveUser.bad_ntnno) handleSetData({ name: "bad_ntnno" });
     if (isActiveUser.bad_otherregulatorybodyreference)
@@ -207,7 +214,11 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
               <label>Main Place of work / Medical School</label>
               <input
                 name="address1_line1"
-                value={formData.address1_line1}
+                value={
+                  formData[
+                    "_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"
+                  ]
+                }
                 onChange={handleInputChange}
                 className="form-control input"
                 placeholder="Main Place of work / Medical School"

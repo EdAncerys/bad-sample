@@ -413,7 +413,12 @@ const EnquireModal = ({ state, actions, libraries }) => {
                           <div
                             className="filter-icon"
                             style={{ top: -7 }}
-                            onClick={() => setSelectedHospital(null)}
+                            onClick={() => {
+                              setFormData({
+                                ...formData,
+                                hospitalChangeName: null,
+                              });
+                            }}
                           >
                             <CloseIcon
                               style={{
