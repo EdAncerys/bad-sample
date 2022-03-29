@@ -111,7 +111,7 @@ const SearchContainer = ({
           style={{
             display: "grid",
             alignItems: "center",
-            paddingLeft: !lg ? `2em` : 0,
+            paddingLeft: !lg ? `2em` : `0.5em`,
             paddingTop: !lg ? null : "1em",
           }}
         >

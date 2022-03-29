@@ -227,7 +227,11 @@ const FindADermatologist = ({ state, block }) => {
                 setName(e.target.value);
               }}
             />
-            <button type="submit" className="blue-btn">
+            <button
+              type="submit"
+              className="blue-btn"
+              style={{ marginLeft: "2em" }}
+            >
               Search
             </button>
           </form>
@@ -258,7 +262,12 @@ const FindADermatologist = ({ state, block }) => {
                 setPC(e.target.value);
               }}
             />
-            <button type="submit" className="blue-btn" disabled={!pc && true}>
+            <button
+              type="submit"
+              className="blue-btn"
+              disabled={!pc && true}
+              style={{ marginLeft: "2em" }}
+            >
               Search
             </button>
           </form>
@@ -279,7 +288,11 @@ const FindADermatologist = ({ state, block }) => {
           Search for dermatologists
         </div>
         <div
-          style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "2em",
+          }}
         >
           <ServeSearchByPostCode />
           <ServeSearchByName />
