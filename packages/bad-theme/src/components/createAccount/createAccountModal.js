@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 
@@ -48,9 +48,6 @@ const loginModal = ({ state, actions }) => {
       agreeTermsAndConditions,
       agreeMarketing,
     };
-    console.log("accountDetails", accountDetails);
-
-    // setFormComplete(true);
   };
 
   // SERVERS --------------------------------------------------

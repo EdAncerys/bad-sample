@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
-
 import { colors } from "../../config/imports";
+
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, setCreateAccountModalAction } from "../../context";
 
