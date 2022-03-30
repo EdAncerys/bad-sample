@@ -433,7 +433,7 @@ const Event = ({ state, actions, libraries }) => {
             width: "fit-content",
             paddingTop: `1em`,
           }}
-          onClick={() => setGoToAction({ path: "/membership", actions })}
+          onClick={() => setGoToAction({ state, path: "/membership", actions })}
         >
           Join Us Here
         </div>
@@ -562,7 +562,9 @@ const Event = ({ state, actions, libraries }) => {
                 <div
                   className="primary-title title-link-animation"
                   style={{ fontSize: 16, padding: "1em 0", cursor: "pointer" }}
-                  onClick={() => setGoToAction({ path: event.link, actions })}
+                  onClick={() =>
+                    setGoToAction({ state, path: event.link, actions })
+                  }
                 >
                   {event.title.rendered}
                 </div>

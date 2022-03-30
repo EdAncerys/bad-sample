@@ -241,7 +241,9 @@ const AccordionBody = ({
         <div>
           <button
             className="flex-row blue-btn"
-            onClick={() => setGoToAction({ path: button_link.url, actions })}
+            onClick={() =>
+              setGoToAction({ state, path: button_link.url, actions })
+            }
           >
             <div className="flex">
               <Html2React html={linkLabel} />
@@ -288,7 +290,7 @@ const AccordionBody = ({
           <div
             className="caps-btn-no-underline"
             style={{ boxShadow: "none" }}
-            onClick={() => setGoToAction({ path: link.url, actions })}
+            onClick={() => setGoToAction({ state, path: link.url, actions })}
           >
             <div className="flex">
               <Html2React html={linkLabel} />
@@ -324,7 +326,9 @@ const AccordionBody = ({
               <div
                 className="caps-btn-no-underline"
                 style={{ boxShadow: "none" }}
-                onClick={() => setGoToAction({ path: link.url, actions })}
+                onClick={() =>
+                  setGoToAction({ state, path: link.url, actions })
+                }
               >
                 <div className="flex">
                   <Html2React html={linkLabel} />
@@ -631,7 +635,9 @@ const AccordionBody = ({
         <div
           value={parse(label || button_label)}
           className="caps-btn"
-          onClick={() => setGoToAction({ path: link || link_url, actions })}
+          onClick={() =>
+            setGoToAction({ state, path: link || link_url, actions })
+          }
         >
           <Html2React html={label || button_label} />
         </div>

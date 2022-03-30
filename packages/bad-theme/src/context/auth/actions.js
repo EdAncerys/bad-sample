@@ -24,7 +24,7 @@ export const loginAction = async ({ state, dispatch, transId }) => {
     if (!response) throw new Error("Error login in.");
 
     setLoginModalAction({ dispatch, loginModalAction: false });
-    setGoToAction({ path: `/dashboard`, actions });
+    setGoToAction({ state, path: `/dashboard`, actions });
     return response;
   } catch (error) {
     console.log("loginAction error", error);
@@ -183,7 +183,7 @@ export const logoutAction = async ({ state, actions, dispatch }) => {
   console.log("logoutAction triggered");
   // ⬇️ stack order important to unmount components correctly
   handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
-  setGoToAction({ path: `/`, actions });
+  setGoToAction({ state, path: `/`, actions });
 
   seJWTAction({ dispatch, jwt: null });
   setActiveUserAction({ dispatch, isActiveUser: null });

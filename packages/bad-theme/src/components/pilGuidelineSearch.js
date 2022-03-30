@@ -67,11 +67,9 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
     let data = content;
     data = data.filter((item) => {
       const title = item.title.rendered.toLowerCase().includes(input);
-      const body = item.content.rendered.toLowerCase().includes(input);
+      // const body = item.content.rendered.toLowerCase().includes(input); // include body
 
-      // console.log(title, body); // debug
-
-      return title || body;
+      return title;
     });
 
     // ⬇️ refactor data to match dropdown format
@@ -120,7 +118,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
       setIDFilterAction({ dispatch, idFilter: item.id });
     }
 
-    setGoToAction({ path: item.link, actions });
+    setGoToAction({ state, path: item.link, actions });
   };
 
   // SERVERS ---------------------------------------------
@@ -180,7 +178,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
               <TitleBlock
                 block={{
                   text_align: "left",
-                  title: "Search for PILS & Guidelines",
+                  title: "Search for PILs & Guidelines",
                 }}
                 margin="0 0 1em 0"
               />

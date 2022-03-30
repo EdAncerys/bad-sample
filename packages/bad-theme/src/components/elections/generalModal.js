@@ -50,7 +50,7 @@ const GeneralModal = ({ state, actions, libraries, modalData, handler }) => {
       return (
         <div
           className="blue-btn"
-          onClick={() => setGoToAction({ path: link, actions })}
+          onClick={() => setGoToAction({ state, path: link, actions })}
         >
           Read more here
         </div>

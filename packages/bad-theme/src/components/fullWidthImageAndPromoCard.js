@@ -22,7 +22,7 @@ const FullWidthImageAndPromoCard = ({ state, actions, block }) => {
       <div className="flex">
         <div
           className={`flex card-wrapper`}
-          onClick={() => setGoToAction({ path: link.url, actions })}
+          onClick={() => setGoToAction({ state, path: link.url, actions })}
         >
           <Card
             imageAndPromoCard={block}

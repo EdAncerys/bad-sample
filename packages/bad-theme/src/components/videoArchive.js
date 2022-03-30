@@ -283,7 +283,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
         colour={colors.orange}
         link={post.link}
         link_label="watch"
-        onClick={() => setGoToAction({ path: post.link, actions })}
+        onClick={() => setGoToAction({ state, path: post.link, actions })}
         shadow
       />
     );

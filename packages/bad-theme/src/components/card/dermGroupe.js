@@ -86,7 +86,7 @@ const DermGroupe = ({ state, actions, libraries, dermGroupe }) => {
     return (
       <div
         className="flex-col primary-title"
-        onClick={() => setGoToAction({ path: website_url, actions })}
+        onClick={() => setGoToAction({ state, path: website_url, actions })}
         style={{ paddingBottom: padding }}
       >
         <div style={{ fontSize: 20 }}>Website:</div>

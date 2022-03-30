@@ -90,7 +90,7 @@ const IndexCard = ({
         return (
           <div
             className="title-link"
-            onClick={() => setGoToAction({ path: link.url, actions })}
+            onClick={() => setGoToAction({ state, path: link.url, actions })}
           >
             <Html2React html={title} />
           </div>

@@ -92,7 +92,7 @@ const CardFS = ({
   const ServeFooterActions = () => {
     return (
       <div className="flex pt-4">
-        <div onClick={() => setGoToAction({ path: url, actions })}>
+        <div onClick={() => setGoToAction({ state, path: url, actions })}>
           <div style={styles.footerActionTitle}>
             <p className="card-text">Find Out More</p>
           </div>

@@ -93,7 +93,9 @@ const FadDirectory = ({ state, actions, libraries, fadDirectory }) => {
     return (
       <div
         className="flex"
-        onClick={() => setGoToAction({ path: bad_mainhosptialweb, actions })}
+        onClick={() =>
+          setGoToAction({ state, path: bad_mainhosptialweb, actions })
+        }
         style={{ cursor: "pointer" }}
       >
         <Html2React html={_parentcustomerid_value} />
@@ -107,7 +109,9 @@ const FadDirectory = ({ state, actions, libraries, fadDirectory }) => {
     return (
       <div
         className="flex"
-        onClick={() => setGoToAction({ path: bad_mainhosptialweb, actions })}
+        onClick={() =>
+          setGoToAction({ state, path: bad_mainhosptialweb, actions })
+        }
         style={{ cursor: "pointer" }}
       >
         <Html2React html={bad_mainhosptialweb} />

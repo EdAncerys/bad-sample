@@ -195,7 +195,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
       isActiveUser,
       data: formData,
     });
-    if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
+    if (isActiveUser) setGoToAction({ state, path: `/membership/`, actions });
   };
 
   const isFormValidated = ({ required }) => {
@@ -251,7 +251,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     if (!store.success) return; // if store not saved, return
 
     let slug = `/membership/step-4-professional-details/`;
-    if (isActiveUser) setGoToAction({ path: slug, actions });
+    if (isActiveUser) setGoToAction({ state, path: slug, actions });
 
     // console.log(formData); // debug
   };
@@ -307,6 +307,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
           className="transparent-btn"
           onClick={() =>
             setGoToAction({
+              state,
               path: `/membership/step-2-category-selection/`,
               actions,
             })

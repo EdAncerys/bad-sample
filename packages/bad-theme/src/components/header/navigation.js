@@ -1,9 +1,8 @@
-import { useState, useEffect, useRef, useLayoutEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import { setGoToAction } from "../../context";
 import Link from "@frontity/components/link";
 
 import BlockWrapper from "../blockWrapper";
@@ -19,12 +18,11 @@ const Navigation = ({ state, actions, libraries }) => {
   const useEffectRef = useRef(false);
 
   const MAIN_NAV_LENGTH = 6; // main navigation length config
-  const host = "https://badadmin.skylarkdev.co/";
+  const wpHost = state.auth.WP_HOST_CONTENT;
 
   // active menu slug ref
   const activeMenu = useRef(null);
   const activeChildMenu = useRef(null);
-  console.log("CURRENT URL", state.router.link);
   useEffect(async () => {
     // ⬇️ getting wp menu & featured from state
     if (!state.theme.menu) return;
@@ -115,7 +113,6 @@ const Navigation = ({ state, actions, libraries }) => {
     // checking if any of the menu should be highlighted
     const currentLink = state.router.link;
     const activeSlug = currentLink.match(/\/(.*?)\//);
-    console.log("ACTIVERO", activeSlug);
     if (activeSlug !== null && activeSlug[1] === slug) {
       return handleBoxShadow(slug);
     }
@@ -141,8 +138,8 @@ const Navigation = ({ state, actions, libraries }) => {
         if (!child_items) return null;
 
         let linkPath = parent.url;
-        // strip down trailing host from url
-        if (linkPath.includes(host)) linkPath = linkPath.replace(host, "");
+        // strip down trailing wpHost from url
+        if (linkPath.includes(wpHost)) linkPath = linkPath.replace(wpHost, "");
 
         return (
           <ul
@@ -194,9 +191,9 @@ const Navigation = ({ state, actions, libraries }) => {
 
                 let subChildTitle = title.replace(/’/g, "");
                 let linkPath = url;
-                // strip down trailing host from url
-                if (linkPath.includes(host))
-                  linkPath = linkPath.replace(host, "");
+                // strip down trailing wpHost from url
+                if (linkPath.includes(wpHost))
+                  linkPath = linkPath.replace(wpHost, "");
 
                 return (
                   <li key={key} className="flex-row" style={{ width: "100%" }}>
@@ -252,7 +249,7 @@ const Navigation = ({ state, actions, libraries }) => {
         const isFile = acf.file;
         let linkPath = acf.link;
         const wpHost = state.auth.WP_HOST;
-        // strip down trailing host from url
+        // strip down trailing wpHost from url
         if (linkPath.includes(wpHost)) linkPath = linkPath.replace(wpHost, "");
 
         return (
@@ -305,9 +302,9 @@ const Navigation = ({ state, actions, libraries }) => {
               const { title, url, slug, child_items } = item;
 
               let linkPath = url;
-              // strip down trailing host from url
-              if (linkPath.includes(host))
-                linkPath = linkPath.replace(host, "");
+              // strip down trailing wpHost from url
+              if (linkPath.includes(wpHost))
+                linkPath = linkPath.replace(wpHost, "");
 
               const ServeMenuArrow = () => {
                 if (!child_items) return null;
@@ -443,10 +440,9 @@ const Navigation = ({ state, actions, libraries }) => {
           });
 
           let linkPath = url;
-          // strip down trailing host from url
-          if (linkPath.includes(host)) linkPath = linkPath.replace(host, "");
-          // console.log("url", url); // debug
-          // console.log("featuredBannerTwo", featuredBannerTwo); // debug
+          // strip down trailing wpHost from url
+          if (linkPath.includes(wpHost))
+            linkPath = linkPath.replace(wpHost, "");
 
           return (
             <ul

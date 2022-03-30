@@ -181,6 +181,7 @@ export const handleApplyForMembershipAction = async ({
     // ⏬ redirect to application form if active user
     if (isActiveUser && store) {
       setGoToAction({
+        state,
         path: path || `/membership/step-1-the-process/`,
         actions,
       });

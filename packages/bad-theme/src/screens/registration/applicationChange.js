@@ -99,13 +99,13 @@ const ApplicationChange = ({ state, actions, libraries }) => {
       console.log(
         "⬇️ user have no application data created - redirect to /dashboard"
       );
-      setGoToAction({ path: `/dashboard/`, actions });
+      setGoToAction({ state, path: `/dashboard/`, actions });
       return;
     }
     // redirect to / if !isActiveUser || !applicationData
     if (!isActiveUser) {
       console.log("⬇️ no user - redirect to /");
-      setGoToAction({ path: `/`, actions });
+      setGoToAction({ state, path: `/`, actions });
     }
     if (!applicationData) return null;
 
@@ -378,7 +378,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
       if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
 
       // redirect to dashboard
-      setGoToAction({ path: `/dashboard/`, actions });
+      setGoToAction({ state, path: `/dashboard/`, actions });
     } catch (error) {
       console.log(error);
       setErrorAction({
@@ -434,7 +434,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
         <div
           className="transparent-btn"
           style={{ marginRight: "2em" }}
-          onClick={() => setGoToAction({ path: `/dashboard/`, actions })}
+          onClick={() => setGoToAction({ state, path: `/dashboard/`, actions })}
         >
           Back
         </div>
@@ -574,7 +574,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                         onChange={handleInputChange}
                         type="text"
                         className="form-control input"
-                        placeholder="GMC Number"
+                        placeholder="GMC / IMC number"
                       />
                       <FormError id="py3_gmcnumber" />
                     </div>
@@ -954,6 +954,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                                       }}
                                       onClick={() =>
                                         setGoToAction({
+                                          state,
                                           path: `/privacy-policy/`,
                                           actions,
                                         })

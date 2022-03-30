@@ -108,7 +108,7 @@ const RowButton = ({
           return;
         }
         if (link) {
-          setGoToAction({ path: link.url, actions });
+          setGoToAction({ state, path: link.url, actions });
           return;
         }
       }}

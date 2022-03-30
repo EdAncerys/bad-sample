@@ -52,29 +52,32 @@ const SideBarMenu = ({ state, actions, libraries }) => {
       console.log(
         "⬇️ user have no application data created - redirect to /dashboard"
       );
-      setGoToAction({ path: `/dashboard/`, actions });
+      setGoToAction({ state, path: `/dashboard/`, actions });
       return;
     }
     // redirect to / if !isActiveUser || !applicationData
     if (!isActiveUser) {
       console.log("⬇️ no user - redirect to /");
-      setGoToAction({ path: `/`, actions });
+      setGoToAction({ state, path: `/`, actions });
     }
     // auth/manage application steps for apps & redirects
     if (applicationData) {
       const appData = applicationData[0];
       if (slug.includes("step-2") && !appData.stepOne)
         stepTwo = setGoToAction({
+          state,
           path: `/membership/step-1-the-process/`,
           actions,
         });
       if (slug.includes("step-3") && !appData.stepTwo)
         stepTwo = setGoToAction({
+          state,
           path: `/membership/step-2-category-selection/`,
           actions,
         });
       if (slug.includes("step-4") && !appData.stepThree)
         stepTwo = setGoToAction({
+          state,
           path: `/membership/step-3-personal-information/`,
           actions,
         });
@@ -111,6 +114,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
           onClick={() => {
             if (slug === "/membership/thank-you/") return null;
             setGoToAction({
+              state,
               path: `/membership/sig-questions/`,
               actions,
             });
@@ -131,6 +135,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
               onClick={() => {
                 // if (slug === "/membership/thank-you/") return null;
                 setGoToAction({
+                  state,
                   path: `/membership/step-1-the-process/`,
                   actions,
                 });
@@ -143,6 +148,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
               style={{ ...stepTwo, padding: `0.5em 0` }}
               onClick={() => {
                 setGoToAction({
+                  state,
                   path: `/membership/step-2-category-selection/`,
                   actions,
                 });
@@ -155,6 +161,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
               style={{ ...stepThree, padding: `0.5em 0` }}
               onClick={() => {
                 setGoToAction({
+                  state,
                   path: `/membership/step-3-personal-information/`,
                   actions,
                 });
@@ -167,6 +174,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
               style={{ ...stepFour, padding: `0.5em 0` }}
               onClick={() => {
                 setGoToAction({
+                  state,
                   path: `/membership/step-4-professional-details/`,
                   actions,
                 });

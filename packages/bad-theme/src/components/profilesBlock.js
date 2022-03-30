@@ -27,7 +27,7 @@ const ProfilesBlock = ({ state, actions, libraries, block }) => {
       <div className="flex-center-row" style={{ paddingTop: `1em` }}>
         <div
           className="blue-btn"
-          onClick={() => setGoToAction({ path: link.url, actions })}
+          onClick={() => setGoToAction({ state, path: link.url, actions })}
         >
           <Html2React html={label} />
         </div>

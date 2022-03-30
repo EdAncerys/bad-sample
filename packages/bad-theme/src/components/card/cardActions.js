@@ -76,7 +76,7 @@ const CardActions = ({
 
   const handelRedirect = () => {
     setErrorAction({ dispatch, isError: null });
-    setGoToAction({ path: authLink, actions });
+    setGoToAction({ state, path: authLink, actions });
   };
 
   const handleFeedLink = () => {
@@ -86,7 +86,7 @@ const CardActions = ({
       setErrorAction({
         dispatch,
         isError: {
-          message: `Remember to log in to the BAD website in order to have full access to Wiley Publications.`,
+          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals.`,
           image: "Error",
           action: [
             {
@@ -101,7 +101,7 @@ const CardActions = ({
       return;
     }
 
-    setGoToAction({ path: authLink, actions });
+    setGoToAction({ state, path: authLink, actions });
   };
 
   // SERVERS ---------------------------------------------
@@ -111,7 +111,7 @@ const CardActions = ({
     if (link_label) goToLabel = link_label;
 
     return (
-      <div onClick={() => setGoToAction({ path: link, actions })}>
+      <div onClick={() => setGoToAction({ state, path: link, actions })}>
         <div className="caps-btn" style={{ marginTop: "1em" }}>
           <Html2React html={goToLabel} />
         </div>

@@ -143,6 +143,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
       await getMembershipDataAction({ state, actions });
       membershipData = state.source.memberships;
     }
+    if (!membershipData) return null; // if no membership data is found, return null
+
     membershipData = Object.values(membershipData);
 
     const handleSetFormData = ({ data, name }) => {
@@ -251,11 +253,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       });
     }
     setMembershipData(membershipData); // set membership data
-
-    console.log("isSingleApp", isSingleApp);
-    console.log("applicationType", applicationType);
-    console.log("membershipData", membershipData);
-  }, []);
+  }, [state.source.memberships]);
 
   // HANDLERS --------------------------------------------
   const handleSelectHospital = ({ item }) => {
@@ -458,7 +456,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
 
       let slug = `/membership/thank-you/`;
-      if (isActiveUser) setGoToAction({ path: slug, actions });
+      if (isActiveUser) setGoToAction({ state, path: slug, actions });
     } catch (error) {
       console.log(error);
     } finally {
@@ -561,12 +559,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         <div
           className="transparent-btn"
           style={{ marginRight: "1em" }}
-          onClick={() =>
-            setGoToAction({
-              path: `/dashboard/`,
-              actions,
-            })
-          }
+          onClick={() => setGoToAction({ state, path: `/dashboard/`, actions })}
         >
           Back
         </div>
@@ -584,7 +577,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     return (
       <div>
         <label className="bold required" style={{ padding: "0.5em 0" }}>
-          Membership Category
+          Please select the Special Interest Group you would like to apply for:
         </label>
         <Form.Select
           name="bad_categorytype"
@@ -623,20 +616,15 @@ const SIGApplication = ({ state, actions, libraries }) => {
   return (
     <div style={{ position: "relative" }}>
       <ActionPlaceholder isFetching={isFetching} background="transparent" />
-      <div
-        className="primary-title"
-        style={{
-          fontSize: 20,
-          paddingTop: `1em`,
-          marginTop: `1em`,
-          borderTop: `1px solid ${colors.silverFillTwo}`,
-        }}
-      >
-        Category Selected: <span>{applicationType}</span>
-      </div>
 
       <form>
-        <div style={{ padding: `2em 1em` }}>
+        <div
+          style={{
+            padding: `1em`,
+            margin: `1em 0`,
+            borderTop: `1px solid ${colors.silverFillTwo}`,
+          }}
+        >
           <ServeSIGMembershipCategory />
 
           {inputValidator.py3_title && (
@@ -1170,14 +1158,14 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.py3_gmcnumber && (
             <div>
-              <label className="required form-label">GMC Number</label>
+              <label className="required form-label">GMC / IMC number</label>
               <input
                 name="py3_gmcnumber"
                 value={formData.py3_gmcnumber}
                 onChange={handleInputChange}
                 type="text"
                 className="form-control input"
-                placeholder="GMC Number"
+                placeholder="GMC / IMC number"
               />
               <FormError id="py3_gmcnumber" />
             </div>
@@ -1346,27 +1334,25 @@ const SIGApplication = ({ state, actions, libraries }) => {
                   />
                 </div>
                 <div>
-                  <label className="form-check-label flex-row">
-                    Please refer to
+                  <label className="form-check-label">
+                    <span className="required" /> Please confirm you have read
+                    the {` ${applicationType} `}
                     <span
                       className="caps-btn-no-underline"
                       style={{
-                        display: "grid",
-                        alignItems: "center",
                         margin: "0 0.5em",
                         paddingTop: 4,
                       }}
                       onClick={() =>
-                        setGoToAction({ path: readPolicyDoc, actions })
+                        setGoToAction({ state, path: readPolicyDoc, actions })
                       }
                     >
-                      here
+                      Privacy Policy
                     </span>
-                    {`for the ${applicationType} Privacy Policy`}
                   </label>
+                  <FormError id="bad_readpolicydocument" />
                 </div>
               </div>
-              <FormError id="bad_readpolicydocument" />
             </div>
           )}
         </div>

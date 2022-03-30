@@ -95,7 +95,7 @@ const FullWidthContentBlock = ({
         return;
       }
 
-      setGoToAction({ path: link.url, actions });
+      setGoToAction({ state, path: link.url, actions });
     };
 
     return (

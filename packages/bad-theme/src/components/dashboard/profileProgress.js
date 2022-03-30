@@ -81,7 +81,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     if (applicationData && applicationData[0].changeAppCategory)
       path = `/membership/application-change/`;
 
-    setGoToAction({ path: path, actions });
+    setGoToAction({ state, path: path, actions });
   };
 
   const handleCancelApplication = async () => {

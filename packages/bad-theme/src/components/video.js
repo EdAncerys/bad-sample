@@ -274,7 +274,7 @@ const Video = ({ state, actions, libraries }) => {
           event_specialty: post.event_specialty,
         }}
         colour={colors.orange}
-        onClick={() => setGoToAction({ path: post.link, actions })}
+        onClick={() => setGoToAction({ state, path: post.link, actions })}
         shareToSocials
         disableCardAnimation
       />
@@ -298,7 +298,7 @@ const Video = ({ state, actions, libraries }) => {
           videoArchive={vid}
           link={vid.link}
           noVideoCategory
-          onClick={() => setGoToAction({ path: vid.link, actions })}
+          onClick={() => setGoToAction({ state, path: vid.link, actions })}
           cardHeight={500}
           disableCardAnimation
         />

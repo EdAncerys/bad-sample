@@ -168,7 +168,7 @@ const Card = ({
     return (
       <div
         style={{ ...STYLES, width: "100%", overflow: "hidden" }}
-        onClick={() => setGoToAction({ path: link, actions })}
+        onClick={() => setGoToAction({ state, path: link, actions })}
       >
         <Image
           src={url}
@@ -215,7 +215,7 @@ const Card = ({
     return (
       <div
         style={{ position: "relative", cursor: "pointer" }}
-        onClick={() => setGoToAction({ path: link, actions })}
+        onClick={() => setGoToAction({ state, path: link, actions })}
       >
         <Image src={vimeoCover} alt="Submit" style={{ width: "100%" }} />
         <div
@@ -319,7 +319,9 @@ const Card = ({
         height: videoArchive ? null : CARD_HEIGHT,
         minHeight: MIN_CARD_HEIGHT,
       }}
-      onClick={() => setGoToAction({ path: link, actions, downloadFile })}
+      onClick={() =>
+        setGoToAction({ state, path: link, actions, downloadFile })
+      }
       data-aos={animationType || "fade"}
       data-aos-delay={`${delay * 50}`}
       data-aos-duration="500"

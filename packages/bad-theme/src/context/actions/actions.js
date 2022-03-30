@@ -1,23 +1,28 @@
-const pathOne = `http://3.9.193.188`;
-const pathTwo = `https://badadmin.skylarkdev.co`;
-const pathThee = `https://bad.skylarkdev.digital`;
-const pathFour = `https://bad-internal-testing.vercel.app/`; // APP HOST url endpoint
+import BADTheme from "../../client";
+
 // import state APP_URL from client state with process.env.APP_URL
 
-export const setGoToAction = async ({ path, actions, downloadFile }) => {
+export const setGoToAction = async ({ state, path, actions, downloadFile }) => {
   if (!path && !downloadFile) return null;
   // console.log("setGoToAction triggered", path, downloadFile); // debug
+
+  const pathOne = `http://3.9.193.188`;
+  const pathTwo = `https://badadmin.skylarkdev.co`;
+  const wpHost = state.auth.WP_HOST;
+  const appUrl = state.auth.APP_URL;
 
   if (downloadFile) {
     // ⬇️  download file ⬇️
     const { file } = downloadFile;
     window.open(file.url, "_blank");
   }
+
+  // ⬇️ handle redirect rules
   let isExternalLink = true;
   if (path && path.includes(pathOne)) isExternalLink = false;
   if (path && path.includes(pathTwo)) isExternalLink = false;
-  if (path && path.includes(pathThee)) isExternalLink = false;
-  if (path && path.includes(pathFour)) isExternalLink = false;
+  if (path && path.includes(wpHost)) isExternalLink = false;
+  if (path && path.includes(appUrl)) isExternalLink = false;
 
   if (path && path.includes(`www`) && !path.includes(`http`) && isExternalLink)
     return window.open(`https://` + path, "_blank"); // handle external links without https pre fix

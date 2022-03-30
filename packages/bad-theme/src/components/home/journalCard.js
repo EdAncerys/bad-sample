@@ -40,7 +40,7 @@ const JournalCard = ({
             className="flex"
             className="flex-row pointer"
             style={{ alignItems: "center", paddingTop: `1em` }}
-            onClick={() => setGoToAction({ path: link.url, actions })}
+            onClick={() => setGoToAction({ state, path: link.url, actions })}
           >
             <div value="Read More" className="caps-btn">
               Read More
@@ -130,7 +130,7 @@ const JournalCard = ({
       data-aos-easing="ease-in-sine"
       data-aos-delay={`${delay * 50}`}
       data-aos-duration="1000"
-      onClick={() => setGoToAction({ path: link.url, actions })}
+      onClick={() => setGoToAction({ state, path: link.url, actions })}
     >
       <div
         className="flex-row"
