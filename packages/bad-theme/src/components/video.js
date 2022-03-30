@@ -240,6 +240,7 @@ const Video = ({ state, actions, libraries }) => {
     const related_videos_to_show = videos_list.slice(0, 2);
     if (!state.source.videos) return null;
     return related_videos_to_show.map((vid, key) => {
+      console.log(vid);
       if (vid.id === post.id) vid = videos_list[2];
 
       return (

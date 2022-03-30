@@ -4,7 +4,6 @@ import Image from "@frontity/components/image";
 
 import Card from "../card/card";
 import { colors } from "../../config/imports";
-import { muiQuery } from "../../context";
 
 const NewsBlock = ({
   state,
