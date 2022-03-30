@@ -143,6 +143,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
       await getMembershipDataAction({ state, actions });
       membershipData = state.source.memberships;
     }
+    if (!membershipData) return null; // if no membership data is found, return null
+
     membershipData = Object.values(membershipData);
 
     const handleSetFormData = ({ data, name }) => {
@@ -251,7 +253,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       });
     }
     setMembershipData(membershipData); // set membership data
-  }, []);
+  }, [state.source.memberships]);
 
   // HANDLERS --------------------------------------------
   const handleSelectHospital = ({ item }) => {
@@ -575,7 +577,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     return (
       <div>
         <label className="bold required" style={{ padding: "0.5em 0" }}>
-          Membership Category
+          Please select the Special Interest Group you would like to apply for:
         </label>
         <Form.Select
           name="bad_categorytype"
@@ -1332,13 +1334,12 @@ const SIGApplication = ({ state, actions, libraries }) => {
                   />
                 </div>
                 <div>
-                  <label className="form-check-label flex-row">
-                    Please refer to
+                  <label className="form-check-label">
+                    <span className="required" /> Please confirm you have read
+                    the {` ${applicationType} `}
                     <span
                       className="caps-btn-no-underline"
                       style={{
-                        display: "grid",
-                        alignItems: "center",
                         margin: "0 0.5em",
                         paddingTop: 4,
                       }}
@@ -1346,13 +1347,12 @@ const SIGApplication = ({ state, actions, libraries }) => {
                         setGoToAction({ state, path: readPolicyDoc, actions })
                       }
                     >
-                      here
+                      Privacy Policy
                     </span>
-                    {`for the ${applicationType} Privacy Policy`}
                   </label>
+                  <FormError id="bad_readpolicydocument" />
                 </div>
               </div>
-              <FormError id="bad_readpolicydocument" />
             </div>
           )}
         </div>
