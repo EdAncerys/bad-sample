@@ -24,8 +24,10 @@ const Video = ({ state, actions, libraries }) => {
   const [loadVideo, setLoadVideo] = React.useState(false);
   const [videoStatus, setVideoStatus] = React.useState("");
   const [paymentUrl, setPaymentUrl] = React.useState("");
+  const [relatedVideos, setRelatedVideos] = React.useState(null);
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
+  console.log("post data: ", post); // debug
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -33,12 +35,13 @@ const Video = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   console.log(isActiveUser);
 
-  console.log(post);
-
   React.useEffect(async () => {
     //Not the greatest idea to make useEffect async
     actions.source.fetch("/videos/");
+    const videos_list = Object.values(state.source.videos);
+    const related_videos_to_show = videos_list.slice(0, 2);
 
+    setRelatedVideos(related_videos_to_show);
     const jwt = await authenticateAppAction({ state, dispatch });
     console.log("JWT:", jwt);
 
@@ -280,12 +283,10 @@ const Video = ({ state, actions, libraries }) => {
 
   const RelatedVideos = () => {
     const videos_list = Object.values(state.source.videos);
-    const related_videos_to_show = videos_list.slice(0, 2);
-    if (!state.source.videos) return null;
+    const related_videos_to_show = videos_list.slice(0, 3);
+    if (!videos_list) return null;
     return related_videos_to_show.map((vid, key) => {
-      console.log(vid);
       if (vid.id === post.id) vid = videos_list[2];
-
       return (
         <Card
           key={key}
