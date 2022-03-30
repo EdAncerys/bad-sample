@@ -149,8 +149,7 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
 
   const ServeMobileDropdown = (card) => {
     if (!card.card.index_card) return null;
-    console.log("MOBILE DROPDOWN", card);
-    console.log("CARD: ", card.card.index_title);
+
     return (
       <Dropdown>
         <Dropdown.Toggle

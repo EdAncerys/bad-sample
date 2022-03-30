@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import { colors } from "../config/imports";
-
 import Loading from "./loading";
 
+// CONTEXT -----------------------------------------------------
 import { muiQuery } from "../context";
 
 const TitleAndBodyBlock = ({ state, actions, libraries, block }) => {

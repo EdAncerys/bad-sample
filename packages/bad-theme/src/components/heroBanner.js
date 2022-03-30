@@ -1,17 +1,16 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
-
 import Card from "./card/card";
 import Loading from "./loading";
 import ButtonsRow from "./buttonsRow";
 import FullWidthContentBlock from "./fullWidthContentBlock";
+
+// CONTEXT --------------------------------------------------
 import { muiQuery } from "../context";
 
 const HeroBanner = ({ state, actions, libraries, block }) => {
   const { sm, md, lg, xl } = muiQuery();
 
-  // console.log("HeroBanner Triggered", block); //debug
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
@@ -167,12 +166,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           width: OVERLAY_WIDTH,
         }}
       >
-        <div
-          style={{
-            margin: `0 ${PADDING}px`,
-            // marginTop: BANNER_HEIGHT - FOOTER_HEIGHT,
-          }}
-        >
+        <div style={{ margin: `0 ${PADDING}px` }}>
           <ButtonsRow block={block} disableMargin />
         </div>
       </div>
@@ -291,6 +285,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
     );
   }
 };
+
 const styles = {
   container: {},
 };

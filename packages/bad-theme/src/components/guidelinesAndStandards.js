@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
-import Image from "@frontity/components/image";
 
 import BlockWrapper from "./blockWrapper";
 import Loading from "./loading";
@@ -40,8 +39,6 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
   const { disable_vertical_padding, background_colour } = block;
 
   const marginHorizontal = state.theme.marginHorizontal;
-  let marginVertical = state.theme.marginVertical;
-  if (disable_vertical_padding) marginVertical = 0;
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {

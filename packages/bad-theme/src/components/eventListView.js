@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
-
 import date from "date-and-time";
-
 import Loading from "./loading";
 import { colors } from "../config/imports";
+
 // CONTEXT --------------------------------------------------------
 import {
   useAppDispatch,
@@ -31,7 +30,6 @@ const EventListView = ({
   const dispatch = useAppDispatch();
 
   const BANNER_HEIGHT = state.theme.bannerHeight;
-  const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
   let MARGIN = `${marginVertical}px 0 0`;
   if (removeMargin) MARGIN = 0;
@@ -57,12 +55,6 @@ const EventListView = ({
 
   const title = block.title.rendered;
   const anchor = "id-" + title.replace(/ /g, "-").toLowerCase(); // set title to anchor
-
-  const GRADES = Object.values(state.source.event_grade);
-  const eventGradeIds = Object.values(block.event_grade);
-  const eventGrades = GRADES.filter((item) => {
-    if (eventGradeIds.includes(item.id)) return item;
-  });
 
   // HANDLERS ---------------------------------------------------------------
   const handleClick = () => {

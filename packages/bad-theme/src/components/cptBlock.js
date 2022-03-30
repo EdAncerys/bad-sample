@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
-import parse from "html-react-parser";
 
 import TitleBlock from "./titleBlock";
 import Card from "./card/card";
@@ -9,12 +8,15 @@ import { colors } from "../config/imports";
 import BlockWrapper from "./blockWrapper";
 import SearchContainer from "./searchContainer";
 import TypeFilters from "./typeFilters";
-
-import { muiQuery } from "../context";
-
 import CloseIcon from "@mui/icons-material/Close";
+
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, setCPTBlockAction } from "../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setCPTBlockAction,
+  muiQuery,
+} from "../context";
 
 const CPTBlock = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -105,6 +107,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       searchFilterRef.current = false; // clean up function
     };
   }, []);
+
   // DATA pre FETCH ---------------------------------------------------------
   if (!postListData || !groupeType) return <Loading />;
 

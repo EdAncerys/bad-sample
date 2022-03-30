@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
-
 import { colors } from "../config/imports";
+
 // CONTEXT ----------------------------------------------------------------
 import { postTypeHandler } from "../context";
 
@@ -19,7 +19,6 @@ const SearchDropDown = ({
 
   // filter value are one layer deep object with title & link { title: "", link: "" }
   if (!filter) return null;
-  // console.log("filter", filter); // debug
 
   const ctaHeight = 45;
   const BANNER_HEIGHT = state.theme.bannerHeight;
@@ -60,7 +59,6 @@ const SearchDropDown = ({
 
           {filter.map((item, key) => {
             const { title, type } = item;
-            // console.log("item", item); // debug
 
             // ⬇️ define subtitle name based on type
             let name = postTypeHandler({ type }).name;

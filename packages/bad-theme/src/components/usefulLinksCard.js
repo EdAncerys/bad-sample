@@ -1,6 +1,7 @@
 import { connect } from "frontity";
 import { colors } from "../config/imports";
 
+// CONTEXT ----------------------------------------------------
 import { setGoToAction } from "../context";
 
 const UsefulLinksCard = ({

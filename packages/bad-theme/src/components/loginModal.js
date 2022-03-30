@@ -1,19 +1,16 @@
 //
 
-import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
-
 import CloseIcon from "@mui/icons-material/Close";
-
 import { colors } from "../config/imports";
-import RowButton from "./rowButton";
+
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
   useAppState,
   setLoginModalAction,
-  setCreateAccountModalAction,
   loginAction,
   getUserDataByContactId,
   authenticateAppAction,
@@ -83,7 +80,7 @@ const LoginModal = ({ state, actions }) => {
         console.log("Error getting transId from iFrame");
       }
     } catch (error) {
-      console.log("*** ERROR GETTING IFRAME CONTENT - CROSS-ORIGIN **");
+      console.log("*** ERROR GETTING IFRAME CONTENT - CROSS-ORIGIN **"); // debug
       // console.log(error); // debug
     }
   };

@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
-import parse from "html-react-parser";
 
 import TitleBlock from "./titleBlock";
 import Card from "./card/card";
@@ -10,6 +9,7 @@ import BlockWrapper from "./blockWrapper";
 import SearchContainer from "./searchContainer";
 
 import CloseIcon from "@mui/icons-material/Close";
+
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -80,7 +80,7 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
       searchFilterRef.current = false; // clean up function
     };
   }, []);
-  // DATA pre FETCH ----------------------------------------------------------------
+
   if (!feedData) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
@@ -203,7 +203,6 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
         {feedData.map((block, key) => {
           const { title, category, link, pubDate } = block;
           const doi = block["prism:doi"];
-          // console.log(block); // debug
 
           // HANDLERS -----------------------------------------------------
           if (searchFilter) {

@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
-
 import Card from "./card/card";
 import Loading from "./loading";
 
+// CONTEXT -----------------------------------------------------
 import { muiQuery } from "../context";
 
 const VideoGallery = ({ state, actions, block }) => {

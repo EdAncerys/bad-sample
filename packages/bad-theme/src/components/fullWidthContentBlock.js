@@ -1,6 +1,4 @@
-import { useState } from "react";
 import { connect } from "frontity";
-import { colors } from "../config/imports";
 
 import { setGoToAction, muiQuery } from "../context";
 import Loading from "./loading";
@@ -38,7 +36,6 @@ const FullWidthContentBlock = ({
   } = block;
   // console.log("block", block); // debug
 
-  const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;

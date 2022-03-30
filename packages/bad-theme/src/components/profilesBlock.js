@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import Profile from "./profile";
-import { colors } from "../config/imports";
 import Loading from "./loading";
+
+// CONTEXT --------------------------------------------------
 import { setGoToAction, muiQuery } from "../context";
 
 const ProfilesBlock = ({ state, actions, libraries, block }) => {

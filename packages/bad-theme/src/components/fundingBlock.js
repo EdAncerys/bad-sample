@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
-import parse from "html-react-parser";
 
 import TitleBlock from "./titleBlock";
 import Card from "./card/card";
@@ -83,6 +82,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       searchFilterRef.current = false; // clean up function
     };
   }, []);
+
   // DATA pre FETCH ---------------------------------------------------------
   if (!postListData || !groupeType) return <Loading />;
 

@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import Image from "@frontity/components/image";
 import Loading from "./loading";
-import { colors } from "../config/imports";
 
 const ImageBlock = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.

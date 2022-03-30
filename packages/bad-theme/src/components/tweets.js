@@ -1,10 +1,8 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { connect } from "frontity";
-import { colors } from "../config/imports";
-
 import Loading from "./loading";
-import Card from "./card/card";
 import SocialIcons from "../components/socialIcons";
+
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, useAppState, getTweetsAction } from "../context";
 
@@ -66,12 +64,6 @@ const Tweets = ({ state, actions, libraries, block }) => {
 
           return (
             <div key={key} className="flex tweet">
-              {/* <Card
-                tweetInfo={block}
-                body={html}
-                colour={colors.danger}
-                shadow // optional param
-              /> */}
               <Html2React html={html} />
             </div>
           );

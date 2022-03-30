@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/imports";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import parse from "html-react-parser";
-import { styled, keyframes, css } from "frontity";
 
-import { setGoToAction } from "../context";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, setEnquireAction } from "../context";
+import { useAppDispatch, setEnquireAction, setGoToAction } from "../context";
 
 const RowButton = ({
   state,
@@ -43,7 +40,6 @@ const RowButton = ({
   // default to defaultContactList if no recipients are set
   if (!enquireAction.recipients) {
     // recipients = state.theme.defaultContactList;
-    console.log("📧 contact list", state.contactList.defaultContactList); // debug
     enquireAction.recipients = state.contactList.defaultContactList;
     // enquireAction.recipients = [{ email: "ed@skylarkcreative.co.uk" }];
   }
@@ -64,6 +60,7 @@ const RowButton = ({
       />
     );
   };
+
   const arrowStyle = {
     fill: isHover ? "white" : THEME,
     backgroundColor: isHover ? `${THEME}` : "white",
@@ -76,11 +73,6 @@ const RowButton = ({
     transform: isHover ? `translate(5px, 0)` : `translate(0, 0)`,
     transition: `background-color 1s, transform 1s`,
   };
-  // const ServeButton = () => {
-  //   return (
-
-  //   );
-  // };
 
   return (
     <div
@@ -155,17 +147,5 @@ const RowButton = ({
 const styles = {
   conteiner: {},
 };
-
-const arrow = (isHover, THEME) => css`
-  fill: ${isHover ? "white" : THEME};
-  background-color: ${isHover ? THEME : "white"};
-  border-radius: 50%;
-  border: 1px ${THEME};
-  border-style: solid;
-  padding: 0;
-  cursor: pointer;
-  box-shadow: ${isHover === true ? `inset 0 3.25em 0 0 ${THEME}` : "none"};
-  transition: all 0.3s ease-in-out;
-`;
 
 export default React.memo(connect(RowButton));

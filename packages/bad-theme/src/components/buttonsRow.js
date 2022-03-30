@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
-
 import Loading from "../components/loading";
 import RowButton from "./rowButton";
 
+// CONTEXT -----------------------------------------------------
 import { muiQuery } from "../context";
 
 const ButtonsRow = ({ state, actions, style, block, disableMargin }) => {

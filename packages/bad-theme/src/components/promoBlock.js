@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
 import Loading from "./loading";
 import FullWidthContentBlock from "./fullWidthContentBlock";
-import { colors } from "../config/imports";
 
+// CONTEXT ----------------------------------------------------------------
 import { muiQuery } from "../context";
 
 const PromoBlock = ({ state, actions, block, disableMargin }) => {

@@ -13,7 +13,6 @@ const BADMemberships = ({ state, actions, libraries, block }) => {
   const { background_colour, disable_vertical_padding } = block;
 
   const [membershipTypes, setMembershipTypes] = useState(null);
-  const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 

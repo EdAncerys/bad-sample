@@ -3,6 +3,7 @@ import { connect } from "frontity";
 
 import AccordionComponent from "./accordion/accordion";
 import Loading from "./loading";
+
 // CONTEXT -----------------------------------------------------------------
 import { getLeadershipTeamData } from "../helpers";
 

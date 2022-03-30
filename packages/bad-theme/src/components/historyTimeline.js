@@ -1,8 +1,6 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
-
 import Loading from "./loading";
 import { colors } from "../config/imports";
 
@@ -13,7 +11,6 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
 
   const { disable_vertical_padding } = block;
 
-  const IMG_WIDTH = 70;
   let GRID_KEY = 0;
   let ROW_COUNTER = 0;
   let ROW = 1;
@@ -77,6 +74,7 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
       </button>
     );
   };
+
   // RETURN ---------------------------------------------------
   return (
     <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>

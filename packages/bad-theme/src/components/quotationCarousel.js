@@ -1,4 +1,3 @@
-import React from "react";
 import { connect } from "frontity";
 import { Carousel } from "react-bootstrap";
 import { colors } from "../config/imports";
@@ -10,6 +9,8 @@ import RightIcon from "../img/svg/carouselIconRight.svg";
 
 import Loading from "./loading";
 import BlockWrapper from "./blockWrapper";
+
+// CONTEXT ----------------------------------------------------------------
 import { muiQuery } from "../context";
 
 const QuotationCarousel = ({ state, actions, libraries, block }) => {
@@ -69,6 +70,7 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
       </div>
     );
   };
+
   const ServeAuthorPhoto = ({ photo }) => {
     if (!photo) return null;
     if (lg) return null;
@@ -78,6 +80,7 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
       </div>
     );
   };
+
   if (!block) return <Loading />;
 
   // RETURN ---------------------------------------------------
@@ -101,8 +104,6 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
       >
         {block.slides.map((block, key) => {
           const { label, title, photo } = block;
-
-          // SERVERS ----------------------------------------------------
 
           return (
             <Carousel.Item key={key}>

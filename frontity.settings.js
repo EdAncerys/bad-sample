@@ -32,6 +32,7 @@ const settings = {
       state: {
         source: {
           url: "https://bad.skylarkdev.digital/", // production url
+          // url: "https://controlpanel.bad.org.uk ", // UPDATED production url
           // url: "https://badadmin.skylarkdev.co/", // development url
           // api: "https://app-5efddb43c1ac181508283e93.closte.com/wp-json", // frontity example api
           params: {

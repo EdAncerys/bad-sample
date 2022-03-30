@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect } from "react";
 
 import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
@@ -22,6 +22,7 @@ function AlterAccordion({
   fundingBlock,
   membershipApplications,
   hasPublishDate,
+  hasPreview,
 }) {
   const [isFetching, setFetching] = useState(null);
 
@@ -100,6 +101,7 @@ function AlterAccordion({
       </Card>
     );
   };
+
   return (
     <BlockWrapper>
       <div style={{ padding: "0 100px" }}>

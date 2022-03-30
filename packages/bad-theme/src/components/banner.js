@@ -1,8 +1,6 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/imports";
 import Image from "@frontity/components/image";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import Loading from "./loading";
 import BlockWrapper from "./blockWrapper";

@@ -3,6 +3,8 @@ import { connect } from "frontity";
 
 import Card from "./card/card";
 import Loading from "./loading";
+
+// CONTEXT --------------------------------------------------
 import { muiQuery } from "../context";
 
 const VenueHireGallery = ({ state, actions, block }) => {
@@ -40,6 +42,7 @@ const VenueHireGallery = ({ state, actions, block }) => {
       mountedRef.current = false; // clean up function
     };
   }, []);
+
   // DATA pre FETCH ----------------------------------------------------------------
   if (!venueList) return <Loading />;
 
@@ -48,17 +51,7 @@ const VenueHireGallery = ({ state, actions, block }) => {
     <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
       <div style={!lg ? styles.container : styles.containerMobile}>
         {venueList.map((block, key) => {
-          const {
-            about_the_venue,
-            address,
-            capacity_options,
-            catering,
-            enquiry_email,
-            excerpt,
-            gallery,
-            square_footage,
-            colour,
-          } = block.acf;
+          const { gallery, colour } = block.acf;
 
           return (
             <div key={key} className="flex">

@@ -91,7 +91,6 @@ const Video = ({ state, actions, libraries }) => {
     const ServeImage = () => {
       const [videoCover, setVideoCover] = React.useState(defaultCover);
       const getVimeoCover = async ({ video_url }) => {
-        console.log("VIDEOURL", video_url);
         // Example URL: https://player.vimeo.com/video/382577680?h=8f166cf506&color=5b89a3&title=0&byline=0&portrait=0
         const reg = /\d+/g;
         const videoId = video_url.match(reg);

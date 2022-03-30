@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
-
-import parse from "html-react-parser";
-
 import Loading from "./loading";
+
+// CONTEXT -----------------------------------------------------
 import { setGoToAction, muiQuery } from "../context";
 
 const TitleBlock = ({

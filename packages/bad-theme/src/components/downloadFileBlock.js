@@ -1,9 +1,6 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import { colors } from "../config/imports";
 import Image from "@frontity/components/image";
-
 import PDF from "../img/svg/badPDF.svg";
 import DOC from "../img/svg/badDOC.svg";
 import PPT from "../img/svg/badPPT.svg";

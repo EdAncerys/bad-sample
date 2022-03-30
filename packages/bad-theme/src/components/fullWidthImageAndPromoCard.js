@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import Link from "@frontity/components/link";
 import Card from "./card/card";
 import Loading from "./loading";
+
 // CONTEXT -------------------------------------
-import { setLinkWrapperAction, setGoToAction } from "../context";
+import { setGoToAction } from "../context";
 
 const FullWidthImageAndPromoCard = ({ state, actions, block }) => {
   if (!block) return <Loading />;

@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 
-import { colors } from "../config/imports";
 import Image from "@frontity/components/image";
 import CheckMark from "../img/svg/checkMark.svg";
 import Error from "../img/svg/error.svg";

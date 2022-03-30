@@ -1,4 +1,4 @@
-import { styled, keyframes, css } from "frontity";
+import { styled } from "frontity";
 import { CircularProgress } from "@mui/material";
 import { colors } from "../config/colors";
 

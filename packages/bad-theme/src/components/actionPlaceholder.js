@@ -1,4 +1,3 @@
-import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
@@ -10,22 +9,6 @@ const ActionPlaceholder = ({ isFetching, background, bottom, height }) => {
   if (!isFetching) return null;
 
   // SERVERS ---------------------------------------------
-  const ServeImage = () => {
-    const alt = "BAD Complete";
-
-    return (
-      <div style={{ maxWidth: 200, height: "100%" }}>
-        <Image
-          src={CheckMark}
-          alt={alt}
-          style={{
-            width: "100%",
-            height: "100%",
-          }}
-        />
-      </div>
-    );
-  };
 
   return (
     <div

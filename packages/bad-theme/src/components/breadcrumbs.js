@@ -61,9 +61,6 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
       if (goToLink === "/events-content/venues")
         goToLink = "/events-content/venue-hire";
 
-      // console.log(titleName); // debug
-      // console.log(item); // debug
-
       actions.router.set(`${goToLink}`);
     };
 

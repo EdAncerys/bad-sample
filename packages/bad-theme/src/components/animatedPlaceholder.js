@@ -1,12 +1,10 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { connect } from "frontity";
-import Image from "@frontity/components/image";
 import CircularProgress from "@mui/material/CircularProgress";
 import Logo from "../img/svg/bad_logo_animate.svg";
 import { Transition, useSpring, animated } from "react-spring";
 import Vivus from "vivus";
 
-import Placeholder from "../img/svg/badLogoHeader.svg";
 import { useAppState } from "../context";
 import { colors } from "../config/imports";
 
