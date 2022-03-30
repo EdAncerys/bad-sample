@@ -251,10 +251,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
       });
     }
     setMembershipData(membershipData); // set membership data
-
-    console.log("isSingleApp", isSingleApp);
-    console.log("applicationType", applicationType);
-    console.log("membershipData", membershipData);
   }, []);
 
   // HANDLERS --------------------------------------------
@@ -618,20 +614,15 @@ const SIGApplication = ({ state, actions, libraries }) => {
   return (
     <div style={{ position: "relative" }}>
       <ActionPlaceholder isFetching={isFetching} background="transparent" />
-      <div
-        className="primary-title"
-        style={{
-          fontSize: 20,
-          paddingTop: `1em`,
-          marginTop: `1em`,
-          borderTop: `1px solid ${colors.silverFillTwo}`,
-        }}
-      >
-        Category Selected: <span>{applicationType}</span>
-      </div>
 
       <form>
-        <div style={{ padding: `2em 1em` }}>
+        <div
+          style={{
+            padding: `1em`,
+            margin: `1em 0`,
+            borderTop: `1px solid ${colors.silverFillTwo}`,
+          }}
+        >
           <ServeSIGMembershipCategory />
 
           {inputValidator.py3_title && (
@@ -1165,14 +1156,14 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.py3_gmcnumber && (
             <div>
-              <label className="required form-label">GMC Number</label>
+              <label className="required form-label">GMC / IMC number</label>
               <input
                 name="py3_gmcnumber"
                 value={formData.py3_gmcnumber}
                 onChange={handleInputChange}
                 type="text"
                 className="form-control input"
-                placeholder="GMC Number"
+                placeholder="GMC / IMC number"
               />
               <FormError id="py3_gmcnumber" />
             </div>

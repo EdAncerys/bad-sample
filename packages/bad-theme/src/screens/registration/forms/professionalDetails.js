@@ -408,7 +408,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                 onChange={handleInputChange}
                 type="text"
                 className="form-control input"
-                placeholder="GMC Number"
+                placeholder="GMC / IMC number"
               />
               <FormError id="py3_gmcnumber" />
             </div>
