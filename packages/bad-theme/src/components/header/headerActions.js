@@ -58,7 +58,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
     setSearchFilter(input);
 
     // ⬇️ prevent API call if search is less than 3 characters
-    if (!input && input.length < 3) return;
+    if (input && input.length < 3) return;
 
     try {
       // add 500ms delay on API calls to prevent API throttling
@@ -69,12 +69,18 @@ const HeaderActions = ({ state, actions, libraries }) => {
       if (result && result.length > 0) {
         // ⬇️  set data to match dropdown format
         const data = result.map((item) => {
+          const { title, content } = item;
+          let titleContent = title;
+          if (title && title.rendered) titleContent = title.rendered;
+          let bodyContent = content;
+          if (content && content.rendered) bodyContent = content.rendered;
+
           return {
             id: item.id,
-            title: item.title.rendered,
+            title: titleContent,
             url: item.link,
             type: item.type,
-            content: item.content.rendered,
+            content: bodyContent,
           };
         });
 

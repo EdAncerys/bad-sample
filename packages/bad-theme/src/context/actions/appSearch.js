@@ -11,7 +11,7 @@ export const appSearchAction = async ({ state, query }) => {
   };
 
   try {
-    // fetch data while condition matches
+    // ⬇️ fetch data while condition matches
     while (responseLength === perPage && pageNo < 5) {
       // while result length is equal perPage, then fetch next page
       let URL = `${state.auth.WP_HOST}/wp-json/relevanssi/v1/search?keyword=${query}&per_page=${perPage}&page=${pageNo}`;
@@ -19,10 +19,7 @@ export const appSearchAction = async ({ state, query }) => {
       if (!data.ok) throw new Error("error fetching data form API");
       const result = await data.json();
       // ⬇️ if data contains no result & msg break out of the loop ⬇️
-      if (result.message === "Nothing found") {
-        pageNo = 99;
-        break;
-      }
+      if (result.message === "Nothing found") break;
 
       responseLength = result.length;
       pageNo++;
