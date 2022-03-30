@@ -87,9 +87,8 @@ const PilsArchive = ({ state, actions, libraries }) => {
 
     if (input) {
       filter = pilList.filter(
-        (pil) =>
-          pil.title.rendered.toLowerCase().includes(input) ||
-          pil.content.rendered.toLowerCase().includes(input)
+        (pil) => pil.title.rendered.toLowerCase().includes(input)
+        // || pil.content.rendered.toLowerCase().includes(input) // uncomment to search in content
       );
       // ⬇️ convert filter to dropdown object format
       filter = filter.map((item) => {

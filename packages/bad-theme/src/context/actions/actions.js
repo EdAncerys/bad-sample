@@ -4,7 +4,7 @@ import BADTheme from "../../client";
 
 export const setGoToAction = async ({ state, path, actions, downloadFile }) => {
   if (!path && !downloadFile) return null;
-  console.log("setGoToAction triggered", path, downloadFile); // debug
+  // console.log("setGoToAction triggered", path, downloadFile); // debug
 
   const pathOne = `http://3.9.193.188`;
   const pathTwo = `https://badadmin.skylarkdev.co`;

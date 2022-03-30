@@ -86,7 +86,7 @@ const CardActions = ({
       setErrorAction({
         dispatch,
         isError: {
-          message: `Remember to log in to the BAD website in order to have full access to Wiley Publications.`,
+          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals.`,
           image: "Error",
           action: [
             {

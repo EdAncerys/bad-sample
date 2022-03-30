@@ -139,10 +139,8 @@ const Navigation = ({ state, actions, libraries }) => {
         if (!child_items) return null;
 
         let linkPath = parent.url;
-        console.log(linkPath);
         // strip down trailing wpHost from url
         if (linkPath.includes(wpHost)) linkPath = linkPath.replace(wpHost, "");
-        console.log(linkPath);
 
         return (
           <ul
@@ -446,8 +444,6 @@ const Navigation = ({ state, actions, libraries }) => {
           // strip down trailing wpHost from url
           if (linkPath.includes(wpHost))
             linkPath = linkPath.replace(wpHost, "");
-          // console.log("url", url); // debug
-          // console.log("featuredBannerTwo", featuredBannerTwo); // debug
 
           return (
             <ul
