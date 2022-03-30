@@ -80,6 +80,7 @@ function AlterAccordion({
               leadershipBlock={leadershipBlock}
               fundingBlock={fundingBlock}
               membershipApplications={membershipApplications}
+              hasPreview={hasPreview}
             />
           </CustomToggle>
         </Card.Header>

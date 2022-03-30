@@ -82,6 +82,7 @@ const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
         style={{
           width: "100%",
           height: 250,
+          overflow: "hidden",
         }}
       >
         <Image
@@ -92,6 +93,7 @@ const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
             height: "100%",
             objectFit: "cover",
           }}
+          className="card-image-animated"
         />
       </div>
     );
@@ -145,10 +147,13 @@ const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
   };
 
   return (
-    <div className="position-relative">
+    <div className="position-relative heading-tile">
       <ServeImage />
       <ServePlaceholder />
-      <div className="position-absolute" style={{ top: `3em`, left: `2em` }}>
+      <div
+        className="position-absolute heading-tile"
+        style={{ top: `3em`, left: `2em` }}
+      >
         <div>
           <div
             className="flex-row"

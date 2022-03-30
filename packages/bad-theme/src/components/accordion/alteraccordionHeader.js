@@ -28,7 +28,6 @@ const AccordionHeader = ({
 
   const { subtitle, acf } = block;
   const LOGO_HEIGHT = 35;
-
   let preview = block.preview;
   if (hasPreview) preview = hasPreview;
 
