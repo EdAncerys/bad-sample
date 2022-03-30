@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Form } from "react-bootstrap";
 
