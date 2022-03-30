@@ -37,10 +37,11 @@ const Video = ({ state, actions, libraries }) => {
 
   React.useEffect(async () => {
     //Not the greatest idea to make useEffect async
-    actions.source.fetch("/videos/");
-    const videos_list = Object.values(state.source.videos);
-    const related_videos_to_show = videos_list.slice(0, 2);
-
+    await actions.source.fetch("/videos/");
+    const all_videos = state.source.videos;
+    const videos_list = await Object.values(all_videos);
+    const related_videos_to_show = videos_list.slice(0, 3);
+    console.log("FELICITA", related_videos_to_show);
     setRelatedVideos(related_videos_to_show);
     const jwt = await authenticateAppAction({ state, dispatch });
     console.log("JWT:", jwt);
@@ -281,11 +282,12 @@ const Video = ({ state, actions, libraries }) => {
   };
 
   const RelatedVideos = () => {
-    const videos_list = Object.values(state.source.videos);
-    const related_videos_to_show = videos_list.slice(0, 3);
-    if (!videos_list) return null;
-    return related_videos_to_show.map((vid, key) => {
-      if (vid.id === post.id) vid = videos_list[2];
+    if (!relatedVideos) return null;
+    if (relatedVideos.length < 3) return null;
+    console.log("RELATEDVI", relatedVideos);
+    return relatedVideos.map((vid, key) => {
+      if (vid.id === post.id) vid = relatedVideos[2];
+      if (key > 1) return null;
       return (
         <Card
           key={key}
