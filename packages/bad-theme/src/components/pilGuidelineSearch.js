@@ -120,7 +120,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
       setIDFilterAction({ dispatch, idFilter: item.id });
     }
 
-    setGoToAction({ path: item.link, actions });
+    setGoToAction({ state, path: item.link, actions });
   };
 
   // SERVERS ---------------------------------------------

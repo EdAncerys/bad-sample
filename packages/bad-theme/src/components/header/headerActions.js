@@ -101,7 +101,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
     path = path.replace(wpPath, ""); // strip down wp path
 
     // ⬇️ redirect to url with path ⬇️
-    setGoToAction({ path, actions });
+    setGoToAction({ state, path, actions });
     clearSearchHandler(); // clear search input
   };
 
@@ -118,7 +118,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
     setAppSearchPhraseAction({ dispatch, appSearchPhrase: searchFilter });
     clearSearchHandler(); // clear search input
     // ⬇️ redirect to url with path ⬇️
-    setGoToAction({ path: "/search/", actions });
+    setGoToAction({ state, path: "/search/", actions });
   };
 
   const handleKeyPress = (e) => {
@@ -154,12 +154,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
     return (
       <div style={{ padding: `0 1em` }}>
         <button
-          onClick={() =>
-            setGoToAction({
-              path: `/dashboard/`,
-              actions,
-            })
-          }
+          onClick={() => setGoToAction({ state, path: `/dashboard/`, actions })}
           className="blue-btn"
         >
           My Account
@@ -188,7 +183,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
           <div className="flex">
             <div
               style={{ width: 385, height: 90, cursor: "pointer" }}
-              onClick={() => setGoToAction({ path: `/`, actions })}
+              onClick={() => setGoToAction({ state, path: `/`, actions })}
             >
               <Image src={BADLogo} className="d-block h-100" alt="BAD Logo" />
             </div>

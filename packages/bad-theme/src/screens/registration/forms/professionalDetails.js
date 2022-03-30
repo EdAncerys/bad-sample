@@ -228,7 +228,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       data: formData,
     });
 
-    if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
+    if (isActiveUser) setGoToAction({ state, path: `/membership/`, actions });
   };
 
   const isFormValidated = ({ required }) => {
@@ -295,7 +295,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
       let slug = `/membership/thank-you/`;
       if (category === "SIG") slug = `/membership/sig-questions/`;
-      if (isActiveUser) setGoToAction({ path: slug, actions });
+      if (isActiveUser) setGoToAction({ state, path: slug, actions });
     } catch (error) {
       console.log(error);
     } finally {
@@ -357,6 +357,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
           className="transparent-btn"
           onClick={() =>
             setGoToAction({
+              state,
               path: `/membership/step-3-personal-information/`,
               actions,
             })
@@ -768,6 +769,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                               }}
                               onClick={() =>
                                 setGoToAction({
+                                  state,
                                   path: `/privacy-policy/`,
                                   actions,
                                 })

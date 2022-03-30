@@ -40,7 +40,7 @@ const Banner = ({ state, actions, libraries, block }) => {
           <div>
             <button
               className="banner-transparent-btn"
-              onClick={() => setGoToAction({ path: link.url, actions })}
+              onClick={() => setGoToAction({ state, path: link.url, actions })}
             >
               <div className="first-letter-capital">
                 <Html2React html={LABEL} />

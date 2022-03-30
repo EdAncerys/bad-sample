@@ -22,7 +22,7 @@ const VenueInfo = ({ state, actions, libraries, venueInfo }) => {
       <div
         className="primary-title title-link-animation"
         style={{ fontSize: 20, cursor: "pointer" }}
-        onClick={() => setGoToAction({ path: link, actions })}
+        onClick={() => setGoToAction({ state, path: link, actions })}
       >
         <Html2React html={title.rendered} />
       </div>

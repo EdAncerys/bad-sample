@@ -59,7 +59,7 @@ const EventListView = ({
   // HANDLERS ---------------------------------------------------------------
   const handleClick = () => {
     setEventAnchorAction({ dispatch, eventAnchor: anchor });
-    setGoToAction({ path: block.link, actions });
+    setGoToAction({ state, path: block.link, actions });
   };
 
   // SERVERS ----------------------------------------------------------------

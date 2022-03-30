@@ -44,7 +44,7 @@ const TitleBlock = ({
     return (
       <div
         className="caps-btn"
-        onClick={() => setGoToAction({ path: link.url, actions })}
+        onClick={() => setGoToAction({ state, path: link.url, actions })}
       >
         <Html2React html={LABEL} />
       </div>

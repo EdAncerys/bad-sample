@@ -458,7 +458,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
 
       let slug = `/membership/thank-you/`;
-      if (isActiveUser) setGoToAction({ path: slug, actions });
+      if (isActiveUser) setGoToAction({ state, path: slug, actions });
     } catch (error) {
       console.log(error);
     } finally {
@@ -561,12 +561,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         <div
           className="transparent-btn"
           style={{ marginRight: "1em" }}
-          onClick={() =>
-            setGoToAction({
-              path: `/dashboard/`,
-              actions,
-            })
-          }
+          onClick={() => setGoToAction({ state, path: `/dashboard/`, actions })}
         >
           Back
         </div>
@@ -1357,7 +1352,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                         paddingTop: 4,
                       }}
                       onClick={() =>
-                        setGoToAction({ path: readPolicyDoc, actions })
+                        setGoToAction({ state, path: readPolicyDoc, actions })
                       }
                     >
                       here

@@ -86,7 +86,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
       });
 
       let slug = `/dashboard/`;
-      if (isActiveUser) setGoToAction({ path: slug, actions });
+      if (isActiveUser) setGoToAction({ state, path: slug, actions });
     } catch (err) {
       console.log(err);
     } finally {

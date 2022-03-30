@@ -60,7 +60,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
               key={key}
               className="flex-row"
               style={{ marginRight: `2em` }}
-              onClick={() => setGoToAction({ path: url, actions })}
+              onClick={() => setGoToAction({ state, path: url, actions })}
             >
               <a className="dropdown-item" style={{ padding: `0.5em 0` }}>
                 <div

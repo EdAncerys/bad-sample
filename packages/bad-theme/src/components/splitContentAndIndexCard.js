@@ -96,7 +96,7 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
         >
           <div
             className="blue-btn"
-            onClick={() => setGoToAction({ path: link.url, actions })}
+            onClick={() => setGoToAction({ state, path: link.url, actions })}
           >
             <Html2React html={label} />
           </div>
@@ -176,7 +176,9 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
           {card.card.index_title.map((item, key) => {
             return (
               <Dropdown.Item
-                onClick={() => setGoToAction({ path: item.link.url, actions })}
+                onClick={() =>
+                  setGoToAction({ state, path: item.link.url, actions })
+                }
                 drop="down"
               >
                 <Html2React html={item.title} />

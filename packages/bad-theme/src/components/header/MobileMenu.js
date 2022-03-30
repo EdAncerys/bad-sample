@@ -43,7 +43,7 @@ export default connect(({ libraries, state, actions, toggleMobileMenu }) => {
                 children: menu.child_items,
               });
             } else {
-              setGoToAction({ path: menu.url, actions });
+              setGoToAction({ state, path: menu.url, actions });
               toggleMobileMenu();
             }
           }}
@@ -78,7 +78,7 @@ export default connect(({ libraries, state, actions, toggleMobileMenu }) => {
               fontWeight: "bold",
             }}
             onClick={() =>
-              setGoToAction({ path: menuContent.main_url, actions })
+              setGoToAction({ state, path: menuContent.main_url, actions })
             }
           >
             <Html2React html={menuContent.main_title} />
@@ -91,7 +91,7 @@ export default connect(({ libraries, state, actions, toggleMobileMenu }) => {
             <Nav.Link
               style={styles.navMenuItem}
               onClick={() => {
-                setGoToAction({ path: item.url, actions });
+                setGoToAction({ state, path: item.url, actions });
                 toggleMobileMenu();
               }}
             >

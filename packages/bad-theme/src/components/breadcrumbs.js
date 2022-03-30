@@ -127,7 +127,9 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
         <div
           className="flex-row"
           style={styles.link}
-          onClick={() => setGoToAction({ path: "/news-media/", actions })}
+          onClick={() =>
+            setGoToAction({ state, path: "/news-media/", actions })
+          }
         >
           <div style={styles.linkValue}>News & Media</div>
           <div style={{ margin: `0 10px` }}>

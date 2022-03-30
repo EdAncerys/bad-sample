@@ -41,7 +41,7 @@ const Benefit = ({ state, actions, libraries, block }) => {
           margin: `0 auto`,
           cursor: "pointer",
         }}
-        onClick={() => setGoToAction({ path: link.url, actions })}
+        onClick={() => setGoToAction({ state, path: link.url, actions })}
       >
         <Image
           src={SERVE_ICON}

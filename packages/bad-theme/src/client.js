@@ -37,11 +37,12 @@ const BADTheme = {
       APP_PASSWORD: process.env.APP_PASSWORD,
       APP_HOST: process.env.APP_HOST,
 
+      WP_HOST: process.env.WP_HOST,
+      WP_HOST_CONTENT: process.env.WP_HOST_CONTENT,
       ENVIRONMENT: process.env.ENVIRONMENT,
       GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
       DYNAMICS_BRIDGE: process.env.DYNAMICS_BRIDGE,
       APP_URL: process.env.APP_URL,
-      WP_HOST: process.env.WP_HOST,
       COOKIE_NAME: "BAD-WebApp",
     },
     contactList: {

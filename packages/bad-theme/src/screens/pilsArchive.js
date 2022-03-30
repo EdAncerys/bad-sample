@@ -120,7 +120,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
 
   const dropDownHandler = ({ item }) => {
     // console.log(item); // debug
-    setGoToAction({ path: item.url, actions });
+    setGoToAction({ state, path: item.url, actions });
   };
 
   const handleKeyPress = (e) => {
@@ -173,7 +173,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
         <div
           className="pil-title"
           style={{ fontSize: 16, marginBottom: `0.25em`, cursor: "pointer" }}
-          onClick={() => setGoToAction({ path: link, actions })}
+          onClick={() => setGoToAction({ state, path: link, actions })}
         >
           <Html2React html={title.rendered} />
         </div>

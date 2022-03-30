@@ -195,7 +195,9 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
       >
         <div
           className="transparent-btn"
-          onClick={() => setGoToAction({ path: `/membership/`, actions })}
+          onClick={() =>
+            setGoToAction({ state, path: `/membership/`, actions })
+          }
         >
           Back
         </div>

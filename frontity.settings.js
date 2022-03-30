@@ -31,7 +31,7 @@ const settings = {
       name: "@frontity/wp-source",
       state: {
         source: {
-          url: process.env.WP_HOST, // UPDATED production url
+          url: process.env.WP_HOST, // production url
           params: {
             per_page: 25, // limit per page fetch request
           },

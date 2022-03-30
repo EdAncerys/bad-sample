@@ -163,7 +163,9 @@ const Post = ({ state, actions, libraries }) => {
                 <div
                   className="primary-title"
                   style={{ fontSize: 16, padding: "1em 0", cursor: "pointer" }}
-                  onClick={() => setGoToAction({ path: post.link, actions })}
+                  onClick={() =>
+                    setGoToAction({ state, path: post.link, actions })
+                  }
                 >
                   {post.title.rendered}
                 </div>

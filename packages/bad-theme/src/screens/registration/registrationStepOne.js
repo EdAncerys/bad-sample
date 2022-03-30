@@ -34,7 +34,7 @@ const RegistrationStepOne = ({ state, actions }) => {
       isActiveUser,
       dynamicsApps,
     });
-    if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
+    if (isActiveUser) setGoToAction({ state, path: `/membership/`, actions });
   };
 
   const handleNext = async () => {
@@ -52,6 +52,7 @@ const RegistrationStepOne = ({ state, actions }) => {
 
     if (isActiveUser)
       setGoToAction({
+        state,
         path: `/membership/step-2-category-selection/`,
         actions,
       });
@@ -69,7 +70,9 @@ const RegistrationStepOne = ({ state, actions }) => {
       >
         <div
           className="transparent-btn"
-          onClick={() => setGoToAction({ path: `/membership/`, actions })}
+          onClick={() =>
+            setGoToAction({ state, path: `/membership/`, actions })
+          }
         >
           Back
         </div>
@@ -112,6 +115,7 @@ const RegistrationStepOne = ({ state, actions }) => {
             className="caps-btn"
             onClick={() =>
               setGoToAction({
+                state,
                 path: `/membership/categories-of-membership/`,
                 actions,
               })

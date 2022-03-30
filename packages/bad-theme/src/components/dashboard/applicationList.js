@@ -126,10 +126,7 @@ const ApplicationList = ({ state, actions, libraries }) => {
       return;
     }
     // otherwise handle create new application in Dynamics & redirect to application page
-    setGoToAction({
-      path: "/membership/step-1-the-process/",
-      actions,
-    });
+    setGoToAction({ state, path: "/membership/step-1-the-process/", actions });
   };
 
   // SERVERS ---------------------------------------------

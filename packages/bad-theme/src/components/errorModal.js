@@ -40,7 +40,7 @@ const ErrorModal = ({ state, actions }) => {
   if (!isError) return null; // error handler
 
   const gotToActionHandler = ({ path }) => {
-    setGoToAction({ path, actions });
+    setGoToAction({ state, path, actions });
     setErrorAction({ dispatch, isError: null });
   };
 

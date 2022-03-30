@@ -25,7 +25,7 @@ const ImageAndPromoCard = ({
     if (label) GO_TO_LABEL = label;
 
     return (
-      <div onClick={() => setGoToAction({ path: link.url, actions })}>
+      <div onClick={() => setGoToAction({ state, path: link.url, actions })}>
         <div value={parse(GO_TO_LABEL)} className="caps-btn">
           <Html2React html={GO_TO_LABEL} />
         </div>

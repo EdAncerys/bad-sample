@@ -104,7 +104,9 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
               <div className="home-banner">
                 <button
                   className="banner-transparent-btn"
-                  onClick={() => setGoToAction({ path: link.url, actions })}
+                  onClick={() =>
+                    setGoToAction({ state, path: link.url, actions })
+                  }
                 >
                   <div className="first-letter-capital">
                     <Html2React html={LABEL} />
@@ -124,7 +126,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
               <div
                 className="label"
                 onClick={() =>
-                  setGoToAction({ path: event_label.url, actions })
+                  setGoToAction({ state, path: event_label.url, actions })
                 }
               >
                 <Html2React html={LABEL} />
