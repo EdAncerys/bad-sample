@@ -1,3 +1,5 @@
+import BADTheme from "../../client";
+
 const pathOne = `http://3.9.193.188`;
 const pathTwo = `https://badadmin.skylarkdev.co`;
 const pathThee = `https://bad.skylarkdev.digital`;
@@ -7,6 +9,7 @@ const pathFour = `https://bad-internal-testing.vercel.app/`; // APP HOST url end
 export const setGoToAction = async ({ path, actions, downloadFile }) => {
   if (!path && !downloadFile) return null;
   // console.log("setGoToAction triggered", path, downloadFile); // debug
+  console.log("🤖", process.env.WP_HOST);
 
   if (downloadFile) {
     // ⬇️  download file ⬇️

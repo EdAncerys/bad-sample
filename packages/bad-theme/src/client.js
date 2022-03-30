@@ -39,7 +39,6 @@ const BADTheme = {
 
       ENVIRONMENT: process.env.ENVIRONMENT,
       GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
-      SEND_GRID_API: process.env.SEND_GRID_API,
       DYNAMICS_BRIDGE: process.env.DYNAMICS_BRIDGE,
       APP_URL: process.env.APP_URL,
       WP_HOST: process.env.WP_HOST,
