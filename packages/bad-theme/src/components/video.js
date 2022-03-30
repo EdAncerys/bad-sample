@@ -19,6 +19,10 @@ import {
 import { handleGetCookie } from "../helpers/cookie";
 import PaymentModal from "./dashboard/paymentModal";
 const Video = ({ state, actions, libraries }) => {
+  // STATE
+  const [loadVideo, setLoadVideo] = React.useState(false);
+  const [videoStatus, setVideoStatus] = React.useState("");
+  const [paymentUrl, setPaymentUrl] = React.useState("");
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
 
@@ -27,18 +31,56 @@ const Video = ({ state, actions, libraries }) => {
   const { isActiveUser } = useAppState();
   const dispatch = useAppDispatch();
   console.log(isActiveUser);
-  if (!post) return <Loading />;
 
   console.log(post);
-  // STATE
-  const [loadVideo, setLoadVideo] = React.useState(false);
-  const [videoStatus, setVideoStatus] = React.useState("");
-  const [paymentUrl, setPaymentUrl] = React.useState("");
+
+  React.useEffect(async () => {
+    //Not the greatest idea to make useEffect async
+    actions.source.fetch("/videos/");
+
+    const jwt = await authenticateAppAction({ state, dispatch });
+    console.log("JWT:", jwt);
+
+    if (!post.acf.private) {
+      setVideoStatus("unlocked");
+      return true;
+    }
+    if (!isActiveUser) {
+      setVideoStatus("locked");
+      return true;
+    }
+    if (isActiveUser && post.acf.price) {
+      const url =
+        state.auth.APP_HOST +
+        "/videvent/" +
+        isActiveUser.contactid +
+        "/" +
+        post.acf.event_id;
+      const fetching = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+      if (fetching.ok) {
+        const json = await fetching.json();
+        if (json.success === false) setVideoStatus("locked");
+        if (json.data.entity.bad_confirmationid) setVideoStatus("unlocked");
+        return true;
+      } else {
+        setVideoStatus("locked");
+        return true;
+      }
+    }
+    setVideoStatus("locked");
+  }, [isActiveUser, paymentUrl]);
+
+  if (!post) return <Loading />;
+  if (!videoStatus) return <Loading />;
+  if (!state.source.videos) return <Loading />;
+
   // HELPERS
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-
-  //HELPERS
   const handlePayment = async () => {
     const cookie = handleGetCookie({ name: `BAD-WebApp` });
     const { contactid, jwt } = cookie;
@@ -247,47 +289,6 @@ const Video = ({ state, actions, libraries }) => {
       );
     });
   };
-  React.useEffect(async () => {
-    //Not the greatest idea to make useEffect async
-    actions.source.fetch("/videos/");
-
-    const jwt = await authenticateAppAction({ state, dispatch });
-    console.log("JWT:", jwt);
-
-    if (!post.acf.private) {
-      setVideoStatus("unlocked");
-      return true;
-    }
-    if (!isActiveUser) {
-      setVideoStatus("locked");
-      return true;
-    }
-    if (isActiveUser && post.acf.price) {
-      const url =
-        state.auth.APP_HOST +
-        "/videvent/" +
-        isActiveUser.contactid +
-        "/" +
-        post.acf.event_id;
-      const fetching = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      });
-      if (fetching.ok) {
-        const json = await fetching.json();
-        if (json.success === false) setVideoStatus("locked");
-        if (json.data.entity.bad_confirmationid) setVideoStatus("unlocked");
-        return true;
-      } else {
-        setVideoStatus("locked");
-        return true;
-      }
-    }
-    setVideoStatus("locked");
-  }, [isActiveUser, paymentUrl]);
-  if (!videoStatus) return <Loading />;
-  if (!state.source.videos) return <Loading />;
 
   const handleProblemEnquiry = () => {
     setEnquireAction({
