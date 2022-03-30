@@ -73,7 +73,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         form_body: `Please use the form below to update us to changes to your professional details. To update your place of work, start typing to select from a list of options. If your place of work is not on the list, type Not Listed and use the message box at the bottom of the form instead`,
         job_title: true,
         message: true,
-        recipients: state.contactList.defaultContactList,
+        recipients: state.contactList.DEFAULT_CONTACT_LIST,
         isHospitalChange: true,
 
         // default email subject & template name

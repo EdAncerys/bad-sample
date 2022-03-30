@@ -137,7 +137,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
           message: contact_message || true,
           allow_attachments: contact_allow_attachments,
           recipients:
-            contact_recipients || state.contactList.defaultContactList,
+            contact_recipients || state.contactList.DEFAULT_CONTACT_LIST,
           // default email subject & template name
           emailSubject: `Notify when ${positionName} position is open.`,
           emailTemplate: "StandardEnquiryForm",

@@ -341,7 +341,7 @@ const Event = ({ state, actions, libraries }) => {
             full_name: true,
             email_address: true,
             phone_number: true,
-            recipients: state.contactList.defaultContactList,
+            recipients: state.contactList.DEFAULT_CONTACT_LIST,
             registerForEvent: title.rendered,
             // default email subject & template name
             emailSubject: `Register for ${title.rendered} event interest.`,
@@ -654,7 +654,7 @@ const Event = ({ state, actions, libraries }) => {
                 message: true,
                 allow_attachments: contact_allow_attachments,
                 recipients:
-                  contact_recipients || state.contactList.defaultContactList,
+                  contact_recipients || state.contactList.DEFAULT_CONTACT_LIST,
                 // default email subject & template name
                 emailSubject: `Enquire about ${title.rendered} event.`,
                 emailTemplate: "StandardEnquiryForm",

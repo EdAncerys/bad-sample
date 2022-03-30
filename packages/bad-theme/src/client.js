@@ -46,16 +46,16 @@ const BADTheme = {
       COOKIE_NAME: "BAD-WebApp",
     },
     contactList: {
-      venueHireContacts: process.env.VENUE_HIRE_CONTACTS
+      VENUE_HIRE_CONTACTS: process.env.VENUE_HIRE_CONTACTS
         ? JSON.parse(process.env.VENUE_HIRE_CONTACTS)
         : null, // [{ email: "conference@bad.org.uk" }]
-      eventContacts: process.env.EVENT_CONTACTS
+      EVENT_CONTACTS: process.env.EVENT_CONTACTS
         ? JSON.parse(process.env.EVENT_CONTACTS)
         : null, // [{ email: "conference@bad.org.uk" }]
-      electionContacts: process.env.ELECTION_CONTACTS
+      ELECTION_CONTACTS: process.env.ELECTION_CONTACTS
         ? JSON.parse(process.env.ELECTION_CONTACTS)
         : null, // [{ email: "harriet@bag.org.uk" }]
-      defaultContactList: process.env.DEFAULT_CONTACT_LIST
+      DEFAULT_CONTACT_LIST: process.env.DEFAULT_CONTACT_LIST
         ? JSON.parse(process.env.DEFAULT_CONTACT_LIST)
         : null, // [{ email: "ed@skylarkcreative.co.uk" }]
     },

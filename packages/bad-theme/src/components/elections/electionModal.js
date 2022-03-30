@@ -55,7 +55,8 @@ const ElectionModal = ({
         subject_dropdown_options: contact_subject_dropdown_options,
         message: true,
         allow_attachments: true,
-        recipients: contact_recipients || state.contactList.defaultContactList,
+        recipients:
+          contact_recipients || state.contactList.DEFAULT_CONTACT_LIST,
         // default email subject & template name
         emailSubject: `Apply to ${title.rendered} position.`,
         emailTemplate: "StandardEnquiryForm",

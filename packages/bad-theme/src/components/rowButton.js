@@ -37,10 +37,10 @@ const RowButton = ({
     emailSubject: "Standard Enquiry Form B.A.D WebApp",
     emailTemplate: "StandardEnquiryForm",
   };
-  // default to defaultContactList if no recipients are set
+  // default to DEFAULT_CONTACT_LIST if no recipients are set
   if (!enquireAction.recipients) {
-    // recipients = state.theme.defaultContactList;
-    enquireAction.recipients = state.contactList.defaultContactList;
+    // recipients = state.theme.DEFAULT_CONTACT_LIST;
+    enquireAction.recipients = state.contactList.DEFAULT_CONTACT_LIST;
     // enquireAction.recipients = [{ email: "ed@skylarkcreative.co.uk" }];
   }
 
