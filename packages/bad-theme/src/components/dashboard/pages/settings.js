@@ -1,8 +1,6 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../../config/colors";
-
 import PrivacyPreferences from "../privacyPreferences";
 import FindDermatologistOptions from "../findDermOptions";
 // CONTEXT ------------------------------------------------------------------

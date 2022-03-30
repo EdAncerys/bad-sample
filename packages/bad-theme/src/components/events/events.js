@@ -1,24 +1,21 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Form } from "react-bootstrap";
-
 import EventLoopBlock from "./eventLoopBlock";
 import SearchContainer from "../searchContainer";
 import Loading from "../loading";
 import { colors } from "../../config/imports";
-
 import date from "date-and-time";
 const DATE_MODULE = date;
 
 import CloseIcon from "@mui/icons-material/Close";
+
 // CONTEXT --------------------------------------------------------
 import { getEventsData } from "../../helpers";
-
 import { muiQuery } from "../../context";
 
 const Events = ({ state, actions, libraries, block, disableMargin }) => {
   const { sm, md, lg, xl } = muiQuery();
-  // console.log("EVENTS BLOCK: ", block);
 
   const [grades, setGrades] = useState(null); // data
   const [locations, setLocations] = useState(null); // data

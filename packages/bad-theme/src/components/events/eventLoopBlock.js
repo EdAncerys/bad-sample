@@ -5,16 +5,15 @@ import Loading from "../loading";
 import EventListView from "../eventListView";
 import Card from "../card/card";
 import TitleBlock from "../titleBlock";
-import { colors } from "../../config/imports";
+
 // CONTEXT --------------------------------------------------------
 import {
   useAppDispatch,
   useAppState,
   setEventAnchorAction,
+  muiQuery,
 } from "../../context";
-import { getEventsData } from "../../helpers";
 
-import { muiQuery } from "../../context";
 const EventLoopBlock = ({
   state,
   actions,
@@ -45,10 +44,8 @@ const EventLoopBlock = ({
     colour,
     events_archive,
   } = block;
-  // console.log("block", colour); // debug
 
   const [eventList, setEventList] = useState(null); // event data
-
   const [gradeFilter, setGradeFilterId] = useState(null); // data
   const useEffectRef = useRef(null);
   const postLimitRef = useRef(0);

@@ -1,10 +1,7 @@
-import { useState } from "react";
-
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Carousel } from "react-bootstrap";
 import { colors } from "../../config/imports";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import Loading from "../loading";
 import BlockWrapper from "../blockWrapper";
@@ -65,6 +62,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
   };
 
   if (!block) return <Loading />;
+
   // RETURN ---------------------------------------------------
   return (
     <div

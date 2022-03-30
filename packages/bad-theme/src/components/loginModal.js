@@ -44,8 +44,14 @@ const LoginModal = ({ state, actions }) => {
   // HANDLERS ----------------------------------------------------
   const iFrameHandler = async (e) => {
     const iFrame = e.currentTarget;
+    // 👉 iFrame have to have correct redirect url se to for redirect to work.
+    // Redirect url set on dynamics server.
 
-    // development env default login action
+    // console.log("IFRAME_URL", state.auth.IFRAME_URL); // debug
+    // console.log("APP_USERNAME", state.auth.APP_USERNAME); // debug
+    // console.log("APP_PASSWORD", state.auth.APP_PASSWORD); // debug
+
+    // ⬇️ development env default login action ⬇️
     if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
       console.log("🤖 DEVELOPMENT ENVIRONMENT 🤖");
 
@@ -67,13 +73,6 @@ const LoginModal = ({ state, actions }) => {
       const iFramePath = iFrame.contentWindow.location.pathname;
       // console.log("iFramePath", iFramePath); // debug
 
-      // ⏬⏬  CORS validation on old type browsers ⏬⏬
-      // if (
-      //   !iframeLocation.includes(`3000`) ||
-      //   !iframeLocation.includes(state.auth.APP_URL)
-      // )
-      //   throw new Error("Wrong redirection url");
-
       const iqs = new URLSearchParams(iFrame.contentWindow.location.search);
       console.log("iFrameRef iqs", iqs);
       if (iqs && iqs.has("transId")) {
@@ -90,40 +89,6 @@ const LoginModal = ({ state, actions }) => {
   };
 
   // SERVERS --------------------------------------------------
-  const ServeFormInfo = () => {
-    return (
-      <div>
-        {/* <ServeCloseAction /> */}
-        <div style={{ marginTop: `2em` }}>
-          <div className="mb-4">
-            <div>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </div>
-          </div>
-          <RowButton
-            block={{
-              title: "Not yet registered? Register here",
-            }}
-            onClick={() => {
-              setCreateAccountModalAction({
-                dispatch,
-                createAccountAction: true,
-              });
-              setLoginModalAction({ dispatch, loginModalAction: false });
-            }}
-            buttonWidth="60%"
-          />
-        </div>
-      </div>
-    );
-  };
-
   const ServeModalContent = () => {
     const ServeCloseAction = () => {
       return (
@@ -154,6 +119,7 @@ const LoginModal = ({ state, actions }) => {
             width="100%"
             height="1000"
             src={state.auth.IFRAME_URL}
+            // src="https://britishad.b2clogin.com/BritishAD.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1_signupsignin_uat&client_id=adbed72d-5ee0-49b1-a064-421bdbcd68b2&nonce=defaultNonce&redirect_uri=http://localhost:3000/codecollect&scope=openid&response_type=id_token&prompt=login"
           ></iframe>
         </div>
       );

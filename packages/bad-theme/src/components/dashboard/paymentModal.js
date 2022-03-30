@@ -22,38 +22,31 @@ const PaymentModal = ({ state, actions, payment_url, resetPaymentUrl }) => {
 
     try {
       const iFramePath = iFrame.contentWindow.location.pathname;
-      console.log("iFramePath", iFramePath); // debug
-
-      // ⏬⏬  CORS validation on old type browsers ⏬⏬
-      // if (
-      //   !iframeLocation.includes(`3000`) ||
-      //   !iframeLocation.includes(state.auth.APP_URL)
-      // )
-      //   throw new Error("Wrong redirection url");
 
       const iqs = new URLSearchParams(iFrame.contentWindow.location.search);
-      console.log("iFrameRef iqs", iqs);
 
       setErrorAction({
         dispatch,
         isError: { message: "Your payment has been accepted." },
       });
+
       await getApplicationStatus({
         state,
         dispatch,
         contactid: isActiveUser.contactid,
       });
+
       resetPaymentUrl();
       if (iqs && iqs.has("transId")) {
         const transId = iqs.get("transId");
-        console.log("*** WE FOUND A TRANSACTION ID IN THE IFRAME ** ", transId);
+        // console.log("*** WE FOUND A TRANSACTION ID IN THE IFRAME ** ", transId); // debug
         setId(transId);
       } else {
-        console.log("Error getting transId from iFrame");
+        console.log("Error getting transId from iFrame"); // debug
       }
     } catch (error) {
-      console.log("*** ERROR GETTING IFRAME CONTENT - CROSS-ORIGIN **");
-      // console.log(error); // debug
+      console.log("*** ERROR GETTING IFRAME CONTENT - CROSS-ORIGIN **"); // debug
+      console.log(error); // debug
     }
   };
   return (

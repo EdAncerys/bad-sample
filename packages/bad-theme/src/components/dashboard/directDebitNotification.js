@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
-import { colors } from "../../config/imports";
 // CONTEXT ------------------------------------------------------------------
 import {
   muiQuery,
@@ -63,9 +62,6 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
   let isSetupDirectDebit = false;
   if (!isVisibleNotification) isSetupDirectDebit = true;
   if (isDebitSetup) isSetupDirectDebit = true;
-
-  console.log("⬇️ isSetupDirectDebit", isSetupDirectDebit);
-  console.log("⬇️ isApprovedMemberships", isApprovedMemberships);
 
   // if direct debit setup or no approved applications, return null
   if (isSetupDirectDebit || !isApprovedMemberships) return null;

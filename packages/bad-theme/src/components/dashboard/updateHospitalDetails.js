@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import ActionPlaceholder from "../actionPlaceholder";
 
-import { colors } from "../../config/imports";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -62,7 +61,6 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
     }));
-    // console.log(value); // debug
   };
 
   const handleContactForm = async () => {

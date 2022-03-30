@@ -157,7 +157,6 @@ const ApplicationList = ({ state, actions, libraries }) => {
               createdon,
               core_membershipsubscriptionid,
             } = app;
-            console.log("application data", app); // debug
             // get application date
             let appData = createdon.split(" ")[0];
             // split string and revert date with month format
@@ -192,7 +191,6 @@ const ApplicationList = ({ state, actions, libraries }) => {
                     });
                   }
 
-                  console.log("isSubmitted", isSubmitted);
                   setStatus(isSubmitted); // set status to submitted
                 } catch (error) {
                   console.log(error);

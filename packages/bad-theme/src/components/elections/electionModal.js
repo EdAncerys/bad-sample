@@ -1,13 +1,9 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import Image from "@frontity/components/image";
 import { Modal } from "react-bootstrap";
-
 import { colors } from "../../config/imports";
-import { setGoToAction } from "../../context";
-
 import CloseIcon from "@mui/icons-material/Close";
-// CONTEXT ------------------------------------------------
+
+// CONTEXT --------------------------------------------------------
 import { useAppDispatch, setEnquireAction } from "../../context";
 
 const ElectionModal = ({
@@ -44,8 +40,6 @@ const ElectionModal = ({
       contact_allow_attachments,
       contact_recipients,
     } = modalData.acf;
-
-    console.log(modalData);
 
     setEnquireAction({
       dispatch,

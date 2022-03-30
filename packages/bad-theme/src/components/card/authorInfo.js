@@ -1,13 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
-import Link from "@frontity/components/link";
-
 import { colors } from "../../config/imports";
-import date from "date-and-time";
 import ShareToSocials from "./shareToSocials";
-
+import date from "date-and-time";
 const DATE_MODULE = date;
+
 // CONTEXT ----------------------------------------------------------------
 import { copyToClipboard } from "../../context";
 
@@ -15,7 +13,6 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!authorInfo) return null;
-  console.log("authorInfo: ", authorInfo); // debug
 
   const { date, modified, tags, content } = authorInfo;
   const { press_release_authors, show_modified_date } = authorInfo.acf;

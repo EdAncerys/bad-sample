@@ -1,11 +1,9 @@
 import React from "react";
-import Navigation from "./navigation";
 import { connect } from "frontity";
-import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
+import { Nav } from "react-bootstrap";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { setGoToAction } from "../../context";
 
-import QuickLinksDropDown from "./quickLinksDropDown";
 import { MENU_DATA } from "../../config/data";
 import { colors } from "../../config/imports";
 export default connect(({ libraries, state, actions, toggleMobileMenu }) => {
@@ -31,6 +29,7 @@ export default connect(({ libraries, state, actions, toggleMobileMenu }) => {
       </div>
     );
   };
+
   const ServeMainMenu = () => {
     return wpMainMenu.map((menu) => {
       return (
@@ -55,6 +54,7 @@ export default connect(({ libraries, state, actions, toggleMobileMenu }) => {
       );
     });
   };
+
   React.useEffect(() => {
     // getting wp menu from state
     const data = state.theme.menu;
@@ -64,6 +64,7 @@ export default connect(({ libraries, state, actions, toggleMobileMenu }) => {
     setWpMainMenu(data); // main menu to display
     setWpMoreMenu(data); // more menu into dropdown
   }, [state.theme.menu]);
+
   if (menuContent) {
     console.log(menuContent);
     return (
@@ -101,6 +102,7 @@ export default connect(({ libraries, state, actions, toggleMobileMenu }) => {
       </div>
     );
   }
+
   return (
     <div style={styles.container} className="BAD-menu">
       <Nav.Link

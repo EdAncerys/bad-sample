@@ -4,7 +4,6 @@ import { Form } from "react-bootstrap";
 
 import { ETHNIC_GROUPS, GENDER_GROUPS } from "../../config/data";
 import ActionPlaceholder from "../actionPlaceholder";
-import { colors } from "../../config/imports";
 import Image from "@frontity/components/image";
 import ProfileAvatar from "../../img/svg/profile.svg";
 // CONTEXT ----------------------------------------------------------------
@@ -74,7 +73,6 @@ const UpdateProfile = ({ state, actions, libraries }) => {
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
     }));
-    // console.log(value); // debug
   };
 
   const handleDocUploadChange = async (e) => {
@@ -87,7 +85,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
         attachments: bad_profile_photo_url,
         isPicture: true, // 🐞 dont append file type for images bug in S3
       });
-    console.log("bad_profile_photo_url", bad_profile_photo_url); // debug
+    // console.log("bad_profile_photo_url", bad_profile_photo_url); // debug
 
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -96,8 +94,6 @@ const UpdateProfile = ({ state, actions, libraries }) => {
   };
 
   const handleProfileUpdate = async () => {
-    // console.log("formData", formData); // debug
-
     const firstname = formData.firstname;
     const lastname = formData.lastname;
     const bad_profile_photo_url = formData.bad_profile_photo_url;

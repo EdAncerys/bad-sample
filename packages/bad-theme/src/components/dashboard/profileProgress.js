@@ -3,12 +3,9 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
 import { colors } from "../../config/imports";
-import date from "date-and-time";
-const DATE_MODULE = date;
 import ActionPlaceholder from "../../components/actionPlaceholder";
 import SubmittedApplications from "./submittedApplications";
 import ApplicationList from "./applicationList";
-
 import Ellipse from "../../img/svg/ellipse.svg";
 import CheckMarkGreen from "../../img/svg/checkMarkGreen.svg";
 

@@ -31,14 +31,16 @@ const BADTheme = {
       notification: false,
     },
     auth: {
-      ENVIRONMENT: process.env.ENVIRONMENT,
-      GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
-      SEND_GRID_API: process.env.SEND_GRID_API,
+      // app auth service secrets
+      IFRAME_URL: process.env.IFRAME_URL,
       APP_USERNAME: process.env.APP_USERNAME,
       APP_PASSWORD: process.env.APP_PASSWORD,
       APP_HOST: process.env.APP_HOST,
+
+      ENVIRONMENT: process.env.ENVIRONMENT,
+      GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
+      SEND_GRID_API: process.env.SEND_GRID_API,
       DYNAMICS_BRIDGE: process.env.DYNAMICS_BRIDGE,
-      IFRAME_URL: process.env.IFRAME_URL,
       APP_URL: process.env.APP_URL,
       WP_HOST: process.env.WP_HOST,
       COOKIE_NAME: "BAD-WebApp",

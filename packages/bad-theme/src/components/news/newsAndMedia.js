@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Form } from "react-bootstrap";
 import parse from "html-react-parser";
@@ -12,6 +12,7 @@ import BlockWrapper from "../blockWrapper";
 
 import CloseIcon from "@mui/icons-material/Close";
 import SearchContainer from "../../components/searchContainer";
+
 // CONTEXT -----------------------------------------------------------------
 import { getPostData } from "../../helpers";
 import { muiQuery } from "../../context";

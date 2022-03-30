@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
+import React, { useState, useLayoutEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
@@ -12,6 +12,7 @@ import Loading from "../../components/loading";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import CircularProgress from "@mui/material/CircularProgress";
+
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,

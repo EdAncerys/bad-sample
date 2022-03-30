@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 
@@ -65,10 +64,7 @@ const ContactPreferences = ({
         <div className="flex mb-3 form-check">
           <div className="flex">
             <div>
-              <input
-                type="checkbox"
-                className="form-check-input check-box"
-              />
+              <input type="checkbox" className="form-check-input check-box" />
             </div>
             <div>
               <label className="form-check-label">
@@ -80,10 +76,7 @@ const ContactPreferences = ({
         <div className="flex mb-3 form-check">
           <div className="flex">
             <div>
-              <input
-                type="checkbox"
-                className="form-check-input check-box"
-              />
+              <input type="checkbox" className="form-check-input check-box" />
             </div>
             <div>
               <label className="form-check-label">
@@ -95,10 +88,7 @@ const ContactPreferences = ({
         <div className="flex mb-3 form-check">
           <div className="flex">
             <div>
-              <input
-                type="checkbox"
-                className="form-check-input check-box"
-              />
+              <input type="checkbox" className="form-check-input check-box" />
             </div>
             <div>
               <label className="form-check-label">
@@ -110,10 +100,7 @@ const ContactPreferences = ({
         <div className="flex mb-3 form-check">
           <div className="flex">
             <div>
-              <input
-                type="checkbox"
-                className="form-check-input check-box"
-              />
+              <input type="checkbox" className="form-check-input check-box" />
             </div>
             <div>
               <label className="form-check-label">
@@ -128,10 +115,7 @@ const ContactPreferences = ({
         <div className="flex mb-3 form-check">
           <div className="flex">
             <div>
-              <input
-                type="checkbox"
-                className="form-check-input check-box"
-              />
+              <input type="checkbox" className="form-check-input check-box" />
             </div>
             <div>
               <label className="form-check-label">
@@ -155,10 +139,7 @@ const ContactPreferences = ({
         <div className="flex mb-3 form-check">
           <div className="flex">
             <div>
-              <input
-                type="checkbox"
-                className="form-check-input check-box"
-              />
+              <input type="checkbox" className="form-check-input check-box" />
             </div>
             <div>
               <label className="form-check-label">

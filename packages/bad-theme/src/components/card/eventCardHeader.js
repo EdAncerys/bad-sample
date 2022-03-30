@@ -1,10 +1,7 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import date from "date-and-time";
-
 import { colors } from "../../config/imports";
-
+import date from "date-and-time";
 const DATE_MODULE = date;
 
 const EventCardHeader = ({ state, actions, libraries, eventHeader }) => {

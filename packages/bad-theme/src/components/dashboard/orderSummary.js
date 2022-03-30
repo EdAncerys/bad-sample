@@ -3,7 +3,6 @@ import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 import { Form } from "react-bootstrap";
-
 import { UK_COUNTIES } from "../../config/data";
 import { UK_COUNTRIES } from "../../config/data";
 // CONTEXT ----------------------------------------------------------------
@@ -38,7 +37,6 @@ const OrderSummary = ({ state, actions, libraries }) => {
       postcode,
       country,
     };
-    console.log("orderSummary", orderSummary);
   };
 
   // HELPERS ----------------------------------------------------------------

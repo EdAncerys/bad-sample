@@ -3,7 +3,6 @@ import { connect } from "frontity";
 
 import ActionPlaceholder from "../actionPlaceholder";
 import { colors } from "../../config/imports";
-import { padding } from "@mui/system";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -23,7 +22,6 @@ const BillingHistory = ({ state, actions, libraries }) => {
   const [subApps, setSubApps] = useState([]);
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-  const PAYMENTS = [1, 2, 3];
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
@@ -36,7 +34,6 @@ const BillingHistory = ({ state, actions, libraries }) => {
 
     // get approved memberships
     if (dynamicsApps) setSubApps(dynamicsApps.subs.data);
-    console.log("dynamicsApps", dynamicsApps.subs.data);
 
     return () => {
       useEffectRef.current = false; // clean up function

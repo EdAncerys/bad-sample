@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
-import { colors } from "../../config/imports";
 import DirectDebit from "../../img/svg/directDebit.svg";
 import Loading from "../loading";
 import ActionPlaceholder from "../actionPlaceholder";
@@ -23,7 +22,6 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
   const { isActiveUser, directDebitPath } = useAppState();
 
   const [isFetching, setFetching] = useState(false);
-
   const marginVertical = state.theme.marginVertical;
 
   if (!isActiveUser) return <Loading />;
@@ -62,8 +60,15 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
           isError: { message: "Direct debit been successfully setup" },
         });
       } else {
-        console.log("⬇️ Failed to create direct debit ⬇️");
-        console.log(debitResponse);
+        // console.log("⬇️ Failed to create direct debit ⬇️");
+        // console.log(debitResponse);
+
+        setErrorAction({
+          dispatch,
+          isError: {
+            message: "Failed to create setup direct debit. Please try again.",
+          },
+        });
       }
     } catch (error) {
       console.log(error);
@@ -101,8 +106,6 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
         </div>
       );
     };
-
-    console.log(data); // debug
 
     return (
       <div style={{ padding: `2em 0 1em 0` }}>

@@ -1,11 +1,8 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import { colors } from "../../config/imports";
 import Card from "../card/card";
 import RowButton from "../rowButton";
 
-import Loading from "../loading";
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, useAppState, muiQuery } from "../../context";
 
@@ -83,6 +80,7 @@ const MultiPostBlock = ({ state, actions, block, filter }) => {
               return null;
             FILTER_LENGTH++;
           }
+
           if (lg)
             return (
               <RowButton
@@ -90,6 +88,7 @@ const MultiPostBlock = ({ state, actions, block, filter }) => {
                 multiPostRowButtons
               />
             );
+
           return (
             <div key={key} className="flex">
               <Card

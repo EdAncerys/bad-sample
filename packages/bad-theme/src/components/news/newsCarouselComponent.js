@@ -1,10 +1,7 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Carousel } from "react-bootstrap";
-
 import { colors } from "../../config/imports";
-
 import Card from "../card/card";
 import LeftIcon from "../../img/svg/leftIcon.svg";
 import RightIcon from "../../img/svg/rightIcon.svg";
@@ -66,22 +63,7 @@ const NewsCarouselComponent = ({
             <Carousel.Item key={key}>
               <div className="flex">
                 {block.map((block, key) => {
-                  const {
-                    date,
-                    categories,
-                    title,
-                    content,
-                    excerpt,
-                    link,
-                    featured_media,
-                  } = block;
-                  const { press_release_authors } = block.acf;
-
-                  const media = state.source.attachment[featured_media];
-                  const filter = categoryList.filter(
-                    (item) => item.id === Number(categories[0])
-                  );
-                  const categoryName = filter[0].name;
+                  const { categories, title, link } = block;
 
                   const ServeDivider = ({ i }) => {
                     if (isSingleBlock) return null;
@@ -138,13 +120,7 @@ const NewsCarouselComponent = ({
     return (
       <Carousel className="news-carousel">
         {block.map((block, key) => {
-          const { date, categories, excerpt, link, featured_media } = block;
-
-          const media = state.source.attachment[featured_media];
-          const filter = categoryList.filter(
-            (item) => item.id === Number(categories[0])
-          );
-          const categoryName = filter[0].name;
+          const { date, categories, excerpt, link } = block;
 
           return (
             <Carousel.Item key={key}>

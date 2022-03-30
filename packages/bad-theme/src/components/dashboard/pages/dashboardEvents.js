@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../../config/colors";
 
 import TitleBlock from "../../titleBlock";
-import Events from "../../events/events";
 import Loading from "../../loading";
 import Card from "../../card/card";
 // CONTEXT ------------------------------------------------------------------
@@ -16,48 +15,62 @@ import {
 import BlockWrapper from "../../blockWrapper";
 
 const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
-  const [listOfEvents, setListOfEvents] = useState();
+  const { dashboardPath, isActiveUser } = useAppState();
 
+  const [listOfEvents, setListOfEvents] = useState();
+  const [eventList, setEventList] = useState(null); // event data
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
   const DEFAULT_IMAGE = `${state.auth.WORDPRESS_URL}wp-content/uploads/2022/03/EVENTS.jpg`;
   const dispatch = useAppDispatch();
-  const { dashboardPath, isActiveUser } = useAppState();
-  if (!isActiveUser) return <Loading />;
+  const useEffectRef = useRef(null);
 
-  useEffect(() => {
-    const filterEvents = async () => {
-      await actions.source.fetch("/events/");
-      const allEvents = Object.values(state.source.events);
-      const { contactid } = isActiveUser;
-      const jwt = await authenticateAppAction({ dispatch, state });
-      const fetchUserEvents = await fetch(
-        state.auth.APP_HOST + "/videvent/" + contactid + "/entities",
-        {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
-        }
-      );
-      if (fetchUserEvents.ok) {
-        let filteredEvents = [];
-        const json = await fetchUserEvents.json();
-        json.data.map((event) => {
-          filteredEvents.push(event.bad_eventid);
-        });
+  useEffect(async () => {
+    // pre fetch events data
+    let data = state.source.events;
+    if (!data) await getEventsData({ state, actions });
+    data = state.source.events;
+    const events = Object.values(data).slice(0, 2);
+    setEventList(events);
 
-        const filteredCompletely = allEvents.filter((item) => {
-          return filteredEvents.includes(item.acf.events_force_id);
-        });
-        setListOfEvents(filteredCompletely);
+    if (!isActiveUser) return null;
+
+    const { contactid } = isActiveUser;
+    const jwt = await authenticateAppAction({ dispatch, state });
+    const fetchUserEvents = await fetch(
+      state.auth.APP_HOST + "/videvent/" + contactid + "/entities",
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
       }
+    );
+
+    console.log("fetchUserEvents", fetchUserEvents);
+    if (fetchUserEvents.ok) {
+      let filteredEvents = [];
+      const json = await fetchUserEvents.json();
+      json.data.map((event) => {
+        filteredEvents.push(event.bad_eventid);
+      });
+
+      console.log("data", data);
+      // convert object to array
+      data = Object.values(data);
+      const relatedEvents = data.filter((item) => {
+        return filteredEvents.includes(item.acf.events_force_id);
+      });
+      console.log("relatedEvents", relatedEvents);
+      setListOfEvents(relatedEvents);
+    }
+
+    return () => {
+      useEffectRef.current = ""; // clean up function
     };
-    filterEvents();
-  }, []);
+  }, [isActiveUser, dashboardPath]);
 
   if (dashboardPath !== "Events") return null;
-
-  if (!listOfEvents) return <Loading />;
+  if (!listOfEvents || !isActiveUser) return <Loading />;
 
   // RETURN ---------------------------------------------
   return (
@@ -102,21 +115,36 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
           disable_vertical_padding: true,
         }}
       />
-      <Events
-        block={{
-          add_search_function: false,
-          background_colour: "transparent",
-          colour: colors.turquoise,
-          disable_vertical_padding: false,
-          event_type: false,
-          grade_filter: "All Levels",
-          grades: false,
-          layout: "layout_two",
-          locations: false,
-          post_limit: "2",
-          view_all_link: false,
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: `repeat(2, 1fr)`,
+          gap: 20,
+          padding: `${marginVertical}px ${marginHorizontal}px`,
         }}
-      />
+      >
+        {eventList.map((block, key) => {
+          const title = block.title.rendered;
+          const { date_time, image } = block.acf;
+
+          return (
+            <Card
+              key={key}
+              title={title}
+              url={image}
+              imgHeight={200}
+              link_label="Read More"
+              link={block.link}
+              colour={colors.turquoise}
+              date={date_time}
+              delay={key}
+              seatNumber="seatNumber"
+              cardHeight="100%"
+              shadow
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };

@@ -1,8 +1,4 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
-
-import { colors } from "../../config/imports";
-import { setGoToAction } from "../../context";
 
 const ElectionInfo = ({ state, actions, libraries, electionInfo, opacity }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.

@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import date from "date-and-time";
 const DATE_MODULE = date;
-
 import { colors } from "../../config/imports";
 
 const FundingHeader = ({ state, actions, libraries, fundingHeader }) => {

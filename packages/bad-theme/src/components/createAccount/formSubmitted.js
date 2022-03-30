@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 import Image from "@frontity/components/image";
@@ -38,13 +37,7 @@ const FormSubmitted = ({ state, actions, formSubmitted }) => {
 };
 
 const styles = {
-  formContainer: {
-    display: "grid",
-    gridTemplateColumns: `repeat(2, 1fr)`,
-    justifyContent: "space-between",
-    gap: 20,
-    margin: `2em 0 2em 0`,
-  },
+  container: {},
 };
 
 export default connect(FormSubmitted);

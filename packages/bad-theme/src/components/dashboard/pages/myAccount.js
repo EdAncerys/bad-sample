@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../../config/colors";

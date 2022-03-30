@@ -1,15 +1,10 @@
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import { connect } from "frontity";
 
-import { colors } from "../../config/imports";
 import SearchContainer from "../searchContainer";
+
 // CONTEXT ----------------------------------------------------------------
-import {
-  useAppDispatch,
-  useAppState,
-  setFilterAction,
-  setGoToAction,
-} from "../../context";
+import { useAppDispatch, useAppState } from "../../context";
 
 const SearchInput = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.

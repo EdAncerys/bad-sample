@@ -7,10 +7,7 @@ import { useAccordionButton } from "react-bootstrap/AccordionButton";
 import AccordionContext from "react-bootstrap/AccordionContext";
 import { colors } from "../../config/imports";
 import Loading from "../loading";
-import AccordionHeader from "./accordionHeader";
 import AccordionBody from "./alteraccordionBody";
-import ActionPlaceholder from "../actionPlaceholder";
-import SearchContainer from "../searchContainer";
 import CardHeader from "./alteraccordionHeader";
 import { useAppState } from "../../context";
 import connect from "@frontity/connect";
@@ -24,7 +21,6 @@ function AlterAccordion({
   leadershipBlock,
   fundingBlock,
   membershipApplications,
-  hasPreview,
   hasPublishDate,
 }) {
   const [isFetching, setFetching] = useState(null);
@@ -39,9 +35,6 @@ function AlterAccordion({
     return <div onClick={decoratedOnClick}>{children}</div>;
   }
 
-  //   const CardHeader = ({ derm, id }) => {
-  //     return <div className="accordion">Biczka</div>;
-  //   };
   if (!block) return <Loading />;
 
   const { dynamicsApps } = useAppState();
@@ -54,12 +47,6 @@ function AlterAccordion({
   // console.log("accordion_item", accordion_item); //debug
 
   const [searchFilter, setSearchFilter] = useState(null);
-  const [searchInput, setInput] = useState(null);
-  const searchFilterRef = useRef(null);
-
-  //   const marginHorizontal = state.theme.marginHorizontal;
-  //   let marginVertical = state.theme.marginVertical / 4;
-  if (disable_vertical_padding) marginVertical = 0;
 
   let isBADApproved = false;
   if (dynamicsApps && dynamicsApps.subs.data.length > 0) isBADApproved = true;
@@ -108,16 +95,6 @@ function AlterAccordion({
               membershipApplications={membershipApplications}
               hasPublishDate={hasPublishDate}
             />
-            {/* <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 4fr",
-                gap: 20,
-              }}
-            >
-              <div></div>
-              <div style={{ padding: 10 }}>Biczka</div>
-            </div> */}
           </Card.Body>
         </Accordion.Collapse>
       </Card>
