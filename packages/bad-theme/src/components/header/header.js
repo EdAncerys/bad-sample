@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import { connect, Global, css } from "frontity";
 import bootStrapCSS from "../../css/bootstrap.min.css";
 import { colors } from "../../config/imports";
@@ -17,9 +16,9 @@ import iFrame from "../../css/iFrame.css";
 import HTMLHead from "./htmlHead";
 import HeaderActions from "./headerActions";
 import Navigation from "./navigation";
-import BlockWrapper from "../blockWrapper";
-import { muiQuery } from "../../context";
 import Loading from "../loading";
+// CONTEXT ----------------------------------------------------------------
+import { muiQuery } from "../../context";
 
 const Header = ({ state, actions }) => {
   const { sm, md, lg, xl } = muiQuery();

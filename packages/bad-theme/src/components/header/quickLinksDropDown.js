@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
-
 import { colors } from "../../config/imports";
 import { MENU_DATA } from "../../config/data";
 // CONTEXT ----------------------------------------------------
