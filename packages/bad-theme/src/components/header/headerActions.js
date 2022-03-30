@@ -137,7 +137,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
     return (
       <div style={{ padding: `0 1em` }}>
         <div
-          className="blue-btn"
+          className="blue-btn-reverse"
           onClick={() =>
             setLoginModalAction({ dispatch, loginModalAction: true })
           }
@@ -155,7 +155,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
       <div style={{ padding: `0 1em` }}>
         <button
           onClick={() => setGoToAction({ state, path: `/dashboard/`, actions })}
-          className="blue-btn"
+          className="blue-btn-reverse"
         >
           My Account
         </button>
