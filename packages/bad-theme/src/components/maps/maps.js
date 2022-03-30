@@ -1,17 +1,8 @@
-import { useState, useCallback, useRef } from "react";
 import { connect } from "frontity";
 
-import {
-  GoogleMap,
-  useJsApiLoader,
-  Marker,
-  LoadScript,
-} from "@react-google-maps/api";
+import { GoogleMap, Marker, LoadScript } from "@react-google-maps/api";
 
-import Loading from "../loading";
-import PinIcon from "../../img/svg/pinIcon.svg";
-import { colors } from "../../config/imports";
-import { useAppDispatch, authenticateAppAction } from "../../context";
+import { useAppDispatch } from "../../context";
 const LIBRARIES = ["places"];
 
 const MapsComponent = ({
@@ -23,9 +14,6 @@ const MapsComponent = ({
   markers,
   queryType,
 }) => {
-  // const { isLoaded } = useJsApiLoader({
-  //   googleMapsApiKey: state.auth.GOOGLE_API_KEY,
-  // });
   const dispatch = useAppDispatch();
 
   const CENTER = center || { lat: 51.5072, lng: -0.1276 };
@@ -36,9 +24,7 @@ const MapsComponent = ({
     height: "100%",
     borderRadius: markers ? 0 : 10,
   };
-  const fetchPostCodeCoordinates = async () => {
-    return { lat: 51.5072, lng: -0.1276 };
-  };
+
   const ServeMarkersOnTheMap = () => {
     if (!markers)
       return <Marker markerLabel={{ text: "Google Map" }} position={CENTER} />;
@@ -82,29 +68,6 @@ const MapsComponent = ({
       </GoogleMap>
     </LoadScript>
   );
-
-  // if (isLoaded)
-  //   return (
-  //     // <GoogleMap
-  //     //   onLoad={loadHandler}
-  //     //   onUnmount={onUnmount}
-  //     //   mapContainerStyle={containerStyle}
-  //     //   // zoom={10}
-  //     //   // defaultCenter={mapCenter}
-  //     // >
-  //     //   <Marker position={MARKER_POSITION} icon={PinIcon} />
-  //     //   <Marker
-  //     //     position={{
-  //     //       lat: 37.672,
-  //     //       lng: -122.214,
-  //     //     }}
-  //     //     icon={PinIcon}
-  //     //     text="Hello World!"
-  //     //   />
-  //     //   <Marker position={mapCenter} icon={PinIcon} title="Hello" />
-  //     // </GoogleMap>
-  //   );
-  // return <Loading />;
 };
 
 export default connect(MapsComponent);
