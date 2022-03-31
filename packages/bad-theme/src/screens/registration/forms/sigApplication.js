@@ -910,7 +910,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
           {inputValidator.bad_currentpost && (
             <div>
               <label className="required form-label">
-                Current post/job title
+                New Post/Job title field (If retired please enter retired)
               </label>
               <input
                 name="bad_currentpost"

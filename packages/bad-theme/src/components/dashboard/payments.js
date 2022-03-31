@@ -28,6 +28,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     setLiveSubscriptions(dynamicsApps);
     setLoading(false);
   }, [loading]);
+
   // when should I return null ?
   if (!subscriptions) return null;
   if (
@@ -90,8 +91,11 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   };
 
   // SERVERS ---------------------------------------------
-  const ServePayments = ({ block, item }) => {
+  const ServePayments = ({ block, item, isApplications }) => {
     if (dashboard && block.bad_sagepayid !== null) return null;
+
+    const { core_totalamount, core_name } = block;
+
     const ServeStatusOrAction = () => {
       // get important data
       const {
@@ -102,7 +106,8 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       } = block;
 
       const ServePayButton = () => {
-        if (bad_sagepayid) return null;
+        if (bad_sagepayid || core_totalamount === "£0.00") return null;
+
         return (
           <div
             type="submit"
@@ -123,6 +128,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
         if (!bad_sagepayid) return null;
         if (bad_sagepayid) return "Paid";
       };
+
       return (
         <div style={{ margin: `auto 0`, width: marginHorizontal * 2 }}>
           <div style={{ padding: `0 2em` }}>
@@ -134,9 +140,11 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     };
 
     const ServeInfo = () => {
-      const dataLength = subs.data.length;
+      // bottom border show for the block if it's the last one
+      let dataLength = liveSubscriptions.subs.data.length;
+      if (isApplications) dataLength = liveSubscriptions.aps.data.length;
       const isLastItem = dataLength === item + 1;
-      const { core_totalamount, core_name } = block;
+
       return (
         <div
           className="flex"
@@ -175,6 +183,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
         ? liveSubscriptions.apps.data.length === 0
         : liveSubscriptions.subs.data.length === 0;
     const appsOrSubs = type === "applications" ? "apps" : "subs";
+
     return (
       <div>
         <div
@@ -186,7 +195,9 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
         {zeroObjects && <ServeSubTitle title="No active subscriptions found" />}
 
         {liveSubscriptions[appsOrSubs].data.map((block, key) => {
-          return <ServePayments key={key} block={block} item={key} />;
+          return (
+            <ServePayments key={key} block={block} item={key} isApplications />
+          );
         })}
       </div>
     );

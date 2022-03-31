@@ -36,6 +36,7 @@ const ApplicationList = ({ state, actions, libraries }) => {
 
   useEffect(() => {
     console.log("API CALL");
+    console.log(subsData);
   }, [applicationData]);
 
   // HELPERS ----------------------------------------------
@@ -188,6 +189,7 @@ const ApplicationList = ({ state, actions, libraries }) => {
                     });
                   }
 
+                  console.log("isSubmitted", isSubmitted);
                   setStatus(isSubmitted); // set status to submitted
                 } catch (error) {
                   console.log(error);
