@@ -125,6 +125,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
             return (
               <div
                 className="label"
+                style={{ marginBottom: "1em" }}
                 onClick={() =>
                   setGoToAction({ state, path: event_label.url, actions })
                 }
@@ -172,7 +173,14 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
                         bottom: `5em`,
                       }}
                     >
-                      <div>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "flex-end",
+                          marginBottom: "2em",
+                        }}
+                      >
                         <ServeEventAction />
                         <div
                           className="flex"

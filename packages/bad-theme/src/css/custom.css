@@ -45,7 +45,14 @@
 .card-image-animated {
   transition: all 0.5s;
 }
-
+.news-carousel-limited-body p {
+  display: block;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow: hidden;
+  max-height: 5.4em;
+  line-height: 1.8em;
+}
 .heading-tile:hover .card-image-animated {
   transform: scale(1.1);
 }
@@ -421,10 +428,10 @@ https://codebeautify.org/
 @keyframes fadeInLeft {
   from {
     opacity: 0;
-    -webkit-transform: translatex(-100px);
-    -moz-transform: translatex(-100px);
-    -o-transform: translatex(-100px);
-    transform: translatex(-100px);
+    -webkit-transform: translatex(-30px);
+    -moz-transform: translatex(-30px);
+    -o-transform: translatex(-30px);
+    transform: translatex(-30px);
   }
   to {
     opacity: 1;

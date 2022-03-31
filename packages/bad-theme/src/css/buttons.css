@@ -109,6 +109,10 @@
 .caps-btn-no-underline:hover {
   color: #3882cd;
 }
+/* 
+.caps-btn:hover {
+  box-shadow: 0 2px #3882cd;
+} */
 .heading-tile:hover .caps-btn::before {
   width: 100%;
 }
