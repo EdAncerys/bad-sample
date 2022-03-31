@@ -696,6 +696,7 @@ const styles = {
     paddingRight: 5,
     fontSize: "12px",
     fontWeight: "bold",
+    textTransform: "uppercase",
   },
   action: {
     backgroundColor: colors.silverFillOne,
