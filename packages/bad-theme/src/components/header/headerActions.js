@@ -130,18 +130,21 @@ const HeaderActions = ({ state, actions, libraries }) => {
     }
   };
 
+  const handleLoginAction = () => {
+    // setLoginModalAction({ dispatch, loginModalAction: true })
+    const url =
+      "https://britishad.b2clogin.com/BritishAD.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1_signupsignin_uat&client_id=adbed72d-5ee0-49b1-a064-421bdbcd68b2&nonce=defaultNonce&redirect_uri=http://localhost:3000/codecollect&scope=openid&response_type=id_token&prompt=login";
+    // set window location to login page
+    window.location.href = url;
+  };
+
   // SERVERS ----------------------------------------------------
   const ServeLoginAction = () => {
     if (isActiveUser) return null;
 
     return (
       <div style={{ padding: `0 1em` }}>
-        <div
-          className="blue-btn-reverse"
-          onClick={() =>
-            setLoginModalAction({ dispatch, loginModalAction: true })
-          }
-        >
+        <div className="blue-btn-reverse" onClick={handleLoginAction}>
           Login
         </div>
       </div>

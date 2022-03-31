@@ -66,7 +66,6 @@ const EventLoopBlock = ({
     let data = state.source.events;
 
     let eventList = Object.values(data);
-    console.log("eventList", eventList); // debug
     const grades = Object.values(state.source.event_grade);
 
     let gradeFilter = [];

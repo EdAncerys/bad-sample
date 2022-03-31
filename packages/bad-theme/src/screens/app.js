@@ -20,6 +20,7 @@ import Page from "./page";
 import Contact from "./contact";
 import Login from "./login";
 import Home from "./home";
+import Codecollect from "./codecollect";
 import PilsArchive from "./pilsArchive";
 import Pils from "./pils";
 import AppSearch from "./appSearch";
@@ -41,12 +42,10 @@ import PaymentConfirmation from "./paymentConfirmation";
 import VideoArchive from "../components/videoArchive";
 import VideoGuides from "../components/videoGuides";
 import Video from "../components/video";
-import FindADermatologist from "../components/findADermatologist";
 // SCREEN HELPERS ---------------------------------------------------------
 import Error from "./error";
 import Loading from "../components/loading";
 import BlockWrapper from "../components/blockWrapper";
-import { useScript } from "../hooks/useScript";
 import { useQuery } from "../hooks/useQuery";
 // CONTEXT ----------------------------------------------------------------
 import {
@@ -65,11 +64,6 @@ const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { isActiveUser, isPlaceholder, idFilter } = useAppState();
   const { sm, md, lg, xl, xxl } = muiQuery();
-
-  // ⬇️ import custom hook for Google API ⬇️
-  // useScript({
-  //   url: `https://maps.googleapis.com/maps/api/js?key=${state.auth.GOOGLE_API_KEY}&libraries=places`,
-  // });
 
   let endPoint = state.router.link;
   const data = state.source.get(endPoint);
@@ -193,6 +187,7 @@ const App = ({ state, actions }) => {
                   when={endPoint === "/patient-information-leaflets/"}
                 />
 
+                <Codecollect when={endPoint.includes("codecollect")} />
                 <Pils when={data.isPils} />
                 <AppSearch when={endPoint === "/search/"} />
                 <Event when={data.isEvents} />
@@ -200,7 +195,7 @@ const App = ({ state, actions }) => {
                 <DermGroupsCharity when={data.isDermGroupsCharity} />
                 <Covid when={data.isCovid19} />
                 <VideoArchive when={endPoint === "/videos/"} />
-                <Home when={data.isHome} />
+                <Home when={data.isHome || endPoint === "/"} />
 
                 <Post when={data.isPost} />
                 <Page when={data.isPage} />

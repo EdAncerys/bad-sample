@@ -186,7 +186,6 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
 
     // return null if data is less than chunkRef
     if (data.length < chunkRef.current) return null;
-    console.log("🐞 ", feedData.length, chunkRef.current); // debug
 
     return (
       <div
