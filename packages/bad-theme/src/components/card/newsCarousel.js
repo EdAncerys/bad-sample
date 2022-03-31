@@ -115,6 +115,8 @@ const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
   const ServeBody = () => {
     if (!excerpt || !title) return null;
 
+    const first_sentence = excerpt.rendered.split(".");
+    const shorter = first_sentence.toString();
     if (featured_media)
       return (
         <div
@@ -127,7 +129,7 @@ const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
 
     return (
       <div style={{ padding: `1em 1.5em` }}>
-        <Html2React html={excerpt.rendered} />
+        <Html2React html={shorter} />.
       </div>
     );
   };
