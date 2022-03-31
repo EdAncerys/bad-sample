@@ -47,11 +47,11 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
     // sort memberships by bad_order accenting & if no value push to end
     membershipData.sort((a, b) => {
       // sort memberships alphabetically
-      if (a.bad_order < b.bad_order) return -1;
-      if (a.bad_order > b.bad_order) return 1;
+      if (a.acf.category_types < b.acf.category_types) return -1;
+      if (a.acf.category_types > b.acf.category_types) return 1;
       return 0;
 
-      // uncomment to sort by bad_order
+      // 📌 uncomment to sort by bad_order
       // if (a.acf.bad_order && b.acf.bad_order) {
       //   return a.acf.bad_order - b.acf.bad_order;
       // } else if (a.acf.bad_order) {

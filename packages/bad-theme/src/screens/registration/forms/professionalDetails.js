@@ -64,8 +64,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     py3_ntnno: true,
     bad_currentpost: true,
     py3_hospitalid: true,
-    bad_proposer1: true,
-    bad_proposer2: true,
+    bad_proposer1: false, // 📌 remove by default
+    bad_proposer2: false, // 📌 remove by default
     sky_cvurl: true,
     py3_currentgrade: true,
     sky_newhospitalname: true,
