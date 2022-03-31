@@ -299,10 +299,10 @@ const Event = ({ state, actions, libraries }) => {
     const ServeInformationForUser = () => {
       if (registration_type === "events_force" && !isActiveUser) {
         return (
-          <div style={{ padding: "1em 0" }}>
-            "Please login to your BAD account and use your registered email
+          <div style={{ padding: "1em 0", textAlign: "center" }}>
+            Please login to your BAD account and use your registered email
             address for signing up to this event, this will enable us to link
-            your registration to your BAD account"
+            your registration to your BAD account
           </div>
         );
       }
@@ -355,12 +355,13 @@ const Event = ({ state, actions, libraries }) => {
       <div
         className="flex"
         style={{
-          // backgroundColor: colors.lightSilver, // optional background color
+          backgroundColor: colors.white, // optional background color
           justifyContent: "center",
           padding: `2em`,
           margin: `0`,
           flexDirection: "column",
           alignItems: "center",
+          marginTop: "1em",
         }}
       >
         <ServeInformationForUser />
@@ -605,7 +606,7 @@ const Event = ({ state, actions, libraries }) => {
   };
 
   return (
-    <BlockWrapper>
+    <BlockWrapper background={colors.silverFillOne}>
       <div style={{ backgroundColor: colors.silverFillOne }}>
         <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
           <div style={!lg ? styles.container : styles.containerMobile}>
@@ -630,7 +631,7 @@ const Event = ({ state, actions, libraries }) => {
       <div
         style={{
           padding: `${marginVertical}px ${marginHorizontal}px`,
-          backgroundColor: colors.darkSilver,
+          backgroundColor: colors.lightSilver,
         }}
       >
         <RowButton
@@ -691,6 +692,8 @@ const styles = {
   },
   date: {
     paddingRight: 5,
+    fontSize: "12px",
+    fontWeight: "bold",
   },
   action: {
     backgroundColor: colors.silverFillOne,
