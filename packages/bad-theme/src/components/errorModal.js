@@ -22,7 +22,7 @@ const ErrorModal = ({ state, actions }) => {
   // HANDLERS ----------------------------------------------------
   const handleKeyPress = (e) => {
     // handle close modal on enter key
-    if (e.key === "Enter") actionHandler();
+    if (isError && e.key === "Enter") actionHandler();
   };
 
   const actionHandler = () => {
