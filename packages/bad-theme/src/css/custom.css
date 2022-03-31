@@ -441,14 +441,20 @@ https://codebeautify.org/
     transform: translatex(0);
   }
 }
-.carousel-caption {
+/* .carousel-caption {
   opacity: 0;
-}
-.carousel-item.active .carousel-caption {
+} */
+/* .carousel-item.active .carousel-caption {
   animation-name: fadeInLeft;
   animation-duration: 1s;
   animation-fill-mode: forwards;
   /* transition: opacity 1s !important; */
+/* } */
+.anim-fadeInLeft {
+  opacity: 0;
+  animation-name: fadeInLeft;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
 }
 
 ::-webkit-scrollbar-track {
