@@ -953,7 +953,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
           {inputValidator.py3_hospitalid && (
             <div>
               <label className="form-label required">
-                Main Place of Work / Medical School
+                Main Hospital / Place of Work / Medical School details
               </label>
               <div style={{ position: "relative" }}>
                 {selectedHospital && (
@@ -1000,7 +1000,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                       onChange={handleHospitalLookup}
                       type="text"
                       className="form-control input"
-                      placeholder="Main Hospital/Place of work"
+                      placeholder="Main Hospital / Place of Work / Medical School details"
                     />
                     <FormError id="py3_hospitalid" />
                   </div>

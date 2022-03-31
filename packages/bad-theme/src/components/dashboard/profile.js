@@ -153,7 +153,7 @@ const Profile = ({ state, actions, libraries }) => {
       return (
         <div className="flex-col" style={styles.container}>
           <span className="primary-title">
-            Main Place of work / Medical School:{" "}
+            Main Hospital / Place of Work / Medical School details:{" "}
           </span>
           <Html2React html={mainPlaceOfWorkCategory} />
         </div>

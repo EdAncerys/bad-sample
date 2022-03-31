@@ -78,7 +78,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
 
         // default email subject & template name
         emailSubject:
-          "Change of Professional Details Request. Main Place of Work / Medical School",
+          "Change of Professional Details Request. Main Hospital / Place of Work / Medical School details",
         emailTemplate: "ChangeOfHospital",
       },
     });
@@ -209,7 +209,9 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
 
           <div>
             <div>
-              <label>Main Place of work / Medical School</label>
+              <label>
+                Main Hospital / Place of Work / Medical School details
+              </label>
               <input
                 name="address1_line1"
                 value={
@@ -219,7 +221,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 }
                 onChange={handleInputChange}
                 className="form-control input"
-                placeholder="Main Place of work / Medical School"
+                placeholder="Main Hospital / Place of Work / Medical School details"
                 disabled
               />
             </div>

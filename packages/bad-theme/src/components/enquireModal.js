@@ -396,7 +396,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
             {enquireAction.isHospitalChange && (
               <div>
                 <label className="form-label">
-                  Main Place of Work / Medical School
+                  Main Hospital / Place of Work / Medical School details
                 </label>
                 <div style={{ position: "relative" }}>
                   {formData.hospitalChangeName && (
@@ -439,7 +439,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
                         onChange={handleHospitalLookup}
                         type="text"
                         className="form-control input"
-                        placeholder="Main Hospital/Place of work"
+                        placeholder="Main Hospital / Place of Work / Medical School details"
                       />
                     </div>
                   )}
