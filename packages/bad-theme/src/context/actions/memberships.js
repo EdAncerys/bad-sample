@@ -112,7 +112,8 @@ export const handleApplyForMembershipAction = async ({
       if (!canUpdateApplication) {
         let confirmationMsg = `You already have application open and unsubmitted! Please go to your dashboard to continue or cancel this application`;
         if (applicationData) {
-          const type = applicationData[0].bad_categorytype;
+          let type = applicationData[0].bad_categorytype;
+          if (type === "*") type = "Special Interest Group";
           confirmationMsg = `You already have ${type} application open and unsubmitted! Please go to your dashboard to continue or cancel this application`;
         }
         // if user have existing application show error msg

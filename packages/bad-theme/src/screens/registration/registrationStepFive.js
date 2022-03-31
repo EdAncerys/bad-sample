@@ -21,7 +21,9 @@ const RegistrationStepFive = ({ state, actions }) => {
   useEffect(() => {
     if (!applicationData) return null;
     // get SIG application category type from applicationData
-    const type = applicationData[0].bad_categorytype;
+    let type = applicationData[0].bad_categorytype;
+    if (type === "*") type = `Special Interest Group`;
+
     setType(type);
   }, []);
 

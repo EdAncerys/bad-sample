@@ -23,6 +23,7 @@ import {
   getDirectDebitAction,
   getApplicationStatus,
   muiQuery,
+  handleApplyForMembershipAction,
 } from "../context";
 
 const AccountDashboard = ({ state, actions, libraries }) => {
@@ -31,7 +32,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const { isActiveUser, dynamicsApps } = useAppState();
+  const { isActiveUser, dynamicsApps, applicationData } = useAppState();
 
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
@@ -81,6 +82,27 @@ const AccountDashboard = ({ state, actions, libraries }) => {
 
   if (!isReady) return null;
 
+  // HANDLERS --------------------------------------------------
+  const handleApply = async ({ catType }) => {
+    await handleApplyForMembershipAction({
+      state,
+      actions,
+      dispatch,
+      applicationData,
+      isActiveUser,
+      dynamicsApps,
+      category: "SIG",
+      type: catType || "", // application type name
+      membershipApplication: {
+        stepOne: false,
+        stepTwo: false,
+        stepThree: false,
+        stepFour: false,
+      },
+      path: "/membership/sig-questions/", // redirect to SIG form page
+    });
+  };
+
   const ServeDashboardActions = () => {
     let applicationTitle = "Apply for BAD Membership";
     let applicationPath = "/membership/categories-of-membership/";
@@ -104,7 +126,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
                   {
                     title: "Apply for SIG Membership",
                     colour: colors.green,
-                    link: { url: "/derm-groups-charity/" },
+                    onClickAction: () => handleApply({ catType: "*" }), // * = all categories
                   },
                   {
                     title: "Register for an event",

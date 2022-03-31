@@ -206,7 +206,10 @@ const ProfileProgress = ({ state, actions, libraries }) => {
 
     // get application name & type & concat in string
     const appData = applicationData[0]; // application info data
-    const appProgress = `${appData.bad_organisedfor} - ${appData.bad_categorytype}: ${applicationStep}`;
+    let appProgress = `${appData.bad_organisedfor} - ${appData.bad_categorytype}: ${applicationStep}`;
+    // general SIG application route
+    if (appData.bad_categorytype === "*")
+      appProgress = `${appData.bad_organisedfor}: Started Special Interest Group application`;
 
     return (
       <div style={{ position: "relative" }}>
