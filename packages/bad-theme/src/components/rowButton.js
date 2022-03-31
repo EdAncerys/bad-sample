@@ -28,6 +28,7 @@ const RowButton = ({
     recipients,
     link_id,
     file_link,
+    onClickAction,
   } = block;
 
   // ⬇️ initialize new enquireAction object & update object with new values
@@ -97,6 +98,10 @@ const RowButton = ({
         }
         if (onClick) {
           onClick();
+          return;
+        }
+        if (onClickAction) {
+          onClickAction();
           return;
         }
         if (contact_form) {

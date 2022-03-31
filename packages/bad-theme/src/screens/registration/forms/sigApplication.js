@@ -224,9 +224,21 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
     if (membershipData) {
       // filter memberships data & return memberships that includes applicationType
-      membershipData = membershipData.filter((item) =>
-        item.acf.category_types.includes(applicationType)
-      );
+      membershipData = membershipData.filter((item) => {
+        // if applicationType is * then return all memberships that are SIG
+        if (applicationType === "*") {
+          return item.acf.bad_or_sig === "sig";
+        }
+
+        item.acf.category_types.includes(applicationType);
+      });
+
+      // sort membershipData alphabetically
+      membershipData = membershipData.sort((a, b) => {
+        if (a.acf.category_types < b.acf.category_types) return -1;
+        if (a.acf.category_types > b.acf.category_types) return 1;
+        return 0;
+      });
     }
 
     // check if application category have only one application
