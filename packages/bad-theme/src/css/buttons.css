@@ -33,10 +33,14 @@
   color: #1f335e !important;
 }
 
+.blue-btn:hover a {
+  color: white !important;
+}
+
 .blue-btn:hover {
   box-shadow: inset 0 3.25em 0 0 #1f335e;
   background-color: rgb(31, 51, 94, 0.9);
-  color: white;
+  color: white !important;
 }
 
 .blue-btn-reverse:hover {

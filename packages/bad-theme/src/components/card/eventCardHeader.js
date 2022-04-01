@@ -17,7 +17,7 @@ const EventCardHeader = ({ state, actions, libraries, eventHeader }) => {
 
     return (
       <div>
-        <div className="flex">
+        <div className="flex" style={{ gap: 10 }}>
           {date_time.map((block, key) => {
             const { date, end_time, start_time } = block;
 
@@ -28,9 +28,10 @@ const EventCardHeader = ({ state, actions, libraries, eventHeader }) => {
               <div
                 key={key}
                 style={{
-                  fontSize: 12,
+                  fontSize: 11,
                   fontWeight: "bold",
                   paddingRight: `1em`,
+                  backgroundColor: colors.lightSilver,
                 }}
               >
                 <Html2React html={formattedDate} />
@@ -48,13 +49,13 @@ const EventCardHeader = ({ state, actions, libraries, eventHeader }) => {
         className="flex"
         style={{
           padding: `0.5em`,
-          backgroundColor: colors.lightSilver,
           fontSize: 12,
           letterSpacing: 2,
           borderRadius: 5,
           textTransform: "uppercase",
           marginBottom: `2em`,
           flexWrap: "wrap",
+          gap: 10,
         }}
       >
         <ServeDate />
