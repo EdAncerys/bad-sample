@@ -12,6 +12,7 @@ import Loading from "../../components/loading";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import CircularProgress from "@mui/material/CircularProgress";
+import { handleSetCookie } from "../../helpers/cookie";
 
 // CONTEXT ----------------------------------------------------------------
 import {
@@ -29,7 +30,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
-  let endPoint = state.router.link;
+  let urlPath = state.router.link;
 
   const [isReady, SetReady] = useState(null);
   const [filter, setFilter] = useState(null);
@@ -131,11 +132,23 @@ const HeaderActions = ({ state, actions, libraries }) => {
   };
 
   const handleLoginAction = () => {
-    // setLoginModalAction({ dispatch, loginModalAction: true })
+    // --------------------------------------------------------------------------------
+    // 📌  B2C login auth path endpoint
+    // --------------------------------------------------------------------------------
+
     const url =
       "https://britishad.b2clogin.com/BritishAD.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1_signupsignin_uat&client_id=adbed72d-5ee0-49b1-a064-421bdbcd68b2&nonce=defaultNonce&redirect_uri=http://localhost:3000/codecollect&scope=openid&response_type=id_token&prompt=login";
-    // set window location to login page
+
+    // get current url path and store in cookieValue
+    handleSetCookie({
+      name: "redirect",
+      value: urlPath,
+      days: 1,
+    });
+
+    // redirect to B2C auth set window location to login page
     window.location.href = url;
+    // setLoginModalAction({ dispatch, loginModalAction: true })
   };
 
   // SERVERS ----------------------------------------------------

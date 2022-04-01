@@ -11,8 +11,8 @@ import { muiQuery } from "../context";
 const Footer = ({ state, actions }) => {
   const { sm, md, lg, xl } = muiQuery();
 
-  const endPoint = state.router.link;
-  if (endPoint.includes("/redirect/")) return null;
+  const urlPath = state.router.link;
+  if (urlPath.includes("/redirect/")) return null;
 
   const date = new Date();
   const year = date.getFullYear();

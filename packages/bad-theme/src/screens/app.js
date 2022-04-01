@@ -47,6 +47,7 @@ import Error from "./error";
 import Loading from "../components/loading";
 import BlockWrapper from "../components/blockWrapper";
 import { useQuery } from "../hooks/useQuery";
+import { useB2CLogin } from "../hooks/useB2CLogin";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -65,8 +66,13 @@ const App = ({ state, actions }) => {
   const { isActiveUser, isPlaceholder, idFilter } = useAppState();
   const { sm, md, lg, xl, xxl } = muiQuery();
 
-  let endPoint = state.router.link;
-  const data = state.source.get(endPoint);
+  // --------------------------------------------------------------------------------
+  // 📌  B2C login handler.
+  // --------------------------------------------------------------------------------
+  useB2CLogin({ state, actions });
+
+  let urlPath = state.router.link;
+  const data = state.source.get(urlPath);
   console.log("INDEX data", data); // debug
 
   // ⬇️ hook for media queries ⬇️
@@ -76,9 +82,12 @@ const App = ({ state, actions }) => {
   useEffect(() => {
     // ⬇️ restore scroll history to manual position ⬇️
     window.history.scrollRestoration = "manual";
-  }, [endPoint]);
+  }, [urlPath]);
 
   useEffect(async () => {
+    // --------------------------------------------------------------------------------
+    // 📌  PRE-FETCH CONTENT DATA HANDLERS
+    // --------------------------------------------------------------------------------
     // get current time & save it to variable
     const currentTime = new Date().getTime();
     if (!isPlaceholder) return; // trigger only once
@@ -95,8 +104,11 @@ const App = ({ state, actions }) => {
     if (timeTaken < 3000) {
       await new Promise((resolve) => setTimeout(resolve, 3000 - timeTaken));
     }
-    // ⬇️  set placeholder after async actions to false
-    setPlaceholderAction({ dispatch, isPlaceholder: false });
+    // ⬇️  set APP placeholder after async actions to false
+    // if page path include codecollect, skip placeholder
+    if (!urlPath.includes("codecollect"))
+      setPlaceholderAction({ dispatch, isPlaceholder: false });
+    // animation handler
     AOS.init();
     return () => {
       useEffectRef.current = false; // clean up function
@@ -109,9 +121,9 @@ const App = ({ state, actions }) => {
 
     // ⬇️  clearing id reference
     const slug = "/guidelines-and-standards/clinical-guidelines/";
-    if (idFilter && endPoint !== slug)
+    if (idFilter && urlPath !== slug)
       setIDFilterAction({ dispatch, idFilter: null }); // reset filter id on page change
-  }, [endPoint]);
+  }, [urlPath]);
 
   const transitions = useTransition(isPlaceholder, {
     from: { opacity: 0 },
@@ -128,7 +140,7 @@ const App = ({ state, actions }) => {
   return transitions(({ opacity }, appContent) =>
     appContent ? (
       <animated.div className="no-selector">
-        <AnimatedPlaceholder opacity={opacity} appContent={appContent} />
+        <AnimatedPlaceholder opacity={opacity} />
       </animated.div>
     ) : (
       <animated.div
@@ -156,46 +168,46 @@ const App = ({ state, actions }) => {
                 <Error when={data.isError} />
                 <BlocksPage when={data.route.includes("blocks")} />
 
-                <Login when={endPoint === "/login/"} />
-                <CreateAccount when={endPoint === "/create-account/"} />
+                <Login when={urlPath === "/login/"} />
+                <CreateAccount when={urlPath === "/create-account/"} />
 
                 <AccountDashboard
-                  when={endPoint === "/dashboard/" && isActiveUser}
+                  when={urlPath === "/dashboard/" && isActiveUser}
                 />
-                <Contact when={endPoint === "/contact-us/"} />
+                <Contact when={urlPath === "/contact-us/"} />
                 <RegistrationStepOne
-                  when={endPoint === "/membership/step-1-the-process/"}
+                  when={urlPath === "/membership/step-1-the-process/"}
                 />
                 <RegistrationStepTwo
-                  when={endPoint === "/membership/step-2-category-selection/"}
+                  when={urlPath === "/membership/step-2-category-selection/"}
                 />
                 <ApplicationChange
-                  when={endPoint === "/membership/application-change/"}
+                  when={urlPath === "/membership/application-change/"}
                 />
                 <RegistrationStepThree
-                  when={endPoint === "/membership/step-3-personal-information/"}
+                  when={urlPath === "/membership/step-3-personal-information/"}
                 />
                 <RegistrationStepFour
-                  when={endPoint === "/membership/step-4-professional-details/"}
+                  when={urlPath === "/membership/step-4-professional-details/"}
                 />
                 <RegistrationStepFive
-                  when={endPoint === "/membership/sig-questions/"}
+                  when={urlPath === "/membership/sig-questions/"}
                 />
-                <ThankYou when={endPoint === "/membership/thank-you/"} />
-                <EventsLandingPage when={endPoint === "/events/"} />
+                <ThankYou when={urlPath === "/membership/thank-you/"} />
+                <EventsLandingPage when={urlPath === "/events/"} />
                 <PilsArchive
-                  when={endPoint === "/patient-information-leaflets/"}
+                  when={urlPath === "/patient-information-leaflets/"}
                 />
 
-                <Codecollect when={endPoint.includes("codecollect")} />
+                <Codecollect when={urlPath.includes("codecollect")} />
                 <Pils when={data.isPils} />
-                <AppSearch when={endPoint === "/search/"} />
+                <AppSearch when={urlPath === "/search/"} />
                 <Event when={data.isEvents} />
                 <Venue when={data.isVenues} />
                 <DermGroupsCharity when={data.isDermGroupsCharity} />
                 <Covid when={data.isCovid19} />
-                <VideoArchive when={endPoint === "/videos/"} />
-                <Home when={data.isHome || endPoint === "/"} />
+                <VideoArchive when={urlPath === "/videos/"} />
+                <Home when={data.isHome || urlPath === "/"} />
 
                 <Post when={data.isPost} />
                 <Page when={data.isPage} />
