@@ -116,7 +116,6 @@ const LoginModal = ({ state, actions }) => {
             width="100%"
             height="1000"
             src={state.auth.IFRAME_URL}
-            // src="https://britishad.b2clogin.com/BritishAD.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1_signupsignin_uat&client_id=adbed72d-5ee0-49b1-a064-421bdbcd68b2&nonce=defaultNonce&redirect_uri=http://localhost:3000/codecollect&scope=openid&response_type=id_token&prompt=login"
           ></iframe>
         </div>
       );

@@ -53,8 +53,8 @@ const CardActions = ({
 
   const handleFeedLink = () => {
     // check if logged in user exists || otherwise error notification
-    if (!isActiveUser) {
-      // track notification error action
+    if (rssFeedLink && !isActiveUser) {
+      // 📌 track notification error action
       setErrorAction({
         dispatch,
         isError: {

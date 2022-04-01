@@ -20,7 +20,7 @@ export const useB2CLogin = ({ state, actions }) => {
   // await to get window object & setWindow to true
   useEffect(() => {
     if (window) {
-      console.log("🐞  B2C Login Hook. Have window object 🐞"); // debug
+      console.log("📌 B2C Login Hook. 📌"); // debug
       setWindow(window);
     }
   }, []);
@@ -29,10 +29,14 @@ export const useB2CLogin = ({ state, actions }) => {
   useEffect(() => {
     if (isWindow) {
       const hash = isWindow.location.hash;
+      // get redirect url from cookie
+      const redirectUrl = handleGetCookie({ name: "redirect" });
 
       if (hash) setHash(hash);
-      if (!hash && urlPath.includes("codecollect"))
-        console.log("🐞 hash not found. REDIRECT");
+      if (!hash && urlPath.includes("codecollect")) {
+        setGoToAction({ state, path: redirectUrl, actions }); // 🐞 redirect to url path if failed to get hash
+        setPlaceholderAction({ dispatch, isPlaceholder: false });
+      }
     }
   }, [isWindow]);
 

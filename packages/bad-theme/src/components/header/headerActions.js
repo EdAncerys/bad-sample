@@ -131,16 +131,20 @@ const HeaderActions = ({ state, actions, libraries }) => {
     }
   };
 
+  console.log("🐞 ", state.auth.APP_URL);
+
   const handleLoginAction = () => {
     // --------------------------------------------------------------------------------
     // 📌  B2C login auth path endpoint
     // --------------------------------------------------------------------------------
 
-    // 📌 replace with when auth by B2c state.auth.APP_URL
+    // 📌 auth B2c redirect url based on App default url
+    // const redirectPath = `&redirect_uri=${state.auth.APP_URL}codecollect`;
     const redirectPath = `&redirect_uri=http://localhost:3000/codecollect`;
     const url =
       state.auth.B2C +
       `${redirectPath}&scope=openid&response_type=id_token&prompt=login`;
+    console.log("🐞 ", url);
 
     // get current url path and store in cookieValue
     handleSetCookie({
@@ -151,7 +155,6 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
     // redirect to B2C auth set window location to login page
     window.location.href = url;
-    // setLoginModalAction({ dispatch, loginModalAction: true })
   };
 
   // SERVERS ----------------------------------------------------

@@ -1,6 +1,12 @@
 import { authenticateAppAction } from "../index";
 
-export const getWileyAction = async ({ state, doi, isActiveUser }) => {
+export const getWileyAction = async ({
+  state,
+  doi,
+  isActiveUser,
+  isFullAccess,
+  url,
+}) => {
   console.log("getWileyAction triggered");
 
   let isValidId = "";
@@ -11,6 +17,8 @@ export const getWileyAction = async ({ state, doi, isActiveUser }) => {
 
   const URL = state.auth.APP_HOST + `/wiley?contactid=${isValidId}`;
   const jwt = await authenticateAppAction({ state });
+  let body = JSON.stringify({ doi: `doi/${doi}` }); // individual post access auth link
+  if (isFullAccess) body = JSON.stringify({ target: url }); // full access auth link
 
   const requestOptions = {
     method: "POST",
@@ -18,14 +26,12 @@ export const getWileyAction = async ({ state, doi, isActiveUser }) => {
       Authorization: `Bearer ${jwt}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ doi: `doi/${doi}` }),
+    body,
   };
 
   try {
     const data = await fetch(URL, requestOptions);
     const wiley = await data.json();
-    // console.log("getWileyAction wiley", wiley); // debug
-    // if (wiley.tps) console.log("secure link 👌 wia wileys"); // debug
 
     if (wiley.success) return wiley.data;
     return null;

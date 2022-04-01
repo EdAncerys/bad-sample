@@ -26,7 +26,14 @@ import GeneralModal from "../elections/generalModal";
 import DownloadFileBlock from "../downloadFileBlock";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 // CONTEXT ----------------------------------------------------------------
-import { useAppState, setGoToAction, getWileyAction } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setGoToAction,
+  getWileyAction,
+  setErrorAction,
+  setLoginModalAction,
+} from "../../context";
 
 const Card = ({
   state,
@@ -111,6 +118,7 @@ const Card = ({
   let isCardAnimation = "card-wrapper";
   if (disableCardAnimation) isCardAnimation = "";
 
+  const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
 
   const [authLink, setAuthLink] = useState(null);
@@ -132,6 +140,7 @@ const Card = ({
         const wileyLink = await getWileyAction({ state, doi, isActiveUser });
         if (wileyLink) authLink = wileyLink;
       }
+      console.log("🐞 ", authLink);
     } catch (error) {
       console.log(error);
     } finally {
@@ -145,6 +154,37 @@ const Card = ({
   }, [isActiveUser]);
 
   // HANDLERS ---------------------------------------------
+  const handelLogin = () => {
+    setErrorAction({ dispatch, isError: null });
+    setLoginModalAction({ dispatch, loginModalAction: true });
+  };
+
+  const handelRedirect = () => {
+    setErrorAction({ dispatch, isError: null });
+    setGoToAction({ state, path: authLink, actions });
+  };
+
+  const onClickHandler = () => {
+    if (rssFeedLink && !isActiveUser) {
+      // 📌 track notification error action
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals.`,
+          image: "Error",
+          action: [
+            {
+              label: "Read Publication",
+              handler: handelRedirect,
+            },
+            { label: "Login", handler: handelLogin },
+          ],
+        },
+      });
+      return;
+    }
+    setGoToAction({ state, path: link || authLink, actions, downloadFile });
+  };
 
   // SERVERS ----------------------------------------------
   const ServeFooter = () => {
@@ -354,9 +394,7 @@ const Card = ({
         height: videoArchive ? null : CARD_HEIGHT,
         minHeight: MIN_CARD_HEIGHT,
       }}
-      onClick={() =>
-        setGoToAction({ state, path: link || authLink, actions, downloadFile })
-      }
+      onClick={onClickHandler}
       data-aos={animationType || "fade"}
       data-aos-delay={`${delay * 50}`}
       data-aos-duration="500"

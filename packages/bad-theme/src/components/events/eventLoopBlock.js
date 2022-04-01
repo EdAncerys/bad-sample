@@ -80,7 +80,6 @@ const EventLoopBlock = ({
       });
     }
 
-    console.log("🐞 ", eventList);
     // sort events by date newest first
     eventList.sort((a, b) => {
       let dateA = a.acf.date_time;
