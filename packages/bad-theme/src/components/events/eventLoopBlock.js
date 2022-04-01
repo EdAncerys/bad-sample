@@ -80,14 +80,19 @@ const EventLoopBlock = ({
       });
     }
 
-    // sort events in order by date accenting from
-    eventList = eventList.sort((a, b) => {
-      // if !date_time return null;
-      if (!a.date_time || !b.date_time) return null;
-      new Date(a.acf.date_time[0].date) - new Date(b.acf.date_time[0].date);
+    console.log("🐞 ", eventList);
+    // sort events by date newest first
+    eventList.sort((a, b) => {
+      let dateA = a.acf.date_time;
+      let dateB = b.acf.date_time;
+      if (dateA) dateA = dateA[0].date;
+      if (dateB) dateB = dateB[0].date;
+
+      if (dateA > dateB) return -1;
+      if (dateA < dateB) return 1;
+      return 0;
     });
 
-    // console.log("🚀 event list", eventList.length); // debug
     setEventList(eventList);
     setGradeFilterId(gradeFilter);
 

@@ -131,13 +131,6 @@ const HeaderActions = ({ state, actions, libraries }) => {
     }
   };
 
-  console.log(
-    "🐞 ",
-    state.auth.B2C +
-      "&redirect_uri=" +
-      state.auth.APP_URL +
-      `codecollect&scope=openid&response_type=id_token&prompt=login`
-  );
   const handleLoginAction = () => {
     // --------------------------------------------------------------------------------
     // 📌  B2C login auth path endpoint
