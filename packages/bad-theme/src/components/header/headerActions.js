@@ -139,8 +139,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
     // --------------------------------------------------------------------------------
 
     // 📌 auth B2c redirect url based on App default url
-    // const redirectPath = `&redirect_uri=${state.auth.APP_URL}codecollect`;
-    const redirectPath = `&redirect_uri=http://localhost:3000/codecollect`;
+    const redirectPath = `&redirect_uri=${state.auth.APP_URL}/codecollect`;
     const url =
       state.auth.B2C +
       `${redirectPath}&scope=openid&response_type=id_token&prompt=login`;
