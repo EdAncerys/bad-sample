@@ -3,8 +3,8 @@ import BADTheme from "../../client";
 // import state APP_URL from client state with process.env.APP_URL
 
 export const setGoToAction = async ({ state, path, actions, downloadFile }) => {
-  if (!path && !downloadFile) return null;
   // console.log("setGoToAction triggered", path, downloadFile); // debug
+  if (!path && !downloadFile) return null;
 
   const pathOne = `http://3.9.193.188`;
   const pathTwo = `https://badadmin.skylarkdev.co`;

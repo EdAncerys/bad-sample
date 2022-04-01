@@ -56,6 +56,7 @@ export const authenticateAppAction = async ({ state }) => {
     const response = await data.json();
 
     if (response.token) {
+      // console.log("🐞 ", response.token); // debug
       return response.token;
     } else {
       return null;

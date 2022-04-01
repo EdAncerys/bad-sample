@@ -4,12 +4,13 @@ import parse from "html-react-parser";
 
 import { colors } from "../../config/imports";
 import DownloadFileBlock from "../downloadFileBlock";
+import CircularProgress from "@mui/material/CircularProgress";
+
 // CONTEXT ------------------------------------------------
 import {
   useAppDispatch,
   useAppState,
   setGoToAction,
-  getWileyAction,
   setErrorAction,
   setLoginModalAction,
 } from "../../context";
@@ -27,48 +28,19 @@ const CardActions = ({
   electionBlocks,
   rssFeedLink,
   videoArchive,
+  isFetching,
+  authLink,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
 
-  const [authLink, setAuthLink] = useState(null);
-  const [isFetching, setFetching] = useState(null);
-  const useEffectRef = useRef(null);
-
   // ⏬⏬  hide component if data not provided ⏬⏬
   if (!link && !form_link && !downloadFile && !handler && !rssFeedLink)
     return null;
 
   // HANDLERS ------------------------------------------
-  useEffect(async () => {
-    if (!rssFeedLink) return null;
-
-    const { link, doi } = rssFeedLink;
-    let authLink = link;
-
-    try {
-      setFetching(true);
-
-      // ⏬⏬  validate auth link for users via wiley ⏬⏬
-      // get auth link to wiley if user is BAD member & logged in
-      if (isActiveUser) {
-        const wileyLink = await getWileyAction({ state, doi, isActiveUser });
-        if (wileyLink) authLink = wileyLink;
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setAuthLink(authLink); // set auth link via wiley
-      setFetching(false);
-    }
-
-    return () => {
-      useEffectRef.current = false; // clean up function
-    };
-  }, [isActiveUser]);
-
   const handelLogin = () => {
     setErrorAction({ dispatch, isError: null });
     setLoginModalAction({ dispatch, loginModalAction: true });
@@ -177,19 +149,7 @@ const CardActions = ({
 
   if (isFetching)
     return (
-      <div>
-        <div
-          className="flex-row"
-          style={{
-            justifyContent: "space-between",
-            alignItems: "center",
-            paddingTop: `1em`,
-            position: "relative",
-          }}
-        >
-          <div className="caps-btn">Loading...</div>
-        </div>
-      </div>
+      <CircularProgress color="inherit" style={{ width: 20, height: 20 }} />
     );
 
   if (videoArchive) return null;

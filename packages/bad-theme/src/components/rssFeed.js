@@ -176,7 +176,6 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
   const ServeMoreAction = () => {
     if (post_limit || feedData.length < LIMIT || currentSearchFilterRef.current)
       return null;
-    const value = loadMoreRef.current ? "Less" : " Load More";
 
     return (
       <div
@@ -191,7 +190,7 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
           className="transparent-btn"
           onClick={handleLoadMoreFilter}
         >
-          {value}
+          Load More
         </button>
       </div>
     );
