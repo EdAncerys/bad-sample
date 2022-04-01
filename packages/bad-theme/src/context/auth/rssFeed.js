@@ -14,6 +14,7 @@ export const getBJDFeedAction = async ({ state, dispatch }) => {
 
   try {
     const data = await fetch(URL, requestOptions);
+    if (!data) throw new Error("Error getting data.");
     const result = await data.json();
 
     if (result.success) {
@@ -43,6 +44,7 @@ export const getCEDFeedAction = async ({ state, dispatch }) => {
 
   try {
     const data = await fetch(URL, requestOptions);
+    if (!data) throw new Error("Error getting data.");
     const result = await data.json();
 
     if (result.success) {
@@ -72,6 +74,7 @@ export const getSHDFeedAction = async ({ state, dispatch }) => {
 
   try {
     const data = await fetch(URL, requestOptions);
+    if (!data) throw new Error("Error getting data.");
     const result = await data.json();
 
     if (result.success) {

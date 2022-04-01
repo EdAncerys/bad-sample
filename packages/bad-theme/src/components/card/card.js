@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import { colors } from "../../config/imports";
 import Image from "@frontity/components/image";
@@ -26,7 +26,7 @@ import GeneralModal from "../elections/generalModal";
 import DownloadFileBlock from "../downloadFileBlock";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 // CONTEXT ----------------------------------------------------------------
-import { setLinkWrapperAction, setGoToAction } from "../../context";
+import { useAppState, setGoToAction, getWileyAction } from "../../context";
 
 const Card = ({
   state,
@@ -110,6 +110,39 @@ const Card = ({
 
   let isCardAnimation = "card-wrapper";
   if (disableCardAnimation) isCardAnimation = "";
+
+  const { isActiveUser } = useAppState();
+
+  const [authLink, setAuthLink] = useState(null);
+  const [isFetching, setFetching] = useState(null);
+  const useEffectRef = useRef(null);
+
+  useEffect(async () => {
+    if (!rssFeedLink) return null;
+
+    const { link, doi } = rssFeedLink;
+    let authLink = link;
+
+    try {
+      setFetching(true);
+
+      // ⏬⏬  validate auth link for users via wiley ⏬⏬
+      // get auth link to wiley if user is BAD member & logged in
+      if (isActiveUser) {
+        const wileyLink = await getWileyAction({ state, doi, isActiveUser });
+        if (wileyLink) authLink = wileyLink;
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setAuthLink(authLink); // set auth link via wiley
+      setFetching(false);
+    }
+
+    return () => {
+      useEffectRef.current = false; // clean up function
+    };
+  }, [isActiveUser]);
 
   // HANDLERS ---------------------------------------------
 
@@ -303,6 +336,8 @@ const Card = ({
           handler={handler}
           electionBlocks={ELECTION_BLOCKS}
           videoArchive={videoArchive}
+          isFetching={isFetching}
+          authLink={authLink}
         />
       </div>
     );
@@ -320,7 +355,7 @@ const Card = ({
         minHeight: MIN_CARD_HEIGHT,
       }}
       onClick={() =>
-        setGoToAction({ state, path: link, actions, downloadFile })
+        setGoToAction({ state, path: link || authLink, actions, downloadFile })
       }
       data-aos={animationType || "fade"}
       data-aos-delay={`${delay * 50}`}

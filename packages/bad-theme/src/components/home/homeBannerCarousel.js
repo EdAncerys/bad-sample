@@ -103,7 +103,8 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
             return (
               <div className="home-banner">
                 <button
-                  className="banner-transparent-btn"
+                  className="banner-transparent-btn anim-fadeInLeft"
+                  style={{ animationDelay: "1.2s" }}
                   onClick={() =>
                     setGoToAction({ state, path: link.url, actions })
                   }
@@ -124,7 +125,14 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
 
             return (
               <div
-                className="label"
+                className="label anim-fadeInLeft"
+                style={{
+                  marginBottom: "1em",
+                  animationDelay: "0.5s",
+                  backgroundColor: colors.lightSilver,
+                  color: colors.navy,
+                  padding: "0.3em",
+                }}
                 onClick={() =>
                   setGoToAction({ state, path: event_label.url, actions })
                 }
@@ -172,19 +180,27 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
                         bottom: `5em`,
                       }}
                     >
-                      <div>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "flex-end",
+                          marginBottom: "2em",
+                        }}
+                      >
                         <ServeEventAction />
                         <div
-                          className="flex"
+                          className="flex anim-fadeInLeft"
                           style={{
                             alignItems: "center",
                             height: !lg ? BANNER_HEIGHT / 2 : null,
                             maxWidth: !lg ? "50%" : "100%",
                             margin: !lg ? null : "1em 0 1em 0",
+                            animationDelay: "0.9s",
                           }}
                         >
                           <div
-                            className="flex-col primary-title animate__animated animate__fadeInLeft animate__delay-1s"
+                            className="flex-col primary-title"
                             style={{
                               fontSize: !lg ? 36 : 26,
                               textAlign: "start",

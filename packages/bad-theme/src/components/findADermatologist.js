@@ -331,9 +331,10 @@ const FindADermatologist = ({ state, block }) => {
 
         return (
           <div className="primary-title mb-2" style={{ color: colors.navy }}>
-            <div className="primary-title">Address</div>
+            <div className="primary-title">Hospital / Practice address</div>
             <div>
-              <p>{derm.address3_line1}</p> <p>{derm.address3_line2},</p>
+              <p>{derm.address3_line1}</p>{" "}
+              <p>{derm.address3_line2 ? `${derm.address3_line2},` : null}</p>
               <p>
                 {derm.address3_city} {derm.address3_postalcode}
               </p>

@@ -116,7 +116,7 @@ const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
     if (!excerpt || !title) return null;
 
     const first_sentence = excerpt.rendered.split(".");
-    const shorter = first_sentence.toString();
+    const shorter = first_sentence[0].toString().concat("...");
     if (featured_media)
       return (
         <div
@@ -128,8 +128,11 @@ const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
       );
 
     return (
-      <div style={{ padding: `1em 1.5em` }}>
-        <Html2React html={shorter} />.
+      <div
+        style={{ padding: `1em 1.5em` }}
+        className="news-carousel-limited-body"
+      >
+        <Html2React html={shorter} />
       </div>
     );
   };
