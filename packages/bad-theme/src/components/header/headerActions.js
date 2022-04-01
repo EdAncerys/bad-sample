@@ -131,13 +131,23 @@ const HeaderActions = ({ state, actions, libraries }) => {
     }
   };
 
+  console.log(
+    "🐞 ",
+    state.auth.B2C +
+      "&redirect_uri=" +
+      state.auth.APP_URL +
+      `codecollect&scope=openid&response_type=id_token&prompt=login`
+  );
   const handleLoginAction = () => {
     // --------------------------------------------------------------------------------
     // 📌  B2C login auth path endpoint
     // --------------------------------------------------------------------------------
 
+    // 📌 replace with when auth by B2c state.auth.APP_URL
+    const redirectPath = `&redirect_uri=http://localhost:3000/codecollect`;
     const url =
-      "https://britishad.b2clogin.com/BritishAD.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1_signupsignin_uat&client_id=adbed72d-5ee0-49b1-a064-421bdbcd68b2&nonce=defaultNonce&redirect_uri=http://localhost:3000/codecollect&scope=openid&response_type=id_token&prompt=login";
+      state.auth.B2C +
+      `${redirectPath}&scope=openid&response_type=id_token&prompt=login`;
 
     // get current url path and store in cookieValue
     handleSetCookie({

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { handleGetCookie } from "../helpers/cookie";
 
 // CONTEXT ----------------------------------------------------------------
@@ -12,6 +12,7 @@ export const useB2CLogin = ({ state, actions }) => {
   // await for window object to be available
   const [isWindow, setWindow] = useState(null);
   const [hash, setHash] = useState(null);
+  const useEffectRef = useRef(true);
   let urlPath = state.router.link;
 
   const dispatch = useAppDispatch();
@@ -42,7 +43,7 @@ export const useB2CLogin = ({ state, actions }) => {
   // header (first part) and then the claims (second part)
   // --------------------------------------------------------------------------
 
-  useEffect(() => {
+  useEffect(async () => {
     // Decode the token
     if (!hash) return;
     let items = hash.replace("#id_token=", "");
@@ -58,6 +59,9 @@ export const useB2CLogin = ({ state, actions }) => {
         // setContactEmail(items[1].emails[0]);
         console.log("🐞 email ", email);
         console.log("API CALL to fetch user blob");
+        // add 2s delay on API calls to prevent API throttling
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+
         // get redirect url from cookie
         const redirectUrl = handleGetCookie({ name: "redirect" });
         console.log("🐞 redirectUrl ", redirectUrl);
@@ -74,5 +78,9 @@ export const useB2CLogin = ({ state, actions }) => {
       console.log(error);
     }
     console.log(items);
+
+    return () => {
+      useEffectRef.current = false; // clean up function
+    };
   }, [hash]);
 };
