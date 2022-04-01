@@ -57,6 +57,7 @@ export const useB2CLogin = ({ state, actions }) => {
         const email = items[1].emails[0];
         // setContactEmail(items[1].emails[0]);
         console.log("🐞 email ", email);
+        console.log("API CALL to fetch user blob");
         // get redirect url from cookie
         const redirectUrl = handleGetCookie({ name: "redirect" });
         console.log("🐞 redirectUrl ", redirectUrl);
