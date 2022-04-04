@@ -37,7 +37,6 @@ const JournalCard = ({
       return (
         <div>
           <div
-            className="flex"
             className="flex-row pointer"
             style={{ alignItems: "center", paddingTop: `1em` }}
             onClick={() => setGoToAction({ state, path: link.url, actions })}
