@@ -12,6 +12,7 @@ import Loading from "../../components/loading";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import CircularProgress from "@mui/material/CircularProgress";
+import { handleSetCookie } from "../../helpers/cookie";
 
 // CONTEXT ----------------------------------------------------------------
 import {
@@ -29,7 +30,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
-  let endPoint = state.router.link;
+  let urlPath = state.router.link;
 
   const [isReady, SetReady] = useState(null);
   const [filter, setFilter] = useState(null);
@@ -130,18 +131,38 @@ const HeaderActions = ({ state, actions, libraries }) => {
     }
   };
 
+  console.log("🐞 ", state.auth.APP_URL);
+
+  const handleLoginAction = () => {
+    // --------------------------------------------------------------------------------
+    // 📌  B2C login auth path endpoint
+    // --------------------------------------------------------------------------------
+
+    // 📌 auth B2c redirect url based on App default url
+    const redirectPath = `&redirect_uri=${state.auth.APP_URL}/codecollect`;
+    const url =
+      state.auth.B2C +
+      `${redirectPath}&scope=openid&response_type=id_token&prompt=login`;
+    console.log("🐞 ", url);
+
+    // get current url path and store in cookieValue
+    handleSetCookie({
+      name: "redirect",
+      value: urlPath,
+      days: 1,
+    });
+
+    // redirect to B2C auth set window location to login page
+    window.location.href = url;
+  };
+
   // SERVERS ----------------------------------------------------
   const ServeLoginAction = () => {
     if (isActiveUser) return null;
 
     return (
       <div style={{ padding: `0 1em` }}>
-        <div
-          className="blue-btn-reverse"
-          onClick={() =>
-            setLoginModalAction({ dispatch, loginModalAction: true })
-          }
-        >
+        <div className="blue-btn-reverse" onClick={handleLoginAction}>
           Login
         </div>
       </div>

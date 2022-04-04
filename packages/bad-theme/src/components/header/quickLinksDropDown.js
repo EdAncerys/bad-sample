@@ -2,10 +2,20 @@ import { connect } from "frontity";
 import { colors } from "../../config/imports";
 import { MENU_DATA } from "../../config/data";
 // CONTEXT ----------------------------------------------------
-import { setGoToAction } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setGoToAction,
+  setErrorAction,
+  setLoginModalAction,
+  getWileyAction,
+} from "../../context";
 
 const QuickLinksDropDown = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
+  const dispatch = useAppDispatch();
+  const { isActiveUser } = useAppState();
 
   // HANDLERS ----------------------------------------------------
   const handleActiveMenu = ({ mouseLeave }) => {
@@ -19,6 +29,53 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
     }
     if (selector) selector.style.display = "block";
     if (btn) btn.classList.add = "shadow";
+  };
+
+  const handelLogin = () => {
+    setErrorAction({ dispatch, isError: null });
+    setLoginModalAction({ dispatch, loginModalAction: true });
+  };
+
+  const onClickLinkHandler = async ({ title, url }) => {
+    const isWileys = title.includes("Journal");
+    let authLink = url;
+
+    // 📌 check if logged in user exists & user is BAD member to replace auth link
+    if (isActiveUser) {
+      authLink = await getWileyAction({
+        state,
+        isActiveUser,
+        isFullAccess: true,
+        url,
+      });
+    }
+
+    // redirect handler
+    const handelRedirect = () => {
+      setErrorAction({ dispatch, isError: null });
+      setGoToAction({ state, path: authLink, actions });
+    };
+
+    if (isWileys && !isActiveUser) {
+      // 📌 track notification error action
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals.`,
+          image: "Error",
+          action: [
+            {
+              label: `Go to ${title}`,
+              handler: handelRedirect,
+            },
+            { label: "Login", handler: handelLogin },
+          ],
+        },
+      });
+      return;
+    }
+
+    setGoToAction({ state, path: authLink, actions });
   };
 
   // SERVERS ----------------------------------------------------------
@@ -60,7 +117,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
               key={key}
               className="flex-row"
               style={{ marginRight: `2em` }}
-              onClick={() => setGoToAction({ state, path: url, actions })}
+              onClick={() => onClickLinkHandler({ title, url })}
             >
               <a className="dropdown-item" style={{ padding: `0.5em 0` }}>
                 <div

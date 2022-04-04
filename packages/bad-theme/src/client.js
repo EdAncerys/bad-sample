@@ -37,6 +37,7 @@ const BADTheme = {
       APP_PASSWORD: process.env.APP_PASSWORD,
       APP_HOST: process.env.APP_HOST,
 
+      B2C: process.env.B2C,
       WP_HOST: process.env.WP_HOST,
       WP_HOST_CONTENT: process.env.WP_HOST_CONTENT,
       ENVIRONMENT: process.env.ENVIRONMENT,

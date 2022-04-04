@@ -34,7 +34,7 @@ const SearchContainer = ({
   const handleKeyPress = (e) => {
     if (isFetching) return;
     if (e.key === "Enter" && e.target.value) {
-      handleSearch();
+      handleSearch({ e });
     }
   };
 

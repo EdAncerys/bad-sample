@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import { colors } from "../../config/imports";
 import Image from "@frontity/components/image";
@@ -26,7 +26,14 @@ import GeneralModal from "../elections/generalModal";
 import DownloadFileBlock from "../downloadFileBlock";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 // CONTEXT ----------------------------------------------------------------
-import { setLinkWrapperAction, setGoToAction } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setGoToAction,
+  getWileyAction,
+  setErrorAction,
+  setLoginModalAction,
+} from "../../context";
 
 const Card = ({
   state,
@@ -111,7 +118,73 @@ const Card = ({
   let isCardAnimation = "card-wrapper";
   if (disableCardAnimation) isCardAnimation = "";
 
+  const dispatch = useAppDispatch();
+  const { isActiveUser } = useAppState();
+
+  const [authLink, setAuthLink] = useState(null);
+  const [isFetching, setFetching] = useState(null);
+  const useEffectRef = useRef(null);
+
+  useEffect(async () => {
+    if (!rssFeedLink) return null;
+
+    const { link, doi } = rssFeedLink;
+    let authLink = link;
+
+    try {
+      setFetching(true);
+
+      // ⏬⏬  validate auth link for users via wiley ⏬⏬
+      // get auth link to wiley if user is BAD member & logged in
+      if (isActiveUser) {
+        const wileyLink = await getWileyAction({ state, doi, isActiveUser });
+        if (wileyLink) authLink = wileyLink;
+      }
+      console.log("🐞 ", authLink);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setAuthLink(authLink); // set auth link via wiley
+      setFetching(false);
+    }
+
+    return () => {
+      useEffectRef.current = false; // clean up function
+    };
+  }, [isActiveUser]);
+
   // HANDLERS ---------------------------------------------
+  const handelLogin = () => {
+    setErrorAction({ dispatch, isError: null });
+    setLoginModalAction({ dispatch, loginModalAction: true });
+  };
+
+  const handelRedirect = () => {
+    setErrorAction({ dispatch, isError: null });
+    setGoToAction({ state, path: authLink, actions });
+  };
+
+  const onClickHandler = () => {
+    if (rssFeedLink && !isActiveUser) {
+      // 📌 track notification error action
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals.`,
+          image: "Error",
+          action: [
+            {
+              label: "Read Publication",
+              handler: handelRedirect,
+            },
+            { label: "Login", handler: handelLogin },
+          ],
+        },
+      });
+      return;
+    }
+    setGoToAction({ state, path: link || authLink, actions, downloadFile });
+  };
 
   // SERVERS ----------------------------------------------
   const ServeFooter = () => {
@@ -303,6 +376,8 @@ const Card = ({
           handler={handler}
           electionBlocks={ELECTION_BLOCKS}
           videoArchive={videoArchive}
+          isFetching={isFetching}
+          authLink={authLink}
         />
       </div>
     );
@@ -319,9 +394,7 @@ const Card = ({
         height: videoArchive ? null : CARD_HEIGHT,
         minHeight: MIN_CARD_HEIGHT,
       }}
-      onClick={() =>
-        setGoToAction({ state, path: link, actions, downloadFile })
-      }
+      onClick={onClickHandler}
       data-aos={animationType || "fade"}
       data-aos-delay={`${delay * 50}`}
       data-aos-duration="500"

@@ -8,7 +8,7 @@ import Vivus from "vivus";
 import { useAppState } from "../context";
 import { colors } from "../config/imports";
 
-const AnimatedPlaceholder = ({ state, actions, opacity, appContent }) => {
+const AnimatedPlaceholder = ({ state, actions, opacity }) => {
   const { isPlaceholder } = useAppState();
 
   useEffect(() => {

@@ -22,11 +22,11 @@ import { muiQuery } from "../../context";
 
 const Header = ({ state, actions }) => {
   const { sm, md, lg, xl } = muiQuery();
-  const endPoint = state.router.link;
-  const data = state.source.get(endPoint);
+  const urlPath = state.router.link;
+  const data = state.source.get(urlPath);
 
   const ServeNavigation = () => {
-    if (endPoint.includes("/redirect/"))
+    if (urlPath.includes("/redirect/"))
       return (
         <div style={{ paddingTop: `55%` }}>
           <Loading />

@@ -4,7 +4,15 @@ import { colors } from "../config/imports";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, setEnquireAction, setGoToAction } from "../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setEnquireAction,
+  setGoToAction,
+  getWileyAction,
+  setErrorAction,
+  setLoginModalAction,
+} from "../context";
 
 const RowButton = ({
   state,
@@ -17,7 +25,9 @@ const RowButton = ({
 }) => {
   const [isHover, setIsHover] = useState(false);
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
   const dispatch = useAppDispatch();
+  const { isActiveUser } = useAppState();
 
   let {
     title,
@@ -29,6 +39,7 @@ const RowButton = ({
     link_id,
     file_link,
     onClickAction,
+    is_wileys_link,
   } = block;
 
   // ⬇️ initialize new enquireAction object & update object with new values
@@ -48,6 +59,53 @@ const RowButton = ({
   const THEME = colour || colors.primary;
   let LABEL = title;
   if (!title && link) LABEL = link.title;
+
+  // HANDLERS -------------------------------------------
+  const handelLogin = () => {
+    setErrorAction({ dispatch, isError: null });
+    setLoginModalAction({ dispatch, loginModalAction: true });
+  };
+
+  const onClickLinkHandler = async () => {
+    let authLink = link.url;
+
+    // 📌 check if logged in user exists & user is BAD member to replace auth link
+    if (isActiveUser) {
+      authLink = await getWileyAction({
+        state,
+        isActiveUser,
+        isFullAccess: true,
+        url: link.url,
+      });
+    }
+
+    // redirect handler
+    const handelRedirect = () => {
+      setErrorAction({ dispatch, isError: null });
+      setGoToAction({ state, path: authLink, actions });
+    };
+
+    if (is_wileys_link && !isActiveUser) {
+      // 📌 track notification error action
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals.`,
+          image: "Error",
+          action: [
+            {
+              label: `Go to ${title}`,
+              handler: handelRedirect,
+            },
+            { label: "Login", handler: handelLogin },
+          ],
+        },
+      });
+      return;
+    }
+
+    setGoToAction({ state, path: authLink, actions });
+  };
 
   // SERVERS --------------------------------------------
   const ServeFooter = () => {
@@ -113,7 +171,7 @@ const RowButton = ({
           return;
         }
         if (link) {
-          setGoToAction({ state, path: link.url, actions });
+          onClickLinkHandler();
           return;
         }
       }}
