@@ -143,17 +143,18 @@ const HeaderActions = ({ state, actions, libraries }) => {
     const url =
       state.auth.B2C +
       `${redirectPath}&scope=openid&response_type=id_token&prompt=login`;
+    console.log("🐞 APP_URL ", state.auth.APP_URL);
     console.log("🐞 ", url);
 
     // get current url path and store in cookieValue
     handleSetCookie({
-      name: "redirect",
+      name: "loginPath",
       value: urlPath,
       days: 1,
     });
 
     // redirect to B2C auth set window location to login page
-    window.location.href = url;
+    // window.location.href = url;
   };
 
   // SERVERS ----------------------------------------------------

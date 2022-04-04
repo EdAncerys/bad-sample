@@ -1,5 +1,20 @@
 # bad-org 😈
 
+# ⬇️ PRODUCTION APP auth creditentials ⬇️
+
+.env file secrets
+
+B2C
+WP_HOST
+WP_HOST_CONTENT
+GOOGLE_API_KEY
+DYNAMICS_BRIDGE
+APP_URL
+VENUE_HIRE_CONTACTS
+EVENT_CONTACTS
+ELECTION_CONTACTS
+DEFAULT_CONTACT_LIST
+
 ## README TBD
 
 ### Deployment to Versel
