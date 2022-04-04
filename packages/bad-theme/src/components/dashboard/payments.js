@@ -142,7 +142,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     const ServeInfo = () => {
       // bottom border show for the block if it's the last one
       let dataLength = liveSubscriptions.subs.data.length;
-      if (isApplications) dataLength = liveSubscriptions.aps.data.length;
+      if (isApplications) dataLength = liveSubscriptions.apps.data.length;
       const isLastItem = dataLength === item + 1;
 
       return (

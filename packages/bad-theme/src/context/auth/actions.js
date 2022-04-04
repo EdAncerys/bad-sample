@@ -157,6 +157,57 @@ export const getUserDataByContactId = async ({
   }
 };
 
+export const getUserDataByEmail = async ({ state, dispatch, email }) => {
+  console.log("getUserDataByEmail triggered");
+
+  const URL =
+    state.auth.APP_HOST +
+    `/catalogue/data/contacts?$filter=emailaddress1 eq '${email}'`;
+
+  try {
+    const jwt = await authenticateAppAction({ state, dispatch });
+    if (!jwt) throw new Error("Cannot logon to server.");
+
+    const requestOptions = {
+      method: "GET",
+      headers: { Authorization: "Bearer " + jwt },
+    };
+
+    const data = await fetch(URL, requestOptions);
+    if (!data) throw new Error("Error getting userData.");
+    const response = await data.json();
+
+    if (response.value.length > 0) {
+      const userData = response.value[0];
+      const { contactid } = userData;
+
+      // pre-fetch application data & populate to context store
+      await getUserApplicationAction({ state, dispatch, contactid });
+      // get application status against user in Dynamic
+      const dynamicApps = await getApplicationStatus({
+        state,
+        dispatch,
+        contactid,
+      });
+      if (!dynamicApps.apps.success)
+        throw new Error("Error dynamicApps userData.");
+
+      setActiveUserAction({ dispatch, isActiveUser: userData });
+      handleSetCookie({
+        name: state.auth.COOKIE_NAME,
+        value: { jwt, contactid },
+      });
+      console.log("⬇️ user data successfully fetched ⬇️ "); // debug
+      console.log(userData); // debug
+      return userData;
+    }
+
+    return null;
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
 export const getUserDataFromDynamics = async ({ state, jwt, contactid }) => {
   console.log("getUserDataByContactId triggered");
 

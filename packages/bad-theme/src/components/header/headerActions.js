@@ -154,7 +154,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
     });
 
     // redirect to B2C auth set window location to login page
-    // window.location.href = url;
+    window.location.href = url;
   };
 
   // SERVERS ----------------------------------------------------

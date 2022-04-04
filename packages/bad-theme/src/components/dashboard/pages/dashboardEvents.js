@@ -6,13 +6,15 @@ import { colors } from "../../../config/colors";
 import TitleBlock from "../../titleBlock";
 import Loading from "../../loading";
 import Card from "../../card/card";
+import BlockWrapper from "../../blockWrapper";
+import { getEventsData } from "../../../helpers";
+
 // CONTEXT ------------------------------------------------------------------
 import {
   useAppState,
   useAppDispatch,
   authenticateAppAction,
 } from "../../../context";
-import BlockWrapper from "../../blockWrapper";
 
 const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
   const { dashboardPath, isActiveUser } = useAppState();

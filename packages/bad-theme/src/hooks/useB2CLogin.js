@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from "react";
-import { handleGetCookie } from "../helpers/cookie";
+import { handleGetCookie, handleSetCookie } from "../helpers/cookie";
 
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
   setPlaceholderAction,
   setGoToAction,
+  getUserDataByEmail,
 } from "../context";
 
 export const useB2CLogin = ({ state, actions }) => {
@@ -35,7 +36,7 @@ export const useB2CLogin = ({ state, actions }) => {
       if (hash) setHash(hash);
       if (!hash && urlPath.includes("codecollect")) {
         // 🐞 redirect to url path if failed to get hash from url
-        setGoToAction({ state, path: redirectUrl, actions });
+        setGoToAction({ state, path: redirectUrl || "/", actions });
         setPlaceholderAction({ dispatch, isPlaceholder: false });
       }
     }
@@ -63,28 +64,26 @@ export const useB2CLogin = ({ state, actions }) => {
         const email = items[1].emails[0];
         // setContactEmail(items[1].emails[0]);
         console.log("🐞 email ", email);
-        console.log("API CALL to fetch user blob");
-        // add 2s delay on API calls to prevent API throttling
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-
-        // get redirect url from cookie
-        const redirectUrl = handleGetCookie({ name: "loginPath" });
-        console.log("🐞 redirectUrl ", redirectUrl);
-        // if redirectUrl is not set then set it to default
-
-        // ⬇️ redirect to url with path ⬇️
-        setGoToAction({ state, path: redirectUrl, actions });
-        // set placeholder to false
-        setPlaceholderAction({ dispatch, isPlaceholder: false });
-        // delate redirect cookie to prevent redirect loop
-        handleDeleteCookie({ name: "redirect" });
+        const user = await getUserDataByEmail({ state, dispatch, email });
+        if (!user) throw new Error("Error getting user data.");
       } else {
         console.log("🐞 error. Redirect to home path");
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      // get redirect url from cookie
+      const redirectUrl = handleGetCookie({ name: "loginPath" });
+      console.log("🐞 redirectUrl ", redirectUrl);
+
+      // ⬇️ redirect to url with path ⬇️
+      setGoToAction({ state, path: redirectUrl || "/", actions });
+      // set placeholder to false
+      setPlaceholderAction({ dispatch, isPlaceholder: false });
+      // delate redirect cookie to prevent redirect loop
+      handleSetCookie({ name: "loginPath", deleteCookie: true });
     }
-    console.log(items);
+    console.log(items); // debug
 
     return () => {
       useEffectRef.current = false; // clean up function
