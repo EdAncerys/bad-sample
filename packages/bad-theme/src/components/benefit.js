@@ -12,7 +12,7 @@ import Library from "../img/svg/library.svg";
 import HireDiscounts from "../img/svg/hireDiscounts.svg";
 import { setGoToAction } from "../context";
 
-const Benefit = ({ state, actions, libraries, block }) => {
+const Benefit = ({ state, actions, libraries, block, id }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { icon, body, title, link } = block;
@@ -88,7 +88,13 @@ const Benefit = ({ state, actions, libraries, block }) => {
   };
 
   return (
-    <div style={{ margin: `2em auto` }}>
+    <div
+      style={{ margin: `2em auto` }}
+      data-aos="fade"
+      data-aos-easing="ease-in-sine"
+      data-aos-delay={`${id * 50}`}
+      data-aos-duration="1000"
+    >
       <div>
         <ServeIcon />
         <ServeContent />
