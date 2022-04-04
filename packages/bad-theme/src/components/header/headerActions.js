@@ -12,7 +12,6 @@ import Loading from "../../components/loading";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import CircularProgress from "@mui/material/CircularProgress";
-import { handleSetCookie } from "../../helpers/cookie";
 
 // CONTEXT ----------------------------------------------------------------
 import {
@@ -129,8 +128,6 @@ const HeaderActions = ({ state, actions, libraries }) => {
       takeToSearchHandler();
     }
   };
-
-  console.log("🐞 ", state.auth.APP_URL);
 
   const handleLoginAction = () => {
     // --------------------------------------------------------------------------------
