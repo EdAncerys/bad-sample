@@ -10,7 +10,7 @@ import FormSubmitted from "./formSubmitted";
 import {
   useAppDispatch,
   useAppState,
-  setLoginModalAction,
+  loginAction,
   setCreateAccountModalAction,
 } from "../../context";
 
@@ -78,10 +78,7 @@ const loginModal = ({ state, actions }) => {
                   dispatch,
                   createAccountAction: false,
                 });
-                setLoginModalAction({
-                  dispatch,
-                  loginModalAction: true,
-                });
+                loginAction({ state });
               }}
             >
               Already a member? Login

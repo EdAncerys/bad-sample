@@ -7,7 +7,7 @@ import {
   useAppState,
   setGoToAction,
   setErrorAction,
-  setLoginModalAction,
+  loginAction,
   getWileyAction,
 } from "../../context";
 
@@ -33,7 +33,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
 
   const handelLogin = () => {
     setErrorAction({ dispatch, isError: null });
-    setLoginModalAction({ dispatch, loginModalAction: true });
+    loginAction({ state });
   };
 
   const onClickLinkHandler = async ({ title, url }) => {

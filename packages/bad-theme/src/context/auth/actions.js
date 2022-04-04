@@ -1,12 +1,13 @@
-import { setLoginModalAction, setFetchAction } from "../index";
 import { handleSetCookie } from "../../helpers/cookie";
 import {
   setGoToAction,
   getApplicationStatus,
   getUserApplicationAction,
+  setFetchAction,
+  setLoginModalAction,
 } from "../index";
 
-export const loginAction = async ({ state, dispatch, transId }) => {
+export const loginActionViaModal = async ({ state, dispatch, transId }) => {
   console.log("loginAction triggered");
   setFetchAction({ dispatch, isFetching: true });
 
@@ -30,6 +31,33 @@ export const loginAction = async ({ state, dispatch, transId }) => {
     console.log("loginAction error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
+  }
+};
+export const loginAction = async ({ state }) => {
+  console.log("loginAction triggered");
+
+  try {
+    // 📌 auth B2c redirect url based on App default url
+    const redirectPath = `&redirect_uri=${state.auth.APP_URL}/codecollect`;
+    // --------------------------------------------------------------------------------
+    // 📌  B2C login auth path endpoint
+    // --------------------------------------------------------------------------------
+    const url =
+      state.auth.B2C +
+      `${redirectPath}&scope=openid&response_type=id_token&prompt=login`;
+    const urlPath = state.router.link;
+
+    // get current url path and store in cookieValue
+    handleSetCookie({
+      name: "loginPath",
+      value: urlPath,
+      days: 1,
+    });
+
+    // redirect to B2C auth set window location to login page
+    window.location.href = url;
+  } catch (error) {
+    console.log("loginAction error", error);
   }
 };
 

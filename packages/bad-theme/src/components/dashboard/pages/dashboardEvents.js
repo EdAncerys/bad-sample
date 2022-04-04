@@ -28,44 +28,49 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
-    // pre fetch events data
-    let data = state.source.events;
-    if (!data) await getEventsData({ state, actions });
-    data = state.source.events;
-    const events = Object.values(data).slice(0, 2);
-    setEventList(events);
+    try {
+      // pre fetch events data
+      let data = state.source.events;
+      if (!data) await getEventsData({ state, actions });
+      // throw exception if no events
+      if (!data) throw new Error("No events found");
+      data = state.source.events;
+      const events = Object.values(data).slice(0, 2);
+      setEventList(events);
 
-    if (!isActiveUser) return null;
+      if (!isActiveUser) return null;
 
-    const { contactid } = isActiveUser;
-    const jwt = await authenticateAppAction({ dispatch, state });
-    const fetchUserEvents = await fetch(
-      state.auth.APP_HOST + "/videvent/" + contactid + "/entities",
-      {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
+      const { contactid } = isActiveUser;
+      const jwt = await authenticateAppAction({ dispatch, state });
+      const fetchUserEvents = await fetch(
+        state.auth.APP_HOST + "/videvent/" + contactid + "/entities",
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+
+      console.log("fetchUserEvents", fetchUserEvents);
+      if (fetchUserEvents.ok) {
+        let filteredEvents = [];
+        const json = await fetchUserEvents.json();
+        json.data.map((event) => {
+          filteredEvents.push(event.bad_eventid);
+        });
+
+        console.log("data", data);
+        // convert object to array
+        data = Object.values(data);
+        const relatedEvents = data.filter((item) => {
+          return filteredEvents.includes(item.acf.events_force_id);
+        });
+        console.log("relatedEvents", relatedEvents);
+        setListOfEvents(relatedEvents);
       }
-    );
-
-    console.log("fetchUserEvents", fetchUserEvents);
-    if (fetchUserEvents.ok) {
-      let filteredEvents = [];
-      const json = await fetchUserEvents.json();
-      json.data.map((event) => {
-        filteredEvents.push(event.bad_eventid);
-      });
-
-      console.log("data", data);
-      // convert object to array
-      data = Object.values(data);
-      const relatedEvents = data.filter((item) => {
-        return filteredEvents.includes(item.acf.events_force_id);
-      });
-      console.log("relatedEvents", relatedEvents);
-      setListOfEvents(relatedEvents);
+    } catch (err) {
+      console.log(err);
     }
-
     return () => {
       useEffectRef.current = ""; // clean up function
     };

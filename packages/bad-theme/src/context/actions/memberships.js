@@ -2,7 +2,7 @@ import {
   getBADMembershipSubscriptionData,
   setUserStoreAction,
   setGoToAction,
-  setLoginModalAction,
+  loginAction,
   setErrorAction,
   authenticateAppAction,
 } from "../index";
@@ -80,7 +80,7 @@ export const handleApplyForMembershipAction = async ({
   try {
     if (!isActiveUser) {
       // validate if isActiveUser 🤖
-      setLoginModalAction({ dispatch, loginModalAction: true });
+      loginAction({ state });
       return null;
     }
     const isBADApp = category === "BAD"; // check if isBADApp

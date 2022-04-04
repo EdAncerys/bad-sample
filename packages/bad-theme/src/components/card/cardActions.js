@@ -12,7 +12,7 @@ import {
   useAppState,
   setGoToAction,
   setErrorAction,
-  setLoginModalAction,
+  loginAction,
 } from "../../context";
 
 const CardActions = ({
@@ -43,7 +43,7 @@ const CardActions = ({
   // HANDLERS ------------------------------------------
   const handelLogin = () => {
     setErrorAction({ dispatch, isError: null });
-    setLoginModalAction({ dispatch, loginModalAction: true });
+    loginAction({ state });
   };
 
   const handelRedirect = () => {
