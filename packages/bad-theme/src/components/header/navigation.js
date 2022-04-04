@@ -251,6 +251,7 @@ const Navigation = ({ state, actions, libraries }) => {
         const wpHost = state.auth.WP_HOST;
         // strip down trailing wpHost from url
         if (linkPath.includes(wpHost)) linkPath = linkPath.replace(wpHost, "");
+        console.log("🐞 ", linkPath);
 
         return (
           <div

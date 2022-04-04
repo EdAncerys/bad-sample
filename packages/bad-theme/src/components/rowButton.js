@@ -70,7 +70,7 @@ const RowButton = ({
     let authLink = link.url;
 
     // 📌 check if logged in user exists & user is BAD member to replace auth link
-    if (isActiveUser) {
+    if (is_wileys_link && isActiveUser) {
       authLink = await getWileyAction({
         state,
         isActiveUser,
