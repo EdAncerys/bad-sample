@@ -26,7 +26,8 @@ import {
 
 const Directory = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
-  const { fad, dashboardPath, isActiveUser, dynamicsApps } = useAppState();
+  const { fad, dashboardPath, isActiveUser, dynamicsApps, refreshJWT } =
+    useAppState();
 
   const ctaHeight = 45;
 
@@ -49,10 +50,9 @@ const Directory = ({ state, actions, libraries }) => {
   // DATA pre FETCH ------------------------------------------------------------
   useEffect(async () => {
     try {
-      // await getAllFadAction({ state, dispatch });
       if (!fad) {
         // fetch data via API
-        const data = await getFadAction({ state, dispatch });
+        const data = await getFadAction({ state, dispatch, refreshJWT });
         // set fad data in context of app
         setFadAction({ dispatch, fad: data });
         setFadData(data);
@@ -90,6 +90,7 @@ const Directory = ({ state, actions, libraries }) => {
         dispatch,
         data,
         isActiveUser,
+        refreshJWT,
       });
       if (!response) throw new Error("Error updating profile");
 
@@ -139,7 +140,12 @@ const Directory = ({ state, actions, libraries }) => {
 
     try {
       setSearchFetching(true);
-      const fad = await getFADSearchAction({ state, dispatch, query: input });
+      const fad = await getFADSearchAction({
+        state,
+        dispatch,
+        query: input,
+        refreshJWT,
+      });
       setSearchData(fad);
     } catch (error) {
       console.log(error);
@@ -154,7 +160,7 @@ const Directory = ({ state, actions, libraries }) => {
     try {
       setGetMore(true);
 
-      const data = await getFadAction({ state, dispatch, page });
+      const data = await getFadAction({ state, dispatch, page, refreshJWT });
       let updatedFad = [...fad, ...data];
       // set fad data in context of app
       setFadAction({ dispatch, fad: updatedFad });

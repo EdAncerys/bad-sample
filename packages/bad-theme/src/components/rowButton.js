@@ -27,7 +27,7 @@ const RowButton = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { isActiveUser } = useAppState();
+  const { isActiveUser, refreshJWT } = useAppState();
 
   let {
     title,
@@ -73,6 +73,8 @@ const RowButton = ({
     if (is_wileys_link && isActiveUser) {
       authLink = await getWileyAction({
         state,
+        dispatch,
+        refreshJWT,
         isActiveUser,
         isFullAccess: true,
         url: link.url,

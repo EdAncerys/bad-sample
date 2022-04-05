@@ -128,6 +128,7 @@ export const getUserAction = async ({ state, dispatch, jwt, transId }) => {
       dispatch,
       jwt,
       contactid,
+      refreshJWT,
     });
     if (!userData) throw new Error("Error getting userData.");
 
@@ -245,6 +246,7 @@ export const getUserDataByEmail = async ({
         state,
         dispatch,
         contactid,
+        refreshJWT,
       });
       if (!dynamicApps.apps.success)
         throw new Error("Error dynamicApps userData.");

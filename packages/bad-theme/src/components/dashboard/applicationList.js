@@ -82,6 +82,7 @@ const ApplicationList = ({ state, actions, libraries }) => {
         },
         path: "/membership/application-change/", // redirect to application change page
         changeAppCategory: app, // change of application
+        refreshJWT,
       });
       if (!appData) throw new Error("Failed to create application");
     } catch (error) {

@@ -119,7 +119,7 @@ const Card = ({
   if (disableCardAnimation) isCardAnimation = "";
 
   const dispatch = useAppDispatch();
-  const { isActiveUser } = useAppState();
+  const { isActiveUser, refreshJWT } = useAppState();
 
   const [authLink, setAuthLink] = useState(null);
   const [isFetching, setFetching] = useState(null);
@@ -137,7 +137,13 @@ const Card = ({
       // ⏬⏬  validate auth link for users via wiley ⏬⏬
       // get auth link to wiley if user is BAD member & logged in
       if (isActiveUser) {
-        const wileyLink = await getWileyAction({ state, doi, isActiveUser });
+        const wileyLink = await getWileyAction({
+          state,
+          dispatch,
+          refreshJWT,
+          doi,
+          isActiveUser,
+        });
         if (wileyLink) authLink = wileyLink;
       }
     } catch (error) {

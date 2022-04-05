@@ -17,7 +17,7 @@ const Tweets = ({ state, actions, libraries, block }) => {
     disable_vertical_padding,
   } = block;
   const dispatch = useAppDispatch();
-  const { tweets } = useAppState();
+  const { tweets, refreshJWT } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -42,7 +42,7 @@ const Tweets = ({ state, actions, libraries, block }) => {
   };
 
   useEffect(() => {
-    getTweetsAction({ state, dispatch });
+    getTweetsAction({ state, dispatch, refreshJWT });
   }, []);
 
   if (!tweets) return <Loading />;

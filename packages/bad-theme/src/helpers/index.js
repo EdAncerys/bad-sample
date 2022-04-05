@@ -59,6 +59,8 @@ export const authCookieActionBeforeCSR = async ({
 
       const userStoreData = await getUserStoreAction({
         state,
+        dispatch,
+        refreshJWT,
         isActiveUser: userData,
       });
 
@@ -93,7 +95,11 @@ export const authCookieActionBeforeCSR = async ({
   }
 };
 
-export const authCookieActionAfterCSR = async ({ state, dispatch }) => {
+export const authCookieActionAfterCSR = async ({
+  state,
+  dispatch,
+  refreshJWT,
+}) => {
   const cookie = handleGetCookie({ name: state.auth.COOKIE_NAME });
 
   // ⏬⏬  user validation & auth ⏬⏬
@@ -113,6 +119,7 @@ export const authCookieActionAfterCSR = async ({ state, dispatch }) => {
         dispatch,
         jwt,
         contactid,
+        refreshJWT,
       });
       if (!userData) throw new Error("Error getting userData.");
 

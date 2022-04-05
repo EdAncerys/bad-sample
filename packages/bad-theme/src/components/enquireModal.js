@@ -23,7 +23,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
   const { lg } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const { enquireAction, isActiveUser } = useAppState();
+  const { enquireAction, isActiveUser, refreshJWT } = useAppState();
   // console.log("enquireAction", enquireAction); // debug
 
   const [isFetching, setIsFetching] = useState(null);
@@ -95,6 +95,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
         attachments: formData.attachments,
         emailSubject: enquireAction.emailSubject, // email default subject title
         template: enquireAction.emailTemplate, // email default template
+        refreshJWT,
       });
       if (!response) throw new Error("Error sending email");
     } catch (error) {
@@ -144,7 +145,9 @@ const EnquireModal = ({ state, actions, libraries }) => {
 
     let hospitalData = await getHospitalsAction({
       state,
+      dispatch,
       input,
+      refreshJWT,
     });
     // refactor hospital data to match dropdown format
     hospitalData = hospitalData.map((hospital) => {

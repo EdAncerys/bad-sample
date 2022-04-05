@@ -20,7 +20,8 @@ const CompleteApplication = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, ethnicity } = useAppState();
+  const { applicationData, isActiveUser, ethnicity, refreshJWT } =
+    useAppState();
 
   const [ethnicityList, setEthnicityList] = useState([]);
   const [isFetching, setFetching] = useState(false);
@@ -35,7 +36,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
 
   useEffect(async () => {
     // ⬇️ get ethnicity choices from Dynamics
-    if (!ethnicity) await getEthnicityAction({ state, dispatch });
+    if (!ethnicity) await getEthnicityAction({ state, dispatch, refreshJWT });
 
     return () => {
       useEffectRef.current = false; // clean up function

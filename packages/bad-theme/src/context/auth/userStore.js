@@ -16,6 +16,7 @@ export const setUserStoreAction = async ({
   data,
   membershipApplication,
   dynamicsApps,
+  refreshJWT,
 }) => {
   console.log("setUserStoreAction triggered");
 
@@ -36,7 +37,11 @@ export const setUserStoreAction = async ({
 
     if (!storeApplication) {
       // ⏬⏬  get application record from store ⏬⏬
-      storeApplication = await getUserStoreAction({ state, isActiveUser });
+      storeApplication = await getUserStoreAction({
+        state,
+        isActiveUser,
+        refreshJWT,
+      });
     }
     if (!storeApplication) {
       // ⏬⏬  creat application record in Dynamics ⏬⏬
@@ -232,6 +237,7 @@ export const setCompleteUserApplicationAction = async ({
         state,
         dispatch,
         contactid,
+        refreshJWT,
       });
       // delete application record from CONTEXT
       setApplicationDataAction({

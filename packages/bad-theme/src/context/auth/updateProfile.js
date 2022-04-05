@@ -47,6 +47,7 @@ export const updateProfileAction = async ({
         dispatch,
         jwt,
         contactid,
+        refreshJWT,
       });
 
       return response;

@@ -27,7 +27,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
   const isMounted = useIsMounted();
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, dynamicsApps } = useAppState();
+  const { applicationData, isActiveUser, dynamicsApps, refreshJWT } =
+    useAppState();
 
   const [category, setCategory] = useState(() => {
     if (!applicationData) return "";
@@ -153,6 +154,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         // get hospital data via API & populate form
         const hospitalData = await getHospitalNameAction({
           state,
+          dispatch,
+          refreshJWT,
           id: hospitalId,
         });
         if (hospitalData) {
@@ -202,6 +205,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
     let hospitalData = await getHospitalsAction({
       state,
+      dispatch,
+      refreshJWT,
       input,
     });
     // refactor hospital data to match dropdown format
@@ -226,6 +231,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       applicationData,
       isActiveUser,
       data: formData,
+      refreshJWT,
     });
 
     if (isActiveUser) setGoToAction({ state, path: `/membership/`, actions });
@@ -281,6 +287,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         dynamicsApps,
         membershipApplication: { stepFour: true }, // set stepOne to complete
         data: formData,
+        refreshJWT,
       });
       if (!store.success) throw new Error("Failed to update application");
 
@@ -290,6 +297,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         dispatch,
         isActiveUser,
         applicationData,
+        refreshJWT,
       });
       if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
 
@@ -312,6 +320,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         state,
         dispatch,
         attachments: sky_cvurl,
+        refreshJWT,
       });
     console.log("sky_cvurl", sky_cvurl); // debug
 

@@ -59,6 +59,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
       state,
       dispatch,
       contactid: isActiveUser.contactid,
+      refreshJWT,
     });
 
     return () => {
@@ -102,6 +103,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
         stepFour: false,
       },
       path: "/membership/sig-questions/", // redirect to SIG form page
+      refreshJWT,
     });
   };
 

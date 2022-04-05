@@ -44,6 +44,7 @@ export const updateAddressAction = async ({
         dispatch,
         jwt,
         contactid,
+        refreshJWT,
       });
     }
   } catch (error) {

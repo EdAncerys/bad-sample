@@ -23,6 +23,7 @@ export const createApplicationRecord = async ({
       dispatch,
       isActiveUser,
       data: userStoreData,
+      refreshJWT,
     });
     return;
   }
@@ -59,6 +60,7 @@ export const createApplicationRecord = async ({
         dispatch,
         isActiveUser,
         data: applicationData,
+        refreshJWT,
       });
     }
   } catch (error) {

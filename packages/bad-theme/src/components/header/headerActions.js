@@ -149,8 +149,8 @@ const HeaderActions = ({ state, actions, libraries }) => {
         // contactid: "84590b32-9490-ec11-b400-000d3a22037e", // mandy
         // contactid: "0786df85-618f-ec11-b400-000d3a22037e", // Chris
         contactid: "969ba377-a398-ec11-b400-000d3aaedef5", // emilia
+        refreshJWT,
       });
-      setLoginModalAction({ dispatch, loginModalAction: false });
       return;
     }
 

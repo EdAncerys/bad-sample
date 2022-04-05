@@ -63,7 +63,7 @@ import {
 
 const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
-  const { isActiveUser, isPlaceholder, idFilter } = useAppState();
+  const { isActiveUser, isPlaceholder, idFilter, refreshJWT } = useAppState();
   const { sm, md, lg, xl, xxl } = muiQuery();
 
   // --------------------------------------------------------------------------------
@@ -92,7 +92,7 @@ const App = ({ state, actions }) => {
     const currentTime = new Date().getTime();
     if (!isPlaceholder) return; // trigger only once
     // ⬇️  get user data if cookie is set
-    await authCookieActionAfterCSR({ state, dispatch });
+    await authCookieActionAfterCSR({ state, dispatch, refreshJWT });
     // ⬇️  pre-fetch app menu from wp
     await getWPMenu({ state, actions });
     // ⬇️  get leadership data
