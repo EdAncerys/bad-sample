@@ -31,6 +31,7 @@ import {
   authenticateAppAction,
   getUserAction,
   getUserDataByContactId,
+  getUserDataByEmail,
   getUserDataFromDynamics,
 } from "./auth/actions";
 import { sendEmailEnquireAction } from "./auth/sendEnquire";
@@ -114,6 +115,7 @@ export {
   setFadAction,
   getUserAction,
   getUserDataByContactId,
+  getUserDataByEmail,
   updateProfileAction,
   updateAddressAction,
   sendFileToS3Action,

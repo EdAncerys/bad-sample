@@ -12,7 +12,7 @@ import {
   updateEthnicityAction,
   setGoToAction,
   validateMembershipFormAction,
-  setLoginModalAction,
+  loginAction,
   getEthnicityAction,
 } from "../../../context";
 
@@ -72,7 +72,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
   const handleSubmit = async () => {
     if (!isActiveUser) {
       // validate if isActiveUser 🤖
-      setLoginModalAction({ dispatch, loginModalAction: true });
+      loginAction({ state });
       return null;
     }
 

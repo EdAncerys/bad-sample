@@ -1,12 +1,13 @@
-import { setLoginModalAction, setFetchAction } from "../index";
 import { handleSetCookie } from "../../helpers/cookie";
 import {
   setGoToAction,
   getApplicationStatus,
   getUserApplicationAction,
+  setFetchAction,
+  setLoginModalAction,
 } from "../index";
 
-export const loginAction = async ({ state, dispatch, transId }) => {
+export const loginActionViaModal = async ({ state, dispatch, transId }) => {
   console.log("loginAction triggered");
   setFetchAction({ dispatch, isFetching: true });
 
@@ -30,6 +31,33 @@ export const loginAction = async ({ state, dispatch, transId }) => {
     console.log("loginAction error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
+  }
+};
+export const loginAction = async ({ state }) => {
+  console.log("loginAction triggered");
+
+  try {
+    // 📌 auth B2c redirect url based on App default url
+    const redirectPath = `&redirect_uri=${state.auth.APP_URL}/codecollect`;
+    // --------------------------------------------------------------------------------
+    // 📌  B2C login auth path endpoint
+    // --------------------------------------------------------------------------------
+    const url =
+      state.auth.B2C +
+      `${redirectPath}&scope=openid&response_type=id_token&prompt=login`;
+    const urlPath = state.router.link;
+
+    // get current url path and store in cookieValue
+    handleSetCookie({
+      name: "loginPath",
+      value: urlPath,
+      days: 1,
+    });
+
+    // redirect to B2C auth set window location to login page
+    window.location.href = url;
+  } catch (error) {
+    console.log("loginAction error", error);
   }
 };
 
@@ -152,6 +180,57 @@ export const getUserDataByContactId = async ({
     seJWTAction({ dispatch, jwt });
     console.log("⬇️ user details successfully updated ⬇️ "); // debug
     return response;
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
+export const getUserDataByEmail = async ({ state, dispatch, email }) => {
+  console.log("getUserDataByEmail triggered");
+
+  const URL =
+    state.auth.APP_HOST +
+    `/catalogue/data/contacts?$filter=emailaddress1 eq '${email}'`;
+
+  try {
+    const jwt = await authenticateAppAction({ state, dispatch });
+    if (!jwt) throw new Error("Cannot logon to server.");
+
+    const requestOptions = {
+      method: "GET",
+      headers: { Authorization: "Bearer " + jwt },
+    };
+
+    const data = await fetch(URL, requestOptions);
+    if (!data) throw new Error("Error getting userData.");
+    const response = await data.json();
+
+    if (response.value.length > 0) {
+      const userData = response.value[0];
+      const { contactid } = userData;
+
+      // pre-fetch application data & populate to context store
+      await getUserApplicationAction({ state, dispatch, contactid });
+      // get application status against user in Dynamic
+      const dynamicApps = await getApplicationStatus({
+        state,
+        dispatch,
+        contactid,
+      });
+      if (!dynamicApps.apps.success)
+        throw new Error("Error dynamicApps userData.");
+
+      setActiveUserAction({ dispatch, isActiveUser: userData });
+      handleSetCookie({
+        name: state.auth.COOKIE_NAME,
+        value: { jwt, contactid },
+      });
+      console.log("⬇️ user data successfully fetched ⬇️ "); // debug
+      console.log(userData); // debug
+      return userData;
+    }
+
+    return null;
   } catch (error) {
     console.log("error", error);
   }

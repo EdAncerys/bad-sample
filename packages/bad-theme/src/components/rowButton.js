@@ -11,7 +11,7 @@ import {
   setGoToAction,
   getWileyAction,
   setErrorAction,
-  setLoginModalAction,
+  loginAction,
 } from "../context";
 
 const RowButton = ({
@@ -63,14 +63,14 @@ const RowButton = ({
   // HANDLERS -------------------------------------------
   const handelLogin = () => {
     setErrorAction({ dispatch, isError: null });
-    setLoginModalAction({ dispatch, loginModalAction: true });
+    loginAction({ state });
   };
 
   const onClickLinkHandler = async () => {
     let authLink = link.url;
 
     // 📌 check if logged in user exists & user is BAD member to replace auth link
-    if (isActiveUser) {
+    if (is_wileys_link && isActiveUser) {
       authLink = await getWileyAction({
         state,
         isActiveUser,

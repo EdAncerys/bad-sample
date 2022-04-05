@@ -2,10 +2,9 @@ import {
   authenticateAppAction,
   setFetchAction,
   setApplicationDataAction,
-  setLoginModalAction,
+  loginAction,
   getApplicationStatus,
   setErrorAction,
-  setGoToAction,
 } from "../index";
 
 export const setUserStoreAction = async ({
@@ -22,7 +21,7 @@ export const setUserStoreAction = async ({
 
   if (!isActiveUser) {
     // validate if isActiveUser 🤖
-    setLoginModalAction({ dispatch, loginModalAction: true });
+    loginAction({ state });
     return null;
   }
 

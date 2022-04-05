@@ -18,11 +18,11 @@ import { handleSetCookie } from "../../helpers/cookie";
 import {
   useAppDispatch,
   useAppState,
-  setLoginModalAction,
   setGoToAction,
   appSearchAction,
   setAppSearchDataAction,
   setAppSearchPhraseAction,
+  loginAction,
 } from "../../context";
 
 const HeaderActions = ({ state, actions, libraries }) => {
@@ -30,7 +30,6 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
-  let urlPath = state.router.link;
 
   const [isReady, SetReady] = useState(null);
   const [filter, setFilter] = useState(null);
@@ -135,25 +134,10 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   const handleLoginAction = () => {
     // --------------------------------------------------------------------------------
-    // 📌  B2C login auth path endpoint
+    // 📌  B2C login action
     // --------------------------------------------------------------------------------
 
-    // 📌 auth B2c redirect url based on App default url
-    const redirectPath = `&redirect_uri=${state.auth.APP_URL}/codecollect`;
-    const url =
-      state.auth.B2C +
-      `${redirectPath}&scope=openid&response_type=id_token&prompt=login`;
-    console.log("🐞 ", url);
-
-    // get current url path and store in cookieValue
-    handleSetCookie({
-      name: "redirect",
-      value: urlPath,
-      days: 1,
-    });
-
-    // redirect to B2C auth set window location to login page
-    window.location.href = url;
+    loginAction({ state });
   };
 
   // SERVERS ----------------------------------------------------

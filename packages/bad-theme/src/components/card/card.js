@@ -32,7 +32,7 @@ import {
   setGoToAction,
   getWileyAction,
   setErrorAction,
-  setLoginModalAction,
+  loginAction,
 } from "../../context";
 
 const Card = ({
@@ -156,7 +156,7 @@ const Card = ({
   // HANDLERS ---------------------------------------------
   const handelLogin = () => {
     setErrorAction({ dispatch, isError: null });
-    setLoginModalAction({ dispatch, loginModalAction: true });
+    loginAction({ state });
   };
 
   const handelRedirect = () => {
