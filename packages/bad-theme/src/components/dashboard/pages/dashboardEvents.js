@@ -23,7 +23,7 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
   const [eventList, setEventList] = useState(null); // event data
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-  const DEFAULT_IMAGE = `${state.auth.WORDPRESS_URL}wp-content/uploads/2022/03/EVENTS.jpg`;
+  const DEFAULT_IMAGE = `https://cdn.bad.org.uk/uploads/2022/03/29195958/EVENTS.jpg`;
   const dispatch = useAppDispatch();
   const useEffectRef = useRef(null);
 
