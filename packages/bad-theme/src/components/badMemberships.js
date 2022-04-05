@@ -35,7 +35,7 @@ const BADMemberships = ({ state, actions, libraries, block }) => {
     membershipTypes = membershipTypes.filter(
       (membership) => membership.acf.bad_or_sig === "bad"
     );
-    console.log("membershipTypes", membershipTypes); //debug
+    // console.log("membershipTypes", membershipTypes); //debug
     // sort memberships by bad_order accenting & if no value push to end
     membershipTypes.sort((a, b) => {
       if (a.acf.bad_order && b.acf.bad_order) {
@@ -49,8 +49,6 @@ const BADMemberships = ({ state, actions, libraries, block }) => {
       }
     });
 
-    console.log("membershipTypes", membershipTypes); //debug
-    // console.log(response); // debug
     setMembershipTypes(membershipTypes);
 
     return () => {
@@ -68,9 +66,6 @@ const BADMemberships = ({ state, actions, libraries, block }) => {
           membership.acf; // get the data from the memberships CPT
         const { title } = membership; // get the data from the memberships CPT
         if (bad_or_sig !== "bad") return null; // filter out the bad memberships
-
-        console.log(category_types); // debug
-        console.log(bad_order); // debug
 
         let accordion_item = {
           title: title,

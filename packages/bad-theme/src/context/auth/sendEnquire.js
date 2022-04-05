@@ -12,12 +12,13 @@ export const sendEmailEnquireAction = async ({
   recipients,
   emailSubject,
   template,
+  refreshJWT,
 }) => {
   console.log("enquireAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
   const URL = state.auth.APP_HOST + `/email`;
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   try {
     if (!recipients) throw new Error("No Recipients Provided");

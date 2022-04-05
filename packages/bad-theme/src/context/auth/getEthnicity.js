@@ -1,10 +1,10 @@
 import { authenticateAppAction } from "../index";
 
-export const getEthnicityAction = async ({ state, dispatch }) => {
+export const getEthnicityAction = async ({ state, dispatch, refreshJWT }) => {
   console.log("getEthnicityAction triggered");
 
   try {
-    const jwt = await authenticateAppAction({ state });
+    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
     if (!jwt) throw new Error("error authenticating app");
 
     const URL =

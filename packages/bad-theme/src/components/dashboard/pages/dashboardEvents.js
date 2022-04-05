@@ -17,14 +17,14 @@ import {
 } from "../../../context";
 
 const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
-  const { dashboardPath, isActiveUser } = useAppState();
+  const dispatch = useAppDispatch();
+  const { dashboardPath, isActiveUser, refreshJWT } = useAppState();
 
   const [listOfEvents, setListOfEvents] = useState();
   const [eventList, setEventList] = useState(null); // event data
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
   const DEFAULT_IMAGE = `${state.auth.WORDPRESS_URL}wp-content/uploads/2022/03/EVENTS.jpg`;
-  const dispatch = useAppDispatch();
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
@@ -41,7 +41,7 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
       if (!isActiveUser) return null;
 
       const { contactid } = isActiveUser;
-      const jwt = await authenticateAppAction({ dispatch, state });
+      const jwt = await authenticateAppAction({ dispatch, refreshJWT, state });
       const fetchUserEvents = await fetch(
         state.auth.APP_HOST + "/videvent/" + contactid + "/entities",
         {

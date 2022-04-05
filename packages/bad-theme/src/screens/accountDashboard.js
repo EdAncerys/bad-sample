@@ -32,7 +32,8 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const { isActiveUser, dynamicsApps, applicationData } = useAppState();
+  const { isActiveUser, dynamicsApps, applicationData, refreshJWT } =
+    useAppState();
 
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
@@ -52,6 +53,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
       state,
       dispatch,
       id: isActiveUser.contactid,
+      refreshJWT,
     });
     await getApplicationStatus({
       state,

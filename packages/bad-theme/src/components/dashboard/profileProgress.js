@@ -21,7 +21,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { dynamicsApps, applicationData, isActiveUser, dashboardPath } =
+  const { dynamicsApps, applicationData, isActiveUser, refreshJWT } =
     useAppState();
   // console.log("dynamicsApps", dynamicsApps); // debug
 
@@ -93,6 +93,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
         dispatch,
         applicationData,
         contactid: isActiveUser.contactid,
+        refreshJWT,
       });
     } catch (error) {
       console.log(error);

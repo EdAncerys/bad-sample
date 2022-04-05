@@ -9,6 +9,7 @@ export const updateProfileAction = async ({
   dispatch,
   data,
   isActiveUser,
+  refreshJWT,
 }) => {
   console.log("updateProfileAction triggered");
   const { contactid } = isActiveUser;
@@ -19,7 +20,7 @@ export const updateProfileAction = async ({
   // --------------------------------------------------------------------------
   // 📌 STEP: Log onto the API server and get the Bearer token
   // --------------------------------------------------------------------------
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
   if (!jwt) throw new Error("Cannot logon to server.");
 
   const requestOptions = {

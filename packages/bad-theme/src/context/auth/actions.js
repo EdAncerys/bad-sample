@@ -7,7 +7,12 @@ import {
   setLoginModalAction,
 } from "../index";
 
-export const loginActionViaModal = async ({ state, dispatch, transId }) => {
+export const loginActionViaModal = async ({
+  state,
+  dispatch,
+  transId,
+  refreshJWT,
+}) => {
   console.log("loginAction triggered");
   setFetchAction({ dispatch, isFetching: true });
 
@@ -15,7 +20,7 @@ export const loginActionViaModal = async ({ state, dispatch, transId }) => {
     // --------------------------------------------------------------------------
     // 📌 STEP: Log onto the API server and get the Bearer token
     // --------------------------------------------------------------------------
-    const jwt = await authenticateAppAction({ state, dispatch });
+    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
     if (!jwt) throw new Error("Cannot logon to server.");
 
     // --------------------------------------------------------------------------
@@ -35,6 +40,8 @@ export const loginActionViaModal = async ({ state, dispatch, transId }) => {
 };
 export const loginAction = async ({ state }) => {
   console.log("loginAction triggered");
+
+  console.log("🐞 ", state.auth.APP_USERNAME, state.auth.APP_PASSWORD);
 
   try {
     // 📌 auth B2c redirect url based on App default url
@@ -61,34 +68,48 @@ export const loginAction = async ({ state }) => {
   }
 };
 
-export const authenticateAppAction = async ({ state }) => {
+export const authenticateAppAction = async ({
+  state,
+  dispatch,
+  refreshJWT,
+}) => {
   console.log("authenticateAppAction triggered");
 
-  const username = state.auth.APP_USERNAME;
-  const password = state.auth.APP_PASSWORD;
-  const URL = state.auth.APP_HOST + `/users/login`;
-  // console.log("🐞 ", username, password, URL); // debug
-
-  const appCredentials = JSON.stringify({
-    username,
-    password,
-  });
-
-  const requestOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: appCredentials,
-  };
-
   try {
-    const data = await fetch(URL, requestOptions);
-    const response = await data.json();
+    // check if refresh token is set & valid if so use it
+    if (refreshJWT) {
+      console.log("🐞 APP HAVE REFRESH JWT");
+      // authenticate via refresh token
+      // replace authenticate
+    }
 
-    if (response.token) {
-      // console.log("🐞 ", response.token); // debug
-      return response.token;
-    } else {
-      return null;
+    // if refresh taken is not valid or null auth via app credentials
+    if (!refreshJWT) {
+      console.log("🐞 NO REFRESH JWT FOUND"); // debug
+      const username = state.auth.APP_USERNAME;
+      const password = state.auth.APP_PASSWORD;
+      const URL = state.auth.APP_HOST + `/users/login`;
+
+      const appCredentials = JSON.stringify({
+        username,
+        password,
+      });
+
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: appCredentials,
+      };
+
+      const data = await fetch(URL, requestOptions);
+      const response = await data.json();
+      // console.log("🐞 ", response); // debug
+
+      if (response.token) {
+        return response.token;
+      } else {
+        return null;
+      }
     }
   } catch (error) {
     console.log("error", error);
@@ -146,6 +167,7 @@ export const getUserDataByContactId = async ({
   dispatch,
   jwt,
   contactid,
+  refreshJWT,
 }) => {
   console.log("getUserDataByContactId triggered");
 
@@ -169,6 +191,7 @@ export const getUserDataByContactId = async ({
       state,
       dispatch,
       contactid,
+      refreshJWT,
     });
     if (!dynamicApps.apps.success)
       throw new Error("Error dynamicApps userData.");
@@ -186,7 +209,12 @@ export const getUserDataByContactId = async ({
   }
 };
 
-export const getUserDataByEmail = async ({ state, dispatch, email }) => {
+export const getUserDataByEmail = async ({
+  state,
+  dispatch,
+  email,
+  refreshJWT,
+}) => {
   console.log("getUserDataByEmail triggered");
 
   const URL =
@@ -194,7 +222,7 @@ export const getUserDataByEmail = async ({ state, dispatch, email }) => {
     `/catalogue/data/contacts?$filter=emailaddress1 eq '${email}'`;
 
   try {
-    const jwt = await authenticateAppAction({ state, dispatch });
+    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
     if (!jwt) throw new Error("Cannot logon to server.");
 
     const requestOptions = {

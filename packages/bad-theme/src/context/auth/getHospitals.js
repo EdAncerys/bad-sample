@@ -1,11 +1,16 @@
 import { authenticateAppAction } from "../index";
 
-export const getHospitalsAction = async ({ state, input }) => {
+export const getHospitalsAction = async ({
+  state,
+  input,
+  dispatch,
+  refreshJWT,
+}) => {
   console.log("getHospitalsAction triggered");
 
   const URL =
     state.auth.APP_HOST + `/catalogue/lookup/hospitals?search=${input}`;
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   const requestOptions = {
     method: "GET",
@@ -24,13 +29,18 @@ export const getHospitalsAction = async ({ state, input }) => {
   }
 };
 
-export const getHospitalNameAction = async ({ state, id }) => {
+export const getHospitalNameAction = async ({
+  state,
+  id,
+  dispatch,
+  refreshJWT,
+}) => {
   console.log("getHospitalsAction triggered");
 
   const URL =
     state.auth.APP_HOST +
     `/catalogue/data/accounts(${id})?$select=name,address1_composite,customertypecode,customertypecode`;
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   const requestOptions = {
     method: "GET",

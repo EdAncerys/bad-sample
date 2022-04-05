@@ -140,7 +140,6 @@ const Card = ({
         const wileyLink = await getWileyAction({ state, doi, isActiveUser });
         if (wileyLink) authLink = wileyLink;
       }
-      console.log("🐞 ", authLink);
     } catch (error) {
       console.log(error);
     } finally {
@@ -270,13 +269,11 @@ const Card = ({
       const video_url = videoArchive.acf.video;
       const reg = /\d+/g;
       const videoId = video_url.match(reg);
-      console.log("VIDELOID", videoId);
       const fetchVideoData = await fetch(
         `https://vimeo.com/api/v2/video/${videoId[0]}.json`
       );
       if (fetchVideoData.ok) {
         const json = await fetchVideoData.json();
-        console.log(json[0].thumbnail_medium);
         setVimeoCover(json[0].thumbnail_large);
       }
     };

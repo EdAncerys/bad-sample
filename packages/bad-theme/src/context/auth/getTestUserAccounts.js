@@ -1,12 +1,16 @@
 import { authenticateAppAction } from "../index";
 
-export const getTestUserAccountsAction = async ({ state }) => {
+export const getTestUserAccountsAction = async ({
+  state,
+  dispatch,
+  refreshJWT,
+}) => {
   console.log("getTestUserAccountsAction triggered");
 
   const URL =
     state.auth.APP_HOST +
     `/catalogue/data/contacts?$filter=firstname eq 'Andy'`;
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   const requestOptions = {
     method: "GET",

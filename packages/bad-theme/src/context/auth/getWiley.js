@@ -2,10 +2,12 @@ import { authenticateAppAction } from "../index";
 
 export const getWileyAction = async ({
   state,
+  dispatch,
   doi,
   isActiveUser,
   isFullAccess,
   url,
+  refreshJWT,
 }) => {
   console.log("getWileyAction triggered");
 
@@ -16,7 +18,7 @@ export const getWileyAction = async ({
   }
 
   const URL = state.auth.APP_HOST + `/wiley?contactid=${isValidId}`;
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
   let body = JSON.stringify({ doi: `doi/${doi}` }); // individual post access auth link
   if (isFullAccess) body = JSON.stringify({ target: url }); // full access auth link
 

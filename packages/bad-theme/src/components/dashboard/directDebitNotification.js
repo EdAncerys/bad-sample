@@ -17,8 +17,13 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const { isDirectDebit, dynamicsApps, isActiveUser, isVisibleNotification } =
-    useAppState();
+  const {
+    isDirectDebit,
+    dynamicsApps,
+    isActiveUser,
+    isVisibleNotification,
+    refreshJWT,
+  } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
 
@@ -31,6 +36,7 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
         state,
         dispatch,
         contactid: isActiveUser.contactid,
+        refreshJWT,
       });
 
     if (!isDirectDebit)
@@ -38,6 +44,7 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
         state,
         dispatch,
         id: isActiveUser.contactid,
+        refreshJWT,
       });
 
     // if direct status is status is Active, set debit setup to true

@@ -1,11 +1,11 @@
 import { authenticateAppAction, setFetchAction } from "../index";
 
-export const getBJDFeedAction = async ({ state, dispatch }) => {
+export const getBJDFeedAction = async ({ state, dispatch, refreshJWT }) => {
   console.log("getBJDFeedAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
   const URL = state.auth.APP_HOST + `/rss/bjd`;
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   const requestOptions = {
     method: "GET",
@@ -30,12 +30,12 @@ export const getBJDFeedAction = async ({ state, dispatch }) => {
   }
 };
 
-export const getCEDFeedAction = async ({ state, dispatch }) => {
+export const getCEDFeedAction = async ({ state, dispatch, refreshJWT }) => {
   console.log("getCEDFeedAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
   const URL = state.auth.APP_HOST + `/rss/ced`;
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   const requestOptions = {
     method: "GET",
@@ -60,12 +60,12 @@ export const getCEDFeedAction = async ({ state, dispatch }) => {
   }
 };
 
-export const getSHDFeedAction = async ({ state, dispatch }) => {
+export const getSHDFeedAction = async ({ state, dispatch, refreshJWT }) => {
   console.log("getSHDFeedAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
   const URL = state.auth.APP_HOST + `/rss/shd`;
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   const requestOptions = {
     method: "GET",

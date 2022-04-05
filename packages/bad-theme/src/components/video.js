@@ -27,13 +27,12 @@ const Video = ({ state, actions, libraries }) => {
   const [relatedVideos, setRelatedVideos] = React.useState(null);
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
-  console.log("post data: ", post); // debug
+  // console.log("post data: ", post); // debug
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const { isActiveUser } = useAppState();
   const dispatch = useAppDispatch();
-  console.log(isActiveUser);
+  const { isActiveUser, refreshJWT } = useAppState();
 
   React.useEffect(async () => {
     //Not the greatest idea to make useEffect async
@@ -43,8 +42,7 @@ const Video = ({ state, actions, libraries }) => {
     const related_videos_to_show = videos_list.slice(0, 3);
     console.log("FELICITA", related_videos_to_show);
     setRelatedVideos(related_videos_to_show);
-    const jwt = await authenticateAppAction({ state, dispatch });
-    console.log("JWT:", jwt);
+    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
     if (!post.acf.private) {
       setVideoStatus("unlocked");

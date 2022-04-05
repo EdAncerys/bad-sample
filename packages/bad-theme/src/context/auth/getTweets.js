@@ -1,11 +1,11 @@
 import { authenticateAppAction, setFetchAction } from "../index";
 
-export const getTweetsAction = async ({ state, dispatch }) => {
+export const getTweetsAction = async ({ state, dispatch, refreshJWT }) => {
   console.log("getTweetsAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
   const URL = state.auth.APP_HOST + `/twitter/tweets?limit=3`;
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   const requestOptions = {
     method: "GET",

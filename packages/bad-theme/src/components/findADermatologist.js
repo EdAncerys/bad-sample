@@ -18,19 +18,26 @@ const FindADermatologist = ({ state, block }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   let MARGIN = `${marginVertical}px ${marginHorizontal}px`;
 
+  const dispatch = useAppDispatch();
+  const { refreshJWT } = useAppState();
+
   const [query, setQuery] = React.useState();
 
   const [filteredDermatologists, setFilteredDermatologists] = React.useState();
   const [loading, setLoading] = React.useState(true);
   const [dermOnFocus, setDermOnFocus] = React.useState(null);
-  const dispatch = useAppDispatch();
   const query_limit = React.useRef(5);
   const enough = React.useRef(false);
   let crutent = 0;
 
   React.useEffect(async () => {
     const fetchDermatologistsByPostCode = async () => {
-      const jwt = await authenticateAppAction({ dispatch, state });
+      const jwt = await authenticateAppAction({
+        dispatch,
+        state,
+        dispatch,
+        refreshJWT,
+      });
       console.log("QUERY VALUE POSTCODE", query);
       const post_code = query.value.split(" ").join("");
       console.log(post_code);
@@ -67,8 +74,7 @@ const FindADermatologist = ({ state, block }) => {
     };
 
     const handleFocusOnThePostCode = async () => {
-      const jwt = await authenticateAppAction({ state, dispatch });
-      console.log("DZEJDABLJUTI", jwt);
+      const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
       const post_code = await fetch(
         state.auth.APP_HOST + "/catalogue/ukpostcode/" + query.value,
@@ -90,7 +96,7 @@ const FindADermatologist = ({ state, block }) => {
     };
 
     const fetchDermatologistsByName = async () => {
-      const jwt = await authenticateAppAction({ dispatch, state });
+      const jwt = await authenticateAppAction({ dispatch, refreshJWT, state });
 
       const url = state.auth.APP_HOST + "/catalogue/fad";
       const fetching = await fetch(url, {
@@ -118,7 +124,7 @@ const FindADermatologist = ({ state, block }) => {
 
   const handleLoadMore = async () => {
     setLoading(true);
-    const jwt = await authenticateAppAction({ dispatch, state });
+    const jwt = await authenticateAppAction({ dispatch, refreshJWT, state });
     const post_code = query.value.split(" ").join("");
     const url =
       state.auth.APP_HOST +

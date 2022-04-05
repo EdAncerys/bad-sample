@@ -4,6 +4,8 @@ export const getBADMembershipSubscriptionData = async ({
   state,
   category,
   type,
+  dispatch,
+  refreshJWT,
 }) => {
   console.log("getBADMembershipSubscriptionData triggered");
 
@@ -16,7 +18,7 @@ export const getBADMembershipSubscriptionData = async ({
       state.auth.APP_HOST +
       `/catalogue/lookup/membershiptype?search=${category}:${type}:${year}`;
 
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   console.log(URL); // debug
 

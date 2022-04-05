@@ -18,7 +18,7 @@ import {
 
 const LoginModal = ({ state, actions }) => {
   const dispatch = useAppDispatch();
-  const { loginModalAction, isFetching } = useAppState();
+  const { loginModalAction, refreshJWT } = useAppState();
 
   const [id, setId] = useState(null);
   const iFrameRef = useRef(null);
@@ -42,29 +42,7 @@ const LoginModal = ({ state, actions }) => {
   const iFrameHandler = async (e) => {
     const iFrame = e.currentTarget;
     // 👉 iFrame have to have correct redirect url se to for redirect to work.
-    // Redirect url set on dynamics server.
-
-    // console.log("IFRAME_URL", state.auth.IFRAME_URL); // debug
-    // console.log("APP_USERNAME", state.auth.APP_USERNAME); // debug
-    // console.log("APP_PASSWORD", state.auth.APP_PASSWORD); // debug
-
-    // ⬇️ development env default login action ⬇️
-    if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
-      console.log("🤖 DEVELOPMENT ENVIRONMENT 🤖");
-
-      const jwt = await authenticateAppAction({ state, dispatch });
-      await getUserDataByContactId({
-        state,
-        dispatch,
-        jwt,
-        // contactid: "cc9a332a-3672-ec11-8943-000d3a43c136", // andy testing account
-        // contactid: "84590b32-9490-ec11-b400-000d3a22037e", // mandy
-        // contactid: "0786df85-618f-ec11-b400-000d3a22037e", // Chris
-        contactid: "969ba377-a398-ec11-b400-000d3aaedef5", // emilia
-      });
-      setLoginModalAction({ dispatch, loginModalAction: false });
-      return;
-    }
+    // Redirect url set in dynamics server.
 
     try {
       const iFramePath = iFrame.contentWindow.location.pathname;

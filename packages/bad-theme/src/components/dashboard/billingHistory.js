@@ -15,8 +15,9 @@ const BillingHistory = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { sm, md, lg, xl } = muiQuery();
+
   const dispatch = useAppDispatch();
-  const { dynamicsApps, isActiveUser } = useAppState();
+  const { dynamicsApps, isActiveUser, refreshJWT } = useAppState();
 
   const [isFetching, setFetching] = useState(null);
   const [subApps, setSubApps] = useState([]);
@@ -30,6 +31,7 @@ const BillingHistory = ({ state, actions, libraries }) => {
         state,
         dispatch,
         contactid: isActiveUser.contactid,
+        refreshJWT,
       });
 
     // get approved memberships
@@ -44,7 +46,12 @@ const BillingHistory = ({ state, actions, libraries }) => {
   const handleDownloadPayment = async () => {
     try {
       setFetching(true);
-      const url = await getInvoiceAction({ state, isActiveUser });
+      const url = await getInvoiceAction({
+        state,
+        isActiveUser,
+        dispatch,
+        refreshJWT,
+      });
       // await for link to download & open in new window to download
       window.open(url, "_blank");
     } catch (error) {

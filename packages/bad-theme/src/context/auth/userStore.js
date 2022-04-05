@@ -80,7 +80,12 @@ export const setUserStoreAction = async ({
   }
 };
 
-export const getUserStoreAction = async ({ state, isActiveUser }) => {
+export const getUserStoreAction = async ({
+  state,
+  isActiveUser,
+  dispatch,
+  refreshJWT,
+}) => {
   console.log("getUserStoreAction triggered");
 
   try {
@@ -89,7 +94,7 @@ export const getUserStoreAction = async ({ state, isActiveUser }) => {
       throw new Error("Cannot set user store. Contactid is missing.");
 
     const URL = state.auth.APP_HOST + `/applications/current/${contactid}`;
-    const jwt = await authenticateAppAction({ state });
+    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
     const requestOptions = {
       method: "GET",
@@ -116,6 +121,7 @@ export const getUserApplicationAction = async ({
   state,
   dispatch,
   contactid,
+  refreshJWT,
 }) => {
   console.log("getUserApplicationAction triggered");
 
@@ -124,7 +130,7 @@ export const getUserApplicationAction = async ({
       throw new Error("Cannot get user store. Contactid is missing.");
 
     const URL = state.auth.APP_HOST + `/applications/current/${contactid}`;
-    const jwt = await authenticateAppAction({ state });
+    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
     const requestOptions = {
       method: "GET",
@@ -149,12 +155,17 @@ export const getUserApplicationAction = async ({
   }
 };
 
-export const createDynamicsApplicationAction = async ({ state, contactid }) => {
+export const createDynamicsApplicationAction = async ({
+  state,
+  contactid,
+  dispatch,
+  refreshJWT,
+}) => {
   console.log("createDynamicsApplicationAction triggered");
 
   // ⏬⏬  create application record in dynamics ⏬⏬
   const URL = state.auth.APP_HOST + `/applications/new/${contactid}`;
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   const requestOptions = {
     method: "GET",
@@ -185,6 +196,7 @@ export const setCompleteUserApplicationAction = async ({
   isActiveUser,
   applicationData,
   changeAppCategory,
+  refreshJWT,
 }) => {
   console.log("setCompleteUserApplicationAction triggered");
 
@@ -204,7 +216,7 @@ export const setCompleteUserApplicationAction = async ({
       throw new Error("Cannot set user store. Contactid is missing.");
 
     const URL = state.auth.APP_HOST + `/applications/new/${contactid}`;
-    const jwt = await authenticateAppAction({ state });
+    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
     const requestOptions = {
       method: "POST",
@@ -248,14 +260,16 @@ export const setCompleteUserApplicationAction = async ({
 
 export const updateDynamicsApplicationAction = async ({
   state,
+  dispatch,
   contactid,
   updatedMembershipData,
+  refreshJWT,
 }) => {
   console.log("updateDynamicsApplicationAction triggered");
 
   try {
     const URL = state.auth.APP_HOST + `/applications/current/${contactid}`;
-    const jwt = await authenticateAppAction({ state });
+    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
     const requestOptions = {
       method: "POST",
@@ -286,6 +300,7 @@ export const deleteApplicationAction = async ({
   dispatch,
   contactid,
   applicationData,
+  refreshJWT,
 }) => {
   console.log("deleteApplicationRecord triggered");
 
@@ -303,7 +318,7 @@ export const deleteApplicationAction = async ({
 
     // userStore endpoint API
     const URL = state.auth.APP_HOST + `/applications/current/${contactid}`;
-    const jwt = await authenticateAppAction({ state });
+    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
     const requestOptions = {
       method: "DELETE",

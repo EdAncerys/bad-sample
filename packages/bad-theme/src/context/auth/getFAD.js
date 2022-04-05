@@ -1,6 +1,6 @@
 import { authenticateAppAction, setFetchAction } from "../index";
 
-export const getFadAction = async ({ state, dispatch, page }) => {
+export const getFadAction = async ({ state, dispatch, page, refreshJWT }) => {
   console.log("getFadAction triggered");
 
   let perPage = 15;
@@ -8,7 +8,7 @@ export const getFadAction = async ({ state, dispatch, page }) => {
 
   try {
     setFetchAction({ dispatch, isFetching: true });
-    const jwt = await authenticateAppAction({ state });
+    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
     if (!jwt) throw new Error("error authenticating app");
 
     const requestOptions = {
@@ -33,11 +33,16 @@ export const getFadAction = async ({ state, dispatch, page }) => {
   }
 };
 
-export const getFADSearchAction = async ({ state, dispatch, query }) => {
+export const getFADSearchAction = async ({
+  state,
+  dispatch,
+  query,
+  refreshJWT,
+}) => {
   console.log("getFADSearchAction triggered");
 
   try {
-    const jwt = await authenticateAppAction({ state });
+    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
     if (!jwt) throw new Error("error authenticating app");
 
     const requestOptions = {
@@ -58,7 +63,12 @@ export const getFADSearchAction = async ({ state, dispatch, query }) => {
   }
 };
 
-export const getAllFadAction = async ({ state, dispatch, page }) => {
+export const getAllFadAction = async ({
+  state,
+  dispatch,
+  page,
+  refreshJWT,
+}) => {
   console.log("getFadAction triggered");
 
   let skip = page || 0;
@@ -67,7 +77,7 @@ export const getAllFadAction = async ({ state, dispatch, page }) => {
   let responseLength = perPage;
 
   try {
-    const jwt = await authenticateAppAction({ state });
+    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
     if (!jwt) throw new Error("error authenticating app");
 
     const requestOptions = {

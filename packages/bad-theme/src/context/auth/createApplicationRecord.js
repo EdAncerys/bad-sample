@@ -4,11 +4,18 @@ export const createApplicationRecord = async ({
   state,
   dispatch,
   isActiveUser,
+  refreshJWT,
 }) => {
   console.log("createApplicationRecord triggered");
 
   // ⏬⏬  check if user application already exist ⏬⏬
-  const userStoreData = await getUserStoreAction({ state, isActiveUser });
+  const userStoreData = await getUserStoreAction({
+    state,
+    isActiveUser,
+    dispatch,
+    refreshJWT,
+  });
+
   if (userStoreData) {
     await setUserStoreAction({
       state,
@@ -26,7 +33,7 @@ export const createApplicationRecord = async ({
   const URL =
     state.auth.APP_HOST +
     `/catalogue/data/core_membershipapplications(${contactid})`;
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   const requestOptions = {
     method: "PATCH",

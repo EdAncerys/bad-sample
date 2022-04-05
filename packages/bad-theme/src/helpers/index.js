@@ -10,7 +10,12 @@ const fetchCompleteHandler = ({ initialState }) => {
   initialState.isPlaceholder = false;
 };
 
-export const authCookieActionBeforeCSR = async ({ state, initialState }) => {
+export const authCookieActionBeforeCSR = async ({
+  state,
+  initialState,
+  dispatch,
+  refreshJWT,
+}) => {
   const cookie = handleGetCookie({ name: state.auth.COOKIE_NAME });
 
   // ⏬⏬  user validation & auth ⏬⏬
@@ -62,7 +67,11 @@ export const authCookieActionBeforeCSR = async ({ state, initialState }) => {
       }
 
       if (userData && appsData) {
-        const taken = await authenticateAppAction({ state }); // replace taken with new one
+        const taken = await authenticateAppAction({
+          state,
+          dispatch,
+          refreshJWT,
+        }); // replace taken with new one
         initialState.isActiveUser = userData; // populates user userResponse
         initialState.dynamicsApps = appsData;
         initialState.jwt = taken; // replace taken with new one

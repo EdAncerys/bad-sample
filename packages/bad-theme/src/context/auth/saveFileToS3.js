@@ -6,12 +6,13 @@ export const sendFileToS3Action = async ({
   dispatch,
   attachments,
   isPicture,
+  refreshJWT,
 }) => {
   console.log("sendFileToS3Action triggered");
 
   setFetchAction({ dispatch, isFetching: true });
   const URL = state.auth.APP_HOST + `/s3/profile/image`;
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   // extract file extension name from attachment
   const fileExtension = attachments.name.split(".").pop();

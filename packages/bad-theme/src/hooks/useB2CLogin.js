@@ -3,6 +3,7 @@ import { handleGetCookie, handleSetCookie } from "../helpers/cookie";
 
 // CONTEXT ----------------------------------------------------------------
 import {
+  useAppState,
   useAppDispatch,
   setPlaceholderAction,
   setGoToAction,
@@ -17,6 +18,7 @@ export const useB2CLogin = ({ state, actions }) => {
   let urlPath = state.router.link;
 
   const dispatch = useAppDispatch();
+  const { refreshJWT } = useAppState();
 
   // await to get window object & setWindow to true
   useEffect(() => {
@@ -64,7 +66,12 @@ export const useB2CLogin = ({ state, actions }) => {
         const email = items[1].emails[0];
         // setContactEmail(items[1].emails[0]);
         console.log("🐞 email ", email);
-        const user = await getUserDataByEmail({ state, dispatch, email });
+        const user = await getUserDataByEmail({
+          state,
+          dispatch,
+          email,
+          refreshJWT,
+        });
         if (!user) throw new Error("Error getting user data.");
       } else {
         console.log("🐞 error. Redirect to home path");

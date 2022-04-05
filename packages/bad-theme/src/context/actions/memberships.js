@@ -208,6 +208,8 @@ export const handleValidateMembershipChangeAction = async ({
   state,
   isActiveUser,
   core_membershipsubscriptionid,
+  dispatch,
+  refreshJWT,
 }) => {
   try {
     if (!isActiveUser || !core_membershipsubscriptionid)
@@ -218,7 +220,7 @@ export const handleValidateMembershipChangeAction = async ({
     const URL =
       state.auth.APP_HOST +
       `/catalogue/data/core_membershipapplications?$filter=statuscode eq 1 and _core_contactid_value eq ${contactid} and _bad_existingsubscriptionid_value eq ${core_membershipsubscriptionid}&$select=_bad_existingsubscriptionid_value`;
-    const jwt = await authenticateAppAction({ state });
+    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
     const requestOptions = {
       method: "GET",

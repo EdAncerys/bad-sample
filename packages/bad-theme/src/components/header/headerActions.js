@@ -22,13 +22,15 @@ import {
   setAppSearchDataAction,
   setAppSearchPhraseAction,
   loginAction,
+  authenticateAppAction, // TESTING
+  getUserDataByContactId, // TESTING
 } from "../../context";
 
 const HeaderActions = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { isActiveUser } = useAppState();
+  const { isActiveUser, refreshJWT } = useAppState();
 
   const [isReady, SetReady] = useState(null);
   const [filter, setFilter] = useState(null);
@@ -129,10 +131,28 @@ const HeaderActions = ({ state, actions, libraries }) => {
     }
   };
 
-  const handleLoginAction = () => {
+  const handleLoginAction = async () => {
     // --------------------------------------------------------------------------------
     // 📌  B2C login action
     // --------------------------------------------------------------------------------
+
+    // ⬇️ development env default login action ⬇️
+    if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
+      console.log("🤖 DEVELOPMENT ENVIRONMENT 🤖");
+
+      const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
+      await getUserDataByContactId({
+        state,
+        dispatch,
+        jwt,
+        // contactid: "cc9a332a-3672-ec11-8943-000d3a43c136", // andy testing account
+        // contactid: "84590b32-9490-ec11-b400-000d3a22037e", // mandy
+        // contactid: "0786df85-618f-ec11-b400-000d3a22037e", // Chris
+        contactid: "969ba377-a398-ec11-b400-000d3aaedef5", // emilia
+      });
+      setLoginModalAction({ dispatch, loginModalAction: false });
+      return;
+    }
 
     loginAction({ state });
   };

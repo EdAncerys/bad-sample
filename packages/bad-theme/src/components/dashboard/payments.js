@@ -8,14 +8,21 @@ import PaymentModal from "./paymentModal";
 import Loading from "../loading";
 import TitleBlock from "../titleBlock";
 
-import { useAppState, getApplicationStatus } from "../../context";
+// CONTEXT ----------------------------------------------------------------
+import {
+  useAppDispatch,
+  useAppState,
+  getApplicationStatus,
+} from "../../context";
+
 const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   //component state
   const [paymentUrl, setPaymentUrl] = useState("");
   const [liveSubscriptions, setLiveSubscriptions] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const { dynamicsApps, isActiveUser } = useAppState();
+  const dispatch = useAppDispatch();
+  const { dynamicsApps, isActiveUser, refreshJWT } = useAppState();
 
   // import values from the global state
   const marginHorizontal = state.theme.marginHorizontal;
@@ -81,6 +88,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
           state,
           dispatch,
           contactid: isActiveUser.contactid,
+          refreshJWT,
         });
     }
   };

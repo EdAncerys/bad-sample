@@ -9,6 +9,7 @@ export const updateAddressAction = async ({
   dispatch,
   data,
   isActiveUser,
+  refreshJWT,
 }) => {
   console.log("updateAddressAction triggered");
   const { contactid } = isActiveUser;
@@ -19,7 +20,7 @@ export const updateAddressAction = async ({
   // --------------------------------------------------------------------------
   // 📌 STEP: Log onto the API server and get the Bearer token
   // --------------------------------------------------------------------------
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
   if (!jwt) throw new Error("Cannot logon to server.");
 
   const requestOptions = {
@@ -52,7 +53,12 @@ export const updateAddressAction = async ({
   }
 };
 
-export const updateEthnicityAction = async ({ state, data, isActiveUser }) => {
+export const updateEthnicityAction = async ({
+  state,
+  data,
+  isActiveUser,
+  refreshJWT,
+}) => {
   console.log("updateEthnicityAction triggered");
   if (!isActiveUser) throw new Error("isActiveUser is required");
 
@@ -62,7 +68,7 @@ export const updateEthnicityAction = async ({ state, data, isActiveUser }) => {
   // --------------------------------------------------------------------------
   // 📌 STEP: Log onto the API server and get the Bearer token
   // --------------------------------------------------------------------------
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
   if (!jwt) throw new Error("Cannot logon to server.");
 
   const requestOptions = {
