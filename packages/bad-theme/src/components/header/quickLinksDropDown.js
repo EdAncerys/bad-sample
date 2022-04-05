@@ -41,7 +41,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
     let authLink = url;
 
     // 📌 check if logged in user exists & user is BAD member to replace auth link
-    if (isActiveUser) {
+    if (isWileys && isActiveUser) {
       authLink = await getWileyAction({
         state,
         isActiveUser,
