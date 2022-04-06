@@ -36,7 +36,6 @@ const PaymentModal = ({ state, actions, payment_url, resetPaymentUrl }) => {
         contactid: isActiveUser.contactid,
         refreshJWT,
       });
-
       resetPaymentUrl();
       if (iqs && iqs.has("transId")) {
         const transId = iqs.get("transId");

@@ -19,7 +19,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   //component state
   const [paymentUrl, setPaymentUrl] = useState("");
   const [liveSubscriptions, setLiveSubscriptions] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
   const dispatch = useAppDispatch();
   const { dynamicsApps, isActiveUser, refreshJWT } = useAppState();
@@ -33,8 +33,9 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
   useEffect(() => {
     setLiveSubscriptions(dynamicsApps);
-    setLoading(false);
-  }, [loading]);
+    // setLoading(false);
+    console.log("USEEFFECT TRIGGERED");
+  }, []);
 
   // when should I return null ?
   if (!subscriptions) return null;
@@ -81,7 +82,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       const url =
         json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
       setPaymentUrl(url);
-
+      console.log("Set Payment Url", url);
       // update application status for the user
       if (isActiveUser)
         await getApplicationStatus({
