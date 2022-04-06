@@ -17,9 +17,12 @@ export const getEthnicityAction = async ({ state, dispatch, refreshJWT }) => {
     const data = await fetch(URL, requestOptions);
     if (!data) throw new Error("error fetching data form API");
     let result = await data.json();
-    // filter result & return results where Lable is Ethnicity
-    result = result.filter((item) => item.LogicalName === "py3_ethnicity");
-    if (result.length > 0) result = result[0].Choices;
+
+    if (result.length > 0) {
+      result = result[0].Choices; // get picklist data
+    } else {
+      result = null; // reset ethnicity result data
+    }
 
     setEthnicityAction({ dispatch, ethnicity: result });
   } catch (error) {

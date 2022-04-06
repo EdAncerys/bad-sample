@@ -29,20 +29,19 @@ const BADTheme = {
       notification: false,
     },
     auth: {
-      // app auth service secrets
-      IFRAME_URL: process.env.IFRAME_URL,
+      // 📌 app auth service secrets
+      APP_HOST: process.env.APP_HOST, // app server endpoint
       APP_USERNAME: process.env.APP_USERNAME,
       APP_PASSWORD: process.env.APP_PASSWORD,
-      APP_HOST: process.env.APP_HOST,
 
-      B2C: process.env.B2C,
-      WP_HOST: process.env.WP_HOST,
+      B2C: process.env.B2C, // B2C auth logon service
+      WP_HOST: process.env.WP_HOST, // wp backend endpoint
       WP_HOST_CONTENT: process.env.WP_HOST_CONTENT,
-      ENVIRONMENT: process.env.ENVIRONMENT,
       GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
       DYNAMICS_BRIDGE: process.env.DYNAMICS_BRIDGE,
-      APP_URL: process.env.APP_URL,
-      COOKIE_NAME: "BAD-WebApp",
+      APP_URL: process.env.APP_URL, // app host url
+      COOKIE_NAME: "BAD-WebApp", // gen App cooie name
+      ENVIRONMENT: process.env.ENVIRONMENT,
     },
     contactList: {
       VENUE_HIRE_CONTACTS: process.env.VENUE_HIRE_CONTACTS
