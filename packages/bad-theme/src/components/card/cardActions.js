@@ -58,7 +58,7 @@ const CardActions = ({
       setErrorAction({
         dispatch,
         isError: {
-          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals.`,
+          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals. To continue to the publication without logging in, click 'Read Publication'`,
           image: "Error",
           action: [
             {
