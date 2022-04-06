@@ -71,7 +71,7 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
   if (isDebitSetup) isSetupDirectDebit = true;
 
   // if direct debit setup or no approved applications, return null
-  if (isSetupDirectDebit || !isApprovedMemberships) return null;
+  // if (isSetupDirectDebit || !isApprovedMemberships) return null;
 
   // HELPERS ----------------------------------------------------------------
   const handlePayment = () => {
