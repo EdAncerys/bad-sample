@@ -28,7 +28,6 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
-    console.log("🐞 ", dashboardPath);
     if (dashboardPath !== "Events") return null;
 
     try {
