@@ -331,13 +331,15 @@ const PilsArchive = ({ state, actions, libraries }) => {
                   >
                     <ServeIcon />
                   </div>
+                  <SearchDropDown
+                    input={searchInput}
+                    filter={searchFilter}
+                    onClickHandler={dropDownHandler}
+                    marginTop={ctaHeight + 5}
+                  />
                 </div>
                 <ServeSearchButton />
               </div>
-              <SearchDropDown
-                filter={searchFilter}
-                onClickHandler={dropDownHandler}
-              />
             </div>
             <div className="flex" style={{ marginTop: "1em" }}>
               <ServeSearchFilter />

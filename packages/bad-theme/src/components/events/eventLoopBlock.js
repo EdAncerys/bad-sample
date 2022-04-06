@@ -115,7 +115,6 @@ const EventLoopBlock = ({
       let diffB = Math.abs(dateB - today);
 
       if (diffA > diffB) return 1;
-
       if (diffA < diffB) return -1;
 
       return 0;
