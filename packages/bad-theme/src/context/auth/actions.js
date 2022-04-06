@@ -149,7 +149,6 @@ export const getUserContactId = async ({ state, dispatch, jwt, transId }) => {
     },
     body: JSON.stringify({ transId }),
   };
-  // console.log(URL); // debug
 
   try {
     const data = await fetch(URL, requestOptions);
