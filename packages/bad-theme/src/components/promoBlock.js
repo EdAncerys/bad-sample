@@ -119,6 +119,10 @@ const PromoBlock = ({ state, actions, block, disableMargin }) => {
         marginTop: "2em",
         marginBottom: "2em",
       }}
+      data-aos="fade"
+      data-aos-easing="ease-in-sine"
+      data-aos-delay={`50`}
+      data-aos-duration="1000"
     >
       <div
         style={{

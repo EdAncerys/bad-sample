@@ -199,7 +199,14 @@ const EventLoopBlock = ({
           if (layoutOne) {
             const removeMargin = search && key === 0;
             return (
-              <div key={key}>
+              <div
+                key={key}
+                data-aos="fade"
+                data-aos-easing="ease-in-sine"
+                data-aos-delay={`${key * 50}`}
+                data-aos-duration="1000"
+                data-aos-offset="-120"
+              >
                 <EventListView
                   block={block}
                   removeMargin={removeMargin}

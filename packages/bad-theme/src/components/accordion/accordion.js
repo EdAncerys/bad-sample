@@ -61,7 +61,7 @@ function AlterAccordion({
 
   if (!searchFilter || isForBADMembersOnly) return null; // defensive programming
 
-  const SingleDerm = ({ block, id }) => {
+  const SingleItem = ({ block, id }) => {
     return (
       <Card
         style={{
@@ -70,6 +70,11 @@ function AlterAccordion({
           marginTop: 20,
           border: 0,
         }}
+        data-aos="fade"
+        data-aos-easing="ease-in-sine"
+        data-aos-delay={`${id}`}
+        data-aos-duration="1000"
+        data-aos-offset="-120"
       >
         <Card.Header style={{ padding: 0, border: 0 }}>
           <CustomToggle eventKey={id}>
@@ -107,7 +112,7 @@ function AlterAccordion({
       <div style={{ padding: "0 100px" }}>
         <Accordion style={{ border: 0 }}>
           {searchFilter.map((block, key) => {
-            return <SingleDerm block={block} key={key} id={key} />;
+            return <SingleItem block={block} key={key} id={key} />;
           })}
         </Accordion>
       </div>

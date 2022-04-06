@@ -29,7 +29,7 @@ const BenefitsGrid = ({ state, actions, libraries, block }) => {
     >
       <div style={!lg ? styles.container : styles.containerMobile}>
         {block.benefits_card.map((block, key) => {
-          return <Benefit key={key} block={block} />;
+          return <Benefit key={key} id={key} block={block} />;
         })}
       </div>
     </div>

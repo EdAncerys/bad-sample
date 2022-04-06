@@ -18,7 +18,13 @@ const FullWidthImageAndPromoCard = ({ state, actions, block }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
+    <div
+      style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}
+      data-aos="fade"
+      data-aos-easing="ease-in-sine"
+      data-aos-delay="100"
+      data-aos-duration="1000"
+    >
       <div className="flex">
         <div
           className={`flex card-wrapper`}

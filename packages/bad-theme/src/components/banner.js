@@ -36,6 +36,10 @@ const Banner = ({ state, actions, libraries, block }) => {
             justifyContent: !lg ? "flex-end" : "flex-start",
             marginTop: !lg ? null : "1em",
           }}
+          data-aos="fade"
+          data-aos-easing="ease-in-sine"
+          data-aos-delay={`100`}
+          data-aos-duration="1000"
         >
           <div>
             <button
@@ -75,6 +79,10 @@ const Banner = ({ state, actions, libraries, block }) => {
                   justifyContent: "flex-end",
                   overflow: "hidden",
                 }}
+                data-aos="fade"
+                data-aos-easing="ease-in-sine"
+                data-aos-delay={`50`}
+                data-aos-duration="1000"
               >
                 <Html2React html={title} />
               </div>
