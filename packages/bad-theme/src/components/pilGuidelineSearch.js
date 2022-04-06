@@ -165,6 +165,22 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
     );
   };
 
+  const ServeViewAllButton = () => {
+    return (
+      <div
+        style={{
+          display: "grid",
+          alignItems: "center",
+          paddingLeft: `2em`,
+        }}
+      >
+        <a href="./patient-information-leaflets/" className="blue-btn-reverse">
+          View all
+        </a>
+      </div>
+    );
+  };
+
   // RETURN ---------------------------------------------------
   return (
     <div
@@ -222,6 +238,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
                   />
                 </div>
                 <ServeSearchButton />
+                <ServeViewAllButton />
               </div>
             </div>
           </div>
