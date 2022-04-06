@@ -25,6 +25,7 @@ function AlterAccordion({
   hasPreview,
 }) {
   const [isFetching, setFetching] = useState(null);
+  const { activeEventKey } = React.useContext(AccordionContext);
 
   function CustomToggle({ children, eventKey, callback }) {
     const { activeEventKey } = React.useContext(AccordionContext);

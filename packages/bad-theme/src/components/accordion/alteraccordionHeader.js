@@ -229,7 +229,7 @@ const AccordionHeader = ({
           </div>
         </div>
       </div>
-      <ServePreview />
+      {activeEventKey === uniqueId ? null : <ServePreview />}
     </div>
   );
 };
