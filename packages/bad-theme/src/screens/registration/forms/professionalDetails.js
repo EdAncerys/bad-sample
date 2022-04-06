@@ -408,8 +408,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             <div>
               <label className="required form-label">
                 {applicationType === "Associate Overseas"
-                  ? "GMC number or International equivalent"
-                  : "GMC number"}
+                  ? "GMC / IMC Number or International equivalent"
+                  : "GMC / IMC Number"}
               </label>
               <input
                 name="py3_gmcnumber"

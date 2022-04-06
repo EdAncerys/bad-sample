@@ -142,7 +142,7 @@ const RegistrationStepOne = ({ state, actions }) => {
             <ul>
               <li>CV</li>
               <li>Main Hospital / Place of Work / Medical School details</li>
-              <li>GMC/IMC number (except students)</li>
+              <li>GMC / IMC number (except students)</li>
               <li>Current Post</li>
               <li>Medical School (for student category only)</li>
               <li>

@@ -41,14 +41,13 @@ export const loginActionViaModal = async ({
 export const loginAction = async ({ state }) => {
   console.log("loginAction triggered");
 
-  console.log("🐞 ", state.auth.APP_USERNAME, state.auth.APP_PASSWORD);
-
   try {
     // 📌 auth B2c redirect url based on App default url
     const redirectPath = `&redirect_uri=${state.auth.APP_URL}/codecollect`;
     // --------------------------------------------------------------------------------
     // 📌  B2C login auth path endpoint
     // --------------------------------------------------------------------------------
+
     const url =
       state.auth.B2C +
       `${redirectPath}&scope=openid&response_type=id_token&prompt=login`;
@@ -80,7 +79,7 @@ export const authenticateAppAction = async ({
     if (refreshJWT) {
       console.log("🐞 APP HAVE REFRESH JWT");
       // authenticate via refresh token
-      // replace authenticate
+      // replace app tokens with response object
     }
 
     // if refresh taken is not valid or null auth via app credentials

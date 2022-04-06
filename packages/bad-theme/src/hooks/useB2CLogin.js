@@ -78,6 +78,7 @@ export const useB2CLogin = ({ state, actions }) => {
       }
     } catch (error) {
       console.log(error);
+      console.log("🐞 items: ", items);
     } finally {
       // get redirect url from cookie
       const redirectUrl = handleGetCookie({ name: "loginPath" });

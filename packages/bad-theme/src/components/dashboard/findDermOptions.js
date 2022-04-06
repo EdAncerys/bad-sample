@@ -188,14 +188,16 @@ const FindDermatologistOptions = ({ state }) => {
                 </div>
               </div>
             </div>
-            <div style={{ paddingTop: `1em` }}>Website Address</div>
+            <div style={{ paddingTop: `1em` }}>
+              Private Practice Website Address
+            </div>
             <div>
               <div className="flex-col">
                 <input
                   id="mainHospitalWebAddress"
                   type="text"
                   className="form-control"
-                  placeholder="Main Hospital Web Address"
+                  placeholder="Main Place of Work"
                   style={styles.input}
                   value={fadData.bad_mainhosptialweb}
                   onChange={(e) => {
