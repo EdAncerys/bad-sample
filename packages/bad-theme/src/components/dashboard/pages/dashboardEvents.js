@@ -28,12 +28,16 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
+    console.log("🐞 ", dashboardPath);
+    if (dashboardPath !== "Events") return null;
+
     try {
       // pre fetch events data
       let data = state.source.events;
       if (!data) await getEventsData({ state, actions });
+      console.log("🐞 ", data);
       // throw exception if no events
-      if (!data) throw new Error("No events found");
+      if (!data) throw new Error("Faild to fetch events data");
       data = state.source.events;
       const events = Object.values(data).slice(0, 2);
       setEventList(events);
@@ -51,7 +55,6 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
         }
       );
 
-      console.log("fetchUserEvents", fetchUserEvents);
       if (fetchUserEvents.ok) {
         let filteredEvents = [];
         const json = await fetchUserEvents.json();
@@ -59,13 +62,12 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
           filteredEvents.push(event.bad_eventid);
         });
 
-        console.log("data", data);
         // convert object to array
         data = Object.values(data);
         const relatedEvents = data.filter((item) => {
           return filteredEvents.includes(item.acf.events_force_id);
         });
-        console.log("relatedEvents", relatedEvents);
+
         setListOfEvents(relatedEvents);
       }
     } catch (err) {
@@ -96,7 +98,6 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
         >
           {listOfEvents.length > 0
             ? listOfEvents.map((item, key) => {
-                console.log(item);
                 return (
                   <Card
                     key={key}
