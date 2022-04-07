@@ -3,6 +3,7 @@ import { connect } from "frontity";
 
 import { colors } from "../config/colors";
 import DashboardNavigation from "../components/dashboard/dashboardNavigation";
+import DashboardNotifications from "../components/dashboard/dashboardNotifications";
 import Dashboard from "../components/dashboard/pages/dashboard";
 import DashboardEvents from "../components/dashboard/pages/dashboardEvents";
 import Directory from "../components/dashboard/pages/directory";
@@ -24,6 +25,7 @@ import {
   getApplicationStatus,
   muiQuery,
   handleApplyForMembershipAction,
+  setDashboardNotificationsAction,
 } from "../context";
 
 const AccountDashboard = ({ state, actions, libraries }) => {
@@ -48,6 +50,33 @@ const AccountDashboard = ({ state, actions, libraries }) => {
 
   useEffect(async () => {
     if (!isActiveUser) return null;
+    let isProfileComplete = true;
+    // map user profile data & if any field is empty, set isProfileComplete to false
+    isActiveUser.map((item) => {
+      // dashboard pane
+      if (!item.emailaddress1) isProfileComplete = false;
+      if (!item.address2_line1) isProfileComplete = false;
+      if (!item.address2_line2) isProfileComplete = false;
+      if (!item.address2_city) isProfileComplete = false;
+      if (!item.address2_postalcode) isProfileComplete = false;
+      if (!item.address2_country) isProfileComplete = false;
+      if (!item.jobtitle) isProfileComplete = false;
+      if (!item.mobilephone) isProfileComplete = false;
+      // personal information pane
+      if (!item.firstname) isProfileComplete = false;
+      if (!item.lastname) isProfileComplete = false;
+      if (!item.gendercode) isProfileComplete = false;
+      if (!item.birthdate) isProfileComplete = false;
+      if (!item.py3_ethnicity) isProfileComplete = false;
+    });
+    // --------------------------------------------------------------------------------
+    // 📌 SET Dashboard notification if user profile not complete
+    // --------------------------------------------------------------------------------
+    if (!isProfileComplete)
+      setDashboardNotificationsAction({
+        dispatch,
+        isDashboardNotifications: !isProfileComplete,
+      });
 
     await getDirectDebitAction({
       state,
@@ -154,6 +183,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
         <div className="flex-col">
           <BlockWrapper>
             {!lg ? <DashboardNavigation /> : <DashboardNavigationMobile />}
+            <DashboardNotifications />
             <Dashboard />
             <DashboardEvents />
             <Membership />

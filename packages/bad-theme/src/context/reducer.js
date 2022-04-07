@@ -6,7 +6,9 @@ export const initialState = {
   dynamicsApps: null,
   jwt: null,
   refreshJWT: null,
+
   isPlaceholder: true,
+  isDashboardNotifications: null,
 
   tweets: null,
   fad: null,
@@ -90,6 +92,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, isPlaceholder: action.payload };
     case "SET_ETHNICITY_ACTION":
       return { ...state, ethnicity: action.payload };
+    case "SET_DASHBOARD_NOTIFICATION_ACTION":
+      return { ...state, isDashboardNotifications: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
