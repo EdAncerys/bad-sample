@@ -9,6 +9,8 @@ import { colors } from "../config/imports";
 import BlockWrapper from "./blockWrapper";
 import SearchContainer from "./searchContainer";
 import TypeFilters from "./typeFilters";
+import date from "date-and-time";
+const DATE_MODULE = date;
 
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -28,13 +30,13 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   const [postListData, setPostListData] = useState(null);
   const [groupeType, setGroupeType] = useState(null);
 
-  const [searchFilter, setFilter] = useState(null);
-  const [amountFilter, setAmount] = useState(null);
-  const [dateFilter, setDate] = useState(null);
+  const [searchFilter, setFilter] = useState("");
+  const [fundingFilter, setFunding] = useState("");
+  const [dateFilter, setDate] = useState("");
 
   const filterRef = useRef("");
   const typeFilterRef = useRef(null);
-  const amountRef = useRef("");
+  const fundingRef = useRef("");
   const dateRef = useRef("");
 
   const postLimit = Number(post_limit) || 10; // max limit
@@ -77,7 +79,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     }
 
     if (post_limit) resultData = resultData.slice(0, Number(post_limit)); // apply limit on posts
-    console.log("🐞 ", resultData);
 
     setPostListData(resultData);
     setGroupeType(GROUPE_TYPE);
@@ -92,22 +93,36 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handleLoadMoreFilter = async () => {
-    let data = Object.values(state.source[postPath]);
-
     // increment chunk by postLimit
     chunkRef.current = chunkRef.current + postLimit;
-    setPostListData(data.slice(0, chunkRef.current));
+    handleSearch();
   };
 
   const handleSearch = () => {
     const input = filterRef.current.value;
     const type = typeFilterRef.current;
-    console.log("🐞 ", input, type);
+    const date = dateRef.current;
+    const funding = fundingRef.current;
 
     let data = Object.values(state.source[postPath]);
 
     if (type) {
       data = data.filter((item) => item[typePath].includes(type));
+    }
+
+    if (funding) {
+      data = data.filter((item) => item.acf.amount_filter === funding);
+    }
+
+    if (date) {
+      data = data.filter((item) => {
+        const closingDate = item.acf.closing_date;
+        if (!closingDate) return null;
+        // format dates to MMMM YYYY
+        const dateObject = new Date(closingDate);
+        const formattedDate = DATE_MODULE.format(dateObject, "MMMM YYYY");
+        return formattedDate === date;
+      });
     }
 
     if (input) {
@@ -146,7 +161,126 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     handleSearch();
   };
 
+  const handleClearFundingFilter = () => {
+    setFunding("");
+    fundingRef.current = "";
+
+    handleSearch();
+  };
+
+  const handleDateSearch = ({ e }) => {
+    const date = e.target.value;
+    dateRef.current = date;
+    setDate(date);
+
+    handleSearch();
+  };
+
+  const handleFundingSearch = ({ e }) => {
+    const funding = e.target.value;
+    fundingRef.current = funding;
+    setFunding(funding);
+
+    handleSearch();
+  };
+
+  const handleClearDateFilter = () => {
+    setDate("");
+    dateRef.current = "";
+
+    handleSearch();
+  };
+
   // SERVERS ----------------------------------------------------------------
+  const ServeAmountFilter = () => {
+    let data = Object.values(state.source[postPath]);
+    // set dateFilter to post dates
+    let allFundings = [];
+    data.filter((item) => {
+      const fundingFilter = item.acf.amount_filter;
+      if (fundingFilter) allFundings.push(fundingFilter);
+    });
+    // get unique month & year from allDates array and set to allDates
+    let uniqueFundings = [...new Set(allFundings)];
+    console.log("🐞 ", uniqueFundings);
+
+    return (
+      <div
+        style={{
+          marginTop: "auto",
+          padding: `1em 0 1em ${state.theme.marginVertical}px`,
+        }}
+      >
+        <select
+          name="guidance"
+          value={fundingFilter}
+          onChange={(e) => handleFundingSearch({ e })}
+          className="input"
+          style={{ height: 45 }}
+        >
+          <option value="" hidden>
+            Select Funding Rate
+          </option>
+          {uniqueFundings.map((item, key) => {
+            return (
+              <option key={key} value={item}>
+                {item} £
+              </option>
+            );
+          })}
+        </select>
+      </div>
+    );
+  };
+
+  const ServeClosingDates = () => {
+    let data = Object.values(state.source[postPath]);
+    // set dateFilter to post dates
+    let allDates = [];
+    data.filter((item) => {
+      const date = item.acf.closing_date;
+      if (date) {
+        // format dates to MMMM YYYY
+        const dateObject = new Date(date);
+        const formattedDate = DATE_MODULE.format(dateObject, "MMMM YYYY");
+
+        allDates.push(formattedDate);
+      }
+    });
+    // get unique month & year from allDates array and set to allDates
+    let uniqueDates = [...new Set(allDates)];
+    // if no dates, return null
+    if (!uniqueDates.length) return null;
+
+    return (
+      <div
+        style={{
+          marginTop: "auto",
+          padding: `1em 0 1em ${state.theme.marginVertical}px`,
+        }}
+      >
+        <select
+          name="guidance"
+          value={dateFilter}
+          onChange={(e) => handleDateSearch({ e })}
+          className="input"
+          style={{ height: 45 }}
+        >
+          <option value="" hidden>
+            Select Closing Date
+          </option>
+          {uniqueDates.map((item, key) => {
+            return (
+              <option key={key} value={item}>
+                {item}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+    );
+  };
+
   const ServeFilter = () => {
     if (!add_search_function) return null;
 
@@ -157,6 +291,42 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
         <div className="shadow filter">
           <div>{searchFilter}</div>
           <div className="filter-icon" onClick={handleClearSearchFilter}>
+            <CloseIcon
+              style={{
+                fill: colors.darkSilver,
+                padding: 0,
+              }}
+            />
+          </div>
+        </div>
+      );
+    };
+
+    const ServeFundingFilter = () => {
+      if (!fundingFilter) return null;
+
+      return (
+        <div className="shadow filter">
+          <div>{fundingFilter} £</div>
+          <div className="filter-icon" onClick={handleClearFundingFilter}>
+            <CloseIcon
+              style={{
+                fill: colors.darkSilver,
+                padding: 0,
+              }}
+            />
+          </div>
+        </div>
+      );
+    };
+
+    const ServeDateFilter = () => {
+      if (!dateFilter) return null;
+
+      return (
+        <div className="shadow filter">
+          <div>{dateFilter}</div>
+          <div className="filter-icon" onClick={handleClearDateFilter}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -179,14 +349,22 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       >
         <BlockWrapper>
           <div style={{ padding: `0 ${marginHorizontal}px` }}>
-            <SearchContainer
-              title={isAccordion ? "Undergraduate Awards" : "Research Funding"}
-              width="70%"
-              searchFilterRef={filterRef}
-              handleSearch={handleSearch}
-            />
+            <div className="flex">
+              <SearchContainer
+                title={
+                  isAccordion ? "Undergraduate Awards" : "Research Funding"
+                }
+                width="100%"
+                searchFilterRef={filterRef}
+                handleSearch={handleSearch}
+              />
+              <ServeAmountFilter />
+              <ServeClosingDates />
+            </div>
             <div className="flex" style={{ margin: "0.5em 0" }}>
               <ServeSearchFilter />
+              <ServeFundingFilter />
+              <ServeDateFilter />
             </div>
             <TypeFilters
               filters={groupeType}
