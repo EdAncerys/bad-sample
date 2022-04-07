@@ -15,7 +15,7 @@ const Error = ({ state, actions }) => {
           style={{ width: "fit-content" }}
           onClick={() => setGoToAction({ state, path: "/", actions })}
         >
-          B.A.D. Home
+          Return to BAD home
         </div>
       </div>
     );
@@ -59,7 +59,8 @@ const styles = {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    paddingTop: "10%",
+    marginTop: "10%",
+    padding: "4em 0",
   },
 };
 

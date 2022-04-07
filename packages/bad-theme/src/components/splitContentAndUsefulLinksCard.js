@@ -37,13 +37,6 @@ const SplitContentAndUsefulLinksCard = ({
     const ServeBody = () => {
       if (!body) return null;
 
-      // Manage max string Length
-      let BODY = body;
-      const MAX_LENGTH = 1600;
-      let bodyPreview = `${body.substring(0, MAX_LENGTH)}...`;
-      if (body.length < MAX_LENGTH) bodyPreview = body;
-      if (limit) BODY = bodyPreview;
-
       const ServeActions = () => {
         if (!limit_body_length) return null;
 
@@ -52,11 +45,7 @@ const SplitContentAndUsefulLinksCard = ({
 
         return (
           <div style={{ padding: `2em 0` }}>
-            <div
-              value={label}
-              className="caps-btn"
-              onClick={() => setLimit(!limit)}
-            >
+            <div className="caps-btn" onClick={() => setLimit(!limit)}>
               {label}
             </div>
           </div>
@@ -81,7 +70,15 @@ const SplitContentAndUsefulLinksCard = ({
           }}
         >
           <ServeTitle />
-          <Html2React html={BODY} />
+          <div
+            className="body-limit"
+            style={{
+              WebkitLineClamp: 1,
+              WebkitLineClamp: limit ? 20 : null, // line limit to body
+            }}
+          >
+            <Html2React html={body} />
+          </div>
           <ServeActions />
         </div>
       );

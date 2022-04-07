@@ -38,14 +38,8 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
     const ServeBody = () => {
       if (!body) return null;
 
-      // Adjust body max string Length
-      let bodyPreview = body;
-      const maxLength = 1500;
-      if (body.length > maxLength && limit)
-        bodyPreview = `${body.substring(0, maxLength)}...`;
-
       const ServeActions = () => {
-        if (!limit_body_length || body.length <= maxLength) return null;
+        if (!limit_body_length) return null;
 
         let label = "Read More";
         if (!limit) label = "Read Less";
@@ -77,7 +71,15 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
           }}
         >
           <ServeTitle />
-          <Html2React html={bodyPreview} />
+          <div
+            className="body-limit"
+            style={{
+              WebkitLineClamp: 1,
+              WebkitLineClamp: limit ? 20 : null, // line limit to body
+            }}
+          >
+            <Html2React html={body} />
+          </div>
           <ServeActions />
         </div>
       );

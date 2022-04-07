@@ -9,23 +9,13 @@ import { colors } from "../config/imports";
 import BlockWrapper from "./blockWrapper";
 import SearchContainer from "./searchContainer";
 import TypeFilters from "./typeFilters";
+import date from "date-and-time";
+const DATE_MODULE = date;
 
 import CloseIcon from "@mui/icons-material/Close";
 
 const CPTBlock = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
-  const [postListData, setPostListData] = useState(null);
-  const [groupeType, setGroupeType] = useState(null);
-
-  const [searchFilter, setSearchFilter] = useState(null);
-
-  const searchFilterRef = useRef(null);
-  const currentSearchFilterRef = useRef(null);
-  const typeFilterRef = useRef(null);
-  const loadMoreRef = useRef(null);
-
-  if (!block) return <Loading />;
 
   const {
     colour,
@@ -37,8 +27,22 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     preview,
     funding_filter,
   } = block;
+  const [postListData, setPostListData] = useState(null);
+  const [groupeType, setGroupeType] = useState(null);
 
-  const LIMIT = 100; // max limit
+  const [searchFilter, setFilter] = useState("");
+  const [fundingFilter, setFunding] = useState("");
+  const [dateFilter, setDate] = useState("");
+
+  const filterRef = useRef("");
+  const typeFilterRef = useRef(null);
+  const fundingRef = useRef("");
+  const dateRef = useRef("");
+
+  const postLimit = Number(post_limit) || 10; // max limit
+  const chunkRef = useRef(postLimit);
+
+  if (!block) return <Loading />;
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -74,12 +78,13 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       );
     }
 
-    const limit = post_limit || LIMIT;
-    setPostListData(resultData.slice(0, Number(limit))); // apply limit on posts
+    if (post_limit) resultData = resultData.slice(0, Number(post_limit)); // apply limit on posts
+
+    setPostListData(resultData);
     setGroupeType(GROUPE_TYPE);
 
     return () => {
-      searchFilterRef.current = false; // clean up function
+      filterRef.current = false; // clean up function
     };
   }, []);
 
@@ -88,27 +93,36 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handleLoadMoreFilter = async () => {
-    if (postListData.length < LIMIT) return;
-    let data = Object.values(state.source[postPath]);
-
-    if (!loadMoreRef.current) {
-      loadMoreRef.current = data;
-      setPostListData(data);
-    } else {
-      setPostListData(loadMoreRef.current.slice(0, Number(LIMIT)));
-      loadMoreRef.current = null;
-    }
+    // increment chunk by postLimit
+    chunkRef.current = chunkRef.current + postLimit;
+    handleSearch();
   };
 
   const handleSearch = () => {
-    const input = searchFilterRef.current.value || searchFilter;
-    currentSearchFilterRef.current = input;
+    const input = filterRef.current.value;
+    const type = typeFilterRef.current;
+    const date = dateRef.current;
+    const funding = fundingRef.current;
+
     let data = Object.values(state.source[postPath]);
 
-    if (typeFilterRef.current) {
-      data = data.filter((item) =>
-        item[typePath].includes(typeFilterRef.current)
-      );
+    if (type) {
+      data = data.filter((item) => item[typePath].includes(type));
+    }
+
+    if (funding) {
+      data = data.filter((item) => item.acf.amount_filter === funding);
+    }
+
+    if (date) {
+      data = data.filter((item) => {
+        const closingDate = item.acf.closing_date;
+        if (!closingDate) return null;
+        // format dates to MMMM YYYY
+        const dateObject = new Date(closingDate);
+        const formattedDate = DATE_MODULE.format(dateObject, "MMMM YYYY");
+        return formattedDate === date;
+      });
     }
 
     if (input) {
@@ -124,72 +138,149 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       });
     }
 
+    if (post_limit) data = data.slice(0, Number(chunkRef.current)); // apply limit on posts
+
     setPostListData(data);
-    setSearchFilter(input);
+    setFilter(input);
   };
 
-  const handleTypeSearch = () => {
-    const input = typeFilterRef.current;
-    let data = Object.values(state.source[postPath]); // add postListData object to data array
-
-    if (currentSearchFilterRef.current)
-      data = data.filter((item) => {
-        let title = item.title;
-        if (title) title = title.rendered;
-        let content = item.content;
-        if (content) content = content.rendered;
-        let overview = item.acf;
-        if (overview) overview = overview.overview;
-
-        if (title)
-          title = title.toLowerCase().includes(currentSearchFilterRef.current);
-        if (content)
-          content = content
-            .toLowerCase()
-            .includes(currentSearchFilterRef.current);
-        if (overview)
-          overview = overview
-            .toLowerCase()
-            .includes(currentSearchFilterRef.current);
-
-        return title || content || overview;
-      });
-
-    if (input) {
-      data = data.filter((item) => {
-        const list = item[typePath];
-        if (list.includes(input)) return item;
-      });
-
-      setPostListData(data);
-    }
-  };
-
-  const handleClearSearchFilter = () => {
-    let data = Object.values(state.source[postPath]); // add postListData object to data array
-    setSearchFilter(null);
-    searchFilterRef.current = null;
-    currentSearchFilterRef.current = null;
-
-    if (!typeFilterRef.current) {
-      setPostListData(data.slice(0, Number(post_limit || LIMIT)));
-    } else {
-      handleTypeSearch();
-    }
+  const handleTypeSearch = ({ id }) => {
+    typeFilterRef.current = id;
+    handleSearch();
   };
 
   const handleClearTypeFilter = () => {
     typeFilterRef.current = null;
-    let data = Object.values(state.source[postPath]); // add postListData object to data array
+    handleSearch();
+  };
 
-    if (!currentSearchFilterRef.current) {
-      setPostListData(data.slice(0, Number(post_limit || LIMIT)));
-    } else {
-      handleSearch();
-    }
+  const handleClearSearchFilter = () => {
+    setFilter(null);
+    filterRef.current.value = "";
+
+    handleSearch();
+  };
+
+  const handleClearFundingFilter = () => {
+    setFunding("");
+    fundingRef.current = "";
+
+    handleSearch();
+  };
+
+  const handleDateSearch = ({ e }) => {
+    const date = e.target.value;
+    dateRef.current = date;
+    setDate(date);
+
+    handleSearch();
+  };
+
+  const handleFundingSearch = ({ e }) => {
+    const funding = e.target.value;
+    fundingRef.current = funding;
+    setFunding(funding);
+
+    handleSearch();
+  };
+
+  const handleClearDateFilter = () => {
+    setDate("");
+    dateRef.current = "";
+
+    handleSearch();
   };
 
   // SERVERS ----------------------------------------------------------------
+  const ServeAmountFilter = () => {
+    let data = Object.values(state.source[postPath]);
+    // set dateFilter to post dates
+    let allFundings = [];
+    data.filter((item) => {
+      const fundingFilter = item.acf.amount_filter;
+      if (fundingFilter) allFundings.push(fundingFilter);
+    });
+    // get unique month & year from allDates array and set to allDates
+    let uniqueFundings = [...new Set(allFundings)];
+    console.log("🐞 ", uniqueFundings);
+
+    return (
+      <div
+        style={{
+          marginTop: "auto",
+          padding: `1em 0 1em ${state.theme.marginVertical}px`,
+        }}
+      >
+        <select
+          name="guidance"
+          value={fundingFilter}
+          onChange={(e) => handleFundingSearch({ e })}
+          className="input"
+          style={{ height: 45 }}
+        >
+          <option value="" hidden>
+            Select Funding Rate
+          </option>
+          {uniqueFundings.map((item, key) => {
+            return (
+              <option key={key} value={item}>
+                {item} £
+              </option>
+            );
+          })}
+        </select>
+      </div>
+    );
+  };
+
+  const ServeClosingDates = () => {
+    let data = Object.values(state.source[postPath]);
+    // set dateFilter to post dates
+    let allDates = [];
+    data.filter((item) => {
+      const date = item.acf.closing_date;
+      if (date) {
+        // format dates to MMMM YYYY
+        const dateObject = new Date(date);
+        const formattedDate = DATE_MODULE.format(dateObject, "MMMM YYYY");
+
+        allDates.push(formattedDate);
+      }
+    });
+    // get unique month & year from allDates array and set to allDates
+    let uniqueDates = [...new Set(allDates)];
+    // if no dates, return null
+    if (!uniqueDates.length) return null;
+
+    return (
+      <div
+        style={{
+          marginTop: "auto",
+          padding: `1em 0 1em ${state.theme.marginVertical}px`,
+        }}
+      >
+        <select
+          name="guidance"
+          value={dateFilter}
+          onChange={(e) => handleDateSearch({ e })}
+          className="input"
+          style={{ height: 45 }}
+        >
+          <option value="" hidden>
+            Select Closing Date
+          </option>
+          {uniqueDates.map((item, key) => {
+            return (
+              <option key={key} value={item}>
+                {item}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+    );
+  };
+
   const ServeFilter = () => {
     if (!add_search_function) return null;
 
@@ -200,6 +291,42 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
         <div className="shadow filter">
           <div>{searchFilter}</div>
           <div className="filter-icon" onClick={handleClearSearchFilter}>
+            <CloseIcon
+              style={{
+                fill: colors.darkSilver,
+                padding: 0,
+              }}
+            />
+          </div>
+        </div>
+      );
+    };
+
+    const ServeFundingFilter = () => {
+      if (!fundingFilter) return null;
+
+      return (
+        <div className="shadow filter">
+          <div>{fundingFilter} £</div>
+          <div className="filter-icon" onClick={handleClearFundingFilter}>
+            <CloseIcon
+              style={{
+                fill: colors.darkSilver,
+                padding: 0,
+              }}
+            />
+          </div>
+        </div>
+      );
+    };
+
+    const ServeDateFilter = () => {
+      if (!dateFilter) return null;
+
+      return (
+        <div className="shadow filter">
+          <div>{dateFilter}</div>
+          <div className="filter-icon" onClick={handleClearDateFilter}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -222,14 +349,22 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       >
         <BlockWrapper>
           <div style={{ padding: `0 ${marginHorizontal}px` }}>
-            <SearchContainer
-              title={isAccordion ? "Undergraduate Awards" : "Research Funding"}
-              width="70%"
-              searchFilterRef={searchFilterRef}
-              handleSearch={handleSearch}
-            />
+            <div className="flex">
+              <SearchContainer
+                title={
+                  isAccordion ? "Undergraduate Awards" : "Research Funding"
+                }
+                width="100%"
+                searchFilterRef={filterRef}
+                handleSearch={handleSearch}
+              />
+              <ServeAmountFilter />
+              <ServeClosingDates />
+            </div>
             <div className="flex" style={{ margin: "0.5em 0" }}>
               <ServeSearchFilter />
+              <ServeFundingFilter />
+              <ServeDateFilter />
             </div>
             <TypeFilters
               filters={groupeType}
@@ -290,10 +425,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   };
 
   const ServeMoreAction = () => {
-    if (currentSearchFilterRef.current || typeFilterRef.current) return null;
-    if (post_limit || postListData.length < LIMIT) return null;
-
-    const value = loadMoreRef.current ? "Less" : "Load More";
+    if (!post_limit || postListData.length < chunkRef.current) return null;
 
     return (
       <div
@@ -308,7 +440,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           className="transparent-btn"
           onClick={handleLoadMoreFilter}
         >
-          {value}
+          Load More
         </button>
       </div>
     );
