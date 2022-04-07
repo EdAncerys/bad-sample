@@ -472,3 +472,12 @@ https://codebeautify.org/
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #1e335d;
 }
+
+/* search dropdown customization */
+.search-phrase {
+  font-weight: bold;
+  color: #3882cd;
+}
+.title-link-animation:hover .search-phrase {
+  color: #000;
+}

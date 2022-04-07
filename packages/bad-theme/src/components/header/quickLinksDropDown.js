@@ -63,11 +63,11 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
       setErrorAction({
         dispatch,
         isError: {
-          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals.`,
+          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals. <br/> To continue to the publication without logging in, click 'Read ${title}'`,
           image: "Error",
           action: [
             {
-              label: `Go to ${title}`,
+              label: `Read ${title}`,
               handler: handelRedirect,
             },
             { label: "Login", handler: handelLogin },

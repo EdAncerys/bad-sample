@@ -157,6 +157,13 @@ const HeaderActions = ({ state, actions, libraries }) => {
     loginAction({ state });
   };
 
+  const mouseLeaveHandler = (e) => {
+    // check if mouse is leaving the dropdown based on Y position
+    if (e.clientY > ctaHeight * 6) {
+      clearSearchHandler();
+    }
+  };
+
   // SERVERS ----------------------------------------------------
   const ServeLoginAction = () => {
     if (isActiveUser) return null;
@@ -219,7 +226,10 @@ const HeaderActions = ({ state, actions, libraries }) => {
               flex: 1.5,
             }}
           >
-            <div style={{ position: "relative", width: "100%" }}>
+            <div
+              style={{ position: "relative", width: "100%" }}
+              onMouseLeave={mouseLeaveHandler}
+            >
               <div
                 className="flex"
                 style={{

@@ -1,18 +1,52 @@
 import React from "react";
 import { connect } from "frontity";
-
 import { colors } from "../config/imports";
 
-const Error = ({ state }) => {
+// CONTEXT ----------------------------------------------------------------
+import { setGoToAction } from "../context";
+
+const Error = ({ state, actions }) => {
+  // SERVERS ----------------------------------------------------
+  const ServeActions = () => {
+    return (
+      <div style={{ alignSelf: "center", paddingTop: "1em" }}>
+        <div
+          className="blue-btn-reverse"
+          style={{ width: "fit-content" }}
+          onClick={() => setGoToAction({ state, path: "/", actions })}
+        >
+          B.A.D. Home
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div style={styles.container}>
-      <div>
-        <div className="primary-title" style={styles.title}>
-          404 Error
+      <div className="flex-col" style={{ textAlign: "center" }}>
+        <div
+          className="primary-title"
+          style={{
+            fontSize: 96,
+            fontWeight: "500",
+            color: colors.primary,
+          }}
+        >
+          404
         </div>
-        <div>
-          The path <em>{state.router.link}</em> cannot be found.
+        <div
+          className="primary-title"
+          style={{
+            fontSize: 26,
+            fontWeight: "500",
+            color: colors.primary,
+            padding: "1em 0",
+          }}
+        >
+          Something went wrong. Let's get you to the tight place.
         </div>
+
+        <ServeActions />
       </div>
     </div>
   );
@@ -25,12 +59,7 @@ const styles = {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    paddingTop: "5%",
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: "500",
-    color: colors.primary,
+    paddingTop: "10%",
   },
 };
 

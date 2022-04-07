@@ -165,18 +165,54 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
     );
   };
 
-  const ServeViewAllButton = () => {
+  const ServeViewPILs = () => {
     return (
       <div
         style={{
           display: "grid",
           alignItems: "center",
-          paddingLeft: `2em`,
+          padding: `1em 0`,
+          minWidth: 200,
         }}
       >
-        <a href="./patient-information-leaflets/" className="blue-btn-reverse">
-          View all
-        </a>
+        <div
+          className="blue-btn-reverse"
+          onClick={() =>
+            setGoToAction({
+              state,
+              path: `/patient-information-leaflets/`,
+              actions,
+            })
+          }
+        >
+          View all PILs
+        </div>
+      </div>
+    );
+  };
+
+  const ServeViewGuidelines = () => {
+    return (
+      <div
+        style={{
+          display: "grid",
+          alignItems: "center",
+          padding: `1em 0`,
+          minWidth: 200,
+        }}
+      >
+        <div
+          className="blue-btn-reverse"
+          onClick={() =>
+            setGoToAction({
+              state,
+              path: `/guidelines-and-standards/`,
+              actions,
+            })
+          }
+        >
+          View all Guidelines
+        </div>
       </div>
     );
   };
@@ -187,64 +223,72 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
       style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}
       className="no-selector"
     >
+      <div
+        style={{
+          display: "grid",
+          justifyItems: "center",
+          gridTemplateColumns: "1fr 1fr",
+        }}
+      >
+        <ServeViewPILs />
+        <ServeViewGuidelines />
+      </div>
+
       <div className="shadow" style={{ backgroundColor: colors.white }}>
-        <div className="shadow" style={{ backgroundColor: colors.white }}>
-          <div className="flex no-selector" style={{ padding: `2em` }}>
-            <div className="flex-col">
-              <TitleBlock
-                block={{
-                  text_align: "left",
-                  title: "Search for PILs & Guidelines",
+        <div className="flex no-selector" style={{ padding: `2em` }}>
+          <div className="flex-col">
+            <TitleBlock
+              block={{
+                text_align: "left",
+                title: "Search for PILs & Guidelines",
+              }}
+              margin="0 0 1em 0"
+            />
+            <div className="flex-row">
+              <div
+                className="flex"
+                style={{
+                  flex: 1,
+                  height: ctaHeight,
+                  position: "relative",
+                  margin: "auto 0",
                 }}
-                margin="0 0 1em 0"
-              />
-              <div className="flex-row">
+              >
+                <input
+                  value={inputValue}
+                  onChange={handleSearch}
+                  type="text"
+                  className="form-control input"
+                  placeholder="Search"
+                />
                 <div
-                  className="flex"
+                  className="input-group-text toggle-icon-color"
                   style={{
-                    flex: 1,
+                    position: "absolute",
+                    right: 0,
                     height: ctaHeight,
-                    position: "relative",
-                    margin: "auto 0",
+                    border: "none",
+                    background: "transparent",
+                    alignItems: "center",
+                    color: colors.darkSilver,
+                    cursor: "pointer",
                   }}
                 >
-                  <input
-                    value={inputValue}
-                    onChange={handleSearch}
-                    type="text"
-                    className="form-control input"
-                    placeholder="Search"
-                  />
-                  <div
-                    className="input-group-text toggle-icon-color"
-                    style={{
-                      position: "absolute",
-                      right: 0,
-                      height: ctaHeight,
-                      border: "none",
-                      background: "transparent",
-                      alignItems: "center",
-                      color: colors.darkSilver,
-                      cursor: "pointer",
-                    }}
-                  >
-                    <ServeIcon />
-                  </div>
-                  <SearchDropDown
-                    filter={filterData}
-                    mapToName="title.rendered"
-                    onClickHandler={selectHandler}
-                    marginTop={ctaHeight + 10}
-                  />
+                  <ServeIcon />
                 </div>
-                <ServeSearchButton />
-                <ServeViewAllButton />
+                <SearchDropDown
+                  filter={filterData}
+                  mapToName="title.rendered"
+                  onClickHandler={selectHandler}
+                  marginTop={ctaHeight + 10}
+                />
               </div>
+              <ServeSearchButton />
             </div>
           </div>
-
-          <ServeFooter />
         </div>
+
+        <ServeFooter />
       </div>
     </div>
   );
