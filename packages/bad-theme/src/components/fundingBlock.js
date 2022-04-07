@@ -15,18 +15,6 @@ import CloseIcon from "@mui/icons-material/Close";
 const CPTBlock = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const [postListData, setPostListData] = useState(null);
-  const [groupeType, setGroupeType] = useState(null);
-
-  const [searchFilter, setSearchFilter] = useState(null);
-
-  const searchFilterRef = useRef(null);
-  const currentSearchFilterRef = useRef(null);
-  const typeFilterRef = useRef(null);
-  const loadMoreRef = useRef(null);
-
-  if (!block) return <Loading />;
-
   const {
     colour,
     background_colour,
@@ -37,8 +25,22 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     preview,
     funding_filter,
   } = block;
+  const [postListData, setPostListData] = useState(null);
+  const [groupeType, setGroupeType] = useState(null);
 
-  const LIMIT = 100; // max limit
+  const [searchFilter, setFilter] = useState(null);
+  const [amountFilter, setAmount] = useState(null);
+  const [dateFilter, setDate] = useState(null);
+
+  const filterRef = useRef("");
+  const typeFilterRef = useRef(null);
+  const amountRef = useRef("");
+  const dateRef = useRef("");
+
+  const postLimit = Number(post_limit) || 10; // max limit
+  const chunkRef = useRef(postLimit);
+
+  if (!block) return <Loading />;
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -74,12 +76,14 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       );
     }
 
-    const limit = post_limit || LIMIT;
-    setPostListData(resultData.slice(0, Number(limit))); // apply limit on posts
+    if (post_limit) resultData = resultData.slice(0, Number(post_limit)); // apply limit on posts
+    console.log("🐞 ", resultData);
+
+    setPostListData(resultData);
     setGroupeType(GROUPE_TYPE);
 
     return () => {
-      searchFilterRef.current = false; // clean up function
+      filterRef.current = false; // clean up function
     };
   }, []);
 
@@ -88,27 +92,22 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handleLoadMoreFilter = async () => {
-    if (postListData.length < LIMIT) return;
     let data = Object.values(state.source[postPath]);
 
-    if (!loadMoreRef.current) {
-      loadMoreRef.current = data;
-      setPostListData(data);
-    } else {
-      setPostListData(loadMoreRef.current.slice(0, Number(LIMIT)));
-      loadMoreRef.current = null;
-    }
+    // increment chunk by postLimit
+    chunkRef.current = chunkRef.current + postLimit;
+    setPostListData(data.slice(0, chunkRef.current));
   };
 
   const handleSearch = () => {
-    const input = searchFilterRef.current.value || searchFilter;
-    currentSearchFilterRef.current = input;
+    const input = filterRef.current.value;
+    const type = typeFilterRef.current;
+    console.log("🐞 ", input, type);
+
     let data = Object.values(state.source[postPath]);
 
-    if (typeFilterRef.current) {
-      data = data.filter((item) =>
-        item[typePath].includes(typeFilterRef.current)
-      );
+    if (type) {
+      data = data.filter((item) => item[typePath].includes(type));
     }
 
     if (input) {
@@ -124,69 +123,27 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       });
     }
 
+    if (post_limit) data = data.slice(0, Number(chunkRef.current)); // apply limit on posts
+
     setPostListData(data);
-    setSearchFilter(input);
+    setFilter(input);
   };
 
-  const handleTypeSearch = () => {
-    const input = typeFilterRef.current;
-    let data = Object.values(state.source[postPath]); // add postListData object to data array
-
-    if (currentSearchFilterRef.current)
-      data = data.filter((item) => {
-        let title = item.title;
-        if (title) title = title.rendered;
-        let content = item.content;
-        if (content) content = content.rendered;
-        let overview = item.acf;
-        if (overview) overview = overview.overview;
-
-        if (title)
-          title = title.toLowerCase().includes(currentSearchFilterRef.current);
-        if (content)
-          content = content
-            .toLowerCase()
-            .includes(currentSearchFilterRef.current);
-        if (overview)
-          overview = overview
-            .toLowerCase()
-            .includes(currentSearchFilterRef.current);
-
-        return title || content || overview;
-      });
-
-    if (input) {
-      data = data.filter((item) => {
-        const list = item[typePath];
-        if (list.includes(input)) return item;
-      });
-
-      setPostListData(data);
-    }
-  };
-
-  const handleClearSearchFilter = () => {
-    let data = Object.values(state.source[postPath]); // add postListData object to data array
-    setSearchFilter(null);
-    searchFilterRef.current = null;
-    currentSearchFilterRef.current = null;
-
-    if (!typeFilterRef.current) {
-      setPostListData(data.slice(0, Number(post_limit || LIMIT)));
-    } else {
-      handleTypeSearch();
-    }
+  const handleTypeSearch = ({ id }) => {
+    typeFilterRef.current = id;
+    handleSearch();
   };
 
   const handleClearTypeFilter = () => {
     typeFilterRef.current = null;
-    let data = Object.values(state.source[postPath]); // add postListData object to data array
+    handleSearch();
+  };
 
-    if (!currentSearchFilterRef.current) {
-      setPostListData(data.slice(0, Number(post_limit || LIMIT)));
-    } else {
-      handleSearch();
-    }
+  const handleClearSearchFilter = () => {
+    setFilter(null);
+    filterRef.current.value = "";
+
+    handleSearch();
   };
 
   // SERVERS ----------------------------------------------------------------
@@ -225,7 +182,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
             <SearchContainer
               title={isAccordion ? "Undergraduate Awards" : "Research Funding"}
               width="70%"
-              searchFilterRef={searchFilterRef}
+              searchFilterRef={filterRef}
               handleSearch={handleSearch}
             />
             <div className="flex" style={{ margin: "0.5em 0" }}>
@@ -290,10 +247,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   };
 
   const ServeMoreAction = () => {
-    if (currentSearchFilterRef.current || typeFilterRef.current) return null;
-    if (post_limit || postListData.length < LIMIT) return null;
-
-    const value = loadMoreRef.current ? "Less" : "Load More";
+    if (!post_limit || postListData.length < chunkRef.current) return null;
 
     return (
       <div
@@ -308,7 +262,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           className="transparent-btn"
           onClick={handleLoadMoreFilter}
         >
-          {value}
+          Load More
         </button>
       </div>
     );
