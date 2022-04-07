@@ -209,7 +209,7 @@ const AccordionHeader = ({
   };
 
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: "relative", transition: "all 0.3s" }}>
       <div className="accordion-header">
         <div className="flex-col">
           <div
@@ -229,7 +229,7 @@ const AccordionHeader = ({
           </div>
         </div>
       </div>
-      <ServePreview />
+      {activeEventKey === uniqueId ? null : <ServePreview />}
     </div>
   );
 };
