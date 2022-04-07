@@ -25,6 +25,7 @@ function AlterAccordion({
   hasPreview,
 }) {
   const [isFetching, setFetching] = useState(null);
+  const { activeEventKey } = React.useContext(AccordionContext);
 
   function CustomToggle({ children, eventKey, callback }) {
     const { activeEventKey } = React.useContext(AccordionContext);
@@ -65,7 +66,7 @@ function AlterAccordion({
     return (
       <Card
         style={{
-          backgroundColor: colors.lightSilver,
+          backgroundColor: "#fff",
           borderRadius: 0,
           marginTop: 20,
           border: 0,
@@ -75,8 +76,16 @@ function AlterAccordion({
         data-aos-delay={`${id}`}
         data-aos-duration="1000"
         data-aos-offset="-120"
+        className="shadow"
       >
-        <Card.Header style={{ padding: 0, border: 0 }}>
+        <Card.Header
+          style={{
+            padding: 0,
+            border: 0,
+            backgroundColor: "#fff",
+            paddingTop: "10px",
+          }}
+        >
           <CustomToggle eventKey={id}>
             <CardHeader
               id={id}

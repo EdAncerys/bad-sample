@@ -8,22 +8,19 @@ import PaymentModal from "./paymentModal";
 import Loading from "../loading";
 import TitleBlock from "../titleBlock";
 
-// CONTEXT ----------------------------------------------------------------
 import {
-  useAppDispatch,
   useAppState,
   getApplicationStatus,
+  useAppDispatch,
 } from "../../context";
-
 const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   //component state
   const [paymentUrl, setPaymentUrl] = useState("");
   const [liveSubscriptions, setLiveSubscriptions] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
+  const { dynamicsApps, isActiveUser } = useAppState();
   const dispatch = useAppDispatch();
-  const { dynamicsApps, isActiveUser, refreshJWT } = useAppState();
-
   // import values from the global state
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -33,8 +30,9 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
   useEffect(() => {
     setLiveSubscriptions(dynamicsApps);
-    setLoading(false);
-  }, [loading]);
+    // setLoading(false);
+    console.log("USEEFFECT TRIGGERED");
+  }, []);
 
   // when should I return null ?
   if (!subscriptions) return null;
@@ -81,21 +79,20 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       const url =
         json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
       setPaymentUrl(url);
-
-      // update application status for the user
-      if (isActiveUser)
-        await getApplicationStatus({
-          state,
-          dispatch,
-          contactid: isActiveUser.contactid,
-          refreshJWT,
-        });
     }
   };
 
-  const resetPaymentUrl = () => {
+  const resetPaymentUrl = async () => {
     setPaymentUrl(null);
     setLoading(true);
+
+    // update application status for the user
+    if (isActiveUser)
+      await getApplicationStatus({
+        state,
+        dispatch,
+        contactid: isActiveUser.contactid,
+      });
   };
 
   // SERVERS ---------------------------------------------
