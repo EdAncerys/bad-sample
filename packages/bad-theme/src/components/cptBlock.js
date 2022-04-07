@@ -282,11 +282,20 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           }
           if (cptBlockFilter) {
             // guidance type filtering
-            if (!block[catType].includes(Number(cptBlockFilter))) return null;
+            if (
+              block[catType] &&
+              !block[catType].includes(Number(cptBlockFilter))
+            )
+              return null;
           }
           if (searchType) {
             // type filtering
-            if (!block.guidance.includes(searchType)) return null;
+            if (
+              (block.guidance && !block.guidance.includes(searchType)) ||
+              (block.dermo_group_type &&
+                !block.dermo_group_type.includes(searchType))
+            )
+              return null;
           }
 
           return (
