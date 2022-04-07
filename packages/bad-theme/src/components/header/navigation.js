@@ -410,7 +410,7 @@ const Navigation = ({ state, actions, libraries }) => {
               style={styles.link}
               onClick={() => handleOnClickNavigation({ parentSlug: "more" })}
             >
-              <Html2React html={"More"} />
+              <Html2React html={"About & More"} />
             </a>
             <ServeChildMenu
               item={{ child_items: wpMoreMenu }}
