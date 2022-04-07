@@ -17,7 +17,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   //component state
   const [paymentUrl, setPaymentUrl] = useState("");
   const [liveSubscriptions, setLiveSubscriptions] = useState(null);
-  // const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   const { dynamicsApps, isActiveUser } = useAppState();
   const dispatch = useAppDispatch();
