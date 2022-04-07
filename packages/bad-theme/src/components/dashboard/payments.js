@@ -8,7 +8,11 @@ import PaymentModal from "./paymentModal";
 import Loading from "../loading";
 import TitleBlock from "../titleBlock";
 
-import { useAppState, getApplicationStatus } from "../../context";
+import {
+  useAppState,
+  getApplicationStatus,
+  useAppDispatch,
+} from "../../context";
 const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   //component state
   const [paymentUrl, setPaymentUrl] = useState("");
@@ -16,7 +20,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   const [loading, setLoading] = useState(true);
 
   const { dynamicsApps, isActiveUser } = useAppState();
-
+  const dispatch = useAppDispatch();
   // import values from the global state
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -74,20 +78,20 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       const url =
         json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
       setPaymentUrl(url);
-
-      // update application status for the user
-      if (isActiveUser)
-        await getApplicationStatus({
-          state,
-          dispatch,
-          contactid: isActiveUser.contactid,
-        });
     }
   };
 
-  const resetPaymentUrl = () => {
+  const resetPaymentUrl = async () => {
     setPaymentUrl(null);
     setLoading(true);
+
+    // update application status for the user
+    if (isActiveUser)
+      await getApplicationStatus({
+        state,
+        dispatch,
+        contactid: isActiveUser.contactid,
+      });
   };
 
   // SERVERS ---------------------------------------------
