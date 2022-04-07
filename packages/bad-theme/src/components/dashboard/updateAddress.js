@@ -40,14 +40,13 @@ const UpdateAddress = ({ state, actions, libraries }) => {
   const [isFetching, setIsFetching] = useState(null);
   const [isFetchingAddress, setIsFetchingAddress] = useState(null);
   const [formData, setFormData] = useState({
-    test_address: "",
-    address1_line1: "",
-    address1_line2: "",
     emailaddress1: "",
     mobilephone: "",
-    address1_city: "",
-    address1_country: "",
-    address1_postalcode: "",
+    address2_line1: "",
+    address2_line2: "",
+    address2_city: "",
+    address2_country: "",
+    address2_postalcode: "",
     preferredcontactmethodcode: "", // TBC field name
   });
 
@@ -63,15 +62,15 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     };
 
     // populate profile information form Dynamics records
-    if (isActiveUser.address1_line1) handleSetData({ name: "address1_line1" });
-    if (isActiveUser.address1_line2) handleSetData({ name: "address1_line2" });
+    if (isActiveUser.address2_line1) handleSetData({ name: "address2_line1" });
+    if (isActiveUser.address2_line2) handleSetData({ name: "address2_line2" });
     if (isActiveUser.emailaddress1) handleSetData({ name: "emailaddress1" });
     if (isActiveUser.mobilephone) handleSetData({ name: "mobilephone" });
-    if (isActiveUser.address1_city) handleSetData({ name: "address1_city" });
-    if (isActiveUser.address1_country)
-      handleSetData({ name: "address1_country" });
-    if (isActiveUser.address1_postalcode)
-      handleSetData({ name: "address1_postalcode" });
+    if (isActiveUser.address2_city) handleSetData({ name: "address2_city" });
+    if (isActiveUser.address2_country)
+      handleSetData({ name: "address2_country" });
+    if (isActiveUser.address2_postalcode)
+      handleSetData({ name: "address2_postalcode" });
     if (isActiveUser.preferredcontactmethodcode)
       handleSetData({ name: "preferredcontactmethodcode" });
   }, [isActiveUser]);
@@ -88,25 +87,25 @@ const UpdateAddress = ({ state, actions, libraries }) => {
   };
 
   const handleAddressUpdate = async () => {
-    let address1_line1 = formData.address1_line1;
-    if (!address1_line1) address1_line1 = address1Line1Ref.current.value; //defaults to input ref value
-    const address1_line2 = formData.address1_line2;
+    let address2_line1 = formData.address2_line1;
+    if (!address2_line1) address2_line1 = address1Line1Ref.current.value; //defaults to input ref value
+    const address2_line2 = formData.address2_line2;
     const emailaddress1 = formData.emailaddress1;
     const mobilephone = formData.mobilephone;
-    const address1_city = formData.address1_city;
-    const address1_country = formData.address1_country;
-    const address1_postalcode = formData.address1_postalcode;
+    const address2_city = formData.address2_city;
+    const address2_country = formData.address2_country;
+    const address2_postalcode = formData.address2_postalcode;
     const preferredcontactmethodcode = formData.preferredcontactmethodcode;
 
     const data = Object.assign(
       {}, // add empty object
-      !!address1_line1 && { address1_line1 },
-      !!address1_line2 && { address1_line2 },
+      !!address2_line1 && { address2_line1 },
+      !!address2_line2 && { address2_line2 },
       !!emailaddress1 && { emailaddress1 },
       !!mobilephone && { mobilephone },
-      !!address1_city && { address1_city },
-      !!address1_country && { address1_country },
-      !!address1_postalcode && { address1_postalcode },
+      !!address2_city && { address2_city },
+      !!address2_country && { address2_country },
+      !!address2_postalcode && { address2_postalcode },
       !!preferredcontactmethodcode && { preferredcontactmethodcode }
     );
 
@@ -177,7 +176,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
   const handleSelectAddress = async ({ item }) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      address1_line1: item.title,
+      address2_line1: item.title,
     }));
   };
 
@@ -185,7 +184,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     // clear search input value
     setFormData((prevFormData) => ({
       ...prevFormData,
-      address1_line1: "",
+      address2_line1: "",
     }));
     setSearchInput("");
     setAddressData(null);
@@ -238,7 +237,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
             <div>
               <div style={{ position: "relative" }}>
                 <label>Address Line 1</label>
-                {!formData.address1_line1 && (
+                {!formData.address2_line1 && (
                   <div style={{ position: "relative", width: "100%" }}>
                     <div
                       className="flex"
@@ -280,7 +279,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
                     />
                   </div>
                 )}
-                {formData.address1_line1 && (
+                {formData.address2_line1 && (
                   <div className="form-control input">
                     <div className="flex-row">
                       <div
@@ -290,7 +289,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
                           paddingRight: 15,
                         }}
                       >
-                        {formData.address1_line1}
+                        {formData.address2_line1}
                         <div
                           className="filter-icon"
                           style={{ top: -7 }}
@@ -313,8 +312,8 @@ const UpdateAddress = ({ state, actions, libraries }) => {
               <div style={styles.wrapper}>
                 <label>Address Line 2</label>
                 <input
-                  name="address1_line2"
-                  value={formData.address1_line2}
+                  name="address2_line2"
+                  value={formData.address2_line2}
                   onChange={handleInputChange}
                   className="form-control input"
                   placeholder="Address Line 2"
@@ -347,8 +346,8 @@ const UpdateAddress = ({ state, actions, libraries }) => {
               <div>
                 <label>City</label>
                 <Form.Select
-                  name="address1_city"
-                  value={formData.address1_city}
+                  name="address2_city"
+                  value={formData.address2_city}
                   onChange={handleInputChange}
                   className="input"
                   // disabled
@@ -368,8 +367,8 @@ const UpdateAddress = ({ state, actions, libraries }) => {
               <div style={styles.wrapper}>
                 <label>Country</label>
                 <Form.Select
-                  name="address1_country"
-                  value={formData.address1_country}
+                  name="address2_country"
+                  value={formData.address2_country}
                   onChange={handleInputChange}
                   className="input"
                   // disabled
@@ -389,8 +388,8 @@ const UpdateAddress = ({ state, actions, libraries }) => {
               <div>
                 <label>Postcode</label>
                 <input
-                  name="address1_postalcode"
-                  value={formData.address1_postalcode}
+                  name="address2_postalcode"
+                  value={formData.address2_postalcode}
                   onChange={handleInputChange}
                   className="form-control input"
                   placeholder="Postcode"

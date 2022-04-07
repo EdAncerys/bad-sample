@@ -1355,12 +1355,20 @@ export const sigAppFileds = [
 
 export const prefMailingOption = [
   {
-    value: 1, // TBC value reange
-    Label: "Main Hospital",
+    value: 1,
+    Label: "Any",
   },
   {
     value: 2,
-    Label: "Home",
+    Label: "Email",
+  },
+  {
+    value: 3,
+    Label: "Phone",
+  },
+  {
+    value: 5,
+    Label: "Mail",
   },
 ];
 

@@ -50,28 +50,25 @@ const AccountDashboard = ({ state, actions, libraries }) => {
 
   useEffect(async () => {
     if (!isActiveUser) return null;
+    console.log("🐞 ", isActiveUser);
     let isProfileComplete = true;
-    // map user profile data & if any field is empty, set isProfileComplete to false
-    isActiveUser.map((item) => {
-      // dashboard pane
-      if (!item.emailaddress1) isProfileComplete = false;
-      if (!item.address2_line1) isProfileComplete = false;
-      if (!item.address2_line2) isProfileComplete = false;
-      if (!item.address2_city) isProfileComplete = false;
-      if (!item.address2_postalcode) isProfileComplete = false;
-      if (!item.address2_country) isProfileComplete = false;
-      if (!item.jobtitle) isProfileComplete = false;
-      if (!item.mobilephone) isProfileComplete = false;
-      // personal information pane
-      if (!item.firstname) isProfileComplete = false;
-      if (!item.lastname) isProfileComplete = false;
-      if (!item.gendercode) isProfileComplete = false;
-      if (!item.birthdate) isProfileComplete = false;
-      if (!item.py3_ethnicity) isProfileComplete = false;
-    });
     // --------------------------------------------------------------------------------
     // 📌 SET Dashboard notification if user profile not complete
     // --------------------------------------------------------------------------------
+    if (!isActiveUser.emailaddress1) isProfileComplete = false;
+    if (!isActiveUser.address2_line1) isProfileComplete = false;
+    if (!isActiveUser.address2_city) isProfileComplete = false;
+    if (!isActiveUser.address2_postalcode) isProfileComplete = false;
+    if (!isActiveUser.address2_country) isProfileComplete = false;
+    if (!isActiveUser.jobtitle) isProfileComplete = false;
+    if (!isActiveUser.mobilephone) isProfileComplete = false;
+    // personal information pane
+    if (!isActiveUser.firstname) isProfileComplete = false;
+    if (!isActiveUser.lastname) isProfileComplete = false;
+    if (!isActiveUser.gendercode) isProfileComplete = false;
+    if (!isActiveUser.birthdate) isProfileComplete = false;
+    if (!isActiveUser.py3_ethnicity) isProfileComplete = false;
+
     if (!isProfileComplete)
       setDashboardNotificationsAction({
         dispatch,
