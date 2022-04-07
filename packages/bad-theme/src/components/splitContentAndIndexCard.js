@@ -39,6 +39,8 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
       if (!body) return null;
 
       const ServeActions = () => {
+        if (!limit_body_length) return null;
+
         let label = "Read More";
         if (!limit) label = "Read Less";
 
@@ -73,7 +75,7 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
             className="body-limit"
             style={{
               WebkitLineClamp: 1,
-              WebkitLineClamp: limit ? 20 : null,
+              WebkitLineClamp: limit ? 20 : null, // line limit to body
             }}
           >
             <Html2React html={body} />
