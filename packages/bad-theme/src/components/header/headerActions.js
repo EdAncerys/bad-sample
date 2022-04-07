@@ -22,8 +22,8 @@ import {
   setAppSearchDataAction,
   setAppSearchPhraseAction,
   loginAction,
-  authenticateAppAction, // TESTING
-  getUserDataByContactId, // TESTING
+  authenticateAppAction, // TESTING enviroment
+  getUserDataByContactId, // TESTING enviroment
 } from "../../context";
 
 const HeaderActions = ({ state, actions, libraries }) => {

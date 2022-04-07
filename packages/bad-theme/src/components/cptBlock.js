@@ -21,20 +21,7 @@ import {
 const CPTBlock = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const dispatch = useAppDispatch();
-  const { cptBlockFilter } = useAppState();
-
-  const [postListData, setPostListData] = useState(null);
-  const [groupeType, setGroupeType] = useState(null);
-  const [guidanceCategory, setGuidanceCategory] = useState(null);
-
-  const [searchFilter, setSearchFilter] = useState(null);
-  const [guidanceFilter, setGuidanceFilter] = useState(null);
-
-  if (!block) return <Loading />;
-
   const { sm, md, lg, xl } = muiQuery();
-
   const {
     colour,
     background_colour,
@@ -43,13 +30,20 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     add_search_function,
     acf_fc_layout,
   } = block;
+  const dispatch = useAppDispatch();
+  const { cptBlockFilter } = useAppState();
+
+  const [postListData, setPostListData] = useState(null);
+  const [groupeType, setGroupeType] = useState(null);
+
+  const chunkRef = useRef(post_limit || 8);
+  const [guidanceCategory, setCategory] = useState(null);
+  const [searchFilter, setFilter] = useState(null);
+  const [searchType, setType] = useState(null);
 
   const searchFilterRef = useRef(null);
-  const currentSearchFilterRef = useRef(null);
   const typeFilterRef = useRef(null);
   const loadMoreRef = useRef(null);
-
-  const LIMIT = 8;
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -58,6 +52,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   const isCovid_19 = acf_fc_layout === "covid_loop_block";
   let postPath = `derm_groups_charity`;
   let typePath = `dermo_group_type`;
+  let catType = `guidance_category`;
   if (isCovid_19) {
     postPath = `covid_19`;
     typePath = `guidance`;
@@ -66,6 +61,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   let PADDING = `${marginVertical}px 0`;
   if (add_search_function) PADDING = `0 0 ${marginVertical}px 0`;
 
+  if (!block) return <Loading />;
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
     const path = `/${postPath}/`;
@@ -82,25 +78,24 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     }
     let groupData = Object.values(state.source[postPath]);
     const groupType = Object.values(state.source[typePath]);
-    if (isCovid_19)
-      setGuidanceCategory(Object.values(state.source.guidance_category)); // set additional filter option to COVID-19
+    if (isCovid_19) setCategory(Object.values(state.source.guidance_category)); // set additional filter option to COVID-19
 
-    // set post lit values from filter value in local storage
+    // set post lit values from filter value in app context
     if (cptBlockFilter) {
-      typeFilterRef.current = cptBlockFilter;
-      groupData = groupData.filter((item) =>
-        item[typePath].includes(cptBlockFilter)
-      );
+      groupData = groupData.filter((item) => {
+        let isCatList = null;
+        let isIncludes = null;
+        if (item[catType]) isCatList = Object.values(item[catType]);
+        // check data includes selected category
+        if (isCatList) isIncludes = isCatList.includes(Number(cptBlockFilter));
+
+        return isIncludes;
+      });
     }
-    // clear filter value in local storage
+    // clear filter value in app context
     setCPTBlockAction({ dispatch, cptBlockFilter: "" });
 
-    const limit = post_limit || LIMIT;
-    if (!cptBlockFilter) {
-      setPostListData(groupData.slice(0, Number(limit))); // apply limit on posts
-    } else {
-      setPostListData(groupData);
-    }
+    setPostListData(groupData.slice(0, Number(chunkRef.current))); // apply limit on posts
     setGroupeType(groupType);
 
     return () => {
@@ -113,115 +108,16 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handleLoadMoreFilter = async () => {
-    if (postListData.length < LIMIT) return;
     let data = Object.values(state.source[postPath]);
 
-    if (!loadMoreRef.current) {
-      loadMoreRef.current = data;
-      setPostListData(data);
-    } else {
-      setPostListData(loadMoreRef.current.slice(0, Number(LIMIT)));
-      loadMoreRef.current = null;
-    }
+    // increment chunkRef value by 8
+    chunkRef.current = chunkRef.current + 8;
+    setPostListData(data.slice(0, Number(chunkRef.current)));
   };
 
-  const handleSearch = () => {
-    const input = searchFilterRef.current.value.toLowerCase() || searchFilter;
-    currentSearchFilterRef.current = input;
-    let data = Object.values(state.source[postPath]);
-
-    const categoryId = cptBlockFilter;
-
-    if (categoryId) {
-      data = data.filter((item) =>
-        item.guidance_category.includes(Number(categoryId))
-      );
-    }
-
-    if (cptBlockFilter) {
-      data = data.filter((item) => item[typePath].includes(cptBlockFilter));
-    }
-
-    if (input) {
-      data = data.filter((item) => {
-        let title = item.title.rendered;
-        let content = item.content.rendered;
-
-        if (title) title = title.toLowerCase().includes(input.toLowerCase());
-        if (content)
-          content = content.toLowerCase().includes(input.toLowerCase());
-
-        return title || content;
-      });
-    }
-
-    setPostListData(data);
-    setSearchFilter(input);
-    if (categoryId) setGuidanceFilter(categoryId);
-  };
-
-  const handleTypeSearch = () => {
-    const input = typeFilterRef.current;
-    let data = Object.values(state.source[postPath]); // add postListData object to data array
-
-    if (currentSearchFilterRef.current)
-      data = data.filter((item) => {
-        let title = item.title.rendered;
-        let content = item.content.rendered;
-        if (title)
-          title = title.toLowerCase().includes(currentSearchFilterRef.current);
-        if (content)
-          content = content
-            .toLowerCase()
-            .includes(currentSearchFilterRef.current);
-
-        return title || content;
-      });
-
-    if (input) {
-      data = data.filter((item) => {
-        const list = item[typePath];
-        if (list.includes(input)) return item;
-      });
-
-      // handle save search filter to local storage
-      setCPTBlockAction({ dispatch, cptBlockFilter: input });
-
-      setPostListData(data);
-    }
-  };
-
-  const handleClearSearchFilter = () => {
-    let data = Object.values(state.source[postPath]); // add postListData object to data array
-    setSearchFilter(null);
-    searchFilterRef.current = null;
-    currentSearchFilterRef.current = null;
-
-    if (!typeFilterRef.current) {
-      setPostListData(data.slice(0, Number(post_limit || LIMIT)));
-    } else {
-      handleTypeSearch();
-    }
-  };
-
-  const handleClearCategoryFilter = () => {
-    let data = Object.values(state.source[postPath]); // add postListData object to data array
-    setCPTBlockAction({ dispatch, cptBlockFilter: "" });
-    setGuidanceFilter(null);
-    setPostListData(data.slice(0, Number(post_limit || LIMIT)));
-
-    handleTypeSearch();
-  };
-
-  const handleClearTypeFilter = () => {
-    typeFilterRef.current = null;
-    let data = Object.values(state.source[postPath]); // add postListData object to data array
-
-    if (!currentSearchFilterRef.current) {
-      setPostListData(data.slice(0, Number(post_limit || LIMIT)));
-    } else {
-      handleSearch();
-    }
+  const inputSearchHandler = () => {
+    const input = searchFilterRef.current.value;
+    setFilter(input);
   };
 
   // SERVERS ----------------------------------------------------------------
@@ -234,7 +130,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       return (
         <div className="shadow filter">
           <div>{searchFilter}</div>
-          <div className="filter-icon" onClick={handleClearSearchFilter}>
+          <div className="filter-icon" onClick={() => setFilter("")}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -247,18 +143,21 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     };
 
     const ServeGuidanceFilter = () => {
-      if (!guidanceFilter) return null;
+      if (!cptBlockFilter) return null;
 
       let name = "Category";
       name = guidanceCategory.filter(
-        (item) => item.id === Number(guidanceFilter)
+        (item) => item.id === Number(cptBlockFilter)
       )[0];
       if (name) name = name.name; // apply category filter name
 
       return (
         <div className="shadow filter">
           <div>{name}</div>
-          <div className="filter-icon" onClick={handleClearCategoryFilter}>
+          <div
+            className="filter-icon"
+            onClick={() => setCPTBlockAction({ dispatch, cptBlockFilter: "" })}
+          >
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -283,7 +182,9 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           <select
             name="guidance"
             value={cptBlockFilter}
-            onChange={handleSearch}
+            onChange={(e) =>
+              setCPTBlockAction({ dispatch, cptBlockFilter: e.target.value })
+            }
             className="input"
             style={{ height: 45 }}
           >
@@ -326,7 +227,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
                     : "Search for Dermatology Groups & Charities"
                 }
                 searchFilterRef={searchFilterRef}
-                handleSearch={handleSearch}
+                handleSearch={inputSearchHandler}
               />
               <ServeGuidanceType />
             </div>
@@ -337,9 +238,12 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
             </div>
             <TypeFilters
               filters={groupeType}
-              handleSearch={handleTypeSearch}
               typeFilterRef={typeFilterRef}
-              handleClearTypeFilter={handleClearTypeFilter}
+              handleSearch={({ id }) => setType(id)}
+              handleClearTypeFilter={() => {
+                typeFilterRef.current = null;
+                setType(null);
+              }}
               title="Filter"
             />
           </div>
@@ -357,6 +261,33 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           const file = block.acf.file_download;
           let cardLink = link;
           if (redirect) cardLink = redirect.url;
+
+          // --------------------------------------------------------------------------------
+          // 📌 apply filters to posts
+          // --------------------------------------------------------------------------------
+          if (searchFilter) {
+            // serach input filtering
+            if (
+              title.rendered &&
+              !title.rendered.toLowerCase().includes(searchFilter.toLowerCase())
+            )
+              return null;
+            if (
+              content.rendered &&
+              !content.rendered
+                .toLowerCase()
+                .includes(searchFilter.toLowerCase())
+            )
+              return null;
+          }
+          if (cptBlockFilter) {
+            // guidance type filtering
+            if (!block[catType].includes(Number(cptBlockFilter))) return null;
+          }
+          if (searchType) {
+            // type filtering
+            if (!block.guidance.includes(searchType)) return null;
+          }
 
           return (
             <Card
@@ -380,10 +311,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   };
 
   const ServeMoreAction = () => {
-    if (currentSearchFilterRef.current || typeFilterRef.current) return null;
-    if (post_limit || postListData.length < LIMIT) return null;
-
-    const value = loadMoreRef.current ? "Less" : "Load More";
+    if (post_limit || postListData.length < chunkRef.current) return null;
 
     return (
       <div
@@ -398,7 +326,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           className="transparent-btn"
           onClick={handleLoadMoreFilter}
         >
-          {value}
+          Load More
         </button>
       </div>
     );

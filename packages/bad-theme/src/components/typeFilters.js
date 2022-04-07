@@ -23,7 +23,7 @@ const TypeFilters = ({
   // HELPERS ----------------------------------------------------------------
   const handleSetTypeFilter = ({ id }) => {
     typeFilterRef.current = id;
-    handleSearch();
+    handleSearch({ id });
   };
 
   // SERVERS ----------------------------------------------------------------
