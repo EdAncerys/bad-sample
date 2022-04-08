@@ -113,7 +113,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     py3_insertnhsnetemailaddress: true,
   });
   const [isEmail, setIsEmail] = useState(false);
-  const [applicationType, setType] = useState("SIG Application");
+  const [applicationType, setType] = useState("Special Interest Group");
   const [readPolicyDoc, setReadPolicyDoc] = useState("");
   const [isFetching, setFetching] = useState(false);
   const [membershipData, setMembershipData] = useState(false);
@@ -203,8 +203,11 @@ const SIGApplication = ({ state, actions, libraries }) => {
       }
       // set app type name
       if (data.bad_categorytype) {
-        applicationType = data.bad_categorytype;
-        setType(data.bad_categorytype); // validate SIG application category type
+        applicationType = data.bad_categorytype; // set application type for logic below
+        // 📌 set application type name
+        let type = data.bad_categorytype;
+        if (type === "*") type = "Special Interest Group";
+        setType(type); // validate SIG application category type
       }
     });
     // apply app additional logic after mapping apps data
@@ -224,16 +227,29 @@ const SIGApplication = ({ state, actions, libraries }) => {
         console.log("🤖 error", error);
       }
     }
+    let apps = [];
+    membershipData.map((item) => {
+      // push app name to apps array
+      apps.push(item.acf.category_types);
+    });
 
     if (membershipData) {
       // filter memberships data & return memberships that includes applicationType
       membershipData = membershipData.filter((item) => {
+        // get application & stip all white spaces
+        let application = item.acf.category_types
+          .toLowerCase()
+          .replace(/\s/g, "");
+        let selectedApplication = applicationType
+          .toLowerCase()
+          .replace(/\s/g, "");
         // if applicationType is * then return all memberships that are SIG
         if (applicationType === "*") {
           return item.acf.bad_or_sig === "sig";
         }
 
-        item.acf.category_types.includes(applicationType);
+        // return memberships that matches or includes any words in applicationType
+        return application.includes(selectedApplication);
       });
 
       // sort membershipData alphabetically
@@ -250,7 +266,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
     // if application category have only one application set formData to that application
     if (isSingleApp) {
       const type = membershipData[0].acf.category_types;
-      console.log("type", type); // debug
       setFormData((prevFormData) => ({
         ...prevFormData,
         bad_categorytype: type,
@@ -267,6 +282,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         applicationData,
       });
     }
+
     setMembershipData(membershipData); // set membership data
   }, [state.source.memberships]);
 
@@ -279,7 +295,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
     setSelectedHospital(item.title);
     setHospitalData(null); // clear hospital data for dropdown
-    console.log("selected hospital", item); // debug
   };
 
   const handleClearHospital = () => {
@@ -292,7 +307,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
   const handleDocUploadChange = async (e) => {
     let sky_cvurl = e.target.files[0];
-    // console.log("e", e); // debug
 
     if (sky_cvurl)
       sky_cvurl = await sendFileToS3Action({
@@ -301,7 +315,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         attachments: sky_cvurl,
         refreshJWT,
       });
-    console.log("sky_cvurl", sky_cvurl); // debug
+    console.log("🐞 ", sky_cvurl); // debug
 
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -329,8 +343,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
     if (hospitalData.length > 0) setHospitalData(hospitalData);
     if (!hospitalData.length || !input) setHospitalData(null);
-
-    // console.log("Hospitals", hospitalData); // debug
   };
 
   const isFormValidated = ({ required }) => {
@@ -358,8 +370,14 @@ const SIGApplication = ({ state, actions, libraries }) => {
     if (filteredMembershipData.length)
       policyLink =
         filteredMembershipData[0].acf.sig_readpolicydocument_url_email;
-    console.log("policyLink", policyLink); // debug
 
+    // reset name for SIG application
+    let applicationName = value;
+    // if application have : then split it to get name
+    if (applicationName.includes(":"))
+      applicationName = applicationName.split(":")[1];
+    setType(applicationName);
+    // set selected policy link
     setReadPolicyDoc(policyLink);
   };
 
@@ -370,7 +388,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
     }));
-
     if (membershipData) {
       // update policy link agains app data
       handlePolicyLinkUpdate({ membershipData, value });
@@ -425,7 +442,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
     });
 
     if (!isValid) return null;
-    console.log("formData", formData); // debug
 
     try {
       setFetching(true);
@@ -449,7 +465,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
         sigAppliaction.core_membershipsubscriptionplanid =
           membershipData.core_membershipsubscriptionplanid;
       }
-      console.log("sigAppliaction", sigAppliaction); // debug
 
       const store = await setUserStoreAction({
         state,
@@ -618,7 +633,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
             let typeName = category_types.split(":").reverse().join(" - ");
             // if value include - Full replace with empty string
             typeName = typeName.replace(" - Full", "");
-            console.log(item);
 
             return (
               <option key={key} value={category_types}>
@@ -637,6 +651,21 @@ const SIGApplication = ({ state, actions, libraries }) => {
   return (
     <div style={{ position: "relative" }}>
       <ActionPlaceholder isFetching={isFetching} background="transparent" />
+
+      <div
+        className="primary-title"
+        style={{
+          fontSize: 20,
+          paddingBottom: `1em`,
+        }}
+      >
+        Category Selected: <span>{applicationType}</span>
+      </div>
+
+      <div>
+        <span className="required" />
+        Mandatory fields
+      </div>
 
       <form>
         <div
