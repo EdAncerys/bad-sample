@@ -75,25 +75,16 @@ export const authenticateAppAction = async ({
   console.log("authenticateAppAction triggered");
 
   try {
-    // check if refresh token is set & valid if so use it
-    if (refreshJWT) {
-      console.log("🐞 APP HAVE REFRESH JWT");
-      // authenticate via refresh token
-      // replace app tokens with response object
-    }
-
     // if refresh taken is not valid or null auth via app credentials
-    if (!refreshJWT) {
-      console.log("🐞 NO REFRESH JWT FOUND"); // debug
-      const username = state.auth.APP_USERNAME;
-      const password = state.auth.APP_PASSWORD;
-      const URL = state.auth.APP_HOST + `/users/login`;
+    let jwt = null;
+    let refreshJWT = null;
 
+    if (refreshJWT) {
+      console.log("🐞 REFRESH TAKEN PRESENT"); // debug
+      const URL = state.auth.APP_HOST + `/users/refresh`;
       const appCredentials = JSON.stringify({
-        username,
-        password,
+        RefreshToken: refreshJWT,
       });
-
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -102,14 +93,45 @@ export const authenticateAppAction = async ({
 
       const data = await fetch(URL, requestOptions);
       const response = await data.json();
-      // console.log("🐞 ", response); // debug
 
-      if (response.token) {
-        return response.token;
-      } else {
-        return null;
+      if (response.success) {
+        // 📌 set app refresh token in context
+        jwt = response.token;
+        refreshJWT = response.data.AuthenticationResult.RefreshToken;
+      }
+    } else {
+      console.log("🐞 REFRESH TAKEN NOT PRESENT"); // debug
+      const username = state.auth.APP_USERNAME;
+      const password = state.auth.APP_PASSWORD;
+      let URL = state.auth.APP_HOST + `/users/login`;
+      let appCredentials = JSON.stringify({
+        username,
+        password,
+      });
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: appCredentials,
+      };
+
+      const data = await fetch(URL, requestOptions);
+      const response = await data.json();
+
+      if (response.success) {
+        // 📌 set app refresh token in context
+        jwt = response.token;
+        refreshJWT = response.data.AuthenticationResult.RefreshToken;
       }
     }
+
+    // --------------------------------------------------------------------------------
+    // 📌 Set JWT in context
+    // --------------------------------------------------------------------------------
+    // seRefreshJWTAction({
+    //   dispatch,
+    //   refreshJWT,
+    // });
+    return jwt;
   } catch (error) {
     console.log("error", error);
   }
@@ -302,6 +324,10 @@ export const logoutAction = async ({ state, actions, dispatch }) => {
 export const seJWTAction = ({ dispatch, jwt }) => {
   console.log("seJWTAction triggered"); //debug
   dispatch({ type: "SET_JWT_ACTION", payload: jwt });
+};
+export const seRefreshJWTAction = ({ dispatch, refreshJWT }) => {
+  console.log("seRefreshJWTAction triggered"); //debug
+  dispatch({ type: "SET_REFRESH_JWT_ACTION", payload: refreshJWT });
 };
 export const setActiveUserAction = ({ dispatch, isActiveUser }) => {
   console.log("setActiveUserAction triggered"); //debug
