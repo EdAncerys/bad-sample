@@ -71,7 +71,7 @@ const DashboardNotifications = ({ state, actions, libraries }) => {
           className="flex primary-title"
           style={{ display: "grid", alignItems: "center", fontSize: 20 }}
         >
-          Please complete missiing BAD profile information.
+          Please complete missing BAD profile information.
         </div>
         <ServeActions />
       </div>
