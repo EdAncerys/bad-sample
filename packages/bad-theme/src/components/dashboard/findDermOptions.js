@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import ProfileAvatar from "./profileAvatar";
 import { handleGetCookie } from "../../helpers/cookie";
@@ -10,16 +10,17 @@ import {
   setErrorAction,
   useAppDispatch,
   muiQuery,
+  sendFileToS3Action,
 } from "../../context";
 
 const FindDermatologistOptions = ({ state }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const { isActiveUser } = useAppState();
+  const { isActiveUser, refreshJWT } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
-  const [fadData, setFadData] = useState({
+  const [formData, setFormData] = useState({
     bad_includeinfindadermatologist: "",
     address3_postalcode: "",
     address3_line1: "",
@@ -30,12 +31,14 @@ const FindDermatologistOptions = ({ state }) => {
     bad_web2: "",
     bad_web1: "",
     bad_findadermatologisttext: "",
+    bad_profile_photo_url: "",
   });
+  const documentRef = useRef(null);
 
   useEffect(() => {
     if (!isActiveUser) return null;
 
-    setFadData((prevFromData) => ({
+    setFormData((prevFromData) => ({
       ...prevFromData,
       bad_includeinfindadermatologist:
         isActiveUser.bad_includeinfindadermatologist,
@@ -63,7 +66,7 @@ const FindDermatologistOptions = ({ state }) => {
         Authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(fadData),
+      body: JSON.stringify(formData),
     });
 
     if (submitUpdate.ok) {
@@ -80,7 +83,25 @@ const FindDermatologistOptions = ({ state }) => {
     }
   };
 
-  if (!fadData) return <Loading />;
+  const handleDocUploadChange = async (e) => {
+    let bad_profile_photo_url = e.target.files[0];
+
+    if (bad_profile_photo_url)
+      bad_profile_photo_url = await sendFileToS3Action({
+        state,
+        dispatch,
+        attachments: bad_profile_photo_url,
+        refreshJWT,
+      });
+    // console.log("bad_profile_photo_url", bad_profile_photo_url); // debug
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      ["bad_profile_photo_url"]: bad_profile_photo_url, // update formData
+    }));
+  };
+
+  if (!formData) return <Loading />;
 
   return (
     <div
@@ -110,12 +131,12 @@ const FindDermatologistOptions = ({ state }) => {
                         id="includeInFindDermatologist"
                         type="checkbox"
                         className="form-check-input check-box"
-                        checked={fadData.bad_includeinfindadermatologist}
+                        checked={formData.bad_includeinfindadermatologist}
                         onChange={() => {
-                          setFadData((prev) => ({
+                          setFormData((prev) => ({
                             ...prev,
                             bad_includeinfindadermatologist:
-                              !fadData.bad_includeinfindadermatologist,
+                              !formData.bad_includeinfindadermatologist,
                           }));
                         }}
                       />
@@ -139,9 +160,9 @@ const FindDermatologistOptions = ({ state }) => {
                       className="form-control"
                       placeholder="Address Line 1"
                       style={styles.input}
-                      value={fadData.address3_line1}
+                      value={formData.address3_line1}
                       onChange={(e) => {
-                        setFadData((prev) => ({
+                        setFormData((prev) => ({
                           ...prev,
                           address3_line1: e.target.value,
                         }));
@@ -153,9 +174,9 @@ const FindDermatologistOptions = ({ state }) => {
                       className="form-control"
                       placeholder="Address Line 2"
                       style={styles.input}
-                      value={fadData.address3_line2}
+                      value={formData.address3_line2}
                       onChange={(e) => {
-                        setFadData((prev) => ({
+                        setFormData((prev) => ({
                           ...prev,
                           address3_line2: e.target.value,
                         }));
@@ -168,9 +189,9 @@ const FindDermatologistOptions = ({ state }) => {
                       className="form-control"
                       placeholder="Post Code"
                       style={styles.input}
-                      value={fadData.address3_postalcode}
+                      value={formData.address3_postalcode}
                       onChange={(e) => {
-                        setFadData((prev) => ({
+                        setFormData((prev) => ({
                           ...prev,
                           address3_postalcode: e.target.value,
                         }));
@@ -182,14 +203,26 @@ const FindDermatologistOptions = ({ state }) => {
                       className="form-control"
                       placeholder="City"
                       style={styles.input}
-                      value={fadData.address3_city}
+                      value={formData.address3_city}
                       onChange={(e) => {
-                        setFadData((prev) => ({
+                        setFormData((prev) => ({
                           ...prev,
                           address3_city: e.target.value,
                         }));
                       }}
                     />
+
+                    <div>
+                      <label>Upload A Profile Photo</label>
+                      <input
+                        ref={documentRef}
+                        onChange={handleDocUploadChange}
+                        type="file"
+                        className="form-control input"
+                        placeholder="Profile Photo"
+                        accept="image/png, image/jpeg"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -208,9 +241,9 @@ const FindDermatologistOptions = ({ state }) => {
                   className="form-control"
                   placeholder="Main Place of Work"
                   style={styles.input}
-                  value={fadData.bad_mainhosptialweb}
+                  value={formData.bad_mainhosptialweb}
                   onChange={(e) => {
-                    setFadData((prev) => ({
+                    setFormData((prev) => ({
                       ...prev,
                       bad_mainhosptialweb: e.target.value,
                     }));
@@ -222,9 +255,9 @@ const FindDermatologistOptions = ({ state }) => {
                   className="form-control"
                   placeholder="Private Practice Web Address 1"
                   style={styles.input}
-                  value={fadData.bad_web1}
+                  value={formData.bad_web1}
                   onChange={(e) => {
-                    setFadData((prev) => ({
+                    setFormData((prev) => ({
                       ...prev,
                       bad_web1: e.target.value,
                     }));
@@ -236,9 +269,9 @@ const FindDermatologistOptions = ({ state }) => {
                   className="form-control"
                   placeholder="Private Practice Web Address 2"
                   style={styles.input}
-                  value={fadData.bad_web2}
+                  value={formData.bad_web2}
                   onChange={(e) => {
-                    setFadData((prev) => ({
+                    setFormData((prev) => ({
                       ...prev,
                       bad_web2: e.target.value,
                     }));
@@ -250,9 +283,9 @@ const FindDermatologistOptions = ({ state }) => {
                   className="form-control"
                   placeholder="Private Practice Web Address 3"
                   style={styles.input}
-                  value={fadData.bad_web3}
+                  value={formData.bad_web3}
                   onChange={(e) => {
-                    setFadData((prev) => ({
+                    setFormData((prev) => ({
                       ...prev,
                       bad_web3: e.target.value,
                     }));
@@ -271,9 +304,9 @@ const FindDermatologistOptions = ({ state }) => {
                   placeholder="Find a Dermatologist About Text"
                   rows="10"
                   style={styles.input}
-                  value={fadData.bad_findadermatologisttext}
+                  value={formData.bad_findadermatologisttext}
                   onChange={(e) => {
-                    setFadData((prev) => ({
+                    setFormData((prev) => ({
                       ...prev,
                       bad_findadermatologisttext: e.target.value,
                     }));
