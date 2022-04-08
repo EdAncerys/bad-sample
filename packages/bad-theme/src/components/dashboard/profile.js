@@ -1,6 +1,6 @@
 import { connect } from "frontity";
-import Image from "@frontity/components/image";
-import ProfileAvatar from "../../img/svg/profile.svg";
+import ProfileAvatar from "./profileAvatar";
+
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -19,43 +19,6 @@ const Profile = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
 
   // SERVERS ---------------------------------------------
-  const ServeProfileAvatar = () => {
-    if (!isActiveUser) return null;
-
-    const { bad_listname, bad_profile_photo_url } = isActiveUser;
-    const alt = bad_listname || "Profile Picture";
-    let imgWidth = 350;
-    if (xl) {
-      imgWidth = 200;
-    } else {
-      imgWidth = 350;
-    }
-
-    return (
-      <div className="flex" style={{ justifyContent: "flex-end" }}>
-        <div
-          style={{
-            width: imgWidth,
-            height: imgWidth,
-            borderRadius: `50%`,
-            overflow: `hidden`,
-            margin: "3em 0 0 0",
-          }}
-        >
-          <Image
-            src={bad_profile_photo_url || ProfileAvatar}
-            alt={alt}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-            }}
-          />
-        </div>
-      </div>
-    );
-  };
-
   const ServeProfileName = () => {
     if (!isActiveUser) return null;
 
@@ -238,12 +201,12 @@ const Profile = ({ state, actions, libraries }) => {
           alignItems: "center",
         }}
       >
-        {!lg ? null : <ServeProfileAvatar />}
+        {!lg ? null : <ProfileAvatar />}
         <ServeProfileName />
         <ServeProfileInfo />
       </div>
 
-      {!lg ? <ServeProfileAvatar /> : null}
+      {!lg ? <ProfileAvatar /> : null}
     </div>
   );
 };

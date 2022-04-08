@@ -1,11 +1,20 @@
-import { useState, useEffect, useReducer, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
-
-import { useAppState, setErrorAction, useAppDispatch } from "../../context";
+import ProfileAvatar from "./profileAvatar";
 import { handleGetCookie } from "../../helpers/cookie";
 import Loading from "../loading";
 
+// CONTEXT ----------------------------------------------------------------
+import {
+  useAppState,
+  setErrorAction,
+  useAppDispatch,
+  muiQuery,
+} from "../../context";
+
 const FindDermatologistOptions = ({ state }) => {
+  const { sm, md, lg, xl } = muiQuery();
+
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
 
@@ -42,6 +51,7 @@ const FindDermatologistOptions = ({ state }) => {
     }));
   }, []);
 
+  // HELPERS ---------------------------------------------
   const handlePreferenceUpdate = async () => {
     const cookie = await handleGetCookie({ name: `BAD-WebApp` });
     const { contactid, jwt } = cookie;
@@ -88,104 +98,105 @@ const FindDermatologistOptions = ({ state }) => {
       >
         <div style={{ display: "grid" }}>
           <div className="flex-col">
-            <div>
-              <div
-                className="flex"
-                style={{ alignItems: "center", margin: `1em 0` }}
-              >
-                <div style={{ display: "grid" }}>
-                  <input
-                    id="includeInFindDermatologist"
-                    type="checkbox"
-                    className="form-check-input check-box"
-                    checked={fadData.bad_includeinfindadermatologist}
-                    onChange={() => {
-                      setFadData((prev) => ({
-                        ...prev,
-                        bad_includeinfindadermatologist:
-                          !fadData.bad_includeinfindadermatologist,
-                      }));
-                    }}
-                  />
-                </div>
-                <div style={styles.textInfo}>
-                  I would like to be included in the Find a Dermatologist
-                  directory
-                </div>
-              </div>
-            </div>
-            <div style={{ paddingTop: `1em` }}>
-              Practice address to show in the directory
-            </div>
-            <div>
+            <div className="flex">
               <div className="flex-col">
-                <input
-                  id="address3_line1"
-                  name="address3_line1"
-                  type="text"
-                  className="form-control"
-                  placeholder="Address Line 1"
-                  style={styles.input}
-                  value={fadData.address3_line1}
-                  onChange={(e) => {
-                    setFadData((prev) => ({
-                      ...prev,
-                      address3_line1: e.target.value,
-                    }));
-                  }}
-                />
-                <input
-                  id="address3_line2"
-                  type="text"
-                  className="form-control"
-                  placeholder="Address Line 2"
-                  style={styles.input}
-                  value={fadData.address3_line2}
-                  onChange={(e) => {
-                    setFadData((prev) => ({
-                      ...prev,
-                      address3_line2: e.target.value,
-                    }));
-                  }}
-                />
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr",
-                    gap: 20,
-                  }}
-                >
-                  <input
-                    id="address3_postalcode"
-                    type="text"
-                    className="form-control"
-                    placeholder="Post Code"
-                    style={styles.input}
-                    value={fadData.address3_postalcode}
-                    onChange={(e) => {
-                      setFadData((prev) => ({
-                        ...prev,
-                        address3_postalcode: e.target.value,
-                      }));
-                    }}
-                  />
-                  <input
-                    id="address3_city"
-                    type="text"
-                    className="form-control"
-                    placeholder="City"
-                    style={styles.input}
-                    value={fadData.address3_city}
-                    onChange={(e) => {
-                      setFadData((prev) => ({
-                        ...prev,
-                        address3_city: e.target.value,
-                      }));
-                    }}
-                  />
+                <div>
+                  <div
+                    className="flex"
+                    style={{ alignItems: "center", margin: `1em 0` }}
+                  >
+                    <div style={{ display: "grid" }}>
+                      <input
+                        id="includeInFindDermatologist"
+                        type="checkbox"
+                        className="form-check-input check-box"
+                        checked={fadData.bad_includeinfindadermatologist}
+                        onChange={() => {
+                          setFadData((prev) => ({
+                            ...prev,
+                            bad_includeinfindadermatologist:
+                              !fadData.bad_includeinfindadermatologist,
+                          }));
+                        }}
+                      />
+                    </div>
+                    <div style={styles.textInfo}>
+                      I would like to be included in the Find a Dermatologist
+                      directory
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ paddingTop: `1em` }}>
+                  Practice address to show in the directory
+                </div>
+                <div>
+                  <div className="flex-col">
+                    <input
+                      id="address3_line1"
+                      name="address3_line1"
+                      type="text"
+                      className="form-control"
+                      placeholder="Address Line 1"
+                      style={styles.input}
+                      value={fadData.address3_line1}
+                      onChange={(e) => {
+                        setFadData((prev) => ({
+                          ...prev,
+                          address3_line1: e.target.value,
+                        }));
+                      }}
+                    />
+                    <input
+                      id="address3_line2"
+                      type="text"
+                      className="form-control"
+                      placeholder="Address Line 2"
+                      style={styles.input}
+                      value={fadData.address3_line2}
+                      onChange={(e) => {
+                        setFadData((prev) => ({
+                          ...prev,
+                          address3_line2: e.target.value,
+                        }));
+                      }}
+                    />
+
+                    <input
+                      id="address3_postalcode"
+                      type="text"
+                      className="form-control"
+                      placeholder="Post Code"
+                      style={styles.input}
+                      value={fadData.address3_postalcode}
+                      onChange={(e) => {
+                        setFadData((prev) => ({
+                          ...prev,
+                          address3_postalcode: e.target.value,
+                        }));
+                      }}
+                    />
+                    <input
+                      id="address3_city"
+                      type="text"
+                      className="form-control"
+                      placeholder="City"
+                      style={styles.input}
+                      value={fadData.address3_city}
+                      onChange={(e) => {
+                        setFadData((prev) => ({
+                          ...prev,
+                          address3_city: e.target.value,
+                        }));
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
+
+              <ProfileAvatar />
             </div>
+
             <div style={{ paddingTop: `1em` }}>
               Private Practice Website Address
             </div>
