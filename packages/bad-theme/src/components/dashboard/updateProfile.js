@@ -83,7 +83,6 @@ const UpdateProfile = ({ state, actions, libraries }) => {
         state,
         dispatch,
         attachments: bad_profile_photo_url,
-        isPicture: true, // 🐞 dont append file type for images bug in S3
         refreshJWT,
       });
     // console.log("bad_profile_photo_url", bad_profile_photo_url); // debug
