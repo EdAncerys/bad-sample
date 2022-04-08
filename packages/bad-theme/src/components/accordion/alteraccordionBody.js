@@ -694,13 +694,13 @@ const AccordionBody = ({
         className="accordion-body"
         style={{ margin: `0 1.25em`, padding: `1em 0` }}
       >
-        <ServePublishedDate />
         <ServeBody />
         <ServeLTBody />
 
         <ServeFundingInfo />
         <ServeLTTeam />
         <ServeGSSubTitle />
+        <ServePublishedDate />
         <ServeGSLink />
         <ServeBodyActions />
         <ServeGoToLinkRepeater />

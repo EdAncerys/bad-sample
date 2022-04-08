@@ -239,7 +239,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           height: BANNER_HEIGHT,
           width: containerWidth,
           position: "absolute",
-          zIndex: 9,
+          zIndex: 8,
         }}
       >
         <div style={{ position: "relative" }}>
