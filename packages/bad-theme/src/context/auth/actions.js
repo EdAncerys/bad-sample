@@ -77,7 +77,7 @@ export const authenticateAppAction = async ({
   try {
     // if refresh taken is not valid or null auth via app credentials
     let jwt = null;
-    let refreshJWT = null;
+    let refreshToken = null;
 
     if (refreshJWT) {
       console.log("🐞 REFRESH TAKEN PRESENT"); // debug
@@ -97,9 +97,11 @@ export const authenticateAppAction = async ({
       if (response.success) {
         // 📌 set app refresh token in context
         jwt = response.token;
-        refreshJWT = response.data.AuthenticationResult.RefreshToken;
+        refreshToken = response.data.AuthenticationResult.RefreshToken;
       }
-    } else {
+    }
+    // 📌 if refresh token is not valid or null auth via app credentials
+    if (!jwt) {
       console.log("🐞 REFRESH TAKEN NOT PRESENT"); // debug
       const username = state.auth.APP_USERNAME;
       const password = state.auth.APP_PASSWORD;
@@ -120,7 +122,7 @@ export const authenticateAppAction = async ({
       if (response.success) {
         // 📌 set app refresh token in context
         jwt = response.token;
-        refreshJWT = response.data.AuthenticationResult.RefreshToken;
+        refreshToken = response.data.AuthenticationResult.RefreshToken;
       }
     }
 
@@ -129,7 +131,7 @@ export const authenticateAppAction = async ({
     // --------------------------------------------------------------------------------
     // seRefreshJWTAction({
     //   dispatch,
-    //   refreshJWT,
+    //   refreshJWT: refreshToken,
     // });
     return jwt;
   } catch (error) {

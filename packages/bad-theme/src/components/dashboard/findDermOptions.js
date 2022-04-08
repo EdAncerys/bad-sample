@@ -1,48 +1,46 @@
 import { useState, useEffect, useReducer, useCallback } from "react";
 import { connect } from "frontity";
 
-import { muiQuery, setErrorAction, useAppDispatch } from "../../context";
+import { useAppState, setErrorAction, useAppDispatch } from "../../context";
 import { handleGetCookie } from "../../helpers/cookie";
 import Loading from "../loading";
 
 const FindDermatologistOptions = ({ state }) => {
-  const [fadData, setFadData] = useState();
-  const [reset, setReset] = useState();
   const dispatch = useAppDispatch();
+  const { isActiveUser } = useAppState();
+
   const marginVertical = state.theme.marginVertical;
+  const [fadData, setFadData] = useState({
+    bad_includeinfindadermatologist: "",
+    address3_postalcode: "",
+    address3_line1: "",
+    address3_line2: "",
+    address3_city: "",
+    bad_mainhosptialweb: "",
+    bad_web3: "",
+    bad_web2: "",
+    bad_web1: "",
+    bad_findadermatologisttext: "",
+  });
 
   useEffect(() => {
-    const getCurrentUserFadData = async () => {
-      const cookie = await handleGetCookie({ name: `BAD-WebApp` });
-      const { contactid, jwt } = cookie;
+    if (!isActiveUser) return null;
 
-      const fetchData = await fetch(
-        state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`,
-        {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
-        }
-      );
-
-      if (fetchData.ok) {
-        const json = await fetchData.json();
-        setFadData({
-          bad_includeinfindadermatologist: json.bad_includeinfindadermatologist,
-          address3_postalcode: json.address3_postalcode || "",
-          address3_line1: json.address3_line1 || "",
-          address3_line2: json.address3_line2 || "",
-          address3_city: json.address3_city || "",
-          bad_mainhosptialweb: json.bad_mainhosptialweb || "",
-          bad_web3: json.bad_web3 || "",
-          bad_web2: json.bad_web2 || "",
-          bad_web1: json.bad_web1 || "",
-          bad_findadermatologisttext: json.bad_findadermatologisttext || "",
-        });
-      }
-    };
-    getCurrentUserFadData();
-  }, [reset]);
+    setFadData((prevFromData) => ({
+      ...prevFromData,
+      bad_includeinfindadermatologist:
+        isActiveUser.bad_includeinfindadermatologist,
+      address3_postalcode: isActiveUser.address3_postalcode || "",
+      address3_line1: isActiveUser.address3_line1 || "",
+      address3_line2: isActiveUser.address3_line2 || "",
+      address3_city: isActiveUser.address3_city || "",
+      bad_mainhosptialweb: isActiveUser.bad_mainhosptialweb || "",
+      bad_web3: isActiveUser.bad_web3 || "",
+      bad_web2: isActiveUser.bad_web2 || "",
+      bad_web1: isActiveUser.bad_web1 || "",
+      bad_findadermatologisttext: isActiveUser.bad_findadermatologisttext || "",
+    }));
+  }, []);
 
   const handlePreferenceUpdate = async () => {
     const cookie = await handleGetCookie({ name: `BAD-WebApp` });
