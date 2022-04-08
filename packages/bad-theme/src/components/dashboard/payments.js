@@ -155,8 +155,8 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
           className="flex"
           style={{
             borderBottom: isLastItem
-              ? "none"
-              : `1px solid ${colors.darkSilver}`,
+              ? `1px solid ${colors.darkSilver}`
+              : "none",
             padding: `1em`,
           }}
         >
