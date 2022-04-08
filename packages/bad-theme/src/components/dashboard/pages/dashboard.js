@@ -83,19 +83,10 @@ const Dashboard = ({ state, actions, libraries }) => {
     return <Payments subscriptions={dynamicsApps} dashboard />;
   };
 
-  if (dashboardPath !== "Dashboard") return null;
-  if (!eventList) return <Loading />;
+  const ServeEvents = () => {
+    if (!eventList) return <Loading />;
 
-  // RETURN ---------------------------------------------
-  return (
-    <div style={{ padding: `0 ${marginHorizontal}px` }}>
-      <div>
-        <Profile />
-        <ProfileProgress />
-        <ServeApplicationStatus />
-        <ServePayments />
-      </div>
-
+    return (
       <div
         className="shadow"
         style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
@@ -131,6 +122,21 @@ const Dashboard = ({ state, actions, libraries }) => {
           })}
         </div>
       </div>
+    );
+  };
+
+  if (dashboardPath !== "Dashboard") return null;
+
+  // RETURN ---------------------------------------------
+  return (
+    <div style={{ padding: `0 ${marginHorizontal}px` }}>
+      <div>
+        <Profile />
+        <ProfileProgress />
+        <ServeApplicationStatus />
+        <ServePayments />
+      </div>
+      <ServeEvents />
     </div>
   );
 };
