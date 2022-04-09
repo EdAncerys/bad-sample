@@ -203,8 +203,8 @@ export const getUserDataByContactId = async ({
 
   try {
     const data = await fetch(URL, requestOptions);
+    if (!data) throw new Error("Error getting userData.");
     const response = await data.json();
-    if (!response) throw new Error("Error getting userData.");
 
     // pre-fetch application data & populate to context store
     await getUserApplicationAction({ state, dispatch, contactid });
@@ -290,7 +290,7 @@ export const getUserDataByEmail = async ({
 };
 
 export const getUserDataFromDynamics = async ({ state, jwt, contactid }) => {
-  console.log("getUserDataByContactId triggered");
+  console.log("getUserDataFromDynamics triggered");
 
   const URL = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
 

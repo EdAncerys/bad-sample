@@ -43,7 +43,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   const searchFilterRef = useRef(null);
   const typeFilterRef = useRef(null);
-  const loadMoreRef = useRef(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -51,11 +50,11 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   const isCovid_19 = acf_fc_layout === "covid_loop_block";
   let postPath = `derm_groups_charity`;
-  let typePath = `dermo_group_type`;
-  let catType = `guidance_category`;
+  let typeFilter = `dermo_group_type`;
+  let guidanceFilter = `guidance_category`;
   if (isCovid_19) {
     postPath = `covid_19`;
-    typePath = `guidance`;
+    typeFilter = `guidance`;
   }
 
   let PADDING = `${marginVertical}px 0`;
@@ -77,15 +76,16 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       isThereNextPage = nextPage;
     }
     let groupData = Object.values(state.source[postPath]);
-    const groupType = Object.values(state.source[typePath]);
-    if (isCovid_19) setCategory(Object.values(state.source.guidance_category)); // set additional filter option to COVID-19
+    const groupType = Object.values(state.source[typeFilter]);
+    if (isCovid_19) setCategory(Object.values(state.source[guidanceFilter])); // set additional filter option to COVID-19
 
     // set post lit values from filter value in app context
     if (cptBlockFilter) {
       groupData = groupData.filter((item) => {
         let isCatList = null;
         let isIncludes = null;
-        if (item[catType]) isCatList = Object.values(item[catType]);
+        if (item[guidanceFilter])
+          isCatList = Object.values(item[guidanceFilter]);
         // check data includes selected category
         if (isCatList) isIncludes = isCatList.includes(Number(cptBlockFilter));
 
@@ -102,6 +102,61 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       searchFilterRef.current = false; // clean up function
     };
   }, []);
+
+  // if serach queries are set, filter the full data set
+  useEffect(() => {
+    if (!postListData) return null;
+    let groupData = Object.values(state.source[postPath]);
+
+    // --------------------------------------------------------------------------------
+    // 📌 apply filters to posts
+    // --------------------------------------------------------------------------------
+    if (searchFilter) {
+      // serach input filtering
+      groupData = groupData.filter((item) => {
+        let isIncludes = null;
+        if (item.title)
+          isIncludes = item.title.rendered
+            .toLowerCase()
+            .includes(searchFilter.toLowerCase());
+        if (item.content)
+          isIncludes = item.content.rendered
+            .toLowerCase()
+            .includes(searchFilter.toLowerCase());
+
+        return isIncludes;
+      });
+    }
+    if (cptBlockFilter) {
+      // guidance type filtering
+      groupData = groupData.filter((item) => {
+        let isCatList = null;
+        let isIncludes = null;
+        if (item[guidanceFilter]) isCatList = item[guidanceFilter];
+        // check data includes selected category
+        if (isCatList) isIncludes = isCatList.includes(Number(cptBlockFilter));
+        return isIncludes;
+      });
+    }
+    if (searchType) {
+      // type filtering
+      groupData = groupData.filter((item) => {
+        let isCatList = null;
+        let isIncludes = null;
+        if (item[typeFilter]) isCatList = item[typeFilter];
+        // check data includes selected category
+        if (isCatList) isIncludes = isCatList.includes(Number(searchType));
+        return isIncludes;
+      });
+    }
+
+    // if all filters are cleared, reset the data set & apply limit
+    if (!searchFilter && !cptBlockFilter && !searchType) {
+      setPostListData(groupData.slice(0, Number(chunkRef.current)));
+    } else {
+      setPostListData(groupData);
+    }
+  }, [searchFilter, searchType, cptBlockFilter]);
 
   // DATA pre FETCH ---------------------------------------------------------
   if (!postListData || !groupeType) return <Loading />;
@@ -261,42 +316,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           const file = block.acf.file_download;
           let cardLink = link;
           if (redirect) cardLink = redirect.url;
-
-          // --------------------------------------------------------------------------------
-          // 📌 apply filters to posts
-          // --------------------------------------------------------------------------------
-          if (searchFilter) {
-            // serach input filtering
-            if (
-              title.rendered &&
-              !title.rendered.toLowerCase().includes(searchFilter.toLowerCase())
-            )
-              return null;
-            if (
-              content.rendered &&
-              !content.rendered
-                .toLowerCase()
-                .includes(searchFilter.toLowerCase())
-            )
-              return null;
-          }
-          if (cptBlockFilter) {
-            // guidance type filtering
-            if (
-              block[catType] &&
-              !block[catType].includes(Number(cptBlockFilter))
-            )
-              return null;
-          }
-          if (searchType) {
-            // type filtering
-            if (
-              (block.guidance && !block.guidance.includes(searchType)) ||
-              (block.dermo_group_type &&
-                !block.dermo_group_type.includes(searchType))
-            )
-              return null;
-          }
+          // console.log("🐞 ", block);
 
           return (
             <Card
@@ -312,6 +332,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               bodyLimit={4}
               titleLimit={4}
               shadow
+              animationType="none" // remove animation
             />
           );
         })}
@@ -320,7 +341,10 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   };
 
   const ServeMoreAction = () => {
-    if (post_limit || postListData.length < chunkRef.current) return null;
+    let isFilter = searchFilter || searchType || cptBlockFilter;
+
+    if (post_limit || postListData.length < chunkRef.current || isFilter)
+      return null;
 
     return (
       <div
