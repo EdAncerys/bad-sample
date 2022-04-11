@@ -39,11 +39,6 @@ const ApplicationList = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
   const [isFetching, setFetching] = useState(false);
 
-  useEffect(() => {
-    console.log("API CALL");
-    console.log(subsData);
-  }, [applicationData]);
-
   // HELPERS ----------------------------------------------
   const handleUpdateMembershipApplication = async ({ app }) => {
     // if user have application in progress break & display error

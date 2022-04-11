@@ -275,13 +275,14 @@ const SIGApplication = ({ state, actions, libraries }) => {
         membershipData,
         value: type,
       });
-      // ⏬  validate inputs for single application only
-      validateMembershipFormAction({
-        state,
-        setData: setInputValidator,
-        applicationData,
-      });
     }
+
+    // ⏬  validate inputs for single application only
+    validateMembershipFormAction({
+      state,
+      setData: setInputValidator,
+      applicationData,
+    });
 
     setMembershipData(membershipData); // set membership data
   }, [state.source.memberships]);
