@@ -30,8 +30,6 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
   useEffect(() => {
     setLiveSubscriptions(dynamicsApps);
-    // setLoading(false);
-    console.log("USEEFFECT TRIGGERED");
   }, []);
 
   // when should I return null ?

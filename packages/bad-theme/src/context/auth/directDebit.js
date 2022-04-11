@@ -28,7 +28,12 @@ export const getDirectDebitAction = async ({
   }
 };
 
-export const getInvoiceAction = async ({ state, isActiveUser, refreshJWT }) => {
+export const getInvoiceAction = async ({
+  state,
+  dispatch,
+  isActiveUser,
+  refreshJWT,
+}) => {
   console.log("getInvoiceAction triggered");
 
   const { contactid } = isActiveUser;
