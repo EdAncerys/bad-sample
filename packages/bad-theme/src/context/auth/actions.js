@@ -1,4 +1,5 @@
-import { handleSetCookie } from "../../helpers/cookie";
+import { atom, appAuthenticationTokens } from "jotai";
+import { handleSetCookie, handleGetCookie } from "../../helpers/cookie";
 import {
   setGoToAction,
   getApplicationStatus,
@@ -38,6 +39,7 @@ export const loginActionViaModal = async ({
     setFetchAction({ dispatch, isFetching: false });
   }
 };
+
 export const loginAction = async ({ state }) => {
   console.log("loginAction triggered");
 
@@ -75,11 +77,13 @@ export const authenticateAppAction = async ({
   console.log("authenticateAppAction triggered");
 
   try {
-    // if refresh taken is not valid or null auth via app credentials
-    let jwt = null;
+    let jwtToken = null;
     let refreshToken = null;
+    // 📌 get auth takens form atom state
+    // const authTokens = appAuthenticationTokens;
+    // console.log("🐞 ", authTokens);
 
-    if (refreshJWT) {
+    if (refreshToken) {
       console.log("🐞 REFRESH TAKEN PRESENT"); // debug
       const URL = state.auth.APP_HOST + `/users/refresh`;
       const appCredentials = JSON.stringify({
@@ -96,13 +100,19 @@ export const authenticateAppAction = async ({
 
       if (response.success) {
         // 📌 set app refresh token in context
-        jwt = response.token;
+        jwtToken = response.token;
         refreshToken = response.data.AuthenticationResult.RefreshToken;
+        console.log("🐞 check if valid", response.data);
+      }
+      if (!response.success) {
+        // 📌 set refresh taken to null to trigger login via creditentials
+        refreshToken = null;
       }
     }
+    // console.log("🐞 ", refreshToken);
     // 📌 if refresh token is not valid or null auth via app credentials
-    if (!jwt) {
-      console.log("🐞 REFRESH TAKEN NOT PRESENT"); // debug
+    if (!refreshToken) {
+      console.log("🐞 REFRESH TAKEN NOT PRESENT OR NOT VALID"); // debug
       const username = state.auth.APP_USERNAME;
       const password = state.auth.APP_PASSWORD;
       let URL = state.auth.APP_HOST + `/users/login`;
@@ -121,19 +131,21 @@ export const authenticateAppAction = async ({
 
       if (response.success) {
         // 📌 set app refresh token in context
-        jwt = response.token;
+        jwtToken = response.token;
         refreshToken = response.data.AuthenticationResult.RefreshToken;
+        // 📌 auth takens in global state via atom
+        // const appAuthenticationTokens = atom({
+        //   jwt: jwtToken,
+        //   refreshJWT: refreshToken,
+        // });
       }
     }
 
-    // --------------------------------------------------------------------------------
-    // 📌 Set JWT in context
-    // --------------------------------------------------------------------------------
-    // seRefreshJWTAction({
-    //   dispatch,
-    //   refreshJWT: refreshToken,
-    // });
-    return jwt;
+    // 📌 set app refresh token in context
+    // seJWTAction({ dispatch, jwt });
+    // seRefreshJWTAction({ dispatch, refreshJWT });
+
+    return jwtToken;
   } catch (error) {
     console.log("error", error);
   }

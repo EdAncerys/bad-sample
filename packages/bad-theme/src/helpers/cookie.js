@@ -38,15 +38,11 @@ export const handleGetCookie = ({ name }) => {
       .find((c) => c.startsWith(cookieName));
     //if !cookie then return null
     if (!cookie) return null;
-    // cookie value
-    //if !cookie then return null
-    if (!cookie) return null;
     let cookieValue = cookie.split("=")[1];
     // if cookie exists & not empty
     if (cookie && cookieValue) {
       cookieValue = JSON.parse(cookieValue);
-      // return cookie value
-      console.log("🍪 value: ", cookieValue); // debug
+      // console.log("🍪 value: ", cookieValue); // debug
       return cookieValue;
     } else {
       console.log("🍪 not found || not valid"); // debug

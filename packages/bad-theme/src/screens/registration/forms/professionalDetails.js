@@ -263,7 +263,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         "py3_otherregulatorybodyreference",
         "py3_ntnno",
         "bad_currentpost",
-        isNewHospital ? "sky_newhospitaltype" : null,
+        isNewHospital ? "sky_newhospitaltype" : null, // required if new hospital name added
+        isNewHospital ? "sky_newhospitalname" : null, // required if new hospital name added
         !isNewHospital ? "py3_hospitalid" : null,
         "bad_proposer1",
         "bad_proposer2",
@@ -475,7 +476,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
           {inputValidator.py3_hospitalid && (
             <div>
               <label className="form-label required">
-                Main Hospital / Place of Work / Medical School details
+                Main Hospital / Medical School / Place of Work details
               </label>
               <div style={{ position: "relative" }}>
                 {selectedHospital && (
@@ -490,21 +491,21 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                       >
                         {selectedHospital}
 
-                        {canChangeHospital && (
-                          <div
-                            className="filter-icon"
-                            style={{ top: -7 }}
-                            onClick={handleClearHospital}
-                          >
-                            <CloseIcon
-                              style={{
-                                fill: colors.darkSilver,
-                                padding: 0,
-                                width: "0.7em",
-                              }}
-                            />
-                          </div>
-                        )}
+                        {/* {canChangeHospital && ( */}
+                        <div
+                          className="filter-icon"
+                          style={{ top: -7 }}
+                          onClick={handleClearHospital}
+                        >
+                          <CloseIcon
+                            style={{
+                              fill: colors.darkSilver,
+                              padding: 0,
+                              width: "0.7em",
+                            }}
+                          />
+                        </div>
+                        {/* )} */}
                       </div>
                     </div>
                   </div>
@@ -516,7 +517,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                       onChange={handleHospitalLookup}
                       type="text"
                       className="form-control input"
-                      placeholder="Main Hospital / Place of Work / Medical School details"
+                      placeholder="Main Hospital / Medical School / Place of Work"
                     />
                     <FormError id="py3_hospitalid" />
                   </div>
@@ -532,7 +533,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
           {!isHospitalValue && (
             <div className="flex-col">
               <label className="form-label">
-                Hospital / Medical School not listed
+                Main Hospital / Medical School / Place of Work not listed
               </label>
               <input
                 name="bad_newhospitaladded"
@@ -554,9 +555,9 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                 className="input"
               >
                 <option value="" hidden>
-                  Hospital / Medical School
+                  Main Hospital / Medical School / Place of Work
                 </option>
-                <option value="Hospital">Hospital</option>
+                <option value="Hospital">Main Hospital</option>
                 <option value="Medical School">Medical School</option>
               </Form.Select>
               <FormError id="sky_newhospitaltype" />
@@ -565,14 +566,16 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
           {formData.bad_newhospitaladded && inputValidator.sky_newhospitalname && (
             <div>
-              <label className="form-label">New Hospital Name</label>
+              <label className="form-label">
+                Main Hospital / Medical School / Place of Work
+              </label>
               <input
                 name="sky_newhospitalname"
                 value={formData.sky_newhospitalname}
                 onChange={handleInputChange}
                 type="text"
                 className="form-control input"
-                placeholder="New Hospital Name"
+                placeholder="Main Hospital / Medical School / Place of Work"
               />
               <FormError id="sky_newhospitalname" />
             </div>

@@ -73,6 +73,11 @@ export const useB2CLogin = ({ state, actions }) => {
           refreshJWT,
         });
         if (!user) throw new Error("Error getting user data.");
+        // set cookie with jwt token & user id for future requests
+        // handleSetCookie({
+        //   name: state.auth.COOKIE_NAME,
+        //   value: { jwt, contactid },
+        // });
       } else {
         console.log("🐞 error. Redirect to home path");
       }

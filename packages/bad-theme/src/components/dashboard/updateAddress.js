@@ -73,6 +73,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
       handleSetData({ name: "address2_postalcode" });
     if (isActiveUser.preferredcontactmethodcode)
       handleSetData({ name: "preferredcontactmethodcode" });
+    // bad_preferredmailingaddress
   }, [isActiveUser]);
 
   // HELPERS ----------------------------------------------------------------

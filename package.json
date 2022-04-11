@@ -34,6 +34,7 @@
     "dotenv": "^10.0.0",
     "frontity": "^1.17.1",
     "html-react-parser": "^1.4.5",
+    "jotai": "^1.6.3",
     "js-cookie": "^3.0.1",
     "react-bootstrap": "^2.0.2",
     "react-cookie": "^4.1.1",
