@@ -47,7 +47,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     address2_city: "",
     address2_country: "",
     address2_postalcode: "",
-    preferredcontactmethodcode: "", // TBC field name
+    bad_preferredmailingaddress: "", // TBC field name
   });
 
   useEffect(() => {
@@ -71,9 +71,9 @@ const UpdateAddress = ({ state, actions, libraries }) => {
       handleSetData({ name: "address2_country" });
     if (isActiveUser.address2_postalcode)
       handleSetData({ name: "address2_postalcode" });
-    if (isActiveUser.preferredcontactmethodcode)
-      handleSetData({ name: "preferredcontactmethodcode" });
-    // bad_preferredmailingaddress
+    if (isActiveUser.bad_preferredmailingaddress)
+      handleSetData({ name: "bad_preferredmailingaddress" });
+    // preferredcontactmethodcode applies for mail/phone/email
   }, [isActiveUser]);
 
   // HELPERS ----------------------------------------------------------------
@@ -96,7 +96,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     const address2_city = formData.address2_city;
     const address2_country = formData.address2_country;
     const address2_postalcode = formData.address2_postalcode;
-    const preferredcontactmethodcode = formData.preferredcontactmethodcode;
+    const bad_preferredmailingaddress = formData.bad_preferredmailingaddress;
 
     const data = Object.assign(
       {}, // add empty object
@@ -107,7 +107,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
       !!address2_city && { address2_city },
       !!address2_country && { address2_country },
       !!address2_postalcode && { address2_postalcode },
-      !!preferredcontactmethodcode && { preferredcontactmethodcode }
+      !!bad_preferredmailingaddress && { bad_preferredmailingaddress }
     );
 
     try {
@@ -399,8 +399,8 @@ const UpdateAddress = ({ state, actions, libraries }) => {
               <div style={styles.wrapper}>
                 <label>Preferred mailing option</label>
                 <Form.Select
-                  name="preferredcontactmethodcode"
-                  value={formData.preferredcontactmethodcode}
+                  name="bad_preferredmailingaddress"
+                  value={formData.bad_preferredmailingaddress}
                   onChange={handleInputChange}
                   className="input"
                 >

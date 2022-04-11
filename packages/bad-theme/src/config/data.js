@@ -1355,20 +1355,16 @@ export const sigAppFileds = [
 
 export const prefMailingOption = [
   {
-    value: 1,
-    Label: "Any",
+    value: 810170000,
+    Label: "Main Hospital",
   },
   {
-    value: 2,
-    Label: "Email",
+    value: 810170001,
+    Label: "Home",
   },
   {
-    value: 3,
-    Label: "Phone",
-  },
-  {
-    value: 5,
-    Label: "Mail",
+    value: 810170002,
+    Label: "Private Practice",
   },
 ];
 
