@@ -312,6 +312,18 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     }
   };
 
+  const policyHandler = ({ isConstitution }) => {
+    // open privacy policy in new window
+    let url = state.auth.APP_URL + "/privacy-policy/";
+    if (isConstitution)
+      url = state.auth.APP_URL + "/about-the-bad/bad-constitution/";
+    window.open(
+      url,
+      "_blank"
+      // "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400"
+    );
+  };
+
   const handleDocUploadChange = async (e) => {
     let sky_cvurl = e.target.files[0];
     console.log("e", e); // debug
@@ -744,6 +756,9 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                           <div
                             className="caps-btn required"
                             style={{ paddingTop: 6, marginLeft: 10 }}
+                            onClick={() =>
+                              policyHandler({ isConstitution: true })
+                            }
                           >
                             BAD CONSTITUTION
                           </div>
@@ -780,11 +795,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                                 whiteSpace: "nowrap",
                               }}
                               onClick={() =>
-                                setGoToAction({
-                                  state,
-                                  path: `/privacy-policy/`,
-                                  actions,
-                                })
+                                policyHandler({ isPrivacyPolicy: true })
                               }
                             >
                               BAD'S PRIVACY NOTICE
