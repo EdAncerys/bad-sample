@@ -15,6 +15,7 @@ import {
   useAppDispatch,
   useAppState,
   setCPTBlockAction,
+  setCPTBlockTypeAction,
   muiQuery,
 } from "../context";
 
@@ -31,7 +32,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     acf_fc_layout,
   } = block;
   const dispatch = useAppDispatch();
-  const { cptBlockFilter } = useAppState();
+  const { cptBlockFilter, cptBlockTypeFilter } = useAppState();
 
   const [postListData, setPostListData] = useState(null);
   const [groupeType, setGroupeType] = useState(null);
@@ -39,7 +40,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   const chunkRef = useRef(post_limit || 8);
   const [guidanceCategory, setCategory] = useState(null);
   const [searchFilter, setFilter] = useState(null);
-  const [searchType, setType] = useState(null);
 
   const searchFilterRef = useRef(null);
   const typeFilterRef = useRef(null);
@@ -94,9 +94,25 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     }
     // clear filter value in app context
     setCPTBlockAction({ dispatch, cptBlockFilter: "" });
-
     setPostListData(groupData.slice(0, Number(chunkRef.current))); // apply limit on posts
     setGroupeType(groupType);
+
+    // if SIG is selected, filter by SIG type
+    if (cptBlockTypeFilter) {
+      // for SIGs apps get type id that represents the SIG type filter & apply
+      let interestGroupsId = null;
+      const sigApp = groupType.filter((item) => {
+        return item.name
+          .toLowerCase()
+          .includes("Special Interest".toLowerCase());
+      });
+      if (sigApp.length > 0) {
+        interestGroupsId = sigApp[0].id;
+      }
+      // get if from  groupeType filter where name includes Special Interest Group
+      typeFilterRef.current = interestGroupsId;
+      setCPTBlockTypeAction({ dispatch, cptBlockTypeFilter: interestGroupsId });
+    }
 
     return () => {
       searchFilterRef.current = false; // clean up function
@@ -138,25 +154,26 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
         return isIncludes;
       });
     }
-    if (searchType) {
+    if (cptBlockTypeFilter) {
       // type filtering
       groupData = groupData.filter((item) => {
         let isCatList = null;
         let isIncludes = null;
         if (item[typeFilter]) isCatList = item[typeFilter];
         // check data includes selected category
-        if (isCatList) isIncludes = isCatList.includes(Number(searchType));
+        if (isCatList)
+          isIncludes = isCatList.includes(Number(cptBlockTypeFilter));
         return isIncludes;
       });
     }
 
     // if all filters are cleared, reset the data set & apply limit
-    if (!searchFilter && !cptBlockFilter && !searchType) {
+    if (!searchFilter && !cptBlockFilter && !cptBlockTypeFilter) {
       setPostListData(groupData.slice(0, Number(chunkRef.current)));
     } else {
       setPostListData(groupData);
     }
-  }, [searchFilter, searchType, cptBlockFilter]);
+  }, [searchFilter, cptBlockTypeFilter, cptBlockFilter]);
 
   // DATA pre FETCH ---------------------------------------------------------
   if (!postListData || !groupeType) return <Loading />;
@@ -294,10 +311,12 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
             <TypeFilters
               filters={groupeType}
               typeFilterRef={typeFilterRef}
-              handleSearch={({ id }) => setType(id)}
+              handleSearch={({ id }) =>
+                setCPTBlockTypeAction({ dispatch, cptBlockTypeFilter: id })
+              }
               handleClearTypeFilter={() => {
                 typeFilterRef.current = null;
-                setType(null);
+                setCPTBlockTypeAction({ dispatch, cptBlockTypeFilter: null });
               }}
               title="Filter"
             />
@@ -341,7 +360,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   };
 
   const ServeMoreAction = () => {
-    let isFilter = searchFilter || searchType || cptBlockFilter;
+    let isFilter = searchFilter || cptBlockTypeFilter || cptBlockFilter;
 
     if (post_limit || postListData.length < chunkRef.current || isFilter)
       return null;

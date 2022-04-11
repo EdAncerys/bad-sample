@@ -24,8 +24,9 @@ import {
   getDirectDebitAction,
   getApplicationStatus,
   muiQuery,
-  handleApplyForMembershipAction,
+  setGoToAction,
   setDashboardNotificationsAction,
+  setCPTBlockTypeAction,
 } from "../context";
 
 const AccountDashboard = ({ state, actions, libraries }) => {
@@ -112,25 +113,11 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   if (!isReady) return null;
 
   // HANDLERS --------------------------------------------------
-  const handleApply = async ({ catType }) => {
-    await handleApplyForMembershipAction({
-      state,
-      actions,
-      dispatch,
-      applicationData,
-      isActiveUser,
-      dynamicsApps,
-      category: "SIG",
-      type: catType || "", // application type name
-      membershipApplication: {
-        stepOne: false,
-        stepTwo: false,
-        stepThree: false,
-        stepFour: false,
-      },
-      path: "/membership/sig-questions/", // redirect to SIG form page
-      refreshJWT,
-    });
+  const handleApply = async () => {
+    // set filter cat type in context to filter SIGs
+    setCPTBlockTypeAction({ dispatch, cptBlockTypeFilter: true });
+    // redirect to apply page
+    setGoToAction({ state, path: "/derm-groups-charity/", actions });
   };
 
   const ServeDashboardActions = () => {
@@ -156,7 +143,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
                   {
                     title: "Apply for SIG Membership",
                     colour: colors.green,
-                    onClickAction: () => handleApply({ catType: "*" }), // * = all categories
+                    onClickAction: () => handleApply(), // * = all categories
                   },
                   {
                     title: "Register for an event",

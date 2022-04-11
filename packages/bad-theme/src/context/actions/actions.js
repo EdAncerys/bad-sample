@@ -85,6 +85,11 @@ export const setCPTBlockAction = ({ dispatch, cptBlockFilter }) => {
   dispatch({ type: "SET_CPT_BLOCK_ACTION", payload: cptBlockFilter });
 };
 
+export const setCPTBlockTypeAction = ({ dispatch, cptBlockTypeFilter }) => {
+  console.log("setCPTBlockAction triggered"); //debug
+  dispatch({ type: "SET_CPT_BLOCK_TYPE_ACTION", payload: cptBlockTypeFilter });
+};
+
 export const setEventAnchorAction = ({ dispatch, eventAnchor }) => {
   console.log("setEventAnchorAction triggered"); //debug
   dispatch({ type: "SET_EVENT_ANCHOR_ACTION", payload: eventAnchor });

@@ -17,9 +17,11 @@ export const initialState = {
   shdFeed: null,
   isDirectDebit: null,
 
+  cptBlockFilter: "",
+  cptBlockTypeFilter: null,
+
   filter: null,
   idFilter: null,
-  cptBlockFilter: "",
   eventAnchor: null,
   dashboardPath: "Dashboard",
   directDebitPath: { page: "billing" },
@@ -78,6 +80,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, isDirectDebit: action.payload };
     case "SET_CPT_BLOCK_ACTION":
       return { ...state, cptBlockFilter: action.payload };
+    case "SET_CPT_BLOCK_TYPE_ACTION":
+      return { ...state, cptBlockTypeFilter: action.payload };
     case "SET_EVENT_ANCHOR_ACTION":
       return { ...state, eventAnchor: action.payload };
     case "SET_APPLICATION_ACTION":
