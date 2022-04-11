@@ -398,7 +398,7 @@ const Card = ({
         minHeight: MIN_CARD_HEIGHT,
       }}
       onClick={onClickHandler}
-      data-aos={animationType || "fade"}
+      data-aos={videoArchive ? "none" : animationType || "fade"}
       data-aos-delay={`${delay * 50}`}
       data-aos-duration="500"
     >
