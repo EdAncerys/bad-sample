@@ -1194,14 +1194,14 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.bad_qualifications && (
             <div>
-              <label className="required form-label">Qualification</label>
+              <label className="required form-label">Qualifications</label>
               <input
                 name="bad_qualifications"
                 value={formData.bad_qualifications}
                 onChange={handleInputChange}
                 type="text"
                 className="form-control input"
-                placeholder="Qualification"
+                placeholder="Qualifications"
               />
               <FormError id="bad_qualifications" />
             </div>
