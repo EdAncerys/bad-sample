@@ -5,6 +5,7 @@ import {
   loginAction,
   getApplicationStatus,
   setErrorAction,
+  getUserDataByContactId,
 } from "../index";
 
 export const setUserStoreAction = async ({
@@ -245,6 +246,15 @@ export const setCompleteUserApplicationAction = async ({
         applicationData: null,
       });
 
+      // 📌 get & update user record in context
+      const userData = await getUserDataByContactId({
+        state,
+        dispatch,
+        jwt,
+        contactid,
+        refreshJWT,
+      });
+      if (!userData) throw new Error("Error getting userData.");
       console.log("⏬ Membership Completed ⏬");
       console.log(data);
 

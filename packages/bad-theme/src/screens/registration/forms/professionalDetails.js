@@ -491,21 +491,21 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                       >
                         {selectedHospital}
 
-                        {/* {canChangeHospital && ( */}
-                        <div
-                          className="filter-icon"
-                          style={{ top: -7 }}
-                          onClick={handleClearHospital}
-                        >
-                          <CloseIcon
-                            style={{
-                              fill: colors.darkSilver,
-                              padding: 0,
-                              width: "0.7em",
-                            }}
-                          />
-                        </div>
-                        {/* )} */}
+                        {canChangeHospital && (
+                          <div
+                            className="filter-icon"
+                            style={{ top: -7 }}
+                            onClick={handleClearHospital}
+                          >
+                            <CloseIcon
+                              style={{
+                                fill: colors.darkSilver,
+                                padding: 0,
+                                width: "0.7em",
+                              }}
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
