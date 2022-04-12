@@ -22,7 +22,9 @@ import {
   setErrorAction,
   handleValidateMembershipChangeAction,
   handleApplyForMembershipAction,
+  muiQuery,
 } from "../../../context";
+import { getEventsData } from "../../../helpers";
 
 const Dashboard = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
@@ -33,6 +35,9 @@ const Dashboard = ({ state, actions, libraries }) => {
     refreshJWT,
     applicationData,
   } = useAppState();
+  // CONTEXT ------------------------------------------------------------------
+
+  const { lg } = muiQuery();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -219,7 +224,7 @@ const Dashboard = ({ state, actions, libraries }) => {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: `repeat(4, 1fr)`,
+            gridTemplateColumns: !lg ? `repeat(4, 1fr)` : "1fr",
             gap: 20,
           }}
         >
