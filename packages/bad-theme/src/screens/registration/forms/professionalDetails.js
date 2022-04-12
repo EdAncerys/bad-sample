@@ -61,6 +61,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     bad_readpolicydocument: "",
     sky_newhospitaltype: "",
     bad_memberdirectory: "",
+    bad_preferredmailingaddress: "",
   });
   const [inputValidator, setInputValidator] = useState({
     py3_gmcnumber: true,
@@ -135,6 +136,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         handleSetFormData({ data, name: "sky_newhospitalname" });
       if (data.name === "bad_expectedyearofqualification")
         handleSetFormData({ data, name: "bad_expectedyearofqualification" });
+      if (data.name === "bad_preferredmailingaddress")
+        handleSetFormData({ data, name: "bad_preferredmailingaddress" });
       if (data.name === "py3_hospitalid") {
         // get hospital id from application data
         if (data.value) hospitalId = data.value;
@@ -687,7 +690,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
               </div>
             )}
 
-            {/* <div>
+            <div>
               <label>Preferred mailing option</label>
               <Form.Select
                 name="bad_preferredmailingaddress"
@@ -706,7 +709,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                   );
                 })}
               </Form.Select>
-            </div> */}
+            </div>
 
             {inputValidator.sky_cvurl && (
               <div>
