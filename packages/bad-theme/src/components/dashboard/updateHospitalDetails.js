@@ -9,11 +9,12 @@ import {
   updateProfileAction,
   setEnquireAction,
   setErrorAction,
+  muiQuery,
 } from "../../context";
 
 const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
+  const { lg } = muiQuery();
   const dispatch = useAppDispatch();
   const { isActiveUser, refreshJWT } = useAppState();
 
@@ -135,7 +136,10 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     return (
       <div
         className="flex"
-        style={{ justifyContent: "flex-end", padding: `2em 0 0` }}
+        style={{
+          justifyContent: !lg ? "flex-end" : "center",
+          padding: `2em 0 0`,
+        }}
       >
         <div
           type="submit"
@@ -158,7 +162,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       <div
         className="shadow"
         style={{
-          padding: `2em 4em`,
+          padding: !lg ? `2em 4em` : `1em`,
           marginBottom: `${marginVertical}px`,
         }}
       >
@@ -168,7 +172,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: `1fr 1fr`,
+            gridTemplateColumns: !lg ? `1fr 1fr` : `1fr`,
             gap: 20,
             padding: `1em 0 0`,
           }}

@@ -148,10 +148,13 @@ const UpdateProfile = ({ state, actions, libraries }) => {
 
     const { bad_listname, bad_profile_photo_url } = isActiveUser;
     const alt = bad_listname || "Profile Picture";
-    const imgWidth = 350;
+    const imgWidth = !lg ? 350 : 200;
 
     return (
-      <div className="flex" style={{ justifyContent: "flex-end" }}>
+      <div
+        className="flex"
+        style={{ justifyContent: !lg ? "flex-end" : "center" }}
+      >
         <div
           style={{
             width: imgWidth,
@@ -179,7 +182,10 @@ const UpdateProfile = ({ state, actions, libraries }) => {
     return (
       <div
         className="flex"
-        style={{ justifyContent: "flex-end", padding: `0 4em 2em 0` }}
+        style={{
+          justifyContent: !lg ? "flex-end" : "center",
+          padding: `0 4em 2em 0`,
+        }}
       >
         <div type="submit" className="blue-btn" onClick={handleProfileUpdate}>
           Save

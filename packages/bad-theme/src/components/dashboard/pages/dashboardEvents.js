@@ -14,12 +14,13 @@ import {
   useAppState,
   useAppDispatch,
   authenticateAppAction,
+  muiQuery,
 } from "../../../context";
 
 const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
   const dispatch = useAppDispatch();
   const { dashboardPath, isActiveUser, refreshJWT } = useAppState();
-
+  const { lg } = muiQuery();
   const [listOfEvents, setListOfEvents] = useState();
   const [eventList, setEventList] = useState(null); // event data
   const marginHorizontal = state.theme.marginHorizontal;
@@ -90,7 +91,7 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr 1fr",
+            gridTemplateColumns: !lg ? "1fr 1fr" : `1fr`,
             gap: 20,
             padding: `${marginVertical}px ${marginHorizontal}px`,
           }}
@@ -125,7 +126,7 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: `repeat(2, 1fr)`,
+          gridTemplateColumns: !lg ? `repeat(2, 1fr)` : `1fr`,
           gap: 20,
           padding: `${marginVertical}px ${marginHorizontal}px`,
         }}

@@ -23,11 +23,12 @@ import {
   updateProfileAction,
   setErrorAction,
   googleAutocompleteAction,
+  muiQuery,
 } from "../../context";
 
 const UpdateAddress = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
+  const { lg } = muiQuery();
   const dispatch = useAppDispatch();
   const { isActiveUser, refreshJWT } = useAppState();
 
@@ -196,7 +197,10 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     return (
       <div
         className="flex"
-        style={{ justifyContent: "flex-end", padding: `2em 0 0` }}
+        style={{
+          justifyContent: !lg ? "flex-end" : "center",
+          padding: `2em 0 0`,
+        }}
       >
         <div type="submit" className="blue-btn" onClick={handleAddressUpdate}>
           Save
@@ -222,7 +226,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     <div style={{ position: "relative" }}>
       <ActionPlaceholder isFetching={isFetching} background="transparent" />
       <div className="shadow" style={{ marginBottom: `${marginVertical}px` }}>
-        <div style={{ padding: `2em 4em` }}>
+        <div style={{ padding: !lg ? `2em 4em` : `1em` }}>
           <div className="primary-title" style={{ fontSize: 20 }}>
             Contact Details:
           </div>
@@ -230,7 +234,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: `1fr 1fr`,
+              gridTemplateColumns: !lg ? `1fr 1fr` : `1fr`,
               gap: 20,
               padding: `1em 0 0`,
             }}

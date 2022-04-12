@@ -12,13 +12,14 @@ import {
   useAppState,
   getApplicationStatus,
   useAppDispatch,
+  muiQuery,
 } from "../../context";
 const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   //component state
   const [paymentUrl, setPaymentUrl] = useState("");
   const [liveSubscriptions, setLiveSubscriptions] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const { lg } = muiQuery();
   const { dynamicsApps, isActiveUser } = useAppState();
   const dispatch = useAppDispatch();
   // import values from the global state
@@ -129,12 +130,18 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
       const ServePaymentStatus = () => {
         if (!bad_sagepayid) return null;
+        if (lg && bad_sagepayid) return "Status: paid";
         if (bad_sagepayid) return "Paid";
       };
 
       return (
-        <div style={{ margin: `auto 0`, width: marginHorizontal * 2 }}>
-          <div style={{ padding: `0 2em` }}>
+        <div
+          style={{
+            margin: `auto 0`,
+            width: !lg ? marginHorizontal * 2 : "auto",
+          }}
+        >
+          <div style={{ padding: !lg ? `0 2em` : 0 }}>
             <ServePayButton />
             <ServePaymentStatus />
           </div>
@@ -150,12 +157,13 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
       return (
         <div
-          className="flex"
+          className={!lg ? "flex" : "flex-col"}
           style={{
             borderBottom: isLastItem
               ? `1px solid ${colors.darkSilver}`
               : "none",
-            padding: `1em`,
+            padding: !lg ? `1em` : 0,
+            paddingTop: !lg ? null : "1em",
           }}
         >
           <div className="flex" style={styles.fontSize}>
@@ -169,7 +177,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     };
 
     return (
-      <div className="flex-row">
+      <div className={!lg ? "flex-row" : "flex-col"}>
         <ServeInfo />
         <ServeStatusOrAction />
       </div>
