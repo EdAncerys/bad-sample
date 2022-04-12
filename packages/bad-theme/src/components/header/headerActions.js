@@ -137,7 +137,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
     // --------------------------------------------------------------------------------
 
     // ⬇️ development env default login action ⬇️
-    if (state.auth.ENVIRONMENT === "DEVELOPMENT-") {
+    if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
       console.log("🤖 DEVELOPMENT ENVIRONMENT 🤖");
 
       const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });

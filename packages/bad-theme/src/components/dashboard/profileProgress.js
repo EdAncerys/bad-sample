@@ -5,7 +5,6 @@ import Image from "@frontity/components/image";
 import { colors } from "../../config/imports";
 import ActionPlaceholder from "../../components/actionPlaceholder";
 import SubmittedApplications from "./submittedApplications";
-import ApplicationList from "./applicationList";
 import Ellipse from "../../img/svg/ellipse.svg";
 import CheckMarkGreen from "../../img/svg/checkMarkGreen.svg";
 
@@ -248,7 +247,6 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     <div>
       <ServeApplicationConsole />
       <SubmittedApplications />
-      <ApplicationList />
     </div>
   );
 };
