@@ -119,7 +119,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const [membershipData, setMembershipData] = useState(false);
   const [genderList, setGenderList] = useState([]);
   const [isJobEditable, setJobEditable] = useState(true);
-  const [isEmailEditable, setEmailEditable] = useState(false);
 
   const [hospitalData, setHospitalData] = useState(null);
   const [canChangeHospital, setCanChangeHospital] = useState(true); // allow user to change hospital is no BAD applications are found
@@ -973,8 +972,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 type="text"
                 className="form-control input"
                 placeholder="Current job title"
-                // set field diabled if user have BAD apps
-                disabled={isJobEditable ? false : true}
               />
               <div style={{ padding: "0.5em 0" }}>
                 If you would like to change your job title please use the form

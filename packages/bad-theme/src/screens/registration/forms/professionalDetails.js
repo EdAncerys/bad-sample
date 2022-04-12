@@ -687,7 +687,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
               </div>
             )}
 
-            <div>
+            {/* <div>
               <label>Preferred mailing option</label>
               <Form.Select
                 name="bad_preferredmailingaddress"
@@ -706,7 +706,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                   );
                 })}
               </Form.Select>
-            </div>
+            </div> */}
 
             {inputValidator.sky_cvurl && (
               <div>
