@@ -77,7 +77,3 @@ select {
   margin: 0 10px 0 0;
 }
 /* customize select option styles */
-::selection {
-  background-color: red;
-  color: white;
-}
