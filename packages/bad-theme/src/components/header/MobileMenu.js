@@ -104,7 +104,13 @@ export default connect(({ libraries, state, actions, toggleMobileMenu }) => {
   }
 
   return (
-    <div style={styles.container} className="BAD-menu">
+    <div
+      style={styles.container}
+      className="BAD-menu"
+      data-aos="fade"
+      data-aos-easing="ease-in-sine"
+      data-aos-duration="300"
+    >
       <Nav.Link
         onClick={() => {
           setMenu({ children: MENU_DATA });

@@ -213,7 +213,10 @@ const Dashboard = ({ state, actions, libraries }) => {
     return (
       <div
         className="shadow"
-        style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
+        style={{
+          padding: !lg ? `2em 4em` : `1em`,
+          marginBottom: `${marginVertical}px`,
+        }}
       >
         <TitleBlock
           block={{ text_align: "left", title: "Upcoming Events" }}
@@ -222,6 +225,7 @@ const Dashboard = ({ state, actions, libraries }) => {
 
         <div
           style={{
+            marginTop: !lg ? null : `1em`,
             display: "grid",
             gridTemplateColumns: !lg ? `repeat(4, 1fr)` : "1fr",
             gap: 20,
@@ -266,7 +270,7 @@ const Dashboard = ({ state, actions, libraries }) => {
             <div
               className="flex-col shadow"
               style={{
-                padding: `2em 4em`,
+                padding: !lg ? `2em 4em` : "1em",
                 marginBottom: `${marginVertical}px`,
               }}
             >
@@ -410,7 +414,10 @@ const Dashboard = ({ state, actions, libraries }) => {
                       className="flex-col"
                       style={{ paddingTop: `1em` }}
                     >
-                      <div className="flex">
+                      <div
+                        className="flex"
+                        style={{ flexDirection: !lg ? null : "column" }}
+                      >
                         <div
                           className="flex"
                           style={{ display: "grid", alignItems: "center" }}

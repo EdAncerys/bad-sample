@@ -272,7 +272,11 @@ const HeaderActions = ({ state, actions, libraries }) => {
         <div className="flex" style={{ padding: !lg ? `2.75em 0` : `0.3em 0` }}>
           <div className="flex">
             <div
-              style={{ width: !lg ? 385 : 90, height: 90, cursor: "pointer" }}
+              style={{
+                width: !lg ? 385 : 60,
+                height: !lg ? 90 : 60,
+                cursor: "pointer",
+              }}
               onClick={() => setGoToAction({ state, path: `/`, actions })}
             >
               <Image src={SiteLogo} className="d-block h-100" alt="BAD Logo" />
