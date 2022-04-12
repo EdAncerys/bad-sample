@@ -60,7 +60,7 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
         }); // redirect to payment
         setErrorAction({
           dispatch,
-          isError: { message: "Direct debit been successfully setup" },
+          isError: { message: "Direct debit has been successfully setup" },
         });
       } else {
         // console.log("⬇️ Failed to create direct debit ⬇️");
