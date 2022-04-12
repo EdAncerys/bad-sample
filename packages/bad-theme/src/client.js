@@ -6,7 +6,7 @@ import link from "@frontity/html2react/processors/link";
 import menuHandler from "./handlers/menu-handler";
 
 // CONTEXT ----------------------------------------------------------------
-import { getPILsDataAction } from "./context";
+import { getPILsDataAction, getGuidelinesDataAction } from "./context";
 import { handleSetCookie } from "./helpers/cookie";
 
 const BADTheme = {
@@ -70,6 +70,8 @@ const BADTheme = {
 
         // ⬇️  get pils data
         await getPILsDataAction({ state, actions });
+        // ⬇️  get guidance data
+        await getGuidelinesDataAction({ state, actions });
 
         // ⬇️ handle set cookie for video guide block. Silent auth login
         // https://www.skinhealthinfo.org.uk/support-resources/video-guides/
