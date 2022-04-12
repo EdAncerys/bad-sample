@@ -7,6 +7,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import FormError from "../../../components/formError";
 import { Form } from "react-bootstrap";
 import ActionPlaceholder from "../../../components/actionPlaceholder";
+// DATA HELPERS -----------------------------------------------------------
+import { prefMailingOption } from "../../../config/data";
+
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -683,6 +686,27 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                 />
               </div>
             )}
+
+            <div>
+              <label>Preferred mailing option</label>
+              <Form.Select
+                name="bad_preferredmailingaddress"
+                value={formData.bad_preferredmailingaddress}
+                onChange={handleInputChange}
+                className="input"
+              >
+                <option value="" hidden>
+                  Preferred mailing option
+                </option>
+                {prefMailingOption.map((item, key) => {
+                  return (
+                    <option key={key} value={item.value}>
+                      {item.Label}
+                    </option>
+                  );
+                })}
+              </Form.Select>
+            </div>
 
             {inputValidator.sky_cvurl && (
               <div>

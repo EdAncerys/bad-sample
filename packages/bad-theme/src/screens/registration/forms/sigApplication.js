@@ -119,6 +119,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const [membershipData, setMembershipData] = useState(false);
   const [genderList, setGenderList] = useState([]);
   const [isJobEditable, setJobEditable] = useState(true);
+  const [isEmailEditable, setEmailEditable] = useState(false);
 
   const [hospitalData, setHospitalData] = useState(null);
   const [canChangeHospital, setCanChangeHospital] = useState(true); // allow user to change hospital is no BAD applications are found
@@ -778,6 +779,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 type="text"
                 className="form-control input"
                 placeholder="Email"
+                // disbale email field if user has email
+                disabled={!!formData.py3_email}
               />
             </div>
           )}
@@ -961,7 +964,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
           {inputValidator.bad_currentpost && (
             <div>
               <label className="required form-label">
-                New Post/Job title field (If retired please enter retired)
+                New Post / Job title field (If retired please enter retired)
               </label>
               <input
                 name="bad_currentpost"
