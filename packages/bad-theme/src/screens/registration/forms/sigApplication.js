@@ -255,6 +255,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         ...prevFormData,
         bad_categorytype: type,
       }));
+      console.log("FORMDATA", formData);
       // update policy link agains app data
       handlePolicyLinkUpdate({
         membershipData,
@@ -462,7 +463,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         data: sigAppliaction,
         refreshJWT,
       });
-
+      console.log("INPUT VALIDATOR", inputValidator);
       if (!store.success)
         throw new Error("Failed to update application record"); // throw error if store is not successful
 

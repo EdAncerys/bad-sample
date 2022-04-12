@@ -11,11 +11,12 @@ import ApplicationStatusOrPayment from "../ApplicationStatusOrPayment";
 import Payments from "../payments";
 import Card from "../../../components/card/card";
 // CONTEXT ------------------------------------------------------------------
-import { useAppState, useAppDispatch } from "../../../context";
+import { useAppState, useAppDispatch, muiQuery } from "../../../context";
 import { getEventsData } from "../../../helpers";
-
 const Dashboard = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
+  const { lg } = muiQuery();
+
   const { dashboardPath, dynamicsApps } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
@@ -108,7 +109,7 @@ const Dashboard = ({ state, actions, libraries }) => {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: `repeat(4, 1fr)`,
+            gridTemplateColumns: !lg ? `repeat(4, 1fr)` : "1fr",
             gap: 20,
           }}
         >
