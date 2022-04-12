@@ -13,7 +13,6 @@ import ApplicationStatusOrPayment from "../ApplicationStatusOrPayment";
 import Payments from "../payments";
 import Card from "../../../components/card/card";
 import ActionPlaceholder from "../../actionPlaceholder";
-import { getEventsData } from "../../../helpers";
 
 // CONTEXT ------------------------------------------------------------------
 import {
