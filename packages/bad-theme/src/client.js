@@ -6,6 +6,7 @@ import link from "@frontity/html2react/processors/link";
 import menuHandler from "./handlers/menu-handler";
 
 // CONTEXT ----------------------------------------------------------------
+import { getPILsDataAction } from "./context";
 import { handleSetCookie } from "./helpers/cookie";
 
 const BADTheme = {
@@ -66,6 +67,9 @@ const BADTheme = {
           actions.source.fetch(`/home-page`), // pre fetch home page CONTENT
           // actions.source.fetch(`/menu_features`), // pre fetch menu featured CPT
         ]);
+
+        // ⬇️  get pils data
+        await getPILsDataAction({ state, actions });
 
         // ⬇️ handle set cookie for video guide block. Silent auth login
         // https://www.skinhealthinfo.org.uk/support-resources/video-guides/

@@ -171,7 +171,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
         style={{
           display: "grid",
           alignItems: "center",
-          padding: `1em 0`,
+          padding: `0 2em 1.5em 0`,
           minWidth: 200,
         }}
       >
@@ -197,7 +197,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
         style={{
           display: "grid",
           alignItems: "center",
-          padding: `1em 0`,
+          paddingBottom: `1.5em`,
           minWidth: 200,
         }}
       >
@@ -223,27 +223,22 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
       style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}
       className="no-selector"
     >
-      <div
-        style={{
-          display: "grid",
-          justifyItems: "center",
-          gridTemplateColumns: "1fr 1fr",
-        }}
-      >
-        <ServeViewPILs />
-        <ServeViewGuidelines />
-      </div>
-
       <div className="shadow" style={{ backgroundColor: colors.white }}>
         <div className="flex no-selector" style={{ padding: `2em` }}>
           <div className="flex-col">
-            <TitleBlock
-              block={{
-                text_align: "left",
-                title: "Search for PILs & Guidelines",
-              }}
-              margin="0 0 1em 0"
-            />
+            <div className="flex">
+              <div className="flex">
+                <TitleBlock
+                  block={{
+                    text_align: "left",
+                    title: "Search for PILs & Guidelines",
+                  }}
+                  margin="0 0 1em 0"
+                />
+              </div>
+              <ServeViewPILs />
+              <ServeViewGuidelines />
+            </div>
             <div className="flex-row">
               <div
                 className="flex"

@@ -1165,7 +1165,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.bad_isbadmember && (
             <div className="flex-col">
-              <label className="form-label">Are you BAD member (Y/N)</label>
+              <label className="form-label">Are you BAD member?</label>
               <input
                 name="bad_isbadmember"
                 checked={formData.bad_isbadmember}
