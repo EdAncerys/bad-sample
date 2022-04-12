@@ -428,7 +428,7 @@ const Dashboard = ({ state, actions, libraries }) => {
           </div>
         )}
         {/* <ServeApplicationStatus /> */}
-        {/* <ServePayments /> */}
+        <ServePayments />
       </div>
       <ServeEvents />
     </div>
