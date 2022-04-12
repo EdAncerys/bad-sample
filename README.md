@@ -2,7 +2,7 @@
 
 # ⬇️ PRODUCTION APP auth creditentials ⬇️
 
-.env file secrets
+.env file secrets\_
 
 B2C
 WP_HOST
