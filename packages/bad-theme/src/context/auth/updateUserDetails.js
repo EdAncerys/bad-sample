@@ -56,6 +56,7 @@ export const updateAddressAction = async ({
 
 export const updateEthnicityAction = async ({
   state,
+  dispatch,
   data,
   isActiveUser,
   refreshJWT,

@@ -76,6 +76,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     py3_insertnhsnetemailaddress: "",
   });
   const [inputValidator, setInputValidator] = useState({
+    bad_categorytype: true,
     py3_title: true,
     py3_firstname: true,
     py3_lastname: true,
@@ -443,6 +444,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
       ],
     });
 
+    console.log("🐞 ", sigAppliaction); // debug
+    console.log("🐞 ", isValid); // debug
     if (!isValid) return null;
 
     try {
@@ -479,7 +482,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
         data: sigAppliaction,
         refreshJWT,
       });
-      console.log("INPUT VALIDATOR", inputValidator);
       if (!store.success)
         throw new Error("Failed to update application record"); // throw error if store is not successful
 

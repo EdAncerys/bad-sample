@@ -82,6 +82,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
       // handle update ethnicity for user contact
       await updateEthnicityAction({
         state,
+        dispatch,
         data: formData.bad_ethnicity,
         isActiveUser,
       });

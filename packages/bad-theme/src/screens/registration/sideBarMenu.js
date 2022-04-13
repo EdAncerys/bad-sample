@@ -48,7 +48,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
 
   useEffect(() => {
     // redirect to /dashboard if isActiveUser && !applicationData
-    if (isActiveUser && !applicationData) {
+    if (isActiveUser && !applicationData && slug !== "/membership/thank-you/") {
       console.log(
         "⬇️ user have no application data created - redirect to /dashboard"
       );
@@ -85,10 +85,13 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   }, [isActiveUser, applicationData]);
 
   // return loading placeholder if if !isActiveUser || !applicationData
-  if (!isActiveUser || !applicationData) return <Loading />;
+  if (!isActiveUser) return <Loading />;
 
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
+    let title = "Apply to become a member of BAD";
+    if (slug === "/membership/thank-you/") title = "Ethnic Group Question";
+
     return (
       <div
         className="primary-title"
@@ -98,7 +101,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
           padding: `0 1em 1em 0`,
         }}
       >
-        Apply to become a member of BAD
+        {title}
       </div>
     );
   };
