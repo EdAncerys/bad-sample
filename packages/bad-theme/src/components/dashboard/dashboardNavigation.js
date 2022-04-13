@@ -28,7 +28,7 @@ const DashboardNavigation = ({ state, actions, libraries }) => {
 
       return hasBADMemberships;
     });
-    console.log("🐞 ", badApps.length);
+
     if (badApps.length) setIsBADMember(true);
   }, [dynamicsApps]);
 
