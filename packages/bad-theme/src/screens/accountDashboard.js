@@ -10,7 +10,7 @@ import Directory from "../components/dashboard/pages/directory";
 import Membership from "../components/dashboard/pages/membership";
 import MyAccount from "../components/dashboard/pages/myAccount";
 import Billing from "../components/dashboard/pages/billing";
-import Settings from "../components/dashboard/pages/settings";
+import Preferences from "../components/dashboard/pages/settings";
 import DashboardNavigationMobile from "../components/dashboard/dashboardNavigationMobile";
 import ButtonsRow from "../components/buttonsRow";
 // BLOCK BUILDER ------------------------------------------------------------
@@ -173,7 +173,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
             <Membership />
             <MyAccount />
             <Billing />
-            <Settings />
+            <Preferences />
           </BlockWrapper>
 
           <Directory />

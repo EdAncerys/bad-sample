@@ -5,7 +5,7 @@ import Avatar from "../../img/svg/profile.svg";
 // CONTEXT ----------------------------------------------------------------
 import { useAppState, muiQuery } from "../../context";
 
-const ProfileAvatar = ({ state, actions, libraries }) => {
+const ProfileAvatar = ({ state, actions, libraries, isPreview }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { sm, md, lg, xl } = muiQuery();
@@ -14,6 +14,7 @@ const ProfileAvatar = ({ state, actions, libraries }) => {
   if (!isActiveUser) return null;
 
   const { bad_listname, bad_profile_photo_url } = isActiveUser;
+  const profilePicture = isPreview || bad_profile_photo_url;
   const alt = bad_listname || "Profile Picture";
   let imgWidth = 350;
   if (xl) {
@@ -34,7 +35,7 @@ const ProfileAvatar = ({ state, actions, libraries }) => {
         }}
       >
         <Image
-          src={bad_profile_photo_url || Avatar}
+          src={profilePicture || Avatar}
           alt={alt}
           style={{
             width: "100%",

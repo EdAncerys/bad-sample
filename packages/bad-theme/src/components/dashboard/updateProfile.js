@@ -5,7 +5,7 @@ import { Form } from "react-bootstrap";
 import { ETHNIC_GROUPS, GENDER_GROUPS } from "../../config/data";
 import ActionPlaceholder from "../actionPlaceholder";
 import Image from "@frontity/components/image";
-import ProfileAvatar from "../../img/svg/profile.svg";
+import ProfileAvatar from "./profileAvatar";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -143,41 +143,6 @@ const UpdateProfile = ({ state, actions, libraries }) => {
   };
 
   // SERVERS ---------------------------------------------
-  const ServeProfileAvatar = () => {
-    if (!isActiveUser) return null;
-
-    const { bad_listname, bad_profile_photo_url } = isActiveUser;
-    const alt = bad_listname || "Profile Picture";
-    const imgWidth = !lg ? 350 : 200;
-
-    return (
-      <div
-        className="flex"
-        style={{ justifyContent: !lg ? "flex-end" : "center" }}
-      >
-        <div
-          style={{
-            width: imgWidth,
-            height: imgWidth,
-            borderRadius: `50%`,
-            overflow: `hidden`,
-            margin: "3em 0 0 0",
-          }}
-        >
-          <Image
-            src={bad_profile_photo_url || ProfileAvatar}
-            alt={alt}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-            }}
-          />
-        </div>
-      </div>
-    );
-  };
-
   const ServeActions = () => {
     return (
       <div
@@ -300,7 +265,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
             />
           </div>
         </div>
-        <ServeProfileAvatar />
+        <ProfileAvatar isPreview={formData.bad_profile_photo_url} />
       </div>
       <ServeActions />
     </div>

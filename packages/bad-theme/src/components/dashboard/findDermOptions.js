@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import ProfileAvatar from "./profileAvatar";
-import { handleGetCookie } from "../../helpers/cookie";
-import Loading from "../loading";
+import ActionPlaceholder from "../actionPlaceholder";
 
 // CONTEXT ----------------------------------------------------------------
 import {
@@ -11,6 +10,7 @@ import {
   useAppDispatch,
   muiQuery,
   sendFileToS3Action,
+  updateProfileAction,
 } from "../../context";
 
 const FindDermatologistOptions = ({ state }) => {
@@ -20,16 +20,17 @@ const FindDermatologistOptions = ({ state }) => {
   const { isActiveUser, refreshJWT } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
+  const [isFetching, setIsFetching] = useState(null);
   const [formData, setFormData] = useState({
     bad_includeinfindadermatologist: "",
-    address3_postalcode: "",
     address3_line1: "",
     address3_line2: "",
+    address3_postalcode: "",
     address3_city: "",
     bad_mainhosptialweb: "",
-    bad_web3: "",
-    bad_web2: "",
     bad_web1: "",
+    bad_web2: "",
+    bad_web3: "",
     bad_findadermatologisttext: "",
     bad_profile_photo_url: "",
   });
@@ -38,48 +39,91 @@ const FindDermatologistOptions = ({ state }) => {
   useEffect(() => {
     if (!isActiveUser) return null;
 
-    setFormData((prevFromData) => ({
-      ...prevFromData,
-      bad_includeinfindadermatologist:
-        isActiveUser.bad_includeinfindadermatologist,
-      address3_postalcode: isActiveUser.address3_postalcode || "",
-      address3_line1: isActiveUser.address3_line1 || "",
-      address3_line2: isActiveUser.address3_line2 || "",
-      address3_city: isActiveUser.address3_city || "",
-      bad_mainhosptialweb: isActiveUser.bad_mainhosptialweb || "",
-      bad_web3: isActiveUser.bad_web3 || "",
-      bad_web2: isActiveUser.bad_web2 || "",
-      bad_web1: isActiveUser.bad_web1 || "",
-      bad_findadermatologisttext: isActiveUser.bad_findadermatologisttext || "",
+    // map through user & update formData with values
+    const handleSetData = ({ name }) => {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [`${name}`]: isActiveUser[`${name}`],
+      }));
+    };
+
+    // 📌 populate profile information form Dynamics records
+    handleSetData({ name: "bad_includeinfindadermatologist" });
+    if (isActiveUser.address3_postalcode)
+      handleSetData({ name: "address3_postalcode" });
+    if (isActiveUser.address3_line1) handleSetData({ name: "address3_line1" });
+    if (isActiveUser.address3_line2) handleSetData({ name: "address3_line2" });
+    if (isActiveUser.address3_city) handleSetData({ name: "address3_city" });
+    if (isActiveUser.bad_mainhosptialweb)
+      handleSetData({ name: "bad_mainhosptialweb" });
+    if (isActiveUser.bad_web3) handleSetData({ name: "bad_web3" });
+    if (isActiveUser.bad_web2) handleSetData({ name: "bad_web2" });
+    if (isActiveUser.bad_web1) handleSetData({ name: "bad_web1" });
+    if (isActiveUser.bad_findadermatologisttext)
+      handleSetData({ name: "bad_findadermatologisttext" });
+  }, [isActiveUser]);
+
+  // HELPERS ----------------------------------------------------------------
+  const handleInputChange = (e) => {
+    const { name, value, type, checked, files } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: type === "checkbox" ? checked : value,
     }));
-  }, []);
+  };
 
-  // HELPERS ---------------------------------------------
-  const handlePreferenceUpdate = async () => {
-    const cookie = await handleGetCookie({ name: `BAD-WebApp` });
-    const { contactid, jwt } = cookie;
-    const url = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
+  const handleProfileUpdate = async () => {
+    let bad_includeinfindadermatologist =
+      formData.bad_includeinfindadermatologist;
+    let address3_line1 = formData.address3_line1;
+    let address3_line2 = formData.address3_line2;
+    let address3_postalcode = formData.address3_postalcode;
+    let address3_city = formData.address3_city;
+    let bad_web1 = formData.bad_web1;
+    let bad_web2 = formData.bad_web2;
+    let bad_web3 = formData.bad_web3;
+    let bad_findadermatologisttext = formData.bad_findadermatologisttext;
+    let bad_profile_photo_url = formData.bad_profile_photo_url;
 
-    const submitUpdate = await fetch(url, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    const data = {
+      bad_includeinfindadermatologist,
+      address3_line1,
+      address3_line2,
+      address3_postalcode,
+      address3_city,
+      bad_web1,
+      bad_web2,
+      bad_web3,
+      bad_findadermatologisttext,
+      bad_profile_photo_url,
+    };
 
-    if (submitUpdate.ok) {
-      const json = await submitUpdate.json();
-      json.success
-        ? setErrorAction({
-            dispatch,
-            isError: { message: "Updated" },
-          })
-        : setErrorAction({
-            dispatch,
-            isError: { message: "There was an error processing the update" },
-          });
+    try {
+      setIsFetching(true);
+      const response = await updateProfileAction({
+        state,
+        dispatch,
+        data,
+        isActiveUser,
+        refreshJWT,
+      });
+      if (!response) throw new Error("Error updating profile");
+      // display error message
+      setErrorAction({
+        dispatch,
+        isError: { message: `Personal information updated successfully` },
+      });
+    } catch (error) {
+      console.log("error", error);
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Failed to update personal information. Please try again.`,
+          image: "Error",
+        },
+      });
+    } finally {
+      setIsFetching(false);
     }
   };
 
@@ -101,26 +145,20 @@ const FindDermatologistOptions = ({ state }) => {
     }));
   };
 
-  if (!formData) return <Loading />;
-
   return (
-    <div
-      className="shadow"
-      style={{
-        padding: `2em 4em`,
-        marginBottom: `${marginVertical}px`,
-      }}
-    >
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handlePreferenceUpdate();
+    <div style={{ position: "relative" }}>
+      <ActionPlaceholder isFetching={isFetching} background="transparent" />
+      <div
+        className="shadow"
+        style={{
+          padding: `2em 4em`,
+          marginBottom: `${marginVertical}px`,
         }}
       >
         <div style={{ display: "grid" }}>
           <div className="flex-col">
             <div className="flex">
-              <div className="flex-col">
+              <div className="flex-col" style={{ flex: 1.25 }}>
                 <div>
                   <div
                     className="flex"
@@ -128,17 +166,11 @@ const FindDermatologistOptions = ({ state }) => {
                   >
                     <div style={{ display: "grid" }}>
                       <input
-                        id="includeInFindDermatologist"
+                        name="bad_includeinfindadermatologist"
+                        checked={formData.bad_includeinfindadermatologist}
+                        onChange={handleInputChange}
                         type="checkbox"
                         className="form-check-input check-box"
-                        checked={formData.bad_includeinfindadermatologist}
-                        onChange={() => {
-                          setFormData((prev) => ({
-                            ...prev,
-                            bad_includeinfindadermatologist:
-                              !formData.bad_includeinfindadermatologist,
-                          }));
-                        }}
                       />
                     </div>
                     <div style={styles.textInfo}>
@@ -154,62 +186,41 @@ const FindDermatologistOptions = ({ state }) => {
                 <div>
                   <div className="flex-col">
                     <input
-                      id="address3_line1"
                       name="address3_line1"
-                      type="text"
-                      className="form-control"
-                      placeholder="Address Line 1"
-                      style={styles.input}
                       value={formData.address3_line1}
-                      onChange={(e) => {
-                        setFormData((prev) => ({
-                          ...prev,
-                          address3_line1: e.target.value,
-                        }));
-                      }}
+                      onChange={handleInputChange}
+                      type="text"
+                      placeholder="Address Line 1"
+                      className="form-control"
+                      style={styles.input}
                     />
                     <input
-                      id="address3_line2"
-                      type="text"
-                      className="form-control"
-                      placeholder="Address Line 2"
-                      style={styles.input}
+                      name="address3_line2"
                       value={formData.address3_line2}
-                      onChange={(e) => {
-                        setFormData((prev) => ({
-                          ...prev,
-                          address3_line2: e.target.value,
-                        }));
-                      }}
+                      onChange={handleInputChange}
+                      type="text"
+                      placeholder="Address Line 2"
+                      className="form-control"
+                      style={styles.input}
                     />
 
                     <input
-                      id="address3_postalcode"
-                      type="text"
-                      className="form-control"
-                      placeholder="Post Code"
-                      style={styles.input}
+                      name="address3_postalcode"
                       value={formData.address3_postalcode}
-                      onChange={(e) => {
-                        setFormData((prev) => ({
-                          ...prev,
-                          address3_postalcode: e.target.value,
-                        }));
-                      }}
+                      onChange={handleInputChange}
+                      type="text"
+                      placeholder="Postcode"
+                      className="form-control"
+                      style={styles.input}
                     />
                     <input
-                      id="address3_city"
-                      type="text"
-                      className="form-control"
-                      placeholder="City"
-                      style={styles.input}
+                      name="address3_city"
                       value={formData.address3_city}
-                      onChange={(e) => {
-                        setFormData((prev) => ({
-                          ...prev,
-                          address3_city: e.target.value,
-                        }));
-                      }}
+                      onChange={handleInputChange}
+                      type="text"
+                      placeholder="City"
+                      className="form-control"
+                      style={styles.input}
                     />
 
                     <div>
@@ -227,7 +238,7 @@ const FindDermatologistOptions = ({ state }) => {
                 </div>
               </div>
 
-              <ProfileAvatar />
+              <ProfileAvatar isPreview={formData.bad_profile_photo_url} />
             </div>
 
             <div style={{ paddingTop: `1em` }}>
@@ -236,60 +247,40 @@ const FindDermatologistOptions = ({ state }) => {
             <div>
               <div className="flex-col">
                 <input
-                  id="mainHospitalWebAddress"
-                  type="text"
-                  className="form-control"
-                  placeholder="Main Place of Work"
-                  style={styles.input}
+                  name="bad_mainhosptialweb"
                   value={formData.bad_mainhosptialweb}
-                  onChange={(e) => {
-                    setFormData((prev) => ({
-                      ...prev,
-                      bad_mainhosptialweb: e.target.value,
-                    }));
-                  }}
+                  onChange={handleInputChange}
+                  type="text"
+                  placeholder="Main Place of Work Web Address"
+                  className="form-control"
+                  style={styles.input}
                 />
                 <input
-                  id="privatePracticeWebAddressOne"
-                  type="text"
-                  className="form-control"
-                  placeholder="Private Practice Web Address 1"
-                  style={styles.input}
+                  name="bad_web1"
                   value={formData.bad_web1}
-                  onChange={(e) => {
-                    setFormData((prev) => ({
-                      ...prev,
-                      bad_web1: e.target.value,
-                    }));
-                  }}
+                  onChange={handleInputChange}
+                  type="text"
+                  placeholder="Private Practice Web Address 1"
+                  className="form-control"
+                  style={styles.input}
                 />
                 <input
-                  id="privatePracticeWebAddressTwo"
-                  type="text"
-                  className="form-control"
-                  placeholder="Private Practice Web Address 2"
-                  style={styles.input}
+                  name="bad_web2"
                   value={formData.bad_web2}
-                  onChange={(e) => {
-                    setFormData((prev) => ({
-                      ...prev,
-                      bad_web2: e.target.value,
-                    }));
-                  }}
+                  onChange={handleInputChange}
+                  type="text"
+                  placeholder="Private Practice Web Address 2"
+                  className="form-control"
+                  style={styles.input}
                 />
                 <input
-                  id="privatePracticeWebAddressThree"
-                  type="text"
-                  className="form-control"
-                  placeholder="Private Practice Web Address 3"
-                  style={styles.input}
+                  name="bad_web3"
                   value={formData.bad_web3}
-                  onChange={(e) => {
-                    setFormData((prev) => ({
-                      ...prev,
-                      bad_web3: e.target.value,
-                    }));
-                  }}
+                  onChange={handleInputChange}
+                  type="text"
+                  placeholder="Private Practice Web Address 3"
+                  className="form-control"
+                  style={styles.input}
                 />
               </div>
             </div>
@@ -298,19 +289,14 @@ const FindDermatologistOptions = ({ state }) => {
             <div>
               <div className="flex-col">
                 <textarea
-                  id="aboutText"
-                  type="text"
-                  className="form-control"
-                  placeholder="Find a Dermatologist About Text"
-                  rows="10"
-                  style={styles.input}
+                  name="bad_findadermatologisttext"
                   value={formData.bad_findadermatologisttext}
-                  onChange={(e) => {
-                    setFormData((prev) => ({
-                      ...prev,
-                      bad_findadermatologisttext: e.target.value,
-                    }));
-                  }}
+                  onChange={handleInputChange}
+                  rows="10"
+                  type="text"
+                  placeholder="Find a Dermatologist About Text"
+                  className="form-control"
+                  style={styles.input}
                 />
               </div>
             </div>
@@ -320,11 +306,11 @@ const FindDermatologistOptions = ({ state }) => {
           className="flex"
           style={{ justifyContent: "flex-end", padding: `2em 0 0` }}
         >
-          <div type="submit" className="blue-btn">
-            Update
+          <div className="blue-btn" onClick={handleProfileUpdate}>
+            Save
           </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 };
