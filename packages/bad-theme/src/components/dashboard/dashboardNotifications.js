@@ -14,67 +14,119 @@ const DashboardNotifications = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { isDashboardNotifications } = useAppState();
+  const { isDashboardNotifications, dashboardPath, dynamicsApps } =
+    useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  if (!isDashboardNotifications) return null;
-
   // HELPERS ----------------------------------------------------------------
 
   // SERVERS -----------------------------------------------------------------
-  const ServeActions = () => {
+  const ServeGoToActions = ({ path, title, isDismisable }) => {
+    if (!path) return null;
+
     return (
       <div>
         <div className="flex">
-          <div
-            className="blue-btn"
-            style={{ width: "fit-content" }}
-            onClick={() =>
-              setDashboardNotificationsAction({
-                dispatch,
-                isDashboardNotifications: null,
-              })
-            }
-          >
-            Dismiss
-          </div>
+          {isDismisable && (
+            <div
+              className="blue-btn"
+              style={{ width: "fit-content" }}
+              onClick={() =>
+                setDashboardNotificationsAction({
+                  dispatch,
+                  isDashboardNotifications: null,
+                })
+              }
+            >
+              Dismiss
+            </div>
+          )}
 
           <div
             className="blue-btn"
             style={{ marginLeft: "2em", width: "fit-content" }}
             onClick={() =>
-              setDashboardPathAction({ dispatch, dashboardPath: "My Profile" })
+              setDashboardPathAction({ dispatch, dashboardPath: path })
             }
           >
-            Go to My Profile
+            {title || "More"}
           </div>
         </div>
       </div>
     );
   };
 
-  return (
-    <div
-      className="no-selector"
-      style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}
-    >
+  const ServeProfileReminders = () => {
+    if (dashboardPath === "My Profile" || !isDashboardNotifications)
+      return null;
+
+    return (
       <div
-        className="shadow"
-        style={{
-          display: "flex",
-          padding: `1em 4em`,
-        }}
+        className="no-selector"
+        style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}
       >
         <div
-          className="flex primary-title"
-          style={{ display: "grid", alignItems: "center", fontSize: 20 }}
+          className="shadow"
+          style={{
+            display: "flex",
+            padding: `1em 4em`,
+          }}
         >
-          Please complete missing BAD profile information.
+          <div
+            className="flex primary-title"
+            style={{ display: "grid", alignItems: "center", fontSize: 20 }}
+          >
+            Please complete missing BAD profile information.
+          </div>
+          <ServeGoToActions
+            path="My Profile"
+            title="Go to my profile"
+            isDismisable
+          />
         </div>
-        <ServeActions />
       </div>
+    );
+  };
+
+  const ServeAppReminders = () => {
+    console.log("🐞 ", dynamicsApps);
+    if (dashboardPath === "Billing" || !dynamicsApps) return null;
+    // check if user have approved SIG membership for any of the categories
+    const isPendingPayment = dynamicsApps.subs.data.filter(
+      (app) => app.bad_organisedfor === "SIG" && !app.bad_sagepayid
+    );
+    if (isPendingPayment.length === 0) return null;
+
+    return (
+      <div
+        className="no-selector"
+        style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}
+      >
+        <div
+          className="shadow"
+          style={{
+            display: "flex",
+            padding: `1em 4em`,
+          }}
+        >
+          <div
+            className="flex primary-title"
+            style={{ display: "grid", alignItems: "center", fontSize: 20 }}
+          >
+            Your SIG application has been approved.
+          </div>
+          <ServeGoToActions path="Billing" title="Pay Now" />
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div>
+      <ServeProfileReminders />
+      <ServeAppReminders />
     </div>
   );
 };

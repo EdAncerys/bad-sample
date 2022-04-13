@@ -43,7 +43,7 @@ const Error = ({ state, actions }) => {
             padding: "1em 0",
           }}
         >
-          Something went wrong. Let's get you to the tight place.
+          Something went wrong.
         </div>
 
         <ServeActions />

@@ -423,7 +423,7 @@ const Dashboard = ({ state, actions, libraries }) => {
                             {bad_organisedfor}
                           </div>
                           <div>{core_name}</div>
-                          <div>Application Date: {formattedDate}</div>
+                          {/* <div>Application Date: {formattedDate}</div> */}
                         </div>
                         <ServeChangeApplicationAction />
                         <ServeMembershipActions />
@@ -435,7 +435,7 @@ const Dashboard = ({ state, actions, libraries }) => {
             </div>
           </div>
         )}
-        {/* <ServeApplicationStatus /> */}
+        <ServeApplicationStatus />
         <ServePayments />
       </div>
       <ServeEvents />
