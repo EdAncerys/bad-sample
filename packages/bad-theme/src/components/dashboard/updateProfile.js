@@ -4,7 +4,6 @@ import { Form } from "react-bootstrap";
 
 import { ETHNIC_GROUPS, GENDER_GROUPS } from "../../config/data";
 import ActionPlaceholder from "../actionPlaceholder";
-import Image from "@frontity/components/image";
 import ProfileAvatar from "./profileAvatar";
 // CONTEXT ----------------------------------------------------------------
 import {

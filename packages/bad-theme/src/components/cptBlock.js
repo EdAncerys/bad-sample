@@ -9,6 +9,7 @@ import BlockWrapper from "./blockWrapper";
 import SearchContainer from "./searchContainer";
 import TypeFilters from "./typeFilters";
 import CloseIcon from "@mui/icons-material/Close";
+import { Form } from "react-bootstrap";
 
 // CONTEXT ----------------------------------------------------------------
 import {
@@ -251,7 +252,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
             padding: `1em 0 1em ${state.theme.marginVertical}px`,
           }}
         >
-          <select
+          <Form.Select
             name="guidance"
             value={cptBlockFilter}
             onChange={(e) =>
@@ -270,7 +271,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
                 </option>
               );
             })}
-          </select>
+          </Form.Select>
         </div>
       );
     };

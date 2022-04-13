@@ -76,7 +76,6 @@ const App = ({ state, actions }) => {
   useB2CLogin({ state, actions });
   // 📌 anchor tag scrapper
   useScraper({ urlPath });
-  useDocObjectStyles({ urlPath });
 
   // ⬇️ hook for media queries ⬇️
   useQuery({ state });
