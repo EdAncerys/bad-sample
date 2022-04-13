@@ -4,6 +4,7 @@ export const useScraper = ({ urlPath }) => {
   // --------------------------------------------------------------------------------
   // 📌 Anchro Scrapper. Replace all anchor links with the correct url
   // --------------------------------------------------------------------------------
+
   useLayoutEffect(() => {
     const links = document.querySelectorAll("a"); // get all links in document object
 

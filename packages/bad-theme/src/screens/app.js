@@ -46,6 +46,7 @@ import Video from "../components/video";
 import Error from "./error";
 import Loading from "../components/loading";
 import BlockWrapper from "../components/blockWrapper";
+// HOOKS ------------------------------------------------------------------
 import { useQuery } from "../hooks/useQuery";
 import { useScraper } from "../hooks/useScraper";
 import { useB2CLogin } from "../hooks/useB2CLogin";
@@ -75,6 +76,7 @@ const App = ({ state, actions }) => {
   useB2CLogin({ state, actions });
   // 📌 anchor tag scrapper
   useScraper({ urlPath });
+  useDocObjectStyles({ urlPath });
 
   // ⬇️ hook for media queries ⬇️
   useQuery({ state });

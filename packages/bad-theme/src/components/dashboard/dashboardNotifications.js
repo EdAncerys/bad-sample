@@ -91,7 +91,6 @@ const DashboardNotifications = ({ state, actions, libraries }) => {
   };
 
   const ServeAppReminders = () => {
-    console.log("🐞 ", dynamicsApps);
     if (dashboardPath === "Billing" || !dynamicsApps) return null;
     // check if user have approved SIG membership for any of the categories
     const isPendingPayment = dynamicsApps.subs.data.filter(

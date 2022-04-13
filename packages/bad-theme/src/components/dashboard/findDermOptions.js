@@ -111,7 +111,9 @@ const FindDermatologistOptions = ({ state }) => {
       // display error message
       setErrorAction({
         dispatch,
-        isError: { message: `Personal information updated successfully` },
+        isError: {
+          message: `Find a Dermatologist information updated successfully`,
+        },
       });
     } catch (error) {
       console.log("error", error);
