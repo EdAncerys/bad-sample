@@ -6,6 +6,7 @@ import HeroBanner from "./heroBanner";
 import { colors } from "../config/imports";
 import defaultCover from "../img/png/video_default.jpg";
 import Loading from "../components/loading";
+import { handleGetCookie } from "../helpers/cookie";
 
 // CONTEXT ----------------------------------------------------------------
 import { muiQuery, useAppState } from "../context";
@@ -13,6 +14,7 @@ import { muiQuery, useAppState } from "../context";
 const VideoArchive = ({ state, actions, libraries }) => {
   const [postData, setPostData] = useState(null);
   const [heroBannerBlock, setHeroBannerBlock] = useState(null);
+  // const [showMyVids, setShowMyVids] = useState(false);
 
   const { isActiveUser } = useAppState();
 
@@ -37,6 +39,13 @@ const VideoArchive = ({ state, actions, libraries }) => {
       return true;
     }
 
+    // if(showOnlyMyVids.current === true){
+    //   const vids = [];
+
+    //   unfilteredVideos.map(vid => {
+    //     if(vid.acf.event_id)
+    //   })
+    // }
     const filteredVideos = unfilteredVideos.filter((video) => {
       if (
         specialtyFilter.current &&
@@ -183,10 +192,13 @@ const VideoArchive = ({ state, actions, libraries }) => {
         <PaymentFilters />
         {isActiveUser && (
           <button
-            className="blue-btn"
+            className={
+              showOnlyMyVids.current === true ? "blue-btn-reverse" : "blue-btn"
+            }
             onClick={() => {
-              alert("HEllo");
-              showOnlyMyVids.current = true;
+              const opposite = showOnlyMyVids.current;
+              showOnlyMyVids.current = !opposite;
+              handleFilters();
             }}
           >
             {showOnlyMyVids.current === true
@@ -303,10 +315,11 @@ const VideoArchive = ({ state, actions, libraries }) => {
     );
   };
 
-  useEffect(async () => {
-    actions.source.fetch("/videos/");
-    actions.source.fetch("/event_specialty/");
-
+  useEffect(() => {
+    const fetchContent = async () => {
+      actions.source.fetch("/videos/");
+      actions.source.fetch("/event_specialty/");
+    };
     const fetchHeroBanner = async () => {
       const fetchInfo = await fetch(
         state.source.url + "/wp-json/wp/v2/pages/7051"
@@ -329,10 +342,32 @@ const VideoArchive = ({ state, actions, libraries }) => {
       }
     };
 
+    const fetchUserVideos = async () => {
+      const cookie = handleGetCookie({ name: `BAD-WebApp` });
+      const { contactid, jwt } = cookie;
+
+      const allVidz = state.source.videos;
+      console.log("All videos", allVidz);
+      const listOfVids = await fetch(
+        state.auth.APP_HOST +
+          "/videvent/e170d1fc-a0b9-ec11-983f-002248813da3/entities",
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+
+      const json = await listOfVids.json();
+
+      console.log("List of vids", json);
+    };
     const data = state.source.get(state.router.link);
     setPostData(data.items);
-
+    fetchContent();
     fetchHeroBanner();
+
+    if (isActiveUser) fetchUserVideos();
   }, []);
 
   if (!postData) return <Loading />;
