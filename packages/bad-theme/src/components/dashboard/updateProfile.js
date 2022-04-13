@@ -152,7 +152,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
           padding: `0 4em 2em 0`,
         }}
       >
-        <div type="submit" className="blue-btn" onClick={handleProfileUpdate}>
+        <div className="blue-btn" onClick={handleProfileUpdate}>
           Save
         </div>
       </div>

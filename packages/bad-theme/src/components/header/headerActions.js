@@ -205,14 +205,14 @@ const HeaderActions = ({ state, actions, libraries }) => {
     if (!lg)
       return (
         <div style={{ padding: `0 1em` }}>
-          <button
+          <div
             onClick={() =>
               setGoToAction({ state, path: `/dashboard/`, actions })
             }
             className="blue-btn-reverse"
           >
             My Account
-          </button>
+          </div>
         </div>
       );
     return (

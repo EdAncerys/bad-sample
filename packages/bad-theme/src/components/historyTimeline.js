@@ -39,7 +39,7 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
 
   const HistoryButton = ({ next }) => {
     return (
-      <button
+      <div
         onClick={() => {
           next ? slide("right") : slide("left");
         }}
@@ -71,7 +71,7 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
             <div>Previous</div>
           </div>
         )}
-      </button>
+      </div>
     );
   };
 

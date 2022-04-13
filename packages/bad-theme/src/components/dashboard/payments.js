@@ -114,7 +114,6 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
         return (
           <div
-            type="submit"
             className="blue-btn"
             onClick={() =>
               handlePayment({

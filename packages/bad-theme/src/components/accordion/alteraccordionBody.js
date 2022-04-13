@@ -244,7 +244,7 @@ const AccordionBody = ({
         }}
       >
         <div>
-          <button
+          <div
             className="flex-row blue-btn"
             onClick={() =>
               setGoToAction({ state, path: button_link.url, actions })
@@ -261,7 +261,7 @@ const AccordionBody = ({
                 }}
               />
             </div>
-          </button>
+          </div>
         </div>
       </div>
     );

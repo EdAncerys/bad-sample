@@ -170,18 +170,13 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
         style={{ justifyContent: "flex-end", padding: `2em 0 0` }}
       >
         <div
-          type="submit"
           className="transparent-btn"
           style={{ marginRight: `2em` }}
           onClick={handleBack}
         >
           Back
         </div>
-        <div
-          type="submit"
-          className="blue-btn"
-          onClick={handleDirectDebitSetup}
-        >
+        <div className="blue-btn" onClick={handleDirectDebitSetup}>
           Confirm And Setup Direct Debit
         </div>
       </div>

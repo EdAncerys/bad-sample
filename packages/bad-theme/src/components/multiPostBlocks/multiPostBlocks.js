@@ -116,13 +116,9 @@ const MultiPostBlocks = ({ state, actions, libraries, block }) => {
         <div
           style={{ display: "grid", alignItems: "center", paddingLeft: `2em` }}
         >
-          <button
-            type="submit"
-            className="blue-btn"
-            onClick={handleInputSearch}
-          >
+          <div className="blue-btn" onClick={handleInputSearch}>
             Search
-          </button>
+          </div>
         </div>
       </div>
     );

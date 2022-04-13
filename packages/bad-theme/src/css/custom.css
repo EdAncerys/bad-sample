@@ -37,10 +37,6 @@
   color: inherit;
   transition: all 0.3s ease-in-out;
 }
-/* .card-wrapper:hover {
-  color: inherit;
-  transform: scale(0.995);
-} */
 
 .card-image-animated {
   transition: all 0.5s;

@@ -187,14 +187,13 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     return (
       <div className="flex" style={{ paddingTop: "1.5em" }}>
         <div
-          type="submit"
           className="blue-btn"
           onClick={handleCancelApplication}
           style={{ marginRight: "1em", backgroundColor: colors.danger }}
         >
           Cancel Application
         </div>
-        <div type="submit" className="blue-btn" onClick={handleApply}>
+        <div className="blue-btn" onClick={handleApply}>
           Continue Application
         </div>
       </div>

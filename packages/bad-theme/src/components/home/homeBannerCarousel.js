@@ -102,7 +102,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
 
             return (
               <div className="home-banner">
-                <button
+                <div
                   className="banner-transparent-btn anim-fadeInLeft"
                   style={{ animationDelay: "1.2s" }}
                   onClick={() =>
@@ -112,7 +112,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
                   <div className="first-letter-capital">
                     <Html2React html={LABEL} />
                   </div>
-                </button>
+                </div>
               </div>
             );
           };

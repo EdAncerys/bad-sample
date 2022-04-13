@@ -284,11 +284,7 @@ const FindDermatologistOptions = ({ state, actions, libraries }) => {
         className="flex"
         style={{ justifyContent: "flex-end", padding: `2em 0 0` }}
       >
-        <div
-          type="submit"
-          className="blue-btn"
-          onClick={() => handlePreferenceUpdate()}
-        >
+        <div className="blue-btn" onClick={() => handlePreferenceUpdate()}>
           Update
         </div>
       </div>

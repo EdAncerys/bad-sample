@@ -56,7 +56,6 @@ const PaymentNotification = ({
       <div style={{ margin: `auto 0`, width: marginHorizontal * 2 }}>
         <div style={{ padding: `0 2em` }}>
           <div
-            type="submit"
             className="blue-btn"
             onClick={() =>
               handlePayment({

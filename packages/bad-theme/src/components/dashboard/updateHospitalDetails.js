@@ -142,14 +142,13 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         }}
       >
         <div
-          type="submit"
           className="blue-btn"
           style={{ marginRight: "1em" }}
           onClick={handleContactForm}
         >
           Request To Edit
         </div>
-        <div type="submit" className="blue-btn" onClick={handleProfileUpdate}>
+        <div className="blue-btn" onClick={handleProfileUpdate}>
           Save
         </div>
       </div>

@@ -210,11 +210,7 @@ const Video = ({ state, actions, libraries }) => {
 
         if (isActiveUser && post.acf.private && videoStatus === "locked")
           return (
-            <div
-              type="submit"
-              className="blue-btn"
-              onClick={() => handlePayment()}
-            >
+            <div className="blue-btn" onClick={() => handlePayment()}>
               Buy for £{post.acf.price}
             </div>
           );

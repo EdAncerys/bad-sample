@@ -247,9 +247,9 @@ const PilsArchive = ({ state, actions, libraries }) => {
           paddingTop: !lg ? null : "1em",
         }}
       >
-        <button type="submit" className="blue-btn" onClick={handleSearchPress}>
+        <div className="blue-btn" onClick={handleSearchPress}>
           Search
-        </button>
+        </div>
       </div>
     );
   };

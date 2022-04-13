@@ -195,13 +195,9 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
           paddingTop: `2em`,
         }}
       >
-        <button
-          type="submit"
-          className="transparent-btn"
-          onClick={handleLoadMoreFilter}
-        >
+        <div className="transparent-btn" onClick={handleLoadMoreFilter}>
           {label}
-        </button>
+        </div>
       </div>
     );
   };

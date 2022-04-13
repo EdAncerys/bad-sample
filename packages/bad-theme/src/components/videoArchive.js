@@ -227,9 +227,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
             paddingTop: !lg ? null : "1em",
           }}
         >
-          <button type="submit" className="blue-btn">
-            Search
-          </button>
+          <div className="blue-btn">Search</div>
         </div>
       );
     };

@@ -115,9 +115,9 @@ const SearchContainer = ({
             paddingTop: !lg ? null : "1em",
           }}
         >
-          <button type="submit" className="blue-btn" onClick={handleSearch}>
+          <div className="blue-btn" onClick={handleSearch}>
             Search
-          </button>
+          </div>
         </div>
       );
     };

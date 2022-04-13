@@ -149,7 +149,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
           paddingTop: `4em`,
         }}
       >
-        <div type="submit" className="blue-btn" onClick={handleProfileUpdate}>
+        <div className="blue-btn" onClick={handleProfileUpdate}>
           Save
         </div>
       </div>

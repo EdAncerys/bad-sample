@@ -86,13 +86,12 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
     return (
       <div className="flex" style={{ margin: `auto 0` }}>
         <div style={{ padding: !lg ? `0 2em` : "1em" }}>
-          <div type="submit" className="blue-btn" onClick={handlePayment}>
+          <div className="blue-btn" onClick={handlePayment}>
             Setup Direct Debit
           </div>
         </div>
         <div>
           <div
-            type="submit"
             className="transparent-btn"
             onClick={() =>
               setNotificationAction({ dispatch, isVisibleNotification: false })

@@ -242,13 +242,9 @@ const FindADermatologist = ({ state, block }) => {
                 setName(e.target.value);
               }}
             />
-            <button
-              type="submit"
-              className="blue-btn"
-              style={{ marginLeft: "2em" }}
-            >
+            <div className="blue-btn" style={{ marginLeft: "2em" }}>
               Search
-            </button>
+            </div>
           </form>
         </div>
       );
@@ -277,14 +273,13 @@ const FindADermatologist = ({ state, block }) => {
                 setPC(e.target.value);
               }}
             />
-            <button
-              type="submit"
+            <div
               className="blue-btn"
               disabled={!pc && true}
               style={{ marginLeft: "2em" }}
             >
               Search
-            </button>
+            </div>
           </form>
         </div>
       );

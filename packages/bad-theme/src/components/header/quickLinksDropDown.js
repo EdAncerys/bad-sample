@@ -144,13 +144,13 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
         handleActiveMenu({ mouseLeave: true });
       }}
     >
-      <button
+      <div
         id="drop-down-btn"
         className="dropdown-toggle drop-down-btn"
         type="button"
       >
         Quick Links
-      </button>
+      </div>
       <ServeMenu />
     </div>
   );

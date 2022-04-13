@@ -42,14 +42,14 @@ const Banner = ({ state, actions, libraries, block }) => {
           data-aos-duration="1000"
         >
           <div>
-            <button
+            <div
               className="banner-transparent-btn"
               onClick={() => setGoToAction({ state, path: link.url, actions })}
             >
               <div className="first-letter-capital">
                 <Html2React html={LABEL} />
               </div>
-            </button>
+            </div>
           </div>
         </div>
       );

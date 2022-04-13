@@ -365,7 +365,7 @@ const Event = ({ state, actions, libraries }) => {
         }}
       >
         <ServeInformationForUser />
-        <button
+        <div
           className="blue-btn"
           style={{
             backgroundColor: colors.primary,
@@ -377,7 +377,7 @@ const Event = ({ state, actions, libraries }) => {
           onClick={handleRegistrationClick}
         >
           Register for Event
-        </button>
+        </div>
       </div>
     );
   };

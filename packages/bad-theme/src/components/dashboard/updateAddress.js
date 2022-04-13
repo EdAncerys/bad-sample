@@ -202,7 +202,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
           padding: `2em 0 0`,
         }}
       >
-        <div type="submit" className="blue-btn" onClick={handleAddressUpdate}>
+        <div className="blue-btn" onClick={handleAddressUpdate}>
           Save
         </div>
       </div>

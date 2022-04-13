@@ -158,9 +158,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
           paddingLeft: `2em`,
         }}
       >
-        <button type="submit" className="blue-btn">
-          Search
-        </button>
+        <div className="blue-btn">Search</div>
       </div>
     );
   };

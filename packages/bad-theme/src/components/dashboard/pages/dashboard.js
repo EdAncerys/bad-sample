@@ -364,7 +364,6 @@ const Dashboard = ({ state, actions, libraries }) => {
                         }}
                       >
                         <div
-                          type="submit"
                           className="blue-btn"
                           onClick={() =>
                             handleUpdateMembershipApplication({ app })
@@ -387,7 +386,6 @@ const Dashboard = ({ state, actions, libraries }) => {
                       <div style={{ display: "grid", alignItems: "center" }}>
                         <div className="flex">
                           <div
-                            type="submit"
                             className="blue-btn"
                             style={{ marginRight: "1em" }}
                             onClick={handleApplyForMembershipChangeAction}
@@ -395,7 +393,6 @@ const Dashboard = ({ state, actions, libraries }) => {
                             Apply to change membership
                           </div>
                           <div
-                            type="submit"
                             className="blue-btn"
                             onClick={() =>
                               handleDownloadConfirmationPDF({ app })
