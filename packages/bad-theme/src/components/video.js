@@ -33,7 +33,7 @@ const Video = ({ state, actions, libraries }) => {
 
   const dispatch = useAppDispatch();
   const { isActiveUser, refreshJWT } = useAppState();
-
+  console.log("USERO", isActiveUser);
   React.useEffect(async () => {
     //Not the greatest idea to make useEffect async
     await actions.source.fetch("/videos/");
@@ -225,7 +225,7 @@ const Video = ({ state, actions, libraries }) => {
               className="primary-title"
               style={{ fontSize: 20, display: "flex", alignItems: "center" }}
             >
-              You own the video
+              You have access to this video
             </div>
           );
 

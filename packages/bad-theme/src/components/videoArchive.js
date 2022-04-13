@@ -22,6 +22,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
   const specialtyFilter = useRef("");
   const paidFilter = useRef("");
   const gradeFilter = useRef("");
+  const showOnlyMyVids = useRef(false);
   const marginVertical = state.theme.marginVertical;
 
   const handleFilters = () => {
@@ -180,6 +181,19 @@ const VideoArchive = ({ state, actions, libraries }) => {
         <SpecialtyFilters />
         <GradeFilters />
         <PaymentFilters />
+        {isActiveUser && (
+          <button
+            className="blue-btn"
+            onClick={() => {
+              alert("HEllo");
+              showOnlyMyVids.current = true;
+            }}
+          >
+            {showOnlyMyVids.current === true
+              ? "Show all videos"
+              : "Show only my videos"}
+          </button>
+        )}
         <div
           onClick={() => {
             specialtyFilter.current = null;
