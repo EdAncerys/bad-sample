@@ -17,11 +17,12 @@ import {
   handleApplyForMembershipAction,
   errorHandler,
   getMembershipDataAction,
+  muiQuery,
 } from "../../context";
 
 const RegistrationStepTwo = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
+  const { lg } = muiQuery();
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
 
@@ -196,7 +197,7 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
   const ServeActions = () => {
     return (
       <div
-        className="flex"
+        className={!lg ? "flex" : "flex-col"}
         style={{
           justifyContent: "flex-end",
           padding: `2em 1em 0 1em`,
@@ -212,7 +213,7 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
         </div>
         <div
           className="transparent-btn"
-          style={{ margin: `0 1em` }}
+          style={{ margin: !lg ? `0 1em` : `1em 0` }}
           onClick={handleSaveExit}
         >
           Save & Exit
@@ -322,7 +323,7 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
           margin: `${marginVertical}px ${marginHorizontal}px`,
         }}
       >
-        <div style={styles.container}>
+        <div style={!lg ? styles.container : styles.containerMobile}>
           <SideBarMenu />
           <div style={{ position: "relative" }}>
             <ActionPlaceholder
@@ -360,6 +361,12 @@ const styles = {
   container: {
     display: "grid",
     gridTemplateColumns: `1fr 2fr`,
+    justifyContent: "space-between",
+    gap: 20,
+  },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
     justifyContent: "space-between",
     gap: 20,
   },
