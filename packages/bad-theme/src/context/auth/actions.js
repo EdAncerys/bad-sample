@@ -45,8 +45,7 @@ export const loginAction = async ({ state }) => {
 
   try {
     // 📌 auth B2c redirect url based on App default url
-    // const redirectPath = `&redirect_uri=${state.auth.APP_URL}/codecollect`;
-    const redirectPath = `&redirect_uri=https://bad-live.vercel.app/codecollect`;
+    const redirectPath = `&redirect_uri=${state.auth.APP_URL}/codecollect`;
     // --------------------------------------------------------------------------------
     // 📌  B2C login auth path endpoint
     // --------------------------------------------------------------------------------
@@ -56,17 +55,10 @@ export const loginAction = async ({ state }) => {
       `${redirectPath}&scope=openid&response_type=id_token&prompt=login`;
     const urlPath = state.router.link;
 
-    console.log("🐞 ", url);
-
     // get current url path and store in cookieValue
-    // handleSetCookie({
-    //   name: "loginPath",
-    //   value: urlPath,
-    //   days: 1,
-    // });
     handleSetCookie({
       name: "loginPath",
-      value: url,
+      value: urlPath,
       days: 1,
     });
 
