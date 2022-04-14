@@ -6,6 +6,7 @@ import HeroBanner from "./heroBanner";
 import { colors } from "../config/imports";
 import defaultCover from "../img/png/video_default.jpg";
 import Loading from "../components/loading";
+import { handleGetCookie } from "../helpers/cookie";
 
 // CONTEXT ----------------------------------------------------------------
 import { muiQuery, useAppState } from "../context";
@@ -13,6 +14,7 @@ import { muiQuery, useAppState } from "../context";
 const VideoArchive = ({ state, actions, libraries }) => {
   const [postData, setPostData] = useState(null);
   const [heroBannerBlock, setHeroBannerBlock] = useState(null);
+  // const [showMyVids, setShowMyVids] = useState(false);
 
   const { isActiveUser } = useAppState();
 
@@ -22,6 +24,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
   const specialtyFilter = useRef("");
   const paidFilter = useRef("");
   const gradeFilter = useRef("");
+  const showOnlyMyVids = useRef(false);
   const marginVertical = state.theme.marginVertical;
 
   const handleFilters = () => {
@@ -36,6 +39,13 @@ const VideoArchive = ({ state, actions, libraries }) => {
       return true;
     }
 
+    // if(showOnlyMyVids.current === true){
+    //   const vids = [];
+
+    //   unfilteredVideos.map(vid => {
+    //     if(vid.acf.event_id)
+    //   })
+    // }
     const filteredVideos = unfilteredVideos.filter((video) => {
       if (
         specialtyFilter.current &&
@@ -89,7 +99,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
               specialtyFilter.current = value;
               handleFilters();
             }}
-            style={styles.dropdown}
+            style={!lg ? styles.dropdown : styles.dropdownMobile}
           >
             <option value="">Specialties</option>
             {data.map((item, key) => {
@@ -115,7 +125,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
             className="form-control"
             name="event-grades"
             id="event-grades"
-            style={styles.dropdown}
+            style={!lg ? styles.dropdown : styles.dropdownMobile}
             value={gradeFilter.current}
             onChange={() => {
               const select = document.getElementById("event-grades");
@@ -148,7 +158,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
               paidFilter.current = value;
               handleFilters();
             }}
-            style={styles.dropdown}
+            style={!lg ? styles.dropdown : styles.dropdownMobile}
           >
             <option>Video type</option>
             <option value="all">All videos</option>
@@ -168,18 +178,35 @@ const VideoArchive = ({ state, actions, libraries }) => {
       <div
         style={{
           display: "flex",
-          gap: 20,
+          gap: !lg ? 20 : 5,
+          flexWrap: !lg ? null : "wrap",
         }}
       >
         <div
           className="primary-title"
           style={{ display: "flex", alignItems: "center" }}
         >
-          Filters:{" "}
+          {!lg ? "Filters:" : null}
         </div>
         <SpecialtyFilters />
         <GradeFilters />
         <PaymentFilters />
+        {isActiveUser && (
+          <button
+            className={
+              showOnlyMyVids.current === true ? "blue-btn-reverse" : "blue-btn"
+            }
+            onClick={() => {
+              const opposite = showOnlyMyVids.current;
+              showOnlyMyVids.current = !opposite;
+              handleFilters();
+            }}
+          >
+            {showOnlyMyVids.current === true
+              ? "Show all videos"
+              : "Show only my videos"}
+          </button>
+        )}
         <div
           onClick={() => {
             specialtyFilter.current = null;
@@ -239,7 +266,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
       >
         <form
           onSubmit={(e) => handleSearch(e, searchFilter)}
-          style={{ display: "flex", width: "50%" }}
+          style={{ display: "flex", width: !lg ? "50%" : "100%" }}
         >
           <input
             ref={searchFilterRef}
@@ -247,7 +274,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
             type="text"
             className="form-control"
             placeholder="Search"
-            style={!lg ? { width: "50%" } : { padding: "1em" }}
+            style={!lg ? { width: "50%" } : { padding: "1em", height: 40 }}
             value={searchFilter}
           />
           <div
@@ -287,10 +314,11 @@ const VideoArchive = ({ state, actions, libraries }) => {
     );
   };
 
-  useEffect(async () => {
-    actions.source.fetch("/videos/");
-    actions.source.fetch("/event_specialty/");
-
+  useEffect(() => {
+    const fetchContent = async () => {
+      actions.source.fetch("/videos/");
+      actions.source.fetch("/event_specialty/");
+    };
     const fetchHeroBanner = async () => {
       const fetchInfo = await fetch(
         state.source.url + "/wp-json/wp/v2/pages/7051"
@@ -313,10 +341,32 @@ const VideoArchive = ({ state, actions, libraries }) => {
       }
     };
 
+    const fetchUserVideos = async () => {
+      const cookie = handleGetCookie({ name: `BAD-WebApp` });
+      const { contactid, jwt } = cookie;
+
+      const allVidz = state.source.videos;
+      console.log("All videos", allVidz);
+      const listOfVids = await fetch(
+        state.auth.APP_HOST +
+          "/videvent/e170d1fc-a0b9-ec11-983f-002248813da3/entities",
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+
+      const json = await listOfVids.json();
+
+      console.log("List of vids", json);
+    };
     const data = state.source.get(state.router.link);
     setPostData(data.items);
-
+    fetchContent();
     fetchHeroBanner();
+
+    if (isActiveUser) fetchUserVideos();
   }, []);
 
   if (!postData) return <Loading />;
@@ -374,8 +424,20 @@ const styles = {
     marginBottom: 10,
     marginTop: 20,
   },
+  container: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
+    justifyContent: "space-between",
+    gap: 20,
+    marginBottom: 10,
+    marginTop: 20,
+  },
   dropdown: {
     width: 150,
+    height: "40px",
+  },
+  dropdownMobile: {
+    width: 100,
     height: "40px",
   },
 };
