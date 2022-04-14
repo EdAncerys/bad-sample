@@ -47,7 +47,12 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   if (slug.includes("step-4")) stepFour = activeStyle;
 
   useEffect(() => {
-    // redirect to /dashboard if isActiveUser && !applicationData
+    // 📌 redirect to / if !isActiveUser || !applicationData
+    if (!isActiveUser) {
+      console.log("⬇️ no user - redirect to /");
+      setGoToAction({ state, path: `/`, actions });
+    }
+    // 📌 redirect to /dashboard if isActiveUser && !applicationData
     if (isActiveUser && !applicationData && slug !== "/membership/thank-you/") {
       console.log(
         "⬇️ user have no application data created - redirect to /dashboard"
@@ -55,12 +60,8 @@ const SideBarMenu = ({ state, actions, libraries }) => {
       setGoToAction({ state, path: `/dashboard/`, actions });
       return;
     }
-    // redirect to / if !isActiveUser || !applicationData
-    if (!isActiveUser) {
-      console.log("⬇️ no user - redirect to /");
-      setGoToAction({ state, path: `/`, actions });
-    }
-    // auth/manage application steps for apps & redirects
+
+    // 📌 auth/manage application steps for apps & redirects
     if (applicationData) {
       const appData = applicationData[0];
       if (slug.includes("step-2") && !appData.stepOne)

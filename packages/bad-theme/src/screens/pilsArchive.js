@@ -63,9 +63,9 @@ const PilsArchive = ({ state, actions, libraries }) => {
       useEffectRef.current = false; // clean up function
     };
   }, []);
-  // DATA pre FETCH ----------------------------------------------------------------
 
   if (!pilList) return <Loading />;
+
   let ALPHABET = [];
   pilList.map((item) => {
     const pilTitle = item.title.rendered;

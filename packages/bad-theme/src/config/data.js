@@ -1362,10 +1362,10 @@ export const prefMailingOption = [
     value: 810170001,
     Label: "Home",
   },
-  {
-    value: 810170002,
-    Label: "Private Practice",
-  },
+  // 📌 uncomment if you want to add a new option
+  //   value: 810170002,
+  //   Label: "Private Practice",
+  // },
 ];
 
 export const proAppFileds = [

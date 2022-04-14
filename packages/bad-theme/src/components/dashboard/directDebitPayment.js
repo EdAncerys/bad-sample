@@ -122,7 +122,7 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
         <ServeDataString title="Frequency:" value="Annual Collection" />
         <ServeDataString
           title="Date of Collection:"
-          value={`1st of February ${
+          value={`1st of January ${
             currentYear + 1
           } or first working day thereafter`}
         />

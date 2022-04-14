@@ -23,6 +23,7 @@ import {
   setCompleteUserApplicationAction,
   useIsMounted,
   getHospitalNameAction,
+  setErrorAction,
 } from "../../../context";
 
 const ProfessionalDetails = ({ state, actions, libraries }) => {
@@ -260,8 +261,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   const handleNext = async () => {
     // check if new hospital value been added
     const isNewHospital = formData.bad_newhospitaladded;
-    // check if isAssociateType to apply mandatory fields
-    const isAssociateType = applicationType.includes("Associate");
+    // 📌 check if isAssociateType to apply mandatory fields
+    // const isAssociateType = applicationType.includes("Associate");
 
     const isValid = isFormValidated({
       required: [
@@ -313,6 +314,13 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       if (isActiveUser) setGoToAction({ state, path: slug, actions });
     } catch (error) {
       console.log(error);
+
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Failed to create ${applicationType} application. Please try again.`,
+        },
+      });
     } finally {
       setFetching(false);
     }
