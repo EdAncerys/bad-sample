@@ -27,10 +27,13 @@ const PaymentNotification = ({
       state.auth.ENVIRONMENT === "DEVELOPMENT"
         ? "http://localhost:3000/"
         : state.auth.APP_URL;
-
+    const sagepay_url =
+      state.auth.ENVIRONMENT === "DEVELOPMENT"
+        ? "/sagepay/test/application/"
+        : "/sagepay/live/application/";
     const fetchVendorId = await fetch(
       state.auth.APP_HOST +
-        "/sagepay/test/application/" +
+        sagepay_url +
         sage_id +
         `?redirecturl=${the_url}/payment-confirmation/`,
       {

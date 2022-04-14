@@ -96,9 +96,7 @@ const NewsCarouselComponent = ({
                         cardHeight={BANNER_HEIGHT}
                         colour={colors.danger}
                         link={link}
-                        bodyLimit="100"
                         link_label="Read More"
-                        cardHeight="90%"
                         bodyLimit={homepage ? 4 : null}
                         shadow
                       />
@@ -114,6 +112,7 @@ const NewsCarouselComponent = ({
     );
   };
 
+  // cardHeight="90%"
   const ServeSingleCardCarousel = () => {
     if (!md) return null;
 
@@ -142,7 +141,6 @@ const NewsCarouselComponent = ({
                   link={link}
                   link_label="Read More"
                   titleLimit={1}
-                  cardHeight="90%"
                   shadow
                 />
               </div>

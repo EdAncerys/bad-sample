@@ -7,10 +7,9 @@ import { useAccordionButton } from "react-bootstrap/AccordionButton";
 import Loading from "../loading";
 import AccordionBody from "./alteraccordionBody";
 import CardHeader from "./alteraccordionHeader";
-import { useAppState } from "../../context";
+import { useAppState, muiQuery } from "../../context";
 import connect from "@frontity/connect";
 import { v4 as uuidv4 } from "uuid";
-
 function AlterAccordion({
   state,
   actions,
@@ -34,7 +33,7 @@ function AlterAccordion({
   }
 
   if (!block) return <Loading />;
-
+  const { lg } = muiQuery();
   const { dynamicsApps } = useAppState();
   const {
     disable_vertical_padding,
@@ -129,7 +128,7 @@ function AlterAccordion({
 
   return (
     <BlockWrapper>
-      <div style={{ padding: "0 100px" }}>
+      <div style={{ padding: !lg ? "0 100px" : "0 0.5em" }}>
         <Accordion style={{ border: 0 }}>
           {searchFilter.map((block, key) => {
             return <SingleItem block={block} key={key} id={key} />;

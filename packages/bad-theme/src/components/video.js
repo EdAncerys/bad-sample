@@ -17,6 +17,7 @@ import {
   useAppDispatch,
   authenticateAppAction,
   setEnquireAction,
+  muiQuery,
 } from "../context";
 
 const Video = ({ state, actions, libraries }) => {
@@ -28,12 +29,12 @@ const Video = ({ state, actions, libraries }) => {
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
   // console.log("post data: ", post); // debug
-
+  const { lg } = muiQuery();
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
   const { isActiveUser, refreshJWT } = useAppState();
-
+  console.log("USERO", isActiveUser);
   React.useEffect(async () => {
     //Not the greatest idea to make useEffect async
     await actions.source.fetch("/videos/");
@@ -87,7 +88,10 @@ const Video = ({ state, actions, libraries }) => {
   const handlePayment = async () => {
     const cookie = handleGetCookie({ name: `BAD-WebApp` });
     const { contactid, jwt } = cookie;
-
+    const sagepay_url =
+      state.auth.ENVIRONMENT === "DEVELOPMENT"
+        ? "/sagepay/test/video/"
+        : "/sagepay/live/video/";
     const the_url =
       state.auth.ENVIRONMENT === "DEVELOPMENT"
         ? "http://localhost:3000/"
@@ -95,7 +99,7 @@ const Video = ({ state, actions, libraries }) => {
 
     const fetchVendorId = await fetch(
       state.auth.APP_HOST +
-        "/sagepay/test/video/" +
+        sagepay_url +
         contactid +
         "/" +
         post.acf.event_id +
@@ -221,7 +225,7 @@ const Video = ({ state, actions, libraries }) => {
               className="primary-title"
               style={{ fontSize: 20, display: "flex", alignItems: "center" }}
             >
-              You own the video
+              You have access to this video
             </div>
           );
 
@@ -278,7 +282,6 @@ const Video = ({ state, actions, libraries }) => {
   const RelatedVideos = () => {
     if (!relatedVideos) return null;
     if (relatedVideos.length < 3) return null;
-    console.log("RELATEDVI", relatedVideos);
     return relatedVideos.map((vid, key) => {
       if (vid.id === post.id) vid = relatedVideos[2];
       if (key > 1) return null;
@@ -327,7 +330,7 @@ const Video = ({ state, actions, libraries }) => {
       />
       <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
         <ServeTitle />
-        <div style={styles.container}>
+        <div style={!lg ? styles.container : styles.containerMobile}>
           <div>
             <ServeContent />
             <ServeBody />
@@ -358,6 +361,11 @@ const styles = {
   container: {
     display: "grid",
     gridTemplateColumns: "2fr 1fr",
+    gap: 20,
+  },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: "1fr",
     gap: 20,
   },
 };

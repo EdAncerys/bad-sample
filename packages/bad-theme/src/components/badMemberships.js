@@ -5,7 +5,7 @@ import { colors } from "../config/imports";
 import Loading from "./loading";
 import Accordion from "./accordion/accordion";
 // CONTEXT ----------------------------------------------------------------
-import { getMembershipDataAction } from "../context";
+import { getMembershipDataAction, muiQuery } from "../context";
 
 const BADMemberships = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -17,7 +17,7 @@ const BADMemberships = ({ state, actions, libraries, block }) => {
   if (disable_vertical_padding) marginVertical = 0;
 
   const useEffectRef = useRef(null);
-
+  const { lg } = muiQuery();
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
     // pre fetch membership data
@@ -60,7 +60,10 @@ const BADMemberships = ({ state, actions, libraries, block }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div className="flex-col" style={{ margin: `${marginVertical}px 0` }}>
+    <div
+      className="flex-col"
+      style={{ margin: !lg ? `${marginVertical}px 0` : "1em" }}
+    >
       {membershipTypes.map((membership, key) => {
         const { body_copy, category_types, price, bad_or_sig, bad_order } =
           membership.acf; // get the data from the memberships CPT

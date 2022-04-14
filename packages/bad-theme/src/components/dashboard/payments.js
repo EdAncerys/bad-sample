@@ -46,9 +46,11 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     core_membershipapplicationid,
   }) => {
     const type = core_membershipsubscriptionid || core_membershipapplicationid;
+    const sagepay_live =
+      state.auth.ENVIRONMENT === "DEVELOPMENT" ? "test" : "live";
     const sagepayUrl = core_membershipsubscriptionid
-      ? "/sagepay/test/subscription/"
-      : "/sagepay/test/application/";
+      ? `/sagepay/${sagepay_live}/subscription/`
+      : `/sagepay/${sagepay_live}/application/`;
 
     try {
       const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
