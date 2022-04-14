@@ -804,6 +804,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                     <FormError id="py3_constitutionagreement" />
                   </div>
                 )}
+
                 {inputValidator.bad_readpolicydocument && (
                   <div>
                     <div

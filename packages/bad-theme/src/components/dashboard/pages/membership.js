@@ -40,7 +40,7 @@ const Membership = ({ state, actions, libraries }) => {
   useEffect(() => {
     if (!dynamicsApps) return;
     // 📌 set dynamic apps data
-    // setSubs(dynamicsApps.subs.data);
+    setSubs(dynamicsApps.subs.data);
   }, [dynamicsApps]);
 
   // HANDLERS ----------------------------------------------------------------
@@ -263,13 +263,13 @@ const Membership = ({ state, actions, libraries }) => {
                   return (
                     <div style={{ display: "grid", alignItems: "center" }}>
                       <div className="flex">
-                        <div
+                        {/* <div
                           className="blue-btn"
                           style={{ marginRight: "1em" }}
                           onClick={handleApplyForMembershipChangeAction}
                         >
                           Apply to change membership
-                        </div>
+                        </div> */}
                         <div
                           className="blue-btn"
                           onClick={() => handleDownloadConfirmationPDF({ app })}
