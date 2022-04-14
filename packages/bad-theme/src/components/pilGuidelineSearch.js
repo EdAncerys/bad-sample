@@ -157,7 +157,8 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
         style={{
           display: "grid",
           alignItems: "center",
-          paddingLeft: `2em`,
+          paddingLeft: !lg ? `2em` : 0,
+          paddingTop: !lg ? 0 : `0.5em`,
         }}
       >
         <div className="blue-btn">Search</div>
@@ -244,7 +245,10 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
                 <ServeViewGuidelines />
               </div>
             </div>
-            <div className="flex-row">
+            <div
+              className={!lg ? "flex-row" : "flex-col"}
+              style={{ marginTop: "1em" }}
+            >
               <div
                 className="flex"
                 style={{
