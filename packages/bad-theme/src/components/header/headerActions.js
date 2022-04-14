@@ -177,6 +177,32 @@ const HeaderActions = ({ state, actions, libraries }) => {
   };
 
   // SERVERS ----------------------------------------------------
+  const ServeProductionBatch = () => {
+    // 📌 Production Batch shows if pointing to production server
+    if (!state.auth.APP_HOST.toLowerCase().includes("uat")) return null;
+
+    return (
+      <div style={{ position: "relative" }}>
+        <div
+          className="shadow no-selector"
+          style={{
+            position: "absolute",
+            top: "1.5em",
+            right: 0,
+            padding: 5,
+            borderRadius: "50%",
+            border: `1px solid ${colors.danger}`,
+            fontSize: 12,
+            color: colors.danger,
+            fontWeight: "bold",
+          }}
+        >
+          UAT
+        </div>
+      </div>
+    );
+  };
+
   const ServeLoginAction = () => {
     if (isActiveUser) return null;
 
@@ -190,6 +216,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
       );
     return <Login />;
   };
+
   const ServeMobileMenuAction = () => {
     return (
       <div style={{}}>
@@ -199,6 +226,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
       </div>
     );
   };
+
   const ServeDashboardAction = () => {
     if (!isActiveUser) return null;
 
@@ -215,6 +243,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
           </div>
         </div>
       );
+
     return (
       <div style={{ padding: `0 1em` }}>
         <div
@@ -269,6 +298,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
     <div style={{ borderBottom: `1px solid ${colors.primary}` }}>
       {mobileMenuActive && <MobileMenu />}
       <BlockWrapper>
+        <ServeProductionBatch />
         <div className="flex" style={{ padding: !lg ? `2.75em 0` : `0.3em 0` }}>
           <div className="flex">
             <div
