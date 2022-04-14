@@ -88,7 +88,10 @@ const Video = ({ state, actions, libraries }) => {
   const handlePayment = async () => {
     const cookie = handleGetCookie({ name: `BAD-WebApp` });
     const { contactid, jwt } = cookie;
-
+    const sagepay_url =
+      state.auth.ENVIRONMENT === "DEVELOPMENT"
+        ? "/sagepay/test/video/"
+        : "/sagepay/live/video/";
     const the_url =
       state.auth.ENVIRONMENT === "DEVELOPMENT"
         ? "http://localhost:3000/"
@@ -96,7 +99,7 @@ const Video = ({ state, actions, libraries }) => {
 
     const fetchVendorId = await fetch(
       state.auth.APP_HOST +
-        "/sagepay/test/video/" +
+        sagepay_url +
         contactid +
         "/" +
         post.acf.event_id +
