@@ -31,7 +31,7 @@ const RegistrationStepFive = ({ state, actions }) => {
           margin: `${marginVertical}px ${marginHorizontal}px`,
         }}
       >
-        <div style={styles.container}>
+        <div style={!lg ? styles.container : styles.containerMobile}>
           <SideBarMenu />
           <ServeContent />
         </div>
@@ -44,6 +44,12 @@ const styles = {
   container: {
     display: "grid",
     gridTemplateColumns: `1fr 2fr`,
+    justifyContent: "space-between",
+    gap: 20,
+  },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
     justifyContent: "space-between",
     gap: 20,
   },

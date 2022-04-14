@@ -24,11 +24,12 @@ import {
   useIsMounted,
   getHospitalNameAction,
   setErrorAction,
+  muiQuery,
 } from "../../../context";
 
 const ProfessionalDetails = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
+  const { lg } = muiQuery();
   const isMounted = useIsMounted();
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, dynamicsApps, refreshJWT } =
@@ -387,7 +388,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
     return (
       <div
-        className="flex"
+        className={!lg ? "flex" : "flex-col"}
         style={{ justifyContent: "flex-end", padding: `2em 1em 0 1em` }}
       >
         <div
@@ -404,7 +405,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         </div>
         <div
           className="transparent-btn"
-          style={{ margin: `0 1em` }}
+          style={{ margin: !lg ? `0 1em` : "1em 0" }}
           onClick={handleSaveExit}
         >
           Save & Exit
@@ -640,7 +641,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: `repeat(2, 1fr)`,
+                gridTemplateColumns: !lg ? `repeat(2, 1fr)` : "1fr",
                 gap: 20,
               }}
             >
