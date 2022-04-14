@@ -156,6 +156,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
         link: hospital.accountid,
       };
     });
+    console.log("🐞 hospitalData ", hospitalData);
 
     if (hospitalData.length > 0) setHospitalData(hospitalData);
     if (!hospitalData.length || !input) setHospitalData(null);
