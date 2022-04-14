@@ -54,6 +54,13 @@
   padding-left: 150px;
 }
 
+.home-banner-carousel-mobile .carousel-indicators {
+  display: flex;
+  margin: 0 auto;
+  margin-bottom: 2em;
+  justify-content: center;
+}
+
 /* quotation-carousel Carousel styling */
 .quotation-carousel .carousel-indicators [data-bs-target] {
   background-color: #a2a2a2;

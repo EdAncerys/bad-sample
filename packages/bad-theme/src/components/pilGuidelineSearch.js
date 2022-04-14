@@ -240,7 +240,10 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
                   margin="0 0 1em 0"
                 />
               </div>
-              <div className="flex">
+              <div
+                className={!lg ? "flex" : "flex-col"}
+                style={{ gap: !lg ? null : 10 }}
+              >
                 <ServeViewPILs />
                 <ServeViewGuidelines />
               </div>

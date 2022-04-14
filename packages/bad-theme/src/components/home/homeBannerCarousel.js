@@ -72,14 +72,18 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
       }}
     >
       <BlockWrapper>
-        <div
-          style={{ position: "relative", margin: `0 ${marginHorizontal}px` }}
-        >
-          <ServeIcon icon={LeftIcon} left />
-          <ServeIcon icon={RightIcon} right />
-        </div>
+        {!lg && (
+          <div
+            style={{ position: "relative", margin: `0 ${marginHorizontal}px` }}
+          >
+            <ServeIcon icon={LeftIcon} left />
+            <ServeIcon icon={RightIcon} right />
+          </div>
+        )}
       </BlockWrapper>
-      <Carousel className="home-banner-carousel">
+      <Carousel
+        className={!lg ? "home-banner-carousel" : "home-banner-carousel-mobile"}
+      >
         {block.slides.map((block, key) => {
           const {
             background_image,
