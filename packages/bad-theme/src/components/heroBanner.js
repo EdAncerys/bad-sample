@@ -225,7 +225,11 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           <Image
             src={background_image}
             alt={alt}
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: !lg ? "cover" : "contain",
+            }}
           />
         </div>
       </div>
