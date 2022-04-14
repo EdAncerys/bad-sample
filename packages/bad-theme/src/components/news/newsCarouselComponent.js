@@ -93,7 +93,7 @@ const NewsCarouselComponent = ({
                       <Card
                         newsCarousel={block}
                         cardWidth={isSingleBlock ? "50%" : "100%"}
-                        cardHeight={BANNER_HEIGHT}
+                        cardHeight="90%"
                         colour={colors.danger}
                         link={link}
                         link_label="Read More"
@@ -113,6 +113,9 @@ const NewsCarouselComponent = ({
   };
 
   // cardHeight="90%"
+  // cardHeight={BANNER_HEIGHT}
+  //
+
   const ServeSingleCardCarousel = () => {
     if (!md) return null;
 
@@ -135,7 +138,7 @@ const NewsCarouselComponent = ({
                 <Card
                   newsCarousel={block}
                   cardWidth={!lg ? "50%" : "100%"}
-                  cardHeight={BANNER_HEIGHT}
+                  cardHeight="90%"
                   title={excerpt ? excerpt.rendered : null}
                   colour={colors.danger}
                   link={link}

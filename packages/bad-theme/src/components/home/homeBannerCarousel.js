@@ -172,7 +172,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
               >
                 <ServeCardImage />
                 <BlockWrapper>
-                  <div style={{ position: "relative" }}>
+                  <div style={{ position: !lg ? "relative" : null }}>
                     <Carousel.Caption
                       style={{
                         color: THEME_COLOR,

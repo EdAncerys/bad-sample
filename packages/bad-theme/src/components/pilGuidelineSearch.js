@@ -15,12 +15,14 @@ import {
   getGuidelinesDataAction,
   setGoToAction,
   setIDFilterAction,
+  muiQuery,
 } from "../context";
 
 const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
+  const { lg } = muiQuery();
   const { disable_vertical_padding, colour } = block;
   const ctaHeight = 45;
   const marginHorizontal = state.theme.marginHorizontal;
@@ -169,8 +171,8 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
         style={{
           display: "grid",
           alignItems: "center",
-          padding: `0 2em 1.5em 0`,
-          minWidth: 200,
+          padding: !lg ? `0 2em 1.5em 0` : 0,
+          minWidth: !lg ? 200 : "40%",
         }}
       >
         <div
@@ -195,8 +197,8 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
         style={{
           display: "grid",
           alignItems: "center",
-          paddingBottom: `1.5em`,
-          minWidth: 200,
+          paddingBottom: !lg ? `1.5em` : 0,
+          minWidth: !lg ? 200 : "40%",
         }}
       >
         <div
@@ -224,7 +226,10 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
       <div className="shadow" style={{ backgroundColor: colors.white }}>
         <div className="flex no-selector" style={{ padding: `2em` }}>
           <div className="flex-col">
-            <div className="flex">
+            <div
+              className="flex"
+              style={{ flexDirection: !lg ? null : "column" }}
+            >
               <div className="flex">
                 <TitleBlock
                   block={{
@@ -234,8 +239,10 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
                   margin="0 0 1em 0"
                 />
               </div>
-              <ServeViewPILs />
-              <ServeViewGuidelines />
+              <div className="flex">
+                <ServeViewPILs />
+                <ServeViewGuidelines />
+              </div>
             </div>
             <div className="flex-row">
               <div
