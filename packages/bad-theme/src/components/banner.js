@@ -56,39 +56,37 @@ const Banner = ({ state, actions, libraries, block }) => {
     };
 
     return (
-      <div style={{ position: "relative" }}>
-        <div>
-          <div
-            className={!lg ? "flex-row" : "flow-col"}
-            style={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: marginHorizontal,
-              width: "100%",
-              padding: `${marginVertical}px ${marginHorizontal}px`,
-              marginBottom: `2em`,
-            }}
-          >
-            <div className="flex" style={{ flex: 3 }}>
-              <div
-                className="flex-col title-no-bottom-margin colour-white"
-                style={{
-                  fontSize: 36,
-                  lineHeight: 1.2,
-                  justifyContent: "flex-end",
-                  overflow: "hidden",
-                }}
-                data-aos="fade"
-                data-aos-easing="ease-in-sine"
-                data-aos-delay={`50`}
-                data-aos-duration="1000"
-              >
-                <Html2React html={title} />
-              </div>
+      <div style={{ position: !lg ? "relative" : null }}>
+        <div
+          className={!lg ? "flex-row" : "flow-col"}
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: marginHorizontal,
+            width: "100%",
+            padding: `${marginVertical}px ${marginHorizontal}px`,
+            marginBottom: `2em`,
+          }}
+        >
+          <div className="flex" style={{ flex: 3 }}>
+            <div
+              className="flex-col title-no-bottom-margin colour-white"
+              style={{
+                fontSize: 36,
+                lineHeight: 1.2,
+                justifyContent: "flex-end",
+                overflow: "hidden",
+              }}
+              data-aos="fade"
+              data-aos-easing="ease-in-sine"
+              data-aos-delay={`50`}
+              data-aos-duration="1000"
+            >
+              <Html2React html={title} />
             </div>
-            <ServeMoreAction />
           </div>
+          <ServeMoreAction />
         </div>
       </div>
     );
