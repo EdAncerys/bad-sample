@@ -14,12 +14,13 @@ import {
   useAppState,
   useAppDispatch,
   authenticateAppAction,
+  muiQuery,
 } from "../../../context";
 
 const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
   const dispatch = useAppDispatch();
   const { dashboardPath, isActiveUser, refreshJWT } = useAppState();
-
+  const { lg } = muiQuery();
   const [listOfEvents, setListOfEvents] = useState();
   const [eventList, setEventList] = useState(null); // event data
   const marginHorizontal = state.theme.marginHorizontal;
@@ -28,14 +29,57 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
+    if (dashboardPath !== "Events") return null;
+
     try {
       // pre fetch events data
       let data = state.source.events;
       if (!data) await getEventsData({ state, actions });
+      console.log("🐞 ", data);
       // throw exception if no events
-      if (!data) throw new Error("No events found");
+      if (!data) throw new Error("Faild to fetch events data");
       data = state.source.events;
-      const events = Object.values(data).slice(0, 2);
+      if (data) data = Object.values(data);
+      // 📌 sort events by date newest first
+      data.sort((a, b) => {
+        let dateA = a.acf.date_time;
+        let dateB = b.acf.date_time;
+        if (dateA) dateA = dateA[0].date;
+        if (dateB) dateB = dateB[0].date;
+        // convert to date object
+        dateA = new Date(dateA);
+        dateB = new Date(dateB);
+
+        if (dateA > dateB) return -1;
+        if (dateA < dateB) return 1;
+        return 0;
+      });
+
+      // 📌 sort eventList by closest to today first (if date is set)
+      data.sort((a, b) => {
+        let dateA = a.acf.date_time;
+        let dateB = b.acf.date_time;
+        if (dateA) dateA = dateA[0].date;
+        if (dateB) dateB = dateB[0].date;
+
+        // convert to date object
+        dateA = new Date(dateA);
+        dateB = new Date(dateB);
+
+        // get today's date
+        let today = new Date();
+
+        // get date difference
+        let diffA = Math.abs(dateA - today);
+        let diffB = Math.abs(dateB - today);
+
+        if (diffA > diffB) return 1;
+        if (diffA < diffB) return -1;
+
+        return 0;
+      });
+
+      const events = data.slice(0, 2);
       setEventList(events);
 
       if (!isActiveUser) return null;
@@ -51,7 +95,6 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
         }
       );
 
-      console.log("fetchUserEvents", fetchUserEvents);
       if (fetchUserEvents.ok) {
         let filteredEvents = [];
         const json = await fetchUserEvents.json();
@@ -59,13 +102,12 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
           filteredEvents.push(event.bad_eventid);
         });
 
-        console.log("data", data);
         // convert object to array
         data = Object.values(data);
         const relatedEvents = data.filter((item) => {
           return filteredEvents.includes(item.acf.events_force_id);
         });
-        console.log("relatedEvents", relatedEvents);
+
         setListOfEvents(relatedEvents);
       }
     } catch (err) {
@@ -89,14 +131,13 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr 1fr",
+            gridTemplateColumns: !lg ? "1fr 1fr" : `1fr`,
             gap: 20,
             padding: `${marginVertical}px ${marginHorizontal}px`,
           }}
         >
           {listOfEvents.length > 0
             ? listOfEvents.map((item, key) => {
-                console.log(item);
                 return (
                   <Card
                     key={key}
@@ -125,7 +166,7 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: `repeat(2, 1fr)`,
+          gridTemplateColumns: !lg ? `repeat(2, 1fr)` : `1fr`,
           gap: 20,
           padding: `${marginVertical}px ${marginHorizontal}px`,
         }}

@@ -85,6 +85,11 @@ export const setCPTBlockAction = ({ dispatch, cptBlockFilter }) => {
   dispatch({ type: "SET_CPT_BLOCK_ACTION", payload: cptBlockFilter });
 };
 
+export const setCPTBlockTypeAction = ({ dispatch, cptBlockTypeFilter }) => {
+  console.log("setCPTBlockAction triggered"); //debug
+  dispatch({ type: "SET_CPT_BLOCK_TYPE_ACTION", payload: cptBlockTypeFilter });
+};
+
 export const setEventAnchorAction = ({ dispatch, eventAnchor }) => {
   console.log("setEventAnchorAction triggered"); //debug
   dispatch({ type: "SET_EVENT_ANCHOR_ACTION", payload: eventAnchor });
@@ -93,6 +98,17 @@ export const setEventAnchorAction = ({ dispatch, eventAnchor }) => {
 export const setDashboardPathAction = ({ dispatch, dashboardPath }) => {
   console.log("setDashboardPathAction triggered"); //debug
   dispatch({ type: "SET_DASHBOARD_PATH_ACTION", payload: dashboardPath });
+};
+
+export const setDashboardNotificationsAction = ({
+  dispatch,
+  isDashboardNotifications,
+}) => {
+  console.log("setDashboardNotificationsAction triggered"); //debug
+  dispatch({
+    type: "SET_DASHBOARD_NOTIFICATION_ACTION",
+    payload: isDashboardNotifications,
+  });
 };
 
 export const setNotificationAction = ({ dispatch, isVisibleNotification }) => {

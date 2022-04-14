@@ -1,7 +1,9 @@
 import { connect } from "frontity";
-import { useB2CLogin } from "../hooks/useB2CLogin";
 
 const Codecollect = ({ state, actions, libraries }) => {
+  // --------------------------------------------------------------------------------
+  // 📌 B2C codecollect redirect handler page
+  // --------------------------------------------------------------------------------
   console.log("🐞 B2C component triggered"); // debug
 
   return null;

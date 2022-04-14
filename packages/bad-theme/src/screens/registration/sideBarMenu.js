@@ -47,20 +47,21 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   if (slug.includes("step-4")) stepFour = activeStyle;
 
   useEffect(() => {
-    // redirect to /dashboard if isActiveUser && !applicationData
-    if (isActiveUser && !applicationData) {
+    // 📌 redirect to / if !isActiveUser || !applicationData
+    if (!isActiveUser) {
+      console.log("⬇️ no user - redirect to /");
+      setGoToAction({ state, path: `/`, actions });
+    }
+    // 📌 redirect to /dashboard if isActiveUser && !applicationData
+    if (isActiveUser && !applicationData && slug !== "/membership/thank-you/") {
       console.log(
         "⬇️ user have no application data created - redirect to /dashboard"
       );
       setGoToAction({ state, path: `/dashboard/`, actions });
       return;
     }
-    // redirect to / if !isActiveUser || !applicationData
-    if (!isActiveUser) {
-      console.log("⬇️ no user - redirect to /");
-      setGoToAction({ state, path: `/`, actions });
-    }
-    // auth/manage application steps for apps & redirects
+
+    // 📌 auth/manage application steps for apps & redirects
     if (applicationData) {
       const appData = applicationData[0];
       if (slug.includes("step-2") && !appData.stepOne)
@@ -85,10 +86,13 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   }, [isActiveUser, applicationData]);
 
   // return loading placeholder if if !isActiveUser || !applicationData
-  if (!isActiveUser || !applicationData) return <Loading />;
+  if (!isActiveUser) return <Loading />;
 
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
+    let title = "Apply to become a member of BAD";
+    if (slug === "/membership/thank-you/") title = "Ethnic Group Question";
+
     return (
       <div
         className="primary-title"
@@ -98,7 +102,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
           padding: `0 1em 1em 0`,
         }}
       >
-        Apply to become a member of BAD
+        {title}
       </div>
     );
   };

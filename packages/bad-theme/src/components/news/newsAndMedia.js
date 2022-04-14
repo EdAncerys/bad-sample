@@ -501,13 +501,9 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
           padding: `${state.theme.marginVertical}px 0`,
         }}
       >
-        <button
-          type="submit"
-          className="transparent-btn"
-          onClick={handleLoadMoreFilter}
-        >
+        <div className="transparent-btn" onClick={handleLoadMoreFilter}>
           {value}
-        </button>
+        </div>
       </div>
     );
   };

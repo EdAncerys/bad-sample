@@ -61,13 +61,14 @@ const FindADermatologist = ({ state, block }) => {
         const result = data.reduce((acc, derm) => {
           return {
             ...acc,
-            [derm.address3_postalcode]: [
-              ...(acc[derm.address3_postalcode] || []),
-              derm,
-            ],
+            [derm.address3_postalcode]: [derm],
           };
         }, {});
         console.log("REDUCTION", result);
+        setDermOnFocus({
+          lat: Number(data[0].cordinates.lat),
+          lng: Number(data[0].cordinates.lng),
+        });
         setFilteredDermatologists(data);
         handleFocusOnThePostCode();
       }
@@ -241,13 +242,9 @@ const FindADermatologist = ({ state, block }) => {
                 setName(e.target.value);
               }}
             />
-            <button
-              type="submit"
-              className="blue-btn"
-              style={{ marginLeft: "2em" }}
-            >
+            <div className="blue-btn" style={{ marginLeft: "2em" }}>
               Search
-            </button>
+            </div>
           </form>
         </div>
       );
@@ -276,14 +273,13 @@ const FindADermatologist = ({ state, block }) => {
                 setPC(e.target.value);
               }}
             />
-            <button
-              type="submit"
+            <div
               className="blue-btn"
               disabled={!pc && true}
               style={{ marginLeft: "2em" }}
             >
               Search
-            </button>
+            </div>
           </form>
         </div>
       );
@@ -320,7 +316,7 @@ const FindADermatologist = ({ state, block }) => {
     if (!query) return null;
     if (!filteredDermatologists) return <Loading />;
 
-    const SingleDerm = ({ derm, id }) => {
+    const SingleDerm = ({ derm, id, key2 }) => {
       if (query.type === "pc" && !derm.distance) return null;
       const ServeBiography = () => {
         if (!derm.bad_findadermatologisttext) return null;
@@ -393,6 +389,7 @@ const FindADermatologist = ({ state, block }) => {
             marginTop: 20,
             border: 0,
           }}
+          key={key2}
         >
           <Card.Header style={{ padding: 0, border: 0 }}>
             <CustomToggle eventKey={id}>
@@ -468,7 +465,7 @@ const FindADermatologist = ({ state, block }) => {
             ) {
               crutent += 1;
             }
-            return <SingleDerm derm={derm} id={crutent} key={key} />;
+            return <SingleDerm derm={derm} id={crutent} key={key} key2={key} />;
           })}
         </Accordion>
         <div

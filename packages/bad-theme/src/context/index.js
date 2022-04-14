@@ -10,7 +10,9 @@ import {
   setApplicationDataAction,
   setIDFilterAction,
   setCPTBlockAction,
+  setCPTBlockTypeAction,
   setEventAnchorAction,
+  setDashboardNotificationsAction,
   setDashboardPathAction,
   setNotificationAction,
   setDebitHandlerAction,
@@ -33,6 +35,7 @@ import {
   getUserDataByContactId,
   getUserDataByEmail,
   getUserDataFromDynamics,
+  seRefreshJWTAction,
 } from "./auth/actions";
 import { sendEmailEnquireAction } from "./auth/sendEnquire";
 import { getEthnicityAction } from "./auth/getEthnicity";
@@ -141,7 +144,9 @@ export {
   anchorScrapper,
   getWpPagesAction,
   setCPTBlockAction,
+  setCPTBlockTypeAction,
   setEventAnchorAction,
+  setDashboardNotificationsAction,
   getApplicationStatus,
   updateEthnicityAction,
   getHospitalNameAction,
@@ -168,4 +173,5 @@ export {
   postTypeHandler,
   getEthnicityAction,
   googleAutocompleteAction,
+  seRefreshJWTAction,
 };

@@ -274,6 +274,12 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     }));
   };
 
+  const handleBADPolicy = () => {
+    const url = state.auth.APP_URL + `/privacy-policy/`;
+    // 📌 redirect to BAD policy page in new tab
+    window.open(url, "_blank");
+  };
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (name === "bad_organisedfor")
@@ -399,6 +405,18 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     } finally {
       setFetching(false);
     }
+  };
+
+  const policyHandler = ({ isConstitution }) => {
+    // open privacy policy in new window
+    let url = state.auth.APP_URL + "/privacy-policy/";
+    if (isConstitution)
+      url = state.auth.APP_URL + "/about-the-bad/bad-constitution/";
+    window.open(
+      url,
+      "_blank"
+      // "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400"
+    );
   };
 
   const handleDocUploadChange = async (e) => {
@@ -927,6 +945,9 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                                   <div
                                     className="caps-btn required"
                                     style={{ paddingTop: 6, marginLeft: 10 }}
+                                    onClick={() =>
+                                      policyHandler({ isConstitution: true })
+                                    }
                                   >
                                     BAD CONSTITUTION
                                   </div>
@@ -936,6 +957,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                             <FormError id="py3_constitutionagreement" />
                           </div>
                         )}
+
                         {inputValidator.bad_readpolicydocument && (
                           <div>
                             <div
@@ -962,13 +984,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                                         whiteSpace: "nowrap",
                                         float: "left",
                                       }}
-                                      onClick={() =>
-                                        setGoToAction({
-                                          state,
-                                          path: `/privacy-policy/`,
-                                          actions,
-                                        })
-                                      }
+                                      onClick={handleBADPolicy}
                                     >
                                       I agree to the BAD'S PRIVACY NOTICE
                                     </div>

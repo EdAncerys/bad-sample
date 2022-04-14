@@ -63,9 +63,9 @@ const PilsArchive = ({ state, actions, libraries }) => {
       useEffectRef.current = false; // clean up function
     };
   }, []);
-  // DATA pre FETCH ----------------------------------------------------------------
 
   if (!pilList) return <Loading />;
+
   let ALPHABET = [];
   pilList.map((item) => {
     const pilTitle = item.title.rendered;
@@ -247,9 +247,9 @@ const PilsArchive = ({ state, actions, libraries }) => {
           paddingTop: !lg ? null : "1em",
         }}
       >
-        <button type="submit" className="blue-btn" onClick={handleSearchPress}>
+        <div className="blue-btn" onClick={handleSearchPress}>
           Search
-        </button>
+        </div>
       </div>
     );
   };
@@ -331,13 +331,15 @@ const PilsArchive = ({ state, actions, libraries }) => {
                   >
                     <ServeIcon />
                   </div>
+                  <SearchDropDown
+                    input={searchInput}
+                    filter={searchFilter}
+                    onClickHandler={dropDownHandler}
+                    marginTop={ctaHeight + 5}
+                  />
                 </div>
                 <ServeSearchButton />
               </div>
-              <SearchDropDown
-                filter={searchFilter}
-                onClickHandler={dropDownHandler}
-              />
             </div>
             <div className="flex" style={{ marginTop: "1em" }}>
               <ServeSearchFilter />

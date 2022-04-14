@@ -46,13 +46,14 @@ import Video from "../components/video";
 import Error from "./error";
 import Loading from "../components/loading";
 import BlockWrapper from "../components/blockWrapper";
+// HOOKS ------------------------------------------------------------------
 import { useQuery } from "../hooks/useQuery";
+import { useScraper } from "../hooks/useScraper";
 import { useB2CLogin } from "../hooks/useB2CLogin";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
   useAppState,
-  anchorScrapper,
   authCookieActionAfterCSR,
   getWPMenu,
   setPlaceholderAction,
@@ -66,14 +67,15 @@ const App = ({ state, actions }) => {
   const { isActiveUser, isPlaceholder, idFilter, refreshJWT } = useAppState();
   const { sm, md, lg, xl, xxl } = muiQuery();
 
+  let urlPath = state.router.link;
+  const data = state.source.get(urlPath);
+  console.log("INDEX data", data); // debug
   // --------------------------------------------------------------------------------
   // 📌  B2C login handler.
   // --------------------------------------------------------------------------------
   useB2CLogin({ state, actions });
-
-  let urlPath = state.router.link;
-  const data = state.source.get(urlPath);
-  console.log("INDEX data", data); // debug
+  // 📌 anchor tag scrapper
+  useScraper({ urlPath });
 
   // ⬇️ hook for media queries ⬇️
   useQuery({ state });
@@ -99,7 +101,7 @@ const App = ({ state, actions }) => {
     await getLeadershipTeamData({ state, actions });
     // get current time & compare how long pre-fetch took before  setting placeholder
     const timeTaken = new Date().getTime() - currentTime;
-    // if time taken is less than 3s await for remaining time before proceeding
+    // 📌 if time taken is less than 3s await for remaining time before proceeding
     console.log("timeTaken", timeTaken); // debug
     if (timeTaken < 3000) {
       await new Promise((resolve) => setTimeout(resolve, 3000 - timeTaken));
@@ -116,9 +118,6 @@ const App = ({ state, actions }) => {
   }, []);
 
   useEffect(() => {
-    // ⬇️ anchor tag scrapper
-    anchorScrapper();
-
     // ⬇️  clearing id reference
     const slug = "/guidelines-and-standards/clinical-guidelines/";
     if (idFilter && urlPath !== slug)

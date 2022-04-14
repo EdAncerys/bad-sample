@@ -14,6 +14,7 @@ const SearchDropDown = ({
   actionHandler,
   marginTop,
   isAppSearch,
+  input,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -58,7 +59,19 @@ const SearchDropDown = ({
           )}
 
           {filter.map((item, key) => {
-            const { title, type } = item;
+            const { title, type, url } = item;
+            // 📌 if item dont have a link dont render it
+            if (!url) return null;
+
+            let serachTitle = title;
+            if (input) {
+              // hilight search string in title & apply className
+              const regex = new RegExp(input, "gi");
+              serachTitle = title.replace(
+                regex,
+                `<span class="search-phrase">${input}</span>`
+              );
+            }
 
             // ⬇️ define subtitle name based on type
             let name = postTypeHandler({ type }).name;
@@ -75,7 +88,7 @@ const SearchDropDown = ({
                 onClick={() => onClickHandler({ item })}
               >
                 <span style={{ paddingRight: `0.5em` }}>
-                  <Html2React html={title} />.
+                  <Html2React html={serachTitle} />.
                 </span>
                 {type && <Html2React html={name} />}
               </div>

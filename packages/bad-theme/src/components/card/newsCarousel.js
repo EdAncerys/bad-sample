@@ -5,11 +5,11 @@ import { colors } from "../../config/imports";
 import date from "date-and-time";
 
 const DATE_MODULE = date;
-
+import { muiQuery } from "../../context";
 const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!newsCarousel) return null;
-
+  const { lg } = muiQuery();
   const { date, release, title, categories, featured_media, excerpt } =
     newsCarousel;
   const CATEGORY = Object.values(state.source.category);
@@ -114,7 +114,7 @@ const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
 
   const ServeBody = () => {
     if (!excerpt || !title) return null;
-
+    // if (lg) return null;
     const first_sentence = excerpt.rendered.split(".");
     const shorter = first_sentence[0].toString().concat("...");
     if (featured_media)

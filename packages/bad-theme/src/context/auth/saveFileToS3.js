@@ -5,7 +5,6 @@ export const sendFileToS3Action = async ({
   state,
   dispatch,
   attachments,
-  isPicture,
   refreshJWT,
 }) => {
   console.log("sendFileToS3Action triggered");
@@ -18,7 +17,7 @@ export const sendFileToS3Action = async ({
   const fileExtension = attachments.name.split(".").pop();
   const uniqueName = uuidv4();
   let fileName = uniqueName + "." + fileExtension;
-  if (isPicture) fileName = uniqueName;
+  // if (isNoFileExtention) fileName = uniqueName; // 📌 dont add extension to picture files
 
   const form = new FormData(); // create form object to sent email content & attachments
   form.append("profile", attachments, fileName); // append file to form object

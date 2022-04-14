@@ -4,14 +4,12 @@ import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
 import BlockWrapper from "../blockWrapper";
 import { useAccordionButton } from "react-bootstrap/AccordionButton";
-import AccordionContext from "react-bootstrap/AccordionContext";
-import { colors } from "../../config/imports";
 import Loading from "../loading";
 import AccordionBody from "./alteraccordionBody";
 import CardHeader from "./alteraccordionHeader";
-import { useAppState } from "../../context";
+import { useAppState, muiQuery } from "../../context";
 import connect from "@frontity/connect";
-
+import { v4 as uuidv4 } from "uuid";
 function AlterAccordion({
   state,
   actions,
@@ -24,20 +22,18 @@ function AlterAccordion({
   hasPublishDate,
   hasPreview,
 }) {
-  const [isFetching, setFetching] = useState(null);
-
-  function CustomToggle({ children, eventKey, callback }) {
-    const { activeEventKey } = React.useContext(AccordionContext);
-    const decoratedOnClick = useAccordionButton(
-      eventKey,
-      () => callback && callback(eventKey)
-    );
+  function CustomToggle({ children, eventKey, callback, isActive }) {
+    const decoratedOnClick = useAccordionButton(eventKey, () => {
+      callback && callback(eventKey);
+      console.log("eventKey", eventKey);
+      console.log("isActive", isActive);
+    });
 
     return <div onClick={decoratedOnClick}>{children}</div>;
   }
 
   if (!block) return <Loading />;
-
+  const { lg } = muiQuery();
   const { dynamicsApps } = useAppState();
   const {
     disable_vertical_padding,
@@ -48,6 +44,8 @@ function AlterAccordion({
   // console.log("accordion_item", accordion_item); //debug
 
   const [searchFilter, setSearchFilter] = useState(null);
+  const [uniqueId, setUniqueId] = useState(null);
+  const [hasActiveClass, setActive] = useState(null);
 
   let isBADApproved = false;
   if (dynamicsApps && dynamicsApps.subs.data.length > 0) isBADApproved = true;
@@ -57,15 +55,28 @@ function AlterAccordion({
   useLayoutEffect(() => {
     // ⬇️ re-set accordion data state on data change
     setSearchFilter(accordion_item);
+    const id = uuidv4(); // add unique id
+    setUniqueId(id);
   }, [accordion_item]);
 
   if (!searchFilter || isForBADMembersOnly) return null; // defensive programming
 
   const SingleItem = ({ block, id }) => {
+    let isActive = false;
+    if (leadershipBlock && block.block) isActive = block.block.is_active;
+    if (isActive) {
+      // 📌 apply show class to accordion item
+      // set timeout get the accordion body with the unique id
+      setTimeout(() => {
+        const accordionBody = document.getElementById(uniqueId);
+        if (accordionBody) accordionBody.classList.add("show");
+      }, 100);
+    }
+
     return (
       <Card
         style={{
-          backgroundColor: colors.lightSilver,
+          backgroundColor: "#fff",
           borderRadius: 0,
           marginTop: 20,
           border: 0,
@@ -75,9 +86,17 @@ function AlterAccordion({
         data-aos-delay={`${id}`}
         data-aos-duration="1000"
         data-aos-offset="-120"
+        className="shadow"
       >
-        <Card.Header style={{ padding: 0, border: 0 }}>
-          <CustomToggle eventKey={id}>
+        <Card.Header
+          style={{
+            padding: 0,
+            border: 0,
+            backgroundColor: "#fff",
+            paddingTop: "10px",
+          }}
+        >
+          <CustomToggle eventKey={id} isActive={isActive}>
             <CardHeader
               id={id}
               uniqueId={id}
@@ -90,7 +109,7 @@ function AlterAccordion({
             />
           </CustomToggle>
         </Card.Header>
-        <Accordion.Collapse eventKey={id}>
+        <Accordion.Collapse eventKey={id} id={uniqueId}>
           <Card.Body>
             <AccordionBody
               block={block}
@@ -109,7 +128,7 @@ function AlterAccordion({
 
   return (
     <BlockWrapper>
-      <div style={{ padding: "0 100px" }}>
+      <div style={{ padding: !lg ? "0 100px" : "0 0.5em" }}>
         <Accordion style={{ border: 0 }}>
           {searchFilter.map((block, key) => {
             return <SingleItem block={block} key={key} id={key} />;

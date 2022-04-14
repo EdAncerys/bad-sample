@@ -13,7 +13,9 @@ import {
   setGoToAction,
 } from "../context";
 
-const ErrorModal = ({ state, actions }) => {
+const ErrorModal = ({ state, actions, libraries }) => {
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
   const dispatch = useAppDispatch();
   const { isError } = useAppState();
 
@@ -154,7 +156,7 @@ const ErrorModal = ({ state, actions }) => {
                 fontSize: 26,
               }}
             >
-              {message}
+              <Html2React html={message} />
             </div>
             <ServeActions />
           </Modal.Body>

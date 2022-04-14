@@ -21,7 +21,12 @@ const Navigation = ({ state, actions, libraries }) => {
   const wpHost = state.auth.WP_HOST_CONTENT;
 
   // active menu slug ref
+  const currentLink = state.router.link;
+  const currentlySelectedMenuItem = currentLink.match(/\/(.*?)\//);
   const activeMenu = useRef(null);
+  const lastSelectedMenuItem = useRef(
+    currentlySelectedMenuItem ? currentlySelectedMenuItem[1] : null
+  );
   const activeChildMenu = useRef(null);
   useEffect(async () => {
     // ⬇️ getting wp menu & featured from state
@@ -104,16 +109,27 @@ const Navigation = ({ state, actions, libraries }) => {
   };
 
   const handleOnClickNavigation = ({ parentSlug }) => {
+    if (lastSelectedMenuItem.current) {
+      const menuSelector = document.querySelector(
+        `#menu-${lastSelectedMenuItem.current}`
+      );
+      if (menuSelector) {
+        menuSelector.style.boxShadow = "none";
+      }
+    }
+
     const childMenuSelector = document.querySelector(
       `#${parentSlug}-child-menu`
     );
     if (childMenuSelector) childMenuSelector.style.display = "none";
+    lastSelectedMenuItem.current = parentSlug;
   };
   const handleActiveBoxShadow = (slug) => {
     // checking if any of the menu should be highlighted
-    const currentLink = state.router.link;
-    const activeSlug = currentLink.match(/\/(.*?)\//);
-    if (activeSlug !== null && activeSlug[1] === slug) {
+    if (
+      lastSelectedMenuItem.current !== null &&
+      lastSelectedMenuItem.current === slug
+    ) {
       return handleBoxShadow(slug);
     }
     return "none";
@@ -410,7 +426,7 @@ const Navigation = ({ state, actions, libraries }) => {
               style={styles.link}
               onClick={() => handleOnClickNavigation({ parentSlug: "more" })}
             >
-              <Html2React html={"More"} />
+              <Html2React html={"About & More"} />
             </a>
             <ServeChildMenu
               item={{ child_items: wpMoreMenu }}

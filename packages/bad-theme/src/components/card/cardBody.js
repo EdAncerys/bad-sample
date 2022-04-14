@@ -88,7 +88,6 @@ const CardBody = ({
 
   const ServeBody = () => {
     if (!body) return null;
-
     return (
       <div
         className="body-limit"

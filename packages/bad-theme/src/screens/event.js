@@ -365,7 +365,7 @@ const Event = ({ state, actions, libraries }) => {
         }}
       >
         <ServeInformationForUser />
-        <button
+        <div
           className="blue-btn"
           style={{
             backgroundColor: colors.primary,
@@ -377,7 +377,7 @@ const Event = ({ state, actions, libraries }) => {
           onClick={handleRegistrationClick}
         >
           Register for Event
-        </button>
+        </div>
       </div>
     );
   };
@@ -453,8 +453,8 @@ const Event = ({ state, actions, libraries }) => {
     const shareUrl = state.auth.APP_URL + removeFirstSlash(state.router.link);
 
     // event start date
-    let startDate = new Date();
-    if (date_time) startDate = Object.values(date_time)[0].date;
+    let startDate = date_time;
+    if (startDate[0]) startDate = startDate[0].date;
 
     return (
       <div className="flex-col" style={{ width: `55%` }}>

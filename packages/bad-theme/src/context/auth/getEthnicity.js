@@ -8,7 +8,7 @@ export const getEthnicityAction = async ({ state, dispatch, refreshJWT }) => {
     if (!jwt) throw new Error("error authenticating app");
 
     const URL =
-      state.auth.APP_HOST + `/catalogue/fields/core_membershipapplication`;
+      state.auth.APP_HOST + `/catalogue/fields/contact?field=py3_ethnicity`;
     const requestOptions = {
       method: "GET",
       headers: { Authorization: `Bearer ${jwt}` },
@@ -17,9 +17,12 @@ export const getEthnicityAction = async ({ state, dispatch, refreshJWT }) => {
     const data = await fetch(URL, requestOptions);
     if (!data) throw new Error("error fetching data form API");
     let result = await data.json();
-    // filter result & return results where Lable is Ethnicity
-    result = result.filter((item) => item.Label === "Ethnicity");
-    if (result.length > 0) result = result[0].Choices;
+
+    if (result.length > 0) {
+      result = result[0].Choices; // get picklist data
+    } else {
+      result = null; // reset ethnicity result data
+    }
 
     setEthnicityAction({ dispatch, ethnicity: result });
   } catch (error) {

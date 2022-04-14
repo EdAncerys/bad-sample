@@ -60,8 +60,10 @@ const AccordionBody = ({
   let link = block.link;
   let amount = block.acf ? block.acf.amount : null;
   let closingDate = block.acf ? block.acf.closing_date : null;
+  let labelName = link_label;
 
   if (fundingBlock) body = block.acf ? block.acf.overview : null;
+  if (fundingBlock) labelName = block.acf ? block.acf.link_label : null;
   if (fundingBlock) link = { url: block.acf.external_application_link };
 
   useEffect(() => {
@@ -242,7 +244,7 @@ const AccordionBody = ({
         }}
       >
         <div>
-          <button
+          <div
             className="flex-row blue-btn"
             onClick={() =>
               setGoToAction({ state, path: button_link.url, actions })
@@ -259,7 +261,7 @@ const AccordionBody = ({
                 }}
               />
             </div>
-          </button>
+          </div>
         </div>
       </div>
     );
@@ -269,7 +271,7 @@ const AccordionBody = ({
     if (!link || guidelines) return null;
 
     let linkLabel = "External Link";
-    if (link_label) linkLabel = link_label;
+    if (labelName) linkLabel = labelName;
 
     return (
       <div
@@ -292,7 +294,7 @@ const AccordionBody = ({
           </div>
           <div
             className="caps-btn-no-underline"
-            style={{ boxShadow: "none" }}
+            style={{ boxShadow: "none", display: "grid", alignItems: "center" }}
             onClick={() => setGoToAction({ state, path: link.url, actions })}
           >
             <div className="flex">
@@ -328,7 +330,11 @@ const AccordionBody = ({
               </div>
               <div
                 className="caps-btn-no-underline"
-                style={{ boxShadow: "none" }}
+                style={{
+                  boxShadow: "none",
+                  display: "grid",
+                  alignItems: "center",
+                }}
                 onClick={() =>
                   setGoToAction({ state, path: link.url, actions })
                 }
@@ -688,13 +694,13 @@ const AccordionBody = ({
         className="accordion-body"
         style={{ margin: `0 1.25em`, padding: `1em 0` }}
       >
-        <ServePublishedDate />
         <ServeBody />
         <ServeLTBody />
 
         <ServeFundingInfo />
         <ServeLTTeam />
         <ServeGSSubTitle />
+        <ServePublishedDate />
         <ServeGSLink />
         <ServeBodyActions />
         <ServeGoToLinkRepeater />

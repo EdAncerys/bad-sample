@@ -12,6 +12,14 @@ import Loading from "../../components/loading";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import CircularProgress from "@mui/material/CircularProgress";
+import PersonIcon from "@mui/icons-material/Person";
+
+// Responsive
+import MobileLogo from "../../img/png/logo-mobile.png";
+import Login from "@mui/icons-material/Login";
+import ResponsiveMenuIcon from "../../img/png/BAD-Mobile_MENU.png";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import MobileMenu from "./MobileMenu";
 
 // CONTEXT ----------------------------------------------------------------
 import {
@@ -21,12 +29,15 @@ import {
   appSearchAction,
   setAppSearchDataAction,
   setAppSearchPhraseAction,
+  muiQuery,
   loginAction,
-  authenticateAppAction, // TESTING
-  getUserDataByContactId, // TESTING
+  authenticateAppAction, // TESTING enviroment
+  getUserDataByContactId, // TESTING enviroment
 } from "../../context";
+import { Person } from "@mui/icons-material";
 
 const HeaderActions = ({ state, actions, libraries }) => {
+  const { sm, md, lg, xl } = muiQuery();
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
@@ -36,10 +47,11 @@ const HeaderActions = ({ state, actions, libraries }) => {
   const [filter, setFilter] = useState(null);
   const [isFetching, setFetching] = useState(null);
   const [searchFilter, setSearchFilter] = useState("");
+  const [mobileMenuActive, setMobileMenuActive] = useState(false);
   const searchRef = useRef("");
 
   const ctaHeight = 45;
-
+  const SiteLogo = !lg ? BADLogo : MobileLogo;
   // hook applies after React has performed all DOM mutations
   // prevent dashboard actions to load before isActiveUser data loaded
   useLayoutEffect(() => {
@@ -147,8 +159,8 @@ const HeaderActions = ({ state, actions, libraries }) => {
         jwt,
         // contactid: "cc9a332a-3672-ec11-8943-000d3a43c136", // andy testing account
         // contactid: "84590b32-9490-ec11-b400-000d3a22037e", // mandy
-        // contactid: "0786df85-618f-ec11-b400-000d3a22037e", // Chris
-        contactid: "969ba377-a398-ec11-b400-000d3aaedef5", // emilia
+        contactid: "0786df85-618f-ec11-b400-000d3a22037e", // Chris
+        // contactid: "969ba377-a398-ec11-b400-000d3aaedef5", // emilia
         refreshJWT,
       });
       return;
@@ -157,14 +169,59 @@ const HeaderActions = ({ state, actions, libraries }) => {
     loginAction({ state });
   };
 
+  const mouseLeaveHandler = (e) => {
+    // check if mouse is leaving the dropdown based on Y position
+    if (e.clientY > ctaHeight * 6) {
+      clearSearchHandler();
+    }
+  };
+
   // SERVERS ----------------------------------------------------
+  const ServeProductionBatch = () => {
+    // 📌 Production Batch shows if pointing to production server
+    if (!state.auth.APP_HOST.toLowerCase().includes("uat")) return null;
+
+    return (
+      <div style={{ position: "relative" }}>
+        <div
+          className="shadow no-selector"
+          style={{
+            position: "absolute",
+            top: "1.5em",
+            right: 0,
+            padding: 5,
+            borderRadius: "50%",
+            border: `1px solid ${colors.danger}`,
+            fontSize: 12,
+            color: colors.danger,
+            fontWeight: "bold",
+          }}
+        >
+          UAT
+        </div>
+      </div>
+    );
+  };
+
   const ServeLoginAction = () => {
     if (isActiveUser) return null;
 
+    if (!lg)
+      return (
+        <div style={{ padding: `0 1em` }}>
+          <div className="blue-btn-reverse" onClick={handleLoginAction}>
+            Login
+          </div>
+        </div>
+      );
+    return <Login />;
+  };
+
+  const ServeMobileMenuAction = () => {
     return (
-      <div style={{ padding: `0 1em` }}>
-        <div className="blue-btn-reverse" onClick={handleLoginAction}>
-          Login
+      <div style={{}}>
+        <div onClick={() => setMobileMenuActive(!mobileMenuActive)}>
+          <Image src={ResponsiveMenuIcon} style={{ maxWidth: "65px" }} />
         </div>
       </div>
     );
@@ -173,14 +230,53 @@ const HeaderActions = ({ state, actions, libraries }) => {
   const ServeDashboardAction = () => {
     if (!isActiveUser) return null;
 
+    if (!lg)
+      return (
+        <div style={{ padding: `0 1em` }}>
+          <div
+            onClick={() =>
+              setGoToAction({ state, path: `/dashboard/`, actions })
+            }
+            className="blue-btn-reverse"
+          >
+            My Account
+          </div>
+        </div>
+      );
+
     return (
       <div style={{ padding: `0 1em` }}>
-        <button
+        <div
           onClick={() => setGoToAction({ state, path: `/dashboard/`, actions })}
-          className="blue-btn-reverse"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
         >
-          My Account
-        </button>
+          <PersonIcon />
+          Dashboard
+        </div>
+      </div>
+    );
+  };
+
+  const ServeMobileLoginAction = () => {
+    if (isActiveUser) return null;
+
+    return (
+      <div style={{ padding: `0 1em` }}>
+        <div
+          onClick={handleLoginAction}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Login />
+          Login
+        </div>
       </div>
     );
   };
@@ -200,14 +296,20 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   return (
     <div style={{ borderBottom: `1px solid ${colors.primary}` }}>
+      {mobileMenuActive && <MobileMenu />}
       <BlockWrapper>
-        <div className="flex" style={{ padding: `2.75em 0` }}>
+        <ServeProductionBatch />
+        <div className="flex" style={{ padding: !lg ? `2.75em 0` : `0.3em 0` }}>
           <div className="flex">
             <div
-              style={{ width: 385, height: 90, cursor: "pointer" }}
+              style={{
+                width: !lg ? 385 : 60,
+                height: !lg ? 90 : 60,
+                cursor: "pointer",
+              }}
               onClick={() => setGoToAction({ state, path: `/`, actions })}
             >
-              <Image src={BADLogo} className="d-block h-100" alt="BAD Logo" />
+              <Image src={SiteLogo} className="d-block h-100" alt="BAD Logo" />
             </div>
           </div>
 
@@ -219,52 +321,58 @@ const HeaderActions = ({ state, actions, libraries }) => {
               flex: 1.5,
             }}
           >
-            <div style={{ position: "relative", width: "100%" }}>
+            {!lg && (
               <div
-                className="flex"
-                style={{
-                  flex: 1,
-                  height: ctaHeight,
-                  position: "relative",
-                  margin: "auto 0",
-                }}
+                style={{ position: "relative", width: "100%" }}
+                onMouseLeave={mouseLeaveHandler}
               >
-                <input
-                  ref={searchRef}
-                  value={searchFilter}
-                  onChange={handleSearchLookup}
-                  onKeyPress={(e) => handleKeyPress(e)}
-                  type="text"
-                  className="form-control input"
-                  placeholder="Search"
-                />
                 <div
-                  className="input-group-text toggle-icon-color"
+                  className="flex"
                   style={{
-                    position: "absolute",
-                    right: 0,
+                    flex: 1,
                     height: ctaHeight,
-                    border: "none",
-                    background: "transparent",
-                    alignItems: "center",
-                    color: colors.darkSilver,
-                    cursor: "pointer",
+                    position: "relative",
+                    margin: "auto 0",
                   }}
                 >
-                  <ServeIcon />
+                  <input
+                    ref={searchRef}
+                    value={searchFilter}
+                    onChange={handleSearchLookup}
+                    onKeyPress={(e) => handleKeyPress(e)}
+                    type="text"
+                    className="form-control input"
+                    placeholder="Search"
+                  />
+                  <div
+                    className="input-group-text toggle-icon-color"
+                    style={{
+                      position: "absolute",
+                      right: 0,
+                      height: ctaHeight,
+                      border: "none",
+                      background: "transparent",
+                      alignItems: "center",
+                      color: colors.darkSilver,
+                      cursor: "pointer",
+                    }}
+                  >
+                    <ServeIcon />
+                  </div>
                 </div>
+                <SearchDropDown
+                  filter={filter}
+                  onClickHandler={redirectHandler}
+                  actionHandler={takeToSearchHandler}
+                  isAppSearch
+                />
               </div>
-              <SearchDropDown
-                filter={filter}
-                onClickHandler={redirectHandler}
-                actionHandler={takeToSearchHandler}
-                isAppSearch
-              />
-            </div>
+            )}
 
-            <ServeLoginAction />
+            {!lg ? <ServeLoginAction /> : <ServeMobileLoginAction />}
             <ServeDashboardAction />
-            <QuickLinksDropDown />
+            {!lg ? <QuickLinksDropDown /> : null}
+            {!lg ? null : <ServeMobileMenuAction />}
           </div>
         </div>
       </BlockWrapper>

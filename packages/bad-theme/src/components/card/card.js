@@ -175,7 +175,7 @@ const Card = ({
       setErrorAction({
         dispatch,
         isError: {
-          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals.`,
+          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals. To continue to the publication without logging in, click 'Read Publication'`,
           image: "Error",
           action: [
             {
@@ -398,7 +398,7 @@ const Card = ({
         minHeight: MIN_CARD_HEIGHT,
       }}
       onClick={onClickHandler}
-      data-aos={animationType || "fade"}
+      data-aos={videoArchive ? "none" : animationType || "fade"}
       data-aos-delay={`${delay * 50}`}
       data-aos-duration="500"
     >

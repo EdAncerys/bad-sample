@@ -1,4 +1,5 @@
-import { handleSetCookie } from "../../helpers/cookie";
+import { atom, appAuthenticationTokens } from "jotai";
+import { handleSetCookie, handleGetCookie } from "../../helpers/cookie";
 import {
   setGoToAction,
   getApplicationStatus,
@@ -38,10 +39,9 @@ export const loginActionViaModal = async ({
     setFetchAction({ dispatch, isFetching: false });
   }
 };
+
 export const loginAction = async ({ state }) => {
   console.log("loginAction triggered");
-
-  console.log("🐞 ", state.auth.APP_USERNAME, state.auth.APP_PASSWORD);
 
   try {
     // 📌 auth B2c redirect url based on App default url
@@ -49,6 +49,7 @@ export const loginAction = async ({ state }) => {
     // --------------------------------------------------------------------------------
     // 📌  B2C login auth path endpoint
     // --------------------------------------------------------------------------------
+
     const url =
       state.auth.B2C +
       `${redirectPath}&scope=openid&response_type=id_token&prompt=login`;
@@ -76,25 +77,18 @@ export const authenticateAppAction = async ({
   console.log("authenticateAppAction triggered");
 
   try {
-    // check if refresh token is set & valid if so use it
-    if (refreshJWT) {
-      console.log("🐞 APP HAVE REFRESH JWT");
-      // authenticate via refresh token
-      // replace authenticate
-    }
+    let jwtToken = null;
+    let refreshToken = null;
+    // 📌 get auth takens form atom state
+    // const authTokens = appAuthenticationTokens;
+    // console.log("🐞 ", authTokens);
 
-    // if refresh taken is not valid or null auth via app credentials
-    if (!refreshJWT) {
-      console.log("🐞 NO REFRESH JWT FOUND"); // debug
-      const username = state.auth.APP_USERNAME;
-      const password = state.auth.APP_PASSWORD;
-      const URL = state.auth.APP_HOST + `/users/login`;
-
+    if (refreshToken) {
+      console.log("🐞 REFRESH TAKEN PRESENT"); // debug
+      const URL = state.auth.APP_HOST + `/users/refresh`;
       const appCredentials = JSON.stringify({
-        username,
-        password,
+        RefreshToken: refreshJWT,
       });
-
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -103,14 +97,55 @@ export const authenticateAppAction = async ({
 
       const data = await fetch(URL, requestOptions);
       const response = await data.json();
-      // console.log("🐞 ", response); // debug
 
-      if (response.token) {
-        return response.token;
-      } else {
-        return null;
+      if (response.success) {
+        // 📌 set app refresh token in context
+        jwtToken = response.token;
+        refreshToken = response.data.AuthenticationResult.RefreshToken;
+        console.log("🐞 check if valid", response.data);
+      }
+      if (!response.success) {
+        // 📌 set refresh taken to null to trigger login via creditentials
+        refreshToken = null;
       }
     }
+    // console.log("🐞 ", refreshToken);
+    // 📌 if refresh token is not valid or null auth via app credentials
+    if (!refreshToken) {
+      console.log("🐞 REFRESH TAKEN NOT PRESENT OR NOT VALID"); // debug
+      const username = state.auth.APP_USERNAME;
+      const password = state.auth.APP_PASSWORD;
+      let URL = state.auth.APP_HOST + `/users/login`;
+      let appCredentials = JSON.stringify({
+        username,
+        password,
+      });
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: appCredentials,
+      };
+
+      const data = await fetch(URL, requestOptions);
+      const response = await data.json();
+
+      if (response.success) {
+        // 📌 set app refresh token in context
+        jwtToken = response.token;
+        refreshToken = response.data.AuthenticationResult.RefreshToken;
+        // 📌 auth takens in global state via atom
+        // const appAuthenticationTokens = atom({
+        //   jwt: jwtToken,
+        //   refreshJWT: refreshToken,
+        // });
+      }
+    }
+
+    // 📌 set app refresh token in context
+    // seJWTAction({ dispatch, jwt });
+    // seRefreshJWTAction({ dispatch, refreshJWT });
+
+    return jwtToken;
   } catch (error) {
     console.log("error", error);
   }
@@ -150,7 +185,6 @@ export const getUserContactId = async ({ state, dispatch, jwt, transId }) => {
     },
     body: JSON.stringify({ transId }),
   };
-  // console.log(URL); // debug
 
   try {
     const data = await fetch(URL, requestOptions);
@@ -181,8 +215,8 @@ export const getUserDataByContactId = async ({
 
   try {
     const data = await fetch(URL, requestOptions);
+    if (!data) throw new Error("Error getting userData.");
     const response = await data.json();
-    if (!response) throw new Error("Error getting userData.");
 
     // pre-fetch application data & populate to context store
     await getUserApplicationAction({ state, dispatch, contactid });
@@ -268,7 +302,7 @@ export const getUserDataByEmail = async ({
 };
 
 export const getUserDataFromDynamics = async ({ state, jwt, contactid }) => {
-  console.log("getUserDataByContactId triggered");
+  console.log("getUserDataFromDynamics triggered");
 
   const URL = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
 
@@ -304,6 +338,10 @@ export const logoutAction = async ({ state, actions, dispatch }) => {
 export const seJWTAction = ({ dispatch, jwt }) => {
   console.log("seJWTAction triggered"); //debug
   dispatch({ type: "SET_JWT_ACTION", payload: jwt });
+};
+export const seRefreshJWTAction = ({ dispatch, refreshJWT }) => {
+  console.log("seRefreshJWTAction triggered"); //debug
+  dispatch({ type: "SET_REFRESH_JWT_ACTION", payload: refreshJWT });
 };
 export const setActiveUserAction = ({ dispatch, isActiveUser }) => {
   console.log("setActiveUserAction triggered"); //debug

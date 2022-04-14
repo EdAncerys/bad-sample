@@ -233,9 +233,9 @@ const Directory = ({ state, actions, libraries }) => {
           paddingTop: !lg ? null : "1em",
         }}
       >
-        <button type="submit" className="blue-btn" onClick={handleSearch}>
+        <div className="blue-btn" onClick={handleSearch}>
           Search
-        </button>
+        </div>
       </div>
     );
   };
@@ -252,13 +252,9 @@ const Directory = ({ state, actions, libraries }) => {
           paddingTop: `2em`,
         }}
       >
-        <button
-          type="submit"
-          className="transparent-btn"
-          onClick={handleLoadMore}
-        >
+        <div className="transparent-btn" onClick={handleLoadMore}>
           Load More
-        </button>
+        </div>
       </div>
     );
   };

@@ -23,6 +23,9 @@
     icon
     <span class='link-icon' />
 
+    imgages in wp editor example
+    class='image-wrapper'
+
  **/
 
 .image-wrapper {
@@ -37,10 +40,6 @@
   color: inherit;
   transition: all 0.3s ease-in-out;
 }
-/* .card-wrapper:hover {
-  color: inherit;
-  transform: scale(0.995);
-} */
 
 .card-image-animated {
   transition: all 0.5s;
@@ -471,4 +470,13 @@ https://codebeautify.org/
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #1e335d;
+}
+
+/* search dropdown customization */
+.search-phrase {
+  font-weight: bold;
+  color: #3882cd;
+}
+.title-link-animation:hover .search-phrase {
+  color: #000;
 }

@@ -12,40 +12,13 @@ const RegistrationStepFive = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
 
-  const { applicationData } = useAppState();
-
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-  const [applicationType, setType] = useState("SIG Application");
-
-  useEffect(() => {
-    if (!applicationData) return null;
-    // get SIG application category type from applicationData
-    let type = applicationData[0].bad_categorytype;
-    if (type === "*") type = `Special Interest Group`;
-
-    setType(type);
-  }, []);
 
   // SERVERS ---------------------------------------------
   const ServeContent = () => {
     return (
       <div style={{ padding: `0 1em 1em` }}>
-        <div
-          className="primary-title"
-          style={{
-            fontSize: 20,
-            paddingBottom: `1em`,
-          }}
-        >
-          Category Selected: <span>{applicationType}</span>
-        </div>
-
-        <div>
-          <span className="required" />
-          Mandatory fields
-        </div>
-
         <SIGApplication />
       </div>
     );

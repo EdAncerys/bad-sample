@@ -75,11 +75,7 @@ const BillingHistory = ({ state, actions, libraries }) => {
           {currentPayYear}
         </div>
         <div style={{ alignItems: "center" }}>
-          <div
-            type="submit"
-            className="blue-btn"
-            onClick={handleDownloadPayment}
-          >
+          <div className="blue-btn" onClick={handleDownloadPayment}>
             Download Receipt
           </div>
         </div>

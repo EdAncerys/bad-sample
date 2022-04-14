@@ -5,6 +5,7 @@ import {
   loginAction,
   getApplicationStatus,
   setErrorAction,
+  getUserDataByContactId,
 } from "../index";
 
 export const setUserStoreAction = async ({
@@ -245,6 +246,15 @@ export const setCompleteUserApplicationAction = async ({
         applicationData: null,
       });
 
+      // 📌 get & update user record in context
+      const userData = await getUserDataByContactId({
+        state,
+        dispatch,
+        jwt,
+        contactid,
+        refreshJWT,
+      });
+      if (!userData) throw new Error("Error getting userData.");
       console.log("⏬ Membership Completed ⏬");
       console.log(data);
 
@@ -475,6 +485,11 @@ const updateMembershipApplication = ({
       application.value = data.bad_expectedyearofqualification;
     if (data.bad_memberdirectory && application.name === "bad_memberdirectory")
       application.value = data.bad_memberdirectory;
+    if (
+      data.bad_preferredmailingaddress &&
+      application.name === "bad_preferredmailingaddress"
+    )
+      application.value = data.bad_preferredmailingaddress;
 
     //⏬ SIG section of the application process
     if (data.bad_qualifications && application.name === "bad_qualifications")

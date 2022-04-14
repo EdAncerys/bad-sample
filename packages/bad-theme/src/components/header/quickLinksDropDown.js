@@ -63,11 +63,11 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
       setErrorAction({
         dispatch,
         isError: {
-          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals.`,
+          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals. <br/> To continue to the publication without logging in, click to visit the BJD website`,
           image: "Error",
           action: [
             {
-              label: `Go to ${title}`,
+              label: `Read ${title}`,
               handler: handelRedirect,
             },
             { label: "Login", handler: handelLogin },
@@ -144,13 +144,13 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
         handleActiveMenu({ mouseLeave: true });
       }}
     >
-      <button
+      <div
         id="drop-down-btn"
         className="dropdown-toggle drop-down-btn"
         type="button"
       >
         Quick Links
-      </button>
+      </div>
       <ServeMenu />
     </div>
   );

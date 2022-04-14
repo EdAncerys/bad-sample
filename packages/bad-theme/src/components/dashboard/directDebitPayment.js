@@ -60,7 +60,7 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
         }); // redirect to payment
         setErrorAction({
           dispatch,
-          isError: { message: "Direct debit been successfully setup" },
+          isError: { message: "Direct debit has been successfully setup" },
         });
       } else {
         // console.log("⬇️ Failed to create direct debit ⬇️");
@@ -122,7 +122,7 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
         <ServeDataString title="Frequency:" value="Annual Collection" />
         <ServeDataString
           title="Date of Collection:"
-          value={`1st of February ${
+          value={`1st of January ${
             currentYear + 1
           } or first working day thereafter`}
         />
@@ -170,18 +170,13 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
         style={{ justifyContent: "flex-end", padding: `2em 0 0` }}
       >
         <div
-          type="submit"
           className="transparent-btn"
           style={{ marginRight: `2em` }}
           onClick={handleBack}
         >
           Back
         </div>
-        <div
-          type="submit"
-          className="blue-btn"
-          onClick={handleDirectDebitSetup}
-        >
+        <div className="blue-btn" onClick={handleDirectDebitSetup}>
           Confirm And Setup Direct Debit
         </div>
       </div>

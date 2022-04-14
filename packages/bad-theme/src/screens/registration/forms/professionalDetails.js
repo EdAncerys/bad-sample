@@ -7,6 +7,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import FormError from "../../../components/formError";
 import { Form } from "react-bootstrap";
 import ActionPlaceholder from "../../../components/actionPlaceholder";
+// DATA HELPERS -----------------------------------------------------------
+import { prefMailingOption } from "../../../config/data";
+
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -20,6 +23,7 @@ import {
   setCompleteUserApplicationAction,
   useIsMounted,
   getHospitalNameAction,
+  setErrorAction,
 } from "../../../context";
 
 const ProfessionalDetails = ({ state, actions, libraries }) => {
@@ -58,6 +62,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     bad_readpolicydocument: "",
     sky_newhospitaltype: "",
     bad_memberdirectory: "",
+    bad_preferredmailingaddress: "",
   });
   const [inputValidator, setInputValidator] = useState({
     py3_gmcnumber: true,
@@ -132,6 +137,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         handleSetFormData({ data, name: "sky_newhospitalname" });
       if (data.name === "bad_expectedyearofqualification")
         handleSetFormData({ data, name: "bad_expectedyearofqualification" });
+      if (data.name === "bad_preferredmailingaddress")
+        handleSetFormData({ data, name: "bad_preferredmailingaddress" });
       if (data.name === "py3_hospitalid") {
         // get hospital id from application data
         if (data.value) hospitalId = data.value;
@@ -254,8 +261,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   const handleNext = async () => {
     // check if new hospital value been added
     const isNewHospital = formData.bad_newhospitaladded;
-    // check if isAssociateType to apply mandatory fields
-    const isAssociateType = applicationType.includes("Associate");
+    // 📌 check if isAssociateType to apply mandatory fields
+    // const isAssociateType = applicationType.includes("Associate");
 
     const isValid = isFormValidated({
       required: [
@@ -263,7 +270,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         "py3_otherregulatorybodyreference",
         "py3_ntnno",
         "bad_currentpost",
-        isNewHospital ? "sky_newhospitaltype" : null,
+        isNewHospital ? "sky_newhospitaltype" : null, // required if new hospital name added
+        isNewHospital ? "sky_newhospitalname" : null, // required if new hospital name added
         !isNewHospital ? "py3_hospitalid" : null,
         "bad_proposer1",
         "bad_proposer2",
@@ -306,9 +314,29 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       if (isActiveUser) setGoToAction({ state, path: slug, actions });
     } catch (error) {
       console.log(error);
+
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Failed to create ${applicationType} application. Please try again.`,
+          image: "Error",
+        },
+      });
     } finally {
       setFetching(false);
     }
+  };
+
+  const policyHandler = ({ isConstitution }) => {
+    // open privacy policy in new window
+    let url = state.auth.APP_URL + "/privacy-policy/";
+    if (isConstitution)
+      url = state.auth.APP_URL + "/about-the-bad/bad-constitution/";
+    window.open(
+      url,
+      "_blank"
+      // "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400"
+    );
   };
 
   const handleDocUploadChange = async (e) => {
@@ -408,8 +436,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             <div>
               <label className="required form-label">
                 {applicationType === "Associate Overseas"
-                  ? "GMC number or International equivalent"
-                  : "GMC number"}
+                  ? "GMC / IMC Number or International equivalent"
+                  : "GMC / IMC Number"}
               </label>
               <input
                 name="py3_gmcnumber"
@@ -475,7 +503,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
           {inputValidator.py3_hospitalid && (
             <div>
               <label className="form-label required">
-                Main Hospital / Place of Work / Medical School details
+                Main Hospital / Medical School / Place of Work details
               </label>
               <div style={{ position: "relative" }}>
                 {selectedHospital && (
@@ -516,7 +544,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                       onChange={handleHospitalLookup}
                       type="text"
                       className="form-control input"
-                      placeholder="Main Hospital / Place of Work / Medical School details"
+                      placeholder="Main Hospital / Medical School / Place of Work"
                     />
                     <FormError id="py3_hospitalid" />
                   </div>
@@ -532,7 +560,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
           {!isHospitalValue && (
             <div className="flex-col">
               <label className="form-label">
-                Hospital / Medical School not listed
+                Main Hospital / Medical School / Place of Work not listed
               </label>
               <input
                 name="bad_newhospitaladded"
@@ -554,9 +582,9 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                 className="input"
               >
                 <option value="" hidden>
-                  Hospital / Medical School
+                  Main Hospital / Medical School / Place of Work
                 </option>
-                <option value="Hospital">Hospital</option>
+                <option value="Hospital">Main Hospital</option>
                 <option value="Medical School">Medical School</option>
               </Form.Select>
               <FormError id="sky_newhospitaltype" />
@@ -565,14 +593,16 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
           {formData.bad_newhospitaladded && inputValidator.sky_newhospitalname && (
             <div>
-              <label className="form-label">New Hospital Name</label>
+              <label className="form-label">
+                Main Hospital / Medical School / Place of Work
+              </label>
               <input
                 name="sky_newhospitalname"
                 value={formData.sky_newhospitalname}
                 onChange={handleInputChange}
                 type="text"
                 className="form-control input"
-                placeholder="New Hospital Name"
+                placeholder="Main Hospital / Medical School / Place of Work"
               />
               <FormError id="sky_newhospitalname" />
             </div>
@@ -669,6 +699,27 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
               </div>
             )}
 
+            <div>
+              <label>Preferred mailing option</label>
+              <Form.Select
+                name="bad_preferredmailingaddress"
+                value={formData.bad_preferredmailingaddress}
+                onChange={handleInputChange}
+                className="input"
+              >
+                <option value="" hidden>
+                  Preferred mailing option
+                </option>
+                {prefMailingOption.map((item, key) => {
+                  return (
+                    <option key={key} value={item.value}>
+                      {item.Label}
+                    </option>
+                  );
+                })}
+              </Form.Select>
+            </div>
+
             {inputValidator.sky_cvurl && (
               <div>
                 <label className="form-label required">Upload Your CV</label>
@@ -741,6 +792,9 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                           <div
                             className="caps-btn required"
                             style={{ paddingTop: 6, marginLeft: 10 }}
+                            onClick={() =>
+                              policyHandler({ isConstitution: true })
+                            }
                           >
                             BAD CONSTITUTION
                           </div>
@@ -750,6 +804,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                     <FormError id="py3_constitutionagreement" />
                   </div>
                 )}
+
                 {inputValidator.bad_readpolicydocument && (
                   <div>
                     <div
@@ -777,11 +832,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                                 whiteSpace: "nowrap",
                               }}
                               onClick={() =>
-                                setGoToAction({
-                                  state,
-                                  path: `/privacy-policy/`,
-                                  actions,
-                                })
+                                policyHandler({ isPrivacyPolicy: true })
                               }
                             >
                               BAD'S PRIVACY NOTICE
