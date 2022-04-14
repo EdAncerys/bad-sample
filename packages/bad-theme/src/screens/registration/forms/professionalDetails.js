@@ -319,6 +319,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         dispatch,
         isError: {
           message: `Failed to create ${applicationType} application. Please try again.`,
+          image: "Error",
         },
       });
     } finally {

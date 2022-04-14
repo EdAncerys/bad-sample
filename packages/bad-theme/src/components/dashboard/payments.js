@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
-import { handleGetCookie } from "../../helpers/cookie";
-
 import PaymentModal from "./paymentModal";
 import Loading from "../loading";
 import TitleBlock from "../titleBlock";
+
+// CONTEXT ---------------------------------------------
+import { setErrorAction, authenticateAppAction } from "../../context";
 
 import {
   useAppState,
@@ -15,19 +16,15 @@ import {
   muiQuery,
 } from "../../context";
 const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
-  //component state
+  const { lg } = muiQuery();
+  const dispatch = useAppDispatch();
+  const { dynamicsApps, isActiveUser, refreshJWT } = useAppState();
+
   const [paymentUrl, setPaymentUrl] = useState("");
   const [liveSubscriptions, setLiveSubscriptions] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const { lg } = muiQuery();
-  const { dynamicsApps, isActiveUser } = useAppState();
-  const dispatch = useAppDispatch();
-  // import values from the global state
+
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-
-  const cookie = handleGetCookie({ name: `BAD-WebApp` });
-  const { contactid, jwt } = cookie;
 
   useEffect(() => {
     setLiveSubscriptions(dynamicsApps);
@@ -40,14 +37,8 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     dynamicsApps.apps.data.length === 0
   )
     return null;
-  if (!liveSubscriptions) return <Loading />;
-  const { subs } = subscriptions;
 
-  //the url for redirect
-  const the_url =
-    state.auth.ENVIRONMENT === "DEVELOPMENT"
-      ? "http://localhost:3000/"
-      : state.auth.APP_URL;
+  if (!liveSubscriptions) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
   const handlePayment = async ({
@@ -59,31 +50,43 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       ? "/sagepay/test/subscription/"
       : "/sagepay/test/application/";
 
-    const fetchVendorId = await fetch(
-      state.auth.APP_HOST +
-        sagepayUrl +
-        type +
-        `?redirecturl=${the_url}/payment-confirmation/`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      }
-    );
+    try {
+      const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
-    if (fetchVendorId.ok) {
-      const json = await fetchVendorId.json();
-      console.log(json);
-      const url =
-        json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
-      setPaymentUrl(url);
+      const fetchVendorId = await fetch(
+        state.auth.APP_HOST +
+          sagepayUrl +
+          type +
+          `?redirecturl=${state.auth.APP_URL}/payment-confirmation/`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+
+      if (fetchVendorId.ok) {
+        const json = await fetchVendorId.json();
+        console.log(json);
+        const url =
+          json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
+        setPaymentUrl(url);
+      }
+    } catch (error) {
+      console.log(error);
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Something went wrong. Please try again.`,
+          image: "Error",
+        },
+      });
     }
   };
 
   const resetPaymentUrl = async () => {
     setPaymentUrl(null);
-    setLoading(true);
 
     // update application status for the user
     if (isActiveUser)
@@ -95,7 +98,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   };
 
   // SERVERS ---------------------------------------------
-  const ServePayments = ({ block, item, isApplications }) => {
+  const ServePayments = ({ block, item, type }) => {
     if (dashboard && block.bad_sagepayid !== null) return null;
 
     const { core_totalamount, core_name } = block;
@@ -149,16 +152,21 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     };
 
     const ServeInfo = () => {
-      // bottom border show for the block if it's the last one
-      let dataLength = liveSubscriptions.subs.data.length;
-      if (isApplications) dataLength = liveSubscriptions.apps.data.length;
-      const isLastItem = dataLength === item + 1;
+      if (!liveSubscriptions) return null;
+      // 📌 bottom border show for the block if it's the last one
+      // check how many outstanding app payments there are
+      let paymentLength = liveSubscriptions.apps.data.length;
+      if (type === "subscriptions")
+        paymentLength = liveSubscriptions.subs.data.length;
+      const isLastItem = paymentLength === item + 1;
+      console.log("🐞 ", liveSubscriptions);
+      console.log("🐞 item", item);
 
       return (
         <div
           className={!lg ? "flex" : "flex-col"}
           style={{
-            borderBottom: isLastItem
+            borderBottom: !isLastItem
               ? `1px solid ${colors.darkSilver}`
               : "none",
             padding: !lg ? `1em` : 0,
@@ -198,7 +206,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       <div>
         <div
           className="primary-title"
-          style={{ fontSize: 20, paddingTop: "2em" }}
+          style={{ fontSize: 20, padding: "2em 0" }}
         >
           {dashboard ? "Outstanding payments" : `Active ${type}:`}
         </div>
@@ -206,12 +214,13 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
         {liveSubscriptions[appsOrSubs].data.map((block, key) => {
           return (
-            <ServePayments key={key} block={block} item={key} isApplications />
+            <ServePayments key={key} block={block} item={key} type={type} />
           );
         })}
       </div>
     );
   };
+
   return (
     <div className="shadow">
       {dashboard && (
