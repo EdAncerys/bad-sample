@@ -40,7 +40,8 @@ const Membership = ({ state, actions, libraries }) => {
   useEffect(() => {
     if (!dynamicsApps) return;
     // 📌 set dynamic apps data
-    setSubs(dynamicsApps.subs.data);
+    setSubs([]);
+    // setSubs(dynamicsApps.subs.data);
   }, [dynamicsApps]);
 
   // HANDLERS ----------------------------------------------------------------
@@ -162,7 +163,30 @@ const Membership = ({ state, actions, libraries }) => {
               >
                 Current Subscriptions
               </div>
+
               {subsData.map((app, key) => {
+                console.log("🐞 ", app);
+
+                if (subsData.length === 0) {
+                  // 📌 if subsData is empty display no subscriptions message
+                  return (
+                    <div
+                      key={key}
+                      className="flex-col"
+                      style={{
+                        padding: `${marginVertical}px`,
+                        marginBottom: `${marginVertical}px`,
+                      }}
+                    >
+                      <div className="flex-col">
+                        <div className="flex primary-title">
+                          You have no subscriptions.
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+
                 const {
                   bad_organisedfor,
                   core_name,

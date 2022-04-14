@@ -149,7 +149,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
     // --------------------------------------------------------------------------------
 
     // ⬇️ development env default login action ⬇️
-    if (state.auth.ENVIRONMENT === "DEVELOPMENT-") {
+    if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
       console.log("🤖 DEVELOPMENT ENVIRONMENT 🤖");
 
       const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
@@ -179,9 +179,9 @@ const HeaderActions = ({ state, actions, libraries }) => {
   // SERVERS ----------------------------------------------------
   const ServeProductionBatch = () => {
     // 📌 Production Batch shows if pointing to production server
+    const isProduction = !state.auth.APP_HOST.toLowerCase().includes("uat");
     let serverBatch = "UAT";
-    if (!state.auth.APP_HOST.toLowerCase().includes("uat"))
-      serverBatch = "PROD";
+    if (isProduction) serverBatch = "PROD";
 
     return (
       <div style={{ position: "relative" }}>
@@ -191,7 +191,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
             position: "absolute",
             top: "1.5em",
             right: 0,
-            padding: 5,
+            padding: isProduction ? "5px 1px" : 5,
             borderRadius: "50%",
             border: `1px solid ${colors.danger}`,
             fontSize: 10,
