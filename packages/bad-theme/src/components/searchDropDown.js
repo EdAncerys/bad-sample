@@ -59,7 +59,9 @@ const SearchDropDown = ({
           )}
 
           {filter.map((item, key) => {
-            const { title, type } = item;
+            const { title, type, url } = item;
+            // 📌 if item dont have a link dont render it
+            if (!url) return null;
 
             let serachTitle = title;
             if (input) {
