@@ -113,7 +113,14 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     // pre fetch membership data if not already present
     if (!state.source.memberships)
       await getMembershipDataAction({ state, actions });
-    const membershipData = Object.values(state.source.memberships);
+    let membershipData = Object.values(state.source.memberships);
+    // sort memberships in alphabetical order
+    membershipData = membershipData.sort((a, b) => {
+      if (a.acf.category_types < b.acf.category_types) return -1;
+      if (a.acf.category_types > b.acf.category_types) return 1;
+      return 0;
+    });
+
     setMembershipData(membershipData);
 
     // API to get membership data based in app ID
@@ -859,7 +866,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                       borderBottom: `1px solid ${colors.silverFillTwo}`,
                     }}
                   >
-                    {/* {inputValidator.bad_mrpcqualified && (
+                    {inputValidator.bad_mrpcqualified && (
                       <div className="flex-col">
                         <label className="form-label">MRCP Qualified</label>
                         <input
@@ -870,7 +877,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                           className="form-check-input check-box"
                         />
                       </div>
-                    )} */}
+                    )}
 
                     {inputValidator.sky_cvurl && (
                       <div>
