@@ -149,6 +149,15 @@ const FindDermatologistOptions = ({ state }) => {
           <div className="flex-col">
             <div className="flex">
               <div className="flex-col" style={{ flex: 1.25 }}>
+                <div style={{ textAlign: "justify" }}>
+                  The Find a Dermatologist feature is a service where members of
+                  the public can search for Consultant Dermatologists by
+                  postcode proximity. Opting in allows our Consultant members to
+                  provide the public with further information about their
+                  dermatological specialties and work. Your personal message,
+                  main place of work and up to three private practice websites
+                  will be displayed on your search results profile.
+                </div>
                 <div>
                   <div
                     className="flex"
