@@ -208,7 +208,11 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       <div>
         <div
           className="primary-title"
-          style={{ fontSize: 20, padding: "2em 0" }}
+          style={{
+            fontSize: 20,
+            padding: !lg ? "2em 0" : 0,
+            marginTop: !lg ? null : "1em",
+          }}
         >
           {dashboard ? "Outstanding payments" : `Active ${type}:`}
         </div>
@@ -226,7 +230,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   return (
     <div className="shadow">
       {dashboard && (
-        <div style={{ padding: `2em 4em` }}>
+        <div style={{ padding: !lg ? `2em 4em` : `1em` }}>
           <TitleBlock
             block={{ text_align: "left", title: "Payments" }}
             disableMargin
@@ -235,7 +239,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       )}
       <div
         style={{
-          padding: `0 4em 2em 4em`,
+          padding: !lg ? `0 4em 2em 4em` : "1em",
           marginBottom: `${marginVertical}px`,
         }}
       >

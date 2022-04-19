@@ -186,14 +186,18 @@ const ProfileProgress = ({ state, actions, libraries }) => {
 
   const ServeActions = () => {
     return (
-      <div className="flex" style={{ paddingTop: "1.5em" }}>
+      <div
+        className={!lg ? "flex" : "flex-col"}
+        style={{ paddingTop: "1.5em" }}
+      >
         <div
           className="blue-btn"
           onClick={handleCancelApplication}
           style={{
-            marginRight: "1em",
+            marginRight: !lg ? "1em" : 0,
             backgroundColor: colors.danger,
             padding: !lg ? null : 10,
+            marginBottom: !lg ? null : "1em",
           }}
         >
           Cancel Application
