@@ -4,14 +4,14 @@ import date from "date-and-time";
 const DATE_MODULE = date;
 
 // CONTEXT ----------------------------------------------------------------
-import { useAppState } from "../../context";
+import { useAppState, muiQuery } from "../../context";
 
 const SubmittedApplications = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { dynamicsApps } = useAppState();
   const marginVertical = state.theme.marginVertical;
-
+  const { lg } = muiQuery();
   if (!dynamicsApps) return null; // if application data exist & not under review return null
 
   // HELPERS ----------------------------------------------
@@ -42,7 +42,10 @@ const SubmittedApplications = ({ state, actions, libraries }) => {
   return (
     <div
       className="flex-col shadow"
-      style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
+      style={{
+        padding: !lg ? `2em 4em` : `1em`,
+        marginBottom: `${marginVertical}px`,
+      }}
     >
       <div className="flex-col">
         <div

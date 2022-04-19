@@ -25,44 +25,71 @@ const DashboardNavigationMobile = ({ state, actions, libraries }) => {
   };
 
   return (
-    <Dropdown>
-      <Dropdown.Toggle style={styles.dropdownToggle} id="dropdown-basic">
-        Navigate
-      </Dropdown.Toggle>
-
-      <Dropdown.Menu style={{ width: "100%" }}>
-        <Dropdown.Item onClick={(e) => handleNavigate({ e })}>
+    <div>
+      <ul style={styles.ulist}>
+        <li style={styles.listItem} onClick={(e) => handleNavigate({ e })}>
           Dashboard
-        </Dropdown.Item>
-        <Dropdown.Item onClick={(e) => handleNavigate({ e })}>
+        </li>
+        <li style={styles.listItem} onClick={(e) => handleNavigate({ e })}>
           Events
-        </Dropdown.Item>
-        <Dropdown.Item onClick={(e) => handleNavigate({ e })}>
+        </li>
+        <li style={styles.listItem} onClick={(e) => handleNavigate({ e })}>
           Membership
-        </Dropdown.Item>
-        <Dropdown.Item onClick={(e) => handleNavigate({ e })}>
+        </li>
+        <li style={styles.listItem} onClick={(e) => handleNavigate({ e })}>
           Directory
-        </Dropdown.Item>
-        <Dropdown.Item onClick={(e) => handleNavigate({ e })}>
+        </li>
+        <li style={styles.listItem} onClick={(e) => handleNavigate({ e })}>
           My account
-        </Dropdown.Item>
-        <Dropdown.Item onClick={(e) => handleNavigate({ e })}>
+        </li>
+        <li style={styles.listItem} onClick={(e) => handleNavigate({ e })}>
           Billing
-        </Dropdown.Item>
-        <Dropdown.Item onClick={(e) => handleNavigate({ e })}>
+        </li>
+        <li style={styles.listItem} onClick={(e) => handleNavigate({ e })}>
           Settings
-        </Dropdown.Item>
-        <Dropdown.Item
-          onClick={(e) => {
-            handleNavigate({ e });
-            logoutAction({ state, dispatch, actions });
-          }}
-        >
-          Log out
-        </Dropdown.Item>
-      </Dropdown.Menu>
-    </Dropdown>
+        </li>
+      </ul>
+    </div>
   );
+  // return (
+  //   <Dropdown>
+  //     <Dropdown.Toggle style={styles.dropdownToggle} id="dropdown-basic">
+  //       Navigate
+  //     </Dropdown.Toggle>
+
+  //     <Dropdown.Menu style={{ width: "100%" }}>
+  //       <Dropdown.Item onClick={(e) => handleNavigate({ e })}>
+  //         Dashboard
+  //       </Dropdown.Item>
+  //       <Dropdown.Item onClick={(e) => handleNavigate({ e })}>
+  //         Events
+  //       </Dropdown.Item>
+  //       <Dropdown.Item onClick={(e) => handleNavigate({ e })}>
+  //         Membership
+  //       </Dropdown.Item>
+  //       <Dropdown.Item onClick={(e) => handleNavigate({ e })}>
+  //         Directory
+  //       </Dropdown.Item>
+  //       <Dropdown.Item onClick={(e) => handleNavigate({ e })}>
+  //         My account
+  //       </Dropdown.Item>
+  //       <Dropdown.Item onClick={(e) => handleNavigate({ e })}>
+  //         Billing
+  //       </Dropdown.Item>
+  //       <Dropdown.Item onClick={(e) => handleNavigate({ e })}>
+  //         Settings
+  //       </Dropdown.Item>
+  //       <Dropdown.Item
+  //         onClick={(e) => {
+  //           handleNavigate({ e });
+  //           logoutAction({ state, dispatch, actions });
+  //         }}
+  //       >
+  //         Log out
+  //       </Dropdown.Item>
+  //     </Dropdown.Menu>
+  //   </Dropdown>
+  // );
 };
 
 const styles = {
@@ -73,6 +100,15 @@ const styles = {
     borderRadius: 0,
     justifyContent: "center",
   },
+  ulist: {
+    display: "flex",
+    overflow: "scroll",
+    padding: "1em 0",
+  },
+  listItem: {
+    display: "inline",
+    minWidth: 100,
+    textAlign: "center",
+  },
 };
-
 export default connect(DashboardNavigationMobile);

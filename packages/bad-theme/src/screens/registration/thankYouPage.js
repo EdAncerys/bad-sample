@@ -6,11 +6,11 @@ import CheckMark from "../../img/svg/checkMark.svg";
 
 import BlockWrapper from "../../components/blockWrapper";
 import CompleteApplication from "./forms/completeApplication";
-
+import { muiQuery } from "../../context";
 const RegistrationThankYouPage = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
-
+  const { lg } = muiQuery();
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
@@ -66,7 +66,7 @@ const RegistrationThankYouPage = ({ state, actions }) => {
           margin: `${marginVertical}px ${marginHorizontal}px`,
         }}
       >
-        <div style={styles.container}>
+        <div style={!lg ? styles.container : styles.containerMobile}>
           <SideBarMenu />
           <ServeContent />
         </div>
@@ -79,6 +79,12 @@ const styles = {
   container: {
     display: "grid",
     gridTemplateColumns: `1fr 2fr`,
+    justifyContent: "space-between",
+    gap: 20,
+  },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
     justifyContent: "space-between",
     gap: 20,
   },

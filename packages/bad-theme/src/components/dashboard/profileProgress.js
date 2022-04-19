@@ -14,11 +14,12 @@ import {
   useAppState,
   setGoToAction,
   deleteApplicationAction,
+  muiQuery,
 } from "../../context";
 
 const ProfileProgress = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
+  const { lg } = muiQuery();
   const dispatch = useAppDispatch();
   const { dynamicsApps, applicationData, isActiveUser, refreshJWT } =
     useAppState();
@@ -189,7 +190,11 @@ const ProfileProgress = ({ state, actions, libraries }) => {
         <div
           className="blue-btn"
           onClick={handleCancelApplication}
-          style={{ marginRight: "1em", backgroundColor: colors.danger }}
+          style={{
+            marginRight: "1em",
+            backgroundColor: colors.danger,
+            padding: !lg ? null : 10,
+          }}
         >
           Cancel Application
         </div>
@@ -216,7 +221,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
         <div
           className="flex-col shadow"
           style={{
-            padding: `2em 4em`,
+            padding: !lg ? `2em 4em` : `1em`,
             marginBottom: `${marginVertical}px`,
           }}
         >
