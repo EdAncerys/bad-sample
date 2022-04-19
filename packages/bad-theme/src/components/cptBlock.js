@@ -131,17 +131,19 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     if (searchFilter) {
       // serach input filtering
       groupData = groupData.filter((item) => {
-        let isIncludes = null;
+        let isInTitle = null;
+        let isInBody = null;
+
         if (item.title)
-          isIncludes = item.title.rendered
+          isInTitle = item.title.rendered
             .toLowerCase()
             .includes(searchFilter.toLowerCase());
         if (item.content)
-          isIncludes = item.content.rendered
+          isInBody = item.content.rendered
             .toLowerCase()
             .includes(searchFilter.toLowerCase());
 
-        return isIncludes;
+        return isInBody || isInTitle;
       });
     }
     if (cptBlockFilter) {
@@ -168,7 +170,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       });
     }
 
-    // if all filters are cleared, reset the data set & apply limit
+    // 📌 if all filters are cleared, reset the data set & apply limit
     if (!searchFilter && !cptBlockFilter && !cptBlockTypeFilter) {
       setPostListData(groupData.slice(0, Number(chunkRef.current)));
     } else {
