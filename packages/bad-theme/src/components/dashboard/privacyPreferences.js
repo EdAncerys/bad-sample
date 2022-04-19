@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import ActionPlaceholder from "../actionPlaceholder";
+import { Form } from "react-bootstrap";
+// DATA HELPERS -----------------------------------------------------------
+import { prefMailingOption } from "../../config/data";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -28,6 +31,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
     contactByPhone: false,
     contactByEmail: false,
     universalyUnsubscribe: false,
+    bad_preferredmailingaddress: "",
   });
 
   useEffect(() => {
@@ -46,6 +50,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
     handleSetData({ name: "bad_badecircular" });
     handleSetData({ name: "bad_bjdalerts" });
     handleSetData({ name: "bad_presidentsbulletin" });
+    handleSetData({ name: "bad_preferredmailingaddress" });
     if (
       (isActiveUser.preferredcontactmethodcode &&
         isActiveUser.preferredcontactmethodcode === 3) ||
@@ -85,6 +90,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
     let bad_badecircular = formData.bad_badecircular;
     let bad_bjdalerts = formData.bad_bjdalerts;
     let bad_presidentsbulletin = formData.bad_presidentsbulletin;
+    let bad_preferredmailingaddress = formData.bad_preferredmailingaddress;
     let contactByPhone = formData.contactByPhone;
     let contactByEmail = formData.contactByEmail;
     let universalyUnsubscribe = formData.universalyUnsubscribe;
@@ -107,6 +113,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
       bad_badecircular,
       bad_bjdalerts,
       bad_presidentsbulletin,
+      bad_preferredmailingaddress,
       preferredcontactmethodcode,
     };
 
@@ -271,6 +278,26 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
                   communications
                 </div>
               </div>
+            </div>
+            <div>
+              <div style={{ padding: "1em 0" }}>Preferred mailing option</div>
+              <Form.Select
+                name="bad_preferredmailingaddress"
+                value={formData.bad_preferredmailingaddress}
+                onChange={handleInputChange}
+                className="input"
+              >
+                <option value="" hidden>
+                  Preferred mailing option
+                </option>
+                {prefMailingOption.map((item, key) => {
+                  return (
+                    <option key={key} value={item.value}>
+                      {item.Label}
+                    </option>
+                  );
+                })}
+              </Form.Select>
             </div>
           </div>
         </div>
