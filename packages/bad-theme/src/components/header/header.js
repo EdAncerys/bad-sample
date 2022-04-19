@@ -26,13 +26,6 @@ const Header = ({ state, actions }) => {
   const data = state.source.get(urlPath);
 
   const ServeNavigation = () => {
-    if (urlPath.includes("/redirect/"))
-      return (
-        <div style={{ paddingTop: `55%` }}>
-          <Loading />
-        </div>
-      );
-
     return (
       <div className="bad-header no-selector" style={styles.container}>
         <HeaderActions />
@@ -59,18 +52,13 @@ const Header = ({ state, actions }) => {
       ) : (
         <div
           className="flex-col"
-          style={
-            !lg
-              ? styles.container
-              : {
-                  ...styles.container,
-                  position: "sticky",
-                  zIndex: "999",
-                  top: 0,
-                }
-          }
+          style={{
+            ...styles.container,
+            position: "sticky",
+            zIndex: "999",
+            top: 0,
+          }}
         >
-          <HTMLHead />
           <ServeNavigation />
         </div>
       )}

@@ -8,6 +8,8 @@ import Link from "@frontity/components/link";
 import BlockWrapper from "../blockWrapper";
 import Loading from "../loading";
 import Card from "../../components/card/card";
+// CONTEXT -----------------------------------------------------------------
+import { getPostData } from "../../helpers";
 
 const Navigation = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -15,6 +17,7 @@ const Navigation = ({ state, actions, libraries }) => {
   const [wpMainMenu, setWpMainMenu] = useState([]);
   const [wpMoreMenu, setWpMoreMenu] = useState([]);
   const [featured, setFeatured] = useState([]);
+  const [newsMedia, setNewsMedia] = useState([]);
   const useEffectRef = useRef(false);
 
   const MAIN_NAV_LENGTH = 6; // main navigation length config
@@ -41,7 +44,31 @@ const Navigation = ({ state, actions, libraries }) => {
     setWpMoreMenu(wpMoreMenu); // more menu into dropdown
     if (state.source.menu_features)
       setFeatured(Object.values(state.source.menu_features)); // cpt for menu content
-    activeMenu.current;
+
+    // 📌 set News & Media menu content form CPT
+    let data = Object.values(state.source.post);
+    while (data.length === 0) {
+      console.log("🐞 FETCH POST DATA TRIGERED MENU");
+      // if iteration is greater than 10, break
+      if (iteration > 15) break;
+      // set timeout for async
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      await getPostData({ state, actions });
+      data = Object.values(state.source.post);
+      iteration++;
+    }
+    if (state.source.category) {
+      let catList = Object.values(state.source.category);
+      // sort catList by name in alphabetical order
+      catList.sort((a, b) => {
+        if (a.name < b.name) return -1;
+        if (a.name > b.name) return 1;
+
+        return 0;
+      });
+      setNewsMedia(catList);
+    }
+
     return () => {
       useEffectRef.current = false; // clean up function
     };
@@ -134,7 +161,46 @@ const Navigation = ({ state, actions, libraries }) => {
     }
     return "none";
   };
+
   // SERVERS -----------------------------------------------------
+  const ServeNewsMediaSubMenu = ({ parent }) => {
+    // 📌 serve submenu for news & media only
+    if (parent.title !== "News &#038; Media" || newsMedia.length === 0)
+      return null;
+
+    return (
+      <div style={{ paddingRight: `2em` }}>
+        {newsMedia.map((item, key) => {
+          const { name, link } = item;
+          console.log("🐞 ", item);
+
+          let linkPath = "/news-media/"; // hard coded path to news & media
+
+          return (
+            <li key={key} className="flex-row" style={{ width: "100%" }}>
+              <Link
+                className="flex-row dropdown-item"
+                style={styles.link}
+                // onClick={() =>
+                //   handleOnClickNavigation({
+                //     parentSlug: parentSlug || "more",
+                //   })
+                // }
+                link={linkPath}
+              >
+                <div className="flex">
+                  <div className="menu-title">
+                    <Html2React html={name} />
+                  </div>
+                </div>
+              </Link>
+            </li>
+          );
+        })}
+      </div>
+    );
+  };
+
   const ServeMenu = ({ secondaryMenu }) => {
     const ServeChildMenu = ({
       item,
@@ -233,6 +299,8 @@ const Navigation = ({ state, actions, libraries }) => {
                 );
               })}
             </div>
+
+            <ServeNewsMediaSubMenu parent={parent} />
           </ul>
         );
       };

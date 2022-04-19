@@ -59,8 +59,9 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     let iteration = 0;
     let data = Object.values(state.source.post);
     while (data.length === 0) {
+      console.log("🐞 FETCH POST DATA TRIGERED MENU");
       // if iteration is greater than 10, break
-      if (iteration > 10) break;
+      if (iteration > 15) break;
       // set timeout for async
       await new Promise((resolve) => setTimeout(resolve, 500));
       await getPostData({ state, actions });
