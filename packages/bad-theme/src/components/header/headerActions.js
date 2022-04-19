@@ -29,7 +29,6 @@ import {
   setAppSearchDataAction,
   setAppSearchPhraseAction,
   muiQuery,
-  loginAction,
   setCreateAccountModalAction,
   authenticateAppAction, // TESTING enviroment
   getUserDataByContactId, // TESTING enviroment

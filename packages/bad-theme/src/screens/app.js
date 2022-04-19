@@ -50,6 +50,7 @@ import BlockWrapper from "../components/blockWrapper";
 import { useQuery } from "../hooks/useQuery";
 import { useScraper } from "../hooks/useScraper";
 import { useB2CLogin } from "../hooks/useB2CLogin";
+import { useRedirect } from "../hooks/useRedirect";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -64,7 +65,8 @@ import {
 
 const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
-  const { isActiveUser, isPlaceholder, idFilter, refreshJWT } = useAppState();
+  const { isActiveUser, isPlaceholder, idFilter, refreshJWT, redirects } =
+    useAppState();
   const { sm, md, lg, xl, xxl } = muiQuery();
 
   let urlPath = state.router.link;
@@ -76,6 +78,8 @@ const App = ({ state, actions }) => {
   useB2CLogin({ state, actions });
   // 📌 anchor tag scrapper
   useScraper({ urlPath });
+  // 📌 redirect handler
+  useRedirect({ state, dispatch, actions, redirects, urlPath });
 
   // ⬇️ hook for media queries ⬇️
   useQuery({ state });

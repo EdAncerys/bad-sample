@@ -18,6 +18,7 @@ import {
   setNotificationAction,
   setDebitHandlerAction,
   setPlaceholderAction,
+  setRedirectAction,
 } from "./actions/actions";
 import { muiQuery } from "./mediaQueryContext";
 import {
@@ -158,6 +159,7 @@ export {
   copyToClipboard,
   authCookieActionAfterCSR,
   setPlaceholderAction,
+  setRedirectAction,
   getWPMenu,
   getUserApplicationAction,
   getSIGGroupeData,
