@@ -14,7 +14,7 @@ import {
   getPILsDataAction,
   getGuidelinesDataAction,
   setGoToAction,
-  setIDFilterAction,
+  setIdFilterAction,
   muiQuery,
 } from "../context";
 
@@ -117,7 +117,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
     const isGuidelines = item.type === "guidelines_standards";
     console.log("item", item);
     if (isGuidelines) {
-      setIDFilterAction({ dispatch, idFilter: item.id });
+      setIdFilterAction({ dispatch, idFilter: item.id });
     }
 
     setGoToAction({ state, path: item.link, actions });

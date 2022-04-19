@@ -15,7 +15,7 @@ import {
   useAppState,
   muiQuery,
   getGuidelinesDataAction,
-  setIDFilterAction,
+  setIdFilterAction,
 } from "../context";
 
 const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
@@ -95,7 +95,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handleSearch = () => {
-    // if (idFilter) setIDFilterAction({ dispatch, idFilter: null }); // reset ID for filter
+    // if (idFilter) setIdFilterAction({ dispatch, idFilter: null }); // reset ID for filter
     const input = searchFilterRef.current.value || searchFilter;
     currentSearchFilterRef.current = input;
     let guidelinesList = Object.values(state.source.guidelines_standards);

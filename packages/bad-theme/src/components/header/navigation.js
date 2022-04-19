@@ -10,9 +10,12 @@ import Loading from "../loading";
 import Card from "../../components/card/card";
 // CONTEXT -----------------------------------------------------------------
 import { getPostData } from "../../helpers";
+import { setNesMediaIdFilterAction, useAppDispatch } from "../../context";
 
 const Navigation = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
+  const dispatch = useAppDispatch();
 
   const [wpMainMenu, setWpMainMenu] = useState([]);
   const [wpMoreMenu, setWpMoreMenu] = useState([]);
@@ -31,9 +34,11 @@ const Navigation = ({ state, actions, libraries }) => {
     currentlySelectedMenuItem ? currentlySelectedMenuItem[1] : null
   );
   const activeChildMenu = useRef(null);
+
   useEffect(async () => {
     // ⬇️ getting wp menu & featured from state
     if (!state.theme.menu) return;
+    let iteration = 0;
     const menuData = state.theme.menu;
     const menuLength = menuData.length;
 
@@ -171,9 +176,7 @@ const Navigation = ({ state, actions, libraries }) => {
     return (
       <div style={{ paddingRight: `2em` }}>
         {newsMedia.map((item, key) => {
-          const { name, link } = item;
-          console.log("🐞 ", item);
-
+          const { name, id } = item;
           let linkPath = "/news-media/"; // hard coded path to news & media
 
           return (
@@ -181,11 +184,12 @@ const Navigation = ({ state, actions, libraries }) => {
               <Link
                 className="flex-row dropdown-item"
                 style={styles.link}
-                // onClick={() =>
-                //   handleOnClickNavigation({
-                //     parentSlug: parentSlug || "more",
-                //   })
-                // }
+                onClick={() =>
+                  setNesMediaIdFilterAction({
+                    dispatch,
+                    newsMediaCategoryId: id,
+                  })
+                }
                 link={linkPath}
               >
                 <div className="flex">

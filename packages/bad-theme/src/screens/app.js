@@ -57,7 +57,7 @@ import {
   authCookieActionAfterCSR,
   getWPMenu,
   setPlaceholderAction,
-  setIDFilterAction,
+  setIdFilterAction,
   getLeadershipTeamData,
   muiQuery,
 } from "../context";
@@ -121,7 +121,7 @@ const App = ({ state, actions }) => {
     // ⬇️  clearing id reference
     const slug = "/guidelines-and-standards/clinical-guidelines/";
     if (idFilter && urlPath !== slug)
-      setIDFilterAction({ dispatch, idFilter: null }); // reset filter id on page change
+      setIdFilterAction({ dispatch, idFilter: null }); // reset filter id on page change
   }, [urlPath]);
 
   const transitions = useTransition(isPlaceholder, {

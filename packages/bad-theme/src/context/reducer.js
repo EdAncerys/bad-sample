@@ -22,6 +22,7 @@ export const initialState = {
 
   filter: null,
   idFilter: null,
+  newsMediaCategoryId: "",
   eventAnchor: null,
   dashboardPath: "Dashboard",
   directDebitPath: { page: "billing" },
@@ -76,6 +77,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, applicationData: action.payload };
     case "SET_ID_FILTER_ACTION":
       return { ...state, idFilter: action.payload };
+    case "SET__NEWS_MEDIA_ID_FILTER_ACTION":
+      return { ...state, newsMediaCategoryId: action.payload };
     case "SET_DIRECT_DEBIT_ACTION":
       return { ...state, isDirectDebit: action.payload };
     case "SET_CPT_BLOCK_ACTION":

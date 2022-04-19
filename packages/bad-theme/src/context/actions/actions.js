@@ -60,9 +60,20 @@ export const setAppSearchPhraseAction = ({ dispatch, appSearchPhrase }) => {
   dispatch({ type: "SET_APP_SEARCH_PHRASE_ACTION", payload: appSearchPhrase });
 };
 
-export const setIDFilterAction = ({ dispatch, idFilter }) => {
-  console.log("setIDFilterAction triggered"); //debug
+export const setIdFilterAction = ({ dispatch, idFilter }) => {
+  console.log("setIdFilterAction triggered"); //debug
   dispatch({ type: "SET_ID_FILTER_ACTION", payload: idFilter });
+};
+
+export const setNesMediaIdFilterAction = ({
+  dispatch,
+  newsMediaCategoryId,
+}) => {
+  console.log("setNesMediaIdFilterAction triggered"); //debug
+  dispatch({
+    type: "SET__NEWS_MEDIA_ID_FILTER_ACTION",
+    payload: newsMediaCategoryId,
+  });
 };
 
 export const setFetchAction = ({ dispatch, isFetching }) => {
