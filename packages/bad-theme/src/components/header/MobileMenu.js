@@ -31,9 +31,10 @@ export default connect(({ libraries, state, actions, toggleMobileMenu }) => {
   };
 
   const ServeMainMenu = () => {
-    return wpMainMenu.map((menu) => {
+    return wpMainMenu.map((menu, key) => {
       return (
         <Nav.Link
+          key={key}
           onClick={() => {
             if (menu.child_items) {
               setMenuContent({

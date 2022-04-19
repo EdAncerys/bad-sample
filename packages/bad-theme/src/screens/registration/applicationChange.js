@@ -17,6 +17,7 @@ import {
   setGoToAction,
   setErrorAction,
   errorHandler,
+  muiQuery,
   getMembershipDataAction,
   getApplicationStatus,
   validateMembershipFormAction,
@@ -32,7 +33,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
 
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
-
+  const { lg } = muiQuery();
   const dispatch = useAppDispatch();
   const { isActiveUser, dynamicsApps, applicationData, refreshJWT } =
     useAppState();
@@ -514,7 +515,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
           margin: `${marginVertical}px ${marginHorizontal}px`,
         }}
       >
-        <div style={styles.container}>
+        <div style={!lg ? styles.container : styles.containerMobile}>
           <div
             className="flex-col"
             style={{
@@ -589,7 +590,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
               </div>
 
               <form>
-                <div style={{ padding: `2em 1em` }}>
+                <div style={{ padding: !lg ? `2em 1em` : "1em" }}>
                   {inputValidator.py3_gmcnumber && (
                     <div>
                       <label className="required form-label">
@@ -1019,6 +1020,12 @@ const styles = {
   container: {
     display: "grid",
     gridTemplateColumns: `1fr 2fr`,
+    justifyContent: "space-between",
+    gap: 20,
+  },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
     justifyContent: "space-between",
     gap: 20,
   },

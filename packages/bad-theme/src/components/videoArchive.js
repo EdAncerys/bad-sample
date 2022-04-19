@@ -396,7 +396,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
       </div>
       <BlockWrapper>
         {postData ? (
-          <div style={styles.container}>
+          <div style={!lg ? styles.container : styles.containerMobile}>
             {postData.length > 0 ? (
               postData.map((item, key) => {
                 const post = state.source[item.type][item.id];
@@ -424,7 +424,7 @@ const styles = {
     marginBottom: 10,
     marginTop: 20,
   },
-  container: {
+  containerMobile: {
     display: "grid",
     gridTemplateColumns: `1fr`,
     justifyContent: "space-between",
