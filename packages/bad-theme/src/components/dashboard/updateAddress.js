@@ -241,7 +241,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
           >
             <div>
               <div style={{ position: "relative" }}>
-                <label>Address Line 1</label>
+                <label>Home Address Line 1</label>
                 {!formData.address2_line1 && (
                   <div style={{ position: "relative", width: "100%" }}>
                     <div
@@ -260,7 +260,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
                         onChange={handleAddressLookup}
                         type="text"
                         className="form-control input"
-                        placeholder="Address Line 1"
+                        placeholder="Home Address Line 1"
                       />
                       <div
                         className="input-group-text toggle-icon-color"
@@ -315,13 +315,13 @@ const UpdateAddress = ({ state, actions, libraries }) => {
               </div>
 
               <div style={styles.wrapper}>
-                <label>Address Line 2</label>
+                <label>Home Address Line 2</label>
                 <input
                   name="address2_line2"
                   value={formData.address2_line2}
                   onChange={handleInputChange}
                   className="form-control input"
-                  placeholder="Address Line 2"
+                  placeholder="Home Address Line 2"
                 />
               </div>
               <div>

@@ -179,7 +179,9 @@ const HeaderActions = ({ state, actions, libraries }) => {
   // SERVERS ----------------------------------------------------
   const ServeProductionBatch = () => {
     // 📌 Production Batch shows if pointing to production server
-    if (!state.auth.APP_HOST.toLowerCase().includes("uat")) return null;
+    const isProduction = !state.auth.APP_HOST.toLowerCase().includes("uat");
+    let serverBatch = "UAT";
+    if (isProduction) serverBatch = "PROD";
 
     return (
       <div style={{ position: "relative" }}>
@@ -189,15 +191,15 @@ const HeaderActions = ({ state, actions, libraries }) => {
             position: "absolute",
             top: "1.5em",
             right: 0,
-            padding: 5,
+            padding: isProduction ? "5px 1px" : 5,
             borderRadius: "50%",
             border: `1px solid ${colors.danger}`,
-            fontSize: 12,
+            fontSize: 10,
             color: colors.danger,
             fontWeight: "bold",
           }}
         >
-          UAT
+          {serverBatch}
         </div>
       </div>
     );

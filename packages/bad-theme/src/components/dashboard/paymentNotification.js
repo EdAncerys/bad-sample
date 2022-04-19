@@ -29,7 +29,7 @@ const PaymentNotification = ({
         : state.auth.APP_URL;
     const sagepay_url =
       state.auth.ENVIRONMENT === "DEVELOPMENT"
-        ? "/sagepay/test/application/"
+        ? "/sagepay/live/application/"
         : "/sagepay/live/application/";
     const fetchVendorId = await fetch(
       state.auth.APP_HOST +

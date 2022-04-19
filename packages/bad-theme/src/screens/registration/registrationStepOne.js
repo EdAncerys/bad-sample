@@ -11,12 +11,13 @@ import {
   useAppState,
   setGoToAction,
   setUserStoreAction,
+  muiQuery,
 } from "../../context";
 
 const RegistrationStepOne = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
-
+  const { lg } = muiQuery();
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, dynamicsApps, refreshJWT } =
     useAppState();
@@ -65,7 +66,7 @@ const RegistrationStepOne = ({ state, actions }) => {
   const ServeActions = () => {
     return (
       <div
-        className="flex"
+        className={!lg ? "flex" : "flex-col"}
         style={{
           justifyContent: "flex-end",
           padding: `2em 1em 0 1em`,
@@ -81,7 +82,7 @@ const RegistrationStepOne = ({ state, actions }) => {
         </div>
         <div
           className="transparent-btn"
-          style={{ margin: `0 1em` }}
+          style={{ margin: !lg ? `0 1em` : `1em 0` }}
           onClick={handleSaveExit}
         >
           Save & Exit
@@ -164,7 +165,7 @@ const RegistrationStepOne = ({ state, actions }) => {
           margin: `${marginVertical}px ${marginHorizontal}px`,
         }}
       >
-        <div style={styles.container}>
+        <div style={!lg ? styles.container : styles.containerMobile}>
           <SideBarMenu />
           <ServeContent />
         </div>
@@ -177,6 +178,12 @@ const styles = {
   container: {
     display: "grid",
     gridTemplateColumns: `1fr 2fr`,
+    justifyContent: "space-between",
+    gap: 20,
+  },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
     justifyContent: "space-between",
     gap: 20,
   },

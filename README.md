@@ -19,11 +19,19 @@ DEFAULT_CONTACT_LIST
 
 ## README TBD
 
+## ⬇️ SWITHC To Developemnt git repo
+
+git remote set-url origin https://github.com/SkylarkBAD/bad.org
+
+## ⬇️ SWITHC To Production git repo
+
+git remote set-url origin https://github.com/BADComms/Skylark
+
 ### Deployment to Versel
 
 #### Deploy Frontity using the vercel command (from the root of your project):
 
-`npx vercel`
+npx vercel`
 
 This project was bootstrapped with [Frontity](https://frontity.org/).
 

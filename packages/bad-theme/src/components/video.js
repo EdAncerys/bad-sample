@@ -90,7 +90,7 @@ const Video = ({ state, actions, libraries }) => {
     const { contactid, jwt } = cookie;
     const sagepay_url =
       state.auth.ENVIRONMENT === "DEVELOPMENT"
-        ? "/sagepay/test/video/"
+        ? "/sagepay/live/video/"
         : "/sagepay/live/video/";
     const the_url =
       state.auth.ENVIRONMENT === "DEVELOPMENT"

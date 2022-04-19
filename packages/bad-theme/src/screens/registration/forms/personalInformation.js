@@ -21,6 +21,7 @@ import {
   validateMembershipFormAction,
   errorHandler,
   googleAutocompleteAction,
+  muiQuery,
 } from "../../../context";
 
 const PersonalDetails = ({ state, actions, libraries }) => {
@@ -29,7 +30,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, dynamicsApps, refreshJWT } =
     useAppState();
-
+  const { lg } = muiQuery();
   const [isFetching, setFetching] = useState(false);
   const [isFetchingAddress, setIsFetchingAddress] = useState(null);
   const [genderList, setGenderList] = useState([]);
@@ -304,7 +305,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   const ServeActions = () => {
     return (
       <div
-        className="flex"
+        className={!lg ? "flex" : "flex-col"}
         style={{ justifyContent: "flex-end", padding: `2em 1em 0 1em` }}
       >
         <div
@@ -321,7 +322,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
         </div>
         <div
           className="transparent-btn"
-          style={{ margin: `0 1em` }}
+          style={{ margin: !lg ? `0 1em` : "1em 0" }}
           onClick={handleSaveExit}
         >
           Save & Exit
@@ -339,7 +340,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: `1fr 1fr`,
+          gridTemplateColumns: !lg ? `1fr 1fr` : "1fr",
           justifyContent: "space-between",
           gap: 20,
           padding: `2em 0`,

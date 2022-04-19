@@ -28,9 +28,6 @@ const FindDermatologistOptions = ({ state }) => {
     address3_postalcode: "",
     address3_city: "",
     bad_mainhosptialweb: "",
-    bad_web1: "",
-    bad_web2: "",
-    bad_web3: "",
     bad_findadermatologisttext: "",
     bad_profile_photo_url: "",
   });
@@ -56,9 +53,6 @@ const FindDermatologistOptions = ({ state }) => {
     if (isActiveUser.address3_city) handleSetData({ name: "address3_city" });
     if (isActiveUser.bad_mainhosptialweb)
       handleSetData({ name: "bad_mainhosptialweb" });
-    if (isActiveUser.bad_web3) handleSetData({ name: "bad_web3" });
-    if (isActiveUser.bad_web2) handleSetData({ name: "bad_web2" });
-    if (isActiveUser.bad_web1) handleSetData({ name: "bad_web1" });
     if (isActiveUser.bad_findadermatologisttext)
       handleSetData({ name: "bad_findadermatologisttext" });
   }, [isActiveUser]);
@@ -79,9 +73,6 @@ const FindDermatologistOptions = ({ state }) => {
     let address3_line2 = formData.address3_line2;
     let address3_postalcode = formData.address3_postalcode;
     let address3_city = formData.address3_city;
-    let bad_web1 = formData.bad_web1;
-    let bad_web2 = formData.bad_web2;
-    let bad_web3 = formData.bad_web3;
     let bad_findadermatologisttext = formData.bad_findadermatologisttext;
     let bad_profile_photo_url = formData.bad_profile_photo_url;
 
@@ -91,9 +82,6 @@ const FindDermatologistOptions = ({ state }) => {
       address3_line2,
       address3_postalcode,
       address3_city,
-      bad_web1,
-      bad_web2,
-      bad_web3,
       bad_findadermatologisttext,
       bad_profile_photo_url,
     };
@@ -243,9 +231,7 @@ const FindDermatologistOptions = ({ state }) => {
               <ProfileAvatar isPreview={formData.bad_profile_photo_url} />
             </div>
 
-            <div style={{ paddingTop: `1em` }}>
-              Private Practice Website Address
-            </div>
+            <div style={{ paddingTop: `1em` }}>Main Place of Work:</div>
             <div>
               <div className="flex-col">
                 <input
@@ -253,34 +239,7 @@ const FindDermatologistOptions = ({ state }) => {
                   value={formData.bad_mainhosptialweb}
                   onChange={handleInputChange}
                   type="text"
-                  placeholder="Main Place of Work Web Address"
-                  className="form-control"
-                  style={styles.input}
-                />
-                <input
-                  name="bad_web1"
-                  value={formData.bad_web1}
-                  onChange={handleInputChange}
-                  type="text"
-                  placeholder="Private Practice Web Address 1"
-                  className="form-control"
-                  style={styles.input}
-                />
-                <input
-                  name="bad_web2"
-                  value={formData.bad_web2}
-                  onChange={handleInputChange}
-                  type="text"
-                  placeholder="Private Practice Web Address 2"
-                  className="form-control"
-                  style={styles.input}
-                />
-                <input
-                  name="bad_web3"
-                  value={formData.bad_web3}
-                  onChange={handleInputChange}
-                  type="text"
-                  placeholder="Private Practice Web Address 3"
+                  placeholder="Main Place of Work"
                   className="form-control"
                   style={styles.input}
                 />
