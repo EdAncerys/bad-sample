@@ -98,11 +98,13 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       data = data.slice(0, Number(post_limit)); // apply limit on posts
     }
 
-    setPostList(data);
     if (state.source.category) {
       const catList = Object.values(state.source.category);
       setCategoryList(catList);
     }
+    console.log("🐞 post_limit", post_limit);
+    console.log("🐞 ", data.length);
+    setPostList(data);
 
     return () => {
       searchFilterRef.current = ""; // clean up function
@@ -113,6 +115,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     let data = Object.values(state.source.post);
     // apply sort by date functionality
     data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+    console.log("🐞 CURRENT AMMOUNT", postChunkRef.current);
 
     if (searchValue) {
       data = data.filter((news) =>
@@ -152,6 +155,11 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
         // check if category_filter array contains site_section ids
         return categories.some((item) => category_filter.includes(item));
       });
+    }
+
+    // if all filters are not applied, apply limit on posts
+    if (!newsMediaCategoryId && !searchValue && !dateValue && !yearValue) {
+      data = data.slice(0, Number(postChunkRef.current)); // apply limit on posts
     }
 
     setPostList(data); // set post data

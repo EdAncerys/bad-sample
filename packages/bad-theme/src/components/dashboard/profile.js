@@ -126,7 +126,7 @@ const Profile = ({ state, actions, libraries }) => {
     const ServeAddress = () => {
       return (
         <div className="flex-col" style={styles.container}>
-          <span className="primary-title">Address: </span>
+          <span className="primary-title">Home Address: </span>
           <div className="flex-col">
             {address2_line1 && (
               <div className="flex">
