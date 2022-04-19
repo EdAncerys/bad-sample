@@ -40,8 +40,7 @@ const Membership = ({ state, actions, libraries }) => {
   useEffect(() => {
     if (!dynamicsApps) return;
     // 📌 set dynamic apps data
-    setSubs([]);
-    // setSubs(dynamicsApps.subs.data);
+    setSubs(dynamicsApps.subs.data);
   }, [dynamicsApps]);
 
   // HANDLERS ----------------------------------------------------------------
@@ -165,7 +164,7 @@ const Membership = ({ state, actions, libraries }) => {
               </div>
 
               {subsData.map((app, key) => {
-                console.log("🐞 ", app);
+                console.log("🐞 application Data ", app);
 
                 if (subsData.length === 0) {
                   // 📌 if subsData is empty display no subscriptions message
@@ -278,11 +277,7 @@ const Membership = ({ state, actions, libraries }) => {
                 };
 
                 const ServeMembershipActions = () => {
-                  if (
-                    dashboardPath === "Dashboard" ||
-                    bad_organisedfor === "SIG"
-                  )
-                    return null;
+                  if (bad_organisedfor === "SIG") return null;
 
                   return (
                     <div style={{ display: "grid", alignItems: "center" }}>
