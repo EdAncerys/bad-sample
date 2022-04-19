@@ -131,7 +131,7 @@ const styles = {
     width: "100%",
     position: "absolute",
     overflow: "scroll",
-    top: 80,
+    top: 71,
     left: 0,
     paddingBottom: 100,
     zIndex: 500,

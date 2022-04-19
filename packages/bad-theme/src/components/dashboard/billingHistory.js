@@ -153,7 +153,10 @@ const BillingHistory = ({ state, actions, libraries }) => {
       <ActionPlaceholder isFetching={isFetching} background="transparent" />
       <div
         className="shadow"
-        style={{ padding: `2em 4em`, marginBottom: `${marginVertical}px` }}
+        style={{
+          padding: !lg ? `2em 4em` : "1em",
+          marginBottom: `${marginVertical}px`,
+        }}
       >
         <div className="primary-title" style={{ fontSize: 20 }}>
           Billing History:
