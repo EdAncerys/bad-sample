@@ -62,7 +62,6 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     let iteration = 0;
     let data = Object.values(state.source.post);
     while (data.length === 0) {
-      console.log("🐞 FETCH POST DATA TRIGERED MENU");
       // if iteration is greater than 10, break
       if (iteration > 15) break;
       // set timeout for async
@@ -102,8 +101,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       const catList = Object.values(state.source.category);
       setCategoryList(catList);
     }
-    console.log("🐞 post_limit", post_limit);
-    console.log("🐞 ", data.length);
+
     setPostList(data);
 
     return () => {
@@ -115,7 +113,6 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     let data = Object.values(state.source.post);
     // apply sort by date functionality
     data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
-    console.log("🐞 CURRENT AMMOUNT", postChunkRef.current);
 
     if (searchValue) {
       data = data.filter((news) =>
