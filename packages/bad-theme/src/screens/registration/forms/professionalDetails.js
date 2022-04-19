@@ -487,7 +487,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
           {inputValidator.bad_currentpost && (
             <div>
               <label className="required form-label">
-                New Post/Job title field (If retired please enter retired)
+                Current Post/Job title field (If retired please enter retired)
               </label>
               <input
                 name="bad_currentpost"

@@ -438,16 +438,18 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     }));
   };
 
-  const isFormFooter =
+  let isFormFooter =
     inputValidator.py3_currentgrade ||
     inputValidator.py3_constitutionagreement ||
     inputValidator.bad_readpolicydocument ||
     inputValidator.sky_cvurl;
 
-  const isAgreementForm =
+  let isAgreementForm =
     inputValidator.py3_constitutionagreement ||
     inputValidator.bad_readpolicydocument ||
     inputValidator.bad_memberdirectory;
+  isAgreementForm = false; // 📌 uncoment to enable agreement form
+  isFormFooter = false; // 📌 uncoment to enable agreement form
 
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
@@ -591,9 +593,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                   {inputValidator.py3_gmcnumber && (
                     <div>
                       <label className="required form-label">
-                        {applicationType === "Associate Overseas"
-                          ? "GMC / IMC number'"
-                          : "GMC number"}
+                        GMC / IMC Number
                       </label>
                       <input
                         name="py3_gmcnumber"
@@ -642,7 +642,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                   {inputValidator.bad_currentpost && (
                     <div>
                       <label className="required form-label">
-                        New Post/Job title field (If retired please enter
+                        Current Post/Job title field (If retired please enter
                         retired)
                       </label>
                       <input
@@ -837,6 +837,20 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                   </div>
                 )}
 
+                {inputValidator.py3_currentgrade && (
+                  <div>
+                    <label className="form-label">Current Grade</label>
+                    <input
+                      name="py3_currentgrade"
+                      value={formData.py3_currentgrade}
+                      onChange={handleInputChange}
+                      type="text"
+                      className="form-control input"
+                      placeholder="Current Grade"
+                    />
+                  </div>
+                )}
+
                 {isFormFooter && (
                   <div
                     style={{
@@ -857,20 +871,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                         />
                       </div>
                     )} */}
-
-                    {inputValidator.py3_currentgrade && (
-                      <div>
-                        <label className="form-label">Current Grade</label>
-                        <input
-                          name="py3_currentgrade"
-                          value={formData.py3_currentgrade}
-                          onChange={handleInputChange}
-                          type="text"
-                          className="form-control input"
-                          placeholder="Current Grade"
-                        />
-                      </div>
-                    )}
 
                     {inputValidator.sky_cvurl && (
                       <div>
