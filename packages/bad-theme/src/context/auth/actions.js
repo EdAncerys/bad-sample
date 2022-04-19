@@ -49,10 +49,11 @@ export const loginAction = async ({ state }) => {
     // --------------------------------------------------------------------------------
     // 📌  B2C login auth path endpoint
     // --------------------------------------------------------------------------------
+    let action = "login";
 
     const url =
       state.auth.B2C +
-      `${redirectPath}&scope=openid&response_type=id_token&prompt=login`;
+      `${redirectPath}&scope=openid&response_type=id_token&prompt=${action}`;
     const urlPath = state.router.link;
 
     // get current url path and store in cookieValue

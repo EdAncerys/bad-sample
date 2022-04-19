@@ -18,7 +18,6 @@ import PersonIcon from "@mui/icons-material/Person";
 import MobileLogo from "../../img/png/logo-mobile.png";
 import Login from "@mui/icons-material/Login";
 import ResponsiveMenuIcon from "../../img/png/BAD-Mobile_MENU.png";
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import MobileMenu from "./MobileMenu";
 
 // CONTEXT ----------------------------------------------------------------
@@ -31,6 +30,7 @@ import {
   setAppSearchPhraseAction,
   muiQuery,
   loginAction,
+  setCreateAccountModalAction,
   authenticateAppAction, // TESTING enviroment
   getUserDataByContactId, // TESTING enviroment
 } from "../../context";
@@ -149,7 +149,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
     // --------------------------------------------------------------------------------
 
     // ⬇️ development env default login action ⬇️
-    if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
+    if (state.auth.ENVIRONMENT === "DEVELOPMENT-") {
       console.log("🤖 DEVELOPMENT ENVIRONMENT 🤖");
 
       const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
@@ -165,8 +165,10 @@ const HeaderActions = ({ state, actions, libraries }) => {
       });
       return;
     }
-
-    loginAction({ state });
+    setCreateAccountModalAction({
+      dispatch,
+      createAccountAction: true,
+    });
   };
 
   const mouseLeaveHandler = (e) => {
