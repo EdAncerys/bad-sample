@@ -91,7 +91,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
     let title = "Apply to become a member of BAD";
-    if (slug === "/membership/thank-you/") title = "Ethnic Group Question";
+    if (slug === "/membership/thank-you/") title = "Ethnicity Question";
 
     return (
       <div

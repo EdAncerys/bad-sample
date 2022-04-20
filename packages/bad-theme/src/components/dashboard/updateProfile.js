@@ -240,7 +240,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
                 className="input"
               >
                 <option value="" hidden>
-                  Ethnic Group
+                  Ethnicity
                 </option>
                 {ethnicity.map((item, key) => {
                   return (
