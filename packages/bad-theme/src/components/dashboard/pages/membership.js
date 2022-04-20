@@ -250,6 +250,8 @@ const Membership = ({ state, actions, libraries }) => {
                         style={{
                           fontWeight: "bold",
                           justifyItems: "center",
+                          display: "grid",
+                          alignItems: "center",
                         }}
                       >
                         BAD category change pending approval.

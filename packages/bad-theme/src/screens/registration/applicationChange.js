@@ -223,6 +223,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     };
   }, []);
 
+  console.log("🐞 ", applicationData);
   if (!membershipData) return <Loading />;
 
   // HANDLERS --------------------------------------------
@@ -646,7 +647,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                   {inputValidator.bad_currentpost && (
                     <div>
                       <label className="required form-label">
-                        Current Post/Job title field (If retired please enter
+                        Current Post / Job title field (If retired please enter
                         retired)
                       </label>
                       <input
@@ -668,7 +669,18 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                       </label>
                       <div style={{ position: "relative" }}>
                         {selectedHospital && (
-                          <div className="form-control input">
+                          <div
+                            className="form-control input"
+                            style={{
+                              // if canChangeHospital is false, apply disabled style
+                              ...(!canChangeHospital
+                                ? {
+                                    backgroundColor: colors.silverFillTwo,
+                                    color: colors.black,
+                                  }
+                                : {}),
+                            }}
+                          >
                             <div className="flex-row">
                               <div
                                 style={{
