@@ -222,7 +222,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
         >
           {dashboard ? "Outstanding payments" : `Active ${type}:`}
         </div>
-        {zeroObjects && <ServeSubTitle title="No active subscriptions found" />}
+        {zeroObjects && <ServeSubTitle title="No active applications found" />}
 
         {liveSubscriptions[appsOrSubs].data.map((block, key) => {
           return (

@@ -223,7 +223,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     };
   }, []);
 
-  console.log("🐞 ", applicationData);
   if (!membershipData) return <Loading />;
 
   // HANDLERS --------------------------------------------
@@ -667,6 +666,11 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                       <label className="form-label required">
                         Main Hospital / Place of Work / Medical School details
                       </label>
+                      <div style={{ paddingBottom: "0.5em" }}>
+                        If you need to update your hospital / main place of work
+                        or medical school pleaase go to your dashboard to update
+                        your details.
+                      </div>
                       <div style={{ position: "relative" }}>
                         {selectedHospital && (
                           <div

@@ -40,6 +40,7 @@ export const useRedirect = ({
       urlPath.includes(redirect["301_from"])
     );
     if (!redirect) return null; // skip if redirect is not found
+    console.log("🐞 REDIRECT TRIGERED", redirect);
     // 📌  set redirect to state
     setGoToAction({ state, path: redirect["301_to"], actions });
   }, [urlPath, redirects]);

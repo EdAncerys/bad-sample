@@ -119,8 +119,8 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
         className="primary-title flex"
         style={{ fontSize: 20, alignItems: "center" }}
       >
-        Please complete the Direct Debit Guarantee to automatically renew your
-        membership.
+        Please complete online Direct Debit mandate to automatically renew your
+        membership subscription yeach year.
       </div>
       <ServeActions />
     </div>

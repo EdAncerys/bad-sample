@@ -17,10 +17,11 @@ const FindDermatologistOptions = ({ state }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const { isActiveUser, refreshJWT } = useAppState();
+  const { isActiveUser, dynamicsApps, refreshJWT } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
   const [isFetching, setIsFetching] = useState(null);
+  const [findDerm, setFindDerm] = useState(null);
   const [formData, setFormData] = useState({
     bad_includeinfindadermatologist: "",
     address3_line1: "",
@@ -61,7 +62,18 @@ const FindDermatologistOptions = ({ state }) => {
     if (isActiveUser.bad_web1) handleSetData({ name: "bad_web3" });
     if (isActiveUser.bad_findadermatologisttext)
       handleSetData({ name: "bad_findadermatologisttext" });
-  }, [isActiveUser]);
+
+    // check if user have Ordinary or Honory app then set setFindDerm to true
+    if (dynamicsApps) {
+      const isMember = dynamicsApps.subs.data.filter(
+        (app) =>
+          app.bad_categorytype.includes("Honory") ||
+          app.bad_categorytype.includes("Ordinary")
+      );
+      // show find dermatologist section for applicable users
+      if (isMember.length > 0) setFindDerm(true);
+    }
+  }, [isActiveUser, dynamicsApps]);
 
   // HELPERS ----------------------------------------------------------------
   const handleInputChange = (e) => {
@@ -148,6 +160,8 @@ const FindDermatologistOptions = ({ state }) => {
       ["bad_profile_photo_url"]: bad_profile_photo_url, // update formData
     }));
   };
+
+  if (!findDerm) return null;
 
   return (
     <div style={{ position: "relative" }}>

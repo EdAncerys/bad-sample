@@ -400,6 +400,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
                   </option>
                   <option value="Dr">Dr</option>
                   <option value="Mr">Mr</option>
+                  <option value="Mr">Mrs</option>
                   <option value="Miss">Miss</option>
                   <option value="Ms">Ms</option>
                   <option value="Professor">Professor</option>

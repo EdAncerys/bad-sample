@@ -237,7 +237,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
           </div>
 
           <div className="flex-col ">
-            <div>I am happy to be contacted by:</div>
+            {/* <div>I am happy to be contacted by:</div>
             <div>
               <div className="flex-row" style={styles.wrapper}>
                 <input
@@ -261,9 +261,9 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
                 />
                 <div style={styles.textInfo}>Email</div>
               </div>
-            </div>
+            </div> */}
 
-            <div style={{ paddingTop: `1em` }}>Universal unsubscribe:</div>
+            <div>Universal unsubscribe:</div>
             <div>
               <div className="flex-row" style={styles.wrapper}>
                 <input

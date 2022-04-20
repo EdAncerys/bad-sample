@@ -91,7 +91,7 @@ export const authenticateAppAction = async ({
   }
 
   try {
-    if (refreshTaken) {
+    if (appTaken) {
       console.log("🐞 REFRESH TAKEN FOUND"); // debug
       const URL = state.auth.APP_HOST + `/users/refresh`;
       const requestOptions = {
@@ -106,7 +106,9 @@ export const authenticateAppAction = async ({
       const response = await data.json();
 
       if (response.success) {
-        const jwt = response.data.AuthenticationResult.RefreshToken;
+        const jwt =
+          response.data.AuthenticationResult.RefreshToken ||
+          response.data.AuthenticationResult.IdToken;
         refreshTaken = jwt;
         appTaken = response.token;
       }
@@ -122,7 +124,7 @@ export const authenticateAppAction = async ({
       }
     }
     // 📌 if refresh token is not valid or null auth via app credentials
-    if (!refreshTaken) {
+    if (!appTaken) {
       console.log("🐞 REFRESH TAKEN NOT PRESENT OR NOT VALID"); // debug
       const username = state.auth.APP_USERNAME;
       const password = state.auth.APP_PASSWORD;

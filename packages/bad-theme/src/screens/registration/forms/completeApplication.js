@@ -96,6 +96,10 @@ const CompleteApplication = ({ state, actions, libraries }) => {
     }
   };
 
+  const handleReturn = () => {
+    if (isActiveUser) setGoToAction({ state, path: "/dashboard/", actions });
+  };
+
   const handleInputChange = (e) => {
     const { name, value, type, checked, files } = e.target;
     setFormData((prevFormData) => ({
@@ -117,6 +121,13 @@ const CompleteApplication = ({ state, actions, libraries }) => {
       >
         <div className="blue-btn" onClick={handleSubmit}>
           Submit
+        </div>
+        <div
+          className="blue-btn"
+          style={{ marginLeft: "2em" }}
+          onClick={handleReturn}
+        >
+          No thank you, return to Dashboard
         </div>
       </div>
     );
