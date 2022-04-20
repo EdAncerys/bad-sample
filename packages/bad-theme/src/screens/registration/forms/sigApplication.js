@@ -967,7 +967,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
           {inputValidator.bad_currentpost && (
             <div>
               <label className="required form-label">
-                New Post / Job title field (If retired please enter retired)
+                Post / Job Title details
               </label>
               <input
                 name="bad_currentpost"
@@ -976,6 +976,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 type="text"
                 className="form-control input"
                 placeholder="Current job title"
+                // 📌 disable if bad_currentpost is true
+                disabled={formData.bad_currentpost}
               />
               <div style={{ padding: "0.5em 0" }}>
                 If you would like to change your job title please use the form
