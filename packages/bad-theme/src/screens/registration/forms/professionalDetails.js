@@ -311,8 +311,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
 
       let slug = `/membership/thank-you/`;
-      if (category === "SIG") slug = `/membership/sig-questions/`;
-      if (isActiveUser) setGoToAction({ state, path: slug, actions });
+      if (isActiveUser && appsResponse)
+        setGoToAction({ state, path: slug, actions });
     } catch (error) {
       console.log(error);
 

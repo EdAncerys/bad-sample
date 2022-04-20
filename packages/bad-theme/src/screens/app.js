@@ -51,6 +51,7 @@ import { useQuery } from "../hooks/useQuery";
 import { useScraper } from "../hooks/useScraper";
 import { useB2CLogin } from "../hooks/useB2CLogin";
 import { useRedirect } from "../hooks/useRedirect";
+import { useImage } from "../hooks/useImage";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -71,6 +72,7 @@ const App = ({ state, actions }) => {
 
   let urlPath = state.router.link;
   const data = state.source.get(urlPath);
+  const useEffectRef = useRef(true);
   console.log("INDEX data", data); // debug
   // --------------------------------------------------------------------------------
   // 📌  B2C login handler.
@@ -80,10 +82,8 @@ const App = ({ state, actions }) => {
   useScraper({ urlPath });
   // 📌 redirect handler
   useRedirect({ state, dispatch, actions, redirects, urlPath });
-
-  // ⬇️ hook for media queries ⬇️
+  // 📌 hook for media queries
   useQuery({ state });
-  const useEffectRef = useRef(true);
 
   useEffect(() => {
     // ⬇️ restore scroll history to manual position ⬇️

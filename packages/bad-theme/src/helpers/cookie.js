@@ -21,7 +21,7 @@ export const handleSetCookie = ({ name, value, days, deleteCookie }) => {
   if (deleteCookie) {
     console.log(`🍪 ${cookieName} successfully deleted`); // debug
   } else {
-    console.log("🍪  set to: ", cookie); // debug
+    console.log("🍪  set succesfully"); // debug
   }
 };
 
