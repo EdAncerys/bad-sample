@@ -339,7 +339,9 @@ export const getUserDataFromDynamics = async ({ state, jwt, contactid }) => {
 export const logoutAction = async ({ state, actions, dispatch }) => {
   console.log("logoutAction triggered");
   // ⬇️ stack order important to unmount components correctly
+  // 🍪 delete stored cookies
   handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
+  handleSetCookie({ name: state.auth.AUTH_COOKIE, deleteCookie: true });
   setGoToAction({ state, path: `/`, actions });
 
   seJWTAction({ dispatch, jwt: null });
