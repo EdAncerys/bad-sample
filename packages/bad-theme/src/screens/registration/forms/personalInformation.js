@@ -95,6 +95,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
       }));
     }
 
+    console.log("🐞 applicationData", applicationData);
     if (!applicationData) return null;
     applicationData.map((data) => {
       if (data.name === "py3_title") handleSetData({ data, name: "py3_title" });
@@ -336,12 +337,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
 
   return (
     <div style={{ position: "relative" }}>
-      <ActionPlaceholder
-        isFetching={isFetching}
-        background="transparent"
-        alignSelf="self-end"
-        padding="0 0 6em 0"
-      />
+      <ActionPlaceholder isFetching={isFetching} background="transparent" />
       <div
         style={{
           display: "grid",

@@ -617,6 +617,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
   const ServeSIGMembershipCategory = () => {
     if (!membershipData) return null;
+    console.log("🐞 MEM DATA", membershipData);
 
     return (
       <div>

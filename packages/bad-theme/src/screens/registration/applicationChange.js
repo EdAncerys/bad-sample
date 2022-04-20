@@ -854,20 +854,20 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                         </div>
                       )}
                     </div>
-                  </div>
-                )}
 
-                {inputValidator.py3_currentgrade && (
-                  <div>
-                    <label className="form-label">Current Grade</label>
-                    <input
-                      name="py3_currentgrade"
-                      value={formData.py3_currentgrade}
-                      onChange={handleInputChange}
-                      type="text"
-                      className="form-control input"
-                      placeholder="Current Grade"
-                    />
+                    {inputValidator.py3_currentgrade && (
+                      <div>
+                        <label className="form-label">Current Grade</label>
+                        <input
+                          name="py3_currentgrade"
+                          value={formData.py3_currentgrade}
+                          onChange={handleInputChange}
+                          type="text"
+                          className="form-control input"
+                          placeholder="Current Grade"
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
 
