@@ -63,7 +63,11 @@ const NewsCarouselComponent = ({
             <Carousel.Item key={key}>
               <div className="flex">
                 {block.map((block, key) => {
-                  const { categories, title, link } = block;
+                  const { categories, title, link, acf } = block;
+
+                  let redirectLink = link;
+                  // if redirec_url is set, use it
+                  if (acf && acf.redirect_url) redirectLink = acf.redirect_url;
 
                   const ServeDivider = ({ i }) => {
                     if (isSingleBlock) return null;
@@ -95,7 +99,7 @@ const NewsCarouselComponent = ({
                         cardWidth={isSingleBlock ? "50%" : "100%"}
                         cardHeight="90%"
                         colour={colors.danger}
-                        link={link}
+                        link={redirectLink}
                         link_label="Read More"
                         bodyLimit={homepage ? 4 : null}
                         shadow
