@@ -296,8 +296,8 @@ const PilsArchive = ({ state, actions, libraries }) => {
       >
         <BlockWrapper>
           <div style={{ padding: `0 ${marginHorizontal}px` }}>
-            <div style={{ position: "relative", width: "70%" }}>
-              <div className="flex-row">
+            <div style={{ position: "relative", width: !lg ? "70%" : "100%" }}>
+              <div className={!lg ? "flex-row" : "flex-col"}>
                 <div
                   className="flex"
                   style={{

@@ -17,6 +17,7 @@ import {
   setGoToAction,
   setErrorAction,
   errorHandler,
+  muiQuery,
   getMembershipDataAction,
   getApplicationStatus,
   validateMembershipFormAction,
@@ -32,7 +33,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
 
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
-
+  const { lg } = muiQuery();
   const dispatch = useAppDispatch();
   const { isActiveUser, dynamicsApps, applicationData, refreshJWT } =
     useAppState();
@@ -521,7 +522,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
           margin: `${marginVertical}px ${marginHorizontal}px`,
         }}
       >
-        <div style={styles.container}>
+        <div style={!lg ? styles.container : styles.containerMobile}>
           <div
             className="flex-col"
             style={{
@@ -536,7 +537,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
               isFetching={isFetching}
               background="transparent"
             />
-            <div style={styles.wrapper}>
+            <div style={!lg ? styles.wrapper : styles.wrapperMobile}>
               <div style={{ padding: "0 1em" }}>
                 <div className="primary-title" style={styles.title}>
                   Change of Category Application
@@ -596,7 +597,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
               </div>
 
               <form>
-                <div style={{ padding: `2em 1em` }}>
+                <div style={{ padding: !lg ? `2em 1em` : "1em" }}>
                   {inputValidator.py3_gmcnumber && (
                     <div>
                       <label className="required form-label">
@@ -1029,8 +1030,17 @@ const styles = {
     justifyContent: "space-between",
     gap: 20,
   },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
+    justifyContent: "space-between",
+    gap: 20,
+  },
   wrapper: {
     padding: `0 1em 2em`,
+  },
+  wrapperMobile: {
+    padding: `1em`,
   },
   title: {
     fontSize: 20,

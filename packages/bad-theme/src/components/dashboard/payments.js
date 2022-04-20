@@ -51,7 +51,13 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     const sagepayUrl = core_membershipsubscriptionid
       ? `/sagepay/${sagepay_live}/subscription/`
       : `/sagepay/${sagepay_live}/application/`;
-
+    console.log(
+      "ADDRESS:",
+      state.auth.APP_HOST +
+        sagepayUrl +
+        type +
+        `?redirecturl=${state.auth.APP_URL}/payment-confirmation/`
+    );
     try {
       const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
