@@ -36,12 +36,15 @@ export const useRedirect = ({
   useEffect(() => {
     if (!redirects) return null; // skip if redirects are not set
     // 📌  check if urlPath is in redirects
-    const redirect = redirects.find((redirect) =>
-      urlPath.includes(redirect["301_from"])
+    // remove last slash if present in urlPath
+    const urlPathNoSlash = urlPath.replace(/\/$/, "");
+
+    const redirect = redirects.find(
+      (redirect) => urlPathNoSlash === redirect["301_from"]
     );
     if (!redirect) return null; // skip if redirect is not found
-    console.log("🐞 REDIRECT TRIGERED", redirect);
     // 📌  set redirect to state
     setGoToAction({ state, path: redirect["301_to"], actions });
+    console.log("🐞 REDIRECT TRIGERED", redirect);
   }, [urlPath, redirects]);
 };
