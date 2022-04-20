@@ -88,7 +88,7 @@ const Post = ({ state, actions, libraries }) => {
       const bodyLength = content.rendered.length;
 
       return (
-        <div className="flex-col">
+        <div className="flex-col  post-content">
           <Html2React html={content.rendered} />
           {bodyLength > 2500 && <ScrollTop />}
         </div>

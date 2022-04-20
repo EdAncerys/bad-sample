@@ -34,6 +34,13 @@
   object-fit: cover;
   padding: 2em 100px;
 }
+/* target all img in class post-content & apply styles */
+.post-content img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 2em;
+}
 /* card component animations */
 .card-wrapper {
   cursor: pointer;
