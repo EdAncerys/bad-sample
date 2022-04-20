@@ -155,13 +155,16 @@ const FindDermatologistOptions = ({ state }) => {
       <div
         className="shadow"
         style={{
-          padding: `2em 4em`,
+          padding: !lg ? `2em 4em` : "1em",
           marginBottom: `${marginVertical}px`,
         }}
       >
         <div style={{ display: "grid" }}>
           <div className="flex-col">
-            <div className="flex">
+            <div
+              className="flex"
+              style={{ flexDirection: !lg ? null : "column-reverse" }}
+            >
               <div className="flex-col" style={{ flex: 1.25 }}>
                 <div style={{ textAlign: "justify" }}>
                   The Find a Dermatologist feature is a service where members of
@@ -254,7 +257,7 @@ const FindDermatologistOptions = ({ state }) => {
               <ProfileAvatar isPreview={formData.bad_profile_photo_url} />
             </div>
 
-            <div style={{ paddingTop: `1em` }}>Main Place of Work:</div>
+            <div style={{ paddingTop: `1em` }}>URLs:</div>
             <input
               name="bad_mainhosptialweb"
               value={formData.bad_mainhosptialweb}
@@ -269,7 +272,7 @@ const FindDermatologistOptions = ({ state }) => {
               value={formData.bad_web1}
               onChange={handleInputChange}
               type="text"
-              placeholder="Private Practice Web Address 1"
+              placeholder="https://"
               className="form-control"
               style={styles.input}
             />
@@ -278,7 +281,7 @@ const FindDermatologistOptions = ({ state }) => {
               value={formData.bad_web2}
               onChange={handleInputChange}
               type="text"
-              placeholder="Private Practice Web Address 2"
+              placeholder="https://"
               className="form-control"
               style={styles.input}
             />
@@ -287,7 +290,7 @@ const FindDermatologistOptions = ({ state }) => {
               value={formData.bad_web3}
               onChange={handleInputChange}
               type="text"
-              placeholder="Private Practice Web Address 3"
+              placeholder="https://"
               className="form-control"
               style={styles.input}
             />

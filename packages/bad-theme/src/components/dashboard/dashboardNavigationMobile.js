@@ -46,7 +46,7 @@ const DashboardNavigationMobile = ({ state, actions, libraries }) => {
           Billing
         </li>
         <li style={styles.listItem} onClick={(e) => handleNavigate({ e })}>
-          Settings
+          Preferences
         </li>
       </ul>
     </div>
