@@ -338,8 +338,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
   const handleApplicationChange = async () => {
     // check if new hospital value been added
     const isNewHospital = formData.bad_newhospitaladded;
-    // check if isAssociateType to apply mandatory fields
-    const isAssociateType = applicationType.includes("Associate");
 
     const isValid = isFormValidated({
       required: [
@@ -351,8 +349,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
         !isNewHospital ? "py3_hospitalid" : null,
         "bad_proposer1",
         "bad_proposer2",
-        "py3_constitutionagreement",
-        "bad_readpolicydocument",
       ],
     });
 
