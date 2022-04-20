@@ -2,11 +2,13 @@ import { styled } from "frontity";
 import { CircularProgress } from "@mui/material";
 import { colors } from "../config/colors";
 
-const Loading = ({ padding }) => {
+const Loading = ({ padding, alignSelf }) => {
   const componentPadding = padding || 24;
 
   return (
-    <Container style={{ padding: componentPadding }}>
+    <Container
+      style={{ padding: componentPadding, alignSelf: alignSelf || "center" }}
+    >
       <div
         style={{
           display: "grid",

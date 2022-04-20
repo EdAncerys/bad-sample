@@ -595,7 +595,10 @@ const SIGApplication = ({ state, actions, libraries }) => {
     return (
       <div
         className="flex"
-        style={{ justifyContent: "flex-end", padding: `2em 1em 0 1em` }}
+        style={{
+          justifyContent: "flex-end",
+          padding: `2em 1em 0 1em`,
+        }}
       >
         <div
           className="transparent-btn"
@@ -655,7 +658,12 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
   return (
     <div style={{ position: "relative" }}>
-      <ActionPlaceholder isFetching={isFetching} background="transparent" />
+      <ActionPlaceholder
+        isFetching={isFetching}
+        background="transparent"
+        alignSelf="self-end"
+        padding="0 0 6em 0"
+      />
 
       <div
         className="primary-title"
@@ -806,14 +814,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
           {inputValidator.py3_address1ine1 && (
             <div>
               <label className="required form-label">Home Address</label>
-              {/* <input
-                name="py3_address1ine1"
-                value={formData.py3_address1ine1}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="Address Line 1"
-              /> */}
               <div style={{ position: "relative" }}>
                 {!formData.py3_address1ine1 && (
                   <div style={{ position: "relative", width: "100%" }}>

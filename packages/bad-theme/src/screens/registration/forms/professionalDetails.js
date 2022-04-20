@@ -419,7 +419,12 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
   return (
     <div style={{ position: "relative" }}>
-      <ActionPlaceholder isFetching={isFetching} background="transparent" />
+      <ActionPlaceholder
+        isFetching={isFetching}
+        background="transparent"
+        alignSelf="self-end"
+        padding="0 0 6em 0"
+      />
       <div
         className="primary-title"
         style={{
