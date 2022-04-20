@@ -530,7 +530,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
               isFetching={isFetching}
               background="transparent"
             />
-            <div style={styles.wrapper}>
+            <div style={!lg ? styles.wrapper : styles.wrapperMobile}>
               <div style={{ padding: "0 1em" }}>
                 <div className="primary-title" style={styles.title}>
                   Change of Category Application
@@ -1031,6 +1031,9 @@ const styles = {
   },
   wrapper: {
     padding: `0 1em 2em`,
+  },
+  wrapperMobile: {
+    padding: `1em`,
   },
   title: {
     fontSize: 20,
