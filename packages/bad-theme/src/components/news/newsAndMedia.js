@@ -436,9 +436,8 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   };
 
   const ServeMoreAction = () => {
-    // if postList is empty || lest than post_limit return null
-    // newsMediaCategoryId, searchValue, dateValue
     if (
+      layout === "layout_one" ||
       newsMediaCategoryId ||
       searchValue ||
       dateValue ||
