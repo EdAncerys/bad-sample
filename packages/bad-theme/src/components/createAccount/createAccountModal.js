@@ -5,6 +5,7 @@ import { Modal } from "react-bootstrap";
 import Image from "@frontity/components/image";
 import { colors } from "../../config/imports";
 import BadBadgeLogo from "../../img/svg/badBadgeLogoPrimary.svg";
+import CloseIcon from "@mui/icons-material/Close";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -139,7 +140,10 @@ const CreateAccountModal = ({ state, actions }) => {
 
   const ServeModalContent = () => {
     return (
-      <div className="flex m-4" style={{ flex: 2, paddingRight: `2em` }}>
+      <div
+        className="flex m-4"
+        style={{ flex: 2, paddingRight: !lg ? `2em` : 0 }}
+      >
         <div className="flex-col">
           <Modal.Body style={{ padding: 0 }}>
             <ServeFormInfo />
@@ -163,6 +167,19 @@ const CreateAccountModal = ({ state, actions }) => {
       >
         <Modal.Body>
           <div className="flex-col">
+            {!lg ? (
+              <div
+                onClick={() =>
+                  setCreateAccountModalAction({
+                    dispatch,
+                    createAccountAction: false,
+                  })
+                }
+                style={{ display: "flex", justifyContent: "flex-end" }}
+              >
+                <CloseIcon />
+              </div>
+            ) : null}
             <div
               className="primary-title"
               style={{
