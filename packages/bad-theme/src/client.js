@@ -42,6 +42,7 @@ const BADTheme = {
       DYNAMICS_BRIDGE: process.env.DYNAMICS_BRIDGE,
       APP_URL: process.env.APP_URL, // app host url
       COOKIE_NAME: "BAD-WebApp", // gen App cooie name
+      AUTH_COOKIE: "BAD-AUTH", // gen App cooie name
       ENVIRONMENT: process.env.ENVIRONMENT,
     },
     contactList: {

@@ -1,6 +1,7 @@
-export const handleSetCookie = ({ name, value, exDays, deleteCookie }) => {
+export const handleSetCookie = ({ name, value, days, deleteCookie }) => {
   // setting defaults
   let cookieExDays = 1;
+  if (days) cookieExDays = days;
 
   let expires = cookieExDays * 24 * 60 * 60,
     cookieName = "cookie",
@@ -8,7 +9,6 @@ export const handleSetCookie = ({ name, value, exDays, deleteCookie }) => {
 
   if (name) cookieName = name;
   if (value) cookieValue = JSON.stringify(value);
-  if (exDays) cookieExDays = exDays;
 
   let cookie = `${cookieName}=${cookieValue};path=/;max-age=${expires};`; // cookie params
   // if delete cookie set max-age to 0

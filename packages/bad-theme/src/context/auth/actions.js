@@ -1,4 +1,4 @@
-import { atom, appAuthenticationTokens } from "jotai";
+import { atom, useAtom } from "jotai";
 import { handleSetCookie, handleGetCookie } from "../../helpers/cookie";
 import {
   setGoToAction,
@@ -7,6 +7,10 @@ import {
   setFetchAction,
   setLoginModalAction,
 } from "../index";
+
+// --------------------------------------------------------------------------------
+// 📌 INITIALIZE APP TAKEN via atom STATE
+// --------------------------------------------------------------------------------
 
 export const loginActionViaModal = async ({
   state,
@@ -76,43 +80,49 @@ export const authenticateAppAction = async ({
   refreshJWT,
 }) => {
   console.log("authenticateAppAction triggered");
+  let refreshTaken = null;
+  let appTaken = null;
+
+  // check if cookie is present and if so get the tokens
+  const cookieValue = handleGetCookie({ name: state.auth.AUTH_COOKIE });
+  if (cookieValue) {
+    refreshTaken = cookieValue.refreshJWT;
+    appTaken = cookieValue.appJWT;
+  }
 
   try {
-    let jwtToken = null;
-    let refreshToken = null;
-    // 📌 get auth takens form atom state
-    // const authTokens = appAuthenticationTokens;
-    // console.log("🐞 ", authTokens);
-
-    if (refreshToken) {
-      console.log("🐞 REFRESH TAKEN PRESENT"); // debug
+    if (refreshTaken) {
+      console.log("🐞 REFRESH TAKEN FOUND"); // debug
       const URL = state.auth.APP_HOST + `/users/refresh`;
-      const appCredentials = JSON.stringify({
-        RefreshToken: refreshJWT,
-      });
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: appCredentials,
+        body: JSON.stringify({
+          RefreshToken: refreshTaken,
+        }),
       };
 
       const data = await fetch(URL, requestOptions);
       const response = await data.json();
 
       if (response.success) {
-        // 📌 set app refresh token in context
-        jwtToken = response.token;
-        refreshToken = response.data.AuthenticationResult.RefreshToken;
-        console.log("🐞 check if valid", response.data);
+        const jwt = response.data.AuthenticationResult.RefreshToken;
+        refreshTaken = jwt;
+        appTaken = response.token;
       }
       if (!response.success) {
         // 📌 set refresh taken to null to trigger login via creditentials
-        refreshToken = null;
+        refreshTaken = null;
+        appTaken = null;
+        // delete cookie for refresh token and app token
+        handleSetCookie({
+          name: state.auth.AUTH_COOKIE,
+          deleteCookie: true,
+        });
       }
     }
-    // console.log("🐞 ", refreshToken);
     // 📌 if refresh token is not valid or null auth via app credentials
-    if (!refreshToken) {
+    if (!refreshTaken) {
       console.log("🐞 REFRESH TAKEN NOT PRESENT OR NOT VALID"); // debug
       const username = state.auth.APP_USERNAME;
       const password = state.auth.APP_PASSWORD;
@@ -131,22 +141,23 @@ export const authenticateAppAction = async ({
       const response = await data.json();
 
       if (response.success) {
-        // 📌 set app refresh token in context
-        jwtToken = response.token;
-        refreshToken = response.data.AuthenticationResult.RefreshToken;
-        // 📌 auth takens in global state via atom
-        // const appAuthenticationTokens = atom({
-        //   jwt: jwtToken,
-        //   refreshJWT: refreshToken,
-        // });
+        const jwt = response.data.AuthenticationResult.RefreshToken;
+        refreshTaken = jwt;
+        appTaken = response.token;
+
+        // 📌 set cookie for refresh token and app token
+        handleSetCookie({
+          name: state.auth.AUTH_COOKIE,
+          value: {
+            refreshJWT: refreshTaken,
+            appJWT: appTaken,
+          },
+          days: 1,
+        });
       }
     }
 
-    // 📌 set app refresh token in context
-    // seJWTAction({ dispatch, jwt });
-    // seRefreshJWTAction({ dispatch, refreshJWT });
-
-    return jwtToken;
+    return appTaken;
   } catch (error) {
     console.log("error", error);
   }

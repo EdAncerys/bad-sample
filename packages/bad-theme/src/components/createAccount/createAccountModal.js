@@ -18,7 +18,7 @@ const CreateAccountModal = ({ state, actions }) => {
   const { createAccountAction } = useAppState();
   const data = state.source.get(state.router.link);
 
-  // HANDLERS ----------------------------------------------------
+  // HANDLERS -------------------------------------------------
 
   // SERVERS --------------------------------------------------
   const ServeFormInfo = () => {
