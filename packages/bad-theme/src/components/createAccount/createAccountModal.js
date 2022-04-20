@@ -167,7 +167,7 @@ const CreateAccountModal = ({ state, actions }) => {
       >
         <Modal.Body>
           <div className="flex-col">
-            {!lg ? (
+            {lg && (
               <div
                 onClick={() =>
                   setCreateAccountModalAction({
@@ -179,7 +179,7 @@ const CreateAccountModal = ({ state, actions }) => {
               >
                 <CloseIcon />
               </div>
-            ) : null}
+            )}
             <div
               className="primary-title"
               style={{
