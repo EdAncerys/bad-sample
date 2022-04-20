@@ -54,6 +54,7 @@ export const validateMembershipFormAction = async ({
 
     if (appType) {
       const applicationForm = membership.acf;
+      console.log("applicationForm", membership); // debug
       console.log("applicationForm", applicationForm); // debug
 
       Object.keys(applicationForm).map((keyName) => {
