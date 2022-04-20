@@ -62,7 +62,6 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     let iteration = 0;
     let data = Object.values(state.source.post);
     while (data.length === 0) {
-      console.log("🐞 FETCH POST DATA TRIGERED MENU");
       // if iteration is greater than 10, break
       if (iteration > 15) break;
       // set timeout for async
@@ -98,11 +97,12 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       data = data.slice(0, Number(post_limit)); // apply limit on posts
     }
 
-    setPostList(data);
     if (state.source.category) {
       const catList = Object.values(state.source.category);
       setCategoryList(catList);
     }
+
+    setPostList(data);
 
     return () => {
       searchFilterRef.current = ""; // clean up function
@@ -152,6 +152,11 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
         // check if category_filter array contains site_section ids
         return categories.some((item) => category_filter.includes(item));
       });
+    }
+
+    // if all filters are not applied, apply limit on posts
+    if (!newsMediaCategoryId && !searchValue && !dateValue && !yearValue) {
+      data = data.slice(0, Number(postChunkRef.current)); // apply limit on posts
     }
 
     setPostList(data); // set post data

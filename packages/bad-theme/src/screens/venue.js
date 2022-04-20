@@ -159,7 +159,7 @@ const Venue = ({ state, actions, libraries }) => {
         return (
           <div style={{ paddingTop: `1em` }}>
             <div className="flex primary-title" style={{ fontSize: 20 }}>
-              Address:
+              Home Address:
             </div>
 
             <div className="flex">

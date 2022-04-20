@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { connect } from "frontity";
-import { Modal } from "react-bootstrap";
 
+import { Modal } from "react-bootstrap";
+import Image from "@frontity/components/image";
 import { colors } from "../../config/imports";
-import Form from "./form";
-import ContactPreferences from "./contactPreferences";
-import FormSubmitted from "./formSubmitted";
+import BadBadgeLogo from "../../img/svg/badBadgeLogoPrimary.svg";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -14,113 +13,138 @@ import {
   setCreateAccountModalAction,
 } from "../../context";
 
-const loginModal = ({ state, actions }) => {
+const CreateAccountModal = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { createAccountAction } = useAppState();
   const data = state.source.get(state.router.link);
 
-  const [formComplete, setFormComplete] = useState(false);
-  const [formSubmitted, setFormSubmitted] = useState(false);
-
   // HANDLERS ----------------------------------------------------
-  const handleConfirmDetailsAction = () => {
-    const password = document.querySelector(`#password`).value;
-    const confirmPassword = document.querySelector(`#confirmPassword`).value;
-
-    const firstName = document.querySelector(`#firstName`).value;
-    const lastName = document.querySelector(`#lastName`).value;
-    const emailAddress = document.querySelector(`#emailAddress`).value;
-    const confirmEmailAddress =
-      document.querySelector(`#confirmEmailAddress`).value;
-
-    const agreeTermsAndConditions = document.querySelector(
-      "#agreeTermsAndConditions"
-    ).checked;
-    const agreeMarketing = document.querySelector("#agreeMarketing").checked;
-
-    const accountDetails = {
-      password,
-      confirmPassword,
-      firstName,
-      lastName,
-      emailAddress,
-      confirmEmailAddress,
-      agreeTermsAndConditions,
-      agreeMarketing,
-    };
-  };
 
   // SERVERS --------------------------------------------------
-  const ServeModalContent = () => {
-    if (formComplete) return null;
-    if (formSubmitted) return null;
-
-    const ServeFormInfo = () => {
-      return (
-        <div style={{ marginTop: `3em` }}>
-          <div className="mb-4">
-            <div>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </div>
+  const ServeFormInfo = () => {
+    return (
+      <div style={{ marginTop: `3em` }}>
+        <div className="flex-col">
+          <div className="primary-title" style={{ fontSize: 24 }}>
+            Welcome to the new BAD website logged in area. This is the BAD
+            account registration page.
           </div>
+          <div style={{ padding: "2em 0" }}>Dear User,</div>
           <div>
-            <div
-              value="Already a member? Login"
-              className="caps-btn"
-              onClick={() => {
-                setCreateAccountModalAction({
-                  dispatch,
-                  createAccountAction: false,
-                });
-                loginAction({ state });
-              }}
-            >
-              Already a member? Login
-            </div>
+            We are delighted to announce our new website is now live. To access
+            your existing account or to sign up as a new user please follow the
+            instructions below.
           </div>
         </div>
-      );
-    };
+      </div>
+    );
+  };
 
-    const ServeActions = () => {
-      return (
-        <Modal.Footer
-          style={{
-            borderTop: `1px solid ${colors.darkSilver}`,
-            marginTop: `2em`,
-          }}
+  const ServeExistingMembers = () => {
+    return (
+      <div className="flex-col">
+        <div
+          className="primary-title"
+          style={{ fontSize: 24, padding: "1em 0 0.5em 0" }}
         >
-          <div
-            className="transparent-btn"
-            onClick={() =>
-              setCreateAccountModalAction({
-                dispatch,
-                createAccountAction: false,
-              })
-            }
-          >
-            Back
-          </div>
+          Existing BAD User:
+        </div>
+        <div>
+          If you have already have a registered account with us and are an
+          existing user of the BAD website you will need to follow the link
+          below and press ‘Sign up now’. You will need to have access to the
+          email account registered with the BAD in order to receive the
+          verficiation code that will be sent to you.
+        </div>
+        <div
+          className="blue-btn"
+          style={{ margin: "1em 0", alignSelf: "flex-start" }}
+          onClick={() => loginAction({ state })}
+        >
+          Register
+        </div>
+      </div>
+    );
+  };
 
-          <div className="blue-btn" onClick={handleConfirmDetailsAction}>
-            Confirm
-          </div>
-        </Modal.Footer>
-      );
-    };
+  const ServeNewRegistrations = () => {
+    return (
+      <div className="flex-col">
+        <div
+          className="primary-title"
+          style={{ fontSize: 24, padding: "1em 0 0.5em 0" }}
+        >
+          New registration:
+        </div>
+        <div>
+          If you are new to the BAD and do not have an existing account and
+          would like to register with us so you can apply for BAD and Special
+          Interest Group membership, register for events, and much more, then
+          you can sign up here:
+        </div>
+        <div
+          className="blue-btn"
+          style={{ margin: "1em 0", alignSelf: "flex-start" }}
+          onClick={() => loginAction({ state })}
+        >
+          Create an account
+        </div>
+      </div>
+    );
+  };
 
+  const ServeLogin = () => {
+    return (
+      <div className="flex-col">
+        <div style={{ paddingTop: "1em" }}>
+          If you have already completed either of the steps above,
+        </div>
+        <div className="primary-title" style={{ fontSize: 24 }}>
+          Please log in here:
+        </div>
+        <div
+          className="blue-btn"
+          style={{ margin: "1em 0", alignSelf: "flex-start" }}
+          onClick={() => loginAction({ state })}
+        >
+          Login
+        </div>
+      </div>
+    );
+  };
+
+  const ServeActions = () => {
+    return (
+      <Modal.Footer
+        style={{
+          borderTop: `1px solid ${colors.darkSilver}`,
+          marginTop: `2em`,
+        }}
+      >
+        <div
+          className="blue-btn"
+          onClick={() =>
+            setCreateAccountModalAction({
+              dispatch,
+              createAccountAction: false,
+            })
+          }
+        >
+          Close
+        </div>
+      </Modal.Footer>
+    );
+  };
+
+  const ServeModalContent = () => {
     return (
       <div className="flex m-4" style={{ flex: 2, paddingRight: `2em` }}>
         <div className="flex-col">
           <Modal.Body style={{ padding: 0 }}>
             <ServeFormInfo />
-            <Form />
+            <ServeExistingMembers />
+            <ServeNewRegistrations />
+            <ServeLogin />
           </Modal.Body>
           <ServeActions />
         </div>
@@ -137,16 +161,36 @@ const loginModal = ({ state, actions }) => {
         }}
       >
         <Modal.Body>
-          <div
-            className="primary-title"
-            style={{
-              fontSize: 20,
-              borderBottom: `1px solid ${colors.darkSilver}`,
-              padding: `1em 1em 1em 0`,
-              margin: `3em 1em`,
-            }}
-          >
-            <div>Register with the BAD website</div>
+          <div className="flex-col">
+            <div
+              className="primary-title"
+              style={{
+                fontSize: 20,
+                borderBottom: `1px solid ${colors.darkSilver}`,
+                paddingBottom: `1em`,
+                margin: `3em 1em 2em 1em`,
+              }}
+            >
+              <div>Login / Register</div>
+            </div>
+            <div
+              style={{
+                width: 200,
+                height: 200,
+                overflow: "hidden",
+                margin: "auto",
+              }}
+            >
+              <Image
+                src={BadBadgeLogo}
+                alt="BAD"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+              />
+            </div>
           </div>
         </Modal.Body>
       </div>
@@ -160,15 +204,6 @@ const loginModal = ({ state, actions }) => {
         <div className="flex-row">
           <ServeModalInfo />
           <ServeModalContent />
-          <ContactPreferences
-            formComplete={formComplete}
-            setFormComplete={setFormComplete}
-            setFormSubmitted={setFormSubmitted}
-          />
-          <FormSubmitted
-            formSubmitted={formSubmitted}
-            setFormSubmitted={setFormSubmitted}
-          />
         </div>
       </Modal>
     </div>
@@ -179,4 +214,4 @@ const styles = {
   container: {},
 };
 
-export default connect(loginModal);
+export default connect(CreateAccountModal);

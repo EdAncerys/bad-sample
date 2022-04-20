@@ -33,6 +33,7 @@ export const initialState = {
   appSearchPhrase: "",
 
   applicationData: null,
+  redirects: null,
 
   loginModalAction: false,
   createAccountAction: false,
@@ -101,6 +102,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, ethnicity: action.payload };
     case "SET_DASHBOARD_NOTIFICATION_ACTION":
       return { ...state, isDashboardNotifications: action.payload };
+    case "SET_REDIRECT_ACTION":
+      return { ...state, redirects: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

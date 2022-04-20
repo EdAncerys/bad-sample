@@ -74,9 +74,12 @@ const NewsBlock = ({
     >
       {block.map((block, key) => {
         const { categories, link, title, featured_media, acf } = block;
-        // console.log("block", block); // debug
 
         const isECircular = categories.includes(eCircularCatId);
+        let redirectLink = link;
+        // if redirec_url is set, use it
+        if (acf.redirect_url) redirectLink = acf.redirect_url;
+
         let fileBlock = null;
         if (isECircular && acf.file_uploader) fileBlock = acf.file_uploader;
 
@@ -111,7 +114,7 @@ const NewsBlock = ({
             <Card
               key={key}
               link_label="Read More"
-              link={link}
+              link={redirectLink}
               newsAndMediaInfo={block}
               layout={layout}
               colour={colors.pink}
@@ -124,7 +127,7 @@ const NewsBlock = ({
             <Card
               key={key}
               link_label="Read More"
-              link={isECircular ? null : link}
+              link={isECircular ? null : redirectLink}
               newsAndMediaInfo={block}
               downloadFile={isECircular ? fileBlock : null} // download file passed link
               layout={layout}
@@ -145,7 +148,7 @@ const NewsBlock = ({
               <Card
                 key={key}
                 link_label="Read More"
-                link={link}
+                link={redirectLink}
                 newsAndMediaInfo={block}
                 padding="1.5em 3em"
                 layout={layout}
