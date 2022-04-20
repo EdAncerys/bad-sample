@@ -11,13 +11,14 @@ import {
   useAppState,
   loginAction,
   setCreateAccountModalAction,
+  muiQuery,
 } from "../../context";
 
 const CreateAccountModal = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { createAccountAction } = useAppState();
   const data = state.source.get(state.router.link);
-
+  const { lg } = muiQuery();
   // HANDLERS ----------------------------------------------------
 
   // SERVERS --------------------------------------------------
@@ -201,7 +202,7 @@ const CreateAccountModal = ({ state, actions }) => {
   return (
     <div>
       <Modal show={createAccountAction} size="xl" centered>
-        <div className="flex-row">
+        <div className={!lg ? "flex-row" : "flex-col"}>
           <ServeModalInfo />
           <ServeModalContent />
         </div>
