@@ -42,6 +42,7 @@ const BADTheme = {
       DYNAMICS_BRIDGE: process.env.DYNAMICS_BRIDGE,
       APP_URL: process.env.APP_URL, // app host url
       COOKIE_NAME: "BAD-WebApp", // gen App cooie name
+      AUTH_COOKIE: "BAD-AUTH", // gen App cooie name
       ENVIRONMENT: process.env.ENVIRONMENT,
     },
     contactList: {
@@ -69,9 +70,9 @@ const BADTheme = {
         ]);
 
         // ⬇️  get pils data
-        await getPILsDataAction({ state, actions });
+        // await getPILsDataAction({ state, actions });
         // ⬇️  get guidance data
-        await getGuidelinesDataAction({ state, actions });
+        // await getGuidelinesDataAction({ state, actions });
 
         // ⬇️ handle set cookie for video guide block. Silent auth login
         // https://www.skinhealthinfo.org.uk/support-resources/video-guides/

@@ -20,7 +20,7 @@ const CreateAccountModal = ({ state, actions }) => {
   const { createAccountAction } = useAppState();
   const data = state.source.get(state.router.link);
   const { lg } = muiQuery();
-  // HANDLERS ----------------------------------------------------
+  // HANDLERS -------------------------------------------------
 
   // SERVERS --------------------------------------------------
   const ServeFormInfo = () => {
