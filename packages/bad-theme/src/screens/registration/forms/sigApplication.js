@@ -354,7 +354,11 @@ const SIGApplication = ({ state, actions, libraries }) => {
     let isValid = true;
 
     required.map((input) => {
-      if (!formData[input] && inputValidator["sig_" + input]) {
+      let inputValue = input;
+      // 📌 add bad_ if input dont have it
+      if (!inputValue.includes("sig_")) inputValue = `sig_${input}`;
+
+      if (!formData[input] && inputValidator[inputValue]) {
         errorHandler({ id: `form-error-${input}` });
         isValid = false;
       }
@@ -387,7 +391,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
   const handleMemTypeChange = (e) => {
     const { name, value, type, checked } = e.target;
-    console.log("🐞 inputValidator", inputValidator);
 
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -427,8 +430,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
         "py3_gmcnumber",
         "bad_currentpost",
-        isNewHospital ? "sky_newhospitaltype" : null,
-        !isNewHospital ? "py3_hospitalid" : null,
+        isNewHospital ? "sky_newhospitaltype" : "",
+        !isNewHospital ? "py3_hospitalid" : "",
 
         "py3_title",
         "py3_firstname",
@@ -436,7 +439,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         "py3_gender",
         "py3_email",
         "py3_mobilephone",
-        isAddressInput ? null : "py3_address1ine1",
+        isAddressInput ? "" : "py3_address1ine1",
         "py3_addresstowncity",
         "py3_addresszippostalcode",
         "py3_addresscountry",
@@ -446,8 +449,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
       ],
     });
 
-    console.log("🐞 ", sigAppliaction); // debug
-    console.log("🐞 ", isValid); // debug
     if (!isValid) return null;
 
     try {
