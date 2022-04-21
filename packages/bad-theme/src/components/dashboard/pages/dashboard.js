@@ -294,13 +294,17 @@ const Dashboard = ({ state, actions, libraries }) => {
 
   if (dashboardPath !== "Dashboard") return null;
 
+  // 📌 If user dont have any subscription dont render the component
+  let isSubsData = subsData;
+  if (subsData && subsData.length === 0) isSubsData = null;
+
   // RETURN ---------------------------------------------
   return (
     <div style={{ padding: `0 ${marginHorizontal}px` }}>
       <div>
         <Profile />
         <ProfileProgress />
-        {subsData && (
+        {isSubsData && (
           <div style={{ position: "relative" }}>
             <ActionPlaceholder
               isFetching={isFetching}
@@ -464,7 +468,6 @@ const Dashboard = ({ state, actions, libraries }) => {
                             {bad_organisedfor}
                           </div>
                           <div>{core_name}</div>
-                          {/* <div>Application Date: {formattedDate}</div> */}
                         </div>
                         <ServeChangeApplicationAction />
                         <ServeMembershipActions />

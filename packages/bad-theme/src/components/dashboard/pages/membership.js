@@ -138,11 +138,16 @@ const Membership = ({ state, actions, libraries }) => {
   };
 
   if (dashboardPath !== "Membership") return null;
+
+  // 📌 If user dont have any subscription dont render the component
+  let isSubsData = subsData;
+  if (subsData && subsData.length === 0) isSubsData = null;
+
   // RETURN -----------------------------------------------------------------
   return (
     <div style={{ padding: `0 ${marginHorizontal}px` }}>
       <ProfileProgress />
-      {subsData && (
+      {isSubsData && (
         <div style={{ position: "relative" }}>
           <ActionPlaceholder isFetching={isFetching} background="transparent" />
           <div
