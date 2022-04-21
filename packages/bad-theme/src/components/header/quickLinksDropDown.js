@@ -31,14 +31,38 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
     if (btn) btn.classList.add = "shadow";
   };
 
-  const handelLogin = () => {
-    setErrorAction({ dispatch, isError: null });
-    loginAction({ state });
-  };
-
   const onClickLinkHandler = async ({ title, url }) => {
     const isWileys = title.includes("Journal");
+    const isvideos = title.includes("Video");
     let authLink = url;
+
+    // HANDLERS ----------------------------------------------------
+    const handelLogin = () => {
+      setErrorAction({ dispatch, isError: null });
+      loginAction({ state });
+    };
+
+    const handelRedirect = () => {
+      setErrorAction({ dispatch, isError: null });
+      setGoToAction({ state, path: authLink, actions });
+    };
+
+    // 📌 check if logged in user exists for Video library
+    if (isvideos && !isActiveUser) {
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Please log in to the BAD website in order to register for events`,
+          image: "Error",
+          action: [
+            { label: "Login", handler: handelLogin },
+            { label: "BAD Video Library", handler: handelRedirect },
+          ],
+        },
+      });
+
+      if (!isActiveUser) return;
+    }
 
     // 📌 check if logged in user exists & user is BAD member to replace auth link
     if (isWileys && isActiveUser) {
@@ -51,12 +75,6 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
         url,
       });
     }
-
-    // redirect handler
-    const handelRedirect = () => {
-      setErrorAction({ dispatch, isError: null });
-      setGoToAction({ state, path: authLink, actions });
-    };
 
     if (isWileys && !isActiveUser) {
       // 📌 track notification error action

@@ -21,12 +21,11 @@
 }
 
 .home-banner-carousel .carousel-control-prev {
-  left: calc(50% - 800px);
-  width: 220px;
+  /* left: calc(50% - 800px); */
+  min-width: 150px;
 }
 .home-banner-carousel .carousel-control-next {
-  right: calc(50% - 800px);
-  width: 220px;
+  min-width: 150px;
 }
 .home-banner-carousel .carousel-indicators [data-bs-target],
 .news-carousel .carousel-indicators [data-bs-target] {
