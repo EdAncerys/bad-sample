@@ -134,12 +134,8 @@ const Footer = ({ state, actions }) => {
             <ServeDivider />
           </div>
           <div className="footer-title-link" style={styles.footerLink}>
-            <Link
-              link={`https://skylarkcreative.co.uk/`}
-              target="_blank"
-              style={styles.footerLink}
-            >
-              Terms & Conditions
+            <Link link={`/legal/`} style={styles.footerLink}>
+              Legal
             </Link>
             <ServeDivider />
           </div>
