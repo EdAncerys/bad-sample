@@ -351,8 +351,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
         "bad_currentpost",
         isNewHospital ? "sky_newhospitaltype" : "",
         !isNewHospital ? "py3_hospitalid" : "",
-        "bad_proposer1",
-        "bad_proposer2",
       ],
     });
 
@@ -806,72 +804,17 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                   )}
                 </div>
 
-                {inputValidator.bad_proposer1 && (
-                  <div
-                    style={{
-                      padding: `1em 1em 2em 1em`,
-                      borderTop: `1px solid ${colors.silverFillTwo}`,
-                      borderBottom: `1px solid ${colors.silverFillTwo}`,
-                    }}
-                  >
-                    <label className="form-label">
-                      Proposers must be BAD Ordinary or Honorary Working members
-                    </label>
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: `repeat(2, 1fr)`,
-                        gap: 20,
-                      }}
-                    >
-                      {inputValidator.bad_proposer1 && (
-                        <div>
-                          <label className="required form-label">
-                            Proposer 1
-                          </label>
-                          <input
-                            name="bad_proposer1"
-                            value={formData.bad_proposer1}
-                            onChange={handleInputChange}
-                            type="text"
-                            className="form-control input"
-                            placeholder="Name"
-                          />
-                          <FormError id="bad_proposer1" />
-                        </div>
-                      )}
-
-                      {inputValidator.bad_proposer2 && (
-                        <div>
-                          <label className="required form-label">
-                            Proposer 2
-                          </label>
-                          <input
-                            name="bad_proposer2"
-                            value={formData.bad_proposer2}
-                            onChange={handleInputChange}
-                            type="text"
-                            className="form-control input"
-                            placeholder="Name"
-                          />
-                          <FormError id="bad_proposer2" />
-                        </div>
-                      )}
-                    </div>
-
-                    {inputValidator.bad_py3_currentgrade && (
-                      <div>
-                        <label className="form-label">Current Grade</label>
-                        <input
-                          name="py3_currentgrade"
-                          value={formData.py3_currentgrade}
-                          onChange={handleInputChange}
-                          type="text"
-                          className="form-control input"
-                          placeholder="Current Grade"
-                        />
-                      </div>
-                    )}
+                {inputValidator.bad_py3_currentgrade && (
+                  <div>
+                    <label className="form-label">Current Grade</label>
+                    <input
+                      name="py3_currentgrade"
+                      value={formData.py3_currentgrade}
+                      onChange={handleInputChange}
+                      type="text"
+                      className="form-control input"
+                      placeholder="Current Grade"
+                    />
                   </div>
                 )}
 
