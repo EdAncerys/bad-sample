@@ -98,11 +98,20 @@ const CreateAccountModal = ({ state, actions }) => {
   const ServeLogin = () => {
     return (
       <div className="flex-col">
-        <div style={{ paddingTop: "1em" }}>
-          If you have already completed either of the steps above,
+        <div
+          className="primary-title"
+          style={{ fontSize: 24, paddingTop: "1em" }}
+        >
+          Those with an existing BAD log in
         </div>
-        <div className="primary-title" style={{ fontSize: 24 }}>
-          Please log in here:
+        <div style={{ paddingTop: "1em" }}>
+          If you have already have a registered account with us and are an
+          existing user of the BAD website you will need to follow the
+          ‘register’ link below and then click ‘Sign up now’ on the following
+          screen. You will need to have access to the email account registered
+          with the BAD in order to receive the verification code that will be
+          sent to you. You will also be required to add a password – this can be
+          the same as before.
         </div>
         <div
           className="blue-btn"
@@ -147,8 +156,6 @@ const CreateAccountModal = ({ state, actions }) => {
         <div className="flex-col">
           <Modal.Body style={{ padding: 0 }}>
             <ServeFormInfo />
-            <ServeExistingMembers />
-            <ServeNewRegistrations />
             <ServeLogin />
           </Modal.Body>
           <ServeActions />
