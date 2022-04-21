@@ -182,13 +182,32 @@ export const getLeadershipTeamData = async ({ state, actions }) => {
   await actions.source.fetch(`/leadership_team/`); // fetch CPT leadershipTeam
   const leadershipTeam = state.source.get(`/leadership_team/`);
   const leadershipTeamNextPage = leadershipTeam.next; // check if leadershipTeam have multiple pages
+  let iteration = 0;
+  let data = null;
+  let dataLength = 0;
+  if (data) dataLength = Object.values(data).length;
+
   // fetch leadershipTeam via wp API page by page
   let isThereNextLeadershipPage = leadershipTeamNextPage;
   while (isThereNextLeadershipPage) {
+    // await for 500 ms to avoid wp api rate limit
     await actions.source.fetch(isThereNextLeadershipPage); // fetch next page
     const nextPage = state.source.get(isThereNextLeadershipPage).next; // check ifNext page & set next page
     isThereNextLeadershipPage = nextPage;
+    data = state.source.leadership_team;
   }
+  // if data is null loop with delay for 500 ms to avoid wp api rate limit
+  while (dataLength < 25 && iteration < 10) {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    data = state.source.leadership_team;
+    iteration++;
+  }
+
+  console.log("🐞 ", dataLength);
+  console.log("🐞 ", data);
+
+  return data;
 };
 
 export const getSIGGroupeData = async ({ state, actions }) => {

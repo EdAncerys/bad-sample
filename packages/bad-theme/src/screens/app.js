@@ -60,7 +60,6 @@ import {
   getWPMenu,
   setPlaceholderAction,
   setIdFilterAction,
-  getLeadershipTeamData,
   muiQuery,
 } from "../context";
 
@@ -101,14 +100,13 @@ const App = ({ state, actions }) => {
     await authCookieActionAfterCSR({ state, dispatch, refreshJWT });
     // ⬇️  pre-fetch app menu from wp
     await getWPMenu({ state, actions });
-    // ⬇️  get leadership data
-    await getLeadershipTeamData({ state, actions });
+
     // get current time & compare how long pre-fetch took before  setting placeholder
     const timeTaken = new Date().getTime() - currentTime;
     // 📌 if time taken is less than 3s await for remaining time before proceeding
     console.log("timeTaken", timeTaken); // debug
-    if (timeTaken < 3000) {
-      await new Promise((resolve) => setTimeout(resolve, 3000 - timeTaken));
+    if (timeTaken < 2000) {
+      await new Promise((resolve) => setTimeout(resolve, 2000 - timeTaken));
     }
     // ⬇️  set APP placeholder after async actions to false
     // if page path include codecollect, skip placeholder

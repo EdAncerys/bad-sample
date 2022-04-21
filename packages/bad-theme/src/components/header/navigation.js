@@ -53,7 +53,6 @@ const Navigation = ({ state, actions, libraries }) => {
     // 📌 set News & Media menu content form CPT
     let data = Object.values(state.source.post);
     while (data.length === 0) {
-      console.log("🐞 FETCH POST DATA TRIGERED MENU");
       // if iteration is greater than 10, break
       if (iteration > 15) break;
       // set timeout for async
@@ -62,6 +61,7 @@ const Navigation = ({ state, actions, libraries }) => {
       data = Object.values(state.source.post);
       iteration++;
     }
+
     if (state.source.category) {
       let catList = Object.values(state.source.category);
       // sort catList by name in alphabetical order
