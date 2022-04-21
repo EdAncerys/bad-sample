@@ -185,7 +185,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
           }}
         >
           <div className="flex-col">
-            <div>I am happy to receive:</div>
+            <div className="primary-title">I am happy to receive:</div>
             <div>
               <div className="flex-row" style={styles.wrapper}>
                 <input
@@ -263,7 +263,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
               </div>
             </div> */}
 
-            <div>Universal unsubscribe:</div>
+            <div className="primary-title">Universal unsubscribe:</div>
             <div>
               <div className="flex-row" style={styles.wrapper}>
                 <input
@@ -309,7 +309,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
 
 const styles = {
   textInfo: {
-    fontSize: 12,
+    fontSize: 16,
     paddingLeft: `1em`,
   },
   wrapper: {

@@ -4,6 +4,7 @@ import { connect } from "frontity";
 import { colors } from "../../config/imports";
 import { handleGetCookie } from "../../helpers/cookie";
 import PaymentModal from "./paymentModal";
+
 const PaymentNotification = ({
   state,
   actions,
@@ -18,7 +19,6 @@ const PaymentNotification = ({
   const marginVertical = state.theme.marginVertical;
 
   // HELPERS ----------------------------------------------------------------
-
   const handlePayment = async ({ sage_id }) => {
     const cookie = handleGetCookie({ name: `BAD-WebApp` });
     const { contactid, jwt } = cookie;
@@ -50,9 +50,11 @@ const PaymentNotification = ({
       setPaymentUrl(url);
     }
   };
+
   const resetPaymentUrl = () => {
     setPaymentUrl(null);
   };
+
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
     return (

@@ -57,6 +57,7 @@ const PaymentModal = ({ state, actions, payment_url, resetPaymentUrl }) => {
           display: "flex",
           justifyContent: "flex-end",
           cursor: "pointer",
+          padding: "2em 2em 1em 0",
         }}
       >
         <CloseIcon onClick={resetPaymentUrl} />

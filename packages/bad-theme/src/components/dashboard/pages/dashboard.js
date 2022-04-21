@@ -348,7 +348,9 @@ const Dashboard = ({ state, actions, libraries }) => {
                     core_name,
                     createdon,
                     core_membershipsubscriptionid,
+                    bad_sagepayid,
                   } = app;
+                  console.log("🐞 ", app);
                   // get application date
                   let appData = createdon.split(" ")[0];
                   // split string and revert date with month format
@@ -415,24 +417,26 @@ const Dashboard = ({ state, actions, libraries }) => {
                         </div>
                       );
 
-                    return (
-                      <div
-                        style={{
-                          display: "grid",
-                          alignItems: "center",
-                          marginRight: "2em",
-                        }}
-                      >
+                    // 📌 if app is approved & payed for only render the button
+                    if (bad_sagepayid)
+                      return (
                         <div
-                          className="blue-btn"
-                          onClick={() =>
-                            handleUpdateMembershipApplication({ app })
-                          }
+                          style={{
+                            display: "grid",
+                            alignItems: "center",
+                            marginRight: "2em",
+                          }}
                         >
-                          Apply for BAD category change
+                          <div
+                            className="blue-btn"
+                            onClick={() =>
+                              handleUpdateMembershipApplication({ app })
+                            }
+                          >
+                            Apply for BAD category change
+                          </div>
                         </div>
-                      </div>
-                    );
+                      );
                   };
 
                   const ServeMembershipActions = () => {
@@ -494,7 +498,7 @@ const Dashboard = ({ state, actions, libraries }) => {
             </div>
           </div>
         )}
-        <ServeApplicationStatus />
+        {/* <ServeApplicationStatus /> */}
         <ServePayments />
       </div>
       <ServeEvents />
