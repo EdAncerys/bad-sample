@@ -72,7 +72,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
 
   const ServeMaps = () => {
     return (
-      <div>
+      <div style={{ minHeight: !lg ? null : 300 }}>
         <MapsComponent
           zoom={15}
           center={{ lat: 51.52346281629359, lng: -0.13927725740945598 }}

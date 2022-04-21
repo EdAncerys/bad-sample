@@ -37,16 +37,25 @@ const DashboardNavigationMobile = ({ state, actions, libraries }) => {
           Membership
         </li>
         <li style={styles.listItem} onClick={(e) => handleNavigate({ e })}>
-          Directory
+          Members' Directory
         </li>
         <li style={styles.listItem} onClick={(e) => handleNavigate({ e })}>
-          My account
+          My Profile
         </li>
         <li style={styles.listItem} onClick={(e) => handleNavigate({ e })}>
           Billing
         </li>
         <li style={styles.listItem} onClick={(e) => handleNavigate({ e })}>
           Preferences
+        </li>
+        <li
+          style={styles.listItem}
+          onClick={(e) => {
+            handleNavigate({ e });
+            logoutAction({ state, dispatch, actions });
+          }}
+        >
+          Log Out
         </li>
       </ul>
     </div>

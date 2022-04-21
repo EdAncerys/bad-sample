@@ -308,6 +308,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
               style={{
                 width: !lg ? 385 : 60,
                 height: !lg ? 90 : 60,
+                marginLeft: !lg ? null : "1em",
                 cursor: "pointer",
               }}
               onClick={() => setGoToAction({ state, path: `/`, actions })}
