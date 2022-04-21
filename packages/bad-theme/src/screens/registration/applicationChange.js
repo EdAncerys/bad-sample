@@ -65,21 +65,21 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     bad_memberdirectory: "",
   });
   const [inputValidator, setInputValidator] = useState({
-    py3_gmcnumber: true,
-    py3_otherregulatorybodyreference: true,
-    py3_ntnno: true,
+    bad_py3_gmcnumber: true,
+    bad_py3_otherregulatorybodyreference: true,
+    bad_py3_ntnno: true,
     bad_currentpost: true,
-    py3_hospitalid: true,
+    bad_py3_hospitalid: true,
     bad_proposer1: true,
     bad_proposer2: true,
-    sky_cvurl: true,
-    py3_currentgrade: true,
-    sky_newhospitalname: true,
+    bad_sky_cvurl: true,
+    bad_py3_currentgrade: true,
+    bad_sky_newhospitalname: true,
     bad_newhospitaladded: true,
     bad_expectedyearofqualification: true,
-    py3_constitutionagreement: true,
+    bad_py3_constitutionagreement: true,
     bad_readpolicydocument: true,
-    sky_newhospitaltype: true,
+    bad_sky_newhospitaltype: true,
     bad_memberdirectory: true,
   });
   const [bodyCopy, setBodyCopy] = useState("");
@@ -326,7 +326,11 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     let isValid = true;
 
     required.map((input) => {
-      if (!formData[input] && inputValidator[input]) {
+      let inputValue = input;
+      // 📌 add bad_ if input dont have it
+      if (!inputValue.includes("bad_")) inputValue = `bad_${input}`;
+
+      if (!formData[input] && inputValidator[inputValue]) {
         errorHandler({ id: `form-error-${input}` });
         isValid = false;
       }
@@ -345,8 +349,8 @@ const ApplicationChange = ({ state, actions, libraries }) => {
         "py3_otherregulatorybodyreference",
         "py3_ntnno",
         "bad_currentpost",
-        isNewHospital ? "sky_newhospitaltype" : null,
-        !isNewHospital ? "py3_hospitalid" : null,
+        isNewHospital ? "sky_newhospitaltype" : "",
+        !isNewHospital ? "py3_hospitalid" : "",
         "bad_proposer1",
         "bad_proposer2",
       ],
@@ -443,13 +447,13 @@ const ApplicationChange = ({ state, actions, libraries }) => {
   };
 
   let isFormFooter =
-    inputValidator.py3_currentgrade ||
-    inputValidator.py3_constitutionagreement ||
+    inputValidator.bad_py3_currentgrade ||
+    inputValidator.bad_py3_constitutionagreement ||
     inputValidator.bad_readpolicydocument ||
-    inputValidator.sky_cvurl;
+    inputValidator.bad_sky_cvurl;
 
   let isAgreementForm =
-    inputValidator.py3_constitutionagreement ||
+    inputValidator.bad_py3_constitutionagreement ||
     inputValidator.bad_readpolicydocument ||
     inputValidator.bad_memberdirectory;
   isAgreementForm = false; // 📌 uncoment to enable agreement form
@@ -594,7 +598,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
 
               <form>
                 <div style={{ padding: !lg ? `2em 1em` : "1em" }}>
-                  {inputValidator.py3_gmcnumber && (
+                  {inputValidator.bad_py3_gmcnumber && (
                     <div>
                       <label className="required form-label">
                         GMC / IMC Number
@@ -611,7 +615,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                     </div>
                   )}
 
-                  {inputValidator.py3_otherregulatorybodyreference && (
+                  {inputValidator.bad_py3_otherregulatorybodyreference && (
                     <div>
                       <label className="required form-label">
                         Regulatory Body Registration Number
@@ -628,7 +632,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                     </div>
                   )}
 
-                  {inputValidator.py3_ntnno && (
+                  {inputValidator.bad_py3_ntnno && (
                     <div>
                       <label className="required form-label">NTN Number</label>
                       <input
@@ -661,7 +665,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                     </div>
                   )}
 
-                  {inputValidator.py3_hospitalid && (
+                  {inputValidator.bad_py3_hospitalid && (
                     <div>
                       <label className="form-label required">
                         Main Hospital / Place of Work / Medical School details
@@ -769,7 +773,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                   )}
 
                   {formData.bad_newhospitaladded &&
-                    inputValidator.sky_newhospitalname && (
+                    inputValidator.bad_sky_newhospitalname && (
                       <div>
                         <label className="form-label">New Hospital Name</label>
                         <input
@@ -855,7 +859,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                       )}
                     </div>
 
-                    {inputValidator.py3_currentgrade && (
+                    {inputValidator.bad_py3_currentgrade && (
                       <div>
                         <label className="form-label">Current Grade</label>
                         <input
@@ -892,7 +896,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                       </div>
                     )}
 
-                    {inputValidator.sky_cvurl && (
+                    {inputValidator.bad_sky_cvurl && (
                       <div>
                         <label className="form-label">Upload Your CV</label>
                         <input
@@ -942,7 +946,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                           </div>
                         )}
 
-                        {inputValidator.py3_constitutionagreement && (
+                        {inputValidator.bad_py3_constitutionagreement && (
                           <div>
                             <div
                               className="flex"
