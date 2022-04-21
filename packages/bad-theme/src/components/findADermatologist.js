@@ -409,8 +409,8 @@ const FindADermatologist = ({ state, block }) => {
                 <div style={{ padding: 10 }}>
                   <ServeAddress />
                   <ServeBiography />
-                  <ServeUrls />
                   <ServeShowOnMap />
+                  <ServeUrls />
                 </div>
               </div>
             </Card.Body>
