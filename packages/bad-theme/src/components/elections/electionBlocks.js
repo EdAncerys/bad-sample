@@ -468,8 +468,6 @@ const ElectionBlocks = ({ state, actions, block }) => {
                     isClosedPosition ? "Notify me when position is open" : cta
                   }
                   handler={() => handleContactForm({ isClosedPosition, block })}
-                  // form_label="Nomination Form"
-                  // form_link={isClosedPosition ? null : nomination_form_upload}
                   downloadFile={
                     !isClosedPosition
                       ? {
@@ -488,6 +486,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
                   opacity={isClosedPosition ? 0.7 : null}
                   bodyLimit={4}
                   shadow
+                  isElectionBlock // 📌 disable file download on click action
                 />
               </div>
             </div>

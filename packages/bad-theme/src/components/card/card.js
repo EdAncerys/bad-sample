@@ -95,6 +95,7 @@ const Card = ({
   disableCardAnimation,
   delay,
   animationType,
+  isElectionBlock,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
@@ -188,7 +189,8 @@ const Card = ({
       });
       return;
     }
-    setGoToAction({ state, path: link || authLink, actions, downloadFile });
+    if (!isElectionBlock)
+      setGoToAction({ state, path: link || authLink, actions, downloadFile });
   };
 
   // SERVERS ----------------------------------------------
