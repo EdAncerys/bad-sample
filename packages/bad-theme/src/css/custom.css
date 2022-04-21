@@ -41,6 +41,14 @@
   object-fit: contain;
   padding: 2em;
 }
+.accordion-content span {
+  padding-bottom: 0;
+  display: grid;
+  justify-content: center;
+}
+.accordion-content img {
+  position: relative !important;
+}
 /* card component animations */
 .card-wrapper {
   cursor: pointer;

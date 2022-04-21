@@ -691,7 +691,7 @@ const AccordionBody = ({
   return (
     <div id={`accordion-body-${uniqueId}`}>
       <div
-        className="accordion-body"
+        className="accordion-body accordion-content"
         style={{ margin: `0 1.25em`, padding: `1em 0` }}
       >
         <ServeBody />
