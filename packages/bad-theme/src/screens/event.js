@@ -19,6 +19,7 @@ import {
   setGoToAction,
   muiQuery,
   useAppState,
+  setErrorAction,
 } from "../context";
 import { getEventsData } from "../helpers";
 
@@ -131,7 +132,10 @@ const Event = ({ state, actions, libraries }) => {
   const { title, id } = event;
   // console.log("event", event); // debug
   if (!position) return <Loading />;
-
+  const handleLogin = () => {
+    setErrorAction({ dispatch, isError: null });
+    loginAction({ state });
+  };
   // SERVERS ----------------------------------------------
   const ServeTitle = () => {
     if (!title) return null;
@@ -321,6 +325,17 @@ const Event = ({ state, actions, libraries }) => {
     };
 
     const handleRegistrationClick = () => {
+      if (!isActiveUser) {
+        setErrorAction({
+          dispatch,
+          isError: {
+            message: `Please log in to the BAD website in order to register for this event`,
+            image: "Error",
+            action: [{ label: "Login", handler: handleLogin }],
+          },
+        });
+        return;
+      }
       if (
         registration_type === "events_force" ||
         registration_type === "external"

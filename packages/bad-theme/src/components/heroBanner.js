@@ -116,6 +116,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
             className="d-flex justify-content-center"
             style={{
               marginTop: "-20%",
+              marginBottom: !lg ? null : "10%",
             }}
           >
             <Card
