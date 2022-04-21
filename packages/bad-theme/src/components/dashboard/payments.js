@@ -141,17 +141,15 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       const ServePaymentStatus = () => {
         if (!bad_sagepayid) return null;
         if (lg && bad_sagepayid) return "Status: paid";
-        if (bad_sagepayid) return "Paid";
+        if (bad_sagepayid)
+          return <div style={{ textAlign: "center", minWidth: 145 }}>Paid</div>;
       };
 
       return (
-        <div
-          style={{
-            margin: `auto 0`,
-            width: !lg ? marginHorizontal * 2 : "auto",
-          }}
-        >
-          <div style={{ padding: !lg ? `0 2em` : 0 }}>
+        <div style={{ margin: `auto 0` }}>
+          <div
+            style={{ width: "fit-content", marginLeft: "4em", minWidth: 145 }}
+          >
             <ServePayButton />
             <ServePaymentStatus />
           </div>
@@ -167,8 +165,6 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       if (type === "subscriptions")
         paymentLength = liveSubscriptions.subs.data.length;
       const isLastItem = paymentLength === item + 1;
-      console.log("🐞 ", liveSubscriptions);
-      console.log("🐞 item", item);
 
       return (
         <div
@@ -178,7 +174,6 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
               ? `1px solid ${colors.darkSilver}`
               : "none",
             padding: !lg ? `1em` : 0,
-            paddingTop: !lg ? null : "1em",
           }}
         >
           <div className="flex" style={styles.fontSize}>
