@@ -304,7 +304,7 @@ const Dashboard = ({ state, actions, libraries }) => {
       <div>
         <Profile />
         <ProfileProgress />
-        {isSubsData && (
+        {subsData && (
           <div style={{ position: "relative" }}>
             <ActionPlaceholder
               isFetching={isFetching}
@@ -327,6 +327,21 @@ const Dashboard = ({ state, actions, libraries }) => {
                 >
                   Current Subscriptions
                 </div>
+
+                {!isSubsData && (
+                  <div
+                    className="primary-title"
+                    style={{
+                      fontWeight: "bold",
+                      display: "grid",
+                      alignItems: "center",
+                      paddingTop: "1em",
+                    }}
+                  >
+                    You have no current membership activity.
+                  </div>
+                )}
+
                 {subsData.map((app, key) => {
                   const {
                     bad_organisedfor,

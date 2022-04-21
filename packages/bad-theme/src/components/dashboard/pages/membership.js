@@ -147,7 +147,7 @@ const Membership = ({ state, actions, libraries }) => {
   return (
     <div style={{ padding: `0 ${marginHorizontal}px` }}>
       <ProfileProgress />
-      {isSubsData && (
+      {subsData && (
         <div style={{ position: "relative" }}>
           <ActionPlaceholder isFetching={isFetching} background="transparent" />
           <div
@@ -167,6 +167,20 @@ const Membership = ({ state, actions, libraries }) => {
               >
                 Current Subscriptions
               </div>
+
+              {!isSubsData && (
+                <div
+                  className="primary-title"
+                  style={{
+                    fontWeight: "bold",
+                    display: "grid",
+                    alignItems: "center",
+                    paddingTop: "1em",
+                  }}
+                >
+                  You have no current membership activity.
+                </div>
+              )}
 
               {subsData.map((app, key) => {
                 console.log("🐞 application Data ", app);
