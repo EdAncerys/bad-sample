@@ -204,9 +204,6 @@ export const getLeadershipTeamData = async ({ state, actions }) => {
     iteration++;
   }
 
-  console.log("🐞 ", dataLength);
-  console.log("🐞 ", data);
-
   return data;
 };
 

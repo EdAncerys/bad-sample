@@ -511,6 +511,15 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
 
+    // handle BAD member question
+    if (name === "bad_isbadmember") {
+      let isBadMember = value === "true" ? true : false;
+      return setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: isBadMember,
+      }));
+    }
+
     // if input value py3_insertnhsnetemailaddress in wp set to show proceed
     if (
       name === "bad_includeinthebssciiemaildiscussionforum" &&
@@ -1176,13 +1185,18 @@ const SIGApplication = ({ state, actions, libraries }) => {
           {inputValidator.sig_bad_isbadmember && (
             <div className="flex-col">
               <label className="form-label">Are you BAD member?</label>
-              <input
+              <Form.Select
                 name="bad_isbadmember"
-                checked={formData.bad_isbadmember}
+                value={formData.bad_isbadmember}
                 onChange={handleInputChange}
-                type="checkbox"
-                className="form-check-input check-box"
-              />
+                className="input"
+              >
+                <option value="" hidden>
+                  Yes, No
+                </option>
+                <option value={true}>Yes</option>
+                <option value={false}>No</option>
+              </Form.Select>
             </div>
           )}
 
