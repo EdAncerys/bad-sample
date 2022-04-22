@@ -161,6 +161,7 @@ const FindDermatologistOptions = ({ state }) => {
     }));
   };
 
+  // 📌 hide component if user is not a member
   if (!findDerm) return null;
 
   return (
