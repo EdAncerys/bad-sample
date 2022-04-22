@@ -269,7 +269,6 @@ const Card = ({
     if (!videoArchive) return null;
     if (!url) return null;
     const [vimeoCover, setVimeoCover] = useState(defaultVideoCover);
-    const alt = title || "BAD";
 
     let STYLES = { minHeight: 200, maxHeight: 300 };
     if (imgHeight) STYLES = { height: imgHeight };
@@ -307,7 +306,6 @@ const Card = ({
         >
           <PlayCircleOutlineIcon
             sx={{ fontSize: 80 }}
-            onClick={() => setLoadVideo(true)}
             style={{ cursor: "pointer" }}
           />
         </div>
