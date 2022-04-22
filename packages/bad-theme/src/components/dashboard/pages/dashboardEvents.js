@@ -8,6 +8,7 @@ import Loading from "../../loading";
 import Card from "../../card/card";
 import BlockWrapper from "../../blockWrapper";
 import { getEventsData } from "../../../helpers";
+import EventListView from "../../eventListView";
 
 // CONTEXT ------------------------------------------------------------------
 import {
@@ -15,6 +16,7 @@ import {
   useAppDispatch,
   authenticateAppAction,
   muiQuery,
+  setGoToAction,
 } from "../../../context";
 
 const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
@@ -22,23 +24,21 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
   const { dashboardPath, isActiveUser, refreshJWT } = useAppState();
   const { lg } = muiQuery();
   const [listOfEvents, setListOfEvents] = useState();
-  const [eventList, setEventList] = useState(null); // event data
+  const [eventList, setEventList] = useState([]); // event data
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
   const DEFAULT_IMAGE = `https://cdn.bad.org.uk/uploads/2022/03/29195958/EVENTS.jpg`;
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
-    if (dashboardPath !== "Events") return null;
-
     try {
       // pre fetch events data
       let data = state.source.events;
       if (!data) await getEventsData({ state, actions });
-      console.log("🐞 ", data);
       // throw exception if no events
       if (!data) throw new Error("Faild to fetch events data");
       data = state.source.events;
+      console.log("🐞  TEST_DATA", data);
       if (data) data = Object.values(data);
       // 📌 sort events by date newest first
       data.sort((a, b) => {
@@ -79,11 +79,10 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
         return 0;
       });
 
-      const events = data.slice(0, 2);
+      const events = data.slice(0, 4);
       setEventList(events);
 
       if (!isActiveUser) return null;
-
       const { contactid } = isActiveUser;
       const jwt = await authenticateAppAction({ dispatch, refreshJWT, state });
       const fetchUserEvents = await fetch(
@@ -116,83 +115,153 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
     return () => {
       useEffectRef.current = ""; // clean up function
     };
-  }, [isActiveUser, dashboardPath]);
+  }, [isActiveUser, state.source.events]);
 
   if (dashboardPath !== "Events") return null;
-  if (!listOfEvents || !isActiveUser) return <Loading />;
 
-  // RETURN ---------------------------------------------
-  return (
-    <div>
-      <TitleBlock
-        block={{ text_align: "left", title: "Events I Am Registered For" }}
-      />
-      <BlockWrapper>
+  // SERVERS --------------------------------------------
+  const ServeRegisteredEvents = () => {
+    if (!listOfEvents || !isActiveUser) return <Loading />;
+
+    return (
+      <div>
+        <TitleBlock
+          block={{ text_align: "left", title: "Events I Am Registered For" }}
+        />
+        <BlockWrapper>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: `1fr`,
+              padding: `0 ${marginHorizontal}px`,
+            }}
+          >
+            {listOfEvents.length > 0 &&
+              listOfEvents.map((block, key) => {
+                return (
+                  // <Card
+                  //   key={key}
+                  //   title={block.title.rendered}
+                  //   url={item.acf.image || DEFAULT_IMAGE}
+                  //   imgHeight={200}
+                  //   link_label="Go to the event's page"
+                  //   link={block.acf.registration_page_link}
+                  //   date={block.acf.date_time}
+                  //   seatNumber="seatNumber"
+                  //   cardHeight="100%"
+                  //   shadow
+                  // />
+
+                  <div
+                    key={key}
+                    data-aos="fade"
+                    data-aos-easing="ease-in-sine"
+                    data-aos-delay={`${key * 50}`}
+                    data-aos-duration="1000"
+                    data-aos-offset="-120"
+                  >
+                    <EventListView block={block} />
+                  </div>
+                );
+              })}
+
+            {listOfEvents.length === 0 && (
+              <div
+                style={{
+                  display: "flex-col",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                  padding: `0 1em`,
+                }}
+              >
+                <div>
+                  Events you are registered for will only appear here if you
+                  have registered using the same email address that is
+                  associated with your BAD / SIG membership account. Events
+                  hosted by external parties may not appear here.
+                </div>
+                <div>
+                  You are not currently registered for any events. View our
+                  <span
+                    className="caps-btn"
+                    style={{ padding: "0 0.5em" }}
+                    onClick={() =>
+                      setGoToAction({
+                        state,
+                        path: "/events-content/",
+                        actions,
+                      })
+                    }
+                  >
+                    Events Calendar
+                  </span>
+                  here.
+                </div>
+              </div>
+            )}
+          </div>
+        </BlockWrapper>
+      </div>
+    );
+  };
+
+  const ServeDashEvents = () => {
+    console.log("🐞 eventList", eventList);
+    if (eventList.length === 0) return null;
+
+    return (
+      <div
+        style={{
+          paddingTop: `${marginVertical}px`,
+        }}
+      >
+        <TitleBlock
+          block={{
+            text_align: "left",
+            title: "Upcoming Events",
+            disable_vertical_padding: true,
+          }}
+        />
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: !lg ? "1fr 1fr" : `1fr`,
+            gridTemplateColumns: !lg ? `repeat(4, 1fr)` : `1fr`, // layout settings
             gap: 20,
             padding: `${marginVertical}px ${marginHorizontal}px`,
           }}
         >
-          {listOfEvents.length > 0
-            ? listOfEvents.map((item, key) => {
-                return (
-                  <Card
-                    key={key}
-                    title={item.title.rendered}
-                    url={item.acf.image || DEFAULT_IMAGE}
-                    imgHeight={200}
-                    link_label="Go to the event's page"
-                    link={item.acf.registration_page_link}
-                    date={item.acf.date_time}
-                    seatNumber="seatNumber"
-                    cardHeight="100%"
-                    shadow
-                  />
-                );
-              })
-            : "You are not registered for any events"}
-        </div>
-      </BlockWrapper>
-      <TitleBlock
-        block={{
-          text_align: "left",
-          title: "Upcoming Events",
-          disable_vertical_padding: true,
-        }}
-      />
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: !lg ? `repeat(2, 1fr)` : `1fr`,
-          gap: 20,
-          padding: `${marginVertical}px ${marginHorizontal}px`,
-        }}
-      >
-        {eventList.map((block, key) => {
-          const title = block.title.rendered;
-          const { date_time, image } = block.acf;
+          {eventList.map((block, key) => {
+            const title = block.title.rendered;
+            const { date_time, image } = block.acf;
 
-          return (
-            <Card
-              key={key}
-              title={title}
-              url={image}
-              imgHeight={200}
-              link_label="Read More"
-              link={block.link}
-              colour={colors.turquoise}
-              date={date_time}
-              delay={key}
-              seatNumber="seatNumber"
-              cardHeight="100%"
-              shadow
-            />
-          );
-        })}
+            return (
+              <Card
+                key={key}
+                title={title}
+                // url={image}
+                // imgHeight={200}
+                link_label="Read More"
+                link={block.link}
+                colour={colors.turquoise}
+                date={date_time}
+                delay={key}
+                seatNumber="seatNumber"
+                cardHeight="100%"
+                shadow
+              />
+            );
+          })}
+        </div>
       </div>
+    );
+  };
+
+  // RETURN ---------------------------------------------
+  return (
+    <div>
+      <ServeRegisteredEvents />
+      <ServeDashEvents />
     </div>
   );
 };

@@ -50,6 +50,7 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
         refreshJWT,
       });
 
+    if (!isDirectDebit) return null;
     // if direct status is status is Active, set debit setup to true
     let debitStatus = isDirectDebit.filter(
       (debit) => debit.statecode === "Active"
