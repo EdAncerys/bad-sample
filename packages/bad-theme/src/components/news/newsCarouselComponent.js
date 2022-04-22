@@ -116,10 +116,6 @@ const NewsCarouselComponent = ({
     );
   };
 
-  // cardHeight="90%"
-  // cardHeight={BANNER_HEIGHT}
-  //
-
   const ServeSingleCardCarousel = () => {
     if (!md) return null;
 

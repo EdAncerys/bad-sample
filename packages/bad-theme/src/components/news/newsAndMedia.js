@@ -27,7 +27,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const dispatch = useAppDispatch();
-  const { newsMediaCategoryId } = useAppState();
+  const { newsMediaCategoryId, isActiveUser, dynamicsApps } = useAppState();
 
   if (!block) return <Loading />;
 
@@ -49,6 +49,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   const [searchValue, setSearchValue] = useState("");
   const [dateValue, setDateValue] = useState("");
   const [yearValue, setYearValue] = useState("");
+  const [hasPermission, setPermission] = useState(false);
 
   const searchFilterRef = useRef("");
   const postChunkRef = useRef(Number(post_limit) || 8);
@@ -91,26 +92,100 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
         return categories.some((item) => category_filter.includes(item));
       });
     }
-    // apply sort by date functionality
-    data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
-    if (post_limit && Number(post_limit) !== 0) {
-      data = data.slice(0, Number(post_limit)); // apply limit on posts
-    }
 
-    if (state.source.category) {
-      const catList = Object.values(state.source.category);
-      setCategoryList(catList);
-    }
+    let categoryList = [];
+    if (state.source.category)
+      categoryList = Object.values(state.source.category);
+
+    // apply sort by date functionality & apply limit
+    data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     setPostList(data);
+    setCategoryList(categoryList);
 
     return () => {
       searchFilterRef.current = ""; // clean up function
     };
-  }, []);
+  }, [isActiveUser]);
+
+  useEffect(() => {
+    if (!postList) return null;
+
+    let data = Object.values(state.source.post);
+    let hasPermission = false;
+    // 📌 check if user has permission to view news & media
+    if (dynamicsApps) {
+      // chewck if user have BAD memberships & membership have sage payId is persent
+      const hasBADMembership = dynamicsApps.subs.data.filter(
+        (item) => item.bad_organisedfor === "BAD" && item.bad_sagepayid
+      );
+      if (hasBADMembership.length > 0 && isActiveUser) hasPermission = true;
+    }
+
+    setPermission(hasPermission);
+
+    // 📌 apply permision filters
+    if (!hasPermission && categoryList) {
+      let membersOnly = ["circular", "newsletter", "bulletin"];
+      // get id of all categories that include members only
+      let membersOnlyList = categoryList.filter((item) => {
+        const catName = item.name.toLowerCase();
+        let isMemberOnly = false;
+
+        membersOnly.forEach((item) => {
+          if (catName.includes(item)) isMemberOnly = true;
+        });
+
+        if (isMemberOnly) return item.id;
+      });
+
+      data = data.filter((post) => {
+        let categories = post.categories;
+        let isMemberOnly = false;
+        // map threach membersOnlyList and check if id is present in categories
+        membersOnlyList.forEach((item) => {
+          if (categories.includes(item.id)) isMemberOnly = true;
+        });
+
+        return !isMemberOnly;
+      });
+    }
+
+    if (post_limit && Number(post_limit) !== 0) {
+      data = data.slice(0, Number(post_limit)); // apply limit on posts
+    }
+    setPostList(data);
+  }, [categoryList, isActiveUser]);
 
   useEffect(() => {
     let data = Object.values(state.source.post);
+    // 📌 apply permision filters
+    if (!hasPermission && categoryList) {
+      let membersOnly = ["circular", "newsletter", "bulletin"];
+      // get id of all categories that include members only
+      let membersOnlyList = categoryList.filter((item) => {
+        const catName = item.name.toLowerCase();
+        let isMemberOnly = false;
+
+        membersOnly.forEach((item) => {
+          if (catName.includes(item)) isMemberOnly = true;
+        });
+
+        if (isMemberOnly) return item.id;
+      });
+
+      data = data.filter((post) => {
+        let categories = post.categories;
+        let isMemberOnly = false;
+        // map threach membersOnlyList and check if id is present in categories
+        membersOnlyList.forEach((item) => {
+          if (categories.includes(item.id)) isMemberOnly = true;
+        });
+
+        return !isMemberOnly;
+      });
+    }
+
     // apply sort by date functionality
     data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
 
@@ -169,6 +244,32 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   // HELPERS ----------------------------------------------------------------
   const handleLoadMoreFilter = () => {
     let data = Object.values(state.source.post); // add postList object to data array
+    // 📌 apply permision filters
+    if (!hasPermission && categoryList) {
+      let membersOnly = ["circular", "newsletter", "bulletin"];
+      // get id of all categories that include members only
+      let membersOnlyList = categoryList.filter((item) => {
+        const catName = item.name.toLowerCase();
+        let isMemberOnly = false;
+
+        membersOnly.forEach((item) => {
+          if (catName.includes(item)) isMemberOnly = true;
+        });
+
+        if (isMemberOnly) return item.id;
+      });
+
+      data = data.filter((post) => {
+        let categories = post.categories;
+        let isMemberOnly = false;
+        // map threach membersOnlyList and check if id is present in categories
+        membersOnlyList.forEach((item) => {
+          if (categories.includes(item.id)) isMemberOnly = true;
+        });
+
+        return !isMemberOnly;
+      });
+    }
 
     // apply sort by date functionality
     data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -223,6 +324,13 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
               Category
             </option>
             {categoryList.map((item, key) => {
+              // check if name includes circular newsletters bulletin
+              let membersOnly = ["circular", "newsletter", "bulletin"].some(
+                (word) => item.name.toLowerCase().includes(word)
+              );
+              // 📌 if user has permission to view news & media
+              if (membersOnly && !hasPermission) return null;
+
               return (
                 <option key={key} value={item.id}>
                   {parse(item.name)}
@@ -470,12 +578,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       }}
     >
       <BlockWrapper>
-        <TitleBlock
-          block={block}
-          margin={{
-            marginBottom: `${has_search ? 0 : state.theme.marginVertical}px`,
-          }}
-        />
+        <TitleBlock block={block} margin={has_search ? 0 : `0 0 1em 0`} />
       </BlockWrapper>
       <ServeFilter />
       <BlockWrapper>
