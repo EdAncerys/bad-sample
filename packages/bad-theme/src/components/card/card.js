@@ -268,6 +268,7 @@ const Card = ({
   const ServeVideoCover = () => {
     if (!videoArchive) return null;
     if (!url) return null;
+
     const [vimeoCover, setVimeoCover] = useState(defaultVideoCover);
 
     let STYLES = { minHeight: 200, maxHeight: 300 };

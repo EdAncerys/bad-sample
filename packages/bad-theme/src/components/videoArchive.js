@@ -39,13 +39,6 @@ const VideoArchive = ({ state, actions, libraries }) => {
       return true;
     }
 
-    // if(showOnlyMyVids.current === true){
-    //   const vids = [];
-
-    //   unfilteredVideos.map(vid => {
-    //     if(vid.acf.event_id)
-    //   })
-    // }
     const filteredVideos = unfilteredVideos.filter((video) => {
       if (
         specialtyFilter.current &&

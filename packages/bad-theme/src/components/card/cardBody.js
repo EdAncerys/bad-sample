@@ -48,16 +48,27 @@ const CardBody = ({
 
     const ServePaidIcon = () => {
       if (!videoArchive || !videoArchive.acf) return null;
+      let price = videoArchive.acf.price;
+
       if (videoArchive.acf.private && videoArchive.acf.price)
         return (
-          <svg width="25" height="25" style={{ color: "red", marginLeft: 10 }}>
-            <image
-              href={PoundSterling}
-              src="yourfallback.png"
-              width="25"
-              height="25"
-            />
-          </svg>
+          <div>
+            <div className="flex">
+              <div>{price}</div>
+              <svg
+                width="25"
+                height="25"
+                style={{ color: "red", marginLeft: 5 }}
+              >
+                <image
+                  href={PoundSterling}
+                  src="yourfallback.png"
+                  width="25"
+                  height="25"
+                />
+              </svg>
+            </div>
+          </div>
         );
       return null;
     };

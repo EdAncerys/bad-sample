@@ -11,6 +11,9 @@ import defaultCover from "../img/png/video_default.jpg";
 import { handleGetCookie } from "../helpers/cookie";
 import PaymentModal from "./dashboard/paymentModal";
 
+import date from "date-and-time";
+const DATE_MODULE = date;
+
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppState,
@@ -18,6 +21,7 @@ import {
   authenticateAppAction,
   setEnquireAction,
   muiQuery,
+  setCreateAccountModalAction,
 } from "../context";
 
 const Video = ({ state, actions, libraries }) => {
@@ -26,22 +30,24 @@ const Video = ({ state, actions, libraries }) => {
   const [videoStatus, setVideoStatus] = React.useState("");
   const [paymentUrl, setPaymentUrl] = React.useState("");
   const [relatedVideos, setRelatedVideos] = React.useState(null);
+
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
   // console.log("post data: ", post); // debug
+
   const { lg } = muiQuery();
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
   const { isActiveUser, refreshJWT } = useAppState();
-  console.log("USERO", isActiveUser);
+
   React.useEffect(async () => {
     //Not the greatest idea to make useEffect async
     await actions.source.fetch("/videos/");
     const all_videos = state.source.videos;
     const videos_list = await Object.values(all_videos);
     const related_videos_to_show = videos_list.slice(0, 3);
-    console.log("FELICITA", related_videos_to_show);
+
     setRelatedVideos(related_videos_to_show);
     const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
@@ -60,11 +66,13 @@ const Video = ({ state, actions, libraries }) => {
         isActiveUser.contactid +
         "/" +
         post.acf.event_id;
+
       const fetching = await fetch(url, {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
       });
+
       if (fetching.ok) {
         const json = await fetching.json();
         if (json.success === false) setVideoStatus("locked");
@@ -82,20 +90,16 @@ const Video = ({ state, actions, libraries }) => {
   if (!videoStatus) return <Loading />;
   if (!state.source.videos) return <Loading />;
 
-  // HELPERS
+  // HELPERS ----------------------------------------------------------------
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+
   const handlePayment = async () => {
     const cookie = handleGetCookie({ name: `BAD-WebApp` });
     const { contactid, jwt } = cookie;
-    const sagepay_url =
-      state.auth.ENVIRONMENT === "DEVELOPMENT"
-        ? "/sagepay/live/video/"
-        : "/sagepay/live/video/";
-    const the_url =
-      state.auth.ENVIRONMENT === "DEVELOPMENT"
-        ? "http://localhost:3000/"
-        : state.auth.APP_URL;
+
+    const sagepay_url = "/sagepay/live/video/";
+    const url = state.auth.APP_URL;
 
     const fetchVendorId = await fetch(
       state.auth.APP_HOST +
@@ -105,7 +109,7 @@ const Video = ({ state, actions, libraries }) => {
         post.acf.event_id +
         "/" +
         post.acf.price +
-        `?redirecturl=${the_url}/payment-confirmation`,
+        `?redirecturl=${url}/payment-confirmation`,
       {
         method: "POST",
         headers: {
@@ -148,7 +152,6 @@ const Video = ({ state, actions, libraries }) => {
         );
         if (fetchVideoData.ok) {
           const json = await fetchVideoData.json();
-          console.log(json[0].thumbnail_medium);
           setVideoCover(json[0].thumbnail_large);
         }
       };
@@ -160,6 +163,7 @@ const Video = ({ state, actions, libraries }) => {
       return (
         <div style={{ position: "relative" }}>
           <Image src={videoCover} alt="Submit" style={{ width: "100%" }} />
+
           <div
             style={{
               position: "absolute",
@@ -198,23 +202,30 @@ const Video = ({ state, actions, libraries }) => {
     };
 
     const ServeDateAndPrice = () => {
+      const dateObject = new Date(post.date);
+      const formattedDate = DATE_MODULE.format(dateObject, "MMMM YYYY");
+
       const ServePrice = () => {
-        if (!videoStatus || !isActiveUser)
+        if (!isActiveUser)
           return (
             <div>
               <div
-                className="primary-title"
-                style={{ fontSize: 20, display: "flex", alignItems: "center" }}
+                className="blue-btn"
+                onClick={() =>
+                  setCreateAccountModalAction({
+                    dispatch,
+                    createAccountAction: true,
+                  })
+                }
               >
-                {post.acf.private ? "Login to watch or buy" : "Free to watch"}
+                Login to purchace or whatch this video
               </div>
-              {post.acf.private && `£${post.acf.price}`}
             </div>
           );
 
         if (isActiveUser && post.acf.private && videoStatus === "locked")
           return (
-            <div className="blue-btn" onClick={() => handlePayment()}>
+            <div className="blue-btn" onClick={handlePayment}>
               Buy for £{post.acf.price}
             </div>
           );
@@ -251,7 +262,10 @@ const Video = ({ state, actions, libraries }) => {
           }}
         >
           <ServePrice />
-          <p>Published 12.04.2022</p>
+          <div>
+            <span className="primary-title">Published: </span>
+            {formattedDate}
+          </div>
         </div>
       );
     };
