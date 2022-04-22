@@ -168,6 +168,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
           <BlockWrapper>
             {!lg ? <DashboardNavigation /> : <DashboardNavigationMobile />}
             <DashboardNotifications />
+
             <Dashboard />
             <DashboardEvents />
             <Membership />

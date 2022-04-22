@@ -133,7 +133,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
       setErrorAction({
         dispatch,
         isError: {
-          message: `Your have successfully submitted your enquire. We will be in touch soon.`,
+          message: `Your have successfully submitted your enquiry. We will be in touch soon.`,
         },
       });
     }
