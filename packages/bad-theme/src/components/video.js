@@ -99,24 +99,26 @@ const Video = ({ state, actions, libraries }) => {
     const { contactid, jwt } = cookie;
 
     const sagepay_url = "/sagepay/live/video/";
-    const url = state.auth.APP_URL;
-
-    const fetchVendorId = await fetch(
+    const uappUrl = state.auth.APP_URL;
+    const url =
       state.auth.APP_HOST +
-        sagepay_url +
-        contactid +
-        "/" +
-        post.acf.event_id +
-        "/" +
-        post.acf.price +
-        `?redirecturl=${url}/payment-confirmation`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      }
-    );
+      sagepay_url +
+      contactid +
+      "/" +
+      post.acf.event_id +
+      "/" +
+      post.acf.price +
+      `?redirecturl=${uappUrl}/payment-confirmation`;
+
+    const fetchVendorId = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    console.log("🐞 url", url);
+    console.log("🐞 fetchVendorId", fetchVendorId);
+
     if (fetchVendorId.ok) {
       const json = await fetchVendorId.json();
       const url =
@@ -125,6 +127,7 @@ const Video = ({ state, actions, libraries }) => {
     }
     // setPage({ page: "directDebit", data: block });
   };
+
   const resetPaymentUrl = () => {
     setPaymentUrl(null);
   };
@@ -143,6 +146,7 @@ const Video = ({ state, actions, libraries }) => {
   const ServeContent = () => {
     const ServeImage = () => {
       const [videoCover, setVideoCover] = React.useState(defaultCover);
+
       const getVimeoCover = async ({ video_url }) => {
         // Example URL: https://player.vimeo.com/video/382577680?h=8f166cf506&color=5b89a3&title=0&byline=0&portrait=0
         const reg = /\d+/g;
@@ -150,6 +154,9 @@ const Video = ({ state, actions, libraries }) => {
         const fetchVideoData = await fetch(
           `https://vimeo.com/api/v2/video/${videoId[0]}.json`
         );
+        console.log("🐞 videoId", videoId);
+        console.log("🐞 fetchVideoData", fetchVideoData);
+
         if (fetchVideoData.ok) {
           const json = await fetchVideoData.json();
           setVideoCover(json[0].thumbnail_large);

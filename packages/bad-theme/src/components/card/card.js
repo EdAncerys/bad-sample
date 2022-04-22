@@ -265,6 +265,7 @@ const Card = ({
       </div>
     );
   };
+
   const ServeVideoCover = () => {
     if (!videoArchive) return null;
     if (!url) return null;
@@ -277,6 +278,7 @@ const Card = ({
       const video_url = videoArchive.acf.video;
       const reg = /\d+/g;
       const videoId = video_url.match(reg);
+
       const fetchVideoData = await fetch(
         `https://vimeo.com/api/v2/video/${videoId[0]}.json`
       );

@@ -111,6 +111,8 @@ const HeaderActions = ({ state, actions, libraries }) => {
     let path = item.url;
     const wpPath = state.auth.WP_HOST;
     path = path.replace(wpPath, "/"); // strip down wp path
+    // ⬇️ if path have // replace with /
+    path = path.replace(/\/\//g, "/");
 
     // ⬇️ redirect to url with path ⬇️
     setGoToAction({ state, path, actions });
@@ -183,7 +185,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
     // 📌 Production Batch shows if pointing to production server
     const isProduction = !state.auth.APP_HOST.toLowerCase().includes("uat");
     let serverBatch = "UAT";
-    if (isProduction) serverBatch = "PROD";
+    if (isProduction) return null;
 
     return (
       <div style={{ position: "relative" }}>
