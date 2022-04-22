@@ -110,7 +110,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
   const redirectHandler = ({ item }) => {
     let path = item.url;
     const wpPath = state.auth.WP_HOST;
-    path = path.replace(wpPath, ""); // strip down wp path
+    path = path.replace(wpPath, "/"); // strip down wp path
 
     // ⬇️ redirect to url with path ⬇️
     setGoToAction({ state, path, actions });
