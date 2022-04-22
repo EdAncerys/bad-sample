@@ -80,6 +80,7 @@ export const authenticateAppAction = async ({
   refreshJWT,
 }) => {
   console.log("authenticateAppAction triggered");
+  let contactid = null;
   let refreshTaken = null;
   let appTaken = null;
 
@@ -88,6 +89,7 @@ export const authenticateAppAction = async ({
   if (cookieValue) {
     refreshTaken = cookieValue.refreshJWT;
     appTaken = cookieValue.appJWT;
+    contactid = cookieValue.contactid;
   }
 
   try {
@@ -155,6 +157,11 @@ export const authenticateAppAction = async ({
             appJWT: appTaken,
           },
           days: 1,
+        });
+        // 📌 replace WebApp cookie
+        handleSetCookie({
+          name: state.auth.COOKIE_NAME,
+          value: { jwtL: appTaken, contactid },
         });
       }
     }
@@ -246,6 +253,7 @@ export const getUserDataByContactId = async ({
       throw new Error("Error dynamicApps userData.");
 
     setActiveUserAction({ dispatch, isActiveUser: response });
+    // 📌 set cookie with taken & contactid
     handleSetCookie({
       name: state.auth.COOKIE_NAME,
       value: { jwt, contactid },

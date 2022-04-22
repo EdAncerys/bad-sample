@@ -51,7 +51,7 @@ import { useQuery } from "../hooks/useQuery";
 import { useScraper } from "../hooks/useScraper";
 import { useB2CLogin } from "../hooks/useB2CLogin";
 import { useRedirect } from "../hooks/useRedirect";
-import { useImage } from "../hooks/useImage";
+import { useScript } from "../hooks/useScript";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -83,6 +83,10 @@ const App = ({ state, actions }) => {
   useRedirect({ state, dispatch, actions, redirects, urlPath });
   // 📌 hook for media queries
   useQuery({ state });
+  // 📌 add script for Google API
+  // useScript({
+  //   url: `https://maps.googleapis.com/maps/api/js?key=${state.auth.GOOGLE_API_KEY}&libraries=places`,
+  // });
 
   useEffect(() => {
     // ⬇️ restore scroll history to manual position ⬇️

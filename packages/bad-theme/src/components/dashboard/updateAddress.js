@@ -146,6 +146,17 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     // update input value before async task
     setSearchInput(input);
 
+    // const options = {
+    //   componentRestrictions: { country: "uk" },
+    //   fields: ["address_components", "geometry", "icon", "name"],
+    //   strictBounds: false,
+    //   types: ["establishment"],
+    // };
+    // const autocomplete = new google.maps.places.Autocomplete(input, options);
+    // console.log("🐞 ", autocomplete);
+
+    // return;
+
     try {
       setIsFetchingAddress(true);
       const data = await googleAutocompleteAction({
