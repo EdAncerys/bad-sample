@@ -5,16 +5,19 @@ import { colors } from "../../config/imports";
 import PaymentModal from "./paymentModal";
 import Loading from "../loading";
 import TitleBlock from "../titleBlock";
-
+import PaymentHistory from "./paymentHistory";
+import ActionPlaceholder from "../actionPlaceholder";
 // CONTEXT ---------------------------------------------
-import { setErrorAction, authenticateAppAction } from "../../context";
-
 import {
   useAppState,
   getApplicationStatus,
   useAppDispatch,
   muiQuery,
+  setErrorAction,
+  authenticateAppAction,
+  isActiveUser,
 } from "../../context";
+
 const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   const { lg } = muiQuery();
   const dispatch = useAppDispatch();
@@ -22,13 +25,27 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
   const [paymentUrl, setPaymentUrl] = useState("");
   const [liveSubscriptions, setLiveSubscriptions] = useState(null);
+  const [subAppHistory, setAppHistory] = useState([]);
+  const [isFetching, setFetching] = useState(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
   useEffect(() => {
     setLiveSubscriptions(dynamicsApps);
-  }, []);
+
+    if (dynamicsApps) {
+      // get apps with billinghistory for payments
+      // get current year
+      const currentYear = new Date().getFullYear();
+      // get apps that billing ending year is current year
+      const apps = dynamicsApps.subs.data.filter((app) =>
+        app.core_endon.includes(currentYear)
+      );
+
+      setAppHistory(apps);
+    }
+  }, [dynamicsApps]);
 
   // when should I return null ?
   if (!subscriptions) return null;
@@ -106,6 +123,34 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   };
 
   // SERVERS ---------------------------------------------
+  const ServeBilingHistory = () => {
+    if (subAppHistory.length === 0) return null;
+
+    return (
+      <div style={{ position: "relative" }}>
+        <ActionPlaceholder isFetching={isFetching} background="transparent" />
+
+        <div
+          className="primary-title"
+          style={{ fontSize: 20, padding: "1em 0" }}
+        >
+          Billing:
+        </div>
+        {subAppHistory.map((block, key) => {
+          return (
+            <PaymentHistory
+              key={key}
+              block={block}
+              item={key}
+              subAppHistory={subAppHistory}
+              setFetching={setFetching}
+            />
+          );
+        })}
+      </div>
+    );
+  };
+
   const ServePayments = ({ block, item, type }) => {
     if (dashboard && block.bad_sagepayid !== null) return null;
 
@@ -205,13 +250,16 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
         : liveSubscriptions.subs.data.length === 0;
     const appsOrSubs = type === "applications" ? "apps" : "subs";
 
+    let padding = "2em 0 1em 0";
+    if (type === "subscriptions") padding = "1em 0";
+
     return (
       <div>
         <div
           className="primary-title"
           style={{
             fontSize: 20,
-            padding: !lg ? "2em 0" : 0,
+            padding: !lg ? padding : 0,
             marginTop: !lg ? null : "1em",
           }}
         >
@@ -251,6 +299,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
         {!dashboard && <ServeListOfPayments type="applications" />}
         <ServeListOfPayments type="subscriptions" />
+        <ServeBilingHistory />
       </div>
     </div>
   );
