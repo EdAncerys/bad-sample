@@ -154,7 +154,7 @@ export const getWPMenu = async ({ state, actions }) => {
 
 export const getEventsData = async ({ state, actions }) => {
   await actions.source.fetch(`/events/`); // fetch CPT events
-  const events = state.source.get(`/events/`);
+  let events = state.source.get(`/events/`);
   const eventsNextPage = events.next; // check if events have multiple pages
   // fetch events via wp API page by page
   let isThereNextEventPage = eventsNextPage;
@@ -162,7 +162,10 @@ export const getEventsData = async ({ state, actions }) => {
     await actions.source.fetch(isThereNextEventPage); // fetch next page
     const nextPage = state.source.get(isThereNextEventPage).next; // check ifNext page & set next page
     isThereNextEventPage = nextPage;
+    events = state.source.events;
   }
+
+  return events;
 };
 
 export const getPostData = async ({ state, actions }) => {

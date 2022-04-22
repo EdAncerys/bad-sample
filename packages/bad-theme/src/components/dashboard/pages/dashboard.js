@@ -49,9 +49,10 @@ const Dashboard = ({ state, actions, libraries }) => {
   useEffect(async () => {
     // pre fetch events data
     let data = state.source.events;
-    if (!data) await getEventsData({ state, actions });
-    data = state.source.events;
-    if (data) data = Object.values(data);
+    if (!data) data = await getEventsData({ state, actions });
+
+    if (!data) return null;
+    data = Object.values(data);
     // 📌 sort events by date newest first
     data.sort((a, b) => {
       let dateA = a.acf.date_time;
@@ -350,7 +351,6 @@ const Dashboard = ({ state, actions, libraries }) => {
                     core_membershipsubscriptionid,
                     bad_sagepayid,
                   } = app;
-                  console.log("🐞 ", app);
                   // get application date
                   let appData = createdon.split(" ")[0];
                   // split string and revert date with month format
