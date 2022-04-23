@@ -24,7 +24,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
 
   const dispatch = useAppDispatch();
   const { enquireAction, isActiveUser, refreshJWT } = useAppState();
-  // console.log("enquireAction", enquireAction); // debug
 
   const [isFetching, setIsFetching] = useState(null);
   const [formData, setFormData] = useState({
@@ -99,7 +98,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
       });
       if (!response) throw new Error("Error sending email");
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       setErrorAction({
         dispatch,
         isError: {
@@ -156,12 +155,9 @@ const EnquireModal = ({ state, actions, libraries }) => {
         link: hospital.accountid,
       };
     });
-    console.log("🐞 hospitalData ", hospitalData);
 
     if (hospitalData.length > 0) setHospitalData(hospitalData);
     if (!hospitalData.length || !input) setHospitalData(null);
-
-    // console.log("Hospitals", hospitalData); // debug
   };
 
   const handleSelectHospital = ({ item }) => {
@@ -171,7 +167,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
       hospitalChangeName: item.title,
     }));
     setHospitalData(null); // clear hospital data for dropdown
-    console.log("selected hospital", item); // debug
   };
 
   // SERVERS --------------------------------------------------

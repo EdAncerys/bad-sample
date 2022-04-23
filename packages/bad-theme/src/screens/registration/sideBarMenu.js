@@ -49,14 +49,11 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   useEffect(() => {
     // 📌 redirect to / if !isActiveUser || !applicationData
     if (!isActiveUser) {
-      console.log("⬇️ no user - redirect to /");
+      // console.log("⬇️ no user - redirect to /");
       setGoToAction({ state, path: `/`, actions });
     }
     // 📌 redirect to /dashboard if isActiveUser && !applicationData
     if (isActiveUser && !applicationData && slug !== "/membership/thank-you/") {
-      console.log(
-        "⬇️ user have no application data created - redirect to /dashboard"
-      );
       setGoToAction({ state, path: `/dashboard/`, actions });
       return;
     }

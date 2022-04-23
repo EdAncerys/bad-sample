@@ -57,7 +57,7 @@ const Membership = ({ state, actions, libraries }) => {
       // await for link to download & open in new window to download
       window.open(url, "_blank");
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setFetching(false);
     }
@@ -104,7 +104,7 @@ const Membership = ({ state, actions, libraries }) => {
       });
       if (!appData) throw new Error("Failed to create application");
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       setErrorAction({
         dispatch,
@@ -183,8 +183,6 @@ const Membership = ({ state, actions, libraries }) => {
               )}
 
               {subsData.map((app, key) => {
-                console.log("🐞 application Data ", app);
-
                 if (subsData.length === 0) {
                   // 📌 if subsData is empty display no subscriptions message
                   return (
@@ -256,7 +254,7 @@ const Membership = ({ state, actions, libraries }) => {
 
                       setStatus(isSubmitted); // set status to submitted
                     } catch (error) {
-                      console.log(error);
+                      // console.log(error);
                     }
                   }, []);
 

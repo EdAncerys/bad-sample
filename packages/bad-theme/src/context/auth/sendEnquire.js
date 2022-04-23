@@ -14,7 +14,7 @@ export const sendEmailEnquireAction = async ({
   template,
   refreshJWT,
 }) => {
-  console.log("enquireAction triggered");
+  // console.log("enquireAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
   const URL = state.auth.APP_HOST + `/email`;
@@ -54,8 +54,6 @@ export const sendEmailEnquireAction = async ({
       headers: { Authorization: `Bearer ${jwt}` },
       body: form,
     };
-    console.log("🚀 📧 form", formData); // debug
-    console.log("🚀 📧 fileAttachmentList", fileAttachmentList); // debug
 
     const data = await fetch(URL, requestOptions);
     const response = await data.json();
@@ -63,11 +61,11 @@ export const sendEmailEnquireAction = async ({
     if (response.success) {
       return response;
     } else {
-      console.log("⬇️ Error sending email response"); // debug
-      console.log(response); // debug
+      // console.log("⬇️ Error sending email response"); // debug
+      // console.log(response); // debug
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
     setEnquireAction({ dispatch, enquireAction: null });

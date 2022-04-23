@@ -65,9 +65,7 @@ const Sagepay = ({ state, actions, libraries }) => {
       };
       e.preventDefault();
 
-      console.log("About to sage");
       let sage = await fetch(request.url, request);
-      console.log("Sage OK = ", sage.ok);
       if (sage.ok) {
         sage = await sage.json();
         let sageResult = sage.data.split("\r\n");

@@ -141,7 +141,6 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
       );
       if (membership) setBodyCopy(membership.acf.body_copy);
     }
-    console.log(value);
   };
 
   const isFormValidated = ({ required }) => {
@@ -165,7 +164,6 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
     });
 
     if (!isValid) return null;
-    // console.log(formData); // debug
     let path = `/membership/step-3-personal-information/`;
     if (formData.bad_organisedfor === "810170001")
       path = `/membership/sig-questions/`;
@@ -187,7 +185,7 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
         refreshJWT,
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setFetching(false);
     }

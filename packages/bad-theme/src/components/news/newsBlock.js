@@ -20,7 +20,6 @@ const NewsBlock = ({
   const isLayoutThree = layout === "layout_three";
   const isLayoutFour = layout === "layout_four";
   const isLayoutFive = layout === "layout_five";
-  // console.log("layout", block); // debug
   const [eCircularCatId, setECircularCatId] = useState(null);
   const useEffectRef = useRef(null);
   const { lg } = muiQuery();

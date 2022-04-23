@@ -148,7 +148,7 @@ const Dashboard = ({ state, actions, libraries }) => {
       });
       if (!appData) throw new Error("Failed to create application");
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       setErrorAction({
         dispatch,
@@ -175,7 +175,7 @@ const Dashboard = ({ state, actions, libraries }) => {
       // await for link to download & open in new window to download
       window.open(url, "_blank");
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setFetching(false);
     }
@@ -396,7 +396,7 @@ const Dashboard = ({ state, actions, libraries }) => {
 
                         setStatus(isSubmitted); // set status to submitted
                       } catch (error) {
-                        console.log(error);
+                        // console.log(error);
                       }
                     }, []);
 

@@ -11,9 +11,9 @@ export default {
     theme: {
       ...packageClient.actions.theme,
       beforeSSR: async ({ state }) => {
-        console.log("Server side beforeSSR triggered");
+        // console.log("Server side beforeSSR triggered");
         const { API_KEY } = process.env;
-        console.log("API_KEY", API_KEY);
+        // console.log("API_KEY", API_KEY);
       },
     },
   },

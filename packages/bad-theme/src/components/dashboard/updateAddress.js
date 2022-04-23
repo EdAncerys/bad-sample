@@ -85,7 +85,6 @@ const UpdateAddress = ({ state, actions, libraries }) => {
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
     }));
-    console.log(value); // debug
   };
 
   const handleAddressUpdate = async () => {
@@ -127,7 +126,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
         isError: { message: `Contact details updated successfully` },
       });
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
 
       setErrorAction({
         dispatch,
@@ -180,7 +179,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
         }
       }
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
     } finally {
       setIsFetchingAddress(false);
     }

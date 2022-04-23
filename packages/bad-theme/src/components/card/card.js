@@ -148,7 +148,7 @@ const Card = ({
         if (wileyLink) authLink = wileyLink;
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setAuthLink(authLink); // set auth link via wiley
       setFetching(false);

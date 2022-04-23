@@ -38,7 +38,6 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
       // throw exception if no events
       if (!data) throw new Error("Faild to fetch events data");
       data = state.source.events;
-      console.log("🐞  TEST_DATA", data);
       if (data) data = Object.values(data);
       // 📌 sort events by date newest first
       data.sort((a, b) => {
@@ -110,7 +109,7 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
         setListOfEvents(relatedEvents);
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
     return () => {
       useEffectRef.current = ""; // clean up function
@@ -207,7 +206,6 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
   };
 
   const ServeDashEvents = () => {
-    console.log("🐞 eventList", eventList);
     if (eventList.length === 0) return null;
 
     return (

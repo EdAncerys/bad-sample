@@ -25,8 +25,6 @@ function AlterAccordion({
   function CustomToggle({ children, eventKey, callback, isActive }) {
     const decoratedOnClick = useAccordionButton(eventKey, () => {
       callback && callback(eventKey);
-      console.log("eventKey", eventKey);
-      console.log("isActive", isActive);
     });
 
     return <div onClick={decoratedOnClick}>{children}</div>;
@@ -41,7 +39,6 @@ function AlterAccordion({
     approved_bad_members_only,
     add_search_function,
   } = block;
-  // console.log("accordion_item", accordion_item); //debug
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [uniqueId, setUniqueId] = useState(null);

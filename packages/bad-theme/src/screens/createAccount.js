@@ -9,7 +9,7 @@ const CreateAccount = ({ state, actions }) => {
 
   // HELPERS ------------------------------------------------------------
   const handleUserLogin = async () => {
-    console.log("handleUserLogin triggered");
+    // console.log("handleUserLogin triggered");
     const URL = "http://localhost:8888/events/wp-json/jwt-auth/v1/token";
 
     const userCredentials = JSON.stringify({
@@ -27,22 +27,16 @@ const CreateAccount = ({ state, actions }) => {
       if (response.token) {
         return response.token;
       } else {
-        console.log("Failed to auth");
+        // console.log("Failed to auth");
       }
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
     }
   };
 
   const handleCreateAccount = async () => {
-    console.log("handleCreateAccount triggered");
+    // console.log("handleCreateAccount triggered");
     if (password !== confirmPassword || password === "" || email === "") {
-      console.log(
-        "Passwords do not match or inputs invalid: ",
-        username,
-        email,
-        password
-      ); //debug
       return;
     }
     const jwt = await handleUserLogin();
@@ -67,7 +61,6 @@ const CreateAccount = ({ state, actions }) => {
     try {
       const data = await fetch(URL, requestOptions);
       const response = await data.json();
-      console.log("user create response ------", response);
       if (response.id) {
         actions.router.set("/");
         actions.theme.setLogin(true);
@@ -75,7 +68,7 @@ const CreateAccount = ({ state, actions }) => {
         alert(`${response.message}`);
       }
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
     }
   };
 

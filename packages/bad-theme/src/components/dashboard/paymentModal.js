@@ -46,7 +46,7 @@ const PaymentModal = ({ state, actions, payment_url, resetPaymentUrl }) => {
       }
     } catch (error) {
       console.log("*** ERROR GETTING IFRAME CONTENT - CROSS-ORIGIN **"); // debug
-      console.log(error); // debug
+      // console.log(error); // debug
     }
   };
   return (

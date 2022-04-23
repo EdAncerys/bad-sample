@@ -24,7 +24,7 @@ const SearchInput = ({ state, actions, libraries }) => {
     >
       <SearchContainer
         searchFilterRef={searchFilterRef}
-        handleSearch={() => console.log(searchFilterRef.current.value)}
+        // handleSearch={() => console.log(searchFilterRef.current.value)}
         onChange
         inputOnly
       />

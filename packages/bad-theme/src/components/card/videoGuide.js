@@ -67,7 +67,6 @@ const VideoGuide = ({ state, actions, libraries, videoGuide }) => {
 
   const ServeVideo = () => {
     if (!video) return null;
-    console.log(video);
 
     return (
       <div

@@ -40,7 +40,7 @@ const ServePayments = ({
       // await for link to download & open in new window to download
       window.open(url, "_blank");
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setFetching(false);
     }

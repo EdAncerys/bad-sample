@@ -15,7 +15,7 @@ export const useScraper = ({ urlPath }) => {
       const anchorReplacer = link.href.split(isAnchor)[1];
 
       if (anchor.includes(isAnchor)) {
-        console.log("🔗 anchor replaced");
+        // console.log("🔗 anchor replaced");
         link.href = anchorReplacer;
       }
     });

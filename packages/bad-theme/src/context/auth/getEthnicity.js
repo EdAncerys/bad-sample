@@ -1,7 +1,7 @@
 import { authenticateAppAction } from "../index";
 
 export const getEthnicityAction = async ({ state, dispatch, refreshJWT }) => {
-  console.log("getEthnicityAction triggered");
+  // console.log("getEthnicityAction triggered");
 
   try {
     const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
@@ -26,12 +26,12 @@ export const getEthnicityAction = async ({ state, dispatch, refreshJWT }) => {
 
     setEthnicityAction({ dispatch, ethnicity: result });
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
 // SET CONTEXT ---------------------------------------------------
 export const setEthnicityAction = ({ dispatch, ethnicity }) => {
-  console.log("setEthnicityAction triggered"); //debug
+  // console.log("setEthnicityAction triggered"); //debug
   dispatch({ type: "SET_ETHNICITY_ACTION", payload: ethnicity });
 };

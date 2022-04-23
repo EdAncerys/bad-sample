@@ -339,7 +339,6 @@ const VideoArchive = ({ state, actions, libraries }) => {
       const { contactid, jwt } = cookie;
 
       const allVidz = state.source.videos;
-      console.log("All videos", allVidz);
       const listOfVids = await fetch(
         state.auth.APP_HOST +
           "/videvent/e170d1fc-a0b9-ec11-983f-002248813da3/entities",
@@ -351,8 +350,6 @@ const VideoArchive = ({ state, actions, libraries }) => {
       );
 
       const json = await listOfVids.json();
-
-      console.log("List of vids", json);
     };
     const data = state.source.get(state.router.link);
     setPostData(data.items);

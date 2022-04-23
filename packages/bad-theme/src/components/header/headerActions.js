@@ -101,7 +101,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
         setFilter(null);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setFetching(false);
     }
@@ -150,8 +150,8 @@ const HeaderActions = ({ state, actions, libraries }) => {
     // --------------------------------------------------------------------------------
 
     // ⬇️ development env default login action ⬇️
-    if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
-      console.log("🤖 DEVELOPMENT ENVIRONMENT 🤖");
+    if (state.auth.ENVIRONMENT === "DEVELOPMENT-B2C") {
+      // console.log("🤖 DEVELOPMENT ENVIRONMENT 🤖");
 
       const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
       await getUserDataByContactId({
@@ -161,8 +161,8 @@ const HeaderActions = ({ state, actions, libraries }) => {
         // contactid: "cc9a332a-3672-ec11-8943-000d3a43c136", // andy testing account
         // contactid: "84590b32-9490-ec11-b400-000d3a22037e", // mandy
         // contactid: "0786df85-618f-ec11-b400-000d3a22037e", // Chris
-        contactid: "89bb168e-5dc1-ec11-983f-000d3aae25bf", // NEW USER
-        // contactid: "969ba377-a398-ec11-b400-000d3aaedef5", // emilia
+        // contactid: "89bb168e-5dc1-ec11-983f-000d3aae25bf", // NEW USER
+        contactid: "969ba377-a398-ec11-b400-000d3aaedef5", // emilia
         refreshJWT,
       });
       return;

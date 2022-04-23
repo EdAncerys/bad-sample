@@ -133,7 +133,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
         isError: { message: `Personal information updated successfully` },
       });
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       setErrorAction({
         dispatch,
         isError: {

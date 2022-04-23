@@ -33,7 +33,6 @@ const Video = ({ state, actions, libraries }) => {
 
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
-  // console.log("post data: ", post); // debug
 
   const { lg } = muiQuery();
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -116,8 +115,6 @@ const Video = ({ state, actions, libraries }) => {
         Authorization: `Bearer ${jwt}`,
       },
     });
-    console.log("🐞 url", url);
-    console.log("🐞 fetchVendorId", fetchVendorId);
 
     if (fetchVendorId.ok) {
       const json = await fetchVendorId.json();
@@ -154,8 +151,6 @@ const Video = ({ state, actions, libraries }) => {
         const fetchVideoData = await fetch(
           `https://vimeo.com/api/v2/video/${videoId[0]}.json`
         );
-        console.log("🐞 videoId", videoId);
-        console.log("🐞 fetchVideoData", fetchVideoData);
 
         if (fetchVideoData.ok) {
           const json = await fetchVideoData.json();

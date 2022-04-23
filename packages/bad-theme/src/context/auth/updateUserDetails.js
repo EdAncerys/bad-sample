@@ -11,7 +11,7 @@ export const updateAddressAction = async ({
   isActiveUser,
   refreshJWT,
 }) => {
-  console.log("updateAddressAction triggered");
+  // console.log("updateAddressAction triggered");
   const { contactid } = isActiveUser;
 
   const URL = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
@@ -48,7 +48,7 @@ export const updateAddressAction = async ({
       });
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
   }
@@ -61,7 +61,7 @@ export const updateEthnicityAction = async ({
   isActiveUser,
   refreshJWT,
 }) => {
-  console.log("updateEthnicityAction triggered");
+  // console.log("updateEthnicityAction triggered");
   if (!isActiveUser) throw new Error("isActiveUser is required");
 
   const { contactid } = isActiveUser;
@@ -89,10 +89,9 @@ export const updateEthnicityAction = async ({
     if (!response) throw new Error("Error updating profile.");
 
     if (response.success) {
-      console.log("⬇️ user recorded successfully updated", response);
       return response;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };

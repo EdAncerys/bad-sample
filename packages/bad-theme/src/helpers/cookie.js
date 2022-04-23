@@ -19,14 +19,14 @@ export const handleSetCookie = ({ name, value, days, deleteCookie }) => {
   document.cookie = cookie;
 
   if (deleteCookie) {
-    console.log(`🍪 ${cookieName} successfully deleted`); // debug
+    // console.log(`🍪 ${cookieName} successfully deleted`); // debug
   } else {
-    console.log("🍪  set succesfully"); // debug
+    // console.log("🍪  set succesfully"); // debug
   }
 };
 
 export const handleGetCookie = ({ name }) => {
-  console.log("handleGetCookie triggered");
+  // console.log("handleGetCookie triggered");
   // setting defaults
   let cookieName = "";
   if (name) cookieName = name;
@@ -45,17 +45,17 @@ export const handleGetCookie = ({ name }) => {
       // console.log("🍪 value: ", cookieValue); // debug
       return cookieValue;
     } else {
-      console.log("🍪 not found || not valid"); // debug
+      // console.log("🍪 not found || not valid"); // debug
       return null;
     }
   } catch (error) {
-    console.log("error: " + error);
+    // console.log("error: " + error);
   }
 };
 
 export const handleEncryption = ({ jwt }) => {
   if (!jwt) {
-    console.log("Token not provided!");
+    // console.log("Token not provided!");
     return;
   }
   const bcrypt = require("bcryptjs");
@@ -66,9 +66,9 @@ export const handleEncryption = ({ jwt }) => {
   const valid = bcrypt.compareSync(jwt, hash); // validate encrypted token
 
   if (valid) {
-    console.log("Encryption successful!");
+    // console.log("Encryption successful!");
     return hash;
   } else {
-    console.log("Failed to encrypt the taken!");
+    // console.log("Failed to encrypt the taken!");
   }
 };

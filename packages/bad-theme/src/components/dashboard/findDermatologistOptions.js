@@ -128,7 +128,6 @@ const FindDermatologistOptions = ({ state, actions, libraries }) => {
             dispatch,
             isError: { message: "There was an error processing the update" },
           });
-      console.log("UPDATED?", json);
     }
   };
 

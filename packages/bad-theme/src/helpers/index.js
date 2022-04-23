@@ -6,7 +6,7 @@ import {
 } from "../context";
 
 const fetchCompleteHandler = ({ initialState }) => {
-  console.log("⬇️ user pre-fetch completed");
+  // console.log("⬇️ user pre-fetch completed");
   initialState.isPlaceholder = false;
 };
 
@@ -20,11 +20,10 @@ export const authCookieActionBeforeCSR = async ({
 
   // ⏬⏬  user validation & auth ⏬⏬
   if (cookie) {
-    console.log("🍪 found", cookie);
     let { jwt, contactid } = cookie;
 
     if (!contactid || !jwt) {
-      console.log("Failed to Auth 🍪 data");
+      // console.log("Failed to Auth 🍪 data");
       handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
       return null;
     }
@@ -55,7 +54,6 @@ export const authCookieActionBeforeCSR = async ({
       if (!appsResponse.ok)
         throw new Error(`${appsResponse.statusText} ${appsResponse.status}`); // fetch user data from Dynamics
       const appsData = await appsResponse.json();
-      console.log("🚀 dynamicsApps", appsData); // debug
 
       const userStoreData = await getUserStoreAction({
         state,
@@ -77,7 +75,6 @@ export const authCookieActionBeforeCSR = async ({
         initialState.isActiveUser = userData; // populates user userResponse
         initialState.dynamicsApps = appsData;
         initialState.jwt = taken; // replace taken with new one
-        console.log("initialState", initialState); // debug
 
         handleSetCookie({
           name: state.auth.COOKIE_NAME,
@@ -85,7 +82,7 @@ export const authCookieActionBeforeCSR = async ({
         });
       }
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
     } finally {
       fetchCompleteHandler({ initialState });
@@ -104,11 +101,11 @@ export const authCookieActionAfterCSR = async ({
 
   // ⏬⏬  user validation & auth ⏬⏬
   if (cookie) {
-    console.log("🍪 found", cookie);
+    // console.log("🍪 found", cookie);
     let { jwt, contactid } = cookie;
 
     if (!contactid || !jwt) {
-      console.log("Failed to Auth 🍪 data");
+      // console.log("Failed to Auth 🍪 data");
       handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
       return null;
     }
@@ -123,9 +120,9 @@ export const authCookieActionAfterCSR = async ({
       });
       if (!userData) throw new Error("Error getting userData.");
 
-      console.log("⬇️ userData successfully pre-fetched", userData); // debug
+      // console.log("⬇️ userData successfully pre-fetched", userData); // debug
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
     }
   }
@@ -144,10 +141,9 @@ export const getWPMenu = async ({ state, actions }) => {
       state.theme.menu = badMenu; // replacing menu stored in sessions with state var
       sessionStorage.setItem("badMenu", JSON.stringify(badMenu));
     } catch (error) {
-      console.log("error: " + error);
+      // console.log("error: " + error);
     }
   } else {
-    console.log("menu already pre fetched from wp"); // debug
     state.theme.menu = JSON.parse(menu);
   }
 };

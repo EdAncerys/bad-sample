@@ -63,7 +63,7 @@ const BADTheme = {
   actions: {
     theme: {
       beforeCSR: async ({ state, actions }) => {
-        console.log("beforeCSR triggered"); // debug
+        // console.log("beforeCSR triggered"); // debug
         await Promise.all([
           actions.source.fetch(`/home-page`), // pre fetch home page CONTENT
           // actions.source.fetch(`/menu_features`), // pre fetch menu featured CPT
@@ -100,7 +100,7 @@ const BADTheme = {
         }, 3000);
       },
       afterCSR: async ({ state, actions }) => {
-        console.log("afterCSR triggered"); // debug
+        // console.log("afterCSR triggered"); // debug
       },
     },
   },

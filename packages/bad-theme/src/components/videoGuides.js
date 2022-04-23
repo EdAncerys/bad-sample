@@ -62,7 +62,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       isThereNextPage = nextPage;
     }
     const DATA = Object.values(state.source[postPath]);
-    console.log("Data", DATA); // debug
 
     const limit = post_limit || LIMIT;
     setPostListData(DATA.slice(0, Number(limit))); // apply limit on posts

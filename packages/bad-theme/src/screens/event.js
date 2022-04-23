@@ -29,7 +29,6 @@ const Event = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const event = state.source[data.type][data.id];
-  // console.log("event data: ", event); // debug
 
   const dispatch = useAppDispatch();
 
@@ -69,7 +68,6 @@ const Event = ({ state, actions, libraries }) => {
       await new Promise((resolve) => setTimeout(resolve, 500));
       data = state.source.events;
       iteration++;
-      console.log("🚀 ", iteration);
     }
 
     // if !data then break

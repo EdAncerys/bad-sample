@@ -68,13 +68,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     const sagepayUrl = core_membershipsubscriptionid
       ? `/sagepay/${sagepay_live}/subscription/`
       : `/sagepay/${sagepay_live}/application/`;
-    console.log(
-      "ADDRESS:",
-      state.auth.APP_HOST +
-        sagepayUrl +
-        type +
-        `?redirecturl=${state.auth.APP_URL}/payment-confirmation/`
-    );
+
     try {
       const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
@@ -93,13 +87,12 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
       if (fetchVendorId.ok) {
         const json = await fetchVendorId.json();
-        console.log(json);
         const url =
           json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
         setPaymentUrl(url);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       setErrorAction({
         dispatch,
         isError: {

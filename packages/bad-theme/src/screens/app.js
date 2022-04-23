@@ -72,7 +72,7 @@ const App = ({ state, actions }) => {
   let urlPath = state.router.link;
   const data = state.source.get(urlPath);
   const useEffectRef = useRef(true);
-  console.log("INDEX data", data); // debug
+  // console.log("INDEX data", data); // debug
   // --------------------------------------------------------------------------------
   // 📌  B2C login handler.
   // --------------------------------------------------------------------------------
@@ -108,7 +108,7 @@ const App = ({ state, actions }) => {
     // get current time & compare how long pre-fetch took before  setting placeholder
     const timeTaken = new Date().getTime() - currentTime;
     // 📌 if time taken is less than 3s await for remaining time before proceeding
-    console.log("timeTaken", timeTaken); // debug
+    // console.log("timeTaken", timeTaken); // debug
     if (timeTaken < 2000) {
       await new Promise((resolve) => setTimeout(resolve, 2000 - timeTaken));
     }

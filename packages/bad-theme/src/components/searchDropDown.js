@@ -62,8 +62,6 @@ const SearchDropDown = ({
             const { title, type, url } = item;
             // 📌 if item dont have a link dont render it
             if (isAppSearch & !url) return null;
-            console.log("🐞 url", url);
-            console.log("🐞 type", type);
 
             let serachTitle = title;
             if (input) {

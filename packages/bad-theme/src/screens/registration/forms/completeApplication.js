@@ -90,7 +90,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
       let slug = `/dashboard/`;
       if (isActiveUser) setGoToAction({ state, path: slug, actions });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     } finally {
       setFetching(false);
     }

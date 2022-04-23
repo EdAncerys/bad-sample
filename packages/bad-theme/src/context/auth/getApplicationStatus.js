@@ -6,7 +6,7 @@ export const getApplicationStatus = async ({
   contactid,
   refreshJWT,
 }) => {
-  console.log("getApplicationStatus triggered");
+  // console.log("getApplicationStatus triggered");
 
   // if contactid is not provided then throw error
   if (!contactid) throw new Error("contactid is required");
@@ -25,17 +25,17 @@ export const getApplicationStatus = async ({
 
     if (data.apps.success) {
       setApplicationStatusAction({ dispatch, dynamicsApps: data });
-      console.log("🚀 Dynamic Apps Data", data); // debug
+      // console.log("🚀 Dynamic Apps Data", data); // debug
 
       return data; // return data
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
 // SET CONTEXT ---------------------------------------------------
 export const setApplicationStatusAction = ({ dispatch, dynamicsApps }) => {
-  console.log("setApplicationStatusAction triggered"); //debug
+  // console.log("setApplicationStatusAction triggered"); //debug
   dispatch({ type: "SET_APPLICATION_ACTION", payload: dynamicsApps });
 };
