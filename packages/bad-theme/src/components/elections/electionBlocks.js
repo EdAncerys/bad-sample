@@ -454,7 +454,6 @@ const ElectionBlocks = ({ state, actions, block }) => {
           if (openPositions) {
             if (election_status !== "open") return null;
           }
-
           return (
             <div key={key} className="flex" style={{ position: "relative" }}>
               <div className="flex">
@@ -469,7 +468,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
                   }
                   handler={() => handleContactForm({ isClosedPosition, block })}
                   downloadFile={
-                    !isClosedPosition
+                    !isClosedPosition && nomination_form_upload
                       ? {
                           file: {
                             url: nomination_form_upload,
