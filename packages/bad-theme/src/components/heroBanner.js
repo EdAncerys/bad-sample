@@ -183,7 +183,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           style={{
             display: "grid",
             alignItems: "center",
-            position: "absolute",
+            position: !lg ? "absolute" : background_image ? "absolute" : null,
             zIndex: 9,
             width: !lg
               ? !background_image

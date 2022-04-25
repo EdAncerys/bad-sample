@@ -26,7 +26,7 @@ export default connect(({ libraries, state, actions }) => {
 
   const onClickLinkHandler = async ({ title, url }) => {
     console.log("TITLERERO", title);
-    const isWileys = title.includes("Journal");
+    const isWileys = title.includes("Journal") && !title.includes("Journals");
     let authLink = url;
 
     // HANDLERS ----------------------------------------------------
