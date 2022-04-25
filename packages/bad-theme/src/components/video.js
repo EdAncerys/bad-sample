@@ -77,7 +77,7 @@ const Video = ({ state, actions, libraries }) => {
         console.log("JSON", json);
         if (json.success === false) setVideoStatus("locked");
         if (json.data.entity.bad_confirmationid) setVideoStatus("unlocked");
-        setVideosStatus("locked");
+        setVideoStatus("locked");
         return true;
       } else {
         console.log("FETCHING FAILED");
