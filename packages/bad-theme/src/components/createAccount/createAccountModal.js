@@ -31,8 +31,9 @@ const CreateAccountModal = ({ state, actions }) => {
             Welcome to the new BAD website logged in area. This is the BAD
             account registration page.
           </div>
-          <div style={{ padding: "2em 0" }}>Dear User,</div>
-          <div>
+          <div style={{ padding: "2em 0" }}>
+            Dear User,
+            <br />
             We are delighted to announce our new website is now live. To access
             your existing account or to sign up as a new user please follow the
             instructions below.
@@ -76,21 +77,21 @@ const CreateAccountModal = ({ state, actions }) => {
           className="primary-title"
           style={{ fontSize: 24, padding: "1em 0 0.5em 0" }}
         >
-          New registration:
+          New Members
         </div>
         <div>
           If you are new to the BAD and do not have an existing account and
-          would like to register with us so you can apply for BAD and Special
-          Interest Group membership, register for events, and much more, then
-          you can sign up here:
+          would like to register with us so that you can apply for BAD and
+          Special Interest Group membership, register for events, and much more
+          then you can sign up here
         </div>
-        <div
+        {/* <div
           className="blue-btn"
           style={{ margin: "1em 0", alignSelf: "flex-start" }}
           onClick={() => loginAction({ state })}
         >
           Create an account
-        </div>
+        </div> */}
       </div>
     );
   };
@@ -100,7 +101,7 @@ const CreateAccountModal = ({ state, actions }) => {
       <div className="flex-col">
         <div
           className="primary-title"
-          style={{ fontSize: 24, paddingTop: "1em" }}
+          style={{ fontSize: 24, paddingTop: "0.5em" }}
         >
           Those with an existing BAD log in
         </div>
@@ -113,6 +114,22 @@ const CreateAccountModal = ({ state, actions }) => {
           sent to you. You will also be required to add a password – this can be
           the same as before.
         </div>
+      </div>
+    );
+  };
+
+  const ServeProceedButton = () => {
+    return (
+      <div className="flex-col">
+        <div>
+          <p
+            className="primary-title"
+            style={{ fontSize: 24, paddingTop: "1em" }}
+          >
+            Already completed either of these steps?
+          </p>
+          <p>Please proceed to the login below</p>
+        </div>
         <div
           className="blue-btn"
           style={{ margin: "1em 0", alignSelf: "flex-start" }}
@@ -123,7 +140,6 @@ const CreateAccountModal = ({ state, actions }) => {
       </div>
     );
   };
-
   const ServeActions = () => {
     return (
       <Modal.Footer
@@ -157,6 +173,8 @@ const CreateAccountModal = ({ state, actions }) => {
           <Modal.Body style={{ padding: 0 }}>
             <ServeFormInfo />
             <ServeLogin />
+            <ServeNewRegistrations />
+            <ServeProceedButton />
           </Modal.Body>
           <ServeActions />
         </div>
