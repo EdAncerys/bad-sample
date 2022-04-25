@@ -68,7 +68,7 @@ const RowButton = ({
 
   const onClickLinkHandler = async () => {
     let authLink = link.url;
-
+    console.log("CLICKED", authLink);
     // 📌 check if logged in user exists & user is BAD member to replace auth link
     if (is_wileys_link && isActiveUser) {
       authLink = await getWileyAction({
@@ -89,6 +89,7 @@ const RowButton = ({
 
     if (is_wileys_link && !isActiveUser) {
       // 📌 track notification error action
+      console.log("HANDLING HERE");
       setErrorAction({
         dispatch,
         isError: {

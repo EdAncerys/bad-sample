@@ -11,6 +11,7 @@ import {
   useAppState,
   setErrorAction,
   setGoToAction,
+  muiQuery,
 } from "../context";
 
 const ErrorModal = ({ state, actions, libraries }) => {
@@ -18,7 +19,7 @@ const ErrorModal = ({ state, actions, libraries }) => {
 
   const dispatch = useAppDispatch();
   const { isError } = useAppState();
-
+  const { lg } = muiQuery();
   const bannerHeight = state.theme.bannerHeight;
 
   // HANDLERS ----------------------------------------------------
@@ -67,13 +68,16 @@ const ErrorModal = ({ state, actions, libraries }) => {
 
       return (
         <div>
-          <div className="flex">
+          <div
+            className={!lg ? "flex" : "flex-col"}
+            style={{ gap: !lg ? null : 20 }}
+          >
             {isError.action.map((action, index) => {
               return (
                 <div
                   key={index}
                   className="blue-btn"
-                  style={{ marginRight: "1em" }}
+                  style={{ marginRight: !lg ? "1em" : null }}
                   onClick={action.handler}
                 >
                   {action.label}
@@ -88,9 +92,11 @@ const ErrorModal = ({ state, actions, libraries }) => {
     return (
       <div>
         <div
-          className="flex"
+          className={!lg ? "flex" : "flex-col"}
           style={{
             justifyContent: "flex-end",
+            gap: !lg ? null : 20,
+            marginTop: !lg ? null : "1em",
           }}
         >
           <ServeGoToAction />
@@ -141,7 +147,7 @@ const ErrorModal = ({ state, actions, libraries }) => {
     return (
       <div
         className="flex"
-        style={{ padding: `1em 2em`, minHeight: bannerHeight }}
+        style={{ padding: !lg ? `1em 2em` : "1em", minHeight: bannerHeight }}
       >
         <div className="flex-col">
           <Modal.Body className="flex-col">
@@ -152,7 +158,7 @@ const ErrorModal = ({ state, actions, libraries }) => {
               style={{
                 display: "grid",
                 textAlign: "center",
-                padding: `2em 0`,
+                padding: !lg ? `2em 0` : 0,
                 fontSize: 26,
               }}
             >
