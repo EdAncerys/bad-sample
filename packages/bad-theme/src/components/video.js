@@ -85,7 +85,7 @@ const Video = ({ state, actions, libraries }) => {
       }
     }
     setVideoStatus("locked");
-    console.log("VIDSTATUS", videoStatus);
+    console.log("VIDSTATUS2", videoStatus);
   }, [isActiveUser, paymentUrl]);
 
   if (!post) return <Loading />;
