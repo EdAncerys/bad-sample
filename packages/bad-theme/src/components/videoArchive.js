@@ -350,8 +350,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
 
       const allVidz = state.source.videos;
       const listOfVids = await fetch(
-        state.auth.APP_HOST +
-          "/videvent/e170d1fc-a0b9-ec11-983f-002248813da3/entities",
+        state.auth.APP_HOST + `/videvent/${isActiveUser.contactid}/entities`,
         {
           headers: {
             Authorization: `Bearer ${jwt}`,
