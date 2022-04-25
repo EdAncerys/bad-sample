@@ -224,7 +224,7 @@ const Video = ({ state, actions, libraries }) => {
                   })
                 }
               >
-                Login to purchace or whatch this video
+                Login to purchase or watch this video
               </div>
             </div>
           );

@@ -129,7 +129,7 @@ const LoginModal = ({ state, actions }) => {
               margin: `4em 1em`,
             }}
           >
-            <div>Login</div>
+            <div>Login / Register</div>
           </div>
         </Modal.Body>
       </div>

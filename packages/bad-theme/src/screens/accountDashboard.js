@@ -137,7 +137,8 @@ const AccountDashboard = ({ state, actions, libraries }) => {
                   {
                     title: applicationTitle,
                     colour: colors.navy,
-                    link: { url: applicationPath },
+                    onClickAction: () =>
+                      handleUpdateMembershipApplication({ app }),
                   },
                   {
                     title: "Apply for SIG Membership",
