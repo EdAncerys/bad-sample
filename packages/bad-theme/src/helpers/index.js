@@ -32,6 +32,7 @@ export const authCookieActionBeforeCSR = async ({
       // dev env testing on refresh overwrites cookie value
       // contactid = "cc9a332a-3672-ec11-8943-000d3a43c136"; // andy
       // contactid = "969ba377-a398-ec11-b400-000d3aaedef5"; // emilia
+      // contactid = "a167c3ee-ba93-e711-80f5-3863bb351f50", // membership
     }
 
     const catalogueURL =
