@@ -284,7 +284,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
         <div className="col-12 col-lg-6">
           <ServeCardContent />
           <ServeBannerOverLayMobile />
-          <ServeButtonsOverLayMobile />
+          {/* <ServeButtonsOverLayMobile /> */}
         </div>
       </>
     );
