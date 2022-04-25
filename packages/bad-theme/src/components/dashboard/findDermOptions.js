@@ -130,7 +130,7 @@ const FindDermatologistOptions = ({ state }) => {
         },
       });
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       setErrorAction({
         dispatch,
         isError: {
@@ -153,7 +153,6 @@ const FindDermatologistOptions = ({ state }) => {
         attachments: bad_profile_photo_url,
         refreshJWT,
       });
-    // console.log("bad_profile_photo_url", bad_profile_photo_url); // debug
 
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -161,6 +160,7 @@ const FindDermatologistOptions = ({ state }) => {
     }));
   };
 
+  // 📌 hide component if user is not a member
   if (!findDerm) return null;
 
   return (

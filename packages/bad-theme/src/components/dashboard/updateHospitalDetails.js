@@ -86,8 +86,6 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   };
 
   const handleProfileUpdate = async () => {
-    // console.log("formData", formData); // debug
-
     setIsFetching(true);
     // const address1_line1 = formData.address1_line1;
     const bad_gmcno = formData.bad_gmcno;
@@ -118,7 +116,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         isError: { message: `Professional information updated successfully` },
       });
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       setErrorAction({
         dispatch,
         isError: {

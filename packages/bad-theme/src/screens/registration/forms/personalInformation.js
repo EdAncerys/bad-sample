@@ -95,7 +95,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
       }));
     }
 
-    console.log("🐞 applicationData", applicationData);
+    // console.log("🐞 applicationData", applicationData);
     if (!applicationData) return null;
     applicationData.map((data) => {
       if (data.name === "py3_title") handleSetData({ data, name: "py3_title" });
@@ -166,7 +166,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
         }
       }
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
     } finally {
       setIsFetchingAddress(false);
     }
@@ -290,7 +290,6 @@ const PersonalDetails = ({ state, actions, libraries }) => {
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
     }));
-    console.log(formData); // debug
   };
 
   // SERVERS ---------------------------------------------

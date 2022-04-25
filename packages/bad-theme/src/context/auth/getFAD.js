@@ -1,7 +1,7 @@
 import { authenticateAppAction, setFetchAction } from "../index";
 
 export const getFadAction = async ({ state, dispatch, page, refreshJWT }) => {
-  console.log("getFadAction triggered");
+  // console.log("getFadAction triggered");
 
   let perPage = 15;
   let skip = page ? page * perPage : 0; // define skip for pagination
@@ -22,12 +22,10 @@ export const getFadAction = async ({ state, dispatch, page, refreshJWT }) => {
     const data = await fetch(URL, requestOptions);
     if (!data) throw new Error("error fetching data form API");
     const result = await data.json();
-    console.log("page", page);
-    console.log("getFadAction data", result.data);
 
     return result.data;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
   }
@@ -39,7 +37,7 @@ export const getFADSearchAction = async ({
   query,
   refreshJWT,
 }) => {
-  console.log("getFADSearchAction triggered");
+  // console.log("getFADSearchAction triggered");
 
   try {
     const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
@@ -55,11 +53,10 @@ export const getFADSearchAction = async ({
     const data = await fetch(URL, requestOptions);
     if (!data) throw new Error("error fetching data form API");
     const result = await data.json();
-    console.log("getFadAction data", result.data);
 
     return result.data;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
@@ -69,7 +66,7 @@ export const getAllFadAction = async ({
   page,
   refreshJWT,
 }) => {
-  console.log("getFadAction triggered");
+  // console.log("getFadAction triggered");
 
   let skip = page || 0;
   let perPage = 100;
@@ -93,19 +90,15 @@ export const getAllFadAction = async ({
       if (!data) throw new Error("error fetching data form API");
       const result = await data.json();
 
-      console.log("length", result.data.length);
-      console.log("result", result);
-
       responseLength = result.data.length;
       skip++;
       // spread response to postData equal to previous postData + new response
       postData = [...postData, ...result.data];
     }
 
-    console.log("Total posts", postData.length);
     return postData;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
   }
@@ -113,6 +106,6 @@ export const getAllFadAction = async ({
 
 // SET CONTEXT ---------------------------------------------------
 export const setFadAction = ({ dispatch, fad }) => {
-  console.log("setFadAction triggered"); //debug
+  // console.log("setFadAction triggered"); //debug
   dispatch({ type: "SET_FAD_ACTION", payload: fad });
 };

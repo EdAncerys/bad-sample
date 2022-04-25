@@ -38,16 +38,12 @@ const FindADermatologist = ({ state, block }) => {
         dispatch,
         refreshJWT,
       });
-      console.log("QUERY VALUE POSTCODE", query);
       const post_code = query.value.split(" ").join("");
-      console.log(post_code);
       const url =
         state.auth.APP_HOST +
         "/catalogue/fad/" +
         post_code +
         `?limit=${query_limit.current}`;
-      console.log("JWT", jwt);
-      console.log("URL", url);
       const fetching = await fetch(url, {
         headers: {
           Authorization: `Bearer ${jwt}`,
@@ -55,16 +51,13 @@ const FindADermatologist = ({ state, block }) => {
       });
       if (fetching.ok) {
         const json = await fetching.json();
-        console.log("JSON", json);
         const data = json.data;
-        console.log("DATERO", data);
         const result = data.reduce((acc, derm) => {
           return {
             ...acc,
             [derm.address3_postalcode]: [derm],
           };
         }, {});
-        console.log("REDUCTION", result);
         setDermOnFocus({
           lat: Number(data[0].cordinates.lat),
           lng: Number(data[0].cordinates.lng),
@@ -92,7 +85,6 @@ const FindADermatologist = ({ state, block }) => {
           lat: Number(json.data.location.lattitude),
           lng: Number(json.data.location.longitude),
         });
-        console.log("DERONFOC", dermOnFocus);
       }
     };
 
@@ -112,7 +104,6 @@ const FindADermatologist = ({ state, block }) => {
         const regex = new RegExp(query.value, "gi");
 
         const filteredData = data.filter((item) => item.fullname.match(regex));
-        console.log("FILTERED", filteredData);
 
         setFilteredDermatologists(filteredData);
       }
@@ -132,7 +123,6 @@ const FindADermatologist = ({ state, block }) => {
       "/catalogue/fad/" +
       post_code +
       `?limit=5&skip=${query_limit.current}`;
-    console.log("URL_LOADMORE", url);
     const more = await fetch(url, {
       headers: {
         Authorization: `Bearer ${jwt}`,
@@ -141,7 +131,6 @@ const FindADermatologist = ({ state, block }) => {
 
     if (more.ok) {
       const json = await more.json();
-      console.log(json.data);
       if (json.data.length === 0) enough.current = true;
       setFilteredDermatologists((filteredDermatologists) => [
         ...filteredDermatologists,
@@ -149,7 +138,6 @@ const FindADermatologist = ({ state, block }) => {
       ]);
       query_limit.current += 10;
       setLoading(false);
-      console.log(filteredDermatologists);
     }
   };
 
@@ -433,7 +421,6 @@ const FindADermatologist = ({ state, block }) => {
           className="blue-btn"
           onClick={() => {
             handleLoadMore();
-            console.log("QUERY_LIMIT", query_limit.current);
           }}
           style={{ width: 150 }}
         >

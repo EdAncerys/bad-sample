@@ -6,7 +6,7 @@ export const getHospitalsAction = async ({
   dispatch,
   refreshJWT,
 }) => {
-  console.log("getHospitalsAction triggered");
+  // console.log("getHospitalsAction triggered");
 
   const URL =
     state.auth.APP_HOST + `/catalogue/lookup/hospitals?search=${input}`;
@@ -25,7 +25,7 @@ export const getHospitalsAction = async ({
       return result.data;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
@@ -35,7 +35,7 @@ export const getHospitalNameAction = async ({
   dispatch,
   refreshJWT,
 }) => {
-  console.log("getHospitalsAction triggered");
+  // console.log("getHospitalsAction triggered");
 
   const URL =
     state.auth.APP_HOST +
@@ -52,10 +52,9 @@ export const getHospitalNameAction = async ({
     const result = await data.json();
 
     if (result) {
-      console.log("Hospital Data ", result);
       return result;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };

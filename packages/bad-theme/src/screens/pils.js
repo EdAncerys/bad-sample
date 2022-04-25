@@ -53,7 +53,6 @@ const Pils = ({ state, actions, libraries }) => {
   const ServeBody = () => {
     if (!pil.content) return null;
     const bodyLength = pil.content.rendered.length;
-    console.log("body length: ", bodyLength); // debug
 
     return (
       <div

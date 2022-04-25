@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
+import DirectDebitNotification from "./directDebitNotification";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -124,6 +125,7 @@ const DashboardNotifications = ({ state, actions, libraries }) => {
 
   return (
     <div>
+      <DirectDebitNotification />
       <ServeProfileReminders />
       <ServeAppReminders />
     </div>

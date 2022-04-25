@@ -1,5 +1,5 @@
 export const googleAutocompleteAction = async ({ state, query }) => {
-  console.log("googleAutocompleteAction triggered");
+  // console.log("googleAutocompleteAction triggered");
   // restrict calls if query is less than 2 characters
   if (query.length < 2) return;
 
@@ -22,13 +22,11 @@ export const googleAutocompleteAction = async ({ state, query }) => {
     const result = await data.json();
 
     if (result.status === "OK") {
-      console.log("Google API prediction", result.predictions); // debug
       return result.predictions;
     } else {
-      console.log("Google API error", result.error_message); // debug
       return [];
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };

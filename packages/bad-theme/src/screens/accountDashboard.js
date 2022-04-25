@@ -51,7 +51,6 @@ const AccountDashboard = ({ state, actions, libraries }) => {
 
   useEffect(async () => {
     if (!isActiveUser) return null;
-    console.log("🐞 ", isActiveUser);
     let isProfileComplete = true;
     // --------------------------------------------------------------------------------
     // 📌 SET Dashboard notification if user profile not complete
@@ -168,6 +167,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
           <BlockWrapper>
             {!lg ? <DashboardNavigation /> : <DashboardNavigationMobile />}
             <DashboardNotifications />
+
             <Dashboard />
             <DashboardEvents />
             <Membership />

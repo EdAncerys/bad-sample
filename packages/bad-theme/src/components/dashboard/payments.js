@@ -5,16 +5,19 @@ import { colors } from "../../config/imports";
 import PaymentModal from "./paymentModal";
 import Loading from "../loading";
 import TitleBlock from "../titleBlock";
-
+import PaymentHistory from "./paymentHistory";
+import ActionPlaceholder from "../actionPlaceholder";
 // CONTEXT ---------------------------------------------
-import { setErrorAction, authenticateAppAction } from "../../context";
-
 import {
   useAppState,
   getApplicationStatus,
   useAppDispatch,
   muiQuery,
+  setErrorAction,
+  authenticateAppAction,
+  isActiveUser,
 } from "../../context";
+
 const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   const { lg } = muiQuery();
   const dispatch = useAppDispatch();
@@ -22,13 +25,27 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
   const [paymentUrl, setPaymentUrl] = useState("");
   const [liveSubscriptions, setLiveSubscriptions] = useState(null);
+  const [subAppHistory, setAppHistory] = useState([]);
+  const [isFetching, setFetching] = useState(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
   useEffect(() => {
     setLiveSubscriptions(dynamicsApps);
-  }, []);
+
+    if (dynamicsApps) {
+      // get apps with billinghistory for payments
+      // get current year
+      const currentYear = new Date().getFullYear();
+      // get apps that billing ending year is current year
+      const apps = dynamicsApps.subs.data.filter((app) =>
+        app.core_endon.includes(currentYear)
+      );
+
+      setAppHistory(apps);
+    }
+  }, [dynamicsApps]);
 
   // when should I return null ?
   if (!subscriptions) return null;
@@ -51,13 +68,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     const sagepayUrl = core_membershipsubscriptionid
       ? `/sagepay/${sagepay_live}/subscription/`
       : `/sagepay/${sagepay_live}/application/`;
-    console.log(
-      "ADDRESS:",
-      state.auth.APP_HOST +
-        sagepayUrl +
-        type +
-        `?redirecturl=${state.auth.APP_URL}/payment-confirmation/`
-    );
+
     try {
       const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
@@ -76,13 +87,12 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
       if (fetchVendorId.ok) {
         const json = await fetchVendorId.json();
-        console.log(json);
         const url =
           json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
         setPaymentUrl(url);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       setErrorAction({
         dispatch,
         isError: {
@@ -106,6 +116,34 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   };
 
   // SERVERS ---------------------------------------------
+  const ServeBilingHistory = () => {
+    if (subAppHistory.length === 0) return null;
+
+    return (
+      <div style={{ position: "relative" }}>
+        <ActionPlaceholder isFetching={isFetching} background="transparent" />
+
+        <div
+          className="primary-title"
+          style={{ fontSize: 20, padding: "1em 0" }}
+        >
+          Billing:
+        </div>
+        {subAppHistory.map((block, key) => {
+          return (
+            <PaymentHistory
+              key={key}
+              block={block}
+              item={key}
+              subAppHistory={subAppHistory}
+              setFetching={setFetching}
+            />
+          );
+        })}
+      </div>
+    );
+  };
+
   const ServePayments = ({ block, item, type }) => {
     if (dashboard && block.bad_sagepayid !== null) return null;
 
@@ -141,17 +179,15 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       const ServePaymentStatus = () => {
         if (!bad_sagepayid) return null;
         if (lg && bad_sagepayid) return "Status: paid";
-        if (bad_sagepayid) return "Paid";
+        if (bad_sagepayid)
+          return <div style={{ textAlign: "center", minWidth: 145 }}>Paid</div>;
       };
 
       return (
-        <div
-          style={{
-            margin: `auto 0`,
-            width: !lg ? marginHorizontal * 2 : "auto",
-          }}
-        >
-          <div style={{ padding: !lg ? `0 2em` : 0 }}>
+        <div style={{ margin: `auto 0` }}>
+          <div
+            style={{ width: "fit-content", marginLeft: "4em", minWidth: 145 }}
+          >
             <ServePayButton />
             <ServePaymentStatus />
           </div>
@@ -167,8 +203,6 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       if (type === "subscriptions")
         paymentLength = liveSubscriptions.subs.data.length;
       const isLastItem = paymentLength === item + 1;
-      console.log("🐞 ", liveSubscriptions);
-      console.log("🐞 item", item);
 
       return (
         <div
@@ -178,7 +212,6 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
               ? `1px solid ${colors.darkSilver}`
               : "none",
             padding: !lg ? `1em` : 0,
-            paddingTop: !lg ? null : "1em",
           }}
         >
           <div className="flex" style={styles.fontSize}>
@@ -210,13 +243,16 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
         : liveSubscriptions.subs.data.length === 0;
     const appsOrSubs = type === "applications" ? "apps" : "subs";
 
+    let padding = "2em 0 1em 0";
+    if (type === "subscriptions") padding = "1em 0";
+
     return (
       <div>
         <div
           className="primary-title"
           style={{
             fontSize: 20,
-            padding: !lg ? "2em 0" : 0,
+            padding: !lg ? padding : 0,
             marginTop: !lg ? null : "1em",
           }}
         >
@@ -256,6 +292,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
         {!dashboard && <ServeListOfPayments type="applications" />}
         <ServeListOfPayments type="subscriptions" />
+        <ServeBilingHistory />
       </div>
     </div>
   );

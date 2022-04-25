@@ -39,7 +39,6 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
     let searchData = {};
     let pils = state.source.pils;
     let guidelines = state.source.guidelines_standards;
-    // console.log("data", pils, guidelines); // debug
 
     if (!pils) {
       await getPILsDataAction({ state, actions });
@@ -109,13 +108,10 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
       setFilterData(null);
       setInputValue("");
     }
-    // console.log("filterData", data.length); // debug
-    // console.log("input", input); // debug
   };
 
   const selectHandler = ({ item }) => {
     const isGuidelines = item.type === "guidelines_standards";
-    console.log("item", item);
     if (isGuidelines) {
       setIdFilterAction({ dispatch, idFilter: item.id });
     }

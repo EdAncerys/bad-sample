@@ -168,7 +168,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         subsData.filter((item) => item.bad_organisedfor === "BAD").length > 0;
       // if user have application pending under reviewed status redirect to application list
       if (isApprovedBAD) {
-        console.log("🤖 user have BAD application approved");
+        // console.log("🤖 user have BAD application approved");
         setCanChangeHospital(false);
       }
     }
@@ -226,7 +226,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
           setSelectedHospital(hospitalData.name);
         }
       } catch (error) {
-        console.log("🤖 error", error);
+        // console.log("🤖 error", error);
       }
     }
     let apps = [];
@@ -272,7 +272,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
         ...prevFormData,
         bad_categorytype: type,
       }));
-      console.log("FORMDATA", formData);
       // update policy link agains app data
       handlePolicyLinkUpdate({
         membershipData,
@@ -319,7 +318,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         attachments: sky_cvurl,
         refreshJWT,
       });
-    console.log("🐞 ", sky_cvurl); // debug
+    // console.log("🐞 ", sky_cvurl); // debug
 
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -502,7 +501,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       if (isActiveUser && appsResponse)
         setGoToAction({ state, path: slug, actions });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setFetching(false);
     }
@@ -510,6 +509,15 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
+
+    // handle BAD member question
+    if (name === "bad_isbadmember") {
+      let isBadMember = value === "true" ? true : false;
+      return setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: isBadMember,
+      }));
+    }
 
     // if input value py3_insertnhsnetemailaddress in wp set to show proceed
     if (
@@ -557,7 +565,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         }
       }
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
     } finally {
       setIsFetchingAddress(false);
     }
@@ -1176,13 +1184,18 @@ const SIGApplication = ({ state, actions, libraries }) => {
           {inputValidator.sig_bad_isbadmember && (
             <div className="flex-col">
               <label className="form-label">Are you BAD member?</label>
-              <input
+              <Form.Select
                 name="bad_isbadmember"
-                checked={formData.bad_isbadmember}
+                value={formData.bad_isbadmember}
                 onChange={handleInputChange}
-                type="checkbox"
-                className="form-check-input check-box"
-              />
+                className="input"
+              >
+                <option value="" hidden>
+                  Yes, No
+                </option>
+                <option value={true}>Yes</option>
+                <option value={false}>No</option>
+              </Form.Select>
             </div>
           )}
 

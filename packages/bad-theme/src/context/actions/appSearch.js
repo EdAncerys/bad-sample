@@ -1,5 +1,5 @@
 export const appSearchAction = async ({ state, query }) => {
-  console.log("appSearchAction triggered");
+  // console.log("appSearchAction triggered");
 
   let pageNo = 1;
   let perPage = 20;
@@ -29,6 +29,6 @@ export const appSearchAction = async ({ state, query }) => {
 
     return postData;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };

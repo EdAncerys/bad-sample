@@ -51,7 +51,7 @@ import { useQuery } from "../hooks/useQuery";
 import { useScraper } from "../hooks/useScraper";
 import { useB2CLogin } from "../hooks/useB2CLogin";
 import { useRedirect } from "../hooks/useRedirect";
-import { useImage } from "../hooks/useImage";
+import { useScript } from "../hooks/useScript";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -60,7 +60,6 @@ import {
   getWPMenu,
   setPlaceholderAction,
   setIdFilterAction,
-  getLeadershipTeamData,
   muiQuery,
 } from "../context";
 
@@ -73,7 +72,7 @@ const App = ({ state, actions }) => {
   let urlPath = state.router.link;
   const data = state.source.get(urlPath);
   const useEffectRef = useRef(true);
-  console.log("INDEX data", data); // debug
+  // console.log("INDEX data", data); // debug
   // --------------------------------------------------------------------------------
   // 📌  B2C login handler.
   // --------------------------------------------------------------------------------
@@ -84,6 +83,10 @@ const App = ({ state, actions }) => {
   useRedirect({ state, dispatch, actions, redirects, urlPath });
   // 📌 hook for media queries
   useQuery({ state });
+  // 📌 add script for Google API
+  // useScript({
+  //   url: `https://maps.googleapis.com/maps/api/js?key=${state.auth.GOOGLE_API_KEY}&libraries=places`,
+  // });
 
   useEffect(() => {
     // ⬇️ restore scroll history to manual position ⬇️
@@ -101,14 +104,13 @@ const App = ({ state, actions }) => {
     await authCookieActionAfterCSR({ state, dispatch, refreshJWT });
     // ⬇️  pre-fetch app menu from wp
     await getWPMenu({ state, actions });
-    // ⬇️  get leadership data
-    await getLeadershipTeamData({ state, actions });
+
     // get current time & compare how long pre-fetch took before  setting placeholder
     const timeTaken = new Date().getTime() - currentTime;
     // 📌 if time taken is less than 3s await for remaining time before proceeding
-    console.log("timeTaken", timeTaken); // debug
-    if (timeTaken < 3000) {
-      await new Promise((resolve) => setTimeout(resolve, 3000 - timeTaken));
+    // console.log("timeTaken", timeTaken); // debug
+    if (timeTaken < 2000) {
+      await new Promise((resolve) => setTimeout(resolve, 2000 - timeTaken));
     }
     // ⬇️  set APP placeholder after async actions to false
     // if page path include codecollect, skip placeholder

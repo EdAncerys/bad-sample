@@ -45,6 +45,6 @@ export const useRedirect = ({
     if (!redirect) return null; // skip if redirect is not found
     // 📌  set redirect to state
     setGoToAction({ state, path: redirect["301_to"], actions });
-    console.log("🐞 REDIRECT TRIGERED", redirect);
+    // console.log("🐞 REDIRECT TRIGERED", redirect);
   }, [urlPath, redirects]);
 };

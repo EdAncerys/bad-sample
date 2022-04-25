@@ -49,9 +49,10 @@ const Dashboard = ({ state, actions, libraries }) => {
   useEffect(async () => {
     // pre fetch events data
     let data = state.source.events;
-    if (!data) await getEventsData({ state, actions });
-    data = state.source.events;
-    if (data) data = Object.values(data);
+    if (!data) data = await getEventsData({ state, actions });
+
+    if (!data) return null;
+    data = Object.values(data);
     // 📌 sort events by date newest first
     data.sort((a, b) => {
       let dateA = a.acf.date_time;
@@ -147,7 +148,7 @@ const Dashboard = ({ state, actions, libraries }) => {
       });
       if (!appData) throw new Error("Failed to create application");
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       setErrorAction({
         dispatch,
@@ -174,7 +175,7 @@ const Dashboard = ({ state, actions, libraries }) => {
       // await for link to download & open in new window to download
       window.open(url, "_blank");
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setFetching(false);
     }
@@ -294,6 +295,10 @@ const Dashboard = ({ state, actions, libraries }) => {
 
   if (dashboardPath !== "Dashboard") return null;
 
+  // 📌 If user dont have any subscription dont render the component
+  let isSubsData = subsData;
+  if (subsData && subsData.length === 0) isSubsData = null;
+
   // RETURN ---------------------------------------------
   return (
     <div style={{ padding: `0 ${marginHorizontal}px` }}>
@@ -323,12 +328,28 @@ const Dashboard = ({ state, actions, libraries }) => {
                 >
                   Current Subscriptions
                 </div>
+
+                {!isSubsData && (
+                  <div
+                    className="primary-title"
+                    style={{
+                      fontWeight: "bold",
+                      display: "grid",
+                      alignItems: "center",
+                      paddingTop: "1em",
+                    }}
+                  >
+                    You have no current membership activity.
+                  </div>
+                )}
+
                 {subsData.map((app, key) => {
                   const {
                     bad_organisedfor,
                     core_name,
                     createdon,
                     core_membershipsubscriptionid,
+                    bad_sagepayid,
                   } = app;
                   // get application date
                   let appData = createdon.split(" ")[0];
@@ -375,7 +396,7 @@ const Dashboard = ({ state, actions, libraries }) => {
 
                         setStatus(isSubmitted); // set status to submitted
                       } catch (error) {
-                        console.log(error);
+                        // console.log(error);
                       }
                     }, []);
 
@@ -396,24 +417,26 @@ const Dashboard = ({ state, actions, libraries }) => {
                         </div>
                       );
 
-                    return (
-                      <div
-                        style={{
-                          display: "grid",
-                          alignItems: "center",
-                          marginRight: "2em",
-                        }}
-                      >
+                    // 📌 if app is approved & payed for only render the button
+                    if (bad_sagepayid)
+                      return (
                         <div
-                          className="blue-btn"
-                          onClick={() =>
-                            handleUpdateMembershipApplication({ app })
-                          }
+                          style={{
+                            display: "grid",
+                            alignItems: "center",
+                            marginRight: "2em",
+                          }}
                         >
-                          Apply for BAD category change
+                          <div
+                            className="blue-btn"
+                            onClick={() =>
+                              handleUpdateMembershipApplication({ app })
+                            }
+                          >
+                            Apply for BAD category change
+                          </div>
                         </div>
-                      </div>
-                    );
+                      );
                   };
 
                   const ServeMembershipActions = () => {
@@ -464,7 +487,6 @@ const Dashboard = ({ state, actions, libraries }) => {
                             {bad_organisedfor}
                           </div>
                           <div>{core_name}</div>
-                          {/* <div>Application Date: {formattedDate}</div> */}
                         </div>
                         <ServeChangeApplicationAction />
                         <ServeMembershipActions />
@@ -476,7 +498,7 @@ const Dashboard = ({ state, actions, libraries }) => {
             </div>
           </div>
         )}
-        <ServeApplicationStatus />
+        {/* <ServeApplicationStatus /> */}
         <ServePayments />
       </div>
       <ServeEvents />

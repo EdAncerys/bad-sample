@@ -6,7 +6,7 @@ export const getDirectDebitAction = async ({
   id,
   refreshJWT,
 }) => {
-  console.log("getDirectDebitAction triggered");
+  // console.log("getDirectDebitAction triggered");
 
   const URL = state.auth.APP_HOST + `/bankaccount/${id}`;
   const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
@@ -24,7 +24,7 @@ export const getDirectDebitAction = async ({
     if (data.success)
       setDirectDebitAction({ dispatch, isDirectDebit: data.data });
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
@@ -34,7 +34,7 @@ export const getInvoiceAction = async ({
   isActiveUser,
   refreshJWT,
 }) => {
-  console.log("getInvoiceAction triggered");
+  // console.log("getInvoiceAction triggered");
 
   const { contactid } = isActiveUser;
   if (!contactid) throw new Error("Cannot get receipts. Contactid is missing.");
@@ -51,12 +51,10 @@ export const getInvoiceAction = async ({
 
   try {
     const response = await fetch(URL, requestOptions);
-    console.log("⬇️ invoice data ⬇️ "); // debug
-    console.log(response.url); // debug
 
     if (response.ok) return response.url;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
@@ -67,7 +65,7 @@ export const getProofOfMembershipAction = async ({
   dispatch,
   refreshJWT,
 }) => {
-  console.log("getProofOfMembershipAction triggered");
+  // console.log("getProofOfMembershipAction triggered");
 
   const { contactid } = isActiveUser;
   if (!contactid)
@@ -85,12 +83,10 @@ export const getProofOfMembershipAction = async ({
 
   try {
     const response = await fetch(URL, requestOptions);
-    console.log("⬇️ membership data ⬇️ "); // debug
-    console.log(response.url); // debug
 
     if (response.ok) return response.url;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
@@ -101,7 +97,7 @@ export const createDirectDebitAction = async ({
   dispatch,
   refreshJWT,
 }) => {
-  console.log("createDirectDebitAction triggered");
+  // console.log("createDirectDebitAction triggered");
 
   const URL = state.auth.APP_HOST + `/bankaccount/${id}`;
   const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
@@ -124,12 +120,12 @@ export const createDirectDebitAction = async ({
 
     return data;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
 // SET CONTEXT ---------------------------------------------------
 export const setDirectDebitAction = ({ dispatch, isDirectDebit }) => {
-  console.log("setDirectDebitAction triggered"); //debug
+  // console.log("setDirectDebitAction triggered"); //debug
   dispatch({ type: "SET_DIRECT_DEBIT_ACTION", payload: isDirectDebit });
 };

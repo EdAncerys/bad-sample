@@ -113,7 +113,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         subsData.filter((item) => item.bad_organisedfor === "BAD").length > 0;
       // if user have application pending under reviewed status redirect to application list
       if (isApprovedBAD) {
-        console.log("🤖 user have BAD application approved");
+        // console.log("🤖 user have BAD application approved");
         setCanChangeHospital(false);
       }
     }
@@ -170,7 +170,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
           setSelectedHospital(hospitalData.name);
         }
       } catch (error) {
-        console.log("🤖 error", error);
+        // console.log("🤖 error", error);
       }
     }
 
@@ -189,7 +189,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   const handleSelectHospital = ({ item }) => {
     setSelectedHospital(item.title);
     setHospitalData(null); // clear hospital data for dropdown
-    console.log("selected hospital", item); // debug
 
     // guard if user have BAD apps approved dont allow hospital lookup
     if (!canChangeHospital) return;
@@ -318,7 +317,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       if (isActiveUser && appsResponse)
         setGoToAction({ state, path: slug, actions });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       setErrorAction({
         dispatch,
@@ -346,7 +345,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
   const handleDocUploadChange = async (e) => {
     let sky_cvurl = e.target.files[0];
-    console.log("e", e); // debug
 
     if (sky_cvurl)
       sky_cvurl = await sendFileToS3Action({
@@ -355,7 +353,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         attachments: sky_cvurl,
         refreshJWT,
       });
-    console.log("sky_cvurl", sky_cvurl); // debug
+    // console.log("sky_cvurl", sky_cvurl); // debug
 
     setFormData((prevFormData) => ({
       ...prevFormData,

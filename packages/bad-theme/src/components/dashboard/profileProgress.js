@@ -23,7 +23,6 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { dynamicsApps, applicationData, isActiveUser, refreshJWT } =
     useAppState();
-  // console.log("dynamicsApps", dynamicsApps); // debug
 
   const marginVertical = state.theme.marginVertical;
   const ICON_WIDTH = 30;

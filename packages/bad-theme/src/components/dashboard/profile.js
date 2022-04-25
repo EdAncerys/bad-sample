@@ -159,7 +159,7 @@ const Profile = ({ state, actions, libraries }) => {
     };
 
     return (
-      <div style={{ paddingTop: `1em`, fontSize: 20 }}>
+      <div style={{ paddingTop: `1em` }}>
         <ServeMembershipNumber />
         <ServeBadCategory />
         <ServeMainPlaceOfWork />

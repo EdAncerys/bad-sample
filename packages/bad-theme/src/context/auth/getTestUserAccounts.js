@@ -5,7 +5,7 @@ export const getTestUserAccountsAction = async ({
   dispatch,
   refreshJWT,
 }) => {
-  console.log("getTestUserAccountsAction triggered");
+  // console.log("getTestUserAccountsAction triggered");
 
   const URL =
     state.auth.APP_HOST +
@@ -22,11 +22,9 @@ export const getTestUserAccountsAction = async ({
     const result = await data.json();
     if (!result) throw new Error("Error getting userData.");
 
-    console.log("getTestUserAccountsAction result", result); // debug
-
     if (result.value) return result.value;
     return null;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };

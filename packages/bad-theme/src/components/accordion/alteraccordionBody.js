@@ -92,7 +92,7 @@ const AccordionBody = ({
         refreshJWT,
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       setErrorAction({
         dispatch,

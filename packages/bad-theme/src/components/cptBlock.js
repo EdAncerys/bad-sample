@@ -338,7 +338,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           const file = block.acf.file_download;
           let cardLink = link;
           if (redirect) cardLink = redirect.url;
-          // console.log("🐞 ", block);
 
           return (
             <Card

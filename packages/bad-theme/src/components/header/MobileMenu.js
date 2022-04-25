@@ -67,7 +67,6 @@ export default connect(({ libraries, state, actions, toggleMobileMenu }) => {
   }, [state.theme.menu]);
 
   if (menuContent) {
-    console.log(menuContent);
     return (
       <div style={styles.container}>
         <Nav.Link onClick={() => setMenuContent(null)}> Go Back</Nav.Link>
@@ -87,7 +86,6 @@ export default connect(({ libraries, state, actions, toggleMobileMenu }) => {
         ) : null}
 
         {menuContent.children.map((item) => {
-          console.log(menuContent);
           return (
             <Nav.Link
               style={styles.navMenuItem}

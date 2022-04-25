@@ -35,7 +35,6 @@ const BADMemberships = ({ state, actions, libraries, block }) => {
     membershipTypes = membershipTypes.filter(
       (membership) => membership.acf.bad_or_sig === "bad"
     );
-    // console.log("membershipTypes", membershipTypes); //debug
     // sort memberships by bad_order accenting & if no value push to end
     membershipTypes.sort((a, b) => {
       if (a.acf.bad_order && b.acf.bad_order) {

@@ -1,7 +1,7 @@
 import { authenticateAppAction, setFetchAction } from "../index";
 
 export const getTweetsAction = async ({ state, dispatch, refreshJWT }) => {
-  console.log("getTweetsAction triggered");
+  // console.log("getTweetsAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
   const URL = state.auth.APP_HOST + `/twitter/tweets?limit=3`;
@@ -18,7 +18,7 @@ export const getTweetsAction = async ({ state, dispatch, refreshJWT }) => {
 
     setTweetsAction({ dispatch, tweets });
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
   }
@@ -26,6 +26,6 @@ export const getTweetsAction = async ({ state, dispatch, refreshJWT }) => {
 
 // SET CONTEXT ---------------------------------------------------
 export const setTweetsAction = ({ dispatch, tweets }) => {
-  console.log("setTweetsAction triggered"); //debug
+  // console.log("setTweetsAction triggered"); //debug
   dispatch({ type: "SET_TWEETS_ACTION", payload: tweets });
 };
