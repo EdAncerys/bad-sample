@@ -14,6 +14,7 @@ import { muiQuery, useAppState } from "../context";
 const VideoArchive = ({ state, actions, libraries }) => {
   const [postData, setPostData] = useState(null);
   const [heroBannerBlock, setHeroBannerBlock] = useState(null);
+  const [userVideos, setUserVideos] = useState(null);
   // const [showMyVids, setShowMyVids] = useState(false);
 
   const { isActiveUser } = useAppState();
@@ -38,15 +39,17 @@ const VideoArchive = ({ state, actions, libraries }) => {
       setPostData(unfilteredVideos);
       return true;
     }
+    let filteredVideos = unfilteredVideos;
+    if (showOnlyMyVids.current === true) {
+      filteredVideos = filteredVideos.filter((video) => {
+        const id = video.acf.event_id;
+        return userVideos.some((userVideo) => {
+          return userVideo.event_id === id;
+        });
+      });
+    }
 
-    // if(showOnlyMyVids.current === true){
-    //   const vids = [];
-
-    //   unfilteredVideos.map(vid => {
-    //     if(vid.acf.event_id)
-    //   })
-    // }
-    const filteredVideos = unfilteredVideos.filter((video) => {
+    filteredVideos = filteredVideos.filter((video) => {
       if (
         specialtyFilter.current &&
         !video.event_specialty.includes(Number(specialtyFilter.current))
@@ -236,7 +239,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
           justifyContent: "center",
         }}
       >
-        "There are no videos found"
+        There are no videos found
       </div>
     );
   };
@@ -358,7 +361,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
       );
 
       const json = await listOfVids.json();
-
+      setUserVideos(json.data);
       console.log("List of vids", json);
     };
     const data = state.source.get(state.router.link);

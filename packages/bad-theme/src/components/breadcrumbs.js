@@ -109,6 +109,7 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
           className="flex"
           style={{
             marginRight: MARGIN * 2,
+            marginLeft: !lg ? null : MARGIN * 2,
             fontSize: 14,
             alignItems: "center",
           }}
