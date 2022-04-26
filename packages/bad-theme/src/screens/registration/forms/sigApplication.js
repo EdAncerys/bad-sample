@@ -287,6 +287,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     });
 
     setMembershipData(membershipData); // set membership data
+    console.log("MEMDATA", membershipData);
   }, [state.source.memberships]);
 
   // HANDLERS --------------------------------------------
