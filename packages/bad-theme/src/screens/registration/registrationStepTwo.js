@@ -243,6 +243,8 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
                 Membership Category
               </option>
               {membershipData.map((item, key) => {
+                if (item.id === 8800) return null;
+                if (item.id === 8801) return null;
                 const { bad_or_sig, category_types } = item.acf;
                 if (bad_or_sig !== "bad") return null;
 

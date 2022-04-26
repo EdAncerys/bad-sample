@@ -1276,7 +1276,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.sig_py3_whatukbasedroleareyou && (
             <div>
-              <label style={styles.subTitle}>UK / Overseas role</label>
+              <label style={styles.subTitle} className="required">
+                UK / Overseas role
+              </label>
               <Form.Select
                 name="py3_whatukbasedroleareyou"
                 value={formData.py3_whatukbasedroleareyou}
