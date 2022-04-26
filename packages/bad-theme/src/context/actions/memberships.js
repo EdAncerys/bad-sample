@@ -44,6 +44,7 @@ export const validateMembershipFormAction = async ({
   // console.log("⬇️ membershipTypes", membershipTypes); // debug
 
   let type = applicationData[0].bad_categorytype;
+  console.log("TYPE", type);
   if (membershipTypeChange) type = membershipTypeChange; // apply for SIGs change of memberships
   membershipTypes.map((membership) => {
     // validate application type against store object for BAD & SIGs
