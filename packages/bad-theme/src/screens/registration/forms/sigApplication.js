@@ -446,8 +446,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
         "bad_readpolicydocument",
         "sky_cvurl",
         "sig_bad_otherjointclinics",
-        "py3_whatukbasedroleareyou",
-        "y3_speciality",
+        // "py3_whatukbasedroleareyou",
+        // "py3_speciality",
       ],
     });
 
