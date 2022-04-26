@@ -445,6 +445,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
         "py3_ntnno",
         "bad_readpolicydocument",
         "sky_cvurl",
+        "sig_bad_otherjointclinics",
+        "py3_whatukbasedroleareyou",
+        "y3_speciality",
       ],
     });
 
@@ -1300,7 +1303,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.sig_py3_speciality && (
             <div>
-              <label style={styles.subTitle}>Specialist Interest</label>
+              <label style={styles.subTitle} className="required">
+                Specialist Interest
+              </label>
               <Form.Select
                 name="py3_speciality"
                 value={formData.py3_speciality}
