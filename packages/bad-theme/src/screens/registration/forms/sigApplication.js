@@ -210,6 +210,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         let type = data.bad_categorytype;
         if (type === "*") type = "Special Interest Group";
         setType(type); // validate SIG application category type
+        console.log("TYPE", type);
       }
     });
     // apply app additional logic after mapping apps data
@@ -412,17 +413,18 @@ const SIGApplication = ({ state, actions, libraries }) => {
   };
 
   const handleNext = async () => {
+    console.log("MAYBE type", formData.bad_categorytype);
+
     // check if new hospital value been added
     const isNewHospital = formData.bad_newhospitaladded;
     let sigAppliaction = formData;
-
+    console.log("SIGAPP", formData);
     // default py3_address1ine1 to ref if value not set by user
     let isAddressInput = false;
     if (!formData.py3_address1ine1 && address1Line1Ref.current.value.length) {
       isAddressInput = true;
       formData.py3_address1ine1 = address1Line1Ref.current.value;
     }
-
     const isValid = isFormValidated({
       required: [
         "bad_organisedfor",
@@ -446,6 +448,14 @@ const SIGApplication = ({ state, actions, libraries }) => {
         "py3_ntnno",
         "bad_readpolicydocument",
         "sky_cvurl",
+        formData.bad_categorytype ===
+        "Associate:British Society for Medical Dermatology"
+          ? "bad_otherjointclinics"
+          : "",
+        formData.bad_categorytype ===
+        "Full:British Society for Medical Dermatology"
+          ? "bad_otherjointclinics"
+          : "",
       ],
     });
 
@@ -620,7 +630,13 @@ const SIGApplication = ({ state, actions, libraries }) => {
           Back
         </div>
 
-        <div className="blue-btn" onClick={handleNext}>
+        <div
+          className="blue-btn"
+          onClick={() => {
+            alert("Colka");
+            handleNext();
+          }}
+        >
           Submit Application
         </div>
       </div>
@@ -1318,7 +1334,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.sig_bad_otherjointclinics && (
             <div>
-              <label className="form-label">
+              <label className="form-label required">
                 Do you do joint clinics with any other specialties?
               </label>
               <input
