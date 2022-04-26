@@ -456,6 +456,15 @@ const SIGApplication = ({ state, actions, libraries }) => {
         "Full:British Society for Medical Dermatology"
           ? "bad_otherjointclinics"
           : "",
+        formData.bad_categorytype === "Full:British Hair and Nails Society"
+          ? "py3_speciality"
+          : "",
+        formData.bad_categorytype === "Full:British Hair and Nails Society"
+          ? "py3_whatukbasedroleareyou"
+          : "",
+        formData.bad_categorytype === "Full:DERMPATHPRO"
+          ? "py3_currentgrade"
+          : "",
       ],
     });
 
@@ -630,13 +639,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
           Back
         </div>
 
-        <div
-          className="blue-btn"
-          onClick={() => {
-            alert("Colka");
-            handleNext();
-          }}
-        >
+        <div className="blue-btn" onClick={handleNext}>
           Submit Application
         </div>
       </div>
@@ -1293,7 +1296,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.sig_py3_whatukbasedroleareyou && (
             <div>
-              <label style={styles.subTitle}>UK / Overseas role</label>
+              <label style={styles.subTitle} className="required">
+                UK / Overseas role
+              </label>
               <Form.Select
                 name="py3_whatukbasedroleareyou"
                 value={formData.py3_whatukbasedroleareyou}
@@ -1315,7 +1320,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.sig_py3_speciality && (
             <div>
-              <label style={styles.subTitle}>Specialist Interest</label>
+              <label style={styles.subTitle} className="required">
+                Specialist Interest
+              </label>
               <Form.Select
                 name="py3_speciality"
                 value={formData.py3_speciality}
