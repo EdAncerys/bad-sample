@@ -445,9 +445,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
         "py3_ntnno",
         "bad_readpolicydocument",
         "sky_cvurl",
-        "sig_bad_otherjointclinics",
-        // "py3_whatukbasedroleareyou",
-        // "py3_speciality",
       ],
     });
 
@@ -1279,9 +1276,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.sig_py3_whatukbasedroleareyou && (
             <div>
-              <label style={styles.subTitle} className="required">
-                UK / Overseas role
-              </label>
+              <label style={styles.subTitle}>UK / Overseas role</label>
               <Form.Select
                 name="py3_whatukbasedroleareyou"
                 value={formData.py3_whatukbasedroleareyou}
@@ -1303,9 +1298,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.sig_py3_speciality && (
             <div>
-              <label style={styles.subTitle} className="required">
-                Specialist Interest
-              </label>
+              <label style={styles.subTitle}>Specialist Interest</label>
               <Form.Select
                 name="py3_speciality"
                 value={formData.py3_speciality}
@@ -1324,7 +1317,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.sig_bad_otherjointclinics && (
             <div>
-              <label className="required form-label">
+              <label className="form-label">
                 Do you do joint clinics with any other specialties?
               </label>
               <input
@@ -1335,7 +1328,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 className="form-control input"
                 placeholder="Do you do joint clinics with any other specialties?"
               />
-              <FormError id="bad_otherjointclinics" />
             </div>
           )}
 
@@ -1381,7 +1373,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 </div>
                 <label className="form-label">
                   Do you want to be included in the BSSCII discussion forum? If
-                  yes, please tick and add your NHS address below.
+                  yes, please tick and add your NHS address below
                 </label>
               </div>
 
