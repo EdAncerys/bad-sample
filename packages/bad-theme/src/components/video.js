@@ -65,7 +65,7 @@ const Video = ({ state, actions, libraries }) => {
         isActiveUser.contactid +
         "/" +
         post.acf.event_id;
-
+      console.log("URL", url);
       const fetching = await fetch(url, {
         headers: {
           Authorization: `Bearer ${jwt}`,
