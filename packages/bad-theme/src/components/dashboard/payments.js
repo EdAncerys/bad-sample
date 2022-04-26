@@ -118,7 +118,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   // SERVERS ---------------------------------------------
   const ServeBilingHistory = () => {
     if (subAppHistory.length === 0) return null;
-
+    console.log("SUBAPHIS", subAppHistory);
     return (
       <div style={{ position: "relative" }}>
         <ActionPlaceholder isFetching={isFetching} background="transparent" />
@@ -126,9 +126,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
         <div
           className="primary-title"
           style={{ fontSize: 20, padding: "1em 0" }}
-        >
-          Billing:
-        </div>
+        ></div>
         {subAppHistory.map((block, key) => {
           return (
             <PaymentHistory
@@ -159,7 +157,12 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       } = block;
 
       const ServePayButton = () => {
-        if (bad_sagepayid || core_totalamount === "£0.00") return null;
+        if (
+          bad_sagepayid ||
+          core_totalamount === "£0.00" ||
+          core_totalamount.includes("-")
+        )
+          return null;
 
         return (
           <div
@@ -218,7 +221,9 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
             <div>{core_name}</div>
           </div>
           <div className="flex" style={styles.fontSize}>
-            <div>{core_totalamount}</div>
+            <div>
+              {core_totalamount.includes("-") ? "Free" : core_totalamount}
+            </div>
           </div>
         </div>
       );
