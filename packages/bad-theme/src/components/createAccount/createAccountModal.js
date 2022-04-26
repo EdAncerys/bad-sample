@@ -35,8 +35,8 @@ const CreateAccountModal = ({ state, actions }) => {
             Dear User,
             <br />
             We are delighted to announce our new website is now live. To access
-            your existing account or to sign up as a new user please follow the
-            instructions below.
+            your existing BAD account or to sign-up as a new user, please follow
+            the instructions below.
           </div>
         </div>
       </div>
@@ -81,9 +81,9 @@ const CreateAccountModal = ({ state, actions }) => {
         </div>
         <div>
           If you are new to the BAD and do not have an existing account and
-          would like to register with us so that you can apply for BAD and
-          Special Interest Group membership, register for events, and much more
-          then you can sign up here
+          would like to register, then you should follow steps 1 & 2 as above.
+          This will enable you to apply for BAD and Special Interest Group
+          memberships, register for events, and more.
         </div>
         {/* <div
           className="blue-btn"
@@ -106,13 +106,24 @@ const CreateAccountModal = ({ state, actions }) => {
           Those with an existing BAD log in
         </div>
         <div style={{ paddingTop: "1em" }}>
-          If you have already have a registered account with us and are an
-          existing user of the BAD website you will need to follow the
-          ‘register’ link below and then click ‘Sign up now’ on the following
-          screen. You will need to have access to the email account registered
-          with the BAD in order to receive the verification code that will be
-          sent to you. You will also be required to add a password – this can be
-          the same as before.
+          If you had already set-up an account on the old BAD website, you will
+          need to:{" "}
+          <p style={{ marginTop: 10 }}>
+            <span style={{ fontWeight: "bold" }}>Step 1:</span> Click on the
+            ‘Login/Register’ button below
+          </p>{" "}
+          <p>
+            <span style={{ fontWeight: "bold" }}>Step 2:</span> On the following
+            page, click the ‘sign up now’ button
+          </p>
+          <p style={{ marginBottom: 10 }}>
+            <span style={{ fontWeight: "bold" }}>Step 3:</span> Use the email
+            account you currently have registered with the BAD to create an
+            account on the new website.
+          </p>{" "}
+          If you do not use the email associated with your BAD membership
+          account, then you will not be reregistered. If you have any issues
+          with this process, please email membership@bad.org.uk.
         </div>
       </div>
     );
@@ -135,7 +146,7 @@ const CreateAccountModal = ({ state, actions }) => {
           style={{ margin: "1em 0", alignSelf: "flex-start" }}
           onClick={() => loginAction({ state })}
         >
-          Login
+          Login / Register
         </div>
       </div>
     );
