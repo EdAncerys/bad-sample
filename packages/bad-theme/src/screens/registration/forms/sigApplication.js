@@ -1267,7 +1267,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.sig_py3_currentgrade && (
             <div>
-              <label className="form-label">Current Grade</label>
+              <label className="form-label required">Current Grade</label>
               <input
                 name="py3_currentgrade"
                 value={formData.py3_currentgrade}

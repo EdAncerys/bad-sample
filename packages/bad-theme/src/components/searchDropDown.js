@@ -15,10 +15,12 @@ const SearchDropDown = ({
   marginTop,
   isAppSearch,
   input,
+  dataLoading,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   // filter value are one layer deep object with title & link { title: "", link: "" }
+  if (!dataLoading && !filter) return null;
   if (!filter) return null;
 
   const ctaHeight = 45;

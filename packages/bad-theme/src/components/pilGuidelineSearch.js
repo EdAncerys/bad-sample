@@ -17,6 +17,7 @@ import {
   setIdFilterAction,
   muiQuery,
 } from "../context";
+import { TimerOutlined } from "@mui/icons-material";
 
 const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -29,10 +30,11 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 
-  const [content, setContent] = useState(null);
+  const [dataLoading, setDataLoading] = useState(false);
   const [filterData, setFilterData] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const useEffectRef = useRef(null);
+  const timeoutId = useRef(null);
 
   useEffect(async () => {
     // CPT search content data
@@ -40,38 +42,43 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
     let pils = state.source.pils;
     let guidelines = state.source.guidelines_standards;
 
-    if (!pils) {
-      await getPILsDataAction({ state, actions });
-      pils = state.source.pils;
-    }
-    if (!guidelines) {
-      await getGuidelinesDataAction({ state, actions });
-      guidelines = state.source.guidelines_standards;
-    }
+    // if (!pils) {
+    //   await getPILsDataAction({ state, actions });
+    //   pils = state.source.pils;
+    // }
+    // if (!guidelines) {
+    //   await getGuidelinesDataAction({ state, actions });
+    //   guidelines = state.source.guidelines_standards;
+    // }
 
-    // merge pils and guidelines data
-    searchData = { ...pils, ...guidelines };
-    setContent(Object.values(searchData));
+    // // merge pils and guidelines data
+    // searchData = { ...pils, ...guidelines };
+    // setContent(Object.values(searchData));
 
     return () => {
       useEffectRef.current = false; // clean up function
     };
   }, []);
 
-  if (!block || !content) return <Loading />; // awaits pre fetch & data
-
+  // if (!block || !content) return <Loading />; // awaits pre fetch & data
+  if (!block) return <Loading />;
   // HELPERS ---------------------------------------------
-  const handleSearch = (e) => {
-    const input = e.target.value.toLowerCase();
-
+  const handleSearch = async () => {
+    const input = inputValue.toLowerCase();
+    setDataLoading(true);
     // ⬇️ apply data filters for search
-    let data = content;
-    data = data.filter((item) => {
-      const title = item.title.rendered.toLowerCase().includes(input);
-      // const body = item.content.rendered.toLowerCase().includes(input); // include body
+    let fetching = await fetch(
+      `https://controlpanel.bad.org.uk/wp-json/relevanssi/v1/search?keyword=${input}&type=guidelines_standards,pils&per_page=5`
+    );
+    let data = await fetching.json();
+    console.log("DATA", data);
+    setDataLoading(false);
+    // data = data.map((item) => {
+    //   const title = item.title.rendered;
+    //   // const body = item.content.rendered.toLowerCase().includes(input); // include body
 
-      return title;
-    });
+    //   return title;
+    // });
 
     // ⬇️ refactor data to match dropdown format
     data = data.map((item) => {
@@ -87,12 +94,12 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
         id: item.id,
       };
     });
-    // sort data alphabetically by title
-    data.sort((a, b) => {
-      if (a.title < b.title) return -1;
-      if (a.title > b.title) return 1;
-      return 0;
-    });
+    // // sort data alphabetically by title
+    // data.sort((a, b) => {
+    //   if (a.title < b.title) return -1;
+    //   if (a.title > b.title) return 1;
+    //   return 0;
+    // });
 
     // if data is empty, set filterData to null
     if (data.length === 0) {
@@ -110,6 +117,10 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
     }
   };
 
+  const handleKeyUp = () => {
+    if (timeoutId.current) clearTimeout(timeoutId.current);
+    timeoutId.current = setTimeout(handleSearch, 1000);
+  };
   const selectHandler = ({ item }) => {
     const isGuidelines = item.type === "guidelines_standards";
     if (isGuidelines) {
@@ -259,7 +270,8 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
               >
                 <input
                   value={inputValue}
-                  onChange={handleSearch}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyUp={handleKeyUp}
                   type="text"
                   className="form-control input"
                   placeholder="Search"
@@ -280,13 +292,14 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
                   <ServeIcon />
                 </div>
                 <SearchDropDown
+                  dataLoading={dataLoading}
                   filter={filterData}
                   mapToName="title.rendered"
                   onClickHandler={selectHandler}
                   marginTop={ctaHeight + 10}
                 />
               </div>
-              <ServeSearchButton />
+              {/* <ServeSearchButton /> */}
             </div>
           </div>
         </div>
