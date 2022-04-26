@@ -437,6 +437,7 @@ const Dashboard = ({ state, actions, libraries }) => {
                           </div>
                         </div>
                       );
+                    return null;
                   };
 
                   const ServeMembershipActions = () => {
