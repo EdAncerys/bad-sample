@@ -1317,7 +1317,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.sig_bad_otherjointclinics && (
             <div>
-              <label className="form-label">
+              <label className="required form-label">
                 Do you do joint clinics with any other specialties?
               </label>
               <input
@@ -1328,6 +1328,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 className="form-control input"
                 placeholder="Do you do joint clinics with any other specialties?"
               />
+              <FormError id="bad_otherjointclinics" />
             </div>
           )}
 
@@ -1372,7 +1373,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
                   />
                 </div>
                 <label className="form-label">
-                  Do you want to be part of the BSSCII discussion form?
+                  Do you want to be included in the BSSCII discussion forum? If
+                  yes, please tick and add your NHS address below.
                 </label>
               </div>
 
