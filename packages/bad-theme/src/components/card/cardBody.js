@@ -74,7 +74,7 @@ const CardBody = ({
     };
 
     return (
-      <div
+      <h1
         className={
           videoArchive ? "flex primary-title" : "flex primary-title body-limit"
         }
@@ -93,7 +93,7 @@ const CardBody = ({
       >
         <Html2React html={title} />
         <ServePaidIcon />
-      </div>
+      </h1>
     );
   };
 
