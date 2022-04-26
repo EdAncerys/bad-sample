@@ -58,12 +58,15 @@ const BADMemberships = ({ state, actions, libraries, block }) => {
   if (!block || !membershipTypes) return <Loading />;
 
   // RETURN ---------------------------------------------------
+  console.log("MEMBERSHIPS", membershipTypes);
   return (
     <div
       className="flex-col"
       style={{ margin: !lg ? `${marginVertical}px 0` : "1em" }}
     >
       {membershipTypes.map((membership, key) => {
+        if (membership.id === 8800) return null;
+        if (membership.id === 8801) return null;
         const { body_copy, category_types, price, bad_or_sig, bad_order } =
           membership.acf; // get the data from the memberships CPT
         const { title } = membership; // get the data from the memberships CPT

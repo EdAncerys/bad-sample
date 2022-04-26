@@ -228,7 +228,7 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
 
     const ServeBADMembershipCategory = () => {
       if (formData.bad_organisedfor !== "810170000") return null;
-
+      console.log("MEMBERSHIPDATA", membershipData);
       return (
         <div>
           <div>
