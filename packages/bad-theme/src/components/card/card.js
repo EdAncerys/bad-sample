@@ -397,8 +397,8 @@ const Card = ({
         ...styles.card,
         backgroundColor: backgroundColor || colors.white,
         width: cardWidth || "100%",
-        height: videoArchive ? null : CARD_HEIGHT,
-        minHeight: MIN_CARD_HEIGHT,
+        height: videoArchive || heroBanner ? null : CARD_HEIGHT,
+        minHeight: heroBanner ? CARD_HEIGHT : MIN_CARD_HEIGHT,
       }}
       onClick={onClickHandler}
       data-aos={videoArchive ? "none" : animationType || "fade"}
