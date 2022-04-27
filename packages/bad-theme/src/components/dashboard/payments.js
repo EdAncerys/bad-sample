@@ -158,12 +158,12 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
       const ServePayButton = () => {
         if (
-          (bad_sagepayid ||
-            core_totalamount === "£0.00" ||
-            core_totalamount.includes("-") ||
-            bad_approvalstatus === "Pending" ||
-            bad_outstandingpayments === "£0.00",
-          bad_outstandingpayments.includes("-"))
+          bad_sagepayid ||
+          core_totalamount === "£0.00" ||
+          core_totalamount.includes("-") ||
+          bad_approvalstatus === "Pending" ||
+          bad_outstandingpayments === "£0.00" ||
+          bad_outstandingpayments.includes("-")
         )
           return null;
 
@@ -294,7 +294,8 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       sub.bad_outstandingpayments === "£0.00"
     );
   });
-  if (outstandingSubs.length === 0 && outstandingApps.length === 0) return null;
+  if (dashboard && outstandingSubs.length === 0 && outstandingApps.length === 0)
+    return null;
   return (
     <div className="shadow">
       {dashboard && (
