@@ -142,7 +142,7 @@ const Membership = ({ state, actions, libraries }) => {
   // 📌 If user dont have any subscription dont render the component
   let isSubsData = subsData;
   if (subsData && subsData.length === 0) isSubsData = null;
-
+  console.log("subsData", subsData);
   // RETURN -----------------------------------------------------------------
   return (
     <div style={{ padding: `0 ${marginHorizontal}px` }}>
@@ -223,13 +223,11 @@ const Membership = ({ state, actions, libraries }) => {
 
                 const ServeChangeApplicationAction = () => {
                   // return if bad_organisedfor is BAD & in dashboard only
-                  if (
-                    bad_organisedfor !== "BAD" ||
-                    dashboardPath !== "Dashboard"
-                  )
-                    return null;
+                  {
+                    /* bad_organisedfor !== "BAD" || */
+                  }
+                  if (dashboardPath !== "Dashboard") return null;
                   const [appStatus, setStatus] = useState(null);
-
                   // check if application been previously submitted
                   useEffect(async () => {
                     try {
@@ -253,8 +251,9 @@ const Membership = ({ state, actions, libraries }) => {
                       }
 
                       setStatus(isSubmitted); // set status to submitted
+                      console.log("APPSTATUS", appStatus);
                     } catch (error) {
-                      // console.log(error);
+                      console.log("APPCHANGE ERROR", error);
                     }
                   }, []);
 

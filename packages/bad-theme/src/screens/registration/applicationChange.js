@@ -222,6 +222,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
   if (!membershipData) return <Loading />;
 
   // HANDLERS --------------------------------------------
+
   const handleInputChange = (e) => {
     const { name, value, type, checked, files } = e.target;
     setFormData((prevFormData) => ({
@@ -395,7 +396,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
       // redirect to dashboard
       setGoToAction({ state, path: `/dashboard/`, actions });
     } catch (error) {
-      // console.log(error);
+      console.log("ERROR", error);
       setErrorAction({
         dispatch,
         isError: {

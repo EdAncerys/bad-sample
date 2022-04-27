@@ -350,7 +350,9 @@ const Dashboard = ({ state, actions, libraries }) => {
                     createdon,
                     core_membershipsubscriptionid,
                     bad_sagepayid,
+                    bad_outstandingpayments,
                   } = app;
+
                   // get application date
                   let appData = createdon.split(" ")[0];
                   // split string and revert date with month format
@@ -418,7 +420,10 @@ const Dashboard = ({ state, actions, libraries }) => {
                       );
 
                     // 📌 if app is approved & payed for only render the button
-                    if (bad_sagepayid)
+                    if (
+                      bad_outstandingpayments.includes("-") ||
+                      bad_outstandingpayments === "£0.00"
+                    )
                       return (
                         <div
                           style={{
