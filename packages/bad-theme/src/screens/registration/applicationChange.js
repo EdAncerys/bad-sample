@@ -355,6 +355,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     let appFromData = { ...formData };
 
     try {
+      console.log("FORMDATA", formData);
       setFetching(true);
       // ⏬ get appropriate membership ID for BAD applications only
       const response = await getBADMembershipSubscriptionData({
