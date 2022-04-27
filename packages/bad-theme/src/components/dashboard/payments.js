@@ -284,15 +284,13 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   };
   let outstandingSubs = liveSubscriptions.subs.data.filter((sub) => {
     return !(
+      sub.bad_outstandingpayments === null ||
       sub.bad_outstandingpayments.includes("-") ||
       sub.bad_outstandingpayments === "£0.00"
     );
   });
-  let outstandingApps = liveSubscriptions.apps.data.filter((sub) => {
-    return !(
-      sub.bad_outstandingpayments.includes("-") ||
-      sub.bad_outstandingpayments === "£0.00"
-    );
+  let outstandingApps = liveSubscriptions.apps.data.filter((app) => {
+    return !(app.bad_sagepayid === null);
   });
   if (dashboard && outstandingSubs.length === 0 && outstandingApps.length === 0)
     return null;
