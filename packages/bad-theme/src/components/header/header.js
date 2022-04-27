@@ -19,12 +19,12 @@ import Navigation from "./navigation";
 import Loading from "../loading";
 // CONTEXT ----------------------------------------------------------------
 import { muiQuery } from "../../context";
+import ReactGA from "react-ga";
 
 const Header = ({ state, actions }) => {
   const { sm, md, lg, xl } = muiQuery();
   const urlPath = state.router.link;
   const data = state.source.get(urlPath);
-
   const ServeNavigation = () => {
     return (
       <div className="bad-header no-selector" style={styles.container}>
@@ -33,7 +33,10 @@ const Header = ({ state, actions }) => {
       </div>
     );
   };
-
+  useEffect(() => {
+    ReactGA.initialize("UA-50027583-1");
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
   return (
     <>
       <Global
