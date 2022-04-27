@@ -30,7 +30,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-
+  console.log("APPS", dynamicsApps);
   useEffect(() => {
     setLiveSubscriptions(dynamicsApps);
 
@@ -145,7 +145,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   const ServePayments = ({ block, item, type }) => {
     if (dashboard && block.bad_sagepayid !== null) return null;
 
-    const { core_totalamount, core_name } = block;
+    const { core_totalamount, core_name, bad_approvalstatus } = block;
 
     const ServeStatusOrAction = () => {
       // get important data
@@ -160,7 +160,8 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
         if (
           bad_sagepayid ||
           core_totalamount === "£0.00" ||
-          core_totalamount.includes("-")
+          core_totalamount.includes("-") ||
+          bad_approvalstatus === "Pending"
         )
           return null;
 
@@ -180,6 +181,12 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       };
 
       const ServePaymentStatus = () => {
+        if (bad_approvalstatus == "Pending")
+          return (
+            <div style={{ textAlign: "center", minWidth: 145 }}>
+              Pending approval
+            </div>
+          );
         if (!bad_sagepayid) return null;
         if (lg && bad_sagepayid) return "Status: paid";
         if (bad_sagepayid)

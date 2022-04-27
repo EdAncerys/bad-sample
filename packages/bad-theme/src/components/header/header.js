@@ -1,6 +1,7 @@
 import { connect, Global, css } from "frontity";
 import bootStrapCSS from "../../css/bootstrap.min.css";
 import { colors } from "../../config/imports";
+import { useEffect } from "react";
 // css imports ------------------------------------------------------------
 import animations from "aos/dist/aos.css";
 import globalCSS from "../../css/main.css";
