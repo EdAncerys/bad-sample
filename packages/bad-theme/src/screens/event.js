@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
-
-import { colors } from "../config/imports";
+import { colors } from "../config/colors";
 import RowButton from "../components/rowButton";
 import ShareToSocials from "../components/card/shareToSocials";
 import Loading from "../components/loading";
@@ -337,9 +336,12 @@ const Event = ({ state, actions, libraries }) => {
       //   return;
       // }
       if (
-        registration_status_email === "registration_not_open" ||
-        registration_status_eventsforce === "registration_not_open" ||
-        registration_status_external === "registration_not_open"
+        (registration_type === "email" &&
+          registration_status_email === "registration_not_open") ||
+        (registration_type === "events_force" &&
+          registration_status_eventsforce === "registration_not_open") ||
+        (registration_type === "external" &&
+          registration_status_external === "registration_not_open")
       )
         alert("The registration for this event is not open");
       if (
@@ -386,7 +388,7 @@ const Event = ({ state, actions, libraries }) => {
               "Event Contact Form (register an interest)",
             form_body:
               register_form_body ||
-              `Register interest for ${title.rendered} event.`,
+              `Register an interest for ${title.rendered} event.`,
             subject: `Interest registration for ${title.rendered} event.`,
             full_name: true,
             email_address: true,
@@ -394,7 +396,7 @@ const Event = ({ state, actions, libraries }) => {
             recipients: state.contactList.DEFAULT_CONTACT_LIST,
             registerForEvent: title.rendered,
             // default email subject & template name
-            emailSubject: `Register interest for ${title.rendered} event.`,
+            emailSubject: `Register an interest for ${title.rendered} event.`,
             emailTemplate: "StandardEnquiryForm",
           },
         });
@@ -406,7 +408,7 @@ const Event = ({ state, actions, libraries }) => {
           if (registration_status_email === "register")
             return "Register for event";
           if (registration_status_email === "register_an_interest")
-            return "Register interest";
+            return "Register an interest";
           if (registration_status_email === "registration_not_open")
             return "Registration not open";
         }
@@ -445,6 +447,18 @@ const Event = ({ state, actions, libraries }) => {
           return false;
       }
     };
+
+    const checkColor = () => {
+      switch (disabled) {
+        case registration_status_email === "registration_not_open":
+        case registration_status_external === "registration_not_open":
+        case registration_status_eventsforce === "registration_not_open":
+          return "disabled-btn";
+
+        default:
+          return "blue-btn";
+      }
+    };
     return (
       <div
         className="flex"
@@ -459,20 +473,20 @@ const Event = ({ state, actions, libraries }) => {
         }}
       >
         <ServeInformationForUser />
-        <div
+        <button
           className="blue-btn"
           style={{
-            backgroundColor: colors.primary,
-
+            // backgroundColor: checkColor,
             color: colors.white,
             padding: `1em 2em`,
-            width: 200,
+            width: 250,
             marginTop: 10,
           }}
           onClick={handleRegistrationClick}
+          disabled={checkIfdisabled}
         >
           <ButtonTitle />
-        </div>
+        </button>
       </div>
     );
   };
