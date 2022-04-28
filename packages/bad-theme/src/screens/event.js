@@ -441,7 +441,7 @@ const Event = ({ state, actions, libraries }) => {
         )
           return "Register for event";
       }
-      return "Error";
+      return "Register";
     };
 
     const checkIfdisabled = () => {
