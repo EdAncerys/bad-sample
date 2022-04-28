@@ -342,8 +342,16 @@ const Event = ({ state, actions, libraries }) => {
           registration_status_eventsforce === "registration_not_open") ||
         (registration_type === "external" &&
           registration_status_external === "registration_not_open")
-      )
-        alert("The registration for this event is not open");
+      ) {
+        setErrorAction({
+          dispatch,
+          isError: {
+            message: `Registration for this event is not open. `,
+            image: "Error",
+          },
+        });
+      }
+
       if (
         registration_type === "events_force" ||
         registration_type === "external"
@@ -449,12 +457,12 @@ const Event = ({ state, actions, libraries }) => {
     };
 
     const checkColor = () => {
+      console.log("HIT CHECK COLOUR");
       switch (disabled) {
         case registration_status_email === "registration_not_open":
         case registration_status_external === "registration_not_open":
         case registration_status_eventsforce === "registration_not_open":
-          return "disabled-btn";
-
+          return "blue-btn";
         default:
           return "blue-btn";
       }
@@ -474,16 +482,22 @@ const Event = ({ state, actions, libraries }) => {
       >
         <ServeInformationForUser />
         <button
-          className="blue-btn"
+          className={
+            (registration_type === "email" &&
+              registration_status_email === "registration_not_open") ||
+            (registration_type === "external" &&
+              registration_status_external === "registration_not_open") ||
+            (registration_type === "events_force" &&
+              registration_status_eventsforce === "registration_not_open")
+              ? "disabled-btn"
+              : "blue-btn-reverse"
+          }
           style={{
-            // backgroundColor: checkColor,
-            color: colors.white,
             padding: `1em 2em`,
             width: 250,
             marginTop: 10,
           }}
           onClick={handleRegistrationClick}
-          disabled={checkIfdisabled}
         >
           <ButtonTitle />
         </button>
