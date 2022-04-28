@@ -65,7 +65,7 @@ const AccordionBody = ({
   if (fundingBlock) body = block.acf ? block.acf.overview : null;
   if (fundingBlock) labelName = block.acf ? block.acf.link_label : null;
   if (fundingBlock) link = { url: block.acf.external_application_link };
-
+  console.log("BLOCK", block);
   useEffect(() => {
     // ⬇️ anchor tag scrapper
     anchorScrapper();
@@ -615,7 +615,7 @@ const AccordionBody = ({
 
     if (!isListLayout)
       return (
-        <div style={styles.profileLayout}>
+        <div style={!lg ? styles.profileLayout : styles.profileLayoutMobile}>
           {block.leadershipList.map((item, key) => {
             if (
               LT_LAYOUT === "senior-management" &&
@@ -717,9 +717,20 @@ const styles = {
     gap: 20,
     padding: `0.5em 0`,
   },
+  listLayouMobile: {
+    display: "grid",
+    gridTemplateColumns: `25% auto`,
+    gap: 20,
+    padding: `0.5em 0`,
+  },
   profileLayout: {
     display: "grid",
     gridTemplateColumns: `repeat(3, 1fr)`,
+    gap: 20,
+  },
+  profileLayoutMobile: {
+    display: "grid",
+    gridTemplateColumns: `repeat(2, 1fr)`,
     gap: 20,
   },
 };
