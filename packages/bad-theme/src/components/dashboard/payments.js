@@ -157,6 +157,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       } = block;
 
       const ServePayButton = () => {
+        if (!core_totalamount) return "Processing";
         if (
           bad_sagepayid ||
           core_totalamount === "£0.00" ||
@@ -231,7 +232,11 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
           </div>
           <div className="flex" style={styles.fontSize}>
             <div>
-              {core_totalamount.includes("-") ? "Free" : core_totalamount}
+              {core_totalamount
+                ? core_totalamount.includes("-")
+                  ? "Free"
+                  : core_totalamount
+                : ""}
             </div>
           </div>
         </div>
@@ -283,13 +288,12 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     );
   };
   let outstandingSubs = liveSubscriptions.subs.data.filter((sub) => {
-    if (sub.bad_outstandingpayments) {
-      return !(
-        sub.bad_outstandingpayments === null ||
-        sub.bad_outstandingpayments.includes("-") ||
-        sub.bad_outstandingpayments === "£0.00"
-      );
-    }
+    if (!sub.bad_outstandingpayments) return false;
+    return !(
+      sub.bad_outstandingpayments === null ||
+      sub.bad_outstandingpayments.includes("-") ||
+      sub.bad_outstandingpayments === "£0.00"
+    );
   });
   let outstandingApps = liveSubscriptions.apps.data.filter((app) => {
     return !(app.bad_sagepayid === null);
