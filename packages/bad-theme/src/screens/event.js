@@ -113,7 +113,9 @@ const Event = ({ state, actions, libraries }) => {
     register_message,
     register_allow_attachments,
     register_recipients,
-
+    registration_status_email,
+    registration_status_eventsforce,
+    registration_status_external,
     contact_public_email,
     contact_public_phone_number,
     contact_form_title,
@@ -335,6 +337,12 @@ const Event = ({ state, actions, libraries }) => {
       //   return;
       // }
       if (
+        registration_status_email === "registration_not_open" ||
+        registration_status_eventsforce === "registration_not_open" ||
+        registration_status_external === "registration_not_open"
+      )
+        alert("The registration for this event is not open");
+      if (
         registration_type === "events_force" ||
         registration_type === "external"
       ) {
@@ -342,7 +350,10 @@ const Event = ({ state, actions, libraries }) => {
         window.open(registration_page_link, "_blank");
       }
 
-      if (registration_type === "email") {
+      if (
+        registration_type === "email" &&
+        registration_status_email === "register"
+      ) {
         setEnquireAction({
           dispatch,
           enquireAction: {
@@ -357,13 +368,83 @@ const Event = ({ state, actions, libraries }) => {
             recipients: state.contactList.DEFAULT_CONTACT_LIST,
             registerForEvent: title.rendered,
             // default email subject & template name
-            emailSubject: `Register for ${title.rendered} event interest.`,
+            emailSubject: `Register for ${title.rendered} event.`,
+            emailTemplate: "StandardEnquiryForm",
+          },
+        });
+      }
+      if (
+        registration_type === "email" &&
+        registration_status_email === "register_an_interest"
+      ) {
+        setEnquireAction({
+          dispatch,
+          enquireAction: {
+            contact_public_email: "conference@bad.org.uk",
+            form_title:
+              register_form_title ||
+              "Event Contact Form (register an interest)",
+            form_body:
+              register_form_body ||
+              `Register interest for ${title.rendered} event.`,
+            subject: `Interest registration for ${title.rendered} event.`,
+            full_name: true,
+            email_address: true,
+            phone_number: true,
+            recipients: state.contactList.DEFAULT_CONTACT_LIST,
+            registerForEvent: title.rendered,
+            // default email subject & template name
+            emailSubject: `Register interest for ${title.rendered} event.`,
             emailTemplate: "StandardEnquiryForm",
           },
         });
       }
     };
+    const ButtonTitle = () => {
+      if (registration_type) {
+        if (registration_status_email) {
+          if (registration_status_email === "register")
+            return "Register for event";
+          if (registration_status_email === "register_an_interest")
+            return "Register interest";
+          if (registration_status_email === "registration_not_open")
+            return "Registration not open";
+        }
+        if (
+          registration_type === "events_force" &&
+          registration_status_eventsforce === "register"
+        )
+          return "Register for event";
+        if (
+          registration_type === "events_force" &&
+          registration_status_eventsforce === "registration_not_open"
+        )
+          return "Registration not open";
+        if (
+          registration_type === "external" &&
+          registration_status_external === "registration_not_open"
+        )
+          return "Registration not open";
+        if (
+          registration_type === "external" &&
+          registration_status_external === "register"
+        )
+          return "Register for event";
+      }
+      return "Error";
+    };
 
+    const checkIfdisabled = () => {
+      switch (disabled) {
+        case registration_status_email === "registration_not_open":
+        case registration_status_external === "registration_not_open":
+        case registration_status_eventsforce === "registration_not_open":
+          return true;
+
+        default:
+          return false;
+      }
+    };
     return (
       <div
         className="flex"
@@ -381,7 +462,9 @@ const Event = ({ state, actions, libraries }) => {
         <div
           className="blue-btn"
           style={{
-            backgroundColor: colors.primary,
+            backgroundColor: checkIfdisabled
+              ? colors.primary
+              : colors.darkSilver,
             color: colors.white,
             padding: `1em 2em`,
             width: 200,
@@ -389,7 +472,7 @@ const Event = ({ state, actions, libraries }) => {
           }}
           onClick={handleRegistrationClick}
         >
-          Register for Event
+          <ButtonTitle />
         </div>
       </div>
     );

@@ -21,6 +21,7 @@
     "@frontity/html2react": "^1.7.0",
     "@frontity/tiny-router": "^1.4.4",
     "@frontity/wp-source": "^1.11.7",
+    "@frontity/yoast": "^2.1.1",
     "@mui/icons-material": "^5.1.0",
     "@mui/material": "^5.1.1",
     "@react-google-maps/api": "^2.7.0",
