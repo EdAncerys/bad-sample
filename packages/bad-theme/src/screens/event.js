@@ -323,17 +323,17 @@ const Event = ({ state, actions, libraries }) => {
     };
 
     const handleRegistrationClick = () => {
-      if (!isActiveUser) {
-        setErrorAction({
-          dispatch,
-          isError: {
-            message: `Please log in to the BAD website in order to register for this event`,
-            image: "Error",
-            action: [{ label: "Login", handler: handleLogin }],
-          },
-        });
-        return;
-      }
+      // if (!isActiveUser) {
+      //   setErrorAction({
+      //     dispatch,
+      //     isError: {
+      //       message: `Please log in to the BAD website in order to register for this event`,
+      //       image: "Error",
+      //       action: [{ label: "Login", handler: handleLogin }],
+      //     },
+      //   });
+      //   return;
+      // }
       if (
         registration_type === "events_force" ||
         registration_type === "external"
