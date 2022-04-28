@@ -462,9 +462,8 @@ const Event = ({ state, actions, libraries }) => {
         <div
           className="blue-btn"
           style={{
-            backgroundColor: checkIfdisabled
-              ? colors.primary
-              : colors.darkSilver,
+            backgroundColor: colors.primary,
+
             color: colors.white,
             padding: `1em 2em`,
             width: 200,
