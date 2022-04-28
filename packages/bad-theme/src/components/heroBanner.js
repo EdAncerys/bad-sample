@@ -115,7 +115,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           <div
             className="d-flex justify-content-center"
             style={{
-              marginTop: "-20%",
+              marginTop: !lg ? "-20%" : !background_image ? "10%" : "-20%",
               marginBottom: !lg ? null : "10%",
             }}
           >
