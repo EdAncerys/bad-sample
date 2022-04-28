@@ -25,7 +25,7 @@ const NewsCarousel = ({ state, actions, libraries, block }) => {
   // SERVERS ----------------------------------------------------------------
   const ServeIcon = ({ icon, left, right }) => {
     if (!icon) return null;
-
+    if (lg) return null;
     return (
       <div
         style={{
@@ -87,7 +87,8 @@ const NewsCarousel = ({ state, actions, libraries, block }) => {
                       style={{
                         position: "relative",
                         justifyContent: "center",
-                        height: BANNER_HEIGHT * 1.2,
+                        height: !lg ? BANNER_HEIGHT * 1.2 : null,
+                        minHeight: !lg ? null : BANNER_HEIGHT * 1.2,
                       }}
                     >
                       <ServeDivider i={1} />

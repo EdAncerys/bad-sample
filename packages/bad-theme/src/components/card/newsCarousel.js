@@ -114,7 +114,7 @@ const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
 
   const ServeBody = () => {
     if (!excerpt || !title) return null;
-    // if (lg) return null;
+    if (lg) return null;
     const first_sentence = excerpt.rendered.split(".");
     const shorter = first_sentence[0].toString().concat("...");
     if (featured_media)

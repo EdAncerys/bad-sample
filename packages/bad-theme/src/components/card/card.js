@@ -33,6 +33,7 @@ import {
   getWileyAction,
   setErrorAction,
   loginAction,
+  muiQuery,
 } from "../../context";
 
 const Card = ({
@@ -101,7 +102,7 @@ const Card = ({
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
   const THEME = colour || colors.primary;
   const isShadow = shadow ? "shadow" : "";
-
+  const { lg } = muiQuery();
   let CARD_HEIGHT = "100%";
   let ELECTION_BLOCKS = false;
   if (cardHeight) CARD_HEIGHT = cardHeight;
@@ -398,7 +399,11 @@ const Card = ({
         backgroundColor: backgroundColor || colors.white,
         width: cardWidth || "100%",
         height: videoArchive || heroBanner ? null : CARD_HEIGHT,
-        minHeight: heroBanner ? CARD_HEIGHT : MIN_CARD_HEIGHT,
+        minHeight: heroBanner
+          ? CARD_HEIGHT
+          : !lg
+          ? MIN_CARD_HEIGHT
+          : CARD_HEIGHT,
       }}
       onClick={onClickHandler}
       data-aos={videoArchive ? "none" : animationType || "fade"}
