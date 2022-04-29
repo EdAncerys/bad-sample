@@ -82,7 +82,8 @@ const EnquireModal = ({ state, actions, libraries }) => {
   const handleContactFormSubmit = async () => {
     // check if formData is valid
     const recipients = enquireAction.recipients;
-
+    console.log("ENQUIREACTION", enquireAction);
+    console.log(formData);
     try {
       setIsFetching(true);
       const response = await sendEmailEnquireAction({
