@@ -615,7 +615,7 @@ const AccordionBody = ({
 
     if (!isListLayout)
       return (
-        <div style={styles.profileLayout}>
+        <div style={!lg ? styles.profileLayout : styles.profileLayoutMobile}>
           {block.leadershipList.map((item, key) => {
             if (
               LT_LAYOUT === "senior-management" &&
@@ -720,6 +720,11 @@ const styles = {
   profileLayout: {
     display: "grid",
     gridTemplateColumns: `repeat(3, 1fr)`,
+    gap: 20,
+  },
+  profileLayoutMobile: {
+    display: "grid",
+    gridTemplateColumns: `repeat(2, 1fr)`,
     gap: 20,
   },
 };
