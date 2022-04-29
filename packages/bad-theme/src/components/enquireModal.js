@@ -65,7 +65,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
   // HANDLERS ----------------------------------------------------
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
-
     // if name is attachments set formData with attachments
     if (name === "attachments") {
       setFormData((prevFormData) => ({
@@ -329,7 +328,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
               <div style={styles.inputContainer}>
                 <label className="form-label">Email Address</label>
                 <input
-                  name="email"
+                  name="emailaddress1"
                   value={formData.emailaddress1}
                   onChange={handleChange}
                   type="email"
