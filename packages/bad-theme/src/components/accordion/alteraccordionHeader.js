@@ -83,6 +83,7 @@ const AccordionHeader = ({
           style={{
             alignItems: !lg ? "center" : "flex-start",
             lineHeight: "unset",
+            flexDirection: !lg ? null : "column",
           }}
         >
           <div style={{ fontSize: 20 }}>
@@ -105,12 +106,12 @@ const AccordionHeader = ({
           paddingTop: `1em`,
           margin: `1em`,
           color: colors.darkSilver,
-          borderTop: `1px solid ${colors.darkSilver}`,
+          borderTop: !lg ? `1px solid ${colors.darkSilver}` : null,
           transitionDelay: `1s`,
           WebkitLineClamp: 2,
         }}
       >
-        <Html2React html={body} />
+        {!lg ? <Html2React html={body} /> : null}
       </div>
     );
   };
