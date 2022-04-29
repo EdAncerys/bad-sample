@@ -350,6 +350,7 @@ const Event = ({ state, actions, libraries }) => {
             image: "Error",
           },
         });
+        return true;
       }
 
       if (
@@ -358,6 +359,7 @@ const Event = ({ state, actions, libraries }) => {
       ) {
         // open page in new window
         window.open(registration_page_link, "_blank");
+        return true;
       }
 
       if (
@@ -382,6 +384,7 @@ const Event = ({ state, actions, libraries }) => {
             emailTemplate: "StandardEnquiryForm",
           },
         });
+        return true;
       }
       if (
         registration_type === "email" &&
@@ -408,6 +411,7 @@ const Event = ({ state, actions, libraries }) => {
             emailTemplate: "StandardEnquiryForm",
           },
         });
+        return true;
       }
     };
     const ButtonTitle = () => {
