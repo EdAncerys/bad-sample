@@ -61,11 +61,11 @@ export const sendEmailEnquireAction = async ({
     if (response.success) {
       return response;
     } else {
-      // console.log("⬇️ Error sending email response"); // debug
-      // console.log(response); // debug
+      console.log("⬇️ Error sending email response"); // debug
+      console.log(response); // debug
     }
   } catch (error) {
-    // console.log("error", error);
+    console.log("error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
     setEnquireAction({ dispatch, enquireAction: null });

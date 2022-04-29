@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
-
-import { colors } from "../config/imports";
+import { colors } from "../config/colors";
 import RowButton from "../components/rowButton";
 import ShareToSocials from "../components/card/shareToSocials";
 import Loading from "../components/loading";
@@ -113,7 +112,9 @@ const Event = ({ state, actions, libraries }) => {
     register_message,
     register_allow_attachments,
     register_recipients,
-
+    registration_status_email,
+    registration_status_eventsforce,
+    registration_status_external,
     contact_public_email,
     contact_public_phone_number,
     contact_form_title,
@@ -335,14 +336,36 @@ const Event = ({ state, actions, libraries }) => {
       //   return;
       // }
       if (
+        (registration_type === "email" &&
+          registration_status_email === "registration_not_open") ||
+        (registration_type === "events_force" &&
+          registration_status_eventsforce === "registration_not_open") ||
+        (registration_type === "external" &&
+          registration_status_external === "registration_not_open")
+      ) {
+        setErrorAction({
+          dispatch,
+          isError: {
+            message: `Registration for this event is not open. `,
+            image: "Error",
+          },
+        });
+        return true;
+      }
+
+      if (
         registration_type === "events_force" ||
         registration_type === "external"
       ) {
         // open page in new window
         window.open(registration_page_link, "_blank");
+        return true;
       }
 
-      if (registration_type === "email") {
+      if (
+        registration_type === "email" &&
+        registration_status_email === "register"
+      ) {
         setEnquireAction({
           dispatch,
           enquireAction: {
@@ -357,13 +380,104 @@ const Event = ({ state, actions, libraries }) => {
             recipients: state.contactList.DEFAULT_CONTACT_LIST,
             registerForEvent: title.rendered,
             // default email subject & template name
-            emailSubject: `Register for ${title.rendered} event interest.`,
+            emailSubject: `Register for ${title.rendered} event.`,
             emailTemplate: "StandardEnquiryForm",
           },
         });
+        return true;
+      }
+      if (
+        registration_type === "email" &&
+        registration_status_email === "register_an_interest"
+      ) {
+        setEnquireAction({
+          dispatch,
+          enquireAction: {
+            contact_public_email: "conference@bad.org.uk",
+            form_title:
+              register_form_title ||
+              "Event Contact Form (register an interest)",
+            form_body:
+              register_form_body ||
+              `Register an interest for ${title.rendered} event.`,
+            subject: `Interest registration for ${title.rendered} event.`,
+            full_name: true,
+            email_address: true,
+            phone_number: true,
+            recipients: state.contactList.DEFAULT_CONTACT_LIST,
+            registerForEvent: title.rendered,
+            // default email subject & template name
+            emailSubject: `Register an interest for ${title.rendered} event.`,
+            emailTemplate: "StandardEnquiryForm",
+          },
+        });
+        return true;
+      }
+    };
+    const ButtonTitle = () => {
+      if (registration_type) {
+        if (
+          registration_type === "email" &&
+          registration_status_email === "register"
+        )
+          return "Register for event";
+        if (
+          registration_type === "email" &&
+          registration_status_email === "register_an_interest"
+        )
+          return "Register an interest";
+        if (
+          registration_type === "email" &&
+          registration_status_email === "registration_not_open"
+        )
+          return "Registration not open";
+        if (
+          registration_type === "events_force" &&
+          registration_status_eventsforce === "register"
+        )
+          return "Register for event";
+        if (
+          registration_type === "events_force" &&
+          registration_status_eventsforce === "registration_not_open"
+        )
+          return "Registration not open";
+        if (
+          registration_type === "external" &&
+          registration_status_external === "registration_not_open"
+        )
+          return "Registration not open";
+        if (
+          registration_type === "external" &&
+          registration_status_external === "register"
+        )
+          return "Register for event";
+      }
+      return "Register";
+    };
+
+    const checkIfdisabled = () => {
+      switch (disabled) {
+        case registration_status_email === "registration_not_open":
+        case registration_status_external === "registration_not_open":
+        case registration_status_eventsforce === "registration_not_open":
+          return true;
+
+        default:
+          return false;
       }
     };
 
+    const checkColor = () => {
+      console.log("HIT CHECK COLOUR");
+      switch (disabled) {
+        case registration_status_email === "registration_not_open":
+        case registration_status_external === "registration_not_open":
+        case registration_status_eventsforce === "registration_not_open":
+          return "blue-btn";
+        default:
+          return "blue-btn";
+      }
+    };
     return (
       <div
         className="flex"
@@ -378,19 +492,26 @@ const Event = ({ state, actions, libraries }) => {
         }}
       >
         <ServeInformationForUser />
-        <div
-          className="blue-btn"
+        <button
+          className={
+            (registration_type === "email" &&
+              registration_status_email === "registration_not_open") ||
+            (registration_type === "external" &&
+              registration_status_external === "registration_not_open") ||
+            (registration_type === "events_force" &&
+              registration_status_eventsforce === "registration_not_open")
+              ? "disabled-btn"
+              : "blue-btn-reverse"
+          }
           style={{
-            backgroundColor: colors.primary,
-            color: colors.white,
             padding: `1em 2em`,
-            width: 200,
+            width: 250,
             marginTop: 10,
           }}
           onClick={handleRegistrationClick}
         >
-          Register for Event
-        </div>
+          <ButtonTitle />
+        </button>
       </div>
     );
   };
