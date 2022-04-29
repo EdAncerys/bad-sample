@@ -395,11 +395,10 @@ const Event = ({ state, actions, libraries }) => {
           enquireAction: {
             contact_public_email: "conference@bad.org.uk",
             form_title:
-              register_form_title ||
-              "Event Contact Form (register an interest)",
+              register_form_title || "Event Contact Form (express an interest)",
             form_body:
               register_form_body ||
-              `Register an interest for ${title.rendered} event.`,
+              `Express an interest for ${title.rendered} event.`,
             subject: `Interest registration for ${title.rendered} event.`,
             full_name: true,
             email_address: true,
@@ -407,7 +406,7 @@ const Event = ({ state, actions, libraries }) => {
             recipients: state.contactList.DEFAULT_CONTACT_LIST,
             registerForEvent: title.rendered,
             // default email subject & template name
-            emailSubject: `Register an interest for ${title.rendered} event.`,
+            emailSubject: `Express an interest for ${title.rendered} event.`,
             emailTemplate: "StandardEnquiryForm",
           },
         });
@@ -425,7 +424,7 @@ const Event = ({ state, actions, libraries }) => {
           registration_type === "email" &&
           registration_status_email === "register_an_interest"
         )
-          return "Register an interest";
+          return "Express an interest";
         if (
           registration_type === "email" &&
           registration_status_email === "registration_not_open"
