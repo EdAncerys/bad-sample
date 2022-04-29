@@ -68,7 +68,6 @@ const Header = ({ state, actions }) => {
           }}
         >
           <ServeNavigation />
-          <CookiePopUp />
         </div>
       )}
     </>
