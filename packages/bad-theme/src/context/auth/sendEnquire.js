@@ -65,7 +65,7 @@ export const sendEmailEnquireAction = async ({
       console.log(response); // debug
     }
   } catch (error) {
-    // console.log("error", error);
+    console.log("error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
     setEnquireAction({ dispatch, enquireAction: null });

@@ -416,14 +416,21 @@ const Event = ({ state, actions, libraries }) => {
     };
     const ButtonTitle = () => {
       if (registration_type) {
-        if (registration_status_email) {
-          if (registration_status_email === "register")
-            return "Register for event";
-          if (registration_status_email === "register_an_interest")
-            return "Register an interest";
-          if (registration_status_email === "registration_not_open")
-            return "Registration not open";
-        }
+        if (
+          registration_type === "email" &&
+          registration_status_email === "register"
+        )
+          return "Register for event";
+        if (
+          registration_type === "email" &&
+          registration_status_email === "register_an_interest"
+        )
+          return "Register an interest";
+        if (
+          registration_type === "email" &&
+          registration_status_email === "registration_not_open"
+        )
+          return "Registration not open";
         if (
           registration_type === "events_force" &&
           registration_status_eventsforce === "register"

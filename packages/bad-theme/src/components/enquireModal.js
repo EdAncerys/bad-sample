@@ -31,6 +31,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
     jobtitle: "",
     bad_memberid: "",
     emailaddress1: "",
+    var1: "",
     mobilephone: "",
     subject: "",
     subject_dropdown_options: "",
@@ -51,7 +52,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
       ...prevFormData,
       ["jobtitle"]: isActiveUser.jobtitle || "",
       ["fullname"]: isActiveUser.fullname || "",
-      ["emailaddress1"]: isActiveUser.emailaddress1 || "",
+      ["var1"]: isActiveUser.emailaddress1 || "",
       ["mobilephone"]: isActiveUser.mobilephone || "",
       ["currentHospitalName"]:
         isActiveUser[
@@ -97,7 +98,9 @@ const EnquireModal = ({ state, actions, libraries }) => {
         refreshJWT,
       });
       if (!response) throw new Error("Error sending email");
+      console.log("RESPONSE", response);
     } catch (error) {
+      console.log("HIT ERROR", error);
       // console.log(error);
       setErrorAction({
         dispatch,
@@ -329,8 +332,8 @@ const EnquireModal = ({ state, actions, libraries }) => {
               <div style={styles.inputContainer}>
                 <label className="form-label">Email Address</label>
                 <input
-                  name="emailaddress1"
-                  value={formData.emailaddress1}
+                  name="var1"
+                  value={formData.var1}
                   onChange={handleChange}
                   type="email"
                   className="form-control"
