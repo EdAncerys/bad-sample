@@ -18,9 +18,11 @@ import HTMLHead from "./htmlHead";
 import HeaderActions from "./headerActions";
 import Navigation from "./navigation";
 import Loading from "../loading";
+import CookiePopUp from "../CookiePopUp";
 // CONTEXT ----------------------------------------------------------------
 import { muiQuery } from "../../context";
 import ReactGA from "react-ga";
+import { handleGetCookie } from "../../helpers/cookie";
 
 const Header = ({ state, actions }) => {
   const { sm, md, lg, xl } = muiQuery();
@@ -37,6 +39,8 @@ const Header = ({ state, actions }) => {
   useEffect(() => {
     ReactGA.initialize("UA-50027583-1");
     ReactGA.pageview(window.location.pathname + window.location.search);
+    const cookie = handleGetCookie({ name: `pop-up` });
+    console.log("COOKIE", cookie);
   }, []);
   return (
     <>
@@ -64,6 +68,7 @@ const Header = ({ state, actions }) => {
           }}
         >
           <ServeNavigation />
+          <CookiePopUp />
         </div>
       )}
     </>
