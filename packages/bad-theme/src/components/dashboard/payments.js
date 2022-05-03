@@ -164,7 +164,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
           core_totalamount.includes("-") ||
           bad_approvalstatus === "Pending" ||
           bad_outstandingpayments === "£0.00" ||
-          bad_outstandingpayments.includes("-")
+          (bad_outstandingpayments && bad_outstandingpayments.includes("-"))
         )
           return null;
 

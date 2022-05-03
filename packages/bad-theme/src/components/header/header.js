@@ -39,7 +39,7 @@ const Header = ({ state, actions }) => {
   useEffect(() => {
     ReactGA.initialize("UA-50027583-1");
     ReactGA.pageview(window.location.pathname + window.location.search);
-    const cookie = handleGetCookie({ name: `pop-up` });
+    const cookie = handleGetCookie({ name: `BAD-cookie-popup` });
     console.log("COOKIE", cookie);
   }, []);
   return (
@@ -52,6 +52,7 @@ const Header = ({ state, actions }) => {
         `}
       />
       <HTMLHead />
+      {/* <CookiePopUp /> */}
       {!lg ? (
         <div className="bad-header" style={styles.container}>
           <HeaderActions />
@@ -68,7 +69,6 @@ const Header = ({ state, actions }) => {
           }}
         >
           <ServeNavigation />
-          <CookiePopUp />
         </div>
       )}
     </>
