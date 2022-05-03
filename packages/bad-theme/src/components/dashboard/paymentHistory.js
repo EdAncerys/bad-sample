@@ -57,7 +57,8 @@ const ServePayments = ({
     return (
       <div className="flex" style={{ padding: "1em 0" }}>
         <div className="flex" style={{ display: "grid", alignItems: "center" }}>
-          {currentPayYear}
+          {/* {currentPayYear} */}
+          <p className="primary-title">Download your receipt for this year</p>
         </div>
         <div style={{ alignItems: "center" }}>
           <div className="blue-btn" onClick={handleDownloadPayment}>
@@ -71,7 +72,7 @@ const ServePayments = ({
   return (
     <div className="flex-col">
       <ServeDownloadAction currentPayYear={year} isFirst={isFirst} />
-      <div
+      {/* <div
         className="flex"
         style={{
           borderBottom: isLastItem ? "none" : `1px solid ${colors.darkSilver}`,
@@ -88,7 +89,7 @@ const ServePayments = ({
         <div className="flex" style={styles.textInfo}>
           <div>{core_totalamount}</div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
