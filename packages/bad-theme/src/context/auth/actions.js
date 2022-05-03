@@ -59,7 +59,7 @@ export const loginAction = async ({ state }) => {
       state.auth.B2C +
       `${redirectPath}&scope=openid&response_type=id_token&prompt=${action}`;
     const urlPath = state.router.link;
-
+    console.log("LOGIN URL + REDIRECT", redirectPath);
     // get current url path and store in cookieValue
     handleSetCookie({
       name: "loginPath",
