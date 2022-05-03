@@ -1,14 +1,26 @@
 import React from "react";
 import { connect } from "frontity";
-const CookiePopUp = ({ state }) => {
+import { handleSetCookie, handleGetCookie } from "../helpers/cookie";
+const CookiePopUp = ({ state, hide }) => {
+  const [show, setShow] = React.useState();
   const handleConsent = async () => {
-    alert("Handle consent clicked");
     handleSetCookie({
       name: "BAD-cookie-popup",
       value: "true",
-      domain: state.auth.APP_URL,
+      domain: `${state.auth.APP_URL}`,
     });
+    setShow("true");
   };
+
+  React.useEffect(() => {
+    let popUpCookie = handleGetCookie({ name: `BAD-cookie-popup` });
+    if (popUpCookie === null) {
+      popUpCookie = "false";
+    }
+    setShow(popUpCookie);
+  });
+  if (!show) return null;
+  if (show && show === "true") return null;
   return (
     <div
       className="container-fluid"
@@ -25,9 +37,9 @@ const CookiePopUp = ({ state }) => {
         <div className="col-lg-6 col-12">
           <h5>We value your privacy</h5>{" "}
           <p style={{ fontSize: 12 }}>
-            We use cookies to enhance your browsing experience, serve
-            personalised ads or content, and analyse our traffic. By clicking
-            "Accept All", you consent to our use of cookie.
+            We use cookies to give you the best online experience and analyse
+            our traffic. By clicking ‘I understand’ you agree to our use of
+            cookies.
             <a href="https://www.bad.org.uk/about-the-bad/our-values/our-policies/">
               Read more.
             </a>
