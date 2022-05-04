@@ -20,7 +20,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
 
   const data = state.source.get(state.router.link);
   const pilPageData = state.source[data.type][data.id];
-  // console.log("pageData ", data); // debug
+  console.log("pageData ", data); // debug
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [searchInput, setInput] = useState("");
@@ -34,31 +34,58 @@ const PilsArchive = ({ state, actions, libraries }) => {
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
-    let pils = state.source.pils;
-    if (!pils) {
-      await getPILsDataAction({ state, actions });
-      pils = state.source.pils;
-    }
+    // let pils = state.source.pils;
+    const fetchAllData = async () => {
+      // TODO: Make it better
+      const pilsies = [];
+      const times = 3;
+      const trying = await Promise.all([
+        fetch(
+          state.auth.WP_HOST +
+            `wp-json/wp/v2/pils?filter[orderby]=title&order=asc&per_page=100&page=1&_fields=title,link`
+        ).then((r) => r.json()),
+        fetch(
+          state.auth.WP_HOST +
+            `wp-json/wp/v2/pils?filter[orderby]=title&order=asc&per_page=100&page=2&_fields=title,link`
+        ).then((r) => r.json()),
+        fetch(
+          state.auth.WP_HOST +
+            `wp-json/wp/v2/pils?filter[orderby]=title&order=asc&per_page=100&page=3&_fields=title,link`
+        ).then((r) => r.json()),
+      ]);
+      console.log("TRYING", trying.flat(1));
+
+      console.log("PILSIES", pilsies);
+      setPilList(trying.flat(1));
+      console.log("JSON", data);
+      console.log("STATE", pilList);
+    };
+
+    // if (!pils) {
+    //   await getPILsDataAction({ state, actions });
+    //   pils = state.source.pils;
+    // }
 
     // if pils not found return
-    if (!pils) return;
-    let pilData = Object.values(pils);
+    // if (!pilList) return;
+    // let pilData = Object.values(pils);
 
-    // sort pils alphabetically by title
-    pilData.sort((a, b) => {
-      const nameA = a.title.rendered.toUpperCase(); // ignore upper and lowercase
-      const nameB = b.title.rendered.toUpperCase(); // ignore upper and lowercase
-      if (nameA < nameB) {
-        return -1;
-      }
-      if (nameA > nameB) {
-        return 1;
-      }
-      return 0;
-    });
+    // // sort pils alphabetically by title
+    // pilData.sort((a, b) => {
+    //   const nameA = a.title.rendered.toUpperCase(); // ignore upper and lowercase
+    //   const nameB = b.title.rendered.toUpperCase(); // ignore upper and lowercase
+    //   if (nameA < nameB) {
+    //     return -1;
+    //   }
+    //   if (nameA > nameB) {
+    //     return 1;
+    //   }
+    //   return 0;
+    // });
 
-    setPilList(pilData); // add pill object to data array
+    // setPilList(pilData); // add pill object to data array
 
+    fetchAllData();
     return () => {
       useEffectRef.current = false; // clean up function
     };

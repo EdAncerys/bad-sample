@@ -377,7 +377,13 @@ const Event = ({ state, actions, libraries }) => {
             full_name: true,
             email_address: true,
             phone_number: true,
-            recipients: state.contactList.DEFAULT_CONTACT_LIST,
+            recipients: [
+              {
+                email: event.acf.email
+                  ? event.acf.email
+                  : "conference@bad.org.uk",
+              },
+            ],
             registerForEvent: title.rendered,
             // default email subject & template name
             emailSubject: `Register for ${title.rendered} event.`,
@@ -403,7 +409,13 @@ const Event = ({ state, actions, libraries }) => {
             full_name: true,
             email_address: true,
             phone_number: true,
-            recipients: state.contactList.DEFAULT_CONTACT_LIST,
+            recipients: [
+              {
+                email: event.acf.email
+                  ? event.acf.email
+                  : "conference@bad.org.uk",
+              },
+            ],
             registerForEvent: title.rendered,
             // default email subject & template name
             emailSubject: `Express an interest for ${title.rendered} event.`,

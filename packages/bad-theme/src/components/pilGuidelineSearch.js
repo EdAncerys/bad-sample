@@ -68,7 +68,8 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
     setDataLoading(true);
     // ⬇️ apply data filters for search
     let fetching = await fetch(
-      `https://controlpanel.bad.org.uk/wp-json/relevanssi/v1/search?keyword=${input}&type=guidelines_standards,pils&per_page=5`
+      state.auth.WP_HOST +
+        `wp-json/relevanssi/v1/search?keyword=${input}&type=guidelines_standards,pils&per_page=5&_fields=title,link&orderby=title&order=ASC`
     );
     let data = await fetching.json();
     console.log("DATA", data);
