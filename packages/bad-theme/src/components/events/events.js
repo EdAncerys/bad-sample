@@ -13,6 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 // CONTEXT --------------------------------------------------------
 import { getEventsData } from "../../helpers";
 import { muiQuery } from "../../context";
+import SearchBar from "../searchBar";
 
 const Events = ({ state, actions, libraries, block, disableMargin }) => {
   const { sm, md, lg, xl } = muiQuery();
@@ -378,10 +379,11 @@ const Events = ({ state, actions, libraries, block, disableMargin }) => {
     return (
       <div style={{ position: "relative" }}>
         <div className="flex-col" style={{ width: !lg ? "70%" : "100%" }}>
-          <SearchContainer
+          {/* <SearchContainer
             searchFilterRef={searchFilterRef}
             handleSearch={handleSearch}
-          />
+          /> */}
+          <SearchBar search_type="events" block={block} />
           <ServeFilters />
         </div>
         <div className="flex" style={{ marginTop: "0.5em" }}>
