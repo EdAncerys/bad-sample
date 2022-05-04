@@ -63,8 +63,13 @@ const EventLoopBlock = ({
 
   // DATA get for EVENTS ----------------------------------------------------------------
   useEffect(async () => {
-    let data = state.source.events;
+    // let data = state.source.events;
 
+    const fetching = await fetch(
+      "https://controlpanel.bad.org.uk/wp-json/wp/v2/events?_fields=title,link,event_grade,acf.date_time,acf.organizer,acf.venue,acf.preview_summary,acf.image"
+    );
+    const data = await fetching.json();
+    console.log("EVENT DATA", data);
     let eventList = Object.values(data);
     const grades = Object.values(state.source.event_grade);
 
@@ -172,7 +177,8 @@ const EventLoopBlock = ({
             if (isArchive) return null;
           }
           // ⬇️ show only events that event_grade object have in common gradeFilter
-          if (gradeFilter.length > 0) {
+          {
+            /* if (gradeFilter.length > 0) {
             if (!event_grade) return null;
             let grade_match = false;
             event_grade.forEach((grade) => {
@@ -181,6 +187,7 @@ const EventLoopBlock = ({
               });
             });
             if (!grade_match) return null;
+          } */
           }
 
           if (searchFilter) {

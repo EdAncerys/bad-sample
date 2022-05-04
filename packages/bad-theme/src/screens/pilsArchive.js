@@ -20,7 +20,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
 
   const data = state.source.get(state.router.link);
   const pilPageData = state.source[data.type][data.id];
-  // console.log("pageData ", data); // debug
+  console.log("pageData ", data); // debug
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [searchInput, setInput] = useState("");
