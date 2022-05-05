@@ -40,9 +40,20 @@ export const useRedirect = ({
     console.log("URL PATH", urlPath, "NO SLASH", urlPathNoSlash);
     console.log("REDIRECTS", redirects);
     const redirect = redirects.find(
-      (redirect) =>
-        urlPath === redirect["301_from"] ||
-        urlPathNoSlash === redirect["301_from"]
+      (redirect) => {
+        console.log(
+          "WE MATCHED AGAINST",
+          redirect["301_from"],
+          "WE ARE AT",
+          urlPath
+        );
+        if (doURLsMatch(redirect["301_from"], urlPath, state.auth.APP_URL)) {
+          console.log(
+            `Redirecting from ${redirect["301_from"]} to ${redirect["301_to"]}`
+          );
+        }
+        return doURLsMatch(redirect["301_from"], urlPath, state.auth.APP_URL);
+      }
       // redirect["301_from"].is_document
       //   ? urlPath === redirect["301_from"]
       //   : urlPathNoSlash === redirect["301_from"]
@@ -54,3 +65,29 @@ export const useRedirect = ({
     console.log("🐞 REDIRECT TRIGERED", redirect);
   }, [urlPath, redirects]);
 };
+
+function doURLsMatch(redirectFromUrl, redirectToUrl, hostname) {
+  if (
+    redirectFromUrl.startsWith("www.") ||
+    redirectFromUrl.startsWith("http")
+  ) {
+    return false;
+  }
+  const redirectFrom = new URL(hostname + redirectFromUrl);
+  const redirectTo = new URL(hostname + redirectToUrl);
+
+  if (
+    redirectFrom.pathname.replace(/\/$/, "") !==
+    redirectTo.pathname.replace(/\/$/, "")
+  ) {
+    return false;
+  }
+
+  for (const [key, value] of redirectFrom.searchParams) {
+    if (redirectTo.searchParams.get(key) !== value) {
+      return false;
+    }
+  }
+
+  return true;
+}
