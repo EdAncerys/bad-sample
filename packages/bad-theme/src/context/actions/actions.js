@@ -6,7 +6,7 @@ export const setGoToAction = async ({ state, path, actions, downloadFile }) => {
   // console.log("setGoToAction triggered", path, downloadFile); // debug
   if (!path && !downloadFile) return null;
 
-  const pathOne = `http://3.9.193.188`;
+  const pathOne = `cdn.bad.org.uk`;
   const pathTwo = `https://badadmin.skylarkdev.co`;
   const wpHost = state.auth.WP_HOST;
   const appUrl = state.auth.APP_URL;
@@ -26,11 +26,13 @@ export const setGoToAction = async ({ state, path, actions, downloadFile }) => {
 
   if (path && path.includes(`www`) && !path.includes(`http`) && isExternalLink)
     return window.open(`https://` + path, "_blank"); // handle external links without https pre fix
+  if (path && path.includes("cdn"))
+    return window.location.replace("https://" + path);
   if (path && !path.includes(`www`) && !path.includes(`http`) && isExternalLink)
     return actions.router.set(pathTwo + path); // internal link no pre fix
   if (isExternalLink) return window.open(path, "_blank"); // handle external links
-
-  actions.router.set(path);
+  console.log("ROUTER PATH", path);
+  // actions.router.set(path);
 };
 
 export const setLinkWrapperAction = ({ path }) => {
@@ -140,6 +142,6 @@ export const setPlaceholderAction = ({ dispatch, isPlaceholder }) => {
 };
 
 export const setRedirectAction = ({ dispatch, redirects }) => {
-  // console.log("setRedirectAction triggered"); //debug
+  console.log("setRedirectAction triggered"); //debug
   dispatch({ type: "SET_REDIRECT_ACTION", payload: redirects });
 };
