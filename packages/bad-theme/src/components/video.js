@@ -22,6 +22,7 @@ import {
   setEnquireAction,
   muiQuery,
   setCreateAccountModalAction,
+  setErrorAction,
 } from "../context";
 
 const Video = ({ state, actions, libraries }) => {
@@ -33,7 +34,16 @@ const Video = ({ state, actions, libraries }) => {
 
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
-
+  const handlePaymentModal = (url) => {
+    setErrorAction({
+      dispatch,
+      isError: {
+        message: `The card payment industry is currently in the process of making significant changes to the way card payments are processed online. Unfortunately, because of these changes, some users are experiencing temporary issues with making card payments through the website. If you cannot make a payment through the website, please contact membership@bad.org.uk to discuss alternative arrangements for making payments.`,
+        image: "Error",
+        goToPath: { label: "Continue", path: url },
+      },
+    });
+  };
   const { lg } = muiQuery();
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -115,7 +125,9 @@ const Video = ({ state, actions, libraries }) => {
       post.acf.event_id +
       "/" +
       post.acf.price +
-      `?redirecturl=${uappUrl}/payment-confirmation`;
+      `?redirecturl=` +
+      uappUrl +
+      state.router.link;
 
     const fetchVendorId = await fetch(url, {
       method: "POST",
@@ -128,7 +140,7 @@ const Video = ({ state, actions, libraries }) => {
       const json = await fetchVendorId.json();
       const url =
         json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
-      setPaymentUrl(url);
+      handlePaymentModal(url);
     }
     // setPage({ page: "directDebit", data: block });
   };
