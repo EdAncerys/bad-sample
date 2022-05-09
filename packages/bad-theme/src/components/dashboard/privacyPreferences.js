@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import ActionPlaceholder from "../actionPlaceholder";
+import { Form } from "react-bootstrap";
+// DATA HELPERS -----------------------------------------------------------
+import { prefMailingOption } from "../../config/data";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -28,6 +31,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
     contactByPhone: false,
     contactByEmail: false,
     universalyUnsubscribe: false,
+    bad_preferredmailingaddress: "",
   });
 
   useEffect(() => {
@@ -46,6 +50,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
     handleSetData({ name: "bad_badecircular" });
     handleSetData({ name: "bad_bjdalerts" });
     handleSetData({ name: "bad_presidentsbulletin" });
+    handleSetData({ name: "bad_preferredmailingaddress" });
     if (
       (isActiveUser.preferredcontactmethodcode &&
         isActiveUser.preferredcontactmethodcode === 3) ||
@@ -85,6 +90,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
     let bad_badecircular = formData.bad_badecircular;
     let bad_bjdalerts = formData.bad_bjdalerts;
     let bad_presidentsbulletin = formData.bad_presidentsbulletin;
+    let bad_preferredmailingaddress = formData.bad_preferredmailingaddress;
     let contactByPhone = formData.contactByPhone;
     let contactByEmail = formData.contactByEmail;
     let universalyUnsubscribe = formData.universalyUnsubscribe;
@@ -107,6 +113,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
       bad_badecircular,
       bad_bjdalerts,
       bad_presidentsbulletin,
+      bad_preferredmailingaddress,
       preferredcontactmethodcode,
     };
 
@@ -126,7 +133,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
         isError: { message: `Personal information updated successfully` },
       });
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       setErrorAction({
         dispatch,
         isError: {
@@ -178,9 +185,9 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
           }}
         >
           <div className="flex-col">
-            <div>I am happy to receive:</div>
-            <div>
-              <div className="flex-row" style={styles.wrapper}>
+            <div className="primary-title">I am happy to receive:</div>
+            <div className="flex" style={{ alignItems: "center" }}>
+              <div style={{ display: "grid" }}>
                 <input
                   name="bad_bademailalerts"
                   checked={formData.bad_bademailalerts}
@@ -188,11 +195,11 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
                   type="checkbox"
                   className="form-check-input check-box"
                 />
-                <div style={styles.textInfo}>BAD Email Alerts</div>
               </div>
+              <div style={styles.textInfo}>BAD Email Alerts</div>
             </div>
-            <div>
-              <div className="flex-row" style={styles.wrapper}>
+            <div className="flex" style={{ alignItems: "center" }}>
+              <div style={{ display: "grid" }}>
                 <input
                   name="bad_badecircular"
                   checked={formData.bad_badecircular}
@@ -200,11 +207,11 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
                   type="checkbox"
                   className="form-check-input check-box"
                 />
-                <div style={styles.textInfo}>BAD e-circular</div>
               </div>
+              <div style={styles.textInfo}>BAD e-circular</div>
             </div>
-            <div>
-              <div className="flex-row" style={styles.wrapper}>
+            <div className="flex" style={{ alignItems: "center" }}>
+              <div style={{ display: "grid" }}>
                 <input
                   name="bad_bjdalerts"
                   checked={formData.bad_bjdalerts}
@@ -212,11 +219,11 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
                   type="checkbox"
                   className="form-check-input check-box"
                 />
-                <div style={styles.textInfo}>BAD Alerts</div>
               </div>
+              <div style={styles.textInfo}>BAD Alerts</div>
             </div>
-            <div>
-              <div className="flex-row" style={styles.wrapper}>
+            <div className="flex" style={{ alignItems: "center" }}>
+              <div style={{ display: "grid" }}>
                 <input
                   name="bad_presidentsbulletin"
                   checked={formData.bad_presidentsbulletin}
@@ -224,15 +231,15 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
                   type="checkbox"
                   className="form-check-input check-box"
                 />
-                <div style={styles.textInfo}>President's Bulletin</div>
               </div>
+              <div style={styles.textInfo}>President's Bulletin</div>
             </div>
           </div>
 
           <div className="flex-col ">
-            <div>I am happy to be contacted by:</div>
-            <div>
-              <div className="flex-row" style={styles.wrapper}>
+            {/* <div>I am happy to be contacted by:</div>
+              <div className="flex" style={{ alignItems: "center" }}>
+                  <div style={{ display: "grid" }}>
                 <input
                   name="contactByPhone"
                   checked={formData.contactByPhone}
@@ -240,11 +247,11 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
                   type="checkbox"
                   className="form-check-input check-box"
                 />
+                </div>
                 <div style={styles.textInfo}>Phone</div>
-              </div>
             </div>
-            <div>
-              <div className="flex-row" style={styles.wrapper}>
+              <div className="flex" style={{ alignItems: "center" }}>
+                  <div style={{ display: "grid" }}>
                 <input
                   name="contactByEmail"
                   checked={formData.contactByEmail}
@@ -252,13 +259,13 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
                   type="checkbox"
                   className="form-check-input check-box"
                 />
+                </div>
                 <div style={styles.textInfo}>Email</div>
-              </div>
-            </div>
+            </div> */}
 
-            <div style={{ paddingTop: `1em` }}>Universal unsubscribe:</div>
-            <div>
-              <div className="flex-row" style={styles.wrapper}>
+            <div className="primary-title">Universal unsubscribe:</div>
+            <div className="flex" style={{ alignItems: "center" }}>
+              <div style={{ display: "grid" }}>
                 <input
                   name="universalyUnsubscribe"
                   checked={formData.universalyUnsubscribe}
@@ -266,11 +273,31 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
                   type="checkbox"
                   className="form-check-input check-box"
                 />
-                <div style={styles.textInfo}>
-                  Choose to universally unsubscribe from all BAD membership mass
-                  communications
-                </div>
               </div>
+              <div style={styles.textInfo}>
+                Choose to universally unsubscribe from all BAD membership mass
+                communications
+              </div>
+            </div>
+            <div>
+              <div style={{ padding: "1em 0" }}>Preferred mailing option</div>
+              <Form.Select
+                name="bad_preferredmailingaddress"
+                value={formData.bad_preferredmailingaddress}
+                onChange={handleInputChange}
+                className="input"
+              >
+                <option value="" hidden>
+                  Preferred mailing option
+                </option>
+                {prefMailingOption.map((item, key) => {
+                  return (
+                    <option key={key} value={item.value}>
+                      {item.Label}
+                    </option>
+                  );
+                })}
+              </Form.Select>
             </div>
           </div>
         </div>
@@ -282,11 +309,8 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
 
 const styles = {
   textInfo: {
-    fontSize: 12,
+    fontSize: 16,
     paddingLeft: `1em`,
-  },
-  wrapper: {
-    paddingTop: `1em`,
   },
 };
 

@@ -90,7 +90,7 @@ const AccordionBody = ({
         refreshJWT,
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       setErrorAction({
         dispatch,
@@ -685,7 +685,7 @@ const AccordionBody = ({
   return (
     <div
       id={`accordion-body-${uniqueId}`}
-      className="accordion-collapse collapse"
+      className="accordion-collapse collapse accordion-content"
     >
       <div
         className="accordion-body"

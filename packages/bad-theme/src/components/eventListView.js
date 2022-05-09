@@ -126,7 +126,7 @@ const EventListView = ({
           style={{
             fontSize: !lg ? 20 : 16,
             padding: `0.5em 0`,
-            WebkitLineClamp: 1,
+            WebkitLineClamp: !lg ? 1 : 3,
           }}
         >
           <Html2React html={title} />

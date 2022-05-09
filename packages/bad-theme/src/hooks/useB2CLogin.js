@@ -23,7 +23,7 @@ export const useB2CLogin = ({ state, actions }) => {
   // await to get window object & setWindow to true
   useEffect(() => {
     if (window) {
-      console.log("📌 B2C Login Hook. 📌"); // debug
+      // console.log("📌 B2C Login Hook. 📌"); // debug
       setWindow(window);
     }
   }, []);
@@ -65,7 +65,7 @@ export const useB2CLogin = ({ state, actions }) => {
       if (Array.isArray(items[1].emails)) {
         const email = items[1].emails[0];
         // setContactEmail(items[1].emails[0]);
-        console.log("🐞 email ", email);
+        // console.log("🐞 email ", email);
         const user = await getUserDataByEmail({
           state,
           dispatch,
@@ -73,21 +73,15 @@ export const useB2CLogin = ({ state, actions }) => {
           refreshJWT,
         });
         if (!user) throw new Error("Error getting user data.");
-        // set cookie with jwt token & user id for future requests
-        // handleSetCookie({
-        //   name: state.auth.COOKIE_NAME,
-        //   value: { jwt, contactid },
-        // });
       } else {
-        console.log("🐞 error. Redirect to home path");
+        // console.log("🐞 error. Redirect to home path");
       }
     } catch (error) {
-      console.log(error);
-      console.log("🐞 items: ", items);
+      // console.log(error);
     } finally {
       // get redirect url from cookie
       const redirectUrl = handleGetCookie({ name: "loginPath" });
-      console.log("🐞 redirectUrl ", redirectUrl);
+      // console.log("🐞 redirectUrl ", redirectUrl);
 
       // ⬇️ redirect to url with path ⬇️
       setGoToAction({ state, path: redirectUrl || "/", actions });
@@ -96,7 +90,6 @@ export const useB2CLogin = ({ state, actions }) => {
       // delate redirect cookie to prevent redirect loop
       handleSetCookie({ name: "loginPath", deleteCookie: true });
     }
-    console.log(items); // debug
 
     return () => {
       useEffectRef.current = false; // clean up function

@@ -74,7 +74,7 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
         });
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setFetching(false);
     }
@@ -122,9 +122,7 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
         <ServeDataString title="Frequency:" value="Annual Collection" />
         <ServeDataString
           title="Date of Collection:"
-          value={`1st of January ${
-            currentYear + 1
-          } or first working day thereafter`}
+          value={`1st of January each year or first working day thereafter`}
         />
         <ServeDataString
           title="Name to appears on your statement:"

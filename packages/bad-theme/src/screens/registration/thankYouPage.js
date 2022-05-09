@@ -6,13 +6,24 @@ import CheckMark from "../../img/svg/checkMark.svg";
 
 import BlockWrapper from "../../components/blockWrapper";
 import CompleteApplication from "./forms/completeApplication";
+// CONTEXT ------------------------------------------------
+import { muiQuery, setGoToAction } from "../../context";
 
 const RegistrationThankYouPage = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
-
+  const { lg } = muiQuery();
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+
+  // HANDLERS --------------------------------------------
+  const handleRedirect = () => {
+    setGoToAction({
+      state,
+      path: "/about-the-bad/our-values/equality-diversity-and-inclusion/",
+      actions,
+    });
+  };
 
   // SERVERS ---------------------------------------------
   const ServeContent = () => {
@@ -42,16 +53,22 @@ const RegistrationThankYouPage = ({ state, actions }) => {
           </div>
           <div>
             The BAD wants to meet the aims and commitments set out in its
-            equality policy. This includes not discriminating under the Equality
-            Act 2010, and building an accurate picture of the make-up of the
-            membership. You can find our Equal Opportunities Policy here. The
-            BAD would like to ask for your help and co-operation to enable us to
-            do this, but filling in this form is voluntary and submission of
-            this information will not be considered as part of your application.
-            In line with the 2021 UK census questions, when asking about your
-            ethnicity we first ask for the broad ethnic group which you identify
-            with, this is then followed by a question asking for a more specific
-            ethnic background.
+            <span
+              className="caps-btn-no-underline"
+              style={{ padding: "0 0.5em" }}
+              onClick={handleRedirect}
+            >
+              equality policy.
+            </span>
+            This includes not discriminating under the Equality Act 2010, and
+            building an accurate picture of the make-up of the membership. You
+            can find our Equal Opportunities Policy here. The BAD would like to
+            ask for your help and co-operation to enable us to do this, but
+            filling in this form is voluntary and submission of this information
+            will not be considered as part of your application. In line with the
+            2021 UK census questions, when asking about your ethnicity we first
+            ask for the broad ethnic group which you identify with, this is then
+            followed by a question asking for a more specific ethnic background.
           </div>
           <CompleteApplication />
         </div>
@@ -66,7 +83,7 @@ const RegistrationThankYouPage = ({ state, actions }) => {
           margin: `${marginVertical}px ${marginHorizontal}px`,
         }}
       >
-        <div style={styles.container}>
+        <div style={!lg ? styles.container : styles.containerMobile}>
           <SideBarMenu />
           <ServeContent />
         </div>
@@ -79,6 +96,12 @@ const styles = {
   container: {
     display: "grid",
     gridTemplateColumns: `1fr 2fr`,
+    justifyContent: "space-between",
+    gap: 20,
+  },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
     justifyContent: "space-between",
     gap: 20,
   },

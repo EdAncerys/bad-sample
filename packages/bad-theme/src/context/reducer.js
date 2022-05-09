@@ -22,6 +22,7 @@ export const initialState = {
 
   filter: null,
   idFilter: null,
+  newsMediaCategoryId: "",
   eventAnchor: null,
   dashboardPath: "Dashboard",
   directDebitPath: { page: "billing" },
@@ -32,6 +33,7 @@ export const initialState = {
   appSearchPhrase: "",
 
   applicationData: null,
+  redirects: null,
 
   loginModalAction: false,
   createAccountAction: false,
@@ -76,6 +78,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, applicationData: action.payload };
     case "SET_ID_FILTER_ACTION":
       return { ...state, idFilter: action.payload };
+    case "SET__NEWS_MEDIA_ID_FILTER_ACTION":
+      return { ...state, newsMediaCategoryId: action.payload };
     case "SET_DIRECT_DEBIT_ACTION":
       return { ...state, isDirectDebit: action.payload };
     case "SET_CPT_BLOCK_ACTION":
@@ -98,6 +102,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, ethnicity: action.payload };
     case "SET_DASHBOARD_NOTIFICATION_ACTION":
       return { ...state, isDashboardNotifications: action.payload };
+    case "SET_REDIRECT_ACTION":
+      return { ...state, redirects: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

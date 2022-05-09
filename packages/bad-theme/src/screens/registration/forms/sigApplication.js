@@ -77,41 +77,42 @@ const SIGApplication = ({ state, actions, libraries }) => {
   });
   const [inputValidator, setInputValidator] = useState({
     bad_categorytype: true,
-    py3_title: true,
-    py3_firstname: true,
-    py3_lastname: true,
-    py3_gender: true,
-    py3_dateofbirth: true,
-    py3_email: true,
-    py3_mobilephone: true,
-    py3_address1ine1: true,
-    py3_addressline2: true,
-    py3_addresstowncity: true,
-    py3_addresszippostalcode: true,
-    py3_addresscountystate: true,
-    py3_addresscountry: true,
-    py3_gmcnumber: true,
-    bad_currentpost: true,
-    py3_hospitalid: true,
-    bad_newhospitaladded: true,
-    sky_newhospitalname: true,
-    bad_proposer1: true,
-    bad_proposer2: true,
-    py3_ntnno: true,
-    sky_cvurl: true,
-    bad_readpolicydocument: true,
+
+    sig_py3_title: true,
+    sig_py3_firstname: true,
+    sig_py3_lastname: true,
+    sig_py3_gender: true,
+    sig_py3_dateofbirth: true,
+    sig_py3_email: true,
+    sig_py3_mobilephone: true,
+    sig_py3_address1ine1: true,
+    sig_py3_addressline2: true,
+    sig_py3_addresstowncity: true,
+    sig_py3_addresszippostalcode: true,
+    sig_py3_addresscountystate: true,
+    sig_py3_addresscountry: true,
+    sig_py3_gmcnumber: true,
+    sig_bad_currentpost: true,
+    sig_py3_hospitalid: true,
+    sig_bad_newhospitaladded: true,
+    sig_sky_newhospitalname: true,
+    sig_bad_proposer1: true,
+    sig_bad_proposer2: true,
+    sig_py3_ntnno: true,
+    sig_sky_cvurl: true,
+    sig_bad_readpolicydocument: true,
     sig_readpolicydocument_url_email: true,
-    py3_currentgrade: true,
-    bad_qualifications: true,
-    bad_hasmedicallicence: true,
-    bad_isbadmember: true,
-    py3_whatukbasedroleareyou: true,
-    py3_speciality: true,
-    bad_interestinfieldquestion: true,
-    bad_otherjointclinics: true,
-    bad_mainareaofinterest: true,
-    bad_includeinthebssciiemaildiscussionforum: true,
-    py3_insertnhsnetemailaddress: true,
+    sig_py3_currentgrade: true,
+    sig_bad_qualifications: true,
+    sig_bad_hasmedicallicence: true,
+    sig_bad_isbadmember: true,
+    sig_py3_whatukbasedroleareyou: true,
+    sig_py3_speciality: true,
+    sig_bad_interestinfieldquestion: true,
+    sig_bad_otherjointclinics: true,
+    sig_bad_mainareaofinterest: true,
+    sig_bad_includeinthebssciiemaildiscussionforum: true,
+    sig_py3_insertnhsnetemailaddress: true,
   });
   const [isEmail, setIsEmail] = useState(false);
   const [applicationType, setType] = useState("Special Interest Group");
@@ -167,7 +168,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         subsData.filter((item) => item.bad_organisedfor === "BAD").length > 0;
       // if user have application pending under reviewed status redirect to application list
       if (isApprovedBAD) {
-        console.log("🤖 user have BAD application approved");
+        // console.log("🤖 user have BAD application approved");
         setCanChangeHospital(false);
       }
     }
@@ -209,6 +210,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         let type = data.bad_categorytype;
         if (type === "*") type = "Special Interest Group";
         setType(type); // validate SIG application category type
+        console.log("TYPE", type);
       }
     });
     // apply app additional logic after mapping apps data
@@ -225,7 +227,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
           setSelectedHospital(hospitalData.name);
         }
       } catch (error) {
-        console.log("🤖 error", error);
+        // console.log("🤖 error", error);
       }
     }
     let apps = [];
@@ -271,7 +273,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
         ...prevFormData,
         bad_categorytype: type,
       }));
-      console.log("FORMDATA", formData);
       // update policy link agains app data
       handlePolicyLinkUpdate({
         membershipData,
@@ -287,6 +288,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     });
 
     setMembershipData(membershipData); // set membership data
+    console.log("MEMDATA", membershipData);
   }, [state.source.memberships]);
 
   // HANDLERS --------------------------------------------
@@ -318,7 +320,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         attachments: sky_cvurl,
         refreshJWT,
       });
-    console.log("🐞 ", sky_cvurl); // debug
+    // console.log("🐞 ", sky_cvurl); // debug
 
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -353,7 +355,11 @@ const SIGApplication = ({ state, actions, libraries }) => {
     let isValid = true;
 
     required.map((input) => {
-      if (!formData[input] && inputValidator[input]) {
+      let inputValue = input;
+      // 📌 add bad_ if input dont have it
+      if (!inputValue.includes("sig_")) inputValue = `sig_${input}`;
+
+      if (!formData[input] && inputValidator[inputValue]) {
         errorHandler({ id: `form-error-${input}` });
         isValid = false;
       }
@@ -407,17 +413,18 @@ const SIGApplication = ({ state, actions, libraries }) => {
   };
 
   const handleNext = async () => {
+    console.log("MAYBE type", formData.bad_categorytype);
+
     // check if new hospital value been added
     const isNewHospital = formData.bad_newhospitaladded;
     let sigAppliaction = formData;
-
+    console.log("SIGAPP", formData);
     // default py3_address1ine1 to ref if value not set by user
     let isAddressInput = false;
     if (!formData.py3_address1ine1 && address1Line1Ref.current.value.length) {
       isAddressInput = true;
       formData.py3_address1ine1 = address1Line1Ref.current.value;
     }
-
     const isValid = isFormValidated({
       required: [
         "bad_organisedfor",
@@ -425,8 +432,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
         "py3_gmcnumber",
         "bad_currentpost",
-        isNewHospital ? "sky_newhospitaltype" : null,
-        !isNewHospital ? "py3_hospitalid" : null,
+        isNewHospital ? "sky_newhospitaltype" : "",
+        !isNewHospital ? "py3_hospitalid" : "",
 
         "py3_title",
         "py3_firstname",
@@ -434,18 +441,33 @@ const SIGApplication = ({ state, actions, libraries }) => {
         "py3_gender",
         "py3_email",
         "py3_mobilephone",
-        isAddressInput ? null : "py3_address1ine1",
+        isAddressInput ? "" : "py3_address1ine1",
         "py3_addresstowncity",
         "py3_addresszippostalcode",
         "py3_addresscountry",
         "py3_ntnno",
         "bad_readpolicydocument",
         "sky_cvurl",
+        formData.bad_categorytype ===
+        "Associate:British Society for Medical Dermatology"
+          ? "bad_otherjointclinics"
+          : "",
+        formData.bad_categorytype ===
+        "Full:British Society for Medical Dermatology"
+          ? "bad_otherjointclinics"
+          : "",
+        formData.bad_categorytype === "Full:British Hair and Nails Society"
+          ? "py3_speciality"
+          : "",
+        formData.bad_categorytype === "Full:British Hair and Nails Society"
+          ? "py3_whatukbasedroleareyou"
+          : "",
+        formData.bad_categorytype === "Full:DERMPATHPRO"
+          ? "py3_currentgrade"
+          : "",
       ],
     });
 
-    console.log("🐞 ", sigAppliaction); // debug
-    console.log("🐞 ", isValid); // debug
     if (!isValid) return null;
 
     try {
@@ -495,10 +517,11 @@ const SIGApplication = ({ state, actions, libraries }) => {
       });
       if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
 
-      let slug = `/membership/thank-you/`;
-      if (isActiveUser) setGoToAction({ state, path: slug, actions });
+      let slug = `/`;
+      if (isActiveUser && appsResponse)
+        setGoToAction({ state, path: slug, actions });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setFetching(false);
     }
@@ -507,11 +530,20 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
 
+    // handle BAD member question
+    if (name === "bad_isbadmember") {
+      let isBadMember = value === "true" ? true : false;
+      return setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: isBadMember,
+      }));
+    }
+
     // if input value py3_insertnhsnetemailaddress in wp set to show proceed
     if (
       name === "bad_includeinthebssciiemaildiscussionforum" &&
       checked &&
-      inputValidator.py3_insertnhsnetemailaddress
+      inputValidator.sig_py3_insertnhsnetemailaddress
     ) {
       setIsEmail(true);
     }
@@ -553,7 +585,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         }
       }
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
     } finally {
       setIsFetchingAddress(false);
     }
@@ -594,7 +626,10 @@ const SIGApplication = ({ state, actions, libraries }) => {
     return (
       <div
         className="flex"
-        style={{ justifyContent: "flex-end", padding: `2em 1em 0 1em` }}
+        style={{
+          justifyContent: "flex-end",
+          padding: `2em 1em 0 1em`,
+        }}
       >
         <div
           className="transparent-btn"
@@ -650,11 +685,16 @@ const SIGApplication = ({ state, actions, libraries }) => {
     );
   };
 
-  const isPolicy = inputValidator.bad_readpolicydocument && !!readPolicyDoc;
+  const isPolicy = inputValidator.sig_bad_readpolicydocument && !!readPolicyDoc;
 
   return (
     <div style={{ position: "relative" }}>
-      <ActionPlaceholder isFetching={isFetching} background="transparent" />
+      <ActionPlaceholder
+        isFetching={isFetching}
+        background="transparent"
+        alignSelf="self-end"
+        padding="0 0 6em 0"
+      />
 
       <div
         className="primary-title"
@@ -681,7 +721,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         >
           <ServeSIGMembershipCategory />
 
-          {inputValidator.py3_title && (
+          {inputValidator.sig_py3_title && (
             <div>
               <label className="required form-label">Title</label>
               <Form.Select
@@ -703,7 +743,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_firstname && (
+          {inputValidator.sig_py3_firstname && (
             <div>
               <label className="form-label required">First Name</label>
               <input
@@ -718,7 +758,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_lastname && (
+          {inputValidator.sig_py3_lastname && (
             <div>
               <label className="form-label required">Last Name</label>
               <input
@@ -733,7 +773,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_gender && (
+          {inputValidator.sig_py3_gender && (
             <div>
               <label className="required form-label">Gender</label>
               <Form.Select
@@ -757,7 +797,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_dateofbirth && (
+          {inputValidator.sig_py3_dateofbirth && (
             <div>
               <label className="form-label">Date of Birth</label>
               <input
@@ -771,7 +811,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_email && (
+          {inputValidator.sig_py3_email && (
             <div>
               <label className="form-label required">Email</label>
               <input
@@ -787,7 +827,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_mobilephone && (
+          {inputValidator.sig_py3_mobilephone && (
             <div>
               <label className="form-label required">Mobile Number</label>
               <input
@@ -802,17 +842,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_address1ine1 && (
+          {inputValidator.sig_py3_address1ine1 && (
             <div>
               <label className="required form-label">Home Address</label>
-              {/* <input
-                name="py3_address1ine1"
-                value={formData.py3_address1ine1}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="Address Line 1"
-              /> */}
               <div style={{ position: "relative" }}>
                 {!formData.py3_address1ine1 && (
                   <div style={{ position: "relative", width: "100%" }}>
@@ -889,7 +921,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_addressline2 && (
+          {inputValidator.sig_py3_addressline2 && (
             <input
               name="py3_addressline2"
               value={formData.py3_addressline2}
@@ -901,7 +933,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             />
           )}
 
-          {inputValidator.py3_addresstowncity && (
+          {inputValidator.sig_py3_addresstowncity && (
             <div>
               <input
                 name="py3_addresstowncity"
@@ -916,7 +948,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_addresszippostalcode && (
+          {inputValidator.sig_py3_addresszippostalcode && (
             <div>
               <input
                 name="py3_addresszippostalcode"
@@ -931,7 +963,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_addresscountystate && (
+          {inputValidator.sig_py3_addresscountystate && (
             <div>
               <input
                 name="py3_addresscountystate"
@@ -946,7 +978,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_addresscountry && (
+          {inputValidator.sig_py3_addresscountry && (
             <div>
               <input
                 name="py3_addresscountry"
@@ -963,10 +995,10 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {/* Profesonal Information Questions ------------------------- */}
 
-          {inputValidator.bad_currentpost && (
+          {inputValidator.sig_bad_currentpost && (
             <div>
               <label className="required form-label">
-                New Post / Job title field (If retired please enter retired)
+                Post / Job Title details
               </label>
               <input
                 name="bad_currentpost"
@@ -975,6 +1007,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 type="text"
                 className="form-control input"
                 placeholder="Current job title"
+                // 📌 disable if bad_currentpost is true
+                disabled={formData.bad_currentpost}
               />
               <div style={{ padding: "0.5em 0" }}>
                 If you would like to change your job title please use the form
@@ -984,7 +1018,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_ntnno && (
+          {inputValidator.sig_py3_ntnno && (
             <div>
               <div className="flex-col">
                 <label className="required form-label">
@@ -1004,7 +1038,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_hospitalid && (
+          {inputValidator.sig_py3_hospitalid && (
             <div>
               <label className="form-label required">
                 Main Hospital / Place of Work / Medical School details
@@ -1105,22 +1139,23 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {formData.bad_newhospitaladded && inputValidator.sky_newhospitalname && (
-            <div>
-              <label className="form-label">New Hospital Name</label>
-              <input
-                name="sky_newhospitalname"
-                value={formData.sky_newhospitalname}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="New Hospital Name"
-              />
-              <FormError id="sky_newhospitalname" />
-            </div>
-          )}
+          {formData.bad_newhospitaladded &&
+            inputValidator.sig_sky_newhospitalname && (
+              <div>
+                <label className="form-label">New Hospital Name</label>
+                <input
+                  name="sky_newhospitalname"
+                  value={formData.sky_newhospitalname}
+                  onChange={handleInputChange}
+                  type="text"
+                  className="form-control input"
+                  placeholder="New Hospital Name"
+                />
+                <FormError id="sky_newhospitalname" />
+              </div>
+            )}
 
-          {inputValidator.sky_cvurl && (
+          {inputValidator.sig_sky_cvurl && (
             <div>
               <label className="form-label required">Upload Your CV</label>
               <input
@@ -1135,7 +1170,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.bad_proposer1 && (
+          {inputValidator.sig_bad_proposer1 && (
             <div>
               <label className="form-label">Supporting Member 1</label>
               <input
@@ -1150,7 +1185,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.bad_proposer2 && (
+          {inputValidator.sig_bad_proposer2 && (
             <div>
               <label className="form-label">Supporting Member 2</label>
               <input
@@ -1166,20 +1201,25 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {/* SIG Questions -------------------------------------------- */}
 
-          {inputValidator.bad_isbadmember && (
+          {inputValidator.sig_bad_isbadmember && (
             <div className="flex-col">
               <label className="form-label">Are you BAD member?</label>
-              <input
+              <Form.Select
                 name="bad_isbadmember"
-                checked={formData.bad_isbadmember}
+                value={formData.bad_isbadmember}
                 onChange={handleInputChange}
-                type="checkbox"
-                className="form-check-input check-box"
-              />
+                className="input"
+              >
+                <option value="" hidden>
+                  Yes, No
+                </option>
+                <option value={true}>Yes</option>
+                <option value={false}>No</option>
+              </Form.Select>
             </div>
           )}
 
-          {inputValidator.bad_interestinfieldquestion && (
+          {inputValidator.sig_bad_interestinfieldquestion && (
             <div>
               <label className="form-label">
                 Describe your interest in {applicationType}
@@ -1195,7 +1235,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.bad_qualifications && (
+          {inputValidator.sig_bad_qualifications && (
             <div>
               <label className="required form-label">Qualifications</label>
               <input
@@ -1210,7 +1250,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_gmcnumber && (
+          {inputValidator.sig_py3_gmcnumber && (
             <div>
               <label className="required form-label">GMC / IMC number</label>
               <input
@@ -1225,9 +1265,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_currentgrade && (
+          {inputValidator.sig_py3_currentgrade && (
             <div>
-              <label className="form-label">Current Grade</label>
+              <label className="form-label required">Current Grade</label>
               <input
                 name="py3_currentgrade"
                 value={formData.py3_currentgrade}
@@ -1239,7 +1279,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.bad_hasmedicallicence && (
+          {inputValidator.sig_bad_hasmedicallicence && (
             <div className="flex-col">
               <label className="form-label">
                 License to practice medicine (Y/N)
@@ -1254,9 +1294,11 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_whatukbasedroleareyou && (
+          {inputValidator.sig_py3_whatukbasedroleareyou && (
             <div>
-              <label style={styles.subTitle}>UK / Overseas role</label>
+              <label style={styles.subTitle} className="required">
+                UK / Overseas role
+              </label>
               <Form.Select
                 name="py3_whatukbasedroleareyou"
                 value={formData.py3_whatukbasedroleareyou}
@@ -1276,9 +1318,11 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_speciality && (
+          {inputValidator.sig_py3_speciality && (
             <div>
-              <label style={styles.subTitle}>Specialist Interest</label>
+              <label style={styles.subTitle} className="required">
+                Specialist Interest
+              </label>
               <Form.Select
                 name="py3_speciality"
                 value={formData.py3_speciality}
@@ -1295,9 +1339,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.bad_otherjointclinics && (
+          {inputValidator.sig_bad_otherjointclinics && (
             <div>
-              <label className="form-label">
+              <label className="form-label required">
                 Do you do joint clinics with any other specialties?
               </label>
               <input
@@ -1311,7 +1355,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.bad_mainareaofinterest && (
+          {inputValidator.sig_bad_mainareaofinterest && (
             <div>
               <label style={styles.subTitle}>Main area of interest</label>
               <Form.Select
@@ -1337,7 +1381,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.bad_includeinthebssciiemaildiscussionforum && (
+          {inputValidator.sig_bad_includeinthebssciiemaildiscussionforum && (
             <div className="flex-col">
               <div className="flex">
                 <div style={{ display: "grid", alignItems: "center" }}>
@@ -1352,7 +1396,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
                   />
                 </div>
                 <label className="form-label">
-                  Do you want to be part of the BSSCII discussion form?
+                  Do you want to be included in the BSSCII discussion forum? If
+                  yes, please tick and add your NHS address below
                 </label>
               </div>
 

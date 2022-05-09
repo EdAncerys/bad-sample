@@ -1,6 +1,7 @@
 import { connect, Global, css } from "frontity";
 import bootStrapCSS from "../../css/bootstrap.min.css";
 import { colors } from "../../config/imports";
+import { useEffect } from "react";
 // css imports ------------------------------------------------------------
 import animations from "aos/dist/aos.css";
 import globalCSS from "../../css/main.css";
@@ -17,22 +18,17 @@ import HTMLHead from "./htmlHead";
 import HeaderActions from "./headerActions";
 import Navigation from "./navigation";
 import Loading from "../loading";
+import CookiePopUp from "../CookiePopUp";
 // CONTEXT ----------------------------------------------------------------
 import { muiQuery } from "../../context";
+import ReactGA from "react-ga";
+import { handleGetCookie, handleSetCookie } from "../../helpers/cookie";
 
 const Header = ({ state, actions }) => {
   const { sm, md, lg, xl } = muiQuery();
   const urlPath = state.router.link;
   const data = state.source.get(urlPath);
-
   const ServeNavigation = () => {
-    if (urlPath.includes("/redirect/"))
-      return (
-        <div style={{ paddingTop: `55%` }}>
-          <Loading />
-        </div>
-      );
-
     return (
       <div className="bad-header no-selector" style={styles.container}>
         <HeaderActions />
@@ -40,7 +36,18 @@ const Header = ({ state, actions }) => {
       </div>
     );
   };
-
+  const popUpCookie = handleGetCookie({ name: `BAD-cookie-popup` });
+  if (popUpCookie === null) {
+    handleSetCookie({
+      name: "BAD-cookie-popup",
+      value: "false",
+      domain: `${state.auth.APP_URL}`,
+    });
+  }
+  useEffect(() => {
+    ReactGA.initialize("UA-50027583-1");
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
   return (
     <>
       <Global
@@ -51,6 +58,7 @@ const Header = ({ state, actions }) => {
         `}
       />
       <HTMLHead />
+      <CookiePopUp hide={popUpCookie} />
       {!lg ? (
         <div className="bad-header" style={styles.container}>
           <HeaderActions />
@@ -59,18 +67,13 @@ const Header = ({ state, actions }) => {
       ) : (
         <div
           className="flex-col"
-          style={
-            !lg
-              ? styles.container
-              : {
-                  ...styles.container,
-                  position: "sticky",
-                  zIndex: "999",
-                  top: 0,
-                }
-          }
+          style={{
+            ...styles.container,
+            position: "sticky",
+            zIndex: "999",
+            top: 0,
+          }}
         >
-          <HTMLHead />
           <ServeNavigation />
         </div>
       )}

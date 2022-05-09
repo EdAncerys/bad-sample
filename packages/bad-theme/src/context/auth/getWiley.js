@@ -9,7 +9,7 @@ export const getWileyAction = async ({
   url,
   refreshJWT,
 }) => {
-  console.log("getWileyAction triggered");
+  // console.log("getWileyAction triggered");
 
   let isValidId = "";
   // get wiley link for BAD members
@@ -35,11 +35,10 @@ export const getWileyAction = async ({
     const data = await fetch(URL, requestOptions);
     const wiley = await data.json();
 
-    console.log("🐞 ", wiley); // debug
     if (wiley.success) return wiley.data;
 
     return null;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };

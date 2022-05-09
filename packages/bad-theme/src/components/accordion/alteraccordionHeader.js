@@ -34,7 +34,8 @@ const AccordionHeader = ({
   let title = block.title;
   if (fundingBlock || membershipApplications || guidelines)
     title = block.title.rendered;
-
+  const browsero = navigator.userAgent;
+  console.log("BROWSER", browsero.includes("Firefox"));
   let body = block.body;
   if (fundingBlock) body = block.acf ? block.acf.overview : null;
 
@@ -83,6 +84,7 @@ const AccordionHeader = ({
           style={{
             alignItems: !lg ? "center" : "flex-start",
             lineHeight: "unset",
+            flexDirection: !lg ? null : "column",
           }}
         >
           <div style={{ fontSize: 20 }}>
@@ -96,7 +98,7 @@ const AccordionHeader = ({
 
   const ServePreview = () => {
     if (guidelines || !preview || !body) return null;
-
+    if (lg || browsero.includes("Firefox")) return null;
     return (
       <div
         className="text-body body-limit"
@@ -105,7 +107,10 @@ const AccordionHeader = ({
           paddingTop: `1em`,
           margin: `1em`,
           color: colors.darkSilver,
-          borderTop: `1px solid ${colors.darkSilver}`,
+          borderTop:
+            !lg || browsero.includes("Firefox")
+              ? null
+              : `1px solid ${colors.darkSilver}`,
           transitionDelay: `1s`,
           WebkitLineClamp: 2,
         }}

@@ -8,7 +8,8 @@ import {
   setFetchAction,
   setErrorAction,
   setApplicationDataAction,
-  setIDFilterAction,
+  setIdFilterAction,
+  setNesMediaIdFilterAction,
   setCPTBlockAction,
   setCPTBlockTypeAction,
   setEventAnchorAction,
@@ -17,6 +18,7 @@ import {
   setNotificationAction,
   setDebitHandlerAction,
   setPlaceholderAction,
+  setRedirectAction,
 } from "./actions/actions";
 import { muiQuery } from "./mediaQueryContext";
 import {
@@ -131,7 +133,8 @@ export {
   getWileyAction,
   setCompleteUserApplicationAction,
   getTestUserAccountsAction,
-  setIDFilterAction,
+  setIdFilterAction,
+  setNesMediaIdFilterAction,
   getHospitalsAction,
   getBADMembershipSubscriptionData,
   getMembershipDataAction,
@@ -156,6 +159,7 @@ export {
   copyToClipboard,
   authCookieActionAfterCSR,
   setPlaceholderAction,
+  setRedirectAction,
   getWPMenu,
   getUserApplicationAction,
   getSIGGroupeData,

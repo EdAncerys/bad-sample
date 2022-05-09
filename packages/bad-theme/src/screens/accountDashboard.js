@@ -51,7 +51,6 @@ const AccountDashboard = ({ state, actions, libraries }) => {
 
   useEffect(async () => {
     if (!isActiveUser) return null;
-    console.log("🐞 ", isActiveUser);
     let isProfileComplete = true;
     // --------------------------------------------------------------------------------
     // 📌 SET Dashboard notification if user profile not complete
@@ -119,6 +118,60 @@ const AccountDashboard = ({ state, actions, libraries }) => {
     // redirect to apply page
     setGoToAction({ state, path: "/derm-groups-charity/", actions });
   };
+  const handleUpdateMembershipApplication = async ({ app }) => {
+    // if user have application in progress break & display error
+    if (applicationData) {
+      const type = applicationData[0].bad_categorytype;
+      const confirmationMsg = `You already have ${type} application open and unsubmitted! Please complete it before changing BAD application category.`;
+
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: confirmationMsg,
+          image: "Error",
+        },
+      });
+      return;
+    }
+
+    // handle create new application in Dynamics
+    try {
+      setFetching(true);
+      const appData = await handleApplyForMembershipAction({
+        state,
+        actions,
+        dispatch,
+        applicationData,
+        isActiveUser,
+        dynamicsApps,
+        category: "BAD",
+        type: app.bad_categorytype, //🤖 application type name from appData
+        membershipApplication: {
+          stepOne: false,
+          stepTwo: false,
+          stepThree: false,
+          stepFour: false,
+          changeAppCategory: app, // change of application
+        },
+        path: "/membership/application-change/", // redirect to application change page
+        changeAppCategory: app, // change of application
+        refreshJWT,
+      });
+      if (!appData) throw new Error("Failed to create application");
+    } catch (error) {
+      // console.log(error);
+
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: "Failed to create application record. Please try again.",
+          image: "Error",
+        },
+      });
+    } finally {
+      setFetching(false);
+    }
+  };
 
   const ServeDashboardActions = () => {
     let applicationTitle = "Apply for BAD Membership";
@@ -138,7 +191,8 @@ const AccountDashboard = ({ state, actions, libraries }) => {
                   {
                     title: applicationTitle,
                     colour: colors.navy,
-                    link: { url: applicationPath },
+                    onClickAction: () =>
+                      handleUpdateMembershipApplication({ app }),
                   },
                   {
                     title: "Apply for SIG Membership",
@@ -168,6 +222,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
           <BlockWrapper>
             {!lg ? <DashboardNavigation /> : <DashboardNavigationMobile />}
             <DashboardNotifications />
+
             <Dashboard />
             <DashboardEvents />
             <Membership />

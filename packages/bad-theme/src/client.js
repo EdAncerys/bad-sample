@@ -42,6 +42,7 @@ const BADTheme = {
       DYNAMICS_BRIDGE: process.env.DYNAMICS_BRIDGE,
       APP_URL: process.env.APP_URL, // app host url
       COOKIE_NAME: "BAD-WebApp", // gen App cooie name
+      AUTH_COOKIE: "BAD-AUTH", // gen App cooie name
       ENVIRONMENT: process.env.ENVIRONMENT,
     },
     contactList: {
@@ -62,16 +63,16 @@ const BADTheme = {
   actions: {
     theme: {
       beforeCSR: async ({ state, actions }) => {
-        console.log("beforeCSR triggered"); // debug
+        // console.log("beforeCSR triggered"); // debug
         await Promise.all([
           actions.source.fetch(`/home-page`), // pre fetch home page CONTENT
           // actions.source.fetch(`/menu_features`), // pre fetch menu featured CPT
         ]);
 
         // ⬇️  get pils data
-        await getPILsDataAction({ state, actions });
+        // await getPILsDataAction({ state, actions });
         // ⬇️  get guidance data
-        await getGuidelinesDataAction({ state, actions });
+        // await getGuidelinesDataAction({ state, actions });
 
         // ⬇️ handle set cookie for video guide block. Silent auth login
         // https://www.skinhealthinfo.org.uk/support-resources/video-guides/
@@ -99,7 +100,7 @@ const BADTheme = {
         }, 3000);
       },
       afterCSR: async ({ state, actions }) => {
-        console.log("afterCSR triggered"); // debug
+        // console.log("afterCSR triggered"); // debug
       },
     },
   },

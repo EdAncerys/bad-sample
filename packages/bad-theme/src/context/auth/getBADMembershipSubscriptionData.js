@@ -7,7 +7,7 @@ export const getBADMembershipSubscriptionData = async ({
   dispatch,
   refreshJWT,
 }) => {
-  console.log("getBADMembershipSubscriptionData triggered");
+  // console.log("getBADMembershipSubscriptionData triggered");
 
   const year = new Date().getFullYear(); // get current year
   let URL =
@@ -17,10 +17,7 @@ export const getBADMembershipSubscriptionData = async ({
     URL =
       state.auth.APP_HOST +
       `/catalogue/lookup/membershiptype?search=${category}:${type}:${year}`;
-
   const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-
-  console.log(URL); // debug
 
   const requestOptions = {
     method: "GET",
@@ -33,12 +30,10 @@ export const getBADMembershipSubscriptionData = async ({
 
     if (result.success) {
       const membershipData = result.data[0] ? result.data[0] : null;
-      console.log("⏬ Application ID ⏬");
-      console.log(membershipData.core_membershipsubscriptionplanid);
 
       return membershipData;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };

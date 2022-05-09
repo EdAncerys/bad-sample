@@ -18,7 +18,23 @@
   line-height: normal;
   transition: all 0.3s ease-in-out;
 }
-
+.disabled-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: black;
+  background-color: transparent;
+  min-width: 145px;
+  height: 40px;
+  padding: 0.75em;
+  border-radius: 10px;
+  cursor: pointer;
+  border-color: gray;
+  border-style: solid;
+  line-height: normal;
+  transition: all 0.3s ease-in-out;
+}
 .blue-btn-reverse {
   background-color: rgb(31, 51, 94, 0.9);
   color: white;

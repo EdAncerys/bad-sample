@@ -14,7 +14,7 @@ export const sendEmailEnquireAction = async ({
   template,
   refreshJWT,
 }) => {
-  console.log("enquireAction triggered");
+  // console.log("enquireAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
   const URL = state.auth.APP_HOST + `/email`;
@@ -54,8 +54,6 @@ export const sendEmailEnquireAction = async ({
       headers: { Authorization: `Bearer ${jwt}` },
       body: form,
     };
-    console.log("🚀 📧 form", formData); // debug
-    console.log("🚀 📧 fileAttachmentList", fileAttachmentList); // debug
 
     const data = await fetch(URL, requestOptions);
     const response = await data.json();

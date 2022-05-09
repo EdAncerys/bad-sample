@@ -26,7 +26,6 @@ const LoginModal = ({ state, actions }) => {
   useEffect(async () => {
     if (!id) return null;
 
-    console.log("useEffect trigeted. ID ", id);
     await loginAction({ state, dispatch, transId: id });
 
     return () => {
@@ -46,16 +45,14 @@ const LoginModal = ({ state, actions }) => {
 
     try {
       const iFramePath = iFrame.contentWindow.location.pathname;
-      // console.log("iFramePath", iFramePath); // debug
 
       const iqs = new URLSearchParams(iFrame.contentWindow.location.search);
-      console.log("iFrameRef iqs", iqs);
       if (iqs && iqs.has("transId")) {
         const transId = iqs.get("transId");
-        console.log("*** WE FOUND A TRANSACTION ID IN THE IFRAME ** ", transId);
+        // console.log("*** WE FOUND A TRANSACTION ID IN THE IFRAME ** ", transId);
         setId(transId);
       } else {
-        console.log("Error getting transId from iFrame");
+        // console.log("Error getting transId from iFrame");
       }
     } catch (error) {
       console.log("*** ERROR GETTING IFRAME CONTENT - CROSS-ORIGIN **"); // debug
@@ -132,7 +129,7 @@ const LoginModal = ({ state, actions }) => {
               margin: `4em 1em`,
             }}
           >
-            <div>Login</div>
+            <div>Login / Register</div>
           </div>
         </Modal.Body>
       </div>

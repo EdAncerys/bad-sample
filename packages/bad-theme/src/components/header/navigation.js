@@ -8,13 +8,25 @@ import Link from "@frontity/components/link";
 import BlockWrapper from "../blockWrapper";
 import Loading from "../loading";
 import Card from "../../components/card/card";
+// CONTEXT -----------------------------------------------------------------
+import { getPostData } from "../../helpers";
+import {
+  setNesMediaIdFilterAction,
+  useAppDispatch,
+  useAppState,
+} from "../../context";
 
 const Navigation = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
+  const dispatch = useAppDispatch();
+  const { isActiveUser, dynamicsApps } = useAppState();
+
   const [wpMainMenu, setWpMainMenu] = useState([]);
   const [wpMoreMenu, setWpMoreMenu] = useState([]);
   const [featured, setFeatured] = useState([]);
+  const [newsMedia, setNewsMedia] = useState([]);
+  const [hasPermission, setPermission] = useState(false);
   const useEffectRef = useRef(false);
 
   const MAIN_NAV_LENGTH = 6; // main navigation length config
@@ -28,9 +40,11 @@ const Navigation = ({ state, actions, libraries }) => {
     currentlySelectedMenuItem ? currentlySelectedMenuItem[1] : null
   );
   const activeChildMenu = useRef(null);
+
   useEffect(async () => {
     // ⬇️ getting wp menu & featured from state
     if (!state.theme.menu) return;
+    let iteration = 0;
     const menuData = state.theme.menu;
     const menuLength = menuData.length;
 
@@ -41,11 +55,49 @@ const Navigation = ({ state, actions, libraries }) => {
     setWpMoreMenu(wpMoreMenu); // more menu into dropdown
     if (state.source.menu_features)
       setFeatured(Object.values(state.source.menu_features)); // cpt for menu content
-    activeMenu.current;
+
+    // 📌 set News & Media menu content form CPT
+    let data = Object.values(state.source.post);
+    while (data.length === 0) {
+      // if iteration is greater than 10, break
+      if (iteration > 15) break;
+      // set timeout for async
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      await getPostData({ state, actions });
+      data = Object.values(state.source.post);
+      iteration++;
+    }
+
+    if (state.source.category) {
+      let catList = Object.values(state.source.category);
+      // sort catList by name in alphabetical order
+      catList.sort((a, b) => {
+        if (a.name < b.name) return -1;
+        if (a.name > b.name) return 1;
+
+        return 0;
+      });
+      setNewsMedia(catList);
+    }
+
     return () => {
       useEffectRef.current = false; // clean up function
     };
   }, [state.theme.menu]);
+
+  useEffect(() => {
+    let hasPermission = false;
+    // 📌 check if user has permission to view news & media
+    if (dynamicsApps) {
+      // chewck if user have BAD memberships & membership have sage payId is persent
+      const hasBADMembership = dynamicsApps.subs.data.filter(
+        (item) => item.bad_organisedfor === "BAD" && item.bad_sagepayid
+      );
+      if (hasBADMembership.length > 0 && isActiveUser) hasPermission = true;
+    }
+
+    setPermission(hasPermission);
+  }, [isActiveUser, dynamicsApps]);
 
   if (!wpMoreMenu.length || !wpMainMenu.length)
     return (
@@ -134,7 +186,51 @@ const Navigation = ({ state, actions, libraries }) => {
     }
     return "none";
   };
+
   // SERVERS -----------------------------------------------------
+  const ServeNewsMediaSubMenu = ({ parent }) => {
+    // 📌 serve submenu for news & media only
+    if (parent.title !== "News &#038; Media" || newsMedia.length === 0)
+      return null;
+
+    return (
+      <div style={{ paddingRight: `2em` }}>
+        {newsMedia.map((item, key) => {
+          const { name, id } = item;
+          let linkPath = "/news-media/"; // hard coded path to news & media
+          // check if name includes circular newsletters bulletin
+          let membersOnly = ["circular", "newsletter", "bulletin"].some(
+            (word) => name.toLowerCase().includes(word)
+          );
+          // 📌 if user has permission to view news & media
+          if (membersOnly && !hasPermission) return null;
+
+          return (
+            <li key={key} className="flex-row" style={{ width: "100%" }}>
+              <Link
+                className="flex-row dropdown-item"
+                style={styles.link}
+                onClick={() =>
+                  setNesMediaIdFilterAction({
+                    dispatch,
+                    newsMediaCategoryId: id,
+                  })
+                }
+                link={linkPath}
+              >
+                <div className="flex">
+                  <div className="menu-title">
+                    <Html2React html={name} />
+                  </div>
+                </div>
+              </Link>
+            </li>
+          );
+        })}
+      </div>
+    );
+  };
+
   const ServeMenu = ({ secondaryMenu }) => {
     const ServeChildMenu = ({
       item,
@@ -233,6 +329,8 @@ const Navigation = ({ state, actions, libraries }) => {
                 );
               })}
             </div>
+
+            <ServeNewsMediaSubMenu parent={parent} />
           </ul>
         );
       };

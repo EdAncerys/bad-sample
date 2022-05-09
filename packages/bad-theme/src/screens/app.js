@@ -50,6 +50,8 @@ import BlockWrapper from "../components/blockWrapper";
 import { useQuery } from "../hooks/useQuery";
 import { useScraper } from "../hooks/useScraper";
 import { useB2CLogin } from "../hooks/useB2CLogin";
+import { useRedirect } from "../hooks/useRedirect";
+import { useScript } from "../hooks/useScript";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -57,29 +59,34 @@ import {
   authCookieActionAfterCSR,
   getWPMenu,
   setPlaceholderAction,
-  setIDFilterAction,
-  getLeadershipTeamData,
+  setIdFilterAction,
   muiQuery,
 } from "../context";
 
 const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
-  const { isActiveUser, isPlaceholder, idFilter, refreshJWT } = useAppState();
+  const { isActiveUser, isPlaceholder, idFilter, refreshJWT, redirects } =
+    useAppState();
   const { sm, md, lg, xl, xxl } = muiQuery();
 
   let urlPath = state.router.link;
   const data = state.source.get(urlPath);
-  console.log("INDEX data", data); // debug
+  const useEffectRef = useRef(true);
+  // console.log("INDEX data", data); // debug
   // --------------------------------------------------------------------------------
   // 📌  B2C login handler.
   // --------------------------------------------------------------------------------
   useB2CLogin({ state, actions });
   // 📌 anchor tag scrapper
   useScraper({ urlPath });
-
-  // ⬇️ hook for media queries ⬇️
+  // 📌 redirect handler
+  useRedirect({ state, dispatch, actions, redirects, urlPath });
+  // 📌 hook for media queries
   useQuery({ state });
-  const useEffectRef = useRef(true);
+  // 📌 add script for Google API
+  // useScript({
+  //   url: `https://maps.googleapis.com/maps/api/js?key=${state.auth.GOOGLE_API_KEY}&libraries=places`,
+  // });
 
   useEffect(() => {
     // ⬇️ restore scroll history to manual position ⬇️
@@ -97,14 +104,13 @@ const App = ({ state, actions }) => {
     await authCookieActionAfterCSR({ state, dispatch, refreshJWT });
     // ⬇️  pre-fetch app menu from wp
     await getWPMenu({ state, actions });
-    // ⬇️  get leadership data
-    await getLeadershipTeamData({ state, actions });
+
     // get current time & compare how long pre-fetch took before  setting placeholder
     const timeTaken = new Date().getTime() - currentTime;
     // 📌 if time taken is less than 3s await for remaining time before proceeding
-    console.log("timeTaken", timeTaken); // debug
-    if (timeTaken < 3000) {
-      await new Promise((resolve) => setTimeout(resolve, 3000 - timeTaken));
+    // console.log("timeTaken", timeTaken); // debug
+    if (timeTaken < 2000) {
+      await new Promise((resolve) => setTimeout(resolve, 2000 - timeTaken));
     }
     // ⬇️  set APP placeholder after async actions to false
     // if page path include codecollect, skip placeholder
@@ -121,7 +127,7 @@ const App = ({ state, actions }) => {
     // ⬇️  clearing id reference
     const slug = "/guidelines-and-standards/clinical-guidelines/";
     if (idFilter && urlPath !== slug)
-      setIDFilterAction({ dispatch, idFilter: null }); // reset filter id on page change
+      setIdFilterAction({ dispatch, idFilter: null }); // reset filter id on page change
   }, [urlPath]);
 
   const transitions = useTransition(isPlaceholder, {

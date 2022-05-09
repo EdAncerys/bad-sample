@@ -70,7 +70,10 @@ const NewsAndMediaHeader = ({
     if (!title) return null;
 
     return (
-      <div className="primary-title" style={{ fontSize: 20 }}>
+      <div
+        className="primary-title body-limit"
+        style={{ fontSize: 20, WebkitLineClamp: 6 }}
+      >
         <Html2React html={title.rendered} />
       </div>
     );

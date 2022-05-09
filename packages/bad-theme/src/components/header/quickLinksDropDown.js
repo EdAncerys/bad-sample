@@ -31,14 +31,20 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
     if (btn) btn.classList.add = "shadow";
   };
 
-  const handelLogin = () => {
-    setErrorAction({ dispatch, isError: null });
-    loginAction({ state });
-  };
-
   const onClickLinkHandler = async ({ title, url }) => {
     const isWileys = title.includes("Journal");
     let authLink = url;
+
+    // HANDLERS ----------------------------------------------------
+    const handelLogin = () => {
+      setErrorAction({ dispatch, isError: null });
+      loginAction({ state });
+    };
+
+    const handelRedirect = () => {
+      setErrorAction({ dispatch, isError: null });
+      setGoToAction({ state, path: authLink, actions });
+    };
 
     // 📌 check if logged in user exists & user is BAD member to replace auth link
     if (isWileys && isActiveUser) {
@@ -51,12 +57,6 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
         url,
       });
     }
-
-    // redirect handler
-    const handelRedirect = () => {
-      setErrorAction({ dispatch, isError: null });
-      setGoToAction({ state, path: authLink, actions });
-    };
 
     if (isWileys && !isActiveUser) {
       // 📌 track notification error action

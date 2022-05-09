@@ -21,7 +21,6 @@ const Venue = ({ state, actions, libraries }) => {
 
   const data = state.source.get(state.router.link);
   const venue = state.source[data.type][data.id];
-  console.log("pageData ", data, venue); // debug
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -159,7 +158,7 @@ const Venue = ({ state, actions, libraries }) => {
         return (
           <div style={{ paddingTop: `1em` }}>
             <div className="flex primary-title" style={{ fontSize: 20 }}>
-              Address:
+              Home Address:
             </div>
 
             <div className="flex">

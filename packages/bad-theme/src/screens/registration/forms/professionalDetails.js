@@ -66,21 +66,21 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     bad_preferredmailingaddress: "",
   });
   const [inputValidator, setInputValidator] = useState({
-    py3_gmcnumber: true,
-    py3_otherregulatorybodyreference: true,
-    py3_ntnno: true,
-    bad_currentpost: true,
-    py3_hospitalid: true,
+    bad_py3_gmcnumber: true,
+    bad_py3_otherregulatorybodyreference: true,
+    bad_py3_ntnno: true,
+    bad_bad_currentpost: true,
+    bad_py3_hospitalid: true,
     bad_proposer1: false, // 📌 remove by default
     bad_proposer2: false, // 📌 remove by default
-    sky_cvurl: true,
-    py3_currentgrade: true,
-    sky_newhospitalname: true,
+    bad_sky_cvurl: true,
+    bad_py3_currentgrade: true,
+    bad_sky_newhospitalname: true,
     bad_newhospitaladded: true,
     bad_expectedyearofqualification: true,
-    py3_constitutionagreement: true,
+    bad_py3_constitutionagreement: true,
     bad_readpolicydocument: true,
-    sky_newhospitaltype: true,
+    bad_sky_newhospitaltype: true,
     bad_memberdirectory: true,
   });
 
@@ -113,7 +113,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         subsData.filter((item) => item.bad_organisedfor === "BAD").length > 0;
       // if user have application pending under reviewed status redirect to application list
       if (isApprovedBAD) {
-        console.log("🤖 user have BAD application approved");
+        // console.log("🤖 user have BAD application approved");
         setCanChangeHospital(false);
       }
     }
@@ -170,7 +170,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
           setSelectedHospital(hospitalData.name);
         }
       } catch (error) {
-        console.log("🤖 error", error);
+        // console.log("🤖 error", error);
       }
     }
 
@@ -189,7 +189,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   const handleSelectHospital = ({ item }) => {
     setSelectedHospital(item.title);
     setHospitalData(null); // clear hospital data for dropdown
-    console.log("selected hospital", item); // debug
 
     // guard if user have BAD apps approved dont allow hospital lookup
     if (!canChangeHospital) return;
@@ -250,7 +249,11 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     let isValid = true;
 
     required.map((input) => {
-      if (!formData[input] && inputValidator[input]) {
+      let inputValue = input;
+      // 📌 add bad_ if input dont have it
+      if (!inputValue.includes("bad_")) inputValue = `bad_${input}`;
+
+      if (!formData[input] && inputValidator[inputValue]) {
         errorHandler({ id: `form-error-${input}` });
         isValid = false;
       }
@@ -271,9 +274,9 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         "py3_otherregulatorybodyreference",
         "py3_ntnno",
         "bad_currentpost",
-        isNewHospital ? "sky_newhospitaltype" : null, // required if new hospital name added
-        isNewHospital ? "sky_newhospitalname" : null, // required if new hospital name added
-        !isNewHospital ? "py3_hospitalid" : null,
+        isNewHospital ? "sky_newhospitaltype" : "", // required if new hospital name added
+        isNewHospital ? "sky_newhospitalname" : "", // required if new hospital name added
+        !isNewHospital ? "py3_hospitalid" : "",
         "bad_proposer1",
         "bad_proposer2",
         "py3_constitutionagreement",
@@ -311,10 +314,10 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
 
       let slug = `/membership/thank-you/`;
-      if (category === "SIG") slug = `/membership/sig-questions/`;
-      if (isActiveUser) setGoToAction({ state, path: slug, actions });
+      if (isActiveUser && appsResponse)
+        setGoToAction({ state, path: slug, actions });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       setErrorAction({
         dispatch,
@@ -342,7 +345,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
   const handleDocUploadChange = async (e) => {
     let sky_cvurl = e.target.files[0];
-    console.log("e", e); // debug
 
     if (sky_cvurl)
       sky_cvurl = await sendFileToS3Action({
@@ -351,7 +353,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         attachments: sky_cvurl,
         refreshJWT,
       });
-    console.log("sky_cvurl", sky_cvurl); // debug
+    // console.log("sky_cvurl", sky_cvurl); // debug
 
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -371,13 +373,13 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   };
 
   const isFormFooter =
-    inputValidator.py3_currentgrade ||
-    inputValidator.py3_constitutionagreement ||
+    inputValidator.bad_py3_currentgrade ||
+    inputValidator.bad_py3_constitutionagreement ||
     inputValidator.bad_readpolicydocument ||
-    inputValidator.sky_cvurl;
+    inputValidator.bad_sky_cvurl;
 
   const isAgreementForm =
-    inputValidator.py3_constitutionagreement ||
+    inputValidator.bad_py3_constitutionagreement ||
     inputValidator.bad_readpolicydocument ||
     inputValidator.bad_memberdirectory;
 
@@ -433,7 +435,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       </div>
       <form>
         <div style={{ padding: `2em 1em` }}>
-          {inputValidator.py3_gmcnumber && (
+          {inputValidator.bad_py3_gmcnumber && (
             <div>
               <label className="required form-label">
                 {applicationType === "Associate Overseas"
@@ -452,7 +454,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_otherregulatorybodyreference && (
+          {inputValidator.bad_py3_otherregulatorybodyreference && (
             <div>
               <label className="required form-label">
                 Regulatory Body Registration Number
@@ -469,7 +471,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_ntnno && (
+          {inputValidator.bad_py3_ntnno && (
             <div>
               <label className="required form-label">NTN Number</label>
               <input
@@ -487,7 +489,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
           {inputValidator.bad_currentpost && (
             <div>
               <label className="required form-label">
-                New Post/Job title field (If retired please enter retired)
+                Current Post/Job title field (If retired please enter retired)
               </label>
               <input
                 name="bad_currentpost"
@@ -501,7 +503,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_hospitalid && (
+          {inputValidator.bad_py3_hospitalid && (
             <div>
               <label className="form-label required">
                 Main Hospital / Medical School / Place of Work details
@@ -592,22 +594,23 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {formData.bad_newhospitaladded && inputValidator.sky_newhospitalname && (
-            <div>
-              <label className="form-label">
-                Main Hospital / Medical School / Place of Work
-              </label>
-              <input
-                name="sky_newhospitalname"
-                value={formData.sky_newhospitalname}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="Main Hospital / Medical School / Place of Work"
-              />
-              <FormError id="sky_newhospitalname" />
-            </div>
-          )}
+          {formData.bad_newhospitaladded &&
+            inputValidator.bad_sky_newhospitalname && (
+              <div>
+                <label className="form-label">
+                  Main Hospital / Medical School / Place of Work
+                </label>
+                <input
+                  name="sky_newhospitalname"
+                  value={formData.sky_newhospitalname}
+                  onChange={handleInputChange}
+                  type="text"
+                  className="form-control input"
+                  placeholder="Main Hospital / Medical School / Place of Work"
+                />
+                <FormError id="sky_newhospitalname" />
+              </div>
+            )}
 
           {inputValidator.bad_expectedyearofqualification && (
             <div>
@@ -686,7 +689,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
               borderBottom: `1px solid ${colors.silverFillTwo}`,
             }}
           >
-            {inputValidator.py3_currentgrade && (
+            {inputValidator.bad_py3_currentgrade && (
               <div>
                 <label className="form-label">Current Grade</label>
                 <input
@@ -721,7 +724,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
               </Form.Select>
             </div>
 
-            {inputValidator.sky_cvurl && (
+            {inputValidator.bad_sky_cvurl && (
               <div>
                 <label className="form-label required">Upload Your CV</label>
                 <input
@@ -772,7 +775,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                   </div>
                 )}
 
-                {inputValidator.py3_constitutionagreement && (
+                {inputValidator.bad_py3_constitutionagreement && (
                   <div>
                     <div
                       className="flex"

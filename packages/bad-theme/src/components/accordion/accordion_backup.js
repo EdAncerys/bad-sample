@@ -37,7 +37,6 @@ const AccordionComponent = ({
     approved_bad_members_only,
     add_search_function,
   } = block;
-  // console.log("accordion_item", accordion_item); //debug
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [searchInput, setInput] = useState(null);
@@ -143,7 +142,6 @@ const AccordionComponent = ({
   const ServeAccordion = ({ block }) => {
     const [uniqueId, setUniqueId] = useState(null);
     const [isFetching, setFetching] = useState(null);
-    // console.log("block", block); // debug
 
     // hook applies after React has performed all DOM mutations
     useLayoutEffect(() => {
@@ -239,8 +237,6 @@ const AccordionComponent = ({
       <BlockWrapper>
         <div style={{ margin: `0 ${marginHorizontal}px` }}>
           {searchFilter.map((block, key) => {
-            // console.log("🚀 accordion block", block); // debug
-
             return <ServeAccordion key={key} block={block} />;
           })}
         </div>

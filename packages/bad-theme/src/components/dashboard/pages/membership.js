@@ -40,8 +40,7 @@ const Membership = ({ state, actions, libraries }) => {
   useEffect(() => {
     if (!dynamicsApps) return;
     // 📌 set dynamic apps data
-    setSubs([]);
-    // setSubs(dynamicsApps.subs.data);
+    setSubs(dynamicsApps.subs.data);
   }, [dynamicsApps]);
 
   // HANDLERS ----------------------------------------------------------------
@@ -58,7 +57,7 @@ const Membership = ({ state, actions, libraries }) => {
       // await for link to download & open in new window to download
       window.open(url, "_blank");
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setFetching(false);
     }
@@ -105,7 +104,7 @@ const Membership = ({ state, actions, libraries }) => {
       });
       if (!appData) throw new Error("Failed to create application");
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       setErrorAction({
         dispatch,
@@ -139,6 +138,11 @@ const Membership = ({ state, actions, libraries }) => {
   };
 
   if (dashboardPath !== "Membership") return null;
+
+  // 📌 If user dont have any subscription dont render the component
+  let isSubsData = subsData;
+  if (subsData && subsData.length === 0) isSubsData = null;
+  console.log("subsData", subsData);
   // RETURN -----------------------------------------------------------------
   return (
     <div style={{ padding: `0 ${marginHorizontal}px` }}>
@@ -164,9 +168,21 @@ const Membership = ({ state, actions, libraries }) => {
                 Current Subscriptions
               </div>
 
-              {subsData.map((app, key) => {
-                console.log("🐞 ", app);
+              {!isSubsData && (
+                <div
+                  className="primary-title"
+                  style={{
+                    fontWeight: "bold",
+                    display: "grid",
+                    alignItems: "center",
+                    paddingTop: "1em",
+                  }}
+                >
+                  You have no current membership activity.
+                </div>
+              )}
 
+              {subsData.map((app, key) => {
                 if (subsData.length === 0) {
                   // 📌 if subsData is empty display no subscriptions message
                   return (
@@ -207,13 +223,11 @@ const Membership = ({ state, actions, libraries }) => {
 
                 const ServeChangeApplicationAction = () => {
                   // return if bad_organisedfor is BAD & in dashboard only
-                  if (
-                    bad_organisedfor !== "BAD" ||
-                    dashboardPath !== "Dashboard"
-                  )
-                    return null;
+                  {
+                    /* bad_organisedfor !== "BAD" || */
+                  }
+                  if (dashboardPath !== "Dashboard") return null;
                   const [appStatus, setStatus] = useState(null);
-
                   // check if application been previously submitted
                   useEffect(async () => {
                     try {
@@ -237,8 +251,9 @@ const Membership = ({ state, actions, libraries }) => {
                       }
 
                       setStatus(isSubmitted); // set status to submitted
+                      console.log("APPSTATUS", appStatus);
                     } catch (error) {
-                      console.log(error);
+                      console.log("APPCHANGE ERROR", error);
                     }
                   }, []);
 
@@ -251,6 +266,8 @@ const Membership = ({ state, actions, libraries }) => {
                         style={{
                           fontWeight: "bold",
                           justifyItems: "center",
+                          display: "grid",
+                          alignItems: "center",
                         }}
                       >
                         BAD category change pending approval.
@@ -278,11 +295,7 @@ const Membership = ({ state, actions, libraries }) => {
                 };
 
                 const ServeMembershipActions = () => {
-                  if (
-                    dashboardPath === "Dashboard" ||
-                    bad_organisedfor === "SIG"
-                  )
-                    return null;
+                  if (bad_organisedfor === "SIG") return null;
 
                   return (
                     <div style={{ display: "grid", alignItems: "center" }}>

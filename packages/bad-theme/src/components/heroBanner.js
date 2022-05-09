@@ -115,7 +115,8 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           <div
             className="d-flex justify-content-center"
             style={{
-              marginTop: "-20%",
+              marginTop: !lg ? "-20%" : !background_image ? "10%" : "-20%",
+              marginBottom: !lg ? null : "10%",
             }}
           >
             <Card
@@ -182,7 +183,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           style={{
             display: "grid",
             alignItems: "center",
-            position: "absolute",
+            position: !lg ? "absolute" : background_image ? "absolute" : null,
             zIndex: 9,
             width: !lg
               ? !background_image
@@ -283,7 +284,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
         <div className="col-12 col-lg-6">
           <ServeCardContent />
           <ServeBannerOverLayMobile />
-          <ServeButtonsOverLayMobile />
+          {/* <ServeButtonsOverLayMobile /> */}
         </div>
       </>
     );

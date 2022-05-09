@@ -7,7 +7,7 @@ export const sendFileToS3Action = async ({
   attachments,
   refreshJWT,
 }) => {
-  console.log("sendFileToS3Action triggered");
+  // console.log("sendFileToS3Action triggered");
 
   setFetchAction({ dispatch, isFetching: true });
   const URL = state.auth.APP_HOST + `/s3/profile/image`;
@@ -35,7 +35,7 @@ export const sendFileToS3Action = async ({
       return response.data;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
   }

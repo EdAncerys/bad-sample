@@ -3,6 +3,7 @@ import Image from "@frontity/components/image";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import Loading from "./loading";
 import { colors } from "../config/imports";
+import { muiQuery } from "../context";
 
 const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -10,7 +11,7 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
   if (!block.timeline_item) return null;
 
   const { disable_vertical_padding } = block;
-
+  const { lg } = muiQuery();
   let GRID_KEY = 0;
   let ROW_COUNTER = 0;
   let ROW = 1;
@@ -190,7 +191,7 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
               className="flex-col"
               style={{
                 padding: `1em`,
-                width: "33%",
+                width: !lg ? "33%" : "100vw",
               }}
             >
               <ServeCardContent />

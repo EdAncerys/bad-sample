@@ -34,6 +34,21 @@
   object-fit: cover;
   padding: 2em 100px;
 }
+/* target all img in class post-content & apply styles */
+.post-content img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 2em;
+}
+.accordion-content span {
+  padding-bottom: 0;
+  display: grid;
+  justify-content: center;
+}
+.accordion-content img {
+  position: relative !important;
+}
 /* card component animations */
 .card-wrapper {
   cursor: pointer;
@@ -418,6 +433,7 @@ https://codebeautify.org/
 
 .body-limit {
   overflow: hidden;
+  /* display: none; */
   display: -webkit-box;
   /* -webkit-line-clamp: 2; */ /* number of lines to show */
   -webkit-box-orient: vertical;

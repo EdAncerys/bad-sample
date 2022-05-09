@@ -33,6 +33,7 @@ import {
   getWileyAction,
   setErrorAction,
   loginAction,
+  muiQuery,
 } from "../../context";
 
 const Card = ({
@@ -95,12 +96,13 @@ const Card = ({
   disableCardAnimation,
   delay,
   animationType,
+  isElectionBlock,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
   const THEME = colour || colors.primary;
   const isShadow = shadow ? "shadow" : "";
-
+  const { lg } = muiQuery();
   let CARD_HEIGHT = "100%";
   let ELECTION_BLOCKS = false;
   if (cardHeight) CARD_HEIGHT = cardHeight;
@@ -147,7 +149,7 @@ const Card = ({
         if (wileyLink) authLink = wileyLink;
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setAuthLink(authLink); // set auth link via wiley
       setFetching(false);
@@ -188,7 +190,8 @@ const Card = ({
       });
       return;
     }
-    setGoToAction({ state, path: link || authLink, actions, downloadFile });
+    if (!isElectionBlock)
+      setGoToAction({ state, path: link || authLink, actions, downloadFile });
   };
 
   // SERVERS ----------------------------------------------
@@ -263,11 +266,12 @@ const Card = ({
       </div>
     );
   };
+
   const ServeVideoCover = () => {
     if (!videoArchive) return null;
     if (!url) return null;
+
     const [vimeoCover, setVimeoCover] = useState(defaultVideoCover);
-    const alt = title || "BAD";
 
     let STYLES = { minHeight: 200, maxHeight: 300 };
     if (imgHeight) STYLES = { height: imgHeight };
@@ -275,6 +279,7 @@ const Card = ({
       const video_url = videoArchive.acf.video;
       const reg = /\d+/g;
       const videoId = video_url.match(reg);
+
       const fetchVideoData = await fetch(
         `https://vimeo.com/api/v2/video/${videoId[0]}.json`
       );
@@ -305,7 +310,6 @@ const Card = ({
         >
           <PlayCircleOutlineIcon
             sx={{ fontSize: 80 }}
-            onClick={() => setLoadVideo(true)}
             style={{ cursor: "pointer" }}
           />
         </div>
@@ -394,8 +398,12 @@ const Card = ({
         ...styles.card,
         backgroundColor: backgroundColor || colors.white,
         width: cardWidth || "100%",
-        height: videoArchive ? null : CARD_HEIGHT,
-        minHeight: MIN_CARD_HEIGHT,
+        height: videoArchive || heroBanner ? null : CARD_HEIGHT,
+        minHeight: heroBanner
+          ? CARD_HEIGHT
+          : !lg
+          ? MIN_CARD_HEIGHT
+          : CARD_HEIGHT,
       }}
       onClick={onClickHandler}
       data-aos={videoArchive ? "none" : animationType || "fade"}

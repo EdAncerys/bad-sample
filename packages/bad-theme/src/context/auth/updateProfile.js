@@ -11,7 +11,7 @@ export const updateProfileAction = async ({
   isActiveUser,
   refreshJWT,
 }) => {
-  console.log("updateProfileAction triggered");
+  // console.log("updateProfileAction triggered");
   const { contactid } = isActiveUser;
 
   const URL = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
@@ -39,8 +39,7 @@ export const updateProfileAction = async ({
     if (!response) throw new Error("Error updating profile.");
 
     if (response.success) {
-      console.log("⬇️ profile details successfully updated ⬇️ "); // debug
-      console.log(response); // debug
+      // console.log("⬇️ profile details successfully updated ⬇️ "); // debug
       // update user profile in context
       await getUserDataByContactId({
         state,
@@ -53,7 +52,7 @@ export const updateProfileAction = async ({
       return response;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
   }

@@ -141,7 +141,6 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
       );
       if (membership) setBodyCopy(membership.acf.body_copy);
     }
-    console.log(value);
   };
 
   const isFormValidated = ({ required }) => {
@@ -165,7 +164,6 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
     });
 
     if (!isValid) return null;
-    // console.log(formData); // debug
     let path = `/membership/step-3-personal-information/`;
     if (formData.bad_organisedfor === "810170001")
       path = `/membership/sig-questions/`;
@@ -187,7 +185,7 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
         refreshJWT,
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setFetching(false);
     }
@@ -230,7 +228,7 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
 
     const ServeBADMembershipCategory = () => {
       if (formData.bad_organisedfor !== "810170000") return null;
-
+      console.log("MEMBERSHIPDATA", membershipData);
       return (
         <div>
           <div>
@@ -245,6 +243,8 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
                 Membership Category
               </option>
               {membershipData.map((item, key) => {
+                if (item.id === 8800) return null;
+                if (item.id === 8801) return null;
                 const { bad_or_sig, category_types } = item.acf;
                 if (bad_or_sig !== "bad") return null;
 

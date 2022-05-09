@@ -10,7 +10,6 @@ const FullWidthImageAndPromoCard = ({ state, actions, block }) => {
   if (!block) return <Loading />;
 
   const { body, colour, image, disable_vertical_padding, link } = block;
-  // console.log("promo card", block); // debug
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;

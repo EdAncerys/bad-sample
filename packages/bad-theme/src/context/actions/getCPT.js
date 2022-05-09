@@ -1,5 +1,5 @@
 export const getPILsDataAction = async ({ state, actions }) => {
-  console.log("getPILsDataAction triggered"); //debug
+  // console.log("getPILsDataAction triggered"); //debug
   const path = `/pils/`;
   await actions.source.fetch(path); // fetch CPT data
   const data = state.source.get(path);
@@ -15,7 +15,7 @@ export const getPILsDataAction = async ({ state, actions }) => {
 };
 
 export const getGuidelinesDataAction = async ({ state, actions }) => {
-  console.log("getGuidelinesDataAction triggered"); //debug
+  // console.log("getGuidelinesDataAction triggered"); //debug
   const path = `/guidelines_standards/`;
   await actions.source.fetch(path); // fetch CPT data
   const data = state.source.get(path);

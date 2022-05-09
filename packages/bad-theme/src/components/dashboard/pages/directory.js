@@ -60,7 +60,7 @@ const Directory = ({ state, actions, libraries }) => {
         setFadData(fad);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
 
     return () => {
@@ -80,7 +80,6 @@ const Directory = ({ state, actions, libraries }) => {
       {}, // add empty object
       { bad_memberdirectory: directoryPref }
     );
-    console.log("data", data); // debug
 
     try {
       setIsFetching(true);
@@ -102,7 +101,7 @@ const Directory = ({ state, actions, libraries }) => {
         },
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       setErrorAction({
         dispatch,
         isError: {
@@ -148,7 +147,7 @@ const Directory = ({ state, actions, libraries }) => {
       });
       setSearchData(fad);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setInputValue("");
       setFilter(input);
@@ -169,7 +168,7 @@ const Directory = ({ state, actions, libraries }) => {
       // increment page iteration counter
       setPage(page + 1);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       setErrorAction({
         dispatch,
         isError: {
@@ -275,7 +274,6 @@ const Directory = ({ state, actions, libraries }) => {
       if (badApps.length) isBADMember = true;
     }
     // dont display action if user is not BAD member
-    // console.log("isBADMember", isBADMember); // debug
     if (!isBADMember) return null;
 
     return (

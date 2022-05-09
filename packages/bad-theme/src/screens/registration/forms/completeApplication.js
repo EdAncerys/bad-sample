@@ -90,10 +90,14 @@ const CompleteApplication = ({ state, actions, libraries }) => {
       let slug = `/dashboard/`;
       if (isActiveUser) setGoToAction({ state, path: slug, actions });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     } finally {
       setFetching(false);
     }
+  };
+
+  const handleReturn = () => {
+    if (isActiveUser) setGoToAction({ state, path: "/dashboard/", actions });
   };
 
   const handleInputChange = (e) => {
@@ -118,6 +122,13 @@ const CompleteApplication = ({ state, actions, libraries }) => {
         <div className="blue-btn" onClick={handleSubmit}>
           Submit
         </div>
+        <div
+          className="blue-btn"
+          style={{ marginLeft: "2em" }}
+          onClick={handleReturn}
+        >
+          No thank you, return to Dashboard
+        </div>
       </div>
     );
   };
@@ -130,9 +141,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
           <div style={{ padding: `2em 1em` }}>
             {ethnicity && (
               <div>
-                <label style={styles.subTitle}>
-                  What is your Ethnic Group?
-                </label>
+                <label style={styles.subTitle}>What is your Ethnicity?</label>
                 <Form.Select
                   name="bad_ethnicity"
                   value={formData.bad_ethnicity}
@@ -140,7 +149,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
                   className="input"
                 >
                   <option value="" hidden>
-                    Ethnic Group
+                    Ethnicity
                   </option>
                   {ethnicity.map((item, key) => {
                     return (

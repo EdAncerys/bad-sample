@@ -27,7 +27,6 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
 
   const data = state.source.get(state.router.link);
   const dermGroupe = state.source[data.type][data.id];
-  console.log("dermGroupe", dermGroupe); // debug
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;

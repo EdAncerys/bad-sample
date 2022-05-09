@@ -17,6 +17,7 @@ import {
   setGoToAction,
   setErrorAction,
   errorHandler,
+  muiQuery,
   getMembershipDataAction,
   getApplicationStatus,
   validateMembershipFormAction,
@@ -32,7 +33,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
 
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
-
+  const { lg } = muiQuery();
   const dispatch = useAppDispatch();
   const { isActiveUser, dynamicsApps, applicationData, refreshJWT } =
     useAppState();
@@ -64,21 +65,21 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     bad_memberdirectory: "",
   });
   const [inputValidator, setInputValidator] = useState({
-    py3_gmcnumber: true,
-    py3_otherregulatorybodyreference: true,
-    py3_ntnno: true,
+    bad_py3_gmcnumber: true,
+    bad_py3_otherregulatorybodyreference: true,
+    bad_py3_ntnno: true,
     bad_currentpost: true,
-    py3_hospitalid: true,
+    bad_py3_hospitalid: true,
     bad_proposer1: true,
     bad_proposer2: true,
-    sky_cvurl: true,
-    py3_currentgrade: true,
-    sky_newhospitalname: true,
+    bad_sky_cvurl: true,
+    bad_py3_currentgrade: true,
+    bad_sky_newhospitalname: true,
     bad_newhospitaladded: true,
     bad_expectedyearofqualification: true,
-    py3_constitutionagreement: true,
+    bad_py3_constitutionagreement: true,
     bad_readpolicydocument: true,
-    sky_newhospitaltype: true,
+    bad_sky_newhospitaltype: true,
     bad_memberdirectory: true,
   });
   const [bodyCopy, setBodyCopy] = useState("");
@@ -97,15 +98,11 @@ const ApplicationChange = ({ state, actions, libraries }) => {
   useEffect(async () => {
     // redirect to /dashboard if isActiveUser && !applicationData
     if (isActiveUser && !applicationData) {
-      console.log(
-        "⬇️ user have no application data created - redirect to /dashboard"
-      );
       setGoToAction({ state, path: `/dashboard/`, actions });
       return;
     }
     // redirect to / if !isActiveUser || !applicationData
     if (!isActiveUser) {
-      console.log("⬇️ no user - redirect to /");
       setGoToAction({ state, path: `/`, actions });
     }
     if (!applicationData) return null;
@@ -113,7 +110,14 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     // pre fetch membership data if not already present
     if (!state.source.memberships)
       await getMembershipDataAction({ state, actions });
-    const membershipData = Object.values(state.source.memberships);
+    let membershipData = Object.values(state.source.memberships);
+    // sort memberships in alphabetical order
+    membershipData = membershipData.sort((a, b) => {
+      if (a.acf.category_types < b.acf.category_types) return -1;
+      if (a.acf.category_types > b.acf.category_types) return 1;
+      return 0;
+    });
+
     setMembershipData(membershipData);
 
     // API to get membership data based in app ID
@@ -155,7 +159,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
         subsData.filter((item) => item.bad_organisedfor === "BAD").length > 0;
       // if user have application pending under reviewed status redirect to application list
       if (isApprovedBAD) {
-        console.log("🤖 user have BAD application approved");
+        // console.log("🤖 user have BAD application approved");
         setCanChangeHospital(false);
       }
     }
@@ -198,7 +202,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
           setSelectedHospital(hospitalData.name);
         }
       } catch (error) {
-        console.log("🤖 error", error);
+        // console.log("🤖 error", error);
       }
     }
 
@@ -218,6 +222,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
   if (!membershipData) return <Loading />;
 
   // HANDLERS --------------------------------------------
+
   const handleInputChange = (e) => {
     const { name, value, type, checked, files } = e.target;
     setFormData((prevFormData) => ({
@@ -256,7 +261,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
   const handleSelectHospital = ({ item }) => {
     setSelectedHospital(item.title);
     setHospitalData(null); // clear hospital data for dropdown
-    console.log("selected hospital", item); // debug
 
     // guard if user have BAD apps approved dont allow hospital lookup
     if (!canChangeHospital) return;
@@ -318,7 +322,11 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     let isValid = true;
 
     required.map((input) => {
-      if (!formData[input] && inputValidator[input]) {
+      let inputValue = input;
+      // 📌 add bad_ if input dont have it
+      if (!inputValue.includes("bad_")) inputValue = `bad_${input}`;
+
+      if (!formData[input] && inputValidator[inputValue]) {
         errorHandler({ id: `form-error-${input}` });
         isValid = false;
       }
@@ -330,8 +338,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
   const handleApplicationChange = async () => {
     // check if new hospital value been added
     const isNewHospital = formData.bad_newhospitaladded;
-    // check if isAssociateType to apply mandatory fields
-    const isAssociateType = applicationType.includes("Associate");
 
     const isValid = isFormValidated({
       required: [
@@ -339,12 +345,8 @@ const ApplicationChange = ({ state, actions, libraries }) => {
         "py3_otherregulatorybodyreference",
         "py3_ntnno",
         "bad_currentpost",
-        isNewHospital ? "sky_newhospitaltype" : null,
-        !isNewHospital ? "py3_hospitalid" : null,
-        "bad_proposer1",
-        "bad_proposer2",
-        "py3_constitutionagreement",
-        "bad_readpolicydocument",
+        isNewHospital ? "sky_newhospitaltype" : "",
+        !isNewHospital ? "py3_hospitalid" : "",
       ],
     });
 
@@ -353,6 +355,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     let appFromData = { ...formData };
 
     try {
+      console.log("FORMDATA", formData);
       setFetching(true);
       // ⏬ get appropriate membership ID for BAD applications only
       const response = await getBADMembershipSubscriptionData({
@@ -366,7 +369,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
       // ⬇️  update application object with new membership ID ⬇️
       appFromData.core_membershipsubscriptionplanid =
         response.core_membershipsubscriptionplanid;
-      console.log("appFromData", appFromData); // debug
+      // console.log("appFromData", appFromData); // debug
 
       const store = await setUserStoreAction({
         state,
@@ -394,7 +397,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
       // redirect to dashboard
       setGoToAction({ state, path: `/dashboard/`, actions });
     } catch (error) {
-      console.log(error);
+      console.log("ERROR", error);
       setErrorAction({
         dispatch,
         isError: {
@@ -421,7 +424,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
 
   const handleDocUploadChange = async (e) => {
     let sky_cvurl = e.target.files[0];
-    console.log("e", e); // debug
 
     if (sky_cvurl)
       sky_cvurl = await sendFileToS3Action({
@@ -430,7 +432,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
         attachments: sky_cvurl,
         refreshJWT,
       });
-    console.log("sky_cvurl", sky_cvurl); // debug
+    // console.log("sky_cvurl", sky_cvurl); // debug
 
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -438,16 +440,18 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     }));
   };
 
-  const isFormFooter =
-    inputValidator.py3_currentgrade ||
-    inputValidator.py3_constitutionagreement ||
+  let isFormFooter =
+    inputValidator.bad_py3_currentgrade ||
+    inputValidator.bad_py3_constitutionagreement ||
     inputValidator.bad_readpolicydocument ||
-    inputValidator.sky_cvurl;
+    inputValidator.bad_sky_cvurl;
 
-  const isAgreementForm =
-    inputValidator.py3_constitutionagreement ||
+  let isAgreementForm =
+    inputValidator.bad_py3_constitutionagreement ||
     inputValidator.bad_readpolicydocument ||
     inputValidator.bad_memberdirectory;
+  isAgreementForm = false; // 📌 uncoment to enable agreement form
+  isFormFooter = false; // 📌 uncoment to enable agreement form
 
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
@@ -512,7 +516,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
           margin: `${marginVertical}px ${marginHorizontal}px`,
         }}
       >
-        <div style={styles.container}>
+        <div style={!lg ? styles.container : styles.containerMobile}>
           <div
             className="flex-col"
             style={{
@@ -527,7 +531,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
               isFetching={isFetching}
               background="transparent"
             />
-            <div style={styles.wrapper}>
+            <div style={!lg ? styles.wrapper : styles.wrapperMobile}>
               <div style={{ padding: "0 1em" }}>
                 <div className="primary-title" style={styles.title}>
                   Change of Category Application
@@ -587,13 +591,11 @@ const ApplicationChange = ({ state, actions, libraries }) => {
               </div>
 
               <form>
-                <div style={{ padding: `2em 1em` }}>
-                  {inputValidator.py3_gmcnumber && (
+                <div style={{ padding: !lg ? `2em 1em` : "1em" }}>
+                  {inputValidator.bad_py3_gmcnumber && (
                     <div>
                       <label className="required form-label">
-                        {applicationType === "Associate Overseas"
-                          ? "GMC / IMC number'"
-                          : "GMC number"}
+                        GMC / IMC Number
                       </label>
                       <input
                         name="py3_gmcnumber"
@@ -607,7 +609,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                     </div>
                   )}
 
-                  {inputValidator.py3_otherregulatorybodyreference && (
+                  {inputValidator.bad_py3_otherregulatorybodyreference && (
                     <div>
                       <label className="required form-label">
                         Regulatory Body Registration Number
@@ -624,7 +626,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                     </div>
                   )}
 
-                  {inputValidator.py3_ntnno && (
+                  {inputValidator.bad_py3_ntnno && (
                     <div>
                       <label className="required form-label">NTN Number</label>
                       <input
@@ -642,7 +644,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                   {inputValidator.bad_currentpost && (
                     <div>
                       <label className="required form-label">
-                        New Post/Job title field (If retired please enter
+                        Current Post / Job title field (If retired please enter
                         retired)
                       </label>
                       <input
@@ -657,14 +659,30 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                     </div>
                   )}
 
-                  {inputValidator.py3_hospitalid && (
+                  {inputValidator.bad_py3_hospitalid && (
                     <div>
                       <label className="form-label required">
                         Main Hospital / Place of Work / Medical School details
                       </label>
+                      <div style={{ paddingBottom: "0.5em" }}>
+                        If you need to update your hospital / main place of work
+                        or medical school pleaase go to your dashboard to update
+                        your details.
+                      </div>
                       <div style={{ position: "relative" }}>
                         {selectedHospital && (
-                          <div className="form-control input">
+                          <div
+                            className="form-control input"
+                            style={{
+                              // if canChangeHospital is false, apply disabled style
+                              ...(!canChangeHospital
+                                ? {
+                                    backgroundColor: colors.silverFillTwo,
+                                    color: colors.black,
+                                  }
+                                : {}),
+                            }}
+                          >
                             <div className="flex-row">
                               <div
                                 style={{
@@ -749,7 +767,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                   )}
 
                   {formData.bad_newhospitaladded &&
-                    inputValidator.sky_newhospitalname && (
+                    inputValidator.bad_sky_newhospitalname && (
                       <div>
                         <label className="form-label">New Hospital Name</label>
                         <input
@@ -782,58 +800,17 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                   )}
                 </div>
 
-                {inputValidator.bad_proposer1 && (
-                  <div
-                    style={{
-                      padding: `1em 1em 2em 1em`,
-                      borderTop: `1px solid ${colors.silverFillTwo}`,
-                      borderBottom: `1px solid ${colors.silverFillTwo}`,
-                    }}
-                  >
-                    <label className="form-label">
-                      Proposers must be BAD Ordinary or Honorary Working members
-                    </label>
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: `repeat(2, 1fr)`,
-                        gap: 20,
-                      }}
-                    >
-                      {inputValidator.bad_proposer1 && (
-                        <div>
-                          <label className="required form-label">
-                            Proposer 1
-                          </label>
-                          <input
-                            name="bad_proposer1"
-                            value={formData.bad_proposer1}
-                            onChange={handleInputChange}
-                            type="text"
-                            className="form-control input"
-                            placeholder="Name"
-                          />
-                          <FormError id="bad_proposer1" />
-                        </div>
-                      )}
-
-                      {inputValidator.bad_proposer2 && (
-                        <div>
-                          <label className="required form-label">
-                            Proposer 2
-                          </label>
-                          <input
-                            name="bad_proposer2"
-                            value={formData.bad_proposer2}
-                            onChange={handleInputChange}
-                            type="text"
-                            className="form-control input"
-                            placeholder="Name"
-                          />
-                          <FormError id="bad_proposer2" />
-                        </div>
-                      )}
-                    </div>
+                {inputValidator.bad_py3_currentgrade && (
+                  <div>
+                    <label className="form-label">Current Grade</label>
+                    <input
+                      name="py3_currentgrade"
+                      value={formData.py3_currentgrade}
+                      onChange={handleInputChange}
+                      type="text"
+                      className="form-control input"
+                      placeholder="Current Grade"
+                    />
                   </div>
                 )}
 
@@ -845,7 +822,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                       borderBottom: `1px solid ${colors.silverFillTwo}`,
                     }}
                   >
-                    {/* {inputValidator.bad_mrpcqualified && (
+                    {inputValidator.bad_mrpcqualified && (
                       <div className="flex-col">
                         <label className="form-label">MRCP Qualified</label>
                         <input
@@ -856,23 +833,9 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                           className="form-check-input check-box"
                         />
                       </div>
-                    )} */}
-
-                    {inputValidator.py3_currentgrade && (
-                      <div>
-                        <label className="form-label">Current Grade</label>
-                        <input
-                          name="py3_currentgrade"
-                          value={formData.py3_currentgrade}
-                          onChange={handleInputChange}
-                          type="text"
-                          className="form-control input"
-                          placeholder="Current Grade"
-                        />
-                      </div>
                     )}
 
-                    {inputValidator.sky_cvurl && (
+                    {inputValidator.bad_sky_cvurl && (
                       <div>
                         <label className="form-label">Upload Your CV</label>
                         <input
@@ -922,7 +885,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                           </div>
                         )}
 
-                        {inputValidator.py3_constitutionagreement && (
+                        {inputValidator.bad_py3_constitutionagreement && (
                           <div>
                             <div
                               className="flex"
@@ -1022,8 +985,17 @@ const styles = {
     justifyContent: "space-between",
     gap: 20,
   },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
+    justifyContent: "space-between",
+    gap: 20,
+  },
   wrapper: {
     padding: `0 1em 2em`,
+  },
+  wrapperMobile: {
+    padding: `1em`,
   },
   title: {
     fontSize: 20,

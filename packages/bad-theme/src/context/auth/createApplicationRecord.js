@@ -6,7 +6,7 @@ export const createApplicationRecord = async ({
   isActiveUser,
   refreshJWT,
 }) => {
-  console.log("createApplicationRecord triggered");
+  // console.log("createApplicationRecord triggered");
 
   // ⏬⏬  check if user application already exist ⏬⏬
   const userStoreData = await getUserStoreAction({
@@ -48,8 +48,6 @@ export const createApplicationRecord = async ({
     const data = await fetch(URL, requestOptions);
     const result = await data.json();
 
-    // console.log("createApplicationRecord result", result); // debug
-
     if (result.success) {
       // ⏬  getting new user record ⏬
       const applicationData = await getApplicationRecord({ jwt, contactid });
@@ -64,12 +62,12 @@ export const createApplicationRecord = async ({
       });
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
 export const getApplicationRecord = async ({ jwt, contactid }) => {
-  console.log("getApplicationRecord triggered");
+  // console.log("getApplicationRecord triggered");
 
   const URL =
     state.auth.APP_HOST +
@@ -93,6 +91,6 @@ export const getApplicationRecord = async ({ jwt, contactid }) => {
     }
     return null;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };

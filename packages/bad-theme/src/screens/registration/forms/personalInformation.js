@@ -51,20 +51,20 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     sky_profilepicture: "",
   });
   const [inputValidator, setInputValidator] = useState({
-    py3_title: true,
-    py3_firstname: true,
-    py3_lastname: true,
-    py3_gender: true,
-    py3_email: true,
-    py3_mobilephone: true,
-    py3_address1ine1: true,
-    py3_addressline2: true,
-    py3_addresstowncity: true,
-    py3_addresscountystate: true,
-    py3_addresszippostalcode: true,
-    py3_addresscountry: true,
-    sky_profilepicture: true,
-    py3_dateofbirth: true,
+    bad_py3_title: true,
+    bad_py3_firstname: true,
+    bad_py3_lastname: true,
+    bad_py3_gender: true,
+    bad_py3_email: true,
+    bad_py3_mobilephone: true,
+    bad_py3_address1ine1: true,
+    bad_py3_addressline2: true,
+    bad_py3_addresstowncity: true,
+    bad_py3_addresscountystate: true,
+    bad_py3_addresszippostalcode: true,
+    bad_py3_addresscountry: true,
+    bad_sky_profilepicture: true,
+    bad_py3_dateofbirth: true,
   });
   const documentRef = useRef(null);
 
@@ -95,6 +95,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
       }));
     }
 
+    // console.log("🐞 applicationData", applicationData);
     if (!applicationData) return null;
     applicationData.map((data) => {
       if (data.name === "py3_title") handleSetData({ data, name: "py3_title" });
@@ -165,7 +166,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
         }
       }
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
     } finally {
       setIsFetchingAddress(false);
     }
@@ -206,7 +207,11 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     let isValid = true;
 
     required.map((input) => {
-      if (!formData[input] && inputValidator[input]) {
+      let inputValue = input;
+      // 📌 add bad_ if input dont have it
+      if (!inputValue.includes("bad_")) inputValue = `bad_${input}`;
+
+      if (!formData[input] && inputValidator[inputValue]) {
         errorHandler({ id: `form-error-${input}` });
         isValid = false;
       }
@@ -231,7 +236,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
         "py3_gender",
         "py3_email",
         "py3_mobilephone",
-        isAddressInput ? null : "py3_address1ine1",
+        isAddressInput ? "" : "py3_address1ine1",
         "py3_addresstowncity",
         "py3_addresszippostalcode",
         "py3_addresscountry",
@@ -285,7 +290,6 @@ const PersonalDetails = ({ state, actions, libraries }) => {
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
     }));
-    console.log(formData); // debug
   };
 
   // SERVERS ---------------------------------------------
@@ -381,7 +385,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
 
         <form>
           <div style={{ padding: `0 1em 1em` }}>
-            {inputValidator.py3_title && (
+            {inputValidator.bad_py3_title && (
               <div>
                 <label className="required form-label">Title</label>
                 <Form.Select
@@ -395,6 +399,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
                   </option>
                   <option value="Dr">Dr</option>
                   <option value="Mr">Mr</option>
+                  <option value="Mrs">Mrs</option>
                   <option value="Miss">Miss</option>
                   <option value="Ms">Ms</option>
                   <option value="Professor">Professor</option>
@@ -403,7 +408,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
               </div>
             )}
 
-            {inputValidator.py3_firstname && (
+            {inputValidator.bad_py3_firstname && (
               <div>
                 <label className="form-label required">First Name</label>
                 <input
@@ -418,7 +423,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
               </div>
             )}
 
-            {inputValidator.py3_lastname && (
+            {inputValidator.bad_py3_lastname && (
               <div>
                 <label className="form-label required">Last Name</label>
                 <input
@@ -433,7 +438,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
               </div>
             )}
 
-            {inputValidator.py3_gender && (
+            {inputValidator.bad_py3_gender && (
               <div>
                 <label className="required form-label">Gender</label>
                 <Form.Select
@@ -457,7 +462,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
               </div>
             )}
 
-            {inputValidator.py3_dateofbirth && (
+            {inputValidator.bad_py3_dateofbirth && (
               <div>
                 <label className="form-label">Date of Birth</label>
                 <input
@@ -471,7 +476,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
               </div>
             )}
 
-            {inputValidator.py3_email && (
+            {inputValidator.bad_py3_email && (
               <div>
                 <label className="form-label required">Email</label>
                 <input
@@ -485,7 +490,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
               </div>
             )}
 
-            {inputValidator.py3_mobilephone && (
+            {inputValidator.bad_py3_mobilephone && (
               <div>
                 <label className="form-label required">Mobile Number</label>
                 <input
@@ -508,7 +513,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
               gap: 10,
             }}
           >
-            {inputValidator.py3_address1ine1 && (
+            {inputValidator.bad_py3_address1ine1 && (
               <div>
                 <label className="required form-label">Home Address</label>
 
@@ -588,7 +593,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
               </div>
             )}
 
-            {inputValidator.py3_addressline2 && (
+            {inputValidator.bad_py3_addressline2 && (
               <input
                 name="py3_addressline2"
                 value={formData.py3_addressline2}
@@ -598,7 +603,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
                 placeholder="Address Line 2"
               />
             )}
-            {inputValidator.py3_addresstowncity && (
+            {inputValidator.bad_py3_addresstowncity && (
               <div>
                 <input
                   name="py3_addresstowncity"
@@ -611,7 +616,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
                 <FormError id="py3_addresstowncity" />
               </div>
             )}
-            {inputValidator.py3_addresscountystate && (
+            {inputValidator.bad_py3_addresscountystate && (
               <div>
                 <input
                   name="py3_addresscountystate"
@@ -624,7 +629,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
                 <FormError id="py3_addresscountystate" />
               </div>
             )}
-            {inputValidator.py3_addresszippostalcode && (
+            {inputValidator.bad_py3_addresszippostalcode && (
               <div>
                 <input
                   name="py3_addresszippostalcode"
@@ -637,7 +642,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
                 <FormError id="py3_addresszippostalcode" />
               </div>
             )}
-            {inputValidator.py3_addresscountry && (
+            {inputValidator.bad_py3_addresscountry && (
               <div>
                 <input
                   name="py3_addresscountry"

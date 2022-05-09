@@ -81,7 +81,7 @@ const ApplicationList = ({ state, actions, libraries }) => {
       });
       if (!appData) throw new Error("Failed to create application");
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       setErrorAction({
         dispatch,
@@ -108,7 +108,7 @@ const ApplicationList = ({ state, actions, libraries }) => {
       // await for link to download & open in new window to download
       window.open(url, "_blank");
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setFetching(false);
     }
@@ -194,10 +194,9 @@ const ApplicationList = ({ state, actions, libraries }) => {
                     });
                   }
 
-                  console.log("isSubmitted", isSubmitted);
                   setStatus(isSubmitted); // set status to submitted
                 } catch (error) {
-                  console.log(error);
+                  // console.log(error);
                 }
               }, []);
 
@@ -210,6 +209,8 @@ const ApplicationList = ({ state, actions, libraries }) => {
                     style={{
                       fontWeight: "bold",
                       justifyItems: "center",
+                      display: "grid",
+                      alignItems: "center",
                     }}
                   >
                     BAD category change pending approval.

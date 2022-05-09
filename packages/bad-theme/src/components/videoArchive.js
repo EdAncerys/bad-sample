@@ -14,6 +14,7 @@ import { muiQuery, useAppState } from "../context";
 const VideoArchive = ({ state, actions, libraries }) => {
   const [postData, setPostData] = useState(null);
   const [heroBannerBlock, setHeroBannerBlock] = useState(null);
+  const [userVideos, setUserVideos] = useState(null);
   // const [showMyVids, setShowMyVids] = useState(false);
 
   const { isActiveUser } = useAppState();
@@ -38,15 +39,17 @@ const VideoArchive = ({ state, actions, libraries }) => {
       setPostData(unfilteredVideos);
       return true;
     }
+    let filteredVideos = unfilteredVideos;
+    if (showOnlyMyVids.current === true) {
+      filteredVideos = filteredVideos.filter((video) => {
+        const id = video.acf.event_id;
+        return userVideos.some((userVideo) => {
+          return userVideo.event_id === id;
+        });
+      });
+    }
 
-    // if(showOnlyMyVids.current === true){
-    //   const vids = [];
-
-    //   unfilteredVideos.map(vid => {
-    //     if(vid.acf.event_id)
-    //   })
-    // }
-    const filteredVideos = unfilteredVideos.filter((video) => {
+    filteredVideos = filteredVideos.filter((video) => {
       if (
         specialtyFilter.current &&
         !video.event_specialty.includes(Number(specialtyFilter.current))
@@ -236,7 +239,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
           justifyContent: "center",
         }}
       >
-        "There are no videos found"
+        There are no videos found
       </div>
     );
   };
@@ -346,10 +349,8 @@ const VideoArchive = ({ state, actions, libraries }) => {
       const { contactid, jwt } = cookie;
 
       const allVidz = state.source.videos;
-      console.log("All videos", allVidz);
       const listOfVids = await fetch(
-        state.auth.APP_HOST +
-          "/videvent/e170d1fc-a0b9-ec11-983f-002248813da3/entities",
+        state.auth.APP_HOST + `/videvent/${isActiveUser.contactid}/entities`,
         {
           headers: {
             Authorization: `Bearer ${jwt}`,
@@ -358,7 +359,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
       );
 
       const json = await listOfVids.json();
-
+      setUserVideos(json.data);
       console.log("List of vids", json);
     };
     const data = state.source.get(state.router.link);
@@ -396,7 +397,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
       </div>
       <BlockWrapper>
         {postData ? (
-          <div style={styles.container}>
+          <div style={!lg ? styles.container : styles.containerMobile}>
             {postData.length > 0 ? (
               postData.map((item, key) => {
                 const post = state.source[item.type][item.id];
@@ -424,7 +425,7 @@ const styles = {
     marginBottom: 10,
     marginTop: 20,
   },
-  container: {
+  containerMobile: {
     display: "grid",
     gridTemplateColumns: `1fr`,
     justifyContent: "space-between",

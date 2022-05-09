@@ -1,4 +1,5 @@
 import PaymentNotification from "./paymentNotification";
+
 const ApplicationStatusOrPayment = ({ application }) => {
   if (!application) return null;
   if (!application.bad_approvalstatus) return null;

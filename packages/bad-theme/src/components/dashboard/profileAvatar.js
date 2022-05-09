@@ -24,7 +24,10 @@ const ProfileAvatar = ({ state, actions, libraries, isPreview }) => {
   }
 
   return (
-    <div className="flex" style={{ justifyContent: "flex-end" }}>
+    <div
+      className="flex"
+      style={{ justifyContent: !lg ? "flex-end" : "center" }}
+    >
       <div
         style={{
           width: imgWidth,

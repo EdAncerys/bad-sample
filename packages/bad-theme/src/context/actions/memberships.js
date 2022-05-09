@@ -44,8 +44,8 @@ export const validateMembershipFormAction = async ({
   // console.log("⬇️ membershipTypes", membershipTypes); // debug
 
   let type = applicationData[0].bad_categorytype;
+  console.log("TYPE", type);
   if (membershipTypeChange) type = membershipTypeChange; // apply for SIGs change of memberships
-  console.log("🐞 type", type); // debug
   membershipTypes.map((membership) => {
     // validate application type against store object for BAD & SIGs
     let appType =
@@ -54,7 +54,6 @@ export const validateMembershipFormAction = async ({
 
     if (appType) {
       const applicationForm = membership.acf;
-      console.log("applicationForm", applicationForm); // debug
 
       Object.keys(applicationForm).map((keyName) => {
         handleSetInputData({ data: applicationForm, name: keyName });
@@ -96,19 +95,15 @@ export const handleApplyForMembershipAction = async ({
         appsData.filter((item) => item.bad_organisedfor === "SIG").length > 0;
 
       if (isPending) {
-        console.log("🤖 user have application pending under reviewed status"); // debug
+        // console.log("🤖 user have application pending under reviewed status"); // debug
       } else {
-        console.log(
-          "🤖 user have NO pending applications under reviewed status"
-        ); // debug
+        // console.log("🤖  NO  applications under reviewed status"); // debug
       }
     }
 
     if (applicationData) {
       // if user have application in progress redirect to dashboard
-      console.log(
-        "🤖 user have application in progress. Redirect to Dashboard"
-      );
+
       // allow application to refetch id for BAD apps step 2 only
       if (!canUpdateApplication) {
         let confirmationMsg = `You already have application open and unsubmitted! Please go to your dashboard to continue or cancel this application`;
@@ -147,7 +142,6 @@ export const handleApplyForMembershipAction = async ({
         type,
         refreshJWT,
       });
-      console.log("getBADMembershipSubscriptionData", response);
       if (!response) throw new Error("Failed to get membership data");
       membershipData = response;
     }
@@ -162,9 +156,6 @@ export const handleApplyForMembershipAction = async ({
       // get & assign membership id form old application record
       applicationId = ""; // reset user app category change
     }
-    console.log("🚀 applicationId", applicationId); // debug
-    console.log("🚀 changeAppCategory", changeAppCategory); // debug
-    console.log("🚀 bad_existingsubscriptionid", bad_existingsubscriptionid); // debug
 
     // ⏬ create user application record in Store
     const store = await setUserStoreAction({
@@ -190,8 +181,7 @@ export const handleApplyForMembershipAction = async ({
         actions,
       });
     } else {
-      console.log("🤖 user is not active");
-      console.log(store);
+      // console.log(store);
       setErrorAction({
         dispatch,
         isError: {
@@ -203,7 +193,7 @@ export const handleApplyForMembershipAction = async ({
 
     return store; // return store
   } catch (error) {
-    console.log("ERROR: ", error);
+    // console.log("ERROR: ", error);
   }
 };
 
@@ -234,11 +224,10 @@ export const handleValidateMembershipChangeAction = async ({
     const result = await data.json();
 
     // ⏬ submitted application data for change of category
-    console.log("⏬ submitted application data", result);
     if (result.value) {
       return result.value; // return application data
     }
   } catch (error) {
-    console.log("ERROR: ", error);
+    // console.log("ERROR: ", error);
   }
 };

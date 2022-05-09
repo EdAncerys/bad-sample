@@ -1,7 +1,7 @@
 import { authenticateAppAction, setFetchAction } from "../index";
 
 export const getBJDFeedAction = async ({ state, dispatch, refreshJWT }) => {
-  console.log("getBJDFeedAction triggered");
+  // console.log("getBJDFeedAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
   const URL = state.auth.APP_HOST + `/rss/bjd`;
@@ -24,14 +24,14 @@ export const getBJDFeedAction = async ({ state, dispatch, refreshJWT }) => {
       return bjdFeed;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
   }
 };
 
 export const getCEDFeedAction = async ({ state, dispatch, refreshJWT }) => {
-  console.log("getCEDFeedAction triggered");
+  // console.log("getCEDFeedAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
   const URL = state.auth.APP_HOST + `/rss/ced`;
@@ -54,14 +54,14 @@ export const getCEDFeedAction = async ({ state, dispatch, refreshJWT }) => {
       return cedFeed;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
   }
 };
 
 export const getSHDFeedAction = async ({ state, dispatch, refreshJWT }) => {
-  console.log("getSHDFeedAction triggered");
+  // console.log("getSHDFeedAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
   const URL = state.auth.APP_HOST + `/rss/shd`;
@@ -84,7 +84,7 @@ export const getSHDFeedAction = async ({ state, dispatch, refreshJWT }) => {
       return shdFeed;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
   }
@@ -92,14 +92,14 @@ export const getSHDFeedAction = async ({ state, dispatch, refreshJWT }) => {
 
 // SET CONTEXT ---------------------------------------------------
 export const setBJDFeedAction = ({ dispatch, bjdFeed }) => {
-  console.log("setBJDFeedAction triggered"); //debug
+  // console.log("setBJDFeedAction triggered"); //debug
   dispatch({ type: "SET_BJD_FEED_ACTION", payload: bjdFeed });
 };
 export const setCEDFeedAction = ({ dispatch, cedFeed }) => {
-  console.log("setCEDFeedAction triggered"); //debug
+  // console.log("setCEDFeedAction triggered"); //debug
   dispatch({ type: "SET_CED_FEED_ACTION", payload: cedFeed });
 };
 export const setSHDFeedAction = ({ dispatch, shdFeed }) => {
-  console.log("setSHDFeedAction triggered"); //debug
+  // console.log("setSHDFeedAction triggered"); //debug
   dispatch({ type: "SET_SHD_FEED_ACTION", payload: shdFeed });
 };

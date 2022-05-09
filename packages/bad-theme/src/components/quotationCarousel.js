@@ -109,13 +109,16 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
             <Carousel.Item key={key}>
               <div
                 style={{
-                  height: BANNER_HEIGHT,
+                  height: !lg ? BANNER_HEIGHT : 600,
                   backgroundColor: background_colour || "transparent",
                 }}
               >
                 <Carousel.Caption
                   className="flex-col"
-                  style={{ alignItems: "center", height: BANNER_HEIGHT * 0.95 }}
+                  style={{
+                    alignItems: "center",
+                    height: !lg ? BANNER_HEIGHT * 0.95 : null,
+                  }}
                 >
                   <ServeQuotation />
                   <div

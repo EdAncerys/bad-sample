@@ -454,7 +454,6 @@ const ElectionBlocks = ({ state, actions, block }) => {
           if (openPositions) {
             if (election_status !== "open") return null;
           }
-
           return (
             <div key={key} className="flex" style={{ position: "relative" }}>
               <div className="flex">
@@ -468,10 +467,8 @@ const ElectionBlocks = ({ state, actions, block }) => {
                     isClosedPosition ? "Notify me when position is open" : cta
                   }
                   handler={() => handleContactForm({ isClosedPosition, block })}
-                  // form_label="Nomination Form"
-                  // form_link={isClosedPosition ? null : nomination_form_upload}
                   downloadFile={
-                    !isClosedPosition
+                    !isClosedPosition && nomination_form_upload
                       ? {
                           file: {
                             url: nomination_form_upload,
@@ -488,6 +485,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
                   opacity={isClosedPosition ? 0.7 : null}
                   bodyLimit={4}
                   shadow
+                  isElectionBlock // 📌 disable file download on click action
                 />
               </div>
             </div>

@@ -17,7 +17,6 @@ const Post = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
-  console.log("post data: ", post); // debug
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -88,7 +87,7 @@ const Post = ({ state, actions, libraries }) => {
       const bodyLength = content.rendered.length;
 
       return (
-        <div className="flex-col">
+        <div className="flex-col  post-content">
           <Html2React html={content.rendered} />
           {bodyLength > 2500 && <ScrollTop />}
         </div>

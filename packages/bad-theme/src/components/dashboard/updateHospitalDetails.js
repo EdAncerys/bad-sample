@@ -74,7 +74,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         form_body: `Please use the form below to update us to changes to your professional details. To update your place of work, start typing to select from a list of options. If your place of work is not on the list, type Not Listed and use the message box at the bottom of the form instead`,
         job_title: true,
         message: true,
-        recipients: state.contactList.DEFAULT_CONTACT_LIST,
+        recipients: [{ email: "membership@bad.org.uk" }],
         isHospitalChange: true,
 
         // default email subject & template name
@@ -86,8 +86,6 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   };
 
   const handleProfileUpdate = async () => {
-    // console.log("formData", formData); // debug
-
     setIsFetching(true);
     // const address1_line1 = formData.address1_line1;
     const bad_gmcno = formData.bad_gmcno;
@@ -118,7 +116,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         isError: { message: `Professional information updated successfully` },
       });
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       setErrorAction({
         dispatch,
         isError: {
