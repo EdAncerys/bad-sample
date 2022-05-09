@@ -4,7 +4,7 @@ import { connect } from "frontity";
 import { colors } from "../../config/imports";
 import { handleGetCookie } from "../../helpers/cookie";
 import PaymentModal from "./paymentModal";
-
+import { setErrorAction } from "../../context";
 const PaymentNotification = ({
   state,
   actions,

@@ -11,6 +11,7 @@ import {
   useAppDispatch,
   muiQuery,
   authenticateAppAction,
+  setErrorAction,
 } from "../../context";
 
 const SubmittedApplications = ({ state, actions, libraries }) => {
