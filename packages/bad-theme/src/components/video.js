@@ -35,6 +35,7 @@ const Video = ({ state, actions, libraries }) => {
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
   const handlePaymentModal = (url) => {
+    console.log("PM URL", url);
     setErrorAction({
       dispatch,
       isError: {
@@ -115,7 +116,10 @@ const Video = ({ state, actions, libraries }) => {
     const cookie = handleGetCookie({ name: `BAD-WebApp` });
     const { contactid, jwt } = cookie;
 
-    const sagepay_url = "/sagepay/live/video/";
+    const sagepay_url =
+      state.auth.ENVIRONMENT === "PRODUCTION"
+        ? "sagepay/live/video"
+        : "/sagepay/test/video/";
     const uappUrl = state.auth.APP_URL;
     const url =
       state.auth.APP_HOST +
