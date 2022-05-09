@@ -21,12 +21,8 @@ const PaymentConfirmation = () => {
         }}
       >
         <h3>PAYMENT CONFIRMED</h3>
-        <div id="loading-o">
-          <Loading />
-        </div>
-        <div id="ask-to-close" hidden>
-          Your payment has been confirmed. Thank you.
-        </div>
+
+        <div id="ask-to-close">Your payment has been confirmed. Thank you.</div>
       </div>
     </>
   );

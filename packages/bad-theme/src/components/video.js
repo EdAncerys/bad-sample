@@ -34,6 +34,12 @@ const Video = ({ state, actions, libraries }) => {
 
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
+
+  const queryParams = new Proxy(new URLSearchParams(window.location.search), {
+    get: (searchParams, prop) => searchParams.get(prop),
+  });
+
+  let isSagepay = queryParams.sagepay;
   const handlePaymentModal = (url) => {
     console.log("PM URL", url);
     setErrorAction({
@@ -57,6 +63,16 @@ const Video = ({ state, actions, libraries }) => {
     const all_videos = state.source.videos;
     const videos_list = await Object.values(all_videos);
     const related_videos_to_show = videos_list.slice(0, 3);
+
+    if (isSagepay) {
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Your payment has been accepted`,
+          image: "CheckMark",
+        },
+      });
+    }
 
     setRelatedVideos(related_videos_to_show);
     const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
@@ -131,7 +147,8 @@ const Video = ({ state, actions, libraries }) => {
       post.acf.price +
       `?redirecturl=` +
       uappUrl +
-      state.router.link;
+      state.router.link +
+      "?sagepay=true";
 
     const fetchVendorId = await fetch(url, {
       method: "POST",
