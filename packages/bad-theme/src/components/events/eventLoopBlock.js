@@ -12,6 +12,7 @@ import {
   useAppState,
   setEventAnchorAction,
   muiQuery,
+  getEventsData,
 } from "../../context";
 
 const EventLoopBlock = ({
@@ -64,6 +65,22 @@ const EventLoopBlock = ({
   // DATA get for EVENTS ----------------------------------------------------------------
   useEffect(async () => {
     // let data = state.source.events;
+    const events = await getEventsData({ state });
+    console.log("🐞 ", events);
+    setEventList(events);
+
+    // ⬇️ set link to anchor for event
+    if (eventAnchor) {
+      setTimeout(() => {
+        const anchor = document.getElementById(eventAnchor);
+        if (anchor) anchor.scrollIntoView({ behavior: "smooth" });
+      }, 500);
+      // console.log("🚀 anchor to event list", eventAnchor); // debug
+
+      setEventAnchorAction({ dispatch, eventAnchor: null }); // reset
+    }
+
+    return;
 
     const fetching = await fetch(
       "https://controlpanel.bad.org.uk/wp-json/wp/v2/events?_fields=title,link,event_grade,acf.date_time,acf.organizer,acf.venue,acf.preview_summary,acf.image"
@@ -128,17 +145,6 @@ const EventLoopBlock = ({
     setEventList(eventList);
     setGradeFilterId(gradeFilter);
 
-    // link to anchor for event
-    if (eventAnchor) {
-      setTimeout(() => {
-        const anchor = document.getElementById(eventAnchor);
-        if (anchor) anchor.scrollIntoView({ behavior: "smooth" });
-      }, 500);
-      // console.log("🚀 anchor to event list", eventAnchor); // debug
-
-      setEventAnchorAction({ dispatch, eventAnchor: null }); // reset
-    }
-
     return () => {
       useEffectRef.current = false; // clean up function
     };
@@ -155,8 +161,7 @@ const EventLoopBlock = ({
       />
       <div style={STYLES}>
         {eventList.map((block, key) => {
-          const { image, summary, public_or_members_only, date_time } =
-            block.acf;
+          const { image, summary, date_time } = block.acf;
           const title = block.title.rendered;
           const event_grade = block.event_grade;
           const event_location = block.event_location;
@@ -231,6 +236,7 @@ const EventLoopBlock = ({
             postLimitRef.current++;
           }
 
+          // list view
           if (layoutOne) {
             const removeMargin = search && key === 0;
             return (
@@ -251,6 +257,7 @@ const EventLoopBlock = ({
             );
           }
 
+          // 2x card view
           if (layoutTwo)
             return (
               <Card
@@ -269,6 +276,7 @@ const EventLoopBlock = ({
               />
             );
 
+          // 4x card vew
           if (layoutThree)
             return (
               <Card

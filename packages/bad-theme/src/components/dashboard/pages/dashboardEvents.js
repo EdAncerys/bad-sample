@@ -171,7 +171,7 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
                   justifyContent: "center",
                   alignItems: "center",
                   height: "100%",
-                  padding: `0 1em`,
+                  padding: `1em 1em 0 1em`,
                 }}
               >
                 <div>
