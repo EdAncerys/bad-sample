@@ -2,7 +2,13 @@ import BADTheme from "../../client";
 
 // import state APP_URL from client state with process.env.APP_URL
 
-export const setGoToAction = async ({ state, path, actions, downloadFile }) => {
+export const setGoToAction = async ({
+  state,
+  path,
+  actions,
+  downloadFile,
+  newWindow,
+}) => {
   // console.log("setGoToAction triggered", path, downloadFile); // debug
   if (!path && !downloadFile) return null;
 
@@ -23,6 +29,7 @@ export const setGoToAction = async ({ state, path, actions, downloadFile }) => {
   if (path && path.includes(pathTwo)) isExternalLink = false;
   if (path && path.includes(wpHost)) isExternalLink = false;
   if (path && path.includes(appUrl)) isExternalLink = false;
+  if (newWindow) isExternalLink = true;
 
   if (path && path.includes(`www`) && !path.includes(`http`) && isExternalLink)
     return window.open(`https://` + path, "_blank"); // handle external links without https pre fix
