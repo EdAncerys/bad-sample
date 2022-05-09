@@ -47,6 +47,7 @@ const EventLoopBlock = ({
   } = block;
 
   const [eventList, setEventList] = useState(null); // event data
+  const [eventFilter, setFilter] = useState(null); // event data
   const [gradeFilter, setGradeFilterId] = useState(null); // data
   const useEffectRef = useRef(null);
   const postLimitRef = useRef(0);
@@ -67,7 +68,8 @@ const EventLoopBlock = ({
     // let data = state.source.events;
     const events = await getEventsData({ state });
     console.log("🐞 ", events);
-    setEventList(events);
+    setEventList(events); // set event data
+    setFilter(events); // set event filter data
 
     // ⬇️ set link to anchor for event
     if (eventAnchor) {
@@ -150,7 +152,125 @@ const EventLoopBlock = ({
     };
   }, []);
 
-  if (!eventList) return <Loading />;
+  useEffect(() => {
+    // ⬇️ handle serach filter change
+
+    if (
+      !searchFilter &&
+      !gradesFilter &&
+      !locationsFilter &&
+      !specialtyFilter &&
+      !yearFilter
+    ) {
+      // if no search filter applied then return all prefetched events
+      setFilter(eventList);
+      return;
+    }
+
+    let filteredEvents = eventList;
+
+    if (searchFilter) {
+      // if search filter applied then filter events
+      filteredEvents = eventList.filter((event) => {
+        // filter events by search filter
+        let search = searchFilter.toLowerCase();
+
+        const isInTitle = event.title.rendered.toLowerCase().includes(search);
+        const isInPreview = event.acf.preview_summary
+          .toLowerCase()
+          .includes(search);
+        const isInOrganizer = event.acf.organizer
+          .toLowerCase()
+          .includes(search);
+
+        if (isInTitle || isInPreview || isInOrganizer) {
+          return event;
+        } else {
+          return null;
+        }
+      });
+    }
+
+    if (gradesFilter) {
+      // if grades filter applied then filter events
+      filteredEvents = filteredEvents.filter((event) => {
+        // filter events by grades filter
+        let grade = event.event_grade;
+        let isInGrade = grade.includes(Number(gradesFilter));
+
+        return isInGrade;
+      });
+    }
+
+    if (locationsFilter) {
+      // if locations filter applied then filter events
+      filteredEvents = filteredEvents.filter((event) => {
+        // filter events by locations filter
+        let location = event.event_location;
+        let isInLocation = location.includes(Number(locationsFilter));
+
+        return isInLocation;
+      });
+    }
+
+    if (specialtyFilter) {
+      // if specialty filter applied then filter events
+      filteredEvents = filteredEvents.filter((event) => {
+        // filter events by specialty filter
+        let specialty = event.event_specialty;
+        let isInSpecialty = specialty.includes(Number(specialtyFilter));
+
+        return isInSpecialty;
+      });
+    }
+
+    if (yearFilter) {
+      let [fMonth, fDay, fYear] = yearFilter.split(" ");
+
+      // if year filter applied then filter events
+      filteredEvents = filteredEvents.filter((event) => {
+        let isIncluded = false;
+        // filter events by year filter
+        let date = event.acf.date_time;
+        // map date to year and compare to year filter
+        if (date) {
+          date.map((eventDate) => {
+            // get year from date
+            let [eMonth, eDate, eYear] = eventDate.date.split("/");
+            // if month have 0 in front then remove it
+            if (eMonth[0] === "0") eMonth = eMonth.slice(1);
+            let isInYear = fMonth === eMonth && fYear === eYear;
+
+            if (isInYear) {
+              isIncluded = true;
+            }
+          });
+        }
+
+        return isIncluded;
+      });
+    }
+
+    // if page is set to events_archive return only events that date is in the past
+    // let isArchive = false;
+    // if (date_time) {
+    //   // loop through date_time and check if date is in the past
+    //   date_time.forEach((date) => {
+    //     if (new Date(date.date) < new Date()) isArchive = true;
+    //   });
+    // }
+
+    // 📌 set filtered data to state
+    setFilter(filteredEvents);
+  }, [
+    searchFilter,
+    gradesFilter,
+    locationsFilter,
+    specialtyFilter,
+    yearFilter,
+  ]);
+
+  if (!eventFilter) return <Loading />;
 
   // RETURN ---------------------------------------------
   return (
@@ -160,30 +280,21 @@ const EventLoopBlock = ({
         margin={`0 0 ${marginVertical}px`}
       />
       <div style={STYLES}>
-        {eventList.map((block, key) => {
+        {eventFilter.map((block, key) => {
           const { image, summary, date_time } = block.acf;
           const title = block.title.rendered;
           const event_grade = block.event_grade;
           const event_location = block.event_location;
           const event_specialty = block.event_specialty;
 
-          // if page is set to events_archive return only events that date is in the past
-          let isArchive = false;
-          if (date_time) {
-            // loop through date_time and check if date is in the past
-            date_time.forEach((date) => {
-              if (new Date(date.date) < new Date()) isArchive = true;
-            });
-          }
           // ⬇️ if events_archive show only past events else break
-          if (events_archive) {
-            if (!isArchive) return null;
-          } else {
-            if (isArchive) return null;
-          }
+          // if (events_archive) {
+          //   if (!isArchive) return null;
+          // } else {
+          //   if (isArchive) return null;
+          // }
           // ⬇️ show only events that event_grade object have in common gradeFilter
-          {
-            /* if (gradeFilter.length > 0) {
+          /* if (gradeFilter.length > 0) {
             if (!event_grade) return null;
             let grade_match = false;
             event_grade.forEach((grade) => {
@@ -193,48 +304,12 @@ const EventLoopBlock = ({
             });
             if (!grade_match) return null;
           } */
-          }
 
-          if (searchFilter) {
-            if (!title && !summary) return null;
-            if (
-              title
-                ? !title.toLowerCase().includes(searchFilter.toLowerCase())
-                : null || summary
-                ? !summary.toLowerCase().includes(searchFilter.toLowerCase())
-                : null
-            )
-              return null;
-          }
-          // ⬇️ user select filtering
-          if (gradesFilter) {
-            if (!event_grade.includes(Number(gradesFilter))) return null;
-          }
-          if (locationsFilter) {
-            if (!event_location.includes(Number(locationsFilter))) return null;
-          }
-          if (specialtyFilter) {
-            if (!event_specialty.includes(Number(specialtyFilter))) return null;
-          }
-          if (yearFilter) {
-            // get event month & year start
-            const eventDate = date_time[0].date;
-            const eventMont = new Date(eventDate).getMonth() + 1;
-            const eventYear = new Date(eventDate).getFullYear();
-            // get filter current month & year
-            const filterMont = new Date(yearFilter).getMonth() + 1;
-            const filterYear = new Date(yearFilter).getFullYear();
-
-            // filter events based on mont & year start
-            if (eventMont !== filterMont || eventYear !== filterYear)
-              return null;
-          }
-
-          // ⬇️ if post_limit is set then show only post_limit posts
-          if (post_limit) {
-            if (postLimitRef.current >= post_limit) return null;
-            postLimitRef.current++;
-          }
+          // // ⬇️ if post_limit is set then show only post_limit posts
+          // if (post_limit) {
+          //   if (postLimitRef.current >= post_limit) return null;
+          //   postLimitRef.current++;
+          // }
 
           // list view
           if (layoutOne) {

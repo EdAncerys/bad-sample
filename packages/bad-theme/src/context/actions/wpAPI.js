@@ -1,6 +1,6 @@
 export const getEventsData = async ({ state, page }) => {
   let pageNo = page || 1;
-  const url = `${state.auth.WP_HOST}wp-json/wp/v2/events?&per_page=2&page=${pageNo}&_fields=title,link,event_grade,event_location,event_specialty,acf.date_time,acf.image,acf.summary,acf.organizer,acf.venue&filter[orderby]=event_start_date&order=asc`;
+  const url = `${state.auth.WP_HOST}wp-json/wp/v2/events?&per_page=${state.theme.perPageLimit}&page=${pageNo}&_fields=title,link,event_grade,event_location,event_specialty,acf.date_time,acf.image,acf.preview_summary,acf.organizer,acf.venue&filter[orderby]=event_start_date&order=asc`;
   // ⬇️ fetch data via wp API page by page
 
   try {
