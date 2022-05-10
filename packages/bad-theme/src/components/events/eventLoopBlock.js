@@ -48,9 +48,10 @@ const EventLoopBlock = ({
 
   const [eventList, setEventList] = useState(null); // event data
   const [eventFilter, setFilter] = useState(null); // event data
-  const [gradeFilter, setGradeFilterId] = useState(null); // data
+  const [isPostLimit, setLimit] = useState(post_limit && post_limit !== "0");
+  const [moreAction, setMoreAction] = useState(false); // event data
   const useEffectRef = useRef(null);
-  const postLimitRef = useRef(0);
+  const curentPageRef = useRef(1);
 
   const layoutOne = layout === "layout_one";
   const layoutTwo = layout === "layout_two";
@@ -66,10 +67,38 @@ const EventLoopBlock = ({
   // DATA get for EVENTS ----------------------------------------------------------------
   useEffect(async () => {
     // let data = state.source.events;
-    const events = await getEventsData({ state });
-    console.log("🐞 ", events);
+    let events = await getEventsData({ state, page: curentPageRef.current });
+    if (!events) return;
+
+    curentPageRef.current++;
+    // if page is set to events_archive return only events that date is in the past
+    if (events_archive) {
+      events = events.filter((event) => {
+        let eventDate = event.acf.date_time;
+        if (!eventDate) return false;
+        console.log("🐞 ", eventDate);
+
+        let [month, date, year] = eventDate[0].date.split("/");
+        let eventDateObj = new Date(year, month, date);
+        let today = new Date();
+
+        return eventDateObj < today;
+      });
+    }
+
+    // ⬇️⬇ sort events by date
+    events = handleSortFilter({ list: events });
+
+    if (isPostLimit && events) {
+      if (events.lenght <= Number(post_limit)) return null;
+      // apply limit to eventList array length if post_limit is set & less than post_limit
+      events = events.slice(0, Number(post_limit));
+    }
+
     setEventList(events); // set event data
     setFilter(events); // set event filter data
+    console.log("🐞 ", post_limit);
+    console.log("🐞 ", events);
 
     // ⬇️ set link to anchor for event
     if (eventAnchor) {
@@ -81,78 +110,9 @@ const EventLoopBlock = ({
 
       setEventAnchorAction({ dispatch, eventAnchor: null }); // reset
     }
-
-    return;
-
-    const fetching = await fetch(
-      "https://controlpanel.bad.org.uk/wp-json/wp/v2/events?_fields=title,link,event_grade,acf.date_time,acf.organizer,acf.venue,acf.preview_summary,acf.image"
-    );
-    const data = await fetching.json();
-    console.log("EVENT DATA", data);
-    let eventList = Object.values(data);
-    const grades = Object.values(state.source.event_grade);
-
-    let gradeFilter = [];
-    let isArray = Array.isArray(grade_filter); // verify data type
-    if (grades && isArray) {
-      grades.filter((filter) => {
-        // map grade_filter & if grade name matches grade_filter then return id
-        grade_filter.map((grade) => {
-          if (filter.name.toLowerCase() === grade.toLowerCase())
-            gradeFilter.push(filter.id);
-        });
-      });
-    }
-
-    // 📌 uncoment to sort by data
-    // 📌 sort events by date newest first
-    eventList.sort((a, b) => {
-      let dateA = a.acf.date_time;
-      let dateB = b.acf.date_time;
-      if (dateA) dateA = dateA[0].date;
-      if (dateB) dateB = dateB[0].date;
-      // convert to date object
-      dateA = new Date(dateA);
-      dateB = new Date(dateB);
-
-      if (dateA > dateB) return -1;
-      if (dateA < dateB) return 1;
-      return 0;
-    });
-
-    // 📌 sort eventList by closest to today first (if date is set)
-    eventList.sort((a, b) => {
-      let dateA = a.acf.date_time;
-      let dateB = b.acf.date_time;
-      if (dateA) dateA = dateA[0].date;
-      if (dateB) dateB = dateB[0].date;
-
-      // convert to date object
-      dateA = new Date(dateA);
-      dateB = new Date(dateB);
-
-      // get today's date
-      let today = new Date();
-
-      // get date difference
-      let diffA = Math.abs(dateA - today);
-      let diffB = Math.abs(dateB - today);
-
-      if (diffA > diffB) return 1;
-      if (diffA < diffB) return -1;
-
-      return 0;
-    });
-
-    setEventList(eventList);
-    setGradeFilterId(gradeFilter);
-
-    return () => {
-      useEffectRef.current = false; // clean up function
-    };
   }, []);
 
-  useEffect(() => {
+  useEffect(async () => {
     // ⬇️ handle serach filter change
 
     if (
@@ -252,13 +212,21 @@ const EventLoopBlock = ({
     }
 
     // if page is set to events_archive return only events that date is in the past
-    // let isArchive = false;
-    // if (date_time) {
-    //   // loop through date_time and check if date is in the past
-    //   date_time.forEach((date) => {
-    //     if (new Date(date.date) < new Date()) isArchive = true;
-    //   });
-    // }
+    if (events_archive) {
+      filteredEvents = filteredEvents.filter((event) => {
+        let eventDate = event.acf.date_time;
+        if (!eventDate) return false;
+
+        let [month, date, year] = eventDate[0].date.split("/");
+        let eventDateObj = new Date(year, month, date);
+        let today = new Date();
+
+        return eventDateObj < today;
+      });
+    }
+
+    // ⬇️⬇ sort events by date
+    filteredEvents = handleSortFilter({ list: filteredEvents });
 
     // 📌 set filtered data to state
     setFilter(filteredEvents);
@@ -270,9 +238,103 @@ const EventLoopBlock = ({
     yearFilter,
   ]);
 
+  // HANDLERS --------------------------------------------------------------
+  const handleLoadMoreFilter = async () => {
+    // ⬇️ handle load more filter
+    let events = await getEventsData({ state, page: curentPageRef.current });
+    if (!events) {
+      setMoreAction(false);
+      return;
+    }
+    curentPageRef.current++;
+
+    let updatedEvents = [...eventList, ...events];
+
+    // ⬇️⬇ sort events by date
+    updatedEvents = handleSortFilter({ list: updatedEvents });
+
+    // add events to eventList
+    setEventList(updatedEvents);
+    setFilter(updatedEvents);
+  };
+
+  const handleSortFilter = ({ list }) => {
+    let sortedList = list;
+
+    // 📌 uncoment to sort by data
+    // 📌 sort events by date newest first
+    sortedList.sort((a, b) => {
+      let dateA = a.acf.date_time;
+      let dateB = b.acf.date_time;
+      if (dateA) dateA = dateA[0].date;
+      if (dateB) dateB = dateB[0].date;
+      // convert to date object
+      dateA = new Date(dateA);
+      dateB = new Date(dateB);
+
+      if (dateA > dateB) return -1;
+      if (dateA < dateB) return 1;
+      return 0;
+    });
+
+    // 📌 sort eventList by closest to today first (if date is set)
+    sortedList.sort((a, b) => {
+      let dateA = a.acf.date_time;
+      let dateB = b.acf.date_time;
+      if (dateA) dateA = dateA[0].date;
+      if (dateB) dateB = dateB[0].date;
+
+      // convert to date object
+      dateA = new Date(dateA);
+      dateB = new Date(dateB);
+
+      // get today's date
+      let today = new Date();
+
+      // get date difference
+      let diffA = Math.abs(dateA - today);
+      let diffB = Math.abs(dateB - today);
+
+      if (diffA > diffB) return 1;
+      if (diffA < diffB) return -1;
+
+      return 0;
+    });
+
+    return sortedList;
+  };
+
   if (!eventFilter) return <Loading />;
 
-  // RETURN ---------------------------------------------
+  // SERVERS ---------------------------------------------------------------
+  const ServeMoreAction = () => {
+    if (
+      isPostLimit ||
+      searchFilter ||
+      gradesFilter ||
+      locationsFilter ||
+      specialtyFilter ||
+      yearFilter ||
+      moreAction // disable more action if no more events
+    )
+      return null;
+
+    return (
+      <div
+        className="flex"
+        style={{
+          justifyContent: "center",
+          paddingTop: `2em`,
+        }}
+      >
+        <div className="transparent-btn" onClick={handleLoadMoreFilter}>
+          Load More
+        </div>
+      </div>
+    );
+  };
+
+  // RETURN ----------------------------------------------------------------
   return (
     <div style={{ paddingBottom: `${marginVertical}px` }}>
       <TitleBlock
@@ -369,6 +431,7 @@ const EventLoopBlock = ({
             );
         })}
       </div>
+      <ServeMoreAction />
     </div>
   );
 };
