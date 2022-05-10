@@ -80,7 +80,12 @@ import {
 import { getWileyAction } from "./auth/getWiley";
 import { getTestUserAccountsAction } from "./auth/getTestUserAccounts";
 import { getHospitalsAction, getHospitalNameAction } from "./auth/getHospitals";
-import { getEventsData } from "./actions/wpAPI";
+import {
+  getEventsData,
+  getEventGrades,
+  getEventLocations,
+  getEventSpecialtys,
+} from "./actions/wpAPI";
 import {
   getBJDFeedAction,
   getCEDFeedAction,
@@ -181,5 +186,8 @@ export {
   googleAutocompleteAction,
   seRefreshJWTAction,
   getEventsData,
+  getEventLocations,
+  getEventSpecialtys,
+  getEventGrades,
   handleSortFilter,
 };
