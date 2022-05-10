@@ -1,3 +1,4 @@
+import { handleSortFilter } from "../helpers/eventSortFilter";
 import { AppProvider, useAppDispatch, useAppState } from "./context";
 import {
   setGoToAction,
@@ -79,6 +80,7 @@ import {
 import { getWileyAction } from "./auth/getWiley";
 import { getTestUserAccountsAction } from "./auth/getTestUserAccounts";
 import { getHospitalsAction, getHospitalNameAction } from "./auth/getHospitals";
+import { getEventsData } from "./actions/wpAPI";
 import {
   getBJDFeedAction,
   getCEDFeedAction,
@@ -178,4 +180,6 @@ export {
   getEthnicityAction,
   googleAutocompleteAction,
   seRefreshJWTAction,
+  getEventsData,
+  handleSortFilter,
 };

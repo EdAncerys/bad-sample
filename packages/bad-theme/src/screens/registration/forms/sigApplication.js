@@ -517,7 +517,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       });
       if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
 
-      let slug = `/`;
+      let slug = `/dashboard/`;
       if (isActiveUser && appsResponse)
         setGoToAction({ state, path: slug, actions });
     } catch (error) {
