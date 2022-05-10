@@ -77,13 +77,23 @@ const EventLoopBlock = ({
       events = events.filter((event) => {
         let eventDate = event.acf.date_time;
         if (!eventDate) return false;
-        console.log("🐞 ", eventDate);
 
         let [month, date, year] = eventDate[0].date.split("/");
         let eventDateObj = new Date(year, month, date);
         let today = new Date();
 
         return eventDateObj < today;
+      });
+    } else {
+      events = events.filter((event) => {
+        let eventDate = event.acf.date_time;
+        if (!eventDate) return false;
+
+        let [month, date, year] = eventDate[0].date.split("/");
+        let eventDateObj = new Date(year, month, date);
+        let today = new Date();
+
+        return eventDateObj >= today;
       });
     }
 
@@ -299,16 +309,7 @@ const EventLoopBlock = ({
         {eventFilter.map((block, key) => {
           const { image, summary, date_time } = block.acf;
           const title = block.title.rendered;
-          const event_grade = block.event_grade;
-          const event_location = block.event_location;
-          const event_specialty = block.event_specialty;
 
-          // ⬇️ if events_archive show only past events else break
-          // if (events_archive) {
-          //   if (!isArchive) return null;
-          // } else {
-          //   if (isArchive) return null;
-          // }
           // ⬇️ show only events that event_grade object have in common gradeFilter
           /* if (gradeFilter.length > 0) {
             if (!event_grade) return null;
@@ -320,11 +321,6 @@ const EventLoopBlock = ({
             });
             if (!grade_match) return null;
           } */
-
-          // if (post_limit) {
-          //   if (postLimitRef.current >= post_limit) return null;
-          //   postLimitRef.current++;
-          // }
 
           // list view
           if (layoutOne) {
@@ -384,7 +380,7 @@ const EventLoopBlock = ({
             );
         })}
       </div>
-      <ServeMoreAction />
+      {/* <ServeMoreAction /> */}
     </div>
   );
 };

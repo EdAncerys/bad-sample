@@ -13,6 +13,7 @@ export const setGoToAction = async ({
   let urlPath = path;
   const pathOne = `http://3.9.193.188`;
   const pathTwo = `https://badadmin.skylarkdev.co`;
+  const pathThree = `cdn.bad.org.uk`;
   const wpHost = state.auth.WP_HOST;
   const appUrl = state.auth.APP_URL;
   console.log("urlPath", urlPath);
@@ -26,6 +27,7 @@ export const setGoToAction = async ({
   let isExternalLink = true;
   if (path && path.includes(pathOne)) isExternalLink = false;
   if (path && path.includes(pathTwo)) isExternalLink = false;
+  if (path && path.includes(pathThree)) isExternalLink = false;
   if (path && path.includes(wpHost)) isExternalLink = false;
   if (path && path.includes(appUrl)) isExternalLink = false;
   if (newWindow) isExternalLink = true;

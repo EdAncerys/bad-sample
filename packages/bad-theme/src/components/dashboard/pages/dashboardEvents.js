@@ -51,12 +51,9 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
         }
       );
 
-      console.log("🐞 ", fetchUserEvents);
-
       if (fetchUserEvents.ok) {
         let filteredEvents = [];
         const json = await fetchUserEvents.json();
-        console.log("🐞 ", json);
         json.data.map((event) => {
           filteredEvents.push(event.bad_eventid);
         });
