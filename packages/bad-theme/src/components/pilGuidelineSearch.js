@@ -7,7 +7,7 @@ import TitleBlock from "./titleBlock";
 import SearchDropDown from "./searchDropDown";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
-
+import CircularProgress from "@mui/material/CircularProgress";
 // CONTEXT -----------------------------------------------------------
 import {
   useAppDispatch,
@@ -30,91 +30,61 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 
-  const [dataLoading, setDataLoading] = useState(false);
+  const [isFetching, setFetching] = useState(false);
   const [filterData, setFilterData] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const useEffectRef = useRef(null);
   const timeoutId = useRef(null);
-
-  useEffect(async () => {
-    // CPT search content data
-    let searchData = {};
-    let pils = state.source.pils;
-    let guidelines = state.source.guidelines_standards;
-
-    // if (!pils) {
-    //   await getPILsDataAction({ state, actions });
-    //   pils = state.source.pils;
-    // }
-    // if (!guidelines) {
-    //   await getGuidelinesDataAction({ state, actions });
-    //   guidelines = state.source.guidelines_standards;
-    // }
-
-    // // merge pils and guidelines data
-    // searchData = { ...pils, ...guidelines };
-    // setContent(Object.values(searchData));
-
-    return () => {
-      useEffectRef.current = false; // clean up function
-    };
-  }, []);
 
   // if (!block || !content) return <Loading />; // awaits pre fetch & data
   if (!block) return <Loading />;
   // HELPERS ---------------------------------------------
   const handleSearch = async () => {
     const input = inputValue.toLowerCase();
-    setDataLoading(true);
-    // ⬇️ apply data filters for search
-    let fetching = await fetch(
-      state.auth.WP_HOST +
-        `wp-json/relevanssi/v1/search?keyword=${input}&type=guidelines_standards,pils&per_page=5&_fields=title,link&orderby=title&order=ASC`
-    );
-    let data = await fetching.json();
-    console.log("DATA", data);
-    setDataLoading(false);
-    // data = data.map((item) => {
-    //   const title = item.title.rendered;
-    //   // const body = item.content.rendered.toLowerCase().includes(input); // include body
 
-    //   return title;
-    // });
+    try {
+      setFetching(true);
+      // ⬇️ apply data filters for search
+      let fetching = await fetch(
+        state.auth.WP_HOST +
+          `wp-json/relevanssi/v1/search?keyword=${input}&type=guidelines_standards,pils&per_page=10&_fields=title,link&orderby=title&order=ASC`
+      );
+      let data = await fetching.json();
+      setFetching(false);
+      console.log("🐞 ", data);
+      // if data is not array, return null
+      if (!Array.isArray(data)) return null;
+      // ⬇️ refactor data to match dropdown format
+      data = data.map((item) => {
+        // link overwrite
+        const isGuidelines = item.type === "guidelines_standards";
 
-    // ⬇️ refactor data to match dropdown format
-    data = data.map((item) => {
-      // link overwrite
-      const isGuidelines = item.type === "guidelines_standards";
+        return {
+          title: item.title.rendered,
+          link: isGuidelines
+            ? "/guidelines-and-standards/clinical-guidelines/"
+            : item.link,
+          type: item.type,
+          id: item.id,
+        };
+      });
 
-      return {
-        title: item.title.rendered,
-        link: isGuidelines
-          ? "/guidelines-and-standards/clinical-guidelines/"
-          : item.link,
-        type: item.type,
-        id: item.id,
-      };
-    });
-    // // sort data alphabetically by title
-    // data.sort((a, b) => {
-    //   if (a.title < b.title) return -1;
-    //   if (a.title > b.title) return 1;
-    //   return 0;
-    // });
+      // if data is empty, set filterData to null
+      if (data.length === 0) {
+        setFilterData(null);
+        setInputValue(input);
+        return;
+      }
 
-    // if data is empty, set filterData to null
-    if (data.length === 0) {
-      setFilterData(null);
-      setInputValue(input);
-      return;
-    }
-
-    if (data && input) {
-      setFilterData(data);
-      setInputValue(input);
-    } else {
-      setFilterData(null);
-      setInputValue("");
+      if (data && input) {
+        setFilterData(data);
+        setInputValue(input);
+      } else {
+        setFilterData(null);
+        setInputValue("");
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -156,22 +126,12 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
       setFilterData(null);
     };
 
-    return <div onClick={handleClearSearch}>{icon}</div>;
-  };
+    if (isFetching)
+      return (
+        <CircularProgress color="inherit" style={{ width: 25, height: 25 }} />
+      );
 
-  const ServeSearchButton = () => {
-    return (
-      <div
-        style={{
-          display: "grid",
-          alignItems: "center",
-          paddingLeft: !lg ? `2em` : 0,
-          paddingTop: !lg ? 0 : `0.5em`,
-        }}
-      >
-        <div className="blue-btn">Search</div>
-      </div>
-    );
+    return <div onClick={handleClearSearch}>{icon}</div>;
   };
 
   const ServeViewPILs = () => {
@@ -293,7 +253,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
                   <ServeIcon />
                 </div>
                 <SearchDropDown
-                  dataLoading={dataLoading}
+                  isFetching={isFetching}
                   filter={filterData}
                   mapToName="title.rendered"
                   onClickHandler={selectHandler}

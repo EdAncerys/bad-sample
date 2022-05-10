@@ -75,7 +75,6 @@ const EventLoopBlock = ({
     // if page is set to events_archive return only events that date is in the past
     if (events_archive) {
       events = events.filter((event) => {
-        console.log("🐞 archive event");
         let eventDate = event.acf.date_time;
         if (!eventDate) return false;
 
