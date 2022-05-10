@@ -11,7 +11,7 @@ export const setGoToAction = async ({
   // console.log("setGoToAction triggered", path, downloadFile); // debug
   if (!path && !downloadFile) return null;
   let urlPath = path;
-  const pathOne = `cdn.bad.org.uk`;
+  const pathOne = `http://3.9.193.188`;
   const pathTwo = `https://badadmin.skylarkdev.co`;
   const wpHost = state.auth.WP_HOST;
   const appUrl = state.auth.APP_URL;
