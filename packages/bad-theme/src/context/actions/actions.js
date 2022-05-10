@@ -1,5 +1,4 @@
 import BADTheme from "../../client";
-
 // import state APP_URL from client state with process.env.APP_URL
 
 export const setGoToAction = async ({
@@ -11,13 +10,12 @@ export const setGoToAction = async ({
 }) => {
   // console.log("setGoToAction triggered", path, downloadFile); // debug
   if (!path && !downloadFile) return null;
-
   let urlPath = path;
   const pathOne = `cdn.bad.org.uk`;
   const pathTwo = `https://badadmin.skylarkdev.co`;
   const wpHost = state.auth.WP_HOST;
   const appUrl = state.auth.APP_URL;
-
+  console.log("urlPath", urlPath);
   if (downloadFile) {
     // ⬇️  download file ⬇️
     const { file } = downloadFile;
@@ -34,7 +32,7 @@ export const setGoToAction = async ({
 
   if (urlPath && urlPath.includes(wpHost))
     urlPath = urlPath.replace(wpHost, "/");
-
+  if (urlPath.includes("wiley")) return (window.location.href = urlPath);
   // redirects passed to router without https prefix
   if (
     urlPath &&
