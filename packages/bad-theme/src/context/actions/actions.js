@@ -55,6 +55,7 @@ export const setGoToAction = async ({
   )
     return actions.router.set(pathTwo + urlPath); // internal link no pre fix
   if (isExternalLink) return window.open(urlPath, "_blank"); // handle external links
+
   // 📌 handle internal link redirects
   actions.router.set(urlPath);
 };
