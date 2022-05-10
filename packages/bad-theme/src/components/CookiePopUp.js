@@ -39,8 +39,11 @@ const CookiePopUp = ({ state, hide }) => {
           <p style={{ fontSize: 12 }}>
             We use cookies to give you the best online experience and analyse
             our traffic. By clicking ‘I understand’ you agree to our use of
-            cookies.
-            <a href="https://www.bad.org.uk/about-the-bad/our-values/our-policies/">
+            cookies.{" "}
+            <a
+              href="https://www.bad.org.uk/about-the-bad/our-values/our-policies/"
+              style={{ color: "black", fontSize: 12 }}
+            >
               Read more.
             </a>
           </p>
