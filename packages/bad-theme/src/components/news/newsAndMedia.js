@@ -20,6 +20,8 @@ import {
   useAppState,
   muiQuery,
   setNesMediaIdFilterAction,
+  getNewsData,
+  getMediaCategories,
 } from "../../context";
 
 const NewsAndMedia = ({ state, actions, libraries, block }) => {
@@ -44,6 +46,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   const isLayoutOne = layout === "layout_one";
 
   const [postList, setPostList] = useState(null);
+  const [filterList, setFilterList] = useState(null);
   const [categoryList, setCategoryList] = useState(null);
 
   const [searchValue, setSearchValue] = useState("");
@@ -59,24 +62,10 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   if (disable_vertical_padding) marginVertical = 0;
 
   useEffect(async () => {
-    // pre fetch post data
-    let iteration = 0;
-    let data = Object.values(state.source.post);
-    while (data.length === 0) {
-      // if iteration is greater than 10, break
-      if (iteration > 15) break;
-      // set timeout for async
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      await getPostData({ state, actions });
-      data = Object.values(state.source.post);
-      iteration++;
-    }
+    // let iteration = 0;
+    let data = await getNewsData({ state });
+    let categoryList = await getMediaCategories({ state });
 
-    // if !data then break
-    if (data.length === 0) return;
-
-    // apply category_filter & site_section filters if applicable
-    // return data if site_section array includes filters
     if (site_section) {
       data = data.filter((item) => {
         let postSections = item.site_sections;
@@ -88,19 +77,16 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     if (category_filter) {
       data = data.filter((item) => {
         let categories = item.categories;
-        // check if category_filter array contains site_section ids
+        if (!categories) return false;
+
         return categories.some((item) => category_filter.includes(item));
       });
     }
-
-    let categoryList = [];
-    if (state.source.category)
-      categoryList = Object.values(state.source.category);
-
     // apply sort by date functionality & apply limit
     data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     setPostList(data);
+    setFilterList(data);
     setCategoryList(categoryList);
 
     return () => {
@@ -111,7 +97,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   useEffect(() => {
     if (!postList) return null;
 
-    let data = Object.values(state.source.post);
+    let data = postList;
     let hasPermission = false;
     // 📌 check if user has permission to view news & media
     if (dynamicsApps) {
@@ -144,7 +130,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
         let isMemberOnly = false;
         // map threach membersOnlyList and check if id is present in categories
         membersOnlyList.forEach((item) => {
-          if (categories.includes(item.id)) isMemberOnly = true;
+          if (categories && categories.includes(item.id)) isMemberOnly = true;
         });
 
         return !isMemberOnly;
@@ -154,11 +140,19 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     if (post_limit && Number(post_limit) !== 0) {
       data = data.slice(0, Number(post_limit)); // apply limit on posts
     }
-    setPostList(data);
+    setFilterList(data);
   }, [categoryList, isActiveUser]);
 
   useEffect(() => {
-    let data = Object.values(state.source.post);
+    if (!postList) return null;
+
+    // if asll filters are applied are null then set filterList to postList
+    if (!searchValue && !dateValue && !yearValue) {
+      setFilterList(postList);
+      return;
+    }
+
+    let data = postList;
     // 📌 apply permision filters
     if (!hasPermission && categoryList) {
       let membersOnly = ["circular", "newsletter", "bulletin"];
@@ -179,7 +173,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
         let isMemberOnly = false;
         // map threach membersOnlyList and check if id is present in categories
         membersOnlyList.forEach((item) => {
-          if (categories.includes(item.id)) isMemberOnly = true;
+          if (categories && categories.includes(item.id)) isMemberOnly = true;
         });
 
         return !isMemberOnly;
@@ -196,9 +190,11 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     }
 
     if (newsMediaCategoryId)
-      data = data.filter((news) =>
-        news.categories.includes(Number(newsMediaCategoryId))
-      );
+      data = data.filter((news) => {
+        console.log("🐞 ", news.categories);
+        console.log("🐞 ", news);
+        // news.categories.includes(Number(newsMediaCategoryId))
+      });
 
     // apply date filter & sort by date latest first
     if (dateValue === "Date Descending")
@@ -234,7 +230,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       data = data.slice(0, Number(postChunkRef.current)); // apply limit on posts
     }
 
-    setPostList(data); // set post data
+    setFilterList(data); // set post data
   }, [newsMediaCategoryId, searchValue, dateValue, yearValue]);
 
   if (!postList || !categoryList) return <Loading />;
@@ -281,7 +277,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     if (post_limit && Number(post_limit) !== 0)
       data = data.slice(0, Number(postChunkRef.current)); // apply limit on posts
 
-    setPostList(data); // set post data
+    setFilterList(data); // set post data
   };
 
   // SERVERS ---------------------------------------------
@@ -529,13 +525,13 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   const ServeLayout = () => {
     if (isLayoutOne)
       return (
-        <NewsCarouselComponent block={postList} categoryList={categoryList} />
+        <NewsCarouselComponent block={filterList} categoryList={categoryList} />
       );
 
     return (
       <div>
         <NewsBlock
-          block={postList}
+          block={filterList}
           categoryList={categoryList}
           layout={layout}
         />
@@ -583,7 +579,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       <ServeFilter />
       <BlockWrapper>
         <ServeLayout />
-        <ServeMoreAction />
+        {/* <ServeMoreAction /> */}
       </BlockWrapper>
     </div>
   );

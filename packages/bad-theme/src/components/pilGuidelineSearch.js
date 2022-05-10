@@ -51,9 +51,9 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
       );
       let data = await fetching.json();
       setFetching(false);
-      console.log("🐞 ", data);
       // if data is not array, return null
       if (!Array.isArray(data)) return null;
+
       // ⬇️ refactor data to match dropdown format
       data = data.map((item) => {
         // link overwrite

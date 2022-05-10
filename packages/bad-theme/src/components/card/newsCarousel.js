@@ -1,18 +1,34 @@
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
 import { colors } from "../../config/imports";
 import date from "date-and-time";
-
 const DATE_MODULE = date;
-import { muiQuery } from "../../context";
+
+// CONTEXT --------------------------------------------------------
+import { muiQuery, getMediaCategories } from "../../context";
+
 const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!newsCarousel) return null;
   const { lg } = muiQuery();
-  const { date, release, title, categories, featured_media, excerpt } =
-    newsCarousel;
-  const CATEGORY = Object.values(state.source.category);
+  const {
+    date,
+    release,
+    title,
+    categories,
+    featured_media,
+    excerpt,
+    yoast_head_json,
+  } = newsCarousel;
+  const [category, setCategory] = useState(null);
+
+  useEffect(async () => {
+    let categoryList = await getMediaCategories({ state });
+
+    setCategory(categoryList);
+  }, []);
 
   // SERVERS ---------------------------------------------
   const ServeRelease = () => {
@@ -51,9 +67,9 @@ const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
   };
 
   const ServeCategory = () => {
-    if (!CATEGORY) return null;
+    if (!category || !categories) return null;
 
-    const filter = CATEGORY.filter((item) => item.id === Number(categories[0]));
+    const filter = category.filter((item) => item.id === Number(categories[0]));
     const categoryName = filter[0].name;
 
     return (
@@ -74,8 +90,11 @@ const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
   const ServeImage = () => {
     if (!featured_media) return null;
 
-    const media = state.source.attachment[featured_media];
+    let media = null;
+    if (yoast_head_json) media = yoast_head_json.og_image[0].url;
     const alt = title.rendered || "BAD";
+
+    if (!media) return null;
 
     return (
       <div
@@ -86,7 +105,7 @@ const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
         }}
       >
         <Image
-          src={media.source_url}
+          src={media}
           alt={alt}
           style={{
             width: "100%",

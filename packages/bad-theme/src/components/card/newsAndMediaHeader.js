@@ -2,9 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
-import { colors } from "../../config/imports";
 import date from "date-and-time";
-import { setGoToAction, muiQuery } from "../../context";
+const DATE_MODULE = date;
 
 import Bulletins from "../../img/svg/bulletins.svg";
 import eCircular from "../../img/svg/eCircular.svg";
@@ -13,8 +12,8 @@ import Podcasts from "../../img/svg/podcasts.svg";
 import PressRelease from "../../img/svg/pressRelease.svg";
 import Responses from "../../img/svg/responses.svg";
 import Updates from "../../img/svg/updates.svg";
-
-const DATE_MODULE = date;
+// CONTEXT --------------------------------------------------------
+import { getMediaCategories } from "../../context";
 
 const NewsAndMediaHeader = ({
   state,
@@ -27,13 +26,10 @@ const NewsAndMediaHeader = ({
 
   if (!newsAndMediaInfo) return null;
 
-  const { sm, md, lg, xl } = muiQuery();
-
-  const mountedRef = useRef(true);
-  const CATEGORY = Object.values(state.source.category);
-
-  const [category, setCategory] = useState(null);
-  const { categories, excerpt, title, date, featured_media } = newsAndMediaInfo;
+  const [categoryList, setList] = useState(null);
+  const [postCat, setPostCat] = useState("Uncategorized");
+  const { categories, excerpt, title, date, featured_media, yoast_head_json } =
+    newsAndMediaInfo;
 
   const isLayoutTwo = layout === "layout_two";
   const isLayoutThree = layout === "layout_three";
@@ -41,29 +37,28 @@ const NewsAndMediaHeader = ({
   const isLayoutFive = layout === "layout_five";
 
   useEffect(async () => {
-    if (state.source.category) {
-      const CATEGORY = Object.values(state.source.category);
-      const filter = CATEGORY.filter(
+    let categoryList = await getMediaCategories({ state });
+
+    if (categoryList && categories) {
+      const filter = categoryList.filter(
         (item) => item.id === Number(categories[0])
       );
       const categoryName = filter[0].name;
-      setCategory(categoryName);
+      setPostCat(categoryName);
     }
 
-    return () => {
-      mountedRef.current = false; // clean up function
-    };
+    setList(categoryList);
   }, []);
 
   const ICON_WIDTH = 40;
   let SERVE_ICON = PressRelease;
-  if (category === "Uncategorized" || category === "Presidential Bulletin")
+  if (postCat === "Uncategorized" || postCat === "Presidential Bulletin")
     SERVE_ICON = Bulletins;
-  if (category === "Official Response") SERVE_ICON = Responses;
-  if (category === "Podcast") SERVE_ICON = Podcasts;
-  if (category === "E-Circular") SERVE_ICON = eCircular;
-  if (category === "Insights") SERVE_ICON = Insights;
-  if (category === "News &amp; Updates") SERVE_ICON = Updates;
+  if (postCat === "Official Response") SERVE_ICON = Responses;
+  if (postCat === "Podcast") SERVE_ICON = Podcasts;
+  if (postCat === "E-Circular") SERVE_ICON = eCircular;
+  if (postCat === "Insights") SERVE_ICON = Insights;
+  if (postCat === "News &amp; Updates") SERVE_ICON = Updates;
 
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
@@ -80,7 +75,7 @@ const NewsAndMediaHeader = ({
   };
 
   const ServeIcon = () => {
-    if (!category || isLayoutTwo) return null;
+    if (!postCat || isLayoutTwo) return null;
     const alt = title.rendered || "BAD";
 
     return (
@@ -105,8 +100,11 @@ const NewsAndMediaHeader = ({
   const ServeImage = () => {
     if (!featured_media) return null;
 
-    const media = state.source.attachment[featured_media];
+    let media = null;
+    if (yoast_head_json) media = yoast_head_json.og_image[0].url;
     const alt = title.rendered || "BAD";
+
+    if (!media) return null;
 
     return (
       <div
@@ -116,7 +114,7 @@ const NewsAndMediaHeader = ({
         }}
       >
         <Image
-          src={media.source_url}
+          src={media}
           alt={alt}
           style={{
             width: "100%",
@@ -130,9 +128,11 @@ const NewsAndMediaHeader = ({
   };
 
   const ServeCategory = () => {
-    if (!CATEGORY) return null;
+    if (!categoryList || !categories) return null;
 
-    const filter = CATEGORY.filter((item) => item.id === Number(categories[0]));
+    const filter = categoryList.filter(
+      (item) => item.id === Number(categories[0])
+    );
     const categoryName = filter[0].name;
 
     return (

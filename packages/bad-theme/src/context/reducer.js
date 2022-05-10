@@ -38,6 +38,8 @@ export const initialState = {
   loginModalAction: false,
   createAccountAction: false,
   enquireAction: null,
+
+  newsMediaCategoryList: null,
 };
 
 export const AppReducer = (state = initialState, action) => {
@@ -104,6 +106,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, isDashboardNotifications: action.payload };
     case "SET_REDIRECT_ACTION":
       return { ...state, redirects: action.payload };
+    case "SET_MEDIA_LIST_ACTION":
+      return { ...state, newsMediaCategoryList: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

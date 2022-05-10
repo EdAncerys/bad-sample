@@ -85,6 +85,9 @@ import {
   getEventGrades,
   getEventLocations,
   getEventSpecialtys,
+  getNewsData,
+  getMediaCategories,
+  setMediaCategoriesAction,
 } from "./actions/wpAPI";
 import {
   getBJDFeedAction,
@@ -188,6 +191,9 @@ export {
   getEventsData,
   getEventLocations,
   getEventSpecialtys,
+  getNewsData,
+  getMediaCategories,
+  setMediaCategoriesAction,
   getEventGrades,
   handleSortFilter,
 };

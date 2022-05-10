@@ -537,7 +537,7 @@ const Event = ({ state, actions, libraries }) => {
           className="primary-title"
           style={{ padding: `1em 0`, fontSize: 20, color: colors.white }}
         >
-          Not a Member of British Association Dermatology?
+          Not a member of the British Association of Dermatologists?
         </div>
 
         <div
