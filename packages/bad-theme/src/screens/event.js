@@ -19,8 +19,10 @@ import {
   muiQuery,
   useAppState,
   setErrorAction,
+  getEventGrades,
+  getEventLocations,
+  getEventsData,
 } from "../context";
-import { getEventsData } from "../helpers";
 
 const Event = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
@@ -34,8 +36,8 @@ const Event = ({ state, actions, libraries }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
   const [eventList, setEventList] = useState(null);
-  const [gradeList, setGradeList] = useState(null);
-  const [locationList, setLocationList] = useState(null);
+  const [gradeList, setGrades] = useState(null);
+  const [locationList, setLocations] = useState(null);
   const [position, setPosition] = useState(null);
   const useEffectRef = useRef(null);
 
@@ -44,48 +46,15 @@ const Event = ({ state, actions, libraries }) => {
     window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
     document.documentElement.scrollTop = 0; // for safari
 
-    // get related event content
-    let eventList = null;
-    let categoryList = null;
-    let locationList = null;
+    let grades = await getEventGrades({ state });
+    let locations = await getEventLocations({ state });
+    let events = await getEventsData({ state });
 
-    // pre fetch events data
-    let data = state.source.events;
-    let isCurrentOnly = false;
-    // on page re-fresh check if is current only
-    if (data && Object.keys(data).length === 1) isCurrentOnly = true;
-    if (isCurrentOnly) {
-      await getEventsData({ state, actions });
-    }
+    setGrades(grades);
+    setLocations(locations);
+    setEventList(events);
 
-    let iteration = 0;
-    while (!data) {
-      // if iteration is greater than 10, break
-      if (iteration > 10) break;
-      // set timeout for async
-      await getEventsData({ state, actions });
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      data = state.source.events;
-      iteration++;
-    }
-
-    // if !data then break
-    if (!data) return;
-    eventList = Object.values(data);
-
-    if (state.source.event_grade)
-      categoryList = Object.values(state.source.event_grade);
-    if (state.source.event_location)
-      locationList = Object.values(state.source.event_location);
-
-    setEventList(eventList);
-    setGradeList(categoryList);
-    setLocationList(locationList);
     setPosition(true);
-
-    return () => {
-      useEffectRef.current = false; // clean up function
-    };
   }, []);
 
   const {

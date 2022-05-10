@@ -75,15 +75,26 @@ const EventLoopBlock = ({
     // if page is set to events_archive return only events that date is in the past
     if (events_archive) {
       events = events.filter((event) => {
+        console.log("🐞 archive event");
         let eventDate = event.acf.date_time;
         if (!eventDate) return false;
-        console.log("🐞 ", eventDate);
 
         let [month, date, year] = eventDate[0].date.split("/");
         let eventDateObj = new Date(year, month, date);
         let today = new Date();
 
         return eventDateObj < today;
+      });
+    } else {
+      events = events.filter((event) => {
+        let eventDate = event.acf.date_time;
+        if (!eventDate) return false;
+
+        let [month, date, year] = eventDate[0].date.split("/");
+        let eventDateObj = new Date(year, month, date);
+        let today = new Date();
+
+        return eventDateObj >= today;
       });
     }
 
