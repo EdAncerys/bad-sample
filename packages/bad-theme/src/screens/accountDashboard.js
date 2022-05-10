@@ -193,8 +193,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
                   {
                     title: applicationTitle,
                     colour: colors.navy,
-                    onClickAction: () =>
-                      handleUpdateMembershipApplication({ app }),
+                    link: { url: "/membership/categories-of-membership/" },
                   },
                   {
                     title: "Apply for SIG Membership",
