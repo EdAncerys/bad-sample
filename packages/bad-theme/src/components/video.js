@@ -149,7 +149,6 @@ const Video = ({ state, actions, libraries }) => {
       uappUrl +
       state.router.link +
       "?sagepay=true";
-
     const fetchVendorId = await fetch(url, {
       method: "POST",
       headers: {

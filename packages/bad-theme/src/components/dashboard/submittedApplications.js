@@ -89,7 +89,7 @@ const SubmittedApplications = ({ state, actions, libraries }) => {
       state.auth.APP_HOST +
         sagepay_url +
         sage_id +
-        `?redirecturl=${url}/payment-confirmation/`,
+        `?redirecturl=${url}/payment-confirmation/?redirect=${state.router.link}`,
       {
         method: "POST",
         headers: {

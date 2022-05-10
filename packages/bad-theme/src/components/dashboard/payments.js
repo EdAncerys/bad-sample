@@ -87,7 +87,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
         state.auth.APP_HOST +
           sagepayUrl +
           type +
-          `?redirecturl=${state.auth.APP_URL}/payment-confirmation/`,
+          `?redirecturl=${state.auth.APP_URL}/payment-confirmation/?redirect=${state.router.link}`,
         {
           method: "POST",
           headers: {
