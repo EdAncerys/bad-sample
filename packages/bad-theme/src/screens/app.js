@@ -213,7 +213,9 @@ const App = ({ state, actions }) => {
                 <Covid when={data.isCovid19} />
                 <VideoArchive when={urlPath === "/videos/"} />
                 <Home when={data.isHome || urlPath === "/"} />
-
+                <PaymentConfirmation
+                  when={urlPath === "/payment-confirmation/"}
+                />
                 <Post when={data.isPost} />
                 <Page when={data.isPage} />
                 <Video when={data.isVideos} />

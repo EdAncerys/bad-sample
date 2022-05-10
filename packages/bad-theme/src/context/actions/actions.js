@@ -2,7 +2,13 @@ import BADTheme from "../../client";
 
 // import state APP_URL from client state with process.env.APP_URL
 
-export const setGoToAction = async ({ state, path, actions, downloadFile }) => {
+export const setGoToAction = async ({
+  state,
+  path,
+  actions,
+  downloadFile,
+  newWindow,
+}) => {
   // console.log("setGoToAction triggered", path, downloadFile); // debug
   if (!path && !downloadFile) return null;
 
@@ -20,10 +26,11 @@ export const setGoToAction = async ({ state, path, actions, downloadFile }) => {
 
   // ⬇️ handle redirect rules
   let isExternalLink = true;
-  if (urlPath && urlPath.includes(pathOne)) isExternalLink = false;
-  if (urlPath && urlPath.includes(pathTwo)) isExternalLink = false;
-  if (urlPath && urlPath.includes(wpHost)) isExternalLink = false;
-  if (urlPath && urlPath.includes(appUrl)) isExternalLink = false;
+  if (path && path.includes(pathOne)) isExternalLink = false;
+  if (path && path.includes(pathTwo)) isExternalLink = false;
+  if (path && path.includes(wpHost)) isExternalLink = false;
+  if (path && path.includes(appUrl)) isExternalLink = false;
+  if (newWindow) isExternalLink = true;
 
   if (urlPath && urlPath.includes(wpHost))
     urlPath = urlPath.replace(wpHost, "/");
@@ -48,7 +55,6 @@ export const setGoToAction = async ({ state, path, actions, downloadFile }) => {
   )
     return actions.router.set(pathTwo + urlPath); // internal link no pre fix
   if (isExternalLink) return window.open(urlPath, "_blank"); // handle external links
-  console.log("ROUTER PATH", urlPath);
   // 📌 handle internal link redirects
   actions.router.set(urlPath);
 };

@@ -34,7 +34,7 @@ export const validateMembershipFormAction = async ({
       [name]: data[name],
     }));
   };
-
+  console.log("DATA", applicationData);
   if (!applicationData) return null;
 
   // ⏬ validate inputs & pre fetch membership data
@@ -54,7 +54,7 @@ export const validateMembershipFormAction = async ({
 
     if (appType) {
       const applicationForm = membership.acf;
-
+      console.log("APPFORM", applicationForm);
       Object.keys(applicationForm).map((keyName) => {
         handleSetInputData({ data: applicationForm, name: keyName });
       });

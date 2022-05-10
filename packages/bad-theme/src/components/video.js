@@ -22,6 +22,7 @@ import {
   setEnquireAction,
   muiQuery,
   setCreateAccountModalAction,
+  setErrorAction,
 } from "../context";
 
 const Video = ({ state, actions, libraries }) => {
@@ -34,6 +35,22 @@ const Video = ({ state, actions, libraries }) => {
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
 
+  const queryParams = new Proxy(new URLSearchParams(window.location.search), {
+    get: (searchParams, prop) => searchParams.get(prop),
+  });
+
+  let isSagepay = queryParams.sagepay;
+  const handlePaymentModal = (url) => {
+    console.log("PM URL", url);
+    setErrorAction({
+      dispatch,
+      isError: {
+        message: `The card payment industry is currently in the process of making significant changes to the way card payments are processed online. Unfortunately, because of these changes, some users are experiencing temporary issues with making card payments through the website. If you cannot make a payment through the website, please contact membership@bad.org.uk to discuss alternative arrangements for making payments.`,
+        image: "Error",
+        goToPath: { label: "Continue", path: url },
+      },
+    });
+  };
   const { lg } = muiQuery();
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -46,6 +63,16 @@ const Video = ({ state, actions, libraries }) => {
     const all_videos = state.source.videos;
     const videos_list = await Object.values(all_videos);
     const related_videos_to_show = videos_list.slice(0, 3);
+
+    if (isSagepay) {
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Your payment has been accepted`,
+          image: "CheckMark",
+        },
+      });
+    }
 
     setRelatedVideos(related_videos_to_show);
     const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
@@ -105,7 +132,10 @@ const Video = ({ state, actions, libraries }) => {
     const cookie = handleGetCookie({ name: `BAD-WebApp` });
     const { contactid, jwt } = cookie;
 
-    const sagepay_url = "/sagepay/live/video/";
+    const sagepay_url =
+      state.auth.ENVIRONMENT === "PRODUCTION"
+        ? "sagepay/live/video"
+        : "/sagepay/test/video/";
     const uappUrl = state.auth.APP_URL;
     const url =
       state.auth.APP_HOST +
@@ -115,7 +145,10 @@ const Video = ({ state, actions, libraries }) => {
       post.acf.event_id +
       "/" +
       post.acf.price +
-      `?redirecturl=${uappUrl}/payment-confirmation`;
+      `?redirecturl=` +
+      uappUrl +
+      state.router.link +
+      "?sagepay=true";
 
     const fetchVendorId = await fetch(url, {
       method: "POST",
@@ -128,7 +161,7 @@ const Video = ({ state, actions, libraries }) => {
       const json = await fetchVendorId.json();
       const url =
         json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
-      setPaymentUrl(url);
+      handlePaymentModal(url);
     }
     // setPage({ page: "directDebit", data: block });
   };

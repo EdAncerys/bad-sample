@@ -11,6 +11,7 @@ import {
   useAppDispatch,
   muiQuery,
   authenticateAppAction,
+  setErrorAction,
 } from "../../context";
 
 const SubmittedApplications = ({ state, actions, libraries }) => {
@@ -63,6 +64,17 @@ const SubmittedApplications = ({ state, actions, libraries }) => {
   }, [dynamicsApps]);
 
   // HELPERS ----------------------------------------------
+  const displayPaymentModal = (url) => {
+    console.log("PM URL", url);
+    setErrorAction({
+      dispatch,
+      isError: {
+        message: `The card payment industry is currently in the process of making significant changes to the way card payments are processed online. Unfortunately, because of these changes, some users are experiencing temporary issues with making card payments through the website. If you cannot make a payment through the website, please contact membership@bad.org.uk to discuss alternative arrangements for making payments.`,
+        image: "Error",
+        goToPath: { label: "Continue", path: url },
+      },
+    });
+  };
   const handlePayment = async ({ sage_id }) => {
     const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
@@ -89,7 +101,7 @@ const SubmittedApplications = ({ state, actions, libraries }) => {
       const json = await fetchVendorId.json();
       const url =
         json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
-      setPaymentUrl(url);
+      displayPaymentModal(url);
     }
   };
 
