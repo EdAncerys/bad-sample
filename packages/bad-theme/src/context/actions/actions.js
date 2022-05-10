@@ -11,8 +11,9 @@ export const setGoToAction = async ({
   // console.log("setGoToAction triggered", path, downloadFile); // debug
   if (!path && !downloadFile) return null;
   let urlPath = path;
-  const pathOne = `cdn.bad.org.uk`;
+  const pathOne = `http://3.9.193.188`;
   const pathTwo = `https://badadmin.skylarkdev.co`;
+  const pathThree = `https://cdn.bad.org.uk`;
   const wpHost = state.auth.WP_HOST;
   const appUrl = state.auth.APP_URL;
   console.log("urlPath", urlPath);
@@ -26,6 +27,7 @@ export const setGoToAction = async ({
   let isExternalLink = true;
   if (path && path.includes(pathOne)) isExternalLink = false;
   if (path && path.includes(pathTwo)) isExternalLink = false;
+  // if (path && path.includes(pathThree)) isExternalLink = false;
   if (path && path.includes(wpHost)) isExternalLink = false;
   if (path && path.includes(appUrl)) isExternalLink = false;
   if (newWindow) isExternalLink = true;
@@ -41,8 +43,8 @@ export const setGoToAction = async ({
     isExternalLink
   )
     return window.open(`https://` + urlPath, "_blank"); // handle external links without https pre fix
-  if (urlPath && urlPath.includes("cdn"))
-    return window.location.replace("https://" + urlPath);
+  // if (urlPath && urlPath.includes("cdn"))
+  //   return window.location.replace("https://" + urlPath);
 
   // 📌 handle internal link redirects with prefixes
   if (
