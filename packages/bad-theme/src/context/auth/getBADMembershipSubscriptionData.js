@@ -10,13 +10,16 @@ export const getBADMembershipSubscriptionData = async ({
   // console.log("getBADMembershipSubscriptionData triggered");
 
   const year = new Date().getFullYear(); // get current year
+  let sig_type = type;
+  if (type === "Full:DERMPATHPRO") sig_type = "Full:DermpathPRO";
   let URL =
     state.auth.APP_HOST +
     `/catalogue/lookup/membershiptype?search=${category}:${type}::${year}`;
   if (category === "SIG")
     URL =
       state.auth.APP_HOST +
-      `/catalogue/lookup/membershiptype?search=${category}:${type}:${year}`;
+      `/catalogue/lookup/membershiptype?search=${category}:${sig_type}:${year}`;
+  console.log("URL", URL);
   const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   const requestOptions = {

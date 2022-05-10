@@ -262,7 +262,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         return 0;
       });
     }
-
+    console.log("INPUT VALIDATOR", inputValidator);
     // check if application category have only one application
     let isSingleApp = false;
     if (membershipData) isSingleApp = membershipData.length === 1;
@@ -288,7 +288,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     });
 
     setMembershipData(membershipData); // set membership data
-    console.log("MEMDATA", membershipData);
+    console.log("MEM", membershipData);
   }, [state.source.memberships]);
 
   // HANDLERS --------------------------------------------
@@ -462,7 +462,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         formData.bad_categorytype === "Full:British Hair and Nails Society"
           ? "py3_whatukbasedroleareyou"
           : "",
-        formData.bad_categorytype === "Full:DERMPATHPRO"
+        formData.bad_categorytype === "Full:DermpathPRO"
           ? "py3_currentgrade"
           : "",
       ],
@@ -517,7 +517,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       });
       if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
 
-      let slug = `/`;
+      let slug = `/dashboard/`;
       if (isActiveUser && appsResponse)
         setGoToAction({ state, path: slug, actions });
     } catch (error) {

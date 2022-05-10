@@ -143,7 +143,6 @@ const ErrorModal = ({ state, actions, libraries }) => {
         </div>
       );
     };
-
     return (
       <div
         className="flex"
@@ -159,7 +158,7 @@ const ErrorModal = ({ state, actions, libraries }) => {
                 display: "grid",
                 textAlign: "center",
                 padding: !lg ? `2em 0` : 0,
-                fontSize: 26,
+                fontSize: message.length < 300 ? 26 : 16,
               }}
             >
               <Html2React html={message} />

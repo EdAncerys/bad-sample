@@ -20,7 +20,7 @@ const ButtonsRow = ({ state, actions, style, block, disableMargin }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
-  console.log("PERChE DUBL", block);
+
   // RETURN ---------------------------------------------------
   return (
     <div

@@ -22,8 +22,9 @@ import {
   handleValidateMembershipChangeAction,
   handleApplyForMembershipAction,
   muiQuery,
+  getEventsData,
+  handleSortFilter,
 } from "../../../context";
-import { getEventsData } from "../../../helpers";
 
 const Dashboard = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
@@ -34,7 +35,6 @@ const Dashboard = ({ state, actions, libraries }) => {
     refreshJWT,
     applicationData,
   } = useAppState();
-  // CONTEXT ------------------------------------------------------------------
 
   const { lg } = muiQuery();
 
@@ -47,57 +47,12 @@ const Dashboard = ({ state, actions, libraries }) => {
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
-    // pre fetch events data
-    let data = state.source.events;
-    if (!data) data = await getEventsData({ state, actions });
+    let events = await getEventsData({ state, page: 1, postsPerPage: 4 });
+    if (!events) return;
+    // ⬇️⬇ sort events by date
+    events = handleSortFilter({ list: events });
 
-    if (!data) return null;
-    data = Object.values(data);
-    // 📌 sort events by date newest first
-    data.sort((a, b) => {
-      let dateA = a.acf.date_time;
-      let dateB = b.acf.date_time;
-      if (dateA) dateA = dateA[0].date;
-      if (dateB) dateB = dateB[0].date;
-      // convert to date object
-      dateA = new Date(dateA);
-      dateB = new Date(dateB);
-
-      if (dateA > dateB) return -1;
-      if (dateA < dateB) return 1;
-      return 0;
-    });
-
-    // 📌 sort eventList by closest to today first (if date is set)
-    data.sort((a, b) => {
-      let dateA = a.acf.date_time;
-      let dateB = b.acf.date_time;
-      if (dateA) dateA = dateA[0].date;
-      if (dateB) dateB = dateB[0].date;
-
-      // convert to date object
-      dateA = new Date(dateA);
-      dateB = new Date(dateB);
-
-      // get today's date
-      let today = new Date();
-
-      // get date difference
-      let diffA = Math.abs(dateA - today);
-      let diffB = Math.abs(dateB - today);
-
-      if (diffA > diffB) return 1;
-      if (diffA < diffB) return -1;
-
-      return 0;
-    });
-    // convert to object & return first 2 records
-    const events = data.slice(0, 4);
     setEventList(events);
-
-    return () => {
-      useEffectRef.current = ""; // clean up function
-    };
   }, []);
 
   useEffect(() => {
@@ -201,47 +156,12 @@ const Dashboard = ({ state, actions, libraries }) => {
   };
 
   // SERVERS ---------------------------------------------
-  const ServeApplicationStatus = () => {
-    if (!dynamicsApps) return null;
-    const { apps, subs } = dynamicsApps;
-
-    const [applications, setApplications] = useState();
-
-    useEffect(() => {
-      if (!dynamicsApps) return null;
-
-      setApplications(dynamicsApps.apps);
-    }, [dynamicsApps]);
-
-    if (apps.data.length === 0) return null;
-    if (!applications) return <Loading />;
-    return (
-      <div>
-        {applications.data.map((item, key) => {
-          return (
-            <ApplicationStatusOrPayment
-              key={key}
-              application={applications.data[key]}
-            />
-          );
-        })}
-      </div>
-    );
-  };
-
   const ServePayments = () => {
     if (!dynamicsApps) return null;
 
-    const outstandingApps =
-      dynamicsApps.apps.data.filter((item) => item.bad_sagepayid !== null)
-        .length > 0;
     const outstandingSubs =
       dynamicsApps.subs.data.filter((item) => item.bad_sagepayid === null)
         .length > 0;
-    const subsies = dynamicsApps.subs.data.filter(
-      (item) => item.bad_sagepayid !== null
-    );
-
     if (!outstandingSubs) return null;
 
     return <Payments subscriptions={dynamicsApps} dashboard />;
@@ -504,7 +424,6 @@ const Dashboard = ({ state, actions, libraries }) => {
             </div>
           </div>
         )}
-        {/* <ServeApplicationStatus /> */}
         <ServePayments />
       </div>
       <ServeEvents />
