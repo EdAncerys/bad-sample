@@ -201,47 +201,12 @@ const Dashboard = ({ state, actions, libraries }) => {
   };
 
   // SERVERS ---------------------------------------------
-  const ServeApplicationStatus = () => {
-    if (!dynamicsApps) return null;
-    const { apps, subs } = dynamicsApps;
-
-    const [applications, setApplications] = useState();
-
-    useEffect(() => {
-      if (!dynamicsApps) return null;
-
-      setApplications(dynamicsApps.apps);
-    }, [dynamicsApps]);
-
-    if (apps.data.length === 0) return null;
-    if (!applications) return <Loading />;
-    return (
-      <div>
-        {applications.data.map((item, key) => {
-          return (
-            <ApplicationStatusOrPayment
-              key={key}
-              application={applications.data[key]}
-            />
-          );
-        })}
-      </div>
-    );
-  };
-
   const ServePayments = () => {
     if (!dynamicsApps) return null;
 
-    const outstandingApps =
-      dynamicsApps.apps.data.filter((item) => item.bad_sagepayid !== null)
-        .length > 0;
     const outstandingSubs =
       dynamicsApps.subs.data.filter((item) => item.bad_sagepayid === null)
         .length > 0;
-    const subsies = dynamicsApps.subs.data.filter(
-      (item) => item.bad_sagepayid !== null
-    );
-
     if (!outstandingSubs) return null;
 
     return <Payments subscriptions={dynamicsApps} dashboard />;
@@ -504,7 +469,6 @@ const Dashboard = ({ state, actions, libraries }) => {
             </div>
           </div>
         )}
-        {/* <ServeApplicationStatus /> */}
         <ServePayments />
       </div>
       <ServeEvents />

@@ -1,3 +1,4 @@
+import { handleSortFilter } from "../helpers/eventSortFilter";
 import { AppProvider, useAppDispatch, useAppState } from "./context";
 import {
   setGoToAction,
@@ -180,4 +181,5 @@ export {
   googleAutocompleteAction,
   seRefreshJWTAction,
   getEventsData,
+  handleSortFilter,
 };

@@ -13,6 +13,7 @@ import {
   setEventAnchorAction,
   muiQuery,
   getEventsData,
+  handleSortFilter,
 } from "../../context";
 
 const EventLoopBlock = ({
@@ -90,6 +91,7 @@ const EventLoopBlock = ({
     events = handleSortFilter({ list: events });
 
     if (isPostLimit && events) {
+      // ⬇️ if post_limit is set then show only post_limit posts
       if (events.lenght <= Number(post_limit)) return null;
       // apply limit to eventList array length if post_limit is set & less than post_limit
       events = events.slice(0, Number(post_limit));
@@ -97,8 +99,6 @@ const EventLoopBlock = ({
 
     setEventList(events); // set event data
     setFilter(events); // set event filter data
-    console.log("🐞 ", post_limit);
-    console.log("🐞 ", events);
 
     // ⬇️ set link to anchor for event
     if (eventAnchor) {
@@ -258,52 +258,6 @@ const EventLoopBlock = ({
     setFilter(updatedEvents);
   };
 
-  const handleSortFilter = ({ list }) => {
-    let sortedList = list;
-
-    // 📌 uncoment to sort by data
-    // 📌 sort events by date newest first
-    sortedList.sort((a, b) => {
-      let dateA = a.acf.date_time;
-      let dateB = b.acf.date_time;
-      if (dateA) dateA = dateA[0].date;
-      if (dateB) dateB = dateB[0].date;
-      // convert to date object
-      dateA = new Date(dateA);
-      dateB = new Date(dateB);
-
-      if (dateA > dateB) return -1;
-      if (dateA < dateB) return 1;
-      return 0;
-    });
-
-    // 📌 sort eventList by closest to today first (if date is set)
-    sortedList.sort((a, b) => {
-      let dateA = a.acf.date_time;
-      let dateB = b.acf.date_time;
-      if (dateA) dateA = dateA[0].date;
-      if (dateB) dateB = dateB[0].date;
-
-      // convert to date object
-      dateA = new Date(dateA);
-      dateB = new Date(dateB);
-
-      // get today's date
-      let today = new Date();
-
-      // get date difference
-      let diffA = Math.abs(dateA - today);
-      let diffB = Math.abs(dateB - today);
-
-      if (diffA > diffB) return 1;
-      if (diffA < diffB) return -1;
-
-      return 0;
-    });
-
-    return sortedList;
-  };
-
   if (!eventFilter) return <Loading />;
 
   // SERVERS ---------------------------------------------------------------
@@ -367,7 +321,6 @@ const EventLoopBlock = ({
             if (!grade_match) return null;
           } */
 
-          // // ⬇️ if post_limit is set then show only post_limit posts
           // if (post_limit) {
           //   if (postLimitRef.current >= post_limit) return null;
           //   postLimitRef.current++;
