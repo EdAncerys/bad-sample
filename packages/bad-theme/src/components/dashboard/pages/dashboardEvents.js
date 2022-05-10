@@ -7,7 +7,6 @@ import TitleBlock from "../../titleBlock";
 import Loading from "../../loading";
 import Card from "../../card/card";
 import BlockWrapper from "../../blockWrapper";
-import { getEventsData } from "../../../helpers";
 import EventListView from "../../eventListView";
 
 // CONTEXT ------------------------------------------------------------------
@@ -17,13 +16,15 @@ import {
   authenticateAppAction,
   muiQuery,
   setGoToAction,
+  getEventsData,
+  handleSortFilter,
 } from "../../../context";
 
 const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
   const dispatch = useAppDispatch();
   const { dashboardPath, isActiveUser, refreshJWT } = useAppState();
   const { lg } = muiQuery();
-  const [listOfEvents, setListOfEvents] = useState();
+  const [listOfEvents, setListOfEvents] = useState([]);
   const [eventList, setEventList] = useState([]); // event data
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -32,53 +33,10 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
 
   useEffect(async () => {
     try {
-      // pre fetch events data
-      let data = state.source.events;
-      if (!data) await getEventsData({ state, actions });
-      // throw exception if no events
-      if (!data) throw new Error("Faild to fetch events data");
-      data = state.source.events;
-      if (data) data = Object.values(data);
-      // 📌 sort events by date newest first
-      data.sort((a, b) => {
-        let dateA = a.acf.date_time;
-        let dateB = b.acf.date_time;
-        if (dateA) dateA = dateA[0].date;
-        if (dateB) dateB = dateB[0].date;
-        // convert to date object
-        dateA = new Date(dateA);
-        dateB = new Date(dateB);
-
-        if (dateA > dateB) return -1;
-        if (dateA < dateB) return 1;
-        return 0;
-      });
-
-      // 📌 sort eventList by closest to today first (if date is set)
-      data.sort((a, b) => {
-        let dateA = a.acf.date_time;
-        let dateB = b.acf.date_time;
-        if (dateA) dateA = dateA[0].date;
-        if (dateB) dateB = dateB[0].date;
-
-        // convert to date object
-        dateA = new Date(dateA);
-        dateB = new Date(dateB);
-
-        // get today's date
-        let today = new Date();
-
-        // get date difference
-        let diffA = Math.abs(dateA - today);
-        let diffB = Math.abs(dateB - today);
-
-        if (diffA > diffB) return 1;
-        if (diffA < diffB) return -1;
-
-        return 0;
-      });
-
-      const events = data.slice(0, 4);
+      let events = await getEventsData({ state, page: 1, postsPerPage: 4 });
+      if (!events) return;
+      // ⬇️⬇ sort events by date
+      events = handleSortFilter({ list: events });
       setEventList(events);
 
       if (!isActiveUser) return null;
@@ -93,9 +51,12 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
         }
       );
 
+      console.log("🐞 ", fetchUserEvents);
+
       if (fetchUserEvents.ok) {
         let filteredEvents = [];
         const json = await fetchUserEvents.json();
+        console.log("🐞 ", json);
         json.data.map((event) => {
           filteredEvents.push(event.bad_eventid);
         });
@@ -120,7 +81,7 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
 
   // SERVERS --------------------------------------------
   const ServeRegisteredEvents = () => {
-    if (!listOfEvents || !isActiveUser) return <Loading />;
+    if (!isActiveUser) return <Loading />;
 
     return (
       <div>
@@ -138,19 +99,6 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
             {listOfEvents.length > 0 &&
               listOfEvents.map((block, key) => {
                 return (
-                  // <Card
-                  //   key={key}
-                  //   title={block.title.rendered}
-                  //   url={item.acf.image || DEFAULT_IMAGE}
-                  //   imgHeight={200}
-                  //   link_label="Go to the event's page"
-                  //   link={block.acf.registration_page_link}
-                  //   date={block.acf.date_time}
-                  //   seatNumber="seatNumber"
-                  //   cardHeight="100%"
-                  //   shadow
-                  // />
-
                   <div
                     key={key}
                     data-aos="fade"
