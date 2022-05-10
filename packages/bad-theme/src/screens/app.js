@@ -214,7 +214,7 @@ const App = ({ state, actions }) => {
                 <VideoArchive when={urlPath === "/videos/"} />
                 <Home when={data.isHome || urlPath === "/"} />
                 <PaymentConfirmation
-                  when={urlPath === "/payment-confirmation/"}
+                  when={urlPath.includes("/payment-confirmation/")}
                 />
                 <Post when={data.isPost} />
                 <Page when={data.isPage} />
