@@ -3,13 +3,13 @@ import { connect } from "frontity";
 import { handleSetCookie, handleGetCookie } from "../helpers/cookie";
 const CookiePopUp = ({ state, hide }) => {
   const [show, setShow] = React.useState();
-  const handleConsent = async () => {
+  const handleConsent = async (type) => {
     handleSetCookie({
       name: "BAD-cookie-popup",
-      value: "true",
+      value: type,
       domain: `${state.auth.APP_URL}`,
     });
-    setShow("true");
+    setShow(type);
   };
 
   React.useEffect(() => {
@@ -20,7 +20,9 @@ const CookiePopUp = ({ state, hide }) => {
     setShow(popUpCookie);
   });
   if (!show) return null;
-  if (show && show === "true") return null;
+  if (show && show === "all-cookies") return null;
+  if (show && show === "essential-only") return null;
+
   return (
     <div
       className="container-fluid"
@@ -34,12 +36,12 @@ const CookiePopUp = ({ state, hide }) => {
       }}
     >
       <div className="row d-flex p-3" style={{ justifyContent: "center" }}>
-        <div className="col-lg-6 col-12">
+        <div className="col-lg-5 col-12">
           <h5>We value your privacy</h5>{" "}
           <p style={{ fontSize: 12 }}>
-            We use cookies to give you the best online experience and analyse
-            our traffic. By clicking ‘I understand’ you agree to our use of
-            cookies.{" "}
+            We use cookies to run our services and analyse our traffic. We need
+            some of those cookies to provide the best online experience while
+            others allow us to monitor the site performance.{" "}
             <a
               href="https://www.bad.org.uk/about-the-bad/our-values/our-policies/"
               style={{ color: "black", fontSize: 12 }}
@@ -49,11 +51,20 @@ const CookiePopUp = ({ state, hide }) => {
           </p>
         </div>
         <div
-          className="col-lg-2 col-12 d-flex"
+          className="col-lg-4 col-12 d-flex"
           style={{ justifyContent: "space-around", alignItems: "center" }}
         >
-          <button onClick={handleConsent} className="blue-btn-reverse">
-            I understand
+          <button
+            onClick={() => handleConsent("all-cookies")}
+            className="blue-btn-reverse"
+          >
+            Accept all cookies
+          </button>
+          <button
+            onClick={() => handleConsent("essential-only")}
+            className="blue-btn-reverse"
+          >
+            Only essential cookies
           </button>
         </div>
       </div>

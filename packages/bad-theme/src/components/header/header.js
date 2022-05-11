@@ -36,17 +36,14 @@ const Header = ({ state, actions }) => {
       </div>
     );
   };
-  const popUpCookie = handleGetCookie({ name: `BAD-cookie-popup` });
-  if (popUpCookie === null) {
-    handleSetCookie({
-      name: "BAD-cookie-popup",
-      value: "false",
-      domain: `${state.auth.APP_URL}`,
-    });
-  }
+
   useEffect(() => {
-    ReactGA.initialize("UA-50027583-1");
-    ReactGA.pageview(window.location.pathname + window.location.search);
+    const cookie = handleGetCookie({ name: `BAD-cookie-popup` });
+    console.log("COOKIE", cookie);
+    if (cookie && cookie === "all-cookies") {
+      ReactGA.initialize("UA-50027583-1");
+      ReactGA.pageview(window.location.pathname + window.location.search);
+    }
   }, []);
   return (
     <>
@@ -58,7 +55,7 @@ const Header = ({ state, actions }) => {
         `}
       />
       <HTMLHead />
-      <CookiePopUp hide={popUpCookie} />
+      <CookiePopUp />
       {!lg ? (
         <div className="bad-header" style={styles.container}>
           <HeaderActions />
