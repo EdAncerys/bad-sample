@@ -89,6 +89,7 @@ import {
   getMediaCategories,
   setMediaCategoriesAction,
   getGuidelinesTypes,
+  getVenuesData,
   getGuidelinesData,
 } from "./actions/wpAPI";
 import {
@@ -198,6 +199,7 @@ export {
   setMediaCategoriesAction,
   getGuidelinesData,
   getGuidelinesTypes,
+  getVenuesData,
   getEventGrades,
   handleSortFilter,
 };
