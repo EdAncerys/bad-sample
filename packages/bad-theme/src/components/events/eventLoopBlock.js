@@ -166,6 +166,7 @@ const EventLoopBlock = ({
       filteredEvents = filteredEvents.filter((event) => {
         // filter events by grades filter
         let grade = event.event_grade;
+        if (!grade) return false;
         let isInGrade = grade.includes(Number(gradesFilter));
 
         return isInGrade;

@@ -10,6 +10,7 @@ export const setGoToAction = async ({
 }) => {
   // console.log("setGoToAction triggered", path, downloadFile); // debug
   if (!path && !downloadFile) return null;
+
   let urlPath = path;
   const pathOne = `http://3.9.193.188`;
   const pathTwo = `https://badadmin.skylarkdev.co`;
@@ -34,7 +35,7 @@ export const setGoToAction = async ({
 
   if (urlPath && urlPath.includes(wpHost))
     urlPath = urlPath.replace(wpHost, "/");
-  if (urlPath.includes("wiley")) return (window.location.href = urlPath);
+
   // redirects passed to router without https prefix
   if (
     urlPath &&

@@ -65,7 +65,7 @@ const AccordionBody = ({
   if (fundingBlock) body = block.acf ? block.acf.overview : null;
   if (fundingBlock) labelName = block.acf ? block.acf.link_label : null;
   if (fundingBlock) link = { url: block.acf.external_application_link };
-  console.log("BLOCK", block);
+
   useEffect(() => {
     // ⬇️ anchor tag scrapper
     anchorScrapper();
