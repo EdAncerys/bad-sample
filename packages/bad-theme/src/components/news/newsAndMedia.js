@@ -69,6 +69,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     if (site_section) {
       data = data.filter((item) => {
         let postSections = item.site_sections;
+        if (!postSections) return false;
         // check if postSections array contains site_section ids
         return postSections.some((item) => site_section.includes(item));
       });
