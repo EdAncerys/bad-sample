@@ -88,6 +88,8 @@ import {
   getNewsData,
   getMediaCategories,
   setMediaCategoriesAction,
+  getGuidelinesTypes,
+  getGuidelinesData,
 } from "./actions/wpAPI";
 import {
   getBJDFeedAction,
@@ -194,6 +196,8 @@ export {
   getNewsData,
   getMediaCategories,
   setMediaCategoriesAction,
+  getGuidelinesData,
+  getGuidelinesTypes,
   getEventGrades,
   handleSortFilter,
 };

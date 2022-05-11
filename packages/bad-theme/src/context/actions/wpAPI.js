@@ -92,7 +92,7 @@ export const getNewsData = async ({ state, page, postsPerPage }) => {
 
       data = [...data, ...json];
       pageNo++;
-      url = `${state.auth.WP_HOST}wp-json/wp/v2/events?&per_page=${perPageLimit}&page=${pageNo}&_fields=title,link,event_grade,event_location,event_specialty,acf.date_time,acf.image,acf.preview_summary,acf.organizer,acf.venue&filter[orderby]=event_start_date&order=asc`;
+      url = `${state.auth.WP_HOST}wp-json/wp/v2/guidelines_standards?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
       response = await fetch(url);
     }
 
@@ -123,4 +123,48 @@ export const setMediaCategoriesAction = ({
 }) => {
   // console.log("setFilterAction triggered"); //debug
   dispatch({ type: "SET_MEDIA_LIST_ACTION", payload: newsMediaCategoryList });
+};
+
+// 📌 Guidelines & Standards
+export const getGuidelinesData = async ({ state, page, postsPerPage }) => {
+  let pageNo = page || 1;
+  let perPageLimit = postsPerPage || state.theme.perPageLimit;
+  let fields =
+    "id,title,content,content,tags,guidelines_type,site_sections,acf,layout,authors,notice,nice_accredited";
+
+  let url = `${state.auth.WP_HOST}wp-json/wp/v2/guidelines_standards?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+
+  try {
+    let data = [];
+
+    let response = await fetch(url);
+    // fetch events data from WP & while respone is not 400 (bad request) keep fetching
+    while (response.status !== 400) {
+      let json = await response.json();
+
+      data = [...data, ...json];
+      pageNo++;
+      url = `${state.auth.WP_HOST}wp-json/wp/v2/guidelines_standards?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+      response = await fetch(url);
+    }
+
+    return data;
+  } catch (error) {
+    console.log("🐞 ", error);
+  }
+};
+
+export const getGuidelinesTypes = async ({ state }) => {
+  const url = `${state.auth.WP_HOST}wp-json/wp/v2/guidelines_type?_fields=name,id`;
+
+  try {
+    // ⬇️ fetch data via wp API page by page
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Fetching error");
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log("🐞 ", error);
+  }
 };
