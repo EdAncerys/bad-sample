@@ -20,14 +20,13 @@ const NewsAndMediaHeader = ({
   actions,
   libraries,
   newsAndMediaInfo,
+  categoryList,
   layout,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!newsAndMediaInfo) return null;
 
-  const [categoryList, setList] = useState(null);
-  const [postCat, setPostCat] = useState("Uncategorized");
   const { categories, excerpt, title, date, featured_media, yoast_head_json } =
     newsAndMediaInfo;
 
@@ -35,30 +34,6 @@ const NewsAndMediaHeader = ({
   const isLayoutThree = layout === "layout_three";
   const isLayoutFour = layout === "layout_four";
   const isLayoutFive = layout === "layout_five";
-
-  useEffect(async () => {
-    let categoryList = await getMediaCategories({ state });
-
-    if (categoryList && categories) {
-      const filter = categoryList.filter(
-        (item) => item.id === Number(categories[0])
-      );
-      const categoryName = filter[0].name;
-      setPostCat(categoryName);
-    }
-
-    setList(categoryList);
-  }, []);
-
-  const ICON_WIDTH = 40;
-  let SERVE_ICON = PressRelease;
-  if (postCat === "Uncategorized" || postCat === "Presidential Bulletin")
-    SERVE_ICON = Bulletins;
-  if (postCat === "Official Response") SERVE_ICON = Responses;
-  if (postCat === "Podcast") SERVE_ICON = Podcasts;
-  if (postCat === "E-Circular") SERVE_ICON = eCircular;
-  if (postCat === "Insights") SERVE_ICON = Insights;
-  if (postCat === "News &amp; Updates") SERVE_ICON = Updates;
 
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
@@ -75,8 +50,26 @@ const NewsAndMediaHeader = ({
   };
 
   const ServeIcon = () => {
-    if (!postCat || isLayoutTwo) return null;
+    if (isLayoutTwo) return null;
     const alt = title.rendered || "BAD";
+
+    let postCat = "Uncategorized";
+    if (categoryList && categories) {
+      const filter = categoryList.filter(
+        (item) => item.id === Number(categories[0])
+      );
+      postCat = filter[0].name;
+    }
+
+    const ICON_WIDTH = 40;
+    let SERVE_ICON = PressRelease;
+    if (postCat === "Uncategorized" || postCat === "Presidential Bulletin")
+      SERVE_ICON = Bulletins;
+    if (postCat === "Official Response") SERVE_ICON = Responses;
+    if (postCat === "Podcast") SERVE_ICON = Podcasts;
+    if (postCat === "E-Circular") SERVE_ICON = eCircular;
+    if (postCat === "Insights") SERVE_ICON = Insights;
+    if (postCat === "News &amp; Updates") SERVE_ICON = Updates;
 
     return (
       <div

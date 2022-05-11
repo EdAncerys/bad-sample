@@ -146,8 +146,8 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   useEffect(() => {
     if (!postList) return null;
 
-    // if asll filters are applied are null then set filterList to postList
-    if (!searchValue && !dateValue && !yearValue) {
+    // if all filters are applied are null then set filterList to postList
+    if (!searchValue && !dateValue && !yearValue && !newsMediaCategoryId) {
       setFilterList(postList);
       return;
     }
@@ -191,9 +191,9 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
     if (newsMediaCategoryId)
       data = data.filter((news) => {
-        console.log("🐞 ", news.categories);
-        console.log("🐞 ", news);
-        // news.categories.includes(Number(newsMediaCategoryId))
+        let categories = news.categories;
+        if (!categories) return false;
+        return categories.includes(newsMediaCategoryId); // filter by category
       });
 
     // apply date filter & sort by date latest first

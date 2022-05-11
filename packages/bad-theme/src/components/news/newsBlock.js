@@ -5,7 +5,7 @@ import Image from "@frontity/components/image";
 import Card from "../card/card";
 import { colors } from "../../config/imports";
 // CONTEXT -----------------------------------------------------------------
-import { muiQuery, getMediaCategories } from "../../context";
+import { muiQuery } from "../../context";
 
 const NewsBlock = ({
   state,
@@ -33,11 +33,11 @@ const NewsBlock = ({
   if (disable_vertical_padding) marginVertical = 0;
 
   useEffect(async () => {
-    let data = await getMediaCategories({ state });
-
-    if (data) {
+    if (categoryList) {
       // get e-circular category id
-      const eCircularCat = data.filter((item) => item.name === "E-Circular");
+      const eCircularCat = categoryList.filter(
+        (item) => item.name === "E-Circular"
+      );
       // get e-circular category id
       let eCircularCatId = null;
       if (eCircularCat[0]) eCircularCatId = eCircularCat[0].id;
@@ -117,6 +117,7 @@ const NewsBlock = ({
               link_label="Read More"
               link={redirectLink}
               newsAndMediaInfo={block}
+              categoryList={categoryList}
               layout={layout}
               colour={colors.pink}
               shadow
@@ -130,6 +131,7 @@ const NewsBlock = ({
               link_label="Read More"
               link={isECircular ? null : redirectLink}
               newsAndMediaInfo={block}
+              categoryList={categoryList}
               downloadFile={isECircular ? fileBlock : null} // download file passed link
               layout={layout}
               cardMinHeight={290}
@@ -151,6 +153,7 @@ const NewsBlock = ({
                 link_label="Read More"
                 link={redirectLink}
                 newsAndMediaInfo={block}
+                categoryList={categoryList}
                 padding="1.5em 3em"
                 layout={layout}
                 colour={colors.pink}
