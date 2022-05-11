@@ -91,6 +91,8 @@ import {
   getGuidelinesTypes,
   getVenuesData,
   getVideosData,
+  getFundingData,
+  getFundingTypes,
   getEventSpecialitys,
   getGuidelinesData,
 } from "./actions/wpAPI";
@@ -203,6 +205,8 @@ export {
   getGuidelinesTypes,
   getVenuesData,
   getVideosData,
+  getFundingTypes,
+  getFundingData,
   getEventSpecialitys,
   getEventGrades,
   handleSortFilter,

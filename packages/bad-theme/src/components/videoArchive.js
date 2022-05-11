@@ -59,7 +59,6 @@ const VideoArchive = ({ state, actions, libraries }) => {
       // if video.event_specialty null, return false
       const specialty = video.event_specialty;
       const grades = video.event_grade;
-      console.log("🐞 ", gradeFilter.current);
 
       if (
         specialtyFilter.current &&
@@ -70,9 +69,6 @@ const VideoArchive = ({ state, actions, libraries }) => {
         return false;
 
       if (paidFilter.current) {
-        console.log("🐞 ", paidFilter.current);
-        console.log("🐞 ", video.acf.private);
-
         if (paidFilter.current === "paid") return video.acf.private;
         if (paidFilter.current === "free") return !video.acf.private;
       }
@@ -173,7 +169,6 @@ const VideoArchive = ({ state, actions, libraries }) => {
               const value = select.options[select.selectedIndex].value;
               paidFilter.current = value;
               handleFilters();
-              console.log("🐞 ", paidFilter.current);
             }}
             style={!lg ? styles.dropdown : styles.dropdownMobile}
           >
@@ -375,7 +370,6 @@ const VideoArchive = ({ state, actions, libraries }) => {
       setUserVideos(json.data);
     };
 
-    console.log("🐞 ", videoList);
     fetchHeroBanner();
     setVideosList(videoList);
     setPostData(videoList);
