@@ -26,6 +26,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
   const [searchInput, setInput] = useState("");
   const [searchPhrase, setPhrase] = useState("");
   const [pilList, setPilList] = useState(null);
+  const [pilFilter, setFilter] = useState(null);
   const useEffectRef = useRef(true);
 
   const marginHorizontal = state.theme.marginHorizontal;
@@ -37,8 +38,6 @@ const PilsArchive = ({ state, actions, libraries }) => {
     // let pils = state.source.pils;
     const fetchAllData = async () => {
       // TODO: Make it better
-      const pilsies = [];
-      const times = 3;
       const trying = await Promise.all([
         fetch(
           state.auth.WP_HOST +
@@ -53,37 +52,12 @@ const PilsArchive = ({ state, actions, libraries }) => {
             `wp-json/wp/v2/pils?filter[orderby]=title&order=asc&per_page=100&page=3&_fields=title,link`
         ).then((r) => r.json()),
       ]);
-      console.log("TRYING", trying.flat(1));
 
-      console.log("PILSIES", pilsies);
-      setPilList(trying.flat(1));
-      console.log("JSON", data);
-      console.log("STATE", pilList);
+      console.log("🐞 ", trying);
+      const pils = [...trying[0], ...trying[1], ...trying[2]];
+      setPilList(pils);
+      setFilter(pils); // set filter to all pils
     };
-
-    // if (!pils) {
-    //   await getPILsDataAction({ state, actions });
-    //   pils = state.source.pils;
-    // }
-
-    // if pils not found return
-    // if (!pilList) return;
-    // let pilData = Object.values(pils);
-
-    // // sort pils alphabetically by title
-    // pilData.sort((a, b) => {
-    //   const nameA = a.title.rendered.toUpperCase(); // ignore upper and lowercase
-    //   const nameB = b.title.rendered.toUpperCase(); // ignore upper and lowercase
-    //   if (nameA < nameB) {
-    //     return -1;
-    //   }
-    //   if (nameA > nameB) {
-    //     return 1;
-    //   }
-    //   return 0;
-    // });
-
-    // setPilList(pilData); // add pill object to data array
 
     fetchAllData();
     return () => {
@@ -91,10 +65,10 @@ const PilsArchive = ({ state, actions, libraries }) => {
     };
   }, []);
 
-  if (!pilList) return <Loading />;
+  if (!pilFilter) return <Loading />;
 
   let ALPHABET = [];
-  pilList.map((item) => {
+  pilFilter.map((item) => {
     const pilTitle = item.title.rendered;
     if (!pilTitle) return null;
 
@@ -126,7 +100,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
         };
       });
 
-      // setPilList(filter);
+      setFilter(filter);
     }
 
     if (filter.length) {
@@ -141,7 +115,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
     setSearchFilter(null);
     setInput("");
     setPhrase("");
-    setPilList(Object.values(state.source.pils));
+    setFilter(pilList);
   };
 
   const dropDownHandler = ({ item }) => {
@@ -154,13 +128,13 @@ const PilsArchive = ({ state, actions, libraries }) => {
       const input = e.target.value.toLowerCase();
 
       if (input) {
-        let filter = pilList.filter(
-          (pil) =>
-            pil.title.rendered.toLowerCase().includes(input) ||
-            pil.content.rendered.toLowerCase().includes(input)
-        );
+        let filter = pilList.filter((pil) => {
+          // ⬇️ filter pils by title
+          return pil.title.rendered.toLowerCase().includes(input);
+        });
+
         setPhrase(input);
-        setPilList(filter);
+        setFilter(filter);
         setSearchFilter(null);
       }
     }
@@ -180,7 +154,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
       );
 
       setPhrase(input);
-      setPilList(filter);
+      setFilter(filter);
       setSearchFilter(null);
     }
   };
@@ -218,7 +192,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
           {item}
         </div>
         <div style={{ padding: `1em 0` }}>
-          {pilList.map((pil, key) => {
+          {pilFilter.map((pil, key) => {
             return <ServePil key={key} pil={pil} />;
           })}
         </div>
