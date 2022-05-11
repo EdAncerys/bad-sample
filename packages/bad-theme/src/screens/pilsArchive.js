@@ -20,7 +20,6 @@ const PilsArchive = ({ state, actions, libraries }) => {
 
   const data = state.source.get(state.router.link);
   const pilPageData = state.source[data.type][data.id];
-  console.log("pageData ", data); // debug
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [searchInput, setInput] = useState("");
@@ -53,7 +52,6 @@ const PilsArchive = ({ state, actions, libraries }) => {
         ).then((r) => r.json()),
       ]);
 
-      console.log("🐞 ", trying);
       const pils = [...trying[0], ...trying[1], ...trying[2]];
       setPilList(pils);
       setFilter(pils); // set filter to all pils
