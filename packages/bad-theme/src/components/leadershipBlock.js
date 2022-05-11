@@ -5,7 +5,12 @@ import AccordionComponent from "./accordion/accordion";
 import Loading from "./loading";
 
 // CONTEXT -----------------------------------------------------------------
-import { getLeadershipTeamData } from "../helpers";
+import {
+  getLeadershipTeamData,
+  getLeadershipGrades,
+  getLeadershipData,
+  getLeadershipPositions,
+} from "../context";
 
 const LeadershipBlock = ({ state, actions, block }) => {
   const [leadershipList, setLeadershipList] = useState(null);
@@ -17,15 +22,13 @@ const LeadershipBlock = ({ state, actions, block }) => {
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
-    let data = await getLeadershipTeamData({ state, actions });
-    if (!data) return;
+    const grades = await getLeadershipGrades({ state });
+    const positions = await getLeadershipPositions({ state });
+    const leadershipList = await getLeadershipData({ state });
 
-    let positionData = state.source.leadership_position;
-    let gardeData = state.source.leadership_grade;
-
-    setPositions(Object.values(positionData));
-    setGrades(Object.values(gardeData));
-    setLeadershipList(Object.values(data));
+    setPositions(positions);
+    setGrades(grades);
+    setLeadershipList(leadershipList);
 
     return () => {
       mountedRef.current = false; // clean up function

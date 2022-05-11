@@ -49,6 +49,7 @@ import BADMemberships from "../badMemberships";
 import VideoGuides from "../videoGuides";
 import FindADermatologist from "../findADermatologist";
 import VideoArchive from "../videoArchive";
+
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
   if (!blocks) return null; // if no block content provided
 

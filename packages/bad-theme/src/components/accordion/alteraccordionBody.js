@@ -512,6 +512,7 @@ const AccordionBody = ({
         const position = positionList.filter(
           (position) => position.id === positionId[0]
         );
+        if (!position.length) return null;
         const positionName = position[0].name;
 
         return (
@@ -600,38 +601,35 @@ const AccordionBody = ({
           {block.leadershipList.map((item, key) => {
             if (
               LT_LAYOUT === "executive-committee-regional" &&
-              !item.leadership_grade.includes(rolId)
+              item.leadership_grade[0] === rolId
             )
               return null;
             if (
               LT_LAYOUT === "executive-committee-co-opted" &&
-              !item.leadership_grade.includes(rolId)
+              item.leadership_grade[0] === rolId
             )
               return null;
-            if (isListLayout) return <ServeListLayout item={item} key={key} />;
+
+            return <ServeListLayout item={item} key={key} />;
           })}
         </div>
       );
 
-    if (!isListLayout)
-      return (
-        <div style={!lg ? styles.profileLayout : styles.profileLayoutMobile}>
-          {block.leadershipList.map((item, key) => {
-            if (
-              LT_LAYOUT === "senior-management" &&
-              !item.leadership_grade.includes(rolId)
-            )
-              return null;
-            if (
-              LT_LAYOUT === "officer" &&
-              !item.leadership_grade.includes(rolId)
-            )
-              return null;
+    return (
+      <div style={!lg ? styles.profileLayout : styles.profileLayoutMobile}>
+        {block.leadershipList.map((item, key) => {
+          if (
+            LT_LAYOUT === "senior-management" &&
+            item.leadership_grade[0] !== rolId
+          )
+            return null;
+          if (LT_LAYOUT === "officer" && item.leadership_grade[0] !== rolId)
+            return null;
 
-            return <ServeProfileLayout item={item} key={key} />;
-          })}
-        </div>
-      );
+          return <ServeProfileLayout item={item} key={key} />;
+        })}
+      </div>
+    );
   };
 
   const ServeLink = ({ button_link }) => {
