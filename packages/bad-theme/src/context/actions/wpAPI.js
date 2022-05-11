@@ -283,3 +283,31 @@ export const getFundingTypes = async ({ state }) => {
     console.log("🐞 ", error);
   }
 };
+
+// 📌 Memberships
+export const getMembershipData = async ({ state, page, postsPerPage }) => {
+  let pageNo = page || 1;
+  let perPageLimit = postsPerPage || state.theme.perPageLimit;
+  let fields = "id,type,link,title,sig_group,acf";
+
+  let url = `${state.auth.WP_HOST}wp-json/wp/v2/memberships?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+
+  try {
+    let data = [];
+
+    let response = await fetch(url);
+    // fetch events data from WP & while respone is not 400 (bad request) keep fetching
+    while (response.status !== 400) {
+      let json = await response.json();
+
+      data = [...data, ...json];
+      pageNo++;
+      url = `${state.auth.WP_HOST}wp-json/wp/v2/memberships?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+      response = await fetch(url);
+    }
+
+    return data;
+  } catch (error) {
+    console.log("🐞 ", error);
+  }
+};

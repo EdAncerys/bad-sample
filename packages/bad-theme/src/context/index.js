@@ -93,6 +93,7 @@ import {
   getVideosData,
   getFundingData,
   getFundingTypes,
+  getMembershipData,
   getEventSpecialitys,
   getGuidelinesData,
 } from "./actions/wpAPI";
@@ -206,6 +207,7 @@ export {
   getVenuesData,
   getVideosData,
   getFundingTypes,
+  getMembershipData,
   getFundingData,
   getEventSpecialitys,
   getEventGrades,

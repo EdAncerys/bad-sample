@@ -5,7 +5,11 @@ import { colors } from "../config/imports";
 import Loading from "./loading";
 import Accordion from "./accordion/accordion";
 // CONTEXT ----------------------------------------------------------------
-import { getMembershipDataAction, muiQuery } from "../context";
+import {
+  getMembershipDataAction,
+  muiQuery,
+  getMembershipData,
+} from "../context";
 
 const BADMemberships = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -18,25 +22,17 @@ const BADMemberships = ({ state, actions, libraries, block }) => {
 
   const useEffectRef = useRef(null);
   const { lg } = muiQuery();
+
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
     // pre fetch membership data
-    if (!state.source.memberships)
-      await getMembershipDataAction({ state, actions });
-
-    let membershipTypes = Object.values(state.source.memberships);
-    if (!membershipTypes) return null;
-
-    membershipTypes = membershipTypes.map((membership) => {
-      const data = state.source[membership.type][membership.id];
-      return data;
-    });
-    // filter out bad memberships only
-    membershipTypes = membershipTypes.filter(
+    let memberships = await getMembershipData({ state });
+    // 📌 filter out bad memberships only
+    memberships = memberships.filter(
       (membership) => membership.acf.bad_or_sig === "bad"
     );
-    // sort memberships by bad_order accenting & if no value push to end
-    membershipTypes.sort((a, b) => {
+    // ⬇️ sort memberships by bad_order accenting & if no value push to end
+    memberships.sort((a, b) => {
       if (a.acf.bad_order && b.acf.bad_order) {
         return a.acf.bad_order - b.acf.bad_order;
       } else if (a.acf.bad_order) {
@@ -48,7 +44,7 @@ const BADMemberships = ({ state, actions, libraries, block }) => {
       }
     });
 
-    setMembershipTypes(membershipTypes);
+    setMembershipTypes(memberships);
 
     return () => {
       useEffectRef.current = false; // clean up function
@@ -58,7 +54,6 @@ const BADMemberships = ({ state, actions, libraries, block }) => {
   if (!block || !membershipTypes) return <Loading />;
 
   // RETURN ---------------------------------------------------
-  console.log("MEMBERSHIPS", membershipTypes);
   return (
     <div
       className="flex-col"
