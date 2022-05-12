@@ -33,7 +33,6 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
   // SERVERS ---------------------------------------------
   const ServePatchDirections = ({ item, nextKey }) => {
     let titleName = item;
-
     // title name tweaks
     if (titleName === "derm_groups_charity")
       titleName = "Dermatology Groups & Charities";
@@ -50,6 +49,7 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
     const handleGoToLink = () => {
       const goToPath = urlPath.split("/").slice(1, nextKey + 1);
       let goToLink = `/${goToPath.join("/")}`;
+      console.log("goToPath", goToPath, "goToLink", goToLink);
       // REDIRECT HANDLERS -------------------------------------------------
       if (goToLink === "/derm_groups_charity/")
         goToLink = "/derm-groups-charity";
@@ -64,13 +64,15 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
       actions.router.set(`${goToLink}`);
     };
 
-    if (item[0] !== "home" && !lg)
+    if (item[0] !== "home")
       wpMenu.map((menuItem) => {
         // check for nested child_items
+        console.log("Menu", menuItem);
         if (menuItem.child_items && !lg)
           menuItem.child_items.map((childItem) => {
+            if (lg) return null;
             // check for nested child_items
-            if (childItem.child_items && !lg) {
+            if (childItem.child_items) {
               childItem.child_items.map((childItem) => {
                 if (childItem.slug === item.toLowerCase())
                   titleName = <Html2React html={childItem.title} />;
@@ -146,20 +148,17 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
   if (data.isError) return null;
   if (urlPath === "/") return null; // disable breadcrumbs in home page
   if (urlPath === "/search/") return null; // disable breadcrumbs in search page
-
+  console.log("DIRECTIONS", directions);
   return (
     <BlockWrapper background={colors.lightSilver}>
       <div className="flex" style={{ ...styles.wrapper }}>
         <ServeTitle />
         <ServeNewsMediaPreFix />
-        {!lg ? (
-          directions.map((item) => {
-            KEY += 1;
-            return <ServePatchDirections key={KEY} item={item} nextKey={KEY} />;
-          })
-        ) : (
-          <ServePatchDirections key={KEY} item={directions[0]} nextKey={KEY} />
-        )}
+        {directions.map((item) => {
+          KEY += 1;
+          if (lg && KEY > 1) return null;
+          return <ServePatchDirections key={KEY} item={item} nextKey={KEY} />;
+        })}
       </div>
     </BlockWrapper>
   );
