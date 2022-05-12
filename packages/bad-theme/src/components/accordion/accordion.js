@@ -10,6 +10,7 @@ import CardHeader from "./alteraccordionHeader";
 import { useAppState, muiQuery } from "../../context";
 import connect from "@frontity/connect";
 import { v4 as uuidv4 } from "uuid";
+
 function AlterAccordion({
   state,
   actions,

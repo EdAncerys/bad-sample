@@ -1,8 +1,10 @@
 import React from "react";
 import { connect } from "frontity";
 import { handleSetCookie, handleGetCookie } from "../helpers/cookie";
+
 const CookiePopUp = ({ state, hide }) => {
   const [show, setShow] = React.useState();
+
   const handleConsent = async (type) => {
     handleSetCookie({
       name: "BAD-cookie-popup",
@@ -19,6 +21,7 @@ const CookiePopUp = ({ state, hide }) => {
     }
     setShow(popUpCookie);
   });
+
   if (!show) return null;
   if (show && show === "all-cookies") return null;
   if (show && show === "essential-only") return null;

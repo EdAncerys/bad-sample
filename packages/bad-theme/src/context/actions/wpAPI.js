@@ -311,3 +311,166 @@ export const getMembershipData = async ({ state, page, postsPerPage }) => {
     console.log("🐞 ", error);
   }
 };
+
+// 📌 Leaderships
+export const getLeadershipData = async ({ state, page, postsPerPage }) => {
+  let pageNo = page || 1;
+  let perPageLimit = postsPerPage || state.theme.perPageLimit;
+  let fields =
+    "id,type,link,title,content,leadership_position,leadership_grade,slug,acf";
+
+  let url = `${state.auth.WP_HOST}wp-json/wp/v2/leadership_team?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+
+  try {
+    let data = [];
+
+    let response = await fetch(url);
+    // fetch events data from WP & while respone is not 400 (bad request) keep fetching
+    while (response.status !== 400) {
+      let json = await response.json();
+
+      data = [...data, ...json];
+      pageNo++;
+      url = `${state.auth.WP_HOST}wp-json/wp/v2/leadership_team?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+      response = await fetch(url);
+    }
+
+    return data;
+  } catch (error) {
+    console.log("🐞 ", error);
+  }
+};
+
+export const getLeadershipGrades = async ({ state }) => {
+  const url = `${state.auth.WP_HOST}wp-json/wp/v2/leadership_grade?_fields=name,id,slug`;
+
+  try {
+    // ⬇️ fetch data via wp API page by page
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Fetching error");
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log("🐞 ", error);
+  }
+};
+
+export const getLeadershipPositions = async ({ state }) => {
+  const url = `${state.auth.WP_HOST}wp-json/wp/v2/leadership_position?_fields=name,id`;
+
+  try {
+    // ⬇️ fetch data via wp API page by page
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Fetching error");
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log("🐞 ", error);
+  }
+};
+
+// 📌 Dermatology SIG Groupe
+export const getSIGData = async ({ state, page, postsPerPage, type }) => {
+  let pageNo = page || 1;
+  let perPageLimit = postsPerPage || state.theme.perPageLimit;
+  let fields =
+    "id,type,link,title,content,leadership_position,leadership_grade,slug,acf";
+  let postType = type || "sig_group";
+
+  let url = `${state.auth.WP_HOST}wp-json/wp/v2/${postType}?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+
+  try {
+    let data = [];
+
+    let response = await fetch(url);
+    // fetch events data from WP & while respone is not 400 (bad request) keep fetching
+    while (response.status !== 400) {
+      let json = await response.json();
+
+      data = [...data, ...json];
+      pageNo++;
+      url = `${state.auth.WP_HOST}wp-json/wp/v2/${postType}?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+      response = await fetch(url);
+    }
+
+    return data;
+  } catch (error) {
+    console.log("🐞 ", error);
+  }
+};
+
+export const getCPTData = async ({ state, page, postsPerPage, type }) => {
+  if (!type) return;
+
+  let pageNo = page || 1;
+  let perPageLimit = postsPerPage || state.theme.perPageLimit;
+  let fields =
+    "type,slug,link,title,content,dermo_group_type,acf,site_sections,guidance,guidance_category";
+
+  let url = `${state.auth.WP_HOST}wp-json/wp/v2/${type}?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+
+  try {
+    let data = [];
+
+    let response = await fetch(url);
+    // fetch events data from WP & while respone is not 400 (bad request) keep fetching
+    while (response.status !== 400) {
+      let json = await response.json();
+
+      data = [...data, ...json];
+      pageNo++;
+      url = `${state.auth.WP_HOST}wp-json/wp/v2/${type}?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+      response = await fetch(url);
+    }
+
+    return data;
+  } catch (error) {
+    console.log("🐞 ", error);
+  }
+};
+
+export const getCPTTaxonomy = async ({ state, type }) => {
+  if (!type) return;
+  const url = `${state.auth.WP_HOST}wp-json/wp/v2/${type}?_fields=name,id`;
+
+  try {
+    // ⬇️ fetch data via wp API page by page
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Fetching error");
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log("🐞 ", error);
+  }
+};
+
+// 📌 Elections
+export const getElectionsData = async ({ state, page, postsPerPage }) => {
+  let pageNo = page || 1;
+  let perPageLimit = postsPerPage || state.theme.perPageLimit;
+  let fields = "type,slug,link,title,content,election_grade,election_roles,acf";
+
+  let url = `${state.auth.WP_HOST}wp-json/wp/v2/elections?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+
+  try {
+    let data = [];
+
+    let response = await fetch(url);
+    // fetch events data from WP & while respone is not 400 (bad request) keep fetching
+    while (response.status !== 400) {
+      let json = await response.json();
+
+      data = [...data, ...json];
+      pageNo++;
+      url = `${state.auth.WP_HOST}wp-json/wp/v2/elections?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+      response = await fetch(url);
+    }
+
+    return data;
+  } catch (error) {
+    console.log("🐞 ", error);
+  }
+};

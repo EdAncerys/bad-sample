@@ -15,6 +15,16 @@ const BADTheme = {
     theme: Root,
   },
   state: {
+    data: {
+      "/old-url/": {
+        isReady: true,
+        isRedirection: true,
+        is301: true,
+        redirectionStatus: 301,
+        isExternal: false,
+        location: "/new-url",
+      },
+    },
     theme: {
       menuUrl: "/menu/primary-menu",
       menu: null,
@@ -69,11 +79,6 @@ const BADTheme = {
           actions.source.fetch(`/home-page`), // pre fetch home page CONTENT
           // actions.source.fetch(`/menu_features`), // pre fetch menu featured CPT
         ]);
-
-        // ⬇️  get pils data
-        // await getPILsDataAction({ state, actions });
-        // ⬇️  get guidance data
-        // await getGuidelinesDataAction({ state, actions });
 
         // ⬇️ handle set cookie for video guide block. Silent auth login
         // https://www.skinhealthinfo.org.uk/support-resources/video-guides/
