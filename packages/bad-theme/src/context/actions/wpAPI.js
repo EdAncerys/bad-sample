@@ -357,7 +357,7 @@ export const getLeadershipGrades = async ({ state }) => {
 };
 
 export const getLeadershipPositions = async ({ state }) => {
-  const url = `${state.auth.WP_HOST}wp-json/wp/v2/leadership_position?_fields=name,id`;
+  const url = `${state.auth.WP_HOST}wp-json/wp/v2/leadership_position?order=asc&page=1&per_page=100&_fields=name,id`;
 
   try {
     // ⬇️ fetch data via wp API page by page

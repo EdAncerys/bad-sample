@@ -512,6 +512,7 @@ const AccordionBody = ({
         const position = positionList.filter(
           (position) => position.id === positionId[0]
         );
+
         if (!position.length) return null;
         const positionName = position[0].name;
 
