@@ -63,10 +63,6 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   if (disable_vertical_padding) marginVertical = 0;
 
   useEffect(async () => {
-    // get curent time
-    const currentTime = new Date();
-    console.log("🐞 block fetch fired");
-
     let categoryList = await getMediaCategories({ state });
     let data = await getNewsData({ state });
 
@@ -94,10 +90,6 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     setFilterList(data);
     setCategoryList(categoryList);
     setIsSearch(has_search);
-
-    // get time taken in s to get data
-    const timeTaken = (new Date() - currentTime) / 1000;
-    console.log("time taken to get data", timeTaken);
 
     return () => {
       searchFilterRef.current = ""; // clean up function
