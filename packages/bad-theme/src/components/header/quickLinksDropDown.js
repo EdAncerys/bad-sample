@@ -32,7 +32,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
   };
 
   const onClickLinkHandler = async ({ title, url }) => {
-    const isWileys = title.includes("Journal");
+    const isWileys = title.includes("Journal") && !title.includes("SHD");
     let authLink = url;
 
     // HANDLERS ----------------------------------------------------
@@ -63,7 +63,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
       setErrorAction({
         dispatch,
         isError: {
-          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals. <br/> To continue to the publication without logging in, click to visit the BJD website`,
+          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals. <br/> To continue to the publication without logging in, click to visit the ${title} website`,
           image: "Error",
           action: [
             {

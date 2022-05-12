@@ -512,6 +512,7 @@ const AccordionBody = ({
         const position = positionList.filter(
           (position) => position.id === positionId[0]
         );
+
         if (!position.length) return null;
         const positionName = position[0].name;
 
@@ -601,12 +602,13 @@ const AccordionBody = ({
           {block.leadershipList.map((item, key) => {
             if (
               LT_LAYOUT === "executive-committee-regional" &&
-              item.leadership_grade[0] === rolId
+              // if meber rolId is not included in the list of roles
+              item.leadership_grade[0] !== rolId
             )
               return null;
             if (
               LT_LAYOUT === "executive-committee-co-opted" &&
-              item.leadership_grade[0] === rolId
+              item.leadership_grade[0] !== rolId
             )
               return null;
 

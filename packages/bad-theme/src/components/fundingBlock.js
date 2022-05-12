@@ -15,11 +15,11 @@ const DATE_MODULE = date;
 
 import CloseIcon from "@mui/icons-material/Close";
 // CONTEXT --------------------------------------------------------
-import { getFundingData, getFundingTypes } from "../context";
+import { getFundingData, getFundingTypes, muiQuery } from "../context";
 
 const CPTBlock = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
+  const { lg } = muiQuery();
   const {
     colour,
     background_colour,
@@ -386,7 +386,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: `repeat(3, 1fr)`,
+          gridTemplateColumns: !lg ? `repeat(3, 1fr)` : "1fr",
           justifyContent: "space-between",
           gap: 20,
           padding: `0 ${marginHorizontal}px`,
