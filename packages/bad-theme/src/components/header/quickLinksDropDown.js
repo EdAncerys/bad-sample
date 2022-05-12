@@ -33,7 +33,6 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
 
   const onClickLinkHandler = async ({ title, url }) => {
     const isWileys = title.includes("Journal") && !title.includes("SHD");
-    console.log("1", isWileys);
     let authLink = url;
 
     // HANDLERS ----------------------------------------------------
