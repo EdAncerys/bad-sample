@@ -1,14 +1,14 @@
 import { authenticateAppAction, setFetchAction } from "../index";
 
-export const getFadAction = async ({ state, dispatch, page }) => {
-  console.log("getFadAction triggered");
+export const getFadAction = async ({ state, dispatch, page, refreshJWT }) => {
+  // console.log("getFadAction triggered");
 
   let perPage = 15;
   let skip = page ? page * perPage : 0; // define skip for pagination
 
   try {
     setFetchAction({ dispatch, isFetching: true });
-    const jwt = await authenticateAppAction({ state });
+    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
     if (!jwt) throw new Error("error authenticating app");
 
     const requestOptions = {
@@ -22,22 +22,25 @@ export const getFadAction = async ({ state, dispatch, page }) => {
     const data = await fetch(URL, requestOptions);
     if (!data) throw new Error("error fetching data form API");
     const result = await data.json();
-    console.log("page", page);
-    console.log("getFadAction data", result.data);
 
     return result.data;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
   }
 };
 
-export const getFADSearchAction = async ({ state, dispatch, query }) => {
-  console.log("getFADSearchAction triggered");
+export const getFADSearchAction = async ({
+  state,
+  dispatch,
+  query,
+  refreshJWT,
+}) => {
+  // console.log("getFADSearchAction triggered");
 
   try {
-    const jwt = await authenticateAppAction({ state });
+    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
     if (!jwt) throw new Error("error authenticating app");
 
     const requestOptions = {
@@ -50,16 +53,20 @@ export const getFADSearchAction = async ({ state, dispatch, query }) => {
     const data = await fetch(URL, requestOptions);
     if (!data) throw new Error("error fetching data form API");
     const result = await data.json();
-    console.log("getFadAction data", result.data);
 
     return result.data;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
-export const getAllFadAction = async ({ state, dispatch, page }) => {
-  console.log("getFadAction triggered");
+export const getAllFadAction = async ({
+  state,
+  dispatch,
+  page,
+  refreshJWT,
+}) => {
+  // console.log("getFadAction triggered");
 
   let skip = page || 0;
   let perPage = 100;
@@ -67,7 +74,7 @@ export const getAllFadAction = async ({ state, dispatch, page }) => {
   let responseLength = perPage;
 
   try {
-    const jwt = await authenticateAppAction({ state });
+    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
     if (!jwt) throw new Error("error authenticating app");
 
     const requestOptions = {
@@ -83,19 +90,15 @@ export const getAllFadAction = async ({ state, dispatch, page }) => {
       if (!data) throw new Error("error fetching data form API");
       const result = await data.json();
 
-      console.log("length", result.data.length);
-      console.log("result", result);
-
       responseLength = result.data.length;
       skip++;
       // spread response to postData equal to previous postData + new response
       postData = [...postData, ...result.data];
     }
 
-    console.log("Total posts", postData.length);
     return postData;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
   }
@@ -103,6 +106,6 @@ export const getAllFadAction = async ({ state, dispatch, page }) => {
 
 // SET CONTEXT ---------------------------------------------------
 export const setFadAction = ({ dispatch, fad }) => {
-  console.log("setFadAction triggered"); //debug
+  // console.log("setFadAction triggered"); //debug
   dispatch({ type: "SET_FAD_ACTION", payload: fad });
 };

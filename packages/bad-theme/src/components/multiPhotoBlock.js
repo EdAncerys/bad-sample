@@ -5,16 +5,14 @@ import Image from "@frontity/components/image";
 import Loading from "./loading";
 
 const MultiPhotoBlock = ({ state, actions, block }) => {
-  
   const BANNER_HEIGHT = state.theme.bannerHeight;
-  const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-  
+
   const [imgArray, setImageArray] = useState([]);
   const GAP = 20;
-  
+
   if (!block) return <Loading />;
-  
+
   useEffect(() => {
     let imgArray = [];
     block.map((block) => {
@@ -117,12 +115,7 @@ const MultiPhotoBlock = ({ state, actions, block }) => {
 };
 
 const styles = {
-  container: {
-    // add custom wrapping to card elements
-    // display: "flex",
-    // flexWrap: "wrap",
-    // justifyContent: "center",
-  },
+  container: {},
 };
 
 export default connect(MultiPhotoBlock);

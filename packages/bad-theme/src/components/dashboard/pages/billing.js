@@ -1,7 +1,5 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import DirectDebitNotification from "../directDebitNotification";
 import Payments from "../payments";
 import BillingHistory from "../billingHistory";
 import OrderSummary from "../orderSummary";
@@ -24,7 +22,6 @@ const Billing = ({ state, actions, libraries }) => {
 
     return (
       <div>
-        <DirectDebitNotification />
         <Payments subscriptions={dynamicsApps} />
         <BillingHistory />
       </div>

@@ -1,4 +1,3 @@
-import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import Link from "@frontity/components/link";
@@ -49,7 +48,6 @@ const ShareToSocials = ({
     // duration: [1, "day"],
   };
   const add2Calendar = outlook(event);
-  // console.log(google(event)); // google calendar link
 
   return (
     <div style={{ padding: `1em 0` }}>
@@ -72,18 +70,6 @@ const ShareToSocials = ({
             <Image src={Twitter} className="d-block h-100" alt="Twitter" />
           </TwitterShareButton>
         </div>
-        {/* <div style={styles.socials}>
-            <LinkedinShareButton
-              url={url}
-              className="Demo__some-network__share-button"
-            >
-              <Image
-                src={Instagram}
-                className="d-block h-100"
-                alt="Instagram"
-              />
-            </LinkedinShareButton>
-          </div> */}
         <div className="toggle-icon-scale" style={styles.socials}>
           <LinkedinShareButton
             url={url}

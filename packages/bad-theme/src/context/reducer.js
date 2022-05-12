@@ -5,7 +5,10 @@ export const initialState = {
   isActiveUser: null,
   dynamicsApps: null,
   jwt: null,
+  refreshJWT: null,
+
   isPlaceholder: true,
+  isDashboardNotifications: null,
 
   tweets: null,
   fad: null,
@@ -14,9 +17,12 @@ export const initialState = {
   shdFeed: null,
   isDirectDebit: null,
 
+  cptBlockFilter: "",
+  cptBlockTypeFilter: null,
+
   filter: null,
   idFilter: null,
-  cptBlockFilter: "",
+  newsMediaCategoryId: "",
   eventAnchor: null,
   dashboardPath: "Dashboard",
   directDebitPath: { page: "billing" },
@@ -27,10 +33,13 @@ export const initialState = {
   appSearchPhrase: "",
 
   applicationData: null,
+  redirects: null,
 
   loginModalAction: false,
   createAccountAction: false,
   enquireAction: null,
+
+  newsMediaCategoryList: null,
 };
 
 export const AppReducer = (state = initialState, action) => {
@@ -49,6 +58,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, enquireAction: action.payload };
     case "SET_JWT_ACTION":
       return { ...state, jwt: action.payload };
+    case "SET_REFRESH_JWT_ACTION":
+      return { ...state, refreshJWT: action.payload };
     case "SET_TWEETS_ACTION":
       return { ...state, tweets: action.payload };
     case "SET_FAD_ACTION":
@@ -69,10 +80,14 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, applicationData: action.payload };
     case "SET_ID_FILTER_ACTION":
       return { ...state, idFilter: action.payload };
+    case "SET__NEWS_MEDIA_ID_FILTER_ACTION":
+      return { ...state, newsMediaCategoryId: action.payload };
     case "SET_DIRECT_DEBIT_ACTION":
       return { ...state, isDirectDebit: action.payload };
     case "SET_CPT_BLOCK_ACTION":
       return { ...state, cptBlockFilter: action.payload };
+    case "SET_CPT_BLOCK_TYPE_ACTION":
+      return { ...state, cptBlockTypeFilter: action.payload };
     case "SET_EVENT_ANCHOR_ACTION":
       return { ...state, eventAnchor: action.payload };
     case "SET_APPLICATION_ACTION":
@@ -87,6 +102,12 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, isPlaceholder: action.payload };
     case "SET_ETHNICITY_ACTION":
       return { ...state, ethnicity: action.payload };
+    case "SET_DASHBOARD_NOTIFICATION_ACTION":
+      return { ...state, isDashboardNotifications: action.payload };
+    case "SET_REDIRECT_ACTION":
+      return { ...state, redirects: action.payload };
+    case "SET_MEDIA_LIST_ACTION":
+      return { ...state, newsMediaCategoryList: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

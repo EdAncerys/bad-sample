@@ -5,9 +5,11 @@ import { Form } from "react-bootstrap";
 import { colors } from "../../../config/imports";
 import FormError from "../../../components/formError";
 import ActionPlaceholder from "../../../components/actionPlaceholder";
-import CloseIcon from "@mui/icons-material/Close";
 import SearchDropDown from "../../../components/searchDropDown";
 import { sigAppFileds } from "../../../config/data";
+import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from "@mui/icons-material/Search";
+import CircularProgress from "@mui/material/CircularProgress";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -23,13 +25,15 @@ import {
   getBADMembershipSubscriptionData,
   sendFileToS3Action,
   getEthnicityAction,
+  googleAutocompleteAction,
 } from "../../../context";
 
 const SIGApplication = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, dynamicsApps } = useAppState();
+  const { applicationData, isActiveUser, dynamicsApps, refreshJWT } =
+    useAppState();
 
   const [formData, setFormData] = useState({
     core_membershipsubscriptionplanid: "",
@@ -72,44 +76,46 @@ const SIGApplication = ({ state, actions, libraries }) => {
     py3_insertnhsnetemailaddress: "",
   });
   const [inputValidator, setInputValidator] = useState({
-    py3_title: true,
-    py3_firstname: true,
-    py3_lastname: true,
-    py3_gender: true,
-    py3_dateofbirth: true,
-    py3_email: true,
-    py3_mobilephone: true,
-    py3_address1ine1: true,
-    py3_addressline2: true,
-    py3_addresstowncity: true,
-    py3_addresszippostalcode: true,
-    py3_addresscountystate: true,
-    py3_addresscountry: true,
-    py3_gmcnumber: true,
-    bad_currentpost: true,
-    py3_hospitalid: true,
-    bad_newhospitaladded: true,
-    sky_newhospitalname: true,
-    bad_proposer1: true,
-    bad_proposer2: true,
-    py3_ntnno: true,
-    sky_cvurl: true,
-    bad_readpolicydocument: true,
+    bad_categorytype: true,
+
+    sig_py3_title: true,
+    sig_py3_firstname: true,
+    sig_py3_lastname: true,
+    sig_py3_gender: true,
+    sig_py3_dateofbirth: true,
+    sig_py3_email: true,
+    sig_py3_mobilephone: true,
+    sig_py3_address1ine1: true,
+    sig_py3_addressline2: true,
+    sig_py3_addresstowncity: true,
+    sig_py3_addresszippostalcode: true,
+    sig_py3_addresscountystate: true,
+    sig_py3_addresscountry: true,
+    sig_py3_gmcnumber: true,
+    sig_bad_currentpost: true,
+    sig_py3_hospitalid: true,
+    sig_bad_newhospitaladded: true,
+    sig_sky_newhospitalname: true,
+    sig_bad_proposer1: true,
+    sig_bad_proposer2: true,
+    sig_py3_ntnno: true,
+    sig_sky_cvurl: true,
+    sig_bad_readpolicydocument: true,
     sig_readpolicydocument_url_email: true,
-    py3_currentgrade: true,
-    bad_qualifications: true,
-    bad_hasmedicallicence: true,
-    bad_isbadmember: true,
-    py3_whatukbasedroleareyou: true,
-    py3_speciality: true,
-    bad_interestinfieldquestion: true,
-    bad_otherjointclinics: true,
-    bad_mainareaofinterest: true,
-    bad_includeinthebssciiemaildiscussionforum: true,
-    py3_insertnhsnetemailaddress: true,
+    sig_py3_currentgrade: true,
+    sig_bad_qualifications: true,
+    sig_bad_hasmedicallicence: true,
+    sig_bad_isbadmember: true,
+    sig_py3_whatukbasedroleareyou: true,
+    sig_py3_speciality: true,
+    sig_bad_interestinfieldquestion: true,
+    sig_bad_otherjointclinics: true,
+    sig_bad_mainareaofinterest: true,
+    sig_bad_includeinthebssciiemaildiscussionforum: true,
+    sig_py3_insertnhsnetemailaddress: true,
   });
   const [isEmail, setIsEmail] = useState(false);
-  const [applicationType, setType] = useState("SIG Application");
+  const [applicationType, setType] = useState("Special Interest Group");
   const [readPolicyDoc, setReadPolicyDoc] = useState("");
   const [isFetching, setFetching] = useState(false);
   const [membershipData, setMembershipData] = useState(false);
@@ -123,6 +129,12 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const hospitalSearchRef = useRef("");
   const documentRef = useRef(null);
 
+  const [addressData, setAddressData] = useState(null);
+  const [isFetchingAddress, setIsFetchingAddress] = useState(null);
+  const [searchInput, setSearchInput] = useState("");
+  const address1Line1Ref = useRef("");
+  const ctaHeight = 40;
+
   // ⏬ populate form data values from applicationData
   useEffect(async () => {
     // app type name & hospital id initial values
@@ -134,6 +146,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
       await getMembershipDataAction({ state, actions });
       membershipData = state.source.memberships;
     }
+    if (!membershipData) return null; // if no membership data is found, return null
+
     membershipData = Object.values(membershipData);
 
     const handleSetFormData = ({ data, name }) => {
@@ -154,7 +168,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         subsData.filter((item) => item.bad_organisedfor === "BAD").length > 0;
       // if user have application pending under reviewed status redirect to application list
       if (isApprovedBAD) {
-        console.log("🤖 user have BAD application approved");
+        // console.log("🤖 user have BAD application approved");
         setCanChangeHospital(false);
       }
     }
@@ -191,8 +205,12 @@ const SIGApplication = ({ state, actions, libraries }) => {
       }
       // set app type name
       if (data.bad_categorytype) {
-        applicationType = data.bad_categorytype;
-        setType(data.bad_categorytype); // validate SIG application category type
+        applicationType = data.bad_categorytype; // set application type for logic below
+        // 📌 set application type name
+        let type = data.bad_categorytype;
+        if (type === "*") type = "Special Interest Group";
+        setType(type); // validate SIG application category type
+        console.log("TYPE", type);
       }
     });
     // apply app additional logic after mapping apps data
@@ -201,30 +219,56 @@ const SIGApplication = ({ state, actions, libraries }) => {
         // get hospital data via API & populate form
         const hospitalData = await getHospitalNameAction({
           state,
+          dispatch,
+          refreshJWT,
           id: hospitalId,
         });
         if (hospitalData) {
           setSelectedHospital(hospitalData.name);
         }
       } catch (error) {
-        console.log("🤖 error", error);
+        // console.log("🤖 error", error);
       }
     }
+    let apps = [];
+    membershipData.map((item) => {
+      // push app name to apps array
+      apps.push(item.acf.category_types);
+    });
 
     if (membershipData) {
       // filter memberships data & return memberships that includes applicationType
-      membershipData = membershipData.filter((item) =>
-        item.acf.category_types.includes(applicationType)
-      );
-    }
+      membershipData = membershipData.filter((item) => {
+        // get application & stip all white spaces
+        let application = item.acf.category_types
+          .toLowerCase()
+          .replace(/\s/g, "");
+        let selectedApplication = applicationType
+          .toLowerCase()
+          .replace(/\s/g, "");
+        // if applicationType is * then return all memberships that are SIG
+        if (applicationType === "*") {
+          return item.acf.bad_or_sig === "sig";
+        }
 
+        // return memberships that matches or includes any words in applicationType
+        return application.includes(selectedApplication);
+      });
+
+      // sort membershipData alphabetically
+      membershipData = membershipData.sort((a, b) => {
+        if (a.acf.category_types < b.acf.category_types) return -1;
+        if (a.acf.category_types > b.acf.category_types) return 1;
+        return 0;
+      });
+    }
+    console.log("INPUT VALIDATOR", inputValidator);
     // check if application category have only one application
     let isSingleApp = false;
     if (membershipData) isSingleApp = membershipData.length === 1;
     // if application category have only one application set formData to that application
     if (isSingleApp) {
       const type = membershipData[0].acf.category_types;
-      console.log("type", type); // debug
       setFormData((prevFormData) => ({
         ...prevFormData,
         bad_categorytype: type,
@@ -234,19 +278,18 @@ const SIGApplication = ({ state, actions, libraries }) => {
         membershipData,
         value: type,
       });
-      // ⏬  validate inputs for single application only
-      validateMembershipFormAction({
-        state,
-        setData: setInputValidator,
-        applicationData,
-      });
     }
-    setMembershipData(membershipData); // set membership data
 
-    console.log("isSingleApp", isSingleApp);
-    console.log("applicationType", applicationType);
-    console.log("membershipData", membershipData);
-  }, []);
+    // ⏬  validate inputs for single application only
+    validateMembershipFormAction({
+      state,
+      setData: setInputValidator,
+      applicationData,
+    });
+
+    setMembershipData(membershipData); // set membership data
+    console.log("MEM", membershipData);
+  }, [state.source.memberships]);
 
   // HANDLERS --------------------------------------------
   const handleSelectHospital = ({ item }) => {
@@ -257,7 +300,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
     setSelectedHospital(item.title);
     setHospitalData(null); // clear hospital data for dropdown
-    console.log("selected hospital", item); // debug
   };
 
   const handleClearHospital = () => {
@@ -270,15 +312,15 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
   const handleDocUploadChange = async (e) => {
     let sky_cvurl = e.target.files[0];
-    // console.log("e", e); // debug
 
     if (sky_cvurl)
       sky_cvurl = await sendFileToS3Action({
         state,
         dispatch,
         attachments: sky_cvurl,
+        refreshJWT,
       });
-    console.log("sky_cvurl", sky_cvurl); // debug
+    // console.log("🐞 ", sky_cvurl); // debug
 
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -292,6 +334,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
     let hospitalData = await getHospitalsAction({
       state,
+      dispatch,
+      refreshJWT,
       input,
     });
     // refactor hospital data to match dropdown format
@@ -304,8 +348,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
     if (hospitalData.length > 0) setHospitalData(hospitalData);
     if (!hospitalData.length || !input) setHospitalData(null);
-
-    // console.log("Hospitals", hospitalData); // debug
   };
 
   const isFormValidated = ({ required }) => {
@@ -313,7 +355,11 @@ const SIGApplication = ({ state, actions, libraries }) => {
     let isValid = true;
 
     required.map((input) => {
-      if (!formData[input] && inputValidator[input]) {
+      let inputValue = input;
+      // 📌 add bad_ if input dont have it
+      if (!inputValue.includes("sig_")) inputValue = `sig_${input}`;
+
+      if (!formData[input] && inputValidator[inputValue]) {
         errorHandler({ id: `form-error-${input}` });
         isValid = false;
       }
@@ -333,8 +379,14 @@ const SIGApplication = ({ state, actions, libraries }) => {
     if (filteredMembershipData.length)
       policyLink =
         filteredMembershipData[0].acf.sig_readpolicydocument_url_email;
-    console.log("policyLink", policyLink); // debug
 
+    // reset name for SIG application
+    let applicationName = value;
+    // if application have : then split it to get name
+    if (applicationName.includes(":"))
+      applicationName = applicationName.split(":")[1];
+    setType(applicationName);
+    // set selected policy link
     setReadPolicyDoc(policyLink);
   };
 
@@ -345,7 +397,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
     }));
-
     if (membershipData) {
       // update policy link agains app data
       handlePolicyLinkUpdate({ membershipData, value });
@@ -362,10 +413,18 @@ const SIGApplication = ({ state, actions, libraries }) => {
   };
 
   const handleNext = async () => {
+    console.log("MAYBE type", formData.bad_categorytype);
+
     // check if new hospital value been added
     const isNewHospital = formData.bad_newhospitaladded;
     let sigAppliaction = formData;
-
+    console.log("SIGAPP", formData);
+    // default py3_address1ine1 to ref if value not set by user
+    let isAddressInput = false;
+    if (!formData.py3_address1ine1 && address1Line1Ref.current.value.length) {
+      isAddressInput = true;
+      formData.py3_address1ine1 = address1Line1Ref.current.value;
+    }
     const isValid = isFormValidated({
       required: [
         "bad_organisedfor",
@@ -373,8 +432,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
         "py3_gmcnumber",
         "bad_currentpost",
-        isNewHospital ? "sky_newhospitaltype" : null,
-        !isNewHospital ? "py3_hospitalid" : null,
+        isNewHospital ? "sky_newhospitaltype" : "",
+        !isNewHospital ? "py3_hospitalid" : "",
 
         "py3_title",
         "py3_firstname",
@@ -382,18 +441,34 @@ const SIGApplication = ({ state, actions, libraries }) => {
         "py3_gender",
         "py3_email",
         "py3_mobilephone",
-        "py3_address1ine1",
+        isAddressInput ? "" : "py3_address1ine1",
         "py3_addresstowncity",
         "py3_addresszippostalcode",
         "py3_addresscountry",
         "py3_ntnno",
         "bad_readpolicydocument",
         "sky_cvurl",
+        formData.bad_categorytype ===
+        "Associate:British Society for Medical Dermatology"
+          ? "bad_otherjointclinics"
+          : "",
+        formData.bad_categorytype ===
+        "Full:British Society for Medical Dermatology"
+          ? "bad_otherjointclinics"
+          : "",
+        formData.bad_categorytype === "Full:British Hair and Nails Society"
+          ? "py3_speciality"
+          : "",
+        formData.bad_categorytype === "Full:British Hair and Nails Society"
+          ? "py3_whatukbasedroleareyou"
+          : "",
+        formData.bad_categorytype === "Full:DermpathPRO"
+          ? "py3_currentgrade"
+          : "",
       ],
     });
 
     if (!isValid) return null;
-    console.log("formData", formData); // debug
 
     try {
       setFetching(true);
@@ -402,6 +477,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         state,
         category: "SIG",
         type: formData.bad_categorytype,
+        refreshJWT,
       });
       // if membershipData aupdate application id & procced to next step
       if (!membershipData) {
@@ -416,7 +492,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
         sigAppliaction.core_membershipsubscriptionplanid =
           membershipData.core_membershipsubscriptionplanid;
       }
-      console.log("sigAppliaction", sigAppliaction); // debug
 
       const store = await setUserStoreAction({
         state,
@@ -427,8 +502,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
         dynamicsApps,
         membershipApplication: { sigApp: true }, // set stepOne to complete
         data: sigAppliaction,
+        refreshJWT,
       });
-
       if (!store.success)
         throw new Error("Failed to update application record"); // throw error if store is not successful
 
@@ -438,13 +513,15 @@ const SIGApplication = ({ state, actions, libraries }) => {
         dispatch,
         isActiveUser,
         applicationData,
+        refreshJWT,
       });
       if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
 
-      let slug = `/membership/thank-you/`;
-      if (isActiveUser) setGoToAction({ path: slug, actions });
+      let slug = `/dashboard/`;
+      if (isActiveUser && appsResponse)
+        setGoToAction({ state, path: slug, actions });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setFetching(false);
     }
@@ -453,11 +530,20 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
 
+    // handle BAD member question
+    if (name === "bad_isbadmember") {
+      let isBadMember = value === "true" ? true : false;
+      return setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: isBadMember,
+      }));
+    }
+
     // if input value py3_insertnhsnetemailaddress in wp set to show proceed
     if (
       name === "bad_includeinthebssciiemaildiscussionforum" &&
       checked &&
-      inputValidator.py3_insertnhsnetemailaddress
+      inputValidator.sig_py3_insertnhsnetemailaddress
     ) {
       setIsEmail(true);
     }
@@ -471,22 +557,84 @@ const SIGApplication = ({ state, actions, libraries }) => {
     }));
   };
 
+  const handleAddressLookup = async () => {
+    const input = address1Line1Ref.current.value;
+    // update input value before async task
+    setSearchInput(input);
+
+    try {
+      setIsFetchingAddress(true);
+      const data = await googleAutocompleteAction({
+        state,
+        query: input,
+      });
+      // convert data to dropdown format
+      let predictions = [];
+      // check for data returned form API
+      if (data && data.length) {
+        predictions = data.map((item) => ({
+          // get city & country from data source
+          title: item.description,
+        }));
+
+        // set dropdown data
+        if (predictions.length && input.length) {
+          setAddressData(predictions);
+        } else {
+          setAddressData(null);
+        }
+      }
+    } catch (error) {
+      // console.log("error", error);
+    } finally {
+      setIsFetchingAddress(false);
+    }
+  };
+
+  const handleSelectAddress = async ({ item }) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      py3_address1ine1: item.title,
+    }));
+  };
+
+  const handleClearAction = () => {
+    // clear search input value
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      py3_address1ine1: "",
+    }));
+    setSearchInput("");
+    setAddressData(null);
+  };
+
   // SERVERS ---------------------------------------------
+  const ServeIcon = () => {
+    const searchIcon = <SearchIcon />;
+    const closeIcon = <CloseIcon />;
+    const icon = searchInput ? closeIcon : searchIcon;
+
+    if (isFetchingAddress)
+      return (
+        <CircularProgress color="inherit" style={{ width: 25, height: 25 }} />
+      );
+
+    return <div onClick={handleClearAction}>{icon}</div>;
+  };
+
   const ServeActions = () => {
     return (
       <div
         className="flex"
-        style={{ justifyContent: "flex-end", padding: `2em 1em 0 1em` }}
+        style={{
+          justifyContent: "flex-end",
+          padding: `2em 1em 0 1em`,
+        }}
       >
         <div
           className="transparent-btn"
           style={{ marginRight: "1em" }}
-          onClick={() =>
-            setGoToAction({
-              path: `/dashboard/`,
-              actions,
-            })
-          }
+          onClick={() => setGoToAction({ state, path: `/dashboard/`, actions })}
         >
           Back
         </div>
@@ -504,7 +652,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     return (
       <div>
         <label className="bold required" style={{ padding: "0.5em 0" }}>
-          Membership Category
+          Please select the Special Interest Group you would like to apply for:
         </label>
         <Form.Select
           name="bad_categorytype"
@@ -524,7 +672,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
             let typeName = category_types.split(":").reverse().join(" - ");
             // if value include - Full replace with empty string
             typeName = typeName.replace(" - Full", "");
-            console.log(item);
 
             return (
               <option key={key} value={category_types}>
@@ -538,28 +685,43 @@ const SIGApplication = ({ state, actions, libraries }) => {
     );
   };
 
-  const isPolicy = inputValidator.bad_readpolicydocument && !!readPolicyDoc;
+  const isPolicy = inputValidator.sig_bad_readpolicydocument && !!readPolicyDoc;
 
   return (
     <div style={{ position: "relative" }}>
-      <ActionPlaceholder isFetching={isFetching} background="transparent" />
+      <ActionPlaceholder
+        isFetching={isFetching}
+        background="transparent"
+        alignSelf="self-end"
+        padding="0 0 6em 0"
+      />
+
       <div
         className="primary-title"
         style={{
           fontSize: 20,
-          paddingTop: `1em`,
-          marginTop: `1em`,
-          borderTop: `1px solid ${colors.silverFillTwo}`,
+          paddingBottom: `1em`,
         }}
       >
         Category Selected: <span>{applicationType}</span>
       </div>
 
+      <div>
+        <span className="required" />
+        Mandatory fields
+      </div>
+
       <form>
-        <div style={{ padding: `2em 1em` }}>
+        <div
+          style={{
+            padding: `1em`,
+            margin: `1em 0`,
+            borderTop: `1px solid ${colors.silverFillTwo}`,
+          }}
+        >
           <ServeSIGMembershipCategory />
 
-          {inputValidator.py3_title && (
+          {inputValidator.sig_py3_title && (
             <div>
               <label className="required form-label">Title</label>
               <Form.Select
@@ -581,7 +743,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_firstname && (
+          {inputValidator.sig_py3_firstname && (
             <div>
               <label className="form-label required">First Name</label>
               <input
@@ -596,7 +758,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_lastname && (
+          {inputValidator.sig_py3_lastname && (
             <div>
               <label className="form-label required">Last Name</label>
               <input
@@ -611,7 +773,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_gender && (
+          {inputValidator.sig_py3_gender && (
             <div>
               <label className="required form-label">Gender</label>
               <Form.Select
@@ -635,7 +797,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_dateofbirth && (
+          {inputValidator.sig_py3_dateofbirth && (
             <div>
               <label className="form-label">Date of Birth</label>
               <input
@@ -649,7 +811,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_email && (
+          {inputValidator.sig_py3_email && (
             <div>
               <label className="form-label required">Email</label>
               <input
@@ -659,11 +821,13 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 type="text"
                 className="form-control input"
                 placeholder="Email"
+                // disbale email field if user has email
+                disabled={!!formData.py3_email}
               />
             </div>
           )}
 
-          {inputValidator.py3_mobilephone && (
+          {inputValidator.sig_py3_mobilephone && (
             <div>
               <label className="form-label required">Mobile Number</label>
               <input
@@ -678,22 +842,86 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_address1ine1 && (
+          {inputValidator.sig_py3_address1ine1 && (
             <div>
               <label className="required form-label">Home Address</label>
-              <input
-                name="py3_address1ine1"
-                value={formData.py3_address1ine1}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="Address Line 1"
-              />
+              <div style={{ position: "relative" }}>
+                {!formData.py3_address1ine1 && (
+                  <div style={{ position: "relative", width: "100%" }}>
+                    <div
+                      className="flex"
+                      style={{
+                        flex: 1,
+                        height: ctaHeight,
+                        position: "relative",
+                        margin: "auto 0",
+                      }}
+                    >
+                      <input
+                        ref={address1Line1Ref}
+                        name="search-input"
+                        value={searchInput}
+                        onChange={handleAddressLookup}
+                        type="text"
+                        className="form-control input"
+                        placeholder="Address Line 1"
+                      />
+                      <div
+                        className="input-group-text toggle-icon-color"
+                        style={{
+                          position: "absolute",
+                          right: 0,
+                          height: ctaHeight,
+                          border: "none",
+                          background: "transparent",
+                          alignItems: "center",
+                          color: colors.darkSilver,
+                          cursor: "pointer",
+                        }}
+                      >
+                        <ServeIcon />
+                      </div>
+                    </div>
+                    <SearchDropDown
+                      filter={addressData}
+                      onClickHandler={handleSelectAddress}
+                    />
+                  </div>
+                )}
+                {formData.py3_address1ine1 && (
+                  <div className="form-control input">
+                    <div className="flex-row">
+                      <div
+                        style={{
+                          position: "relative",
+                          width: "fit-content",
+                          paddingRight: 15,
+                        }}
+                      >
+                        {formData.py3_address1ine1}
+                        <div
+                          className="filter-icon"
+                          style={{ top: -7 }}
+                          onClick={handleClearAction}
+                        >
+                          <CloseIcon
+                            style={{
+                              fill: colors.darkSilver,
+                              padding: 0,
+                              width: "0.7em",
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
               <FormError id="py3_address1ine1" />
             </div>
           )}
 
-          {inputValidator.py3_addressline2 && (
+          {inputValidator.sig_py3_addressline2 && (
             <input
               name="py3_addressline2"
               value={formData.py3_addressline2}
@@ -705,7 +933,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             />
           )}
 
-          {inputValidator.py3_addresstowncity && (
+          {inputValidator.sig_py3_addresstowncity && (
             <div>
               <input
                 name="py3_addresstowncity"
@@ -720,7 +948,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_addresszippostalcode && (
+          {inputValidator.sig_py3_addresszippostalcode && (
             <div>
               <input
                 name="py3_addresszippostalcode"
@@ -735,7 +963,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_addresscountystate && (
+          {inputValidator.sig_py3_addresscountystate && (
             <div>
               <input
                 name="py3_addresscountystate"
@@ -750,7 +978,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_addresscountry && (
+          {inputValidator.sig_py3_addresscountry && (
             <div>
               <input
                 name="py3_addresscountry"
@@ -767,10 +995,10 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {/* Profesonal Information Questions ------------------------- */}
 
-          {inputValidator.bad_currentpost && (
+          {inputValidator.sig_bad_currentpost && (
             <div>
               <label className="required form-label">
-                Current post/job title
+                Post / Job Title details
               </label>
               <input
                 name="bad_currentpost"
@@ -779,8 +1007,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 type="text"
                 className="form-control input"
                 placeholder="Current job title"
-                // set field diabled if user have BAD apps
-                disabled={isJobEditable ? false : true}
+                // 📌 disable if bad_currentpost is true
+                disabled={formData.bad_currentpost}
               />
               <div style={{ padding: "0.5em 0" }}>
                 If you would like to change your job title please use the form
@@ -790,7 +1018,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_ntnno && (
+          {inputValidator.sig_py3_ntnno && (
             <div>
               <div className="flex-col">
                 <label className="required form-label">
@@ -810,10 +1038,10 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_hospitalid && (
+          {inputValidator.sig_py3_hospitalid && (
             <div>
               <label className="form-label required">
-                Main Place of Work / Medical School
+                Main Hospital / Place of Work / Medical School details
               </label>
               <div style={{ position: "relative" }}>
                 {selectedHospital && (
@@ -860,7 +1088,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                       onChange={handleHospitalLookup}
                       type="text"
                       className="form-control input"
-                      placeholder="Main Hospital/Place of work"
+                      placeholder="Main Hospital / Place of Work / Medical School details"
                     />
                     <FormError id="py3_hospitalid" />
                   </div>
@@ -911,22 +1139,23 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {formData.bad_newhospitaladded && inputValidator.sky_newhospitalname && (
-            <div>
-              <label className="form-label">New Hospital Name</label>
-              <input
-                name="sky_newhospitalname"
-                value={formData.sky_newhospitalname}
-                onChange={handleInputChange}
-                type="text"
-                className="form-control input"
-                placeholder="New Hospital Name"
-              />
-              <FormError id="sky_newhospitalname" />
-            </div>
-          )}
+          {formData.bad_newhospitaladded &&
+            inputValidator.sig_sky_newhospitalname && (
+              <div>
+                <label className="form-label">New Hospital Name</label>
+                <input
+                  name="sky_newhospitalname"
+                  value={formData.sky_newhospitalname}
+                  onChange={handleInputChange}
+                  type="text"
+                  className="form-control input"
+                  placeholder="New Hospital Name"
+                />
+                <FormError id="sky_newhospitalname" />
+              </div>
+            )}
 
-          {inputValidator.sky_cvurl && (
+          {inputValidator.sig_sky_cvurl && (
             <div>
               <label className="form-label required">Upload Your CV</label>
               <input
@@ -941,7 +1170,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.bad_proposer1 && (
+          {inputValidator.sig_bad_proposer1 && (
             <div>
               <label className="form-label">Supporting Member 1</label>
               <input
@@ -956,7 +1185,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.bad_proposer2 && (
+          {inputValidator.sig_bad_proposer2 && (
             <div>
               <label className="form-label">Supporting Member 2</label>
               <input
@@ -972,20 +1201,25 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {/* SIG Questions -------------------------------------------- */}
 
-          {inputValidator.bad_isbadmember && (
+          {inputValidator.sig_bad_isbadmember && (
             <div className="flex-col">
-              <label className="form-label">Are you BAD member (Y/N)</label>
-              <input
+              <label className="form-label">Are you BAD member?</label>
+              <Form.Select
                 name="bad_isbadmember"
-                checked={formData.bad_isbadmember}
+                value={formData.bad_isbadmember}
                 onChange={handleInputChange}
-                type="checkbox"
-                className="form-check-input check-box"
-              />
+                className="input"
+              >
+                <option value="" hidden>
+                  Yes, No
+                </option>
+                <option value={true}>Yes</option>
+                <option value={false}>No</option>
+              </Form.Select>
             </div>
           )}
 
-          {inputValidator.bad_interestinfieldquestion && (
+          {inputValidator.sig_bad_interestinfieldquestion && (
             <div>
               <label className="form-label">
                 Describe your interest in {applicationType}
@@ -1001,39 +1235,39 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.bad_qualifications && (
+          {inputValidator.sig_bad_qualifications && (
             <div>
-              <label className="required form-label">Qualification</label>
+              <label className="required form-label">Qualifications</label>
               <input
                 name="bad_qualifications"
                 value={formData.bad_qualifications}
                 onChange={handleInputChange}
                 type="text"
                 className="form-control input"
-                placeholder="Qualification"
+                placeholder="Qualifications"
               />
               <FormError id="bad_qualifications" />
             </div>
           )}
 
-          {inputValidator.py3_gmcnumber && (
+          {inputValidator.sig_py3_gmcnumber && (
             <div>
-              <label className="required form-label">GMC Number</label>
+              <label className="required form-label">GMC / IMC number</label>
               <input
                 name="py3_gmcnumber"
                 value={formData.py3_gmcnumber}
                 onChange={handleInputChange}
                 type="text"
                 className="form-control input"
-                placeholder="GMC Number"
+                placeholder="GMC / IMC number"
               />
               <FormError id="py3_gmcnumber" />
             </div>
           )}
 
-          {inputValidator.py3_currentgrade && (
+          {inputValidator.sig_py3_currentgrade && (
             <div>
-              <label className="form-label">Current Grade</label>
+              <label className="form-label required">Current Grade</label>
               <input
                 name="py3_currentgrade"
                 value={formData.py3_currentgrade}
@@ -1045,7 +1279,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.bad_hasmedicallicence && (
+          {inputValidator.sig_bad_hasmedicallicence && (
             <div className="flex-col">
               <label className="form-label">
                 License to practice medicine (Y/N)
@@ -1060,9 +1294,11 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_whatukbasedroleareyou && (
+          {inputValidator.sig_py3_whatukbasedroleareyou && (
             <div>
-              <label style={styles.subTitle}>UK / Overseas role</label>
+              <label style={styles.subTitle} className="required">
+                UK / Overseas role
+              </label>
               <Form.Select
                 name="py3_whatukbasedroleareyou"
                 value={formData.py3_whatukbasedroleareyou}
@@ -1082,9 +1318,11 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.py3_speciality && (
+          {inputValidator.sig_py3_speciality && (
             <div>
-              <label style={styles.subTitle}>Specialist Interest</label>
+              <label style={styles.subTitle} className="required">
+                Specialist Interest
+              </label>
               <Form.Select
                 name="py3_speciality"
                 value={formData.py3_speciality}
@@ -1101,9 +1339,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.bad_otherjointclinics && (
+          {inputValidator.sig_bad_otherjointclinics && (
             <div>
-              <label className="form-label">
+              <label className="form-label required">
                 Do you do joint clinics with any other specialties?
               </label>
               <input
@@ -1117,7 +1355,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.bad_mainareaofinterest && (
+          {inputValidator.sig_bad_mainareaofinterest && (
             <div>
               <label style={styles.subTitle}>Main area of interest</label>
               <Form.Select
@@ -1143,7 +1381,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.bad_includeinthebssciiemaildiscussionforum && (
+          {inputValidator.sig_bad_includeinthebssciiemaildiscussionforum && (
             <div className="flex-col">
               <div className="flex">
                 <div style={{ display: "grid", alignItems: "center" }}>
@@ -1158,7 +1396,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
                   />
                 </div>
                 <label className="form-label">
-                  Do you want to be part of the BSSCII discussion form?
+                  Do you want to be included in the BSSCII discussion forum? If
+                  yes, please tick and add your NHS address below
                 </label>
               </div>
 
@@ -1194,27 +1433,25 @@ const SIGApplication = ({ state, actions, libraries }) => {
                   />
                 </div>
                 <div>
-                  <label className="form-check-label flex-row">
-                    Please refer to
+                  <label className="form-check-label">
+                    <span className="required" /> Please confirm you have read
+                    the {` ${applicationType} `}
                     <span
                       className="caps-btn-no-underline"
                       style={{
-                        display: "grid",
-                        alignItems: "center",
                         margin: "0 0.5em",
                         paddingTop: 4,
                       }}
                       onClick={() =>
-                        setGoToAction({ path: readPolicyDoc, actions })
+                        setGoToAction({ state, path: readPolicyDoc, actions })
                       }
                     >
-                      here
+                      Privacy Policy
                     </span>
-                    {`for the ${applicationType} Privacy Policy`}
                   </label>
+                  <FormError id="bad_readpolicydocument" />
                 </div>
               </div>
-              <FormError id="bad_readpolicydocument" />
             </div>
           )}
         </div>

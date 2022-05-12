@@ -38,14 +38,8 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
     const ServeBody = () => {
       if (!body) return null;
 
-      // Adjust body max string Length
-      let bodyPreview = body;
-      const maxLength = 1500;
-      if (body.length > maxLength && limit)
-        bodyPreview = `${body.substring(0, maxLength)}...`;
-
       const ServeActions = () => {
-        if (!limit_body_length || body.length <= maxLength) return null;
+        if (!limit_body_length) return null;
 
         let label = "Read More";
         if (!limit) label = "Read Less";
@@ -77,7 +71,15 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
           }}
         >
           <ServeTitle />
-          <Html2React html={bodyPreview} />
+          <div
+            className="body-limit"
+            style={{
+              WebkitLineClamp: 1,
+              WebkitLineClamp: limit ? 20 : null, // line limit to body
+            }}
+          >
+            <Html2React html={body} />
+          </div>
           <ServeActions />
         </div>
       );
@@ -96,7 +98,7 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
         >
           <div
             className="blue-btn"
-            onClick={() => setGoToAction({ path: link.url, actions })}
+            onClick={() => setGoToAction({ state, path: link.url, actions })}
           >
             <Html2React html={label} />
           </div>
@@ -149,8 +151,7 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
 
   const ServeMobileDropdown = (card) => {
     if (!card.card.index_card) return null;
-    console.log("MOBILE DROPDOWN", card);
-    console.log("CARD: ", card.card.index_title);
+
     return (
       <Dropdown>
         <Dropdown.Toggle
@@ -177,7 +178,9 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
           {card.card.index_title.map((item, key) => {
             return (
               <Dropdown.Item
-                onClick={() => setGoToAction({ path: item.link.url, actions })}
+                onClick={() =>
+                  setGoToAction({ state, path: item.link.url, actions })
+                }
                 drop="down"
               >
                 <Html2React html={item.title} />

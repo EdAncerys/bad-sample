@@ -1,12 +1,37 @@
 # bad-org 😈
 
-## README TBD !!!
+# ⬇️ PRODUCTION APP auth creditentials ⬇️
+
+APP_HOST
+APP_USERNAME
+APP_PASSWORD
+
+B2C
+WP_HOST
+WP_HOST_CONTENT
+GOOGLE_API_KEY
+DYNAMICS_BRIDGE
+APP_URL
+VENUE_HIRE_CONTACTS
+EVENT_CONTACTS
+ELECTION_CONTACTS
+DEFAULT_CONTACT_LIST
+
+## README TBD
+
+## ⬇️ SWITHC To Developemnt git repo
+
+git remote set-url origin https://github.com/SkylarkBAD/bad.org
+
+## ⬇️ SWITHC To Production git repo
+
+git remote set-url origin https://github.com/BADComms/Skylark
 
 ### Deployment to Versel
 
 #### Deploy Frontity using the vercel command (from the root of your project):
 
-`npx vercel`
+npx vercel`
 
 This project was bootstrapped with [Frontity](https://frontity.org/).
 

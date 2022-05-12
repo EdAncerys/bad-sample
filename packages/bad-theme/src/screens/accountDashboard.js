@@ -3,13 +3,14 @@ import { connect } from "frontity";
 
 import { colors } from "../config/colors";
 import DashboardNavigation from "../components/dashboard/dashboardNavigation";
+import DashboardNotifications from "../components/dashboard/dashboardNotifications";
 import Dashboard from "../components/dashboard/pages/dashboard";
 import DashboardEvents from "../components/dashboard/pages/dashboardEvents";
 import Directory from "../components/dashboard/pages/directory";
 import Membership from "../components/dashboard/pages/membership";
-import MyAccount from "../components/dashboard/pages/myAccount";
+import MyProfile from "../components/dashboard/pages/myAccount";
 import Billing from "../components/dashboard/pages/billing";
-import Settings from "../components/dashboard/pages/settings";
+import Preferences from "../components/dashboard/pages/settings";
 import DashboardNavigationMobile from "../components/dashboard/dashboardNavigationMobile";
 import ButtonsRow from "../components/buttonsRow";
 // BLOCK BUILDER ------------------------------------------------------------
@@ -23,6 +24,10 @@ import {
   getDirectDebitAction,
   getApplicationStatus,
   muiQuery,
+  setGoToAction,
+  setDashboardNotificationsAction,
+  setCPTBlockTypeAction,
+  setErrorAction,
 } from "../context";
 
 const AccountDashboard = ({ state, actions, libraries }) => {
@@ -31,7 +36,8 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const { isActiveUser, dynamicsApps } = useAppState();
+  const { isActiveUser, dynamicsApps, applicationData, refreshJWT } =
+    useAppState();
 
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
@@ -46,16 +52,42 @@ const AccountDashboard = ({ state, actions, libraries }) => {
 
   useEffect(async () => {
     if (!isActiveUser) return null;
+    let isProfileComplete = true;
+
+    // --------------------------------------------------------------------------------
+    // 📌 SET Dashboard notification if user profile not complete
+    // --------------------------------------------------------------------------------
+    if (!isActiveUser.emailaddress1) isProfileComplete = false;
+    if (!isActiveUser.address2_line1) isProfileComplete = false;
+    if (!isActiveUser.address2_city) isProfileComplete = false;
+    if (!isActiveUser.address2_postalcode) isProfileComplete = false;
+    if (!isActiveUser.address2_country) isProfileComplete = false;
+    if (!isActiveUser.jobtitle) isProfileComplete = false;
+    if (!isActiveUser.mobilephone) isProfileComplete = false;
+    // personal information pane
+    if (!isActiveUser.firstname) isProfileComplete = false;
+    if (!isActiveUser.lastname) isProfileComplete = false;
+    if (!isActiveUser.gendercode) isProfileComplete = false;
+    if (!isActiveUser.birthdate) isProfileComplete = false;
+    if (!isActiveUser.py3_ethnicity) isProfileComplete = false;
+
+    if (!isProfileComplete)
+      setDashboardNotificationsAction({
+        dispatch,
+        isDashboardNotifications: !isProfileComplete,
+      });
 
     await getDirectDebitAction({
       state,
       dispatch,
       id: isActiveUser.contactid,
+      refreshJWT,
     });
     await getApplicationStatus({
       state,
       dispatch,
       contactid: isActiveUser.contactid,
+      refreshJWT,
     });
 
     return () => {
@@ -81,6 +113,68 @@ const AccountDashboard = ({ state, actions, libraries }) => {
 
   if (!isReady) return null;
 
+  // HANDLERS --------------------------------------------------
+  const handleApply = async () => {
+    // set filter cat type in context to filter SIGs
+    setCPTBlockTypeAction({ dispatch, cptBlockTypeFilter: true });
+    // redirect to apply page
+    setGoToAction({ state, path: "/derm-groups-charity/", actions });
+  };
+  const handleUpdateMembershipApplication = async ({ app }) => {
+    // if user have application in progress break & display error
+    if (applicationData) {
+      const type = applicationData[0].bad_categorytype;
+      const confirmationMsg = `You already have ${type} application open and unsubmitted! Please complete it before changing BAD application category.`;
+
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: confirmationMsg,
+          image: "Error",
+        },
+      });
+      return;
+    }
+
+    // handle create new application in Dynamics
+    try {
+      setFetching(true);
+      const appData = await handleApplyForMembershipAction({
+        state,
+        actions,
+        dispatch,
+        applicationData,
+        isActiveUser,
+        dynamicsApps,
+        category: "BAD",
+        type: app.bad_categorytype, //🤖 application type name from appData
+        membershipApplication: {
+          stepOne: false,
+          stepTwo: false,
+          stepThree: false,
+          stepFour: false,
+          changeAppCategory: app, // change of application
+        },
+        path: "/membership/application-change/", // redirect to application change page
+        changeAppCategory: app, // change of application
+        refreshJWT,
+      });
+      if (!appData) throw new Error("Failed to create application");
+    } catch (error) {
+      // console.log(error);
+
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: "Failed to create application record. Please try again.",
+          image: "Error",
+        },
+      });
+    } finally {
+      setFetching(false);
+    }
+  };
+
   const ServeDashboardActions = () => {
     let applicationTitle = "Apply for BAD Membership";
     let applicationPath = "/membership/categories-of-membership/";
@@ -99,12 +193,12 @@ const AccountDashboard = ({ state, actions, libraries }) => {
                   {
                     title: applicationTitle,
                     colour: colors.navy,
-                    link: { url: applicationPath },
+                    link: { url: "/membership/categories-of-membership/" },
                   },
                   {
                     title: "Apply for SIG Membership",
                     colour: colors.green,
-                    link: { url: "/derm-groups-charity/" },
+                    onClickAction: () => handleApply(), // * = all categories
                   },
                   {
                     title: "Register for an event",
@@ -128,12 +222,14 @@ const AccountDashboard = ({ state, actions, libraries }) => {
         <div className="flex-col">
           <BlockWrapper>
             {!lg ? <DashboardNavigation /> : <DashboardNavigationMobile />}
+            <DashboardNotifications />
+
             <Dashboard />
             <DashboardEvents />
             <Membership />
-            <MyAccount />
+            <MyProfile />
             <Billing />
-            <Settings />
+            <Preferences />
           </BlockWrapper>
 
           <Directory />

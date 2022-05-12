@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import ActionPlaceholder from "../actionPlaceholder";
 
-import { colors } from "../../config/imports";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -10,18 +9,19 @@ import {
   updateProfileAction,
   setEnquireAction,
   setErrorAction,
+  muiQuery,
 } from "../../context";
 
 const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
+  const { lg } = muiQuery();
   const dispatch = useAppDispatch();
-  const { isActiveUser } = useAppState();
+  const { isActiveUser, refreshJWT } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
   const [isFetching, setIsFetching] = useState(null);
   const [formData, setFormData] = useState({
-    address1_line1: "",
+    ["_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"]: "",
     bad_gmcno: "",
     bad_ntnno: "",
     bad_otherregulatorybodyreference: "",
@@ -40,7 +40,14 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     };
 
     // populate profile information form Dynamics records
-    if (isActiveUser.address1_line1) handleSetData({ name: "address1_line1" });
+    if (
+      isActiveUser[
+        "_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"
+      ]
+    )
+      handleSetData({
+        name: "_parentcustomerid_value@OData.Community.Display.V1.FormattedValue",
+      });
     if (isActiveUser.bad_gmcno) handleSetData({ name: "bad_gmcno" });
     if (isActiveUser.bad_ntnno) handleSetData({ name: "bad_ntnno" });
     if (isActiveUser.bad_otherregulatorybodyreference)
@@ -55,7 +62,6 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
     }));
-    // console.log(value); // debug
   };
 
   const handleContactForm = async () => {
@@ -68,20 +74,18 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         form_body: `Please use the form below to update us to changes to your professional details. To update your place of work, start typing to select from a list of options. If your place of work is not on the list, type Not Listed and use the message box at the bottom of the form instead`,
         job_title: true,
         message: true,
-        recipients: state.contactList.defaultContactList,
+        recipients: [{ email: "membership@bad.org.uk" }],
         isHospitalChange: true,
 
         // default email subject & template name
         emailSubject:
-          "Change of Professional Details Request. Main Place of Work / Medical School",
+          "Change of Professional Details Request. Main Hospital / Place of Work / Medical School details",
         emailTemplate: "ChangeOfHospital",
       },
     });
   };
 
   const handleProfileUpdate = async () => {
-    // console.log("formData", formData); // debug
-
     setIsFetching(true);
     // const address1_line1 = formData.address1_line1;
     const bad_gmcno = formData.bad_gmcno;
@@ -103,6 +107,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         dispatch,
         data,
         isActiveUser,
+        refreshJWT,
       });
       if (!response) throw new Error("Error updating profile");
       // display error message
@@ -111,7 +116,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         isError: { message: `Professional information updated successfully` },
       });
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       setErrorAction({
         dispatch,
         isError: {
@@ -129,17 +134,19 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     return (
       <div
         className="flex"
-        style={{ justifyContent: "flex-end", padding: `2em 0 0` }}
+        style={{
+          justifyContent: !lg ? "flex-end" : "center",
+          padding: `2em 0 0`,
+        }}
       >
         <div
-          type="submit"
           className="blue-btn"
           style={{ marginRight: "1em" }}
           onClick={handleContactForm}
         >
           Request To Edit
         </div>
-        <div type="submit" className="blue-btn" onClick={handleProfileUpdate}>
+        <div className="blue-btn" onClick={handleProfileUpdate}>
           Save
         </div>
       </div>
@@ -152,7 +159,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       <div
         className="shadow"
         style={{
-          padding: `2em 4em`,
+          padding: !lg ? `2em 4em` : `1em`,
           marginBottom: `${marginVertical}px`,
         }}
       >
@@ -162,7 +169,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: `1fr 1fr`,
+            gridTemplateColumns: !lg ? `1fr 1fr` : `1fr`,
             gap: 20,
             padding: `1em 0 0`,
           }}
@@ -204,13 +211,19 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
 
           <div>
             <div>
-              <label>Main Place of work / Medical School</label>
+              <label>
+                Main Hospital / Place of Work / Medical School details
+              </label>
               <input
                 name="address1_line1"
-                value={formData.address1_line1}
+                value={
+                  formData[
+                    "_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"
+                  ]
+                }
                 onChange={handleInputChange}
                 className="form-control input"
-                placeholder="Main Place of work / Medical School"
+                placeholder="Main Hospital / Place of Work / Medical School details"
                 disabled
               />
             </div>

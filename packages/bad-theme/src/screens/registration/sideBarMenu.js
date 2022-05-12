@@ -47,34 +47,35 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   if (slug.includes("step-4")) stepFour = activeStyle;
 
   useEffect(() => {
-    // redirect to /dashboard if isActiveUser && !applicationData
-    if (isActiveUser && !applicationData) {
-      console.log(
-        "⬇️ user have no application data created - redirect to /dashboard"
-      );
-      setGoToAction({ path: `/dashboard/`, actions });
+    // 📌 redirect to / if !isActiveUser || !applicationData
+    if (!isActiveUser) {
+      // console.log("⬇️ no user - redirect to /");
+      setGoToAction({ state, path: `/`, actions });
+    }
+    // 📌 redirect to /dashboard if isActiveUser && !applicationData
+    if (isActiveUser && !applicationData && slug !== "/membership/thank-you/") {
+      setGoToAction({ state, path: `/dashboard/`, actions });
       return;
     }
-    // redirect to / if !isActiveUser || !applicationData
-    if (!isActiveUser) {
-      console.log("⬇️ no user - redirect to /");
-      setGoToAction({ path: `/`, actions });
-    }
-    // auth/manage application steps for apps & redirects
+
+    // 📌 auth/manage application steps for apps & redirects
     if (applicationData) {
       const appData = applicationData[0];
       if (slug.includes("step-2") && !appData.stepOne)
         stepTwo = setGoToAction({
+          state,
           path: `/membership/step-1-the-process/`,
           actions,
         });
       if (slug.includes("step-3") && !appData.stepTwo)
         stepTwo = setGoToAction({
+          state,
           path: `/membership/step-2-category-selection/`,
           actions,
         });
       if (slug.includes("step-4") && !appData.stepThree)
         stepTwo = setGoToAction({
+          state,
           path: `/membership/step-3-personal-information/`,
           actions,
         });
@@ -82,10 +83,13 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   }, [isActiveUser, applicationData]);
 
   // return loading placeholder if if !isActiveUser || !applicationData
-  if (!isActiveUser || !applicationData) return <Loading />;
+  if (!isActiveUser) return <Loading />;
 
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
+    let title = "Apply to become a member of BAD";
+    if (slug === "/membership/thank-you/") title = "Ethnicity Question";
+
     return (
       <div
         className="primary-title"
@@ -95,7 +99,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
           padding: `0 1em 1em 0`,
         }}
       >
-        Apply to become a member of BAD
+        {title}
       </div>
     );
   };
@@ -111,6 +115,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
           onClick={() => {
             if (slug === "/membership/thank-you/") return null;
             setGoToAction({
+              state,
               path: `/membership/sig-questions/`,
               actions,
             });
@@ -131,6 +136,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
               onClick={() => {
                 // if (slug === "/membership/thank-you/") return null;
                 setGoToAction({
+                  state,
                   path: `/membership/step-1-the-process/`,
                   actions,
                 });
@@ -143,6 +149,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
               style={{ ...stepTwo, padding: `0.5em 0` }}
               onClick={() => {
                 setGoToAction({
+                  state,
                   path: `/membership/step-2-category-selection/`,
                   actions,
                 });
@@ -155,6 +162,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
               style={{ ...stepThree, padding: `0.5em 0` }}
               onClick={() => {
                 setGoToAction({
+                  state,
                   path: `/membership/step-3-personal-information/`,
                   actions,
                 });
@@ -167,6 +175,7 @@ const SideBarMenu = ({ state, actions, libraries }) => {
               style={{ ...stepFour, padding: `0.5em 0` }}
               onClick={() => {
                 setGoToAction({
+                  state,
                   path: `/membership/step-4-professional-details/`,
                   actions,
                 });

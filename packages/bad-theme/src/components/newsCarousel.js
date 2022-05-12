@@ -1,15 +1,13 @@
-import React from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Carousel } from "react-bootstrap";
-import { colors } from "../config/imports";
-
 import Loading from "./loading";
-
-import { muiQuery } from "../context";
 import Card from "./card/card";
 import LeftIcon from "../img/svg/leftIcon.svg";
 import RightIcon from "../img/svg/rightIcon.svg";
+
+// CONTEXT --------------------------------------------------
+import { muiQuery } from "../context";
 
 const NewsCarousel = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -27,7 +25,7 @@ const NewsCarousel = ({ state, actions, libraries, block }) => {
   // SERVERS ----------------------------------------------------------------
   const ServeIcon = ({ icon, left, right }) => {
     if (!icon) return null;
-
+    if (lg) return null;
     return (
       <div
         style={{
@@ -89,7 +87,8 @@ const NewsCarousel = ({ state, actions, libraries, block }) => {
                       style={{
                         position: "relative",
                         justifyContent: "center",
-                        height: BANNER_HEIGHT * 1.2,
+                        height: !lg ? BANNER_HEIGHT * 1.2 : null,
+                        minHeight: !lg ? null : BANNER_HEIGHT * 1.2,
                       }}
                     >
                       <ServeDivider i={1} />

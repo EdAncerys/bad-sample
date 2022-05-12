@@ -11,12 +11,26 @@ import {
 } from "../../context";
 
 const DashboardNavigation = ({ state, actions, libraries }) => {
-  const dispatch = useAppDispatch();
-  const { dashboardPath } = useAppState();
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
+  const dispatch = useAppDispatch();
+  const { dashboardPath, dynamicsApps } = useAppState();
+  const [isBADMember, setIsBADMember] = useState(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+
+  useEffect(() => {
+    if (!dynamicsApps && !dynamicsApps.subs) return;
+    // 📌 check if user is a BAD member
+    let badApps = dynamicsApps.subs.data.filter((app) => {
+      let hasBADMemberships = app.bad_organisedfor === "BAD";
+
+      return hasBADMemberships;
+    });
+
+    if (badApps.length) setIsBADMember(true);
+  }, [dynamicsApps]);
 
   // HELPERS ----------------------------------------------------------------
   const handleNavigate = ({ e }) => {
@@ -73,15 +87,17 @@ const DashboardNavigation = ({ state, actions, libraries }) => {
         >
           Membership
         </div>
-        <div
-          className="dashboard-menu"
-          style={{
-            boxShadow: handleUnderline("Members' Directory"),
-          }}
-          onClick={(e) => handleNavigate({ e })}
-        >
-          Members' Directory
-        </div>
+        {isBADMember && (
+          <div
+            className="dashboard-menu"
+            style={{
+              boxShadow: handleUnderline("Members' Directory"),
+            }}
+            onClick={(e) => handleNavigate({ e })}
+          >
+            Members' Directory
+          </div>
+        )}
         <div
           className="dashboard-menu"
           style={{

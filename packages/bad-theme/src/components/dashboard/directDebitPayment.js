@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
-import { colors } from "../../config/imports";
 import DirectDebit from "../../img/svg/directDebit.svg";
 import Loading from "../loading";
 import ActionPlaceholder from "../actionPlaceholder";
@@ -20,10 +19,9 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { isActiveUser, directDebitPath } = useAppState();
+  const { isActiveUser, directDebitPath, refreshJWT } = useAppState();
 
   const [isFetching, setFetching] = useState(false);
-
   const marginVertical = state.theme.marginVertical;
 
   if (!isActiveUser) return <Loading />;
@@ -45,6 +43,8 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
           core_accountnumber: data.core_accountnumber,
           core_sortcode: data.core_sortcode,
         },
+        dispatch,
+        refreshJWT,
       });
 
       if (debitResponse.success) {
@@ -52,6 +52,7 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
           state,
           dispatch,
           id: isActiveUser.contactid,
+          refreshJWT,
         });
         setDebitHandlerAction({
           dispatch,
@@ -59,14 +60,21 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
         }); // redirect to payment
         setErrorAction({
           dispatch,
-          isError: { message: "Direct debit been successfully setup" },
+          isError: { message: "Direct debit has been successfully setup" },
         });
       } else {
-        console.log("⬇️ Failed to create direct debit ⬇️");
-        console.log(debitResponse);
+        // console.log("⬇️ Failed to create direct debit ⬇️");
+        // console.log(debitResponse);
+
+        setErrorAction({
+          dispatch,
+          isError: {
+            message: "Failed to create setup direct debit. Please try again.",
+          },
+        });
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setFetching(false);
     }
@@ -102,8 +110,6 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
       );
     };
 
-    console.log(data); // debug
-
     return (
       <div style={{ padding: `2em 0 1em 0` }}>
         <ServeDataString title="Email:" value={data.py3_email} paddingTop="0" />
@@ -116,9 +122,7 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
         <ServeDataString title="Frequency:" value="Annual Collection" />
         <ServeDataString
           title="Date of Collection:"
-          value={`1st of February ${
-            currentYear + 1
-          } or first working day thereafter`}
+          value={`1st of January each year or first working day thereafter`}
         />
         <ServeDataString
           title="Name to appears on your statement:"
@@ -164,18 +168,13 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
         style={{ justifyContent: "flex-end", padding: `2em 0 0` }}
       >
         <div
-          type="submit"
           className="transparent-btn"
           style={{ marginRight: `2em` }}
           onClick={handleBack}
         >
           Back
         </div>
-        <div
-          type="submit"
-          className="blue-btn"
-          onClick={handleDirectDebitSetup}
-        >
+        <div className="blue-btn" onClick={handleDirectDebitSetup}>
           Confirm And Setup Direct Debit
         </div>
       </div>

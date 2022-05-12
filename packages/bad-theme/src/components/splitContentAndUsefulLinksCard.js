@@ -1,12 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { connect } from "frontity";
-
-import { colors } from "../config/imports";
-import { setGoToAction } from "../context";
-
 import Loading from "./loading";
 import UsefulLinksCard from "./usefulLinksCard";
 import TitleBlock from "./titleBlock";
+
+// CONTEXT -----------------------------------------------------
+import { setGoToAction } from "../context";
 
 const SplitContentAndUsefulLinksCard = ({
   state,
@@ -16,7 +15,6 @@ const SplitContentAndUsefulLinksCard = ({
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  
   const {
     body,
     title,
@@ -26,25 +24,18 @@ const SplitContentAndUsefulLinksCard = ({
     disable_vertical_padding,
     limit_body_length,
   } = block;
-  
+
   const [limit, setLimit] = useState(limit_body_length);
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
-  
+
   if (!block) return <Loading />;
 
   // SERVERS -----------------------------------------------------
   const ServeContent = () => {
     const ServeBody = () => {
       if (!body) return null;
-
-      // Manage max string Length
-      let BODY = body;
-      const MAX_LENGTH = 1600;
-      let bodyPreview = `${body.substring(0, MAX_LENGTH)}...`;
-      if (body.length < MAX_LENGTH) bodyPreview = body;
-      if (limit) BODY = bodyPreview;
 
       const ServeActions = () => {
         if (!limit_body_length) return null;
@@ -54,11 +45,7 @@ const SplitContentAndUsefulLinksCard = ({
 
         return (
           <div style={{ padding: `2em 0` }}>
-            <div
-              value={label}
-              className="caps-btn"
-              onClick={() => setLimit(!limit)}
-            >
+            <div className="caps-btn" onClick={() => setLimit(!limit)}>
               {label}
             </div>
           </div>
@@ -83,7 +70,15 @@ const SplitContentAndUsefulLinksCard = ({
           }}
         >
           <ServeTitle />
-          <Html2React html={BODY} />
+          <div
+            className="body-limit"
+            style={{
+              WebkitLineClamp: 1,
+              WebkitLineClamp: limit ? 20 : null, // line limit to body
+            }}
+          >
+            <Html2React html={body} />
+          </div>
           <ServeActions />
         </div>
       );
@@ -103,7 +98,7 @@ const SplitContentAndUsefulLinksCard = ({
         >
           <div
             className="blue-btn"
-            onClick={() => setGoToAction({ path: link.url, actions })}
+            onClick={() => setGoToAction({ state, path: link.url, actions })}
           >
             <Html2React html={label} />
           </div>

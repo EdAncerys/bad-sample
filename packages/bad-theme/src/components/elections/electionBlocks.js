@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Form } from "react-bootstrap";
 
@@ -137,7 +137,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
           message: contact_message || true,
           allow_attachments: contact_allow_attachments,
           recipients:
-            contact_recipients || state.contactList.defaultContactList,
+            contact_recipients || state.contactList.DEFAULT_CONTACT_LIST,
           // default email subject & template name
           emailSubject: `Notify when ${positionName} position is open.`,
           emailTemplate: "StandardEnquiryForm",
@@ -454,7 +454,6 @@ const ElectionBlocks = ({ state, actions, block }) => {
           if (openPositions) {
             if (election_status !== "open") return null;
           }
-
           return (
             <div key={key} className="flex" style={{ position: "relative" }}>
               <div className="flex">
@@ -468,10 +467,8 @@ const ElectionBlocks = ({ state, actions, block }) => {
                     isClosedPosition ? "Notify me when position is open" : cta
                   }
                   handler={() => handleContactForm({ isClosedPosition, block })}
-                  // form_label="Nomination Form"
-                  // form_link={isClosedPosition ? null : nomination_form_upload}
                   downloadFile={
-                    !isClosedPosition
+                    !isClosedPosition && nomination_form_upload
                       ? {
                           file: {
                             url: nomination_form_upload,
@@ -488,6 +485,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
                   opacity={isClosedPosition ? 0.7 : null}
                   bodyLimit={4}
                   shadow
+                  isElectionBlock // 📌 disable file download on click action
                 />
               </div>
             </div>

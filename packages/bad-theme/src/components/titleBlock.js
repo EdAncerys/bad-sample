@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
-
-import parse from "html-react-parser";
-
 import Loading from "./loading";
+
+// CONTEXT -----------------------------------------------------
 import { setGoToAction, muiQuery } from "../context";
 
 const TitleBlock = ({
@@ -46,7 +44,7 @@ const TitleBlock = ({
     return (
       <div
         className="caps-btn"
-        onClick={() => setGoToAction({ path: link.url, actions })}
+        onClick={() => setGoToAction({ state, path: link.url, actions })}
       >
         <Html2React html={LABEL} />
       </div>

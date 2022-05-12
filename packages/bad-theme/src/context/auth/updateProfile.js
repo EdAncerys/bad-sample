@@ -9,8 +9,9 @@ export const updateProfileAction = async ({
   dispatch,
   data,
   isActiveUser,
+  refreshJWT,
 }) => {
-  console.log("updateProfileAction triggered");
+  // console.log("updateProfileAction triggered");
   const { contactid } = isActiveUser;
 
   const URL = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
@@ -19,7 +20,7 @@ export const updateProfileAction = async ({
   // --------------------------------------------------------------------------
   // 📌 STEP: Log onto the API server and get the Bearer token
   // --------------------------------------------------------------------------
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
   if (!jwt) throw new Error("Cannot logon to server.");
 
   const requestOptions = {
@@ -38,20 +39,20 @@ export const updateProfileAction = async ({
     if (!response) throw new Error("Error updating profile.");
 
     if (response.success) {
-      console.log("⬇️ profile details successfully updated ⬇️ "); // debug
-      console.log(response); // debug
+      // console.log("⬇️ profile details successfully updated ⬇️ "); // debug
       // update user profile in context
       await getUserDataByContactId({
         state,
         dispatch,
         jwt,
         contactid,
+        refreshJWT,
       });
 
       return response;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
   }

@@ -4,16 +4,31 @@ import Image from "@frontity/components/image";
 
 import { colors } from "../../config/imports";
 import date from "date-and-time";
-
 const DATE_MODULE = date;
+
+// CONTEXT --------------------------------------------------------
+import { muiQuery, getMediaCategories } from "../../context";
 
 const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!newsCarousel) return null;
+  const { lg } = muiQuery();
+  const {
+    date,
+    release,
+    title,
+    categories,
+    featured_media,
+    excerpt,
+    yoast_head_json,
+  } = newsCarousel;
+  const [category, setCategory] = useState(null);
 
-  const { date, release, title, categories, featured_media, excerpt } =
-    newsCarousel;
-  const CATEGORY = Object.values(state.source.category);
+  useEffect(async () => {
+    let categoryList = await getMediaCategories({ state });
+
+    setCategory(categoryList);
+  }, []);
 
   // SERVERS ---------------------------------------------
   const ServeRelease = () => {
@@ -52,9 +67,9 @@ const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
   };
 
   const ServeCategory = () => {
-    if (!CATEGORY) return null;
+    if (!category || !categories) return null;
 
-    const filter = CATEGORY.filter((item) => item.id === Number(categories[0]));
+    const filter = category.filter((item) => item.id === Number(categories[0]));
     const categoryName = filter[0].name;
 
     return (
@@ -75,24 +90,29 @@ const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
   const ServeImage = () => {
     if (!featured_media) return null;
 
-    const media = state.source.attachment[featured_media];
+    let media = null;
+    if (yoast_head_json) media = yoast_head_json.og_image[0].url;
     const alt = title.rendered || "BAD";
+
+    if (!media) return null;
 
     return (
       <div
         style={{
           width: "100%",
           height: 250,
+          overflow: "hidden",
         }}
       >
         <Image
-          src={media.source_url}
+          src={media}
           alt={alt}
           style={{
             width: "100%",
             height: "100%",
             objectFit: "cover",
           }}
+          className="card-image-animated"
         />
       </div>
     );
@@ -113,7 +133,9 @@ const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
 
   const ServeBody = () => {
     if (!excerpt || !title) return null;
-
+    if (lg) return null;
+    const first_sentence = excerpt.rendered.split(".");
+    const shorter = first_sentence[0].toString().concat("...");
     if (featured_media)
       return (
         <div
@@ -125,8 +147,11 @@ const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
       );
 
     return (
-      <div style={{ padding: `1em 1.5em` }}>
-        <Html2React html={excerpt.rendered} />
+      <div
+        style={{ padding: `1em 1.5em` }}
+        className="news-carousel-limited-body"
+      >
+        <Html2React html={shorter} />
       </div>
     );
   };
@@ -146,10 +171,13 @@ const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
   };
 
   return (
-    <div className="position-relative">
+    <div className="position-relative heading-tile">
       <ServeImage />
       <ServePlaceholder />
-      <div className="position-absolute" style={{ top: `3em`, left: `2em` }}>
+      <div
+        className="position-absolute heading-tile"
+        style={{ top: `3em`, left: `2em` }}
+      >
         <div>
           <div
             className="flex-row"

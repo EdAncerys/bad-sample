@@ -4,12 +4,12 @@ import { Form } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 
 import PostBlocks from "./postBlocks";
-import ButtonsRow from "../buttonsRow";
 import Loading from "../loading";
 import { colors } from "../../config/imports";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
+
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, useAppState, muiQuery } from "../../context";
 
@@ -23,10 +23,8 @@ const MultiPostBlocks = ({ state, actions, libraries, block }) => {
   const [uniqueId, setUniqueId] = useState(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
 
   const isSearch = block.add_search_function;
-  const layoutOne = block.layout === "layout_one";
   const ctaHeight = 45;
 
   useLayoutEffect(() => {
@@ -118,13 +116,9 @@ const MultiPostBlocks = ({ state, actions, libraries, block }) => {
         <div
           style={{ display: "grid", alignItems: "center", paddingLeft: `2em` }}
         >
-          <button
-            type="submit"
-            className="blue-btn"
-            onClick={handleInputSearch}
-          >
+          <div className="blue-btn" onClick={handleInputSearch}>
             Search
-          </button>
+          </div>
         </div>
       </div>
     );

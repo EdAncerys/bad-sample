@@ -1,10 +1,8 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
-
 import Benefit from "./benefit";
-import { colors } from "../config/imports";
 import Loading from "./loading";
 
+// CONTEXT ----------------------------------------------------------------
 import { muiQuery } from "../context";
 
 const BenefitsGrid = ({ state, actions, libraries, block }) => {
@@ -31,7 +29,7 @@ const BenefitsGrid = ({ state, actions, libraries, block }) => {
     >
       <div style={!lg ? styles.container : styles.containerMobile}>
         {block.benefits_card.map((block, key) => {
-          return <Benefit key={key} block={block} />;
+          return <Benefit key={key} id={key} block={block} />;
         })}
       </div>
     </div>

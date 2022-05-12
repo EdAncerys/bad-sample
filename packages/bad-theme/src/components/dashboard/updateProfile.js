@@ -4,9 +4,7 @@ import { Form } from "react-bootstrap";
 
 import { ETHNIC_GROUPS, GENDER_GROUPS } from "../../config/data";
 import ActionPlaceholder from "../actionPlaceholder";
-import { colors } from "../../config/imports";
-import Image from "@frontity/components/image";
-import ProfileAvatar from "../../img/svg/profile.svg";
+import ProfileAvatar from "./profileAvatar";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -23,7 +21,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const { isActiveUser, ethnicity } = useAppState();
+  const { isActiveUser, ethnicity, refreshJWT } = useAppState();
 
   const [isFetching, setIsFetching] = useState(null);
   const [formData, setFormData] = useState({
@@ -41,7 +39,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
 
   useEffect(async () => {
     // ⬇️ get ethnicity choices from Dynamics
-    if (!ethnicity) await getEthnicityAction({ state, dispatch });
+    if (!ethnicity) await getEthnicityAction({ state, dispatch, refreshJWT });
 
     return () => {
       useEffectRef.current = false; // clean up function
@@ -74,7 +72,6 @@ const UpdateProfile = ({ state, actions, libraries }) => {
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
     }));
-    // console.log(value); // debug
   };
 
   const handleDocUploadChange = async (e) => {
@@ -85,9 +82,9 @@ const UpdateProfile = ({ state, actions, libraries }) => {
         state,
         dispatch,
         attachments: bad_profile_photo_url,
-        isPicture: true, // 🐞 dont append file type for images bug in S3
+        refreshJWT,
       });
-    console.log("bad_profile_photo_url", bad_profile_photo_url); // debug
+    // console.log("bad_profile_photo_url", bad_profile_photo_url); // debug
 
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -96,8 +93,6 @@ const UpdateProfile = ({ state, actions, libraries }) => {
   };
 
   const handleProfileUpdate = async () => {
-    // console.log("formData", formData); // debug
-
     const firstname = formData.firstname;
     const lastname = formData.lastname;
     const bad_profile_photo_url = formData.bad_profile_photo_url;
@@ -124,6 +119,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
         dispatch,
         data,
         isActiveUser,
+        refreshJWT,
       });
       if (!response) throw new Error("Error updating profile");
       // display error message
@@ -132,7 +128,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
         isError: { message: `Personal information updated successfully` },
       });
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       setErrorAction({
         dispatch,
         isError: {
@@ -146,45 +142,16 @@ const UpdateProfile = ({ state, actions, libraries }) => {
   };
 
   // SERVERS ---------------------------------------------
-  const ServeProfileAvatar = () => {
-    if (!isActiveUser) return null;
-
-    const { bad_listname, bad_profile_photo_url } = isActiveUser;
-    const alt = bad_listname || "Profile Picture";
-    const imgWidth = 350;
-
-    return (
-      <div className="flex" style={{ justifyContent: "flex-end" }}>
-        <div
-          style={{
-            width: imgWidth,
-            height: imgWidth,
-            borderRadius: `50%`,
-            overflow: `hidden`,
-            margin: "3em 0 0 0",
-          }}
-        >
-          <Image
-            src={bad_profile_photo_url || ProfileAvatar}
-            alt={alt}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-            }}
-          />
-        </div>
-      </div>
-    );
-  };
-
   const ServeActions = () => {
     return (
       <div
         className="flex"
-        style={{ justifyContent: "flex-end", padding: `0 4em 2em 0` }}
+        style={{
+          justifyContent: !lg ? "flex-end" : "center",
+          padding: `0 4em 2em 0`,
+        }}
       >
-        <div type="submit" className="blue-btn" onClick={handleProfileUpdate}>
+        <div className="blue-btn" onClick={handleProfileUpdate}>
           Save
         </div>
       </div>
@@ -273,7 +240,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
                 className="input"
               >
                 <option value="" hidden>
-                  Ethnic Group
+                  Ethnicity
                 </option>
                 {ethnicity.map((item, key) => {
                   return (
@@ -297,7 +264,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
             />
           </div>
         </div>
-        <ServeProfileAvatar />
+        <ProfileAvatar isPreview={formData.bad_profile_photo_url} />
       </div>
       <ServeActions />
     </div>

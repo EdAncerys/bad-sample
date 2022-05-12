@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import { colors } from "../../config/imports";
 import Image from "@frontity/components/image";
@@ -25,9 +25,16 @@ import defaultVideoCover from "../../img/png/video_default.jpg";
 import GeneralModal from "../elections/generalModal";
 import DownloadFileBlock from "../downloadFileBlock";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
-import LockIcon from "@mui/icons-material/Lock";
 // CONTEXT ----------------------------------------------------------------
-import { setLinkWrapperAction, setGoToAction } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setGoToAction,
+  getWileyAction,
+  setErrorAction,
+  loginAction,
+  muiQuery,
+} from "../../context";
 
 const Card = ({
   state,
@@ -50,6 +57,7 @@ const Card = ({
   electionInfo,
   handler,
   newsAndMediaInfo,
+  categoryList,
   fundingPromo,
   textAlign,
   url,
@@ -89,13 +97,13 @@ const Card = ({
   disableCardAnimation,
   delay,
   animationType,
+  isElectionBlock,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
   const THEME = colour || colors.primary;
   const isShadow = shadow ? "shadow" : "";
-  const [modalData, setModalData] = useState();
-
+  const { lg } = muiQuery();
   let CARD_HEIGHT = "100%";
   let ELECTION_BLOCKS = false;
   if (cardHeight) CARD_HEIGHT = cardHeight;
@@ -113,7 +121,79 @@ const Card = ({
   let isCardAnimation = "card-wrapper";
   if (disableCardAnimation) isCardAnimation = "";
 
+  const dispatch = useAppDispatch();
+  const { isActiveUser, refreshJWT } = useAppState();
+
+  const [authLink, setAuthLink] = useState(null);
+  const [isFetching, setFetching] = useState(null);
+  const useEffectRef = useRef(null);
+
+  useEffect(async () => {
+    if (!rssFeedLink) return null;
+
+    const { link, doi } = rssFeedLink;
+    let authLink = link;
+
+    try {
+      setFetching(true);
+
+      // ⏬⏬  validate auth link for users via wiley ⏬⏬
+      // get auth link to wiley if user is BAD member & logged in
+      if (isActiveUser) {
+        const wileyLink = await getWileyAction({
+          state,
+          dispatch,
+          refreshJWT,
+          doi,
+          isActiveUser,
+        });
+        if (wileyLink) authLink = wileyLink;
+      }
+    } catch (error) {
+      // console.log(error);
+    } finally {
+      setAuthLink(authLink); // set auth link via wiley
+      setFetching(false);
+    }
+
+    return () => {
+      useEffectRef.current = false; // clean up function
+    };
+  }, [isActiveUser]);
+
   // HANDLERS ---------------------------------------------
+  const handelLogin = () => {
+    setErrorAction({ dispatch, isError: null });
+    loginAction({ state });
+  };
+
+  const handelRedirect = () => {
+    setErrorAction({ dispatch, isError: null });
+    setGoToAction({ state, path: authLink, actions });
+  };
+
+  const onClickHandler = () => {
+    if (rssFeedLink && !isActiveUser) {
+      // 📌 track notification error action
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals. To continue to the publication without logging in, click 'Read Publication'`,
+          image: "Error",
+          action: [
+            {
+              label: "Read Publication",
+              handler: handelRedirect,
+            },
+            { label: "Login", handler: handelLogin },
+          ],
+        },
+      });
+      return;
+    }
+    if (!isElectionBlock)
+      setGoToAction({ state, path: link || authLink, actions, downloadFile });
+  };
 
   // SERVERS ----------------------------------------------
   const ServeFooter = () => {
@@ -169,8 +249,8 @@ const Card = ({
 
     return (
       <div
-        style={{ ...STYLES, width: "100%" }}
-        onClick={() => setGoToAction({ path: link, actions })}
+        style={{ ...STYLES, width: "100%", overflow: "hidden" }}
+        onClick={() => setGoToAction({ state, path: link, actions })}
       >
         <Image
           src={url}
@@ -180,33 +260,32 @@ const Card = ({
             height: "100%",
             objectFit: "cover",
             cursor: link ? "pointer" : null,
+            transition: "transform 1s",
           }}
+          className="card-image-animated"
         />
       </div>
     );
   };
+
   const ServeVideoCover = () => {
     if (!videoArchive) return null;
     if (!url) return null;
-    console.log("VA FROM CARD", videoArchive);
+
     const [vimeoCover, setVimeoCover] = useState(defaultVideoCover);
-    const alt = title || "BAD";
 
     let STYLES = { minHeight: 200, maxHeight: 300 };
     if (imgHeight) STYLES = { height: imgHeight };
     const getVimeoCover = async () => {
       const video_url = videoArchive.acf.video;
-      console.log("VIDEOURL", video_url);
-      // Example URL: https://player.vimeo.com/video/382577680?h=8f166cf506&color=5b89a3&title=0&byline=0&portrait=0
       const reg = /\d+/g;
       const videoId = video_url.match(reg);
-      console.log("VIDELOID", videoId);
+
       const fetchVideoData = await fetch(
         `https://vimeo.com/api/v2/video/${videoId[0]}.json`
       );
       if (fetchVideoData.ok) {
         const json = await fetchVideoData.json();
-        console.log(json[0].thumbnail_medium);
         setVimeoCover(json[0].thumbnail_large);
       }
     };
@@ -214,10 +293,11 @@ const Card = ({
     useEffect(() => {
       getVimeoCover();
     }, []);
+
     return (
       <div
         style={{ position: "relative", cursor: "pointer" }}
-        onClick={() => setGoToAction({ path: link, actions })}
+        onClick={() => setGoToAction({ state, path: link, actions })}
       >
         <Image src={vimeoCover} alt="Submit" style={{ width: "100%" }} />
         <div
@@ -231,16 +311,15 @@ const Card = ({
         >
           <PlayCircleOutlineIcon
             sx={{ fontSize: 80 }}
-            onClick={() => setLoadVideo(true)}
             style={{ cursor: "pointer" }}
           />
         </div>
       </div>
     );
   };
+
   const ServeCardHeader = () => {
-    if (url) return null;
-    if (!cardTitle) return null;
+    if (!cardTitle || url) return null;
 
     return (
       <div style={{ opacity: opacity || 1 }}>
@@ -266,7 +345,7 @@ const Card = ({
   const ServeContent = () => {
     return (
       <div className="flex-col" style={{ padding: PADDING, height: "100%" }}>
-        <GeneralModal modalData={modalData} handler={handler} />
+        <GeneralModal handler={handler} />
         <ServeCardHeader />
         <EventCardHeader eventHeader={eventHeader} />
         <VenueInfo venueInfo={venueInfo} />
@@ -305,36 +384,9 @@ const Card = ({
           handler={handler}
           electionBlocks={ELECTION_BLOCKS}
           videoArchive={videoArchive}
+          isFetching={isFetching}
+          authLink={authLink}
         />
-      </div>
-    );
-  };
-
-  // ⬇️ custom card wrapper for the card
-  const CardWrapper = ({ children }) => {
-    if (downloadFile)
-      return (
-        <a
-          style={{ boxShadow: "none" }}
-          // href={file.url}
-          onClick={() => console.log(downloadFile)}
-          target="_blank"
-          download
-        >
-          <div
-          // styles={cardStyles}
-          >
-            {children}
-          </div>
-        </a>
-      );
-
-    return (
-      <div
-        // styles={cardStyles}
-        onClick={() => setGoToAction({ path: link, actions })}
-      >
-        {children}
       </div>
     );
   };
@@ -347,11 +399,15 @@ const Card = ({
         ...styles.card,
         backgroundColor: backgroundColor || colors.white,
         width: cardWidth || "100%",
-        height: videoArchive ? null : CARD_HEIGHT,
-        minHeight: MIN_CARD_HEIGHT,
+        height: videoArchive || heroBanner ? null : CARD_HEIGHT,
+        minHeight: heroBanner
+          ? CARD_HEIGHT
+          : !lg
+          ? MIN_CARD_HEIGHT
+          : CARD_HEIGHT,
       }}
-      onClick={() => setGoToAction({ path: link, actions, downloadFile })}
-      data-aos={animationType || "fade"}
+      onClick={onClickHandler}
+      data-aos={videoArchive ? "none" : animationType || "fade"}
       data-aos-delay={`${delay * 50}`}
       data-aos-duration="500"
     >
@@ -360,7 +416,11 @@ const Card = ({
       <VideoGuide videoGuide={videoGuide} />
       <FundingHeader fundingHeader={fundingHeader} />
       <ImageAndPromoCard imageAndPromoCard={imageAndPromoCard} />
-      <NewsAndMediaHeader newsAndMediaInfo={newsAndMediaInfo} layout={layout} />
+      <NewsAndMediaHeader
+        newsAndMediaInfo={newsAndMediaInfo}
+        layout={layout}
+        categoryList={categoryList}
+      />
       <GalleryCarousel gallery={gallery} />
       <NewsArticleHeader newsArticle={newsArticle} />
       <NewsCarousel newsCarousel={newsCarousel} />

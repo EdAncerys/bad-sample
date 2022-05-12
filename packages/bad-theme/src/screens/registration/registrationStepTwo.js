@@ -17,16 +17,18 @@ import {
   handleApplyForMembershipAction,
   errorHandler,
   getMembershipDataAction,
+  muiQuery,
 } from "../../context";
 
 const RegistrationStepTwo = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
+  const { lg } = muiQuery();
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, dynamicsApps } = useAppState();
+  const { applicationData, isActiveUser, dynamicsApps, refreshJWT } =
+    useAppState();
 
   const [membershipData, setMembershipData] = useState(false);
   const [isFetching, setFetching] = useState(false);
@@ -46,15 +48,21 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
     let membershipData = Object.values(state.source.memberships);
     // sort memberships by bad_order accenting & if no value push to end
     membershipData.sort((a, b) => {
-      if (a.acf.bad_order && b.acf.bad_order) {
-        return a.acf.bad_order - b.acf.bad_order;
-      } else if (a.acf.bad_order) {
-        return -1;
-      } else if (b.acf.bad_order) {
-        return 1;
-      } else {
-        return 0;
-      }
+      // sort memberships alphabetically
+      if (a.acf.category_types < b.acf.category_types) return -1;
+      if (a.acf.category_types > b.acf.category_types) return 1;
+      return 0;
+
+      // 📌 uncomment to sort by bad_order
+      // if (a.acf.bad_order && b.acf.bad_order) {
+      //   return a.acf.bad_order - b.acf.bad_order;
+      // } else if (a.acf.bad_order) {
+      //   return -1;
+      // } else if (b.acf.bad_order) {
+      //   return 1;
+      // } else {
+      //   return 0;
+      // }
     });
 
     setMembershipData(membershipData);
@@ -108,6 +116,7 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
       category: formData.bad_organisedfor === "810170000" ? "BAD" : "SIG",
       type: formData.bad_categorytype, // application type name
       path: `/membership/`,
+      refreshJWT,
     });
   };
 
@@ -132,7 +141,6 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
       );
       if (membership) setBodyCopy(membership.acf.body_copy);
     }
-    console.log(value);
   };
 
   const isFormValidated = ({ required }) => {
@@ -156,7 +164,6 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
     });
 
     if (!isValid) return null;
-    // console.log(formData); // debug
     let path = `/membership/step-3-personal-information/`;
     if (formData.bad_organisedfor === "810170001")
       path = `/membership/sig-questions/`;
@@ -175,9 +182,10 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
         type: formData.bad_categorytype, // application type name
         path,
         canUpdateApplication: true,
+        refreshJWT,
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setFetching(false);
     }
@@ -187,7 +195,7 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
   const ServeActions = () => {
     return (
       <div
-        className="flex"
+        className={!lg ? "flex" : "flex-col"}
         style={{
           justifyContent: "flex-end",
           padding: `2em 1em 0 1em`,
@@ -195,13 +203,15 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
       >
         <div
           className="transparent-btn"
-          onClick={() => setGoToAction({ path: `/membership/`, actions })}
+          onClick={() =>
+            setGoToAction({ state, path: `/membership/`, actions })
+          }
         >
           Back
         </div>
         <div
           className="transparent-btn"
-          style={{ margin: `0 1em` }}
+          style={{ margin: !lg ? `0 1em` : `1em 0` }}
           onClick={handleSaveExit}
         >
           Save & Exit
@@ -218,7 +228,7 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
 
     const ServeBADMembershipCategory = () => {
       if (formData.bad_organisedfor !== "810170000") return null;
-
+      console.log("MEMBERSHIPDATA", membershipData);
       return (
         <div>
           <div>
@@ -233,6 +243,8 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
                 Membership Category
               </option>
               {membershipData.map((item, key) => {
+                if (item.id === 8800) return null;
+                if (item.id === 8801) return null;
                 const { bad_or_sig, category_types } = item.acf;
                 if (bad_or_sig !== "bad") return null;
 
@@ -311,7 +323,7 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
           margin: `${marginVertical}px ${marginHorizontal}px`,
         }}
       >
-        <div style={styles.container}>
+        <div style={!lg ? styles.container : styles.containerMobile}>
           <SideBarMenu />
           <div style={{ position: "relative" }}>
             <ActionPlaceholder
@@ -349,6 +361,12 @@ const styles = {
   container: {
     display: "grid",
     gridTemplateColumns: `1fr 2fr`,
+    justifyContent: "space-between",
+    gap: 20,
+  },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
     justifyContent: "space-between",
     gap: 20,
   },

@@ -12,7 +12,7 @@ import {
   updateEthnicityAction,
   setGoToAction,
   validateMembershipFormAction,
-  setLoginModalAction,
+  loginAction,
   getEthnicityAction,
 } from "../../../context";
 
@@ -20,7 +20,8 @@ const CompleteApplication = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, ethnicity } = useAppState();
+  const { applicationData, isActiveUser, ethnicity, refreshJWT } =
+    useAppState();
 
   const [ethnicityList, setEthnicityList] = useState([]);
   const [isFetching, setFetching] = useState(false);
@@ -35,7 +36,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
 
   useEffect(async () => {
     // ⬇️ get ethnicity choices from Dynamics
-    if (!ethnicity) await getEthnicityAction({ state, dispatch });
+    if (!ethnicity) await getEthnicityAction({ state, dispatch, refreshJWT });
 
     return () => {
       useEffectRef.current = false; // clean up function
@@ -72,7 +73,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
   const handleSubmit = async () => {
     if (!isActiveUser) {
       // validate if isActiveUser 🤖
-      setLoginModalAction({ dispatch, loginModalAction: true });
+      loginAction({ state });
       return null;
     }
 
@@ -81,17 +82,22 @@ const CompleteApplication = ({ state, actions, libraries }) => {
       // handle update ethnicity for user contact
       await updateEthnicityAction({
         state,
+        dispatch,
         data: formData.bad_ethnicity,
         isActiveUser,
       });
 
       let slug = `/dashboard/`;
-      if (isActiveUser) setGoToAction({ path: slug, actions });
+      if (isActiveUser) setGoToAction({ state, path: slug, actions });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     } finally {
       setFetching(false);
     }
+  };
+
+  const handleReturn = () => {
+    if (isActiveUser) setGoToAction({ state, path: "/dashboard/", actions });
   };
 
   const handleInputChange = (e) => {
@@ -116,6 +122,13 @@ const CompleteApplication = ({ state, actions, libraries }) => {
         <div className="blue-btn" onClick={handleSubmit}>
           Submit
         </div>
+        <div
+          className="blue-btn"
+          style={{ marginLeft: "2em" }}
+          onClick={handleReturn}
+        >
+          No thank you, return to Dashboard
+        </div>
       </div>
     );
   };
@@ -128,9 +141,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
           <div style={{ padding: `2em 1em` }}>
             {ethnicity && (
               <div>
-                <label style={styles.subTitle}>
-                  What is your Ethnic Group?
-                </label>
+                <label style={styles.subTitle}>What is your Ethnicity?</label>
                 <Form.Select
                   name="bad_ethnicity"
                   value={formData.bad_ethnicity}
@@ -138,7 +149,7 @@ const CompleteApplication = ({ state, actions, libraries }) => {
                   className="input"
                 >
                   <option value="" hidden>
-                    Ethnic Group
+                    Ethnicity
                   </option>
                   {ethnicity.map((item, key) => {
                     return (

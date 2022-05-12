@@ -1,13 +1,21 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
-
 import { colors } from "../../config/imports";
 import { MENU_DATA } from "../../config/data";
 // CONTEXT ----------------------------------------------------
-import { setGoToAction } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setGoToAction,
+  setErrorAction,
+  loginAction,
+  getWileyAction,
+} from "../../context";
 
 const QuickLinksDropDown = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
+  const dispatch = useAppDispatch();
+  const { isActiveUser, refreshJWT } = useAppState();
 
   // HANDLERS ----------------------------------------------------
   const handleActiveMenu = ({ mouseLeave }) => {
@@ -21,6 +29,55 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
     }
     if (selector) selector.style.display = "block";
     if (btn) btn.classList.add = "shadow";
+  };
+
+  const onClickLinkHandler = async ({ title, url }) => {
+    const isWileys = title.includes("Journal");
+    let authLink = url;
+
+    // HANDLERS ----------------------------------------------------
+    const handelLogin = () => {
+      setErrorAction({ dispatch, isError: null });
+      loginAction({ state });
+    };
+
+    const handelRedirect = () => {
+      setErrorAction({ dispatch, isError: null });
+      setGoToAction({ state, path: authLink, actions });
+    };
+
+    // 📌 check if logged in user exists & user is BAD member to replace auth link
+    if (isWileys && isActiveUser) {
+      authLink = await getWileyAction({
+        state,
+        dispatch,
+        refreshJWT,
+        isActiveUser,
+        isFullAccess: true,
+        url,
+      });
+    }
+
+    if (isWileys && !isActiveUser) {
+      // 📌 track notification error action
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals. <br/> To continue to the publication without logging in, click to visit the BJD website`,
+          image: "Error",
+          action: [
+            {
+              label: `Read ${title}`,
+              handler: handelRedirect,
+            },
+            { label: "Login", handler: handelLogin },
+          ],
+        },
+      });
+      return;
+    }
+
+    setGoToAction({ state, path: authLink, actions });
   };
 
   // SERVERS ----------------------------------------------------------
@@ -62,7 +119,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
               key={key}
               className="flex-row"
               style={{ marginRight: `2em` }}
-              onClick={() => setGoToAction({ path: url, actions })}
+              onClick={() => onClickLinkHandler({ title, url })}
             >
               <a className="dropdown-item" style={{ padding: `0.5em 0` }}>
                 <div
@@ -87,13 +144,13 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
         handleActiveMenu({ mouseLeave: true });
       }}
     >
-      <button
+      <div
         id="drop-down-btn"
         className="dropdown-toggle drop-down-btn"
         type="button"
       >
         Quick Links
-      </button>
+      </div>
       <ServeMenu />
     </div>
   );

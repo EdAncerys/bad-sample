@@ -10,14 +10,14 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-  const endPoint = state.router.link;
-  const data = state.source.get(endPoint);
+  const urlPath = state.router.link;
+  const data = state.source.get(urlPath);
 
   const [wpMenu, setWpMenu] = useState([]);
 
-  if (endPoint.includes("/redirect/")) return null;
+  if (urlPath.includes("/redirect/")) return null;
   const marginHorizontal = state.theme.marginHorizontal;
-  const directions = endPoint.split("/").slice(1, -1);
+  const directions = urlPath.split("/").slice(1, -1);
   const directionLength = directions.length;
   const MARGIN = 10;
   let KEY = 0;
@@ -48,7 +48,7 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
 
     // HELPERS ---------------------------------------------
     const handleGoToLink = () => {
-      const goToPath = endPoint.split("/").slice(1, nextKey + 1);
+      const goToPath = urlPath.split("/").slice(1, nextKey + 1);
       let goToLink = `/${goToPath.join("/")}`;
       // REDIRECT HANDLERS -------------------------------------------------
       if (goToLink === "/derm_groups_charity/")
@@ -60,9 +60,6 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
       if (goToLink === "/venues") goToLink = "/events-content/venues";
       if (goToLink === "/events-content/venues")
         goToLink = "/events-content/venue-hire";
-
-      // console.log(titleName); // debug
-      // console.log(item); // debug
 
       actions.router.set(`${goToLink}`);
     };
@@ -112,6 +109,7 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
           className="flex"
           style={{
             marginRight: MARGIN * 2,
+            marginLeft: !lg ? null : MARGIN * 2,
             fontSize: 14,
             alignItems: "center",
           }}
@@ -130,7 +128,9 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
         <div
           className="flex-row"
           style={styles.link}
-          onClick={() => setGoToAction({ path: "/news-media/", actions })}
+          onClick={() =>
+            setGoToAction({ state, path: "/news-media/", actions })
+          }
         >
           <div style={styles.linkValue}>News & Media</div>
           <div style={{ margin: `0 10px` }}>
@@ -144,8 +144,8 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
   };
 
   if (data.isError) return null;
-  if (endPoint === "/") return null; // disable breadcrumbs in home page
-  if (endPoint === "/search/") return null; // disable breadcrumbs in search page
+  if (urlPath === "/") return null; // disable breadcrumbs in home page
+  if (urlPath === "/search/") return null; // disable breadcrumbs in search page
 
   return (
     <BlockWrapper background={colors.lightSilver}>

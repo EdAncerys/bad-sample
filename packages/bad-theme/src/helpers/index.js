@@ -6,20 +6,24 @@ import {
 } from "../context";
 
 const fetchCompleteHandler = ({ initialState }) => {
-  console.log("⬇️ user pre-fetch completed");
+  // console.log("⬇️ user pre-fetch completed");
   initialState.isPlaceholder = false;
 };
 
-export const authCookieActionBeforeCSR = async ({ state, initialState }) => {
+export const authCookieActionBeforeCSR = async ({
+  state,
+  initialState,
+  dispatch,
+  refreshJWT,
+}) => {
   const cookie = handleGetCookie({ name: state.auth.COOKIE_NAME });
 
   // ⏬⏬  user validation & auth ⏬⏬
   if (cookie) {
-    console.log("🍪 found", cookie);
     let { jwt, contactid } = cookie;
 
     if (!contactid || !jwt) {
-      console.log("Failed to Auth 🍪 data");
+      // console.log("Failed to Auth 🍪 data");
       handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
       return null;
     }
@@ -28,6 +32,7 @@ export const authCookieActionBeforeCSR = async ({ state, initialState }) => {
       // dev env testing on refresh overwrites cookie value
       // contactid = "cc9a332a-3672-ec11-8943-000d3a43c136"; // andy
       // contactid = "969ba377-a398-ec11-b400-000d3aaedef5"; // emilia
+      // contactid = "a167c3ee-ba93-e711-80f5-3863bb351f50", // membership
     }
 
     const catalogueURL =
@@ -50,10 +55,11 @@ export const authCookieActionBeforeCSR = async ({ state, initialState }) => {
       if (!appsResponse.ok)
         throw new Error(`${appsResponse.statusText} ${appsResponse.status}`); // fetch user data from Dynamics
       const appsData = await appsResponse.json();
-      console.log("🚀 dynamicsApps", appsData); // debug
 
       const userStoreData = await getUserStoreAction({
         state,
+        dispatch,
+        refreshJWT,
         isActiveUser: userData,
       });
 
@@ -62,11 +68,14 @@ export const authCookieActionBeforeCSR = async ({ state, initialState }) => {
       }
 
       if (userData && appsData) {
-        const taken = await authenticateAppAction({ state }); // replace taken with new one
+        const taken = await authenticateAppAction({
+          state,
+          dispatch,
+          refreshJWT,
+        }); // replace taken with new one
         initialState.isActiveUser = userData; // populates user userResponse
         initialState.dynamicsApps = appsData;
         initialState.jwt = taken; // replace taken with new one
-        console.log("initialState", initialState); // debug
 
         handleSetCookie({
           name: state.auth.COOKIE_NAME,
@@ -74,7 +83,7 @@ export const authCookieActionBeforeCSR = async ({ state, initialState }) => {
         });
       }
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
     } finally {
       fetchCompleteHandler({ initialState });
@@ -84,16 +93,20 @@ export const authCookieActionBeforeCSR = async ({ state, initialState }) => {
   }
 };
 
-export const authCookieActionAfterCSR = async ({ state, dispatch }) => {
+export const authCookieActionAfterCSR = async ({
+  state,
+  dispatch,
+  refreshJWT,
+}) => {
   const cookie = handleGetCookie({ name: state.auth.COOKIE_NAME });
 
   // ⏬⏬  user validation & auth ⏬⏬
   if (cookie) {
-    console.log("🍪 found", cookie);
+    // console.log("🍪 found", cookie);
     let { jwt, contactid } = cookie;
 
     if (!contactid || !jwt) {
-      console.log("Failed to Auth 🍪 data");
+      // console.log("Failed to Auth 🍪 data");
       handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
       return null;
     }
@@ -104,12 +117,13 @@ export const authCookieActionAfterCSR = async ({ state, dispatch }) => {
         dispatch,
         jwt,
         contactid,
+        refreshJWT,
       });
       if (!userData) throw new Error("Error getting userData.");
 
-      console.log("⬇️ userData successfully pre-fetched", userData); // debug
+      // console.log("⬇️ userData successfully pre-fetched", userData); // debug
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
     }
   }
@@ -128,17 +142,16 @@ export const getWPMenu = async ({ state, actions }) => {
       state.theme.menu = badMenu; // replacing menu stored in sessions with state var
       sessionStorage.setItem("badMenu", JSON.stringify(badMenu));
     } catch (error) {
-      console.log("error: " + error);
+      // console.log("error: " + error);
     }
   } else {
-    console.log("menu already pre fetched from wp"); // debug
     state.theme.menu = JSON.parse(menu);
   }
 };
 
 export const getEventsData = async ({ state, actions }) => {
   await actions.source.fetch(`/events/`); // fetch CPT events
-  const events = state.source.get(`/events/`);
+  let events = state.source.get(`/events/`);
   const eventsNextPage = events.next; // check if events have multiple pages
   // fetch events via wp API page by page
   let isThereNextEventPage = eventsNextPage;
@@ -146,7 +159,10 @@ export const getEventsData = async ({ state, actions }) => {
     await actions.source.fetch(isThereNextEventPage); // fetch next page
     const nextPage = state.source.get(isThereNextEventPage).next; // check ifNext page & set next page
     isThereNextEventPage = nextPage;
+    events = state.source.events;
   }
+
+  return events;
 };
 
 export const getPostData = async ({ state, actions }) => {
@@ -166,13 +182,29 @@ export const getLeadershipTeamData = async ({ state, actions }) => {
   await actions.source.fetch(`/leadership_team/`); // fetch CPT leadershipTeam
   const leadershipTeam = state.source.get(`/leadership_team/`);
   const leadershipTeamNextPage = leadershipTeam.next; // check if leadershipTeam have multiple pages
+  let iteration = 0;
+  let data = null;
+  let dataLength = 0;
+  if (data) dataLength = Object.values(data).length;
+
   // fetch leadershipTeam via wp API page by page
   let isThereNextLeadershipPage = leadershipTeamNextPage;
   while (isThereNextLeadershipPage) {
+    // await for 500 ms to avoid wp api rate limit
     await actions.source.fetch(isThereNextLeadershipPage); // fetch next page
     const nextPage = state.source.get(isThereNextLeadershipPage).next; // check ifNext page & set next page
     isThereNextLeadershipPage = nextPage;
+    data = state.source.leadership_team;
   }
+  // if data is null loop with delay for 500 ms to avoid wp api rate limit
+  while (dataLength < 25 && iteration < 10) {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    data = state.source.leadership_team;
+    iteration++;
+  }
+
+  return data;
 };
 
 export const getSIGGroupeData = async ({ state, actions }) => {

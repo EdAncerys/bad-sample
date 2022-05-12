@@ -4,11 +4,9 @@ import { connect } from "frontity";
 import Loading from "../../loading";
 import { colors } from "../../../config/colors";
 import Card from "../../card/card";
-import SearchContainer from "../../searchContainer";
 import ActionPlaceholder from "../../actionPlaceholder";
 import ScrollTop from "../../../components/scrollTop";
 import TitleBlock from "../../../components/titleBlock";
-import SearchDropDown from "../../../components/searchDropDown";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -23,13 +21,13 @@ import {
   setFadAction,
   updateProfileAction,
   setErrorAction,
-  getAllFadAction,
   getFADSearchAction,
 } from "../../../context";
 
 const Directory = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
-  const { fad, dashboardPath, isActiveUser, dynamicsApps } = useAppState();
+  const { fad, dashboardPath, isActiveUser, dynamicsApps, refreshJWT } =
+    useAppState();
 
   const ctaHeight = 45;
 
@@ -52,10 +50,9 @@ const Directory = ({ state, actions, libraries }) => {
   // DATA pre FETCH ------------------------------------------------------------
   useEffect(async () => {
     try {
-      // await getAllFadAction({ state, dispatch });
       if (!fad) {
         // fetch data via API
-        const data = await getFadAction({ state, dispatch });
+        const data = await getFadAction({ state, dispatch, refreshJWT });
         // set fad data in context of app
         setFadAction({ dispatch, fad: data });
         setFadData(data);
@@ -63,7 +60,7 @@ const Directory = ({ state, actions, libraries }) => {
         setFadData(fad);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
 
     return () => {
@@ -83,7 +80,6 @@ const Directory = ({ state, actions, libraries }) => {
       {}, // add empty object
       { bad_memberdirectory: directoryPref }
     );
-    console.log("data", data); // debug
 
     try {
       setIsFetching(true);
@@ -93,6 +89,7 @@ const Directory = ({ state, actions, libraries }) => {
         dispatch,
         data,
         isActiveUser,
+        refreshJWT,
       });
       if (!response) throw new Error("Error updating profile");
 
@@ -104,7 +101,7 @@ const Directory = ({ state, actions, libraries }) => {
         },
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       setErrorAction({
         dispatch,
         isError: {
@@ -142,10 +139,15 @@ const Directory = ({ state, actions, libraries }) => {
 
     try {
       setSearchFetching(true);
-      const fad = await getFADSearchAction({ state, dispatch, query: input });
+      const fad = await getFADSearchAction({
+        state,
+        dispatch,
+        query: input,
+        refreshJWT,
+      });
       setSearchData(fad);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setInputValue("");
       setFilter(input);
@@ -157,7 +159,7 @@ const Directory = ({ state, actions, libraries }) => {
     try {
       setGetMore(true);
 
-      const data = await getFadAction({ state, dispatch, page });
+      const data = await getFadAction({ state, dispatch, page, refreshJWT });
       let updatedFad = [...fad, ...data];
       // set fad data in context of app
       setFadAction({ dispatch, fad: updatedFad });
@@ -166,7 +168,7 @@ const Directory = ({ state, actions, libraries }) => {
       // increment page iteration counter
       setPage(page + 1);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       setErrorAction({
         dispatch,
         isError: {
@@ -230,9 +232,9 @@ const Directory = ({ state, actions, libraries }) => {
           paddingTop: !lg ? null : "1em",
         }}
       >
-        <button type="submit" className="blue-btn" onClick={handleSearch}>
+        <div className="blue-btn" onClick={handleSearch}>
           Search
-        </button>
+        </div>
       </div>
     );
   };
@@ -249,13 +251,9 @@ const Directory = ({ state, actions, libraries }) => {
           paddingTop: `2em`,
         }}
       >
-        <button
-          type="submit"
-          className="transparent-btn"
-          onClick={handleLoadMore}
-        >
+        <div className="transparent-btn" onClick={handleLoadMore}>
           Load More
-        </button>
+        </div>
       </div>
     );
   };
@@ -276,7 +274,6 @@ const Directory = ({ state, actions, libraries }) => {
       if (badApps.length) isBADMember = true;
     }
     // dont display action if user is not BAD member
-    // console.log("isBADMember", isBADMember); // debug
     if (!isBADMember) return null;
 
     return (
@@ -377,7 +374,6 @@ const Directory = ({ state, actions, libraries }) => {
                   }}
                 >
                   <input
-                    // id="search-input"
                     ref={searchFilterRef}
                     value={inputValue}
                     onChange={handleChange}

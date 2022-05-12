@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import { colors } from "../config/imports";
 import Image from "@frontity/components/image";
+
+// CONTEXT --------------------------------------------------
 import { muiQuery } from "../context";
 
 const Profile = ({ state, actions, libraries, block }) => {

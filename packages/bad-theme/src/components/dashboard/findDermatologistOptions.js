@@ -1,8 +1,6 @@
 import { useState, useEffect, useReducer, useCallback } from "react";
 import { connect } from "frontity";
 
-import { colors } from "../../config/imports";
-
 import { muiQuery, setErrorAction, useAppDispatch } from "../../context";
 import { handleGetCookie } from "../../helpers/cookie";
 import Loading from "../loading";
@@ -66,7 +64,9 @@ const FindDermatologistOptions = ({ state, actions, libraries }) => {
     };
     getCurrentUserFadData();
   }, []);
+
   if (!fadData) return <Loading />;
+
   const [fadState, updateState] = useReducer(enhancedReducer, fadData);
   const updateForm = useCallback(({ target: { value, name, type } }) => {
     const updatePath = name.split(".");
@@ -99,7 +99,9 @@ const FindDermatologistOptions = ({ state, actions, libraries }) => {
       });
     }
   }, []);
+
   if (!fadData) return <Loading />;
+
   // HELPERS ----------------------------------------------------------------
   const handlePreferenceUpdate = async () => {
     const cookie = await handleGetCookie({ name: `BAD-WebApp` });
@@ -126,7 +128,6 @@ const FindDermatologistOptions = ({ state, actions, libraries }) => {
             dispatch,
             isError: { message: "There was an error processing the update" },
           });
-      console.log("UPDATED?", json);
     }
   };
 
@@ -206,14 +207,16 @@ const FindDermatologistOptions = ({ state, actions, libraries }) => {
               </div>
             </div>
           </div>
-          <div style={{ paddingTop: `1em` }}>Website Address</div>
+          <div style={{ paddingTop: `1em` }}>
+            Private Practice Website Address
+          </div>
           <div>
             <div className="flex-col">
               <input
                 id="mainHospitalWebAddress"
                 type="text"
                 className="form-control"
-                placeholder="Main Hospital Web Address"
+                placeholder="Main Place of Work"
                 style={styles.input}
               />
               <input
@@ -280,11 +283,7 @@ const FindDermatologistOptions = ({ state, actions, libraries }) => {
         className="flex"
         style={{ justifyContent: "flex-end", padding: `2em 0 0` }}
       >
-        <div
-          type="submit"
-          className="blue-btn"
-          onClick={() => handlePreferenceUpdate()}
-        >
+        <div className="blue-btn" onClick={() => handlePreferenceUpdate()}>
           Update
         </div>
       </div>

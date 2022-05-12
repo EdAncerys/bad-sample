@@ -6,6 +6,7 @@ import NiceLogo from "../../img/svg/niceLogo.svg";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { colors } from "../../config/imports";
+import AccordionContext from "react-bootstrap/AccordionContext";
 
 import { muiQuery } from "../../context";
 
@@ -23,7 +24,7 @@ const AccordionHeader = ({
   hasPreview,
 }) => {
   const { sm, md, lg, xl } = muiQuery();
-
+  const { activeEventKey } = React.useContext(AccordionContext);
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { subtitle, acf } = block;

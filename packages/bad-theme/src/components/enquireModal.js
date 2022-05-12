@@ -23,8 +23,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
   const { lg } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const { enquireAction, isActiveUser } = useAppState();
-  console.log("enquireAction", enquireAction); // debug
+  const { enquireAction, isActiveUser, refreshJWT } = useAppState();
 
   const [isFetching, setIsFetching] = useState(null);
   const [formData, setFormData] = useState({
@@ -32,6 +31,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
     jobtitle: "",
     bad_memberid: "",
     emailaddress1: "",
+    var1: "",
     mobilephone: "",
     subject: "",
     subject_dropdown_options: "",
@@ -52,7 +52,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
       ...prevFormData,
       ["jobtitle"]: isActiveUser.jobtitle || "",
       ["fullname"]: isActiveUser.fullname || "",
-      ["emailaddress1"]: isActiveUser.emailaddress1 || "",
+      ["var1"]: isActiveUser.emailaddress1 || "",
       ["mobilephone"]: isActiveUser.mobilephone || "",
       ["currentHospitalName"]:
         isActiveUser[
@@ -66,7 +66,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
   // HANDLERS ----------------------------------------------------
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
-
     // if name is attachments set formData with attachments
     if (name === "attachments") {
       setFormData((prevFormData) => ({
@@ -84,7 +83,8 @@ const EnquireModal = ({ state, actions, libraries }) => {
   const handleContactFormSubmit = async () => {
     // check if formData is valid
     const recipients = enquireAction.recipients;
-
+    console.log("ENQUIREACTION", enquireAction);
+    console.log(formData);
     try {
       setIsFetching(true);
       const response = await sendEmailEnquireAction({
@@ -95,10 +95,13 @@ const EnquireModal = ({ state, actions, libraries }) => {
         attachments: formData.attachments,
         emailSubject: enquireAction.emailSubject, // email default subject title
         template: enquireAction.emailTemplate, // email default template
+        refreshJWT,
       });
       if (!response) throw new Error("Error sending email");
+      console.log("RESPONSE", response);
     } catch (error) {
-      console.log(error);
+      console.log("HIT ERROR", error);
+      // console.log(error);
       setErrorAction({
         dispatch,
         isError: {
@@ -132,7 +135,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
       setErrorAction({
         dispatch,
         isError: {
-          message: `Your have successfully submitted your enquire. We will be in touch soon.`,
+          message: `Your have successfully submitted your enquiry. We will be in touch soon.`,
         },
       });
     }
@@ -144,7 +147,9 @@ const EnquireModal = ({ state, actions, libraries }) => {
 
     let hospitalData = await getHospitalsAction({
       state,
+      dispatch,
       input,
+      refreshJWT,
     });
     // refactor hospital data to match dropdown format
     hospitalData = hospitalData.map((hospital) => {
@@ -156,8 +161,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
 
     if (hospitalData.length > 0) setHospitalData(hospitalData);
     if (!hospitalData.length || !input) setHospitalData(null);
-
-    // console.log("Hospitals", hospitalData); // debug
   };
 
   const handleSelectHospital = ({ item }) => {
@@ -167,7 +170,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
       hospitalChangeName: item.title,
     }));
     setHospitalData(null); // clear hospital data for dropdown
-    console.log("selected hospital", item); // debug
   };
 
   // SERVERS --------------------------------------------------
@@ -330,8 +332,8 @@ const EnquireModal = ({ state, actions, libraries }) => {
               <div style={styles.inputContainer}>
                 <label className="form-label">Email Address</label>
                 <input
-                  name="email"
-                  value={formData.emailaddress1}
+                  name="var1"
+                  value={formData.var1}
                   onChange={handleChange}
                   type="email"
                   className="form-control"
@@ -396,7 +398,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
             {enquireAction.isHospitalChange && (
               <div>
                 <label className="form-label">
-                  Main Place of Work / Medical School
+                  Main Hospital / Place of Work / Medical School details
                 </label>
                 <div style={{ position: "relative" }}>
                   {formData.hospitalChangeName && (
@@ -413,7 +415,12 @@ const EnquireModal = ({ state, actions, libraries }) => {
                           <div
                             className="filter-icon"
                             style={{ top: -7 }}
-                            onClick={() => setSelectedHospital(null)}
+                            onClick={() => {
+                              setFormData({
+                                ...formData,
+                                hospitalChangeName: null,
+                              });
+                            }}
                           >
                             <CloseIcon
                               style={{
@@ -434,7 +441,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
                         onChange={handleHospitalLookup}
                         type="text"
                         className="form-control input"
-                        placeholder="Main Hospital/Place of work"
+                        placeholder="Main Hospital / Place of Work / Medical School details"
                       />
                     </div>
                   )}

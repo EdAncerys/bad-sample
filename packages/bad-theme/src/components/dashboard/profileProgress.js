@@ -3,12 +3,8 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
 import { colors } from "../../config/imports";
-import date from "date-and-time";
-const DATE_MODULE = date;
 import ActionPlaceholder from "../../components/actionPlaceholder";
 import SubmittedApplications from "./submittedApplications";
-import ApplicationList from "./applicationList";
-
 import Ellipse from "../../img/svg/ellipse.svg";
 import CheckMarkGreen from "../../img/svg/checkMarkGreen.svg";
 
@@ -18,15 +14,15 @@ import {
   useAppState,
   setGoToAction,
   deleteApplicationAction,
+  muiQuery,
 } from "../../context";
 
 const ProfileProgress = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
+  const { lg } = muiQuery();
   const dispatch = useAppDispatch();
-  const { dynamicsApps, applicationData, isActiveUser, dashboardPath } =
+  const { dynamicsApps, applicationData, isActiveUser, refreshJWT } =
     useAppState();
-  // console.log("dynamicsApps", dynamicsApps); // debug
 
   const marginVertical = state.theme.marginVertical;
   const ICON_WIDTH = 30;
@@ -84,7 +80,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     if (applicationData && applicationData[0].changeAppCategory)
       path = `/membership/application-change/`;
 
-    setGoToAction({ path: path, actions });
+    setGoToAction({ state, path: path, actions });
   };
 
   const handleCancelApplication = async () => {
@@ -96,6 +92,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
         dispatch,
         applicationData,
         contactid: isActiveUser.contactid,
+        refreshJWT,
       });
     } catch (error) {
       console.log(error);
@@ -188,16 +185,23 @@ const ProfileProgress = ({ state, actions, libraries }) => {
 
   const ServeActions = () => {
     return (
-      <div className="flex" style={{ paddingTop: "1.5em" }}>
+      <div
+        className={!lg ? "flex" : "flex-col"}
+        style={{ paddingTop: "1.5em" }}
+      >
         <div
-          type="submit"
           className="blue-btn"
           onClick={handleCancelApplication}
-          style={{ marginRight: "1em", backgroundColor: colors.danger }}
+          style={{
+            marginRight: !lg ? "1em" : 0,
+            backgroundColor: colors.danger,
+            padding: !lg ? null : 10,
+            marginBottom: !lg ? null : "1em",
+          }}
         >
           Cancel Application
         </div>
-        <div type="submit" className="blue-btn" onClick={handleApply}>
+        <div className="blue-btn" onClick={handleApply}>
           Continue Application
         </div>
       </div>
@@ -209,7 +213,10 @@ const ProfileProgress = ({ state, actions, libraries }) => {
 
     // get application name & type & concat in string
     const appData = applicationData[0]; // application info data
-    const appProgress = `${appData.bad_organisedfor} - ${appData.bad_categorytype}: ${applicationStep}`;
+    let appProgress = `${appData.bad_organisedfor} - ${appData.bad_categorytype}: ${applicationStep}`;
+    // general SIG application route
+    if (appData.bad_categorytype === "*")
+      appProgress = `${appData.bad_organisedfor}: Started Special Interest Group application`;
 
     return (
       <div style={{ position: "relative" }}>
@@ -217,7 +224,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
         <div
           className="flex-col shadow"
           style={{
-            padding: `2em 4em`,
+            padding: !lg ? `2em 4em` : `1em`,
             marginBottom: `${marginVertical}px`,
           }}
         >
@@ -247,7 +254,6 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     <div>
       <ServeApplicationConsole />
       <SubmittedApplications />
-      <ApplicationList />
     </div>
   );
 };

@@ -54,8 +54,8 @@ const Sagepay = ({ state, actions, libraries }) => {
   async function doSage(e) {
     try {
       const request = {
-        // url: 'https://ae6d-82-31-1-88.ngrok.io/sagepay/test',
-        url: "https://skylarkdev.digital/dynamicsbridge/sagepay/test",
+        // url: 'https://ae6d-82-31-1-88.ngrok.io/sagepay/live',
+        url: "https://skylarkdev.digital/dynamicsbridge/sagepay/live",
         method: "POST",
         headers: {
           Authorization: `Bearer ${jwt}`,
@@ -65,9 +65,7 @@ const Sagepay = ({ state, actions, libraries }) => {
       };
       e.preventDefault();
 
-      console.log("About to sage");
       let sage = await fetch(request.url, request);
-      console.log("Sage OK = ", sage.ok);
       if (sage.ok) {
         sage = await sage.json();
         let sageResult = sage.data.split("\r\n");
@@ -268,9 +266,7 @@ const Sagepay = ({ state, actions, libraries }) => {
 
           <div className="form-group row">
             <div className="col-sm-10">
-              <button type="submit" className="btn-primary">
-                Send To Sage
-              </button>
+              <div className="btn-primary">Send To Sage</div>
             </div>
           </div>
         </form>

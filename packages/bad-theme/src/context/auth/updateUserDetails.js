@@ -9,8 +9,9 @@ export const updateAddressAction = async ({
   dispatch,
   data,
   isActiveUser,
+  refreshJWT,
 }) => {
-  console.log("updateAddressAction triggered");
+  // console.log("updateAddressAction triggered");
   const { contactid } = isActiveUser;
 
   const URL = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
@@ -19,7 +20,7 @@ export const updateAddressAction = async ({
   // --------------------------------------------------------------------------
   // 📌 STEP: Log onto the API server and get the Bearer token
   // --------------------------------------------------------------------------
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
   if (!jwt) throw new Error("Cannot logon to server.");
 
   const requestOptions = {
@@ -43,17 +44,24 @@ export const updateAddressAction = async ({
         dispatch,
         jwt,
         contactid,
+        refreshJWT,
       });
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
   }
 };
 
-export const updateEthnicityAction = async ({ state, data, isActiveUser }) => {
-  console.log("updateEthnicityAction triggered");
+export const updateEthnicityAction = async ({
+  state,
+  dispatch,
+  data,
+  isActiveUser,
+  refreshJWT,
+}) => {
+  // console.log("updateEthnicityAction triggered");
   if (!isActiveUser) throw new Error("isActiveUser is required");
 
   const { contactid } = isActiveUser;
@@ -62,7 +70,7 @@ export const updateEthnicityAction = async ({ state, data, isActiveUser }) => {
   // --------------------------------------------------------------------------
   // 📌 STEP: Log onto the API server and get the Bearer token
   // --------------------------------------------------------------------------
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
   if (!jwt) throw new Error("Cannot logon to server.");
 
   const requestOptions = {
@@ -81,10 +89,9 @@ export const updateEthnicityAction = async ({ state, data, isActiveUser }) => {
     if (!response) throw new Error("Error updating profile.");
 
     if (response.success) {
-      console.log("⬇️ user recorded successfully updated", response);
       return response;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };

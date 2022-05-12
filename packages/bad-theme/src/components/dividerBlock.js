@@ -1,7 +1,6 @@
 import { connect } from "frontity";
 
 import Loading from "./loading";
-import { colors } from "../config/imports";
 import BlockWrapper from "./blockWrapper";
 
 const DividerBlock = ({ state, actions, libraries, block }) => {

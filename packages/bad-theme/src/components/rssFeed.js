@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
-import parse from "html-react-parser";
 
 import TitleBlock from "./titleBlock";
 import Card from "./card/card";
@@ -10,6 +9,7 @@ import BlockWrapper from "./blockWrapper";
 import SearchContainer from "./searchContainer";
 
 import CloseIcon from "@mui/icons-material/Close";
+
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -26,10 +26,14 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { bjdFeed, cedFeed, shdFeed } = useAppState();
+  const { bjdFeed, cedFeed, shdFeed, refreshJWT } = useAppState();
+
+  const incrementor = 12;
 
   const [feedData, setFeedData] = useState(null);
   const [searchFilter, setSearchFilter] = useState(null);
+  const searchFilterRef = useRef(null);
+  const chunkRef = useRef(incrementor);
 
   if (!block) return <Loading />;
 
@@ -41,12 +45,6 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
     disable_vertical_padding,
     add_search_function,
   } = block;
-
-  const searchFilterRef = useRef(null);
-  const currentSearchFilterRef = useRef(null);
-  const loadMoreRef = useRef(null);
-
-  const LIMIT = 8;
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -67,28 +65,26 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
-    const limit = post_limit || LIMIT;
-    let result = null;
+    const postLimit = post_limit || incrementor;
+    let data = null;
 
-    if (isBJD) result = await getBJDFeedAction({ state, dispatch });
-    if (isCED) result = await getCEDFeedAction({ state, dispatch });
-    if (isSHD) result = await getSHDFeedAction({ state, dispatch });
+    if (isBJD) data = await getBJDFeedAction({ state, dispatch, refreshJWT });
+    if (isCED) data = await getCEDFeedAction({ state, dispatch, refreshJWT });
+    if (isSHD) data = await getSHDFeedAction({ state, dispatch, refreshJWT });
 
-    setFeedData(result.slice(0, Number(limit))); // apply limit on posts
+    setFeedData(data.slice(0, Number(postLimit))); // apply limit on posts
 
     return () => {
       searchFilterRef.current = false; // clean up function
     };
   }, []);
-  // DATA pre FETCH ----------------------------------------------------------------
+
   if (!feedData) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
   const handleClearFilter = () => {
     setSearchFilter(null);
     searchFilterRef.current.value = "";
-    currentSearchFilterRef.current = null;
-    loadMoreRef.current = null;
 
     let data = null;
 
@@ -96,29 +92,35 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
     if (isCED) data = cedFeed;
     if (isSHD) data = shdFeed;
 
-    setFeedData(data.slice(0, Number(LIMIT)));
+    setFeedData(data.slice(0, Number(chunkRef.current)));
   };
 
   const handleLoadMoreFilter = () => {
-    if (feedData.length < LIMIT) return;
     let data = null;
 
     if (isBJD) data = bjdFeed;
     if (isCED) data = cedFeed;
     if (isSHD) data = shdFeed;
 
-    if (!loadMoreRef.current) {
-      loadMoreRef.current = data;
-      setFeedData(data);
-    } else {
-      setFeedData(loadMoreRef.current.slice(0, Number(LIMIT)));
-      loadMoreRef.current = null;
-    }
+    // increment page number
+    chunkRef.current = chunkRef.current + incrementor;
+    setFeedData(data.slice(0, Number(chunkRef.current)));
   };
 
   const handleSearch = () => {
     const input = searchFilterRef.current.value;
-    currentSearchFilterRef.current = input;
+    // filter feedData that includes input
+    const filteredData = feedData.filter((item) => {
+      const title = item.title.toLowerCase();
+      const description = item.description.toLowerCase();
+
+      return (
+        title.includes(input.toLowerCase()) ||
+        description.includes(input.toLowerCase())
+      );
+    });
+
+    setFeedData(filteredData);
     setSearchFilter(input);
   };
 
@@ -174,9 +176,16 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
   };
 
   const ServeMoreAction = () => {
-    if (post_limit || feedData.length < LIMIT || currentSearchFilterRef.current)
-      return null;
-    const value = loadMoreRef.current ? "Less" : " Load More";
+    // if (post_limit || feedData.length < chunkRef) return null;
+    let label = "Load More";
+    let data = null;
+
+    if (isBJD) data = bjdFeed;
+    if (isCED) data = cedFeed;
+    if (isSHD) data = shdFeed;
+
+    // return null if data is less than chunkRef
+    if (data.length < chunkRef.current) return null;
 
     return (
       <div
@@ -186,13 +195,9 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
           paddingTop: `2em`,
         }}
       >
-        <button
-          type="submit"
-          className="transparent-btn"
-          onClick={handleLoadMoreFilter}
-        >
-          {value}
-        </button>
+        <div className="transparent-btn" onClick={handleLoadMoreFilter}>
+          {label}
+        </div>
       </div>
     );
   };
@@ -203,16 +208,6 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
         {feedData.map((block, key) => {
           const { title, category, link, pubDate } = block;
           const doi = block["prism:doi"];
-          // console.log(block); // debug
-
-          // HANDLERS -----------------------------------------------------
-          if (searchFilter) {
-            if (
-              !title.toLowerCase().includes(searchFilter.toLowerCase()) &&
-              !category.toLowerCase().includes(searchFilter.toLowerCase())
-            )
-              return;
-          }
 
           return (
             <Card
@@ -224,6 +219,7 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
               colour={colour}
               titleLimit={6}
               cardMinHeight={280}
+              animationType="none" // remove animation
               shadow
             />
           );

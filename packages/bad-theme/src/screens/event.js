@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
-
-import { colors } from "../config/imports";
+import { colors } from "../config/colors";
 import RowButton from "../components/rowButton";
 import ShareToSocials from "../components/card/shareToSocials";
 import Loading from "../components/loading";
@@ -19,8 +18,11 @@ import {
   setGoToAction,
   muiQuery,
   useAppState,
+  setErrorAction,
+  getEventGrades,
+  getEventLocations,
+  getEventsData,
 } from "../context";
-import { getEventsData } from "../helpers";
 
 const Event = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
@@ -28,15 +30,14 @@ const Event = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const event = state.source[data.type][data.id];
-  // console.log("event data: ", event); // debug
 
   const dispatch = useAppDispatch();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
   const [eventList, setEventList] = useState(null);
-  const [gradeList, setGradeList] = useState(null);
-  const [locationList, setLocationList] = useState(null);
+  const [gradeList, setGrades] = useState(null);
+  const [locationList, setLocations] = useState(null);
   const [position, setPosition] = useState(null);
   const useEffectRef = useRef(null);
 
@@ -45,49 +46,15 @@ const Event = ({ state, actions, libraries }) => {
     window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
     document.documentElement.scrollTop = 0; // for safari
 
-    // get related event content
-    let eventList = null;
-    let categoryList = null;
-    let locationList = null;
+    let grades = await getEventGrades({ state });
+    let locations = await getEventLocations({ state });
+    let events = await getEventsData({ state });
 
-    // pre fetch events data
-    let data = state.source.events;
-    let isCurrentOnly = false;
-    // on page re-fresh check if is current only
-    if (data && Object.keys(data).length === 1) isCurrentOnly = true;
-    if (isCurrentOnly) {
-      await getEventsData({ state, actions });
-    }
+    setGrades(grades);
+    setLocations(locations);
+    setEventList(events);
 
-    let iteration = 0;
-    while (!data) {
-      // if iteration is greater than 10, break
-      if (iteration > 10) break;
-      // set timeout for async
-      await getEventsData({ state, actions });
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      data = state.source.events;
-      iteration++;
-      console.log("🚀 ", iteration);
-    }
-
-    // if !data then break
-    if (!data) return;
-    eventList = Object.values(data);
-
-    if (state.source.event_grade)
-      categoryList = Object.values(state.source.event_grade);
-    if (state.source.event_location)
-      locationList = Object.values(state.source.event_location);
-
-    setEventList(eventList);
-    setGradeList(categoryList);
-    setLocationList(locationList);
     setPosition(true);
-
-    return () => {
-      useEffectRef.current = false; // clean up function
-    };
   }, []);
 
   const {
@@ -114,7 +81,9 @@ const Event = ({ state, actions, libraries }) => {
     register_message,
     register_allow_attachments,
     register_recipients,
-
+    registration_status_email,
+    registration_status_eventsforce,
+    registration_status_external,
     contact_public_email,
     contact_public_phone_number,
     contact_form_title,
@@ -131,7 +100,10 @@ const Event = ({ state, actions, libraries }) => {
   const { title, id } = event;
   // console.log("event", event); // debug
   if (!position) return <Loading />;
-
+  const handleLogin = () => {
+    setErrorAction({ dispatch, isError: null });
+    loginAction({ state });
+  };
   // SERVERS ----------------------------------------------
   const ServeTitle = () => {
     if (!title) return null;
@@ -299,10 +271,10 @@ const Event = ({ state, actions, libraries }) => {
     const ServeInformationForUser = () => {
       if (registration_type === "events_force" && !isActiveUser) {
         return (
-          <div style={{ padding: "1em 0" }}>
-            "Please login to your BAD account and use your registered email
+          <div style={{ padding: "1em 0", textAlign: "center" }}>
+            Please login to your BAD account and use your registered email
             address for signing up to this event, this will enable us to link
-            your registration to your BAD account"
+            your registration to your BAD account
           </div>
         );
       }
@@ -321,15 +293,48 @@ const Event = ({ state, actions, libraries }) => {
     };
 
     const handleRegistrationClick = () => {
+      // if (!isActiveUser) {
+      //   setErrorAction({
+      //     dispatch,
+      //     isError: {
+      //       message: `Please log in to the BAD website in order to register for this event`,
+      //       image: "Error",
+      //       action: [{ label: "Login", handler: handleLogin }],
+      //     },
+      //   });
+      //   return;
+      // }
+      if (
+        (registration_type === "email" &&
+          registration_status_email === "registration_not_open") ||
+        (registration_type === "events_force" &&
+          registration_status_eventsforce === "registration_not_open") ||
+        (registration_type === "external" &&
+          registration_status_external === "registration_not_open")
+      ) {
+        setErrorAction({
+          dispatch,
+          isError: {
+            message: `Registration for this event is not open. `,
+            image: "Error",
+          },
+        });
+        return true;
+      }
+
       if (
         registration_type === "events_force" ||
         registration_type === "external"
       ) {
         // open page in new window
         window.open(registration_page_link, "_blank");
+        return true;
       }
 
-      if (registration_type === "email") {
+      if (
+        registration_type === "email" &&
+        registration_status_email === "register"
+      ) {
         setEnquireAction({
           dispatch,
           enquireAction: {
@@ -341,41 +346,151 @@ const Event = ({ state, actions, libraries }) => {
             full_name: true,
             email_address: true,
             phone_number: true,
-            recipients: state.contactList.defaultContactList,
+            recipients: [
+              {
+                email: event.acf.email
+                  ? event.acf.email
+                  : "conference@bad.org.uk",
+              },
+            ],
             registerForEvent: title.rendered,
             // default email subject & template name
-            emailSubject: `Register for ${title.rendered} event interest.`,
+            emailSubject: `Register for ${title.rendered} event.`,
             emailTemplate: "StandardEnquiryForm",
           },
         });
+        return true;
+      }
+      if (
+        registration_type === "email" &&
+        registration_status_email === "register_an_interest"
+      ) {
+        setEnquireAction({
+          dispatch,
+          enquireAction: {
+            contact_public_email: "conference@bad.org.uk",
+            form_title:
+              register_form_title || "Event Contact Form (express an interest)",
+            form_body:
+              register_form_body ||
+              `Express an interest for ${title.rendered} event.`,
+            subject: `Interest registration for ${title.rendered} event.`,
+            full_name: true,
+            email_address: true,
+            phone_number: true,
+            recipients: [
+              {
+                email: event.acf.email
+                  ? event.acf.email
+                  : "conference@bad.org.uk",
+              },
+            ],
+            registerForEvent: title.rendered,
+            // default email subject & template name
+            emailSubject: `Express an interest for ${title.rendered} event.`,
+            emailTemplate: "StandardEnquiryForm",
+          },
+        });
+        return true;
+      }
+    };
+    const ButtonTitle = () => {
+      if (registration_type) {
+        if (
+          registration_type === "email" &&
+          registration_status_email === "register"
+        )
+          return "Register for event";
+        if (
+          registration_type === "email" &&
+          registration_status_email === "register_an_interest"
+        )
+          return "Express an interest";
+        if (
+          registration_type === "email" &&
+          registration_status_email === "registration_not_open"
+        )
+          return "Registration not open";
+        if (
+          registration_type === "events_force" &&
+          registration_status_eventsforce === "register"
+        )
+          return "Register for event";
+        if (
+          registration_type === "events_force" &&
+          registration_status_eventsforce === "registration_not_open"
+        )
+          return "Registration not open";
+        if (
+          registration_type === "external" &&
+          registration_status_external === "registration_not_open"
+        )
+          return "Registration not open";
+        if (
+          registration_type === "external" &&
+          registration_status_external === "register"
+        )
+          return "Register for event";
+      }
+      return "Register";
+    };
+
+    const checkIfdisabled = () => {
+      switch (disabled) {
+        case registration_status_email === "registration_not_open":
+        case registration_status_external === "registration_not_open":
+        case registration_status_eventsforce === "registration_not_open":
+          return true;
+
+        default:
+          return false;
       }
     };
 
+    const checkColor = () => {
+      console.log("HIT CHECK COLOUR");
+      switch (disabled) {
+        case registration_status_email === "registration_not_open":
+        case registration_status_external === "registration_not_open":
+        case registration_status_eventsforce === "registration_not_open":
+          return "blue-btn";
+        default:
+          return "blue-btn";
+      }
+    };
     return (
       <div
         className="flex"
         style={{
-          // backgroundColor: colors.lightSilver, // optional background color
+          backgroundColor: colors.white, // optional background color
           justifyContent: "center",
           padding: `2em`,
           margin: `0`,
           flexDirection: "column",
           alignItems: "center",
+          marginTop: "1em",
         }}
       >
         <ServeInformationForUser />
         <button
-          className="blue-btn"
+          className={
+            (registration_type === "email" &&
+              registration_status_email === "registration_not_open") ||
+            (registration_type === "external" &&
+              registration_status_external === "registration_not_open") ||
+            (registration_type === "events_force" &&
+              registration_status_eventsforce === "registration_not_open")
+              ? "disabled-btn"
+              : "blue-btn-reverse"
+          }
           style={{
-            backgroundColor: colors.primary,
-            color: colors.white,
             padding: `1em 2em`,
-            width: 200,
+            width: 250,
             marginTop: 10,
           }}
           onClick={handleRegistrationClick}
         >
-          Register for Event
+          <ButtonTitle />
         </button>
       </div>
     );
@@ -422,7 +537,7 @@ const Event = ({ state, actions, libraries }) => {
           className="primary-title"
           style={{ padding: `1em 0`, fontSize: 20, color: colors.white }}
         >
-          Not a Member of British Association Dermatology?
+          Not a member of the British Association of Dermatologists?
         </div>
 
         <div
@@ -433,7 +548,7 @@ const Event = ({ state, actions, libraries }) => {
             width: "fit-content",
             paddingTop: `1em`,
           }}
-          onClick={() => setGoToAction({ path: "/membership", actions })}
+          onClick={() => setGoToAction({ state, path: "/membership", actions })}
         >
           Join Us Here
         </div>
@@ -452,8 +567,8 @@ const Event = ({ state, actions, libraries }) => {
     const shareUrl = state.auth.APP_URL + removeFirstSlash(state.router.link);
 
     // event start date
-    let startDate = new Date();
-    if (date_time) startDate = Object.values(date_time)[0].date;
+    let startDate = date_time;
+    if (startDate[0]) startDate = startDate[0].date;
 
     return (
       <div className="flex-col" style={{ width: `55%` }}>
@@ -562,7 +677,9 @@ const Event = ({ state, actions, libraries }) => {
                 <div
                   className="primary-title title-link-animation"
                   style={{ fontSize: 16, padding: "1em 0", cursor: "pointer" }}
-                  onClick={() => setGoToAction({ path: event.link, actions })}
+                  onClick={() =>
+                    setGoToAction({ state, path: event.link, actions })
+                  }
                 >
                   {event.title.rendered}
                 </div>
@@ -605,7 +722,7 @@ const Event = ({ state, actions, libraries }) => {
   };
 
   return (
-    <BlockWrapper>
+    <BlockWrapper background={colors.silverFillOne}>
       <div style={{ backgroundColor: colors.silverFillOne }}>
         <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
           <div style={!lg ? styles.container : styles.containerMobile}>
@@ -630,7 +747,7 @@ const Event = ({ state, actions, libraries }) => {
       <div
         style={{
           padding: `${marginVertical}px ${marginHorizontal}px`,
-          backgroundColor: colors.darkSilver,
+          backgroundColor: colors.lightSilver,
         }}
       >
         <RowButton
@@ -654,7 +771,7 @@ const Event = ({ state, actions, libraries }) => {
                 message: true,
                 allow_attachments: contact_allow_attachments,
                 recipients:
-                  contact_recipients || state.contactList.defaultContactList,
+                  contact_recipients || state.contactList.DEFAULT_CONTACT_LIST,
                 // default email subject & template name
                 emailSubject: `Enquire about ${title.rendered} event.`,
                 emailTemplate: "StandardEnquiryForm",
@@ -691,6 +808,9 @@ const styles = {
   },
   date: {
     paddingRight: 5,
+    fontSize: "12px",
+    fontWeight: "bold",
+    textTransform: "uppercase",
   },
   action: {
     backgroundColor: colors.silverFillOne,

@@ -3,79 +3,173 @@ import { connect } from "frontity";
 import Loading from "./loading";
 import BlockWrapper from "./blockWrapper";
 import Card from "./card/card";
-import ShareToSocials from "./card/shareToSocials";
 import { colors } from "../config/colors";
 import Image from "@frontity/components/image";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import LockIcon from "@mui/icons-material/Lock";
 import defaultCover from "../img/png/video_default.jpg";
+import { handleGetCookie } from "../helpers/cookie";
+import PaymentModal from "./dashboard/paymentModal";
 
+import date from "date-and-time";
+const DATE_MODULE = date;
+
+// CONTEXT ----------------------------------------------------------------
 import {
   useAppState,
   useAppDispatch,
   authenticateAppAction,
   setEnquireAction,
+  muiQuery,
+  setCreateAccountModalAction,
+  setErrorAction,
 } from "../context";
-import { handleGetCookie } from "../helpers/cookie";
-import PaymentModal from "./dashboard/paymentModal";
+
 const Video = ({ state, actions, libraries }) => {
-  const data = state.source.get(state.router.link);
-  const post = state.source[data.type][data.id];
-
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
-  const { isActiveUser } = useAppState();
-  const dispatch = useAppDispatch();
-  console.log(isActiveUser);
-  if (!post) return <Loading />;
-
-  console.log(post);
   // STATE
   const [loadVideo, setLoadVideo] = React.useState(false);
   const [videoStatus, setVideoStatus] = React.useState("");
   const [paymentUrl, setPaymentUrl] = React.useState("");
-  // HELPERS
+  const [relatedVideos, setRelatedVideos] = React.useState(null);
+
+  const data = state.source.get(state.router.link);
+  const post = state.source[data.type][data.id];
+
+  const queryParams = new Proxy(new URLSearchParams(window.location.search), {
+    get: (searchParams, prop) => searchParams.get(prop),
+  });
+
+  let isSagepay = queryParams.sagepay;
+  const handlePaymentModal = (url) => {
+    console.log("PM URL", url);
+    setErrorAction({
+      dispatch,
+      isError: {
+        message: `The card payment industry is currently in the process of making significant changes to the way card payments are processed online. Unfortunately, because of these changes, some users are experiencing temporary issues with making card payments through the website. If you cannot make a payment through the website, please contact membership@bad.org.uk to discuss alternative arrangements for making payments.`,
+        image: "Error",
+        goToPath: { label: "Continue", path: url },
+      },
+    });
+  };
+  const { lg } = muiQuery();
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
+  const dispatch = useAppDispatch();
+  const { isActiveUser, refreshJWT } = useAppState();
+
+  React.useEffect(async () => {
+    //Not the greatest idea to make useEffect async
+    await actions.source.fetch("/videos/");
+    const all_videos = state.source.videos;
+    const videos_list = await Object.values(all_videos);
+    const related_videos_to_show = videos_list.slice(0, 3);
+
+    if (isSagepay) {
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Your payment has been accepted`,
+          image: "CheckMark",
+        },
+      });
+    }
+
+    setRelatedVideos(related_videos_to_show);
+    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
+
+    if (!post.acf.private) {
+      setVideoStatus("unlocked");
+      return true;
+    }
+    if (!isActiveUser) {
+      setVideoStatus("locked");
+      return true;
+    }
+    if (isActiveUser && post.acf.price) {
+      const url =
+        state.auth.APP_HOST +
+        "/videvent/" +
+        isActiveUser.contactid +
+        "/" +
+        post.acf.event_id;
+      console.log("URL", url);
+      const fetching = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+
+      if (fetching.ok) {
+        const json = await fetching.json();
+        console.log("JSON", json);
+        console.log("ENTITY", json.data.entity.bad_confirmationid);
+        // if (json.success === false) setVideoStatus("locked");
+        if (json.success && json.data.entity.bad_confirmationid) {
+          setVideoStatus("unlocked");
+          return true;
+        }
+        setVideoStatus("locked");
+        return true;
+      } else {
+        console.log("FETCHING FAILED");
+        setVideoStatus("locked");
+        return true;
+      }
+    }
+    setVideoStatus("locked");
+    console.log("VIDSTATUS2", videoStatus);
+  }, [isActiveUser, paymentUrl]);
+
+  if (!post) return <Loading />;
+  if (!videoStatus) return <Loading />;
+  if (!state.source.videos) return <Loading />;
+
+  // HELPERS ----------------------------------------------------------------
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  //HELPERS
   const handlePayment = async () => {
     const cookie = handleGetCookie({ name: `BAD-WebApp` });
     const { contactid, jwt } = cookie;
 
-    const the_url =
-      state.auth.ENVIRONMENT === "DEVELOPMENT"
-        ? "http://localhost:3000/"
-        : state.auth.APP_URL;
-
-    const fetchVendorId = await fetch(
+    const sagepay_url =
+      state.auth.ENVIRONMENT === "PRODUCTION"
+        ? "sagepay/live/video"
+        : "/sagepay/test/video/";
+    const uappUrl = state.auth.APP_URL;
+    const url =
       state.auth.APP_HOST +
-        "/sagepay/test/video/" +
-        contactid +
-        "/" +
-        post.acf.event_id +
-        "/" +
-        post.acf.price +
-        `?redirecturl=${the_url}/payment-confirmation`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      }
-    );
+      sagepay_url +
+      contactid +
+      "/" +
+      post.acf.event_id +
+      "/" +
+      post.acf.price +
+      `?redirecturl=` +
+      uappUrl +
+      state.router.link +
+      "?sagepay=true";
+    const fetchVendorId = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+
     if (fetchVendorId.ok) {
       const json = await fetchVendorId.json();
       const url =
         json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
-      setPaymentUrl(url);
+      handlePaymentModal(url);
     }
     // setPage({ page: "directDebit", data: block });
   };
+
   const resetPaymentUrl = () => {
     setPaymentUrl(null);
   };
-  //SERVERS
+
+  //SERVERS ----------------------------------------------------
   const ServeTitle = () => {
     return (
       <div style={{ marginTop: "1em", marginBottom: "1em" }}>
@@ -85,21 +179,21 @@ const Video = ({ state, actions, libraries }) => {
       </div>
     );
   };
+
   const ServeContent = () => {
     const ServeImage = () => {
       const [videoCover, setVideoCover] = React.useState(defaultCover);
+
       const getVimeoCover = async ({ video_url }) => {
-        console.log("VIDEOURL", video_url);
         // Example URL: https://player.vimeo.com/video/382577680?h=8f166cf506&color=5b89a3&title=0&byline=0&portrait=0
         const reg = /\d+/g;
         const videoId = video_url.match(reg);
-        console.log("VIDELOID", videoId);
         const fetchVideoData = await fetch(
           `https://vimeo.com/api/v2/video/${videoId[0]}.json`
         );
+
         if (fetchVideoData.ok) {
           const json = await fetchVideoData.json();
-          console.log(json[0].thumbnail_medium);
           setVideoCover(json[0].thumbnail_large);
         }
       };
@@ -111,6 +205,7 @@ const Video = ({ state, actions, libraries }) => {
       return (
         <div style={{ position: "relative" }}>
           <Image src={videoCover} alt="Submit" style={{ width: "100%" }} />
+
           <div
             style={{
               position: "absolute",
@@ -134,6 +229,7 @@ const Video = ({ state, actions, libraries }) => {
         </div>
       );
     };
+
     const ServeVideo = () => {
       return (
         <iframe
@@ -146,39 +242,46 @@ const Video = ({ state, actions, libraries }) => {
         />
       );
     };
+
     const ServeDateAndPrice = () => {
+      const dateObject = new Date(post.date);
+      const formattedDate = DATE_MODULE.format(dateObject, "MMMM YYYY");
+
       const ServePrice = () => {
-        if (!videoStatus || !isActiveUser)
+        if (!isActiveUser)
           return (
             <div>
               <div
-                className="primary-title"
-                style={{ fontSize: 20, display: "flex", alignItems: "center" }}
+                className="blue-btn"
+                onClick={() =>
+                  setCreateAccountModalAction({
+                    dispatch,
+                    createAccountAction: true,
+                  })
+                }
               >
-                {post.acf.private ? "Login to watch or buy" : "Free to watch"}
+                Login to purchase or watch this video
               </div>
-              {post.acf.private && `£${post.acf.price}`}
             </div>
           );
+
         if (isActiveUser && post.acf.private && videoStatus === "locked")
           return (
-            <div
-              type="submit"
-              className="blue-btn"
-              onClick={() => handlePayment()}
-            >
+            <div className="blue-btn" onClick={handlePayment}>
               Buy for £{post.acf.price}
             </div>
           );
+
         if (post.acf.private && videoStatus === "unlocked")
           return (
             <div
               className="primary-title"
               style={{ fontSize: 20, display: "flex", alignItems: "center" }}
             >
-              You own the video
+              You have access to this video
             </div>
           );
+
         return (
           <div
             className="primary-title"
@@ -188,6 +291,7 @@ const Video = ({ state, actions, libraries }) => {
           </div>
         );
       };
+
       return (
         <div
           style={{
@@ -200,10 +304,14 @@ const Video = ({ state, actions, libraries }) => {
           }}
         >
           <ServePrice />
-          <p>Published 12.04.2022</p>
+          <div>
+            <span className="primary-title">Published: </span>
+            {formattedDate}
+          </div>
         </div>
       );
     };
+
     return (
       <div className="shadow">
         {loadVideo ? <ServeVideo /> : <ServeImage />}
@@ -211,6 +319,7 @@ const Video = ({ state, actions, libraries }) => {
       </div>
     );
   };
+
   const ServeBody = () => {
     return (
       <Card
@@ -219,20 +328,22 @@ const Video = ({ state, actions, libraries }) => {
           event_specialty: post.event_specialty,
         }}
         colour={colors.orange}
-        onClick={() => setGoToAction({ path: post.link, actions })}
+        onClick={() => setGoToAction({ state, path: post.link, actions })}
         shareToSocials
         disableCardAnimation
       />
     );
   };
+
   const RelatedVideos = () => {
-    const videos_list = Object.values(state.source.videos);
-    const related_videos_to_show = videos_list.slice(0, 2);
-    if (!state.source.videos) return null;
-    return related_videos_to_show.map((vid) => {
-      if (vid.id === post.id) vid = videos_list[2];
+    if (!relatedVideos) return null;
+    if (relatedVideos.length < 3) return null;
+    return relatedVideos.map((vid, key) => {
+      if (vid.id === post.id) vid = relatedVideos[2];
+      if (key > 1) return null;
       return (
         <Card
+          key={key}
           title={vid.title.rendered}
           url="https://i.vimeocdn.com/video/843761302-3d7f394aea80c28b923cee943e3a6be6c0f23410043d41daf399c9a57d19a191-d_640"
           body={vid.content.rendered}
@@ -240,54 +351,13 @@ const Video = ({ state, actions, libraries }) => {
           videoArchive={vid}
           link={vid.link}
           noVideoCategory
-          onClick={() => setGoToAction({ path: vid.link, actions })}
+          onClick={() => setGoToAction({ state, path: vid.link, actions })}
           cardHeight={500}
           disableCardAnimation
         />
       );
     });
   };
-  React.useEffect(async () => {
-    //Not the greatest idea to make useEffect async
-    actions.source.fetch("/videos/");
-
-    const jwt = await authenticateAppAction({ state, dispatch });
-    console.log("JWT:", jwt);
-
-    if (!post.acf.private) {
-      setVideoStatus("unlocked");
-      return true;
-    }
-    if (!isActiveUser) {
-      setVideoStatus("locked");
-      return true;
-    }
-    if (isActiveUser && post.acf.price) {
-      const url =
-        state.auth.APP_HOST +
-        "/videvent/" +
-        isActiveUser.contactid +
-        "/" +
-        post.acf.event_id;
-      const fetching = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      });
-      if (fetching.ok) {
-        const json = await fetching.json();
-        if (json.success === false) setVideoStatus("locked");
-        if (json.data.entity.bad_confirmationid) setVideoStatus("unlocked");
-        return true;
-      } else {
-        setVideoStatus("locked");
-        return true;
-      }
-    }
-    setVideoStatus("locked");
-  }, [isActiveUser, paymentUrl]);
-  if (!videoStatus) return <Loading />;
-  if (!state.source.videos) return <Loading />;
 
   const handleProblemEnquiry = () => {
     setEnquireAction({
@@ -307,6 +377,7 @@ const Video = ({ state, actions, libraries }) => {
       },
     });
   };
+
   return (
     <BlockWrapper>
       <PaymentModal
@@ -315,7 +386,7 @@ const Video = ({ state, actions, libraries }) => {
       />
       <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
         <ServeTitle />
-        <div style={styles.container}>
+        <div style={!lg ? styles.container : styles.containerMobile}>
           <div>
             <ServeContent />
             <ServeBody />
@@ -346,6 +417,11 @@ const styles = {
   container: {
     display: "grid",
     gridTemplateColumns: "2fr 1fr",
+    gap: 20,
+  },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: "1fr",
     gap: 20,
   },
 };

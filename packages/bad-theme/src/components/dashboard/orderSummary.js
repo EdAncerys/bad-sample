@@ -3,7 +3,6 @@ import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 import { Form } from "react-bootstrap";
-
 import { UK_COUNTIES } from "../../config/data";
 import { UK_COUNTRIES } from "../../config/data";
 // CONTEXT ----------------------------------------------------------------
@@ -38,7 +37,6 @@ const OrderSummary = ({ state, actions, libraries }) => {
       postcode,
       country,
     };
-    console.log("orderSummary", orderSummary);
   };
 
   // HELPERS ----------------------------------------------------------------
@@ -240,14 +238,13 @@ const OrderSummary = ({ state, actions, libraries }) => {
         style={{ justifyContent: "flex-end", padding: `2em 0 0` }}
       >
         <div
-          type="submit"
           className="transparent-btn"
           style={{ marginRight: `2em` }}
           onClick={handlePayment}
         >
           Cancel
         </div>
-        <div type="submit" className="blue-btn" onClick={handleProfileUpdate}>
+        <div className="blue-btn" onClick={handleProfileUpdate}>
           Save
         </div>
       </div>

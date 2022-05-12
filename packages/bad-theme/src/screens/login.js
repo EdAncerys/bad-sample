@@ -12,7 +12,7 @@ const login = ({ state, actions }) => {
 
   // HELPERS ----------------------------------------------------
   const handleUserLogin = async () => {
-    console.log("handleUserLogin triggered");
+    // console.log("handleUserLogin triggered");
     if (username === "" || password === "") return;
     const URL = "http://localhost:8888/events/wp-json/jwt-auth/v1/token";
 
@@ -39,7 +39,7 @@ const login = ({ state, actions }) => {
         alert(`${response.message}`);
       }
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
     }
   };
 

@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import Image from "@frontity/components/image";
 import { Modal } from "react-bootstrap";
 
 import { colors } from "../../config/imports";
@@ -15,7 +13,7 @@ const GeneralModal = ({ state, actions, libraries, modalData, handler }) => {
 
   const { title, link, body } = modalData;
 
-  // HELPERS ---------------------------------------------
+  // HELPERS --------------------------------------------------
 
   // SERVERS --------------------------------------------------
   const ServeModalContent = () => {
@@ -45,18 +43,20 @@ const GeneralModal = ({ state, actions, libraries, modalData, handler }) => {
         </div>
       );
     };
+
     const ServeMoreLink = () => {
       if (!link) return null;
 
       return (
         <div
           className="blue-btn"
-          onClick={() => setGoToAction({ path: link, actions })}
+          onClick={() => setGoToAction({ state, path: link, actions })}
         >
           Read more here
         </div>
       );
     };
+
     const ServeActions = () => {
       return (
         <Modal.Footer

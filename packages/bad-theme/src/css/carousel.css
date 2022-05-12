@@ -21,12 +21,11 @@
 }
 
 .home-banner-carousel .carousel-control-prev {
-  left: calc(50% - 800px);
-  width: 220px;
+  /* left: calc(50% - 800px); */
+  min-width: 150px;
 }
 .home-banner-carousel .carousel-control-next {
-  right: calc(50% - 800px);
-  width: 220px;
+  min-width: 150px;
 }
 .home-banner-carousel .carousel-indicators [data-bs-target],
 .news-carousel .carousel-indicators [data-bs-target] {
@@ -51,7 +50,14 @@
   display: flex;
   margin: 0 auto;
   margin-bottom: 2em;
-  padding-left: 100px;
+  padding-left: 150px;
+}
+
+.home-banner-carousel-mobile .carousel-indicators {
+  display: flex;
+  margin: 0 auto;
+  margin-bottom: 2em;
+  justify-content: center;
 }
 
 /* quotation-carousel Carousel styling */

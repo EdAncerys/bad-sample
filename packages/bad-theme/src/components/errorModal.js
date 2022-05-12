@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 
-import { colors } from "../config/imports";
 import Image from "@frontity/components/image";
 import CheckMark from "../img/svg/checkMark.svg";
 import Error from "../img/svg/error.svg";
@@ -12,18 +11,21 @@ import {
   useAppState,
   setErrorAction,
   setGoToAction,
+  muiQuery,
 } from "../context";
 
-const ErrorModal = ({ state, actions }) => {
+const ErrorModal = ({ state, actions, libraries }) => {
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
   const dispatch = useAppDispatch();
   const { isError } = useAppState();
-
+  const { lg } = muiQuery();
   const bannerHeight = state.theme.bannerHeight;
 
   // HANDLERS ----------------------------------------------------
   const handleKeyPress = (e) => {
     // handle close modal on enter key
-    if (e.key === "Enter") actionHandler();
+    if (isError && e.key === "Enter") actionHandler();
   };
 
   const actionHandler = () => {
@@ -41,7 +43,7 @@ const ErrorModal = ({ state, actions }) => {
   if (!isError) return null; // error handler
 
   const gotToActionHandler = ({ path }) => {
-    setGoToAction({ path, actions });
+    setGoToAction({ state, path, actions });
     setErrorAction({ dispatch, isError: null });
   };
 
@@ -66,13 +68,16 @@ const ErrorModal = ({ state, actions }) => {
 
       return (
         <div>
-          <div className="flex">
+          <div
+            className={!lg ? "flex" : "flex-col"}
+            style={{ gap: !lg ? null : 20 }}
+          >
             {isError.action.map((action, index) => {
               return (
                 <div
                   key={index}
                   className="blue-btn"
-                  style={{ marginRight: "1em" }}
+                  style={{ marginRight: !lg ? "1em" : null }}
                   onClick={action.handler}
                 >
                   {action.label}
@@ -87,9 +92,11 @@ const ErrorModal = ({ state, actions }) => {
     return (
       <div>
         <div
-          className="flex"
+          className={!lg ? "flex" : "flex-col"}
           style={{
             justifyContent: "flex-end",
+            gap: !lg ? null : 20,
+            marginTop: !lg ? null : "1em",
           }}
         >
           <ServeGoToAction />
@@ -136,11 +143,10 @@ const ErrorModal = ({ state, actions }) => {
         </div>
       );
     };
-
     return (
       <div
         className="flex"
-        style={{ padding: `1em 2em`, minHeight: bannerHeight }}
+        style={{ padding: !lg ? `1em 2em` : "1em", minHeight: bannerHeight }}
       >
         <div className="flex-col">
           <Modal.Body className="flex-col">
@@ -151,11 +157,11 @@ const ErrorModal = ({ state, actions }) => {
               style={{
                 display: "grid",
                 textAlign: "center",
-                padding: `2em 0`,
-                fontSize: 26,
+                padding: !lg ? `2em 0` : 0,
+                fontSize: message.length < 300 ? 26 : 16,
               }}
             >
-              {message}
+              <Html2React html={message} />
             </div>
             <ServeActions />
           </Modal.Body>

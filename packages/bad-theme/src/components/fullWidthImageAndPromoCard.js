@@ -1,17 +1,15 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import Link from "@frontity/components/link";
 import Card from "./card/card";
 import Loading from "./loading";
+
 // CONTEXT -------------------------------------
-import { setLinkWrapperAction, setGoToAction } from "../context";
+import { setGoToAction } from "../context";
 
 const FullWidthImageAndPromoCard = ({ state, actions, block }) => {
   if (!block) return <Loading />;
 
   const { body, colour, image, disable_vertical_padding, link } = block;
-  // console.log("promo card", block); // debug
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -19,11 +17,17 @@ const FullWidthImageAndPromoCard = ({ state, actions, block }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
+    <div
+      style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}
+      data-aos="fade"
+      data-aos-easing="ease-in-sine"
+      data-aos-delay="100"
+      data-aos-duration="1000"
+    >
       <div className="flex">
         <div
           className={`flex card-wrapper`}
-          onClick={() => setGoToAction({ path: link.url, actions })}
+          onClick={() => setGoToAction({ state, path: link.url, actions })}
         >
           <Card
             imageAndPromoCard={block}

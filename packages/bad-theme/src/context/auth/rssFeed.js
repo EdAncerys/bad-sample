@@ -1,11 +1,11 @@
 import { authenticateAppAction, setFetchAction } from "../index";
 
-export const getBJDFeedAction = async ({ state, dispatch }) => {
-  console.log("getBJDFeedAction triggered");
+export const getBJDFeedAction = async ({ state, dispatch, refreshJWT }) => {
+  // console.log("getBJDFeedAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
   const URL = state.auth.APP_HOST + `/rss/bjd`;
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   const requestOptions = {
     method: "GET",
@@ -14,6 +14,7 @@ export const getBJDFeedAction = async ({ state, dispatch }) => {
 
   try {
     const data = await fetch(URL, requestOptions);
+    if (!data) throw new Error("Error getting data.");
     const result = await data.json();
 
     if (result.success) {
@@ -23,18 +24,18 @@ export const getBJDFeedAction = async ({ state, dispatch }) => {
       return bjdFeed;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
   }
 };
 
-export const getCEDFeedAction = async ({ state, dispatch }) => {
-  console.log("getCEDFeedAction triggered");
+export const getCEDFeedAction = async ({ state, dispatch, refreshJWT }) => {
+  // console.log("getCEDFeedAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
   const URL = state.auth.APP_HOST + `/rss/ced`;
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   const requestOptions = {
     method: "GET",
@@ -43,6 +44,7 @@ export const getCEDFeedAction = async ({ state, dispatch }) => {
 
   try {
     const data = await fetch(URL, requestOptions);
+    if (!data) throw new Error("Error getting data.");
     const result = await data.json();
 
     if (result.success) {
@@ -52,18 +54,18 @@ export const getCEDFeedAction = async ({ state, dispatch }) => {
       return cedFeed;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
   }
 };
 
-export const getSHDFeedAction = async ({ state, dispatch }) => {
-  console.log("getSHDFeedAction triggered");
+export const getSHDFeedAction = async ({ state, dispatch, refreshJWT }) => {
+  // console.log("getSHDFeedAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
   const URL = state.auth.APP_HOST + `/rss/shd`;
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   const requestOptions = {
     method: "GET",
@@ -72,6 +74,7 @@ export const getSHDFeedAction = async ({ state, dispatch }) => {
 
   try {
     const data = await fetch(URL, requestOptions);
+    if (!data) throw new Error("Error getting data.");
     const result = await data.json();
 
     if (result.success) {
@@ -81,7 +84,7 @@ export const getSHDFeedAction = async ({ state, dispatch }) => {
       return shdFeed;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
   }
@@ -89,14 +92,14 @@ export const getSHDFeedAction = async ({ state, dispatch }) => {
 
 // SET CONTEXT ---------------------------------------------------
 export const setBJDFeedAction = ({ dispatch, bjdFeed }) => {
-  console.log("setBJDFeedAction triggered"); //debug
+  // console.log("setBJDFeedAction triggered"); //debug
   dispatch({ type: "SET_BJD_FEED_ACTION", payload: bjdFeed });
 };
 export const setCEDFeedAction = ({ dispatch, cedFeed }) => {
-  console.log("setCEDFeedAction triggered"); //debug
+  // console.log("setCEDFeedAction triggered"); //debug
   dispatch({ type: "SET_CED_FEED_ACTION", payload: cedFeed });
 };
 export const setSHDFeedAction = ({ dispatch, shdFeed }) => {
-  console.log("setSHDFeedAction triggered"); //debug
+  // console.log("setSHDFeedAction triggered"); //debug
   dispatch({ type: "SET_SHD_FEED_ACTION", payload: shdFeed });
 };

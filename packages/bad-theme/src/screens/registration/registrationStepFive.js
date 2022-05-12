@@ -1,19 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import { colors } from "../../config/imports";
-import { setGoToAction } from "../../context";
 import SideBarMenu from "./sideBarMenu";
 import BlockWrapper from "../../components/blockWrapper";
 import SIGApplication from "./forms/sigApplication";
 
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState } from "../../context";
+import { useAppDispatch, useAppState, muiQuery } from "../../context";
 
 const RegistrationStepFive = ({ state, actions }) => {
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
-
+  const { lg } = muiQuery();
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
@@ -21,15 +19,6 @@ const RegistrationStepFive = ({ state, actions }) => {
   const ServeContent = () => {
     return (
       <div style={{ padding: `0 1em 1em` }}>
-        <div className="primary-title" style={styles.title}>
-          SIG Questions
-        </div>
-
-        <div>
-          <span className="required" />
-          Mandatory fields
-        </div>
-
         <SIGApplication />
       </div>
     );
@@ -42,7 +31,7 @@ const RegistrationStepFive = ({ state, actions }) => {
           margin: `${marginVertical}px ${marginHorizontal}px`,
         }}
       >
-        <div style={styles.container}>
+        <div style={!lg ? styles.container : styles.containerMobile}>
           <SideBarMenu />
           <ServeContent />
         </div>
@@ -58,8 +47,11 @@ const styles = {
     justifyContent: "space-between",
     gap: 20,
   },
-  title: {
-    fontSize: 20,
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
+    justifyContent: "space-between",
+    gap: 20,
   },
 };
 

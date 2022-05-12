@@ -111,6 +111,7 @@
 }
 /* dashboard-menu */
 .dashboard-menu {
+  font-size: 14px;
   transition: all 0.3s ease-in-out;
 }
 .dashboard-menu:hover {

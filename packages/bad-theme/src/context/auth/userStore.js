@@ -2,10 +2,10 @@ import {
   authenticateAppAction,
   setFetchAction,
   setApplicationDataAction,
-  setLoginModalAction,
+  loginAction,
   getApplicationStatus,
   setErrorAction,
-  setGoToAction,
+  getUserDataByContactId,
 } from "../index";
 
 export const setUserStoreAction = async ({
@@ -17,12 +17,13 @@ export const setUserStoreAction = async ({
   data,
   membershipApplication,
   dynamicsApps,
+  refreshJWT,
 }) => {
-  console.log("setUserStoreAction triggered");
+  // console.log("setUserStoreAction triggered");
 
   if (!isActiveUser) {
     // validate if isActiveUser 🤖
-    setLoginModalAction({ dispatch, loginModalAction: true });
+    loginAction({ state });
     return null;
   }
 
@@ -37,7 +38,11 @@ export const setUserStoreAction = async ({
 
     if (!storeApplication) {
       // ⏬⏬  get application record from store ⏬⏬
-      storeApplication = await getUserStoreAction({ state, isActiveUser });
+      storeApplication = await getUserStoreAction({
+        state,
+        isActiveUser,
+        refreshJWT,
+      });
     }
     if (!storeApplication) {
       // ⏬⏬  creat application record in Dynamics ⏬⏬
@@ -69,20 +74,25 @@ export const setUserStoreAction = async ({
         applicationData: updatedMembershipData,
       });
 
-      console.log("⬇️ application record ", updatedMembershipData);
+      // console.log("⬇️ application record ", updatedMembershipData);
       return dynamicsApplication;
     } else {
       throw new Error("Failed to update application record");
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
   }
 };
 
-export const getUserStoreAction = async ({ state, isActiveUser }) => {
-  console.log("getUserStoreAction triggered");
+export const getUserStoreAction = async ({
+  state,
+  isActiveUser,
+  dispatch,
+  refreshJWT,
+}) => {
+  // console.log("getUserStoreAction triggered");
 
   try {
     const { contactid } = isActiveUser;
@@ -90,7 +100,7 @@ export const getUserStoreAction = async ({ state, isActiveUser }) => {
       throw new Error("Cannot set user store. Contactid is missing.");
 
     const URL = state.auth.APP_HOST + `/applications/current/${contactid}`;
-    const jwt = await authenticateAppAction({ state });
+    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
     const requestOptions = {
       method: "GET",
@@ -101,15 +111,13 @@ export const getUserStoreAction = async ({ state, isActiveUser }) => {
     const userStore = await response.json();
 
     if (userStore.success) {
-      console.log("⏬ Membership Record ⏬");
-      console.log(userStore.data);
       return userStore.data;
     } else {
-      console.log("⏬ Membership Record Not Found ⏬");
+      // console.log("⏬ Membership Record Not Found ⏬");
       return null;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
@@ -117,15 +125,16 @@ export const getUserApplicationAction = async ({
   state,
   dispatch,
   contactid,
+  refreshJWT,
 }) => {
-  console.log("getUserApplicationAction triggered");
+  // console.log("getUserApplicationAction triggered");
 
   try {
     if (!contactid)
       throw new Error("Cannot get user store. Contactid is missing.");
 
     const URL = state.auth.APP_HOST + `/applications/current/${contactid}`;
-    const jwt = await authenticateAppAction({ state });
+    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
     const requestOptions = {
       method: "GET",
@@ -136,26 +145,30 @@ export const getUserApplicationAction = async ({
     const userStore = await response.json();
 
     if (userStore.success) {
-      console.log("⏬ Membership Record ⏬");
-      console.log(userStore.data);
+      // console.log("⏬ Membership Record ⏬");
 
       // set application data to context
       setApplicationDataAction({ dispatch, applicationData: userStore.data });
     } else {
-      console.log("⏬ Membership Record Not Found ⏬");
+      // console.log("⏬ Membership Record Not Found ⏬");
       return null;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
-export const createDynamicsApplicationAction = async ({ state, contactid }) => {
-  console.log("createDynamicsApplicationAction triggered");
+export const createDynamicsApplicationAction = async ({
+  state,
+  contactid,
+  dispatch,
+  refreshJWT,
+}) => {
+  // console.log("createDynamicsApplicationAction triggered");
 
   // ⏬⏬  create application record in dynamics ⏬⏬
   const URL = state.auth.APP_HOST + `/applications/new/${contactid}`;
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   const requestOptions = {
     method: "GET",
@@ -176,7 +189,7 @@ export const createDynamicsApplicationAction = async ({ state, contactid }) => {
       return null;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
@@ -186,8 +199,9 @@ export const setCompleteUserApplicationAction = async ({
   isActiveUser,
   applicationData,
   changeAppCategory,
+  refreshJWT,
 }) => {
-  console.log("setCompleteUserApplicationAction triggered");
+  // console.log("setCompleteUserApplicationAction triggered");
 
   let confirmationMsg = "Application been successfully submitted!";
   if (applicationData) {
@@ -205,7 +219,7 @@ export const setCompleteUserApplicationAction = async ({
       throw new Error("Cannot set user store. Contactid is missing.");
 
     const URL = state.auth.APP_HOST + `/applications/new/${contactid}`;
-    const jwt = await authenticateAppAction({ state });
+    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
     const requestOptions = {
       method: "POST",
@@ -221,6 +235,7 @@ export const setCompleteUserApplicationAction = async ({
         state,
         dispatch,
         contactid,
+        refreshJWT,
       });
       // delete application record from CONTEXT
       setApplicationDataAction({
@@ -228,8 +243,16 @@ export const setCompleteUserApplicationAction = async ({
         applicationData: null,
       });
 
-      console.log("⏬ Membership Completed ⏬");
-      console.log(data);
+      // 📌 get & update user record in context
+      const userData = await getUserDataByContactId({
+        state,
+        dispatch,
+        jwt,
+        contactid,
+        refreshJWT,
+      });
+      if (!userData) throw new Error("Error getting userData.");
+      // console.log("⏬ Membership Completed ⏬");
 
       setErrorAction({
         dispatch,
@@ -238,25 +261,25 @@ export const setCompleteUserApplicationAction = async ({
 
       return data;
     } else {
-      console.log("⏬ Failed to Create Membership ⏬");
-      console.log(response);
-      console.log(data);
+      // console.log("⏬ Failed to Create Membership ⏬");
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
 export const updateDynamicsApplicationAction = async ({
   state,
+  dispatch,
   contactid,
   updatedMembershipData,
+  refreshJWT,
 }) => {
-  console.log("updateDynamicsApplicationAction triggered");
+  // console.log("updateDynamicsApplicationAction triggered");
 
   try {
     const URL = state.auth.APP_HOST + `/applications/current/${contactid}`;
-    const jwt = await authenticateAppAction({ state });
+    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
     const requestOptions = {
       method: "POST",
@@ -271,14 +294,14 @@ export const updateDynamicsApplicationAction = async ({
     const data = await response.json();
 
     if (data.success) {
-      console.log("⏬ DYNAMICS. Membership Record Successfully Updated ⏬");
+      // console.log("⏬ DYNAMICS. Membership Record Successfully Updated ⏬");
       return data;
     } else {
-      console.log("⏬ DYNAMICS. Failed to Update Membership Record ⏬");
+      // console.log("⏬ DYNAMICS. Failed to Update Membership Record ⏬");
       return null;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
@@ -287,8 +310,9 @@ export const deleteApplicationAction = async ({
   dispatch,
   contactid,
   applicationData,
+  refreshJWT,
 }) => {
-  console.log("deleteApplicationRecord triggered");
+  // console.log("deleteApplicationRecord triggered");
 
   let confirmationMsg = "Application been successfully deleted!";
   if (applicationData) {
@@ -304,7 +328,7 @@ export const deleteApplicationAction = async ({
 
     // userStore endpoint API
     const URL = state.auth.APP_HOST + `/applications/current/${contactid}`;
-    const jwt = await authenticateAppAction({ state });
+    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
     const requestOptions = {
       method: "DELETE",
@@ -317,8 +341,7 @@ export const deleteApplicationAction = async ({
     const data = await response.json();
 
     if (data.success) {
-      console.log("⏬ DYNAMICS. Membership Record Successfully Deleted ⏬");
-      console.log(data);
+      // console.log("⏬ DYNAMICS. Membership Record Successfully Deleted ⏬");
       // delete application record from CONTEXT
       setApplicationDataAction({
         dispatch,
@@ -332,12 +355,11 @@ export const deleteApplicationAction = async ({
 
       return data;
     } else {
-      console.log("⏬ DYNAMICS. Failed to Delete Membership Record ⏬");
-      console.log(data);
+      // console.log("⏬ DYNAMICS. Failed to Delete Membership Record ⏬");
       return null;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
@@ -348,13 +370,12 @@ const updateMembershipApplication = ({
 }) => {
   if (!data && !membershipApplication) return storeApplication;
 
-  console.log("⏬ UPDATING Membership Record ⏬");
+  // console.log("⏬ UPDATING Membership Record ⏬");
   let newApplicationRecord = storeApplication;
 
   newApplicationRecord.map((application, key) => {
     // add additional data to membershop application object
     if (membershipApplication && key === 0) {
-      console.log("🚀 Additional Membership data added 🚀");
       Object.keys(membershipApplication).map((key) => {
         const value = membershipApplication[key];
 
@@ -455,6 +476,11 @@ const updateMembershipApplication = ({
       application.value = data.bad_expectedyearofqualification;
     if (data.bad_memberdirectory && application.name === "bad_memberdirectory")
       application.value = data.bad_memberdirectory;
+    if (
+      data.bad_preferredmailingaddress &&
+      application.name === "bad_preferredmailingaddress"
+    )
+      application.value = data.bad_preferredmailingaddress;
 
     //⏬ SIG section of the application process
     if (data.bad_qualifications && application.name === "bad_qualifications")
@@ -525,8 +551,8 @@ const updateMembershipApplication = ({
       application.value = data.bad_readpolicydocument;
   });
 
-  console.log("User Input Data ", data); // debug
-  console.log("UPDATED Application Record", newApplicationRecord); // debug
+  // console.log("User Input Data ", data); // debug
+  // console.log("UPDATED Application Record", newApplicationRecord); // debug
 
   return newApplicationRecord;
 };

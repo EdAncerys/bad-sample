@@ -206,7 +206,7 @@ const AppSearch = ({ state, actions, libraries }) => {
                 marginBottom: `1em`,
                 minHeight: "200px",
               }}
-              onClick={() => setGoToAction({ path: url, actions })}
+              onClick={() => setGoToAction({ state, path: url, actions })}
             >
               <ServeTitle />
               <ServeType />

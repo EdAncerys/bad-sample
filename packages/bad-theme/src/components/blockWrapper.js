@@ -1,5 +1,4 @@
 import { connect } from "frontity";
-import { colors } from "../config/colors";
 import { muiQuery } from "../context";
 
 const BlockWrapper = ({ children, state, background, fullWidth }) => {
@@ -9,7 +8,6 @@ const BlockWrapper = ({ children, state, background, fullWidth }) => {
   const containerWidth = state.theme.contentContainer;
 
   let STYLES = !lg ? { display: "flex", flex: 1 } : null;
-
   if (data.isPost || data.isPage) STYLES = !lg ? { display: "grid" } : null;
 
   return (

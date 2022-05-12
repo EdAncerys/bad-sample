@@ -1,27 +1,23 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/imports";
 import Image from "@frontity/components/image";
 import Link from "@frontity/components/link";
-
 import BlockWrapper from "./blockWrapper";
-
 import BADLogo from "../img/svg/badLogoFooter.svg";
-import Facebook from "../img/svg/facebook.svg";
-import Twitter from "../img/svg/twitter.svg";
-import Instagram from "../img/svg/instagram.svg";
+
+// CONTEXT ------------------------------
 import { muiQuery } from "../context";
+
 const Footer = ({ state, actions }) => {
   const { sm, md, lg, xl } = muiQuery();
 
-  const endPoint = state.router.link;
-  if (endPoint.includes("/redirect/")) return null;
+  const urlPath = state.router.link;
+  if (urlPath.includes("/redirect/")) return null;
 
   const date = new Date();
   const year = date.getFullYear();
 
   const marginHorizontal = state.theme.marginHorizontal;
-  const marginVertical = state.theme.marginVertical;
 
   // SERVERS ---------------------------------------------
   const ServeDivider = () => {
@@ -138,12 +134,8 @@ const Footer = ({ state, actions }) => {
             <ServeDivider />
           </div>
           <div className="footer-title-link" style={styles.footerLink}>
-            <Link
-              link={`https://skylarkcreative.co.uk/`}
-              target="_blank"
-              style={styles.footerLink}
-            >
-              Terms & Conditions
+            <Link link={`/legal/`} style={styles.footerLink}>
+              Legal
             </Link>
             <ServeDivider />
           </div>

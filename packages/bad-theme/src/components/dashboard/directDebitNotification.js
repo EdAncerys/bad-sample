@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
-import { colors } from "../../config/imports";
 // CONTEXT ------------------------------------------------------------------
 import {
   muiQuery,
@@ -11,6 +10,7 @@ import {
   getDirectDebitAction,
   setNotificationAction,
   setDebitHandlerAction,
+  setDashboardPathAction,
 } from "../../context";
 
 const DirectDebitNotification = ({ state, actions, libraries }) => {
@@ -18,9 +18,16 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const { isDirectDebit, dynamicsApps, isActiveUser, isVisibleNotification } =
-    useAppState();
+  const {
+    isDirectDebit,
+    dynamicsApps,
+    isActiveUser,
+    isVisibleNotification,
+    refreshJWT,
+    directDebitPath,
+  } = useAppState();
 
+  const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
   const [isDebitSetup, setDebitSetup] = useState(false);
@@ -32,6 +39,7 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
         state,
         dispatch,
         contactid: isActiveUser.contactid,
+        refreshJWT,
       });
 
     if (!isDirectDebit)
@@ -39,8 +47,10 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
         state,
         dispatch,
         id: isActiveUser.contactid,
+        refreshJWT,
       });
 
+    if (!isDirectDebit) return null;
     // if direct status is status is Active, set debit setup to true
     let debitStatus = isDirectDebit.filter(
       (debit) => debit.statecode === "Active"
@@ -64,14 +74,12 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
   if (!isVisibleNotification) isSetupDirectDebit = true;
   if (isDebitSetup) isSetupDirectDebit = true;
 
-  console.log("⬇️ isSetupDirectDebit", isSetupDirectDebit);
-  console.log("⬇️ isApprovedMemberships", isApprovedMemberships);
-
   // if direct debit setup or no approved applications, return null
   if (isSetupDirectDebit || !isApprovedMemberships) return null;
 
   // HELPERS ----------------------------------------------------------------
   const handlePayment = () => {
+    setDashboardPathAction({ dispatch, dashboardPath: "Billing" });
     setDebitHandlerAction({
       dispatch,
       directDebitPath: { page: "directDebitSetup" },
@@ -83,13 +91,12 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
     return (
       <div className="flex" style={{ margin: `auto 0` }}>
         <div style={{ padding: !lg ? `0 2em` : "1em" }}>
-          <div type="submit" className="blue-btn" onClick={handlePayment}>
+          <div className="blue-btn" onClick={handlePayment}>
             Setup Direct Debit
           </div>
         </div>
         <div>
           <div
-            type="submit"
             className="transparent-btn"
             onClick={() =>
               setNotificationAction({ dispatch, isVisibleNotification: false })
@@ -102,6 +109,9 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
     );
   };
 
+  // 📌 hide notification if user has pane open
+  if (directDebitPath.page !== "billing") return null;
+
   return (
     <div
       className="shadow"
@@ -110,15 +120,15 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
         gridTemplateColumns: !lg ? `1fr auto` : `1fr`,
         gap: "1em",
         padding: !lg ? `2em 4em` : "1em",
-        marginBottom: `${marginVertical}px`,
+        margin: `0 ${marginHorizontal}px ${marginVertical}px ${marginHorizontal}px`,
       }}
     >
       <div
         className="primary-title flex"
         style={{ fontSize: 20, alignItems: "center" }}
       >
-        Please complete the Direct Debit Guarantee to automatically renew your
-        membership.
+        Please set up a Direct Debit instruction to automatically renew your
+        membership each year.
       </div>
       <ServeActions />
     </div>

@@ -1,10 +1,15 @@
 import { authenticateAppAction } from "../index";
 
-export const getDirectDebitAction = async ({ state, dispatch, id }) => {
-  console.log("getDirectDebitAction triggered");
+export const getDirectDebitAction = async ({
+  state,
+  dispatch,
+  id,
+  refreshJWT,
+}) => {
+  // console.log("getDirectDebitAction triggered");
 
   const URL = state.auth.APP_HOST + `/bankaccount/${id}`;
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   const requestOptions = {
     method: "GET",
@@ -19,17 +24,22 @@ export const getDirectDebitAction = async ({ state, dispatch, id }) => {
     if (data.success)
       setDirectDebitAction({ dispatch, isDirectDebit: data.data });
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
-export const getInvoiceAction = async ({ state, isActiveUser }) => {
-  console.log("getInvoiceAction triggered");
+export const getInvoiceAction = async ({
+  state,
+  dispatch,
+  isActiveUser,
+  refreshJWT,
+}) => {
+  // console.log("getInvoiceAction triggered");
 
   const { contactid } = isActiveUser;
   if (!contactid) throw new Error("Cannot get receipts. Contactid is missing.");
 
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
   const URL =
     state.auth.APP_HOST +
     `/utils/pdf/sample?contactid=${contactid}&token=${jwt}`;
@@ -41,12 +51,10 @@ export const getInvoiceAction = async ({ state, isActiveUser }) => {
 
   try {
     const response = await fetch(URL, requestOptions);
-    console.log("⬇️ invoice data ⬇️ "); // debug
-    console.log(response.url); // debug
 
     if (response.ok) return response.url;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
@@ -54,14 +62,16 @@ export const getProofOfMembershipAction = async ({
   state,
   core_membershipsubscriptionid,
   isActiveUser,
+  dispatch,
+  refreshJWT,
 }) => {
-  console.log("getProofOfMembershipAction triggered");
+  // console.log("getProofOfMembershipAction triggered");
 
   const { contactid } = isActiveUser;
   if (!contactid)
     throw new Error("Cannot get membership proof. Contactid is missing.");
 
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
   const URL =
     state.auth.APP_HOST +
     `/utils/pdf/confirm?contactid=${contactid}&subid=${core_membershipsubscriptionid}&token=${jwt}`;
@@ -73,20 +83,24 @@ export const getProofOfMembershipAction = async ({
 
   try {
     const response = await fetch(URL, requestOptions);
-    console.log("⬇️ membership data ⬇️ "); // debug
-    console.log(response.url); // debug
 
     if (response.ok) return response.url;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
-export const createDirectDebitAction = async ({ state, id, data }) => {
-  console.log("createDirectDebitAction triggered");
+export const createDirectDebitAction = async ({
+  state,
+  id,
+  data,
+  dispatch,
+  refreshJWT,
+}) => {
+  // console.log("createDirectDebitAction triggered");
 
   const URL = state.auth.APP_HOST + `/bankaccount/${id}`;
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   // console.log("data", data); // debug
 
@@ -106,12 +120,12 @@ export const createDirectDebitAction = async ({ state, id, data }) => {
 
     return data;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
 // SET CONTEXT ---------------------------------------------------
 export const setDirectDebitAction = ({ dispatch, isDirectDebit }) => {
-  console.log("setDirectDebitAction triggered"); //debug
+  // console.log("setDirectDebitAction triggered"); //debug
   dispatch({ type: "SET_DIRECT_DEBIT_ACTION", payload: isDirectDebit });
 };

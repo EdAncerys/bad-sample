@@ -77,7 +77,6 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
     });
 
     if (!isValid) return null;
-    console.log(formData); // debug
 
     setDebitHandlerAction({
       dispatch,
@@ -150,18 +149,13 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
         style={{ justifyContent: "flex-end", padding: `2em 0 0` }}
       >
         <div
-          type="submit"
           className="transparent-btn"
           style={{ marginRight: `2em` }}
           onClick={handleCancel}
         >
           Cancel
         </div>
-        <div
-          type="submit"
-          className="blue-btn"
-          onClick={handleDirectDebitSetup}
-        >
+        <div className="blue-btn" onClick={handleDirectDebitSetup}>
           Click here to setup your direct debit
         </div>
       </div>
@@ -268,14 +262,7 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
 };
 
 const styles = {
-  summary: {
-    fontSize: 12,
-    color: colors.darkSilver,
-    border: `1px solid ${colors.silver}`,
-    borderRadius: 10,
-    padding: `0.375rem 0.75rem`,
-    margin: `10px 0`,
-  },
+  container: {},
 };
 
 export default connect(DirectDebitPayment);

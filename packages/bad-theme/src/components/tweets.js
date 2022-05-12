@@ -1,10 +1,8 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { connect } from "frontity";
-import { colors } from "../config/imports";
-
 import Loading from "./loading";
-import Card from "./card/card";
 import SocialIcons from "../components/socialIcons";
+
 // CONTEXT ----------------------------------------------------------------
 import { useAppDispatch, useAppState, getTweetsAction } from "../context";
 
@@ -19,7 +17,7 @@ const Tweets = ({ state, actions, libraries, block }) => {
     disable_vertical_padding,
   } = block;
   const dispatch = useAppDispatch();
-  const { tweets } = useAppState();
+  const { tweets, refreshJWT } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -44,7 +42,7 @@ const Tweets = ({ state, actions, libraries, block }) => {
   };
 
   useEffect(() => {
-    getTweetsAction({ state, dispatch });
+    getTweetsAction({ state, dispatch, refreshJWT });
   }, []);
 
   if (!tweets) return <Loading />;
@@ -66,12 +64,6 @@ const Tweets = ({ state, actions, libraries, block }) => {
 
           return (
             <div key={key} className="flex tweet">
-              {/* <Card
-                tweetInfo={block}
-                body={html}
-                colour={colors.danger}
-                shadow // optional param
-              /> */}
               <Html2React html={html} />
             </div>
           );

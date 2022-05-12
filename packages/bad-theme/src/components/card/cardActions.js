@@ -4,15 +4,15 @@ import parse from "html-react-parser";
 
 import { colors } from "../../config/imports";
 import DownloadFileBlock from "../downloadFileBlock";
-import ActionPlaceholder from "../actionPlaceholder";
+import CircularProgress from "@mui/material/CircularProgress";
+
 // CONTEXT ------------------------------------------------
 import {
   useAppDispatch,
   useAppState,
   setGoToAction,
-  getWileyAction,
   setErrorAction,
-  setLoginModalAction,
+  loginAction,
 } from "../../context";
 
 const CardActions = ({
@@ -28,66 +28,37 @@ const CardActions = ({
   electionBlocks,
   rssFeedLink,
   videoArchive,
+  isFetching,
+  authLink,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
 
-  const [authLink, setAuthLink] = useState(null);
-  const [isFetching, setFetching] = useState(null);
-  const useEffectRef = useRef(null);
-
   // ⏬⏬  hide component if data not provided ⏬⏬
   if (!link && !form_link && !downloadFile && !handler && !rssFeedLink)
     return null;
 
   // HANDLERS ------------------------------------------
-  useEffect(async () => {
-    if (!rssFeedLink) return null;
-
-    const { link, doi } = rssFeedLink;
-    let authLink = link;
-
-    try {
-      setFetching(true);
-
-      // ⏬⏬  validate auth link for users via wiley ⏬⏬
-      // get auth link to wiley if user is BAD member & logged in
-      if (isActiveUser) {
-        const wileyLink = await getWileyAction({ state, doi, isActiveUser });
-        if (wileyLink) authLink = wileyLink;
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setAuthLink(authLink); // set auth link via wiley
-      setFetching(false);
-    }
-
-    return () => {
-      useEffectRef.current = false; // clean up function
-    };
-  }, [isActiveUser]);
-
   const handelLogin = () => {
     setErrorAction({ dispatch, isError: null });
-    setLoginModalAction({ dispatch, loginModalAction: true });
+    loginAction({ state });
   };
 
   const handelRedirect = () => {
     setErrorAction({ dispatch, isError: null });
-    setGoToAction({ path: authLink, actions });
+    setGoToAction({ state, path: authLink, actions });
   };
 
   const handleFeedLink = () => {
     // check if logged in user exists || otherwise error notification
-    if (!isActiveUser) {
-      // track notification error action
+    if (rssFeedLink && !isActiveUser) {
+      // 📌 track notification error action
       setErrorAction({
         dispatch,
         isError: {
-          message: `Remember to log in to the BAD website in order to have full access to Wiley Publications.`,
+          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals. To continue to the publication without logging in, click 'Read Publication'`,
           image: "Error",
           action: [
             {
@@ -102,7 +73,7 @@ const CardActions = ({
       return;
     }
 
-    setGoToAction({ path: authLink, actions });
+    setGoToAction({ state, path: authLink, actions });
   };
 
   // SERVERS ---------------------------------------------
@@ -112,7 +83,7 @@ const CardActions = ({
     if (link_label) goToLabel = link_label;
 
     return (
-      <div onClick={() => setGoToAction({ path: link, actions })}>
+      <div onClick={() => setGoToAction({ state, path: link, actions })}>
         <div className="caps-btn" style={{ marginTop: "1em" }}>
           <Html2React html={goToLabel} />
         </div>
@@ -178,21 +149,11 @@ const CardActions = ({
 
   if (isFetching)
     return (
-      <div>
-        <div
-          className="flex-row"
-          style={{
-            justifyContent: "space-between",
-            alignItems: "center",
-            paddingTop: `1em`,
-            position: "relative",
-          }}
-        >
-          <div className="caps-btn">Loading...</div>
-        </div>
-      </div>
+      <CircularProgress color="inherit" style={{ width: 20, height: 20 }} />
     );
+
   if (videoArchive) return null;
+
   return (
     <div>
       <div

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../config/imports";
@@ -34,7 +34,7 @@ const SearchContainer = ({
   const handleKeyPress = (e) => {
     if (isFetching) return;
     if (e.key === "Enter" && e.target.value) {
-      handleSearch();
+      handleSearch({ e });
     }
   };
 
@@ -111,13 +111,13 @@ const SearchContainer = ({
           style={{
             display: "grid",
             alignItems: "center",
-            paddingLeft: !lg ? `2em` : 0,
+            paddingLeft: !lg ? `2em` : `0.5em`,
             paddingTop: !lg ? null : "1em",
           }}
         >
-          <button type="submit" className="blue-btn" onClick={handleSearch}>
+          <div className="blue-btn" onClick={handleSearch}>
             Search
-          </button>
+          </div>
         </div>
       );
     };

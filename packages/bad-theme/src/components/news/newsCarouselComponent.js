@@ -1,10 +1,7 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Carousel } from "react-bootstrap";
-
 import { colors } from "../../config/imports";
-
 import Card from "../card/card";
 import LeftIcon from "../../img/svg/leftIcon.svg";
 import RightIcon from "../../img/svg/rightIcon.svg";
@@ -66,22 +63,11 @@ const NewsCarouselComponent = ({
             <Carousel.Item key={key}>
               <div className="flex">
                 {block.map((block, key) => {
-                  const {
-                    date,
-                    categories,
-                    title,
-                    content,
-                    excerpt,
-                    link,
-                    featured_media,
-                  } = block;
-                  const { press_release_authors } = block.acf;
+                  const { categories, title, link, acf } = block;
 
-                  const media = state.source.attachment[featured_media];
-                  const filter = categoryList.filter(
-                    (item) => item.id === Number(categories[0])
-                  );
-                  const categoryName = filter[0].name;
+                  let redirectLink = link;
+                  // if redirec_url is set, use it
+                  if (acf && acf.redirect_url) redirectLink = acf.redirect_url;
 
                   const ServeDivider = ({ i }) => {
                     if (isSingleBlock) return null;
@@ -111,12 +97,10 @@ const NewsCarouselComponent = ({
                       <Card
                         newsCarousel={block}
                         cardWidth={isSingleBlock ? "50%" : "100%"}
-                        cardHeight={BANNER_HEIGHT}
-                        colour={colors.danger}
-                        link={link}
-                        bodyLimit="100"
-                        link_label="Read More"
                         cardHeight="90%"
+                        colour={colors.danger}
+                        link={redirectLink}
+                        link_label="Read More"
                         bodyLimit={homepage ? 4 : null}
                         shadow
                       />
@@ -138,13 +122,7 @@ const NewsCarouselComponent = ({
     return (
       <Carousel className="news-carousel">
         {block.map((block, key) => {
-          const { date, categories, excerpt, link, featured_media } = block;
-
-          const media = state.source.attachment[featured_media];
-          const filter = categoryList.filter(
-            (item) => item.id === Number(categories[0])
-          );
-          const categoryName = filter[0].name;
+          const { date, categories, excerpt, link } = block;
 
           return (
             <Carousel.Item key={key}>
@@ -160,13 +138,12 @@ const NewsCarouselComponent = ({
                 <Card
                   newsCarousel={block}
                   cardWidth={!lg ? "50%" : "100%"}
-                  cardHeight={BANNER_HEIGHT}
+                  cardHeight="90%"
                   title={excerpt ? excerpt.rendered : null}
                   colour={colors.danger}
                   link={link}
                   link_label="Read More"
                   titleLimit={1}
-                  cardHeight="90%"
                   shadow
                 />
               </div>

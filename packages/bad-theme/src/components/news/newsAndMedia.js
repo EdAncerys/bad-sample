@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Form } from "react-bootstrap";
 import parse from "html-react-parser";
@@ -12,14 +12,24 @@ import BlockWrapper from "../blockWrapper";
 
 import CloseIcon from "@mui/icons-material/Close";
 import SearchContainer from "../../components/searchContainer";
+
 // CONTEXT -----------------------------------------------------------------
 import { getPostData } from "../../helpers";
-import { muiQuery } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  muiQuery,
+  setNesMediaIdFilterAction,
+  getNewsData,
+  getMediaCategories,
+} from "../../context";
 
 const NewsAndMedia = ({ state, actions, libraries, block }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  const dispatch = useAppDispatch();
+  const { newsMediaCategoryId, isActiveUser, dynamicsApps } = useAppState();
 
   if (!block) return <Loading />;
 
@@ -36,39 +46,167 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   const isLayoutOne = layout === "layout_one";
 
   const [postList, setPostList] = useState(null);
+  const [filterList, setFilterList] = useState(null);
   const [categoryList, setCategoryList] = useState(null);
 
   const [searchValue, setSearchValue] = useState("");
-  const [categoryValue, setCategoryValue] = useState("");
   const [dateValue, setDateValue] = useState("");
   const [yearValue, setYearValue] = useState("");
+  const [hasPermission, setPermission] = useState(false);
 
   const searchFilterRef = useRef("");
-  const categoryFilterRef = useRef("");
-  const dateFilterRef = useRef("");
-  const yearFilterRef = useRef("");
-  const loadMoreRef = useRef(true);
+  const postChunkRef = useRef(Number(post_limit) || 8);
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 
   useEffect(async () => {
-    // pre fetch post data
-    let iteration = 0;
-    let data = Object.values(state.source.post);
-    while (data.length === 0) {
-      // if iteration is greater than 10, break
-      if (iteration > 10) break;
-      // set timeout for async
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      await getPostData({ state, actions });
-      data = Object.values(state.source.post);
-      iteration++;
+    // let iteration = 0;
+    let data = await getNewsData({ state });
+    let categoryList = await getMediaCategories({ state });
+
+    if (site_section) {
+      data = data.filter((item) => {
+        let postSections = item.site_sections;
+        if (!postSections) return false;
+        // check if postSections array contains site_section ids
+        return postSections.some((item) => site_section.includes(item));
+      });
+    }
+    // return data if site_section array includes filters
+    if (category_filter) {
+      data = data.filter((item) => {
+        let categories = item.categories;
+        if (!categories) return false;
+
+        return categories.some((item) => category_filter.includes(item));
+      });
+    }
+    // apply sort by date functionality & apply limit
+    data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    setPostList(data);
+    setFilterList(data);
+    setCategoryList(categoryList);
+
+    return () => {
+      searchFilterRef.current = ""; // clean up function
+    };
+  }, [isActiveUser]);
+
+  useEffect(() => {
+    if (!postList) return null;
+
+    let data = postList;
+    let hasPermission = false;
+    // 📌 check if user has permission to view news & media
+    if (dynamicsApps) {
+      // chewck if user have BAD memberships & membership have sage payId is persent
+      const hasBADMembership = dynamicsApps.subs.data.filter(
+        (item) => item.bad_organisedfor === "BAD" && item.bad_sagepayid
+      );
+      if (hasBADMembership.length > 0 && isActiveUser) hasPermission = true;
     }
 
-    // if !data then break
-    if (data.length === 0) return;
+    setPermission(hasPermission);
+
+    // 📌 apply permision filters
+    if (!hasPermission && categoryList) {
+      let membersOnly = ["circular", "newsletter", "bulletin"];
+      // get id of all categories that include members only
+      let membersOnlyList = categoryList.filter((item) => {
+        const catName = item.name.toLowerCase();
+        let isMemberOnly = false;
+
+        membersOnly.forEach((item) => {
+          if (catName.includes(item)) isMemberOnly = true;
+        });
+
+        if (isMemberOnly) return item.id;
+      });
+
+      data = data.filter((post) => {
+        let categories = post.categories;
+        let isMemberOnly = false;
+        // map threach membersOnlyList and check if id is present in categories
+        membersOnlyList.forEach((item) => {
+          if (categories && categories.includes(item.id)) isMemberOnly = true;
+        });
+
+        return !isMemberOnly;
+      });
+    }
+
+    if (post_limit && Number(post_limit) !== 0) {
+      data = data.slice(0, Number(post_limit)); // apply limit on posts
+    }
+    setFilterList(data);
+  }, [categoryList, isActiveUser]);
+
+  useEffect(() => {
+    if (!postList) return null;
+
+    // if all filters are applied are null then set filterList to postList
+    if (!searchValue && !dateValue && !yearValue && !newsMediaCategoryId) {
+      setFilterList(postList);
+      return;
+    }
+
+    let data = postList;
+    // 📌 apply permision filters
+    if (!hasPermission && categoryList) {
+      let membersOnly = ["circular", "newsletter", "bulletin"];
+      // get id of all categories that include members only
+      let membersOnlyList = categoryList.filter((item) => {
+        const catName = item.name.toLowerCase();
+        let isMemberOnly = false;
+
+        membersOnly.forEach((item) => {
+          if (catName.includes(item)) isMemberOnly = true;
+        });
+
+        if (isMemberOnly) return item.id;
+      });
+
+      data = data.filter((post) => {
+        let categories = post.categories;
+        let isMemberOnly = false;
+        // map threach membersOnlyList and check if id is present in categories
+        membersOnlyList.forEach((item) => {
+          if (categories && categories.includes(item.id)) isMemberOnly = true;
+        });
+
+        return !isMemberOnly;
+      });
+    }
+
+    // apply sort by date functionality
+    data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    if (searchValue) {
+      data = data.filter((news) =>
+        news.title.rendered.toLowerCase().includes(searchValue.toLowerCase())
+      );
+    }
+
+    if (newsMediaCategoryId)
+      data = data.filter((news) => {
+        let categories = news.categories;
+        if (!categories) return false;
+        return categories.includes(newsMediaCategoryId); // filter by category
+      });
+
+    // apply date filter & sort by date latest first
+    if (dateValue === "Date Descending")
+      data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+    if (dateValue === "Date Ascending")
+      data = data.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    if (yearValue)
+      data = data.filter(
+        (news) => new Date(news.date).getFullYear() === Number(yearValue)
+      );
 
     // apply category_filter & site_section filters if applicable
     // return data if site_section array includes filters
@@ -87,144 +225,60 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
         return categories.some((item) => category_filter.includes(item));
       });
     }
-    // apply sort by date functionality
-    data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
-    if (post_limit && Number(post_limit) !== 0) {
-      data = data.slice(0, Number(post_limit)); // apply limit on posts
+
+    // if all filters are not applied, apply limit on posts
+    if (!newsMediaCategoryId && !searchValue && !dateValue && !yearValue) {
+      data = data.slice(0, Number(postChunkRef.current)); // apply limit on posts
     }
 
-    setPostList(data);
-    if (state.source.category) {
-      const catList = Object.values(state.source.category);
-      setCategoryList(catList);
-    }
-
-    return () => {
-      searchFilterRef.current = ""; // clean up function
-    };
-  }, []);
+    setFilterList(data); // set post data
+  }, [newsMediaCategoryId, searchValue, dateValue, yearValue]);
 
   if (!postList || !categoryList) return <Loading />;
 
   if (postList.length === 0 && !has_search) return null; // hide block if no posts
 
   // HELPERS ----------------------------------------------------------------
-  const handleClearFilter = ({
-    clearInput,
-    clearCategory,
-    clearDate,
-    clearYear,
-  }) => {
-    if (clearInput) {
-      searchFilterRef.current.value = "";
-      setSearchValue("");
-    }
-    if (clearCategory) {
-      categoryFilterRef.current.value = "";
-      setCategoryValue("");
-    }
-    if (clearDate) {
-      dateFilterRef.current.value = "";
-      setDateValue("");
-    }
-    if (clearYear) {
-      yearFilterRef.current.value = "";
-      setYearValue("");
-    }
-
-    handleSearch();
-  };
-
   const handleLoadMoreFilter = () => {
     let data = Object.values(state.source.post); // add postList object to data array
+    // 📌 apply permision filters
+    if (!hasPermission && categoryList) {
+      let membersOnly = ["circular", "newsletter", "bulletin"];
+      // get id of all categories that include members only
+      let membersOnlyList = categoryList.filter((item) => {
+        const catName = item.name.toLowerCase();
+        let isMemberOnly = false;
+
+        membersOnly.forEach((item) => {
+          if (catName.includes(item)) isMemberOnly = true;
+        });
+
+        if (isMemberOnly) return item.id;
+      });
+
+      data = data.filter((post) => {
+        let categories = post.categories;
+        let isMemberOnly = false;
+        // map threach membersOnlyList and check if id is present in categories
+        membersOnlyList.forEach((item) => {
+          if (categories.includes(item.id)) isMemberOnly = true;
+        });
+
+        return !isMemberOnly;
+      });
+    }
 
     // apply sort by date functionality
     data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
-    // apply category_filter & site_section filters if applicable
-    // return data if site_section array includes filters
-    if (site_section) {
-      data = data.filter((item) => {
-        let postSections = item.site_sections;
-        // check if postSections array contains site_section ids
-        return postSections.some((item) => site_section.includes(item));
-      });
-    }
-    // return data if site_section array includes filters
-    if (category_filter) {
-      data = data.filter((item) => {
-        let categories = item.categories;
-        // check if category_filter array contains site_section ids
-        return categories.some((item) => category_filter.includes(item));
-      });
-    }
 
-    // if loadMore is truthy display all postList posts
-    if (loadMoreRef.current) {
-      setPostList(data);
-      loadMoreRef.current = false;
-    } else {
-      // if loadMore is falsy display only limit posts
-      if (post_limit) data = data.slice(0, Number(post_limit)); // apply limit on posts
-      setPostList(data);
-      loadMoreRef.current = true;
-    }
-  };
+    // increment postChunkRef by 8
+    postChunkRef.current = postChunkRef.current + Number(post_limit) || 8;
 
-  const handleSearch = () => {
-    const input = searchFilterRef.current.value.toLowerCase();
+    // apply limity on posts
+    if (post_limit && Number(post_limit) !== 0)
+      data = data.slice(0, Number(postChunkRef.current)); // apply limit on posts
 
-    const category = categoryFilterRef.current.value;
-    const date = dateFilterRef.current.value;
-    const year = yearFilterRef.current.value;
-
-    let data = Object.values(state.source.post);
-    data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-    if (input) {
-      const INPUT = input.toLowerCase();
-      data = data.filter((news) =>
-        news.title.rendered.toLowerCase().includes(INPUT)
-      );
-    }
-
-    if (category)
-      data = data.filter((news) => news.categories.includes(Number(category)));
-
-    // apply date filter & sort by date latest first
-    if (date === "Date Descending")
-      data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
-    if (date === "Date Ascending")
-      data = data.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    if (year)
-      data = data.filter(
-        (news) => new Date(news.date).getFullYear() === Number(year)
-      );
-
-    // apply category_filter & site_section filters if applicable
-    // return data if site_section array includes filters
-    if (site_section) {
-      data = data.filter((item) => {
-        let postSections = item.site_sections;
-        // check if postSections array contains site_section ids
-        return postSections.some((item) => site_section.includes(item));
-      });
-    }
-    // return data if site_section array includes filters
-    if (category_filter) {
-      data = data.filter((item) => {
-        let categories = item.categories;
-        // check if category_filter array contains site_section ids
-        return categories.some((item) => category_filter.includes(item));
-      });
-    }
-
-    if (input) setSearchValue(input);
-    if (category) setCategoryValue(category);
-    if (date) setDateValue(date);
-    if (year) setYearValue(year);
-
-    setPostList(data);
+    setFilterList(data); // set post data
   };
 
   // SERVERS ---------------------------------------------
@@ -254,15 +308,26 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       const ServeCategoryFilter = () => {
         return (
           <Form.Select
-            ref={categoryFilterRef}
-            value={categoryValue}
-            onChange={handleSearch}
+            value={newsMediaCategoryId}
+            onChange={(e) =>
+              setNesMediaIdFilterAction({
+                dispatch,
+                newsMediaCategoryId: Number(e.target.value),
+              })
+            }
             style={styles.input}
           >
             <option value="" hidden>
               Category
             </option>
             {categoryList.map((item, key) => {
+              // check if name includes circular newsletters bulletin
+              let membersOnly = ["circular", "newsletter", "bulletin"].some(
+                (word) => item.name.toLowerCase().includes(word)
+              );
+              // 📌 if user has permission to view news & media
+              if (membersOnly && !hasPermission) return null;
+
               return (
                 <option key={key} value={item.id}>
                   {parse(item.name)}
@@ -276,9 +341,8 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       const ServeDateFilter = () => {
         return (
           <Form.Select
-            ref={dateFilterRef}
             value={dateValue}
-            onChange={handleSearch}
+            onChange={(e) => setDateValue(e.target.value)}
             style={styles.input}
           >
             <option value="" hidden>
@@ -298,9 +362,8 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
         return (
           <Form.Select
-            ref={yearFilterRef}
             value={yearValue}
-            onChange={handleSearch}
+            onChange={(e) => setYearValue(e.target.value)}
             style={styles.input}
           >
             <option value="" hidden>
@@ -341,10 +404,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       return (
         <div className="shadow filter">
           <div>{searchValue}</div>
-          <div
-            className="filter-icon"
-            onClick={() => handleClearFilter({ clearInput: true })}
-          >
+          <div className="filter-icon" onClick={() => setSearchValue("")}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -357,10 +417,10 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     };
 
     const ServeSelectedCategoryFilter = () => {
-      if (!categoryValue) return null;
+      if (!newsMediaCategoryId) return null;
 
       let catName = categoryList.filter(
-        (category) => category.id === Number(categoryValue)
+        (category) => category.id === Number(newsMediaCategoryId)
       );
       catName = catName[0] ? catName[0].name : "N/A";
 
@@ -371,7 +431,12 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
           </div>
           <div
             className="filter-icon"
-            onClick={() => handleClearFilter({ clearCategory: true })}
+            onClick={() =>
+              setNesMediaIdFilterAction({
+                dispatch,
+                newsMediaCategoryId: "",
+              })
+            }
           >
             <CloseIcon
               style={{
@@ -390,10 +455,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       return (
         <div className="shadow filter">
           <div>{dateValue}</div>
-          <div
-            className="filter-icon"
-            onClick={() => handleClearFilter({ clearDate: true })}
-          >
+          <div className="filter-icon" onClick={() => setDateValue("")}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -411,10 +473,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       return (
         <div className="shadow filter">
           <div>{yearValue}</div>
-          <div
-            className="filter-icon"
-            onClick={() => handleClearFilter({ clearYear: true })}
-          >
+          <div className="filter-icon" onClick={() => setYearValue("")}>
             <CloseIcon
               style={{
                 fill: colors.darkSilver,
@@ -446,7 +505,9 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
               <ServeTitle />
               <SearchContainer
                 searchFilterRef={searchFilterRef}
-                handleSearch={handleSearch}
+                handleSearch={() =>
+                  setSearchValue(searchFilterRef.current.value)
+                }
               />
               <ServeFilters />
             </div>
@@ -465,13 +526,13 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   const ServeLayout = () => {
     if (isLayoutOne)
       return (
-        <NewsCarouselComponent block={postList} categoryList={categoryList} />
+        <NewsCarouselComponent block={filterList} categoryList={categoryList} />
       );
 
     return (
       <div>
         <NewsBlock
-          block={postList}
+          block={filterList}
           categoryList={categoryList}
           layout={layout}
         />
@@ -480,17 +541,15 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   };
 
   const ServeMoreAction = () => {
-    // if postList is empty || lest than post_limit return null
     if (
-      isLayoutOne ||
-      postList.length === 0 ||
-      postList.length < post_limit ||
-      !post_limit ||
-      post_limit === "0"
+      layout === "layout_one" ||
+      newsMediaCategoryId ||
+      searchValue ||
+      dateValue ||
+      yearValue ||
+      postList.length < postChunkRef.curent
     )
       return null;
-
-    const value = !loadMoreRef.current ? "Less" : " Load More";
 
     return (
       <div
@@ -500,13 +559,9 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
           padding: `${state.theme.marginVertical}px 0`,
         }}
       >
-        <button
-          type="submit"
-          className="transparent-btn"
-          onClick={handleLoadMoreFilter}
-        >
-          {value}
-        </button>
+        <div className="transparent-btn" onClick={handleLoadMoreFilter}>
+          Load More
+        </div>
       </div>
     );
   };
@@ -520,17 +575,12 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       }}
     >
       <BlockWrapper>
-        <TitleBlock
-          block={block}
-          margin={{
-            marginBottom: `${has_search ? 0 : state.theme.marginVertical}px`,
-          }}
-        />
+        <TitleBlock block={block} margin={has_search ? 0 : `0 0 1em 0`} />
       </BlockWrapper>
       <ServeFilter />
       <BlockWrapper>
         <ServeLayout />
-        <ServeMoreAction />
+        {/* <ServeMoreAction /> */}
       </BlockWrapper>
     </div>
   );

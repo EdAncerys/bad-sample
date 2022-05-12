@@ -2,43 +2,53 @@ import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Form } from "react-bootstrap";
 
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from "react-places-autocomplete";
+import SearchDropDown from "../../components/searchDropDown";
 import ActionPlaceholder from "../actionPlaceholder";
+import { colors } from "../../config/imports";
+import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from "@mui/icons-material/Search";
+import CircularProgress from "@mui/material/CircularProgress";
+
+// DATA HELPERS -----------------------------------------------------------
 import {
   UK_COUNTIES,
   UK_COUNTRIES,
   prefMailingOption,
 } from "../../config/data";
-import { colors } from "../../config/imports";
+
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
   useAppState,
   updateProfileAction,
   setErrorAction,
+  googleAutocompleteAction,
+  muiQuery,
 } from "../../context";
 
 const UpdateAddress = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
+  const { lg } = muiQuery();
   const dispatch = useAppDispatch();
-  const { isActiveUser } = useAppState();
+  const { isActiveUser, refreshJWT } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
+  const [addressData, setAddressData] = useState(null);
+  const [searchInput, setSearchInput] = useState("");
+  const address1Line1Ref = useRef("");
+  const ctaHeight = 40;
+
   const [isFetching, setIsFetching] = useState(null);
+  const [isFetchingAddress, setIsFetchingAddress] = useState(null);
   const [formData, setFormData] = useState({
-    test_address: "",
-    address1_line1: "",
-    address1_line2: "",
     emailaddress1: "",
     mobilephone: "",
-    address1_city: "",
-    address1_country: "",
-    address1_postalcode: "",
-    preferredcontactmethodcode: "", // TBC field name
+    address2_line1: "",
+    address2_line2: "",
+    address2_city: "",
+    address2_country: "",
+    address2_postalcode: "",
+    bad_preferredmailingaddress: "", // TBC field name
   });
 
   useEffect(() => {
@@ -53,48 +63,51 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     };
 
     // populate profile information form Dynamics records
-    if (isActiveUser.address1_line1) handleSetData({ name: "address1_line1" });
-    if (isActiveUser.address1_line2) handleSetData({ name: "address1_line2" });
+    if (isActiveUser.address2_line1) handleSetData({ name: "address2_line1" });
+    if (isActiveUser.address2_line2) handleSetData({ name: "address2_line2" });
     if (isActiveUser.emailaddress1) handleSetData({ name: "emailaddress1" });
     if (isActiveUser.mobilephone) handleSetData({ name: "mobilephone" });
-    if (isActiveUser.address1_city) handleSetData({ name: "address1_city" });
-    if (isActiveUser.address1_country)
-      handleSetData({ name: "address1_country" });
-    if (isActiveUser.address1_postalcode)
-      handleSetData({ name: "address1_postalcode" });
-    if (isActiveUser.preferredcontactmethodcode)
-      handleSetData({ name: "preferredcontactmethodcode" });
+    if (isActiveUser.address2_city) handleSetData({ name: "address2_city" });
+    if (isActiveUser.address2_country)
+      handleSetData({ name: "address2_country" });
+    if (isActiveUser.address2_postalcode)
+      handleSetData({ name: "address2_postalcode" });
+    if (isActiveUser.bad_preferredmailingaddress)
+      handleSetData({ name: "bad_preferredmailingaddress" });
+    // preferredcontactmethodcode applies for mail/phone/email
   }, [isActiveUser]);
 
   // HELPERS ----------------------------------------------------------------
   const handleInputChange = (e) => {
     const { name, value, type, checked, files } = e.target;
+
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
     }));
-    console.log(value); // debug
   };
+
   const handleAddressUpdate = async () => {
-    const address1_line1 = formData.address1_line1;
-    const address1_line2 = formData.address1_line2;
+    let address2_line1 = formData.address2_line1;
+    if (!address2_line1) address2_line1 = address1Line1Ref.current.value; //defaults to input ref value
+    const address2_line2 = formData.address2_line2;
     const emailaddress1 = formData.emailaddress1;
     const mobilephone = formData.mobilephone;
-    const address1_city = formData.address1_city;
-    const address1_country = formData.address1_country;
-    const address1_postalcode = formData.address1_postalcode;
-    const preferredcontactmethodcode = formData.preferredcontactmethodcode;
+    const address2_city = formData.address2_city;
+    const address2_country = formData.address2_country;
+    const address2_postalcode = formData.address2_postalcode;
+    const bad_preferredmailingaddress = formData.bad_preferredmailingaddress;
 
     const data = Object.assign(
       {}, // add empty object
-      !!address1_line1 && { address1_line1 },
-      !!address1_line2 && { address1_line2 },
+      !!address2_line1 && { address2_line1 },
+      !!address2_line2 && { address2_line2 },
       !!emailaddress1 && { emailaddress1 },
       !!mobilephone && { mobilephone },
-      !!address1_city && { address1_city },
-      !!address1_country && { address1_country },
-      !!address1_postalcode && { address1_postalcode },
-      !!preferredcontactmethodcode && { preferredcontactmethodcode }
+      !!address2_city && { address2_city },
+      !!address2_country && { address2_country },
+      !!address2_postalcode && { address2_postalcode },
+      !!bad_preferredmailingaddress && { bad_preferredmailingaddress }
     );
 
     try {
@@ -104,6 +117,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
         dispatch,
         data,
         isActiveUser,
+        refreshJWT,
       });
       if (!response) throw new Error("Error updating profile");
       // display error message
@@ -112,7 +126,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
         isError: { message: `Contact details updated successfully` },
       });
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
 
       setErrorAction({
         dispatch,
@@ -126,36 +140,66 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     }
   };
 
-  const onChangeHandler = (e) => {
-    console.log(e);
-    // setFormData((prevFormData) => ({
-    //   ...prevFormData,
-    //   test_address: address,
-    // }));
+  const handleAddressLookup = async () => {
+    const input = address1Line1Ref.current.value;
+    // update input value before async task
+    setSearchInput(input);
+
+    // const options = {
+    //   componentRestrictions: { country: "uk" },
+    //   fields: ["address_components", "geometry", "icon", "name"],
+    //   strictBounds: false,
+    //   types: ["establishment"],
+    // };
+    // const autocomplete = new google.maps.places.Autocomplete(input, options);
+    // console.log("🐞 ", autocomplete);
+
+    // return;
+
+    try {
+      setIsFetchingAddress(true);
+      const data = await googleAutocompleteAction({
+        state,
+        query: input,
+      });
+      // convert data to dropdown format
+      let predictions = [];
+      // check for data returned form API
+      if (data && data.length) {
+        predictions = data.map((item) => ({
+          // get city & country from data source
+          title: item.description,
+        }));
+
+        // set dropdown data
+        if (predictions.length && input.length) {
+          setAddressData(predictions);
+        } else {
+          setAddressData(null);
+        }
+      }
+    } catch (error) {
+      // console.log("error", error);
+    } finally {
+      setIsFetchingAddress(false);
+    }
   };
 
-  const handleSelect = async (address) => {
+  const handleSelectAddress = async ({ item }) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      test_address: address,
-    }));
-    const results = await geocodeByAddress(address);
-    const latLng = await getLatLng(results[0]);
-    console.log(latLng);
-  };
-
-  const handleChange = (address) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      test_address: address,
+      address2_line1: item.title,
     }));
   };
 
-  const handleCloseClick = () => {
+  const handleClearAction = () => {
+    // clear search input value
     setFormData((prevFormData) => ({
       ...prevFormData,
-      test_address: "",
+      address2_line1: "",
     }));
+    setSearchInput("");
+    setAddressData(null);
   };
 
   // SERVERS ---------------------------------------------
@@ -163,110 +207,131 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     return (
       <div
         className="flex"
-        style={{ justifyContent: "flex-end", padding: `2em 0 0` }}
+        style={{
+          justifyContent: !lg ? "flex-end" : "center",
+          padding: `2em 0 0`,
+        }}
       >
-        <div type="submit" className="blue-btn" onClick={handleAddressUpdate}>
+        <div className="blue-btn" onClick={handleAddressUpdate}>
           Save
         </div>
       </div>
     );
   };
 
+  const ServeIcon = () => {
+    const searchIcon = <SearchIcon />;
+    const closeIcon = <CloseIcon />;
+    const icon = searchInput ? closeIcon : searchIcon;
+
+    if (isFetchingAddress)
+      return (
+        <CircularProgress color="inherit" style={{ width: 25, height: 25 }} />
+      );
+
+    return <div onClick={handleClearAction}>{icon}</div>;
+  };
+
   return (
     <div style={{ position: "relative" }}>
       <ActionPlaceholder isFetching={isFetching} background="transparent" />
       <div className="shadow" style={{ marginBottom: `${marginVertical}px` }}>
-        <div style={{ padding: `2em 4em` }}>
+        <div style={{ padding: !lg ? `2em 4em` : `1em` }}>
           <div className="primary-title" style={{ fontSize: 20 }}>
             Contact Details:
           </div>
 
-          {/* <PlacesAutocomplete
-            // onChange={(e) => onChangeHandler(e)}
-            onChange={handleChange}
-            value={formData.test_address}
-            onSelect={handleSelect}
-            // onError={this.handleError}
-            // shouldFetchSuggestions={address.length > 2}
-          >
-            {({ getInputProps, suggestions, getSuggestionItemProps }) => {
-              return (
-                <div className="Demo__search-bar-container">
-                  <div className="Demo__search-input-container">
-                    <input
-                      {...getInputProps({
-                        placeholder: "Search Places...",
-                        className: "Demo__search-input",
-                      })}
-                    />
-                    {formData.test_address.length > 0 && (
-                      <button
-                        className="Demo__clear-button"
-                        onClick={handleCloseClick}
-                      >
-                        x
-                      </button>
-                    )}
-                  </div>
-                  {suggestions.length > 0 && (
-                    <div className="Demo__autocomplete-container">
-                      {suggestions.map((suggestion) => {
-                        const className = classnames("Demo__suggestion-item", {
-                          "Demo__suggestion-item--active": suggestion.active,
-                        });
-
-                        return (
-                          <div
-                            {...getSuggestionItemProps(suggestion, {
-                              className,
-                            })}
-                          >
-                            <strong>
-                              {suggestion.formattedSuggestion.mainText}
-                            </strong>{" "}
-                            <small>
-                              {suggestion.formattedSuggestion.secondaryText}
-                            </small>
-                          </div>
-                        );
-                      })}
-                      <div className="Demo__dropdown-footer">
-                        <div>x?</div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            }}
-          </PlacesAutocomplete> */}
-
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: `1fr 1fr`,
+              gridTemplateColumns: !lg ? `1fr 1fr` : `1fr`,
               gap: 20,
               padding: `1em 0 0`,
             }}
           >
             <div>
-              <div>
-                <label>Address Line 1</label>
-                <input
-                  name="address1_line1"
-                  value={formData.address1_line1}
-                  onChange={handleInputChange}
-                  className="form-control input"
-                  placeholder="Address Line 1"
-                />
+              <div style={{ position: "relative" }}>
+                <label>Home Address Line 1</label>
+                {!formData.address2_line1 && (
+                  <div style={{ position: "relative", width: "100%" }}>
+                    <div
+                      className="flex"
+                      style={{
+                        flex: 1,
+                        height: ctaHeight,
+                        position: "relative",
+                        margin: "auto 0",
+                      }}
+                    >
+                      <input
+                        ref={address1Line1Ref}
+                        name="search-input"
+                        value={searchInput}
+                        onChange={handleAddressLookup}
+                        type="text"
+                        className="form-control input"
+                        placeholder="Home Address Line 1"
+                      />
+                      <div
+                        className="input-group-text toggle-icon-color"
+                        style={{
+                          position: "absolute",
+                          right: 0,
+                          height: ctaHeight,
+                          border: "none",
+                          background: "transparent",
+                          alignItems: "center",
+                          color: colors.darkSilver,
+                          cursor: "pointer",
+                        }}
+                      >
+                        <ServeIcon />
+                      </div>
+                    </div>
+                    <SearchDropDown
+                      filter={addressData}
+                      onClickHandler={handleSelectAddress}
+                    />
+                  </div>
+                )}
+                {formData.address2_line1 && (
+                  <div className="form-control input">
+                    <div className="flex-row">
+                      <div
+                        style={{
+                          position: "relative",
+                          width: "fit-content",
+                          paddingRight: 15,
+                        }}
+                      >
+                        {formData.address2_line1}
+                        <div
+                          className="filter-icon"
+                          style={{ top: -7 }}
+                          onClick={handleClearAction}
+                        >
+                          <CloseIcon
+                            style={{
+                              fill: colors.darkSilver,
+                              padding: 0,
+                              width: "0.7em",
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
+
               <div style={styles.wrapper}>
-                <label>Address Line 2</label>
+                <label>Home Address Line 2</label>
                 <input
-                  name="address1_line2"
-                  value={formData.address1_line2}
+                  name="address2_line2"
+                  value={formData.address2_line2}
                   onChange={handleInputChange}
                   className="form-control input"
-                  placeholder="Address Line 2"
+                  placeholder="Home Address Line 2"
                 />
               </div>
               <div>
@@ -296,8 +361,8 @@ const UpdateAddress = ({ state, actions, libraries }) => {
               <div>
                 <label>City</label>
                 <Form.Select
-                  name="address1_city"
-                  value={formData.address1_city}
+                  name="address2_city"
+                  value={formData.address2_city}
                   onChange={handleInputChange}
                   className="input"
                   // disabled
@@ -317,8 +382,8 @@ const UpdateAddress = ({ state, actions, libraries }) => {
               <div style={styles.wrapper}>
                 <label>Country</label>
                 <Form.Select
-                  name="address1_country"
-                  value={formData.address1_country}
+                  name="address2_country"
+                  value={formData.address2_country}
                   onChange={handleInputChange}
                   className="input"
                   // disabled
@@ -338,8 +403,8 @@ const UpdateAddress = ({ state, actions, libraries }) => {
               <div>
                 <label>Postcode</label>
                 <input
-                  name="address1_postalcode"
-                  value={formData.address1_postalcode}
+                  name="address2_postalcode"
+                  value={formData.address2_postalcode}
                   onChange={handleInputChange}
                   className="form-control input"
                   placeholder="Postcode"
@@ -348,8 +413,8 @@ const UpdateAddress = ({ state, actions, libraries }) => {
               <div style={styles.wrapper}>
                 <label>Preferred mailing option</label>
                 <Form.Select
-                  name="preferredcontactmethodcode"
-                  value={formData.preferredcontactmethodcode}
+                  name="bad_preferredmailingaddress"
+                  value={formData.bad_preferredmailingaddress}
                   onChange={handleInputChange}
                   className="input"
                 >

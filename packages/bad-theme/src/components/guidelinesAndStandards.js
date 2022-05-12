@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
-import Image from "@frontity/components/image";
 
 import BlockWrapper from "./blockWrapper";
 import Loading from "./loading";
@@ -16,7 +15,7 @@ import {
   useAppState,
   muiQuery,
   getGuidelinesDataAction,
-  setIDFilterAction,
+  setIdFilterAction,
 } from "../context";
 
 const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
@@ -40,8 +39,6 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
   const { disable_vertical_padding, background_colour } = block;
 
   const marginHorizontal = state.theme.marginHorizontal;
-  let marginVertical = state.theme.marginVertical;
-  if (disable_vertical_padding) marginVertical = 0;
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
@@ -98,7 +95,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handleSearch = () => {
-    // if (idFilter) setIDFilterAction({ dispatch, idFilter: null }); // reset ID for filter
+    // if (idFilter) setIdFilterAction({ dispatch, idFilter: null }); // reset ID for filter
     const input = searchFilterRef.current.value || searchFilter;
     currentSearchFilterRef.current = input;
     let guidelinesList = Object.values(state.source.guidelines_standards);

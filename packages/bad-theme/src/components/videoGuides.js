@@ -1,8 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
-import parse from "html-react-parser";
-
-import TitleBlock from "./titleBlock";
 import Card from "./card/card";
 import Loading from "./loading";
 import { colors } from "../config/imports";
@@ -65,7 +62,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       isThereNextPage = nextPage;
     }
     const DATA = Object.values(state.source[postPath]);
-    console.log("Data", DATA); // debug
 
     const limit = post_limit || LIMIT;
     setPostListData(DATA.slice(0, Number(limit))); // apply limit on posts
@@ -307,7 +303,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       <div style={styles.container}>
         {postListData.map((block, key) => {
           const { title, content, link, date, dermo_group_type } = block;
-          const redirect = block.acf.redirect_url;
 
           return (
             <Card
@@ -339,13 +334,9 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           paddingTop: `2em`,
         }}
       >
-        <button
-          type="submit"
-          className="transparent-btn"
-          onClick={handleLoadMoreFilter}
-        >
+        <div className="transparent-btn" onClick={handleLoadMoreFilter}>
           {value}
-        </button>
+        </div>
       </div>
     );
   };

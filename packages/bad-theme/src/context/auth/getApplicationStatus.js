@@ -1,13 +1,18 @@
 import { authenticateAppAction, setFetchAction } from "../index";
 
-export const getApplicationStatus = async ({ state, dispatch, contactid }) => {
-  console.log("getApplicationStatus triggered");
+export const getApplicationStatus = async ({
+  state,
+  dispatch,
+  contactid,
+  refreshJWT,
+}) => {
+  // console.log("getApplicationStatus triggered");
 
   // if contactid is not provided then throw error
   if (!contactid) throw new Error("contactid is required");
 
   const URL = state.auth.APP_HOST + `/applications/billing/` + contactid;
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   const requestOptions = {
     method: "GET",
@@ -20,17 +25,17 @@ export const getApplicationStatus = async ({ state, dispatch, contactid }) => {
 
     if (data.apps.success) {
       setApplicationStatusAction({ dispatch, dynamicsApps: data });
-      console.log("🚀 Dynamic Apps Data", data); // debug
+      // console.log("🚀 Dynamic Apps Data", data); // debug
 
       return data; // return data
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
 // SET CONTEXT ---------------------------------------------------
 export const setApplicationStatusAction = ({ dispatch, dynamicsApps }) => {
-  console.log("setApplicationStatusAction triggered"); //debug
+  // console.log("setApplicationStatusAction triggered"); //debug
   dispatch({ type: "SET_APPLICATION_ACTION", payload: dynamicsApps });
 };

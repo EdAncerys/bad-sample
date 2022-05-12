@@ -1,17 +1,16 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
-
 import Card from "./card/card";
 import Loading from "./loading";
 import ButtonsRow from "./buttonsRow";
 import FullWidthContentBlock from "./fullWidthContentBlock";
+
+// CONTEXT --------------------------------------------------
 import { muiQuery } from "../context";
 
 const HeroBanner = ({ state, actions, libraries, block }) => {
   const { sm, md, lg, xl } = muiQuery();
 
-  // console.log("HeroBanner Triggered", block); //debug
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
@@ -116,7 +115,8 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           <div
             className="d-flex justify-content-center"
             style={{
-              marginTop: "-20%",
+              marginTop: !lg ? "-20%" : !background_image ? "10%" : "-20%",
+              marginBottom: !lg ? null : "10%",
             }}
           >
             <Card
@@ -167,12 +167,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           width: OVERLAY_WIDTH,
         }}
       >
-        <div
-          style={{
-            margin: `0 ${PADDING}px`,
-            // marginTop: BANNER_HEIGHT - FOOTER_HEIGHT,
-          }}
-        >
+        <div style={{ margin: `0 ${PADDING}px` }}>
           <ButtonsRow block={block} disableMargin />
         </div>
       </div>
@@ -188,7 +183,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           style={{
             display: "grid",
             alignItems: "center",
-            position: "absolute",
+            position: !lg ? "absolute" : background_image ? "absolute" : null,
             zIndex: 9,
             width: !lg
               ? !background_image
@@ -231,7 +226,11 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           <Image
             src={background_image}
             alt={alt}
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: !lg ? "cover" : "contain",
+            }}
           />
         </div>
       </div>
@@ -245,7 +244,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           height: BANNER_HEIGHT,
           width: containerWidth,
           position: "absolute",
-          zIndex: 9,
+          zIndex: 8,
         }}
       >
         <div style={{ position: "relative" }}>
@@ -285,12 +284,13 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
         <div className="col-12 col-lg-6">
           <ServeCardContent />
           <ServeBannerOverLayMobile />
-          <ServeButtonsOverLayMobile />
+          {/* <ServeButtonsOverLayMobile /> */}
         </div>
       </>
     );
   }
 };
+
 const styles = {
   container: {},
 };

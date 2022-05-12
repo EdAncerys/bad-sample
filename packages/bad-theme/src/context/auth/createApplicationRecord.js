@@ -4,11 +4,18 @@ export const createApplicationRecord = async ({
   state,
   dispatch,
   isActiveUser,
+  refreshJWT,
 }) => {
-  console.log("createApplicationRecord triggered");
+  // console.log("createApplicationRecord triggered");
 
   // ⏬⏬  check if user application already exist ⏬⏬
-  const userStoreData = await getUserStoreAction({ state, isActiveUser });
+  const userStoreData = await getUserStoreAction({
+    state,
+    isActiveUser,
+    dispatch,
+    refreshJWT,
+  });
+
   if (userStoreData) {
     await setUserStoreAction({
       state,
@@ -16,6 +23,7 @@ export const createApplicationRecord = async ({
       dispatch,
       isActiveUser,
       data: userStoreData,
+      refreshJWT,
     });
     return;
   }
@@ -26,7 +34,7 @@ export const createApplicationRecord = async ({
   const URL =
     state.auth.APP_HOST +
     `/catalogue/data/core_membershipapplications(${contactid})`;
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   const requestOptions = {
     method: "PATCH",
@@ -40,8 +48,6 @@ export const createApplicationRecord = async ({
     const data = await fetch(URL, requestOptions);
     const result = await data.json();
 
-    // console.log("createApplicationRecord result", result); // debug
-
     if (result.success) {
       // ⏬  getting new user record ⏬
       const applicationData = await getApplicationRecord({ jwt, contactid });
@@ -52,15 +58,16 @@ export const createApplicationRecord = async ({
         dispatch,
         isActiveUser,
         data: applicationData,
+        refreshJWT,
       });
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
 export const getApplicationRecord = async ({ jwt, contactid }) => {
-  console.log("getApplicationRecord triggered");
+  // console.log("getApplicationRecord triggered");
 
   const URL =
     state.auth.APP_HOST +
@@ -84,6 +91,6 @@ export const getApplicationRecord = async ({ jwt, contactid }) => {
     }
     return null;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };

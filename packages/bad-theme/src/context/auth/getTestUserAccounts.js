@@ -1,12 +1,16 @@
 import { authenticateAppAction } from "../index";
 
-export const getTestUserAccountsAction = async ({ state }) => {
-  console.log("getTestUserAccountsAction triggered");
+export const getTestUserAccountsAction = async ({
+  state,
+  dispatch,
+  refreshJWT,
+}) => {
+  // console.log("getTestUserAccountsAction triggered");
 
   const URL =
     state.auth.APP_HOST +
     `/catalogue/data/contacts?$filter=firstname eq 'Andy'`;
-  const jwt = await authenticateAppAction({ state });
+  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   const requestOptions = {
     method: "GET",
@@ -18,11 +22,9 @@ export const getTestUserAccountsAction = async ({ state }) => {
     const result = await data.json();
     if (!result) throw new Error("Error getting userData.");
 
-    console.log("getTestUserAccountsAction result", result); // debug
-
     if (result.value) return result.value;
     return null;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };

@@ -1,36 +1,47 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../../config/colors";
 
 import TitleBlock from "../../titleBlock";
-import Events from "../../events/events";
 import Loading from "../../loading";
 import Card from "../../card/card";
+import BlockWrapper from "../../blockWrapper";
+import EventListView from "../../eventListView";
+
 // CONTEXT ------------------------------------------------------------------
 import {
   useAppState,
   useAppDispatch,
   authenticateAppAction,
+  muiQuery,
+  setGoToAction,
+  getEventsData,
+  handleSortFilter,
 } from "../../../context";
-import BlockWrapper from "../../blockWrapper";
 
 const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
-  const [listOfEvents, setListOfEvents] = useState();
-
+  const dispatch = useAppDispatch();
+  const { dashboardPath, isActiveUser, refreshJWT } = useAppState();
+  const { lg } = muiQuery();
+  const [listOfEvents, setListOfEvents] = useState([]);
+  const [eventList, setEventList] = useState([]); // event data
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-  const DEFAULT_IMAGE = `${state.auth.WORDPRESS_URL}wp-content/uploads/2022/03/EVENTS.jpg`;
-  const dispatch = useAppDispatch();
-  const { dashboardPath, isActiveUser } = useAppState();
-  if (!isActiveUser) return <Loading />;
+  const DEFAULT_IMAGE = `https://cdn.bad.org.uk/uploads/2022/03/29195958/EVENTS.jpg`;
+  const useEffectRef = useRef(null);
 
-  useEffect(() => {
-    const filterEvents = async () => {
-      await actions.source.fetch("/events/");
-      const allEvents = Object.values(state.source.events);
+  useEffect(async () => {
+    try {
+      let events = await getEventsData({ state, page: 1, postsPerPage: 4 });
+      if (!events) return;
+      // ⬇️⬇ sort events by date
+      events = handleSortFilter({ list: events });
+      setEventList(events);
+
+      if (!isActiveUser) return null;
       const { contactid } = isActiveUser;
-      const jwt = await authenticateAppAction({ dispatch, state });
+      const jwt = await authenticateAppAction({ dispatch, refreshJWT, state });
       const fetchUserEvents = await fetch(
         state.auth.APP_HOST + "/videvent/" + contactid + "/entities",
         {
@@ -39,6 +50,7 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
           },
         }
       );
+
       if (fetchUserEvents.ok) {
         let filteredEvents = [];
         const json = await fetchUserEvents.json();
@@ -46,77 +58,153 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
           filteredEvents.push(event.bad_eventid);
         });
 
-        const filteredCompletely = allEvents.filter((item) => {
+        // convert object to array
+        data = Object.values(data);
+        const relatedEvents = data.filter((item) => {
           return filteredEvents.includes(item.acf.events_force_id);
         });
-        setListOfEvents(filteredCompletely);
+
+        setListOfEvents(relatedEvents);
       }
+    } catch (err) {
+      // console.log(err);
+    }
+    return () => {
+      useEffectRef.current = ""; // clean up function
     };
-    filterEvents();
-  }, []);
+  }, [isActiveUser, state.source.events]);
 
   if (dashboardPath !== "Events") return null;
 
-  if (!listOfEvents) return <Loading />;
+  // SERVERS --------------------------------------------
+  const ServeRegisteredEvents = () => {
+    if (!isActiveUser) return <Loading />;
 
-  // RETURN ---------------------------------------------
-  return (
-    <div>
-      <TitleBlock
-        block={{ text_align: "left", title: "Events I Am Registered For" }}
-      />
-      <BlockWrapper>
+    return (
+      <div>
+        <TitleBlock
+          block={{ text_align: "left", title: "Events I Am Registered For" }}
+        />
+        <BlockWrapper>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: `1fr`,
+              padding: `0 ${marginHorizontal}px`,
+            }}
+          >
+            {listOfEvents.length > 0 &&
+              listOfEvents.map((block, key) => {
+                return (
+                  <div
+                    key={key}
+                    data-aos="fade"
+                    data-aos-easing="ease-in-sine"
+                    data-aos-delay={`${key * 50}`}
+                    data-aos-duration="1000"
+                    data-aos-offset="-120"
+                  >
+                    <EventListView block={block} />
+                  </div>
+                );
+              })}
+
+            {listOfEvents.length === 0 && (
+              <div
+                style={{
+                  display: "flex-col",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                  padding: `1em 1em 0 1em`,
+                }}
+              >
+                <div>
+                  Events you are registered for will only appear here if you
+                  have registered using the same email address that is
+                  associated with your BAD / SIG membership account. Events
+                  hosted by external parties may not appear here.
+                </div>
+                <div>
+                  You are not currently registered for any events. View our
+                  <span
+                    className="caps-btn"
+                    style={{ padding: "0 0.5em" }}
+                    onClick={() =>
+                      setGoToAction({
+                        state,
+                        path: "/events-content/",
+                        actions,
+                      })
+                    }
+                  >
+                    Events Calendar
+                  </span>
+                  here.
+                </div>
+              </div>
+            )}
+          </div>
+        </BlockWrapper>
+      </div>
+    );
+  };
+
+  const ServeDashEvents = () => {
+    if (eventList.length === 0) return null;
+
+    return (
+      <div
+        style={{
+          paddingTop: `${marginVertical}px`,
+        }}
+      >
+        <TitleBlock
+          block={{
+            text_align: "left",
+            title: "Upcoming Events",
+            disable_vertical_padding: true,
+          }}
+        />
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr 1fr",
+            gridTemplateColumns: !lg ? `repeat(4, 1fr)` : `1fr`, // layout settings
             gap: 20,
             padding: `${marginVertical}px ${marginHorizontal}px`,
           }}
         >
-          {listOfEvents.length > 0
-            ? listOfEvents.map((item, key) => {
-                console.log(item);
-                return (
-                  <Card
-                    key={key}
-                    title={item.title.rendered}
-                    url={item.acf.image || DEFAULT_IMAGE}
-                    imgHeight={200}
-                    link_label="Go to the event's page"
-                    link={item.acf.registration_page_link}
-                    date={item.acf.date_time}
-                    seatNumber="seatNumber"
-                    cardHeight="100%"
-                    shadow
-                  />
-                );
-              })
-            : "You are not registered for any events"}
+          {eventList.map((block, key) => {
+            const title = block.title.rendered;
+            const { date_time, image } = block.acf;
+
+            return (
+              <Card
+                key={key}
+                title={title}
+                // url={image}
+                // imgHeight={200}
+                link_label="Read More"
+                link={block.link}
+                colour={colors.turquoise}
+                date={date_time}
+                delay={key}
+                seatNumber="seatNumber"
+                cardHeight="100%"
+                shadow
+              />
+            );
+          })}
         </div>
-      </BlockWrapper>
-      <TitleBlock
-        block={{
-          text_align: "left",
-          title: "Upcoming Events",
-          disable_vertical_padding: true,
-        }}
-      />
-      <Events
-        block={{
-          add_search_function: false,
-          background_colour: "transparent",
-          colour: colors.turquoise,
-          disable_vertical_padding: false,
-          event_type: false,
-          grade_filter: "All Levels",
-          grades: false,
-          layout: "layout_two",
-          locations: false,
-          post_limit: "2",
-          view_all_link: false,
-        }}
-      />
+      </div>
+    );
+  };
+
+  // RETURN ---------------------------------------------
+  return (
+    <div>
+      <ServeRegisteredEvents />
+      <ServeDashEvents />
     </div>
   );
 };

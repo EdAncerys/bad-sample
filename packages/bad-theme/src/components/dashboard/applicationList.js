@@ -22,8 +22,13 @@ const ApplicationList = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { dynamicsApps, applicationData, isActiveUser, dashboardPath } =
-    useAppState();
+  const {
+    dynamicsApps,
+    applicationData,
+    isActiveUser,
+    dashboardPath,
+    refreshJWT,
+  } = useAppState();
 
   if (!dynamicsApps) return null; // if application data exist & not under review return null
   // see if application list have approved applications and if so show them
@@ -33,10 +38,6 @@ const ApplicationList = ({ state, actions, libraries }) => {
 
   const marginVertical = state.theme.marginVertical;
   const [isFetching, setFetching] = useState(false);
-
-  useEffect(() => {
-    console.log("API CALL");
-  }, [applicationData]);
 
   // HELPERS ----------------------------------------------
   const handleUpdateMembershipApplication = async ({ app }) => {
@@ -76,10 +77,11 @@ const ApplicationList = ({ state, actions, libraries }) => {
         },
         path: "/membership/application-change/", // redirect to application change page
         changeAppCategory: app, // change of application
+        refreshJWT,
       });
       if (!appData) throw new Error("Failed to create application");
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       setErrorAction({
         dispatch,
@@ -100,11 +102,13 @@ const ApplicationList = ({ state, actions, libraries }) => {
         state,
         core_membershipsubscriptionid: app.core_membershipsubscriptionid,
         isActiveUser,
+        dispatch,
+        refreshJWT,
       });
       // await for link to download & open in new window to download
       window.open(url, "_blank");
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setFetching(false);
     }
@@ -126,10 +130,7 @@ const ApplicationList = ({ state, actions, libraries }) => {
       return;
     }
     // otherwise handle create new application in Dynamics & redirect to application page
-    setGoToAction({
-      path: "/membership/step-1-the-process/",
-      actions,
-    });
+    setGoToAction({ state, path: "/membership/step-1-the-process/", actions });
   };
 
   // SERVERS ---------------------------------------------
@@ -157,7 +158,6 @@ const ApplicationList = ({ state, actions, libraries }) => {
               createdon,
               core_membershipsubscriptionid,
             } = app;
-            console.log("application data", app); // debug
             // get application date
             let appData = createdon.split(" ")[0];
             // split string and revert date with month format
@@ -180,6 +180,8 @@ const ApplicationList = ({ state, actions, libraries }) => {
                     state,
                     core_membershipsubscriptionid,
                     isActiveUser,
+                    dispatch,
+                    refreshJWT,
                   });
 
                   if (isSubmitted) {
@@ -192,10 +194,9 @@ const ApplicationList = ({ state, actions, libraries }) => {
                     });
                   }
 
-                  console.log("isSubmitted", isSubmitted);
                   setStatus(isSubmitted); // set status to submitted
                 } catch (error) {
-                  console.log(error);
+                  // console.log(error);
                 }
               }, []);
 
@@ -208,6 +209,8 @@ const ApplicationList = ({ state, actions, libraries }) => {
                     style={{
                       fontWeight: "bold",
                       justifyItems: "center",
+                      display: "grid",
+                      alignItems: "center",
                     }}
                   >
                     BAD category change pending approval.
@@ -223,7 +226,6 @@ const ApplicationList = ({ state, actions, libraries }) => {
                   }}
                 >
                   <div
-                    type="submit"
                     className="blue-btn"
                     onClick={() => handleUpdateMembershipApplication({ app })}
                   >
@@ -241,7 +243,6 @@ const ApplicationList = ({ state, actions, libraries }) => {
                 <div style={{ display: "grid", alignItems: "center" }}>
                   <div className="flex">
                     <div
-                      type="submit"
                       className="blue-btn"
                       style={{ marginRight: "1em" }}
                       onClick={handleApplyForMembershipChangeAction}
@@ -249,7 +250,6 @@ const ApplicationList = ({ state, actions, libraries }) => {
                       Apply to change membership
                     </div>
                     <div
-                      type="submit"
                       className="blue-btn"
                       onClick={() => handleDownloadConfirmationPDF({ app })}
                     >

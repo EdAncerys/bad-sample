@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 const FormError = ({ state, actions, libraries, id, title }) => {

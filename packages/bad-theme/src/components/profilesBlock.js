@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import Profile from "./profile";
-import { colors } from "../config/imports";
 import Loading from "./loading";
+
+// CONTEXT --------------------------------------------------
 import { setGoToAction, muiQuery } from "../context";
 
 const ProfilesBlock = ({ state, actions, libraries, block }) => {
@@ -27,7 +27,7 @@ const ProfilesBlock = ({ state, actions, libraries, block }) => {
       <div className="flex-center-row" style={{ paddingTop: `1em` }}>
         <div
           className="blue-btn"
-          onClick={() => setGoToAction({ path: link.url, actions })}
+          onClick={() => setGoToAction({ state, path: link.url, actions })}
         >
           <Html2React html={label} />
         </div>

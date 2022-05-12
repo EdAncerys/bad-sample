@@ -80,7 +80,6 @@ let newObject = Object.entries(fish).reduce((object, [key, obj_value]) => {
   let newKey = dog[key];
   object[newKey || key] = obj_value;
 
-  console.log(object);
   return object;
 }, {});
 

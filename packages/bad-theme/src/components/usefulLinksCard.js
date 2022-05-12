@@ -1,6 +1,7 @@
 import { connect } from "frontity";
 import { colors } from "../config/imports";
 
+// CONTEXT ----------------------------------------------------
 import { setGoToAction } from "../context";
 
 const UsefulLinksCard = ({
@@ -67,7 +68,7 @@ const UsefulLinksCard = ({
             fontSize: 20,
             cursor: "pointer",
           }}
-          onClick={() => setGoToAction({ path: link.url, actions })}
+          onClick={() => setGoToAction({ state, path: link.url, actions })}
         >
           <Html2React html={title} />
         </div>

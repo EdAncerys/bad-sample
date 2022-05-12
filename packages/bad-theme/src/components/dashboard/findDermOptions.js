@@ -1,276 +1,326 @@
-import { useState, useEffect, useReducer, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
+import ProfileAvatar from "./profileAvatar";
+import ActionPlaceholder from "../actionPlaceholder";
 
-import { colors } from "../../config/imports";
-
-import { muiQuery, setErrorAction, useAppDispatch } from "../../context";
-import { handleGetCookie } from "../../helpers/cookie";
-import Loading from "../loading";
+// CONTEXT ----------------------------------------------------------------
+import {
+  useAppState,
+  setErrorAction,
+  useAppDispatch,
+  muiQuery,
+  sendFileToS3Action,
+  updateProfileAction,
+} from "../../context";
 
 const FindDermatologistOptions = ({ state }) => {
-  const [fadData, setFadData] = useState();
-  const [reset, setReset] = useState();
+  const { sm, md, lg, xl } = muiQuery();
+
   const dispatch = useAppDispatch();
+  const { isActiveUser, dynamicsApps, refreshJWT } = useAppState();
+
   const marginVertical = state.theme.marginVertical;
+  const [isFetching, setIsFetching] = useState(null);
+  const [findDerm, setFindDerm] = useState(null);
+  const [formData, setFormData] = useState({
+    bad_includeinfindadermatologist: "",
+    address3_line1: "",
+    address3_line2: "",
+    address3_postalcode: "",
+    address3_city: "",
+    bad_mainhosptialweb: "",
+    bad_web1: "",
+    bad_web2: "",
+    bad_web3: "",
+    bad_findadermatologisttext: "",
+    bad_profile_photo_url: "",
+  });
+  const documentRef = useRef(null);
 
   useEffect(() => {
-    const getCurrentUserFadData = async () => {
-      const cookie = await handleGetCookie({ name: `BAD-WebApp` });
-      const { contactid, jwt } = cookie;
+    if (!isActiveUser) return null;
 
-      const fetchData = await fetch(
-        state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`,
-        {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
-        }
-      );
-
-      if (fetchData.ok) {
-        const json = await fetchData.json();
-        setFadData({
-          bad_includeinfindadermatologist: json.bad_includeinfindadermatologist,
-          address3_postalcode: json.address3_postalcode || "",
-          address3_line1: json.address3_line1 || "",
-          address3_line2: json.address3_line2 || "",
-          address3_city: json.address3_city || "",
-          bad_mainhosptialweb: json.bad_mainhosptialweb || "",
-          bad_web3: json.bad_web3 || "",
-          bad_web2: json.bad_web2 || "",
-          bad_web1: json.bad_web1 || "",
-          bad_findadermatologisttext: json.bad_findadermatologisttext || "",
-        });
-      }
+    // map through user & update formData with values
+    const handleSetData = ({ name }) => {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [`${name}`]: isActiveUser[`${name}`],
+      }));
     };
-    getCurrentUserFadData();
-  }, [reset]);
 
-  const handlePreferenceUpdate = async () => {
-    const cookie = await handleGetCookie({ name: `BAD-WebApp` });
-    const { contactid, jwt } = cookie;
-    const url = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
+    // 📌 populate profile information form Dynamics records
+    handleSetData({ name: "bad_includeinfindadermatologist" });
+    if (isActiveUser.address3_postalcode)
+      handleSetData({ name: "address3_postalcode" });
+    if (isActiveUser.address3_line1) handleSetData({ name: "address3_line1" });
+    if (isActiveUser.address3_line2) handleSetData({ name: "address3_line2" });
+    if (isActiveUser.address3_city) handleSetData({ name: "address3_city" });
+    if (isActiveUser.bad_mainhosptialweb)
+      handleSetData({ name: "bad_mainhosptialweb" });
+    if (isActiveUser.bad_web1) handleSetData({ name: "bad_web1" });
+    if (isActiveUser.bad_web1) handleSetData({ name: "bad_web2" });
+    if (isActiveUser.bad_web1) handleSetData({ name: "bad_web3" });
+    if (isActiveUser.bad_findadermatologisttext)
+      handleSetData({ name: "bad_findadermatologisttext" });
 
-    console.log("URLKA", url);
-    const submitUpdate = await fetch(url, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(fadData),
-    });
+    // check if user have Ordinary or Honory app then set setFindDerm to true
+    if (dynamicsApps) {
+      const isMember = dynamicsApps.subs.data.filter(
+        (app) =>
+          app.bad_categorytype.includes("Honory") ||
+          app.bad_categorytype.includes("Ordinary")
+      );
+      // show find dermatologist section for applicable users
+      if (isMember.length > 0) setFindDerm(true);
+    }
+  }, [isActiveUser, dynamicsApps]);
 
-    if (submitUpdate.ok) {
-      const json = await submitUpdate.json();
-      json.success
-        ? setErrorAction({
-            dispatch,
-            isError: { message: "Updated" },
-          })
-        : setErrorAction({
-            dispatch,
-            isError: { message: "There was an error processing the update" },
-          });
-      console.log("UPDATED?", json);
+  // HELPERS ----------------------------------------------------------------
+  const handleInputChange = (e) => {
+    const { name, value, type, checked, files } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleProfileUpdate = async () => {
+    let bad_includeinfindadermatologist =
+      formData.bad_includeinfindadermatologist;
+    let address3_line1 = formData.address3_line1;
+    let address3_line2 = formData.address3_line2;
+    let address3_postalcode = formData.address3_postalcode;
+    let address3_city = formData.address3_city;
+    let bad_mainhosptialweb = formData.bad_mainhosptialweb;
+    let bad_web1 = formData.bad_web1;
+    let bad_web2 = formData.bad_web2;
+    let bad_web3 = formData.bad_web3;
+    let bad_findadermatologisttext = formData.bad_findadermatologisttext;
+    let bad_profile_photo_url = formData.bad_profile_photo_url;
+
+    const data = {
+      bad_includeinfindadermatologist,
+      address3_line1,
+      address3_line2,
+      address3_postalcode,
+      address3_city,
+      bad_mainhosptialweb,
+      bad_web1,
+      bad_web2,
+      bad_web3,
+      bad_findadermatologisttext,
+      bad_profile_photo_url,
+    };
+
+    try {
+      setIsFetching(true);
+      const response = await updateProfileAction({
+        state,
+        dispatch,
+        data,
+        isActiveUser,
+        refreshJWT,
+      });
+      if (!response) throw new Error("Error updating profile");
+      // display error message
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Find a Dermatologist information updated successfully`,
+        },
+      });
+    } catch (error) {
+      // console.log("error", error);
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Failed to update personal information. Please try again.`,
+          image: "Error",
+        },
+      });
+    } finally {
+      setIsFetching(false);
     }
   };
 
-  if (!fadData) return <Loading />;
+  const handleDocUploadChange = async (e) => {
+    let bad_profile_photo_url = e.target.files[0];
+
+    if (bad_profile_photo_url)
+      bad_profile_photo_url = await sendFileToS3Action({
+        state,
+        dispatch,
+        attachments: bad_profile_photo_url,
+        refreshJWT,
+      });
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      ["bad_profile_photo_url"]: bad_profile_photo_url, // update formData
+    }));
+  };
+
+  // 📌 hide component if user is not a member
+  if (!findDerm) return null;
+
   return (
-    <div
-      className="shadow"
-      style={{
-        padding: `2em 4em`,
-        marginBottom: `${marginVertical}px`,
-      }}
-    >
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          console.log("FADKA", fadData);
-          handlePreferenceUpdate();
+    <div style={{ position: "relative" }}>
+      <ActionPlaceholder isFetching={isFetching} background="transparent" />
+      <div
+        className="shadow"
+        style={{
+          padding: !lg ? `2em 4em` : "1em",
+          marginBottom: `${marginVertical}px`,
         }}
       >
         <div style={{ display: "grid" }}>
           <div className="flex-col">
-            <div>
-              <div
-                className="flex"
-                style={{ alignItems: "center", margin: `1em 0` }}
-              >
-                <div style={{ display: "grid" }}>
-                  <input
-                    id="includeInFindDermatologist"
-                    type="checkbox"
-                    className="form-check-input check-box"
-                    checked={fadData.bad_includeinfindadermatologist}
-                    onChange={() => {
-                      setFadData((prev) => ({
-                        ...prev,
-                        bad_includeinfindadermatologist:
-                          !fadData.bad_includeinfindadermatologist,
-                      }));
-                    }}
-                  />
+            <div
+              className="flex"
+              style={{ flexDirection: !lg ? null : "column-reverse" }}
+            >
+              <div className="flex-col" style={{ flex: 1.25 }}>
+                <div style={{ textAlign: "justify" }}>
+                  The Find a Dermatologist feature is a service where members of
+                  the public can search for Consultant Dermatologists by
+                  postcode proximity. Opting in allows our Consultant members to
+                  provide the public with further information about their
+                  dermatological specialties and work. Your personal message,
+                  main place of work and up to three private practice websites
+                  will be displayed on your search results profile.
                 </div>
-                <div style={styles.textInfo}>
-                  I would like to be included in the Find a Dermatologist
-                  directory
+                <div>
+                  <div
+                    className="flex"
+                    style={{ alignItems: "center", margin: `1em 0` }}
+                  >
+                    <div style={{ display: "grid" }}>
+                      <input
+                        name="bad_includeinfindadermatologist"
+                        checked={formData.bad_includeinfindadermatologist}
+                        onChange={handleInputChange}
+                        type="checkbox"
+                        className="form-check-input check-box"
+                      />
+                    </div>
+                    <div style={styles.textInfo}>
+                      I would like to be included in the Find a Dermatologist
+                      directory
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div style={{ paddingTop: `1em` }}>
-              Practice address to show in the directory
-            </div>
-            <div>
-              <div className="flex-col">
-                <input
-                  id="address3_line1"
-                  name="address3_line1"
-                  type="text"
-                  className="form-control"
-                  placeholder="Address Line 1"
-                  style={styles.input}
-                  value={fadData.address3_line1}
-                  onChange={(e) => {
-                    setFadData((prev) => ({
-                      ...prev,
-                      address3_line1: e.target.value,
-                    }));
-                  }}
-                />
-                <input
-                  id="address3_line2"
-                  type="text"
-                  className="form-control"
-                  placeholder="Address Line 2"
-                  style={styles.input}
-                  value={fadData.address3_line2}
-                  onChange={(e) => {
-                    setFadData((prev) => ({
-                      ...prev,
-                      address3_line2: e.target.value,
-                    }));
-                  }}
-                />
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr",
-                    gap: 20,
-                  }}
-                >
-                  <input
-                    id="address3_postalcode"
-                    type="text"
-                    className="form-control"
-                    placeholder="Post Code"
-                    style={styles.input}
-                    value={fadData.address3_postalcode}
-                    onChange={(e) => {
-                      setFadData((prev) => ({
-                        ...prev,
-                        address3_postalcode: e.target.value,
-                      }));
-                    }}
-                  />
-                  <input
-                    id="address3_city"
-                    type="text"
-                    className="form-control"
-                    placeholder="City"
-                    style={styles.input}
-                    value={fadData.address3_city}
-                    onChange={(e) => {
-                      setFadData((prev) => ({
-                        ...prev,
-                        address3_city: e.target.value,
-                      }));
-                    }}
-                  />
+
+                <div style={{ paddingTop: `1em` }}>
+                  Practice address to show in the directory
+                </div>
+                <div>
+                  <div className="flex-col">
+                    <input
+                      name="address3_line1"
+                      value={formData.address3_line1}
+                      onChange={handleInputChange}
+                      type="text"
+                      placeholder="Address Line 1"
+                      className="form-control"
+                      style={styles.input}
+                    />
+                    <input
+                      name="address3_line2"
+                      value={formData.address3_line2}
+                      onChange={handleInputChange}
+                      type="text"
+                      placeholder="Address Line 2"
+                      className="form-control"
+                      style={styles.input}
+                    />
+
+                    <input
+                      name="address3_postalcode"
+                      value={formData.address3_postalcode}
+                      onChange={handleInputChange}
+                      type="text"
+                      placeholder="Postcode"
+                      className="form-control"
+                      style={styles.input}
+                    />
+                    <input
+                      name="address3_city"
+                      value={formData.address3_city}
+                      onChange={handleInputChange}
+                      type="text"
+                      placeholder="City"
+                      className="form-control"
+                      style={styles.input}
+                    />
+
+                    <div>
+                      <label>Upload A Profile Photo</label>
+                      <input
+                        ref={documentRef}
+                        onChange={handleDocUploadChange}
+                        type="file"
+                        className="form-control input"
+                        placeholder="Profile Photo"
+                        accept="image/png, image/jpeg"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
+
+              <ProfileAvatar isPreview={formData.bad_profile_photo_url} />
             </div>
-            <div style={{ paddingTop: `1em` }}>Website Address</div>
-            <div>
-              <div className="flex-col">
-                <input
-                  id="mainHospitalWebAddress"
-                  type="text"
-                  className="form-control"
-                  placeholder="Main Hospital Web Address"
-                  style={styles.input}
-                  value={fadData.bad_mainhosptialweb}
-                  onChange={(e) => {
-                    setFadData((prev) => ({
-                      ...prev,
-                      bad_mainhosptialweb: e.target.value,
-                    }));
-                  }}
-                />
-                <input
-                  id="privatePracticeWebAddressOne"
-                  type="text"
-                  className="form-control"
-                  placeholder="Private Practice Web Address 1"
-                  style={styles.input}
-                  value={fadData.bad_web1}
-                  onChange={(e) => {
-                    setFadData((prev) => ({
-                      ...prev,
-                      bad_web1: e.target.value,
-                    }));
-                  }}
-                />
-                <input
-                  id="privatePracticeWebAddressTwo"
-                  type="text"
-                  className="form-control"
-                  placeholder="Private Practice Web Address 2"
-                  style={styles.input}
-                  value={fadData.bad_web2}
-                  onChange={(e) => {
-                    setFadData((prev) => ({
-                      ...prev,
-                      bad_web2: e.target.value,
-                    }));
-                  }}
-                />
-                <input
-                  id="privatePracticeWebAddressThree"
-                  type="text"
-                  className="form-control"
-                  placeholder="Private Practice Web Address 3"
-                  style={styles.input}
-                  value={fadData.bad_web3}
-                  onChange={(e) => {
-                    setFadData((prev) => ({
-                      ...prev,
-                      bad_web3: e.target.value,
-                    }));
-                  }}
-                />
-              </div>
-            </div>
+
+            <div style={{ paddingTop: `1em` }}>URLs:</div>
+            <input
+              name="bad_mainhosptialweb"
+              value={formData.bad_mainhosptialweb}
+              onChange={handleInputChange}
+              type="text"
+              placeholder="Main Place of Work"
+              className="form-control"
+              style={styles.input}
+            />
+            <input
+              name="bad_web1"
+              value={formData.bad_web1}
+              onChange={handleInputChange}
+              type="text"
+              placeholder="https://"
+              className="form-control"
+              style={styles.input}
+            />
+            <input
+              name="bad_web2"
+              value={formData.bad_web2}
+              onChange={handleInputChange}
+              type="text"
+              placeholder="https://"
+              className="form-control"
+              style={styles.input}
+            />
+            <input
+              name="bad_web3"
+              value={formData.bad_web3}
+              onChange={handleInputChange}
+              type="text"
+              placeholder="https://"
+              className="form-control"
+              style={styles.input}
+            />
 
             <div style={{ paddingTop: `1em` }}>About Text</div>
             <div>
               <div className="flex-col">
                 <textarea
-                  id="aboutText"
-                  type="text"
-                  className="form-control"
-                  placeholder="Find a Dermatologist About Text"
+                  name="bad_findadermatologisttext"
+                  value={formData.bad_findadermatologisttext}
+                  onChange={handleInputChange}
                   rows="10"
+                  type="text"
+                  placeholder="Find a Dermatologist About Text"
+                  className="form-control"
                   style={styles.input}
-                  value={fadData.bad_findadermatologisttext}
-                  onChange={(e) => {
-                    setFadData((prev) => ({
-                      ...prev,
-                      bad_findadermatologisttext: e.target.value,
-                    }));
-                  }}
                 />
               </div>
             </div>
@@ -280,11 +330,11 @@ const FindDermatologistOptions = ({ state }) => {
           className="flex"
           style={{ justifyContent: "flex-end", padding: `2em 0 0` }}
         >
-          <div type="submit" className="blue-btn">
-            Update
+          <div className="blue-btn" onClick={handleProfileUpdate}>
+            Save
           </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 };

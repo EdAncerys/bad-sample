@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import Image from "@frontity/components/image";
-import ProfileAvatar from "../../img/svg/profile.svg";
+import ProfileAvatar from "./profileAvatar";
+
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -20,43 +19,6 @@ const Profile = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
 
   // SERVERS ---------------------------------------------
-  const ServeProfileAvatar = () => {
-    if (!isActiveUser) return null;
-
-    const { bad_listname, bad_profile_photo_url } = isActiveUser;
-    const alt = bad_listname || "Profile Picture";
-    let imgWidth = 350;
-    if (xl) {
-      imgWidth = 200;
-    } else {
-      imgWidth = 350;
-    }
-
-    return (
-      <div className="flex" style={{ justifyContent: "flex-end" }}>
-        <div
-          style={{
-            width: imgWidth,
-            height: imgWidth,
-            borderRadius: `50%`,
-            overflow: `hidden`,
-            margin: "3em 0 0 0",
-          }}
-        >
-          <Image
-            src={bad_profile_photo_url || ProfileAvatar}
-            alt={alt}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-            }}
-          />
-        </div>
-      </div>
-    );
-  };
-
   const ServeProfileName = () => {
     if (!isActiveUser) return null;
 
@@ -154,7 +116,7 @@ const Profile = ({ state, actions, libraries }) => {
       return (
         <div className="flex-col" style={styles.container}>
           <span className="primary-title">
-            Main Place of work / Medical School:{" "}
+            Main Hospital / Place of Work / Medical School details:{" "}
           </span>
           <Html2React html={mainPlaceOfWorkCategory} />
         </div>
@@ -164,7 +126,7 @@ const Profile = ({ state, actions, libraries }) => {
     const ServeAddress = () => {
       return (
         <div className="flex-col" style={styles.container}>
-          <span className="primary-title">Address: </span>
+          <span className="primary-title">Home Address: </span>
           <div className="flex-col">
             {address2_line1 && (
               <div className="flex">
@@ -197,7 +159,7 @@ const Profile = ({ state, actions, libraries }) => {
     };
 
     return (
-      <div style={{ paddingTop: `1em`, fontSize: 20 }}>
+      <div style={{ paddingTop: `1em` }}>
         <ServeMembershipNumber />
         <ServeBadCategory />
         <ServeMainPlaceOfWork />
@@ -239,12 +201,12 @@ const Profile = ({ state, actions, libraries }) => {
           alignItems: "center",
         }}
       >
-        {!lg ? null : <ServeProfileAvatar />}
+        {!lg ? null : <ProfileAvatar />}
         <ServeProfileName />
         <ServeProfileInfo />
       </div>
 
-      {!lg ? <ServeProfileAvatar /> : null}
+      {!lg ? <ProfileAvatar /> : null}
     </div>
   );
 };

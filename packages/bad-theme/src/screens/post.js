@@ -17,7 +17,6 @@ const Post = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
-  console.log("post data: ", post); // debug
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -88,7 +87,7 @@ const Post = ({ state, actions, libraries }) => {
       const bodyLength = content.rendered.length;
 
       return (
-        <div className="flex-col">
+        <div className="flex-col  post-content">
           <Html2React html={content.rendered} />
           {bodyLength > 2500 && <ScrollTop />}
         </div>
@@ -114,12 +113,19 @@ const Post = ({ state, actions, libraries }) => {
       );
       if (catName[0]) catName = catName[0].name;
       // get list of posts where category is the same as the current post
-      let relatedList = postList.filter((post) => {
-        return post.categories.includes(currentPostCategory);
+      let relatedList = postList.filter((item) => {
+        // return posts that includes current post category & dont include current post id
+        return (
+          item.categories.includes(currentPostCategory) && post.id !== item.id
+        );
+      });
+      // sort relatedList by date earliest to latest
+      relatedList.sort((a, b) => {
+        return new Date(a.date) - new Date(b.date);
       });
       // get latest posts from the list
-      relatedList = postList.slice(0, 3);
-      if (!postList.length) return null; // dont render if no posts
+      relatedList = relatedList.slice(0, 3);
+      if (!relatedList.length) return null; // dont render if no posts
 
       return (
         <div
@@ -156,7 +162,9 @@ const Post = ({ state, actions, libraries }) => {
                 <div
                   className="primary-title"
                   style={{ fontSize: 16, padding: "1em 0", cursor: "pointer" }}
-                  onClick={() => setGoToAction({ path: post.link, actions })}
+                  onClick={() =>
+                    setGoToAction({ state, path: post.link, actions })
+                  }
                 >
                   {post.title.rendered}
                 </div>

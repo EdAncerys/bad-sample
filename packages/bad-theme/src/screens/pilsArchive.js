@@ -20,7 +20,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
 
   const data = state.source.get(state.router.link);
   const pilPageData = state.source[data.type][data.id];
-  // console.log("pageData ", data); // debug
+  console.log("pageData ", data); // debug
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [searchInput, setInput] = useState("");
@@ -34,38 +34,65 @@ const PilsArchive = ({ state, actions, libraries }) => {
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
-    let pils = state.source.pils;
-    if (!pils) {
-      await getPILsDataAction({ state, actions });
-      pils = state.source.pils;
-    }
+    // let pils = state.source.pils;
+    const fetchAllData = async () => {
+      // TODO: Make it better
+      const pilsies = [];
+      const times = 3;
+      const trying = await Promise.all([
+        fetch(
+          state.auth.WP_HOST +
+            `wp-json/wp/v2/pils?filter[orderby]=title&order=asc&per_page=100&page=1&_fields=title,link`
+        ).then((r) => r.json()),
+        fetch(
+          state.auth.WP_HOST +
+            `wp-json/wp/v2/pils?filter[orderby]=title&order=asc&per_page=100&page=2&_fields=title,link`
+        ).then((r) => r.json()),
+        fetch(
+          state.auth.WP_HOST +
+            `wp-json/wp/v2/pils?filter[orderby]=title&order=asc&per_page=100&page=3&_fields=title,link`
+        ).then((r) => r.json()),
+      ]);
+      console.log("TRYING", trying.flat(1));
+
+      console.log("PILSIES", pilsies);
+      setPilList(trying.flat(1));
+      console.log("JSON", data);
+      console.log("STATE", pilList);
+    };
+
+    // if (!pils) {
+    //   await getPILsDataAction({ state, actions });
+    //   pils = state.source.pils;
+    // }
 
     // if pils not found return
-    if (!pils) return;
-    let pilData = Object.values(pils);
+    // if (!pilList) return;
+    // let pilData = Object.values(pils);
 
-    // sort pils alphabetically by title
-    pilData.sort((a, b) => {
-      const nameA = a.title.rendered.toUpperCase(); // ignore upper and lowercase
-      const nameB = b.title.rendered.toUpperCase(); // ignore upper and lowercase
-      if (nameA < nameB) {
-        return -1;
-      }
-      if (nameA > nameB) {
-        return 1;
-      }
-      return 0;
-    });
+    // // sort pils alphabetically by title
+    // pilData.sort((a, b) => {
+    //   const nameA = a.title.rendered.toUpperCase(); // ignore upper and lowercase
+    //   const nameB = b.title.rendered.toUpperCase(); // ignore upper and lowercase
+    //   if (nameA < nameB) {
+    //     return -1;
+    //   }
+    //   if (nameA > nameB) {
+    //     return 1;
+    //   }
+    //   return 0;
+    // });
 
-    setPilList(pilData); // add pill object to data array
+    // setPilList(pilData); // add pill object to data array
 
+    fetchAllData();
     return () => {
       useEffectRef.current = false; // clean up function
     };
   }, []);
-  // DATA pre FETCH ----------------------------------------------------------------
 
   if (!pilList) return <Loading />;
+
   let ALPHABET = [];
   pilList.map((item) => {
     const pilTitle = item.title.rendered;
@@ -87,9 +114,8 @@ const PilsArchive = ({ state, actions, libraries }) => {
 
     if (input) {
       filter = pilList.filter(
-        (pil) =>
-          pil.title.rendered.toLowerCase().includes(input) ||
-          pil.content.rendered.toLowerCase().includes(input)
+        (pil) => pil.title.rendered.toLowerCase().includes(input)
+        // || pil.content.rendered.toLowerCase().includes(input) // uncomment to search in content
       );
       // ⬇️ convert filter to dropdown object format
       filter = filter.map((item) => {
@@ -120,7 +146,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
 
   const dropDownHandler = ({ item }) => {
     // console.log(item); // debug
-    setGoToAction({ path: item.url, actions });
+    setGoToAction({ state, path: item.url, actions });
   };
 
   const handleKeyPress = (e) => {
@@ -173,7 +199,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
         <div
           className="pil-title"
           style={{ fontSize: 16, marginBottom: `0.25em`, cursor: "pointer" }}
-          onClick={() => setGoToAction({ path: link, actions })}
+          onClick={() => setGoToAction({ state, path: link, actions })}
         >
           <Html2React html={title.rendered} />
         </div>
@@ -248,9 +274,9 @@ const PilsArchive = ({ state, actions, libraries }) => {
           paddingTop: !lg ? null : "1em",
         }}
       >
-        <button type="submit" className="blue-btn" onClick={handleSearchPress}>
+        <div className="blue-btn" onClick={handleSearchPress}>
           Search
-        </button>
+        </div>
       </div>
     );
   };
@@ -297,8 +323,8 @@ const PilsArchive = ({ state, actions, libraries }) => {
       >
         <BlockWrapper>
           <div style={{ padding: `0 ${marginHorizontal}px` }}>
-            <div style={{ position: "relative", width: "70%" }}>
-              <div className="flex-row">
+            <div style={{ position: "relative", width: !lg ? "70%" : "100%" }}>
+              <div className={!lg ? "flex-row" : "flex-col"}>
                 <div
                   className="flex"
                   style={{
@@ -332,13 +358,15 @@ const PilsArchive = ({ state, actions, libraries }) => {
                   >
                     <ServeIcon />
                   </div>
+                  <SearchDropDown
+                    input={searchInput}
+                    filter={searchFilter}
+                    onClickHandler={dropDownHandler}
+                    marginTop={ctaHeight + 5}
+                  />
                 </div>
                 <ServeSearchButton />
               </div>
-              <SearchDropDown
-                filter={searchFilter}
-                onClickHandler={dropDownHandler}
-              />
             </div>
             <div className="flex" style={{ marginTop: "1em" }}>
               <ServeSearchFilter />

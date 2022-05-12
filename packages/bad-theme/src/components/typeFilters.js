@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { connect } from "frontity";
 import { muiQuery } from "../context";
 import { colors } from "../config/imports";
@@ -24,7 +23,7 @@ const TypeFilters = ({
   // HELPERS ----------------------------------------------------------------
   const handleSetTypeFilter = ({ id }) => {
     typeFilterRef.current = id;
-    handleSearch();
+    handleSearch({ id });
   };
 
   // SERVERS ----------------------------------------------------------------

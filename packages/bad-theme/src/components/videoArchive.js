@@ -1,38 +1,34 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { connect } from "frontity";
 import Card from "./card/card";
 import BlockWrapper from "./blockWrapper";
 import HeroBanner from "./heroBanner";
-import SearchContainer from "./searchContainer";
 import { colors } from "../config/imports";
-import CloseIcon from "@mui/icons-material/Close";
-import SearchIcon from "@mui/icons-material/Search";
 import defaultCover from "../img/png/video_default.jpg";
-
 import Loading from "../components/loading";
+import { handleGetCookie } from "../helpers/cookie";
+
+// CONTEXT ----------------------------------------------------------------
 import { muiQuery, useAppState } from "../context";
+
 const VideoArchive = ({ state, actions, libraries }) => {
-  const [guidanceCategory, setGuidanceCategory] = useState(null);
   const [postData, setPostData] = useState(null);
   const [heroBannerBlock, setHeroBannerBlock] = useState(null);
-  const [filters, setFilters] = useState();
+  const [userVideos, setUserVideos] = useState(null);
+  // const [showMyVids, setShowMyVids] = useState(false);
 
   const { isActiveUser } = useAppState();
 
   const { sm, md, lg, xl } = muiQuery();
 
-  const searchFilterRef = useRef(null);
-
-  const specialtyFilter = useRef(null);
-  const paidFilter = useRef(null);
-  const gradeFilter = useRef(null);
-  const allVideos = useRef(null);
+  const searchFilterRef = useRef("");
+  const specialtyFilter = useRef("");
+  const paidFilter = useRef("");
+  const gradeFilter = useRef("");
+  const showOnlyMyVids = useRef(false);
   const marginVertical = state.theme.marginVertical;
-  const inputSize = 20;
-  // const LIMIT = 6;
 
   const handleFilters = () => {
-    const data = state.source.get(state.router.link);
     let unfilteredVideos = Object.values(state.source.videos);
 
     if (specialtyFilter.current === "all") {
@@ -43,10 +39,17 @@ const VideoArchive = ({ state, actions, libraries }) => {
       setPostData(unfilteredVideos);
       return true;
     }
+    let filteredVideos = unfilteredVideos;
+    if (showOnlyMyVids.current === true) {
+      filteredVideos = filteredVideos.filter((video) => {
+        const id = video.acf.event_id;
+        return userVideos.some((userVideo) => {
+          return userVideo.event_id === id;
+        });
+      });
+    }
 
-    console.log("UNFILTERED:", specialtyFilter.current);
-
-    const filteredVideos = unfilteredVideos.filter((video) => {
+    filteredVideos = filteredVideos.filter((video) => {
       if (
         specialtyFilter.current &&
         !video.event_specialty.includes(Number(specialtyFilter.current))
@@ -66,8 +69,8 @@ const VideoArchive = ({ state, actions, libraries }) => {
     });
 
     setPostData(filteredVideos);
-    console.log(filteredVideos);
   };
+
   const handleSearch = (e, searchFilter) => {
     e.preventDefault();
     let unfilteredVideos = Object.values(state.source.videos);
@@ -80,6 +83,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
     });
     setPostData(filteredVideos);
   };
+
   const ServeFilterMenu = () => {
     const SpecialtyFilters = () => {
       if (!state.source.event_specialty) return null;
@@ -98,17 +102,22 @@ const VideoArchive = ({ state, actions, libraries }) => {
               specialtyFilter.current = value;
               handleFilters();
             }}
-            style={styles.dropdown}
+            style={!lg ? styles.dropdown : styles.dropdownMobile}
           >
             <option value="">Specialties</option>
-            {data.map((item) => {
-              return <option value={item.id}>{item.name}</option>;
+            {data.map((item, key) => {
+              return (
+                <option key={key} value={item.id}>
+                  {item.name}
+                </option>
+              );
             })}
             <option value="all">All specialties</option>
           </select>
         </div>
       );
     };
+
     const GradeFilters = () => {
       if (!state.source.event_grade) return null;
       const data = Object.values(state.source.event_grade);
@@ -119,7 +128,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
             className="form-control"
             name="event-grades"
             id="event-grades"
-            style={styles.dropdown}
+            style={!lg ? styles.dropdown : styles.dropdownMobile}
             value={gradeFilter.current}
             onChange={() => {
               const select = document.getElementById("event-grades");
@@ -136,6 +145,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
         </div>
       );
     };
+
     const PaymentFilters = () => {
       const paymentType = ["Paid", "Free"];
       return (
@@ -151,33 +161,55 @@ const VideoArchive = ({ state, actions, libraries }) => {
               paidFilter.current = value;
               handleFilters();
             }}
-            style={styles.dropdown}
+            style={!lg ? styles.dropdown : styles.dropdownMobile}
           >
             <option>Video type</option>
             <option value="all">All videos</option>
-            {paymentType.map((item) => {
-              return <option value={item.toLowerCase()}>{item}</option>;
+            {paymentType.map((item, key) => {
+              return (
+                <option key={key} value={item.toLowerCase()}>
+                  {item}
+                </option>
+              );
             })}
           </select>
         </div>
       );
     };
+
     return (
       <div
         style={{
           display: "flex",
-          gap: 20,
+          gap: !lg ? 20 : 5,
+          flexWrap: !lg ? null : "wrap",
         }}
       >
         <div
           className="primary-title"
           style={{ display: "flex", alignItems: "center" }}
         >
-          Filters:{" "}
+          {!lg ? "Filters:" : null}
         </div>
         <SpecialtyFilters />
         <GradeFilters />
         <PaymentFilters />
+        {isActiveUser && (
+          <button
+            className={
+              showOnlyMyVids.current === true ? "blue-btn-reverse" : "blue-btn"
+            }
+            onClick={() => {
+              const opposite = showOnlyMyVids.current;
+              showOnlyMyVids.current = !opposite;
+              handleFilters();
+            }}
+          >
+            {showOnlyMyVids.current === true
+              ? "Show all videos"
+              : "Show only my videos"}
+          </button>
+        )}
         <div
           onClick={() => {
             specialtyFilter.current = null;
@@ -207,29 +239,13 @@ const VideoArchive = ({ state, actions, libraries }) => {
           justifyContent: "center",
         }}
       >
-        "There are no videos found"
+        There are no videos found
       </div>
     );
   };
+
   const ServeSearchFilter = () => {
     const [searchFilter, setSearchFilter] = useState("");
-    const ServeIcon = () => {
-      const searchIcon = <SearchIcon />;
-      const closeIcon = <CloseIcon />;
-      const icon = searchFilter ? closeIcon : searchIcon;
-
-      return (
-        <div
-          onClick={() => {
-            setSearchFilter(null);
-            searchFilterRef.current.value = "";
-            if (onChange) setFilterAction({ dispatch, filter: null }); // reset main search filter
-          }}
-        >
-          {icon}
-        </div>
-      );
-    };
 
     const ServeSerachButton = () => {
       return (
@@ -241,9 +257,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
             paddingTop: !lg ? null : "1em",
           }}
         >
-          <button type="submit" className="blue-btn">
-            Search
-          </button>
+          <div className="blue-btn">Search</div>
         </div>
       );
     };
@@ -255,7 +269,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
       >
         <form
           onSubmit={(e) => handleSearch(e, searchFilter)}
-          style={{ display: "flex", width: "50%" }}
+          style={{ display: "flex", width: !lg ? "50%" : "100%" }}
         >
           <input
             ref={searchFilterRef}
@@ -263,7 +277,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
             type="text"
             className="form-control"
             placeholder="Search"
-            style={!lg ? { width: "50%" } : { padding: "1em" }}
+            style={!lg ? { width: "50%" } : { padding: "1em", height: 40 }}
             value={searchFilter}
           />
           <div
@@ -277,9 +291,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
               color: colors.darkSilver,
               cursor: "pointer",
             }}
-          >
-            {/* <ServeIcon /> */}
-          </div>
+          ></div>
           <ServeSerachButton />
         </form>
       </div>
@@ -299,18 +311,17 @@ const VideoArchive = ({ state, actions, libraries }) => {
         colour={colors.orange}
         link={post.link}
         link_label="watch"
-        onClick={() => setGoToAction({ path: post.link, actions })}
+        onClick={() => setGoToAction({ state, path: post.link, actions })}
         shadow
       />
     );
   };
 
-  useEffect(async () => {
-    actions.source.fetch("/videos/");
-    actions.source.fetch("/event_specialty/");
-
-    console.log("Use effect trigerred");
-
+  useEffect(() => {
+    const fetchContent = async () => {
+      actions.source.fetch("/videos/");
+      actions.source.fetch("/event_specialty/");
+    };
     const fetchHeroBanner = async () => {
       const fetchInfo = await fetch(
         state.source.url + "/wp-json/wp/v2/pages/7051"
@@ -333,15 +344,34 @@ const VideoArchive = ({ state, actions, libraries }) => {
       }
     };
 
+    const fetchUserVideos = async () => {
+      const cookie = handleGetCookie({ name: `BAD-WebApp` });
+      const { contactid, jwt } = cookie;
+
+      const allVidz = state.source.videos;
+      const listOfVids = await fetch(
+        state.auth.APP_HOST + `/videvent/${isActiveUser.contactid}/entities`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+
+      const json = await listOfVids.json();
+      setUserVideos(json.data);
+      console.log("List of vids", json);
+    };
     const data = state.source.get(state.router.link);
-    // const data = state.source.get("/videos/");
-
     setPostData(data.items);
-
-    console.log("DATERO ", data.items);
+    fetchContent();
     fetchHeroBanner();
+
+    if (isActiveUser) fetchUserVideos();
   }, []);
+
   if (!postData) return <Loading />;
+
   return (
     <>
       <BlockWrapper background="rgb(239, 125, 33, 0.1)">
@@ -367,31 +397,21 @@ const VideoArchive = ({ state, actions, libraries }) => {
       </div>
       <BlockWrapper>
         {postData ? (
-          <div style={styles.container}>
+          <div style={!lg ? styles.container : styles.containerMobile}>
             {postData.length > 0 ? (
-              postData.map((item) => {
+              postData.map((item, key) => {
                 const post = state.source[item.type][item.id];
-                return <VideoArchivePost post={post} />;
+
+                return <VideoArchivePost key={key} post={post} />;
               })
             ) : (
-              <ServeNoVideosFound />
+              <ServeNoVideosFound key={key} />
             )}
           </div>
         ) : (
-          <ServeNoVideosFound />
+          <ServeNoVideosFound key={key} />
         )}
       </BlockWrapper>
-
-      {/* {postData ? 
-        <div style={styles.container}>
-          {postData.length > 0 ? (
-            postData.map((item) => {
-              const post = state.source[item.type][item.id];
-              return <VideoArchive post={post} />
-            }
-            </div>  : (
-            <ServeNoVideosFound />
-          )} */}
     </>
   );
 };
@@ -405,8 +425,20 @@ const styles = {
     marginBottom: 10,
     marginTop: 20,
   },
+  containerMobile: {
+    display: "grid",
+    gridTemplateColumns: `1fr`,
+    justifyContent: "space-between",
+    gap: 20,
+    marginBottom: 10,
+    marginTop: 20,
+  },
   dropdown: {
     width: 150,
+    height: "40px",
+  },
+  dropdownMobile: {
+    width: 100,
     height: "40px",
   },
 };

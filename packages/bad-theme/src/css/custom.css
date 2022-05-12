@@ -23,6 +23,9 @@
     icon
     <span class='link-icon' />
 
+    imgages in wp editor example
+    class='image-wrapper'
+
  **/
 
 .image-wrapper {
@@ -31,16 +34,48 @@
   object-fit: cover;
   padding: 2em 100px;
 }
+/* target all img in class post-content & apply styles */
+.post-content img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 2em;
+}
+.accordion-content span {
+  padding-bottom: 0;
+  display: grid;
+  justify-content: center;
+}
+.accordion-content img {
+  position: relative !important;
+}
 /* card component animations */
 .card-wrapper {
   cursor: pointer;
   color: inherit;
   transition: all 0.3s ease-in-out;
 }
-/* .card-wrapper:hover {
-  color: inherit;
-  transform: scale(0.995);
-} */
+
+.card-image-animated {
+  transition: all 0.5s;
+}
+.news-carousel-limited-body p {
+  display: block;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow: hidden;
+  max-height: 5.4em;
+  line-height: 1.8em;
+}
+.heading-tile:hover .card-image-animated {
+  transform: scale(1.1);
+}
+.heading-tile:hover .caps-btn::before {
+  width: 100%;
+}
+.heading-tile:hover .card-image-animated::before {
+  transform: scale(1.1);
+}
 .bad-card-footer {
   height: 5px;
   transition: all 0.3s ease-in-out;
@@ -398,6 +433,7 @@ https://codebeautify.org/
 
 .body-limit {
   overflow: hidden;
+  /* display: none; */
   display: -webkit-box;
   /* -webkit-line-clamp: 2; */ /* number of lines to show */
   -webkit-box-orient: vertical;
@@ -407,10 +443,10 @@ https://codebeautify.org/
 @keyframes fadeInLeft {
   from {
     opacity: 0;
-    -webkit-transform: translatex(-100px);
-    -moz-transform: translatex(-100px);
-    -o-transform: translatex(-100px);
-    transform: translatex(-100px);
+    -webkit-transform: translatex(-30px);
+    -moz-transform: translatex(-30px);
+    -o-transform: translatex(-30px);
+    transform: translatex(-30px);
   }
   to {
     opacity: 1;
@@ -420,14 +456,20 @@ https://codebeautify.org/
     transform: translatex(0);
   }
 }
-.carousel-caption {
+/* .carousel-caption {
   opacity: 0;
-}
-.carousel-item.active .carousel-caption {
+} */
+/* .carousel-item.active .carousel-caption {
   animation-name: fadeInLeft;
   animation-duration: 1s;
   animation-fill-mode: forwards;
   /* transition: opacity 1s !important; */
+/* } */
+.anim-fadeInLeft {
+  opacity: 0;
+  animation-name: fadeInLeft;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
 }
 
 ::-webkit-scrollbar-track {
@@ -437,10 +479,20 @@ https://codebeautify.org/
 }
 ::-webkit-scrollbar {
   width: 12px;
+  height: 12px;
   background-color: #f5f5f5;
 }
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #1e335d;
+}
+
+/* search dropdown customization */
+.search-phrase {
+  font-weight: bold;
+  color: #3882cd;
+}
+.title-link-animation:hover .search-phrase {
+  color: #000;
 }

@@ -2,17 +2,16 @@ import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
-import date from "date-and-time";
-import { CurrencyPoundRounded } from "@mui/icons-material";
 import PoundSterling from "../../img/svg/pound-sterling.svg";
 
 import { colors } from "../../config/imports";
 import ElectionInfo from "./electionInfo";
 import ShareToSocials from "./shareToSocials";
-
-import { anchorScrapper, muiQuery } from "../../context";
-
+import date from "date-and-time";
 const DATE_MODULE = date;
+
+// CONTEXT ------------------------------------------------
+import { anchorScrapper, muiQuery } from "../../context";
 
 const CardBody = ({
   state,
@@ -49,22 +48,33 @@ const CardBody = ({
 
     const ServePaidIcon = () => {
       if (!videoArchive || !videoArchive.acf) return null;
+      let price = videoArchive.acf.price;
+
       if (videoArchive.acf.private && videoArchive.acf.price)
         return (
-          <svg width="25" height="25" style={{ color: "red", marginLeft: 10 }}>
-            <image
-              href={PoundSterling}
-              src="yourfallback.png"
-              width="25"
-              height="25"
-            />
-          </svg>
+          <div>
+            <div className="flex">
+              <div>{price}</div>
+              <svg
+                width="25"
+                height="25"
+                style={{ color: "red", marginLeft: 5 }}
+              >
+                <image
+                  href={PoundSterling}
+                  src="yourfallback.png"
+                  width="25"
+                  height="25"
+                />
+              </svg>
+            </div>
+          </div>
         );
       return null;
     };
 
     return (
-      <div
+      <h1
         className={
           videoArchive ? "flex primary-title" : "flex primary-title body-limit"
         }
@@ -83,13 +93,12 @@ const CardBody = ({
       >
         <Html2React html={title} />
         <ServePaidIcon />
-      </div>
+      </h1>
     );
   };
 
   const ServeBody = () => {
     if (!body) return null;
-
     return (
       <div
         className="body-limit"
@@ -130,8 +139,6 @@ const CardBody = ({
     return (
       <div className="flex" style={{ paddingTop: `1em` }}>
         {date.map((block, key) => {
-          const { end_time, start_time } = block;
-
           const dateObject = new Date(block.date);
           const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
 
@@ -156,16 +163,17 @@ const CardBody = ({
   const ServeVideoArchiveCategories = () => {
     if (!videoArchive || !videoArchive.event_specialty) return null;
     if (noVideoCategory) return null;
+
     const event_specialties = videoArchive.event_specialty;
     if (event_specialties.length === 0) return null;
 
     const specialties = state.source["event_specialty"];
 
     let antresto = [];
-
     for (let i = 0; i < videoArchive.event_specialty.length; i++) {
       antresto.push(specialties[event_specialties[i]]);
     }
+
     const ServeSpecialty = ({ name }) => {
       return (
         <div
@@ -182,6 +190,7 @@ const CardBody = ({
         </div>
       );
     };
+
     if (specialties)
       return (
         <div
@@ -199,6 +208,7 @@ const CardBody = ({
             })}
         </div>
       );
+
     return "Error fetching categories";
   };
 
@@ -225,6 +235,7 @@ const CardBody = ({
 
   const ServeSocials = () => {
     if (!shareToSocials) return null;
+
     return (
       <div style={{ width: "50%" }}>
         <div className="primary-title" style={{ fontSize: 20 }}>

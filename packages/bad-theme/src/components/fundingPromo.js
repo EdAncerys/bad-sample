@@ -1,10 +1,8 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
-
 import Card from "./card/card";
 import Loading from "./loading";
-import { colors } from "../config/imports";
 
+// CONTEXT -----------------------------------------------------
 import { muiQuery } from "../context";
 
 const FundingPromo = ({ state, actions, libraries, block }) => {
@@ -83,7 +81,6 @@ const FundingPromo = ({ state, actions, libraries, block }) => {
             link,
           } = block;
 
-          console.log("----", block);
           return (
             <div key={key} className="flex">
               <Card

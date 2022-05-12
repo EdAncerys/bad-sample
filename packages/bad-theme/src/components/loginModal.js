@@ -1,19 +1,16 @@
 //
 
-import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
-
 import CloseIcon from "@mui/icons-material/Close";
-
 import { colors } from "../config/imports";
-import RowButton from "./rowButton";
+
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
   useAppState,
   setLoginModalAction,
-  setCreateAccountModalAction,
   loginAction,
   getUserDataByContactId,
   authenticateAppAction,
@@ -21,7 +18,7 @@ import {
 
 const LoginModal = ({ state, actions }) => {
   const dispatch = useAppDispatch();
-  const { loginModalAction, isFetching } = useAppState();
+  const { loginModalAction, refreshJWT } = useAppState();
 
   const [id, setId] = useState(null);
   const iFrameRef = useRef(null);
@@ -29,7 +26,6 @@ const LoginModal = ({ state, actions }) => {
   useEffect(async () => {
     if (!id) return null;
 
-    console.log("useEffect trigeted. ID ", id);
     await loginAction({ state, dispatch, transId: id });
 
     return () => {
@@ -44,86 +40,27 @@ const LoginModal = ({ state, actions }) => {
   // HANDLERS ----------------------------------------------------
   const iFrameHandler = async (e) => {
     const iFrame = e.currentTarget;
-
-    // development env default login action
-    if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
-      console.log("🤖 DEVELOPMENT ENVIRONMENT 🤖");
-
-      const jwt = await authenticateAppAction({ state, dispatch });
-      await getUserDataByContactId({
-        state,
-        dispatch,
-        jwt,
-        // contactid: "cc9a332a-3672-ec11-8943-000d3a43c136", // andy testing account
-        // contactid: "84590b32-9490-ec11-b400-000d3a22037e", // mandy
-        // contactid: "0786df85-618f-ec11-b400-000d3a22037e", // Chris
-        contactid: "969ba377-a398-ec11-b400-000d3aaedef5", // emilia
-      });
-      setLoginModalAction({ dispatch, loginModalAction: false });
-      return;
-    }
+    // 👉 iFrame have to have correct redirect url se to for redirect to work.
+    // Redirect url set in dynamics server.
 
     try {
       const iFramePath = iFrame.contentWindow.location.pathname;
-      // console.log("iFramePath", iFramePath); // debug
-
-      // ⏬⏬  CORS validation on old type browsers ⏬⏬
-      // if (
-      //   !iframeLocation.includes(`3000`) ||
-      //   !iframeLocation.includes(state.auth.APP_URL)
-      // )
-      //   throw new Error("Wrong redirection url");
 
       const iqs = new URLSearchParams(iFrame.contentWindow.location.search);
-      console.log("iFrameRef iqs", iqs);
       if (iqs && iqs.has("transId")) {
         const transId = iqs.get("transId");
-        console.log("*** WE FOUND A TRANSACTION ID IN THE IFRAME ** ", transId);
+        // console.log("*** WE FOUND A TRANSACTION ID IN THE IFRAME ** ", transId);
         setId(transId);
       } else {
-        console.log("Error getting transId from iFrame");
+        // console.log("Error getting transId from iFrame");
       }
     } catch (error) {
-      console.log("*** ERROR GETTING IFRAME CONTENT - CROSS-ORIGIN **");
+      console.log("*** ERROR GETTING IFRAME CONTENT - CROSS-ORIGIN **"); // debug
       // console.log(error); // debug
     }
   };
 
   // SERVERS --------------------------------------------------
-  const ServeFormInfo = () => {
-    return (
-      <div>
-        {/* <ServeCloseAction /> */}
-        <div style={{ marginTop: `2em` }}>
-          <div className="mb-4">
-            <div>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </div>
-          </div>
-          <RowButton
-            block={{
-              title: "Not yet registered? Register here",
-            }}
-            onClick={() => {
-              setCreateAccountModalAction({
-                dispatch,
-                createAccountAction: true,
-              });
-              setLoginModalAction({ dispatch, loginModalAction: false });
-            }}
-            buttonWidth="60%"
-          />
-        </div>
-      </div>
-    );
-  };
-
   const ServeModalContent = () => {
     const ServeCloseAction = () => {
       return (
@@ -192,7 +129,7 @@ const LoginModal = ({ state, actions }) => {
               margin: `4em 1em`,
             }}
           >
-            <div>Login</div>
+            <div>Login / Register</div>
           </div>
         </Modal.Body>
       </div>

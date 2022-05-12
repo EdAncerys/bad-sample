@@ -5,14 +5,10 @@ import parse from "html-react-parser";
 
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import LINK from "../../img/svg/badLink.svg";
-
+import DownloadFileBlock from "../downloadFileBlock";
 import date from "date-and-time";
 const DATE_MODULE = date;
 
-import Loading from "../../components/loading";
-import DownloadFileBlock from "../downloadFileBlock";
-
-import { muiQuery } from "../../context";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -22,8 +18,8 @@ import {
   handleApplyForMembershipAction,
   anchorScrapper,
   setErrorAction,
+  muiQuery,
 } from "../../context";
-import { getLeadershipTeamData } from "../../helpers";
 
 const AccordionBody = ({
   state,
@@ -42,9 +38,9 @@ const AccordionBody = ({
   const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, dynamicsApps } = useAppState();
+  const { applicationData, isActiveUser, dynamicsApps, refreshJWT } =
+    useAppState();
 
-  const ICON_WIDTH = 35;
   const {
     downloads,
     button_label,
@@ -63,6 +59,7 @@ const AccordionBody = ({
   let link = block.link;
   let amount = block.acf ? block.acf.amount : null;
   let closingDate = block.acf ? block.acf.closing_date : null;
+  const ICON_WIDTH = 35;
 
   if (fundingBlock) body = block.acf ? block.acf.overview : null;
   if (fundingBlock) link = { url: block.acf.external_application_link };
@@ -90,9 +87,10 @@ const AccordionBody = ({
           stepThree: false,
           stepFour: false,
         },
+        refreshJWT,
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       setErrorAction({
         dispatch,
@@ -121,6 +119,7 @@ const AccordionBody = ({
       formData,
       attachments,
       recipients,
+      refreshJWT,
     });
     setFetching(false);
     document.querySelector(`#attachments-${uniqueId}`).value = "";
@@ -136,12 +135,10 @@ const AccordionBody = ({
     gsLinks = block.acf.links;
     gsSubtitle = block.acf.subtitle;
   }
-  // Guidelines & Standards --------------------------------
 
   // LEadership team & Standards --------------------------------
   let ltBody = null;
   let LT_LAYOUT = null;
-  let ALL_GRADES = null;
 
   if (leadershipBlock) {
     ltBody = block.block.intro_text;
@@ -245,9 +242,11 @@ const AccordionBody = ({
         }}
       >
         <div>
-          <button
+          <div
             className="flex-row blue-btn"
-            onClick={() => setGoToAction({ path: button_link.url, actions })}
+            onClick={() =>
+              setGoToAction({ state, path: button_link.url, actions })
+            }
           >
             <div className="flex">
               <Html2React html={linkLabel} />
@@ -260,7 +259,7 @@ const AccordionBody = ({
                 }}
               />
             </div>
-          </button>
+          </div>
         </div>
       </div>
     );
@@ -294,7 +293,7 @@ const AccordionBody = ({
           <div
             className="caps-btn-no-underline"
             style={{ boxShadow: "none" }}
-            onClick={() => setGoToAction({ path: link.url, actions })}
+            onClick={() => setGoToAction({ state, path: link.url, actions })}
           >
             <div className="flex">
               <Html2React html={linkLabel} />
@@ -330,7 +329,9 @@ const AccordionBody = ({
               <div
                 className="caps-btn-no-underline"
                 style={{ boxShadow: "none" }}
-                onClick={() => setGoToAction({ path: link.url, actions })}
+                onClick={() =>
+                  setGoToAction({ state, path: link.url, actions })
+                }
               >
                 <div className="flex">
                   <Html2React html={linkLabel} />
@@ -637,7 +638,9 @@ const AccordionBody = ({
         <div
           value={parse(label || button_label)}
           className="caps-btn"
-          onClick={() => setGoToAction({ path: link || link_url, actions })}
+          onClick={() =>
+            setGoToAction({ state, path: link || link_url, actions })
+          }
         >
           <Html2React html={label || button_label} />
         </div>
@@ -682,17 +685,15 @@ const AccordionBody = ({
   return (
     <div
       id={`accordion-body-${uniqueId}`}
-      className="accordion-collapse collapse"
+      className="accordion-collapse collapse accordion-content"
     >
       <div
         className="accordion-body"
         style={{ margin: `0 1.25em`, padding: `1em 0` }}
       >
         <ServePublishedDate />
-
         <ServeBody />
         <ServeLTBody />
-
         <ServeFundingInfo />
         <ServeLTTeam />
         <ServeGSSubTitle />

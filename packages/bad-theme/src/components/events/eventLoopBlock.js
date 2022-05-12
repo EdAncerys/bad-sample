@@ -5,16 +5,17 @@ import Loading from "../loading";
 import EventListView from "../eventListView";
 import Card from "../card/card";
 import TitleBlock from "../titleBlock";
-import { colors } from "../../config/imports";
+
 // CONTEXT --------------------------------------------------------
 import {
   useAppDispatch,
   useAppState,
   setEventAnchorAction,
+  muiQuery,
+  getEventsData,
+  handleSortFilter,
 } from "../../context";
-import { getEventsData } from "../../helpers";
 
-import { muiQuery } from "../../context";
 const EventLoopBlock = ({
   state,
   actions,
@@ -45,13 +46,13 @@ const EventLoopBlock = ({
     colour,
     events_archive,
   } = block;
-  // console.log("block", colour); // debug
 
   const [eventList, setEventList] = useState(null); // event data
-
-  const [gradeFilter, setGradeFilterId] = useState(null); // data
+  const [eventFilter, setFilter] = useState(null); // event data
+  const [isPostLimit, setLimit] = useState(post_limit && post_limit !== "0");
+  const [moreAction, setMoreAction] = useState(false); // event data
   const useEffectRef = useRef(null);
-  const postLimitRef = useRef(0);
+  const curentPageRef = useRef(1);
 
   const layoutOne = layout === "layout_one";
   const layoutTwo = layout === "layout_two";
@@ -66,36 +67,50 @@ const EventLoopBlock = ({
 
   // DATA get for EVENTS ----------------------------------------------------------------
   useEffect(async () => {
-    let data = state.source.events;
+    // let data = state.source.events;
+    let events = await getEventsData({ state, page: curentPageRef.current });
+    if (!events) return;
 
-    let eventList = Object.values(data);
-    console.log("eventList", eventList); // debug
-    const grades = Object.values(state.source.event_grade);
+    curentPageRef.current++;
+    // if page is set to events_archive return only events that date is in the past
+    if (events_archive) {
+      events = events.filter((event) => {
+        let eventDate = event.acf.date_time;
+        if (!eventDate) return false;
 
-    let gradeFilter = [];
-    let isArray = Array.isArray(grade_filter); // verify data type
-    if (grades && isArray) {
-      grades.filter((filter) => {
-        // map grade_filter & if grade name matches grade_filter then return id
-        grade_filter.map((grade) => {
-          if (filter.name.toLowerCase() === grade.toLowerCase())
-            gradeFilter.push(filter.id);
-        });
+        let [month, date, year] = eventDate[0].date.split("/");
+        let eventDateObj = new Date(year, month, date);
+        let today = new Date();
+
+        return eventDateObj < today;
+      });
+    } else {
+      events = events.filter((event) => {
+        let eventDate = event.acf.date_time;
+        if (!eventDate) return false;
+
+        let [month, date, year] = eventDate[0].date.split("/");
+        let eventDateObj = new Date(year, month, date);
+        let today = new Date();
+
+        return eventDateObj >= today;
       });
     }
 
-    // sort events in order by date accenting from
-    eventList = eventList.sort((a, b) => {
-      // if !date_time return null;
-      if (!a.date_time || !b.date_time) return null;
-      new Date(a.acf.date_time[0].date) - new Date(b.acf.date_time[0].date);
-    });
+    // ⬇️⬇ sort events by date
+    events = handleSortFilter({ list: events });
 
-    // console.log("🚀 event list", eventList.length); // debug
-    setEventList(eventList);
-    setGradeFilterId(gradeFilter);
+    if (isPostLimit && events) {
+      // ⬇️ if post_limit is set then show only post_limit posts
+      if (events.lenght <= Number(post_limit)) return null;
+      // apply limit to eventList array length if post_limit is set & less than post_limit
+      events = events.slice(0, Number(post_limit));
+    }
 
-    // link to anchor for event
+    setEventList(events); // set event data
+    setFilter(events); // set event filter data
+
+    // ⬇️ set link to anchor for event
     if (eventAnchor) {
       setTimeout(() => {
         const anchor = document.getElementById(eventAnchor);
@@ -105,15 +120,185 @@ const EventLoopBlock = ({
 
       setEventAnchorAction({ dispatch, eventAnchor: null }); // reset
     }
-
-    return () => {
-      useEffectRef.current = false; // clean up function
-    };
   }, []);
 
-  if (!eventList) return <Loading />;
+  useEffect(async () => {
+    // ⬇️ handle serach filter change
 
-  // RETURN ---------------------------------------------
+    if (
+      !searchFilter &&
+      !gradesFilter &&
+      !locationsFilter &&
+      !specialtyFilter &&
+      !yearFilter
+    ) {
+      // if no search filter applied then return all prefetched events
+      setFilter(eventList);
+      return;
+    }
+
+    let filteredEvents = eventList;
+
+    if (searchFilter) {
+      // if search filter applied then filter events
+      filteredEvents = eventList.filter((event) => {
+        // filter events by search filter
+        let search = searchFilter.toLowerCase();
+
+        const isInTitle = event.title.rendered.toLowerCase().includes(search);
+        const isInPreview = event.acf.preview_summary
+          .toLowerCase()
+          .includes(search);
+        const isInOrganizer = event.acf.organizer
+          .toLowerCase()
+          .includes(search);
+
+        if (isInTitle || isInPreview || isInOrganizer) {
+          return event;
+        } else {
+          return null;
+        }
+      });
+    }
+
+    if (gradesFilter) {
+      // if grades filter applied then filter events
+      filteredEvents = filteredEvents.filter((event) => {
+        // filter events by grades filter
+        let grade = event.event_grade;
+        let isInGrade = grade.includes(Number(gradesFilter));
+
+        return isInGrade;
+      });
+    }
+
+    if (locationsFilter) {
+      // if locations filter applied then filter events
+      filteredEvents = filteredEvents.filter((event) => {
+        // filter events by locations filter
+        let location = event.event_location;
+        let isInLocation = location.includes(Number(locationsFilter));
+
+        return isInLocation;
+      });
+    }
+
+    if (specialtyFilter) {
+      // if specialty filter applied then filter events
+      filteredEvents = filteredEvents.filter((event) => {
+        // filter events by specialty filter
+        let specialty = event.event_specialty;
+        let isInSpecialty = specialty.includes(Number(specialtyFilter));
+
+        return isInSpecialty;
+      });
+    }
+
+    if (yearFilter) {
+      let [fMonth, fDay, fYear] = yearFilter.split(" ");
+
+      // if year filter applied then filter events
+      filteredEvents = filteredEvents.filter((event) => {
+        let isIncluded = false;
+        // filter events by year filter
+        let date = event.acf.date_time;
+        // map date to year and compare to year filter
+        if (date) {
+          date.map((eventDate) => {
+            // get year from date
+            let [eMonth, eDate, eYear] = eventDate.date.split("/");
+            // if month have 0 in front then remove it
+            if (eMonth[0] === "0") eMonth = eMonth.slice(1);
+            let isInYear = fMonth === eMonth && fYear === eYear;
+
+            if (isInYear) {
+              isIncluded = true;
+            }
+          });
+        }
+
+        return isIncluded;
+      });
+    }
+
+    // if page is set to events_archive return only events that date is in the past
+    if (events_archive) {
+      filteredEvents = filteredEvents.filter((event) => {
+        let eventDate = event.acf.date_time;
+        if (!eventDate) return false;
+
+        let [month, date, year] = eventDate[0].date.split("/");
+        let eventDateObj = new Date(year, month, date);
+        let today = new Date();
+
+        return eventDateObj < today;
+      });
+    }
+
+    // ⬇️⬇ sort events by date
+    filteredEvents = handleSortFilter({ list: filteredEvents });
+
+    // 📌 set filtered data to state
+    setFilter(filteredEvents);
+  }, [
+    searchFilter,
+    gradesFilter,
+    locationsFilter,
+    specialtyFilter,
+    yearFilter,
+  ]);
+
+  // HANDLERS --------------------------------------------------------------
+  const handleLoadMoreFilter = async () => {
+    // ⬇️ handle load more filter
+    let events = await getEventsData({ state, page: curentPageRef.current });
+    if (!events) {
+      setMoreAction(false);
+      return;
+    }
+    curentPageRef.current++;
+
+    let updatedEvents = [...eventList, ...events];
+
+    // ⬇️⬇ sort events by date
+    updatedEvents = handleSortFilter({ list: updatedEvents });
+
+    // add events to eventList
+    setEventList(updatedEvents);
+    setFilter(updatedEvents);
+  };
+
+  if (!eventFilter) return <Loading />;
+
+  // SERVERS ---------------------------------------------------------------
+  const ServeMoreAction = () => {
+    if (
+      isPostLimit ||
+      searchFilter ||
+      gradesFilter ||
+      locationsFilter ||
+      specialtyFilter ||
+      yearFilter ||
+      moreAction // disable more action if no more events
+    )
+      return null;
+
+    return (
+      <div
+        className="flex"
+        style={{
+          justifyContent: "center",
+          paddingTop: `2em`,
+        }}
+      >
+        <div className="transparent-btn" onClick={handleLoadMoreFilter}>
+          Load More
+        </div>
+      </div>
+    );
+  };
+
+  // RETURN ----------------------------------------------------------------
   return (
     <div style={{ paddingBottom: `${marginVertical}px` }}>
       <TitleBlock
@@ -121,30 +306,12 @@ const EventLoopBlock = ({
         margin={`0 0 ${marginVertical}px`}
       />
       <div style={STYLES}>
-        {eventList.map((block, key) => {
-          const { image, summary, public_or_members_only, date_time } =
-            block.acf;
+        {eventFilter.map((block, key) => {
+          const { image, summary, date_time } = block.acf;
           const title = block.title.rendered;
-          const event_grade = block.event_grade;
-          const event_location = block.event_location;
-          const event_specialty = block.event_specialty;
 
-          // if page is set to events_archive return only events that date is in the past
-          let isArchive = false;
-          if (date_time) {
-            // loop through date_time and check if date is in the past
-            date_time.forEach((date) => {
-              if (new Date(date.date) < new Date()) isArchive = true;
-            });
-          }
-          // ⬇️ if events_archive show only past events else break
-          if (events_archive) {
-            if (!isArchive) return null;
-          } else {
-            if (isArchive) return null;
-          }
           // ⬇️ show only events that event_grade object have in common gradeFilter
-          if (gradeFilter.length > 0) {
+          /* if (gradeFilter.length > 0) {
             if (!event_grade) return null;
             let grade_match = false;
             event_grade.forEach((grade) => {
@@ -153,53 +320,20 @@ const EventLoopBlock = ({
               });
             });
             if (!grade_match) return null;
-          }
+          } */
 
-          if (searchFilter) {
-            if (!title && !summary) return null;
-            if (
-              title
-                ? !title.toLowerCase().includes(searchFilter.toLowerCase())
-                : null || summary
-                ? !summary.toLowerCase().includes(searchFilter.toLowerCase())
-                : null
-            )
-              return null;
-          }
-          // ⬇️ user select filtering
-          if (gradesFilter) {
-            if (!event_grade.includes(Number(gradesFilter))) return null;
-          }
-          if (locationsFilter) {
-            if (!event_location.includes(Number(locationsFilter))) return null;
-          }
-          if (specialtyFilter) {
-            if (!event_specialty.includes(Number(specialtyFilter))) return null;
-          }
-          if (yearFilter) {
-            // get event month & year start
-            const eventDate = date_time[0].date;
-            const eventMont = new Date(eventDate).getMonth() + 1;
-            const eventYear = new Date(eventDate).getFullYear();
-            // get filter current month & year
-            const filterMont = new Date(yearFilter).getMonth() + 1;
-            const filterYear = new Date(yearFilter).getFullYear();
-
-            // filter events based on mont & year start
-            if (eventMont !== filterMont || eventYear !== filterYear)
-              return null;
-          }
-
-          // ⬇️ if post_limit is set then show only post_limit posts
-          if (post_limit) {
-            if (postLimitRef.current >= post_limit) return null;
-            postLimitRef.current++;
-          }
-
+          // list view
           if (layoutOne) {
             const removeMargin = search && key === 0;
             return (
-              <div key={key}>
+              <div
+                key={key}
+                data-aos="fade"
+                data-aos-easing="ease-in-sine"
+                data-aos-delay={`${key * 50}`}
+                data-aos-duration="1000"
+                data-aos-offset="-120"
+              >
                 <EventListView
                   block={block}
                   removeMargin={removeMargin}
@@ -209,6 +343,7 @@ const EventLoopBlock = ({
             );
           }
 
+          // 2x card view
           if (layoutTwo)
             return (
               <Card
@@ -227,6 +362,7 @@ const EventLoopBlock = ({
               />
             );
 
+          // 4x card vew
           if (layoutThree)
             return (
               <Card
@@ -244,6 +380,7 @@ const EventLoopBlock = ({
             );
         })}
       </div>
+      {/* <ServeMoreAction /> */}
     </div>
   );
 };

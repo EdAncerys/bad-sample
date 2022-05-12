@@ -1,13 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/imports";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import parse from "html-react-parser";
-import { styled, keyframes, css } from "frontity";
 
-import { setGoToAction } from "../context";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, setEnquireAction } from "../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setEnquireAction,
+  setGoToAction,
+  getWileyAction,
+  setErrorAction,
+  loginAction,
+} from "../context";
 
 const RowButton = ({
   state,
@@ -20,7 +25,9 @@ const RowButton = ({
 }) => {
   const [isHover, setIsHover] = useState(false);
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
   const dispatch = useAppDispatch();
+  const { isActiveUser, refreshJWT } = useAppState();
 
   let {
     title,
@@ -31,6 +38,8 @@ const RowButton = ({
     recipients,
     link_id,
     file_link,
+    onClickAction,
+    is_wileys_link,
   } = block;
 
   // ⬇️ initialize new enquireAction object & update object with new values
@@ -40,17 +49,66 @@ const RowButton = ({
     emailSubject: "Standard Enquiry Form B.A.D WebApp",
     emailTemplate: "StandardEnquiryForm",
   };
-  // default to defaultContactList if no recipients are set
+  // default to DEFAULT_CONTACT_LIST if no recipients are set
   if (!enquireAction.recipients) {
-    // recipients = state.theme.defaultContactList;
-    console.log("📧 contact list", state.contactList.defaultContactList); // debug
-    enquireAction.recipients = state.contactList.defaultContactList;
+    // recipients = state.theme.DEFAULT_CONTACT_LIST;
+    enquireAction.recipients = state.contactList.DEFAULT_CONTACT_LIST;
     // enquireAction.recipients = [{ email: "ed@skylarkcreative.co.uk" }];
   }
 
   const THEME = colour || colors.primary;
   let LABEL = title;
   if (!title && link) LABEL = link.title;
+
+  // HANDLERS -------------------------------------------
+  const handelLogin = () => {
+    setErrorAction({ dispatch, isError: null });
+    loginAction({ state });
+  };
+
+  const onClickLinkHandler = async () => {
+    let authLink = link.url;
+    console.log("CLICKED", authLink);
+    // 📌 check if logged in user exists & user is BAD member to replace auth link
+    if (is_wileys_link && isActiveUser) {
+      authLink = await getWileyAction({
+        state,
+        dispatch,
+        refreshJWT,
+        isActiveUser,
+        isFullAccess: true,
+        url: link.url,
+      });
+    }
+
+    // redirect handler
+    const handelRedirect = () => {
+      setErrorAction({ dispatch, isError: null });
+      setGoToAction({ state, path: authLink, actions });
+    };
+
+    if (is_wileys_link && !isActiveUser) {
+      // 📌 track notification error action
+      console.log("HANDLING HERE");
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals. To continue to the publication without logging in, click to visit the BJD website`,
+          image: "Error",
+          action: [
+            {
+              label: `Read ${title}`,
+              handler: handelRedirect,
+            },
+            { label: "Login", handler: handelLogin },
+          ],
+        },
+      });
+      return;
+    }
+
+    setGoToAction({ state, path: authLink, actions });
+  };
 
   // SERVERS --------------------------------------------
   const ServeFooter = () => {
@@ -64,6 +122,7 @@ const RowButton = ({
       />
     );
   };
+
   const arrowStyle = {
     fill: isHover ? "white" : THEME,
     backgroundColor: isHover ? `${THEME}` : "white",
@@ -76,11 +135,6 @@ const RowButton = ({
     transform: isHover ? `translate(5px, 0)` : `translate(0, 0)`,
     transition: `background-color 1s, transform 1s`,
   };
-  // const ServeButton = () => {
-  //   return (
-
-  //   );
-  // };
 
   return (
     <div
@@ -107,6 +161,10 @@ const RowButton = ({
           onClick();
           return;
         }
+        if (onClickAction) {
+          onClickAction();
+          return;
+        }
         if (contact_form) {
           setEnquireAction({
             dispatch,
@@ -116,7 +174,7 @@ const RowButton = ({
           return;
         }
         if (link) {
-          setGoToAction({ path: link.url, actions });
+          onClickLinkHandler();
           return;
         }
       }}
@@ -155,17 +213,5 @@ const RowButton = ({
 const styles = {
   conteiner: {},
 };
-
-const arrow = (isHover, THEME) => css`
-  fill: ${isHover ? "white" : THEME};
-  background-color: ${isHover ? THEME : "white"};
-  border-radius: 50%;
-  border: 1px ${THEME};
-  border-style: solid;
-  padding: 0;
-  cursor: pointer;
-  box-shadow: ${isHover === true ? `inset 0 3.25em 0 0 ${THEME}` : "none"};
-  transition: all 0.3s ease-in-out;
-`;
 
 export default React.memo(connect(RowButton));

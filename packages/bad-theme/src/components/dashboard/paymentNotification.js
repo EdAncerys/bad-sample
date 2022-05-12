@@ -4,6 +4,7 @@ import { connect } from "frontity";
 import { colors } from "../../config/imports";
 import { handleGetCookie } from "../../helpers/cookie";
 import PaymentModal from "./paymentModal";
+import { setErrorAction } from "../../context";
 const PaymentNotification = ({
   state,
   actions,
@@ -18,6 +19,17 @@ const PaymentNotification = ({
   const marginVertical = state.theme.marginVertical;
 
   // HELPERS ----------------------------------------------------------------
+  const displayPaymentModal = (url) => {
+    console.log("PM URL", url);
+    setErrorAction({
+      dispatch,
+      isError: {
+        message: `The card payment industry is currently in the process of making significant changes to the way card payments are processed online. Unfortunately, because of these changes, some users are experiencing temporary issues with making card payments through the website. If you cannot make a payment through the website, please contact membership@bad.org.uk to discuss alternative arrangements for making payments.`,
+        image: "Error",
+        goToPath: { label: "Continue", path: url },
+      },
+    });
+  };
 
   const handlePayment = async ({ sage_id }) => {
     const cookie = handleGetCookie({ name: `BAD-WebApp` });
@@ -26,13 +38,13 @@ const PaymentNotification = ({
     const the_url =
       state.auth.ENVIRONMENT === "DEVELOPMENT"
         ? "http://localhost:3000/"
-        : state.auth.APP_URL;
-
+        : `${state.auth.APP_URL}/payment-confirmation/?redirect=${state.router.link}`;
+    const sagepay_url =
+      state.auth.ENVIRONMENT === "DEVELOPMENT"
+        ? "/sagepay/live/application/"
+        : "/sagepay/live/application/";
     const fetchVendorId = await fetch(
-      state.auth.APP_HOST +
-        "/sagepay/test/application/" +
-        sage_id +
-        `?redirecturl=${the_url}/payment-confirmation/`,
+      state.auth.APP_HOST + sagepay_url + sage_id + `?redirecturl=${the_url}`,
       {
         method: "POST",
         headers: {
@@ -44,20 +56,20 @@ const PaymentNotification = ({
       const json = await fetchVendorId.json();
       const url =
         json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
-      setPaymentUrl(url);
+      displayPaymentModal(url);
     }
-    // setPage({ page: "directDebit", data: block });
   };
+
   const resetPaymentUrl = () => {
     setPaymentUrl(null);
   };
+
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
     return (
       <div style={{ margin: `auto 0`, width: marginHorizontal * 2 }}>
         <div style={{ padding: `0 2em` }}>
           <div
-            type="submit"
             className="blue-btn"
             onClick={() =>
               handlePayment({
@@ -99,9 +111,7 @@ const PaymentNotification = ({
 };
 
 const styles = {
-  text: {
-    fontSize: 12,
-  },
+  container: {},
 };
 
 export default connect(PaymentNotification);

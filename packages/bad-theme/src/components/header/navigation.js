@@ -1,33 +1,50 @@
-import { useState, useEffect, useRef, useLayoutEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import { setGoToAction } from "../../context";
 import Link from "@frontity/components/link";
 
 import BlockWrapper from "../blockWrapper";
 import Loading from "../loading";
 import Card from "../../components/card/card";
+// CONTEXT -----------------------------------------------------------------
+import { getPostData } from "../../helpers";
+import {
+  setNesMediaIdFilterAction,
+  useAppDispatch,
+  useAppState,
+} from "../../context";
 
 const Navigation = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
+  const dispatch = useAppDispatch();
+  const { isActiveUser, dynamicsApps } = useAppState();
+
   const [wpMainMenu, setWpMainMenu] = useState([]);
   const [wpMoreMenu, setWpMoreMenu] = useState([]);
   const [featured, setFeatured] = useState([]);
+  const [newsMedia, setNewsMedia] = useState([]);
+  const [hasPermission, setPermission] = useState(false);
   const useEffectRef = useRef(false);
 
   const MAIN_NAV_LENGTH = 6; // main navigation length config
-  const host = "https://badadmin.skylarkdev.co/";
+  const wpHost = state.auth.WP_HOST_CONTENT;
 
   // active menu slug ref
+  const currentLink = state.router.link;
+  const currentlySelectedMenuItem = currentLink.match(/\/(.*?)\//);
   const activeMenu = useRef(null);
+  const lastSelectedMenuItem = useRef(
+    currentlySelectedMenuItem ? currentlySelectedMenuItem[1] : null
+  );
   const activeChildMenu = useRef(null);
-  console.log("CURRENT URL", state.router.link);
+
   useEffect(async () => {
     // ⬇️ getting wp menu & featured from state
     if (!state.theme.menu) return;
+    let iteration = 0;
     const menuData = state.theme.menu;
     const menuLength = menuData.length;
 
@@ -38,11 +55,49 @@ const Navigation = ({ state, actions, libraries }) => {
     setWpMoreMenu(wpMoreMenu); // more menu into dropdown
     if (state.source.menu_features)
       setFeatured(Object.values(state.source.menu_features)); // cpt for menu content
-    activeMenu.current;
+
+    // 📌 set News & Media menu content form CPT
+    let data = Object.values(state.source.post);
+    while (data.length === 0) {
+      // if iteration is greater than 10, break
+      if (iteration > 15) break;
+      // set timeout for async
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      await getPostData({ state, actions });
+      data = Object.values(state.source.post);
+      iteration++;
+    }
+
+    if (state.source.category) {
+      let catList = Object.values(state.source.category);
+      // sort catList by name in alphabetical order
+      catList.sort((a, b) => {
+        if (a.name < b.name) return -1;
+        if (a.name > b.name) return 1;
+
+        return 0;
+      });
+      setNewsMedia(catList);
+    }
+
     return () => {
       useEffectRef.current = false; // clean up function
     };
   }, [state.theme.menu]);
+
+  useEffect(() => {
+    let hasPermission = false;
+    // 📌 check if user has permission to view news & media
+    if (dynamicsApps) {
+      // chewck if user have BAD memberships & membership have sage payId is persent
+      const hasBADMembership = dynamicsApps.subs.data.filter(
+        (item) => item.bad_organisedfor === "BAD" && item.bad_sagepayid
+      );
+      if (hasBADMembership.length > 0 && isActiveUser) hasPermission = true;
+    }
+
+    setPermission(hasPermission);
+  }, [isActiveUser, dynamicsApps]);
 
   if (!wpMoreMenu.length || !wpMainMenu.length)
     return (
@@ -106,21 +161,76 @@ const Navigation = ({ state, actions, libraries }) => {
   };
 
   const handleOnClickNavigation = ({ parentSlug }) => {
+    if (lastSelectedMenuItem.current) {
+      const menuSelector = document.querySelector(
+        `#menu-${lastSelectedMenuItem.current}`
+      );
+      if (menuSelector) {
+        menuSelector.style.boxShadow = "none";
+      }
+    }
+
     const childMenuSelector = document.querySelector(
       `#${parentSlug}-child-menu`
     );
     if (childMenuSelector) childMenuSelector.style.display = "none";
+    lastSelectedMenuItem.current = parentSlug;
   };
   const handleActiveBoxShadow = (slug) => {
     // checking if any of the menu should be highlighted
-    const currentLink = state.router.link;
-    const activeSlug = currentLink.match(/(?<=\/).*?(?=\/)/);
-    if (activeSlug !== null && activeSlug[0] === slug) {
+    if (
+      lastSelectedMenuItem.current !== null &&
+      lastSelectedMenuItem.current === slug
+    ) {
       return handleBoxShadow(slug);
     }
     return "none";
   };
+
   // SERVERS -----------------------------------------------------
+  const ServeNewsMediaSubMenu = ({ parent }) => {
+    // 📌 serve submenu for news & media only
+    if (parent.title !== "News &#038; Media" || newsMedia.length === 0)
+      return null;
+
+    return (
+      <div style={{ paddingRight: `2em` }}>
+        {newsMedia.map((item, key) => {
+          const { name, id } = item;
+          let linkPath = "/news-media/"; // hard coded path to news & media
+          // check if name includes circular newsletters bulletin
+          let membersOnly = ["circular", "newsletter", "bulletin"].some(
+            (word) => name.toLowerCase().includes(word)
+          );
+          // 📌 if user has permission to view news & media
+          if (membersOnly && !hasPermission) return null;
+
+          return (
+            <li key={key} className="flex-row" style={{ width: "100%" }}>
+              <Link
+                className="flex-row dropdown-item"
+                style={styles.link}
+                onClick={() =>
+                  setNesMediaIdFilterAction({
+                    dispatch,
+                    newsMediaCategoryId: id,
+                  })
+                }
+                link={linkPath}
+              >
+                <div className="flex">
+                  <div className="menu-title">
+                    <Html2React html={name} />
+                  </div>
+                </div>
+              </Link>
+            </li>
+          );
+        })}
+      </div>
+    );
+  };
+
   const ServeMenu = ({ secondaryMenu }) => {
     const ServeChildMenu = ({
       item,
@@ -140,8 +250,8 @@ const Navigation = ({ state, actions, libraries }) => {
         if (!child_items) return null;
 
         let linkPath = parent.url;
-        // strip down trailing host from url
-        if (linkPath.includes(host)) linkPath = linkPath.replace(host, "");
+        // strip down trailing wpHost from url
+        if (linkPath.includes(wpHost)) linkPath = linkPath.replace(wpHost, "");
 
         return (
           <ul
@@ -193,9 +303,9 @@ const Navigation = ({ state, actions, libraries }) => {
 
                 let subChildTitle = title.replace(/’/g, "");
                 let linkPath = url;
-                // strip down trailing host from url
-                if (linkPath.includes(host))
-                  linkPath = linkPath.replace(host, "");
+                // strip down trailing wpHost from url
+                if (linkPath.includes(wpHost))
+                  linkPath = linkPath.replace(wpHost, "");
 
                 return (
                   <li key={key} className="flex-row" style={{ width: "100%" }}>
@@ -219,6 +329,8 @@ const Navigation = ({ state, actions, libraries }) => {
                 );
               })}
             </div>
+
+            <ServeNewsMediaSubMenu parent={parent} />
           </ul>
         );
       };
@@ -251,8 +363,8 @@ const Navigation = ({ state, actions, libraries }) => {
         const isFile = acf.file;
         let linkPath = acf.link;
         const wpHost = state.auth.WP_HOST;
-        // strip down trailing host from url
-        if (linkPath.includes(wpHost)) linkPath = linkPath.replace(wpHost, "");
+        // strip down trailing wpHost from url
+        if (linkPath.includes(wpHost)) linkPath = linkPath.replace(wpHost, "/");
 
         return (
           <div
@@ -304,9 +416,9 @@ const Navigation = ({ state, actions, libraries }) => {
               const { title, url, slug, child_items } = item;
 
               let linkPath = url;
-              // strip down trailing host from url
-              if (linkPath.includes(host))
-                linkPath = linkPath.replace(host, "");
+              // strip down trailing wpHost from url
+              if (linkPath.includes(wpHost))
+                linkPath = linkPath.replace(wpHost, "");
 
               const ServeMenuArrow = () => {
                 if (!child_items) return null;
@@ -412,7 +524,7 @@ const Navigation = ({ state, actions, libraries }) => {
               style={styles.link}
               onClick={() => handleOnClickNavigation({ parentSlug: "more" })}
             >
-              <Html2React html={"More"} />
+              <Html2React html={"About & More"} />
             </a>
             <ServeChildMenu
               item={{ child_items: wpMoreMenu }}
@@ -442,10 +554,9 @@ const Navigation = ({ state, actions, libraries }) => {
           });
 
           let linkPath = url;
-          // strip down trailing host from url
-          if (linkPath.includes(host)) linkPath = linkPath.replace(host, "");
-          // console.log("url", url); // debug
-          // console.log("featuredBannerTwo", featuredBannerTwo); // debug
+          // strip down trailing wpHost from url
+          if (linkPath.includes(wpHost))
+            linkPath = linkPath.replace(wpHost, "");
 
           return (
             <ul

@@ -50,8 +50,6 @@ import VideoGuides from "../videoGuides";
 import FindADermatologist from "../findADermatologist";
 import VideoArchive from "../videoArchive";
 const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
-  // console.log("BLOCKS: ", blocks); // debug
-
   if (!blocks) return null; // if no block content provided
 
   // SERVERS -----------------------------------------------------
@@ -85,7 +83,6 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
     <div>
       {blocks.map((block, key) => {
         const { acf_fc_layout } = block;
-        console.log("CONTENT BLOCK", block); // debug
 
         if (acf_fc_layout === "video_guide_block")
           return (

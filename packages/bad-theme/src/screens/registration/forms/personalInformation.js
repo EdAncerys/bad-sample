@@ -6,7 +6,11 @@ import { Form } from "react-bootstrap";
 import Avatar from "../../../img/svg/profile.svg";
 import { colors } from "../../../config/imports";
 import FormError from "../../../components/formError";
+import SearchDropDown from "../../../components/searchDropDown";
 import ActionPlaceholder from "../../../components/actionPlaceholder";
+import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from "@mui/icons-material/Search";
+import CircularProgress from "@mui/material/CircularProgress";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -16,15 +20,19 @@ import {
   setGoToAction,
   validateMembershipFormAction,
   errorHandler,
+  googleAutocompleteAction,
+  muiQuery,
 } from "../../../context";
 
 const PersonalDetails = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, dynamicsApps } = useAppState();
-
+  const { applicationData, isActiveUser, dynamicsApps, refreshJWT } =
+    useAppState();
+  const { lg } = muiQuery();
   const [isFetching, setFetching] = useState(false);
+  const [isFetchingAddress, setIsFetchingAddress] = useState(null);
   const [genderList, setGenderList] = useState([]);
   const [formData, setFormData] = useState({
     py3_title: "",
@@ -43,22 +51,27 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     sky_profilepicture: "",
   });
   const [inputValidator, setInputValidator] = useState({
-    py3_title: true,
-    py3_firstname: true,
-    py3_lastname: true,
-    py3_gender: true,
-    py3_email: true,
-    py3_mobilephone: true,
-    py3_address1ine1: true,
-    py3_addressline2: true,
-    py3_addresstowncity: true,
-    py3_addresscountystate: true,
-    py3_addresszippostalcode: true,
-    py3_addresscountry: true,
-    sky_profilepicture: true,
-    py3_dateofbirth: true,
+    bad_py3_title: true,
+    bad_py3_firstname: true,
+    bad_py3_lastname: true,
+    bad_py3_gender: true,
+    bad_py3_email: true,
+    bad_py3_mobilephone: true,
+    bad_py3_address1ine1: true,
+    bad_py3_addressline2: true,
+    bad_py3_addresstowncity: true,
+    bad_py3_addresscountystate: true,
+    bad_py3_addresszippostalcode: true,
+    bad_py3_addresscountry: true,
+    bad_sky_profilepicture: true,
+    bad_py3_dateofbirth: true,
   });
   const documentRef = useRef(null);
+
+  const [addressData, setAddressData] = useState(null);
+  const [searchInput, setSearchInput] = useState("");
+  const address1Line1Ref = useRef("");
+  const ctaHeight = 40;
 
   // ⏬ populate form data values from applicationData
   useEffect(() => {
@@ -82,6 +95,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
       }));
     }
 
+    // console.log("🐞 applicationData", applicationData);
     if (!applicationData) return null;
     applicationData.map((data) => {
       if (data.name === "py3_title") handleSetData({ data, name: "py3_title" });
@@ -124,6 +138,57 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   }, []);
 
   // HANDLERS --------------------------------------------
+  const handleAddressLookup = async () => {
+    const input = address1Line1Ref.current.value;
+    // update input value before async task
+    setSearchInput(input);
+
+    try {
+      setIsFetchingAddress(true);
+      const data = await googleAutocompleteAction({
+        state,
+        query: input,
+      });
+      // convert data to dropdown format
+      let predictions = [];
+      // check for data returned form API
+      if (data && data.length) {
+        predictions = data.map((item) => ({
+          // get city & country from data source
+          title: item.description,
+        }));
+
+        // set dropdown data
+        if (predictions.length && input.length) {
+          setAddressData(predictions);
+        } else {
+          setAddressData(null);
+        }
+      }
+    } catch (error) {
+      // console.log("error", error);
+    } finally {
+      setIsFetchingAddress(false);
+    }
+  };
+
+  const handleSelectAddress = async ({ item }) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      py3_address1ine1: item.title,
+    }));
+  };
+
+  const handleClearAction = () => {
+    // clear search input value
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      py3_address1ine1: "",
+    }));
+    setSearchInput("");
+    setAddressData(null);
+  };
+
   const handleSaveExit = async () => {
     await setUserStoreAction({
       state,
@@ -132,8 +197,9 @@ const PersonalDetails = ({ state, actions, libraries }) => {
       applicationData,
       isActiveUser,
       data: formData,
+      refreshJWT,
     });
-    if (isActiveUser) setGoToAction({ path: `/membership/`, actions });
+    if (isActiveUser) setGoToAction({ state, path: `/membership/`, actions });
   };
 
   const isFormValidated = ({ required }) => {
@@ -141,7 +207,11 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     let isValid = true;
 
     required.map((input) => {
-      if (!formData[input] && inputValidator[input]) {
+      let inputValue = input;
+      // 📌 add bad_ if input dont have it
+      if (!inputValue.includes("bad_")) inputValue = `bad_${input}`;
+
+      if (!formData[input] && inputValidator[inputValue]) {
         errorHandler({ id: `form-error-${input}` });
         isValid = false;
       }
@@ -151,6 +221,13 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   };
 
   const handleNext = async () => {
+    // default py3_address1ine1 to ref if value not set by user
+    let isAddressInput = false;
+    if (!formData.py3_address1ine1 && address1Line1Ref.current.value.length) {
+      isAddressInput = true;
+      formData.py3_address1ine1 = address1Line1Ref.current.value;
+    }
+
     const isValid = isFormValidated({
       required: [
         "py3_title",
@@ -159,7 +236,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
         "py3_gender",
         "py3_email",
         "py3_mobilephone",
-        "py3_address1ine1",
+        isAddressInput ? "" : "py3_address1ine1",
         "py3_addresstowncity",
         "py3_addresszippostalcode",
         "py3_addresscountry",
@@ -177,12 +254,13 @@ const PersonalDetails = ({ state, actions, libraries }) => {
       dynamicsApps,
       membershipApplication: { stepThree: true }, // set stepOne to complete
       data: formData,
+      refreshJWT,
     });
     setFetching(false);
     if (!store.success) return; // if store not saved, return
 
     let slug = `/membership/step-4-professional-details/`;
-    if (isActiveUser) setGoToAction({ path: slug, actions });
+    if (isActiveUser) setGoToAction({ state, path: slug, actions });
 
     // console.log(formData); // debug
   };
@@ -196,6 +274,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
         state,
         dispatch,
         attachments: sky_profilepicture,
+        refreshJWT,
       });
 
     setFormData((prevFormData) => ({
@@ -211,20 +290,33 @@ const PersonalDetails = ({ state, actions, libraries }) => {
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
     }));
-    console.log(formData); // debug
   };
 
   // SERVERS ---------------------------------------------
+  const ServeIcon = () => {
+    const searchIcon = <SearchIcon />;
+    const closeIcon = <CloseIcon />;
+    const icon = searchInput ? closeIcon : searchIcon;
+
+    if (isFetchingAddress)
+      return (
+        <CircularProgress color="inherit" style={{ width: 25, height: 25 }} />
+      );
+
+    return <div onClick={handleClearAction}>{icon}</div>;
+  };
+
   const ServeActions = () => {
     return (
       <div
-        className="flex"
+        className={!lg ? "flex" : "flex-col"}
         style={{ justifyContent: "flex-end", padding: `2em 1em 0 1em` }}
       >
         <div
           className="transparent-btn"
           onClick={() =>
             setGoToAction({
+              state,
               path: `/membership/step-2-category-selection/`,
               actions,
             })
@@ -234,7 +326,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
         </div>
         <div
           className="transparent-btn"
-          style={{ margin: `0 1em` }}
+          style={{ margin: !lg ? `0 1em` : "1em 0" }}
           onClick={handleSaveExit}
         >
           Save & Exit
@@ -252,7 +344,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: `1fr 1fr`,
+          gridTemplateColumns: !lg ? `1fr 1fr` : "1fr",
           justifyContent: "space-between",
           gap: 20,
           padding: `2em 0`,
@@ -293,7 +385,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
 
         <form>
           <div style={{ padding: `0 1em 1em` }}>
-            {inputValidator.py3_title && (
+            {inputValidator.bad_py3_title && (
               <div>
                 <label className="required form-label">Title</label>
                 <Form.Select
@@ -307,6 +399,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
                   </option>
                   <option value="Dr">Dr</option>
                   <option value="Mr">Mr</option>
+                  <option value="Mrs">Mrs</option>
                   <option value="Miss">Miss</option>
                   <option value="Ms">Ms</option>
                   <option value="Professor">Professor</option>
@@ -315,7 +408,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
               </div>
             )}
 
-            {inputValidator.py3_firstname && (
+            {inputValidator.bad_py3_firstname && (
               <div>
                 <label className="form-label required">First Name</label>
                 <input
@@ -330,7 +423,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
               </div>
             )}
 
-            {inputValidator.py3_lastname && (
+            {inputValidator.bad_py3_lastname && (
               <div>
                 <label className="form-label required">Last Name</label>
                 <input
@@ -345,7 +438,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
               </div>
             )}
 
-            {inputValidator.py3_gender && (
+            {inputValidator.bad_py3_gender && (
               <div>
                 <label className="required form-label">Gender</label>
                 <Form.Select
@@ -369,7 +462,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
               </div>
             )}
 
-            {inputValidator.py3_dateofbirth && (
+            {inputValidator.bad_py3_dateofbirth && (
               <div>
                 <label className="form-label">Date of Birth</label>
                 <input
@@ -383,7 +476,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
               </div>
             )}
 
-            {inputValidator.py3_email && (
+            {inputValidator.bad_py3_email && (
               <div>
                 <label className="form-label required">Email</label>
                 <input
@@ -397,7 +490,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
               </div>
             )}
 
-            {inputValidator.py3_mobilephone && (
+            {inputValidator.bad_py3_mobilephone && (
               <div>
                 <label className="form-label required">Mobile Number</label>
                 <input
@@ -420,22 +513,87 @@ const PersonalDetails = ({ state, actions, libraries }) => {
               gap: 10,
             }}
           >
-            {inputValidator.py3_address1ine1 && (
+            {inputValidator.bad_py3_address1ine1 && (
               <div>
                 <label className="required form-label">Home Address</label>
-                <input
-                  name="py3_address1ine1"
-                  value={formData.py3_address1ine1}
-                  onChange={handleInputChange}
-                  type="text"
-                  className="form-control input"
-                  placeholder="Address Line 1"
-                />
+
+                <div style={{ position: "relative" }}>
+                  {!formData.py3_address1ine1 && (
+                    <div style={{ position: "relative", width: "100%" }}>
+                      <div
+                        className="flex"
+                        style={{
+                          flex: 1,
+                          height: ctaHeight,
+                          position: "relative",
+                          margin: "auto 0",
+                        }}
+                      >
+                        <input
+                          ref={address1Line1Ref}
+                          name="search-input"
+                          value={searchInput}
+                          onChange={handleAddressLookup}
+                          type="text"
+                          className="form-control input"
+                          placeholder="Address Line 1"
+                        />
+                        <div
+                          className="input-group-text toggle-icon-color"
+                          style={{
+                            position: "absolute",
+                            right: 0,
+                            height: ctaHeight,
+                            border: "none",
+                            background: "transparent",
+                            alignItems: "center",
+                            color: colors.darkSilver,
+                            cursor: "pointer",
+                          }}
+                        >
+                          <ServeIcon />
+                        </div>
+                      </div>
+                      <SearchDropDown
+                        filter={addressData}
+                        onClickHandler={handleSelectAddress}
+                      />
+                    </div>
+                  )}
+                  {formData.py3_address1ine1 && (
+                    <div className="form-control input">
+                      <div className="flex-row">
+                        <div
+                          style={{
+                            position: "relative",
+                            width: "fit-content",
+                            paddingRight: 15,
+                          }}
+                        >
+                          {formData.py3_address1ine1}
+                          <div
+                            className="filter-icon"
+                            style={{ top: -7 }}
+                            onClick={handleClearAction}
+                          >
+                            <CloseIcon
+                              style={{
+                                fill: colors.darkSilver,
+                                padding: 0,
+                                width: "0.7em",
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
                 <FormError id="py3_address1ine1" />
               </div>
             )}
 
-            {inputValidator.py3_addressline2 && (
+            {inputValidator.bad_py3_addressline2 && (
               <input
                 name="py3_addressline2"
                 value={formData.py3_addressline2}
@@ -445,7 +603,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
                 placeholder="Address Line 2"
               />
             )}
-            {inputValidator.py3_addresstowncity && (
+            {inputValidator.bad_py3_addresstowncity && (
               <div>
                 <input
                   name="py3_addresstowncity"
@@ -458,7 +616,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
                 <FormError id="py3_addresstowncity" />
               </div>
             )}
-            {inputValidator.py3_addresscountystate && (
+            {inputValidator.bad_py3_addresscountystate && (
               <div>
                 <input
                   name="py3_addresscountystate"
@@ -471,7 +629,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
                 <FormError id="py3_addresscountystate" />
               </div>
             )}
-            {inputValidator.py3_addresszippostalcode && (
+            {inputValidator.bad_py3_addresszippostalcode && (
               <div>
                 <input
                   name="py3_addresszippostalcode"
@@ -484,7 +642,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
                 <FormError id="py3_addresszippostalcode" />
               </div>
             )}
-            {inputValidator.py3_addresscountry && (
+            {inputValidator.bad_py3_addresscountry && (
               <div>
                 <input
                   name="py3_addresscountry"
