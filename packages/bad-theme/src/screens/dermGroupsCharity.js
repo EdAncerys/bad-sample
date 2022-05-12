@@ -13,6 +13,7 @@ import {
   useAppState,
   handleApplyForMembershipAction,
   getSIGGroupeData,
+  getSIGData,
 } from "../context";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";

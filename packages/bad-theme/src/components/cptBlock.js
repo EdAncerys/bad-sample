@@ -18,6 +18,8 @@ import {
   setCPTBlockAction,
   setCPTBlockTypeAction,
   muiQuery,
+  getCPTTaxonomy,
+  getCPTData,
 } from "../context";
 
 const CPTBlock = ({ state, actions, libraries, block }) => {
@@ -36,6 +38,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   const { cptBlockFilter, cptBlockTypeFilter } = useAppState();
 
   const [postListData, setPostListData] = useState(null);
+  const [postFilter, setPostFilter] = useState(null);
   const [groupeType, setGroupeType] = useState(null);
 
   const chunkRef = useRef(post_limit || 8);
@@ -64,25 +67,15 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   if (!block) return <Loading />;
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
-    const path = `/${postPath}/`;
-    await actions.source.fetch(path); // fetch CPT dermGroupeData
-
-    let dermGroupeData = state.source.get(path);
-    const { totalPages, page, next } = dermGroupeData; // check if dermGroupeData have multiple pages
-    // fetch dermGroupeData via wp API page by page
-    let isThereNextPage = next;
-    while (isThereNextPage) {
-      await actions.source.fetch(isThereNextPage); // fetch next page
-      const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
-      isThereNextPage = nextPage;
-    }
-    let groupData = Object.values(state.source[postPath]);
-    const groupType = Object.values(state.source[typeFilter]);
-    if (isCovid_19) setCategory(Object.values(state.source[guidanceFilter])); // set additional filter option to COVID-19
+    let cptTaxonomy = null;
+    if (isCovid_19)
+      cptTaxonomy = await getCPTTaxonomy({ state, type: guidanceFilter }); // set additional filter option to COVID-19
+    let cptData = await getCPTData({ state, type: postPath });
+    let cptTypes = await getCPTTaxonomy({ state, type: typeFilter });
 
     // set post lit values from filter value in app context
     if (cptBlockFilter) {
-      groupData = groupData.filter((item) => {
+      cptData = cptData.filter((item) => {
         let isCatList = null;
         let isIncludes = null;
         if (item[guidanceFilter])
@@ -95,14 +88,17 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     }
     // clear filter value in app context
     setCPTBlockAction({ dispatch, cptBlockFilter: "" });
-    setPostListData(groupData.slice(0, Number(chunkRef.current))); // apply limit on posts
-    setGroupeType(groupType);
+    setGroupeType(cptTypes);
+
+    let dataChunk = cptData.slice(0, Number(chunkRef.current));
+    setPostFilter(dataChunk);
+    setPostListData(cptData); // apply limit on posts
 
     // if SIG is selected, filter by SIG type
     if (cptBlockTypeFilter) {
       // for SIGs apps get type id that represents the SIG type filter & apply
       let interestGroupsId = null;
-      const sigApp = groupType.filter((item) => {
+      const sigApp = cptTypes.filter((item) => {
         return item.name
           .toLowerCase()
           .includes("Special Interest".toLowerCase());
@@ -123,7 +119,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   // if serach queries are set, filter the full data set
   useEffect(() => {
     if (!postListData) return null;
-    let groupData = Object.values(state.source[postPath]);
+    let groupData = postListData;
 
     // --------------------------------------------------------------------------------
     // 📌 apply filters to posts
@@ -172,9 +168,9 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
     // 📌 if all filters are cleared, reset the data set & apply limit
     if (!searchFilter && !cptBlockFilter && !cptBlockTypeFilter) {
-      setPostListData(groupData.slice(0, Number(chunkRef.current)));
+      setPostFilter(groupData.slice(0, Number(chunkRef.current)));
     } else {
-      setPostListData(groupData);
+      setPostFilter(groupData);
     }
   }, [searchFilter, cptBlockTypeFilter, cptBlockFilter]);
 
@@ -183,11 +179,11 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handleLoadMoreFilter = async () => {
-    let data = Object.values(state.source[postPath]);
+    let data = postListData;
 
     // increment chunkRef value by 8
     chunkRef.current = chunkRef.current + 8;
-    setPostListData(data.slice(0, Number(chunkRef.current)));
+    setPostFilter(data.slice(0, Number(chunkRef.current)));
   };
 
   const inputSearchHandler = () => {
@@ -290,7 +286,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           <div
             style={{
               padding: `0 ${marginHorizontal}px`,
-              width: isCovid_19 ? "100%" : `70%`,
+              width: "100%",
             }}
             className="no-selector"
           >
@@ -332,7 +328,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   const ServeLayout = () => {
     return (
       <div style={!lg ? styles.container : styles.containerMobile}>
-        {postListData.map((block, key) => {
+        {postFilter.map((block, key) => {
           const { title, content, link, date, dermo_group_type } = block;
           const redirect = block.acf.redirect_url;
           const file = block.acf.file_download;
@@ -364,7 +360,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   const ServeMoreAction = () => {
     let isFilter = searchFilter || cptBlockTypeFilter || cptBlockFilter;
 
-    if (post_limit || postListData.length < chunkRef.current || isFilter)
+    if (post_limit || postFilter.length < chunkRef.current || isFilter)
       return null;
 
     return (
