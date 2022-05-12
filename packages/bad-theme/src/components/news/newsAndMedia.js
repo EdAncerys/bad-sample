@@ -53,6 +53,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   const [dateValue, setDateValue] = useState("");
   const [yearValue, setYearValue] = useState("");
   const [hasPermission, setPermission] = useState(false);
+  const [isSearch, setIsSearch] = useState(false);
 
   const searchFilterRef = useRef("");
   const postChunkRef = useRef(Number(post_limit) || 8);
@@ -64,10 +65,10 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   useEffect(async () => {
     // get curent time
     const currentTime = new Date();
-    // console.log("🐞 block fetch fired");
+    console.log("🐞 block fetch fired");
 
-    let data = await getNewsData({ state });
     let categoryList = await getMediaCategories({ state });
+    let data = await getNewsData({ state });
 
     if (site_section) {
       data = data.filter((item) => {
@@ -92,10 +93,11 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     setPostList(data);
     setFilterList(data);
     setCategoryList(categoryList);
+    setIsSearch(has_search);
 
     // get time taken in s to get data
     const timeTaken = (new Date() - currentTime) / 1000;
-    // console.log("time taken to get data", timeTaken);
+    console.log("time taken to get data", timeTaken);
 
     return () => {
       searchFilterRef.current = ""; // clean up function
@@ -243,7 +245,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
   if (!postList || !categoryList) return <Loading />;
 
-  if (postList.length === 0 && !has_search) return null; // hide block if no posts
+  if (postList.length === 0 && !isSearch) return null; // hide block if no posts
 
   // HELPERS ----------------------------------------------------------------
   const handleLoadMoreFilter = () => {
@@ -290,7 +292,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
   // SERVERS ---------------------------------------------
   const ServeFilter = () => {
-    if (!has_search) return null;
+    if (!isSearch) return null;
 
     const ServeTitle = () => {
       return (
@@ -547,32 +549,6 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     );
   };
 
-  const ServeMoreAction = () => {
-    if (
-      layout === "layout_one" ||
-      newsMediaCategoryId ||
-      searchValue ||
-      dateValue ||
-      yearValue ||
-      postList.length < postChunkRef.curent
-    )
-      return null;
-
-    return (
-      <div
-        className="flex"
-        style={{
-          justifyContent: "center",
-          padding: `${state.theme.marginVertical}px 0`,
-        }}
-      >
-        <div className="transparent-btn" onClick={handleLoadMoreFilter}>
-          Load More
-        </div>
-      </div>
-    );
-  };
-
   // RETURN ---------------------------------------------------
   return (
     <div
@@ -582,12 +558,11 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       }}
     >
       <BlockWrapper>
-        <TitleBlock block={block} margin={has_search ? 0 : `0 0 1em 0`} />
+        <TitleBlock block={block} margin={isSearch ? 0 : `0 0 1em 0`} />
       </BlockWrapper>
       <ServeFilter />
       <BlockWrapper>
         <ServeLayout />
-        {/* <ServeMoreAction /> */}
       </BlockWrapper>
     </div>
   );
