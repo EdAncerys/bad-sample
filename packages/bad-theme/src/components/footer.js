@@ -115,7 +115,7 @@ const Footer = ({ state, actions }) => {
         <div className="flex" style={{ flex: 2, justifyContent: "flex-end" }}>
           <div className="footer-title-link" style={styles.footerLink}>
             <Link
-              link={`https://skylarkcreative.co.uk/`}
+              link={`https://register-of-charities.charitycommission.gov.uk/charity-search/-/charity-details/258474`}
               target="_blank"
               style={styles.footerLink}
             >

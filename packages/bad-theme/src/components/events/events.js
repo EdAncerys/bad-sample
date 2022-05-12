@@ -11,8 +11,12 @@ const DATE_MODULE = date;
 import CloseIcon from "@mui/icons-material/Close";
 
 // CONTEXT --------------------------------------------------------
-import { getEventsData } from "../../helpers";
-import { muiQuery } from "../../context";
+import {
+  muiQuery,
+  getEventGrades,
+  getEventLocations,
+  getEventSpecialtys,
+} from "../../context";
 // import SearchBar from "../searchBar";
 
 const Events = ({ state, actions, libraries, block, disableMargin }) => {
@@ -36,37 +40,13 @@ const Events = ({ state, actions, libraries, block, disableMargin }) => {
 
   useEffect(async () => {
     // pre fetch events data
-    let iteration = 0;
-    let data = state.source.events;
-
-    // pre fetch events to get taxonomies data
-    while (!data) {
-      // if iteration is greater than 10, break
-      if (iteration > 10) break;
-      // set timeout for async
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      await getEventsData({ state, actions });
-      data = state.source.post;
-      iteration++;
-    }
-
-    let grades = null;
-    let locations = null;
-    let specialty = null;
-    if (state.source.event_grade)
-      grades = Object.values(state.source.event_grade);
-    if (state.source.event_location)
-      locations = Object.values(state.source.event_location);
-    if (state.source.event_specialty)
-      specialty = Object.values(state.source.event_specialty);
+    let grades = await getEventGrades({ state });
+    let locations = await getEventLocations({ state });
+    let specialtys = await getEventSpecialtys({ state });
 
     setGrades(grades);
     setLocations(locations);
-    setSpecialty(specialty);
-
-    return () => {
-      searchFilterRef.current = ""; // clean up function
-    };
+    setSpecialty(specialtys);
   }, []);
 
   // HELPERS ----------------------------------------------------------------
@@ -288,7 +268,7 @@ const Events = ({ state, actions, libraries, block, disableMargin }) => {
 
     const ServeSelectedGradesFilter = () => {
       if (!gradesFilter) return null;
-      const grades = Object.values(state.source.event_grade);
+
       const filter = grades.filter((item) => item.id === Number(gradesFilter));
       const name = filter[0].name;
 
@@ -309,7 +289,7 @@ const Events = ({ state, actions, libraries, block, disableMargin }) => {
 
     const ServeSelectedLocationFilter = () => {
       if (!locationsFilter) return null;
-      const locations = Object.values(state.source.event_location);
+
       const filter = locations.filter(
         (item) => item.id === Number(locationsFilter)
       );
@@ -333,7 +313,6 @@ const Events = ({ state, actions, libraries, block, disableMargin }) => {
     const ServeSpecialtyFilter = () => {
       if (!specialtyFilter) return null;
 
-      const specialty = Object.values(state.source.event_specialty);
       const filter = specialty.filter(
         (item) => item.id === Number(specialtyFilter)
       );
@@ -397,7 +376,7 @@ const Events = ({ state, actions, libraries, block, disableMargin }) => {
     );
   };
 
-  if (!state.source.events) return <Loading />;
+  if (!grades || !locations || !specialty) return <Loading />;
   // RETURN ---------------------------------------------------
   return (
     <div style={{ padding: `0 ${marginHorizontal}px` }}>

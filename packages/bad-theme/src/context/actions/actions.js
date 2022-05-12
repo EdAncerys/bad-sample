@@ -1,16 +1,23 @@
 import BADTheme from "../../client";
-
 // import state APP_URL from client state with process.env.APP_URL
 
-export const setGoToAction = async ({ state, path, actions, downloadFile }) => {
+export const setGoToAction = async ({
+  state,
+  path,
+  actions,
+  downloadFile,
+  newWindow,
+}) => {
   // console.log("setGoToAction triggered", path, downloadFile); // debug
   if (!path && !downloadFile) return null;
 
-  const pathOne = `cdn.bad.org.uk`;
+  let urlPath = path;
+  const pathOne = `http://3.9.193.188`;
   const pathTwo = `https://badadmin.skylarkdev.co`;
+  const pathThree = `https://cdn.bad.org.uk`;
   const wpHost = state.auth.WP_HOST;
   const appUrl = state.auth.APP_URL;
-
+  console.log("urlPath", urlPath);
   if (downloadFile) {
     // ⬇️  download file ⬇️
     const { file } = downloadFile;
@@ -21,18 +28,37 @@ export const setGoToAction = async ({ state, path, actions, downloadFile }) => {
   let isExternalLink = true;
   if (path && path.includes(pathOne)) isExternalLink = false;
   if (path && path.includes(pathTwo)) isExternalLink = false;
+  // if (path && path.includes(pathThree)) isExternalLink = false;
   if (path && path.includes(wpHost)) isExternalLink = false;
   if (path && path.includes(appUrl)) isExternalLink = false;
+  if (newWindow) isExternalLink = true;
 
-  if (path && path.includes(`www`) && !path.includes(`http`) && isExternalLink)
-    return window.open(`https://` + path, "_blank"); // handle external links without https pre fix
-  if (path && path.includes("cdn"))
-    return window.location.replace("https://" + path);
-  if (path && !path.includes(`www`) && !path.includes(`http`) && isExternalLink)
-    return actions.router.set(pathTwo + path); // internal link no pre fix
-  if (isExternalLink) return window.open(path, "_blank"); // handle external links
-  console.log("ROUTER PATH", path);
-  // actions.router.set(path);
+  if (urlPath && urlPath.includes(wpHost))
+    urlPath = urlPath.replace(wpHost, "/");
+
+  // redirects passed to router without https prefix
+  if (
+    urlPath &&
+    urlPath.includes(`www`) &&
+    !urlPath.includes(`http`) &&
+    isExternalLink
+  )
+    return window.open(`https://` + urlPath, "_blank"); // handle external links without https pre fix
+  // if (urlPath && urlPath.includes("cdn"))
+  //   return window.location.replace("https://" + urlPath);
+
+  // 📌 handle internal link redirects with prefixes
+  if (
+    urlPath &&
+    !urlPath.includes(`www`) &&
+    !urlPath.includes(`http`) &&
+    isExternalLink
+  )
+    return actions.router.set(pathTwo + urlPath); // internal link no pre fix
+  if (isExternalLink) return window.open(urlPath, "_blank"); // handle external links
+
+  // 📌 handle internal link redirects
+  actions.router.set(urlPath);
 };
 
 export const setLinkWrapperAction = ({ path }) => {

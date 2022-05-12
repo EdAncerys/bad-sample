@@ -16,6 +16,8 @@ import {
   muiQuery,
   getGuidelinesDataAction,
   setIdFilterAction,
+  getGuidelinesTypes,
+  getGuidelinesData,
 } from "../context";
 
 const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
@@ -42,16 +44,11 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
-    let guidelines = state.source.guidelines_standards;
-    if (!guidelines) {
-      await getGuidelinesDataAction({ state, actions });
-      guidelines = state.source.guidelines_standards;
-    }
+    let guidelines = await getGuidelinesData({ state });
+    let guideType = await getGuidelinesTypes({ state });
 
-    const guideType = Object.values(state.source.guidelines_type);
-    let guideList = Object.values(guidelines); // add guidelines object to data array
     // sort guidelines in alphabetically order by title name
-    guideList = guideList.sort((a, b) => {
+    guidelines = guidelines.sort((a, b) => {
       const nameA = a.title.rendered.toUpperCase();
       const nameB = b.title.rendered.toUpperCase();
       if (nameA < nameB) return -1;
@@ -60,7 +57,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     });
 
     setGuidelinesType(guideType);
-    setGuidelinesList(guideList);
+    setGuidelinesList(guidelines);
 
     return () => {
       searchFilterRef.current = false; // clean up function
@@ -90,6 +87,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
       }, 100);
     }
   }, []);
+
   // DATA pre FETCH ----------------------------------------------------------------
   if (!guidelinesList) return <Loading />;
 

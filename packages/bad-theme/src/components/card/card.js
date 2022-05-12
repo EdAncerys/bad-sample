@@ -57,6 +57,7 @@ const Card = ({
   electionInfo,
   handler,
   newsAndMediaInfo,
+  categoryList,
   fundingPromo,
   textAlign,
   url,
@@ -415,7 +416,11 @@ const Card = ({
       <VideoGuide videoGuide={videoGuide} />
       <FundingHeader fundingHeader={fundingHeader} />
       <ImageAndPromoCard imageAndPromoCard={imageAndPromoCard} />
-      <NewsAndMediaHeader newsAndMediaInfo={newsAndMediaInfo} layout={layout} />
+      <NewsAndMediaHeader
+        newsAndMediaInfo={newsAndMediaInfo}
+        layout={layout}
+        categoryList={categoryList}
+      />
       <GalleryCarousel gallery={gallery} />
       <NewsArticleHeader newsArticle={newsArticle} />
       <NewsCarousel newsCarousel={newsCarousel} />

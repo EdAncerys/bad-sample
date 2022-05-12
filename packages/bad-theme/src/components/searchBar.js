@@ -7,7 +7,7 @@ import TitleBlock from "./titleBlock";
 import SearchDropDown from "./searchDropDown";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
-import CircularProgress from "@mui/material/CircularProgress";
+
 // CONTEXT -----------------------------------------------------------
 import {
   useAppDispatch,
@@ -19,72 +19,106 @@ import {
 } from "../context";
 import { TimerOutlined } from "@mui/icons-material";
 
-const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
+const SearchBar = ({ state, actions, libraries, block, search_type }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
+  console.log("BLOCK", block);
   const dispatch = useAppDispatch();
   const { lg } = muiQuery();
-  const { disable_vertical_padding, colour } = block;
   const ctaHeight = 45;
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
-  if (disable_vertical_padding) marginVertical = 0;
-
-  const [isFetching, setFetching] = useState(false);
+  const { colour } = block;
+  const [dataLoading, setDataLoading] = useState(false);
   const [filterData, setFilterData] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const useEffectRef = useRef(null);
   const timeoutId = useRef(null);
+  const typeOfSearch = {
+    events: "events",
+    "guidelines-pils": "guidelines_standards,pils",
+    pils: "pils",
+  };
+  useEffect(async () => {
+    // CPT search content data
+    let searchData = {};
+    let pils = state.source.pils;
+    let guidelines = state.source.guidelines_standards;
+
+    // if (!pils) {
+    //   await getPILsDataAction({ state, actions });
+    //   pils = state.source.pils;
+    // }
+    // if (!guidelines) {
+    //   await getGuidelinesDataAction({ state, actions });
+    //   guidelines = state.source.guidelines_standards;
+    // }
+
+    // // merge pils and guidelines data
+    // searchData = { ...pils, ...guidelines };
+    // setContent(Object.values(searchData));
+
+    return () => {
+      useEffectRef.current = false; // clean up function
+    };
+  }, []);
 
   // if (!block || !content) return <Loading />; // awaits pre fetch & data
-  if (!block) return <Loading />;
+  //   if (!block) return <Loading />;
   // HELPERS ---------------------------------------------
   const handleSearch = async () => {
     const input = inputValue.toLowerCase();
+    setDataLoading(true);
+    // ⬇️ apply data filters for search
+    let fetching = await fetch(
+      state.auth.WP_HOST +
+        `wp-json/relevanssi/v1/search?keyword=${input}&type=${typeOfSearch[search_type]}&per_page=5&_fields=title,link&orderby=title&order=ASC`
+    );
+    let data = await fetching.json();
+    console.log("SEARCH TYPE", search_type);
+    console.log("INPUT", input);
+    console.log("DATA", data);
+    setDataLoading(false);
+    // data = data.map((item) => {
+    //   const title = item.title.rendered;
+    //   // const body = item.content.rendered.toLowerCase().includes(input); // include body
 
-    try {
-      setFetching(true);
-      // ⬇️ apply data filters for search
-      let fetching = await fetch(
-        state.auth.WP_HOST +
-          `wp-json/relevanssi/v1/search?keyword=${input}&type=guidelines_standards,pils&per_page=10&_fields=title,link&orderby=title&order=ASC`
-      );
-      let data = await fetching.json();
-      setFetching(false);
-      // if data is not array, return null
-      if (!Array.isArray(data)) return null;
+    //   return title;
+    // });
 
-      // ⬇️ refactor data to match dropdown format
-      data = data.map((item) => {
-        // link overwrite
-        const isGuidelines = item.type === "guidelines_standards";
+    // ⬇️ refactor data to match dropdown format
+    data = data.map((item) => {
+      // link overwrite
+      const isGuidelines = item.type === "guidelines_standards";
 
-        return {
-          title: item.title.rendered,
-          link: isGuidelines
-            ? "/guidelines-and-standards/clinical-guidelines/"
-            : item.link,
-          type: item.type,
-          id: item.id,
-        };
-      });
+      return {
+        title: item.title.rendered,
+        link: isGuidelines
+          ? "/guidelines-and-standards/clinical-guidelines/"
+          : item.link,
+        type: item.type,
+        id: item.id,
+      };
+    });
+    // // sort data alphabetically by title
+    // data.sort((a, b) => {
+    //   if (a.title < b.title) return -1;
+    //   if (a.title > b.title) return 1;
+    //   return 0;
+    // });
 
-      // if data is empty, set filterData to null
-      if (data.length === 0) {
-        setFilterData(null);
-        setInputValue(input);
-        return;
-      }
+    // if data is empty, set filterData to null
+    if (data.length === 0) {
+      setFilterData(null);
+      setInputValue(input);
+      return;
+    }
 
-      if (data && input) {
-        setFilterData(data);
-        setInputValue(input);
-      } else {
-        setFilterData(null);
-        setInputValue("");
-      }
-    } catch (e) {
-      console.log(e);
+    if (data && input) {
+      setFilterData(data);
+      setInputValue(input);
+    } else {
+      setFilterData(null);
+      setInputValue("");
     }
   };
 
@@ -106,7 +140,8 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
     return (
       <div
         style={{
-          backgroundColor: colour,
+          backgroundColor: block.background_colour,
+          //   backgroundColor: "white",
           height: 5,
           width: "100%",
         }}
@@ -126,12 +161,22 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
       setFilterData(null);
     };
 
-    if (isFetching)
-      return (
-        <CircularProgress color="inherit" style={{ width: 25, height: 25 }} />
-      );
-
     return <div onClick={handleClearSearch}>{icon}</div>;
+  };
+
+  const ServeSearchButton = () => {
+    return (
+      <div
+        style={{
+          display: "grid",
+          alignItems: "center",
+          paddingLeft: !lg ? `2em` : 0,
+          paddingTop: !lg ? 0 : `0.5em`,
+        }}
+      >
+        <div className="blue-btn">Search</div>
+      </div>
+    );
   };
 
   const ServeViewPILs = () => {
@@ -188,34 +233,13 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
 
   // RETURN ---------------------------------------------------
   return (
-    <div
-      style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}
-      className="no-selector"
-    >
-      <div className="shadow" style={{ backgroundColor: colors.white }}>
+    <div style={{ padding: 0 }} className="no-selector">
+      <div
+        className="shadow"
+        style={{ backgroundColor: block.background_colour }}
+      >
         <div className="flex no-selector" style={{ padding: `2em` }}>
           <div className="flex-col">
-            <div
-              className="flex"
-              style={{ flexDirection: !lg ? null : "column" }}
-            >
-              <div className="flex">
-                <TitleBlock
-                  block={{
-                    text_align: "left",
-                    title: "Search for PILs & Guidelines",
-                  }}
-                  margin="0 0 1em 0"
-                />
-              </div>
-              <div
-                className={!lg ? "flex" : "flex-col"}
-                style={{ gap: !lg ? null : 10 }}
-              >
-                <ServeViewPILs />
-                <ServeViewGuidelines />
-              </div>
-            </div>
             <div
               className={!lg ? "flex-row" : "flex-col"}
               style={{ marginTop: "1em" }}
@@ -253,7 +277,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
                   <ServeIcon />
                 </div>
                 <SearchDropDown
-                  isFetching={isFetching}
+                  dataLoading={dataLoading}
                   filter={filterData}
                   mapToName="title.rendered"
                   onClickHandler={selectHandler}
@@ -265,7 +289,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
           </div>
         </div>
 
-        <ServeFooter />
+        {/* <ServeFooter /> */}
       </div>
     </div>
   );
@@ -275,4 +299,4 @@ const styles = {
   container: {},
 };
 
-export default connect(PilGuidelineSearch);
+export default connect(SearchBar);

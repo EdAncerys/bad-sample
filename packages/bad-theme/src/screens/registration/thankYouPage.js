@@ -22,6 +22,7 @@ const RegistrationThankYouPage = ({ state, actions }) => {
       state,
       path: "/about-the-bad/our-values/equality-diversity-and-inclusion/",
       actions,
+      newWindow: true,
     });
   };
 

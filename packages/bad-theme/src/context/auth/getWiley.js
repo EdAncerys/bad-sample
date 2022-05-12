@@ -34,11 +34,11 @@ export const getWileyAction = async ({
   try {
     const data = await fetch(URL, requestOptions);
     const wiley = await data.json();
-
+    console.log("WILLEYE", wiley.data);
     if (wiley.success) return wiley.data;
 
     return null;
   } catch (error) {
-    // console.log("error", error);
+    console.log("error", error);
   }
 };

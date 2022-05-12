@@ -4,8 +4,9 @@ import Image from "@frontity/components/image";
 
 import Card from "../card/card";
 import { colors } from "../../config/imports";
-
+// CONTEXT -----------------------------------------------------------------
 import { muiQuery } from "../../context";
+
 const NewsBlock = ({
   state,
   actions,
@@ -32,23 +33,11 @@ const NewsBlock = ({
   if (disable_vertical_padding) marginVertical = 0;
 
   useEffect(async () => {
-    // pre fetch post data
-    let iteration = 0;
-    let data = Object.values(state.source.post);
-    while (data.length === 0) {
-      // if iteration is greater than 10, break
-      if (iteration > 10) break;
-      // set timeout for async
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      await getPostData({ state, actions });
-      data = Object.values(state.source.post);
-      iteration++;
-    }
-
-    if (state.source.category) {
-      const catList = Object.values(state.source.category);
+    if (categoryList) {
       // get e-circular category id
-      const eCircularCat = catList.filter((item) => item.name === "E-Circular");
+      const eCircularCat = categoryList.filter(
+        (item) => item.name === "E-Circular"
+      );
       // get e-circular category id
       let eCircularCatId = null;
       if (eCircularCat[0]) eCircularCatId = eCircularCat[0].id;
@@ -61,6 +50,8 @@ const NewsBlock = ({
     };
   }, []);
 
+  if (!block) return null;
+
   // RETURN ---------------------------------------------
   return (
     <div
@@ -72,9 +63,17 @@ const NewsBlock = ({
       }}
     >
       {block.map((block, key) => {
-        const { categories, link, title, featured_media, acf } = block;
+        const {
+          categories,
+          link,
+          title,
+          featured_media,
+          acf,
+          yoast_head_json,
+        } = block;
 
-        const isECircular = categories.includes(eCircularCatId);
+        const isECircular = null;
+        if (categories) categories.includes(eCircularCatId);
         let redirectLink = link;
         // if redirec_url is set, use it
         if (acf.redirect_url) redirectLink = acf.redirect_url;
@@ -85,8 +84,11 @@ const NewsBlock = ({
         const ServeImage = () => {
           if (!featured_media) return null;
 
-          const media = state.source.attachment[featured_media];
+          let media = null;
+          if (yoast_head_json) media = yoast_head_json.og_image[0].url;
           const alt = title.rendered || "BAD";
+
+          if (!media) return null;
 
           return (
             <div
@@ -96,7 +98,7 @@ const NewsBlock = ({
               }}
             >
               <Image
-                src={media.source_url}
+                src={media}
                 alt={alt}
                 style={{
                   width: "100%",
@@ -115,6 +117,7 @@ const NewsBlock = ({
               link_label="Read More"
               link={redirectLink}
               newsAndMediaInfo={block}
+              categoryList={categoryList}
               layout={layout}
               colour={colors.pink}
               shadow
@@ -128,6 +131,7 @@ const NewsBlock = ({
               link_label="Read More"
               link={isECircular ? null : redirectLink}
               newsAndMediaInfo={block}
+              categoryList={categoryList}
               downloadFile={isECircular ? fileBlock : null} // download file passed link
               layout={layout}
               cardMinHeight={290}
@@ -149,6 +153,7 @@ const NewsBlock = ({
                 link_label="Read More"
                 link={redirectLink}
                 newsAndMediaInfo={block}
+                categoryList={categoryList}
                 padding="1.5em 3em"
                 layout={layout}
                 colour={colors.pink}

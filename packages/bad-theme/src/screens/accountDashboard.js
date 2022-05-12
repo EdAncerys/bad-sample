@@ -27,6 +27,7 @@ import {
   setGoToAction,
   setDashboardNotificationsAction,
   setCPTBlockTypeAction,
+  setErrorAction,
 } from "../context";
 
 const AccountDashboard = ({ state, actions, libraries }) => {
@@ -52,6 +53,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   useEffect(async () => {
     if (!isActiveUser) return null;
     let isProfileComplete = true;
+
     // --------------------------------------------------------------------------------
     // 📌 SET Dashboard notification if user profile not complete
     // --------------------------------------------------------------------------------
@@ -191,8 +193,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
                   {
                     title: applicationTitle,
                     colour: colors.navy,
-                    onClickAction: () =>
-                      handleUpdateMembershipApplication({ app }),
+                    link: { url: "/membership/categories-of-membership/" },
                   },
                   {
                     title: "Apply for SIG Membership",

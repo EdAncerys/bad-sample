@@ -42,7 +42,6 @@ function AlterAccordion({
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [uniqueId, setUniqueId] = useState(null);
-  const [hasActiveClass, setActive] = useState(null);
 
   let isBADApproved = false;
   if (dynamicsApps && dynamicsApps.subs.data.length > 0) isBADApproved = true;

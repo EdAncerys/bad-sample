@@ -9,16 +9,24 @@ import Loading from "../components/loading";
 import { handleGetCookie } from "../helpers/cookie";
 
 // CONTEXT ----------------------------------------------------------------
-import { muiQuery, useAppState } from "../context";
+import {
+  muiQuery,
+  useAppState,
+  getVideosData,
+  getEventSpecialitys,
+  getEventGrades,
+} from "../context";
 
 const VideoArchive = ({ state, actions, libraries }) => {
   const [postData, setPostData] = useState(null);
   const [heroBannerBlock, setHeroBannerBlock] = useState(null);
   const [userVideos, setUserVideos] = useState(null);
-  // const [showMyVids, setShowMyVids] = useState(false);
+
+  const [videosList, setVideosList] = useState(null);
+  const [eventSpec, setEventSpec] = useState(null);
+  const [eventGrades, setEventGrades] = useState(null);
 
   const { isActiveUser } = useAppState();
-
   const { sm, md, lg, xl } = muiQuery();
 
   const searchFilterRef = useRef("");
@@ -29,17 +37,15 @@ const VideoArchive = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
 
   const handleFilters = () => {
-    let unfilteredVideos = Object.values(state.source.videos);
-
     if (specialtyFilter.current === "all") {
-      setPostData(unfilteredVideos);
-      return true;
+      setPostData(videosList);
+      return;
     }
     if (paidFilter.current === "all") {
-      setPostData(unfilteredVideos);
-      return true;
+      setPostData(videosList);
+      return;
     }
-    let filteredVideos = unfilteredVideos;
+    let filteredVideos = videosList;
     if (showOnlyMyVids.current === true) {
       filteredVideos = filteredVideos.filter((video) => {
         const id = video.acf.event_id;
@@ -50,21 +56,23 @@ const VideoArchive = ({ state, actions, libraries }) => {
     }
 
     filteredVideos = filteredVideos.filter((video) => {
+      // if video.event_specialty null, return false
+      const specialty = video.event_specialty;
+      const grades = video.event_grade;
+
       if (
         specialtyFilter.current &&
-        !video.event_specialty.includes(Number(specialtyFilter.current))
+        !specialty.includes(Number(specialtyFilter.current))
       )
         return false;
-      if (
-        gradeFilter.current &&
-        !video.event_grade.includes(Number(gradeFilter.current))
-      )
+      if (gradeFilter.current && !grades.includes(Number(gradeFilter.current)))
         return false;
+
       if (paidFilter.current) {
-        if (paidFilter.current === "paid") return video.acf.private === true;
-        if (paidFilter.current === "free")
-          return video.acf.private === !video.acf.private;
+        if (paidFilter.current === "paid") return video.acf.private;
+        if (paidFilter.current === "free") return !video.acf.private;
       }
+
       return true;
     });
 
@@ -73,7 +81,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
 
   const handleSearch = (e, searchFilter) => {
     e.preventDefault();
-    let unfilteredVideos = Object.values(state.source.videos);
+    let unfilteredVideos = videosList;
 
     const regex = new RegExp(searchFilter, "gi");
     const filteredVideos = unfilteredVideos.filter((video) => {
@@ -86,8 +94,8 @@ const VideoArchive = ({ state, actions, libraries }) => {
 
   const ServeFilterMenu = () => {
     const SpecialtyFilters = () => {
-      if (!state.source.event_specialty) return null;
-      const data = Object.values(state.source.event_specialty);
+      if (!eventSpec) return null;
+      const data = eventSpec;
 
       return (
         <div>
@@ -104,7 +112,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
             }}
             style={!lg ? styles.dropdown : styles.dropdownMobile}
           >
-            <option value="">Specialties</option>
+            <option hidden>Specialties</option>
             {data.map((item, key) => {
               return (
                 <option key={key} value={item.id}>
@@ -119,8 +127,8 @@ const VideoArchive = ({ state, actions, libraries }) => {
     };
 
     const GradeFilters = () => {
-      if (!state.source.event_grade) return null;
-      const data = Object.values(state.source.event_grade);
+      if (!eventGrades) return null;
+      const data = eventGrades;
 
       return (
         <div>
@@ -137,7 +145,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
               handleFilters();
             }}
           >
-            <option value="">Grade Filters</option>
+            <option hidden>Grade Filters</option>
             {data.map((item) => {
               return <option value={item.id}>{item.name}</option>;
             })}
@@ -148,6 +156,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
 
     const PaymentFilters = () => {
       const paymentType = ["Paid", "Free"];
+
       return (
         <div>
           <select
@@ -163,7 +172,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
             }}
             style={!lg ? styles.dropdown : styles.dropdownMobile}
           >
-            <option>Video type</option>
+            <option hidden>Video type</option>
             <option value="all">All videos</option>
             {paymentType.map((item, key) => {
               return (
@@ -212,10 +221,10 @@ const VideoArchive = ({ state, actions, libraries }) => {
         )}
         <div
           onClick={() => {
-            specialtyFilter.current = null;
-            paidFilter.current = null;
-            gradeFilter.current = null;
-            handleFilters();
+            specialtyFilter.current = "";
+            paidFilter.current = "";
+            gradeFilter.current = "";
+            setPostData(videosList);
           }}
           style={{
             cursor: "pointer",
@@ -317,14 +326,14 @@ const VideoArchive = ({ state, actions, libraries }) => {
     );
   };
 
-  useEffect(() => {
-    const fetchContent = async () => {
-      actions.source.fetch("/videos/");
-      actions.source.fetch("/event_specialty/");
-    };
+  useEffect(async () => {
+    const videoList = await getVideosData({ state });
+    const eventSpec = await getEventSpecialitys({ state });
+    const eventGrades = await getEventGrades({ state });
+
     const fetchHeroBanner = async () => {
       const fetchInfo = await fetch(
-        state.source.url + "/wp-json/wp/v2/pages/7051"
+        state.source.url + "/wp-json/wp/v2/pages/7051" // hero banner page
       );
 
       if (fetchInfo.ok) {
@@ -348,7 +357,6 @@ const VideoArchive = ({ state, actions, libraries }) => {
       const cookie = handleGetCookie({ name: `BAD-WebApp` });
       const { contactid, jwt } = cookie;
 
-      const allVidz = state.source.videos;
       const listOfVids = await fetch(
         state.auth.APP_HOST + `/videvent/${isActiveUser.contactid}/entities`,
         {
@@ -360,12 +368,13 @@ const VideoArchive = ({ state, actions, libraries }) => {
 
       const json = await listOfVids.json();
       setUserVideos(json.data);
-      console.log("List of vids", json);
     };
-    const data = state.source.get(state.router.link);
-    setPostData(data.items);
-    fetchContent();
+
     fetchHeroBanner();
+    setVideosList(videoList);
+    setPostData(videoList);
+    setEventSpec(eventSpec);
+    setEventGrades(eventGrades);
 
     if (isActiveUser) fetchUserVideos();
   }, []);
@@ -386,7 +395,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
       >
         <BlockWrapper>
           <div
-            className="primary-title"
+            className="primary-title no-selector"
             style={{ fontSize: "2.25rem", marginBottom: 20 }}
           >
             Search for videos
@@ -400,16 +409,19 @@ const VideoArchive = ({ state, actions, libraries }) => {
           <div style={!lg ? styles.container : styles.containerMobile}>
             {postData.length > 0 ? (
               postData.map((item, key) => {
-                const post = state.source[item.type][item.id];
+                // filter videos by id
+                const post = videosList.filter(
+                  (post) => post.id === item.id
+                )[0];
 
                 return <VideoArchivePost key={key} post={post} />;
               })
             ) : (
-              <ServeNoVideosFound key={key} />
+              <ServeNoVideosFound />
             )}
           </div>
         ) : (
-          <ServeNoVideosFound key={key} />
+          <ServeNoVideosFound />
         )}
       </BlockWrapper>
     </>

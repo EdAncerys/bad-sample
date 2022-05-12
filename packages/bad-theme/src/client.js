@@ -28,6 +28,7 @@ const BADTheme = {
       marginHorizontal: 100, // px units
       marginVertical: 40, // px units
       notification: false,
+      perPageLimit: 50, // number of posts to fetch per page
     },
     auth: {
       // 📌 app auth service secrets
