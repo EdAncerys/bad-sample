@@ -26,8 +26,7 @@ export default connect(({ libraries, state, actions }) => {
   };
 
   const onClickLinkHandler = async ({ title, url }) => {
-    console.log("TITLERERO", title);
-    const isWileys = title.includes("Journal") && !title.includes("Journals");
+    const isWileys = title.includes("Journal") && !title.includes("SHD");
     let authLink = url;
 
     // HANDLERS ----------------------------------------------------
@@ -58,7 +57,7 @@ export default connect(({ libraries, state, actions }) => {
       setErrorAction({
         dispatch,
         isError: {
-          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals. <br/> To continue to the publication without logging in, click to visit the BJD website`,
+          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals. <br/> To continue to the publication without logging in, click to visit the ${title} website`,
           image: "Error",
           action: [
             {
