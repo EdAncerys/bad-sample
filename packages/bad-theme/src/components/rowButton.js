@@ -89,8 +89,7 @@ const RowButton = ({
 
     if (is_wileys_link && !isActiveUser) {
       // 📌 track notification error action
-      console.log("TITLERO", title.match(/[A-Z]{3}/gm)[0]);
-      console.log("HANDLING HERE", is_wileys_link, "title:", title);
+      // console.log("HANDLING HERE", is_wileys_link, "title:", title);
       setErrorAction({
         dispatch,
         isError: {
