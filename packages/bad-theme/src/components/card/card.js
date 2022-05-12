@@ -98,6 +98,7 @@ const Card = ({
   delay,
   animationType,
   isElectionBlock,
+  electionTaxonomy,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
@@ -371,6 +372,7 @@ const Card = ({
           videoArchive={videoArchive}
           noVideoCategory={noVideoCategory}
           shareToSocials={shareToSocials}
+          electionTaxonomy={electionTaxonomy}
         />
         <VideoGalleryInfo videoGalleryInfo={videoGalleryInfo} />
         <ServeDownloads />

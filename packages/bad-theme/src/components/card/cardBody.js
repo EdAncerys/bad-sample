@@ -32,6 +32,7 @@ const CardBody = ({
   videoArchive,
   noVideoCategory,
   shareToSocials,
+  electionTaxonomy,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { sm, md, lg, xl } = muiQuery();
@@ -258,7 +259,11 @@ const CardBody = ({
         <ServeSeatsRemaining />
         <ServeTitle />
         <ServePublicationDate />
-        <ElectionInfo electionInfo={electionInfo} opacity={opacity} />
+        <ElectionInfo
+          electionInfo={electionInfo}
+          opacity={opacity}
+          electionTaxonomy={electionTaxonomy}
+        />
         <ServeBody />
         <ServeDate />
         <ServeVideoArchiveCategories />
