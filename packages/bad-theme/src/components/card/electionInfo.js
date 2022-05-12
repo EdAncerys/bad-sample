@@ -1,6 +1,13 @@
 import { connect } from "frontity";
 
-const ElectionInfo = ({ state, actions, libraries, electionInfo, opacity }) => {
+const ElectionInfo = ({
+  state,
+  actions,
+  libraries,
+  electionInfo,
+  opacity,
+  electionTaxonomy,
+}) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!electionInfo) return null;
@@ -14,10 +21,9 @@ const ElectionInfo = ({ state, actions, libraries, electionInfo, opacity }) => {
 
   // SERVERS ---------------------------------------------
   const ServeOfficer = () => {
-    if (!election_roles.length) return null;
+    if (!election_roles.length || !electionTaxonomy) return null;
 
-    const ROLES = Object.values(state.source.election_roles);
-    const filter = ROLES.filter(
+    const filter = electionTaxonomy.filter(
       (item) => item.id === Number(election_roles[0])
     );
     const name = filter[0].name;

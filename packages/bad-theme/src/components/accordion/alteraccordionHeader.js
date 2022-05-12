@@ -35,7 +35,6 @@ const AccordionHeader = ({
   if (fundingBlock || membershipApplications || guidelines)
     title = block.title.rendered;
   const browsero = navigator.userAgent;
-  console.log("BROWSER", browsero.includes("Firefox"));
   let body = block.body;
   if (fundingBlock) body = block.acf ? block.acf.overview : null;
 

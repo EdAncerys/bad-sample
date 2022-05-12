@@ -9,10 +9,13 @@ import { colors } from "../config/imports";
 import BlockWrapper from "./blockWrapper";
 import SearchContainer from "./searchContainer";
 import TypeFilters from "./typeFilters";
+
 import date from "date-and-time";
 const DATE_MODULE = date;
 
 import CloseIcon from "@mui/icons-material/Close";
+// CONTEXT --------------------------------------------------------
+import { getFundingData, getFundingTypes } from "../context";
 
 const CPTBlock = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -57,31 +60,18 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
-    const path = `/${postPath}/`;
-    await actions.source.fetch(path); // fetch CPT dermGroupeData
-
-    let dermGroupeData = state.source.get(path);
-    const { totalPages, page, next } = dermGroupeData; // check if dermGroupeData have multiple pages
-    // fetch dermGroupeData via wp API page by page
-    let isThereNextPage = next;
-    while (isThereNextPage) {
-      await actions.source.fetch(isThereNextPage); // fetch next page
-      const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
-      isThereNextPage = nextPage;
-    }
-    let resultData = Object.values(state.source[postPath]);
-    const GROUPE_TYPE = Object.values(state.source[typePath]);
+    let fundingList = await getFundingData({ state });
+    const types = await getFundingTypes({ state });
 
     if (funding_filter !== "All Levels") {
-      resultData = resultData.filter((item) =>
+      fundingList = fundingList.filter((item) =>
         item.funding_type.includes(Number(funding_filter))
       );
     }
+    if (post_limit) fundingList = fundingList.slice(0, Number(post_limit)); // apply limit on posts
 
-    if (post_limit) resultData = resultData.slice(0, Number(post_limit)); // apply limit on posts
-
-    setPostListData(resultData);
-    setGroupeType(GROUPE_TYPE);
+    setPostListData(fundingList);
+    setGroupeType(types);
 
     return () => {
       filterRef.current = false; // clean up function
@@ -202,7 +192,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     });
     // get unique month & year from allDates array and set to allDates
     let uniqueFundings = [...new Set(allFundings)];
-    console.log("🐞 ", uniqueFundings);
 
     return (
       <div

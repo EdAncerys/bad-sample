@@ -20,6 +20,7 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
+  console.log("🐞 ", block);
 
   // HELPERS ----------------------------------------------------------------
   const slide = (direction) => {
@@ -58,7 +59,11 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
         {next ? (
           <div
             className="flex shadow"
-            style={{ padding: `0.5em 2em`, alignItems: "center" }}
+            style={{
+              padding: `0.5em 2em`,
+              alignItems: "center",
+              cursor: "pointer",
+            }}
           >
             <div>Next</div>
             <KeyboardArrowRight sx={{ fontSize: 24 }} />
@@ -66,7 +71,11 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
         ) : (
           <div
             className="flex shadow"
-            style={{ padding: `0.5em 2em`, alignItems: "center" }}
+            style={{
+              padding: `0.5em 2em`,
+              alignItems: "center",
+              cursor: "pointer",
+            }}
           >
             <KeyboardArrowLeft sx={{ fontSize: 24 }} />
             <div>Previous</div>

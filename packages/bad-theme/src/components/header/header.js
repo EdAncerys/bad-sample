@@ -38,8 +38,12 @@ const Header = ({ state, actions }) => {
   };
 
   useEffect(() => {
-    ReactGA.initialize("UA-50027583-1");
-    ReactGA.pageview(window.location.pathname + window.location.search);
+    const cookie = handleGetCookie({ name: `BAD-cookie-popup` });
+    console.log("COOKIE", cookie);
+    if (cookie && cookie === "all-cookies") {
+      ReactGA.initialize("UA-50027583-1");
+      ReactGA.pageview(window.location.pathname + window.location.search);
+    }
   }, []);
   return (
     <>

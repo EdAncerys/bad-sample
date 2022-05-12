@@ -12,7 +12,12 @@ import SearchContainer from "../searchContainer";
 import CloseIcon from "@mui/icons-material/Close";
 import ElectionModal from "./electionModal";
 // CONTEXT ------------------------------------------------
-import { useAppDispatch, setEnquireAction } from "../../context";
+import {
+  useAppDispatch,
+  setEnquireAction,
+  getElectionsData,
+  getCPTTaxonomy,
+} from "../../context";
 
 const ElectionBlocks = ({ state, actions, block }) => {
   if (!block) return <Loading />;
@@ -29,6 +34,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
   } = block;
 
   const [electionList, setElectionList] = useState(null);
+  const [electionFilter, setElectionFilter] = useState(null);
   const [gradeList, setGradeList] = useState(null); // data
   const [roleList, setRoleList] = useState(null); // data
   const [modalData, setModalData] = useState(null);
@@ -51,33 +57,26 @@ const ElectionBlocks = ({ state, actions, block }) => {
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
-    const path = `/elections/`;
-    await actions.source.fetch(path); // fetch CPT electionData
+    const gradeTaxonomy = await getCPTTaxonomy({
+      state,
+      type: "election_grade",
+    });
+    const roleTaxonomy = await getCPTTaxonomy({
+      state,
+      type: "election_roles",
+    });
+    const postData = await getElectionsData({ state });
 
-    const electionData = state.source.get(path);
-    const { totalPages, page, next } = electionData; // check if electionData have multiple pages
-    // fetch electionData via wp API page by page
-    let isThereNextPage = next;
-    while (isThereNextPage) {
-      await actions.source.fetch(isThereNextPage); // fetch next page
-      const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
-      isThereNextPage = nextPage;
-    }
-
-    const electionList = Object.values(state.source.elections); // add electionData object to data array
-    setElectionList(electionList);
-    // get taxonomy data for elections
-    const electionGrade = Object.values(state.source.election_grade);
-    const electionRoles = Object.values(state.source.election_roles);
-
-    setGradeList(electionGrade);
-    setRoleList(electionRoles);
+    setGradeList(gradeTaxonomy);
+    setRoleList(roleTaxonomy);
+    setElectionFilter(postData);
+    setElectionList(postData);
 
     return () => {
       mountedRef.current = false; // clean up function
     };
   }, []);
-  // DATA pre FETCH ----------------------------------------------------------------
+
   if (!electionList) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
@@ -88,13 +87,13 @@ const ElectionBlocks = ({ state, actions, block }) => {
       const sortedList = electionList.sort((a, b) => {
         return new Date(a.date) - new Date(b.date);
       });
-      setElectionList(sortedList);
+      setElectionFilter(sortedList);
     }
     if (value === "Date Descending") {
       const sortedList = electionList.sort((a, b) => {
         return new Date(b.date) - new Date(a.date);
       });
-      setElectionList(sortedList);
+      setElectionFilter(sortedList);
     }
 
     setDateFilter(value);
@@ -421,11 +420,10 @@ const ElectionBlocks = ({ state, actions, block }) => {
       <TitleBlock block={{ title, text_align }} disableMargin />
       <ServeFilter />
       <div style={!lg ? styles.container : styles.containerMobile}>
-        {electionList.map((block, key) => {
+        {electionFilter.map((block, key) => {
           const { title, election_grade, election_roles } = block;
           const { cta, description, nomination_form_upload, election_status } =
             block.acf;
-          // console.log("block", block); // debug
 
           // taxonomy grade name filtering
           const filter = gradeList.filter(
@@ -438,11 +436,14 @@ const ElectionBlocks = ({ state, actions, block }) => {
           const isClosedPosition = election_status === "closed";
 
           if (searchFilter) {
-            if (
-              !title.rendered.toLowerCase().includes(searchFilter) ||
-              !description.toLowerCase().includes(searchFilter)
-            )
-              return null;
+            let blockTitle = title.rendered.toLowerCase();
+            let blockDescription = description.toLowerCase();
+            let search = searchFilter.toLowerCase();
+
+            let isInTitle = blockTitle.includes(search);
+            let isInDescription = blockDescription.includes(search);
+
+            if (!isInTitle && !isInDescription) return null;
           }
           // select filtering config
           if (gradeFilter) {
@@ -459,6 +460,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
               <div className="flex">
                 <Card
                   cardTitle={GRADE_NAME}
+                  electionTaxonomy={roleList}
                   title={title.rendered}
                   body={isClosedPosition ? null : description}
                   colour={colors.primary}

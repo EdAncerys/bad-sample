@@ -62,7 +62,10 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   if (disable_vertical_padding) marginVertical = 0;
 
   useEffect(async () => {
-    // let iteration = 0;
+    // get curent time
+    const currentTime = new Date();
+    // console.log("🐞 block fetch fired");
+
     let data = await getNewsData({ state });
     let categoryList = await getMediaCategories({ state });
 
@@ -89,6 +92,10 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     setPostList(data);
     setFilterList(data);
     setCategoryList(categoryList);
+
+    // get time taken in s to get data
+    const timeTaken = (new Date() - currentTime) / 1000;
+    // console.log("time taken to get data", timeTaken);
 
     return () => {
       searchFilterRef.current = ""; // clean up function

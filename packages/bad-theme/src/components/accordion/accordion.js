@@ -10,6 +10,7 @@ import CardHeader from "./alteraccordionHeader";
 import { useAppState, muiQuery } from "../../context";
 import connect from "@frontity/connect";
 import { v4 as uuidv4 } from "uuid";
+
 function AlterAccordion({
   state,
   actions,
@@ -42,7 +43,6 @@ function AlterAccordion({
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [uniqueId, setUniqueId] = useState(null);
-  const [hasActiveClass, setActive] = useState(null);
 
   let isBADApproved = false;
   if (dynamicsApps && dynamicsApps.subs.data.length > 0) isBADApproved = true;

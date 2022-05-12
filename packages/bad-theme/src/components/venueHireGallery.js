@@ -5,7 +5,7 @@ import Card from "./card/card";
 import Loading from "./loading";
 
 // CONTEXT --------------------------------------------------
-import { muiQuery } from "../context";
+import { muiQuery, getVenuesData } from "../context";
 
 const VenueHireGallery = ({ state, actions, block }) => {
   const { sm, md, lg, xl } = muiQuery();
@@ -22,21 +22,8 @@ const VenueHireGallery = ({ state, actions, block }) => {
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
-    const path = `/venues/`;
-    await actions.source.fetch(path); // fetch CPT venues
-
-    const venues = state.source.get(path);
-    const { totalPages, page, next } = venues; // check if venues have multiple pages
-    // fetch venues via wp API page by page
-    let isThereNextPage = next;
-    while (isThereNextPage) {
-      await actions.source.fetch(isThereNextPage); // fetch next page
-      const nextPage = state.source.get(isThereNextPage).next; // check ifNext page & set next page
-      isThereNextPage = nextPage;
-    }
-
-    const VENUE_LIST = Object.values(state.source["venues"]); // add venues object to data array
-    setVenueList(VENUE_LIST);
+    const venues = await getVenuesData({ state });
+    setVenueList(venues);
 
     return () => {
       mountedRef.current = false; // clean up function

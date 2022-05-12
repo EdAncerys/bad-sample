@@ -9,7 +9,7 @@ import BlockWrapper from "../components/blockWrapper";
 // CONTEXT -----------------------------------------------------------------
 import { setGoToAction } from "../context";
 
-const DermGroupsCharity = ({ state, actions, libraries }) => {
+const Covid = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const data = state.source.get(state.router.link);
@@ -60,4 +60,4 @@ const styles = {
   container: {},
 };
 
-export default connect(DermGroupsCharity);
+export default connect(Covid);
