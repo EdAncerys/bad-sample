@@ -49,7 +49,7 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
     const handleGoToLink = () => {
       const goToPath = urlPath.split("/").slice(1, nextKey + 1);
       let goToLink = `/${goToPath.join("/")}`;
-      console.log("goToPath", goToPath, "goToLink", goToLink);
+      // console.log("goToPath", goToPath, "goToLink", goToLink);
       // REDIRECT HANDLERS -------------------------------------------------
       if (goToLink === "/derm_groups_charity/")
         goToLink = "/derm-groups-charity";
@@ -67,7 +67,7 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
     if (item[0] !== "home")
       wpMenu.map((menuItem) => {
         // check for nested child_items
-        console.log("Menu", menuItem);
+        // console.log("Menu", menuItem);
         if (menuItem.child_items && !lg)
           menuItem.child_items.map((childItem) => {
             if (lg) return null;
