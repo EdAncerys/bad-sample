@@ -80,7 +80,7 @@ const RowButton = ({
         url: link.url,
       });
     }
-
+    const journal = title.match(/[A-Z]{3}/gm)[0];
     // redirect handler
     const handelRedirect = () => {
       setErrorAction({ dispatch, isError: null });
@@ -89,15 +89,16 @@ const RowButton = ({
 
     if (is_wileys_link && !isActiveUser) {
       // 📌 track notification error action
-      console.log("HANDLING HERE");
+      console.log("TITLERO", title.match(/[A-Z]{3}/gm)[0]);
+      console.log("HANDLING HERE", is_wileys_link, "title:", title);
       setErrorAction({
         dispatch,
         isError: {
-          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals. To continue to the publication without logging in, click to visit the BJD website`,
+          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals. To continue to the publication without logging in, click to visit the ${journal} website`,
           image: "Error",
           action: [
             {
-              label: `Read ${title}`,
+              label: `${title}`,
               handler: handelRedirect,
             },
             { label: "Login", handler: handelLogin },
