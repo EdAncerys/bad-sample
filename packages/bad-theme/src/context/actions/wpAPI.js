@@ -77,6 +77,7 @@ export const getEventSpecialtys = async ({ state }) => {
 export const getNewsData = async ({ state, page, postsPerPage }) => {
   let pageNo = page || 1;
   let perPageLimit = postsPerPage || state.theme.perPageLimit;
+  console.log(postsPerPage);
   let fields =
     "title,link,date,release,title,categories,featured_media,excerpt,yoast_head_json.og_image,acf";
 
@@ -87,7 +88,7 @@ export const getNewsData = async ({ state, page, postsPerPage }) => {
 
     let response = await fetch(url);
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status !== 400) {
+    while (response.status !== 400 && data.length <= perPageLimit) {
       let json = await response.json();
 
       data = [...data, ...json];

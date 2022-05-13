@@ -128,7 +128,7 @@ const Card = ({
   const [authLink, setAuthLink] = useState(null);
   const [isFetching, setFetching] = useState(null);
   const useEffectRef = useRef(null);
-
+  console.log(categoryList);
   useEffect(async () => {
     if (!rssFeedLink) return null;
 
@@ -425,7 +425,7 @@ const Card = ({
       />
       <GalleryCarousel gallery={gallery} />
       <NewsArticleHeader newsArticle={newsArticle} />
-      <NewsCarousel newsCarousel={newsCarousel} />
+      <NewsCarousel newsCarousel={newsCarousel} categoryList={categoryList} />
       <ServeCardImage />
       <ServeVideoCover />
       <ServeContent />
