@@ -15,7 +15,7 @@ import {
   muiQuery,
   setErrorAction,
   authenticateAppAction,
-  isActiveUser,
+  fetchDataHandler,
 } from "../../context";
 
 const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
@@ -30,7 +30,6 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-  console.log("APPS", dynamicsApps);
   useEffect(() => {
     setLiveSubscriptions(dynamicsApps);
 
@@ -83,18 +82,17 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     try {
       const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
-      const fetchVendorId = await fetch(
+      const path =
         state.auth.APP_HOST +
-          sagepayUrl +
-          type +
-          `?redirecturl=${state.auth.APP_URL}/payment-confirmation/?redirect=${state.router.link}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
-        }
-      );
+        sagepayUrl +
+        type +
+        `?redirecturl=${state.auth.APP_URL}/payment-confirmation/?redirect=${state.router.link}`;
+      const fetchVendorId = await fetchDataHandler({
+        path,
+        method: "POST",
+        body: appCredentials,
+        state,
+      });
 
       if (fetchVendorId.ok) {
         const json = await fetchVendorId.json();

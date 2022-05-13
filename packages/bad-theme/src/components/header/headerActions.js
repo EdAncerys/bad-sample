@@ -150,8 +150,20 @@ const HeaderActions = ({ state, actions, libraries }) => {
     // 📌  B2C login action
     // --------------------------------------------------------------------------------
 
-    // let path = state.auth.APP_HOST + `/twitter/tweets?limit=3`;
-    // const response = await fetchDataHandler({ path, state });
+    // let path = state.auth.APP_HOST + "/catalogue/fad/" + "N89SA" + `?limit=8`;
+    // const username = state.auth.APP_USERNAME;
+    // const password = state.auth.APP_PASSWORD;
+    // let path = state.auth.APP_HOST + `/users/login`;
+    // let appCredentials = {
+    //   username,
+    //   password,
+    // };
+    // const response = await fetchDataHandler({
+    //   path,
+    //   method: "POST",
+    //   body: appCredentials,
+    //   state,
+    // });
     // return;
 
     // ⬇️ development env default login action ⬇️
@@ -169,6 +181,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
         // contactid: "89bb168e-5dc1-ec11-983f-000d3aae25bf", // NEW USER
         // contactid: "969ba377-a398-ec11-b400-000d3aaedef5", // emilia
         // contactid: "a167c3ee-ba93-e711-80f5-3863bb351f50", // membership
+        // contactid: "04548c0b-cf52-ec11-8c62-000d3a4a9589", // 📌 MEMBER OF BAD !!!
         refreshJWT,
       });
       return;

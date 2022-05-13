@@ -6,6 +6,7 @@ export const fetchDataHandler = async ({
   accept,
   body,
   state,
+  options,
 }) => {
   // -----------------------------------------------
   // 📌 CUSTOM FETCH HANDLER
@@ -24,12 +25,16 @@ export const fetchDataHandler = async ({
     Authorization: `Bearer ${jwt}`,
     // set cash control headers to 7 days if method is GET
     ...(method === "GET" ? { "Cache-Control": "s-maxage=86400" } : {}),
+    // add short term cash control headers to GET requests
   };
 
   // 📌 Options
   let requestOptions = {
     method,
     headers,
+    // if otions are passed, use them instead of the default ones
+    ...(options ? options : {}),
+    // add credentials to the request
   };
 
   // 📌 BODY Options
@@ -44,6 +49,9 @@ export const fetchDataHandler = async ({
     if (!path) throw new Error("No path provided");
     // 📌 make a fetch request to the backend api with the given path
     const response = await fetch(path, requestOptions);
+    // // 📌 get the response body
+    // const data = await response.json();
+    // console.log("🐞 ", data);
     console.log("🐞 ", response);
 
     return response;

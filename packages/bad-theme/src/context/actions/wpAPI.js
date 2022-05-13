@@ -245,7 +245,7 @@ export const getFundingData = async ({ state, page, postsPerPage }) => {
   let pageNo = page || 1;
   let perPageLimit = postsPerPage || state.theme.perPageLimit;
   let fields =
-    "id,title,content,content,tags,guidelines_type,site_sections,acf,layout,authors,notice,nice_accredited";
+    "id,title,content,content,tags,guidelines_type,site_sections,acf,layout,authors,notice,nice_accredited,funding_type";
 
   let url = `${state.auth.WP_HOST}wp-json/wp/v2/funding_awards?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
 

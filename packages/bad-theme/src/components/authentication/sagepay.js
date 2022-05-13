@@ -3,7 +3,7 @@ import { connect } from "frontity";
 
 import { v4 as uuidv4 } from "uuid";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState } from "../../context";
+import { useAppDispatch, useAppState, fetchDataHandler } from "../../context";
 
 function blankForm() {
   return {
@@ -65,7 +65,7 @@ const Sagepay = ({ state, actions, libraries }) => {
       };
       e.preventDefault();
 
-      let sage = await fetch(request.url, request);
+      let sage = await fetchDataHandler({ path: request.url, state });
       if (sage.ok) {
         sage = await sage.json();
         let sageResult = sage.data.split("\r\n");

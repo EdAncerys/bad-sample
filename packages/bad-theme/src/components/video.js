@@ -23,6 +23,7 @@ import {
   muiQuery,
   setCreateAccountModalAction,
   setErrorAction,
+  fetchDataHandler,
 } from "../context";
 
 const Video = ({ state, actions, libraries }) => {
@@ -92,12 +93,8 @@ const Video = ({ state, actions, libraries }) => {
         isActiveUser.contactid +
         "/" +
         post.acf.event_id;
-      console.log("URL", url);
-      const fetching = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      });
+
+      const fetching = await fetchDataHandler({ path: url, state });
 
       if (fetching.ok) {
         const json = await fetching.json();
@@ -149,11 +146,11 @@ const Video = ({ state, actions, libraries }) => {
       uappUrl +
       state.router.link +
       "?sagepay=true";
-    const fetchVendorId = await fetch(url, {
+
+    const fetchVendorId = await fetchDataHandler({
+      path: url,
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
+      state,
     });
 
     if (fetchVendorId.ok) {
@@ -188,9 +185,8 @@ const Video = ({ state, actions, libraries }) => {
         // Example URL: https://player.vimeo.com/video/382577680?h=8f166cf506&color=5b89a3&title=0&byline=0&portrait=0
         const reg = /\d+/g;
         const videoId = video_url.match(reg);
-        const fetchVideoData = await fetch(
-          `https://vimeo.com/api/v2/video/${videoId[0]}.json`
-        );
+        const path = `https://vimeo.com/api/v2/video/${videoId[0]}.json`;
+        const fetchVideoData = await fetchDataHandler({ path, state });
 
         if (fetchVideoData.ok) {
           const json = await fetchVideoData.json();

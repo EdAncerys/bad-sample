@@ -34,6 +34,7 @@ import {
   setErrorAction,
   loginAction,
   muiQuery,
+  fetchDataHandler,
 } from "../../context";
 
 const Card = ({
@@ -282,9 +283,9 @@ const Card = ({
       const reg = /\d+/g;
       const videoId = video_url.match(reg);
 
-      const fetchVideoData = await fetch(
-        `https://vimeo.com/api/v2/video/${videoId[0]}.json`
-      );
+      const path = `https://vimeo.com/api/v2/video/${videoId[0]}.json`;
+      const fetchVideoData = await fetchDataHandler({ path, state });
+
       if (fetchVideoData.ok) {
         const json = await fetchVideoData.json();
         setVimeoCover(json[0].thumbnail_large);
@@ -401,7 +402,7 @@ const Card = ({
         ...styles.card,
         backgroundColor: backgroundColor || colors.white,
         width: cardWidth || "100%",
-        height: videoArchive || heroBanner ? null : CARD_HEIGHT,
+        height: videoArchive || heroBanner ? "auto" : CARD_HEIGHT,
         minHeight: heroBanner
           ? CARD_HEIGHT
           : !lg

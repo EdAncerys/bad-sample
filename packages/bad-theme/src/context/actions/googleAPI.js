@@ -18,7 +18,8 @@ export const googleAutocompleteAction = async ({ state, query }) => {
   };
 
   try {
-    const data = await fetch(URL, requestOptions);
+    const data = await fetchDataHandler({ path, state });
+    await fetch(URL, requestOptions);
     const result = await data.json();
 
     if (result.status === "OK") {

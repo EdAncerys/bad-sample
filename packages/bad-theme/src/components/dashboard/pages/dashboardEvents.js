@@ -18,6 +18,7 @@ import {
   setGoToAction,
   getEventsData,
   handleSortFilter,
+  fetchDataHandler,
 } from "../../../context";
 
 const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
@@ -42,14 +43,9 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
       if (!isActiveUser) return null;
       const { contactid } = isActiveUser;
       const jwt = await authenticateAppAction({ dispatch, refreshJWT, state });
-      const fetchUserEvents = await fetch(
-        state.auth.APP_HOST + "/videvent/" + contactid + "/entities",
-        {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
-        }
-      );
+
+      const path = state.auth.APP_HOST + "/videvent/" + contactid + "/entities";
+      const fetchUserEvents = await fetchDataHandler({ path, state });
 
       if (fetchUserEvents.ok) {
         let filteredEvents = [];

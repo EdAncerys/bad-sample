@@ -63,6 +63,7 @@ export const useB2CLogin = ({ state, actions }) => {
       items[0] = JSON.parse(atob(items[0]));
       items[1] = JSON.parse(atob(items[1]));
 
+      console.log("🐞 items", hash);
       console.log("🐞 items", items);
       console.log("🐞 ", items[0]);
       console.log("🐞 ", items[1]);

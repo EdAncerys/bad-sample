@@ -11,7 +11,12 @@ import MapsComponent from "./maps/maps";
 import Loading from "./loading";
 
 // CONTEXT --------------------------------------------------------------------------
-import { useAppState, authenticateAppAction, useAppDispatch } from "../context";
+import {
+  useAppState,
+  authenticateAppAction,
+  useAppDispatch,
+  fetchDataHandler,
+} from "../context";
 
 const FindADermatologist = ({ state, block }) => {
   const marginVertical = state.theme.marginVertical;
@@ -44,11 +49,8 @@ const FindADermatologist = ({ state, block }) => {
         "/catalogue/fad/" +
         post_code +
         `?limit=${query_limit.current}`;
-      const fetching = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      });
+      const fetching = await fetchDataHandler({ path: url, state });
+
       if (fetching.ok) {
         const json = await fetching.json();
         const data = json.data;
@@ -69,15 +71,8 @@ const FindADermatologist = ({ state, block }) => {
 
     const handleFocusOnThePostCode = async () => {
       const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-
-      const post_code = await fetch(
-        state.auth.APP_HOST + "/catalogue/ukpostcode/" + query.value,
-        {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
-        }
-      );
+      const path = state.auth.APP_HOST + "/catalogue/ukpostcode/" + query.value;
+      const post_code = await fetchDataHandler({ path, state });
 
       if (post_code.ok) {
         const json = await post_code.json();
@@ -92,11 +87,7 @@ const FindADermatologist = ({ state, block }) => {
       const jwt = await authenticateAppAction({ dispatch, refreshJWT, state });
 
       const url = state.auth.APP_HOST + "/catalogue/fad";
-      const fetching = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      });
+      const fetching = await fetchDataHandler({ path: url, state });
 
       if (fetching.ok) {
         const json = await fetching.json();
@@ -123,11 +114,7 @@ const FindADermatologist = ({ state, block }) => {
       "/catalogue/fad/" +
       post_code +
       `?limit=5&skip=${query_limit.current}`;
-    const more = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-    });
+    const more = await fetchDataHandler({ path: url, state });
 
     if (more.ok) {
       const json = await more.json();

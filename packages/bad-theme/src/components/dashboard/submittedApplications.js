@@ -12,6 +12,7 @@ import {
   muiQuery,
   authenticateAppAction,
   setErrorAction,
+  fetchDataHandler,
 } from "../../context";
 
 const SubmittedApplications = ({ state, actions, libraries }) => {
@@ -85,18 +86,18 @@ const SubmittedApplications = ({ state, actions, libraries }) => {
         ? "/sagepay/test/application/"
         : "/sagepay/live/application/";
 
-    const fetchVendorId = await fetch(
+    const path =
       state.auth.APP_HOST +
-        sagepay_url +
-        sage_id +
-        `?redirecturl=${url}/payment-confirmation/?redirect=${state.router.link}`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      }
-    );
+      sagepay_url +
+      sage_id +
+      `?redirecturl=${url}/payment-confirmation/?redirect=${state.router.link}`;
+    const fetchVendorId = await fetchDataHandler({
+      path,
+      method: "POST",
+      body: appCredentials,
+      state,
+    });
+
     if (fetchVendorId.ok) {
       const json = await fetchVendorId.json();
       const url =

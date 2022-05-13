@@ -1,7 +1,12 @@
 import { useState, useEffect, useReducer, useCallback } from "react";
 import { connect } from "frontity";
 
-import { muiQuery, setErrorAction, useAppDispatch } from "../../context";
+import {
+  muiQuery,
+  setErrorAction,
+  useAppDispatch,
+  fetchDataHandler,
+} from "../../context";
 import { handleGetCookie } from "../../helpers/cookie";
 import Loading from "../loading";
 function enhancedReducer(fadState, updateArg) {
@@ -38,14 +43,9 @@ const FindDermatologistOptions = ({ state, actions, libraries }) => {
       const cookie = await handleGetCookie({ name: `BAD-WebApp` });
       const { contactid, jwt } = cookie;
 
-      const fetchData = await fetch(
-        state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`,
-        {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
-        }
-      );
+      const path =
+        state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
+      const fetchData = await fetchDataHandler({ path, state });
 
       if (fetchData.ok) {
         const json = await fetchData.json();
@@ -107,15 +107,12 @@ const FindDermatologistOptions = ({ state, actions, libraries }) => {
     const cookie = await handleGetCookie({ name: `BAD-WebApp` });
     const { contactid, jwt } = cookie;
 
-    const submitUpdate = await fetch(
-      state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`,
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      }
-    );
+    const path = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
+    const submitUpdate = await fetchDataHandler({
+      path,
+      method: "PATCH",
+      state,
+    });
 
     if (submitUpdate.ok) {
       const json = await submitUpdate.json();

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState } from "../../context";
+import { useAppDispatch, useAppState, fetchDataHandler } from "../../context";
 
 const Wileys = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -31,7 +31,8 @@ const Wileys = ({ state, actions, libraries }) => {
     // --------------------------------------------------------------------------
     if (doi) request.body = JSON.stringify({ doi });
     // let wiley = await axios.post(request);
-    let wiley = await fetch(request.url, request);
+
+    let wiley = await fetchDataHandler({ path: request.url, state });
     if (wiley.ok) {
       wiley = await wiley.json();
       return setiFrameSrc(wiley.data);
@@ -89,10 +90,7 @@ const Wileys = ({ state, actions, libraries }) => {
           <div className="row">
             <label className="col-md-2 col-form-label">&nbsp;</label>
             <div className="col-md-3 ">
-              <div
-                className="btn-info form-control"
-                onClick={executeScript}
-              >
+              <div className="btn-info form-control" onClick={executeScript}>
                 Click here to get URL
               </div>
             </div>
