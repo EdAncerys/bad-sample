@@ -24,10 +24,14 @@ const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
   } = newsCarousel;
   const [category, setCategory] = useState(null);
 
-  useEffect(async () => {
-    let categoryList = await getMediaCategories({ state });
+  useEffect(() => {
+    console.log("USEFFECT TRIGGERED");
+    // async function getCategories() {
+    //   let categoryList = await getMediaCategories({ state });
 
-    setCategory(categoryList);
+    //   setCategory(categoryList);
+    // }
+    // if (!category) getCategories();
   }, []);
 
   // SERVERS ---------------------------------------------
