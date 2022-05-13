@@ -1,3 +1,4 @@
+import { fetchDataHandler } from "../helpers/fetchDataHandler";
 import { handleSortFilter } from "../helpers/eventSortFilter";
 import { AppProvider, useAppDispatch, useAppState } from "./context";
 import {
@@ -226,4 +227,5 @@ export {
   getEventSpecialitys,
   getEventGrades,
   handleSortFilter,
+  fetchDataHandler,
 };

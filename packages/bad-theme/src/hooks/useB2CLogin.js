@@ -63,14 +63,15 @@ export const useB2CLogin = ({ state, actions }) => {
       items[0] = JSON.parse(atob(items[0]));
       items[1] = JSON.parse(atob(items[1]));
 
-      console.log("🐞 ", JSON.parse(atob(items[0])));
-      console.log("🐞 ", JSON.parse(atob(items[1])));
-      console.log("🐞 ", JSON.parse(atob(items[3])));
+      console.log("🐞 items", items);
+      console.log("🐞 ", items[0]);
+      console.log("🐞 ", items[1]);
+      console.log("🐞 ", items[2]);
 
       if (Array.isArray(items[1].emails)) {
         const email = items[1].emails[0];
-        // setContactEmail(items[1].emails[0]);
-        // console.log("🐞 email ", email);
+        console.log("🐞 email ", email); // debug
+
         const user = await getUserDataByEmail({
           state,
           dispatch,
@@ -79,10 +80,10 @@ export const useB2CLogin = ({ state, actions }) => {
         });
         if (!user) throw new Error("Error getting user data.");
       } else {
-        // console.log("🐞 error. Redirect to home path");
+        console.log("🐞 error. No email found. Redirect to home path");
       }
     } catch (error) {
-      // console.log(error);
+      console.log(error);
     } finally {
       // get redirect url from cookie
       const redirectUrl = handleGetCookie({ name: "loginPath" });
