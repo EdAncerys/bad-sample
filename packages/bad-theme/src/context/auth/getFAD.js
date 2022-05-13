@@ -1,4 +1,4 @@
-import { authenticateAppAction, setFetchAction } from "../index";
+import { setFetchAction, fetchDataHandler } from "../index";
 
 export const getFadAction = async ({ state, dispatch, page, refreshJWT }) => {
   // console.log("getFadAction triggered");
@@ -8,18 +8,12 @@ export const getFadAction = async ({ state, dispatch, page, refreshJWT }) => {
 
   try {
     setFetchAction({ dispatch, isFetching: true });
-    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-    if (!jwt) throw new Error("error authenticating app");
-
-    const requestOptions = {
-      method: "GET",
-      headers: { Authorization: `Bearer ${jwt}` },
-    };
 
     // while result length is equal perPage, then fetch next page
-    let URL =
+    let path =
       state.auth.APP_HOST + `/catalogue/fad?limit=${perPage}&skip=${skip}&md`;
-    const data = await fetch(URL, requestOptions);
+    const data = await fetchDataHandler({ path, state });
+
     if (!data) throw new Error("error fetching data form API");
     const result = await data.json();
 
@@ -40,17 +34,9 @@ export const getFADSearchAction = async ({
   // console.log("getFADSearchAction triggered");
 
   try {
-    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-    if (!jwt) throw new Error("error authenticating app");
-
-    const requestOptions = {
-      method: "GET",
-      headers: { Authorization: `Bearer ${jwt}` },
-    };
-
     // while result length is equal perPage, then fetch next page
-    let URL = state.auth.APP_HOST + `/catalogue/fad?md&search=${query}`;
-    const data = await fetch(URL, requestOptions);
+    let path = state.auth.APP_HOST + `/catalogue/fad?md&search=${query}`;
+    const data = await fetchDataHandler({ path, state });
     if (!data) throw new Error("error fetching data form API");
     const result = await data.json();
 
@@ -74,19 +60,11 @@ export const getAllFadAction = async ({
   let responseLength = perPage;
 
   try {
-    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-    if (!jwt) throw new Error("error authenticating app");
-
-    const requestOptions = {
-      method: "GET",
-      headers: { Authorization: `Bearer ${jwt}` },
-    };
-
     while (responseLength === perPage) {
       // while result length is equal perPage, then fetch next page
-      let URL =
+      let path =
         state.auth.APP_HOST + `/catalogue/fad?limit=${perPage}&skip=${skip}`;
-      const data = await fetch(URL, requestOptions);
+      const data = await fetchDataHandler({ path, state });
       if (!data) throw new Error("error fetching data form API");
       const result = await data.json();
 

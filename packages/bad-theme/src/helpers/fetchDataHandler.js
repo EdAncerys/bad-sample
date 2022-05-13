@@ -7,6 +7,7 @@ export const fetchDataHandler = async ({
   body,
   state,
   options,
+  headers,
 }) => {
   // -----------------------------------------------
   // 📌 CUSTOM FETCH HANDLER
@@ -19,22 +20,24 @@ export const fetchDataHandler = async ({
   if (state) jwt = await authenticateAppAction({ state });
 
   // 📌 HEADER  Options
-  let headers = {
+  let headerOptions = {
     "Content-Type": "application/json",
     Accept: accept,
     Authorization: `Bearer ${jwt}`,
     // set cash control headers to 7 days if method is GET
     ...(method === "GET" ? { "Cache-Control": "s-maxage=86400" } : {}),
-    // add short term cash control headers to GET requests
+    // add custom headers if provided
+    ...headers,
   };
 
   // 📌 Options
   let requestOptions = {
     method,
-    headers,
-    // if otions are passed, use them instead of the default ones
-    ...(options ? options : {}),
-    // add credentials to the request
+    headerOptions,
+    // add options if provided
+    ...options,
+    // 🍪 add credentials to the request to incloode cookies
+    credentials: "include",
   };
 
   // 📌 BODY Options
@@ -49,6 +52,7 @@ export const fetchDataHandler = async ({
     if (!path) throw new Error("No path provided");
     // 📌 make a fetch request to the backend api with the given path
     const response = await fetch(path, requestOptions);
+
     // // 📌 get the response body
     // const data = await response.json();
     // console.log("🐞 ", data);

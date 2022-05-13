@@ -1,4 +1,4 @@
-import { authenticateAppAction } from "../index";
+import { fetchDataHandler } from "../index";
 
 export const getWileyAction = async ({
   state,
@@ -7,7 +7,6 @@ export const getWileyAction = async ({
   isActiveUser,
   isFullAccess,
   url,
-  refreshJWT,
 }) => {
   // console.log("getWileyAction triggered");
 
@@ -17,24 +16,19 @@ export const getWileyAction = async ({
     isValidId = isActiveUser.contactid;
   }
 
-  const URL = state.auth.APP_HOST + `/wiley?contactid=${isValidId}`;
-  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-  let body = JSON.stringify({ doi: `doi/${doi}` }); // individual post access auth link
-  if (isFullAccess) body = JSON.stringify({ target: url }); // full access auth link
-
-  const requestOptions = {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${jwt}`,
-      "Content-Type": "application/json",
-    },
-    body,
-  };
+  const path = state.auth.APP_HOST + `/wiley?contactid=${isValidId}`;
+  let body = { doi: `doi/${doi}` }; // individual post access auth link
+  if (isFullAccess) body = { target: url }; // full access auth link
 
   try {
-    const data = await fetch(URL, requestOptions);
+    const data = await fetchDataHandler({
+      path,
+      method: "POST",
+      body,
+      state,
+    });
+
     const wiley = await data.json();
-    console.log("WILLEYE", wiley.data);
     if (wiley.success) return wiley.data;
 
     return null;

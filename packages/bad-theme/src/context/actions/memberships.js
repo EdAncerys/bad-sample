@@ -5,6 +5,7 @@ import {
   loginAction,
   setErrorAction,
   authenticateAppAction,
+  fetchDataHandler,
 } from "../index";
 
 export const getMembershipDataAction = async ({ state, actions }) => {
@@ -210,7 +211,7 @@ export const handleValidateMembershipChangeAction = async ({
     const { contactid } = isActiveUser;
 
     // ⏬ check if user have application change of category submitted
-    const URL =
+    const path =
       state.auth.APP_HOST +
       `/catalogue/data/core_membershipapplications?$filter=statuscode eq 1 and _core_contactid_value eq ${contactid} and _bad_existingsubscriptionid_value eq ${core_membershipsubscriptionid}&$select=_bad_existingsubscriptionid_value`;
     const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
@@ -220,7 +221,7 @@ export const handleValidateMembershipChangeAction = async ({
       headers: { Authorization: `Bearer ${jwt}` },
     };
 
-    const data = await fetch(URL, requestOptions);
+    const data = await fetchDataHandler({ path, state });
     const result = await data.json();
 
     // ⏬ submitted application data for change of category

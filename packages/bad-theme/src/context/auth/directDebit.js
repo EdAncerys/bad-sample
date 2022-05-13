@@ -1,4 +1,4 @@
-import { authenticateAppAction } from "../index";
+import { authenticateAppAction, fetchDataHandler } from "../index";
 
 export const getDirectDebitAction = async ({
   state,
@@ -8,16 +8,12 @@ export const getDirectDebitAction = async ({
 }) => {
   // console.log("getDirectDebitAction triggered");
 
-  const URL = state.auth.APP_HOST + `/bankaccount/${id}`;
+  const path = state.auth.APP_HOST + `/bankaccount/${id}`;
   const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
-  const requestOptions = {
-    method: "GET",
-    headers: { Authorization: `Bearer ${jwt}` },
-  };
-
   try {
-    const response = await fetch(URL, requestOptions);
+    const response = await fetchDataHandler({ path, state });
+
     const data = await response.json();
     // console.log("getDirectDebitAction data", data); // debug
 
@@ -40,17 +36,12 @@ export const getInvoiceAction = async ({
   if (!contactid) throw new Error("Cannot get receipts. Contactid is missing.");
 
   const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-  const URL =
+  const path =
     state.auth.APP_HOST +
     `/utils/pdf/sample?contactid=${contactid}&token=${jwt}`;
 
-  const requestOptions = {
-    method: "GET",
-    headers: { Authorization: `Bearer ${jwt}` },
-  };
-
   try {
-    const response = await fetch(URL, requestOptions);
+    const response = await fetchDataHandler({ path, state });
 
     if (response.ok) return response.url;
   } catch (error) {
@@ -72,17 +63,12 @@ export const getProofOfMembershipAction = async ({
     throw new Error("Cannot get membership proof. Contactid is missing.");
 
   const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-  const URL =
+  const path =
     state.auth.APP_HOST +
     `/utils/pdf/confirm?contactid=${contactid}&subid=${core_membershipsubscriptionid}&token=${jwt}`;
 
-  const requestOptions = {
-    method: "GET",
-    headers: { Authorization: `Bearer ${jwt}` },
-  };
-
   try {
-    const response = await fetch(URL, requestOptions);
+    const response = await fetchDataHandler({ path, state });
 
     if (response.ok) return response.url;
   } catch (error) {
@@ -99,22 +85,19 @@ export const createDirectDebitAction = async ({
 }) => {
   // console.log("createDirectDebitAction triggered");
 
-  const URL = state.auth.APP_HOST + `/bankaccount/${id}`;
+  const path = state.auth.APP_HOST + `/bankaccount/${id}`;
   const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   // console.log("data", data); // debug
 
-  const requestOptions = {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${jwt}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  };
-
   try {
-    const response = await fetch(URL, requestOptions);
+    const response = await fetchDataHandler({
+      path,
+      method: "POST",
+      body: data,
+      headers: { "Content-Type": "application/json" },
+      state,
+    });
     const data = await response.json();
     // console.log("createDirectDebitAction data", data); // debug
 

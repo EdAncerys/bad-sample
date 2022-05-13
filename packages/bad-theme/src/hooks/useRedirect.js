@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { setRedirectAction, setGoToAction } from "../context";
+import { setRedirectAction, setGoToAction, fetchDataHandler } from "../context";
 
 export const useRedirect = ({
   state,
@@ -16,12 +16,13 @@ export const useRedirect = ({
 
   useEffect(async () => {
     if (redirects) return null; // skip if redirects are already set
-    // ⬇️  get redirects url from wp
-    const url =
+    // ⬇️  get redirects path from wp
+    const path =
       state.auth.WP_HOST + "/wp-json/acf/v3/options/options/301_redirects";
     console.log("SET triggered");
     // 📌  PRE-FETCH redirects from wp
-    const response = await fetch(url);
+    const response = await fetchDataHandler({ path, state });
+
     const data = await response.json();
     if (!data["301_redirects"]) return;
     // 📌  SET redirects to state

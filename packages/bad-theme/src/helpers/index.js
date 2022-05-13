@@ -3,6 +3,7 @@ import {
   authenticateAppAction,
   getUserStoreAction,
   getUserDataByContactId,
+  fetchDataHandler,
 } from "../context";
 
 const fetchCompleteHandler = ({ initialState }) => {
@@ -40,14 +41,16 @@ export const authCookieActionBeforeCSR = async ({
     const dynamicAppsURL =
       state.auth.APP_HOST + `/applications/billing/` + contactid;
 
-    const requestOptions = {
-      method: "GET",
-      headers: { Authorization: "Bearer " + jwt },
-    };
-
     try {
-      const userResponse = await fetch(catalogueURL, requestOptions); // fetch user data
-      const appsResponse = await fetch(dynamicAppsURL, requestOptions); // fetch dynamic application data
+      const userResponse = await fetchDataHandler({
+        path: catalogueURL,
+        state,
+      }); // fetch user data
+      const appsResponse = await fetchDataHandler({
+        path: dynamicAppsURL,
+        state,
+      }); // fetch dynamic application data
+
       if (!userResponse.ok)
         throw new Error(`${userResponse.statusText} ${userResponse.status}`); // fetch user data from Dynamics
       const userData = await userResponse.json();

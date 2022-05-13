@@ -1,4 +1,3 @@
-import { atom, useAtom } from "jotai";
 import { handleSetCookie, handleGetCookie } from "../../helpers/cookie";
 import {
   setGoToAction,
@@ -6,6 +5,7 @@ import {
   getUserApplicationAction,
   setFetchAction,
   setLoginModalAction,
+  fetchDataHandler,
 } from "../index";
 
 // --------------------------------------------------------------------------------
@@ -59,7 +59,7 @@ export const loginAction = async ({ state }) => {
       state.auth.B2C +
       `${redirectPath}&scope=openid&response_type=id_token&prompt=${action}`;
     const urlPath = state.router.link;
-    console.log("LOGIN URL + REDIRECT", redirectPath);
+    console.log("LOGIN path + REDIRECT", redirectPath);
     // get current url path and store in cookieValue
     handleSetCookie({
       name: "loginPath",
@@ -95,16 +95,16 @@ export const authenticateAppAction = async ({
   try {
     if (appTaken) {
       // console.log("🐞 REFRESH TAKEN FOUND"); // debug
-      const URL = state.auth.APP_HOST + `/users/refresh`;
-      const requestOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          RefreshToken: refreshTaken,
-        }),
-      };
+      const path = state.auth.APP_HOST + `/users/refresh`;
 
-      const data = await fetch(URL, requestOptions);
+      const data = await fetchDataHandler({
+        path,
+        method: "POST",
+        body: { RefreshToken: refreshTaken },
+        headers: { "Content-Type": "application/json" },
+        state,
+      });
+
       const response = await data.json();
 
       if (response.success) {
@@ -130,18 +130,18 @@ export const authenticateAppAction = async ({
       // console.log("🐞 REFRESH TAKEN NOT PRESENT OR NOT VALID"); // debug
       const username = state.auth.APP_USERNAME;
       const password = state.auth.APP_PASSWORD;
-      let URL = state.auth.APP_HOST + `/users/login`;
-      let appCredentials = JSON.stringify({
-        username,
-        password,
-      });
-      const requestOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: appCredentials,
-      };
+      let path = state.auth.APP_HOST + `/users/login`;
 
-      const data = await fetch(URL, requestOptions);
+      const data = await fetchDataHandler({
+        path,
+        method: "POST",
+        body: {
+          username,
+          password,
+        },
+        headers: { "Content-Type": "application/json" },
+        state,
+      });
       const response = await data.json();
 
       if (response.success) {
@@ -197,18 +197,16 @@ export const getUserAction = async ({ state, dispatch, jwt, transId }) => {
 export const getUserContactId = async ({ state, dispatch, jwt, transId }) => {
   // console.log("getUserContactId triggered");
 
-  const URL = state.auth.DYNAMICS_BRIDGE;
-  const requestOptions = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + jwt,
-    },
-    body: JSON.stringify({ transId }),
-  };
+  const path = state.auth.DYNAMICS_BRIDGE;
 
   try {
-    const data = await fetch(URL, requestOptions);
+    const data = await fetchDataHandler({
+      path,
+      method: "POST",
+      body: { transId },
+      headers: { "Content-Type": "application/json" },
+      state,
+    });
     const response = await data.json();
     if (response.success) {
       return response.data.user.contactid;
@@ -227,15 +225,10 @@ export const getUserDataByContactId = async ({
 }) => {
   // console.log("getUserDataByContactId triggered");
 
-  const URL = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
-
-  const requestOptions = {
-    method: "GET",
-    headers: { Authorization: "Bearer " + jwt },
-  };
+  const path = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
 
   try {
-    const data = await fetch(URL, requestOptions);
+    const data = await fetchDataHandler({ path, state });
     if (!data) throw new Error("Error getting userData.");
     const response = await data.json();
 
@@ -258,7 +251,6 @@ export const getUserDataByContactId = async ({
       name: state.auth.COOKIE_NAME,
       value: { jwt, contactid },
     });
-    seJWTAction({ dispatch, jwt });
     return response;
   } catch (error) {
     // console.log("error", error);
@@ -273,7 +265,7 @@ export const getUserDataByEmail = async ({
 }) => {
   // console.log("getUserDataByEmail triggered");
 
-  const URL =
+  const path =
     state.auth.APP_HOST +
     `/catalogue/data/contacts?$filter=emailaddress1 eq '${email}'`;
 
@@ -281,12 +273,7 @@ export const getUserDataByEmail = async ({
     const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
     if (!jwt) throw new Error("Cannot logon to server.");
 
-    const requestOptions = {
-      method: "GET",
-      headers: { Authorization: "Bearer " + jwt },
-    };
-
-    const data = await fetch(URL, requestOptions);
+    const data = await fetchDataHandler({ path, state });
     if (!data) throw new Error("Error getting userData.");
     const response = await data.json();
 
@@ -323,15 +310,11 @@ export const getUserDataByEmail = async ({
 export const getUserDataFromDynamics = async ({ state, jwt, contactid }) => {
   // console.log("getUserDataFromDynamics triggered");
 
-  const URL = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
-
-  const requestOptions = {
-    method: "GET",
-    headers: { Authorization: "Bearer " + jwt },
-  };
+  const path = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
 
   try {
-    const data = await fetch(URL, requestOptions);
+    const data = await fetchDataHandler({ path, state });
+
     const response = await data.json();
     if (!response) throw new Error("Error getting userData.");
     // console.log("⏬ FED data successfully fetched ⏬");

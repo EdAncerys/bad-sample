@@ -1,8 +1,4 @@
-import {
-  authenticateAppAction,
-  setFetchAction,
-  setEnquireAction,
-} from "../index";
+import { setFetchAction, setEnquireAction } from "../index";
 
 export const sendEmailEnquireAction = async ({
   state,
@@ -12,13 +8,11 @@ export const sendEmailEnquireAction = async ({
   recipients,
   emailSubject,
   template,
-  refreshJWT,
 }) => {
   // console.log("enquireAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
-  const URL = state.auth.APP_HOST + `/email`;
-  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
+  const path = state.auth.APP_HOST + `/email`;
 
   try {
     if (!recipients) throw new Error("No Recipients Provided");
@@ -49,13 +43,12 @@ export const sendEmailEnquireAction = async ({
         form.append("attachments", file, file.name);
       });
 
-    const requestOptions = {
+    const data = await fetchDataHandler({
+      path,
       method: "POST",
-      headers: { Authorization: `Bearer ${jwt}` },
       body: form,
-    };
-
-    const data = await fetch(URL, requestOptions);
+      state,
+    });
     const response = await data.json();
 
     if (response.success) {

@@ -17,9 +17,11 @@ export const googleAutocompleteAction = async ({ state, query }) => {
     },
   };
 
+  // 📌 default to return empty array if no query is provided
+  return [];
+
   try {
     const data = await fetchDataHandler({ path, state });
-    await fetch(URL, requestOptions);
     const result = await data.json();
 
     if (result.status === "OK") {

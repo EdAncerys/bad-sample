@@ -1,20 +1,14 @@
-import { authenticateAppAction } from "../index";
+import { fetchDataHandler } from "../index";
 
 export const getEthnicityAction = async ({ state, dispatch, refreshJWT }) => {
   // console.log("getEthnicityAction triggered");
 
   try {
-    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-    if (!jwt) throw new Error("error authenticating app");
-
-    const URL =
+    const path =
       state.auth.APP_HOST + `/catalogue/fields/contact?field=py3_ethnicity`;
-    const requestOptions = {
-      method: "GET",
-      headers: { Authorization: `Bearer ${jwt}` },
-    };
 
-    const data = await fetch(URL, requestOptions);
+    const data = await fetchDataHandler({ path, state });
+
     if (!data) throw new Error("error fetching data form API");
     let result = await data.json();
 

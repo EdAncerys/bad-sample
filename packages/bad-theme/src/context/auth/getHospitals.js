@@ -1,24 +1,14 @@
-import { authenticateAppAction } from "../index";
+import { authenticateAppAction, fetchDataHandler } from "../index";
 
-export const getHospitalsAction = async ({
-  state,
-  input,
-  dispatch,
-  refreshJWT,
-}) => {
+export const getHospitalsAction = async ({ state, input, dispatch }) => {
   // console.log("getHospitalsAction triggered");
 
-  const URL =
+  const path =
     state.auth.APP_HOST + `/catalogue/lookup/hospitals?search=${input}`;
-  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-
-  const requestOptions = {
-    method: "GET",
-    headers: { Authorization: `Bearer ${jwt}` },
-  };
 
   try {
-    const data = await fetch(URL, requestOptions);
+    const data = await fetchDataHandler({ path, state });
+
     const result = await data.json();
 
     if (result.success) {
@@ -29,26 +19,15 @@ export const getHospitalsAction = async ({
   }
 };
 
-export const getHospitalNameAction = async ({
-  state,
-  id,
-  dispatch,
-  refreshJWT,
-}) => {
+export const getHospitalNameAction = async ({ state, id, dispatch }) => {
   // console.log("getHospitalsAction triggered");
 
-  const URL =
+  const path =
     state.auth.APP_HOST +
     `/catalogue/data/accounts(${id})?$select=name,address1_composite,customertypecode,customertypecode`;
-  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-
-  const requestOptions = {
-    method: "GET",
-    headers: { Authorization: `Bearer ${jwt}` },
-  };
 
   try {
-    const data = await fetch(URL, requestOptions);
+    const data = await fetchDataHandler({ path, state });
     const result = await data.json();
 
     if (result) {
