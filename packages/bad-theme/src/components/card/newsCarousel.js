@@ -31,7 +31,7 @@ const NewsCarousel = ({
   const [category, setCategory] = useState(categoryList);
   console.log(categoryList);
   useEffect(() => {
-    console.log("USEFFECT TRIGGERED");
+    // console.log("USEFFECT TRIGGERED");
     setCategory(categoryList);
     // async function getCategories() {
     //   let categoryList = await getMediaCategories({ state });
