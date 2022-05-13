@@ -183,7 +183,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   // SERVERS ----------------------------------------------------------------
   const ServeAmountFilter = () => {
-    let data = Object.values(state.source[postPath]);
+    let data = Object.values(postListData);
     // set dateFilter to post dates
     let allFundings = [];
     data.filter((item) => {
@@ -223,7 +223,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   };
 
   const ServeClosingDates = () => {
-    let data = Object.values(state.source[postPath]);
+    let data = Object.values(postListData);
     // set dateFilter to post dates
     let allDates = [];
     data.filter((item) => {
