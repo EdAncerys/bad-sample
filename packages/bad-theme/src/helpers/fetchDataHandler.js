@@ -23,11 +23,11 @@ export const fetchDataHandler = async ({
   let headerOptions = {
     "Content-Type": "application/json",
     Accept: accept,
-    Authorization: `Bearer ${jwt}`,
+    // Authorization: `Bearer ${jwt}`,
     // add CORS headers
-    "Access-Control-Allow-Origin": "*",
+    // "Access-Control-Allow-Origin": "*",
     // set cash control headers to 7 days if method is GET
-    ...(method === "GET" ? { "Cache-Control": "s-maxage=86400" } : {}),
+    // ...(method === "GET" ? { "Cache-Control": "s-maxage=86400" } : {}),
     // add custom headers if provided
     ...headers,
   };

@@ -1,5 +1,6 @@
 import { fetchDataHandler } from "../helpers/fetchDataHandler";
 import { handleSortFilter } from "../helpers/eventSortFilter";
+import { setAuthenticationCookieAction } from "../helpers/setAuthenticationCookie";
 import { AppProvider, useAppDispatch, useAppState } from "./context";
 import {
   setGoToAction,
@@ -226,4 +227,5 @@ export {
   getEventGrades,
   handleSortFilter,
   fetchDataHandler,
+  setAuthenticationCookieAction,
 };

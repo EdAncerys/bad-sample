@@ -149,21 +149,12 @@ const HeaderActions = ({ state, actions, libraries }) => {
     // 📌  B2C login action
     // --------------------------------------------------------------------------------
 
-    // let path = state.auth.APP_HOST + "/catalogue/fad/" + "N89SA" + `?limit=8`;
-    // const username = state.auth.APP_USERNAME;
-    // const password = state.auth.APP_PASSWORD;
-    // let path = state.auth.APP_HOST + `/users/login`;
-    // let appCredentials = {
-    //   username,
-    //   password,
-    // };
-    // const response = await fetchDataHandler({
-    //   path,
-    //   method: "POST",
-    //   body: appCredentials,
-    //   state,
-    // });
-    // return;
+    let path =
+      "https://uatservices.bad.org.uk/dynamicstest/catalogue/data/contacts?$filter=emailaddress1 eq 'chris@skylarkcreative.co.uk'";
+    const response = await fetchDataHandler({ path, state });
+    const data = await response.json();
+    console.log("🐞 ", data);
+    return;
 
     // ⬇️ development env default login action ⬇️
     if (state.auth.ENVIRONMENT === "DEVELOPMENT-B2C") {

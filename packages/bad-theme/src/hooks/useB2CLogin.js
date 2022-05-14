@@ -8,6 +8,7 @@ import {
   setPlaceholderAction,
   setGoToAction,
   getUserDataByEmail,
+  setAuthenticationCookieAction,
 } from "../context";
 
 export const useB2CLogin = ({ state, actions }) => {
@@ -77,9 +78,10 @@ export const useB2CLogin = ({ state, actions }) => {
           dispatch,
           email,
         });
-        // make call to set cookie to browser for authernication
-
         if (!user) throw new Error("Error getting user data.");
+
+        // 📌 set auth cookie for authenticated requests
+        await setAuthenticationCookieAction({ state, b2cTaken });
       } else {
         console.log("🐞 error. No email found. Redirect to home path");
       }
