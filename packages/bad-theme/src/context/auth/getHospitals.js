@@ -1,4 +1,4 @@
-import { authenticateAppAction, fetchDataHandler } from "../index";
+import { fetchDataHandler } from "../index";
 
 export const getHospitalsAction = async ({ state, input, dispatch }) => {
   // console.log("getHospitalsAction triggered");

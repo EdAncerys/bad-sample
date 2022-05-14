@@ -25,13 +25,11 @@ export const loginActionViaModal = async ({
     // --------------------------------------------------------------------------
     // 📌 STEP: Log onto the API server and get the Bearer token
     // --------------------------------------------------------------------------
-    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-    if (!jwt) throw new Error("Cannot logon to server.");
 
     // --------------------------------------------------------------------------
     // 📌 STEP: Get User data from Dynamics
     // --------------------------------------------------------------------------
-    const response = await getUserAction({ state, dispatch, jwt, transId });
+    const response = await getUserAction({ state, dispatch, transId });
     if (!response) throw new Error("Error login in.");
 
     setLoginModalAction({ dispatch, loginModalAction: false });
@@ -136,17 +134,16 @@ export const authenticateAppAction = async ({ state, dispatch }) => {
   }
 };
 
-export const getUserAction = async ({ state, dispatch, jwt, transId }) => {
+export const getUserAction = async ({ state, dispatch, transId }) => {
   // console.log("getUserAction triggered");
 
   try {
-    const contactid = await getUserContactId({ state, dispatch, jwt, transId });
+    const contactid = await getUserContactId({ state, dispatch, transId });
     if (!contactid) throw new Error("Error getting contactid.");
 
     const userData = await getUserDataByContactId({
       state,
       dispatch,
-      jwt,
       contactid,
       refreshJWT,
     });
@@ -158,7 +155,7 @@ export const getUserAction = async ({ state, dispatch, jwt, transId }) => {
   }
 };
 
-export const getUserContactId = async ({ state, dispatch, jwt, transId }) => {
+export const getUserContactId = async ({ state, dispatch, transId }) => {
   // console.log("getUserContactId triggered");
 
   const path = state.auth.DYNAMICS_BRIDGE;
@@ -183,7 +180,6 @@ export const getUserContactId = async ({ state, dispatch, jwt, transId }) => {
 export const getUserDataByContactId = async ({
   state,
   dispatch,
-  jwt,
   contactid,
   refreshJWT,
 }) => {
@@ -210,11 +206,7 @@ export const getUserDataByContactId = async ({
       throw new Error("Error dynamicApps userData.");
 
     setActiveUserAction({ dispatch, isActiveUser: response });
-    // 📌 set cookie with taken & contactid
-    handleSetCookie({
-      name: state.auth.COOKIE_NAME,
-      value: { jwt, contactid },
-    });
+
     return response;
   } catch (error) {
     // console.log("error", error);
@@ -234,9 +226,6 @@ export const getUserDataByEmail = async ({
     `/catalogue/data/contacts?$filter=emailaddress1 eq '${email}'`;
 
   try {
-    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-    if (!jwt) throw new Error("Cannot logon to server.");
-
     const data = await fetchDataHandler({ path, state });
     if (!data) throw new Error("Error getting userData.");
     const response = await data.json();
@@ -258,10 +247,6 @@ export const getUserDataByEmail = async ({
         throw new Error("Error dynamicApps userData.");
 
       setActiveUserAction({ dispatch, isActiveUser: userData });
-      handleSetCookie({
-        name: state.auth.COOKIE_NAME,
-        value: { jwt, contactid },
-      });
       return userData;
     }
 
@@ -271,7 +256,7 @@ export const getUserDataByEmail = async ({
   }
 };
 
-export const getUserDataFromDynamics = async ({ state, jwt, contactid }) => {
+export const getUserDataFromDynamics = async ({ state, contactid }) => {
   // console.log("getUserDataFromDynamics triggered");
 
   const path = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;

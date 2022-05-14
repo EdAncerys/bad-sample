@@ -13,7 +13,6 @@ import EventListView from "../../eventListView";
 import {
   useAppState,
   useAppDispatch,
-  authenticateAppAction,
   muiQuery,
   setGoToAction,
   getEventsData,
@@ -42,7 +41,6 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
 
       if (!isActiveUser) return null;
       const { contactid } = isActiveUser;
-      const jwt = await authenticateAppAction({ dispatch, refreshJWT, state });
 
       const path = state.auth.APP_HOST + "/videvent/" + contactid + "/entities";
       const fetchUserEvents = await fetchDataHandler({ path, state });

@@ -11,12 +11,7 @@ import MapsComponent from "./maps/maps";
 import Loading from "./loading";
 
 // CONTEXT --------------------------------------------------------------------------
-import {
-  useAppState,
-  authenticateAppAction,
-  useAppDispatch,
-  fetchDataHandler,
-} from "../context";
+import { useAppState, useAppDispatch, fetchDataHandler } from "../context";
 
 const FindADermatologist = ({ state, block }) => {
   const marginVertical = state.theme.marginVertical;
@@ -37,12 +32,6 @@ const FindADermatologist = ({ state, block }) => {
 
   React.useEffect(async () => {
     const fetchDermatologistsByPostCode = async () => {
-      const jwt = await authenticateAppAction({
-        dispatch,
-        state,
-        dispatch,
-        refreshJWT,
-      });
       const post_code = query.value.split(" ").join("");
       const url =
         state.auth.APP_HOST +
@@ -70,7 +59,6 @@ const FindADermatologist = ({ state, block }) => {
     };
 
     const handleFocusOnThePostCode = async () => {
-      const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
       const path = state.auth.APP_HOST + "/catalogue/ukpostcode/" + query.value;
       const post_code = await fetchDataHandler({ path, state });
 
@@ -84,8 +72,6 @@ const FindADermatologist = ({ state, block }) => {
     };
 
     const fetchDermatologistsByName = async () => {
-      const jwt = await authenticateAppAction({ dispatch, refreshJWT, state });
-
       const url = state.auth.APP_HOST + "/catalogue/fad";
       const fetching = await fetchDataHandler({ path: url, state });
 
@@ -107,7 +93,6 @@ const FindADermatologist = ({ state, block }) => {
 
   const handleLoadMore = async () => {
     setLoading(true);
-    const jwt = await authenticateAppAction({ dispatch, refreshJWT, state });
     const post_code = query.value.split(" ").join("");
     const url =
       state.auth.APP_HOST +

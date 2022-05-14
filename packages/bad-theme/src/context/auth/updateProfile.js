@@ -1,5 +1,4 @@
 import {
-  authenticateAppAction,
   getUserDataByContactId,
   setFetchAction,
   fetchDataHandler,
@@ -21,7 +20,6 @@ export const updateProfileAction = async ({
   // --------------------------------------------------------------------------
   // 📌 STEP: Log onto the API server and get the Bearer token
   // --------------------------------------------------------------------------
-  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   try {
     const respose = await fetchDataHandler({
@@ -43,7 +41,6 @@ export const updateProfileAction = async ({
       await getUserDataByContactId({
         state,
         dispatch,
-        jwt,
         contactid,
         refreshJWT,
       });

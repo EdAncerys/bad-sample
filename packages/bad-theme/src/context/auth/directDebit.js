@@ -9,7 +9,6 @@ export const getDirectDebitAction = async ({
   // console.log("getDirectDebitAction triggered");
 
   const path = state.auth.APP_HOST + `/bankaccount/${id}`;
-  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   try {
     const response = await fetchDataHandler({ path, state });
@@ -86,9 +85,6 @@ export const createDirectDebitAction = async ({
   // console.log("createDirectDebitAction triggered");
 
   const path = state.auth.APP_HOST + `/bankaccount/${id}`;
-  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-
-  // console.log("data", data); // debug
 
   try {
     const response = await fetchDataHandler({

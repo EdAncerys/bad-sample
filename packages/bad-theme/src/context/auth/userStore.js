@@ -1,5 +1,4 @@
 import {
-  authenticateAppAction,
   setFetchAction,
   setApplicationDataAction,
   loginAction,
@@ -192,7 +191,6 @@ export const setCompleteUserApplicationAction = async ({
       throw new Error("Cannot set user store. Contactid is missing.");
 
     const path = state.auth.APP_HOST + `/applications/new/${contactid}`;
-    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
     const response = await fetchDataHandler({
       path,
@@ -219,7 +217,6 @@ export const setCompleteUserApplicationAction = async ({
       const userData = await getUserDataByContactId({
         state,
         dispatch,
-        jwt,
         contactid,
         refreshJWT,
       });

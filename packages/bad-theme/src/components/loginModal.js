@@ -13,7 +13,6 @@ import {
   setLoginModalAction,
   loginAction,
   getUserDataByContactId,
-  authenticateAppAction,
 } from "../context";
 
 const LoginModal = ({ state, actions }) => {

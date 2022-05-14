@@ -16,8 +16,8 @@ export const fetchDataHandler = async ({
   method = method || "GET";
   accept = accept || "application/json";
 
-  let jwt = null;
-  if (state) jwt = await authenticateAppAction({ state });
+  let jwt = "";
+  // if (state) jwt = await authenticateAppAction({ state });
 
   // 📌 HEADER  Options
   let headerOptions = {
@@ -43,7 +43,7 @@ export const fetchDataHandler = async ({
   };
 
   // 📌 BODY Options
-  if (method !== "GET") {
+  if (method !== "GET" && body) {
     requestOptions = {
       ...requestOptions,
       body: JSON.stringify(body),

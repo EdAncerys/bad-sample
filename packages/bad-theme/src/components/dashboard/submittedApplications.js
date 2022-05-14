@@ -10,7 +10,6 @@ import {
   useAppState,
   useAppDispatch,
   muiQuery,
-  authenticateAppAction,
   setErrorAction,
   fetchDataHandler,
 } from "../../context";
@@ -77,8 +76,6 @@ const SubmittedApplications = ({ state, actions, libraries }) => {
     });
   };
   const handlePayment = async ({ sage_id }) => {
-    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-
     const url = state.auth.APP_URL;
 
     const sagepay_url =

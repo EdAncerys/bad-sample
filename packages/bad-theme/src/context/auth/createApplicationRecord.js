@@ -1,8 +1,4 @@
-import {
-  authenticateAppAction,
-  setUserStoreAction,
-  fetchDataHandler,
-} from "../index";
+import { setUserStoreAction, fetchDataHandler } from "../index";
 
 export const createApplicationRecord = async ({
   state,
@@ -38,7 +34,6 @@ export const createApplicationRecord = async ({
   const path =
     state.auth.APP_HOST +
     `/catalogue/data/core_membershipapplications(${contactid})`;
-  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
   try {
     const data = await fetchDataHandler({
@@ -52,7 +47,7 @@ export const createApplicationRecord = async ({
 
     if (result.success) {
       // ⏬  getting new user record ⏬
-      const applicationData = await getApplicationRecord({ jwt, contactid });
+      const applicationData = await getApplicationRecord({ contactid });
 
       await setUserStoreAction({
         state,
@@ -68,7 +63,7 @@ export const createApplicationRecord = async ({
   }
 };
 
-export const getApplicationRecord = async ({ jwt, contactid }) => {
+export const getApplicationRecord = async ({ contactid }) => {
   // console.log("getApplicationRecord triggered");
 
   const path =

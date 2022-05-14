@@ -1,11 +1,6 @@
-import { authenticateAppAction, fetchDataHandler } from "../index";
+import { fetchDataHandler } from "../index";
 
-export const getApplicationStatus = async ({
-  state,
-  dispatch,
-  contactid,
-  refreshJWT,
-}) => {
+export const getApplicationStatus = async ({ state, dispatch, contactid }) => {
   // console.log("getApplicationStatus triggered");
 
   // if contactid is not provided then throw error

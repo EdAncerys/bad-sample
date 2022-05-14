@@ -14,7 +14,6 @@ import {
   useAppDispatch,
   muiQuery,
   setErrorAction,
-  authenticateAppAction,
   fetchDataHandler,
 } from "../../context";
 
@@ -80,8 +79,6 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       : `/sagepay/${sagepay_live}/application/`;
 
     try {
-      const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-
       const path =
         state.auth.APP_HOST +
         sagepayUrl +

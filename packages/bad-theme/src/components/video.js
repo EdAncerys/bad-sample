@@ -18,7 +18,6 @@ const DATE_MODULE = date;
 import {
   useAppState,
   useAppDispatch,
-  authenticateAppAction,
   setEnquireAction,
   muiQuery,
   setCreateAccountModalAction,
@@ -76,7 +75,6 @@ const Video = ({ state, actions, libraries }) => {
     }
 
     setRelatedVideos(related_videos_to_show);
-    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
     if (!post.acf.private) {
       setVideoStatus("unlocked");

@@ -1,5 +1,4 @@
 import {
-  authenticateAppAction,
   getUserDataByContactId,
   setFetchAction,
   fetchDataHandler,
@@ -21,8 +20,6 @@ export const updateAddressAction = async ({
   // --------------------------------------------------------------------------
   // 📌 STEP: Log onto the API server and get the Bearer token
   // --------------------------------------------------------------------------
-  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-  if (!jwt) throw new Error("Cannot logon to server.");
 
   try {
     const response = await fetchDataHandler({
@@ -43,7 +40,6 @@ export const updateAddressAction = async ({
       await getUserDataByContactId({
         state,
         dispatch,
-        jwt,
         contactid,
         refreshJWT,
       });

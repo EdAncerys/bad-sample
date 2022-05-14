@@ -30,9 +30,8 @@ import {
   setAppSearchPhraseAction,
   muiQuery,
   setCreateAccountModalAction,
-  authenticateAppAction, // TESTING enviroment
   getUserDataByContactId, // TESTING enviroment
-  fetchDataHandler,
+  fetchDataHandler, // TESTING enviroment
 } from "../../context";
 import { Person } from "@mui/icons-material";
 
@@ -170,11 +169,9 @@ const HeaderActions = ({ state, actions, libraries }) => {
     if (state.auth.ENVIRONMENT === "DEVELOPMENT-B2C") {
       // console.log("🤖 DEVELOPMENT ENVIRONMENT 🤖");
 
-      const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
       await getUserDataByContactId({
         state,
         dispatch,
-        jwt,
         // contactid: "cc9a332a-3672-ec11-8943-000d3a43c136", // andy testing account
         // contactid: "84590b32-9490-ec11-b400-000d3a22037e", // mandy
         contactid: "0786df85-618f-ec11-b400-000d3a22037e", // Chris
