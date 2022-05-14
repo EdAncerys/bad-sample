@@ -18,9 +18,6 @@ const FindADermatologist = ({ state, block }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   let MARGIN = `${marginVertical}px ${marginHorizontal}px`;
 
-  const dispatch = useAppDispatch();
-  const { refreshJWT } = useAppState();
-
   const [query, setQuery] = React.useState();
 
   const [filteredDermatologists, setFilteredDermatologists] = React.useState();

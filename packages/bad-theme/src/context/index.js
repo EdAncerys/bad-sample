@@ -39,7 +39,6 @@ import {
   getUserDataByContactId,
   getUserDataByEmail,
   getUserDataFromDynamics,
-  seRefreshJWTAction,
 } from "./auth/actions";
 import { sendEmailEnquireAction } from "./auth/sendEnquire";
 import { getEthnicityAction } from "./auth/getEthnicity";
@@ -203,7 +202,6 @@ export {
   postTypeHandler,
   getEthnicityAction,
   googleAutocompleteAction,
-  seRefreshJWTAction,
   getEventsData,
   getEventLocations,
   getEventSpecialtys,

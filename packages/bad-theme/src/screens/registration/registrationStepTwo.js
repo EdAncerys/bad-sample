@@ -27,8 +27,7 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
   const page = state.source[data.type][data.id];
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, dynamicsApps, refreshJWT } =
-    useAppState();
+  const { applicationData, isActiveUser, dynamicsApps } = useAppState();
 
   const [membershipData, setMembershipData] = useState(false);
   const [isFetching, setFetching] = useState(false);
@@ -116,7 +115,6 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
       category: formData.bad_organisedfor === "810170000" ? "BAD" : "SIG",
       type: formData.bad_categorytype, // application type name
       path: `/membership/`,
-      refreshJWT,
     });
   };
 
@@ -182,7 +180,6 @@ const RegistrationStepTwo = ({ state, actions, libraries }) => {
         type: formData.bad_categorytype, // application type name
         path,
         canUpdateApplication: true,
-        refreshJWT,
       });
     } catch (error) {
       // console.log(error);

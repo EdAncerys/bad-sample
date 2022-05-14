@@ -15,7 +15,6 @@ export const authCookieActionBeforeCSR = async ({
   state,
   initialState,
   dispatch,
-  refreshJWT,
 }) => {
   const cookie = handleGetCookie({ name: state.auth.COOKIE_NAME });
 
@@ -62,7 +61,6 @@ export const authCookieActionBeforeCSR = async ({
       const userStoreData = await getUserStoreAction({
         state,
         dispatch,
-        refreshJWT,
         isActiveUser: userData,
       });
 
@@ -74,7 +72,6 @@ export const authCookieActionBeforeCSR = async ({
         const taken = await authenticateAppAction({
           state,
           dispatch,
-          refreshJWT,
         }); // replace taken with new one
         initialState.isActiveUser = userData; // populates user userResponse
         initialState.dynamicsApps = appsData;
@@ -96,11 +93,7 @@ export const authCookieActionBeforeCSR = async ({
   }
 };
 
-export const authCookieActionAfterCSR = async ({
-  state,
-  dispatch,
-  refreshJWT,
-}) => {
+export const authCookieActionAfterCSR = async ({ state, dispatch }) => {
   const cookie = handleGetCookie({ name: state.auth.COOKIE_NAME });
 
   // ⏬⏬  user validation & auth ⏬⏬
@@ -120,7 +113,6 @@ export const authCookieActionAfterCSR = async ({
         dispatch,
         jwt,
         contactid,
-        refreshJWT,
       });
       if (!userData) throw new Error("Error getting userData.");
 

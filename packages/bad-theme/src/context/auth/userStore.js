@@ -16,7 +16,6 @@ export const setUserStoreAction = async ({
   isActiveUser,
   data,
   membershipApplication,
-  refreshJWT,
 }) => {
   // console.log("setUserStoreAction triggered");
 
@@ -40,7 +39,6 @@ export const setUserStoreAction = async ({
       storeApplication = await getUserStoreAction({
         state,
         isActiveUser,
-        refreshJWT,
       });
     }
     if (!storeApplication) {
@@ -171,7 +169,6 @@ export const setCompleteUserApplicationAction = async ({
   isActiveUser,
   applicationData,
   changeAppCategory,
-  refreshJWT,
 }) => {
   // console.log("setCompleteUserApplicationAction triggered");
 
@@ -205,7 +202,6 @@ export const setCompleteUserApplicationAction = async ({
         state,
         dispatch,
         contactid,
-        refreshJWT,
       });
       // delete application record from CONTEXT
       setApplicationDataAction({
@@ -218,7 +214,6 @@ export const setCompleteUserApplicationAction = async ({
         state,
         dispatch,
         contactid,
-        refreshJWT,
       });
       if (!userData) throw new Error("Error getting userData.");
       // console.log("⏬ Membership Completed ⏬");

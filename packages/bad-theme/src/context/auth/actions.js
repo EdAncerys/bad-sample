@@ -12,12 +12,7 @@ import {
 // 📌 INITIALIZE APP TAKEN via atom STATE
 // --------------------------------------------------------------------------------
 
-export const loginActionViaModal = async ({
-  state,
-  dispatch,
-  transId,
-  refreshJWT,
-}) => {
+export const loginActionViaModal = async ({ state, dispatch, transId }) => {
   // console.log("loginAction triggered");
   setFetchAction({ dispatch, isFetching: true });
 
@@ -81,7 +76,7 @@ export const authenticateAppAction = async ({ state, dispatch }) => {
   // check if cookie is present and if so get the tokens
   const cookieValue = handleGetCookie({ name: state.auth.AUTH_COOKIE });
   if (cookieValue) {
-    refreshTaken = cookieValue.refreshJWT;
+    refreshTaken = cookieValue.refreshTaken;
     appTaken = cookieValue.appJWT;
     contactid = cookieValue.contactid;
   }
@@ -115,7 +110,7 @@ export const authenticateAppAction = async ({ state, dispatch }) => {
         handleSetCookie({
           name: state.auth.AUTH_COOKIE,
           value: {
-            refreshJWT: refreshTaken,
+            refreshTaken: refreshTaken,
             appJWT: appTaken,
           },
           days: 1,
@@ -145,7 +140,6 @@ export const getUserAction = async ({ state, dispatch, transId }) => {
       state,
       dispatch,
       contactid,
-      refreshJWT,
     });
     if (!userData) throw new Error("Error getting userData.");
 
@@ -181,7 +175,6 @@ export const getUserDataByContactId = async ({
   state,
   dispatch,
   contactid,
-  refreshJWT,
 }) => {
   // console.log("getUserDataByContactId triggered");
 
@@ -200,7 +193,6 @@ export const getUserDataByContactId = async ({
       state,
       dispatch,
       contactid,
-      refreshJWT,
     });
     if (!dynamicApps.apps.success)
       throw new Error("Error dynamicApps userData.");
@@ -213,12 +205,7 @@ export const getUserDataByContactId = async ({
   }
 };
 
-export const getUserDataByEmail = async ({
-  state,
-  dispatch,
-  email,
-  refreshJWT,
-}) => {
+export const getUserDataByEmail = async ({ state, dispatch, email }) => {
   // console.log("getUserDataByEmail triggered");
 
   const path =
@@ -241,7 +228,6 @@ export const getUserDataByEmail = async ({
         state,
         dispatch,
         contactid,
-        refreshJWT,
       });
       if (!dynamicApps.apps.success)
         throw new Error("Error dynamicApps userData.");
@@ -291,10 +277,6 @@ export const logoutAction = async ({ state, actions, dispatch }) => {
 export const seJWTAction = ({ dispatch, jwt }) => {
   // console.log("seJWTAction triggered"); //debug
   dispatch({ type: "SET_JWT_ACTION", payload: jwt });
-};
-export const seRefreshJWTAction = ({ dispatch, refreshJWT }) => {
-  // console.log("seRefreshJWTAction triggered"); //debug
-  dispatch({ type: "SET_REFRESH_JWT_ACTION", payload: refreshJWT });
 };
 export const setActiveUserAction = ({ dispatch, isActiveUser }) => {
   // console.log("setActiveUserAction triggered"); //debug

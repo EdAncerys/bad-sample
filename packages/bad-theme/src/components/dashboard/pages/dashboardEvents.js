@@ -22,7 +22,7 @@ import {
 
 const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
   const dispatch = useAppDispatch();
-  const { dashboardPath, isActiveUser, refreshJWT } = useAppState();
+  const { dashboardPath, isActiveUser } = useAppState();
   const { lg } = muiQuery();
   const [listOfEvents, setListOfEvents] = useState([]);
   const [eventList, setEventList] = useState([]); // event data

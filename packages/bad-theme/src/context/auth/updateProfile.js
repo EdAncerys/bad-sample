@@ -9,7 +9,6 @@ export const updateProfileAction = async ({
   dispatch,
   data,
   isActiveUser,
-  refreshJWT,
 }) => {
   // console.log("updateProfileAction triggered");
   const { contactid } = isActiveUser;
@@ -42,7 +41,6 @@ export const updateProfileAction = async ({
         state,
         dispatch,
         contactid,
-        refreshJWT,
       });
 
       return responseData;

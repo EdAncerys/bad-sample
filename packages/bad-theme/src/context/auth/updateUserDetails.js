@@ -9,7 +9,6 @@ export const updateAddressAction = async ({
   dispatch,
   data,
   isActiveUser,
-  refreshJWT,
 }) => {
   // console.log("updateAddressAction triggered");
   const { contactid } = isActiveUser;
@@ -41,7 +40,6 @@ export const updateAddressAction = async ({
         state,
         dispatch,
         contactid,
-        refreshJWT,
       });
     }
   } catch (error) {

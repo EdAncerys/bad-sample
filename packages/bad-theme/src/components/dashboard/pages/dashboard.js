@@ -28,13 +28,8 @@ import {
 
 const Dashboard = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
-  const {
-    isActiveUser,
-    dashboardPath,
-    dynamicsApps,
-    refreshJWT,
-    applicationData,
-  } = useAppState();
+  const { isActiveUser, dashboardPath, dynamicsApps, applicationData } =
+    useAppState();
 
   const { lg } = muiQuery();
 
@@ -99,7 +94,6 @@ const Dashboard = ({ state, actions, libraries }) => {
         },
         path: "/membership/application-change/", // redirect to application change page
         changeAppCategory: app, // change of application
-        refreshJWT,
       });
       if (!appData) throw new Error("Failed to create application");
     } catch (error) {
@@ -125,7 +119,6 @@ const Dashboard = ({ state, actions, libraries }) => {
         core_membershipsubscriptionid: app.core_membershipsubscriptionid,
         isActiveUser,
         dispatch,
-        refreshJWT,
       });
       // await for link to download & open in new window to download
       window.open(url, "_blank");
@@ -303,7 +296,6 @@ const Dashboard = ({ state, actions, libraries }) => {
                             core_membershipsubscriptionid,
                             isActiveUser,
                             dispatch,
-                            refreshJWT,
                           });
 
                         if (isSubmitted) {

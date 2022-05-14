@@ -21,7 +21,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const { isActiveUser, ethnicity, refreshJWT } = useAppState();
+  const { isActiveUser, ethnicity } = useAppState();
 
   const [isFetching, setIsFetching] = useState(null);
   const [formData, setFormData] = useState({
@@ -39,7 +39,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
 
   useEffect(async () => {
     // ⬇️ get ethnicity choices from Dynamics
-    if (!ethnicity) await getEthnicityAction({ state, dispatch, refreshJWT });
+    if (!ethnicity) await getEthnicityAction({ state, dispatch });
 
     return () => {
       useEffectRef.current = false; // clean up function
@@ -82,7 +82,6 @@ const UpdateProfile = ({ state, actions, libraries }) => {
         state,
         dispatch,
         attachments: bad_profile_photo_url,
-        refreshJWT,
       });
     // console.log("bad_profile_photo_url", bad_profile_photo_url); // debug
 
@@ -119,7 +118,6 @@ const UpdateProfile = ({ state, actions, libraries }) => {
         dispatch,
         data,
         isActiveUser,
-        refreshJWT,
       });
       if (!response) throw new Error("Error updating profile");
       // display error message

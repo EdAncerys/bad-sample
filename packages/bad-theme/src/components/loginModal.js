@@ -17,7 +17,7 @@ import {
 
 const LoginModal = ({ state, actions }) => {
   const dispatch = useAppDispatch();
-  const { loginModalAction, refreshJWT } = useAppState();
+  const { loginModalAction } = useAppState();
 
   const [id, setId] = useState(null);
   const iFrameRef = useRef(null);

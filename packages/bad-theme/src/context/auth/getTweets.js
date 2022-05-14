@@ -1,6 +1,6 @@
 import { setFetchAction, fetchDataHandler } from "../index";
 
-export const getTweetsAction = async ({ state, dispatch, refreshJWT }) => {
+export const getTweetsAction = async ({ state, dispatch }) => {
   // console.log("getTweetsAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });

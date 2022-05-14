@@ -40,7 +40,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { isActiveUser, refreshJWT } = useAppState();
+  const { isActiveUser } = useAppState();
 
   const [isReady, SetReady] = useState(null);
   const [filter, setFilter] = useState(null);
@@ -179,7 +179,6 @@ const HeaderActions = ({ state, actions, libraries }) => {
         // contactid: "969ba377-a398-ec11-b400-000d3aaedef5", // emilia
         // contactid: "a167c3ee-ba93-e711-80f5-3863bb351f50", // membership
         // contactid: "04548c0b-cf52-ec11-8c62-000d3a4a9589", // 📌 MEMBER OF BAD !!!
-        refreshJWT,
       });
       return;
     }

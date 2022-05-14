@@ -20,7 +20,7 @@ import {
 const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   const { lg } = muiQuery();
   const dispatch = useAppDispatch();
-  const { dynamicsApps, isActiveUser, refreshJWT } = useAppState();
+  const { dynamicsApps, isActiveUser } = useAppState();
 
   const [paymentUrl, setPaymentUrl] = useState("");
   const [liveSubscriptions, setLiveSubscriptions] = useState(null);

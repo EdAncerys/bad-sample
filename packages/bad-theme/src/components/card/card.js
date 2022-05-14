@@ -124,7 +124,7 @@ const Card = ({
   if (disableCardAnimation) isCardAnimation = "";
 
   const dispatch = useAppDispatch();
-  const { isActiveUser, refreshJWT } = useAppState();
+  const { isActiveUser } = useAppState();
 
   const [authLink, setAuthLink] = useState(null);
   const [isFetching, setFetching] = useState(null);
@@ -145,7 +145,6 @@ const Card = ({
         const wileyLink = await getWileyAction({
           state,
           dispatch,
-          refreshJWT,
           doi,
           isActiveUser,
         });

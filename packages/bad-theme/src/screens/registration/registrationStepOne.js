@@ -19,8 +19,7 @@ const RegistrationStepOne = ({ state, actions }) => {
   const page = state.source[data.type][data.id];
   const { lg } = muiQuery();
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, dynamicsApps, refreshJWT } =
-    useAppState();
+  const { applicationData, isActiveUser, dynamicsApps } = useAppState();
 
   const [isFetching, setFetching] = useState(false);
   const marginHorizontal = state.theme.marginHorizontal;
@@ -35,7 +34,6 @@ const RegistrationStepOne = ({ state, actions }) => {
       applicationData,
       isActiveUser,
       dynamicsApps,
-      refreshJWT,
     });
     if (isActiveUser) setGoToAction({ state, path: `/membership/`, actions });
   };
@@ -49,7 +47,6 @@ const RegistrationStepOne = ({ state, actions }) => {
       applicationData,
       membershipApplication: { stepOne: true }, // set stepOne to complete
       isActiveUser,
-      refreshJWT,
     });
     setFetching(false);
     if (!store.success) return; // if store not saved, return

@@ -23,13 +23,8 @@ const Membership = ({ state, actions, libraries }) => {
   const { lg } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const {
-    dynamicsApps,
-    applicationData,
-    dashboardPath,
-    isActiveUser,
-    refreshJWT,
-  } = useAppState();
+  const { dynamicsApps, applicationData, dashboardPath, isActiveUser } =
+    useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -52,7 +47,6 @@ const Membership = ({ state, actions, libraries }) => {
         core_membershipsubscriptionid: app.core_membershipsubscriptionid,
         isActiveUser,
         dispatch,
-        refreshJWT,
       });
       // await for link to download & open in new window to download
       window.open(url, "_blank");
@@ -100,7 +94,6 @@ const Membership = ({ state, actions, libraries }) => {
         },
         path: "/membership/application-change/", // redirect to application change page
         changeAppCategory: app, // change of application
-        refreshJWT,
       });
       if (!appData) throw new Error("Failed to create application");
     } catch (error) {
@@ -237,7 +230,6 @@ const Membership = ({ state, actions, libraries }) => {
                           core_membershipsubscriptionid,
                           isActiveUser,
                           dispatch,
-                          refreshJWT,
                         });
 
                       if (isSubmitted) {

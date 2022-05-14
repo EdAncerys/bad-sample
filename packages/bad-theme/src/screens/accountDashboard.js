@@ -36,8 +36,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const { isActiveUser, dynamicsApps, applicationData, refreshJWT } =
-    useAppState();
+  const { isActiveUser, dynamicsApps, applicationData } = useAppState();
 
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
@@ -81,13 +80,11 @@ const AccountDashboard = ({ state, actions, libraries }) => {
       state,
       dispatch,
       id: isActiveUser.contactid,
-      refreshJWT,
     });
     await getApplicationStatus({
       state,
       dispatch,
       contactid: isActiveUser.contactid,
-      refreshJWT,
     });
 
     return () => {
@@ -157,7 +154,6 @@ const AccountDashboard = ({ state, actions, libraries }) => {
         },
         path: "/membership/application-change/", // redirect to application change page
         changeAppCategory: app, // change of application
-        refreshJWT,
       });
       if (!appData) throw new Error("Failed to create application");
     } catch (error) {

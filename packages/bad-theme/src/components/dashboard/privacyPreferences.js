@@ -20,7 +20,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
 
   const dispatch = useAppDispatch();
-  const { isActiveUser, refreshJWT } = useAppState();
+  const { isActiveUser } = useAppState();
 
   const [isFetching, setIsFetching] = useState(null);
   const [formData, setFormData] = useState({
@@ -124,7 +124,6 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
         dispatch,
         data,
         isActiveUser,
-        refreshJWT,
       });
       if (!response) throw new Error("Error updating profile");
       // display error message

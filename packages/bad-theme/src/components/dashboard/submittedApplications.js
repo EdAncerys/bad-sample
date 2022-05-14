@@ -18,7 +18,7 @@ const SubmittedApplications = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { dynamicsApps, refreshJWT } = useAppState();
+  const { dynamicsApps } = useAppState();
   const marginVertical = state.theme.marginVertical;
   const { lg } = muiQuery();
 

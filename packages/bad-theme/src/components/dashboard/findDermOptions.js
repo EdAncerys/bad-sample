@@ -17,7 +17,7 @@ const FindDermatologistOptions = ({ state }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const { isActiveUser, dynamicsApps, refreshJWT } = useAppState();
+  const { isActiveUser, dynamicsApps } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
   const [isFetching, setIsFetching] = useState(null);
@@ -119,7 +119,6 @@ const FindDermatologistOptions = ({ state }) => {
         dispatch,
         data,
         isActiveUser,
-        refreshJWT,
       });
       if (!response) throw new Error("Error updating profile");
       // display error message
@@ -151,7 +150,6 @@ const FindDermatologistOptions = ({ state }) => {
         state,
         dispatch,
         attachments: bad_profile_photo_url,
-        refreshJWT,
       });
 
     setFormData((prevFormData) => ({

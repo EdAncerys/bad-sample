@@ -26,7 +26,7 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { bjdFeed, cedFeed, shdFeed, refreshJWT } = useAppState();
+  const { bjdFeed, cedFeed, shdFeed } = useAppState();
 
   const incrementor = 12;
 
@@ -68,9 +68,9 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
     const postLimit = post_limit || incrementor;
     let data = null;
 
-    if (isBJD) data = await getBJDFeedAction({ state, dispatch, refreshJWT });
-    if (isCED) data = await getCEDFeedAction({ state, dispatch, refreshJWT });
-    if (isSHD) data = await getSHDFeedAction({ state, dispatch, refreshJWT });
+    if (isBJD) data = await getBJDFeedAction({ state, dispatch });
+    if (isCED) data = await getCEDFeedAction({ state, dispatch });
+    if (isSHD) data = await getSHDFeedAction({ state, dispatch });
 
     setFeedData(data.slice(0, Number(postLimit))); // apply limit on posts
 

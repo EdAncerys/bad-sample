@@ -75,7 +75,6 @@ export const handleApplyForMembershipAction = async ({
   dynamicsApps,
   canUpdateApplication,
   changeAppCategory,
-  refreshJWT,
 }) => {
   try {
     if (!isActiveUser) {
@@ -140,7 +139,6 @@ export const handleApplyForMembershipAction = async ({
         state,
         category,
         type,
-        refreshJWT,
       });
       if (!response) throw new Error("Failed to get membership data");
       membershipData = response;
@@ -170,7 +168,6 @@ export const handleApplyForMembershipAction = async ({
         bad_existingsubscriptionid, // existing subscription id for BAD apps
         bad_applicationfor: changeAppCategory ? "810170001" : "810170000", // for new apps 810170000 for change of cat for BAD and 810170001
       },
-      refreshJWT,
     });
 
     // ⏬ redirect to application form if active user
@@ -202,7 +199,6 @@ export const handleValidateMembershipChangeAction = async ({
   isActiveUser,
   core_membershipsubscriptionid,
   dispatch,
-  refreshJWT,
 }) => {
   try {
     if (!isActiveUser || !core_membershipsubscriptionid)

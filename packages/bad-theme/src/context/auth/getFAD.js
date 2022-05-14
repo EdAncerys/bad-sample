@@ -1,6 +1,6 @@
 import { setFetchAction, fetchDataHandler } from "../index";
 
-export const getFadAction = async ({ state, dispatch, page, refreshJWT }) => {
+export const getFadAction = async ({ state, dispatch, page }) => {
   // console.log("getFadAction triggered");
 
   let perPage = 15;
@@ -25,12 +25,7 @@ export const getFadAction = async ({ state, dispatch, page, refreshJWT }) => {
   }
 };
 
-export const getFADSearchAction = async ({
-  state,
-  dispatch,
-  query,
-  refreshJWT,
-}) => {
+export const getFADSearchAction = async ({ state, dispatch, query }) => {
   // console.log("getFADSearchAction triggered");
 
   try {
@@ -46,12 +41,7 @@ export const getFADSearchAction = async ({
   }
 };
 
-export const getAllFadAction = async ({
-  state,
-  dispatch,
-  page,
-  refreshJWT,
-}) => {
+export const getAllFadAction = async ({ state, dispatch, page }) => {
   // console.log("getFadAction triggered");
 
   let skip = page || 0;

@@ -18,7 +18,7 @@ export const useB2CLogin = ({ state, actions }) => {
   let urlPath = state.router.link;
 
   const dispatch = useAppDispatch();
-  const { refreshJWT } = useAppState();
+  const {} = useAppState();
 
   // await to get window object & setWindow to true
   useEffect(() => {
@@ -76,7 +76,6 @@ export const useB2CLogin = ({ state, actions }) => {
           state,
           dispatch,
           email,
-          refreshJWT,
         });
         // make call to set cookie to browser for authernication
 

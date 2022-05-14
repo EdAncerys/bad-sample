@@ -22,13 +22,8 @@ const ApplicationList = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const {
-    dynamicsApps,
-    applicationData,
-    isActiveUser,
-    dashboardPath,
-    refreshJWT,
-  } = useAppState();
+  const { dynamicsApps, applicationData, isActiveUser, dashboardPath } =
+    useAppState();
 
   if (!dynamicsApps) return null; // if application data exist & not under review return null
   // see if application list have approved applications and if so show them
@@ -77,7 +72,6 @@ const ApplicationList = ({ state, actions, libraries }) => {
         },
         path: "/membership/application-change/", // redirect to application change page
         changeAppCategory: app, // change of application
-        refreshJWT,
       });
       if (!appData) throw new Error("Failed to create application");
     } catch (error) {
@@ -103,7 +97,6 @@ const ApplicationList = ({ state, actions, libraries }) => {
         core_membershipsubscriptionid: app.core_membershipsubscriptionid,
         isActiveUser,
         dispatch,
-        refreshJWT,
       });
       // await for link to download & open in new window to download
       window.open(url, "_blank");
@@ -181,7 +174,6 @@ const ApplicationList = ({ state, actions, libraries }) => {
                     core_membershipsubscriptionid,
                     isActiveUser,
                     dispatch,
-                    refreshJWT,
                   });
 
                   if (isSubmitted) {

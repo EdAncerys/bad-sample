@@ -1,6 +1,6 @@
 import { fetchDataHandler } from "../index";
 
-export const getEthnicityAction = async ({ state, dispatch, refreshJWT }) => {
+export const getEthnicityAction = async ({ state, dispatch }) => {
   // console.log("getEthnicityAction triggered");
 
   try {

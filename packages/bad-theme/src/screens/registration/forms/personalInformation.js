@@ -28,8 +28,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, dynamicsApps, refreshJWT } =
-    useAppState();
+  const { applicationData, isActiveUser, dynamicsApps } = useAppState();
   const { lg } = muiQuery();
   const [isFetching, setFetching] = useState(false);
   const [isFetchingAddress, setIsFetchingAddress] = useState(null);
@@ -197,7 +196,6 @@ const PersonalDetails = ({ state, actions, libraries }) => {
       applicationData,
       isActiveUser,
       data: formData,
-      refreshJWT,
     });
     if (isActiveUser) setGoToAction({ state, path: `/membership/`, actions });
   };
@@ -254,7 +252,6 @@ const PersonalDetails = ({ state, actions, libraries }) => {
       dynamicsApps,
       membershipApplication: { stepThree: true }, // set stepOne to complete
       data: formData,
-      refreshJWT,
     });
     setFetching(false);
     if (!store.success) return; // if store not saved, return
@@ -274,7 +271,6 @@ const PersonalDetails = ({ state, actions, libraries }) => {
         state,
         dispatch,
         attachments: sky_profilepicture,
-        refreshJWT,
       });
 
     setFormData((prevFormData) => ({

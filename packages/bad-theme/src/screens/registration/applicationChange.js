@@ -35,8 +35,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
   const page = state.source[data.type][data.id];
   const { lg } = muiQuery();
   const dispatch = useAppDispatch();
-  const { isActiveUser, dynamicsApps, applicationData, refreshJWT } =
-    useAppState();
+  const { isActiveUser, dynamicsApps, applicationData } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -195,7 +194,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
         const hospitalData = await getHospitalNameAction({
           state,
           dispatch,
-          refreshJWT,
           id: hospitalId,
         });
         if (hospitalData) {
@@ -241,7 +239,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     let hospitalData = await getHospitalsAction({
       state,
       dispatch,
-      refreshJWT,
       input,
     });
     // refactor hospital data to match dropdown format
@@ -362,7 +359,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
         state,
         category: "BAD",
         type: formData.bad_categorytype,
-        refreshJWT,
       });
       if (!response) throw new Error("Failed to get membership data");
 
@@ -379,7 +375,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
         isActiveUser,
         dynamicsApps,
         data: appFromData,
-        refreshJWT,
       });
       if (!store.success) throw new Error("Failed to update application");
 
@@ -390,7 +385,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
         isActiveUser,
         applicationData,
         changeAppCategory: appFromData,
-        refreshJWT,
       });
       if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
 
@@ -430,7 +424,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
         state,
         dispatch,
         attachments: sky_cvurl,
-        refreshJWT,
       });
     // console.log("sky_cvurl", sky_cvurl); // debug
 

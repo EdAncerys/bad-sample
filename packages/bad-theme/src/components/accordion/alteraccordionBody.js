@@ -38,8 +38,7 @@ const AccordionBody = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { sm, md, lg, xl } = muiQuery();
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, dynamicsApps, refreshJWT } =
-    useAppState();
+  const { applicationData, isActiveUser, dynamicsApps } = useAppState();
 
   const ICON_WIDTH = 35;
   const {
@@ -89,7 +88,6 @@ const AccordionBody = ({
           stepThree: false,
           stepFour: false,
         },
-        refreshJWT,
       });
     } catch (error) {
       // console.log(error);
@@ -121,7 +119,6 @@ const AccordionBody = ({
       formData,
       attachments,
       recipients,
-      refreshJWT,
     });
     setFetching(false);
     document.querySelector(`#attachments-${uniqueId}`).value = "";

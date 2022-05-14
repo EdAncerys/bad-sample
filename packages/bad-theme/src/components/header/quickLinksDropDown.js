@@ -15,7 +15,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { isActiveUser, refreshJWT } = useAppState();
+  const { isActiveUser } = useAppState();
 
   // HANDLERS ----------------------------------------------------
   const handleActiveMenu = ({ mouseLeave }) => {
@@ -51,7 +51,6 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
       authLink = await getWileyAction({
         state,
         dispatch,
-        refreshJWT,
         isActiveUser,
         isFullAccess: true,
         url,

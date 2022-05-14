@@ -5,7 +5,6 @@ export const getBADMembershipSubscriptionData = async ({
   category,
   type,
   dispatch,
-  refreshJWT,
 }) => {
   // console.log("getBADMembershipSubscriptionData triggered");
 

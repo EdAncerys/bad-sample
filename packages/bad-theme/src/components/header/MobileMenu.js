@@ -18,7 +18,7 @@ export default connect(({ libraries, state, actions }) => {
   const [menuContent, setMenuContent] = React.useState();
   const [wpMainMenu, setWpMainMenu] = React.useState([]);
   const [wpMoreMenu, setWpMoreMenu] = React.useState([]);
-  const { isActiveUser, refreshJWT } = useAppState();
+  const { isActiveUser } = useAppState();
   const dispatch = useAppDispatch();
 
   const setMenu = (children) => {
@@ -45,7 +45,6 @@ export default connect(({ libraries, state, actions }) => {
       authLink = await getWileyAction({
         state,
         dispatch,
-        refreshJWT,
         isActiveUser,
         isFullAccess: true,
         url,
