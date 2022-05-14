@@ -1,7 +1,8 @@
 .blue-btn-reverse,
 .blue-btn,
 .transparent-btn,
-.drop-down-btn {
+.drop-down-btn,
+.custom-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -231,4 +232,9 @@
 }
 .title-link-animation:hover::before {
   width: 100%;
+}
+
+/* white border on hover */
+.custom-btn:hover {
+  border: 1px solid #fff !important;
 }

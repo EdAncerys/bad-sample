@@ -54,6 +54,8 @@ export const useB2CLogin = ({ state, actions }) => {
   useEffect(async () => {
     // Decode the token
     if (!hash) return;
+    // get all the parts of the token after #id_token=
+    const b2cTaken = hash.split("#id_token=");
     let items = hash.replace("#id_token=", "");
     items = items ? items.split(".") : null;
     if (!items) return;
@@ -64,10 +66,7 @@ export const useB2CLogin = ({ state, actions }) => {
       items[1] = JSON.parse(atob(items[1]));
 
       console.log("🐞 items", hash);
-      console.log("🐞 items", items);
-      console.log("🐞 ", items[0]);
-      console.log("🐞 ", items[1]);
-      console.log("🐞 ", items[2]);
+      console.log("🐞 items", b2cTaken);
 
       if (Array.isArray(items[1].emails)) {
         const email = items[1].emails[0];
@@ -79,6 +78,8 @@ export const useB2CLogin = ({ state, actions }) => {
           email,
           refreshJWT,
         });
+        // make call to set cookie to browser for authernication
+
         if (!user) throw new Error("Error getting user data.");
       } else {
         console.log("🐞 error. No email found. Redirect to home path");

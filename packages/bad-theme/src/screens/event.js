@@ -541,7 +541,7 @@ const Event = ({ state, actions, libraries }) => {
         </div>
 
         <div
-          className="blue-btn"
+          className="blue-btn custom-btn"
           style={{
             backgroundColor: colors.white,
             color: colors.primary,
