@@ -32,6 +32,7 @@ import {
   setCreateAccountModalAction,
   getUserDataByContactId, // TESTING enviroment
   fetchDataHandler, // TESTING enviroment
+  handleSetCookie, // TESTING enviroment
 } from "../../context";
 import { Person } from "@mui/icons-material";
 
@@ -146,12 +147,15 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   const ServeTesting = () => {
     return (
-      <div style={{ padding: `0 1em` }}>
+      <div className="flex" style={{ padding: `0 1em` }}>
         <div className="blue-btn-reverse" onClick={handleCheck}>
           Status
         </div>
         <div className="blue-btn-reverse" onClick={handleUser}>
-          User
+          😀
+        </div>
+        <div className="blue-btn-reverse" onClick={handleCookie}>
+          🍪
         </div>
       </div>
     );
@@ -162,7 +166,8 @@ const HeaderActions = ({ state, actions, libraries }) => {
     const response = await fetchDataHandler({
       path,
       state,
-      // disableCookies: true,
+      disableCookies: true,
+      isCORSHeaders: true,
     });
     let data = "not found";
     if (response.ok) data = await response.json();
@@ -176,6 +181,18 @@ const HeaderActions = ({ state, actions, libraries }) => {
     let data = "response !ok";
     if (response.ok) data = await response.json();
     console.log("🐞 ", data);
+  };
+  const handleCookie = async () => {
+    // handleSetCookie({ name: "loginPath", value: "/testinValue" });
+    handleSetCookie({ name: "loginPath", deleteCookie: true });
+    handleSetCookie({ name: "badAuth", deleteCookie: true });
+
+    console.log("🐞 ", document.cookie);
+
+    // delete cookie badAuth
+    document.cookie =
+      "badAuth=; path=/; domain=.uatservices.bad.org.uk; expires=" +
+      new Date(0).toUTCString();
   };
 
   const handleLoginAction = async () => {

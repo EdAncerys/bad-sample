@@ -54,11 +54,7 @@ export const loginAction = async ({ state }) => {
     const urlPath = state.router.link;
     console.log("LOGIN path + REDIRECT", redirectPath);
     // get current url path and store in cookieValue
-    handleSetCookie({
-      name: "loginPath",
-      value: urlPath,
-      days: 1,
-    });
+    handleSetCookie({ name: "loginPath", value: urlPath });
 
     // redirect to B2C auth set window location to login page
     window.location.href = url;

@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { connect } from "frontity";
-import {
-  handleSetCookie,
-  handleEncryption,
-  handleGetCookie,
-} from "../helpers/cookie";
+import { handleSetCookie, handleGetCookie } from "../helpers/cookie";
 // CONTEXT ------------------------------------------------------------
 import { fetchDataHandler } from "../context";
 
@@ -32,9 +28,6 @@ const login = ({ state, actions }) => {
 
       const response = await data.json();
       if (response.token) {
-        const encryptedJWT = handleEncryption({ jwt: response.token }); // encrypting provided jwt
-        handleSetCookie({ name: state.auth.COOKIE_NAME, value: encryptedJWT }); // set cookie in the browser
-
         actions.theme.setTaken(response.token);
         actions.theme.setLogin(true);
         actions.router.set("/");

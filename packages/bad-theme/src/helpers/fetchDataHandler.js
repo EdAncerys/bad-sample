@@ -9,7 +9,7 @@ export const fetchDataHandler = async ({
   options,
   headers,
   disableCookies,
-  isCORSHeader,
+  isCORSHeaders,
 }) => {
   // -----------------------------------------------
   // 📌 CUSTOM FETCH HANDLER
@@ -17,9 +17,7 @@ export const fetchDataHandler = async ({
 
   method = method || "GET";
   accept = accept || "application/json";
-  disableCookies = disableCookies || false;
-  isCORSHeader = isCORSHeader || false;
-  if (isCORSHeader) disableCookies = false; // disable sending cookies with requests if CORS header is set
+  if (isCORSHeaders) disableCookies = false; // disable sending cookies with requests if CORS header is set
 
   // 📌 TESTING
   let timeNow = new Date();
@@ -48,7 +46,7 @@ export const fetchDataHandler = async ({
     Accept: accept,
     // Authorization: `Bearer ${jwt}`,
     // add CORS headers
-    // ...(isCORSHeader ? corsHeaders : {}),
+    ...(isCORSHeaders ? corsHeaders : {}),
     // set cash control headers to 7 days if method is GET
     // ...(method === "GET" ? { "Cache-Control": "s-maxage=86400" } : {}),
     // add custom headers if provided
@@ -60,7 +58,7 @@ export const fetchDataHandler = async ({
     method,
     headerOptions,
     // CORS mode options
-    // ...(isCORSHeader ? { mode: "no-cors" } : {}),
+    // ...(isCORSHeaders ? { mode: "no-cors" } : {}),
     // add options if provided
     ...options,
     // 🍪 add credentials to the request to incloode cookies in all fetch requests if disableCookies 🍪

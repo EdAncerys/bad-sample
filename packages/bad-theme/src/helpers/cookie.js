@@ -1,74 +1,20 @@
+import Cookies from "js-cookie";
+
 export const handleSetCookie = ({ name, value, days, deleteCookie }) => {
-  // setting defaults
+  // default values
   let cookieExDays = 1;
   if (days) cookieExDays = days;
 
-  let expires = cookieExDays * 24 * 60 * 60,
-    cookieName = "cookie",
-    cookieValue = "🍪 value not set!";
-
-  if (name) cookieName = name;
-  if (value) cookieValue = JSON.stringify(value);
-
-  let cookie = `${cookieName}=${cookieValue};path=/;max-age=${expires};`; // cookie params
-  // if delete cookie set max-age to 0
+  console.log("🐞 ", Cookies.get());
   if (deleteCookie) {
-    cookie = `${cookieName}= ;path=/;max-age=${new Date(0)};`; // cookie params
+    Cookies.remove(name);
+    return;
   }
-
-  document.cookie = cookie;
-
-  if (deleteCookie) {
-    // console.log(`🍪 ${cookieName} successfully deleted`); // debug
-  } else {
-    // console.log("🍪  set succesfully"); // debug
-  }
+  Cookies.set(name, value, { expires: cookieExDays });
 };
 
 export const handleGetCookie = ({ name }) => {
   // console.log("handleGetCookie triggered");
-  // setting defaults
-  let cookieName = "";
-  if (name) cookieName = name;
 
-  try {
-    // get cookie by name
-    let cookie = document.cookie
-      .split("; ")
-      .find((c) => c.startsWith(cookieName));
-    //if !cookie then return null
-    if (!cookie) return null;
-    let cookieValue = cookie.split("=")[1];
-    // if cookie exists & not empty
-    if (cookie && cookieValue) {
-      cookieValue = JSON.parse(cookieValue);
-      // console.log("🍪 value: ", cookieValue); // debug
-      return cookieValue;
-    } else {
-      // console.log("🍪 not found || not valid"); // debug
-      return null;
-    }
-  } catch (error) {
-    // console.log("error: " + error);
-  }
-};
-
-export const handleEncryption = ({ jwt }) => {
-  if (!jwt) {
-    // console.log("Token not provided!");
-    return;
-  }
-  const bcrypt = require("bcryptjs");
-  const saltRounds = 10;
-
-  const salt = bcrypt.genSaltSync(saltRounds);
-  const hash = bcrypt.hashSync(jwt, salt);
-  const valid = bcrypt.compareSync(jwt, hash); // validate encrypted token
-
-  if (valid) {
-    // console.log("Encryption successful!");
-    return hash;
-  } else {
-    // console.log("Failed to encrypt the taken!");
-  }
+  Cookies.get(name);
 };
