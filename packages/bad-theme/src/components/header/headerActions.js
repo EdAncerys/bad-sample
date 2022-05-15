@@ -144,17 +144,40 @@ const HeaderActions = ({ state, actions, libraries }) => {
     }
   };
 
-  const handleLoginAction = async () => {
-    // --------------------------------------------------------------------------------
-    // 📌  B2C login action
-    // --------------------------------------------------------------------------------
+  const ServeTesting = () => {
+    return (
+      <div style={{ padding: `0 1em` }}>
+        <div className="blue-btn-reverse" onClick={handleCheck}>
+          Check
+        </div>
+        <div className="blue-btn-reverse" onClick={handleUser}>
+          User
+        </div>
+      </div>
+    );
+  };
 
+  const handleCheck = async () => {
+    let path = "https://uatservices.bad.org.uk/dynamicstest/utils/cookie";
+    const response = await fetchDataHandler({
+      path,
+      state,
+    });
+    const data = await response.json();
+    console.log("🐞 ", data);
+  };
+  const handleUser = async () => {
     let path =
       "https://uatservices.bad.org.uk/dynamicstest/catalogue/data/contacts?$filter=emailaddress1 eq 'chris@skylarkcreative.co.uk'";
     const response = await fetchDataHandler({ path, state });
     const data = await response.json();
     console.log("🐞 ", data);
-    return;
+  };
+
+  const handleLoginAction = async () => {
+    // --------------------------------------------------------------------------------
+    // 📌  B2C login action
+    // --------------------------------------------------------------------------------
 
     // ⬇️ development env default login action ⬇️
     if (state.auth.ENVIRONMENT === "DEVELOPMENT-B2C") {
@@ -387,6 +410,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
             <ServeDashboardAction />
             {!lg ? <QuickLinksDropDown /> : null}
             {!lg ? null : <ServeMobileMenuAction />}
+            <ServeTesting />
           </div>
         </div>
       </BlockWrapper>

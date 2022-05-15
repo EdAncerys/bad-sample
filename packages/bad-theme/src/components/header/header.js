@@ -22,7 +22,7 @@ import CookiePopUp from "../CookiePopUp";
 // CONTEXT ----------------------------------------------------------------
 import { muiQuery } from "../../context";
 import ReactGA from "react-ga";
-import { handleGetCookie, handleSetCookie } from "../../helpers/cookie";
+import { handleGetCookie } from "../../helpers/cookie";
 
 const Header = ({ state, actions }) => {
   const { sm, md, lg, xl } = muiQuery();
@@ -39,12 +39,14 @@ const Header = ({ state, actions }) => {
 
   useEffect(() => {
     const cookie = handleGetCookie({ name: `BAD-cookie-popup` });
-    console.log("COOKIE", cookie);
+    console.log("Cookie Policie 🍪", cookie);
+
     if (cookie && cookie === "all-cookies") {
       ReactGA.initialize("UA-50027583-1");
       ReactGA.pageview(window.location.pathname + window.location.search);
     }
   }, []);
+
   return (
     <>
       <Global

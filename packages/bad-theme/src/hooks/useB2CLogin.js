@@ -73,15 +73,18 @@ export const useB2CLogin = ({ state, actions }) => {
         const email = items[1].emails[0];
         console.log("🐞 email ", email); // debug
 
+        // 📌 set auth cookie for authenticated requests
+        await setAuthenticationCookieAction({ state, b2cTaken });
         const user = await getUserDataByEmail({
           state,
           dispatch,
           email,
         });
-        if (!user) throw new Error("Error getting user data.");
-
-        // 📌 set auth cookie for authenticated requests
-        await setAuthenticationCookieAction({ state, b2cTaken });
+        if (!user) {
+          // delete auth cookie if user not found
+          // handleSetCookie({ name: "badAuth", deleteCookie: true });
+          throw new Error("Error getting user data.");
+        }
       } else {
         console.log("🐞 error. No email found. Redirect to home path");
       }
