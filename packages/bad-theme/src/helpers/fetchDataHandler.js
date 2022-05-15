@@ -8,7 +8,8 @@ export const fetchDataHandler = async ({
   state,
   options,
   headers,
-  isDiableCoookie,
+  disableCookies,
+  isCORSHeader,
 }) => {
   // -----------------------------------------------
   // 📌 CUSTOM FETCH HANDLER
@@ -16,7 +17,9 @@ export const fetchDataHandler = async ({
 
   method = method || "GET";
   accept = accept || "application/json";
-  isDiableCoookie = isDiableCoookie || false;
+  disableCookies = disableCookies || false;
+  isCORSHeader = isCORSHeader || false;
+  if (isCORSHeader) disableCookies = false; // disable sending cookies with requests if CORS header is set
 
   // 📌 TESTING
   let timeNow = new Date();
@@ -27,8 +30,17 @@ export const fetchDataHandler = async ({
     second: "numeric",
   })}`;
 
-  let jwt = "";
+  // let jwt = "";
   // if (state) jwt = await authenticateAppAction({ state });
+
+  // 📌 CORS header options
+  let corsHeaders = {
+    "access-control-allow-credentials": true,
+    "Access-Control-Allow-Methods":
+      "GET, PUT, POST, DELETE, HEAD, OPTIONS, PATCH",
+    "Access-Control-Allow-Origin": "*",
+    "content-type": "application/json; charset=utf-8",
+  };
 
   // 📌 HEADER  Options
   let headerOptions = {
@@ -36,7 +48,7 @@ export const fetchDataHandler = async ({
     Accept: accept,
     // Authorization: `Bearer ${jwt}`,
     // add CORS headers
-    // "Access-Control-Allow-Origin": "*",
+    // ...(isCORSHeader ? corsHeaders : {}),
     // set cash control headers to 7 days if method is GET
     // ...(method === "GET" ? { "Cache-Control": "s-maxage=86400" } : {}),
     // add custom headers if provided
@@ -47,10 +59,13 @@ export const fetchDataHandler = async ({
   let requestOptions = {
     method,
     headerOptions,
+    // CORS mode options
+    // ...(isCORSHeader ? { mode: "no-cors" } : {}),
     // add options if provided
     ...options,
-    // 🍪 add credentials to the request to incloode cookies in all fetch requests if isDiableCoookie 🍪
-    credentials: isDiableCoookie ? "omit" : "include",
+    // 🍪 add credentials to the request to incloode cookies in all fetch requests if disableCookies 🍪
+    // ...(disableCookies ? {} : { credentials: "include" }),
+    credentials: disableCookies ? "omit" : "include",
   };
 
   // 📌 BODY Options

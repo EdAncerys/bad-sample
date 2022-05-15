@@ -82,7 +82,7 @@ export const useB2CLogin = ({ state, actions }) => {
         });
         if (!user) {
           // delete auth cookie if user not found
-          // handleSetCookie({ name: "badAuth", deleteCookie: true });
+          handleSetCookie({ name: "badAuth", deleteCookie: true });
           throw new Error("Error getting user data.");
         }
       } else {

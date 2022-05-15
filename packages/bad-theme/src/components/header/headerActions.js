@@ -148,7 +148,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
     return (
       <div style={{ padding: `0 1em` }}>
         <div className="blue-btn-reverse" onClick={handleCheck}>
-          Check
+          Status
         </div>
         <div className="blue-btn-reverse" onClick={handleUser}>
           User
@@ -162,15 +162,19 @@ const HeaderActions = ({ state, actions, libraries }) => {
     const response = await fetchDataHandler({
       path,
       state,
+      // disableCookies: true,
     });
-    const data = await response.json();
-    console.log("🐞 ", data);
+    let data = "not found";
+    if (response.ok) data = await response.json();
+    console.log("🐞 Auth level ", data.data.level);
+    console.log("🐞 data ", data.data);
   };
   const handleUser = async () => {
     let path =
       "https://uatservices.bad.org.uk/dynamicstest/catalogue/data/contacts?$filter=emailaddress1 eq 'chris@skylarkcreative.co.uk'";
     const response = await fetchDataHandler({ path, state });
-    const data = await response.json();
+    let data = "response !ok";
+    if (response.ok) data = await response.json();
     console.log("🐞 ", data);
   };
 

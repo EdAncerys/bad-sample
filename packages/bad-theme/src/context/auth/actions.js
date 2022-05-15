@@ -269,6 +269,9 @@ export const logoutAction = async ({ state, actions, dispatch }) => {
   // 🍪 delete stored cookies
   handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
   handleSetCookie({ name: state.auth.AUTH_COOKIE, deleteCookie: true });
+  handleSetCookie({ name: "badAuth", deleteCookie: true });
+
+  // reddirect user to home page
   setGoToAction({ state, path: `/`, actions });
 
   seJWTAction({ dispatch, jwt: null });
