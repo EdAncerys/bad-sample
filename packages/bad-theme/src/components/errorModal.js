@@ -127,7 +127,7 @@ const ErrorModal = ({ state, actions, libraries }) => {
       return (
         <div
           style={{
-            width: 250,
+            width: !lg ? 250 : 100,
             maxHeight: 250,
             margin: "0 auto",
           }}
@@ -158,7 +158,8 @@ const ErrorModal = ({ state, actions, libraries }) => {
                 display: "grid",
                 textAlign: "center",
                 padding: !lg ? `2em 0` : 0,
-                fontSize: message.length < 300 ? 26 : 16,
+                fontSize: message.length < 300 ? !lg ? 26 : 16 : 16,
+                marginTop: !lg ? null : "1em"
               }}
             >
               <Html2React html={message} />
