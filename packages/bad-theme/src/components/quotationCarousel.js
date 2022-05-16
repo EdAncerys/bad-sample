@@ -109,7 +109,7 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
             <Carousel.Item key={key}>
               <div
                 style={{
-                  height: !lg ? BANNER_HEIGHT : 600,
+                  height: !lg ? BANNER_HEIGHT : 500,
                   backgroundColor: background_colour || "transparent",
                 }}
               >
