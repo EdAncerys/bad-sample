@@ -408,9 +408,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     }
   };
 
-  const handleNext = async () => {
-    console.log("MAYBE type", formData.bad_categorytype);
-
+  const handleSubmitApp = async () => {
     // check if new hospital value been added
     const isNewHospital = formData.bad_newhospitaladded;
     let sigAppliaction = formData;
@@ -632,7 +630,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
           Back
         </div>
 
-        <div className="blue-btn" onClick={handleNext}>
+        <div className="blue-btn" onClick={handleSubmitApp}>
           Submit Application
         </div>
       </div>

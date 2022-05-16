@@ -72,6 +72,7 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
     if (isCED) data = await getCEDFeedAction({ state, dispatch });
     if (isSHD) data = await getSHDFeedAction({ state, dispatch });
 
+    if (!data) return;
     setFeedData(data.slice(0, Number(postLimit))); // apply limit on posts
 
     return () => {

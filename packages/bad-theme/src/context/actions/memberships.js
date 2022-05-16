@@ -99,7 +99,6 @@ export const handleApplyForMembershipAction = async ({
         // console.log("🤖  NO  applications under reviewed status"); // debug
       }
     }
-
     if (applicationData) {
       // if user have application in progress redirect to dashboard
 
@@ -124,7 +123,7 @@ export const handleApplyForMembershipAction = async ({
         return;
       }
     }
-
+    console.log("🐞 HELLO 2");
     // default application data
     let membershipData = {
       bad_organisedfor: "SIG",
@@ -169,6 +168,15 @@ export const handleApplyForMembershipAction = async ({
         bad_applicationfor: changeAppCategory ? "810170001" : "810170000", // for new apps 810170000 for change of cat for BAD and 810170001
       },
     });
+
+    console.log(
+      "🐞 ",
+      isActiveUser,
+      applicationData,
+      isBADApp,
+      changeAppCategory,
+      store
+    ); // debug
 
     // ⏬ redirect to application form if active user
     if (isActiveUser && store) {

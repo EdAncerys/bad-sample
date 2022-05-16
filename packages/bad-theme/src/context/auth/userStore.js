@@ -124,7 +124,15 @@ export const getUserApplicationAction = async ({
     const userStore = await response.json();
 
     if (userStore.success) {
-      // console.log("⏬ Membership Record ⏬");
+      console.log("⏬ Membership Record ⏬");
+      console.log("🐞 userStore", userStore);
+      // check if userStore.data is iterable object & if not return null
+      if (
+        userStore.data &&
+        typeof userStore.data === "object" &&
+        !Array.isArray(userStore.data)
+      )
+        return null;
 
       // set application data to context
       setApplicationDataAction({ dispatch, applicationData: userStore.data });

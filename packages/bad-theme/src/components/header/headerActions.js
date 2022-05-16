@@ -189,6 +189,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
   const handleCookie = async () => {
     // handleSetCookie({ name: "loginPath", value: "/testinValue" });
     handleSetCookie({ name: "no-cookie", deleteCookie: true });
+    console.log("🐞 APP_HOST ", state.auth.APP_HOST);
     // handleSetCookie({ name: "badAuth", deleteCookie: true });
 
     // console.log("🐞 ", document.cookie);

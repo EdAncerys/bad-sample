@@ -347,9 +347,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           <div style={{ padding: `0 ${marginHorizontal}px` }}>
             <div className="flex">
               <SearchContainer
-                title={
-                  isAccordion ? "Undergraduate Awards" : "Research Funding"
-                }
+                title={isAccordion ? null : "Research Funding"}
                 width="100%"
                 searchFilterRef={filterRef}
                 handleSearch={handleSearch}
@@ -362,13 +360,13 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               <ServeFundingFilter />
               <ServeDateFilter />
             </div>
-            <TypeFilters
+            {/* <TypeFilters
               filters={groupeType}
               handleSearch={handleTypeSearch}
               typeFilterRef={typeFilterRef}
               handleClearTypeFilter={handleClearTypeFilter}
               title="Filter"
-            />
+            /> */}
           </div>
         </BlockWrapper>
       </div>
