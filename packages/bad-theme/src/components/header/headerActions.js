@@ -169,7 +169,10 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   const handleCheck = async () => {
     let path = "https://uatservices.bad.org.uk/dynamicstest/utils/cookie";
-    const response = await fetchDataHandler({ path, state });
+    const response = await fetchDataHandler({
+      path,
+      state,
+    });
     let data = "not found";
     if (response.ok) data = await response.json();
     console.log("🐞 Auth level ", data.data.level);
