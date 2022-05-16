@@ -61,10 +61,14 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
+  console.log("postList", postList);
+  console.log("category", categoryList);
 
   useEffect(async () => {
+    console.log("NEWSANDMEDIA");
+    const postsPerPage = isLayoutOne ? 6 : null;
     let categoryList = await getMediaCategories({ state });
-    let data = await getNewsData({ state });
+    let data = await getNewsData({ state, postsPerPage });
 
     if (site_section) {
       data = data.filter((item) => {

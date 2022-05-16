@@ -35,7 +35,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
   let OVERLAY_WIDTH = "100%";
   let CARD_WIDTH = !lg ? "50%" : "100%";
   let CARD_HEIGHT = BANNER_HEIGHT - FOOTER_HEIGHT * 3;
-  let BODY_LENGTH = 400;
+  let BODY_LENGTH = 3;
   const containerWidth = !lg ? state.theme.contentContainer : "100%";
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -47,7 +47,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
   if (content_height === "small")
     BANNER_HEIGHT = state.theme.bannerHeight * 0.75;
   if (!buttons) {
-    BODY_LENGTH = 450;
+    BODY_LENGTH = 4;
     CARD_HEIGHT = BANNER_HEIGHT - FOOTER_HEIGHT;
   }
   if (!background_image && layout === "full-width") return null; // defaults to null based on config
@@ -91,7 +91,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
             body={body}
             cardWidth={CARD_WIDTH}
             cardHeight={CARD_HEIGHT}
-            bodyLength={BODY_LENGTH}
+            bodyLimit={BODY_LENGTH}
             colour={block.colour}
             shadow
             heroBanner
@@ -123,7 +123,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
               title={title}
               body={body}
               cardWidth="90%"
-              bodyLength={BODY_LENGTH}
+              bodyLimit={BODY_LENGTH}
               colour={block.colour}
               shadow
               heroBanner

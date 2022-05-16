@@ -9,7 +9,13 @@ const DATE_MODULE = date;
 // CONTEXT --------------------------------------------------------
 import { muiQuery, getMediaCategories } from "../../context";
 
-const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
+const NewsCarousel = ({
+  state,
+  actions,
+  libraries,
+  newsCarousel,
+  categoryList,
+}) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!newsCarousel) return null;
   const { lg } = muiQuery();
@@ -22,12 +28,18 @@ const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
     excerpt,
     yoast_head_json,
   } = newsCarousel;
-  const [category, setCategory] = useState(null);
-
-  useEffect(async () => {
-    let categoryList = await getMediaCategories({ state });
-
+  const [category, setCategory] = useState(categoryList);
+  console.log(categoryList);
+  useEffect(() => {
+    // console.log("USEFFECT TRIGGERED");
     setCategory(categoryList);
+    // async function getCategories() {
+    //   let categoryList = await getMediaCategories({ state });
+
+    //   setCategory(categoryList);
+    // }
+    // if (!category) getCategories();
+    console.log(categoryList);
   }, []);
 
   // SERVERS ---------------------------------------------
