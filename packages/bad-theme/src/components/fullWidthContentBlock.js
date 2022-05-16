@@ -166,7 +166,7 @@ const FullWidthContentBlock = ({
         padding: PADDING,
       }}
     >
-      <div style={{ margin: heroBanner ? 0 : !lg ? MARGIN : null }}>
+      <div style={{ margin: heroBanner ? 0 : !lg ? MARGIN : null, display: !lg ? null : "flex", flexDirection: !lg ? null : "column", alignItems: !lg ? null : "center" }}>
         <ServeTitle />
         <ServeCardBody />
         <ServeDownloads />
