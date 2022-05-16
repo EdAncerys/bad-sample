@@ -42,7 +42,11 @@ const Dashboard = ({ state, actions, libraries }) => {
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
-    let events = await getEventsData({ state, page: 1, postsPerPage: 4 });
+    let events = await getEventsData({
+      state,
+      page: 1,
+      postsPerPage: 4,
+    });
     if (!events) return;
     // ⬇️⬇ sort events by date
     events = handleSortFilter({ list: events });
