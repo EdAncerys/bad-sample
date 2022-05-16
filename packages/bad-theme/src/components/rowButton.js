@@ -153,14 +153,18 @@ const RowButton = ({
           return;
         }
         if (file_link) {
+          console.log("FILE CLICKED");
           window.open(file_link.url);
           return;
         }
         if (onClick) {
+          console.log("OnClick");
+
           onClick();
           return;
         }
         if (onClickAction) {
+          console.log("OnClickAction");
           onClickAction();
           return;
         }
@@ -173,6 +177,7 @@ const RowButton = ({
           return;
         }
         if (link) {
+          console.log("onClickLinkHandler")
           onClickLinkHandler();
           return;
         }
