@@ -55,7 +55,7 @@ const ErrorModal = ({ state, actions, libraries }) => {
       return (
         <div
           className="blue-btn"
-          style={{ marginRight: "1em" }}
+          style={{ marginRight: "1em", fontSize: !lg ? null : 13 }}
           onClick={() => gotToActionHandler({ path: isError.goToPath.path })}
         >
           {isError.goToPath.label}
