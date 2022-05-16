@@ -1,4 +1,5 @@
-import { setFetchAction, setEnquireAction } from "../index";
+// CONTEXT ------------------------------------------------------------------
+import { setFetchAction, setEnquireAction, fetchDataHandler } from "../index";
 
 export const sendEmailEnquireAction = async ({
   state,
