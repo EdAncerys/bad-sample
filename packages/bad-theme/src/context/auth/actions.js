@@ -204,11 +204,9 @@ export const getUserDataByContactId = async ({
 export const getUserDataByEmail = async ({ state, dispatch, email }) => {
   // console.log("getUserDataByEmail triggered");
 
-  console.log("🐞 APP_HOST PATH ALTERED");
-  const path = `https://uatservices.bad.org.uk/dynamicstest/catalogue/data/contacts?$filter=emailaddress1 eq '${email}'`;
-  // const path =
-  //   state.auth.APP_HOST +
-  //   `/catalogue/data/contacts?$filter=emailaddress1 eq '${email}'`;
+  const path =
+    state.auth.APP_HOST +
+    `/catalogue/data/contacts?$filter=emailaddress1 eq '${email}'`;
 
   try {
     const data = await fetchDataHandler({ path, state });

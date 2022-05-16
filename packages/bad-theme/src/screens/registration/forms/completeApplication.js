@@ -52,6 +52,8 @@ const CompleteApplication = ({ state, actions, libraries }) => {
     };
 
     if (!applicationData) return null;
+    if (!applicationData[0]) return null; // check if application data is available
+
     applicationData.map((data) => {
       if (data.name === "bad_ethnicity") {
         handleSetData({ data, name: "bad_ethnicity" });
