@@ -72,33 +72,38 @@ const EventLoopBlock = ({
     if (!events) return;
 
     curentPageRef.current++;
+
+    // ⬇️⬇ sort events by date
+    events = handleSortFilter({ list: events });
+
     // if page is set to events_archive return only events that date is in the past
     if (events_archive) {
       events = events.filter((event) => {
         let eventDate = event.acf.date_time;
         if (!eventDate) return false;
 
-        let [month, date, year] = eventDate[0].date.split("/");
-        let eventDateObj = new Date(year, month, date);
+        let eventDateObj = new Date(eventDate[0].date);
         let today = new Date();
+        // if event date is in the past return true
+        const isPastEvent = eventDateObj < today;
 
-        return eventDateObj < today;
+        return isPastEvent;
       });
     } else {
       events = events.filter((event) => {
         let eventDate = event.acf.date_time;
         if (!eventDate) return false;
 
-        let [month, date, year] = eventDate[0].date.split("/");
-        let eventDateObj = new Date(year, month, date);
+        // let [month, date, year] = eventDate[0].date.split("/");
+        // let eventDateObj = new Date(year, month, date);
+        let eventDateObj = new Date(eventDate[0].date);
         let today = new Date();
+        // is event date in the future
+        const isFuture = eventDateObj >= today;
 
-        return eventDateObj >= today;
+        return isFuture;
       });
     }
-
-    // ⬇️⬇ sort events by date
-    events = handleSortFilter({ list: events });
 
     if (isPostLimit && events) {
       // ⬇️ if post_limit is set then show only post_limit posts
