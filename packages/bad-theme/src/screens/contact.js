@@ -74,7 +74,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
     return (
       <div style={{ minHeight: !lg ? null : 300 }}>
         <MapsComponent
-          zoom={15}
+          zoom={!lg ? 15 : 10}
           center={{ lat: 51.52346281629359, lng: -0.13927725740945598 }}
         />
       </div>
@@ -92,7 +92,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
               gridTemplateColumns: !lg ? `1fr 1.5fr` : "1fr",
               justifyContent: "center",
               padding: `${marginVertical}px ${marginHorizontal}px`,
-              height: 500,
+              height: !lg ? 500 : null,
             }}
           >
             <ServeInfo />

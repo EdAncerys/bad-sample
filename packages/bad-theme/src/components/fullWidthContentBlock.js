@@ -74,7 +74,7 @@ const FullWidthContentBlock = ({
 
     return (
       <div className="flex-col">
-        <div className="card-text">
+        <div className="card-text" style={{padding: !lg ? null : "1.5em"}}>
           <Html2React html={body} />
         </div>
       </div>

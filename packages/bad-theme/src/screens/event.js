@@ -571,7 +571,7 @@ const Event = ({ state, actions, libraries }) => {
     if (startDate[0]) startDate = startDate[0].date;
 
     return (
-      <div className="flex-col" style={{ width: `55%` }}>
+      <div className="flex-col" style={{ width: !lg ? `55%` : null }}>
         <div
           className="flex-row"
           style={{ justifyContent: "space-between", padding: `2em 0 0 0` }}

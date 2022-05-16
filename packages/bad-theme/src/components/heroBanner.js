@@ -140,7 +140,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
     return (
       <div
         style={{
-          position: "absolute",
+          position: !lg ? "absolute" : null,
           zIndex: 9,
           width: OVERLAY_WIDTH,
         }}
@@ -183,7 +183,8 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           style={{
             display: "grid",
             alignItems: "center",
-            position: !lg ? "absolute" : background_image ? "absolute" : null,
+            // position: !lg ? "absolute" : background_image ? "absolute" : null,
+            position: !lg ? "absolute" : null,
             zIndex: 8,
             width: !lg
               ? !background_image
@@ -195,6 +196,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
               : background_image
               ? BANNER_HEIGHT
               : null,
+            height: !lg ? BANNER_HEIGHT : null,
           }}
         >
           <FullWidthContentBlock block={block} heroBanner />

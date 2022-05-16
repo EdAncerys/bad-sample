@@ -92,7 +92,7 @@ const RowButton = ({
       setErrorAction({
         dispatch,
         isError: {
-          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals. To continue to the publication without logging in, click to visit the BJD website`,
+          message: `BAD members should login to get free access to our journals. To continue to the journal without logging in, click 'Read Journal'`,
           image: "Error",
           action: [
             {
@@ -153,14 +153,18 @@ const RowButton = ({
           return;
         }
         if (file_link) {
+          console.log("FILE CLICKED");
           window.open(file_link.url);
           return;
         }
         if (onClick) {
+          console.log("OnClick");
+
           onClick();
           return;
         }
         if (onClickAction) {
+          console.log("OnClickAction");
           onClickAction();
           return;
         }
@@ -173,6 +177,7 @@ const RowButton = ({
           return;
         }
         if (link) {
+          console.log("onClickLinkHandler")
           onClickLinkHandler();
           return;
         }
