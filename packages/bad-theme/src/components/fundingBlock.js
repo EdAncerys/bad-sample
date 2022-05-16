@@ -338,7 +338,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       >
         <BlockWrapper>
           <div style={{ padding: `0 ${marginHorizontal}px` }}>
-            <div className="flex">
+            <div className="flex-col">
               <SearchContainer
                 title={
                   isAccordion ? "Undergraduate Awards" : "Research Funding"
