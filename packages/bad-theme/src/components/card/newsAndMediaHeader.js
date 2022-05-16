@@ -13,7 +13,7 @@ import PressRelease from "../../img/svg/pressRelease.svg";
 import Responses from "../../img/svg/responses.svg";
 import Updates from "../../img/svg/updates.svg";
 // CONTEXT --------------------------------------------------------
-import { getMediaCategories } from "../../context";
+import {} from "../../context";
 
 const NewsAndMediaHeader = ({
   state,

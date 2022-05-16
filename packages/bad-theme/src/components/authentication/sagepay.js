@@ -35,14 +35,10 @@ function blankForm() {
 const Sagepay = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const dispatch = useAppDispatch();
-  const { jwt } = useAppState();
-
   const [formData, setFormData] = useState(blankForm());
   const [sage, setSage] = useState(null);
   const [hasUrl, setHasUrl] = useState(false);
 
-  // let scope = jwt.decode.scope || "none";
   let scope = "admin"; // test var
   let inScope = ["admin", "sage"].includes(scope);
   function updateForm(e) {
@@ -58,7 +54,6 @@ const Sagepay = ({ state, actions, libraries }) => {
         url: "https://skylarkdev.digital/dynamicsbridge/sagepay/live",
         method: "POST",
         headers: {
-          Authorization: `Bearer ${jwt}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ sage: { ...formData } }),

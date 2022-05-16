@@ -14,7 +14,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import SearchContainer from "../../components/searchContainer";
 
 // CONTEXT -----------------------------------------------------------------
-import { getPostData } from "../../helpers";
 import {
   useAppDispatch,
   useAppState,
@@ -63,7 +62,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   if (disable_vertical_padding) marginVertical = 0;
 
   useEffect(async () => {
-    let categoryList = await getMediaCategories({ state });
+    let categoryData = await getMediaCategories({ state });
     let data = await getNewsData({ state });
 
     if (site_section) {
@@ -88,7 +87,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
     setPostList(data);
     setFilterList(data);
-    setCategoryList(categoryList);
+    setCategoryList(categoryData);
     setIsSearch(has_search);
 
     return () => {

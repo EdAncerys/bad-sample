@@ -125,7 +125,7 @@ const Video = ({ state, actions, libraries }) => {
 
   const handlePayment = async () => {
     const cookie = handleGetCookie({ name: `BAD-WebApp` });
-    const { contactid, jwt } = cookie;
+    const { contactid } = cookie;
 
     const sagepay_url =
       state.auth.ENVIRONMENT === "PRODUCTION"

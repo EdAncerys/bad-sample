@@ -425,7 +425,7 @@ const Card = ({
       />
       <GalleryCarousel gallery={gallery} />
       <NewsArticleHeader newsArticle={newsArticle} />
-      <NewsCarousel newsCarousel={newsCarousel} />
+      <NewsCarousel newsCarousel={newsCarousel} categoryList={categoryList} />
       <ServeCardImage />
       <ServeVideoCover />
       <ServeContent />

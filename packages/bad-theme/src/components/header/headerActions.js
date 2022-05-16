@@ -151,9 +151,6 @@ const HeaderActions = ({ state, actions, libraries }) => {
         <div className="blue-btn-reverse" onClick={handleCheck}>
           Status
         </div>
-        <div className="blue-btn-reverse" onClick={handleUser}>
-          😀
-        </div>
         <div className="blue-btn-reverse" onClick={handleCookie}>
           🍪
         </div>
@@ -184,15 +181,15 @@ const HeaderActions = ({ state, actions, libraries }) => {
   };
   const handleCookie = async () => {
     // handleSetCookie({ name: "loginPath", value: "/testinValue" });
-    handleSetCookie({ name: "loginPath", deleteCookie: true });
-    handleSetCookie({ name: "badAuth", deleteCookie: true });
+    handleSetCookie({ name: "no-cookie", deleteCookie: true });
+    // handleSetCookie({ name: "badAuth", deleteCookie: true });
 
-    console.log("🐞 ", document.cookie);
+    // console.log("🐞 ", document.cookie);
 
     // delete cookie badAuth
-    document.cookie =
-      "badAuth=; path=/; domain=.uatservices.bad.org.uk; expires=" +
-      new Date(0).toUTCString();
+    // document.cookie =
+    //   "badAuth=; path=/; domain=.uatservices.bad.org.uk; expires=" +
+    //   new Date(0).toUTCString();
   };
 
   const handleLoginAction = async () => {

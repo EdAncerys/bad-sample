@@ -31,9 +31,6 @@ const PaymentNotification = ({
   };
 
   const handlePayment = async ({ sage_id }) => {
-    const cookie = handleGetCookie({ name: `BAD-WebApp` });
-    const { contactid, jwt } = cookie;
-
     const the_url =
       state.auth.ENVIRONMENT === "DEVELOPMENT"
         ? "http://localhost:3000/"

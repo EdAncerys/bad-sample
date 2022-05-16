@@ -354,9 +354,6 @@ const VideoArchive = ({ state, actions, libraries }) => {
     };
 
     const fetchUserVideos = async () => {
-      const cookie = handleGetCookie({ name: `BAD-WebApp` });
-      const { contactid, jwt } = cookie;
-
       const path =
         state.auth.APP_HOST + `/videvent/${isActiveUser.contactid}/entities`;
       const listOfVids = await fetchDataHandler({ path, state });

@@ -62,7 +62,6 @@ export const fetchDataHandler = async ({
     // add options if provided
     ...options,
     // 🍪 add credentials to the request to incloode cookies in all fetch requests if disableCookies 🍪
-    // ...(disableCookies ? {} : { credentials: "include" }),
     credentials: disableCookies ? "omit" : "include",
   };
 
@@ -80,10 +79,9 @@ export const fetchDataHandler = async ({
     const response = await fetch(path, requestOptions);
     let timeTaken = (new Date() - timeNow) / 1000;
 
-    // log date to console in HH:MM:SS format
-    console.log(time);
-    // time taken to execute fetch request in seconds
-    console.log(`Fetch time: ${timeTaken}s`);
+    // fetch request timing info
+    console.log(`${time} Fetch time: ${timeTaken}s`);
+    console.log("🐞 ", path);
     console.log("🐞 Status", response.status);
 
     return response;

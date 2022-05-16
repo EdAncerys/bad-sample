@@ -41,11 +41,11 @@ export const loginAction = async ({ state }) => {
   // console.log("loginAction triggered");
 
   try {
-    // 📌 auth B2c redirect url based on App default url
-    const redirectPath = `&redirect_uri=${state.auth.APP_URL}/codecollect`;
     // --------------------------------------------------------------------------------
     // 📌  B2C login auth path endpoint
     // --------------------------------------------------------------------------------
+    // 📌 auth B2c redirect url based on App default url
+    const redirectPath = `&redirect_uri=${state.auth.APP_URL}/codecollect`;
     let action = "login";
 
     const url =

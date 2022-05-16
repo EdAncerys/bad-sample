@@ -41,7 +41,7 @@ const FindDermatologistOptions = ({ state, actions, libraries }) => {
   useEffect(() => {
     const getCurrentUserFadData = async () => {
       const cookie = await handleGetCookie({ name: `BAD-WebApp` });
-      const { contactid, jwt } = cookie;
+      const { contactid } = cookie;
 
       const path =
         state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
@@ -105,7 +105,7 @@ const FindDermatologistOptions = ({ state, actions, libraries }) => {
   // HELPERS ----------------------------------------------------------------
   const handlePreferenceUpdate = async () => {
     const cookie = await handleGetCookie({ name: `BAD-WebApp` });
-    const { contactid, jwt } = cookie;
+    const { contactid } = cookie;
 
     const path = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
     const submitUpdate = await fetchDataHandler({

@@ -6,13 +6,9 @@ import { useAppDispatch, useAppState, fetchDataHandler } from "../../context";
 const Wileys = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const dispatch = useAppDispatch();
-  const { jwt } = useAppState();
-
   const [iFrameSrc, setiFrameSrc] = useState("");
   const [doi, setDoi] = useState("doi/10.1111/bjd.21021");
 
-  // let scope = jwt.decode.scope || "none";
   let scope = "admin"; // test var
   let inScope = ["admin", "wiley"].includes(scope);
 
@@ -22,7 +18,7 @@ const Wileys = ({ state, actions, libraries }) => {
       url: "https://skylarkdev.digital/dynamicsbridge/wiley",
       method: "POST",
       headers: {
-        Authorization: `Bearer ${jwt}`,
+        // Authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
       },
     };

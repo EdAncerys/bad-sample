@@ -20,9 +20,9 @@ export const authCookieActionBeforeCSR = async ({
 
   // ⏬⏬  user validation & auth ⏬⏬
   if (cookie) {
-    let { jwt, contactid } = cookie;
+    let { contactid } = cookie;
 
-    if (!contactid || !jwt) {
+    if (!contactid) {
       // console.log("Failed to Auth 🍪 data");
       handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
       return null;
@@ -79,7 +79,7 @@ export const authCookieActionBeforeCSR = async ({
 
         handleSetCookie({
           name: state.auth.COOKIE_NAME,
-          value: { jwt: taken, contactid },
+          value: { contactid },
         });
       }
     } catch (error) {
@@ -99,9 +99,9 @@ export const authCookieActionAfterCSR = async ({ state, dispatch }) => {
   // ⏬⏬  user validation & auth ⏬⏬
   if (cookie) {
     // console.log("🍪 found", cookie);
-    let { jwt, contactid } = cookie;
+    let { contactid } = cookie;
 
-    if (!contactid || !jwt) {
+    if (!contactid) {
       // console.log("Failed to Auth 🍪 data");
       handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
       return null;
@@ -111,7 +111,6 @@ export const authCookieActionAfterCSR = async ({ state, dispatch }) => {
       const userData = await getUserDataByContactId({
         state,
         dispatch,
-        jwt,
         contactid,
       });
       if (!userData) throw new Error("Error getting userData.");

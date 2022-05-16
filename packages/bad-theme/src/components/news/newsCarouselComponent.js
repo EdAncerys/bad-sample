@@ -96,6 +96,7 @@ const NewsCarouselComponent = ({
                       <ServeDivider i={1} />
                       <Card
                         newsCarousel={block}
+                        categoryList={categoryList}
                         cardWidth={isSingleBlock ? "50%" : "100%"}
                         cardHeight="90%"
                         colour={colors.danger}
@@ -137,6 +138,7 @@ const NewsCarouselComponent = ({
               >
                 <Card
                   newsCarousel={block}
+                  categoryList={categoryList}
                   cardWidth={!lg ? "50%" : "100%"}
                   cardHeight="90%"
                   title={excerpt ? excerpt.rendered : null}
