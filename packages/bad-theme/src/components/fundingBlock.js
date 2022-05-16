@@ -193,6 +193,12 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     });
     // get unique month & year from allDates array and set to allDates
     let uniqueFundings = [...new Set(allFundings)];
+    // sort funding by amount assending
+    uniqueFundings.sort((a, b) => a - b);
+    // add comma to each thousand
+    uniqueFundings = uniqueFundings.map((item) => {
+      return item.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    });
 
     return (
       <div
@@ -214,7 +220,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           {uniqueFundings.map((item, key) => {
             return (
               <option key={key} value={item}>
-                {item} £
+                £ {item}
               </option>
             );
           })}
