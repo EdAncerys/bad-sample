@@ -94,32 +94,24 @@ export const authCookieActionBeforeCSR = async ({
 };
 
 export const authCookieActionAfterCSR = async ({ state, dispatch }) => {
-  const cookie = handleGetCookie({ name: state.auth.COOKIE_NAME });
+  let path = "https://uatservices.bad.org.uk/dynamicstest/utils/cookie";
 
-  // ⏬⏬  user validation & auth ⏬⏬
-  if (cookie) {
-    // console.log("🍪 found", cookie);
-    let { contactid } = cookie;
+  try {
+    const response = await fetchDataHandler({ path, state });
+    if (response.ok) {
+      // 📌 handle user data from Dynamics prefetch
+      let data = await response.json();
+      const { level, contactid } = data.data;
+      if (level !== "auth") return null; // if cookie is not auth level, don't proceed
 
-    if (!contactid) {
-      // console.log("Failed to Auth 🍪 data");
-      handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
-      return null;
-    }
-
-    try {
-      const userData = await getUserDataByContactId({
+      await getUserDataByContactId({
         state,
         dispatch,
         contactid,
       });
-      if (!userData) throw new Error("Error getting userData.");
-
-      // console.log("⬇️ userData successfully pre-fetched", userData); // debug
-    } catch (error) {
-      // console.log("error", error);
-      handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
     }
+  } catch (error) {
+    console.log("error", error);
   }
 };
 
