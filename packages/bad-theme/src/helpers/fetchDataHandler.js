@@ -1,3 +1,4 @@
+// CONTEXT --------------------------------------------------------
 import { authenticateAppAction } from "../context";
 
 export const fetchDataHandler = async ({
@@ -17,7 +18,7 @@ export const fetchDataHandler = async ({
 
   method = method || "GET";
   accept = accept || "application/json";
-  if (isCORSHeaders) disableCookies = false; // disable sending cookies with requests if CORS header is set
+  if (isCORSHeaders) disableCookies = true; // 📌 disable sending cookies with requests if CORS header is set
 
   // 📌 TESTING
   let timeNow = new Date();
@@ -27,9 +28,6 @@ export const fetchDataHandler = async ({
     minute: "numeric",
     second: "numeric",
   })}`;
-
-  // let jwt = "";
-  // if (state) jwt = await authenticateAppAction({ state });
 
   // 📌 CORS header options
   let corsHeaders = {
@@ -48,7 +46,7 @@ export const fetchDataHandler = async ({
     // add CORS headers
     ...(isCORSHeaders ? corsHeaders : {}),
     // set cash control headers to 7 days if method is GET
-    // ...(method === "GET" ? { "Cache-Control": "s-maxage=86400" } : {}),
+    ...(method === "GET" ? { "Cache-Control": "s-maxage=86400" } : {}),
     // add custom headers if provided
     ...headers,
   };
@@ -81,8 +79,8 @@ export const fetchDataHandler = async ({
 
     // fetch request timing info
     console.log(`${time} Fetch time: ${timeTaken}s`);
-    console.log("🐞 ", path);
     console.log("🐞 Status", response.status);
+    // console.log("🐞 ", path);
 
     return response;
   } catch (error) {

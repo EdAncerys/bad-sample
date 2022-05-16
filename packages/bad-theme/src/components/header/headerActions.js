@@ -145,13 +145,22 @@ const HeaderActions = ({ state, actions, libraries }) => {
     }
   };
 
+  // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
   const ServeTesting = () => {
     return (
       <div className="flex" style={{ padding: `0 1em` }}>
-        <div className="blue-btn-reverse" onClick={handleCheck}>
-          Status
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={handleCheck}
+        >
+          ST
         </div>
-        <div className="blue-btn-reverse" onClick={handleCookie}>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={handleCookie}
+        >
           🍪
         </div>
       </div>
@@ -163,8 +172,6 @@ const HeaderActions = ({ state, actions, libraries }) => {
     const response = await fetchDataHandler({
       path,
       state,
-      disableCookies: true,
-      isCORSHeaders: true,
     });
     let data = "not found";
     if (response.ok) data = await response.json();
@@ -191,6 +198,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
     //   "badAuth=; path=/; domain=.uatservices.bad.org.uk; expires=" +
     //   new Date(0).toUTCString();
   };
+  // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
 
   const handleLoginAction = async () => {
     // --------------------------------------------------------------------------------

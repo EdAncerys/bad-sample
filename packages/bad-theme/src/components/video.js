@@ -92,7 +92,12 @@ const Video = ({ state, actions, libraries }) => {
         "/" +
         post.acf.event_id;
 
-      const fetching = await fetchDataHandler({ path: url, state });
+      const fetching = await fetchDataHandler({
+        path: url,
+        state,
+        isCORSHeaders: true,
+        disableCookies: true,
+      });
 
       if (fetching.ok) {
         const json = await fetching.json();
@@ -149,6 +154,8 @@ const Video = ({ state, actions, libraries }) => {
       path: url,
       method: "POST",
       state,
+      isCORSHeaders: true,
+      disableCookies: true,
     });
 
     if (fetchVendorId.ok) {
@@ -184,7 +191,12 @@ const Video = ({ state, actions, libraries }) => {
         const reg = /\d+/g;
         const videoId = video_url.match(reg);
         const path = `https://vimeo.com/api/v2/video/${videoId[0]}.json`;
-        const fetchVideoData = await fetchDataHandler({ path, state });
+        const fetchVideoData = await fetchDataHandler({
+          path,
+          state,
+          isCORSHeaders: true,
+          disableCookies: true,
+        });
 
         if (fetchVideoData.ok) {
           const json = await fetchVideoData.json();
