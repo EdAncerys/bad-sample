@@ -304,17 +304,24 @@ const FindADermatologist = ({ state, block }) => {
 
       const ServeUrls = () => {
         if (!derm.bad_web1 && !derm.bad_web2 && !derm.bad_web3) return null;
+
         return (
           <div style={{ marginTop: 20 }}>
             <div className="primary-title">Private Practice Links</div>
             <div className="menu-title">
-              <a href={derm.bad_web1}>{derm.bad_web1}</a>
+              <a href={derm.bad_web1} target="_blank">
+                {derm.bad_web1}
+              </a>
             </div>
             <div className="menu-title">
-              <a href={derm.bad_web2}>{derm.bad_web2}</a>
+              <a href={derm.bad_web2} target="_blank">
+                {derm.bad_web2}
+              </a>
             </div>
             <div className="menu-title">
-              <a href={derm.bad_web3}>{derm.bad_web3}</a>
+              <a href={derm.bad_web3} target="_blank">
+                {derm.bad_web3}
+              </a>
             </div>
           </div>
         );
