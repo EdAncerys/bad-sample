@@ -101,7 +101,7 @@ const FullWidthContentBlock = ({
       <div>
         <div
           className="flex"
-          style={{ justifyContent: ALIGNMENT, paddingTop: `1em` }}
+          style={{ justifyContent: ALIGNMENT, paddingTop: `1em`, marginBottom: !lg ? null : "1em" }}
         >
           <div className="blue-btn" onClick={handleSubmitAction}>
             <Html2React html={LABEL} />
@@ -166,7 +166,7 @@ const FullWidthContentBlock = ({
         padding: PADDING,
       }}
     >
-      <div style={{ margin: heroBanner ? 0 : MARGIN }}>
+      <div style={{ margin: heroBanner ? 0 : !lg ? MARGIN : null, display: !lg ? null : "flex", flexDirection: !lg ? null : "column", alignItems: !lg ? null : "center" }}>
         <ServeTitle />
         <ServeCardBody />
         <ServeDownloads />
