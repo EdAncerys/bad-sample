@@ -95,7 +95,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
 
   // ⏬ populate form data values from applicationData
   useEffect(async () => {
-    // redirect to /dashboard if isActiveUser && !applicationData
+    // 📌 redirect to /dashboard if isActiveUser && !applicationData
     if (isActiveUser && !applicationData) {
       setGoToAction({ state, path: `/dashboard/`, actions });
       return;
@@ -554,26 +554,28 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                     <ServeAppName />
                   </div>
                   <label className="bold">Change Membership Category to</label>
-                  <Form.Select
-                    name="bad_categorytype"
-                    value={formData.bad_categorytype}
-                    onChange={handleChange}
-                    className="input"
-                  >
-                    <option value="" hidden>
-                      Membership Category
-                    </option>
-                    {membershipData.map((item, key) => {
-                      const { bad_or_sig, category_types } = item.acf;
-                      if (bad_or_sig !== "bad") return null;
+                  {membershipData && (
+                    <Form.Select
+                      name="bad_categorytype"
+                      value={formData.bad_categorytype}
+                      onChange={handleChange}
+                      className="input"
+                    >
+                      <option value="" hidden>
+                        Membership Category
+                      </option>
+                      {membershipData.map((item, key) => {
+                        const { bad_or_sig, category_types } = item.acf;
+                        if (bad_or_sig !== "bad") return null;
 
-                      return (
-                        <option key={key} value={category_types}>
-                          {category_types}
-                        </option>
-                      );
-                    })}
-                  </Form.Select>
+                        return (
+                          <option key={key} value={category_types}>
+                            {category_types}
+                          </option>
+                        );
+                      })}
+                    </Form.Select>
+                  )}
                   <FormError id="bad_categorytype" />
                 </div>
                 {bodyCopy && (
@@ -584,7 +586,9 @@ const ApplicationChange = ({ state, actions, libraries }) => {
               </div>
 
               <form>
-                <div style={{ padding: !lg ? `2em 1em` : "1em" }}>
+                <div
+                  style={{ padding: !lg ? `2em 1em 0 1em` : "1em 1em 0 1em" }}
+                >
                   {inputValidator.bad_py3_gmcnumber && (
                     <div>
                       <label className="required form-label">
@@ -794,7 +798,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                 </div>
 
                 {inputValidator.bad_py3_currentgrade && (
-                  <div>
+                  <div style={{ padding: "0 1em" }}>
                     <label className="form-label">Current Grade</label>
                     <input
                       name="py3_currentgrade"

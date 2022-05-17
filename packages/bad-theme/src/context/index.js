@@ -3,6 +3,7 @@ import { handleSortFilter } from "../helpers/eventSortFilter";
 import { setAuthenticationCookieAction } from "../helpers/setAuthenticationCookie";
 import { AppProvider, useAppDispatch, useAppState } from "./context";
 import { handleSetCookie } from "../helpers/cookie";
+import { handleUpdateMembershipApplication } from "../helpers/handleUpdateMembershipApplication";
 import {
   setGoToAction,
   setLinkWrapperAction,
@@ -230,4 +231,5 @@ export {
   fetchDataHandler,
   setAuthenticationCookieAction,
   handleSetCookie,
+  handleUpdateMembershipApplication,
 };

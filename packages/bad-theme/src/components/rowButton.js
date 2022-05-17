@@ -158,8 +158,6 @@ const RowButton = ({
           return;
         }
         if (onClick) {
-          console.log("OnClick");
-
           onClick();
           return;
         }
@@ -177,7 +175,7 @@ const RowButton = ({
           return;
         }
         if (link) {
-          console.log("onClickLinkHandler")
+          console.log("onClickLinkHandler");
           onClickLinkHandler();
           return;
         }
