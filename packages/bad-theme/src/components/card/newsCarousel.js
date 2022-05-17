@@ -14,7 +14,6 @@ const NewsCarousel = ({
   actions,
   libraries,
   newsCarousel,
-  categoryList,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!newsCarousel) return null;
