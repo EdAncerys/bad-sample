@@ -147,7 +147,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
   const ServeTesting = () => {
-    if (state.auth.ENVIRONMENT !== "DEVELOPMENT") return null;
+    // if (state.auth.ENVIRONMENT !== "DEVELOPMENT") return null;
 
     return (
       <div className="flex" style={{ padding: `0 1em` }}>
@@ -189,17 +189,17 @@ const HeaderActions = ({ state, actions, libraries }) => {
     console.log("🐞 ", data);
   };
   const handleCookie = async () => {
-    // handleSetCookie({ name: "loginPath", value: "/testinValue" });
-    handleSetCookie({ name: "no-cookie", deleteCookie: true });
+    handleSetCookie({ name: "no-cookie", deleteCookie: true }); // to show list of all cookies
     console.log("🐞 APP_HOST ", state.auth.APP_HOST);
-    // handleSetCookie({ name: "badAuth", deleteCookie: true });
+    console.log("🐞 APP_URL ", state.auth.APP_URL);
 
-    // console.log("🐞 ", document.cookie);
-
-    // delete cookie badAuth
-    // document.cookie =
-    //   "badAuth=; path=/; domain=.uatservices.bad.org.uk; expires=" +
-    //   new Date(0).toUTCString();
+    const redirectPath = `&redirect_uri=${state.auth.APP_URL}/codecollect`;
+    let action = "login";
+    const url =
+      state.auth.B2C +
+      `${redirectPath}&scope=openid&response_type=id_token&prompt=${action}`;
+    console.log("🐞 B2C redirect ", redirectPath);
+    console.log("🐞 B2C redirect ", url);
   };
   // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
 

@@ -129,7 +129,7 @@ const Card = ({
   const [authLink, setAuthLink] = useState(null);
   const [isFetching, setFetching] = useState(null);
   const useEffectRef = useRef(null);
-  console.log(categoryList);
+
   useEffect(async () => {
     if (!rssFeedLink) return null;
 

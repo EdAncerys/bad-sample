@@ -15,7 +15,6 @@ const NewsCarouselComponent = ({
   categoryList,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-  console.log("NEWSCAROUSELCOMPONENTCAT", categoryList);
   const { sm, md, lg, xl } = muiQuery();
   const homepage = state.router.link === "/";
   const { post_limit, disable_vertical_padding } = block;
