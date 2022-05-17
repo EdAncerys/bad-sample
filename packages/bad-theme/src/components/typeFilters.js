@@ -64,7 +64,7 @@ const TypeFilters = ({
 
   const ServeFilter = () => {
     return (
-      <div className="flex-row" style={{ flexWrap: "wrap" }}>
+      <div className="flex-row" style={{ flexWrap: "wrap"}}>
         <ServeAllFilter />
 
         {filters.map((type, key) => {
@@ -94,7 +94,7 @@ const TypeFilters = ({
 
   const ServeFilterMobile = () => {
     return (
-      <div className="flex-row" style={{ flexWrap: "wrap" }}>
+      <div className="flex-row" style={{ flexWrap: "wrap", alignItems: !lg ? null : "flex-end"  }}>
         <ServeAllFilter />
 
         <Dropdown>

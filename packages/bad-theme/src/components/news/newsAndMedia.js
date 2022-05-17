@@ -60,6 +60,8 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
+  console.log("postList", postList);
+  console.log("category", categoryList);
 
   useEffect(async () => {
     let categoryData = await getMediaCategories({ state });
