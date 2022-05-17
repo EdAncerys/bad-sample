@@ -42,9 +42,7 @@ const BADTheme = {
     },
     auth: {
       // 📌 app auth service secrets
-      // APP_HOST: process.env.APP_HOST, // app server endpoint
-      APP_HOST: "https://services.bad.org.uk/dynamicsbridge", // app server endpoint
-
+      APP_HOST: process.env.APP_HOST, // app server endpoint
       APP_USERNAME: process.env.APP_USERNAME,
       APP_PASSWORD: process.env.APP_PASSWORD,
 
