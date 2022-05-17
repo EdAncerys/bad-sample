@@ -24,10 +24,7 @@ export const getInvoiceAction = async ({ state, dispatch, isActiveUser }) => {
   const { contactid } = isActiveUser;
   if (!contactid) throw new Error("Cannot get receipts. Contactid is missing.");
 
-  const jwt = await authenticateAppAction({ state, dispatch });
-  const path =
-    state.auth.APP_HOST +
-    `/utils/pdf/sample?contactid=${contactid}&token=${jwt}`;
+  const path = state.auth.APP_HOST + `/utils/pdf/sample?contactid=${contactid}`;
 
   try {
     const response = await fetchDataHandler({ path, state });
@@ -50,10 +47,9 @@ export const getProofOfMembershipAction = async ({
   if (!contactid)
     throw new Error("Cannot get membership proof. Contactid is missing.");
 
-  const jwt = await authenticateAppAction({ state, dispatch });
   const path =
     state.auth.APP_HOST +
-    `/utils/pdf/confirm?contactid=${contactid}&subid=${core_membershipsubscriptionid}&token=${jwt}`;
+    `/utils/pdf/confirm?contactid=${contactid}&subid=${core_membershipsubscriptionid}`;
 
   try {
     const response = await fetchDataHandler({ path, state });

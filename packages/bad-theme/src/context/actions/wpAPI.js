@@ -23,7 +23,7 @@ export const getEventsData = async ({ state, page, postsPerPage }) => {
       url = `${state.auth.WP_HOST}wp-json/wp/v2/events?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&filter[orderby]=event_start_date&order=asc`;
       response = await fetchDataHandler({ path: url, state });
     }
-    console.log("🐞 ", data);
+
     return data;
   } catch (error) {
     console.log("🐞 ", error);

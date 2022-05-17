@@ -47,7 +47,6 @@ export const fetchDataHandler = async ({
   let headerOptions = {
     "Content-Type": "application/json",
     Accept: accept,
-    // Authorization: `Bearer ${jwt}`,
     // add CORS headers
     // ...(isCORSHeaders ? corsHeaders : {}),
     // set cash control headers to 7 days if method is GET

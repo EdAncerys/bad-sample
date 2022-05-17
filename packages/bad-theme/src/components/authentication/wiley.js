@@ -18,7 +18,6 @@ const Wileys = ({ state, actions, libraries }) => {
       url: "https://skylarkdev.digital/dynamicsbridge/wiley",
       method: "POST",
       headers: {
-        // Authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
       },
     };

@@ -283,15 +283,10 @@ export const logoutAction = async ({ state, actions, dispatch }) => {
   // reddirect user to home page
   setGoToAction({ state, path: `/`, actions });
 
-  seJWTAction({ dispatch, jwt: null });
   setActiveUserAction({ dispatch, isActiveUser: null });
 };
 
 // SET CONTEXT ---------------------------------------------------
-export const seJWTAction = ({ dispatch, jwt }) => {
-  // console.log("seJWTAction triggered"); //debug
-  dispatch({ type: "SET_JWT_ACTION", payload: jwt });
-};
 export const setActiveUserAction = ({ dispatch, isActiveUser }) => {
   // console.log("setActiveUserAction triggered"); //debug
   dispatch({ type: "SET_ACTIVE_USER_ACTION", payload: isActiveUser });

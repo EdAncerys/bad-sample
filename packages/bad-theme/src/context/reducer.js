@@ -4,7 +4,6 @@ export const initialState = {
 
   isActiveUser: null,
   dynamicsApps: null,
-  jwt: null,
 
   isPlaceholder: true,
   isDashboardNotifications: null,
@@ -55,8 +54,6 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, createAccountAction: action.payload };
     case "SET_ENQUIRE_ACTION":
       return { ...state, enquireAction: action.payload };
-    case "SET_JWT_ACTION":
-      return { ...state, jwt: action.payload };
     case "SET_TWEETS_ACTION":
       return { ...state, tweets: action.payload };
     case "SET_FAD_ACTION":
