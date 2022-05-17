@@ -23,6 +23,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   // SERVERS --------------------------------------------
   const ServeInfo = () => {
     const ServeAddress = () => {
+      if(lg) return null;
       return (
         <div
           className="flex-col"
@@ -38,7 +39,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
 
     const ServeContact = () => {
       return (
-        <div className="flex-col" style={{ alignItems: "flex-end" }}>
+        <div className={!lg ? "flex-col" : "flex-col-reverse"} style={{ alignItems: !lg ? "flex-end" : null, display: !lg ? "null" : "flex", flexDirection: !lg ? null : "column-reverse" }}> 
           <div>Tel: +44 (0)207 383 0266</div>
           <div>Fax: +44 (0)207 388 5263</div>
           <div>Email: Admin@bad.org.uk</div>
@@ -59,7 +60,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
           style={{
             display: "grid",
             gap: 20,
-            gridTemplateColumns: `repeat(2, 1fr)`,
+            gridTemplateColumns: !lg ? `repeat(2, 1fr)` : "1fr",
             padding: `1em 0`,
           }}
         >
