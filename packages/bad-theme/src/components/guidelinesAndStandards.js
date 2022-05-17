@@ -34,6 +34,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
   const [typeFilter, setTypeFilter] = useState(null);
 
   const [guidelinesList, setGuidelinesList] = useState(null);
+  const [filterData, setFilter] = useState(null);
   const [guidelinesType, setGuidelinesType] = useState(null);
 
   if (!block) return <Loading />;
@@ -58,6 +59,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
     setGuidelinesType(guideType);
     setGuidelinesList(guidelines);
+    setFilter(guidelines);
 
     return () => {
       searchFilterRef.current = false; // clean up function
@@ -89,24 +91,24 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
   }, []);
 
   // DATA pre FETCH ----------------------------------------------------------------
-  if (!guidelinesList) return <Loading />;
+  if (!filterData) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
   const handleSearch = () => {
     // if (idFilter) setIdFilterAction({ dispatch, idFilter: null }); // reset ID for filter
     const input = searchFilterRef.current.value || searchFilter;
     currentSearchFilterRef.current = input;
-    let guidelinesList = Object.values(state.source.guidelines_standards);
+    let filter = guidelinesList;
 
     if (typeFilterRef.current)
-      guidelinesList = guidelinesList.filter((item) => {
+      filter = filter.filter((item) => {
         const list = item.guidelines_type;
         if (list.includes(typeFilterRef.current)) return item;
       });
 
     if (!!input) {
       const INPUT = input.toLowerCase();
-      const filter = guidelinesList.filter((item) => {
+      filter = filter.filter((item) => {
         let title = item.title.rendered;
         let subtitle = item.acf.subtitle;
         if (title) title = title.toLowerCase().includes(INPUT);
@@ -116,7 +118,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
       });
 
       setSearchFilter(input);
-      setGuidelinesList(filter);
+      setFilter(filter);
     }
   };
 
@@ -124,9 +126,9 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     const input = typeFilterRef.current;
     let name = guidelinesType.filter((item) => item.id === input)[0];
     if (name) name = name.name;
-    let guidelinesList = Object.values(state.source.guidelines_standards);
+    let filter = guidelinesList;
     // sort guidelines in alphabetically order by title name
-    guidelinesList = guidelinesList.sort((a, b) => {
+    filter = filter.sort((a, b) => {
       const nameA = a.title.rendered.toUpperCase();
       const nameB = b.title.rendered.toUpperCase();
       if (nameA < nameB) return -1;
@@ -135,7 +137,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     });
 
     if (currentSearchFilterRef.current)
-      guidelinesList = guidelinesList.filter((item) => {
+      filter = filter.filter((item) => {
         let title = item.title.rendered;
         let subtitle = item.acf.subtitle;
         if (title)
@@ -149,14 +151,14 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
       });
 
     if (input) {
-      guidelinesList = guidelinesList.filter((item) => {
+      filter = filter.filter((item) => {
         const list = item.guidelines_type;
         if (list.includes(input)) return item;
       });
     }
 
     setTypeFilter(name);
-    setGuidelinesList(guidelinesList);
+    setFilter(filter);
   };
 
   const handleClearTypeFilter = () => {
@@ -164,7 +166,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     typeFilterRef.current = null;
 
     if (!searchFilter) {
-      setGuidelinesList(Object.values(state.source.guidelines_standards));
+      setFilter(guidelinesList);
     } else {
       handleSearch();
     }
@@ -176,7 +178,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     currentSearchFilterRef.current = null;
 
     if (!typeFilter) {
-      setGuidelinesList(Object.values(state.source.guidelines_standards));
+      setFilter(guidelinesList);
     } else {
       handleTypeSearch();
     }
@@ -269,7 +271,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
       <BlockWrapper>
         <ServeType />
         <Accordion
-          block={{ accordion_item: guidelinesList }}
+          block={{ accordion_item: filterData }}
           guidelines
           hasPublishDate
         />
