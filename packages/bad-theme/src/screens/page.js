@@ -14,7 +14,7 @@ const Post = ({ state, actions, libraries }) => {
 
   const marginVertical = state.theme.marginVertical;
   const { sm, md, lg, xl } = muiQuery();
-
+  
   return (
     <div>
       <BlockBuilder blocks={wpBlocks} />

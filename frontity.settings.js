@@ -35,6 +35,7 @@ const settings = {
           params: {
             per_page: 25, // limit per page fetch request
           },
+          redirections: "all",
           postTypes: [
             {
               type: "pils",
