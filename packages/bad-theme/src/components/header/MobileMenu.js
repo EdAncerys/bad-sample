@@ -8,6 +8,7 @@ import {
   setErrorAction,
   useAppDispatch,
   getWileyAction,
+  loginAction
 } from "../../context";
 
 import { MENU_DATA } from "../../config/data";
@@ -17,7 +18,7 @@ export default connect(({ libraries, state, actions }) => {
 
   const [menuContent, setMenuContent] = React.useState();
   const [wpMainMenu, setWpMainMenu] = React.useState([]);
-  const [wpMoreMenu, setWpMoreMenu] = React.useState([]);
+  // const [wpMoreMenu, setWpMoreMenu] = React.useState([]);
   const { isActiveUser } = useAppState();
   const dispatch = useAppDispatch();
 
@@ -35,7 +36,7 @@ export default connect(({ libraries, state, actions }) => {
       loginAction({ state });
     };
 
-    const handelRedirect = () => {
+    const handleRedirect = () => {
       setErrorAction({ dispatch, isError: null });
       setGoToAction({ state, path: authLink, actions });
     };
@@ -61,7 +62,7 @@ export default connect(({ libraries, state, actions }) => {
           action: [
             {
               label: `Read ${title}`,
-              handler: handelRedirect,
+              handler: handleRedirect,
             },
             { label: "Login", handler: handelLogin },
           ],
@@ -91,6 +92,7 @@ export default connect(({ libraries, state, actions }) => {
         <Nav.Link
           key={key}
           onClick={() => {
+            console.log("MENU", menu)
             if (menu.child_items) {
               setMenuContent({
                 main_title: menu.title,
@@ -115,13 +117,13 @@ export default connect(({ libraries, state, actions }) => {
     // getting wp menu from state
     const data = state.theme.menu;
     if (!data) return;
-    const dataLength = data.length;
 
     setWpMainMenu(data); // main menu to display
-    setWpMoreMenu(data); // more menu into dropdown
+    // setWpMoreMenu(data); // more menu into dropdown
   }, [state.theme.menu]);
 
   if (menuContent) {
+    console.log(menuContent)
     return (
       <div style={styles.container}>
         <Nav.Link onClick={() => setMenuContent(null)}> Go Back</Nav.Link>
@@ -133,21 +135,31 @@ export default connect(({ libraries, state, actions }) => {
               fontWeight: "bold",
             }}
             onClick={() =>
-              setGoToAction({ state, path: menuContent.main_url, actions })
+              {
+              
+             }
             }
           >
             <Html2React html={menuContent.main_title} />
           </Nav.Link>
         ) : null}
 
-        {menuContent.children.map((item) => {
+        {menuContent.children.map((item, i) => {
           return (
             <Nav.Link
+            key={i}
               style={styles.navMenuItem}
               onClick={() => {
-                onClickLinkHandler({ title: item.title, url: item.url });
-                // setGoToAction({ state, path: item.url, actions });
-                // toggleMobileMenu();
+                if (item.child_items) {
+                  setMenuContent({
+                    main_title: item.title,
+                    main_slug: item.slug,
+                    main_url: item.url,
+                    children: item.child_items,
+                  });
+                } else {
+                  onClickLinkHandler({ title: item.title, url: item.url });
+                }
               }}
             >
               <MenuNavItem item={item} />
