@@ -198,6 +198,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
     const url =
       state.auth.B2C +
       `${redirectPath}&scope=openid&response_type=id_token&prompt=${action}`;
+    console.log("🐞 B2C redirect ", redirectPath);
     console.log("🐞 B2C redirect ", url);
   };
   // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
