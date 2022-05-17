@@ -37,6 +37,8 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
       if (!events) return;
       // ⬇️⬇ sort events by date
       events = handleSortFilter({ list: events });
+      // show only 4 events
+      events = events.slice(0, 4);
       setEventList(events);
 
       if (!isActiveUser) return null;

@@ -15,7 +15,7 @@ export const getEventsData = async ({ state, page, postsPerPage }) => {
     let response = await fetchDataHandler({ path: url, state });
 
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status !== 400) {
+    while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
@@ -23,7 +23,7 @@ export const getEventsData = async ({ state, page, postsPerPage }) => {
       url = `${state.auth.WP_HOST}wp-json/wp/v2/events?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&filter[orderby]=event_start_date&order=asc`;
       response = await fetchDataHandler({ path: url, state });
     }
-
+    console.log("🐞 ", data);
     return data;
   } catch (error) {
     console.log("🐞 ", error);
@@ -89,7 +89,7 @@ export const getNewsData = async ({ state, page, postsPerPage }) => {
 
     let response = await fetchDataHandler({ path: url, state });
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status !== 400) {
+    while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
@@ -141,7 +141,7 @@ export const getGuidelinesData = async ({ state, page, postsPerPage }) => {
 
     let response = await fetchDataHandler({ path: url, state });
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status !== 400) {
+    while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
@@ -184,7 +184,7 @@ export const getVenuesData = async ({ state, page, postsPerPage }) => {
 
     let response = await fetchDataHandler({ path: url, state });
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status !== 400) {
+    while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
@@ -212,7 +212,7 @@ export const getVideosData = async ({ state, page, postsPerPage }) => {
 
     let response = await fetchDataHandler({ path: url, state });
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status !== 400) {
+    while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
@@ -256,7 +256,7 @@ export const getFundingData = async ({ state, page, postsPerPage }) => {
 
     let response = await fetchDataHandler({ path: url, state });
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status !== 400) {
+    while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
@@ -299,7 +299,7 @@ export const getMembershipData = async ({ state, page, postsPerPage }) => {
 
     let response = await fetchDataHandler({ path: url, state });
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status !== 400) {
+    while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
@@ -328,7 +328,7 @@ export const getLeadershipData = async ({ state, page, postsPerPage }) => {
 
     let response = await fetchDataHandler({ path: url, state });
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status !== 400) {
+    while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
@@ -388,7 +388,7 @@ export const getSIGData = async ({ state, page, postsPerPage, type }) => {
 
     let response = await fetchDataHandler({ path: url, state });
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status !== 400) {
+    while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
@@ -418,7 +418,7 @@ export const getCPTData = async ({ state, page, postsPerPage, type }) => {
 
     let response = await fetchDataHandler({ path: url, state });
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status !== 400) {
+    while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
@@ -462,7 +462,7 @@ export const getElectionsData = async ({ state, page, postsPerPage }) => {
 
     let response = await fetchDataHandler({ path: url, state });
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status !== 400) {
+    while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
