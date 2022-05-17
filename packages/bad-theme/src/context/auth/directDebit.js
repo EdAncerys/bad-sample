@@ -1,4 +1,4 @@
-import { authenticateAppAction, fetchDataHandler } from "../index";
+import { fetchDataHandler } from "../index";
 
 export const getDirectDebitAction = async ({ state, dispatch, id }) => {
   // console.log("getDirectDebitAction triggered");

@@ -147,6 +147,8 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
   const ServeTesting = () => {
+    if (state.auth.ENVIRONMENT !== "DEVELOPMENT") return null;
+
     return (
       <div className="flex" style={{ padding: `0 1em` }}>
         <div

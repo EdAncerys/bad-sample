@@ -1,6 +1,5 @@
 import { handleGetCookie, handleSetCookie } from "./cookie";
 import {
-  authenticateAppAction,
   getUserStoreAction,
   getUserDataByContactId,
   fetchDataHandler,
@@ -69,13 +68,8 @@ export const authCookieActionBeforeCSR = async ({
       }
 
       if (userData && appsData) {
-        const taken = await authenticateAppAction({
-          state,
-          dispatch,
-        }); // replace taken with new one
         initialState.isActiveUser = userData; // populates user userResponse
         initialState.dynamicsApps = appsData;
-        initialState.jwt = taken; // replace taken with new one
 
         handleSetCookie({
           name: state.auth.COOKIE_NAME,
