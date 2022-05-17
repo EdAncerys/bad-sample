@@ -1,5 +1,5 @@
 // CONTEXT --------------------------------------------------------
-import { authenticateAppAction } from "../context";
+import {} from "../context";
 
 export const fetchDataHandler = async ({
   method,

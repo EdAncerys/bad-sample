@@ -257,13 +257,28 @@ export const getUserDataFromDynamics = async ({ state, contactid }) => {
   }
 };
 
+export const handleRemoveServerSideCookie = async ({ state }) => {
+  // console.log("getUserDataFromDynamics triggered");
+
+  const path = state.auth.APP_HOST + `/dynamicstest/users/b2c/logout`;
+
+  try {
+    const response = await fetchDataHandler({ path, state });
+
+    return response;
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
 export const logoutAction = async ({ state, actions, dispatch }) => {
   // console.log("logoutAction triggered");
   // ⬇️ stack order important to unmount components correctly
   // 🍪 delete stored cookies
   handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
   handleSetCookie({ name: state.auth.AUTH_COOKIE, deleteCookie: true });
-  handleSetCookie({ name: "badAuth", deleteCookie: true });
+  handleSetCookie({ name: "vuid", deleteCookie: true }); // 🍪 remove vuid cookie
+  await handleRemoveServerSideCookie({ state });
 
   // reddirect user to home page
   setGoToAction({ state, path: `/`, actions });
