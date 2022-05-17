@@ -10,6 +10,7 @@ export const fetchDataHandler = async ({
   options,
   headers,
   disableCookies,
+  disableCash,
   isCORSHeaders,
 }) => {
   // -----------------------------------------------
@@ -19,6 +20,10 @@ export const fetchDataHandler = async ({
   method = method || "GET";
   accept = accept || "application/json";
   if (isCORSHeaders) disableCookies = true; // 📌 disable sending cookies with requests if CORS header is set
+  let isCashControlHeaders =
+    method === "GET" &&
+    state.auth.ENVIRONMENT !== "DEVELOPMENT" && // 📌 disable cashing in development
+    !disableCash; // 📌 enable sending cash control headers with requests if method is GET
 
   // 📌 TESTING
   let timeNow = new Date();
@@ -35,7 +40,7 @@ export const fetchDataHandler = async ({
     "Access-Control-Allow-Methods":
       "GET, PUT, POST, DELETE, HEAD, OPTIONS, PATCH",
     "Access-Control-Allow-Origin": "*",
-    "content-type": "application/json; charset=utf-8",
+    // "content-type": "application/json; charset=utf-8",
   };
 
   // 📌 HEADER  Options
@@ -46,7 +51,7 @@ export const fetchDataHandler = async ({
     // add CORS headers
     // ...(isCORSHeaders ? corsHeaders : {}),
     // set cash control headers to 7 days if method is GET
-    ...(method === "GET" ? { "Cache-Control": "s-maxage=86400" } : {}),
+    ...(isCashControlHeaders ? { "Cache-Control": "s-maxage=86400" } : {}),
     // add custom headers if provided
     ...headers,
   };
@@ -54,7 +59,7 @@ export const fetchDataHandler = async ({
   // 📌 Options
   let requestOptions = {
     method,
-    headerOptions,
+    headers: headerOptions,
     // CORS mode options
     // ...(isCORSHeaders ? { mode: "no-cors" } : {}),
     // add options if provided
@@ -70,6 +75,8 @@ export const fetchDataHandler = async ({
       body: JSON.stringify(body),
     };
   }
+
+  // console.log("🐞 requestOptions", requestOptions); // debug
 
   try {
     if (!path) throw new Error("No path provided");

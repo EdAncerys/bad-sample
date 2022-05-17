@@ -6,6 +6,7 @@ export const handleSetCookie = ({ name, value, days, deleteCookie }) => {
   if (days) cookieExDays = days;
 
   console.log("🍪 list ", Cookies.get()); // debug
+
   if (deleteCookie) {
     Cookies.remove(name);
     return;
