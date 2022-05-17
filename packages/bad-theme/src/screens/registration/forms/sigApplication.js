@@ -684,7 +684,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         isFetching={isFetching}
         background="transparent"
         alignSelf="self-end"
-        padding="0 0 6em 0"
+        padding="0 0 45% 0"
       />
 
       <div

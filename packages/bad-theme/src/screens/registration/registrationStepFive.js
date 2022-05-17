@@ -16,13 +16,6 @@ const RegistrationStepFive = ({ state, actions }) => {
   const marginVertical = state.theme.marginVertical;
 
   // SERVERS ---------------------------------------------
-  const ServeContent = () => {
-    return (
-      <div style={{ padding: `0 1em 1em` }}>
-        <SIGApplication />
-      </div>
-    );
-  };
 
   return (
     <BlockWrapper>
@@ -33,7 +26,9 @@ const RegistrationStepFive = ({ state, actions }) => {
       >
         <div style={!lg ? styles.container : styles.containerMobile}>
           <SideBarMenu />
-          <ServeContent />
+          <div style={{ padding: `0 1em 1em` }}>
+            <SIGApplication />
+          </div>
         </div>
       </div>
     </BlockWrapper>
