@@ -79,7 +79,7 @@ const RowButton = ({
         url: link.url,
       });
     }
-    const journal = title.match(/[A-Z]{3}/gm)[0];
+    // const journal = title.match(/[A-Z]{3}/gm)[0];
     // redirect handler
     const handelRedirect = () => {
       setErrorAction({ dispatch, isError: null });
