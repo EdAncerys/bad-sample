@@ -212,7 +212,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           value={fundingFilter}
           onChange={(e) => handleFundingSearch({ e })}
           className="input"
-          style={{ height: 45 }}
+          style={{ height: 45, borderRadius: 10, width: !lg ? null : "100%" }}
         >
           <option value="" hidden>
             Select Funding Rate
@@ -252,7 +252,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       <div
         style={{
           marginTop: "auto",
-          padding: `1em 0 1em ${state.theme.marginVertical}px`,
+          padding: !lg ? `1em 0 1em ${state.theme.marginVertical}px` : `0em 0 1em ${state.theme.marginVertical}px`,
         }}
       >
         <select
@@ -260,7 +260,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           value={dateFilter}
           onChange={(e) => handleDateSearch({ e })}
           className="input"
-          style={{ height: 45 }}
+          style={{ height: 45, borderRadius: 10, width: !lg ? null : "100%" }}
         >
           <option value="" hidden>
             Select Closing Date
@@ -345,7 +345,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       >
         <BlockWrapper>
           <div style={{ padding: `0 ${marginHorizontal}px` }}>
-            <div className="flex">
+            <div className={!lg ? "flex" : "flex-col"}>
               <SearchContainer
                 title={isAccordion ? null : "Research Funding"}
                 width="100%"

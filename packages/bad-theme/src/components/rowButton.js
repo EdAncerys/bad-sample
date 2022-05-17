@@ -79,7 +79,7 @@ const RowButton = ({
         url: link.url,
       });
     }
-
+    const journal = title.match(/[A-Z]{3}/gm)[0];
     // redirect handler
     const handelRedirect = () => {
       setErrorAction({ dispatch, isError: null });
@@ -88,7 +88,7 @@ const RowButton = ({
 
     if (is_wileys_link && !isActiveUser) {
       // 📌 track notification error action
-      console.log("HANDLING HERE");
+      // console.log("HANDLING HERE", is_wileys_link, "title:", title);
       setErrorAction({
         dispatch,
         isError: {
@@ -96,7 +96,7 @@ const RowButton = ({
           image: "Error",
           action: [
             {
-              label: `Read ${title}`,
+              label: `${title}`,
               handler: handelRedirect,
             },
             { label: "Login", handler: handelLogin },

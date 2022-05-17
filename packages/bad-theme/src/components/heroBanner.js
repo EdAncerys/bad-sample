@@ -123,7 +123,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
               title={title}
               body={body}
               cardWidth="90%"
-              bodyLength={BODY_LENGTH}
+              bodyLimit={BODY_LENGTH}
               colour={block.colour}
               shadow
               heroBanner

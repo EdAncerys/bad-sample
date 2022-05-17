@@ -15,7 +15,7 @@ const NewsCarouselComponent = ({
   categoryList,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
+  console.log("NEWSCAROUSELCOMPONENTCAT", categoryList);
   const { sm, md, lg, xl } = muiQuery();
   const homepage = state.router.link === "/";
   const { post_limit, disable_vertical_padding } = block;
@@ -64,7 +64,6 @@ const NewsCarouselComponent = ({
               <div className="flex">
                 {block.map((block, key) => {
                   const { categories, title, link, acf } = block;
-
                   let redirectLink = link;
                   // if redirec_url is set, use it
                   if (acf && acf.redirect_url) redirectLink = acf.redirect_url;
