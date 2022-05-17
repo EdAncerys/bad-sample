@@ -173,9 +173,13 @@ export const getUserDataByContactId = async ({
   contactid,
 }) => {
   // console.log("getUserDataByContactId triggered");
-  console.log("🐞 CONTACT id ALTERED");
-  // contactid = "969ba377-a398-ec11-b400-000d3aaedef5"; // TESTING
-  contactid = "0786df85-618f-ec11-b400-000d3a22037e"; // TESTING
+
+  // ⬇️ development env default login action ⬇️
+  if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
+    console.log("🐞 ALTERED DATA");
+    // contactid = "969ba377-a398-ec11-b400-000d3aaedef5"; // TESTING
+    contactid = "0786df85-618f-ec11-b400-000d3a22037e"; // TESTING
+  }
 
   const path = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
 
@@ -207,9 +211,13 @@ export const getUserDataByContactId = async ({
 export const getUserDataByEmail = async ({ state, dispatch, email }) => {
   // console.log("getUserDataByEmail triggered");
 
-  console.log("🐞 EMAIL ALTERED");
-  // email = "milliegatley@gmail.com"; // TESTING
-  email = "chris@skylarkcreative.co.uk"; // TESTING
+  // ⬇️ development env default login action ⬇️
+  if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
+    console.log("🐞 ALTERED DATA");
+
+    // email = "milliegatley@gmail.com"; // TESTING
+    email = "chris@skylarkcreative.co.uk"; // TESTING
+  }
 
   const path =
     state.auth.APP_HOST +
