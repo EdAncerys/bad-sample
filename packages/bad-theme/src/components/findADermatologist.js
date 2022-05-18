@@ -32,7 +32,7 @@ const FindADermatologist = ({ state, block }) => {
       const post_code = query.value.split(" ").join("");
       const url =
         state.auth.APP_HOST +
-        "/catalogue/fad/" +
+        "/catalogue/md/" +
         post_code +
         `?limit=${query_limit.current}`;
       const fetching = await fetchDataHandler({ path: url, state });
@@ -69,7 +69,7 @@ const FindADermatologist = ({ state, block }) => {
     };
 
     const fetchDermatologistsByName = async () => {
-      const url = state.auth.APP_HOST + "/catalogue/fad";
+      const url = state.auth.APP_HOST + "/catalogue/md";
       const fetching = await fetchDataHandler({ path: url, state });
 
       if (fetching.ok) {
@@ -93,7 +93,7 @@ const FindADermatologist = ({ state, block }) => {
     const post_code = query.value.split(" ").join("");
     const url =
       state.auth.APP_HOST +
-      "/catalogue/fad/" +
+      "/catalogue/md/" +
       post_code +
       `?limit=5&skip=${query_limit.current}`;
     const more = await fetchDataHandler({ path: url, state });
