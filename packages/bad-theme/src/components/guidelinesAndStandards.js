@@ -14,7 +14,6 @@ import {
   useAppDispatch,
   useAppState,
   muiQuery,
-  getGuidelinesDataAction,
   setIdFilterAction,
   getGuidelinesTypes,
   getGuidelinesData,
