@@ -16,7 +16,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { lg } = muiQuery();
   const dispatch = useAppDispatch();
-  const { isActiveUser, refreshJWT } = useAppState();
+  const { isActiveUser } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
   const [isFetching, setIsFetching] = useState(null);
@@ -107,7 +107,6 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         dispatch,
         data,
         isActiveUser,
-        refreshJWT,
       });
       if (!response) throw new Error("Error updating profile");
       // display error message

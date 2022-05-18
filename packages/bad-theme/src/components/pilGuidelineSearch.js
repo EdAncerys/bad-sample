@@ -16,6 +16,7 @@ import {
   setGoToAction,
   setIdFilterAction,
   muiQuery,
+  fetchDataHandler,
 } from "../context";
 import { TimerOutlined } from "@mui/icons-material";
 
@@ -45,10 +46,10 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
     try {
       setFetching(true);
       // ⬇️ apply data filters for search
-      let fetching = await fetch(
+      const path =
         state.auth.WP_HOST +
-          `wp-json/relevanssi/v1/search?keyword=${input}&type=guidelines_standards,pils&per_page=10&_fields=title,link&orderby=title&order=ASC`
-      );
+        `wp-json/relevanssi/v1/search?keyword=${input}&type=guidelines_standards,pils&per_page=10&_fields=title,link&orderby=title&order=ASC`;
+      let fetching = await fetchDataHandler({ path, state });
       let data = await fetching.json();
       setFetching(false);
       // if data is not array, return null

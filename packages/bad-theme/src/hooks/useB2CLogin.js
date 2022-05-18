@@ -8,6 +8,7 @@ import {
   setPlaceholderAction,
   setGoToAction,
   getUserDataByEmail,
+  setAuthenticationCookieAction,
 } from "../context";
 
 export const useB2CLogin = ({ state, actions }) => {
@@ -18,7 +19,7 @@ export const useB2CLogin = ({ state, actions }) => {
   let urlPath = state.router.link;
 
   const dispatch = useAppDispatch();
-  const { refreshJWT } = useAppState();
+  const {} = useAppState();
 
   // await to get window object & setWindow to true
   useEffect(() => {
@@ -54,6 +55,8 @@ export const useB2CLogin = ({ state, actions }) => {
   useEffect(async () => {
     // Decode the token
     if (!hash) return;
+    // get all the parts of the token after #id_token=
+    const b2cTaken = hash.split("#id_token=");
     let items = hash.replace("#id_token=", "");
     items = items ? items.split(".") : null;
     if (!items) return;
@@ -63,24 +66,30 @@ export const useB2CLogin = ({ state, actions }) => {
       items[0] = JSON.parse(atob(items[0]));
       items[1] = JSON.parse(atob(items[1]));
 
-      // console.log("🐞 ", JSON.parse(atob(items[0])));
+      console.log("🐞 items", hash);
+      console.log("🐞 items", b2cTaken);
 
       if (Array.isArray(items[1].emails)) {
         const email = items[1].emails[0];
-        // setContactEmail(items[1].emails[0]);
-        // console.log("🐞 email ", email);
+        console.log("🐞 email ", email); // debug
+
+        // 📌 set auth cookie for authenticated requests
+        await setAuthenticationCookieAction({ state, b2cTaken });
         const user = await getUserDataByEmail({
           state,
           dispatch,
           email,
-          refreshJWT,
         });
-        if (!user) throw new Error("Error getting user data.");
+        if (!user) {
+          // delete auth cookie if user not found
+          handleSetCookie({ name: "badAuth", deleteCookie: true });
+          throw new Error("Error getting user data.");
+        }
       } else {
-        // console.log("🐞 error. Redirect to home path");
+        console.log("🐞 error. No email found. Redirect to home path");
       }
     } catch (error) {
-      // console.log(error);
+      console.log(error);
     } finally {
       // get redirect url from cookie
       const redirectUrl = handleGetCookie({ name: "loginPath" });

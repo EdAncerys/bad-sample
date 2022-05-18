@@ -11,15 +11,12 @@ import MapsComponent from "./maps/maps";
 import Loading from "./loading";
 
 // CONTEXT --------------------------------------------------------------------------
-import { useAppState, authenticateAppAction, useAppDispatch } from "../context";
+import { useAppState, useAppDispatch, fetchDataHandler } from "../context";
 
 const FindADermatologist = ({ state, block }) => {
   const marginVertical = state.theme.marginVertical;
   const marginHorizontal = state.theme.marginHorizontal;
   let MARGIN = `${marginVertical}px ${marginHorizontal}px`;
-
-  const dispatch = useAppDispatch();
-  const { refreshJWT } = useAppState();
 
   const [query, setQuery] = React.useState();
 
@@ -32,23 +29,14 @@ const FindADermatologist = ({ state, block }) => {
 
   React.useEffect(async () => {
     const fetchDermatologistsByPostCode = async () => {
-      const jwt = await authenticateAppAction({
-        dispatch,
-        state,
-        dispatch,
-        refreshJWT,
-      });
       const post_code = query.value.split(" ").join("");
       const url =
         state.auth.APP_HOST +
         "/catalogue/fad/" +
         post_code +
         `?limit=${query_limit.current}`;
-      const fetching = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      });
+      const fetching = await fetchDataHandler({ path: url, state });
+
       if (fetching.ok) {
         const json = await fetching.json();
         const data = json.data;
@@ -68,16 +56,8 @@ const FindADermatologist = ({ state, block }) => {
     };
 
     const handleFocusOnThePostCode = async () => {
-      const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-
-      const post_code = await fetch(
-        state.auth.APP_HOST + "/catalogue/ukpostcode/" + query.value,
-        {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
-        }
-      );
+      const path = state.auth.APP_HOST + "/catalogue/ukpostcode/" + query.value;
+      const post_code = await fetchDataHandler({ path, state });
 
       if (post_code.ok) {
         const json = await post_code.json();
@@ -89,14 +69,8 @@ const FindADermatologist = ({ state, block }) => {
     };
 
     const fetchDermatologistsByName = async () => {
-      const jwt = await authenticateAppAction({ dispatch, refreshJWT, state });
-
       const url = state.auth.APP_HOST + "/catalogue/fad";
-      const fetching = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      });
+      const fetching = await fetchDataHandler({ path: url, state });
 
       if (fetching.ok) {
         const json = await fetching.json();
@@ -116,18 +90,13 @@ const FindADermatologist = ({ state, block }) => {
 
   const handleLoadMore = async () => {
     setLoading(true);
-    const jwt = await authenticateAppAction({ dispatch, refreshJWT, state });
     const post_code = query.value.split(" ").join("");
     const url =
       state.auth.APP_HOST +
       "/catalogue/fad/" +
       post_code +
       `?limit=5&skip=${query_limit.current}`;
-    const more = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-    });
+    const more = await fetchDataHandler({ path: url, state });
 
     if (more.ok) {
       const json = await more.json();
@@ -335,17 +304,24 @@ const FindADermatologist = ({ state, block }) => {
 
       const ServeUrls = () => {
         if (!derm.bad_web1 && !derm.bad_web2 && !derm.bad_web3) return null;
+
         return (
           <div style={{ marginTop: 20 }}>
             <div className="primary-title">Private Practice Links</div>
             <div className="menu-title">
-              <a href={derm.bad_web1}>{derm.bad_web1}</a>
+              <a href={derm.bad_web1} target="_blank">
+                {derm.bad_web1}
+              </a>
             </div>
             <div className="menu-title">
-              <a href={derm.bad_web2}>{derm.bad_web2}</a>
+              <a href={derm.bad_web2} target="_blank">
+                {derm.bad_web2}
+              </a>
             </div>
             <div className="menu-title">
-              <a href={derm.bad_web3}>{derm.bad_web3}</a>
+              <a href={derm.bad_web3} target="_blank">
+                {derm.bad_web3}
+              </a>
             </div>
           </div>
         );

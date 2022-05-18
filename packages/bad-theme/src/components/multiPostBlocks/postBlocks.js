@@ -84,7 +84,7 @@ const MultiPostBlock = ({ state, actions, block, filter }) => {
           if (lg)
             return (
               <RowButton
-                block={{ title: title, link: link, colour: colour }}
+                block={{ title: title, link: link, colour: colour, file_link: doc_upload }}
                 multiPostRowButtons
               />
             );

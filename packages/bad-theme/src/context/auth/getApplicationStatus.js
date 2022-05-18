@@ -1,26 +1,15 @@
-import { authenticateAppAction, setFetchAction } from "../index";
+import { fetchDataHandler } from "../index";
 
-export const getApplicationStatus = async ({
-  state,
-  dispatch,
-  contactid,
-  refreshJWT,
-}) => {
+export const getApplicationStatus = async ({ state, dispatch, contactid }) => {
   // console.log("getApplicationStatus triggered");
 
   // if contactid is not provided then throw error
   if (!contactid) throw new Error("contactid is required");
 
-  const URL = state.auth.APP_HOST + `/applications/billing/` + contactid;
-  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-
-  const requestOptions = {
-    method: "GET",
-    headers: { Authorization: `Bearer ${jwt}` },
-  };
+  const path = state.auth.APP_HOST + `/applications/billing/` + contactid;
 
   try {
-    const response = await fetch(URL, requestOptions);
+    const response = await fetchDataHandler({ path, state });
     const data = await response.json();
 
     if (data.apps.success) {

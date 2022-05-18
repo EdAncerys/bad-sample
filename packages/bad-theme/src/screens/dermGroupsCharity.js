@@ -22,8 +22,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, dynamicsApps, refreshJWT } =
-    useAppState();
+  const { applicationData, isActiveUser, dynamicsApps } = useAppState();
   const [sigGroup, setGroupe] = useState(null);
 
   const data = state.source.get(state.router.link);
@@ -51,6 +50,8 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
 
   // HANDLERS --------------------------------------------------
   const handleApply = async ({ catType }) => {
+    console.log("🐞 ", catType);
+
     await handleApplyForMembershipAction({
       state,
       actions,
@@ -67,7 +68,6 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
         stepFour: false,
       },
       path: "/membership/sig-questions/", // redirect to SIG form page
-      refreshJWT,
     });
   };
 

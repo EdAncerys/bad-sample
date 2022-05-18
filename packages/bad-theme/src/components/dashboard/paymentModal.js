@@ -14,7 +14,7 @@ import {
 } from "../../context";
 const PaymentModal = ({ state, actions, payment_url, resetPaymentUrl }) => {
   const dispatch = useAppDispatch();
-  const { isActiveUser, refreshJWT } = useAppState();
+  const { isActiveUser } = useAppState();
 
   if (!payment_url) return null;
   const iFrameHandler = async (e) => {
@@ -34,7 +34,6 @@ const PaymentModal = ({ state, actions, payment_url, resetPaymentUrl }) => {
         state,
         dispatch,
         contactid: isActiveUser.contactid,
-        refreshJWT,
       });
       resetPaymentUrl();
       if (iqs && iqs.has("transId")) {

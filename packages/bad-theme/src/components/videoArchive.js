@@ -15,6 +15,7 @@ import {
   getVideosData,
   getEventSpecialitys,
   getEventGrades,
+  fetchDataHandler,
 } from "../context";
 
 const VideoArchive = ({ state, actions, libraries }) => {
@@ -332,9 +333,8 @@ const VideoArchive = ({ state, actions, libraries }) => {
     const eventGrades = await getEventGrades({ state });
 
     const fetchHeroBanner = async () => {
-      const fetchInfo = await fetch(
-        state.source.url + "/wp-json/wp/v2/pages/7051" // hero banner page
-      );
+      const path = state.source.url + "/wp-json/wp/v2/pages/7051";
+      const fetchInfo = await fetchDataHandler({ path, state });
 
       if (fetchInfo.ok) {
         const json = await fetchInfo.json();
@@ -354,17 +354,9 @@ const VideoArchive = ({ state, actions, libraries }) => {
     };
 
     const fetchUserVideos = async () => {
-      const cookie = handleGetCookie({ name: `BAD-WebApp` });
-      const { contactid, jwt } = cookie;
-
-      const listOfVids = await fetch(
-        state.auth.APP_HOST + `/videvent/${isActiveUser.contactid}/entities`,
-        {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
-        }
-      );
+      const path =
+        state.auth.APP_HOST + `/videvent/${isActiveUser.contactid}/entities`;
+      const listOfVids = await fetchDataHandler({ path, state });
 
       const json = await listOfVids.json();
       setUserVideos(json.data);

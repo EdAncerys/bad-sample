@@ -16,6 +16,7 @@ const DATE_MODULE = date;
 import CloseIcon from "@mui/icons-material/Close";
 // CONTEXT --------------------------------------------------------
 import { getFundingData, getFundingTypes, muiQuery } from "../context";
+import { compose } from "@mui/system";
 
 const CPTBlock = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -31,6 +32,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     funding_filter,
   } = block;
   const [postListData, setPostListData] = useState(null);
+  const [postFilter, setPostFilter] = useState(null);
   const [groupeType, setGroupeType] = useState(null);
 
   const [searchFilter, setFilter] = useState("");
@@ -52,8 +54,6 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   if (disable_vertical_padding) marginVertical = 0;
 
   const isAccordion = layout === "accordion";
-  let postPath = `funding_awards`;
-  let typePath = `funding_type`;
 
   let PADDING = `${marginVertical}px 0`;
   if (add_search_function) PADDING = `0 0 ${marginVertical}px 0`;
@@ -70,6 +70,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     }
     if (post_limit) fundingList = fundingList.slice(0, Number(post_limit)); // apply limit on posts
 
+    setPostFilter(fundingList);
     setPostListData(fundingList);
     setGroupeType(types);
 
@@ -94,10 +95,10 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     const date = dateRef.current;
     const funding = fundingRef.current;
 
-    let data = Object.values(state.source[postPath]);
+    let data = postListData;
 
     if (type) {
-      data = data.filter((item) => item[typePath].includes(type));
+      data = data.filter((item) => item.funding_type.includes(type));
     }
 
     if (funding) {
@@ -130,7 +131,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
     if (post_limit) data = data.slice(0, Number(chunkRef.current)); // apply limit on posts
 
-    setPostListData(data);
+    setPostFilter(data);
     setFilter(input);
   };
 
@@ -183,7 +184,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   // SERVERS ----------------------------------------------------------------
   const ServeAmountFilter = () => {
-    let data = Object.values(state.source[postPath]);
+    let data = postListData;
     // set dateFilter to post dates
     let allFundings = [];
     data.filter((item) => {
@@ -192,6 +193,12 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     });
     // get unique month & year from allDates array and set to allDates
     let uniqueFundings = [...new Set(allFundings)];
+    // sort funding by amount assending
+    uniqueFundings.sort((a, b) => a - b);
+    // add comma to each thousand
+    uniqueFundings = uniqueFundings.map((item) => {
+      return item.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    });
 
     return (
       <div
@@ -205,7 +212,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           value={fundingFilter}
           onChange={(e) => handleFundingSearch({ e })}
           className="input"
-          style={{ height: 45 }}
+          style={{ height: 45, borderRadius: 10, width: !lg ? null : "100%" }}
         >
           <option value="" hidden>
             Select Funding Rate
@@ -213,7 +220,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           {uniqueFundings.map((item, key) => {
             return (
               <option key={key} value={item}>
-                {item} £
+                £ {item}
               </option>
             );
           })}
@@ -223,7 +230,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   };
 
   const ServeClosingDates = () => {
-    let data = Object.values(state.source[postPath]);
+    let data = postListData;
     // set dateFilter to post dates
     let allDates = [];
     data.filter((item) => {
@@ -245,7 +252,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       <div
         style={{
           marginTop: "auto",
-          padding: `1em 0 1em ${state.theme.marginVertical}px`,
+          padding: !lg ? `1em 0 1em ${state.theme.marginVertical}px` : `0em 0 1em ${state.theme.marginVertical}px`,
         }}
       >
         <select
@@ -253,7 +260,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           value={dateFilter}
           onChange={(e) => handleDateSearch({ e })}
           className="input"
-          style={{ height: 45 }}
+          style={{ height: 45, borderRadius: 10, width: !lg ? null : "100%" }}
         >
           <option value="" hidden>
             Select Closing Date
@@ -338,11 +345,9 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       >
         <BlockWrapper>
           <div style={{ padding: `0 ${marginHorizontal}px` }}>
-            <div className="flex">
+            <div className={!lg ? "flex" : "flex-col"}>
               <SearchContainer
-                title={
-                  isAccordion ? "Undergraduate Awards" : "Research Funding"
-                }
+                title={isAccordion ? null : "Research Funding"}
                 width="100%"
                 searchFilterRef={filterRef}
                 handleSearch={handleSearch}
@@ -355,13 +360,13 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
               <ServeFundingFilter />
               <ServeDateFilter />
             </div>
-            <TypeFilters
+            {/* <TypeFilters
               filters={groupeType}
               handleSearch={handleTypeSearch}
               typeFilterRef={typeFilterRef}
               handleClearTypeFilter={handleClearTypeFilter}
               title="Filter"
-            />
+            /> */}
           </div>
         </BlockWrapper>
       </div>
@@ -374,7 +379,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
         <div>
           <Accordion
             block={{
-              accordion_item: postListData,
+              accordion_item: postFilter,
             }}
             fundingBlock
             hasPreview={preview}
@@ -392,7 +397,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           padding: `0 ${marginHorizontal}px`,
         }}
       >
-        {postListData.map((block, key) => {
+        {postFilter.map((block, key) => {
           const { title, content, link, date, dermo_group_type } = block.acf;
 
           return (
@@ -414,7 +419,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
   };
 
   const ServeMoreAction = () => {
-    if (!post_limit || postListData.length < chunkRef.current) return null;
+    if (!post_limit || postFilter.length < chunkRef.current) return null;
 
     return (
       <div

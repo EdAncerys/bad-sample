@@ -60,14 +60,11 @@ import {
   getWPMenu,
   setPlaceholderAction,
   setIdFilterAction,
-  muiQuery,
 } from "../context";
 
 const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
-  const { isActiveUser, isPlaceholder, idFilter, refreshJWT, redirects } =
-    useAppState();
-  const { sm, md, lg, xl, xxl } = muiQuery();
+  const { isActiveUser, isPlaceholder, idFilter, redirects } = useAppState();
 
   let urlPath = state.router.link;
   const data = state.source.get(urlPath);
@@ -101,7 +98,7 @@ const App = ({ state, actions }) => {
     const currentTime = new Date().getTime();
     if (!isPlaceholder) return; // trigger only once
     // ⬇️  get user data if cookie is set
-    await authCookieActionAfterCSR({ state, dispatch, refreshJWT });
+    await authCookieActionAfterCSR({ state, dispatch });
     // ⬇️  pre-fetch app menu from wp
     await getWPMenu({ state, actions });
 

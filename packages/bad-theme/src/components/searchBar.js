@@ -16,6 +16,7 @@ import {
   setGoToAction,
   setIdFilterAction,
   muiQuery,
+  fetchDataHandler,
 } from "../context";
 import { TimerOutlined } from "@mui/icons-material";
 
@@ -69,10 +70,11 @@ const SearchBar = ({ state, actions, libraries, block, search_type }) => {
     const input = inputValue.toLowerCase();
     setDataLoading(true);
     // ⬇️ apply data filters for search
-    let fetching = await fetch(
+
+    const path =
       state.auth.WP_HOST +
-        `wp-json/relevanssi/v1/search?keyword=${input}&type=${typeOfSearch[search_type]}&per_page=5&_fields=title,link&orderby=title&order=ASC`
-    );
+      `wp-json/relevanssi/v1/search?keyword=${input}&type=${typeOfSearch[search_type]}&per_page=5&_fields=title,link&orderby=title&order=ASC`;
+    let fetching = await fetchDataHandler({ path, state });
     let data = await fetching.json();
     console.log("SEARCH TYPE", search_type);
     console.log("INPUT", input);

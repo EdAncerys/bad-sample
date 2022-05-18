@@ -23,7 +23,6 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
     dynamicsApps,
     isActiveUser,
     isVisibleNotification,
-    refreshJWT,
     directDebitPath,
   } = useAppState();
 
@@ -39,7 +38,6 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
         state,
         dispatch,
         contactid: isActiveUser.contactid,
-        refreshJWT,
       });
 
     if (!isDirectDebit)
@@ -47,7 +45,6 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
         state,
         dispatch,
         id: isActiveUser.contactid,
-        refreshJWT,
       });
 
     if (!isDirectDebit) return null;

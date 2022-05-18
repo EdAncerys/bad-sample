@@ -4,7 +4,7 @@ import { connect } from "frontity";
 import { colors } from "../../config/imports";
 import { handleGetCookie } from "../../helpers/cookie";
 import PaymentModal from "./paymentModal";
-import { setErrorAction } from "../../context";
+import { setErrorAction, fetchDataHandler } from "../../context";
 const PaymentNotification = ({
   state,
   actions,
@@ -20,7 +20,6 @@ const PaymentNotification = ({
 
   // HELPERS ----------------------------------------------------------------
   const displayPaymentModal = (url) => {
-    console.log("PM URL", url);
     setErrorAction({
       dispatch,
       isError: {
@@ -32,9 +31,6 @@ const PaymentNotification = ({
   };
 
   const handlePayment = async ({ sage_id }) => {
-    const cookie = handleGetCookie({ name: `BAD-WebApp` });
-    const { contactid, jwt } = cookie;
-
     const the_url =
       state.auth.ENVIRONMENT === "DEVELOPMENT"
         ? "http://localhost:3000/"
@@ -43,15 +39,15 @@ const PaymentNotification = ({
       state.auth.ENVIRONMENT === "DEVELOPMENT"
         ? "/sagepay/live/application/"
         : "/sagepay/live/application/";
-    const fetchVendorId = await fetch(
-      state.auth.APP_HOST + sagepay_url + sage_id + `?redirecturl=${the_url}`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      }
-    );
+
+    const path =
+      state.auth.APP_HOST + sagepay_url + sage_id + `?redirecturl=${the_url}`;
+    const fetchVendorId = await fetchDataHandler({
+      path,
+      method: "POST",
+      state,
+    });
+
     if (fetchVendorId.ok) {
       const json = await fetchVendorId.json();
       const url =

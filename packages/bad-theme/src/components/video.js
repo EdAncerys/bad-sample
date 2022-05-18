@@ -18,11 +18,11 @@ const DATE_MODULE = date;
 import {
   useAppState,
   useAppDispatch,
-  authenticateAppAction,
   setEnquireAction,
   muiQuery,
   setCreateAccountModalAction,
   setErrorAction,
+  fetchDataHandler,
 } from "../context";
 
 const Video = ({ state, actions, libraries }) => {
@@ -55,7 +55,7 @@ const Video = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { isActiveUser, refreshJWT } = useAppState();
+  const { isActiveUser } = useAppState();
 
   React.useEffect(async () => {
     //Not the greatest idea to make useEffect async
@@ -75,7 +75,6 @@ const Video = ({ state, actions, libraries }) => {
     }
 
     setRelatedVideos(related_videos_to_show);
-    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
     if (!post.acf.private) {
       setVideoStatus("unlocked");
@@ -92,11 +91,12 @@ const Video = ({ state, actions, libraries }) => {
         isActiveUser.contactid +
         "/" +
         post.acf.event_id;
-      console.log("URL", url);
-      const fetching = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
+
+      const fetching = await fetchDataHandler({
+        path: url,
+        state,
+        isCORSHeaders: true,
+        disableCookies: true,
       });
 
       if (fetching.ok) {
@@ -130,7 +130,7 @@ const Video = ({ state, actions, libraries }) => {
 
   const handlePayment = async () => {
     const cookie = handleGetCookie({ name: `BAD-WebApp` });
-    const { contactid, jwt } = cookie;
+    const { contactid } = cookie;
 
     const sagepay_url =
       state.auth.ENVIRONMENT === "PRODUCTION"
@@ -149,19 +149,35 @@ const Video = ({ state, actions, libraries }) => {
       uappUrl +
       state.router.link +
       "?sagepay=true";
-    const fetchVendorId = await fetch(url, {
+
+    const fetchVendorId = await fetchDataHandler({
+      path: url,
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
+      state,
+      isCORSHeaders: true,
+      disableCookies: true,
     });
 
     if (fetchVendorId.ok) {
       const json = await fetchVendorId.json();
+      if(json.success) {
       const url =
         json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
       handlePaymentModal(url);
+      return true;
+      } 
+
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `There was a problem processing the request`,
+          image: "Error",
+        },
+      });
+      
     }
+
+    
     // setPage({ page: "directDebit", data: block });
   };
 
@@ -188,9 +204,13 @@ const Video = ({ state, actions, libraries }) => {
         // Example URL: https://player.vimeo.com/video/382577680?h=8f166cf506&color=5b89a3&title=0&byline=0&portrait=0
         const reg = /\d+/g;
         const videoId = video_url.match(reg);
-        const fetchVideoData = await fetch(
-          `https://vimeo.com/api/v2/video/${videoId[0]}.json`
-        );
+        const path = `https://vimeo.com/api/v2/video/${videoId[0]}.json`;
+        const fetchVideoData = await fetchDataHandler({
+          path,
+          state,
+          isCORSHeaders: true,
+          disableCookies: true,
+        });
 
         if (fetchVideoData.ok) {
           const json = await fetchVideoData.json();

@@ -1,19 +1,14 @@
-import { authenticateAppAction, setFetchAction } from "../index";
+import { setFetchAction, fetchDataHandler } from "../index";
 
-export const getBJDFeedAction = async ({ state, dispatch, refreshJWT }) => {
+export const getBJDFeedAction = async ({ state, dispatch }) => {
   // console.log("getBJDFeedAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
-  const URL = state.auth.APP_HOST + `/rss/bjd`;
-  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-
-  const requestOptions = {
-    method: "GET",
-    headers: { Authorization: `Bearer ${jwt}` },
-  };
+  const path = state.auth.APP_HOST + `/rss/bjd`;
 
   try {
-    const data = await fetch(URL, requestOptions);
+    const data = await fetchDataHandler({ path, state });
+
     if (!data) throw new Error("Error getting data.");
     const result = await data.json();
 
@@ -30,20 +25,14 @@ export const getBJDFeedAction = async ({ state, dispatch, refreshJWT }) => {
   }
 };
 
-export const getCEDFeedAction = async ({ state, dispatch, refreshJWT }) => {
+export const getCEDFeedAction = async ({ state, dispatch }) => {
   // console.log("getCEDFeedAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
-  const URL = state.auth.APP_HOST + `/rss/ced`;
-  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-
-  const requestOptions = {
-    method: "GET",
-    headers: { Authorization: `Bearer ${jwt}` },
-  };
+  const path = state.auth.APP_HOST + `/rss/ced`;
 
   try {
-    const data = await fetch(URL, requestOptions);
+    const data = await fetchDataHandler({ path, state });
     if (!data) throw new Error("Error getting data.");
     const result = await data.json();
 
@@ -60,20 +49,14 @@ export const getCEDFeedAction = async ({ state, dispatch, refreshJWT }) => {
   }
 };
 
-export const getSHDFeedAction = async ({ state, dispatch, refreshJWT }) => {
+export const getSHDFeedAction = async ({ state, dispatch }) => {
   // console.log("getSHDFeedAction triggered");
 
   setFetchAction({ dispatch, isFetching: true });
-  const URL = state.auth.APP_HOST + `/rss/shd`;
-  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-
-  const requestOptions = {
-    method: "GET",
-    headers: { Authorization: `Bearer ${jwt}` },
-  };
+  const path = state.auth.APP_HOST + `/rss/shd`;
 
   try {
-    const data = await fetch(URL, requestOptions);
+    const data = await fetchDataHandler({ path, state });
     if (!data) throw new Error("Error getting data.");
     const result = await data.json();
 

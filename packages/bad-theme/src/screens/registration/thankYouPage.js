@@ -18,12 +18,9 @@ const RegistrationThankYouPage = ({ state, actions }) => {
 
   // HANDLERS --------------------------------------------
   const handleRedirect = () => {
-    setGoToAction({
-      state,
-      path: "/about-the-bad/our-values/equality-diversity-and-inclusion/",
-      actions,
-      newWindow: true,
-    });
+    const path = "/about-the-bad/our-values/equality-diversity-and-inclusion/";
+    // open policy in new tab
+    window.open(path, "_blank");
   };
 
   // SERVERS ---------------------------------------------

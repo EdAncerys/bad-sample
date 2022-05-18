@@ -38,8 +38,7 @@ const AccordionBody = ({
   const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, dynamicsApps, refreshJWT } =
-    useAppState();
+  const { applicationData, isActiveUser, dynamicsApps } = useAppState();
 
   const {
     downloads,
@@ -87,7 +86,6 @@ const AccordionBody = ({
           stepThree: false,
           stepFour: false,
         },
-        refreshJWT,
       });
     } catch (error) {
       // console.log(error);
@@ -119,7 +117,6 @@ const AccordionBody = ({
       formData,
       attachments,
       recipients,
-      refreshJWT,
     });
     setFetching(false);
     document.querySelector(`#attachments-${uniqueId}`).value = "";

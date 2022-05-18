@@ -1,10 +1,9 @@
-import { authenticateAppAction, setUserStoreAction } from "../index";
+import { setUserStoreAction, fetchDataHandler } from "../index";
 
 export const createApplicationRecord = async ({
   state,
   dispatch,
   isActiveUser,
-  refreshJWT,
 }) => {
   // console.log("createApplicationRecord triggered");
 
@@ -13,7 +12,6 @@ export const createApplicationRecord = async ({
     state,
     isActiveUser,
     dispatch,
-    refreshJWT,
   });
 
   if (userStoreData) {
@@ -23,7 +21,6 @@ export const createApplicationRecord = async ({
       dispatch,
       isActiveUser,
       data: userStoreData,
-      refreshJWT,
     });
     return;
   }
@@ -31,26 +28,23 @@ export const createApplicationRecord = async ({
   const { contactid } = isActiveUser;
 
   // ⏬⏬  creating new user record ⏬⏬
-  const URL =
+  const path =
     state.auth.APP_HOST +
     `/catalogue/data/core_membershipapplications(${contactid})`;
-  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-
-  const requestOptions = {
-    method: "PATCH",
-    headers: {
-      Authorization: `Bearer ${jwt}`,
-      "Content-Type": "application/json",
-    },
-  };
 
   try {
-    const data = await fetch(URL, requestOptions);
+    const data = await fetchDataHandler({
+      path,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      state,
+    });
+
     const result = await data.json();
 
     if (result.success) {
       // ⏬  getting new user record ⏬
-      const applicationData = await getApplicationRecord({ jwt, contactid });
+      const applicationData = await getApplicationRecord({ contactid });
 
       await setUserStoreAction({
         state,
@@ -58,7 +52,6 @@ export const createApplicationRecord = async ({
         dispatch,
         isActiveUser,
         data: applicationData,
-        refreshJWT,
       });
     }
   } catch (error) {
@@ -66,22 +59,15 @@ export const createApplicationRecord = async ({
   }
 };
 
-export const getApplicationRecord = async ({ jwt, contactid }) => {
+export const getApplicationRecord = async ({ contactid }) => {
   // console.log("getApplicationRecord triggered");
 
-  const URL =
+  const path =
     state.auth.APP_HOST +
     `/catalogue/data/core_membershipapplications(${contactid})`;
 
-  const requestOptions = {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${jwt}`,
-    },
-  };
-
   try {
-    const data = await fetch(URL, requestOptions);
+    const data = await fetchDataHandler({ path, state });
     const result = await data.json();
 
     // console.log("getApplicationRecord result", result); // debug

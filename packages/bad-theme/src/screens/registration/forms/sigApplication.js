@@ -32,8 +32,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, dynamicsApps, refreshJWT } =
-    useAppState();
+  const { applicationData, isActiveUser, dynamicsApps } = useAppState();
 
   const [formData, setFormData] = useState({
     core_membershipsubscriptionplanid: "",
@@ -220,7 +219,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
         const hospitalData = await getHospitalNameAction({
           state,
           dispatch,
-          refreshJWT,
           id: hospitalId,
         });
         if (hospitalData) {
@@ -318,7 +316,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
         state,
         dispatch,
         attachments: sky_cvurl,
-        refreshJWT,
       });
     // console.log("🐞 ", sky_cvurl); // debug
 
@@ -335,7 +332,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
     let hospitalData = await getHospitalsAction({
       state,
       dispatch,
-      refreshJWT,
       input,
     });
     // refactor hospital data to match dropdown format
@@ -412,9 +408,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     }
   };
 
-  const handleNext = async () => {
-    console.log("MAYBE type", formData.bad_categorytype);
-
+  const handleSubmitApp = async () => {
     // check if new hospital value been added
     const isNewHospital = formData.bad_newhospitaladded;
     let sigAppliaction = formData;
@@ -477,7 +471,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
         state,
         category: "SIG",
         type: formData.bad_categorytype,
-        refreshJWT,
       });
       // if membershipData aupdate application id & procced to next step
       if (!membershipData) {
@@ -502,7 +495,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
         dynamicsApps,
         membershipApplication: { sigApp: true }, // set stepOne to complete
         data: sigAppliaction,
-        refreshJWT,
       });
       if (!store.success)
         throw new Error("Failed to update application record"); // throw error if store is not successful
@@ -513,7 +505,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
         dispatch,
         isActiveUser,
         applicationData,
-        refreshJWT,
       });
       if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
 
@@ -639,7 +630,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
           Back
         </div>
 
-        <div className="blue-btn" onClick={handleNext}>
+        <div className="blue-btn" onClick={handleSubmitApp}>
           Submit Application
         </div>
       </div>
@@ -693,7 +684,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         isFetching={isFetching}
         background="transparent"
         alignSelf="self-end"
-        padding="0 0 6em 0"
+        padding="0 0 45% 0"
       />
 
       <div
@@ -735,6 +726,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 </option>
                 <option value="Dr">Dr</option>
                 <option value="Mr">Mr</option>
+                <option value="Mrs">Mrs</option>
                 <option value="Miss">Miss</option>
                 <option value="Ms">Ms</option>
                 <option value="Professor">Professor</option>

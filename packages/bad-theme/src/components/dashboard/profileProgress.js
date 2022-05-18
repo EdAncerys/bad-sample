@@ -21,8 +21,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { lg } = muiQuery();
   const dispatch = useAppDispatch();
-  const { dynamicsApps, applicationData, isActiveUser, refreshJWT } =
-    useAppState();
+  const { dynamicsApps, applicationData, isActiveUser } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
   const ICON_WIDTH = 30;
@@ -46,6 +45,8 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     if (!applicationData) return null;
 
     const appData = applicationData[0]; // application info data
+    if (!appData) return null;
+
     let progressName = "";
     // if application record & no steps completed return application name
     if (appData.bad_categorytype) {
@@ -92,7 +93,6 @@ const ProfileProgress = ({ state, actions, libraries }) => {
         dispatch,
         applicationData,
         contactid: isActiveUser.contactid,
-        refreshJWT,
       });
     } catch (error) {
       console.log(error);
@@ -213,6 +213,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
 
     // get application name & type & concat in string
     const appData = applicationData[0]; // application info data
+    if (!appData) return null;
     let appProgress = `${appData.bad_organisedfor} - ${appData.bad_categorytype}: ${applicationStep}`;
     // general SIG application route
     if (appData.bad_categorytype === "*")

@@ -1,7 +1,7 @@
 import {
-  authenticateAppAction,
   getUserDataByContactId,
   setFetchAction,
+  fetchDataHandler,
 } from "../index";
 
 export const updateProfileAction = async ({
@@ -9,47 +9,41 @@ export const updateProfileAction = async ({
   dispatch,
   data,
   isActiveUser,
-  refreshJWT,
 }) => {
   // console.log("updateProfileAction triggered");
   const { contactid } = isActiveUser;
 
-  const URL = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
+  const path = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
 
   setFetchAction({ dispatch, isFetching: true });
   // --------------------------------------------------------------------------
   // 📌 STEP: Log onto the API server and get the Bearer token
   // --------------------------------------------------------------------------
-  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-  if (!jwt) throw new Error("Cannot logon to server.");
-
-  const requestOptions = {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      "if-Match": "*",
-      Authorization: "Bearer " + jwt,
-    },
-    body: JSON.stringify(data),
-  };
 
   try {
-    const data = await fetch(URL, requestOptions);
-    const response = await data.json();
-    if (!response) throw new Error("Error updating profile.");
+    const respose = await fetchDataHandler({
+      path,
+      method: "PATCH",
+      body: data,
+      headers: {
+        "Content-Type": "application/json",
+        "if-Match": "*",
+      },
+      state,
+    });
+    const responseData = await respose.json();
+    if (!responseData) throw new Error("Error updating profile.");
 
-    if (response.success) {
+    if (responseData.success) {
       // console.log("⬇️ profile details successfully updated ⬇️ "); // debug
       // update user profile in context
       await getUserDataByContactId({
         state,
         dispatch,
-        jwt,
         contactid,
-        refreshJWT,
       });
 
-      return response;
+      return responseData;
     }
   } catch (error) {
     // console.log("error", error);

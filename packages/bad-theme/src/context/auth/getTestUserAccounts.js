@@ -1,24 +1,15 @@
-import { authenticateAppAction } from "../index";
+import { fetchDataHandler } from "../index";
 
-export const getTestUserAccountsAction = async ({
-  state,
-  dispatch,
-  refreshJWT,
-}) => {
+export const getTestUserAccountsAction = async ({ state, dispatch }) => {
   // console.log("getTestUserAccountsAction triggered");
 
-  const URL =
+  const path =
     state.auth.APP_HOST +
     `/catalogue/data/contacts?$filter=firstname eq 'Andy'`;
-  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-
-  const requestOptions = {
-    method: "GET",
-    headers: { Authorization: `Bearer ${jwt}` },
-  };
 
   try {
-    const data = await fetch(URL, requestOptions);
+    const data = await fetchDataHandler({ path, state });
+
     const result = await data.json();
     if (!result) throw new Error("Error getting userData.");
 

@@ -19,7 +19,7 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { isActiveUser, directDebitPath, refreshJWT } = useAppState();
+  const { isActiveUser, directDebitPath } = useAppState();
 
   const [isFetching, setFetching] = useState(false);
   const marginVertical = state.theme.marginVertical;
@@ -44,7 +44,6 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
           core_sortcode: data.core_sortcode,
         },
         dispatch,
-        refreshJWT,
       });
 
       if (debitResponse.success) {
@@ -52,7 +51,6 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
           state,
           dispatch,
           id: isActiveUser.contactid,
-          refreshJWT,
         });
         setDebitHandlerAction({
           dispatch,

@@ -1,4 +1,3 @@
-import { atom, useAtom } from "jotai";
 import { handleSetCookie, handleGetCookie } from "../../helpers/cookie";
 import {
   setGoToAction,
@@ -6,18 +5,14 @@ import {
   getUserApplicationAction,
   setFetchAction,
   setLoginModalAction,
+  fetchDataHandler,
 } from "../index";
 
 // --------------------------------------------------------------------------------
 // 📌 INITIALIZE APP TAKEN via atom STATE
 // --------------------------------------------------------------------------------
 
-export const loginActionViaModal = async ({
-  state,
-  dispatch,
-  transId,
-  refreshJWT,
-}) => {
+export const loginActionViaModal = async ({ state, dispatch, transId }) => {
   // console.log("loginAction triggered");
   setFetchAction({ dispatch, isFetching: true });
 
@@ -25,13 +20,11 @@ export const loginActionViaModal = async ({
     // --------------------------------------------------------------------------
     // 📌 STEP: Log onto the API server and get the Bearer token
     // --------------------------------------------------------------------------
-    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-    if (!jwt) throw new Error("Cannot logon to server.");
 
     // --------------------------------------------------------------------------
     // 📌 STEP: Get User data from Dynamics
     // --------------------------------------------------------------------------
-    const response = await getUserAction({ state, dispatch, jwt, transId });
+    const response = await getUserAction({ state, dispatch, transId });
     if (!response) throw new Error("Error login in.");
 
     setLoginModalAction({ dispatch, loginModalAction: false });
@@ -48,24 +41,20 @@ export const loginAction = async ({ state }) => {
   // console.log("loginAction triggered");
 
   try {
-    // 📌 auth B2c redirect url based on App default url
-    const redirectPath = `&redirect_uri=${state.auth.APP_URL}/codecollect`;
     // --------------------------------------------------------------------------------
     // 📌  B2C login auth path endpoint
     // --------------------------------------------------------------------------------
+    // 📌 auth B2c redirect url based on App default url
+    const redirectPath = `&redirect_uri=${state.auth.APP_URL}/codecollect`;
     let action = "login";
 
     const url =
       state.auth.B2C +
       `${redirectPath}&scope=openid&response_type=id_token&prompt=${action}`;
     const urlPath = state.router.link;
-    console.log("LOGIN URL + REDIRECT", redirectPath);
+    console.log("LOGIN path + REDIRECT", redirectPath);
     // get current url path and store in cookieValue
-    handleSetCookie({
-      name: "loginPath",
-      value: urlPath,
-      days: 1,
-    });
+    handleSetCookie({ name: "loginPath", value: urlPath });
 
     // redirect to B2C auth set window location to login page
     window.location.href = url;
@@ -74,11 +63,7 @@ export const loginAction = async ({ state }) => {
   }
 };
 
-export const authenticateAppAction = async ({
-  state,
-  dispatch,
-  refreshJWT,
-}) => {
+export const authenticateAppAction = async ({ state, dispatch }) => {
   // console.log("authenticateAppAction triggered");
   let contactid = null;
   let refreshTaken = null;
@@ -87,61 +72,29 @@ export const authenticateAppAction = async ({
   // check if cookie is present and if so get the tokens
   const cookieValue = handleGetCookie({ name: state.auth.AUTH_COOKIE });
   if (cookieValue) {
-    refreshTaken = cookieValue.refreshJWT;
+    refreshTaken = cookieValue.refreshTaken;
     appTaken = cookieValue.appJWT;
     contactid = cookieValue.contactid;
   }
 
   try {
-    if (appTaken) {
-      // console.log("🐞 REFRESH TAKEN FOUND"); // debug
-      const URL = state.auth.APP_HOST + `/users/refresh`;
-      const requestOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          RefreshToken: refreshTaken,
-        }),
-      };
-
-      const data = await fetch(URL, requestOptions);
-      const response = await data.json();
-
-      if (response.success) {
-        const jwt =
-          response.data.AuthenticationResult.RefreshToken ||
-          response.data.AuthenticationResult.IdToken;
-        refreshTaken = jwt;
-        appTaken = response.token;
-      }
-      if (!response.success) {
-        // 📌 set refresh taken to null to trigger login via creditentials
-        refreshTaken = null;
-        appTaken = null;
-        // delete cookie for refresh token and app token
-        handleSetCookie({
-          name: state.auth.AUTH_COOKIE,
-          deleteCookie: true,
-        });
-      }
-    }
     // 📌 if refresh token is not valid or null auth via app credentials
     if (!appTaken) {
       // console.log("🐞 REFRESH TAKEN NOT PRESENT OR NOT VALID"); // debug
       const username = state.auth.APP_USERNAME;
       const password = state.auth.APP_PASSWORD;
-      let URL = state.auth.APP_HOST + `/users/login`;
-      let appCredentials = JSON.stringify({
-        username,
-        password,
-      });
-      const requestOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: appCredentials,
-      };
+      let path = state.auth.APP_HOST + `/users/login`;
 
-      const data = await fetch(URL, requestOptions);
+      const data = await fetchDataHandler({
+        path,
+        method: "POST",
+        body: {
+          username,
+          password,
+        },
+        headers: { "Content-Type": "application/json" },
+        state,
+      });
       const response = await data.json();
 
       if (response.success) {
@@ -153,7 +106,7 @@ export const authenticateAppAction = async ({
         handleSetCookie({
           name: state.auth.AUTH_COOKIE,
           value: {
-            refreshJWT: refreshTaken,
+            refreshTaken: refreshTaken,
             appJWT: appTaken,
           },
           days: 1,
@@ -172,19 +125,17 @@ export const authenticateAppAction = async ({
   }
 };
 
-export const getUserAction = async ({ state, dispatch, jwt, transId }) => {
+export const getUserAction = async ({ state, dispatch, transId }) => {
   // console.log("getUserAction triggered");
 
   try {
-    const contactid = await getUserContactId({ state, dispatch, jwt, transId });
+    const contactid = await getUserContactId({ state, dispatch, transId });
     if (!contactid) throw new Error("Error getting contactid.");
 
     const userData = await getUserDataByContactId({
       state,
       dispatch,
-      jwt,
       contactid,
-      refreshJWT,
     });
     if (!userData) throw new Error("Error getting userData.");
 
@@ -194,21 +145,19 @@ export const getUserAction = async ({ state, dispatch, jwt, transId }) => {
   }
 };
 
-export const getUserContactId = async ({ state, dispatch, jwt, transId }) => {
+export const getUserContactId = async ({ state, dispatch, transId }) => {
   // console.log("getUserContactId triggered");
 
-  const URL = state.auth.DYNAMICS_BRIDGE;
-  const requestOptions = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + jwt,
-    },
-    body: JSON.stringify({ transId }),
-  };
+  const path = state.auth.DYNAMICS_BRIDGE;
 
   try {
-    const data = await fetch(URL, requestOptions);
+    const data = await fetchDataHandler({
+      path,
+      method: "POST",
+      body: { transId },
+      headers: { "Content-Type": "application/json" },
+      state,
+    });
     const response = await data.json();
     if (response.success) {
       return response.data.user.contactid;
@@ -221,21 +170,21 @@ export const getUserContactId = async ({ state, dispatch, jwt, transId }) => {
 export const getUserDataByContactId = async ({
   state,
   dispatch,
-  jwt,
   contactid,
-  refreshJWT,
 }) => {
   // console.log("getUserDataByContactId triggered");
 
-  const URL = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
+  // ⬇️ development env default login action ⬇️
+  if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
+    console.log("🐞 ALTERED DATA");
+    // contactid = "969ba377-a398-ec11-b400-000d3aaedef5"; // TESTING
+    contactid = "0786df85-618f-ec11-b400-000d3a22037e"; // TESTING
+  }
 
-  const requestOptions = {
-    method: "GET",
-    headers: { Authorization: "Bearer " + jwt },
-  };
+  const path = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
 
   try {
-    const data = await fetch(URL, requestOptions);
+    const data = await fetchDataHandler({ path, state });
     if (!data) throw new Error("Error getting userData.");
     const response = await data.json();
 
@@ -247,46 +196,35 @@ export const getUserDataByContactId = async ({
       state,
       dispatch,
       contactid,
-      refreshJWT,
     });
     if (!dynamicApps.apps.success)
       throw new Error("Error dynamicApps userData.");
 
     setActiveUserAction({ dispatch, isActiveUser: response });
-    // 📌 set cookie with taken & contactid
-    handleSetCookie({
-      name: state.auth.COOKIE_NAME,
-      value: { jwt, contactid },
-    });
-    seJWTAction({ dispatch, jwt });
+
     return response;
   } catch (error) {
     // console.log("error", error);
   }
 };
 
-export const getUserDataByEmail = async ({
-  state,
-  dispatch,
-  email,
-  refreshJWT,
-}) => {
+export const getUserDataByEmail = async ({ state, dispatch, email }) => {
   // console.log("getUserDataByEmail triggered");
 
-  const URL =
+  // ⬇️ development env default login action ⬇️
+  if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
+    console.log("🐞 ALTERED DATA");
+
+    // email = "milliegatley@gmail.com"; // TESTING
+    email = "chris@skylarkcreative.co.uk"; // TESTING
+  }
+
+  const path =
     state.auth.APP_HOST +
     `/catalogue/data/contacts?$filter=emailaddress1 eq '${email}'`;
 
   try {
-    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-    if (!jwt) throw new Error("Cannot logon to server.");
-
-    const requestOptions = {
-      method: "GET",
-      headers: { Authorization: "Bearer " + jwt },
-    };
-
-    const data = await fetch(URL, requestOptions);
+    const data = await fetchDataHandler({ path, state });
     if (!data) throw new Error("Error getting userData.");
     const response = await data.json();
 
@@ -301,16 +239,11 @@ export const getUserDataByEmail = async ({
         state,
         dispatch,
         contactid,
-        refreshJWT,
       });
       if (!dynamicApps.apps.success)
         throw new Error("Error dynamicApps userData.");
 
       setActiveUserAction({ dispatch, isActiveUser: userData });
-      handleSetCookie({
-        name: state.auth.COOKIE_NAME,
-        value: { jwt, contactid },
-      });
       return userData;
     }
 
@@ -320,18 +253,14 @@ export const getUserDataByEmail = async ({
   }
 };
 
-export const getUserDataFromDynamics = async ({ state, jwt, contactid }) => {
+export const getUserDataFromDynamics = async ({ state, contactid }) => {
   // console.log("getUserDataFromDynamics triggered");
 
-  const URL = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
-
-  const requestOptions = {
-    method: "GET",
-    headers: { Authorization: "Bearer " + jwt },
-  };
+  const path = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
 
   try {
-    const data = await fetch(URL, requestOptions);
+    const data = await fetchDataHandler({ path, state });
+
     const response = await data.json();
     if (!response) throw new Error("Error getting userData.");
     // console.log("⏬ FED data successfully fetched ⏬");
@@ -343,27 +272,36 @@ export const getUserDataFromDynamics = async ({ state, jwt, contactid }) => {
   }
 };
 
+export const handleRemoveServerSideCookie = async ({ state }) => {
+  // console.log("getUserDataFromDynamics triggered");
+
+  const path = state.auth.APP_HOST + `/dynamicstest/users/b2c/logout`;
+
+  try {
+    const response = await fetchDataHandler({ path, state });
+
+    return response;
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
 export const logoutAction = async ({ state, actions, dispatch }) => {
   // console.log("logoutAction triggered");
   // ⬇️ stack order important to unmount components correctly
   // 🍪 delete stored cookies
   handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
   handleSetCookie({ name: state.auth.AUTH_COOKIE, deleteCookie: true });
+  handleSetCookie({ name: "vuid", deleteCookie: true }); // 🍪 remove vuid cookie
+  await handleRemoveServerSideCookie({ state });
+
+  // reddirect user to home page
   setGoToAction({ state, path: `/`, actions });
 
-  seJWTAction({ dispatch, jwt: null });
   setActiveUserAction({ dispatch, isActiveUser: null });
 };
 
 // SET CONTEXT ---------------------------------------------------
-export const seJWTAction = ({ dispatch, jwt }) => {
-  // console.log("seJWTAction triggered"); //debug
-  dispatch({ type: "SET_JWT_ACTION", payload: jwt });
-};
-export const seRefreshJWTAction = ({ dispatch, refreshJWT }) => {
-  // console.log("seRefreshJWTAction triggered"); //debug
-  dispatch({ type: "SET_REFRESH_JWT_ACTION", payload: refreshJWT });
-};
 export const setActiveUserAction = ({ dispatch, isActiveUser }) => {
   // console.log("setActiveUserAction triggered"); //debug
   dispatch({ type: "SET_ACTIVE_USER_ACTION", payload: isActiveUser });

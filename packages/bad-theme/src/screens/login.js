@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { connect } from "frontity";
-import {
-  handleSetCookie,
-  handleEncryption,
-  handleGetCookie,
-} from "../helpers/cookie";
+import { handleSetCookie, handleGetCookie } from "../helpers/cookie";
+// CONTEXT ------------------------------------------------------------
+import { fetchDataHandler } from "../context";
 
 const login = ({ state, actions }) => {
   const [username, setUsername] = useState("");
@@ -14,24 +12,22 @@ const login = ({ state, actions }) => {
   const handleUserLogin = async () => {
     // console.log("handleUserLogin triggered");
     if (username === "" || password === "") return;
-    const URL = "http://localhost:8888/events/wp-json/jwt-auth/v1/token";
+    const path = "http://localhost:8888/events/wp-json/jwt-auth/v1/token";
 
-    const userCredentials = JSON.stringify({
-      username,
-      password,
-    });
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: userCredentials,
-    };
     try {
-      const data = await fetch(URL, requestOptions);
+      const data = await fetchDataHandler({
+        path,
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: {
+          username,
+          password,
+        },
+        state,
+      });
+
       const response = await data.json();
       if (response.token) {
-        const encryptedJWT = handleEncryption({ jwt: response.token }); // encrypting provided jwt
-        handleSetCookie({ name: state.auth.COOKIE_NAME, value: encryptedJWT }); // set cookie in the browser
-
         actions.theme.setTaken(response.token);
         actions.theme.setLogin(true);
         actions.router.set("/");

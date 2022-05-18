@@ -157,7 +157,7 @@ const Events = ({ state, actions, libraries, block, disableMargin }) => {
       });
 
       return (
-        <div className="flex" style={{ paddingRight: `1em` }}>
+        <div className="flex" style={{ paddingRight: !lg ? `1em` : 0, width: !lg ? null : "100%" }}>
           <Form.Select
             style={styles.input}
             value={specialtyFilter}
@@ -207,9 +207,9 @@ const Events = ({ state, actions, libraries, block, disableMargin }) => {
       if (block.events_archive) eventSearchMonth = monthsPast;
 
       return (
-        <div className="flex">
+        <div className="flex" style={{width: "100%"}}>
           <Form.Select
-            style={styles.input}
+            style={!lg ? styles.input : styles.mobileInput}
             value={yearFilter}
             onChange={(e) => setYearFilter(e.target.value)}
           >
@@ -234,7 +234,7 @@ const Events = ({ state, actions, libraries, block, disableMargin }) => {
     return (
       <div
         className={!lg ? "flex" : "flex-col"}
-        style={{ padding: `1em 0`, alignItems: !lg ? "center" : "flex-start" }}
+        style={{ padding: `1em 0`, alignItems: !lg ? "center" : "flex-start", gap: !lg ? null : 10 }}
       >
         <ServeTitle />
         <ServeGradeFilter />
@@ -397,6 +397,11 @@ const styles = {
   input: {
     borderRadius: 10,
     paddingRight: 35,
+  },
+  mobileInput: {
+    borderRadius: 10,
+width: "100%",
+    paddingRight: 0,
   },
 };
 

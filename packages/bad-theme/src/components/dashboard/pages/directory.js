@@ -26,8 +26,7 @@ import {
 
 const Directory = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
-  const { fad, dashboardPath, isActiveUser, dynamicsApps, refreshJWT } =
-    useAppState();
+  const { fad, dashboardPath, isActiveUser, dynamicsApps } = useAppState();
 
   const ctaHeight = 45;
 
@@ -52,7 +51,7 @@ const Directory = ({ state, actions, libraries }) => {
     try {
       if (!fad) {
         // fetch data via API
-        const data = await getFadAction({ state, dispatch, refreshJWT });
+        const data = await getFadAction({ state, dispatch });
         // set fad data in context of app
         setFadAction({ dispatch, fad: data });
         setFadData(data);
@@ -89,7 +88,6 @@ const Directory = ({ state, actions, libraries }) => {
         dispatch,
         data,
         isActiveUser,
-        refreshJWT,
       });
       if (!response) throw new Error("Error updating profile");
 
@@ -143,7 +141,6 @@ const Directory = ({ state, actions, libraries }) => {
         state,
         dispatch,
         query: input,
-        refreshJWT,
       });
       setSearchData(fad);
     } catch (error) {
@@ -159,7 +156,7 @@ const Directory = ({ state, actions, libraries }) => {
     try {
       setGetMore(true);
 
-      const data = await getFadAction({ state, dispatch, page, refreshJWT });
+      const data = await getFadAction({ state, dispatch, page });
       let updatedFad = [...fad, ...data];
       // set fad data in context of app
       setFadAction({ dispatch, fad: updatedFad });

@@ -18,28 +18,28 @@ export const handleSortFilter = ({ list }) => {
   });
 
   // 📌 sort eventList by closest to today first (if date is set)
-  sortedList.sort((a, b) => {
-    let dateA = a.acf.date_time;
-    let dateB = b.acf.date_time;
-    if (dateA) dateA = dateA[0].date;
-    if (dateB) dateB = dateB[0].date;
+  // sortedList.sort((a, b) => {
+  //   let dateA = a.acf.date_time;
+  //   let dateB = b.acf.date_time;
+  //   if (dateA) dateA = dateA[0].date;
+  //   if (dateB) dateB = dateB[0].date;
 
-    // convert to date object
-    dateA = new Date(dateA);
-    dateB = new Date(dateB);
+  //   // convert to date object
+  //   dateA = new Date(dateA);
+  //   dateB = new Date(dateB);
 
-    // get today's date
-    let today = new Date();
+  //   // get today's date
+  //   let today = new Date();
 
-    // get date difference
-    let diffA = Math.abs(dateA - today);
-    let diffB = Math.abs(dateB - today);
+  //   // get date difference
+  //   let diffA = Math.abs(dateA - today);
+  //   let diffB = Math.abs(dateB - today);
 
-    if (diffA > diffB) return 1;
-    if (diffA < diffB) return -1;
+  //   if (diffA > diffB) return 1;
+  //   if (diffA < diffB) return -1;
 
-    return 0;
-  });
+  //   return 0;
+  // });
 
   return sortedList;
 };

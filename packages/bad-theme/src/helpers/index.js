@@ -1,8 +1,8 @@
 import { handleGetCookie, handleSetCookie } from "./cookie";
 import {
-  authenticateAppAction,
   getUserStoreAction,
   getUserDataByContactId,
+  fetchDataHandler,
 } from "../context";
 
 const fetchCompleteHandler = ({ initialState }) => {
@@ -14,15 +14,14 @@ export const authCookieActionBeforeCSR = async ({
   state,
   initialState,
   dispatch,
-  refreshJWT,
 }) => {
   const cookie = handleGetCookie({ name: state.auth.COOKIE_NAME });
 
   // ⏬⏬  user validation & auth ⏬⏬
   if (cookie) {
-    let { jwt, contactid } = cookie;
+    let { contactid } = cookie;
 
-    if (!contactid || !jwt) {
+    if (!contactid) {
       // console.log("Failed to Auth 🍪 data");
       handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
       return null;
@@ -40,14 +39,16 @@ export const authCookieActionBeforeCSR = async ({
     const dynamicAppsURL =
       state.auth.APP_HOST + `/applications/billing/` + contactid;
 
-    const requestOptions = {
-      method: "GET",
-      headers: { Authorization: "Bearer " + jwt },
-    };
-
     try {
-      const userResponse = await fetch(catalogueURL, requestOptions); // fetch user data
-      const appsResponse = await fetch(dynamicAppsURL, requestOptions); // fetch dynamic application data
+      const userResponse = await fetchDataHandler({
+        path: catalogueURL,
+        state,
+      }); // fetch user data
+      const appsResponse = await fetchDataHandler({
+        path: dynamicAppsURL,
+        state,
+      }); // fetch dynamic application data
+
       if (!userResponse.ok)
         throw new Error(`${userResponse.statusText} ${userResponse.status}`); // fetch user data from Dynamics
       const userData = await userResponse.json();
@@ -59,7 +60,6 @@ export const authCookieActionBeforeCSR = async ({
       const userStoreData = await getUserStoreAction({
         state,
         dispatch,
-        refreshJWT,
         isActiveUser: userData,
       });
 
@@ -68,18 +68,12 @@ export const authCookieActionBeforeCSR = async ({
       }
 
       if (userData && appsData) {
-        const taken = await authenticateAppAction({
-          state,
-          dispatch,
-          refreshJWT,
-        }); // replace taken with new one
         initialState.isActiveUser = userData; // populates user userResponse
         initialState.dynamicsApps = appsData;
-        initialState.jwt = taken; // replace taken with new one
 
         handleSetCookie({
           name: state.auth.COOKIE_NAME,
-          value: { jwt: taken, contactid },
+          value: { contactid },
         });
       }
     } catch (error) {
@@ -93,39 +87,25 @@ export const authCookieActionBeforeCSR = async ({
   }
 };
 
-export const authCookieActionAfterCSR = async ({
-  state,
-  dispatch,
-  refreshJWT,
-}) => {
-  const cookie = handleGetCookie({ name: state.auth.COOKIE_NAME });
+export const authCookieActionAfterCSR = async ({ state, dispatch }) => {
+  let path = "https://uatservices.bad.org.uk/dynamicstest/utils/cookie";
 
-  // ⏬⏬  user validation & auth ⏬⏬
-  if (cookie) {
-    // console.log("🍪 found", cookie);
-    let { jwt, contactid } = cookie;
+  try {
+    const response = await fetchDataHandler({ path, state });
+    if (response.ok) {
+      // 📌 handle user data from Dynamics prefetch
+      let data = await response.json();
+      const { level, contactid } = data.data;
+      if (level !== "auth") return null; // if cookie is not auth level, don't proceed
 
-    if (!contactid || !jwt) {
-      // console.log("Failed to Auth 🍪 data");
-      handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
-      return null;
-    }
-
-    try {
-      const userData = await getUserDataByContactId({
+      await getUserDataByContactId({
         state,
         dispatch,
-        jwt,
         contactid,
-        refreshJWT,
       });
-      if (!userData) throw new Error("Error getting userData.");
-
-      // console.log("⬇️ userData successfully pre-fetched", userData); // debug
-    } catch (error) {
-      // console.log("error", error);
-      handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
     }
+  } catch (error) {
+    console.log("error", error);
   }
 };
 

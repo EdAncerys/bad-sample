@@ -10,15 +10,15 @@ import {
   useAppState,
   useAppDispatch,
   muiQuery,
-  authenticateAppAction,
   setErrorAction,
+  fetchDataHandler,
 } from "../../context";
 
 const SubmittedApplications = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { dynamicsApps, refreshJWT } = useAppState();
+  const { dynamicsApps } = useAppState();
   const marginVertical = state.theme.marginVertical;
   const { lg } = muiQuery();
 
@@ -76,8 +76,6 @@ const SubmittedApplications = ({ state, actions, libraries }) => {
     });
   };
   const handlePayment = async ({ sage_id }) => {
-    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-
     const url = state.auth.APP_URL;
 
     const sagepay_url =
@@ -85,18 +83,18 @@ const SubmittedApplications = ({ state, actions, libraries }) => {
         ? "/sagepay/test/application/"
         : "/sagepay/live/application/";
 
-    const fetchVendorId = await fetch(
+    const path =
       state.auth.APP_HOST +
-        sagepay_url +
-        sage_id +
-        `?redirecturl=${url}/payment-confirmation/?redirect=${state.router.link}`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      }
-    );
+      sagepay_url +
+      sage_id +
+      `?redirecturl=${url}/payment-confirmation/?redirect=${state.router.link}`;
+    const fetchVendorId = await fetchDataHandler({
+      path,
+      method: "POST",
+      body: appCredentials,
+      state,
+    });
+
     if (fetchVendorId.ok) {
       const json = await fetchVendorId.json();
       const url =

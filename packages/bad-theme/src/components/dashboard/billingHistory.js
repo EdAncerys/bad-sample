@@ -17,7 +17,7 @@ const BillingHistory = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const { dynamicsApps, isActiveUser, refreshJWT } = useAppState();
+  const { dynamicsApps, isActiveUser } = useAppState();
 
   const [isFetching, setFetching] = useState(null);
   const [subAppHistory, setAppHistory] = useState([]);
@@ -32,7 +32,6 @@ const BillingHistory = ({ state, actions, libraries }) => {
         state,
         dispatch,
         contactid: isActiveUser.contactid,
-        refreshJWT,
       });
 
     if (dynamicsApps) {

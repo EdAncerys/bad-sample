@@ -1,18 +1,14 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState } from "../../context";
+import { useAppDispatch, useAppState, fetchDataHandler } from "../../context";
 
 const Wileys = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const dispatch = useAppDispatch();
-  const { jwt } = useAppState();
-
   const [iFrameSrc, setiFrameSrc] = useState("");
   const [doi, setDoi] = useState("doi/10.1111/bjd.21021");
 
-  // let scope = jwt.decode.scope || "none";
   let scope = "admin"; // test var
   let inScope = ["admin", "wiley"].includes(scope);
 
@@ -22,7 +18,6 @@ const Wileys = ({ state, actions, libraries }) => {
       url: "https://skylarkdev.digital/dynamicsbridge/wiley",
       method: "POST",
       headers: {
-        Authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
       },
     };
@@ -31,7 +26,8 @@ const Wileys = ({ state, actions, libraries }) => {
     // --------------------------------------------------------------------------
     if (doi) request.body = JSON.stringify({ doi });
     // let wiley = await axios.post(request);
-    let wiley = await fetch(request.url, request);
+
+    let wiley = await fetchDataHandler({ path: request.url, state });
     if (wiley.ok) {
       wiley = await wiley.json();
       return setiFrameSrc(wiley.data);
@@ -89,10 +85,7 @@ const Wileys = ({ state, actions, libraries }) => {
           <div className="row">
             <label className="col-md-2 col-form-label">&nbsp;</label>
             <div className="col-md-3 ">
-              <div
-                className="btn-info form-control"
-                onClick={executeScript}
-              >
+              <div className="btn-info form-control" onClick={executeScript}>
                 Click here to get URL
               </div>
             </div>

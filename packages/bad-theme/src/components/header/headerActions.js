@@ -30,8 +30,9 @@ import {
   setAppSearchPhraseAction,
   muiQuery,
   setCreateAccountModalAction,
-  authenticateAppAction, // TESTING enviroment
   getUserDataByContactId, // TESTING enviroment
+  fetchDataHandler, // TESTING enviroment
+  handleSetCookie, // TESTING enviroment
 } from "../../context";
 import { Person } from "@mui/icons-material";
 
@@ -40,7 +41,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { isActiveUser, refreshJWT } = useAppState();
+  const { isActiveUser } = useAppState();
 
   const [isReady, SetReady] = useState(null);
   const [filter, setFilter] = useState(null);
@@ -144,6 +145,64 @@ const HeaderActions = ({ state, actions, libraries }) => {
     }
   };
 
+  // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
+  const ServeTesting = () => {
+    // if (state.auth.ENVIRONMENT !== "DEVELOPMENT") return null;
+
+    return (
+      <div className="flex" style={{ padding: `0 1em` }}>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={handleCheck}
+        >
+          ST
+        </div>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={handleCookie}
+        >
+          🍪
+        </div>
+      </div>
+    );
+  };
+
+  const handleCheck = async () => {
+    let path = "https://uatservices.bad.org.uk/dynamicstest/utils/cookie";
+    const response = await fetchDataHandler({
+      path,
+      state,
+    });
+    let data = "not found";
+    if (response.ok) data = await response.json();
+    console.log("🐞 Auth level ", data.data.level);
+    console.log("🐞 data ", data.data);
+  };
+  const handleUser = async () => {
+    let path =
+      "https://uatservices.bad.org.uk/dynamicstest/catalogue/data/contacts?$filter=emailaddress1 eq 'chris@skylarkcreative.co.uk'";
+    const response = await fetchDataHandler({ path, state });
+    let data = "response !ok";
+    if (response.ok) data = await response.json();
+    console.log("🐞 ", data);
+  };
+  const handleCookie = async () => {
+    handleSetCookie({ name: "no-cookie", deleteCookie: true }); // to show list of all cookies
+    console.log("🐞 APP_HOST ", state.auth.APP_HOST);
+    console.log("🐞 APP_URL ", state.auth.APP_URL);
+
+    const redirectPath = `&redirect_uri=${state.auth.APP_URL}/codecollect`;
+    let action = "login";
+    const url =
+      state.auth.B2C +
+      `${redirectPath}&scope=openid&response_type=id_token&prompt=${action}`;
+    console.log("🐞 B2C redirect ", redirectPath);
+    console.log("🐞 B2C redirect ", url);
+  };
+  // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
+
   const handleLoginAction = async () => {
     // --------------------------------------------------------------------------------
     // 📌  B2C login action
@@ -153,18 +212,16 @@ const HeaderActions = ({ state, actions, libraries }) => {
     if (state.auth.ENVIRONMENT === "DEVELOPMENT-B2C") {
       // console.log("🤖 DEVELOPMENT ENVIRONMENT 🤖");
 
-      const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
       await getUserDataByContactId({
         state,
         dispatch,
-        jwt,
         // contactid: "cc9a332a-3672-ec11-8943-000d3a43c136", // andy testing account
         // contactid: "84590b32-9490-ec11-b400-000d3a22037e", // mandy
-        // contactid: "0786df85-618f-ec11-b400-000d3a22037e", // Chris
+        contactid: "0786df85-618f-ec11-b400-000d3a22037e", // Chris
         // contactid: "89bb168e-5dc1-ec11-983f-000d3aae25bf", // NEW USER
-        contactid: "969ba377-a398-ec11-b400-000d3aaedef5", // emilia
+        // contactid: "969ba377-a398-ec11-b400-000d3aaedef5", // emilia
         // contactid: "a167c3ee-ba93-e711-80f5-3863bb351f50", // membership
-        refreshJWT,
+        // contactid: "04548c0b-cf52-ec11-8c62-000d3a4a9589", // 📌 MEMBER OF BAD !!!
       });
       return;
     }
@@ -382,6 +439,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
             <ServeDashboardAction />
             {!lg ? <QuickLinksDropDown /> : null}
             {!lg ? null : <ServeMobileMenuAction />}
+            <ServeTesting />
           </div>
         </div>
       </BlockWrapper>

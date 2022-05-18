@@ -13,6 +13,7 @@ import Billing from "../components/dashboard/pages/billing";
 import Preferences from "../components/dashboard/pages/settings";
 import DashboardNavigationMobile from "../components/dashboard/dashboardNavigationMobile";
 import ButtonsRow from "../components/buttonsRow";
+import ActionPlaceholder from "../components/actionPlaceholder";
 // BLOCK BUILDER ------------------------------------------------------------
 import BlockBuilder from "../components/builder/blockBuilder";
 // BLOCK WIDTH WRAPPER ------------------------------------------------------
@@ -27,7 +28,7 @@ import {
   setGoToAction,
   setDashboardNotificationsAction,
   setCPTBlockTypeAction,
-  setErrorAction,
+  handleUpdateMembershipApplication,
 } from "../context";
 
 const AccountDashboard = ({ state, actions, libraries }) => {
@@ -36,8 +37,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const { isActiveUser, dynamicsApps, applicationData, refreshJWT } =
-    useAppState();
+  const { isActiveUser, dynamicsApps, applicationData } = useAppState();
 
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
@@ -47,6 +47,8 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
 
   const [isReady, setReady] = useState(null);
+  const [subsData, setSubsData] = useState(null);
+  const [isFetching, setFetching] = useState(false);
   const [isBADMember, setIsMember] = useState(false);
   const useEffectRef = useRef(null);
 
@@ -81,13 +83,11 @@ const AccountDashboard = ({ state, actions, libraries }) => {
       state,
       dispatch,
       id: isActiveUser.contactid,
-      refreshJWT,
     });
     await getApplicationStatus({
       state,
       dispatch,
       contactid: isActiveUser.contactid,
-      refreshJWT,
     });
 
     return () => {
@@ -104,10 +104,14 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   useEffect(() => {
     // if dynamic apps check if user have BAD membership
     if (dynamicsApps) {
-      const isBADMember = dynamicsApps.subs.data.filter(
+      const subsData = dynamicsApps.subs.data; // get subs data form dynamic apps
+      const isBADMember = subsData.filter(
         (app) => app.bad_organisedfor === "BAD"
       );
-      if (isBADMember.length) setIsMember(true);
+      if (isBADMember.length) {
+        setIsMember(true);
+        setSubsData(isBADMember);
+      }
     }
   }, [dynamicsApps]);
 
@@ -120,59 +124,18 @@ const AccountDashboard = ({ state, actions, libraries }) => {
     // redirect to apply page
     setGoToAction({ state, path: "/derm-groups-charity/", actions });
   };
-  const handleUpdateMembershipApplication = async ({ app }) => {
-    // if user have application in progress break & display error
-    if (applicationData) {
-      const type = applicationData[0].bad_categorytype;
-      const confirmationMsg = `You already have ${type} application open and unsubmitted! Please complete it before changing BAD application category.`;
 
-      setErrorAction({
-        dispatch,
-        isError: {
-          message: confirmationMsg,
-          image: "Error",
-        },
-      });
-      return;
-    }
-
-    // handle create new application in Dynamics
-    try {
-      setFetching(true);
-      const appData = await handleApplyForMembershipAction({
-        state,
-        actions,
-        dispatch,
-        applicationData,
-        isActiveUser,
-        dynamicsApps,
-        category: "BAD",
-        type: app.bad_categorytype, //🤖 application type name from appData
-        membershipApplication: {
-          stepOne: false,
-          stepTwo: false,
-          stepThree: false,
-          stepFour: false,
-          changeAppCategory: app, // change of application
-        },
-        path: "/membership/application-change/", // redirect to application change page
-        changeAppCategory: app, // change of application
-        refreshJWT,
-      });
-      if (!appData) throw new Error("Failed to create application");
-    } catch (error) {
-      // console.log(error);
-
-      setErrorAction({
-        dispatch,
-        isError: {
-          message: "Failed to create application record. Please try again.",
-          image: "Error",
-        },
-      });
-    } finally {
-      setFetching(false);
-    }
+  const handleApplyForMembershipChange = async () => {
+    await handleUpdateMembershipApplication({
+      state,
+      actions,
+      dispatch,
+      isActiveUser,
+      dynamicsApps,
+      app: subsData[0], // get first subs data for change of membership
+      applicationData,
+      setFetching,
+    });
   };
 
   const ServeDashboardActions = () => {
@@ -184,7 +147,8 @@ const AccountDashboard = ({ state, actions, libraries }) => {
     }
 
     return (
-      <div>
+      <div style={{ position: "relative" }}>
+        <ActionPlaceholder isFetching={isFetching} background="transparent" />
         <BlockWrapper>
           <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
             <ButtonsRow
@@ -193,7 +157,12 @@ const AccountDashboard = ({ state, actions, libraries }) => {
                   {
                     title: applicationTitle,
                     colour: colors.navy,
-                    link: { url: "/membership/categories-of-membership/" },
+                    // add redirect link if !isBADMember
+                    link: isBADMember ? null : { url: applicationPath },
+                    // add onClick action if isBADMember
+                    onClickAction: isBADMember
+                      ? () => handleApplyForMembershipChange()
+                      : null,
                   },
                   {
                     title: "Apply for SIG Membership",

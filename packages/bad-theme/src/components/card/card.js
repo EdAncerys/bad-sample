@@ -34,6 +34,7 @@ import {
   setErrorAction,
   loginAction,
   muiQuery,
+  fetchDataHandler,
 } from "../../context";
 
 const Card = ({
@@ -123,7 +124,7 @@ const Card = ({
   if (disableCardAnimation) isCardAnimation = "";
 
   const dispatch = useAppDispatch();
-  const { isActiveUser, refreshJWT } = useAppState();
+  const { isActiveUser } = useAppState();
 
   const [authLink, setAuthLink] = useState(null);
   const [isFetching, setFetching] = useState(null);
@@ -144,7 +145,6 @@ const Card = ({
         const wileyLink = await getWileyAction({
           state,
           dispatch,
-          refreshJWT,
           doi,
           isActiveUser,
         });
@@ -282,9 +282,9 @@ const Card = ({
       const reg = /\d+/g;
       const videoId = video_url.match(reg);
 
-      const fetchVideoData = await fetch(
-        `https://vimeo.com/api/v2/video/${videoId[0]}.json`
-      );
+      const path = `https://vimeo.com/api/v2/video/${videoId[0]}.json`;
+      const fetchVideoData = await fetchDataHandler({ path, state });
+
       if (fetchVideoData.ok) {
         const json = await fetchVideoData.json();
         setVimeoCover(json[0].thumbnail_large);
@@ -401,7 +401,7 @@ const Card = ({
         ...styles.card,
         backgroundColor: backgroundColor || colors.white,
         width: cardWidth || "100%",
-        height: videoArchive || heroBanner ? null : CARD_HEIGHT,
+        height: videoArchive || heroBanner ? "auto" : CARD_HEIGHT,
         minHeight: heroBanner
           ? CARD_HEIGHT
           : !lg
@@ -425,7 +425,7 @@ const Card = ({
       />
       <GalleryCarousel gallery={gallery} />
       <NewsArticleHeader newsArticle={newsArticle} />
-      <NewsCarousel newsCarousel={newsCarousel} />
+      <NewsCarousel newsCarousel={newsCarousel} categoryList={categoryList} />
       <ServeCardImage />
       <ServeVideoCover />
       <ServeContent />

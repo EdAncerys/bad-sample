@@ -43,9 +43,7 @@ const BADTheme = {
     auth: {
       // 📌 app auth service secrets
       APP_HOST: process.env.APP_HOST, // app server endpoint
-      APP_USERNAME: process.env.APP_USERNAME,
-      APP_PASSWORD: process.env.APP_PASSWORD,
-
+      // APP_HOST: "https://8365-85-255-235-9.ngrok.io", // TESTING app server endpoint
       B2C: process.env.B2C, // B2C auth logon service
       WP_HOST: process.env.WP_HOST, // wp backend endpoint
       WP_HOST_CONTENT: process.env.WP_HOST_CONTENT,

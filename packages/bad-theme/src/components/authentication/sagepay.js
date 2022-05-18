@@ -3,7 +3,7 @@ import { connect } from "frontity";
 
 import { v4 as uuidv4 } from "uuid";
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState } from "../../context";
+import { useAppDispatch, useAppState, fetchDataHandler } from "../../context";
 
 function blankForm() {
   return {
@@ -35,14 +35,10 @@ function blankForm() {
 const Sagepay = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
-  const dispatch = useAppDispatch();
-  const { jwt } = useAppState();
-
   const [formData, setFormData] = useState(blankForm());
   const [sage, setSage] = useState(null);
   const [hasUrl, setHasUrl] = useState(false);
 
-  // let scope = jwt.decode.scope || "none";
   let scope = "admin"; // test var
   let inScope = ["admin", "sage"].includes(scope);
   function updateForm(e) {
@@ -58,14 +54,13 @@ const Sagepay = ({ state, actions, libraries }) => {
         url: "https://skylarkdev.digital/dynamicsbridge/sagepay/live",
         method: "POST",
         headers: {
-          Authorization: `Bearer ${jwt}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ sage: { ...formData } }),
       };
       e.preventDefault();
 
-      let sage = await fetch(request.url, request);
+      let sage = await fetchDataHandler({ path: request.url, state });
       if (sage.ok) {
         sage = await sage.json();
         let sageResult = sage.data.split("\r\n");

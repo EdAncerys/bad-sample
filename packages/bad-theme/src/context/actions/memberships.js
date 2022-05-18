@@ -4,7 +4,7 @@ import {
   setGoToAction,
   loginAction,
   setErrorAction,
-  authenticateAppAction,
+  fetchDataHandler,
 } from "../index";
 
 export const getMembershipDataAction = async ({ state, actions }) => {
@@ -75,7 +75,6 @@ export const handleApplyForMembershipAction = async ({
   dynamicsApps,
   canUpdateApplication,
   changeAppCategory,
-  refreshJWT,
 }) => {
   try {
     if (!isActiveUser) {
@@ -100,7 +99,6 @@ export const handleApplyForMembershipAction = async ({
         // console.log("🤖  NO  applications under reviewed status"); // debug
       }
     }
-
     if (applicationData) {
       // if user have application in progress redirect to dashboard
 
@@ -125,7 +123,7 @@ export const handleApplyForMembershipAction = async ({
         return;
       }
     }
-
+    console.log("🐞 HELLO 2");
     // default application data
     let membershipData = {
       bad_organisedfor: "SIG",
@@ -140,7 +138,6 @@ export const handleApplyForMembershipAction = async ({
         state,
         category,
         type,
-        refreshJWT,
       });
       if (!response) throw new Error("Failed to get membership data");
       membershipData = response;
@@ -170,8 +167,16 @@ export const handleApplyForMembershipAction = async ({
         bad_existingsubscriptionid, // existing subscription id for BAD apps
         bad_applicationfor: changeAppCategory ? "810170001" : "810170000", // for new apps 810170000 for change of cat for BAD and 810170001
       },
-      refreshJWT,
     });
+
+    console.log(
+      "🐞 ",
+      isActiveUser,
+      applicationData,
+      isBADApp,
+      changeAppCategory,
+      store
+    ); // debug
 
     // ⏬ redirect to application form if active user
     if (isActiveUser && store) {
@@ -202,7 +207,6 @@ export const handleValidateMembershipChangeAction = async ({
   isActiveUser,
   core_membershipsubscriptionid,
   dispatch,
-  refreshJWT,
 }) => {
   try {
     if (!isActiveUser || !core_membershipsubscriptionid)
@@ -210,17 +214,11 @@ export const handleValidateMembershipChangeAction = async ({
     const { contactid } = isActiveUser;
 
     // ⏬ check if user have application change of category submitted
-    const URL =
+    const path =
       state.auth.APP_HOST +
       `/catalogue/data/core_membershipapplications?$filter=statuscode eq 1 and _core_contactid_value eq ${contactid} and _bad_existingsubscriptionid_value eq ${core_membershipsubscriptionid}&$select=_bad_existingsubscriptionid_value`;
-    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
 
-    const requestOptions = {
-      method: "GET",
-      headers: { Authorization: `Bearer ${jwt}` },
-    };
-
-    const data = await fetch(URL, requestOptions);
+    const data = await fetchDataHandler({ path, state });
     const result = await data.json();
 
     // ⏬ submitted application data for change of category

@@ -1,17 +1,11 @@
 import { v4 as uuidv4 } from "uuid";
-import { authenticateAppAction, setFetchAction } from "../index";
+import { setFetchAction, fetchDataHandler } from "../index";
 
-export const sendFileToS3Action = async ({
-  state,
-  dispatch,
-  attachments,
-  refreshJWT,
-}) => {
+export const sendFileToS3Action = async ({ state, dispatch, attachments }) => {
   // console.log("sendFileToS3Action triggered");
 
   setFetchAction({ dispatch, isFetching: true });
-  const URL = state.auth.APP_HOST + `/s3/profile/image`;
-  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
+  const path = state.auth.APP_HOST + `/s3/profile/image`;
 
   // extract file extension name from attachment
   const fileExtension = attachments.name.split(".").pop();
@@ -22,14 +16,14 @@ export const sendFileToS3Action = async ({
   const form = new FormData(); // create form object to sent email content & attachments
   form.append("profile", attachments, fileName); // append file to form object
 
-  const requestOptions = {
-    method: "PUT",
-    headers: { Authorization: `Bearer ${jwt}` },
-    body: form,
-  };
-
   try {
-    const data = await fetch(URL, requestOptions);
+    const data = await fetchDataHandler({
+      path,
+      method: "PUT",
+      body: form,
+      state,
+    });
+
     const response = await data.json();
     if (response.success) {
       return response.data;

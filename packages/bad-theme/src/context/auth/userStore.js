@@ -1,11 +1,11 @@
 import {
-  authenticateAppAction,
   setFetchAction,
   setApplicationDataAction,
   loginAction,
   getApplicationStatus,
   setErrorAction,
   getUserDataByContactId,
+  fetchDataHandler,
 } from "../index";
 
 export const setUserStoreAction = async ({
@@ -16,8 +16,6 @@ export const setUserStoreAction = async ({
   isActiveUser,
   data,
   membershipApplication,
-  dynamicsApps,
-  refreshJWT,
 }) => {
   // console.log("setUserStoreAction triggered");
 
@@ -41,7 +39,6 @@ export const setUserStoreAction = async ({
       storeApplication = await getUserStoreAction({
         state,
         isActiveUser,
-        refreshJWT,
       });
     }
     if (!storeApplication) {
@@ -86,12 +83,7 @@ export const setUserStoreAction = async ({
   }
 };
 
-export const getUserStoreAction = async ({
-  state,
-  isActiveUser,
-  dispatch,
-  refreshJWT,
-}) => {
+export const getUserStoreAction = async ({ state, isActiveUser, dispatch }) => {
   // console.log("getUserStoreAction triggered");
 
   try {
@@ -99,15 +91,9 @@ export const getUserStoreAction = async ({
     if (!contactid)
       throw new Error("Cannot set user store. Contactid is missing.");
 
-    const URL = state.auth.APP_HOST + `/applications/current/${contactid}`;
-    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
+    const path = state.auth.APP_HOST + `/applications/current/${contactid}`;
 
-    const requestOptions = {
-      method: "GET",
-      headers: { Authorization: `Bearer ${jwt}` },
-    };
-
-    const response = await fetch(URL, requestOptions);
+    const response = await fetchDataHandler({ path, state });
     const userStore = await response.json();
 
     if (userStore.success) {
@@ -125,7 +111,6 @@ export const getUserApplicationAction = async ({
   state,
   dispatch,
   contactid,
-  refreshJWT,
 }) => {
   // console.log("getUserApplicationAction triggered");
 
@@ -133,19 +118,21 @@ export const getUserApplicationAction = async ({
     if (!contactid)
       throw new Error("Cannot get user store. Contactid is missing.");
 
-    const URL = state.auth.APP_HOST + `/applications/current/${contactid}`;
-    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
+    const path = state.auth.APP_HOST + `/applications/current/${contactid}`;
 
-    const requestOptions = {
-      method: "GET",
-      headers: { Authorization: `Bearer ${jwt}` },
-    };
-
-    const response = await fetch(URL, requestOptions);
+    const response = await fetchDataHandler({ path, state });
     const userStore = await response.json();
 
     if (userStore.success) {
-      // console.log("⏬ Membership Record ⏬");
+      console.log("⏬ Membership Record ⏬");
+      console.log("🐞 userStore", userStore);
+      // check if userStore.data is iterable object & if not return null
+      if (
+        userStore.data &&
+        typeof userStore.data === "object" &&
+        !Array.isArray(userStore.data)
+      )
+        return null;
 
       // set application data to context
       setApplicationDataAction({ dispatch, applicationData: userStore.data });
@@ -162,23 +149,14 @@ export const createDynamicsApplicationAction = async ({
   state,
   contactid,
   dispatch,
-  refreshJWT,
 }) => {
   // console.log("createDynamicsApplicationAction triggered");
 
   // ⏬⏬  create application record in dynamics ⏬⏬
-  const URL = state.auth.APP_HOST + `/applications/new/${contactid}`;
-  const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
-
-  const requestOptions = {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${jwt}`,
-    },
-  };
+  const path = state.auth.APP_HOST + `/applications/new/${contactid}`;
 
   try {
-    const response = await fetch(URL, requestOptions);
+    const response = await fetchDataHandler({ path, state });
     const data = await response.json();
 
     // console.log("Dynamics Application result", data); // debug
@@ -199,7 +177,6 @@ export const setCompleteUserApplicationAction = async ({
   isActiveUser,
   applicationData,
   changeAppCategory,
-  refreshJWT,
 }) => {
   // console.log("setCompleteUserApplicationAction triggered");
 
@@ -218,15 +195,13 @@ export const setCompleteUserApplicationAction = async ({
     if (!contactid)
       throw new Error("Cannot set user store. Contactid is missing.");
 
-    const URL = state.auth.APP_HOST + `/applications/new/${contactid}`;
-    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
+    const path = state.auth.APP_HOST + `/applications/new/${contactid}`;
 
-    const requestOptions = {
+    const response = await fetchDataHandler({
+      path,
       method: "POST",
-      headers: { Authorization: `Bearer ${jwt}` },
-    };
-
-    const response = await fetch(URL, requestOptions);
+      state,
+    });
     const data = await response.json();
 
     if (data.success) {
@@ -235,7 +210,6 @@ export const setCompleteUserApplicationAction = async ({
         state,
         dispatch,
         contactid,
-        refreshJWT,
       });
       // delete application record from CONTEXT
       setApplicationDataAction({
@@ -247,9 +221,7 @@ export const setCompleteUserApplicationAction = async ({
       const userData = await getUserDataByContactId({
         state,
         dispatch,
-        jwt,
         contactid,
-        refreshJWT,
       });
       if (!userData) throw new Error("Error getting userData.");
       // console.log("⏬ Membership Completed ⏬");
@@ -273,24 +245,19 @@ export const updateDynamicsApplicationAction = async ({
   dispatch,
   contactid,
   updatedMembershipData,
-  refreshJWT,
 }) => {
   // console.log("updateDynamicsApplicationAction triggered");
 
   try {
-    const URL = state.auth.APP_HOST + `/applications/current/${contactid}`;
-    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
+    const path = state.auth.APP_HOST + `/applications/current/${contactid}`;
 
-    const requestOptions = {
+    const response = await fetchDataHandler({
+      path,
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${jwt}`,
-      },
-      body: JSON.stringify(updatedMembershipData),
-    };
-
-    const response = await fetch(URL, requestOptions);
+      body: updatedMembershipData,
+      headers: { "Content-Type": "application/json" },
+      state,
+    });
     const data = await response.json();
 
     if (data.success) {
@@ -310,7 +277,6 @@ export const deleteApplicationAction = async ({
   dispatch,
   contactid,
   applicationData,
-  refreshJWT,
 }) => {
   // console.log("deleteApplicationRecord triggered");
 
@@ -327,17 +293,13 @@ export const deleteApplicationAction = async ({
       );
 
     // userStore endpoint API
-    const URL = state.auth.APP_HOST + `/applications/current/${contactid}`;
-    const jwt = await authenticateAppAction({ state, dispatch, refreshJWT });
+    const path = state.auth.APP_HOST + `/applications/current/${contactid}`;
 
-    const requestOptions = {
+    const response = await fetchDataHandler({
+      path,
       method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-    };
-
-    const response = await fetch(URL, requestOptions);
+      state,
+    });
     const data = await response.json();
 
     if (data.success) {

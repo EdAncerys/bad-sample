@@ -27,7 +27,7 @@ const RowButton = ({
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { isActiveUser, refreshJWT } = useAppState();
+  const { isActiveUser } = useAppState();
 
   let {
     title,
@@ -74,13 +74,12 @@ const RowButton = ({
       authLink = await getWileyAction({
         state,
         dispatch,
-        refreshJWT,
         isActiveUser,
         isFullAccess: true,
         url: link.url,
       });
     }
-    const journal = title.match(/[A-Z]{3}/gm)[0];
+    // const journal = title.match(/[A-Z]{3}/gm)[0];
     // redirect handler
     const handelRedirect = () => {
       setErrorAction({ dispatch, isError: null });
@@ -93,7 +92,7 @@ const RowButton = ({
       setErrorAction({
         dispatch,
         isError: {
-          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals. To continue to the publication without logging in, click to visit the ${journal} website`,
+          message: `BAD members should login to get free access to our journals. To continue to the journal without logging in, click 'Read Journal'`,
           image: "Error",
           action: [
             {
@@ -154,6 +153,7 @@ const RowButton = ({
           return;
         }
         if (file_link) {
+          console.log("FILE CLICKED");
           window.open(file_link.url);
           return;
         }
@@ -162,6 +162,7 @@ const RowButton = ({
           return;
         }
         if (onClickAction) {
+          console.log("OnClickAction");
           onClickAction();
           return;
         }
@@ -174,6 +175,7 @@ const RowButton = ({
           return;
         }
         if (link) {
+          console.log("onClickLinkHandler");
           onClickLinkHandler();
           return;
         }

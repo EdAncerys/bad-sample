@@ -13,7 +13,7 @@ import {
   useAppDispatch,
   handleValidateMembershipChangeAction,
   getProofOfMembershipAction,
-  handleApplyForMembershipAction,
+  handleUpdateMembershipApplication,
   setErrorAction,
   muiQuery,
   setGoToAction,
@@ -23,13 +23,8 @@ const Membership = ({ state, actions, libraries }) => {
   const { lg } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const {
-    dynamicsApps,
-    applicationData,
-    dashboardPath,
-    isActiveUser,
-    refreshJWT,
-  } = useAppState();
+  const { dynamicsApps, applicationData, dashboardPath, isActiveUser } =
+    useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -52,67 +47,11 @@ const Membership = ({ state, actions, libraries }) => {
         core_membershipsubscriptionid: app.core_membershipsubscriptionid,
         isActiveUser,
         dispatch,
-        refreshJWT,
       });
       // await for link to download & open in new window to download
       window.open(url, "_blank");
     } catch (error) {
       // console.log(error);
-    } finally {
-      setFetching(false);
-    }
-  };
-
-  const handleUpdateMembershipApplication = async ({ app }) => {
-    // if user have application in progress break & display error
-    if (applicationData) {
-      const type = applicationData[0].bad_categorytype;
-      const confirmationMsg = `You already have ${type} application open and unsubmitted! Please complete it before changing BAD application category.`;
-
-      setErrorAction({
-        dispatch,
-        isError: {
-          message: confirmationMsg,
-          image: "Error",
-        },
-      });
-      return;
-    }
-
-    // handle create new application in Dynamics
-    try {
-      setFetching(true);
-      const appData = await handleApplyForMembershipAction({
-        state,
-        actions,
-        dispatch,
-        applicationData,
-        isActiveUser,
-        dynamicsApps,
-        category: "BAD",
-        type: app.bad_categorytype, //🤖 application type name from appData
-        membershipApplication: {
-          stepOne: false,
-          stepTwo: false,
-          stepThree: false,
-          stepFour: false,
-          changeAppCategory: app, // change of application
-        },
-        path: "/membership/application-change/", // redirect to application change page
-        changeAppCategory: app, // change of application
-        refreshJWT,
-      });
-      if (!appData) throw new Error("Failed to create application");
-    } catch (error) {
-      // console.log(error);
-
-      setErrorAction({
-        dispatch,
-        isError: {
-          message: "Failed to create application record. Please try again.",
-          image: "Error",
-        },
-      });
     } finally {
       setFetching(false);
     }
@@ -237,7 +176,6 @@ const Membership = ({ state, actions, libraries }) => {
                           core_membershipsubscriptionid,
                           isActiveUser,
                           dispatch,
-                          refreshJWT,
                         });
 
                       if (isSubmitted) {
@@ -285,7 +223,16 @@ const Membership = ({ state, actions, libraries }) => {
                       <div
                         className="blue-btn"
                         onClick={() =>
-                          handleUpdateMembershipApplication({ app })
+                          handleUpdateMembershipApplication({
+                            state,
+                            actions,
+                            dispatch,
+                            isActiveUser,
+                            dynamicsApps,
+                            app,
+                            applicationData,
+                            setFetching,
+                          })
                         }
                       >
                         Apply for BAD category change

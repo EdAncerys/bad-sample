@@ -1,5 +1,6 @@
-// 📌 EVENTS
+import { fetchDataHandler } from "../index";
 
+// 📌 EVENTS
 export const getEventsData = async ({ state, page, postsPerPage }) => {
   let pageNo = page || 1;
   let perPageLimit = postsPerPage || state.theme.perPageLimit;
@@ -11,15 +12,16 @@ export const getEventsData = async ({ state, page, postsPerPage }) => {
   try {
     let data = [];
 
-    let response = await fetch(url);
+    let response = await fetchDataHandler({ path: url, state });
+
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status !== 400) {
+    while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
       pageNo++;
       url = `${state.auth.WP_HOST}wp-json/wp/v2/events?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&filter[orderby]=event_start_date&order=asc`;
-      response = await fetch(url);
+      response = await fetchDataHandler({ path: url, state });
     }
 
     return data;
@@ -33,7 +35,7 @@ export const getEventGrades = async ({ state }) => {
 
   try {
     // ⬇️ fetch data via wp API page by page
-    const response = await fetch(url);
+    const response = await fetchDataHandler({ path: url, state });
     if (!response.ok) throw new Error("Fetching error");
 
     const data = await response.json();
@@ -48,7 +50,7 @@ export const getEventLocations = async ({ state }) => {
 
   try {
     // ⬇️ fetch data via wp API page by page
-    const response = await fetch(url);
+    const response = await fetchDataHandler({ path: url, state });
     if (!response.ok) throw new Error("Fetching error");
 
     const data = await response.json();
@@ -63,7 +65,7 @@ export const getEventSpecialtys = async ({ state }) => {
 
   try {
     // ⬇️ fetch data via wp API page by page
-    const response = await fetch(url);
+    const response = await fetchDataHandler({ path: url, state });
     if (!response.ok) throw new Error("Fetching error");
 
     const data = await response.json();
@@ -77,23 +79,24 @@ export const getEventSpecialtys = async ({ state }) => {
 export const getNewsData = async ({ state, page, postsPerPage }) => {
   let pageNo = page || 1;
   let perPageLimit = postsPerPage || state.theme.perPageLimit;
+  console.log(postsPerPage);
   let fields =
     "title,link,date,release,title,categories,featured_media,excerpt,yoast_head_json.og_image,acf";
 
-  let url = `${state.auth.WP_HOST}wp-json/wp/v2/posts?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+  let url = `${state.auth.WP_HOST}wp-json/wp/v2/posts?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=desc`;
 
   try {
     let data = [];
 
-    let response = await fetch(url);
+    let response = await fetchDataHandler({ path: url, state });
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status !== 400) {
+    while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
       pageNo++;
       url = `${state.auth.WP_HOST}wp-json/wp/v2/posts?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
-      response = await fetch(url);
+      response = await fetchDataHandler({ path: url, state });
     }
 
     return data;
@@ -107,7 +110,7 @@ export const getMediaCategories = async ({ state }) => {
 
   try {
     // ⬇️ fetch data via wp API page by page
-    const response = await fetch(url);
+    const response = await fetchDataHandler({ path: url, state });
     if (!response.ok) throw new Error("Fetching error");
 
     const data = await response.json();
@@ -137,15 +140,15 @@ export const getGuidelinesData = async ({ state, page, postsPerPage }) => {
   try {
     let data = [];
 
-    let response = await fetch(url);
+    let response = await fetchDataHandler({ path: url, state });
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status !== 400) {
+    while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
       pageNo++;
       url = `${state.auth.WP_HOST}wp-json/wp/v2/guidelines_standards?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
-      response = await fetch(url);
+      response = await fetchDataHandler({ path: url, state });
     }
 
     return data;
@@ -159,7 +162,7 @@ export const getGuidelinesTypes = async ({ state }) => {
 
   try {
     // ⬇️ fetch data via wp API page by page
-    const response = await fetch(url);
+    const response = await fetchDataHandler({ path: url, state });
     if (!response.ok) throw new Error("Fetching error");
 
     const data = await response.json();
@@ -180,15 +183,15 @@ export const getVenuesData = async ({ state, page, postsPerPage }) => {
   try {
     let data = [];
 
-    let response = await fetch(url);
+    let response = await fetchDataHandler({ path: url, state });
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status !== 400) {
+    while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
       pageNo++;
       url = `${state.auth.WP_HOST}wp-json/wp/v2/venues?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
-      response = await fetch(url);
+      response = await fetchDataHandler({ path: url, state });
     }
 
     return data;
@@ -208,15 +211,15 @@ export const getVideosData = async ({ state, page, postsPerPage }) => {
   try {
     let data = [];
 
-    let response = await fetch(url);
+    let response = await fetchDataHandler({ path: url, state });
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status !== 400) {
+    while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
       pageNo++;
       url = `${state.auth.WP_HOST}wp-json/wp/v2/videos?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
-      response = await fetch(url);
+      response = await fetchDataHandler({ path: url, state });
     }
 
     return data;
@@ -230,7 +233,7 @@ export const getEventSpecialitys = async ({ state }) => {
 
   try {
     // ⬇️ fetch data via wp API page by page
-    const response = await fetch(url);
+    const response = await fetchDataHandler({ path: url, state });
     if (!response.ok) throw new Error("Fetching error");
 
     const data = await response.json();
@@ -245,22 +248,22 @@ export const getFundingData = async ({ state, page, postsPerPage }) => {
   let pageNo = page || 1;
   let perPageLimit = postsPerPage || state.theme.perPageLimit;
   let fields =
-    "id,title,content,content,tags,guidelines_type,site_sections,acf,layout,authors,notice,nice_accredited";
+    "id,title,content,content,tags,guidelines_type,site_sections,acf,layout,authors,notice,nice_accredited,funding_type";
 
   let url = `${state.auth.WP_HOST}wp-json/wp/v2/funding_awards?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
 
   try {
     let data = [];
 
-    let response = await fetch(url);
+    let response = await fetchDataHandler({ path: url, state });
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status !== 400) {
+    while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
       pageNo++;
       url = `${state.auth.WP_HOST}wp-json/wp/v2/funding_awards?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
-      response = await fetch(url);
+      response = await fetchDataHandler({ path: url, state });
     }
 
     return data;
@@ -274,7 +277,7 @@ export const getFundingTypes = async ({ state }) => {
 
   try {
     // ⬇️ fetch data via wp API page by page
-    const response = await fetch(url);
+    const response = await fetchDataHandler({ path: url, state });
     if (!response.ok) throw new Error("Fetching error");
 
     const data = await response.json();
@@ -295,15 +298,15 @@ export const getMembershipData = async ({ state, page, postsPerPage }) => {
   try {
     let data = [];
 
-    let response = await fetch(url);
+    let response = await fetchDataHandler({ path: url, state });
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status !== 400) {
+    while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
       pageNo++;
       url = `${state.auth.WP_HOST}wp-json/wp/v2/memberships?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
-      response = await fetch(url);
+      response = await fetchDataHandler({ path: url, state });
     }
 
     return data;
@@ -324,15 +327,15 @@ export const getLeadershipData = async ({ state, page, postsPerPage }) => {
   try {
     let data = [];
 
-    let response = await fetch(url);
+    let response = await fetchDataHandler({ path: url, state });
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status !== 400) {
+    while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
       pageNo++;
       url = `${state.auth.WP_HOST}wp-json/wp/v2/leadership_team?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
-      response = await fetch(url);
+      response = await fetchDataHandler({ path: url, state });
     }
 
     return data;
@@ -346,7 +349,7 @@ export const getLeadershipGrades = async ({ state }) => {
 
   try {
     // ⬇️ fetch data via wp API page by page
-    const response = await fetch(url);
+    const response = await fetchDataHandler({ path: url, state });
     if (!response.ok) throw new Error("Fetching error");
 
     const data = await response.json();
@@ -361,7 +364,7 @@ export const getLeadershipPositions = async ({ state }) => {
 
   try {
     // ⬇️ fetch data via wp API page by page
-    const response = await fetch(url);
+    const response = await fetchDataHandler({ path: url, state });
     if (!response.ok) throw new Error("Fetching error");
 
     const data = await response.json();
@@ -384,15 +387,15 @@ export const getSIGData = async ({ state, page, postsPerPage, type }) => {
   try {
     let data = [];
 
-    let response = await fetch(url);
+    let response = await fetchDataHandler({ path: url, state });
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status !== 400) {
+    while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
       pageNo++;
       url = `${state.auth.WP_HOST}wp-json/wp/v2/${postType}?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
-      response = await fetch(url);
+      response = await fetchDataHandler({ path: url, state });
     }
 
     return data;
@@ -414,15 +417,15 @@ export const getCPTData = async ({ state, page, postsPerPage, type }) => {
   try {
     let data = [];
 
-    let response = await fetch(url);
+    let response = await fetchDataHandler({ path: url, state });
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status !== 400) {
+    while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
       pageNo++;
       url = `${state.auth.WP_HOST}wp-json/wp/v2/${type}?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
-      response = await fetch(url);
+      response = await fetchDataHandler({ path: url, state });
     }
 
     return data;
@@ -437,7 +440,7 @@ export const getCPTTaxonomy = async ({ state, type }) => {
 
   try {
     // ⬇️ fetch data via wp API page by page
-    const response = await fetch(url);
+    const response = await fetchDataHandler({ path: url, state });
     if (!response.ok) throw new Error("Fetching error");
 
     const data = await response.json();
@@ -458,15 +461,15 @@ export const getElectionsData = async ({ state, page, postsPerPage }) => {
   try {
     let data = [];
 
-    let response = await fetch(url);
+    let response = await fetchDataHandler({ path: url, state });
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status !== 400) {
+    while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
       pageNo++;
       url = `${state.auth.WP_HOST}wp-json/wp/v2/elections?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
-      response = await fetch(url);
+      response = await fetchDataHandler({ path: url, state });
     }
 
     return data;

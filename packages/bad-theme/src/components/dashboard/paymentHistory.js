@@ -14,7 +14,7 @@ const ServePayments = ({
   if (!block) return null;
 
   const dispatch = useAppDispatch();
-  const { isActiveUser, refreshJWT } = useAppState();
+  const { isActiveUser } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const isLastItem = subAppHistory.length === item + 1; // item length helper
@@ -35,7 +35,6 @@ const ServePayments = ({
         state,
         isActiveUser,
         dispatch,
-        refreshJWT,
       });
       // await for link to download & open in new window to download
       window.open(url, "_blank");
