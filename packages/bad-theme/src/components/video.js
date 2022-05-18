@@ -160,10 +160,24 @@ const Video = ({ state, actions, libraries }) => {
 
     if (fetchVendorId.ok) {
       const json = await fetchVendorId.json();
+      if(json.success) {
       const url =
         json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
       handlePaymentModal(url);
+      return true;
+      } 
+
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `There was a problem processing the request`,
+          image: "Error",
+        },
+      });
+      
     }
+
+    
     // setPage({ page: "directDebit", data: block });
   };
 

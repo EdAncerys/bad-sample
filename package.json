@@ -29,6 +29,10 @@
     "calendar-link": "^2.1.1",
     "date-and-time": "^2.0.1",
     "dotenv": "^10.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-react-hooks": "^4.5.0",
     "frontity": "^1.17.1",
     "html-react-parser": "^1.4.5",
     "js-cookie": "^3.0.1",
@@ -43,5 +47,9 @@
     "uuid": "^8.3.2",
     "vivus": "^0.4.6",
     "webfontloader": "^1.6.28"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.17.0",
+    "babel-eslint": "^10.1.0"
   }
 }
