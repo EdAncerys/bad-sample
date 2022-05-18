@@ -41,12 +41,6 @@ export const useRedirect = ({
     // console.log("REDIRECTS", redirects);
     const redirect = redirects.find(
       (redirect) => {
-        // console.log(
-        //   "WE MATCHED AGAINST",
-        //   redirect["301_from"],
-        //   "WE ARE AT",
-        //   urlPath
-        // );
         if (doURLsMatch(redirect["301_from"], urlPath, state.auth.APP_URL)) {
           console.log(
             `Redirecting from ${redirect["301_from"]} to ${redirect["301_to"]}`
@@ -58,7 +52,7 @@ export const useRedirect = ({
       //   ? urlPath === redirect["301_from"]
       //   : urlPathNoSlash === redirect["301_from"]
     );
-    // console.log("CONST REDIRECT", redirect);
+
     if (!redirect) return null; // skip if redirect is not found
     // 📌  set redirect to state
     setGoToAction({ state, path: redirect["301_to"], actions });

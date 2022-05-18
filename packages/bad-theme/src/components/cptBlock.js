@@ -90,6 +90,11 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
     setCPTBlockAction({ dispatch, cptBlockFilter: "" });
     setGroupeType(cptTypes);
 
+    if (postPath === `derm_groups_charity`) {
+      // sort groupe data by title in alphabetical order
+    }
+    console.log("📌 cptData", cptData);
+
     let dataChunk = cptData.slice(0, Number(chunkRef.current));
     setPostFilter(dataChunk);
     setPostListData(cptData); // apply limit on posts
