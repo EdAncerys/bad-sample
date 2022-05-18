@@ -201,6 +201,8 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
   };
 
   const ServeFilter = () => {
+    if (lg) return null; // hide filters on mobile
+
     const ServeSearchFilter = () => {
       if (!searchFilter) return null;
 
@@ -220,7 +222,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
     };
 
     const ServeTypeFilter = () => {
-      if (!typeFilter || lg) return null;
+      if (!typeFilter) return null;
 
       return (
         <div className="shadow filter" style={{ textTransform: "uppercase" }}>

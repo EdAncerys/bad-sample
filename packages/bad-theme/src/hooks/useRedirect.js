@@ -67,12 +67,14 @@ export const useRedirect = ({
 };
 
 function doURLsMatch(redirectFromUrl, redirectToUrl, hostname) {
-  if (
-    redirectFromUrl.startsWith("www.") ||
-    redirectFromUrl.startsWith("http")
-  ) {
+  // check if meets criteria
+  const isStartsWith =
+    redirectFromUrl.startsWith("www.") || redirectFromUrl.startsWith("http");
+
+  if (!redirectFromUrl || !redirectToUrl || !hostname || isStartsWith) {
     return false;
   }
+
   const redirectFrom = new URL(hostname + redirectFromUrl);
   const redirectTo = new URL(hostname + redirectToUrl);
 
