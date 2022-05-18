@@ -186,7 +186,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
   // SERVERS --------------------------------------------------------
   const ServeType = () => {
-    if (!guidelinesType) return null;
+    if (!guidelinesType || lg) return null; // hide type filters if mobile
 
     return (
       <div style={{ padding: `1em ${marginHorizontal}px` }}>
