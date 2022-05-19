@@ -68,6 +68,7 @@ const App = ({ state, actions }) => {
 
   let urlPath = state.router.link;
   const data = state.source.get(urlPath);
+  console.log("data", data)
   const useEffectRef = useRef(true);
   // console.log("INDEX data", data); // debug
   // --------------------------------------------------------------------------------

@@ -142,14 +142,27 @@ export const getGuidelinesData = async ({ state, page, postsPerPage }) => {
 
     let response = await fetchDataHandler({ path: url, state });
     // fetch events data from WP & while respone is not 400 (bad request) keep fetching
-    while (response.status === 200) {
-      let json = await response.json();
+
+    let totalPages = response.headers.get('X-WP-TotalPages');
+    console.log("totalPages", totalPages)
+    
+    for(; pageNo <= totalPages; pageNo++){
+        let json = await response.json();
 
       data = [...data, ...json];
-      pageNo++;
+      // pageNo++;
       url = `${state.auth.WP_HOST}wp-json/wp/v2/guidelines_standards?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
       response = await fetchDataHandler({ path: url, state });
+
     }
+    // while (response.status === 200) {
+    //   let json = await response.json();
+
+    //   data = [...data, ...json];
+    //   pageNo++;
+    //   url = `${state.auth.WP_HOST}wp-json/wp/v2/guidelines_standards?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+    //   response = await fetchDataHandler({ path: url, state });
+    // }
 
     return data;
   } catch (error) {

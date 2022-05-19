@@ -57,11 +57,11 @@ export default connect(({ libraries, state, actions }) => {
       setErrorAction({
         dispatch,
         isError: {
-          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals. <br/> To continue to the publication without logging in, click to visit the ${title} website`,
+          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals. <br/> To continue to the publication without logging in, click 'Continue to Wiley website'`,
           image: "Error",
           action: [
             {
-              label: `Read ${title}`,
+              label: `Continue to Wiley website`,
               handler: handleRedirect,
             },
             { label: "Login", handler: handelLogin },
