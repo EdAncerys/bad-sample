@@ -255,54 +255,10 @@ const EventLoopBlock = ({
   ]);
 
   // HANDLERS --------------------------------------------------------------
-  const handleLoadMoreFilter = async () => {
-    // ⬇️ handle load more filter
-    let events = await getEventsData({ state, page: curentPageRef.current });
-    if (!events) {
-      setMoreAction(false);
-      return;
-    }
-    curentPageRef.current++;
-
-    let updatedEvents = [...eventList, ...events];
-
-    // ⬇️⬇ sort events by date
-    updatedEvents = handleSortFilter({ list: updatedEvents });
-
-    // add events to eventList
-    setEventList(updatedEvents);
-    setFilter(updatedEvents);
-  };
 
   if (!eventFilter) return <Loading />;
 
   // SERVERS ---------------------------------------------------------------
-  const ServeMoreAction = () => {
-    if (
-      isPostLimit ||
-      searchFilter ||
-      gradesFilter ||
-      locationsFilter ||
-      specialtyFilter ||
-      yearFilter ||
-      moreAction // disable more action if no more events
-    )
-      return null;
-
-    return (
-      <div
-        className="flex"
-        style={{
-          justifyContent: "center",
-          paddingTop: `2em`,
-        }}
-      >
-        <div className="transparent-btn" onClick={handleLoadMoreFilter}>
-          Load More
-        </div>
-      </div>
-    );
-  };
 
   // RETURN ----------------------------------------------------------------
   return (
@@ -386,7 +342,6 @@ const EventLoopBlock = ({
             );
         })}
       </div>
-      {/* <ServeMoreAction /> */}
     </div>
   );
 };

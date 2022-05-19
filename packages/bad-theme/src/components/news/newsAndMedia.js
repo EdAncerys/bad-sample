@@ -83,7 +83,9 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       });
     }
     // apply sort by date functionality & apply limit
-    data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+    data = data.sort((a, b) => {
+      return new Date(b.date) - new Date(a.date);
+    });
 
     setPostList(data);
     setFilterList(data);
