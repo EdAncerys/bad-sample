@@ -59,14 +59,10 @@ const RegistrationThankYouPage = ({ state, actions }) => {
               equality policy.
             </span>
             This includes not discriminating under the Equality Act 2010, and
-            building an accurate picture of the make-up of the membership. You
-            can find our Equal Opportunities Policy here. The BAD would like to
+            building an accurate picture of the make-up of the membership. The BAD would like to
             ask for your help and co-operation to enable us to do this, but
             filling in this form is voluntary and submission of this information
-            will not be considered as part of your application. In line with the
-            2021 UK census questions, when asking about your ethnicity we first
-            ask for the broad ethnic group which you identify with, this is then
-            followed by a question asking for a more specific ethnic background.
+            will not be considered as part of your application. 
           </div>
           <CompleteApplication />
         </div>
