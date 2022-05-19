@@ -64,15 +64,19 @@ export const fetchDataHandler = async ({
     credentials: disableCookies ? "omit" : "include",
   };
 
+  let isFormData = headerOptions["Content-Type"].includes(
+    "multipart/form-data"
+  );
+
   // 📌 BODY Options
   if (method !== "GET" && body) {
     requestOptions = {
       ...requestOptions,
-      body: JSON.stringify(body),
+      body: isFormData ? body : JSON.stringify(body),
     };
   }
 
-  // console.log("🐞 requestOptions", requestOptions); // debug
+  console.log("🐞 requestOptions", requestOptions); // debug
 
   try {
     if (!path) throw new Error("No path provided");

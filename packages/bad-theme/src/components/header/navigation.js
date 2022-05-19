@@ -60,7 +60,7 @@ const Navigation = ({ state, actions, libraries }) => {
     let data = Object.values(state.source.post);
     while (data.length === 0) {
       // if iteration is greater than 10, break
-      if (iteration > 15) break;
+      if (iteration > 5) break;
       // set timeout for async
       await new Promise((resolve) => setTimeout(resolve, 500));
       await getPostData({ state, actions });

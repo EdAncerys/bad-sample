@@ -79,7 +79,6 @@ export const getEventSpecialtys = async ({ state }) => {
 export const getNewsData = async ({ state, page, postsPerPage }) => {
   let pageNo = page || 1;
   let perPageLimit = postsPerPage || state.theme.perPageLimit;
-  console.log(postsPerPage);
   let fields =
     "title,link,date,release,title,categories,featured_media,excerpt,yoast_head_json.og_image,acf";
 

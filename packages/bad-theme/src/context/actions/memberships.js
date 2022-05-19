@@ -44,7 +44,6 @@ export const validateMembershipFormAction = async ({
   // console.log("⬇️ membershipTypes", membershipTypes); // debug
 
   let type = applicationData[0].bad_categorytype;
-  console.log("TYPE", type);
   if (membershipTypeChange) type = membershipTypeChange; // apply for SIGs change of memberships
   membershipTypes.map((membership) => {
     // validate application type against store object for BAD & SIGs
@@ -54,7 +53,6 @@ export const validateMembershipFormAction = async ({
 
     if (appType) {
       const applicationForm = membership.acf;
-      console.log("APPFORM", applicationForm);
       Object.keys(applicationForm).map((keyName) => {
         handleSetInputData({ data: applicationForm, name: keyName });
       });
@@ -123,7 +121,6 @@ export const handleApplyForMembershipAction = async ({
         return;
       }
     }
-    console.log("🐞 HELLO 2");
     // default application data
     let membershipData = {
       bad_organisedfor: "SIG",
@@ -185,7 +182,11 @@ export const handleApplyForMembershipAction = async ({
         path: path || `/membership/step-1-the-process/`,
         actions,
       });
-    } else {
+
+      return store;
+    }
+
+    if (!isActiveUser) {
       // console.log(store);
       setErrorAction({
         dispatch,
@@ -194,6 +195,20 @@ export const handleApplyForMembershipAction = async ({
           image: "Error",
         },
       });
+
+      return;
+    }
+
+    if (!store) {
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: "Fail to create application. Please try again.",
+          image: "Error",
+        },
+      });
+
+      return;
     }
 
     return store; // return store
