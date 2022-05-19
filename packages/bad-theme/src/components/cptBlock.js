@@ -92,8 +92,17 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
     if (postPath === `derm_groups_charity`) {
       // sort groupe data by title in alphabetical order
+      cptData = cptData.sort((a, b) => {
+        // break if no title
+        if (!a.title || !b.title) return 0;
+        let tile = a.title.rendered.toLowerCase();
+        let tile2 = b.title.rendered.toLowerCase();
+
+        if (tile < tile2) return -1;
+        if (tile > tile2) return 1;
+        return 0;
+      });
     }
-    console.log("📌 cptData", cptData);
 
     let dataChunk = cptData.slice(0, Number(chunkRef.current));
     setPostFilter(dataChunk);
