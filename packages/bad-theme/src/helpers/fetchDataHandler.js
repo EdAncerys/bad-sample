@@ -64,7 +64,10 @@ export const fetchDataHandler = async ({
     credentials: disableCookies ? "omit" : "include",
   };
 
-  let isFormData = headerOptions["Content-Type"] === "multipart/form-data";
+  let isFormData = headerOptions["Content-Type"].includes(
+    "multipart/form-data"
+  );
+
   // 📌 BODY Options
   if (method !== "GET" && body) {
     requestOptions = {

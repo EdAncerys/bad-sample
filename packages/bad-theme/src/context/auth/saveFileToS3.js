@@ -16,42 +16,45 @@ export const sendFileToS3Action = async ({ state, dispatch, attachments }) => {
   const form = new FormData(); // create form object to sent email content & attachments
   form.append("profile", attachments, fileName); // append file to form object
 
-  // const requestOptions = {
-  //   method: "PUT",
-  //   body: form,
-  // };
-
-  // try {
-  //   const data = await fetch(path, requestOptions);
-  //   const response = await data.json();
-  //   if (response.success) {
-  //     return response.data;
-  //   }
-  // } catch (error) {
-  //   // console.log("error", error);
-  // } finally {
-  //   setFetchAction({ dispatch, isFetching: false });
-  // }
+  const requestOptions = {
+    method: "PUT",
+    body: form,
+    credentials: "include",
+  };
 
   try {
-    const data = await fetchDataHandler({
-      path,
-      method: "PUT",
-      body: form,
-      state,
-      // 📌 pass headers as multipart/form-data
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-
-    const response = await data.json();
-    if (response.success) {
-      return response.data;
+    const response = await fetch(path, requestOptions);
+    const data = await response.json();
+    if (data.success) {
+      return data.data;
     }
   } catch (error) {
     // console.log("error", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
   }
+
+  // try {
+  //   const response = await fetchDataHandler({
+  //     path,
+  //     method: "PUT",
+  //     body: form,
+  //     state,
+  //     // 📌 pass headers as multipart/form-data
+  //     headers: {
+  //       "Content-Type": "multipart/form-data;",
+  //       "Content-Type": "application/x-www-form-urlencoded",
+  //       "Content-Type": "application/json; charset=utf-8",
+  //     },
+  //   });
+  //   const data = await response.json();
+
+  //   if (data.success) {
+  //     return data.data;
+  //   }
+  // } catch (error) {
+  //   // console.log("error", error);
+  // } finally {
+  //   setFetchAction({ dispatch, isFetching: false });
+  // }
 };
