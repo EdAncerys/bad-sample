@@ -203,7 +203,7 @@ export const handleApplyForMembershipAction = async ({
       setErrorAction({
         dispatch,
         isError: {
-          message: "Fail to create application. Please try again.",
+          message: "Failed to create application. Please try again.",
           image: "Error",
         },
       });

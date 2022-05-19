@@ -44,24 +44,39 @@ export const sendEmailEnquireAction = async ({
         form.append("attachments", file, file.name);
       });
 
-    const data = await fetchDataHandler({
-      path,
+    const requestOptions = {
       method: "POST",
       body: form,
-      state,
-      // 📌 pass headers as multipart/form-data
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    const response = await data.json();
+      credentials: "include",
+    };
 
-    if (response.success) {
-      return response;
+    const respose = await fetch(path, requestOptions);
+    const data = await respose.json();
+    if (data.success) {
+      return data;
     } else {
       console.log("⬇️ Error sending email response"); // debug
-      console.log(response); // debug
+      throw new Error(data.message);
     }
+
+    // const data = await fetchDataHandler({
+    //   path,
+    //   method: "POST",
+    //   body: form,
+    //   state,
+    //   // 📌 pass headers as multipart/form-data
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    // });
+    // const response = await data.json();
+
+    // if (response.success) {
+    //   return response;
+    // } else {
+    //   console.log("⬇️ Error sending email response"); // debug
+    //   console.log(response); // debug
+    // }
   } catch (error) {
     console.log("error", error);
   } finally {

@@ -25,14 +25,14 @@ const SideBarMenu = ({ state, actions, libraries }) => {
       _bad_sigid_value: "Form", // fall back value
     };
 
-    // if (!applicationData || !Object.values(applicationData).length) return form;
-
-    // applicationData.map((data) => {
-    //   if (data.name === "bad_organisedfor") form.bad_organisedfor = data.value;
-    //   if (data._bad_sigid_value) form._bad_sigid_value = data._bad_sigid_value;
-    // });
-
     // application data not available, default to Form
+    if (!applicationData) return form;
+
+    applicationData.map((data) => {
+      if (data.name === "bad_organisedfor") form.bad_organisedfor = data.value;
+      if (data._bad_sigid_value) form._bad_sigid_value = data._bad_sigid_value;
+    });
+
     return form;
   });
 
@@ -126,6 +126,8 @@ const SideBarMenu = ({ state, actions, libraries }) => {
         </div>
       );
     };
+
+    console.log("🐞 formItem", form);
 
     return (
       <div style={{ padding: `2em 0` }}>

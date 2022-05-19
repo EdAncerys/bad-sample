@@ -51,6 +51,7 @@ export const setUserStoreAction = async ({
 
     // throw error if newApplicationRecord is null
     if (!storeApplication) throw new Error("Failed to fetch application");
+    console.log("🐞 storeApplication", storeApplication);
 
     // 🤖 update object with user input data
     const updatedMembershipData = updateMembershipApplication({
@@ -94,16 +95,16 @@ export const getUserStoreAction = async ({ state, isActiveUser, dispatch }) => {
     const path = state.auth.APP_HOST + `/applications/current/${contactid}`;
 
     const response = await fetchDataHandler({ path, state });
-    const userStore = await response.json();
+    const data = await response.json();
 
-    if (userStore.success) {
-      return userStore.data;
+    if (data.success) {
+      return data.data;
     } else {
-      // console.log("⏬ Membership Record Not Found ⏬");
+      console.log("⏬ Membership Record Not Found ⏬");
       return null;
     }
   } catch (error) {
-    // console.log("error", error);
+    console.log("error", error);
   }
 };
 
@@ -121,27 +122,17 @@ export const getUserApplicationAction = async ({
     const path = state.auth.APP_HOST + `/applications/current/${contactid}`;
 
     const response = await fetchDataHandler({ path, state });
-    const userStore = await response.json();
+    const data = await response.json();
 
-    if (userStore.success) {
-      console.log("⏬ Membership Record ⏬");
-      console.log("🐞 userStore", userStore);
-      // check if userStore.data is iterable object & if not return null
-      if (
-        userStore.data &&
-        typeof userStore.data === "object" &&
-        !Array.isArray(userStore.data)
-      )
-        return null;
-
+    if (data.success) {
       // set application data to context
-      setApplicationDataAction({ dispatch, applicationData: userStore.data });
+      setApplicationDataAction({ dispatch, applicationData: data.data });
     } else {
-      // console.log("⏬ Membership Record Not Found ⏬");
+      console.log("⏬ Membership Record Not Found ⏬");
       return null;
     }
   } catch (error) {
-    // console.log("error", error);
+    console.log("error", error);
   }
 };
 
@@ -158,7 +149,6 @@ export const createDynamicsApplicationAction = async ({
   try {
     const response = await fetchDataHandler({ path, state });
     const data = await response.json();
-
     // console.log("Dynamics Application result", data); // debug
 
     if (data.success) {
@@ -233,10 +223,10 @@ export const setCompleteUserApplicationAction = async ({
 
       return data;
     } else {
-      // console.log("⏬ Failed to Create Membership ⏬");
+      console.log("⏬ Failed to Create Membership ⏬");
     }
   } catch (error) {
-    // console.log("error", error);
+    console.log("error", error);
   }
 };
 
@@ -261,14 +251,14 @@ export const updateDynamicsApplicationAction = async ({
     const data = await response.json();
 
     if (data.success) {
-      // console.log("⏬ DYNAMICS. Membership Record Successfully Updated ⏬");
+      console.log("⏬ DYNAMICS. Membership Record Successfully Updated ⏬");
       return data;
     } else {
-      // console.log("⏬ DYNAMICS. Failed to Update Membership Record ⏬");
+      console.log("⏬ DYNAMICS. Failed to Update Membership Record ⏬");
       return null;
     }
   } catch (error) {
-    // console.log("error", error);
+    console.log("error", error);
   }
 };
 
@@ -303,7 +293,7 @@ export const deleteApplicationAction = async ({
     const data = await response.json();
 
     if (data.success) {
-      // console.log("⏬ DYNAMICS. Membership Record Successfully Deleted ⏬");
+      console.log("⏬ DYNAMICS. Membership Record Successfully Deleted ⏬");
       // delete application record from CONTEXT
       setApplicationDataAction({
         dispatch,
@@ -317,11 +307,11 @@ export const deleteApplicationAction = async ({
 
       return data;
     } else {
-      // console.log("⏬ DYNAMICS. Failed to Delete Membership Record ⏬");
+      console.log("⏬ DYNAMICS. Failed to Delete Membership Record ⏬");
       return null;
     }
   } catch (error) {
-    // console.log("error", error);
+    console.log("error", error);
   }
 };
 

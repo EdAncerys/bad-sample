@@ -353,6 +353,10 @@ const PersonalDetails = ({ state, actions, libraries }) => {
               height: 260,
               borderRadius: "50%",
               overflow: "hidden",
+              // add border if image set by user
+              border: formData.sky_profilepicture
+                ? `1px solid ${colors.silver}`
+                : "none",
             }}
           >
             <Image
@@ -375,7 +379,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
             type="file"
             className="form-control input"
             placeholder="Profile Photo"
-            accept="image/*"
+            accept="image/png, image/jpeg"
           />
         </div>
 

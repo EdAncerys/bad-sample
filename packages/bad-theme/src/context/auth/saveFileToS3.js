@@ -9,8 +9,12 @@ export const sendFileToS3Action = async ({ state, dispatch, attachments }) => {
 
   // extract file extension name from attachment
   const fileExtension = attachments.name.split(".").pop();
-  const uniqueName = uuidv4();
-  let fileName = uniqueName + "." + fileExtension;
+  // const uniqueName = uuidv4(); // generate unique name for file
+  let name = attachments.name.split(".").slice(0, -1).join(".");
+  // if name is empty string set to unique name
+  if (name === "") name = uuidv4();
+  // const uniqueName = attachments.name;
+  let fileName = name + "." + fileExtension;
   // if (isNoFileExtention) fileName = uniqueName; // 📌 dont add extension to picture files
 
   const form = new FormData(); // create form object to sent email content & attachments

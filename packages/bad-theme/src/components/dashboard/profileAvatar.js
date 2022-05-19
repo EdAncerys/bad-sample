@@ -1,6 +1,7 @@
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import Avatar from "../../img/svg/profile.svg";
+import { colors } from "../../config/colors";
 
 // CONTEXT ----------------------------------------------------------------
 import { useAppState, muiQuery } from "../../context";
@@ -35,6 +36,8 @@ const ProfileAvatar = ({ state, actions, libraries, isPreview }) => {
           borderRadius: `50%`,
           overflow: `hidden`,
           margin: "3em 0 0 0",
+          // add border if image set by user
+          border: profilePicture ? `1px solid ${colors.silver}` : "none",
         }}
       >
         <Image

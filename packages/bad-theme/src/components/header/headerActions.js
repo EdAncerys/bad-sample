@@ -170,19 +170,22 @@ const HeaderActions = ({ state, actions, libraries }) => {
   };
 
   const handleCheck = async () => {
-    let path = "https://uatservices.bad.org.uk/dynamicstest/utils/cookie";
+    let path = state.auth.APP_HOST + "/utils/cookie";
     const response = await fetchDataHandler({
       path,
       state,
     });
     let data = "not found";
-    if (response.ok) data = await response.json();
-    console.log("🐞 Auth level ", data.data.level);
-    console.log("🐞 data ", data.data);
+    if (response && response.ok) {
+      data = await response.json();
+      console.log("🐞 Auth level ", data.data.level);
+      console.log("🐞 data ", data.data);
+    }
   };
   const handleUser = async () => {
     let path =
-      "https://uatservices.bad.org.uk/dynamicstest/catalogue/data/contacts?$filter=emailaddress1 eq 'chris@skylarkcreative.co.uk'";
+      state.auth.APP_HOST +
+      "/catalogue/data/contacts?$filter=emailaddress1 eq 'chris@skylarkcreative.co.uk'";
     const response = await fetchDataHandler({ path, state });
     let data = "response !ok";
     if (response.ok) data = await response.json();

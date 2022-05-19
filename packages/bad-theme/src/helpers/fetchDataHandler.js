@@ -76,7 +76,7 @@ export const fetchDataHandler = async ({
     };
   }
 
-  console.log("🐞 requestOptions", requestOptions); // debug
+  // console.log("🐞 requestOptions", requestOptions); // debug
 
   try {
     if (!path) throw new Error("No path provided");

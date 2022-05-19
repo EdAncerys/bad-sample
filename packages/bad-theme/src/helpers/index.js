@@ -88,7 +88,7 @@ export const authCookieActionBeforeCSR = async ({
 };
 
 export const authCookieActionAfterCSR = async ({ state, dispatch }) => {
-  let path = "https://uatservices.bad.org.uk/dynamicstest/utils/cookie";
+  let path = state.auth.APP_HOST + "/utils/cookie";
 
   try {
     const response = await fetchDataHandler({ path, state });
