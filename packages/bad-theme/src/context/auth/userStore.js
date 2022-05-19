@@ -17,7 +17,7 @@ export const setUserStoreAction = async ({
   data,
   membershipApplication,
 }) => {
-  // console.log("setUserStoreAction triggered");
+  console.log("setUserStoreAction triggered");
 
   if (!isActiveUser) {
     // validate if isActiveUser 🤖

@@ -425,7 +425,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
         dispatch,
         attachments: sky_cvurl,
       });
-    // console.log("sky_cvurl", sky_cvurl); // debug
+    console.log("sky_cvurl", sky_cvurl); // debug
 
     setFormData((prevFormData) => ({
       ...prevFormData,

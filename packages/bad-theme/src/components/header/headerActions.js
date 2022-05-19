@@ -192,14 +192,15 @@ const HeaderActions = ({ state, actions, libraries }) => {
     handleSetCookie({ name: "no-cookie", deleteCookie: true }); // to show list of all cookies
     console.log("🐞 APP_HOST ", state.auth.APP_HOST);
     console.log("🐞 APP_URL ", state.auth.APP_URL);
+    console.log("🐞 ENVIRONMENT ", state.auth.ENVIRONMENT);
 
-    const redirectPath = `&redirect_uri=${state.auth.APP_URL}/codecollect`;
-    let action = "login";
-    const url =
-      state.auth.B2C +
-      `${redirectPath}&scope=openid&response_type=id_token&prompt=${action}`;
-    console.log("🐞 B2C redirect ", redirectPath);
-    console.log("🐞 B2C redirect ", url);
+    // const redirectPath = `&redirect_uri=${state.auth.APP_URL}/codecollect`;
+    // let action = "login";
+    // const url =
+    //   state.auth.B2C +
+    //   `${redirectPath}&scope=openid&response_type=id_token&prompt=${action}`;
+    // console.log("🐞 B2C redirect ", redirectPath);
+    // console.log("🐞 B2C redirect ", url);
   };
   // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
 

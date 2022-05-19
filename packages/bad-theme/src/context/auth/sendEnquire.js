@@ -49,6 +49,10 @@ export const sendEmailEnquireAction = async ({
       method: "POST",
       body: form,
       state,
+      // 📌 pass headers as multipart/form-data
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
     const response = await data.json();
 
