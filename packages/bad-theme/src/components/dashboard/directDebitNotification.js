@@ -24,6 +24,7 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
     isActiveUser,
     isVisibleNotification,
     directDebitPath,
+    dashboardPath,
   } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
@@ -71,7 +72,7 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
   if (!isVisibleNotification) isSetupDirectDebit = true;
   if (isDebitSetup) isSetupDirectDebit = true;
 
-  // if direct debit setup or no approved applications, return null
+  // 📌 if direct debit setup or no approved applications, return null
   if (isSetupDirectDebit || !isApprovedMemberships) return null;
 
   // HELPERS ----------------------------------------------------------------
@@ -106,8 +107,11 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
     );
   };
 
-  // 📌 hide notification if user has pane open
-  if (directDebitPath.page !== "billing") return null;
+  // 📌 hide notification if user has pane open || if user on dashboard
+  let isBilling =
+    dashboardPath === "Billing" && directDebitPath.page === "billing";
+  let isDashboard = dashboardPath === "Dashboard";
+  if (!isBilling && !isDashboard) return null;
 
   return (
     <div

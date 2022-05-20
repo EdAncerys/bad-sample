@@ -31,7 +31,6 @@ const Event = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const event = state.source[data.type][data.id];
-  console.log("EVENT", event);
   const dispatch = useAppDispatch();
 
   const marginHorizontal = state.theme.marginHorizontal;
