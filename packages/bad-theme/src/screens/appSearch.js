@@ -75,15 +75,18 @@ const AppSearch = ({ state, actions, libraries }) => {
     if (input)
       data = appSearchData.filter((item) => {
         // if title | type includes input
-        let titleName = item.title;
-        if (item.title.rendered) titleName = item.title.rendered;
+        let title = item.title;
+        if (title && title.rendered) title = title.rendered;
+        let content = item.content;
+        if (content && content.rendered) content = content.rendered;
+        console.log("🐞 ", title, content);
 
+        // if title | content includes input return true
         if (
-          titleName.toLowerCase().includes(input) ||
-          item.type.toLowerCase().includes(input)
-        ) {
-          return item;
-        }
+          (title && title.length && title.toLowerCase().includes(input)) ||
+          (content && content.length && content.toLowerCase().includes(input))
+        )
+          return true;
       });
 
     if (type) {
@@ -245,7 +248,7 @@ const AppSearch = ({ state, actions, libraries }) => {
       let name = postTypeHandler({ type: typeFilter }).name;
 
       return (
-        <div className="shadow filter" style={{ textTransform: "uppercase" }}>
+        <div className="shadow filter">
           <div>{name}</div>
           <div className="filter-icon" onClick={handleClearTypeFilter}>
             <CloseIcon

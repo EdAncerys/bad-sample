@@ -69,13 +69,13 @@ const HeaderActions = ({ state, actions, libraries }) => {
   const handleSearchLookup = async () => {
     const input = searchRef.current.value.toLowerCase();
     setSearchFilter(input);
+    // delay search lookup to prevent multiple requests
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // ⬇️ prevent API call if search is less than 3 characters
     if (input && input.length < 3) return;
 
     try {
-      // add 500ms delay on API calls to prevent API throttling
-      await new Promise((resolve) => setTimeout(resolve, 1000));
       setFetching(true);
       const result = await appSearchAction({ state, query: input });
 
