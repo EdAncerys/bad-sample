@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
+import React from "react";
 import { connect } from "frontity";
 
-import { colors } from "../../config/imports";
 import DirectDebitNotification from "./directDebitNotification";
 // CONTEXT ----------------------------------------------------------------
 import {
@@ -9,11 +8,11 @@ import {
   useAppState,
   setDashboardNotificationsAction,
   setDashboardPathAction,
+  muiQuery
 } from "../../context";
 
-const DashboardNotifications = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
+const DashboardNotifications = ({ state }) => {
+  const {lg} = muiQuery()
   const dispatch = useAppDispatch();
   const { isDashboardNotifications, dashboardPath, dynamicsApps } =
     useAppState();
@@ -73,6 +72,7 @@ const DashboardNotifications = ({ state, actions, libraries }) => {
           style={{
             display: "flex",
             padding: `1em 4em`,
+            flexDirection: !lg ? null : "column"
           }}
         >
           <div
@@ -132,8 +132,6 @@ const DashboardNotifications = ({ state, actions, libraries }) => {
   );
 };
 
-const styles = {
-  container: {},
-};
+
 
 export default connect(DashboardNotifications);

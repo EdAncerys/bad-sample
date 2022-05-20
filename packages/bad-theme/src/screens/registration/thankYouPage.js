@@ -63,10 +63,6 @@ const RegistrationThankYouPage = ({ state, actions }) => {
             BAD would like to ask for your help and co-operation to enable us to
             do this, but filling in this form is voluntary and submission of
             this information will not be considered as part of your application.
-            In line with the 2021 UK census questions, when asking about your
-            ethnicity we first ask for the broad ethnic group which you identify
-            with, this is then followed by a question asking for a more specific
-            ethnic background.
           </div>
           <CompleteApplication />
         </div>

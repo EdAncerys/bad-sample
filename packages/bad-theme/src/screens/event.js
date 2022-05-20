@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { colors } from "../config/colors";
@@ -25,12 +25,12 @@ import {
 } from "../context";
 
 const Event = ({ state, actions, libraries }) => {
-  const { sm, md, lg, xl } = muiQuery();
+  const {lg  } = muiQuery();
   const { isActiveUser } = useAppState();
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const event = state.source[data.type][data.id];
-
+  console.log("EVENT", event)
   const dispatch = useAppDispatch();
 
   const marginHorizontal = state.theme.marginHorizontal;
@@ -338,7 +338,7 @@ const Event = ({ state, actions, libraries }) => {
         setEnquireAction({
           dispatch,
           enquireAction: {
-            contact_public_email: "conference@bad.org.uk",
+            contact_public_email: event.acf.email || "conference@bad.org.uk",
             form_title: register_form_title || "Event Contact Form",
             form_body:
               register_form_body || `Register for ${title.rendered} event.`,
@@ -368,7 +368,7 @@ const Event = ({ state, actions, libraries }) => {
         setEnquireAction({
           dispatch,
           enquireAction: {
-            contact_public_email: "conference@bad.org.uk",
+            contact_public_email: event.acf.email || "conference@bad.org.uk",
             form_title:
               register_form_title || "Event Contact Form (express an interest)",
             form_body:
