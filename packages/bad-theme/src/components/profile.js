@@ -53,8 +53,8 @@ const Profile = ({ state, actions, libraries, block }) => {
   };
 
   const ServeBody = () => {
-    if (!body) return null;
-    if (lg) return null;
+    if (!body || lg) return null;
+
     return (
       <div
         className="primary-title"

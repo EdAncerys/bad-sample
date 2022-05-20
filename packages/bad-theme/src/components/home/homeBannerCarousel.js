@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Carousel } from "react-bootstrap";
@@ -14,12 +15,23 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const { disable_vertical_padding, background_colour } = block;
+  console.log("🐞 ", block);
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const BANNER_HEIGHT = state.theme.bannerHeight * 1.25;
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
+
+  const [carouselSlides, setSlides] = useState([]);
+
+  useEffect(() => {
+    // 📌 set slide images depending on screen size
+    let slides = block.slides;
+    if (lg & !!block.slides_mobile) slides = block.slides_mobile;
+
+    setSlides(slides);
+  }, [lg]);
 
   // SERVERS ----------------------------------------------------------------
   const ServeIcon = ({ icon, left, right }) => {
@@ -84,7 +96,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
       <Carousel
         className={!lg ? "home-banner-carousel" : "home-banner-carousel-mobile"}
       >
-        {block.slides.map((block, key) => {
+        {carouselSlides.map((block, key) => {
           const {
             background_image,
             event_label,
