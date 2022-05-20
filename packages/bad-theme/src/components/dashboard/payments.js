@@ -77,20 +77,21 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     const sagepayUrl = core_membershipsubscriptionid
       ? `/sagepay/${sagepay_live}/subscription/`
       : `/sagepay/${sagepay_live}/application/`;
-
+    
     try {
       const path =
         state.auth.APP_HOST +
         sagepayUrl +
         type +
         `?redirecturl=${state.auth.APP_URL}/payment-confirmation/?redirect=${state.router.link}`;
+      console.log("PATH", path);
       const fetchVendorId = await fetchDataHandler({
         path,
         method: "POST",
-        body: appCredentials,
+        // body: appCredentials,
         state,
       });
-
+      console.log("FetchVendor", fetchVendorId)
       if (fetchVendorId.ok) {
         const json = await fetchVendorId.json();
         const url =

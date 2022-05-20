@@ -91,7 +91,7 @@ const SubmittedApplications = ({ state, actions, libraries }) => {
     const fetchVendorId = await fetchDataHandler({
       path,
       method: "POST",
-      body: appCredentials,
+      // body: appCredentials,
       state,
     });
 
