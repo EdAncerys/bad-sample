@@ -50,8 +50,6 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
 
   // HANDLERS --------------------------------------------------
   const handleApply = async ({ catType }) => {
-    console.log("🐞 ", catType);
-
     await handleApplyForMembershipAction({
       state,
       actions,
