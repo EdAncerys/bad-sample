@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
 
 import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
@@ -23,7 +23,7 @@ function AlterAccordion({
   hasPublishDate,
   hasPreview,
 }) {
-  function CustomToggle({ children, eventKey, callback, isActive }) {
+  function CustomToggle({ children, eventKey, callback }) {
     const decoratedOnClick = useAccordionButton(eventKey, () => {
       callback && callback(eventKey);
     });
@@ -43,6 +43,7 @@ function AlterAccordion({
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [uniqueId, setUniqueId] = useState(null);
+  const [isActive, setIsActive] = useState(true);
 
   let isBADApproved = false;
   if (dynamicsApps && dynamicsApps.subs.data.length > 0) isBADApproved = true;
@@ -56,11 +57,12 @@ function AlterAccordion({
     setUniqueId(id);
   }, [accordion_item]);
 
-  if (!searchFilter || isForBADMembersOnly) return null; // defensive programming
-
-  const SingleItem = ({ block, id }) => {
+  useEffect(() => {
+    if (!uniqueId) return; // break if no unique id
     let isActive = false;
-    if (leadershipBlock && block.block) isActive = block.block.is_active;
+
+    if (leadershipBlock && block.accordion_item)
+      isActive = block.accordion_item[0].block.is_active;
     if (isActive) {
       // 📌 apply show class to accordion item
       // set timeout get the accordion body with the unique id
@@ -69,7 +71,11 @@ function AlterAccordion({
         if (accordionBody) accordionBody.classList.add("show");
       }, 100);
     }
+  }, [uniqueId]);
 
+  if (!searchFilter || isForBADMembersOnly) return null; // defensive programming
+
+  const SingleItem = ({ block, id }) => {
     return (
       <Card
         style={{
@@ -78,11 +84,13 @@ function AlterAccordion({
           marginTop: 20,
           border: 0,
         }}
-        data-aos="fade"
-        data-aos-easing="ease-in-sine"
-        data-aos-delay={`${id}`}
-        data-aos-duration="1000"
-        data-aos-offset="-120"
+        // uncoment to use css effects
+        // data-aos={leadershipBlock ? "none" : "fade"}
+        // data-aos-easing="ease-in-sine"
+        // data-aos-delay={`${id}`}
+        // data-aos-duration="1000"
+        // data-aos-offset="-120"
+
         className="shadow"
       >
         <Card.Header
@@ -93,7 +101,7 @@ function AlterAccordion({
             paddingTop: "10px",
           }}
         >
-          <CustomToggle eventKey={id} isActive={isActive}>
+          <CustomToggle eventKey={id}>
             <CardHeader
               id={id}
               uniqueId={id}
