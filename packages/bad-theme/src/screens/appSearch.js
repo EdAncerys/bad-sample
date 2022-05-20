@@ -334,7 +334,7 @@ const AppSearch = ({ state, actions, libraries }) => {
   };
 
   return (
-    <div className="flex-col">
+    <div className="flex-col app-search">
       <ServeFilter />
       <BlockWrapper>
         <div
