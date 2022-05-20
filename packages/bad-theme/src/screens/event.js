@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { colors } from "../config/colors";
@@ -71,27 +71,14 @@ const Event = ({ state, actions, libraries }) => {
   const {
     date_time,
     email,
-    event_type,
     image,
-    layout,
-    organizer,
     registration_page_link,
     registration_type,
     scientific_committee,
     summary,
     venue,
-    register_public_email,
-    register_public_phone_number,
     register_form_title,
     register_form_body,
-    register_full_name,
-    register_email,
-    register_phone_number,
-    register_subject,
-    register_subject_dropdown_options,
-    register_message,
-    register_allow_attachments,
-    register_recipients,
     registration_status_email,
     registration_status_eventsforce,
     registration_status_external,
@@ -99,16 +86,11 @@ const Event = ({ state, actions, libraries }) => {
     contact_public_phone_number,
     contact_form_title,
     contact_form_body,
-    contact_full_name,
-    contact_email,
-    contact_phone_number,
-    contact_subject,
-    contact_subject_dropdown_options,
-    contact_message,
     contact_allow_attachments,
     contact_recipients,
   } = event.acf;
   const { title, id } = event;
+  console.log("EVENTIN", event.acf.email)
   // console.log("event", event); // debug
   if (!position) return <Loading />;
   const handleLogin = () => {
@@ -269,7 +251,7 @@ const Event = ({ state, actions, libraries }) => {
   };
 
   const ServeRegisterLink = () => {
-    if (!registration_page_link) return null;
+    // if (!registration_page_link) return null;
     let isArchive = false;
     if (date_time) {
       // loop through date_time and check if date is in the past
@@ -283,23 +265,22 @@ const Event = ({ state, actions, libraries }) => {
       if (registration_type === "events_force" && !isActiveUser) {
         return (
           <div style={{ padding: "1em 0", textAlign: "center" }}>
-            Please login to your BAD account and use your registered email
-            address for signing up to this event, this will enable us to link
-            your registration to your BAD account
+            If you have a BAD online account and register for BAD events using the email address associated with that account, it will appear in your ‘Events’ in your BAD account Dashboard
           </div>
         );
       }
       if (registration_type === "events_force" && isActiveUser) {
         return (
           <div style={{ padding: "1em 0" }}>
-            Please ensure you register for this event using your
+           If you register for BAD events using your
             <span className="primary-title">
               {" " + isActiveUser.emailaddress1}
             </span>{" "}
-            email address in order to link your registration to your BAD account
+            email address, it will appear in your ‘Events’ in your BAD account Dashboard
           </div>
         );
       }
+      
       return null;
     };
 
@@ -446,29 +427,6 @@ const Event = ({ state, actions, libraries }) => {
       return "Register";
     };
 
-    const checkIfdisabled = () => {
-      switch (disabled) {
-        case registration_status_email === "registration_not_open":
-        case registration_status_external === "registration_not_open":
-        case registration_status_eventsforce === "registration_not_open":
-          return true;
-
-        default:
-          return false;
-      }
-    };
-
-    const checkColor = () => {
-      console.log("HIT CHECK COLOUR");
-      switch (disabled) {
-        case registration_status_email === "registration_not_open":
-        case registration_status_external === "registration_not_open":
-        case registration_status_eventsforce === "registration_not_open":
-          return "blue-btn";
-        default:
-          return "blue-btn";
-      }
-    };
     return (
       <div
         className="flex"
@@ -614,7 +572,6 @@ const Event = ({ state, actions, libraries }) => {
     // get current event taxonomy types
     const currentPostGrade = event.event_grade[0];
     const currentPostLocation = event.event_location[0];
-    const currentPostSpecialty = event.event_specialty[0];
     const eventListIds = [];
 
     // get category name from category list
