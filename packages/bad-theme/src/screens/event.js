@@ -22,15 +22,16 @@ import {
   getEventGrades,
   getEventLocations,
   getEventsData,
+  handleSortFilter,
 } from "../context";
 
 const Event = ({ state, actions, libraries }) => {
-  const {lg  } = muiQuery();
+  const { lg } = muiQuery();
   const { isActiveUser } = useAppState();
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const event = state.source[data.type][data.id];
-  console.log("EVENT", event)
+  console.log("EVENT", event);
   const dispatch = useAppDispatch();
 
   const marginHorizontal = state.theme.marginHorizontal;
@@ -39,7 +40,6 @@ const Event = ({ state, actions, libraries }) => {
   const [gradeList, setGrades] = useState(null);
   const [locationList, setLocations] = useState(null);
   const [position, setPosition] = useState(null);
-  const useEffectRef = useRef(null);
 
   useEffect(async () => {
     // ⬇️ on component load defaults to window position TOP
@@ -49,6 +49,18 @@ const Event = ({ state, actions, libraries }) => {
     let grades = await getEventGrades({ state });
     let locations = await getEventLocations({ state });
     let events = await getEventsData({ state });
+    // ⬇️⬇ sort events by date
+    events = handleSortFilter({ list: events });
+    // filter events & show only future events
+    events = events.filter((event) => {
+      // if date_time is null return false
+      if (!event.acf.date_time) return false;
+      let eventDate = event.acf.date_time[0].date;
+      eventDate = new Date(eventDate);
+      let today = new Date();
+
+      return eventDate > today;
+    });
 
     setGrades(grades);
     setLocations(locations);
