@@ -58,7 +58,7 @@ const Footer = ({ state, actions }) => {
               <div>admin@bad.org.uk</div>
               <ServeDivider />
             </div>
-            <div style={styles.footerInfo}>+44 (0)207 383 0266</div>
+            <div style={styles.footerInfo}>+44 (0)020 7383 0266</div>
           </div>
           <div
             className="flex"
