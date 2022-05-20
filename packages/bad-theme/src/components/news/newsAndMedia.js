@@ -21,6 +21,7 @@ import {
   setNesMediaIdFilterAction,
   getNewsData,
   getMediaCategories,
+  hasPermisionLevel,
 } from "../../context";
 
 const NewsAndMedia = ({ state, actions, libraries, block }) => {
@@ -103,14 +104,8 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     let data = postList;
     let hasPermission = false;
     // 📌 check if user has permission to view news & media
-    if (dynamicsApps) {
-      // chewck if user have BAD memberships & membership have sage payId is persent
-      const hasBADMembership = dynamicsApps.subs.data.filter(
-        (item) => item.bad_organisedfor === "BAD" && item.bad_sagepayid
-      );
-      if (hasBADMembership.length > 0 && isActiveUser) hasPermission = true;
-    }
-
+    if (dynamicsApps)
+      hasPermission = hasPermisionLevel({ dynamicsApps, isActiveUser });
     setPermission(hasPermission);
 
     // 📌 apply permision filters

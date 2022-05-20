@@ -1,5 +1,6 @@
 import { fetchDataHandler } from "../helpers/fetchDataHandler";
 import { handleSortFilter } from "../helpers/eventSortFilter";
+import { hasPermisionLevel } from "../helpers/permitionLevel";
 import { setAuthenticationCookieAction } from "../helpers/setAuthenticationCookie";
 import { AppProvider, useAppDispatch, useAppState } from "./context";
 import { handleSetCookie } from "../helpers/cookie";
@@ -232,4 +233,5 @@ export {
   setAuthenticationCookieAction,
   handleSetCookie,
   handleUpdateMembershipApplication,
+  hasPermisionLevel,
 };
