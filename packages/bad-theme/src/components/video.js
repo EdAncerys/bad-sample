@@ -204,6 +204,7 @@ const Video = ({ state, actions, libraries }) => {
         // Example URL: https://player.vimeo.com/video/382577680?h=8f166cf506&color=5b89a3&title=0&byline=0&portrait=0
         const reg = /\d+/g;
         const videoId = video_url.match(reg);
+        
         const path = `https://vimeo.com/api/v2/video/${videoId[0]}.json`;
         const fetchVideoData = await fetchDataHandler({
           path,
@@ -256,9 +257,9 @@ const Video = ({ state, actions, libraries }) => {
           src={post.acf.video}
           width="100%"
           height="400"
-          frameborder="0"
+          frameBorder="0"
           allow="autoplay; fullscreen; picture-in-picture"
-          allowfullscreen
+          allowFullScreen
         />
       );
     };

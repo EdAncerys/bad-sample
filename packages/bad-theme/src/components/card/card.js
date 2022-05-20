@@ -275,20 +275,29 @@ const Card = ({
 
     const [vimeoCover, setVimeoCover] = useState(defaultVideoCover);
 
-    let STYLES = { minHeight: 200, maxHeight: 300 };
-    if (imgHeight) STYLES = { height: imgHeight };
+    // let STYLES = { minHeight: 200, maxHeight: 300 };
+    // if (imgHeight) STYLES = { height: imgHeight };
     const getVimeoCover = async () => {
       const video_url = videoArchive.acf.video;
       const reg = /\d+/g;
       const videoId = video_url.match(reg);
+      console.log(videoId)
+      const videoAttempt = await fetch(`https://api.vimeo.com/videos/${videoId[0]}/pictures`,{
+        headers: {
+          Authorization: 'Bearer db13ac258b5ad7de0926f8fbe7b893a7',
+          'Content-Type': "application/json"
+        }});
+        if(videoAttempt.ok){
+          const jsonka = await videoAttempt.json();
+          setVimeoCover(jsonka.data[0].base_link);
+        }
+      // const path = `https://vimeo.com/api/v2/video/${videoId[0]}.json`;
+      // const fetchVideoData = await fetchDataHandler({ path, state });
 
-      const path = `https://vimeo.com/api/v2/video/${videoId[0]}.json`;
-      const fetchVideoData = await fetchDataHandler({ path, state });
-
-      if (fetchVideoData.ok) {
-        const json = await fetchVideoData.json();
-        setVimeoCover(json[0].thumbnail_large);
-      }
+      // if (fetchVideoData.ok) {
+      //   const json = await fetchVideoData.json();
+      //   setVimeoCover(json[0].thumbnail_large);
+      // }
     };
 
     useEffect(() => {

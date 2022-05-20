@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { connect } from "frontity";
 import Card from "./card/card";
 import BlockWrapper from "./blockWrapper";
@@ -6,7 +6,6 @@ import HeroBanner from "./heroBanner";
 import { colors } from "../config/imports";
 import defaultCover from "../img/png/video_default.jpg";
 import Loading from "../components/loading";
-import { handleGetCookie } from "../helpers/cookie";
 
 // CONTEXT ----------------------------------------------------------------
 import {
@@ -18,7 +17,7 @@ import {
   fetchDataHandler,
 } from "../context";
 
-const VideoArchive = ({ state, actions, libraries }) => {
+const VideoArchive = ({ state, actions}) => {
   const [postData, setPostData] = useState(null);
   const [heroBannerBlock, setHeroBannerBlock] = useState(null);
   const [userVideos, setUserVideos] = useState(null);
@@ -28,7 +27,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
   const [eventGrades, setEventGrades] = useState(null);
 
   const { isActiveUser } = useAppState();
-  const { sm, md, lg, xl } = muiQuery();
+  const { lg} = muiQuery();
 
   const searchFilterRef = useRef("");
   const specialtyFilter = useRef("");
@@ -147,8 +146,8 @@ const VideoArchive = ({ state, actions, libraries }) => {
             }}
           >
             <option hidden>Grade Filters</option>
-            {data.map((item) => {
-              return <option value={item.id}>{item.name}</option>;
+            {data.map((item, i) => {
+              return <option key={i} value={item.id}>{item.name}</option>;
             })}
           </select>
         </div>
