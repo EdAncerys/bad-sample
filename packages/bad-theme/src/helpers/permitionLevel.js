@@ -12,7 +12,6 @@ export const hasPermisionLevel = ({ dynamicsApps, isActiveUser }) => {
       .toLowerCase()
       .includes("retired");
 
-    console.log("🐞 ", hasSagePayId, isBADMembership, isValidCategory);
     return (hasSagePayId && isBADMembership) || isValidCategory;
   });
   if (hasBADMembership.length > 0 && isActiveUser) hasPermission = true;
