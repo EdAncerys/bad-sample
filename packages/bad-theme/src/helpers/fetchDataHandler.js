@@ -87,8 +87,6 @@ export const fetchDataHandler = async ({
     // fetch request timing info
     console.log(`${time} Fetch time: ${timeTaken}s`);
     console.log("🐞 Status", response.status);
-    const peta = await response.headers.get('X-WP-TotalPages');
-    console.log('Response', peta)
     // console.log("🐞 ", path);
 
     return response;

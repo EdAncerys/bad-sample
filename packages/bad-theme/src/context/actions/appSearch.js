@@ -2,31 +2,23 @@ import { fetchDataHandler } from "../index";
 
 export const appSearchAction = async ({ state, query }) => {
   // console.log("appSearchAction triggered");
-
   let pageNo = 1;
-  let perPage = 20;
-  let postData = [];
-  let responseLength = perPage;
+  let perPage = 25;
 
   try {
     // ⬇️ fetch data while condition matches
-    while (responseLength === perPage && pageNo < 5) {
-      // while result length is equal perPage, then fetch next page
-      let path = `${state.auth.WP_HOST}/wp-json/relevanssi/v1/search?keyword=${query}&per_page=${perPage}&page=${pageNo}`;
+    let path =
+      state.auth.WP_HOST +
+      `/wp-json/relevanssi/v1/search?keyword=${query}&per_page=${perPage}&page=${pageNo}&_fields=id,title,link,type,content&orderby=title&order=ASC`;
 
-      const data = await fetchDataHandler({ path, state });
-      if (!data.ok) throw new Error("error fetching data form API");
-      const result = await data.json();
-      // ⬇️ if data contains no result & msg break out of the loop ⬇️
-      if (result.message === "Nothing found") break;
+    const data = await fetchDataHandler({ path, state });
+    console.log("🐞 ", data);
+    if (!data.ok) throw new Error("error fetching data form API");
+    const result = await data.json();
+    console.log("🐞 serachResult ", result);
+    // ⬇️ if data contains no result & msg break out of the loop ⬇️
 
-      responseLength = result.length;
-      pageNo++;
-      // spread response to postData equal to previous postData + new response
-      postData = [...postData, ...result];
-    }
-
-    return postData;
+    return result;
   } catch (error) {
     // console.log("error", error);
   }

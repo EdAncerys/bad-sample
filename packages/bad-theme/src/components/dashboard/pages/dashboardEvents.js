@@ -33,7 +33,7 @@ const DashboardEvents = ({ state, actions, libraries, activeUser }) => {
 
   useEffect(async () => {
     try {
-      let events = await getEventsData({ state, page: 1, postsPerPage: 4 });
+      let events = await getEventsData({ state });
       if (!events) return;
       // ⬇️⬇ sort events by date
       events = handleSortFilter({ list: events });

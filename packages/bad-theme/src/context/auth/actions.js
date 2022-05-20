@@ -182,7 +182,7 @@ export const getUserDataByContactId = async ({
     // contactid = "0786df85-618f-ec11-b400-000d3a22037e"; // Chris
     // contactid = "89bb168e-5dc1-ec11-983f-000d3aae25bf"; // NEW USER
     // contactid = "a167c3ee-ba93-e711-80f5-3863bb351f50"; // membership
-    // contactid = "969ba377-a398-ec11-b400-000d3aaedef5"; // emelia
+    contactid = "969ba377-a398-ec11-b400-000d3aaedef5"; // emelia
   }
 
   const path = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;

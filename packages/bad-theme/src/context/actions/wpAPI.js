@@ -13,14 +13,18 @@ export const getEventsData = async ({ state, page, postsPerPage }) => {
     let data = [];
 
     let response = await fetchDataHandler({ path: url, state });
+    let totalPages = response.headers.get("X-WP-TotalPages");
 
-    // fetch events data from WP & while respone is not 400 (bad request) keep fetching
+    // fetch events data from WP & while respone is not 200 (bad request) keep fetching
     while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
       pageNo++;
       url = `${state.auth.WP_HOST}wp-json/wp/v2/events?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&filter[orderby]=event_start_date&order=asc`;
+
+      // 📌 break out of the loop if no more pages
+      if (pageNo > totalPages) break;
       response = await fetchDataHandler({ path: url, state });
     }
 
@@ -88,13 +92,18 @@ export const getNewsData = async ({ state, page, postsPerPage }) => {
     let data = [];
 
     let response = await fetchDataHandler({ path: url, state });
-    // fetch events data from WP & while respone is not 400 (bad request) keep fetching
+    let totalPages = response.headers.get("X-WP-TotalPages");
+
+    // fetch events data from WP & while respone is not 200 (bad request) keep fetching
     while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
       pageNo++;
       url = `${state.auth.WP_HOST}wp-json/wp/v2/posts?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+
+      // 📌 break out of the loop if no more pages
+      if (pageNo > totalPages) break;
       response = await fetchDataHandler({ path: url, state });
     }
 
@@ -139,29 +148,21 @@ export const getGuidelinesData = async ({ state, page, postsPerPage }) => {
   try {
     let data = [];
 
+    // fetch events data from WP & while respone is not 200 (bad request) keep fetching
     let response = await fetchDataHandler({ path: url, state });
-    // fetch events data from WP & while respone is not 400 (bad request) keep fetching
+    let totalPages = response.headers.get("X-WP-TotalPages");
 
-    let totalPages = response.headers.get('X-WP-TotalPages');
-    console.log("totalPages", totalPages)
-    
-    for(; pageNo <= totalPages; pageNo++){
-        let json = await response.json();
+    while (response.status === 200) {
+      let json = await response.json();
 
       data = [...data, ...json];
-      // pageNo++;
+      pageNo++;
       url = `${state.auth.WP_HOST}wp-json/wp/v2/guidelines_standards?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+
+      // 📌 break out of the loop if no more pages
+      if (pageNo > totalPages) break;
       response = await fetchDataHandler({ path: url, state });
-
     }
-    // while (response.status === 200) {
-    //   let json = await response.json();
-
-    //   data = [...data, ...json];
-    //   pageNo++;
-    //   url = `${state.auth.WP_HOST}wp-json/wp/v2/guidelines_standards?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
-    //   response = await fetchDataHandler({ path: url, state });
-    // }
 
     return data;
   } catch (error) {
@@ -196,13 +197,18 @@ export const getVenuesData = async ({ state, page, postsPerPage }) => {
     let data = [];
 
     let response = await fetchDataHandler({ path: url, state });
-    // fetch events data from WP & while respone is not 400 (bad request) keep fetching
+    let totalPages = response.headers.get("X-WP-TotalPages");
+
+    // fetch events data from WP & while respone is not 200 (bad request) keep fetching
     while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
       pageNo++;
       url = `${state.auth.WP_HOST}wp-json/wp/v2/venues?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+
+      // 📌 break out of the loop if no more pages
+      if (pageNo > totalPages) break;
       response = await fetchDataHandler({ path: url, state });
     }
 
@@ -224,13 +230,18 @@ export const getVideosData = async ({ state, page, postsPerPage }) => {
     let data = [];
 
     let response = await fetchDataHandler({ path: url, state });
-    // fetch events data from WP & while respone is not 400 (bad request) keep fetching
+    let totalPages = response.headers.get("X-WP-TotalPages");
+
+    // fetch events data from WP & while respone is not 200 (bad request) keep fetching
     while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
       pageNo++;
       url = `${state.auth.WP_HOST}wp-json/wp/v2/videos?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+
+      // 📌 break out of the loop if no more pages
+      if (pageNo > totalPages) break;
       response = await fetchDataHandler({ path: url, state });
     }
 
@@ -268,13 +279,18 @@ export const getFundingData = async ({ state, page, postsPerPage }) => {
     let data = [];
 
     let response = await fetchDataHandler({ path: url, state });
-    // fetch events data from WP & while respone is not 400 (bad request) keep fetching
+    let totalPages = response.headers.get("X-WP-TotalPages");
+
+    // fetch events data from WP & while respone is not 200 (bad request) keep fetching
     while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
       pageNo++;
       url = `${state.auth.WP_HOST}wp-json/wp/v2/funding_awards?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+
+      // 📌 break out of the loop if no more pages
+      if (pageNo > totalPages) break;
       response = await fetchDataHandler({ path: url, state });
     }
 
@@ -311,13 +327,18 @@ export const getMembershipData = async ({ state, page, postsPerPage }) => {
     let data = [];
 
     let response = await fetchDataHandler({ path: url, state });
-    // fetch events data from WP & while respone is not 400 (bad request) keep fetching
+    let totalPages = response.headers.get("X-WP-TotalPages");
+
+    // fetch events data from WP & while respone is not 200 (bad request) keep fetching
     while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
       pageNo++;
       url = `${state.auth.WP_HOST}wp-json/wp/v2/memberships?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+
+      // 📌 break out of the loop if no more pages
+      if (pageNo > totalPages) break;
       response = await fetchDataHandler({ path: url, state });
     }
 
@@ -340,13 +361,18 @@ export const getLeadershipData = async ({ state, page, postsPerPage }) => {
     let data = [];
 
     let response = await fetchDataHandler({ path: url, state });
-    // fetch events data from WP & while respone is not 400 (bad request) keep fetching
+    let totalPages = response.headers.get("X-WP-TotalPages");
+
+    // fetch events data from WP & while respone is not 200 (bad request) keep fetching
     while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
       pageNo++;
       url = `${state.auth.WP_HOST}wp-json/wp/v2/leadership_team?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+
+      // 📌 break out of the loop if no more pages
+      if (pageNo > totalPages) break;
       response = await fetchDataHandler({ path: url, state });
     }
 
@@ -400,13 +426,18 @@ export const getSIGData = async ({ state, page, postsPerPage, type }) => {
     let data = [];
 
     let response = await fetchDataHandler({ path: url, state });
-    // fetch events data from WP & while respone is not 400 (bad request) keep fetching
+    let totalPages = response.headers.get("X-WP-TotalPages");
+
+    // fetch events data from WP & while respone is not 200 (bad request) keep fetching
     while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
       pageNo++;
       url = `${state.auth.WP_HOST}wp-json/wp/v2/${postType}?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+
+      // 📌 break out of the loop if no more pages
+      if (pageNo > totalPages) break;
       response = await fetchDataHandler({ path: url, state });
     }
 
@@ -430,13 +461,18 @@ export const getCPTData = async ({ state, page, postsPerPage, type }) => {
     let data = [];
 
     let response = await fetchDataHandler({ path: url, state });
-    // fetch events data from WP & while respone is not 400 (bad request) keep fetching
+    let totalPages = response.headers.get("X-WP-TotalPages");
+
+    // fetch events data from WP & while respone is not 200 (bad request) keep fetching
     while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
       pageNo++;
       url = `${state.auth.WP_HOST}wp-json/wp/v2/${type}?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+
+      // 📌 break out of the loop if no more pages
+      if (pageNo > totalPages) break;
       response = await fetchDataHandler({ path: url, state });
     }
 
@@ -474,13 +510,18 @@ export const getElectionsData = async ({ state, page, postsPerPage }) => {
     let data = [];
 
     let response = await fetchDataHandler({ path: url, state });
-    // fetch events data from WP & while respone is not 400 (bad request) keep fetching
+    let totalPages = response.headers.get("X-WP-TotalPages");
+
+    // fetch events data from WP & while respone is not 200 (bad request) keep fetching
     while (response.status === 200) {
       let json = await response.json();
 
       data = [...data, ...json];
       pageNo++;
       url = `${state.auth.WP_HOST}wp-json/wp/v2/elections?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+
+      // 📌 break out of the loop if no more pages
+      if (pageNo > totalPages) break;
       response = await fetchDataHandler({ path: url, state });
     }
 

@@ -217,7 +217,7 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
         >
           Topics
         </div>
-        <div className="flex" style={{ fontSize: 16, paddingTop: `1em` }}>
+        <div className="flex-col" style={{ fontSize: 16 }}>
           {tags.map((tag, key) => {
             const filter = tagData.filter((item) => item.id === Number(tag));
             const categoryName = filter[0].name;
@@ -227,7 +227,7 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
                 key={key}
                 style={{
                   padding: `0.5em`,
-                  marginRight: `1em`,
+                  marginTop: `1em`,
                   backgroundColor: colors.lightSilver,
                   textTransform: "capitalize",
                 }}

@@ -233,6 +233,15 @@ h5 {
 h6 {
   font-size: 1rem;
 }
+/* apply custom font size to app seearch page */
+.app-search h1,
+.app-search h2,
+.app-search h3,
+.app-search h4,
+.app-search h5,
+.app-search h6 {
+  font-size: 16px;
+}
 
 .text-body h1,
 .text-body h2,
