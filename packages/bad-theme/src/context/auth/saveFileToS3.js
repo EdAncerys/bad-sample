@@ -30,6 +30,8 @@ export const sendFileToS3Action = async ({ state, dispatch, attachments }) => {
     const response = await fetch(path, requestOptions);
     const data = await response.json();
     if (data.success) {
+      console.log("🐞 S3 IMAGE URL ", data.data); // debug
+
       return data.data;
     }
   } catch (error) {

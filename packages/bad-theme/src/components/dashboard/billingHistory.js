@@ -3,6 +3,7 @@ import { connect } from "frontity";
 
 import ActionPlaceholder from "../actionPlaceholder";
 import PaymentHistory from "./paymentHistory";
+import { colors } from "../../config/colors";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -85,15 +86,50 @@ const BillingHistory = ({ state, actions, libraries }) => {
           Billing History:
         </div>
         {subAppHistory.map((block, key) => {
+          console.log("🐞 history", block); // bill history
+          console.log("🐞 subAppHistory", subAppHistory); // bill history
+
+          const { core_name, core_totalamount } = block;
+          let paymentLength = subAppHistory.length;
+          const isLastItem = paymentLength === key + 1;
+
+          // list of apps with billing history
           return (
-            <PaymentHistory
+            <div
               key={key}
-              block={block}
-              item={key}
-              subAppHistory={subAppHistory}
-              setFetching={setFetching}
-            />
+              className={!lg ? "flex" : "flex-col"}
+              style={{
+                borderBottom: !isLastItem
+                  ? `1px solid ${colors.darkSilver}`
+                  : "none",
+                padding: !lg ? `1em` : 0,
+              }}
+            >
+              <div className="flex" style={styles.fontSize}>
+                <div>{core_name}</div>
+              </div>
+              <div className="flex" style={styles.fontSize}>
+                <div>
+                  {core_totalamount
+                    ? core_totalamount.includes("-")
+                      ? "Free"
+                      : core_totalamount
+                    : ""}
+                </div>
+              </div>
+            </div>
           );
+
+          // 📌 payment history for each app
+          // return (
+          //   <PaymentHistory
+          //     key={key}
+          //     block={block}
+          //     item={key}
+          //     subAppHistory={subAppHistory}
+          //     setFetching={setFetching}
+          //   />
+          // );
         })}
       </div>
     </div>

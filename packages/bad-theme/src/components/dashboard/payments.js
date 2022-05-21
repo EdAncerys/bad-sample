@@ -77,7 +77,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     const sagepayUrl = core_membershipsubscriptionid
       ? `/sagepay/${sagepay_live}/subscription/`
       : `/sagepay/${sagepay_live}/application/`;
-    
+
     try {
       const path =
         state.auth.APP_HOST +
@@ -91,7 +91,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
         // body: appCredentials,
         state,
       });
-      console.log("FetchVendor", fetchVendorId)
+
       if (fetchVendorId.ok) {
         const json = await fetchVendorId.json();
         const url =
@@ -294,6 +294,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       </div>
     );
   };
+
   let outstandingSubs = liveSubscriptions.subs.data.filter((sub) => {
     if (!sub.bad_outstandingpayments) return false;
     return !(
