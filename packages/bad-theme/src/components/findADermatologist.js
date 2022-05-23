@@ -38,14 +38,13 @@ const FindADermatologist = ({ state, block }) => {
 
   // HANDLERS ------------------------------------------------------------------------
 
-  const handlePostCodeChange = () => {
+  const handleSearchByPostcode = () => {
     let isPostcode = pc;
 
     // validate postocode format
     isPostcode = isPostcode.replace(/\s/g, "");
     const regex = /^[A-Z]{1,2}[0-9]{1,2} ?[0-9][A-Z]{2}$/i;
     isPostcode = regex.test(isPostcode);
-    console.log("isPostcode", isPostcode);
 
     // display error message if postoce is not valid
     if (isPostcode) {
@@ -56,72 +55,102 @@ const FindADermatologist = ({ state, block }) => {
       return;
     }
 
+    let message = `Postcode ${pc} is not valid. Please enter valid postoced & try again.`;
+    if (!pc.length) message = "Please enter valid postoced & try again.";
+
     setErrorAction({
       dispatch,
       isError: {
-        message: `Postcode ${pc} is not valid UK postcode. Please enter valid postoced & try again.`,
+        message: message,
         image: "Error",
       },
     });
   };
 
+  const handleSearchByName = () => {
+    // display error message if name is not valid
+    if (name.length) {
+      setQuery({
+        type: "name",
+        value: name,
+      });
+      return;
+    }
+
+    let message = `Please enter name & try again.`;
+
+    setErrorAction({
+      dispatch,
+      isError: {
+        message: message,
+        image: "Error",
+      },
+    });
+  };
+
+  const handleFocusOnThePostCode = async () => {
+    const path = state.auth.APP_HOST + "/catalogue/ukpostcode/" + query.value;
+    const post_code = await fetchDataHandler({ path, state });
+
+    if (post_code.ok) {
+      const json = await post_code.json();
+      setDermOnFocus({
+        lat: Number(json.data.location.lattitude),
+        lng: Number(json.data.location.longitude),
+      });
+    }
+  };
+
+  const fetchDermatologistsByPostCode = async () => {
+    const post_code = query.value.split(" ").join("");
+    const url =
+      state.auth.APP_HOST +
+      "/catalogue/md/" +
+      post_code +
+      `?limit=${query_limit.current}`;
+    const fetching = await fetchDataHandler({ path: url, state });
+
+    if (fetching && fetching.ok) {
+      const json = await fetching.json();
+      const data = json.data;
+      const result = data.reduce((acc, derm) => {
+        return {
+          ...acc,
+          [derm.address3_postalcode]: [derm],
+        };
+      }, {});
+      setDermOnFocus({
+        lat: Number(data[0].cordinates.lat),
+        lng: Number(data[0].cordinates.lng),
+      });
+      setFilteredDermatologists(data);
+      handleFocusOnThePostCode();
+    }
+  };
+
+  const fetchDermatologistsByName = async () => {
+    const url = state.auth.APP_HOST + "/catalogue/md";
+    const fetching = await fetchDataHandler({ path: url, state });
+
+    if (fetching.ok) {
+      const json = await fetching.json();
+      const data = json.data;
+      const regex = new RegExp(query.value, "gi");
+
+      const filteredData = data.filter((item) => {
+        let fullname = item.fullname;
+
+        // break if fullname is not found or valid
+        if (!fullname) return false;
+
+        return fullname.match(regex);
+      });
+
+      setFilteredDermatologists(filteredData);
+    }
+  };
+
   React.useEffect(async () => {
-    const fetchDermatologistsByPostCode = async () => {
-      const post_code = query.value.split(" ").join("");
-      const url =
-        state.auth.APP_HOST +
-        "/catalogue/md/" +
-        post_code +
-        `?limit=${query_limit.current}`;
-      const fetching = await fetchDataHandler({ path: url, state });
-      console.log("🐞 ", fetching);
-
-      if (fetching && fetching.ok) {
-        const json = await fetching.json();
-        const data = json.data;
-        const result = data.reduce((acc, derm) => {
-          return {
-            ...acc,
-            [derm.address3_postalcode]: [derm],
-          };
-        }, {});
-        setDermOnFocus({
-          lat: Number(data[0].cordinates.lat),
-          lng: Number(data[0].cordinates.lng),
-        });
-        setFilteredDermatologists(data);
-        handleFocusOnThePostCode();
-      }
-    };
-
-    const handleFocusOnThePostCode = async () => {
-      const path = state.auth.APP_HOST + "/catalogue/ukpostcode/" + query.value;
-      const post_code = await fetchDataHandler({ path, state });
-
-      if (post_code.ok) {
-        const json = await post_code.json();
-        setDermOnFocus({
-          lat: Number(json.data.location.lattitude),
-          lng: Number(json.data.location.longitude),
-        });
-      }
-    };
-
-    const fetchDermatologistsByName = async () => {
-      const url = state.auth.APP_HOST + "/catalogue/md";
-      const fetching = await fetchDataHandler({ path: url, state });
-
-      if (fetching.ok) {
-        const json = await fetching.json();
-        const data = json.data;
-        const regex = new RegExp(query.value, "gi");
-
-        const filteredData = data.filter((item) => item.fullname.match(regex));
-
-        setFilteredDermatologists(filteredData);
-      }
-    };
-
     if (query && query.type === "pc") fetchDermatologistsByPostCode();
     if (query && query.type === "name") fetchDermatologistsByName();
     setLoading(false);
@@ -314,7 +343,6 @@ const FindADermatologist = ({ state, block }) => {
                   gap: 20,
                 }}
               >
-                <div></div>
                 <div style={{ padding: 10 }}>
                   <ServeAddress />
                   <ServeBiography />
@@ -432,35 +460,29 @@ const FindADermatologist = ({ state, block }) => {
                 className="blue-btn"
                 disabled={!pc}
                 style={{ marginLeft: "2em" }}
-                onClick={handlePostCodeChange}
+                onClick={handleSearchByPostcode}
               >
                 Search
               </div>
             </div>
+
             <div className="flex-row">
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setQuery({
-                    type: "name",
-                    value: name,
-                  });
-                }}
-                className="flex-row"
-              >
+              <div className="flex-row">
                 <input
                   type="text"
                   placeholder="Search by Name"
+                  onChange={(e) => setName(e.target.value)}
                   value={name}
                   className="form-control"
-                  onChange={(e) => {
-                    setName(e.target.value);
-                  }}
                 />
-                <div className="blue-btn" style={{ marginLeft: "2em" }}>
+                <div
+                  className="blue-btn"
+                  style={{ marginLeft: "2em" }}
+                  onClick={handleSearchByName}
+                >
                   Search
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>
