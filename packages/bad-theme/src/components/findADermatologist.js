@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/colors";
 
@@ -11,14 +11,23 @@ import MapsComponent from "./maps/maps";
 import Loading from "./loading";
 
 // CONTEXT --------------------------------------------------------------------------
-import { useAppState, useAppDispatch, fetchDataHandler } from "../context";
+import {
+  useAppState,
+  useAppDispatch,
+  fetchDataHandler,
+  setErrorAction,
+} from "../context";
 
 const FindADermatologist = ({ state, block }) => {
   const marginVertical = state.theme.marginVertical;
   const marginHorizontal = state.theme.marginHorizontal;
   let MARGIN = `${marginVertical}px ${marginHorizontal}px`;
 
+  const dispatch = useAppDispatch();
+
   const [query, setQuery] = React.useState();
+  const [pc, setPC] = React.useState("");
+  const [name, setName] = React.useState("");
 
   const [filteredDermatologists, setFilteredDermatologists] = React.useState();
   const [loading, setLoading] = React.useState(true);
@@ -26,6 +35,38 @@ const FindADermatologist = ({ state, block }) => {
   const query_limit = React.useRef(5);
   const enough = React.useRef(false);
   let crutent = 0;
+
+  // HANDLERS ------------------------------------------------------------------------
+  const handleCloseError = () => {
+    setErrorAction({ dispatch, isError: null });
+  };
+
+  const handlePostCodeChange = () => {
+    let isPostcode = pc;
+
+    // validate postocode format
+    isPostcode = isPostcode.replace(/\s/g, "");
+    const regex = /^[A-Z]{1,2}[0-9]{1,2} ?[0-9][A-Z]{2}$/i;
+    isPostcode = regex.test(isPostcode);
+    console.log("isPostcode", isPostcode);
+
+    // display error message if postoce is not valid
+    if (isPostcode) {
+      setQuery({
+        type: "pc",
+        value: pc,
+      });
+      return;
+    }
+
+    setErrorAction({
+      dispatch,
+      isError: {
+        message: `Postcode ${pc} is not valid UK postcode. Please enter valid postoced & try again.`,
+        image: "Error",
+      },
+    });
+  };
 
   React.useEffect(async () => {
     const fetchDermatologistsByPostCode = async () => {
@@ -36,8 +77,9 @@ const FindADermatologist = ({ state, block }) => {
         post_code +
         `?limit=${query_limit.current}`;
       const fetching = await fetchDataHandler({ path: url, state });
+      console.log("🐞 ", fetching);
 
-      if (fetching.ok) {
+      if (fetching && fetching.ok) {
         const json = await fetching.json();
         const data = json.data;
         const result = data.reduce((acc, derm) => {
@@ -174,100 +216,6 @@ const FindADermatologist = ({ state, block }) => {
 
     return <div onClick={decoratedOnClick}>{children}</div>;
   }
-
-  const ServeSearchOptions = () => {
-    const ServeSearchByName = () => {
-      const [name, setName] = React.useState("");
-      return (
-        <div className="flex-row">
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              setQuery({
-                type: "name",
-                value: name,
-              });
-            }}
-            className="flex-row"
-          >
-            <input
-              type="text"
-              placeholder="Search by Name"
-              value={name}
-              className="form-control"
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-            />
-            <div className="blue-btn" style={{ marginLeft: "2em" }}>
-              Search
-            </div>
-          </form>
-        </div>
-      );
-    };
-
-    const ServeSearchByPostCode = () => {
-      const [pc, setPC] = React.useState("");
-      return (
-        <div className="flex-row">
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              setQuery({
-                type: "pc",
-                value: pc,
-              });
-            }}
-            className="flex-row"
-          >
-            <input
-              type="text"
-              placeholder="Postcode"
-              className="form-control"
-              value={pc}
-              onChange={(e) => {
-                setPC(e.target.value);
-              }}
-            />
-            <div
-              className="blue-btn"
-              disabled={!pc && true}
-              style={{ marginLeft: "2em" }}
-            >
-              Search
-            </div>
-          </form>
-        </div>
-      );
-    };
-
-    return (
-      <div
-        style={{
-          backgroundColor: colors.silver,
-          padding: MARGIN,
-        }}
-      >
-        <div
-          className="primary-title"
-          style={{ fontSize: "2.25rem", marginBottom: 20 }}
-        >
-          Search for dermatologists
-        </div>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "2em",
-          }}
-        >
-          <ServeSearchByPostCode />
-          <ServeSearchByName />
-        </div>
-      </div>
-    );
-  };
 
   const ServeAccordionListOfDerms = () => {
     if (!query) return null;
@@ -441,19 +389,6 @@ const FindADermatologist = ({ state, block }) => {
     );
   };
 
-  const ServeMap = () => {
-    return (
-      <div style={{ height: 300, marginTop: 20, marginBottom: 20 }}>
-        <MapsComponent
-          markers={filteredDermatologists}
-          center={dermOnFocus}
-          zoom={dermOnFocus ? 14 : 10}
-          queryType={query ? query.type : null}
-        />
-      </div>
-    );
-  };
-
   const ServeYouSearched = () => {
     if (!query) return null;
     return (
@@ -467,16 +402,85 @@ const FindADermatologist = ({ state, block }) => {
   };
 
   return (
-    <>
+    <div>
       <BlockWrapper background={colors.silver}>
-        <ServeSearchOptions />
+        <div
+          style={{
+            backgroundColor: colors.silver,
+            padding: MARGIN,
+          }}
+        >
+          <div
+            className="primary-title"
+            style={{ fontSize: "2.25rem", marginBottom: 20 }}
+          >
+            Search for dermatologists
+          </div>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "2em",
+            }}
+          >
+            <div className="flex-row">
+              <input
+                type="text"
+                placeholder="Postcode"
+                className="form-control"
+                onChange={(e) => setPC(e.target.value)}
+                value={pc}
+              />
+              <div
+                className="blue-btn"
+                disabled={!pc}
+                style={{ marginLeft: "2em" }}
+                onClick={handlePostCodeChange}
+              >
+                Search
+              </div>
+            </div>
+            <div className="flex-row">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setQuery({
+                    type: "name",
+                    value: name,
+                  });
+                }}
+                className="flex-row"
+              >
+                <input
+                  type="text"
+                  placeholder="Search by Name"
+                  value={name}
+                  className="form-control"
+                  onChange={(e) => {
+                    setName(e.target.value);
+                  }}
+                />
+                <div className="blue-btn" style={{ marginLeft: "2em" }}>
+                  Search
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
       </BlockWrapper>
       <BlockWrapper>
         <ServeYouSearched />
-        <ServeMap />
+        <div style={{ height: 300, marginTop: 20, marginBottom: 20 }}>
+          <MapsComponent
+            markers={filteredDermatologists}
+            center={dermOnFocus}
+            zoom={dermOnFocus ? 14 : 10}
+            queryType={query ? query.type : null}
+          />
+        </div>
         <ServeAccordionListOfDerms />
       </BlockWrapper>
-    </>
+    </div>
   );
 };
 

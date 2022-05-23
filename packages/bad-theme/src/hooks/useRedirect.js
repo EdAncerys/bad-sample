@@ -22,6 +22,7 @@ export const useRedirect = ({
     console.log("SET triggered");
     // 📌  PRE-FETCH redirects from wp
     const response = await fetchDataHandler({ path, state });
+    if (!response) return null;
 
     const data = await response.json();
     if (!data["301_redirects"]) return;

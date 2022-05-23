@@ -91,6 +91,7 @@ function AlterAccordion({
           marginTop: 20,
           border: 0,
         }}
+        // 📌 animation adds bug when using react-bootstrap accordion
         // uncoment to use css effects
         // data-aos={leadershipBlock ? "none" : "fade"}
         // data-aos-easing="ease-in-sine"
