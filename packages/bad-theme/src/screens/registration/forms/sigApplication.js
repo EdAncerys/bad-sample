@@ -26,13 +26,15 @@ import {
   sendFileToS3Action,
   getEthnicityAction,
   googleAutocompleteAction,
+  getGenderAction,
 } from "../../../context";
 
 const SIGApplication = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, dynamicsApps } = useAppState();
+  const { applicationData, isActiveUser, dynamicsApps, genderList } =
+    useAppState();
 
   const [formData, setFormData] = useState({
     core_membershipsubscriptionplanid: "",
@@ -118,7 +120,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const [readPolicyDoc, setReadPolicyDoc] = useState("");
   const [isFetching, setFetching] = useState(false);
   const [membershipData, setMembershipData] = useState(false);
-  const [genderList, setGenderList] = useState([]);
   const [isJobEditable, setJobEditable] = useState(true);
 
   const [hospitalData, setHospitalData] = useState(null);
@@ -140,6 +141,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
     let applicationType = null;
     let hospitalId = null;
     let membershipData = state.source.memberships;
+
+    // 📌 get gender list from Dynamics
+    if (!genderList) await getGenderAction({ state, dispatch });
 
     if (!membershipData) {
       await getMembershipDataAction({ state, actions });
@@ -765,7 +769,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.sig_py3_gender && (
+          {inputValidator.sig_py3_gender && genderList && (
             <div>
               <label className="required form-label">Gender</label>
               <Form.Select

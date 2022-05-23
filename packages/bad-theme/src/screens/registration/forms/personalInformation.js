@@ -22,17 +22,18 @@ import {
   errorHandler,
   googleAutocompleteAction,
   muiQuery,
+  getGenderAction,
 } from "../../../context";
 
 const PersonalDetails = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { applicationData, isActiveUser, dynamicsApps } = useAppState();
+  const { applicationData, isActiveUser, dynamicsApps, genderList } =
+    useAppState();
   const { lg } = muiQuery();
   const [isFetching, setFetching] = useState(false);
   const [isFetchingAddress, setIsFetchingAddress] = useState(null);
-  const [genderList, setGenderList] = useState([]);
   const [formData, setFormData] = useState({
     py3_title: "",
     py3_firstname: "",
@@ -73,7 +74,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   const ctaHeight = 40;
 
   // ⏬ populate form data values from applicationData
-  useEffect(() => {
+  useEffect(async () => {
     const handleSetData = ({ data, name }) => {
       let value = data.value;
       // validate gender input field if name is py3_gender & value = 1 replace with ''
@@ -84,6 +85,9 @@ const PersonalDetails = ({ state, actions, libraries }) => {
         [`${name}`]: value || "",
       }));
     };
+
+    // 📌 get gender list from Dynamics
+    if (!genderList) await getGenderAction({ state, dispatch });
 
     // add profile picture from CONTEXT
     if (isActiveUser) {
@@ -102,10 +106,6 @@ const PersonalDetails = ({ state, actions, libraries }) => {
         handleSetData({ data, name: "py3_firstname" });
       if (data.name === "py3_lastname")
         handleSetData({ data, name: "py3_lastname" });
-      if (data.name === "py3_gender") {
-        handleSetData({ data, name: "py3_gender" });
-        setGenderList(data.info.Choices);
-      }
       if (data.name === "py3_email") handleSetData({ data, name: "py3_email" });
       if (data.name === "py3_mobilephone")
         handleSetData({ data, name: "py3_mobilephone" });
@@ -438,7 +438,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
               </div>
             )}
 
-            {inputValidator.bad_py3_gender && (
+            {inputValidator.bad_py3_gender && genderList && (
               <div>
                 <label className="required form-label">Gender</label>
                 <Form.Select
