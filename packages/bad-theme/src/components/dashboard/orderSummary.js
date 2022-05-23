@@ -4,14 +4,24 @@ import { connect } from "frontity";
 import { colors } from "../../config/imports";
 import { Form } from "react-bootstrap";
 import { UK_COUNTIES } from "../../config/data";
-import { UK_COUNTRIES } from "../../config/data";
 // CONTEXT ----------------------------------------------------------------
-import { setDebitHandlerAction } from "../../context";
+import {
+  useAppDispatch,
+  useAppState,
+  setDebitHandlerAction,
+} from "../../context";
 
 const OrderSummary = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const marginVertical = state.theme.marginVertical;
+  const dispatch = useAppDispatch();
+  const { countryList } = useAppState();
+
+  useEffect(async () => {
+    // 📌 get gender list from Dynamics
+    if (!countryList) await getCountryList({ state, dispatch });
+  }, []);
 
   // HELPERS ----------------------------------------------------------------
   const handleProfileUpdate = () => {
@@ -25,18 +35,6 @@ const OrderSummary = ({ state, actions, libraries }) => {
     const county = document.querySelector("#county").value;
     const postcode = document.querySelector("#postcode").value;
     const country = document.querySelector("#country").value;
-
-    const orderSummary = {
-      addressType,
-      addressLineOne,
-      addressLineTwo,
-      addressLineThree,
-      town,
-      mobileNumber,
-      county,
-      postcode,
-      country,
-    };
   };
 
   // HELPERS ----------------------------------------------------------------
@@ -207,24 +205,27 @@ const OrderSummary = ({ state, actions, libraries }) => {
                 style={styles.input}
               />
             </div>
-            <div>
-              <label>Country/State</label>
-              <Form.Select
-                id="country"
-                style={{ ...styles.input, width: "100%" }}
-              >
-                <option value="null" hidden>
-                  Country/State
-                </option>
-                {UK_COUNTRIES.map((item, key) => {
-                  return (
-                    <option key={key} value={item}>
-                      {item}
-                    </option>
-                  );
-                })}
-              </Form.Select>
-            </div>
+
+            {countryList && (
+              <div>
+                <label>Country/State</label>
+                <Form.Select
+                  id="country"
+                  style={{ ...styles.input, width: "100%" }}
+                >
+                  <option value="null" hidden>
+                    Country/State
+                  </option>
+                  {countryList.map((item, key) => {
+                    return (
+                      <option key={key} value={item}>
+                        {item}
+                      </option>
+                    );
+                  })}
+                </Form.Select>
+              </div>
+            )}
           </div>
         </div>
       </div>

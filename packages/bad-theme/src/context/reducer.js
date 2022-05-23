@@ -28,6 +28,7 @@ export const initialState = {
 
   ethnicity: null,
   genderList: null,
+  countryList: null,
 
   appSearchData: null,
   appSearchPhrase: "",
@@ -106,6 +107,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, redirects: action.payload };
     case "SET_MEDIA_LIST_ACTION":
       return { ...state, newsMediaCategoryList: action.payload };
+    case "SET_COUNTRY_LIST_ACTION":
+      return { ...state, countryList: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

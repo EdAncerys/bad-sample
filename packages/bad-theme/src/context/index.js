@@ -47,6 +47,7 @@ import {
 import { sendEmailEnquireAction } from "./auth/sendEnquire";
 import { getGenderAction } from "./auth/getGender";
 import { getEthnicityAction } from "./auth/getEthnicity";
+import { getCountryList } from "./auth/getCountryList";
 import {
   getMembershipDataAction,
   handleApplyForMembershipAction,
@@ -236,4 +237,5 @@ export {
   handleUpdateMembershipApplication,
   hasPermisionLevel,
   getGenderAction,
+  getCountryList,
 };

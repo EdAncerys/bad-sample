@@ -10,11 +10,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import CircularProgress from "@mui/material/CircularProgress";
 
 // DATA HELPERS -----------------------------------------------------------
-import {
-  UK_COUNTIES,
-  UK_COUNTRIES,
-  prefMailingOption,
-} from "../../config/data";
+import { UK_COUNTIES, prefMailingOption } from "../../config/data";
 
 // CONTEXT ----------------------------------------------------------------
 import {
@@ -24,13 +20,14 @@ import {
   setErrorAction,
   googleAutocompleteAction,
   muiQuery,
+  getCountryList,
 } from "../../context";
 
 const UpdateAddress = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { lg } = muiQuery();
   const dispatch = useAppDispatch();
-  const { isActiveUser } = useAppState();
+  const { isActiveUser, countryList } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
   const [addressData, setAddressData] = useState(null);
@@ -51,7 +48,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     bad_preferredmailingaddress: "", // TBC field name
   });
 
-  useEffect(() => {
+  useEffect(async () => {
     if (!isActiveUser) return null;
 
     // map through user & update formData with values
@@ -61,6 +58,9 @@ const UpdateAddress = ({ state, actions, libraries }) => {
         [`${name}`]: isActiveUser[`${name}`] || "",
       }));
     };
+
+    // 📌 get gender list from Dynamics
+    if (!countryList) await getCountryList({ state, dispatch });
 
     // populate profile information form Dynamics records
     if (isActiveUser.address2_line1) handleSetData({ name: "address2_line1" });
@@ -378,27 +378,31 @@ const UpdateAddress = ({ state, actions, libraries }) => {
                   })}
                 </Form.Select>
               </div>
-              <div style={styles.wrapper}>
-                <label>Country</label>
-                <Form.Select
-                  name="address2_country"
-                  value={formData.address2_country}
-                  onChange={handleInputChange}
-                  className="input"
-                  // disabled
-                >
-                  <option value="" hidden>
-                    Country/State
-                  </option>
-                  {UK_COUNTRIES.map((item, key) => {
-                    return (
-                      <option key={key} value={item}>
-                        {item}
-                      </option>
-                    );
-                  })}
-                </Form.Select>
-              </div>
+
+              {countryList && (
+                <div style={styles.wrapper}>
+                  <label>Country</label>
+                  <Form.Select
+                    name="address2_country"
+                    value={formData.address2_country}
+                    onChange={handleInputChange}
+                    className="input"
+                    // disabled
+                  >
+                    <option value="" hidden>
+                      Country/State
+                    </option>
+                    {countryList.map((item, key) => {
+                      return (
+                        <option key={key} value={item.core_name}>
+                          {item.core_name}
+                        </option>
+                      );
+                    })}
+                  </Form.Select>
+                </div>
+              )}
+
               <div>
                 <label>Postcode</label>
                 <input
