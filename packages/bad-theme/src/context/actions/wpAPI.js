@@ -92,6 +92,8 @@ export const getNewsData = async ({ state, page, postsPerPage }) => {
     let data = [];
 
     let response = await fetchDataHandler({ path: url, state });
+    if (!response) throw new Error("Fetching error");
+
     let totalPages = response.headers.get("X-WP-TotalPages");
 
     // fetch events data from WP & while respone is not 200 (bad request) keep fetching

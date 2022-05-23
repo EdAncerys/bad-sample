@@ -355,7 +355,6 @@ const Navigation = ({ state, actions, libraries }) => {
         let isLeft = "35%";
         if (featuredBannerTwo) isLeft = "66.5%";
 
-        const isFile = acf.file;
         let linkPath = acf.link;
         const wpHost = state.auth.WP_HOST;
         // strip down trailing wpHost from url
@@ -379,7 +378,6 @@ const Navigation = ({ state, actions, libraries }) => {
               bodyLimit={4}
               link_label="Read More"
               link={linkPath}
-              downloadFile={isFile ? { file: isFile } : null} // optional param
               cardHeight="90%"
               colour={colors.white}
               shadow // optional param

@@ -18,7 +18,7 @@ export const useRedirect = ({
     if (redirects) return null; // skip if redirects are already set
     // ⬇️  get redirects path from wp
     const path =
-      state.auth.WP_HOST + "/wp-json/acf/v3/options/options/301_redirects";
+      state.auth.WP_HOST + "wp-json/acf/v3/options/options/301_redirects";
     console.log("SET triggered");
     // 📌  PRE-FETCH redirects from wp
     const response = await fetchDataHandler({ path, state });
