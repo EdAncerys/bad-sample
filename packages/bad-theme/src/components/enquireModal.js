@@ -491,6 +491,12 @@ const EnquireModal = ({ state, actions, libraries }) => {
                   type="file"
                   multiple
                 />
+
+                <div style={{ padding: "1em 0", fontSize: 14 }}>
+                  *to upload multiple files press and hold command + click (Mac)
+                  or control + click (PC) and select files you would like to
+                  attach.
+                </div>
               </div>
             )}
 
