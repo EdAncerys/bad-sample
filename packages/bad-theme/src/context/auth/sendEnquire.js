@@ -1,5 +1,5 @@
 // CONTEXT ------------------------------------------------------------------
-import { setFetchAction, setEnquireAction, fetchDataHandler } from "../index";
+import { setFetchAction, setEnquireAction} from "../index";
 
 export const sendEmailEnquireAction = async ({
   state,
@@ -49,9 +49,11 @@ export const sendEmailEnquireAction = async ({
       body: form,
       credentials: "include",
     };
-
+    console.log("REQUEST", requestOptions)
     const respose = await fetch(path, requestOptions);
+    console.log("RESPONSE", respose)
     const data = await respose.json();
+    console.log("EMAIL DATA", data)
     if (data.success) {
       return data;
     } else {
