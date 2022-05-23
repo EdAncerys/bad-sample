@@ -26,9 +26,10 @@ import {
 } from "../context";
 
 const Event = ({ state, actions, libraries }) => {
+  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+
   const { lg } = muiQuery();
   const { isActiveUser } = useAppState();
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const event = state.source[data.type][data.id];
   const dispatch = useAppDispatch();
@@ -90,9 +91,10 @@ const Event = ({ state, actions, libraries }) => {
     contact_recipients,
   } = event.acf;
   const { title, id } = event;
-  console.log("EVENTIN", event.acf.email)
-  // console.log("event", event); // debug
+  console.log("event", event); // debug
+
   if (!position) return <Loading />;
+
   const handleLogin = () => {
     setErrorAction({ dispatch, isError: null });
     loginAction({ state });
@@ -265,26 +267,30 @@ const Event = ({ state, actions, libraries }) => {
       if (registration_type === "events_force" && !isActiveUser) {
         return (
           <div style={{ padding: "1em 0", textAlign: "center" }}>
-            If you have a BAD online account and register for BAD events using the email address associated with that account, it will appear in your ‘Events’ in your BAD account Dashboard
+            If you have a BAD online account and register for BAD events using
+            the email address associated with that account, it will appear in
+            your ‘Events’ in your BAD account Dashboard
           </div>
         );
       }
       if (registration_type === "events_force" && isActiveUser) {
         return (
           <div style={{ padding: "1em 0" }}>
-           If you register for BAD events using your
+            If you register for BAD events using your
             <span className="primary-title">
               {" " + isActiveUser.emailaddress1}
             </span>{" "}
-            email address, it will appear in your ‘Events’ in your BAD account Dashboard
+            email address, it will appear in your ‘Events’ in your BAD account
+            Dashboard
           </div>
         );
       }
-      
+
       return null;
     };
 
     const handleRegistrationClick = () => {
+      // uncoment to have registration for active user only
       // if (!isActiveUser) {
       //   setErrorAction({
       //     dispatch,
@@ -296,6 +302,7 @@ const Event = ({ state, actions, libraries }) => {
       //   });
       //   return;
       // }
+
       if (
         (registration_type === "email" &&
           registration_status_email === "registration_not_open") ||
@@ -340,9 +347,7 @@ const Event = ({ state, actions, libraries }) => {
             phone_number: true,
             recipients: [
               {
-                email: event.acf.email
-                  ? event.acf.email
-                  : "conference@bad.org.uk",
+                email: event.acf.email || "conference@bad.org.uk",
               },
             ],
             registerForEvent: title.rendered,
@@ -649,7 +654,7 @@ const Event = ({ state, actions, libraries }) => {
                     setGoToAction({ state, path: event.link, actions })
                   }
                 >
-                  {event.title.rendered}
+                  <Html2React html={event.title.rendered} />
                 </div>
               </div>
             );
