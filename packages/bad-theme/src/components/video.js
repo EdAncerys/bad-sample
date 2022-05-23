@@ -23,6 +23,7 @@ import {
   setCreateAccountModalAction,
   setErrorAction,
   fetchDataHandler,
+  setGoToAction
 } from "../context";
 
 const Video = ({ state, actions, libraries }) => {
