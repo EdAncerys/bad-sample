@@ -99,7 +99,6 @@ const Venue = ({ state, actions, libraries }) => {
                       recipients || state.contactList.DEFAULT_CONTACT_LIST,
                     // default email subject & template name
                     emailSubject: "Standard Enquiry Form B.A.D WebApp",
-                    emailTemplate: "StandardEnquiryForm",
                   },
                 })
               }

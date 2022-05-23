@@ -23,7 +23,7 @@ import {
   setCreateAccountModalAction,
   setErrorAction,
   fetchDataHandler,
-  setGoToAction
+  setGoToAction,
 } from "../context";
 
 const Video = ({ state, actions, libraries }) => {
@@ -161,12 +161,12 @@ const Video = ({ state, actions, libraries }) => {
 
     if (fetchVendorId.ok) {
       const json = await fetchVendorId.json();
-      if(json.success) {
-      const url =
-        json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
-      handlePaymentModal(url);
-      return true;
-      } 
+      if (json.success) {
+        const url =
+          json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
+        handlePaymentModal(url);
+        return true;
+      }
 
       setErrorAction({
         dispatch,
@@ -175,10 +175,8 @@ const Video = ({ state, actions, libraries }) => {
           image: "Error",
         },
       });
-      
     }
 
-    
     // setPage({ page: "directDebit", data: block });
   };
 
@@ -205,7 +203,7 @@ const Video = ({ state, actions, libraries }) => {
         // Example URL: https://player.vimeo.com/video/382577680?h=8f166cf506&color=5b89a3&title=0&byline=0&portrait=0
         const reg = /\d+/g;
         const videoId = video_url.match(reg);
-        
+
         const path = `https://vimeo.com/api/v2/video/${videoId[0]}.json`;
         const fetchVideoData = await fetchDataHandler({
           path,
@@ -388,14 +386,9 @@ const Video = ({ state, actions, libraries }) => {
         contact_public_email: "comms@bag.org.uk",
         message: true,
         allow_attachments: true,
-        recipients: [
-          {
-            email: "dominik@skylarkcreative.co.uk",
-          },
-        ],
+        recipients: state.contactList.DEFAULT_CONTACT_LIST,
         // default email subject & template name
         emailSubject: "Viewing Video Issue.",
-        emailTemplate: "StandardEnquiryForm",
       },
     });
   };

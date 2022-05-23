@@ -33,7 +33,7 @@ const Event = ({ state, actions, libraries }) => {
   const data = state.source.get(state.router.link);
   const event = state.source[data.type][data.id];
   const dispatch = useAppDispatch();
-
+  console.log("EVENT", event);
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
   const [eventList, setEventList] = useState(null);
@@ -91,7 +91,7 @@ const Event = ({ state, actions, libraries }) => {
     contact_recipients,
   } = event.acf;
   const { title, id } = event;
-  console.log("event", event); // debug
+  // console.log("event", event); // debug
 
   if (!position) return <Loading />;
 
@@ -353,7 +353,6 @@ const Event = ({ state, actions, libraries }) => {
             registerForEvent: title.rendered,
             // default email subject & template name
             emailSubject: `Register for ${title.rendered} event.`,
-            emailTemplate: "StandardEnquiryForm",
           },
         });
         return true;
@@ -385,7 +384,6 @@ const Event = ({ state, actions, libraries }) => {
             registerForEvent: title.rendered,
             // default email subject & template name
             emailSubject: `Express an interest for ${title.rendered} event.`,
-            emailTemplate: "StandardEnquiryForm",
           },
         });
         return true;
@@ -747,7 +745,6 @@ const Event = ({ state, actions, libraries }) => {
                   contact_recipients || state.contactList.DEFAULT_CONTACT_LIST,
                 // default email subject & template name
                 emailSubject: `Enquire about ${title.rendered} event.`,
-                emailTemplate: "StandardEnquiryForm",
               },
             })
           }
