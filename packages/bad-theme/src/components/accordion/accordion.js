@@ -23,6 +23,7 @@ function AlterAccordion({
   hasPublishDate,
   hasPreview,
 }) {
+  // HELPERS -----------------------------------------------------------------------
   function CustomToggle({ children, eventKey, callback }) {
     const decoratedOnClick = useAccordionButton(eventKey, () => {
       callback && callback(eventKey);
@@ -31,6 +32,8 @@ function AlterAccordion({
     return <div onClick={decoratedOnClick}>{children}</div>;
   }
 
+  console.log("🐞 block", block);
+
   if (!block) return <Loading />;
   const { lg } = muiQuery();
   const { dynamicsApps } = useAppState();
@@ -38,12 +41,16 @@ function AlterAccordion({
     disable_vertical_padding,
     accordion_item,
     approved_bad_members_only,
-    add_search_function,
+    background_colour,
   } = block;
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [uniqueId, setUniqueId] = useState(null);
   const [isActive, setIsActive] = useState(true);
+
+  const marginHorizontal = state.theme.marginHorizontal;
+  let marginVertical = state.theme.marginVertical;
+  if (disable_vertical_padding) marginVertical = 0;
 
   let isBADApproved = false;
   if (dynamicsApps && dynamicsApps.subs.data.length > 0) isBADApproved = true;
@@ -132,15 +139,22 @@ function AlterAccordion({
   };
 
   return (
-    <BlockWrapper>
-      <div style={{ padding: !lg ? "0 100px" : "0 0.5em" }}>
-        <Accordion style={{ border: 0 }}>
-          {searchFilter.map((block, key) => {
-            return <SingleItem block={block} key={key} id={key} />;
-          })}
-        </Accordion>
-      </div>
-    </BlockWrapper>
+    <div
+      style={{
+        padding: `${marginVertical}px ${marginHorizontal}px`,
+        backgroundColor: background_colour || "transparent",
+      }}
+    >
+      <BlockWrapper>
+        <div style={{ padding: !lg ? "0 100px" : "0 0.5em" }}>
+          <Accordion style={{ border: 0 }}>
+            {searchFilter.map((block, key) => {
+              return <SingleItem block={block} key={key} id={key} />;
+            })}
+          </Accordion>
+        </div>
+      </BlockWrapper>
+    </div>
   );
 }
 
