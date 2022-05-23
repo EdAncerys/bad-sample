@@ -17,7 +17,7 @@ export const sendEmailEnquireAction = async ({
 
   try {
     if (!recipients) throw new Error("No Recipients Provided");
-
+    console.log(recipients)
     let recipientsArray = [];
     recipients.map((item) => {
       recipientsArray.push(item.email);
