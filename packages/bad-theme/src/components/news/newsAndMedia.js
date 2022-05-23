@@ -42,6 +42,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     category_filter,
     site_section,
   } = block;
+  // console.log("🐞 N&M", block); // debug
 
   const isLayoutOne = layout === "layout_one";
 
@@ -67,11 +68,21 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     let data = await getNewsData({ state });
 
     if (site_section) {
+      // convert site_section to Object
+
       data = data.filter((item) => {
         let postSections = item.site_sections;
         if (!postSections) return false;
+
+        // convert site_section to Object
+        const sectionFilters = Object.values(site_section);
+
         // check if postSections array contains site_section ids
-        return postSections.some((item) => site_section.includes(item));
+        let isMatch = sectionFilters.some((section) => {
+          return postSections.includes(section);
+        });
+
+        return isMatch;
       });
     }
     // return data if site_section array includes filters
@@ -83,6 +94,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
         return categories.some((item) => category_filter.includes(item));
       });
     }
+
     // apply sort by date functionality & apply limit
     data = data.sort((a, b) => {
       return new Date(b.date) - new Date(a.date);

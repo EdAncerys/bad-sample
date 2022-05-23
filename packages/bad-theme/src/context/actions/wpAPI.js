@@ -84,7 +84,7 @@ export const getNewsData = async ({ state, page, postsPerPage }) => {
   let pageNo = page || 1;
   let perPageLimit = postsPerPage || state.theme.perPageLimit;
   let fields =
-    "title,link,date,release,title,categories,featured_media,excerpt,yoast_head_json.og_image,acf";
+    "title,link,date,release,title,categories,featured_media,excerpt,yoast_head_json.og_image,site_sections,acf";
 
   let url = `${state.auth.WP_HOST}wp-json/wp/v2/posts?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=desc`;
 
