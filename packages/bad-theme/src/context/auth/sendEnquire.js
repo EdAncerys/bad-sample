@@ -9,6 +9,7 @@ export const sendEmailEnquireAction = async ({
   recipients,
   emailSubject,
   template,
+  isActiveUser,
 }) => {
   // console.log("enquireAction triggered");
 
@@ -33,8 +34,37 @@ export const sendEmailEnquireAction = async ({
     formData.recipientsList = recipientsList;
     formData.subject = subject;
 
+    // ⬇️ Add defaults to formData if nothing been passed in | user data not available ⬇️
+    formData.currentHospitalName = formData.currentHospitalName || "";
+    formData.hospitalChangeName = formData.hospitalChangeName || "";
+    formData.jobtitle = formData.jobtitle || "";
+    formData.fullname = formData.fullname || "";
+    formData.bad_memberid = formData.bad_memberid || "";
+    formData.emailaddress1 = formData.emailaddress1 || "";
+    formData.mobilephone = formData.mobilephone || "";
+    formData.subject = subject;
+    formData.subject_dropdown_options = formData.subject_dropdown_options || "";
+    formData.message = formData.message || "";
+
+    if (isActiveUser) {
+      // 📌 pass in defaults user values from Dynamics if not provided
+      formData.currentHospitalName =
+        formData.currentHospitalName ||
+        isActiveUser[
+          "_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"
+        ];
+      formData.jobtitle = formData.jobtitle || isActiveUser.jobtitle;
+      formData.jobtitle = formData.fullname || isActiveUser.fullname;
+      formData.jobtitle = formData.bad_memberid || isActiveUser.bad_memberid;
+      formData.emailaddress1 =
+        formData.emailaddress1 || isActiveUser.emailaddress1;
+      formData.mobilephone = formData.mobilephone || isActiveUser.mobilephone;
+    }
+
+    console.log("🐞 formData", formData); // debug
+
     const form = new FormData(); // create form object to sent email content & attachments
-    form.append("template", template || "Placeholder"); // default email template
+    form.append("template", template || "BADEnquiryForm"); // default email template
     form.append("email", recipientsList);
     form.append("data", JSON.stringify(formData));
     form.append("subject", subject);

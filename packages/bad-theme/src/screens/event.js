@@ -90,7 +90,6 @@ const Event = ({ state, actions, libraries }) => {
     contact_recipients,
   } = event.acf;
   const { title, id } = event;
-  console.log("EVENTIN", event.acf.email)
   // console.log("event", event); // debug
   if (!position) return <Loading />;
   const handleLogin = () => {
@@ -265,22 +264,25 @@ const Event = ({ state, actions, libraries }) => {
       if (registration_type === "events_force" && !isActiveUser) {
         return (
           <div style={{ padding: "1em 0", textAlign: "center" }}>
-            If you have a BAD online account and register for BAD events using the email address associated with that account, it will appear in your ‘Events’ in your BAD account Dashboard
+            If you have a BAD online account and register for BAD events using
+            the email address associated with that account, it will appear in
+            your ‘Events’ in your BAD account Dashboard
           </div>
         );
       }
       if (registration_type === "events_force" && isActiveUser) {
         return (
           <div style={{ padding: "1em 0" }}>
-           If you register for BAD events using your
+            If you register for BAD events using your
             <span className="primary-title">
               {" " + isActiveUser.emailaddress1}
             </span>{" "}
-            email address, it will appear in your ‘Events’ in your BAD account Dashboard
+            email address, it will appear in your ‘Events’ in your BAD account
+            Dashboard
           </div>
         );
       }
-      
+
       return null;
     };
 
@@ -348,7 +350,6 @@ const Event = ({ state, actions, libraries }) => {
             registerForEvent: title.rendered,
             // default email subject & template name
             emailSubject: `Register for ${title.rendered} event.`,
-            emailTemplate: "StandardEnquiryForm",
           },
         });
         return true;
@@ -380,7 +381,6 @@ const Event = ({ state, actions, libraries }) => {
             registerForEvent: title.rendered,
             // default email subject & template name
             emailSubject: `Express an interest for ${title.rendered} event.`,
-            emailTemplate: "StandardEnquiryForm",
           },
         });
         return true;
@@ -742,7 +742,6 @@ const Event = ({ state, actions, libraries }) => {
                   contact_recipients || state.contactList.DEFAULT_CONTACT_LIST,
                 // default email subject & template name
                 emailSubject: `Enquire about ${title.rendered} event.`,
-                emailTemplate: "StandardEnquiryForm",
               },
             })
           }

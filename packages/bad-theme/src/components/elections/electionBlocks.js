@@ -139,7 +139,6 @@ const ElectionBlocks = ({ state, actions, block }) => {
             contact_recipients || state.contactList.DEFAULT_CONTACT_LIST,
           // default email subject & template name
           emailSubject: `Notify when ${positionName} position is open.`,
-          emailTemplate: "StandardEnquiryForm",
         },
       });
     if (!isClosedPosition) handleElectionModal({ block });

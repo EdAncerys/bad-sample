@@ -117,6 +117,7 @@ const AccordionBody = ({
       formData,
       attachments,
       recipients,
+      isActiveUser,
     });
     setFetching(false);
     document.querySelector(`#attachments-${uniqueId}`).value = "";
