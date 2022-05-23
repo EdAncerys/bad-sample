@@ -25,7 +25,9 @@ export const initialState = {
   dashboardPath: "Dashboard",
   directDebitPath: { page: "billing" },
   isVisibleNotification: true,
+
   ethnicity: null,
+  genderList: null,
 
   appSearchData: null,
   appSearchPhrase: "",
@@ -96,6 +98,8 @@ export const AppReducer = (state = initialState, action) => {
       return { ...state, isPlaceholder: action.payload };
     case "SET_ETHNICITY_ACTION":
       return { ...state, ethnicity: action.payload };
+    case "SET_GENDER_ACTION":
+      return { ...state, genderList: action.payload };
     case "SET_DASHBOARD_NOTIFICATION_ACTION":
       return { ...state, isDashboardNotifications: action.payload };
     case "SET_REDIRECT_ACTION":

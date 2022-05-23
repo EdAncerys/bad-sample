@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Form } from "react-bootstrap";
 
-import { ETHNIC_GROUPS, GENDER_GROUPS } from "../../config/data";
 import ActionPlaceholder from "../actionPlaceholder";
 import ProfileAvatar from "./profileAvatar";
 // CONTEXT ----------------------------------------------------------------
@@ -14,6 +13,7 @@ import {
   muiQuery,
   setErrorAction,
   getEthnicityAction,
+  getGenderAction,
 } from "../../context";
 
 const UpdateProfile = ({ state, actions, libraries }) => {
@@ -21,7 +21,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const { isActiveUser, ethnicity } = useAppState();
+  const { isActiveUser, ethnicity, genderList } = useAppState();
 
   const [isFetching, setIsFetching] = useState(null);
   const [formData, setFormData] = useState({
@@ -40,6 +40,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
   useEffect(async () => {
     // ⬇️ get ethnicity choices from Dynamics
     if (!ethnicity) await getEthnicityAction({ state, dispatch });
+    if (!genderList) await getGenderAction({ state, dispatch });
 
     return () => {
       useEffectRef.current = false; // clean up function
@@ -207,27 +208,29 @@ const UpdateProfile = ({ state, actions, libraries }) => {
               placeholder="Your Date Of Birth"
             />
           </div>
-          <div>
-            <label>Gender</label>
-            <Form.Select
-              name="gendercode"
-              value={formData.gendercode}
-              onChange={handleInputChange}
-              className="input"
-              // disabled
-            >
-              <option value="" hidden>
-                Male, Female, Transgender, Prefer Not To Answer
-              </option>
-              {GENDER_GROUPS.map((item, key) => {
-                return (
-                  <option key={key} value={item.value}>
-                    {item.Label}
-                  </option>
-                );
-              })}
-            </Form.Select>
-          </div>
+          {genderList && (
+            <div>
+              <label>Gender</label>
+              <Form.Select
+                name="gendercode"
+                value={formData.gendercode}
+                onChange={handleInputChange}
+                className="input"
+                // disabled
+              >
+                <option value="" hidden>
+                  Male, Female, Transgender, Prefer Not To Answer
+                </option>
+                {genderList.map((item, key) => {
+                  return (
+                    <option key={key} value={item.value}>
+                      {item.Label}
+                    </option>
+                  );
+                })}
+              </Form.Select>
+            </div>
+          )}
           {ethnicity && (
             <div style={styles.wrapper}>
               <label>Ethnicity</label>

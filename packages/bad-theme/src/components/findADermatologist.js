@@ -37,9 +37,6 @@ const FindADermatologist = ({ state, block }) => {
   let crutent = 0;
 
   // HANDLERS ------------------------------------------------------------------------
-  const handleCloseError = () => {
-    setErrorAction({ dispatch, isError: null });
-  };
 
   const handlePostCodeChange = () => {
     let isPostcode = pc;

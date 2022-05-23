@@ -45,6 +45,7 @@ import {
   getUserDataFromDynamics,
 } from "./auth/actions";
 import { sendEmailEnquireAction } from "./auth/sendEnquire";
+import { getGenderAction } from "./auth/getGender";
 import { getEthnicityAction } from "./auth/getEthnicity";
 import {
   getMembershipDataAction,
@@ -234,4 +235,5 @@ export {
   handleSetCookie,
   handleUpdateMembershipApplication,
   hasPermisionLevel,
+  getGenderAction,
 };
