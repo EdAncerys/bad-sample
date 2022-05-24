@@ -96,10 +96,10 @@ const Video = ({ state, actions, libraries }) => {
       const fetching = await fetchDataHandler({
         path: url,
         state,
-        isCORSHeaders: true,
-        disableCookies: true,
+        // isCORSHeaders: true,
+        // disableCookies: true,
       });
-
+      console.log("FETCHING", fetching);
       if (fetching.ok) {
         const json = await fetching.json();
         console.log("JSON", json);
