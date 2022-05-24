@@ -95,6 +95,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
         attachments: formData.attachments,
         emailSubject: enquireAction.emailSubject, // email default subject title
         template: enquireAction.emailTemplate, // email default template
+        isActiveUser,
       });
       if (!response) throw new Error("Error sending email");
     } catch (error) {

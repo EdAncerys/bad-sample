@@ -1,5 +1,5 @@
 // CONTEXT ------------------------------------------------------------------
-import { setFetchAction, setEnquireAction} from "../index";
+import { setFetchAction, setEnquireAction } from "../index";
 
 export const sendEmailEnquireAction = async ({
   state,
@@ -9,15 +9,16 @@ export const sendEmailEnquireAction = async ({
   recipients,
   emailSubject,
   template,
+  isActiveUser,
 }) => {
   // console.log("enquireAction triggered");
-  console.log("DATA", formData)
+  console.log("DATA", formData);
   setFetchAction({ dispatch, isFetching: true });
   const path = state.auth.APP_HOST + `/email`;
 
   try {
     if (!recipients) throw new Error("No Recipients Provided");
-    console.log(recipients)
+    console.log(recipients);
     let recipientsArray = [];
     recipients.map((item) => {
       recipientsArray.push(item.email);
@@ -32,9 +33,38 @@ export const sendEmailEnquireAction = async ({
     // append recipientsList to formData
     formData.recipientsList = recipientsList;
     formData.subject = subject;
-   
+
+    // ⬇️ Add defaults to formData if nothing been passed in | user data not available ⬇️
+    formData.currentHospitalName = formData.currentHospitalName || "";
+    formData.hospitalChangeName = formData.hospitalChangeName || "";
+    formData.jobtitle = formData.jobtitle || "";
+    formData.fullname = formData.fullname || "";
+    formData.bad_memberid = formData.bad_memberid || "";
+    formData.emailaddress1 = formData.emailaddress1 || "";
+    formData.mobilephone = formData.mobilephone || "";
+    formData.subject = subject;
+    formData.subject_dropdown_options = formData.subject_dropdown_options || "";
+    formData.message = formData.message || "";
+
+    if (isActiveUser) {
+      // 📌 pass in defaults user values from Dynamics if not provided
+      formData.currentHospitalName =
+        formData.currentHospitalName ||
+        isActiveUser[
+          "_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"
+        ];
+      formData.jobtitle = formData.jobtitle || isActiveUser.jobtitle;
+      formData.jobtitle = formData.fullname || isActiveUser.fullname;
+      formData.jobtitle = formData.bad_memberid || isActiveUser.bad_memberid;
+      formData.emailaddress1 =
+        formData.emailaddress1 || isActiveUser.emailaddress1;
+      formData.mobilephone = formData.mobilephone || isActiveUser.mobilephone;
+    }
+
+    console.log("🐞 formData", formData); // debug
+
     const form = new FormData(); // create form object to sent email content & attachments
-    form.append("template", template || "Placeholder"); // default email template
+    form.append("template", template || "BADEnquiryForm"); // default email template
     form.append("email", recipientsList);
     form.append("data", JSON.stringify(formData));
     form.append("subject", subject);
@@ -49,11 +79,11 @@ export const sendEmailEnquireAction = async ({
       body: form,
       credentials: "include",
     };
-    console.log("REQUEST", requestOptions)
+    console.log("REQUEST", requestOptions);
     const respose = await fetch(path, requestOptions);
-    console.log("RESPONSE", respose)
+    console.log("RESPONSE", respose);
     const data = await respose.json();
-    console.log("EMAIL DATA", data)
+    console.log("EMAIL DATA", data);
     if (data.success) {
       return data;
     } else {

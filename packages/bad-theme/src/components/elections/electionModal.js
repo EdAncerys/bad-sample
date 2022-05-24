@@ -59,7 +59,6 @@ const ElectionModal = ({
           contact_recipients || state.contactList.DEFAULT_CONTACT_LIST,
         // default email subject & template name
         emailSubject: `Apply to ${title.rendered} position.`,
-        emailTemplate: "StandardEnquiryForm",
       },
     });
   };

@@ -80,7 +80,6 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         // default email subject & template name
         emailSubject:
           "Change of Professional Details Request. Main Hospital / Place of Work / Medical School details",
-        emailTemplate: "ChangeOfHospital",
       },
     });
   };
