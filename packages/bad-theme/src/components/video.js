@@ -128,11 +128,7 @@ const Video = ({ state, actions, libraries }) => {
   // HELPERS ----------------------------------------------------------------
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-
   const handlePayment = async () => {
-    const cookie = handleGetCookie({ name: `BAD-WebApp` });
-    const { contactid } = cookie;
-
     const sagepay_url =
       state.auth.ENVIRONMENT === "PRODUCTION"
         ? "sagepay/live/video"
@@ -141,7 +137,7 @@ const Video = ({ state, actions, libraries }) => {
     const url =
       state.auth.APP_HOST +
       sagepay_url +
-      contactid +
+      isActiveUser.contactid +
       "/" +
       post.acf.event_id +
       "/" +

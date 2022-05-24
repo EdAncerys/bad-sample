@@ -6,7 +6,7 @@ import custom from "../css/custom.css";
 import CheckMark from "../img/svg/checkMark.svg";
 import Image from "@frontity/components/image";
 
-const PaymentConfirmation = () => {
+const PaymentConfirmation = ({state}) => {
   const queryParams = new Proxy(new URLSearchParams(window.location.search), {
     get: (searchParams, prop) => searchParams.get(prop),
   });
@@ -69,4 +69,4 @@ const PaymentConfirmation = () => {
   );
 };
 
-export default PaymentConfirmation;
+export default connect(PaymentConfirmation);
