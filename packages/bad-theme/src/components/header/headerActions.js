@@ -34,6 +34,7 @@ import {
   fetchDataHandler, // TESTING enviroment
   handleSetCookie, // TESTING enviroment
   handleGetCookie, // TESTING enviroment
+  handleRemoveServerSideCookie, // TESTING enviroment
 } from "../../context";
 
 const HeaderActions = ({ state, actions, libraries }) => {

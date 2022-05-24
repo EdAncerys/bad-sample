@@ -49,7 +49,7 @@ export const fetchDataHandler = async ({
     // set cash control headers to 7 days if method is GET
     // ...(isCashControlHeaders ? { "Cache-Control": "s-maxage=86400" } : {}),
     // add custom headers if provided
-    ...headers,
+    ...(headers || {}),
   };
 
   // 📌 Options
@@ -59,7 +59,7 @@ export const fetchDataHandler = async ({
     // CORS mode options
     // ...(isCORSHeaders ? { mode: "no-cors" } : {}),
     // add options if provided
-    ...options,
+    ...(options || {}),
     // 🍪 add credentials to the request to incloode cookies in all fetch requests if disableCookies 🍪
     credentials: disableCookies ? "omit" : "include",
   };

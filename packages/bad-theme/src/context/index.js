@@ -43,6 +43,7 @@ import {
   getUserDataByContactId,
   getUserDataByEmail,
   getUserDataFromDynamics,
+  handleRemoveServerSideCookie,
 } from "./auth/actions";
 import { sendEmailEnquireAction } from "./auth/sendEnquire";
 import { getGenderAction } from "./auth/getGender";
@@ -239,4 +240,5 @@ export {
   hasPermisionLevel,
   getGenderAction,
   getCountryList,
+  handleRemoveServerSideCookie,
 };
