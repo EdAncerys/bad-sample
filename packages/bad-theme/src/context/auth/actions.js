@@ -52,11 +52,11 @@ export const loginAction = async ({ state }) => {
       state.auth.B2C +
       `${redirectPath}&scope=openid&response_type=id_token&prompt=${action}`;
     const urlPath = state.router.link;
-    console.log("LOGIN path + REDIRECT", redirectPath);
-    // get current url path and store in cookieValue
-    handleSetCookie({ name: "loginPath", value: urlPath });
 
-    // redirect to B2C auth set window location to login page
+    // get current url path and store in cookieValue for redirects after login
+    handleSetCookie({ name: "badLoginPath", value: urlPath });
+
+    // 📌 redirect to B2C auth set window location to login page
     window.location.href = url;
   } catch (error) {
     // console.log("loginAction error", error);
@@ -297,6 +297,7 @@ export const logoutAction = async ({ state, actions, dispatch }) => {
   handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
   handleSetCookie({ name: state.auth.AUTH_COOKIE, deleteCookie: true });
   handleSetCookie({ name: "vuid", deleteCookie: true }); // 🍪 remove vuid cookie
+  handleSetCookie({ name: "badLoginPath", deleteCookie: true }); // 🍪 remove vuid cookie
   await handleRemoveServerSideCookie({ state });
 
   // reddirect user to home page

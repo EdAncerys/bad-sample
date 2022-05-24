@@ -3,7 +3,7 @@ import { handleSortFilter } from "../helpers/eventSortFilter";
 import { hasPermisionLevel } from "../helpers/permitionLevel";
 import { setAuthenticationCookieAction } from "../helpers/setAuthenticationCookie";
 import { AppProvider, useAppDispatch, useAppState } from "./context";
-import { handleSetCookie } from "../helpers/cookie";
+import { handleSetCookie, handleGetCookie } from "../helpers/cookie";
 import { handleUpdateMembershipApplication } from "../helpers/handleUpdateMembershipApplication";
 import {
   setGoToAction,
@@ -234,6 +234,7 @@ export {
   fetchDataHandler,
   setAuthenticationCookieAction,
   handleSetCookie,
+  handleGetCookie,
   handleUpdateMembershipApplication,
   hasPermisionLevel,
   getGenderAction,
