@@ -237,7 +237,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       data: formData,
     });
 
-    if (isActiveUser) setGoToAction({ state, path: `/membership/`, actions });
+    if (isActiveUser) setGoToAction({ state, path: `/dashboard/`, actions });
   };
 
   const isFormValidated = ({ required }) => {

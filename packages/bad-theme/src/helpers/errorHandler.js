@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react";
 
-export const errorHandler = ({ id }) => {
+export const errorHandler = ({ id, time }) => {
   if (!id) return null;
 
   const error = document.querySelector(`#${id}`);
@@ -11,6 +11,6 @@ export const errorHandler = ({ id }) => {
       if (error) error.classList.add("d-none");
     },
 
-    3000
+    time || 3000
   );
 };

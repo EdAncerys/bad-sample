@@ -27,6 +27,7 @@ import {
   getEthnicityAction,
   googleAutocompleteAction,
   getGenderAction,
+  setErrorAction,
 } from "../../../context";
 
 const SIGApplication = ({ state, actions, libraries }) => {
@@ -196,11 +197,12 @@ const SIGApplication = ({ state, actions, libraries }) => {
           setJobEditable(false);
         }
       });
+      // incoment to set gender list from app blob data
       // set gender from picklist from app data
-      if (data.name === "py3_gender") {
-        let list = data.info.Choices;
-        setGenderList(list);
-      }
+      // if (data.name === "py3_gender") {
+      //   let list = data.info.Choices;
+      //   setGenderList(list);
+      // }
 
       // set hospital id if exists
       if (data.name === "py3_hospitalid") {
@@ -360,7 +362,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       if (!inputValue.includes("sig_")) inputValue = `sig_${input}`;
 
       if (!formData[input] && inputValidator[inputValue]) {
-        errorHandler({ id: `form-error-${input}` });
+        errorHandler({ id: `form-error-${input}`, time: 5000 });
         isValid = false;
       }
     });
@@ -466,7 +468,18 @@ const SIGApplication = ({ state, actions, libraries }) => {
       ],
     });
 
-    if (!isValid) return null;
+    if (!isValid) {
+      // ⬇️ display error msg if form is not valid inputs | missing inputs
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Please fill all mandatory fields`,
+          image: "Error",
+        },
+      });
+
+      return null;
+    }
 
     try {
       setFetching(true);
@@ -1160,7 +1173,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 type="file"
                 className="form-control input"
                 placeholder="CV Document"
-                accept=".pdf,.doc,.docx"
+                // accept=".pdf,.doc,.docx"
               />
               <FormError id="sky_cvurl" />
             </div>
@@ -1233,7 +1246,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.sig_bad_qualifications && (
             <div>
-              <label className="required form-label">Qualifications</label>
+              <label className="form-label">Qualifications</label>
               <input
                 name="bad_qualifications"
                 value={formData.bad_qualifications}
@@ -1242,7 +1255,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 className="form-control input"
                 placeholder="Qualifications"
               />
-              <FormError id="bad_qualifications" />
             </div>
           )}
 
@@ -1311,6 +1323,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                   Working outside the UK
                 </option>
               </Form.Select>
+              <FormError id="py3_whatukbasedroleareyou" />
             </div>
           )}
 
@@ -1332,6 +1345,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 <option value="Nails">Nails</option>
                 <option value="Both">Both</option>
               </Form.Select>
+              <FormError id="py3_speciality" />
             </div>
           )}
 
