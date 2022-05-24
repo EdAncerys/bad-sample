@@ -15,11 +15,14 @@ const BlocksPage = ({ state }) => {
   const wpBlocks = page.acf.blocks;
   // console.log("page data: ", page); // debug
 
+  // 📌 if env is dev, show the blocks.
+  if (state.auth.ENVIRONMENT !== "DEVELOPMENT") return null;
+
   return (
     <div>
       <div>
         <div className="primary-title" style={styles.title}>
-          BLOCK BUILDER 😈{" "}
+          BLOCK BUILDER 😈
         </div>
 
         <BlockWrapper>
