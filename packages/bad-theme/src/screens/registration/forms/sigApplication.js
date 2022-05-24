@@ -1173,7 +1173,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 type="file"
                 className="form-control input"
                 placeholder="CV Document"
-                // accept=".pdf,.doc,.docx"
+                accept=".pdf,.doc,.docx"
               />
               <FormError id="sky_cvurl" />
             </div>
