@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import BlockWrapper from "./blockWrapper";
@@ -11,18 +11,16 @@ import TypeFilters from "./typeFilters";
 import CloseIcon from "@mui/icons-material/Close";
 // CONTEXT ---------------------------------------------------------------
 import {
-  useAppDispatch,
   useAppState,
   muiQuery,
-  setIdFilterAction,
   getGuidelinesTypes,
   getGuidelinesData,
 } from "../context";
 
-const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
-  const { sm, md, lg, xl } = muiQuery();
+const GuidelinesAndStandards = ({ state, block }) => {
+  const { lg } = muiQuery();
 
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const { idFilter } = useAppState();
 
   const searchFilterRef = useRef(null);
@@ -38,7 +36,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
   if (!block) return <Loading />;
 
-  const { disable_vertical_padding, background_colour } = block;
+  const { background_colour } = block;
 
   const marginHorizontal = state.theme.marginHorizontal;
 
@@ -105,7 +103,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
         if (list.includes(typeFilterRef.current)) return item;
       });
 
-    if (!!input) {
+    if (input) {
       const INPUT = input.toLowerCase();
       filter = filter.filter((item) => {
         let title = item.title.rendered;
@@ -185,7 +183,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
 
   // SERVERS --------------------------------------------------------
   const ServeType = () => {
-    if (!guidelinesType || lg) return null; // hide type filters if mobile
+    if (!guidelinesType) return null; // hide type filters if mobile
 
     return (
       <div style={{ padding: `1em ${marginHorizontal}px` }}>
@@ -200,7 +198,7 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
   };
 
   const ServeFilter = () => {
-    if (lg) return null; // hide filters on mobile
+    // if (lg) return null; // hide filters on mobile
 
     const ServeSearchFilter = () => {
       if (!searchFilter) return null;
@@ -281,8 +279,5 @@ const GuidelinesAndStandards = ({ state, actions, libraries, block }) => {
   );
 };
 
-const styles = {
-  container: {},
-};
 
 export default connect(GuidelinesAndStandards);
