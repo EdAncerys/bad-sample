@@ -84,7 +84,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
   const handleContactFormSubmit = async () => {
     // check if formData is valid
     const recipients = enquireAction.recipients;
-    console.log("ENQUIREACTION", enquireAction);
     console.log(formData);
     try {
       setIsFetching(true);
@@ -98,9 +97,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
         template: enquireAction.emailTemplate, // email default template
       });
       if (!response) throw new Error("Error sending email");
-      console.log("RESPONSE", response);
     } catch (error) {
-      console.log("HIT ERROR", error);
       // console.log(error);
       setErrorAction({
         dispatch,

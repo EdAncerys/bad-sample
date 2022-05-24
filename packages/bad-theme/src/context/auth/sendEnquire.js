@@ -11,7 +11,7 @@ export const sendEmailEnquireAction = async ({
   template,
 }) => {
   // console.log("enquireAction triggered");
-
+  console.log("DATA", formData)
   setFetchAction({ dispatch, isFetching: true });
   const path = state.auth.APP_HOST + `/email`;
 
@@ -32,7 +32,7 @@ export const sendEmailEnquireAction = async ({
     // append recipientsList to formData
     formData.recipientsList = recipientsList;
     formData.subject = subject;
-
+   
     const form = new FormData(); // create form object to sent email content & attachments
     form.append("template", template || "Placeholder"); // default email template
     form.append("email", recipientsList);
@@ -80,7 +80,7 @@ export const sendEmailEnquireAction = async ({
     //   console.log(response); // debug
     // }
   } catch (error) {
-    console.log("error", error);
+    console.log("error sending enquiry", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
     setEnquireAction({ dispatch, enquireAction: null });

@@ -388,6 +388,8 @@ const Video = ({ state, actions, libraries }) => {
         contact_public_email: "comms@bag.org.uk",
         message: true,
         allow_attachments: true,
+        full_name: true,
+          email_address:true,
         recipients: [
           {
             email: "dominik@skylarkcreative.co.uk",
