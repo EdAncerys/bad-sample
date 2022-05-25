@@ -100,6 +100,7 @@ const Card = ({
   animationType,
   isElectionBlock,
   electionTaxonomy,
+  authLink,
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
@@ -126,41 +127,7 @@ const Card = ({
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
 
-  const [authLink, setAuthLink] = useState(null);
   const [isFetching, setFetching] = useState(null);
-  const useEffectRef = useRef(null);
-
-  useEffect(async () => {
-    if (!rssFeedLink) return null;
-
-    const { link, doi } = rssFeedLink;
-    let authLink = link;
-
-    try {
-      setFetching(true);
-
-      // ⏬⏬  validate auth link for users via wiley ⏬⏬
-      // get auth link to wiley if user is BAD member & logged in
-      if (isActiveUser) {
-        const wileyLink = await getWileyAction({
-          state,
-          dispatch,
-          doi,
-          isActiveUser,
-        });
-        if (wileyLink) authLink = wileyLink;
-      }
-    } catch (error) {
-      // console.log(error);
-    } finally {
-      setAuthLink(authLink); // set auth link via wiley
-      setFetching(false);
-    }
-
-    return () => {
-      useEffectRef.current = false; // clean up function
-    };
-  }, [isActiveUser]);
 
   // HANDLERS ---------------------------------------------
   const handelLogin = () => {
@@ -281,16 +248,19 @@ const Card = ({
       const video_url = videoArchive.acf.video;
       const reg = /\d+/g;
       const videoId = video_url.match(reg);
-      console.log(videoId)
-      const videoAttempt = await fetch(`https://api.vimeo.com/videos/${videoId[0]}/pictures`,{
-        headers: {
-          Authorization: 'Bearer db13ac258b5ad7de0926f8fbe7b893a7',
-          'Content-Type': "application/json"
-        }});
-        if(videoAttempt.ok){
-          const jsonka = await videoAttempt.json();
-          setVimeoCover(jsonka.data[0].base_link);
+      const videoAttempt = await fetch(
+        `https://api.vimeo.com/videos/${videoId[0]}/pictures`,
+        {
+          headers: {
+            Authorization: "Bearer db13ac258b5ad7de0926f8fbe7b893a7",
+            "Content-Type": "application/json",
+          },
         }
+      );
+      if (videoAttempt.ok) {
+        const jsonka = await videoAttempt.json();
+        setVimeoCover(jsonka.data[0].base_link);
+      }
       // const path = `https://vimeo.com/api/v2/video/${videoId[0]}.json`;
       // const fetchVideoData = await fetchDataHandler({ path, state });
 
@@ -417,6 +387,7 @@ const Card = ({
           ? MIN_CARD_HEIGHT
           : CARD_HEIGHT,
       }}
+      // card action handler
       onClick={onClickHandler}
       data-aos={videoArchive ? "none" : animationType || "fade"}
       data-aos-delay={`${delay * 50}`}

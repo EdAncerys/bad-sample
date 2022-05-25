@@ -115,6 +115,9 @@ import {
   getBJDFeedAction,
   getCEDFeedAction,
   getSHDFeedAction,
+  setBJDFeedAction,
+  setCEDFeedAction,
+  setSHDFeedAction,
 } from "./auth/rssFeed";
 import { useIsMounted } from "../helpers/useIsMounted";
 import { errorHandler } from "../helpers/errorHandler";
@@ -159,6 +162,9 @@ export {
   getBJDFeedAction,
   getCEDFeedAction,
   getSHDFeedAction,
+  setBJDFeedAction,
+  setCEDFeedAction,
+  setSHDFeedAction,
   setApplicationDataAction,
   setUserStoreAction,
   getUserStoreAction,
