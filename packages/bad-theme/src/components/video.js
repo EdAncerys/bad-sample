@@ -39,7 +39,7 @@ const Video = ({ state, actions, libraries }) => {
   const queryParams = new Proxy(new URLSearchParams(window.location.search), {
     get: (searchParams, prop) => searchParams.get(prop),
   });
-
+  // test
   let isSagepay = queryParams.sagepay;
   const handlePaymentModal = (url) => {
     console.log("PM URL", url);
@@ -64,6 +64,7 @@ const Video = ({ state, actions, libraries }) => {
     const all_videos = state.source.videos;
     const videos_list = await Object.values(all_videos);
     const related_videos_to_show = videos_list.slice(0, 3);
+    console.log("ACTIVE USER", isActiveUser);
 
     if (isSagepay) {
       setErrorAction({
@@ -96,10 +97,10 @@ const Video = ({ state, actions, libraries }) => {
       const fetching = await fetchDataHandler({
         path: url,
         state,
-        isCORSHeaders: true,
-        disableCookies: true,
+        // isCORSHeaders: true,
+        // disableCookies: true,
       });
-
+      console.log("FETCHING", fetching);
       if (fetching.ok) {
         const json = await fetching.json();
         console.log("JSON", json);
@@ -130,18 +131,15 @@ const Video = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
 
   const handlePayment = async () => {
-    const cookie = handleGetCookie({ name: `BAD-WebApp` });
-    const { contactid } = cookie;
-
     const sagepay_url =
       state.auth.ENVIRONMENT === "PRODUCTION"
-        ? "sagepay/live/video"
+        ? "sagepay/live/video/"
         : "/sagepay/test/video/";
     const uappUrl = state.auth.APP_URL;
     const url =
       state.auth.APP_HOST +
       sagepay_url +
-      contactid +
+      isActiveUser.contactid +
       "/" +
       post.acf.event_id +
       "/" +
