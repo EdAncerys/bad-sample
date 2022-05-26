@@ -156,8 +156,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
     const handleSetFormData = ({ data, name }) => {
       let value = data.value;
-      // validate gender input field if name is py3_gender & value = 1 replace with ''
-      if (name === "py3_gender" && value === 1) value = "";
 
       setFormData((prevFormData) => ({
         ...prevFormData,
@@ -187,6 +185,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         if (data.name === item) {
           handleSetFormData({ data, name: item });
         }
+
         // if bad_currentpost is null then set value from user profile data
         if (!data.bad_currentpost) {
           setFormData((prevFormData) => ({
@@ -197,12 +196,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
           setJobEditable(false);
         }
       });
-      // incoment to set gender list from app blob data
-      // set gender from picklist from app data
-      // if (data.name === "py3_gender") {
-      //   let list = data.info.Choices;
-      //   setGenderList(list);
-      // }
 
       // set hospital id if exists
       if (data.name === "py3_hospitalid") {

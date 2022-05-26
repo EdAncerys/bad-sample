@@ -155,8 +155,6 @@ const Video = ({ state, actions, libraries }) => {
       path: url,
       method: "POST",
       state,
-      isCORSHeaders: true,
-      disableCookies: true,
     });
 
     if (fetchVendorId.ok) {
