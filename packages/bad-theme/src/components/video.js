@@ -39,7 +39,8 @@ const Video = ({ state, actions, libraries }) => {
   const queryParams = new Proxy(new URLSearchParams(window.location.search), {
     get: (searchParams, prop) => searchParams.get(prop),
   });
-
+  // test
+  console.log("ACTIVE USER", isActiveUser);
   let isSagepay = queryParams.sagepay;
   const handlePaymentModal = (url) => {
     console.log("PM URL", url);
