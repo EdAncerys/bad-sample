@@ -8,7 +8,6 @@ import Image from "@frontity/components/image";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import LockIcon from "@mui/icons-material/Lock";
 import defaultCover from "../img/png/video_default.jpg";
-import { handleGetCookie } from "../helpers/cookie";
 import PaymentModal from "./dashboard/paymentModal";
 
 import date from "date-and-time";
@@ -39,7 +38,7 @@ const Video = ({ state, actions, libraries }) => {
   const queryParams = new Proxy(new URLSearchParams(window.location.search), {
     get: (searchParams, prop) => searchParams.get(prop),
   });
-  // test
+
   let isSagepay = queryParams.sagepay;
   const handlePaymentModal = (url) => {
     console.log("PM URL", url);
@@ -64,7 +63,6 @@ const Video = ({ state, actions, libraries }) => {
     const all_videos = state.source.videos;
     const videos_list = await Object.values(all_videos);
     const related_videos_to_show = videos_list.slice(0, 3);
-    console.log("ACTIVE USER", isActiveUser);
 
     if (isSagepay) {
       setErrorAction({
@@ -133,7 +131,7 @@ const Video = ({ state, actions, libraries }) => {
   const handlePayment = async () => {
     const sagepay_url =
       state.auth.ENVIRONMENT === "PRODUCTION"
-        ? "sagepay/live/video/"
+        ? "/sagepay/live/video/"
         : "/sagepay/test/video/";
     const uappUrl = state.auth.APP_URL;
     const url =
@@ -153,6 +151,8 @@ const Video = ({ state, actions, libraries }) => {
       path: url,
       method: "POST",
       state,
+      // isCORSHeaders: true,
+      // disableCookies: true,
     });
 
     if (fetchVendorId.ok) {
