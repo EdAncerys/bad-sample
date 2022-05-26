@@ -40,7 +40,6 @@ const Video = ({ state, actions, libraries }) => {
     get: (searchParams, prop) => searchParams.get(prop),
   });
   // test
-  console.log("ACTIVE USER", isActiveUser);
   let isSagepay = queryParams.sagepay;
   const handlePaymentModal = (url) => {
     console.log("PM URL", url);
@@ -65,6 +64,7 @@ const Video = ({ state, actions, libraries }) => {
     const all_videos = state.source.videos;
     const videos_list = await Object.values(all_videos);
     const related_videos_to_show = videos_list.slice(0, 3);
+    console.log("ACTIVE USER", isActiveUser);
 
     if (isSagepay) {
       setErrorAction({
