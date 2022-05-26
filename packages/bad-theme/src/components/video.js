@@ -97,10 +97,10 @@ const Video = ({ state, actions, libraries }) => {
       const fetching = await fetchDataHandler({
         path: url,
         state,
-        isCORSHeaders: true,
-        disableCookies: true,
+        // isCORSHeaders: true,
+        // disableCookies: true,
       });
-
+      console.log("FETCHING", fetching);
       if (fetching.ok) {
         const json = await fetching.json();
         console.log("JSON", json);
@@ -132,7 +132,7 @@ const Video = ({ state, actions, libraries }) => {
   const handlePayment = async () => {
     const sagepay_url =
       state.auth.ENVIRONMENT === "PRODUCTION"
-        ? "sagepay/live/video"
+        ? "sagepay/live/video/"
         : "/sagepay/test/video/";
     const uappUrl = state.auth.APP_URL;
     const url =
@@ -152,8 +152,8 @@ const Video = ({ state, actions, libraries }) => {
       path: url,
       method: "POST",
       state,
-      isCORSHeaders: true,
-      disableCookies: true,
+      // isCORSHeaders: true,
+      // disableCookies: true,
     });
 
     if (fetchVendorId.ok) {
