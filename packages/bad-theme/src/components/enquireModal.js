@@ -101,18 +101,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
         template: enquireAction.emailTemplate, // email default template
         isActiveUser,
       });
-      if (!response) throw new Error("Error sending email");
-    } catch (error) {
-      // console.log(error);
-      setErrorAction({
-        dispatch,
-        isError: {
-          message: `Failed to send message. Please try again.`,
-          image: "Error",
-        },
-      });
-    } finally {
-      setIsFetching(false);
 
       if (!response) throw new Error("Error sending email");
       // sucsess error messages to user
