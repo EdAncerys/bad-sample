@@ -189,6 +189,10 @@ const HeaderActions = ({ state, actions, libraries }) => {
     console.log("🐞 APP_HOST ", state.auth.APP_HOST);
     console.log("🐞 APP_URL ", state.auth.APP_URL);
     console.log("🐞 ENVIRONMENT ", state.auth.ENVIRONMENT);
+    console.log(
+      "🐞 DEFAULT_CONTACT_LIST ",
+      state.contactList.DEFAULT_CONTACT_LIST
+    );
   };
   // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
 

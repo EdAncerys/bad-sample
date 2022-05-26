@@ -1,5 +1,5 @@
 // CONTEXT ------------------------------------------------------------------
-import { setFetchAction, setEnquireAction} from "../index";
+import { setFetchAction, setEnquireAction } from "../index";
 
 export const sendEmailEnquireAction = async ({
   state,
@@ -18,7 +18,7 @@ export const sendEmailEnquireAction = async ({
 
   try {
     if (!recipients) throw new Error("No Recipients Provided");
-    console.log(recipients)
+    console.log(recipients);
     let recipientsArray = [];
     recipients.map((item) => {
       recipientsArray.push(item.email);
@@ -42,7 +42,6 @@ export const sendEmailEnquireAction = async ({
     formData.bad_memberid = formData.bad_memberid || "";
     formData.emailaddress1 = formData.emailaddress1 || "";
     formData.mobilephone = formData.mobilephone || "";
-    formData.subject = subject;
     formData.subject_dropdown_options = formData.subject_dropdown_options || "";
     formData.message = formData.message || "";
 
@@ -61,8 +60,6 @@ export const sendEmailEnquireAction = async ({
       formData.mobilephone = formData.mobilephone || isActiveUser.mobilephone;
     }
 
-    console.log("🐞 formData", formData); // debug
-
     const form = new FormData(); // create form object to sent email content & attachments
     form.append("template", template || "BADEnquiryForm"); // default email template
     form.append("email", recipientsList);
@@ -79,11 +76,11 @@ export const sendEmailEnquireAction = async ({
       body: form,
       credentials: "include",
     };
-    console.log("REQUEST", requestOptions)
+    console.log("REQUEST", requestOptions);
     const respose = await fetch(path, requestOptions);
-    console.log("RESPONSE", respose)
+    console.log("RESPONSE", respose);
     const data = await respose.json();
-    console.log("EMAIL DATA", data)
+    console.log("EMAIL DATA", data);
     if (data.success) {
       return data;
     } else {

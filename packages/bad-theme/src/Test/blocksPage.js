@@ -8,6 +8,7 @@ import BlockWrapper from "../components/blockWrapper";
 import Wiley from "../components/authentication/wiley";
 import Sagepay from "../components/authentication/sagepay";
 import OCP from "../components/authentication/ocp";
+import ButtonsRow from "../components/buttonsRow";
 
 const BlocksPage = ({ state }) => {
   const data = state.source.get(state.router.link);
@@ -29,10 +30,30 @@ const BlocksPage = ({ state }) => {
           {/* <Wiley /> */}
           {/* <Sagepay /> */}
           {/* <OCP /> */}
+          {/* <ButtonsRow
+            block={{
+              buttons: [
+                {
+                  contact_form: true,
+                  full_name: true,
+                  email_address: true,
+                  phone_number: true,
+                  subject: true,
+                  subject_dropdown_options: { 1: "a", 2: "b", 3: "c" },
+                  isHospitalChange: true,
+                  job_title: true,
+                  message: true,
+                  allow_attachments: true,
+
+                  title: "Visit The BJD Website",
+                },
+              ],
+            }}
+          /> */}
         </BlockWrapper>
       </div>
 
-      <BlockBuilder blocks={wpBlocks} />
+      <BlockBuilder blocks={wpBlocks} block={{ facebook_link: "" }} />
     </div>
   );
 };

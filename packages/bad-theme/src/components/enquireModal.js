@@ -32,7 +32,6 @@ const EnquireModal = ({ state, actions, libraries }) => {
     jobtitle: "",
     bad_memberid: "",
     emailaddress1: "",
-    var1: "",
     mobilephone: "",
     subject: "",
     subject_dropdown_options: "",
@@ -53,7 +52,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
       ...prevFormData,
       ["jobtitle"]: isActiveUser.jobtitle || "",
       ["fullname"]: isActiveUser.fullname || "",
-      ["var1"]: isActiveUser.emailaddress1 || "",
+      ["emailaddress1"]: isActiveUser.emailaddress1 || "",
       ["mobilephone"]: isActiveUser.mobilephone || "",
       ["currentHospitalName"]:
         isActiveUser[
@@ -84,8 +83,11 @@ const EnquireModal = ({ state, actions, libraries }) => {
   const handleContactFormSubmit = async () => {
     // check if formData is valid
     const recipients = enquireAction.recipients;
-    console.log("ENQUIRE ACTION", enquireAction); // debug
-    console.log("formData", formData);
+
+    // default change of hospital value to input if exists value is empty
+    const changeOfHospitalInput = hospitalSearchRef.current.value || "";
+    formData.hospitalChangeName =
+      formData.hospitalChangeName || changeOfHospitalInput;
 
     try {
       setIsFetching(true);
@@ -99,21 +101,9 @@ const EnquireModal = ({ state, actions, libraries }) => {
         template: enquireAction.emailTemplate, // email default template
         isActiveUser,
       });
-      if (!response) throw new Error("Error sending email");
-      console.log("RESPONSE", response);
-    } catch (error) {
-      console.log("HIT ERROR", error);
-      // console.log(error);
-      setErrorAction({
-        dispatch,
-        isError: {
-          message: `Failed to send message. Please try again.`,
-          image: "Error",
-        },
-      });
-    } finally {
-      setIsFetching(false);
 
+      if (!response) throw new Error("Error sending email");
+      // sucsess error messages to user
       if (enquireAction.isHospitalChange) {
         setErrorAction({
           dispatch,
@@ -140,6 +130,17 @@ const EnquireModal = ({ state, actions, libraries }) => {
           message: `Your have successfully submitted your enquiry. We will be in touch soon.`,
         },
       });
+    } catch (error) {
+      // console.log(error);
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Failed to send message. Please try again.`,
+          image: "Error",
+        },
+      });
+    } finally {
+      setIsFetching(false);
     }
   };
 
@@ -152,6 +153,8 @@ const EnquireModal = ({ state, actions, libraries }) => {
       dispatch,
       input,
     });
+    // break if no data returned
+    if (!hospitalData) return;
     // refactor hospital data to match dropdown format
     hospitalData = hospitalData.map((hospital) => {
       return {
@@ -333,8 +336,8 @@ const EnquireModal = ({ state, actions, libraries }) => {
               <div style={styles.inputContainer}>
                 <label className="form-label">Email Address</label>
                 <input
-                  name="var1"
-                  value={formData.var1}
+                  name="emailaddress1"
+                  value={formData.emailaddress1}
                   onChange={handleChange}
                   type="email"
                   className="form-control"
