@@ -96,10 +96,10 @@ const Video = ({ state, actions, libraries }) => {
       const fetching = await fetchDataHandler({
         path: url,
         state,
-        isCORSHeaders: true,
-        disableCookies: true,
+        // isCORSHeaders: true,
+        // disableCookies: true,
       });
-
+      console.log("FETCHING", fetching);
       if (fetching.ok) {
         const json = await fetching.json();
         console.log("JSON", json);
@@ -130,18 +130,15 @@ const Video = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
 
   const handlePayment = async () => {
-    const cookie = handleGetCookie({ name: `BAD-WebApp` });
-    const { contactid } = cookie;
-
     const sagepay_url =
       state.auth.ENVIRONMENT === "PRODUCTION"
-        ? "sagepay/live/video"
+        ? "sagepay/live/video/"
         : "/sagepay/test/video/";
     const uappUrl = state.auth.APP_URL;
     const url =
       state.auth.APP_HOST +
       sagepay_url +
-      contactid +
+      isActiveUser.contactid +
       "/" +
       post.acf.event_id +
       "/" +
@@ -155,8 +152,8 @@ const Video = ({ state, actions, libraries }) => {
       path: url,
       method: "POST",
       state,
-      isCORSHeaders: true,
-      disableCookies: true,
+      // isCORSHeaders: true,
+      // disableCookies: true,
     });
 
     if (fetchVendorId.ok) {

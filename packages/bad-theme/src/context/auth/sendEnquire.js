@@ -12,7 +12,7 @@ export const sendEmailEnquireAction = async ({
   isActiveUser,
 }) => {
   // console.log("enquireAction triggered");
-
+  console.log("DATA", formData);
   setFetchAction({ dispatch, isFetching: true });
   const path = state.auth.APP_HOST + `/email`;
 
@@ -107,7 +107,7 @@ export const sendEmailEnquireAction = async ({
     //   console.log(response); // debug
     // }
   } catch (error) {
-    console.log("error", error);
+    console.log("error sending enquiry", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
     setEnquireAction({ dispatch, enquireAction: null });
