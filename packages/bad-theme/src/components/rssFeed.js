@@ -18,6 +18,10 @@ import {
   getCEDFeedAction,
   getSHDFeedAction,
   muiQuery,
+  getWileyAction,
+  setBJDFeedAction,
+  setCEDFeedAction,
+  setSHDFeedAction,
 } from "../context";
 
 const RSSFeed = ({ state, actions, libraries, block }) => {
@@ -26,7 +30,7 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
-  const { bjdFeed, cedFeed, shdFeed } = useAppState();
+  const { bjdFeed, cedFeed, shdFeed, isActiveUser } = useAppState();
 
   const incrementor = 12;
 
@@ -68,17 +72,45 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
     const postLimit = post_limit || incrementor;
     let data = null;
 
-    if (isBJD) data = await getBJDFeedAction({ state, dispatch });
-    if (isCED) data = await getCEDFeedAction({ state, dispatch });
-    if (isSHD) data = await getSHDFeedAction({ state, dispatch });
+    try {
+      if (isBJD) data = await getBJDFeedAction({ state, dispatch });
+      if (isCED) data = await getCEDFeedAction({ state, dispatch });
+      if (isSHD) data = await getSHDFeedAction({ state, dispatch });
 
-    if (!data) return;
-    setFeedData(data.slice(0, Number(postLimit))); // apply limit on posts
+      if (!data) return;
+
+      if (isActiveUser) {
+        // map through data and replace link with wileys link for logged in users
+        data = data.map(async (item) => {
+          const doi = item["prism:doi"];
+          // if no doi, return item
+          if (!doi) return item;
+
+          const wileyLink = await getWileyAction({
+            state,
+            dispatch,
+            doi,
+            isActiveUser,
+          });
+          return { ...item, link: wileyLink };
+        });
+        data = await Promise.all(data);
+
+        // replace feed data with new data with wiley links for logged in users in app context
+        if (isBJD) setBJDFeedAction({ dispatch, bjdFeed: data });
+        if (isCED) setCEDFeedAction({ dispatch, cedFeed: data });
+        if (isSHD) setSHDFeedAction({ dispatch, shdFeed: data });
+      }
+
+      setFeedData(data.slice(0, Number(postLimit))); // apply limit on posts
+    } catch (error) {
+      console.log(error);
+    }
 
     return () => {
       searchFilterRef.current = false; // clean up function
     };
-  }, []);
+  }, [isActiveUser]);
 
   if (!feedData) return <Loading />;
 
@@ -216,7 +248,9 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
               title={title}
               publicationDate={pubDate}
               link_label="Read More"
+              // rss feed link props
               rssFeedLink={{ link, doi }}
+              authLink={link}
               colour={colour}
               titleLimit={6}
               cardMinHeight={280}

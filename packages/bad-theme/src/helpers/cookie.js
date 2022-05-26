@@ -16,6 +16,7 @@ export const handleSetCookie = ({ name, value, days, deleteCookie }) => {
 
 export const handleGetCookie = ({ name }) => {
   // console.log("handleGetCookie triggered");
+  if (!name) return null;
 
-  Cookies.get(name);
+  return Cookies.get(name);
 };

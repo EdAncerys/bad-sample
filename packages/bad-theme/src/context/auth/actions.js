@@ -52,11 +52,11 @@ export const loginAction = async ({ state }) => {
       state.auth.B2C +
       `${redirectPath}&scope=openid&response_type=id_token&prompt=${action}`;
     const urlPath = state.router.link;
-    console.log("LOGIN path + REDIRECT", redirectPath);
-    // get current url path and store in cookieValue
-    handleSetCookie({ name: "loginPath", value: urlPath });
 
-    // redirect to B2C auth set window location to login page
+    // get current url path and store in cookieValue for redirects after login
+    handleSetCookie({ name: "badLoginPath", value: urlPath });
+
+    // 📌 redirect to B2C auth set window location to login page
     window.location.href = url;
   } catch (error) {
     // console.log("loginAction error", error);
@@ -175,15 +175,16 @@ export const getUserDataByContactId = async ({
   // console.log("getUserDataByContactId triggered");
 
   // ⬇️ development env default login action ⬇️
-  if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
-    console.log("🐞 ALTERED USER DATA");
-    // contactid = "cc9a332a-3672-ec11-8943-000d3a43c136"; // andy testing account
-    // contactid = "84590b32-9490-ec11-b400-000d3a22037e"; // mandy
-    // contactid = "0786df85-618f-ec11-b400-000d3a22037e"; // Chris
-    // contactid = "89bb168e-5dc1-ec11-983f-000d3aae25bf"; // NEW USER
-    // contactid = "a167c3ee-ba93-e711-80f5-3863bb351f50"; // membership
-    contactid = "969ba377-a398-ec11-b400-000d3aaedef5"; // emelia
-  }
+  // incoment to override default login action for user prefetch data
+  // if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
+  //   console.log("🐞 ALTERED USER DATA");
+  //   // contactid = "cc9a332a-3672-ec11-8943-000d3a43c136"; // andy testing account
+  //   // contactid = "84590b32-9490-ec11-b400-000d3a22037e"; // mandy
+  //   // contactid = "0786df85-618f-ec11-b400-000d3a22037e"; // Chris
+  //   // contactid = "89bb168e-5dc1-ec11-983f-000d3aae25bf"; // NEW USER
+  //   // contactid = "a167c3ee-ba93-e711-80f5-3863bb351f50"; // membership
+  //   // contactid = "969ba377-a398-ec11-b400-000d3aaedef5"; // emelia
+  // }
 
   const path = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
 
@@ -214,14 +215,6 @@ export const getUserDataByContactId = async ({
 
 export const getUserDataByEmail = async ({ state, dispatch, email }) => {
   // console.log("getUserDataByEmail triggered");
-
-  // ⬇️ development env default login action ⬇️
-  if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
-    console.log("🐞 ALTERED USER DATA");
-
-    // email = "milliegatley@gmail.com"; // emelia
-    // email = "chris@skylarkcreative.co.uk"; // chris
-  }
 
   const path =
     state.auth.APP_HOST +
@@ -297,6 +290,7 @@ export const logoutAction = async ({ state, actions, dispatch }) => {
   handleSetCookie({ name: state.auth.COOKIE_NAME, deleteCookie: true });
   handleSetCookie({ name: state.auth.AUTH_COOKIE, deleteCookie: true });
   handleSetCookie({ name: "vuid", deleteCookie: true }); // 🍪 remove vuid cookie
+  handleSetCookie({ name: "badLoginPath", deleteCookie: true }); // 🍪 remove vuid cookie
   await handleRemoveServerSideCookie({ state });
 
   // reddirect user to home page

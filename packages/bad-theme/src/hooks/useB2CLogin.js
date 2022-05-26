@@ -34,7 +34,7 @@ export const useB2CLogin = ({ state, actions }) => {
     if (isWindow) {
       const hash = isWindow.location.hash;
       // get redirect url from cookie
-      const redirectUrl = handleGetCookie({ name: "loginPath" });
+      const redirectUrl = handleGetCookie({ name: "badLoginPath" });
 
       if (hash) setHash(hash);
       if (!hash && urlPath.includes("codecollect")) {
@@ -92,15 +92,13 @@ export const useB2CLogin = ({ state, actions }) => {
       console.log(error);
     } finally {
       // get redirect url from cookie
-      const redirectUrl = handleGetCookie({ name: "loginPath" });
-      // console.log("🐞 redirectUrl ", redirectUrl);
+      const redirectUrl = handleGetCookie({ name: "badLoginPath" });
+      console.log("🐞 redirectUrl ", redirectUrl); // debug
 
       // ⬇️ redirect to url with path ⬇️
       setGoToAction({ state, path: redirectUrl || "/", actions });
       // set placeholder to false
       setPlaceholderAction({ dispatch, isPlaceholder: false });
-      // delate redirect cookie to prevent redirect loop
-      handleSetCookie({ name: "loginPath", deleteCookie: true });
     }
 
     return () => {

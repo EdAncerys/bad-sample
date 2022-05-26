@@ -32,8 +32,6 @@ function AlterAccordion({
     return <div onClick={decoratedOnClick}>{children}</div>;
   }
 
-  console.log("🐞 block", block);
-
   if (!block) return <Loading />;
   const { lg } = muiQuery();
   const { dynamicsApps } = useAppState();

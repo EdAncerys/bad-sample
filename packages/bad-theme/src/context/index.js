@@ -3,7 +3,7 @@ import { handleSortFilter } from "../helpers/eventSortFilter";
 import { hasPermisionLevel } from "../helpers/permitionLevel";
 import { setAuthenticationCookieAction } from "../helpers/setAuthenticationCookie";
 import { AppProvider, useAppDispatch, useAppState } from "./context";
-import { handleSetCookie } from "../helpers/cookie";
+import { handleSetCookie, handleGetCookie } from "../helpers/cookie";
 import { handleUpdateMembershipApplication } from "../helpers/handleUpdateMembershipApplication";
 import {
   setGoToAction,
@@ -43,6 +43,7 @@ import {
   getUserDataByContactId,
   getUserDataByEmail,
   getUserDataFromDynamics,
+  handleRemoveServerSideCookie,
 } from "./auth/actions";
 import { sendEmailEnquireAction } from "./auth/sendEnquire";
 import { getGenderAction } from "./auth/getGender";
@@ -114,6 +115,9 @@ import {
   getBJDFeedAction,
   getCEDFeedAction,
   getSHDFeedAction,
+  setBJDFeedAction,
+  setCEDFeedAction,
+  setSHDFeedAction,
 } from "./auth/rssFeed";
 import { useIsMounted } from "../helpers/useIsMounted";
 import { errorHandler } from "../helpers/errorHandler";
@@ -158,6 +162,9 @@ export {
   getBJDFeedAction,
   getCEDFeedAction,
   getSHDFeedAction,
+  setBJDFeedAction,
+  setCEDFeedAction,
+  setSHDFeedAction,
   setApplicationDataAction,
   setUserStoreAction,
   getUserStoreAction,
@@ -234,8 +241,10 @@ export {
   fetchDataHandler,
   setAuthenticationCookieAction,
   handleSetCookie,
+  handleGetCookie,
   handleUpdateMembershipApplication,
   hasPermisionLevel,
   getGenderAction,
   getCountryList,
+  handleRemoveServerSideCookie,
 };

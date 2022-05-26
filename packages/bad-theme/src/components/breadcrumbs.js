@@ -148,7 +148,7 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
   if (data.isError) return null;
   if (urlPath === "/") return null; // disable breadcrumbs in home page
   if (urlPath === "/search/") return null; // disable breadcrumbs in search page
-  console.log("DIRECTIONS", directions);
+
   return (
     <BlockWrapper background={colors.lightSilver}>
       <div className="flex" style={{ ...styles.wrapper }}>

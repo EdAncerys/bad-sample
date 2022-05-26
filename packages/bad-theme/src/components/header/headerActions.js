@@ -33,8 +33,9 @@ import {
   getUserDataByContactId, // TESTING enviroment
   fetchDataHandler, // TESTING enviroment
   handleSetCookie, // TESTING enviroment
+  handleGetCookie, // TESTING enviroment
+  handleRemoveServerSideCookie, // TESTING enviroment
 } from "../../context";
-import { Person } from "@mui/icons-material";
 
 const HeaderActions = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
@@ -182,28 +183,16 @@ const HeaderActions = ({ state, actions, libraries }) => {
       console.log("🐞 data ", data.data);
     }
   };
-  const handleUser = async () => {
-    let path =
-      state.auth.APP_HOST +
-      "/catalogue/data/contacts?$filter=emailaddress1 eq 'chris@skylarkcreative.co.uk'";
-    const response = await fetchDataHandler({ path, state });
-    let data = "response !ok";
-    if (response.ok) data = await response.json();
-    console.log("🐞 ", data);
-  };
+
   const handleCookie = async () => {
     handleSetCookie({ name: "no-cookie", deleteCookie: true }); // to show list of all cookies
     console.log("🐞 APP_HOST ", state.auth.APP_HOST);
     console.log("🐞 APP_URL ", state.auth.APP_URL);
     console.log("🐞 ENVIRONMENT ", state.auth.ENVIRONMENT);
-
-    // const redirectPath = `&redirect_uri=${state.auth.APP_URL}/codecollect`;
-    // let action = "login";
-    // const url =
-    //   state.auth.B2C +
-    //   `${redirectPath}&scope=openid&response_type=id_token&prompt=${action}`;
-    // console.log("🐞 B2C redirect ", redirectPath);
-    // console.log("🐞 B2C redirect ", url);
+    console.log(
+      "🐞 DEFAULT_CONTACT_LIST ",
+      state.contactList.DEFAULT_CONTACT_LIST
+    );
   };
   // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
 
