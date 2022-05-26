@@ -77,8 +77,6 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   useEffect(async () => {
     const handleSetData = ({ data, name }) => {
       let value = data.value;
-      // validate gender input field if name is py3_gender & value = 1 replace with ''
-      if (name === "py3_gender" && value === 1) value = "";
 
       setFormData((prevFormData) => ({
         ...prevFormData,
@@ -125,6 +123,8 @@ const PersonalDetails = ({ state, actions, libraries }) => {
         handleSetData({ data, name: "sky_profilepicture" });
       if (data.name === "py3_dateofbirth")
         handleSetData({ data, name: "py3_dateofbirth" });
+      if (data.name === "py3_gender")
+        handleSetData({ data, name: "py3_gender" });
     });
 
     // ⏬ validate inputs

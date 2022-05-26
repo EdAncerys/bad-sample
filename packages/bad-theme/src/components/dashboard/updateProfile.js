@@ -30,7 +30,6 @@ const UpdateProfile = ({ state, actions, libraries }) => {
     bad_profile_photo_url: "",
     birthdate: "",
     gendercode: "",
-
     py3_ethnicity: "",
   });
   const documentRef = useRef(null);

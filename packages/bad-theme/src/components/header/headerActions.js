@@ -193,6 +193,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
       "🐞 DEFAULT_CONTACT_LIST ",
       state.contactList.DEFAULT_CONTACT_LIST
     );
+    console.log("🐞 isActiveUser ", isActiveUser);
   };
   // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
 
