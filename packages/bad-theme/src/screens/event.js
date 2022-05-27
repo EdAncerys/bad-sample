@@ -96,10 +96,6 @@ const Event = ({ state, actions, libraries }) => {
 
   if (!position) return <Loading />;
 
-  const handleLogin = () => {
-    setErrorAction({ dispatch, isError: null });
-    loginAction({ state });
-  };
   // SERVERS ----------------------------------------------
   const ServeTitle = () => {
     if (!title) return null;
@@ -354,6 +350,7 @@ const Event = ({ state, actions, libraries }) => {
             registerForEvent: title.rendered,
             // default email subject & template name
             emailSubject: `Register for ${title.rendered} event.`,
+            emailOverride: contact_email_override,
           },
         });
         return true;
