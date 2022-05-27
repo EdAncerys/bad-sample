@@ -14,6 +14,7 @@ import {
   muiQuery,
   getEventsData,
   handleSortFilter,
+  getEventGrades,
 } from "../../context";
 
 const EventLoopBlock = ({
@@ -69,6 +70,7 @@ const EventLoopBlock = ({
   useEffect(async () => {
     // let data = state.source.events;
     let events = await getEventsData({ state, page: curentPageRef.current });
+    let grades = await getEventGrades({ state });
     if (!events) return;
 
     curentPageRef.current++;
@@ -110,6 +112,33 @@ const EventLoopBlock = ({
       if (events.lenght <= Number(post_limit)) return null;
       // apply limit to eventList array length if post_limit is set & less than post_limit
       events = events.slice(0, Number(post_limit));
+    }
+
+    if (grade_filter && grades) {
+      // apply grade filter to events list
+      // apply to lower case to all filter title values
+      let filterTitlesToLowerCase = Object.values(grade_filter).map((grade) =>
+        grade.toLowerCase()
+      );
+
+      // get list of grade id that match the filter titles
+      let gradeIds = [];
+      grades.map((grade) => {
+        let gradeTitle = grade.name.toLowerCase();
+        let isIncluded = filterTitlesToLowerCase.includes(gradeTitle);
+        if (isIncluded) gradeIds.push(grade.id);
+      });
+      // console.log("🐞 gradeIds", gradeIds);
+
+      // get events that match the grade ids
+      events = events.filter((event) => {
+        let eventGradeIds = event.event_grade;
+        let isIncluded = eventGradeIds.some((gradeId) =>
+          gradeIds.includes(gradeId)
+        );
+
+        return isIncluded;
+      });
     }
 
     setEventList(events); // set event data
@@ -271,18 +300,6 @@ const EventLoopBlock = ({
         {eventFilter.map((block, key) => {
           const { image, summary, date_time } = block.acf;
           const title = block.title.rendered;
-
-          // ⬇️ show only events that event_grade object have in common gradeFilter
-          /* if (gradeFilter.length > 0) {
-            if (!event_grade) return null;
-            let grade_match = false;
-            event_grade.forEach((grade) => {
-              gradeFilter.forEach((filter) => {
-                if (grade === filter) grade_match = true;
-              });
-            });
-            if (!grade_match) return null;
-          } */
 
           // list view
           if (layoutOne) {
