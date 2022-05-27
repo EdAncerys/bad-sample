@@ -104,7 +104,7 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
 
       setFeedData(data.slice(0, Number(postLimit))); // apply limit on posts
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
 
     return () => {

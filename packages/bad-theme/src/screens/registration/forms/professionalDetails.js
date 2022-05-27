@@ -264,7 +264,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     // 📌 check if isAssociateType to apply mandatory fields
     // const isAssociateType = applicationType.includes("Associate");
 
-    console.log("🐞 formData", formData);
     const isValid = isFormValidated({
       required: [
         "py3_gmcnumber",
@@ -340,7 +339,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
   const handleDocUploadChange = async (e) => {
     let sky_cvurl = e.target.files[0];
-    console.log("🐞 UPLOAD TRIGERED", sky_cvurl);
 
     if (sky_cvurl) {
       sky_cvurl = await sendFileToS3Action({
@@ -351,8 +349,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     } else {
       sky_cvurl = "";
     }
-
-    console.log("sky_cvurl", sky_cvurl); // debug
+    // console.log("sky_cvurl", sky_cvurl); // debug
 
     setFormData((prevFormData) => ({
       ...prevFormData,

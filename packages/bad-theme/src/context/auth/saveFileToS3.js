@@ -2,8 +2,6 @@ import { v4 as uuidv4 } from "uuid";
 import { setFetchAction, fetchDataHandler } from "../index";
 
 export const sendFileToS3Action = async ({ state, dispatch, attachments }) => {
-  console.log("sendFileToS3Action triggered");
-
   setFetchAction({ dispatch, isFetching: true });
   const path = state.auth.APP_HOST + `/s3/profile/image`;
 
@@ -30,8 +28,6 @@ export const sendFileToS3Action = async ({ state, dispatch, attachments }) => {
     const response = await fetch(path, requestOptions);
     const data = await response.json();
     if (data.success) {
-      console.log("🐞 S3 IMAGE URL ", data.data); // debug
-
       return data.data;
     }
   } catch (error) {
@@ -39,28 +35,4 @@ export const sendFileToS3Action = async ({ state, dispatch, attachments }) => {
   } finally {
     setFetchAction({ dispatch, isFetching: false });
   }
-
-  // try {
-  //   const response = await fetchDataHandler({
-  //     path,
-  //     method: "PUT",
-  //     body: form,
-  //     state,
-  //     // 📌 pass headers as multipart/form-data
-  //     headers: {
-  //       "Content-Type": "multipart/form-data;",
-  //       "Content-Type": "application/x-www-form-urlencoded",
-  //       "Content-Type": "application/json; charset=utf-8",
-  //     },
-  //   });
-  //   const data = await response.json();
-
-  //   if (data.success) {
-  //     return data.data;
-  //   }
-  // } catch (error) {
-  //   // console.log("error", error);
-  // } finally {
-  //   setFetchAction({ dispatch, isFetching: false });
-  // }
 };

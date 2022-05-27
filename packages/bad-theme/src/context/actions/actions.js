@@ -17,7 +17,7 @@ export const setGoToAction = async ({
   const pathThree = `https://cdn.bad.org.uk`;
   const wpHost = state.auth.WP_HOST;
   const appUrl = state.auth.APP_URL;
-  console.log("urlPath", urlPath);
+
   if (downloadFile) {
     // ⬇️  download file ⬇️
     const { file } = downloadFile;

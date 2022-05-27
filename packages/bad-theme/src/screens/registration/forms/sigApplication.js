@@ -208,7 +208,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
         let type = data.bad_categorytype;
         if (type === "*") type = "Special Interest Group";
         setType(type); // validate SIG application category type
-        console.log("TYPE", type);
       }
     });
     // apply app additional logic after mapping apps data
@@ -259,7 +258,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
         return 0;
       });
     }
-    console.log("INPUT VALIDATOR", inputValidator);
     // check if application category have only one application
     let isSingleApp = false;
     if (membershipData) isSingleApp = membershipData.length === 1;
@@ -285,7 +283,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
     });
 
     setMembershipData(membershipData); // set membership data
-    console.log("MEM", membershipData);
   }, [state.source.memberships]);
 
   // HANDLERS --------------------------------------------
@@ -357,6 +354,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       if (!formData[input] && inputValidator[inputValue]) {
         errorHandler({ id: `form-error-${input}`, time: 5000 });
         isValid = false;
+        // console.log("🐞 FAILED AUTH", input, formData[input]);
       }
     });
 
@@ -411,7 +409,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
     // check if new hospital value been added
     const isNewHospital = formData.bad_newhospitaladded;
     let sigAppliaction = formData;
-    console.log("SIGAPP", formData);
     // default py3_address1ine1 to ref if value not set by user
     let isAddressInput = false;
     if (!formData.py3_address1ine1 && address1Line1Ref.current.value.length) {
@@ -454,9 +451,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
           : "",
         formData.bad_categorytype === "Full:British Hair and Nails Society"
           ? "py3_whatukbasedroleareyou"
-          : "",
-        formData.bad_categorytype === "Full:DermpathPRO"
-          ? "py3_currentgrade"
           : "",
       ],
     });

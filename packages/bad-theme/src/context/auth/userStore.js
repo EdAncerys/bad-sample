@@ -17,7 +17,7 @@ export const setUserStoreAction = async ({
   data,
   membershipApplication,
 }) => {
-  console.log("setUserStoreAction triggered");
+  // console.log("setUserStoreAction triggered");
 
   if (!isActiveUser) {
     // validate if isActiveUser 🤖
@@ -51,7 +51,6 @@ export const setUserStoreAction = async ({
 
     // throw error if newApplicationRecord is null
     if (!storeApplication) throw new Error("Failed to fetch application");
-    console.log("🐞 storeApplication", storeApplication);
 
     // 🤖 update object with user input data
     const updatedMembershipData = updateMembershipApplication({
@@ -100,11 +99,11 @@ export const getUserStoreAction = async ({ state, isActiveUser, dispatch }) => {
     if (data.success) {
       return data.data;
     } else {
-      console.log("⏬ Membership Record Not Found ⏬");
+      // console.log("⏬ Membership Record Not Found ⏬");
       return null;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
@@ -128,11 +127,11 @@ export const getUserApplicationAction = async ({
       // set application data to context
       setApplicationDataAction({ dispatch, applicationData: data.data });
     } else {
-      console.log("⏬ Membership Record Not Found ⏬");
+      // console.log("⏬ Membership Record Not Found ⏬");
       return null;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
@@ -223,10 +222,10 @@ export const setCompleteUserApplicationAction = async ({
 
       return data;
     } else {
-      console.log("⏬ Failed to Create Membership ⏬");
+      // console.log("⏬ Failed to Create Membership ⏬");
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
@@ -251,14 +250,14 @@ export const updateDynamicsApplicationAction = async ({
     const data = await response.json();
 
     if (data.success) {
-      console.log("⏬ DYNAMICS. Membership Record Successfully Updated ⏬");
+      // console.log("⏬ DYNAMICS. Membership Record Successfully Updated ⏬");
       return data;
     } else {
-      console.log("⏬ DYNAMICS. Failed to Update Membership Record ⏬");
+      // console.log("⏬ DYNAMICS. Failed to Update Membership Record ⏬");
       return null;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
@@ -293,7 +292,7 @@ export const deleteApplicationAction = async ({
     const data = await response.json();
 
     if (data.success) {
-      console.log("⏬ DYNAMICS. Membership Record Successfully Deleted ⏬");
+      // console.log("⏬ DYNAMICS. Membership Record Successfully Deleted ⏬");
       // delete application record from CONTEXT
       setApplicationDataAction({
         dispatch,
@@ -307,11 +306,11 @@ export const deleteApplicationAction = async ({
 
       return data;
     } else {
-      console.log("⏬ DYNAMICS. Failed to Delete Membership Record ⏬");
+      // console.log("⏬ DYNAMICS. Failed to Delete Membership Record ⏬");
       return null;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 

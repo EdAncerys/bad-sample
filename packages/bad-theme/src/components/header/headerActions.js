@@ -146,57 +146,6 @@ const HeaderActions = ({ state, actions, libraries }) => {
     }
   };
 
-  // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
-  const ServeTesting = () => {
-    if (state.auth.ENVIRONMENT !== "DEVELOPMENT") return null;
-
-    return (
-      <div className="flex" style={{ padding: `0 1em` }}>
-        <div
-          className="blue-btn-reverse"
-          style={{ minWidth: "fit-content" }}
-          onClick={handleCheck}
-        >
-          ST
-        </div>
-        <div
-          className="blue-btn-reverse"
-          style={{ minWidth: "fit-content" }}
-          onClick={handleCookie}
-        >
-          🍪
-        </div>
-      </div>
-    );
-  };
-
-  const handleCheck = async () => {
-    let path = state.auth.APP_HOST + "/utils/cookie";
-    const response = await fetchDataHandler({
-      path,
-      state,
-    });
-    let data = "not found";
-    if (response && response.ok) {
-      data = await response.json();
-      console.log("🐞 Auth level ", data.data.level);
-      console.log("🐞 data ", data.data);
-    }
-  };
-
-  const handleCookie = async () => {
-    handleSetCookie({ name: "no-cookie", deleteCookie: true }); // to show list of all cookies
-    console.log("🐞 APP_HOST ", state.auth.APP_HOST);
-    console.log("🐞 APP_URL ", state.auth.APP_URL);
-    console.log("🐞 ENVIRONMENT ", state.auth.ENVIRONMENT);
-    console.log(
-      "🐞 DEFAULT_CONTACT_LIST ",
-      state.contactList.DEFAULT_CONTACT_LIST
-    );
-    console.log("🐞 isActiveUser ", isActiveUser);
-  };
-  // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
-
   const handleLoginAction = async () => {
     // --------------------------------------------------------------------------------
     // 📌  B2C login action
@@ -416,7 +365,6 @@ const HeaderActions = ({ state, actions, libraries }) => {
             <ServeDashboardAction />
             {!lg ? <QuickLinksDropDown /> : null}
             {!lg ? null : <ServeMobileMenuAction />}
-            <ServeTesting />
           </div>
         </div>
       </BlockWrapper>

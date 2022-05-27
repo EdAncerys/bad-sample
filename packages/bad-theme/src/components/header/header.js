@@ -39,7 +39,7 @@ const Header = ({ state, actions }) => {
 
   useEffect(() => {
     const cookie = handleGetCookie({ name: `BAD-cookie-popup` });
-    console.log("Cookie Policie 🍪", cookie);
+    // console.log("Cookie Policie 🍪", cookie);
 
     if (cookie && cookie === "all-cookies") {
       ReactGA.initialize("UA-50027583-1");

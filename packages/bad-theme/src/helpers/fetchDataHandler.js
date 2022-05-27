@@ -15,8 +15,6 @@ export const fetchDataHandler = async ({
   // -----------------------------------------------
   // 📌 CUSTOM FETCH HANDLER
   // -----------------------------------------------
-  console.log("HEADERS", headers);
-  console.log("STATE", state);
   method = method || "GET";
   accept = accept || "application/json";
   if (isCORSHeaders) disableCookies = true; // 📌 disable sending cookies with requests if CORS header is set
@@ -86,12 +84,12 @@ export const fetchDataHandler = async ({
     let timeTaken = (new Date() - timeNow) / 1000;
 
     // fetch request timing info
-    console.log(`${time} Fetch time: ${timeTaken}s`);
-    console.log("🐞 Status", response.status);
+    // console.log(`${time} Fetch time: ${timeTaken}s`);
+    // console.log("🐞 Status", response.status);
     // console.log("🐞 ", path);
 
     return response;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 };

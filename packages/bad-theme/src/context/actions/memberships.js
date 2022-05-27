@@ -34,7 +34,6 @@ export const validateMembershipFormAction = async ({
       [name]: data[name],
     }));
   };
-  console.log("DATA", applicationData);
   if (!applicationData) return null;
 
   // ⏬ validate inputs & pre fetch membership data
@@ -165,15 +164,6 @@ export const handleApplyForMembershipAction = async ({
         bad_applicationfor: changeAppCategory ? "810170001" : "810170000", // for new apps 810170000 for change of cat for BAD and 810170001
       },
     });
-
-    console.log(
-      "🐞 ",
-      isActiveUser,
-      applicationData,
-      isBADApp,
-      changeAppCategory,
-      store
-    ); // debug
 
     // ⏬ redirect to application form if active user
     if (isActiveUser && store) {

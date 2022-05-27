@@ -86,8 +86,7 @@ const BillingHistory = ({ state, actions, libraries }) => {
           Billing History:
         </div>
         {subAppHistory.map((block, key) => {
-          console.log("🐞 history", block); // bill history
-          console.log("🐞 subAppHistory", subAppHistory); // bill history
+          // console.log("🐞 history", block); // bill history
 
           const { core_name, core_totalamount } = block;
           let paymentLength = subAppHistory.length;

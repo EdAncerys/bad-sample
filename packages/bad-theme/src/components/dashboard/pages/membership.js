@@ -81,7 +81,6 @@ const Membership = ({ state, actions, libraries }) => {
   // 📌 If user dont have any subscription dont render the component
   let isSubsData = subsData;
   if (subsData && subsData.length === 0) isSubsData = null;
-  console.log("subsData", subsData);
   // RETURN -----------------------------------------------------------------
   return (
     <div style={{ padding: `0 ${marginHorizontal}px` }}>
@@ -189,9 +188,8 @@ const Membership = ({ state, actions, libraries }) => {
                       }
 
                       setStatus(isSubmitted); // set status to submitted
-                      console.log("APPSTATUS", appStatus);
                     } catch (error) {
-                      console.log("APPCHANGE ERROR", error);
+                      // console.log("APPCHANGE ERROR", error);
                     }
                   }, []);
 

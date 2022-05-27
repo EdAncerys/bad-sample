@@ -67,7 +67,6 @@ const RowButton = ({
 
   const onClickLinkHandler = async () => {
     let authLink = link.url;
-    console.log("CLICKED", authLink);
     // 📌 check if logged in user exists & user is BAD member to replace auth link
     if (is_wileys_link && isActiveUser) {
       authLink = await getWileyAction({
@@ -152,7 +151,6 @@ const RowButton = ({
           return;
         }
         if (file_link) {
-          console.log("FILE CLICKED");
           window.open(file_link.url);
           return;
         }
@@ -161,7 +159,6 @@ const RowButton = ({
           return;
         }
         if (onClickAction) {
-          console.log("OnClickAction");
           onClickAction();
           return;
         }
@@ -174,7 +171,6 @@ const RowButton = ({
           return;
         }
         if (link) {
-          console.log("onClickLinkHandler");
           onClickLinkHandler();
           return;
         }

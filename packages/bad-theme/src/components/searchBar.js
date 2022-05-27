@@ -22,7 +22,6 @@ import { TimerOutlined } from "@mui/icons-material";
 
 const SearchBar = ({ state, actions, libraries, block, search_type }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-  console.log("BLOCK", block);
   const dispatch = useAppDispatch();
   const { lg } = muiQuery();
   const ctaHeight = 45;
@@ -76,9 +75,6 @@ const SearchBar = ({ state, actions, libraries, block, search_type }) => {
       `wp-json/relevanssi/v1/search?keyword=${input}&type=${typeOfSearch[search_type]}&per_page=5&_fields=title,link&orderby=title&order=ASC`;
     let fetching = await fetchDataHandler({ path, state });
     let data = await fetching.json();
-    console.log("SEARCH TYPE", search_type);
-    console.log("INPUT", input);
-    console.log("DATA", data);
     setDataLoading(false);
     // data = data.map((item) => {
     //   const title = item.title.rendered;

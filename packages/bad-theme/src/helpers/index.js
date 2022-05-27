@@ -105,7 +105,7 @@ export const authCookieActionAfterCSR = async ({ state, dispatch }) => {
       });
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 

@@ -6,5 +6,5 @@ export const setAuthenticationCookieAction = async ({ state, b2cTaken }) => {
   const response = await fetchDataHandler({ path, state });
   const data = await response.json();
 
-  console.log("🍪 setAuthenticationCookieAction. 🍪", data); // debug
+  // console.log("🍪 setAuthenticationCookieAction. 🍪", data); // debug
 };

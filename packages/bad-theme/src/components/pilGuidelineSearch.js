@@ -85,7 +85,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
         setInputValue("");
       }
     } catch (e) {
-      console.log(e);
+      // console.log(e);
     }
   };
 

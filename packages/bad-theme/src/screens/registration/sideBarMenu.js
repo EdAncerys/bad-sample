@@ -127,8 +127,6 @@ const SideBarMenu = ({ state, actions, libraries }) => {
       );
     };
 
-    console.log("🐞 formItem", form);
-
     return (
       <div style={{ padding: `2em 0` }}>
         {form.bad_organisedfor === "810170000" && (

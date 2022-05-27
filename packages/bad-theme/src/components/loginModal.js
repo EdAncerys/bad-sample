@@ -54,7 +54,7 @@ const LoginModal = ({ state, actions }) => {
         // console.log("Error getting transId from iFrame");
       }
     } catch (error) {
-      console.log("*** ERROR GETTING IFRAME CONTENT - CROSS-ORIGIN **"); // debug
+      // console.log("*** ERROR GETTING IFRAME CONTENT - CROSS-ORIGIN **"); // debug
       // console.log(error); // debug
     }
   };

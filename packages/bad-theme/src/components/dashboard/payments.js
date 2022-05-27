@@ -57,7 +57,6 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
   // HELPERS ----------------------------------------------------------------
   const displayPaymentModal = (url) => {
-    console.log("PM URL", url);
     setErrorAction({
       dispatch,
       isError: {
@@ -84,7 +83,6 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
         sagepayUrl +
         type +
         `?redirecturl=${state.auth.APP_URL}/payment-confirmation/?redirect=${state.router.link}`;
-      console.log("PATH", path);
       const fetchVendorId = await fetchDataHandler({
         path,
         method: "POST",
@@ -125,7 +123,6 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   // SERVERS ---------------------------------------------
   const ServeBilingHistory = () => {
     if (subAppHistory.length === 0) return null;
-    console.log("SUBAPHIS", subAppHistory);
     return (
       <div style={{ position: "relative" }}>
         <ActionPlaceholder isFetching={isFetching} background="transparent" />

@@ -8,7 +8,7 @@ import {
   setErrorAction,
   useAppDispatch,
   getWileyAction,
-  loginAction
+  loginAction,
 } from "../../context";
 
 import { MENU_DATA } from "../../config/data";
@@ -27,7 +27,10 @@ export default connect(({ libraries, state, actions }) => {
   };
 
   const onClickLinkHandler = async ({ title, url }) => {
-    const isWileys = title.includes("Journal") && !title.includes("SHD") && title !== "Journals";
+    const isWileys =
+      title.includes("Journal") &&
+      !title.includes("SHD") &&
+      title !== "Journals";
     let authLink = url;
 
     // HANDLERS ----------------------------------------------------
@@ -92,7 +95,6 @@ export default connect(({ libraries, state, actions }) => {
         <Nav.Link
           key={key}
           onClick={() => {
-            console.log("MENU", menu)
             if (menu.child_items) {
               setMenuContent({
                 main_title: menu.title,
@@ -123,7 +125,6 @@ export default connect(({ libraries, state, actions }) => {
   }, [state.theme.menu]);
 
   if (menuContent) {
-    console.log(menuContent)
     return (
       <div style={styles.container}>
         <Nav.Link onClick={() => setMenuContent(null)}> Go Back</Nav.Link>
@@ -134,11 +135,7 @@ export default connect(({ libraries, state, actions }) => {
               ...styles.navMenuItem,
               fontWeight: "bold",
             }}
-            onClick={() =>
-              {
-              
-             }
-            }
+            onClick={() => {}}
           >
             <Html2React html={menuContent.main_title} />
           </Nav.Link>
@@ -147,7 +144,7 @@ export default connect(({ libraries, state, actions }) => {
         {menuContent.children.map((item, i) => {
           return (
             <Nav.Link
-            key={i}
+              key={i}
               style={styles.navMenuItem}
               onClick={() => {
                 if (item.child_items) {

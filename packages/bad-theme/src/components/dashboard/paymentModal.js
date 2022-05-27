@@ -41,10 +41,10 @@ const PaymentModal = ({ state, actions, payment_url, resetPaymentUrl }) => {
         // console.log("*** WE FOUND A TRANSACTION ID IN THE IFRAME ** ", transId); // debug
         setId(transId);
       } else {
-        console.log("Error getting transId from iFrame"); // debug
+        // console.log("Error getting transId from iFrame"); // debug
       }
     } catch (error) {
-      console.log("*** ERROR GETTING IFRAME CONTENT - CROSS-ORIGIN **"); // debug
+      // console.log("*** ERROR GETTING IFRAME CONTENT - CROSS-ORIGIN **"); // debug
       // console.log(error); // debug
     }
   };
