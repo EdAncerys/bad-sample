@@ -89,6 +89,7 @@ const Event = ({ state, actions, libraries }) => {
     contact_form_body,
     contact_allow_attachments,
     contact_recipients,
+    contact_email_override,
   } = event.acf;
   const { title, id } = event;
   // console.log("event", event); // debug
@@ -230,14 +231,14 @@ const Event = ({ state, actions, libraries }) => {
     };
 
     const ServeEmail = () => {
-      if (!email) return null;
-
+      if (!email && !contact_email_override) return null;
+      const displayEmail = contact_email_override || email;
       return (
         <div style={{ paddingBottom: `1em` }}>
           <div className="primary-title" style={{ fontSize: 20 }}>
             Email:
           </div>
-          <Html2React html={email} />
+          <Html2React html={displayEmail} />
         </div>
       );
     };
