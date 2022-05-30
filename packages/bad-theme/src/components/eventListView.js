@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import date from "date-and-time";
@@ -25,7 +25,7 @@ const EventListView = ({
 }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
-  const { sm, md, lg, xl } = muiQuery();
+  const { lg } = muiQuery();
 
   const dispatch = useAppDispatch();
 
@@ -38,17 +38,9 @@ const EventListView = ({
 
   const {
     date_time,
-    conditions,
-    email,
     image,
-    layout,
     organizer,
-    public_or_members_only,
-    registration_page_link,
-    registration_type,
     scientific_committee,
-    show_add_to_calendar,
-    show_sharing_buttons,
     preview_summary,
     venue,
   } = block.acf;
@@ -61,7 +53,7 @@ const EventListView = ({
     setEventAnchorAction({ dispatch, eventAnchor: anchor });
     setGoToAction({ state, path: block.link, actions });
   };
-
+  console.log("Hello", block.acf);
   // SERVERS ----------------------------------------------------------------
   const ServeCardImage = () => {
     if (!image) return null;
