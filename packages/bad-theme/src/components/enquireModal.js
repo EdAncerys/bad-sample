@@ -19,13 +19,13 @@ import {
   setErrorAction,
 } from "../context";
 
-const EnquireModal = ({ state, actions, libraries }) => {
+const EnquireModal = ({ state, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { lg } = muiQuery();
 
   const dispatch = useAppDispatch();
   const { enquireAction, isActiveUser } = useAppState();
-
+  console.log("ENQUIRE A", enquireAction);
   const [isFetching, setIsFetching] = useState(null);
   const [formData, setFormData] = useState({
     fullname: "",
@@ -275,7 +275,22 @@ const EnquireModal = ({ state, actions, libraries }) => {
         </div>
       );
     };
-
+    const ServeAddress = () => {
+      if (enquireAction.emailOverride) return null;
+      return (
+        <>
+          <div style={styles.infoTitle}>
+            <div>Address</div>
+          </div>
+          <div style={styles.infoText}>
+            <div>British Association of Dermatologists</div>
+            <div>Willan House</div>
+            <div>4 Fitzroy square</div>
+            <div>London, W1T 5HQ</div>
+          </div>
+        </>
+      );
+    };
     return (
       <div className="flex">
         <Modal.Body>
@@ -290,15 +305,7 @@ const EnquireModal = ({ state, actions, libraries }) => {
             Contact Details
           </div>
           <div style={{ padding: `1em 0` }}>
-            <div style={styles.infoTitle}>
-              <div>Address</div>
-            </div>
-            <div style={styles.infoText}>
-              <div>British Association of Dermatologists</div>
-              <div>Willan House</div>
-              <div>4 Fitzroy square</div>
-              <div>London, W1T 5HQ</div>
-            </div>
+            <ServeAddress />
             <ServePublicEmail />
             <ServePublicPhone />
           </div>
