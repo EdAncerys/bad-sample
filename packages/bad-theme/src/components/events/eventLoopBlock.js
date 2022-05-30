@@ -117,9 +117,9 @@ const EventLoopBlock = ({
     if (grade_filter && grades) {
       // apply grade filter to events list
       // apply to lower case to all filter title values
-      let filterTitlesToLowerCase = Object.values(grade_filter).map((grade) =>
-        grade.toLowerCase()
-      );
+      let filters = Object.values(grade_filter);
+      // break if filters are empty
+      let filterTitlesToLowerCase = filters.map((grade) => grade.toLowerCase());
 
       // get list of grade id that match the filter titles
       let gradeIds = [];
@@ -131,14 +131,16 @@ const EventLoopBlock = ({
       // console.log("🐞 gradeIds", gradeIds);
 
       // get events that match the grade ids
-      events = events.filter((event) => {
-        let eventGradeIds = event.event_grade;
-        let isIncluded = eventGradeIds.some((gradeId) =>
-          gradeIds.includes(gradeId)
-        );
+      // apply filters if grade_filter is set and grade_filter is not empty
+      if (filters.length)
+        events = events.filter((event) => {
+          let eventGradeIds = event.event_grade;
+          let isIncluded = eventGradeIds.some((gradeId) =>
+            gradeIds.includes(gradeId)
+          );
 
-        return isIncluded;
-      });
+          return isIncluded;
+        });
     }
 
     setEventList(events); // set event data
