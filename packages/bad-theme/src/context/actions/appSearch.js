@@ -7,9 +7,13 @@ export const appSearchAction = async ({ state, query }) => {
 
   try {
     // ⬇️ fetch data while condition matches
+    // let path =
+    //   state.auth.WP_HOST +
+    //   `/wp-json/relevanssi/v1/search?keyword=${query}&per_page=${perPage}&page=${pageNo}&_fields=id,title,link,type,content&orderby=title&order=ASC`;
+
     let path =
       state.auth.WP_HOST +
-      `/wp-json/relevanssi/v1/search?keyword=${query}&per_page=${perPage}&page=${pageNo}&_fields=id,title,link,type,content&orderby=title&order=ASC`;
+      `/wp-json/relevanssi/v1/search?keyword=${query}&per_page=${perPage}&page=${pageNo}&_fields=id,title,link,type,content`;
 
     const data = await fetchDataHandler({ path, state });
     console.log("🐞 ", data);
