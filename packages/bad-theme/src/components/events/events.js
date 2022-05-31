@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import { Form } from "react-bootstrap";
 import EventLoopBlock from "./eventLoopBlock";
@@ -19,8 +19,8 @@ import {
 } from "../../context";
 // import SearchBar from "../searchBar";
 
-const Events = ({ state, actions, libraries, block, disableMargin }) => {
-  const { sm, md, lg, xl } = muiQuery();
+const Events = ({ state, block, disableMargin }) => {
+  const { lg } = muiQuery();
 
   const [grades, setGrades] = useState(null); // data
   const [locations, setLocations] = useState(null); // data
@@ -53,7 +53,7 @@ const Events = ({ state, actions, libraries, block, disableMargin }) => {
   const handleSearch = () => {
     const input = searchFilterRef.current.value.toLowerCase();
 
-    if (!!input) setSearchFilter(input);
+    if (input) setSearchFilter(input);
   };
 
   // SERVERS ---------------------------------------------
@@ -72,9 +72,9 @@ const Events = ({ state, actions, libraries, block, disableMargin }) => {
     const ServeGradeFilter = () => {
       if (!grades) return null;
       // sort grades alphabetically by name
-      const sortedGrades = grades.sort((a, b) => {
-        return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
-      });
+      // const sortedGrades = grades.sort((a, b) => {
+      //   return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+      // });
       // custom sort grades by name in order based on array of grades
       const sortedGradesCustom = grades.sort((a, b) => {
         const order = [
@@ -157,7 +157,10 @@ const Events = ({ state, actions, libraries, block, disableMargin }) => {
       });
 
       return (
-        <div className="flex" style={{ paddingRight: !lg ? `1em` : 0, width: !lg ? null : "100%" }}>
+        <div
+          className="flex"
+          style={{ paddingRight: !lg ? `1em` : 0, width: !lg ? null : "100%" }}
+        >
           <Form.Select
             style={styles.input}
             value={specialtyFilter}
@@ -207,7 +210,7 @@ const Events = ({ state, actions, libraries, block, disableMargin }) => {
       if (block.events_archive) eventSearchMonth = monthsPast;
 
       return (
-        <div className="flex" style={{width: "100%"}}>
+        <div className="flex" style={{ width: "100%" }}>
           <Form.Select
             style={!lg ? styles.input : styles.mobileInput}
             value={yearFilter}
@@ -234,7 +237,11 @@ const Events = ({ state, actions, libraries, block, disableMargin }) => {
     return (
       <div
         className={!lg ? "flex" : "flex-col"}
-        style={{ padding: `1em 0`, alignItems: !lg ? "center" : "flex-start", gap: !lg ? null : 10 }}
+        style={{
+          padding: `1em 0`,
+          alignItems: !lg ? "center" : "flex-start",
+          gap: !lg ? null : 10,
+        }}
       >
         <ServeTitle />
         <ServeGradeFilter />
@@ -400,7 +407,7 @@ const styles = {
   },
   mobileInput: {
     borderRadius: 10,
-width: "100%",
+    width: "100%",
     paddingRight: 0,
   },
 };

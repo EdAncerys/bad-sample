@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../config/imports";
@@ -11,8 +11,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useAppDispatch, setFilterAction } from "../context";
 
 const SearchContainer = ({
-  state,
-  actions,
   title,
   subTitle,
   width,
@@ -23,7 +21,7 @@ const SearchContainer = ({
   inputOnly,
   isFetching,
 }) => {
-  const { sm, md, lg, xl } = muiQuery();
+  const { lg } = muiQuery();
 
   const dispatch = useAppDispatch();
 
