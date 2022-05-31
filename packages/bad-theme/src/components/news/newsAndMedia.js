@@ -95,13 +95,15 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       });
     }
 
-    // apply sort by date functionality & apply limit
+    // apply sort by date
     data = data.sort((a, b) => {
       return new Date(b.date) - new Date(a.date);
     });
 
     setPostList(data);
     setFilterList(data);
+    // 📌 further filter by category will be appied if user not auth to see all categories
+    // see useEffect below
     setCategoryList(categoryData);
     setIsSearch(has_search);
 
@@ -246,49 +248,6 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   if (!postList || !categoryList) return <Loading />;
 
   if (postList.length === 0 && !isSearch) return null; // hide block if no posts
-
-  // HELPERS ----------------------------------------------------------------
-  const handleLoadMoreFilter = () => {
-    let data = Object.values(state.source.post); // add postList object to data array
-    // 📌 apply permision filters
-    if (!hasPermission && categoryList) {
-      let membersOnly = ["circular", "newsletter", "bulletin"];
-      // get id of all categories that include members only
-      let membersOnlyList = categoryList.filter((item) => {
-        const catName = item.name.toLowerCase();
-        let isMemberOnly = false;
-
-        membersOnly.forEach((item) => {
-          if (catName.includes(item)) isMemberOnly = true;
-        });
-
-        if (isMemberOnly) return item.id;
-      });
-
-      data = data.filter((post) => {
-        let categories = post.categories;
-        let isMemberOnly = false;
-        // map threach membersOnlyList and check if id is present in categories
-        membersOnlyList.forEach((item) => {
-          if (categories.includes(item.id)) isMemberOnly = true;
-        });
-
-        return !isMemberOnly;
-      });
-    }
-
-    // apply sort by date functionality
-    data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-    // increment postChunkRef by 8
-    postChunkRef.current = postChunkRef.current + Number(post_limit) || 8;
-
-    // apply limity on posts
-    if (post_limit && Number(post_limit) !== 0)
-      data = data.slice(0, Number(postChunkRef.current)); // apply limit on posts
-
-    setFilterList(data); // set post data
-  };
 
   // SERVERS ---------------------------------------------
   const ServeFilter = () => {
@@ -533,6 +492,8 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   };
 
   const ServeLayout = () => {
+    console.log("🐞 enter component", filterList.length);
+
     if (isLayoutOne)
       return (
         <NewsCarouselComponent block={filterList} categoryList={categoryList} />

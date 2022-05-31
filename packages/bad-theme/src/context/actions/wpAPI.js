@@ -84,9 +84,9 @@ export const getNewsData = async ({ state, page, postsPerPage }) => {
   let pageNo = page || 1;
   let perPageLimit = postsPerPage || state.theme.perPageLimit;
   let fields =
-    "title,link,date,release,title,categories,featured_media,excerpt,yoast_head_json.og_image,site_sections,acf";
+    "title,link,date,release,categories,featured_media,excerpt,yoast_head_json.og_image,site_sections,acf";
 
-  let url = `${state.auth.WP_HOST}wp-json/wp/v2/posts?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=desc`;
+  let url = `${state.auth.WP_HOST}wp-json/wp/v2/posts?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}`;
 
   try {
     let data = [];
@@ -102,7 +102,7 @@ export const getNewsData = async ({ state, page, postsPerPage }) => {
 
       data = [...data, ...json];
       pageNo++;
-      url = `${state.auth.WP_HOST}wp-json/wp/v2/posts?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+      url = `${state.auth.WP_HOST}wp-json/wp/v2/posts?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}`;
 
       // 📌 break out of the loop if no more pages
       if (pageNo > totalPages) break;
