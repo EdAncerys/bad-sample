@@ -115,7 +115,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     sig_bad_mainareaofinterest: true,
     sig_bad_includeinthebssciiemaildiscussionforum: true,
     sig_py3_insertnhsnetemailaddress: true,
-    bad_psychodermatologycategory: true,
+    sig_py3_bad_psychodermatologycategory: true,
   });
   const [isEmail, setIsEmail] = useState(false);
   const [applicationType, setType] = useState("Special Interest Group");
@@ -1201,7 +1201,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {/* SIG Questions -------------------------------------------- */}
 
-          {inputValidator.bad_psychodermatologycategory && dermList && (
+          {inputValidator.sig_py3_bad_psychodermatologycategory && dermList && (
             <div className="flex-col">
               <label className="form-label">Psychodermatology Category</label>
               <Form.Select
@@ -1289,7 +1289,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.sig_py3_currentgrade && (
             <div>
-              <label className="form-label required">Current Grade</label>
+              <label className="form-label">Current Grade</label>
               <input
                 name="py3_currentgrade"
                 value={formData.py3_currentgrade}
