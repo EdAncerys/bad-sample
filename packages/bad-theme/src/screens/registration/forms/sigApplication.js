@@ -24,7 +24,6 @@ import {
   getHospitalsAction,
   getBADMembershipSubscriptionData,
   sendFileToS3Action,
-  getEthnicityAction,
   googleAutocompleteAction,
   getGenderAction,
   setErrorAction,
@@ -76,6 +75,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     bad_mainareaofinterest: "",
     bad_includeinthebssciiemaildiscussionforum: "",
     py3_insertnhsnetemailaddress: "",
+    bad_psychodermatologycategory: "",
   });
   const [inputValidator, setInputValidator] = useState({
     bad_categorytype: true,
@@ -115,6 +115,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     sig_bad_mainareaofinterest: true,
     sig_bad_includeinthebssciiemaildiscussionforum: true,
     sig_py3_insertnhsnetemailaddress: true,
+    bad_psychodermatologycategory: true,
   });
   const [isEmail, setIsEmail] = useState(false);
   const [applicationType, setType] = useState("Special Interest Group");
@@ -126,6 +127,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const [hospitalData, setHospitalData] = useState(null);
   const [canChangeHospital, setCanChangeHospital] = useState(true); // allow user to change hospital is no BAD applications are found
   const [selectedHospital, setSelectedHospital] = useState(null);
+  const [dermList, setDermList] = useState(null);
   const isHospitalValue = formData.py3_hospitalid;
   const hospitalSearchRef = useRef("");
   const documentRef = useRef(null);
@@ -135,6 +137,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const [searchInput, setSearchInput] = useState("");
   const address1Line1Ref = useRef("");
   const ctaHeight = 40;
+  console.log("🐞 app", applicationData);
 
   // ⏬ populate form data values from applicationData
   useEffect(async () => {
@@ -180,28 +183,29 @@ const SIGApplication = ({ state, actions, libraries }) => {
     // pre-fill application input fields with data from applicationData
     applicationData.map((data) => {
       // ⬇️  map sigApp fields against applicationData & set formData with field name & value
-      sigAppFileds.map((item) => {
-        if (item.name === "sky_cvurl") return; // cv url field is not required
-        if (data.name === item) {
-          handleSetFormData({ data, name: item });
-        }
+      if (data.name === "sky_cvurl") return; // cv url field is not required
+      handleSetFormData({ data, name: data.name });
 
-        // if bad_currentpost is null then set value from user profile data
-        if (!data.bad_currentpost) {
-          setFormData((prevFormData) => ({
-            ...prevFormData,
-            [`bad_currentpost`]: isActiveUser.jobtitle,
-          }));
-          // set job title to disabled status
-          setJobEditable(false);
-        }
-      });
+      // if bad_currentpost is null then set value from user profile data
+      if (!data.bad_currentpost && isActiveUser) {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          [`bad_currentpost`]: isActiveUser.jobtitle,
+        }));
+        // set job title to disabled status
+        setJobEditable(false);
+      }
 
       // set hospital id if exists
       if (data.name === "py3_hospitalid") {
         if (data.value) hospitalId = data.value;
       }
-      // set app type name
+      // 📌 set Psychodermatology Category picklist values
+      if (data.name === "bad_psychodermatologycategory") {
+        const pickList = data.info.Choices;
+        setDermList(pickList);
+      }
+      // 📌 set app type name
       if (data.bad_categorytype) {
         applicationType = data.bad_categorytype; // set application type for logic below
         // 📌 set application type name
@@ -1196,6 +1200,29 @@ const SIGApplication = ({ state, actions, libraries }) => {
           )}
 
           {/* SIG Questions -------------------------------------------- */}
+
+          {inputValidator.bad_psychodermatologycategory && dermList && (
+            <div className="flex-col">
+              <label className="form-label">Psychodermatology Category</label>
+              <Form.Select
+                name="bad_psychodermatologycategory"
+                value={formData.bad_psychodermatologycategory}
+                onChange={handleInputChange}
+                className="input"
+              >
+                <option value="" hidden>
+                  Psychodermatology Categor
+                </option>
+                {dermList.map(({ value, Label }, key) => {
+                  return (
+                    <option key={key} value={value}>
+                      {Label}
+                    </option>
+                  );
+                })}
+              </Form.Select>
+            </div>
+          )}
 
           {inputValidator.sig_bad_isbadmember && (
             <div className="flex-col">

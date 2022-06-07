@@ -501,6 +501,11 @@ const updateMembershipApplication = ({
       application.name === "bad_readpolicydocument"
     )
       application.value = data.bad_readpolicydocument;
+    if (
+      data.bad_psychodermatologycategory !== undefined &&
+      application.name === "bad_psychodermatologycategory"
+    )
+      application.value = data.bad_psychodermatologycategory;
   });
 
   // console.log("User Input Data ", data); // debug
