@@ -27,6 +27,7 @@ const Header = ({ state, actions }) => {
   const { sm, md, lg, xl } = muiQuery();
   const urlPath = state.router.link;
   const data = state.source.get(urlPath);
+
   const ServeNavigation = () => {
     return (
       <div className="bad-header no-selector" style={styles.container}>

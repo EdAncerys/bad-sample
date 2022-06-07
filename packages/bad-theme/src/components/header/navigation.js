@@ -6,7 +6,6 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import Link from "@frontity/components/link";
 
 import BlockWrapper from "../blockWrapper";
-import Loading from "../loading";
 import Card from "../../components/card/card";
 // CONTEXT -----------------------------------------------------------------
 import { getPostData } from "../../helpers";
@@ -95,11 +94,7 @@ const Navigation = ({ state, actions, libraries }) => {
   }, [isActiveUser, dynamicsApps]);
 
   if (!wpMoreMenu.length || !wpMainMenu.length)
-    return (
-      <div style={{ height: 60 }}>
-        <Loading padding="0px" />
-      </div>
-    );
+    return <div style={{ height: 60 }} />;
 
   // HANDLERS ----------------------------------------------------
   const handleBoxShadow = (slug) => {

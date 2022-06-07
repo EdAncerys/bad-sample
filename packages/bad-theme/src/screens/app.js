@@ -133,93 +133,70 @@ const App = ({ state, actions }) => {
     config: { mass: 1, tension: 280, friction: 120 },
   });
 
-  // ⬇️  handle application animation before data pre fetch
-  // show placeholder logo while pre fetch user data is completed
   // RETURN --------------------------------------------------------------------
-  return transitions(({ opacity }, appContent) =>
-    appContent ? (
-      <animated.div className="no-selector">
-        <AnimatedPlaceholder opacity={opacity} />
-      </animated.div>
-    ) : (
-      <animated.div
-        style={{ opacity: opacity.to({ range: [0.0, 1.0], output: [0.1, 1] }) }}
-      >
-        <div
-          onClick={(e) => {
-            state.theme.childMenuRef = ""; // reset child menu ref value
-            state.theme.activeDropDownRef = "menu reset"; // reset menu ref value
-          }}
-        >
-          <div style={{ ...styles.container }}>
-            <Header />
-            <Breadcrumbs />
-            <BlockWrapper>
-              <LoginModal />
-              <ErrorModal />
-              <CreateAccountModal />
-              <EnquireModal />
-            </BlockWrapper>
+  return (
+    <div style={{ ...styles.container }}>
+      <Header />
+      <Breadcrumbs />
+      <BlockWrapper>
+        <LoginModal />
+        <ErrorModal />
+        <CreateAccountModal />
+        <EnquireModal />
+      </BlockWrapper>
 
-            <div className="flex-col">
-              <Switch>
-                <Loading when={data.isFetching} />
-                <Error when={data.isError} />
-                <BlocksPage when={data.route.includes("blocks")} />
+      <div className="flex-col">
+        <Switch>
+          <Loading when={data.isFetching} />
+          <Error when={data.isError} />
+          <BlocksPage when={data.route.includes("blocks")} />
 
-                <Login when={urlPath === "/login/"} />
-                <CreateAccount when={urlPath === "/create-account/"} />
+          <Login when={urlPath === "/login/"} />
+          <CreateAccount when={urlPath === "/create-account/"} />
 
-                <AccountDashboard
-                  when={urlPath === "/dashboard/" && isActiveUser}
-                />
-                <Contact when={urlPath === "/contact-us/"} />
-                <RegistrationStepOne
-                  when={urlPath === "/membership/step-1-the-process/"}
-                />
-                <RegistrationStepTwo
-                  when={urlPath === "/membership/step-2-category-selection/"}
-                />
-                <ApplicationChange
-                  when={urlPath === "/membership/application-change/"}
-                />
-                <RegistrationStepThree
-                  when={urlPath === "/membership/step-3-personal-information/"}
-                />
-                <RegistrationStepFour
-                  when={urlPath === "/membership/step-4-professional-details/"}
-                />
-                <RegistrationStepFive
-                  when={urlPath === "/membership/sig-questions/"}
-                />
-                <ThankYou when={urlPath === "/membership/thank-you/"} />
-                <EventsLandingPage when={urlPath === "/events/"} />
-                <PilsArchive
-                  when={urlPath === "/patient-information-leaflets/"}
-                />
+          <AccountDashboard when={urlPath === "/dashboard/" && isActiveUser} />
+          <Contact when={urlPath === "/contact-us/"} />
+          <RegistrationStepOne
+            when={urlPath === "/membership/step-1-the-process/"}
+          />
+          <RegistrationStepTwo
+            when={urlPath === "/membership/step-2-category-selection/"}
+          />
+          <ApplicationChange
+            when={urlPath === "/membership/application-change/"}
+          />
+          <RegistrationStepThree
+            when={urlPath === "/membership/step-3-personal-information/"}
+          />
+          <RegistrationStepFour
+            when={urlPath === "/membership/step-4-professional-details/"}
+          />
+          <RegistrationStepFive
+            when={urlPath === "/membership/sig-questions/"}
+          />
+          <ThankYou when={urlPath === "/membership/thank-you/"} />
+          <EventsLandingPage when={urlPath === "/events/"} />
+          <PilsArchive when={urlPath === "/patient-information-leaflets/"} />
 
-                <Codecollect when={urlPath.includes("codecollect")} />
-                <Pils when={data.isPils} />
-                <AppSearch when={urlPath === "/search/"} />
-                <Event when={data.isEvents} />
-                <Venue when={data.isVenues} />
-                <DermGroupsCharity when={data.isDermGroupsCharity} />
-                <Covid when={data.isCovid19} />
-                <VideoArchive when={urlPath === "/videos/"} />
-                <Home when={data.isHome || urlPath === "/"} />
-                <PaymentConfirmation
-                  when={urlPath.includes("/payment-confirmation/")}
-                />
-                <Post when={data.isPost} />
-                <Page when={data.isPage} />
-                <Video when={data.isVideos} />
-              </Switch>
-            </div>
-            <Footer />
-          </div>
-        </div>
-      </animated.div>
-    )
+          <Codecollect when={urlPath.includes("codecollect")} />
+          <Pils when={data.isPils} />
+          <AppSearch when={urlPath === "/search/"} />
+          <Event when={data.isEvents} />
+          <Venue when={data.isVenues} />
+          <DermGroupsCharity when={data.isDermGroupsCharity} />
+          <Covid when={data.isCovid19} />
+          <VideoArchive when={urlPath === "/videos/"} />
+          <Home when={data.isHome || urlPath === "/"} />
+          <PaymentConfirmation
+            when={urlPath.includes("/payment-confirmation/")}
+          />
+          <Post when={data.isPost} />
+          <Page when={data.isPage} />
+          <Video when={data.isVideos} />
+        </Switch>
+      </div>
+      <Footer />
+    </div>
   );
 };
 

@@ -1,4 +1,6 @@
 import { connect } from "frontity";
+// --------------------------------------------------------------------------------
+import Loading from "../components/loading";
 
 const Codecollect = ({ state, actions, libraries }) => {
   // --------------------------------------------------------------------------------
@@ -6,7 +8,7 @@ const Codecollect = ({ state, actions, libraries }) => {
   // --------------------------------------------------------------------------------
   // console.log("🐞 B2C component triggered"); // debug
 
-  return null;
+  return <Loading />;
 };
 
 const styles = {
