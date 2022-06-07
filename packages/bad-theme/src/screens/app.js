@@ -68,7 +68,7 @@ const App = ({ state, actions }) => {
 
   let urlPath = state.router.link;
   const data = state.source.get(urlPath);
-  console.log("data", data)
+  console.log("data", data);
   const useEffectRef = useRef(true);
   // console.log("INDEX data", data); // debug
   // --------------------------------------------------------------------------------
@@ -81,10 +81,6 @@ const App = ({ state, actions }) => {
   useRedirect({ state, dispatch, actions, redirects, urlPath });
   // 📌 hook for media queries
   useQuery({ state });
-  // 📌 add script for Google API
-  // useScript({
-  //   url: `https://maps.googleapis.com/maps/api/js?key=${state.auth.GOOGLE_API_KEY}&libraries=places`,
-  // });
 
   useEffect(() => {
     // ⬇️ restore scroll history to manual position ⬇️

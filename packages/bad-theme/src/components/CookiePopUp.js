@@ -1,9 +1,11 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { connect } from "frontity";
 import { handleSetCookie, handleGetCookie } from "../helpers/cookie";
+// --------------------------------------------------------------------------------
+import { setGoToAction } from "../context";
 
-const CookiePopUp = ({ state, hide }) => {
-  const [show, setShow] = React.useState();
+const CookiePopUp = ({ state, actions }) => {
+  const [show, setShow] = useState();
 
   const handleConsent = async (type) => {
     handleSetCookie({
@@ -14,15 +16,13 @@ const CookiePopUp = ({ state, hide }) => {
     setShow(type);
   };
 
-  React.useEffect(() => {
-    let popUpCookie = handleGetCookie({ name: `BAD-cookie-popup` });
-    if (popUpCookie === null) {
-      popUpCookie = "false";
-    }
-    setShow(popUpCookie);
+  useEffect(() => {
+    let cookie = handleGetCookie({ name: `BAD-cookie-popup` });
+
+    // set cookie policie preferences
+    setShow(cookie);
   });
 
-  if (!show) return null;
   if (show && show === "all-cookies") return null;
   if (show && show === "essential-only") return null;
 
@@ -45,12 +45,18 @@ const CookiePopUp = ({ state, hide }) => {
             We use cookies to run our services and analyse our traffic. We need
             some of those cookies to provide the best online experience while
             others allow us to monitor the site performance.{" "}
-            <a
-              href="https://www.bad.org.uk/about-the-bad/our-values/our-policies/"
-              style={{ color: "black", fontSize: 12 }}
+            <spam
+              onClick={() =>
+                setGoToAction({
+                  state,
+                  path: "/about-the-bad/our-values/our-policies/",
+                  actions,
+                })
+              }
+              style={{ color: "black", fontSize: 12, cursor: "pointer" }}
             >
               Read more.
-            </a>
+            </spam>
           </p>
         </div>
         <div

@@ -53,7 +53,7 @@ const EventListView = ({
     setEventAnchorAction({ dispatch, eventAnchor: anchor });
     setGoToAction({ state, path: block.link, actions });
   };
-  console.log("Hello", block.acf);
+
   // SERVERS ----------------------------------------------------------------
   const ServeCardImage = () => {
     if (!image) return null;
