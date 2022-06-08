@@ -358,7 +358,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       if (!formData[input] && inputValidator[inputValue]) {
         errorHandler({ id: `form-error-${input}`, time: 5000 });
         isValid = false;
-        // console.log("🐞 FAILED AUTH", input, formData[input]);
+        // console.log("🐞 FAILED AUTH", input, formData[input]); // failed input validation debugger
       }
     });
 
@@ -440,7 +440,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
         "py3_addresszippostalcode",
         "py3_addresscountry",
         "py3_ntnno",
-        "bad_readpolicydocument",
+        inputValidator.sig_bad_readpolicydocument && !!readPolicyDoc
+          ? "bad_readpolicydocument"
+          : "",
         "sky_cvurl",
         formData.bad_categorytype ===
         "Associate:British Society for Medical Dermatology"
@@ -1211,7 +1213,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 className="input"
               >
                 <option value="" hidden>
-                  Psychodermatology Categor
+                  Psychodermatology Category
                 </option>
                 {dermList.map(({ value, Label }, key) => {
                   return (
@@ -1317,7 +1319,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
           )}
 
           {inputValidator.sig_py3_whatukbasedroleareyou && (
-            <div>
+            <div style={{ paddingTop: "0.5em" }}>
               <label style={styles.subTitle} className="required">
                 UK / Overseas role
               </label>
