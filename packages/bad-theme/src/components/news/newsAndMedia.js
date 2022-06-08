@@ -57,15 +57,15 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   const [isSearch, setIsSearch] = useState(false);
 
   const searchFilterRef = useRef("");
-  const postChunkRef = useRef(Number(post_limit) || 8);
+  const postChunkRef = useRef(8);
 
-  const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 
   useEffect(async () => {
     let categoryData = await getMediaCategories({ state });
     let data = await getNewsData({ state });
+    if (post_limit) postChunkRef.current = Number(post_limit);
 
     if (site_section) {
       // convert site_section to Object
@@ -101,7 +101,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     });
 
     setPostList(data);
-    setFilterList(data);
+
     // 📌 further filter by category will be appied if user not auth to see all categories
     // see useEffect below
     setCategoryList(categoryData);
@@ -113,54 +113,14 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   }, [isActiveUser]);
 
   useEffect(() => {
-    if (!postList) return null;
-
-    let data = postList;
-    let hasPermission = false;
-    // 📌 check if user has permission to view news & media
-    if (dynamicsApps)
-      hasPermission = hasPermisionLevel({ dynamicsApps, isActiveUser });
-    setPermission(hasPermission);
-
-    // 📌 apply permision filters
-    if (!hasPermission && categoryList) {
-      let membersOnly = ["circular", "newsletter", "bulletin"];
-      // get id of all categories that include members only
-      let membersOnlyList = categoryList.filter((item) => {
-        const catName = item.name.toLowerCase();
-        let isMemberOnly = false;
-
-        membersOnly.forEach((item) => {
-          if (catName.includes(item)) isMemberOnly = true;
-        });
-
-        if (isMemberOnly) return item.id;
-      });
-
-      data = data.filter((post) => {
-        let categories = post.categories;
-        let isMemberOnly = false;
-        // map threach membersOnlyList and check if id is present in categories
-        membersOnlyList.forEach((item) => {
-          if (categories && categories.includes(item.id)) isMemberOnly = true;
-        });
-
-        return !isMemberOnly;
-      });
-    }
-
-    if (post_limit && Number(post_limit) !== 0) {
-      data = data.slice(0, Number(post_limit)); // apply limit on posts
-    }
-    setFilterList(data);
-  }, [categoryList, isActiveUser]);
-
-  useEffect(() => {
-    if (!postList) return null;
+    // --------------------------------------------------------------------------------
+    // 📌  serach & filters
+    // --------------------------------------------------------------------------------
+    if (!filterList) return null;
 
     // if all filters are applied are null then set filterList to postList
     if (!searchValue && !dateValue && !yearValue && !newsMediaCategoryId) {
-      setFilterList(postList);
+      setFilterList(data.slice(0, postChunkRef.current));
       return;
     }
 
@@ -239,11 +199,51 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
     // if all filters are not applied, apply limit on posts
     if (!newsMediaCategoryId && !searchValue && !dateValue && !yearValue) {
-      data = data.slice(0, Number(postChunkRef.current)); // apply limit on posts
+      data = data.slice(0, postChunkRef.current); // apply limit on posts
     }
 
     setFilterList(data); // set post data
   }, [newsMediaCategoryId, searchValue, dateValue, yearValue]);
+
+  useEffect(() => {
+    if (!postList) return null;
+
+    let data = postList;
+    let hasPermission = false;
+    // 📌 check if user has permission to view news & media
+    if (dynamicsApps)
+      hasPermission = hasPermisionLevel({ dynamicsApps, isActiveUser });
+    setPermission(hasPermission);
+
+    // 📌 apply permision filters
+    if (!hasPermission && categoryList) {
+      let membersOnly = ["circular", "newsletter", "bulletin"];
+      // get id of all categories that include members only
+      let membersOnlyList = categoryList.filter((item) => {
+        const catName = item.name.toLowerCase();
+        let isMemberOnly = false;
+
+        membersOnly.forEach((item) => {
+          if (catName.includes(item)) isMemberOnly = true;
+        });
+
+        if (isMemberOnly) return item.id;
+      });
+
+      data = data.filter((post) => {
+        let categories = post.categories;
+        let isMemberOnly = false;
+        // map through membersOnlyList and check if id is present in categories
+        membersOnlyList.forEach((item) => {
+          if (categories && categories.includes(item.id)) isMemberOnly = true;
+        });
+
+        return !isMemberOnly;
+      });
+    }
+
+    setFilterList(data.slice(0, postChunkRef.current));
+  }, [postList, isActiveUser]);
 
   if (!postList || !categoryList) return <Loading />;
 
@@ -492,8 +492,6 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   };
 
   const ServeLayout = () => {
-    console.log("🐞 enter component", filterList.length);
-
     if (isLayoutOne)
       return (
         <NewsCarouselComponent block={filterList} categoryList={categoryList} />
@@ -506,6 +504,45 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
           categoryList={categoryList}
           layout={layout}
         />
+      </div>
+    );
+  };
+
+  const ServeMoreOption = () => {
+    const postLength = postList.length;
+    let moreOption = postLength > postChunkRef.current;
+    // 📌 hide if any of the filter is selected
+    if (
+      newsMediaCategoryId ||
+      dateValue ||
+      yearValue ||
+      searchValue ||
+      !post_limit
+    )
+      moreOption = false;
+
+    const handleLoadMore = () => {
+      // increment postChunkRef chunk size by 8
+      let newChunkSize = postChunkRef.current + 8;
+      postChunkRef.current = newChunkSize;
+
+      setFilterList(postList.slice(0, postChunkRef.current));
+    };
+
+    if (!moreOption) return null;
+
+    return (
+      <div
+        className="flex"
+        style={{ alignContent: "center", justifyContent: "center" }}
+      >
+        <div
+          className="blue-btn"
+          style={{ width: "fit-content" }}
+          onClick={handleLoadMore}
+        >
+          See More
+        </div>
       </div>
     );
   };
@@ -524,6 +561,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       <ServeFilter />
       <BlockWrapper>
         <ServeLayout />
+        <ServeMoreOption />
       </BlockWrapper>
     </div>
   );
