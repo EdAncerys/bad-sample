@@ -179,9 +179,9 @@ const Navigation = ({ state, actions, libraries }) => {
 
   // SERVERS -----------------------------------------------------
   const ServeNewsMediaSubMenu = ({ parent }) => {
+    console.log("🐞 parent", parent);
     // 📌 serve submenu for news & media only
-    if (parent.title !== "News &#038; Media" || newsMedia.length === 0)
-      return null;
+    if (parent.db_id !== 292 || newsMedia.length === 0) return null;
 
     return (
       <div style={{ paddingRight: `2em` }}>
@@ -234,9 +234,10 @@ const Navigation = ({ state, actions, libraries }) => {
       let slugID = parentSlug;
       if (secondaryMenu) slugID = "more";
 
-      const menuLength = child_items.length;
-
       const ServeSubChildMenu = ({ child_items, parent, slug }) => {
+        const isNewsMedia = parent.db_id === 292;
+        if (isNewsMedia && !child_items)
+          child_items = [{ title: "Dummy Menu Item", url: "/" }];
         if (!child_items) return null;
 
         let linkPath = parent.url;
@@ -289,7 +290,8 @@ const Navigation = ({ state, actions, libraries }) => {
 
             <div style={{ paddingRight: `2em` }}>
               {child_items.map((item, key) => {
-                const { title, url, slug, child_items } = item;
+                const { title, url } = item;
+                const isDummy = title === "Dummy Menu Item";
 
                 let subChildTitle = title.replace(/’/g, "");
                 let linkPath = url;
@@ -309,7 +311,7 @@ const Navigation = ({ state, actions, libraries }) => {
                       }
                       link={linkPath}
                     >
-                      <div className="flex">
+                      <div className={isDummy ? "hide" : "flex"}>
                         <div className="menu-title">
                           <Html2React html={subChildTitle} />
                         </div>
@@ -401,7 +403,11 @@ const Navigation = ({ state, actions, libraries }) => {
             <ServeFeaturedMenu featuredBannerTwo={featuredBannerTwo} />
 
             {child_items.map((item, key) => {
-              const { title, url, slug, child_items } = item;
+              let { title, url, slug, child_items } = item;
+              const isNewsMedia = item.db_id === 292;
+              if (isNewsMedia && !child_items) {
+                slug = "news-media";
+              }
 
               let linkPath = url;
               // strip down trailing wpHost from url
@@ -409,7 +415,7 @@ const Navigation = ({ state, actions, libraries }) => {
                 linkPath = linkPath.replace(wpHost, "");
 
               const ServeMenuArrow = () => {
-                if (!child_items) return null;
+                if (!child_items && !isNewsMedia) return null;
 
                 return (
                   <KeyboardArrowRightIcon
@@ -438,7 +444,7 @@ const Navigation = ({ state, actions, libraries }) => {
                   }}
                   onMouseLeave={() => {
                     activeChildMenu.current = null; // clear Ref hook after handler been triggered only!
-                    if (child_items) {
+                    if (child_items || isNewsMedia) {
                       setTimeout(() => {
                         handleSubMenu({ slug, removeMenu: true });
                       }, 200);
