@@ -137,7 +137,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const [searchInput, setSearchInput] = useState("");
   const address1Line1Ref = useRef("");
   const ctaHeight = 40;
-  console.log("🐞 app", applicationData);
 
   // ⏬ populate form data values from applicationData
   useEffect(async () => {
@@ -722,6 +721,29 @@ const SIGApplication = ({ state, actions, libraries }) => {
         >
           <ServeSIGMembershipCategory />
 
+          {inputValidator.sig_py3_bad_psychodermatologycategory && dermList && (
+            <div className="flex-col">
+              <label className="form-label">Membership Category Type</label>
+              <Form.Select
+                name="bad_psychodermatologycategory"
+                value={formData.bad_psychodermatologycategory}
+                onChange={handleInputChange}
+                className="input"
+              >
+                <option value="" hidden>
+                  Membership Category Type
+                </option>
+                {dermList.map(({ value, Label }, key) => {
+                  return (
+                    <option key={key} value={value}>
+                      {Label}
+                    </option>
+                  );
+                })}
+              </Form.Select>
+            </div>
+          )}
+
           {inputValidator.sig_py3_title && (
             <div>
               <label className="required form-label">Title</label>
@@ -1202,29 +1224,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
           )}
 
           {/* SIG Questions -------------------------------------------- */}
-
-          {inputValidator.sig_py3_bad_psychodermatologycategory && dermList && (
-            <div className="flex-col">
-              <label className="form-label">Psychodermatology Category</label>
-              <Form.Select
-                name="bad_psychodermatologycategory"
-                value={formData.bad_psychodermatologycategory}
-                onChange={handleInputChange}
-                className="input"
-              >
-                <option value="" hidden>
-                  Psychodermatology Category
-                </option>
-                {dermList.map(({ value, Label }, key) => {
-                  return (
-                    <option key={key} value={value}>
-                      {Label}
-                    </option>
-                  );
-                })}
-              </Form.Select>
-            </div>
-          )}
 
           {inputValidator.sig_bad_isbadmember && (
             <div className="flex-col">
