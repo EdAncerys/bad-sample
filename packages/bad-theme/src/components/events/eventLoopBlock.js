@@ -47,13 +47,12 @@ const EventLoopBlock = ({
     colour,
     events_archive,
   } = block;
+  console.log("🐞 BLOCK", block);
 
   const [eventList, setEventList] = useState(null); // event data
   const [eventFilter, setFilter] = useState(null); // event data
-  const [isPostLimit, setLimit] = useState(post_limit && post_limit !== "0");
-  const [moreAction, setMoreAction] = useState(false); // event data
-  const useEffectRef = useRef(null);
   const curentPageRef = useRef(1);
+  const postLimitRef = useRef(0);
 
   const layoutOne = layout === "layout_one";
   const layoutTwo = layout === "layout_two";
@@ -71,6 +70,7 @@ const EventLoopBlock = ({
     // let data = state.source.events;
     let events = await getEventsData({ state, page: curentPageRef.current });
     let grades = await getEventGrades({ state });
+    if (!!post_limit) postLimitRef.current = Number(post_limit);
     if (!events) return;
 
     curentPageRef.current++;
@@ -107,13 +107,6 @@ const EventLoopBlock = ({
       });
     }
 
-    if (isPostLimit && events) {
-      // ⬇️ if post_limit is set then show only post_limit posts
-      if (events.lenght <= Number(post_limit)) return null;
-      // apply limit to eventList array length if post_limit is set & less than post_limit
-      events = events.slice(0, Number(post_limit));
-    }
-
     if (grade_filter && grades) {
       // apply grade filter to events list
       // apply to lower case to all filter title values
@@ -141,6 +134,15 @@ const EventLoopBlock = ({
 
           return isIncluded;
         });
+    }
+
+    console.log("🐞 postLimitRef", postLimitRef.current);
+    console.log("🐞 events", events.length);
+    if (postLimitRef.current !== 0 && events) {
+      // ⬇️ if post_limit is set then show only post_limit posts
+      if (events.lenght <= postLimitRef.current) return null;
+      // apply limit to eventList array length if post_limit is set & less than post_limit
+      events = events.slice(0, postLimitRef.current);
     }
 
     setEventList(events); // set event data
