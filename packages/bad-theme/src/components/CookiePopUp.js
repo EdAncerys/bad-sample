@@ -43,8 +43,7 @@ const CookiePopUp = ({ state, actions }) => {
     }
   }, [show]);
 
-  if (show && show === "all-cookies") return null;
-  if (show && show === "essential-only") return null;
+  if (show) return null;
 
   return (
     <div

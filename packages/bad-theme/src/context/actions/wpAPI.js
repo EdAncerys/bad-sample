@@ -532,3 +532,35 @@ export const getElectionsData = async ({ state, page, postsPerPage }) => {
     console.log("🐞 ", error);
   }
 };
+
+export const getDermGroupsData = async ({ state, page, postsPerPage }) => {
+  let pageNo = page || 1;
+  let perPageLimit = postsPerPage || state.theme.perPageLimit;
+  let fields = "id,title,acf";
+
+  let url = `${state.auth.WP_HOST}wp-json/wp/v2/derm_groups_charity?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+
+  try {
+    let data = [];
+
+    let response = await fetchDataHandler({ path: url, state });
+    let totalPages = response.headers.get("X-WP-TotalPages");
+
+    // fetch events data from WP & while respone is not 200 (bad request) keep fetching
+    while (response.status === 200) {
+      let json = await response.json();
+
+      data = [...data, ...json];
+      pageNo++;
+      url = `${state.auth.WP_HOST}wp-json/wp/v2/derm_groups_charity?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
+
+      // 📌 break out of the loop if no more pages
+      if (pageNo > totalPages) break;
+      response = await fetchDataHandler({ path: url, state });
+    }
+
+    return data;
+  } catch (error) {
+    console.log("🐞 ", error);
+  }
+};

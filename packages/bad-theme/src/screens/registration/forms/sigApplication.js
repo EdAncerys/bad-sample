@@ -26,6 +26,7 @@ import {
   sendFileToS3Action,
   googleAutocompleteAction,
   getGenderAction,
+  getDermGroupsData,
   setErrorAction,
 } from "../../../context";
 
@@ -120,6 +121,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const [isEmail, setIsEmail] = useState(false);
   const [applicationType, setType] = useState("Special Interest Group");
   const [readPolicyDoc, setReadPolicyDoc] = useState("");
+  const [contactEmail, setEmail] = useState("");
   const [isFetching, setFetching] = useState(false);
   const [membershipData, setMembershipData] = useState(false);
   const [isJobEditable, setJobEditable] = useState(true);
@@ -136,6 +138,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const [isFetchingAddress, setIsFetchingAddress] = useState(null);
   const [searchInput, setSearchInput] = useState("");
   const address1Line1Ref = useRef("");
+  const dermGroupRef = useRef([]);
   const ctaHeight = 40;
 
   // ⏬ populate form data values from applicationData
@@ -144,6 +147,10 @@ const SIGApplication = ({ state, actions, libraries }) => {
     let applicationType = null;
     let hospitalId = null;
     let membershipData = state.source.memberships;
+
+    // 📌 prefetch derm group data for mails and policy links
+    const dermGroups = await getDermGroupsData({ state, postsPerPage: 100 });
+    if (dermGroups) dermGroupRef.current = dermGroups;
 
     // 📌 get gender list from Dynamics
     if (!genderList) await getGenderAction({ state, dispatch });
@@ -271,7 +278,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         ...prevFormData,
         bad_categorytype: type,
       }));
-      // update policy link agains app data
+      // 📌 update policy link agains app data
       handlePolicyLinkUpdate({
         membershipData,
         value: type,
@@ -371,6 +378,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     );
 
     let policyLink = "";
+    let contactEmail = "";
     // if have membership app data update policy field with link to policy
     if (filteredMembershipData.length)
       policyLink =
@@ -381,9 +389,18 @@ const SIGApplication = ({ state, actions, libraries }) => {
     // if application have : then split it to get name
     if (applicationName.includes(":"))
       applicationName = applicationName.split(":")[1];
+
+    // filter dermGroupRefs data & return memberships that includes applicationName
+    const filteredDermGroupRefs = dermGroupRef.current.filter((item) =>
+      item.title.rendered.includes(applicationName)
+    );
+    if (filteredDermGroupRefs.length)
+      contactEmail = filteredDermGroupRefs[0].acf.email;
+
     setType(applicationName);
-    // set selected policy link
+    // set selected policy link & contact email
     setReadPolicyDoc(policyLink);
+    setEmail(contactEmail);
   };
 
   const handleMemTypeChange = (e) => {
@@ -684,10 +701,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
       </div>
     );
   };
-
-  const isPolicy = inputValidator.sig_bad_readpolicydocument && !!readPolicyDoc;
-  const isPolicyFallBack =
-    inputValidator.sig_bad_readpolicydocument && !readPolicyDoc;
 
   return (
     <div style={{ position: "relative" }}>
@@ -1321,7 +1334,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.sig_py3_whatukbasedroleareyou && (
             <div style={{ paddingTop: "0.5em" }}>
-              <label style={styles.subTitle} className="required">
+              <label style={styles.subTitle} className="required form-label">
                 UK / Overseas role
               </label>
               <Form.Select
@@ -1346,7 +1359,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.sig_py3_speciality && (
             <div>
-              <label style={styles.subTitle} className="required">
+              <label style={styles.subTitle} className="required form-label">
                 Specialist Interest
               </label>
               <Form.Select
@@ -1384,7 +1397,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.sig_bad_mainareaofinterest && (
             <div>
-              <label style={styles.subTitle}>Main area of interest</label>
+              <label style={styles.subTitle} className="form-label">
+                Main area of interest
+              </label>
               <Form.Select
                 name="bad_mainareaofinterest"
                 value={formData.bad_mainareaofinterest}
@@ -1409,7 +1424,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
           )}
 
           {inputValidator.sig_bad_includeinthebssciiemaildiscussionforum && (
-            <div className="flex-col">
+            <div className="flex-col" style={{ paddingTop: "0.5em" }}>
               <div className="flex">
                 <div style={{ display: "grid", alignItems: "center" }}>
                   <input
@@ -1444,22 +1459,22 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {isPolicyFallBack && (
+          {inputValidator.sig_bad_readpolicydocument && !readPolicyDoc && (
             <div>
               <div
                 className="flex"
-                style={{ alignItems: "center", margin: `1em 0` }}
+                style={{ alignItems: "center", paddingTop: "0.5em" }}
               >
-                {`If you would like to find out more about the ${applicationType} privacy policy please contact (email address)`}
+                {`If you would like to find out more about the ${applicationType} privacy policy please contact ${contactEmail}`}
               </div>
             </div>
           )}
 
-          {isPolicy && (
+          {inputValidator.sig_bad_readpolicydocument && !!readPolicyDoc && (
             <div>
               <div
                 className="flex"
-                style={{ alignItems: "center", margin: `1em 0` }}
+                style={{ alignItems: "center", paddingTop: "0.5em" }}
               >
                 <div style={{ display: "grid" }}>
                   <input
