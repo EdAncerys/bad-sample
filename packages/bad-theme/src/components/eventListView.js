@@ -111,10 +111,10 @@ const EventListView = ({
 
     const ServeTitle = () => {
       if (!title) return null;
-
+      const titleClass = !lg ? "primary-title body-limit" : "primary-title";
       return (
         <div
-          className="primary-title body-limit"
+          className={titleClass}
           style={{
             fontSize: !lg ? 20 : 16,
             padding: `0.5em 0`,
