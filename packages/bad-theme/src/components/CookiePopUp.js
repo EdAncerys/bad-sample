@@ -30,9 +30,16 @@ const CookiePopUp = ({ state, actions }) => {
     // --------------------------------------------------------------------------------
     const cookie = handleGetCookie({ name: `BAD-cookie-popup` });
 
+    // set analitics cookie
     if (cookie && cookie === "all-cookies") {
       ReactGA.initialize("UA-50027583-1");
       ReactGA.pageview(window.location.pathname + window.location.search);
+    }
+    //remove analytics cookie if user has not consented
+    if (cookie && cookie === "essential-only") {
+      handleSetCookie({ name: "_gat", deleteCookie: true });
+      handleSetCookie({ name: "_gid", deleteCookie: true });
+      handleSetCookie({ name: "_ga", deleteCookie: true });
     }
   }, [show]);
 

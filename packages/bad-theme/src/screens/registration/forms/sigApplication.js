@@ -686,6 +686,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
   };
 
   const isPolicy = inputValidator.sig_bad_readpolicydocument && !!readPolicyDoc;
+  const isPolicyFallBack =
+    inputValidator.sig_bad_readpolicydocument && !readPolicyDoc;
 
   return (
     <div style={{ position: "relative" }}>
@@ -1439,6 +1441,17 @@ const SIGApplication = ({ state, actions, libraries }) => {
                   />
                 </div>
               )}
+            </div>
+          )}
+
+          {isPolicyFallBack && (
+            <div>
+              <div
+                className="flex"
+                style={{ alignItems: "center", margin: `1em 0` }}
+              >
+                {`If you would like to find out more about the ${applicationType} privacy policy please contact (email address)`}
+              </div>
             </div>
           )}
 
