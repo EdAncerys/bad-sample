@@ -156,7 +156,7 @@ const Post = ({ state, actions, libraries }) => {
                     width: "fit-content",
                   }}
                 >
-                  {catName}
+                  <Html2React html={catName} />
                 </div>
 
                 <div

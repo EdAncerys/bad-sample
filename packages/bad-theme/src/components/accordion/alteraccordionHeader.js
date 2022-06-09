@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
@@ -103,8 +103,7 @@ const AccordionHeader = ({
         className="text-body body-limit"
         id={`preview-id-${uniqueId}`}
         style={{
-          paddingTop: `1em`,
-          margin: `1em`,
+          margin: `0 1em 1em`,
           color: colors.darkSilver,
           borderTop:
             !lg || browsero.includes("Firefox")

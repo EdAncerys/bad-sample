@@ -1,9 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
-import Loading from "./loading";
 import { colors } from "../config/imports";
-import TitleBlock from "./titleBlock";
 import SearchDropDown from "./searchDropDown";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";

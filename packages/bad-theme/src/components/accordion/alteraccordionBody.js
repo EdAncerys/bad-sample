@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import parse from "html-react-parser";
@@ -20,7 +20,6 @@ import {
   setErrorAction,
   muiQuery,
 } from "../../context";
-import { getLeadershipTeamData } from "../../helpers";
 
 const AccordionBody = ({
   state,
@@ -690,7 +689,7 @@ const AccordionBody = ({
     <div id={`accordion-body-${uniqueId}`}>
       <div
         className="accordion-body accordion-content"
-        style={{ margin: `0 1.25em`, padding: `1em 0` }}
+        style={{ padding: `1em 0` }}
       >
         <ServeBody />
         <ServeLTBody />

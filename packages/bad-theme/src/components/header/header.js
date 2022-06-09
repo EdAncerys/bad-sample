@@ -1,7 +1,6 @@
 import { connect, Global, css } from "frontity";
 import bootStrapCSS from "../../css/bootstrap.min.css";
 import { colors } from "../../config/imports";
-import { useEffect } from "react";
 // css imports ------------------------------------------------------------
 import animations from "aos/dist/aos.css";
 import globalCSS from "../../css/main.css";
@@ -17,17 +16,15 @@ import iFrame from "../../css/iFrame.css";
 import HTMLHead from "./htmlHead";
 import HeaderActions from "./headerActions";
 import Navigation from "./navigation";
-import Loading from "../loading";
 import CookiePopUp from "../CookiePopUp";
 // CONTEXT ----------------------------------------------------------------
 import { muiQuery } from "../../context";
-import ReactGA from "react-ga";
-import { handleGetCookie } from "../../helpers/cookie";
 
 const Header = ({ state, actions }) => {
   const { sm, md, lg, xl } = muiQuery();
   const urlPath = state.router.link;
   const data = state.source.get(urlPath);
+
   const ServeNavigation = () => {
     return (
       <div className="bad-header no-selector" style={styles.container}>
@@ -36,16 +33,6 @@ const Header = ({ state, actions }) => {
       </div>
     );
   };
-
-  useEffect(() => {
-    const cookie = handleGetCookie({ name: `BAD-cookie-popup` });
-    // console.log("Cookie Policie 🍪", cookie);
-
-    if (cookie && cookie === "all-cookies") {
-      ReactGA.initialize("UA-50027583-1");
-      ReactGA.pageview(window.location.pathname + window.location.search);
-    }
-  }, []);
 
   return (
     <>

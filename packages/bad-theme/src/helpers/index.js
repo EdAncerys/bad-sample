@@ -92,6 +92,7 @@ export const authCookieActionAfterCSR = async ({ state, dispatch }) => {
 
   try {
     const response = await fetchDataHandler({ path, state });
+
     if (response.ok) {
       // 📌 handle user data from Dynamics prefetch
       let data = await response.json();

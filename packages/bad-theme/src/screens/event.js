@@ -88,16 +88,13 @@ const Event = ({ state, actions, libraries }) => {
     contact_form_body,
     contact_allow_attachments,
     contact_recipients,
+    contact_email_override,
   } = event.acf;
   const { title, id } = event;
   // console.log("event", event); // debug
 
   if (!position) return <Loading />;
 
-  const handleLogin = () => {
-    setErrorAction({ dispatch, isError: null });
-    loginAction({ state });
-  };
   // SERVERS ----------------------------------------------
   const ServeTitle = () => {
     if (!title) return null;
@@ -229,14 +226,14 @@ const Event = ({ state, actions, libraries }) => {
     };
 
     const ServeEmail = () => {
-      if (!email) return null;
-
+      if (!email && !contact_email_override) return null;
+      const displayEmail = contact_email_override || email;
       return (
         <div style={{ paddingBottom: `1em` }}>
           <div className="primary-title" style={{ fontSize: 20 }}>
             Email:
           </div>
-          <Html2React html={email} />
+          <Html2React html={displayEmail} />
         </div>
       );
     };
@@ -352,6 +349,7 @@ const Event = ({ state, actions, libraries }) => {
             registerForEvent: title.rendered,
             // default email subject & template name
             emailSubject: `Register for ${title.rendered} event.`,
+            emailOverride: contact_email_override,
           },
         });
         return true;

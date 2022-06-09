@@ -84,7 +84,12 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   }, [isActiveUser, applicationData]);
 
   // return loading placeholder if if !isActiveUser || !applicationData
-  if (!isActiveUser) return <Loading />;
+  if (!isActiveUser)
+    return (
+      <div>
+        <Loading padding="5vh 0 0" />
+      </div>
+    );
 
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {

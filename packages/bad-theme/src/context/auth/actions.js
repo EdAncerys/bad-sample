@@ -267,7 +267,7 @@ export const handleRemoveServerSideCookie = async ({ state }) => {
 
     return response;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 

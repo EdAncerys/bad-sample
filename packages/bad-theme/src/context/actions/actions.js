@@ -168,6 +168,6 @@ export const setPlaceholderAction = ({ dispatch, isPlaceholder }) => {
 };
 
 export const setRedirectAction = ({ dispatch, redirects }) => {
-  console.log("setRedirectAction triggered"); //debug
+  // console.log("setRedirectAction triggered"); //debug
   dispatch({ type: "SET_REDIRECT_ACTION", payload: redirects });
 };

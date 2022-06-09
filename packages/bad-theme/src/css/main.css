@@ -149,6 +149,10 @@ input[type="email"]::-webkit-input-placeholder {
   flex: auto;
 }
 
+.hide {
+  display: none;
+}
+
 /* Test css */
 .pink {
   background-color: pink;

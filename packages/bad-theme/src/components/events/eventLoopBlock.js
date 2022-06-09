@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import Loading from "../loading";
@@ -14,6 +14,7 @@ import {
   muiQuery,
   getEventsData,
   handleSortFilter,
+  getEventGrades,
 } from "../../context";
 
 const EventLoopBlock = ({
@@ -49,10 +50,8 @@ const EventLoopBlock = ({
 
   const [eventList, setEventList] = useState(null); // event data
   const [eventFilter, setFilter] = useState(null); // event data
-  const [isPostLimit, setLimit] = useState(post_limit && post_limit !== "0");
-  const [moreAction, setMoreAction] = useState(false); // event data
-  const useEffectRef = useRef(null);
   const curentPageRef = useRef(1);
+  const postLimitRef = useRef(0);
 
   const layoutOne = layout === "layout_one";
   const layoutTwo = layout === "layout_two";
@@ -69,6 +68,8 @@ const EventLoopBlock = ({
   useEffect(async () => {
     // let data = state.source.events;
     let events = await getEventsData({ state, page: curentPageRef.current });
+    let grades = await getEventGrades({ state });
+    if (!!post_limit) postLimitRef.current = Number(post_limit);
     if (!events) return;
 
     curentPageRef.current++;
@@ -105,11 +106,40 @@ const EventLoopBlock = ({
       });
     }
 
-    if (isPostLimit && events) {
+    if (grade_filter && grades) {
+      // apply grade filter to events list
+      // apply to lower case to all filter title values
+      let filters = Object.values(grade_filter);
+      // break if filters are empty
+      let filterTitlesToLowerCase = filters.map((grade) => grade.toLowerCase());
+
+      // get list of grade id that match the filter titles
+      let gradeIds = [];
+      grades.map((grade) => {
+        let gradeTitle = grade.name.toLowerCase();
+        let isIncluded = filterTitlesToLowerCase.includes(gradeTitle);
+        if (isIncluded) gradeIds.push(grade.id);
+      });
+      // console.log("🐞 gradeIds", gradeIds);
+
+      // get events that match the grade ids
+      // apply filters if grade_filter is set and grade_filter is not empty
+      if (filters.length)
+        events = events.filter((event) => {
+          let eventGradeIds = event.event_grade;
+          let isIncluded = eventGradeIds.some((gradeId) =>
+            gradeIds.includes(gradeId)
+          );
+
+          return isIncluded;
+        });
+    }
+
+    if (postLimitRef.current !== 0 && events) {
       // ⬇️ if post_limit is set then show only post_limit posts
-      if (events.lenght <= Number(post_limit)) return null;
+      if (events.lenght <= postLimitRef.current) return null;
       // apply limit to eventList array length if post_limit is set & less than post_limit
-      events = events.slice(0, Number(post_limit));
+      events = events.slice(0, postLimitRef.current);
     }
 
     setEventList(events); // set event data
@@ -271,18 +301,6 @@ const EventLoopBlock = ({
         {eventFilter.map((block, key) => {
           const { image, summary, date_time } = block.acf;
           const title = block.title.rendered;
-
-          // ⬇️ show only events that event_grade object have in common gradeFilter
-          /* if (gradeFilter.length > 0) {
-            if (!event_grade) return null;
-            let grade_match = false;
-            event_grade.forEach((grade) => {
-              gradeFilter.forEach((filter) => {
-                if (grade === filter) grade_match = true;
-              });
-            });
-            if (!grade_match) return null;
-          } */
 
           // list view
           if (layoutOne) {

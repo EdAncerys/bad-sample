@@ -140,7 +140,7 @@ function AlterAccordion({
   return (
     <div
       style={{
-        padding: `${marginVertical}px ${marginHorizontal}px`,
+        padding: `1em 0`,
         backgroundColor: background_colour || "transparent",
       }}
     >

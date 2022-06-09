@@ -30,11 +30,6 @@ import {
   setAppSearchPhraseAction,
   muiQuery,
   setCreateAccountModalAction,
-  getUserDataByContactId, // TESTING enviroment
-  fetchDataHandler, // TESTING enviroment
-  handleSetCookie, // TESTING enviroment
-  handleGetCookie, // TESTING enviroment
-  handleRemoveServerSideCookie, // TESTING enviroment
 } from "../../context";
 
 const HeaderActions = ({ state, actions, libraries }) => {
@@ -44,7 +39,6 @@ const HeaderActions = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
 
-  const [isReady, SetReady] = useState(null);
   const [filter, setFilter] = useState(null);
   const [isFetching, setFetching] = useState(null);
   const [searchFilter, setSearchFilter] = useState("");
@@ -53,18 +47,6 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   const ctaHeight = 45;
   const SiteLogo = !lg ? BADLogo : MobileLogo;
-  // hook applies after React has performed all DOM mutations
-  // prevent dashboard actions to load before isActiveUser data loaded
-  useLayoutEffect(() => {
-    SetReady(true);
-  }, []);
-
-  if (!isReady)
-    return (
-      <div style={{ height: 178, borderBottom: `1px solid ${colors.primary}` }}>
-        <Loading />
-      </div>
-    );
 
   // HANDLERS --------------------------------------------
   const handleSearchLookup = async () => {

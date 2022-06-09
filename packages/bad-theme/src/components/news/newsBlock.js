@@ -15,7 +15,7 @@ const NewsBlock = ({
   block,
   layout,
 }) => {
-  const { post_limit, disable_vertical_padding } = block;
+  const { disable_vertical_padding } = block;
 
   const isLayoutTwo = layout === "layout_two";
   const isLayoutThree = layout === "layout_three";

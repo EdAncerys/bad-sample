@@ -24,9 +24,9 @@ import {
   getHospitalsAction,
   getBADMembershipSubscriptionData,
   sendFileToS3Action,
-  getEthnicityAction,
   googleAutocompleteAction,
   getGenderAction,
+  getDermGroupsData,
   setErrorAction,
 } from "../../../context";
 
@@ -76,6 +76,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     bad_mainareaofinterest: "",
     bad_includeinthebssciiemaildiscussionforum: "",
     py3_insertnhsnetemailaddress: "",
+    bad_psychodermatologycategory: "",
   });
   const [inputValidator, setInputValidator] = useState({
     bad_categorytype: true,
@@ -115,10 +116,12 @@ const SIGApplication = ({ state, actions, libraries }) => {
     sig_bad_mainareaofinterest: true,
     sig_bad_includeinthebssciiemaildiscussionforum: true,
     sig_py3_insertnhsnetemailaddress: true,
+    sig_py3_bad_psychodermatologycategory: true,
   });
   const [isEmail, setIsEmail] = useState(false);
   const [applicationType, setType] = useState("Special Interest Group");
   const [readPolicyDoc, setReadPolicyDoc] = useState("");
+  const [contactEmail, setEmail] = useState("");
   const [isFetching, setFetching] = useState(false);
   const [membershipData, setMembershipData] = useState(false);
   const [isJobEditable, setJobEditable] = useState(true);
@@ -126,6 +129,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const [hospitalData, setHospitalData] = useState(null);
   const [canChangeHospital, setCanChangeHospital] = useState(true); // allow user to change hospital is no BAD applications are found
   const [selectedHospital, setSelectedHospital] = useState(null);
+  const [dermList, setDermList] = useState(null);
   const isHospitalValue = formData.py3_hospitalid;
   const hospitalSearchRef = useRef("");
   const documentRef = useRef(null);
@@ -134,6 +138,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const [isFetchingAddress, setIsFetchingAddress] = useState(null);
   const [searchInput, setSearchInput] = useState("");
   const address1Line1Ref = useRef("");
+  const dermGroupRef = useRef([]);
   const ctaHeight = 40;
 
   // ⏬ populate form data values from applicationData
@@ -142,6 +147,10 @@ const SIGApplication = ({ state, actions, libraries }) => {
     let applicationType = null;
     let hospitalId = null;
     let membershipData = state.source.memberships;
+
+    // 📌 prefetch derm group data for mails and policy links
+    const dermGroups = await getDermGroupsData({ state, postsPerPage: 100 });
+    if (dermGroups) dermGroupRef.current = dermGroups;
 
     // 📌 get gender list from Dynamics
     if (!genderList) await getGenderAction({ state, dispatch });
@@ -180,28 +189,29 @@ const SIGApplication = ({ state, actions, libraries }) => {
     // pre-fill application input fields with data from applicationData
     applicationData.map((data) => {
       // ⬇️  map sigApp fields against applicationData & set formData with field name & value
-      sigAppFileds.map((item) => {
-        if (item.name === "sky_cvurl") return; // cv url field is not required
-        if (data.name === item) {
-          handleSetFormData({ data, name: item });
-        }
+      if (data.name === "sky_cvurl") return; // cv url field is not required
+      handleSetFormData({ data, name: data.name });
 
-        // if bad_currentpost is null then set value from user profile data
-        if (!data.bad_currentpost) {
-          setFormData((prevFormData) => ({
-            ...prevFormData,
-            [`bad_currentpost`]: isActiveUser.jobtitle,
-          }));
-          // set job title to disabled status
-          setJobEditable(false);
-        }
-      });
+      // if bad_currentpost is null then set value from user profile data
+      if (!data.bad_currentpost && isActiveUser) {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          [`bad_currentpost`]: isActiveUser.jobtitle,
+        }));
+        // set job title to disabled status
+        setJobEditable(false);
+      }
 
       // set hospital id if exists
       if (data.name === "py3_hospitalid") {
         if (data.value) hospitalId = data.value;
       }
-      // set app type name
+      // 📌 set Psychodermatology Category picklist values
+      if (data.name === "bad_psychodermatologycategory") {
+        const pickList = data.info.Choices;
+        setDermList(pickList);
+      }
+      // 📌 set app type name
       if (data.bad_categorytype) {
         applicationType = data.bad_categorytype; // set application type for logic below
         // 📌 set application type name
@@ -268,7 +278,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         ...prevFormData,
         bad_categorytype: type,
       }));
-      // update policy link agains app data
+      // 📌 update policy link agains app data
       handlePolicyLinkUpdate({
         membershipData,
         value: type,
@@ -354,7 +364,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       if (!formData[input] && inputValidator[inputValue]) {
         errorHandler({ id: `form-error-${input}`, time: 5000 });
         isValid = false;
-        // console.log("🐞 FAILED AUTH", input, formData[input]);
+        // console.log("🐞 FAILED AUTH", input, formData[input]); // failed input validation debugger
       }
     });
 
@@ -368,6 +378,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     );
 
     let policyLink = "";
+    let contactEmail = "";
     // if have membership app data update policy field with link to policy
     if (filteredMembershipData.length)
       policyLink =
@@ -378,9 +389,18 @@ const SIGApplication = ({ state, actions, libraries }) => {
     // if application have : then split it to get name
     if (applicationName.includes(":"))
       applicationName = applicationName.split(":")[1];
+
+    // filter dermGroupRefs data & return memberships that includes applicationName
+    const filteredDermGroupRefs = dermGroupRef.current.filter((item) =>
+      item.title.rendered.includes(applicationName)
+    );
+    if (filteredDermGroupRefs.length)
+      contactEmail = filteredDermGroupRefs[0].acf.email;
+
     setType(applicationName);
-    // set selected policy link
+    // set selected policy link & contact email
     setReadPolicyDoc(policyLink);
+    setEmail(contactEmail);
   };
 
   const handleMemTypeChange = (e) => {
@@ -436,7 +456,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
         "py3_addresszippostalcode",
         "py3_addresscountry",
         "py3_ntnno",
-        "bad_readpolicydocument",
+        inputValidator.sig_bad_readpolicydocument && !!readPolicyDoc
+          ? "bad_readpolicydocument"
+          : "",
         "sky_cvurl",
         formData.bad_categorytype ===
         "Associate:British Society for Medical Dermatology"
@@ -680,8 +702,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
     );
   };
 
-  const isPolicy = inputValidator.sig_bad_readpolicydocument && !!readPolicyDoc;
-
   return (
     <div style={{ position: "relative" }}>
       <ActionPlaceholder
@@ -715,6 +735,29 @@ const SIGApplication = ({ state, actions, libraries }) => {
           }}
         >
           <ServeSIGMembershipCategory />
+
+          {/* {inputValidator.sig_py3_bad_psychodermatologycategory && dermList && (
+            <div className="flex-col">
+              <label className="form-label">Membership Category Type</label>
+              <Form.Select
+                name="bad_psychodermatologycategory"
+                value={formData.bad_psychodermatologycategory}
+                onChange={handleInputChange}
+                className="input"
+              >
+                <option value="" hidden>
+                  Membership Category Type
+                </option>
+                {dermList.map(({ value, Label }, key) => {
+                  return (
+                    <option key={key} value={value}>
+                      {Label}
+                    </option>
+                  );
+                })}
+              </Form.Select>
+            </div>
+          )} */}
 
           {inputValidator.sig_py3_title && (
             <div>
@@ -1262,7 +1305,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.sig_py3_currentgrade && (
             <div>
-              <label className="form-label required">Current Grade</label>
+              <label className="form-label">Current Grade</label>
               <input
                 name="py3_currentgrade"
                 value={formData.py3_currentgrade}
@@ -1290,8 +1333,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
           )}
 
           {inputValidator.sig_py3_whatukbasedroleareyou && (
-            <div>
-              <label style={styles.subTitle} className="required">
+            <div style={{ paddingTop: "0.5em" }}>
+              <label style={styles.subTitle} className="required form-label">
                 UK / Overseas role
               </label>
               <Form.Select
@@ -1316,7 +1359,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.sig_py3_speciality && (
             <div>
-              <label style={styles.subTitle} className="required">
+              <label style={styles.subTitle} className="required form-label">
                 Specialist Interest
               </label>
               <Form.Select
@@ -1354,7 +1397,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.sig_bad_mainareaofinterest && (
             <div>
-              <label style={styles.subTitle}>Main area of interest</label>
+              <label style={styles.subTitle} className="form-label">
+                Main area of interest
+              </label>
               <Form.Select
                 name="bad_mainareaofinterest"
                 value={formData.bad_mainareaofinterest}
@@ -1379,7 +1424,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
           )}
 
           {inputValidator.sig_bad_includeinthebssciiemaildiscussionforum && (
-            <div className="flex-col">
+            <div className="flex-col" style={{ paddingTop: "0.5em" }}>
               <div className="flex">
                 <div style={{ display: "grid", alignItems: "center" }}>
                   <input
@@ -1414,11 +1459,22 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {isPolicy && (
+          {inputValidator.sig_bad_readpolicydocument && !readPolicyDoc && (
             <div>
               <div
                 className="flex"
-                style={{ alignItems: "center", margin: `1em 0` }}
+                style={{ alignItems: "center", paddingTop: "0.5em" }}
+              >
+                {`If you would like to find out more about the ${applicationType} privacy policy please contact ${contactEmail}`}
+              </div>
+            </div>
+          )}
+
+          {inputValidator.sig_bad_readpolicydocument && !!readPolicyDoc && (
+            <div>
+              <div
+                className="flex"
+                style={{ alignItems: "center", paddingTop: "0.5em" }}
               >
                 <div style={{ display: "grid" }}>
                   <input
