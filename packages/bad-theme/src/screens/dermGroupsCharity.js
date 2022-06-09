@@ -1,26 +1,23 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../config/imports";
-import BlockBuilder from "../components/builder/blockBuilder";
 import { muiQuery } from "../context";
 import TitleBlock from "../components/titleBlock";
 import Card from "../components/card/card";
-import Loading from "../components/loading";
 // CONTEXT -----------------------------------------------------------------
 import {
   useAppDispatch,
   useAppState,
   handleApplyForMembershipAction,
   getSIGGroupeData,
-  getSIGData,
 } from "../context";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 
 const DermGroupsCharity = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
+  const { lg } = muiQuery();
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, dynamicsApps } = useAppState();
   const [sigGroup, setGroupe] = useState(null);
@@ -72,7 +69,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   // SERVERS ---------------------------------------------------
   const ServeContent = () => {
     return (
-      <div>
+      <div style={{ margin: !lg ? null : "0.5em 1em" }}>
         <TitleBlock
           block={{ title: title.rendered }}
           margin={`0 0 ${marginVertical}px 0`}
@@ -112,7 +109,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   return (
     <BlockWrapper>
       <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
-        <div style={styles.container}>
+        <div style={!lg ? styles.container : styles.containerMobile}>
           <ServeContent />
           <div style={{ minWidth: 300 }}>
             <Card
@@ -133,6 +130,12 @@ const styles = {
   container: {
     display: "grid",
     gridTemplateColumns: `1fr auto`,
+    gap: "2em",
+  },
+  containerMobile: {
+    display: "flex",
+    flexDirection: "column-reverse",
+    // gridTemplateColumns: `1fr`,
     gap: "2em",
   },
 };
