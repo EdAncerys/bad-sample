@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { connect } from "frontity";
 import { handleSetCookie, handleGetCookie } from "../helpers/cookie";
+import ReactGA from "react-ga";
 // --------------------------------------------------------------------------------
 import { setGoToAction } from "../context";
 
@@ -22,6 +23,18 @@ const CookiePopUp = ({ state, actions }) => {
     // set cookie policie preferences
     setShow(cookie);
   });
+
+  useEffect(() => {
+    // --------------------------------------------------------------------------------
+    // 📌  Add Google Analytics Cookies
+    // --------------------------------------------------------------------------------
+    const cookie = handleGetCookie({ name: `BAD-cookie-popup` });
+
+    if (cookie && cookie === "all-cookies") {
+      ReactGA.initialize("UA-50027583-1");
+      ReactGA.pageview(window.location.pathname + window.location.search);
+    }
+  }, [show]);
 
   if (show && show === "all-cookies") return null;
   if (show && show === "essential-only") return null;
