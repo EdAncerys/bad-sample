@@ -138,21 +138,38 @@ const HeaderActions = ({ state, actions, libraries }) => {
     if (state.auth.ENVIRONMENT !== "DEVELOPMENT") return null;
 
     return (
-      <div className="flex-col" style={{ padding: `0 1em` }}>
-        {/* <div
-            className="blue-btn-reverse"
-            style={{ minWidth: "fit-content" }}
-            onClick={handleCheck}
-          >
-            ST
-          </div>
-          <div
-            className="blue-btn-reverse"
-            style={{ minWidth: "fit-content" }}
-            onClick={handleCookie}
-          >
-            🍪
-          </div> */}
+      <div
+        className="flex pink"
+        style={{
+          position: "absolute",
+          top: "3em",
+          left: "2em",
+          justifyContent: "space-between",
+          minWidth: 500,
+          padding: "1em",
+        }}
+      >
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={handleCheck}
+        >
+          ST
+        </div>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={() => handleRemoveServerSideCookie({ state })}
+        >
+          LogOut
+        </div>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={handleCookie}
+        >
+          🍪
+        </div>
         <input
           id="autocomplete"
           placeholder="google autocomplete"

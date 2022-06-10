@@ -83,7 +83,7 @@ const App = ({ state, actions }) => {
   useQuery({ state });
   // 📌 google places api
   useScript({
-    url: `https://maps.googleapis.com/maps/api/js?key=${state.auth.GOOGLE_API_KEY}&libraries=places&callback=initAutocomplete`,
+    url: `https://maps.googleapis.com/maps/api/js?key=${state.auth.GOOGLE_API_KEY}&libraries=places`,
   });
   console.log("🐞 GOOGLE_API_KEY", state.auth.GOOGLE_API_KEY);
 
@@ -106,15 +106,8 @@ const App = ({ state, actions }) => {
 
     // get current time & compare how long pre-fetch took before  setting placeholder
     const timeTaken = new Date().getTime() - currentTime;
-    // 📌 if time taken is less than 3s await for remaining time before proceeding
-    // console.log("timeTaken", timeTaken); // debug
-    if (timeTaken < 2000) {
-      await new Promise((resolve) => setTimeout(resolve, 2000 - timeTaken));
-    }
-    // ⬇️  set APP placeholder after async actions to false
-    // if page path include codecollect, skip placeholder
-    if (!urlPath.includes("codecollect"))
-      setPlaceholderAction({ dispatch, isPlaceholder: false });
+    console.log("🐞 LOAD TIME", timeTaken); // debug
+
     // animation handler
     AOS.init();
     return () => {

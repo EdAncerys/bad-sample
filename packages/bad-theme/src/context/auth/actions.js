@@ -180,7 +180,7 @@ export const getUserDataByContactId = async ({
     console.log("🐞 ALTERED USER DATA");
     // contactid = "cc9a332a-3672-ec11-8943-000d3a43c136"; // andy testing account
     // contactid = "84590b32-9490-ec11-b400-000d3a22037e"; // mandy
-    contactid = "0786df85-618f-ec11-b400-000d3a22037e"; // Chris
+    // contactid = "0786df85-618f-ec11-b400-000d3a22037e"; // Chris
     // contactid = "89bb168e-5dc1-ec11-983f-000d3aae25bf"; // NEW USER
     // contactid = "a167c3ee-ba93-e711-80f5-3863bb351f50"; // membership
     // contactid = "969ba377-a398-ec11-b400-000d3aaedef5"; // emelia
@@ -204,7 +204,6 @@ export const getUserDataByContactId = async ({
     });
     if (!dynamicApps.apps.success)
       throw new Error("Error dynamicApps userData.");
-
     setActiveUserAction({ dispatch, isActiveUser: response });
 
     return response;
@@ -272,7 +271,7 @@ export const getUserDataFromDynamics = async ({ state, contactid }) => {
 export const handleRemoveServerSideCookie = async ({ state }) => {
   // console.log("getUserDataFromDynamics triggered");
 
-  const path = state.auth.APP_HOST + `/dynamicstest/users/b2c/logout`;
+  const path = state.auth.APP_HOST + `/users/b2c/logout`;
 
   try {
     const response = await fetchDataHandler({ path, state });

@@ -116,7 +116,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     sig_bad_mainareaofinterest: true,
     sig_bad_includeinthebssciiemaildiscussionforum: true,
     sig_py3_insertnhsnetemailaddress: true,
-    sig_bad_psychodermatologycategory: true,
+    sig_bad_psychodermatologycategory: false, // this is a special case for the sig application forms as new field is added that do not update wp resspones via api
   });
   const [isEmail, setIsEmail] = useState(false);
   const [applicationType, setType] = useState("Special Interest Group");
@@ -405,6 +405,11 @@ const SIGApplication = ({ state, actions, libraries }) => {
     );
     if (filteredDermGroupRefs.length)
       contactEmail = filteredDermGroupRefs[0].acf.email;
+
+    console.log("🐞 filteredMembershipData", filteredMembershipData);
+    console.log("🐞 dermGroupRef", dermGroupRef);
+    console.log("🐞 applicationName", applicationName);
+    console.log("🐞 filteredDermGroupRefs", filteredDermGroupRefs);
 
     setType(applicationName);
     // set selected policy link & contact email

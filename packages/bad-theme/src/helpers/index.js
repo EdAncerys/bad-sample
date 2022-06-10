@@ -92,10 +92,12 @@ export const authCookieActionAfterCSR = async ({ state, dispatch }) => {
 
   try {
     const response = await fetchDataHandler({ path, state });
+    console.log("🐞 RESPONSE", response);
 
     if (response.ok) {
       // 📌 handle user data from Dynamics prefetch
       let data = await response.json();
+      console.log("🐞 RESPONSE data", data);
       const { level, contactid } = data.data;
       if (level !== "auth") return null; // if cookie is not auth level, don't proceed
 
