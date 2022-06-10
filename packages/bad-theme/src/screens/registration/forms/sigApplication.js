@@ -116,7 +116,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     sig_bad_mainareaofinterest: true,
     sig_bad_includeinthebssciiemaildiscussionforum: true,
     sig_py3_insertnhsnetemailaddress: true,
-    sig_py3_bad_psychodermatologycategory: true,
+    sig_bad_psychodermatologycategory: true,
   });
   const [isEmail, setIsEmail] = useState(false);
   const [applicationType, setType] = useState("Special Interest Group");
@@ -317,18 +317,27 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const handleDocUploadChange = async (e) => {
     let sky_cvurl = e.target.files[0];
 
-    if (sky_cvurl)
-      sky_cvurl = await sendFileToS3Action({
-        state,
-        dispatch,
-        attachments: sky_cvurl,
-      });
-    // console.log("🐞 ", sky_cvurl); // debug
+    try {
+      setFetching(true);
+      // upload file to storage
+      if (sky_cvurl)
+        sky_cvurl = await sendFileToS3Action({
+          state,
+          dispatch,
+          attachments: sky_cvurl,
+        });
 
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      ["sky_cvurl"]: sky_cvurl,
-    }));
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        ["sky_cvurl"]: sky_cvurl,
+      }));
+
+      // console.log("🐞 ", sky_cvurl); // debug
+    } catch (error) {
+      // console.log("🤖 error", error);
+    } finally {
+      setFetching(false);
+    }
   };
 
   const handleHospitalLookup = async () => {
@@ -456,6 +465,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
         "py3_addresszippostalcode",
         "py3_addresscountry",
         "py3_ntnno",
+        inputValidator.sig_bad_psychodermatologycategory && !!dermList
+          ? "bad_psychodermatologycategory"
+          : "",
         inputValidator.sig_bad_readpolicydocument && !!readPolicyDoc
           ? "bad_readpolicydocument"
           : "",
@@ -736,9 +748,11 @@ const SIGApplication = ({ state, actions, libraries }) => {
         >
           <ServeSIGMembershipCategory />
 
-          {inputValidator.sig_py3_bad_psychodermatologycategory && dermList && (
+          {inputValidator.sig_bad_psychodermatologycategory && !!dermList && (
             <div className="flex-col">
-              <label className="form-label">Membership Category Type</label>
+              <label className="required form-label">
+                Membership Category Type
+              </label>
               <Form.Select
                 name="bad_psychodermatologycategory"
                 value={formData.bad_psychodermatologycategory}
@@ -756,6 +770,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                   );
                 })}
               </Form.Select>
+              <FormError id="bad_psychodermatologycategory" />
             </div>
           )}
 
