@@ -340,24 +340,28 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
   const handleDocUploadChange = async (e) => {
     let sky_cvurl = e.target.files[0];
-    console.log("🐞 UPLOAD TRIGERED", sky_cvurl);
 
-    if (sky_cvurl) {
-      sky_cvurl = await sendFileToS3Action({
-        state,
-        dispatch,
-        attachments: sky_cvurl,
-      });
-    } else {
-      sky_cvurl = "";
+    try {
+      setFetching(true);
+      // upload file to storage
+      if (sky_cvurl)
+        sky_cvurl = await sendFileToS3Action({
+          state,
+          dispatch,
+          attachments: sky_cvurl,
+        });
+
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        ["sky_cvurl"]: sky_cvurl,
+      }));
+
+      // console.log("🐞 ", sky_cvurl); // debug
+    } catch (error) {
+      // console.log("🤖 error", error);
+    } finally {
+      setFetching(false);
     }
-
-    console.log("sky_cvurl", sky_cvurl); // debug
-
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      ["sky_cvurl"]: sky_cvurl,
-    }));
   };
 
   const handleInputChange = (e) => {
