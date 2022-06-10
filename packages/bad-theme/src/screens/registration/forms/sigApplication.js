@@ -28,6 +28,7 @@ import {
   getGenderAction,
   getDermGroupsData,
   setErrorAction,
+  copyToClipboard,
 } from "../../../context";
 
 const SIGApplication = ({ state, actions, libraries }) => {
@@ -297,6 +298,32 @@ const SIGApplication = ({ state, actions, libraries }) => {
   }, [state.source.memberships]);
 
   // HANDLERS --------------------------------------------
+  const mailToClient = (e) => {
+    copyToClipboard(e);
+
+    // set user notification if email client is not available & copy to clipboard
+    const emailValue = e.target.innerText;
+
+    // open email client if available in new tab
+    if (emailValue && emailValue.includes("@")) {
+      const email = emailValue.replace(/\s/g, "");
+      const emailLink = `mailto:${email}`;
+      window.open(emailLink, "_blank");
+    }
+
+    // document.location = "mailto:" + emailValue; // open default email client
+  };
+
+  useEffect(() => {
+    // add event listener to email-client button
+    const emailClient = document.getElementById("email-client");
+    if (emailClient) {
+      emailClient.addEventListener("click", (e) => {
+        mailToClient(e);
+      });
+    }
+  }, []);
+
   const handleSelectHospital = ({ item }) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -1477,11 +1504,10 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.sig_bad_readpolicydocument && !readPolicyDoc && (
             <div>
-              <div
-                className="flex"
-                style={{ alignItems: "center", paddingTop: "0.5em" }}
-              >
-                {`If you would like to find out more about the ${applicationType} privacy policy please contact ${contactEmail}`}
+              <div style={{ paddingTop: "0.5em" }}>
+                <Html2React
+                  html={`If you would like to find out more about the ${applicationType} privacy policy please contact <span class="title-link-animation" name="${contactEmail}" id="email-client">${contactEmail}</span>`}
+                />
               </div>
             </div>
           )}
