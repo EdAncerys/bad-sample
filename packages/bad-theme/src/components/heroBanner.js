@@ -20,6 +20,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
     add_buttons,
     background_colour,
     background_image,
+    mobile_background_image,
     body,
     buttons,
     layout,
@@ -28,6 +29,8 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
     content_height,
     disable_vertical_padding,
   } = block;
+
+  console.log("🐞 block", block);
 
   let BANNER_HEIGHT = state.theme.bannerHeight;
   const PADDING = state.theme.marginHorizontal;
@@ -206,7 +209,14 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
   };
 
   const ServeCardImage = () => {
-    if (!background_image) return <div className="flex" />;
+    if (!background_image && !mobile_background_image)
+      return <div className="flex" />;
+
+    let image = background_image;
+    if (lg || !image) image = mobile_background_image;
+
+    console.log("🐞 lg", lg);
+    console.log("🐞 image", image);
 
     const alt = { title } || "BAD";
     const isFullWidth = layout === "full-width";
@@ -226,7 +236,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
       <div className="flex">
         <div style={CARD_STYLES}>
           <Image
-            src={background_image}
+            src={image}
             alt={alt}
             style={{
               width: "100%",
