@@ -28,7 +28,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  const { content, title, acf } = dermGroupe;
+  let { content, title, acf } = dermGroupe;
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
@@ -81,6 +81,13 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   };
 
   const ApplyForMembership = () => {
+    // 🚀 TESTING
+    console.log("🐞 acf.sigs", acf.sigs);
+    console.log("🐞 dermGroupe", dermGroupe);
+    let postId = dermGroupe.id;
+    if (postId === 8982) acf.sigs = 207;
+    // 🚀 TESTING
+
     if (!acf.sigs || !sigGroup) return null;
 
     // filter sig by id and return name of the groupe
