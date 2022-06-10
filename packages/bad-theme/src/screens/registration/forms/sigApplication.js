@@ -277,7 +277,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       appType = membershipData[0].acf.category_types;
       setFormData((prevFormData) => ({
         ...prevFormData,
-        bad_categorytype: type,
+        bad_categorytype: appType,
       }));
     }
     // 📌 update policy link agains app data
