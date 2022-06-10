@@ -138,23 +138,79 @@ const HeaderActions = ({ state, actions, libraries }) => {
     if (state.auth.ENVIRONMENT !== "DEVELOPMENT") return null;
 
     return (
-      <div className="flex" style={{ padding: `0 1em` }}>
-        <div
-          className="blue-btn-reverse"
-          style={{ minWidth: "fit-content" }}
-          onClick={handleCheck}
-        >
-          ST
-        </div>
-        <div
-          className="blue-btn-reverse"
-          style={{ minWidth: "fit-content" }}
-          onClick={handleCookie}
-        >
-          🍪
-        </div>
+      <div className="flex-col" style={{ padding: `0 1em` }}>
+        {/* <div
+            className="blue-btn-reverse"
+            style={{ minWidth: "fit-content" }}
+            onClick={handleCheck}
+          >
+            ST
+          </div>
+          <div
+            className="blue-btn-reverse"
+            style={{ minWidth: "fit-content" }}
+            onClick={handleCookie}
+          >
+            🍪
+          </div> */}
+        <input
+          id="autocomplete"
+          placeholder="google autocomplete"
+          type="text"
+          onChange={initAutocompleteCustom}
+        />
       </div>
     );
+  };
+
+  const initAutocompleteCustom = () => {
+    // --------------------------------------------------------------------------------
+    // 📌  Google Autocomplete
+    // --------------------------------------------------------------------------------
+
+    const services = new google.maps.places.AutocompleteService();
+    const request = {
+      input: document.getElementById("autocomplete").value,
+      componentRestrictions: { country: "uk" },
+    };
+
+    services.getPlacePredictions(request, (predictions, status) => {
+      if (status !== google.maps.places.PlacesServiceStatus.OK) {
+        console.log(status);
+        return;
+      }
+      console.log(predictions);
+    });
+  };
+
+  const initAutocompleteGoogleUI = () => {
+    // --------------------------------------------------------------------------------
+    // 📌  Google UI Autocomplete
+    // --------------------------------------------------------------------------------
+
+    const autocomplete = new google.maps.places.Autocomplete(
+      document.getElementById("autocomplete"),
+      {
+        // types: ["geocode"],
+        componentRestrictions: { country: "uk" },
+        fields: ["address_component", "formatted_address", "geometry", "name"],
+      }
+    );
+
+    autocomplete.addListener("place_changed", () => {
+      // --------------------------------------------------------------------------------
+      // 📌  On place selected, get the place details from the autocomplete object.
+      // --------------------------------------------------------------------------------
+      const place = autocomplete.getPlace();
+      if (!place.geometry) {
+        // User entered the name of a Place that was not suggested and
+        // pressed the Enter key, or the Place Details request failed.
+        window.alert("No details available for input: '" + place.name + "'");
+        return;
+      }
+      // polulate inputs with place details
+      console.log(place);
+    });
   };
 
   const handleCheck = async () => {

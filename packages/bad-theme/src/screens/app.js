@@ -81,6 +81,11 @@ const App = ({ state, actions }) => {
   useRedirect({ state, dispatch, actions, redirects, urlPath });
   // 📌 hook for media queries
   useQuery({ state });
+  // 📌 google places api
+  useScript({
+    url: `https://maps.googleapis.com/maps/api/js?key=${state.auth.GOOGLE_API_KEY}&libraries=places&callback=initAutocomplete`,
+  });
+  console.log("🐞 GOOGLE_API_KEY", state.auth.GOOGLE_API_KEY);
 
   useEffect(() => {
     // ⬇️ restore scroll history to manual position ⬇️
