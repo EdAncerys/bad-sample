@@ -270,20 +270,21 @@ const SIGApplication = ({ state, actions, libraries }) => {
     }
     // check if application category have only one application
     let isSingleApp = false;
+    let appType = "";
     if (membershipData) isSingleApp = membershipData.length === 1;
     // if application category have only one application set formData to that application
     if (isSingleApp) {
-      const type = membershipData[0].acf.category_types;
+      appType = membershipData[0].acf.category_types;
       setFormData((prevFormData) => ({
         ...prevFormData,
         bad_categorytype: type,
       }));
-      // 📌 update policy link agains app data
-      handlePolicyLinkUpdate({
-        membershipData,
-        value: type,
-      });
     }
+    // 📌 update policy link agains app data
+    handlePolicyLinkUpdate({
+      membershipData,
+      value: appType,
+    });
 
     // ⏬  validate inputs for single application only
     validateMembershipFormAction({
@@ -405,11 +406,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
     );
     if (filteredDermGroupRefs.length)
       contactEmail = filteredDermGroupRefs[0].acf.email;
-
-    console.log("🐞 filteredMembershipData", filteredMembershipData);
-    console.log("🐞 dermGroupRef", dermGroupRef);
-    console.log("🐞 applicationName", applicationName);
-    console.log("🐞 filteredDermGroupRefs", filteredDermGroupRefs);
 
     setType(applicationName);
     // set selected policy link & contact email
