@@ -148,6 +148,28 @@ input[type="email"]::-webkit-input-placeholder {
   content: "";
   flex: auto;
 }
+.cookie-consent {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  padding: 10px;
+  z-index: 9999;
+}
+.cookie-wrapper,
+.cookie-actions {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.cookie-actions {
+  justify-content: space-around;
+}
 
 .hide {
   display: none;
@@ -165,6 +187,13 @@ input[type="email"]::-webkit-input-placeholder {
 @media screen and (max-width: 800px) {
   .main-container {
     width: 100%;
+  }
+  .cookie-wrapper {
+    flex-direction: column;
+    padding: 0 5%;
+  }
+  .cookie-actions {
+    margin-top: 1em;
   }
 }
 @media screen and (min-width: 992px) {
