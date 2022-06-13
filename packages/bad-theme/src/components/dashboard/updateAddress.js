@@ -21,6 +21,7 @@ import {
   googleAutocompleteAction,
   muiQuery,
   getCountryList,
+  googleAutocomplete,
 } from "../../context";
 
 const UpdateAddress = ({ state, actions, libraries }) => {
@@ -144,38 +145,21 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     // update input value before async task
     setSearchInput(input);
 
-    // const options = {
-    //   componentRestrictions: { country: "uk" },
-    //   fields: ["address_components", "geometry", "icon", "name"],
-    //   strictBounds: false,
-    //   types: ["establishment"],
-    // };
-    // const autocomplete = new google.maps.places.Autocomplete(input, options);
-    // console.log("🐞 ", autocomplete);
-
-    // return;
-
     try {
       setIsFetchingAddress(true);
-      const data = await googleAutocompleteAction({
-        state,
-        query: input,
-      });
-      // convert data to dropdown format
-      let predictions = [];
-      // check for data returned form API
-      if (data && data.length) {
-        predictions = data.map((item) => ({
-          // get city & country from data source
-          title: item.description,
-        }));
+      const data = await googleAutocomplete({ input });
 
-        // set dropdown data
-        if (predictions.length && input.length) {
-          setAddressData(predictions);
-        } else {
-          setAddressData(null);
-        }
+      // check for data returned form API
+      if (data.length > 0) {
+        // covert data to address format
+        const dropDownFoprmat = [];
+        data.map((item) => {
+          dropDownFoprmat.push({ title: item.description, terms: item.terms });
+        });
+
+        setAddressData(dropDownFoprmat);
+      } else {
+        setAddressData(null);
       }
     } catch (error) {
       // console.log("error", error);
@@ -185,9 +169,35 @@ const UpdateAddress = ({ state, actions, libraries }) => {
   };
 
   const handleSelectAddress = async ({ item }) => {
+    // destructure item object & get coutry code & city name from terms
+    const { terms, title } = item;
+    let countryCode = "";
+    let countyName = "";
+
+    if (terms) {
+      // if terms define address components
+      if (terms.length >= 1) countryCode = terms[terms.length - 1].value;
+      if (terms.length >= 2) countyName = terms[terms.length - 2].value;
+    }
+    // overwrite formData to match Dynamics fields
+    if (countryCode === "UK")
+      countryCode = "United Kingdom of Great Britain and Northern Ireland";
+
+    if (UK_COUNTIES) {
+      // find match of countyName in UK_COUNTIES & overwrite
+      const match = UK_COUNTIES.find((item) => {
+        return countyName.toLowerCase().includes(item.toLowerCase());
+      });
+
+      if (match) countyName = match;
+    }
+
+    // update formData with values
     setFormData((prevFormData) => ({
       ...prevFormData,
-      address2_line1: item.title,
+      address2_line1: title,
+      address2_country: countryCode,
+      address2_city: countyName,
     }));
   };
 

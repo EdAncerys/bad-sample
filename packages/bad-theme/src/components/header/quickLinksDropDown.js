@@ -115,7 +115,6 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
           let isBADMember = false;
 
           // 📌 check if logged in user exists & user is BAD member to allow access to PushFar
-          console.log("🐞 ", isActiveUser, dynamicsApps);
           if (dynamicsApps && isActiveUser) {
             isBADMember = dynamicsApps.subs.data.some(
               (app) => app.bad_organisedfor === "BAD"
