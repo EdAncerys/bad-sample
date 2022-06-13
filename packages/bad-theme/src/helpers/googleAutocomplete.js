@@ -3,8 +3,6 @@ export const googleAutocomplete = async ({ input }) => {
   // 📌  Google Autocomplete
   // --------------------------------------------------------------------------------
 
-  console.log(input);
-
   if (!input) return;
   let response = [];
   // add delay for 500ms to prevent google autocomplete from firing too often
@@ -26,6 +24,5 @@ export const googleAutocomplete = async ({ input }) => {
     response = predictions;
   });
 
-  console.log(response);
   return response;
 };
