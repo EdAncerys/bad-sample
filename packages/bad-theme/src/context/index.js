@@ -5,6 +5,7 @@ import { setAuthenticationCookieAction } from "../helpers/setAuthenticationCooki
 import { AppProvider, useAppDispatch, useAppState } from "./context";
 import { handleSetCookie, handleGetCookie } from "../helpers/cookie";
 import { handleUpdateMembershipApplication } from "../helpers/handleUpdateMembershipApplication";
+import { googleAutocomplete } from "../helpers/googleAutocomplete";
 import {
   setGoToAction,
   setLinkWrapperAction,
@@ -245,6 +246,7 @@ export {
   handleSetCookie,
   handleGetCookie,
   handleUpdateMembershipApplication,
+  googleAutocomplete,
   hasPermisionLevel,
   getGenderAction,
   getCountryList,
