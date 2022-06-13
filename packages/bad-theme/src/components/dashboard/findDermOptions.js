@@ -2,7 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import ProfileAvatar from "./profileAvatar";
 import ActionPlaceholder from "../actionPlaceholder";
-
+import SearchDropDown from "../searchDropDown";
+import { colors } from "../../config/imports";
+import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from "@mui/icons-material/Search";
+import CircularProgress from "@mui/material/CircularProgress";
 // CONTEXT ----------------------------------------------------------------
 import {
   useAppState,
@@ -11,6 +15,7 @@ import {
   muiQuery,
   sendFileToS3Action,
   updateProfileAction,
+  googleAutocomplete,
 } from "../../context";
 
 const FindDermatologistOptions = ({ state }) => {
@@ -22,6 +27,8 @@ const FindDermatologistOptions = ({ state }) => {
   const marginVertical = state.theme.marginVertical;
   const [isFetching, setIsFetching] = useState(null);
   const [findDerm, setFindDerm] = useState(null);
+  const [isFetchingAddress, setIsFetchingAddress] = useState(null);
+  const [addressData, setAddressData] = useState(null);
   const [formData, setFormData] = useState({
     bad_includeinfindadermatologist: "",
     address3_line1: "",
@@ -36,6 +43,8 @@ const FindDermatologistOptions = ({ state }) => {
     bad_profile_photo_url: "",
   });
   const documentRef = useRef(null);
+  const address1Line1Ref = useRef("");
+  const ctaHeight = 40;
 
   useEffect(() => {
     if (!isActiveUser) return null;
@@ -76,6 +85,63 @@ const FindDermatologistOptions = ({ state }) => {
   }, [isActiveUser, dynamicsApps]);
 
   // HELPERS ----------------------------------------------------------------
+  const handleAddressLookup = async () => {
+    const input = address1Line1Ref.current.value;
+    // update input value before async task
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      address3_line1: input,
+    }));
+
+    try {
+      setIsFetchingAddress(true);
+      const data = await googleAutocomplete({ input });
+
+      // check for data returned form API
+      if (data.length > 0) {
+        // covert data to address format
+        const dropDownFoprmat = [];
+        data.map((item) => {
+          dropDownFoprmat.push({ title: item.description, terms: item.terms });
+        });
+
+        setAddressData(dropDownFoprmat);
+      } else {
+        setAddressData(null);
+      }
+    } catch (error) {
+      // console.log("error", error);
+    } finally {
+      setIsFetchingAddress(false);
+    }
+  };
+
+  const handleSelectAddress = async ({ item }) => {
+    // destructure item object & get coutry code & city name from terms
+    const { terms, title } = item;
+    let countryCode = "";
+    let cityName = "";
+
+    if (terms) {
+      // if terms define address components
+      if (terms.length >= 1) countryCode = terms[terms.length - 1].value;
+      if (terms.length >= 2) cityName = terms[terms.length - 2].value;
+    }
+    // overwrite formData to match Dynamics fields
+    if (countryCode === "UK")
+      countryCode = "United Kingdom of Great Britain and Northern Ireland";
+
+    // update formData with values
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      address3_line1: title,
+      address3_city: cityName,
+    }));
+
+    // clear response data
+    setAddressData(null);
+  };
+
   const handleInputChange = (e) => {
     const { name, value, type, checked, files } = e.target;
     setFormData((prevFormData) => ({
@@ -162,6 +228,27 @@ const FindDermatologistOptions = ({ state }) => {
     }));
   };
 
+  const handleClearAction = () => {
+    // clear search input value
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      address3_line1: "",
+    }));
+    setAddressData(null);
+  };
+
+  // SERVERS ---------------------------------------------------------------
+  const ServeIcon = () => {
+    const icon = formData.address3_line1 ? <CloseIcon /> : <SearchIcon />;
+
+    if (isFetchingAddress)
+      return (
+        <CircularProgress color="inherit" style={{ width: 25, height: 25 }} />
+      );
+
+    return <div onClick={handleClearAction}>{icon}</div>;
+  };
+
   // 📌 hide component if user is not a member
   if (!findDerm) return null;
 
@@ -218,15 +305,47 @@ const FindDermatologistOptions = ({ state }) => {
                 </div>
                 <div>
                   <div className="flex-col">
-                    <input
-                      name="address3_line1"
-                      value={formData.address3_line1}
-                      onChange={handleInputChange}
-                      type="text"
-                      placeholder="Address Line 1"
-                      className="form-control"
-                      style={styles.input}
-                    />
+                    <div style={{ position: "relative", width: "100%" }}>
+                      <div
+                        className="flex"
+                        style={{
+                          flex: 1,
+                          height: ctaHeight,
+                          position: "relative",
+                          margin: "0.5em 0",
+                        }}
+                      >
+                        <input
+                          ref={address1Line1Ref}
+                          name="search-input"
+                          value={formData.address3_line1}
+                          onChange={handleAddressLookup}
+                          type="text"
+                          className="form-control"
+                          placeholder="Address Line 1"
+                        />
+                        <div
+                          className="input-group-text toggle-icon-color"
+                          style={{
+                            position: "absolute",
+                            right: 0,
+                            height: ctaHeight,
+                            border: "none",
+                            background: "transparent",
+                            alignItems: "center",
+                            color: colors.darkSilver,
+                            cursor: "pointer",
+                          }}
+                        >
+                          <ServeIcon />
+                        </div>
+                      </div>
+                      <SearchDropDown
+                        filter={addressData}
+                        onClickHandler={handleSelectAddress}
+                        height={230}
+                      />
+                    </div>
                     <input
                       name="address3_line2"
                       value={formData.address3_line2}

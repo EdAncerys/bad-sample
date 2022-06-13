@@ -26,7 +26,6 @@ const SearchDropDown = ({
   const ctaHeight = 45;
   const BANNER_HEIGHT = state.theme.bannerHeight;
   let maxHeight = height || BANNER_HEIGHT / 2;
-  console.log("🐞 ", maxHeight);
 
   if (dataLoading && !filter)
     return (

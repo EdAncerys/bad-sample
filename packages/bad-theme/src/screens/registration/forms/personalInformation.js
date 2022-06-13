@@ -141,7 +141,6 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     const input = address1Line1Ref.current.value;
     // update input value before async task
     setSearchInput(input);
-    console.log("🐞 ", input);
 
     try {
       setIsFetchingAddress(true);

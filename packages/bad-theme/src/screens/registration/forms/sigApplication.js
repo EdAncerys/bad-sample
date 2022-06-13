@@ -6,7 +6,6 @@ import { colors } from "../../../config/imports";
 import FormError from "../../../components/formError";
 import ActionPlaceholder from "../../../components/actionPlaceholder";
 import SearchDropDown from "../../../components/searchDropDown";
-import { sigAppFileds } from "../../../config/data";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -618,7 +617,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
     const input = address1Line1Ref.current.value;
     // update input value before async task
     setSearchInput(input);
-    console.log("🐞 ", input);
 
     try {
       setIsFetchingAddress(true);
