@@ -4,12 +4,13 @@ import Card from "./card/card";
 import Loading from "./loading";
 import ButtonsRow from "./buttonsRow";
 import FullWidthContentBlock from "./fullWidthContentBlock";
+import React from "react";
 
 // CONTEXT --------------------------------------------------
 import { muiQuery } from "../context";
 
 const HeroBanner = ({ state, actions, libraries, block }) => {
-  const { sm, md, lg, xl } = muiQuery();
+  const { lg } = muiQuery();
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
@@ -118,7 +119,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           <div
             className="d-flex justify-content-center"
             style={{
-              marginTop: !lg ? "-20%" : !background_image ? "10%" : "-20%",
+              marginTop: !lg ? "-20%" : !background_image ? "10%" : "10%",
               marginBottom: !lg ? null : "10%",
             }}
           >
@@ -199,7 +200,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
               : background_image
               ? BANNER_HEIGHT
               : null,
-            height: !lg ? BANNER_HEIGHT : null,
+            // height: !lg ? BANNER_HEIGHT : null,
           }}
         >
           <FullWidthContentBlock block={block} heroBanner />
@@ -214,11 +215,13 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
 
     let image = background_image;
     if (lg || !image) image = mobile_background_image;
-
+    if (!image) return null;
     console.log("🐞 lg", lg);
     console.log("🐞 image", image);
-
+    console.log("title", title);
     const alt = { title } || "BAD";
+    console.log("ALT", alt.title);
+
     const isFullWidth = layout === "full-width";
     const CARD_STYLES = isFullWidth
       ? {
@@ -237,7 +240,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
         <div style={CARD_STYLES}>
           <Image
             src={image}
-            alt={alt}
+            alt={alt.title}
             style={{
               width: "100%",
               height: "100%",
