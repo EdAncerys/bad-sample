@@ -136,7 +136,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
   // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
   const ServeTesting = () => {
     if (state.auth.ENVIRONMENT !== "DEVELOPMENT") return null;
-
+    if (lg) return null;
     return (
       <div
         className="flex pink"
