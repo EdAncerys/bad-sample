@@ -20,7 +20,7 @@ import {
   setGoToAction,
   validateMembershipFormAction,
   errorHandler,
-  googleAutocompleteAction,
+  googleAutocomplete,
   muiQuery,
   getGenderAction,
 } from "../../../context";
@@ -141,28 +141,23 @@ const PersonalDetails = ({ state, actions, libraries }) => {
     const input = address1Line1Ref.current.value;
     // update input value before async task
     setSearchInput(input);
+    console.log("🐞 ", input);
 
     try {
       setIsFetchingAddress(true);
-      const data = await googleAutocompleteAction({
-        state,
-        query: input,
-      });
-      // convert data to dropdown format
-      let predictions = [];
-      // check for data returned form API
-      if (data && data.length) {
-        predictions = data.map((item) => ({
-          // get city & country from data source
-          title: item.description,
-        }));
+      const data = await googleAutocomplete({ input });
 
-        // set dropdown data
-        if (predictions.length && input.length) {
-          setAddressData(predictions);
-        } else {
-          setAddressData(null);
-        }
+      // check for data returned form API
+      if (data.length > 0) {
+        // covert data to address format
+        const dropDownFoprmat = [];
+        data.map((item) => {
+          dropDownFoprmat.push({ title: item.description, terms: item.terms });
+        });
+
+        setAddressData(dropDownFoprmat);
+      } else {
+        setAddressData(null);
       }
     } catch (error) {
       // console.log("error", error);
@@ -172,9 +167,26 @@ const PersonalDetails = ({ state, actions, libraries }) => {
   };
 
   const handleSelectAddress = async ({ item }) => {
+    // destructure item object & get coutry code & city name from terms
+    const { terms, title } = item;
+    let countryCode = "";
+    let cityName = "";
+
+    if (terms) {
+      // if terms define address components
+      if (terms.length >= 1) countryCode = terms[terms.length - 1].value;
+      if (terms.length >= 2) cityName = terms[terms.length - 2].value;
+    }
+    // overwrite formData to match Dynamics fields
+    if (countryCode === "UK")
+      countryCode = "United Kingdom of Great Britain and Northern Ireland";
+
+    // update formData with values
     setFormData((prevFormData) => ({
       ...prevFormData,
-      py3_address1ine1: item.title,
+      py3_address1ine1: title,
+      py3_addresscountry: countryCode,
+      py3_addresstowncity: cityName,
     }));
   };
 
@@ -557,6 +569,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
                       <SearchDropDown
                         filter={addressData}
                         onClickHandler={handleSelectAddress}
+                        height={250}
                       />
                     </div>
                   )}

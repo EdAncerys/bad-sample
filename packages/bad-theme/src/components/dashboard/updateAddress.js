@@ -10,7 +10,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import CircularProgress from "@mui/material/CircularProgress";
 
 // DATA HELPERS -----------------------------------------------------------
-import { UK_COUNTIES, prefMailingOption } from "../../config/data";
+import { prefMailingOption } from "../../config/data";
 
 // CONTEXT ----------------------------------------------------------------
 import {
@@ -18,7 +18,6 @@ import {
   useAppState,
   updateProfileAction,
   setErrorAction,
-  googleAutocompleteAction,
   muiQuery,
   getCountryList,
   googleAutocomplete,
@@ -172,32 +171,23 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     // destructure item object & get coutry code & city name from terms
     const { terms, title } = item;
     let countryCode = "";
-    let countyName = "";
+    let cityName = "";
 
     if (terms) {
       // if terms define address components
       if (terms.length >= 1) countryCode = terms[terms.length - 1].value;
-      if (terms.length >= 2) countyName = terms[terms.length - 2].value;
+      if (terms.length >= 2) cityName = terms[terms.length - 2].value;
     }
     // overwrite formData to match Dynamics fields
     if (countryCode === "UK")
       countryCode = "United Kingdom of Great Britain and Northern Ireland";
-
-    if (UK_COUNTIES) {
-      // find match of countyName in UK_COUNTIES & overwrite
-      const match = UK_COUNTIES.find((item) => {
-        return countyName.toLowerCase().includes(item.toLowerCase());
-      });
-
-      if (match) countyName = match;
-    }
 
     // update formData with values
     setFormData((prevFormData) => ({
       ...prevFormData,
       address2_line1: title,
       address2_country: countryCode,
-      address2_city: countyName,
+      address2_city: cityName,
     }));
   };
 
@@ -369,24 +359,13 @@ const UpdateAddress = ({ state, actions, libraries }) => {
             <div>
               <div>
                 <label>City</label>
-                <Form.Select
+                <input
                   name="address2_city"
                   value={formData.address2_city}
                   onChange={handleInputChange}
-                  className="input"
-                  // disabled
-                >
-                  <option value="" hidden>
-                    County/State
-                  </option>
-                  {UK_COUNTIES.map((item, key) => {
-                    return (
-                      <option key={key} value={item}>
-                        {item}
-                      </option>
-                    );
-                  })}
-                </Form.Select>
+                  className="form-control input"
+                  placeholder="City"
+                />
               </div>
 
               {countryList && (
