@@ -172,24 +172,32 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     // destructure item object & get coutry code & city name from terms
     const { terms, title } = item;
     let countryCode = "";
-    let cityName = "";
+    let countyName = "";
 
     if (terms) {
       // if terms define address components
       if (terms.length >= 1) countryCode = terms[terms.length - 1].value;
-      if (terms.length >= 2) cityName = terms[terms.length - 2].value;
+      if (terms.length >= 2) countyName = terms[terms.length - 2].value;
     }
     // overwrite formData to match Dynamics fields
     if (countryCode === "UK")
       countryCode = "United Kingdom of Great Britain and Northern Ireland";
-    console.log("🐞 ", countryCode, cityName);
+
+    if (UK_COUNTIES) {
+      // find match of countyName in UK_COUNTIES & overwrite
+      const match = UK_COUNTIES.find((item) => {
+        return countyName.toLowerCase().includes(item.toLowerCase());
+      });
+
+      if (match) countyName = match;
+    }
 
     // update formData with values
     setFormData((prevFormData) => ({
       ...prevFormData,
       address2_line1: title,
       address2_country: countryCode,
-      address2_city: cityName,
+      address2_city: countyName,
     }));
   };
 
