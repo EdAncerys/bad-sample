@@ -43,7 +43,7 @@ const BADTheme = {
     auth: {
       // 📌 app auth service secrets
       APP_HOST: process.env.APP_HOST, // app server endpoint
-      // APP_HOST: "https://uatservices.bad.org.uk/dynamicstest", // TESTING app server endpoint
+      // APP_HOST: "https://services.bad.org.uk/dynamicsbridge", // TESTING
       B2C: process.env.B2C, // B2C auth logon service
       WP_HOST: process.env.WP_HOST, // wp backend endpoint
       WP_HOST_CONTENT: process.env.WP_HOST_CONTENT,
