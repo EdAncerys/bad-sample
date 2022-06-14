@@ -260,7 +260,7 @@ export const getUserDataFromDynamics = async ({ state, contactid }) => {
 export const handleRemoveServerSideCookie = async ({ state }) => {
   // console.log("getUserDataFromDynamics triggered");
 
-  const path = state.auth.APP_HOST + `/dynamicstest/users/b2c/logout`;
+  const path = state.auth.APP_HOST + `/users/b2c/logout`;
 
   try {
     const response = await fetchDataHandler({ path, state });

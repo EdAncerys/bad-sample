@@ -65,6 +65,7 @@ export const useB2CLogin = ({ state, actions }) => {
       // decode Base64 encoded url value
       items[0] = JSON.parse(atob(items[0]));
       items[1] = JSON.parse(atob(items[1]));
+      console.log("🐞 hash", hash);
       console.log("🐞 items", b2cTaken);
 
       if (Array.isArray(items[1].emails)) {

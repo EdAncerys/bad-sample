@@ -112,8 +112,6 @@ export const authCookieActionAfterCSR = async ({ state, dispatch }) => {
 
 export const getWPMenu = async ({ state, actions }) => {
   const menu = sessionStorage.getItem("badMenu"); // checking if menu already pre fetched from wp
-  // pre-fetch custom post types for menus (for wp menu)
-  await actions.source.fetch(`/menu_features`);
 
   if (!menu) {
     try {
