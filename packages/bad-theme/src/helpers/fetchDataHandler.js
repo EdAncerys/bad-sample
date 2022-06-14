@@ -87,6 +87,7 @@ export const fetchDataHandler = async ({
 
     // fetch request timing info
     console.log(`${time} Fetch time: ${timeTaken}s`);
+    console.log("🐞 URL", path);
     console.log("🐞 Status", response.status);
     // console.log("🐞 ", path);
 

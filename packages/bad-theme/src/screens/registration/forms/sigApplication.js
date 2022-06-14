@@ -29,6 +29,7 @@ import {
   setErrorAction,
   copyToClipboard,
 } from "../../../context";
+import Loading from "../../../components/loading";
 
 const SIGApplication = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -208,8 +209,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
       }
       // 📌 set Psychodermatology Category picklist values
       if (data.name === "bad_psychodermatologycategory") {
-        const pickList = data.info.Choices;
-        setDermList(pickList);
+        let pickList = null;
+        if (data.info) pickList = data.info.Choices;
+        if (pickList) setDermList(pickList);
       }
       // 📌 set app type name
       if (data.bad_categorytype) {
@@ -293,7 +295,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       applicationData,
     });
 
-    setMembershipData(membershipData); // set membership data
+    setMembershipData(membershipData); // 📌 set membership data picklist
   }, [state.source.memberships]);
 
   // HANDLERS --------------------------------------------
@@ -715,6 +717,14 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
   const ServeSIGMembershipCategory = () => {
     if (!membershipData) return null;
+
+    // show loading indicator while no membershipData is fetched or if membershipData is fetched but is empty
+    if (!membershipData)
+      return (
+        <div>
+          <Loading padding="5vh 0 0" />
+        </div>
+      );
 
     return (
       <div>
