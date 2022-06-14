@@ -210,7 +210,7 @@ export const getUserDataByEmail = async ({ state, dispatch, email }) => {
 
   try {
     const data = await fetchDataHandler({ path, state });
-    if (!data) throw new Error("Error getting userData.");
+    if (!data) throw new Error("Failed to fetch user data.");
     const response = await data.json();
 
     if (response.value.length > 0) {
@@ -234,7 +234,7 @@ export const getUserDataByEmail = async ({ state, dispatch, email }) => {
 
     return null;
   } catch (error) {
-    // console.log("error", error);
+    console.log("error", error);
   }
 };
 
