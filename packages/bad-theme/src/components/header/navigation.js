@@ -56,18 +56,6 @@ const Navigation = ({ state, actions, libraries }) => {
     if (state.source.menu_features)
       setFeatured(Object.values(state.source.menu_features)); // cpt for menu content
 
-    // 📌 set News & Media menu content form CPT
-    let data = Object.values(state.source.post);
-    while (data.length === 0) {
-      // if iteration is greater than 10, break
-      if (iteration > 5) break;
-      // set timeout for async
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      await getPostData({ state, actions });
-      data = Object.values(state.source.post);
-      iteration++;
-    }
-
     if (state.source.category) {
       let catList = Object.values(state.source.category);
       // sort catList by name in alphabetical order

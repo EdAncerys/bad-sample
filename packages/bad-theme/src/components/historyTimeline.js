@@ -20,7 +20,6 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
-  console.log("🐞 ", block);
 
   // HELPERS ----------------------------------------------------------------
   const slide = (direction) => {

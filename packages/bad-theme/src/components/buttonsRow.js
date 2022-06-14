@@ -9,7 +9,6 @@ const ButtonsRow = ({ state, actions, style, block, disableMargin }) => {
   const { sm, md, lg, xl } = muiQuery();
   if (!block) return <Loading />;
   if (!block.buttons) return null;
-  console.log("🐞 ", block);
 
   const { disable_vertical_padding } = block;
 

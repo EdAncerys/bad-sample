@@ -19,7 +19,6 @@ export const useRedirect = ({
     // ⬇️  get redirects path from wp
     const path =
       state.auth.WP_HOST + "wp-json/acf/v3/options/options/301_redirects";
-    console.log("SET triggered");
     // 📌  PRE-FETCH redirects from wp
     const response = await fetchDataHandler({ path, state });
     if (!response) return null;
@@ -44,9 +43,9 @@ export const useRedirect = ({
     const redirect = redirects.find(
       (redirect) => {
         if (doURLsMatch(redirect["301_from"], urlPath, state.auth.APP_URL)) {
-          console.log(
-            `Redirecting from ${redirect["301_from"]} to ${redirect["301_to"]}`
-          );
+          // console.log(
+          //   `Redirecting from ${redirect["301_from"]} to ${redirect["301_to"]}`
+          // );
         }
         return doURLsMatch(redirect["301_from"], urlPath, state.auth.APP_URL);
       }

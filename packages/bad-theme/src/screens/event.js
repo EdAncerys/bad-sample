@@ -33,7 +33,6 @@ const Event = ({ state, actions, libraries }) => {
   const data = state.source.get(state.router.link);
   const event = state.source[data.type][data.id];
   const dispatch = useAppDispatch();
-  console.log("EVENT", event);
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
   const [eventList, setEventList] = useState(null);

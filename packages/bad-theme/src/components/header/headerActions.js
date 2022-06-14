@@ -30,11 +30,6 @@ import {
   setAppSearchPhraseAction,
   muiQuery,
   setCreateAccountModalAction,
-  getUserDataByContactId, // TESTING enviroment
-  fetchDataHandler, // TESTING enviroment
-  handleSetCookie, // TESTING enviroment
-  handleGetCookie, // TESTING enviroment
-  handleRemoveServerSideCookie, // TESTING enviroment
 } from "../../context";
 
 const HeaderActions = ({ state, actions, libraries }) => {
@@ -421,7 +416,6 @@ const HeaderActions = ({ state, actions, libraries }) => {
             <ServeDashboardAction />
             {!lg ? <QuickLinksDropDown /> : null}
             {!lg ? null : <ServeMobileMenuAction />}
-            <ServeTesting />
           </div>
         </div>
       </BlockWrapper>

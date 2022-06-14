@@ -264,7 +264,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     // 📌 check if isAssociateType to apply mandatory fields
     // const isAssociateType = applicationType.includes("Associate");
 
-    console.log("🐞 formData", formData);
     const isValid = isFormValidated({
       required: [
         "py3_gmcnumber",

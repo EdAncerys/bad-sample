@@ -43,8 +43,6 @@ export const handleUpdateMembershipApplication = async ({
     return;
   }
 
-  console.log("🐞 ", app);
-
   // handle create new application in Dynamics
   try {
     setFetching(true);
@@ -102,7 +100,7 @@ export const handleUpdateMembershipApplication = async ({
     });
     if (!appData) throw new Error("Failed to create application");
   } catch (error) {
-    console.log(error);
+    // console.log(error);
 
     setErrorAction({
       dispatch,

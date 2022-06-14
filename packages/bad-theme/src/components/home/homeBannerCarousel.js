@@ -15,7 +15,6 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const { disable_vertical_padding, background_colour } = block;
-  console.log("🐞 ", block);
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const BANNER_HEIGHT = state.theme.bannerHeight * 1.25;

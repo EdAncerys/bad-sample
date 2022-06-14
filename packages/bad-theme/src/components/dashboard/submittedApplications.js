@@ -65,7 +65,6 @@ const SubmittedApplications = ({ state, actions, libraries }) => {
 
   // HELPERS ----------------------------------------------
   const displayPaymentModal = (url) => {
-    console.log("PM URL", url);
     setErrorAction({
       dispatch,
       isError: {

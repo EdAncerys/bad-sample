@@ -95,7 +95,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
         contactid: isActiveUser.contactid,
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setFetching(false);
     }

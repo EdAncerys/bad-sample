@@ -41,7 +41,6 @@ const Video = ({ state, actions, libraries }) => {
 
   let isSagepay = queryParams.sagepay;
   const handlePaymentModal = (url) => {
-    console.log("PM URL", url);
     setErrorAction({
       dispatch,
       isError: {
@@ -95,14 +94,9 @@ const Video = ({ state, actions, libraries }) => {
       const fetching = await fetchDataHandler({
         path: url,
         state,
-        // isCORSHeaders: true,
-        // disableCookies: true,
       });
-      console.log("FETCHING", fetching);
       if (fetching.ok) {
         const json = await fetching.json();
-        console.log("JSON", json);
-        console.log("ENTITY", json.data.entity.bad_confirmationid);
         // if (json.success === false) setVideoStatus("locked");
         if (json.success && json.data.entity.bad_confirmationid) {
           setVideoStatus("unlocked");
@@ -111,13 +105,11 @@ const Video = ({ state, actions, libraries }) => {
         setVideoStatus("locked");
         return true;
       } else {
-        console.log("FETCHING FAILED");
         setVideoStatus("locked");
         return true;
       }
     }
     setVideoStatus("locked");
-    console.log("VIDSTATUS2", videoStatus);
   }, [isActiveUser, paymentUrl]);
 
   if (!post) return <Loading />;

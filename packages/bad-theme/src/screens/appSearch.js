@@ -79,7 +79,6 @@ const AppSearch = ({ state, actions, libraries }) => {
         if (title && title.rendered) title = title.rendered;
         let content = item.content;
         if (content && content.rendered) content = content.rendered;
-        console.log("🐞 ", title, content);
 
         // if title | content includes input return true
         if (

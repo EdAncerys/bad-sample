@@ -47,7 +47,6 @@ const EventLoopBlock = ({
     colour,
     events_archive,
   } = block;
-  console.log("🐞 BLOCK", block);
 
   const [eventList, setEventList] = useState(null); // event data
   const [eventFilter, setFilter] = useState(null); // event data
@@ -136,8 +135,6 @@ const EventLoopBlock = ({
         });
     }
 
-    console.log("🐞 postLimitRef", postLimitRef.current);
-    console.log("🐞 events", events.length);
     if (postLimitRef.current !== 0 && events) {
       // ⬇️ if post_limit is set then show only post_limit posts
       if (events.lenght <= postLimitRef.current) return null;

@@ -30,7 +30,7 @@ export const getEventsData = async ({ state, page, postsPerPage }) => {
 
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -45,7 +45,7 @@ export const getEventGrades = async ({ state }) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -60,7 +60,7 @@ export const getEventLocations = async ({ state }) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -75,7 +75,7 @@ export const getEventSpecialtys = async ({ state }) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -111,7 +111,7 @@ export const getNewsData = async ({ state, page, postsPerPage }) => {
 
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -126,7 +126,7 @@ export const getMediaCategories = async ({ state }) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -168,7 +168,7 @@ export const getGuidelinesData = async ({ state, page, postsPerPage }) => {
 
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -183,7 +183,7 @@ export const getGuidelinesTypes = async ({ state }) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -216,7 +216,7 @@ export const getVenuesData = async ({ state, page, postsPerPage }) => {
 
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -249,7 +249,7 @@ export const getVideosData = async ({ state, page, postsPerPage }) => {
 
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -264,7 +264,7 @@ export const getEventSpecialitys = async ({ state }) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -298,7 +298,7 @@ export const getFundingData = async ({ state, page, postsPerPage }) => {
 
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -313,7 +313,7 @@ export const getFundingTypes = async ({ state }) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -346,7 +346,7 @@ export const getMembershipData = async ({ state, page, postsPerPage }) => {
 
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -380,7 +380,7 @@ export const getLeadershipData = async ({ state, page, postsPerPage }) => {
 
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -395,7 +395,7 @@ export const getLeadershipGrades = async ({ state }) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -410,7 +410,7 @@ export const getLeadershipPositions = async ({ state }) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -445,7 +445,7 @@ export const getSIGData = async ({ state, page, postsPerPage, type }) => {
 
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -480,7 +480,7 @@ export const getCPTData = async ({ state, page, postsPerPage, type }) => {
 
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -496,7 +496,7 @@ export const getCPTTaxonomy = async ({ state, type }) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -529,7 +529,7 @@ export const getElectionsData = async ({ state, page, postsPerPage }) => {
 
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -561,6 +561,6 @@ export const getDermGroupsData = async ({ state, page, postsPerPage }) => {
 
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };

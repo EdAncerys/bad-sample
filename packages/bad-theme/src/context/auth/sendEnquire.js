@@ -12,13 +12,11 @@ export const sendEmailEnquireAction = async ({
   isActiveUser,
 }) => {
   // console.log("enquireAction triggered");
-  console.log("DATA", formData);
   setFetchAction({ dispatch, isFetching: true });
   const path = state.auth.APP_HOST + `/email`;
 
   try {
     if (!recipients) throw new Error("No Recipients Provided");
-    console.log(recipients);
     let recipientsArray = [];
     recipients.map((item) => {
       recipientsArray.push(item.email);
@@ -76,15 +74,12 @@ export const sendEmailEnquireAction = async ({
       body: form,
       credentials: "include",
     };
-    console.log("REQUEST", requestOptions);
     const respose = await fetch(path, requestOptions);
-    console.log("RESPONSE", respose);
     const data = await respose.json();
-    console.log("EMAIL DATA", data);
     if (data.success) {
       return data;
     } else {
-      console.log("⬇️ Error sending email response"); // debug
+      // console.log("⬇️ Error sending email response"); // debug
       throw new Error(data.message);
     }
 
@@ -107,7 +102,7 @@ export const sendEmailEnquireAction = async ({
     //   console.log(response); // debug
     // }
   } catch (error) {
-    console.log("error sending enquiry", error);
+    // console.log("error sending enquiry", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
     setEnquireAction({ dispatch, enquireAction: null });

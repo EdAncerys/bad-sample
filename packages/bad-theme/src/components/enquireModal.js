@@ -25,7 +25,6 @@ const EnquireModal = ({ state, libraries }) => {
 
   const dispatch = useAppDispatch();
   const { enquireAction, isActiveUser } = useAppState();
-  console.log("ENQUIRE A", enquireAction);
   const [isFetching, setIsFetching] = useState(null);
   const [formData, setFormData] = useState({
     fullname: "",
