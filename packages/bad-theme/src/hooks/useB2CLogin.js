@@ -65,11 +65,11 @@ export const useB2CLogin = ({ state, actions }) => {
       // decode Base64 encoded url value
       items[0] = JSON.parse(atob(items[0]));
       items[1] = JSON.parse(atob(items[1]));
-      // console.log("🐞 items", b2cTaken);
+      console.log("🐞 items", b2cTaken);
 
       if (Array.isArray(items[1].emails)) {
         const email = items[1].emails[0];
-        // console.log("🐞 email ", email); // debug
+        console.log("🐞 email ", email); // debug
 
         // 📌 set auth cookie for authenticated requests
         await setAuthenticationCookieAction({ state, b2cTaken });
@@ -84,14 +84,14 @@ export const useB2CLogin = ({ state, actions }) => {
           throw new Error("Error getting user data.");
         }
       } else {
-        // console.log("🐞 error. No email found. Redirect to home path");
+        console.log("🐞 error. No email found. Redirect to home path");
       }
     } catch (error) {
-      // console.log(error);
+      console.log(error);
     } finally {
       // get redirect url from cookie
       const redirectUrl = handleGetCookie({ name: "badLoginPath" });
-      // console.log("🐞 redirectUrl ", redirectUrl); // debug
+      console.log("🐞 redirectUrl ", redirectUrl); // debug
 
       // ⬇️ redirect to url with path ⬇️
       setGoToAction({ state, path: redirectUrl || "/", actions });
