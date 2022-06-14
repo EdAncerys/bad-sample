@@ -16,7 +16,6 @@ export const fetchDataHandler = async ({
   // 📌 CUSTOM FETCH HANDLER
   // -----------------------------------------------
   console.log("HEADERS", headers);
-  console.log("STATE", state);
   method = method || "GET";
   accept = accept || "application/json";
   if (isCORSHeaders) disableCookies = true; // 📌 disable sending cookies with requests if CORS header is set

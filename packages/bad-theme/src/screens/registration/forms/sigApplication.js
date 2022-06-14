@@ -718,14 +718,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const ServeSIGMembershipCategory = () => {
     if (!membershipData) return null;
 
-    // show loading indicator while no membershipData is fetched or if membershipData is fetched but is empty
-    if (!membershipData)
-      return (
-        <div>
-          <Loading padding="5vh 0 0" />
-        </div>
-      );
-
     return (
       <div>
         <label className="bold required" style={{ padding: "0.5em 0" }}>
@@ -761,6 +753,14 @@ const SIGApplication = ({ state, actions, libraries }) => {
       </div>
     );
   };
+
+  // show loading indicator while no membershipData is fetched or if membershipData is fetched but is empty
+  if (!membershipData)
+    return (
+      <div>
+        <Loading padding="5vh 0 0" />
+      </div>
+    );
 
   return (
     <div style={{ position: "relative" }}>
