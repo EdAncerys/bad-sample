@@ -6,7 +6,6 @@ import { colors } from "../../../config/imports";
 import FormError from "../../../components/formError";
 import ActionPlaceholder from "../../../components/actionPlaceholder";
 import SearchDropDown from "../../../components/searchDropDown";
-import { sigAppFileds } from "../../../config/data";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -208,8 +207,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
       }
       // 📌 set Psychodermatology Category picklist values
       if (data.name === "bad_psychodermatologycategory") {
-        const pickList = data.info.Choices;
-        setDermList(pickList);
+        let pickList = null;
+        if (data.info) pickList = data.info.Choices;
+        if (pickList) setDermList(pickList);
       }
       // 📌 set app type name
       if (data.bad_categorytype) {
