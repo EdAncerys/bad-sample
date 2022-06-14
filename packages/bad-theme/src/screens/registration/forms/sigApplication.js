@@ -28,6 +28,7 @@ import {
   getDermGroupsData,
   setErrorAction,
 } from "../../../context";
+import Loading from "../../../components/loading";
 
 const SIGApplication = ({ state, actions, libraries }) => {
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -701,6 +702,14 @@ const SIGApplication = ({ state, actions, libraries }) => {
       </div>
     );
   };
+
+  // show loading indicator while no membershipData is fetched or if membershipData is fetched but is empty
+  if (!membershipData)
+    return (
+      <div>
+        <Loading padding="5vh 0 0" />
+      </div>
+    );
 
   return (
     <div style={{ position: "relative" }}>
