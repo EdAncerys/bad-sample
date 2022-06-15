@@ -25,15 +25,6 @@ const Header = ({ state, actions }) => {
   const urlPath = state.router.link;
   const data = state.source.get(urlPath);
 
-  const ServeNavigation = () => {
-    return (
-      <div className="bad-header no-selector" style={styles.container}>
-        <HeaderActions />
-        {!lg ? <Navigation /> : null}
-      </div>
-    );
-  };
-
   return (
     <>
       <Global
@@ -60,7 +51,10 @@ const Header = ({ state, actions }) => {
             top: 0,
           }}
         >
-          <ServeNavigation />
+          <div className="bad-header no-selector" style={styles.container}>
+            <HeaderActions />
+            <Navigation />
+          </div>
         </div>
       )}
     </>

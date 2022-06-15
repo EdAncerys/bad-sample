@@ -14,6 +14,7 @@ import {
   useAppDispatch,
   useAppState,
   hasPermisionLevel,
+  getMediaCategories,
 } from "../../context";
 
 const Navigation = ({ state, actions, libraries }) => {
@@ -44,7 +45,6 @@ const Navigation = ({ state, actions, libraries }) => {
   useEffect(async () => {
     // ⬇️ getting wp menu & featured from state
     if (!state.theme.menu) return;
-    let iteration = 0;
     const menuData = state.theme.menu;
     const menuLength = menuData.length;
 
@@ -56,16 +56,24 @@ const Navigation = ({ state, actions, libraries }) => {
     if (state.source.menu_features)
       setFeatured(Object.values(state.source.menu_features)); // cpt for menu content
 
-    if (state.source.category) {
-      let catList = Object.values(state.source.category);
+    let taxonomyList = [];
+    if (null) {
+      taxonomyList = Object.values(state.source.category);
+    } else {
+      // prefetch news categories taxonomy
+      taxonomyList = await getMediaCategories({ state });
+    }
+
+    if (taxonomyList.length > 0) {
       // sort catList by name in alphabetical order
-      catList.sort((a, b) => {
+      taxonomyList.sort((a, b) => {
         if (a.name < b.name) return -1;
         if (a.name > b.name) return 1;
 
         return 0;
       });
-      setNewsMedia(catList);
+
+      setNewsMedia(taxonomyList);
     }
 
     return () => {
