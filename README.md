@@ -1,17 +1,26 @@
 # bad-org 😈
 
-# ⬇️ PRODUCTION APP auth creditentials ⬇️
+### Live website url: [BAD Web App](https://www.bad.org.uk)
 
-B2C
-WP_HOST
-WP_HOST_CONTENT
-GOOGLE_API_KEY
-DYNAMICS_BRIDGE
-APP_URL
-VENUE_HIRE_CONTACTS
-EVENT_CONTACTS
-ELECTION_CONTACTS
-DEFAULT_CONTACT_LIST
+#### App build with [Frontity](https://frontity.org/) & headless wp. User data been handles with Dynamics APIs
+
+#### Authentication by B2C via server side cookies 🍪
+
+<br/>
+
+### ⬇️ PRODUCTION APP auth creditentials ⬇️
+
+```
+# ENVIRONMENT=PRODUCTION
+# GOOGLE_API_KEY
+# DYNAMICS_BRIDGE
+# WP_HOST_CONTENT
+# WP_HOST
+# DEFAULT_CONTACT_LIST
+# APP_URL
+# APP_HOST
+# B2C
+```
 
 ## README TBD
 
