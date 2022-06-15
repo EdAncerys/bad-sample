@@ -120,8 +120,8 @@ export const getWPMenu = async ({ state, actions }) => {
       // pre-fetch wp menu
       await actions.source.fetch(`${state.theme.menuUrl}`);
       const badMenu = await state.source.data["/menu/primary-menu/"].items;
+      // sessionStorage.setItem("badMenu", JSON.stringify(badMenu)); // saving menu to session storage
       state.theme.menu = badMenu; // replacing menu stored in sessions with state var
-      sessionStorage.setItem("badMenu", JSON.stringify(badMenu));
     } catch (error) {
       // console.log("error: " + error);
     }

@@ -29,7 +29,10 @@ const DashboardNavigation = ({ state, actions, libraries }) => {
       return hasBADMemberships;
     });
 
-    if (badApps.length) setIsBADMember(true);
+    // 📌 check if user is a BAD member
+    // temp disable access to all users
+    // uncomment below to check if user is a BAD member
+    // if (badApps.length) setIsBADMember(true);
   }, [dynamicsApps]);
 
   // HELPERS ----------------------------------------------------------------
