@@ -80,7 +80,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     bad_psychodermatologycategory: "",
   });
   const [inputValidator, setInputValidator] = useState({
-    bad_categorytype: true,
+    sig_bad_categorytype: true, // 📌 validation condition for bad_categorytype with sig_ prefix
 
     sig_py3_title: true,
     sig_py3_firstname: true,
