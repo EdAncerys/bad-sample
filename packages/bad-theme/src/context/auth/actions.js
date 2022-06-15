@@ -234,7 +234,7 @@ export const getUserDataByEmail = async ({ state, dispatch, email }) => {
 
     return null;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
