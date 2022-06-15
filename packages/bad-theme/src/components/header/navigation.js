@@ -57,7 +57,7 @@ const Navigation = ({ state, actions, libraries }) => {
       setFeatured(Object.values(state.source.menu_features)); // cpt for menu content
 
     let taxonomyList = [];
-    if (null) {
+    if (state.source.category) {
       taxonomyList = Object.values(state.source.category);
     } else {
       // prefetch news categories taxonomy
