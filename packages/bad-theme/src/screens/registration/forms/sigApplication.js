@@ -745,7 +745,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         >
           <ServeSIGMembershipCategory />
 
-          {/* {inputValidator.sig_py3_bad_psychodermatologycategory && dermList && (
+          {inputValidator.sig_py3_bad_psychodermatologycategory && dermList && (
             <div className="flex-col">
               <label className="form-label">Membership Category Type</label>
               <Form.Select
@@ -766,7 +766,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 })}
               </Form.Select>
             </div>
-          )} */}
+          )}
 
           {inputValidator.sig_py3_title && (
             <div>
