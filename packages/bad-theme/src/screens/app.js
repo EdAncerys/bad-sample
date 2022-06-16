@@ -84,7 +84,6 @@ const App = ({ state, actions }) => {
   useScript({
     url: `https://maps.googleapis.com/maps/api/js?key=${state.auth.GOOGLE_API_KEY}&libraries=places`,
   });
-  console.log("🐞 GOOGLE_API_KEY", state.auth.GOOGLE_API_KEY);
 
   useEffect(() => {
     // ⬇️ restore scroll history to manual position ⬇️

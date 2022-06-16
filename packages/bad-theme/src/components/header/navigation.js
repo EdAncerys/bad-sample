@@ -44,10 +44,15 @@ const Navigation = ({ state, actions, libraries }) => {
 
   useEffect(async () => {
     // ⬇️ getting wp menu & featured from state
-    if (!state.theme.menu) return;
-    const menuData = state.theme.menu;
-    const menuLength = menuData.length;
+    let menuData = state.theme.menu;
+    if (!menuData) {
+      // get menu from local storage
+      const menu = sessionStorage.getItem("badMenu"); // checking if menu already pre fetched from wp
+      if (!menu) return; // if not, exit
 
+      menuData = JSON.parse(menu);
+    }
+    const menuLength = menuData.length;
     const wpMainMenu = menuData.slice(0, MAIN_NAV_LENGTH);
     const wpMoreMenu = menuData.slice(MAIN_NAV_LENGTH, menuLength);
 
