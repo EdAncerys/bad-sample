@@ -44,7 +44,6 @@ function AlterAccordion({
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [uniqueId, setUniqueId] = useState(null);
-  const [isActive, setIsActive] = useState(true);
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -62,31 +61,26 @@ function AlterAccordion({
     setUniqueId(id);
   }, [accordion_item]);
 
-  useEffect(() => {
-    if (!uniqueId) return; // break if no unique id
-    let isActive = false;
-
-    if (leadershipBlock && block.accordion_item)
-      isActive = block.accordion_item[0].block.is_active;
-    if (isActive) {
-      // 📌 apply show class to accordion item
-      // set timeout get the accordion body with the unique id
-      setTimeout(() => {
-        const accordionBody = document.getElementById(uniqueId);
-        if (accordionBody) accordionBody.classList.add("show");
-      }, 100);
-    }
-  }, [uniqueId]);
-
   if (!searchFilter || isForBADMembersOnly) return null; // defensive programming
 
   const SingleItem = ({ block, id }) => {
+    let isActive = false;
+    if (leadershipBlock && block.block) isActive = block.block.is_active;
+    // 📌 apply show class to accordion item.
+    // set timeout get the accordion body with the unique id
+    if (isActive) {
+      // get the accordion body with the unique id and add the show class
+      useEffect(() => {
+        const accordionBody = document.getElementById(uniqueId);
+        if (accordionBody) accordionBody.classList.add("show");
+      }, []);
+    }
+
     return (
       <Card
         style={{
           backgroundColor: "#fff",
           borderRadius: 0,
-          marginTop: 20,
           border: 0,
         }}
         // 📌 animation adds bug when using react-bootstrap accordion
@@ -120,8 +114,12 @@ function AlterAccordion({
             />
           </CustomToggle>
         </Card.Header>
-        <Accordion.Collapse eventKey={id} id={uniqueId}>
-          <Card.Body>
+        <Accordion.Collapse
+          eventKey={id}
+          id={uniqueId}
+          // className={isActive ? "show" : ""}
+        >
+          <Card.Body style={{ padding: "1em 3.25em" }}>
             <AccordionBody
               block={block}
               guidelines={guidelines}
@@ -140,7 +138,7 @@ function AlterAccordion({
   return (
     <div
       style={{
-        padding: `1em 0`,
+        padding: `${marginVertical}px 0`,
         backgroundColor: background_colour || "transparent",
       }}
     >

@@ -41,7 +41,15 @@ const LeadershipBlock = ({ state, actions, block }) => {
   return (
     <AccordionComponent
       block={{
-        accordion_item: [{ leadershipList, gradesList, positionList, block }],
+        accordion_item: [
+          {
+            leadershipList,
+            gradesList,
+            positionList,
+            block,
+          },
+        ],
+        disable_vertical_padding: block.disable_vertical_padding,
       }}
       leadershipBlock
     />
