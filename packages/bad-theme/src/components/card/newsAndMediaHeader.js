@@ -126,10 +126,21 @@ const NewsAndMediaHeader = ({
     const filter = categoryList.filter(
       (item) => item.id === Number(categories[0])
     );
-    const categoryName = filter[0].name;
+    let categoryName = filter[0].name;
+    // replace names with singular form
+    if (categoryName === "Official Responses")
+      categoryName = "Official Response";
+    if (categoryName === "President's Bulletins")
+      categoryName = "President's Bulletin";
+    if (categoryName === "News & Updates") categoryName = "News & Update";
+    if (categoryName === "Press Releases") categoryName = "Press Release";
+    if (categoryName === "Podcasts") categoryName = "Podcast";
+    if (categoryName === "E-Circulars") categoryName = "E-Circular";
+    if (categoryName === "Insights") categoryName = "Insight";
+    if (categoryName === "Newsletters") categoryName = "Newsletter";
 
     return (
-      <div className="primary-title" style={{ fontSize: 20 }}>
+      <div className="primary-title" style={{ fontSize: 20, paddingRight: 10 }}>
         <Html2React html={categoryName} />
       </div>
     );
