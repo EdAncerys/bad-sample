@@ -139,8 +139,6 @@ const NewsAndMediaHeader = ({
       categoryName = "President's Bulletin";
     if (categoryName === "Press Releases") categoryName = "Press Release";
 
-    console.log("🐞 categoryList", categoryList);
-
     return (
       <div className="primary-title" style={{ fontSize: 20, paddingRight: 10 }}>
         <Html2React html={categoryName} />

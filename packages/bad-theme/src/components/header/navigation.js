@@ -61,14 +61,7 @@ const Navigation = ({ state, actions, libraries }) => {
     if (state.source.menu_features)
       setFeatured(Object.values(state.source.menu_features)); // cpt for menu content
 
-    let taxonomyList = [];
-    if (state.source.category) {
-      taxonomyList = Object.values(state.source.category);
-    } else {
-      // prefetch news categories taxonomy
-      taxonomyList = await getMediaCategories({ state });
-    }
-
+    let taxonomyList = await getMediaCategories({ state });
     if (taxonomyList.length > 0) {
       // sort catList by name in alphabetical order
       taxonomyList.sort((a, b) => {
@@ -180,6 +173,7 @@ const Navigation = ({ state, actions, libraries }) => {
 
   // SERVERS -----------------------------------------------------
   const ServeNewsMediaSubMenu = ({ parent }) => {
+    console.log("🐞 ", parent.db_id, newsMedia.length);
     // 📌 serve submenu for news & media only
     if (parent.db_id !== 292 || newsMedia.length === 0) return null;
 
@@ -291,7 +285,9 @@ const Navigation = ({ state, actions, libraries }) => {
             <div style={{ paddingRight: `2em` }}>
               {child_items.map((item, key) => {
                 const { title, url } = item;
+                // 📌 hide child navigation injected menu item
                 const isDummy = title === "Dummy Menu Item";
+                if (isDummy) return null;
 
                 let subChildTitle = title.replace(/’/g, "");
                 let linkPath = url;
@@ -311,7 +307,7 @@ const Navigation = ({ state, actions, libraries }) => {
                       }
                       link={linkPath}
                     >
-                      <div className={isDummy ? "hide" : "flex"}>
+                      <div className="flex">
                         <div className="menu-title">
                           <Html2React html={subChildTitle} />
                         </div>

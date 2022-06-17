@@ -172,7 +172,7 @@ input[type="email"]::-webkit-input-placeholder {
 }
 
 .hide {
-  display: none;
+  display: none !important;
 }
 
 /* Test css */
