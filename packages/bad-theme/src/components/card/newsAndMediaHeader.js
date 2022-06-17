@@ -127,17 +127,19 @@ const NewsAndMediaHeader = ({
       (item) => item.id === Number(categories[0])
     );
     let categoryName = filter[0].name;
-    // replace names with singular form
-    if (categoryName === "Official Responses")
-      categoryName = "Official Response";
-    if (categoryName === "President's Bulletins")
-      categoryName = "President's Bulletin";
-    if (categoryName === "News & Updates") categoryName = "News & Update";
-    if (categoryName === "Press Releases") categoryName = "Press Release";
-    if (categoryName === "Podcasts") categoryName = "Podcast";
+    // 📌 replace names with singular form
     if (categoryName === "E-Circulars") categoryName = "E-Circular";
     if (categoryName === "Insights") categoryName = "Insight";
+    if (categoryName === "News &amp; Updates") categoryName = "News Update";
     if (categoryName === "Newsletters") categoryName = "Newsletter";
+    if (categoryName === "Official Responses")
+      categoryName = "Official Response";
+    if (categoryName === "Podcasts") categoryName = "Podcast";
+    if (categoryName === "President's Bulletins")
+      categoryName = "President's Bulletin";
+    if (categoryName === "Press Releases") categoryName = "Press Release";
+
+    console.log("🐞 categoryList", categoryList);
 
     return (
       <div className="primary-title" style={{ fontSize: 20, paddingRight: 10 }}>
