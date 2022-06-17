@@ -30,6 +30,7 @@ import {
   setAppSearchPhraseAction,
   muiQuery,
   setCreateAccountModalAction,
+  handleSetCookie,
 } from "../../context";
 
 const HeaderActions = ({ state, actions, libraries }) => {
@@ -129,7 +130,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
   };
 
   // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
-  const ServeTesting = () => {
+  const ServeDevPanel = () => {
     if (state.auth.ENVIRONMENT !== "DEVELOPMENT" || lg) return null;
 
     return (
@@ -142,6 +143,8 @@ const HeaderActions = ({ state, actions, libraries }) => {
           justifyContent: "space-between",
           minWidth: 500,
           padding: "1em",
+          borderRadius: 10,
+          zIndex: 1,
         }}
       >
         <div
@@ -341,6 +344,8 @@ const HeaderActions = ({ state, actions, libraries }) => {
       {mobileMenuActive && <MobileMenu />}
       <BlockWrapper>
         <ServeProductionBatch />
+        <ServeDevPanel />
+
         <div className="flex" style={{ padding: !lg ? `2.75em 0` : `0.3em 0` }}>
           <div className="flex">
             <div

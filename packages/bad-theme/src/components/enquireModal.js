@@ -102,7 +102,7 @@ const EnquireModal = ({ state, libraries }) => {
       });
 
       if (!response) throw new Error("Error sending email");
-      // sucsess error messages to user
+      // success error messages to user
       if (enquireAction.isHospitalChange) {
         setErrorAction({
           dispatch,
@@ -130,7 +130,7 @@ const EnquireModal = ({ state, libraries }) => {
         },
       });
     } catch (error) {
-      // console.log(error);
+      console.log(error); // debug
       setErrorAction({
         dispatch,
         isError: {
