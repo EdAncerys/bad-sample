@@ -76,6 +76,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         message: true,
         recipients: [{ email: "membership@bad.org.uk" }],
         isHospitalChange: true,
+        emailTemplate: "BADEnquiryFormAuthChangeOfHospital", // change of hospital template
 
         // default email subject & template name
         emailSubject:

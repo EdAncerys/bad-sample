@@ -84,7 +84,9 @@ const EnquireModal = ({ state, libraries }) => {
     const recipients = enquireAction.recipients;
 
     // default change of hospital value to input if exists value is empty
-    const changeOfHospitalInput = hospitalSearchRef.current.value || "";
+    const changeOfHospitalInput = hospitalSearchRef.current
+      ? hospitalSearchRef.current.value
+      : "";
     formData.hospitalChangeName =
       formData.hospitalChangeName || changeOfHospitalInput;
 
