@@ -135,15 +135,16 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
     return (
       <div
-        className="flex pink"
+        className="flex"
         style={{
           position: "absolute",
           top: "3em",
           left: "2em",
           justifyContent: "space-between",
-          minWidth: 500,
+          minWidth: 300,
           padding: "1em",
           borderRadius: 10,
+          backgroundColor: "rgba(247,61,147,0.5)",
           zIndex: 1,
         }}
       >

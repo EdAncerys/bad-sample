@@ -4,11 +4,8 @@ import { connect } from "frontity";
 import { colors } from "../config/imports";
 import BlockBuilder from "../components/builder/blockBuilder";
 import BlockWrapper from "../components/blockWrapper";
-
-import Wiley from "../components/authentication/wiley";
-import Sagepay from "../components/authentication/sagepay";
-import OCP from "../components/authentication/ocp";
-import ButtonsRow from "../components/buttonsRow";
+// --------------------------------------------------------------------------------
+import Referrals from "../screens/referrals";
 
 const BlocksPage = ({ state }) => {
   const data = state.source.get(state.router.link);
@@ -27,29 +24,7 @@ const BlocksPage = ({ state }) => {
         </div>
 
         <BlockWrapper>
-          {/* <Wiley /> */}
-          {/* <Sagepay /> */}
-          {/* <OCP /> */}
-          {/* <ButtonsRow
-            block={{
-              buttons: [
-                {
-                  contact_form: true,
-                  full_name: true,
-                  email_address: true,
-                  phone_number: true,
-                  subject: true,
-                  subject_dropdown_options: { 1: "a", 2: "b", 3: "c" },
-                  isHospitalChange: true,
-                  job_title: true,
-                  message: true,
-                  allow_attachments: true,
-
-                  title: "Visit The BJD Website",
-                },
-              ],
-            }}
-          /> */}
+          <Referrals />
         </BlockWrapper>
       </div>
 
