@@ -182,9 +182,15 @@ input[type="email"]::-webkit-input-placeholder {
 .tom {
   background-color: tomato;
 }
+.referral-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-content: space-between;
+  grid-gap: 15px;
+}
 
 /* Media Queries */
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 992px) {
   .main-container {
     width: 100%;
   }
@@ -194,6 +200,9 @@ input[type="email"]::-webkit-input-placeholder {
   }
   .cookie-actions {
     margin-top: 1em;
+  }
+  .referral-container {
+    grid-template-columns: 1fr;
   }
 }
 @media screen and (min-width: 992px) {

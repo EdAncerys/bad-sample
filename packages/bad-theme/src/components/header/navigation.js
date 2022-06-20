@@ -173,7 +173,6 @@ const Navigation = ({ state, actions, libraries }) => {
 
   // SERVERS -----------------------------------------------------
   const ServeNewsMediaSubMenu = ({ parent }) => {
-    console.log("🐞 ", parent.db_id, newsMedia.length);
     // 📌 serve submenu for news & media only
     if (parent.db_id !== 292 || newsMedia.length === 0) return null;
 

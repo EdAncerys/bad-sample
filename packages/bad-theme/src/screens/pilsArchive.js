@@ -4,12 +4,11 @@ import { connect } from "frontity";
 import Loading from "../components/loading";
 import SearchDropDown from "../components/searchDropDown";
 import { colors } from "../config/imports";
-import { setGoToAction } from "../context";
-
+// --------------------------------------------------------------------------------
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 // CONTEXT -----------------------------------------------------------
-import { muiQuery, getPILsDataAction } from "../context";
+import { muiQuery, setGoToAction } from "../context";
 // BLOCK WIDTH WRAPPER -----------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 

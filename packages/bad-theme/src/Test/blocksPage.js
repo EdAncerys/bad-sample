@@ -18,29 +18,11 @@ const BlocksPage = ({ state }) => {
 
   return (
     <div>
-      <div>
-        <div className="primary-title" style={styles.title}>
-          BLOCK BUILDER 😈
-        </div>
-
-        <BlockWrapper>
-          <Referrals />
-        </BlockWrapper>
-      </div>
+      <Referrals />
 
       <BlockBuilder blocks={wpBlocks} block={{ facebook_link: "" }} />
     </div>
   );
-};
-
-const styles = {
-  title: {
-    fontSize: 26,
-    textAlign: "center",
-    fontWeight: "500",
-    color: colors.primary,
-    backgroundColor: "#66806A",
-  },
 };
 
 export default connect(BlocksPage);
