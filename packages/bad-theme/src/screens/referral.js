@@ -38,18 +38,16 @@ const Referral = ({ state, actions, libraries }) => {
   const ServeSeverityContainer = ({ block, type }) => {
     if (!block) return null;
 
-    let description = block.filter((item) => item.title === "Description");
-    if (description.length > 0) description = description[0].content;
-    console.log("🐞 ", description); // debug
+    let description = block[0].content;
 
     return (
-      <div onClick={() => console.log(type)}>
+      <div onClick={() => setSeverity(block)}>
         <Card
           title={type}
           subTitle="Description:"
           body={description}
           colour={colors.primary}
-          // bodyLimit={3} // limit body text
+          bodyLimit={10} // limit body text
           cardMinHeight={250}
           shadow
         />
@@ -57,43 +55,92 @@ const Referral = ({ state, actions, libraries }) => {
     );
   };
 
-  const ServeContent = () => {
-    if (!severity) return null;
-
+  const ServeContentCard = ({ title, body, recaurces }) => {
     return (
       <div
-        className="text-body"
+        className="flex-col shadow"
         style={{
-          backgroundColor: colors.white,
-          padding: `2em 0`,
+          padding: `${marginVertical}px 2em`,
+          marginTop: `${marginVertical}px`,
         }}
       >
-        <Html2React html={referral.acf.condition_description} />
+        {title && (
+          <div
+            className="flex primary-title divider"
+            style={{ fontSize: 20, paddingBottom: "1em", marginBottom: "1em" }}
+          >
+            <Html2React html={title} />
+          </div>
+        )}
+        {body && (
+          <div className="flex">
+            <Html2React html={body} />
+          </div>
+        )}
+        {recaurces && <ServeDownloadAction recaurces={recaurces} />}
       </div>
     );
   };
 
-  const ServeDownloadAction = () => {
-    if (!referral.acf && !referral.acf.clinical_resources) return null;
+  const ServeContent = () => {
+    if (!severity) return null;
 
-    const { clinical_resources } = referral.acf;
+    let notice = referral.acf.severity_notice;
+    let treatment = severity[1];
+    let management = severity[2];
 
+    return (
+      <div className="flex-col">
+        {notice && (
+          <div
+            className="flex-col shadow"
+            style={{
+              padding: `${marginVertical}px ${marginHorizontal}px`,
+              marginTop: `${marginVertical}px`,
+              backgroundColor: colors.primary,
+              color: colors.white,
+              textAlign: "center",
+            }}
+          >
+            <Html2React html={referral.notice} />
+          </div>
+        )}
+
+        <ServeContentCard title={treatment.title} body={treatment.content} />
+        <ServeContentCard
+          title="Clinical Recaurces"
+          recaurces={referral.acf.clinical_resources}
+        />
+        <ServeContentCard title={management.title} body={management.content} />
+        <ServeContentCard
+          title="Patient Information Leaflets"
+          recaurces={referral.acf.patient_information_resources}
+        />
+        <ServeContentCard
+          title="ICD search category(s)"
+          body={`${referral.acf.icd_search_category} <span class="referal-badge-wrapper">ICD11 CODE ${referral.acf.icd11_code}</span>`}
+        />
+      </div>
+    );
+  };
+
+  const ServeDownloadAction = ({ recaurces }) => {
     const downloadAction = ({ link }) => {
       // 📌 open download link in new tab or window
       window.open(link, "_blank");
     };
 
     return (
-      <div style={{ margin: `1em 0`, display: "flex", flexWrap: "wrap" }}>
-        {clinical_resources.map((item, key) => {
+      <div className="flex-col" style={{ margin: `1em 0` }}>
+        {recaurces.map((item, key) => {
           const { label, link } = item;
 
           return (
             <div
               key={key}
               className="caps-btn"
+              style={{ padding: "10px 0" }}
               onClick={() => downloadAction({ link })}
-              style={{ paddingRight: "1em" }}
             >
               {label}
             </div>
@@ -136,7 +183,11 @@ const Referral = ({ state, actions, libraries }) => {
               </div>
             )}
           </div>
-          <ServeDownloadAction />
+
+          <div className="caps-btn" style={{ padding: "1em 0" }}>
+            DOWNLOAD RECAURCES
+          </div>
+
           <div className="flex-col">
             {referral.acf ? referral.acf.condition_description : null}
           </div>
@@ -147,7 +198,7 @@ const Referral = ({ state, actions, libraries }) => {
             text_align: "left",
             title: "Please Select Desease Severity:",
           }}
-          fontSize={24}
+          fontSize={20}
           margin="1em 0"
         />
         <div className="severity-container">

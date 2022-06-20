@@ -13,14 +13,18 @@ import CloseIcon from "@mui/icons-material/Close";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 // --------------------------------------------------------------------------------
-import { muiQuery, getReferralsData, setGoToAction } from "../context";
+import {
+  muiQuery,
+  getReferralsData,
+  setGoToAction,
+  getReferralsPage,
+} from "../context";
 
 const ReferralArchive = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
-  const pil = state.source[data.type][data.id];
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -31,6 +35,7 @@ const ReferralArchive = ({ state, actions, libraries }) => {
   const [searchFilter, setSearchFilter] = useState("");
   const [searchInput, setInput] = useState("");
   const [searchPhrase, setPhrase] = useState("");
+  const [pageContent, setPageContent] = useState([]);
 
   useEffect(async () => {
     // ⬇️ on component load defaults to window position TOP
@@ -39,29 +44,44 @@ const ReferralArchive = ({ state, actions, libraries }) => {
 
     // get referral data from wp api
     let response = await getReferralsData({ state });
+    // get referral page contetn
+    let pageContent = await getReferralsPage({ state });
+    console.log("🐞 pageContent", pageContent); // debug
     if (response && response.length > 0) {
-      // multiple response 5x times fro testing purposes
-      response = Array(5).fill(...response);
-      console.log("🐞 response", response); // debug
+      // 📌 sort posts alphabetically by title
+      response.sort((a, b) => {
+        if (a.title.rendered < b.title.rendered) return -1;
+        if (a.title.rendered > b.title.rendered) return 1;
+        return 0;
+      });
 
+      setPageContent(pageContent);
       setPosts(response);
       setFilter(response);
     }
   }, []);
 
-  if (!posts) return <Loading />;
+  if (!posts || !pageContent.length) return <Loading />;
 
   // HANDLERS ---------------------------------------------------------------
   const handleSearch = (e) => {
-    const input = e.target.value.toLowerCase();
+    const input = e.target.value;
     let filter = [];
 
     if (input) {
-      filter = posts.filter(
-        (post) =>
-          post.title.rendered.toLowerCase().includes(input) || // search by title
-          post.acf.condition_description.toLowerCase().includes(input) // search by content
-      );
+      // filter posts where title or content contains input
+      filter = posts.filter((post) => {
+        let title = post.title ? post.title.rendered.toLowerCase() : "";
+        let content = post.acf.condition_description
+          ? post.acf.condition_description.toLowerCase()
+          : "";
+
+        return (
+          title.includes(input.toLowerCase()) ||
+          content.includes(input.toLowerCase())
+        );
+      });
+
       // ⬇️ convert filter to dropdown object format
       filter = filter.map((item) => {
         return {
@@ -71,12 +91,12 @@ const ReferralArchive = ({ state, actions, libraries }) => {
         };
       });
     }
+    //
 
-    if (filter.length) {
-      setFilter(filter);
+    if (filter.length > 0) {
       setSearchFilter(filter);
     } else {
-      setSearchFilter([]);
+      setSearchFilter("");
     }
     setInput(input);
   };
@@ -84,16 +104,6 @@ const ReferralArchive = ({ state, actions, libraries }) => {
   const dropDownHandler = ({ item }) => {
     // console.log(item); // debug
     setGoToAction({ state, path: item.url, actions });
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter" && e.target.value) {
-      handleSearch(e);
-    }
-  };
-
-  const handleSearchPress = (e) => {
-    handleSearch(e);
   };
 
   const handleClearFilter = () => {
@@ -141,41 +151,34 @@ const ReferralArchive = ({ state, actions, libraries }) => {
           paddingTop: !lg ? null : "1em",
         }}
       >
-        <div className="blue-btn" onClick={handleSearchPress}>
-          Search
-        </div>
+        <div className="blue-btn">Search</div>
       </div>
     );
   };
 
   return (
     <div>
-      <BlockWrapper>
-        <div
-          className="flex-col shadow"
-          style={{
-            padding: `${marginVertical}px ${marginHorizontal}px`,
-            margin: `${marginVertical}px 0`,
-          }}
-        >
-          <div className="primary-title" style={{ fontSize: !lg ? 36 : 25 }}>
-            Dermotology Referral Guidilenes
-          </div>
+      {pageContent.length > 0 && (
+        <BlockWrapper>
           <div
-            className="flex-col"
-            style={{ padding: `1em 0`, width: "100%", maxWidth: 800 }}
+            className="flex-col shadow"
+            style={{
+              padding: `${marginVertical}px ${marginHorizontal}px`,
+              margin: `${marginVertical}px 0`,
+            }}
           >
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages,
-            and more recently with desktop publishing software like Aldus.
+            <div className="primary-title" style={{ fontSize: !lg ? 36 : 25 }}>
+              <Html2React html={pageContent[0].title.rendered} />
+            </div>
+            <div
+              className="flex-col"
+              style={{ padding: `1em 0`, width: "100%", maxWidth: 800 }}
+            >
+              <Html2React html={pageContent[0].content.rendered} />
+            </div>
           </div>
-        </div>
-      </BlockWrapper>
+        </BlockWrapper>
+      )}
 
       <div
         style={{
@@ -209,7 +212,6 @@ const ReferralArchive = ({ state, actions, libraries }) => {
                   id="pils-search-input"
                   value={searchInput}
                   onChange={handleSearch}
-                  onKeyPress={(e) => handleKeyPress(e)}
                   type="text"
                   className="form-control input"
                   placeholder="Search"
@@ -261,8 +263,8 @@ const ReferralArchive = ({ state, actions, libraries }) => {
                   title={title}
                   body={body}
                   colour={colors.primary}
-                  bodyLimit={3}
-                  cardMinHeight={250}
+                  bodyLimit={6}
+                  cardMinHeight={350}
                   link_label="See More"
                   link={link}
                   shadow

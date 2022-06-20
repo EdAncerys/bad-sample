@@ -184,9 +184,10 @@ input[type="email"]::-webkit-input-placeholder {
 }
 .referral-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   justify-content: space-between;
   grid-gap: 15px;
+  padding-bottom: 40px;
 }
 .severity-container {
   display: grid;

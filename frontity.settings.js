@@ -36,6 +36,7 @@ const settings = {
             per_page: 25, // limit per page fetch request
           },
           redirections: "all",
+          // CPT to fetch from WP backend
           postTypes: [
             {
               type: "pils",

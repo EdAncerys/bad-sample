@@ -596,3 +596,18 @@ export const getReferralsData = async ({ state, page, postsPerPage }) => {
     // console.log("🐞 ", error);
   }
 };
+
+export const getReferralsPage = async ({ state }) => {
+  let fields = "id,title,content";
+
+  let url = `${state.auth.WP_HOST}wp-json/wp/v2/pages?_fields=${fields}&slug=referrals`;
+
+  try {
+    let response = await fetchDataHandler({ path: url, state });
+    let data = await response.json();
+
+    return data;
+  } catch (error) {
+    // console.log("🐞 ", error);
+  }
+};

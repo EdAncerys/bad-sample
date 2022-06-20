@@ -107,7 +107,7 @@ const CardBody = ({
         className="body-limit"
         style={{
           fontSize: 16,
-          paddingTop: title ? `1em` : 0,
+          paddingTop: title ? 0 : `1em`,
           WebkitLineClamp: titleLimit || "unset",
         }}
       >
