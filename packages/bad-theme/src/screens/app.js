@@ -1,8 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Switch from "@frontity/components/switch";
 import { colors } from "../config/imports";
-import { useTransition, animated } from "react-spring";
 import AOS from "aos";
 // COMPONENTS ---------------------------------------------------------
 import Header from "../components/header/header";
@@ -13,7 +12,6 @@ import EnquireModal from "../components/enquireModal";
 import CreateAccountModal from "../components/createAccount/createAccountModal";
 import Breadcrumbs from "../components/breadcrumbs";
 import CreateAccount from "./createAccount";
-import AnimatedPlaceholder from "../components/animatedPlaceholder";
 // SCREENS --------------------------------------------------------------
 import Post from "./post";
 import Page from "./page";
@@ -40,7 +38,8 @@ import DermGroupsCharity from "./dermGroupsCharity";
 import Covid from "./covid";
 import PaymentConfirmation from "./paymentConfirmation";
 import VideoArchive from "../components/videoArchive";
-import VideoGuides from "../components/videoGuides";
+import ReferralArchive from "./referralArchive";
+import Referral from "./referral";
 import Video from "../components/video";
 // SCREEN HELPERS ---------------------------------------------------------
 import Error from "./error";
@@ -58,7 +57,6 @@ import {
   useAppState,
   authCookieActionAfterCSR,
   getWPMenu,
-  setPlaceholderAction,
   setIdFilterAction,
 } from "../context";
 
@@ -69,7 +67,7 @@ const App = ({ state, actions }) => {
   let urlPath = state.router.link;
   const data = state.source.get(urlPath);
   const useEffectRef = useRef(true);
-  // console.log("INDEX data", data); // debug
+  console.log("INDEX data", data); // debug
   // --------------------------------------------------------------------------------
   // 📌  B2C login handler.
   // --------------------------------------------------------------------------------
@@ -120,15 +118,6 @@ const App = ({ state, actions }) => {
       setIdFilterAction({ dispatch, idFilter: null }); // reset filter id on page change
   }, [urlPath]);
 
-  const transitions = useTransition(isPlaceholder, {
-    from: { opacity: 0 },
-    enter: { opacity: 1 },
-    leave: { opacity: 0 },
-    reverse: isPlaceholder,
-    delay: 200,
-    config: { mass: 1, tension: 280, friction: 120 },
-  });
-
   // RETURN --------------------------------------------------------------------
   return (
     <div style={{ ...styles.container }}>
@@ -173,12 +162,14 @@ const App = ({ state, actions }) => {
           <ThankYou when={urlPath === "/membership/thank-you/"} />
           <EventsLandingPage when={urlPath === "/events/"} />
           <PilsArchive when={urlPath === "/patient-information-leaflets/"} />
+          <ReferralArchive when={urlPath === "/referrals/"} />
 
           <Codecollect when={urlPath.includes("codecollect")} />
           <Pils when={data.isPils} />
           <AppSearch when={urlPath === "/search/"} />
           <Event when={data.isEvents} />
           <Venue when={data.isVenues} />
+          <Referral when={data.isReferrals} />
           <DermGroupsCharity when={data.isDermGroupsCharity} />
           <Covid when={data.isCovid19} />
           <VideoArchive when={urlPath === "/videos/"} />

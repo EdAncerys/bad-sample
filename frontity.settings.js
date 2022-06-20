@@ -112,6 +112,11 @@ const settings = {
               endpoint: "sig_group",
               archive: "/sig_group",
             },
+            {
+              type: "referrals",
+              endpoint: "referrals",
+              archive: "/referrals",
+            },
           ],
           taxonomies: [
             {

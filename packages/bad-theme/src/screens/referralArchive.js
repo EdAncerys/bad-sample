@@ -15,7 +15,7 @@ import BlockWrapper from "../components/blockWrapper";
 // --------------------------------------------------------------------------------
 import { muiQuery, getReferralsData, setGoToAction } from "../context";
 
-const Referrals = ({ state, actions, libraries }) => {
+const ReferralArchive = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
@@ -276,4 +276,4 @@ const Referrals = ({ state, actions, libraries }) => {
   );
 };
 
-export default connect(Referrals);
+export default connect(ReferralArchive);

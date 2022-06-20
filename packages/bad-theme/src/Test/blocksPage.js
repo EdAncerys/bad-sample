@@ -3,9 +3,8 @@ import { connect } from "frontity";
 
 import { colors } from "../config/imports";
 import BlockBuilder from "../components/builder/blockBuilder";
-import BlockWrapper from "../components/blockWrapper";
 // --------------------------------------------------------------------------------
-import Referrals from "../screens/referrals";
+import BlockWrapper from "../components/blockWrapper";
 
 const BlocksPage = ({ state }) => {
   const data = state.source.get(state.router.link);
@@ -18,7 +17,9 @@ const BlocksPage = ({ state }) => {
 
   return (
     <div>
-      <Referrals />
+      <div className="primary-title" style={styles.title}>
+        BLOCK BUILDER 😈
+      </div>
 
       <BlockBuilder blocks={wpBlocks} block={{ facebook_link: "" }} />
     </div>
