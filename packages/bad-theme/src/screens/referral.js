@@ -3,10 +3,10 @@ import { connect } from "frontity";
 
 import { colors } from "../config/imports";
 import Loading from "../components/loading";
-import DownloadFileBlock from "../components/downloadFileBlock";
 
 import { muiQuery } from "../context";
-import ScrollTop from "../components/scrollTop";
+import TitleBlock from "../components/titleBlock";
+import Card from "../components/card/card";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 
@@ -15,11 +15,13 @@ const Referral = ({ state, actions, libraries }) => {
 
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
-  const pil = state.source[data.type][data.id];
+  const referral = state.source[data.type][data.id];
+  console.log("🐞 REFERRAL", referral); // debug
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
   const [position, setPosition] = useState(null);
+  const [severity, setSeverity] = useState(null);
 
   useEffect(() => {
     // ⬇️ on component load defaults to window position TOP
@@ -28,31 +30,35 @@ const Referral = ({ state, actions, libraries }) => {
     setPosition(true);
   }, []);
 
-  if (!pil || !position) return <Loading />;
+  if (!referral || !position) return <Loading />;
+
+  // HANDLERS --------------------------------------------
+
   // SERVERS ---------------------------------------------
-  const ServeTitle = () => {
-    if (!pil.title) return null;
+  const ServeSeverityContainer = ({ block, type }) => {
+    if (!block) return null;
+
+    let description = block.filter((item) => item.title === "Description");
+    if (description.length > 0) description = description[0].content;
+    console.log("🐞 ", description); // debug
 
     return (
-      <div className="flex">
-        <div
-          className="primary-title"
-          style={{
-            fontSize: !lg ? 36 : 25,
-            padding: `0.5em 1em`,
-            backgroundColor: colors.white,
-            borderBottom: `5px solid ${colors.danger}`,
-          }}
-        >
-          <Html2React html={pil.title.rendered} />
-        </div>
+      <div onClick={() => console.log(type)}>
+        <Card
+          title={type}
+          subTitle="Description:"
+          body={description}
+          colour={colors.primary}
+          // bodyLimit={3} // limit body text
+          cardMinHeight={250}
+          shadow
+        />
       </div>
     );
   };
 
-  const ServeBody = () => {
-    if (!pil.content) return null;
-    const bodyLength = pil.content.rendered.length;
+  const ServeContent = () => {
+    if (!severity) return null;
 
     return (
       <div
@@ -62,18 +68,37 @@ const Referral = ({ state, actions, libraries }) => {
           padding: `2em 0`,
         }}
       >
-        <Html2React html={pil.content.rendered} />
-        {bodyLength > 2500 && <ScrollTop />}
+        <Html2React html={referral.acf.condition_description} />
       </div>
     );
   };
 
-  const ServeDownload = () => {
-    if (!pil.acf) return null;
+  const ServeDownloadAction = () => {
+    if (!referral.acf && !referral.acf.clinical_resources) return null;
+
+    const { clinical_resources } = referral.acf;
+
+    const downloadAction = ({ link }) => {
+      // 📌 open download link in new tab or window
+      window.open(link, "_blank");
+    };
 
     return (
-      <div style={{ margin: `3em 0 1em` }}>
-        <DownloadFileBlock block={pil.acf} disableMargin />
+      <div style={{ margin: `1em 0`, display: "flex", flexWrap: "wrap" }}>
+        {clinical_resources.map((item, key) => {
+          const { label, link } = item;
+
+          return (
+            <div
+              key={key}
+              className="caps-btn"
+              onClick={() => downloadAction({ link })}
+              style={{ paddingRight: "1em" }}
+            >
+              {label}
+            </div>
+          );
+        })}
       </div>
     );
   };
@@ -86,12 +111,67 @@ const Referral = ({ state, actions, libraries }) => {
           margin: `${marginVertical}px ${marginHorizontal}px`,
         }}
       >
-        <ServeTitle />
-        <ServeDownload />
-        <ServeBody />
+        <div
+          className="flex-col shadow"
+          style={{
+            padding: `${marginVertical}px ${marginHorizontal}px`,
+            margin: `${marginVertical}px 0`,
+          }}
+        >
+          <div className="flex">
+            <div
+              className="flex primary-title"
+              style={{ fontSize: !lg ? 36 : 25 }}
+            >
+              {referral.title ? referral.title.rendered : null}
+            </div>
+            {referral.acf && (
+              <div className="referal-badge-container">
+                <div className="referal-badge-wrapper">
+                  {referral.acf.icd_search_category} disease code:
+                  <span style={{ color: colors.blue, paddingLeft: 10 }}>
+                    {referral.acf.icd11_code}
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+          <ServeDownloadAction />
+          <div className="flex-col">
+            {referral.acf ? referral.acf.condition_description : null}
+          </div>
+        </div>
+
+        <TitleBlock
+          block={{
+            text_align: "left",
+            title: "Please Select Desease Severity:",
+          }}
+          fontSize={24}
+          margin="1em 0"
+        />
+        <div className="severity-container">
+          <ServeSeverityContainer
+            block={referral.acf.severity_1_content}
+            type={referral.acf.severity_1_name}
+          />
+          <ServeSeverityContainer
+            block={referral.acf.severity_2_content}
+            type={referral.acf.severity_2_name}
+          />
+          <ServeSeverityContainer
+            block={referral.acf.severity_3_content}
+            type={referral.acf.severity_3_name}
+          />
+        </div>
+        <ServeContent />
       </div>
     </BlockWrapper>
   );
+};
+
+const styles = {
+  link: { boxShadow: "none", color: "inherit" },
 };
 
 export default connect(Referral);

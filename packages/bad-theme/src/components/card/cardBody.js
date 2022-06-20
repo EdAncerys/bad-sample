@@ -18,6 +18,7 @@ const CardBody = ({
   actions,
   libraries,
   title,
+  subTitle,
   body,
   bodyLimit,
   date,
@@ -98,8 +99,26 @@ const CardBody = ({
     );
   };
 
+  const ServeSubTitle = () => {
+    if (!subTitle) return null;
+
+    return (
+      <div
+        className="body-limit"
+        style={{
+          fontSize: 16,
+          paddingTop: title ? `1em` : 0,
+          WebkitLineClamp: titleLimit || "unset",
+        }}
+      >
+        <Html2React html={subTitle} />
+      </div>
+    );
+  };
+
   const ServeBody = () => {
     if (!body) return null;
+
     return (
       <div
         className="body-limit"
@@ -258,6 +277,7 @@ const CardBody = ({
       <div style={{ margin: CONTENT_ALIGNMENT }}>
         <ServeSeatsRemaining />
         <ServeTitle />
+        <ServeSubTitle />
         <ServePublicationDate />
         <ElectionInfo
           electionInfo={electionInfo}

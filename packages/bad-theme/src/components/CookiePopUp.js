@@ -56,7 +56,7 @@ const CookiePopUp = ({ state, actions }) => {
               We use cookies to run our services and analyse our traffic. We
               need some of those cookies to provide the best online experience
               while others allow us to monitor the site performance.{" "}
-              <spam
+              <span
                 onClick={() =>
                   setGoToAction({
                     state,
@@ -67,7 +67,7 @@ const CookiePopUp = ({ state, actions }) => {
                 style={{ color: "black", fontSize: 12, cursor: "pointer" }}
               >
                 Read more.
-              </spam>
+              </span>
             </p>
           </div>
           <div className="cookie-actions">

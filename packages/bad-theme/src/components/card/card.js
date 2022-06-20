@@ -44,6 +44,7 @@ const Card = ({
   colour,
   cardTitle,
   title,
+  subTitle,
   body,
   bodyLimit,
   link_label,
@@ -337,6 +338,7 @@ const Card = ({
 
         <CardBody
           title={title}
+          subTitle={subTitle}
           body={body}
           bodyLimit={bodyLimit}
           date={date}

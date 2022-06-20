@@ -188,6 +188,27 @@ input[type="email"]::-webkit-input-placeholder {
   justify-content: space-between;
   grid-gap: 15px;
 }
+.severity-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: space-between;
+  grid-gap: 15px;
+}
+.referal-badge-container {
+  display: flex;
+  align-content: center;
+  justify-content: end;
+}
+.referal-badge-wrapper {
+  display: flex;
+  align-items: center;
+  height: fit-content;
+  background-color: rgb(230, 230, 230, 0.2);
+  text-transform: uppercase;
+  padding: 5px;
+  width: fit-content;
+  font-size: 12px;
+}
 
 /* Media Queries */
 @media screen and (max-width: 992px) {
