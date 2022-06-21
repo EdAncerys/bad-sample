@@ -113,7 +113,8 @@ input[type="email"]::-webkit-input-placeholder {
 .flex-col,
 .flex-row,
 .flex-center-col,
-.flex-center-row {
+.flex-center-row,
+.flex-wrap {
   display: flex;
   flex: 1;
 }
@@ -130,6 +131,9 @@ input[type="email"]::-webkit-input-placeholder {
 .flex-col,
 .flex-center-col {
   flex-direction: column;
+}
+.flex-wrap {
+  flex-wrap: wrap;
 }
 .row-reverse {
   flex-direction: row-reverse;

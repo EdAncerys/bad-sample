@@ -108,6 +108,10 @@ export const MENU_DATA = [
     title: "PushFar Mentoring platform",
     url: "https://www.pushfar.com/employee-register/VYhR5MtTPX/",
   },
+  {
+    title: "Referrals",
+    url: "/referrals/",
+  },
 ];
 
 export const ALPHABET = [

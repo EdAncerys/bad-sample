@@ -4,7 +4,7 @@ import { connect } from "frontity";
 import { colors } from "../config/imports";
 import Loading from "../components/loading";
 
-import { muiQuery } from "../context";
+import { getReferralsData, muiQuery } from "../context";
 import TitleBlock from "../components/titleBlock";
 import Card from "../components/card/card";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
@@ -35,15 +35,11 @@ const Referral = ({ state, actions, libraries }) => {
   // HANDLERS --------------------------------------------
 
   // SERVERS ---------------------------------------------
-  const ServeSeverityContainer = ({ block, type }) => {
-    if (!block) return null;
-
-    let description = block[0].content;
-
+  const ServeSeverityContainer = ({ description, name, status }) => {
     return (
-      <div onClick={() => setSeverity(block)}>
+      <div onClick={() => setSeverity(status)}>
         <Card
-          title={type}
+          title={name}
           subTitle="Description:"
           body={description}
           colour={colors.primary}
@@ -55,7 +51,12 @@ const Referral = ({ state, actions, libraries }) => {
     );
   };
 
-  const ServeContentCard = ({ title, body, recaurces }) => {
+  const ServeContentCard = ({ title, body, recaurces, isRowItem }) => {
+    if (!body) return null; // dont return component if no body
+
+    let classList = "flex-col";
+    if (isRowItem) classList = "flex";
+
     return (
       <div
         className="flex-col shadow"
@@ -67,13 +68,17 @@ const Referral = ({ state, actions, libraries }) => {
         {title && (
           <div
             className="flex primary-title divider"
-            style={{ fontSize: 20, paddingBottom: "1em", marginBottom: "1em" }}
+            style={{
+              fontSize: 20,
+              paddingBottom: "1em",
+              marginBottom: "0.5em",
+            }}
           >
             <Html2React html={title} />
           </div>
         )}
         {body && (
-          <div className="flex">
+          <div className={classList}>
             <Html2React html={body} />
           </div>
         )}
@@ -85,13 +90,29 @@ const Referral = ({ state, actions, libraries }) => {
   const ServeContent = () => {
     if (!severity) return null;
 
-    let notice = referral.acf.severity_notice;
-    let treatment = severity[1];
-    let management = severity[2];
+    let condition = referral.acf.severity_1_name;
+    let management = referral.acf.severity_1_referral_management;
+    let treatment = referral.acf.severity_1_treatment_therapy;
+    let teledermatology = referral.acf.severity_1_teledermatology;
+    let tips = referral.acf.clinical_tips;
+
+    // contitional rendering based on type of referral
+    if (severity === "moderate") {
+      condition = referral.acf.severity_2_name;
+      management = referral.acf.severity_2_referral_management;
+      treatment = referral.acf.severity_2_treatment_therapy;
+      teledermatology = referral.acf.severity_2_teledermatology;
+    }
+    if (severity === "severe") {
+      condition = referral.acf.severity_3_name;
+      management = referral.acf.severity_3_referral_management;
+      treatment = referral.acf.severity_3_treatment_therapy;
+      teledermatology = referral.acf.severity_3_teledermatology;
+    }
 
     return (
       <div className="flex-col">
-        {notice && (
+        {management && (
           <div
             className="flex-col shadow"
             style={{
@@ -99,19 +120,27 @@ const Referral = ({ state, actions, libraries }) => {
               marginTop: `${marginVertical}px`,
               backgroundColor: colors.primary,
               color: colors.white,
-              textAlign: "center",
             }}
           >
-            <Html2React html={referral.notice} />
+            <div style={{ textAlign: "center" }}>
+              <Html2React
+                html={`Referral Management for ${condition} - ${referral.title.rendered}:`}
+              />
+            </div>
+            <div>
+              <Html2React html={management} />
+            </div>
           </div>
         )}
 
-        <ServeContentCard title={treatment.title} body={treatment.content} />
+        <ServeContentCard title="Teledermatology" body={teledermatology} />
         <ServeContentCard
           title="Clinical Recaurces"
           recaurces={referral.acf.clinical_resources}
         />
-        <ServeContentCard title={management.title} body={management.content} />
+        <ServeContentCard title="Clinical Tips" body={tips} />
+        <ServeContentCard title="Referal Management" body={management} />
+        <ServeContentCard title="Treatment" body={treatment} />
         <ServeContentCard
           title="Patient Information Leaflets"
           recaurces={referral.acf.patient_information_resources}
@@ -119,19 +148,25 @@ const Referral = ({ state, actions, libraries }) => {
         <ServeContentCard
           title="ICD search category(s)"
           body={`${referral.acf.icd_search_category} <span class="referal-badge-wrapper">ICD11 CODE ${referral.acf.icd11_code}</span>`}
+          isRowItem
         />
       </div>
     );
   };
 
-  const ServeDownloadAction = ({ recaurces }) => {
+  const ServeDownloadAction = ({ recaurces, isRowItem }) => {
+    if (!recaurces) return null;
+
     const downloadAction = ({ link }) => {
       // 📌 open download link in new tab or window
       window.open(link, "_blank");
     };
 
+    let classList = "flex-col";
+    if (isRowItem) classList = "flex-row";
+
     return (
-      <div className="flex-col" style={{ margin: `1em 0` }}>
+      <div className={classList} style={{ marginTop: `1em` }}>
         {recaurces.map((item, key) => {
           const { label, link } = item;
 
@@ -139,7 +174,7 @@ const Referral = ({ state, actions, libraries }) => {
             <div
               key={key}
               className="caps-btn"
-              style={{ padding: "10px 0" }}
+              style={{ padding: "10px 10px 0 0" }}
               onClick={() => downloadAction({ link })}
             >
               {label}
@@ -170,27 +205,39 @@ const Referral = ({ state, actions, libraries }) => {
               className="flex primary-title"
               style={{ fontSize: !lg ? 36 : 25 }}
             >
-              {referral.title ? referral.title.rendered : null}
+              {referral.title ? (
+                <Html2React html={referral.title.rendered} />
+              ) : null}
             </div>
             {referral.acf && (
               <div className="referal-badge-container">
                 <div className="referal-badge-wrapper">
-                  {referral.acf.icd_search_category} disease code:
+                  <Html2React html={referral.acf.icd_search_category} /> disease
+                  code:
                   <span style={{ color: colors.blue, paddingLeft: 10 }}>
-                    {referral.acf.icd11_code}
+                    <Html2React html={referral.acf.icd11_code} />
                   </span>
                 </div>
               </div>
             )}
           </div>
 
-          <div className="caps-btn" style={{ padding: "1em 0" }}>
-            DOWNLOAD RECAURCES
-          </div>
+          <ServeDownloadAction
+            recaurces={referral.acf.condition_guideline_link}
+            isRowItem
+          />
 
           <div className="flex-col">
-            {referral.acf ? referral.acf.condition_description : null}
+            <Html2React html={referral.acf.condition_description} />
           </div>
+          {referral.acf.severity_notice && (
+            <div
+              className="flex-col primary-title"
+              style={{ marginTop: "1em" }}
+            >
+              <Html2React html={referral.acf.severity_notice} />
+            </div>
+          )}
         </div>
 
         <TitleBlock
@@ -203,16 +250,19 @@ const Referral = ({ state, actions, libraries }) => {
         />
         <div className="severity-container">
           <ServeSeverityContainer
-            block={referral.acf.severity_1_content}
-            type={referral.acf.severity_1_name}
+            description={referral.acf.severity_1_description}
+            name={referral.acf.severity_1_name}
+            status="mild"
           />
           <ServeSeverityContainer
-            block={referral.acf.severity_2_content}
-            type={referral.acf.severity_2_name}
+            description={referral.acf.severity_2_description}
+            name={referral.acf.severity_2_name}
+            status="moderate"
           />
           <ServeSeverityContainer
-            block={referral.acf.severity_3_content}
-            type={referral.acf.severity_3_name}
+            description={referral.acf.severity_3_description}
+            name={referral.acf.severity_3_name}
+            status="severe"
           />
         </div>
         <ServeContent />

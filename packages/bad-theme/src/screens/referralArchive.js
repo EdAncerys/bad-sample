@@ -46,7 +46,6 @@ const ReferralArchive = ({ state, actions, libraries }) => {
     let response = await getReferralsData({ state });
     // get referral page contetn
     let pageContent = await getReferralsPage({ state });
-    console.log("🐞 pageContent", pageContent); // debug
     if (response && response.length > 0) {
       // 📌 sort posts alphabetically by title
       response.sort((a, b) => {
@@ -102,7 +101,6 @@ const ReferralArchive = ({ state, actions, libraries }) => {
   };
 
   const dropDownHandler = ({ item }) => {
-    // console.log(item); // debug
     setGoToAction({ state, path: item.url, actions });
   };
 
