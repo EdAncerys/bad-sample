@@ -6,6 +6,7 @@ import { AppProvider, useAppDispatch, useAppState } from "./context";
 import { handleSetCookie, handleGetCookie } from "../helpers/cookie";
 import { handleUpdateMembershipApplication } from "../helpers/handleUpdateMembershipApplication";
 import { googleAutocomplete } from "../helpers/googleAutocomplete";
+import { Parcer } from "../helpers/parcer";
 import {
   setGoToAction,
   setLinkWrapperAction,
@@ -255,4 +256,5 @@ export {
   getGenderAction,
   getCountryList,
   handleRemoveServerSideCookie,
+  Parcer,
 };
