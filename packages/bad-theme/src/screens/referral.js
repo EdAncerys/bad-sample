@@ -147,7 +147,7 @@ const Referral = ({ state, actions, libraries }) => {
         />
         <ServeContentCard
           title="ICD search category(s)"
-          body={`${referral.acf.icd_search_category} <span class="referal-badge-wrapper">ICD11 CODE ${referral.acf.icd11_code}</span>`}
+          body={`${referral.acf.icd_search_category} <span class="referal-badge-wrapper">ICD11 CODE  <span style="color: #3882CD; padding-left: 10px;">${referral.acf.icd11_code}</span></span>`}
           isRowItem
         />
       </div>
