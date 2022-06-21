@@ -62,7 +62,7 @@ const Referral = ({ state, actions, libraries }) => {
     if (!body && !resources && !resources2) return null; // dont return component if no body or resources
 
     let classList = "flex-col";
-    if (isRowItem) classList = "flex";
+    if (isRowItem) classList = "flex-contasiner";
     const isResources = resources || resources2;
 
     return (
@@ -155,7 +155,7 @@ const Referral = ({ state, actions, libraries }) => {
               fontWeight: "bold",
             }}
           >
-            <div style={{ textAlign: "center", fontSize: 20 }}>
+            <div className="referal-management-title">
               <Html2React
                 html={`Referral Management for ${condition} - ${referral.title.rendered}:`}
               />
@@ -180,7 +180,7 @@ const Referral = ({ state, actions, libraries }) => {
         />
         <ServeContentCard
           title="ICD search category(s)"
-          body={`${icd_search_category}<span style="padding: 0 40px;">ICD11 CODE</span>${icd11_code}`}
+          body={`${icd_search_category}<span class="icd-code">ICD11 CODE</span>${icd11_code}`}
           isRowItem
         />
       </div>
@@ -201,7 +201,7 @@ const Referral = ({ state, actions, libraries }) => {
     };
 
     let classList = "flex-col";
-    if (isRowItem) classList = "flex-row";
+    if (isRowItem) classList = "flex-contasiner";
 
     return (
       <div className={classList} style={{ marginTop: `1em` }}>
@@ -238,7 +238,7 @@ const Referral = ({ state, actions, libraries }) => {
             margin: `${marginVertical}px 0`,
           }}
         >
-          <div className="flex">
+          <div className="flex-contasiner">
             <div
               className="flex primary-title"
               style={{ fontSize: !lg ? 36 : 25 }}

@@ -114,7 +114,8 @@ input[type="email"]::-webkit-input-placeholder {
 .flex-row,
 .flex-center-col,
 .flex-center-row,
-.flex-wrap {
+.flex-wrap,
+.flex-contasiner {
   display: flex;
   flex: 1;
 }
@@ -215,8 +216,18 @@ input[type="email"]::-webkit-input-placeholder {
   font-size: 12px;
 }
 
+.icd-code {
+  padding: 0 40px;
+}
+
+.referal-management-title {
+  font-size: 20px;
+  text-align: center;
+}
+
 /* Media Queries */
 @media screen and (max-width: 992px) {
+  /* mobile break down */
   .main-container {
     width: 100%;
   }
@@ -230,7 +241,26 @@ input[type="email"]::-webkit-input-placeholder {
   .referral-container {
     grid-template-columns: 1fr;
   }
+  .referral-container {
+    padding: 0 10px;
+  }
+  .flex-contasiner {
+    flex-direction: column;
+  }
+  .referal-badge-container {
+    justify-content: start;
+  }
+  .severity-container {
+    grid-template-columns: 1fr;
+  }
+  .icd-code {
+    padding: 0;
+  }
+  .referal-management-title {
+    text-align: left;
+  }
 }
+
 @media screen and (min-width: 992px) {
   .lg {
     display: none;
