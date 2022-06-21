@@ -116,7 +116,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     sig_bad_mainareaofinterest: true,
     sig_bad_includeinthebssciiemaildiscussionforum: true,
     sig_py3_insertnhsnetemailaddress: true,
-    sig_py3_bad_psychodermatologycategory: true,
+    sig_bad_psychodermatologycategory: false, // 📌  by default is diabled for this field. Overwrite from wp api
   });
   const [isEmail, setIsEmail] = useState(false);
   const [applicationType, setType] = useState("Special Interest Group");
@@ -745,7 +745,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         >
           <ServeSIGMembershipCategory />
 
-          {inputValidator.sig_py3_bad_psychodermatologycategory && dermList && (
+          {inputValidator.sig_bad_psychodermatologycategory && dermList && (
             <div className="flex-col">
               <label className="form-label">Membership Category Type</label>
               <Form.Select
