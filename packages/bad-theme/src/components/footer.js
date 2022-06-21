@@ -87,7 +87,7 @@ const Footer = ({ state, actions }) => {
             </div>
             <div style={!lg ? styles.socials : styles.socialsMobile}>
               <Link
-                link={`https://www.instagram.com/explore/locations/1020258048/british-association-of-dermatologists?hl=en`}
+                link={`https://www.instagram.com/britishdermatology/`}
                 target="_blank"
               >
                 <span className="instagram-icon" />
