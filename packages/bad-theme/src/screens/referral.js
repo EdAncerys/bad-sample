@@ -52,11 +52,18 @@ const Referral = ({ state, actions, libraries }) => {
     );
   };
 
-  const ServeContentCard = ({ title, body, recaurces, isRowItem }) => {
-    if (!body && !recaurces) return null; // dont return component if no body or resources
+  const ServeContentCard = ({
+    title,
+    body,
+    resources,
+    resources2,
+    isRowItem,
+  }) => {
+    if (!body && !resources && !resources2) return null; // dont return component if no body or resources
 
     let classList = "flex-col";
     if (isRowItem) classList = "flex";
+    const isResources = resources || resources2;
 
     return (
       <div
@@ -83,7 +90,9 @@ const Referral = ({ state, actions, libraries }) => {
             <Html2React html={body} />
           </div>
         )}
-        {recaurces && <ServeDownloadAction recaurces={recaurces} />}
+        {isResources && (
+          <ServeDownloadAction resources={resources} resources2={resources2} />
+        )}
       </div>
     );
   };
@@ -159,15 +168,15 @@ const Referral = ({ state, actions, libraries }) => {
 
         <ServeContentCard title="Teledermatology" body={teledermatology} />
         <ServeContentCard
-          title="Clinical Recaurces"
-          recaurces={clinical_resources}
+          title="Clinical Resources"
+          resources={clinical_resources}
         />
         <ServeContentCard title="Clinical Tips" body={tips} />
         <ServeContentCard title="Referral Management" body={management} />
         <ServeContentCard title="Treatment / Therapy" body={treatment} />
         <ServeContentCard
           title="Patient Information Leaflets"
-          recaurces={patient_information_resources}
+          resources={patient_information_resources}
         />
         <ServeContentCard
           title="ICD search category(s)"
@@ -178,8 +187,13 @@ const Referral = ({ state, actions, libraries }) => {
     );
   };
 
-  const ServeDownloadAction = ({ recaurces, isRowItem }) => {
-    if (!recaurces) return null;
+  const ServeDownloadAction = ({ resources, resources2, isRowItem }) => {
+    if (!resources) return null;
+
+    // spread guidelines & pills into array to render as one resource
+    let links = [];
+    if (resources) links = [...resources];
+    if (resources2) links = [...links, ...resources2];
 
     const downloadAction = ({ link }) => {
       // 📌 open download link in new tab or window
@@ -191,14 +205,14 @@ const Referral = ({ state, actions, libraries }) => {
 
     return (
       <div className={classList} style={{ marginTop: `1em` }}>
-        {recaurces.map((item, key) => {
+        {links.map((item, key) => {
           const { label, link } = item;
 
           return (
             <div
               key={key}
               className="caps-btn"
-              style={{ padding: "10px 10px 0 0" }}
+              style={{ padding: "10px 30px 0 0" }}
               onClick={() => downloadAction({ link })}
             >
               {label}
@@ -247,7 +261,8 @@ const Referral = ({ state, actions, libraries }) => {
           </div>
 
           <ServeDownloadAction
-            recaurces={referral.acf.condition_guideline_link}
+            resources={referral.acf.condition_guideline_link}
+            resources2={referral.acf.condition_pil_link}
             isRowItem
           />
 
