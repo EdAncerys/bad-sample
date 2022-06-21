@@ -448,6 +448,11 @@ https://codebeautify.org/
   -webkit-box-orient: vertical;
 }
 
+.referral-card .primary-title {
+  /* overwiite defaults */
+  margin-top: 0 !important;
+}
+
 /*CAROUSEL ANIMATION */
 @keyframes fadeInLeft {
   from {

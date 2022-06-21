@@ -37,7 +37,7 @@ const Referral = ({ state, actions, libraries }) => {
   // SERVERS ---------------------------------------------
   const ServeSeverityContainer = ({ description, name, status }) => {
     return (
-      <div onClick={() => setSeverity(status)}>
+      <div className="referral-card" onClick={() => setSeverity(status)}>
         <Card
           title={name}
           subTitle="Description:"
@@ -45,6 +45,7 @@ const Referral = ({ state, actions, libraries }) => {
           colour={colors.primary}
           bodyLimit={10} // limit body text
           cardMinHeight={250}
+          backgroundColor={severity === name ? colors.lightSilver : null}
           shadow
         />
       </div>
@@ -52,7 +53,7 @@ const Referral = ({ state, actions, libraries }) => {
   };
 
   const ServeContentCard = ({ title, body, recaurces, isRowItem }) => {
-    if (!body) return null; // dont return component if no body
+    if (!body && !recaurces) return null; // dont return component if no body or resources
 
     let classList = "flex-col";
     if (isRowItem) classList = "flex";
@@ -90,24 +91,46 @@ const Referral = ({ state, actions, libraries }) => {
   const ServeContent = () => {
     if (!severity) return null;
 
-    let condition = referral.acf.severity_1_name;
-    let management = referral.acf.severity_1_referral_management;
-    let treatment = referral.acf.severity_1_treatment_therapy;
-    let teledermatology = referral.acf.severity_1_teledermatology;
-    let tips = referral.acf.clinical_tips;
+    const {
+      severity_1_name,
+      severity_1_referral_management,
+      severity_1_treatment_therapy,
+      severity_1_teledermatology,
+      clinical_tips,
+      severity_2_name,
+      severity_2_referral_management,
+      severity_2_treatment_therapy,
+      severity_2_teledermatology,
+      severity_3_name,
+      severity_3_referral_management,
+      severity_3_treatment_therapy,
+      severity_3_teledermatology,
+
+      icd_search_category,
+      icd11_code,
+
+      clinical_resources,
+      patient_information_resources,
+    } = referral.acf;
+
+    let condition = severity_1_name;
+    let management = severity_1_referral_management;
+    let treatment = severity_1_treatment_therapy;
+    let teledermatology = severity_1_teledermatology;
+    let tips = clinical_tips;
 
     // contitional rendering based on type of referral
-    if (severity === "moderate") {
-      condition = referral.acf.severity_2_name;
-      management = referral.acf.severity_2_referral_management;
-      treatment = referral.acf.severity_2_treatment_therapy;
-      teledermatology = referral.acf.severity_2_teledermatology;
+    if (severity === severity_2_name) {
+      condition = severity_2_name;
+      management = severity_2_referral_management;
+      treatment = severity_2_treatment_therapy;
+      teledermatology = severity_2_teledermatology;
     }
-    if (severity === "severe") {
-      condition = referral.acf.severity_3_name;
-      management = referral.acf.severity_3_referral_management;
-      treatment = referral.acf.severity_3_treatment_therapy;
-      teledermatology = referral.acf.severity_3_teledermatology;
+    if (severity === severity_3_name) {
+      condition = severity_3_name;
+      management = severity_3_referral_management;
+      treatment = severity_3_treatment_therapy;
+      teledermatology = severity_3_teledermatology;
     }
 
     return (
@@ -120,9 +143,10 @@ const Referral = ({ state, actions, libraries }) => {
               marginTop: `${marginVertical}px`,
               backgroundColor: colors.primary,
               color: colors.white,
+              fontWeight: "bold",
             }}
           >
-            <div style={{ textAlign: "center" }}>
+            <div style={{ textAlign: "center", fontSize: 20 }}>
               <Html2React
                 html={`Referral Management for ${condition} - ${referral.title.rendered}:`}
               />
@@ -136,18 +160,18 @@ const Referral = ({ state, actions, libraries }) => {
         <ServeContentCard title="Teledermatology" body={teledermatology} />
         <ServeContentCard
           title="Clinical Recaurces"
-          recaurces={referral.acf.clinical_resources}
+          recaurces={clinical_resources}
         />
         <ServeContentCard title="Clinical Tips" body={tips} />
-        <ServeContentCard title="Referal Management" body={management} />
-        <ServeContentCard title="Treatment" body={treatment} />
+        <ServeContentCard title="Referral Management" body={management} />
+        <ServeContentCard title="Treatment / Therapy" body={treatment} />
         <ServeContentCard
           title="Patient Information Leaflets"
-          recaurces={referral.acf.patient_information_resources}
+          recaurces={patient_information_resources}
         />
         <ServeContentCard
           title="ICD search category(s)"
-          body={`${referral.acf.icd_search_category} <span class="referal-badge-wrapper">ICD11 CODE  <span style="color: #3882CD; padding-left: 10px;">${referral.acf.icd11_code}</span></span>`}
+          body={`${icd_search_category}<span style="padding: 0 40px;">ICD11 CODE</span>${icd11_code}`}
           isRowItem
         />
       </div>
@@ -243,7 +267,7 @@ const Referral = ({ state, actions, libraries }) => {
         <TitleBlock
           block={{
             text_align: "left",
-            title: "Please Select Desease Severity:",
+            title: "Please select desease severity:",
           }}
           fontSize={20}
           margin="1em 0"
@@ -252,17 +276,17 @@ const Referral = ({ state, actions, libraries }) => {
           <ServeSeverityContainer
             description={referral.acf.severity_1_description}
             name={referral.acf.severity_1_name}
-            status="mild"
+            status={referral.acf.severity_1_name}
           />
           <ServeSeverityContainer
             description={referral.acf.severity_2_description}
             name={referral.acf.severity_2_name}
-            status="moderate"
+            status={referral.acf.severity_2_name}
           />
           <ServeSeverityContainer
             description={referral.acf.severity_3_description}
             name={referral.acf.severity_3_name}
-            status="severe"
+            status={referral.acf.severity_3_name}
           />
         </div>
         <ServeContent />
