@@ -1,15 +1,19 @@
 import React, { useState, useLayoutEffect, useEffect, useRef } from "react";
-
 import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
-import BlockWrapper from "../blockWrapper";
 import { useAccordionButton } from "react-bootstrap/AccordionButton";
-import Loading from "../loading";
-import AccordionBody from "./alteraccordionBody";
-import CardHeader from "./alteraccordionHeader";
-import { useAppState, muiQuery } from "../../context";
 import connect from "@frontity/connect";
+import AccordionBody from "./alteraccordionBody";
 import { v4 as uuidv4 } from "uuid";
+import CloseIcon from "@mui/icons-material/Close";
+// --------------------------------------------------------------------------------
+import CardHeader from "./alteraccordionHeader";
+import Loading from "../loading";
+import BlockWrapper from "../blockWrapper";
+import { colors } from "../../config/colors";
+import SearchContainer from "../searchContainer";
+// --------------------------------------------------------------------------------
+import { useAppState, muiQuery } from "../../context";
 
 function AlterAccordion({
   state,
@@ -49,6 +53,7 @@ function AlterAccordion({
   const [searchInput, setInput] = useState(null);
   const searchFilterRef = useRef(null);
 
+  const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 
@@ -66,6 +71,86 @@ function AlterAccordion({
 
   if (!searchFilter || isForBADMembersOnly) return null; // defensive programming
 
+  // HANDLERS ---------------------------------------------
+  const handleSearch = () => {
+    const input = searchFilterRef.current.value;
+    let filter = accordion_item;
+
+    if (input) {
+      filter = filter.filter((item) => {
+        let title = item.title;
+        let body = item.content;
+
+        if (title) title = title.toLowerCase().includes(input.toLowerCase());
+        if (body) body = content.toLowerCase().includes(input.toLowerCase());
+
+        return title || body;
+      });
+    }
+
+    setSearchFilter(filter);
+    setInput(input);
+  };
+
+  const handleClearSearchFilter = () => {
+    setSearchFilter(accordion_item);
+    setInput(null);
+  };
+
+  // SERVERS ---------------------------------------------
+  const ServeAccordionSearchFilter = () => {
+    if (!add_search_function) return null;
+
+    const ServeSearchFilter = () => {
+      if (!searchInput) return null;
+
+      return (
+        <div className="shadow filter">
+          <div>{searchInput}</div>
+          <div className="filter-icon" onClick={handleClearSearchFilter}>
+            <CloseIcon
+              style={{
+                fill: colors.darkSilver,
+                padding: 0,
+              }}
+            />
+          </div>
+        </div>
+      );
+    };
+
+    return (
+      <div
+        style={{
+          backgroundColor: colors.silverFillTwo,
+          padding: "2em 0",
+        }}
+      >
+        <BlockWrapper>
+          <div
+            style={{
+              padding: `0 ${marginHorizontal}px`,
+              width: `70%`,
+            }}
+            className="no-selector"
+          >
+            <div className="flex-row">
+              <SearchContainer
+                title={`Search for content`}
+                searchFilterRef={searchFilterRef}
+                handleSearch={handleSearch}
+              />
+            </div>
+
+            <div className="flex" style={{ margin: "0.5em 0" }}>
+              <ServeSearchFilter />
+            </div>
+          </div>
+        </BlockWrapper>
+      </div>
+    );
+  };
+
   const SingleItem = ({ block, id }) => {
     let isActive = false;
     if (leadershipBlock && block.block) isActive = block.block.is_active;
@@ -78,87 +163,6 @@ function AlterAccordion({
         if (accordionBody) accordionBody.classList.add("show");
       }, []);
     }
-
-    // HANDLERS ---------------------------------------------
-    const handleSearch = () => {
-      const input = searchFilterRef.current.value;
-      let filter = accordion_item;
-
-      if (input) {
-        filter = filter.filter((item) => {
-          let title = item.title;
-          let body = item.content;
-
-          if (title) title = title.toLowerCase().includes(input.toLowerCase());
-          if (body) body = content.toLowerCase().includes(input.toLowerCase());
-
-          return title || body;
-        });
-      }
-
-      setSearchFilter(filter);
-      setInput(input);
-    };
-
-    const handleClearSearchFilter = () => {
-      setSearchFilter(accordion_item);
-      setInput(null);
-    };
-
-    // SERVERS ---------------------------------------------
-    const ServeAccordionSearchFilter = () => {
-      if (!add_search_function) return null;
-
-      const ServeSearchFilter = () => {
-        if (!searchInput) return null;
-
-        return (
-          <div className="shadow filter">
-            <div>{searchInput}</div>
-            <div className="filter-icon" onClick={handleClearSearchFilter}>
-              <CloseIcon
-                style={{
-                  fill: colors.darkSilver,
-                  padding: 0,
-                }}
-              />
-            </div>
-          </div>
-        );
-      };
-
-      return (
-        <div
-          style={{
-            margin: `${marginVertical}px `,
-            backgroundColor: colors.silverFillTwo,
-            padding: "2em 0",
-          }}
-        >
-          <BlockWrapper>
-            <div
-              style={{
-                padding: `0 ${marginHorizontal}px`,
-                width: `70%`,
-              }}
-              className="no-selector"
-            >
-              <div className="flex-row">
-                <SearchContainer
-                  title={`Search for content`}
-                  searchFilterRef={searchFilterRef}
-                  handleSearch={handleSearch}
-                />
-              </div>
-
-              <div className="flex" style={{ margin: "0.5em 0" }}>
-                <ServeSearchFilter />
-              </div>
-            </div>
-          </BlockWrapper>
-        </div>
-      );
-    };
 
     return (
       <Card
@@ -215,22 +219,26 @@ function AlterAccordion({
   };
 
   return (
-    <div
-      style={{
-        padding: `${marginVertical}px 0`,
-        backgroundColor: background_colour || "transparent",
-      }}
-    >
-      {/* <ServeAccordionSearchFilter /> */}
-      <BlockWrapper>
-        <div style={{ padding: !lg ? "0 100px" : "0 0.5em" }}>
-          <Accordion style={{ border: 0 }}>
-            {searchFilter.map((block, key) => {
-              return <SingleItem block={block} key={key} id={key} />;
-            })}
-          </Accordion>
-        </div>
-      </BlockWrapper>
+    <div>
+      <ServeAccordionSearchFilter />
+      <div
+        style={{
+          padding: `${
+            disable_vertical_padding ? state.theme.marginVertical : 0
+          }px 0`,
+          backgroundColor: background_colour || "transparent",
+        }}
+      >
+        <BlockWrapper>
+          <div style={{ padding: !lg ? "0 100px" : "0 0.5em" }}>
+            <Accordion style={{ border: 0 }}>
+              {searchFilter.map((block, key) => {
+                return <SingleItem block={block} key={key} id={key} />;
+              })}
+            </Accordion>
+          </div>
+        </BlockWrapper>
+      </div>
     </div>
   );
 }
