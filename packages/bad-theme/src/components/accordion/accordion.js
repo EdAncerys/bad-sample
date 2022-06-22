@@ -41,6 +41,8 @@ function AlterAccordion({
     approved_bad_members_only,
     background_colour,
   } = block;
+  console.log("🐞 ", block);
+  console.log("🐞 ", disable_vertical_padding);
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [uniqueId, setUniqueId] = useState(null);
@@ -78,9 +80,9 @@ function AlterAccordion({
     return (
       <Card
         style={{
-          backgroundColor: "#fff",
           borderRadius: 0,
           border: 0,
+          margin: `${marginVertical}px 0`,
         }}
         // 📌 animation adds bug when using react-bootstrap accordion
         // uncoment to use css effects
@@ -97,7 +99,6 @@ function AlterAccordion({
             padding: 0,
             border: 0,
             backgroundColor: "#fff",
-            paddingTop: "10px",
           }}
         >
           <CustomToggle eventKey={id}>
