@@ -12,8 +12,6 @@ import {
 } from "../context";
 
 const BADMemberships = ({ state, actions, libraries, block }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const { background_colour, disable_vertical_padding } = block;
 
   const [membershipTypes, setMembershipTypes] = useState(null);
