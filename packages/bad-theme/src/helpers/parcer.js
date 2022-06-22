@@ -6,12 +6,15 @@ export const Parcer = ({ libraries, html }) => {
 
   // 📌  Check if html is a string. If not, return error.
   if (typeof html !== "string") {
-    // if html is null | undefined | false, return null
-    if (!html) {
-      html = `Parcer error: html is underfined | null.`;
-    } else {
-      html = `Parcer error: html is an ${typeof html} type.`;
-    }
+    // fall back to empty string
+    html = "";
+
+    // 📌 TESTING env
+    // if (!html) {
+    //   html = `Parcer error: html is underfined | null.`;
+    // } else {
+    //   html = `Parcer error: html is an ${typeof html} type.`;
+    // }
   }
 
   // 📌  Return the parsed html
