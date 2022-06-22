@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/imports";
-
-// CONTEXT ----------------------------------------------------------------
-import { postTypeHandler } from "../context";
 import Loading from "./loading";
+// CONTEXT ----------------------------------------------------------------
+import { postTypeHandler, Parcer } from "../context";
+
 const SearchDropDown = ({
   state,
   actions,
@@ -18,8 +18,6 @@ const SearchDropDown = ({
   dataLoading,
   height,
 }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   // filter value are one layer deep object with title & link { title: "", link: "" }
 
   if (!dataLoading && !filter) return null;
@@ -123,9 +121,9 @@ const SearchDropDown = ({
                 onClick={() => onClickHandler({ item })}
               >
                 <span style={{ paddingRight: `0.5em` }}>
-                  <Html2React html={serachTitle} />.
+                  <Parcer libraries={libraries} html={serachTitle} />
                 </span>
-                {type && <Html2React html={name} />}
+                {type && <Parcer libraries={libraries} html={name} />}
               </div>
             );
           })}

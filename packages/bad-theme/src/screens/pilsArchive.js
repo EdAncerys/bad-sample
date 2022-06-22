@@ -8,14 +8,12 @@ import { colors } from "../config/imports";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 // CONTEXT -----------------------------------------------------------
-import { muiQuery, setGoToAction } from "../context";
+import { muiQuery, setGoToAction, Parcer } from "../context";
 // BLOCK WIDTH WRAPPER -----------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 
 const PilsArchive = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
-
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const data = state.source.get(state.router.link);
   const pilPageData = state.source[data.type][data.id];
@@ -172,7 +170,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
           style={{ fontSize: 16, marginBottom: `0.25em`, cursor: "pointer" }}
           onClick={() => setGoToAction({ state, path: link, actions })}
         >
-          <Html2React html={title.rendered} />
+          <Parcer libraries={libraries} html={title.rendered} />
         </div>
       );
     };
@@ -210,7 +208,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
           className="flex primary-title"
           style={{ fontSize: !lg ? 36 : 25, alignItems: "center" }}
         >
-          <Html2React html={title.rendered} />
+          <Parcer libraries={libraries} html={title.rendered} />
         </div>
       );
     };
@@ -220,7 +218,7 @@ const PilsArchive = ({ state, actions, libraries }) => {
 
       return (
         <div className="flex-col" style={{ padding: `1em 0`, width: "100%" }}>
-          <Html2React html={content.rendered} />
+          <Parcer libraries={libraries} html={content.rendered} />
         </div>
       );
     };

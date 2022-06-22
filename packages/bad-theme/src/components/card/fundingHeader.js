@@ -3,9 +3,10 @@ import { connect } from "frontity";
 import date from "date-and-time";
 const DATE_MODULE = date;
 import { colors } from "../../config/imports";
+// --------------------------------------------------------------------------------
+import { Parcer } from "../../context";
 
 const FundingHeader = ({ state, actions, libraries, fundingHeader }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!fundingHeader) return null;
 
   const { title } = fundingHeader;
@@ -17,7 +18,7 @@ const FundingHeader = ({ state, actions, libraries, fundingHeader }) => {
 
     return (
       <div className="primary-title" style={{ fontSize: 20 }}>
-        <Html2React html={title.rendered} />
+        <Parcer libraries={libraries} html={title.rendered} />
       </div>
     );
   };
@@ -32,7 +33,7 @@ const FundingHeader = ({ state, actions, libraries, fundingHeader }) => {
           fontSize: 20,
         }}
       >
-        <Html2React html={amount} />
+        <Parcer libraries={libraries} html={amount} />
       </div>
     );
   };

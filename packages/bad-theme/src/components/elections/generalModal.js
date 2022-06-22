@@ -2,13 +2,12 @@ import { connect } from "frontity";
 import { Modal } from "react-bootstrap";
 
 import { colors } from "../../config/imports";
-import { setGoToAction } from "../../context";
+// --------------------------------------------------------------------------------
+import { setGoToAction, Parcer } from "../../context";
 
 import CloseIcon from "@mui/icons-material/Close";
 
 const GeneralModal = ({ state, actions, libraries, modalData, handler }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   if (!modalData) return null;
 
   const { title, link, body } = modalData;
@@ -39,7 +38,7 @@ const GeneralModal = ({ state, actions, libraries, modalData, handler }) => {
 
       return (
         <div style={{ padding: `2em 0` }}>
-          <Html2React html={body} />
+          <Parcer libraries={libraries} html={body} />
         </div>
       );
     };

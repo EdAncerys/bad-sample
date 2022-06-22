@@ -12,6 +12,7 @@ import {
   getWileyAction,
   setErrorAction,
   loginAction,
+  Parcer,
 } from "../context";
 
 const RowButton = ({
@@ -24,7 +25,6 @@ const RowButton = ({
   delay,
 }) => {
   const [isHover, setIsHover] = useState(false);
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
@@ -187,7 +187,7 @@ const RowButton = ({
               <div
                 className={!multiPostRowButtons ? "caps-btn" : "mp-row-button"}
               >
-                <Html2React html={LABEL} />
+                <Parcer libraries={libraries} html={LABEL} />
               </div>
             </div>
             <div

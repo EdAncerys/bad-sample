@@ -1,4 +1,3 @@
-import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
@@ -13,7 +12,7 @@ import PressRelease from "../../img/svg/pressRelease.svg";
 import Responses from "../../img/svg/responses.svg";
 import Updates from "../../img/svg/updates.svg";
 // CONTEXT --------------------------------------------------------
-import {} from "../../context";
+import { Parcer } from "../../context";
 
 const NewsAndMediaHeader = ({
   state,
@@ -23,8 +22,6 @@ const NewsAndMediaHeader = ({
   categoryList,
   layout,
 }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   if (!newsAndMediaInfo) return null;
 
   const { categories, excerpt, title, date, featured_media, yoast_head_json } =
@@ -44,7 +41,7 @@ const NewsAndMediaHeader = ({
         className="primary-title body-limit"
         style={{ fontSize: 20, WebkitLineClamp: 6 }}
       >
-        <Html2React html={title.rendered} />
+        <Parcer libraries={libraries} html={title.rendered} />
       </div>
     );
   };
@@ -141,7 +138,7 @@ const NewsAndMediaHeader = ({
 
     return (
       <div className="primary-title" style={{ fontSize: 20, paddingRight: 10 }}>
-        <Html2React html={categoryName} />
+        <Parcer libraries={libraries} html={categoryName} />
       </div>
     );
   };
@@ -154,7 +151,7 @@ const NewsAndMediaHeader = ({
 
     return (
       <div style={{ padding: `1em 0` }}>
-        <Html2React html={formattedDate} />
+        <Parcer libraries={libraries} html={formattedDate} />
       </div>
     );
   };
@@ -164,7 +161,7 @@ const NewsAndMediaHeader = ({
 
     return (
       <div style={{ padding: `0.5em 0 0` }}>
-        <Html2React html={excerpt.rendered} />
+        <Parcer libraries={libraries} html={excerpt.rendered} />
       </div>
     );
   };

@@ -8,7 +8,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { colors } from "../../config/imports";
 import AccordionContext from "react-bootstrap/AccordionContext";
 // CONTEXT ----------------------------------------------------------------
-import { muiQuery } from "../../context";
+import { muiQuery, Parcer } from "../../context";
 
 const AccordionHeader = ({
   state,
@@ -23,7 +23,6 @@ const AccordionHeader = ({
   hasPreview,
 }) => {
   const { sm, md, lg, xl } = muiQuery();
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { activeEventKey } = React.useContext(AccordionContext);
 
   const { subtitle, acf } = block;
@@ -71,7 +70,7 @@ const AccordionHeader = ({
           }}
         >
           <ServeLogo />
-          <Html2React html={subtitle} />
+          <Parcer libraries={libraries} html={subtitle} />
         </div>
       );
     };
@@ -87,7 +86,7 @@ const AccordionHeader = ({
           }}
         >
           <div style={{ fontSize: 20 }}>
-            <Html2React html={title} />
+            <Parcer libraries={libraries} html={title} />
           </div>
           <ServeSubtitle />
         </div>
@@ -113,7 +112,7 @@ const AccordionHeader = ({
           WebkitLineClamp: 2,
         }}
       >
-        <Html2React html={body} />
+        <Parcer libraries={libraries} html={body} />
       </div>
     );
   };
@@ -130,7 +129,7 @@ const AccordionHeader = ({
           lineHeight: "unset",
         }}
       >
-        <Html2React html={`Update in progress`} />
+        <Parcer libraries={libraries} html={`Update in progress`} />
       </div>
     );
   };
@@ -206,7 +205,7 @@ const AccordionHeader = ({
           lineHeight: "unset",
         }}
       >
-        <Html2React html={ltTitle} />
+        <Parcer libraries={libraries} html={ltTitle} />
       </div>
     );
   };

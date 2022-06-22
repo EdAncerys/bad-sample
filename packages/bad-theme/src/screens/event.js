@@ -23,11 +23,10 @@ import {
   getEventLocations,
   getEventsData,
   handleSortFilter,
+  Parcer,
 } from "../context";
 
 const Event = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const { lg } = muiQuery();
   const { isActiveUser } = useAppState();
   const data = state.source.get(state.router.link);
@@ -107,7 +106,7 @@ const Event = ({ state, actions, libraries }) => {
           paddingBottom: `${marginVertical}px`,
         }}
       >
-        <Html2React html={title.rendered} />
+        <Parcer libraries={libraries} html={title.rendered} />
       </div>
     );
   };
@@ -156,7 +155,7 @@ const Event = ({ state, actions, libraries }) => {
 
                   return (
                     <div style={styles.date}>
-                      <Html2React html={formattedDate} />
+                      <Parcer libraries={libraries} html={formattedDate} />
                     </div>
                   );
                 };
@@ -166,7 +165,7 @@ const Event = ({ state, actions, libraries }) => {
 
                   return (
                     <div style={styles.date}>
-                      <Html2React html={start_time} />
+                      <Parcer libraries={libraries} html={start_time} />
                     </div>
                   );
                 };
@@ -176,7 +175,7 @@ const Event = ({ state, actions, libraries }) => {
 
                   return (
                     <div style={styles.date}>
-                      <Html2React html={end_time} />
+                      <Parcer libraries={libraries} html={end_time} />
                     </div>
                   );
                 };
@@ -207,7 +206,7 @@ const Event = ({ state, actions, libraries }) => {
           <div className="primary-title" style={{ fontSize: 20 }}>
             Venue:
           </div>
-          <Html2React html={venue} />
+          <Parcer libraries={libraries} html={venue} />
         </div>
       );
     };
@@ -220,7 +219,7 @@ const Event = ({ state, actions, libraries }) => {
           <div className="primary-title" style={{ fontSize: 20 }}>
             Venue:
           </div>
-          <Html2React html={scientific_committee} />
+          <Parcer libraries={libraries} html={scientific_committee} />
         </div>
       );
     };
@@ -233,7 +232,7 @@ const Event = ({ state, actions, libraries }) => {
           <div className="primary-title" style={{ fontSize: 20 }}>
             Email:
           </div>
-          <Html2React html={displayEmail} />
+          <Parcer libraries={libraries} html={displayEmail} />
         </div>
       );
     };
@@ -476,7 +475,7 @@ const Event = ({ state, actions, libraries }) => {
         >
           Summary
         </div>
-        <Html2React html={summary} />
+        <Parcer libraries={libraries} html={summary} />
       </div>
     );
   };
@@ -649,7 +648,7 @@ const Event = ({ state, actions, libraries }) => {
                     setGoToAction({ state, path: event.link, actions })
                   }
                 >
-                  <Html2React html={event.title.rendered} />
+                  <Parcer libraries={libraries} html={event.title.rendered} />
                 </div>
               </div>
             );

@@ -35,6 +35,7 @@ import {
   loginAction,
   muiQuery,
   fetchDataHandler,
+  Parcer,
 } from "../../context";
 
 const Card = ({
@@ -103,7 +104,6 @@ const Card = ({
   electionTaxonomy,
   authLink,
 }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
   const THEME = colour || colors.primary;
   const isShadow = shadow ? "shadow" : "";
@@ -316,7 +316,7 @@ const Card = ({
               padding: `0.5em`,
             }}
           >
-            <Html2React html={cardTitle} />
+            <Parcer libraries={libraries} html={cardTitle} />
           </div>
         </div>
       </div>

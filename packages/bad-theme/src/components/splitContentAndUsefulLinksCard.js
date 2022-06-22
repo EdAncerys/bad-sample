@@ -5,7 +5,7 @@ import UsefulLinksCard from "./usefulLinksCard";
 import TitleBlock from "./titleBlock";
 
 // CONTEXT -----------------------------------------------------
-import { setGoToAction } from "../context";
+import { setGoToAction, Parcer } from "../context";
 
 const SplitContentAndUsefulLinksCard = ({
   state,
@@ -13,8 +13,6 @@ const SplitContentAndUsefulLinksCard = ({
   libraries,
   block,
 }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const {
     body,
     title,
@@ -77,7 +75,7 @@ const SplitContentAndUsefulLinksCard = ({
               WebkitLineClamp: limit ? 20 : null, // line limit to body
             }}
           >
-            <Html2React html={body} />
+            <Parcer libraries={libraries} html={body} />
           </div>
           <ServeActions />
         </div>
@@ -100,7 +98,7 @@ const SplitContentAndUsefulLinksCard = ({
             className="blue-btn"
             onClick={() => setGoToAction({ state, path: link.url, actions })}
           >
-            <Html2React html={label} />
+            <Parcer libraries={libraries} html={label} />
           </div>
         </div>
       );

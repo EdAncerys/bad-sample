@@ -4,10 +4,14 @@ import Loading from "./loading";
 import SocialIcons from "../components/socialIcons";
 
 // CONTEXT ----------------------------------------------------------------
-import { useAppDispatch, useAppState, getTweetsAction } from "../context";
+import {
+  useAppDispatch,
+  useAppState,
+  getTweetsAction,
+  Parcer,
+} from "../context";
 
 const Tweets = ({ state, actions, libraries, block }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
 
   const {
@@ -64,7 +68,7 @@ const Tweets = ({ state, actions, libraries, block }) => {
 
           return (
             <div key={key} className="flex tweet">
-              <Html2React html={html} />
+              <Parcer libraries={libraries} html={html} />
             </div>
           );
         })}

@@ -28,12 +28,11 @@ import {
   getDermGroupsData,
   setErrorAction,
   copyToClipboard,
+  Parcer,
 } from "../../../context";
 import Loading from "../../../components/loading";
 
 const SIGApplication = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, dynamicsApps, genderList } =
     useAppState();
@@ -1527,7 +1526,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
           {inputValidator.sig_bad_readpolicydocument && !readPolicyDoc && (
             <div>
               <div style={{ paddingTop: "0.5em" }}>
-                <Html2React
+                <Parcer
+                  libraries={libraries}
                   html={`If you would like to find out more about the ${applicationType} privacy policy please contact <span class="title-link-animation" name="${contactEmail}" id="email-client">${contactEmail}</span>`}
                 />
               </div>

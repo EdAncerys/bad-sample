@@ -22,12 +22,12 @@ import {
   getNewsData,
   getMediaCategories,
   hasPermisionLevel,
+  Parcer,
 } from "../../context";
 
 const NewsAndMedia = ({ state, actions, libraries, block }) => {
   const { sm, md, lg, xl } = muiQuery();
 
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const dispatch = useAppDispatch();
   const { newsMediaCategoryId, isActiveUser, dynamicsApps } = useAppState();
 
@@ -395,7 +395,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       return (
         <div className="shadow filter">
           <div>
-            <Html2React html={catName} />
+            <Parcer libraries={libraries} html={catName} />
           </div>
           <div
             className="filter-icon"

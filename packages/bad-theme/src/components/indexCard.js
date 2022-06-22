@@ -1,7 +1,7 @@
 import { connect } from "frontity";
-
 import { colors } from "../config/imports";
-import { setGoToAction } from "../context";
+// --------------------------------------------------------------------------------
+import { setGoToAction, Parcer } from "../context";
 
 const IndexCard = ({
   state,
@@ -15,8 +15,6 @@ const IndexCard = ({
   cardWidth,
   cardHeight,
 }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   if (!index_title) return null;
 
   const SHADOW = shadow ? "shadow" : "";
@@ -41,7 +39,7 @@ const IndexCard = ({
 
       return (
         <div className="primary-title" style={{ fontSize: 20 }}>
-          <Html2React html={card_title} />
+          <Parcer libraries={libraries} html={card_title} />
         </div>
       );
     };
@@ -51,7 +49,7 @@ const IndexCard = ({
 
       return (
         <div style={{ fontSize: 16, fontWeight: "bold", padding: `1em 0` }}>
-          <Html2React html={subtitle} />
+          <Parcer libraries={libraries} html={subtitle} />
         </div>
       );
     };
@@ -79,7 +77,7 @@ const IndexCard = ({
 
         return (
           <a href={`#${link_id}`}>
-            <Html2React html={title} />
+            <Parcer libraries={libraries} html={title} />
           </a>
         );
       };
@@ -92,7 +90,7 @@ const IndexCard = ({
             className="title-link"
             onClick={() => setGoToAction({ state, path: link.url, actions })}
           >
-            <Html2React html={title} />
+            <Parcer libraries={libraries} html={title} />
           </div>
         );
       };

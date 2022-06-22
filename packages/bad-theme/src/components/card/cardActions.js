@@ -13,6 +13,7 @@ import {
   setGoToAction,
   setErrorAction,
   loginAction,
+  Parcer,
 } from "../../context";
 
 const CardActions = ({
@@ -31,8 +32,6 @@ const CardActions = ({
   isFetching,
   authLink,
 }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
 
@@ -85,7 +84,7 @@ const CardActions = ({
     return (
       <div onClick={() => setGoToAction({ state, path: link, actions })}>
         <div className="caps-btn" style={{ marginTop: "1em" }}>
-          <Html2React html={goToLabel} />
+          <Parcer libraries={libraries} html={goToLabel} />
         </div>
       </div>
     );
@@ -100,7 +99,7 @@ const CardActions = ({
     return (
       <div onClick={handleFeedLink}>
         <div className="caps-btn" style={{ marginTop: "1em" }}>
-          <Html2React html={goToLabel} />
+          <Parcer libraries={libraries} html={goToLabel} />
         </div>
       </div>
     );
@@ -115,7 +114,7 @@ const CardActions = ({
     return (
       <div onClick={handler}>
         <div className="caps-btn">
-          <Html2React html={goToLabel} />
+          <Parcer libraries={libraries} html={goToLabel} />
         </div>
       </div>
     );
@@ -135,7 +134,7 @@ const CardActions = ({
           style={{ color: "inherit" }}
           download
         >
-          <Html2React html={goToLabel} />
+          <Parcer libraries={libraries} html={goToLabel} />
         </a>
       </div>
     );

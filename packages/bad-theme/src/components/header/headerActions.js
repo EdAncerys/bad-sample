@@ -31,6 +31,7 @@ import {
   muiQuery,
   setCreateAccountModalAction,
   handleSetCookie,
+  fetchDataHandler,
 } from "../../context";
 
 const HeaderActions = ({ state, actions, libraries }) => {

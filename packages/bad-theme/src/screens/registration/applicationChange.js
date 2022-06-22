@@ -26,11 +26,10 @@ import {
   getBADMembershipSubscriptionData,
   setUserStoreAction,
   setCompleteUserApplicationAction,
+  Parcer,
 } from "../../context";
 
 const ApplicationChange = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
   const { lg } = muiQuery();
@@ -588,7 +587,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                 </div>
                 {bodyCopy && (
                   <div style={{ paddingTop: "2em" }}>
-                    <Html2React html={bodyCopy} />
+                    <Parcer libraries={libraries} html={bodyCopy} />
                   </div>
                 )}
               </div>

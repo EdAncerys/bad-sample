@@ -17,10 +17,10 @@ import {
   muiQuery,
   getHospitalsAction,
   setErrorAction,
+  Parcer,
 } from "../context";
 
 const EnquireModal = ({ state, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { lg } = muiQuery();
 
   const dispatch = useAppDispatch();
@@ -212,7 +212,7 @@ const EnquireModal = ({ state, libraries }) => {
 
       return (
         <div className="primary-title" style={{ fontSize: 20 }}>
-          <Html2React html={enquireAction.form_title} />
+          <Parcer libraries={libraries} html={enquireAction.form_title} />
         </div>
       );
     };
@@ -222,7 +222,7 @@ const EnquireModal = ({ state, libraries }) => {
 
       return (
         <div style={{ paddingTop: `1em` }}>
-          <Html2React html={enquireAction.form_body} />
+          <Parcer libraries={libraries} html={enquireAction.form_body} />
         </div>
       );
     };

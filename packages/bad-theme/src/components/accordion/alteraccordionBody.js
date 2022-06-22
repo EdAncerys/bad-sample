@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import parse from "html-react-parser";
-
+// --------------------------------------------------------------------------------
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import LINK from "../../img/svg/badLink.svg";
 import DownloadFileBlock from "../downloadFileBlock";
@@ -19,6 +19,7 @@ import {
   anchorScrapper,
   setErrorAction,
   muiQuery,
+  Parcer,
 } from "../../context";
 
 const AccordionBody = ({
@@ -34,7 +35,6 @@ const AccordionBody = ({
   membershipApplications,
   hasPublishDate,
 }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { sm, md, lg, xl } = muiQuery();
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, dynamicsApps } = useAppState();
@@ -151,7 +151,7 @@ const AccordionBody = ({
 
     return (
       <div className="flex">
-        <Html2React html={gsSubtitle} />
+        <Parcer libraries={libraries} html={gsSubtitle} />
       </div>
     );
   };
@@ -248,7 +248,7 @@ const AccordionBody = ({
             }
           >
             <div className="flex">
-              <Html2React html={linkLabel} />
+              <Parcer libraries={libraries} html={linkLabel} />
             </div>
             <div style={{ margin: "auto 0" }}>
               <KeyboardArrowRightIcon
@@ -295,7 +295,7 @@ const AccordionBody = ({
             onClick={() => setGoToAction({ state, path: link.url, actions })}
           >
             <div className="flex">
-              <Html2React html={linkLabel} />
+              <Parcer libraries={libraries} html={linkLabel} />
             </div>
           </div>
         </div>
@@ -337,7 +337,7 @@ const AccordionBody = ({
                 }
               >
                 <div className="flex">
-                  <Html2React html={linkLabel} />
+                  <Parcer libraries={libraries} html={linkLabel} />
                 </div>
               </div>
             </div>
@@ -388,7 +388,7 @@ const AccordionBody = ({
 
     return (
       <div className="text-body">
-        <Html2React html={body} />
+        <Parcer libraries={libraries} html={body} />
       </div>
     );
   };
@@ -401,7 +401,7 @@ const AccordionBody = ({
 
       return (
         <div className="flex-col">
-          <Html2React html={amount} />
+          <Parcer libraries={libraries} html={amount} />
         </div>
       );
     };
@@ -414,7 +414,7 @@ const AccordionBody = ({
 
       return (
         <div className="flex-col">
-          <Html2React html={formattedDate} />
+          <Parcer libraries={libraries} html={formattedDate} />
         </div>
       );
     };
@@ -432,7 +432,7 @@ const AccordionBody = ({
 
     return (
       <div>
-        <Html2React html={ltBody} />
+        <Parcer libraries={libraries} html={ltBody} />
       </div>
     );
   };
@@ -450,7 +450,7 @@ const AccordionBody = ({
 
         return (
           <div>
-            <Html2React html={title} />
+            <Parcer libraries={libraries} html={title} />
           </div>
         );
       };
@@ -460,7 +460,7 @@ const AccordionBody = ({
 
         return (
           <div style={{ marginRight: 10 }}>
-            <Html2React html={hospital} />
+            <Parcer libraries={libraries} html={hospital} />
           </div>
         );
       };
@@ -470,7 +470,7 @@ const AccordionBody = ({
 
         return (
           <div>
-            <Html2React html={dates} />
+            <Parcer libraries={libraries} html={dates} />
           </div>
         );
       };
@@ -498,7 +498,7 @@ const AccordionBody = ({
 
         return (
           <div className="primary-title">
-            <Html2React html={title} />
+            <Parcer libraries={libraries} html={title} />
           </div>
         );
       };
@@ -515,7 +515,7 @@ const AccordionBody = ({
 
         return (
           <div>
-            <Html2React html={positionName} />
+            <Parcer libraries={libraries} html={positionName} />
           </div>
         );
       };
@@ -525,7 +525,7 @@ const AccordionBody = ({
 
         return (
           <div style={{ marginRight: 10 }}>
-            <Html2React html={hospital} />
+            <Parcer libraries={libraries} html={hospital} />
           </div>
         );
       };
@@ -535,7 +535,7 @@ const AccordionBody = ({
 
         return (
           <div>
-            <Html2React html={dates} />
+            <Parcer libraries={libraries} html={dates} />
           </div>
         );
       };
@@ -645,7 +645,7 @@ const AccordionBody = ({
             setGoToAction({ state, path: link || link_url, actions })
           }
         >
-          <Html2React html={label || button_label} />
+          <Parcer libraries={libraries} html={label || button_label} />
         </div>
       </div>
     );
@@ -661,7 +661,10 @@ const AccordionBody = ({
           style={{ width: "fit-content" }}
           onClick={handleApply}
         >
-          <Html2React html={`Apply for ${category_types} membership`} />
+          <Parcer
+            libraries={libraries}
+            html={`Apply for ${category_types} membership`}
+          />
         </div>
       </div>
     );

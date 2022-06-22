@@ -2,12 +2,11 @@ import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
 import { setGoToAction } from "../../context";
-import { muiQuery } from "../../context";
+// --------------------------------------------------------------------------------
+import { muiQuery, Parcer } from "../../context";
 
 const VenueInfo = ({ state, actions, libraries, venueInfo }) => {
   const { sm, md, lg, xl } = muiQuery();
-
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!venueInfo) return null;
 
@@ -24,7 +23,7 @@ const VenueInfo = ({ state, actions, libraries, venueInfo }) => {
         style={{ fontSize: 20, cursor: "pointer" }}
         onClick={() => setGoToAction({ state, path: link, actions })}
       >
-        <Html2React html={title.rendered} />
+        <Parcer libraries={libraries} html={title.rendered} />
       </div>
     );
   };
@@ -45,7 +44,7 @@ const VenueInfo = ({ state, actions, libraries, venueInfo }) => {
             return (
               <div key={key} style={{ paddingRight: 5 }}>
                 <span>
-                  <Html2React html={item.capacity} />{" "}
+                  <Parcer libraries={libraries} html={item.capacity} />{" "}
                   {key < capacity_options.length - 1 ? "/" : null}
                 </span>
               </div>

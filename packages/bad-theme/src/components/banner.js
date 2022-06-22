@@ -4,10 +4,10 @@ import Image from "@frontity/components/image";
 
 import Loading from "./loading";
 import BlockWrapper from "./blockWrapper";
-import { setGoToAction, muiQuery } from "../context";
+// --------------------------------------------------------------------------------
+import { setGoToAction, muiQuery, Parcer } from "../context";
 
 const Banner = ({ state, actions, libraries, block }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
 
   const { sm, md, lg, xl } = muiQuery();
@@ -47,7 +47,7 @@ const Banner = ({ state, actions, libraries, block }) => {
               onClick={() => setGoToAction({ state, path: link.url, actions })}
             >
               <div className="first-letter-capital">
-                <Html2React html={LABEL} />
+                <Parcer libraries={libraries} html={LABEL} />
               </div>
             </div>
           </div>
@@ -83,7 +83,7 @@ const Banner = ({ state, actions, libraries, block }) => {
               data-aos-delay={`50`}
               data-aos-duration="1000"
             >
-              <Html2React html={title} />
+              <Parcer libraries={libraries} html={title} />
             </div>
           </div>
           <ServeMoreAction />

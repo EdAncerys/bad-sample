@@ -15,11 +15,10 @@ import {
   useAppState,
   hasPermisionLevel,
   getMediaCategories,
+  Parcer,
 } from "../../context";
 
 const Navigation = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const dispatch = useAppDispatch();
   const { isActiveUser, dynamicsApps } = useAppState();
 
@@ -203,7 +202,7 @@ const Navigation = ({ state, actions, libraries }) => {
               >
                 <div className="flex">
                   <div className="menu-title">
-                    <Html2React html={name} />
+                    <Parcer libraries={libraries} html={name} />
                   </div>
                 </div>
               </Link>
@@ -277,7 +276,7 @@ const Navigation = ({ state, actions, libraries }) => {
                 }
                 link={linkPath}
               >
-                <Html2React html={parent.title} />
+                <Parcer libraries={libraries} html={parent.title} />
               </Link>
             </div>
 
@@ -308,7 +307,7 @@ const Navigation = ({ state, actions, libraries }) => {
                     >
                       <div className="flex">
                         <div className="menu-title">
-                          <Html2React html={subChildTitle} />
+                          <Parcer libraries={libraries} html={subChildTitle} />
                         </div>
                       </div>
                     </Link>
@@ -460,7 +459,7 @@ const Navigation = ({ state, actions, libraries }) => {
                   >
                     <div className="flex">
                       <div className="menu-title">
-                        <Html2React html={title} />
+                        <Parcer libraries={libraries} html={title} />
                       </div>
                     </div>
                     <ServeMenuArrow />
@@ -513,7 +512,7 @@ const Navigation = ({ state, actions, libraries }) => {
               style={styles.link}
               onClick={() => handleOnClickNavigation({ parentSlug: "more" })}
             >
-              <Html2React html={"About & More"} />
+              <Parcer libraries={libraries} html={"About & More"} />
             </a>
             <ServeChildMenu
               item={{ child_items: wpMoreMenu }}
@@ -577,7 +576,7 @@ const Navigation = ({ state, actions, libraries }) => {
                   }
                   link={linkPath}
                 >
-                  <Html2React html={title} />
+                  <Parcer libraries={libraries} html={title} />
                 </Link>
                 <ServeChildMenu
                   item={item}

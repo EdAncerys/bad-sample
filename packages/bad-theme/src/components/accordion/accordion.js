@@ -45,7 +45,6 @@ function AlterAccordion({
   const [searchFilter, setSearchFilter] = useState(null);
   const [uniqueId, setUniqueId] = useState(null);
 
-  const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 
@@ -114,11 +113,7 @@ function AlterAccordion({
             />
           </CustomToggle>
         </Card.Header>
-        <Accordion.Collapse
-          eventKey={id}
-          id={uniqueId}
-          // className={isActive ? "show" : ""}
-        >
+        <Accordion.Collapse eventKey={id} id={uniqueId}>
           <Card.Body style={{ padding: "1em 3.25em" }}>
             <AccordionBody
               block={block}

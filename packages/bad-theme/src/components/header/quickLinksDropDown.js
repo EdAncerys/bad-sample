@@ -9,11 +9,10 @@ import {
   setErrorAction,
   loginAction,
   getWileyAction,
+  Parcer,
 } from "../../context";
 
 const QuickLinksDropDown = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const dispatch = useAppDispatch();
   const { isActiveUser, dynamicsApps } = useAppState();
 
@@ -136,7 +135,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
                   className="quick-link-title"
                   style={{ width: `fit-content` }}
                 >
-                  <Html2React html={title} />
+                  <Parcer libraries={libraries} html={title} />
                 </div>
               </a>
             </li>

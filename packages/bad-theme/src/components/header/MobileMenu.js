@@ -9,13 +9,12 @@ import {
   useAppDispatch,
   getWileyAction,
   loginAction,
+  Parcer,
 } from "../../context";
 
 import { MENU_DATA } from "../../config/data";
 import { colors } from "../../config/imports";
 export default connect(({ libraries, state, actions }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const [menuContent, setMenuContent] = React.useState();
   const [wpMainMenu, setWpMainMenu] = React.useState([]);
   // const [wpMoreMenu, setWpMoreMenu] = React.useState([]);
@@ -80,7 +79,7 @@ export default connect(({ libraries, state, actions }) => {
     return (
       <div className="row" style={styles.navItem}>
         <div className="col-11">
-          <Html2React html={item.title} />
+          <Parcer libraries={libraries} html={item.title} />
         </div>
         <div className="col-1">
           <ArrowForwardIosIcon fontSize="small" />
@@ -137,7 +136,7 @@ export default connect(({ libraries, state, actions }) => {
             }}
             onClick={() => {}}
           >
-            <Html2React html={menuContent.main_title} />
+            <Parcer libraries={libraries} html={menuContent.main_title} />
           </Nav.Link>
         ) : null}
 

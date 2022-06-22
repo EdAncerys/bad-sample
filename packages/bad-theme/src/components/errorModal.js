@@ -12,11 +12,10 @@ import {
   setErrorAction,
   setGoToAction,
   muiQuery,
+  Parcer,
 } from "../context";
 
 const ErrorModal = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const dispatch = useAppDispatch();
   const { isError } = useAppState();
   const { lg } = muiQuery();
@@ -158,11 +157,11 @@ const ErrorModal = ({ state, actions, libraries }) => {
                 display: "grid",
                 textAlign: "center",
                 padding: !lg ? `2em 0` : 0,
-                fontSize: message.length < 300 ? !lg ? 26 : 16 : 16,
-                marginTop: !lg ? null : "1em"
+                fontSize: message.length < 300 ? (!lg ? 26 : 16) : 16,
+                marginTop: !lg ? null : "1em",
               }}
             >
-              <Html2React html={message} />
+              <Parcer libraries={libraries} html={message} />
             </div>
             <ServeActions />
           </Modal.Body>

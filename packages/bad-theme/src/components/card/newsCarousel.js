@@ -1,21 +1,13 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
-
 import { colors } from "../../config/imports";
 import date from "date-and-time";
 const DATE_MODULE = date;
 
 // CONTEXT --------------------------------------------------------
-import { muiQuery, getMediaCategories } from "../../context";
+import { muiQuery, Parcer } from "../../context";
 
-const NewsCarousel = ({
-  state,
-  actions,
-  libraries,
-  newsCarousel,
-}) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+const NewsCarousel = ({ state, actions, libraries, newsCarousel }) => {
   if (!newsCarousel) return null;
   const { lg } = muiQuery();
   const {
@@ -42,7 +34,7 @@ const NewsCarousel = ({
           paddingLeft: date ? `1em` : 0,
         }}
       >
-        <Html2React html={release} />
+        <Parcer libraries={libraries} html={release} />
       </div>
     );
   };
@@ -60,7 +52,10 @@ const NewsCarousel = ({
           paddingRight: release ? `1em` : 0,
         }}
       >
-        <Html2React html={DATE_MODULE.format(datePublished, "DD MMM YYYY")} />
+        <Parcer
+          libraries={libraries}
+          html={DATE_MODULE.format(datePublished, "DD MMM YYYY")}
+        />
       </div>
     );
   };
@@ -83,7 +78,7 @@ const NewsCarousel = ({
           paddingLeft: date ? `2em` : 0,
         }}
       >
-        <Html2React html={categoryName} />
+        <Parcer libraries={libraries} html={categoryName} />
       </div>
     );
   };
@@ -127,7 +122,7 @@ const NewsCarousel = ({
         className="primary-title"
         style={{ padding: `2em 2em 0 0`, fontSize: 20 }}
       >
-        <Html2React html={title.rendered} />
+        <Parcer libraries={libraries} html={title.rendered} />
       </div>
     );
   };
@@ -143,7 +138,7 @@ const NewsCarousel = ({
           className="primary-title"
           style={{ padding: `2em 1.5em`, fontSize: 20 }}
         >
-          <Html2React html={title.rendered} />
+          <Parcer libraries={libraries} html={title.rendered} />
         </div>
       );
 
@@ -152,7 +147,7 @@ const NewsCarousel = ({
         style={{ padding: `1em 1.5em` }}
         className="news-carousel-limited-body"
       >
-        <Html2React html={shorter} />
+        <Parcer libraries={libraries} html={shorter} />
       </div>
     );
   };

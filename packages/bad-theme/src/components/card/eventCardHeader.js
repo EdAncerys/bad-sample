@@ -3,10 +3,10 @@ import { connect } from "frontity";
 import { colors } from "../../config/imports";
 import date from "date-and-time";
 const DATE_MODULE = date;
+// --------------------------------------------------------------------------------
+import { Parcer } from "../../context";
 
 const EventCardHeader = ({ state, actions, libraries, eventHeader }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   if (!eventHeader || !eventHeader.date_time) return null;
 
   const { date_time } = eventHeader;
@@ -34,7 +34,7 @@ const EventCardHeader = ({ state, actions, libraries, eventHeader }) => {
                   backgroundColor: colors.lightSilver,
                 }}
               >
-                <Html2React html={formattedDate} />
+                <Parcer libraries={libraries} html={formattedDate} />
               </div>
             );
           })}

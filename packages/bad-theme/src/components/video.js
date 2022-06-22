@@ -23,6 +23,7 @@ import {
   setErrorAction,
   fetchDataHandler,
   setGoToAction,
+  Parcer,
 } from "../context";
 
 const Video = ({ state, actions, libraries }) => {
@@ -51,7 +52,6 @@ const Video = ({ state, actions, libraries }) => {
     });
   };
   const { lg } = muiQuery();
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
@@ -177,7 +177,7 @@ const Video = ({ state, actions, libraries }) => {
     return (
       <div style={{ marginTop: "1em", marginBottom: "1em" }}>
         <h1>
-          <Html2React html={post.title.rendered} />
+          <Parcer libraries={libraries} html={post.title.rendered} />
         </h1>
       </div>
     );

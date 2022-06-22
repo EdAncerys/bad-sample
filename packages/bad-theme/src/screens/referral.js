@@ -4,19 +4,19 @@ import { connect } from "frontity";
 import { colors } from "../config/imports";
 import Loading from "../components/loading";
 
-import { getReferralsData, muiQuery } from "../context";
 import TitleBlock from "../components/titleBlock";
 import Card from "../components/card/card";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
+// --------------------------------------------------------------------------------
+import { Parcer, muiQuery } from "../context";
 
 const Referral = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
 
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const referral = state.source[data.type][data.id];
-  console.log("🐞 REFERRAL", referral); // debug
+  // console.log("🐞 REFERRAL", referral); // debug
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -82,12 +82,12 @@ const Referral = ({ state, actions, libraries }) => {
               marginBottom: "0.5em",
             }}
           >
-            <Html2React html={title} />
+            <Parcer libraries={libraries} html={title} />
           </div>
         )}
         {body && (
           <div className={classList}>
-            <Html2React html={body} />
+            <Parcer libraries={libraries} html={body} />
           </div>
         )}
         {isResources && (
@@ -156,12 +156,13 @@ const Referral = ({ state, actions, libraries }) => {
             }}
           >
             <div className="referal-management-title">
-              <Html2React
+              <Parcer
+                libraries={libraries}
                 html={`Referral Management for ${condition} - ${referral.title.rendered}:`}
               />
             </div>
             <div>
-              <Html2React html={management} />
+              <Parcer libraries={libraries} html={management} />
             </div>
           </div>
         )}
@@ -244,16 +245,22 @@ const Referral = ({ state, actions, libraries }) => {
               style={{ fontSize: !lg ? 36 : 25 }}
             >
               {referral.title ? (
-                <Html2React html={referral.title.rendered} />
+                <Parcer libraries={libraries} html={referral.title.rendered} />
               ) : null}
             </div>
             {referral.acf && (
               <div className="referal-badge-container">
                 <div className="referal-badge-wrapper">
-                  <Html2React html={referral.acf.icd_search_category} /> disease
-                  code:
+                  <Parcer
+                    libraries={libraries}
+                    html={referral.acf.icd_search_category}
+                  />{" "}
+                  disease code:
                   <span style={{ color: colors.blue, paddingLeft: 10 }}>
-                    <Html2React html={referral.acf.icd11_code} />
+                    <Parcer
+                      libraries={libraries}
+                      html={referral.acf.icd11_code}
+                    />
                   </span>
                 </div>
               </div>
@@ -267,14 +274,20 @@ const Referral = ({ state, actions, libraries }) => {
           />
 
           <div className="flex-col">
-            <Html2React html={referral.acf.condition_description} />
+            <Parcer
+              libraries={libraries}
+              html={referral.acf.condition_description}
+            />
           </div>
           {referral.acf.severity_notice && (
             <div
               className="flex-col primary-title"
               style={{ marginTop: "1em" }}
             >
-              <Html2React html={referral.acf.severity_notice} />
+              <Parcer
+                libraries={libraries}
+                html={referral.acf.severity_notice}
+              />
             </div>
           )}
         </div>

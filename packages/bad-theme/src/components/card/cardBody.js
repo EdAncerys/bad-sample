@@ -11,7 +11,7 @@ import date from "date-and-time";
 const DATE_MODULE = date;
 
 // CONTEXT ------------------------------------------------
-import { anchorScrapper, muiQuery } from "../../context";
+import { Parcer, muiQuery } from "../../context";
 
 const CardBody = ({
   state,
@@ -35,7 +35,6 @@ const CardBody = ({
   shareToSocials,
   electionTaxonomy,
 }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { sm, md, lg, xl } = muiQuery();
 
   let CONTENT_ALIGNMENT = 0;
@@ -93,7 +92,7 @@ const CardBody = ({
           justifyContent: "space-between",
         }}
       >
-        <Html2React html={title} />
+        <Parcer libraries={libraries} html={title} />
         <ServePaidIcon />
       </h1>
     );
@@ -111,7 +110,7 @@ const CardBody = ({
           WebkitLineClamp: titleLimit || "unset",
         }}
       >
-        <Html2React html={subTitle} />
+        <Parcer libraries={libraries} html={subTitle} />
       </div>
     );
   };
@@ -128,7 +127,7 @@ const CardBody = ({
           WebkitLineClamp: bodyLimit || "unset",
         }}
       >
-        <Html2React html={body} />
+        <Parcer libraries={libraries} html={body} />
       </div>
     );
   };
@@ -148,7 +147,7 @@ const CardBody = ({
           paddingBottom: `1em`,
         }}
       >
-        <Html2React html={"TBC Seats remaining"} />
+        <Parcer libraries={libraries} html={"TBC Seats remaining"} />
       </div>
     );
   };
@@ -171,7 +170,7 @@ const CardBody = ({
                 textTransform: videoArchive ? "uppercase" : null,
               }}
             >
-              <Html2React html={formattedDate} />
+              <Parcer libraries={libraries} html={formattedDate} />
               {key + 1 < date.length ? " - " : null}
             </div>
           );
@@ -247,7 +246,7 @@ const CardBody = ({
             textTransform: videoArchive ? "uppercase" : null,
           }}
         >
-          <Html2React html={formattedDate} />
+          <Parcer libraries={libraries} html={formattedDate} />
         </div>
       </div>
     );

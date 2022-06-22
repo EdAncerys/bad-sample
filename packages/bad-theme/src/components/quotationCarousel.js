@@ -11,7 +11,7 @@ import Loading from "./loading";
 import BlockWrapper from "./blockWrapper";
 
 // CONTEXT ----------------------------------------------------------------
-import { muiQuery } from "../context";
+import { muiQuery, Parcer } from "../context";
 
 const QuotationCarousel = ({ state, actions, libraries, block }) => {
   const { sm, md, lg, xl } = muiQuery();
@@ -20,7 +20,6 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
 
   const { disable_vertical_padding, background_colour, carouselling } = block;
 
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -130,7 +129,7 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
                     }}
                   >
                     <ServeAuthorPhoto photo={photo} />
-                    <Html2React html={title} />
+                    <Parcer libraries={libraries} html={title} />
                   </div>
                   <div
                     style={{
@@ -139,7 +138,7 @@ const QuotationCarousel = ({ state, actions, libraries, block }) => {
                       color: colors.darkSilver,
                     }}
                   >
-                    <Html2React html={label} />
+                    <Parcer libraries={libraries} html={label} />
                   </div>
                 </Carousel.Caption>
               </div>

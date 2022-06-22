@@ -1,8 +1,9 @@
 import { connect } from "frontity";
 
-import { setGoToAction, muiQuery } from "../context";
 import Loading from "./loading";
 import DownloadFileBlock from "../components/downloadFileBlock";
+// --------------------------------------------------------------------------------
+import { setGoToAction, muiQuery, Parcer } from "../context";
 
 const FullWidthContentBlock = ({
   state,
@@ -14,7 +15,6 @@ const FullWidthContentBlock = ({
   disablePadding,
   promoBlock,
 }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { sm, md, lg, xl } = muiQuery();
 
   if (!block) return <Loading />;
@@ -63,7 +63,7 @@ const FullWidthContentBlock = ({
     return (
       <div>
         <div className="primary-title" style={{ fontSize: fontSize }}>
-          <Html2React html={title} />
+          <Parcer libraries={libraries} html={title} />
         </div>
       </div>
     );
@@ -74,8 +74,8 @@ const FullWidthContentBlock = ({
 
     return (
       <div className="flex-col">
-        <div className="card-text" style={{padding: !lg ? null : "1.5em"}}>
-          <Html2React html={body} />
+        <div className="card-text" style={{ padding: !lg ? null : "1.5em" }}>
+          <Parcer libraries={libraries} html={body} />
         </div>
       </div>
     );
@@ -101,10 +101,14 @@ const FullWidthContentBlock = ({
       <div>
         <div
           className="flex"
-          style={{ justifyContent: ALIGNMENT, paddingTop: `1em`, marginBottom: !lg ? null : "1em" }}
+          style={{
+            justifyContent: ALIGNMENT,
+            paddingTop: `1em`,
+            marginBottom: !lg ? null : "1em",
+          }}
         >
           <div className="blue-btn" onClick={handleSubmitAction}>
-            <Html2React html={LABEL} />
+            <Parcer libraries={libraries} html={LABEL} />
           </div>
         </div>
       </div>
@@ -166,7 +170,14 @@ const FullWidthContentBlock = ({
         padding: PADDING,
       }}
     >
-      <div style={{ margin: heroBanner ? 0 : !lg ? MARGIN : null, display: !lg ? null : "flex", flexDirection: !lg ? null : "column", alignItems: !lg ? null : "center" }}>
+      <div
+        style={{
+          margin: heroBanner ? 0 : !lg ? MARGIN : null,
+          display: !lg ? null : "flex",
+          flexDirection: !lg ? null : "column",
+          alignItems: !lg ? null : "center",
+        }}
+      >
         <ServeTitle />
         <ServeCardBody />
         <ServeDownloads />

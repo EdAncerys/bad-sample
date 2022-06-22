@@ -7,11 +7,9 @@ import { colors } from "../../config/imports";
 
 import ProfileAvatar from "../../img/svg/profile.svg";
 // CONTEXT ----------------------------------------------------------------
-import { setGoToAction, copyToClipboard } from "../../context";
+import { setGoToAction, copyToClipboard, Parcer } from "../../context";
 
 const DermGroupe = ({ state, actions, libraries, dermGroupe }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   if (!dermGroupe) return null;
 
   const { email, logo, telephone_helpline, website_url } = dermGroupe;
@@ -71,7 +69,7 @@ const DermGroupe = ({ state, actions, libraries, dermGroupe }) => {
           onClick={mailToClient}
         >
           <div style={styles.link}>
-            <Html2React html={email} />
+            <Parcer libraries={libraries} html={email} />
           </div>
           <span className="clipboard-reference d-none" />
         </div>
@@ -91,7 +89,7 @@ const DermGroupe = ({ state, actions, libraries, dermGroupe }) => {
       >
         <div style={{ fontSize: 20 }}>Website:</div>
         <div className="title-link-animation">
-          <Html2React html={website_url} />
+          <Parcer libraries={libraries} html={website_url} />
         </div>
       </div>
     );
@@ -104,7 +102,7 @@ const DermGroupe = ({ state, actions, libraries, dermGroupe }) => {
       <div className="flex-col primary-title">
         <div style={{ fontSize: 20 }}>Phone Number:</div>
         <div className="title-link-animation" style={{ cursor: "pointer" }}>
-          <Html2React html={telephone_helpline} />
+          <Parcer libraries={libraries} html={telephone_helpline} />
         </div>
       </div>
     );

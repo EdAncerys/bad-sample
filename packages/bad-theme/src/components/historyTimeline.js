@@ -3,10 +3,10 @@ import Image from "@frontity/components/image";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import Loading from "./loading";
 import { colors } from "../config/imports";
-import { muiQuery } from "../context";
+// --------------------------------------------------------------------------------
+import { muiQuery, Parcer } from "../context";
 
 const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
   if (!block.timeline_item) return null;
 
@@ -121,10 +121,7 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
                           zIndex: 12,
                         }}
                       >
-                        <Html2React
-                          html={year}
-                          style={{ backgroundColor: "white" }}
-                        />
+                        <Parcer libraries={libraries} html={year} />
                       </div>
                       <div
                         className="col-8 d-flex p-0 flex-column justify-content-center"
@@ -165,7 +162,7 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
                   className="primary-title"
                   style={{ fontSize: 12, padding: `1em 0` }}
                 >
-                  <Html2React html={title} />
+                  <Parcer libraries={libraries} html={title} />
                 </div>
               );
             };
@@ -175,7 +172,7 @@ const HistoryTimeline = ({ state, actions, libraries, block, reverse }) => {
 
               return (
                 <div style={{ fontSize: 12, padding: title ? 0 : `1em 0` }}>
-                  <Html2React html={body} />
+                  <Parcer libraries={libraries} html={body} />
                 </div>
               );
             };

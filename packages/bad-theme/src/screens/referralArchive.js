@@ -18,13 +18,11 @@ import {
   getReferralsData,
   setGoToAction,
   getReferralsPage,
+  Parcer,
 } from "../context";
 
 const ReferralArchive = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
-
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-  const data = state.source.get(state.router.link);
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -166,13 +164,19 @@ const ReferralArchive = ({ state, actions, libraries }) => {
             }}
           >
             <div className="primary-title" style={{ fontSize: !lg ? 36 : 25 }}>
-              <Html2React html={pageContent[0].title.rendered} />
+              <Parcer
+                libraries={libraries}
+                html={pageContent[0].title.rendered}
+              />
             </div>
             <div
               className="flex-col"
               style={{ padding: `1em 0`, width: "100%", maxWidth: 800 }}
             >
-              <Html2React html={pageContent[0].content.rendered} />
+              <Parcer
+                libraries={libraries}
+                html={pageContent[0].content.rendered}
+              />
             </div>
           </div>
         </BlockWrapper>

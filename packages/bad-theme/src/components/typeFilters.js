@@ -1,8 +1,9 @@
 import { connect } from "frontity";
-import { muiQuery } from "../context";
+// --------------------------------------------------------------------------------
 import { colors } from "../config/imports";
-
 import { Dropdown } from "react-bootstrap";
+// --------------------------------------------------------------------------------
+import { muiQuery, Parcer } from "../context";
 
 const TypeFilters = ({
   state,
@@ -15,7 +16,6 @@ const TypeFilters = ({
   handleClearTypeFilter,
   currentFilter,
 }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { sm, md, lg, xl } = muiQuery();
 
   if (!filters) return null;
@@ -57,14 +57,14 @@ const TypeFilters = ({
             typeFilterRef.current === null ? colors.white : colors.softBlack,
         }}
       >
-        <Html2React html={"All"} />
+        <Parcer libraries={libraries} html={"All"} />
       </div>
     );
   };
 
   const ServeFilter = () => {
     return (
-      <div className="flex-row" style={{ flexWrap: "wrap"}}>
+      <div className="flex-row" style={{ flexWrap: "wrap" }}>
         <ServeAllFilter />
 
         {filters.map((type, key) => {
@@ -84,7 +84,7 @@ const TypeFilters = ({
                     : colors.softBlack,
               }}
             >
-              <Html2React html={type.name} />
+              <Parcer libraries={libraries} html={type.name} />
             </div>
           );
         })}
@@ -94,7 +94,10 @@ const TypeFilters = ({
 
   const ServeFilterMobile = () => {
     return (
-      <div className="flex-row" style={{ flexWrap: "wrap", alignItems: !lg ? null : "flex-end"  }}>
+      <div
+        className="flex-row"
+        style={{ flexWrap: "wrap", alignItems: !lg ? null : "flex-end" }}
+      >
         <ServeAllFilter />
 
         <Dropdown>
@@ -124,7 +127,7 @@ const TypeFilters = ({
                   onClick={() => handleSetTypeFilter({ id: type.id })}
                   drop="down"
                 >
-                  <Html2React html={type.name} />
+                  <Parcer libraries={libraries} html={type.name} />
                 </Dropdown.Item>
               );
             })}

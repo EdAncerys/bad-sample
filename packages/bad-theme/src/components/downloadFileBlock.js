@@ -6,7 +6,7 @@ import DOC from "../img/svg/badDOC.svg";
 import PPT from "../img/svg/badPPT.svg";
 import XLS from "../img/svg/badXLS.svg";
 // CONTEXT ---------------------------------------------
-import { setGoToAction, muiQuery } from "../context";
+import { setGoToAction, muiQuery, Parcer } from "../context";
 
 const DownloadFileBlock = ({
   state,
@@ -16,7 +16,6 @@ const DownloadFileBlock = ({
   guidelines,
   disableMargin,
 }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { sm, md, lg, xl } = muiQuery();
 
   if (!block) return null;
@@ -46,7 +45,7 @@ const DownloadFileBlock = ({
         style={{ display: "grid", alignItems: "center", boxShadow: "none" }}
       >
         <a href={file.url} target="_blank" style={styles.link} download>
-          <Html2React html={fileName} />
+          <Parcer libraries={libraries} html={fileName} />
         </a>
       </div>
     );
@@ -70,7 +69,11 @@ const DownloadFileBlock = ({
           style={styles.link}
           download
         >
-          {!lg ? <Html2React html={fileName} /> : "Download file"}
+          {!lg ? (
+            <Parcer libraries={libraries} html={fileName} />
+          ) : (
+            "Download file"
+          )}
         </a>
       </div>
     );

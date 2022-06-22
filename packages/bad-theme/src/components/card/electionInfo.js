@@ -1,4 +1,6 @@
 import { connect } from "frontity";
+// --------------------------------------------------------------------------------
+import { Parcer } from "../../context";
 
 const ElectionInfo = ({
   state,
@@ -8,8 +10,6 @@ const ElectionInfo = ({
   opacity,
   electionTaxonomy,
 }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   if (!electionInfo) return null;
 
   const { title, election_roles } = electionInfo;
@@ -30,7 +30,7 @@ const ElectionInfo = ({
 
     return (
       <div style={{ opacity: opacity || 1 }}>
-        <Html2React html={name} />
+        <Parcer libraries={libraries} html={name} />
       </div>
     );
   };
@@ -42,7 +42,7 @@ const ElectionInfo = ({
       <div className="flex-row">
         <div>Closing Date -</div>
         <div style={{ paddingLeft: 5 }}>
-          <Html2React html={closing_date} />
+          <Parcer libraries={libraries} html={closing_date} />
         </div>
       </div>
     );

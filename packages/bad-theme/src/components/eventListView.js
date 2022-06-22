@@ -11,6 +11,7 @@ import {
   setGoToAction,
   setEventAnchorAction,
   muiQuery,
+  Parcer,
 } from "../context";
 
 const DATE_MODULE = date;
@@ -23,7 +24,6 @@ const EventListView = ({
   removeMargin,
   recommended_events,
 }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
   const { lg } = muiQuery();
 
@@ -57,7 +57,7 @@ const EventListView = ({
   // SERVERS ----------------------------------------------------------------
   const ServeCardImage = () => {
     if (!image) return null;
-    const alt = <Html2React html={title} /> || "BAD";
+    const alt = <Parcer libraries={libraries} html={title} /> || "BAD";
 
     return (
       <div style={{ width: "100%", height: HEIGHT }}>
@@ -99,7 +99,7 @@ const EventListView = ({
                     fontWeight: "bold",
                   }}
                 >
-                  <Html2React html={formattedDate} />
+                  <Parcer libraries={libraries} html={formattedDate} />
                   {key + 1 < date_time.length ? "  -  " : null}
                 </div>
               );
@@ -121,7 +121,7 @@ const EventListView = ({
             WebkitLineClamp: !lg ? 1 : 3,
           }}
         >
-          <Html2React html={title} />
+          <Parcer libraries={libraries} html={title} />
         </div>
       );
     };
@@ -131,7 +131,7 @@ const EventListView = ({
         if (!venue) return null;
         return (
           <div>
-            <Html2React html={venue} />
+            <Parcer libraries={libraries} html={venue} />
           </div>
         );
       };
@@ -142,7 +142,7 @@ const EventListView = ({
           <div>
             <div className="flex">
               {venue && <div style={styles.divider} />}
-              <Html2React html={organizer} />
+              <Parcer libraries={libraries} html={organizer} />
             </div>
           </div>
         );
@@ -153,7 +153,7 @@ const EventListView = ({
         return (
           <div className="flex">
             {(organizer || venue) && <div style={styles.divider} />}
-            <Html2React html={scientific_committee} />
+            <Parcer libraries={libraries} html={scientific_committee} />
           </div>
         );
       };
@@ -180,7 +180,7 @@ const EventListView = ({
           className="body-limit"
           style={{ justifyItems: "center", WebkitLineClamp: 4 }}
         >
-          <Html2React html={preview_summary} />
+          <Parcer libraries={libraries} html={preview_summary} />
         </div>
       );
     };
