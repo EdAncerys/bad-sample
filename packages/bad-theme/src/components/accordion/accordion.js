@@ -41,8 +41,7 @@ function AlterAccordion({
     approved_bad_members_only,
     background_colour,
   } = block;
-  console.log("🐞 ", block);
-  console.log("🐞 ", disable_vertical_padding);
+  console.log("🐞 ACORDION ITEM", block); // debug
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [uniqueId, setUniqueId] = useState(null);

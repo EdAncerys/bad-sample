@@ -16,6 +16,7 @@ export const getFadAction = async ({ state, dispatch, page }) => {
 
     if (!data) throw new Error("error fetching data form API");
     const result = await data.json();
+    // console.log("🐞 MD LENGTH", result.data.length); // debug
 
     return result.data;
   } catch (error) {

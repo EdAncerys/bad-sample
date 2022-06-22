@@ -57,6 +57,7 @@ const AccordionBody = ({
   let body = block.body;
   let link = block.link;
   let amount = block.acf ? block.acf.amount : null;
+  let openingDate = block.acf ? block.acf.opening_date : null;
   let closingDate = block.acf ? block.acf.closing_date : null;
   let labelName = link_label;
 
@@ -394,8 +395,6 @@ const AccordionBody = ({
   };
 
   const ServeFundingInfo = () => {
-    if (!amount || !closingDate) return null;
-
     const ServeAmount = () => {
       if (!amount) return null;
 
@@ -407,14 +406,34 @@ const AccordionBody = ({
     };
 
     const ServeClosingDate = () => {
-      if (!closingDate) return null;
+      if (!closingDate && !openingDate) return null;
 
-      const dateObject = new Date(closingDate);
-      const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
+      let formOpeningDate = "";
+      let formClosingDate = "";
+
+      if (openingDate) {
+        const openingDateObject = new Date(openingDate);
+        formOpeningDate = DATE_MODULE.format(openingDateObject, "DD MMM YYYY");
+      }
+      if (closingDate) {
+        const closingDateObject = new Date(closingDate);
+        formClosingDate = DATE_MODULE.format(closingDateObject, "DD MMM YYYY");
+      }
 
       return (
         <div className="flex-col">
-          <Parcer libraries={libraries} html={formattedDate} />
+          {openingDate && (
+            <div>
+              Opening Date:{" "}
+              <Parcer libraries={libraries} html={formOpeningDate} />
+            </div>
+          )}
+          {closingDate && (
+            <div>
+              Closing Date:{" "}
+              <Parcer libraries={libraries} html={formClosingDate} />
+            </div>
+          )}
         </div>
       );
     };

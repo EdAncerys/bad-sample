@@ -131,8 +131,6 @@ const Card = ({
   if (shadow) classList = classList + " " + "shadow";
   if (!backgroundColor) classList = classList + " " + "white-background";
 
-  console.log("🐞 classList", classList);
-
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
 
