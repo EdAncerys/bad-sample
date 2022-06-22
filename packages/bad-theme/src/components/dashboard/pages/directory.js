@@ -68,50 +68,6 @@ const Directory = ({ state, actions, libraries }) => {
   }, []);
 
   // HANDLERS -------------------------------------------------------------------
-  const handlePreferenceUpdate = async () => {
-    if (!isActiveUser) return;
-    let directoryPref = "Opt-in";
-    if (fad.directoryPref === "Opt-in") directoryPref = "Opt-out";
-
-    directoryPref = !isActiveUser.bad_memberdirectory;
-
-    const data = Object.assign(
-      {}, // add empty object
-      { bad_memberdirectory: directoryPref }
-    );
-
-    try {
-      setIsFetching(true);
-      // API call to update profile preferences
-      const response = await updateProfileAction({
-        state,
-        dispatch,
-        data,
-        isActiveUser,
-      });
-      if (!response) throw new Error("Error updating profile");
-
-      // display error message
-      setErrorAction({
-        dispatch,
-        isError: {
-          message: `Members' Directory preferences updated successfully`,
-        },
-      });
-    } catch (error) {
-      // console.log(error);
-      setErrorAction({
-        dispatch,
-        isError: {
-          message: `Failed to update members directory preferences. Please try again.`,
-          image: "Error",
-        },
-      });
-    } finally {
-      setIsFetching(false);
-    }
-  };
-
   const handleKeyPress = (e) => {
     if (isSearchFetching) return;
     if (e.key === "Enter" && searchFilterRef.current.value) {
@@ -255,49 +211,6 @@ const Directory = ({ state, actions, libraries }) => {
     );
   };
 
-  const ServePreferences = () => {
-    if (!isActiveUser) return null;
-
-    // directory agreement field for user
-    const { bad_memberdirectory } = isActiveUser;
-    // check if user have BAD memberships approved in dynamics apps
-    let isBADMember = false;
-    if (dynamicsApps) {
-      let badApps = dynamicsApps.subs.data.filter((app) => {
-        let hasBADMemberships = app.bad_organisedfor === "BAD";
-
-        return hasBADMemberships;
-      });
-      if (badApps.length) isBADMember = true;
-    }
-    // dont display action if user is not BAD member
-    if (!isBADMember) return null;
-
-    return (
-      <div style={{ position: "relative", margin: `0 ${marginHorizontal}px` }}>
-        <ActionPlaceholder
-          isFetching={isFetching}
-          background="transparent"
-          bottom="-30px"
-          height="auto"
-        />
-        <div
-          className="blue-btn"
-          style={{
-            marginRight: "1em",
-            width: "fit-content",
-            backgroundColor: !bad_memberdirectory
-              ? colors.danger
-              : colors.white,
-          }}
-          onClick={handlePreferenceUpdate}
-        >
-          {!bad_memberdirectory ? "Opt-out" : "Opt-in"}
-        </div>
-      </div>
-    );
-  };
-
   const ServeFadMembers = () => {
     if (searchFadData) return null; // hide on FAD search
 
@@ -406,7 +319,6 @@ const Directory = ({ state, actions, libraries }) => {
         </BlockWrapper>
       </div>
       <BlockWrapper>
-        <ServePreferences />
         <div style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}>
           {isSearchFetching && <Loading />}
           {!isSearchFetching && (
