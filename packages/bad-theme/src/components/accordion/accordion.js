@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useEffect } from "react";
+import React, { useState, useLayoutEffect, useEffect, useRef } from "react";
 
 import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
@@ -36,6 +36,7 @@ function AlterAccordion({
   const { lg } = muiQuery();
   const { dynamicsApps } = useAppState();
   const {
+    add_search_function,
     disable_vertical_padding,
     accordion_item,
     approved_bad_members_only,
@@ -45,6 +46,8 @@ function AlterAccordion({
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [uniqueId, setUniqueId] = useState(null);
+  const [searchInput, setInput] = useState(null);
+  const searchFilterRef = useRef(null);
 
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
@@ -75,6 +78,87 @@ function AlterAccordion({
         if (accordionBody) accordionBody.classList.add("show");
       }, []);
     }
+
+    // HANDLERS ---------------------------------------------
+    const handleSearch = () => {
+      const input = searchFilterRef.current.value;
+      let filter = accordion_item;
+
+      if (input) {
+        filter = filter.filter((item) => {
+          let title = item.title;
+          let body = item.content;
+
+          if (title) title = title.toLowerCase().includes(input.toLowerCase());
+          if (body) body = content.toLowerCase().includes(input.toLowerCase());
+
+          return title || body;
+        });
+      }
+
+      setSearchFilter(filter);
+      setInput(input);
+    };
+
+    const handleClearSearchFilter = () => {
+      setSearchFilter(accordion_item);
+      setInput(null);
+    };
+
+    // SERVERS ---------------------------------------------
+    const ServeAccordionSearchFilter = () => {
+      if (!add_search_function) return null;
+
+      const ServeSearchFilter = () => {
+        if (!searchInput) return null;
+
+        return (
+          <div className="shadow filter">
+            <div>{searchInput}</div>
+            <div className="filter-icon" onClick={handleClearSearchFilter}>
+              <CloseIcon
+                style={{
+                  fill: colors.darkSilver,
+                  padding: 0,
+                }}
+              />
+            </div>
+          </div>
+        );
+      };
+
+      return (
+        <div
+          style={{
+            margin: `${marginVertical}px `,
+            backgroundColor: colors.silverFillTwo,
+            padding: "2em 0",
+          }}
+        >
+          <BlockWrapper>
+            <div
+              style={{
+                padding: `0 ${marginHorizontal}px`,
+                width: `70%`,
+              }}
+              className="no-selector"
+            >
+              <div className="flex-row">
+                <SearchContainer
+                  title={`Search for content`}
+                  searchFilterRef={searchFilterRef}
+                  handleSearch={handleSearch}
+                />
+              </div>
+
+              <div className="flex" style={{ margin: "0.5em 0" }}>
+                <ServeSearchFilter />
+              </div>
+            </div>
+          </BlockWrapper>
+        </div>
+      );
+    };
 
     return (
       <Card
@@ -137,6 +221,7 @@ function AlterAccordion({
         backgroundColor: background_colour || "transparent",
       }}
     >
+      {/* <ServeAccordionSearchFilter /> */}
       <BlockWrapper>
         <div style={{ padding: !lg ? "0 100px" : "0 0.5em" }}>
           <Accordion style={{ border: 0 }}>
