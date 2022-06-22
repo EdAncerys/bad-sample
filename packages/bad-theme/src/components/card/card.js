@@ -37,6 +37,7 @@ import {
   fetchDataHandler,
   Parcer,
 } from "../../context";
+import { color } from "@mui/system";
 
 const Card = ({
   state,
@@ -103,10 +104,10 @@ const Card = ({
   isElectionBlock,
   electionTaxonomy,
   authLink,
+  isReferalCard,
 }) => {
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
   const THEME = colour || colors.primary;
-  const isShadow = shadow ? "shadow" : "";
   const { lg } = muiQuery();
   let CARD_HEIGHT = "100%";
   let ELECTION_BLOCKS = false;
@@ -122,8 +123,15 @@ const Card = ({
   if (removePadding) PADDING = 0;
   if (padding) PADDING = padding;
 
+  // 📌 card component class list overwrides
   let isCardAnimation = "card-wrapper";
   if (disableCardAnimation) isCardAnimation = "";
+  let classList = "";
+  if (isReferalCard) classList = classList + " " + "referral-card";
+  if (shadow) classList = classList + " " + "shadow";
+  if (!backgroundColor) classList = classList + " " + "white-background";
+
+  console.log("🐞 classList", classList);
 
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
@@ -377,10 +385,10 @@ const Card = ({
   // RETURN ----------------------------------------------------
   return (
     <div
-      className={`${isShadow} ${isCardAnimation} heading-tile`} // card wrapper as clickable card if link is set
+      className={`${isCardAnimation} ${classList} heading-tile`} // card wrapper as clickable card if link is set
       style={{
         ...styles.card,
-        backgroundColor: backgroundColor || colors.white,
+        backgroundColor: backgroundColor,
         width: cardWidth || "100%",
         height: videoArchive || heroBanner ? "auto" : CARD_HEIGHT,
         minHeight: heroBanner

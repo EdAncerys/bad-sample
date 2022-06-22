@@ -448,9 +448,13 @@ https://codebeautify.org/
   -webkit-box-orient: vertical;
 }
 
-.referral-card .primary-title {
+.referral-card-wrapper .primary-title {
   /* overwiite defaults */
   margin-top: 0 !important;
+}
+
+.white-background {
+  background-color: #fff;
 }
 
 /*CAROUSEL ANIMATION */

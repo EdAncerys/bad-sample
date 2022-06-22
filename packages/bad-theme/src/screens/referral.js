@@ -37,7 +37,10 @@ const Referral = ({ state, actions, libraries }) => {
   // SERVERS ---------------------------------------------
   const ServeSeverityContainer = ({ description, name, status }) => {
     return (
-      <div className="referral-card" onClick={() => setSeverity(status)}>
+      <div
+        className="referral-card-wrapper"
+        onClick={() => setSeverity(status)}
+      >
         <Card
           title={name}
           subTitle="Description:"
@@ -47,6 +50,7 @@ const Referral = ({ state, actions, libraries }) => {
           cardMinHeight={250}
           backgroundColor={severity === name ? colors.lightSilver : null}
           shadow
+          isReferalCard
         />
       </div>
     );

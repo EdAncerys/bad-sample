@@ -239,3 +239,11 @@ a:visited {
 .custom-btn:hover {
   border: 1px solid #fff !important;
 }
+
+.referral-card {
+  transition: all 0.6s ease-in-out !important;
+}
+
+.referral-card:hover {
+  background-color: #f0f1f4;
+}
