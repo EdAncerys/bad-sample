@@ -258,6 +258,10 @@ const SIGApplication = ({ state, actions, libraries }) => {
           return item.acf.bad_or_sig === "sig";
         }
 
+        console.log("🐞 application", application);
+        console.log("🐞 selectedApplication", selectedApplication);
+        console.log("🐞 isInc", application.includes(selectedApplication));
+
         // return memberships that matches or includes any words in applicationType
         return application.includes(selectedApplication);
       });
