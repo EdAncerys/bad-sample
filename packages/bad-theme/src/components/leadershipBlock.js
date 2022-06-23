@@ -6,7 +6,6 @@ import Loading from "./loading";
 
 // CONTEXT -----------------------------------------------------------------
 import {
-  getLeadershipTeamData,
   getLeadershipGrades,
   getLeadershipData,
   getLeadershipPositions,

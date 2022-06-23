@@ -56,7 +56,7 @@ function AlterAccordion({
   const searchFilterRef = useRef(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
-  let marginVertical = state.theme.marginVertical;
+  let marginVertical = state.theme.marginVertical / 2;
   if (disable_vertical_padding) marginVertical = 0;
 
   let isBADApproved = false;
@@ -227,14 +227,7 @@ function AlterAccordion({
   return (
     <div>
       <ServeAccordionSearchFilter />
-      <div
-        style={{
-          padding: `${
-            disable_vertical_padding ? state.theme.marginVertical : 0
-          }px 0`,
-          backgroundColor: background_colour || "transparent",
-        }}
-      >
+      <div style={{ backgroundColor: background_colour || "transparent" }}>
         <BlockWrapper>
           <div style={{ padding: !lg ? "0 100px" : "0 0.5em" }}>
             <Accordion style={{ border: 0 }}>
