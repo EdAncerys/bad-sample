@@ -1,18 +1,13 @@
 import Loading from "../components/loading";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { connect, Global, css } from "frontity";
 import BlockWrapper from "../components/blockWrapper";
 import custom from "../css/custom.css";
 import CheckMark from "../img/svg/checkMark.svg";
 import Image from "@frontity/components/image";
 
-const PaymentConfirmation = ({state}) => {
-  const queryParams = new Proxy(new URLSearchParams(window.location.search), {
-    get: (searchParams, prop) => searchParams.get(prop),
-  });
-
-  let backurl = queryParams.redirect;
-
+const PaymentConfirmation = ({ state }) => {
+  const [url, setUrl] = React.useState(null);
   // useEffect(() => {
   //   if (isSagepay) {
   //     setErrorAction({
@@ -24,6 +19,15 @@ const PaymentConfirmation = ({state}) => {
   //     });
   //   }
   // }, []);
+
+  useEffect(() => {
+    const queryParams = new Proxy(new URLSearchParams(window.location.search), {
+      get: (searchParams, prop) => searchParams.get(prop),
+    });
+
+    let backurl = queryParams.redirect;
+    setUrl(backurl);
+  });
   return (
     <>
       <Global
@@ -58,7 +62,7 @@ const PaymentConfirmation = ({state}) => {
           </div>
           <a
             style={{ marginTop: "1em" }}
-            href={backurl ? backurl : state.auth.APP_URL}
+            href={url ? url : state.auth.APP_URL}
             class="blue-btn"
           >
             Go back
