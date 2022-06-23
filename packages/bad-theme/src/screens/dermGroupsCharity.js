@@ -81,17 +81,11 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   };
 
   const ApplyForMembership = () => {
-    // 🚀 TESTING
-    console.log("🐞 acf.sigs", acf.sigs);
-    console.log("🐞 dermGroupe", dermGroupe);
-    let postId = dermGroupe.id;
-    if (postId === 8982) acf.sigs = 207;
-    // 🚀 TESTING
-
     if (!acf.sigs || !sigGroup) return null;
 
     // filter sig by id and return name of the groupe
     const sig = sigGroup.filter((sig) => sig.id === acf.sigs);
+
     // if sig data is empty then return null
     if (!sig.length) return null;
     let sigAppName = "";

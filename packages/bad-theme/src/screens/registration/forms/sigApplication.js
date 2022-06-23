@@ -250,6 +250,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
         let application = item.acf.category_types
           .toLowerCase()
           .replace(/\s/g, "");
+        // if application exist split : & select second part of the string
+        // if (typeof application === "string" && application.includes(":"))
+        //   application = application.split(":")[1];
         let selectedApplication = applicationType
           .toLowerCase()
           .replace(/\s/g, "");
@@ -257,10 +260,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
         if (applicationType === "*") {
           return item.acf.bad_or_sig === "sig";
         }
-
-        console.log("🐞 application", application);
-        console.log("🐞 selectedApplication", selectedApplication);
-        console.log("🐞 isInc", application.includes(selectedApplication));
 
         // return memberships that matches or includes any words in applicationType
         return application.includes(selectedApplication);
@@ -297,10 +296,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
       setData: setInputValidator,
       applicationData,
     });
-
-    console.log("🐞 applicationData", applicationData);
-    console.log("🐞 applicationType", applicationType);
-    console.log("🐞 membershipData", membershipData);
 
     setMembershipData(membershipData); // 📌 set membership data picklist
   }, [state.source.memberships]);
@@ -776,6 +771,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
       </div>
     );
 
+  let appTitle = null;
+  if (applicationData) appTitle = applicationData[0].bad_categorytype;
+
   return (
     <div style={{ position: "relative" }}>
       <ActionPlaceholder
@@ -792,7 +790,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
           paddingBottom: `1em`,
         }}
       >
-        Category Selected: <span>{applicationType}</span>
+        <span>Category Selected: {appTitle || applicationType}</span>
       </div>
 
       <div>
