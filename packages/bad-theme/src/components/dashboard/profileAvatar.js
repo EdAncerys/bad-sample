@@ -7,8 +7,6 @@ import { colors } from "../../config/colors";
 import { useAppState, muiQuery } from "../../context";
 
 const ProfileAvatar = ({ state, actions, libraries, isPreview }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const { sm, md, lg, xl } = muiQuery();
   const { isActiveUser } = useAppState();
 

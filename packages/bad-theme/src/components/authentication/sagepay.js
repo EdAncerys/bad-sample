@@ -33,8 +33,6 @@ function blankForm() {
 }
 
 const Sagepay = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const [formData, setFormData] = useState(blankForm());
   const [sage, setSage] = useState(null);
   const [hasUrl, setHasUrl] = useState(false);

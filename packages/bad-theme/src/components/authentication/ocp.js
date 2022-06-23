@@ -4,8 +4,6 @@ import { connect } from "frontity";
 import { useAppDispatch, useAppState } from "../../context";
 
 const OCP = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   let scope = "admin"; // test var
   let inScope = ["admin", "sage"].includes(scope);
 

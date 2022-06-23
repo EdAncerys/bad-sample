@@ -17,8 +17,6 @@ import {
 } from "../../../context";
 
 const CompleteApplication = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, ethnicity } = useAppState();
 

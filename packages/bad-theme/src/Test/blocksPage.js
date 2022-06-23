@@ -8,8 +8,6 @@ import { Parcer } from "../context";
 import BlockWrapper from "../components/blockWrapper";
 
 const BlocksPage = ({ state, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
   const wpBlocks = page.acf.blocks;

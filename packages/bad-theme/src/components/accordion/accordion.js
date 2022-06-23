@@ -39,6 +39,8 @@ function AlterAccordion({
   if (!block) return <Loading />;
   const { lg } = muiQuery();
   const { dynamicsApps } = useAppState();
+
+  const data = state.source.get(state.router.link);
   const {
     add_search_function,
     disable_vertical_padding,
@@ -54,7 +56,7 @@ function AlterAccordion({
   const searchFilterRef = useRef(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
-  let marginVertical = state.theme.marginVertical;
+  let marginVertical = state.theme.marginVertical / 2;
   if (disable_vertical_padding) marginVertical = 0;
 
   let isBADApproved = false;
@@ -101,6 +103,10 @@ function AlterAccordion({
   const ServeAccordionSearchFilter = () => {
     if (!add_search_function) return null;
 
+    let searchTitle = "Search for content";
+    if (data.link === "/education-training/bursaries-fellowships-awards/")
+      searchTitle = "Search bursaries, fellowships and awards";
+
     const ServeSearchFilter = () => {
       if (!searchInput) return null;
 
@@ -136,7 +142,7 @@ function AlterAccordion({
           >
             <div className="flex-row">
               <SearchContainer
-                title={`Search for content`}
+                title={searchTitle}
                 searchFilterRef={searchFilterRef}
                 handleSearch={handleSearch}
               />
@@ -221,14 +227,7 @@ function AlterAccordion({
   return (
     <div>
       <ServeAccordionSearchFilter />
-      <div
-        style={{
-          padding: `${
-            disable_vertical_padding ? state.theme.marginVertical : 0
-          }px 0`,
-          backgroundColor: background_colour || "transparent",
-        }}
-      >
+      <div style={{ backgroundColor: background_colour || "transparent" }}>
         <BlockWrapper>
           <div style={{ padding: !lg ? "0 100px" : "0 0.5em" }}>
             <Accordion style={{ border: 0 }}>

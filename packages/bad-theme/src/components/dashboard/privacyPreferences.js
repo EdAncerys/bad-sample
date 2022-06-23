@@ -15,8 +15,6 @@ import {
 } from "../../context";
 
 const PrivacyPreferences = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const { sm, md, lg, xl } = muiQuery();
   const marginVertical = state.theme.marginVertical;
 

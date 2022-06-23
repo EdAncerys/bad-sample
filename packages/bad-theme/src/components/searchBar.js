@@ -19,7 +19,6 @@ import {
 import { TimerOutlined } from "@mui/icons-material";
 
 const SearchBar = ({ state, actions, libraries, block, search_type }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const dispatch = useAppDispatch();
   const { lg } = muiQuery();
   const ctaHeight = 45;

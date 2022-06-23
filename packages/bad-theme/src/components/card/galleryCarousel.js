@@ -15,8 +15,6 @@ const GalleryCarousel = ({
   height,
   padding,
 }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const marginHorizontal = state.theme.marginHorizontal;
   let carouselPadding = 0;
   if (padding) carouselPadding = padding;

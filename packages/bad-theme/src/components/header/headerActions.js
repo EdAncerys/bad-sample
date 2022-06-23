@@ -36,7 +36,6 @@ import {
 
 const HeaderActions = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();

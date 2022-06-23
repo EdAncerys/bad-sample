@@ -12,8 +12,6 @@ import {
 } from "../../context";
 
 const OrderSummary = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const marginVertical = state.theme.marginVertical;
   const dispatch = useAppDispatch();
   const { countryList } = useAppState();

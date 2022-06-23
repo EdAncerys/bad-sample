@@ -3,8 +3,6 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
 const SCREEN_NAME = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   // HELPERS ---------------------------------------------
 
   return (

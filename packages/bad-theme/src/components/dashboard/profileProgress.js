@@ -18,7 +18,6 @@ import {
 } from "../../context";
 
 const ProfileProgress = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { lg } = muiQuery();
   const dispatch = useAppDispatch();
   const { dynamicsApps, applicationData, isActiveUser } = useAppState();
