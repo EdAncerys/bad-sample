@@ -10,7 +10,7 @@ export const getBADMembershipSubscriptionData = async ({
 
   const year = new Date().getFullYear(); // get current year
   let sig_type = type;
-  if (type === "Full:DERMPATHPRO") sig_type = "Full:DermpathPRO";
+  if (type === "Full:DERMPATHPRO") sig_type = "Full:DermpathPRO"; // 📌 overwrite
   let path =
     state.auth.APP_HOST +
     `/catalogue/lookup/membershiptype?search=${category}:${type}::${year}`;
