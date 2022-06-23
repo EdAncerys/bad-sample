@@ -579,6 +579,13 @@ const SIGApplication = ({ state, actions, libraries }) => {
         setGoToAction({ state, path: slug, actions });
     } catch (error) {
       // console.log(error);
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Failed to submit ${applicationType} application. Please try again.`,
+          image: "Error",
+        },
+      });
     } finally {
       setFetching(false);
     }
