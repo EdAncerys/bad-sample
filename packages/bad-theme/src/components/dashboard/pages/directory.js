@@ -273,8 +273,23 @@ const Directory = ({ state, actions, libraries }) => {
     // dont display action if user is not BAD member
     if (!isBADMember) return null;
 
+    const membersSettingTitle = `You are currently ${
+      bad_memberdirectory ? "Opt-out from" : "Opt-in to"
+    } the
+    Members' Directory, to edit your preferences you can do so below or in
+    the Preferences Tab in your dashboard.`;
+
     return (
       <div style={{ position: "relative", margin: `0 ${marginHorizontal}px` }}>
+        <TitleBlock
+          block={{
+            text_align: "left",
+            title: membersSettingTitle,
+          }}
+          styles={{ fontSize: 16, fontWeight: "normal", paddingBottom: "2em" }}
+          margin="0"
+        />
+
         <ActionPlaceholder
           isFetching={isFetching}
           background="transparent"
