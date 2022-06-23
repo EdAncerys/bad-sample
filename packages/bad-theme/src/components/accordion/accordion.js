@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
 import { useAccordionButton } from "react-bootstrap/AccordionButton";
@@ -29,9 +29,10 @@ function AlterAccordion({
 }) {
   // HELPERS -----------------------------------------------------------------------
   function CustomToggle({ children, eventKey, callback }) {
-    const decoratedOnClick = useAccordionButton(eventKey, () => {
-      callback && callback(eventKey);
-    });
+    const decoratedOnClick = useAccordionButton(
+      eventKey,
+      () => callback && callback(eventKey)
+    );
 
     return <div onClick={decoratedOnClick}>{children}</div>;
   }
@@ -47,11 +48,12 @@ function AlterAccordion({
     accordion_item,
     approved_bad_members_only,
     background_colour,
+    is_active,
   } = block;
+
   console.log("🐞 ACORDION ITEM", block); // debug
 
-  const [searchFilter, setSearchFilter] = useState(null);
-  const [uniqueId, setUniqueId] = useState(null);
+  const [searchFilter, setSearchFilter] = useState(accordion_item);
   const [searchInput, setInput] = useState(null);
   const searchFilterRef = useRef(null);
 
@@ -63,13 +65,6 @@ function AlterAccordion({
   if (dynamicsApps && dynamicsApps.subs.data.length > 0) isBADApproved = true;
   let isForBADMembersOnly = false;
   if (approved_bad_members_only && !isBADApproved) isForBADMembersOnly = true;
-
-  useLayoutEffect(() => {
-    // ⬇️ re-set accordion data state on data change
-    setSearchFilter(accordion_item);
-    const id = uuidv4(); // add unique id
-    setUniqueId(id);
-  }, [accordion_item]);
 
   if (!searchFilter || isForBADMembersOnly) return null; // defensive programming
 
@@ -103,7 +98,7 @@ function AlterAccordion({
   const ServeAccordionSearchFilter = () => {
     if (!add_search_function) return null;
 
-    let searchTitle = "Search for content";
+    let searchTitle = "Search";
     if (data.link === "/education-training/bursaries-fellowships-awards/")
       searchTitle = "Search bursaries, fellowships and awards";
 
@@ -158,34 +153,14 @@ function AlterAccordion({
   };
 
   const SingleItem = ({ block, id }) => {
-    let isActive = false;
-    if (leadershipBlock && block.block) isActive = block.block.is_active;
-    // 📌 apply show class to accordion item.
-    // set timeout get the accordion body with the unique id
-    if (isActive) {
-      // get the accordion body with the unique id and add the show class
-      useEffect(() => {
-        const accordionBody = document.getElementById(uniqueId);
-        if (accordionBody) accordionBody.classList.add("show");
-      }, []);
-    }
-
     return (
       <Card
+        className="shadow"
         style={{
           borderRadius: 0,
           border: 0,
           margin: `${marginVertical}px 0`,
         }}
-        // 📌 animation adds bug when using react-bootstrap accordion
-        // uncoment to use css effects
-        // data-aos={leadershipBlock ? "none" : "fade"}
-        // data-aos-easing="ease-in-sine"
-        // data-aos-delay={`${id}`}
-        // data-aos-duration="1000"
-        // data-aos-offset="-120"
-
-        className="shadow"
       >
         <Card.Header
           style={{
@@ -197,7 +172,6 @@ function AlterAccordion({
           <CustomToggle eventKey={id}>
             <CardHeader
               id={id}
-              uniqueId={id}
               block={block}
               guidelines={guidelines}
               leadershipBlock={leadershipBlock}
@@ -207,13 +181,12 @@ function AlterAccordion({
             />
           </CustomToggle>
         </Card.Header>
-        <Accordion.Collapse eventKey={id} id={uniqueId}>
-          <Card.Body style={{ padding: "1em 3.25em" }}>
+        <Accordion.Collapse eventKey={id}>
+          <Card.Body>
             <AccordionBody
               block={block}
               guidelines={guidelines}
               leadershipBlock={leadershipBlock}
-              uniqueId={id}
               fundingBlock={fundingBlock}
               membershipApplications={membershipApplications}
               hasPublishDate={hasPublishDate}
@@ -230,9 +203,13 @@ function AlterAccordion({
       <div style={{ backgroundColor: background_colour || "transparent" }}>
         <BlockWrapper>
           <div style={{ padding: !lg ? "0 100px" : "0 0.5em" }}>
-            <Accordion style={{ border: 0 }}>
+            <Accordion
+              style={{ border: 0 }}
+              defaultActiveKey={is_active ? "0" : "99"}
+            >
               {searchFilter.map((block, key) => {
-                return <SingleItem block={block} key={key} id={key} />;
+                console.log("🐞 key", key);
+                return <SingleItem block={block} key={key} id={`${key}`} />;
               })}
             </Accordion>
           </div>

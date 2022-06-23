@@ -28,6 +28,7 @@
     "bad-theme": "file:packages/bad-theme",
     "calendar-link": "^2.2.0",
     "date-and-time": "^2.3.1",
+    "detect-browser": "^5.3.0",
     "dotenv": "^10.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-promise": "^6.0.0",
