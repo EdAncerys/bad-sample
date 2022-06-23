@@ -21,8 +21,6 @@ import {
 import { TimerOutlined } from "@mui/icons-material";
 
 const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const dispatch = useAppDispatch();
   const { lg } = muiQuery();
   const { disable_vertical_padding, colour } = block;

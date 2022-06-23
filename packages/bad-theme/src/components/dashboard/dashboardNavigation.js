@@ -11,8 +11,6 @@ import {
 } from "../../context";
 
 const DashboardNavigation = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const dispatch = useAppDispatch();
   const { dashboardPath, dynamicsApps } = useAppState();
   const [isBADMember, setIsBADMember] = useState(null);

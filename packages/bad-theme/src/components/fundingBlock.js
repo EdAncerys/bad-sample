@@ -19,7 +19,6 @@ import { getFundingData, getFundingTypes, muiQuery } from "../context";
 import { compose } from "@mui/system";
 
 const CPTBlock = ({ state, actions, libraries, block }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { lg } = muiQuery();
   const {
     colour,

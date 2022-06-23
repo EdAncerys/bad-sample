@@ -10,7 +10,6 @@ import TitleBlock from "../components/titleBlock";
 import { muiQuery } from "../context";
 
 const AccountDashboard = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { sm, md, lg, xl } = muiQuery();
 
   const data = state.source.get(state.router.link);
@@ -23,7 +22,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   // SERVERS --------------------------------------------
   const ServeInfo = () => {
     const ServeAddress = () => {
-      if(lg) return null;
+      if (lg) return null;
       return (
         <div
           className="flex-col"
@@ -39,7 +38,14 @@ const AccountDashboard = ({ state, actions, libraries }) => {
 
     const ServeContact = () => {
       return (
-        <div className={!lg ? "flex-col" : "flex-col-reverse"} style={{ alignItems: !lg ? "flex-end" : null, display: !lg ? "null" : "flex", flexDirection: !lg ? null : "column-reverse" }}> 
+        <div
+          className={!lg ? "flex-col" : "flex-col-reverse"}
+          style={{
+            alignItems: !lg ? "flex-end" : null,
+            display: !lg ? "null" : "flex",
+            flexDirection: !lg ? null : "column-reverse",
+          }}
+        >
           <div>Tel: +44 (0)207 383 0266</div>
           <div>Fax: +44 (0)207 388 5263</div>
           <div>Email: Admin@bad.org.uk</div>

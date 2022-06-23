@@ -10,8 +10,6 @@ import RightIcon from "../img/svg/rightIcon.svg";
 import { muiQuery } from "../context";
 
 const NewsCarousel = ({ state, actions, libraries, block }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   if (!block) return <Loading />;
 
   const { sm, md, lg, xl } = muiQuery();

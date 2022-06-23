@@ -16,8 +16,6 @@ import {
 } from "../../context";
 
 const DirectDebitPayment = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const dispatch = useAppDispatch();
   const { isActiveUser, directDebitPath } = useAppState();
 

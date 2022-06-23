@@ -1,8 +1,6 @@
 import { connect } from "frontity";
 
 const FormError = ({ state, actions, libraries, id, title }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   let errorTitle = "Mandatory field";
   if (title) errorTitle = title;
 

@@ -12,8 +12,6 @@ import { muiQuery } from "../context";
 const HeroBanner = ({ state, actions, libraries, block }) => {
   const { lg } = muiQuery();
 
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   if (!block) return <Loading />;
 
   const {

@@ -13,7 +13,6 @@ import {
 } from "../../context";
 
 const UpdateHospitalDetails = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { lg } = muiQuery();
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();

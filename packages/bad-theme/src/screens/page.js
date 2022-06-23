@@ -6,7 +6,6 @@ import BlockBuilder from "../components/builder/blockBuilder";
 import { muiQuery } from "../context";
 
 const Post = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
   const wpBlocks = page.acf.blocks;
@@ -14,7 +13,7 @@ const Post = ({ state, actions, libraries }) => {
 
   const marginVertical = state.theme.marginVertical;
   const { sm, md, lg, xl } = muiQuery();
-  
+
   return (
     <div>
       <BlockBuilder blocks={wpBlocks} />

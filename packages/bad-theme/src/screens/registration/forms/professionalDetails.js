@@ -28,7 +28,6 @@ import {
 } from "../../../context";
 
 const ProfessionalDetails = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { lg } = muiQuery();
   const isMounted = useIsMounted();
   const dispatch = useAppDispatch();

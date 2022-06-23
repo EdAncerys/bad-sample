@@ -10,8 +10,6 @@ import TypeFilters from "./typeFilters";
 import CloseIcon from "@mui/icons-material/Close";
 
 const CPTBlock = ({ state, actions, libraries, block }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const [postListData, setPostListData] = useState(null);
   const [groupeType, setGroupeType] = useState(null);
   const [guidanceCategory, setGuidanceCategory] = useState(null);

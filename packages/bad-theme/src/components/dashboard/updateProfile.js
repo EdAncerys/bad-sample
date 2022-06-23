@@ -17,7 +17,6 @@ import {
 } from "../../context";
 
 const UpdateProfile = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();

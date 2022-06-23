@@ -13,7 +13,6 @@ const PaymentNotification = ({
   application,
 }) => {
   const [paymentUrl, setPaymentUrl] = useState(null);
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;

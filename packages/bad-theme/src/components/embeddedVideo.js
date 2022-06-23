@@ -5,8 +5,6 @@ import ReactPlayer from "react-player";
 import { colors } from "../config/imports";
 
 const EmbeddedVideo = ({ state, actions, libraries, block }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   if (!block) return <Loading />;
 
   const { colour, video_url, disable_vertical_padding } = block;

@@ -8,8 +8,6 @@ import { muiQuery } from "../context";
 const BenefitsGrid = ({ state, actions, libraries, block }) => {
   const { sm, md, lg, xl } = muiQuery();
 
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   if (!block) return <Loading />;
   if (!block.benefits_card) return null;
 

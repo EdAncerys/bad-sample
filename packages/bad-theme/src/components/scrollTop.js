@@ -3,8 +3,6 @@ import { colors } from "../config/imports";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 
 const ScrollTop = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   // HANDLERS --------------------------------------------
   const handleGoToTop = () => {
     // ⬇️ on component load defaults to window position TOP
