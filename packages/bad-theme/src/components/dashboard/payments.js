@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
@@ -15,7 +15,64 @@ import {
   muiQuery,
   setErrorAction,
   fetchDataHandler,
+  handleSetCookie,
 } from "../../context";
+
+export const handlePayment = async ({
+  core_membershipsubscriptionid,
+  core_membershipapplicationid,
+  state,
+  dispatch,
+}) => {
+  alert("BITKA");
+  const displayPaymentModal = (url) => {
+    setErrorAction({
+      dispatch,
+      isError: {
+        message: `The card payment industry is currently in the process of making significant changes to the way card payments are processed online. Unfortunately, because of these changes, some users are experiencing temporary issues with making card payments through the website. If you cannot make a payment through the website, please contact membership@bad.org.uk to discuss alternative arrangements for making payments.`,
+        image: "Error",
+        goToPath: { label: "Continue", path: url },
+      },
+    });
+  };
+
+  const type = core_membershipsubscriptionid || core_membershipapplicationid;
+  const sagepay_live = "live";
+  // state.auth.ENVIRONMENT === "DEVELOPMENT" ? "test" : "live";
+  const sagepayUrl = core_membershipsubscriptionid
+    ? `/sagepay/${sagepay_live}/subscription/`
+    : `/sagepay/${sagepay_live}/application/`;
+
+  try {
+    const path =
+      state.auth.APP_HOST +
+      sagepayUrl +
+      type +
+      `?redirecturl=${state.auth.APP_URL}/payment-confirmation/?redirect=${state.router.link}`;
+    const fetchVendorId = await fetchDataHandler({
+      path,
+      method: "POST",
+      // body: appCredentials,
+      state,
+    });
+
+    if (fetchVendorId.ok) {
+      const json = await fetchVendorId.json();
+      const url =
+        json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
+      displayPaymentModal(url);
+    }
+  } catch (error) {
+    // console.log(error);
+    setErrorAction({
+      dispatch,
+      isError: {
+        message: `Something went wrong. Please try again.`,
+        image: "Error",
+      },
+    });
+  }
+};
 
 const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   const { lg } = muiQuery();
@@ -27,6 +84,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   const [subAppHistory, setAppHistory] = useState([]);
   const [isFetching, setFetching] = useState(null);
 
+  const isButtonClicked = useRef(false);
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
   useEffect(() => {
@@ -56,57 +114,6 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   if (!liveSubscriptions) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
-  const displayPaymentModal = (url) => {
-    setErrorAction({
-      dispatch,
-      isError: {
-        message: `The card payment industry is currently in the process of making significant changes to the way card payments are processed online. Unfortunately, because of these changes, some users are experiencing temporary issues with making card payments through the website. If you cannot make a payment through the website, please contact membership@bad.org.uk to discuss alternative arrangements for making payments.`,
-        image: "Error",
-        goToPath: { label: "Continue", path: url },
-      },
-    });
-  };
-  const handlePayment = async ({
-    core_membershipsubscriptionid,
-    core_membershipapplicationid,
-  }) => {
-    const type = core_membershipsubscriptionid || core_membershipapplicationid;
-    const sagepay_live =
-      state.auth.ENVIRONMENT === "DEVELOPMENT" ? "test" : "live";
-    const sagepayUrl = core_membershipsubscriptionid
-      ? `/sagepay/${sagepay_live}/subscription/`
-      : `/sagepay/${sagepay_live}/application/`;
-
-    try {
-      const path =
-        state.auth.APP_HOST +
-        sagepayUrl +
-        type +
-        `?redirecturl=${state.auth.APP_URL}/payment-confirmation/?redirect=${state.router.link}`;
-      const fetchVendorId = await fetchDataHandler({
-        path,
-        method: "POST",
-        // body: appCredentials,
-        state,
-      });
-
-      if (fetchVendorId.ok) {
-        const json = await fetchVendorId.json();
-        const url =
-          json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
-        displayPaymentModal(url);
-      }
-    } catch (error) {
-      // console.log(error);
-      setErrorAction({
-        dispatch,
-        isError: {
-          message: `Something went wrong. Please try again.`,
-          image: "Error",
-        },
-      });
-    }
-  };
 
   const resetPaymentUrl = async () => {
     setPaymentUrl(null);
@@ -175,14 +182,22 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
         return (
           <div
             className="blue-btn"
-            onClick={() =>
+            onClick={() => {
               handlePayment({
                 core_membershipsubscriptionid,
                 core_membershipapplicationid,
-              })
-            }
+                dispatch,
+                state,
+              });
+              alert(block.core_membershipapplicationid);
+              handleSetCookie({
+                name: "BAD-payment",
+                value: block.core_membershipapplicationid,
+                domain: `${state.auth.APP_URL}`,
+              });
+            }}
           >
-            Pay now
+            {isButtonClicked.current === true ? "Payment initiated" : "Pay now"}
           </div>
         );
       };

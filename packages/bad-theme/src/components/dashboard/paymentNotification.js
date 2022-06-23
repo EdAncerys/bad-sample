@@ -13,6 +13,7 @@ const PaymentNotification = ({
   application,
 }) => {
   const [paymentUrl, setPaymentUrl] = useState(null);
+  const [buttonClicked, setButtonClicked] = useState(false);
   const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const marginHorizontal = state.theme.marginHorizontal;
@@ -67,13 +68,18 @@ const PaymentNotification = ({
         <div style={{ padding: `0 2em` }}>
           <div
             className="blue-btn"
-            onClick={() =>
+            onClick={() => {
+              if (buttonClicked) {
+                alert("You have initiated the payment already");
+                return;
+              }
+              setButtonClicked(true);
               handlePayment({
                 sage_id: application.core_membershipapplicationid,
-              })
-            }
+              });
+            }}
           >
-            Pay now
+            {buttonClicked ? "Payment initiated" : "Pay now"}
           </div>
         </div>
       </div>
