@@ -38,7 +38,7 @@ export const handlePayment = async ({
   const type = core_membershipsubscriptionid || core_membershipapplicationid;
   // const sagepay_live = "live";
   const sagepay_live =
-    state.auth.ENVIRONMENT === "DEVELOPMENT" ? "test" : "live";
+    state.auth.ENVIRONMENT === "PRODUCTION" ? "live" : "test";
   const sagepayUrl = core_membershipsubscriptionid
     ? `/sagepay/${sagepay_live}/subscription/`
     : `/sagepay/${sagepay_live}/application/`;
