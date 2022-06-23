@@ -84,8 +84,9 @@ export const fetchDataHandler = async ({
     let timeTaken = (new Date() - timeNow) / 1000;
 
     // fetch request timing info
-    // console.log(`${time} Fetch time: ${timeTaken}s`);
-    // console.log("🐞 Status", response.status);
+    console.log(`${time} Fetch time: ${timeTaken}s`);
+    console.log("🐞 URL", path);
+    console.log("🐞 Status", response.status);
     // console.log("🐞 ", path);
 
     return response;

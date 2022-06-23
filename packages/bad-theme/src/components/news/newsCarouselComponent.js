@@ -14,18 +14,14 @@ const NewsCarouselComponent = ({
   block,
   categoryList,
 }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { sm, md, lg, xl } = muiQuery();
   const homepage = state.router.link === "/";
-  const { post_limit, disable_vertical_padding } = block;
 
   const BLOCK_PAIRS = block.flatMap((_, i, a) =>
     i % 2 ? [] : [a.slice(i, i + 2)]
   ); // split data in array of pairs
   const BANNER_HEIGHT = state.theme.bannerHeight;
   const marginHorizontal = state.theme.marginHorizontal;
-  let marginVertical = state.theme.marginVertical;
-  if (disable_vertical_padding) marginVertical = 0;
 
   // SERVERS ----------------------------------------------------------------
   const ServeIcon = ({ icon, left, right }) => {

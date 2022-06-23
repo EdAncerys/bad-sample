@@ -4,12 +4,10 @@ import Profile from "./profile";
 import Loading from "./loading";
 
 // CONTEXT --------------------------------------------------
-import { setGoToAction, muiQuery } from "../context";
+import { setGoToAction, muiQuery, Parcer } from "../context";
 
 const ProfilesBlock = ({ state, actions, libraries, block }) => {
   const { sm, md, lg, xl } = muiQuery();
-
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
   if (!block.profile_card) return null;
@@ -29,7 +27,7 @@ const ProfilesBlock = ({ state, actions, libraries, block }) => {
           className="blue-btn"
           onClick={() => setGoToAction({ state, path: link.url, actions })}
         >
-          <Html2React html={label} />
+          <Parcer libraries={libraries} html={label} />
         </div>
       </div>
     );
@@ -42,7 +40,7 @@ const ProfilesBlock = ({ state, actions, libraries, block }) => {
           className="primary-title"
           style={{ fontSize: 26, textTransform: "capitalize" }}
         >
-          <Html2React html={title} />
+          <Parcer libraries={libraries} html={title} />
         </div>
       </div>
     );

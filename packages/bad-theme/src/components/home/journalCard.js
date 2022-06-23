@@ -3,7 +3,7 @@ import Image from "@frontity/components/image";
 import { colors } from "../../config/imports";
 
 // CONTEXT -------------------------------------
-import { setGoToAction } from "../../context";
+import { setGoToAction, Parcer } from "../../context";
 
 const JournalCard = ({
   state,
@@ -16,7 +16,6 @@ const JournalCard = ({
   shadow,
   delay,
 }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const CARD_WIDTH = "30%";
   const IMG_WIDTH = 75;
   const isShadow = shadow ? "shadow" : "";
@@ -54,7 +53,7 @@ const JournalCard = ({
 
       return (
         <div className="flex primary-title" style={{ fontSize: 20 }}>
-          <Html2React html={title} />
+          <Parcer libraries={libraries} html={title} />
         </div>
       );
     };
@@ -64,7 +63,7 @@ const JournalCard = ({
 
       return (
         <div className="flex primary-title" style={{ fontSize: 20 }}>
-          <Html2React html={user} />
+          <Parcer libraries={libraries} html={user} />
         </div>
       );
     };

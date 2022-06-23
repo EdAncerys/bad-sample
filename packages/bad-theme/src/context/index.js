@@ -5,6 +5,8 @@ import { setAuthenticationCookieAction } from "../helpers/setAuthenticationCooki
 import { AppProvider, useAppDispatch, useAppState } from "./context";
 import { handleSetCookie, handleGetCookie } from "../helpers/cookie";
 import { handleUpdateMembershipApplication } from "../helpers/handleUpdateMembershipApplication";
+import { googleAutocomplete } from "../helpers/googleAutocomplete";
+import { Parcer } from "../helpers/parcer";
 import {
   setGoToAction,
   setLinkWrapperAction,
@@ -108,6 +110,8 @@ import {
   getCPTTaxonomy,
   getElectionsData,
   getDermGroupsData,
+  getReferralsData,
+  getReferralsPage,
   getLeadershipData,
   getEventSpecialitys,
   getGuidelinesData,
@@ -235,6 +239,8 @@ export {
   getCPTTaxonomy,
   getElectionsData,
   getDermGroupsData,
+  getReferralsData,
+  getReferralsPage,
   getLeadershipData,
   getFundingData,
   getEventSpecialitys,
@@ -245,8 +251,10 @@ export {
   handleSetCookie,
   handleGetCookie,
   handleUpdateMembershipApplication,
+  googleAutocomplete,
   hasPermisionLevel,
   getGenderAction,
   getCountryList,
   handleRemoveServerSideCookie,
+  Parcer,
 };

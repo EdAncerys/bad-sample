@@ -2,7 +2,7 @@ import { connect } from "frontity";
 import { colors } from "../config/imports";
 
 // CONTEXT ----------------------------------------------------
-import { setGoToAction } from "../context";
+import { setGoToAction, Parcer } from "../context";
 
 const UsefulLinksCard = ({
   state,
@@ -14,8 +14,6 @@ const UsefulLinksCard = ({
   cardWidth,
   cardHeight,
 }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   if (!link_title) return null;
 
   const SHADOW = shadow ? "shadow" : "";
@@ -53,7 +51,7 @@ const UsefulLinksCard = ({
               backgroundColor: colors.lightSilver,
             }}
           >
-            <Html2React html={label} />
+            <Parcer libraries={libraries} html={label} />
           </div>
         </div>
       );
@@ -70,7 +68,7 @@ const UsefulLinksCard = ({
           }}
           onClick={() => setGoToAction({ state, path: link.url, actions })}
         >
-          <Html2React html={title} />
+          <Parcer libraries={libraries} html={title} />
         </div>
       );
     };

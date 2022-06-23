@@ -11,8 +11,6 @@ import {
 } from "../../context";
 
 const DashboardNavigation = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const dispatch = useAppDispatch();
   const { dashboardPath, dynamicsApps } = useAppState();
   const [isBADMember, setIsBADMember] = useState(null);
@@ -30,9 +28,7 @@ const DashboardNavigation = ({ state, actions, libraries }) => {
     });
 
     // 📌 check if user is a BAD member
-    // temp disable access to all users
-    // uncomment below to check if user is a BAD member
-    // if (badApps.length) setIsBADMember(true);
+    if (badApps.length) setIsBADMember(true);
   }, [dynamicsApps]);
 
   // HELPERS ----------------------------------------------------------------

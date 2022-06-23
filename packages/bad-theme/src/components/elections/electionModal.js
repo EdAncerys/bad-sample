@@ -4,7 +4,7 @@ import { colors } from "../../config/imports";
 import CloseIcon from "@mui/icons-material/Close";
 
 // CONTEXT --------------------------------------------------------
-import { useAppDispatch, setEnquireAction } from "../../context";
+import { useAppDispatch, setEnquireAction, Parcer } from "../../context";
 
 const ElectionModal = ({
   state,
@@ -13,7 +13,6 @@ const ElectionModal = ({
   modalData,
   setModalData,
 }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const dispatch = useAppDispatch();
 
   if (!modalData) return null;
@@ -69,7 +68,7 @@ const ElectionModal = ({
       return (
         <div className="flex">
           <div className="flex primary-title" style={{ fontSize: 20 }}>
-            <Html2React html={title.rendered} />
+            <Parcer libraries={libraries} html={title.rendered} />
           </div>
           <div
             className="toggle-icon-color"
@@ -87,7 +86,7 @@ const ElectionModal = ({
 
       return (
         <div style={{ padding: `2em 0` }}>
-          <Html2React html={description} />
+          <Parcer libraries={libraries} html={description} />
         </div>
       );
     };

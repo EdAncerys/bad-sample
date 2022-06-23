@@ -2,8 +2,8 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import parse from "html-react-parser";
 
-import { colors } from "../../config/imports";
-import { setGoToAction, muiQuery } from "../../context";
+// --------------------------------------------------------------------------------
+import { setGoToAction, muiQuery, Parcer } from "../../context";
 
 const ImageAndPromoCard = ({
   state,
@@ -11,7 +11,6 @@ const ImageAndPromoCard = ({
   libraries,
   imageAndPromoCard,
 }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!imageAndPromoCard) return null;
 
   const { sm, md, lg, xl } = muiQuery();
@@ -27,7 +26,7 @@ const ImageAndPromoCard = ({
     return (
       <div onClick={() => setGoToAction({ state, path: link.url, actions })}>
         <div value={parse(GO_TO_LABEL)} className="caps-btn">
-          <Html2React html={GO_TO_LABEL} />
+          <Parcer libraries={libraries} html={GO_TO_LABEL} />
         </div>
       </div>
     );
@@ -38,7 +37,7 @@ const ImageAndPromoCard = ({
 
     return (
       <div className="primary-title" style={{ fontSize: 20 }}>
-        <Html2React html={title} />
+        <Parcer libraries={libraries} html={title} />
       </div>
     );
   };
@@ -48,7 +47,7 @@ const ImageAndPromoCard = ({
 
     return (
       <div style={{ padding: `1em 0` }}>
-        <Html2React html={body} />
+        <Parcer libraries={libraries} html={body} />
       </div>
     );
   };

@@ -30,11 +30,12 @@ import {
   setAppSearchPhraseAction,
   muiQuery,
   setCreateAccountModalAction,
+  handleSetCookie,
+  fetchDataHandler,
 } from "../../context";
 
 const HeaderActions = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
@@ -127,6 +128,78 @@ const HeaderActions = ({ state, actions, libraries }) => {
       takeToSearchHandler();
     }
   };
+
+  // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
+  const ServeDevPanel = () => {
+    if (state.auth.ENVIRONMENT !== "DEVELOPMENT" || lg) return null;
+
+    return (
+      <div
+        className="flex"
+        style={{
+          position: "absolute",
+          top: "3em",
+          left: "2em",
+          justifyContent: "space-between",
+          minWidth: 300,
+          padding: "1em",
+          borderRadius: 10,
+          backgroundColor: "rgba(247,61,147,0.5)",
+          zIndex: 1,
+        }}
+      >
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={handleCheck}
+        >
+          ST
+        </div>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={() => handleRemoveServerSideCookie({ state })}
+        >
+          LogOut
+        </div>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={handleCookie}
+        >
+          🍪
+        </div>
+      </div>
+    );
+  };
+
+  const handleCheck = async () => {
+    let path = state.auth.APP_HOST + "/utils/cookie";
+    const response = await fetchDataHandler({
+      path,
+      state,
+    });
+    let data = "not found";
+    if (response && response.ok) {
+      data = await response.json();
+      console.log("🐞 Auth level ", data.data.level);
+      console.log("🐞 data ", data.data);
+    }
+  };
+
+  const handleCookie = async () => {
+    handleSetCookie({ name: "no-cookie", deleteCookie: true }); // to show list of all cookies
+    handleSetCookie({ name: "BAD-cookie-popup", deleteCookie: true });
+    console.log("🐞 APP_HOST ", state.auth.APP_HOST);
+    console.log("🐞 APP_URL ", state.auth.APP_URL);
+    console.log("🐞 ENVIRONMENT ", state.auth.ENVIRONMENT);
+    console.log(
+      "🐞 DEFAULT_CONTACT_LIST ",
+      state.contactList.DEFAULT_CONTACT_LIST
+    );
+    console.log("🐞 isActiveUser ", isActiveUser);
+  };
+  // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
 
   const handleLoginAction = async () => {
     // --------------------------------------------------------------------------------
@@ -272,6 +345,8 @@ const HeaderActions = ({ state, actions, libraries }) => {
       {mobileMenuActive && <MobileMenu />}
       <BlockWrapper>
         <ServeProductionBatch />
+        <ServeDevPanel />
+
         <div className="flex" style={{ padding: !lg ? `2.75em 0` : `0.3em 0` }}>
           <div className="flex">
             <div

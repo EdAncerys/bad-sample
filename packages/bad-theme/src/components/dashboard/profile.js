@@ -7,12 +7,11 @@ import {
   useAppState,
   setDashboardPathAction,
   muiQuery,
+  Parcer,
 } from "../../context";
 
 const Profile = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
-
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   const { isActiveUser } = useAppState();
   const marginVertical = state.theme.marginVertical;
@@ -26,7 +25,7 @@ const Profile = ({ state, actions, libraries }) => {
 
     return (
       <div className="primary-title" style={{ fontSize: 26 }}>
-        <Html2React html={fullname} />
+        <Parcer libraries={libraries} html={fullname} />
       </div>
     );
   };
@@ -53,7 +52,7 @@ const Profile = ({ state, actions, libraries }) => {
       return (
         <div className="flex-col" style={styles.container}>
           <span className="primary-title">Email: </span>
-          <Html2React html={emailaddress1} />
+          <Parcer libraries={libraries} html={emailaddress1} />
         </div>
       );
     };
@@ -64,7 +63,7 @@ const Profile = ({ state, actions, libraries }) => {
       return (
         <div className="flex-col" style={styles.container}>
           <span className="primary-title">Membership Number: </span>
-          <Html2React html={bad_memberid} />
+          <Parcer libraries={libraries} html={bad_memberid} />
         </div>
       );
     };
@@ -75,7 +74,7 @@ const Profile = ({ state, actions, libraries }) => {
       return (
         <div className="flex-col" style={styles.container}>
           <span className="primary-title">Job Title: </span>
-          <Html2React html={jobtitle} />
+          <Parcer libraries={libraries} html={jobtitle} />
         </div>
       );
     };
@@ -86,7 +85,7 @@ const Profile = ({ state, actions, libraries }) => {
       return (
         <div className="flex-col" style={styles.container}>
           <span className="primary-title">Mobile: </span>
-          <Html2React html={mobilephone} />
+          <Parcer libraries={libraries} html={mobilephone} />
         </div>
       );
     };
@@ -101,7 +100,7 @@ const Profile = ({ state, actions, libraries }) => {
       return (
         <div className="flex-col" style={styles.container}>
           <span className="primary-title">BAD Membership Category: </span>
-          <Html2React html={memebershpCategory} />
+          <Parcer libraries={libraries} html={memebershpCategory} />
         </div>
       );
     };
@@ -118,7 +117,7 @@ const Profile = ({ state, actions, libraries }) => {
           <span className="primary-title">
             Main Hospital / Place of Work / Medical School details:{" "}
           </span>
-          <Html2React html={mainPlaceOfWorkCategory} />
+          <Parcer libraries={libraries} html={mainPlaceOfWorkCategory} />
         </div>
       );
     };
@@ -130,27 +129,27 @@ const Profile = ({ state, actions, libraries }) => {
           <div className="flex-col">
             {address2_line1 && (
               <div className="flex">
-                <Html2React html={address2_line1} />
+                <Parcer libraries={libraries} html={address2_line1} />
               </div>
             )}
             {address2_line2 && (
               <div className="flex">
-                <Html2React html={address2_line2} />
+                <Parcer libraries={libraries} html={address2_line2} />
               </div>
             )}
             {address2_city && (
               <div className="flex">
-                <Html2React html={address2_city} />
+                <Parcer libraries={libraries} html={address2_city} />
               </div>
             )}
             {address2_postalcode && (
               <div className="flex">
-                <Html2React html={address2_postalcode} />
+                <Parcer libraries={libraries} html={address2_postalcode} />
               </div>
             )}
             {address2_country && (
               <div className="flex">
-                <Html2React html={address2_country} />
+                <Parcer libraries={libraries} html={address2_country} />
               </div>
             )}
           </div>

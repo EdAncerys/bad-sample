@@ -5,9 +5,10 @@ import ReactPlayer from "react-player";
 import Currency from "../../img/svg/currency.svg";
 import date from "date-and-time";
 const DATE_MODULE = date;
+// --------------------------------------------------------------------------------
+import { Parcer } from "../../context";
 
 const VideoGuide = ({ state, actions, libraries, videoGuide }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!videoGuide) return null;
 
   const title = videoGuide.title.rendered;
@@ -45,7 +46,7 @@ const VideoGuide = ({ state, actions, libraries, videoGuide }) => {
           className="flex primary-title"
           style={{ fontSize: 20, lineHeight: "revert" }}
         >
-          <Html2React html={title} />
+          <Parcer libraries={libraries} html={title} />
         </div>
         <ServeAmount />
       </div>
@@ -60,7 +61,7 @@ const VideoGuide = ({ state, actions, libraries, videoGuide }) => {
 
     return (
       <div>
-        <Html2React html={formattedDate} />
+        <Parcer libraries={libraries} html={formattedDate} />
       </div>
     );
   };

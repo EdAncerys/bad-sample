@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/imports";
-
-// CONTEXT ----------------------------------------------------------------
-import { postTypeHandler } from "../context";
 import Loading from "./loading";
+// CONTEXT ----------------------------------------------------------------
+import { postTypeHandler, Parcer } from "../context";
+
 const SearchDropDown = ({
   state,
   actions,
@@ -16,14 +16,14 @@ const SearchDropDown = ({
   isAppSearch,
   input,
   dataLoading,
+  height,
 }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   // filter value are one layer deep object with title & link { title: "", link: "" }
 
   if (!dataLoading && !filter) return null;
   const ctaHeight = 45;
   const BANNER_HEIGHT = state.theme.bannerHeight;
+  let maxHeight = height || BANNER_HEIGHT / 2;
 
   if (dataLoading && !filter)
     return (
@@ -44,7 +44,7 @@ const SearchDropDown = ({
             className="flex-col"
             style={{
               minHeight: ctaHeight,
-              maxHeight: BANNER_HEIGHT / 2,
+              maxHeight,
               borderRadius: 10,
               padding: `0.5em 1em`,
               overflow: "auto",
@@ -74,7 +74,8 @@ const SearchDropDown = ({
           className="flex-col"
           style={{
             minHeight: ctaHeight,
-            maxHeight: BANNER_HEIGHT / 2,
+            maxHeight,
+            height: height || "auto",
             borderRadius: 10,
             padding: `0.5em 1em`,
             overflow: "auto",
@@ -120,9 +121,9 @@ const SearchDropDown = ({
                 onClick={() => onClickHandler({ item })}
               >
                 <span style={{ paddingRight: `0.5em` }}>
-                  <Html2React html={serachTitle} />.
+                  <Parcer libraries={libraries} html={serachTitle} />
                 </span>
-                {type && <Html2React html={name} />}
+                {type && <Parcer libraries={libraries} html={name} />}
               </div>
             );
           })}

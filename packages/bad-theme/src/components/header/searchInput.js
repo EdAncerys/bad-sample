@@ -7,8 +7,6 @@ import SearchContainer from "../searchContainer";
 import { useAppDispatch, useAppState } from "../../context";
 
 const SearchInput = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const dispatch = useAppDispatch();
   const { filter } = useAppState();
 

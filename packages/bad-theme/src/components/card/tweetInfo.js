@@ -1,13 +1,11 @@
 import { connect } from "frontity";
 
 import Image from "@frontity/components/image";
-
 import { colors } from "../../config/imports";
-import { setGoToAction } from "../../context";
+// --------------------------------------------------------------------------------
+import { setGoToAction, Parcer } from "../../context";
 
 const TweetInfo = ({ state, actions, libraries, tweetInfo }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   if (!tweetInfo) return null;
 
   const { name, profile_image_url, author_name } = tweetInfo;
@@ -52,7 +50,7 @@ const TweetInfo = ({ state, actions, libraries, tweetInfo }) => {
           setGoToAction({ state, path: profile_image_url, actions })
         }
       >
-        <Html2React html={name} />
+        <Parcer libraries={libraries} html={name} />
       </div>
     );
   };
@@ -62,7 +60,7 @@ const TweetInfo = ({ state, actions, libraries, tweetInfo }) => {
 
     return (
       <div style={{ fontSize: 20 }}>
-        @<Html2React html={author_name} />
+        @<Parcer libraries={libraries} html={author_name} />
       </div>
     );
   };

@@ -6,8 +6,6 @@ import { muiQuery } from "../context";
 import Loading from "../components/loading";
 
 const EventsLandingPage = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const [wpBlocks, setWpBlocks] = useState(false); // event data
   const mountedRef = useRef(true);
   const { sm, md, lg, xl } = muiQuery();

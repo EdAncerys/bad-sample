@@ -6,9 +6,10 @@ import { colors } from "../../config/imports";
 
 import Loading from "../loading";
 import BlockWrapper from "../blockWrapper";
-import { setGoToAction, muiQuery } from "../../context";
 import LeftIcon from "../../img/svg/carouselIconLeft.svg";
 import RightIcon from "../../img/svg/carouselIconRight.svg";
+// --------------------------------------------------------------------------------
+import { setGoToAction, muiQuery, Parcer } from "../../context";
 
 const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
   if (!block) return null;
@@ -16,7 +17,6 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
 
   const { disable_vertical_padding, background_colour } = block;
 
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const BANNER_HEIGHT = state.theme.bannerHeight * 1.25;
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -125,7 +125,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
                   }
                 >
                   <div className="first-letter-capital">
-                    <Html2React html={LABEL} />
+                    <Parcer libraries={libraries} html={LABEL} />
                   </div>
                 </div>
               </div>
@@ -152,7 +152,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
                   setGoToAction({ state, path: event_label.url, actions })
                 }
               >
-                <Html2React html={LABEL} />
+                <Parcer libraries={libraries} html={LABEL} />
               </div>
             );
           };
@@ -222,7 +222,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
                               color: colors.white,
                             }}
                           >
-                            <Html2React html={title} />
+                            <Parcer libraries={libraries} html={title} />
                           </div>
                         </div>
                       </div>

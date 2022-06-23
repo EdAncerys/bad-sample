@@ -35,7 +35,9 @@ import {
   loginAction,
   muiQuery,
   fetchDataHandler,
+  Parcer,
 } from "../../context";
+import { color } from "@mui/system";
 
 const Card = ({
   state,
@@ -44,6 +46,7 @@ const Card = ({
   colour,
   cardTitle,
   title,
+  subTitle,
   body,
   bodyLimit,
   link_label,
@@ -101,11 +104,10 @@ const Card = ({
   isElectionBlock,
   electionTaxonomy,
   authLink,
+  isReferalCard,
 }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
   const THEME = colour || colors.primary;
-  const isShadow = shadow ? "shadow" : "";
   const { lg } = muiQuery();
   let CARD_HEIGHT = "100%";
   let ELECTION_BLOCKS = false;
@@ -121,8 +123,13 @@ const Card = ({
   if (removePadding) PADDING = 0;
   if (padding) PADDING = padding;
 
+  // 📌 card component class list overwrides
   let isCardAnimation = "card-wrapper";
   if (disableCardAnimation) isCardAnimation = "";
+  let classList = "";
+  if (isReferalCard) classList = classList + " " + "referral-card";
+  if (shadow) classList = classList + " " + "shadow";
+  if (!backgroundColor) classList = classList + " " + "white-background";
 
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
@@ -315,7 +322,7 @@ const Card = ({
               padding: `0.5em`,
             }}
           >
-            <Html2React html={cardTitle} />
+            <Parcer libraries={libraries} html={cardTitle} />
           </div>
         </div>
       </div>
@@ -337,6 +344,7 @@ const Card = ({
 
         <CardBody
           title={title}
+          subTitle={subTitle}
           body={body}
           bodyLimit={bodyLimit}
           date={date}
@@ -375,10 +383,10 @@ const Card = ({
   // RETURN ----------------------------------------------------
   return (
     <div
-      className={`${isShadow} ${isCardAnimation} heading-tile`} // card wrapper as clickable card if link is set
+      className={`${isCardAnimation} ${classList} heading-tile`} // card wrapper as clickable card if link is set
       style={{
         ...styles.card,
-        backgroundColor: backgroundColor || colors.white,
+        backgroundColor: backgroundColor,
         width: cardWidth || "100%",
         height: videoArchive || heroBanner ? "auto" : CARD_HEIGHT,
         minHeight: heroBanner

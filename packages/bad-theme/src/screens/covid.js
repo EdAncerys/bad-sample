@@ -7,11 +7,9 @@ import Loading from "../components/loading";
 // BLOCK WIDTH WRAPPER -----------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT -----------------------------------------------------------------
-import { setGoToAction } from "../context";
+import { Parcer } from "../context";
 
 const Covid = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const data = state.source.get(state.router.link);
   const dermGroupe = state.source[data.type][data.id];
 
@@ -38,7 +36,7 @@ const Covid = ({ state, actions, libraries }) => {
           block={{ title: title.rendered }}
           margin={`0 0 ${marginVertical}px 0`}
         />
-        <Html2React html={content.rendered} />
+        <Parcer libraries={libraries} html={content.rendered} />
       </div>
     );
   };

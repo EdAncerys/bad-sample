@@ -23,7 +23,6 @@ import { muiQuery } from "../../context";
 const Header = ({ state, actions }) => {
   const { sm, md, lg, xl } = muiQuery();
   const urlPath = state.router.link;
-  const data = state.source.get(urlPath);
 
   return (
     <>

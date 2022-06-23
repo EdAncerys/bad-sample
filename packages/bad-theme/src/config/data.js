@@ -104,6 +104,14 @@ export const MENU_DATA = [
     title: "BAD Video Library",
     url: "/videos/",
   },
+  {
+    title: "PushFar Mentoring platform",
+    url: "https://www.pushfar.com/employee-register/VYhR5MtTPX/",
+  },
+  {
+    title: "Referrals",
+    url: "/referrals/",
+  },
 ];
 
 export const ALPHABET = [

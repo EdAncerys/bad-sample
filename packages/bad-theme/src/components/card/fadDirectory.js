@@ -3,12 +3,11 @@ import { connect } from "frontity";
 
 import Image from "@frontity/components/image";
 import { colors } from "../../config/imports";
-import { setGoToAction } from "../../context";
 import ProfileAvatar from "../../img/svg/profile.svg";
+// --------------------------------------------------------------------------------
+import { setGoToAction, Parcer } from "../../context";
 
 const FadDirectory = ({ state, actions, libraries, fadDirectory }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   if (!fadDirectory) return null;
 
   const {
@@ -62,7 +61,7 @@ const FadDirectory = ({ state, actions, libraries, fadDirectory }) => {
         className="flex primary-title"
         style={{ fontSize: 20, paddingBottom: `0.5em` }}
       >
-        <Html2React html={fullname} />
+        <Parcer libraries={libraries} html={fullname} />
       </div>
     );
   };
@@ -72,7 +71,7 @@ const FadDirectory = ({ state, actions, libraries, fadDirectory }) => {
 
     return (
       <div className="flex">
-        <Html2React html={emailaddress1} />
+        <Parcer libraries={libraries} html={emailaddress1} />
       </div>
     );
   };
@@ -82,7 +81,7 @@ const FadDirectory = ({ state, actions, libraries, fadDirectory }) => {
 
     return (
       <div className="flex">
-        <Html2React html={jobtitle} />
+        <Parcer libraries={libraries} html={jobtitle} />
       </div>
     );
   };
@@ -98,7 +97,7 @@ const FadDirectory = ({ state, actions, libraries, fadDirectory }) => {
         }
         style={{ cursor: "pointer" }}
       >
-        <Html2React html={_parentcustomerid_value} />
+        <Parcer libraries={libraries} html={_parentcustomerid_value} />
       </div>
     );
   };
@@ -114,7 +113,7 @@ const FadDirectory = ({ state, actions, libraries, fadDirectory }) => {
         }
         style={{ cursor: "pointer" }}
       >
-        <Html2React html={bad_mainhosptialweb} />
+        <Parcer libraries={libraries} html={bad_mainhosptialweb} />
       </div>
     );
   };

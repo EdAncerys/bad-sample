@@ -1,17 +1,15 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
-
-import { setGoToAction, muiQuery } from "../context";
+// --------------------------------------------------------------------------------
 import { colors } from "../config/imports";
-
 import Loading from "./loading";
 import IndexCard from "./indexCard";
 import TitleBlock from "./titleBlock";
 import Dropdown from "react-bootstrap/Dropdown";
+// --------------------------------------------------------------------------------
+import { setGoToAction, muiQuery } from "../context";
 
 const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   if (!block) return <Loading />;
 
   const { sm, md, lg, xl } = muiQuery();
@@ -78,7 +76,7 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
               WebkitLineClamp: limit ? 20 : null, // line limit to body
             }}
           >
-            <Html2React html={body} />
+            <Parcer libraries={libraries} html={body} />
           </div>
           <ServeActions />
         </div>
@@ -100,7 +98,7 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
             className="blue-btn"
             onClick={() => setGoToAction({ state, path: link.url, actions })}
           >
-            <Html2React html={label} />
+            <Parcer libraries={libraries} html={label} />
           </div>
         </div>
       );
@@ -172,7 +170,7 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
           }}
           drop="down"
         >
-          <Html2React html={card.card.card_title} />
+          <Parcer libraries={libraries} html={card.card.card_title} />
         </Dropdown.Toggle>
         <Dropdown.Menu style={{ width: "100%" }}>
           {card.card.index_title.map((item, key) => {
@@ -183,7 +181,7 @@ const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
                 }
                 drop="down"
               >
-                <Html2React html={item.title} />
+                <Parcer libraries={libraries} html={item.title} />
               </Dropdown.Item>
             );
           })}

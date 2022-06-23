@@ -1,7 +1,6 @@
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
-import { colors } from "../../config/imports";
 import Bulletins from "../../img/svg/bulletins.svg";
 import eCircular from "../../img/svg/eCircular.svg";
 import Insights from "../../img/svg/insights.svg";
@@ -9,9 +8,10 @@ import Podcasts from "../../img/svg/podcasts.svg";
 import PressRelease from "../../img/svg/pressRelease.svg";
 import Responses from "../../img/svg/responses.svg";
 import Updates from "../../img/svg/updates.svg";
+// --------------------------------------------------------------------------------
+import { Parcer } from "../../context";
 
 const NewsArticleHeader = ({ state, actions, libraries, newsArticle }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!newsArticle) return null;
 
   const { news_title, date, icon } = newsArticle;
@@ -31,7 +31,7 @@ const NewsArticleHeader = ({ state, actions, libraries, newsArticle }) => {
 
     return (
       <div className="primary-title" style={{ fontSize: 20 }}>
-        <Html2React html={news_title} />
+        <Parcer libraries={libraries} html={news_title} />
       </div>
     );
   };
@@ -48,7 +48,7 @@ const NewsArticleHeader = ({ state, actions, libraries, newsArticle }) => {
           padding: `1em 0`,
         }}
       >
-        <Html2React html={date} />
+        <Parcer libraries={libraries} html={date} />
       </div>
     );
   };

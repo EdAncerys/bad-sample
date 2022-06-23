@@ -9,13 +9,12 @@ import {
   setErrorAction,
   loginAction,
   getWileyAction,
+  Parcer,
 } from "../../context";
 
 const QuickLinksDropDown = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const dispatch = useAppDispatch();
-  const { isActiveUser } = useAppState();
+  const { isActiveUser, dynamicsApps } = useAppState();
 
   // HANDLERS ----------------------------------------------------
   const handleActiveMenu = ({ mouseLeave }) => {
@@ -112,6 +111,17 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
 
         {MENU_DATA.map((item, key) => {
           const { title, url } = item;
+          let isBADMember = false;
+
+          // 📌 check if logged in user exists & user is BAD member to allow access to PushFar
+          if (dynamicsApps && isActiveUser) {
+            isBADMember = dynamicsApps.subs.data.some(
+              (app) => app.bad_organisedfor === "BAD"
+            );
+            if (isBADMember.length) isBADMember = true;
+          }
+          if (title === "PushFar Mentoring platform" && !isBADMember)
+            return null;
 
           return (
             <li
@@ -125,7 +135,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
                   className="quick-link-title"
                   style={{ width: `fit-content` }}
                 >
-                  <Html2React html={title} />
+                  <Parcer libraries={libraries} html={title} />
                 </div>
               </a>
             </li>

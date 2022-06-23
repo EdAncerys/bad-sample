@@ -6,8 +6,6 @@ import { colors } from "../../config/imports";
 import { setGoToAction } from "../../context";
 
 const FeaturedBanner = ({ state, actions, libraries, featuredBanner }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   if (!featuredBanner) return null;
 
   const { title, acf } = featuredBanner;

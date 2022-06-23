@@ -9,12 +9,11 @@ import Card from "../components/card/card";
 import GalleryCarousel from "../components/card/galleryCarousel";
 import Loading from "../components/loading";
 // CONTEXT -------------------------------------------------------------------
-import { useAppDispatch, setEnquireAction, muiQuery } from "../context";
+import { useAppDispatch, setEnquireAction, muiQuery, Parcer } from "../context";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 
 const Venue = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
@@ -67,7 +66,7 @@ const Venue = ({ state, actions, libraries }) => {
         <div className="flex-col">
           <div className="flex">
             <div>
-              <Html2React html={about_the_venue} />
+              <Parcer libraries={libraries} html={about_the_venue} />
             </div>
           </div>
 
@@ -123,10 +122,10 @@ const Venue = ({ state, actions, libraries }) => {
               return (
                 <div key={key} className="flex-row">
                   <div style={{ paddingRight: 5 }}>
-                    <Html2React html={item.layout} />
+                    <Parcer libraries={libraries} html={item.layout} />
                   </div>
                   <div>
-                    <Html2React html={item.capacity} />
+                    <Parcer libraries={libraries} html={item.capacity} />
                   </div>
                 </div>
               );
@@ -145,7 +144,7 @@ const Venue = ({ state, actions, libraries }) => {
             </div>
 
             <div className="flex">
-              <Html2React html={square_footage} />
+              <Parcer libraries={libraries} html={square_footage} />
             </div>
           </div>
         );
@@ -161,7 +160,7 @@ const Venue = ({ state, actions, libraries }) => {
             </div>
 
             <div className="flex">
-              <Html2React html={address} />
+              <Parcer libraries={libraries} html={address} />
             </div>
           </div>
         );
@@ -177,7 +176,7 @@ const Venue = ({ state, actions, libraries }) => {
             </div>
 
             <div className="flex">
-              <Html2React html={floor} /> floor
+              <Parcer libraries={libraries} html={floor} /> floor
             </div>
           </div>
         );
@@ -193,7 +192,7 @@ const Venue = ({ state, actions, libraries }) => {
             </div>
 
             <div className="flex">
-              <Html2React html={catering} />
+              <Parcer libraries={libraries} html={catering} />
             </div>
           </div>
         );

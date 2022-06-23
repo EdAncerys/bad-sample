@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import parse from "html-react-parser";
-
+// --------------------------------------------------------------------------------
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import LINK from "../../img/svg/badLink.svg";
 import DownloadFileBlock from "../downloadFileBlock";
@@ -19,6 +19,7 @@ import {
   anchorScrapper,
   setErrorAction,
   muiQuery,
+  Parcer,
 } from "../../context";
 
 const AccordionBody = ({
@@ -34,7 +35,6 @@ const AccordionBody = ({
   membershipApplications,
   hasPublishDate,
 }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { sm, md, lg, xl } = muiQuery();
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, dynamicsApps } = useAppState();
@@ -57,6 +57,7 @@ const AccordionBody = ({
   let body = block.body;
   let link = block.link;
   let amount = block.acf ? block.acf.amount : null;
+  let openingDate = block.acf ? block.acf.opening_date : null;
   let closingDate = block.acf ? block.acf.closing_date : null;
   let labelName = link_label;
 
@@ -151,7 +152,7 @@ const AccordionBody = ({
 
     return (
       <div className="flex">
-        <Html2React html={gsSubtitle} />
+        <Parcer libraries={libraries} html={gsSubtitle} />
       </div>
     );
   };
@@ -248,7 +249,7 @@ const AccordionBody = ({
             }
           >
             <div className="flex">
-              <Html2React html={linkLabel} />
+              <Parcer libraries={libraries} html={linkLabel} />
             </div>
             <div style={{ margin: "auto 0" }}>
               <KeyboardArrowRightIcon
@@ -295,7 +296,7 @@ const AccordionBody = ({
             onClick={() => setGoToAction({ state, path: link.url, actions })}
           >
             <div className="flex">
-              <Html2React html={linkLabel} />
+              <Parcer libraries={libraries} html={linkLabel} />
             </div>
           </div>
         </div>
@@ -337,7 +338,7 @@ const AccordionBody = ({
                 }
               >
                 <div className="flex">
-                  <Html2React html={linkLabel} />
+                  <Parcer libraries={libraries} html={linkLabel} />
                 </div>
               </div>
             </div>
@@ -388,33 +389,51 @@ const AccordionBody = ({
 
     return (
       <div className="text-body">
-        <Html2React html={body} />
+        <Parcer libraries={libraries} html={body} />
       </div>
     );
   };
 
   const ServeFundingInfo = () => {
-    if (!amount || !closingDate) return null;
-
     const ServeAmount = () => {
       if (!amount) return null;
 
       return (
         <div className="flex-col">
-          <Html2React html={amount} />
+          <Parcer libraries={libraries} html={amount} />
         </div>
       );
     };
 
     const ServeClosingDate = () => {
-      if (!closingDate) return null;
+      if (!closingDate && !openingDate) return null;
 
-      const dateObject = new Date(closingDate);
-      const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
+      let formOpeningDate = "";
+      let formClosingDate = "";
+
+      if (openingDate) {
+        const openingDateObject = new Date(openingDate);
+        formOpeningDate = DATE_MODULE.format(openingDateObject, "DD MMM YYYY");
+      }
+      if (closingDate) {
+        const closingDateObject = new Date(closingDate);
+        formClosingDate = DATE_MODULE.format(closingDateObject, "DD MMM YYYY");
+      }
 
       return (
         <div className="flex-col">
-          <Html2React html={formattedDate} />
+          {openingDate && (
+            <div>
+              Opening Date:{" "}
+              <Parcer libraries={libraries} html={formOpeningDate} />
+            </div>
+          )}
+          {closingDate && (
+            <div>
+              Closing Date:{" "}
+              <Parcer libraries={libraries} html={formClosingDate} />
+            </div>
+          )}
         </div>
       );
     };
@@ -432,7 +451,7 @@ const AccordionBody = ({
 
     return (
       <div>
-        <Html2React html={ltBody} />
+        <Parcer libraries={libraries} html={ltBody} />
       </div>
     );
   };
@@ -450,7 +469,7 @@ const AccordionBody = ({
 
         return (
           <div>
-            <Html2React html={title} />
+            <Parcer libraries={libraries} html={title} />
           </div>
         );
       };
@@ -460,7 +479,7 @@ const AccordionBody = ({
 
         return (
           <div style={{ marginRight: 10 }}>
-            <Html2React html={hospital} />
+            <Parcer libraries={libraries} html={hospital} />
           </div>
         );
       };
@@ -470,7 +489,7 @@ const AccordionBody = ({
 
         return (
           <div>
-            <Html2React html={dates} />
+            <Parcer libraries={libraries} html={dates} />
           </div>
         );
       };
@@ -498,7 +517,7 @@ const AccordionBody = ({
 
         return (
           <div className="primary-title">
-            <Html2React html={title} />
+            <Parcer libraries={libraries} html={title} />
           </div>
         );
       };
@@ -515,7 +534,7 @@ const AccordionBody = ({
 
         return (
           <div>
-            <Html2React html={positionName} />
+            <Parcer libraries={libraries} html={positionName} />
           </div>
         );
       };
@@ -525,7 +544,7 @@ const AccordionBody = ({
 
         return (
           <div style={{ marginRight: 10 }}>
-            <Html2React html={hospital} />
+            <Parcer libraries={libraries} html={hospital} />
           </div>
         );
       };
@@ -535,7 +554,7 @@ const AccordionBody = ({
 
         return (
           <div>
-            <Html2React html={dates} />
+            <Parcer libraries={libraries} html={dates} />
           </div>
         );
       };
@@ -645,7 +664,7 @@ const AccordionBody = ({
             setGoToAction({ state, path: link || link_url, actions })
           }
         >
-          <Html2React html={label || button_label} />
+          <Parcer libraries={libraries} html={label || button_label} />
         </div>
       </div>
     );
@@ -661,7 +680,10 @@ const AccordionBody = ({
           style={{ width: "fit-content" }}
           onClick={handleApply}
         >
-          <Html2React html={`Apply for ${category_types} membership`} />
+          <Parcer
+            libraries={libraries}
+            html={`Apply for ${category_types} membership`}
+          />
         </div>
       </div>
     );

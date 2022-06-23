@@ -2,12 +2,10 @@ import { connect } from "frontity";
 import Loading from "./loading";
 
 // CONTEXT -----------------------------------------------------
-import { muiQuery } from "../context";
+import { muiQuery, Parcer } from "../context";
 
 const TitleAndBodyBlock = ({ state, actions, libraries, block }) => {
   const { sm, md, lg, xl } = muiQuery();
-
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
 
@@ -34,7 +32,7 @@ const TitleAndBodyBlock = ({ state, actions, libraries, block }) => {
           justifyContent: ALIGNMENT,
         }}
       >
-        <Html2React html={title} />
+        <Parcer libraries={libraries} html={title} />
       </div>
     );
   };
@@ -53,7 +51,7 @@ const TitleAndBodyBlock = ({ state, actions, libraries, block }) => {
           justifyContent: ALIGNMENT,
         }}
       >
-        <Html2React html={body} />
+        <Parcer libraries={libraries} html={body} />
       </div>
     );
   };

@@ -1,14 +1,14 @@
 import React from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
-
+import { detect } from "detect-browser";
 import NiceLogo from "../../img/svg/niceLogo.svg";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { colors } from "../../config/imports";
 import AccordionContext from "react-bootstrap/AccordionContext";
 // CONTEXT ----------------------------------------------------------------
-import { muiQuery } from "../../context";
+import { muiQuery, Parcer } from "../../context";
 
 const AccordionHeader = ({
   state,
@@ -23,7 +23,6 @@ const AccordionHeader = ({
   hasPreview,
 }) => {
   const { sm, md, lg, xl } = muiQuery();
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { activeEventKey } = React.useContext(AccordionContext);
 
   const { subtitle, acf } = block;
@@ -34,7 +33,13 @@ const AccordionHeader = ({
   let title = block.title;
   if (fundingBlock || membershipApplications || guidelines)
     title = block.title.rendered;
-  const browsero = navigator.userAgent;
+  // --------------------------------------------------------------------------------
+  // 📌  Detect broser type
+  // --------------------------------------------------------------------------------
+  const browser = detect();
+  let isFirefox = false;
+  if (browser && browser.name.includes("firefox")) isFirefox = true;
+
   let body = block.body;
   if (fundingBlock) body = block.acf ? block.acf.overview : null;
 
@@ -71,7 +76,7 @@ const AccordionHeader = ({
           }}
         >
           <ServeLogo />
-          <Html2React html={subtitle} />
+          <Parcer libraries={libraries} html={subtitle} />
         </div>
       );
     };
@@ -87,7 +92,7 @@ const AccordionHeader = ({
           }}
         >
           <div style={{ fontSize: 20 }}>
-            <Html2React html={title} />
+            <Parcer libraries={libraries} html={title} />
           </div>
           <ServeSubtitle />
         </div>
@@ -97,7 +102,7 @@ const AccordionHeader = ({
 
   const ServePreview = () => {
     if (guidelines || !preview || !body) return null;
-    if (lg || browsero.includes("Firefox")) return null;
+    if (lg || isFirefox) return null;
     return (
       <div
         className="text-body body-limit"
@@ -105,15 +110,12 @@ const AccordionHeader = ({
         style={{
           margin: `0 1em 1em`,
           color: colors.darkSilver,
-          borderTop:
-            !lg || browsero.includes("Firefox")
-              ? null
-              : `1px solid ${colors.darkSilver}`,
+          borderTop: !lg || isFirefox ? null : `1px solid ${colors.darkSilver}`,
           transitionDelay: `1s`,
           WebkitLineClamp: 2,
         }}
       >
-        <Html2React html={body} />
+        <Parcer libraries={libraries} html={body} />
       </div>
     );
   };
@@ -130,7 +132,7 @@ const AccordionHeader = ({
           lineHeight: "unset",
         }}
       >
-        <Html2React html={`Update in progress`} />
+        <Parcer libraries={libraries} html={`Update in progress`} />
       </div>
     );
   };
@@ -206,7 +208,7 @@ const AccordionHeader = ({
           lineHeight: "unset",
         }}
       >
-        <Html2React html={ltTitle} />
+        <Parcer libraries={libraries} html={ltTitle} />
       </div>
     );
   };

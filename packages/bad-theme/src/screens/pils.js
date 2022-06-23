@@ -4,16 +4,15 @@ import { connect } from "frontity";
 import { colors } from "../config/imports";
 import Loading from "../components/loading";
 import DownloadFileBlock from "../components/downloadFileBlock";
-
-import { muiQuery } from "../context";
 import ScrollTop from "../components/scrollTop";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
+// --------------------------------------------------------------------------------
+import { muiQuery, Parcer } from "../context";
 
 const Pils = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
 
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const pil = state.source[data.type][data.id];
 
@@ -44,7 +43,7 @@ const Pils = ({ state, actions, libraries }) => {
             borderBottom: `5px solid ${colors.danger}`,
           }}
         >
-          <Html2React html={pil.title.rendered} />
+          <Parcer libraries={libraries} html={pil.title.rendered} />
         </div>
       </div>
     );
@@ -62,7 +61,7 @@ const Pils = ({ state, actions, libraries }) => {
           padding: `2em 0`,
         }}
       >
-        <Html2React html={pil.content.rendered} />
+        <Parcer libraries={libraries} html={pil.content.rendered} />
         {bodyLength > 2500 && <ScrollTop />}
       </div>
     );

@@ -1,9 +1,9 @@
 import { connect } from "frontity";
-import Image from "@frontity/components/image";
 import { colors } from "../../config/imports";
+// --------------------------------------------------------------------------------
+import { Parcer } from "../../context";
 
 const PromoHeader = ({ state, actions, libraries, fundingPromo }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!fundingPromo) return null;
 
   const { title, amount, deadline } = fundingPromo;
@@ -14,7 +14,7 @@ const PromoHeader = ({ state, actions, libraries, fundingPromo }) => {
 
     return (
       <div className="primary-title" style={{ fontSize: 20 }}>
-        <Html2React html={title} />
+        <Parcer libraries={libraries} html={title} />
       </div>
     );
   };
@@ -29,7 +29,7 @@ const PromoHeader = ({ state, actions, libraries, fundingPromo }) => {
           fontSize: 20,
         }}
       >
-        <Html2React html={amount} />
+        <Parcer libraries={libraries} html={amount} />
       </div>
     );
   };
@@ -43,7 +43,7 @@ const PromoHeader = ({ state, actions, libraries, fundingPromo }) => {
           fontSize: 16,
         }}
       >
-        <Html2React html={deadline} />
+        <Parcer libraries={libraries} html={deadline} />
       </div>
     );
   };

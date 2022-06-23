@@ -4,14 +4,13 @@ import Card from "./card/card";
 import Loading from "./loading";
 import ButtonsRow from "./buttonsRow";
 import FullWidthContentBlock from "./fullWidthContentBlock";
+import React from "react";
 
 // CONTEXT --------------------------------------------------
 import { muiQuery } from "../context";
 
 const HeroBanner = ({ state, actions, libraries, block }) => {
-  const { sm, md, lg, xl } = muiQuery();
-
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
+  const { lg } = muiQuery();
 
   if (!block) return <Loading />;
 
@@ -20,6 +19,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
     add_buttons,
     background_colour,
     background_image,
+    mobile_background_image,
     body,
     buttons,
     layout,
@@ -115,7 +115,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
           <div
             className="d-flex justify-content-center"
             style={{
-              marginTop: !lg ? "-20%" : !background_image ? "10%" : "-20%",
+              marginTop: !lg ? "-20%" : !background_image ? "10%" : "10%",
               marginBottom: !lg ? null : "10%",
             }}
           >
@@ -196,7 +196,7 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
               : background_image
               ? BANNER_HEIGHT
               : null,
-            height: !lg ? BANNER_HEIGHT : null,
+            // height: !lg ? BANNER_HEIGHT : null,
           }}
         >
           <FullWidthContentBlock block={block} heroBanner />
@@ -206,9 +206,18 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
   };
 
   const ServeCardImage = () => {
-    if (!background_image) return <div className="flex" />;
+    if (!background_image && !mobile_background_image)
+      return <div className="flex" />;
 
+    let image = background_image;
+    if (lg || !image) image = mobile_background_image;
+    if (!image) return null;
+    console.log("🐞 lg", lg);
+    console.log("🐞 image", image);
+    console.log("title", title);
     const alt = { title } || "BAD";
+    console.log("ALT", alt.title);
+
     const isFullWidth = layout === "full-width";
     const CARD_STYLES = isFullWidth
       ? {
@@ -226,8 +235,8 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
       <div className="flex">
         <div style={CARD_STYLES}>
           <Image
-            src={background_image}
-            alt={alt}
+            src={image}
+            alt={alt.title}
             style={{
               width: "100%",
               height: "100%",

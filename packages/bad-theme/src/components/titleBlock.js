@@ -2,7 +2,7 @@ import { connect } from "frontity";
 import Loading from "./loading";
 
 // CONTEXT -----------------------------------------------------
-import { setGoToAction, muiQuery } from "../context";
+import { setGoToAction, muiQuery, Parcer } from "../context";
 
 const TitleBlock = ({
   state,
@@ -16,8 +16,6 @@ const TitleBlock = ({
   styles,
 }) => {
   const { sm, md, lg, xl } = muiQuery();
-
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
 
   if (!block) return <Loading />;
 
@@ -46,7 +44,7 @@ const TitleBlock = ({
         className="caps-btn"
         onClick={() => setGoToAction({ state, path: link.url, actions })}
       >
-        <Html2React html={LABEL} />
+        <Parcer libraries={libraries} html={LABEL} />
       </div>
     );
   };
@@ -64,7 +62,7 @@ const TitleBlock = ({
           ...styles,
         }}
       >
-        <Html2React html={title} />
+        <Parcer libraries={libraries} html={title} />
       </div>
     );
   };

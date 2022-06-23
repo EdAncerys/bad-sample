@@ -8,7 +8,6 @@ import Loading from "../../components/loading";
 import { useAppState } from "../../context";
 
 const SideBarMenu = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const slug = state.router.link;
 
   const { applicationData, isActiveUser } = useAppState();

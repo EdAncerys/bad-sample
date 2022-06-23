@@ -17,10 +17,10 @@ import {
   muiQuery,
   getHospitalsAction,
   setErrorAction,
+  Parcer,
 } from "../context";
 
 const EnquireModal = ({ state, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { lg } = muiQuery();
 
   const dispatch = useAppDispatch();
@@ -84,7 +84,9 @@ const EnquireModal = ({ state, libraries }) => {
     const recipients = enquireAction.recipients;
 
     // default change of hospital value to input if exists value is empty
-    const changeOfHospitalInput = hospitalSearchRef.current.value || "";
+    const changeOfHospitalInput = hospitalSearchRef.current
+      ? hospitalSearchRef.current.value
+      : "";
     formData.hospitalChangeName =
       formData.hospitalChangeName || changeOfHospitalInput;
 
@@ -102,7 +104,7 @@ const EnquireModal = ({ state, libraries }) => {
       });
 
       if (!response) throw new Error("Error sending email");
-      // sucsess error messages to user
+      // success error messages to user
       if (enquireAction.isHospitalChange) {
         setErrorAction({
           dispatch,
@@ -130,7 +132,7 @@ const EnquireModal = ({ state, libraries }) => {
         },
       });
     } catch (error) {
-      // console.log(error);
+      console.log(error); // debug
       setErrorAction({
         dispatch,
         isError: {
@@ -210,7 +212,7 @@ const EnquireModal = ({ state, libraries }) => {
 
       return (
         <div className="primary-title" style={{ fontSize: 20 }}>
-          <Html2React html={enquireAction.form_title} />
+          <Parcer libraries={libraries} html={enquireAction.form_title} />
         </div>
       );
     };
@@ -220,7 +222,7 @@ const EnquireModal = ({ state, libraries }) => {
 
       return (
         <div style={{ paddingTop: `1em` }}>
-          <Html2React html={enquireAction.form_body} />
+          <Parcer libraries={libraries} html={enquireAction.form_body} />
         </div>
       );
     };

@@ -6,7 +6,6 @@ import Loading from "./loading";
 
 // CONTEXT -----------------------------------------------------------------
 import {
-  getLeadershipTeamData,
   getLeadershipGrades,
   getLeadershipData,
   getLeadershipPositions,
@@ -19,6 +18,7 @@ const LeadershipBlock = ({ state, actions, block }) => {
   const mountedRef = useRef(true);
 
   if (!block) return <Loading />;
+  console.log("🐞 ", block);
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
@@ -41,7 +41,16 @@ const LeadershipBlock = ({ state, actions, block }) => {
   return (
     <AccordionComponent
       block={{
-        accordion_item: [{ leadershipList, gradesList, positionList, block }],
+        accordion_item: [
+          {
+            leadershipList,
+            gradesList,
+            positionList,
+            block,
+          },
+        ],
+        is_active: block.is_active,
+        disable_vertical_padding: block.disable_vertical_padding,
       }}
       leadershipBlock
     />

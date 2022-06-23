@@ -10,7 +10,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import CircularProgress from "@mui/material/CircularProgress";
 
 // DATA HELPERS -----------------------------------------------------------
-import { UK_COUNTIES, prefMailingOption } from "../../config/data";
+import { prefMailingOption } from "../../config/data";
 
 // CONTEXT ----------------------------------------------------------------
 import {
@@ -18,13 +18,12 @@ import {
   useAppState,
   updateProfileAction,
   setErrorAction,
-  googleAutocompleteAction,
   muiQuery,
   getCountryList,
+  googleAutocomplete,
 } from "../../context";
 
 const UpdateAddress = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { lg } = muiQuery();
   const dispatch = useAppDispatch();
   const { isActiveUser, countryList } = useAppState();
@@ -144,38 +143,21 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     // update input value before async task
     setSearchInput(input);
 
-    // const options = {
-    //   componentRestrictions: { country: "uk" },
-    //   fields: ["address_components", "geometry", "icon", "name"],
-    //   strictBounds: false,
-    //   types: ["establishment"],
-    // };
-    // const autocomplete = new google.maps.places.Autocomplete(input, options);
-    // console.log("🐞 ", autocomplete);
-
-    // return;
-
     try {
       setIsFetchingAddress(true);
-      const data = await googleAutocompleteAction({
-        state,
-        query: input,
-      });
-      // convert data to dropdown format
-      let predictions = [];
-      // check for data returned form API
-      if (data && data.length) {
-        predictions = data.map((item) => ({
-          // get city & country from data source
-          title: item.description,
-        }));
+      const data = await googleAutocomplete({ input });
 
-        // set dropdown data
-        if (predictions.length && input.length) {
-          setAddressData(predictions);
-        } else {
-          setAddressData(null);
-        }
+      // check for data returned form API
+      if (data.length > 0) {
+        // covert data to address format
+        const dropDownFoprmat = [];
+        data.map((item) => {
+          dropDownFoprmat.push({ title: item.description, terms: item.terms });
+        });
+
+        setAddressData(dropDownFoprmat);
+      } else {
+        setAddressData(null);
       }
     } catch (error) {
       // console.log("error", error);
@@ -185,9 +167,26 @@ const UpdateAddress = ({ state, actions, libraries }) => {
   };
 
   const handleSelectAddress = async ({ item }) => {
+    // destructure item object & get coutry code & city name from terms
+    const { terms, title } = item;
+    let countryCode = "";
+    let cityName = "";
+
+    if (terms) {
+      // if terms define address components
+      if (terms.length >= 1) countryCode = terms[terms.length - 1].value;
+      if (terms.length >= 2) cityName = terms[terms.length - 2].value;
+    }
+    // overwrite formData to match Dynamics fields
+    if (countryCode === "UK")
+      countryCode = "United Kingdom of Great Britain and Northern Ireland";
+
+    // update formData with values
     setFormData((prevFormData) => ({
       ...prevFormData,
-      address2_line1: item.title,
+      address2_line1: title,
+      address2_country: countryCode,
+      address2_city: cityName,
     }));
   };
 
@@ -359,24 +358,13 @@ const UpdateAddress = ({ state, actions, libraries }) => {
             <div>
               <div>
                 <label>City</label>
-                <Form.Select
+                <input
                   name="address2_city"
                   value={formData.address2_city}
                   onChange={handleInputChange}
-                  className="input"
-                  // disabled
-                >
-                  <option value="" hidden>
-                    County/State
-                  </option>
-                  {UK_COUNTIES.map((item, key) => {
-                    return (
-                      <option key={key} value={item}>
-                        {item}
-                      </option>
-                    );
-                  })}
-                </Form.Select>
+                  className="form-control input"
+                  placeholder="City"
+                />
               </div>
 
               {countryList && (

@@ -10,11 +10,10 @@ import Newsletters from "../img/svg/newsletters.svg";
 import Fellowships from "../img/svg/fellowships.svg";
 import Library from "../img/svg/library.svg";
 import HireDiscounts from "../img/svg/hireDiscounts.svg";
-import { setGoToAction } from "../context";
+// --------------------------------------------------------------------------------
+import { setGoToAction, Parcer } from "../context";
 
 const Benefit = ({ state, actions, libraries, block, id }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const { icon, body, title, link } = block;
 
   const ICON_WIDTH = 100;
@@ -63,7 +62,7 @@ const Benefit = ({ state, actions, libraries, block, id }) => {
         className="primary-title"
         style={{ fontSize: 20, margin: `0.75em 0` }}
       >
-        <Html2React html={title} />
+        <Parcer libraries={libraries} html={title} />
       </div>
     );
   };
@@ -73,7 +72,7 @@ const Benefit = ({ state, actions, libraries, block, id }) => {
 
     return (
       <div>
-        <Html2React html={body} />
+        <Parcer libraries={libraries} html={body} />
       </div>
     );
   };

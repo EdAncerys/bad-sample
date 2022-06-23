@@ -18,6 +18,7 @@ import {
   setGoToAction,
   muiQuery,
   postTypeHandler,
+  Parcer,
 } from "../context";
 
 const AppSearch = ({ state, actions, libraries }) => {
@@ -26,7 +27,6 @@ const AppSearch = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { appSearchData, appSearchPhrase } = useAppState();
 
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
   const wpBlocks = page.acf.blocks;
@@ -155,7 +155,7 @@ const AppSearch = ({ state, actions, libraries }) => {
                 className="primary-title"
                 style={{ fontSize: 24, padding: `0.5em 0` }}
               >
-                <Html2React html={searchTitle} />
+                <Parcer libraries={libraries} html={searchTitle} />
               </div>
             );
           };
@@ -172,7 +172,7 @@ const AppSearch = ({ state, actions, libraries }) => {
                 className="primary-title"
                 style={{ padding: `0.5em 0`, color }}
               >
-                <Html2React html={name} />
+                <Parcer libraries={libraries} html={name} />
               </div>
             );
           };
@@ -185,7 +185,7 @@ const AppSearch = ({ state, actions, libraries }) => {
                 className="primary-title body-limit"
                 style={{ margin: `0.5em 0`, WebkitLineClamp: 6 }}
               >
-                <Html2React html={searchBody} />
+                <Parcer libraries={libraries} html={searchBody} />
               </div>
             );
           };

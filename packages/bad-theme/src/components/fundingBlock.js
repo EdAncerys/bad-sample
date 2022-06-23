@@ -19,7 +19,6 @@ import { getFundingData, getFundingTypes, muiQuery } from "../context";
 import { compose } from "@mui/system";
 
 const CPTBlock = ({ state, actions, libraries, block }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { lg } = muiQuery();
   const {
     colour,
@@ -252,7 +251,9 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
       <div
         style={{
           marginTop: "auto",
-          padding: !lg ? `1em 0 1em ${state.theme.marginVertical}px` : `0em 0 1em ${state.theme.marginVertical}px`,
+          padding: !lg
+            ? `1em 0 1em ${state.theme.marginVertical}px`
+            : `0em 0 1em ${state.theme.marginVertical}px`,
         }}
       >
         <select
@@ -380,6 +381,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           <Accordion
             block={{
               accordion_item: postFilter,
+              disable_vertical_padding,
             }}
             fundingBlock
             hasPreview={preview}

@@ -7,11 +7,9 @@ import date from "date-and-time";
 const DATE_MODULE = date;
 
 // CONTEXT ----------------------------------------------------------------
-import { copyToClipboard } from "../../context";
+import { copyToClipboard, Parcer } from "../../context";
 
 const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   if (!authorInfo) return null;
 
   const { date, modified, tags, content } = authorInfo;
@@ -84,7 +82,10 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
       return (
         <div style={styles.container}>
           <div>Modified -</div>
-          <Html2React html={DATE_MODULE.format(dateModified, "DD/MMM/YYYY")} />
+          <Parcer
+            libraries={libraries}
+            html={DATE_MODULE.format(dateModified, "DD/MMM/YYYY")}
+          />
         </div>
       );
     };
@@ -100,7 +101,10 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
       >
         <div style={styles.container}>
           <div>Published -</div>
-          <Html2React html={DATE_MODULE.format(datePublished, "DD/MMM/YYYY")} />
+          <Parcer
+            libraries={libraries}
+            html={DATE_MODULE.format(datePublished, "DD/MMM/YYYY")}
+          />
         </div>
         <ServeModified />
       </div>
@@ -144,7 +148,10 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
 
       return (
         <div style={{ fontWeight: "bold", padding: `0.5em 0` }}>
-          <Html2React html={author.press_release_author_name} />
+          <Parcer
+            libraries={libraries}
+            html={author.press_release_author_name}
+          />
         </div>
       );
     };
@@ -160,7 +167,7 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
           style={{ marginBottom: `0.5em` }}
         >
           <div style={styles.link}>
-            <Html2React html={author.email} />
+            <Parcer libraries={libraries} html={author.email} />
           </div>
           <span className="clipboard-reference d-none" />
         </div>
@@ -172,7 +179,10 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
 
       return (
         <div>
-          <Html2React html={author.press_release_author_hospital} />
+          <Parcer
+            libraries={libraries}
+            html={author.press_release_author_hospital}
+          />
         </div>
       );
     };

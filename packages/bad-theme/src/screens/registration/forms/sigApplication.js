@@ -23,16 +23,16 @@ import {
   getHospitalsAction,
   getBADMembershipSubscriptionData,
   sendFileToS3Action,
-  googleAutocompleteAction,
+  googleAutocomplete,
   getGenderAction,
   getDermGroupsData,
   setErrorAction,
+  copyToClipboard,
+  Parcer,
 } from "../../../context";
 import Loading from "../../../components/loading";
 
 const SIGApplication = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, dynamicsApps, genderList } =
     useAppState();
@@ -116,7 +116,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     sig_bad_mainareaofinterest: true,
     sig_bad_includeinthebssciiemaildiscussionforum: true,
     sig_py3_insertnhsnetemailaddress: true,
-    sig_bad_psychodermatologycategory: false, // 📌  by default is diabled for this field. Overwrite from wp api
+    sig_bad_psychodermatologycategory: false, // this is a special case for the sig application forms as new field is added that do not update wp resspones via api
   });
   const [isEmail, setIsEmail] = useState(false);
   const [applicationType, setType] = useState("Special Interest Group");
@@ -271,20 +271,21 @@ const SIGApplication = ({ state, actions, libraries }) => {
     }
     // check if application category have only one application
     let isSingleApp = false;
+    let appType = "";
     if (membershipData) isSingleApp = membershipData.length === 1;
     // if application category have only one application set formData to that application
     if (isSingleApp) {
-      const type = membershipData[0].acf.category_types;
+      appType = membershipData[0].acf.category_types;
       setFormData((prevFormData) => ({
         ...prevFormData,
-        bad_categorytype: type,
+        bad_categorytype: appType,
       }));
-      // 📌 update policy link agains app data
-      handlePolicyLinkUpdate({
-        membershipData,
-        value: type,
-      });
     }
+    // 📌 update policy link agains app data
+    handlePolicyLinkUpdate({
+      membershipData,
+      value: appType,
+    });
 
     // ⏬  validate inputs for single application only
     validateMembershipFormAction({
@@ -293,10 +294,40 @@ const SIGApplication = ({ state, actions, libraries }) => {
       applicationData,
     });
 
-    setMembershipData(membershipData); // set membership data
+    console.log("🐞 applicationData", applicationData);
+    console.log("🐞 applicationType", applicationType);
+    console.log("🐞 membershipData", membershipData);
+
+    setMembershipData(membershipData); // 📌 set membership data picklist
   }, [state.source.memberships]);
 
   // HANDLERS --------------------------------------------
+  const mailToClient = (e) => {
+    copyToClipboard(e);
+
+    // set user notification if email client is not available & copy to clipboard
+    const emailValue = e.target.innerText;
+
+    // open email client if available in new tab
+    if (emailValue && emailValue.includes("@")) {
+      const email = emailValue.replace(/\s/g, "");
+      const emailLink = `mailto:${email}`;
+      window.open(emailLink, "_blank");
+    }
+
+    // document.location = "mailto:" + emailValue; // open default email client
+  };
+
+  useEffect(() => {
+    // add event listener to email-client button
+    const emailClient = document.getElementById("email-client");
+    if (emailClient) {
+      emailClient.addEventListener("click", (e) => {
+        mailToClient(e);
+      });
+    }
+  }, []);
+
   const handleSelectHospital = ({ item }) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -318,18 +349,27 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const handleDocUploadChange = async (e) => {
     let sky_cvurl = e.target.files[0];
 
-    if (sky_cvurl)
-      sky_cvurl = await sendFileToS3Action({
-        state,
-        dispatch,
-        attachments: sky_cvurl,
-      });
-    // console.log("🐞 ", sky_cvurl); // debug
+    try {
+      setFetching(true);
+      // upload file to storage
+      if (sky_cvurl)
+        sky_cvurl = await sendFileToS3Action({
+          state,
+          dispatch,
+          attachments: sky_cvurl,
+        });
 
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      ["sky_cvurl"]: sky_cvurl,
-    }));
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        ["sky_cvurl"]: sky_cvurl,
+      }));
+
+      // console.log("🐞 ", sky_cvurl); // debug
+    } catch (error) {
+      // console.log("🤖 error", error);
+    } finally {
+      setFetching(false);
+    }
   };
 
   const handleHospitalLookup = async () => {
@@ -457,6 +497,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
         "py3_addresszippostalcode",
         "py3_addresscountry",
         "py3_ntnno",
+        inputValidator.sig_bad_psychodermatologycategory && !!dermList
+          ? "bad_psychodermatologycategory"
+          : "",
         inputValidator.sig_bad_readpolicydocument && !!readPolicyDoc
           ? "bad_readpolicydocument"
           : "",
@@ -540,6 +583,13 @@ const SIGApplication = ({ state, actions, libraries }) => {
         setGoToAction({ state, path: slug, actions });
     } catch (error) {
       // console.log(error);
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Failed to submit ${applicationType} application. Please try again.`,
+          image: "Error",
+        },
+      });
     } finally {
       setFetching(false);
     }
@@ -582,25 +632,19 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
     try {
       setIsFetchingAddress(true);
-      const data = await googleAutocompleteAction({
-        state,
-        query: input,
-      });
-      // convert data to dropdown format
-      let predictions = [];
-      // check for data returned form API
-      if (data && data.length) {
-        predictions = data.map((item) => ({
-          // get city & country from data source
-          title: item.description,
-        }));
+      const data = await googleAutocomplete({ input });
 
-        // set dropdown data
-        if (predictions.length && input.length) {
-          setAddressData(predictions);
-        } else {
-          setAddressData(null);
-        }
+      // check for data returned form API
+      if (data.length > 0) {
+        // covert data to address format
+        const dropDownFoprmat = [];
+        data.map((item) => {
+          dropDownFoprmat.push({ title: item.description, terms: item.terms });
+        });
+
+        setAddressData(dropDownFoprmat);
+      } else {
+        setAddressData(null);
       }
     } catch (error) {
       // console.log("error", error);
@@ -610,9 +654,26 @@ const SIGApplication = ({ state, actions, libraries }) => {
   };
 
   const handleSelectAddress = async ({ item }) => {
+    // destructure item object & get coutry code & city name from terms
+    const { terms, title } = item;
+    let countryCode = "";
+    let cityName = "";
+
+    if (terms) {
+      // if terms define address components
+      if (terms.length >= 1) countryCode = terms[terms.length - 1].value;
+      if (terms.length >= 2) cityName = terms[terms.length - 2].value;
+    }
+    // overwrite formData to match Dynamics fields
+    if (countryCode === "UK")
+      countryCode = "United Kingdom of Great Britain and Northern Ireland";
+
+    // update formData with values
     setFormData((prevFormData) => ({
       ...prevFormData,
-      py3_address1ine1: item.title,
+      py3_address1ine1: title,
+      py3_addresscountry: countryCode,
+      py3_addresstowncity: cityName,
     }));
   };
 
@@ -747,7 +808,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.sig_bad_psychodermatologycategory && dermList && (
             <div className="flex-col">
-              <label className="form-label">Membership Category Type</label>
+              <label className="required form-label">
+                Membership Category Type
+              </label>
               <Form.Select
                 name="bad_psychodermatologycategory"
                 value={formData.bad_psychodermatologycategory}
@@ -765,6 +828,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                   );
                 })}
               </Form.Select>
+              <FormError id="bad_psychodermatologycategory" />
             </div>
           )}
 
@@ -933,6 +997,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                     <SearchDropDown
                       filter={addressData}
                       onClickHandler={handleSelectAddress}
+                      height={230}
                     />
                   </div>
                 )}
@@ -1144,6 +1209,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 <SearchDropDown
                   filter={hospitalData}
                   onClickHandler={handleSelectHospital}
+                  height={230}
                 />
               </div>
               <div style={{ padding: "0.5em 0" }}>
@@ -1470,11 +1536,11 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
           {inputValidator.sig_bad_readpolicydocument && !readPolicyDoc && (
             <div>
-              <div
-                className="flex"
-                style={{ alignItems: "center", paddingTop: "0.5em" }}
-              >
-                {`If you would like to find out more about the ${applicationType} privacy policy please contact ${contactEmail}`}
+              <div style={{ paddingTop: "0.5em" }}>
+                <Parcer
+                  libraries={libraries}
+                  html={`If you would like to find out more about the ${applicationType} privacy policy please contact <span class="title-link-animation" name="${contactEmail}" id="email-client">${contactEmail}</span>`}
+                />
               </div>
             </div>
           )}

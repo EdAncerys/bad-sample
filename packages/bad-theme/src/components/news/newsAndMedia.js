@@ -22,12 +22,12 @@ import {
   getNewsData,
   getMediaCategories,
   hasPermisionLevel,
+  Parcer,
 } from "../../context";
 
 const NewsAndMedia = ({ state, actions, libraries, block }) => {
   const { sm, md, lg, xl } = muiQuery();
 
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const dispatch = useAppDispatch();
   const { newsMediaCategoryId, isActiveUser, dynamicsApps } = useAppState();
 
@@ -62,10 +62,54 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 
+  // HELPERS --------------------------------------------------------------------------
+  const handleMembersOnlyAccess = ({ data, categoryData }) => {
+    // --------------------------------------------------------------------------------
+    // 📌  Handle members only access permision
+    // --------------------------------------------------------------------------------
+
+    let hasPermission = false;
+    let membersOnly = ["circular", "newsletter", "bulletin"];
+    let membersOnlyList = [];
+    // 📌 check if user has permission to view news & media
+    if (dynamicsApps)
+      hasPermission = hasPermisionLevel({ dynamicsApps, isActiveUser });
+    setPermission(hasPermission);
+
+    if (hasPermission) return data;
+    // 📌 apply filters on news & media data
+    // get id of all categories that include members only
+    if (categoryData)
+      membersOnlyList = categoryData.filter((item) => {
+        const catName = item.name.toLowerCase();
+        let isMemberOnly = false;
+
+        membersOnly.forEach((item) => {
+          if (catName.includes(item)) isMemberOnly = true;
+        });
+
+        if (isMemberOnly) return item.id;
+      });
+
+    data = data.filter((post) => {
+      let categories = post.categories;
+      let isMemberOnly = false;
+      // map threach membersOnlyList and check if id is present in categories
+      membersOnlyList.forEach((item) => {
+        if (categories && categories.includes(item.id)) isMemberOnly = true;
+      });
+
+      return !isMemberOnly;
+    });
+
+    return data;
+  };
+
   useEffect(async () => {
     let categoryData = await getMediaCategories({ state });
     let data = await getNewsData({ state });
     if (post_limit) postChunkRef.current = Number(post_limit);
+    data = handleMembersOnlyAccess({ data, categoryData });
 
     if (site_section) {
       // convert site_section to Object
@@ -100,12 +144,11 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       return new Date(b.date) - new Date(a.date);
     });
 
-    setPostList(data);
-
-    // 📌 further filter by category will be appied if user not auth to see all categories
-    // see useEffect below
     setCategoryList(categoryData);
     setIsSearch(has_search);
+    setPostList(data);
+    // 📌 data component with post limits applied
+    setFilterList(data.slice(0, postChunkRef.current));
 
     return () => {
       searchFilterRef.current = ""; // clean up function
@@ -116,40 +159,14 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     // --------------------------------------------------------------------------------
     // 📌  serach & filters
     // --------------------------------------------------------------------------------
-    if (!filterList) return null;
+
+    if (!postList) return null;
+    let data = postList;
 
     // if all filters are applied are null then set filterList to postList
     if (!searchValue && !dateValue && !yearValue && !newsMediaCategoryId) {
       setFilterList(data.slice(0, postChunkRef.current));
       return;
-    }
-
-    let data = postList;
-    // 📌 apply permision filters
-    if (!hasPermission && categoryList) {
-      let membersOnly = ["circular", "newsletter", "bulletin"];
-      // get id of all categories that include members only
-      let membersOnlyList = categoryList.filter((item) => {
-        const catName = item.name.toLowerCase();
-        let isMemberOnly = false;
-
-        membersOnly.forEach((item) => {
-          if (catName.includes(item)) isMemberOnly = true;
-        });
-
-        if (isMemberOnly) return item.id;
-      });
-
-      data = data.filter((post) => {
-        let categories = post.categories;
-        let isMemberOnly = false;
-        // map threach membersOnlyList and check if id is present in categories
-        membersOnlyList.forEach((item) => {
-          if (categories && categories.includes(item.id)) isMemberOnly = true;
-        });
-
-        return !isMemberOnly;
-      });
     }
 
     // apply sort by date functionality
@@ -205,47 +222,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     setFilterList(data); // set post data
   }, [newsMediaCategoryId, searchValue, dateValue, yearValue]);
 
-  useEffect(() => {
-    if (!postList) return null;
-
-    let data = postList;
-    let hasPermission = false;
-    // 📌 check if user has permission to view news & media
-    if (dynamicsApps)
-      hasPermission = hasPermisionLevel({ dynamicsApps, isActiveUser });
-    setPermission(hasPermission);
-
-    // 📌 apply permision filters
-    if (!hasPermission && categoryList) {
-      let membersOnly = ["circular", "newsletter", "bulletin"];
-      // get id of all categories that include members only
-      let membersOnlyList = categoryList.filter((item) => {
-        const catName = item.name.toLowerCase();
-        let isMemberOnly = false;
-
-        membersOnly.forEach((item) => {
-          if (catName.includes(item)) isMemberOnly = true;
-        });
-
-        if (isMemberOnly) return item.id;
-      });
-
-      data = data.filter((post) => {
-        let categories = post.categories;
-        let isMemberOnly = false;
-        // map through membersOnlyList and check if id is present in categories
-        membersOnlyList.forEach((item) => {
-          if (categories && categories.includes(item.id)) isMemberOnly = true;
-        });
-
-        return !isMemberOnly;
-      });
-    }
-
-    setFilterList(data.slice(0, postChunkRef.current));
-  }, [postList, isActiveUser]);
-
-  if (!postList || !categoryList) return <Loading />;
+  if (!filterList || !categoryList) return <Loading />;
 
   if (postList.length === 0 && !isSearch) return null; // hide block if no posts
 
@@ -395,7 +372,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       return (
         <div className="shadow filter">
           <div>
-            <Html2React html={catName} />
+            <Parcer libraries={libraries} html={catName} />
           </div>
           <div
             className="filter-icon"

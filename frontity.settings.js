@@ -36,6 +36,7 @@ const settings = {
             per_page: 25, // limit per page fetch request
           },
           redirections: "all",
+          // CPT to fetch from WP backend
           postTypes: [
             {
               type: "pils",
@@ -111,6 +112,11 @@ const settings = {
               type: "sig_group",
               endpoint: "sig_group",
               archive: "/sig_group",
+            },
+            {
+              type: "referrals",
+              endpoint: "referrals",
+              archive: "/referrals",
             },
           ],
           taxonomies: [

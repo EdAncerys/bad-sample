@@ -6,10 +6,10 @@ import { colors } from "../config/imports";
 import Facebook from "../img/svg/facebookColour.svg";
 import Twitter from "../img/svg/twitterColour.svg";
 import Instagram from "../img/svg/instagramColour.svg";
+// --------------------------------------------------------------------------------
+import { Parcer } from "../context";
 
 const SocialIcons = ({ state, actions, libraries, block }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   if (!block) return null;
 
   const { disable_vertical_padding, links_per_row, social_links } = block;
@@ -55,7 +55,7 @@ const SocialIcons = ({ state, actions, libraries, block }) => {
           className="primary-title"
           style={{ fontSize: 26, paddingBottom: `1em` }}
         >
-          <Html2React html={title} />
+          <Parcer libraries={libraries} html={title} />
         </div>
       </div>
     );

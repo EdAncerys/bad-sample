@@ -564,3 +564,50 @@ export const getDermGroupsData = async ({ state, page, postsPerPage }) => {
     // console.log("🐞 ", error);
   }
 };
+
+export const getReferralsData = async ({ state, page, postsPerPage }) => {
+  let pageNo = page || 1;
+  let perPageLimit = postsPerPage || state.theme.perPageLimit;
+  let fields = "id,slug,type,link,title,template,site_sections,acf";
+
+  let url = `${state.auth.WP_HOST}wp-json/wp/v2/referrals?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}`;
+
+  try {
+    let data = [];
+
+    let response = await fetchDataHandler({ path: url, state });
+    let totalPages = response.headers.get("X-WP-TotalPages");
+
+    // fetch events data from WP & while respone is not 200 (bad request) keep fetching
+    while (response.status === 200) {
+      let json = await response.json();
+
+      data = [...data, ...json];
+      pageNo++;
+      url = `${state.auth.WP_HOST}wp-json/wp/v2/referrals?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}`;
+
+      // 📌 break out of the loop if no more pages
+      if (pageNo > totalPages) break;
+      response = await fetchDataHandler({ path: url, state });
+    }
+
+    return data;
+  } catch (error) {
+    // console.log("🐞 ", error);
+  }
+};
+
+export const getReferralsPage = async ({ state }) => {
+  let fields = "id,title,content";
+
+  let url = `${state.auth.WP_HOST}wp-json/wp/v2/pages?_fields=${fields}&slug=referrals`;
+
+  try {
+    let response = await fetchDataHandler({ path: url, state });
+    let data = await response.json();
+
+    return data;
+  } catch (error) {
+    // console.log("🐞 ", error);
+  }
+};

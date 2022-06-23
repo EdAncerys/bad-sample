@@ -4,8 +4,6 @@ import { connect } from "frontity";
 import { useAppDispatch, useAppState, fetchDataHandler } from "../../context";
 
 const Wileys = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const [iFrameSrc, setiFrameSrc] = useState("");
   const [doi, setDoi] = useState("doi/10.1111/bjd.21021");
 

@@ -4,8 +4,6 @@ import Image from "@frontity/components/image";
 import Loading from "./loading";
 
 const ImageBlock = ({ state, actions, libraries, block }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   if (!block) return <Loading />;
 
   const { image, image_height, disable_vertical_padding } = block;

@@ -11,12 +11,12 @@ import {
   useAppState,
   handleApplyForMembershipAction,
   getSIGGroupeData,
+  Parcer,
 } from "../context";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 
 const DermGroupsCharity = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { lg } = muiQuery();
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, dynamicsApps } = useAppState();
@@ -28,7 +28,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  const { content, title, acf } = dermGroupe;
+  let { content, title, acf } = dermGroupe;
   const useEffectRef = useRef(null);
 
   useEffect(async () => {
@@ -74,13 +74,20 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
           block={{ title: title.rendered }}
           margin={`0 0 ${marginVertical}px 0`}
         />
-        <Html2React html={content.rendered} />
+        <Parcer libraries={libraries} html={content.rendered} />
         <ApplyForMembership />
       </div>
     );
   };
 
   const ApplyForMembership = () => {
+    // 🚀 TESTING
+    console.log("🐞 acf.sigs", acf.sigs);
+    console.log("🐞 dermGroupe", dermGroupe);
+    let postId = dermGroupe.id;
+    if (postId === 8982) acf.sigs = 207;
+    // 🚀 TESTING
+
     if (!acf.sigs || !sigGroup) return null;
 
     // filter sig by id and return name of the groupe
@@ -99,7 +106,10 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
           style={{ width: "fit-content", margin: `1em 0` }}
           onClick={() => handleApply({ catType: sigAppName })}
         >
-          <Html2React html={`Apply for ${sigAppName} membership`} />
+          <Parcer
+            libraries={libraries}
+            html={`Apply for ${sigAppName} membership`}
+          />
         </div>
       </div>
     );

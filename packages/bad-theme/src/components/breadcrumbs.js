@@ -4,12 +4,12 @@ import { colors } from "../config/imports";
 
 import BlockWrapper from "./blockWrapper";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { setGoToAction, muiQuery } from "../context";
+// --------------------------------------------------------------------------------
+import { setGoToAction, muiQuery, Parcer } from "../context";
 
 const Breadcrumbs = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
 
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const urlPath = state.router.link;
   const data = state.source.get(urlPath);
 
@@ -75,21 +75,27 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
             if (childItem.child_items) {
               childItem.child_items.map((childItem) => {
                 if (childItem.slug === item.toLowerCase())
-                  titleName = <Html2React html={childItem.title} />;
+                  titleName = (
+                    <Parcer libraries={libraries} html={childItem.title} />
+                  );
                 return;
               });
             }
             if (childItem.slug === item.toLowerCase())
-              titleName = <Html2React html={childItem.title} />;
+              titleName = (
+                <Parcer libraries={libraries} html={childItem.title} />
+              );
             return;
           });
 
         if (menuItem.slug === item.toLowerCase()) {
-          titleName = <Html2React html={menuItem.title} />;
+          titleName = <Parcer libraries={libraries} html={menuItem.title} />;
           return;
         }
         if (typeof titleName == "string" && titleName.includes("-"))
-          titleName = <Html2React html={titleName.replace(/-/g, " ")} />;
+          titleName = (
+            <Parcer libraries={libraries} html={titleName.replace(/-/g, " ")} />
+          );
       });
 
     return (

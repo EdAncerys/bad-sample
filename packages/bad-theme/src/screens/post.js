@@ -8,13 +8,12 @@ import Loading from "../components/loading";
 // BLOCK WIDTH WRAPPER -----------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT -----------------------------------------------------------------
-import { setGoToAction, muiQuery } from "../context";
+import { setGoToAction, muiQuery, Parcer } from "../context";
 import { getPostData } from "../helpers";
 
 const Post = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
 
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
 
@@ -77,7 +76,7 @@ const Post = ({ state, actions, libraries }) => {
             marginBottom: `1em`,
           }}
         >
-          <Html2React html={title.rendered} />
+          <Parcer libraries={libraries} html={title.rendered} />
         </div>
       );
     };
@@ -88,7 +87,7 @@ const Post = ({ state, actions, libraries }) => {
 
       return (
         <div className="flex-col  post-content">
-          <Html2React html={content.rendered} />
+          <Parcer libraries={libraries} html={content.rendered} />
           {bodyLength > 2500 && <ScrollTop />}
         </div>
       );
@@ -156,7 +155,7 @@ const Post = ({ state, actions, libraries }) => {
                     width: "fit-content",
                   }}
                 >
-                  <Html2React html={catName} />
+                  <Parcer libraries={libraries} html={catName} />
                 </div>
 
                 <div

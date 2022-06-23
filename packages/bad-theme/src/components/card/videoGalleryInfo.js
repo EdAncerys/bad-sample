@@ -1,9 +1,9 @@
 import { connect } from "frontity";
 import { colors } from "../../config/imports";
+// --------------------------------------------------------------------------------
+import { Parcer } from "../../context";
 
 const VideoGalleryInfo = ({ state, actions, libraries, videoGalleryInfo }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   if (!videoGalleryInfo) return null;
   const { body, condition, date, procedure, service, title } = videoGalleryInfo;
 
@@ -16,7 +16,7 @@ const VideoGalleryInfo = ({ state, actions, libraries, videoGalleryInfo }) => {
         className="flex primary-title"
         style={{ fontSize: 20, fontWeight: "bold", paddingRight: `1em` }}
       >
-        <Html2React html={title} />
+        <Parcer libraries={libraries} html={title} />
       </div>
     );
   };
@@ -26,7 +26,7 @@ const VideoGalleryInfo = ({ state, actions, libraries, videoGalleryInfo }) => {
 
     return (
       <div style={{ fontSize: 16, padding: `1em 0 0` }}>
-        <Html2React html={body} />
+        <Parcer libraries={libraries} html={body} />
       </div>
     );
   };
@@ -36,7 +36,7 @@ const VideoGalleryInfo = ({ state, actions, libraries, videoGalleryInfo }) => {
 
     return (
       <div style={{ fontSize: 12 }}>
-        <Html2React html={date} />
+        <Parcer libraries={libraries} html={date} />
       </div>
     );
   };
@@ -47,13 +47,13 @@ const VideoGalleryInfo = ({ state, actions, libraries, videoGalleryInfo }) => {
     return (
       <div className="flex-row" style={{ flexWrap: "wrap" }}>
         <div style={styles.action}>
-          <Html2React html={condition} />
+          <Parcer libraries={libraries} html={condition} />
         </div>
         <div style={styles.action}>
-          <Html2React html={procedure} />
+          <Parcer libraries={libraries} html={procedure} />
         </div>
         <div style={styles.action}>
-          <Html2React html={service} />
+          <Parcer libraries={libraries} html={service} />
         </div>
       </div>
     );

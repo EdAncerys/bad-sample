@@ -3,12 +3,11 @@ import Card from "./card/card";
 import Loading from "./loading";
 
 // CONTEXT -----------------------------------------------------
-import { muiQuery } from "../context";
+import { muiQuery, Parcer } from "../context";
 
 const FundingPromo = ({ state, actions, libraries, block }) => {
   const { sm, md, lg, xl } = muiQuery();
 
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   if (!block) return <Loading />;
   if (!block.card) return null;
 
@@ -28,7 +27,7 @@ const FundingPromo = ({ state, actions, libraries, block }) => {
           className="flex primary-title"
           style={{ fontSize: 26, justifyContent: "center" }}
         >
-          <Html2React html={title} />
+          <Parcer libraries={libraries} html={title} />
         </div>
       );
     };
@@ -44,7 +43,7 @@ const FundingPromo = ({ state, actions, libraries, block }) => {
             padding: `1em 0`,
           }}
         >
-          <Html2React html={body} />
+          <Parcer libraries={libraries} html={body} />
         </div>
       );
     };

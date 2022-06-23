@@ -2,12 +2,11 @@ import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
 // CONTEXT --------------------------------------------------
-import { muiQuery } from "../context";
+import { muiQuery, Parcer } from "../context";
 
 const Profile = ({ state, actions, libraries, block }) => {
   const { sm, md, lg, xl } = muiQuery();
 
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const PROFILE_PICTURE_WIDTH = 190;
   const { background_image, body, title } = block;
 
@@ -47,7 +46,7 @@ const Profile = ({ state, actions, libraries, block }) => {
         className="primary-title"
         style={{ fontSize: 20, margin: `0.75em 0` }}
       >
-        <Html2React html={title} />
+        <Parcer libraries={libraries} html={title} />
       </div>
     );
   };
@@ -63,7 +62,7 @@ const Profile = ({ state, actions, libraries, block }) => {
           fontWeight: "regular",
         }}
       >
-        <Html2React html={body} />
+        <Parcer libraries={libraries} html={body} />
       </div>
     );
   };

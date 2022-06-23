@@ -113,7 +113,9 @@ input[type="email"]::-webkit-input-placeholder {
 .flex-col,
 .flex-row,
 .flex-center-col,
-.flex-center-row {
+.flex-center-row,
+.flex-wrap,
+.flex-contasiner {
   display: flex;
   flex: 1;
 }
@@ -130,6 +132,9 @@ input[type="email"]::-webkit-input-placeholder {
 .flex-col,
 .flex-center-col {
   flex-direction: column;
+}
+.flex-wrap {
+  flex-wrap: wrap;
 }
 .row-reverse {
   flex-direction: row-reverse;
@@ -148,9 +153,31 @@ input[type="email"]::-webkit-input-placeholder {
   content: "";
   flex: auto;
 }
+.cookie-consent {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  padding: 10px;
+  z-index: 9999;
+}
+.cookie-wrapper,
+.cookie-actions {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.cookie-actions {
+  justify-content: space-around;
+}
 
 .hide {
-  display: none;
+  display: none !important;
 }
 
 /* Test css */
@@ -160,13 +187,80 @@ input[type="email"]::-webkit-input-placeholder {
 .tom {
   background-color: tomato;
 }
+.referral-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: space-between;
+  grid-gap: 15px;
+  padding-bottom: 40px;
+}
+.severity-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: space-between;
+  grid-gap: 15px;
+}
+.referal-badge-container {
+  display: flex;
+  align-content: center;
+  justify-content: end;
+}
+.referal-badge-wrapper {
+  display: flex;
+  align-items: center;
+  height: fit-content;
+  background-color: rgb(230, 230, 230, 0.2);
+  text-transform: uppercase;
+  padding: 5px;
+  width: fit-content;
+  font-size: 12px;
+}
+
+.icd-code {
+  padding: 0 40px;
+}
+
+.referal-management-title {
+  font-size: 20px;
+  text-align: center;
+}
 
 /* Media Queries */
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 992px) {
+  /* mobile break down */
   .main-container {
     width: 100%;
   }
+  .cookie-wrapper {
+    flex-direction: column;
+    padding: 0 5%;
+  }
+  .cookie-actions {
+    margin-top: 1em;
+  }
+  .referral-container {
+    grid-template-columns: 1fr;
+  }
+  .referral-container {
+    padding: 0 10px;
+  }
+  .flex-contasiner {
+    flex-direction: column;
+  }
+  .referal-badge-container {
+    justify-content: start;
+  }
+  .severity-container {
+    grid-template-columns: 1fr;
+  }
+  .icd-code {
+    padding: 0;
+  }
+  .referal-management-title {
+    text-align: left;
+  }
 }
+
 @media screen and (min-width: 992px) {
   .lg {
     display: none;

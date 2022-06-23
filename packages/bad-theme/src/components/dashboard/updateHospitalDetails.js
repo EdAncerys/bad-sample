@@ -13,7 +13,6 @@ import {
 } from "../../context";
 
 const UpdateHospitalDetails = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
   const { lg } = muiQuery();
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
@@ -76,6 +75,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         message: true,
         recipients: [{ email: "membership@bad.org.uk" }],
         isHospitalChange: true,
+        emailTemplate: "BADEnquiryFormAuthChangeOfHospital", // change of hospital template
 
         // default email subject & template name
         emailSubject:

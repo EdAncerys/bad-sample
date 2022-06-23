@@ -15,11 +15,10 @@ import {
   useAppState,
   hasPermisionLevel,
   getMediaCategories,
+  Parcer,
 } from "../../context";
 
 const Navigation = ({ state, actions, libraries }) => {
-  const Html2React = libraries.html2react.Component; // Get the component exposed by html2react.
-
   const dispatch = useAppDispatch();
   const { isActiveUser, dynamicsApps } = useAppState();
 
@@ -44,10 +43,15 @@ const Navigation = ({ state, actions, libraries }) => {
 
   useEffect(async () => {
     // ⬇️ getting wp menu & featured from state
-    if (!state.theme.menu) return;
-    const menuData = state.theme.menu;
-    const menuLength = menuData.length;
+    let menuData = state.theme.menu;
+    if (!menuData) {
+      // get menu from local storage
+      const menu = sessionStorage.getItem("badMenu"); // checking if menu already pre fetched from wp
+      if (!menu) return; // if not, exit
 
+      menuData = JSON.parse(menu);
+    }
+    const menuLength = menuData.length;
     const wpMainMenu = menuData.slice(0, MAIN_NAV_LENGTH);
     const wpMoreMenu = menuData.slice(MAIN_NAV_LENGTH, menuLength);
 
@@ -56,14 +60,7 @@ const Navigation = ({ state, actions, libraries }) => {
     if (state.source.menu_features)
       setFeatured(Object.values(state.source.menu_features)); // cpt for menu content
 
-    let taxonomyList = [];
-    if (state.source.category) {
-      taxonomyList = Object.values(state.source.category);
-    } else {
-      // prefetch news categories taxonomy
-      taxonomyList = await getMediaCategories({ state });
-    }
-
+    let taxonomyList = await getMediaCategories({ state });
     if (taxonomyList.length > 0) {
       // sort catList by name in alphabetical order
       taxonomyList.sort((a, b) => {
@@ -205,7 +202,7 @@ const Navigation = ({ state, actions, libraries }) => {
               >
                 <div className="flex">
                   <div className="menu-title">
-                    <Html2React html={name} />
+                    <Parcer libraries={libraries} html={name} />
                   </div>
                 </div>
               </Link>
@@ -279,14 +276,16 @@ const Navigation = ({ state, actions, libraries }) => {
                 }
                 link={linkPath}
               >
-                <Html2React html={parent.title} />
+                <Parcer libraries={libraries} html={parent.title} />
               </Link>
             </div>
 
             <div style={{ paddingRight: `2em` }}>
               {child_items.map((item, key) => {
                 const { title, url } = item;
+                // 📌 hide child navigation injected menu item
                 const isDummy = title === "Dummy Menu Item";
+                if (isDummy) return null;
 
                 let subChildTitle = title.replace(/’/g, "");
                 let linkPath = url;
@@ -306,9 +305,9 @@ const Navigation = ({ state, actions, libraries }) => {
                       }
                       link={linkPath}
                     >
-                      <div className={isDummy ? "hide" : "flex"}>
+                      <div className="flex">
                         <div className="menu-title">
-                          <Html2React html={subChildTitle} />
+                          <Parcer libraries={libraries} html={subChildTitle} />
                         </div>
                       </div>
                     </Link>
@@ -460,7 +459,7 @@ const Navigation = ({ state, actions, libraries }) => {
                   >
                     <div className="flex">
                       <div className="menu-title">
-                        <Html2React html={title} />
+                        <Parcer libraries={libraries} html={title} />
                       </div>
                     </div>
                     <ServeMenuArrow />
@@ -513,7 +512,7 @@ const Navigation = ({ state, actions, libraries }) => {
               style={styles.link}
               onClick={() => handleOnClickNavigation({ parentSlug: "more" })}
             >
-              <Html2React html={"About & More"} />
+              <Parcer libraries={libraries} html={"About & More"} />
             </a>
             <ServeChildMenu
               item={{ child_items: wpMoreMenu }}
@@ -577,7 +576,7 @@ const Navigation = ({ state, actions, libraries }) => {
                   }
                   link={linkPath}
                 >
-                  <Html2React html={title} />
+                  <Parcer libraries={libraries} html={title} />
                 </Link>
                 <ServeChildMenu
                   item={item}
