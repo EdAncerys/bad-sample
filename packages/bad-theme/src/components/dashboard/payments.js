@@ -24,7 +24,6 @@ export const handlePayment = async ({
   state,
   dispatch,
 }) => {
-  alert("BITKA");
   const displayPaymentModal = (url) => {
     setErrorAction({
       dispatch,
@@ -38,7 +37,8 @@ export const handlePayment = async ({
 
   const type = core_membershipsubscriptionid || core_membershipapplicationid;
   // const sagepay_live = "live";
-  state.auth.ENVIRONMENT === "DEVELOPMENT" ? "test" : "live";
+  const sagepay_live =
+    state.auth.ENVIRONMENT === "DEVELOPMENT" ? "test" : "live";
   const sagepayUrl = core_membershipsubscriptionid
     ? `/sagepay/${sagepay_live}/subscription/`
     : `/sagepay/${sagepay_live}/application/`;
@@ -189,7 +189,6 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
                 dispatch,
                 state,
               });
-              alert(block.core_membershipapplicationid);
               handleSetCookie({
                 name: "BAD-payment",
                 value: block.core_membershipapplicationid,
