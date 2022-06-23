@@ -39,6 +39,8 @@ function AlterAccordion({
   if (!block) return <Loading />;
   const { lg } = muiQuery();
   const { dynamicsApps } = useAppState();
+
+  const data = state.source.get(state.router.link);
   const {
     add_search_function,
     disable_vertical_padding,
@@ -101,6 +103,10 @@ function AlterAccordion({
   const ServeAccordionSearchFilter = () => {
     if (!add_search_function) return null;
 
+    let searchTitle = "Search for content";
+    if (data.link === "/education-training/bursaries-fellowships-awards/")
+      searchTitle = "Search bursaries, fellowships and awards";
+
     const ServeSearchFilter = () => {
       if (!searchInput) return null;
 
@@ -136,7 +142,7 @@ function AlterAccordion({
           >
             <div className="flex-row">
               <SearchContainer
-                title={`Search for content`}
+                title={searchTitle}
                 searchFilterRef={searchFilterRef}
                 handleSearch={handleSearch}
               />
