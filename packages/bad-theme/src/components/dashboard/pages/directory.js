@@ -277,7 +277,7 @@ const Directory = ({ state, actions, libraries }) => {
       bad_memberdirectory ? "Opt-out from" : "Opt-in to"
     } the
     Members' Directory, to edit your preferences you can do so below or in
-    the Preferences Tab in your dashboard.`;
+    the Preferences Tab.`;
 
     return (
       <div style={{ position: "relative", margin: `0 ${marginHorizontal}px` }}>
