@@ -294,10 +294,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
       applicationData,
     });
 
-    console.log("🐞 applicationData", applicationData);
-    console.log("🐞 applicationType", applicationType);
-    console.log("🐞 membershipData", membershipData);
-
     setMembershipData(membershipData); // 📌 set membership data picklist
   }, [state.source.memberships]);
 

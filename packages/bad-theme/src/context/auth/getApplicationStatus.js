@@ -1,7 +1,7 @@
 import { fetchDataHandler } from "../index";
 
 export const getApplicationStatus = async ({ state, dispatch, contactid }) => {
-  console.log("getApplicationStatus triggered");
+  // console.log("getApplicationStatus triggered");
 
   // if contactid is not provided then throw error
   if (!contactid) throw new Error("contactid is required");
@@ -11,7 +11,6 @@ export const getApplicationStatus = async ({ state, dispatch, contactid }) => {
   try {
     const response = await fetchDataHandler({ path, state });
     const data = await response.json();
-    console.log("🐞 Dynasmic Apps", data);
 
     if (data.apps.success) {
       setApplicationStatusAction({ dispatch, dynamicsApps: data });

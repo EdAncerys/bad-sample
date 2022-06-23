@@ -51,7 +51,7 @@ function AlterAccordion({
     is_active,
   } = block;
 
-  console.log("🐞 ACORDION ITEM", block); // debug
+  // console.log("🐞 ACORDION ITEM", block); // debug
 
   const [searchFilter, setSearchFilter] = useState(accordion_item);
   const [searchInput, setInput] = useState(null);
@@ -208,7 +208,6 @@ function AlterAccordion({
               defaultActiveKey={is_active ? "0" : "99"}
             >
               {searchFilter.map((block, key) => {
-                console.log("🐞 key", key);
                 return <SingleItem block={block} key={key} id={`${key}`} />;
               })}
             </Accordion>

@@ -212,11 +212,8 @@ const HeroBanner = ({ state, actions, libraries, block }) => {
     let image = background_image;
     if (lg || !image) image = mobile_background_image;
     if (!image) return null;
-    console.log("🐞 lg", lg);
-    console.log("🐞 image", image);
-    console.log("title", title);
+
     const alt = { title } || "BAD";
-    console.log("ALT", alt.title);
 
     const isFullWidth = layout === "full-width";
     const CARD_STYLES = isFullWidth
