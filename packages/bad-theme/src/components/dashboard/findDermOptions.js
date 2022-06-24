@@ -16,6 +16,7 @@ import {
   sendFileToS3Action,
   updateProfileAction,
   googleAutocomplete,
+  getFadPermision,
 } from "../../context";
 
 const FindDermatologistOptions = ({ state }) => {
@@ -26,7 +27,7 @@ const FindDermatologistOptions = ({ state }) => {
 
   const marginVertical = state.theme.marginVertical;
   const [isFetching, setIsFetching] = useState(null);
-  const [findDerm, setFindDerm] = useState(null);
+  const [fadPermision, setFadPermision] = useState(null);
   const [isFetchingAddress, setIsFetchingAddress] = useState(null);
   const [addressData, setAddressData] = useState(null);
   const [formData, setFormData] = useState({
@@ -46,7 +47,7 @@ const FindDermatologistOptions = ({ state }) => {
   const address1Line1Ref = useRef("");
   const ctaHeight = 40;
 
-  useEffect(() => {
+  useEffect(async () => {
     if (!isActiveUser) return null;
 
     // map through user & update formData with values
@@ -72,16 +73,12 @@ const FindDermatologistOptions = ({ state }) => {
     if (isActiveUser.bad_findadermatologisttext)
       handleSetData({ name: "bad_findadermatologisttext" });
 
-    // check if user have Ordinary or Honory app then set setFindDerm to true
-    if (dynamicsApps) {
-      const isMember = dynamicsApps.subs.data.filter(
-        (app) =>
-          app.bad_categorytype.includes("Honory") ||
-          app.bad_categorytype.includes("Ordinary")
-      );
-      // show find dermatologist section for applicable users
-      if (isMember.length > 0) setFindDerm(true);
-    }
+    // 📌 get fad dir permision & check user permission status
+    const permision = await getFadPermision({
+      state,
+      contactid: isActiveUser.contactid,
+    });
+    if (permision) setFadPermision(permision);
   }, [isActiveUser, dynamicsApps]);
 
   // HELPERS ----------------------------------------------------------------
@@ -250,7 +247,7 @@ const FindDermatologistOptions = ({ state }) => {
   };
 
   // 📌 hide component if user is not a member
-  if (!findDerm) return null;
+  if (!fadPermision) return null;
 
   return (
     <div style={{ position: "relative" }}>

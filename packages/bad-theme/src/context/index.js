@@ -7,6 +7,7 @@ import { handleSetCookie, handleGetCookie } from "../helpers/cookie";
 import { handleUpdateMembershipApplication } from "../helpers/handleUpdateMembershipApplication";
 import { googleAutocomplete } from "../helpers/googleAutocomplete";
 import { Parcer } from "../helpers/parcer";
+import { getFadPermision } from "../helpers/getFadPermision";
 import {
   setGoToAction,
   setLinkWrapperAction,
@@ -257,4 +258,5 @@ export {
   getCountryList,
   handleRemoveServerSideCookie,
   Parcer,
+  getFadPermision,
 };
