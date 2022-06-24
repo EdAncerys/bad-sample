@@ -26,12 +26,15 @@ export const getFadAction = async ({ state, dispatch, page }) => {
   }
 };
 
-export const getFADSearchAction = async ({ state, dispatch, query }) => {
+export const getFADSearchAction = async ({ state, query }) => {
   // console.log("getFADSearchAction triggered");
+
+  // 📌 remove invalid url characters from query string
+  let validString = query.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, "");
 
   try {
     // while result length is equal perPage, then fetch next page
-    let path = state.auth.APP_HOST + `/catalogue/md?md&search=${query}`;
+    let path = state.auth.APP_HOST + `/catalogue/md?md&search=${validString}`;
     const data = await fetchDataHandler({ path, state });
     if (!data) throw new Error("error fetching data form API");
     const result = await data.json();
