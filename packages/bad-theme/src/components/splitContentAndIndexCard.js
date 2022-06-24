@@ -7,7 +7,7 @@ import IndexCard from "./indexCard";
 import TitleBlock from "./titleBlock";
 import Dropdown from "react-bootstrap/Dropdown";
 // --------------------------------------------------------------------------------
-import { setGoToAction, muiQuery } from "../context";
+import { setGoToAction, muiQuery, Parcer } from "../context";
 
 const SplitContentAndIndexCard = ({ state, actions, libraries, block }) => {
   if (!block) return <Loading />;
