@@ -330,7 +330,6 @@ const Directory = ({ state, actions, libraries }) => {
 
   const ServeSearchFadMembers = () => {
     if (!searchFadData) return null; // hide on FAD search
-    console.log("🐞 ", searchFadData);
 
     if (searchFadData.length === 0)
       return (
@@ -338,7 +337,7 @@ const Directory = ({ state, actions, libraries }) => {
           <TitleBlock
             block={{
               text_align: "left",
-              title: `No results faund for " ${searchFilter} ". Please try again.`,
+              title: `No results found for " ${searchFilter} ". Please try again.`,
             }}
             margin="1em 0"
           />
