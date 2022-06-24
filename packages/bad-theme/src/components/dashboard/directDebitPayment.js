@@ -35,16 +35,15 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
       const debitResponse = await createDirectDebitAction({
         state,
         id: isActiveUser.contactid,
-        data: {
+        body: {
           bad_transactiontype: "0S",
           core_name: data.core_name,
           core_accountnumber: data.core_accountnumber,
           core_sortcode: data.core_sortcode,
         },
-        dispatch,
       });
 
-      if (debitResponse.success) {
+      if (debitResponse && debitResponse.success) {
         await getDirectDebitAction({
           state,
           dispatch,
@@ -60,17 +59,20 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
         });
       } else {
         // console.log("⬇️ Failed to create direct debit ⬇️");
-        // console.log(debitResponse);
+        // console.log("response", debitResponse);
+        let errorMsg = "";
+        if (debitResponse) errorMsg = `${debitResponse.data}.`;
 
         setErrorAction({
           dispatch,
           isError: {
-            message: "Failed to create setup direct debit. Please try again.",
+            message: `Failed to create setup direct debit. ${errorMsg} Please try again.`,
+            image: "Error",
           },
         });
       }
     } catch (error) {
-      // console.log(error);
+      console.log(error);
     } finally {
       setFetching(false);
     }
@@ -80,7 +82,10 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
   const handleBack = () => {
     setDebitHandlerAction({
       dispatch,
-      directDebitPath: { page: "directDebitSetup" },
+      directDebitPath: {
+        page: "directDebitSetup",
+        data: directDebitPath.data,
+      },
     });
   };
 
@@ -132,8 +137,8 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
     return (
       <div style={{ paddingTop: "1em" }}>
         You will receive advance notice of at least 5 days of any amount to be
-        debited under the instruction. Payments will show as ‘British
-        Association of Dermatologists’ on your bank statement. After you
+        debited under the instruction. Payments will show as 'British
+        Association of Dermatologists' on your bank statement. After you
         complete the set up an email confirmation will be sent to (enter email)
         within 3 working days.
       </div>

@@ -16,7 +16,7 @@ import {
 
 const DirectDebitPayment = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
-  const { isActiveUser } = useAppState();
+  const { isActiveUser, directDebitPath } = useAppState();
 
   const [formData, setFormData] = useState({
     py3_email: "",
@@ -24,19 +24,28 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
     core_accountnumber: "",
     core_sortcode: "",
   });
-  const [isFetching, setFetching] = useState(false);
 
   const marginVertical = state.theme.marginVertical;
 
   useEffect(() => {
     if (!isActiveUser) return null;
 
+    let accountNumber = "";
+    let sortCode = "";
+    if (directDebitPath.data) {
+      // populate account details on component reload if data available
+      accountNumber = directDebitPath.data.core_accountnumber || "";
+      sortCode = directDebitPath.data.core_sortcode || "";
+    }
+
     setFormData((prevFormData) => ({
       ...prevFormData,
       [`py3_email`]: isActiveUser.emailaddress1 || "",
       [`core_name`]: isActiveUser.fullname || "",
+      [`core_accountnumber`]: accountNumber,
+      [`core_sortcode`]: sortCode,
     }));
-  }, []);
+  }, [directDebitPath]);
 
   if (!isActiveUser) return <Loading />;
 
@@ -115,8 +124,8 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
     return (
       <div style={{ paddingTop: `2em` }}>
         You will receive advance notice of at least 5 days of any amount to be
-        debited under the instruction. Payments will show as ‘British
-        Association of Dermatologists’ on your bank statement. After you
+        debited under the instruction. Payments will show as 'British
+        Association of Dermatologists' on your bank statement. After you
         complete the set up an email confirmation will be sent to (enter email)
         within 3 working days.
       </div>

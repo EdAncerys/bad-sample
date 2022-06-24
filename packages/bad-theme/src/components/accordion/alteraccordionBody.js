@@ -267,6 +267,7 @@ const AccordionBody = ({
 
   const ServeGoToLink = () => {
     if (!link || guidelines) return null;
+    if (!link.url) return null; // if link object exist & no url present dont show component
 
     let linkLabel = "External Link";
     if (labelName) linkLabel = labelName;

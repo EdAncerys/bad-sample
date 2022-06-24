@@ -7,12 +7,14 @@ export const getDirectDebitAction = async ({ state, dispatch, id }) => {
 
   try {
     const response = await fetchDataHandler({ path, state });
-
     const data = await response.json();
-    // console.log("getDirectDebitAction data", data); // debug
 
-    if (data.success)
+    if (data.success) {
       setDirectDebitAction({ dispatch, isDirectDebit: data.data });
+      return data;
+    } else {
+      return null;
+    }
   } catch (error) {
     // console.log("error", error);
   }
@@ -60,12 +62,7 @@ export const getProofOfMembershipAction = async ({
   }
 };
 
-export const createDirectDebitAction = async ({
-  state,
-  id,
-  data,
-  dispatch,
-}) => {
+export const createDirectDebitAction = async ({ state, id, body }) => {
   // console.log("createDirectDebitAction triggered");
 
   const path = state.auth.APP_HOST + `/bankaccount/${id}`;
@@ -74,12 +71,11 @@ export const createDirectDebitAction = async ({
     const response = await fetchDataHandler({
       path,
       method: "POST",
-      body: data,
+      body,
       headers: { "Content-Type": "application/json" },
       state,
     });
     const data = await response.json();
-    // console.log("createDirectDebitAction data", data); // debug
 
     return data;
   } catch (error) {
