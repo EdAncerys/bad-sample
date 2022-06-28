@@ -94,18 +94,19 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
     let contactByEmail = formData.contactByEmail;
     let universalyUnsubscribe = formData.universalyUnsubscribe;
 
-    let preferredcontactmethodcode = null;
-    // 📌 apply contact method logic
-    if (contactByPhone) preferredcontactmethodcode = 3;
-    if (contactByEmail) preferredcontactmethodcode = 2;
-    if (contactByEmail && contactByPhone) preferredcontactmethodcode = 1;
-    // 📌 apply unsubscribe logic
+    // 📌 if user has checked the universal unsubscribe checkbox, set all other checkboxes to false
     if (universalyUnsubscribe) {
       bad_bademailalerts = false;
       bad_badecircular = false;
       bad_bjdalerts = false;
       bad_presidentsbulletin = false;
     }
+
+    let preferredcontactmethodcode = null;
+    // 📌 apply logic to determine preferred contact method code
+    if (contactByPhone) preferredcontactmethodcode = 3;
+    if (contactByEmail) preferredcontactmethodcode = 2;
+    if (contactByEmail && contactByPhone) preferredcontactmethodcode = 1;
 
     const data = {
       bad_bademailalerts,
