@@ -53,7 +53,7 @@ function AlterAccordion({
 
   console.log("🐞 ACORDION ITEM", block); // debug
 
-  const [searchFilter, setSearchFilter] = useState(accordion_item);
+  const [searchFilter, setSearchFilter] = useState(null);
   const [searchInput, setInput] = useState(null);
   const searchFilterRef = useRef(null);
 
@@ -65,6 +65,11 @@ function AlterAccordion({
   if (dynamicsApps && dynamicsApps.subs.data.length > 0) isBADApproved = true;
   let isForBADMembersOnly = false;
   if (approved_bad_members_only && !isBADApproved) isForBADMembersOnly = true;
+
+  useEffect(() => {
+    // 📌 update filter data on block change
+    setSearchFilter(accordion_item);
+  }, [block]);
 
   if (!searchFilter || isForBADMembersOnly) return null; // defensive programming
 

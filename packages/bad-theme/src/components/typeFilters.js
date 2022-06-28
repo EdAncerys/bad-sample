@@ -24,6 +24,7 @@ const TypeFilters = ({
   const handleSetTypeFilter = ({ id }) => {
     typeFilterRef.current = id;
     handleSearch({ id });
+    console.log("🐞 id", id);
   };
 
   // SERVERS ----------------------------------------------------------------

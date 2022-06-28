@@ -114,6 +114,8 @@ const GuidelinesAndStandards = ({ state, block }) => {
         return title || subtitle;
       });
 
+      console.log("🐞 input", input);
+
       setSearchFilter(input);
       setFilter(filter);
     }
@@ -278,6 +280,5 @@ const GuidelinesAndStandards = ({ state, block }) => {
     </div>
   );
 };
-
 
 export default connect(GuidelinesAndStandards);
