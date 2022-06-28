@@ -27,57 +27,69 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
     bad_badecircular: false,
     bad_bjdalerts: false,
     bad_presidentsbulletin: false,
-    contactByPhone: false,
-    contactByEmail: false,
-    universalyUnsubscribe: false,
+    donotemail: false,
+    // --------------------------------------------------------------------------------
     bad_preferredmailingaddress: "",
   });
+
+  // --------------------------------------------------------------------------------
+  const handleSetData = ({ name, value }) => {
+    setFormData((prevFormData) => ({
+      // --------------------------------------------------------------------------------
+      // 📌  NOTE. USER pref settings are in reverse order of the value
+      //    ex. bad_bademailalerts === true ===> "Do Not Allow"
+      // --------------------------------------------------------------------------------
+      ...prevFormData,
+      [`${name}`]: value,
+    }));
+  };
 
   useEffect(() => {
     if (!isActiveUser) return null;
 
-    // map through user & update formData with values
-    const handleSetData = ({ name }) => {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [`${name}`]: isActiveUser[`${name}`],
-      }));
-    };
-
     // 📌 populate profile information form Dynamics records
-    handleSetData({ name: "bad_bademailalerts" });
-    handleSetData({ name: "bad_badecircular" });
-    handleSetData({ name: "bad_bjdalerts" });
-    handleSetData({ name: "bad_presidentsbulletin" });
-    handleSetData({ name: "bad_preferredmailingaddress" });
-    if (
-      (isActiveUser.preferredcontactmethodcode &&
-        isActiveUser.preferredcontactmethodcode === 3) ||
-      isActiveUser.preferredcontactmethodcode === 1
-    )
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [`contactByPhone`]: true,
-      }));
-    if (
-      (isActiveUser.preferredcontactmethodcode &&
-        isActiveUser.preferredcontactmethodcode === 2) ||
-      isActiveUser.preferredcontactmethodcode === 1
-    )
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [`contactByEmail`]: true,
-      }));
-    // 📌 reset universal unsubscribe to false on load
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [`universalyUnsubscribe`]: false,
-    }));
+    handleSetData({
+      name: "bad_bademailalerts",
+      value: !isActiveUser[`bad_bademailalerts`],
+    });
+    handleSetData({
+      name: "bad_badecircular",
+      value: !isActiveUser[`bad_badecircular`],
+    });
+    handleSetData({
+      name: "bad_bjdalerts",
+      value: !isActiveUser[`bad_bjdalerts`],
+    });
+    handleSetData({
+      name: "bad_presidentsbulletin",
+      value: !isActiveUser[`bad_presidentsbulletin`],
+    });
+    handleSetData({
+      name: "donotemail",
+      value: !isActiveUser[`donotemail`],
+    });
+    handleSetData({
+      name: "bad_preferredmailingaddress",
+      value: isActiveUser[`bad_preferredmailingaddress`],
+    });
   }, [isActiveUser]);
 
   // HELPERS ----------------------------------------------------------------
   const handleInputChange = (e) => {
     const { name, value, type, checked, files } = e.target;
+    // untick checkbox if donotemail is checked and value is true
+    if (name === "donotemail" && checked === true) {
+      handleSetData({ name: "bad_bademailalerts", value: false });
+      handleSetData({ name: "bad_badecircular", value: false });
+      handleSetData({ name: "bad_bjdalerts", value: false });
+      handleSetData({ name: "bad_presidentsbulletin", value: false });
+    }
+    // --------------------------------------------------------------------------------
+    // if any other checkbox is checked, untick donotemail
+    if (name !== "donotemail" && checked === true) {
+      handleSetData({ name: "donotemail", value: false });
+    }
+    // --------------------------------------------------------------------------------
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
@@ -85,37 +97,32 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
   };
 
   const handleProfileUpdate = async () => {
-    let bad_bademailalerts = formData.bad_bademailalerts;
-    let bad_badecircular = formData.bad_badecircular;
-    let bad_bjdalerts = formData.bad_bjdalerts;
-    let bad_presidentsbulletin = formData.bad_presidentsbulletin;
-    let bad_preferredmailingaddress = formData.bad_preferredmailingaddress;
-    let contactByPhone = formData.contactByPhone;
-    let contactByEmail = formData.contactByEmail;
-    let universalyUnsubscribe = formData.universalyUnsubscribe;
+    let data = {
+      // --------------------------------------------------------------------------------
+      // 📌  NOTE. USER pref settings are in reverse order of the value
+      //    ex. bad_bademailalerts === true ===> "Do Not Allow"
+      // --------------------------------------------------------------------------------
+      bad_bademailalerts: !formData.bad_bademailalerts,
+      bad_badecircular: !formData.bad_badecircular,
+      bad_bjdalerts: !formData.bad_bjdalerts,
+      bad_presidentsbulletin: !formData.bad_presidentsbulletin,
+      donotemail: !formData.donotemail,
+      // --------------------------------------------------------------------------------
+      bad_preferredmailingaddress: formData.bad_preferredmailingaddress,
+    };
 
     // 📌 if user has checked the universal unsubscribe checkbox, set all other checkboxes to false
-    if (universalyUnsubscribe) {
-      bad_bademailalerts = false;
-      bad_badecircular = false;
-      bad_bjdalerts = false;
-      bad_presidentsbulletin = false;
+    if (formData.donotemail) {
+      data = {
+        ...data,
+        bad_bademailalerts: true,
+        bad_badecircular: true,
+        bad_bjdalerts: true,
+        bad_presidentsbulletin: true,
+      };
     }
 
-    let preferredcontactmethodcode = null;
-    // 📌 apply logic to determine preferred contact method code
-    if (contactByPhone) preferredcontactmethodcode = 3;
-    if (contactByEmail) preferredcontactmethodcode = 2;
-    if (contactByEmail && contactByPhone) preferredcontactmethodcode = 1;
-
-    const data = {
-      bad_bademailalerts,
-      bad_badecircular,
-      bad_bjdalerts,
-      bad_presidentsbulletin,
-      bad_preferredmailingaddress,
-      preferredcontactmethodcode,
-    };
+    console.log("🐞 data", data);
 
     try {
       setIsFetching(true);
@@ -318,38 +325,12 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
           </div>
 
           <div className="flex-col ">
-            {/* <div>I am happy to be contacted by:</div>
-              <div className="flex" style={{ alignItems: "center" }}>
-                  <div style={{ display: "grid" }}>
-                <input
-                  name="contactByPhone"
-                  checked={formData.contactByPhone}
-                  onChange={handleInputChange}
-                  type="checkbox"
-                  className="form-check-input check-box"
-                />
-                </div>
-                <div style={styles.textInfo}>Phone</div>
-            </div>
-              <div className="flex" style={{ alignItems: "center" }}>
-                  <div style={{ display: "grid" }}>
-                <input
-                  name="contactByEmail"
-                  checked={formData.contactByEmail}
-                  onChange={handleInputChange}
-                  type="checkbox"
-                  className="form-check-input check-box"
-                />
-                </div>
-                <div style={styles.textInfo}>Email</div>
-            </div> */}
-
             <div className="primary-title">Universal unsubscribe:</div>
             <div className="flex" style={{ alignItems: "center" }}>
               <div style={{ display: "grid" }}>
                 <input
-                  name="universalyUnsubscribe"
-                  checked={formData.universalyUnsubscribe}
+                  name="donotemail"
+                  checked={formData.donotemail}
                   onChange={handleInputChange}
                   type="checkbox"
                   className="form-check-input check-box"

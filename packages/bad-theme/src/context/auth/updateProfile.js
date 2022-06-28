@@ -22,7 +22,7 @@ export const updateProfileAction = async ({
 
   try {
     const respose = await fetchDataHandler({
-      path,
+      path,          
       method: "PATCH",
       body: data,
       headers: {
