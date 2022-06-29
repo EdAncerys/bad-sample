@@ -278,6 +278,7 @@ const EnquireModal = ({ state, libraries }) => {
     };
     const ServeAddress = () => {
       if (enquireAction.emailOverride) return null;
+
       return (
         <>
           <div style={styles.infoTitle}>
@@ -292,6 +293,7 @@ const EnquireModal = ({ state, libraries }) => {
         </>
       );
     };
+
     return (
       <div className="flex">
         <Modal.Body>
