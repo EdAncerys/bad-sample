@@ -301,18 +301,6 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
             <div className="flex" style={{ alignItems: "center" }}>
               <div style={{ display: "grid" }}>
                 <input
-                  name="bad_bjdalerts"
-                  checked={formData.bad_bjdalerts}
-                  onChange={handleInputChange}
-                  type="checkbox"
-                  className="form-check-input check-box"
-                />
-              </div>
-              <div style={styles.textInfo}>BAD Alerts</div>
-            </div>
-            <div className="flex" style={{ alignItems: "center" }}>
-              <div style={{ display: "grid" }}>
-                <input
                   name="bad_presidentsbulletin"
                   checked={formData.bad_presidentsbulletin}
                   onChange={handleInputChange}
@@ -321,6 +309,18 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
                 />
               </div>
               <div style={styles.textInfo}>President's Bulletin</div>
+            </div>
+            <div className="flex" style={{ alignItems: "center" }}>
+              <div style={{ display: "grid" }}>
+                <input
+                  name="bad_bjdalerts"
+                  checked={formData.bad_bjdalerts}
+                  onChange={handleInputChange}
+                  type="checkbox"
+                  className="form-check-input check-box"
+                />
+              </div>
+              <div style={styles.textInfo}>BJD Alerts</div>
             </div>
           </div>
 
