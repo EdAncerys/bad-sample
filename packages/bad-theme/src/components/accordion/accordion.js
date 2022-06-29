@@ -29,10 +29,9 @@ function AlterAccordion({
 }) {
   // HELPERS -----------------------------------------------------------------------
   function CustomToggle({ children, eventKey, callback }) {
-    const decoratedOnClick = useAccordionButton(
-      eventKey,
-      () => callback && callback(eventKey)
-    );
+    const decoratedOnClick = useAccordionButton(eventKey, () => {
+      callback && callback(eventKey);
+    });
 
     return <div onClick={decoratedOnClick}>{children}</div>;
   }
