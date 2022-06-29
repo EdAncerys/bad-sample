@@ -207,9 +207,7 @@ function AlterAccordion({
       <ServeAccordionSearchFilter />
       <div style={{ backgroundColor: background_colour || "transparent" }}>
         <BlockWrapper>
-          <div
-            style={{ padding: !lg ? `${marginVertical}px 100px` : "0 0.5em" }}
-          >
+          <div style={{ padding: !lg ? `0 100px` : "0 0.5em" }}>
             <Accordion
               style={{ border: 0 }}
               defaultActiveKey={is_active ? "0" : "99"}

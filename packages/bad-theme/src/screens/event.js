@@ -385,6 +385,7 @@ const Event = ({ state, actions, libraries }) => {
         return true;
       }
     };
+
     const ButtonTitle = () => {
       if (registration_type) {
         if (
