@@ -57,7 +57,8 @@ function AlterAccordion({
   const searchFilterRef = useRef(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
-  let marginVertical = state.theme.marginVertical / 2;
+  let marginVertical = state.theme.marginVertical;
+  // Uncoment to enable vertical padding ammend for accordion items (default: false)
   if (disable_vertical_padding) marginVertical = 0;
 
   let isBADApproved = false;
@@ -163,7 +164,7 @@ function AlterAccordion({
         style={{
           borderRadius: 0,
           border: 0,
-          margin: `${marginVertical}px 0`,
+          margin: `${state.theme.marginVertical / 2}px 0`,
         }}
       >
         <Card.Header
@@ -206,7 +207,9 @@ function AlterAccordion({
       <ServeAccordionSearchFilter />
       <div style={{ backgroundColor: background_colour || "transparent" }}>
         <BlockWrapper>
-          <div style={{ padding: !lg ? "0 100px" : "0 0.5em" }}>
+          <div
+            style={{ padding: !lg ? `${marginVertical}px 100px` : "0 0.5em" }}
+          >
             <Accordion
               style={{ border: 0 }}
               defaultActiveKey={is_active ? "0" : "99"}
