@@ -2,7 +2,6 @@ import { connect } from "frontity";
 
 import { GoogleMap, Marker, LoadScript } from "@react-google-maps/api";
 
-import { useAppDispatch } from "../../context";
 const LIBRARIES = ["places"];
 
 const MapsComponent = ({
@@ -14,8 +13,6 @@ const MapsComponent = ({
   markers,
   queryType,
 }) => {
-  const dispatch = useAppDispatch();
-
   const CENTER = center || { lat: 51.5072, lng: -0.1276 };
   const ZOOM = zoom || 10;
 
@@ -23,7 +20,7 @@ const MapsComponent = ({
     width: "100%",
     height: "100%",
     // borderRadius: markers ? 0 : 10,
-    borderRadius: 0
+    borderRadius: 0,
   };
 
   const ServeMarkersOnTheMap = () => {
@@ -48,10 +45,10 @@ const MapsComponent = ({
       const marker_label = marker_key.toString();
       return (
         <Marker
-          markerLabel={{ text: "Johny" }}
+          markerLabel={{ text: "BAD" }}
           position={POSITION}
           label={{ text: marker_label, color: "white", border: "black" }}
-          title={"Pedalka"}
+          // title={"BAD"}
           options={{
             fillColor: "lightblue",
           }}
