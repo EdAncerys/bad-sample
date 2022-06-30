@@ -18,7 +18,7 @@ const AccordionHeader = ({
   guidelines,
   leadershipBlock,
   fundingBlock,
-  uniqueId,
+  id,
   membershipApplications,
   hasPreview,
 }) => {
@@ -106,7 +106,7 @@ const AccordionHeader = ({
     return (
       <div
         className="text-body body-limit"
-        id={`preview-id-${uniqueId}`}
+        id={`preview-id-${id}`}
         style={{
           margin: `0 1em 1em`,
           color: colors.darkSilver,
@@ -179,8 +179,8 @@ const AccordionHeader = ({
     return (
       <div>
         <div className="flex">
-          <div id={`add-icon-${uniqueId}`}>
-            {activeEventKey === uniqueId ? (
+          <div id={`add-icon-${id}`}>
+            {activeEventKey === id ? (
               <RemoveIcon style={{ fontSize: 48, fill: colors.softBlack }} />
             ) : (
               <AddIcon style={{ fontSize: 48, fill: colors.softBlack }} />
@@ -234,7 +234,7 @@ const AccordionHeader = ({
           </div>
         </div>
       </div>
-      {activeEventKey === uniqueId ? null : <ServePreview />}
+      {activeEventKey === id ? null : <ServePreview />}
     </div>
   );
 };
