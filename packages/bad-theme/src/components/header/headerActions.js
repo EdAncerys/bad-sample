@@ -190,14 +190,14 @@ const HeaderActions = ({ state, actions, libraries }) => {
   const handleCookie = async () => {
     handleSetCookie({ name: "no-cookie", deleteCookie: true }); // to show list of all cookies
     handleSetCookie({ name: "BAD-cookie-popup", deleteCookie: true });
-    // console.log("🐞 APP_HOST ", state.auth.APP_HOST);
-    // console.log("🐞 APP_URL ", state.auth.APP_URL);
-    // console.log("🐞 ENVIRONMENT ", state.auth.ENVIRONMENT);
-    // console.log(
-    //   "🐞 DEFAULT_CONTACT_LIST ",
-    //   state.contactList.DEFAULT_CONTACT_LIST
-    // );
-    // console.log("🐞 isActiveUser ", isActiveUser);
+    console.log("🐞 APP_HOST ", state.auth.APP_HOST);
+    console.log("🐞 APP_URL ", state.auth.APP_URL);
+    console.log("🐞 ENVIRONMENT ", state.auth.ENVIRONMENT);
+    console.log(
+      "🐞 DEFAULT_CONTACT_LIST ",
+      state.contactList.DEFAULT_CONTACT_LIST
+    );
+    console.log("🐞 isActiveUser ", isActiveUser);
   };
   // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
 
