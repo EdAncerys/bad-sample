@@ -220,7 +220,37 @@ const HeaderActions = ({ state, actions, libraries }) => {
   };
 
   // SERVERS ----------------------------------------------------
-  const ServeProductionBatch = () => {
+
+  const ServeTicketNo = () => {
+    const ticketNo = state.theme.TICKET_NO;
+    const url = state.auth.APP_HOST;
+    const isDevelopment =
+      state.auth.APP_URL.includes("testing") ||
+      state.auth.APP_URL.includes("localhost");
+
+    // 📌 only show for local development & testing url
+    if (!isDevelopment) return null;
+
+    return (
+      <div
+        className="shadow no-selector"
+        style={{
+          position: "absolute",
+          top: "1.5em",
+          right: 50,
+          padding: 5,
+          border: `1px solid ${colors.danger}`,
+          fontSize: 10,
+          color: colors.danger,
+          fontWeight: "bold",
+        }}
+      >
+        Ticket No: {ticketNo}
+      </div>
+    );
+  };
+
+  const ServeInfoBatch = () => {
     // 📌 Production Batch shows if pointing to production server
     const isProduction = !state.auth.APP_HOST.toLowerCase().includes("uat");
     let serverBatch = "UAT";
@@ -228,6 +258,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
     return (
       <div style={{ position: "relative" }}>
+        <ServeTicketNo />
         <div
           className="shadow no-selector"
           style={{
@@ -344,7 +375,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
     <div style={{ borderBottom: `1px solid ${colors.primary}` }}>
       {mobileMenuActive && <MobileMenu />}
       <BlockWrapper>
-        <ServeProductionBatch />
+        <ServeInfoBatch />
         <ServeDevPanel />
 
         <div className="flex" style={{ padding: !lg ? `2.75em 0` : `0.3em 0` }}>
