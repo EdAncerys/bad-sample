@@ -30,7 +30,10 @@ const MapsComponent = ({
   useScript({
     url: `https://maps.googleapis.com/maps/api/js?key=${state.auth.GOOGLE_API_KEY}&libraries=places`,
   });
+
   useEffect(async () => {
+    // check if google script exist and is loaded
+
     // 📌 allow google maps script to be injected into the DOM
     await new Promise((resolve) => setTimeout(resolve, 500));
     setReady(true);

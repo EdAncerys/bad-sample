@@ -38,13 +38,11 @@ const FindADermatologist = ({ state, block }) => {
   // HANDLERS ------------------------------------------------------------------------
 
   const handleSearchByPostcode = () => {
-    let isPostcode = pc;
-    console.log("🐞 postcode ", pc);
+    let isPostcode = false;
+    let postcodeInput = pc.replace(/\s/g, "");
 
-    // validate postocode format
-    isPostcode = isPostcode.replace(/\s/g, "");
     const regex = /^[A-Z]{1,2}[0-9]{1,2} ?[0-9][A-Z]{2}$/i;
-    isPostcode = regex.test(isPostcode);
+    isPostcode = regex.test(postcodeInput);
 
     // display error message if postoce is not valid
     if (isPostcode) {
@@ -55,7 +53,7 @@ const FindADermatologist = ({ state, block }) => {
       return;
     }
 
-    let message = `Postcode ${pc} is not valid. Please enter valid postoced & try again.`;
+    let message = `Postcode " ${pc} " is not valid. Please enter valid postoced & try again.`;
     if (!pc.length) message = "Please enter valid postoced & try again.";
 
     setErrorAction({
@@ -248,7 +246,7 @@ const FindADermatologist = ({ state, block }) => {
     if (!filteredDermatologists) return <Loading />;
 
     const SingleDerm = ({ derm, id, key2 }) => {
-      console.log("🐞 ", derm); // debug
+      // console.log("🐞 ", derm); // debug
 
       if (query.type === "pc" && !derm.distance) return null;
       const ServeBiography = () => {
