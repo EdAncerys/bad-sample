@@ -34,6 +34,7 @@ const FullWidthContentBlock = ({
     button_label,
     button_type,
   } = block;
+  console.log("🐞 ", block); // debug
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -84,8 +85,9 @@ const FullWidthContentBlock = ({
   const ServeActions = () => {
     if (!link) return null;
 
-    let LABEL = "More";
-    if (label) LABEL = label;
+    let linkLabel = "More";
+    if (link.title) linkLabel = link.title; // default to title if exists
+    if (label) linkLabel = label; // override with label if exists
 
     const handleSubmitAction = () => {
       if (email) {
@@ -108,7 +110,7 @@ const FullWidthContentBlock = ({
           }}
         >
           <div className="blue-btn" onClick={handleSubmitAction}>
-            <Parcer libraries={libraries} html={LABEL} />
+            <Parcer libraries={libraries} html={linkLabel} />
           </div>
         </div>
       </div>
