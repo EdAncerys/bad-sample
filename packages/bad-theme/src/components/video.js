@@ -101,29 +101,33 @@ const Video = ({ state, actions, libraries }) => {
       return true;
     }
     if (isActiveUser && post.acf.price) {
-      const url =
-        state.auth.APP_HOST +
-        "/videvent/" +
-        isActiveUser.contactid +
-        "/" +
-        post.acf.event_id;
+      try {
+        const url =
+          state.auth.APP_HOST +
+          "/videvent/" +
+          isActiveUser.contactid +
+          "/" +
+          post.acf.event_id;
 
-      const fetching = await fetchDataHandler({
-        path: url,
-        state,
-      });
-      if (fetching.ok) {
-        const json = await fetching.json();
-        // if (json.success === false) setVideoStatus("locked");
-        if (json.success && json.data.entity.bad_confirmationid) {
-          setVideoStatus("unlocked");
+        const fetching = await fetchDataHandler({
+          path: url,
+          state,
+        });
+        if (fetching.ok) {
+          const json = await fetching.json();
+          // if (json.success === false) setVideoStatus("locked");
+          if (json.success && json.data.entity.bad_confirmationid) {
+            setVideoStatus("unlocked");
+            return true;
+          }
+          setVideoStatus("locked");
+          return true;
+        } else {
+          setVideoStatus("locked");
           return true;
         }
-        setVideoStatus("locked");
-        return true;
-      } else {
-        setVideoStatus("locked");
-        return true;
+      } catch (error) {
+        console.log(error); // debug
       }
     }
     setVideoStatus("locked");
@@ -138,46 +142,50 @@ const Video = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
 
   const handlePayment = async () => {
-    const sagepay_url =
-      state.auth.ENVIRONMENT === "PRODUCTION"
-        ? "/sagepay/live/video/"
-        : "/sagepay/test/video/";
-    const uappUrl = state.auth.APP_URL;
-    const url =
-      state.auth.APP_HOST +
-      sagepay_url +
-      isActiveUser.contactid +
-      "/" +
-      post.acf.event_id +
-      "/" +
-      post.acf.price +
-      `?redirecturl=` +
-      uappUrl +
-      state.router.link +
-      "?sagepay=true";
+    try {
+      const sagepay_url =
+        state.auth.ENVIRONMENT === "PRODUCTION"
+          ? "/sagepay/live/video/"
+          : "/sagepay/test/video/";
+      const uappUrl = state.auth.APP_URL;
+      const url =
+        state.auth.APP_HOST +
+        sagepay_url +
+        isActiveUser.contactid +
+        "/" +
+        post.acf.event_id +
+        "/" +
+        post.acf.price +
+        `?redirecturl=` +
+        uappUrl +
+        state.router.link +
+        "?sagepay=true";
 
-    const fetchVendorId = await fetchDataHandler({
-      path: url,
-      method: "POST",
-      state,
-    });
-
-    if (fetchVendorId.ok) {
-      const json = await fetchVendorId.json();
-      if (json.success) {
-        const url =
-          json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
-        handlePaymentModal(url);
-        return true;
-      }
-
-      setErrorAction({
-        dispatch,
-        isError: {
-          message: `There was a problem processing the request`,
-          image: "Error",
-        },
+      const fetchVendorId = await fetchDataHandler({
+        path: url,
+        method: "POST",
+        state,
       });
+
+      if (fetchVendorId.ok) {
+        const json = await fetchVendorId.json();
+        if (json.success) {
+          const url =
+            json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
+          handlePaymentModal(url);
+          return true;
+        }
+
+        setErrorAction({
+          dispatch,
+          isError: {
+            message: `There was a problem processing the request`,
+            image: "Error",
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error); // debug
     }
   };
 
@@ -205,17 +213,21 @@ const Video = ({ state, actions, libraries }) => {
         const reg = /\d+/g;
         const videoId = video_url.match(reg);
 
-        const path = `https://vimeo.com/api/v2/video/${videoId[0]}.json`;
-        const fetchVideoData = await fetchDataHandler({
-          path,
-          state,
-          isCORSHeaders: true,
-          disableCookies: true,
-        });
+        try {
+          const path = `https://vimeo.com/api/v2/video/${videoId[0]}.json`;
+          const fetchVideoData = await fetchDataHandler({
+            path,
+            state,
+            isCORSHeaders: true,
+            disableCookies: true,
+          });
 
-        if (fetchVideoData.ok) {
-          const json = await fetchVideoData.json();
-          setVideoCover(json[0].thumbnail_large);
+          if (fetchVideoData.ok) {
+            const json = await fetchVideoData.json();
+            setVideoCover(json[0].thumbnail_large);
+          }
+        } catch (error) {
+          console.log(error); // debug
         }
       };
 
