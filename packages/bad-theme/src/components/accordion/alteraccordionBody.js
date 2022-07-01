@@ -735,7 +735,7 @@ const styles = {
     display: "grid",
     gridTemplateColumns: `25% auto`,
     gap: 20,
-    padding: `0.5em 0`,
+    padding: `0.5em 2.75em`,
   },
   listLayouMobile: {
     display: "grid",

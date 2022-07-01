@@ -327,8 +327,9 @@ const Event = ({ state, actions, libraries }) => {
       }
 
       if (
-        registration_type === "email" &&
-        registration_status_email === "register"
+        (registration_type === "email" &&
+          registration_status_email === "register") ||
+        (registration_type === "email" && registration_status_email === "")
       ) {
         setEnquireAction({
           dispatch,
@@ -348,8 +349,10 @@ const Event = ({ state, actions, libraries }) => {
             emailOverride: contact_email_override,
           },
         });
-        return true;
+
+        return;
       }
+
       if (
         registration_type === "email" &&
         registration_status_email === "register_an_interest"
@@ -369,9 +372,7 @@ const Event = ({ state, actions, libraries }) => {
             phone_number: true,
             recipients: [
               {
-                email: event.acf.email
-                  ? event.acf.email
-                  : "conference@bad.org.uk",
+                email: event.acf.email || "conference@bad.org.uk",
               },
             ],
             registerForEvent: title.rendered,
@@ -379,9 +380,11 @@ const Event = ({ state, actions, libraries }) => {
             emailSubject: `Express an interest for ${title.rendered} event.`,
           },
         });
-        return true;
+
+        return;
       }
     };
+
     const ButtonTitle = () => {
       if (registration_type) {
         if (
