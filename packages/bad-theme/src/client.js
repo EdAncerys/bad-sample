@@ -39,7 +39,11 @@ const BADTheme = {
       marginVertical: 40, // px units
       notification: false,
       perPageLimit: 50, // number of posts to fetch per page
+<<<<<<< HEAD
       TICKET_NO: "B-35",
+=======
+      TICKET_NO: "B-2",
+>>>>>>> b-2
     },
     auth: {
       // 📌 app auth service secrets
