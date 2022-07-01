@@ -310,13 +310,13 @@ const FindADermatologist = ({ state, block }) => {
       };
 
       const ServeShowOnMap = () => {
+        if (!derm.cordinates) return null;
+
         return (
           <div className="flex-row mt-2" style={{ alignItems: "flex-end" }}>
             <div
               className="caps-btn"
               onClick={() => {
-                console.log("🐞 ", derm, derm.cordinates); // debug
-
                 setDermOnFocus({
                   lat: Number(derm.cordinates.lat),
                   lng: Number(derm.cordinates.lng),
@@ -502,7 +502,7 @@ const FindADermatologist = ({ state, block }) => {
         <div style={{ height: 300, marginTop: 20, marginBottom: 20 }}>
           <MapsComponent
             markers={filteredDermatologists}
-            center={!!dermOnFocus}
+            center={dermOnFocus}
             zoom={!!dermOnFocus ? 14 : 10}
             queryType={query ? query.type : null}
           />
