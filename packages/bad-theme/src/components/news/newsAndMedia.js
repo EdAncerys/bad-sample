@@ -494,7 +494,8 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       dateValue ||
       yearValue ||
       searchValue ||
-      !post_limit
+      !post_limit ||
+      isLayoutOne // if layout is carousel then hide more option
     )
       moreOption = false;
 
