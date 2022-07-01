@@ -113,6 +113,10 @@ export const MENU_DATA = [
   //   title: "Referrals",
   //   url: "/referrals/",
   // },
+  {
+    title: "FAD",
+    url: "/find-a-dermatologist/",
+  },
 ];
 
 export const ALPHABET = [
