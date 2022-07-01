@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Loading from "./loading";
 import BlockWrapper from "./blockWrapper";
@@ -28,10 +28,11 @@ import {
 
 const Video = ({ state, actions, libraries }) => {
   // STATE
-  const [loadVideo, setLoadVideo] = React.useState(false);
-  const [videoStatus, setVideoStatus] = React.useState("");
-  const [paymentUrl, setPaymentUrl] = React.useState("");
-  const [relatedVideos, setRelatedVideos] = React.useState(null);
+  const [loadVideo, setLoadVideo] = useState(false);
+  const [videoStatus, setVideoStatus] = useState("");
+  const [paymentUrl, setPaymentUrl] = useState("");
+  const [relatedVideos, setRelatedVideos] = useState(null);
+  // const [queryParams, setQueryParams] = useState(null);
 
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
@@ -56,7 +57,7 @@ const Video = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
 
-  React.useEffect(async () => {
+  useEffect(async () => {
     //Not the greatest idea to make useEffect async
     await actions.source.fetch("/videos/");
     const all_videos = state.source.videos;
@@ -185,7 +186,7 @@ const Video = ({ state, actions, libraries }) => {
 
   const ServeContent = () => {
     const ServeImage = () => {
-      const [videoCover, setVideoCover] = React.useState(defaultCover);
+      const [videoCover, setVideoCover] = useState(defaultCover);
 
       const getVimeoCover = async ({ video_url }) => {
         // Example URL: https://player.vimeo.com/video/382577680?h=8f166cf506&color=5b89a3&title=0&byline=0&portrait=0
@@ -206,7 +207,7 @@ const Video = ({ state, actions, libraries }) => {
         }
       };
 
-      React.useEffect(() => {
+      useEffect(() => {
         getVimeoCover({ video_url: post.acf.video });
       }, []);
 
@@ -372,7 +373,10 @@ const Video = ({ state, actions, libraries }) => {
       dispatch,
       enquireAction: {
         contact_public_email: "comms@bag.org.uk",
+        fullname: true,
         message: true,
+        emailaddress1: true,
+        mobilephone: true,
         allow_attachments: true,
         recipients: state.contactList.DEFAULT_CONTACT_LIST,
         // default email subject & template name
