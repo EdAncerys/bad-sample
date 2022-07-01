@@ -17,6 +17,8 @@ const MapsComponent = ({
   const CENTER = center || { lat: 51.5072, lng: -0.1276 };
   const ZOOM = zoom || 10;
 
+  console.log("🐞 markers", markers);
+
   const containerStyle = {
     width: "100%",
     height: "100%",
@@ -53,11 +55,13 @@ const MapsComponent = ({
         lat: Number(derm.cordinates.lat),
         lng: Number(derm.cordinates.lng),
       };
+      console.log("🐞 POSITION", POSITION);
 
       const marker_label = marker_key.toString();
 
       return (
         <Marker
+          key={key}
           markerLabel={{ text: "Johny" }}
           position={POSITION}
           label={{ text: marker_label, color: "white", border: "black" }}

@@ -248,6 +248,8 @@ const FindADermatologist = ({ state, block }) => {
     if (!filteredDermatologists) return <Loading />;
 
     const SingleDerm = ({ derm, id, key2 }) => {
+      console.log("🐞 ", derm); // debug
+
       if (query.type === "pc" && !derm.distance) return null;
       const ServeBiography = () => {
         if (!derm.bad_findadermatologisttext) return null;
@@ -266,8 +268,8 @@ const FindADermatologist = ({ state, block }) => {
           <div className="primary-title mb-2" style={{ color: colors.navy }}>
             <div className="primary-title">Hospital / Practice address</div>
             <div>
-              <p>{derm.address3_line1}</p>{" "}
-              <p>{derm.address3_line2 ? `${derm.address3_line2},` : null}</p>
+              {derm.address3_line1 && <p>{derm.address3_line1}</p>}
+              {derm.address3_line2 && <p>{derm.address3_line2}</p>}
               <p>
                 {derm.address3_city} {derm.address3_postalcode}
               </p>
@@ -282,21 +284,27 @@ const FindADermatologist = ({ state, block }) => {
         return (
           <div style={{ marginTop: 20 }}>
             <div className="primary-title">Private Practice Links</div>
-            <div className="menu-title">
-              <a href={derm.bad_web1} target="_blank">
-                {derm.bad_web1}
-              </a>
-            </div>
-            <div className="menu-title">
-              <a href={derm.bad_web2} target="_blank">
-                {derm.bad_web2}
-              </a>
-            </div>
-            <div className="menu-title">
-              <a href={derm.bad_web3} target="_blank">
-                {derm.bad_web3}
-              </a>
-            </div>
+            {derm.bad_web1 && (
+              <div className="menu-title">
+                <a href={derm.bad_web1} target="_blank">
+                  {derm.bad_web1}
+                </a>
+              </div>
+            )}
+            {derm.bad_web2 && (
+              <div className="menu-title">
+                <a href={derm.bad_web2} target="_blank">
+                  {derm.bad_web2}
+                </a>
+              </div>
+            )}
+            {derm.bad_web3 && (
+              <div className="menu-title">
+                <a href={derm.bad_web3} target="_blank">
+                  {derm.bad_web3}
+                </a>
+              </div>
+            )}
           </div>
         );
       };
