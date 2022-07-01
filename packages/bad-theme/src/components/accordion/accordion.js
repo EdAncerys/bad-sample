@@ -29,10 +29,9 @@ function AlterAccordion({
 }) {
   // HELPERS -----------------------------------------------------------------------
   function CustomToggle({ children, eventKey, callback }) {
-    const decoratedOnClick = useAccordionButton(
-      eventKey,
-      () => callback && callback(eventKey)
-    );
+    const decoratedOnClick = useAccordionButton(eventKey, () => {
+      callback && callback(eventKey);
+    });
 
     return <div onClick={decoratedOnClick}>{children}</div>;
   }
@@ -51,20 +50,26 @@ function AlterAccordion({
     is_active,
   } = block;
 
-  // console.log("🐞 ACORDION ITEM", block); // debug
+  console.log("🐞 ACORDION ITEM", block); // debug
 
-  const [searchFilter, setSearchFilter] = useState(accordion_item);
+  const [searchFilter, setSearchFilter] = useState(null);
   const [searchInput, setInput] = useState(null);
   const searchFilterRef = useRef(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
-  let marginVertical = state.theme.marginVertical / 2;
+  let marginVertical = state.theme.marginVertical;
+  // Uncoment to enable vertical padding ammend for accordion items (default: false)
   if (disable_vertical_padding) marginVertical = 0;
 
   let isBADApproved = false;
   if (dynamicsApps && dynamicsApps.subs.data.length > 0) isBADApproved = true;
   let isForBADMembersOnly = false;
   if (approved_bad_members_only && !isBADApproved) isForBADMembersOnly = true;
+
+  useEffect(() => {
+    // 📌 update filter data on block change
+    setSearchFilter(accordion_item);
+  }, [block]);
 
   if (!searchFilter || isForBADMembersOnly) return null; // defensive programming
 
@@ -159,7 +164,7 @@ function AlterAccordion({
         style={{
           borderRadius: 0,
           border: 0,
-          margin: `${marginVertical}px 0`,
+          margin: `${state.theme.marginVertical / 2}px 0`,
         }}
       >
         <Card.Header
@@ -202,7 +207,7 @@ function AlterAccordion({
       <ServeAccordionSearchFilter />
       <div style={{ backgroundColor: background_colour || "transparent" }}>
         <BlockWrapper>
-          <div style={{ padding: !lg ? "0 100px" : "0 0.5em" }}>
+          <div style={{ padding: !lg ? `0 100px` : "0 0.5em" }}>
             <Accordion
               style={{ border: 0 }}
               defaultActiveKey={is_active ? "0" : "99"}
