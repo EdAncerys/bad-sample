@@ -370,11 +370,7 @@ const Event = ({ state, actions, libraries }) => {
             full_name: true,
             email_address: true,
             phone_number: true,
-            recipients: [
-              {
-                email: event.acf.email || "conference@bad.org.uk",
-              },
-            ],
+            recipients: [{ email: email || "conference@bad.org.uk" }],
             registerForEvent: title.rendered,
             // default email subject & template name
             emailSubject: `Express an interest for ${title.rendered} event.`,

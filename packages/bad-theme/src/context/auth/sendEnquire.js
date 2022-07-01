@@ -96,25 +96,6 @@ export const sendEmailEnquireAction = async ({
       // console.log("⬇️ Error sending email response"); // debug
       throw new Error(data.message);
     }
-
-    // const data = await fetchDataHandler({
-    //   path,
-    //   method: "POST",
-    //   body: form,
-    //   state,
-    //   // 📌 pass headers as multipart/form-data
-    //   headers: {
-    //     "Content-Type": "multipart/form-data",
-    //   },
-    // });
-    // const response = await data.json();
-
-    // if (response.success) {
-    //   return response;
-    // } else {
-    //   console.log("⬇️ Error sending email response"); // debug
-    //   console.log(response); // debug
-    // }
   } catch (error) {
     // console.log("error sending enquiry", error);
   } finally {
