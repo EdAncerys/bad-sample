@@ -222,8 +222,8 @@ const CardBody = ({
           }}
         >
           {specialties &&
-            antresto.map((special) => {
-              return <ServeSpecialty name={special.name} />;
+            antresto.map((special, key) => {
+              return <ServeSpecialty name={special.name} key={key} />;
             })}
         </div>
       );

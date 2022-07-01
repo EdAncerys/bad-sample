@@ -32,16 +32,31 @@ const Video = ({ state, actions, libraries }) => {
   const [videoStatus, setVideoStatus] = useState("");
   const [paymentUrl, setPaymentUrl] = useState("");
   const [relatedVideos, setRelatedVideos] = useState(null);
-  // const [queryParams, setQueryParams] = useState(null);
+  const [isWindow, setWindow] = useState(null);
+  const [isSagepay, setSagepay] = useState(null);
 
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
 
-  const queryParams = new Proxy(new URLSearchParams(window.location.search), {
-    get: (searchParams, prop) => searchParams.get(prop),
-  });
+  // await to get window object & setWindow to true
+  useEffect(() => {
+    if (window) {
+      // console.log("📌 B2C Login Hook. 📌"); // debug
+      setWindow(window);
+    }
+  }, []);
 
-  let isSagepay = queryParams.sagepay;
+  useEffect(() => {
+    if (!isWindow) return;
+
+    const queryParams = new Proxy(new URLSearchParams(window.location.search), {
+      get: (searchParams, prop) => searchParams.get(prop),
+    });
+    let isSagepay = queryParams.sagepay;
+    setSagepay(isSagepay);
+
+    console.log("🐞 ", queryParams.sagepay); // debug
+  }, [isWindow]);
 
   const handlePaymentModal = (url) => {
     setErrorAction({
@@ -347,6 +362,7 @@ const Video = ({ state, actions, libraries }) => {
     return relatedVideos.map((vid, key) => {
       if (vid.id === post.id) vid = relatedVideos[2];
       if (key > 1) return null;
+
       return (
         <Card
           key={key}
