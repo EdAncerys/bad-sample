@@ -7,6 +7,10 @@ import { handleSetCookie, handleGetCookie } from "../helpers/cookie";
 import { handleUpdateMembershipApplication } from "../helpers/handleUpdateMembershipApplication";
 import { googleAutocomplete } from "../helpers/googleAutocomplete";
 import { Parcer } from "../helpers/parcer";
+// --------------------------------------------------------------------------------
+import { useRemoveScript } from "../hooks/useRemoveScript";
+import { useScript } from "../hooks/useScript";
+// --------------------------------------------------------------------------------
 import { getFadPermision } from "../helpers/getFadPermision";
 import {
   setGoToAction,
@@ -137,6 +141,10 @@ import {
   getLeadershipTeamData,
 } from "../helpers";
 
+// --------------------------------------------------------------------------------
+// 📌  RETURNS:
+// --------------------------------------------------------------------------------
+
 export {
   AppProvider,
   useAppDispatch,
@@ -259,4 +267,6 @@ export {
   handleRemoveServerSideCookie,
   Parcer,
   getFadPermision,
+  useRemoveScript,
+  useScript,
 };

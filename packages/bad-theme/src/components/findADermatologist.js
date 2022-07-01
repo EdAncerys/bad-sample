@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { connect } from "frontity";
 import { colors } from "../config/colors";
 
@@ -9,7 +9,6 @@ import { useAccordionButton } from "react-bootstrap/AccordionButton";
 import AccordionContext from "react-bootstrap/AccordionContext";
 import MapsComponent from "./maps/maps";
 import Loading from "./loading";
-
 // CONTEXT --------------------------------------------------------------------------
 import {
   useAppState,
@@ -25,21 +24,22 @@ const FindADermatologist = ({ state, block }) => {
 
   const dispatch = useAppDispatch();
 
-  const [query, setQuery] = React.useState();
-  const [pc, setPC] = React.useState("");
-  const [name, setName] = React.useState("");
+  const [query, setQuery] = useState();
+  const [pc, setPC] = useState("");
+  const [name, setName] = useState("");
 
-  const [filteredDermatologists, setFilteredDermatologists] = React.useState();
-  const [loading, setLoading] = React.useState(true);
-  const [dermOnFocus, setDermOnFocus] = React.useState(null);
-  const query_limit = React.useRef(5);
-  const enough = React.useRef(false);
+  const [filteredDermatologists, setFilteredDermatologists] = useState();
+  const [loading, setLoading] = useState(true);
+  const [dermOnFocus, setDermOnFocus] = useState(null);
+  const query_limit = useRef(5);
+  const enough = useRef(false);
   let crutent = 0;
 
   // HANDLERS ------------------------------------------------------------------------
 
   const handleSearchByPostcode = () => {
     let isPostcode = pc;
+    console.log("🐞 postcode ", pc);
 
     // validate postocode format
     isPostcode = isPostcode.replace(/\s/g, "");
@@ -150,7 +150,7 @@ const FindADermatologist = ({ state, block }) => {
     }
   };
 
-  React.useEffect(async () => {
+  useEffect(async () => {
     if (query && query.type === "pc") fetchDermatologistsByPostCode();
     if (query && query.type === "name") fetchDermatologistsByName();
     setLoading(false);
@@ -206,7 +206,7 @@ const FindADermatologist = ({ state, block }) => {
     };
 
     const ServeActions = () => {
-      const { activeEventKey } = React.useContext(AccordionContext);
+      const { activeEventKey } = useContext(AccordionContext);
 
       return (
         <div className="flex-row" style={{ alignItems: "flex-end" }}>
@@ -233,7 +233,7 @@ const FindADermatologist = ({ state, block }) => {
   };
 
   function CustomToggle({ children, eventKey, callback }) {
-    const { activeEventKey } = React.useContext(AccordionContext);
+    const { activeEventKey } = useContext(AccordionContext);
 
     const decoratedOnClick = useAccordionButton(
       eventKey,
@@ -306,12 +306,14 @@ const FindADermatologist = ({ state, block }) => {
           <div className="flex-row mt-2" style={{ alignItems: "flex-end" }}>
             <div
               className="caps-btn"
-              onClick={() =>
+              onClick={() => {
+                console.log("🐞 ", derm, derm.cordinates); // debug
+
                 setDermOnFocus({
                   lat: Number(derm.cordinates.lat),
                   lng: Number(derm.cordinates.lng),
-                })
-              }
+                });
+              }}
             >
               Show on map
             </div>
@@ -492,8 +494,8 @@ const FindADermatologist = ({ state, block }) => {
         <div style={{ height: 300, marginTop: 20, marginBottom: 20 }}>
           <MapsComponent
             markers={filteredDermatologists}
-            center={dermOnFocus}
-            zoom={dermOnFocus ? 14 : 10}
+            center={!!dermOnFocus}
+            zoom={!!dermOnFocus ? 14 : 10}
             queryType={query ? query.type : null}
           />
         </div>
