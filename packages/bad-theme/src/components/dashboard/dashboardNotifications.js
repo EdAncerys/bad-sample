@@ -8,11 +8,11 @@ import {
   useAppState,
   setDashboardNotificationsAction,
   setDashboardPathAction,
-  muiQuery
+  muiQuery,
 } from "../../context";
 
 const DashboardNotifications = ({ state }) => {
-  const {lg} = muiQuery()
+  const { lg } = muiQuery();
   const dispatch = useAppDispatch();
   const { isDashboardNotifications, dashboardPath, dynamicsApps } =
     useAppState();
@@ -72,7 +72,7 @@ const DashboardNotifications = ({ state }) => {
           style={{
             display: "flex",
             padding: `1em 4em`,
-            flexDirection: !lg ? null : "column"
+            flexDirection: !lg ? null : "column",
           }}
         >
           <div
@@ -94,9 +94,13 @@ const DashboardNotifications = ({ state }) => {
   const ServeAppReminders = () => {
     if (dashboardPath === "Billing" || !dynamicsApps) return null;
     // check if user have approved SIG membership for any of the categories
-    const isPendingPayment = dynamicsApps.subs.data.filter(
-      (app) => app.bad_organisedfor === "SIG" && !app.bad_sagepayid
-    );
+    const isPendingPayment = dynamicsApps.subs.data.filter((app) => {
+      return (
+        app.bad_organisedfor === "SIG" &&
+        !app.bad_sagepayid &&
+        app.bad_outstandingpayments !== "£0.00" // payments with 0 outstanding payments are not shown
+      );
+    });
     if (isPendingPayment.length === 0) return null;
 
     return (
@@ -131,7 +135,5 @@ const DashboardNotifications = ({ state }) => {
     </div>
   );
 };
-
-
 
 export default connect(DashboardNotifications);
