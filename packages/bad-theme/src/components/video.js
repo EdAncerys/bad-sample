@@ -42,6 +42,7 @@ const Video = ({ state, actions, libraries }) => {
   });
 
   let isSagepay = queryParams.sagepay;
+
   const handlePaymentModal = (url) => {
     setErrorAction({
       dispatch,
@@ -144,8 +145,6 @@ const Video = ({ state, actions, libraries }) => {
       path: url,
       method: "POST",
       state,
-      // isCORSHeaders: true,
-      // disableCookies: true,
     });
 
     if (fetchVendorId.ok) {
@@ -165,8 +164,6 @@ const Video = ({ state, actions, libraries }) => {
         },
       });
     }
-
-    // setPage({ page: "directDebit", data: block });
   };
 
   const resetPaymentUrl = () => {
@@ -373,11 +370,11 @@ const Video = ({ state, actions, libraries }) => {
       dispatch,
       enquireAction: {
         contact_public_email: "comms@bag.org.uk",
-        fullname: true,
+        full_name: true,
         message: true,
-        emailaddress1: true,
-        mobilephone: true,
-        allow_attachments: true,
+        email_address: true,
+        phone_number: true,
+        subject: true,
         recipients: state.contactList.DEFAULT_CONTACT_LIST,
         // default email subject & template name
         emailSubject: "Viewing Video Issue.",
