@@ -328,39 +328,45 @@ const FindADermatologist = ({ state, block }) => {
       };
 
       return (
-        <Card
-          style={{
-            backgroundColor: colors.lightSilver,
-            borderRadius: 0,
-            marginTop: 20,
-            border: 0,
-          }}
+        <div
+          style={{ backgroundColor: colors.lightSilver, marginTop: 20 }}
           key={key2}
         >
-          <Card.Header style={{ padding: 0, border: 0 }}>
-            <CustomToggle eventKey={id}>
-              <CardHeader derm={derm} id={id} />
-            </CustomToggle>
-          </Card.Header>
-          <Accordion.Collapse eventKey={id}>
-            <Card.Body>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 4fr",
-                  gap: 20,
-                }}
-              >
-                <div style={{ padding: 10 }}>
-                  <ServeAddress />
-                  <ServeBiography />
-                  <ServeShowOnMap />
-                  <ServeUrls />
-                </div>
-              </div>
-            </Card.Body>
-          </Accordion.Collapse>
-        </Card>
+          <BlockWrapper>
+            <Card
+              style={{
+                backgroundColor: colors.lightSilver,
+                borderRadius: 0,
+                border: 0,
+              }}
+              key={key2}
+            >
+              <Card.Header style={{ padding: 0, border: 0 }}>
+                <CustomToggle eventKey={id}>
+                  <CardHeader derm={derm} id={id} />
+                </CustomToggle>
+              </Card.Header>
+              <Accordion.Collapse eventKey={id}>
+                <Card.Body>
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "1fr 4fr",
+                      gap: 20,
+                    }}
+                  >
+                    <div style={{ padding: 10 }}>
+                      <ServeAddress />
+                      <ServeBiography />
+                      <ServeShowOnMap />
+                      <ServeUrls />
+                    </div>
+                  </div>
+                </Card.Body>
+              </Accordion.Collapse>
+            </Card>
+          </BlockWrapper>
+        </div>
       );
     };
 
@@ -393,7 +399,11 @@ const FindADermatologist = ({ state, block }) => {
         info = "Your query returned the following dermatologists:";
       if (query.type === "pc") info = "Your nearest dermatologists are:";
 
-      return <div className="primary-title">{info}</div>;
+      return (
+        <BlockWrapper>
+          <div className="primary-title">{info}</div>
+        </BlockWrapper>
+      );
     };
 
     return (
@@ -505,8 +515,8 @@ const FindADermatologist = ({ state, block }) => {
             queryType={query ? query.type : null}
           />
         </div>
-        <ServeAccordionListOfDerms />
       </BlockWrapper>
+      <ServeAccordionListOfDerms />
     </div>
   );
 };
