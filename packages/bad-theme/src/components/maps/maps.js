@@ -53,8 +53,14 @@ const MapsComponent = ({
       ) {
         marker_key += 1;
       }
-      if (queryType === "pc" && !derm.distance) return null;
-      const POSITION = queryType === "pc" && {
+
+      // --------------------------------------------------------------------------------
+      // 📌  Dont shof markers if cordinates are not available
+      // --------------------------------------------------------------------------------
+      if ((queryType === "pc" && !derm.distance) || !derm.cordinates)
+        return null;
+
+      const mapMarker = queryType === "pc" && {
         lat: Number(derm.cordinates.lat),
         lng: Number(derm.cordinates.lng),
       };
@@ -65,7 +71,7 @@ const MapsComponent = ({
         <Marker
           key={key}
           markerLabel={{ text: "Johny" }}
-          position={POSITION}
+          position={mapMarker}
           label={{ text: marker_label, color: "white", border: "black" }}
           title={"Pedalka"}
           options={{

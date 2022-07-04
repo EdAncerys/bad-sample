@@ -164,20 +164,17 @@ const FindDermatologistOptions = ({ state }) => {
     // 📌 add valid data to data object to be sent to Dynamics
     // not to overwrite existing data in Dynamics only valid inputs are sent
     const data = {};
-    if (bad_includeinfindadermatologist)
-      data.bad_includeinfindadermatologist = bad_includeinfindadermatologist;
-    if (address3_line1) data.address3_line1 = address3_line1;
-    if (address3_line2) data.address3_line2 = address3_line2;
-    if (address3_postalcode) data.address3_postalcode = address3_postalcode;
-    if (address3_city) data.address3_city = address3_city;
-    if (bad_mainhosptialweb) data.bad_mainhosptialweb = bad_mainhosptialweb;
-    if (bad_web1) data.bad_web1 = bad_web1;
-    if (bad_web2) data.bad_web2 = bad_web2;
-    if (bad_web3) data.bad_web3 = bad_web3;
-    if (bad_findadermatologisttext)
-      data.bad_findadermatologisttext = bad_findadermatologisttext;
-    if (bad_profile_photo_url)
-      data.bad_profile_photo_url = bad_profile_photo_url;
+    data.bad_includeinfindadermatologist = bad_includeinfindadermatologist;
+    data.address3_line1 = address3_line1;
+    ata.address3_line2 = address3_line2;
+    data.address3_postalcode = address3_postalcode;
+    data.address3_city = address3_city;
+    data.bad_mainhosptialweb = bad_mainhosptialweb;
+    data.bad_web1 = bad_web1;
+    data.bad_web2 = bad_web2;
+    data.bad_web3 = bad_web3;
+    data.bad_findadermatologisttext = bad_findadermatologisttext;
+    data.bad_profile_photo_url = bad_profile_photo_url;
 
     try {
       setIsFetching(true);
