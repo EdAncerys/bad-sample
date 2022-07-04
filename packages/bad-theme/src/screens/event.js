@@ -90,7 +90,7 @@ const Event = ({ state, actions, libraries }) => {
     contact_email_override,
   } = event.acf;
   const { title, id } = event;
-  // console.log("event", event); // debug
+  console.log("event", event); // debug
 
   if (!position) return <Loading />;
 
@@ -227,6 +227,7 @@ const Event = ({ state, actions, libraries }) => {
     const ServeEmail = () => {
       if (!email && !contact_email_override) return null;
       const displayEmail = contact_email_override || email;
+
       return (
         <div style={{ paddingBottom: `1em` }}>
           <div className="primary-title" style={{ fontSize: 20 }}>
@@ -333,7 +334,7 @@ const Event = ({ state, actions, libraries }) => {
         setEnquireAction({
           dispatch,
           enquireAction: {
-            contact_public_email: event.acf.email || "conference@bad.org.uk",
+            contact_public_email: email || "conference@bad.org.uk",
             form_title: register_form_title || "Event Contact Form",
             form_body:
               register_form_body || `Register for ${title.rendered} event.`,
@@ -341,11 +342,7 @@ const Event = ({ state, actions, libraries }) => {
             full_name: true,
             email_address: true,
             phone_number: true,
-            recipients: [
-              {
-                email: event.acf.email || "conference@bad.org.uk",
-              },
-            ],
+            recipients: [{ email: email || "conference@bad.org.uk" }],
             registerForEvent: title.rendered,
             // default email subject & template name
             emailSubject: `Register for ${title.rendered} event.`,
@@ -363,7 +360,7 @@ const Event = ({ state, actions, libraries }) => {
         setEnquireAction({
           dispatch,
           enquireAction: {
-            contact_public_email: event.acf.email || "conference@bad.org.uk",
+            contact_public_email: email || "conference@bad.org.uk",
             form_title:
               register_form_title || "Event Contact Form (express an interest)",
             form_body:
@@ -373,11 +370,7 @@ const Event = ({ state, actions, libraries }) => {
             full_name: true,
             email_address: true,
             phone_number: true,
-            recipients: [
-              {
-                email: event.acf.email || "conference@bad.org.uk",
-              },
-            ],
+            recipients: [{ email: email || "conference@bad.org.uk" }],
             registerForEvent: title.rendered,
             // default email subject & template name
             emailSubject: `Express an interest for ${title.rendered} event.`,
