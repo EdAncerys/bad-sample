@@ -90,7 +90,6 @@ const FindADermatologist = ({ state, block }) => {
   const fetchDermatologistsByPostCode = async () => {
     try {
       const post_code = query.value.split(" ").join("");
-      console.log("🐞 BYPOSTCODE GET TRIGGERED", post_code); // DEBUG
 
       const url =
         state.auth.APP_HOST +
@@ -103,7 +102,6 @@ const FindADermatologist = ({ state, block }) => {
         const data = await response.json();
         const count = data.recordCount;
 
-        console.log("🐞 data", data); // DEBUG
         // --------------------------------------------------------------------------------
         // 📌  prevent data dublication if user swith search by postcode from name
         // --------------------------------------------------------------------------------
@@ -126,13 +124,12 @@ const FindADermatologist = ({ state, block }) => {
         if (!recordCount) setCount(count);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
   const fetchDermatologistsByName = async () => {
     try {
-      console.log("🐞 BY NAME GET FAD TRIGGERED", query); // DEBUG
       const url = state.auth.APP_HOST + `/catalogue/fad?search=${query.value}`;
       const response = await fetchDataHandler({ path: url, state });
 
@@ -147,7 +144,7 @@ const FindADermatologist = ({ state, block }) => {
         return;
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
