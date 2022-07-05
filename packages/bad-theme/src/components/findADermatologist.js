@@ -28,11 +28,11 @@ const FindADermatologist = ({ state, block }) => {
   const [pc, setPC] = useState("");
   const [name, setName] = useState("");
 
-  const [fadList, setFadList] = useState(null);
+  const [fadList, setFadList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dermOnFocus, setDermOnFocus] = useState(null);
-  const query_limit = useRef(1);
-  const query_skip = useRef(1);
+  const limitRef = useRef(1);
+  const skipRef = useRef(1);
   const enough = useRef(false);
   let crutent = 0;
 
@@ -96,31 +96,28 @@ const FindADermatologist = ({ state, block }) => {
         state.auth.APP_HOST +
         "/catalogue/fad/" +
         post_code +
-        `?limit=${query_limit.current}&skip=${query_skip.current}`;
+        `?limit=${limitRef.current}&skip=${skipRef.current}`;
       const fetching = await fetchDataHandler({ path: url, state });
 
       if (fetching && fetching.ok) {
         const json = await fetching.json();
         const data = json.data;
 
-        console.log("🐞 ", data); // DEBUG
+        console.log("🐞 url", url); // DEBUG
+        console.log("🐞 current", skipRef.current); // DEBUG
+        console.log("🐞 fadList", fadList); // DEBUG
+        console.log("🐞 data", data); // DEBUG
+        setFadList((prev) => [...prev, ...data]);
 
-        // setFadList(data);
-        setFadList((prev) => {
-          return {
-            ...prev,
-            ...data,
-          };
-        });
         // apply focus on first dermatologist found in the list
         setDermOnFocus({
           lat: Number(data[0].cordinates.lat),
           lng: Number(data[0].cordinates.lng),
         });
+        // increment query skip
+        skipRef.current = skipRef.current + 1;
+        console.log("🐞 skipRef.current ", skipRef.current);
       }
-
-      // increment query skip
-      query_skip.current += 1;
     } catch (error) {
       console.log(error);
     }
@@ -169,9 +166,10 @@ const FindADermatologist = ({ state, block }) => {
 
     const ServeDistance = () => {
       if (!derm.distance) return null;
+
       return (
         <div style={{ color: colors.blue, fontStyle: "italic" }}>
-          {derm.distanceDisplay} Away
+          {derm.distance} Away
         </div>
       );
     };
@@ -216,10 +214,7 @@ const FindADermatologist = ({ state, block }) => {
     if (!query) return null;
     if (!fadList) return <Loading />;
 
-    const SingleDerm = ({ derm, id, key2 }) => {
-      // console.log("🐞 ", derm); // debug
-      if (query.type === "pc" && !derm.distance) return null;
-
+    const SingleDerm = ({ derm, id, dermKey }) => {
       const ServeBiography = () => {
         if (!derm.bad_findadermatologisttext) return null;
 
@@ -307,7 +302,7 @@ const FindADermatologist = ({ state, block }) => {
             marginTop: 20,
             border: 0,
           }}
-          key={key2}
+          key={dermKey}
         >
           <Card.Header style={{ padding: 0, border: 0 }}>
             <CustomToggle eventKey={id}>
@@ -372,15 +367,9 @@ const FindADermatologist = ({ state, block }) => {
           {fadList.map((derm, key) => {
             console.log("🐞 ", derm); // debug
 
-            // if (
-            //   (key > 0 && !derm.distance) ||
-            //   (key > 0 &&
-            //     derm.address3_postalcode !==
-            //       fadList[key - 1].address3_postalcode)
-            // ) {
-            //   crutent += 1;
-            // }
-            return <SingleDerm derm={derm} id={crutent} key={key} key2={key} />;
+            return (
+              <SingleDerm derm={derm} id={crutent} key={key} dermKey={key} />
+            );
           })}
         </Accordion>
         <div
@@ -470,7 +459,7 @@ const FindADermatologist = ({ state, block }) => {
         <ServeYouSearched />
         <div style={{ height: 300, marginTop: 20, marginBottom: 20 }}>
           <MapsComponent
-            markers={fadList}
+            markers={fadList.length > 0 ? fadList : null}
             center={dermOnFocus}
             zoom={!!dermOnFocus ? 14 : 10}
             queryType={query ? query.type : null}
