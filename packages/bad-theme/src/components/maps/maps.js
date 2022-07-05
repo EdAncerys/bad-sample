@@ -14,10 +14,11 @@ const MapsComponent = ({
   markers,
   queryType,
 }) => {
-  const CENTER = center || { lat: 51.5072, lng: -0.1276 };
+  const mapCenter = center || { lat: 51.5072, lng: -0.1276 };
   const ZOOM = zoom || 10;
 
-  // console.log("🐞 markers", markers); // debug
+  console.log("🐞 markers", markers); // debug
+  console.log("🐞 mapCenter", mapCenter); // debug
 
   const containerStyle = {
     width: "100%",
@@ -41,7 +42,9 @@ const MapsComponent = ({
 
   const ServeMarkersOnTheMap = () => {
     if (!markers)
-      return <Marker markerLabel={{ text: "Google Map" }} position={CENTER} />;
+      return (
+        <Marker markerLabel={{ text: "Google Map" }} position={mapCenter} />
+      );
     if (markers && markers.length === 0) return null;
 
     let marker_key = 1;
@@ -85,7 +88,11 @@ const MapsComponent = ({
   if (!ready) return <Loading />;
 
   return (
-    <GoogleMap center={CENTER} zoom={ZOOM} mapContainerStyle={containerStyle}>
+    <GoogleMap
+      center={mapCenter}
+      zoom={ZOOM}
+      mapContainerStyle={containerStyle}
+    >
       <ServeMarkersOnTheMap />
     </GoogleMap>
   );

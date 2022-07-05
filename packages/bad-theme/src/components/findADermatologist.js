@@ -24,14 +24,14 @@ const FindADermatologist = ({ state, block }) => {
 
   const dispatch = useAppDispatch();
 
-  const [query, setQuery] = useState();
+  const [query, setQuery] = useState("");
   const [pc, setPC] = useState("");
   const [name, setName] = useState("");
 
-  const [filteredDermatologists, setFilteredDermatologists] = useState();
+  const [fadList, setFadList] = useState(null);
   const [loading, setLoading] = useState(true);
   const [dermOnFocus, setDermOnFocus] = useState(null);
-  const query_limit = useRef(5);
+  const query_limit = useRef(1);
   const enough = useRef(false);
   let crutent = 0;
 
@@ -86,65 +86,53 @@ const FindADermatologist = ({ state, block }) => {
     });
   };
 
-  const handleFocusOnThePostCode = async () => {
-    const path = state.auth.APP_HOST + "/catalogue/ukpostcode/" + query.value;
-    const post_code = await fetchDataHandler({ path, state });
-
-    if (post_code.ok) {
-      const json = await post_code.json();
-      setDermOnFocus({
-        lat: Number(json.data.location.lattitude),
-        lng: Number(json.data.location.longitude),
-      });
-    }
-  };
-
   const fetchDermatologistsByPostCode = async () => {
-    const post_code = query.value.split(" ").join("");
-    const url =
-      state.auth.APP_HOST +
-      "/catalogue/md/" +
-      post_code +
-      `?limit=${query_limit.current}`;
-    const fetching = await fetchDataHandler({ path: url, state });
+    try {
+      const post_code = query.value.split(" ").join("");
+      console.log("🐞 BYPOSTCODE GET TRIGGERED", post_code); // DEBUG
 
-    if (fetching && fetching.ok) {
-      const json = await fetching.json();
-      const data = json.data;
-      const result = data.reduce((acc, derm) => {
-        return {
-          ...acc,
-          [derm.address3_postalcode]: [derm],
-        };
-      }, {});
-      setDermOnFocus({
-        lat: Number(data[0].cordinates.lat),
-        lng: Number(data[0].cordinates.lng),
-      });
-      setFilteredDermatologists(data);
-      handleFocusOnThePostCode();
+      const url =
+        state.auth.APP_HOST +
+        "/catalogue/fad/" +
+        post_code +
+        `?limit=${query_limit.current}`;
+      const fetching = await fetchDataHandler({ path: url, state });
+
+      if (fetching && fetching.ok) {
+        const json = await fetching.json();
+        const data = json.data;
+
+        console.log("🐞 ", data); // DEBUG
+
+        setFadList(data);
+        // apply focus on first dermatologist found in the list
+        setDermOnFocus({
+          lat: Number(data[0].cordinates.lat),
+          lng: Number(data[0].cordinates.lng),
+        });
+      }
+
+      // increment query limit
+      query_limit.current += 1;
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const fetchDermatologistsByName = async () => {
-    const url = state.auth.APP_HOST + "/catalogue/md";
-    const fetching = await fetchDataHandler({ path: url, state });
+    try {
+      console.log("🐞 BY NAME GET FAD TRIGGERED", query); // DEBUG
+      const url = state.auth.APP_HOST + `/catalogue/fad?search=andy`;
+      const response = await fetchDataHandler({ path: url, state });
 
-    if (fetching.ok) {
-      const json = await fetching.json();
-      const data = json.data;
-      const regex = new RegExp(query.value, "gi");
-
-      const filteredData = data.filter((item) => {
-        let fullname = item.fullname;
-
-        // break if fullname is not found or valid
-        if (!fullname) return false;
-
-        return fullname.match(regex);
-      });
-
-      setFilteredDermatologists(filteredData);
+      if (response.success) {
+        const data = await response.json();
+        // set filtered dermatologists
+        setFadList(data.data);
+      }
+      setFadList(null);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -153,28 +141,6 @@ const FindADermatologist = ({ state, block }) => {
     if (query && query.type === "name") fetchDermatologistsByName();
     setLoading(false);
   }, [query]);
-
-  const handleLoadMore = async () => {
-    setLoading(true);
-    const post_code = query.value.split(" ").join("");
-    const url =
-      state.auth.APP_HOST +
-      "/catalogue/md/" +
-      post_code +
-      `?limit=5&skip=${query_limit.current}`;
-    const more = await fetchDataHandler({ path: url, state });
-
-    if (more.ok) {
-      const json = await more.json();
-      if (json.data.length === 0) enough.current = true;
-      setFilteredDermatologists((filteredDermatologists) => [
-        ...filteredDermatologists,
-        ...json.data,
-      ]);
-      query_limit.current += 10;
-      setLoading(false);
-    }
-  };
 
   const CardHeader = ({ derm, id }) => {
     const ServeHeadline = () => {
@@ -231,8 +197,6 @@ const FindADermatologist = ({ state, block }) => {
   };
 
   function CustomToggle({ children, eventKey, callback }) {
-    const { activeEventKey } = useContext(AccordionContext);
-
     const decoratedOnClick = useAccordionButton(
       eventKey,
       () => callback && callback(eventKey)
@@ -243,14 +207,15 @@ const FindADermatologist = ({ state, block }) => {
 
   const ServeAccordionListOfDerms = () => {
     if (!query) return null;
-    if (!filteredDermatologists) return <Loading />;
+    if (!fadList) return <Loading />;
 
     const SingleDerm = ({ derm, id, key2 }) => {
       // console.log("🐞 ", derm); // debug
-
       if (query.type === "pc" && !derm.distance) return null;
+
       const ServeBiography = () => {
         if (!derm.bad_findadermatologisttext) return null;
+
         return (
           <div style={{ marginTop: 20 }}>
             <div className="primary-title">Bio</div>
@@ -328,53 +293,46 @@ const FindADermatologist = ({ state, block }) => {
       };
 
       return (
-        <div
-          style={{ backgroundColor: colors.lightSilver, marginTop: 20 }}
+        <Card
+          style={{
+            backgroundColor: colors.lightSilver,
+            borderRadius: 0,
+            marginTop: 20,
+            border: 0,
+          }}
           key={key2}
         >
-          <BlockWrapper>
-            <Card
-              style={{
-                backgroundColor: colors.lightSilver,
-                borderRadius: 0,
-                border: 0,
-              }}
-              key={key2}
-            >
-              <Card.Header style={{ padding: 0, border: 0 }}>
-                <CustomToggle eventKey={id}>
-                  <CardHeader derm={derm} id={id} />
-                </CustomToggle>
-              </Card.Header>
-              <Accordion.Collapse eventKey={id}>
-                <Card.Body>
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "1fr 4fr",
-                      gap: 20,
-                    }}
-                  >
-                    <div style={{ padding: 10 }}>
-                      <ServeAddress />
-                      <ServeBiography />
-                      <ServeShowOnMap />
-                      <ServeUrls />
-                    </div>
-                  </div>
-                </Card.Body>
-              </Accordion.Collapse>
-            </Card>
-          </BlockWrapper>
-        </div>
+          <Card.Header style={{ padding: 0, border: 0 }}>
+            <CustomToggle eventKey={id}>
+              <CardHeader derm={derm} id={id} />
+            </CustomToggle>
+          </Card.Header>
+          <Accordion.Collapse eventKey={id}>
+            <Card.Body>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 4fr",
+                  gap: 20,
+                }}
+              >
+                <div style={{ padding: 10 }}>
+                  <ServeAddress />
+                  <ServeBiography />
+                  <ServeShowOnMap />
+                  <ServeUrls />
+                </div>
+              </div>
+            </Card.Body>
+          </Accordion.Collapse>
+        </Card>
       );
     };
 
     const ServeLoadMoreButton = () => {
       if (loading) return <Loading />;
-      if (query.type === "name" && filteredDermatologists.length > 0)
-        return null;
-      if (query.type === "name" && filteredDermatologists.length === 0)
+      if (query.type === "name" && fadList.length > 0) return null;
+      if (query.type === "name" && fadList.length === 0)
         return "No records found with this query";
 
       if (enough.current) return "There is no more records to show";
@@ -382,9 +340,7 @@ const FindADermatologist = ({ state, block }) => {
       return (
         <div
           className="blue-btn"
-          onClick={() => {
-            handleLoadMore();
-          }}
+          onClick={fetchDermatologistsByPostCode}
           style={{ width: 150 }}
         >
           Load more
@@ -399,26 +355,24 @@ const FindADermatologist = ({ state, block }) => {
         info = "Your query returned the following dermatologists:";
       if (query.type === "pc") info = "Your nearest dermatologists are:";
 
-      return (
-        <BlockWrapper>
-          <div className="primary-title">{info}</div>
-        </BlockWrapper>
-      );
+      return <div className="primary-title">{info}</div>;
     };
 
     return (
       <>
         <ServeInfo />
         <Accordion style={{ border: 0 }}>
-          {filteredDermatologists.map((derm, key) => {
-            if (
-              (key > 0 && !derm.distance) ||
-              (key > 0 &&
-                derm.address3_postalcode !==
-                  filteredDermatologists[key - 1].address3_postalcode)
-            ) {
-              crutent += 1;
-            }
+          {fadList.map((derm, key) => {
+            console.log("🐞 ", derm); // debug
+
+            // if (
+            //   (key > 0 && !derm.distance) ||
+            //   (key > 0 &&
+            //     derm.address3_postalcode !==
+            //       fadList[key - 1].address3_postalcode)
+            // ) {
+            //   crutent += 1;
+            // }
             return <SingleDerm derm={derm} id={crutent} key={key} key2={key} />;
           })}
         </Accordion>
@@ -509,14 +463,14 @@ const FindADermatologist = ({ state, block }) => {
         <ServeYouSearched />
         <div style={{ height: 300, marginTop: 20, marginBottom: 20 }}>
           <MapsComponent
-            markers={filteredDermatologists}
+            markers={fadList}
             center={dermOnFocus}
             zoom={!!dermOnFocus ? 14 : 10}
             queryType={query ? query.type : null}
           />
         </div>
+        <ServeAccordionListOfDerms />
       </BlockWrapper>
-      <ServeAccordionListOfDerms />
     </div>
   );
 };
