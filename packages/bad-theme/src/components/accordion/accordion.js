@@ -38,7 +38,7 @@ function AlterAccordion({
 
   if (!block) return <Loading />;
   const { lg } = muiQuery();
-  const { dynamicsApps } = useAppState();
+  const { dynamicsApps, isActiveUser } = useAppState();
 
   const data = state.source.get(state.router.link);
   const {
@@ -54,6 +54,7 @@ function AlterAccordion({
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [searchInput, setInput] = useState(null);
+  const [isForBADMembersOnly, setForMembersOnly] = useState(false);
   const searchFilterRef = useRef(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
@@ -61,10 +62,20 @@ function AlterAccordion({
   // Uncoment to enable vertical padding ammend for accordion items (default: false)
   if (disable_vertical_padding) marginVertical = 0;
 
-  let isBADApproved = false;
-  if (dynamicsApps && dynamicsApps.subs.data.length > 0) isBADApproved = true;
-  let isForBADMembersOnly = false;
-  if (approved_bad_members_only && !isBADApproved) isForBADMembersOnly = true;
+  useEffect(() => {
+    // 📌 handle member only accordion items if no user is logged in
+    if (approved_bad_members_only && !isActiveUser) {
+      setForMembersOnly(true);
+      return;
+    }
+
+    // 📌 handle member only accordion items if user is logged in
+    if (approved_bad_members_only && isActiveUser) {
+      // check if user have active memberships in Dynamics
+      if (dynamicsApps && dynamicsApps.subs.data.length > 0) return;
+      setForMembersOnly(true);
+    }
+  }, [dynamicsApps, isActiveUser]);
 
   useEffect(() => {
     // 📌 update filter data on block change
