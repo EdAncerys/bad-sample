@@ -32,6 +32,7 @@ const FindADermatologist = ({ state, block }) => {
   const [loading, setLoading] = useState(true);
   const [dermOnFocus, setDermOnFocus] = useState(null);
   const query_limit = useRef(1);
+  const query_skip = useRef(1);
   const enough = useRef(false);
   let crutent = 0;
 
@@ -95,7 +96,7 @@ const FindADermatologist = ({ state, block }) => {
         state.auth.APP_HOST +
         "/catalogue/fad/" +
         post_code +
-        `?limit=${query_limit.current}`;
+        `?limit=${query_limit.current}&skip=${query_skip.current}`;
       const fetching = await fetchDataHandler({ path: url, state });
 
       if (fetching && fetching.ok) {
@@ -104,7 +105,13 @@ const FindADermatologist = ({ state, block }) => {
 
         console.log("🐞 ", data); // DEBUG
 
-        setFadList(data);
+        // setFadList(data);
+        setFadList((prev) => {
+          return {
+            ...prev,
+            ...data,
+          };
+        });
         // apply focus on first dermatologist found in the list
         setDermOnFocus({
           lat: Number(data[0].cordinates.lat),
@@ -112,8 +119,8 @@ const FindADermatologist = ({ state, block }) => {
         });
       }
 
-      // increment query limit
-      query_limit.current += 1;
+      // increment query skip
+      query_skip.current += 1;
     } catch (error) {
       console.log(error);
     }
