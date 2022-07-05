@@ -31,10 +31,10 @@ const FindADermatologist = ({ state, block }) => {
   const [fadList, setFadList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dermOnFocus, setDermOnFocus] = useState(null);
-  const limitRef = useRef(1);
-  const skipRef = useRef(1);
+  const [recordCount, setCount] = useState(null);
+  const limitRef = useRef(2);
+  const skipRef = useRef(0);
   const enough = useRef(false);
-  let crutent = 0;
 
   // HANDLERS ------------------------------------------------------------------------
 
@@ -97,26 +97,33 @@ const FindADermatologist = ({ state, block }) => {
         "/catalogue/fad/" +
         post_code +
         `?limit=${limitRef.current}&skip=${skipRef.current}`;
-      const fetching = await fetchDataHandler({ path: url, state });
+      const response = await fetchDataHandler({ path: url, state });
 
-      if (fetching && fetching.ok) {
-        const json = await fetching.json();
-        const data = json.data;
+      if (response && response.ok) {
+        const data = await response.json();
+        const count = data.recordCount;
 
-        console.log("🐞 url", url); // DEBUG
-        console.log("🐞 current", skipRef.current); // DEBUG
-        console.log("🐞 fadList", fadList); // DEBUG
         console.log("🐞 data", data); // DEBUG
-        setFadList((prev) => [...prev, ...data]);
+        // --------------------------------------------------------------------------------
+        // 📌  prevent data dublication if user swith search by postcode from name
+        // --------------------------------------------------------------------------------
+        if (skipRef.current === 0) {
+          setFadList((prev) => [...data.data]);
+        } else {
+          setFadList((prev) => [...prev, ...data.data]);
+        }
 
-        // apply focus on first dermatologist found in the list
-        setDermOnFocus({
-          lat: Number(data[0].cordinates.lat),
-          lng: Number(data[0].cordinates.lng),
-        });
+        // apply focus on first dermatologist found in the list if cordinates object is not empty
+        if (data.length && data[0].cordinates) {
+          setDermOnFocus({
+            lat: Number(data[0].cordinates.lat),
+            lng: Number(data[0].cordinates.lng),
+          });
+        }
         // increment query skip
-        skipRef.current = skipRef.current + 1;
-        console.log("🐞 skipRef.current ", skipRef.current);
+        skipRef.current = skipRef.current + limitRef.current;
+        // hide load more button if there is no more data
+        if (!recordCount) setCount(count);
       }
     } catch (error) {
       console.log(error);
@@ -126,15 +133,19 @@ const FindADermatologist = ({ state, block }) => {
   const fetchDermatologistsByName = async () => {
     try {
       console.log("🐞 BY NAME GET FAD TRIGGERED", query); // DEBUG
-      const url = state.auth.APP_HOST + `/catalogue/fad?search=andy`;
+      const url = state.auth.APP_HOST + `/catalogue/fad?search=${query.value}`;
       const response = await fetchDataHandler({ path: url, state });
 
-      if (response.success) {
+      // reset query skip
+      if (recordCount) setCount(null);
+      skipRef.current = 0;
+
+      if (response && response.ok) {
         const data = await response.json();
         // set filtered dermatologists
         setFadList(data.data);
+        return;
       }
-      setFadList(null);
     } catch (error) {
       console.log(error);
     }
@@ -165,11 +176,11 @@ const FindADermatologist = ({ state, block }) => {
     };
 
     const ServeDistance = () => {
-      if (!derm.distance) return null;
+      if (!derm.distanceDisplay) return null;
 
       return (
         <div style={{ color: colors.blue, fontStyle: "italic" }}>
-          {derm.distance} Away
+          {derm.distanceDisplay} Away
         </div>
       );
     };
@@ -246,26 +257,37 @@ const FindADermatologist = ({ state, block }) => {
       const ServeUrls = () => {
         if (!derm.bad_web1 && !derm.bad_web2 && !derm.bad_web3) return null;
 
+        let webAddressOne = derm.bad_web1;
+        // if web address dont include http:// or https:// then add it
+        if (webAddressOne && !webAddressOne.includes("https"))
+          webAddressOne = "https://" + webAddressOne;
+        let webAddressTwo = derm.bad_web2;
+        if (webAddressTwo && !webAddressTwo.includes("https"))
+          webAddressTwo = "https://" + webAddressTwo;
+        let webAddressThree = derm.bad_web3;
+        if (webAddressThree && !webAddressThree.includes("https"))
+          webAddressThree = "https://" + webAddressThree;
+
         return (
           <div style={{ marginTop: 20 }}>
             <div className="primary-title">Private Practice Links</div>
             {derm.bad_web1 && (
               <div className="menu-title">
-                <a href={derm.bad_web1} target="_blank">
+                <a href={webAddressOne} target="_blank">
                   {derm.bad_web1}
                 </a>
               </div>
             )}
             {derm.bad_web2 && (
               <div className="menu-title">
-                <a href={derm.bad_web2} target="_blank">
+                <a href={webAddressTwo} target="_blank">
                   {derm.bad_web2}
                 </a>
               </div>
             )}
             {derm.bad_web3 && (
               <div className="menu-title">
-                <a href={derm.bad_web3} target="_blank">
+                <a href={webAddressThree} target="_blank">
                   {derm.bad_web3}
                 </a>
               </div>
@@ -306,24 +328,16 @@ const FindADermatologist = ({ state, block }) => {
         >
           <Card.Header style={{ padding: 0, border: 0 }}>
             <CustomToggle eventKey={id}>
-              <CardHeader derm={derm} id={id} />
+              <CardHeader derm={derm} id={dermKey} />
             </CustomToggle>
           </Card.Header>
-          <Accordion.Collapse eventKey={id}>
+          <Accordion.Collapse eventKey={dermKey}>
             <Card.Body>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 4fr",
-                  gap: 20,
-                }}
-              >
-                <div style={{ padding: 10 }}>
-                  <ServeAddress />
-                  <ServeBiography />
-                  <ServeShowOnMap />
-                  <ServeUrls />
-                </div>
+              <div style={{ padding: 10 }}>
+                <ServeAddress />
+                <ServeBiography />
+                <ServeShowOnMap />
+                <ServeUrls />
               </div>
             </Card.Body>
           </Accordion.Collapse>
@@ -333,11 +347,15 @@ const FindADermatologist = ({ state, block }) => {
 
     const ServeLoadMoreButton = () => {
       if (loading) return <Loading />;
-      if (query.type === "name" && fadList.length > 0) return null;
-      if (query.type === "name" && fadList.length === 0)
-        return "No records found with this query";
+      // dont show load more button if there is no more data to load || query been exhausted by name search
+      if (
+        (query.type === "pc" && recordCount && fadList.length >= recordCount) ||
+        (query.type === "name" && fadList.length)
+      )
+        return null;
 
-      if (enough.current) return "There is no more records to show";
+      if (query.type === "name" && fadList.length === 0)
+        return <div>No records found with this query</div>;
 
       return (
         <div
@@ -365,11 +383,7 @@ const FindADermatologist = ({ state, block }) => {
         <ServeInfo />
         <Accordion style={{ border: 0 }}>
           {fadList.map((derm, key) => {
-            console.log("🐞 ", derm); // debug
-
-            return (
-              <SingleDerm derm={derm} id={crutent} key={key} dermKey={key} />
-            );
+            return <SingleDerm derm={derm} id={key} key={key} dermKey={key} />;
           })}
         </Accordion>
         <div
@@ -459,7 +473,9 @@ const FindADermatologist = ({ state, block }) => {
         <ServeYouSearched />
         <div style={{ height: 300, marginTop: 20, marginBottom: 20 }}>
           <MapsComponent
-            markers={fadList.length > 0 ? fadList : null}
+            markers={
+              fadList.length > 0 && query.type !== "name" ? fadList : null
+            }
             center={dermOnFocus}
             zoom={!!dermOnFocus ? 14 : 10}
             queryType={query ? query.type : null}
