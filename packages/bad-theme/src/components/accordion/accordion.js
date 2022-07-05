@@ -82,6 +82,8 @@ function AlterAccordion({
         if (badApps.length) isBadMember = true;
       }
 
+      // update access to accordion item based on user membership status
+      // manage to set in state both true & false due isActiveUser async update
       if (isBadMember) setForMembersOnly(false);
       if (!isBadMember) setForMembersOnly(true);
     }
