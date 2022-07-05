@@ -71,9 +71,19 @@ function AlterAccordion({
 
     // 📌 handle member only accordion items if user is logged in
     if (approved_bad_members_only && isActiveUser) {
-      // check if user have active memberships in Dynamics
-      if (dynamicsApps && dynamicsApps.subs.data.length > 0) return;
-      setForMembersOnly(true);
+      // check if user have active BAD memberships in Dynamics
+      let isBadMember = false;
+      if (dynamicsApps && dynamicsApps.subs) {
+        let badApps = dynamicsApps.subs.data.filter((app) => {
+          let hasBADMemberships = app.bad_organisedfor === "BAD";
+          return hasBADMemberships;
+        });
+        console.log("🐞 ", badApps);
+        if (badApps.length) isBadMember = true;
+      }
+
+      if (isBadMember) setForMembersOnly(false);
+      if (!isBadMember) setForMembersOnly(true);
     }
   }, [dynamicsApps, isActiveUser]);
 
