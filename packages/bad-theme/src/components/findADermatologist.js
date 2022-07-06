@@ -38,8 +38,13 @@ const FindADermatologist = ({ state, block }) => {
   const skipPCRef = useRef(0);
   const skipNameRef = useRef(0);
 
-  // HANDLERS ------------------------------------------------------------------------
+  // --------------------------------------------------------------------------------
+  // 📌  REMOVE TO ENABLE COMPONENT 📌
+  // component disabled in production
+  // --------------------------------------------------------------------------------
+  return null;
 
+  // HANDLERS ------------------------------------------------------------------------
   const handleSearchByPostcode = () => {
     let isPostcode = false;
     let postcodeInput = pc.replace(/\s/g, "");
