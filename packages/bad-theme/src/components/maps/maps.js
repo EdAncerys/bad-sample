@@ -14,10 +14,11 @@ const MapsComponent = ({
   markers,
   queryType,
 }) => {
-  const CENTER = center || { lat: 51.5072, lng: -0.1276 };
+  const mapCenter = center || { lat: 51.5072, lng: -0.1276 };
   const ZOOM = zoom || 10;
 
-  console.log("🐞 markers", markers);
+  console.log("🐞 markers", markers); // debug
+  console.log("🐞 mapCenter", mapCenter); // debug
 
   const containerStyle = {
     width: "100%",
@@ -30,7 +31,10 @@ const MapsComponent = ({
   useScript({
     url: `https://maps.googleapis.com/maps/api/js?key=${state.auth.GOOGLE_API_KEY}&libraries=places`,
   });
+
   useEffect(async () => {
+    // check if google script exist and is loaded
+
     // 📌 allow google maps script to be injected into the DOM
     await new Promise((resolve) => setTimeout(resolve, 500));
     setReady(true);
@@ -38,7 +42,9 @@ const MapsComponent = ({
 
   const ServeMarkersOnTheMap = () => {
     if (!markers)
-      return <Marker markerLabel={{ text: "Google Map" }} position={CENTER} />;
+      return (
+        <Marker markerLabel={{ text: "Google Map" }} position={mapCenter} />
+      );
     if (markers && markers.length === 0) return null;
 
     let marker_key = 1;
@@ -50,12 +56,17 @@ const MapsComponent = ({
       ) {
         marker_key += 1;
       }
-      if (queryType === "pc" && !derm.distance) return null;
-      const POSITION = queryType === "pc" && {
+
+      // --------------------------------------------------------------------------------
+      // 📌  Dont shof markers if cordinates are not available
+      // --------------------------------------------------------------------------------
+      if ((queryType === "pc" && !derm.distance) || !derm.cordinates)
+        return null;
+
+      const mapMarker = queryType === "pc" && {
         lat: Number(derm.cordinates.lat),
         lng: Number(derm.cordinates.lng),
       };
-      console.log("🐞 POSITION", POSITION);
 
       const marker_label = marker_key.toString();
 
@@ -63,7 +74,7 @@ const MapsComponent = ({
         <Marker
           key={key}
           markerLabel={{ text: "Johny" }}
-          position={POSITION}
+          position={mapMarker}
           label={{ text: marker_label, color: "white", border: "black" }}
           title={"Pedalka"}
           options={{
@@ -77,7 +88,11 @@ const MapsComponent = ({
   if (!ready) return <Loading />;
 
   return (
-    <GoogleMap center={CENTER} zoom={ZOOM} mapContainerStyle={containerStyle}>
+    <GoogleMap
+      center={mapCenter}
+      zoom={ZOOM}
+      mapContainerStyle={containerStyle}
+    >
       <ServeMarkersOnTheMap />
     </GoogleMap>
   );
