@@ -50,7 +50,7 @@ function AlterAccordion({
     is_active,
   } = block;
 
-  console.log("🐞 ACORDION ITEM", block); // debug
+  // console.log("🐞 ACORDION ITEM", block); // debug
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [searchInput, setInput] = useState(null);
@@ -78,7 +78,6 @@ function AlterAccordion({
           let hasBADMemberships = app.bad_organisedfor === "BAD";
           return hasBADMemberships;
         });
-        console.log("🐞 ", badApps);
         if (badApps.length) isBadMember = true;
       }
 

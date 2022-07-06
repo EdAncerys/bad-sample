@@ -100,7 +100,6 @@ const FindDermatologistOptions = ({ state }) => {
       state,
       contactid: isActiveUser.contactid,
     });
-    console.log("🐞 PERMISION", permision); // debug
     if (permision) setFadPermision(permision);
   }, [isActiveUser, dynamicsApps]);
 
@@ -187,8 +186,6 @@ const FindDermatologistOptions = ({ state }) => {
       // --------------------------------------------------------------------------------
       bad_profile_photo_url: formData.bad_profile_photo_url,
     };
-
-    console.log("🐞 ", data);
 
     try {
       setIsFetching(true);

@@ -90,7 +90,7 @@ const Event = ({ state, actions, libraries }) => {
     contact_email_override,
   } = event.acf;
   const { title, id } = event;
-  console.log("event", event); // debug
+  // console.log("event", event); // debug
 
   if (!position) return <Loading />;
 
