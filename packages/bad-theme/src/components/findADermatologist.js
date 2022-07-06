@@ -214,13 +214,13 @@ const FindADermatologist = ({ state, block }) => {
       const { activeEventKey } = useContext(AccordionContext);
 
       // 📌 if bio, all web links empty, hide show more option
-      if (
+      const isNoBody =
         !derm.bad_findadermatologisttext &&
         !derm.bad_web1 &&
         !derm.bad_web2 &&
-        !derm.bad_web3
-      )
-        return null;
+        !derm.bad_web3;
+
+      if (isNoBody) return null;
 
       return (
         <div className="flex-row" style={{ alignItems: "flex-end" }}>
@@ -260,6 +260,12 @@ const FindADermatologist = ({ state, block }) => {
     if (!fadList) return <Loading />;
 
     const SingleDerm = ({ derm, id, dermKey }) => {
+      const isNoBody =
+        !derm.bad_findadermatologisttext &&
+        !derm.bad_web1 &&
+        !derm.bad_web2 &&
+        !derm.bad_web3;
+
       const ServeBiography = () => {
         if (!derm.bad_findadermatologisttext) return null;
 
@@ -349,7 +355,7 @@ const FindADermatologist = ({ state, block }) => {
             </CustomToggle>
           </Card.Header>
           <Accordion.Collapse eventKey={dermKey}>
-            <Card.Body style={{ paddingTop: 0 }}>
+            <Card.Body style={{ padding: isNoBody ? 0 : `0 1em 1em 1em` }}>
               <div style={{ padding: `0 10px` }}>
                 <ServeBiography />
                 <ServeShowOnMap />
