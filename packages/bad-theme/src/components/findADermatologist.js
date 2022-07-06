@@ -31,10 +31,12 @@ const FindADermatologist = ({ state, block }) => {
   const [fadList, setFadList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dermOnFocus, setDermOnFocus] = useState(null);
-  const [recordCount, setCount] = useState(null);
-  const limitRef = useRef(2);
-  const skipRef = useRef(0);
-  const enough = useRef(false);
+  const [recordPCCount, setPCCount] = useState(null);
+  const [recordNameCount, setNameCount] = useState(null);
+
+  const limitRef = useRef(2); // data chunk size
+  const skipPCRef = useRef(0);
+  const skipNameRef = useRef(0);
 
   // HANDLERS ------------------------------------------------------------------------
 
@@ -47,6 +49,11 @@ const FindADermatologist = ({ state, block }) => {
 
     // display error message if postoce is not valid
     if (isPostcode) {
+      if (recordNameCount) setNameCount(null);
+      if (recordPCCount) setPCCount(null);
+      skipPCRef.current = 0; // reset skip count
+      skipNameRef.current = 0; // reset skip count
+
       setQuery({
         type: "pc",
         value: pc,
@@ -69,6 +76,11 @@ const FindADermatologist = ({ state, block }) => {
   const handleSearchByName = () => {
     // display error message if name is not valid
     if (name.length) {
+      if (recordNameCount) setNameCount(null);
+      if (recordPCCount) setPCCount(null);
+      skipPCRef.current = 0; // reset skip count
+      skipNameRef.current = 0; // reset skip count
+
       setQuery({
         type: "name",
         value: name,
@@ -95,7 +107,7 @@ const FindADermatologist = ({ state, block }) => {
         state.auth.APP_HOST +
         "/catalogue/fad/" +
         post_code +
-        `?limit=${limitRef.current}&skip=${skipRef.current}`;
+        `?limit=${limitRef.current}&skip=${skipPCRef.current}`;
       const response = await fetchDataHandler({ path: url, state });
 
       if (response && response.ok) {
@@ -105,7 +117,7 @@ const FindADermatologist = ({ state, block }) => {
         // --------------------------------------------------------------------------------
         // 📌  prevent data dublication if user swith search by postcode from name
         // --------------------------------------------------------------------------------
-        if (skipRef.current === 0) {
+        if (skipPCRef.current === 0) {
           setFadList((prev) => [...data.data]);
         } else {
           setFadList((prev) => [...prev, ...data.data]);
@@ -119,9 +131,9 @@ const FindADermatologist = ({ state, block }) => {
           });
         }
         // increment query skip
-        skipRef.current = skipRef.current + limitRef.current;
+        skipPCRef.current = skipPCRef.current + limitRef.current;
         // hide load more button if there is no more data
-        if (!recordCount) setCount(count);
+        if (!recordPCCount) setPCCount(count);
       }
     } catch (error) {
       // console.log(error);
@@ -130,18 +142,27 @@ const FindADermatologist = ({ state, block }) => {
 
   const fetchDermatologistsByName = async () => {
     try {
-      const url = state.auth.APP_HOST + `/catalogue/fad?search=${query.value}`;
+      const url =
+        state.auth.APP_HOST +
+        `/catalogue/fad?search=${query.value}` +
+        `&limit=${limitRef.current}&skip=${skipNameRef.current}`;
       const response = await fetchDataHandler({ path: url, state });
-
-      // reset query skip
-      if (recordCount) setCount(null);
-      skipRef.current = 0;
 
       if (response && response.ok) {
         const data = await response.json();
+        const count = data.recordCount;
+
         // set filtered dermatologists
-        setFadList(data.data);
-        return;
+        if (skipNameRef.current === 0) {
+          setFadList((prev) => [...data.data]);
+        } else {
+          setFadList((prev) => [...prev, ...data.data]);
+        }
+
+        // increment query skip
+        skipNameRef.current = skipNameRef.current + limitRef.current;
+        // hide load more button if there is no more data
+        if (!recordNameCount) setNameCount(count);
       }
     } catch (error) {
       // console.log(error);
@@ -343,21 +364,28 @@ const FindADermatologist = ({ state, block }) => {
     };
 
     const ServeLoadMoreButton = () => {
+      const isNameQuery = query.type === "name";
+
       if (loading) return <Loading />;
       // dont show load more button if there is no more data to load || query been exhausted by name search
       if (
-        (query.type === "pc" && recordCount && fadList.length >= recordCount) ||
-        (query.type === "name" && fadList.length)
+        (!isNameQuery && recordPCCount && fadList.length >= recordPCCount) ||
+        (isNameQuery && recordNameCount && fadList.length >= recordNameCount)
       )
         return null;
 
-      if (query.type === "name" && fadList.length === 0)
+      if (isNameQuery && fadList.length === 0)
         return <div>No records found with this query</div>;
+
+      const onClickHandler = () => {
+        if (isNameQuery) fetchDermatologistsByName();
+        if (!isNameQuery) fetchDermatologistsByPostCode();
+      };
 
       return (
         <div
           className="blue-btn"
-          onClick={fetchDermatologistsByPostCode}
+          onClick={onClickHandler}
           style={{ width: 150 }}
         >
           Load more
