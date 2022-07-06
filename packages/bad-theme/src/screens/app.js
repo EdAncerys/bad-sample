@@ -67,7 +67,8 @@ const App = ({ state, actions }) => {
   let urlPath = state.router.link;
   const data = state.source.get(urlPath);
   const useEffectRef = useRef(true);
-  // console.log("INDEX data", data); // debug
+  console.log("INDEX data", data); // debug
+
   // --------------------------------------------------------------------------------
   // 📌  B2C login handler.
   // --------------------------------------------------------------------------------
