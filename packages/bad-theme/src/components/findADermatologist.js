@@ -38,8 +38,13 @@ const FindADermatologist = ({ state, block }) => {
   const skipPCRef = useRef(0);
   const skipNameRef = useRef(0);
 
-  // HANDLERS ------------------------------------------------------------------------
+  // --------------------------------------------------------------------------------
+  // 📌  REMOVE TO ENABLE COMPONENT 📌
+  // component disabled in production
+  // --------------------------------------------------------------------------------
+  return null;
 
+  // HANDLERS ------------------------------------------------------------------------
   const handleSearchByPostcode = () => {
     let isPostcode = false;
     let postcodeInput = pc.replace(/\s/g, "");
@@ -186,9 +191,16 @@ const FindADermatologist = ({ state, block }) => {
 
     const ServeAddress = () => {
       return (
-        <div>
-          {derm.address3_line1} {derm.address3_line2}, {derm.address3_city}{" "}
-          {derm.address3_postalcode}
+        <div className="flex-col">
+          <div className="flex">
+            <div>
+              {derm.address3_line1} {derm.address3_line2}
+            </div>
+            {derm.address3_city && <div>, {derm.address3_city}</div>}
+            <div className="flex" style={{ paddingLeft: 5 }}>
+              {derm.address3_postalcode}
+            </div>
+          </div>
         </div>
       );
     };
@@ -205,6 +217,15 @@ const FindADermatologist = ({ state, block }) => {
 
     const ServeActions = () => {
       const { activeEventKey } = useContext(AccordionContext);
+
+      // 📌 if bio, all web links empty, hide show more option
+      const isNoBody =
+        !derm.bad_findadermatologisttext &&
+        !derm.bad_web1 &&
+        !derm.bad_web2 &&
+        !derm.bad_web3;
+
+      if (isNoBody) return null;
 
       return (
         <div className="flex-row" style={{ alignItems: "flex-end" }}>
@@ -244,6 +265,12 @@ const FindADermatologist = ({ state, block }) => {
     if (!fadList) return <Loading />;
 
     const SingleDerm = ({ derm, id, dermKey }) => {
+      const isNoBody =
+        !derm.bad_findadermatologisttext &&
+        !derm.bad_web1 &&
+        !derm.bad_web2 &&
+        !derm.bad_web3;
+
       const ServeBiography = () => {
         if (!derm.bad_findadermatologisttext) return null;
 
@@ -251,23 +278,6 @@ const FindADermatologist = ({ state, block }) => {
           <div style={{ marginTop: 20 }}>
             <div className="primary-title">Bio</div>
             {derm.bad_findadermatologisttext}
-          </div>
-        );
-      };
-
-      const ServeAddress = () => {
-        if (!derm.address3_line1) return null;
-
-        return (
-          <div className="primary-title mb-2" style={{ color: colors.navy }}>
-            <div className="primary-title">Hospital / Practice address</div>
-            <div>
-              {derm.address3_line1 && <p>{derm.address3_line1}</p>}
-              {derm.address3_line2 && <p>{derm.address3_line2}</p>}
-              <p>
-                {derm.address3_city} {derm.address3_postalcode}
-              </p>
-            </div>
           </div>
         );
       };
@@ -350,9 +360,8 @@ const FindADermatologist = ({ state, block }) => {
             </CustomToggle>
           </Card.Header>
           <Accordion.Collapse eventKey={dermKey}>
-            <Card.Body>
-              <div style={{ padding: 10 }}>
-                <ServeAddress />
+            <Card.Body style={{ padding: isNoBody ? 0 : `0 1em 1em 1em` }}>
+              <div style={{ padding: `0 10px` }}>
                 <ServeBiography />
                 <ServeShowOnMap />
                 <ServeUrls />
