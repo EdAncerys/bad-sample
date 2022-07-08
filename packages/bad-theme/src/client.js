@@ -24,6 +24,7 @@ const BADTheme = {
         isExternal: false,
         location: "/new-url",
       },
+      initiatedPayments: [],
     },
     theme: {
       menuUrl: "/menu/primary-menu",
@@ -98,6 +99,13 @@ const BADTheme = {
           });
         });
       },
+      //
+      addInitiatedPayment:
+        ({ state }) =>
+        (buttonId) => {
+          console.log(buttonId);
+          state.data.initiatedPayments.push(buttonId);
+        },
       // notification
       setNotification: ({ state }) => {
         state.theme.notification = true;
