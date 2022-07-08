@@ -44,7 +44,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     address2_city: "",
     address2_country: "",
     address2_postalcode: "",
-    bad_preferredmailingaddress: "", // TBC field name
+    _bad_preferredmailingaddress: "", // TBC field name
   });
 
   useEffect(async () => {
@@ -71,9 +71,8 @@ const UpdateAddress = ({ state, actions, libraries }) => {
       handleSetData({ name: "address2_country" });
     if (isActiveUser.address2_postalcode)
       handleSetData({ name: "address2_postalcode" });
-    if (isActiveUser.bad_preferredmailingaddress)
-      handleSetData({ name: "bad_preferredmailingaddress" });
-    // preferredcontactmethodcode applies for mail/phone/email
+    if (isActiveUser._bad_preferredmailingaddress)
+      handleSetData({ name: "_bad_preferredmailingaddress" });
   }, [isActiveUser]);
 
   // HELPERS ----------------------------------------------------------------
@@ -95,19 +94,20 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     const address2_city = formData.address2_city;
     const address2_country = formData.address2_country;
     const address2_postalcode = formData.address2_postalcode;
-    const bad_preferredmailingaddress = formData.bad_preferredmailingaddress;
+    const bad_preferredmailingaddress = formData._bad_preferredmailingaddress;
 
     const data = Object.assign(
       {}, // add empty object
-      !!address2_line1 && { address2_line1 },
-      !!address2_line2 && { address2_line2 },
-      !!emailaddress1 && { emailaddress1 },
-      !!mobilephone && { mobilephone },
+      { address2_line1 },
+      { address2_line2 },
+      { emailaddress1 },
+      { mobilephone },
       !!address2_city && { address2_city },
       !!address2_country && { address2_country },
-      !!address2_postalcode && { address2_postalcode },
+      { address2_postalcode },
       !!bad_preferredmailingaddress && { bad_preferredmailingaddress }
     );
+    console.log("🐞 ", data);
 
     try {
       setIsFetching(true);
@@ -404,8 +404,8 @@ const UpdateAddress = ({ state, actions, libraries }) => {
               <div style={styles.wrapper}>
                 <label>Preferred mailing option</label>
                 <Form.Select
-                  name="bad_preferredmailingaddress"
-                  value={formData.bad_preferredmailingaddress}
+                  name="_bad_preferredmailingaddress"
+                  value={formData._bad_preferredmailingaddress}
                   onChange={handleInputChange}
                   className="input"
                 >

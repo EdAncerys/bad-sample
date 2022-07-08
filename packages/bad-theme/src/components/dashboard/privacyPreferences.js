@@ -29,7 +29,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
     bad_presidentsbulletin: false,
     donotemail: false,
     // --------------------------------------------------------------------------------
-    bad_preferredmailingaddress: "",
+    _bad_preferredmailingaddress: "",
   });
 
   // --------------------------------------------------------------------------------
@@ -69,8 +69,8 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
       value: !isActiveUser[`donotemail`],
     });
     handleSetData({
-      name: "bad_preferredmailingaddress",
-      value: isActiveUser[`bad_preferredmailingaddress`],
+      name: "_bad_preferredmailingaddress",
+      value: isActiveUser[`_bad_preferredmailingaddress`],
     });
   }, [isActiveUser]);
 
@@ -108,7 +108,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
       bad_presidentsbulletin: !formData.bad_presidentsbulletin,
       donotemail: !formData.donotemail,
       // --------------------------------------------------------------------------------
-      bad_preferredmailingaddress: formData.bad_preferredmailingaddress,
+      bad_preferredmailingaddress: formData._bad_preferredmailingaddress,
     };
 
     // 📌 if user has checked the universal unsubscribe checkbox, set all other checkboxes to false
@@ -342,8 +342,8 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
             <div>
               <div style={{ padding: "1em 0" }}>Preferred mailing option</div>
               <Form.Select
-                name="bad_preferredmailingaddress"
-                value={formData.bad_preferredmailingaddress}
+                name="_bad_preferredmailingaddress"
+                value={formData._bad_preferredmailingaddress}
                 onChange={handleInputChange}
                 className="input"
               >

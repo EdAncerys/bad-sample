@@ -189,7 +189,7 @@ export const getUserDataByContactId = async ({
   const path =
     state.auth.APP_HOST +
     `/catalogue/all/contacts(${contactid})` +
-    `?$value=gendercode,py3_ethnicity,birthdate`;
+    `?$value=gendercode,py3_ethnicity,birthdate,bad_preferredmailingaddress`;
 
   try {
     const response = await fetchDataHandler({ path, state });
@@ -224,14 +224,14 @@ export const getUserDataByEmail = async ({ state, dispatch, email }) => {
   const path =
     state.auth.APP_HOST +
     `/catalogue/all/contacts?$filter=emailaddress1 eq '${email}'` +
-    `?$value=gendercode,py3_ethnicity,birthdate`;
+    `&$value=gendercode,py3_ethnicity,birthdate,bad_preferredmailingaddress`;
 
   try {
     const response = await fetchDataHandler({ path, state });
     if (!response) throw new Error("Failed to fetch user data.");
     const data = await response.json();
 
-    if (data.data && data.data.length > 0) {
+    if (data.data && data.data.length) {
       const user = data.data[0];
       const { contactid } = user;
 

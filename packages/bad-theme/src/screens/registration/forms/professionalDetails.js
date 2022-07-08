@@ -95,6 +95,10 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
   useEffect(async () => {
     const handleSetFormData = ({ data, name }) => {
+      // if name is bad_preferredmailingaddress replace with _bad_preferredmailingaddress
+      if (name === "bad_preferredmailingaddress")
+        name = "_bad_preferredmailingaddress";
+
       setFormData((prevFormData) => ({
         ...prevFormData,
         [`${name}`]: data.value || "",

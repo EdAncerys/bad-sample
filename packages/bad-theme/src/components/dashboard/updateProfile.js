@@ -108,7 +108,6 @@ const UpdateProfile = ({ state, actions, libraries }) => {
       !!gendercode && { gendercode: Number(gendercode) }, // convert to number for dynamics
       !!py3_ethnicity && { py3_ethnicity: Number(py3_ethnicity) } // convert to number for dynamics
     );
-    console.log("🐞 ", data);
 
     try {
       setIsFetching(true);
