@@ -92,7 +92,6 @@ import {
   deleteApplicationAction,
 } from "./auth/userStore";
 import { getWileyAction } from "./auth/getWiley";
-import { getTestUserAccountsAction } from "./auth/getTestUserAccounts";
 import { getHospitalsAction, getHospitalNameAction } from "./auth/getHospitals";
 import {
   getEventsData,
@@ -184,7 +183,6 @@ export {
   getUserStoreAction,
   getWileyAction,
   setCompleteUserApplicationAction,
-  getTestUserAccountsAction,
   setIdFilterAction,
   setNesMediaIdFilterAction,
   getHospitalsAction,
