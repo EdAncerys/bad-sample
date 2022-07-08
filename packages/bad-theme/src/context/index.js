@@ -12,6 +12,7 @@ import { useRemoveScript } from "../hooks/useRemoveScript";
 import { useScript } from "../hooks/useScript";
 // --------------------------------------------------------------------------------
 import { getFadPermision } from "../helpers/getFadPermision";
+import { dateConverter } from "../helpers/dateConverter";
 import {
   setGoToAction,
   setLinkWrapperAction,
@@ -267,4 +268,5 @@ export {
   getFadPermision,
   useRemoveScript,
   useScript,
+  dateConverter,
 };

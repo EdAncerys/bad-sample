@@ -189,18 +189,19 @@ export const getUserDataByContactId = async ({
   const path =
     state.auth.APP_HOST +
     `/catalogue/all/contacts(${contactid})` +
-    `?$value=gendercode,py3_ethnicity`;
+    `?$value=gendercode,py3_ethnicity,birthdate`;
 
   try {
     const response = await fetchDataHandler({ path, state });
     if (!response) throw new Error("Error getting userData.");
     let data = await response.json();
-    // get user blob object from data
-    data = data.data;
+    if (!data.data && !data.data.length)
+      throw new Error("Error getting userData.");
 
+    // get user blob object from data
+    data = data.data[0];
     // pre-fetch application data & populate to context store
     await getUserApplicationAction({ state, dispatch, contactid });
-
     // get application status against user in Dynamic
     const dynamicApps = await getApplicationStatus({
       state,
@@ -223,7 +224,7 @@ export const getUserDataByEmail = async ({ state, dispatch, email }) => {
   const path =
     state.auth.APP_HOST +
     `/catalogue/all/contacts?$filter=emailaddress1 eq '${email}'` +
-    `?$value=gendercode,py3_ethnicity`;
+    `?$value=gendercode,py3_ethnicity,birthdate`;
 
   try {
     const response = await fetchDataHandler({ path, state });

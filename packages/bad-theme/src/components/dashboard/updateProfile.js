@@ -27,7 +27,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
     firstname: "",
     lastname: "",
     bad_profile_photo_url: "",
-    birthdate: "",
+    _birthdate: "",
     _gendercode: "",
     _py3_ethnicity: "",
   });
@@ -60,26 +60,13 @@ const UpdateProfile = ({ state, actions, libraries }) => {
     if (isActiveUser.firstname) handleSetData({ name: "firstname" });
     if (isActiveUser.lastname) handleSetData({ name: "lastname" });
     if (isActiveUser._gendercode) handleSetData({ name: "_gendercode" });
-    if (isActiveUser.birthdate) handleSetData({ name: "birthdate" });
+    if (isActiveUser._birthdate) handleSetData({ name: "_birthdate" });
     if (isActiveUser._py3_ethnicity) handleSetData({ name: "_py3_ethnicity" });
   }, [isActiveUser]);
 
   // HELPERS ----------------------------------------------------------------
   const handleInputChange = (e) => {
     const { name, value, type, checked, files } = e.target;
-    // if type = date then convert to yyyy-mm-dd
-    if (type === "date") {
-      const date = new Date(value);
-      const dateString = `${date.getFullYear()}-${
-        date.getMonth() + 1
-      }-${date.getDate()}`;
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [`${name}`]: dateString,
-      }));
-    }
-
-    console.log("🐞 ", value, type, checked, files);
 
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -108,7 +95,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
     const firstname = formData.firstname;
     const lastname = formData.lastname;
     const bad_profile_photo_url = formData.bad_profile_photo_url;
-    const birthdate = formData.birthdate;
+    const birthdate = formData._birthdate;
     const gendercode = formData._gendercode;
     const py3_ethnicity = formData._py3_ethnicity;
 
@@ -117,16 +104,11 @@ const UpdateProfile = ({ state, actions, libraries }) => {
       { firstname }, // allow to pass empty values
       { lastname }, // allow to pass empty values
       !!bad_profile_photo_url && { bad_profile_photo_url },
-      !!birthdate && { birthdate }
-      // !!gendercode && { gendercode: Number(gendercode) } }, // convert to number for dynamics
-      // !!py3_ethnicity && { py3_ethnicity: Number(py3_ethnicity) } // convert to number for dynamics
+      !!birthdate && { birthdate },
+      !!gendercode && { gendercode: Number(gendercode) }, // convert to number for dynamics
+      !!py3_ethnicity && { py3_ethnicity: Number(py3_ethnicity) } // convert to number for dynamics
     );
-
-    console.log("data", data); // debug
-    console.log("gendercode", gendercode); // debug
-    console.log("gendercode", formData._gendercode); // debug
-    console.log("py3_ethnicity", py3_ethnicity); // debug
-    console.log("py3_ethnicity", formData._py3_ethnicity); // debug
+    console.log("🐞 ", data);
 
     try {
       setIsFetching(true);
@@ -143,7 +125,7 @@ const UpdateProfile = ({ state, actions, libraries }) => {
         isError: { message: `Personal information updated successfully` },
       });
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       setErrorAction({
         dispatch,
         isError: {
@@ -216,9 +198,9 @@ const UpdateProfile = ({ state, actions, libraries }) => {
           <div style={styles.wrapper}>
             <label>Date Of Birth</label>
             <input
-              name="birthdate"
+              name="_birthdate"
               type="date"
-              value={formData.birthdate}
+              value={formData._birthdate}
               onChange={handleInputChange}
               className="form-control input"
               placeholder="Your Date Of Birth"
