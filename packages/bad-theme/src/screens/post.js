@@ -162,7 +162,13 @@ const Post = ({ state, actions, libraries }) => {
     };
 
     return (
-      <div className="flex-col">
+      <div
+        className="flex-col"
+        data-aos="fade"
+        data-aos-easing="ease-in-sine"
+        data-aos-delay={`100`}
+        data-aos-duration="1000"
+      >
         <Card authorInfo={post} colour={colors.red} shadow cardHeight="auto" />
         <ServeRelatedContent />
       </div>
