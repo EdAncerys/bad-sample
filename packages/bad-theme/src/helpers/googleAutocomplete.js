@@ -18,7 +18,6 @@ export const googleAutocomplete = async ({ input }) => {
 
   await services.getPlacePredictions(request, (predictions, status) => {
     if (status !== google.maps.places.PlacesServiceStatus.OK) {
-      console.log(status);
       return;
     }
     response = predictions;

@@ -8,8 +8,7 @@ import Loading from "../components/loading";
 // BLOCK WIDTH WRAPPER -----------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT -----------------------------------------------------------------
-import { setGoToAction, muiQuery, Parcer } from "../context";
-import { getPostData } from "../helpers";
+import { setGoToAction, muiQuery, Parcer, getNewsData } from "../context";
 
 const Post = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
@@ -32,26 +31,14 @@ const Post = ({ state, actions, libraries }) => {
     window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
     document.documentElement.scrollTop = 0; // for safari
 
-    // pre fetch post data
-    let iteration = 0;
-    let data = Object.values(state.source.post);
-    // if no posts or isSingle post fetch data
-    while (data.length === 0 || data.length === 1) {
-      // if iteration is greater than 10, break
-      if (iteration > 10) break;
-      // set timeout for async
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      await getPostData({ state, actions });
-      data = Object.values(state.source.post);
-      iteration++;
-    }
+    // --------------------------------------------------------------------------------
+    // 📌  Fetch news & media data from wp api
+    // --------------------------------------------------------------------------------
+    const postData = await getNewsData({ state });
+    const catList = Object.values(state.source.category);
 
-    // if !data then break
-    if (data.length === 0) return;
-    let categoryList = Object.values(state.source.category);
-
-    setPostList(data);
-    setCatList(categoryList);
+    setPostList(postData);
+    setCatList(catList);
     setPosition(true);
 
     return () => {

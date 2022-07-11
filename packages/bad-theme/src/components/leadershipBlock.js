@@ -18,7 +18,7 @@ const LeadershipBlock = ({ state, actions, block }) => {
   const mountedRef = useRef(true);
 
   if (!block) return <Loading />;
-  console.log("🐞 ", block);
+  // console.log("🐞 ", block);
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {

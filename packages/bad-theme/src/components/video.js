@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Loading from "./loading";
 import BlockWrapper from "./blockWrapper";
@@ -28,19 +28,36 @@ import {
 
 const Video = ({ state, actions, libraries }) => {
   // STATE
-  const [loadVideo, setLoadVideo] = React.useState(false);
-  const [videoStatus, setVideoStatus] = React.useState("");
-  const [paymentUrl, setPaymentUrl] = React.useState("");
-  const [relatedVideos, setRelatedVideos] = React.useState(null);
+  const [loadVideo, setLoadVideo] = useState(false);
+  const [videoStatus, setVideoStatus] = useState("");
+  const [paymentUrl, setPaymentUrl] = useState("");
+  const [relatedVideos, setRelatedVideos] = useState(null);
+  const [isWindow, setWindow] = useState(null);
+  const [isSagepay, setSagepay] = useState(null);
 
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
 
-  const queryParams = new Proxy(new URLSearchParams(window.location.search), {
-    get: (searchParams, prop) => searchParams.get(prop),
-  });
+  // await to get window object & setWindow to true
+  useEffect(() => {
+    if (window) {
+      // console.log("📌 B2C Login Hook. 📌"); // debug
+      setWindow(window);
+    }
+  }, []);
 
-  let isSagepay = queryParams.sagepay;
+  useEffect(() => {
+    if (!isWindow) return;
+
+    const queryParams = new Proxy(new URLSearchParams(window.location.search), {
+      get: (searchParams, prop) => searchParams.get(prop),
+    });
+    let isSagepay = queryParams.sagepay;
+    setSagepay(isSagepay);
+
+    console.log("🐞 ", queryParams.sagepay); // debug
+  }, [isWindow]);
+
   const handlePaymentModal = (url) => {
     setErrorAction({
       dispatch,
@@ -56,7 +73,7 @@ const Video = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { isActiveUser } = useAppState();
 
-  React.useEffect(async () => {
+  useEffect(async () => {
     //Not the greatest idea to make useEffect async
     await actions.source.fetch("/videos/");
     const all_videos = state.source.videos;
@@ -84,29 +101,33 @@ const Video = ({ state, actions, libraries }) => {
       return true;
     }
     if (isActiveUser && post.acf.price) {
-      const url =
-        state.auth.APP_HOST +
-        "/videvent/" +
-        isActiveUser.contactid +
-        "/" +
-        post.acf.event_id;
+      try {
+        const url =
+          state.auth.APP_HOST +
+          "/videvent/" +
+          isActiveUser.contactid +
+          "/" +
+          post.acf.event_id;
 
-      const fetching = await fetchDataHandler({
-        path: url,
-        state,
-      });
-      if (fetching.ok) {
-        const json = await fetching.json();
-        // if (json.success === false) setVideoStatus("locked");
-        if (json.success && json.data.entity.bad_confirmationid) {
-          setVideoStatus("unlocked");
+        const fetching = await fetchDataHandler({
+          path: url,
+          state,
+        });
+        if (fetching.ok) {
+          const json = await fetching.json();
+          // if (json.success === false) setVideoStatus("locked");
+          if (json.success && json.data.entity.bad_confirmationid) {
+            setVideoStatus("unlocked");
+            return true;
+          }
+          setVideoStatus("locked");
+          return true;
+        } else {
+          setVideoStatus("locked");
           return true;
         }
-        setVideoStatus("locked");
-        return true;
-      } else {
-        setVideoStatus("locked");
-        return true;
+      } catch (error) {
+        console.log(error); // debug
       }
     }
     setVideoStatus("locked");
@@ -121,51 +142,51 @@ const Video = ({ state, actions, libraries }) => {
   const marginVertical = state.theme.marginVertical;
 
   const handlePayment = async () => {
-    const sagepay_url =
-      state.auth.ENVIRONMENT === "PRODUCTION"
-        ? "/sagepay/live/video/"
-        : "/sagepay/test/video/";
-    const uappUrl = state.auth.APP_URL;
-    const url =
-      state.auth.APP_HOST +
-      sagepay_url +
-      isActiveUser.contactid +
-      "/" +
-      post.acf.event_id +
-      "/" +
-      post.acf.price +
-      `?redirecturl=` +
-      uappUrl +
-      state.router.link +
-      "?sagepay=true";
+    try {
+      const sagepay_url =
+        state.auth.ENVIRONMENT === "PRODUCTION"
+          ? "/sagepay/live/video/"
+          : "/sagepay/test/video/";
+      const uappUrl = state.auth.APP_URL;
+      const url =
+        state.auth.APP_HOST +
+        sagepay_url +
+        isActiveUser.contactid +
+        "/" +
+        post.acf.event_id +
+        "/" +
+        post.acf.price +
+        `?redirecturl=` +
+        uappUrl +
+        state.router.link +
+        "?sagepay=true";
 
-    const fetchVendorId = await fetchDataHandler({
-      path: url,
-      method: "POST",
-      state,
-      // isCORSHeaders: true,
-      // disableCookies: true,
-    });
-
-    if (fetchVendorId.ok) {
-      const json = await fetchVendorId.json();
-      if (json.success) {
-        const url =
-          json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
-        handlePaymentModal(url);
-        return true;
-      }
-
-      setErrorAction({
-        dispatch,
-        isError: {
-          message: `There was a problem processing the request`,
-          image: "Error",
-        },
+      const fetchVendorId = await fetchDataHandler({
+        path: url,
+        method: "POST",
+        state,
       });
-    }
 
-    // setPage({ page: "directDebit", data: block });
+      if (fetchVendorId.ok) {
+        const json = await fetchVendorId.json();
+        if (json.success) {
+          const url =
+            json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
+          handlePaymentModal(url);
+          return true;
+        }
+
+        setErrorAction({
+          dispatch,
+          isError: {
+            message: `There was a problem processing the request`,
+            image: "Error",
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error); // debug
+    }
   };
 
   const resetPaymentUrl = () => {
@@ -185,28 +206,32 @@ const Video = ({ state, actions, libraries }) => {
 
   const ServeContent = () => {
     const ServeImage = () => {
-      const [videoCover, setVideoCover] = React.useState(defaultCover);
+      const [videoCover, setVideoCover] = useState(defaultCover);
 
       const getVimeoCover = async ({ video_url }) => {
         // Example URL: https://player.vimeo.com/video/382577680?h=8f166cf506&color=5b89a3&title=0&byline=0&portrait=0
         const reg = /\d+/g;
         const videoId = video_url.match(reg);
 
-        const path = `https://vimeo.com/api/v2/video/${videoId[0]}.json`;
-        const fetchVideoData = await fetchDataHandler({
-          path,
-          state,
-          isCORSHeaders: true,
-          disableCookies: true,
-        });
+        try {
+          const path = `https://vimeo.com/api/v2/video/${videoId[0]}.json`;
+          const fetchVideoData = await fetchDataHandler({
+            path,
+            state,
+            isCORSHeaders: true,
+            disableCookies: true,
+          });
 
-        if (fetchVideoData.ok) {
-          const json = await fetchVideoData.json();
-          setVideoCover(json[0].thumbnail_large);
+          if (fetchVideoData.ok) {
+            const json = await fetchVideoData.json();
+            setVideoCover(json[0].thumbnail_large);
+          }
+        } catch (error) {
+          console.log(error); // debug
         }
       };
 
-      React.useEffect(() => {
+      useEffect(() => {
         getVimeoCover({ video_url: post.acf.video });
       }, []);
 
@@ -349,6 +374,7 @@ const Video = ({ state, actions, libraries }) => {
     return relatedVideos.map((vid, key) => {
       if (vid.id === post.id) vid = relatedVideos[2];
       if (key > 1) return null;
+
       return (
         <Card
           key={key}
@@ -372,8 +398,11 @@ const Video = ({ state, actions, libraries }) => {
       dispatch,
       enquireAction: {
         contact_public_email: "comms@bag.org.uk",
+        full_name: true,
         message: true,
-        allow_attachments: true,
+        email_address: true,
+        phone_number: true,
+        subject: true,
         recipients: state.contactList.DEFAULT_CONTACT_LIST,
         // default email subject & template name
         emailSubject: "Viewing Video Issue.",

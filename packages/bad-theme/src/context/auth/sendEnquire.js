@@ -11,7 +11,7 @@ export const sendEmailEnquireAction = async ({
   template,
   isActiveUser,
 }) => {
-  console.log("enquireAction triggered");
+  // console.log("enquireAction triggered");
   setFetchAction({ dispatch, isFetching: true });
   const path = state.auth.APP_HOST + `/email`;
 
@@ -87,9 +87,8 @@ export const sendEmailEnquireAction = async ({
       credentials: "include",
     };
     const response = await fetch(path, requestOptions);
-    console.log("🐞 ", response);
     const data = await response.json();
-    console.log("🐞 ", data);
+    // console.log("🐞 ", data);
 
     if (data.success) {
       return data;
@@ -97,27 +96,8 @@ export const sendEmailEnquireAction = async ({
       // console.log("⬇️ Error sending email response"); // debug
       throw new Error(data.message);
     }
-
-    // const data = await fetchDataHandler({
-    //   path,
-    //   method: "POST",
-    //   body: form,
-    //   state,
-    //   // 📌 pass headers as multipart/form-data
-    //   headers: {
-    //     "Content-Type": "multipart/form-data",
-    //   },
-    // });
-    // const response = await data.json();
-
-    // if (response.success) {
-    //   return response;
-    // } else {
-    //   console.log("⬇️ Error sending email response"); // debug
-    //   console.log(response); // debug
-    // }
   } catch (error) {
-    console.log("error sending enquiry", error);
+    // console.log("error sending enquiry", error);
   } finally {
     setFetchAction({ dispatch, isFetching: false });
     setEnquireAction({ dispatch, enquireAction: null });

@@ -67,7 +67,8 @@ const App = ({ state, actions }) => {
   let urlPath = state.router.link;
   const data = state.source.get(urlPath);
   const useEffectRef = useRef(true);
-  console.log("INDEX data", data); // debug
+  // console.log("INDEX data", data); // debug
+
   // --------------------------------------------------------------------------------
   // 📌  B2C login handler.
   // --------------------------------------------------------------------------------
@@ -78,7 +79,7 @@ const App = ({ state, actions }) => {
   useRedirect({ state, dispatch, actions, redirects, urlPath });
   // 📌 hook for media queries
   useQuery({ state });
-  // 📌 google places api
+  // 📌 google places api script
   useScript({
     url: `https://maps.googleapis.com/maps/api/js?key=${state.auth.GOOGLE_API_KEY}&libraries=places`,
   });
@@ -102,7 +103,7 @@ const App = ({ state, actions }) => {
 
     // get current time & compare how long pre-fetch took before  setting placeholder
     const timeTaken = new Date().getTime() - currentTime;
-    console.log("🐞 LOAD TIME", timeTaken); // debug
+    // console.log("🐞 LOAD TIME", timeTaken); // debug
 
     // animation handler
     AOS.init();

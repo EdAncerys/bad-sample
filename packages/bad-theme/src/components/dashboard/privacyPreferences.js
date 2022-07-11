@@ -122,8 +122,6 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
       };
     }
 
-    console.log("🐞 data", data);
-
     try {
       setIsFetching(true);
       const response = await updateProfileAction({

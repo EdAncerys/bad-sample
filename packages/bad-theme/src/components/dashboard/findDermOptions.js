@@ -51,33 +51,56 @@ const FindDermatologistOptions = ({ state }) => {
     if (!isActiveUser) return null;
 
     // map through user & update formData with values
-    const handleSetData = ({ name }) => {
+    const handleSetData = ({ name, value }) => {
       setFormData((prevFormData) => ({
         ...prevFormData,
-        [`${name}`]: isActiveUser[`${name}`],
+        [`${name}`]: value,
       }));
     };
 
     // 📌 populate profile information form Dynamics records
-    handleSetData({ name: "bad_includeinfindadermatologist" });
-    if (isActiveUser.address3_postalcode)
-      handleSetData({ name: "address3_postalcode" });
-    if (isActiveUser.address3_line1) handleSetData({ name: "address3_line1" });
-    if (isActiveUser.address3_line2) handleSetData({ name: "address3_line2" });
-    if (isActiveUser.address3_city) handleSetData({ name: "address3_city" });
-    if (isActiveUser.bad_mainhosptialweb)
-      handleSetData({ name: "bad_mainhosptialweb" });
-    if (isActiveUser.bad_web1) handleSetData({ name: "bad_web1" });
-    if (isActiveUser.bad_web1) handleSetData({ name: "bad_web2" });
-    if (isActiveUser.bad_web1) handleSetData({ name: "bad_web3" });
-    if (isActiveUser.bad_findadermatologisttext)
-      handleSetData({ name: "bad_findadermatologisttext" });
+    handleSetData({
+      name: "bad_includeinfindadermatologist",
+      value: isActiveUser.bad_includeinfindadermatologist,
+    });
+    handleSetData({
+      name: "address3_line1",
+      value: isActiveUser.address3_line1 || "",
+    });
+    handleSetData({
+      name: "address3_line2",
+      value: isActiveUser.address3_line2 || "",
+    });
+    handleSetData({
+      name: "address3_postalcode",
+      value: isActiveUser.address3_postalcode || "",
+    });
+    handleSetData({
+      name: "address3_city",
+      value: isActiveUser.address3_city || "",
+    });
+    handleSetData({
+      name: "bad_mainhosptialweb",
+      value: isActiveUser.bad_mainhosptialweb || "",
+    });
+    handleSetData({ name: "bad_web1", value: isActiveUser.bad_web1 || "" });
+    handleSetData({ name: "bad_web2", value: isActiveUser.bad_web2 || "" });
+    handleSetData({ name: "bad_web3", value: isActiveUser.bad_web3 || "" });
+    handleSetData({
+      name: "bad_findadermatologisttext",
+      value: isActiveUser.bad_findadermatologisttext || "",
+    });
+    handleSetData({
+      name: "bad_profile_photo_url",
+      value: isActiveUser.bad_profile_photo_url || "",
+    });
 
     // 📌 get fad dir permision & check user permission status
     const permision = await getFadPermision({
       state,
       contactid: isActiveUser.contactid,
     });
+    console.log("🐞 PERMISION", permision); // debug
     if (permision) setFadPermision(permision);
   }, [isActiveUser, dynamicsApps]);
 
@@ -148,36 +171,24 @@ const FindDermatologistOptions = ({ state }) => {
   };
 
   const handleProfileUpdate = async () => {
-    let bad_includeinfindadermatologist =
-      formData.bad_includeinfindadermatologist;
-    let address3_line1 = formData.address3_line1;
-    let address3_line2 = formData.address3_line2;
-    let address3_postalcode = formData.address3_postalcode;
-    let address3_city = formData.address3_city;
-    let bad_mainhosptialweb = formData.bad_mainhosptialweb;
-    let bad_web1 = formData.bad_web1;
-    let bad_web2 = formData.bad_web2;
-    let bad_web3 = formData.bad_web3;
-    let bad_findadermatologisttext = formData.bad_findadermatologisttext;
-    let bad_profile_photo_url = formData.bad_profile_photo_url;
-
     // 📌 add valid data to data object to be sent to Dynamics
     // not to overwrite existing data in Dynamics only valid inputs are sent
-    const data = {};
-    if (bad_includeinfindadermatologist)
-      data.bad_includeinfindadermatologist = bad_includeinfindadermatologist;
-    if (address3_line1) data.address3_line1 = address3_line1;
-    if (address3_line2) data.address3_line2 = address3_line2;
-    if (address3_postalcode) data.address3_postalcode = address3_postalcode;
-    if (address3_city) data.address3_city = address3_city;
-    if (bad_mainhosptialweb) data.bad_mainhosptialweb = bad_mainhosptialweb;
-    if (bad_web1) data.bad_web1 = bad_web1;
-    if (bad_web2) data.bad_web2 = bad_web2;
-    if (bad_web3) data.bad_web3 = bad_web3;
-    if (bad_findadermatologisttext)
-      data.bad_findadermatologisttext = bad_findadermatologisttext;
-    if (bad_profile_photo_url)
-      data.bad_profile_photo_url = bad_profile_photo_url;
+    const data = {
+      bad_includeinfindadermatologist: formData.bad_includeinfindadermatologist,
+      address3_line1: formData.address3_line1,
+      address3_line2: formData.address3_line2,
+      address3_postalcode: formData.address3_postalcode,
+      address3_city: formData.address3_city,
+      bad_mainhosptialweb: formData.bad_mainhosptialweb,
+      bad_web1: formData.bad_web1,
+      bad_web2: formData.bad_web2,
+      bad_web3: formData.bad_web3,
+      bad_findadermatologisttext: formData.bad_findadermatologisttext,
+      // --------------------------------------------------------------------------------
+      bad_profile_photo_url: formData.bad_profile_photo_url,
+    };
+
+    console.log("🐞 ", data);
 
     try {
       setIsFetching(true);
@@ -187,6 +198,7 @@ const FindDermatologistOptions = ({ state }) => {
         data,
         isActiveUser,
       });
+
       if (!response) throw new Error("Error updating profile");
       // display error message
       setErrorAction({

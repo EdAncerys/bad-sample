@@ -35,6 +35,7 @@ export const validateMembershipFormAction = async ({
     }));
   };
   if (!applicationData) return null;
+  // console.log("🐞 applicationData", applicationData); // debug
 
   // ⏬ validate inputs & pre fetch membership data
   if (!state.source.memberships)
