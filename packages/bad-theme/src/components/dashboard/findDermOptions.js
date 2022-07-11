@@ -100,7 +100,7 @@ const FindDermatologistOptions = ({ state }) => {
       state,
       contactid: isActiveUser.contactid,
     });
-    console.log("🐞 PERMISION", permision); // debug
+    // console.log("🐞 PERMISION", permision); // debug
     if (permision) setFadPermision(permision);
   }, [isActiveUser, dynamicsApps]);
 
@@ -187,8 +187,6 @@ const FindDermatologistOptions = ({ state }) => {
       // --------------------------------------------------------------------------------
       bad_profile_photo_url: formData.bad_profile_photo_url,
     };
-
-    console.log("🐞 ", data);
 
     try {
       setIsFetching(true);
@@ -332,6 +330,7 @@ const FindDermatologistOptions = ({ state }) => {
                           type="text"
                           className="form-control"
                           placeholder="Address Line 1"
+                          maxLength={state.theme.inputFieldLimit250}
                         />
                         <div
                           className="input-group-text toggle-icon-color"
@@ -363,6 +362,7 @@ const FindDermatologistOptions = ({ state }) => {
                       placeholder="Address Line 2"
                       className="form-control"
                       style={styles.input}
+                      maxLength={state.theme.inputFieldLimit100}
                     />
 
                     <input
@@ -373,6 +373,7 @@ const FindDermatologistOptions = ({ state }) => {
                       placeholder="Postcode"
                       className="form-control"
                       style={styles.input}
+                      maxLength={state.theme.inputFieldLimit80}
                     />
                     <input
                       name="address3_city"
@@ -382,6 +383,7 @@ const FindDermatologistOptions = ({ state }) => {
                       placeholder="City"
                       className="form-control"
                       style={styles.input}
+                      maxLength={state.theme.inputFieldLimit100}
                     />
 
                     <div>
@@ -411,6 +413,7 @@ const FindDermatologistOptions = ({ state }) => {
               placeholder="Main Place of Work"
               className="form-control"
               style={styles.input}
+              maxLength={state.theme.inputFieldLimit100}
             />
             <input
               name="bad_web1"
@@ -420,6 +423,7 @@ const FindDermatologistOptions = ({ state }) => {
               placeholder="https://"
               className="form-control"
               style={styles.input}
+              maxLength={state.theme.inputFieldLimit100}
             />
             <input
               name="bad_web2"
@@ -429,6 +433,7 @@ const FindDermatologistOptions = ({ state }) => {
               placeholder="https://"
               className="form-control"
               style={styles.input}
+              maxLength={state.theme.inputFieldLimit100}
             />
             <input
               name="bad_web3"
@@ -438,6 +443,7 @@ const FindDermatologistOptions = ({ state }) => {
               placeholder="https://"
               className="form-control"
               style={styles.input}
+              maxLength={state.theme.inputFieldLimit100}
             />
 
             <div style={{ paddingTop: `1em` }}>About Text</div>
@@ -447,11 +453,12 @@ const FindDermatologistOptions = ({ state }) => {
                   name="bad_findadermatologisttext"
                   value={formData.bad_findadermatologisttext}
                   onChange={handleInputChange}
-                  rows="10"
+                  rows="8"
                   type="text"
                   placeholder="Find a Dermatologist About Text"
                   className="form-control"
                   style={styles.input}
+                  maxLength={state.theme.textAreaLimit}
                 />
               </div>
             </div>

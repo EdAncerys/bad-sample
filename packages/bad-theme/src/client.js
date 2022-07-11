@@ -26,6 +26,10 @@ const BADTheme = {
       },
     },
     theme: {
+      inputFieldLimit250: "250", // defines maxlength prop
+      inputFieldLimit100: "100", // defines maxlength prop
+      inputFieldLimit80: "80", // defines maxlength prop
+      textAreaLimit: "1000", // defines maxlength prop
       menuUrl: "/menu/primary-menu",
       menu: null,
       filter: null,
@@ -39,7 +43,7 @@ const BADTheme = {
       marginVertical: 40, // px units
       notification: false,
       perPageLimit: 50, // number of posts to fetch per page
-      TICKET_NO: "B-7",
+      TICKET_NO: "B-23",
     },
     auth: {
       // 📌 app auth service secrets
