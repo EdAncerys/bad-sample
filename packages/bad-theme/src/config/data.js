@@ -109,15 +109,15 @@ export const MENU_DATA = [
     url: "https://www.pushfar.com/employee-register/VYhR5MtTPX/",
   },
   // 📌 uncomment to enable referrals on quick links
-  {
-    title: "Referrals",
-    url: "/referrals/",
-  },
+  // {
+  //   title: "Referrals",
+  //   url: "/referrals/",
+  // },
   // 📌 uncomment to enable FAD on quick links
-  {
-    title: "FAD",
-    url: "/find-a-dermatologist/",
-  },
+  // {
+  //   title: "FAD",
+  //   url: "/find-a-dermatologist/",
+  // },
 ];
 
 export const ALPHABET = [
