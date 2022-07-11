@@ -26,7 +26,6 @@ const Navigation = ({ state, actions, libraries }) => {
   const [wpMoreMenu, setWpMoreMenu] = useState([]);
   const [featured, setFeatured] = useState([]);
   const [newsMedia, setNewsMedia] = useState([]);
-  const [hasPermission, setPermission] = useState(false);
   const useEffectRef = useRef(false);
 
   const MAIN_NAV_LENGTH = 6; // main navigation length config
@@ -77,14 +76,6 @@ const Navigation = ({ state, actions, libraries }) => {
       useEffectRef.current = false; // clean up function
     };
   }, [state.theme.menu]);
-
-  useEffect(() => {
-    let hasPermission = false;
-    // 📌 check if user has permission to view news & media
-    if (dynamicsApps)
-      hasPermission = hasPermisionLevel({ dynamicsApps, isActiveUser });
-    setPermission(hasPermission);
-  }, [isActiveUser, dynamicsApps]);
 
   if (!wpMoreMenu.length || !wpMainMenu.length)
     return <div style={{ height: 60 }} />;
@@ -184,8 +175,12 @@ const Navigation = ({ state, actions, libraries }) => {
           let membersOnly = ["circular", "newsletter", "bulletin"].some(
             (word) => name.toLowerCase().includes(word)
           );
+          let serviceAccess = false;
+          if (isActiveUser)
+            serviceAccess =
+              isActiveUser.bad_selfserviceaccess === state.theme.serviceAccess;
           // 📌 if user has permission to view news & media
-          if (membersOnly && !hasPermission) return null;
+          if (membersOnly && !serviceAccess) return null;
 
           return (
             <li key={key} className="flex-row" style={{ width: "100%" }}>
