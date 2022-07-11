@@ -29,7 +29,7 @@ const BADTheme = {
       inputFieldLimit250: "250", // defines maxlength prop
       inputFieldLimit100: "100", // defines maxlength prop
       inputFieldLimit80: "80", // defines maxlength prop
-      textAreaLimit: "1000", // defines maxlength prop
+      textAreaLimit: "2000", // defines maxlength prop
       menuUrl: "/menu/primary-menu",
       menu: null,
       filter: null,
