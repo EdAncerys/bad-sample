@@ -66,11 +66,11 @@ export const useB2CLogin = ({ state, actions }) => {
       items[0] = JSON.parse(atob(items[0]));
       items[1] = JSON.parse(atob(items[1]));
       // console.log("🐞 hash", hash);
-      // console.log("🐞 items", b2cTaken);
+      console.log("🐞 items", b2cTaken);
 
       if (Array.isArray(items[1].emails)) {
         const email = items[1].emails[0];
-        // console.log("🐞 email ", email); // debug
+        console.log("🐞 email ", email); // debug
 
         // 📌 set auth cookie for authenticated requests
         await setAuthenticationCookieAction({ state, b2cTaken });
