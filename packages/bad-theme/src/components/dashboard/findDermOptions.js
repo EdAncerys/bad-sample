@@ -460,6 +460,18 @@ const FindDermatologistOptions = ({ state }) => {
                   style={styles.input}
                   maxLength={state.theme.textAreaLimit}
                 />
+                <div
+                  className="flex"
+                  style={{
+                    alignSelf: "end",
+                    fontSize: 17,
+                    fontWeight: "bold",
+                  }}
+                >
+                  {Number(state.theme.textAreaLimit) -
+                    formData.bad_findadermatologisttext.length}{" "}
+                  characters remaining.
+                </div>
               </div>
             </div>
           </div>
