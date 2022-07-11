@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import { connect } from "frontity";
 
 import DirectDebitNotification from "./directDebitNotification";
@@ -9,6 +9,7 @@ import {
   setDashboardNotificationsAction,
   setDashboardPathAction,
   muiQuery,
+  setErrorAction,
 } from "../../context";
 
 const DashboardNotifications = ({ state }) => {
@@ -25,12 +26,37 @@ const DashboardNotifications = ({ state }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  // HELPERS ----------------------------------------------------------------
+  // HELPERS -----------------------------------------------------------------
+  useEffect(() => {
+    // break if bad_selfserviceaccess is !lappsed | !frozen
+    if (
+      isActiveUser &&
+      isActiveUser.bad_selfserviceaccess !== state.theme.frozenMembership &&
+      isActiveUser.bad_selfserviceaccess !== state.theme.lapsedMembership
+    )
+      return;
+
+    // user payment message based on
+    let message = state.theme.frozenMembershipBody;
+
+    if (
+      isActiveUser &&
+      state.auth.lapsedMembership === isActiveUser.bad_selfserviceaccess
+    )
+      message = state.theme.lapsedMembershipBody;
+
+    setErrorAction({
+      dispatch,
+      isError: {
+        message,
+        image: "Error",
+      },
+    });
+  }, [isActiveUser]);
 
   // SERVERS -----------------------------------------------------------------
   const ServeGoToActions = ({ path, title, isDismisable, id }) => {
     if (!path) return null;
-    console.log("🐞 ", id);
 
     return (
       <div
@@ -104,20 +130,22 @@ const DashboardNotifications = ({ state }) => {
 
   const ServePaymentReminders = () => {
     if (
-      dashboardPath === "My Profile" ||
-      (isDashboardNotifications && isDashboardNotifications.id === "2")
+      dashboardPath === "Billing" ||
+      (isDashboardNotifications && isDashboardNotifications.id === "2") ||
+      (isActiveUser &&
+        isActiveUser.bad_selfserviceaccess !== state.theme.frozenMembership &&
+        isActiveUser.bad_selfserviceaccess !== state.theme.lapsedMembership)
     )
       return null;
 
     // user payment message based on
-    let message =
-      "According to our records your BAD Membership was frozen as you had not paid your annual subscription. Please go to the Billing tab to pay your subscription in order to reactivate your membership.";
+    let message = state.theme.frozenMembershipBody;
+
     if (
       isActiveUser &&
       state.auth.lapsedMembership === isActiveUser.bad_selfserviceaccess
     )
-      message =
-        "According to our records your BAD Membership was frozen as you had not paid your annual subscription.  We have now moved into a new membership year and your BAD membership has now lapsed.  If you would like to join us again, please complete an application here.";
+      message = state.theme.lapsedMembershipBody;
 
     return (
       <div

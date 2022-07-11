@@ -26,6 +26,10 @@ const BADTheme = {
       },
     },
     theme: {
+      frozenMembershipBody:
+        "According to our records your BAD Membership was frozen as you had not paid your annual subscription. Please go to the Billing tab to pay your subscription in order to reactivate your membership.",
+      lapsedMembershipBody:
+        "According to our records your BAD Membership was frozen as you had not paid your annual subscription. We have now moved into a new membership year and your BAD membership has now lapsed. If you would like to join us again, please complete an application here.",
       menuUrl: "/menu/primary-menu",
       menu: null,
       filter: null,
@@ -39,8 +43,8 @@ const BADTheme = {
       marginVertical: 40, // px units
       notification: false,
       perPageLimit: 50, // number of posts to fetch per page
-      serviceAccess: "Full-", // Full access BAD members
-      frozenMembership: "Full", // members with late payments
+      serviceAccess: "Full", // Full access BAD members
+      frozenMembership: "Frozen", // members with late payments
       lapsedMembership: "Lapsed", // members with lapsed payments over a year ago
       TICKET_NO: "B-7",
     },
