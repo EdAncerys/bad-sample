@@ -30,15 +30,16 @@ const Post = ({ state, actions, libraries }) => {
     // ⬇️ on component load defaults to window position TOP
     window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
     document.documentElement.scrollTop = 0; // for safari
-    setPosition(true);
 
     // --------------------------------------------------------------------------------
     // 📌  Fetch news & media data from wp api
     // --------------------------------------------------------------------------------
+    const postData = await getNewsData({ state });
     const catList = Object.values(state.source.category);
+
+    setPostList(postData);
     setCatList(catList);
-    const postList = await getNewsData({ state });
-    setPostList(postList);
+    setPosition(true);
 
     return () => {
       useEffectRef.current = false; // clean up function
