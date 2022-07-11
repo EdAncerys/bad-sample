@@ -341,6 +341,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
                   onChange={handleInputChange}
                   className="form-control input"
                   placeholder="Email"
+                  disabled
                 />
               </div>
               <div>
