@@ -31,7 +31,7 @@ const FindDermatologistOptions = ({ state }) => {
   const [isFetchingAddress, setIsFetchingAddress] = useState(null);
   const [addressData, setAddressData] = useState(null);
   const [formData, setFormData] = useState({
-    bad_includeinfindadermatologist: "",
+    bad_includeinfindadermatologist: false,
     address3_line1: "",
     address3_line2: "",
     address3_postalcode: "",
@@ -187,6 +187,8 @@ const FindDermatologistOptions = ({ state }) => {
       // --------------------------------------------------------------------------------
       bad_profile_photo_url: formData.bad_profile_photo_url,
     };
+
+    console.log("🐞 data", data); // debug
 
     try {
       setIsFetching(true);
