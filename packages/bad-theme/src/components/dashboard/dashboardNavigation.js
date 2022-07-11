@@ -13,7 +13,7 @@ import {
 const DashboardNavigation = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { dashboardPath, isActiveUser } = useAppState();
-  const [accessLevel, setAccessLevel] = useState(null);
+  const [accessLevel, setAccessLevel] = useState(false);
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;

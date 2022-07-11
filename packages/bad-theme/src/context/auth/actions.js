@@ -193,7 +193,7 @@ export const getUserDataByContactId = async ({
 
   try {
     const response = await fetchDataHandler({ path, state });
-    if (!response) throw new Error("Error getting userData.");
+    if (!response.ok) throw new Error("Response !ok");
     let data = await response.json();
     if (!data.data && !data.data.length)
       throw new Error("Error getting userData.");
@@ -228,8 +228,9 @@ export const getUserDataByEmail = async ({ state, dispatch, email }) => {
 
   try {
     const response = await fetchDataHandler({ path, state });
-    if (!response) throw new Error("Failed to fetch user data.");
+    if (!response.ok) throw new Error("Response !ok");
     const data = await response.json();
+    // console.log("🐞 user data ", data); // debug
 
     if (data.data && data.data.length) {
       const user = data.data[0];

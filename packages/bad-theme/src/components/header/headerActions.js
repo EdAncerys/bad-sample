@@ -32,6 +32,11 @@ import {
   setCreateAccountModalAction,
   handleSetCookie,
   fetchDataHandler,
+
+  // --------------------------------------------------------------------------------
+  getUserDataByContactId, // TESTING ONLY
+  handleRemoveServerSideCookie, // TESTING ONLY
+  setAuthenticationCookieAction, // TESTING ONLY
 } from "../../context";
 
 const HeaderActions = ({ state, actions, libraries }) => {
@@ -158,16 +163,42 @@ const HeaderActions = ({ state, actions, libraries }) => {
         <div
           className="blue-btn-reverse"
           style={{ minWidth: "fit-content" }}
-          onClick={() => handleRemoveServerSideCookie({ state })}
+          onClick={handleCookie}
         >
-          LogOut
+          🍪
         </div>
         <div
           className="blue-btn-reverse"
           style={{ minWidth: "fit-content" }}
-          onClick={handleCookie}
+          onClick={() =>
+            setAuthenticationCookieAction({
+              state,
+              b2cTaken:
+                "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ilg1ZVhrNHh5b2pORnVtMWtsMll0djhkbE5QNC1jNTdkTzZRR1RWQndhTmsifQ.eyJleHAiOjE2NTc1MzE3MjcsIm5iZiI6MTY1NzUyODEyNywidmVyIjoiMS4wIiwiaXNzIjoiaHR0cHM6Ly9icml0aXNoYWQuYjJjbG9naW4uY29tLzU0MjFmNTA2LTgyMzEtNGY1Ny1hNjBmLTM4MDU1YTk5OGJhZi92Mi4wLyIsInN1YiI6IjU0M2RiNzlhLTAxN2ItNDg4My1iYzU5LWU2ZTllN2UyYmFiOCIsImF1ZCI6ImFkYmVkNzJkLTVlZTAtNDliMS1hMDY0LTQyMWJkYmNkNjhiMiIsIm5vbmNlIjoiZGVmYXVsdE5vbmNlIiwiaWF0IjoxNjU3NTI4MTI3LCJhdXRoX3RpbWUiOjE2NTc1MjgxMjcsImdpdmVuX25hbWUiOiJDaHJpcyIsImZhbWlseV9uYW1lIjoiQ3VsbGVuIiwiZXh0ZW5zaW9uX0NvbnRhY3RJZCI6IjA3ODZkZjg1LTYxOGYtZWMxMS1iNDAwLTAwMGQzYTIyMDM3ZSIsImVtYWlscyI6WyJjaHJpc0Bza3lsYXJrY3JlYXRpdmUuY28udWsiXSwidGZwIjoiQjJDXzFfc2lnbnVwc2lnbmluX3VhdCJ9.bwNYYyz3y5ejU_6NBB_x4pyDLlETXbGXQikNuq0AX-LFGBoaU4BteOkzUuBRHtCkh7sQ5ePb5D8sVz1PnzaRg2bTwXFRzi_jl2723OLpdGn-yLpuw2Sihxahj4zfkeePu5KkscaMzcFpFTbry9zlpTsAmAWf-4cZxgTFUIKoQYX4gdjdqSDSSy2ZhSWPzraZPDJOyYOTvIC7yp59Nypb5NyN3Kzqp-eW1wtorDwNWoaWotKzeauRTNZz7RWHzx-zT-BnJmt1V_hpR7-b6vNnO1m7LiOmnSS6rhg9MaTKDAXBbEA0RyY-AB0R7cIq4_iWmJ-HXNdp9cZvmtYb1au2ow",
+            })
+          }
         >
-          🍪
+          B2C JWT
+        </div>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={() =>
+            getUserDataByContactId({
+              state,
+              dispatch,
+              contactid: "969ba377-a398-ec11-b400-000d3aaedef5",
+            })
+          }
+        >
+          LogIn
+        </div>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={() => handleRemoveServerSideCookie({ state })}
+        >
+          LogOut
         </div>
       </div>
     );

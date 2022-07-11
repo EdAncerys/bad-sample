@@ -1,9 +1,4 @@
-import { handleGetCookie, handleSetCookie } from "./cookie";
-import {
-  getUserStoreAction,
-  getUserDataByContactId,
-  fetchDataHandler,
-} from "../context";
+import { getUserDataByContactId, fetchDataHandler } from "../context";
 
 const fetchCompleteHandler = ({ initialState }) => {
   // console.log("⬇️ user pre-fetch completed");
@@ -11,6 +6,7 @@ const fetchCompleteHandler = ({ initialState }) => {
 };
 
 export const authCookieActionAfterCSR = async ({ state, dispatch }) => {
+  console.log("🐞 authCookieActionAfterCSR triggered"); // debug
   let path = state.auth.APP_HOST + "/utils/cookie";
 
   try {
@@ -30,7 +26,7 @@ export const authCookieActionAfterCSR = async ({ state, dispatch }) => {
       });
     }
   } catch (error) {
-    // console.log("error", error);
+    console.log("error", error);
   }
 };
 
