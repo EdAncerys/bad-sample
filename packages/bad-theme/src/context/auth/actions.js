@@ -167,6 +167,12 @@ export const getUserContactId = async ({ state, dispatch, transId }) => {
   }
 };
 
+// --------------------------------------------------------------------------------
+// 📌  Additional uncomputed filed values to add in user blob from Dynamics
+//    (values added with " _ " prefix)
+// --------------------------------------------------------------------------------
+const userBlobFields = `gendercode,py3_ethnicity,birthdate,bad_preferredmailingaddress,bad_includeinfindadermatologist,bad_bademailalerts,bad_badecircular,bad_presidentsbulletin,bad_bjdalerts,donotemail,bad_newhospitaladded,bad_mrpcqualified,bad_memberdirectory,py3_constitutionagreement,bad_readpolicydocument,bad_hasmedicallicence,bad_includeinthebssciiemaildiscussionforum`;
+
 export const getUserDataByContactId = async ({
   state,
   dispatch,
@@ -189,7 +195,7 @@ export const getUserDataByContactId = async ({
   const path =
     state.auth.APP_HOST +
     `/catalogue/all/contacts(${contactid})` +
-    `?$value=gendercode,py3_ethnicity,birthdate,bad_preferredmailingaddress`;
+    `?$value=${userBlobFields}`;
 
   try {
     const response = await fetchDataHandler({ path, state });
@@ -224,7 +230,7 @@ export const getUserDataByEmail = async ({ state, dispatch, email }) => {
   const path =
     state.auth.APP_HOST +
     `/catalogue/all/contacts?$filter=emailaddress1 eq '${email}'` +
-    `&$value=gendercode,py3_ethnicity,birthdate,bad_preferredmailingaddress`;
+    `&$value=${userBlobFields}`;
 
   try {
     const response = await fetchDataHandler({ path, state });

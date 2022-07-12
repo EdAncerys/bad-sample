@@ -31,7 +31,7 @@ const FindDermatologistOptions = ({ state }) => {
   const [isFetchingAddress, setIsFetchingAddress] = useState(null);
   const [addressData, setAddressData] = useState(null);
   const [formData, setFormData] = useState({
-    bad_includeinfindadermatologist: "",
+    _bad_includeinfindadermatologist: false,
     address3_line1: "",
     address3_line2: "",
     address3_postalcode: "",
@@ -60,8 +60,8 @@ const FindDermatologistOptions = ({ state }) => {
 
     // 📌 populate profile information form Dynamics records
     handleSetData({
-      name: "bad_includeinfindadermatologist",
-      value: isActiveUser.bad_includeinfindadermatologist,
+      name: "_bad_includeinfindadermatologist",
+      value: isActiveUser._bad_includeinfindadermatologist,
     });
     handleSetData({
       name: "address3_line1",
@@ -174,7 +174,8 @@ const FindDermatologistOptions = ({ state }) => {
     // 📌 add valid data to data object to be sent to Dynamics
     // not to overwrite existing data in Dynamics only valid inputs are sent
     const data = {
-      bad_includeinfindadermatologist: formData.bad_includeinfindadermatologist,
+      bad_includeinfindadermatologist:
+        formData._bad_includeinfindadermatologist,
       address3_line1: formData.address3_line1,
       address3_line2: formData.address3_line2,
       address3_postalcode: formData.address3_postalcode,
@@ -294,8 +295,8 @@ const FindDermatologistOptions = ({ state }) => {
                   >
                     <div style={{ display: "grid" }}>
                       <input
-                        name="bad_includeinfindadermatologist"
-                        checked={formData.bad_includeinfindadermatologist}
+                        name="_bad_includeinfindadermatologist"
+                        checked={formData._bad_includeinfindadermatologist}
                         onChange={handleInputChange}
                         type="checkbox"
                         className="form-check-input check-box"

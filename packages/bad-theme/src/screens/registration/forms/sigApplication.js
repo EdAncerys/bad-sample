@@ -57,26 +57,27 @@ const SIGApplication = ({ state, actions, libraries }) => {
     py3_gmcnumber: "",
     bad_currentpost: "",
     py3_hospitalid: "",
-    bad_newhospitaladded: "",
     sky_newhospitalname: "",
     bad_proposer1: "",
     bad_proposer2: "",
     py3_ntnno: "",
     sky_cvurl: "",
-    bad_readpolicydocument: "",
     sig_readpolicydocument_url_email: "",
     py3_currentgrade: "",
     bad_qualifications: "",
-    bad_hasmedicallicence: "",
     bad_isbadmember: "",
     py3_whatukbasedroleareyou: "",
     py3_speciality: "",
     bad_interestinfieldquestion: "",
     bad_otherjointclinics: "",
     bad_mainareaofinterest: "",
-    bad_includeinthebssciiemaildiscussionforum: "",
     py3_insertnhsnetemailaddress: "",
     bad_psychodermatologycategory: "",
+    // --------------------------------------------------------------------------------
+    _bad_newhospitaladded: false,
+    _bad_readpolicydocument: false,
+    _bad_hasmedicallicence: false,
+    _bad_includeinthebssciiemaildiscussionforum: false,
   });
   const [inputValidator, setInputValidator] = useState({
     sig_bad_categorytype: true, // 📌 validation condition for bad_categorytype with sig_ prefix
@@ -467,8 +468,51 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
   const handleSubmitApp = async () => {
     // check if new hospital value been added
-    const isNewHospital = formData.bad_newhospitaladded;
-    let sigAppliaction = formData;
+    const isNewHospital = formData._bad_newhospitaladded;
+    let sigAppliaction = {
+      core_membershipsubscriptionplanid: formData.py3_membershipid,
+      bad_categorytype: formData.py3_categorytype,
+      py3_title: formData.py3_title,
+      py3_firstname: formData.py3_firstname,
+      py3_lastname: formData.py3_lastname,
+      py3_gender: formData.py3_gender,
+      py3_dateofbirth: formData.py3_dateofbirth,
+      py3_email: formData.py3_email,
+      py3_mobilephone: formData.py3_mobilephone,
+      py3_address1ine1: formData.py3_address1ine1,
+      py3_addressline2: formData.py3_addressline2,
+      py3_addresstowncity: formData.py3_addresstowncity,
+      py3_addresszippostalcode: formData.py3_addresszippostalcode,
+      py3_addresscountystate: formData.py3_addresscountystate,
+      py3_addresscountry: formData.py3_addresscountry,
+      py3_gmcnumber: formData.py3_gmcnumber,
+      bad_currentpost: formData.py3_currentpost,
+      py3_hospitalid: formData.py3_hospitalid,
+      sky_newhospitalname: formData.sky_newhospitalname,
+      bad_proposer1: formData.py3_proposer1,
+      bad_proposer2: formData.py3_proposer2,
+      py3_ntnno: formData.py3_ntnno,
+      sky_cvurl: formData.sky_cvurl,
+      sig_readpolicydocument_url_email:
+        formData.sig_readpolicydocument_url_email,
+      py3_currentgrade: formData.py3_currentgrade,
+      bad_qualifications: formData.py3_qualifications,
+      bad_isbadmember: formData.py3_isbadmember,
+      py3_whatukbasedroleareyou: formData.py3_whatukbasedroleareyou,
+      py3_speciality: formData.py3_speciality,
+      bad_interestinfieldquestion: formData.py3_interestinfieldquestion,
+      bad_otherjointclinics: formData.py3_otherjointclinics,
+      bad_mainareaofinterest: formData.py3_mainareaofinterest,
+      py3_insertnhsnetemailaddress: formData.py3_insertnhsnetemailaddress,
+      bad_psychodermatologycategory: formData.py3_psychodermatologycategory,
+      // --------------------------------------------------------------------------------
+      bad_newhospitaladded: formData._bad_newhospitaladded,
+      bad_readpolicydocument: formData._bad_readpolicydocument,
+      bad_hasmedicallicence: formData._bad_hasmedicallicence,
+      bad_includeinthebssciiemaildiscussionforum:
+        formData._bad_includeinthebssciiemaildiscussionforum,
+    };
+
     // default py3_address1ine1 to ref if value not set by user
     let isAddressInput = false;
     if (!formData.py3_address1ine1 && address1Line1Ref.current.value.length) {
@@ -500,7 +544,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
           ? "bad_psychodermatologycategory"
           : "",
         inputValidator.sig_bad_readpolicydocument && !!readPolicyDoc
-          ? "bad_readpolicydocument"
+          ? "_bad_readpolicydocument"
           : "",
         "sky_cvurl",
         formData.bad_categorytype ===
@@ -608,13 +652,13 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
     // if input value py3_insertnhsnetemailaddress in wp set to show proceed
     if (
-      name === "bad_includeinthebssciiemaildiscussionforum" &&
+      name === "_bad_includeinthebssciiemaildiscussionforum" &&
       checked &&
       inputValidator.sig_py3_insertnhsnetemailaddress
     ) {
       setIsEmail(true);
     }
-    if (name === "bad_includeinthebssciiemaildiscussionforum" && !checked) {
+    if (name === "_bad_includeinthebssciiemaildiscussionforum" && !checked) {
       setIsEmail(false);
     }
 
@@ -1227,8 +1271,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 Hospital / Medical School not listed
               </label>
               <input
-                name="bad_newhospitaladded"
-                checked={formData.bad_newhospitaladded}
+                name="_bad_newhospitaladded"
+                checked={formData._bad_newhospitaladded}
                 onChange={handleInputChange}
                 type="checkbox"
                 className="form-check-input check-box"
@@ -1236,7 +1280,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {formData.bad_newhospitaladded && (
+          {formData._bad_newhospitaladded && (
             <div>
               <label className="required form-label">Select Type</label>
               <Form.Select
@@ -1255,7 +1299,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {formData.bad_newhospitaladded &&
+          {formData._bad_newhospitaladded &&
             inputValidator.sig_sky_newhospitalname && (
               <div>
                 <label className="form-label">New Hospital Name</label>
@@ -1400,8 +1444,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 License to practice medicine (Y/N)
               </label>
               <input
-                name="bad_hasmedicallicence"
-                checked={formData.bad_hasmedicallicence}
+                name="_bad_hasmedicallicence"
+                checked={formData._bad_hasmedicallicence}
                 onChange={handleInputChange}
                 type="checkbox"
                 className="form-check-input check-box"
@@ -1505,9 +1549,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
               <div className="flex">
                 <div style={{ display: "grid", alignItems: "center" }}>
                   <input
-                    name="bad_includeinthebssciiemaildiscussionforum"
+                    name="_bad_includeinthebssciiemaildiscussionforum"
                     checked={
-                      formData.bad_includeinthebssciiemaildiscussionforum
+                      formData._bad_includeinthebssciiemaildiscussionforum
                     }
                     onChange={handleInputChange}
                     type="checkbox"
@@ -1555,8 +1599,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
               >
                 <div style={{ display: "grid" }}>
                   <input
-                    name="bad_readpolicydocument"
-                    checked={formData.bad_readpolicydocument}
+                    name="_bad_readpolicydocument"
+                    checked={formData._bad_readpolicydocument}
                     onChange={handleInputChange}
                     type="checkbox"
                     className="form-check-input check-box"
@@ -1579,7 +1623,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                       Privacy Policy
                     </span>
                   </label>
-                  <FormError id="bad_readpolicydocument" />
+                  <FormError id="_bad_readpolicydocument" />
                 </div>
               </div>
             </div>
