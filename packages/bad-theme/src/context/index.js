@@ -130,7 +130,7 @@ import {
   setSHDFeedAction,
 } from "./auth/rssFeed";
 import { useIsMounted } from "../helpers/useIsMounted";
-import { errorHandler } from "../helpers/errorHandler";
+import { errorHandler, errorMessage } from "../helpers/errorHandler";
 import { anchorScrapper } from "../helpers/contentScrapper";
 import { copyToClipboard } from "../helpers/domEvents";
 import { postTypeHandler } from "../helpers/postType";
@@ -269,4 +269,5 @@ export {
   getFadPermision,
   useRemoveScript,
   useScript,
+  errorMessage,
 };
