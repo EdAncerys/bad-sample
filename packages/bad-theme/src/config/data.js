@@ -116,7 +116,7 @@ export const MENU_DATA = [
   // 📌 uncomment to enable FAD on quick links
   // {
   //   title: "FAD",
-  //   url: "/find-a-dermatologist/",b-
+  //   url: "/find-a-dermatologist/",
   // },
 ];
 
