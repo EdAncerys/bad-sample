@@ -54,8 +54,6 @@ const Video = ({ state, actions, libraries }) => {
     });
     let isSagepay = queryParams.sagepay;
     setSagepay(isSagepay);
-
-    console.log("🐞 ", queryParams.sagepay); // debug
   }, [isWindow]);
 
   const handlePaymentModal = (url) => {
@@ -127,7 +125,7 @@ const Video = ({ state, actions, libraries }) => {
           return true;
         }
       } catch (error) {
-        console.log(error); // debug
+        // console.log(error); // debug
       }
     }
     setVideoStatus("locked");
@@ -185,7 +183,7 @@ const Video = ({ state, actions, libraries }) => {
         });
       }
     } catch (error) {
-      console.log(error); // debug
+      // console.log(error); // debug
     }
   };
 
@@ -227,7 +225,7 @@ const Video = ({ state, actions, libraries }) => {
             setVideoCover(json[0].thumbnail_large);
           }
         } catch (error) {
-          console.log(error); // debug
+          // console.log(error); // debug
         }
       };
 

@@ -188,8 +188,6 @@ const FindDermatologistOptions = ({ state }) => {
       bad_profile_photo_url: formData.bad_profile_photo_url,
     };
 
-    console.log("🐞 data", data); // debug
-
     try {
       setIsFetching(true);
       const response = await updateProfileAction({

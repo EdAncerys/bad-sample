@@ -17,8 +17,8 @@ const MapsComponent = ({
   const mapCenter = center || { lat: 51.5072, lng: -0.1276 };
   const ZOOM = zoom || 10;
 
-  console.log("🐞 markers", markers); // debug
-  console.log("🐞 mapCenter", mapCenter); // debug
+  // console.log("🐞 markers", markers); // debug
+  // console.log("🐞 mapCenter", mapCenter); // debug
 
   const containerStyle = {
     width: "100%",
