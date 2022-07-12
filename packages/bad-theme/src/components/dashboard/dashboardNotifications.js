@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import { connect } from "frontity";
 
 import DirectDebitNotification from "./directDebitNotification";
@@ -9,57 +9,93 @@ import {
   setDashboardNotificationsAction,
   setDashboardPathAction,
   muiQuery,
+  setErrorAction,
 } from "../../context";
 
 const DashboardNotifications = ({ state }) => {
   const { lg } = muiQuery();
+  // --------------------------------------------------------------------------------
   const dispatch = useAppDispatch();
-  const { isDashboardNotifications, dashboardPath, dynamicsApps } =
-    useAppState();
+  const {
+    isDashboardNotifications,
+    dashboardPath,
+    dynamicsApps,
+    isActiveUser,
+  } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  // HELPERS ----------------------------------------------------------------
+  // HELPERS -----------------------------------------------------------------
+  useEffect(() => {
+    // break if bad_selfserviceaccess is !lappsed | !frozen
+    if (
+      isActiveUser &&
+      isActiveUser.bad_selfserviceaccess !== state.theme.frozenMembership &&
+      isActiveUser.bad_selfserviceaccess !== state.theme.lapsedMembership
+    )
+      return;
+
+    // user payment message based on
+    let message = state.theme.frozenMembershipBody;
+
+    if (
+      isActiveUser &&
+      state.auth.lapsedMembership === isActiveUser.bad_selfserviceaccess
+    )
+      message = state.theme.lapsedMembershipBody;
+
+    setErrorAction({
+      dispatch,
+      isError: {
+        message,
+        image: "Error",
+      },
+    });
+  }, [isActiveUser]);
 
   // SERVERS -----------------------------------------------------------------
-  const ServeGoToActions = ({ path, title, isDismisable }) => {
+  const ServeGoToActions = ({ path, title, isDismisable, id }) => {
     if (!path) return null;
 
     return (
-      <div>
-        <div className="flex">
-          {isDismisable && (
-            <div
-              className="blue-btn"
-              style={{ width: "fit-content" }}
-              onClick={() =>
-                setDashboardNotificationsAction({
-                  dispatch,
-                  isDashboardNotifications: null,
-                })
-              }
-            >
-              Dismiss
-            </div>
-          )}
-
+      <div
+        className="flex"
+        style={{ marginLeft: "2em", alignItems: "center", flex: 0.5 }}
+      >
+        {isDismisable && (
           <div
             className="blue-btn"
-            style={{ marginLeft: "2em", width: "fit-content" }}
+            style={{ width: "fit-content" }}
             onClick={() =>
-              setDashboardPathAction({ dispatch, dashboardPath: path })
+              setDashboardNotificationsAction({
+                dispatch,
+                isDashboardNotifications: { title, id },
+              })
             }
           >
-            {title || "More"}
+            Dismiss
           </div>
+        )}
+
+        <div
+          className="blue-btn"
+          style={{ marginLeft: "2em", width: "fit-content" }}
+          onClick={() =>
+            setDashboardPathAction({ dispatch, dashboardPath: path })
+          }
+        >
+          {title || "More"}
         </div>
       </div>
     );
   };
 
   const ServeProfileReminders = () => {
-    if (dashboardPath === "My Profile" || !isDashboardNotifications)
+    if (
+      dashboardPath === "My Profile" ||
+      (isDashboardNotifications && isDashboardNotifications.id === "1")
+    )
       return null;
 
     return (
@@ -82,8 +118,58 @@ const DashboardNotifications = ({ state }) => {
             Please complete missing BAD profile information.
           </div>
           <ServeGoToActions
+            id="1"
             path="My Profile"
             title="Go to my profile"
+            isDismisable
+          />
+        </div>
+      </div>
+    );
+  };
+
+  const ServePaymentReminders = () => {
+    if (
+      dashboardPath === "Billing" ||
+      (isDashboardNotifications && isDashboardNotifications.id === "2") ||
+      (isActiveUser &&
+        isActiveUser.bad_selfserviceaccess !== state.theme.frozenMembership &&
+        isActiveUser.bad_selfserviceaccess !== state.theme.lapsedMembership)
+    )
+      return null;
+
+    // user payment message based on
+    let message = state.theme.frozenMembershipBody;
+
+    if (
+      isActiveUser &&
+      state.auth.lapsedMembership === isActiveUser.bad_selfserviceaccess
+    )
+      message = state.theme.lapsedMembershipBody;
+
+    return (
+      <div
+        className="no-selector"
+        style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}
+      >
+        <div
+          className="shadow"
+          style={{
+            display: "flex",
+            padding: `1em 4em`,
+            flexDirection: !lg ? null : "column",
+          }}
+        >
+          <div
+            className="flex primary-title"
+            style={{ display: "grid", alignItems: "center", fontSize: 20 }}
+          >
+            {message}
+          </div>
+          <ServeGoToActions
+            id="2"
+            path="Billing"
+            title="Pay Now"
             isDismisable
           />
         </div>
@@ -121,7 +207,7 @@ const DashboardNotifications = ({ state }) => {
           >
             Your SIG application has been approved.
           </div>
-          <ServeGoToActions path="Billing" title="Pay Now" />
+          <ServeGoToActions id="1" path="Billing" title="Pay Now" />
         </div>
       </div>
     );
@@ -132,6 +218,7 @@ const DashboardNotifications = ({ state }) => {
       <DirectDebitNotification />
       <ServeProfileReminders />
       <ServeAppReminders />
+      <ServePaymentReminders />
     </div>
   );
 };

@@ -55,13 +55,14 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     sky_cvurl: "",
     py3_currentgrade: "",
     sky_newhospitalname: "",
-    bad_newhospitaladded: "",
     bad_expectedyearofqualification: "",
-    py3_constitutionagreement: "",
-    bad_readpolicydocument: "",
     sky_newhospitaltype: "",
-    bad_memberdirectory: "",
     bad_preferredmailingaddress: "",
+    // --------------------------------------------------------------------------------
+    _bad_newhospitaladded: false,
+    _py3_constitutionagreement: false,
+    _bad_readpolicydocument: false,
+    _bad_memberdirectory: false,
   });
   const [inputValidator, setInputValidator] = useState({
     bad_py3_gmcnumber: true,
@@ -74,11 +75,12 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     bad_sky_cvurl: true,
     bad_py3_currentgrade: true,
     bad_sky_newhospitalname: true,
-    bad_newhospitaladded: true,
     bad_expectedyearofqualification: true,
     bad_py3_constitutionagreement: true,
-    bad_readpolicydocument: true,
     bad_sky_newhospitaltype: true,
+    // --------------------------------------------------------------------------------
+    bad_readpolicydocument: true,
+    bad_newhospitaladded: true,
     bad_memberdirectory: true,
   });
 
@@ -95,6 +97,10 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
   useEffect(async () => {
     const handleSetFormData = ({ data, name }) => {
+      // if name is bad_preferredmailingaddress replace with _bad_preferredmailingaddress
+      if (name === "bad_preferredmailingaddress")
+        name = "_bad_preferredmailingaddress";
+
       setFormData((prevFormData) => ({
         ...prevFormData,
         [`${name}`]: data.value || "",
@@ -227,13 +233,35 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
   };
 
   const handleSaveExit = async () => {
+    const data = {
+      py3_gmcnumber: formData.py3_gmcnumber,
+      py3_otherregulatorybodyreference:
+        formData.py3_otherregulatorybodyreference,
+      py3_ntnno: formData.py3_ntnno,
+      bad_currentpost: formData.bad_currentpost,
+      py3_hospitalid: formData.py3_hospitalid,
+      bad_proposer1: formData.bad_proposer1,
+      bad_proposer2: formData.bad_proposer2,
+      sky_cvurl: formData.sky_cvurl,
+      py3_currentgrade: formData.py3_currentgrade,
+      sky_newhospitalname: formData.sky_newhospitalname,
+      bad_expectedyearofqualification: formData.bad_expectedyearofqualification,
+      sky_newhospitaltype: formData.sky_newhospitaltype,
+      bad_preferredmailingaddress: formData.bad_preferredmailingaddress,
+      // --------------------------------------------------------------------------------
+      bad_newhospitaladded: formData._bad_newhospitaladded,
+      py3_constitutionagreement: formData._py3_constitutionagreement,
+      bad_readpolicydocument: formData._bad_readpolicydocument,
+      bad_memberdirectory: formData._bad_memberdirectory,
+    };
+
     await setUserStoreAction({
       state,
       actions,
       dispatch,
       applicationData,
       isActiveUser,
-      data: formData,
+      data,
     });
 
     if (isActiveUser) setGoToAction({ state, path: `/dashboard/`, actions });
@@ -247,6 +275,14 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
       let inputValue = input;
       // 📌 add bad_ if input dont have it
       if (!inputValue.includes("bad_")) inputValue = `bad_${input}`;
+      // --------------------------------------------------------------------------------
+      // 📌  Resolved values adjustment v wp sored values
+      // --------------------------------------------------------------------------------
+      // replace first prefix _ foth ""
+      if (inputValue === "_py3_constitutionagreement")
+        inputValue = input.substring(1);
+      if (inputValue === "_bad_readpolicydocument")
+        inputValue = input.substring(1);
 
       if (!formData[input] && inputValidator[inputValue]) {
         errorHandler({ id: `form-error-${input}` });
@@ -259,7 +295,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
   const handleNext = async () => {
     // check if new hospital value been added
-    const isNewHospital = formData.bad_newhospitaladded;
+    const isNewHospital = formData._bad_newhospitaladded;
     // 📌 check if isAssociateType to apply mandatory fields
     // const isAssociateType = applicationType.includes("Associate");
 
@@ -274,14 +310,34 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         !isNewHospital ? "py3_hospitalid" : "",
         "bad_proposer1",
         "bad_proposer2",
-        "py3_constitutionagreement",
-        "bad_readpolicydocument",
+        "_py3_constitutionagreement",
+        "_bad_readpolicydocument",
         "sky_cvurl",
       ],
     });
 
     if (!isValid) return null;
-    // console.log(formData); // debug
+    const data = {
+      py3_gmcnumber: formData.py3_gmcnumber,
+      py3_otherregulatorybodyreference:
+        formData.py3_otherregulatorybodyreference,
+      py3_ntnno: formData.py3_ntnno,
+      bad_currentpost: formData.bad_currentpost,
+      py3_hospitalid: formData.py3_hospitalid,
+      bad_proposer1: formData.bad_proposer1,
+      bad_proposer2: formData.bad_proposer2,
+      sky_cvurl: formData.sky_cvurl,
+      py3_currentgrade: formData.py3_currentgrade,
+      sky_newhospitalname: formData.sky_newhospitalname,
+      bad_expectedyearofqualification: formData.bad_expectedyearofqualification,
+      sky_newhospitaltype: formData.sky_newhospitaltype,
+      bad_preferredmailingaddress: formData.bad_preferredmailingaddress,
+      // --------------------------------------------------------------------------------
+      bad_newhospitaladded: formData._bad_newhospitaladded,
+      py3_constitutionagreement: formData._py3_constitutionagreement,
+      bad_readpolicydocument: formData._bad_readpolicydocument,
+      bad_memberdirectory: formData._bad_memberdirectory,
+    };
 
     try {
       setFetching(true);
@@ -293,7 +349,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         isActiveUser,
         dynamicsApps,
         membershipApplication: { stepFour: true }, // set stepOne to complete
-        data: formData,
+        data,
       });
       if (!store.success) throw new Error("Failed to update application");
 
@@ -370,7 +426,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     }));
 
     // if checked value for hospital not found clear curet hospital input
-    if (name === "bad_newhospitaladded" && !value) handleClearHospital();
+    if (name === "_bad_newhospitaladded" && !value) handleClearHospital();
   };
 
   const isFormFooter =
@@ -567,8 +623,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                 Main Hospital / Medical School / Place of Work not listed
               </label>
               <input
-                name="bad_newhospitaladded"
-                checked={formData.bad_newhospitaladded}
+                name="_bad_newhospitaladded"
+                checked={formData._bad_newhospitaladded}
                 onChange={handleInputChange}
                 type="checkbox"
                 className="form-check-input check-box"
@@ -576,7 +632,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {formData.bad_newhospitaladded && (
+          {formData._bad_newhospitaladded && (
             <div>
               <label className="required form-label">Select Type</label>
               <Form.Select
@@ -595,7 +651,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {formData.bad_newhospitaladded &&
+          {formData._bad_newhospitaladded &&
             inputValidator.bad_sky_newhospitalname && (
               <div>
                 <label className="form-label">
@@ -757,8 +813,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                     >
                       <div style={{ display: "grid" }}>
                         <input
-                          name="bad_memberdirectory"
-                          checked={formData.bad_memberdirectory}
+                          name="_bad_memberdirectory"
+                          checked={formData._bad_memberdirectory}
                           onChange={handleInputChange}
                           type="checkbox"
                           className="form-check-input check-box"
@@ -772,7 +828,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                         Include my details in the BAD Members' Directory
                       </div>
                     </div>
-                    <FormError id="bad_memberdirectory" />
+                    <FormError id="_bad_memberdirectory" />
                   </div>
                 )}
 
@@ -784,8 +840,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                     >
                       <div style={{ display: "grid" }}>
                         <input
-                          name="py3_constitutionagreement"
-                          checked={formData.py3_constitutionagreement}
+                          name="_py3_constitutionagreement"
+                          checked={formData._py3_constitutionagreement}
                           onChange={handleInputChange}
                           type="checkbox"
                           className="form-check-input check-box"
@@ -806,7 +862,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                         </label>
                       </div>
                     </div>
-                    <FormError id="py3_constitutionagreement" />
+                    <FormError id="_py3_constitutionagreement" />
                   </div>
                 )}
 
@@ -818,8 +874,8 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                     >
                       <div style={{ display: "grid" }}>
                         <input
-                          name="bad_readpolicydocument"
-                          checked={formData.bad_readpolicydocument}
+                          name="_bad_readpolicydocument"
+                          checked={formData._bad_readpolicydocument}
                           onChange={handleInputChange}
                           type="checkbox"
                           className="form-check-input check-box"
@@ -846,7 +902,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
                         </label>
                       </div>
                     </div>
-                    <FormError id="bad_readpolicydocument" />
+                    <FormError id="_bad_readpolicydocument" />
                   </div>
                 )}
               </div>

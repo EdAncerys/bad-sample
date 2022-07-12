@@ -167,6 +167,12 @@ export const getUserContactId = async ({ state, dispatch, transId }) => {
   }
 };
 
+// --------------------------------------------------------------------------------
+// 📌  Additional uncomputed filed values to add in user blob from Dynamics
+//    (values added with " _ " prefix)
+// --------------------------------------------------------------------------------
+const userBlobFields = `gendercode,py3_ethnicity,birthdate,bad_preferredmailingaddress,bad_includeinfindadermatologist,bad_bademailalerts,bad_badecircular,bad_presidentsbulletin,bad_bjdalerts,donotemail,bad_newhospitaladded,bad_mrpcqualified,bad_memberdirectory,py3_constitutionagreement,bad_readpolicydocument,bad_hasmedicallicence,bad_includeinthebssciiemaildiscussionforum`;
+
 export const getUserDataByContactId = async ({
   state,
   dispatch,
@@ -186,16 +192,22 @@ export const getUserDataByContactId = async ({
     // contactid = "969ba377-a398-ec11-b400-000d3aaedef5"; // emelia
   }
 
-  const path = state.auth.APP_HOST + `/catalogue/data/contacts(${contactid})`;
+  const path =
+    state.auth.APP_HOST +
+    `/catalogue/all/contacts(${contactid})` +
+    `?$value=${userBlobFields}`;
 
   try {
-    const data = await fetchDataHandler({ path, state });
-    if (!data) throw new Error("Error getting userData.");
-    const response = await data.json();
+    const response = await fetchDataHandler({ path, state });
+    if (!response.ok) throw new Error("Response !ok");
+    let data = await response.json();
+    if (!data.data && !data.data.length)
+      throw new Error("Error getting userData.");
 
+    // get user blob object from data
+    data = data.data[0];
     // pre-fetch application data & populate to context store
     await getUserApplicationAction({ state, dispatch, contactid });
-
     // get application status against user in Dynamic
     const dynamicApps = await getApplicationStatus({
       state,
@@ -204,9 +216,9 @@ export const getUserDataByContactId = async ({
     });
     if (!dynamicApps.apps.success)
       throw new Error("Error dynamicApps userData.");
-    setActiveUserAction({ dispatch, isActiveUser: response });
+    setActiveUserAction({ dispatch, isActiveUser: data });
 
-    return response;
+    return data;
   } catch (error) {
     // console.log("error", error);
   }
@@ -217,16 +229,18 @@ export const getUserDataByEmail = async ({ state, dispatch, email }) => {
 
   const path =
     state.auth.APP_HOST +
-    `/catalogue/data/contacts?$filter=emailaddress1 eq '${email}'`;
+    `/catalogue/all/contacts?$filter=emailaddress1 eq '${email}'` +
+    `&$value=${userBlobFields}`;
 
   try {
-    const data = await fetchDataHandler({ path, state });
-    if (!data) throw new Error("Failed to fetch user data.");
-    const response = await data.json();
+    const response = await fetchDataHandler({ path, state });
+    if (!response.ok) throw new Error("Response !ok");
+    const data = await response.json();
+    // console.log("🐞 user data ", data); // debug
 
-    if (response.value.length > 0) {
-      const userData = response.value[0];
-      const { contactid } = userData;
+    if (data.data && data.data.length) {
+      const user = data.data[0];
+      const { contactid } = user;
 
       // pre-fetch application data & populate to context store
       await getUserApplicationAction({ state, dispatch, contactid });
@@ -236,11 +250,10 @@ export const getUserDataByEmail = async ({ state, dispatch, email }) => {
         dispatch,
         contactid,
       });
-      if (!dynamicApps.apps.success)
-        throw new Error("Error dynamicApps userData.");
+      if (!dynamicApps.apps.success) throw new Error("Error dynamicApps user.");
 
-      setActiveUserAction({ dispatch, isActiveUser: userData });
-      return userData;
+      setActiveUserAction({ dispatch, isActiveUser: user });
+      return user;
     }
 
     return null;

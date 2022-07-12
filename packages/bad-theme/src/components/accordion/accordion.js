@@ -72,19 +72,16 @@ function AlterAccordion({
     // 📌 handle member only accordion items if user is logged in
     if (approved_bad_members_only && isActiveUser) {
       // check if user have active BAD memberships in Dynamics
-      let isBadMember = false;
-      if (dynamicsApps && dynamicsApps.subs) {
-        let badApps = dynamicsApps.subs.data.filter((app) => {
-          let hasBADMemberships = app.bad_organisedfor === "BAD";
-          return hasBADMemberships;
-        });
-        if (badApps.length) isBadMember = true;
+      let serviceAccess = false;
+      if (isActiveUser) {
+        serviceAccess =
+          isActiveUser.bad_selfserviceaccess === state.theme.serviceAccess;
       }
 
       // update access to accordion item based on user membership status
       // manage to set in state both true & false due isActiveUser async update
-      if (isBadMember) setForMembersOnly(false);
-      if (!isBadMember) setForMembersOnly(true);
+      if (serviceAccess) setForMembersOnly(false);
+      if (!serviceAccess) setForMembersOnly(true);
     }
   }, [dynamicsApps, isActiveUser]);
 

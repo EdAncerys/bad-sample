@@ -27,9 +27,9 @@ const UpdateProfile = ({ state, actions, libraries }) => {
     firstname: "",
     lastname: "",
     bad_profile_photo_url: "",
-    birthdate: "",
-    gendercode: "",
-    py3_ethnicity: "",
+    _birthdate: "",
+    _gendercode: "",
+    _py3_ethnicity: "",
   });
   const documentRef = useRef(null);
   const marginVertical = state.theme.marginVertical;
@@ -59,14 +59,15 @@ const UpdateProfile = ({ state, actions, libraries }) => {
     // populate profile information form Dynamics records
     if (isActiveUser.firstname) handleSetData({ name: "firstname" });
     if (isActiveUser.lastname) handleSetData({ name: "lastname" });
-    if (isActiveUser.gendercode) handleSetData({ name: "gendercode" });
-    if (isActiveUser.birthdate) handleSetData({ name: "birthdate" });
-    if (isActiveUser.py3_ethnicity) handleSetData({ name: "py3_ethnicity" });
+    if (isActiveUser._gendercode) handleSetData({ name: "_gendercode" });
+    if (isActiveUser._birthdate) handleSetData({ name: "_birthdate" });
+    if (isActiveUser._py3_ethnicity) handleSetData({ name: "_py3_ethnicity" });
   }, [isActiveUser]);
 
   // HELPERS ----------------------------------------------------------------
   const handleInputChange = (e) => {
     const { name, value, type, checked, files } = e.target;
+
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
@@ -94,21 +95,19 @@ const UpdateProfile = ({ state, actions, libraries }) => {
     const firstname = formData.firstname;
     const lastname = formData.lastname;
     const bad_profile_photo_url = formData.bad_profile_photo_url;
-    const birthdate = formData.birthdate;
-    const gendercode = formData.gendercode;
-    const py3_ethnicity = formData.py3_ethnicity;
-    // const bad_ethnicity = formData.py3_ethnicity; // application field value
+    const birthdate = formData._birthdate;
+    const gendercode = formData._gendercode;
+    const py3_ethnicity = formData._py3_ethnicity;
 
     const data = Object.assign(
       {}, // add empty object
-      !!firstname && { firstname },
-      !!lastname && { lastname },
+      { firstname }, // allow to pass empty values
+      { lastname }, // allow to pass empty values
       !!bad_profile_photo_url && { bad_profile_photo_url },
       !!birthdate && { birthdate },
-      !!gendercode && { gendercode },
-      !!py3_ethnicity && { py3_ethnicity }
+      !!gendercode && { gendercode: Number(gendercode) }, // convert to number for dynamics
+      !!py3_ethnicity && { py3_ethnicity: Number(py3_ethnicity) } // convert to number for dynamics
     );
-    // console.log("data", data); // debug
 
     try {
       setIsFetching(true);
@@ -198,9 +197,9 @@ const UpdateProfile = ({ state, actions, libraries }) => {
           <div style={styles.wrapper}>
             <label>Date Of Birth</label>
             <input
-              name="birthdate"
+              name="_birthdate"
               type="date"
-              value={formData.birthdate}
+              value={formData._birthdate}
               onChange={handleInputChange}
               className="form-control input"
               placeholder="Your Date Of Birth"
@@ -210,8 +209,8 @@ const UpdateProfile = ({ state, actions, libraries }) => {
             <div>
               <label>Gender</label>
               <Form.Select
-                name="gendercode"
-                value={formData.gendercode}
+                name="_gendercode"
+                value={formData._gendercode}
                 onChange={handleInputChange}
                 className="input"
                 // disabled
@@ -233,8 +232,8 @@ const UpdateProfile = ({ state, actions, libraries }) => {
             <div style={styles.wrapper}>
               <label>Ethnicity</label>
               <Form.Select
-                name="py3_ethnicity"
-                value={formData.py3_ethnicity}
+                name="_py3_ethnicity"
+                value={formData._py3_ethnicity}
                 onChange={handleInputChange}
                 className="input"
               >

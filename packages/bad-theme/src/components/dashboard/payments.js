@@ -186,6 +186,20 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
         )
           return null;
 
+        // --------------------------------------------------------------------------------
+        // 📌  Dont allow user to pay for a subscription if account is Lapsed
+        // --------------------------------------------------------------------------------
+        if (
+          isActiveUser &&
+          isActiveUser.bad_selfserviceaccess === state.theme.lapsedMembership
+        ) {
+          return (
+            <div style={{ maxWidth: 500 }}>
+              {state.theme.lapsedMembershipBody}
+            </div>
+          );
+        }
+
         return (
           <div
             className="blue-btn"

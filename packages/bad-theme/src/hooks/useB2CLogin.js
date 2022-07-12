@@ -97,7 +97,8 @@ export const useB2CLogin = ({ state, actions }) => {
       // ⬇️ redirect to url with path ⬇️
       setGoToAction({ state, path: redirectUrl || "/", actions });
       // set placeholder to false
-      setPlaceholderAction({ dispatch, isPlaceholder: false });
+      // deprecated as of v3.0.0
+      // setPlaceholderAction({ dispatch, isPlaceholder: false });
     }
 
     return () => {
