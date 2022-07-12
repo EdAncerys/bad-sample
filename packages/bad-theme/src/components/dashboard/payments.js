@@ -169,6 +169,13 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
       const ServePayButton = () => {
         if (!core_totalamount) return "Processing";
+        const buttonId = core_membershipapplicationid
+          ? core_membershipapplicationid
+          : core_membershipsubscriptionid;
+        if (state.data.initiatedPayments.includes(buttonId)) {
+          return "Payment initiated";
+        }
+
         if (
           bad_sagepayid ||
           core_totalamount === "£0.00" ||
@@ -183,16 +190,12 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
           <div
             className="blue-btn"
             onClick={() => {
+              actions.theme.addInitiatedPayment(buttonId);
               handlePayment({
                 core_membershipsubscriptionid,
                 core_membershipapplicationid,
                 dispatch,
                 state,
-              });
-              handleSetCookie({
-                name: "BAD-payment",
-                value: block.core_membershipapplicationid,
-                domain: `${state.auth.APP_URL}`,
               });
             }}
           >

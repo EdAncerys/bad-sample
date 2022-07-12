@@ -24,6 +24,7 @@ const BADTheme = {
         isExternal: false,
         location: "/new-url",
       },
+      initiatedPayments: [],
     },
     theme: {
       inputFieldLimit250: "250", // defines maxlength prop
@@ -43,7 +44,7 @@ const BADTheme = {
       marginVertical: 40, // px units
       notification: false,
       perPageLimit: 50, // number of posts to fetch per page
-      TICKET_NO: "B-23",
+      TICKET_NO: "B-25",
     },
     auth: {
       // 📌 app auth service secrets
@@ -102,6 +103,13 @@ const BADTheme = {
           });
         });
       },
+      //
+      addInitiatedPayment:
+        ({ state }) =>
+        (buttonId) => {
+          console.log(buttonId);
+          state.data.initiatedPayments.push(buttonId);
+        },
       // notification
       setNotification: ({ state }) => {
         state.theme.notification = true;
