@@ -102,9 +102,8 @@ const FindDermatologistOptions = ({ state }) => {
       contactid: isActiveUser.contactid,
     });
 
-    // 📌 TESTING ONLY - REMOVE LATER
-    setFadPermision(true);
-    // if (permision) setFadPermision(permision);
+    // set fad permision
+    if (permision) setFadPermision(permision);
   }, [isActiveUser, dynamicsApps]);
 
   // HELPERS ----------------------------------------------------------------
