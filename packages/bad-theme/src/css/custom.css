@@ -334,9 +334,21 @@ li {
 
 .error-message {
   position: absolute;
-  top: 80px;
-  right: 0;
+  z-index: 1;
+  top: 10px;
+  right: 40px;
   color: #ef476f;
+}
+.required-input {
+  position: absolute !important;
+  top: -15px;
+  right: -15px;
+  z-index: 1;
+}
+.required-input::after {
+  content: "*";
+  color: #ef476f;
+  font-size: 1.5em;
 }
 
 /* 

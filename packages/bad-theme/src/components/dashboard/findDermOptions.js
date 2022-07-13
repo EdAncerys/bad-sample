@@ -350,7 +350,6 @@ const FindDermatologistOptions = ({ state }) => {
                 <div>
                   <div className="flex-col">
                     <div className="flex-col relative">
-                      <label className="required">Address line one</label>
                       <div className="relative">
                         <input
                           ref={address1Line1Ref}
@@ -360,7 +359,7 @@ const FindDermatologistOptions = ({ state }) => {
                           type="text"
                           style={{ margin: "0.5em 0", paddingRight: 40 }}
                           className="form-control"
-                          placeholder="Address Line 1"
+                          placeholder="Address Line 1 (required)"
                           maxLength={state.theme.inputFieldLimit250}
                         />
                         <div
@@ -386,13 +385,13 @@ const FindDermatologistOptions = ({ state }) => {
                         height={250}
                         marginTop={90}
                       />
+                      <label className="required-input form-label" />
                       <div
                         id="address3_line1"
                         className="required d-none error-message"
                       />
                     </div>
                     <div className="relative">
-                      <label>Address line two</label>
                       <input
                         name="address3_line2"
                         value={formData.address3_line2}
@@ -406,24 +405,23 @@ const FindDermatologistOptions = ({ state }) => {
                     </div>
 
                     <div className="relative">
-                      <label className="required">Postcode</label>
                       <input
                         name="address3_postalcode"
                         value={formData.address3_postalcode}
                         onChange={handleInputChange}
                         type="text"
-                        placeholder="Postcode"
+                        placeholder="Postcode (required)"
                         className="form-control"
                         style={styles.input}
                         maxLength={state.theme.inputFieldLimit80}
                       />
+                      <label className="required-input form-label" />
                       <div
                         id="address3_postalcode"
                         className="required d-none error-message"
                       />
                     </div>
                     <div className="relative">
-                      <label>City</label>
                       <input
                         name="address3_city"
                         value={formData.address3_city}
@@ -517,6 +515,7 @@ const FindDermatologistOptions = ({ state }) => {
                     alignSelf: "end",
                     fontSize: 17,
                     fontWeight: "bold",
+                    opacity: 0.5,
                   }}
                 >
                   {Number(state.theme.textAreaLimit) -
