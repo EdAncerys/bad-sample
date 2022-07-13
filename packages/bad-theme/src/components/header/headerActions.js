@@ -163,7 +163,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
         <div
           className="blue-btn-reverse"
           style={{ minWidth: "fit-content" }}
-          onClick={handleCookie}
+          onClick={handleAboutInfo}
         >
           🍪
         </div>
@@ -216,7 +216,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
         contactid = "60a262dc-57f8-e611-80e4-3863bb35cfc8";
       if (lastname === "Bonsall")
         contactid = "05956d48-59f8-e611-80e4-3863bb35cfc8";
-      if (lastname === "Bonsall")
+      if (lastname === "Bulinska")
         contactid = "0655b9bc-59f8-e611-80e4-3863bb35cfc8";
 
       try {
@@ -246,6 +246,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
           borderRadius: 10,
           backgroundColor: "rgba(247,61,147,0.5)",
           zIndex: 1,
+          gap: 10,
         }}
       >
         <div
@@ -269,6 +270,13 @@ const HeaderActions = ({ state, actions, libraries }) => {
         >
           Bulinska
         </div>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={handleAboutInfo}
+        >
+          i
+        </div>
       </div>
     );
   };
@@ -287,8 +295,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
     }
   };
 
-  const handleCookie = async () => {
-    handleSetCookie({ name: "no-cookie", deleteCookie: true }); // to show list of all cookies
+  const handleAboutInfo = async () => {
     handleSetCookie({ name: "BAD-cookie-popup", deleteCookie: true });
     console.log("🐞 APP_HOST ", state.auth.APP_HOST);
     console.log("🐞 APP_URL ", state.auth.APP_URL);
