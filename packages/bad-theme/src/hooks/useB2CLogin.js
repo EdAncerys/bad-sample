@@ -74,6 +74,7 @@ export const useB2CLogin = ({ state, actions }) => {
 
         // 📌 set auth cookie for authenticated requests
         await setAuthenticationCookieAction({ state, b2cTaken });
+        // 📌 get user data by email
         const user = await getUserDataByEmail({
           state,
           dispatch,

@@ -49,7 +49,8 @@ const FindADermatologist = ({ state, block }) => {
     let isPostcode = false;
     let postcodeInput = pc.replace(/\s/g, "");
 
-    const regex = /^[A-Z]{1,2}[0-9]{1,2} ?[0-9][A-Z]{2}$/i;
+    // regex to check if postcode is valid for UK
+    const regex = /^([A-Z]{1,2}[0-9][A-Z0-9]? ?[0-9][A-Z]{2}|GIR 0AA)$/i;
     isPostcode = regex.test(postcodeInput);
 
     // display error message if postoce is not valid
