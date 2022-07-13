@@ -189,7 +189,8 @@ const FindDermatologistOptions = ({ state }) => {
       bad_profile_photo_url: formData.bad_profile_photo_url,
     };
 
-    const regex = /^[A-Z]{1,2}[0-9]{1,2} ?[0-9][A-Z]{2}$/i;
+    // regex to check if postcode is valid for UK
+    const regex = /^([A-Z]{1,2}[0-9][A-Z0-9]? ?[0-9][A-Z]{2}|GIR 0AA)$/i;
     let isPostcode = regex.test(data.address3_postalcode);
     if (!isPostcode) {
       data.address3_postalcode = "";
