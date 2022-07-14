@@ -15,7 +15,6 @@ import {
   muiQuery,
   setErrorAction,
   fetchDataHandler,
-  handleSetCookie,
 } from "../../context";
 
 export const handlePayment = async ({
