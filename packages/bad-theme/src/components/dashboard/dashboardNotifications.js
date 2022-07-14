@@ -132,8 +132,13 @@ const DashboardNotifications = ({ state }) => {
   const ServeMembershipPaymentReminders = () => {
     const id = 2; // notification id
 
+    const isFrezeStatus =
+      isActiveUser.core_membershipstatus === state.theme.frozenMembership;
+    const isBilling = dashboardPath === "Billing";
+
     if (
-      dashboardPath === "Billing" ||
+      !isFrezeStatus ||
+      isBilling ||
       (isDashboardNotifications && isDashboardNotifications.includes(id))
     )
       return null;

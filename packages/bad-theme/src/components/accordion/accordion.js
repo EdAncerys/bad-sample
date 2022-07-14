@@ -73,7 +73,6 @@ function AlterAccordion({
     if (approved_bad_members_only && isActiveUser) {
       const isFullAccess =
         isActiveUser.bad_selfserviceaccess === state.theme.serviceAccess;
-      console.log("🐞 isFullAccess", isFullAccess);
 
       if (
         isFullAccess &&
