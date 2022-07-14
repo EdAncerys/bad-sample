@@ -176,7 +176,7 @@ const Navigation = ({ state, actions, libraries }) => {
             (word) => name.toLowerCase().includes(word)
           );
           let serviceAccess = false;
-          if (isActiveUser)
+          if (isActiveUser && isActiveUser.core_membershipstatus !== state.theme.frozenMembership) {
             serviceAccess =
               isActiveUser.bad_selfserviceaccess === state.theme.serviceAccess;
           // 📌 if user has permission to view news & media

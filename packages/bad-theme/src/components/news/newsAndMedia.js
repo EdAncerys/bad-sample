@@ -73,7 +73,8 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     // 📌 check if user has permission to view news & media
     if (
       isActiveUser &&
-      isActiveUser.bad_selfserviceaccess === state.theme.serviceAccess
+      isActiveUser.bad_selfserviceaccess === state.theme.serviceAccess &&
+      isActiveUser.core_membershipstatus !== state.theme.frozenMembership
     )
       return data;
 
@@ -271,7 +272,11 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
                 (word) => item.name.toLowerCase().includes(word)
               );
               let serviceAccess = false;
-              if (isActiveUser)
+              if (
+                isActiveUser &&
+                isActiveUser.core_membershipstatus !==
+                  state.theme.frozenMembership
+              )
                 serviceAccess =
                   isActiveUser.bad_selfserviceaccess ===
                   state.theme.serviceAccess;

@@ -73,7 +73,10 @@ function AlterAccordion({
     if (approved_bad_members_only && isActiveUser) {
       // check if user have active BAD memberships in Dynamics
       let serviceAccess = false;
-      if (isActiveUser) {
+      if (
+        isActiveUser &&
+        isActiveUser.core_membershipstatus !== state.theme.frozenMembership
+      ) {
         serviceAccess =
           isActiveUser.bad_selfserviceaccess === state.theme.serviceAccess;
       }

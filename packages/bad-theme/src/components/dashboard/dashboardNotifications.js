@@ -28,11 +28,10 @@ const DashboardNotifications = ({ state }) => {
 
   // HELPERS -----------------------------------------------------------------
   useEffect(() => {
-    // break if bad_selfserviceaccess is !lappsed | !frozen
+    // break if core_membershipstatus !frozen
     if (
       isActiveUser &&
-      isActiveUser.bad_selfserviceaccess !== state.theme.frozenMembership &&
-      isActiveUser.bad_selfserviceaccess !== state.theme.lapsedMembership
+      isActiveUser.core_membershipstatus !== state.theme.frozenMembership
     )
       return;
 
@@ -41,7 +40,7 @@ const DashboardNotifications = ({ state }) => {
 
     if (
       isActiveUser &&
-      state.auth.lapsedMembership === isActiveUser.bad_selfserviceaccess
+      isActiveUser.core_membershipstatus === state.theme.lapsedMembership
     )
       message = state.theme.lapsedMembershipBody;
 
@@ -133,8 +132,7 @@ const DashboardNotifications = ({ state }) => {
       dashboardPath === "Billing" ||
       (isDashboardNotifications && isDashboardNotifications.id === "2") ||
       (isActiveUser &&
-        isActiveUser.bad_selfserviceaccess !== state.theme.frozenMembership &&
-        isActiveUser.bad_selfserviceaccess !== state.theme.lapsedMembership)
+        isActiveUser.core_membershipstatus !== state.theme.frozenMembership)
     )
       return null;
 
@@ -143,7 +141,7 @@ const DashboardNotifications = ({ state }) => {
 
     if (
       isActiveUser &&
-      state.auth.lapsedMembership === isActiveUser.bad_selfserviceaccess
+      isActiveUser.core_membershipstatus === state.theme.lapsedMembership
     )
       message = state.theme.lapsedMembershipBody;
 

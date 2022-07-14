@@ -111,10 +111,12 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
 
         {MENU_DATA.map((item, key) => {
           const { title, url } = item;
-          // 📌 check if logged in user exists & user is BAD member to allow access to PushFar
-          let serviceAccess = isActiveUser
-            ? isActiveUser.bad_selfserviceaccess === state.theme.serviceAccess
-            : false;
+          // 📌 check if logged in user exists & user is BAD member to allow access to PushFar & user have valid permisions
+          let serviceAccess =
+            isActiveUser &&
+            isActiveUser.core_membershipstatus !== state.theme.frozenMembership
+              ? isActiveUser.bad_selfserviceaccess === state.theme.serviceAccess
+              : false;
 
           if (title === "PushFar Mentoring platform" && !serviceAccess)
             return null;

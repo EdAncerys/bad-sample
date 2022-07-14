@@ -50,8 +50,8 @@ const BADTheme = {
       perPageLimit: 50, // number of posts to fetch per page
       // POSSIBLE TUYPES: Full | Limited
       serviceAccess: "Full", // Full access BAD members
-      frozenMembership: "Frozen", // members with late payments
-      lapsedMembership: "Lapsed", // members with lapsed payments over a year ago
+      frozenMembership: "Freeze", // members with late payments
+      lapsedMembership: "Completed", // members with lapsed payments over a year ago
       TICKET_NO: "B-30",
     },
     auth: {

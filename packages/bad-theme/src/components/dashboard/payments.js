@@ -191,7 +191,8 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
         // --------------------------------------------------------------------------------
         if (
           isActiveUser &&
-          isActiveUser.bad_selfserviceaccess === state.theme.lapsedMembership
+          isActiveUser.bad_selfserviceaccess === state.theme.frozenMembership &&
+          isActiveUser.core_membershipstatus === state.theme.lapsedMembership
         ) {
           return (
             <div style={{ maxWidth: 500 }}>
