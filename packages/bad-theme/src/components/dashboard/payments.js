@@ -158,7 +158,6 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
     const { core_totalamount, core_name, bad_approvalstatus, core_starton } =
       block;
-    console.log("🐞 ", block);
 
     // 📌 get yesr of application date and current year
     const currentYear = new Date().getFullYear();

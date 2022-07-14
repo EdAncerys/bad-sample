@@ -205,6 +205,8 @@ const HeaderActions = ({ state, actions, libraries }) => {
   };
 
   const ServeLogInPanel = () => {
+    if (state.auth.ENVIRONMENT !== "DEVELOPMENT" || lg) return null; // kill if not in dev mode
+
     const handleLogin = async ({ lastname }) => {
       console.log("🐞 login trigered");
 
