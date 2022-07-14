@@ -69,7 +69,7 @@ const DashboardNotifications = ({ state }) => {
             onClick={() =>
               setDashboardNotificationsAction({
                 dispatch,
-                isDashboardNotifications: { title, id },
+                isDashboardNotifications: [...isDashboardNotifications, id],
               })
             }
           >
@@ -91,9 +91,11 @@ const DashboardNotifications = ({ state }) => {
   };
 
   const ServeProfileReminders = () => {
+    const id = 1; // notification id
+
     if (
       dashboardPath === "My Profile" ||
-      (isDashboardNotifications && isDashboardNotifications.id === "1")
+      (isDashboardNotifications && isDashboardNotifications.includes(id))
     )
       return null;
 
@@ -117,7 +119,7 @@ const DashboardNotifications = ({ state }) => {
             Please complete missing BAD profile information.
           </div>
           <ServeGoToActions
-            id="1"
+            id={id}
             path="My Profile"
             title="Go to my profile"
             isDismisable
@@ -127,12 +129,12 @@ const DashboardNotifications = ({ state }) => {
     );
   };
 
-  const ServePaymentReminders = () => {
+  const ServeMembershipPaymentReminders = () => {
+    const id = 2; // notification id
+
     if (
       dashboardPath === "Billing" ||
-      (isDashboardNotifications && isDashboardNotifications.id === "2") ||
-      (isActiveUser &&
-        isActiveUser.core_membershipstatus !== state.theme.frozenMembership)
+      (isDashboardNotifications && isDashboardNotifications.includes(id))
     )
       return null;
 
@@ -165,7 +167,7 @@ const DashboardNotifications = ({ state }) => {
             {message}
           </div>
           <ServeGoToActions
-            id="2"
+            id={id}
             path="Billing"
             title="Pay Now"
             isDismisable
@@ -176,7 +178,14 @@ const DashboardNotifications = ({ state }) => {
   };
 
   const ServeAppReminders = () => {
-    if (dashboardPath === "Billing" || !dynamicsApps) return null;
+    const id = 3; // notification id
+
+    if (
+      dashboardPath === "Billing" ||
+      !dynamicsApps ||
+      isDashboardNotifications.includes(id)
+    )
+      return null;
     // check if user have approved SIG membership for any of the categories
     const isPendingPayment = dynamicsApps.subs.data.filter((app) => {
       return (
@@ -205,7 +214,7 @@ const DashboardNotifications = ({ state }) => {
           >
             Your SIG application has been approved.
           </div>
-          <ServeGoToActions id="1" path="Billing" title="Pay Now" />
+          <ServeGoToActions id={id} path="Billing" title="Pay Now" />
         </div>
       </div>
     );
@@ -216,7 +225,7 @@ const DashboardNotifications = ({ state }) => {
       <DirectDebitNotification />
       <ServeProfileReminders />
       <ServeAppReminders />
-      <ServePaymentReminders />
+      <ServeMembershipPaymentReminders />
     </div>
   );
 };

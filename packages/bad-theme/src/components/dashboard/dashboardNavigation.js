@@ -20,11 +20,17 @@ const DashboardNavigation = ({ state, actions, libraries }) => {
 
   useEffect(() => {
     // 📌 check if user have fill access level to access members directory
+    const isFullAccess =
+      isActiveUser.bad_selfserviceaccess === state.theme.serviceAccess;
+
     if (
-      isActiveUser.bad_selfserviceaccess === state.theme.serviceAccess &&
+      isFullAccess &&
       isActiveUser.core_membershipstatus !== state.theme.frozenMembership
-    )
+    ) {
       setAccessLevel(true);
+    } else {
+      setAccessLevel(false);
+    }
   }, [isActiveUser]);
 
   // HELPERS ----------------------------------------------------------------

@@ -156,7 +156,18 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   const ServePayments = ({ block, item, type }) => {
     if (dashboard && block.bad_sagepayid !== null) return null;
 
-    const { core_totalamount, core_name, bad_approvalstatus } = block;
+    const { core_totalamount, core_name, bad_approvalstatus, core_starton } =
+      block;
+    console.log("🐞 ", block);
+
+    // 📌 get yesr of application date and current year
+    const currentYear = new Date().getFullYear();
+    // get year from core_starton string DD/MM/YYYY
+    const aplicationYear = core_starton
+      ? Number(core_starton.split("/")[2])
+      : "";
+    const isCurrentYear = currentYear === aplicationYear;
+    if (!isCurrentYear) return null; // 📌 dont show if not current year
 
     const ServeStatusOrAction = () => {
       // get important data
@@ -332,9 +343,11 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       sub.bad_outstandingpayments === "£0.00"
     );
   });
+
   let outstandingApps = liveSubscriptions.apps.data.filter((app) => {
     return !(app.bad_sagepayid === null);
   });
+
   if (dashboard && outstandingSubs.length === 0 && outstandingApps.length === 0)
     return null;
   return (
