@@ -979,8 +979,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 type="text"
                 className="form-control input"
                 placeholder="Email"
-                // disbale email field if user has email
-                disabled={!!formData.py3_email}
+                disabled
               />
             </div>
           )}
