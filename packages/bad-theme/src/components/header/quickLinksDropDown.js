@@ -88,7 +88,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
             height: 35,
             width: 155,
             backgroundColor: colors.lightSilver,
-            top: -25,
+            top: -35,
             right: 0,
           }}
         />
