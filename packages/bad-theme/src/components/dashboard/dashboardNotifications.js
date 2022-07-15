@@ -38,11 +38,18 @@ const DashboardNotifications = ({ state }) => {
     // user payment message based on
     let message = state.theme.frozenMembershipBody;
 
-    if (
-      isActiveUser &&
-      isActiveUser.core_membershipstatus === state.theme.lapsedMembership
-    )
-      message = state.theme.lapsedMembershipBody;
+    if (dynamicsApps) {
+      // get apps with billinghistory for payments
+      // get current year
+      const currentYear = new Date().getFullYear();
+      // get apps that billing ending year is not current year & have no billing history
+      const apps = dynamicsApps.subs.data.filter(
+        (app) => !app.core_endon.includes(currentYear) && !app.bad_sagepayid
+      );
+      // if apps includes application with billing history from previous year & have no payment history
+      // show as lappsed membership
+      if (apps.length > 0) message = state.theme.lapsedMembershipBody;
+    }
 
     setErrorAction({
       dispatch,
@@ -54,13 +61,18 @@ const DashboardNotifications = ({ state }) => {
   }, [isActiveUser]);
 
   // SERVERS -----------------------------------------------------------------
-  const ServeGoToActions = ({ path, title, isDismisable, id }) => {
+  const ServeGoToActions = ({ path, title, isDismisable, id, isLapsed }) => {
     if (!path) return null;
 
     return (
       <div
         className="flex"
-        style={{ marginLeft: "2em", alignItems: "center", flex: 0.5 }}
+        style={{
+          marginLeft: "2em",
+          alignItems: "center",
+          justifyContent: "end",
+          flex: 0.5,
+        }}
       >
         {isDismisable && (
           <div
@@ -77,15 +89,17 @@ const DashboardNotifications = ({ state }) => {
           </div>
         )}
 
-        <div
-          className="blue-btn"
-          style={{ marginLeft: "2em", width: "fit-content" }}
-          onClick={() =>
-            setDashboardPathAction({ dispatch, dashboardPath: path })
-          }
-        >
-          {title || "More"}
-        </div>
+        {!isLapsed && (
+          <div
+            className="blue-btn"
+            style={{ marginLeft: "2em", width: "fit-content" }}
+            onClick={() =>
+              setDashboardPathAction({ dispatch, dashboardPath: path })
+            }
+          >
+            {title || "More"}
+          </div>
+        )}
       </div>
     );
   };
@@ -145,6 +159,21 @@ const DashboardNotifications = ({ state }) => {
 
     // user payment message based on
     let message = state.theme.frozenMembershipBody;
+    let isLapsed = false;
+
+    if (dynamicsApps) {
+      // get apps with billinghistory for payments
+      // get current year
+      const currentYear = new Date().getFullYear();
+      // get apps that billing ending year is not current year & have no billing history
+      const apps = dynamicsApps.subs.data.filter(
+        (app) => !app.core_endon.includes(currentYear) && !app.bad_sagepayid
+      );
+      // if apps includes application with billing history from previous year & have no payment history
+      // show as lappsed membership
+      if (apps.length > 0) message = state.theme.lapsedMembershipBody;
+      isLapsed = apps.length > 0;
+    }
 
     if (
       isActiveUser &&
@@ -176,6 +205,7 @@ const DashboardNotifications = ({ state }) => {
             path="Billing"
             title="Pay Now"
             isDismisable
+            isLapsed={isLapsed}
           />
         </div>
       </div>
