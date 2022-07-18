@@ -190,6 +190,7 @@ export const setCompleteUserApplicationAction = async ({
       path,
       method: "POST",
       state,
+      // application data is sent as body
       body: applicationData,
     });
     const data = await response.json();
