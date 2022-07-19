@@ -161,7 +161,8 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     const currentYear = new Date().getFullYear();
 
     // check if the application is current year or not
-    const isAppCurrentYear = core_name.includes(currentYear);
+    let isAppCurrentYear = false;
+    if (core_name) isAppCurrentYear = core_name.includes(currentYear);
     if (!isAppCurrentYear) return null; // 📌 dont show if not current year
 
     const ServeStatusOrAction = () => {
