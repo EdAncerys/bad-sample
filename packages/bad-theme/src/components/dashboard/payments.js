@@ -86,6 +86,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   const isButtonClicked = useRef(false);
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
+
   useEffect(() => {
     setLiveSubscriptions(dynamicsApps);
 
@@ -158,14 +159,14 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     const { core_totalamount, core_name, bad_approvalstatus, core_starton } =
       block;
 
+    console.log("🐞 ", block);
+
     // 📌 get yesr of application date and current year
     const currentYear = new Date().getFullYear();
-    // get year from core_starton string DD/MM/YYYY
-    const aplicationYear = core_starton
-      ? Number(core_starton.split("/")[2])
-      : "";
-    const isCurrentYear = currentYear === aplicationYear;
-    if (!isCurrentYear) return null; // 📌 dont show if not current year
+
+    // check if the application is current year or not
+    const isAppCurrentYear = core_name.includes(currentYear);
+    if (!isAppCurrentYear) return null; // 📌 dont show if not current year
 
     const ServeStatusOrAction = () => {
       // get important data
@@ -301,14 +302,12 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   };
 
   const ServeListOfPayments = ({ type }) => {
-    const zeroObjects =
-      type === "applications"
-        ? liveSubscriptions.apps.data.length === 0
-        : liveSubscriptions.subs.data.length === 0;
-    const appsOrSubs = type === "applications" ? "apps" : "subs";
+    let data = liveSubscriptions.subs.data;
+    if (type === "applications") data = liveSubscriptions.apps.data;
 
     let padding = "2em 0 1em 0";
     if (type === "subscriptions") padding = "1em 0";
+    console.log("🐞 ", liveSubscriptions);
 
     return (
       <div>
@@ -322,13 +321,20 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
         >
           {dashboard ? "Outstanding payments" : `Active ${type}:`}
         </div>
-        {zeroObjects && <ServeSubTitle title="No active applications found" />}
 
-        {liveSubscriptions[appsOrSubs].data.map((block, key) => {
-          return (
-            <ServePayments key={key} block={block} item={key} type={type} />
-          );
-        })}
+        {data.length === 0 && (
+          <ServeSubTitle title="No active applications found" />
+        )}
+
+        {data.length > 0 && (
+          <div>
+            {data.map((block, key) => {
+              return (
+                <ServePayments key={key} block={block} item={key} type={type} />
+              );
+            })}
+          </div>
+        )}
       </div>
     );
   };
@@ -348,6 +354,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
   if (dashboard && outstandingSubs.length === 0 && outstandingApps.length === 0)
     return null;
+
   return (
     <div className="shadow">
       {dashboard && (
@@ -370,6 +377,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
         />
 
         {!dashboard && <ServeListOfPayments type="applications" />}
+
         <ServeListOfPayments type="subscriptions" />
         <ServeBilingHistory />
       </div>
