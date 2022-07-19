@@ -124,8 +124,11 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
     // hospital id initial value
     let hospitalId = null;
+    console.log("🐞 applicationData", applicationData);
 
     applicationData.map((data) => {
+      if (data.name === "sky_cvurl")
+        handleSetFormData({ data, name: "sky_cvurl" });
       if (data.name === "py3_gmcnumber")
         handleSetFormData({ data, name: "py3_gmcnumber" });
       if (data.name === "py3_otherregulatorybodyreference")
@@ -312,7 +315,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
         "bad_proposer2",
         "_py3_constitutionagreement",
         "_bad_readpolicydocument",
-        "sky_cvurl",
+        formData.sky_cvurl ? "" : "sky_cvurl",
       ],
     });
 
@@ -783,7 +786,12 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
             {inputValidator.bad_sky_cvurl && (
               <div>
-                <label className="form-label required">Upload Your CV</label>
+                {!formData.sky_cvurl && (
+                  <label className="form-label required">Upload Your CV</label>
+                )}
+                {formData.sky_cvurl && (
+                  <label className="form-label">Upload New CV</label>
+                )}
                 <input
                   ref={documentRef}
                   onChange={handleDocUploadChange}

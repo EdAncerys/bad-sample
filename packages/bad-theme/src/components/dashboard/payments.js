@@ -84,7 +84,6 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   const [isFetching, setFetching] = useState(null);
 
   const isButtonClicked = useRef(false);
-  const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
   useEffect(() => {
@@ -156,10 +155,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   const ServePayments = ({ block, item, type }) => {
     if (dashboard && block.bad_sagepayid !== null) return null;
 
-    const { core_totalamount, core_name, bad_approvalstatus, core_starton } =
-      block;
-
-    console.log("🐞 ", block);
+    const { core_totalamount, core_name, bad_approvalstatus } = block;
 
     // 📌 get yesr of application date and current year
     const currentYear = new Date().getFullYear();
@@ -307,7 +303,6 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
     let padding = "2em 0 1em 0";
     if (type === "subscriptions") padding = "1em 0";
-    console.log("🐞 ", liveSubscriptions);
 
     return (
       <div>
