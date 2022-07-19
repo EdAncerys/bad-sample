@@ -36,6 +36,7 @@ import {
   getUserDataByContactId, // TESTING ONLY
   handleRemoveServerSideCookie, // TESTING ONLY
   setAuthenticationCookieAction, // TESTING ONLY
+  errorHandler, // TESTING ONLY
 } from "../../context";
 
 const HeaderActions = ({ state, actions, libraries }) => {
@@ -278,6 +279,15 @@ const HeaderActions = ({ state, actions, libraries }) => {
           onClick={handleAboutInfo}
         >
           i
+        </div>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={() =>
+            errorHandler({ id: `form-error-bad_categorytype`, time: 5000 })
+          }
+        >
+          e
         </div>
       </div>
     );

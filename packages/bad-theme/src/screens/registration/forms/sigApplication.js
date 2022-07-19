@@ -413,7 +413,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       if (!formData[input] && inputValidator[inputValue]) {
         errorHandler({ id: `form-error-${input}`, time: 5000 });
         isValid = false;
-        // console.log("🐞 FAILED AUTH", input, formData[input]); // failed input validation debugger
+        console.log("🐞 FAILED AUTH", input, formData[input]); // failed input validation debugger
       }
     });
 
@@ -479,7 +479,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     const isNewHospital = formData._bad_newhospitaladded;
     let sigAppliaction = {
       core_membershipsubscriptionplanid: formData.py3_membershipid,
-      bad_categorytype: formData.py3_categorytype,
+      bad_categorytype: formData.bad_categorytype, // py3_categorytype
       py3_title: formData.py3_title,
       py3_firstname: formData.py3_firstname,
       py3_lastname: formData.py3_lastname,

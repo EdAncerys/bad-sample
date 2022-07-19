@@ -154,7 +154,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
     let directoryPref = "Opt-in";
     if (fad.directoryPref === "Opt-in") directoryPref = "Opt-out";
 
-    directoryPref = !isActiveUser.bad_memberdirectory;
+    directoryPref = !isActiveUser._bad_memberdirectory;
 
     const data = Object.assign(
       {}, // add empty object
@@ -212,7 +212,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
 
   const ServeMembersDirAction = () => {
     if (!isActiveUser) return null;
-    const { bad_memberdirectory } = isActiveUser;
+    const { _bad_memberdirectory } = isActiveUser;
 
     let isBADMember = false;
     // 📌 check if user is a BAD member
@@ -236,13 +236,13 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
           style={{
             marginRight: "1em",
             width: "fit-content",
-            backgroundColor: !bad_memberdirectory
+            backgroundColor: !_bad_memberdirectory
               ? colors.danger
               : colors.white,
           }}
           onClick={handlePreferenceUpdate}
         >
-          {!bad_memberdirectory ? "Opt-out" : "Opt-in"}
+          {!_bad_memberdirectory ? "Opt-out" : "Opt-in"}
         </div>
       </div>
     );
