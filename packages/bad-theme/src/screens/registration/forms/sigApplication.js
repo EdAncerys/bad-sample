@@ -222,6 +222,14 @@ const SIGApplication = ({ state, actions, libraries }) => {
         setType(type); // validate SIG application category type
       }
     });
+    // populate bad_isbadmember field form user blob based on selfservice data field value
+    let isBadMember =
+      isActiveUser.bad_selfserviceaccess === state.theme.serviceAccess;
+    setFormData((prev) => ({
+      ...prev,
+      [`bad_isbadmember`]: isBadMember,
+    }));
+
     // apply app additional logic after mapping apps data
     if (hospitalId) {
       try {

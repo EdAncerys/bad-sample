@@ -124,7 +124,6 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
 
     // hospital id initial value
     let hospitalId = null;
-    console.log("🐞 applicationData", applicationData);
 
     applicationData.map((data) => {
       if (data.name === "sky_cvurl")
