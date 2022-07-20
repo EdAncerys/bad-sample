@@ -22,16 +22,6 @@ const PaymentConfirmation = ({ state }) => {
     setUrl(backurl);
   });
 
-  useEffect(async () => {
-    if (!isActiveUser) return null;
-    // refetch application data to update records
-    await getApplicationStatus({
-      state,
-      dispatch,
-      contactid: isActiveUser.contactid,
-    });
-  }, [isActiveUser]);
-
   return (
     <>
       <Global

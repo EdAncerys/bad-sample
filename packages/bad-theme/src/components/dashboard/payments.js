@@ -86,21 +86,28 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   const isButtonClicked = useRef(false);
   const marginVertical = state.theme.marginVertical;
 
-  useEffect(() => {
+  useEffect(async () => {
+    // --------------------------------------------------------------------------------
+    // 📌  Trigger application refetch on component mount. bug fix for payment triggering fetch payment history
+    // --------------------------------------------------------------------------------
+    await getApplicationStatus({
+      state,
+      dispatch,
+      contactid: isActiveUser.contactid,
+    });
+
+    if (!dynamicsApps) return;
+    // get apps with billinghistory for payments
+    // get current year
+    const currentYear = new Date().getFullYear();
+    // get apps that billing ending year is current year
+    const apps = dynamicsApps.subs.data.filter((app) =>
+      app.core_endon.includes(currentYear)
+    );
+
+    setAppHistory(apps);
     setLiveSubscriptions(dynamicsApps);
-
-    if (dynamicsApps) {
-      // get apps with billinghistory for payments
-      // get current year
-      const currentYear = new Date().getFullYear();
-      // get apps that billing ending year is current year
-      const apps = dynamicsApps.subs.data.filter((app) =>
-        app.core_endon.includes(currentYear)
-      );
-
-      setAppHistory(apps);
-    }
-  }, [dynamicsApps]);
+  }, []);
 
   // when should I return null ?
   if (!subscriptions) return null;
