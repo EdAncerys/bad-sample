@@ -142,6 +142,12 @@ const SIGApplication = ({ state, actions, libraries }) => {
   const dermGroupRef = useRef([]);
   const ctaHeight = 40;
 
+  let selectedApplicationType = formData.bad_categorytype;
+  // select after text after :
+  if (selectedApplicationType && selectedApplicationType.includes(":")) {
+    selectedApplicationType = selectedApplicationType.split(":")[1];
+  }
+
   // ⏬ populate form data values from applicationData
   useEffect(async () => {
     // app type name & hospital id initial values
@@ -1397,7 +1403,9 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 onChange={handleInputChange}
                 type="text"
                 className="form-control input"
-                placeholder={`Describe your interest in (SIG name)`}
+                placeholder={`Describe your interest in ${
+                  selectedApplicationType || "Special Interest Group"
+                }`}
               ></textarea>
             </div>
           )}
