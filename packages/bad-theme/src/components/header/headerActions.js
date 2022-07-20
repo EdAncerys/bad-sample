@@ -137,7 +137,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
   // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
   const ServeDevPanel = () => {
     return null; // kill this for now
-    if (state.auth.ENVIRONMENT !== "DEVELOPMENT" || lg) return null;
+    if (state.auth.ENVIRONMENT !== "DEV" || lg) return null;
 
     return (
       <div
@@ -206,7 +206,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
   };
 
   const ServeLogInPanel = () => {
-    if (state.auth.ENVIRONMENT !== "DEVELOPMENT" || lg) return null; // kill if not in dev mode
+    if (state.auth.ENVIRONMENT !== "DEV" || lg) return null; // kill if not in dev mode
 
     const handleLogin = async ({ lastname }) => {
       console.log("🐞 login trigered");
