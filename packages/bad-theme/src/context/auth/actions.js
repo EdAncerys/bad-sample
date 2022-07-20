@@ -176,7 +176,7 @@ export const getUserDataByContactId = async ({
 
   // ⬇️ development env default login action ⬇️
   // incoment to override default login action for user prefetch data
-  if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
+  if (state.auth.ENVIRONMENT === "DEV") {
     // console.log("🐞 ALTERED USER DATA");
     // contactid = "cc9a332a-3672-ec11-8943-000d3a43c136"; // andy testing account
     // contactid = "84590b32-9490-ec11-b400-000d3a22037e"; // mandy

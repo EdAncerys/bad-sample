@@ -131,7 +131,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
   const ServeDevPanel = () => {
-    if (state.auth.ENVIRONMENT !== "DEVELOPMENT" || lg) return null;
+    if (state.auth.ENVIRONMENT !== "DEV" || lg) return null;
 
     return (
       <div
