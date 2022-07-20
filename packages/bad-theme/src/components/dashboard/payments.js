@@ -15,6 +15,7 @@ import {
   muiQuery,
   setErrorAction,
   fetchDataHandler,
+  setGoToAction,
 } from "../../context";
 
 export const handlePayment = async ({
@@ -22,14 +23,31 @@ export const handlePayment = async ({
   core_membershipapplicationid,
   state,
   dispatch,
+  buttonId,
+  actions,
 }) => {
-  const displayPaymentModal = (url) => {
+  let sagePayUrl = "";
+
+  const handleSagePay = () => {
+    actions.theme.addInitiatedPayment(buttonId);
+    setGoToAction({ path: sagePayUrl, state, actions });
+    // close error modal
+    setErrorAction({ dispatch, isError: null });
+  };
+
+  // --------------------------------------------------------------------------------
+  const displayPaymentModal = () => {
     setErrorAction({
       dispatch,
       isError: {
         message: `The card payment industry is currently in the process of making significant changes to the way card payments are processed online. Unfortunately, because of these changes, some users are experiencing temporary issues with making card payments through the website. If you cannot make a payment through the website, please contact membership@bad.org.uk to discuss alternative arrangements for making payments.`,
         image: "Error",
-        goToPath: { label: "Continue", path: url },
+        action: [
+          {
+            label: "Continue",
+            handler: handleSagePay,
+          },
+        ],
       },
     });
   };
@@ -57,9 +75,9 @@ export const handlePayment = async ({
 
     if (fetchVendorId.ok) {
       const json = await fetchVendorId.json();
-      const url =
+      sagePayUrl =
         json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
-      displayPaymentModal(url);
+      displayPaymentModal();
     }
   } catch (error) {
     // console.log(error);
@@ -83,19 +101,9 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   const [subAppHistory, setAppHistory] = useState([]);
   const [isFetching, setFetching] = useState(null);
 
-  const isButtonClicked = useRef(false);
   const marginVertical = state.theme.marginVertical;
 
   useEffect(async () => {
-    // --------------------------------------------------------------------------------
-    // 📌  Trigger application refetch on component mount. bug fix for payment triggering fetch payment history
-    // --------------------------------------------------------------------------------
-    await getApplicationStatus({
-      state,
-      dispatch,
-      contactid: isActiveUser.contactid,
-    });
-
     if (!dynamicsApps) return;
     // get apps with billinghistory for payments
     // get current year
@@ -107,7 +115,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
     setAppHistory(apps);
     setLiveSubscriptions(dynamicsApps);
-  }, []);
+  }, [dynamicsApps]);
 
   // when should I return null ?
   if (!subscriptions) return null;
@@ -160,9 +168,12 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   };
 
   const ServePayments = ({ block, item, type }) => {
-    if (dashboard && block.bad_sagepayid !== null) return null;
-
     const { core_totalamount, core_name, bad_approvalstatus } = block;
+
+    // hide payed subscriptions in dashboard if payment is made
+    if (dashboard && block.bad_sagepayid !== null) return null;
+    // disable in dashboard if approval status is pending
+    if (dashboard && bad_approvalstatus === "Pending") return null;
 
     // 📌 get yesr of application date and current year
     const currentYear = new Date().getFullYear();
@@ -219,16 +230,17 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
           <div
             className="blue-btn"
             onClick={() => {
-              actions.theme.addInitiatedPayment(buttonId);
               handlePayment({
                 core_membershipsubscriptionid,
                 core_membershipapplicationid,
                 dispatch,
                 state,
+                buttonId,
+                actions,
               });
             }}
           >
-            {isButtonClicked.current === true ? "Payment initiated" : "Pay now"}
+            Pay now
           </div>
         );
       };
@@ -240,6 +252,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
               Pending approval
             </div>
           );
+
         if (!bad_sagepayid) return null;
         if (lg && bad_sagepayid) return "Status: paid";
         if (bad_sagepayid)
@@ -350,24 +363,23 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       sub.bad_outstandingpayments === "£0.00"
     );
   });
-
   let outstandingApps = liveSubscriptions.apps.data.filter((app) => {
     return !(app.bad_sagepayid === null);
   });
 
-  if (dashboard && outstandingSubs.length === 0 && outstandingApps.length === 0)
-    return null;
+  // get app wherer bad_sagepayid is null & bad_approvalstatus is pending
+  const validSubs = liveSubscriptions.subs.data.filter(
+    (block) =>
+      block.bad_sagepayid === null && block.bad_approvalstatus !== "Pending"
+  );
+  // dont show in dashboard if there are no validSubs
+  if (dashboard && validSubs.length === 0) return null;
+
+  // if (dashboard && outstandingSubs.length === 0 && outstandingApps.length === 0)
+  //   return null;
 
   return (
     <div className="shadow">
-      {dashboard && (
-        <div style={{ padding: !lg ? `2em 4em` : `1em` }}>
-          <TitleBlock
-            block={{ text_align: "left", title: "Payments" }}
-            disableMargin
-          />
-        </div>
-      )}
       <div
         style={{
           padding: !lg ? `0 4em 2em 4em` : "1em",
@@ -378,11 +390,9 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
           payment_url={paymentUrl}
           resetPaymentUrl={resetPaymentUrl}
         />
-
-        {!dashboard && <ServeListOfPayments type="applications" />}
-
-        <ServeListOfPayments type="subscriptions" />
-        <ServeBilingHistory />
+        <ServeListOfPayments type="applications" />
+        {!dashboard && <ServeListOfPayments type="subscriptions" />}
+        {!dashboard && <ServeBilingHistory />}
       </div>
     </div>
   );
