@@ -39,6 +39,7 @@ export const sendEmailEnquireAction = async ({
     formData.form_title = formTitle;
 
     // ⬇️ Add defaults to formData if nothing been passed in | user data not available ⬇️
+    formData.url = formData.url || "www.bad.org.uk";
     formData.currentHospitalName = formData.currentHospitalName || "";
     formData.hospitalChangeName = formData.hospitalChangeName || "";
 
