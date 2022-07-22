@@ -381,6 +381,9 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   // if (dashboard && outstandingSubs.length === 0 && outstandingApps.length === 0)
   //   return null;
 
+  // if no data is found & dashboard dont show component
+  if (liveSubscriptions.apps.data.length === 0 && dashboard) return null;
+
   return (
     <div className="shadow">
       <div
