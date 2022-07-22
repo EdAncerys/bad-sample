@@ -246,9 +246,6 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       };
 
       const ServePaymentStatus = () => {
-        // dont display if payment is made  in dashboard
-        if (bad_approvalstatus == "Pending" && dashboard) return null;
-
         if (bad_approvalstatus == "Pending")
           return (
             <div style={{ textAlign: "center", minWidth: 145 }}>
@@ -261,6 +258,9 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
         if (bad_sagepayid)
           return <div style={{ textAlign: "center", minWidth: 145 }}>Paid</div>;
       };
+
+      // dont display if payment is made  in dashboard
+      if (bad_approvalstatus == "Pending" && dashboard) return null;
 
       return (
         <div style={{ margin: `auto 0` }}>
