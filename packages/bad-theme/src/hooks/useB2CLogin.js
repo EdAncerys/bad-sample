@@ -74,6 +74,7 @@ export const useB2CLogin = ({ state, actions }) => {
 
         // 📌 set auth cookie for authenticated requests
         await setAuthenticationCookieAction({ state, b2cTaken });
+        // 📌 get user data by email
         const user = await getUserDataByEmail({
           state,
           dispatch,
@@ -97,7 +98,8 @@ export const useB2CLogin = ({ state, actions }) => {
       // ⬇️ redirect to url with path ⬇️
       setGoToAction({ state, path: redirectUrl || "/", actions });
       // set placeholder to false
-      setPlaceholderAction({ dispatch, isPlaceholder: false });
+      // deprecated as of v3.0.0
+      // setPlaceholderAction({ dispatch, isPlaceholder: false });
     }
 
     return () => {

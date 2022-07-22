@@ -31,6 +31,10 @@ const BADTheme = {
       inputFieldLimit100: "100", // defines maxlength prop
       inputFieldLimit80: "80", // defines maxlength prop
       textAreaLimit: "2000", // defines maxlength prop
+      frozenMembershipBody:
+        "According to our records your BAD Membership was frozen as you had not paid your annual subscription. Please go to the Billing tab to pay your subscription in order to reactivate your membership.",
+      lapsedMembershipBody:
+        "According to our records your BAD Membership was frozen as you had not paid your annual subscription. We have now moved into a new membership year and your BAD membership has now lapsed. If you would like to join us again, please complete a new application.",
       menuUrl: "/menu/primary-menu",
       menu: null,
       filter: null,
@@ -44,7 +48,11 @@ const BADTheme = {
       marginVertical: 40, // px units
       notification: false,
       perPageLimit: 50, // number of posts to fetch per page
-      TICKET_NO: "B-31-fad",
+      // POSSIBLE TUYPES: Full | Limited
+      serviceAccess: "Full", // Full access BAD members
+      frozenMembership: "Freeze", // members with late payments
+      lapsedMembership: "Completed", // members with lapsed payments over a year ago
+      TICKET_NO: "B-30",
     },
     auth: {
       // 📌 app auth service secrets

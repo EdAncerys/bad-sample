@@ -23,13 +23,12 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
 
   const [isFetching, setIsFetching] = useState(null);
   const [formData, setFormData] = useState({
-    bad_bademailalerts: false,
-    bad_badecircular: false,
-    bad_bjdalerts: false,
-    bad_presidentsbulletin: false,
-    donotemail: false,
-    // --------------------------------------------------------------------------------
-    bad_preferredmailingaddress: "",
+    _bad_bademailalerts: false,
+    _bad_badecircular: false,
+    _bad_bjdalerts: false,
+    _bad_presidentsbulletin: false,
+    _donotemail: false,
+    _bad_preferredmailingaddress: false,
   });
 
   // --------------------------------------------------------------------------------
@@ -37,7 +36,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
     setFormData((prevFormData) => ({
       // --------------------------------------------------------------------------------
       // 📌  NOTE. USER pref settings are in reverse order of the value
-      //    ex. bad_bademailalerts === true ===> "Do Not Allow"
+      //    ex. _bad_bademailalerts === true ===> "Do Not Allow"
       // --------------------------------------------------------------------------------
       ...prevFormData,
       [`${name}`]: value,
@@ -49,45 +48,45 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
 
     // 📌 populate profile information form Dynamics records
     handleSetData({
-      name: "bad_bademailalerts",
-      value: !isActiveUser[`bad_bademailalerts`],
+      name: "_bad_bademailalerts",
+      value: !isActiveUser[`_bad_bademailalerts`],
     });
     handleSetData({
-      name: "bad_badecircular",
-      value: !isActiveUser[`bad_badecircular`],
+      name: "_bad_badecircular",
+      value: !isActiveUser[`_bad_badecircular`],
     });
     handleSetData({
-      name: "bad_bjdalerts",
-      value: !isActiveUser[`bad_bjdalerts`],
+      name: "_bad_bjdalerts",
+      value: !isActiveUser[`_bad_bjdalerts`],
     });
     handleSetData({
-      name: "bad_presidentsbulletin",
-      value: !isActiveUser[`bad_presidentsbulletin`],
+      name: "_bad_presidentsbulletin",
+      value: !isActiveUser[`_bad_presidentsbulletin`],
     });
     handleSetData({
-      name: "donotemail",
-      value: !isActiveUser[`donotemail`],
+      name: "_donotemail",
+      value: !isActiveUser[`_donotemail`],
     });
     handleSetData({
-      name: "bad_preferredmailingaddress",
-      value: isActiveUser[`bad_preferredmailingaddress`],
+      name: "_bad_preferredmailingaddress",
+      value: isActiveUser[`_bad_preferredmailingaddress`],
     });
   }, [isActiveUser]);
 
   // HELPERS ----------------------------------------------------------------
   const handleInputChange = (e) => {
     const { name, value, type, checked, files } = e.target;
-    // untick checkbox if donotemail is checked and value is true
-    if (name === "donotemail" && checked === true) {
-      handleSetData({ name: "bad_bademailalerts", value: false });
-      handleSetData({ name: "bad_badecircular", value: false });
-      handleSetData({ name: "bad_bjdalerts", value: false });
-      handleSetData({ name: "bad_presidentsbulletin", value: false });
+    // untick checkbox if _donotemail is checked and value is true
+    if (name === "_donotemail" && checked === true) {
+      handleSetData({ name: "_bad_bademailalerts", value: false });
+      handleSetData({ name: "_bad_badecircular", value: false });
+      handleSetData({ name: "_bad_bjdalerts", value: false });
+      handleSetData({ name: "_bad_presidentsbulletin", value: false });
     }
     // --------------------------------------------------------------------------------
-    // if any other checkbox is checked, untick donotemail
-    if (name !== "donotemail" && checked === true) {
-      handleSetData({ name: "donotemail", value: false });
+    // if any other checkbox is checked, untick _donotemail
+    if (name !== "_donotemail" && checked === true) {
+      handleSetData({ name: "_donotemail", value: false });
     }
     // --------------------------------------------------------------------------------
     setFormData((prevFormData) => ({
@@ -100,19 +99,19 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
     let data = {
       // --------------------------------------------------------------------------------
       // 📌  NOTE. USER pref settings are in reverse order of the value
-      //    ex. bad_bademailalerts === true ===> "Do Not Allow"
+      //    ex. _bad_bademailalerts === true ===> "Do Not Allow"
       // --------------------------------------------------------------------------------
-      bad_bademailalerts: !formData.bad_bademailalerts,
-      bad_badecircular: !formData.bad_badecircular,
-      bad_bjdalerts: !formData.bad_bjdalerts,
-      bad_presidentsbulletin: !formData.bad_presidentsbulletin,
-      donotemail: !formData.donotemail,
+      bad_bademailalerts: !formData._bad_bademailalerts,
+      bad_badecircular: !formData._bad_badecircular,
+      bad_bjdalerts: !formData._bad_bjdalerts,
+      bad_presidentsbulletin: !formData._bad_presidentsbulletin,
+      donotemail: !formData._donotemail,
       // --------------------------------------------------------------------------------
-      bad_preferredmailingaddress: formData.bad_preferredmailingaddress,
+      bad_preferredmailingaddress: formData._bad_preferredmailingaddress,
     };
 
     // 📌 if user has checked the universal unsubscribe checkbox, set all other checkboxes to false
-    if (formData.donotemail) {
+    if (formData._donotemail) {
       data = {
         ...data,
         bad_bademailalerts: true,
@@ -155,7 +154,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
     let directoryPref = "Opt-in";
     if (fad.directoryPref === "Opt-in") directoryPref = "Opt-out";
 
-    directoryPref = !isActiveUser.bad_memberdirectory;
+    directoryPref = !isActiveUser._bad_memberdirectory;
 
     const data = Object.assign(
       {}, // add empty object
@@ -213,7 +212,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
 
   const ServeMembersDirAction = () => {
     if (!isActiveUser) return null;
-    const { bad_memberdirectory } = isActiveUser;
+    const { _bad_memberdirectory } = isActiveUser;
 
     let isBADMember = false;
     // 📌 check if user is a BAD member
@@ -237,13 +236,13 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
           style={{
             marginRight: "1em",
             width: "fit-content",
-            backgroundColor: !bad_memberdirectory
+            backgroundColor: !_bad_memberdirectory
               ? colors.danger
               : colors.white,
           }}
           onClick={handlePreferenceUpdate}
         >
-          {!bad_memberdirectory ? "Opt-out" : "Opt-in"}
+          {!_bad_memberdirectory ? "Opt-out" : "Opt-in"}
         </div>
       </div>
     );
@@ -275,8 +274,8 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
             <div className="flex" style={{ alignItems: "center" }}>
               <div style={{ display: "grid" }}>
                 <input
-                  name="bad_bademailalerts"
-                  checked={formData.bad_bademailalerts}
+                  name="_bad_bademailalerts"
+                  checked={formData._bad_bademailalerts}
                   onChange={handleInputChange}
                   type="checkbox"
                   className="form-check-input check-box"
@@ -287,8 +286,8 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
             <div className="flex" style={{ alignItems: "center" }}>
               <div style={{ display: "grid" }}>
                 <input
-                  name="bad_badecircular"
-                  checked={formData.bad_badecircular}
+                  name="_bad_badecircular"
+                  checked={formData._bad_badecircular}
                   onChange={handleInputChange}
                   type="checkbox"
                   className="form-check-input check-box"
@@ -299,8 +298,8 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
             <div className="flex" style={{ alignItems: "center" }}>
               <div style={{ display: "grid" }}>
                 <input
-                  name="bad_presidentsbulletin"
-                  checked={formData.bad_presidentsbulletin}
+                  name="_bad_presidentsbulletin"
+                  checked={formData._bad_presidentsbulletin}
                   onChange={handleInputChange}
                   type="checkbox"
                   className="form-check-input check-box"
@@ -311,8 +310,8 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
             <div className="flex" style={{ alignItems: "center" }}>
               <div style={{ display: "grid" }}>
                 <input
-                  name="bad_bjdalerts"
-                  checked={formData.bad_bjdalerts}
+                  name="_bad_bjdalerts"
+                  checked={formData._bad_bjdalerts}
                   onChange={handleInputChange}
                   type="checkbox"
                   className="form-check-input check-box"
@@ -327,8 +326,8 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
             <div className="flex" style={{ alignItems: "center" }}>
               <div style={{ display: "grid" }}>
                 <input
-                  name="donotemail"
-                  checked={formData.donotemail}
+                  name="_donotemail"
+                  checked={formData._donotemail}
                   onChange={handleInputChange}
                   type="checkbox"
                   className="form-check-input check-box"
@@ -342,8 +341,8 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
             <div>
               <div style={{ padding: "1em 0" }}>Preferred mailing option</div>
               <Form.Select
-                name="bad_preferredmailingaddress"
-                value={formData.bad_preferredmailingaddress}
+                name="_bad_preferredmailingaddress"
+                value={formData._bad_preferredmailingaddress}
                 onChange={handleInputChange}
                 className="input"
               >

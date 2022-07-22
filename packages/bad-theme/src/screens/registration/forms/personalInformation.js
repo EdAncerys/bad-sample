@@ -495,6 +495,7 @@ const PersonalDetails = ({ state, actions, libraries }) => {
                   type="text"
                   className="form-control input"
                   placeholder="Email"
+                  disabled
                 />
               </div>
             )}

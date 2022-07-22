@@ -6,23 +6,15 @@ import { Modal } from "react-bootstrap";
 import CloseIcon from "@mui/icons-material/Close";
 
 // CONTEXT ----------------------------------------------------------------
-import {
-  setErrorAction,
-  getApplicationStatus,
-  useAppDispatch,
-  useAppState,
-} from "../../context";
+import { setErrorAction, useAppDispatch, useAppState } from "../../context";
 const PaymentModal = ({ state, actions, payment_url, resetPaymentUrl }) => {
   const dispatch = useAppDispatch();
-  const { isActiveUser } = useAppState();
 
   if (!payment_url) return null;
   const iFrameHandler = async (e) => {
     const iFrame = e.currentTarget;
 
     try {
-      const iFramePath = iFrame.contentWindow.location.pathname;
-
       const iqs = new URLSearchParams(iFrame.contentWindow.location.search);
 
       setErrorAction({
@@ -30,11 +22,6 @@ const PaymentModal = ({ state, actions, payment_url, resetPaymentUrl }) => {
         isError: { message: "Your payment has been accepted." },
       });
 
-      await getApplicationStatus({
-        state,
-        dispatch,
-        contactid: isActiveUser.contactid,
-      });
       resetPaymentUrl();
       if (iqs && iqs.has("transId")) {
         const transId = iqs.get("transId");

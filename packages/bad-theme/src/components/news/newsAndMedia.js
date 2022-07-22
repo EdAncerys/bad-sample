@@ -53,7 +53,6 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   const [searchValue, setSearchValue] = useState("");
   const [dateValue, setDateValue] = useState("");
   const [yearValue, setYearValue] = useState("");
-  const [hasPermission, setPermission] = useState(false);
   const [isSearch, setIsSearch] = useState(false);
 
   const searchFilterRef = useRef("");
@@ -68,15 +67,17 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     // 📌  Handle members only access permision
     // --------------------------------------------------------------------------------
 
-    let hasPermission = false;
     let membersOnly = ["circular", "newsletter", "bulletin"];
     let membersOnlyList = [];
-    // 📌 check if user has permission to view news & media
-    if (dynamicsApps)
-      hasPermission = hasPermisionLevel({ dynamicsApps, isActiveUser });
-    setPermission(hasPermission);
 
-    if (hasPermission) return data;
+    // 📌 check if user has permission to view news & media
+    if (
+      isActiveUser &&
+      isActiveUser.bad_selfserviceaccess === state.theme.serviceAccess &&
+      isActiveUser.core_membershipstatus !== state.theme.frozenMembership
+    )
+      return data;
+
     // 📌 apply filters on news & media data
     // get id of all categories that include members only
     if (categoryData)
@@ -270,8 +271,17 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
               let membersOnly = ["circular", "newsletter", "bulletin"].some(
                 (word) => item.name.toLowerCase().includes(word)
               );
+              let serviceAccess = false;
+              if (
+                isActiveUser &&
+                isActiveUser.core_membershipstatus !==
+                  state.theme.frozenMembership
+              )
+                serviceAccess =
+                  isActiveUser.bad_selfserviceaccess ===
+                  state.theme.serviceAccess;
               // 📌 if user has permission to view news & media
-              if (membersOnly && !hasPermission) return null;
+              if (membersOnly && !serviceAccess) return null;
 
               return (
                 <option key={key} value={item.id}>
