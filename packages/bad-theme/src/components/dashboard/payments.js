@@ -172,8 +172,8 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
 
     // hide payed subscriptions in dashboard if payment is made
     if (dashboard && block.bad_sagepayid !== null) return null;
-    // disable in dashboard if approval status is pending
-    if (dashboard && bad_approvalstatus === "Pending") return null;
+    // in dashboard show only Pending apps
+    if (dashboard && bad_approvalstatus !== "Pending") return null;
 
     // 📌 get yesr of application date and current year
     const currentYear = new Date().getFullYear();
@@ -246,6 +246,9 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       };
 
       const ServePaymentStatus = () => {
+        // dont display if payment is made  in dashboard
+        if (bad_approvalstatus == "Pending" && dashboard) return null;
+
         if (bad_approvalstatus == "Pending")
           return (
             <div style={{ textAlign: "center", minWidth: 145 }}>
@@ -335,7 +338,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
             marginTop: !lg ? null : "1em",
           }}
         >
-          {dashboard ? "Outstanding payments" : `Active ${type}:`}
+          {dashboard ? "Applications Pending Approval" : `Active ${type}:`}
         </div>
 
         {data.length === 0 && (
@@ -373,7 +376,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       block.bad_sagepayid === null && block.bad_approvalstatus !== "Pending"
   );
   // dont show in dashboard if there are no validSubs
-  if (dashboard && validSubs.length === 0) return null;
+  // if (dashboard && validSubs.length === 0) return null;
 
   // if (dashboard && outstandingSubs.length === 0 && outstandingApps.length === 0)
   //   return null;
