@@ -52,7 +52,7 @@ const BADTheme = {
       serviceAccess: "Full", // Full access BAD members
       frozenMembership: "Freeze", // members with late payments
       lapsedMembership: "Completed", // members with lapsed payments over a year ago
-      TICKET_NO: "B-34",
+      TICKET_NO: "B-37",
     },
     auth: {
       // 📌 app auth service secrets

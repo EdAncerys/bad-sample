@@ -8,10 +8,12 @@ import Loading from "../components/loading";
 // BLOCK WIDTH WRAPPER -----------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT -----------------------------------------------------------------
+import { useWpImageScrip } from "../hooks/useWpImageFix";
+// --------------------------------------------------------------------------------
 import { setGoToAction, muiQuery, Parcer, getNewsData } from "../context";
 
 const Post = ({ state, actions, libraries }) => {
-  const { sm, md, lg, xl } = muiQuery();
+  const { lg } = muiQuery();
 
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
@@ -25,6 +27,11 @@ const Post = ({ state, actions, libraries }) => {
   const [catList, setCatList] = useState(null);
   const [position, setPosition] = useState(null);
   const useEffectRef = useRef(null);
+
+  // --------------------------------------------------------------------------------
+  // 📌  Custom Hooks
+  // --------------------------------------------------------------------------------
+  useWpImageScrip({ inputs: { position } });
 
   useEffect(async () => {
     // ⬇️ on component load defaults to window position TOP
