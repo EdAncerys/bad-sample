@@ -14,16 +14,12 @@ export const useWpImageScrip = ({ inputs }) => {
     wpCaptions.forEach((wpCaption) => {
       // get class name of div
       const className = wpCaption.className;
-      console.log("🐞 ", className);
 
       // if class name includes "-props-css" the add style to the div element margin: "auto"
       if (className.includes("-props-css")) {
         wpCaption.style.margin = "auto";
       }
     });
-
-    // const divs = document.querySelectorAll(".-props-css");
-    console.log("🐞 ", wpCaptions);
 
     // loop through each div
   }, [inputs]);
