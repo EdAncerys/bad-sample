@@ -4,7 +4,6 @@ import Image from "@frontity/components/image";
 
 import { colors } from "../../config/imports";
 import ActionPlaceholder from "../../components/actionPlaceholder";
-import SubmittedApplications from "./submittedApplications";
 import Ellipse from "../../img/svg/ellipse.svg";
 import CheckMarkGreen from "../../img/svg/checkMarkGreen.svg";
 
@@ -207,53 +206,44 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     );
   };
 
-  const ServeApplicationConsole = () => {
-    if (!applicationData) return null; // if no applicationData return null
+  if (!applicationData) return null; // if no applicationData return null
 
-    // get application name & type & concat in string
-    const appData = applicationData[0]; // application info data
-    if (!appData) return null;
-    let appProgress = `${appData.bad_organisedfor} - ${appData.bad_categorytype}: ${applicationStep}`;
-    // general SIG application route
-    if (appData.bad_categorytype === "*")
-      appProgress = `${appData.bad_organisedfor}: Started Special Interest Group application`;
-
-    return (
-      <div style={{ position: "relative" }}>
-        <ActionPlaceholder isFetching={isFetching} background="transparent" />
-        <div
-          className="flex-col shadow"
-          style={{
-            padding: !lg ? `2em 4em` : `1em`,
-            marginBottom: `${marginVertical}px`,
-          }}
-        >
-          <div className="flex-col">
-            <div
-              className="flex-col primary-title"
-              style={{
-                fontSize: 20,
-                fontWeight: "bold",
-                justifyItems: "center",
-                lineHeight: "unset",
-                flexWrap: "wrap",
-              }}
-            >
-              <span>Current Application Progress</span>
-              <span>{appProgress}</span>
-            </div>
-            <ServeProgressBar />
-            <ServeActions />
-          </div>
-        </div>
-      </div>
-    );
-  };
+  // get application name & type & concat in string
+  const appData = applicationData[0]; // application info data
+  if (!appData) return null;
+  let appProgress = `${appData.bad_organisedfor} - ${appData.bad_categorytype}: ${applicationStep}`;
+  // general SIG application route
+  if (appData.bad_categorytype === "*")
+    appProgress = `${appData.bad_organisedfor}: Started Special Interest Group application`;
 
   return (
-    <div>
-      <ServeApplicationConsole />
-      <SubmittedApplications />
+    <div style={{ position: "relative" }}>
+      <ActionPlaceholder isFetching={isFetching} background="transparent" />
+      <div
+        className="flex-col shadow"
+        style={{
+          padding: !lg ? `2em 4em` : `1em`,
+          marginBottom: `${marginVertical}px`,
+        }}
+      >
+        <div className="flex-col">
+          <div
+            className="flex-col primary-title"
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+              justifyItems: "center",
+              lineHeight: "unset",
+              flexWrap: "wrap",
+            }}
+          >
+            <span>Current Application Progress</span>
+            <span>{appProgress}</span>
+          </div>
+          <ServeProgressBar />
+          <ServeActions />
+        </div>
+      </div>
     </div>
   );
 };

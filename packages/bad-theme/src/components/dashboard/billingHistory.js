@@ -86,7 +86,7 @@ const BillingHistory = ({ state, actions, libraries }) => {
         {subAppHistory.map((block, key) => {
           // console.log("🐞 history", block); // bill history
 
-          const { core_name, core_totalamount } = block;
+          const { core_name, core_totalamount, bad_sagepayid } = block;
           let paymentLength = subAppHistory.length;
           const isLastItem = paymentLength === key + 1;
 
@@ -106,27 +106,19 @@ const BillingHistory = ({ state, actions, libraries }) => {
                 <div>{core_name}</div>
               </div>
               <div className="flex" style={styles.fontSize}>
-                <div>
-                  {core_totalamount
-                    ? core_totalamount.includes("-")
-                      ? "Free"
-                      : core_totalamount
-                    : ""}
-                </div>
+                {bad_sagepayid && (
+                  <div>
+                    {core_totalamount
+                      ? core_totalamount.includes("-")
+                        ? "Free"
+                        : core_totalamount
+                      : ""}
+                  </div>
+                )}
+                {!bad_sagepayid && <div>Lapsed Subscription</div>}
               </div>
             </div>
           );
-
-          // 📌 payment history for each app
-          // return (
-          //   <PaymentHistory
-          //     key={key}
-          //     block={block}
-          //     item={key}
-          //     subAppHistory={subAppHistory}
-          //     setFetching={setFetching}
-          //   />
-          // );
         })}
       </div>
     </div>

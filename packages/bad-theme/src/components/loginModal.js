@@ -12,7 +12,6 @@ import {
   useAppState,
   setLoginModalAction,
   loginAction,
-  getUserDataByContactId,
 } from "../context";
 
 const LoginModal = ({ state, actions }) => {

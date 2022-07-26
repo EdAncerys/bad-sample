@@ -55,10 +55,7 @@ export const sendEmailEnquireAction = async ({
     if (isActiveUser) {
       // 📌 pass in defaults user values from Dynamics if not provided
       formData.currentHospitalName =
-        formData.currentHospitalName ||
-        isActiveUser[
-          "_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"
-        ];
+        formData.currentHospitalName || isActiveUser._parentcustomerid_value;
       formData.jobtitle = formData.jobtitle || isActiveUser.jobtitle;
       formData.fullname = formData.fullname || isActiveUser.fullname;
       formData.bad_memberid =
@@ -86,6 +83,10 @@ export const sendEmailEnquireAction = async ({
       body: form,
       credentials: "include",
     };
+    console.log("🐞 ", path);
+    console.log("🐞 ", requestOptions);
+    console.log("🐞 ", formData);
+
     const response = await fetch(path, requestOptions);
     const data = await response.json();
     // console.log("🐞 ", data);
@@ -96,25 +97,6 @@ export const sendEmailEnquireAction = async ({
       // console.log("⬇️ Error sending email response"); // debug
       throw new Error(data.message);
     }
-
-    // const data = await fetchDataHandler({
-    //   path,
-    //   method: "POST",
-    //   body: form,
-    //   state,
-    //   // 📌 pass headers as multipart/form-data
-    //   headers: {
-    //     "Content-Type": "multipart/form-data",
-    //   },
-    // });
-    // const response = await data.json();
-
-    // if (response.success) {
-    //   return response;
-    // } else {
-    //   console.log("⬇️ Error sending email response"); // debug
-    //   console.log(response); // debug
-    // }
   } catch (error) {
     // console.log("error sending enquiry", error);
   } finally {

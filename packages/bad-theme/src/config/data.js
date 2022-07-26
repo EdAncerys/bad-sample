@@ -113,6 +113,11 @@ export const MENU_DATA = [
     title: "Referrals",
     url: "/referrals/",
   },
+  // 📌 uncomment to enable FAD on quick links
+  // {
+  //   title: "FAD",
+  //   url: "/find-a-dermatologist/",
+  // },
 ];
 
 export const ALPHABET = [

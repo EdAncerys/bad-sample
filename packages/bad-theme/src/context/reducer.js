@@ -6,7 +6,7 @@ export const initialState = {
   dynamicsApps: null,
 
   isPlaceholder: true,
-  isDashboardNotifications: null,
+  isDashboardNotifications: [],
 
   tweets: null,
   fad: null,
@@ -24,7 +24,7 @@ export const initialState = {
   eventAnchor: null,
   dashboardPath: "Dashboard",
   directDebitPath: { page: "billing" },
-  isVisibleNotification: true,
+  isDirectDebitNotification: true,
 
   ethnicity: null,
   genderList: null,
@@ -92,7 +92,7 @@ export const AppReducer = (state = initialState, action) => {
     case "SET_DASHBOARD_PATH_ACTION":
       return { ...state, dashboardPath: action.payload };
     case "SET_DEBIT_NOTIFICATION_ACTION":
-      return { ...state, isVisibleNotification: action.payload };
+      return { ...state, isDirectDebitNotification: action.payload };
     case "SET_DEBIT_HANDLER_ACTION":
       return { ...state, directDebitPath: action.payload };
     case "SET_PLACEHOLDER_ACTION":

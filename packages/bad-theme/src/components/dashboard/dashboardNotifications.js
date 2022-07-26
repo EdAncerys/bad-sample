@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import { connect } from "frontity";
 
 import DirectDebitNotification from "./directDebitNotification";
@@ -8,42 +8,88 @@ import {
   useAppState,
   setDashboardNotificationsAction,
   setDashboardPathAction,
-  muiQuery
+  muiQuery,
+  setErrorAction,
 } from "../../context";
 
 const DashboardNotifications = ({ state }) => {
-  const {lg} = muiQuery()
+  const { lg } = muiQuery();
+  // --------------------------------------------------------------------------------
   const dispatch = useAppDispatch();
-  const { isDashboardNotifications, dashboardPath, dynamicsApps } =
-    useAppState();
+  const {
+    isDashboardNotifications,
+    dashboardPath,
+    dynamicsApps,
+    isActiveUser,
+  } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  // HELPERS ----------------------------------------------------------------
+  // HELPERS -----------------------------------------------------------------
+  useEffect(() => {
+    // break if core_membershipstatus !frozen
+    if (
+      isActiveUser &&
+      isActiveUser.core_membershipstatus !== state.theme.frozenMembership
+    )
+      return;
+
+    // user payment message based on
+    let message = state.theme.frozenMembershipBody;
+
+    if (dynamicsApps) {
+      // get apps with billinghistory for payments
+      // get current year
+      const currentYear = new Date().getFullYear();
+      // get apps that billing ending year is not current year & have no billing history
+      const apps = dynamicsApps.subs.data.filter(
+        (app) => !app.core_endon.includes(currentYear) && !app.bad_sagepayid
+      );
+      // if apps includes application with billing history from previous year & have no payment history
+      // show as lappsed membership
+      if (apps.length > 0) message = state.theme.lapsedMembershipBody;
+    }
+
+    setErrorAction({
+      dispatch,
+      isError: {
+        message,
+        image: "Error",
+      },
+    });
+  }, [isActiveUser]);
 
   // SERVERS -----------------------------------------------------------------
-  const ServeGoToActions = ({ path, title, isDismisable }) => {
+  const ServeGoToActions = ({ path, title, isDismisable, id, isLapsed }) => {
     if (!path) return null;
 
     return (
-      <div>
-        <div className="flex">
-          {isDismisable && (
-            <div
-              className="blue-btn"
-              style={{ width: "fit-content" }}
-              onClick={() =>
-                setDashboardNotificationsAction({
-                  dispatch,
-                  isDashboardNotifications: null,
-                })
-              }
-            >
-              Dismiss
-            </div>
-          )}
+      <div
+        className="flex"
+        style={{
+          marginLeft: "2em",
+          alignItems: "center",
+          justifyContent: "end",
+          flex: 0.5,
+        }}
+      >
+        {isDismisable && (
+          <div
+            className="blue-btn"
+            style={{ width: "fit-content" }}
+            onClick={() =>
+              setDashboardNotificationsAction({
+                dispatch,
+                isDashboardNotifications: [...isDashboardNotifications, id],
+              })
+            }
+          >
+            Dismiss
+          </div>
+        )}
 
+        {!isLapsed && (
           <div
             className="blue-btn"
             style={{ marginLeft: "2em", width: "fit-content" }}
@@ -53,13 +99,18 @@ const DashboardNotifications = ({ state }) => {
           >
             {title || "More"}
           </div>
-        </div>
+        )}
       </div>
     );
   };
 
   const ServeProfileReminders = () => {
-    if (dashboardPath === "My Profile" || !isDashboardNotifications)
+    const id = 1; // notification id
+
+    if (
+      dashboardPath === "My Profile" ||
+      (isDashboardNotifications && isDashboardNotifications.includes(id))
+    )
       return null;
 
     return (
@@ -72,7 +123,7 @@ const DashboardNotifications = ({ state }) => {
           style={{
             display: "flex",
             padding: `1em 4em`,
-            flexDirection: !lg ? null : "column"
+            flexDirection: !lg ? null : "column",
           }}
         >
           <div
@@ -82,6 +133,7 @@ const DashboardNotifications = ({ state }) => {
             Please complete missing BAD profile information.
           </div>
           <ServeGoToActions
+            id={id}
             path="My Profile"
             title="Go to my profile"
             isDismisable
@@ -91,12 +143,92 @@ const DashboardNotifications = ({ state }) => {
     );
   };
 
-  const ServeAppReminders = () => {
-    if (dashboardPath === "Billing" || !dynamicsApps) return null;
-    // check if user have approved SIG membership for any of the categories
-    const isPendingPayment = dynamicsApps.subs.data.filter(
-      (app) => app.bad_organisedfor === "SIG" && !app.bad_sagepayid
+  const ServeMembershipPaymentReminders = () => {
+    const id = 2; // notification id
+
+    const isFrezeStatus =
+      isActiveUser.core_membershipstatus === state.theme.frozenMembership;
+    const isBilling = dashboardPath === "Billing";
+
+    if (
+      !isFrezeStatus ||
+      isBilling ||
+      (isDashboardNotifications && isDashboardNotifications.includes(id))
+    )
+      return null;
+
+    // user payment message based on
+    let message = state.theme.frozenMembershipBody;
+    let isLapsed = false;
+
+    if (dynamicsApps) {
+      // get apps with billinghistory for payments
+      // get current year
+      const currentYear = new Date().getFullYear();
+      // get apps that billing ending year is not current year & have no billing history
+      const apps = dynamicsApps.subs.data.filter(
+        (app) => !app.core_endon.includes(currentYear) && !app.bad_sagepayid
+      );
+      // if apps includes application with billing history from previous year & have no payment history
+      // show as lappsed membership
+      if (apps.length > 0) message = state.theme.lapsedMembershipBody;
+      isLapsed = apps.length > 0;
+    }
+
+    if (
+      isActiveUser &&
+      isActiveUser.core_membershipstatus === state.theme.lapsedMembership
+    )
+      message = state.theme.lapsedMembershipBody;
+
+    return (
+      <div
+        className="no-selector"
+        style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}
+      >
+        <div
+          className="shadow"
+          style={{
+            display: "flex",
+            padding: `1em 4em`,
+            flexDirection: !lg ? null : "column",
+          }}
+        >
+          <div
+            className="flex primary-title"
+            style={{ display: "grid", alignItems: "center", fontSize: 20 }}
+          >
+            {message}
+          </div>
+          <ServeGoToActions
+            id={id}
+            path="Billing"
+            title="Pay Now"
+            isDismisable
+            isLapsed={isLapsed}
+          />
+        </div>
+      </div>
     );
+  };
+
+  const ServeAppReminders = () => {
+    const id = 3; // notification id
+
+    if (
+      dashboardPath === "Billing" ||
+      !dynamicsApps ||
+      isDashboardNotifications.includes(id)
+    )
+      return null;
+    // check if user have approved SIG membership for any of the categories
+    const isPendingPayment = dynamicsApps.subs.data.filter((app) => {
+      return (
+        app.bad_organisedfor === "SIG" &&
+        !app.bad_sagepayid &&
+        app.bad_outstandingpayments !== "£0.00" // payments with 0 outstanding payments are not shown
+      );
+    });
     if (isPendingPayment.length === 0) return null;
 
     return (
@@ -117,7 +249,7 @@ const DashboardNotifications = ({ state }) => {
           >
             Your SIG application has been approved.
           </div>
-          <ServeGoToActions path="Billing" title="Pay Now" />
+          <ServeGoToActions id={id} path="Billing" title="Pay Now" />
         </div>
       </div>
     );
@@ -128,10 +260,9 @@ const DashboardNotifications = ({ state }) => {
       <DirectDebitNotification />
       <ServeProfileReminders />
       <ServeAppReminders />
+      <ServeMembershipPaymentReminders />
     </div>
   );
 };
-
-
 
 export default connect(DashboardNotifications);

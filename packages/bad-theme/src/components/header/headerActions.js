@@ -7,7 +7,6 @@ import BADLogo from "../../img/svg/badLogoHeader.svg";
 import QuickLinksDropDown from "./quickLinksDropDown";
 import BlockWrapper from "../blockWrapper";
 import SearchDropDown from "../../components/searchDropDown";
-import Loading from "../../components/loading";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
@@ -32,6 +31,12 @@ import {
   setCreateAccountModalAction,
   handleSetCookie,
   fetchDataHandler,
+
+  // --------------------------------------------------------------------------------
+  getUserDataByContactId, // TESTING ONLY
+  handleRemoveServerSideCookie, // TESTING ONLY
+  setAuthenticationCookieAction, // TESTING ONLY
+  errorHandler, // TESTING ONLY
 } from "../../context";
 
 const HeaderActions = ({ state, actions, libraries }) => {
@@ -131,7 +136,8 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
   const ServeDevPanel = () => {
-    if (state.auth.ENVIRONMENT !== "DEVELOPMENT" || lg) return null;
+    return null; // kill this for now
+    if (state.auth.ENVIRONMENT !== "DEV" || lg) return null;
 
     return (
       <div
@@ -158,16 +164,130 @@ const HeaderActions = ({ state, actions, libraries }) => {
         <div
           className="blue-btn-reverse"
           style={{ minWidth: "fit-content" }}
-          onClick={() => handleRemoveServerSideCookie({ state })}
+          onClick={handleAboutInfo}
         >
-          LogOut
+          🍪
         </div>
         <div
           className="blue-btn-reverse"
           style={{ minWidth: "fit-content" }}
-          onClick={handleCookie}
+          onClick={() =>
+            setAuthenticationCookieAction({
+              state,
+              b2cTaken:
+                "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ilg1ZVhrNHh5b2pORnVtMWtsMll0djhkbE5QNC1jNTdkTzZRR1RWQndhTmsifQ.eyJleHAiOjE2NTc1MzE3MjcsIm5iZiI6MTY1NzUyODEyNywidmVyIjoiMS4wIiwiaXNzIjoiaHR0cHM6Ly9icml0aXNoYWQuYjJjbG9naW4uY29tLzU0MjFmNTA2LTgyMzEtNGY1Ny1hNjBmLTM4MDU1YTk5OGJhZi92Mi4wLyIsInN1YiI6IjU0M2RiNzlhLTAxN2ItNDg4My1iYzU5LWU2ZTllN2UyYmFiOCIsImF1ZCI6ImFkYmVkNzJkLTVlZTAtNDliMS1hMDY0LTQyMWJkYmNkNjhiMiIsIm5vbmNlIjoiZGVmYXVsdE5vbmNlIiwiaWF0IjoxNjU3NTI4MTI3LCJhdXRoX3RpbWUiOjE2NTc1MjgxMjcsImdpdmVuX25hbWUiOiJDaHJpcyIsImZhbWlseV9uYW1lIjoiQ3VsbGVuIiwiZXh0ZW5zaW9uX0NvbnRhY3RJZCI6IjA3ODZkZjg1LTYxOGYtZWMxMS1iNDAwLTAwMGQzYTIyMDM3ZSIsImVtYWlscyI6WyJjaHJpc0Bza3lsYXJrY3JlYXRpdmUuY28udWsiXSwidGZwIjoiQjJDXzFfc2lnbnVwc2lnbmluX3VhdCJ9.bwNYYyz3y5ejU_6NBB_x4pyDLlETXbGXQikNuq0AX-LFGBoaU4BteOkzUuBRHtCkh7sQ5ePb5D8sVz1PnzaRg2bTwXFRzi_jl2723OLpdGn-yLpuw2Sihxahj4zfkeePu5KkscaMzcFpFTbry9zlpTsAmAWf-4cZxgTFUIKoQYX4gdjdqSDSSy2ZhSWPzraZPDJOyYOTvIC7yp59Nypb5NyN3Kzqp-eW1wtorDwNWoaWotKzeauRTNZz7RWHzx-zT-BnJmt1V_hpR7-b6vNnO1m7LiOmnSS6rhg9MaTKDAXBbEA0RyY-AB0R7cIq4_iWmJ-HXNdp9cZvmtYb1au2ow",
+            })
+          }
         >
-          🍪
+          B2C JWT
+        </div>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={() =>
+            getUserDataByContactId({
+              state,
+              dispatch,
+              contactid: "969ba377-a398-ec11-b400-000d3aaedef5",
+            })
+          }
+        >
+          LogIn
+        </div>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={() => handleRemoveServerSideCookie({ state })}
+        >
+          LogOut
+        </div>
+      </div>
+    );
+  };
+
+  const ServeLogInPanel = () => {
+    if (state.auth.ENVIRONMENT !== "DEV" || lg) return null; // kill if not in dev mode
+
+    const handleLogin = async ({ lastname }) => {
+      console.log("🐞 login trigered");
+
+      const b2cTaken =
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ilg1ZVhrNHh5b2pORnVtMWtsMll0djhkbE5QNC1jNTdkTzZRR1RWQndhTmsifQ.eyJleHAiOjE2NTc3MTI1ODcsIm5iZiI6MTY1NzcwODk4NywidmVyIjoiMS4wIiwiaXNzIjoiaHR0cHM6Ly9icml0aXNoYWQuYjJjbG9naW4uY29tLzU0MjFmNTA2LTgyMzEtNGY1Ny1hNjBmLTM4MDU1YTk5OGJhZi92Mi4wLyIsInN1YiI6IjQzNzMzOWMyLWU1ODctNDVkOS05MWMzLTBkZjVmZWVhZDkzYiIsImF1ZCI6ImFkYmVkNzJkLTVlZTAtNDliMS1hMDY0LTQyMWJkYmNkNjhiMiIsIm5vbmNlIjoiZGVmYXVsdE5vbmNlIiwiaWF0IjoxNjU3NzA4OTg3LCJhdXRoX3RpbWUiOjE2NTc3MDg5ODcsImdpdmVuX25hbWUiOiJFbWVsaWEiLCJmYW1pbHlfbmFtZSI6IkdhdGxleSIsImV4dGVuc2lvbl9Db250YWN0SWQiOiI3YjlkMWQzMC1mYWQ1LWVjMTEtYTdiNS0wMDBkM2FiZWQ1MzYiLCJlbWFpbHMiOlsiZW1lbGlhQHNreWxhcmtjcmVhdGl2ZS5jby51ayJdLCJ0ZnAiOiJCMkNfMV9zaWdudXBzaWduaW5fdWF0In0.RCViQq-0bOGsBzXvviNpHaVS21POGP4MHYa6nTgN_DooSziZNc6luhohbMxM-ww_qVKm5HbZ6nIO4aNYEBRKYa6hUQohKzC_SQ5uwoQvVUW7QzfF_2DCh2tdmZV4q9BqVoGwaWBly1NbRx0_cRlVjFtDY2Y4rvkEKuV7z2sYMwzrh5m_2ClaWJJi11EYZ_utEiK_PV0EtY8FKAVO4qUU7E-SvD5oTMmEmYUxw9HrznCobKq9i2R3VzA4o5p_p5QFdOL-uQDtlYU0U6bSLeulPeQHw2NHxgzeor5hSI1TXGEfxO_9jxAiqXlRvQMb_COFP33eKFo-20t66UJ_-joV1A";
+      let contactid = "";
+
+      if (lastname === "Brooke")
+        contactid = "60a262dc-57f8-e611-80e4-3863bb35cfc8";
+      if (lastname === "Bonsall")
+        contactid = "05956d48-59f8-e611-80e4-3863bb35cfc8";
+      if (lastname === "Bulinska")
+        contactid = "0655b9bc-59f8-e611-80e4-3863bb35cfc8";
+
+      try {
+        // 📌 set auth cookie for authenticated requests
+        await setAuthenticationCookieAction({ state, b2cTaken });
+        // 📌 get user data by email
+        await getUserDataByContactId({
+          state,
+          dispatch,
+          contactid,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    return (
+      <div
+        className="flex"
+        style={{
+          position: "absolute",
+          top: "3em",
+          left: "2em",
+          justifyContent: "space-between",
+          minWidth: 300,
+          padding: "1em",
+          borderRadius: 10,
+          backgroundColor: "rgba(247,61,147,0.5)",
+          zIndex: 1,
+          gap: 10,
+        }}
+      >
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={() => handleLogin({ lastname: "Brooke" })}
+        >
+          Brooke
+        </div>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={() => handleLogin({ lastname: "Bonsall" })}
+        >
+          Bonsall
+        </div>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={() => handleLogin({ lastname: "Bulinska" })}
+        >
+          Bulinska
+        </div>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={handleAboutInfo}
+        >
+          i
+        </div>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={() =>
+            errorHandler({ id: `form-error-bad_categorytype`, time: 5000 })
+          }
+        >
+          e
         </div>
       </div>
     );
@@ -182,13 +302,12 @@ const HeaderActions = ({ state, actions, libraries }) => {
     let data = "not found";
     if (response && response.ok) {
       data = await response.json();
-      // console.log("🐞 Auth level ", data.data.level);
-      // console.log("🐞 data ", data.data);
+      console.log("🐞 Auth level ", data.data.level);
+      console.log("🐞 data ", data.data);
     }
   };
 
-  const handleCookie = async () => {
-    handleSetCookie({ name: "no-cookie", deleteCookie: true }); // to show list of all cookies
+  const handleAboutInfo = async () => {
     handleSetCookie({ name: "BAD-cookie-popup", deleteCookie: true });
     console.log("🐞 APP_HOST ", state.auth.APP_HOST);
     console.log("🐞 APP_URL ", state.auth.APP_URL);
@@ -377,6 +496,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
       <BlockWrapper>
         <ServeInfoBatch />
         <ServeDevPanel />
+        <ServeLogInPanel />
 
         <div className="flex" style={{ padding: !lg ? `2.75em 0` : `0.3em 0` }}>
           <div className="flex">

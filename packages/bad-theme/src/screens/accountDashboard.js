@@ -74,7 +74,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
     if (!isProfileComplete)
       setDashboardNotificationsAction({
         dispatch,
-        isDashboardNotifications: !isProfileComplete,
+        isDashboardNotifications: [],
       });
 
     await getDirectDebitAction({

@@ -149,11 +149,14 @@ export const setDashboardNotificationsAction = ({
   });
 };
 
-export const setNotificationAction = ({ dispatch, isVisibleNotification }) => {
+export const setNotificationAction = ({
+  dispatch,
+  isDirectDebitNotification,
+}) => {
   // console.log("setNotificationAction triggered"); //debug
   dispatch({
     type: "SET_DEBIT_NOTIFICATION_ACTION",
-    payload: isVisibleNotification,
+    payload: isDirectDebitNotification,
   });
 };
 

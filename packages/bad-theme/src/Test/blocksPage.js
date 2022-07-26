@@ -14,7 +14,7 @@ const BlocksPage = ({ state, libraries }) => {
   // console.log("page data: ", page); // debug
 
   // 📌 if env is dev, show the blocks.
-  if (state.auth.ENVIRONMENT !== "DEVELOPMENT") return null;
+  if (state.auth.ENVIRONMENT !== "DEV") return null;
   let title = [];
 
   return (

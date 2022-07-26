@@ -53,7 +53,6 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
   const [searchValue, setSearchValue] = useState("");
   const [dateValue, setDateValue] = useState("");
   const [yearValue, setYearValue] = useState("");
-  const [hasPermission, setPermission] = useState(false);
   const [isSearch, setIsSearch] = useState(false);
 
   const searchFilterRef = useRef("");
@@ -68,15 +67,17 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     // 📌  Handle members only access permision
     // --------------------------------------------------------------------------------
 
-    let hasPermission = false;
     let membersOnly = ["circular", "newsletter", "bulletin"];
     let membersOnlyList = [];
-    // 📌 check if user has permission to view news & media
-    if (dynamicsApps)
-      hasPermission = hasPermisionLevel({ dynamicsApps, isActiveUser });
-    setPermission(hasPermission);
 
-    if (hasPermission) return data;
+    // 📌 check if user has permission to view news & media
+    if (
+      isActiveUser &&
+      isActiveUser.bad_selfserviceaccess === state.theme.serviceAccess &&
+      isActiveUser.core_membershipstatus !== state.theme.frozenMembership
+    )
+      return data;
+
     // 📌 apply filters on news & media data
     // get id of all categories that include members only
     if (categoryData)
@@ -160,7 +161,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     // 📌  serach & filters
     // --------------------------------------------------------------------------------
 
-    if (!postList) return null;
+    if (!postList || !isSearch) return null; // component state bug. If isSearch dont update post list state
     let data = postList;
 
     // if all filters are applied are null then set filterList to postList
@@ -270,8 +271,22 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
               let membersOnly = ["circular", "newsletter", "bulletin"].some(
                 (word) => item.name.toLowerCase().includes(word)
               );
+              let serviceAccess = false;
+              if (
+                isActiveUser &&
+                isActiveUser.core_membershipstatus !==
+                  state.theme.frozenMembership
+              )
+                serviceAccess =
+                  isActiveUser.bad_selfserviceaccess ===
+                  state.theme.serviceAccess;
               // 📌 if user has permission to view news & media
-              if (membersOnly && !hasPermission) return null;
+              if (membersOnly && !serviceAccess) return null;
+
+              // apply filters for selected category in category_filter
+              //render only taxonomy categories that are selected in category_filter in wp
+              if (category_filter && !category_filter.includes(item.id))
+                return null;
 
               return (
                 <option key={key} value={item.id}>
@@ -494,7 +509,8 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
       dateValue ||
       yearValue ||
       searchValue ||
-      !post_limit
+      !post_limit ||
+      isLayoutOne // if layout is carousel then hide more option
     )
       moreOption = false;
 

@@ -38,7 +38,7 @@ function AlterAccordion({
 
   if (!block) return <Loading />;
   const { lg } = muiQuery();
-  const { dynamicsApps } = useAppState();
+  const { dynamicsApps, isActiveUser } = useAppState();
 
   const data = state.source.get(state.router.link);
   const {
@@ -50,10 +50,11 @@ function AlterAccordion({
     is_active,
   } = block;
 
-  console.log("🐞 ACORDION ITEM", block); // debug
+  // console.log("🐞 ACORDION ITEM", block); // debug
 
   const [searchFilter, setSearchFilter] = useState(null);
   const [searchInput, setInput] = useState(null);
+  const [isForBADMembersOnly, setForMembersOnly] = useState(false);
   const searchFilterRef = useRef(null);
 
   const marginHorizontal = state.theme.marginHorizontal;
@@ -61,10 +62,30 @@ function AlterAccordion({
   // Uncoment to enable vertical padding ammend for accordion items (default: false)
   if (disable_vertical_padding) marginVertical = 0;
 
-  let isBADApproved = false;
-  if (dynamicsApps && dynamicsApps.subs.data.length > 0) isBADApproved = true;
-  let isForBADMembersOnly = false;
-  if (approved_bad_members_only && !isBADApproved) isForBADMembersOnly = true;
+  useEffect(() => {
+    // 📌 handle member only accordion items if no user is logged in
+    if (approved_bad_members_only && !isActiveUser) {
+      setForMembersOnly(true);
+      return;
+    }
+
+    // 📌 handle member only accordion items access
+    if (approved_bad_members_only && isActiveUser) {
+      const isFullAccess =
+        isActiveUser.bad_selfserviceaccess === state.theme.serviceAccess;
+
+      if (
+        isFullAccess &&
+        isActiveUser.core_membershipstatus !== state.theme.frozenMembership
+      ) {
+        // update access to accordion item based on user membership status
+        // manage to set in state both true & false due isActiveUser async update
+        setForMembersOnly(false);
+      } else {
+        setForMembersOnly(true);
+      }
+    }
+  }, [dynamicsApps, isActiveUser]);
 
   useEffect(() => {
     // 📌 update filter data on block change

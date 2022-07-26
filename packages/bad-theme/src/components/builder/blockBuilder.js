@@ -55,7 +55,7 @@ const BlocksBuilder = ({ state, actions, libraries, blocks, isMenu }) => {
 
   // SERVERS -----------------------------------------------------
   const ServeBlockTitle = ({ acf_fc_layout }) => {
-    if (state.auth.ENVIRONMENT !== "DEVELOPMENT") return null; // add block name title
+    if (state.auth.ENVIRONMENT !== "DEV") return null; // add block name title
 
     return (
       <BlockWrapper>

@@ -68,6 +68,7 @@ const App = ({ state, actions }) => {
   const data = state.source.get(urlPath);
   const useEffectRef = useRef(true);
   // console.log("INDEX data", data); // debug
+
   // --------------------------------------------------------------------------------
   // 📌  B2C login handler.
   // --------------------------------------------------------------------------------
@@ -78,7 +79,7 @@ const App = ({ state, actions }) => {
   useRedirect({ state, dispatch, actions, redirects, urlPath });
   // 📌 hook for media queries
   useQuery({ state });
-  // 📌 google places api
+  // 📌 google places api script
   useScript({
     url: `https://maps.googleapis.com/maps/api/js?key=${state.auth.GOOGLE_API_KEY}&libraries=places`,
   });

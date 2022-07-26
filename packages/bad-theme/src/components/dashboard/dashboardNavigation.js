@@ -12,24 +12,26 @@ import {
 
 const DashboardNavigation = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
-  const { dashboardPath, dynamicsApps } = useAppState();
-  const [isBADMember, setIsBADMember] = useState(null);
+  const { dashboardPath, isActiveUser } = useAppState();
+  const [accessLevel, setAccessLevel] = useState(false);
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
   useEffect(() => {
-    if (!dynamicsApps && !dynamicsApps.subs) return;
-    // 📌 check if user is a BAD member
-    let badApps = dynamicsApps.subs.data.filter((app) => {
-      let hasBADMemberships = app.bad_organisedfor === "BAD";
+    // 📌 check if user have fill access level to access members directory
+    const isFullAccess =
+      isActiveUser.bad_selfserviceaccess === state.theme.serviceAccess;
 
-      return hasBADMemberships;
-    });
-
-    // 📌 check if user is a BAD member
-    if (badApps.length) setIsBADMember(true);
-  }, [dynamicsApps]);
+    if (
+      isFullAccess &&
+      isActiveUser.core_membershipstatus !== state.theme.frozenMembership
+    ) {
+      setAccessLevel(true);
+    } else {
+      setAccessLevel(false);
+    }
+  }, [isActiveUser]);
 
   // HELPERS ----------------------------------------------------------------
   const handleNavigate = ({ e }) => {
@@ -86,7 +88,7 @@ const DashboardNavigation = ({ state, actions, libraries }) => {
         >
           Membership
         </div>
-        {isBADMember && (
+        {accessLevel && (
           <div
             className="dashboard-menu"
             style={{

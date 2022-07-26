@@ -94,10 +94,9 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
 
     const data = Object.assign(
       {}, // add empty object
-      // !!address1_line1 && { address1_line1 },
-      !!bad_gmcno && { bad_gmcno },
-      !!bad_ntnno && { bad_ntnno },
-      !!bad_otherregulatorybodyreference && { bad_otherregulatorybodyreference }
+      { bad_gmcno },
+      { bad_ntnno },
+      { bad_otherregulatorybodyreference }
     );
 
     try {

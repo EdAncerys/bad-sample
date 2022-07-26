@@ -1,5 +1,4 @@
 import { connect } from "frontity";
-import { colors } from "../config/imports";
 import Image from "@frontity/components/image";
 
 import Loading from "./loading";

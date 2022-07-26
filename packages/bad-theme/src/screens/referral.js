@@ -148,37 +148,14 @@ const Referral = ({ state, actions, libraries }) => {
 
     return (
       <div className="flex-col">
-        {management && (
-          <div
-            className="flex-col shadow"
-            style={{
-              padding: `${marginVertical}px ${marginHorizontal}px`,
-              marginTop: `${marginVertical}px`,
-              backgroundColor: colors.primary,
-              color: colors.white,
-              fontWeight: "bold",
-            }}
-          >
-            <div className="referal-management-title">
-              <Parcer
-                libraries={libraries}
-                html={`Referral Management for ${condition} - ${referral.title.rendered}:`}
-              />
-            </div>
-            <div>
-              <Parcer libraries={libraries} html={management} />
-            </div>
-          </div>
-        )}
-
+        <ServeContentCard title="Treatment / Therapy" body={treatment} />
+        <ServeContentCard title="Referral Management" body={management} />
         <ServeContentCard title="Teledermatology" body={teledermatology} />
         <ServeContentCard
           title="Clinical Resources"
           resources={clinical_resources}
         />
         <ServeContentCard title="Clinical Tips" body={tips} />
-        <ServeContentCard title="Referral Management" body={management} />
-        <ServeContentCard title="Treatment / Therapy" body={treatment} />
         <ServeContentCard
           title="Patient Information Leaflets"
           resources={patient_information_resources}
