@@ -21,7 +21,7 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
     isDirectDebit,
     dynamicsApps,
     isActiveUser,
-    isVisibleNotification,
+    isDirectDebitNotification,
     directDebitPath,
     dashboardPath,
   } = useAppState();
@@ -68,7 +68,7 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
     isApprovedMemberships = true;
   // conditional rendering of direct debit component
   let isSetupDirectDebit = false;
-  if (!isVisibleNotification) isSetupDirectDebit = true;
+  if (!isDirectDebitNotification) isSetupDirectDebit = true;
   if (isDebitSetup) isSetupDirectDebit = true;
 
   // 📌 if direct debit setup or no approved applications, return null
@@ -87,20 +87,20 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
   const ServeActions = () => {
     return (
       <div className="flex" style={{ margin: `auto 0` }}>
-        <div style={{ padding: !lg ? `0 2em` : "1em" }}>
-          <div className="blue-btn" onClick={handlePayment}>
-            Setup Direct Debit
-          </div>
+        <div
+          className="blue-btn"
+          style={{ margin: !lg ? `0 2em` : "1em" }}
+          onClick={() =>
+            setNotificationAction({
+              dispatch,
+              isDirectDebitNotification: false,
+            })
+          }
+        >
+          Dismiss
         </div>
-        <div>
-          <div
-            className="transparent-btn"
-            onClick={() =>
-              setNotificationAction({ dispatch, isVisibleNotification: false })
-            }
-          >
-            Dismiss
-          </div>
+        <div className="blue-btn" onClick={handlePayment}>
+          Setup Direct Debit
         </div>
       </div>
     );

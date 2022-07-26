@@ -22,6 +22,7 @@ const DownloadFileBlock = ({
 
   const { file, guidline_file, disable_vertical_padding, title, label, type } =
     block;
+  // console.log("🐞 ", block); // debug
   const ICON_WIDTH = 35;
   const isBtnStyle = type && type === "Button";
   // check if block length is greater than 1
@@ -36,18 +37,24 @@ const DownloadFileBlock = ({
     if (!file) return null;
 
     let fileName = "Download";
-    if (file.title) fileName = file.title;
-    if (label) fileName = label;
+    if (file.title) fileName = file.title; // if file has a title override default
+    if (label) fileName = label; // override file name if label is provided
 
     return (
-      <div
-        className={isBtnStyle ? "" : "caps-btn-no-underline"}
-        style={{ display: "grid", alignItems: "center", boxShadow: "none" }}
+      <a
+        href={file.url}
+        target="_blank"
+        style={styles.link}
+        download
+        className="flex"
       >
-        <a href={file.url} target="_blank" style={styles.link} download>
+        <div
+          className={isBtnStyle ? "" : "caps-btn-no-underline"}
+          style={{ display: "grid", alignItems: "center", boxShadow: "none" }}
+        >
           <Parcer libraries={libraries} html={fileName} />
-        </a>
-      </div>
+        </div>
+      </a>
     );
   };
 

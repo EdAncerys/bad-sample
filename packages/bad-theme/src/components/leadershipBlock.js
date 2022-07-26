@@ -18,13 +18,21 @@ const LeadershipBlock = ({ state, actions, block }) => {
   const mountedRef = useRef(true);
 
   if (!block) return <Loading />;
-  // console.log("🐞 ", block);
+  // console.log("🐞 ", block); // debug
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
     const grades = await getLeadershipGrades({ state });
     const positions = await getLeadershipPositions({ state });
-    const leadershipList = await getLeadershipData({ state });
+    let leadershipList = await getLeadershipData({ state });
+    leadershipList = leadershipList.sort((a, b) => {
+      // change member order in the list. move Mabs Chowdhury to the top
+      let person = "Dr Mabs Chowdhury";
+
+      if (a.title && a.title.rendered === person) return -1;
+      if (b.title && b.title.rendered === person) return 1;
+      return 0;
+    });
 
     setPositions(positions);
     setGrades(grades);

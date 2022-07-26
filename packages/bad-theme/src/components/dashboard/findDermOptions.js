@@ -17,6 +17,7 @@ import {
   updateProfileAction,
   googleAutocomplete,
   getFadPermision,
+  errorMessage,
 } from "../../context";
 
 const FindDermatologistOptions = ({ state }) => {
@@ -31,7 +32,7 @@ const FindDermatologistOptions = ({ state }) => {
   const [isFetchingAddress, setIsFetchingAddress] = useState(null);
   const [addressData, setAddressData] = useState(null);
   const [formData, setFormData] = useState({
-    bad_includeinfindadermatologist: "",
+    _bad_includeinfindadermatologist: false,
     address3_line1: "",
     address3_line2: "",
     address3_postalcode: "",
@@ -60,8 +61,8 @@ const FindDermatologistOptions = ({ state }) => {
 
     // 📌 populate profile information form Dynamics records
     handleSetData({
-      name: "bad_includeinfindadermatologist",
-      value: isActiveUser.bad_includeinfindadermatologist,
+      name: "_bad_includeinfindadermatologist",
+      value: isActiveUser._bad_includeinfindadermatologist,
     });
     handleSetData({
       name: "address3_line1",
@@ -100,7 +101,8 @@ const FindDermatologistOptions = ({ state }) => {
       state,
       contactid: isActiveUser.contactid,
     });
-    console.log("🐞 PERMISION", permision); // debug
+
+    // set fad permision
     if (permision) setFadPermision(permision);
   }, [isActiveUser, dynamicsApps]);
 
@@ -174,7 +176,8 @@ const FindDermatologistOptions = ({ state }) => {
     // 📌 add valid data to data object to be sent to Dynamics
     // not to overwrite existing data in Dynamics only valid inputs are sent
     const data = {
-      bad_includeinfindadermatologist: formData.bad_includeinfindadermatologist,
+      bad_includeinfindadermatologist:
+        formData._bad_includeinfindadermatologist,
       address3_line1: formData.address3_line1,
       address3_line2: formData.address3_line2,
       address3_postalcode: formData.address3_postalcode,
@@ -188,7 +191,42 @@ const FindDermatologistOptions = ({ state }) => {
       bad_profile_photo_url: formData.bad_profile_photo_url,
     };
 
-    console.log("🐞 ", data);
+    // regex to check if postcode is valid for UK
+    const regex = /^([A-Z]{1,2}[0-9][A-Z0-9]? ?[0-9][A-Z]{2}|GIR 0AA)$/i;
+    let isPostcode = regex.test(data.address3_postalcode);
+    if (!isPostcode) {
+      data.address3_postalcode = "";
+
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        address3_postalcode: "",
+      }));
+    }
+
+    // check manditory fields are filled
+    if (data.address3_postalcode === "" || data.address3_line1 === "") {
+      // erorr message if manditory fields are not filled
+      let message = "Postcode is mandatory. Please enter a valid postcode.";
+      if (data.address3_line1 === "")
+        message = "Address is mandatory. Please enter a valid address.";
+      if (data.address3_postalcode === "" && data.address3_line1 === "")
+        message = "Please fill in all mandatory fields";
+
+      // 📌 add show error message to required formData fields
+      if (data.address3_postalcode === "")
+        errorMessage({ id: "address3_postalcode" });
+      if (data.address3_line1 === "") errorMessage({ id: "address3_line1" });
+
+      setErrorAction({
+        dispatch,
+        isError: {
+          message,
+          image: "Error",
+        },
+      });
+
+      return;
+    }
 
     try {
       setIsFetching(true);
@@ -294,8 +332,8 @@ const FindDermatologistOptions = ({ state }) => {
                   >
                     <div style={{ display: "grid" }}>
                       <input
-                        name="bad_includeinfindadermatologist"
-                        checked={formData.bad_includeinfindadermatologist}
+                        name="_bad_includeinfindadermatologist"
+                        checked={formData._bad_includeinfindadermatologist}
                         onChange={handleInputChange}
                         type="checkbox"
                         className="form-check-input check-box"
@@ -314,30 +352,25 @@ const FindDermatologistOptions = ({ state }) => {
                 </div>
                 <div>
                   <div className="flex-col">
-                    <div style={{ position: "relative", width: "100%" }}>
-                      <div
-                        className="flex"
-                        style={{
-                          flex: 1,
-                          height: ctaHeight,
-                          position: "relative",
-                          margin: "0.5em 0",
-                        }}
-                      >
+                    <div className="flex-col relative">
+                      <div className="relative">
                         <input
                           ref={address1Line1Ref}
                           name="search-input"
                           value={formData.address3_line1}
                           onChange={handleAddressLookup}
                           type="text"
+                          style={{ margin: "0.5em 0", paddingRight: 40 }}
                           className="form-control"
-                          placeholder="Address Line 1"
+                          placeholder="Address Line 1 (required)"
+                          maxLength={state.theme.inputFieldLimit250}
                         />
                         <div
                           className="input-group-text toggle-icon-color"
                           style={{
                             position: "absolute",
                             right: 0,
+                            top: 8,
                             height: ctaHeight,
                             border: "none",
                             background: "transparent",
@@ -352,45 +385,66 @@ const FindDermatologistOptions = ({ state }) => {
                       <SearchDropDown
                         filter={addressData}
                         onClickHandler={handleSelectAddress}
-                        height={230}
+                        height={250}
+                        marginTop={90}
+                      />
+                      <label className="required-input form-label" />
+                      <div
+                        id="address3_line1"
+                        className="required d-none error-message"
                       />
                     </div>
-                    <input
-                      name="address3_line2"
-                      value={formData.address3_line2}
-                      onChange={handleInputChange}
-                      type="text"
-                      placeholder="Address Line 2"
-                      className="form-control"
-                      style={styles.input}
-                    />
+                    <div className="relative">
+                      <input
+                        name="address3_line2"
+                        value={formData.address3_line2}
+                        onChange={handleInputChange}
+                        type="text"
+                        placeholder="Address Line 2"
+                        className="form-control"
+                        style={styles.input}
+                        maxLength={state.theme.inputFieldLimit100}
+                      />
+                    </div>
 
-                    <input
-                      name="address3_postalcode"
-                      value={formData.address3_postalcode}
-                      onChange={handleInputChange}
-                      type="text"
-                      placeholder="Postcode"
-                      className="form-control"
-                      style={styles.input}
-                    />
-                    <input
-                      name="address3_city"
-                      value={formData.address3_city}
-                      onChange={handleInputChange}
-                      type="text"
-                      placeholder="City"
-                      className="form-control"
-                      style={styles.input}
-                    />
+                    <div className="relative">
+                      <input
+                        name="address3_postalcode"
+                        value={formData.address3_postalcode}
+                        onChange={handleInputChange}
+                        type="text"
+                        placeholder="Postcode (required)"
+                        className="form-control"
+                        style={styles.input}
+                        maxLength={state.theme.inputFieldLimit80}
+                      />
+                      <label className="required-input form-label" />
+                      <div
+                        id="address3_postalcode"
+                        className="required d-none error-message"
+                      />
+                    </div>
+                    <div className="relative">
+                      <input
+                        name="address3_city"
+                        value={formData.address3_city}
+                        onChange={handleInputChange}
+                        type="text"
+                        placeholder="City"
+                        className="form-control"
+                        style={styles.input}
+                        maxLength={state.theme.inputFieldLimit100}
+                      />
+                    </div>
 
-                    <div>
+                    <div className="relative">
                       <label>Upload A Profile Photo</label>
                       <input
                         ref={documentRef}
                         onChange={handleDocUploadChange}
                         type="file"
                         className="form-control input"
+                        style={{ margin: "0.5em 0" }}
                         placeholder="Profile Photo"
                         accept="image/png, image/jpeg"
                       />
@@ -411,6 +465,7 @@ const FindDermatologistOptions = ({ state }) => {
               placeholder="Main Place of Work"
               className="form-control"
               style={styles.input}
+              maxLength={state.theme.inputFieldLimit100}
             />
             <input
               name="bad_web1"
@@ -420,6 +475,7 @@ const FindDermatologistOptions = ({ state }) => {
               placeholder="https://"
               className="form-control"
               style={styles.input}
+              maxLength={state.theme.inputFieldLimit100}
             />
             <input
               name="bad_web2"
@@ -429,6 +485,7 @@ const FindDermatologistOptions = ({ state }) => {
               placeholder="https://"
               className="form-control"
               style={styles.input}
+              maxLength={state.theme.inputFieldLimit100}
             />
             <input
               name="bad_web3"
@@ -438,6 +495,7 @@ const FindDermatologistOptions = ({ state }) => {
               placeholder="https://"
               className="form-control"
               style={styles.input}
+              maxLength={state.theme.inputFieldLimit100}
             />
 
             <div style={{ paddingTop: `1em` }}>About Text</div>
@@ -447,12 +505,26 @@ const FindDermatologistOptions = ({ state }) => {
                   name="bad_findadermatologisttext"
                   value={formData.bad_findadermatologisttext}
                   onChange={handleInputChange}
-                  rows="10"
+                  rows="8"
                   type="text"
                   placeholder="Find a Dermatologist About Text"
                   className="form-control"
                   style={styles.input}
+                  maxLength={state.theme.textAreaLimit}
                 />
+                <div
+                  className="flex"
+                  style={{
+                    alignSelf: "end",
+                    fontSize: 17,
+                    fontWeight: "bold",
+                    opacity: 0.5,
+                  }}
+                >
+                  {Number(state.theme.textAreaLimit) -
+                    formData.bad_findadermatologisttext.length}{" "}
+                  characters remaining.
+                </div>
               </div>
             </div>
           </div>

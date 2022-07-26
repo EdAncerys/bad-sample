@@ -1,9 +1,4 @@
-import { handleGetCookie, handleSetCookie } from "./cookie";
-import {
-  getUserStoreAction,
-  getUserDataByContactId,
-  fetchDataHandler,
-} from "../context";
+import { getUserDataByContactId, fetchDataHandler } from "../context";
 
 const fetchCompleteHandler = ({ initialState }) => {
   // console.log("⬇️ user pre-fetch completed");
@@ -27,7 +22,7 @@ export const authCookieActionBeforeCSR = async ({
       return null;
     }
 
-    if (state.auth.ENVIRONMENT === "DEVELOPMENT") {
+    if (state.auth.ENVIRONMENT === "DEV") {
       // dev env testing on refresh overwrites cookie value
       // contactid = "cc9a332a-3672-ec11-8943-000d3a43c136"; // andy
       // contactid = "969ba377-a398-ec11-b400-000d3aaedef5"; // emilia
@@ -89,6 +84,7 @@ export const authCookieActionBeforeCSR = async ({
 };
 
 export const authCookieActionAfterCSR = async ({ state, dispatch }) => {
+  console.log("🐞 authCookieActionAfterCSR triggered"); // debug
   let path = state.auth.APP_HOST + "/utils/cookie";
 
   try {
@@ -108,7 +104,7 @@ export const authCookieActionAfterCSR = async ({ state, dispatch }) => {
       });
     }
   } catch (error) {
-    // console.log("error", error);
+    console.log("error", error);
   }
 };
 

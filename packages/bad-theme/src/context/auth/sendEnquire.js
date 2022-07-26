@@ -55,10 +55,7 @@ export const sendEmailEnquireAction = async ({
     if (isActiveUser) {
       // 📌 pass in defaults user values from Dynamics if not provided
       formData.currentHospitalName =
-        formData.currentHospitalName ||
-        isActiveUser[
-          "_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"
-        ];
+        formData.currentHospitalName || isActiveUser._parentcustomerid_value;
       formData.jobtitle = formData.jobtitle || isActiveUser.jobtitle;
       formData.fullname = formData.fullname || isActiveUser.fullname;
       formData.bad_memberid =
@@ -86,6 +83,10 @@ export const sendEmailEnquireAction = async ({
       body: form,
       credentials: "include",
     };
+    console.log("🐞 ", path);
+    console.log("🐞 ", requestOptions);
+    console.log("🐞 ", formData);
+
     const response = await fetch(path, requestOptions);
     const data = await response.json();
     // console.log("🐞 ", data);

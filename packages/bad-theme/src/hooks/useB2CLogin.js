@@ -66,14 +66,15 @@ export const useB2CLogin = ({ state, actions }) => {
       items[0] = JSON.parse(atob(items[0]));
       items[1] = JSON.parse(atob(items[1]));
       // console.log("🐞 hash", hash);
-      // console.log("🐞 items", b2cTaken);
+      console.log("🐞 items", b2cTaken);
 
       if (Array.isArray(items[1].emails)) {
         const email = items[1].emails[0];
-        // console.log("🐞 email ", email); // debug
+        console.log("🐞 email ", email); // debug
 
         // 📌 set auth cookie for authenticated requests
         await setAuthenticationCookieAction({ state, b2cTaken });
+        // 📌 get user data by email
         const user = await getUserDataByEmail({
           state,
           dispatch,
@@ -97,7 +98,8 @@ export const useB2CLogin = ({ state, actions }) => {
       // ⬇️ redirect to url with path ⬇️
       setGoToAction({ state, path: redirectUrl || "/", actions });
       // set placeholder to false
-      setPlaceholderAction({ dispatch, isPlaceholder: false });
+      // deprecated as of v3.0.0
+      // setPlaceholderAction({ dispatch, isPlaceholder: false });
     }
 
     return () => {

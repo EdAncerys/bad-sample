@@ -563,6 +563,9 @@ const AccordionBody = ({
       const ServeCardImage = () => {
         if (!image) return null;
         const alt = title || "BAD";
+        let img = image.url;
+        if (image.sizes && image.sizes.medium_large) image.sizes.medium_large; // replace with medium_large
+        // console.log("🐞 image", image); // debug
 
         return (
           <div
@@ -575,7 +578,7 @@ const AccordionBody = ({
             }}
           >
             <Image
-              src={image.url}
+              src={img}
               alt={alt}
               style={{
                 width: "100%",

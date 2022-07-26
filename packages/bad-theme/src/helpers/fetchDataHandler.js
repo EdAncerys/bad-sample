@@ -19,7 +19,7 @@ export const fetchDataHandler = async ({
   accept = accept || "application/json";
   if (isCORSHeaders) disableCookies = true; // 📌 disable sending cookies with requests if CORS header is set
   let isCashControlHeaders =
-    method === "GET" && state.auth.ENVIRONMENT !== "DEVELOPMENT"; // 📌 disable cashing in development
+    method === "GET" && state.auth.ENVIRONMENT !== "DEV"; // 📌 disable cashing in development
 
   // 📌 TESTING
   let timeNow = new Date();

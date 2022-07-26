@@ -118,15 +118,15 @@ const CompleteApplication = ({ state, actions, libraries }) => {
           borderTop: `1px solid ${colors.silverFillTwo}`,
         }}
       >
-        <div className="blue-btn" onClick={handleSubmit}>
-          Submit
+        <div className="blue-btn" onClick={handleReturn}>
+          No thank you, return to Dashboard
         </div>
         <div
           className="blue-btn"
           style={{ marginLeft: "2em" }}
-          onClick={handleReturn}
+          onClick={handleSubmit}
         >
-          No thank you, return to Dashboard
+          Submit
         </div>
       </div>
     );

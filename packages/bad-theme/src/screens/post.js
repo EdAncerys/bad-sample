@@ -30,15 +30,16 @@ const Post = ({ state, actions, libraries }) => {
     // ⬇️ on component load defaults to window position TOP
     window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
     document.documentElement.scrollTop = 0; // for safari
-    setPosition(true);
 
     // --------------------------------------------------------------------------------
     // 📌  Fetch news & media data from wp api
     // --------------------------------------------------------------------------------
+    const postData = await getNewsData({ state });
     const catList = Object.values(state.source.category);
+
+    setPostList(postData);
     setCatList(catList);
-    const postList = await getNewsData({ state });
-    setPostList(postList);
+    setPosition(true);
 
     return () => {
       useEffectRef.current = false; // clean up function
@@ -152,7 +153,7 @@ const Post = ({ state, actions, libraries }) => {
                     setGoToAction({ state, path: post.link, actions })
                   }
                 >
-                  {post.title.rendered}
+                  <Parcer libraries={libraries} html={post.title.rendered} />
                 </div>
               </div>
             );
@@ -162,7 +163,13 @@ const Post = ({ state, actions, libraries }) => {
     };
 
     return (
-      <div className="flex-col">
+      <div
+        className="flex-col"
+        data-aos="fade"
+        data-aos-easing="ease-in-sine"
+        data-aos-delay={`100`}
+        data-aos-duration="1000"
+      >
         <Card authorInfo={post} colour={colors.red} shadow cardHeight="auto" />
         <ServeRelatedContent />
       </div>

@@ -12,6 +12,7 @@ import { useRemoveScript } from "../hooks/useRemoveScript";
 import { useScript } from "../hooks/useScript";
 // --------------------------------------------------------------------------------
 import { getFadPermision } from "../helpers/getFadPermision";
+import { dateConverter } from "../helpers/dateConverter";
 import {
   setGoToAction,
   setLinkWrapperAction,
@@ -92,7 +93,6 @@ import {
   deleteApplicationAction,
 } from "./auth/userStore";
 import { getWileyAction } from "./auth/getWiley";
-import { getTestUserAccountsAction } from "./auth/getTestUserAccounts";
 import { getHospitalsAction, getHospitalNameAction } from "./auth/getHospitals";
 import {
   getEventsData,
@@ -130,7 +130,7 @@ import {
   setSHDFeedAction,
 } from "./auth/rssFeed";
 import { useIsMounted } from "../helpers/useIsMounted";
-import { errorHandler } from "../helpers/errorHandler";
+import { errorHandler, errorMessage } from "../helpers/errorHandler";
 import { anchorScrapper } from "../helpers/contentScrapper";
 import { copyToClipboard } from "../helpers/domEvents";
 import { postTypeHandler } from "../helpers/postType";
@@ -184,7 +184,6 @@ export {
   getUserStoreAction,
   getWileyAction,
   setCompleteUserApplicationAction,
-  getTestUserAccountsAction,
   setIdFilterAction,
   setNesMediaIdFilterAction,
   getHospitalsAction,
@@ -269,4 +268,6 @@ export {
   getFadPermision,
   useRemoveScript,
   useScript,
+  dateConverter,
+  errorMessage,
 };
