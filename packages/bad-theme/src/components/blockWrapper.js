@@ -20,14 +20,7 @@ const BlockWrapper = ({ children, state, background, fullWidth }) => {
           paddingTop: !lg ? "auto" : 0,
         }}
       >
-        <div
-          style={{
-            width: !lg ? containerWidth : null,
-            overflow: !lg ? null : "hidden",
-          }}
-        >
-          {children}
-        </div>
+        <div style={{ width: !lg ? containerWidth : null }}>{children}</div>
       </div>
     </div>
   );
