@@ -34,7 +34,7 @@ const FullWidthContentBlock = ({
     button_label,
     button_type,
   } = block;
-  console.log("🐞 ", block); // debug
+  // console.log("🐞 ", block); // debug
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
