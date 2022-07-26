@@ -161,7 +161,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     // 📌  serach & filters
     // --------------------------------------------------------------------------------
 
-    if (!postList) return null;
+    if (!postList || !isSearch) return null; // component state bug. If isSearch dont update post list state
     let data = postList;
 
     // if all filters are applied are null then set filterList to postList
@@ -282,6 +282,11 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
                   state.theme.serviceAccess;
               // 📌 if user has permission to view news & media
               if (membersOnly && !serviceAccess) return null;
+
+              // apply filters for selected category in category_filter
+              //render only taxonomy categories that are selected in category_filter in wp
+              if (category_filter && !category_filter.includes(item.id))
+                return null;
 
               return (
                 <option key={key} value={item.id}>
