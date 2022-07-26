@@ -21,6 +21,11 @@ export const useWpImageScrip = ({ inputs }) => {
       }
     });
 
-    // loop through each div
+    // fet all img elements with class "size-full" and add style width "auto"
+    const fullImages = document.querySelectorAll(".size-full");
+    fullImages.forEach((fullImage) => {
+      console.log("🐞 ", fullImage);
+      fullImage.style.width = "auto";
+    });
   }, [inputs]);
 };
