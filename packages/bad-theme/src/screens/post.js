@@ -89,6 +89,7 @@ const Post = ({ state, actions, libraries }) => {
 
   const ServeSideBar = () => {
     const ServeRelatedContent = () => {
+      // show component only when postlist is fetched and not null
       if (!catList || !postList) return null;
 
       const currentPostCategory = post.categories[0];
