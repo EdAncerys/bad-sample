@@ -152,7 +152,7 @@ const Post = ({ state, actions, libraries }) => {
                     setGoToAction({ state, path: post.link, actions })
                   }
                 >
-                  {post.title.rendered}
+                  <Parcer libraries={libraries} html={post.title.rendered} />
                 </div>
               </div>
             );
