@@ -9,15 +9,15 @@ export const useWpImageScrip = ({ inputs }) => {
   useEffect(() => {
     // get all divs with class "wp-caption"
     const wpCaptions = document.querySelectorAll(".wp-caption");
+    console.log("🐞 ", wpCaptions);
 
-    // map & log class names of each div
+    if (!wpCaptions) return;
+    // add margin "auto" to wpCaptions container to center images
     wpCaptions.forEach((wpCaption) => {
-      // get class name of div
-      const className = wpCaption.className;
-
-      // if class name includes "-props-css" the add style to the div element margin: "auto"
-      if (className.includes("-props-css")) {
-        wpCaption.style.margin = "auto";
+      wpCaption.style.margin = "auto";
+      // if class "wp-caption-text" exists, add text alignment "center"
+      if (wpCaption.querySelector(".wp-caption-text")) {
+        wpCaption.querySelector(".wp-caption-text").style.textAlign = "center";
       }
     });
 
