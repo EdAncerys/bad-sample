@@ -41,12 +41,15 @@ const Post = ({ state, actions, libraries }) => {
     // --------------------------------------------------------------------------------
     // 📌  Fetch news & media data from wp api
     // --------------------------------------------------------------------------------
-    const postData = await getNewsData({ state });
-    const catList = Object.values(state.source.category);
 
-    setPostList(postData);
-    setCatList(catList);
+    // stack order of state updates to render quicker page components
     setPosition(true);
+
+    const catList = Object.values(state.source.category);
+    setCatList(catList);
+
+    const postData = await getNewsData({ state });
+    setPostList(postData);
 
     return () => {
       useEffectRef.current = false; // clean up function
@@ -97,6 +100,7 @@ const Post = ({ state, actions, libraries }) => {
 
   const ServeSideBar = () => {
     const ServeRelatedContent = () => {
+      // show component only when postlist is fetched and not null
       if (!catList || !postList) return null;
 
       const currentPostCategory = post.categories[0];
