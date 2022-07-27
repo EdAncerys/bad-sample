@@ -14,7 +14,8 @@ import {
 
 import { MENU_DATA } from "../../config/data";
 import { colors } from "../../config/imports";
-export default connect(({ libraries, state, actions }) => {
+
+export default connect(({ libraries, state, actions, setMobileMenuActive }) => {
   const [menuContent, setMenuContent] = React.useState();
   const [wpMainMenu, setWpMainMenu] = React.useState([]);
   // const [wpMoreMenu, setWpMoreMenu] = React.useState([]);
@@ -155,6 +156,8 @@ export default connect(({ libraries, state, actions }) => {
                   });
                 } else {
                   onClickLinkHandler({ title: item.title, url: item.url });
+                  // disable menu on page naviagtion (toggleMobileMenu)
+                  setMobileMenuActive(false);
                 }
               }}
             >

@@ -415,7 +415,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   const ServeMobileMenuAction = () => {
     return (
-      <div style={{}}>
+      <div style={{ cursor: "pointer" }}>
         <div onClick={() => setMobileMenuActive(!mobileMenuActive)}>
           <Image src={ResponsiveMenuIcon} style={{ maxWidth: "65px" }} />
         </div>
@@ -492,7 +492,9 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   return (
     <div style={{ borderBottom: `1px solid ${colors.primary}` }}>
-      {mobileMenuActive && <MobileMenu />}
+      {mobileMenuActive && (
+        <MobileMenu setMobileMenuActive={setMobileMenuActive} />
+      )}
       <BlockWrapper>
         <ServeInfoBatch />
         <ServeDevPanel />
