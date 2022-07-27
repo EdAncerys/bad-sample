@@ -95,14 +95,12 @@ const TypeFilters = ({
   const ServeFilterMobile = () => {
     return (
       <div
-        className="flex-row"
+        className="flex"
         style={{ flexWrap: "wrap", alignItems: !lg ? null : "flex-end" }}
       >
         <ServeAllFilter />
-
         <Dropdown>
           <Dropdown.Toggle
-            id="dropdown-basic"
             style={{
               backgroundColor: colors.darkSilver,
               width: "100%",
@@ -115,15 +113,19 @@ const TypeFilters = ({
               zIndex: 700,
               padding: "1em",
               border: 0,
+              borderRadius: 5,
+              padding: 20,
             }}
-            drop="down"
+            dataDisplay="static"
           >
             {currentFilter ? currentFilter : "Filters"}
           </Dropdown.Toggle>
-          <Dropdown.Menu style={{ width: "100%" }}>
+
+          <Dropdown.Menu style={{ margin: "10px 0", width: "100%" }}>
             {filters.map((type, key) => {
               return (
                 <Dropdown.Item
+                  key={key}
                   onClick={() => handleSetTypeFilter({ id: type.id })}
                   drop="down"
                 >
@@ -136,6 +138,7 @@ const TypeFilters = ({
       </div>
     );
   };
+
   return (
     <div className="no-selector">
       <ServeTitle />
