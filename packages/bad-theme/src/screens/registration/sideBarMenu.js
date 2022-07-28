@@ -94,6 +94,8 @@ const SideBarMenu = ({ state, actions, libraries }) => {
   const ServeTitle = () => {
     let title = "Apply to become a member of BAD";
     if (slug === "/membership/thank-you/") title = "Ethnicity Question";
+    if (slug.includes("sig-questions"))
+      title = "Apply to become a member of a Special Interest Group";
 
     return (
       <div
