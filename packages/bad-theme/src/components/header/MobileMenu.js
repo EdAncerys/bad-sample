@@ -135,7 +135,11 @@ export default connect(({ libraries, state, actions, setMobileMenuActive }) => {
               ...styles.navMenuItem,
               fontWeight: "bold",
             }}
-            onClick={() => {}}
+            onClick={() => {
+              setGoToAction({ state, path: menuContent.main_url, actions });
+              // disable menu on page naviagtion (toggleMobileMenu)
+              setMobileMenuActive(false);
+            }}
           >
             <Parcer libraries={libraries} html={menuContent.main_title} />
           </Nav.Link>
