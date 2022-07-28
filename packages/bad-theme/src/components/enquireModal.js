@@ -83,6 +83,9 @@ const EnquireModal = ({ state, libraries }) => {
     // check if formData is valid
     const recipients = enquireAction.recipients;
 
+    // add page path to formData for tracking
+    formData.url = state.auth.APP_URL + state.router.link;
+
     // default change of hospital value to input if exists value is empty
     const changeOfHospitalInput = hospitalSearchRef.current
       ? hospitalSearchRef.current.value

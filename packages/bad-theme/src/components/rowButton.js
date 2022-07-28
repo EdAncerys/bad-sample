@@ -46,7 +46,7 @@ const RowButton = ({
   let enquireAction = {
     ...block,
     // default email subject & template name
-    emailSubject: "Standard Enquiry Form B.A.D WebApp",
+    emailSubject: "Enquire from the BAD website",
   };
   // default to DEFAULT_CONTACT_LIST if no recipients are set
   if (!enquireAction.recipients) {
