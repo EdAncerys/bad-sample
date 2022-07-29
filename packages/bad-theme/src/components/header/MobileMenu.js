@@ -11,6 +11,7 @@ import {
   loginAction,
   getMediaCategories,
   Parcer,
+  setNesMediaIdFilterAction,
 } from "../../context";
 
 import { MENU_DATA } from "../../config/data";
@@ -40,6 +41,23 @@ export default connect(({ libraries, state, actions, setMobileMenuActive }) => {
         return 0;
       });
 
+      // set taconomy filter list based on user permision
+      let membersOnly = [91, 92, 93];
+      let serviceAccess = false;
+      if (
+        isActiveUser &&
+        isActiveUser.core_membershipstatus !== state.theme.frozenMembership
+      ) {
+        serviceAccess =
+          isActiveUser.bad_selfserviceaccess === state.theme.serviceAccess;
+      }
+
+      // if !serviceAccess then dont include members only taxonomies
+      taxonomyList = taxonomyList.filter(
+        (item) => !membersOnly.includes(item.id) || serviceAccess
+        // item id is in membersOnly array & !serviceAccess dont include
+      );
+
       // add url to taxonomyList for each taxonomy item = "/news-media/" & cnahge add title = name
       taxonomyList.forEach((item) => {
         item.url = `/news-media/`;
@@ -59,54 +77,60 @@ export default connect(({ libraries, state, actions, setMobileMenuActive }) => {
     setWpMainMenu(data); // main menu content
   }, [state.theme.menu]);
 
-  const onClickLinkHandler = async ({ title, url }) => {
+  const onClickLinkHandler = async ({ title, url, menu }) => {
     // check if link is a Wiley link
     const isWileys =
       title && title.includes("Journal") && !title.includes("SHD");
     let authLink = url;
-    console.log("🐞 title", title);
-    console.log("🐞 authLink", authLink);
 
-    // // HANDLERS ----------------------------------------------------
-    // const handelLogin = () => {
-    //   setErrorAction({ dispatch, isError: null });
-    //   loginAction({ state });
-    // };
+    // if url = 'news-media' set filter action to news & media
+    if (url === "/news-media/") {
+      setNesMediaIdFilterAction({
+        dispatch,
+        newsMediaCategoryId: menu.id,
+      });
+    }
 
-    // const handleRedirect = () => {
-    //   setErrorAction({ dispatch, isError: null });
-    //   setGoToAction({ state, path: authLink, actions });
-    // };
+    // HANDLERS ----------------------------------------------------
+    const handelLogin = () => {
+      setErrorAction({ dispatch, isError: null });
+      loginAction({ state });
+    };
 
-    // // 📌 check if logged in user exists & user is BAD member to replace auth link
-    // if (isWileys && isActiveUser) {
-    //   authLink = await getWileyAction({
-    //     state,
-    //     dispatch,
-    //     isActiveUser,
-    //     isFullAccess: true,
-    //     url,
-    //   });
-    // }
+    const handleRedirect = () => {
+      setErrorAction({ dispatch, isError: null });
+      setGoToAction({ state, path: authLink, actions });
+    };
 
-    // if (isWileys && !isActiveUser) {
-    //   // 📌 track notification error action
-    //   setErrorAction({
-    //     dispatch,
-    //     isError: {
-    //       message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals. <br/> To continue to the publication without logging in, click 'Continue to Wiley website'`,
-    //       image: "Error",
-    //       action: [
-    //         {
-    //           label: `Continue to Wiley website`,
-    //           handler: handleRedirect,
-    //         },
-    //         { label: "Login", handler: handelLogin },
-    //       ],
-    //     },
-    //   });
-    //   return;
-    // }
+    // 📌 check if logged in user exists & user is BAD member to replace auth link
+    if (isWileys && isActiveUser) {
+      authLink = await getWileyAction({
+        state,
+        dispatch,
+        isActiveUser,
+        isFullAccess: true,
+        url,
+      });
+    }
+
+    if (isWileys && !isActiveUser) {
+      // 📌 track notification error action
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals. <br/> To continue to the publication without logging in, click 'Continue to Wiley website'`,
+          image: "Error",
+          action: [
+            {
+              label: `Continue to Wiley website`,
+              handler: handleRedirect,
+            },
+            { label: "Login", handler: handelLogin },
+          ],
+        },
+      });
+      return;
+    }
 
     //  page redirect
     setGoToAction({ state, path: authLink, actions });
@@ -138,7 +162,7 @@ export default connect(({ libraries, state, actions, setMobileMenuActive }) => {
             if (subMenu) {
               setMenuContent(subMenu);
             } else {
-              onClickLinkHandler({ title: menu.title, url: menu.url });
+              onClickLinkHandler({ title: menu.title, url: menu.url, menu });
 
               // disable menu on page naviagtion (toggleMobileMenu)
               setMobileMenuActive(false);
