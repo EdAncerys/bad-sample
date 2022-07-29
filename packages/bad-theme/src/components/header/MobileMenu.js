@@ -9,6 +9,7 @@ import {
   useAppDispatch,
   getWileyAction,
   loginAction,
+  getMediaCategories,
   Parcer,
 } from "../../context";
 
@@ -21,13 +22,37 @@ export default connect(({ libraries, state, actions, setMobileMenuActive }) => {
   const { isActiveUser } = useAppState();
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
+  useEffect(async () => {
     // --------------------------------------------------------------------------------
     // 📌  Add menu data to state forpm context
     // --------------------------------------------------------------------------------
-    const data = state.theme.menu;
+    let data = state.theme.menu;
     if (!data) return;
-    console.log("🐞 main_menu", data);
+
+    // get news & media taxonomy data
+    let taxonomyList = await getMediaCategories({ state });
+    if (taxonomyList.length > 0) {
+      // sort catList by name in alphabetical order
+      taxonomyList.sort((a, b) => {
+        if (a.name < b.name) return -1;
+        if (a.name > b.name) return 1;
+
+        return 0;
+      });
+
+      // add url to taxonomyList for each taxonomy item = "/news-media/" & cnahge add title = name
+      taxonomyList.forEach((item) => {
+        item.url = `/news-media/`;
+        item.title = item.name;
+      });
+    }
+
+    // add taxonomyList to menu data for news & media
+    data.forEach((item) => {
+      if (item.slug === "news-media") {
+        item.child_items = taxonomyList;
+      }
+    });
 
     // set menu content as main menu data
     setMenuContent(data);
@@ -39,6 +64,7 @@ export default connect(({ libraries, state, actions, setMobileMenuActive }) => {
     const isWileys =
       title && title.includes("Journal") && !title.includes("SHD");
     let authLink = url;
+    console.log("🐞 title", title);
     console.log("🐞 authLink", authLink);
 
     // // HANDLERS ----------------------------------------------------
@@ -82,6 +108,7 @@ export default connect(({ libraries, state, actions, setMobileMenuActive }) => {
     //   return;
     // }
 
+    //  page redirect
     setGoToAction({ state, path: authLink, actions });
   };
 
@@ -110,8 +137,6 @@ export default connect(({ libraries, state, actions, setMobileMenuActive }) => {
 
             if (subMenu) {
               setMenuContent(subMenu);
-
-              console.log("🐞 subMenu", subMenu);
             } else {
               onClickLinkHandler({ title: menu.title, url: menu.url });
 
