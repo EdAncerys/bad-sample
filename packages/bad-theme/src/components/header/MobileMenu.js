@@ -30,47 +30,48 @@ export default connect(({ libraries, state, actions, setMobileMenuActive }) => {
     let data = state.theme.menu;
     if (!data) return;
 
+    // 📌 UNCOMENT TO INCLUDE TAXONOMY TO NES & MEDIA CATEGORIES
     // get news & media taxonomy data
-    let taxonomyList = await getMediaCategories({ state });
-    if (taxonomyList.length > 0) {
-      // sort catList by name in alphabetical order
-      taxonomyList.sort((a, b) => {
-        if (a.name < b.name) return -1;
-        if (a.name > b.name) return 1;
+    // let taxonomyList = await getMediaCategories({ state });
+    // if (taxonomyList.length > 0) {
+    //   // sort catList by name in alphabetical order
+    //   taxonomyList.sort((a, b) => {
+    //     if (a.name < b.name) return -1;
+    //     if (a.name > b.name) return 1;
 
-        return 0;
-      });
+    //     return 0;
+    //   });
 
-      // set taconomy filter list based on user permision
-      let membersOnly = [91, 92, 93];
-      let serviceAccess = false;
-      if (
-        isActiveUser &&
-        isActiveUser.core_membershipstatus !== state.theme.frozenMembership
-      ) {
-        serviceAccess =
-          isActiveUser.bad_selfserviceaccess === state.theme.serviceAccess;
-      }
+    //   // set taconomy filter list based on user permision
+    //   let membersOnly = [91, 92, 93];
+    //   let serviceAccess = false;
+    //   if (
+    //     isActiveUser &&
+    //     isActiveUser.core_membershipstatus !== state.theme.frozenMembership
+    //   ) {
+    //     serviceAccess =
+    //       isActiveUser.bad_selfserviceaccess === state.theme.serviceAccess;
+    //   }
 
-      // if !serviceAccess then dont include members only taxonomies
-      taxonomyList = taxonomyList.filter(
-        (item) => !membersOnly.includes(item.id) || serviceAccess
-        // item id is in membersOnly array & !serviceAccess dont include
-      );
+    //   // if !serviceAccess then dont include members only taxonomies
+    //   taxonomyList = taxonomyList.filter(
+    //     (item) => !membersOnly.includes(item.id) || serviceAccess
+    //     // item id is in membersOnly array & !serviceAccess dont include
+    //   );
 
-      // add url to taxonomyList for each taxonomy item = "/news-media/" & cnahge add title = name
-      taxonomyList.forEach((item) => {
-        item.url = `/news-media/`;
-        item.title = item.name;
-      });
-    }
+    //   // add url to taxonomyList for each taxonomy item = "/news-media/" & cnahge add title = name
+    //   taxonomyList.forEach((item) => {
+    //     item.url = `/news-media/`;
+    //     item.title = item.name;
+    //   });
+    // }
 
-    // add taxonomyList to menu data for news & media
-    data.forEach((item) => {
-      if (item.slug === "news-media") {
-        item.child_items = taxonomyList;
-      }
-    });
+    // // add taxonomyList to menu data for news & media
+    // data.forEach((item) => {
+    //   if (item.slug === "news-media") {
+    //     item.child_items = taxonomyList;
+    //   }
+    // });
 
     // set menu content as main menu data
     setMenuContent(data);
