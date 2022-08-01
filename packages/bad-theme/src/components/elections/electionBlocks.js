@@ -32,6 +32,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
     title,
     disable_vertical_padding,
   } = block;
+  // console.log("🐞 block", block); // debug
 
   const [electionList, setElectionList] = useState(null);
   const [electionFilter, setElectionFilter] = useState(null);
@@ -69,6 +70,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
 
     setGradeList(gradeTaxonomy);
     setRoleList(roleTaxonomy);
+    // --------------------------------------------------------------------------------
     setElectionFilter(postData);
     setElectionList(postData);
 
@@ -272,9 +274,11 @@ const ElectionBlocks = ({ state, actions, block }) => {
     };
 
     const ServeDropDownGradeFilter = () => {
-      if (!gradeFilter) return null;
-      const GRADES = Object.values(state.source.election_grade);
-      const filter = GRADES.filter((item) => item.id === Number(gradeFilter));
+      if (!gradeFilter && gradeList) return null;
+
+      const filter = gradeList.filter(
+        (item) => item.id === Number(gradeFilter)
+      );
       const name = filter[0].name;
 
       return (
@@ -293,9 +297,9 @@ const ElectionBlocks = ({ state, actions, block }) => {
     };
 
     const ServeDropDownRoleFilter = () => {
-      if (!roleFilter) return null;
-      const ROLES = Object.values(state.source.election_roles);
-      const filter = ROLES.filter((item) => item.id === Number(roleFilter));
+      if (!roleFilter && roleList) return null;
+
+      const filter = roleList.filter((item) => item.id === Number(roleFilter));
       const name = filter[0].name;
 
       return (
@@ -487,6 +491,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
                   bodyLimit={4}
                   shadow
                   isElectionBlock // 📌 disable file download on click action
+                  isDisabled={isClosedPosition}
                 />
               </div>
             </div>

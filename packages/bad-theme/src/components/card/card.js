@@ -105,6 +105,7 @@ const Card = ({
   electionTaxonomy,
   authLink,
   isReferalCard,
+  isDisabled,
 }) => {
   const TEXT_ALIGN = textAlign || "start"; // takes values 'start' | 'center' | 'end'
   const THEME = colour || colors.primary;
@@ -126,6 +127,7 @@ const Card = ({
   // 📌 card component class list overwrides
   let isCardAnimation = "card-wrapper";
   if (disableCardAnimation) isCardAnimation = "";
+  if (isDisabled) isCardAnimation = "card-wrapper-no-pointer";
   let classList = "";
   if (isReferalCard) classList = classList + " " + "referral-card";
   if (shadow) classList = classList + " " + "shadow";
