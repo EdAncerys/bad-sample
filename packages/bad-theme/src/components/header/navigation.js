@@ -8,12 +8,10 @@ import Link from "@frontity/components/link";
 import BlockWrapper from "../blockWrapper";
 import Card from "../../components/card/card";
 // CONTEXT -----------------------------------------------------------------
-import { getPostData } from "../../helpers";
 import {
   setNesMediaIdFilterAction,
   useAppDispatch,
   useAppState,
-  hasPermisionLevel,
   getMediaCategories,
   Parcer,
 } from "../../context";

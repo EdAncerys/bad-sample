@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import { Nav } from "react-bootstrap";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -9,29 +9,88 @@ import {
   useAppDispatch,
   getWileyAction,
   loginAction,
+  getMediaCategories,
   Parcer,
+  setNesMediaIdFilterAction,
 } from "../../context";
 
 import { MENU_DATA } from "../../config/data";
 import { colors } from "../../config/imports";
 
 export default connect(({ libraries, state, actions, setMobileMenuActive }) => {
-  const [menuContent, setMenuContent] = React.useState();
-  const [wpMainMenu, setWpMainMenu] = React.useState([]);
-  // const [wpMoreMenu, setWpMoreMenu] = React.useState([]);
+  const [menuContent, setMenuContent] = useState(null);
+  const [wpMainMenu, setWpMainMenu] = useState(null);
   const { isActiveUser } = useAppState();
   const dispatch = useAppDispatch();
 
-  const setMenu = (children) => {
-    setMenuContent(children);
-  };
+  useEffect(async () => {
+    // --------------------------------------------------------------------------------
+    // 📌  Add menu data to state forpm context
+    // --------------------------------------------------------------------------------
+    let data = state.theme.menu;
+    if (!data) return;
 
-  const onClickLinkHandler = async ({ title, url }) => {
+    // 📌 UNCOMENT TO INCLUDE TAXONOMY TO NES & MEDIA CATEGORIES
+    // get news & media taxonomy data
+    // let taxonomyList = await getMediaCategories({ state });
+    // if (taxonomyList.length > 0) {
+    //   // sort catList by name in alphabetical order
+    //   taxonomyList.sort((a, b) => {
+    //     if (a.name < b.name) return -1;
+    //     if (a.name > b.name) return 1;
+
+    //     return 0;
+    //   });
+
+    //   // set taconomy filter list based on user permision
+    //   let membersOnly = [91, 92, 93];
+    //   let serviceAccess = false;
+    //   if (
+    //     isActiveUser &&
+    //     isActiveUser.core_membershipstatus !== state.theme.frozenMembership
+    //   ) {
+    //     serviceAccess =
+    //       isActiveUser.bad_selfserviceaccess === state.theme.serviceAccess;
+    //   }
+
+    //   // if !serviceAccess then dont include members only taxonomies
+    //   taxonomyList = taxonomyList.filter(
+    //     (item) => !membersOnly.includes(item.id) || serviceAccess
+    //     // item id is in membersOnly array & !serviceAccess dont include
+    //   );
+
+    //   // add url to taxonomyList for each taxonomy item = "/news-media/" & cnahge add title = name
+    //   taxonomyList.forEach((item) => {
+    //     item.url = `/news-media/`;
+    //     item.title = item.name;
+    //   });
+    // }
+
+    // // add taxonomyList to menu data for news & media
+    // data.forEach((item) => {
+    //   if (item.slug === "news-media") {
+    //     item.child_items = taxonomyList;
+    //   }
+    // });
+
+    // set menu content as main menu data
+    setMenuContent(data);
+    setWpMainMenu(data); // main menu content
+  }, [state.theme.menu]);
+
+  const onClickLinkHandler = async ({ title, url, menu }) => {
+    // check if link is a Wiley link
     const isWileys =
-      title.includes("Journal") &&
-      !title.includes("SHD") &&
-      title !== "Journals";
+      title && title.includes("Journal") && !title.includes("SHD");
     let authLink = url;
+
+    // if url = 'news-media' set filter action to news & media
+    if (url === "/news-media/") {
+      setNesMediaIdFilterAction({
+        dispatch,
+        newsMediaCategoryId: menu.id,
+      });
+    }
 
     // HANDLERS ----------------------------------------------------
     const handelLogin = () => {
@@ -74,8 +133,10 @@ export default connect(({ libraries, state, actions, setMobileMenuActive }) => {
       return;
     }
 
+    //  page redirect
     setGoToAction({ state, path: authLink, actions });
   };
+
   const MenuNavItem = ({ item }) => {
     return (
       <div className="row" style={styles.navItem}>
@@ -89,22 +150,23 @@ export default connect(({ libraries, state, actions, setMobileMenuActive }) => {
     );
   };
 
-  const ServeMainMenu = () => {
-    return wpMainMenu.map((menu, key) => {
+  const ServeMenu = () => {
+    if (!menuContent) return null;
+
+    return menuContent.map((menu, key) => {
       return (
         <Nav.Link
           key={key}
           onClick={() => {
-            if (menu.child_items) {
-              setMenuContent({
-                main_title: menu.title,
-                main_slug: menu.slug,
-                main_url: menu.url,
-                children: menu.child_items,
-              });
+            const subMenu = menu.child_items;
+
+            if (subMenu) {
+              setMenuContent(subMenu);
             } else {
-              onClickLinkHandler({ title: menu.title, url: menu.url });
-              // toggleMobileMenu();
+              onClickLinkHandler({ title: menu.title, url: menu.url, menu });
+
+              // disable menu on page naviagtion (toggleMobileMenu)
+              setMobileMenuActive(false);
             }
           }}
           style={styles.navMenuItem}
@@ -115,63 +177,22 @@ export default connect(({ libraries, state, actions, setMobileMenuActive }) => {
     });
   };
 
-  React.useEffect(() => {
-    // getting wp menu from state
-    const data = state.theme.menu;
-    if (!data) return;
+  const ServeAditionalLinks = () => {
+    // check if menu content is = wpMainMenu
+    if (menuContent !== wpMainMenu) {
+      return (
+        <Nav.Link onClick={() => setMenuContent(wpMainMenu)}>Go Back</Nav.Link>
+      );
+    }
 
-    setWpMainMenu(data); // main menu to display
-    // setWpMoreMenu(data); // more menu into dropdown
-  }, [state.theme.menu]);
-
-  if (menuContent) {
     return (
-      <div style={styles.container}>
-        <Nav.Link onClick={() => setMenuContent(null)}> Go Back</Nav.Link>
-        {menuContent.main_title ? (
-          <Nav.Link
-            style={{
-              ...styles.navItem,
-              ...styles.navMenuItem,
-              fontWeight: "bold",
-            }}
-            onClick={() => {
-              setGoToAction({ state, path: menuContent.main_url, actions });
-              // disable menu on page naviagtion (toggleMobileMenu)
-              setMobileMenuActive(false);
-            }}
-          >
-            <Parcer libraries={libraries} html={menuContent.main_title} />
-          </Nav.Link>
-        ) : null}
-
-        {menuContent.children.map((item, i) => {
-          return (
-            <Nav.Link
-              key={i}
-              style={styles.navMenuItem}
-              onClick={() => {
-                if (item.child_items) {
-                  setMenuContent({
-                    main_title: item.title,
-                    main_slug: item.slug,
-                    main_url: item.url,
-                    children: item.child_items,
-                  });
-                } else {
-                  onClickLinkHandler({ title: item.title, url: item.url });
-                  // disable menu on page naviagtion (toggleMobileMenu)
-                  setMobileMenuActive(false);
-                }
-              }}
-            >
-              <MenuNavItem item={item} />
-            </Nav.Link>
-          );
-        })}
-      </div>
+      <Nav.Link onClick={() => setMenuContent(MENU_DATA)}>
+        <MenuNavItem item={{ title: "Quick Links" }} />
+      </Nav.Link>
     );
-  }
+  };
+
+  if (!wpMainMenu) return null;
 
   return (
     <div
@@ -181,14 +202,8 @@ export default connect(({ libraries, state, actions, setMobileMenuActive }) => {
       data-aos-easing="ease-in-sine"
       data-aos-duration="300"
     >
-      <Nav.Link
-        onClick={() => {
-          setMenu({ children: MENU_DATA });
-        }}
-      >
-        <MenuNavItem item={{ title: "Quick Links" }} />
-      </Nav.Link>
-      <ServeMainMenu />
+      <ServeAditionalLinks />
+      <ServeMenu />
       <div style={{ height: "50px" }} />
     </div>
   );
