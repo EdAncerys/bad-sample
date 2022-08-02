@@ -46,7 +46,8 @@ const ElectionModal = ({
         contact_public_email: contact_public_email || "harriet@bag.org.uk",
         contact_public_phone_number,
         form_title: contact_form_title || "Application Form",
-        form_body: contact_form_body || `Apply to ${title.rendered} position.`,
+        // uncoment to use form body
+        // form_body: contact_form_body || `Apply to ${title.rendered} position.`,
         full_name: true,
         email_address: true,
         phone_number: true,
