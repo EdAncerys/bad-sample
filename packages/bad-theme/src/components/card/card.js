@@ -377,6 +377,7 @@ const Card = ({
           videoArchive={videoArchive}
           isFetching={isFetching}
           authLink={authLink}
+          isElectionBlock={isElectionBlock}
         />
       </div>
     );

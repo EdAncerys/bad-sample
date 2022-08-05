@@ -127,9 +127,10 @@ const ElectionBlocks = ({ state, actions, block }) => {
           contact_public_email: contact_public_email || "harriet@bag.org.uk",
           contact_public_phone_number,
           form_title: contact_form_title || "Notification Form",
-          form_body:
-            contact_form_body ||
-            `Notify when ${positionName} position is open.`,
+          // 📌 uncomment to use the form body
+          // form_body:
+          //   contact_form_body ||
+          //   `Notify when ${positionName} position is open.`,
           full_name: contact_full_name || true,
           email_address: contact_email || true,
           phone_number: contact_phone_number || true,
