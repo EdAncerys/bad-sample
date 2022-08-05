@@ -8,7 +8,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { setGoToAction, muiQuery, Parcer } from "../context";
 
 const Breadcrumbs = ({ state, actions, libraries }) => {
-  const { sm, md, lg, xl } = muiQuery();
+  const { lg } = muiQuery();
 
   const urlPath = state.router.link;
   const data = state.source.get(urlPath);
@@ -117,7 +117,7 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
           className="flex"
           style={{
             marginRight: MARGIN * 2,
-            marginLeft: !lg ? null : MARGIN * 2,
+            marginLeft: lg ? "unset" : MARGIN * 2,
             fontSize: 14,
             alignItems: "center",
           }}
@@ -158,7 +158,15 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
 
   return (
     <BlockWrapper background={colors.lightSilver}>
-      <div className="flex" style={{ ...styles.wrapper }}>
+      <div
+        className="flex"
+        style={{
+          height: lg ? "fit-content" : 50,
+          flexWrap: "wrap",
+          alignItems: "center",
+          margin: !lg ? "unset" : `0 ${MARGIN * 2}px`,
+        }}
+      >
         <ServeTitle />
         <ServeNewsMediaPreFix />
         {directions.map((item) => {
@@ -172,11 +180,6 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
 };
 
 const styles = {
-  wrapper: {
-    height: 50,
-    flexWrap: "wrap",
-    alignItems: "center",
-  },
   link: {
     alignItems: "center",
     fontSize: 12,
