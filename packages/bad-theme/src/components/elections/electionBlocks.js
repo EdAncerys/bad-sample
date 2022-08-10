@@ -32,7 +32,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
     title,
     disable_vertical_padding,
   } = block;
-  // console.log("🐞 block", block); // debug
+  console.log("🐞 block", block); // debug
 
   const [electionList, setElectionList] = useState(null);
   const [electionFilter, setElectionFilter] = useState(null);
@@ -71,8 +71,20 @@ const ElectionBlocks = ({ state, actions, block }) => {
     setGradeList(gradeTaxonomy);
     setRoleList(roleTaxonomy);
     // --------------------------------------------------------------------------------
-    setElectionFilter(postData);
-    setElectionList(postData);
+    // sort posts by date (desc)
+    const sortedPosts = postData
+      .sort((a, b) => {
+        // return if no date is set
+        if (!a.acf || !b.acf) return 0;
+
+        return (
+          new Date(b.acf.closing_date.date) - new Date(a.acf.closing_date.date)
+        );
+      })
+      .reverse();
+
+    setElectionFilter(sortedPosts);
+    setElectionList(sortedPosts);
 
     return () => {
       mountedRef.current = false; // clean up function
