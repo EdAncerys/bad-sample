@@ -20,6 +20,7 @@ import { colors } from "../../config/imports";
 export default connect(({ libraries, state, actions, setMobileMenuActive }) => {
   const [menuContent, setMenuContent] = useState(null);
   const [wpMainMenu, setWpMainMenu] = useState(null);
+  const [parent, setParent] = useState(null);
   const { isActiveUser } = useAppState();
   const dispatch = useAppDispatch();
 
@@ -137,6 +138,30 @@ export default connect(({ libraries, state, actions, setMobileMenuActive }) => {
     setGoToAction({ state, path: authLink, actions });
   };
 
+  const ParentNavItem = () => {
+    if (!parent) return null;
+
+    return (
+      <div
+        className="row"
+        style={{ ...styles.navMenuItem, padding: "2em 1em", cursor: "pointer" }}
+        onClick={() => {
+          // redirect to parent url
+          setGoToAction({ state, path: parent.url, actions });
+          // disable menu on page naviagtion (toggleMobileMenu)
+          setMobileMenuActive(false);
+        }}
+      >
+        <div className="col-11">
+          <Parcer libraries={libraries} html={parent.title} />
+        </div>
+        <div className="col-1">
+          <ArrowForwardIosIcon fontSize="small" />
+        </div>
+      </div>
+    );
+  };
+
   const MenuNavItem = ({ item }) => {
     return (
       <div className="row" style={styles.navItem}>
@@ -161,12 +186,14 @@ export default connect(({ libraries, state, actions, setMobileMenuActive }) => {
             const subMenu = menu.child_items;
 
             if (subMenu) {
-              setMenuContent(subMenu);
+              setMenuContent(subMenu); // set sub menu content
+              setParent({ title: menu.title, url: menu.url }); // set parent title
             } else {
               onClickLinkHandler({ title: menu.title, url: menu.url, menu });
 
               // disable menu on page naviagtion (toggleMobileMenu)
               setMobileMenuActive(false);
+              setParent(null); // set parent title
             }
           }}
           style={styles.navMenuItem}
@@ -181,7 +208,14 @@ export default connect(({ libraries, state, actions, setMobileMenuActive }) => {
     // check if menu content is = wpMainMenu
     if (menuContent !== wpMainMenu) {
       return (
-        <Nav.Link onClick={() => setMenuContent(wpMainMenu)}>Go Back</Nav.Link>
+        <Nav.Link
+          onClick={() => {
+            setMenuContent(wpMainMenu);
+            setParent(null); // reset parent title
+          }}
+        >
+          Go Back
+        </Nav.Link>
       );
     }
 
@@ -203,6 +237,8 @@ export default connect(({ libraries, state, actions, setMobileMenuActive }) => {
       data-aos-duration="300"
     >
       <ServeAditionalLinks />
+      <ParentNavItem />
+
       <ServeMenu />
       <div style={{ height: "50px" }} />
     </div>
