@@ -28,6 +28,24 @@ const DashboardNotifications = ({ state }) => {
 
   // HELPERS -----------------------------------------------------------------
   useEffect(() => {
+    // --------------------------------------------------------------------------------
+    // 📌  FEEZE & LAPSED membership notification hook
+    // 📌  bad_selfserviceaccess & core_membershipstatus fileds notifications
+    // --------------------------------------------------------------------------------
+
+    // if user have apps that bad_organisedfor === "BAD" & createdon is a current year then break & dont show notification
+    if (
+      isActiveUser &&
+      dynamicsApps.apps &&
+      dynamicsApps.apps.length > 0 &&
+      dynamicsApps.some((app) => app.bad_organisedfor === "BAD") && // if user have apps that bad_organisedfor === "BAD"
+      dynamicsApps.some(
+        (app) => app.createdon.substring.includes(new Date().getFullYear()) // if user have apps that createdon is a current year
+      )
+    ) {
+      return;
+    }
+
     // break if core_membershipstatus !frozen
     if (
       isActiveUser &&
