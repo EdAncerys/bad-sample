@@ -50,6 +50,13 @@ const PilsArchive = ({ state, actions, libraries }) => {
       ]);
 
       const pils = [...trying[0], ...trying[1], ...trying[2]];
+      // order by title alphabetically
+      pils.sort((a, b) => {
+        if (a.title < b.title) return -1;
+        if (a.title > b.title) return 1;
+        return 0;
+      });
+
       setPilList(pils);
       setFilter(pils); // set filter to all pils
     };
