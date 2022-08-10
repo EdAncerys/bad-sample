@@ -189,21 +189,12 @@ const Post = ({ state, actions, libraries }) => {
   return (
     <BlockWrapper>
       <div
-        style={
-          !lg
-            ? {
-                display: "grid",
-                gridTemplateColumns: `2.5fr 1fr`,
-                gap: 20,
-                padding: `${marginVertical}px ${marginHorizontal}px`,
-              }
-            : {
-                display: "flex",
-                flexDirection: "column-reverse",
-                gap: 20,
-                padding: `${marginVertical}px ${marginHorizontal}px`,
-              }
-        }
+        style={{
+          display: "grid",
+          gridTemplateColumns: lg ? "1fr" : "2.5fr 1fr",
+          gap: 20,
+          padding: `${marginVertical}px ${marginHorizontal}px`,
+        }}
       >
         <ServeContent />
         <ServeSideBar />
