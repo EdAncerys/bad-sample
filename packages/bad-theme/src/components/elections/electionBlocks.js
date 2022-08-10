@@ -32,6 +32,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
     title,
     disable_vertical_padding,
   } = block;
+  console.log("🐞 block", block); // debug
 
   const [electionList, setElectionList] = useState(null);
   const [electionFilter, setElectionFilter] = useState(null);
@@ -69,8 +70,21 @@ const ElectionBlocks = ({ state, actions, block }) => {
 
     setGradeList(gradeTaxonomy);
     setRoleList(roleTaxonomy);
-    setElectionFilter(postData);
-    setElectionList(postData);
+    // --------------------------------------------------------------------------------
+    // sort posts by date (desc)
+    const sortedPosts = postData
+      .sort((a, b) => {
+        // return if no date is set
+        if (!a.acf || !b.acf) return 0;
+
+        return (
+          new Date(b.acf.closing_date.date) - new Date(a.acf.closing_date.date)
+        );
+      })
+      .reverse();
+
+    setElectionFilter(sortedPosts);
+    setElectionList(sortedPosts);
 
     return () => {
       mountedRef.current = false; // clean up function
@@ -125,9 +139,10 @@ const ElectionBlocks = ({ state, actions, block }) => {
           contact_public_email: contact_public_email || "harriet@bag.org.uk",
           contact_public_phone_number,
           form_title: contact_form_title || "Notification Form",
-          form_body:
-            contact_form_body ||
-            `Notify when ${positionName} position is open.`,
+          // 📌 uncomment to use the form body
+          // form_body:
+          //   contact_form_body ||
+          //   `Notify when ${positionName} position is open.`,
           full_name: contact_full_name || true,
           email_address: contact_email || true,
           phone_number: contact_phone_number || true,
@@ -272,9 +287,11 @@ const ElectionBlocks = ({ state, actions, block }) => {
     };
 
     const ServeDropDownGradeFilter = () => {
-      if (!gradeFilter) return null;
-      const GRADES = Object.values(state.source.election_grade);
-      const filter = GRADES.filter((item) => item.id === Number(gradeFilter));
+      if (!gradeFilter && gradeList) return null;
+
+      const filter = gradeList.filter(
+        (item) => item.id === Number(gradeFilter)
+      );
       const name = filter[0].name;
 
       return (
@@ -293,9 +310,9 @@ const ElectionBlocks = ({ state, actions, block }) => {
     };
 
     const ServeDropDownRoleFilter = () => {
-      if (!roleFilter) return null;
-      const ROLES = Object.values(state.source.election_roles);
-      const filter = ROLES.filter((item) => item.id === Number(roleFilter));
+      if (!roleFilter && roleList) return null;
+
+      const filter = roleList.filter((item) => item.id === Number(roleFilter));
       const name = filter[0].name;
 
       return (
@@ -487,6 +504,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
                   bodyLimit={4}
                   shadow
                   isElectionBlock // 📌 disable file download on click action
+                  // isDisabled={isClosedPosition} // set cursorn to pointer on hover
                 />
               </div>
             </div>

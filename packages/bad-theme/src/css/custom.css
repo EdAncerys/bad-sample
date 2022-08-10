@@ -50,10 +50,15 @@
   position: relative !important;
 }
 /* card component animations */
-.card-wrapper {
+.card-wrapper,
+.card-wrapper-no-pointer {
   cursor: pointer;
   color: inherit;
   transition: all 0.3s ease-in-out;
+}
+
+.card-wrapper-no-pointer {
+  cursor: default;
 }
 
 .card-image-animated {
