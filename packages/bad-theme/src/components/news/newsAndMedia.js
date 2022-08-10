@@ -267,6 +267,8 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
               Category
             </option>
             {categoryList.map((item, key) => {
+              // doon't show Uncategorized category
+              if (item.name === "Uncategorized") return null;
               // check if name includes circular newsletters bulletin
               let membersOnly = ["circular", "newsletter", "bulletin"].some(
                 (word) => item.name.toLowerCase().includes(word)

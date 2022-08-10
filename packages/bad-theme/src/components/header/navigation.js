@@ -167,6 +167,8 @@ const Navigation = ({ state, actions, libraries }) => {
     return (
       <div style={{ paddingRight: `2em` }}>
         {newsMedia.map((item, key) => {
+          // dont show uncategorized category
+          if (item.name === "Uncategorized") return null;
           const { name, id } = item;
           let linkPath = "/news-media/"; // hard coded path to news & media
           // check if name includes circular newsletters bulletin
