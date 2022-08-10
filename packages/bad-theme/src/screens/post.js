@@ -67,10 +67,11 @@ const Post = ({ state, actions, libraries }) => {
         <div
           className="flex primary-title"
           style={{
-            fontSize: 36,
+            fontSize: lg ? 24 : 36,
             borderBottom: `1px solid ${colors.lightSilver}`,
-            paddingBottom: `1em`,
-            marginBottom: `1em`,
+            paddingBottom: lg ? "0.5em" : `1em`,
+            marginBottom: lg ? "0.5em" : `1em`,
+            paddingTop: lg ? "0.5em" : `0`,
           }}
         >
           <Parcer libraries={libraries} html={title.rendered} />
@@ -92,7 +93,7 @@ const Post = ({ state, actions, libraries }) => {
 
     return (
       <div className="text-body">
-        {!lg ? <ServeTitle /> : null}
+        <ServeTitle />
         <ServeBody />
       </div>
     );
