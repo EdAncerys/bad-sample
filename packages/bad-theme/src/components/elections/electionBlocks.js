@@ -504,7 +504,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
                   bodyLimit={4}
                   shadow
                   isElectionBlock // 📌 disable file download on click action
-                  isDisabled={isClosedPosition}
+                  // isDisabled={isClosedPosition} // set cursorn to pointer on hover
                 />
               </div>
             </div>

@@ -168,8 +168,11 @@ const Card = ({
       });
       return;
     }
-    if (!isElectionBlock)
-      setGoToAction({ state, path: link || authLink, actions, downloadFile });
+    if (isElectionBlock && handler) {
+      handler(); // 📌 election block handler
+      return;
+    }
+    setGoToAction({ state, path: link || authLink, actions, downloadFile });
   };
 
   // SERVERS ----------------------------------------------
