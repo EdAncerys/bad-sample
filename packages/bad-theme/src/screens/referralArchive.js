@@ -254,10 +254,9 @@ const ReferralArchive = ({ state, actions, libraries }) => {
           {postFilter.length > 0 &&
             postFilter.map((post, key) => {
               let title = post.title ? post.title.rendered : null;
-              let body = post.acf.condition_description
-                ? post.acf.condition_description
-                : null;
-              let link = post.link ? post.link : null;
+              let body =
+                post.acf.condition_preview || post.acf.condition_description;
+              let link = post.link || null;
 
               return (
                 <Card
