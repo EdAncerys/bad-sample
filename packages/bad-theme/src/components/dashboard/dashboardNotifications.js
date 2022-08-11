@@ -27,48 +27,55 @@ const DashboardNotifications = ({ state }) => {
   const marginVertical = state.theme.marginVertical;
 
   // HELPERS -----------------------------------------------------------------
+  const handelValidateMembership = () => {
+    // --------------------------------------------------------------------------------
+    // 📌  Validate user membership status
+    // --------------------------------------------------------------------------------
+    let membership = {
+      isValid: true,
+      message: state.theme.frozenMembershipBody,
+    };
+    // console.log("🐞 dynamicsApps", dynamicsApps); // debug
+
+    // if user core_membershipstatus is not set to Free, then return valid subscription
+    if (
+      !isActiveUser ||
+      isActiveUser.core_membershipstatus !== state.theme.frozenMembership
+    )
+      return membership;
+
+    if (isActiveUser.core_membershipstatus === state.theme.frozenMembership)
+      membership.isValid = false;
+
+    // is lapsed if any bad_organisedfor === 'BAD' & core_membershipstatus === 'Completed'
+    const lapsedMembership = [];
+    if (dynamicsApps && dynamicsApps.subs && dynamicsApps.subs.data)
+      dynamicsApps.subs.data.filter((app) => {
+        return (
+          app.bad_organisedfor === "BAD" &&
+          app.core_membershipstatus === state.theme.lapsedMembership
+        );
+      });
+
+    if (lapsedMembership.length > 0)
+      membership.message = state.theme.lapsedMembershipBody;
+
+    return membership;
+  };
+
   useEffect(() => {
     // --------------------------------------------------------------------------------
     // 📌  FEEZE & LAPSED membership notification hook
-    // 📌  bad_selfserviceaccess & core_membershipstatus fileds notifications
+    // 📌  bad_selfserviceaccess & core_membershipstatus in subs as validation fileds for membership status
     // --------------------------------------------------------------------------------
 
-    // if user have apps that bad_organisedfor === "BAD" & createdon is a current year then break & dont show notification
-    if (
-      isActiveUser &&
-      dynamicsApps.apps &&
-      dynamicsApps.apps.length > 0 &&
-      dynamicsApps.some((app) => app.bad_organisedfor === "BAD") && // if user have apps that bad_organisedfor === "BAD"
-      dynamicsApps.some(
-        (app) => app.createdon.substring.includes(new Date().getFullYear()) // if user have apps that createdon is a current year
-      )
-    ) {
-      return;
-    }
+    // member status notification - if user bad_selfserviceaccess === "FEEZE" then show notification
+    if (handelValidateMembership().isValid) return;
+    let message = handelValidateMembership().message; // user error message
 
-    // break if core_membershipstatus !frozen
-    if (
-      isActiveUser &&
-      isActiveUser.core_membershipstatus !== state.theme.frozenMembership
-    )
-      return;
-
-    // user payment message based on
-    let message = state.theme.frozenMembershipBody;
-
-    if (dynamicsApps) {
-      // get apps with billinghistory for payments
-      // get current year
-      const currentYear = new Date().getFullYear();
-      // get apps that billing ending year is not current year & have no billing history
-      const apps = dynamicsApps.subs.data.filter(
-        (app) => !app.core_endon.includes(currentYear) && !app.bad_sagepayid
-      );
-      // if apps includes application with billing history from previous year & have no payment history
-      // show as lappsed membership
-      if (apps.length > 0) message = state.theme.lapsedMembershipBody;
-    }
-
+    // --------------------------------------------------------------------------------
+    // 📌  Freeze & Lapsed membership notification popup
+    // --------------------------------------------------------------------------------
     setErrorAction({
       dispatch,
       isError: {
@@ -76,10 +83,16 @@ const DashboardNotifications = ({ state }) => {
         image: "Error",
       },
     });
-  }, [isActiveUser]);
+  }, [isActiveUser, dynamicsApps]);
 
   // SERVERS -----------------------------------------------------------------
-  const ServeGoToActions = ({ path, title, isDismisable, id, isLapsed }) => {
+  const ServeGoToActions = ({
+    path,
+    title,
+    isDismisable,
+    id,
+    isActive = true,
+  }) => {
     if (!path) return null;
 
     return (
@@ -89,7 +102,7 @@ const DashboardNotifications = ({ state }) => {
           marginLeft: "2em",
           alignItems: "center",
           justifyContent: "end",
-          flex: 0.5,
+          flex: isActive ? 0.5 : 0,
         }}
       >
         {isDismisable && (
@@ -107,7 +120,7 @@ const DashboardNotifications = ({ state }) => {
           </div>
         )}
 
-        {!isLapsed && (
+        {isActive && (
           <div
             className="blue-btn"
             style={{ marginLeft: "2em", width: "fit-content" }}
@@ -164,40 +177,15 @@ const DashboardNotifications = ({ state }) => {
   const ServeMembershipPaymentReminders = () => {
     const id = 2; // notification id
 
-    const isFrezeStatus =
-      isActiveUser.core_membershipstatus === state.theme.frozenMembership;
     const isBilling = dashboardPath === "Billing";
+    const membership = handelValidateMembership();
 
     if (
-      !isFrezeStatus ||
+      membership.isValid ||
       isBilling ||
       (isDashboardNotifications && isDashboardNotifications.includes(id))
     )
       return null;
-
-    // user payment message based on
-    let message = state.theme.frozenMembershipBody;
-    let isLapsed = false;
-
-    if (dynamicsApps) {
-      // get apps with billinghistory for payments
-      // get current year
-      const currentYear = new Date().getFullYear();
-      // get apps that billing ending year is not current year & have no billing history
-      const apps = dynamicsApps.subs.data.filter(
-        (app) => !app.core_endon.includes(currentYear) && !app.bad_sagepayid
-      );
-      // if apps includes application with billing history from previous year & have no payment history
-      // show as lappsed membership
-      if (apps.length > 0) message = state.theme.lapsedMembershipBody;
-      isLapsed = apps.length > 0;
-    }
-
-    if (
-      isActiveUser &&
-      isActiveUser.core_membershipstatus === state.theme.lapsedMembership
-    )
-      message = state.theme.lapsedMembershipBody;
 
     return (
       <div
@@ -216,14 +204,20 @@ const DashboardNotifications = ({ state }) => {
             className="flex primary-title"
             style={{ display: "grid", alignItems: "center", fontSize: 20 }}
           >
-            {message}
+            {membership.message}
           </div>
+
           <ServeGoToActions
             id={id}
             path="Billing"
             title="Pay Now"
             isDismisable
-            isLapsed={isLapsed}
+            isActive={
+              handelValidateMembership().message !==
+                state.theme.lapsedMembershipBody &&
+              dynamicsApps &&
+              dynamicsApps.apps.data.length > 0 // show payment button if there are apps to pay for
+            }
           />
         </div>
       </div>
