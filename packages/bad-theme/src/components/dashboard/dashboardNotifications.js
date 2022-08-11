@@ -35,7 +35,7 @@ const DashboardNotifications = ({ state }) => {
       isValid: true,
       message: state.theme.frozenMembershipBody,
     };
-    console.log("🐞 dynamicsApps", dynamicsApps); // debug
+    // console.log("🐞 dynamicsApps", dynamicsApps.subs.data); // debug
 
     // if user core_membershipstatus is not set to Free, then return valid subscription
     if (
@@ -47,9 +47,9 @@ const DashboardNotifications = ({ state }) => {
     if (isActiveUser.core_membershipstatus === state.theme.frozenMembership)
       membership.isValid = false;
 
-    // is lapsed if any bad_organisedfor === 'BAD' & core_membershipstatus === 'Completed'
     let lapsedMembership = [];
-    if (dynamicsApps && dynamicsApps.subs && dynamicsApps.subs.data)
+    if (dynamicsApps && dynamicsApps.subs) {
+      // is lapsed if any bad_organisedfor === 'BAD' & core_membershipstatus === 'Completed'
       lapsedMembership = dynamicsApps.subs.data.filter((app) => {
         return (
           app.bad_organisedfor === "BAD" &&
@@ -57,8 +57,14 @@ const DashboardNotifications = ({ state }) => {
         );
       });
 
-    console.log("🐞 dynamicsApps.subs.data", dynamicsApps.subs.data); // debug
-    console.log("🐞 lapsedMembership", lapsedMembership); // debug
+      // if user have paid applications form current year then set lapsed membership to false
+      let currentYear = new Date().getFullYear();
+      let isAppCurrentYear = lapsedMembership.filter((app) => {
+        return app.core_name.includes(currentYear);
+      });
+      if (isAppCurrentYear.length) lapsedMembership = [];
+    }
+
     if (lapsedMembership.length > 0)
       membership.message = state.theme.lapsedMembershipBody;
 
