@@ -167,21 +167,13 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     );
   };
 
-  const ServePayments = ({ block, item, type }) => {
+  const ServePayments = ({ block, item, type, data }) => {
     const { core_totalamount, core_name, bad_approvalstatus } = block;
 
     // hide payed subscriptions in dashboard if payment is made
     if (dashboard && block.bad_sagepayid !== null) return null;
     // in dashboard show only Pending apps
     if (dashboard && bad_approvalstatus !== "Pending") return null;
-
-    // 📌 get yesr of application date and current year
-    const currentYear = new Date().getFullYear();
-
-    // check if the application is current year or not
-    let isAppCurrentYear = false;
-    if (core_name) isAppCurrentYear = core_name.includes(currentYear);
-    if (!isAppCurrentYear) return null; // 📌 dont show if not current year
 
     const ServeStatusOrAction = () => {
       // get important data
@@ -278,9 +270,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       if (!liveSubscriptions) return null;
       // 📌 bottom border show for the block if it's the last one
       // check how many outstanding app payments there are
-      let paymentLength = liveSubscriptions.apps.data.length;
-      if (type === "subscriptions")
-        paymentLength = liveSubscriptions.subs.data.length;
+      let paymentLength = data.length;
       const isLastItem = paymentLength === item + 1;
 
       return (
@@ -328,6 +318,19 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     let padding = "2em 0 1em 0";
     if (type === "subscriptions") padding = "1em 0";
 
+    // --------------------------------------------------------------------------------
+    // 📌  Only show current year subscriptions as active or pending payment
+    // --------------------------------------------------------------------------------
+    data = data.filter((app) => {
+      // 📌 get yesr of application date and current year
+      const currentYear = new Date().getFullYear();
+
+      // check if the application is current year or not
+      let isAppCurrentYear = false;
+      if (app.core_name) isAppCurrentYear = app.core_name.includes(currentYear);
+      if (isAppCurrentYear) return app; // 📌 show current year applications only
+    });
+
     return (
       <div>
         <div
@@ -349,7 +352,13 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
           <div>
             {data.map((block, key) => {
               return (
-                <ServePayments key={key} block={block} item={key} type={type} />
+                <ServePayments
+                  key={key}
+                  block={block}
+                  item={key}
+                  type={type}
+                  data={data}
+                />
               );
             })}
           </div>

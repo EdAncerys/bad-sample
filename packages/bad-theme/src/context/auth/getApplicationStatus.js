@@ -6,7 +6,7 @@ export const getApplicationStatus = async ({ state, dispatch, contactid }) => {
   // if contactid is not provided then throw error
   if (!contactid) throw new Error("contactid is required");
 
-  const path = state.auth.APP_HOST + `/applications/billing/` + contactid;
+  const path = state.auth.APP_HOST + `/applications/billing/all/` + contactid;
 
   try {
     const response = await fetchDataHandler({ path, state });

@@ -35,7 +35,7 @@ const DashboardNotifications = ({ state }) => {
       isValid: true,
       message: state.theme.frozenMembershipBody,
     };
-    // console.log("🐞 dynamicsApps", dynamicsApps); // debug
+    console.log("🐞 dynamicsApps", dynamicsApps); // debug
 
     // if user core_membershipstatus is not set to Free, then return valid subscription
     if (
@@ -48,15 +48,17 @@ const DashboardNotifications = ({ state }) => {
       membership.isValid = false;
 
     // is lapsed if any bad_organisedfor === 'BAD' & core_membershipstatus === 'Completed'
-    const lapsedMembership = [];
+    let lapsedMembership = [];
     if (dynamicsApps && dynamicsApps.subs && dynamicsApps.subs.data)
-      dynamicsApps.subs.data.filter((app) => {
+      lapsedMembership = dynamicsApps.subs.data.filter((app) => {
         return (
           app.bad_organisedfor === "BAD" &&
           app.core_membershipstatus === state.theme.lapsedMembership
         );
       });
 
+    console.log("🐞 dynamicsApps.subs.data", dynamicsApps.subs.data); // debug
+    console.log("🐞 lapsedMembership", lapsedMembership); // debug
     if (lapsedMembership.length > 0)
       membership.message = state.theme.lapsedMembershipBody;
 
@@ -233,11 +235,18 @@ const DashboardNotifications = ({ state }) => {
       isDashboardNotifications.includes(id)
     )
       return null;
-    // check if user have approved SIG membership for any of the categories
+
+    // --------------------------------------------------------------------------------
+    // 📌  check if user have approved SIG membership for any of the categories & application pending for payment is current year
+    // --------------------------------------------------------------------------------
     const isPendingPayment = dynamicsApps.subs.data.filter((app) => {
+      // get current year
+      const currentYear = new Date().getFullYear();
+
       return (
         app.bad_organisedfor === "SIG" &&
         !app.bad_sagepayid &&
+        app.core_endon.includes(currentYear) && // check if application is pending for payment for current year
         app.bad_outstandingpayments !== "£0.00" // payments with 0 outstanding payments are not shown
       );
     });

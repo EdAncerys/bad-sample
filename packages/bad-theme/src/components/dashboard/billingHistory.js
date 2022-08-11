@@ -86,7 +86,8 @@ const BillingHistory = ({ state, actions, libraries }) => {
         {subAppHistory.map((block, key) => {
           // console.log("🐞 history", block); // bill history
 
-          const { core_name, core_totalamount, bad_sagepayid } = block;
+          const { core_name, core_totalamount, bad_sagepayid, core_endon } =
+            block;
           let paymentLength = subAppHistory.length;
           const isLastItem = paymentLength === key + 1;
 
@@ -103,7 +104,7 @@ const BillingHistory = ({ state, actions, libraries }) => {
               }}
             >
               <div className="flex" style={styles.fontSize}>
-                <div>{core_name}</div>
+                <div>{core_name || `Application date ${core_endon}`}</div>
               </div>
               <div className="flex" style={styles.fontSize}>
                 {bad_sagepayid && (

@@ -117,6 +117,7 @@ const SubmittedApplications = ({ state, actions, libraries }) => {
         >
           Applications Pending Approval
         </div>
+
         {submitedApps.map((app, key) => {
           const { bad_organisedfor, core_name, createdon, bad_approvalstatus } =
             app;
