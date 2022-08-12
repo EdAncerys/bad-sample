@@ -224,9 +224,7 @@ const DashboardNotifications = ({ state }) => {
             isDismisable
             isActive={
               handelValidateMembership().message !==
-                state.theme.lapsedMembershipBody &&
-              dynamicsApps &&
-              dynamicsApps.apps.data.length > 0 // show payment button if there are apps to pay for
+              state.theme.lapsedMembershipBody
             }
           />
         </div>
