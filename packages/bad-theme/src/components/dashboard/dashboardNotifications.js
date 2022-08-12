@@ -49,20 +49,23 @@ const DashboardNotifications = ({ state }) => {
 
     let lapsedMembership = [];
     if (dynamicsApps && dynamicsApps.subs) {
-      // is lapsed if any bad_organisedfor === 'BAD' & core_membershipstatus === 'Completed'
+      // is lapsed if any bad_organisedfor === 'BAD' & core_membershipstatus === 'Completed' && subscription of previous year is completed
+      let currentYear = new Date().getFullYear(); // get current year
       lapsedMembership = dynamicsApps.subs.data.filter((app) => {
         return (
           app.bad_organisedfor === "BAD" &&
-          app.core_membershipstatus === state.theme.lapsedMembership
+          app.core_membershipstatus === state.theme.lapsedMembership &&
+          app.core_endon.includes(currentYear - 1) // check if end year is previous year
         );
       });
+      // console.log("🐞 lapsedMembership", lapsedMembership);
 
+      // 📌 uncoment below to eneable lapsed membership flip if user have applications form current year
       // if user have paid applications form current year then set lapsed membership to false
-      let currentYear = new Date().getFullYear();
-      let isAppCurrentYear = lapsedMembership.filter((app) => {
-        return app.core_name.includes(currentYear);
-      });
-      if (isAppCurrentYear.length) lapsedMembership = [];
+      // let isAppCurrentYear = lapsedMembership.filter((app) => {
+      //   return app.core_name.includes(currentYear);
+      // });
+      // if (isAppCurrentYear.length) lapsedMembership = [];
     }
 
     if (lapsedMembership.length > 0)
