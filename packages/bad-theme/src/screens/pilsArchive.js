@@ -50,10 +50,18 @@ const PilsArchive = ({ state, actions, libraries }) => {
       ]);
 
       const pils = [...trying[0], ...trying[1], ...trying[2]];
+      console.log("🐞 ", pils);
       // order by title alphabetically
       pils.sort((a, b) => {
-        if (a.title < b.title) return -1;
-        if (a.title > b.title) return 1;
+        // if no title return -1
+        if (!a.title.rendered) return -1;
+        if (!b.title.rendered) return 1;
+
+        // if titles are equal return 0
+        if (a.title.rendered === b.title.rendered) return 0;
+
+        if (a.title.rendered < b.title.rendered) return -1;
+        if (a.title.rendered > b.title.rendered) return 1;
         return 0;
       });
 
