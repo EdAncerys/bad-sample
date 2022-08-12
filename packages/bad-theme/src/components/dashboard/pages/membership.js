@@ -237,7 +237,13 @@ const Membership = ({ state, actions, libraries }) => {
                 };
 
                 const ServeMembershipActions = ({ show }) => {
-                  if (bad_organisedfor === "SIG" || show) return null;
+                  // dont allow download sertificates if membership is not active | frozen
+                  const isFrozen =
+                    isActiveUser.core_membershipstatus ===
+                    state.theme.frozenMembership;
+
+                  if (bad_organisedfor === "SIG" || show || isFrozen)
+                    return null;
 
                   return (
                     <div style={{ display: "grid", alignItems: "center" }}>
