@@ -86,10 +86,17 @@ const BillingHistory = ({ state, actions, libraries }) => {
         {subAppHistory.map((block, key) => {
           // console.log("🐞 history", block); // bill history
 
-          const { core_name, core_totalamount, bad_sagepayid, core_endon } =
-            block;
+          const {
+            core_name,
+            core_totalamount,
+            bad_sagepayid,
+            core_endon,
+            bad_organisedfor,
+          } = block;
           let paymentLength = subAppHistory.length;
           const isLastItem = paymentLength === key + 1;
+          const isSIG = bad_organisedfor === "SIG";
+          console.log("🐞 block", block);
 
           // list of apps with billing history
           return (
@@ -116,7 +123,9 @@ const BillingHistory = ({ state, actions, libraries }) => {
                       : ""}
                   </div>
                 )}
-                {!bad_sagepayid && <div>Lapsed Subscription</div>}
+
+                {!bad_sagepayid && !isSIG && <div>Lapsed Subscription</div>}
+                {!bad_sagepayid && isSIG && <div>{core_totalamount}</div>}
               </div>
             </div>
           );
