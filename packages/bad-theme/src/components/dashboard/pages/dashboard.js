@@ -217,11 +217,12 @@ const Dashboard = ({ state, actions, libraries }) => {
 
                   const dateObject = new Date(appData);
 
-                  const ServeChangeApplicationAction = () => {
+                  const ServeChangeApplicationAction = ({ show }) => {
                     // return if bad_organisedfor is BAD & in dashboard only
                     if (
                       bad_organisedfor !== "BAD" ||
-                      dashboardPath !== "Dashboard"
+                      dashboardPath !== "Dashboard" ||
+                      show
                     )
                       return null;
                     const [appStatus, setStatus] = useState(null);
@@ -305,10 +306,11 @@ const Dashboard = ({ state, actions, libraries }) => {
                     return null;
                   };
 
-                  const ServeMembershipActions = () => {
+                  const ServeMembershipActions = ({ show }) => {
                     if (
                       dashboardPath === "Dashboard" ||
-                      bad_organisedfor === "SIG"
+                      bad_organisedfor === "SIG" ||
+                      show // hide acctions if application is not current year
                     )
                       return null;
 
@@ -335,6 +337,12 @@ const Dashboard = ({ state, actions, libraries }) => {
                     );
                   };
 
+                  // --------------------------------------------------------------------------------
+                  // 📌  Disable all action if application is not current year
+                  // --------------------------------------------------------------------------------
+                  const currentYear = new Date().getFullYear();
+                  const applicationYear = app.core_endon;
+
                   return (
                     <div
                       key={key}
@@ -354,8 +362,12 @@ const Dashboard = ({ state, actions, libraries }) => {
                           </div>
                           <div>{core_name}</div>
                         </div>
-                        <ServeChangeApplicationAction />
-                        <ServeMembershipActions />
+                        <ServeChangeApplicationAction
+                          show={!applicationYear.includes(currentYear)}
+                        />
+                        <ServeMembershipActions
+                          show={!applicationYear.includes(currentYear)}
+                        />
                       </div>
                     </div>
                   );
