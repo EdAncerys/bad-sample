@@ -54,8 +54,7 @@ const DashboardNotifications = ({ state }) => {
       lapsedMembership = dynamicsApps.subs.data.filter((app) => {
         return (
           app.bad_organisedfor === "BAD" &&
-          app.core_membershipstatus === state.theme.lapsedMembership &&
-          app.core_endon.includes(currentYear - 1) // check if end year is previous year
+          app.core_membershipstatus === state.theme.frozenMembership
         );
       });
       // console.log("🐞 lapsedMembership", lapsedMembership);
