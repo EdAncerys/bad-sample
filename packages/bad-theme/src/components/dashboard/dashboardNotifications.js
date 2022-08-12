@@ -33,7 +33,7 @@ const DashboardNotifications = ({ state }) => {
     // --------------------------------------------------------------------------------
     let membership = {
       isValid: true,
-      message: state.theme.frozenMembershipBody,
+      message: state.theme.lapsedMembershipBody,
     };
     // console.log("🐞 dynamicsApps", dynamicsApps.subs.data); // debug
 
@@ -44,31 +44,31 @@ const DashboardNotifications = ({ state }) => {
     )
       return membership;
 
-    if (isActiveUser.core_membershipstatus === state.theme.frozenMembership)
-      membership.isValid = false;
+    // FREEZE membership status & set it to LAPSED by default
+    membership.isValid = false;
 
-    let lapsedMembership = [];
+    let freezeMembershipList = [];
     if (dynamicsApps && dynamicsApps.subs) {
       // is lapsed if any bad_organisedfor === 'BAD' & core_membershipstatus === 'Completed' && subscription of previous year is completed
-      let currentYear = new Date().getFullYear(); // get current year
-      lapsedMembership = dynamicsApps.subs.data.filter((app) => {
+      freezeMembershipList = dynamicsApps.subs.data.filter((app) => {
         return (
           app.bad_organisedfor === "BAD" &&
           app.core_membershipstatus === state.theme.frozenMembership
         );
       });
-      // console.log("🐞 lapsedMembership", lapsedMembership);
+      console.log("🐞 freezeMembershipList", freezeMembershipList); // debug
 
       // 📌 uncoment below to eneable lapsed membership flip if user have applications form current year
       // if user have paid applications form current year then set lapsed membership to false
-      // let isAppCurrentYear = lapsedMembership.filter((app) => {
+      // let isAppCurrentYear = freezeMembershipList.filter((app) => {
       //   return app.core_name.includes(currentYear);
       // });
-      // if (isAppCurrentYear.length) lapsedMembership = [];
+      // if (isAppCurrentYear.length) freezeMembershipList = [];
     }
 
-    if (lapsedMembership.length > 0)
-      membership.message = state.theme.lapsedMembershipBody;
+    // if user have any memberships set to FREEZ then set membership to freezed
+    if (freezeMembershipList.length > 0)
+      membership.message = state.theme.frozenMembershipBody;
 
     return membership;
   };
