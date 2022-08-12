@@ -49,23 +49,41 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
     // 📌 populate profile information form Dynamics records
     handleSetData({
       name: "_bad_bademailalerts",
-      value: !isActiveUser[`_bad_bademailalerts`],
+      value:
+        isActiveUser[`_bad_bademailalerts`] === null
+          ? false
+          : !isActiveUser[`_bad_bademailalerts`],
     });
     handleSetData({
       name: "_bad_badecircular",
-      value: !isActiveUser[`_bad_badecircular`],
+      value:
+        isActiveUser[`_bad_badecircular`] === null
+          ? false
+          : !isActiveUser[`_bad_badecircular`],
     });
     handleSetData({
       name: "_bad_bjdalerts",
-      value: !isActiveUser[`_bad_bjdalerts`],
+      value:
+        isActiveUser[`_bad_bjdalerts`] === null
+          ? false
+          : !isActiveUser[`_bad_bjdalerts`],
     });
     handleSetData({
       name: "_bad_presidentsbulletin",
-      value: !isActiveUser[`_bad_presidentsbulletin`],
+      value:
+        isActiveUser[`_bad_presidentsbulletin`] === null
+          ? false
+          : !isActiveUser[`_bad_presidentsbulletin`],
     });
     handleSetData({
       name: "_donotemail",
-      value: !isActiveUser[`_donotemail`],
+      // --------------------------------------------------------------------------------
+      // 📌  flip to oposite & check if value in !null
+      // --------------------------------------------------------------------------------
+      value:
+        isActiveUser[`_donotemail`] === null
+          ? false
+          : !isActiveUser[`_donotemail`],
     });
     handleSetData({
       name: "_bad_preferredmailingaddress",
