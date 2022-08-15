@@ -148,6 +148,9 @@ input[type="email"]::-webkit-input-placeholder {
 .shadow {
   box-shadow: 0 8px 8px -4px;
 }
+.relative {
+  position: relative;
+}
 /* positioning of post block elements left*/
 .test-block::after {
   content: "";

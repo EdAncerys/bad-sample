@@ -19,7 +19,6 @@ import {
   errorHandler,
   muiQuery,
   getMembershipDataAction,
-  getApplicationStatus,
   validateMembershipFormAction,
   getHospitalsAction,
   getHospitalNameAction,
@@ -55,12 +54,14 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     sky_cvurl: "",
     py3_currentgrade: "",
     sky_newhospitalname: "",
-    bad_newhospitaladded: "",
     bad_expectedyearofqualification: "",
-    py3_constitutionagreement: "",
-    bad_readpolicydocument: "",
     sky_newhospitaltype: "",
-    bad_memberdirectory: "",
+    // --------------------------------------------------------------------------------
+    _bad_newhospitaladded: false,
+    _py3_constitutionagreement: false,
+    _bad_readpolicydocument: false,
+    _bad_memberdirectory: false,
+    _bad_mrpcqualified: false,
   });
   const [inputValidator, setInputValidator] = useState({
     bad_py3_gmcnumber: true,
@@ -73,11 +74,12 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     bad_sky_cvurl: true,
     bad_py3_currentgrade: true,
     bad_sky_newhospitalname: true,
-    bad_newhospitaladded: true,
     bad_expectedyearofqualification: true,
     bad_py3_constitutionagreement: true,
-    bad_readpolicydocument: true,
     bad_sky_newhospitaltype: true,
+    // --------------------------------------------------------------------------------
+    bad_newhospitaladded: true,
+    bad_readpolicydocument: true,
     bad_memberdirectory: true,
   });
   const [bodyCopy, setBodyCopy] = useState("");
@@ -228,7 +230,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     }));
 
     // if checked value for hospital not found clear curet hospital input
-    if (name === "bad_newhospitaladded" && !value) handleClearHospital();
+    if (name === "_bad_newhospitaladded" && !value) handleClearHospital();
   };
 
   const handleHospitalLookup = async () => {
@@ -321,6 +323,11 @@ const ApplicationChange = ({ state, actions, libraries }) => {
       let inputValue = input;
       // 📌 add bad_ if input dont have it
       if (!inputValue.includes("bad_")) inputValue = `bad_${input}`;
+      // --------------------------------------------------------------------------------
+      // 📌  Resolved values adjustment v wp sored values
+      // --------------------------------------------------------------------------------
+      // replace first prefix _ foth ""
+      // NONE ADJUTMENTS NEEDED
 
       if (!formData[input] && inputValidator[inputValue]) {
         errorHandler({ id: `form-error-${input}` });
@@ -333,7 +340,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
 
   const handleApplicationChange = async () => {
     // check if new hospital value been added
-    const isNewHospital = formData.bad_newhospitaladded;
+    const isNewHospital = formData._bad_newhospitaladded;
 
     const isValid = isFormValidated({
       required: [
@@ -348,7 +355,33 @@ const ApplicationChange = ({ state, actions, libraries }) => {
 
     if (!isValid) return null;
     // ⬇️ set new application data object
-    let appFromData = { ...formData };
+    let appFromData = {
+      bad_organisedfor: "810170000",
+      bad_categorytype: formData.bad_categorytype,
+      bad_existingsubscriptionid: formData.bad_existingsubscriptionid, // current subscription id
+      core_membershipsubscriptionplanid:
+        formData.core_membershipsubscriptionplanid, // new subscription plan id
+
+      py3_gmcnumber: formData.py3_gmcnumber,
+      py3_otherregulatorybodyreference:
+        formData.py3_otherregulatorybodyreference,
+      py3_ntnno: formData.py3_ntnno,
+      bad_currentpost: formData.bad_currentpost,
+      py3_hospitalid: formData.py3_hospitalid,
+      bad_proposer1: formData.bad_proposer1,
+      bad_proposer2: formData.bad_proposer2,
+      sky_cvurl: formData.sky_cvurl,
+      py3_currentgrade: formData.py3_currentgrade,
+      sky_newhospitalname: formData.sky_newhospitalname,
+      bad_expectedyearofqualification: formData.bad_expectedyearofqualification,
+      sky_newhospitaltype: formData.sky_newhospitaltype,
+      // --------------------------------------------------------------------------------
+      bad_mrpcqualified: formData._bad_mrpcqualified,
+      bad_newhospitaladded: formData._bad_newhospitaladded,
+      py3_constitutionagreement: formData._py3_constitutionagreement,
+      bad_readpolicydocument: formData._bad_readpolicydocument,
+      bad_memberdirectory: formData._bad_memberdirectory,
+    };
 
     try {
       setFetching(true);
@@ -742,8 +775,8 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                         Hospital / Medical School not listed
                       </label>
                       <input
-                        name="bad_newhospitaladded"
-                        checked={formData.bad_newhospitaladded}
+                        name="_bad_newhospitaladded"
+                        checked={formData._bad_newhospitaladded}
                         onChange={handleInputChange}
                         type="checkbox"
                         className="form-check-input check-box"
@@ -751,7 +784,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                     </div>
                   )}
 
-                  {formData.bad_newhospitaladded && (
+                  {formData._bad_newhospitaladded && (
                     <div>
                       <label className="required form-label">Select Type</label>
                       <Form.Select
@@ -770,7 +803,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                     </div>
                   )}
 
-                  {formData.bad_newhospitaladded &&
+                  {formData._bad_newhospitaladded &&
                     inputValidator.bad_sky_newhospitalname && (
                       <div>
                         <label className="form-label">New Hospital Name</label>
@@ -830,8 +863,8 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                       <div className="flex-col">
                         <label className="form-label">MRCP Qualified</label>
                         <input
-                          name="bad_mrpcqualified"
-                          checked={formData.bad_mrpcqualified}
+                          name="_bad_mrpcqualified"
+                          checked={formData._bad_mrpcqualified}
                           onChange={handleInputChange}
                           type="checkbox"
                           className="form-check-input check-box"
@@ -870,8 +903,8 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                             >
                               <div style={{ display: "grid" }}>
                                 <input
-                                  name="bad_memberdirectory"
-                                  checked={formData.bad_memberdirectory}
+                                  name="_bad_memberdirectory"
+                                  checked={formData._bad_memberdirectory}
                                   onChange={handleInputChange}
                                   type="checkbox"
                                   className="form-check-input check-box"
@@ -885,7 +918,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                                 Include my details in the BAD Members' Directory
                               </div>
                             </div>
-                            <FormError id="bad_memberdirectory" />
+                            <FormError id="_bad_memberdirectory" />
                           </div>
                         )}
 
@@ -897,8 +930,8 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                             >
                               <div style={{ display: "grid" }}>
                                 <input
-                                  name="py3_constitutionagreement"
-                                  checked={formData.py3_constitutionagreement}
+                                  name="_py3_constitutionagreement"
+                                  checked={formData._py3_constitutionagreement}
                                   onChange={handleInputChange}
                                   type="checkbox"
                                   className="form-check-input check-box"
@@ -921,7 +954,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                                 </label>
                               </div>
                             </div>
-                            <FormError id="py3_constitutionagreement" />
+                            <FormError id="_py3_constitutionagreement" />
                           </div>
                         )}
 
@@ -933,8 +966,8 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                             >
                               <div>
                                 <input
-                                  name="bad_readpolicydocument"
-                                  checked={formData.bad_readpolicydocument}
+                                  name="_bad_readpolicydocument"
+                                  checked={formData._bad_readpolicydocument}
                                   onChange={handleInputChange}
                                   type="checkbox"
                                   className="form-check-input check-box"
@@ -965,7 +998,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                                 </label>
                               </div>
                             </div>
-                            <FormError id="bad_readpolicydocument" />
+                            <FormError id="_bad_readpolicydocument" />
                           </div>
                         )}
                       </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
@@ -7,9 +7,7 @@ import PaymentModal from "./paymentModal";
 import { setErrorAction, fetchDataHandler } from "../../context";
 const PaymentNotification = ({
   state,
-  actions,
-  libraries,
-  setPage,
+
   application,
 }) => {
   const [paymentUrl, setPaymentUrl] = useState(null);

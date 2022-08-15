@@ -86,9 +86,16 @@ const BillingHistory = ({ state, actions, libraries }) => {
         {subAppHistory.map((block, key) => {
           // console.log("🐞 history", block); // bill history
 
-          const { core_name, core_totalamount } = block;
+          const {
+            core_name,
+            core_totalamount,
+            bad_sagepayid,
+            core_endon,
+            bad_organisedfor,
+          } = block;
           let paymentLength = subAppHistory.length;
           const isLastItem = paymentLength === key + 1;
+          const isSIG = bad_organisedfor === "SIG";
 
           // list of apps with billing history
           return (
@@ -103,30 +110,24 @@ const BillingHistory = ({ state, actions, libraries }) => {
               }}
             >
               <div className="flex" style={styles.fontSize}>
-                <div>{core_name}</div>
+                <div>{core_name || `Application date ${core_endon}`}</div>
               </div>
               <div className="flex" style={styles.fontSize}>
-                <div>
-                  {core_totalamount
-                    ? core_totalamount.includes("-")
-                      ? "Free"
-                      : core_totalamount
-                    : ""}
-                </div>
+                {bad_sagepayid && (
+                  <div>
+                    {core_totalamount
+                      ? core_totalamount.includes("-")
+                        ? "Free"
+                        : core_totalamount
+                      : ""}
+                  </div>
+                )}
+
+                {!bad_sagepayid && !isSIG && <div>Lapsed Subscription</div>}
+                {!bad_sagepayid && isSIG && <div>{core_totalamount}</div>}
               </div>
             </div>
           );
-
-          // 📌 payment history for each app
-          // return (
-          //   <PaymentHistory
-          //     key={key}
-          //     block={block}
-          //     item={key}
-          //     subAppHistory={subAppHistory}
-          //     setFetching={setFetching}
-          //   />
-          // );
         })}
       </div>
     </div>

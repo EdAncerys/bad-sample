@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import date from "date-and-time";
@@ -117,6 +117,7 @@ const SubmittedApplications = ({ state, actions, libraries }) => {
         >
           Applications Pending Approval
         </div>
+
         {submitedApps.map((app, key) => {
           const { bad_organisedfor, core_name, createdon, bad_approvalstatus } =
             app;
@@ -173,6 +174,9 @@ const SubmittedApplications = ({ state, actions, libraries }) => {
 
           const dateObject = new Date(appData);
           const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
+          const initiated = state.data.initiatedPayments.includes(
+            core_membershipapplicationid
+          );
 
           return (
             <div key={key} className="flex">
@@ -183,16 +187,23 @@ const SubmittedApplications = ({ state, actions, libraries }) => {
               </div>
 
               <div style={{ display: "grid", alignItems: "center" }}>
-                <div
-                  className="blue-btn"
-                  onClick={() =>
-                    handlePayment({
-                      sage_id: core_membershipapplicationid,
-                    })
-                  }
-                >
-                  Pay now
-                </div>
+                {!initiated ? (
+                  <div
+                    className="blue-btn"
+                    onClick={() => {
+                      actions.theme.addInitiatedPayment(
+                        core_membershipapplicationid
+                      );
+                      handlePayment({
+                        sage_id: core_membershipapplicationid,
+                      });
+                    }}
+                  >
+                    Pay now
+                  </div>
+                ) : (
+                  "Payment initiated"
+                )}
               </div>
             </div>
           );

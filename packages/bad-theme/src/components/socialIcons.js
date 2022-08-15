@@ -7,12 +7,13 @@ import Facebook from "../img/svg/facebookColour.svg";
 import Twitter from "../img/svg/twitterColour.svg";
 import Instagram from "../img/svg/instagramColour.svg";
 // --------------------------------------------------------------------------------
-import { Parcer } from "../context";
+import { Parcer, muiQuery } from "../context";
 
 const SocialIcons = ({ state, actions, libraries, block }) => {
   if (!block) return null;
 
   const { disable_vertical_padding, links_per_row, social_links } = block;
+  const { lg } = muiQuery();
 
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
@@ -68,7 +69,7 @@ const SocialIcons = ({ state, actions, libraries, block }) => {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: COLUMNS_NUMBER,
+          gridTemplateColumns: lg ? "1fr" : COLUMNS_NUMBER,
           gap: 20,
           alignItems: "center",
         }}

@@ -34,8 +34,16 @@ const Membership = ({ state, actions, libraries }) => {
 
   useEffect(() => {
     if (!dynamicsApps) return;
+    // --------------------------------------------------------------------------------
+    // 📌  Current user subs
+    // --------------------------------------------------------------------------------
+    const currentYear = new Date().getFullYear(); // get current year
+    // apps with core_endon that is current year
+    const apps = dynamicsApps.subs.data.filter((app) => {
+      return app.core_endon.includes(currentYear);
+    });
     // 📌 set dynamic apps data
-    setSubs(dynamicsApps.subs.data);
+    setSubs(apps);
   }, [dynamicsApps]);
 
   // HANDLERS ----------------------------------------------------------------
@@ -159,12 +167,9 @@ const Membership = ({ state, actions, libraries }) => {
                   "DD MMM YYYY"
                 );
 
-                const ServeChangeApplicationAction = () => {
+                const ServeChangeApplicationAction = ({ show }) => {
                   // return if bad_organisedfor is BAD & in dashboard only
-                  {
-                    /* bad_organisedfor !== "BAD" || */
-                  }
-                  if (dashboardPath !== "Dashboard") return null;
+                  if (dashboardPath !== "Dashboard" || show) return null;
                   const [appStatus, setStatus] = useState(null);
                   // check if application been previously submitted
                   useEffect(async () => {
@@ -239,8 +244,14 @@ const Membership = ({ state, actions, libraries }) => {
                   );
                 };
 
-                const ServeMembershipActions = () => {
-                  if (bad_organisedfor === "SIG") return null;
+                const ServeMembershipActions = ({ show }) => {
+                  // dont allow download sertificates if membership is not active | frozen
+                  const isFrozen =
+                    isActiveUser.core_membershipstatus ===
+                    state.theme.frozenMembership;
+
+                  if (bad_organisedfor === "SIG" || show || isFrozen)
+                    return null;
 
                   return (
                     <div style={{ display: "grid", alignItems: "center" }}>
@@ -263,6 +274,14 @@ const Membership = ({ state, actions, libraries }) => {
                   );
                 };
 
+                // --------------------------------------------------------------------------------
+                // 📌  Disable all action if application is not current year
+                // --------------------------------------------------------------------------------
+                const currentYear = new Date().getFullYear();
+                const applicationYear = app.core_endon;
+
+                if (!bad_organisedfor && !core_name) return null;
+
                 return (
                   <div
                     key={key}
@@ -280,8 +299,12 @@ const Membership = ({ state, actions, libraries }) => {
                         <div className="primary-title">{bad_organisedfor}</div>
                         <div>{core_name}</div>
                       </div>
-                      <ServeChangeApplicationAction />
-                      <ServeMembershipActions />
+                      <ServeChangeApplicationAction
+                        show={!applicationYear.includes(currentYear)}
+                      />
+                      <ServeMembershipActions
+                        show={!applicationYear.includes(currentYear)}
+                      />
                     </div>
                   </div>
                 );

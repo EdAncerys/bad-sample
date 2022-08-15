@@ -9,7 +9,6 @@ export const useRemoveScript = ({ source }) => {
     if (!source) return;
     // 📌 get all scriopts in document object
     const scripts = document.querySelectorAll("script");
-    console.log("🐞 source", source); // debug
 
     scripts.forEach((script) => {
       if (script.src.includes(source)) {

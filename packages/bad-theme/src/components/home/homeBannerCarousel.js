@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import { Carousel } from "react-bootstrap";
@@ -21,16 +20,6 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
   const marginHorizontal = state.theme.marginHorizontal;
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
-
-  const [carouselSlides, setSlides] = useState([]);
-
-  useEffect(() => {
-    // 📌 set slide images depending on screen size
-    let slides = block.slides;
-    if (lg & !!block.slides_mobile) slides = block.slides_mobile;
-
-    setSlides(slides);
-  }, [lg]);
 
   // SERVERS ----------------------------------------------------------------
   const ServeIcon = ({ icon, left, right }) => {
@@ -95,9 +84,10 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
       <Carousel
         className={!lg ? "home-banner-carousel" : "home-banner-carousel-mobile"}
       >
-        {carouselSlides.map((block, key) => {
+        {block.slides.map((block, key) => {
           const {
             background_image,
+            background_image_mobile,
             event_label,
             event_link,
             label,
@@ -161,10 +151,15 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
             if (!background_image) return null;
             const alt = title || "BAD";
 
+            let img = background_image.url;
+            // mobile version of image if exists
+            if (lg && background_image_mobile)
+              img = background_image_mobile.url;
+
             return (
               <div style={{ width: "100%", height: "100%" }}>
                 <Image
-                  src={background_image.url}
+                  src={img}
                   alt={alt}
                   style={{
                     width: "100%",

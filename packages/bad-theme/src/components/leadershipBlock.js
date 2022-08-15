@@ -18,13 +18,21 @@ const LeadershipBlock = ({ state, actions, block }) => {
   const mountedRef = useRef(true);
 
   if (!block) return <Loading />;
-  // console.log("🐞 ", block);
+  // console.log("🐞 ", block); // debug
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
     const grades = await getLeadershipGrades({ state });
     const positions = await getLeadershipPositions({ state });
-    const leadershipList = await getLeadershipData({ state });
+    let leadershipList = await getLeadershipData({ state });
+    // sort by order in acf field
+    leadershipList = leadershipList.sort((a, b) => {
+      // if order is null, add to end of list
+      if (a.acf.order === null) return 1;
+      if (b.acf.order === null) return -1;
+
+      return a.acf.order - b.acf.order;
+    });
 
     setPositions(positions);
     setGrades(grades);

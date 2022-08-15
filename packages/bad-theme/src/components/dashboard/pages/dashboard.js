@@ -9,7 +9,6 @@ import ProfileProgress from "../profileProgress";
 import { colors } from "../../../config/colors";
 import Loading from "../../loading";
 import TitleBlock from "../../titleBlock";
-import ApplicationStatusOrPayment from "../ApplicationStatusOrPayment";
 import Payments from "../payments";
 import Card from "../../../components/card/card";
 import ActionPlaceholder from "../../actionPlaceholder";
@@ -24,6 +23,7 @@ import {
   muiQuery,
   getEventsData,
   handleSortFilter,
+  getApplicationStatus,
 } from "../../../context";
 
 const Dashboard = ({ state, actions, libraries }) => {
@@ -49,14 +49,18 @@ const Dashboard = ({ state, actions, libraries }) => {
     // show only 4 events
     events = events.slice(0, 4);
 
+    // --------------------------------------------------------------------------------
+    // 📌  Trigger application refetch on component mount. bug fix for payment triggering fetch payment history
+    // --------------------------------------------------------------------------------
+    await getApplicationStatus({
+      state,
+      dispatch,
+      contactid: isActiveUser.contactid,
+    });
+    setSubs(dynamicsApps.subs.data);
+
     setEventList(events);
   }, []);
-
-  useEffect(() => {
-    if (!dynamicsApps) return;
-    // 📌 set dynamic apps data
-    setSubs(dynamicsApps.subs.data);
-  }, [dynamicsApps]);
 
   // HELPERS ----------------------------------------------
   const handleDownloadConfirmationPDF = async ({ app }) => {
@@ -97,17 +101,6 @@ const Dashboard = ({ state, actions, libraries }) => {
   };
 
   // SERVERS ---------------------------------------------
-  const ServePayments = () => {
-    if (!dynamicsApps) return null;
-
-    const outstandingSubs =
-      dynamicsApps.subs.data.filter((item) => item.bad_sagepayid === null)
-        .length > 0;
-    if (!outstandingSubs) return null;
-
-    return <Payments subscriptions={dynamicsApps} dashboard />;
-  };
-
   const ServeEvents = () => {
     if (!eventList) return <Loading />;
 
@@ -166,6 +159,8 @@ const Dashboard = ({ state, actions, libraries }) => {
       <div>
         <Profile />
         <ProfileProgress />
+        <Payments subscriptions={dynamicsApps} dashboard />
+
         {subsData && (
           <div style={{ position: "relative" }}>
             <ActionPlaceholder
@@ -221,16 +216,13 @@ const Dashboard = ({ state, actions, libraries }) => {
                   appData = `${appData[1]}/${appData[0]}/${appData[2]}`;
 
                   const dateObject = new Date(appData);
-                  const formattedDate = DATE_MODULE.format(
-                    dateObject,
-                    "DD MMM YYYY"
-                  );
 
-                  const ServeChangeApplicationAction = () => {
+                  const ServeChangeApplicationAction = ({ show }) => {
                     // return if bad_organisedfor is BAD & in dashboard only
                     if (
                       bad_organisedfor !== "BAD" ||
-                      dashboardPath !== "Dashboard"
+                      dashboardPath !== "Dashboard" ||
+                      show
                     )
                       return null;
                     const [appStatus, setStatus] = useState(null);
@@ -314,10 +306,11 @@ const Dashboard = ({ state, actions, libraries }) => {
                     return null;
                   };
 
-                  const ServeMembershipActions = () => {
+                  const ServeMembershipActions = ({ show }) => {
                     if (
                       dashboardPath === "Dashboard" ||
-                      bad_organisedfor === "SIG"
+                      bad_organisedfor === "SIG" ||
+                      show // hide acctions if application is not current year
                     )
                       return null;
 
@@ -344,6 +337,15 @@ const Dashboard = ({ state, actions, libraries }) => {
                     );
                   };
 
+                  // --------------------------------------------------------------------------------
+                  // 📌  Disable all action if application is not current year | frozen
+                  // --------------------------------------------------------------------------------
+                  const currentYear = new Date().getFullYear();
+                  const applicationYear = app.core_endon;
+                  const isFrozen =
+                    isActiveUser.core_membershipstatus !==
+                    state.theme.frozenMembership;
+
                   return (
                     <div
                       key={key}
@@ -363,8 +365,16 @@ const Dashboard = ({ state, actions, libraries }) => {
                           </div>
                           <div>{core_name}</div>
                         </div>
-                        <ServeChangeApplicationAction />
-                        <ServeMembershipActions />
+                        <ServeChangeApplicationAction
+                          show={
+                            !applicationYear.includes(currentYear) || !isFrozen
+                          }
+                        />
+                        <ServeMembershipActions
+                          show={
+                            !applicationYear.includes(currentYear) || !isFrozen
+                          }
+                        />
                       </div>
                     </div>
                   );
@@ -373,7 +383,6 @@ const Dashboard = ({ state, actions, libraries }) => {
             </div>
           </div>
         )}
-        <ServePayments />
       </div>
       <ServeEvents />
     </div>

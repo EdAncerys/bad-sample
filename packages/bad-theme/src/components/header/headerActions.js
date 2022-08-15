@@ -7,7 +7,6 @@ import BADLogo from "../../img/svg/badLogoHeader.svg";
 import QuickLinksDropDown from "./quickLinksDropDown";
 import BlockWrapper from "../blockWrapper";
 import SearchDropDown from "../../components/searchDropDown";
-import Loading from "../../components/loading";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
@@ -32,6 +31,12 @@ import {
   setCreateAccountModalAction,
   handleSetCookie,
   fetchDataHandler,
+
+  // --------------------------------------------------------------------------------
+  getUserDataByContactId, // TESTING ONLY
+  handleRemoveServerSideCookie, // TESTING ONLY
+  setAuthenticationCookieAction, // TESTING ONLY
+  errorHandler, // TESTING ONLY
 } from "../../context";
 
 const HeaderActions = ({ state, actions, libraries }) => {
@@ -130,8 +135,35 @@ const HeaderActions = ({ state, actions, libraries }) => {
   };
 
   // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
-  const ServeDevPanel = () => {
-    if (state.auth.ENVIRONMENT !== "DEVELOPMENT" || lg) return null;
+
+  const ServeLogInPanel = () => {
+    if (state.auth.ENVIRONMENT !== "DEV" || lg) return null; // kill if not in dev mode
+
+    const handleLogin = async ({ lastname }) => {
+      const b2cTaken =
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ilg1ZVhrNHh5b2pORnVtMWtsMll0djhkbE5QNC1jNTdkTzZRR1RWQndhTmsifQ.eyJleHAiOjE2NTc3MTI1ODcsIm5iZiI6MTY1NzcwODk4NywidmVyIjoiMS4wIiwiaXNzIjoiaHR0cHM6Ly9icml0aXNoYWQuYjJjbG9naW4uY29tLzU0MjFmNTA2LTgyMzEtNGY1Ny1hNjBmLTM4MDU1YTk5OGJhZi92Mi4wLyIsInN1YiI6IjQzNzMzOWMyLWU1ODctNDVkOS05MWMzLTBkZjVmZWVhZDkzYiIsImF1ZCI6ImFkYmVkNzJkLTVlZTAtNDliMS1hMDY0LTQyMWJkYmNkNjhiMiIsIm5vbmNlIjoiZGVmYXVsdE5vbmNlIiwiaWF0IjoxNjU3NzA4OTg3LCJhdXRoX3RpbWUiOjE2NTc3MDg5ODcsImdpdmVuX25hbWUiOiJFbWVsaWEiLCJmYW1pbHlfbmFtZSI6IkdhdGxleSIsImV4dGVuc2lvbl9Db250YWN0SWQiOiI3YjlkMWQzMC1mYWQ1LWVjMTEtYTdiNS0wMDBkM2FiZWQ1MzYiLCJlbWFpbHMiOlsiZW1lbGlhQHNreWxhcmtjcmVhdGl2ZS5jby51ayJdLCJ0ZnAiOiJCMkNfMV9zaWdudXBzaWduaW5fdWF0In0.RCViQq-0bOGsBzXvviNpHaVS21POGP4MHYa6nTgN_DooSziZNc6luhohbMxM-ww_qVKm5HbZ6nIO4aNYEBRKYa6hUQohKzC_SQ5uwoQvVUW7QzfF_2DCh2tdmZV4q9BqVoGwaWBly1NbRx0_cRlVjFtDY2Y4rvkEKuV7z2sYMwzrh5m_2ClaWJJi11EYZ_utEiK_PV0EtY8FKAVO4qUU7E-SvD5oTMmEmYUxw9HrznCobKq9i2R3VzA4o5p_p5QFdOL-uQDtlYU0U6bSLeulPeQHw2NHxgzeor5hSI1TXGEfxO_9jxAiqXlRvQMb_COFP33eKFo-20t66UJ_-joV1A";
+      let contactid = "";
+
+      if (lastname === "Brooke")
+        contactid = "60a262dc-57f8-e611-80e4-3863bb35cfc8";
+      if (lastname === "Bonsall")
+        contactid = "05956d48-59f8-e611-80e4-3863bb35cfc8";
+      if (lastname === "Bulinska")
+        contactid = "0655b9bc-59f8-e611-80e4-3863bb35cfc8";
+
+      try {
+        // 📌 set auth cookie for authenticated requests
+        await setAuthenticationCookieAction({ state, b2cTaken });
+        // 📌 get user data by email
+        await getUserDataByContactId({
+          state,
+          dispatch,
+          contactid,
+        });
+      } catch (error) {
+        // console.log(error);
+      }
+    };
 
     return (
       <div
@@ -146,28 +178,45 @@ const HeaderActions = ({ state, actions, libraries }) => {
           borderRadius: 10,
           backgroundColor: "rgba(247,61,147,0.5)",
           zIndex: 1,
+          gap: 10,
         }}
       >
         <div
           className="blue-btn-reverse"
           style={{ minWidth: "fit-content" }}
-          onClick={handleCheck}
+          onClick={() => handleLogin({ lastname: "Brooke" })}
         >
-          ST
+          Brooke
         </div>
         <div
           className="blue-btn-reverse"
           style={{ minWidth: "fit-content" }}
-          onClick={() => handleRemoveServerSideCookie({ state })}
+          onClick={() => handleLogin({ lastname: "Bonsall" })}
         >
-          LogOut
+          Bonsall
         </div>
         <div
           className="blue-btn-reverse"
           style={{ minWidth: "fit-content" }}
-          onClick={handleCookie}
+          onClick={() => handleLogin({ lastname: "Bulinska" })}
         >
-          🍪
+          Bulinska
+        </div>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={handleAboutInfo}
+        >
+          i
+        </div>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={() =>
+            errorHandler({ id: `form-error-bad_categorytype`, time: 5000 })
+          }
+        >
+          e
         </div>
       </div>
     );
@@ -187,8 +236,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
     }
   };
 
-  const handleCookie = async () => {
-    handleSetCookie({ name: "no-cookie", deleteCookie: true }); // to show list of all cookies
+  const handleAboutInfo = async () => {
     handleSetCookie({ name: "BAD-cookie-popup", deleteCookie: true });
     console.log("🐞 APP_HOST ", state.auth.APP_HOST);
     console.log("🐞 APP_URL ", state.auth.APP_URL);
@@ -220,36 +268,6 @@ const HeaderActions = ({ state, actions, libraries }) => {
   };
 
   // SERVERS ----------------------------------------------------
-
-  const ServeTicketNo = () => {
-    const ticketNo = state.theme.TICKET_NO;
-    const url = state.auth.APP_HOST;
-    const isDevelopment =
-      state.auth.APP_URL.includes("testing") ||
-      state.auth.APP_URL.includes("localhost");
-
-    // 📌 only show for local development & testing url
-    if (!isDevelopment) return null;
-
-    return (
-      <div
-        className="shadow no-selector"
-        style={{
-          position: "absolute",
-          top: "1.5em",
-          right: 50,
-          padding: 5,
-          border: `1px solid ${colors.danger}`,
-          fontSize: 10,
-          color: colors.danger,
-          fontWeight: "bold",
-        }}
-      >
-        Ticket No: {ticketNo}
-      </div>
-    );
-  };
-
   const ServeInfoBatch = () => {
     // 📌 Production Batch shows if pointing to production server
     const isProduction = !state.auth.APP_HOST.toLowerCase().includes("uat");
@@ -258,7 +276,6 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
     return (
       <div style={{ position: "relative" }}>
-        <ServeTicketNo />
         <div
           className="shadow no-selector"
           style={{
@@ -296,7 +313,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   const ServeMobileMenuAction = () => {
     return (
-      <div style={{}}>
+      <div style={{ cursor: "pointer" }}>
         <div onClick={() => setMobileMenuActive(!mobileMenuActive)}>
           <Image src={ResponsiveMenuIcon} style={{ maxWidth: "65px" }} />
         </div>
@@ -373,10 +390,12 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   return (
     <div style={{ borderBottom: `1px solid ${colors.primary}` }}>
-      {mobileMenuActive && <MobileMenu />}
+      {mobileMenuActive && (
+        <MobileMenu setMobileMenuActive={setMobileMenuActive} />
+      )}
       <BlockWrapper>
         <ServeInfoBatch />
-        <ServeDevPanel />
+        <ServeLogInPanel />
 
         <div className="flex" style={{ padding: !lg ? `2.75em 0` : `0.3em 0` }}>
           <div className="flex">

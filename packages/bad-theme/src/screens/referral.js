@@ -46,7 +46,7 @@ const Referral = ({ state, actions, libraries }) => {
           subTitle="Description:"
           body={description}
           colour={colors.primary}
-          bodyLimit={10} // limit body text
+          // bodyLimit={10} // limit body text
           cardMinHeight={250}
           backgroundColor={severity === name ? colors.lightSilver : null}
           shadow
@@ -229,7 +229,8 @@ const Referral = ({ state, actions, libraries }) => {
                 <Parcer libraries={libraries} html={referral.title.rendered} />
               ) : null}
             </div>
-            {referral.acf && (
+
+            {/* {referral.acf && (
               <div className="referal-badge-container">
                 <div className="referal-badge-wrapper">
                   <Parcer
@@ -245,14 +246,14 @@ const Referral = ({ state, actions, libraries }) => {
                   </span>
                 </div>
               </div>
-            )}
+            )} */}
           </div>
 
-          <ServeDownloadAction
+          {/* <ServeDownloadAction
             resources={referral.acf.condition_guideline_link}
             resources2={referral.acf.condition_pil_link}
             isRowItem
-          />
+          /> */}
 
           <div className="flex-col">
             <Parcer
