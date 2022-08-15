@@ -10,6 +10,7 @@ import {
   setDashboardPathAction,
   muiQuery,
   setErrorAction,
+  handleGetCookie,
 } from "../../context";
 
 const DashboardNotifications = ({ state }) => {
@@ -35,18 +36,36 @@ const DashboardNotifications = ({ state }) => {
       isValid: true,
       message: state.theme.lapsedMembershipBody,
     };
+    let paymentLapseTime = 15; // notification delay un minutes
     // console.log("🐞 dynamicsApps", dynamicsApps.subs.data); // debug
 
-    // if user core_membershipstatus is not set to Free, then return valid subscription
+    // --------------------------------------------------------------------------------
+    // 📌 if user core_membershipstatus is not set to Free, then return valid subscription
+    // --------------------------------------------------------------------------------
     if (
       !isActiveUser ||
       isActiveUser.core_membershipstatus !== state.theme.frozenMembership
     )
       return membership;
 
+    // check if cookie is set with user payment Date & value is less then paymentLapseTime in minutes
+    const cookie = handleGetCookie({ name: "payment" });
+    // check if value is less then 10 minutes
+    if (cookie) {
+      const now = new Date().getTime();
+      const cookieDate = new Date(Number(cookie)).getTime(); // convert cookie to date
+
+      const difference = now - cookieDate; // This will give difference in milliseconds
+      // get time difference in minutes
+      const resultInMinutes = Math.round(difference / 60000);
+
+      if (resultInMinutes < paymentLapseTime) return membership;
+    }
+
     // FREEZE membership status & set it to LAPSED by default
     membership.isValid = false;
 
+    // check if subscriptions have FREEZE status
     let freezeMembershipList = [];
     if (dynamicsApps && dynamicsApps.subs) {
       // is lapsed if any bad_organisedfor === 'BAD' & core_membershipstatus === 'Completed' && subscription of previous year is completed
@@ -56,7 +75,6 @@ const DashboardNotifications = ({ state }) => {
           app.core_membershipstatus === state.theme.frozenMembership
         );
       });
-      console.log("🐞 freezeMembershipList", freezeMembershipList); // debug
 
       // 📌 uncoment below to eneable lapsed membership flip if user have applications form current year
       // if user have paid applications form current year then set lapsed membership to false

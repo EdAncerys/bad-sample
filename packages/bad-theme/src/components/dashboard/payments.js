@@ -16,6 +16,7 @@ import {
   setErrorAction,
   fetchDataHandler,
   setGoToAction,
+  handleSetCookie,
 } from "../../context";
 
 export const handlePayment = async ({
@@ -33,6 +34,8 @@ export const handlePayment = async ({
     setGoToAction({ path: sagePayUrl, state, actions });
     // close error modal
     setErrorAction({ dispatch, isError: null });
+    // set cookie with timestamp for payment
+    handleSetCookie({ name: "payment", value: Date.now() });
   };
 
   // --------------------------------------------------------------------------------
@@ -128,7 +131,6 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
   if (!liveSubscriptions) return <Loading />;
 
   // HELPERS ----------------------------------------------------------------
-
   const resetPaymentUrl = async () => {
     setPaymentUrl(null);
 
