@@ -34,8 +34,16 @@ const Membership = ({ state, actions, libraries }) => {
 
   useEffect(() => {
     if (!dynamicsApps) return;
+    // --------------------------------------------------------------------------------
+    // 📌  Current user subs
+    // --------------------------------------------------------------------------------
+    const currentYear = new Date().getFullYear(); // get current year
+    // apps with core_endon that is current year
+    const apps = dynamicsApps.subs.data.filter((app) => {
+      return app.core_endon.includes(currentYear);
+    });
     // 📌 set dynamic apps data
-    setSubs(dynamicsApps.subs.data);
+    setSubs(apps);
   }, [dynamicsApps]);
 
   // HANDLERS ----------------------------------------------------------------
