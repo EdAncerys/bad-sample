@@ -83,7 +83,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
       value:
         isActiveUser[`_donotemail`] === null
           ? false
-          : !isActiveUser[`_donotemail`],
+          : isActiveUser[`_donotemail`],
     });
     handleSetData({
       name: "_bad_preferredmailingaddress",
@@ -101,7 +101,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
       handleSetData({ name: "_bad_bjdalerts", value: false });
       handleSetData({ name: "_bad_presidentsbulletin", value: false });
     }
-    // --------------------------------------------------------------------------------
+    // // --------------------------------------------------------------------------------
     // if any other checkbox is checked, untick _donotemail
     if (name !== "_donotemail" && checked === true) {
       handleSetData({ name: "_donotemail", value: false });
@@ -123,7 +123,7 @@ const PrivacyPreferences = ({ state, actions, libraries }) => {
       bad_badecircular: !formData._bad_badecircular,
       bad_bjdalerts: !formData._bad_bjdalerts,
       bad_presidentsbulletin: !formData._bad_presidentsbulletin,
-      donotemail: !formData._donotemail,
+      donotemail: formData._donotemail,
       // --------------------------------------------------------------------------------
       bad_preferredmailingaddress: formData._bad_preferredmailingaddress,
     };
