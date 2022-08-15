@@ -115,7 +115,7 @@ const BADTheme = {
       addInitiatedPayment:
         ({ state }) =>
         (buttonId) => {
-          console.log(buttonId);
+          // console.log(buttonId);
           state.data.initiatedPayments.push(buttonId);
         },
       // notification

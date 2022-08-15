@@ -96,7 +96,6 @@ const BillingHistory = ({ state, actions, libraries }) => {
           let paymentLength = subAppHistory.length;
           const isLastItem = paymentLength === key + 1;
           const isSIG = bad_organisedfor === "SIG";
-          console.log("🐞 block", block);
 
           // list of apps with billing history
           return (

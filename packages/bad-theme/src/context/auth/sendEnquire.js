@@ -84,9 +84,7 @@ export const sendEmailEnquireAction = async ({
       body: form,
       credentials: "include",
     };
-    console.log("🐞 ", path);
-    console.log("🐞 ", requestOptions);
-    console.log("🐞 ", formData);
+    // console.log("🐞 ", path);
 
     const response = await fetch(path, requestOptions);
     const data = await response.json();

@@ -72,7 +72,6 @@ const ErrorModal = ({ state, actions, libraries }) => {
             style={{ gap: !lg ? null : 20 }}
           >
             {isError.action.map((action, index) => {
-              console.log("🐞 ", action);
               return (
                 <div
                   key={index}

@@ -9,7 +9,6 @@ export const useWpImageScrip = ({ inputs }) => {
   useEffect(() => {
     // get all divs with class "wp-caption"
     const wpCaptions = document.querySelectorAll(".wp-caption");
-    console.log("🐞 ", wpCaptions);
 
     if (!wpCaptions) return;
     // add margin "auto" to wpCaptions container to center images
@@ -24,7 +23,6 @@ export const useWpImageScrip = ({ inputs }) => {
     // fet all img elements with class "size-full" and add style width "auto"
     const fullImages = document.querySelectorAll(".size-full");
     fullImages.forEach((fullImage) => {
-      console.log("🐞 ", fullImage);
       fullImage.style.width = "auto";
     });
   }, [inputs]);

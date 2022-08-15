@@ -222,7 +222,6 @@ const EnquireModal = ({ state, libraries }) => {
 
     const ServeFormBody = () => {
       if (!enquireAction.form_body) return null;
-      console.log("🐞 ", enquireAction.form_body);
 
       return (
         <div style={{ paddingTop: `1em` }}>

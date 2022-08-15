@@ -24,7 +24,6 @@ export const dateConverter = ({ date, dateFormat, isDynamics }) => {
   let year = formatedDate.getFullYear();
   let month = formatedDate.getMonth() + 1;
   let day = formatedDate.getDate();
-  console.log("🐞 ", year, month, day);
 
   //  if dateFormat "DD/MM/YYYY"
   if (dateFormat === "DD/MM/YYYY") return `${day}/${month}/${year}`;

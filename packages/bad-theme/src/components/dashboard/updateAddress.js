@@ -107,7 +107,6 @@ const UpdateAddress = ({ state, actions, libraries }) => {
       { address2_postalcode },
       !!bad_preferredmailingaddress && { bad_preferredmailingaddress }
     );
-    console.log("🐞 ", data);
 
     try {
       setIsFetching(true);
