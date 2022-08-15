@@ -25,13 +25,13 @@ const LeadershipBlock = ({ state, actions, block }) => {
     const grades = await getLeadershipGrades({ state });
     const positions = await getLeadershipPositions({ state });
     let leadershipList = await getLeadershipData({ state });
+    // sort by order in acf field
     leadershipList = leadershipList.sort((a, b) => {
-      // change member order in the list. move Mabs Chowdhury to the top
-      let person = "Dr Mabs Chowdhury";
+      // if order is null, add to end of list
+      if (a.acf.order === null) return 1;
+      if (b.acf.order === null) return -1;
 
-      if (a.title && a.title.rendered === person) return -1;
-      if (b.title && b.title.rendered === person) return 1;
-      return 0;
+      return a.acf.order - b.acf.order;
     });
 
     setPositions(positions);
