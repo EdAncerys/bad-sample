@@ -338,10 +338,13 @@ const Dashboard = ({ state, actions, libraries }) => {
                   };
 
                   // --------------------------------------------------------------------------------
-                  // 📌  Disable all action if application is not current year
+                  // 📌  Disable all action if application is not current year | frozen
                   // --------------------------------------------------------------------------------
                   const currentYear = new Date().getFullYear();
                   const applicationYear = app.core_endon;
+                  const isFrozen =
+                    isActiveUser.core_membershipstatus !==
+                    state.theme.frozenMembership;
 
                   return (
                     <div
@@ -363,10 +366,14 @@ const Dashboard = ({ state, actions, libraries }) => {
                           <div>{core_name}</div>
                         </div>
                         <ServeChangeApplicationAction
-                          show={!applicationYear.includes(currentYear)}
+                          show={
+                            !applicationYear.includes(currentYear) || !isFrozen
+                          }
                         />
                         <ServeMembershipActions
-                          show={!applicationYear.includes(currentYear)}
+                          show={
+                            !applicationYear.includes(currentYear) || !isFrozen
+                          }
                         />
                       </div>
                     </div>
