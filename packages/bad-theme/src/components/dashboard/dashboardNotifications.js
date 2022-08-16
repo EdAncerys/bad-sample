@@ -65,7 +65,7 @@ const DashboardNotifications = ({ state }) => {
         image: "Error",
       },
     });
-  }, [isActiveUser, dynamicsApps]);
+  }, [isActiveUser]);
 
   // SERVERS -----------------------------------------------------------------
   const ServeGoToActions = ({
