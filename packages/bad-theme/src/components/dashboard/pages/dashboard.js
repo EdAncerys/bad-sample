@@ -39,7 +39,6 @@ const Dashboard = ({ state, actions, libraries }) => {
   const [eventList, setEventList] = useState(null); // event data
   const [isFetching, setFetching] = useState(false);
   const [subsData, setSubs] = useState(null);
-  const useEffectRef = useRef(null);
 
   useEffect(async () => {
     let events = await getEventsData({ state });
@@ -57,9 +56,21 @@ const Dashboard = ({ state, actions, libraries }) => {
       dispatch,
       contactid: isActiveUser.contactid,
     });
-    setSubs(dynamicsApps.subs.data);
 
-    setEventList(events);
+    // sort subs by core_endon (ending year) date & get year DD/MM/YYYY
+    const subs = dynamicsApps.subs.data.sort((a, b) => {
+      // get year from core_endon date only
+      const yearA = a.core_endon.split("/")[2];
+      const yearB = b.core_endon.split("/")[2];
+
+      // sort by year (ending year)
+      if (yearA > yearB) return -1;
+      if (yearA < yearB) return 1;
+      return 0;
+    });
+
+    setSubs(subs); // set subs data
+    setEventList(events); // set event list
   }, []);
 
   // HELPERS ----------------------------------------------
@@ -152,6 +163,7 @@ const Dashboard = ({ state, actions, libraries }) => {
   // 📌 If user dont have any subscription dont render the component
   let isSubsData = subsData;
   if (subsData && subsData.length === 0) isSubsData = null;
+  console.log("🐞 subsData", subsData);
 
   // RETURN ---------------------------------------------
   return (
@@ -204,6 +216,7 @@ const Dashboard = ({ state, actions, libraries }) => {
                     bad_organisedfor,
                     core_name,
                     createdon,
+                    core_endon,
                     core_membershipsubscriptionid,
                     bad_sagepayid,
                     bad_outstandingpayments,
@@ -282,7 +295,6 @@ const Dashboard = ({ state, actions, libraries }) => {
                           style={{
                             display: "grid",
                             alignItems: "center",
-                            marginRight: "2em",
                           }}
                         >
                           <div
@@ -327,7 +339,7 @@ const Dashboard = ({ state, actions, libraries }) => {
                             <div>
                               <div
                                 className="blue-btn"
-                                style={{ marginRight: "1em" }}
+                                style={{ marginLeft: "2em" }}
                                 onClick={handleApplyForMembershipChangeAction}
                               >
                                 Apply to change membership
@@ -368,7 +380,6 @@ const Dashboard = ({ state, actions, libraries }) => {
                   // 📌  Disable all action if application is not current year | frozen
                   // --------------------------------------------------------------------------------
                   const currentYear = new Date().getFullYear();
-                  const applicationYear = app.core_endon;
                   const isFrozen =
                     isActiveUser.core_membershipstatus !==
                     state.theme.frozenMembership;
@@ -396,15 +407,13 @@ const Dashboard = ({ state, actions, libraries }) => {
                           <div>{core_name}</div>
                         </div>
                         <ServeChangeApplicationAction
-                          show={
-                            !applicationYear.includes(currentYear) || !isFrozen
-                          }
+                          show={!core_endon.includes(currentYear) || !isFrozen}
                         />
                         <ServeMembershipActions
-                          show={!applicationYear.includes(currentYear)}
+                          show={!core_endon.includes(currentYear)}
                         />
                         <ServeMembershipHistory
-                          show={applicationYear.includes(currentYear)}
+                          show={core_endon.includes(currentYear)}
                         />
                       </div>
                     </div>

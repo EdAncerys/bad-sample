@@ -103,9 +103,11 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   useEffect(() => {
     // if dynamic apps check if user have BAD membership
     if (dynamicsApps) {
+      const currentYear = new Date().getFullYear();
       const subsData = dynamicsApps.subs.data; // get subs data form dynamic apps
       const isBADMember = subsData.filter(
-        (app) => app.bad_organisedfor === "BAD"
+        (app) =>
+          app.bad_organisedfor === "BAD" && app.core_endon.includes(currentYear)
       );
       if (isBADMember.length) {
         setIsMember(true);

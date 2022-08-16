@@ -13,7 +13,7 @@ export const handelValidateMembership = ({
     isValid: true,
     message: "",
   };
-  let paymentLapseTime = 5; // notification delay un minutes
+  let paymentLapseTime = 8; // notification delay un minutes
   // console.log("🐞 dynamicsApps", dynamicsApps.subs.data); // debug
 
   // --------------------------------------------------------------------------------

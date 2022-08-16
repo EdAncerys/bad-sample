@@ -29,6 +29,7 @@ const DashboardNotifications = ({ state }) => {
 
   // HELPERS -----------------------------------------------------------------
   useEffect(() => {
+    if (!isActiveUser && !dynamicsApps) return;
     // --------------------------------------------------------------------------------
     // 📌  FEEZE & LAPSED membership notification hook
     // 📌  bad_selfserviceaccess & core_membershipstatus in subs as validation fileds for membership status
@@ -64,7 +65,7 @@ const DashboardNotifications = ({ state }) => {
         image: "Error",
       },
     });
-  }, [isActiveUser, dynamicsApps]);
+  }, [isActiveUser]);
 
   // SERVERS -----------------------------------------------------------------
   const ServeGoToActions = ({
