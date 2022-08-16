@@ -636,8 +636,18 @@ const SIGApplication = ({ state, actions, libraries }) => {
       if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
 
       let slug = `/dashboard/`;
-      if (isActiveUser && appsResponse)
-        setGoToAction({ state, path: slug, actions });
+      // disable freeze notification for active user if exists on redirect to dashboard
+      // state.theme.isNotificationDisable = true;
+
+      // setErrorAction({
+      //   dispatch,
+      //   isNotification: {
+      //     message: `Application for ${applicationType} submitted successfully!`,
+      //     image: "Success",
+      //   },
+      // });
+
+      setGoToAction({ state, path: slug, actions });
     } catch (error) {
       // console.log(error);
       setErrorAction({

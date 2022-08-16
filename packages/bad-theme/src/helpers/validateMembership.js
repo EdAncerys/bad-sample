@@ -22,8 +22,10 @@ export const handelValidateMembership = ({
   if (
     !isActiveUser ||
     isActiveUser.core_membershipstatus !== state.theme.frozenMembership
-  )
+  ) {
+    // return object with valid subscription
     return membership;
+  }
 
   // check if cookie is set with user payment Date & value is less then paymentLapseTime in minutes
   const cookie = handleGetCookie({ name: "payment" });

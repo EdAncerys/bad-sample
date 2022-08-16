@@ -35,8 +35,19 @@ const DashboardNotifications = ({ state }) => {
     // --------------------------------------------------------------------------------
 
     // member status notification - if user bad_selfserviceaccess === "FEEZE" then show notification
-    if (handelValidateMembership({ isActiveUser, dynamicsApps, state }).isValid)
+    if (
+      handelValidateMembership({ isActiveUser, dynamicsApps, state }).isValid ||
+      state.theme.isNotificationDisable
+    ) {
+      // set notification to false on delay if they been set to true
+      setTimeout(() => {
+        const isMsg = state.theme.isNotificationDisable;
+        if (isMsg) state.theme.isNotificationDisable = !isMsg;
+      }, 3000);
+
       return;
+    }
+
     let message = handelValidateMembership({
       isActiveUser,
       dynamicsApps,
