@@ -27,6 +27,7 @@ const BADTheme = {
       initiatedPayments: [],
     },
     theme: {
+      isNotificationDisable: false, // notification disable
       inputFieldLimit250: "250", // defines maxlength prop
       inputFieldLimit100: "100", // defines maxlength prop
       inputFieldLimit80: "80", // defines maxlength prop

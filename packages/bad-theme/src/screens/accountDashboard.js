@@ -29,6 +29,7 @@ import {
   setDashboardNotificationsAction,
   setCPTBlockTypeAction,
   handleUpdateMembershipApplication,
+  handelValidateMembership,
 } from "../context";
 
 const AccountDashboard = ({ state, actions, libraries }) => {
@@ -143,6 +144,17 @@ const AccountDashboard = ({ state, actions, libraries }) => {
       applicationTitle = "Apply to Change BAD Membership category";
       applicationPath = "/membership/step-1-the-process/";
     }
+    if (
+      handelValidateMembership({
+        isActiveUser,
+        dynamicsApps,
+        state,
+      }).message === state.theme.lapsedMembershipBody
+    ) {
+      // set default message if user have lapsed membership
+      applicationTitle = "Apply for BAD Membership";
+      applicationPath = "/membership/categories-of-membership/";
+    }
 
     return (
       <div style={{ position: "relative" }}>
@@ -161,6 +173,13 @@ const AccountDashboard = ({ state, actions, libraries }) => {
                     onClickAction: isBADMember
                       ? () => handleApplyForMembershipChange()
                       : null,
+                    // disable button if user have Freeze status
+                    disable:
+                      handelValidateMembership({
+                        isActiveUser,
+                        dynamicsApps,
+                        state,
+                      }).message === state.theme.frozenMembershipBody,
                   },
                   {
                     title: "Apply for SIG Membership",
