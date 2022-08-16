@@ -152,6 +152,7 @@ const Dashboard = ({ state, actions, libraries }) => {
   // 📌 If user dont have any subscription dont render the component
   let isSubsData = subsData;
   if (subsData && subsData.length === 0) isSubsData = null;
+  console.log("🐞 subsData", subsData);
 
   // RETURN ---------------------------------------------
   return (
@@ -354,11 +355,17 @@ const Dashboard = ({ state, actions, libraries }) => {
                     )
                       return null;
 
+                    let isFrozen =
+                      isActiveUser.core_membershipstatus ===
+                      state.theme.frozenMembership;
+
                     return (
                       <div style={{ display: "grid", alignItems: "center" }}>
                         <div className="flex">
-                          {!bad_sagepayid && <div>Lapsed Membership</div>}
-                          {bad_sagepayid && <div>{core_totalamount}</div>}
+                          {isFrozen && <div>Frozen Membership</div>}
+                          {bad_sagepayid && !isFrozen && (
+                            <div>{core_totalamount}</div>
+                          )}
                         </div>
                       </div>
                     );
@@ -395,11 +402,11 @@ const Dashboard = ({ state, actions, libraries }) => {
                           </div>
                           <div>{core_name}</div>
                         </div>
-                        <ServeChangeApplicationAction
+                        {/* <ServeChangeApplicationAction
                           show={
                             !applicationYear.includes(currentYear) || !isFrozen
                           }
-                        />
+                        /> */}
                         <ServeMembershipActions
                           show={!applicationYear.includes(currentYear)}
                         />
