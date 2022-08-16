@@ -207,6 +207,7 @@ const Dashboard = ({ state, actions, libraries }) => {
                     core_membershipsubscriptionid,
                     bad_sagepayid,
                     bad_outstandingpayments,
+                    core_totalamount,
                   } = app;
 
                   // get application date
@@ -314,24 +315,50 @@ const Dashboard = ({ state, actions, libraries }) => {
                     )
                       return null;
 
+                    const isFrozen =
+                      isActiveUser.core_membershipstatus ===
+                      state.theme.frozenMembership;
+
                     return (
                       <div style={{ display: "grid", alignItems: "center" }}>
                         <div className="flex">
-                          <div
-                            className="blue-btn"
-                            style={{ marginRight: "1em" }}
-                            onClick={handleApplyForMembershipChangeAction}
-                          >
-                            Apply to change membership
-                          </div>
-                          <div
-                            className="blue-btn"
-                            onClick={() =>
-                              handleDownloadConfirmationPDF({ app })
-                            }
-                          >
-                            Proof of membership certificate
-                          </div>
+                          {isFrozen && <div>Frozen Membership</div>}
+                          {!isFrozen && (
+                            <div>
+                              <div
+                                className="blue-btn"
+                                style={{ marginRight: "1em" }}
+                                onClick={handleApplyForMembershipChangeAction}
+                              >
+                                Apply to change membership
+                              </div>
+                              <div
+                                className="blue-btn"
+                                onClick={() =>
+                                  handleDownloadConfirmationPDF({ app })
+                                }
+                              >
+                                Proof of membership certificate
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  };
+
+                  const ServeMembershipHistory = ({ show }) => {
+                    if (
+                      bad_organisedfor === "SIG" ||
+                      show // hide acctions if application is not current year
+                    )
+                      return null;
+
+                    return (
+                      <div style={{ display: "grid", alignItems: "center" }}>
+                        <div className="flex">
+                          {!bad_sagepayid && <div>Lapsed Membership</div>}
+                          {bad_sagepayid && <div>{core_totalamount}</div>}
                         </div>
                       </div>
                     );
@@ -345,6 +372,9 @@ const Dashboard = ({ state, actions, libraries }) => {
                   const isFrozen =
                     isActiveUser.core_membershipstatus !==
                     state.theme.frozenMembership;
+
+                  // dont show data if bad_organisedfor & core_name is not set
+                  if (!bad_organisedfor || !core_name) return null;
 
                   return (
                     <div
@@ -371,9 +401,10 @@ const Dashboard = ({ state, actions, libraries }) => {
                           }
                         />
                         <ServeMembershipActions
-                          show={
-                            !applicationYear.includes(currentYear) || !isFrozen
-                          }
+                          show={!applicationYear.includes(currentYear)}
+                        />
+                        <ServeMembershipHistory
+                          show={applicationYear.includes(currentYear)}
                         />
                       </div>
                     </div>
