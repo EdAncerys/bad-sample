@@ -36,7 +36,7 @@ const DashboardNotifications = ({ state }) => {
       isValid: true,
       message: state.theme.lapsedMembershipBody,
     };
-    let paymentLapseTime = 15; // notification delay un minutes
+    let paymentLapseTime = 5; // notification delay un minutes
     // console.log("🐞 dynamicsApps", dynamicsApps.subs.data); // debug
 
     // --------------------------------------------------------------------------------
