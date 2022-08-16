@@ -40,6 +40,7 @@ const RowButton = ({
     file_link,
     onClickAction,
     is_wileys_link,
+    disable, // disable button if true
   } = block;
 
   // ⬇️ initialize new enquireAction object & update object with new values
@@ -127,7 +128,7 @@ const RowButton = ({
     border: `1px ${THEME}`,
     borderStyle: `solid`,
     padding: 0,
-    cursor: "pointer",
+    cursor: disable ? "unset" : "pointer",
     boxShadow: isHover ? `inset 0 40px 0 0 ${THEME}` : null,
     transform: isHover ? `translate(5px, 0)` : `translate(0, 0)`,
     transition: `background-color 1s, transform 1s`,
@@ -138,14 +139,16 @@ const RowButton = ({
       className="flex shadow"
       style={{
         backgroundColor: colors.white,
-        cursor: "pointer",
+        cursor: disable ? "unset" : "pointer",
         position: "relative",
+        opacity: disable ? 0.5 : 1,
       }}
       data-aos="fade"
       data-aos-easing="ease-in-sine"
       data-aos-delay={`${delay * 50}`}
       data-aos-duration="1000"
       onClick={() => {
+        if (disable) return; // if button is disabled, do not do anything
         if (link_id) {
           window.location.href = "#" + link_id;
           return;
@@ -186,6 +189,7 @@ const RowButton = ({
             <div className="flex">
               <div
                 className={!multiPostRowButtons ? "caps-btn" : "mp-row-button"}
+                style={{ cursor: disable ? "unset" : "pointer" }}
               >
                 <Parcer libraries={libraries} html={LABEL} />
               </div>
