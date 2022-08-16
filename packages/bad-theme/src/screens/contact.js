@@ -31,7 +31,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
           <div>Willan House</div>
           <div>4 Fitzroy Square</div>
           <div>London</div>
-          <div>W17 5HQ</div>
+          <div>W1T 5HQ</div>
         </div>
       );
     };
