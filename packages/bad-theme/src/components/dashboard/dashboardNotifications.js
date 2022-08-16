@@ -34,17 +34,21 @@ const DashboardNotifications = ({ state }) => {
     // 📌  FEEZE & LAPSED membership notification hook
     // 📌  bad_selfserviceaccess & core_membershipstatus in subs as validation fileds for membership status
     // --------------------------------------------------------------------------------
-
+    console.log("🐞 NOTIFICATION CHECK TRIGGERED");
     // member status notification - if user bad_selfserviceaccess === "FEEZE" then show notification
     if (
       handelValidateMembership({ isActiveUser, dynamicsApps, state }).isValid ||
       state.theme.isNotificationDisable
     ) {
-      // set notification to false on delay if they been set to true
+      // --------------------------------------------------------------------------------
+      // 📌  FEEZE & LAPSED membership notification hook disable if state set 2 true on delay
+      // --------------------------------------------------------------------------------
       setTimeout(() => {
-        const isMsg = state.theme.isNotificationDisable;
-        if (isMsg) state.theme.isNotificationDisable = !isMsg;
-      }, 3000);
+        let isMsg = state.theme.isNotificationDisable;
+        if (isMsg) {
+          state.theme.isNotificationDisable = !isMsg;
+        }
+      }, 5000);
 
       return;
     }
