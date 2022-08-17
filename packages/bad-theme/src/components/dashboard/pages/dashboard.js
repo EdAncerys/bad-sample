@@ -163,7 +163,6 @@ const Dashboard = ({ state, actions, libraries }) => {
   // 📌 If user dont have any subscription dont render the component
   let isSubsData = subsData;
   if (subsData && subsData.length === 0) isSubsData = null;
-  console.log("🐞 subsData", subsData);
 
   // RETURN ---------------------------------------------
   return (
@@ -228,8 +227,6 @@ const Dashboard = ({ state, actions, libraries }) => {
                   // split string and revert date with month format
                   appData = appData.split("/");
                   appData = `${appData[1]}/${appData[0]}/${appData[2]}`;
-
-                  const dateObject = new Date(appData);
 
                   const ServeChangeApplicationAction = ({ show }) => {
                     // return if bad_organisedfor is BAD & in dashboard only
@@ -319,41 +316,24 @@ const Dashboard = ({ state, actions, libraries }) => {
                     return null;
                   };
 
-                  const ServeMembershipActions = ({ show }) => {
+                  const ServeCurrentMemberships = ({ show }) => {
+                    const isFrozen =
+                      isActiveUser.core_membershipstatus ===
+                      state.theme.frozenMembership;
+
                     if (
-                      dashboardPath === "Dashboard" ||
                       bad_organisedfor === "SIG" ||
                       show // hide acctions if application is not current year
                     )
                       return null;
 
-                    const isFrozen =
-                      isActiveUser.core_membershipstatus ===
-                      state.theme.frozenMembership;
+                    // if dashboard do not show actions except for frozen memberships
+                    if (!isFrozen) return null;
 
                     return (
                       <div style={{ display: "grid", alignItems: "center" }}>
                         <div className="flex">
                           {isFrozen && <div>Frozen Membership</div>}
-                          {!isFrozen && (
-                            <div>
-                              <div
-                                className="blue-btn"
-                                style={{ marginLeft: "2em" }}
-                                onClick={handleApplyForMembershipChangeAction}
-                              >
-                                Apply to change membership
-                              </div>
-                              <div
-                                className="blue-btn"
-                                onClick={() =>
-                                  handleDownloadConfirmationPDF({ app })
-                                }
-                              >
-                                Proof of membership certificate
-                              </div>
-                            </div>
-                          )}
                         </div>
                       </div>
                     );
@@ -409,7 +389,7 @@ const Dashboard = ({ state, actions, libraries }) => {
                         <ServeChangeApplicationAction
                           show={!core_endon.includes(currentYear) || !isFrozen}
                         />
-                        <ServeMembershipActions
+                        <ServeCurrentMemberships
                           show={!core_endon.includes(currentYear)}
                         />
                         <ServeMembershipHistory
