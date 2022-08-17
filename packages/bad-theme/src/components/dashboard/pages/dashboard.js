@@ -163,7 +163,6 @@ const Dashboard = ({ state, actions, libraries }) => {
   // 📌 If user dont have any subscription dont render the component
   let isSubsData = subsData;
   if (subsData && subsData.length === 0) isSubsData = null;
-  console.log("🐞 subsData", subsData);
 
   // RETURN ---------------------------------------------
   return (
@@ -228,8 +227,6 @@ const Dashboard = ({ state, actions, libraries }) => {
                   // split string and revert date with month format
                   appData = appData.split("/");
                   appData = `${appData[1]}/${appData[0]}/${appData[2]}`;
-
-                  const dateObject = new Date(appData);
 
                   const ServeChangeApplicationAction = ({ show }) => {
                     // return if bad_organisedfor is BAD & in dashboard only
@@ -320,16 +317,18 @@ const Dashboard = ({ state, actions, libraries }) => {
                   };
 
                   const ServeMembershipActions = ({ show }) => {
+                    const isFrozen =
+                      isActiveUser.core_membershipstatus ===
+                      state.theme.frozenMembership;
+
                     if (
-                      dashboardPath === "Dashboard" ||
                       bad_organisedfor === "SIG" ||
                       show // hide acctions if application is not current year
                     )
                       return null;
 
-                    const isFrozen =
-                      isActiveUser.core_membershipstatus ===
-                      state.theme.frozenMembership;
+                    // if dashboard do not show actions except for frozen memberships
+                    if (dashboardPath !== "Dashboard" && !isFrozen) return null;
 
                     return (
                       <div style={{ display: "grid", alignItems: "center" }}>
