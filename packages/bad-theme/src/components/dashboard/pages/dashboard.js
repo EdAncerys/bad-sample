@@ -316,7 +316,7 @@ const Dashboard = ({ state, actions, libraries }) => {
                     return null;
                   };
 
-                  const ServeMembershipActions = ({ show }) => {
+                  const ServeCurrentMemberships = ({ show }) => {
                     const isFrozen =
                       isActiveUser.core_membershipstatus ===
                       state.theme.frozenMembership;
@@ -328,31 +328,12 @@ const Dashboard = ({ state, actions, libraries }) => {
                       return null;
 
                     // if dashboard do not show actions except for frozen memberships
-                    if (dashboardPath !== "Dashboard" && !isFrozen) return null;
+                    if (!isFrozen) return null;
 
                     return (
                       <div style={{ display: "grid", alignItems: "center" }}>
                         <div className="flex">
                           {isFrozen && <div>Frozen Membership</div>}
-                          {!isFrozen && (
-                            <div>
-                              <div
-                                className="blue-btn"
-                                style={{ marginLeft: "2em" }}
-                                onClick={handleApplyForMembershipChangeAction}
-                              >
-                                Apply to change membership
-                              </div>
-                              <div
-                                className="blue-btn"
-                                onClick={() =>
-                                  handleDownloadConfirmationPDF({ app })
-                                }
-                              >
-                                Proof of membership certificate
-                              </div>
-                            </div>
-                          )}
                         </div>
                       </div>
                     );
@@ -408,7 +389,7 @@ const Dashboard = ({ state, actions, libraries }) => {
                         <ServeChangeApplicationAction
                           show={!core_endon.includes(currentYear) || !isFrozen}
                         />
-                        <ServeMembershipActions
+                        <ServeCurrentMemberships
                           show={!core_endon.includes(currentYear)}
                         />
                         <ServeMembershipHistory
