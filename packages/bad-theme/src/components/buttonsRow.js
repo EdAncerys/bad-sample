@@ -39,6 +39,7 @@ const ButtonsRow = ({ state, actions, style, block, disableMargin }) => {
             key={key}
             delay={key}
             block={block}
+            disable={block.disable}
             style={{ cursor: "pointer" }}
           />
         );

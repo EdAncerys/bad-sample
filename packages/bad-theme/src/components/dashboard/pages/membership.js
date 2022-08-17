@@ -250,25 +250,22 @@ const Membership = ({ state, actions, libraries }) => {
                     isActiveUser.core_membershipstatus ===
                     state.theme.frozenMembership;
 
-                  if (bad_organisedfor === "SIG" || show || isFrozen)
-                    return null;
+                  if (bad_organisedfor === "SIG" || show) return null;
 
                   return (
                     <div style={{ display: "grid", alignItems: "center" }}>
                       <div className="flex">
-                        {/* <div
-                          className="blue-btn"
-                          style={{ marginRight: "1em" }}
-                          onClick={handleApplyForMembershipChangeAction}
-                        >
-                          Apply to change membership
-                        </div> */}
-                        <div
-                          className="blue-btn"
-                          onClick={() => handleDownloadConfirmationPDF({ app })}
-                        >
-                          Proof of membership certificate
-                        </div>
+                        {isFrozen && <div>Frozen Membership</div>}
+                        {!isFrozen && (
+                          <div
+                            className="blue-btn"
+                            onClick={() =>
+                              handleDownloadConfirmationPDF({ app })
+                            }
+                          >
+                            Proof of membership certificate
+                          </div>
+                        )}
                       </div>
                     </div>
                   );

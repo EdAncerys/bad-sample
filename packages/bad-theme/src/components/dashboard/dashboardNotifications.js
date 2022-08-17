@@ -10,7 +10,7 @@ import {
   setDashboardPathAction,
   muiQuery,
   setErrorAction,
-  handleGetCookie,
+  handelValidateMembership,
 } from "../../context";
 
 const DashboardNotifications = ({ state }) => {
@@ -28,78 +28,36 @@ const DashboardNotifications = ({ state }) => {
   const marginVertical = state.theme.marginVertical;
 
   // HELPERS -----------------------------------------------------------------
-  const handelValidateMembership = () => {
-    // --------------------------------------------------------------------------------
-    // 📌  Validate user membership status
-    // --------------------------------------------------------------------------------
-    let membership = {
-      isValid: true,
-      message: state.theme.lapsedMembershipBody,
-    };
-    let paymentLapseTime = 15; // notification delay un minutes
-    // console.log("🐞 dynamicsApps", dynamicsApps.subs.data); // debug
-
-    // --------------------------------------------------------------------------------
-    // 📌 if user core_membershipstatus is not set to Free, then return valid subscription
-    // --------------------------------------------------------------------------------
-    if (
-      !isActiveUser ||
-      isActiveUser.core_membershipstatus !== state.theme.frozenMembership
-    )
-      return membership;
-
-    // check if cookie is set with user payment Date & value is less then paymentLapseTime in minutes
-    const cookie = handleGetCookie({ name: "payment" });
-    // check if value is less then 10 minutes
-    if (cookie) {
-      const now = new Date().getTime();
-      const cookieDate = new Date(Number(cookie)).getTime(); // convert cookie to date
-
-      const difference = now - cookieDate; // This will give difference in milliseconds
-      // get time difference in minutes
-      const resultInMinutes = Math.round(difference / 60000);
-
-      if (resultInMinutes < paymentLapseTime) return membership;
-    }
-
-    // FREEZE membership status & set it to LAPSED by default
-    membership.isValid = false;
-
-    // check if subscriptions have FREEZE status
-    let freezeMembershipList = [];
-    if (dynamicsApps && dynamicsApps.subs) {
-      // is lapsed if any bad_organisedfor === 'BAD' & core_membershipstatus === 'Completed' && subscription of previous year is completed
-      freezeMembershipList = dynamicsApps.subs.data.filter((app) => {
-        return (
-          app.bad_organisedfor === "BAD" &&
-          app.core_membershipstatus === state.theme.frozenMembership
-        );
-      });
-
-      // 📌 uncoment below to eneable lapsed membership flip if user have applications form current year
-      // if user have paid applications form current year then set lapsed membership to false
-      // let isAppCurrentYear = freezeMembershipList.filter((app) => {
-      //   return app.core_name.includes(currentYear);
-      // });
-      // if (isAppCurrentYear.length) freezeMembershipList = [];
-    }
-
-    // if user have any memberships set to FREEZ then set membership to freezed
-    if (freezeMembershipList.length > 0)
-      membership.message = state.theme.frozenMembershipBody;
-
-    return membership;
-  };
-
   useEffect(() => {
+    if (!isActiveUser && !dynamicsApps) return;
     // --------------------------------------------------------------------------------
     // 📌  FEEZE & LAPSED membership notification hook
     // 📌  bad_selfserviceaccess & core_membershipstatus in subs as validation fileds for membership status
     // --------------------------------------------------------------------------------
-
+    console.log("🐞 NOTIFICATION CHECK TRIGGERED");
     // member status notification - if user bad_selfserviceaccess === "FEEZE" then show notification
-    if (handelValidateMembership().isValid) return;
-    let message = handelValidateMembership().message; // user error message
+    if (
+      handelValidateMembership({ isActiveUser, dynamicsApps, state }).isValid ||
+      state.theme.isNotificationDisable
+    ) {
+      // --------------------------------------------------------------------------------
+      // 📌  FEEZE & LAPSED membership notification hook disable if state set 2 true on delay
+      // --------------------------------------------------------------------------------
+      setTimeout(() => {
+        let isMsg = state.theme.isNotificationDisable;
+        if (isMsg) {
+          state.theme.isNotificationDisable = !isMsg;
+        }
+      }, 5000);
+
+      return;
+    }
+
+    let message = handelValidateMembership({
+      isActiveUser,
+      dynamicsApps,
+      state,
+    }).message; // user error message
 
     // --------------------------------------------------------------------------------
     // 📌  Freeze & Lapsed membership notification popup
@@ -111,7 +69,7 @@ const DashboardNotifications = ({ state }) => {
         image: "Error",
       },
     });
-  }, [isActiveUser, dynamicsApps]);
+  }, [isActiveUser]);
 
   // SERVERS -----------------------------------------------------------------
   const ServeGoToActions = ({
@@ -206,7 +164,11 @@ const DashboardNotifications = ({ state }) => {
     const id = 2; // notification id
 
     const isBilling = dashboardPath === "Billing";
-    const membership = handelValidateMembership();
+    const membership = handelValidateMembership({
+      isActiveUser,
+      dynamicsApps,
+      state,
+    });
 
     if (
       membership.isValid ||
@@ -241,8 +203,8 @@ const DashboardNotifications = ({ state }) => {
             title="Pay Now"
             isDismisable
             isActive={
-              handelValidateMembership().message !==
-              state.theme.lapsedMembershipBody
+              handelValidateMembership({ isActiveUser, dynamicsApps, state })
+                .message !== state.theme.lapsedMembershipBody
             }
           />
         </div>

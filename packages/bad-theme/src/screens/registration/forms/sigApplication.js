@@ -593,6 +593,8 @@ const SIGApplication = ({ state, actions, libraries }) => {
 
     try {
       setFetching(true);
+      state.theme.isNotificationDisable = true; // disable freeze notification for active user if exists on redirect to dashboard
+
       // ⏬ get appropriate membership ID
       const membershipData = await getBADMembershipSubscriptionData({
         state,
@@ -636,8 +638,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
 
       let slug = `/dashboard/`;
-      if (isActiveUser && appsResponse)
-        setGoToAction({ state, path: slug, actions });
+      setGoToAction({ state, path: slug, actions }); // redirect to dashboard after successful submission
     } catch (error) {
       // console.log(error);
       setErrorAction({
