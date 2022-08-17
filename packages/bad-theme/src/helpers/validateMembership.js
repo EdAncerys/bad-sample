@@ -13,7 +13,6 @@ export const handelValidateMembership = ({
     isValid: true,
     message: "",
   };
-  let paymentLapseTime = 8; // notification delay un minutes
   // console.log("🐞 dynamicsApps", dynamicsApps.subs.data); // debug
 
   // --------------------------------------------------------------------------------
@@ -38,7 +37,7 @@ export const handelValidateMembership = ({
     // get time difference in minutes
     const resultInMinutes = Math.round(difference / 60000);
 
-    if (resultInMinutes < paymentLapseTime) return membership;
+    if (resultInMinutes < state.theme.paymentLapseTime) return membership;
   }
 
   // FREEZE membership status & set it to LAPSED by default

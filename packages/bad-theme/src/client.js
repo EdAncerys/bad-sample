@@ -27,6 +27,7 @@ const BADTheme = {
       initiatedPayments: [],
     },
     theme: {
+      paymentLapseTime: 8, // notification delay un minutes
       isNotificationDisable: false, // notification disable
       inputFieldLimit250: "250", // defines maxlength prop
       inputFieldLimit100: "100", // defines maxlength prop
