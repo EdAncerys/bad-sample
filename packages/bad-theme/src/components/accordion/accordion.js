@@ -69,22 +69,21 @@ function AlterAccordion({
       return;
     }
 
-    // 📌 handle member only accordion items if user is logged in
+    // 📌 handle member only accordion items access
     if (approved_bad_members_only && isActiveUser) {
-      // check if user have active BAD memberships in Dynamics
-      let isBadMember = false;
-      if (dynamicsApps && dynamicsApps.subs) {
-        let badApps = dynamicsApps.subs.data.filter((app) => {
-          let hasBADMemberships = app.bad_organisedfor === "BAD";
-          return hasBADMemberships;
-        });
-        if (badApps.length) isBadMember = true;
-      }
+      const isFullAccess =
+        isActiveUser.bad_selfserviceaccess === state.theme.serviceAccess;
 
-      // update access to accordion item based on user membership status
-      // manage to set in state both true & false due isActiveUser async update
-      if (isBadMember) setForMembersOnly(false);
-      if (!isBadMember) setForMembersOnly(true);
+      if (
+        isFullAccess &&
+        isActiveUser.core_membershipstatus !== state.theme.frozenMembership
+      ) {
+        // update access to accordion item based on user membership status
+        // manage to set in state both true & false due isActiveUser async update
+        setForMembersOnly(false);
+      } else {
+        setForMembersOnly(true);
+      }
     }
   }, [dynamicsApps, isActiveUser]);
 

@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import { connect } from "frontity";
 
 import DirectDebitNotification from "./directDebitNotification";
@@ -9,41 +9,104 @@ import {
   setDashboardNotificationsAction,
   setDashboardPathAction,
   muiQuery,
+  setErrorAction,
+  handelValidateMembership,
 } from "../../context";
 
 const DashboardNotifications = ({ state }) => {
   const { lg } = muiQuery();
+  // --------------------------------------------------------------------------------
   const dispatch = useAppDispatch();
-  const { isDashboardNotifications, dashboardPath, dynamicsApps } =
-    useAppState();
+  const {
+    isDashboardNotifications,
+    dashboardPath,
+    dynamicsApps,
+    isActiveUser,
+  } = useAppState();
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
 
-  // HELPERS ----------------------------------------------------------------
+  // HELPERS -----------------------------------------------------------------
+  useEffect(() => {
+    if (!isActiveUser && !dynamicsApps) return;
+    // --------------------------------------------------------------------------------
+    // 📌  FEEZE & LAPSED membership notification hook
+    // 📌  bad_selfserviceaccess & core_membershipstatus in subs as validation fileds for membership status
+    // --------------------------------------------------------------------------------
+    console.log("🐞 NOTIFICATION CHECK TRIGGERED");
+    // member status notification - if user bad_selfserviceaccess === "FEEZE" then show notification
+    if (
+      handelValidateMembership({ isActiveUser, dynamicsApps, state }).isValid ||
+      state.theme.isNotificationDisable
+    ) {
+      // --------------------------------------------------------------------------------
+      // 📌  FEEZE & LAPSED membership notification hook disable if state set 2 true on delay
+      // --------------------------------------------------------------------------------
+      setTimeout(() => {
+        let isMsg = state.theme.isNotificationDisable;
+        if (isMsg) {
+          state.theme.isNotificationDisable = !isMsg;
+        }
+      }, 5000);
+
+      return;
+    }
+
+    let message = handelValidateMembership({
+      isActiveUser,
+      dynamicsApps,
+      state,
+    }).message; // user error message
+
+    // --------------------------------------------------------------------------------
+    // 📌  Freeze & Lapsed membership notification popup
+    // --------------------------------------------------------------------------------
+    setErrorAction({
+      dispatch,
+      isError: {
+        message,
+        image: "Error",
+      },
+    });
+  }, [isActiveUser]);
 
   // SERVERS -----------------------------------------------------------------
-  const ServeGoToActions = ({ path, title, isDismisable }) => {
+  const ServeGoToActions = ({
+    path,
+    title,
+    isDismisable,
+    id,
+    isActive = true,
+  }) => {
     if (!path) return null;
 
     return (
-      <div>
-        <div className="flex">
-          {isDismisable && (
-            <div
-              className="blue-btn"
-              style={{ width: "fit-content" }}
-              onClick={() =>
-                setDashboardNotificationsAction({
-                  dispatch,
-                  isDashboardNotifications: null,
-                })
-              }
-            >
-              Dismiss
-            </div>
-          )}
+      <div
+        className="flex"
+        style={{
+          marginLeft: "2em",
+          alignItems: "center",
+          justifyContent: "end",
+          flex: isActive ? 0.5 : 0,
+        }}
+      >
+        {isDismisable && (
+          <div
+            className="blue-btn"
+            style={{ width: "fit-content" }}
+            onClick={() =>
+              setDashboardNotificationsAction({
+                dispatch,
+                isDashboardNotifications: [...isDashboardNotifications, id],
+              })
+            }
+          >
+            Dismiss
+          </div>
+        )}
 
+        {isActive && (
           <div
             className="blue-btn"
             style={{ marginLeft: "2em", width: "fit-content" }}
@@ -53,13 +116,18 @@ const DashboardNotifications = ({ state }) => {
           >
             {title || "More"}
           </div>
-        </div>
+        )}
       </div>
     );
   };
 
   const ServeProfileReminders = () => {
-    if (dashboardPath === "My Profile" || !isDashboardNotifications)
+    const id = 1; // notification id
+
+    if (
+      dashboardPath === "My Profile" ||
+      (isDashboardNotifications && isDashboardNotifications.includes(id))
+    )
       return null;
 
     return (
@@ -82,6 +150,7 @@ const DashboardNotifications = ({ state }) => {
             Please complete missing BAD profile information.
           </div>
           <ServeGoToActions
+            id={id}
             path="My Profile"
             title="Go to my profile"
             isDismisable
@@ -91,13 +160,79 @@ const DashboardNotifications = ({ state }) => {
     );
   };
 
+  const ServeMembershipPaymentReminders = () => {
+    const id = 2; // notification id
+
+    const isBilling = dashboardPath === "Billing";
+    const membership = handelValidateMembership({
+      isActiveUser,
+      dynamicsApps,
+      state,
+    });
+
+    if (
+      membership.isValid ||
+      isBilling ||
+      (isDashboardNotifications && isDashboardNotifications.includes(id))
+    )
+      return null;
+
+    return (
+      <div
+        className="no-selector"
+        style={{ margin: `${marginVertical}px ${marginHorizontal}px` }}
+      >
+        <div
+          className="shadow"
+          style={{
+            display: "flex",
+            padding: `1em 4em`,
+            flexDirection: !lg ? null : "column",
+          }}
+        >
+          <div
+            className="flex primary-title"
+            style={{ display: "grid", alignItems: "center", fontSize: 20 }}
+          >
+            {membership.message}
+          </div>
+
+          <ServeGoToActions
+            id={id}
+            path="Billing"
+            title="Pay Now"
+            isDismisable
+            isActive={
+              handelValidateMembership({ isActiveUser, dynamicsApps, state })
+                .message !== state.theme.lapsedMembershipBody
+            }
+          />
+        </div>
+      </div>
+    );
+  };
+
   const ServeAppReminders = () => {
-    if (dashboardPath === "Billing" || !dynamicsApps) return null;
-    // check if user have approved SIG membership for any of the categories
+    const id = 3; // notification id
+
+    if (
+      dashboardPath === "Billing" ||
+      !dynamicsApps ||
+      isDashboardNotifications.includes(id)
+    )
+      return null;
+
+    // --------------------------------------------------------------------------------
+    // 📌  check if user have approved SIG membership for any of the categories & application pending for payment is current year
+    // --------------------------------------------------------------------------------
     const isPendingPayment = dynamicsApps.subs.data.filter((app) => {
+      // get current year
+      const currentYear = new Date().getFullYear();
+
       return (
         app.bad_organisedfor === "SIG" &&
         !app.bad_sagepayid &&
+        app.core_endon.includes(currentYear) && // check if application is pending for payment for current year
         app.bad_outstandingpayments !== "£0.00" // payments with 0 outstanding payments are not shown
       );
     });
@@ -121,7 +256,7 @@ const DashboardNotifications = ({ state }) => {
           >
             Your SIG application has been approved.
           </div>
-          <ServeGoToActions path="Billing" title="Pay Now" />
+          <ServeGoToActions id={id} path="Billing" title="Pay Now" />
         </div>
       </div>
     );
@@ -132,6 +267,7 @@ const DashboardNotifications = ({ state }) => {
       <DirectDebitNotification />
       <ServeProfileReminders />
       <ServeAppReminders />
+      <ServeMembershipPaymentReminders />
     </div>
   );
 };

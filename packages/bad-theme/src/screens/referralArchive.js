@@ -171,7 +171,7 @@ const ReferralArchive = ({ state, actions, libraries }) => {
             </div>
             <div
               className="flex-col"
-              style={{ padding: `1em 0`, width: "100%", maxWidth: 800 }}
+              style={{ padding: `1em 0`, width: "100%" }}
             >
               <Parcer
                 libraries={libraries}

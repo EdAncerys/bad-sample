@@ -1,24 +1,17 @@
 import Loading from "../components/loading";
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { connect, Global, css } from "frontity";
 import BlockWrapper from "../components/blockWrapper";
 import custom from "../css/custom.css";
 import CheckMark from "../img/svg/checkMark.svg";
 import Image from "@frontity/components/image";
+// --------------------------------------------------------------------------------
+import { getApplicationStatus, useAppDispatch, useAppState } from "../context";
 
 const PaymentConfirmation = ({ state }) => {
-  const [url, setUrl] = React.useState(null);
-  // useEffect(() => {
-  //   if (isSagepay) {
-  //     setErrorAction({
-  //       dispatch,
-  //       isError: {
-  //         message: `Your payment has been accepted`,
-  //         image: "CheckMark",
-  //       },
-  //     });
-  //   }
-  // }, []);
+  const [url, setUrl] = useState(null);
+  const dispatch = useAppDispatch();
+  const { isActiveUser } = useAppState();
 
   useEffect(() => {
     const queryParams = new Proxy(new URLSearchParams(window.location.search), {
@@ -28,6 +21,7 @@ const PaymentConfirmation = ({ state }) => {
     let backurl = queryParams.redirect;
     setUrl(backurl);
   });
+
   return (
     <>
       <Global
@@ -63,7 +57,7 @@ const PaymentConfirmation = ({ state }) => {
           <a
             style={{ marginTop: "1em" }}
             href={url ? url : state.auth.APP_URL}
-            class="blue-btn"
+            className="blue-btn"
           >
             Go back
           </a>

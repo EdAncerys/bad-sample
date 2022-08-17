@@ -8,12 +8,10 @@ import Link from "@frontity/components/link";
 import BlockWrapper from "../blockWrapper";
 import Card from "../../components/card/card";
 // CONTEXT -----------------------------------------------------------------
-import { getPostData } from "../../helpers";
 import {
   setNesMediaIdFilterAction,
   useAppDispatch,
   useAppState,
-  hasPermisionLevel,
   getMediaCategories,
   Parcer,
 } from "../../context";
@@ -26,7 +24,6 @@ const Navigation = ({ state, actions, libraries }) => {
   const [wpMoreMenu, setWpMoreMenu] = useState([]);
   const [featured, setFeatured] = useState([]);
   const [newsMedia, setNewsMedia] = useState([]);
-  const [hasPermission, setPermission] = useState(false);
   const useEffectRef = useRef(false);
 
   const MAIN_NAV_LENGTH = 6; // main navigation length config
@@ -77,14 +74,6 @@ const Navigation = ({ state, actions, libraries }) => {
       useEffectRef.current = false; // clean up function
     };
   }, [state.theme.menu]);
-
-  useEffect(() => {
-    let hasPermission = false;
-    // 📌 check if user has permission to view news & media
-    if (dynamicsApps)
-      hasPermission = hasPermisionLevel({ dynamicsApps, isActiveUser });
-    setPermission(hasPermission);
-  }, [isActiveUser, dynamicsApps]);
 
   if (!wpMoreMenu.length || !wpMainMenu.length)
     return <div style={{ height: 60 }} />;
@@ -178,14 +167,24 @@ const Navigation = ({ state, actions, libraries }) => {
     return (
       <div style={{ paddingRight: `2em` }}>
         {newsMedia.map((item, key) => {
+          // dont show uncategorized category
+          if (item.name === "Uncategorized") return null;
           const { name, id } = item;
           let linkPath = "/news-media/"; // hard coded path to news & media
           // check if name includes circular newsletters bulletin
           let membersOnly = ["circular", "newsletter", "bulletin"].some(
             (word) => name.toLowerCase().includes(word)
           );
+          let serviceAccess = false;
+          if (
+            isActiveUser &&
+            isActiveUser.core_membershipstatus !== state.theme.frozenMembership
+          ) {
+            serviceAccess =
+              isActiveUser.bad_selfserviceaccess === state.theme.serviceAccess;
+          }
           // 📌 if user has permission to view news & media
-          if (membersOnly && !hasPermission) return null;
+          if (membersOnly && !serviceAccess) return null;
 
           return (
             <li key={key} className="flex-row" style={{ width: "100%" }}>

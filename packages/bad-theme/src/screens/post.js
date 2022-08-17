@@ -8,10 +8,12 @@ import Loading from "../components/loading";
 // BLOCK WIDTH WRAPPER -----------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 // CONTEXT -----------------------------------------------------------------
+import { useWpImageScrip } from "../hooks/useWpImageFix";
+// --------------------------------------------------------------------------------
 import { setGoToAction, muiQuery, Parcer, getNewsData } from "../context";
 
 const Post = ({ state, actions, libraries }) => {
-  const { sm, md, lg, xl } = muiQuery();
+  const { lg } = muiQuery();
 
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
@@ -26,6 +28,11 @@ const Post = ({ state, actions, libraries }) => {
   const [position, setPosition] = useState(null);
   const useEffectRef = useRef(null);
 
+  // --------------------------------------------------------------------------------
+  // 📌  Custom Hooks
+  // --------------------------------------------------------------------------------
+  useWpImageScrip({ inputs: { position } });
+
   useEffect(async () => {
     // ⬇️ on component load defaults to window position TOP
     window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
@@ -34,12 +41,15 @@ const Post = ({ state, actions, libraries }) => {
     // --------------------------------------------------------------------------------
     // 📌  Fetch news & media data from wp api
     // --------------------------------------------------------------------------------
-    const postData = await getNewsData({ state });
-    const catList = Object.values(state.source.category);
 
-    setPostList(postData);
-    setCatList(catList);
+    // stack order of state updates to render quicker page components
     setPosition(true);
+
+    const catList = Object.values(state.source.category);
+    setCatList(catList);
+
+    const postData = await getNewsData({ state });
+    setPostList(postData);
 
     return () => {
       useEffectRef.current = false; // clean up function
@@ -57,10 +67,11 @@ const Post = ({ state, actions, libraries }) => {
         <div
           className="flex primary-title"
           style={{
-            fontSize: 36,
+            fontSize: lg ? 24 : 36,
             borderBottom: `1px solid ${colors.lightSilver}`,
-            paddingBottom: `1em`,
-            marginBottom: `1em`,
+            paddingBottom: lg ? "0.5em" : `1em`,
+            marginBottom: lg ? "0.5em" : `1em`,
+            paddingTop: lg ? "0.5em" : `0`,
           }}
         >
           <Parcer libraries={libraries} html={title.rendered} />
@@ -82,7 +93,7 @@ const Post = ({ state, actions, libraries }) => {
 
     return (
       <div className="text-body">
-        {!lg ? <ServeTitle /> : null}
+        <ServeTitle />
         <ServeBody />
       </div>
     );
@@ -90,6 +101,7 @@ const Post = ({ state, actions, libraries }) => {
 
   const ServeSideBar = () => {
     const ServeRelatedContent = () => {
+      // show component only when postlist is fetched and not null
       if (!catList || !postList) return null;
 
       const currentPostCategory = post.categories[0];
@@ -152,7 +164,7 @@ const Post = ({ state, actions, libraries }) => {
                     setGoToAction({ state, path: post.link, actions })
                   }
                 >
-                  {post.title.rendered}
+                  <Parcer libraries={libraries} html={post.title.rendered} />
                 </div>
               </div>
             );
@@ -178,21 +190,12 @@ const Post = ({ state, actions, libraries }) => {
   return (
     <BlockWrapper>
       <div
-        style={
-          !lg
-            ? {
-                display: "grid",
-                gridTemplateColumns: `2.5fr 1fr`,
-                gap: 20,
-                padding: `${marginVertical}px ${marginHorizontal}px`,
-              }
-            : {
-                display: "flex",
-                flexDirection: "column-reverse",
-                gap: 20,
-                padding: `${marginVertical}px ${marginHorizontal}px`,
-              }
-        }
+        style={{
+          display: "grid",
+          gridTemplateColumns: lg ? "1fr" : "2.5fr 1fr",
+          gap: 20,
+          padding: `${marginVertical}px ${marginHorizontal}px`,
+        }}
       >
         <ServeContent />
         <ServeSideBar />

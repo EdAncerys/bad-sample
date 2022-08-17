@@ -73,7 +73,7 @@ const Directory = ({ state, actions, libraries }) => {
     let directoryPref = "Opt-in";
     if (fad.directoryPref === "Opt-in") directoryPref = "Opt-out";
 
-    directoryPref = !isActiveUser.bad_memberdirectory;
+    directoryPref = !isActiveUser._bad_memberdirectory;
 
     const data = Object.assign(
       {}, // add empty object
@@ -259,7 +259,7 @@ const Directory = ({ state, actions, libraries }) => {
     if (!isActiveUser) return null;
 
     // directory agreement field for user
-    const { bad_memberdirectory } = isActiveUser;
+    const { _bad_memberdirectory } = isActiveUser;
     // check if user have BAD memberships approved in dynamics apps
     let isBADMember = false;
     if (dynamicsApps) {
@@ -274,7 +274,7 @@ const Directory = ({ state, actions, libraries }) => {
     if (!isBADMember) return null;
 
     const membersSettingTitle = `You are currently ${
-      bad_memberdirectory ? "Opt-out from" : "Opt-in to"
+      _bad_memberdirectory ? "Opt-out from" : "Opt-in to"
     } the
     Members' Directory, to edit your preferences you can do so below or in
     the Preferences Tab.`;
@@ -301,13 +301,13 @@ const Directory = ({ state, actions, libraries }) => {
           style={{
             marginRight: "1em",
             width: "fit-content",
-            backgroundColor: !bad_memberdirectory
+            backgroundColor: !_bad_memberdirectory
               ? colors.danger
               : colors.white,
           }}
           onClick={handlePreferenceUpdate}
         >
-          {!bad_memberdirectory ? "Opt-out" : "Opt-in"}
+          {!_bad_memberdirectory ? "Opt-out" : "Opt-in"}
         </div>
       </div>
     );

@@ -360,7 +360,8 @@ const Event = ({ state, actions, libraries }) => {
         setEnquireAction({
           dispatch,
           enquireAction: {
-            contact_public_email: email || "conference@bad.org.uk",
+            contact_public_email:
+              contact_email_override || "conference@bad.org.uk",
             form_title:
               register_form_title || "Event Contact Form (express an interest)",
             form_body:
@@ -370,7 +371,9 @@ const Event = ({ state, actions, libraries }) => {
             full_name: true,
             email_address: true,
             phone_number: true,
-            recipients: [{ email: email || "conference@bad.org.uk" }],
+            recipients: [
+              { email: contact_email_override || "conference@bad.org.uk" },
+            ],
             registerForEvent: title.rendered,
             // default email subject & template name
             emailSubject: `Express an interest for ${title.rendered} event.`,
@@ -722,7 +725,7 @@ const Event = ({ state, actions, libraries }) => {
               dispatch,
               enquireAction: {
                 contact_public_email:
-                  contact_public_email || "conference@bad.org.uk",
+                  contact_email_override || "conference@bad.org.uk",
                 contact_public_phone_number,
                 form_title: contact_form_title || "Event Information Form",
                 form_body:

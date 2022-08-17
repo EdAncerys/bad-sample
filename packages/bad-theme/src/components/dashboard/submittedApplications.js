@@ -117,6 +117,7 @@ const SubmittedApplications = ({ state, actions, libraries }) => {
         >
           Applications Pending Approval
         </div>
+
         {submitedApps.map((app, key) => {
           const { bad_organisedfor, core_name, createdon, bad_approvalstatus } =
             app;
@@ -176,7 +177,7 @@ const SubmittedApplications = ({ state, actions, libraries }) => {
           const initiated = state.data.initiatedPayments.includes(
             core_membershipapplicationid
           );
-          console.log("INI", initiated, state.data.initiatedPayments);
+
           return (
             <div key={key} className="flex">
               <div className="flex-col" style={{ paddingTop: `1em` }}>
