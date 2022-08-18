@@ -84,7 +84,7 @@ export const authCookieActionBeforeCSR = async ({
 };
 
 export const authCookieActionAfterCSR = async ({ state, dispatch }) => {
-  console.log("🐞 authCookieActionAfterCSR triggered"); // debug
+  // console.log("🐞 authCookieActionAfterCSR triggered"); // debug
   let path = state.auth.APP_HOST + "/utils/cookie";
 
   try {

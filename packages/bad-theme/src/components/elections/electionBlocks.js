@@ -32,7 +32,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
     title,
     disable_vertical_padding,
   } = block;
-  console.log("🐞 block", block); // debug
+  // console.log("🐞 block", block); // debug
 
   const [electionList, setElectionList] = useState(null);
   const [electionFilter, setElectionFilter] = useState(null);

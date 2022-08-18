@@ -50,7 +50,6 @@ const PilsArchive = ({ state, actions, libraries }) => {
       ]);
 
       const pils = [...trying[0], ...trying[1], ...trying[2]];
-      console.log("🐞 ", pils);
       // order by title alphabetically
       pils.sort((a, b) => {
         // if no title return -1
