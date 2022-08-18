@@ -126,7 +126,7 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
           value={`1st of January each year or first working day thereafter`}
         />
         <ServeDataString
-          title="Name to appears on your statement:"
+          title="Name to appear on your statement:"
           value="The British Association of Dermatologists"
         />
       </div>
