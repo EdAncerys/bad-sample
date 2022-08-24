@@ -277,7 +277,8 @@ const Referral = ({ state, actions, libraries }) => {
         <TitleBlock
           block={{
             text_align: "left",
-            title: "Please select disease severity:",
+            title:
+              "Choose an option below to see the relevant treatment and management guidelines:",
           }}
           fontSize={20}
           margin="1em 0"

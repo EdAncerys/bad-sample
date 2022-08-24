@@ -34,6 +34,7 @@ const ReferralArchive = ({ state, actions, libraries }) => {
   const [searchInput, setInput] = useState("");
   const [searchPhrase, setPhrase] = useState("");
   const [pageContent, setPageContent] = useState([]);
+  console.log("🐞 posts", posts); // debug
 
   useEffect(async () => {
     // ⬇️ on component load defaults to window position TOP
@@ -182,7 +183,7 @@ const ReferralArchive = ({ state, actions, libraries }) => {
         </BlockWrapper>
       )}
 
-      <div
+      {/* <div
         style={{
           backgroundColor: colors.silverFillTwo,
           marginBottom: `${state.theme.marginVertical}px`,
@@ -247,7 +248,7 @@ const ReferralArchive = ({ state, actions, libraries }) => {
             <ServeSearchFilter />
           </div>
         </BlockWrapper>
-      </div>
+      </div> */}
 
       <BlockWrapper>
         <div className="referral-container">
@@ -257,12 +258,17 @@ const ReferralArchive = ({ state, actions, libraries }) => {
               let body =
                 post.acf.condition_preview || post.acf.condition_description;
               let link = post.link || null;
+              let image = post.acf.image || null;
+              console.log("🐞 ", image);
 
               return (
                 <Card
                   key={key}
                   title={title}
                   body={body}
+                  // --------------------------------------------------------------------------------
+                  url={image ? image.url : null}
+                  imgHeight="200px" // image height in pixels
                   colour={colors.primary}
                   bodyLimit={6}
                   cardMinHeight={350}
