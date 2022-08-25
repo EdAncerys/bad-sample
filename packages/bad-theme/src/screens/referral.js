@@ -141,6 +141,9 @@ const Referral = ({ state, actions, libraries }) => {
     let teledermatology = severity_1_teledermatology;
     let tips = clinical_tips;
     let imgGalery = [];
+    // --------------------------------------------------------------------------------
+    // 📌  Image galery for severity blob
+    // --------------------------------------------------------------------------------
     if (severity_1_image_gallery) {
       imgGalery = severity_1_image_gallery.map((item) => {
         return {
