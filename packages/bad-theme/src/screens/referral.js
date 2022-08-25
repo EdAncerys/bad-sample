@@ -140,12 +140,16 @@ const Referral = ({ state, actions, libraries }) => {
     let treatment = severity_1_treatment_therapy;
     let teledermatology = severity_1_teledermatology;
     let tips = clinical_tips;
-    let imgGalery = severity_1_image_gallery.map((item) => {
-      return {
-        background_image: { url: item.url },
-      };
-    });
-    console.log("🐞 imgGalery", imgGalery);
+    let imgGalery = [];
+    if (severity_1_image_gallery) {
+      imgGalery = severity_1_image_gallery.map((item) => {
+        return {
+          background_image: { url: item.url },
+        };
+      });
+    } else {
+      imgGalery = [];
+    }
 
     // contitional rendering based on type of referral
     if (severity === severity_2_name) {
@@ -153,12 +157,30 @@ const Referral = ({ state, actions, libraries }) => {
       management = severity_2_referral_management;
       treatment = severity_2_treatment_therapy;
       teledermatology = severity_2_teledermatology;
+      if (severity_2_image_gallery) {
+        imgGalery = severity_2_image_gallery.map((item) => {
+          return {
+            background_image: { url: item.url },
+          };
+        });
+      } else {
+        imgGalery = [];
+      }
     }
     if (severity === severity_3_name) {
       condition = severity_3_name;
       management = severity_3_referral_management;
       treatment = severity_3_treatment_therapy;
       teledermatology = severity_3_teledermatology;
+      if (severity_3_image_gallery) {
+        imgGalery = severity_3_image_gallery.map((item) => {
+          return {
+            background_image: { url: item.url },
+          };
+        });
+      } else {
+        imgGalery = [];
+      }
     }
 
     return (

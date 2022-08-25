@@ -32,6 +32,13 @@ const HomeBannerCarousel = ({
   const ServeIcon = ({ icon, left, right }) => {
     if (!icon) return null;
 
+    let marginLeft = left ? `-6em` : "auto";
+    let marginRight = right ? `-6em` : "auto";
+    if (referrals) {
+      marginLeft = left ? `-1em` : "auto";
+      marginRight = right ? `-1em` : "auto";
+    }
+
     return (
       <div
         style={{
@@ -42,8 +49,8 @@ const HomeBannerCarousel = ({
           cursor: "pointer",
           top: BANNER_HEIGHT / 2,
           right: right ? 0 : "",
-          marginLeft: left ? `-6em` : "auto",
-          marginRight: right ? `-6em` : "auto",
+          marginLeft,
+          marginRight,
         }}
       >
         <Image className="d-block h-100" src={icon} />
