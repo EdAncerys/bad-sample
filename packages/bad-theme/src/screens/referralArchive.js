@@ -258,8 +258,16 @@ const ReferralArchive = ({ state, actions, libraries }) => {
               let body =
                 post.acf.condition_preview || post.acf.condition_description;
               let link = post.link || null;
-              let image = post.acf.image || null;
-              console.log("🐞 ", image);
+              // --------------------------------------------------------------------------------
+              let cardImage = null;
+              let mildSeverityImage = post.acf.mild_severity_image;
+              let moderateSeverityImage = post.acf.moderate_severity_image;
+              let severeSeverityImage = post.acf.severe_severity_image;
+              if (mildSeverityImage) cardImage = mildSeverityImage.url;
+              if (moderateSeverityImage && !cardImage)
+                cardImage = moderateSeverityImage.url;
+              if (severeSeverityImage && !cardImage)
+                cardImage = severeSeverityImage.url;
 
               return (
                 <Card
@@ -267,7 +275,7 @@ const ReferralArchive = ({ state, actions, libraries }) => {
                   title={title}
                   body={body}
                   // --------------------------------------------------------------------------------
-                  url={image ? image.url : null}
+                  url={cardImage}
                   imgHeight="200px" // image height in pixels
                   colour={colors.primary}
                   bodyLimit={6}

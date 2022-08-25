@@ -10,11 +10,18 @@ import RightIcon from "../../img/svg/carouselIconRight.svg";
 // --------------------------------------------------------------------------------
 import { setGoToAction, muiQuery, Parcer } from "../../context";
 
-const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
+const HomeBannerCarousel = ({
+  state,
+  actions,
+  libraries,
+  block,
+  referrals,
+}) => {
   if (!block) return null;
   const { sm, md, lg, xl } = muiQuery();
 
-  const { disable_vertical_padding, background_colour } = block;
+  const { disable_vertical_padding, background_colour, slides } = block;
+  console.log("🐞 slides", slides);
 
   const BANNER_HEIGHT = state.theme.bannerHeight * 1.25;
   const marginHorizontal = state.theme.marginHorizontal;
@@ -167,7 +174,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
                     objectFit: "cover",
                   }}
                 />
-                <ServeOverlay />
+                {!referrals && <ServeOverlay />}
               </div>
             );
           };

@@ -6,6 +6,7 @@ import Loading from "../components/loading";
 
 import TitleBlock from "../components/titleBlock";
 import Card from "../components/card/card";
+import HomeBannerCarousel from "../components/home/homeBannerCarousel";
 // BLOCK WIDTH WRAPPER -------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 // --------------------------------------------------------------------------------
@@ -16,7 +17,7 @@ const Referral = ({ state, actions, libraries }) => {
 
   const data = state.source.get(state.router.link);
   const referral = state.source[data.type][data.id];
-  // console.log("🐞 REFERRAL", referral); // debug
+  console.log("🐞 REFERRAL", referral); // debug
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -35,7 +36,7 @@ const Referral = ({ state, actions, libraries }) => {
   // HANDLERS --------------------------------------------
 
   // SERVERS ---------------------------------------------
-  const ServeSeverityContainer = ({ description, name, status }) => {
+  const ServeSeverityContainer = ({ description, name, status, url }) => {
     return (
       <div
         className="referral-card-wrapper"
@@ -45,6 +46,9 @@ const Referral = ({ state, actions, libraries }) => {
           title={name}
           subTitle="Description:"
           body={description}
+          // --------------------------------------------------------------------------------
+          url={url}
+          imgHeight="200px" // image height in pixels
           colour={colors.primary}
           // bodyLimit={10} // limit body text
           cardMinHeight={250}
@@ -103,6 +107,7 @@ const Referral = ({ state, actions, libraries }) => {
 
   const ServeContent = () => {
     if (!severity) return null;
+    console.log("🐞 severity", severity); // debug
 
     const {
       severity_1_name,
@@ -122,6 +127,10 @@ const Referral = ({ state, actions, libraries }) => {
       icd_search_category,
       icd11_code,
 
+      severity_1_image_gallery,
+      severity_2_image_gallery,
+      severity_3_image_gallery,
+
       clinical_resources,
       patient_information_resources,
     } = referral.acf;
@@ -131,6 +140,12 @@ const Referral = ({ state, actions, libraries }) => {
     let treatment = severity_1_treatment_therapy;
     let teledermatology = severity_1_teledermatology;
     let tips = clinical_tips;
+    let imgGalery = severity_1_image_gallery.map((item) => {
+      return {
+        background_image: { url: item.url },
+      };
+    });
+    console.log("🐞 imgGalery", imgGalery);
 
     // contitional rendering based on type of referral
     if (severity === severity_2_name) {
@@ -148,6 +163,7 @@ const Referral = ({ state, actions, libraries }) => {
 
     return (
       <div className="flex-col">
+        <HomeBannerCarousel block={{ slides: [...imgGalery] }} referrals />
         <ServeContentCard title="Treatment / Therapy" body={treatment} />
         <ServeContentCard title="Referral Management" body={management} />
         <ServeContentCard title="Teledermatology" body={teledermatology} />
@@ -288,16 +304,28 @@ const Referral = ({ state, actions, libraries }) => {
             description={referral.acf.severity_1_description}
             name={referral.acf.severity_1_name}
             status={referral.acf.severity_1_name}
+            url={
+              referral.acf.mild_severity_image &&
+              referral.acf.mild_severity_image.url
+            }
           />
           <ServeSeverityContainer
             description={referral.acf.severity_2_description}
             name={referral.acf.severity_2_name}
             status={referral.acf.severity_2_name}
+            url={
+              referral.acf.moderate_severity_image &&
+              referral.acf.moderate_severity_image.url
+            }
           />
           <ServeSeverityContainer
             description={referral.acf.severity_3_description}
             name={referral.acf.severity_3_name}
             status={referral.acf.severity_3_name}
+            url={
+              referral.acf.severe_severity_image &&
+              referral.acf.severe_severity_image.url
+            }
           />
         </div>
         <ServeContent />
