@@ -606,7 +606,14 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                       </option>
                       {membershipData.map((item, key) => {
                         const { bad_or_sig, category_types } = item.acf;
-                        if (bad_or_sig !== "bad") return null;
+
+                        // --------------------------------------------------------------------------------
+                        // 📌  Hide change of category if that includes in badCategoryHide array defined in client.js
+                        // --------------------------------------------------------------------------------
+                        const isHidden =
+                          state.theme.badCategoryHide.includes(category_types);
+
+                        if (bad_or_sig !== "bad" || isHidden) return null;
 
                         return (
                           <option key={key} value={category_types}>
