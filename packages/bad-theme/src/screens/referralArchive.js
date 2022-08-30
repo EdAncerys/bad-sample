@@ -260,14 +260,8 @@ const ReferralArchive = ({ state, actions, libraries }) => {
               let link = post.link || null;
               // --------------------------------------------------------------------------------
               let cardImage = null;
-              let mildSeverityImage = post.acf.mild_severity_image;
-              let moderateSeverityImage = post.acf.moderate_severity_image;
-              let severeSeverityImage = post.acf.severe_severity_image;
-              if (mildSeverityImage) cardImage = mildSeverityImage.url;
-              if (moderateSeverityImage && !cardImage)
-                cardImage = moderateSeverityImage.url;
-              if (severeSeverityImage && !cardImage)
-                cardImage = severeSeverityImage.url;
+              if (post.acf.severity_caption_image)
+                cardImage = post.acf.severity_caption_image.url;
 
               return (
                 <Card
