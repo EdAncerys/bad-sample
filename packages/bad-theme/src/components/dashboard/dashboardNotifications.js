@@ -34,7 +34,7 @@ const DashboardNotifications = ({ state }) => {
     // 📌  FEEZE & LAPSED membership notification hook
     // 📌  bad_selfserviceaccess & core_membershipstatus in subs as validation fileds for membership status
     // --------------------------------------------------------------------------------
-    console.log("🐞 NOTIFICATION CHECK TRIGGERED");
+    // console.log("🐞 NOTIFICATION CHECK TRIGGERED");
     // member status notification - if user bad_selfserviceaccess === "FEEZE" then show notification
     if (
       handelValidateMembership({ isActiveUser, dynamicsApps, state }).isValid ||

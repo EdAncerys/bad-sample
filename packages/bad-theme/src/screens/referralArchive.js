@@ -34,7 +34,6 @@ const ReferralArchive = ({ state, actions, libraries }) => {
   const [searchInput, setInput] = useState("");
   const [searchPhrase, setPhrase] = useState("");
   const [pageContent, setPageContent] = useState([]);
-  console.log("🐞 posts", posts); // debug
 
   useEffect(async () => {
     // ⬇️ on component load defaults to window position TOP

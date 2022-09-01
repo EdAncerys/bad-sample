@@ -76,7 +76,6 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
       if (isSHD) data = await getSHDFeedAction({ state, dispatch });
 
       if (!data) return;
-      console.log("🐞 no wileys", data);
 
       if (isActiveUser) {
         // map through data and replace link with wileys link for logged in users
@@ -94,7 +93,6 @@ const RSSFeed = ({ state, actions, libraries, block }) => {
           return { ...item, link: wileyLink };
         });
         data = await Promise.all(data);
-        console.log("🐞 wileys links", data);
 
         // replace feed data with new data with wiley links for logged in users in app context
         if (isBJD) setBJDFeedAction({ dispatch, bjdFeed: data });

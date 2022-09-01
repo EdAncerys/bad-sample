@@ -21,7 +21,6 @@ const HomeBannerCarousel = ({
   const { sm, md, lg, xl } = muiQuery();
 
   const { disable_vertical_padding, background_colour, slides } = block;
-  console.log("🐞 slides", slides);
 
   const BANNER_HEIGHT = state.theme.bannerHeight * 1.25;
   const marginHorizontal = state.theme.marginHorizontal;
