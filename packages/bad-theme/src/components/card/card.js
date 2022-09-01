@@ -224,12 +224,12 @@ const Card = ({
     if (!url) return null;
     const alt = title || "BAD";
 
-    let STYLES = { minHeight: 200, maxHeight: 300 };
-    if (imgHeight) STYLES = { height: imgHeight };
+    let styleProps = { minHeight: 200, maxHeight: 300 };
+    if (imgHeight) styleProps = { height: imgHeight };
 
     return (
       <div
-        style={{ ...STYLES, width: "100%", overflow: "hidden" }}
+        style={{ ...styleProps, width: "100%", overflow: "hidden" }}
         onClick={() => setGoToAction({ state, path: link, actions })}
       >
         <Image

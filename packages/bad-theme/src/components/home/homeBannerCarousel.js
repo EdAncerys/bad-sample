@@ -10,11 +10,18 @@ import RightIcon from "../../img/svg/carouselIconRight.svg";
 // --------------------------------------------------------------------------------
 import { setGoToAction, muiQuery, Parcer } from "../../context";
 
-const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
+const HomeBannerCarousel = ({
+  state,
+  actions,
+  libraries,
+  block,
+  referrals,
+}) => {
   if (!block) return null;
   const { sm, md, lg, xl } = muiQuery();
 
-  const { disable_vertical_padding, background_colour } = block;
+  const { disable_vertical_padding, background_colour, slides } = block;
+  console.log("🐞 slides", slides);
 
   const BANNER_HEIGHT = state.theme.bannerHeight * 1.25;
   const marginHorizontal = state.theme.marginHorizontal;
@@ -24,6 +31,13 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
   // SERVERS ----------------------------------------------------------------
   const ServeIcon = ({ icon, left, right }) => {
     if (!icon) return null;
+
+    let marginLeft = left ? `-6em` : "auto";
+    let marginRight = right ? `-6em` : "auto";
+    if (referrals) {
+      marginLeft = left ? `-1em` : "auto";
+      marginRight = right ? `-1em` : "auto";
+    }
 
     return (
       <div
@@ -35,8 +49,8 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
           cursor: "pointer",
           top: BANNER_HEIGHT / 2,
           right: right ? 0 : "",
-          marginLeft: left ? `-6em` : "auto",
-          marginRight: right ? `-6em` : "auto",
+          marginLeft,
+          marginRight,
         }}
       >
         <Image className="d-block h-100" src={icon} />
@@ -167,7 +181,7 @@ const HomeBannerCarousel = ({ state, actions, libraries, block }) => {
                     objectFit: "cover",
                   }}
                 />
-                <ServeOverlay />
+                {!referrals && <ServeOverlay />}
               </div>
             );
           };
