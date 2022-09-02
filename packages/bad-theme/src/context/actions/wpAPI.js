@@ -598,7 +598,7 @@ export const getReferralsData = async ({ state, page, postsPerPage }) => {
 };
 
 export const getReferralsPage = async ({ state }) => {
-  let fields = "id,title,content";
+  let fields = "id,title,content,acf";
 
   let url = `${state.auth.WP_HOST}wp-json/wp/v2/pages?_fields=${fields}&slug=referrals`;
 
