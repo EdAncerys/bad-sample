@@ -195,7 +195,7 @@ input[type="email"]::-webkit-input-placeholder {
   grid-template-columns: repeat(3, 1fr);
   justify-content: space-between;
   grid-gap: 15px;
-  padding-bottom: 40px;
+  padding: 0 0 40px 0;
 }
 .severity-container {
   display: grid;
