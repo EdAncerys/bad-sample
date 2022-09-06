@@ -7,6 +7,7 @@ import TitleBlock from "../components/titleBlock";
 import SearchDropDown from "../components/searchDropDown";
 import ScrollTop from "../components/scrollTop";
 import Card from "../components/card/card";
+import BlockBuilder from "../components/builder/blockBuilder";
 // --------------------------------------------------------------------------------
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
@@ -26,7 +27,6 @@ const ReferralArchive = ({ state, actions, libraries }) => {
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
-  const ctaHeight = 45;
 
   const [posts, setPosts] = useState([]);
   const [postFilter, setFilter] = useState([]);
@@ -40,25 +40,23 @@ const ReferralArchive = ({ state, actions, libraries }) => {
     window.scrollTo({ top: 0, behavior: "smooth" }); // force scrolling to top of page
     document.documentElement.scrollTop = 0; // for safari
 
-    // get referral data from wp api
-    let response = await getReferralsData({ state });
-    // get referral page contetn
-    let pageContent = await getReferralsPage({ state });
-    if (response && response.length > 0) {
+    let referals = await getReferralsData({ state }); // get data from context
+    const pageContent = await getReferralsPage({ state }); // get referral page contetn
+    if (referals) {
       // 📌 sort posts alphabetically by title
-      response.sort((a, b) => {
+      referals.sort((a, b) => {
         if (a.title.rendered < b.title.rendered) return -1;
         if (a.title.rendered > b.title.rendered) return 1;
         return 0;
       });
 
       setPageContent(pageContent);
-      setPosts(response);
-      setFilter(response);
+      setPosts(referals); // set posts
+      setFilter(referals); // to asllow filtering of posts
     }
   }, []);
 
-  if (!posts || !pageContent.length) return <Loading />;
+  if (!postFilter || !pageContent.length) return <Loading />;
 
   // HANDLERS ---------------------------------------------------------------
   const handleSearch = (e) => {
@@ -154,7 +152,13 @@ const ReferralArchive = ({ state, actions, libraries }) => {
 
   return (
     <div>
-      {pageContent.length > 0 && (
+      {pageContent.length && (
+        <BlockBuilder
+          blocks={pageContent[0].acf && pageContent[0].acf.blocks}
+        />
+      )}
+
+      {/* {pageContent.length > 0 && (
         <BlockWrapper>
           <div
             className="flex-col shadow"
@@ -180,7 +184,7 @@ const ReferralArchive = ({ state, actions, libraries }) => {
             </div>
           </div>
         </BlockWrapper>
-      )}
+      )} */}
 
       {/* <div
         style={{
