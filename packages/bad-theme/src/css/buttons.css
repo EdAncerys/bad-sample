@@ -180,6 +180,7 @@ a:visited {
   padding: 0.5em 2em;
   transition: all 0.3s ease-in-out;
   text-transform: lowercase;
+  cursor: pointer;
 }
 .first-letter-capital:first-letter {
   text-transform: capitalize;

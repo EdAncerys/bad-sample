@@ -20,6 +20,17 @@
   right: -172px;
 }
 
+.carousel-control-prev,
+.carousel-control-next {
+  position: absolute;
+  z-index: 1;
+}
+
+.carousel-caption {
+  position: absolute;
+  z-index: 2; /* caption should be on top of the image */
+}
+
 /* add media querys for home carousel controls on large screens */
 @media (min-width: 1568px) {
   .carousel-control-next,
