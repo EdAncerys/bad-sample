@@ -83,8 +83,18 @@ const ElectionBlocks = ({ state, actions, block }) => {
       })
       .reverse();
 
-    setElectionFilter(sortedPosts);
-    setElectionList(sortedPosts);
+    // move open positions to top election_status === "open"
+    const openPositions = sortedPosts.filter(
+      (post) => post.acf.election_status === "open"
+    );
+    const closedPositions = sortedPosts.filter(
+      (post) => post.acf.election_status === "closed"
+    );
+    const sortedPostsByStatus = [...openPositions, ...closedPositions];
+    // --------------------------------------------------------------------------------
+
+    setElectionFilter(sortedPostsByStatus);
+    setElectionList(sortedPostsByStatus);
 
     return () => {
       mountedRef.current = false; // clean up function
