@@ -83,8 +83,18 @@ const ElectionBlocks = ({ state, actions, block }) => {
       })
       .reverse();
 
-    setElectionFilter(sortedPosts);
-    setElectionList(sortedPosts);
+    // move open positions to top election_status === "open"
+    const openPositions = sortedPosts.filter(
+      (post) => post.acf.election_status === "open"
+    );
+    const closedPositions = sortedPosts.filter(
+      (post) => post.acf.election_status === "closed"
+    );
+    const sortedPostsByStatus = [...openPositions, ...closedPositions];
+    // --------------------------------------------------------------------------------
+
+    setElectionFilter(sortedPostsByStatus);
+    setElectionList(sortedPostsByStatus);
 
     return () => {
       mountedRef.current = false; // clean up function
@@ -132,6 +142,9 @@ const ElectionBlocks = ({ state, actions, block }) => {
     let positionName = "Position";
     if (block.title.rendered) positionName = block.title.rendered;
 
+    let FALL_BACK_LIST = state.contactList.DEFAULT_CONTACT_LIST;
+    FALL_BACK_LIST = [{ email: "harriet@bag.org.uk" }];
+
     if (isClosedPosition)
       setEnquireAction({
         dispatch,
@@ -150,8 +163,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
           subject_dropdown_options: contact_subject_dropdown_options,
           message: contact_message || true,
           allow_attachments: contact_allow_attachments,
-          recipients:
-            contact_recipients || state.contactList.DEFAULT_CONTACT_LIST,
+          recipients: contact_recipients || FALL_BACK_LIST,
           // default email subject & template name
           emailSubject: `Notify when ${positionName} position is open.`,
         },

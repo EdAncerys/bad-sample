@@ -1,6 +1,9 @@
 import { connect } from "frontity";
 // --------------------------------------------------------------------------------
 import { Parcer } from "../../context";
+import date from "date-and-time";
+
+const DATE_MODULE = date;
 
 const ElectionInfo = ({
   state,
@@ -38,11 +41,15 @@ const ElectionInfo = ({
   const ServeDate = () => {
     if (!closing_date || isClosedPosition) return null;
 
+    // change date format to DD/MM/YYYY
+    const dateObject = new Date(closing_date);
+    const formattedDate = DATE_MODULE.format(dateObject, "DD MMM YYYY");
+
     return (
       <div className="flex-row">
         <div>Closing Date -</div>
         <div style={{ paddingLeft: 5 }}>
-          <Parcer libraries={libraries} html={closing_date} />
+          <Parcer libraries={libraries} html={formattedDate} />
         </div>
       </div>
     );
