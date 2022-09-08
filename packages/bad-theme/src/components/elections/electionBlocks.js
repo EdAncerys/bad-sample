@@ -138,9 +138,18 @@ const ElectionBlocks = ({ state, actions, block }) => {
       contact_allow_attachments,
       contact_recipients,
     } = block.acf;
+    console.log("🐞 blob", block.acf);
+    console.log("🐞 contact_recipients", contact_recipients);
+    console.log(
+      "🐞 DEFAULT_CONTACT_LIST",
+      state.contactList.DEFAULT_CONTACT_LIST
+    );
 
     let positionName = "Position";
     if (block.title.rendered) positionName = block.title.rendered;
+
+    let FALL_BACK_LIST = state.contactList.DEFAULT_CONTACT_LIST;
+    FALL_BACK_LIST = [{ email: "harriet@bag.org.uk" }];
 
     if (isClosedPosition)
       setEnquireAction({
@@ -160,8 +169,7 @@ const ElectionBlocks = ({ state, actions, block }) => {
           subject_dropdown_options: contact_subject_dropdown_options,
           message: contact_message || true,
           allow_attachments: contact_allow_attachments,
-          recipients:
-            contact_recipients || state.contactList.DEFAULT_CONTACT_LIST,
+          recipients: contact_recipients || FALL_BACK_LIST,
           // default email subject & template name
           emailSubject: `Notify when ${positionName} position is open.`,
         },
