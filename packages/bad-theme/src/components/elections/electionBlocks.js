@@ -138,12 +138,6 @@ const ElectionBlocks = ({ state, actions, block }) => {
       contact_allow_attachments,
       contact_recipients,
     } = block.acf;
-    console.log("🐞 blob", block.acf);
-    console.log("🐞 contact_recipients", contact_recipients);
-    console.log(
-      "🐞 DEFAULT_CONTACT_LIST",
-      state.contactList.DEFAULT_CONTACT_LIST
-    );
 
     let positionName = "Position";
     if (block.title.rendered) positionName = block.title.rendered;
