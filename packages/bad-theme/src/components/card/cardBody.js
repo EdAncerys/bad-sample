@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
-import Image from "@frontity/components/image";
+import { detect } from "detect-browser";
 
 import PoundSterling from "../../img/svg/pound-sterling.svg";
 
@@ -118,16 +118,26 @@ const CardBody = ({
   const ServeBody = () => {
     if (!body) return null;
 
+    // --------------------------------------------------------------------------------
+    // 📌  Detect broser type
+    // --------------------------------------------------------------------------------
+    const browser = detect();
+    let isFirefox = browser && browser.name.includes("firefox");
+    let maxHeight = bodyLimit * 32 + 16; // 👇 see bellow
+
     return (
-      <div
-        className="body-limit"
-        style={{
-          fontSize: 16,
-          paddingTop: title ? `1em` : 0,
-          WebkitLineClamp: bodyLimit || "unset",
-        }}
-      >
-        <Parcer libraries={libraries} html={body} />
+      <div style={{ position: "relative" }}>
+        <div
+          className="body-limit"
+          style={{
+            fontSize: 16,
+            paddingTop: title ? `1em` : 0,
+            WebkitLineClamp: bodyLimit || "unset",
+            maxHeight: isFirefox ? maxHeight : "unset", // set max heigh. Firefox doesn't support WebkitLineClamp
+          }}
+        >
+          <Parcer libraries={libraries} html={body} />
+        </div>
       </div>
     );
   };
