@@ -502,7 +502,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       py3_gmcnumber: formData.py3_gmcnumber,
       bad_currentpost: formData.py3_currentpost,
       py3_hospitalid: formData.py3_hospitalid,
-      sky_newhospitalname: formData.sky_newhospitalname,
+      sky_newhospitalname: formData.sky_newhospitalname, // new hospital name if added
       bad_proposer1: formData.bad_proposer1,
       bad_proposer2: formData.bad_proposer2,
       py3_ntnno: formData.py3_ntnno,
@@ -520,7 +520,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       py3_insertnhsnetemailaddress: formData.py3_insertnhsnetemailaddress,
       bad_psychodermatologycategory: formData.py3_psychodermatologycategory,
       // --------------------------------------------------------------------------------
-      bad_newhospitaladded: formData._bad_newhospitaladded,
+      bad_newhospitaladded: isNewHospital, // new hospital added flag
       bad_readpolicydocument: formData._bad_readpolicydocument,
       bad_hasmedicallicence: formData._bad_hasmedicallicence,
       bad_includeinthebssciiemaildiscussionforum:
@@ -589,6 +589,14 @@ const SIGApplication = ({ state, actions, libraries }) => {
       });
 
       return null;
+    }
+    // --------------------------------------------------------------------------------
+    // 📌  Validate if new hospital added (sky_newhospitalname)
+    // ⚠️ Prevent serverside failuer to sumit application if new hospital name not provided!
+    // if sky_newhospitalname is empty then set hard set bad_newhospitaladded to false
+    // --------------------------------------------------------------------------------
+    if (isNewHospital && !formData.sky_newhospitalname) {
+      sigAppliaction.bad_newhospitaladded = false;
     }
 
     try {
