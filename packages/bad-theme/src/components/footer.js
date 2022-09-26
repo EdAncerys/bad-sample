@@ -119,7 +119,7 @@ const Footer = ({ state, actions }) => {
               target="_blank"
               style={styles.footerLink}
             >
-              Registered Charity No. 25847
+              Registered Charity No. 258474
             </Link>
             <ServeDivider />
           </div>
