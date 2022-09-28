@@ -108,7 +108,6 @@ export const MENU_DATA = [
     title: "PushFar Mentoring platform",
     url: "https://www.pushfar.com/employee-register/VYhR5MtTPX/",
   },
-  // 📌 uncomment to enable referrals on quick links
   {
     title: "Referrals",
     url: "/referrals/",
