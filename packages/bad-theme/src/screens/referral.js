@@ -17,7 +17,6 @@ const Referral = ({ state, actions, libraries }) => {
 
   const data = state.source.get(state.router.link);
   const referral = state.source[data.type][data.id];
-  console.log("🐞 REFERRAL", referral); // debug
 
   const marginHorizontal = state.theme.marginHorizontal;
   const marginVertical = state.theme.marginVertical;
@@ -107,7 +106,6 @@ const Referral = ({ state, actions, libraries }) => {
 
   const ServeContent = () => {
     if (!severity) return null;
-    console.log("🐞 severity", severity); // debug
 
     const {
       severity_1_name,

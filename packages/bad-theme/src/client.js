@@ -33,11 +33,7 @@ const BADTheme = {
       inputFieldLimit100: "100", // defines maxlength prop
       inputFieldLimit80: "80", // defines maxlength prop
       textAreaLimit: "2000", // defines maxlength prop
-      badCategoryHide: [
-        "GP",
-        "Associate Trainee",
-        "Scientist and Allied Healthcare Professional",
-      ], // defines hide categories for BAD applications & change
+      badCategoryHide: ["ADD_CATEGORY_TO_HIDE"], // defines hide categories for BAD applications & change
       frozenMembershipBody:
         "According to our records your BAD Membership was frozen as you had not paid your annual subscription. Please go to the Billing tab to pay your subscription in order to reactivate your membership.",
       lapsedMembershipBody:
