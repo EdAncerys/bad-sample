@@ -81,7 +81,7 @@ export const fetchDataHandler = async ({
     if (!path) throw new Error("No path provided");
     // 📌 make a fetch request to the backend api with the given path
     const response = await fetch(path, requestOptions);
-    let timeTaken = (new Date() - timeNow) / 1000;
+    // let timeTaken = (new Date() - timeNow) / 1000;
 
     // fetch request timing info
     // console.log(`${time} Fetch time: ${timeTaken}s`);

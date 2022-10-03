@@ -96,6 +96,12 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     const address2_postalcode = formData.address2_postalcode;
     const bad_preferredmailingaddress = formData._bad_preferredmailingaddress;
 
+    // --------------------------------------------------------------------------------
+    // 📌  Validate user inputs
+    // multiple Country suport ...imput validation not required
+    // check error on API calls & refer to user address pane check
+    // --------------------------------------------------------------------------------
+
     const data = Object.assign(
       {}, // add empty object
       { address2_line1 },
@@ -350,7 +356,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
                   value={formData.mobilephone}
                   onChange={handleInputChange}
                   className="form-control input"
-                  placeholder="Postcode"
+                  placeholder="Mobile Number"
                 />
               </div>
             </div>

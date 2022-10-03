@@ -17,6 +17,7 @@ import {
   fetchDataHandler,
   setGoToAction,
   handleSetCookie,
+  setDashboardPathAction,
 } from "../../context";
 
 export const handlePayment = async ({
@@ -36,6 +37,15 @@ export const handlePayment = async ({
     setErrorAction({ dispatch, isError: null });
     // set cookie with timestamp for payment
     handleSetCookie({ name: "payment", value: Date.now() });
+  };
+
+  const redirectHandler = () => {
+    setDashboardPathAction({
+      dispatch,
+      dashboardPath: "My Profile",
+    });
+    // close error modal on user redirect
+    setErrorAction({ dispatch, isError: null });
   };
 
   // --------------------------------------------------------------------------------
@@ -75,6 +85,25 @@ export const handlePayment = async ({
       // body: appCredentials,
       state,
     });
+
+    if (!fetchVendorId.ok) {
+      // --------------------------------------------------------------------------------
+      // 📌  General Sage pay error handler to notify user
+      // --------------------------------------------------------------------------------
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Your address details don't appear to be correct. Please go to the "My Profile" tab to confirm your address.`,
+          image: "Error",
+          action: [
+            {
+              label: "My Profile",
+              handler: redirectHandler,
+            },
+          ],
+        },
+      });
+    }
 
     if (fetchVendorId.ok) {
       const json = await fetchVendorId.json();
