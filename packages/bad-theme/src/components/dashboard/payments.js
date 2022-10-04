@@ -44,6 +44,8 @@ export const handlePayment = async ({
       dispatch,
       dashboardPath: "My Profile",
     });
+    // scroll to bottom of page to contact panel
+    window.scrollTo({ top: Number.MAX_SAFE_INTEGER, behavior: "smooth" });
     // close error modal on user redirect
     setErrorAction({ dispatch, isError: null });
   };
@@ -79,21 +81,40 @@ export const handlePayment = async ({
       sagepayUrl +
       type +
       `?redirecturl=${state.auth.APP_URL}/payment-confirmation/?redirect=${state.router.link}`;
-    const fetchVendorId = await fetchDataHandler({
+    const response = await fetchDataHandler({
       path,
       method: "POST",
-      // body: appCredentials,
       state,
     });
+    const data = await response.json();
+    console.log("🐞 data", data);
 
-    if (!fetchVendorId.ok) {
+    // return;
+
+    if (!data.success) {
       // --------------------------------------------------------------------------------
       // 📌  General Sage pay error handler to notify user
       // --------------------------------------------------------------------------------
+      let message = `Your address details don't appear to be correct. Please go to the "My Profile" tab to confirm your address.`;
+      let errorMsg = "";
+
+      try {
+        errorMsg = data.sageResult.StatusDetail; // Sage pay error message from API
+      } catch (error) {
+        errorMsg = "";
+      }
+
+      // --------------------------------------------------------------------------------
+      // 📌  Notify user with potential error message based on sage pay response error
+      // --------------------------------------------------------------------------------
+      if (errorMsg.includes("5055"))
+        message = `Your postcode details don't appear to be correct. Please go to the "My Profile" tab to confirm your postcode.`;
+      // console.log("🐞 errorMsg", errorMsg);
+
       setErrorAction({
         dispatch,
         isError: {
-          message: `Your address details don't appear to be correct. Please go to the "My Profile" tab to confirm your address.`,
+          message,
           image: "Error",
           action: [
             {
@@ -105,14 +126,14 @@ export const handlePayment = async ({
       });
     }
 
-    if (fetchVendorId.ok) {
-      const json = await fetchVendorId.json();
+    if (data.success) {
       sagePayUrl =
-        json.data.NextURL + "=" + json.data.VPSTxId.replace(/[{}]/g, "");
+        data.data.NextURL + "=" + data.data.VPSTxId.replace(/[{}]/g, "");
       displayPaymentModal();
     }
   } catch (error) {
-    // console.log(error);
+    console.log(error);
+
     setErrorAction({
       dispatch,
       isError: {
