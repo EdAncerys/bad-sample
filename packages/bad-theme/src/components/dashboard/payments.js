@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "frontity";
 
 import { colors } from "../../config/imports";
@@ -29,6 +29,7 @@ export const handlePayment = async ({
   actions,
 }) => {
   let sagePayUrl = "";
+  let isNameError = "";
 
   const handleSagePay = () => {
     actions.theme.addInitiatedPayment(buttonId);
@@ -45,7 +46,8 @@ export const handlePayment = async ({
       dashboardPath: "My Profile",
     });
     // scroll to bottom of page to contact panel
-    window.scrollTo({ top: Number.MAX_SAFE_INTEGER, behavior: "smooth" });
+    if (!isNameError)
+      window.scrollTo({ top: Number.MAX_SAFE_INTEGER, behavior: "smooth" });
     // close error modal on user redirect
     setErrorAction({ dispatch, isError: null });
   };
@@ -87,19 +89,17 @@ export const handlePayment = async ({
       state,
     });
     const data = await response.json();
-    console.log("🐞 data", data);
-
-    // return;
+    // console.log("🐞 data", data);
 
     if (!data.success) {
       // --------------------------------------------------------------------------------
       // 📌  General Sage pay error handler to notify user
       // --------------------------------------------------------------------------------
-      let message = `Your address details don't appear to be correct. Please go to the "My Profile" tab to confirm your address.`;
+      let message = `Your address details appear to be incorrect. Please go to the 'My Profile' tab to confirm your address.`;
       let errorMsg = "";
 
       try {
-        errorMsg = data.sageResult.StatusDetail; // Sage pay error message from API
+        errorMsg = data.data || data.sageResult.StatusDetail; // Sage pay error message from API
       } catch (error) {
         errorMsg = "";
       }
@@ -107,8 +107,13 @@ export const handlePayment = async ({
       // --------------------------------------------------------------------------------
       // 📌  Notify user with potential error message based on sage pay response error
       // --------------------------------------------------------------------------------
-      if (errorMsg.includes("5055"))
-        message = `Your postcode details don't appear to be correct. Please go to the "My Profile" tab to confirm your postcode.`;
+      if (errorMsg.includes("5055") || errorMsg.includes("postcode")) {
+        message = `Your postcode appears to be incorrect. Please go to the 'My Profile' tab to confirm your postcode.`;
+      }
+      if (errorMsg.includes("surname")) {
+        message = `Your name appears to be incorrect. Please go to the 'My Profile' tab to confirm your name details.`;
+        isNameError = true;
+      }
       // console.log("🐞 errorMsg", errorMsg);
 
       setErrorAction({
@@ -132,7 +137,7 @@ export const handlePayment = async ({
       displayPaymentModal();
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
 
     setErrorAction({
       dispatch,
