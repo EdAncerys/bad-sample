@@ -11,7 +11,7 @@ export const googleAutocomplete = async ({ input }) => {
   const services = new google.maps.places.AutocompleteService();
   const request = {
     input,
-    componentRestrictions: { country: "uk" },
+    componentRestrictions: {}, // limit to country ( country: "uk" }
     fields: ["address_components", "geometry", "icon", "name"],
     strictBounds: false,
   };
