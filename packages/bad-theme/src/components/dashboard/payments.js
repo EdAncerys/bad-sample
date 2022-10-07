@@ -250,12 +250,14 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
           return "Payment initiated";
         }
 
+        // --------------------------------------------------------------------------------
+        // 📌  Pay button show conditions
+        // --------------------------------------------------------------------------------
         if (
           bad_sagepayid ||
           core_totalamount === "£0.00" ||
           core_totalamount.includes("-") ||
           bad_approvalstatus === "Pending" ||
-          bad_outstandingpayments === "£0.00" ||
           (bad_outstandingpayments && bad_outstandingpayments.includes("-"))
         )
           return null;
