@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
+import Image from "@frontity/components/image";
 
 import { colors } from "../config/imports";
 import Loading from "../components/loading";
@@ -85,16 +86,36 @@ const Pils = ({ state, actions, libraries }) => {
           margin: `${marginVertical}px ${marginHorizontal}px`,
         }}
       >
-        <ServeTitle />
-        <ServeDownload />
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+          }}
+        >
+          <div style={{ marginRight: "auto" }}>
+            <ServeTitle />
+            <ServeDownload />
+          </div>
+
+          {pil.acf?.qr_code && (
+            <div style={{ width: 200, height: 200, backgroundColor: "pink" }}>
+              <Image
+                src={pil.acf?.qr_code?.url}
+                alt="QR Code"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+              />
+            </div>
+          )}
+        </div>
+
         <ServeBody />
       </div>
     </BlockWrapper>
   );
-};
-
-const styles = {
-  container: {},
 };
 
 export default connect(Pils);
