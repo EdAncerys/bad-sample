@@ -172,6 +172,21 @@ export const getGuidelinesData = async ({ state, page, postsPerPage }) => {
   }
 };
 
+export const getMembershipTypes = async ({ state }) => {
+  const url = `${state.auth.WP_HOST}wp-json/wp/v2/memberships?_fields=id,title,acf`;
+
+  try {
+    // ⬇️ fetch data via wp API page by page
+    const response = await fetchDataHandler({ path: url, state });
+    if (!response.ok) throw new Error("Fetching error");
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    // console.log("🐞 ", error);
+  }
+};
+
 export const getGuidelinesTypes = async ({ state }) => {
   const url = `${state.auth.WP_HOST}wp-json/wp/v2/guidelines_type?_fields=name,id`;
 

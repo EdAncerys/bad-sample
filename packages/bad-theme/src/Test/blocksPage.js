@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "frontity";
 
 import BlockBuilder from "../components/builder/blockBuilder";
 // --------------------------------------------------------------------------------
-import { Parcer } from "../context";
+import { Parcer, getMembershipTypes } from "../context";
 // --------------------------------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 
@@ -16,6 +16,18 @@ const BlocksPage = ({ state, libraries }) => {
   // 📌 if env is dev, show the blocks.
   if (state.auth.ENVIRONMENT !== "DEV") return null;
   let title = [];
+
+  useEffect(() => {
+    // async fetch handler
+    (async () => {
+      try {
+        const response = await getMembershipTypes({ state });
+        console.log("response: ", response);
+      } catch (error) {
+        console.log("error: ", error);
+      }
+    })();
+  }, []);
 
   return (
     <div>

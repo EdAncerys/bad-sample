@@ -169,6 +169,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
     if (!membershipData) return null; // if no membership data is found, return null
 
     membershipData = Object.values(membershipData);
+    console.log("🐞 membershipData", membershipData);
 
     const handleSetFormData = ({ data, name }) => {
       let value = data.value;
