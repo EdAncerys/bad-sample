@@ -258,6 +258,7 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
           core_totalamount === "£0.00" ||
           core_totalamount.includes("-") ||
           bad_approvalstatus === "Pending" ||
+          bad_outstandingpayments === "£0.00" || // ⚠️ Pay Button show condition
           (bad_outstandingpayments && bad_outstandingpayments.includes("-"))
         )
           return null;

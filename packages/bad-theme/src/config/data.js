@@ -109,7 +109,7 @@ export const MENU_DATA = [
     url: "https://www.pushfar.com/employee-register/VYhR5MtTPX/",
   },
   {
-    title: "Referrals",
+    title: "Dermatology Referral Guidelines",
     url: "/referrals/",
   },
   // 📌 uncomment to enable FAD on quick links
