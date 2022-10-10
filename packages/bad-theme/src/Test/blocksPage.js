@@ -35,21 +35,25 @@ const BlocksPage = ({ state, libraries }) => {
         console.log("appTypes: ", appTypes);
         console.log("userApp: ", userApp);
 
-        const bad_categorytype = userApp?.[0]?.bad_categorytype;
+        const bad_categorytype = userApp?.[0]?.bad_categorytype
+          ?.toLowerCase()
+          ?.replace(/\s/g, "");
         const bad_organisedfor = userApp?.[0]?.bad_organisedfor;
 
         console.log("🐞 app", bad_categorytype, bad_organisedfor);
 
         // map threough appTypes and find the app type that matches the user app type
         const wpAppType = appTypes.find((app) => {
-          console.log("🐞 ", app.acf.category_types);
+          // get application & strip all white spaces and make lowercase and replace - with ''
+          const application = app?.slug
+            ?.toLowerCase()
+            ?.replace(/\s/g, "")
+            ?.replace(/-/g, "");
 
-          return app?.acf?.category_types?.includes(bad_categorytype);
+          // return memberships that matches or includes any words in applicationType
+          return application?.includes(bad_categorytype);
         });
 
-        // const wpAppType = Object.keys(appTypes).some(function (key) {
-        //   return appTypes[key] === bad_categorytype;
-        // });
         console.log("wpAppType: ", wpAppType);
       } catch (error) {
         console.log("error: ", error);

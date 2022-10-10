@@ -174,7 +174,7 @@ export const getGuidelinesData = async ({ state, page, postsPerPage }) => {
 
 export const getMembershipTypes = async ({ state }) => {
   let pageNo = 1;
-  const url = `${state.auth.WP_HOST}wp-json/wp/v2/memberships?_fields=id,title,acf&page=${pageNo}`;
+  let url = `${state.auth.WP_HOST}wp-json/wp/v2/memberships?_fields=id,slug,acf&page=${pageNo}`;
 
   try {
     let data = [];
@@ -188,6 +188,7 @@ export const getMembershipTypes = async ({ state }) => {
 
       data = [...data, ...json];
       pageNo++;
+      url = `${state.auth.WP_HOST}wp-json/wp/v2/memberships?_fields=id,slug,acf&page=${pageNo}`;
 
       // 📌 break out of the loop if no more pages
       if (pageNo > totalPages) break;
