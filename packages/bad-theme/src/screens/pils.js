@@ -97,8 +97,8 @@ const Pils = ({ state, actions, libraries }) => {
             <ServeDownload />
           </div>
 
-          {pil.acf?.qr_code && (
-            <div style={{ width: 200, height: 200, backgroundColor: "pink" }}>
+          {/* {pil.acf?.qr_code && (
+            <div style={{ width: 200, height: 200 }}>
               <Image
                 src={pil.acf?.qr_code?.url}
                 alt="QR Code"
@@ -109,7 +109,7 @@ const Pils = ({ state, actions, libraries }) => {
                 }}
               />
             </div>
-          )}
+          )} */}
         </div>
 
         <ServeBody />
