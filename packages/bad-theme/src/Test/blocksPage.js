@@ -3,7 +3,12 @@ import { connect } from "frontity";
 
 import BlockBuilder from "../components/builder/blockBuilder";
 // --------------------------------------------------------------------------------
-import { Parcer, getMembershipTypes } from "../context";
+import {
+  Parcer,
+  getMembershipTypes,
+  useAppState,
+  getUserStoreAction,
+} from "../context";
 // --------------------------------------------------------------------------------
 import BlockWrapper from "../components/blockWrapper";
 
@@ -13,21 +18,44 @@ const BlocksPage = ({ state, libraries }) => {
   const wpBlocks = page.acf.blocks;
   // console.log("page data: ", page); // debug
 
+  const { applicationData, isActiveUser } = useAppState();
+
   // 📌 if env is dev, show the blocks.
   if (state.auth.ENVIRONMENT !== "DEV") return null;
   let title = [];
 
   useEffect(() => {
+    if (!isActiveUser) return null; // async user data fetch from Dynamics. If no user break
+
     // async fetch handler
     (async () => {
       try {
-        const response = await getMembershipTypes({ state });
-        console.log("response: ", response);
+        const appTypes = await getMembershipTypes({ state });
+        const userApp = await getUserStoreAction({ state, isActiveUser });
+        console.log("appTypes: ", appTypes);
+        console.log("userApp: ", userApp);
+
+        const bad_categorytype = userApp?.[0]?.bad_categorytype;
+        const bad_organisedfor = userApp?.[0]?.bad_organisedfor;
+
+        console.log("🐞 app", bad_categorytype, bad_organisedfor);
+
+        // map threough appTypes and find the app type that matches the user app type
+        const wpAppType = appTypes.find((app) => {
+          console.log("🐞 ", app.acf.category_types);
+
+          return app?.acf?.category_types?.includes(bad_categorytype);
+        });
+
+        // const wpAppType = Object.keys(appTypes).some(function (key) {
+        //   return appTypes[key] === bad_categorytype;
+        // });
+        console.log("wpAppType: ", wpAppType);
       } catch (error) {
         console.log("error: ", error);
       }
     })();
-  }, []);
+  }, [isActiveUser]);
 
   return (
     <div>
