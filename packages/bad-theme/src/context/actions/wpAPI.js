@@ -173,14 +173,26 @@ export const getGuidelinesData = async ({ state, page, postsPerPage }) => {
 };
 
 export const getMembershipTypes = async ({ state }) => {
-  const url = `${state.auth.WP_HOST}wp-json/wp/v2/memberships?_fields=id,title,acf`;
+  let pageNo = 1;
+  const url = `${state.auth.WP_HOST}wp-json/wp/v2/memberships?_fields=id,title,acf&page=${pageNo}`;
 
   try {
-    // ⬇️ fetch data via wp API page by page
-    const response = await fetchDataHandler({ path: url, state });
-    if (!response.ok) throw new Error("Fetching error");
+    let data = [];
 
-    const data = await response.json();
+    // ⬇️ fetch data via wp API page by page
+    let response = await fetchDataHandler({ path: url, state });
+    let totalPages = response.headers.get("X-WP-TotalPages");
+
+    while (response.status === 200) {
+      let json = await response.json();
+
+      data = [...data, ...json];
+      pageNo++;
+
+      // 📌 break out of the loop if no more pages
+      if (pageNo > totalPages) break;
+      response = await fetchDataHandler({ path: url, state });
+    }
     return data;
   } catch (error) {
     // console.log("🐞 ", error);
