@@ -261,7 +261,7 @@ const BlocksPage = ({ state, libraries }) => {
           // *Lookup (has variables)
 
           if (cargo) return null; // skip cargo blob
-          if (name !== "py3_hospitalid") return null; // testing
+          // if (name !== "py3_hospitalid") return null; // testing
 
           Label = Label || info?.Label || FORM_CONFIG?.[name]?.Label;
           const AttributeType =
@@ -274,24 +274,42 @@ const BlocksPage = ({ state, libraries }) => {
           const labelClass =
             Required === "None" ? "form-label" : "form-label required";
 
-          if (AttributeType === "String") {
+          if (AttributeType === "String" || AttributeType === "Memo") {
+            // TODO: py3_speciality to change to Picklist
             let disabled = false;
             if (name === "py3_email" && value) disabled = true; // disable email input if user has email
             if (name === "bad_currentpost" && value) disabled = true; // disable current post input if user has current post
 
+            let type = "input";
+            if (AttributeType === "Memo") type = "textarea";
+
             return (
               <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
                 <label className={labelClass}>{Label}</label>
-                <input
-                  name={name}
-                  value={form[name] || value || ""}
-                  onChange={handleInputChange}
-                  type="text"
-                  maxLength={MaxLength}
-                  placeholder={Label}
-                  className="form-control input"
-                  disabled={disabled}
-                />
+                {type === "input" && (
+                  <input
+                    name={name}
+                    value={form[name] || value || ""}
+                    onChange={handleInputChange}
+                    type="text"
+                    maxLength={MaxLength}
+                    placeholder={Label}
+                    className="form-control input"
+                    disabled={disabled}
+                  />
+                )}
+                {type === "textarea" && (
+                  <textarea
+                    name={name}
+                    value={form[name] || value || ""}
+                    onChange={handleInputChange}
+                    type="text"
+                    maxLength={MaxLength}
+                    placeholder={Label}
+                    className="form-control input"
+                    disabled={disabled}
+                  />
+                )}
               </div>
             );
           }
@@ -420,7 +438,7 @@ const BlocksPage = ({ state, libraries }) => {
             );
           }
 
-          if (AttributeType === "Picklist" || AttributeType === "Memo") {
+          if (AttributeType === "Picklist") {
             return (
               <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
                 <label className="form-label required">{Label}</label>
