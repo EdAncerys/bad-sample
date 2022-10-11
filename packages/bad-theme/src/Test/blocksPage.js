@@ -93,6 +93,7 @@ const BlocksPage = ({ state, libraries }) => {
   //       AttributeType: app?.info?.AttributeType || "String",
   //       MaxLength: app?.info?.MaxLength || 100,
   //       Required: app?.info?.Required || "None",
+  //       order: 0,
   //     },
   //   };
   //   // console.log("🐞 ", app);
@@ -131,7 +132,14 @@ const BlocksPage = ({ state, libraries }) => {
         </div>
       </div>
 
-      <div style={{ maxWidth: 600, margin: "0 auto" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          maxWidth: 600,
+          margin: "0 auto",
+        }}
+      >
         <FomShowButton />
 
         {app?.map(({ info, name, value, Label, cargo }, key) => {
@@ -156,7 +164,7 @@ const BlocksPage = ({ state, libraries }) => {
 
           if (AttributeType === "String") {
             return (
-              <div key={key}>
+              <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
                 <label className={labelClass}>{Label}</label>
                 <input
                   name={name}
@@ -173,7 +181,7 @@ const BlocksPage = ({ state, libraries }) => {
 
           if (AttributeType === "DateTime") {
             return (
-              <div key={key}>
+              <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
                 <label className={labelClass}>{Label}</label>
                 <input
                   name={name}
@@ -192,7 +200,7 @@ const BlocksPage = ({ state, libraries }) => {
             const labelClass = "caps-btn-no-underline";
 
             return (
-              <div key={key}>
+              <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
                 <div
                   className="flex"
                   style={{ alignItems: "center", margin: "1em 0" }}
@@ -220,7 +228,7 @@ const BlocksPage = ({ state, libraries }) => {
 
           if (AttributeType === "Picklist") {
             return (
-              <div key={key}>
+              <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
                 <label className="form-label required">{Label}</label>
                 <Form.Select
                   name="bad_categorytype"
