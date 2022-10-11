@@ -272,7 +272,7 @@ export const FORM_CONFIG = {
   },
   py3_hospitalid: {
     type: "text",
-    Label: "Hospital",
+    Label: "Main Hospital / Place of Work / Medical School details.",
     AttributeType: "Lookup",
     MaxLength: 100,
     Required: "None",

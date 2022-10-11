@@ -111,7 +111,7 @@ const SearchDropDown = ({
 
             return (
               <div
-                className="flex-row title-link-animation"
+                className="title-link-animation"
                 key={key}
                 style={{
                   padding: `0.5em 0`,

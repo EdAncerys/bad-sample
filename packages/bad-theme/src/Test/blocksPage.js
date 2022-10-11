@@ -7,11 +7,16 @@ import {
   Parcer,
   getMembershipTypes,
   useAppState,
+  useAppDispatch,
   getUserStoreAction,
   FORM_CONFIG,
+  getHospitalsAction,
+  colors,
+  getHospitalNameAction,
 } from "../context";
 // --------------------------------------------------------------------------------
-import BlockWrapper from "../components/blockWrapper";
+import SearchDropDown from "../components/searchDropDown";
+import CloseIcon from "@mui/icons-material/Close";
 import { Form } from "react-bootstrap";
 
 const BlocksPage = ({ state, libraries }) => {
@@ -21,11 +26,16 @@ const BlocksPage = ({ state, libraries }) => {
   // console.log("page data: ", page); // debug
 
   const { applicationData, isActiveUser } = useAppState();
+  const dispatch = useAppDispatch();
 
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState({
+    hospital_lookup: "", // lookup input value
+    hospital_name: "", // selected hospital name value
+  });
   const [appBlob, setAppBlob] = useState(null);
   const [appTypes, setAppTypes] = useState(null);
   const [selectedApp, setSelectedApp] = useState(null);
+  const [hospitalData, setHospitalData] = useState(null);
 
   // 📌 if env is dev, show the blocks.
   if (state.auth.ENVIRONMENT !== "DEV") return null;
@@ -39,6 +49,27 @@ const BlocksPage = ({ state, libraries }) => {
       try {
         const wpAppStore = await getMembershipTypes({ state });
         const userApp = await getUserStoreAction({ state, isActiveUser });
+        let hospitalId = "";
+        let hospitalName = "";
+
+        // --------------------------------------------------------------------------------
+        // 📌  Check if user have hospital id set in Dynamics. If not, set hospitalId to null
+        // --------------------------------------------------------------------------------
+        userApp.map((item) => {
+          if (item.name === "py3_hospitalid" && item.value) {
+            hospitalId = item.value;
+          }
+        });
+
+        if (hospitalId) {
+          const hospitalData = await getHospitalNameAction({
+            state,
+            dispatch,
+            id: hospitalId,
+          });
+          if (hospitalData) hospitalName = hospitalData.name;
+        }
+
         console.log("wpAppStore: ", wpAppStore);
         console.log("userApp: ", userApp);
 
@@ -60,9 +91,10 @@ const BlocksPage = ({ state, libraries }) => {
           return application?.includes(bad_categorytype); // return memberships that matches or includes any words in applicationType
         });
 
-        console.log("appTypes: ", appTypes);
+        console.log("hospitalId: ", hospitalId);
         setAppBlob(userApp);
         setAppTypes(appTypes);
+        setForm({ ...form, hospital_name: hospitalName });
       } catch (error) {
         console.log("error: ", error);
       }
@@ -79,6 +111,54 @@ const BlocksPage = ({ state, libraries }) => {
       [name]: type === "checkbox" ? checked : value,
     });
   };
+
+  const handleSelectHospital = ({ item }) => {
+    setForm((form) => ({
+      ...form,
+      hospital_lookup: "",
+      hospital_name: item?.title,
+      py3_hospitalid: item?.link,
+    }));
+
+    setHospitalData(null); // clear hospital data for dropdown
+  };
+
+  const handleClearHospital = () => {
+    setForm((form) => ({
+      ...form,
+      hospital_name: "",
+    }));
+  };
+
+  useEffect(() => {
+    // --------------------------------------------------------------------------------
+    // 📌  Hospital name lookup
+    // --------------------------------------------------------------------------------
+
+    // if hospital name is not empty, fetch hospital data
+    if (form.hospital_name || form.hospital_lookup === "") return null;
+
+    (async () => {
+      try {
+        console.log("🐞 py3_hospitalid", form.py3_hospitalid);
+        let hospitalData = await getHospitalsAction({
+          state,
+          dispatch,
+          input: form.hospital_lookup,
+        });
+        // refactor hospital data to match dropdown format
+        hospitalData = hospitalData.map((hospital) => {
+          return {
+            title: hospital.name,
+            link: hospital.accountid,
+          };
+        });
+        setHospitalData(hospitalData);
+      } catch (error) {
+        console.log("error: ", error);
+      }
+    })();
+  }, [form]);
 
   // --------------------------------------------------------------------------------
   // 📌  Extract data from user application blob
@@ -178,8 +258,10 @@ const BlocksPage = ({ state, libraries }) => {
         {appBlob?.map(({ info, name, value, Label, cargo }, key) => {
           // ⚠️ types handles the input type
           // String & Boolean & Picklist & DateTime & Memo
+          // *Lookup (has variables)
 
           if (cargo) return null; // skip cargo blob
+          if (name !== "py3_hospitalid") return null; // testing
 
           Label = Label || info?.Label || FORM_CONFIG?.[name]?.Label;
           const AttributeType =
@@ -193,6 +275,10 @@ const BlocksPage = ({ state, libraries }) => {
             Required === "None" ? "form-label" : "form-label required";
 
           if (AttributeType === "String") {
+            let disabled = false;
+            if (name === "py3_email" && value) disabled = true; // disable email input if user has email
+            if (name === "bad_currentpost" && value) disabled = true; // disable current post input if user has current post
+
             return (
               <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
                 <label className={labelClass}>{Label}</label>
@@ -204,7 +290,85 @@ const BlocksPage = ({ state, libraries }) => {
                   maxLength={MaxLength}
                   placeholder={Label}
                   className="form-control input"
+                  disabled={disabled}
                 />
+              </div>
+            );
+          }
+
+          if (AttributeType === "Lookup" && name === "py3_hospitalid") {
+            // --------------------------------------------------------------------------------
+            // 📌  Hospital lookup input with dropdown
+            // --------------------------------------------------------------------------------
+            let disabled = false;
+            if (value) disabled = true; // disable hospital input if user has hospital
+
+            return (
+              <div
+                key={key}
+                style={{
+                  order: FORM_CONFIG?.[name]?.order,
+                  position: "relative",
+                }}
+              >
+                <label className={labelClass}>{Label}</label>
+                {form.hospital_name && (
+                  <div
+                    className="form-control input"
+                    style={{
+                      backgroundColor: !disabled
+                        ? "transparent"
+                        : colors.disabled,
+                    }}
+                  >
+                    <div className="flex-row">
+                      <div
+                        style={{
+                          position: "relative",
+                          width: "fit-content",
+                          paddingRight: 15,
+                        }}
+                      >
+                        {form.hospital_name}
+                        {!disabled && (
+                          <div
+                            className="filter-icon"
+                            style={{ top: -5 }}
+                            onClick={handleClearHospital}
+                          >
+                            <CloseIcon
+                              style={{
+                                fill: colors.darkSilver,
+                                padding: 0,
+                                width: 15,
+                                height: 15,
+                              }}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {!form.hospital_name && (
+                  <input
+                    name="hospital_lookup" // hospital name not passed to form submit object
+                    value={form.hospital_lookup}
+                    onChange={handleInputChange}
+                    type="text"
+                    maxLength={MaxLength}
+                    placeholder={Label}
+                    className="form-control input"
+                    disabled={disabled}
+                  />
+                )}
+                {hospitalData && (
+                  <SearchDropDown
+                    filter={hospitalData}
+                    onClickHandler={handleSelectHospital}
+                    height={230}
+                  />
+                )}
               </div>
             );
           }
