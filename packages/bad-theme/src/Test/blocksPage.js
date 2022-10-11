@@ -310,6 +310,12 @@ const BlocksPage = ({ state, libraries }) => {
                     disabled={disabled}
                   />
                 )}
+
+                {FORM_CONFIG?.[name]?.caption && (
+                  <div style={{ padding: "0.5em 0" }}>
+                    {FORM_CONFIG?.[name]?.caption}
+                  </div>
+                )}
               </div>
             );
           }

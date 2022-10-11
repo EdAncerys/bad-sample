@@ -437,6 +437,8 @@ export const FORM_CONFIG = {
     MaxLength: 500,
     Required: "None",
     order: 0,
+    caption:
+      "If you would like to change your job title please use the form on your dashboard.",
   },
   core_accountid: {
     type: "text",
