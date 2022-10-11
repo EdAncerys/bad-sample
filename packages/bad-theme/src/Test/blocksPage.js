@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { connect } from "frontity";
 
 import BlockBuilder from "../components/builder/blockBuilder";
@@ -13,11 +13,13 @@ import {
   getHospitalsAction,
   colors,
   getHospitalNameAction,
+  sendFileToS3Action,
 } from "../context";
 // --------------------------------------------------------------------------------
 import SearchDropDown from "../components/searchDropDown";
 import CloseIcon from "@mui/icons-material/Close";
 import { Form } from "react-bootstrap";
+import ActionPlaceholder from "../components/actionPlaceholder";
 
 const BlocksPage = ({ state, libraries }) => {
   const data = state.source.get(state.router.link);
@@ -36,6 +38,8 @@ const BlocksPage = ({ state, libraries }) => {
   const [appTypes, setAppTypes] = useState(null);
   const [selectedApp, setSelectedApp] = useState(null);
   const [hospitalData, setHospitalData] = useState(null);
+  const [isFetching, setFetching] = useState(false);
+  const documentRef = useRef(null);
 
   // 📌 if env is dev, show the blocks.
   if (state.auth.ENVIRONMENT !== "DEV") return null;
@@ -51,13 +55,18 @@ const BlocksPage = ({ state, libraries }) => {
         const userApp = await getUserStoreAction({ state, isActiveUser });
         let hospitalId = "";
         let hospitalName = "";
+        let documentUrl = "";
 
         // --------------------------------------------------------------------------------
         // 📌  Check if user have hospital id set in Dynamics. If not, set hospitalId to null
+        //  Check for Doc URL in Dynamics. If not, set documentUrl to null
         // --------------------------------------------------------------------------------
         userApp.map((item) => {
           if (item.name === "py3_hospitalid" && item.value) {
             hospitalId = item.value;
+          }
+          if (item.name === "sky_cvurl" && item.value) {
+            documentUrl = item.value;
           }
         });
 
@@ -92,9 +101,14 @@ const BlocksPage = ({ state, libraries }) => {
         });
 
         console.log("hospitalId: ", hospitalId);
+        documentRef.current = documentUrl; // set documentRef to documentUrl
         setAppBlob(userApp);
         setAppTypes(appTypes);
-        setForm({ ...form, hospital_name: hospitalName });
+        setForm({
+          ...form,
+          hospital_name: hospitalName,
+          doc_file: documentUrl, // set documentUrl to form
+        });
       } catch (error) {
         console.log("error: ", error);
       }
@@ -128,6 +142,33 @@ const BlocksPage = ({ state, libraries }) => {
       ...form,
       hospital_name: "",
     }));
+  };
+
+  const handleDocUploadChange = async (e) => {
+    let sky_cvurl = e.target.files[0];
+    if (!sky_cvurl) return;
+
+    try {
+      setFetching(true);
+      // upload file to S3 bucket and get url
+      sky_cvurl = await sendFileToS3Action({
+        state,
+        dispatch,
+        attachments: sky_cvurl,
+      });
+
+      setForm((prevFormData) => ({
+        ...prevFormData,
+        ["sky_cvurl"]: sky_cvurl,
+        ["doc_file"]: "", // clear file input for prevevious uploads
+      }));
+
+      // console.log("🐞 ", sky_cvurl); // debug
+    } catch (error) {
+      // console.log("🤖 error", error);
+    } finally {
+      setFetching(false);
+    }
   };
 
   useEffect(() => {
@@ -218,8 +259,15 @@ const BlocksPage = ({ state, libraries }) => {
           flexDirection: "column",
           maxWidth: 600,
           margin: "0 auto",
+          position: "relative",
         }}
       >
+        <ActionPlaceholder
+          isFetching={isFetching}
+          background="transparent"
+          alignSelf="self-end"
+          padding="0 0 45% 0"
+        />
         <FomShowButton />
 
         <div>
@@ -261,7 +309,7 @@ const BlocksPage = ({ state, libraries }) => {
           // *Lookup (has variables)
 
           if (cargo) return null; // skip cargo blob
-          // if (name !== "py3_hospitalid") return null; // testing
+          if (name !== "sky_cvurl") return null; // testing
 
           Label = Label || info?.Label || FORM_CONFIG?.[name]?.Label;
           const AttributeType =
@@ -273,6 +321,39 @@ const BlocksPage = ({ state, libraries }) => {
 
           const labelClass =
             Required === "None" ? "form-label" : "form-label required";
+
+          if (name === "sky_cvurl") {
+            return (
+              <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
+                <label className={labelClass}>{Label}</label>
+                <div style={{ position: "relative" }}>
+                  {form.doc_file && (
+                    <label
+                      style={{
+                        position: "absolute",
+                        left: 120,
+                        height: 40,
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                      className="caps-btn-no-underline"
+                    >
+                      CV exists in database
+                    </label>
+                  )}
+                  <input
+                    ref={documentRef}
+                    onChange={handleDocUploadChange}
+                    name={name}
+                    type="file"
+                    className="form-control input"
+                    accept=".pdf,.doc,.docx"
+                    style={{ color: form.doc_file ? "transparent" : "black" }}
+                  />
+                </div>
+              </div>
+            );
+          }
 
           if (AttributeType === "String" || AttributeType === "Memo") {
             // TODO: py3_speciality to change to Picklist
@@ -312,7 +393,7 @@ const BlocksPage = ({ state, libraries }) => {
                 )}
 
                 {FORM_CONFIG?.[name]?.caption && (
-                  <div style={{ padding: "0.5em 0" }}>
+                  <div style={{ margin: "0.5em 0" }}>
                     {FORM_CONFIG?.[name]?.caption}
                   </div>
                 )}
