@@ -118,6 +118,11 @@ export const FORM_CONFIG = {
     MaxLength: 2000,
     Required: "None",
     order: 0,
+    Choices: [
+      { value: "Anaesthetics", Label: "Anaesthetics" },
+      { value: "Cardiology", Label: "Cardiology" },
+      { value: "Dermatology", Label: "Dermatology" },
+    ],
   },
   py3_whatukbasedroleareyou: {
     type: "text",

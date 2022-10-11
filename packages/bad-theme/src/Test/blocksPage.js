@@ -70,7 +70,7 @@ const BlocksPage = ({ state, libraries }) => {
   }, [isActiveUser]);
 
   // --------------------------------------------------------------------------------
-  const handleInputChange = (e) => {
+  const handleInputChange = async (e) => {
     const { name, value, type, checked } = e.target;
     console.log("🐞 name, value, type, checked", name, value, type, checked);
 
@@ -144,10 +144,7 @@ const BlocksPage = ({ state, libraries }) => {
 
         {app?.map(({ info, name, value, Label, cargo }, key) => {
           // ⚠️ types handles the input type
-          // String
-          // Boolean
-          // Picklist
-          // DateTime
+          // String & Boolean & Picklist & DateTime & Speciality
 
           if (cargo) return null; // skip cargo blob
 
@@ -156,7 +153,7 @@ const BlocksPage = ({ state, libraries }) => {
             info?.AttributeType || FORM_CONFIG?.[name]?.AttributeType;
           const MaxLength = info?.MaxLength || FORM_CONFIG?.[name]?.MaxLength;
           const Required = info?.Required || FORM_CONFIG?.[name]?.Required;
-          const Choices = info?.Choices || [];
+          const Choices = info?.Choices || FORM_CONFIG?.[name]?.Choices || [];
           const Handler = FORM_CONFIG?.[name]?.Handler || null;
 
           const labelClass =
@@ -226,12 +223,12 @@ const BlocksPage = ({ state, libraries }) => {
             );
           }
 
-          if (AttributeType === "Picklist") {
+          if (AttributeType === "Picklist" || AttributeType === "Speciality") {
             return (
               <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
                 <label className="form-label required">{Label}</label>
                 <Form.Select
-                  name="bad_categorytype"
+                  name={name}
                   value={form[name] || value || ""}
                   onChange={handleInputChange}
                   className="input"
