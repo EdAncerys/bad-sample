@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "frontity";
 
 import BlockBuilder from "../components/builder/blockBuilder";
@@ -25,7 +25,6 @@ const BlocksPage = ({ state, libraries }) => {
   const [form, setForm] = useState({});
   const [app, setApp] = useState(null);
   const [appStore, setAppStore] = useState(null);
-  const inputCounter = useRef(0);
 
   // 📌 if env is dev, show the blocks.
   if (state.auth.ENVIRONMENT !== "DEV") return null;
@@ -73,6 +72,7 @@ const BlocksPage = ({ state, libraries }) => {
   // --------------------------------------------------------------------------------
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
+    console.log("🐞 name, value, type, checked", name, value, type, checked);
 
     setForm({
       ...form,
@@ -115,7 +115,6 @@ const BlocksPage = ({ state, libraries }) => {
         }}
         onClick={() => {
           console.log("form: ", form);
-          console.log("🐞 Totla inputs rendered: ", inputCounter.current);
         }}
       >
         Log Form
@@ -136,6 +135,12 @@ const BlocksPage = ({ state, libraries }) => {
         <FomShowButton />
 
         {app?.map(({ info, name, value, Label, cargo }, key) => {
+          // ⚠️ types handles the input type
+          // String
+          // Boolean
+          // Picklist
+          // DateTime
+
           if (cargo) return null; // skip cargo blob
 
           Label = Label || info?.Label || FORM_CONFIG?.[name]?.Label;
@@ -144,13 +149,12 @@ const BlocksPage = ({ state, libraries }) => {
           const MaxLength = info?.MaxLength || FORM_CONFIG?.[name]?.MaxLength;
           const Required = info?.Required || FORM_CONFIG?.[name]?.Required;
           const Choices = info?.Choices || [];
+          const Handler = FORM_CONFIG?.[name]?.Handler || null;
 
           const labelClass =
             Required === "None" ? "form-label" : "form-label required";
 
           if (AttributeType === "String") {
-            inputCounter.current++;
-
             return (
               <div key={key}>
                 <label className={labelClass}>{Label}</label>
@@ -167,15 +171,60 @@ const BlocksPage = ({ state, libraries }) => {
             );
           }
 
-          if (AttributeType === "Picklist") {
-            inputCounter.current++;
+          if (AttributeType === "DateTime") {
+            return (
+              <div key={key}>
+                <label className={labelClass}>{Label}</label>
+                <input
+                  name={name}
+                  value={form[name] || value || ""}
+                  onChange={handleInputChange}
+                  type="date"
+                  maxLength={MaxLength}
+                  placeholder={Label}
+                  className="form-control input"
+                />
+              </div>
+            );
+          }
 
+          if (AttributeType === "Boolean") {
+            const labelClass = "caps-btn-no-underline";
+
+            return (
+              <div key={key}>
+                <div
+                  className="flex"
+                  style={{ alignItems: "center", margin: "1em 0" }}
+                >
+                  <input
+                    name={name}
+                    value={name}
+                    checked={form[name] || value || false}
+                    onChange={handleInputChange}
+                    type="checkbox"
+                    className="form-check-input check-box"
+                  />
+                  <div onClick={Handler} style={{ display: "flex" }}>
+                    <label
+                      className={labelClass}
+                      style={{ cursor: Handler ? "pointer" : "default" }}
+                    >
+                      {Label}
+                    </label>
+                  </div>
+                </div>
+              </div>
+            );
+          }
+
+          if (AttributeType === "Picklist") {
             return (
               <div key={key}>
                 <label className="form-label required">{Label}</label>
                 <Form.Select
                   name="bad_categorytype"
-                  value={form[name] || value}
+                  value={form[name] || value || ""}
                   onChange={handleInputChange}
                   className="input"
                 >

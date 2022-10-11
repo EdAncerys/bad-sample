@@ -1,4 +1,4 @@
-const FORM_CONFIG = {
+export const FORM_CONFIG = {
   core_membershipapplicationid: {
     type: "text",
     Label: "Membership Application",
@@ -124,6 +124,7 @@ const FORM_CONFIG = {
     AttributeType: "Boolean",
     MaxLength: 100,
     Required: "None",
+    Handler: () => console.log("🐞 onClick handler"),
   },
   bad_includeinthebssciiemaildiscussionforum: {
     type: "text",
