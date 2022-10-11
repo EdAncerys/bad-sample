@@ -23,8 +23,9 @@ const BlocksPage = ({ state, libraries }) => {
   const { applicationData, isActiveUser } = useAppState();
 
   const [form, setForm] = useState({});
-  const [app, setApp] = useState(null);
-  const [appStore, setAppStore] = useState(null);
+  const [appBlob, setAppBlob] = useState(null);
+  const [appTypes, setAppTypes] = useState(null);
+  const [selectedApp, setSelectedApp] = useState(null);
 
   // 📌 if env is dev, show the blocks.
   if (state.auth.ENVIRONMENT !== "DEV") return null;
@@ -46,23 +47,22 @@ const BlocksPage = ({ state, libraries }) => {
           ?.replace(/\s/g, "");
         const bad_organisedfor = userApp?.[0]?.bad_organisedfor;
 
-        console.log("🐞 app", bad_categorytype, bad_organisedfor);
+        console.log("🐞 appBlob", bad_categorytype, bad_organisedfor);
 
-        // map threough wpAppStore and find the app type that matches the user app type
-        const wpAppType = wpAppStore.find((app) => {
+        // find all applications that match the user's category type
+        const appTypes = wpAppStore.filter((appBlob) => {
           // get application & strip all white spaces and make lowercase and replace - with ''
-          const application = app?.slug
+          const application = appBlob?.slug
             ?.toLowerCase()
             ?.replace(/\s/g, "")
             ?.replace(/-/g, "");
 
-          // return memberships that matches or includes any words in applicationType
-          return application?.includes(bad_categorytype);
+          return application?.includes(bad_categorytype); // return memberships that matches or includes any words in applicationType
         });
 
-        console.log("wpAppType: ", wpAppType);
-        setApp(userApp);
-        setAppStore(wpAppStore);
+        console.log("appTypes: ", appTypes);
+        setAppBlob(userApp);
+        setAppTypes(appTypes);
       } catch (error) {
         console.log("error: ", error);
       }
@@ -84,19 +84,19 @@ const BlocksPage = ({ state, libraries }) => {
   // 📌  Extract data from user application blob
   // --------------------------------------------------------------------------------
   // let blob = {};
-  // app?.map((app) => {
+  // appBlob?.map((appBlob) => {
   //   blob = {
   //     ...blob,
-  //     [app.name]: {
+  //     [appBlob.name]: {
   //       type: "text",
-  //       Label: app?.info?.Label || "Input Lapbel",
-  //       AttributeType: app?.info?.AttributeType || "String",
-  //       MaxLength: app?.info?.MaxLength || 100,
-  //       Required: app?.info?.Required || "None",
+  //       Label: appBlob?.info?.Label || "Input Lapbel",
+  //       AttributeType: appBlob?.info?.AttributeType || "String",
+  //       MaxLength: appBlob?.info?.MaxLength || 100,
+  //       Required: appBlob?.info?.Required || "None",
   //       order: 0,
   //     },
   //   };
-  //   // console.log("🐞 ", app);
+  //   // console.log("🐞 ", appBlob);
   // });
   // console.log("🐞 blob", JSON.stringify(blob));
 
@@ -142,9 +142,42 @@ const BlocksPage = ({ state, libraries }) => {
       >
         <FomShowButton />
 
-        {app?.map(({ info, name, value, Label, cargo }, key) => {
+        <div>
+          <label className="form-label required">
+            Please select the Special Interest Group you would like to apply
+            for:
+          </label>
+          <Form.Select
+            name="bad_categorytype"
+            value={form.bad_categorytype || ""}
+            onChange={handleInputChange}
+            className="form-control input"
+          >
+            <option value="" hidden>
+              Membership Category
+            </option>
+            {appTypes?.map(({ acf }, key) => {
+              const category_types = acf?.category_types;
+              // get SIG membership categories name from custom object
+              // split string on : and swap first and second value
+              // if typeName includes Full replace with empty string
+              // change prefix for names with " - ", eg. "Tarainee - Time"
+              let typeName = category_types.split(":").reverse().join(" - ");
+              // if value include - Full replace with empty string
+              typeName = typeName.replace(" - Full", "");
+
+              return (
+                <option key={key} value={category_types}>
+                  {typeName}
+                </option>
+              );
+            })}
+          </Form.Select>
+        </div>
+
+        {appBlob?.map(({ info, name, value, Label, cargo }, key) => {
           // ⚠️ types handles the input type
-          // String & Boolean & Picklist & DateTime & Speciality
+          // String & Boolean & Picklist & DateTime & Memo
 
           if (cargo) return null; // skip cargo blob
 
@@ -223,7 +256,7 @@ const BlocksPage = ({ state, libraries }) => {
             );
           }
 
-          if (AttributeType === "Picklist" || AttributeType === "Speciality") {
+          if (AttributeType === "Picklist" || AttributeType === "Memo") {
             return (
               <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
                 <label className="form-label required">{Label}</label>
