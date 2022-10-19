@@ -41,7 +41,9 @@ const BlocksPage = ({ state, libraries }) => {
   const [isFetching, setFetching] = useState(false);
   const documentRef = useRef(null);
 
+  // --------------------------------------------------------------------------------
   // 📌 if env is dev, show the blocks.
+  // --------------------------------------------------------------------------------
   if (state.auth.ENVIRONMENT !== "DEV") return null;
   let title = [];
 
@@ -263,7 +265,7 @@ const BlocksPage = ({ state, libraries }) => {
         }}
       >
         <ActionPlaceholder
-          isFetching={isFetching}
+          isFetching={true}
           background="transparent"
           alignSelf="self-end"
           padding="0 0 45% 0"
@@ -309,7 +311,7 @@ const BlocksPage = ({ state, libraries }) => {
           // *Lookup (has variables)
 
           if (cargo) return null; // skip cargo blob
-          if (name !== "sky_cvurl") return null; // testing
+          // if (name !== "sky_cvurl") return null; // testing
 
           Label = Label || info?.Label || FORM_CONFIG?.[name]?.Label;
           const AttributeType =
