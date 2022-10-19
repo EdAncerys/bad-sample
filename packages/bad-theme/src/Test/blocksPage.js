@@ -2,6 +2,14 @@ import React, { useEffect, useState, useRef } from "react";
 import { connect } from "frontity";
 
 import BlockBuilder from "../components/builder/blockBuilder";
+import {
+  ServeCvInput,
+  ServeEmailInput,
+  ServeHospitalLookUplInput,
+  ServeCheckboxInput,
+  ServePicklistInput,
+  ServeDateTimeInput,
+} from "../components/applicationForm";
 // --------------------------------------------------------------------------------
 import {
   Parcer,
@@ -11,13 +19,10 @@ import {
   getUserStoreAction,
   FORM_CONFIG,
   getHospitalsAction,
-  colors,
   getHospitalNameAction,
   sendFileToS3Action,
 } from "../context";
 // --------------------------------------------------------------------------------
-import SearchDropDown from "../components/searchDropDown";
-import CloseIcon from "@mui/icons-material/Close";
 import { Form } from "react-bootstrap";
 import ActionPlaceholder from "../components/actionPlaceholder";
 
@@ -137,6 +142,7 @@ const BlocksPage = ({ state, libraries }) => {
     }));
 
     setHospitalData(null); // clear hospital data for dropdown
+    // handleInputChange({ target: { value: null, name: "hospital_data" } });
   };
 
   const handleClearHospital = () => {
@@ -322,38 +328,14 @@ const BlocksPage = ({ state, libraries }) => {
           if (name === "sky_cvurl") {
             return (
               <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
-                <label className={labelClass}>{Label}</label>
-                <div style={{ position: "relative" }}>
-                  {form.doc_file && (
-                    <label
-                      style={{
-                        position: "absolute",
-                        left: 120,
-                        height: 40,
-                        display: "flex",
-                        alignItems: "center",
-                        zIndex: 1,
-                      }}
-                      className="caps-btn-no-underline"
-                    >
-                      CV exists in database
-                    </label>
-                  )}
-                  <input
-                    ref={documentRef}
-                    onChange={handleDocUploadChange}
-                    name={name}
-                    type="file"
-                    className="form-control input"
-                    accept=".pdf,.doc,.docx"
-                    style={{
-                      color: form.doc_file ? "transparent" : "black",
-                      background: "transparent",
-                      position: "absolute",
-                      zIndex: 2,
-                    }}
-                  />
-                </div>
+                <ServeCvInput
+                  form={form}
+                  name={name}
+                  labelClass={labelClass}
+                  documentRef={documentRef}
+                  Label={Label}
+                  handleDocUploadChange={handleDocUploadChange}
+                />
               </div>
             );
           }
@@ -369,37 +351,17 @@ const BlocksPage = ({ state, libraries }) => {
 
             return (
               <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
-                <label className={labelClass}>{Label}</label>
-                {type === "input" && (
-                  <input
-                    name={name}
-                    value={form[name] || value || ""}
-                    onChange={handleInputChange}
-                    type="text"
-                    maxLength={MaxLength}
-                    placeholder={Label}
-                    className="form-control input"
-                    disabled={disabled}
-                  />
-                )}
-                {type === "textarea" && (
-                  <textarea
-                    name={name}
-                    value={form[name] || value || ""}
-                    onChange={handleInputChange}
-                    type="text"
-                    maxLength={MaxLength}
-                    placeholder={Label}
-                    className="form-control input"
-                    disabled={disabled}
-                  />
-                )}
-
-                {FORM_CONFIG?.[name]?.caption && (
-                  <div style={{ margin: "0.5em 0" }}>
-                    {FORM_CONFIG?.[name]?.caption}
-                  </div>
-                )}
+                <ServeEmailInput
+                  form={form}
+                  name={name}
+                  labelClass={labelClass}
+                  Label={Label}
+                  type={type}
+                  disabled={disabled}
+                  value={value}
+                  handleInputChange={handleInputChange}
+                  MaxLength={MaxLength}
+                />
               </div>
             );
           }
@@ -412,71 +374,19 @@ const BlocksPage = ({ state, libraries }) => {
             if (value) disabled = true; // disable hospital input if user has hospital
 
             return (
-              <div
-                key={key}
-                style={{
-                  order: FORM_CONFIG?.[name]?.order,
-                  position: "relative",
-                }}
-              >
-                <label className={labelClass}>{Label}</label>
-                {form.hospital_name && (
-                  <div
-                    className="form-control input"
-                    style={{
-                      backgroundColor: !disabled
-                        ? "transparent"
-                        : colors.disabled,
-                    }}
-                  >
-                    <div className="flex-row">
-                      <div
-                        style={{
-                          position: "relative",
-                          width: "fit-content",
-                          paddingRight: 15,
-                        }}
-                      >
-                        {form.hospital_name}
-                        {!disabled && (
-                          <div
-                            className="filter-icon"
-                            style={{ top: -5 }}
-                            onClick={handleClearHospital}
-                          >
-                            <CloseIcon
-                              style={{
-                                fill: colors.darkSilver,
-                                padding: 0,
-                                width: 15,
-                                height: 15,
-                              }}
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
-                {!form.hospital_name && (
-                  <input
-                    name="hospital_lookup" // hospital name not passed to form submit object
-                    value={form.hospital_lookup}
-                    onChange={handleInputChange}
-                    type="text"
-                    maxLength={MaxLength}
-                    placeholder={Label}
-                    className="form-control input"
-                    disabled={disabled}
-                  />
-                )}
-                {hospitalData && (
-                  <SearchDropDown
-                    filter={hospitalData}
-                    onClickHandler={handleSelectHospital}
-                    height={230}
-                  />
-                )}
+              <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
+                <ServeHospitalLookUplInput
+                  form={form}
+                  name={name}
+                  labelClass={labelClass}
+                  Label={Label}
+                  disabled={disabled}
+                  handleInputChange={handleInputChange}
+                  hospitalData={hospitalData}
+                  MaxLength={MaxLength}
+                  handleSelectHospital={handleSelectHospital}
+                  handleClearHospital={handleClearHospital}
+                />
               </div>
             );
           }
@@ -484,15 +394,14 @@ const BlocksPage = ({ state, libraries }) => {
           if (AttributeType === "DateTime") {
             return (
               <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
-                <label className={labelClass}>{Label}</label>
-                <input
+                <ServeDateTimeInput
+                  form={form}
                   name={name}
-                  value={form[name] || value || ""}
-                  onChange={handleInputChange}
-                  type="date"
-                  maxLength={MaxLength}
-                  placeholder={Label}
-                  className="form-control input"
+                  Label={Label}
+                  value={value}
+                  labelClass={labelClass}
+                  handleInputChange={handleInputChange}
+                  MaxLength={MaxLength}
                 />
               </div>
             );
@@ -503,27 +412,15 @@ const BlocksPage = ({ state, libraries }) => {
 
             return (
               <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
-                <div
-                  className="flex"
-                  style={{ alignItems: "center", margin: "1em 0" }}
-                >
-                  <input
-                    name={name}
-                    value={name}
-                    checked={form[name] || value || false}
-                    onChange={handleInputChange}
-                    type="checkbox"
-                    className="form-check-input check-box"
-                  />
-                  <div onClick={Handler} style={{ display: "flex" }}>
-                    <label
-                      className={labelClass}
-                      style={{ cursor: Handler ? "pointer" : "default" }}
-                    >
-                      {Label}
-                    </label>
-                  </div>
-                </div>
+                <ServeCheckboxInput
+                  form={form}
+                  name={name}
+                  labelClass={labelClass}
+                  Label={Label}
+                  value={value}
+                  handleInputChange={handleInputChange}
+                  Handler={Handler}
+                />
               </div>
             );
           }
@@ -531,24 +428,14 @@ const BlocksPage = ({ state, libraries }) => {
           if (AttributeType === "Picklist") {
             return (
               <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
-                <label className="form-label required">{Label}</label>
-                <Form.Select
+                <ServePicklistInput
+                  form={form}
                   name={name}
-                  value={form[name] || value || ""}
-                  onChange={handleInputChange}
-                  className="input"
-                >
-                  <option value="" hidden>
-                    {Label}
-                  </option>
-                  {Choices.map(({ value, Label }, key) => {
-                    return (
-                      <option key={key} value={value}>
-                        {Label}
-                      </option>
-                    );
-                  })}
-                </Form.Select>
+                  Label={Label}
+                  value={value}
+                  handleInputChange={handleInputChange}
+                  Choices={Choices}
+                />
               </div>
             );
           }
