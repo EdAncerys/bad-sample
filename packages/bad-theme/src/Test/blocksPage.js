@@ -265,18 +265,7 @@ const BlocksPage = ({ state, libraries }) => {
         }}
       >
         <FomShowButton />
-        <ActionPlaceholder isFetching={true} background="pink" />
-
-        <div
-          style={{
-            position: "-webkit-sticky",
-            top: 300,
-            height: 100,
-            background: "blue",
-          }}
-        >
-          spiner
-        </div>
+        {/* <ActionPlaceholder isFetching={true} background="pink" /> */}
 
         <div>
           <label className="form-label required">
