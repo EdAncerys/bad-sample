@@ -264,13 +264,19 @@ const BlocksPage = ({ state, libraries }) => {
           position: "relative",
         }}
       >
-        <ActionPlaceholder
-          isFetching={true}
-          background="transparent"
-          alignSelf="self-end"
-          padding="0 0 45% 0"
-        />
         <FomShowButton />
+        <ActionPlaceholder isFetching={true} background="pink" />
+
+        <div
+          style={{
+            position: "-webkit-sticky",
+            top: 300,
+            height: 100,
+            background: "blue",
+          }}
+        >
+          spiner
+        </div>
 
         <div>
           <label className="form-label required">
@@ -337,6 +343,7 @@ const BlocksPage = ({ state, libraries }) => {
                         height: 40,
                         display: "flex",
                         alignItems: "center",
+                        zIndex: 1,
                       }}
                       className="caps-btn-no-underline"
                     >
@@ -350,7 +357,12 @@ const BlocksPage = ({ state, libraries }) => {
                     type="file"
                     className="form-control input"
                     accept=".pdf,.doc,.docx"
-                    style={{ color: form.doc_file ? "transparent" : "black" }}
+                    style={{
+                      color: form.doc_file ? "transparent" : "black",
+                      background: "transparent",
+                      position: "absolute",
+                      zIndex: 2,
+                    }}
                   />
                 </div>
               </div>
