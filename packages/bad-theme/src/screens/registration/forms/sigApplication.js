@@ -1604,16 +1604,18 @@ const SIGApplication = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {inputValidator.sig_bad_readpolicydocument && !readPolicyDoc && (
-            <div>
-              <div style={{ paddingTop: "0.5em" }}>
-                <Parcer
-                  libraries={libraries}
-                  html={`If you would like to find out more about the ${applicationType} privacy policy please contact <span class="title-link-animation" name="${contactEmail}" id="email-client">${contactEmail}</span>`}
-                />
+          {inputValidator.sig_bad_readpolicydocument &&
+            !readPolicyDoc &&
+            formData?.bad_categorytype && (
+              <div>
+                <div style={{ paddingTop: "0.5em" }}>
+                  <Parcer
+                    libraries={libraries}
+                    html={`If you would like to find out more about the ${applicationType} privacy policy please contact <span class="title-link-animation" name="${contactEmail}" id="email-client">${contactEmail}</span>`}
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
           {inputValidator.sig_bad_readpolicydocument && !!readPolicyDoc && (
             <div>
