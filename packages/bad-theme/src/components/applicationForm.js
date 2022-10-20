@@ -79,7 +79,7 @@ export const ServeCvInput = ({
       <label className={labelClass}>{Label}</label>
       <ServeDevInfo name={name ?? ""} />
 
-      <div style={{ position: "relative" }}>
+      <div style={{ position: "relative", height: 40 }}>
         {form.doc_file && (
           <label
             style={{
