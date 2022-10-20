@@ -7,6 +7,25 @@ import SearchDropDown from "../components/searchDropDown";
 // 📌  Form Input components
 // --------------------------------------------------------------------------------
 
+const ServeDevInfo = ({ name, type }) => {
+  if (false) return null; // dev mode
+
+  return (
+    <div
+      className="flex"
+      style={{
+        color: "red",
+        fontSize: 12,
+        position: "absolute",
+        bottom: -20,
+        right: 0,
+      }}
+    >
+      <div>{name}</div>
+    </div>
+  );
+};
+
 export const ServeApplicationTypeInput = ({
   form,
   appTypes,
@@ -56,8 +75,10 @@ export const ServeCvInput = ({
   handleDocUploadChange,
 }) => {
   return (
-    <div style={{ order: FORM_CONFIG?.[name]?.order }}>
+    <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
       <label className={labelClass}>{Label}</label>
+      <ServeDevInfo name={name ?? ""} />
+
       <div style={{ position: "relative" }}>
         {form.doc_file && (
           <label
@@ -105,11 +126,10 @@ export const ServeTextInput = ({
   disabled,
 }) => {
   return (
-    <div style={{ order: FORM_CONFIG?.[name]?.order }}>
+    <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
       <label className={labelClass}>{Label}</label>
-      <label className={labelClass} style={{ color: "red" }}>
-        {name}
-      </label>
+      <ServeDevInfo name={name ?? ""} />
+
       {type === "input" && (
         <input
           name={name}
@@ -157,13 +177,10 @@ export const ServeHospitalLookUplInput = ({
   handleClearHospital,
 }) => {
   return (
-    <div
-      style={{
-        order: FORM_CONFIG?.[name]?.order,
-        position: "relative",
-      }}
-    >
+    <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
       <label className={labelClass}>{Label}</label>
+      <ServeDevInfo name={name ?? ""} />
+
       {form.hospital_name && (
         <div
           className="form-control input"
@@ -233,7 +250,9 @@ export const ServeCheckboxInput = ({
   Handler,
 }) => {
   return (
-    <div style={{ order: FORM_CONFIG?.[name]?.order }}>
+    <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
+      <ServeDevInfo name={name ?? ""} />
+
       <div className="flex" style={{ alignItems: "center", margin: "1em 0" }}>
         <input
           name={name}
@@ -266,8 +285,10 @@ export const ServePicklistInput = ({
   Choices,
 }) => {
   return (
-    <div style={{ order: FORM_CONFIG?.[name]?.order }}>
+    <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
       <label className="form-label required">{Label}</label>
+      <ServeDevInfo name={name ?? ""} />
+
       <Form.Select
         name={name}
         // if form value is empty use value from props or empty string only once on first render
@@ -300,8 +321,10 @@ export const ServeDateTimeInput = ({
   MaxLength,
 }) => {
   return (
-    <div>
+    <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
       <label className={labelClass}>{Label}</label>
+      <ServeDevInfo name={name ?? ""} />
+
       <input
         name={name}
         // if form value is empty use value from props or empty string only once on first render

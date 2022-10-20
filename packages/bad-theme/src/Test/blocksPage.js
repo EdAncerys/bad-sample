@@ -269,6 +269,7 @@ const BlocksPage = ({ state, libraries }) => {
           maxWidth: 600,
           margin: "0 auto",
           position: "relative",
+          paddingBottom: 32,
         }}
       >
         <FomShowButton />
