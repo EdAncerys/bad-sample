@@ -125,8 +125,6 @@ const BlocksPage = ({ state, libraries }) => {
         // --------------------------------------------------------------------------------
         // 📌  Update state with blob values for UI render
         // --------------------------------------------------------------------------------
-        documentRef.current = documentUrl; // set documentRef to documentUrl
-        profilePictureRef.current = profilePicture; // set profilePicture to profilePicture
         setAppBlob(userApp);
         setAppTypes(appTypes);
         setForm({
@@ -181,6 +179,7 @@ const BlocksPage = ({ state, libraries }) => {
 
     try {
       setFetching(true);
+
       // upload file to S3 bucket and get url
       let url = await sendFileToS3Action({
         state,
@@ -188,7 +187,8 @@ const BlocksPage = ({ state, libraries }) => {
         attachments: doc,
       });
 
-      handleInputChange({ target: { value: url, name } });
+      let dev_name = name === "sky_cvurl" ? "dev_new_cv" : "dev_new_doc";
+      setForm({ ...form, [name]: url, [dev_name]: true });
 
       // console.log("🐞 ", sky_cvurl); // debug
     } catch (error) {
@@ -356,7 +356,6 @@ const BlocksPage = ({ state, libraries }) => {
           // --------------------------------------------------------------------------------
           // 📌  General inoput mapping
           // --------------------------------------------------------------------------------
-          console.log("🐞 ", AttributeType, name);
 
           if (AttributeType === "String" || AttributeType === "Memo") {
             // TODO: py3_speciality to change to Picklist

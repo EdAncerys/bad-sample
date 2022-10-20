@@ -101,6 +101,8 @@ export const ServePictureInput = ({
   Label,
   handleDocUploadChange,
 }) => {
+  console.log("🐞 documentRef value", profilePictureRef?.current?.file);
+
   return (
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
       <label className={labelClass}>{Label}</label>
@@ -131,7 +133,7 @@ export const ServePictureInput = ({
 
       <label className={labelClass}>{Label}</label>
       <div style={{ position: "relative", height: 40 }}>
-        {form?.sky_profilepicture && (
+        {!form?.dev_new_doc && (
           <label
             style={{
               position: "absolute",
@@ -156,7 +158,7 @@ export const ServePictureInput = ({
           placeholder="Profile Photo"
           accept="image/png, image/jpeg"
           style={{
-            color: form?.sky_profilepicture ? "transparent" : "black",
+            color: form?.dev_new_doc ? "black" : "transparent",
             background: "transparent",
             position: "absolute",
             zIndex: 2,
@@ -179,9 +181,8 @@ export const ServeCvInput = ({
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
       <label className={labelClass}>{Label}</label>
       <ServeDevInfo name={name ?? ""} />
-
       <div style={{ position: "relative", height: 40 }}>
-        {form?.sky_cvurl && (
+        {!form?.dev_new_cv && (
           <label
             style={{
               position: "absolute",
@@ -204,7 +205,7 @@ export const ServeCvInput = ({
           className="form-control input"
           accept=".pdf,.doc,.docx"
           style={{
-            color: form?.sky_cvurl ? "transparent" : "black",
+            color: form?.dev_new_cv ? "black" : "transparent",
             background: "transparent",
             position: "absolute",
             zIndex: 2,
