@@ -7,7 +7,7 @@ import SearchDropDown from "../components/searchDropDown";
 import Avatar from "../img/svg/profile.svg";
 
 // --------------------------------------------------------------------------------
-// 📌  Form Input components
+// 📌  Form Input components & helpers
 // --------------------------------------------------------------------------------
 
 const ServeDevInfo = ({ name, type }) => {
@@ -25,8 +25,32 @@ const ServeDevInfo = ({ name, type }) => {
       }}
     >
       <div>{name}</div>
+      {type && <div style={{ margin: "0 5px", color: "green" }}>{type}</div>}
     </div>
   );
+};
+
+export const dataExtractor = ({ appBlob }) => {
+  // --------------------------------------------------------------------------------
+  // 📌  Extract data from user application blob
+  // --------------------------------------------------------------------------------
+  let blob = {};
+
+  appBlob?.map((appBlob) => {
+    blob = {
+      ...blob,
+      [appBlob.name]: {
+        Label: appBlob?.info?.Label || "Input Lapbel",
+        AttributeType: appBlob?.info?.AttributeType || "",
+        MaxLength: appBlob?.info?.MaxLength || 100,
+        Required: appBlob?.info?.Required || "None",
+        order: 0,
+      },
+    };
+    // console.log("🐞 ", appBlob);
+  });
+
+  console.log("🐞 blob", JSON.stringify(blob));
 };
 
 export const ServeApplicationTypeInput = ({
@@ -41,7 +65,7 @@ export const ServeApplicationTypeInput = ({
       </label>
       <Form.Select
         name="bad_categorytype"
-        value={form.bad_categorytype || ""}
+        value={form?.bad_categorytype || ""}
         onChange={handleInputChange}
         className="form-control input"
       >
@@ -89,13 +113,13 @@ export const ServePictureInput = ({
           borderRadius: "50%",
           overflow: "hidden",
           // add border if image set by user
-          border: form.sky_profilepicture
+          border: form?.sky_profilepicture
             ? `1px solid ${colors.silver}`
             : "none",
         }}
       >
         <Image
-          src={form.sky_profilepicture || Avatar}
+          src={form?.sky_profilepicture || Avatar}
           alt="Profile Avatar"
           style={{
             width: "100%",
@@ -107,7 +131,7 @@ export const ServePictureInput = ({
 
       <label className={labelClass}>{Label}</label>
       <div style={{ position: "relative", height: 40 }}>
-        {form.sky_profilepicture && (
+        {form?.sky_profilepicture && (
           <label
             style={{
               position: "absolute",
@@ -132,7 +156,7 @@ export const ServePictureInput = ({
           placeholder="Profile Photo"
           accept="image/png, image/jpeg"
           style={{
-            color: form.sky_profilepicture ? "transparent" : "black",
+            color: form?.sky_profilepicture ? "transparent" : "black",
             background: "transparent",
             position: "absolute",
             zIndex: 2,
@@ -157,7 +181,7 @@ export const ServeCvInput = ({
       <ServeDevInfo name={name ?? ""} />
 
       <div style={{ position: "relative", height: 40 }}>
-        {form.sky_cvurl && (
+        {form?.sky_cvurl && (
           <label
             style={{
               position: "absolute",
@@ -180,7 +204,7 @@ export const ServeCvInput = ({
           className="form-control input"
           accept=".pdf,.doc,.docx"
           style={{
-            color: form.sky_cvurl ? "transparent" : "black",
+            color: form?.sky_cvurl ? "transparent" : "black",
             background: "transparent",
             position: "absolute",
             zIndex: 2,
@@ -205,13 +229,13 @@ export const ServeTextInput = ({
   return (
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
       <label className={labelClass}>{Label}</label>
-      <ServeDevInfo name={name ?? ""} />
+      <ServeDevInfo name={name ?? ""} type={type} />
 
       {type === "input" && (
         <input
           name={name}
           // if form value is empty use value from props or empty string only once on first render
-          value={form[name] === undefined ? value || "" : form[name]}
+          value={form?.[name] === undefined ? value || "" : form?.[name]}
           onChange={handleInputChange}
           type="text"
           maxLength={MaxLength}
@@ -224,7 +248,7 @@ export const ServeTextInput = ({
         <textarea
           name={name}
           // if form value is empty use value from props or empty string only once on first render
-          value={form[name] === undefined ? value || "" : form[name]}
+          value={form?.[name] === undefined ? value || "" : form?.[name]}
           onChange={handleInputChange}
           type="text"
           maxLength={MaxLength}
@@ -258,7 +282,7 @@ export const ServeHospitalLookUplInput = ({
       <label className={labelClass}>{Label}</label>
       <ServeDevInfo name={name ?? ""} />
 
-      {form.dev_hospital_name && (
+      {form?.sky_newhospitalname && (
         <div
           className="form-control input"
           style={{
@@ -273,7 +297,7 @@ export const ServeHospitalLookUplInput = ({
                 paddingRight: 15,
               }}
             >
-              {form.dev_hospital_name}
+              {form?.sky_newhospitalname}
               {!disabled && (
                 <div
                   className="filter-icon"
@@ -294,10 +318,10 @@ export const ServeHospitalLookUplInput = ({
           </div>
         </div>
       )}
-      {!form.dev_hospital_name && (
+      {!form?.sky_newhospitalname && (
         <input
-          name="dev_hospital_lookup" // hospital name not passed to form submit object
-          value={form.dev_hospital_lookup}
+          name="dev_hospital_name" // hospital name not passed to form submit object
+          value={form?.dev_hospital_name}
           onChange={handleInputChange}
           type="text"
           maxLength={MaxLength}
@@ -335,7 +359,7 @@ export const ServeCheckboxInput = ({
           name={name}
           value={name}
           // if form value is empty use value from props or empty string only once on first render
-          checked={form[name] === undefined ? value || false : form[name]}
+          checked={form?.[name] === undefined ? value || false : form?.[name]}
           onChange={handleInputChange}
           type="checkbox"
           className="form-check-input check-box"
@@ -369,7 +393,7 @@ export const ServePicklistInput = ({
       <Form.Select
         name={name}
         // if form value is empty use value from props or empty string only once on first render
-        value={form[name] === undefined ? value || "" : form[name]}
+        value={form?.[name] === undefined ? value || "" : form?.[name]}
         onChange={handleInputChange}
         className="input"
       >
@@ -405,7 +429,7 @@ export const ServeDateTimeInput = ({
       <input
         name={name}
         // if form value is empty use value from props or empty string only once on first render
-        value={form[name] === undefined ? value || "" : form[name]}
+        value={form?.[name] === undefined ? value || "" : form?.[name]}
         onChange={handleInputChange}
         type="date"
         maxLength={MaxLength}

@@ -38,8 +38,7 @@ const BlocksPage = ({ state, libraries }) => {
   const dispatch = useAppDispatch();
 
   const [form, setForm] = useState({
-    dev_hospital_lookup: "", // lookup input value
-    dev_hospital_name: "", // selected hospital name value
+    dev_hospital_name: "", // avoid uncontrollable input change warning
   });
   const [appBlob, setAppBlob] = useState(null);
   const [appTypes, setAppTypes] = useState(null);
@@ -132,7 +131,7 @@ const BlocksPage = ({ state, libraries }) => {
         setAppTypes(appTypes);
         setForm({
           ...form,
-          dev_hospital_name: hospitalName,
+          sky_newhospitalname: hospitalName, // set hospital name
           sky_cvurl: documentUrl, // set documentUrl to form
           sky_profilepicture: profilePicture, // set profilePicture to form
         });
@@ -143,9 +142,12 @@ const BlocksPage = ({ state, libraries }) => {
   }, [isActiveUser]);
 
   // --------------------------------------------------------------------------------
-  const handleInputChange = async (e) => {
-    const { name, value, type, checked } = e.target;
-    console.log("🐞 name, value, type, checked", name, value, type, checked);
+  const handleInputChange = async ({ target }) => {
+    // --------------------------------------------------------------------------------
+    // 📌  Handle input change for all inputs
+    // --------------------------------------------------------------------------------
+    const { name, value, type, checked } = target;
+    console.log("🐞 ", name, value, type, checked);
 
     setForm({
       ...form,
@@ -157,18 +159,18 @@ const BlocksPage = ({ state, libraries }) => {
     setForm((form) => ({
       ...form,
       dev_hospital_lookup: "",
-      dev_hospital_name: item?.title,
+      sky_newhospitalname: item?.title,
       py3_hospitalid: item?.link,
     }));
 
     setHospitalData(null); // clear hospital data for dropdown
-    // handleInputChange({ target: { value: null, name: "hospital_data" } });
   };
 
   const handleClearHospital = () => {
     setForm((form) => ({
       ...form,
-      dev_hospital_name: "",
+      dev_hospital_name: "", // clear prev search value
+      sky_newhospitalname: "", // clear hospital name
     }));
   };
 
@@ -186,10 +188,7 @@ const BlocksPage = ({ state, libraries }) => {
         attachments: doc,
       });
 
-      setForm((prevFormData) => ({
-        ...prevFormData,
-        [name]: url,
-      }));
+      handleInputChange({ target: { value: url, name } });
 
       // console.log("🐞 ", sky_cvurl); // debug
     } catch (error) {
@@ -205,7 +204,7 @@ const BlocksPage = ({ state, libraries }) => {
     // --------------------------------------------------------------------------------
 
     // if hospital name is not empty, fetch hospital data
-    if (form.dev_hospital_name || form.dev_hospital_lookup === "") return null;
+    if (form.sky_newhospitalname || form.dev_hospital_name === "") return null;
 
     (async () => {
       try {
@@ -213,7 +212,7 @@ const BlocksPage = ({ state, libraries }) => {
         let hospitalData = await getHospitalsAction({
           state,
           dispatch,
-          input: form.dev_hospital_lookup,
+          input: form.dev_hospital_name,
         });
         // refactor hospital data to match dropdown format
         hospitalData = hospitalData.map((hospital) => {
@@ -228,26 +227,6 @@ const BlocksPage = ({ state, libraries }) => {
       }
     })();
   }, [form]);
-
-  // --------------------------------------------------------------------------------
-  // 📌  Extract data from user application blob
-  // --------------------------------------------------------------------------------
-  // let blob = {};
-  // appBlob?.map((appBlob) => {
-  //   blob = {
-  //     ...blob,
-  //     [appBlob.name]: {
-  //       type: "text",
-  //       Label: appBlob?.info?.Label || "Input Lapbel",
-  //       AttributeType: appBlob?.info?.AttributeType || "String",
-  //       MaxLength: appBlob?.info?.MaxLength || 100,
-  //       Required: appBlob?.info?.Required || "None",
-  //       order: 0,
-  //     },
-  //   };
-  //   // console.log("🐞 ", appBlob);
-  // });
-  // console.log("🐞 blob", JSON.stringify(blob));
 
   const FomShowButton = () => {
     return (
@@ -308,7 +287,7 @@ const BlocksPage = ({ state, libraries }) => {
           if (cargo) return null; // skip cargo blob
           // if (name !== "sky_cvurl") return null; // testing
 
-          Label = Label || info?.Label || FORM_CONFIG?.[name]?.Label;
+          Label = FORM_CONFIG?.[name]?.Label || Label || info?.Label;
           const AttributeType =
             info?.AttributeType || FORM_CONFIG?.[name]?.AttributeType;
           const MaxLength = info?.MaxLength || FORM_CONFIG?.[name]?.MaxLength;
@@ -349,6 +328,36 @@ const BlocksPage = ({ state, libraries }) => {
             );
           }
 
+          if (name === "sky_newhospitalname") {
+            // --------------------------------------------------------------------------------
+            // 📌  Hospital lookup input with dropdown
+            // --------------------------------------------------------------------------------
+            let disabled = false;
+            if (form?.sky_newhospitalname) disabled = true; // disable hospital input if user has hospital
+
+            return (
+              <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
+                <ServeHospitalLookUplInput
+                  form={form}
+                  name={name}
+                  labelClass={labelClass}
+                  Label={Label}
+                  disabled={disabled}
+                  handleInputChange={handleInputChange}
+                  hospitalData={hospitalData}
+                  MaxLength={MaxLength}
+                  handleSelectHospital={handleSelectHospital}
+                  handleClearHospital={handleClearHospital}
+                />
+              </div>
+            );
+          }
+
+          // --------------------------------------------------------------------------------
+          // 📌  General inoput mapping
+          // --------------------------------------------------------------------------------
+          console.log("🐞 ", AttributeType, name);
+
           if (AttributeType === "String" || AttributeType === "Memo") {
             // TODO: py3_speciality to change to Picklist
             let disabled = false;
@@ -370,31 +379,6 @@ const BlocksPage = ({ state, libraries }) => {
                   value={value}
                   handleInputChange={handleInputChange}
                   MaxLength={MaxLength}
-                />
-              </div>
-            );
-          }
-
-          if (AttributeType === "Lookup" && name === "py3_hospitalid") {
-            // --------------------------------------------------------------------------------
-            // 📌  Hospital lookup input with dropdown
-            // --------------------------------------------------------------------------------
-            let disabled = false;
-            if (value) disabled = true; // disable hospital input if user has hospital
-
-            return (
-              <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
-                <ServeHospitalLookUplInput
-                  form={form}
-                  name={name}
-                  labelClass={labelClass}
-                  Label={Label}
-                  disabled={disabled}
-                  handleInputChange={handleInputChange}
-                  hospitalData={hospitalData}
-                  MaxLength={MaxLength}
-                  handleSelectHospital={handleSelectHospital}
-                  handleClearHospital={handleClearHospital}
                 />
               </div>
             );
@@ -449,7 +433,10 @@ const BlocksPage = ({ state, libraries }) => {
             );
           }
 
-          return null; // return null if no match
+          // --------------------------------------------------------------------------------
+          // 📌  Return null if no match
+          // --------------------------------------------------------------------------------
+          return null;
         })}
       </div>
 
