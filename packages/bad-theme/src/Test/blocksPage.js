@@ -4,11 +4,12 @@ import { connect } from "frontity";
 import BlockBuilder from "../components/builder/blockBuilder";
 import {
   ServeCvInput,
-  ServeEmailInput,
+  ServeTextInput,
   ServeHospitalLookUplInput,
   ServeCheckboxInput,
   ServePicklistInput,
   ServeDateTimeInput,
+  ServeApplicationTypeInput,
 } from "../components/applicationForm";
 // --------------------------------------------------------------------------------
 import {
@@ -273,38 +274,11 @@ const BlocksPage = ({ state, libraries }) => {
         <FomShowButton />
         {/* <ActionPlaceholder isFetching={true} background="pink" /> */}
 
-        <div>
-          <label className="form-label required">
-            Please select the Special Interest Group you would like to apply
-            for:
-          </label>
-          <Form.Select
-            name="bad_categorytype"
-            value={form.bad_categorytype || ""}
-            onChange={handleInputChange}
-            className="form-control input"
-          >
-            <option value="" hidden>
-              Membership Category
-            </option>
-            {appTypes?.map(({ acf }, key) => {
-              const category_types = acf?.category_types;
-              // get SIG membership categories name from custom object
-              // split string on : and swap first and second value
-              // if typeName includes Full replace with empty string
-              // change prefix for names with " - ", eg. "Tarainee - Time"
-              let typeName = category_types.split(":").reverse().join(" - ");
-              // if value include - Full replace with empty string
-              typeName = typeName.replace(" - Full", "");
-
-              return (
-                <option key={key} value={category_types}>
-                  {typeName}
-                </option>
-              );
-            })}
-          </Form.Select>
-        </div>
+        <ServeApplicationTypeInput
+          form={form}
+          appTypes={appTypes}
+          handleInputChange={handleInputChange}
+        />
 
         {appBlob?.map(({ info, name, value, Label, cargo }, key) => {
           // ⚠️ types handles the input type
@@ -351,7 +325,7 @@ const BlocksPage = ({ state, libraries }) => {
 
             return (
               <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
-                <ServeEmailInput
+                <ServeTextInput
                   form={form}
                   name={name}
                   labelClass={labelClass}

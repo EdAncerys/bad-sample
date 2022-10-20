@@ -3,6 +3,50 @@ import { FORM_CONFIG, colors } from "../context";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchDropDown from "../components/searchDropDown";
 
+// --------------------------------------------------------------------------------
+// 📌  Form Input components
+// --------------------------------------------------------------------------------
+
+export const ServeApplicationTypeInput = ({
+  form,
+  appTypes,
+  handleInputChange,
+}) => {
+  return (
+    <div style={{ order: 0 }}>
+      <label className="form-label required">
+        Please select the Special Interest Group you would like to apply for:
+      </label>
+      <Form.Select
+        name="bad_categorytype"
+        value={form.bad_categorytype || ""}
+        onChange={handleInputChange}
+        className="form-control input"
+      >
+        <option value="" hidden>
+          Membership Category
+        </option>
+        {appTypes?.map(({ acf }, key) => {
+          const category_types = acf?.category_types;
+          // get SIG membership categories name from custom object
+          // split string on : and swap first and second value
+          // if typeName includes Full replace with empty string
+          // change prefix for names with " - ", eg. "Tarainee - Time"
+          let typeName = category_types.split(":").reverse().join(" - ");
+          // if value include - Full replace with empty string
+          typeName = typeName.replace(" - Full", "");
+
+          return (
+            <option key={key} value={category_types}>
+              {typeName}
+            </option>
+          );
+        })}
+      </Form.Select>
+    </div>
+  );
+};
+
 export const ServeCvInput = ({
   form,
   name,
@@ -49,7 +93,7 @@ export const ServeCvInput = ({
   );
 };
 
-export const ServeEmailInput = ({
+export const ServeTextInput = ({
   form,
   name,
   labelClass,
@@ -63,10 +107,14 @@ export const ServeEmailInput = ({
   return (
     <div style={{ order: FORM_CONFIG?.[name]?.order }}>
       <label className={labelClass}>{Label}</label>
+      <label className={labelClass} style={{ color: "red" }}>
+        {name}
+      </label>
       {type === "input" && (
         <input
           name={name}
-          value={form[name] || value || ""}
+          // if form value is empty use value from props or empty string only once on first render
+          value={form[name] === undefined ? value || "" : form[name]}
           onChange={handleInputChange}
           type="text"
           maxLength={MaxLength}
@@ -78,7 +126,8 @@ export const ServeEmailInput = ({
       {type === "textarea" && (
         <textarea
           name={name}
-          value={form[name] || value || ""}
+          // if form value is empty use value from props or empty string only once on first render
+          value={form[name] === undefined ? value || "" : form[name]}
           onChange={handleInputChange}
           type="text"
           maxLength={MaxLength}
@@ -189,7 +238,8 @@ export const ServeCheckboxInput = ({
         <input
           name={name}
           value={name}
-          checked={form[name] || value || false}
+          // if form value is empty use value from props or empty string only once on first render
+          checked={form[name] === undefined ? value || false : form[name]}
           onChange={handleInputChange}
           type="checkbox"
           className="form-check-input check-box"
@@ -220,7 +270,8 @@ export const ServePicklistInput = ({
       <label className="form-label required">{Label}</label>
       <Form.Select
         name={name}
-        value={form[name] || value || ""}
+        // if form value is empty use value from props or empty string only once on first render
+        value={form[name] === undefined ? value || "" : form[name]}
         onChange={handleInputChange}
         className="input"
       >
@@ -253,7 +304,8 @@ export const ServeDateTimeInput = ({
       <label className={labelClass}>{Label}</label>
       <input
         name={name}
-        value={form[name] || value || ""}
+        // if form value is empty use value from props or empty string only once on first render
+        value={form[name] === undefined ? value || "" : form[name]}
         onChange={handleInputChange}
         type="date"
         maxLength={MaxLength}

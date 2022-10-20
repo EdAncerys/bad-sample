@@ -5,7 +5,7 @@ export const FORM_CONFIG = {
     AttributeType: "Uniqueidentifier",
     MaxLength: 100,
     Required: "SystemRequired",
-    order: 0,
+    order: 1,
   },
   bad_ethnicity: {
     type: "text",
@@ -13,7 +13,7 @@ export const FORM_CONFIG = {
     AttributeType: "Picklist",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_ethnicity: {
     type: "text",
@@ -21,7 +21,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_currentgrade: {
     type: "text",
@@ -29,7 +29,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_insertnhsnetemailaddress: {
     type: "text",
@@ -37,7 +37,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_otherregulatorybodyreference: {
     type: "text",
@@ -45,7 +45,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   bad_memberdirectory: {
     type: "text",
@@ -53,7 +53,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   bad_preferredmailingaddress: {
     type: "text",
@@ -61,7 +61,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   bad_readpolicydocument: {
     type: "text",
@@ -69,7 +69,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   bad_newhospitaladded: {
     type: "text",
@@ -77,7 +77,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   sky_newhospitaltype: {
     type: "text",
@@ -85,7 +85,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   sky_cvurl: {
     type: "text",
@@ -101,7 +101,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   sky_newhospitalname: {
     type: "text",
@@ -109,7 +109,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_speciality: {
     type: "text",
@@ -117,7 +117,7 @@ export const FORM_CONFIG = {
     AttributeType: "Memo",
     MaxLength: 2000,
     Required: "None",
-    order: 0,
+    order: 1,
     Choices: [
       { value: "Anaesthetics", Label: "Anaesthetics" },
       { value: "Cardiology", Label: "Cardiology" },
@@ -130,7 +130,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   bad_mainareaofinterest: {
     type: "text",
@@ -138,7 +138,7 @@ export const FORM_CONFIG = {
     AttributeType: "Picklist",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   bad_isbadmember: {
     type: "text",
@@ -146,7 +146,7 @@ export const FORM_CONFIG = {
     AttributeType: "Boolean",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
     Handler: () => console.log("🐞 onClick handler"),
   },
   bad_includeinthebssciiemaildiscussionforum: {
@@ -164,7 +164,7 @@ export const FORM_CONFIG = {
     AttributeType: "Boolean",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   bad_otherjointclinics: {
     type: "text",
@@ -172,7 +172,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_title: {
     type: "text",
@@ -180,7 +180,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_firstname: {
     type: "text",
@@ -188,7 +188,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_initials: {
     type: "text",
@@ -196,7 +196,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_lastname: {
     type: "text",
@@ -204,7 +204,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_alternativelastname: {
     type: "text",
@@ -212,7 +212,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_gender: {
     type: "text",
@@ -220,7 +220,7 @@ export const FORM_CONFIG = {
     AttributeType: "Picklist",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_dateofbirth: {
     type: "text",
@@ -228,7 +228,7 @@ export const FORM_CONFIG = {
     AttributeType: "DateTime",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_email: {
     type: "text",
@@ -236,7 +236,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_mobilephone: {
     type: "text",
@@ -244,7 +244,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_gmcnumber: {
     type: "text",
@@ -252,7 +252,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_ntnno: {
     type: "text",
@@ -260,7 +260,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   bad_currentpost: {
     type: "text",
@@ -268,7 +268,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_hospitalid: {
     type: "text",
@@ -276,7 +276,7 @@ export const FORM_CONFIG = {
     AttributeType: "Lookup",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   bad_proposer1: {
     type: "text",
@@ -284,7 +284,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   bad_proposer2: {
     type: "text",
@@ -292,7 +292,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   bad_interestinfieldquestion: {
     type: "text",
@@ -300,7 +300,7 @@ export const FORM_CONFIG = {
     AttributeType: "Memo",
     MaxLength: 2000,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   bad_mrpcqualified: {
     type: "text",
@@ -308,7 +308,7 @@ export const FORM_CONFIG = {
     AttributeType: "Boolean",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   bad_hasmedicallicence: {
     type: "text",
@@ -316,7 +316,7 @@ export const FORM_CONFIG = {
     AttributeType: "Boolean",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   bad_existingsubscriptionid: {
     type: "text",
@@ -324,7 +324,7 @@ export const FORM_CONFIG = {
     AttributeType: "Lookup",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   core_membershipsubscriptionplanid: {
     type: "text",
@@ -332,7 +332,7 @@ export const FORM_CONFIG = {
     AttributeType: "Lookup",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   bad_newcategorydate: {
     type: "text",
@@ -340,7 +340,7 @@ export const FORM_CONFIG = {
     AttributeType: "DateTime",
     MaxLength: 100,
     Required: "ApplicationRequired",
-    order: 0,
+    order: 1,
   },
   py3_nationality: {
     type: "text",
@@ -348,7 +348,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   bad_sigapprovalrequestdate: {
     type: "text",
@@ -356,7 +356,7 @@ export const FORM_CONFIG = {
     AttributeType: "DateTime",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   bad_noofdayswithsig: {
     type: "text",
@@ -364,7 +364,7 @@ export const FORM_CONFIG = {
     AttributeType: "Integer",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_address1ine1: {
     type: "text",
@@ -372,7 +372,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_addressline2: {
     type: "text",
@@ -380,7 +380,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_addresstowncity: {
     type: "text",
@@ -388,7 +388,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_addressline3: {
     type: "text",
@@ -396,7 +396,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_addresscountystate: {
     type: "text",
@@ -404,7 +404,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_addresszippostalcode: {
     type: "text",
@@ -412,7 +412,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   py3_addresscountry: {
     type: "text",
@@ -420,7 +420,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   bad_expectedyearofqualification: {
     type: "text",
@@ -428,7 +428,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   bad_qualifications: {
     type: "text",
@@ -436,7 +436,7 @@ export const FORM_CONFIG = {
     AttributeType: "Memo",
     MaxLength: 500,
     Required: "None",
-    order: 0,
+    order: 1,
     caption:
       "If you would like to change your job title please use the form on your dashboard.",
   },
@@ -446,7 +446,7 @@ export const FORM_CONFIG = {
     AttributeType: "Lookup",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   bad_organisedfor: {
     type: "text",
@@ -454,7 +454,7 @@ export const FORM_CONFIG = {
     AttributeType: "Picklist",
     MaxLength: 100,
     Required: "ApplicationRequired",
-    order: 0,
+    order: 1,
   },
   bad_applicationfor: {
     type: "text",
@@ -462,7 +462,7 @@ export const FORM_CONFIG = {
     AttributeType: "Picklist",
     MaxLength: 100,
     Required: "ApplicationRequired",
-    order: 0,
+    order: 1,
   },
   transactioncurrencyid: {
     type: "text",
@@ -470,7 +470,7 @@ export const FORM_CONFIG = {
     AttributeType: "Lookup",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
   bad_psychodermatologycategory: {
     type: "text",
@@ -478,6 +478,6 @@ export const FORM_CONFIG = {
     AttributeType: "Picklist",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 1,
   },
 };
