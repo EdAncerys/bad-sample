@@ -37,16 +37,14 @@ const BlocksPage = ({ state, libraries }) => {
   const { applicationData, isActiveUser } = useAppState();
   const dispatch = useAppDispatch();
 
-  const [form, setForm] = useState({
-    dev_hospital_name: "", // avoid uncontrollable input change warning
-  });
+  const [form, setForm] = useState({});
   const [appBlob, setAppBlob] = useState(null);
   const [appTypes, setAppTypes] = useState(null);
   const [selectedApp, setSelectedApp] = useState(null);
-  const [hospitalData, setHospitalData] = useState(null);
   const [isFetching, setFetching] = useState(false);
   const documentRef = useRef(null);
   const profilePictureRef = useRef(null);
+  const hospitalSearchRef = useRef("");
 
   // --------------------------------------------------------------------------------
   // 📌 if env is dev, show the blocks.
@@ -118,10 +116,6 @@ const BlocksPage = ({ state, libraries }) => {
           return application?.includes(bad_categorytype); // return memberships that matches or includes any words in applicationType
         });
 
-        console.log("hospitalId: ", hospitalId);
-        console.log("🐞 hospitalName & ", hospitalId, hospitalName);
-        console.log("🐞 profilePicture", profilePicture);
-
         // --------------------------------------------------------------------------------
         // 📌  Update state with blob values for UI render
         // --------------------------------------------------------------------------------
@@ -129,7 +123,7 @@ const BlocksPage = ({ state, libraries }) => {
         setAppTypes(appTypes);
         setForm({
           ...form,
-          sky_newhospitalname: hospitalName, // set hospital name
+          // sky_newhospitalname: hospitalName, // set hospital name
           sky_cvurl: documentUrl, // set documentUrl to form
           sky_profilepicture: profilePicture, // set profilePicture to form
         });
@@ -154,22 +148,19 @@ const BlocksPage = ({ state, libraries }) => {
   };
 
   const handleSelectHospital = ({ item }) => {
+    console.log("🐞 item", item);
     setForm((form) => ({
       ...form,
       dev_hospital_lookup: "",
+      dev_hospital_data: null,
       sky_newhospitalname: item?.title,
       py3_hospitalid: item?.link,
     }));
-
-    setHospitalData(null); // clear hospital data for dropdown
   };
 
   const handleClearHospital = () => {
-    setForm((form) => ({
-      ...form,
-      dev_hospital_name: "", // clear prev search value
-      sky_newhospitalname: "", // clear hospital name
-    }));
+    hospitalSearchRef.current.value = ""; // clear search input
+    handleInputChange({ target: { name: "sky_newhospitalname", value: "" } });
   };
 
   const handleDocUploadChange = async (e) => {
@@ -189,8 +180,6 @@ const BlocksPage = ({ state, libraries }) => {
 
       let dev_name = name === "sky_cvurl" ? "dev_new_cv" : "dev_new_doc";
       setForm({ ...form, [name]: url, [dev_name]: true });
-
-      // console.log("🐞 ", sky_cvurl); // debug
     } catch (error) {
       // console.log("🤖 error", error);
     } finally {
@@ -198,35 +187,32 @@ const BlocksPage = ({ state, libraries }) => {
     }
   };
 
-  useEffect(() => {
+  const handleHospitalLookup = async () => {
     // --------------------------------------------------------------------------------
-    // 📌  Hospital name lookup
+    // 📌  Handle hospital lookup
     // --------------------------------------------------------------------------------
+    const input = hospitalSearchRef.current.value;
 
-    // if hospital name is not empty, fetch hospital data
-    if (form.sky_newhospitalname || form.dev_hospital_name === "") return null;
-
-    (async () => {
-      try {
-        console.log("🐞 py3_hospitalid", form.py3_hospitalid);
-        let hospitalData = await getHospitalsAction({
-          state,
-          dispatch,
-          input: form.dev_hospital_name,
-        });
-        // refactor hospital data to match dropdown format
-        hospitalData = hospitalData.map((hospital) => {
-          return {
-            title: hospital.name,
-            link: hospital.accountid,
-          };
-        });
-        setHospitalData(hospitalData);
-      } catch (error) {
-        console.log("error: ", error);
-      }
-    })();
-  }, [form]);
+    try {
+      let hospitalData = await getHospitalsAction({
+        state,
+        dispatch,
+        input,
+      });
+      // refactor hospital data to match dropdown format
+      hospitalData = hospitalData.map((hospital) => {
+        return {
+          title: hospital.name,
+          link: hospital.accountid,
+        };
+      });
+      handleInputChange({
+        target: { name: "dev_hospital_data", value: hospitalData },
+      });
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
 
   const FomShowButton = () => {
     return (
@@ -328,12 +314,13 @@ const BlocksPage = ({ state, libraries }) => {
             );
           }
 
-          if (name === "sky_newhospitalname") {
+          if (name === "py3_hospitalid") {
             // --------------------------------------------------------------------------------
             // 📌  Hospital lookup input with dropdown
+            // py3_hospitalid to fall back in id soredd in dynamics
             // --------------------------------------------------------------------------------
             let disabled = false;
-            if (form?.sky_newhospitalname) disabled = true; // disable hospital input if user has hospital
+            if (value) disabled = true; // disable hospital input if user has hospital
 
             return (
               <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
@@ -343,15 +330,36 @@ const BlocksPage = ({ state, libraries }) => {
                   labelClass={labelClass}
                   Label={Label}
                   disabled={disabled}
-                  handleInputChange={handleInputChange}
-                  hospitalData={hospitalData}
+                  handleHospitalLookup={handleHospitalLookup}
                   MaxLength={MaxLength}
                   handleSelectHospital={handleSelectHospital}
                   handleClearHospital={handleClearHospital}
+                  hospitalSearchRef={hospitalSearchRef}
                 />
               </div>
             );
           }
+
+          // if (name === "py3_address1ine1") {
+          //   // --------------------------------------------------------------------------------
+          //   // 📌  Address lookup input with dropdown
+          //   // --------------------------------------------------------------------------------
+
+          //   return (
+          //     <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
+          //       <ServeHospitalLookUplInput
+          //         form={form}
+          //         name={name}
+          //         labelClass={labelClass}
+          //         Label={Label}
+          //         handleInputChange={handleInputChange}
+          //         MaxLength={MaxLength}
+          //         handleSelectHospital={handleSelectHospital}
+          //         handleClearHospital={handleClearHospital}
+          //       />
+          //     </div>
+          //   );
+          // }
 
           // --------------------------------------------------------------------------------
           // 📌  General inoput mapping

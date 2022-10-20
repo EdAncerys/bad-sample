@@ -101,8 +101,6 @@ export const ServePictureInput = ({
   Label,
   handleDocUploadChange,
 }) => {
-  console.log("🐞 documentRef value", profilePictureRef?.current?.file);
-
   return (
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
       <label className={labelClass}>{Label}</label>
@@ -272,11 +270,11 @@ export const ServeHospitalLookUplInput = ({
   labelClass,
   Label,
   disabled,
-  handleInputChange,
-  hospitalData,
+  handleHospitalLookup,
   handleSelectHospital,
   MaxLength,
   handleClearHospital,
+  hospitalSearchRef,
 }) => {
   return (
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
@@ -321,9 +319,8 @@ export const ServeHospitalLookUplInput = ({
       )}
       {!form?.sky_newhospitalname && (
         <input
-          name="dev_hospital_name" // hospital name not passed to form submit object
-          value={form?.dev_hospital_name}
-          onChange={handleInputChange}
+          ref={hospitalSearchRef}
+          onChange={handleHospitalLookup}
           type="text"
           maxLength={MaxLength}
           placeholder={Label}
@@ -331,9 +328,9 @@ export const ServeHospitalLookUplInput = ({
           disabled={disabled}
         />
       )}
-      {hospitalData && (
+      {form?.dev_hospital_data && (
         <SearchDropDown
-          filter={hospitalData}
+          filter={form?.dev_hospital_data}
           onClickHandler={handleSelectHospital}
           height={230}
         />
