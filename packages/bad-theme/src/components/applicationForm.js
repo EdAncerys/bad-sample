@@ -1,7 +1,10 @@
 import { Form } from "react-bootstrap";
+import Image from "@frontity/components/image";
+// --------------------------------------------------------------------------------
 import { FORM_CONFIG, colors } from "../context";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchDropDown from "../components/searchDropDown";
+import Avatar from "../img/svg/profile.svg";
 
 // --------------------------------------------------------------------------------
 // 📌  Form Input components
@@ -66,10 +69,84 @@ export const ServeApplicationTypeInput = ({
   );
 };
 
+export const ServePictureInput = ({
+  form,
+  name,
+  profilePictureRef, // reference to file url for input
+  labelClass,
+  Label,
+  handleDocUploadChange,
+}) => {
+  return (
+    <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
+      <label className={labelClass}>{Label}</label>
+      <ServeDevInfo name={name ?? ""} />
+
+      <div
+        style={{
+          width: 260,
+          height: 260,
+          borderRadius: "50%",
+          overflow: "hidden",
+          // add border if image set by user
+          border: form.sky_profilepicture
+            ? `1px solid ${colors.silver}`
+            : "none",
+        }}
+      >
+        <Image
+          src={form.sky_profilepicture || Avatar}
+          alt="Profile Avatar"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+          }}
+        />
+      </div>
+
+      <label className={labelClass}>{Label}</label>
+      <div style={{ position: "relative", height: 40 }}>
+        {form.sky_profilepicture && (
+          <label
+            style={{
+              position: "absolute",
+              left: 120,
+              height: 40,
+              display: "flex",
+              alignItems: "center",
+              zIndex: 1,
+            }}
+            className="caps-btn-no-underline"
+          >
+            Profile picture exists in database
+          </label>
+        )}
+
+        <input
+          ref={profilePictureRef}
+          name={name}
+          onChange={handleDocUploadChange}
+          type="file"
+          className="form-control input"
+          placeholder="Profile Photo"
+          accept="image/png, image/jpeg"
+          style={{
+            color: form.sky_profilepicture ? "transparent" : "black",
+            background: "transparent",
+            position: "absolute",
+            zIndex: 2,
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
 export const ServeCvInput = ({
   form,
   name,
-  documentRef,
+  documentRef, // reference to file url for input
   labelClass,
   Label,
   handleDocUploadChange,
@@ -80,7 +157,7 @@ export const ServeCvInput = ({
       <ServeDevInfo name={name ?? ""} />
 
       <div style={{ position: "relative", height: 40 }}>
-        {form.doc_file && (
+        {form.sky_cvurl && (
           <label
             style={{
               position: "absolute",
@@ -103,7 +180,7 @@ export const ServeCvInput = ({
           className="form-control input"
           accept=".pdf,.doc,.docx"
           style={{
-            color: form.doc_file ? "transparent" : "black",
+            color: form.sky_cvurl ? "transparent" : "black",
             background: "transparent",
             position: "absolute",
             zIndex: 2,
@@ -181,7 +258,7 @@ export const ServeHospitalLookUplInput = ({
       <label className={labelClass}>{Label}</label>
       <ServeDevInfo name={name ?? ""} />
 
-      {form.hospital_name && (
+      {form.dev_hospital_name && (
         <div
           className="form-control input"
           style={{
@@ -196,7 +273,7 @@ export const ServeHospitalLookUplInput = ({
                 paddingRight: 15,
               }}
             >
-              {form.hospital_name}
+              {form.dev_hospital_name}
               {!disabled && (
                 <div
                   className="filter-icon"
@@ -217,10 +294,10 @@ export const ServeHospitalLookUplInput = ({
           </div>
         </div>
       )}
-      {!form.hospital_name && (
+      {!form.dev_hospital_name && (
         <input
-          name="hospital_lookup" // hospital name not passed to form submit object
-          value={form.hospital_lookup}
+          name="dev_hospital_lookup" // hospital name not passed to form submit object
+          value={form.dev_hospital_lookup}
           onChange={handleInputChange}
           type="text"
           maxLength={MaxLength}

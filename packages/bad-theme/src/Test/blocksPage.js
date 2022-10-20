@@ -10,6 +10,7 @@ import {
   ServePicklistInput,
   ServeDateTimeInput,
   ServeApplicationTypeInput,
+  ServePictureInput,
 } from "../components/applicationForm";
 // --------------------------------------------------------------------------------
 import {
@@ -37,8 +38,8 @@ const BlocksPage = ({ state, libraries }) => {
   const dispatch = useAppDispatch();
 
   const [form, setForm] = useState({
-    hospital_lookup: "", // lookup input value
-    hospital_name: "", // selected hospital name value
+    dev_hospital_lookup: "", // lookup input value
+    dev_hospital_name: "", // selected hospital name value
   });
   const [appBlob, setAppBlob] = useState(null);
   const [appTypes, setAppTypes] = useState(null);
@@ -46,6 +47,7 @@ const BlocksPage = ({ state, libraries }) => {
   const [hospitalData, setHospitalData] = useState(null);
   const [isFetching, setFetching] = useState(false);
   const documentRef = useRef(null);
+  const profilePictureRef = useRef(null);
 
   // --------------------------------------------------------------------------------
   // 📌 if env is dev, show the blocks.
@@ -64,6 +66,7 @@ const BlocksPage = ({ state, libraries }) => {
         let hospitalId = "";
         let hospitalName = "";
         let documentUrl = "";
+        let profilePicture = "";
 
         // --------------------------------------------------------------------------------
         // 📌  Check if user have hospital id set in Dynamics. If not, set hospitalId to null
@@ -76,9 +79,15 @@ const BlocksPage = ({ state, libraries }) => {
           if (item.name === "sky_cvurl" && item.value) {
             documentUrl = item.value;
           }
+          if (item.name === "sky_profilepicture" && item.value) {
+            profilePicture = item.value;
+          }
         });
 
         if (hospitalId) {
+          // --------------------------------------------------------------------------------
+          // 📌  If hospitalId is set in dynamic fetch it hospital name to show in UI.
+          // --------------------------------------------------------------------------------
           const hospitalData = await getHospitalNameAction({
             state,
             dispatch,
@@ -97,7 +106,9 @@ const BlocksPage = ({ state, libraries }) => {
 
         console.log("🐞 appBlob", bad_categorytype, bad_organisedfor);
 
-        // find all applications that match the user's category type
+        // --------------------------------------------------------------------------------
+        // 📌 find all applications that match the user's category type selections
+        // --------------------------------------------------------------------------------
         const appTypes = wpAppStore.filter((appBlob) => {
           // get application & strip all white spaces and make lowercase and replace - with ''
           const application = appBlob?.slug
@@ -109,13 +120,21 @@ const BlocksPage = ({ state, libraries }) => {
         });
 
         console.log("hospitalId: ", hospitalId);
+        console.log("🐞 hospitalName & ", hospitalId, hospitalName);
+        console.log("🐞 profilePicture", profilePicture);
+
+        // --------------------------------------------------------------------------------
+        // 📌  Update state with blob values for UI render
+        // --------------------------------------------------------------------------------
         documentRef.current = documentUrl; // set documentRef to documentUrl
+        profilePictureRef.current = profilePicture; // set profilePicture to profilePicture
         setAppBlob(userApp);
         setAppTypes(appTypes);
         setForm({
           ...form,
-          hospital_name: hospitalName,
-          doc_file: documentUrl, // set documentUrl to form
+          dev_hospital_name: hospitalName,
+          sky_cvurl: documentUrl, // set documentUrl to form
+          sky_profilepicture: profilePicture, // set profilePicture to form
         });
       } catch (error) {
         console.log("error: ", error);
@@ -137,8 +156,8 @@ const BlocksPage = ({ state, libraries }) => {
   const handleSelectHospital = ({ item }) => {
     setForm((form) => ({
       ...form,
-      hospital_lookup: "",
-      hospital_name: item?.title,
+      dev_hospital_lookup: "",
+      dev_hospital_name: item?.title,
       py3_hospitalid: item?.link,
     }));
 
@@ -149,27 +168,27 @@ const BlocksPage = ({ state, libraries }) => {
   const handleClearHospital = () => {
     setForm((form) => ({
       ...form,
-      hospital_name: "",
+      dev_hospital_name: "",
     }));
   };
 
   const handleDocUploadChange = async (e) => {
-    let sky_cvurl = e.target.files[0];
-    if (!sky_cvurl) return;
+    const { name, files } = e.target;
+    let doc = files[0];
+    if (!doc) return;
 
     try {
       setFetching(true);
       // upload file to S3 bucket and get url
-      sky_cvurl = await sendFileToS3Action({
+      let url = await sendFileToS3Action({
         state,
         dispatch,
-        attachments: sky_cvurl,
+        attachments: doc,
       });
 
       setForm((prevFormData) => ({
         ...prevFormData,
-        ["sky_cvurl"]: sky_cvurl,
-        ["doc_file"]: "", // clear file input for prevevious uploads
+        [name]: url,
       }));
 
       // console.log("🐞 ", sky_cvurl); // debug
@@ -186,7 +205,7 @@ const BlocksPage = ({ state, libraries }) => {
     // --------------------------------------------------------------------------------
 
     // if hospital name is not empty, fetch hospital data
-    if (form.hospital_name || form.hospital_lookup === "") return null;
+    if (form.dev_hospital_name || form.dev_hospital_lookup === "") return null;
 
     (async () => {
       try {
@@ -194,7 +213,7 @@ const BlocksPage = ({ state, libraries }) => {
         let hospitalData = await getHospitalsAction({
           state,
           dispatch,
-          input: form.hospital_lookup,
+          input: form.dev_hospital_lookup,
         });
         // refactor hospital data to match dropdown format
         hospitalData = hospitalData.map((hospital) => {
@@ -308,6 +327,21 @@ const BlocksPage = ({ state, libraries }) => {
                   name={name}
                   labelClass={labelClass}
                   documentRef={documentRef}
+                  Label={Label}
+                  handleDocUploadChange={handleDocUploadChange}
+                />
+              </div>
+            );
+          }
+
+          if (name === "sky_profilepicture") {
+            return (
+              <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
+                <ServePictureInput
+                  form={form}
+                  name={name}
+                  profilePictureRef={profilePictureRef}
+                  labelClass={labelClass}
                   Label={Label}
                   handleDocUploadChange={handleDocUploadChange}
                 />
