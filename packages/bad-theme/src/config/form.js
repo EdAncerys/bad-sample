@@ -326,7 +326,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: 1,
+    order: -1,
   },
   py3_addressline2: {
     Label: "Address Line 2",

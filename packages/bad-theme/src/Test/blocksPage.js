@@ -11,6 +11,7 @@ import {
   ServeDateTimeInput,
   ServeApplicationTypeInput,
   ServePictureInput,
+  ServeAddressLookkUplInput,
 } from "../components/applicationForm";
 // --------------------------------------------------------------------------------
 import {
@@ -23,6 +24,7 @@ import {
   getHospitalsAction,
   getHospitalNameAction,
   sendFileToS3Action,
+  googleAutocomplete,
 } from "../context";
 // --------------------------------------------------------------------------------
 import { Form } from "react-bootstrap";
@@ -45,6 +47,7 @@ const BlocksPage = ({ state, libraries }) => {
   const documentRef = useRef(null);
   const profilePictureRef = useRef(null);
   const hospitalSearchRef = useRef("");
+  const address1Line1Ref = useRef("");
 
   // --------------------------------------------------------------------------------
   // 📌 if env is dev, show the blocks.
@@ -123,7 +126,7 @@ const BlocksPage = ({ state, libraries }) => {
         setAppTypes(appTypes);
         setForm({
           ...form,
-          // sky_newhospitalname: hospitalName, // set hospital name
+          sky_newhospitalname: hospitalName, // set hospital name
           sky_cvurl: documentUrl, // set documentUrl to form
           sky_profilepicture: profilePicture, // set profilePicture to form
         });
@@ -158,9 +161,38 @@ const BlocksPage = ({ state, libraries }) => {
     }));
   };
 
+  const handleSelectAddress = async ({ item }) => {
+    // destructure item object & get coutry code & city name from terms
+    const { terms, title } = item;
+    let countryCode = "";
+    let cityName = "";
+
+    if (terms) {
+      // if terms define address components
+      if (terms.length >= 1) countryCode = terms[terms.length - 1].value;
+      if (terms.length >= 2) cityName = terms[terms.length - 2].value;
+    }
+    // overwrite formData to match Dynamics fields
+    if (countryCode === "UK")
+      countryCode = "United Kingdom of Great Britain and Northern Ireland";
+
+    // update formData with values
+    setForm((form) => ({
+      ...form,
+      py3_address1ine1: title,
+      py3_addresscountry: countryCode,
+      py3_addresstowncity: cityName,
+    }));
+  };
+
   const handleClearHospital = () => {
     hospitalSearchRef.current.value = ""; // clear search input
     handleInputChange({ target: { name: "sky_newhospitalname", value: "" } });
+  };
+
+  const handleClearAddress = () => {
+    address1Line1Ref.current.value = ""; // clear search input
+    handleInputChange({ target: { name: "py3_address1ine1", value: "" } });
   };
 
   const handleDocUploadChange = async (e) => {
@@ -211,6 +243,36 @@ const BlocksPage = ({ state, libraries }) => {
       });
     } catch (error) {
       console.log("error: ", error);
+    }
+  };
+
+  const handleAddressLookup = async () => {
+    // --------------------------------------------------------------------------------
+    // 📌  Handle address lookup
+    // --------------------------------------------------------------------------------
+    const input = address1Line1Ref.current.value;
+
+    try {
+      const data = await googleAutocomplete({ input });
+
+      // check for data returned form API
+      if (data.length > 0) {
+        // covert data to address format
+        const formatedData = [];
+        data.map((item) => {
+          formatedData.push({ title: item.description, terms: item.terms });
+        });
+
+        handleInputChange({
+          target: { name: "dev_address_data", value: formatedData },
+        });
+      } else {
+        setAddressData(null);
+      }
+    } catch (error) {
+      // console.log("error", error);
+    } finally {
+      setIsFetchingAddress(false);
     }
   };
 
@@ -340,26 +402,27 @@ const BlocksPage = ({ state, libraries }) => {
             );
           }
 
-          // if (name === "py3_address1ine1") {
-          //   // --------------------------------------------------------------------------------
-          //   // 📌  Address lookup input with dropdown
-          //   // --------------------------------------------------------------------------------
+          if (name === "py3_address1ine1") {
+            // --------------------------------------------------------------------------------
+            // 📌  Address lookup input with dropdown
+            // --------------------------------------------------------------------------------
 
-          //   return (
-          //     <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
-          //       <ServeHospitalLookUplInput
-          //         form={form}
-          //         name={name}
-          //         labelClass={labelClass}
-          //         Label={Label}
-          //         handleInputChange={handleInputChange}
-          //         MaxLength={MaxLength}
-          //         handleSelectHospital={handleSelectHospital}
-          //         handleClearHospital={handleClearHospital}
-          //       />
-          //     </div>
-          //   );
-          // }
+            return (
+              <div key={key} style={{ order: FORM_CONFIG?.[name]?.order }}>
+                <ServeAddressLookkUplInput
+                  form={form}
+                  name={name}
+                  labelClass={labelClass}
+                  Label={Label}
+                  handleAddressLookup={handleAddressLookup}
+                  MaxLength={MaxLength}
+                  handleSelectAddress={handleSelectAddress}
+                  handleClearAddress={handleClearAddress}
+                  address1Line1Ref={address1Line1Ref}
+                />
+              </div>
+            );
+          }
 
           // --------------------------------------------------------------------------------
           // 📌  General inoput mapping

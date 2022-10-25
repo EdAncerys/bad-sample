@@ -160,6 +160,13 @@ const HeaderActions = ({ state, actions, libraries }) => {
         >
           i
         </div>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={() => console.log("host: ", state.auth.APP_HOST)}
+        >
+          host
+        </div>
       </div>
     );
   };
