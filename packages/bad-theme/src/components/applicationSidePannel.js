@@ -2,9 +2,9 @@ import { connect } from "frontity";
 // --------------------------------------------------------------------------------
 import { setGoToAction, colors } from "../context";
 
-const ApplicationSidePannel = ({ state, actions, step }) => {
+const ApplicationSidePannel = ({ state, actions, form, step }) => {
   // --------------------------------------------------------------------------------
-  // 📌  BAD applications page.
+  // 📌  Applications side/navigation panel.
   // --------------------------------------------------------------------------------
 
   const menu = [
@@ -40,7 +40,7 @@ const ApplicationSidePannel = ({ state, actions, step }) => {
             key={key}
             className="title-link-animation"
             style={{
-              padding: `0.5em 0`,
+              padding: key === 0 ? "2em 0 0.5em 0" : "0.5em 0",
               color: step === key ? colors.blue : colors.black,
               fontWeight: step === key ? "bold" : "normal",
             }}

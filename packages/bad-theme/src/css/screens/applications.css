@@ -12,3 +12,20 @@
   border-bottom: 1px solid #e3e7ea;
   padding: 0 1em 1em 0;
 }
+
+.applications-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin: 2em 0 0 0;
+  gap: 1em;
+  width: 100%;
+}
+
+/* media querys */
+@media screen and (max-width: 992px) {
+  .applications-actions {
+    flex-direction: column;
+    margin: 0;
+  }
+}

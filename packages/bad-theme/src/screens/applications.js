@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 // --------------------------------------------------------------------------------
+import {} from "../context";
 import BlockWrapper from "../components/blockWrapper";
 import ApplicationSidePannel from "../components/applicationSidePannel";
 
@@ -31,11 +32,39 @@ const Applications = ({ state, actions, libraries }) => {
     })();
   }, []);
 
+  // --------------------------------------------------------------------------------
+  const goBackHandler = () => {
+    console.log("goBackHandler");
+    // setGoToAction({ state, path: `/membership/`, actions })
+  };
+
+  const saveExitHandler = () => {
+    console.log("saveExitHandler");
+  };
+
+  const nextHandler = () => {
+    console.log("nextHandler");
+  };
+
   return (
     <BlockWrapper>
-      <div className="flex applications-container">
-        <ApplicationSidePannel step={form?.step} />
-        <div>applications</div>
+      <div className="flex-col applications-container">
+        <div className="flex">
+          <ApplicationSidePannel step={form?.step} form={form} />
+          <div>applications</div>
+        </div>
+
+        <div className="application-actions">
+          <div className="transparent-btn" onClick={goBackHandler}>
+            Back
+          </div>
+          <div className="transparent-btn" onClick={saveExitHandler}>
+            Save & Exit
+          </div>
+          <div className="blue-btn" onClick={nextHandler}>
+            Next
+          </div>
+        </div>
       </div>
     </BlockWrapper>
   );
