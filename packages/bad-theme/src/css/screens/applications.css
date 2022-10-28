@@ -1,3 +1,14 @@
 .applications-container {
-  background-color: light-grey;
+  margin: 40px 100px;
+}
+
+.applications-side-pannel {
+  border-right: 1px solid #e3e7ea;
+  padding-right: 4em;
+}
+
+.application-panel-title {
+  font-size: 20px;
+  border-bottom: 1px solid #e3e7ea;
+  padding: 0 1em 1em 0;
 }

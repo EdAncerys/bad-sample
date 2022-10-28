@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 // --------------------------------------------------------------------------------
+import BlockWrapper from "../components/blockWrapper";
+import ApplicationSidePannel from "../components/applicationSidePannel";
 
 const Applications = ({ state, actions, libraries }) => {
   // --------------------------------------------------------------------------------
@@ -11,7 +13,9 @@ const Applications = ({ state, actions, libraries }) => {
   console.log("pageData ", data, page); // debug
 
   const [fetching, setFetching] = useState(false);
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState({
+    step: 1,
+  });
 
   useEffect(() => {
     console.log("🐞 DATA fetch");
@@ -28,14 +32,13 @@ const Applications = ({ state, actions, libraries }) => {
   }, []);
 
   return (
-    <div className="flex applications-container">
-      <div>applications</div>
-    </div>
+    <BlockWrapper>
+      <div className="flex applications-container">
+        <ApplicationSidePannel step={form?.step} />
+        <div>applications</div>
+      </div>
+    </BlockWrapper>
   );
-};
-
-const styles = {
-  container: {},
 };
 
 export default connect(Applications);
