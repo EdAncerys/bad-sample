@@ -31,11 +31,7 @@ import {
   setCreateAccountModalAction,
   handleSetCookie,
   fetchDataHandler,
-
-  // --------------------------------------------------------------------------------
-  getUserDataByContactId, // TESTING ONLY
-  setAuthenticationCookieAction, // TESTING ONLY
-  errorHandler, // TESTING ONLY
+  loginAction,
 } from "../../context";
 
 const HeaderActions = ({ state, actions, libraries }) => {
@@ -196,10 +192,15 @@ const HeaderActions = ({ state, actions, libraries }) => {
     // 📌  B2C login action
     // --------------------------------------------------------------------------------
 
-    setCreateAccountModalAction({
-      dispatch,
-      createAccountAction: true,
-    });
+    loginAction({ state });
+
+    // --------------------------------------------------------------------------------
+    // 📌  Partial modal login action (not used)
+    // --------------------------------------------------------------------------------
+    // setCreateAccountModalAction({
+    //   dispatch,
+    //   createAccountAction: true,
+    // });
   };
 
   const mouseLeaveHandler = (e) => {
