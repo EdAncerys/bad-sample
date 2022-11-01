@@ -98,16 +98,31 @@ const Pils = ({ state, actions, libraries }) => {
           </div>
 
           {pil.acf?.qr_code && (
-            <div style={{ width: 200, height: 200, backgroundColor: "pink" }}>
-              <Image
-                src={pil.acf?.qr_code?.url}
-                alt="QR Code"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
-              />
+            <div className="no-selector">
+              <div className="flex-col">
+                <div
+                  style={{ width: 200, height: 200, backgroundColor: "pink" }}
+                >
+                  <Image
+                    src={pil.acf?.qr_code?.url}
+                    alt="QR Code"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
+                <div
+                  style={{
+                    color: colors.red,
+                    textAlign: "center",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Scan to share
+                </div>
+              </div>
             </div>
           )}
         </div>
