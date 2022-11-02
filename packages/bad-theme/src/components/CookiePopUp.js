@@ -7,25 +7,28 @@ import BlockWrapper from "./blockWrapper";
 import { setGoToAction } from "../context";
 
 const CookiePopUp = ({ state, actions }) => {
-  const [show, setShow] = useState();
+  const [policy, setPolicie] = useState({ cokie: "", show: false });
+  console.log("policy ", policy); // debug
 
   const handleConsent = async (type) => {
     handleSetCookie({
       name: "BAD-cookie-popup",
       value: type,
-      domain: `${state.auth.APP_URL}`,
+      domain: `${state.auth.APP_URL}`, // set cookie domain
+      days: 7, // 7 days cookie expiration time
     });
-    setShow(type);
+    setPolicie({ cookie: type, show: false });
   };
 
   useEffect(() => {
     let cookie = handleGetCookie({ name: `BAD-cookie-popup` });
 
-    // set cookie policie preferences
-    setShow(cookie);
-  });
+    setPolicie({ cookie, show: cookie ? false : true }); // show cookie popup only if cookie is not set
+  }, []);
 
   useEffect(() => {
+    if (!!policy?.cookie) return;
+
     // --------------------------------------------------------------------------------
     // 📌  Add Google Analytics Cookies
     // --------------------------------------------------------------------------------
@@ -35,6 +38,8 @@ const CookiePopUp = ({ state, actions }) => {
     if (cookie && cookie === "all-cookies") {
       ReactGA.initialize("UA-50027583-1");
       ReactGA.pageview(window.location.pathname + window.location.search);
+
+      return;
     }
     //remove analytics cookie if user has not consented
     if (cookie && cookie === "essential-only") {
@@ -42,10 +47,13 @@ const CookiePopUp = ({ state, actions }) => {
       handleSetCookie({ name: "_gid", deleteCookie: true });
       handleSetCookie({ name: "_ga", deleteCookie: true });
     }
-  }, [show]);
+  }, [policy]);
 
-  if (show) return null;
+  if (!policy?.show) return null; // do not render if cookie is set
 
+  // --------------------------------------------------------------------------------
+  // 📌  Cookie popup component markup and logic for consent
+  // --------------------------------------------------------------------------------
   return (
     <div className="cookie-consent">
       <BlockWrapper>

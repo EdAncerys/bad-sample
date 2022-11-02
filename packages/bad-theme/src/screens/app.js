@@ -83,6 +83,7 @@ const App = ({ state, actions }) => {
   // 📌 google places api script
   useScript({
     url: `https://maps.googleapis.com/maps/api/js?key=${state.auth.GOOGLE_API_KEY}&libraries=places`,
+    name: "maps.googleapis.com",
   });
 
   useEffect(() => {
