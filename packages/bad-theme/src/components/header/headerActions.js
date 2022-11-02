@@ -192,15 +192,15 @@ const HeaderActions = ({ state, actions, libraries }) => {
     // 📌  B2C login action
     // --------------------------------------------------------------------------------
 
-    loginAction({ state });
+    // loginAction({ state });
 
     // --------------------------------------------------------------------------------
     // 📌  Partial modal login action (not used)
     // --------------------------------------------------------------------------------
-    // setCreateAccountModalAction({
-    //   dispatch,
-    //   createAccountAction: true,
-    // });
+    setCreateAccountModalAction({
+      dispatch,
+      createAccountAction: true,
+    });
   };
 
   const mouseLeaveHandler = (e) => {
