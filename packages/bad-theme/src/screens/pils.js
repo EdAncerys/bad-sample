@@ -113,13 +113,7 @@ const Pils = ({ state, actions, libraries }) => {
                     }}
                   />
                 </div>
-                <div
-                  style={{
-                    color: colors.red,
-                    textAlign: "center",
-                    fontWeight: "bold",
-                  }}
-                >
+                <div style={{ textAlign: "center", fontWeight: "bold" }}>
                   Scan to share
                 </div>
               </div>
