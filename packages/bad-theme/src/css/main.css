@@ -226,6 +226,13 @@ input[type="email"]::-webkit-input-placeholder {
   text-align: center;
 }
 
+.fetching-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 /* Media Queries */
 @media screen and (max-width: 992px) {
   /* mobile break down */

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 // --------------------------------------------------------------------------------
-import {} from "../context";
+import { useAppState } from "../context";
 import BlockWrapper from "../components/blockWrapper";
 import ApplicationSidePannel from "../components/applicationSidePannel";
 
@@ -13,14 +13,16 @@ const Applications = ({ state, actions, libraries }) => {
   const page = state.source[data.type][data.id];
   console.log("pageData ", data, page); // debug
 
+  const { applicationData, isActiveUser } = useAppState();
+  console.log("⭐️ applicationData,", applicationData); // debug
+  console.log("⭐️ isActiveUser,", isActiveUser); // debug
+
   const [fetching, setFetching] = useState(false);
   const [form, setForm] = useState({
     step: 1,
   });
 
   useEffect(() => {
-    console.log("🐞 DATA fetch");
-
     (async () => {
       try {
         setFetching(true);

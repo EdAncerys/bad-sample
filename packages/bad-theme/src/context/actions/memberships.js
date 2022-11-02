@@ -166,17 +166,22 @@ export const handleApplyForMembershipAction = async ({
       },
     });
 
-    // ⏬ redirect to application form if active user
+    // --------------------------------------------------------------------------------
+    // 📌  On success redirect to application form
+    // --------------------------------------------------------------------------------
     if (isActiveUser && store) {
       setGoToAction({
         state,
-        path: path || `/membership/step-1-the-process/`,
+        path: "/membership/applications/", // redirect to application form general path
         actions,
       });
 
       return store;
     }
 
+    // --------------------------------------------------------------------------------
+    // 📌  General error handling
+    // --------------------------------------------------------------------------------
     if (!isActiveUser) {
       // console.log(store);
       setErrorAction({
