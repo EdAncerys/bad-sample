@@ -1,5 +1,4 @@
 import { connect } from "frontity";
-import { useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import { colors } from "../../config/imports";
 import CloseIcon from "@mui/icons-material/Close";
