@@ -25,7 +25,10 @@ const CheckboxInput = ({
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
       <ErrorComponent name={name ?? ""} form={form} />
 
-      <div className="flex" style={{ alignItems: "center", height: 40 }}>
+      <div
+        className="flex"
+        style={{ alignItems: "center", height: 40, margin: "10px 0" }}
+      >
         <div>
           <div className="flex">
             <input

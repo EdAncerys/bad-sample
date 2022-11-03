@@ -396,7 +396,7 @@ const Applications = ({ state, actions }) => {
         setErrorAction({
           dispatch,
           isError: {
-            message: `Faild to submit application. Please try again later`,
+            message: `Failed to submit application. Please try again.`,
             image: "Error",
           },
         });
@@ -430,7 +430,7 @@ const Applications = ({ state, actions }) => {
   const goBackHandler = () => {
     console.log("goBackHandler");
 
-    if (hasError || isSIG) {
+    if (hasError || isSIG || (!isSIG && form.step === 0)) {
       setGoToAction({ state, path: `/dashboard/`, actions }); // go to dashboard
       return;
     }
@@ -471,7 +471,7 @@ const Applications = ({ state, actions }) => {
       });
       console.log("🐞 Update application record response: ", response);
 
-      if (response?.success && !submitAction) {
+      if (response?.success && submitAction === undefined) {
         setGoToAction({ state, path: `/dashboard/`, actions }); // go to dashboard
         return response;
       }
@@ -560,7 +560,6 @@ const Applications = ({ state, actions }) => {
         // 📌  if SIG, submit form and redirect
         // --------------------------------------------------------------------------------
         await formSubmitHandler();
-        // setGoToAction({ state, path: `/membership/`, actions }); // 👉 redirect to **** page
         return;
       }
 
@@ -643,6 +642,20 @@ const Applications = ({ state, actions }) => {
 
         {!hasError && (
           <div className="flex-col application-form-wrapper">
+            {!badApp && (
+              <div className="flex-col">
+                <div
+                  className="primary-title application-panel-title"
+                  style={{ borderBottom: "none" }}
+                >
+                  Category Selected: {application?.[0]?.bad_categorytype}
+                </div>
+                <div className="required" style={{ paddingTop: `0.5em` }}>
+                  Mandatory fields
+                </div>
+              </div>
+            )}
+
             {badApp && (
               <div className="flex-col">
                 <div className="primary-title application-panel-title">

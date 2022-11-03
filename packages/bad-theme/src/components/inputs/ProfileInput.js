@@ -1,7 +1,7 @@
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 // --------------------------------------------------------------------------------
-import { FORM_CONFIG } from "../../config/form";
+import { FORM_CONFIG, colors } from "../../config/form";
 import ErrorComponent from "./ErrorComponent";
 import Avatar from "../../img/svg/profile.svg";
 
@@ -52,6 +52,7 @@ const ProfileInput = ({
             display: "flex",
             alignItems: "center",
             zIndex: 1,
+            fontSize: 8,
           }}
           className="caps-btn-no-underline"
         >

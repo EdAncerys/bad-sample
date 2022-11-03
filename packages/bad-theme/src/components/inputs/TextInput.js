@@ -26,6 +26,7 @@ const TextInput = ({
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
       {inputLabel && <label className={labelClass}>{inputLabel}</label>}
       <ErrorComponent name={name ?? ""} type={type} form={form} />
+      {!inputLabel && <div style={{ padding: "10px 0" }} />}
 
       {type === "input" && (
         <input
