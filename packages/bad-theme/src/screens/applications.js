@@ -149,7 +149,7 @@ const Applications = ({ state, actions }) => {
         setForm({
           ...form,
           dev_selected_application_types: types,
-          sky_newhospitalname: hospitalName, // set hospital name
+          // sky_newhospitalname: hospitalName, // set hospital name
           sky_cvurl: documentUrl, // set documentUrl to form
           sky_profilepicture: profilePicture, // set profilePicture to form
           step: application?.[0]?.step || 0,
@@ -730,30 +730,32 @@ const Applications = ({ state, actions }) => {
               )}
 
               {!stepOne && (
-                <Form
-                  form={form}
-                  application={application}
-                  onChange={onChange}
-                  handleDocUploadChange={handleDocUploadChange}
-                  handleHospitalLookup={handleHospitalLookup}
-                  handleSelectHospital={handleSelectHospital}
-                  handleClearHospital={handleClearHospital}
-                  handleAddressLookup={handleAddressLookup}
-                  handleClearAddress={handleClearAddress}
-                  handleSelectAddress={handleSelectAddress}
-                  // --------------------------------------------------------------------------------
-                  documentRef={documentRef}
-                  profilePictureRef={profilePictureRef}
-                  hospitalSearchRef={hospitalSearchRef}
-                  address1Line1Ref={address1Line1Ref}
-                  // --------------------------------------------------------------------------------
-                  badApp={badApp}
-                  stepOne={stepOne}
-                  stepTwo={stepTwo}
-                  stepThree={stepThree}
-                  stepFour={stepFour}
-                  stepFive={stepFive}
-                />
+                <div className="form-contenmt-wrapper">
+                  <Form
+                    form={form}
+                    application={application}
+                    onChange={onChange}
+                    handleDocUploadChange={handleDocUploadChange}
+                    handleHospitalLookup={handleHospitalLookup}
+                    handleSelectHospital={handleSelectHospital}
+                    handleClearHospital={handleClearHospital}
+                    handleAddressLookup={handleAddressLookup}
+                    handleClearAddress={handleClearAddress}
+                    handleSelectAddress={handleSelectAddress}
+                    // --------------------------------------------------------------------------------
+                    documentRef={documentRef}
+                    profilePictureRef={profilePictureRef}
+                    hospitalSearchRef={hospitalSearchRef}
+                    address1Line1Ref={address1Line1Ref}
+                    // --------------------------------------------------------------------------------
+                    badApp={badApp}
+                    stepOne={stepOne}
+                    stepTwo={stepTwo}
+                    stepThree={stepThree}
+                    stepFour={stepFour}
+                    stepFive={stepFive}
+                  />
+                </div>
               )}
             </div>
 

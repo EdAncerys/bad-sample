@@ -80,7 +80,7 @@ const Form = ({
           // 📌  FORM_CONFIG - Configuration for form inputs & filtering
           // --------------------------------------------------------------------------------
           if (FORM_CONFIG?.[name]?.hidden) return null; // if hidden return null
-          // if (!wpInputFilterHandler({ form, name, badApp })) return null; // if input is not in filter return null
+          if (!wpInputFilterHandler({ form, name, badApp })) return null; // if input is not in filter return null
           if (!inputShowHandler({ form, name })) return null; // additional filter logic for inputs
 
           // --------------------------------------------------------------------------------

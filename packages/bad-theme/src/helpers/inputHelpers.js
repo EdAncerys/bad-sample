@@ -330,6 +330,9 @@ export const wpInputFilterHandler = ({ form, name, badApp }) => {
   if (typeof appSelected === "undefined" && form?.dev_application_input_filter)
     isValid = false;
 
+  // ⚠️ ignore all WP validations for BAD application
+  if (badApp) isValid = true;
+
   // ⚠️ for SIG application if user have no application selected hide all inputs
   // if (!badApp && !form?.dev_application_input_filter) isValid = false;
 
