@@ -18,7 +18,12 @@ import {
   submitUserApplication,
   formValidationHandler,
 } from "../helpers/inputHelpers";
-import { useAppState, useAppDispatch, setGoToAction } from "../context";
+import {
+  useAppState,
+  useAppDispatch,
+  setGoToAction,
+  setErrorAction,
+} from "../context";
 
 const Applications = ({ state, actions }) => {
   // --------------------------------------------------------------------------------
@@ -347,13 +352,13 @@ const Applications = ({ state, actions }) => {
         setForm((form) => ({ ...form, ...updatedForm })); // ⚠️ update formData with new application fields
         setApplication(application); // ⚠️ update application with new application fields
 
-        // setErrorAction({
-        //   dispatch,
-        //   isError: {
-        //     message: `Please fill all mandatory fields`,
-        //     image: "Error",
-        //   },
-        // });
+        setErrorAction({
+          dispatch,
+          isError: {
+            message: `Please fill all mandatory fields`,
+            image: "Error",
+          },
+        });
         return; // 👉 if form is not valid, return
       }
 
@@ -377,7 +382,7 @@ const Applications = ({ state, actions }) => {
         }
       });
 
-      await saveApplicationRecord({ updatedApplication });
+      await saveApplicationRecord({ updatedApplication, submitAction: true });
       const submitRes = await submitUserApplication({
         state,
         contactid: isActiveUser?.contactid || "",
@@ -385,7 +390,33 @@ const Applications = ({ state, actions }) => {
       });
 
       console.log("🐞 submitRes: ", submitRes);
-      // ⚠️ update formData with new application fields
+      if (!submitRes?.sucess) {
+        console.log("🐞 ⭐️⭐️ ERROR MODAL ⭐️⭐️");
+
+        setErrorAction({
+          dispatch,
+          isError: {
+            message: `Faild to submit application. Please try again later`,
+            image: "Error",
+          },
+        });
+        return; // 👉 if form is not valid, return
+      }
+      if (submitRes?.sucess) {
+        // ⚠️ redirect to success page & notify user
+        let msg = form?.dev_application_input_filter?.category_types;
+        // if msg includes : split and take first word
+        if (msg?.includes(":")) msg = msg?.split(":")[1];
+        if (msg) msg = `Application submitted successfully for ` + msg;
+
+        setErrorAction({
+          dispatch,
+          isError: {
+            message: msg || `Application submitted successfully`,
+          },
+        });
+        setGoToAction({ state, path: `/dashboard/`, actions }); // go to dashboard
+      }
     } catch (error) {
       console.log("🐞 error: ", error);
     } finally {
@@ -408,7 +439,10 @@ const Applications = ({ state, actions }) => {
     });
   };
 
-  const saveApplicationRecord = async ({ updatedApplication }) => {
+  const saveApplicationRecord = async ({
+    updatedApplication,
+    submitAction,
+  }) => {
     try {
       setFetching(true);
 
@@ -436,7 +470,7 @@ const Applications = ({ state, actions }) => {
       });
       console.log("🐞 Update application record response: ", response);
 
-      if (response?.success) {
+      if (response?.success && !submitAction) {
         setGoToAction({ state, path: `/dashboard/`, actions }); // go to dashboard
         return response;
       }
@@ -508,13 +542,13 @@ const Applications = ({ state, actions }) => {
       setForm((form) => ({ ...form, ...updatedForm })); // ⚠️ update formData with new application fields
       setApplication(application); // ⚠️ update application with new application fields
 
-      // setErrorAction({
-      //   dispatch,
-      //   isError: {
-      //     message: `Please fill all mandatory fields`,
-      //     image: "Error",
-      //   },
-      // });
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Please fill all mandatory fields`,
+          image: "Error",
+        },
+      });
       return; // 👉 if form is not valid, return
     }
 
