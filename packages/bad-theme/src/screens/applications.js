@@ -382,7 +382,7 @@ const Applications = ({ state, actions }) => {
         }
       });
 
-      await saveApplicationRecord({ updatedApplication, submitAction: true });
+      await saveApplicationRecord({ updatedApplication });
       const submitRes = await submitUserApplication({
         state,
         contactid: isActiveUser?.contactid || "",
@@ -442,7 +442,7 @@ const Applications = ({ state, actions }) => {
 
   const saveApplicationRecord = async ({
     updatedApplication,
-    submitAction,
+    saveAndExit = false,
   }) => {
     try {
       setFetching(true);
@@ -471,7 +471,7 @@ const Applications = ({ state, actions }) => {
       });
       console.log("🐞 Update application record response: ", response);
 
-      if (response?.success && !submitAction) {
+      if (response?.success && saveAndExit) {
         setGoToAction({ state, path: `/dashboard/`, actions }); // go to dashboard
         return response;
       }
@@ -569,7 +569,7 @@ const Applications = ({ state, actions }) => {
       onChange({
         target: { name: "step", value: form?.step + 1 },
       });
-      await saveApplicationRecord({ updatedApplication, submitAction: true }); // save application record before moving to next step
+      await saveApplicationRecord({ updatedApplication }); // save application record before moving to next step
     } catch (error) {
       console.log("🐞 error: ", error);
     } finally {
@@ -766,7 +766,10 @@ const Applications = ({ state, actions }) => {
               <div className="transparent-btn" onClick={goBackHandler}>
                 Back
               </div>
-              <div className="transparent-btn" onClick={saveApplicationRecord}>
+              <div
+                className="transparent-btn"
+                onClick={() => saveApplicationRecord({ saveAndExit: true })}
+              >
                 Save & Exit
               </div>
               <div className="blue-btn" onClick={nextHandler}>

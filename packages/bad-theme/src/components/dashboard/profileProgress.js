@@ -21,13 +21,14 @@ import { getUserStoreAction } from "../../helpers/inputHelpers";
 const ProfileProgress = ({ state, actions, libraries }) => {
   const { lg } = muiQuery();
   const dispatch = useAppDispatch();
-  const { dynamicsApps, applicationData, isActiveUser } = useAppState();
+  const { dynamicsApps, isActiveUser } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
   const ICON_WIDTH = 30;
   const [isFetching, setFetching] = useState(false);
 
   const [applicationStep, setStep] = useState("Application");
+  const [applicationData, setAppData] = useState("Application");
   // application under review
   let isUnderReview = false;
   if (dynamicsApps) {
@@ -38,8 +39,6 @@ const ProfileProgress = ({ state, actions, libraries }) => {
       appsData.filter((item) => item.bad_approvalstatus === "Pending").length >
       0;
   }
-
-  // if (isUnderReview) return null;
 
   useEffect(() => {
     (async () => {
@@ -54,33 +53,25 @@ const ProfileProgress = ({ state, actions, libraries }) => {
             applicationData: updatedMembershipData,
           });
         }
+
+        const appData = dynamicsApplication?.[0]; // application info data
+
+        let progressName = ` - Started ${appData.bad_categorytype} application`;
+        if (appData.step === 1) progressName = "Step 1 - The Process";
+        if (appData.step === 2) progressName = "Step 2 - Personal Information";
+        if (appData.step === 3) progressName = "Step 3 - Personal Information";
+        if (appData.step === 4) progressName = "Step 4 - Professional Details";
+        if (appData.step === 5) progressName = "Step 5: Application Submission";
+        if (appData.step === 8)
+          progressName = ` - BAD ${appData.bad_categorytype} membership category change`;
+
+        setStep(progressName);
+        setAppData(dynamicsApplication);
       } catch (error) {
         console.log("🐞 error", error);
       }
     })();
-
-    if (!applicationData) return null;
-
-    const appData = applicationData[0]; // application info data
-    if (!appData) return null;
-    console.log("🐞 appDataappDataappData", appData);
-
-    let progressName = "";
-    // if application record & no steps completed return application name
-    if (appData.bad_categorytype) {
-      progressName = `- Started ${appData.bad_categorytype} application`;
-    }
-
-    if (appData.step === 0) progressName = "Step 1 - The Process";
-    if (appData.step === 1) progressName = "Step 2 - Personal Information";
-    if (appData.step === 2) progressName = "Step 3 - Personal Information";
-    if (appData.step === 3) progressName = "Step 4 - Professional Details";
-    if (appData.step === 4) progressName = "Step 5: Application Submission";
-    if (appData.step === 8)
-      progressName = ` - BAD ${appData.bad_categorytype} membership category change`;
-
-    setStep(progressName);
-  }, [applicationData]);
+  }, []);
 
   // HELPERS ----------------------------------------------
   const handleApply = () => {
@@ -163,11 +154,11 @@ const ProfileProgress = ({ state, actions, libraries }) => {
               justifyItems: "center",
             }}
           >
-            <ServeProgressIcon complete={appData.step >= 0} />
             <ServeProgressIcon complete={appData.step >= 1} />
             <ServeProgressIcon complete={appData.step >= 2} />
             <ServeProgressIcon complete={appData.step >= 3} />
             <ServeProgressIcon complete={appData.step >= 4} />
+            <ServeProgressIcon complete={appData.step >= 5} />
           </div>
         </div>
       );
