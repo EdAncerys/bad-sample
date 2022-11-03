@@ -1,74 +1,713 @@
-import { useState, useEffect } from "react";
-import { connect } from "frontity";
+import { useState, useEffect, useRef } from "react";
+import connect from "@frontity/connect";
 // --------------------------------------------------------------------------------
+import Form from "../components/form";
+import ProfileInput from "../components/inputs/ProfileInput";
+import { FORM_CONFIG } from "../config/form";
+import ApplicationSidePanel from "../components/ApplicationSidePanel";
+import {
+  getMembershipTypes,
+  getUserStoreAction,
+  getHospitalsAction,
+  googleAutocomplete,
+  sendFileToS3Action,
+  getHospitalNameAction,
+  getBADMembershipSubscriptionData,
+  updateDynamicsApplicationAction,
+  submitUserApplication,
+  formValidationHandler,
+} from "../helpers/inputHelpers";
 import { useAppState } from "../context";
-import BlockWrapper from "../components/blockWrapper";
-import ApplicationSidePannel from "../components/applicationSidePannel";
 
-const Applications = ({ state, actions, libraries }) => {
+const Applications = ({ state, dispatch }) => {
   // --------------------------------------------------------------------------------
   // 📌  BAD applications page.
   // --------------------------------------------------------------------------------
-  const data = state.source.get(state.router.link);
-  const page = state.source[data.type][data.id];
-  console.log("pageData ", data, page); // debug
 
   const { applicationData, isActiveUser } = useAppState();
-  console.log("⭐️ applicationData,", applicationData); // debug
-  console.log("⭐️ isActiveUser,", isActiveUser); // debug
-
   const [fetching, setFetching] = useState(false);
   const [form, setForm] = useState({
-    step: 1,
+    dev_py3_address1line1: "", // 📌  Address Line 1 default form field value
+    step: 0,
   });
+  const [application, setApplication] = useState([]);
+  const [memberships, setMemberships] = useState([]);
+  const isSIG = application?.[0]?.bad_organisedfor === "SIG";
+  const hasError = form?.dev_selected_application_types?.length === 0;
+  console.log("⭐️⭐️🐞 COMPONENT RERENDER ⭐️⭐️", memberships);
+
+  const documentRef = useRef(null);
+  const profilePictureRef = useRef(null);
+  const hospitalSearchRef = useRef("");
+  const address1Line1Ref = useRef("");
 
   useEffect(() => {
+    if (!isActiveUser) return; // return if no user data is available
+
     (async () => {
       try {
         setFetching(true);
+        // --------------------------------------------------------------------------------
+        // 📌  Default form values
+        // --------------------------------------------------------------------------------
+        let memberships;
+        let application;
+        let hospitalId = "";
+        let hospitalName = "";
+        let documentUrl = "";
+        let profilePicture = "";
+        let formDefaults = {};
+
+        // --------------------------------------------------------------------------------
+        // 📌 fetch application data from server if no application data in context
+        // --------------------------------------------------------------------------------
+        if (!memberships) {
+          memberships = await getMembershipTypes({ state });
+          // TODO update context
+        }
+        if (!application) {
+          const id = isActiveUser?.contactid || "";
+          application = await getUserStoreAction({ state, id });
+          // if application is not typeof array then set it to empty array
+          if (!Array.isArray(application)) {
+            application = [application]; // 👈 set application to empty array
+          }
+          // TODO update context
+        }
+
+        // --------------------------------------------------------------------------------
+        // 📌  Check if user have hospital id set in Dynamics. If not, set hospitalId to null
+        //  Check for Doc URL in Dynamics. If not, set documentUrl to null
+        // --------------------------------------------------------------------------------
+        application?.map((input, key) => {
+          if (input?.name === "py3_hospitalid" && input.value) {
+            hospitalId = input.value;
+          }
+          if (input?.name === "sky_cvurl" && input.value) {
+            documentUrl = input.value;
+          }
+          if (input?.name === "sky_profilepicture" && input.value) {
+            profilePicture = input?.value;
+          }
+
+          if (input?.name && input?.value) {
+            // --------------------------------------------------------------------------------
+            // ⚠️ update application with new value
+            // --------------------------------------------------------------------------------
+            formDefaults[input.name] = input.value;
+          }
+        });
+
+        if (hospitalId) {
+          // --------------------------------------------------------------------------------
+          // 📌  If hospitalId is set in dynamic fetch it hospital name to show in UI.
+          // --------------------------------------------------------------------------------
+          const hospitalData = await getHospitalNameAction({
+            state,
+            dispatch,
+            id: hospitalId,
+          });
+          if (hospitalData) hospitalName = hospitalData.name;
+        }
+
+        const bad_categorytype = application?.[0]?.bad_categorytype
+          ?.toLowerCase()
+          ?.replace(/\s/g, "");
+        const bad_organisedfor = application?.[0]?.bad_organisedfor;
+
+        console.log("🐞 appBlob", bad_categorytype, bad_organisedfor);
+
+        // --------------------------------------------------------------------------------
+        // 📌 find all applications that match the user's category type selections
+        // --------------------------------------------------------------------------------
+        const types = memberships?.filter((app) => {
+          // return all BAD applications type is application is not SIG
+          if (application?.[0]?.bad_organisedfor === "BAD") {
+            return app?.acf?.bad_or_sig === "bad";
+          }
+
+          // get application & strip all white spaces and make lowercase and replace - with ''
+          const slug = app?.slug
+            ?.toLowerCase()
+            ?.replace(/\s/g, "")
+            ?.replace(/-/g, "");
+
+          return slug?.includes(bad_categorytype); // return memberships that matches or includes any words in applicationType
+        });
+
+        // --------------------------------------------------------------------------------
+        // 📌  Update state with blob values for UI render
+        // --------------------------------------------------------------------------------
+        setForm({
+          ...form,
+          dev_selected_application_types: types,
+          sky_newhospitalname: hospitalName, // set hospital name
+          sky_cvurl: documentUrl, // set documentUrl to form
+          sky_profilepicture: profilePicture, // set profilePicture to form
+          step: application?.[0]?.step || 0,
+          bad_categorytype:
+            types?.length === 1 ? types?.[0]?.acf?.category_types : undefined, // 📌 set category type to form if only one category type is available for user
+          dev_application_input_filter:
+            types?.length === 1 ? types?.[0]?.acf : undefined,
+          ...formDefaults,
+        });
+        setApplication(application); // ⚠️ update application with new application fields
+        setMemberships(memberships);
+        console.log("🐞 memberships", memberships);
+        console.log("🐞 application", application);
       } catch (error) {
-        console.log("error", error);
+        console.log("🐞 error", error);
       } finally {
         setFetching(false);
       }
     })();
-  }, []);
+  }, [isActiveUser]);
+
+  const handleSelectAddress = async ({ item }) => {
+    // destructure item object & get country code & city name from terms
+    const { terms, title } = item;
+    let countryCode = "";
+    let cityName = "";
+
+    if (terms) {
+      // if terms define address components
+      if (terms.length >= 1) countryCode = terms[terms.length - 1].value;
+      if (terms.length >= 2) cityName = terms[terms.length - 2].value;
+    }
+    // overwrite formData to match Dynamics fields
+    if (countryCode === "UK")
+      countryCode = "United Kingdom of Great Britain and Northern Ireland";
+
+    // update formData with values
+    setForm((form) => ({
+      ...form,
+      py3_address1ine1: title,
+      py3_addresscountry: countryCode,
+      py3_addresstowncity: cityName,
+    }));
+  };
+
+  const handleClearHospital = () => {
+    hospitalSearchRef.current = ""; // clear search input
+    onChange({ target: { name: "sky_newhospitalname", value: "" } });
+  };
+
+  const handleClearAddress = () => {
+    address1Line1Ref.current = ""; // clear search input
+    setForm((form) => ({
+      ...form,
+      py3_address1ine1: "",
+      dev_address_data: "",
+    }));
+  };
+
+  const handleDocUploadChange = async ({ target }) => {
+    const { name, files } = target;
+    const doc = files[0];
+    const fileName = doc.name; // name of the file attachment
+    if (!doc) return;
+
+    try {
+      setFetching(true);
+
+      // upload file to S3 bucket and get url
+      let url = await sendFileToS3Action({
+        state,
+        dispatch,
+        attachments: doc,
+      });
+
+      let dev_name = name === "sky_cvurl" ? "dev_new_cv" : "dev_new_doc";
+      setForm({ ...form, [name]: url, [dev_name]: fileName });
+    } catch (error) {
+      console.log("🤖 error", error);
+    } finally {
+      setFetching(false);
+    }
+  };
+
+  const handleHospitalLookup = async () => {
+    // --------------------------------------------------------------------------------
+    // 📌  Handle hospital lookup
+    // --------------------------------------------------------------------------------
+    const input = hospitalSearchRef.current.value;
+
+    try {
+      let hospitalData = await getHospitalsAction({
+        state,
+        input,
+      });
+      // refactor hospital data to match dropdown format
+      hospitalData = hospitalData.map((hospital) => {
+        return {
+          title: hospital.name,
+          link: hospital.accountid,
+        };
+      });
+      onChange({
+        target: { name: "dev_hospital_data", value: hospitalData },
+      });
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
+  const handleAddressLookup = async () => {
+    // --------------------------------------------------------------------------------
+    // 📌  Handle address lookup
+    // --------------------------------------------------------------------------------
+
+    const input = address1Line1Ref.current.value;
+
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // add delay to allow async to finish before running
+      let addressData = await googleAutocomplete({
+        input,
+      });
+      // refactor address data to match dropdown format
+      addressData = addressData?.map((address) => {
+        return {
+          title: address?.description,
+          link: address?.terms,
+        };
+      });
+      onChange({
+        target: { name: "dev_address_data", value: addressData },
+      });
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
+  const onChange = ({ target }) => {
+    // --------------------------------------------------------------------------------
+    // 📌  Handle input change for all inputs
+    // --------------------------------------------------------------------------------
+    const { name, value, type, checked } = target;
+    console.log("🐞 name: ", name, value);
+
+    // --------------------------------------------------------------------------------
+    // 📌  if filed bad_categorytype is changed, add to state application from fields from WP
+    // --------------------------------------------------------------------------------
+    if (name === "bad_categorytype") {
+      let dev_application_input_filter;
+
+      memberships?.filter((app) => {
+        const acf = app?.acf;
+        if (acf?.category_types === value) dev_application_input_filter = acf; // return memberships that matches or includes any words in applicationType
+      });
+      setForm({
+        ...form,
+        [name]: type === "checkbox" ? checked : value,
+        dev_application_input_filter: dev_application_input_filter,
+      });
+      return;
+    }
+
+    setForm({
+      ...form,
+      [name]: type === "checkbox" ? checked : value,
+    });
+  };
+
+  const handleSelectHospital = ({ item }) => {
+    console.log("🐞 item", item);
+    setForm((form) => ({
+      ...form,
+      dev_hospital_lookup: "",
+      dev_hospital_data: null,
+      sky_newhospitalname: item?.title,
+      py3_hospitalid: item?.link,
+    }));
+  };
+
+  const formSubmitHandler = async () => {
+    // --------------------------------------------------------------------------------
+    // 📌  Handle form submit
+    // --------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------
+    // 📌 Form validation handler
+    // --------------------------------------------------------------------------------
+    const { isValid, updatedApplication, updatedForm } = formValidationHandler({
+      form,
+      application,
+      FORM_CONFIG,
+      MANUALLY_REQUIRED: isSIG ? undefined : [], // if SIG, don't manually require any fields
+    });
+
+    try {
+      setFetching(true);
+
+      if (!isValid) {
+        console.log("🐞 ⭐️⭐️ ERROR MODAL ⭐️⭐️");
+        setForm((form) => ({ ...form, ...updatedForm })); // ⚠️ update formData with new application fields
+        setApplication(application); // ⚠️ update application with new application fields
+
+        // setErrorAction({
+        //   dispatch,
+        //   isError: {
+        //     message: `Please fill all mandatory fields`,
+        //     image: "Error",
+        //   },
+        // });
+        return; // 👉 if form is not valid, return
+      }
+
+      // --------------------------------------------------------------------------------
+      // 📌  Proceed to from submission
+      // --------------------------------------------------------------------------------
+      // 👉 get appropriate membership ID
+      const data = await getBADMembershipSubscriptionData({
+        state,
+        category: form?.bad_organisedfor,
+        type: form?.bad_categorytype,
+      });
+
+      updatedApplication?.map((input, key) => {
+        let { name, value, info } = input;
+        if (name === "core_membershipsubscriptionplanid") {
+          updatedApplication[key] = {
+            ...input,
+            value: data?.[0]?.core_membershipsubscriptionplanid, // set core_membership_id to updatedApplication
+          };
+        }
+      });
+
+      await saveApplicationRecord({ updatedApplication });
+      const submitRes = await submitUserApplication({
+        contactid: context()?.user?.contactid,
+        application: updatedApplication,
+      });
+
+      console.log("🐞 submitRes: ", submitRes);
+      // ⚠️ update formData with new application fields
+    } catch (error) {
+      console.log("🐞 error: ", error);
+    } finally {
+      setForm((form) => ({ ...form, ...updatedForm })); // ⚠️ update formData with new application fields
+      setApplication(application); // ⚠️ update application with new application fields
+      setFetching(false);
+    }
+  };
 
   // --------------------------------------------------------------------------------
   const goBackHandler = () => {
     console.log("goBackHandler");
     // setGoToAction({ state, path: `/membership/`, actions })
+    onChange({
+      target: { name: "step", value: form?.step - 1 },
+    });
   };
 
-  const saveExitHandler = () => {
-    console.log("saveExitHandler");
+  const saveApplicationRecord = async ({ updatedApplication }) => {
+    try {
+      setFetching(true);
+
+      updatedApplication = updatedApplication || application; // ⚠️ set updatedApplication to application if not provided
+      updatedApplication[0].step = form?.step; // ⚠️ set step to form step
+
+      updatedApplication?.map((input, key) => {
+        let { name, value } = input;
+
+        if (form?.[name] !== undefined) {
+          value = form?.[name]; // ⚠️ set value to from value
+
+          // --------------------------------------------------------------------------------
+          // ⚠️ update application with new value
+          // --------------------------------------------------------------------------------
+          updatedApplication[key] = { ...input, value };
+        }
+      });
+      console.log("updatedApplication", updatedApplication);
+
+      const response = await updateDynamicsApplicationAction({
+        state,
+        contactid: context()?.user?.contactid,
+        application: updatedApplication,
+      });
+      console.log("🐞 Update application record response: ", response);
+
+      return response;
+    } catch (error) {
+      console.log("🐞 error: ", error);
+    } finally {
+      setFetching(false);
+    }
   };
 
-  const nextHandler = () => {
-    console.log("nextHandler");
+  const nextHandler = async () => {
+    // --------------------------------------------------------------------------------
+    // 📌 Form validation handler
+    // --------------------------------------------------------------------------------
+    let MANUALLY_REQUIRED = [];
+    if (form?.step === 1) MANUALLY_REQUIRED = ["bad_categorytype"];
+    if (form?.step === 2)
+      MANUALLY_REQUIRED = [
+        "py3_title",
+        "py3_firstname",
+        "py3_gender",
+        "py3_dateofbirth",
+        "py3_email",
+        "py3_mobilephone",
+        "py3_address1ine1",
+        "py3_addressline2",
+        "py3_addresscountystate",
+        "py3_addresszippostalcode",
+        "py3_addresscountry",
+      ];
+    if (form?.step === 3)
+      MANUALLY_REQUIRED = [
+        "formus_staffgroupcategory",
+        "formus_jobrole",
+        "py3_hospitalid",
+        "formus_professionalregistrationbody",
+        "formus_professionalregistrationstatus",
+        "formus_residencystatus",
+        "formus_qualificationtype",
+        // 'formus_mainspecialtyqualification',
+        // 'formus_clinicalspecialtysofpractice',
+        // 'formus_specialiseddermatologyareasofpractice',
+        "formus_typeofcontract",
+        "formus_fixedtermtemporaryreasonforemploymentcont",
+        "formus_typeofcontract",
+        "formus_rotapattern",
+        "formus_typeofpractice",
+        "formus_privatepracticeorganisation",
+        "formus_reasonformovingccstdate",
+      ];
+    if (form?.step === 4)
+      MANUALLY_REQUIRED = [
+        "bad_proposer1",
+        "bad_preferredmailingaddress",
+        "sky_cvurl",
+        "bad_memberdirectory",
+        "py3_constitutionagreement",
+        "bad_readpolicydocument",
+      ];
+    const { isValid, updatedApplication, updatedForm } = formValidationHandler({
+      form,
+      application,
+      FORM_CONFIG,
+      MANUALLY_REQUIRED: isSIG ? undefined : MANUALLY_REQUIRED,
+    });
+
+    if (!isValid) {
+      console.log("🐞 ⭐️⭐️ ERROR MODAL ⭐️⭐️");
+      setForm((form) => ({ ...form, ...updatedForm })); // ⚠️ update formData with new application fields
+      setApplication(application); // ⚠️ update application with new application fields
+
+      // setErrorAction({
+      //   dispatch,
+      //   isError: {
+      //     message: `Please fill all mandatory fields`,
+      //     image: "Error",
+      //   },
+      // });
+      return; // 👉 if form is not valid, return
+    }
+
+    try {
+      setFetching(true);
+      if (isSIG || form?.step === 4) {
+        // --------------------------------------------------------------------------------
+        // 📌  if SIG, submit form and redirect
+        // --------------------------------------------------------------------------------
+        await formSubmitHandler();
+        // setGoToAction({ state, path: `/membership/`, actions }); // 👉 redirect to **** page
+        return;
+      }
+
+      // --------------------------------------------------------------------------------
+      // 📌  Application step process
+      // --------------------------------------------------------------------------------
+      onChange({
+        target: { name: "step", value: form?.step + 1 },
+      });
+      await saveApplicationRecord({ updatedApplication }); // save application record before moving to next step
+    } catch (error) {
+      console.log("🐞 error: ", error);
+    } finally {
+      setFetching(false);
+    }
   };
 
-  return (
-    <BlockWrapper>
-      <div className="flex-col applications-container">
-        <div className="flex">
-          <ApplicationSidePannel step={form?.step} form={form} />
-          <div>applications</div>
+  const redirectHandler = async () => {
+    let path = "/membership/categories-of-membership/";
+    if (form?.step === 1) path = "/membership/";
+    console.log("🐞 ", path);
+
+    // setGoToAction({
+    //   state,
+    //   path,
+    //   actions,
+    // });
+  };
+
+  // --------------------------------------------------------------------------------
+  // 📌  Screen render logic
+  // --------------------------------------------------------------------------------
+  const badApp = form?.bad_organisedfor === "810170000";
+  const stepOne = form?.step === 0 && badApp;
+  const stepTwo = form?.step === 1 && badApp;
+  const stepThree = form?.step === 2 && badApp;
+  const stepFour = form?.step === 3 && badApp;
+  const stepFive = form?.step === 4 && badApp;
+
+  const ServeNoApplicationData = () => {
+    return (
+      <div className="flex-col application-form-wrapper">
+        <div className="flex required">
+          Error. No application found. Please create new application and try
+          again!
         </div>
-
         <div className="application-actions">
           <div className="transparent-btn" onClick={goBackHandler}>
             Back
           </div>
-          <div className="transparent-btn" onClick={saveExitHandler}>
-            Save & Exit
-          </div>
-          <div className="blue-btn" onClick={nextHandler}>
-            Next
-          </div>
         </div>
       </div>
-    </BlockWrapper>
+    );
+  };
+
+  return (
+    <div className="applications-container">
+      {fetching && <div className="indicator">Loading...</div>}
+
+      <div className="flex">
+        <ApplicationSidePanel
+          step={form?.step}
+          form={form}
+          application={application}
+          onChange={onChange}
+          badApp={badApp}
+        />
+        {hasError && <ServeNoApplicationData />}
+
+        {!hasError && (
+          <div className="flex-col application-form-wrapper">
+            {badApp && (
+              <div className="flex-col">
+                <div className="primary-title application-panel-title">
+                  {stepOne && "The Process"}
+                  {stepTwo && "Category Selection"}
+                  {stepThree && "Personal Information"}
+                  {stepFour && "Professional Details"}
+                </div>
+                <div style={{ paddingTop: `0.75em` }}>
+                  {stepOne &&
+                    "Please follow the below steps to complete your application. All of the information required to submit your application is listed below."}
+                  {stepTwo &&
+                    "Please confirm your category selection. Or if you are unsure of the category you should be applying for please view the membership category descriptions for further clarification."}
+                </div>
+                <div style={{ paddingTop: `0.75em` }}>
+                  {stepOne &&
+                    "Once your membership application has been completed, it will be reviewed by the BAD’s membership team and then presented to the BAD Executive committee for approval at the quarterly Executive Meeting. You will receive an email on completion of your application with the date of the next meeting. Shortly following the meeting you will be contacted with the outcome of the application. Successful applicants will then be prompted to make payment to activate their membership."}
+                </div>
+                <div
+                  className="caps-btn"
+                  onClick={redirectHandler}
+                  style={{ paddingTop: `1em` }}
+                >
+                  {stepOne && "BAD membership categories"}
+                  {stepTwo && "Membership categories"}
+                </div>
+                {stepOne && (
+                  <div>
+                    <div
+                      className="primary-title application-panel-title"
+                      style={{
+                        marginTop: `1em`,
+                        paddingTop: `1em`,
+                        borderTop: `1px solid #E3E7EA`,
+                        borderBottom: "none",
+                      }}
+                    >
+                      You Will Need:
+                    </div>
+                    <div>
+                      <ul>
+                        <li>CV </li>
+                        <li>
+                          Main Hospital / Place of Work / Medical School details
+                        </li>
+                        <li>GMC / IMC number (except students)</li>
+                        <li>Current Post</li>
+                        <li>
+                          Proposers (two proposers are needed for all
+                          applications, with the exception of medical students
+                          who only require one)
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div className="flex form-outer-wrapper">
+              {stepThree && (
+                <div className="form-img-input-wrapper">
+                  <ProfileInput
+                    form={form}
+                    name="sky_profilepicture"
+                    profilePictureRef={profilePictureRef}
+                    labelClass="form-label"
+                    Label={FORM_CONFIG?.["sky_profilepicture"]?.Label}
+                    handleDocUploadChange={handleDocUploadChange}
+                  />
+                </div>
+              )}
+
+              {!stepOne && (
+                <Form
+                  form={form}
+                  application={application}
+                  onChange={onChange}
+                  handleDocUploadChange={handleDocUploadChange}
+                  handleHospitalLookup={handleHospitalLookup}
+                  handleSelectHospital={handleSelectHospital}
+                  handleClearHospital={handleClearHospital}
+                  handleAddressLookup={handleAddressLookup}
+                  handleClearAddress={handleClearAddress}
+                  handleSelectAddress={handleSelectAddress}
+                  // --------------------------------------------------------------------------------
+                  documentRef={documentRef}
+                  profilePictureRef={profilePictureRef}
+                  hospitalSearchRef={hospitalSearchRef}
+                  address1Line1Ref={address1Line1Ref}
+                  // --------------------------------------------------------------------------------
+                  badApp={badApp}
+                  stepOne={stepOne}
+                  stepTwo={stepTwo}
+                  stepThree={stepThree}
+                  stepFour={stepFour}
+                  stepFive={stepFive}
+                />
+              )}
+            </div>
+
+            <div style={{ padding: `0.5em 0 2em 0` }}>
+              {stepTwo &&
+                "Our ordinary category is for practising dermatologists, working in the UK, on the Specialist Register of the General Medical Council, or Ireland, on the Specialist Register of The Irish Medical Council, whose work is substantially devoted to dermatological practice or research, or SAS doctors who have been fully committed to secondary care dermatology for a period of four years."}
+            </div>
+
+            <div className="application-actions">
+              <div className="transparent-btn" onClick={goBackHandler}>
+                Back
+              </div>
+              <div className="transparent-btn" onClick={saveApplicationRecord}>
+                Save & Exit
+              </div>
+              <div className="blue-btn" onClick={nextHandler}>
+                {(isSIG || form?.step === 4) && "Submit Application"}
+                {!isSIG && form?.step !== 4 && "Next"}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 

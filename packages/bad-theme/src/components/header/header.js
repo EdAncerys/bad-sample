@@ -13,6 +13,7 @@ import customMobile from "../../css/custom-mobile.css";
 import buttons from "../../css/buttons.css";
 import iFrame from "../../css/iFrame.css";
 import applications from "../../css/screens/applications.css";
+import formApplications from "../../css/applications.css";
 // COMPONENTS -------------------------------------------------------------
 import HTMLHead from "./htmlHead";
 import HeaderActions from "./headerActions";
@@ -29,7 +30,7 @@ const Header = ({ state, actions }) => {
     <>
       <Global
         styles={css`
-          ${bootStrapCSS}, ${globalCSS}, ${carousel}, ${applications}, ${accordion}, ${nav}, ${input},  ${buttons}, ${iFrame}, ${animations}, ${!lg
+          ${bootStrapCSS}, ${globalCSS}, ${carousel}, ${formApplications}, ${applications}, ${accordion}, ${nav}, ${input},  ${buttons}, ${iFrame}, ${animations}, ${!lg
             ? custom
             : customMobile},
         `}
