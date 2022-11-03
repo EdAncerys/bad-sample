@@ -30,6 +30,7 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
   const dispatch = useAppDispatch();
   const { newsMediaCategoryId, isActiveUser, dynamicsApps } = useAppState();
+  console.log("🐞 newsMediaCategoryId ", newsMediaCategoryId);
 
   if (!block) return <Loading />;
 
@@ -144,12 +145,22 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     data = data.sort((a, b) => {
       return new Date(b.date) - new Date(a.date);
     });
+    let filterList = data;
+    if (newsMediaCategoryId) {
+      // ⚠️ if newsMediaCategoryId is set, filter data by category
+      filterList = filterList.filter((item) => {
+        let categories = item.categories;
+        if (!categories) return false;
+
+        return categories.includes(newsMediaCategoryId);
+      });
+    }
 
     setCategoryList(categoryData);
     setIsSearch(has_search);
     setPostList(data);
     // 📌 data component with post limits applied
-    setFilterList(data.slice(0, postChunkRef.current));
+    setFilterList(filterList.slice(0, postChunkRef.current));
 
     return () => {
       searchFilterRef.current = ""; // clean up function
