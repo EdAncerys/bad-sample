@@ -181,6 +181,7 @@ const Form = ({
                 <HospitalLookUplInput
                   form={form}
                   name={name}
+                  onChange={onChange}
                   labelClass={labelClass}
                   Label={Label}
                   disabled={disabled}

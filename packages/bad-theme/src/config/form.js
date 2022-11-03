@@ -11,7 +11,7 @@ export const FORM_CONFIG = {
   },
   bad_ethnicity: {
     Label: "Ethnicity",
-    AttributeType: "Picklist",
+    AttributeType: "Picklist", // TODO add picklist options
     MaxLength: 100,
     Required: "None",
     order: 0,
@@ -90,10 +90,10 @@ export const FORM_CONFIG = {
   },
   bad_newhospitaladded: {
     Label: "Hospital / Medical School not listed",
-    AttributeType: "",
+    AttributeType: "Boolean",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: 16,
     hidden: false,
     width: "100%",
     caption: "",
@@ -788,6 +788,7 @@ export const BAD_STEP_FOUR_FORM_CONFIG = {
   formus_staffgroupcategory: {},
   formus_jobrole: {},
   py3_hospitalid: {},
+  bad_newhospitaladded: {},
   formus_professionalregistrationbody: {},
   formus_professionalregistrationstatus: {},
   formus_residencystatus: {},

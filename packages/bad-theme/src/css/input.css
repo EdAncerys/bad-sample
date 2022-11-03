@@ -70,6 +70,7 @@ select {
   right: -10px;
   background-color: #fff;
   cursor: pointer;
+  z-index: 99;
 }
 .check-box {
   border-radius: 50% !important;

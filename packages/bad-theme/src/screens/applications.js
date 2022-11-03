@@ -149,7 +149,7 @@ const Applications = ({ state, actions }) => {
         setForm({
           ...form,
           dev_selected_application_types: types,
-          // sky_newhospitalname: hospitalName, // set hospital name
+          sky_newhospitalname: hospitalName, // set hospital name
           sky_cvurl: documentUrl, // set documentUrl to form
           sky_profilepicture: profilePicture, // set profilePicture to form
           step: application?.[0]?.step || 0,
@@ -158,6 +158,7 @@ const Applications = ({ state, actions }) => {
           dev_application_input_filter:
             types?.length === 1 ? types?.[0]?.acf : undefined,
           ...formDefaults,
+          // sky_newhospitalname: "", // 📌  set hospital name to empty string
         });
         setApplication(application); // ⚠️ update application with new application fields
         setMemberships(memberships);
@@ -239,6 +240,15 @@ const Applications = ({ state, actions }) => {
     // 📌  Handle hospital lookup
     // --------------------------------------------------------------------------------
     const input = hospitalSearchRef.current.value;
+
+    // if input is empty, return & clear dev_hospital_data
+    if (!input) {
+      setForm((form) => ({
+        ...form,
+        dev_hospital_data: "",
+      }));
+      return;
+    }
 
     try {
       let hospitalData = await getHospitalsAction({

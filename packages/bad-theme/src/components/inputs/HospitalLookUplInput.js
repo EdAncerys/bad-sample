@@ -4,6 +4,7 @@ import { FORM_CONFIG, colors } from "../../config/form";
 import ErrorComponent from "./ErrorComponent";
 import SearchDropDown from "../searchDropDown";
 import Caption from "./Caption";
+import CloseIcon from "@mui/icons-material/Close";
 
 const HospitalLookUplInput = ({
   form,
@@ -16,7 +17,10 @@ const HospitalLookUplInput = ({
   MaxLength,
   handleClearHospital,
   hospitalSearchRef,
+  onChange,
 }) => {
+  disabled = false; // dev mode
+
   return (
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
       <label className={labelClass}>{Label}</label>
@@ -70,11 +74,36 @@ const HospitalLookUplInput = ({
         />
       )}
       {form?.dev_hospital_data && (
-        <SearchDropDown
-          filter={form?.dev_hospital_data}
-          onClickHandler={handleSelectHospital}
-          height={230}
-        />
+        <div className="relative">
+          <SearchDropDown
+            filter={form?.dev_hospital_data}
+            onClickHandler={handleSelectHospital}
+            height={230}
+          />
+
+          <div
+            className="filter-icon"
+            style={{
+              top: 20,
+              right: 20,
+              backgroundColor: "rgba(0, 0, 0, 0.1)",
+            }}
+            onClick={() => {
+              onChange({
+                target: { name: "dev_hospital_data", value: undefined },
+              });
+            }}
+          >
+            <CloseIcon
+              style={{
+                fill: colors.darkSilver,
+                padding: 0,
+                width: 25,
+                height: 25,
+              }}
+            />
+          </div>
+        </div>
       )}
 
       <Caption caption={FORM_CONFIG?.[name]?.caption} />
