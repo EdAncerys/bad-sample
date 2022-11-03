@@ -430,10 +430,11 @@ const Applications = ({ state, actions }) => {
   const goBackHandler = () => {
     console.log("goBackHandler");
 
-    if (hasError) {
+    if (hasError || isSIG) {
       setGoToAction({ state, path: `/dashboard/`, actions }); // go to dashboard
       return;
     }
+
     onChange({
       target: { name: "step", value: form?.step - 1 },
     });
