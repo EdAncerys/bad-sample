@@ -521,9 +521,9 @@ const Applications = ({ state, actions }) => {
         "formus_professionalregistrationstatus",
         "formus_residencystatus",
         "formus_qualificationtype",
-        // 'formus_mainspecialtyqualification',
-        // 'formus_clinicalspecialtysofpractice',
-        // 'formus_specialiseddermatologyareasofpractice',
+        // "formus_mainspecialtyqualification", // TODO add picklist
+        // "formus_clinicalspecialtysofpractice", // TODO add picklist
+        // "formus_specialiseddermatologyareasofpractice", // TODO add picklist
         "formus_typeofcontract",
         "formus_fixedtermtemporaryreasonforemploymentcont",
         "formus_typeofcontract",
@@ -531,6 +531,8 @@ const Applications = ({ state, actions }) => {
         "formus_typeofpractice",
         "formus_privatepracticeorganisation",
         "formus_reasonformovingccstdate",
+        form?.bad_newhospitaladded ? "sky_newhospitalname" : "", // if new hospital added, add new hospital name to required fields
+        form?.bad_newhospitaladded ? "sky_newhospitaltype" : "", // if new hospital added, add new hospital name to required fields
       ];
     if (form?.step === 4)
       MANUALLY_REQUIRED = [

@@ -134,7 +134,7 @@ export const FORM_CONFIG = {
   },
   sky_newhospitalname: {
     Label: "New Hospital Name",
-    AttributeType: "",
+    AttributeType: "String",
     MaxLength: 100,
     Required: "None",
     order: 0,
@@ -794,6 +794,7 @@ export const BAD_STEP_FOUR_FORM_CONFIG = {
   py3_hospitalid: {},
   sky_newhospitaltype: {},
   bad_newhospitaladded: {},
+  sky_newhospitalname: {},
   formus_professionalregistrationbody: {},
   formus_professionalregistrationstatus: {},
   formus_residencystatus: {},

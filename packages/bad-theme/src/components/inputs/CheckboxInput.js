@@ -27,7 +27,7 @@ const CheckboxInput = ({
 
       <div
         className="flex"
-        style={{ alignItems: "center", height: 40, margin: "10px 0" }}
+        style={{ alignItems: "center", height: 40, marginTop: "10px" }}
       >
         <div>
           <div className="flex">
