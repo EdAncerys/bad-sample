@@ -39,7 +39,7 @@ const ApplicationSidePanel = ({
     return (
       <div className="flex" style={{ gap: 20 }}>
         <div
-          className="button-primary"
+          className="blue-btn-reverse"
           style={{ width: 200 }}
           onClick={() => console.log("🐞 dev: ", form, application)}
         >

@@ -27,15 +27,19 @@ const CheckboxInput = ({
 
       <div className="flex" style={{ alignItems: "center", height: 40 }}>
         <div>
-          <input
-            name={name}
-            value={name}
-            // if form value is empty use value from props or empty string only once on first render
-            checked={form?.[name] === undefined ? value || false : form?.[name]}
-            onChange={onChange}
-            type="checkbox"
-            className="form-check-input check-box"
-          />
+          <div className="flex">
+            <input
+              name={name}
+              value={name}
+              // if form value is empty use value from props or empty string only once on first render
+              checked={
+                form?.[name] === undefined ? value || false : form?.[name]
+              }
+              onChange={onChange}
+              type="checkbox"
+              className="form-check-input check-box"
+            />
+          </div>
         </div>
         <div onClick={Handler} style={{ display: "flex" }}>
           <label
