@@ -2,7 +2,7 @@ import { styled } from "frontity";
 import { CircularProgress } from "@mui/material";
 import { colors } from "../config/colors";
 
-const Loading = ({ padding, alignSelf }) => {
+const Loading = ({ padding, alignSelf, background }) => {
   const componentPadding = padding || 24;
 
   return (

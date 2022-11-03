@@ -1,6 +1,6 @@
 import { connect } from "frontity";
 // --------------------------------------------------------------------------------
-import { FORM_CONFIG } from "../../config/form";
+import { FORM_CONFIG, colors } from "../../config/form";
 import ErrorComponent from "./ErrorComponent";
 import SearchDropDown from "../searchDropDown";
 // --------------------------------------------------------------------------------

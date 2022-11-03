@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import connect from "@frontity/connect";
 // --------------------------------------------------------------------------------
 import Form from "../components/form";
+import Loading from "../components/loading";
 import ProfileInput from "../components/inputs/ProfileInput";
 import { FORM_CONFIG } from "../config/form";
 import ApplicationSidePanel from "../components/ApplicationSidePanel";
@@ -17,14 +18,16 @@ import {
   submitUserApplication,
   formValidationHandler,
 } from "../helpers/inputHelpers";
-import { useAppState } from "../context";
+import { useAppState, useAppDispatch, setGoToAction } from "../context";
 
-const Applications = ({ state, dispatch }) => {
+const Applications = ({ state, actions }) => {
   // --------------------------------------------------------------------------------
   // 📌  BAD applications page.
   // --------------------------------------------------------------------------------
 
-  const { applicationData, isActiveUser } = useAppState();
+  const dispatch = useAppDispatch();
+  const { isActiveUser } = useAppState();
+
   const [fetching, setFetching] = useState(false);
   const [form, setForm] = useState({
     dev_py3_address1line1: "", // 📌  Address Line 1 default form field value
@@ -395,7 +398,11 @@ const Applications = ({ state, dispatch }) => {
   // --------------------------------------------------------------------------------
   const goBackHandler = () => {
     console.log("goBackHandler");
-    // setGoToAction({ state, path: `/membership/`, actions })
+
+    if (hasError) {
+      setGoToAction({ state, path: `/dashboard/`, actions }); // go to dashboard
+      return;
+    }
     onChange({
       target: { name: "step", value: form?.step - 1 },
     });
@@ -429,7 +436,10 @@ const Applications = ({ state, dispatch }) => {
       });
       console.log("🐞 Update application record response: ", response);
 
-      return response;
+      if (response?.success) {
+        setGoToAction({ state, path: `/dashboard/`, actions }); // go to dashboard
+        return response;
+      }
     } catch (error) {
       console.log("🐞 error: ", error);
     } finally {
@@ -571,9 +581,20 @@ const Applications = ({ state, dispatch }) => {
     );
   };
 
+  if (application?.length === 0)
+    return (
+      <div style={{ padding: "50px 0" }}>
+        <Loading />
+      </div>
+    );
+
   return (
     <div className="applications-container">
-      {fetching && <div className="indicator">Loading...</div>}
+      {fetching && (
+        <div className="fetch-icon">
+          <Loading />
+        </div>
+      )}
 
       <div className="flex">
         <ApplicationSidePanel
