@@ -46,7 +46,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
       try {
         const id = isActiveUser?.contactid || "";
         const dynamicsApplication = await getUserStoreAction({ state, id });
-        console.log("🐞 UPDATE", dynamicsApplication);
+        console.log("🐞 APP UPDATE", dynamicsApplication);
 
         if (dynamicsApplication.success) {
           setApplicationDataAction({
@@ -63,6 +63,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
 
     const appData = applicationData[0]; // application info data
     if (!appData) return null;
+    console.log("🐞 appDataappDataappData", appData);
 
     let progressName = "";
     // if application record & no steps completed return application name

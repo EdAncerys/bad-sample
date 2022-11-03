@@ -471,7 +471,7 @@ const Applications = ({ state, actions }) => {
       });
       console.log("🐞 Update application record response: ", response);
 
-      if (response?.success && submitAction === undefined) {
+      if (response?.success && !submitAction) {
         setGoToAction({ state, path: `/dashboard/`, actions }); // go to dashboard
         return response;
       }
@@ -569,7 +569,7 @@ const Applications = ({ state, actions }) => {
       onChange({
         target: { name: "step", value: form?.step + 1 },
       });
-      await saveApplicationRecord({ updatedApplication }); // save application record before moving to next step
+      await saveApplicationRecord({ updatedApplication, submitAction: true }); // save application record before moving to next step
     } catch (error) {
       console.log("🐞 error: ", error);
     } finally {
