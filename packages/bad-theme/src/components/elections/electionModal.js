@@ -16,18 +16,6 @@ const ElectionModal = ({
 }) => {
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    //  get all strong tags from modalData and add a class to them exxtra-padding
-    // document.querySelectorAll(".modal-content strong").forEach((el) => {
-    //   console.log("🐞 ", el);
-    //   el.classList.add("extra-padding");
-    // });
-
-    document.querySelectorAll(".modal-content strong").forEach((el) => {
-      el.style.padding = "10px 0px";
-    });
-  }, [modalData]);
-
   if (!modalData) return null;
 
   const { title } = modalData;
