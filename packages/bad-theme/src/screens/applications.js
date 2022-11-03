@@ -376,7 +376,8 @@ const Applications = ({ state, dispatch }) => {
 
       await saveApplicationRecord({ updatedApplication });
       const submitRes = await submitUserApplication({
-        contactid: context()?.user?.contactid,
+        state,
+        contactid: isActiveUser?.contactid || "",
         application: updatedApplication,
       });
 
@@ -423,7 +424,7 @@ const Applications = ({ state, dispatch }) => {
 
       const response = await updateDynamicsApplicationAction({
         state,
-        contactid: context()?.user?.contactid,
+        contactid: isActiveUser?.contactid || "",
         application: updatedApplication,
       });
       console.log("🐞 Update application record response: ", response);

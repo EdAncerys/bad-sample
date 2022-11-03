@@ -20,7 +20,7 @@ export const getMembershipTypes = async ({ state }) => {
       data = [...data, ...json];
       pageNo++;
       url =
-        process.env.NEXT_PUBLIC_WP_HOST +
+        state.auth.WP_HOST +
         `/wp-json/wp/v2/memberships?${params}&page=${pageNo}`;
 
       // 📌 break out of the loop if no more pages
@@ -71,12 +71,12 @@ export const loginHandler = async () => {
   }
 };
 
-export const checkB2CStatus = async () => {
+export const checkB2CStatus = async ({ state }) => {
   // --------------------------------------------------------------------------------
   // 📌  Check B2C status & validate cookies 🍪
   // --------------------------------------------------------------------------------
 
-  let path = process.env.NEXT_PUBLIC_HOST + "/utils/cookie";
+  let path = state.auth.APP_HOST + "/utils/cookie";
 
   try {
     const response = await fetchHandler({ path });
@@ -90,10 +90,9 @@ export const checkB2CStatus = async () => {
   }
 };
 
-export const getHospitalsAction = async ({ input }) => {
+export const getHospitalsAction = async ({ state, input }) => {
   const path =
-    process.env.NEXT_PUBLIC_HOST +
-    `/catalogue/lookup/hospitals?search=${input}`;
+    state.auth.APP_HOST + `/catalogue/lookup/hospitals?search=${input}`;
 
   try {
     const response = await fetchHandler({ path });
@@ -133,8 +132,8 @@ export const googleAutocomplete = async ({ input }) => {
   return response;
 };
 
-export const sendFileToS3Action = async ({ attachments }) => {
-  const path = process.env.NEXT_PUBLIC_HOST + `/s3/profile/image`;
+export const sendFileToS3Action = async ({ state, attachments }) => {
+  const path = state.auth.APP_HOST + `/s3/profile/image`;
 
   // extract file extension name from attachment
   const fileExtension = attachments.name.split(".").pop();
@@ -161,9 +160,9 @@ export const sendFileToS3Action = async ({ attachments }) => {
   }
 };
 
-export const getHospitalNameAction = async ({ id }) => {
+export const getHospitalNameAction = async ({ state, id }) => {
   const path =
-    process.env.NEXT_PUBLIC_HOST +
+    state.auth.APP_HOST +
     `/catalogue/data/accounts(${id})?$select=name,address1_composite,customertypecode,customertypecode`;
 
   try {
@@ -176,11 +175,15 @@ export const getHospitalNameAction = async ({ id }) => {
   }
 };
 
-export const getBADMembershipSubscriptionData = async ({ category, type }) => {
+export const getBADMembershipSubscriptionData = async ({
+  state,
+  category,
+  type,
+}) => {
   const year = new Date().getFullYear(); // get current year
   if (type === "Full:DERMPATHPRO") type = "Full:DermpathPRO"; // 📌 overwrite type for DermpathPRO
   const path =
-    process.env.NEXT_PUBLIC_HOST +
+    state.auth.APP_HOST +
     `/catalogue/lookup/membershiptype?search=${category}:${type}::${year}`;
 
   try {
@@ -194,12 +197,12 @@ export const getBADMembershipSubscriptionData = async ({ category, type }) => {
 };
 
 export const updateDynamicsApplicationAction = async ({
+  state,
   contactid,
   application,
 }) => {
   try {
-    const path =
-      process.env.NEXT_PUBLIC_HOST + `/applications/current/${contactid}`;
+    const path = state.auth.APP_HOST + `/applications/current/${contactid}`;
 
     const response = await fetchHandler({
       path,
@@ -215,6 +218,7 @@ export const updateDynamicsApplicationAction = async ({
 };
 
 export const submitUserApplication = async ({
+  state,
   contactid,
   application,
   changeAppCategory,
@@ -230,8 +234,7 @@ export const submitUserApplication = async ({
       msg = `Application change to ${changeAppCategory?.bad_categorytype} from ${application?.[0]?.bad_categorytype} been successfully submitted!`; // change of category for BAD application error message
     }
 
-    const path =
-      process.env.NEXT_PUBLIC_HOST + `/applications/new/${contactid}`;
+    const path = state.auth.APP_HOST + `/applications/new/${contactid}`;
 
     const response = await fetchHandler({
       path,
