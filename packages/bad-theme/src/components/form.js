@@ -36,6 +36,7 @@ const Form = ({
   handleAddressLookup,
   handleClearAddress,
   handleSelectAddress,
+  multiSelectHandler,
   // --------------------------------------------------------------------------------
   profilePictureRef,
   hospitalSearchRef,
@@ -354,6 +355,7 @@ const Form = ({
                   onChange={onChange}
                   labelClass={labelClass}
                   Choices={Choices}
+                  multiSelectHandler={multiSelectHandler}
                 />
               </div>
             );

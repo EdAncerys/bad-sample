@@ -15,65 +15,12 @@ const MultiCheckboxInput = ({
   labelClass,
   onChange,
   Choices,
+  multiSelectHandler,
 }) => {
   const hasSelection = form?.[name] !== undefined && form?.[name].length > 0;
-  console.log("⭐️ ", hasSelection, Choices);
-
-  // selected values container
-  const Selected = ({ title }) => {
-    return (
-      <div>
-        {form?.[name]?.includes(title) && (
-          <div
-            className="flex items-center justify-between"
-            style={{
-              backgroundColor: colors.silver,
-              borderRadius: 10,
-              padding: "0.5em 1em",
-              margin: "0.5em 0",
-            }}
-          >
-            <div className="flex items-center">
-              <div
-                className="flex items-center justify-center"
-                style={{
-                  width: 20,
-                  height: 20,
-                  backgroundColor: colors.white,
-                  borderRadius: 10,
-                  marginRight: 10,
-                }}
-              >
-                <div>{title}</div>
-                <CloseIcon
-                  style={{ fontSize: 12 }}
-                  onClick={() => {
-                    const newValues = form[name].filter((v) => v !== title);
-                    onChange(name, newValues);
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  // 👉 refactor data to match dropdown format
-  const multiSelectHandler = ({ title }) => {
-    let currrntValues = form?.[name] || "";
-
-    if (!currrntValues.includes(title)) {
-      // 👉 if value is already selected, add to it by comma seperated
-      currrntValues = currrntValues + "," + title;
-    } else {
-      // 👉 if value is already selected, remove it
-      currrntValues = currrntValues.replace("," + title, "");
-    }
-
-    onChange({ target: { name: name, value: currrntValues } });
-  };
+  const userSelection = form?.["dev_multi_select_" + name];
+  // if userSelection starts with " ," replace with ""
+  const userSelectionClean = userSelection?.replace(/^, /, "");
 
   return (
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
@@ -101,7 +48,7 @@ const MultiCheckboxInput = ({
               width: "99%",
             }}
           >
-            {Label}
+            {userSelectionClean || Label}
             <div className="filter-icon" style={{ top: 0 }}>
               <KeyboardArrowDownIcon
                 style={{
@@ -154,7 +101,13 @@ const MultiCheckboxInput = ({
                     margin: "4px 0",
                     cursor: "pointer",
                   }}
-                  onClick={() => multiSelectHandler({ title: choice?.value })}
+                  onClick={() =>
+                    multiSelectHandler({
+                      title: choice?.Label,
+                      value: choice?.value,
+                      name,
+                    })
+                  }
                 >
                   {choice.Label}
                 </div>

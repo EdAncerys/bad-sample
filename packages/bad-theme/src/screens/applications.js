@@ -210,6 +210,27 @@ const Applications = ({ state, actions }) => {
     }));
   };
 
+  const multiSelectHandler = ({ title, value, name }) => {
+    let currrntValues = form?.[name] || "";
+    let currentTitles = form?.["dev_multi_select_" + name] || "";
+
+    if (!currrntValues.includes(value)) {
+      // 👉 if value is already selected, add to it by comma seperated
+      currrntValues = currrntValues + "," + value;
+      currentTitles = currentTitles + ", " + title;
+    } else {
+      // 👉 if value is already selected, remove it
+      currrntValues = currrntValues.replace("," + value, "");
+      currentTitles = currentTitles.replace(", " + title, "");
+    }
+
+    setForm((form) => ({
+      ...form,
+      [name]: currrntValues,
+      ["dev_multi_select_" + name]: currentTitles,
+    }));
+  };
+
   const handleDocUploadChange = async ({ target }) => {
     const { name, files } = target;
     const doc = files[0];
@@ -761,6 +782,7 @@ const Applications = ({ state, actions }) => {
                     handleAddressLookup={handleAddressLookup}
                     handleClearAddress={handleClearAddress}
                     handleSelectAddress={handleSelectAddress}
+                    multiSelectHandler={multiSelectHandler}
                     // --------------------------------------------------------------------------------
                     documentRef={documentRef}
                     profilePictureRef={profilePictureRef}
