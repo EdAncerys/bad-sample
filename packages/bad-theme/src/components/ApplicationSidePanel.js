@@ -50,6 +50,8 @@ const ApplicationSidePanel = ({
   };
 
   const navigationHandler = ({ item }) => {
+    if (item.step >= form?.step + 1) return; // 📌 dont allow user to set step higher than +1 of current step
+
     onChange({
       target: { name: "step", value: item.step },
     });

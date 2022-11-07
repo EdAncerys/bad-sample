@@ -742,7 +742,13 @@ const Applications = ({ state, actions }) => {
               )}
 
               {!stepOne && (
-                <div className="form-contenmt-wrapper">
+                <div
+                  className={
+                    form?.step === 2
+                      ? "form-contenmt-wrapper-narrow"
+                      : "form-contenmt-wrapper"
+                  }
+                >
                   <Form
                     form={form}
                     application={application}

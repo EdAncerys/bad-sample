@@ -49,6 +49,9 @@
 .form-contenmt-wrapper {
   width: 600px;
 }
+.form-contenmt-wrapper-narrow {
+  width: 350px;
+}
 
 /* media querys */
 @media screen and (max-width: 992px) {
