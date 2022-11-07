@@ -19,8 +19,6 @@ const HospitalLookUplInput = ({
   hospitalSearchRef,
   onChange,
 }) => {
-  disabled = false; // dev mode
-
   return (
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
       <label className={labelClass}>{Label}</label>

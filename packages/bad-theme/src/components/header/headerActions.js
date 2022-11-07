@@ -38,7 +38,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
 
   const dispatch = useAppDispatch();
-  const { isActiveUser } = useAppState();
+  const { isActiveUser, applicationData } = useAppState();
 
   const [filter, setFilter] = useState(null);
   const [isFetching, setFetching] = useState(null);
@@ -183,14 +183,8 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   const handleAboutInfo = async () => {
     handleSetCookie({ name: "BAD-cookie-popup", deleteCookie: true });
-    console.log("🐞 APP_HOST ", state.auth.APP_HOST);
-    console.log("🐞 APP_URL ", state.auth.APP_URL);
-    console.log("🐞 ENVIRONMENT ", state.auth.ENVIRONMENT);
-    console.log(
-      "🐞 DEFAULT_CONTACT_LIST ",
-      state.contactList.DEFAULT_CONTACT_LIST
-    );
-    console.log("🐞 isActiveUser ", isActiveUser);
+    console.log("⭐️ ", isActiveUser);
+    console.log("⭐️ ", applicationData);
   };
   // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
 

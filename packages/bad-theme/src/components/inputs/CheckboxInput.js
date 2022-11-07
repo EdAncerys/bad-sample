@@ -21,6 +21,13 @@ const CheckboxInput = ({
       "Please confirm you have read the " + appName + " policy document";
   }
 
+  // --------------------------------------------------------------------------------
+  // 📌  if user have dev_has_hospital_id set to true & nodnt render bad_newhospitaladded
+  // --------------------------------------------------------------------------------
+  if (name === "bad_newhospitaladded" && form?.dev_has_hospital_id) {
+    return null;
+  }
+
   return (
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
       <ErrorComponent name={name ?? ""} form={form} />

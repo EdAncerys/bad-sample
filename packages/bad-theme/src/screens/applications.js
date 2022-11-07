@@ -157,8 +157,8 @@ const Applications = ({ state, actions }) => {
             types?.length === 1 ? types?.[0]?.acf?.category_types : undefined, // 📌 set category type to form if only one category type is available for user
           dev_application_input_filter:
             types?.length === 1 ? types?.[0]?.acf : undefined,
+          dev_has_hospital_id: hospitalId, // 📌 set hospital id to form to determine if user have hospital id set in dynamics
           ...formDefaults,
-          // sky_newhospitalname: "", // 📌  set hospital name to empty string
         });
         setApplication(application); // ⚠️ update application with new application fields
         setMemberships(memberships);

@@ -184,6 +184,7 @@ export const getBADMembershipSubscriptionData = async ({
   let yearPrefix = `::${year}`; // add year prefix to the end of the category
   if (category === "SIG") yearPrefix = `:${year}`; // if type is SIG, remove year prefix
   if (type === "Full:DERMPATHPRO") type = "Full:DermpathPRO"; // 📌 overwrite type for DermpathPRO
+
   const path =
     state.auth.APP_HOST +
     `/catalogue/lookup/membershiptype?search=${category}:${type}${yearPrefix}`;
