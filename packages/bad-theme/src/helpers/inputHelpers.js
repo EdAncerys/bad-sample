@@ -312,6 +312,7 @@ export const dataExtractor = ({ application }) => {
         hidden: false,
         width: "100%",
         caption: "",
+        Handler: undefined,
       },
     };
   });

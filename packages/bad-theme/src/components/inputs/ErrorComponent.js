@@ -35,7 +35,7 @@ const ErrorComponent = ({ form, name, type }) => {
           color: "red",
           fontSize: 12,
           position: "absolute",
-          bottom: -20,
+          bottom: -24,
           right: 0,
         }}
       >

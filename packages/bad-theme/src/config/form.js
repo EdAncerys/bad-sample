@@ -87,6 +87,7 @@ export const FORM_CONFIG = {
     hidden: false,
     width: "100%",
     caption: "",
+    Link: "/privacy-policy",
   },
   bad_newhospitaladded: {
     Label: "Hospital / Medical School not listed",
@@ -202,6 +203,7 @@ export const FORM_CONFIG = {
     hidden: false,
     width: "100%",
     caption: "",
+    Link: "/about-the-bad/bad-constitution/",
   },
   bad_otherjointclinics: {
     Label: "Do you do joint clinics with any other specialties?",

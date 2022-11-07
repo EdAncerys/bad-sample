@@ -116,6 +116,7 @@ const Form = ({
           const Required = info?.Required || FORM_CONFIG?.[name]?.Required;
           const Choices = info?.Choices || FORM_CONFIG?.[name]?.Choices || [];
           const Handler = FORM_CONFIG?.[name]?.Handler || null;
+          const Link = FORM_CONFIG?.[name]?.Link || null;
 
           const labelClass =
             Required === "None" ? "form-label" : "form-label required";
@@ -304,6 +305,7 @@ const Form = ({
                   value={value}
                   onChange={onChange}
                   Handler={Handler}
+                  Link={Link}
                 />
               </div>
             );

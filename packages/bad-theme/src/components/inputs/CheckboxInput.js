@@ -5,13 +5,15 @@ import ErrorComponent from "./ErrorComponent";
 import Caption from "./Caption";
 
 const CheckboxInput = ({
+  state,
   form,
   name,
   labelClass,
   Label,
   value,
   onChange,
-  Handler,
+  Handler, // 📌 handler for custom logic
+  Link, // 📌 link to redirect page
 }) => {
   let inputLabel = Label;
   if (name === "bad_readpolicydocument" && form?.bad_categorytype) {
@@ -27,6 +29,12 @@ const CheckboxInput = ({
   if (name === "bad_newhospitaladded" && form?.dev_has_hospital_id) {
     return null;
   }
+
+  const onLinkHandler = () => {
+    let url = state.auth.APP_URL + Link;
+    Handler?.();
+    if (Link) window.open(url, "_blank"); // open privacy policy in new window
+  };
 
   return (
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
@@ -51,10 +59,13 @@ const CheckboxInput = ({
             />
           </div>
         </div>
-        <div onClick={Handler} style={{ display: "flex" }}>
+        <div onClick={onLinkHandler} style={{ display: "flex" }}>
           <label
             className={labelClass}
-            style={{ cursor: Handler ? "pointer" : "default", marginTop: 3 }}
+            style={{
+              cursor: Handler || Link ? "pointer" : "default",
+              marginTop: 3,
+            }}
           >
             {inputLabel}
           </label>

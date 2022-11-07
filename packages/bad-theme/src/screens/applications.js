@@ -318,6 +318,7 @@ const Applications = ({ state, actions }) => {
         ...form,
         [name]: type === "checkbox" ? checked : value,
         dev_application_input_filter: dev_application_input_filter,
+        dev_read_policy: memberships?.[0]?.acf.sig_readpolicydocument_url_email,
       });
       return;
     }
