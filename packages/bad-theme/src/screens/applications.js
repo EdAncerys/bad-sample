@@ -347,7 +347,7 @@ const Applications = ({ state, actions }) => {
     // --------------------------------------------------------------------------------
     // 📌 Form validation handler
     // --------------------------------------------------------------------------------
-    const { isValid, updatedApplication, updatedForm } = formValidationHandler({
+    let { isValid, updatedApplication, updatedForm } = formValidationHandler({
       form,
       application,
       FORM_CONFIG,
@@ -378,7 +378,7 @@ const Applications = ({ state, actions }) => {
       // 👉 get appropriate membership ID
       const data = await getBADMembershipSubscriptionData({
         state,
-        category: form?.bad_organisedfor,
+        category: form?.bad_organisedfor === "810170001" ? "SIG" : "BAD", // SIG or BAD
         type: form?.bad_categorytype,
       });
 
@@ -400,7 +400,7 @@ const Applications = ({ state, actions }) => {
       });
 
       console.log("🐞 submitRes: ", submitRes);
-      if (!submitRes?.sucess) {
+      if (!submitRes?.success) {
         console.log("🐞 ⭐️⭐️ ERROR MODAL ⭐️⭐️");
 
         setErrorAction({
@@ -412,7 +412,7 @@ const Applications = ({ state, actions }) => {
         });
         return; // 👉 if form is not valid, return
       }
-      if (submitRes?.sucess) {
+      if (submitRes?.success) {
         // ⚠️ redirect to success page & notify user
         let msg = form?.dev_application_input_filter?.category_types;
         // if msg includes : split and take first word
