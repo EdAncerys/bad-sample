@@ -3,7 +3,6 @@ import { connect } from "frontity";
 import { FORM_CONFIG, colors } from "../../config/form";
 import ErrorComponent from "./ErrorComponent";
 import Caption from "./Caption";
-import SearchDropDown from "../searchDropDown";
 import CloseIcon from "@mui/icons-material/Close";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
@@ -17,8 +16,8 @@ const MultiCheckboxInput = ({
   onChange,
   Choices,
 }) => {
-  const defaultValue = form[name] === undefined || "";
-  console.log("⭐️ ", defaultValue, Choices);
+  const hasSelection = form?.[name] !== undefined && form?.[name].length > 0;
+  console.log("⭐️ ", hasSelection, Choices);
 
   // selected values container
   const Selected = ({ title }) => {
@@ -62,6 +61,19 @@ const MultiCheckboxInput = ({
   };
 
   // 👉 refactor data to match dropdown format
+  const multiSelectHandler = ({ title }) => {
+    let currrntValues = form?.[name] || "";
+
+    if (!currrntValues.includes(title)) {
+      // 👉 if value is already selected, add to it by comma seperated
+      currrntValues = currrntValues + "," + title;
+    } else {
+      // 👉 if value is already selected, remove it
+      currrntValues = currrntValues.replace("," + title, "");
+    }
+
+    onChange({ target: { name: name, value: currrntValues } });
+  };
 
   return (
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
@@ -85,12 +97,11 @@ const MultiCheckboxInput = ({
               position: "relative",
               width: "fit-content",
               paddingRight: 15,
-              color: defaultValue ? colors.darkSilver : "inherit",
+              color: !hasSelection ? colors.darkSilver : "inherit",
               width: "99%",
             }}
           >
             {Label}
-
             <div className="filter-icon" style={{ top: 0 }}>
               <KeyboardArrowDownIcon
                 style={{
@@ -135,13 +146,15 @@ const MultiCheckboxInput = ({
                   key={key}
                   className="flex items-center justify-between"
                   style={{
-                    backgroundColor: "#a2a2a2", // colors.silver,
+                    backgroundColor: form?.[name]?.includes(choice?.value)
+                      ? colors.silver
+                      : "#F0F1F4", // selected values background color
                     borderRadius: 10,
                     padding: "4px 16px",
                     margin: "4px 0",
                     cursor: "pointer",
                   }}
-                  onClick={() => console.log("⭐️ ", choice?.value)}
+                  onClick={() => multiSelectHandler({ title: choice?.value })}
                 >
                   {choice.Label}
                 </div>
