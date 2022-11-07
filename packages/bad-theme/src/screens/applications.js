@@ -393,7 +393,7 @@ const Applications = ({ state, actions }) => {
         }
       });
 
-      await saveApplicationRecord({ updatedApplication });
+      await saveApplicationRecord({ updatedApplication, submit: true }); // 👉 save application record & disable fetch state
       const submitRes = await submitUserApplication({
         state,
         contactid: isActiveUser?.contactid || "",
@@ -454,9 +454,10 @@ const Applications = ({ state, actions }) => {
   const saveApplicationRecord = async ({
     updatedApplication,
     saveAndExit = false,
+    submit,
   }) => {
     try {
-      setFetching(true);
+      if (!submit) setFetching(true);
 
       updatedApplication = updatedApplication || application; // ⚠️ set updatedApplication to application if not provided
       updatedApplication[0].step = form?.step; // ⚠️ set step to form step
@@ -473,7 +474,6 @@ const Applications = ({ state, actions }) => {
           updatedApplication[key] = { ...input, value };
         }
       });
-      console.log("updatedApplication", updatedApplication);
 
       const response = await updateDynamicsApplicationAction({
         state,
@@ -489,7 +489,7 @@ const Applications = ({ state, actions }) => {
     } catch (error) {
       console.log("🐞 error: ", error);
     } finally {
-      setFetching(false);
+      if (!submit) setFetching(false);
     }
   };
 

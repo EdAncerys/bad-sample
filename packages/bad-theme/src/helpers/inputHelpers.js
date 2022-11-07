@@ -181,13 +181,12 @@ export const getBADMembershipSubscriptionData = async ({
   type,
 }) => {
   const year = new Date().getFullYear(); // get current year
-  let yearPrefix = `::${year}`; // add year prefix to the end of the category
-  if (category === "SIG") yearPrefix = `:${year}`; // if type is SIG, remove year prefix
+  let dateType = category === "SIG" ? ":" + year : "::" + year; // date type for query with prefix of : or ::
   if (type === "Full:DERMPATHPRO") type = "Full:DermpathPRO"; // 📌 overwrite type for DermpathPRO
 
   const path =
     state.auth.APP_HOST +
-    `/catalogue/lookup/membershiptype?search=${category}:${type}${yearPrefix}`;
+    `/catalogue/lookup/membershiptype?search=${category}:${type}${dateType}`;
 
   try {
     const response = await fetchHandler({ path });
@@ -245,25 +244,6 @@ export const submitUserApplication = async ({
       body: application, // application data
     });
     const data = await response?.json();
-
-    // 👉 delete application record from CONTEXT
-    // setApplicationDataAction({
-    //   dispatch,
-    //   applicationData: null,
-    // });
-
-    // 👉 get & update user record in context
-    // await getUserDataByContactId({
-    //   state,
-    //   dispatch,
-    //   contactid,
-    // });
-
-    // 👉 Notify user in UI
-    // setErrorAction({
-    //   dispatch,
-    //   isError: { message: msg },
-    // });
 
     return data;
   } catch (error) {
