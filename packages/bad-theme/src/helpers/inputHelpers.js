@@ -391,7 +391,8 @@ export const formValidationHandler = ({
       // --------------------------------------------------------------------------------
       // 📌  if MANUALLY_REQUIRED do not includes bad_categorytype do not perform check on bad_categorytype
       // --------------------------------------------------------------------------------
-      if (!MANUALLY_REQUIRED?.includes("bad_categorytype")) return;
+      const isSIG = application?.[0]?.bad_organisedfor === "SIG";
+      if (!MANUALLY_REQUIRED?.includes("bad_categorytype") && !isSIG) return;
 
       console.log("🐞 ⭐️⭐️ FAILS CATEGORY: ⭐️⭐️", name, value);
       updatedForm["bad_categorytype"] = undefined;

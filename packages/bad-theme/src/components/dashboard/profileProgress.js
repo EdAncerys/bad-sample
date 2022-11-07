@@ -90,6 +90,9 @@ const ProfileProgress = ({ state, actions, libraries }) => {
         applicationData,
         contactid: isActiveUser.contactid,
       });
+      // 👉 update context
+      setApplicationDataAction({ dispatch, applicationData: null });
+      setAppData(null); // update local state
     } catch (error) {
       // console.log(error);
     } finally {
@@ -204,7 +207,10 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     );
   };
 
-  if (!applicationData) return null; // if no applicationData return null
+  // 👉 if no applicationData is typof string, return null
+  if (typeof applicationData === "string" || !applicationData) return null;
+
+  console.log("🐞e⭐️ applicationData", applicationData);
 
   // get application name & type & concat in string
   const appData = applicationData[0]; // application info data

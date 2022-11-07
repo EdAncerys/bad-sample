@@ -770,6 +770,16 @@ export const FORM_CONFIG = {
     width: "100%",
     caption: "",
   },
+  formus_otherqualificationtype: {
+    Label: "Other Qualification Type",
+    AttributeType: "Virtual",
+    MaxLength: 100,
+    Required: "None",
+    order: 33,
+    hidden: false,
+    width: "100%",
+    caption: "",
+  },
 };
 
 export const BAD_STEP_ONE_FORM_CONFIG = {};
