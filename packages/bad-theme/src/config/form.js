@@ -774,7 +774,7 @@ export const FORM_CONFIG = {
   },
   formus_otherqualificationtype: {
     Label: "Other Qualification Type",
-    AttributeType: "Virtual",
+    AttributeType: "String",
     MaxLength: 100,
     Required: "None",
     order: 33,

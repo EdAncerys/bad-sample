@@ -22,6 +22,7 @@ import TextInput from "./inputs/TextInput";
 import DateTimeInput from "./inputs/DateTimeInput";
 import CheckboxInput from "./inputs/CheckboxInput";
 import PickListInput from "./inputs/PickListInput";
+import MultiCheckboxInput from "./inputs/MultiCheckboxInput";
 
 const Form = ({
   form,
@@ -55,7 +56,7 @@ const Form = ({
   // 🚫  Don't render until we have the application data
   // --------------------------------------------------------------------------------
   if (application?.length <= 1) return null;
-  // dataExtractor({ application}); // 🚫  Don't render until we have the application data
+  // dataExtractor({ application }); // 🚫  Don't render until we have the application data
   // get length of the object FORM_CONFIG
   console.log("⭐️ FORM_CONFIG LENGTH ⭐️", Object.keys(FORM_CONFIG).length);
 
@@ -313,7 +314,6 @@ const Form = ({
 
           if (
             AttributeType === "Picklist" ||
-            AttributeType === "Virtual" ||
             name === "bad_preferredmailingaddress"
           ) {
             return (
@@ -330,6 +330,29 @@ const Form = ({
                   Label={Label}
                   value={value}
                   onChange={onChange}
+                  Choices={Choices}
+                  labelClass={labelClass}
+                />
+              </div>
+            );
+          }
+
+          if (AttributeType === "Virtual") {
+            return (
+              <div
+                key={key}
+                style={{
+                  order: -1, // FORM_CONFIG?.[name]?.order,
+                  width: FORM_CONFIG?.[name]?.width || "100%",
+                }}
+              >
+                <MultiCheckboxInput
+                  form={form}
+                  name={name}
+                  Label={Label}
+                  value={value}
+                  onChange={onChange}
+                  labelClass={labelClass}
                   Choices={Choices}
                 />
               </div>

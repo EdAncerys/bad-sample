@@ -278,8 +278,14 @@ export const dataExtractor = ({ application }) => {
   // 📌  Extract data from user application blob
   // --------------------------------------------------------------------------------
   let blob = {};
+  let virtual = {};
 
   application?.map((application) => {
+    if (application?.info?.AttributeType === "Virtual")
+      virtual = {
+        ...virtual,
+        [application.name]: application?.info?.AttributeType,
+      };
     blob = {
       ...blob,
       [application.name]: {
@@ -298,6 +304,7 @@ export const dataExtractor = ({ application }) => {
   });
 
   console.log("🐞 blob", JSON.stringify(blob));
+  console.log("🐞 virtual", JSON.stringify(virtual));
 };
 
 export const wpInputFilterHandler = ({ form, name, badApp }) => {

@@ -258,8 +258,8 @@ const Applications = ({ state, actions }) => {
       // refactor hospital data to match dropdown format
       hospitalData = hospitalData.map((hospital) => {
         return {
-          title: hospital.name,
-          link: hospital.accountid,
+          title: hospital?.name,
+          link: hospital?.accountid,
         };
       });
       onChange({
