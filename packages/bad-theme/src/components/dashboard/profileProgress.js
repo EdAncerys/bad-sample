@@ -90,8 +90,8 @@ const ProfileProgress = ({ state, actions, libraries }) => {
         applicationData,
         contactid: isActiveUser.contactid,
       });
-      // 👉 update context
-      setApplicationDataAction({ dispatch, applicationData: null });
+
+      setApplicationDataAction({ dispatch, applicationData: null }); // 👉 update context
       setAppData(null); // update local state
     } catch (error) {
       // console.log(error);

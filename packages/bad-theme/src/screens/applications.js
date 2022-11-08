@@ -23,6 +23,7 @@ import {
   useAppDispatch,
   setGoToAction,
   setErrorAction,
+  setApplicationDataAction,
 } from "../context";
 
 const Applications = ({ state, actions }) => {
@@ -456,6 +457,7 @@ const Applications = ({ state, actions }) => {
             message: msg || `Application submitted successfully`,
           },
         });
+        setApplicationDataAction({ dispatch, applicationData: null }); // 👉 update context
         setGoToAction({ state, path: `/dashboard/`, actions }); // go to dashboard
       }
     } catch (error) {
@@ -625,11 +627,11 @@ const Applications = ({ state, actions }) => {
     if (form?.step === 1) path = "/membership/";
     console.log("🐞 ", path);
 
-    // setGoToAction({
-    //   state,
-    //   path,
-    //   actions,
-    // });
+    setGoToAction({
+      state,
+      path,
+      actions,
+    });
   };
 
   // --------------------------------------------------------------------------------
