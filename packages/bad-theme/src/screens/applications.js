@@ -216,12 +216,21 @@ const Applications = ({ state, actions }) => {
 
     if (!currrntValues.includes(value)) {
       // 👉 if value is already selected, add to it by comma seperated
-      currrntValues = currrntValues + "," + value;
-      currentTitles = currentTitles + ", " + title;
+      const newValue = currrntValues?.length > 0 ? "," + value : value; // if string have no values add value, othervise comma seperated
+      const newTitle = currentTitles?.length > 0 ? ", " + title : title; // if string have no values add value, othervise comma seperated
+      currrntValues = currrntValues + newValue;
+      currentTitles = currentTitles + newTitle;
     } else {
       // 👉 if value is already selected, remove it
-      currrntValues = currrntValues.replace("," + value, "");
-      currentTitles = currentTitles.replace(", " + title, "");
+      const hasValue = currrntValues?.includes("," + value); // check if value is comma seperated
+      currrntValues = hasValue
+        ? currrntValues?.replace("," + value, "")
+        : currrntValues?.replace(value, "");
+
+      const hasTitle = currentTitles?.includes(", " + title); // check if value is comma seperated
+      currentTitles = hasTitle
+        ? currentTitles?.replace(", " + title, "")
+        : currentTitles?.replace(title, "");
     }
 
     setForm((form) => ({
@@ -543,9 +552,9 @@ const Applications = ({ state, actions }) => {
         "formus_professionalregistrationstatus",
         "formus_residencystatus",
         "formus_qualificationtype",
-        // "formus_mainspecialtyqualification", // TODO add picklist
-        // "formus_clinicalspecialtysofpractice", // TODO add picklist
-        // "formus_specialiseddermatologyareasofpractice", // TODO add picklist
+        "formus_mainspecialtyqualification", // 👈 multi picker
+        "formus_clinicalspecialtysofpractice", // 👈 multi picker
+        "formus_specialiseddermatologyareasofpractice", // 👈 multi picker
         "formus_typeofcontract",
         "formus_fixedtermtemporaryreasonforemploymentcont",
         "formus_typeofcontract",
