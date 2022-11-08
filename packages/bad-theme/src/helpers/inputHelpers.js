@@ -395,7 +395,10 @@ export const formValidationHandler = ({
       updatedForm["error_bad_categorytype"] = false;
     }
 
-    if (required && !form?.[name] && form?.[name] !== "" && name) {
+    // 👉 check that value form?.[name] is not undefined & is not empty string
+    const formValueRequired = form?.[name] !== undefined && form?.[name] !== "";
+
+    if (required && !formValueRequired && name) {
       // --------------------------------------------------------------------------------
       // ⚠️ if wpFilter & wpFilter don`t include name, skip validation
       // --------------------------------------------------------------------------------
