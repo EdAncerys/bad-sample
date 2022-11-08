@@ -313,15 +313,21 @@ export const wpInputFilterHandler = ({ form, name, badApp }) => {
   // 📌  WP Application input filter
   // --------------------------------------------------------------------------------
   const input_with_prefix = badApp ? "bad_" + name : "sig_" + name; // prefix for bad/sig
-  const appSelected = form?.dev_application_input_filter?.[input_with_prefix]; // input allowed to show in UI
+  const wpSelected = form?.dev_application_input_filter?.[input_with_prefix]; // input allowed to show in UI
 
   // 📌 check if wp config have input set to true
-  if (typeof appSelected === "boolean" && !appSelected) isValid = false; // if hidden return false
-  // 📌 check if wp config have input name value, otherwise return false
-  if (typeof appSelected === "undefined" && form?.dev_application_input_filter)
+  if (typeof wpSelected === "boolean" && !wpSelected) {
     isValid = false;
+  }
+  // 📌 if wp config dont include input & filter exists then return false
+  if (
+    typeof wpSelected === "undefined" &&
+    form?.dev_application_input_filter !== undefined
+  ) {
+    isValid = false;
+  }
   // ⚠️ ignore all WP validations for BAD application
-  if (badApp) isValid = true;
+  // if (badApp) isValid = true;
 
   // if sky_newhospitalname is undefined, hide bad_newhospitaladded input
   if (name === "sky_newhospitaltype" || name === "sky_newhospitalname") {
@@ -333,9 +339,6 @@ export const wpInputFilterHandler = ({ form, name, badApp }) => {
 
   // ⚠️ for SIG application if user have no application selected hide all inputs
   // if (!badApp && !form?.dev_application_input_filter) isValid = false;
-
-  // ⚠️ for BAD application return all inputs | input validations via separate config object
-  // if (badApp) isValid = true;
 
   return isValid;
 };

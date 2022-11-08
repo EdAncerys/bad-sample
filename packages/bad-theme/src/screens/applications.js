@@ -458,7 +458,11 @@ const Applications = ({ state, actions }) => {
           },
         });
         setApplicationDataAction({ dispatch, applicationData: null }); // 👉 update context
-        setGoToAction({ state, path: `/dashboard/`, actions }); // go to dashboard
+        let path = `/dashboard/`;
+        if (form?.bad_organisedfor === "810170000")
+          path = "/membership/thank-you/"; // if application is bad redirect to bad ethnicity page
+
+        setGoToAction({ state, path, actions }); // go to dashboard
       }
     } catch (error) {
       console.log("🐞 error: ", error);

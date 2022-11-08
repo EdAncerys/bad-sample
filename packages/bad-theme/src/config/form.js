@@ -60,7 +60,7 @@ export const FORM_CONFIG = {
     caption: "",
   },
   bad_memberdirectory: {
-    Label: "Include my details in the BAD Members` Directory`, AttributeType:",
+    Label: "Include my details in the BAD Members` Directory",
     MaxLength: 100,
     Required: "None",
     order: 100,
@@ -114,7 +114,7 @@ export const FORM_CONFIG = {
     caption: "",
   },
   sky_cvurl: {
-    Label: "Input Lapbel",
+    Label: "CV upload",
     AttributeType: "",
     MaxLength: 100,
     Required: "None",
@@ -124,7 +124,7 @@ export const FORM_CONFIG = {
     caption: "",
   },
   sky_profilepicture: {
-    Label: "Input Lapbel",
+    Label: "Profile Picture",
     AttributeType: "",
     MaxLength: 100,
     Required: "None",
@@ -613,7 +613,7 @@ export const FORM_CONFIG = {
     caption: "",
   },
   formus_fixedtermtemporaryreasonforemploymentcont: {
-    Label: "Fixed term/temporary reason for employment contrac",
+    Label: "Fixed term/temporary reason for employment contract",
     AttributeType: "Picklist",
     MaxLength: 100,
     Required: "None",
@@ -811,12 +811,11 @@ export const BAD_STEP_FOUR_FORM_CONFIG = {
   formus_professionalregistrationstatus: {},
   formus_residencystatus: {},
   formus_qualificationtype: {},
-  formus_mainspecialtyqualification: {}, // TODO: picklist missing
-  formus_clinicalspecialtysofpractice: {}, // TODO picklist missing
-  formus_specialiseddermatologyareasofpractice: {}, // TODO picklist missing
+  formus_mainspecialtyqualification: {}, // 👈 multi picker
+  formus_clinicalspecialtysofpractice: {}, // 👈 multi picker
+  formus_specialiseddermatologyareasofpractice: {}, // 👈 multi picker
   formus_typeofcontract: {},
   formus_fixedtermtemporaryreasonforemploymentcont: {},
-  formus_typeofcontract: {},
   formus_rotapattern: {},
   formus_typeofpractice: {},
   formus_privatepracticeorganisation: {},

@@ -15,7 +15,6 @@ const ProfileInput = ({
 }) => {
   return (
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
-      <label className={labelClass}>{Label}</label>
       <ErrorComponent name={name ?? ""} form={form} />
 
       <div

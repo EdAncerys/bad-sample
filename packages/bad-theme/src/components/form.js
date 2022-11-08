@@ -86,13 +86,10 @@ const Form = ({
           if (!inputShowHandler({ form, name })) return null; // additional filter logic for inputs
 
           // --------------------------------------------------------------------------------
-          // 📌  Form BAD application screens config
+          // 📌  Form BAD application screens additional screen config config
           // --------------------------------------------------------------------------------
-          if (stepOne && BAD_STEP_ONE_FORM_CONFIG?.[name] === undefined) {
-            return null;
-          }
           if (stepTwo && BAD_STEP_TWO_FORM_CONFIG?.[name] === undefined) {
-            return null;
+            return null; // don't render any fields on step 2 that are not in the config
           }
           if (stepThree && BAD_STEP_THREE_FORM_CONFIG?.[name] === undefined) {
             return null;
@@ -109,7 +106,6 @@ const Form = ({
           // *Lookup (has variables)
 
           if (cargo) return null; // skip cargo blob
-          // if (name !== 'bad_ethnicity') return null; // ⭐️⭐️⭐️ testing ⭐️⭐️⭐️
 
           Label = FORM_CONFIG?.[name]?.Label; // get label from config
           const AttributeType =
