@@ -814,21 +814,23 @@ const Applications = ({ state, actions }) => {
                 "Our ordinary category is for practising dermatologists, working in the UK, on the Specialist Register of the General Medical Council, or Ireland, on the Specialist Register of The Irish Medical Council, whose work is substantially devoted to dermatological practice or research, or SAS doctors who have been fully committed to secondary care dermatology for a period of four years."}
             </div>
 
-            <div className="application-actions">
-              <div className="transparent-btn" onClick={goBackHandler}>
-                Back
+            {!fetching && (
+              <div className="application-actions">
+                <div className="transparent-btn" onClick={goBackHandler}>
+                  Back
+                </div>
+                <div
+                  className="transparent-btn"
+                  onClick={() => saveApplicationRecord({ saveAndExit: true })}
+                >
+                  Save & Exit
+                </div>
+                <div className="blue-btn" onClick={nextHandler}>
+                  {(isSIG || form?.step === 4) && "Submit Application"}
+                  {!isSIG && form?.step !== 4 && "Next"}
+                </div>
               </div>
-              <div
-                className="transparent-btn"
-                onClick={() => saveApplicationRecord({ saveAndExit: true })}
-              >
-                Save & Exit
-              </div>
-              <div className="blue-btn" onClick={nextHandler}>
-                {(isSIG || form?.step === 4) && "Submit Application"}
-                {!isSIG && form?.step !== 4 && "Next"}
-              </div>
-            </div>
+            )}
           </div>
         )}
       </div>
