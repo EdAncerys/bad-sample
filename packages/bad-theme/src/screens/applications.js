@@ -159,6 +159,9 @@ const Applications = ({ state, actions }) => {
             types?.length === 1 ? types?.[0]?.acf : undefined,
           dev_has_hospital_id: hospitalId, // 📌 set hospital id to form to determine if user have hospital id set in dynamics
           ...formDefaults,
+          formus_mainspecialtyqualification: undefined, // 📌  remove default value from form
+          formus_clinicalspecialtysofpractice: undefined, // 📌  remove default value from form
+          formus_specialiseddermatologyareasofpractice: undefined, // 📌  remove default value from form
         });
         setApplication(application); // ⚠️ update application with new application fields
         setMemberships(memberships);
