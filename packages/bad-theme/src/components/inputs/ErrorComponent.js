@@ -7,7 +7,7 @@ const ErrorComponent = ({ form, name, type }) => {
   // --------------------------------------------------------------------------------
   // determine if the field has an error
   const hasError = form?.["error_" + name];
-  // if (!hasError) return null; // dev mode
+  if (!hasError) return null; // dev mode
 
   const Info = () => {
     // --------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ const ErrorComponent = ({ form, name, type }) => {
 
   return (
     <div>
-      <Info />
+      {/* <Info /> */}
       <div
         className="flex required"
         style={{
