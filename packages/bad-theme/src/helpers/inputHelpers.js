@@ -327,7 +327,7 @@ export const wpInputFilterHandler = ({ form, name, badApp }) => {
     isValid = false;
   }
   // ⚠️ ignore all WP validations for BAD application
-  // if (badApp) isValid = true;
+  if (badApp) isValid = true;
 
   // if sky_newhospitalname is undefined, hide bad_newhospitaladded input
   if (name === "sky_newhospitaltype" || name === "sky_newhospitalname") {
@@ -408,7 +408,7 @@ export const formValidationHandler = ({
       const badApp = form?.bad_organisedfor === "810170000"; // check if BAD application
       const nameWithPrefix = badApp ? "bad_" + name : "sig_" + name; // prefix for bad/sig
 
-      if (wpFilter && !wpFilter?.[nameWithPrefix]) return; // 📌 dont validate input if inputs that not allowed to show in UI (wpFilter)
+      if (wpFilter && !wpFilter?.[nameWithPrefix]) return; // ⚠️ dont validate input if inputs that not allowed to show in UI (wpFilter)
 
       isValid = false; // ⚠️  if required field is empty, set isValid to false
       console.log("🐞 ⭐️⭐️ FAILS ON: ⭐️⭐️", name, value);
