@@ -149,13 +149,12 @@ const Applications = ({ state, actions }) => {
         // --------------------------------------------------------------------------------
         setForm({
           ...form,
+          bad_categorytype: application?.[0]?.bad_categorytype, // 📌 set category type to form if only one category type is available for user
           dev_selected_application_types: types,
           sky_newhospitalname: hospitalName, // set hospital name
           sky_cvurl: documentUrl, // set documentUrl to form
           sky_profilepicture: profilePicture, // set profilePicture to form
           step: application?.[0]?.step || 0,
-          bad_categorytype:
-            types?.length === 1 ? types?.[0]?.acf?.category_types : undefined, // 📌 set category type to form if only one category type is available for user
           dev_application_input_filter:
             types?.length === 1 ? types?.[0]?.acf : undefined,
           dev_has_hospital_id: hospitalId, // 📌 set hospital id to form to determine if user have hospital id set in dynamics
