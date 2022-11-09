@@ -320,10 +320,7 @@ export const wpInputFilterHandler = ({ form, name, badApp }) => {
     isValid = false;
   }
   // 📌 if wp config dont include input & filter exists then return false
-  if (
-    typeof wpSelected === "undefined" &&
-    form?.dev_application_input_filter !== undefined
-  ) {
+  if (typeof wpSelected === "undefined" && form?.dev_application_input_filter) {
     isValid = false;
   }
   // ⚠️ ignore all WP validations for BAD application
@@ -415,7 +412,6 @@ export const formValidationHandler = ({
       updatedForm["error_" + name] = true;
     }
     if (required && formValueRequired && name) {
-      console.log("🐞 FAILS RESETS: ", name, value);
       updatedForm["error_" + name] = false;
     }
   });
