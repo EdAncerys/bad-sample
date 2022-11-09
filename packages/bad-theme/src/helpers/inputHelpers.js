@@ -338,7 +338,7 @@ export const wpInputFilterHandler = ({ form, name, badApp }) => {
   }
 
   // ⚠️ for SIG application if user have no application selected hide all inputs
-  // if (!badApp && !form?.dev_application_input_filter) isValid = false;
+  if (!badApp && !form?.dev_application_input_filter) isValid = false;
 
   return isValid;
 };
