@@ -1,4 +1,5 @@
 import { connect } from "frontity";
+import { FORM_CONFIG } from "../../config/form";
 
 const ErrorComponent = ({ form, name, type }) => {
   // --------------------------------------------------------------------------------
@@ -24,6 +25,9 @@ const ErrorComponent = ({ form, name, type }) => {
         }}
       >
         <div>{name}</div>
+        <div style={{ margin: "0 5px", color: "blue", fontWeight: "bold" }}>
+          {FORM_CONFIG?.[name]?.order}
+        </div>
         {type && <div style={{ margin: "0 5px", color: "green" }}>{type}</div>}
       </div>
     );

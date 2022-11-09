@@ -340,7 +340,7 @@ const Form = ({
               <div
                 key={key}
                 style={{
-                  order: -1, // FORM_CONFIG?.[name]?.order,
+                  order: FORM_CONFIG?.[name]?.order,
                   width: FORM_CONFIG?.[name]?.width || "100%",
                 }}
               >

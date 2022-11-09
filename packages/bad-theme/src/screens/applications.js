@@ -43,7 +43,10 @@ const Applications = ({ state, actions }) => {
   const [memberships, setMemberships] = useState([]);
   const isSIG = application?.[0]?.bad_organisedfor === "SIG";
   const hasError = form?.dev_selected_application_types?.length === 0;
-  console.log("⭐️⭐️🐞 COMPONENT RERENDER ⭐️⭐️", memberships);
+  console.log(
+    "⭐️⭐️🐞 COMPONENT RERENDER ⭐️⭐️",
+    form?.dev_application_input_filter
+  );
 
   const documentRef = useRef(null);
   const profilePictureRef = useRef(null);
@@ -66,6 +69,8 @@ const Applications = ({ state, actions }) => {
         let documentUrl = "";
         let profilePicture = "";
         let formDefaults = {};
+        let wpFilters;
+        let readPolicy;
 
         // --------------------------------------------------------------------------------
         // 📌 fetch application data from server if no application data in context
@@ -145,18 +150,37 @@ const Applications = ({ state, actions }) => {
         });
 
         // --------------------------------------------------------------------------------
+        // 📌  Aplly cat selected to BAD applications only
+        // --------------------------------------------------------------------------------
+        let appCatType = application?.[0]?.bad_categorytype;
+        if (appCatType && bad_organisedfor === "BAD") {
+          memberships?.filter((app) => {
+            const acf = app?.acf;
+            if (acf?.category_types === appCatType) wpFilters = acf; // return memberships that matches or includes any words in applicationType
+          });
+        }
+        // --------------------------------------------------------------------------------
+        // 📌  Aplly cat selected to SIG applications only
+        // --------------------------------------------------------------------------------
+        if (types?.length === 1 && bad_organisedfor === "SIG") {
+          wpFilters = types?.[0]?.acf; // 👉 if only one application type is found, set wpFilters to that application type
+          appCatType = types?.[0]?.acf?.category_types;
+          readPolicy = types?.[0]?.acf?.sig_readpolicydocument_url_email;
+        }
+
+        // --------------------------------------------------------------------------------
         // 📌  Update state with blob values for UI render
         // --------------------------------------------------------------------------------
         setForm({
           ...form,
-          bad_categorytype: application?.[0]?.bad_categorytype, // 📌 set category type to form if only one category type is available for user
+          bad_categorytype: appCatType, // 📌 set category type to form if only one category type is available for user
+          dev_application_input_filter: wpFilters, // 📌 set category type to form if only one category type is available for user
           dev_selected_application_types: types,
+          dev_read_policy: readPolicy,
           sky_newhospitalname: hospitalName, // set hospital name
           sky_cvurl: documentUrl, // set documentUrl to form
           sky_profilepicture: profilePicture, // set profilePicture to form
           step: application?.[0]?.step || 0,
-          dev_application_input_filter:
-            types?.length === 1 ? types?.[0]?.acf : undefined,
           dev_has_hospital_id: hospitalId, // 📌 set hospital id to form to determine if user have hospital id set in dynamics
           ...formDefaults,
           formus_mainspecialtyqualification: undefined, // 📌  remove default value from form
