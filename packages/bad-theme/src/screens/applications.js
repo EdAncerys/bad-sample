@@ -149,17 +149,19 @@ const Applications = ({ state, actions }) => {
         // --------------------------------------------------------------------------------
         setForm({
           ...form,
+          bad_categorytype: application?.[0]?.bad_categorytype, // 📌 set category type to form if only one category type is available for user
           dev_selected_application_types: types,
           sky_newhospitalname: hospitalName, // set hospital name
           sky_cvurl: documentUrl, // set documentUrl to form
           sky_profilepicture: profilePicture, // set profilePicture to form
           step: application?.[0]?.step || 0,
-          bad_categorytype:
-            types?.length === 1 ? types?.[0]?.acf?.category_types : undefined, // 📌 set category type to form if only one category type is available for user
           dev_application_input_filter:
             types?.length === 1 ? types?.[0]?.acf : undefined,
           dev_has_hospital_id: hospitalId, // 📌 set hospital id to form to determine if user have hospital id set in dynamics
           ...formDefaults,
+          formus_mainspecialtyqualification: undefined, // 📌  remove default value from form
+          formus_clinicalspecialtysofpractice: undefined, // 📌  remove default value from form
+          formus_specialiseddermatologyareasofpractice: undefined, // 📌  remove default value from form
         });
         setApplication(application); // ⚠️ update application with new application fields
         setMemberships(memberships);
@@ -529,6 +531,43 @@ const Applications = ({ state, actions }) => {
     }
   };
 
+  const multiSelectDropDownHandler = ({ name, value }) => {
+    console.log("🐞 name: ", name);
+    let handler = { ["dev_selected_" + name]: !form?.["dev_selected_" + name] };
+    // 📌 conditional dropdown closing based on selection
+    if (name === "formus_mainspecialtyqualification") {
+      handler = {
+        ...handler,
+        ["dev_selected_" + "formus_clinicalspecialtysofpractice"]: undefined,
+        ["dev_selected_" + "formus_specialiseddermatologyareasofpractice"]:
+          undefined,
+      };
+    }
+
+    if (name === "formus_clinicalspecialtysofpractice") {
+      handler = {
+        ...handler,
+        ["dev_selected_" + "formus_mainspecialtyqualification"]: undefined,
+        ["dev_selected_" + "formus_specialiseddermatologyareasofpractice"]:
+          undefined,
+      };
+    }
+
+    if (name === "formus_specialiseddermatologyareasofpractice") {
+      handler = {
+        ...handler,
+        ["dev_selected_" + "formus_mainspecialtyqualification"]: undefined,
+        ["dev_selected_" + "formus_clinicalspecialtysofpractice"]: undefined,
+      };
+    }
+
+    // 👉 formus_mainspecialtyqualification
+    setForm((form) => ({
+      ...form,
+      ...handler,
+    }));
+  };
+
   const nextHandler = async () => {
     // --------------------------------------------------------------------------------
     // 📌 Form validation handler
@@ -798,6 +837,7 @@ const Applications = ({ state, actions }) => {
                     handleClearAddress={handleClearAddress}
                     handleSelectAddress={handleSelectAddress}
                     multiSelectHandler={multiSelectHandler}
+                    multiSelectDropDownHandler={multiSelectDropDownHandler}
                     // --------------------------------------------------------------------------------
                     documentRef={documentRef}
                     profilePictureRef={profilePictureRef}

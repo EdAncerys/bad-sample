@@ -16,6 +16,7 @@ const MultiCheckboxInput = ({
   onChange,
   Choices,
   multiSelectHandler,
+  multiSelectDropDownHandler,
 }) => {
   const hasSelection = form?.[name] !== undefined && form?.[name].length > 0;
   const userSelection = form?.["dev_multi_select_" + name];
@@ -29,14 +30,7 @@ const MultiCheckboxInput = ({
 
       <div
         className="form-control input"
-        onClick={() =>
-          onChange({
-            target: {
-              name: "dev_selected" + name,
-              value: !form?.["dev_selected" + name],
-            },
-          })
-        }
+        onClick={() => multiSelectDropDownHandler({ name })}
       >
         <div className="flex-row">
           <div
@@ -63,7 +57,7 @@ const MultiCheckboxInput = ({
         </div>
       </div>
 
-      {form?.["dev_selected" + name] && (
+      {form?.["dev_selected_" + name] && (
         <div
           className="input"
           style={{

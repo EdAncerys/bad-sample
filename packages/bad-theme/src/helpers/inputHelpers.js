@@ -338,7 +338,7 @@ export const wpInputFilterHandler = ({ form, name, badApp }) => {
   }
 
   // ⚠️ for SIG application if user have no application selected hide all inputs
-  // if (!badApp && !form?.dev_application_input_filter) isValid = false;
+  if (!badApp && !form?.dev_application_input_filter) isValid = false;
 
   return isValid;
 };
@@ -414,7 +414,7 @@ export const formValidationHandler = ({
       console.log("🐞 ⭐️⭐️ FAILS ON: ⭐️⭐️", name, value);
       updatedForm["error_" + name] = true;
     }
-    if (required && value && name) {
+    if (required && formValueRequired && name) {
       console.log("🐞 FAILS RESETS: ", name, value);
       updatedForm["error_" + name] = false;
     }
