@@ -327,7 +327,7 @@ export const wpInputFilterHandler = ({ form, name, badApp }) => {
     isValid = false;
   }
   // ⚠️ ignore all WP validations for BAD application
-  if (badApp) isValid = true;
+  // if (badApp) isValid = true;
 
   // if sky_newhospitalname is undefined, hide bad_newhospitaladded input
   if (name === "sky_newhospitaltype" || name === "sky_newhospitalname") {
