@@ -414,7 +414,7 @@ export const formValidationHandler = ({
       console.log("🐞 ⭐️⭐️ FAILS ON: ⭐️⭐️", name, value);
       updatedForm["error_" + name] = true;
     }
-    if (required && value && name) {
+    if (required && formValueRequired && name) {
       console.log("🐞 FAILS RESETS: ", name, value);
       updatedForm["error_" + name] = false;
     }

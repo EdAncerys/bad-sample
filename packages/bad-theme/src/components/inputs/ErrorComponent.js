@@ -9,6 +9,9 @@ const ErrorComponent = ({ form, name, type }) => {
   if (!hasError) return null; // dev mode
 
   const Info = () => {
+    // --------------------------------------------------------------------------------
+    // 📌  Additional content info for error message
+    // --------------------------------------------------------------------------------
     return (
       <div
         className="flex"
@@ -28,7 +31,7 @@ const ErrorComponent = ({ form, name, type }) => {
 
   return (
     <div>
-      <Info />
+      {/* <Info /> */}
       <div
         className="flex required"
         style={{
