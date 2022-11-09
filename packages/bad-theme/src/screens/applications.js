@@ -528,6 +528,43 @@ const Applications = ({ state, actions }) => {
     }
   };
 
+  const multiSelectDropDownHandler = ({ name, value }) => {
+    console.log("🐞 name: ", name);
+    let handler = { ["dev_selected_" + name]: !form?.["dev_selected_" + name] };
+    // 📌 conditional dropdown closing based on selection
+    if (name === "formus_mainspecialtyqualification") {
+      handler = {
+        ...handler,
+        ["dev_selected_" + "formus_clinicalspecialtysofpractice"]: undefined,
+        ["dev_selected_" + "formus_specialiseddermatologyareasofpractice"]:
+          undefined,
+      };
+    }
+
+    if (name === "formus_clinicalspecialtysofpractice") {
+      handler = {
+        ...handler,
+        ["dev_selected_" + "formus_mainspecialtyqualification"]: undefined,
+        ["dev_selected_" + "formus_specialiseddermatologyareasofpractice"]:
+          undefined,
+      };
+    }
+
+    if (name === "formus_specialiseddermatologyareasofpractice") {
+      handler = {
+        ...handler,
+        ["dev_selected_" + "formus_mainspecialtyqualification"]: undefined,
+        ["dev_selected_" + "formus_clinicalspecialtysofpractice"]: undefined,
+      };
+    }
+
+    // 👉 formus_mainspecialtyqualification
+    setForm((form) => ({
+      ...form,
+      ...handler,
+    }));
+  };
+
   const nextHandler = async () => {
     // --------------------------------------------------------------------------------
     // 📌 Form validation handler
@@ -797,6 +834,7 @@ const Applications = ({ state, actions }) => {
                     handleClearAddress={handleClearAddress}
                     handleSelectAddress={handleSelectAddress}
                     multiSelectHandler={multiSelectHandler}
+                    multiSelectDropDownHandler={multiSelectDropDownHandler}
                     // --------------------------------------------------------------------------------
                     documentRef={documentRef}
                     profilePictureRef={profilePictureRef}

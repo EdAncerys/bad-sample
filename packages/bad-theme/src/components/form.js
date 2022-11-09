@@ -37,6 +37,7 @@ const Form = ({
   handleClearAddress,
   handleSelectAddress,
   multiSelectHandler,
+  multiSelectDropDownHandler,
   // --------------------------------------------------------------------------------
   profilePictureRef,
   hospitalSearchRef,
@@ -352,6 +353,7 @@ const Form = ({
                   labelClass={labelClass}
                   Choices={Choices}
                   multiSelectHandler={multiSelectHandler}
+                  multiSelectDropDownHandler={multiSelectDropDownHandler}
                 />
               </div>
             );
