@@ -33,6 +33,7 @@ import {
   fetchDataHandler,
   loginAction,
 } from "../../context";
+import { getBADMembershipSubscriptionData } from "../../helpers/inputHelpers";
 
 const HeaderActions = ({ state, actions, libraries }) => {
   const { sm, md, lg, xl } = muiQuery();
@@ -129,6 +130,17 @@ const HeaderActions = ({ state, actions, libraries }) => {
     }
   };
 
+  const appDataHandler = async () => {
+    const data = await getBADMembershipSubscriptionData({
+      state,
+      category: "BAD", // SIG or BAD
+      type: "Trainee", // Junior or Senior
+    });
+
+    console.log("⭐️ ", data);
+    console.log("⭐️ HOST", state.auth.APP_HOS);
+  };
+
   // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
 
   const DevPanel = () => {
@@ -159,7 +171,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
         <div
           className="blue-btn-reverse"
           style={{ minWidth: "fit-content" }}
-          onClick={() => console.log("host: ", state.auth.APP_HOST)}
+          onClick={appDataHandler}
         >
           host
         </div>

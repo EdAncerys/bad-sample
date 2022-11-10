@@ -1,11 +1,11 @@
 import {
-  getBADMembershipSubscriptionData,
   setUserStoreAction,
   setGoToAction,
   loginAction,
   setErrorAction,
   fetchDataHandler,
 } from "../index";
+import { getBADMembershipSubscriptionData } from "../../helpers/inputHelpers";
 
 export const getMembershipDataAction = async ({ state, actions }) => {
   const path = `/memberships/`;
@@ -137,17 +137,19 @@ export const handleApplyForMembershipAction = async ({
         type,
       });
       if (!response) throw new Error("Failed to get membership data");
-      membershipData = response;
+      membershipData = response?.[0];
       console.log("⭐️ ", membershipData, " ⭐️ ", response);
+      console.log("⭐️ ", category, " ⭐️ ", type);
     }
     // set application id for apps
-    let applicationId = membershipData.core_membershipsubscriptionplanid;
+    let applicationId = membershipData?.core_membershipsubscriptionplanid;
+    if (!applicationId) throw new Error("Failed to get application id");
     // for change of category type then add application id for current application
     let bad_existingsubscriptionid = "";
     if (changeAppCategory) {
       // ⬇️ get existing subscription id for BAD apps & populate as current application id
       bad_existingsubscriptionid =
-        changeAppCategory.core_membershipsubscriptionid;
+        changeAppCategory?.core_membershipsubscriptionid;
       // get & assign membership id form old application record
       applicationId = ""; // reset user app category change
     }

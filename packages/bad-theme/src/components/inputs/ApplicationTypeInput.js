@@ -49,8 +49,10 @@ const ApplicationTypeInput = ({ form, onChange }) => {
           // if typeName includes Full replace with empty string
           // change prefix for names with " - ", eg. "Tarainee - Time"
           let typeName = category_types.split(":").reverse().join(" - ");
-          // if value include - Full replace with empty string
+          // ⚠️ if value include - Full replace with empty string
           typeName = typeName.replace(" - Full", "");
+          // ⚠️ replace Associate Trainee with Trainee
+          typeName = typeName.replace("Associate Trainee", "Trainee");
 
           return (
             <option key={key} value={category_types}>

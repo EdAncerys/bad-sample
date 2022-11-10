@@ -607,8 +607,8 @@ const Applications = ({ state, actions }) => {
         "py3_email",
         "py3_mobilephone",
         "py3_address1ine1",
-        // "py3_addressline2",
-        // "py3_addresscountystate",
+        // "py3_addressline2", // 👉 not mandatory
+        // "py3_addresscountystate", // 👉 not mandatory
         "py3_addresszippostalcode",
         "py3_addresscountry",
       ];
@@ -619,18 +619,18 @@ const Applications = ({ state, actions }) => {
         "py3_hospitalid",
         "formus_professionalregistrationbody",
         "formus_professionalregistrationstatus",
-        "formus_residencystatus",
-        "formus_qualificationtype",
+        // "formus_residencystatus", // 👉 not mandatory
+        // "formus_qualificationtype",  // 👉 not mandatory
         "formus_mainspecialtyqualification", // 👈 multi picker
         "formus_clinicalspecialtysofpractice", // 👈 multi picker
         "formus_specialiseddermatologyareasofpractice", // 👈 multi picker
         "formus_typeofcontract",
-        "formus_fixedtermtemporaryreasonforemploymentcont",
-        "formus_typeofcontract",
-        "formus_rotapattern",
-        "formus_typeofpractice",
-        "formus_privatepracticeorganisation",
-        "formus_reasonformovingccstdate",
+        // "formus_fixedtermtemporaryreasonforemploymentcont",  // 👉 not mandatory
+        // "formus_typeofcontract",  // 👉 not mandatory
+        // "formus_rotapattern",  // 👉 not mandatory
+        // "formus_typeofpractice",  // 👉 not mandatory
+        // "formus_privatepracticeorganisation",  // 👉 not mandatory
+        // "formus_reasonformovingccstdate",  // 👉 not mandatory
         form?.bad_newhospitaladded ? "sky_newhospitalname" : "", // if new hospital added, add new hospital name to required fields
         form?.bad_newhospitaladded ? "sky_newhospitaltype" : "", // if new hospital added, add new hospital name to required fields
       ];
