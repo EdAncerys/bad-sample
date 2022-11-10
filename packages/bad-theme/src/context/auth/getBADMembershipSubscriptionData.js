@@ -4,7 +4,6 @@ export const getBADMembershipSubscriptionData = async ({
   state,
   category,
   type,
-  dispatch,
 }) => {
   // console.log("getBADMembershipSubscriptionData triggered");
 
@@ -19,6 +18,7 @@ export const getBADMembershipSubscriptionData = async ({
       state.auth.APP_HOST +
       `/catalogue/lookup/membershiptype?search=${category}:${sig_type}:${year}`;
 
+  console.log("⭐️ ", path);
   try {
     const data = await fetchDataHandler({ path, state });
 
@@ -30,6 +30,6 @@ export const getBADMembershipSubscriptionData = async ({
       return membershipData;
     }
   } catch (error) {
-    // console.log("error", error);
+    console.log("error", error);
   }
 };

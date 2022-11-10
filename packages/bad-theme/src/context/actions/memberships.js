@@ -138,6 +138,7 @@ export const handleApplyForMembershipAction = async ({
       });
       if (!response) throw new Error("Failed to get membership data");
       membershipData = response;
+      console.log("⭐️ ", membershipData, " ⭐️ ", response);
     }
     // set application id for apps
     let applicationId = membershipData.core_membershipsubscriptionplanid;
@@ -165,6 +166,7 @@ export const handleApplyForMembershipAction = async ({
         bad_applicationfor: changeAppCategory ? "810170001" : "810170000", // for new apps 810170000 for change of cat for BAD and 810170001
       },
     });
+    console.log("⭐️ ", store, " ⭐️ ");
 
     // --------------------------------------------------------------------------------
     // 📌  On success redirect to application form
@@ -209,7 +211,7 @@ export const handleApplyForMembershipAction = async ({
 
     return store; // return store
   } catch (error) {
-    // console.log("ERROR: ", error);
+    console.log("⭐️ ERROR: ", error);
   }
 };
 

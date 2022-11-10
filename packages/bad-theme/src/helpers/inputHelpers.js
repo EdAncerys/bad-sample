@@ -187,7 +187,7 @@ export const getBADMembershipSubscriptionData = async ({
   const path =
     state.auth.APP_HOST +
     `/catalogue/lookup/membershiptype?search=${category}:${type}${dateType}`;
-
+  console.log("⭐️ ", path, "⭐️");
   try {
     const response = await fetchHandler({ path });
     const { data } = await response?.json();
