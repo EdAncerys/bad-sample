@@ -37,7 +37,7 @@ const ApplicationSidePanel = ({
 
   const ActionBtn = () => {
     return (
-      <div className="flex" style={{ gap: 20 }}>
+      <div className="flex" style={{ gap: 20, marginTop: 50 }}>
         <div
           className="blue-btn-reverse"
           style={{ width: 200 }}

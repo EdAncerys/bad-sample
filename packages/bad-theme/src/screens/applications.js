@@ -737,7 +737,10 @@ const Applications = ({ state, actions }) => {
   return (
     <div className="applications-container">
       {fetching && (
-        <div className="fetch-icon">
+        <div
+          className="fetch-icon"
+          style={{ marginTop: isSIG ? "30%" : undefined }}
+        >
           <Loading />
         </div>
       )}
