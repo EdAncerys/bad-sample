@@ -607,8 +607,8 @@ const Applications = ({ state, actions }) => {
         "py3_email",
         "py3_mobilephone",
         "py3_address1ine1",
-        "py3_addressline2",
-        "py3_addresscountystate",
+        // "py3_addressline2",
+        // "py3_addresscountystate",
         "py3_addresszippostalcode",
         "py3_addresscountry",
       ];
