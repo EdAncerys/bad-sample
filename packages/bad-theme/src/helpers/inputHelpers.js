@@ -208,6 +208,11 @@ export const getBADMembershipSubscriptionData = async ({
 };
 
 export const jobRoleHandler = ({ name, Label, form }) => {
+  if (name === "formus_jobrole" && form?.formus_staffgroupcategory === "") {
+    // 📌  if job role is selected, return all job roles
+    return true;
+  }
+
   if (
     name === "formus_jobrole" &&
     form?.formus_staffgroupcategory === "810170000" &&

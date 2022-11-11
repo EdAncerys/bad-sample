@@ -186,6 +186,7 @@ const Applications = ({ state, actions }) => {
           formus_mainspecialtyqualification: undefined, // 📌  remove default value from form
           formus_clinicalspecialtysofpractice: undefined, // 📌  remove default value from form
           formus_specialiseddermatologyareasofpractice: undefined, // 📌  remove default value from form
+          formus_staffgroupcategory: "", // 📌  remove default value from form
         });
         setApplication(application); // ⚠️ update application with new application fields
         setMemberships(memberships);
