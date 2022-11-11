@@ -107,35 +107,10 @@ const CompleteApplication = ({ state, actions, libraries }) => {
     }));
   };
 
-  // SERVERS ---------------------------------------------
-  const ServeActions = () => {
-    return (
-      <div
-        className="flex"
-        style={{
-          justifyContent: "flex-end",
-          padding: `2em 1em 0 1em`,
-          borderTop: `1px solid ${colors.silverFillTwo}`,
-        }}
-      >
-        <div className="blue-btn" onClick={handleReturn}>
-          No thank you, return to Dashboard
-        </div>
-        <div
-          className="blue-btn"
-          style={{ marginLeft: "2em" }}
-          onClick={handleSubmit}
-        >
-          Submit
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div style={{ position: "relative" }}>
       <ActionPlaceholder isFetching={isFetching} background="transparent" />
-      {inputValidator.bad_ethnicity && (
+      {inputValidator?.bad_ethnicity && (
         <form>
           <div style={{ padding: `2em 1em` }}>
             {ethnicity && (
@@ -163,7 +138,28 @@ const CompleteApplication = ({ state, actions, libraries }) => {
           </div>
         </form>
       )}
-      <ServeActions />
+
+      <div
+        className="flex"
+        style={{
+          justifyContent: "flex-end",
+          padding: `2em 1em 0 1em`,
+          borderTop: `1px solid ${colors.silverFillTwo}`,
+        }}
+      >
+        <div className="blue-btn" onClick={handleReturn}>
+          No thank you, return to Dashboard
+        </div>
+        {ethnicity && (
+          <div
+            className="blue-btn"
+            style={{ marginLeft: "2em" }}
+            onClick={handleSubmit}
+          >
+            Submit
+          </div>
+        )}
+      </div>
     </div>
   );
 };
