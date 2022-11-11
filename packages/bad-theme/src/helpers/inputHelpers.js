@@ -127,7 +127,9 @@ export const googleAutocomplete = async ({ input }) => {
   const request = {
     input,
     // componentRestrictions: {}, // to limit to country ( country: "uk" }
-    fields: ["address_components", "geometry", "icon", "name"],
+    // fields: ["address_components", "geometry", "icon", "name"],
+    // only return street address and locality
+    types: ["address"],
     strictBounds: false,
   };
 
@@ -325,8 +327,12 @@ export const inputShowHandler = ({ form, name }) => {
   // --------------------------------------------------------------------------------
   // 📌  Handle input show/hide logic for multiple inputs
   // --------------------------------------------------------------------------------
-  if (name === "bad_newhospitaladded") {
-    // if (form?.['py3_address1line1'] === undefined) show = false;
+  if (name === "formus_privatepracticeorganisation") {
+    if (
+      form?.["formus_typeofpractice"] === "810170001" ||
+      form?.["formus_typeofpractice"] === undefined
+    )
+      show = false;
   }
 
   // ...addition to logic here
