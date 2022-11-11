@@ -1,6 +1,7 @@
 import connect from "@frontity/connect";
 
 const ApplicationSidePanel = ({
+  state,
   form,
   application,
   step,
@@ -36,6 +37,8 @@ const ApplicationSidePanel = ({
   ];
 
   const ActionBtn = () => {
+    if (state.auth.ENVIRONMENT !== "DEV") return null;
+
     return (
       <div className="flex" style={{ gap: 20, marginTop: 50 }}>
         <div

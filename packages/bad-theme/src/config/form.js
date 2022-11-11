@@ -75,7 +75,7 @@ export const FORM_CONFIG = {
       { value: 810170000, Label: "Main Hospital" },
       { value: 810170001, Label: "Home" },
     ],
-    MaxLength: 100,
+    MaxLength: 102,
     Required: "None",
     order: -58,
     hidden: false,
@@ -363,7 +363,7 @@ export const FORM_CONFIG = {
   bad_proposer2: {
     Label: "Supporting Member 2",
     AttributeType: "String",
-    MaxLength: 100,
+    MaxLength: 101,
     Required: "ApplicationRequired",
     order: -58,
     hidden: false,
@@ -828,6 +828,7 @@ export const BAD_STEP_FOUR_FORM_CONFIG = {
 
 export const BAD_STEP_FIVE_FORM_CONFIG = {
   bad_proposer1: {},
+  bad_proposer2: {},
   bad_preferredmailingaddress: {},
   sky_cvurl: {},
   bad_memberdirectory: {},
