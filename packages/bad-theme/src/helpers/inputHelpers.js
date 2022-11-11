@@ -1,4 +1,13 @@
 import { fetchHandler } from "./handler";
+import {
+  group_810170000,
+  group_810170001,
+  group_810170002,
+  group_810170003,
+  group_810170004,
+  group_810170005,
+  group_810170006,
+} from "../config/form";
 // --------------------------------------------------------------------------------
 
 export const getMembershipTypes = async ({ state }) => {
@@ -196,6 +205,53 @@ export const getBADMembershipSubscriptionData = async ({
   } catch (error) {
     console.log("error", error);
   }
+};
+
+export const jobRoleHandler = ({ name, Label, form }) => {
+  if (
+    name === "formus_jobrole" &&
+    form?.formus_staffgroupcategory === "810170000" &&
+    group_810170000?.includes(Label)
+  )
+    return true;
+  if (
+    name === "formus_jobrole" &&
+    form?.formus_staffgroupcategory === "810170001" &&
+    group_810170001?.includes(Label)
+  )
+    return true;
+  if (
+    name === "formus_jobrole" &&
+    form?.formus_staffgroupcategory === "810170002" &&
+    group_810170002?.includes(Label)
+  )
+    return true;
+  if (
+    name === "formus_jobrole" &&
+    form?.formus_staffgroupcategory === "810170003" &&
+    group_810170003?.includes(Label)
+  )
+    return true;
+  if (
+    name === "formus_jobrole" &&
+    form?.formus_staffgroupcategory === "810170004" &&
+    group_810170004?.includes(Label)
+  )
+    return true;
+  if (
+    name === "formus_jobrole" &&
+    form?.formus_staffgroupcategory === "810170005" &&
+    group_810170005?.includes(Label)
+  )
+    return true;
+  if (
+    name === "formus_jobrole" &&
+    form?.formus_staffgroupcategory === "810170006" &&
+    group_810170006?.includes(Label)
+  )
+    return true;
+
+  return false;
 };
 
 export const updateDynamicsApplicationAction = async ({

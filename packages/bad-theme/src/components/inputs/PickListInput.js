@@ -3,6 +3,7 @@ import { Form } from "react-bootstrap";
 // --------------------------------------------------------------------------------
 import { FORM_CONFIG } from "../../config/form";
 import ErrorComponent from "./ErrorComponent";
+import { jobRoleHandler } from "../../helpers/inputHelpers";
 
 const PickListInput = ({ form, name, Label, value, onChange, Choices }) => {
   return (
@@ -21,6 +22,16 @@ const PickListInput = ({ form, name, Label, value, onChange, Choices }) => {
           {Label}
         </option>
         {Choices.map(({ value, Label }, key) => {
+          // --------------------------------------------------------------------------------
+          // 📌  formus_jobrole picklist filtering handler
+          // --------------------------------------------------------------------------------
+          if (
+            name === "formus_jobrole" &&
+            !jobRoleHandler({ form, name, Label })
+          ) {
+            return null;
+          }
+
           return (
             <option key={key} value={value}>
               {Label}
