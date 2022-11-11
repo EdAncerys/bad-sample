@@ -129,18 +129,15 @@ export const handleApplyForMembershipAction = async ({
       core_name: "",
     }; // membership data
 
-    if (isBADApp) {
-      // ⏬ get appropriate membership ID for BAD applications only
-      const response = await getBADMembershipSubscriptionData({
-        state,
-        category,
-        type,
-      });
-      if (!response) throw new Error("Failed to get membership data");
-      membershipData = response?.[0];
-      console.log("⭐️ ", membershipData, " ⭐️ ", response);
-      console.log("⭐️ ", category, " ⭐️ ", type);
-    }
+    // ⏬ get appropriate membership ID for BAD applications only
+    const response = await getBADMembershipSubscriptionData({
+      state,
+      category,
+      type,
+    });
+    if (!response) throw new Error("Failed to get membership data");
+    membershipData = response?.[0];
+
     // set application id for apps
     let applicationId = membershipData?.core_membershipsubscriptionplanid;
     if (!applicationId) throw new Error("Failed to get application id");

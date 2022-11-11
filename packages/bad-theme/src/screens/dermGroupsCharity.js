@@ -94,24 +94,21 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
 
     // filter sig by id and return name of the groupe
     const sig = sigGroup.filter((sig) => sig.id === acf.sigs);
-
-    // if sig data is empty then return null
-    if (!sig.length) return null;
-    let sigAppName = "";
-    if (sig.length > 0) {
-      sigAppName = sig[0].name;
-    }
+    let catType = sig?.[0]?.name;
 
     return (
       <div style={{ paddingTop: `2em` }}>
         <div
           className="blue-btn"
           style={{ width: "fit-content", margin: `1em 0` }}
-          onClick={() => handleApply({ catType: sigAppName })}
+          // --------------------------------------------------------------------------------
+          // ⚠️  Add prefix to SIG application type name
+          // --------------------------------------------------------------------------------
+          onClick={() => handleApply({ catType: "Full:" + catType })}
         >
           <Parcer
             libraries={libraries}
-            html={`Apply for ${sigAppName} membership`}
+            html={`Apply for ${catType} membership`}
           />
         </div>
       </div>
