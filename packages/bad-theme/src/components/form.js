@@ -112,7 +112,7 @@ const Form = ({
           const AttributeType =
             info?.AttributeType || FORM_CONFIG?.[name]?.AttributeType;
           const MaxLength = info?.MaxLength || FORM_CONFIG?.[name]?.MaxLength;
-          const Required = info?.Required || FORM_CONFIG?.[name]?.Required;
+          const Required = FORM_CONFIG?.[name]?.Required; // 👉 get required from config
           const Choices = info?.Choices || FORM_CONFIG?.[name]?.Choices || [];
           const Handler = FORM_CONFIG?.[name]?.Handler || null;
           const Link = FORM_CONFIG?.[name]?.Link || null;
@@ -286,8 +286,6 @@ const Form = ({
             name === "bad_readpolicydocument" ||
             name === "bad_memberdirectory"
           ) {
-            const labelClass = "caps-btn-no-underline";
-
             return (
               <div
                 key={key}
@@ -299,7 +297,7 @@ const Form = ({
                 <CheckboxInput
                   form={form}
                   name={name}
-                  labelClass={labelClass}
+                  labelClass={labelClass + " caps-btn-no-underline"} // 👉 add caps-btn-no-underline to checkbox label
                   Label={Label}
                   value={value}
                   onChange={onChange}

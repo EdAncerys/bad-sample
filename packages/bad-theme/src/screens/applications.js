@@ -637,8 +637,8 @@ const Applications = ({ state, actions }) => {
     if (form?.step === 4)
       MANUALLY_REQUIRED = [
         "bad_proposer1",
-        "bad_preferredmailingaddress",
-        "sky_cvurl",
+        // "bad_preferredmailingaddress",
+        // "sky_cvurl",
         "bad_memberdirectory",
         "py3_constitutionagreement",
         "bad_readpolicydocument",
