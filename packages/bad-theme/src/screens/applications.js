@@ -638,7 +638,9 @@ const Applications = ({ state, actions }) => {
         "formus_professionalregistrationstatus",
         // "formus_residencystatus", // 👉 not mandatory
         // "formus_qualificationtype",  // 👉 not mandatory
-        "formus_mainspecialtyqualification", // 👈 multi picker
+        form?.["formus_qualificationtype"] === "810170007"
+          ? "formus_mainspecialtyqualification"
+          : "", // 👈 multi picker
         "formus_clinicalspecialtysofpractice", // 👈 multi picker
         "formus_specialiseddermatologyareasofpractice", // 👈 multi picker
         "formus_typeofcontract",

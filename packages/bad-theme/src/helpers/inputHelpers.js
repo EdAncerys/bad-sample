@@ -335,6 +335,17 @@ export const inputShowHandler = ({ form, name }) => {
       show = false;
   }
 
+  // --------------------------------------------------------------------------------
+  // 📌  Handle input show/hide logic for other qualification input
+  // --------------------------------------------------------------------------------
+  if (
+    name === "formus_otherqualificationtype" ||
+    name === "formus_otherreasonformovingccstdate" ||
+    name === "formus_mainspecialtyqualification"
+  ) {
+    if (form?.["formus_qualificationtype"] !== "810170007") show = false;
+  }
+
   // ...addition to logic here
 
   return show;

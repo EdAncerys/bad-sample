@@ -661,7 +661,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 200,
     Required: "None",
-    order: 21,
+    order: -55,
     hidden: false,
     width: "100%",
     caption: "",
@@ -815,7 +815,9 @@ export const BAD_STEP_FOUR_FORM_CONFIG = {
   formus_professionalregistrationstatus: {},
   formus_residencystatus: {},
   formus_qualificationtype: {},
-  formus_mainspecialtyqualification: {}, // 👈 multi picker
+  formus_otherqualificationtype: {}, // 👉 conditional field
+  formus_otherreasonformovingccstdate: {}, // 👉 conditional field (Trainee only)
+  formus_mainspecialtyqualification: {}, // 👉 conditional field & 👉 multi picker
   formus_clinicalspecialtysofpractice: {}, // 👈 multi picker
   formus_specialiseddermatologyareasofpractice: {}, // 👈 multi picker
   formus_typeofcontract: {},
