@@ -365,7 +365,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 101,
     Required: "ApplicationRequired",
-    order: -58,
+    order: -59,
     hidden: false,
     width: "100%",
     caption: "",
