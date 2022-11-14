@@ -357,7 +357,7 @@ const Applications = ({ state, actions }) => {
 
   const onChange = ({ target }) => {
     // --------------------------------------------------------------------------------
-    // 📌  Handle input change for all inputs
+    // ⭐️  Handle input change for all inputs ⭐️
     // --------------------------------------------------------------------------------
     const { name, value, type, checked } = target;
     console.log("🐞 name: ", name, value);
@@ -377,6 +377,16 @@ const Applications = ({ state, actions }) => {
         [name]: type === "checkbox" ? checked : value,
         dev_application_input_filter: dev_application_input_filter,
         dev_read_policy: memberships?.[0]?.acf.sig_readpolicydocument_url_email,
+      });
+      return;
+    }
+
+    if (name === "formus_staffgroupcategory") {
+      setForm({
+        ...form,
+        [name]: type === "checkbox" ? checked : value,
+        formus_staffgroupcategory: value,
+        formus_jobrole: "", // 👉 clear job role if staff group is changed. This input have condisional rendering
       });
       return;
     }

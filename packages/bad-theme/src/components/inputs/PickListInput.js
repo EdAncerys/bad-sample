@@ -18,7 +18,7 @@ const PickListInput = ({ form, name, Label, value, onChange, Choices }) => {
         onChange={onChange}
         className="input"
       >
-        <option value="" hidden>
+        <option value="" hidden className="select-option-hidden">
           {Label}
         </option>
         {Choices.map(({ value, Label }, key) => {
