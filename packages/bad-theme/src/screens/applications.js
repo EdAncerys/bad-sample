@@ -201,26 +201,32 @@ const Applications = ({ state, actions }) => {
   }, [isActiveUser]);
 
   const handleSelectAddress = async ({ item }) => {
-    // destructure item object & get country code & city name from terms
-    const { terms, title } = item;
+    // destructure item object & get country code & city name from link
+    const { link, title } = item;
+    let address = title;
     let countryCode = "";
     let cityName = "";
+    // if title consist of more than one comma, split it and get the forst item as address
+    if (title?.split(",").length > 1) {
+      address = title?.split(",")[0];
+    }
 
-    if (terms) {
-      // if terms define address components
-      if (terms.length >= 1) countryCode = terms[terms.length - 1].value;
-      if (terms.length >= 2) cityName = terms[terms.length - 2].value;
+    if (link) {
+      // if link object opassed in define destructure address object
+      if (link.length >= 1) countryCode = link?.[link.length - 1]?.value;
+      if (link.length >= 2) cityName = link?.[link.length - 2]?.value;
     }
     // overwrite formData to match Dynamics fields
     if (countryCode === "UK")
       countryCode = "United Kingdom of Great Britain and Northern Ireland";
 
+    console.log("⭐️ object", address, countryCode, cityName);
     // update formData with values
     setForm((form) => ({
       ...form,
-      py3_address1ine1: title,
+      py3_address1ine1: address,
       py3_addresscountry: countryCode,
-      py3_addresstowncity: cityName,
+      py3_addresscountystate: cityName,
     }));
   };
 
