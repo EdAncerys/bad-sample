@@ -215,6 +215,11 @@ export const jobRoleHandler = ({ name, Label, form }) => {
     return true;
   }
 
+  // ⚠️ dont show Phlebotomist option in job role dropdown
+  if (name === "formus_jobrole" && Label === "Phlebotomist") {
+    return false;
+  }
+
   if (
     name === "formus_jobrole" &&
     form?.formus_staffgroupcategory === "810170000" &&

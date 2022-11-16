@@ -6,6 +6,18 @@ import ErrorComponent from "./ErrorComponent";
 import { jobRoleHandler } from "../../helpers/inputHelpers";
 
 const PickListInput = ({ form, name, Label, value, onChange, Choices }) => {
+  // --------------------------------------------------------------------------------
+  // 📌  Extend Choises with custom options
+  // --------------------------------------------------------------------------------
+  const customChoices = FORM_CONFIG[name].Choices;
+  if (customChoices) {
+    Choices = [...Choices, ...customChoices]; // 👉 extend choices
+  }
+
+  if (name === "formus_staffgroupcategory") {
+    console.log("⭐️ ", Choices);
+  }
+
   return (
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
       <label className="form-label required">{Label}</label>
