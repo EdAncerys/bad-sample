@@ -353,7 +353,7 @@ export const inputShowHandler = ({ form, name }) => {
   if (
     name === "formus_otherqualificationtype" ||
     name === "formus_otherreasonformovingccstdate" ||
-    name === "formus_mainspecialtyqualification"
+    name === "formus_othermainspecialtyqualification"
   ) {
     if (form?.["formus_qualificationtype"] !== "810170007") show = false;
   }
