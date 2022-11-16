@@ -30,7 +30,6 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
   const dispatch = useAppDispatch();
   const { newsMediaCategoryId, isActiveUser, dynamicsApps } = useAppState();
-  console.log("🐞 newsMediaCategoryId ", newsMediaCategoryId);
 
   if (!block) return <Loading />;
 

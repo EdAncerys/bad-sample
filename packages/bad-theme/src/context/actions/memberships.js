@@ -53,7 +53,6 @@ export const validateMembershipFormAction = async ({
 
     if (appType) {
       const applicationForm = membership.acf;
-      console.log("⭐️ applicationForm", applicationForm); // debug
       Object.keys(applicationForm).map((keyName) => {
         handleSetInputData({ data: applicationForm, name: keyName });
       });
