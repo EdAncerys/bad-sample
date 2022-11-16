@@ -78,6 +78,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
     bad_expectedyearofqualification: true,
     bad_py3_constitutionagreement: true,
     bad_sky_newhospitaltype: true,
+    bad_bad_newhospitaladded: true,
     // --------------------------------------------------------------------------------
     bad_readpolicydocument: true,
     bad_newhospitaladded: true,
@@ -619,7 +620,7 @@ const ProfessionalDetails = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {!isHospitalValue && (
+          {!isHospitalValue && inputValidator?.bad_bad_newhospitaladded && (
             <div className="flex-col">
               <label className="form-label">
                 Main Hospital / Medical School / Place of Work not listed
