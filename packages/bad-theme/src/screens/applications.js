@@ -648,7 +648,6 @@ const Applications = ({ state, actions }) => {
         // "formus_typeofcontract",  // 👉 not mandatory
         // "formus_rotapattern",  // 👉 not mandatory
         // "formus_typeofpractice",  // 👉 not mandatory
-        // "formus_privatepracticeorganisation",  // 👉 not mandatory
         // "formus_reasonformovingccstdate",  // 👉 not mandatory
         form?.bad_newhospitaladded ? "sky_newhospitalname" : "", // if new hospital added, add new hospital name to required fields
         form?.bad_newhospitaladded ? "sky_newhospitaltype" : "", // if new hospital added, add new hospital name to required fields

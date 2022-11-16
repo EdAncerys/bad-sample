@@ -7,6 +7,7 @@ import {
   group_810170004,
   group_810170005,
   group_810170006,
+  group_810170007,
 } from "../config/form";
 // --------------------------------------------------------------------------------
 
@@ -260,6 +261,12 @@ export const jobRoleHandler = ({ name, Label, form }) => {
     name === "formus_jobrole" &&
     form?.formus_staffgroupcategory === "810170006" &&
     group_810170006?.includes(Label)
+  )
+    return true;
+  if (
+    name === "formus_jobrole" &&
+    form?.formus_staffgroupcategory === "810170007" &&
+    group_810170007?.includes(Label)
   )
     return true;
 

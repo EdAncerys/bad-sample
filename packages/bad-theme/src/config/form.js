@@ -635,6 +635,17 @@ export const FORM_CONFIG = {
     hidden: false,
     width: "100%",
     caption: "",
+    Choices: [
+      { value: 810170097, Label: "Clinical Doctoral Researcher" },
+      { value: 810170098, Label: "Clinical Lecturer" },
+      { value: 810170099, Label: "Doctoral Research Fellow" },
+      { value: 810170100, Label: "Post-doctoral Fellow" },
+      { value: 810170101, Label: "Pre-doctoral Academic Fellow" },
+      { value: 810170102, Label: "Research Fellow" },
+      { value: 810170103, Label: "Research Professor" },
+      { value: 810170104, Label: "Senior Clinical Lecturer" },
+      { value: 810170105, Label: "Senior Research Fellow" },
+    ],
   },
   formus_mainspecialtyqualification: {
     Label: "Main Specialty Qualification",
@@ -757,7 +768,7 @@ export const FORM_CONFIG = {
     caption: "",
     Choices: [
       {
-        Value: 100000000,
+        value: 810170007,
         Label: "Clinical Academic",
       },
     ],
@@ -997,3 +1008,15 @@ export const group_810170005 = [
 ];
 
 export const group_810170006 = ["GPwER", "GPwSI"];
+
+export const group_810170007 = [
+  "Clinical Doctoral Researcher",
+  "Clinical Lecturer",
+  "Doctoral Research Fellow",
+  "Post-doctoral Fellow",
+  "Pre-doctoral Academic Fellow",
+  "Research Fellow",
+  "Research Professor",
+  "Senior Clinical Lecturer",
+  "Senior Research Fellow",
+];

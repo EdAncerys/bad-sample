@@ -9,14 +9,10 @@ const PickListInput = ({ form, name, Label, value, onChange, Choices }) => {
   // --------------------------------------------------------------------------------
   // 📌  Extend Choises with custom options
   // --------------------------------------------------------------------------------
-  const customChoices = FORM_CONFIG[name].Choices;
-  if (customChoices) {
-    Choices = [...Choices, ...customChoices]; // 👉 extend choices
-  }
-
-  if (name === "formus_staffgroupcategory") {
-    console.log("⭐️ ", Choices);
-  }
+  // const customChoices = FORM_CONFIG[name].Choices;
+  // if (customChoices) {
+  //   Choices = [...Choices, ...customChoices]; // 👉 extend choices
+  // }
 
   return (
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
