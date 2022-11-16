@@ -538,3 +538,7 @@ https://codebeautify.org/
 .title-link-animation:hover .search-phrase {
   color: #000;
 }
+
+.padding-vertical-16 {
+  margin: 16px 0;
+}
