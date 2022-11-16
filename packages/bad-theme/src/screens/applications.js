@@ -187,6 +187,7 @@ const Applications = ({ state, actions }) => {
           formus_clinicalspecialtysofpractice: undefined, // 📌  remove default value from form
           formus_specialiseddermatologyareasofpractice: undefined, // 📌  remove default value from form
           formus_staffgroupcategory: "", // 📌  remove default value from form as filed is conditional field for others
+          formus_typeofpractice: "", // 📌  remove default value from form as filed is conditional field for others
         });
         setApplication(application); // ⚠️ update application with new application fields
         setMemberships(memberships);
@@ -647,7 +648,6 @@ const Applications = ({ state, actions }) => {
         // "formus_fixedtermtemporaryreasonforemploymentcont",  // 👉 not mandatory
         // "formus_typeofcontract",  // 👉 not mandatory
         // "formus_rotapattern",  // 👉 not mandatory
-        // "formus_typeofpractice",  // 👉 not mandatory
         // "formus_reasonformovingccstdate",  // 👉 not mandatory
         form?.bad_newhospitaladded ? "sky_newhospitalname" : "", // if new hospital added, add new hospital name to required fields
         form?.bad_newhospitaladded ? "sky_newhospitaltype" : "", // if new hospital added, add new hospital name to required fields
