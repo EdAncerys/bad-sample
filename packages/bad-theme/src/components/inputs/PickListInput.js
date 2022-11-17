@@ -14,6 +14,10 @@ const PickListInput = ({ form, name, Label, value, onChange, Choices }) => {
   //   Choices = [...Choices, ...customChoices]; // 👉 extend choices
   // }
 
+  if (name === "formus_staffgroupcategory" || name === "formus_jobrole") {
+    console.log("⭐️ Choices ", Choices);
+  }
+
   return (
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
       <label className="form-label required">{Label}</label>
