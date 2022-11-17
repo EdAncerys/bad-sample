@@ -348,14 +348,22 @@ export const inputShowHandler = ({ form, name }) => {
   }
 
   // --------------------------------------------------------------------------------
-  // 📌  Handle input show/hide logic for other qualification input
+  // 📌  Handle conditional input show/hide logic for other qualification input
   // --------------------------------------------------------------------------------
-  if (
-    name === "formus_otherqualificationtype" ||
-    name === "formus_otherreasonformovingccstdate" ||
-    name === "formus_othermainspecialtyqualification"
-  ) {
+  if (name === "formus_otherqualificationtype") {
     if (form?.["formus_qualificationtype"] !== "810170007") show = false;
+  }
+  if (name === "formus_othermainspecialtyqualification") {
+    if (!form?.["formus_mainspecialtyqualification"]?.includes("810170008"))
+      show = false;
+  }
+  // 👉 trainee application only input
+  if (name === "formus_otherreasonformovingccstdate") {
+    if (
+      form?.["formus_qualificationtype"] !== "810170007" ||
+      form?.["bad_categorytype"] !== "Trainee"
+    )
+      show = false;
   }
 
   // ...addition to logic here

@@ -658,11 +658,11 @@ export const FORM_CONFIG = {
     caption: "",
   },
   formus_othermainspecialtyqualification: {
-    Label: "Other Main Specialty Qualification",
+    Label: "Please specficy other qualification type", // Old Label: "Other Main Specialty Qualification"
     AttributeType: "String",
     MaxLength: 200,
     Required: "None",
-    order: -55,
+    order: -53,
     hidden: false,
     width: "100%",
     caption: "",
@@ -794,7 +794,7 @@ export const FORM_CONFIG = {
     caption: "",
   },
   formus_otherqualificationtype: {
-    Label: "Other Qualification Type",
+    Label: "Please specficy other Main Specialty Qualification", // Old Label: "Other Qualification Type"
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
