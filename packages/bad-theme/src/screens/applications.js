@@ -236,10 +236,18 @@ const Applications = ({ state, actions }) => {
   };
 
   const handleClearAddress = () => {
+    // --------------------------------------------------------------------------------
+    // 📌  Clear address fields
+    // --------------------------------------------------------------------------------
     address1Line1Ref.current = ""; // clear search input
     setForm((form) => ({
       ...form,
       py3_address1ine1: "",
+      py3_addressline2: "",
+      py3_addresscountystate: "",
+      py3_addresscountry: "",
+      py3_addresspostalcode: "",
+      py3_addresszippostalcode: "",
       dev_address_data: "",
     }));
   };
