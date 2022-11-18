@@ -83,11 +83,11 @@ export const setUserStoreAction = async ({
   }
 };
 
-export const getUserStoreAction = async ({ state, isActiveUser, dispatch }) => {
+export const getUserStoreAction = async ({ state, isActiveUser, id }) => {
   // console.log("getUserStoreAction triggered");
+  const contactid = isActiveUser?.contactid || id; // get contactid from user object or id param
 
   try {
-    const { contactid } = isActiveUser;
     if (!contactid)
       throw new Error("Cannot set user store. Contactid is missing.");
 

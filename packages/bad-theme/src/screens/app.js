@@ -41,6 +41,7 @@ import VideoArchive from "../components/videoArchive";
 import ReferralArchive from "./referralArchive";
 import Referral from "./referral";
 import Video from "../components/video";
+import Applications from "./applications";
 // SCREEN HELPERS ---------------------------------------------------------
 import Error from "./error";
 import Loading from "../components/loading";
@@ -143,6 +144,7 @@ const App = ({ state, actions }) => {
 
           <AccountDashboard when={urlPath === "/dashboard/" && isActiveUser} />
           <Contact when={urlPath === "/contact-us/"} />
+          <Applications when={urlPath === "/membership/applications/"} />
           <RegistrationStepOne
             when={urlPath === "/membership/step-1-the-process/"}
           />

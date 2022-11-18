@@ -5,6 +5,7 @@ import { colors } from "../config/imports";
 import { muiQuery } from "../context";
 import TitleBlock from "../components/titleBlock";
 import Card from "../components/card/card";
+import Loading from "../components/loading";
 // CONTEXT -----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -21,6 +22,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, dynamicsApps } = useAppState();
   const [sigGroup, setGroupe] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const data = state.source.get(state.router.link);
   const dermGroupe = state.source[data.type][data.id];
@@ -47,23 +49,30 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
 
   // HANDLERS --------------------------------------------------
   const handleApply = async ({ catType }) => {
-    await handleApplyForMembershipAction({
-      state,
-      actions,
-      dispatch,
-      applicationData,
-      isActiveUser,
-      dynamicsApps,
-      category: "SIG",
-      type: catType || "", // application type name
-      membershipApplication: {
-        stepOne: false,
-        stepTwo: false,
-        stepThree: false,
-        stepFour: false,
-      },
-      path: "/membership/sig-questions/", // redirect to SIG form page
-    });
+    try {
+      setLoading(true);
+      await handleApplyForMembershipAction({
+        state,
+        actions,
+        dispatch,
+        applicationData,
+        isActiveUser,
+        dynamicsApps,
+        category: "SIG",
+        type: catType || "", // application type name
+        membershipApplication: {
+          stepOne: false,
+          stepTwo: false,
+          stepThree: false,
+          stepFour: false,
+        },
+        path: "/membership/sig-questions/", // redirect to SIG form page
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // SERVERS ---------------------------------------------------
@@ -85,24 +94,21 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
 
     // filter sig by id and return name of the groupe
     const sig = sigGroup.filter((sig) => sig.id === acf.sigs);
-
-    // if sig data is empty then return null
-    if (!sig.length) return null;
-    let sigAppName = "";
-    if (sig.length > 0) {
-      sigAppName = sig[0].name;
-    }
+    let catType = sig?.[0]?.name;
 
     return (
       <div style={{ paddingTop: `2em` }}>
         <div
           className="blue-btn"
           style={{ width: "fit-content", margin: `1em 0` }}
-          onClick={() => handleApply({ catType: sigAppName })}
+          // --------------------------------------------------------------------------------
+          // ⚠️  Add prefix to SIG application type name
+          // --------------------------------------------------------------------------------
+          onClick={() => handleApply({ catType: "Full:" + catType })}
         >
           <Parcer
             libraries={libraries}
-            html={`Apply for ${sigAppName} membership`}
+            html={`Apply for ${catType} membership`}
           />
         </div>
       </div>
@@ -114,6 +120,11 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
     <BlockWrapper>
       <div style={{ padding: `${marginVertical}px ${marginHorizontal}px` }}>
         <div style={!lg ? styles.container : styles.containerMobile}>
+          {loading && (
+            <div className="fetching-icon">
+              <Loading />
+            </div>
+          )}
           <ServeContent />
           <div style={{ minWidth: 300 }}>
             <Card
@@ -132,14 +143,15 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
 
 const styles = {
   container: {
+    position: "relative",
     display: "grid",
     gridTemplateColumns: `1fr auto`,
     gap: "2em",
   },
   containerMobile: {
+    position: "relative",
     display: "flex",
     flexDirection: "column-reverse",
-    // gridTemplateColumns: `1fr`,
     gap: "2em",
   },
 };

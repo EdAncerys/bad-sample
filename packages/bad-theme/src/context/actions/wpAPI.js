@@ -172,6 +172,34 @@ export const getGuidelinesData = async ({ state, page, postsPerPage }) => {
   }
 };
 
+export const getMembershipTypes = async ({ state }) => {
+  let pageNo = 1;
+  let url = `${state.auth.WP_HOST}wp-json/wp/v2/memberships?_fields=id,slug,acf&page=${pageNo}`;
+
+  try {
+    let data = [];
+
+    // ⬇️ fetch data via wp API page by page
+    let response = await fetchDataHandler({ path: url, state });
+    let totalPages = response.headers.get("X-WP-TotalPages");
+
+    while (response.status === 200) {
+      let json = await response.json();
+
+      data = [...data, ...json];
+      pageNo++;
+      url = `${state.auth.WP_HOST}wp-json/wp/v2/memberships?_fields=id,slug,acf&page=${pageNo}`;
+
+      // 📌 break out of the loop if no more pages
+      if (pageNo > totalPages) break;
+      response = await fetchDataHandler({ path: url, state });
+    }
+    return data;
+  } catch (error) {
+    // console.log("🐞 ", error);
+  }
+};
+
 export const getGuidelinesTypes = async ({ state }) => {
   const url = `${state.auth.WP_HOST}wp-json/wp/v2/guidelines_type?_fields=name,id`;
 

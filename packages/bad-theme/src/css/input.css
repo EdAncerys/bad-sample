@@ -70,11 +70,13 @@ select {
   right: -10px;
   background-color: #fff;
   cursor: pointer;
+  z-index: 99;
 }
 .check-box {
   border-radius: 50% !important;
   width: 20px;
   height: 20px;
   margin: 0 10px 0 0;
+  cursor: pointer;
 }
 /* customize select option styles */

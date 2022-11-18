@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 import parse from "html-react-parser";
@@ -7,6 +7,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import LINK from "../../img/svg/badLink.svg";
 import DownloadFileBlock from "../downloadFileBlock";
 import date from "date-and-time";
+import Loading from "../../components/loading";
 const DATE_MODULE = date;
 
 // CONTEXT ----------------------------------------------------------------
@@ -38,6 +39,7 @@ const AccordionBody = ({
   const { sm, md, lg, xl } = muiQuery();
   const dispatch = useAppDispatch();
   const { applicationData, isActiveUser, dynamicsApps } = useAppState();
+  const [loading, setLoading] = useState(false);
 
   const ICON_WIDTH = 35;
   const {
@@ -73,6 +75,7 @@ const AccordionBody = ({
   // HANDLERS ----------------------------------------------------
   const handleApply = async () => {
     try {
+      setLoading(true);
       await handleApplyForMembershipAction({
         state,
         actions,
@@ -99,6 +102,8 @@ const AccordionBody = ({
           image: "Error",
         },
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -713,6 +718,11 @@ const AccordionBody = ({
 
   return (
     <div id={`accordion-body-${uniqueId}`}>
+      {loading && (
+        <div className="fetching-icon">
+          <Loading />
+        </div>
+      )}
       <div
         className="accordion-body accordion-content"
         style={{ padding: `1em 0` }}

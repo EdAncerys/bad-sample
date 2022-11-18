@@ -1,0 +1,82 @@
+.applications-side-panel {
+  border-right: 1px solid #e3e7ea;
+  padding-right: 2em;
+}
+
+.application-panel-title {
+  font-size: 20px;
+  border-bottom: 1px solid #e3e7ea;
+  padding: 0 1em 1em 0;
+}
+
+.application-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 2em 0 0 0;
+  gap: 1em;
+  width: 100%;
+  border-top: 1px solid #e3e7ea;
+}
+
+.application-actions > .transparent-btn,
+.application-actions > .blue-btn {
+  width: fit-content;
+}
+
+.application-form-wrapper {
+  margin: 0 0 0 2em;
+}
+
+.fetch-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.form-img-input-wrapper {
+  width: 350px;
+  overflow: hidden;
+  margin-right: 2rem;
+}
+
+.form-contenmt-wrapper {
+  width: 600px;
+}
+.form-contenmt-wrapper-narrow {
+  width: 350px;
+}
+
+/* media querys */
+@media screen and (max-width: 992px) {
+  .application-actions {
+    flex-direction: column;
+    margin: 0;
+  }
+  .application-actions > .transparent-btn,
+  .application-actions > .blue-btn {
+    width: 100%;
+  }
+  .applications-side-panel {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .form-outer-wrapper {
+    flex-direction: column;
+    gap: 2em;
+  }
+  .form-img-input-wrapper {
+    width: 100%;
+  }
+  .form-contenmt-wrapper {
+    width: 100%;
+  }
+}

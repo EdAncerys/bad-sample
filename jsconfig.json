@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./workspaces/bad.org/packages/bad-theme/src/",
+    "paths": {
+      "@components/*": ["components/*"],
+      "@config/*": ["config/*"],
+      "@helpers/*": ["helpers/*"]
+    },
+    "module": "commonjs",
+    "target": "ES2018"
+  },
+  "exclude": ["node_modules"]
+}

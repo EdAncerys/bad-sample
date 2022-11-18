@@ -14,18 +14,21 @@ import {
   setGoToAction,
   deleteApplicationAction,
   muiQuery,
+  setApplicationDataAction,
 } from "../../context";
+import { getUserStoreAction } from "../../helpers/inputHelpers";
 
 const ProfileProgress = ({ state, actions, libraries }) => {
   const { lg } = muiQuery();
   const dispatch = useAppDispatch();
-  const { dynamicsApps, applicationData, isActiveUser } = useAppState();
+  const { dynamicsApps, isActiveUser } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
   const ICON_WIDTH = 30;
   const [isFetching, setFetching] = useState(false);
 
   const [applicationStep, setStep] = useState("Application");
+  const [applicationData, setAppData] = useState("Application");
   // application under review
   let isUnderReview = false;
   if (dynamicsApps) {
@@ -37,47 +40,42 @@ const ProfileProgress = ({ state, actions, libraries }) => {
       0;
   }
 
-  // if (isUnderReview) return null;
-
   useEffect(() => {
-    if (!applicationData) return null;
+    (async () => {
+      try {
+        const id = isActiveUser?.contactid || "";
+        const dynamicsApplication = await getUserStoreAction({ state, id });
+        console.log("🐞 APP UPDATE", dynamicsApplication);
 
-    const appData = applicationData[0]; // application info data
-    if (!appData) return null;
+        if (dynamicsApplication.success) {
+          setApplicationDataAction({
+            dispatch,
+            applicationData: updatedMembershipData,
+          });
+        }
 
-    let progressName = "";
-    // if application record & no steps completed return application name
-    if (appData.bad_categorytype) {
-      progressName = `- Started ${appData.bad_categorytype} application`;
-    }
+        const appData = dynamicsApplication?.[0]; // application info data
 
-    if (appData.stepOne) progressName = "Step 1 - The Process";
-    if (appData.stepTwo) progressName = "Step 2 - Personal Information";
-    if (appData.stepThree) progressName = "Step 3 - Category Selection";
-    if (appData.stepFour) progressName = "Step 4 - Professional Details";
-    if (appData.changeAppCategory)
-      progressName = ` - BAD ${appData.bad_categorytype} membership category change`;
+        let progressName = ` - Started ${appData.bad_categorytype} application`;
+        if (appData.step === 1) progressName = "Step 1 - The Process";
+        if (appData.step === 2) progressName = "Step 2 - Personal Information";
+        if (appData.step === 3) progressName = "Step 3 - Personal Information";
+        if (appData.step === 4) progressName = "Step 4 - Professional Details";
+        if (appData.step === 5) progressName = "Step 5: Application Submission";
+        if (appData.step === 8)
+          progressName = ` - BAD ${appData.bad_categorytype} membership category change`;
 
-    setStep(progressName);
-  }, [applicationData]);
+        setStep(progressName);
+        setAppData(dynamicsApplication);
+      } catch (error) {
+        console.log("🐞 error", error);
+      }
+    })();
+  }, []);
 
   // HELPERS ----------------------------------------------
   const handleApply = () => {
-    let path = `/membership/step-1-the-process/`;
-    if (applicationData && applicationData[0].stepOne)
-      path = `/membership/step-2-category-selection/`;
-    if (applicationData && applicationData[0].stepTwo)
-      path = `/membership/step-3-personal-information/`;
-    if (applicationData && applicationData[0].stepThree)
-      path = `/membership/step-4-professional-details/`;
-    if (applicationData && applicationData[0].stepFour)
-      path = `/membership/thank-you/`;
-    // SIG application path
-    if (applicationData && applicationData[0].bad_organisedfor === "SIG")
-      path = `/membership/sig-questions/`;
-    // BAD application category change path
-    if (applicationData && applicationData[0].changeAppCategory)
-      path = `/membership/application-change/`;
+    let path = `/membership/applications/`;
 
     setGoToAction({ state, path: path, actions });
   };
@@ -92,6 +90,9 @@ const ProfileProgress = ({ state, actions, libraries }) => {
         applicationData,
         contactid: isActiveUser.contactid,
       });
+
+      setApplicationDataAction({ dispatch, applicationData: null }); // 👉 update context
+      setAppData(null); // update local state
     } catch (error) {
       // console.log(error);
     } finally {
@@ -156,11 +157,11 @@ const ProfileProgress = ({ state, actions, libraries }) => {
               justifyItems: "center",
             }}
           >
-            <ServeProgressIcon complete={appData.stepOne} />
-            <ServeProgressIcon complete={appData.stepTwo} />
-            <ServeProgressIcon complete={appData.stepThree} />
-            <ServeProgressIcon complete={appData.stepFour} />
-            <ServeProgressIcon complete={appData.applicationComplete} />
+            <ServeProgressIcon complete={appData.step >= 1} />
+            <ServeProgressIcon complete={appData.step >= 2} />
+            <ServeProgressIcon complete={appData.step >= 3} />
+            <ServeProgressIcon complete={appData.step >= 4} />
+            <ServeProgressIcon complete={appData.step >= 5} />
           </div>
         </div>
       );
@@ -171,9 +172,9 @@ const ProfileProgress = ({ state, actions, libraries }) => {
         <ServeLine />
 
         <div className="flex" style={styles.progressMenuBar}>
-          <div>Step 1 - The Process</div>
-          <div>Step 2 - Personal Information</div>
-          <div>Step 3 - Category Selection</div>
+          <div style={{ textAlign: "start" }}>Step 1 - The Process</div>
+          <div style={{ textAlign: "start" }}>Step 2 - Category Selection</div>
+          <div>Step 3 - Personal Information</div>
           <div>Step 4 - Professional Details</div>
           <div>Application Submitted</div>
         </div>
@@ -206,7 +207,10 @@ const ProfileProgress = ({ state, actions, libraries }) => {
     );
   };
 
-  if (!applicationData) return null; // if no applicationData return null
+  // 👉 if no applicationData is typof string, return null
+  if (typeof applicationData === "string" || !applicationData) return null;
+
+  console.log("🐞e⭐️ applicationData", applicationData);
 
   // get application name & type & concat in string
   const appData = applicationData[0]; // application info data
@@ -251,7 +255,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
 const styles = {
   progressMenuBar: {
     display: "grid",
-    gridTemplateColumns: `0.5fr 1fr 1fr 1fr 1fr`,
+    gridTemplateColumns: `1fr 1fr 1fr 1fr 1fr`,
     textAlign: "end",
     fontSize: 12,
   },
