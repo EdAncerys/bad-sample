@@ -842,10 +842,8 @@ const Applications = ({ state, actions }) => {
                       <ul>
                         <li>CV </li>
                         <li>
-                          Main Hospital / Place of Work / Medical School details
+                          Information about your current working circumstances
                         </li>
-                        <li>GMC / IMC number (except students)</li>
-                        <li>Current Post</li>
                         <li>
                           Proposers (two proposers are needed for all
                           applications, with the exception of medical students
