@@ -29,7 +29,6 @@ const PickListInput = ({
   return (
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
       <label className={labelClass}>{Label}</label>
-      <label styles={{ color: "red" }}>{Label}</label>
       <ErrorComponent name={name ?? ""} form={form} />
 
       <Form.Select
