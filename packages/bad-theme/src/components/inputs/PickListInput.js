@@ -5,7 +5,15 @@ import { FORM_CONFIG } from "../../config/form";
 import ErrorComponent from "./ErrorComponent";
 import { jobRoleHandler } from "../../helpers/inputHelpers";
 
-const PickListInput = ({ form, name, Label, value, onChange, Choices }) => {
+const PickListInput = ({
+  form,
+  name,
+  Label,
+  value,
+  onChange,
+  Choices,
+  labelClass,
+}) => {
   // --------------------------------------------------------------------------------
   // 📌  Extend Choises with custom options
   // --------------------------------------------------------------------------------
@@ -20,7 +28,8 @@ const PickListInput = ({ form, name, Label, value, onChange, Choices }) => {
 
   return (
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
-      <label className="form-label required">{Label}</label>
+      <label className={labelClass}>{Label}</label>
+      <label styles={{ color: "red" }}>{Label}</label>
       <ErrorComponent name={name ?? ""} form={form} />
 
       <Form.Select

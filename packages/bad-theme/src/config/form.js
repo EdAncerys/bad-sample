@@ -766,12 +766,6 @@ export const FORM_CONFIG = {
     hidden: false,
     width: "100%",
     caption: "",
-    Choices: [
-      {
-        value: 810170007,
-        Label: "Clinical Academic",
-      },
-    ],
   },
   formus_typeofcontract: {
     Label: "Type of Contract",
