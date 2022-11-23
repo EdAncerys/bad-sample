@@ -128,7 +128,7 @@ export const googleAutocomplete = async ({ input }) => {
   const request = {
     input,
     // componentRestrictions: {}, // to limit to country ( country: "uk" }
-    fields: ["address_components", "geometry", "name"], // e👉return all address components including country, state, city, postcode, etc
+    fields: ["address_components", "geometry", "name"], // 👉 return all address components including country, state, city, postcode, etc
     strictBounds: false,
   };
 

@@ -19,20 +19,22 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
 
   const marginVertical = state.theme.marginVertical;
   const [isFetching, setIsFetching] = useState(null);
-  const [formData, setFormData] = useState({
+  const [formData, setForm] = useState({
     ["_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"]: "",
     bad_gmcno: "",
     bad_ntnno: "",
     bad_otherregulatorybodyreference: "",
-    jobtitle: "",
+    formus_jobrole: "",
   });
+
+  console.log("⭐️ formData ", formData);
 
   useEffect(() => {
     if (!isActiveUser) return null;
 
     // map through user & update formData with values
     const handleSetData = ({ name }) => {
-      setFormData((prevFormData) => ({
+      setForm((prevFormData) => ({
         ...prevFormData,
         [`${name}`]: isActiveUser[`${name}`] || "",
       }));
@@ -51,13 +53,13 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     if (isActiveUser.bad_ntnno) handleSetData({ name: "bad_ntnno" });
     if (isActiveUser.bad_otherregulatorybodyreference)
       handleSetData({ name: "bad_otherregulatorybodyreference" });
-    if (isActiveUser.jobtitle) handleSetData({ name: "jobtitle" });
+    if (isActiveUser.formus_jobrole) handleSetData({ name: "formus_jobrole" });
   }, [isActiveUser]);
 
   // HELPERS ----------------------------------------------------------------
   const handleInputChange = (e) => {
     const { name, value, type, checked, files } = e.target;
-    setFormData((prevFormData) => ({
+    setForm((prevFormData) => ({
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
     }));
@@ -196,8 +198,8 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
             <div>
               <label>Job Title</label>
               <input
-                name="jobtitle"
-                value={formData.jobtitle}
+                name="formus_jobrole"
+                value={formData.formus_jobrole}
                 onChange={handleInputChange}
                 className="form-control input"
                 placeholder="Job Title"
