@@ -1,23 +1,27 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "frontity";
 
-import { colors } from "../config/imports";
 // COMPONENTS ----------------------------------------------------------------
 import BlockBuilder from "../components/builder/blockBuilder";
 import Loading from "../components/loading";
 
 const Home = ({ state, actions, libraries }) => {
   const [wpBlocks, setWpBlocks] = useState(null);
-  const mountedRef = useRef(true);
 
-  useEffect(async () => {
-    const home = await state.source["page"][22];
-    // console.log("home data: ", home); // debug
-    setWpBlocks(home.acf.blocks);
-
-    return () => {
-      mountedRef.current = false; // clean up function
-    };
+  useEffect(() => {
+    // --------------------------------------------------------------------------------
+    // 📌  Home page data prefetch
+    // --------------------------------------------------------------------------------
+    (async () => {
+      try {
+        await actions.source.fetch(`/home-page`); // pre fetch home page CONTENT
+        const home = await state.source["page"][22];
+        // console.log("home data: ", home); // debug
+        setWpBlocks(home?.acf?.blocks);
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
   }, []);
 
   if (!wpBlocks) return <Loading />;
