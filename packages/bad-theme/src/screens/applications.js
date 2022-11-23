@@ -253,23 +253,23 @@ const Applications = ({ state, actions }) => {
   };
 
   const multiSelectHandler = ({ title, value, name }) => {
-    let currrntValues = form?.[name] || "";
+    let currentValues = form?.[name] || "";
     let currentTitles = form?.["dev_multi_select_" + name] || "";
 
-    if (!currrntValues.includes(value)) {
-      // 👉 if value is already selected, add to it by comma seperated
-      const newValue = currrntValues?.length > 0 ? "," + value : value; // if string have no values add value, othervise comma seperated
+    if (!currentValues.includes(value)) {
+      // 👉 if value is already selected, add to it by comma separated
+      const newValue = currentValues?.length > 0 ? "," + value : value; // if string have no values add value, othervise comma seperated
       const newTitle = currentTitles?.length > 0 ? ", " + title : title; // if string have no values add value, othervise comma seperated
-      currrntValues = currrntValues + newValue;
+      currentValues = currentValues + newValue;
       currentTitles = currentTitles + newTitle;
     } else {
       // 👉 if value is already selected, remove it
-      const hasValue = currrntValues?.includes("," + value); // check if value is comma seperated
-      currrntValues = hasValue
-        ? currrntValues?.replace("," + value, "")
-        : currrntValues?.replace(value, "");
+      const hasValue = currentValues?.includes("," + value); // check if value is comma separated
+      currentValues = hasValue
+        ? currentValues?.replace("," + value, "")
+        : currentValues?.replace(value, "");
 
-      const hasTitle = currentTitles?.includes(", " + title); // check if value is comma seperated
+      const hasTitle = currentTitles?.includes(", " + title); // check if value is comma separated
       currentTitles = hasTitle
         ? currentTitles?.replace(", " + title, "")
         : currentTitles?.replace(title, "");
@@ -277,7 +277,7 @@ const Applications = ({ state, actions }) => {
 
     setForm((form) => ({
       ...form,
-      [name]: currrntValues,
+      [name]: currentValues,
       ["dev_multi_select_" + name]: currentTitles,
     }));
   };
