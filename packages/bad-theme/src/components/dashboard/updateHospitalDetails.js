@@ -32,6 +32,41 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   useEffect(() => {
     if (!isActiveUser) return null;
 
+    let form = {};
+    const host = state.auth.WP_HOST;
+
+    (async () => {
+      // --------------------------------------------------------------------------------
+      // 📌  fetch promises all for all the data
+      // --------------------------------------------------------------------------------
+      const data = await Promise.all([
+        fetch(
+          host +
+            "/catalogue/fields/contact?field=formus_professionalregistrationbody"
+        ),
+        fetch(
+          host +
+            "/catalogue/fields/contact?field=formus_professionalregistrationstatus"
+        ),
+      ]);
+
+      const [professionalRegistrationBody, professionalRegistrationStatus] =
+        await Promise.all(data.map((res) => res.json()));
+
+      console.log(
+        "⭐️ promise data",
+        professionalRegistrationBody,
+        professionalRegistrationStatus
+      );
+
+      //  update from with fetched data
+      form = {
+        ...form,
+        professionalRegistrationBody,
+        professionalRegistrationStatus,
+      };
+    })();
+
     // --------------------------------------------------------------------------------
     // 📌  UPDATE FORM DATA
     // --------------------------------------------------------------------------------
