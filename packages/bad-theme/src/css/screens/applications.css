@@ -24,10 +24,36 @@
   width: 100%;
 }
 
-/* media querys */
+.flex-form-row {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  width: 100%;
+}
+
+.flex-form-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  width: 100%;
+}
+
+.form-row {
+  width: 100%;
+}
+
+/* media query's */
 @media screen and (max-width: 992px) {
   .applications-actions {
     flex-direction: column;
     margin: 0;
+  }
+
+  .flex-form-row {
+    flex-direction: column;
+  }
+
+  .flex-form-col {
+    padding: 1em;
   }
 }

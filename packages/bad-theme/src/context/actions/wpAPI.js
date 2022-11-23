@@ -49,23 +49,22 @@ export const getEventGrades = async ({ state }) => {
   }
 };
 
-export const getEventLocations = async ({ state }) => {
-  const url = `${state.auth.WP_HOST}wp-json/wp/v2/event_location?_fields=name,id`;
+export const getCatalogueData = async ({ state, path }) => {
+  const url = state.auth.APP_HOST + path;
 
   try {
     // ⬇️ fetch data via wp API page by page
     const response = await fetchDataHandler({ path: url, state });
-    if (!response.ok) throw new Error("Fetching error");
+    const data = await response?.json();
 
-    const data = await response.json();
     return data;
   } catch (error) {
     // console.log("🐞 ", error);
   }
 };
 
-export const getEventSpecialtys = async ({ state }) => {
-  const url = `${state.auth.WP_HOST}wp-json/wp/v2/event_specialty?_fields=name,id`;
+export const getEventLocations = async ({ state }) => {
+  const url = `${state.auth.WP_HOST}wp-json/wp/v2/event_location?_fields=name,id`;
 
   try {
     // ⬇️ fetch data via wp API page by page
@@ -286,7 +285,7 @@ export const getEventSpecialitys = async ({ state }) => {
 
   try {
     // ⬇️ fetch data via wp API page by page
-    const response = await fetchDataHandler({ path: url, state });
+    const response = await fetch(url);
     if (!response.ok) throw new Error("Fetching error");
 
     const data = await response.json();

@@ -15,7 +15,7 @@ import {
   muiQuery,
   getEventGrades,
   getEventLocations,
-  getEventSpecialtys,
+  getEventSpecialitys,
 } from "../../context";
 // import SearchBar from "../searchBar";
 
@@ -42,7 +42,7 @@ const Events = ({ state, block, disableMargin }) => {
     // pre fetch events data
     let grades = await getEventGrades({ state });
     let locations = await getEventLocations({ state });
-    let specialtys = await getEventSpecialtys({ state });
+    let specialtys = await getEventSpecialitys({ state });
 
     setGrades(grades);
     setLocations(locations);
