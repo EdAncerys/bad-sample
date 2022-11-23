@@ -24,7 +24,6 @@ const Navigation = ({ state, actions, libraries }) => {
   const [wpMoreMenu, setWpMoreMenu] = useState([]);
   const [featured, setFeatured] = useState([]);
   const [newsMedia, setNewsMedia] = useState([]);
-  const useEffectRef = useRef(false);
 
   const MAIN_NAV_LENGTH = 6; // main navigation length config
   const wpHost = state.auth.WP_HOST_CONTENT;
@@ -38,41 +37,48 @@ const Navigation = ({ state, actions, libraries }) => {
   );
   const activeChildMenu = useRef(null);
 
-  useEffect(async () => {
-    // ⬇️ getting wp menu & featured from state
-    let menuData = state.theme.menu;
-    if (!menuData) {
-      // get menu from local storage
-      const menu = sessionStorage.getItem("badMenu"); // checking if menu already pre fetched from wp
-      if (!menu) return; // if not, exit
+  useEffect(() => {
+    (async () => {
+      try {
+        // ⬇️ getting wp menu & featured from state
+        let menuData = state.theme.menu;
+        if (!menuData) {
+          // get menu from local storage
+          const menu = sessionStorage.getItem("badMenu"); // checking if menu already pre fetched from wp
+          if (!menu) return; // if not, exit
 
-      menuData = JSON.parse(menu);
-    }
-    const menuLength = menuData.length;
-    const wpMainMenu = menuData.slice(0, MAIN_NAV_LENGTH);
-    const wpMoreMenu = menuData.slice(MAIN_NAV_LENGTH, menuLength);
+          menuData = JSON.parse(menu);
+        }
+        const menuLength = menuData.length;
+        const wpMainMenu = menuData.slice(0, MAIN_NAV_LENGTH);
+        const wpMoreMenu = menuData.slice(MAIN_NAV_LENGTH, menuLength);
 
-    setWpMainMenu(wpMainMenu); // main menu to display
-    setWpMoreMenu(wpMoreMenu); // more menu into dropdown
-    if (state.source?.menu_features)
-      setFeatured(Object.values(state.source?.menu_features)); // cpt for menu content
+        // 👉 prefetch menuFeatures CPT
+        const menuFeatures = await fetch(
+          `${state.auth.WP_HOST}wp-json/wp/v2/menu_features?_fields=id,slug,type,link,title,acf&per_page=25`
+        );
+        const menuFeaturesData = await menuFeatures?.json();
 
-    let taxonomyList = await getMediaCategories({ state });
-    if (taxonomyList.length > 0) {
-      // sort catList by name in alphabetical order
-      taxonomyList.sort((a, b) => {
-        if (a.name < b.name) return -1;
-        if (a.name > b.name) return 1;
+        setFeatured(menuFeaturesData);
+        setWpMainMenu(wpMainMenu); // main menu to display
+        setWpMoreMenu(wpMoreMenu); // more menu into dropdown
 
-        return 0;
-      });
+        let taxonomyList = await getMediaCategories({ state });
+        if (taxonomyList.length > 0) {
+          // sort catList by name in alphabetical order
+          taxonomyList.sort((a, b) => {
+            if (a.name < b.name) return -1;
+            if (a.name > b.name) return 1;
 
-      setNewsMedia(taxonomyList);
-    }
+            return 0;
+          });
 
-    return () => {
-      useEffectRef.current = false; // clean up function
-    };
+          setNewsMedia(taxonomyList);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    })();
   }, [state.theme.menu]);
 
   if (!wpMoreMenu.length || !wpMainMenu.length)
