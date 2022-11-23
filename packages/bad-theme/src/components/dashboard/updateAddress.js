@@ -200,6 +200,10 @@ const UpdateAddress = ({ state, actions, libraries }) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       address2_line1: "",
+      address2_line2: "",
+      address2_city: "",
+      address2_country: "",
+      address2_postalcode: "",
     }));
     setSearchInput("");
     setAddressData(null);

@@ -10,6 +10,7 @@ import {
   setEnquireAction,
   setErrorAction,
   muiQuery,
+  getCatalogueData,
 } from "../../context";
 
 const UpdateHospitalDetails = ({ state, actions, libraries }) => {
@@ -39,32 +40,33 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       // --------------------------------------------------------------------------------
       // 📌  fetch promises all for all the data
       // --------------------------------------------------------------------------------
-      const data = await Promise.all([
-        fetch(
-          host +
-            "/catalogue/fields/contact?field=formus_professionalregistrationbody"
-        ),
-        fetch(
-          host +
-            "/catalogue/fields/contact?field=formus_professionalregistrationstatus"
-        ),
-      ]);
-
-      const [professionalRegistrationBody, professionalRegistrationStatus] =
-        await Promise.all(data.map((res) => res.json()));
-
-      console.log(
-        "⭐️ promise data",
-        professionalRegistrationBody,
-        professionalRegistrationStatus
-      );
-
+      // const res = getCatalogueData({
+      //   state,
+      //   path: "/catalogue/fields/contact",
+      // });
+      // const data = await Promise.all([
+      //   fetch(
+      //     host + "catalogue/fields/contact?field=formus_residencystatus",
+      //     requestOptions
+      //   ),
+      //   fetch(
+      //     host + "catalogue/fields/contact?field=formus_rotapattern",
+      //     requestOptions
+      //   ),
+      // ]);
+      // const [professionalRegistrationBody, professionalRegistrationStatus] =
+      //   await Promise.all(data.map((res) => res.json()));
+      // console.log(
+      //   "⭐️ promise data",
+      //   professionalRegistrationBody,
+      //   professionalRegistrationStatus
+      // );
       //  update from with fetched data
-      form = {
-        ...form,
-        professionalRegistrationBody,
-        professionalRegistrationStatus,
-      };
+      // form = {
+      //   ...form,
+      //   professionalRegistrationBody,
+      //   professionalRegistrationStatus,
+      // };
     })();
 
     // --------------------------------------------------------------------------------
@@ -312,7 +314,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
             </div>
           </div>
 
-          <div className="flex-form-row">
+          {/* <div className="flex-form-row">
             <div className="form-row">
               <label>Other main qualification type</label>
               <input
@@ -335,7 +337,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 disabled
               />
             </div>
-          </div>
+          </div> */}
 
           <div className="flex-form-row">
             <div className="form-row">

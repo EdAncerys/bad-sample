@@ -54,8 +54,8 @@ const Navigation = ({ state, actions, libraries }) => {
 
     setWpMainMenu(wpMainMenu); // main menu to display
     setWpMoreMenu(wpMoreMenu); // more menu into dropdown
-    if (state.source.menu_features)
-      setFeatured(Object.values(state.source.menu_features)); // cpt for menu content
+    if (state.source?.menu_features)
+      setFeatured(Object.values(state.source?.menu_features)); // cpt for menu content
 
     let taxonomyList = await getMediaCategories({ state });
     if (taxonomyList.length > 0) {

@@ -49,6 +49,20 @@ export const getEventGrades = async ({ state }) => {
   }
 };
 
+export const getCatalogueData = async ({ state, path }) => {
+  const url = state.auth.APP_HOST + path;
+
+  try {
+    // ⬇️ fetch data via wp API page by page
+    const response = await fetchDataHandler({ path: url, state });
+    const data = await response?.json();
+
+    return data;
+  } catch (error) {
+    // console.log("🐞 ", error);
+  }
+};
+
 export const getEventLocations = async ({ state }) => {
   const url = `${state.auth.WP_HOST}wp-json/wp/v2/event_location?_fields=name,id`;
 
