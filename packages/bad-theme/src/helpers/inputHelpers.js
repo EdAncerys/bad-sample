@@ -236,7 +236,7 @@ export const jobRoleHandler = ({ name, Label, form }) => {
     return true;
   if (
     form?.formus_staffgroupcategory === "810170003" &&
-    group_810170003?.filter((item) => item !== Label)?.length > 0 // 📌  if allowed job role matches selected job role
+    group_810170003?.filter((item) => item === Label)?.length > 0 // 📌  if allowed job role matches selected job role
   )
     return true;
   if (
