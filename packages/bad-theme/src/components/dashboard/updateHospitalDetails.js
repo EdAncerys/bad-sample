@@ -16,7 +16,7 @@ import {
 const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   const { lg } = muiQuery();
   const dispatch = useAppDispatch();
-  const { isActiveUser } = useAppState();
+  const { isActiveUser, dynamicsApps } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
   const [isFetching, setIsFetching] = useState(null);
@@ -28,7 +28,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     formus_jobrole: "",
   });
 
-  console.log("⭐️ formData ", formData);
+  console.log("⭐️ data ", formData, dynamicsApps);
 
   useEffect(() => {
     if (!isActiveUser) return null;
@@ -44,6 +44,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         state,
         path: "/catalogue/fields/contact",
       });
+
       console.log("⭐️ cat res", res);
       // const data = await Promise.all([
       //   fetch(

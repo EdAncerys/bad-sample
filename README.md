@@ -22,6 +22,15 @@
 # B2C
 ```
 
+### To specify node version in project based on Versel new config changes in package.json to add/configure presicly:
+
+```
+  "engines": {
+    "node": "16.x", 👈 IMPORTANT TO SPECIFY NODE VERSION
+    "npm": ">=6.0.0"
+  },
+```
+
 ## README TBD
 
 ## ⬇️ SWITHC To Developemnt git repo
