@@ -279,7 +279,9 @@ const Video = ({ state, actions, libraries }) => {
       const formattedDate = DATE_MODULE.format(dateObject, "MMMM YYYY");
 
       const ServePrice = () => {
-        if (!isActiveUser)
+        const publicAccess = !post?.acf?.private && !post?.acf?.members; // 👉 public access to video
+
+        if (!isActiveUser && !publicAccess) {
           return (
             <div>
               <div
@@ -295,15 +297,17 @@ const Video = ({ state, actions, libraries }) => {
               </div>
             </div>
           );
+        }
 
-        if (isActiveUser && post.acf.private && videoStatus === "locked")
+        if (isActiveUser && post.acf.private && videoStatus === "locked") {
           return (
             <div className="blue-btn" onClick={handlePayment}>
               Buy for £{post.acf.price}
             </div>
           );
+        }
 
-        if (post.acf.private && videoStatus === "unlocked")
+        if (post.acf.private && videoStatus === "unlocked") {
           return (
             <div
               className="primary-title"
@@ -312,6 +316,7 @@ const Video = ({ state, actions, libraries }) => {
               You have access to this video
             </div>
           );
+        }
 
         return (
           <div
