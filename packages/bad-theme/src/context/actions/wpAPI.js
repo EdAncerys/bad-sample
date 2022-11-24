@@ -280,7 +280,7 @@ export const getVideosData = async ({ state, page, postsPerPage }) => {
   }
 };
 
-export const getEventSpecialitys = async ({ state }) => {
+export const getEventSpecialties = async ({ state }) => {
   const url = `${state.auth.WP_HOST}wp-json/wp/v2/event_specialty?_fields=name,id`;
 
   try {

@@ -118,7 +118,7 @@ import {
   getReferralsData,
   getReferralsPage,
   getLeadershipData,
-  getEventSpecialitys,
+  getEventSpecialties,
   getGuidelinesData,
 } from "./actions/wpAPI";
 import {
@@ -251,7 +251,7 @@ export {
   getReferralsPage,
   getLeadershipData,
   getFundingData,
-  getEventSpecialitys,
+  getEventSpecialties,
   getEventGrades,
   handleSortFilter,
   fetchDataHandler,
