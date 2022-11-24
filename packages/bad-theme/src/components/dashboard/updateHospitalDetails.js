@@ -16,7 +16,7 @@ import {
 const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   const { lg } = muiQuery();
   const dispatch = useAppDispatch();
-  const { isActiveUser, dynamicsApps } = useAppState();
+  const { isActiveUser } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
   const [isFetching, setIsFetching] = useState(null);
@@ -28,7 +28,25 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     formus_jobrole: "",
   });
 
-  console.log("⭐️ data ", formData, dynamicsApps);
+  console.log("⭐️ data ", formData);
+
+  const userApplication = async () => {
+    // --------------------------------------------------------------------------------
+    // 📌  Application blob for active user
+    // --------------------------------------------------------------------------------
+    try {
+      const path =
+        state.auth.WP_HOST +
+        `/applications/billing/all/` +
+        isActiveUser?.contactid;
+      const response = await fetchDataHandler({ path, state });
+      const data = await response.json();
+
+      return data;
+    } catch (error) {
+      console.log("⭐️ ", error);
+    }
+  };
 
   useEffect(() => {
     if (!isActiveUser) return null;
@@ -37,38 +55,23 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     const host = state.auth.WP_HOST;
 
     (async () => {
-      // --------------------------------------------------------------------------------
-      // 📌  fetch promises all for all the data
-      // --------------------------------------------------------------------------------
-      const res = getCatalogueData({
-        state,
-        path: "/catalogue/fields/contact",
-      });
+      try {
+        // --------------------------------------------------------------------------------
+        // 📌  fetch promises all for all the data
+        // --------------------------------------------------------------------------------
+        // const res = getCatalogueData({
+        //   state,
+        //   path: "/catalogue/fields/contact",
+        // });
 
-      console.log("⭐️ cat res", res);
-      // const data = await Promise.all([
-      //   fetch(
-      //     host + "catalogue/fields/contact?field=formus_residencystatus",
-      //     requestOptions
-      //   ),
-      //   fetch(
-      //     host + "catalogue/fields/contact?field=formus_rotapattern",
-      //     requestOptions
-      //   ),
-      // ]);
-      // const [professionalRegistrationBody, professionalRegistrationStatus] =
-      //   await Promise.all(data.map((res) => res.json()));
-      // console.log(
-      //   "⭐️ promise data",
-      //   professionalRegistrationBody,
-      //   professionalRegistrationStatus
-      // );
-      //  update from with fetched data
-      // form = {
-      //   ...form,
-      //   professionalRegistrationBody,
-      //   professionalRegistrationStatus,
-      // };
+        const appData = await userApplication();
+        // get all active application list from subs.data
+        const activeApp = appData.filter((app) => app.statecode === "Active");
+
+        console.log("⭐️ ", appData);
+      } catch (error) {
+        console.log("error", error);
+      }
     })();
 
     // --------------------------------------------------------------------------------
