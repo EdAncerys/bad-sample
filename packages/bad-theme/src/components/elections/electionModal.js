@@ -86,7 +86,7 @@ const ElectionModal = ({
       if (!description) return null;
 
       return (
-        <div style={{ padding: `2em 0` }}>
+        <div style={{ padding: `1.5em 0` }} className="election-container">
           <Parcer libraries={libraries} html={description} />
         </div>
       );
@@ -175,17 +175,13 @@ const ElectionModal = ({
   };
 
   return (
-    <div style={styles.container}>
+    <div>
       <Modal show={modalData} size="xl" centered>
         <ServeModalContent />
         <ServeFooter />
       </Modal>
     </div>
   );
-};
-
-const styles = {
-  container: {},
 };
 
 export default connect(ElectionModal);
