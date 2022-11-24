@@ -28,7 +28,7 @@ const PickListInput = ({
 
   return (
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
-      <label className={labelClass}>{Label}</label>
+      {Label && <label className={labelClass}>{Label}</label>}
       <ErrorComponent name={name ?? ""} form={form} />
 
       <Form.Select
@@ -41,7 +41,7 @@ const PickListInput = ({
         <option value="" hidden className="select-option-hidden">
           {Label}
         </option>
-        {Choices.map(({ value, Label }, key) => {
+        {Choices?.map(({ value, Label }, key) => {
           // --------------------------------------------------------------------------------
           // 📌  formus_jobrole picklist filtering handler
           // --------------------------------------------------------------------------------

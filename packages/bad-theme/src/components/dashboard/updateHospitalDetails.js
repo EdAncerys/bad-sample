@@ -10,13 +10,14 @@ import {
   setEnquireAction,
   setErrorAction,
   muiQuery,
-  getCatalogueData,
+  getApplicationStatus,
 } from "../../context";
+import PickListInput from "../inputs/PickListInput";
 
 const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   const { lg } = muiQuery();
   const dispatch = useAppDispatch();
-  const { isActiveUser } = useAppState();
+  const { isActiveUser, dynamicsApps } = useAppState();
 
   const marginVertical = state.theme.marginVertical;
   const [isFetching, setIsFetching] = useState(null);
@@ -28,47 +29,38 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     formus_jobrole: "",
   });
 
-  console.log("⭐️ data ", formData);
+  // --------------------------------------------------------------------------------
+  // 📌  User application types
+  // --------------------------------------------------------------------------------
+  const isBADMember =
+    formData?.dev_subs?.filter((app) => app?.bad_organisedfor?.includes("BAD"))
+      ?.length > 0;
+  const isStudentApp =
+    formData?.dev_subs?.filter((app) => app?.core_name?.includes("Student"))
+      ?.length > 0;
+  const isOrdinaryApp =
+    formData?.dev_subs?.filter((app) => app?.core_name?.includes("Ordinary"))
+      ?.length > 0;
 
-  const userApplication = async () => {
-    // --------------------------------------------------------------------------------
-    // 📌  Application blob for active user
-    // --------------------------------------------------------------------------------
-    try {
-      const path =
-        state.auth.WP_HOST +
-        `/applications/billing/all/` +
-        isActiveUser?.contactid;
-      const response = await fetchDataHandler({ path, state });
-      const data = await response.json();
-
-      return data;
-    } catch (error) {
-      console.log("⭐️ ", error);
-    }
-  };
+  console.log("⭐️ formData", formData);
 
   useEffect(() => {
     if (!isActiveUser) return null;
 
     let form = {};
-    const host = state.auth.WP_HOST;
 
     (async () => {
       try {
         // --------------------------------------------------------------------------------
         // 📌  fetch promises all for all the data
         // --------------------------------------------------------------------------------
-        // const res = getCatalogueData({
-        //   state,
-        //   path: "/catalogue/fields/contact",
-        // });
 
-        const appData = await userApplication();
-        // get all active application list from subs.data
-        const activeApp = appData.filter((app) => app.statecode === "Active");
-
-        console.log("⭐️ ", appData);
+        const appData = await getApplicationStatus({
+          state,
+          dispatch,
+          contactid: isActiveUser?.contactid,
+        });
+        form.dev_subs = appData?.subs; // 👉 add subs to form
       } catch (error) {
         console.log("error", error);
       }
@@ -80,6 +72,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     setForm((prev) => ({
       ...prev,
       ...isActiveUser,
+      ...form,
     }));
   }, [isActiveUser]);
 
@@ -116,16 +109,20 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   const handleProfileUpdate = async () => {
     setIsFetching(true);
     // const address1_line1 = formData.address1_line1;
-    const bad_gmcno = formData.bad_gmcno;
-    const bad_ntnno = formData.bad_ntnno;
+    const bad_gmcno = formData?.bad_gmcno;
+    const bad_ntnno = formData?.bad_ntnno;
     const bad_otherregulatorybodyreference =
-      formData.bad_otherregulatorybodyreference;
+      formData?.bad_otherregulatorybodyreference;
+    const formus_rotapattern = formData?._formus_rotapattern;
+    const formus_residencystatus = formData?._formus_residencystatus;
 
     const data = Object.assign(
       {}, // add empty object
       { bad_gmcno },
       { bad_ntnno },
-      { bad_otherregulatorybodyreference }
+      { bad_otherregulatorybodyreference },
+      { formus_rotapattern },
+      { formus_residencystatus }
     );
 
     try {
@@ -246,6 +243,17 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
 
           <div className="flex-form-row">
             <div className="form-row">
+              <label>Staff Group Category</label>
+              <input
+                name="formus_staffgroupcategory"
+                value={formData?.formus_staffgroupcategory || ""}
+                onChange={handleInputChange}
+                className="form-control input"
+                placeholder="Staff Group Category"
+                disabled
+              />
+            </div>
+            <div className="form-row">
               <label>Job Title</label>
               <input
                 name="formus_jobrole"
@@ -256,173 +264,142 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 disabled
               />
             </div>
-            <div className="form-row">
-              <label>Professional Registration Body</label>
-              <input
-                name="formus_professionalregistrationbody"
-                value={formData?.formus_professionalregistrationbody || ""}
-                onChange={handleInputChange}
-                className="form-control input"
-                placeholder="Professional Registration Body"
-                disabled
-              />
-            </div>
           </div>
 
-          <div className="flex-form-row">
-            <div className="form-row">
-              <label>Professional Registration Status</label>
-              <input
-                name="formus_professionalregistrationstatus"
-                value={formData?.formus_professionalregistrationstatus || ""}
-                onChange={handleInputChange}
-                className="form-control input"
-                placeholder="Professional Registration Status"
-                disabled
-              />
-            </div>
-            <div className="form-row">
-              <label>Residency Status</label>
-              <input
-                name="formus_residencystatus"
-                value={formData?.formus_residencystatus || ""}
-                onChange={handleInputChange}
-                className="form-control input"
-                placeholder="Residency Status"
-                disabled
-              />
-            </div>
-          </div>
+          {isBADMember && !isStudentApp && (
+            <div className="flex-form-col">
+              <div className="flex-form-row">
+                <div className="form-row">
+                  <label>Professional Registration Body</label>
+                  <input
+                    name="formus_professionalregistrationbody"
+                    value={formData?.formus_professionalregistrationbody || ""}
+                    onChange={handleInputChange}
+                    className="form-control input"
+                    placeholder="Professional Registration Body"
+                    disabled
+                  />
+                </div>
+                <div className="form-row">
+                  <label>Professional Registration Status</label>
+                  <input
+                    name="formus_professionalregistrationstatus"
+                    value={
+                      formData?.formus_professionalregistrationstatus || ""
+                    }
+                    onChange={handleInputChange}
+                    className="form-control input"
+                    placeholder="Professional Registration Status"
+                    disabled
+                  />
+                </div>
+              </div>
 
-          <div className="flex-form-row">
-            <div className="form-row">
-              <label>Qualification Type</label>
-              <input
-                name="formus_qualificationtype"
-                value={formData?.formus_qualificationtype || ""}
-                onChange={handleInputChange}
-                className="form-control input"
-                placeholder="Qualification Type"
-                disabled
-              />
-            </div>
-            <div className="form-row">
-              <label>Other Specialty Qualification</label>
-              <input
-                name="formus_otherqualificationtype"
-                value={formData?.formus_otherqualificationtype || ""}
-                onChange={handleInputChange}
-                className="form-control input"
-                placeholder="Other Specialty Qualification"
-                disabled
-              />
-            </div>
-          </div>
+              <div className="flex-form-row">
+                <div className="form-row">
+                  <label>Type of Contract</label>
+                  <input
+                    name="formus_typeofcontract"
+                    value={formData?.formus_typeofcontract || ""}
+                    onChange={handleInputChange}
+                    className="form-control input"
+                    placeholder="Type of Contract"
+                    disabled
+                  />
+                </div>
 
-          {/* <div className="flex-form-row">
-            <div className="form-row">
-              <label>Other main qualification type</label>
-              <input
-                name="formus_othermainspecialtyqualification"
-                value={formData?.formus_othermainspecialtyqualification || ""}
-                onChange={handleInputChange}
-                className="form-control input"
-                placeholder="Other main qualification type"
-                disabled
-              />
-            </div>
-            <div className="form-row">
-              <label>Other Reason for moving CCST date</label>
-              <input
-                name="formus_otherreasonformovingccstdate"
-                value={formData?.formus_otherreasonformovingccstdate || ""}
-                onChange={handleInputChange}
-                className="form-control input"
-                placeholder="Other Reason for moving CCST date"
-                disabled
-              />
-            </div>
-          </div> */}
+                <div className="form-row">
+                  <label>Clinical Specialty(s) of practice</label>
+                  <input
+                    name="formus_clinicalspecialtysofpractice"
+                    value={formData?.formus_clinicalspecialtysofpractice || ""}
+                    onChange={handleInputChange}
+                    className="form-control input"
+                    placeholder="Clinical Specialty(s) of practice"
+                    disabled
+                  />
+                </div>
+              </div>
 
-          <div className="flex-form-row">
-            <div className="form-row">
-              <label>Main Specialty Qualification</label>
-              <input
-                name="formus_mainspecialtyqualification"
-                value={formData?.formus_mainspecialtyqualification || ""}
-                onChange={handleInputChange}
-                className="form-control input"
-                placeholder="Main Specialty Qualification"
-                disabled
-              />
-            </div>
-            <div className="form-row">
-              <label>Clinical Specialty(s) of practice</label>
-              <input
-                name="formus_clinicalspecialtysofpractice"
-                value={formData?.formus_clinicalspecialtysofpractice || ""}
-                onChange={handleInputChange}
-                className="form-control input"
-                placeholder="Clinical Specialty(s) of practice"
-                disabled
-              />
-            </div>
-          </div>
+              {isOrdinaryApp && (
+                <div className="flex-form-row">
+                  <div className="form-row">
+                    <label>Main Specialty Qualification</label>
+                    <input
+                      name="formus_mainspecialtyqualification"
+                      value={formData?.formus_mainspecialtyqualification || ""}
+                      onChange={handleInputChange}
+                      className="form-control input"
+                      placeholder="Main Specialty Qualification"
+                      disabled
+                    />
+                  </div>
+                  <div className="form-row">
+                    <label>Specialized Dermatology Areas of practice</label>
+                    <input
+                      name="formus_specialiseddermatologyareasofpractice"
+                      value={
+                        formData?.formus_specialiseddermatologyareasofpractice ||
+                        ""
+                      }
+                      onChange={handleInputChange}
+                      className="form-control input"
+                      placeholder="Specialized Dermatology Areas of practice"
+                      disabled
+                    />
+                  </div>
+                </div>
+              )}
 
-          <div className="flex-form-row">
-            <div className="form-row">
-              <label>Specialized Dermatology Areas of practice</label>
-              <input
-                name="formus_specialiseddermatologyareasofpractice"
-                value={
-                  formData?.formus_specialiseddermatologyareasofpractice || ""
-                }
-                onChange={handleInputChange}
-                className="form-control input"
-                placeholder="Specialized Dermatology Areas of practice"
-                disabled
-              />
-            </div>
-            <div className="form-row">
-              <label>Type of Contract</label>
-              <input
-                name="formus_typeofcontract"
-                value={formData?.formus_typeofcontract || ""}
-                onChange={handleInputChange}
-                className="form-control input"
-                placeholder="Type of Contract"
-                disabled
-              />
-            </div>
-          </div>
+              <div className="flex-form-row">
+                <div className="form-row">
+                  <label>Residency Status</label>
+                  <PickListInput
+                    form={formData}
+                    name="_formus_residencystatus"
+                    value={formData?._formus_residencystatus || ""}
+                    onChange={handleInputChange}
+                    Choices={[
+                      {
+                        value: 810170000,
+                        Label: "Permanent",
+                      },
+                      {
+                        value: 810170001,
+                        Label: "Temporary",
+                      },
+                    ]}
+                    labelClass="form-label"
+                  />
+                </div>
 
-          <div className="flex-form-row">
-            <div className="form-row">
-              <label>Fixed term/temporary reason for employment contract</label>
-              <input
-                name="formus_fixedtermtemporaryreasonforemploymentcont"
-                value={
-                  formData?.formus_fixedtermtemporaryreasonforemploymentcont ||
-                  ""
-                }
-                onChange={handleInputChange}
-                className="form-control input"
-                placeholder="Fixed term/temporary reason for employment contract"
-                disabled
-              />
+                <div className="form-row">
+                  <label>Rota Pattern</label>
+                  <PickListInput
+                    form={formData}
+                    name="_formus_rotapattern"
+                    value={formData?._formus_rotapattern || ""}
+                    onChange={handleInputChange}
+                    Choices={[
+                      {
+                        value: 810170000,
+                        Label: "On Call",
+                      },
+                      {
+                        value: 810170002,
+                        Label: "Trainee On Call",
+                      },
+                      {
+                        value: 810170001,
+                        Label: "Ward Rounds",
+                      },
+                    ]}
+                    labelClass="form-label"
+                  />
+                </div>
+              </div>
             </div>
-            <div className="form-row">
-              <label>Rota Pattern</label>
-              <input
-                name="formus_rotapattern"
-                value={formData?.formus_rotapattern || ""}
-                onChange={handleInputChange}
-                className="form-control input"
-                placeholder="Rota Pattern"
-                disabled
-              />
-            </div>
-          </div>
+          )}
         </div>
 
         <ServeActions />
