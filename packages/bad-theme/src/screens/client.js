@@ -89,9 +89,11 @@ const BADTheme = {
   actions: {
     theme: {
       beforeCSR: async ({ state, actions }) => {
-        // --------------------------------------------------------------------------------
-        // ⚠️ Data prefetch before CSR
-        // --------------------------------------------------------------------------------
+        // console.log("beforeCSR triggered"); // debug
+        await Promise.all([
+          // actions.source.fetch(`/home-page`), // pre fetch home page CONTENT
+          // actions.source.fetch(`/formTitl`), // pre fetch menu featured CPT
+        ]);
 
         // ⬇️ handle set cookie for video guide block. Silent auth login
         // https://www.skinhealthinfo.org.uk/support-resources/video-guides/

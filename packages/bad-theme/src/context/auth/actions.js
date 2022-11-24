@@ -171,7 +171,7 @@ export const getUserContactId = async ({ state, dispatch, transId }) => {
 // 📌  Additional uncomputed filed values to add in user blob from Dynamics
 //    (values added with " _ " prefix)
 // --------------------------------------------------------------------------------
-const userBlobFields = `gendercode,py3_ethnicity,birthdate,bad_preferredmailingaddress,bad_includeinfindadermatologist,bad_bademailalerts,bad_badecircular,bad_presidentsbulletin,bad_bjdalerts,donotemail,bad_newhospitaladded,bad_mrpcqualified,bad_memberdirectory,py3_constitutionagreement,bad_readpolicydocument,bad_hasmedicallicence,bad_includeinthebssciiemaildiscussionforum`;
+const userBlobFields = `gendercode,py3_ethnicity,birthdate,bad_preferredmailingaddress,bad_includeinfindadermatologist,bad_bademailalerts,bad_badecircular,bad_presidentsbulletin,bad_bjdalerts,donotemail,bad_newhospitaladded,bad_mrpcqualified,bad_memberdirectory,py3_constitutionagreement,bad_readpolicydocument,bad_hasmedicallicence,bad_includeinthebssciiemaildiscussionforum,formus_jobrole`;
 
 export const getUserDataByContactId = async ({
   state,

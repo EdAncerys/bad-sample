@@ -128,7 +128,7 @@ export const googleAutocomplete = async ({ input }) => {
   const request = {
     input,
     // componentRestrictions: {}, // to limit to country ( country: "uk" }
-    fields: ["address_components", "geometry", "name"], // e👉return all address components including country, state, city, postcode, etc
+    fields: ["address_components", "geometry", "name"], // 👉 return all address components including country, state, city, postcode, etc
     strictBounds: false,
   };
 
@@ -209,62 +209,54 @@ export const getBADMembershipSubscriptionData = async ({
 };
 
 export const jobRoleHandler = ({ name, Label, form }) => {
-  if (name === "formus_jobrole" && form?.formus_staffgroupcategory === "") {
+  if (form?.formus_staffgroupcategory === "") {
     // 📌  if job role is selected, return all job roles
     return true;
   }
 
   // ⚠️ dont show Phlebotomist option in job role dropdown
-  if (name === "formus_jobrole" && Label === "Phlebotomist") {
+  if (Label === "Phlebotomist") {
     return false;
   }
 
   if (
-    name === "formus_jobrole" &&
     form?.formus_staffgroupcategory === "810170000" &&
-    group_810170000?.includes(Label)
+    group_810170000?.filter((item) => item === Label)?.length > 0 // 📌  if allowed job role matches selected job role
   )
     return true;
   if (
-    name === "formus_jobrole" &&
     form?.formus_staffgroupcategory === "810170001" &&
-    group_810170001?.includes(Label)
+    group_810170001?.filter((item) => item === Label)?.length > 0 // 📌  if allowed job role matches selected job role
   )
     return true;
   if (
-    name === "formus_jobrole" &&
     form?.formus_staffgroupcategory === "810170002" &&
-    group_810170002?.includes(Label)
+    group_810170002?.filter((item) => item === Label)?.length > 0 // 📌  if allowed job role matches selected job role
   )
     return true;
   if (
-    name === "formus_jobrole" &&
     form?.formus_staffgroupcategory === "810170003" &&
-    group_810170003?.includes(Label)
+    group_810170003?.filter((item) => item === Label)?.length > 0 // 📌  if allowed job role matches selected job role
   )
     return true;
   if (
-    name === "formus_jobrole" &&
     form?.formus_staffgroupcategory === "810170004" &&
-    group_810170004?.includes(Label)
+    group_810170004?.filter((item) => item === Label)?.length > 0 // 📌  if allowed job role matches selected job role
   )
     return true;
   if (
-    name === "formus_jobrole" &&
     form?.formus_staffgroupcategory === "810170005" &&
-    group_810170005?.includes(Label)
+    group_810170005?.filter((item) => item === Label)?.length > 0 // 📌  if allowed job role matches selected job role
   )
     return true;
   if (
-    name === "formus_jobrole" &&
     form?.formus_staffgroupcategory === "810170006" &&
-    group_810170006?.includes(Label)
+    group_810170006?.filter((item) => item === Label)?.length > 0 // 📌  if allowed job role matches selected job role
   )
     return true;
   if (
-    name === "formus_jobrole" &&
     form?.formus_staffgroupcategory === "810170007" &&
-    group_810170007?.includes(Label)
+    group_810170007?.filter((item) => item === Label)?.length > 0 // 📌  if allowed job role matches selected job role
   )
     return true;
 

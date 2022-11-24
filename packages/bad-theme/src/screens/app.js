@@ -68,7 +68,7 @@ const App = ({ state, actions }) => {
   let urlPath = state.router.link;
   const data = state.source.get(urlPath);
   const useEffectRef = useRef(true);
-  console.log("INDEX data", data); // debug
+  // console.log("INDEX data", data); // 👉 debug
 
   // --------------------------------------------------------------------------------
   // 📌  B2C login handler.
@@ -91,27 +91,30 @@ const App = ({ state, actions }) => {
     window.history.scrollRestoration = "manual";
   }, [urlPath]);
 
-  useEffect(async () => {
+  useEffect(() => {
     // --------------------------------------------------------------------------------
     // 📌  PRE-FETCH CONTENT DATA HANDLERS
     // --------------------------------------------------------------------------------
-    // get current time & save it to variable
-    const currentTime = new Date().getTime();
-    if (!isPlaceholder) return; // trigger only once
-    // ⬇️  get user data if cookie is set
-    await authCookieActionAfterCSR({ state, dispatch });
-    // ⬇️  pre-fetch app menu from wp
-    await getWPMenu({ state, actions });
+    (async () => {
+      try {
+        // get current time & save it to variable
+        const currentTime = new Date().getTime();
+        if (!isPlaceholder) return; // trigger only once
+        // ⬇️  get user data if cookie is set
+        await authCookieActionAfterCSR({ state, dispatch });
+        // ⬇️  pre-fetch app menu from wp
+        await getWPMenu({ state, actions });
 
-    // get current time & compare how long pre-fetch took before  setting placeholder
-    const timeTaken = new Date().getTime() - currentTime;
-    // console.log("🐞 LOAD TIME", timeTaken); // debug
+        // get current time & compare how long pre-fetch took before  setting placeholder
+        const timeTaken = new Date().getTime() - currentTime;
+        // console.log("🐞 LOAD TIME", timeTaken); // debug
 
-    // animation handler
-    AOS.init();
-    return () => {
-      useEffectRef.current = false; // clean up function
-    };
+        // animation handler
+        AOS.init();
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
   }, []);
 
   useEffect(() => {

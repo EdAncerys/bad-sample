@@ -12,12 +12,12 @@ import {
   muiQuery,
   useAppState,
   getVideosData,
-  getEventSpecialitys,
+  getEventSpecialties,
   getEventGrades,
   fetchDataHandler,
 } from "../context";
 
-const VideoArchive = ({ state, actions}) => {
+const VideoArchive = ({ state, actions }) => {
   const [postData, setPostData] = useState(null);
   const [heroBannerBlock, setHeroBannerBlock] = useState(null);
   const [userVideos, setUserVideos] = useState(null);
@@ -27,7 +27,7 @@ const VideoArchive = ({ state, actions}) => {
   const [eventGrades, setEventGrades] = useState(null);
 
   const { isActiveUser } = useAppState();
-  const { lg} = muiQuery();
+  const { lg } = muiQuery();
 
   const searchFilterRef = useRef("");
   const specialtyFilter = useRef("");
@@ -147,7 +147,11 @@ const VideoArchive = ({ state, actions}) => {
           >
             <option hidden>Grade Filters</option>
             {data.map((item, i) => {
-              return <option key={i} value={item.id}>{item.name}</option>;
+              return (
+                <option key={i} value={item.id}>
+                  {item.name}
+                </option>
+              );
             })}
           </select>
         </div>
@@ -328,7 +332,7 @@ const VideoArchive = ({ state, actions}) => {
 
   useEffect(async () => {
     const videoList = await getVideosData({ state });
-    const eventSpec = await getEventSpecialitys({ state });
+    const eventSpec = await getEventSpecialties({ state });
     const eventGrades = await getEventGrades({ state });
 
     const fetchHeroBanner = async () => {

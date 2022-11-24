@@ -658,7 +658,7 @@ export const FORM_CONFIG = {
     caption: "",
   },
   formus_othermainspecialtyqualification: {
-    Label: "Please specficy other qualification type", // Old Label: "Other Main Specialty Qualification"
+    Label: "Please specify other main qualification type", // Old Label: "Other Main Specialty Qualification"
     AttributeType: "String",
     MaxLength: 200,
     Required: "None",
@@ -748,7 +748,7 @@ export const FORM_CONFIG = {
     caption: "",
   },
   formus_specialiseddermatologyareasofpractice: {
-    Label: "Specialised Dermatology Areas of practice",
+    Label: "Specialized Dermatology Areas of practice",
     AttributeType: "Virtual",
     MaxLength: 100,
     Required: "ApplicationRequired",
@@ -766,12 +766,6 @@ export const FORM_CONFIG = {
     hidden: false,
     width: "100%",
     caption: "",
-    Choices: [
-      {
-        value: 810170007,
-        Label: "Clinical Academic",
-      },
-    ],
   },
   formus_typeofcontract: {
     Label: "Type of Contract",
@@ -794,7 +788,7 @@ export const FORM_CONFIG = {
     caption: "",
   },
   formus_otherqualificationtype: {
-    Label: "Please specficy other Main Specialty Qualification", // Old Label: "Other Qualification Type"
+    Label: "Please specify other Specialty Qualification", // Old Label: "Other Qualification Type"
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",

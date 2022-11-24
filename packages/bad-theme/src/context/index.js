@@ -98,7 +98,6 @@ import {
   getEventsData,
   getEventGrades,
   getEventLocations,
-  getEventSpecialtys,
   getNewsData,
   getMediaCategories,
   setMediaCategoriesAction,
@@ -119,7 +118,7 @@ import {
   getReferralsData,
   getReferralsPage,
   getLeadershipData,
-  getEventSpecialitys,
+  getEventSpecialties,
   getGuidelinesData,
 } from "./actions/wpAPI";
 import {
@@ -231,7 +230,6 @@ export {
   googleAutocompleteAction,
   getEventsData,
   getEventLocations,
-  getEventSpecialtys,
   getNewsData,
   getMediaCategories,
   setMediaCategoriesAction,
@@ -253,7 +251,7 @@ export {
   getReferralsPage,
   getLeadershipData,
   getFundingData,
-  getEventSpecialitys,
+  getEventSpecialties,
   getEventGrades,
   handleSortFilter,
   fetchDataHandler,
