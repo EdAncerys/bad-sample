@@ -63,7 +63,6 @@ const ElectionBlocks = ({ state, actions, block }) => {
     // 📌  Hook to inject css to the modal
     // --------------------------------------------------------------------------------
     const container = document.querySelector(".election-container");
-    console.log("⭐️ ", container);
 
     // ⚠️ add vertical padding to all p tags in the container
     const pTags = container.querySelectorAll("p");
