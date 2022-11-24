@@ -40,10 +40,11 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       // --------------------------------------------------------------------------------
       // 📌  fetch promises all for all the data
       // --------------------------------------------------------------------------------
-      // const res = getCatalogueData({
-      //   state,
-      //   path: "/catalogue/fields/contact",
-      // });
+      const res = getCatalogueData({
+        state,
+        path: "/catalogue/fields/contact",
+      });
+      console.log("⭐️ cat res", res);
       // const data = await Promise.all([
       //   fetch(
       //     host + "catalogue/fields/contact?field=formus_residencystatus",
