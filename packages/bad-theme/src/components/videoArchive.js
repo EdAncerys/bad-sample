@@ -314,7 +314,7 @@ const VideoArchive = ({ state, actions, libraries }) => {
     );
   };
   const VideoArchivePost = ({ post }) => {
-    if (post.acf.members & !isActiveUser) return null;
+    if (post.acf.members && !isActiveUser) return null; // if the video is for members only and the user is not a member, don't show the video
     // GET VIMEO COVER
 
     return (
