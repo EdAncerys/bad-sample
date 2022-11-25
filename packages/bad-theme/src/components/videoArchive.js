@@ -12,12 +12,12 @@ import {
   muiQuery,
   useAppState,
   getVideosData,
-  getEventSpecialitys,
+  getEventSpecialties,
   getEventGrades,
   fetchDataHandler,
 } from "../context";
 
-const VideoArchive = ({ state, actions}) => {
+const VideoArchive = ({ state, actions, libraries }) => {
   const [postData, setPostData] = useState(null);
   const [heroBannerBlock, setHeroBannerBlock] = useState(null);
   const [userVideos, setUserVideos] = useState(null);
@@ -27,7 +27,7 @@ const VideoArchive = ({ state, actions}) => {
   const [eventGrades, setEventGrades] = useState(null);
 
   const { isActiveUser } = useAppState();
-  const { lg} = muiQuery();
+  const { lg } = muiQuery();
 
   const searchFilterRef = useRef("");
   const specialtyFilter = useRef("");
@@ -35,6 +35,9 @@ const VideoArchive = ({ state, actions}) => {
   const gradeFilter = useRef("");
   const showOnlyMyVids = useRef(false);
   const marginVertical = state.theme.marginVertical;
+
+  console.log("⭐️ videosList", videosList);
+  console.log("⭐️ postData", postData);
 
   const handleFilters = () => {
     if (specialtyFilter.current === "all") {
@@ -113,10 +116,10 @@ const VideoArchive = ({ state, actions}) => {
             style={!lg ? styles.dropdown : styles.dropdownMobile}
           >
             <option hidden>Specialties</option>
-            {data.map((item, key) => {
+            {data?.map((item, key) => {
               return (
                 <option key={key} value={item.id}>
-                  {item.name}
+                  {item?.name}
                 </option>
               );
             })}
@@ -146,8 +149,12 @@ const VideoArchive = ({ state, actions}) => {
             }}
           >
             <option hidden>Grade Filters</option>
-            {data.map((item, i) => {
-              return <option key={i} value={item.id}>{item.name}</option>;
+            {data?.map((item, i) => {
+              return (
+                <option key={i} value={item.id}>
+                  {item.name}
+                </option>
+              );
             })}
           </select>
         </div>
@@ -174,7 +181,7 @@ const VideoArchive = ({ state, actions}) => {
           >
             <option hidden>Video type</option>
             <option value="all">All videos</option>
-            {paymentType.map((item, key) => {
+            {paymentType?.map((item, key) => {
               return (
                 <option key={key} value={item.toLowerCase()}>
                   {item}
@@ -307,7 +314,7 @@ const VideoArchive = ({ state, actions}) => {
     );
   };
   const VideoArchivePost = ({ post }) => {
-    if (post.acf.members & !isActiveUser) return null;
+    if (post.acf.members && !isActiveUser) return null; // if the video is for members only and the user is not a member, don't show the video
     // GET VIMEO COVER
 
     return (
@@ -327,9 +334,14 @@ const VideoArchive = ({ state, actions}) => {
   };
 
   useEffect(async () => {
-    const videoList = await getVideosData({ state });
-    const eventSpec = await getEventSpecialitys({ state });
+    let videoList = await getVideosData({ state });
+    const eventSpec = await getEventSpecialties({ state });
     const eventGrades = await getEventGrades({ state });
+
+    // sort videos by date in descending order
+    videoList = videoList.sort((a, b) => {
+      return new Date(b.date) - new Date(a.date);
+    });
 
     const fetchHeroBanner = async () => {
       const path = state.source.url + "/wp-json/wp/v2/pages/7051";
@@ -399,7 +411,7 @@ const VideoArchive = ({ state, actions}) => {
         {postData ? (
           <div style={!lg ? styles.container : styles.containerMobile}>
             {postData.length > 0 ? (
-              postData.map((item, key) => {
+              postData?.map((item, key) => {
                 // filter videos by id
                 const post = videosList.filter(
                   (post) => post.id === item.id

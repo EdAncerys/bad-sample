@@ -56,6 +56,21 @@ const ElectionBlocks = ({ state, actions, block }) => {
   const isPosition = positions_filter;
   const isOpen = opened_or_closed_filter;
 
+  useEffect(() => {
+    if (!modalData) return; // exit if no modal data | trigger on modal open event only
+
+    // --------------------------------------------------------------------------------
+    // 📌  Hook to inject css to the modal
+    // --------------------------------------------------------------------------------
+    const container = document.querySelector(".election-container");
+
+    // ⚠️ add vertical padding to all p tags in the container
+    const pTags = container.querySelectorAll("p");
+    pTags.forEach((p) => {
+      p.style.padding = "0.5em 0";
+    });
+  }, [modalData]);
+
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
     const gradeTaxonomy = await getCPTTaxonomy({

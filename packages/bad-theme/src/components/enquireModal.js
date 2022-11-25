@@ -49,15 +49,16 @@ const EnquireModal = ({ state, libraries }) => {
     if (!isActiveUser) return null;
     setFormData((prevFormData) => ({
       ...prevFormData,
-      ["jobtitle"]: isActiveUser.jobtitle || "",
-      ["fullname"]: isActiveUser.fullname || "",
-      ["emailaddress1"]: isActiveUser.emailaddress1 || "",
-      ["mobilephone"]: isActiveUser.mobilephone || "",
+      ["jobtitle"]:
+        isActiveUser?.formus_jobrole || isActiveUser?.jobtitle || "",
+      ["fullname"]: isActiveUser?.fullname || "",
+      ["emailaddress1"]: isActiveUser?.emailaddress1 || "",
+      ["mobilephone"]: isActiveUser?.mobilephone || "",
       ["currentHospitalName"]:
-        isActiveUser[
+        isActiveUser?.[
           "_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"
         ] || "",
-      ["bad_memberid"]: isActiveUser.bad_memberid || "",
+      ["bad_memberid"]: isActiveUser?.bad_memberid || "",
     }));
   }, [isActiveUser]);
 
