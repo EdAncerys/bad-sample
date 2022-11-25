@@ -22,7 +22,7 @@ import CookiePopUp from "../CookiePopUp";
 // CONTEXT ----------------------------------------------------------------
 import { muiQuery } from "../../context";
 
-const Header = ({ state, actions }) => {
+const Header = ({ state, meta }) => {
   const { sm, md, lg, xl } = muiQuery();
   const urlPath = state.router.link;
 
@@ -35,7 +35,7 @@ const Header = ({ state, actions }) => {
             : customMobile},
         `}
       />
-      <HTMLHead />
+      <HTMLHead meta={meta} />
       <CookiePopUp />
       {!lg ? (
         <div className="bad-header" style={styles.container}>
