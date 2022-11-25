@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "frontity";
 import Switch from "@frontity/components/switch";
 import { colors } from "../config/imports";
@@ -64,10 +64,12 @@ import {
 const App = ({ state, actions }) => {
   const dispatch = useAppDispatch();
   const { isActiveUser, isPlaceholder, idFilter, redirects } = useAppState();
+  const [meta, setMeta] = useState();
 
-  let urlPath = state.router.link;
-  const data = state.source.get(urlPath);
-  console.log("INDEX data", data); // 👉 debug
+  let urlPath = state.router?.link;
+  const data = state.source?.get(urlPath);
+  const pageId = data?.id;
+  console.log(`INDEX ${pageId}: `, data); // 👉 debug
 
   // --------------------------------------------------------------------------------
   // 📌  B2C login handler.
@@ -89,6 +91,19 @@ const App = ({ state, actions }) => {
     // ⬇️ restore scroll history to manual position ⬇️
     window.history.scrollRestoration = "manual";
   }, [urlPath]);
+
+  // fetch data from wp based on id
+  useEffect(() => {
+    (async () => {
+      const res = await fetch(
+        state.auth.WP_HOST +
+          `/wp-json/wp/v2/pages/${pageId}?_fields=id,yoast_head_json`
+      );
+      const data = await res.json();
+      setMeta(data);
+      console.log("⭐️ data", data);
+    })();
+  }, [pageId]);
 
   useEffect(() => {
     // --------------------------------------------------------------------------------
@@ -126,7 +141,7 @@ const App = ({ state, actions }) => {
   // RETURN --------------------------------------------------------------------
   return (
     <div style={{ ...styles.container }}>
-      <Header />
+      <Header meta={meta} />
       <Breadcrumbs />
       <BlockWrapper>
         <LoginModal />
