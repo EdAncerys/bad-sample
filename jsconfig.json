@@ -1,3 +1,4 @@
+arn dev
 {
   "compilerOptions": {
     "baseUrl": "./workspaces/bad.org/packages/bad-theme/src/",

@@ -137,6 +137,7 @@ const settings = {
     },
     "@frontity/tiny-router",
     "@frontity/html2react",
+    "@frontity/head-tags", // 👈 package is designed to get automatically all the metadata
   ],
 };
 
