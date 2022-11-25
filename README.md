@@ -22,11 +22,11 @@
 # B2C
 ```
 
-### To specify node version in project based on Versel new config changes in package.json to add/configure presicly:
+### We need to specify exact node version in project based on Versel latest config changes. In package.json to add/configure node version as follow:
 
 ```
   "engines": {
-    "node": "16.x", 👈 IMPORTANT TO SPECIFY NODE VERSION
+    "node": "16.x", 👈 IMPORTANT TO SPECIFY NODE VERSION <!-- "node": ">=16.0.0", -->
     "npm": ">=6.0.0"
   },
 ```
