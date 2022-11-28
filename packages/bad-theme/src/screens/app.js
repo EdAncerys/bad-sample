@@ -92,15 +92,29 @@ const App = ({ state, actions }) => {
     window.history.scrollRestoration = "manual";
   }, [urlPath]);
 
-  // fetch data from wp based on id
   useEffect(() => {
+    // --------------------------------------------------------------------------------
+    // 📌  Yoast SEO meta data.
+    // --------------------------------------------------------------------------------
+    // fetch data from wp based on id
     (async () => {
       const res = await fetch(
         state.auth.WP_HOST +
           `/wp-json/wp/v2/pages/${pageId}?_fields=id,yoast_head_json`
       );
       const data = await res.json();
-      setMeta(data);
+
+      // set meta data to head tag
+      const meta = document.createElement("meta");
+      meta.name = "description";
+      meta.description = data?.description || "Test description";
+      meta.title = data?.title || "Test title";
+      meta.og_type = data?.og_type || "Test og_type";
+      meta.og_title = data?.og_title || "Test og_title";
+      meta.og_description = data?.og_description || "Test og_description";
+      document.head.appendChild(meta); // 👉 append to head tag
+
+      // setMeta(data);
       console.log("⭐️ data", data);
     })();
   }, [pageId]);
