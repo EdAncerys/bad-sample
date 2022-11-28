@@ -831,6 +831,20 @@ const SIGApplication = ({ state, actions, libraries }) => {
     );
   };
 
+  const ErorrMessage = ({ show }) => {
+    if (!show) return null;
+
+    return (
+      <div className="error-notification error-msg">
+        <span className="required">Mandatory field</span>
+      </div>
+    );
+  };
+
+  // --------------------------------------------------------------------------------
+  // 📌  Error placeholder
+  // --------------------------------------------------------------------------------
+
   // show loading indicator while no membershipData is fetched or if membershipData is fetched but is empty
   if (!membershipData)
     return (
@@ -898,7 +912,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                   );
                 })}
               </Form.Select>
-              <FormError id="bad_psychodermatologycategory" />
+              <ErorrMessage show={true} />
             </div>
           )}
 

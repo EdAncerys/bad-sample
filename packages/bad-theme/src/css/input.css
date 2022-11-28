@@ -78,3 +78,13 @@ select {
   margin: 0 10px 0 0;
 }
 /* customize select option styles */
+
+.relative {
+  position: relative;
+}
+
+.error-msg {
+  position: absolute;
+  top: 100%;
+  right: 0;
+}

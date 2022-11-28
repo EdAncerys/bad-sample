@@ -82,13 +82,8 @@ const SideBarMenu = ({ state, actions, libraries }) => {
     }
   }, [isActiveUser, applicationData]);
 
-  // return loading placeholder if if !isActiveUser || !applicationData
-  if (!isActiveUser)
-    return (
-      <div>
-        <Loading padding="5vh 0 0" />
-      </div>
-    );
+  // ⚠️ don't show component if no user found
+  if (!isActiveUser) return null;
 
   // SERVERS ---------------------------------------------
   const ServeTitle = () => {
@@ -209,10 +204,6 @@ const SideBarMenu = ({ state, actions, libraries }) => {
       <ServeContent />
     </div>
   );
-};
-
-const styles = {
-  container: {},
 };
 
 export default connect(SideBarMenu);
