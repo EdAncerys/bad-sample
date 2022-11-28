@@ -100,7 +100,7 @@ const App = ({ state, actions }) => {
       try {
         const res = await fetch(
           state.auth.WP_HOST +
-            `/wp-json/wp/v2/pages/${pageId}?_fields=id,yoast_head_json`
+            `/wp-json/wp/v2/pages/${pageId || 22}?_fields=id,yoast_head_json`
         );
         const data = await res.json();
         const yoast = data?.yoast_head_json;
