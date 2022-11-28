@@ -6,7 +6,6 @@ const HTMLHead = ({ meta }) => {
   let description =
     meta?.description ||
     "Professional membership body for dermatologists in the UK and abroad.";
-
   let og_type = meta?.og_type || "BAD website";
 
   return (

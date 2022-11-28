@@ -102,7 +102,7 @@ const App = ({ state, actions }) => {
         state.auth.WP_HOST +
           `/wp-json/wp/v2/pages/${pageId}?_fields=id,yoast_head_json`
       );
-      const data = await res.json();
+      const data = await res.json()?.yoast_head_json;
 
       // set meta data to head tag
       const meta = document.createElement("meta");
