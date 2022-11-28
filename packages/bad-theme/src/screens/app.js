@@ -102,20 +102,22 @@ const App = ({ state, actions }) => {
         state.auth.WP_HOST +
           `/wp-json/wp/v2/pages/${pageId}?_fields=id,yoast_head_json`
       );
-      const data = await res.json()?.yoast_head_json;
+      const data = await res.json();
 
       // set meta data to head tag
       const meta = document.createElement("meta");
       meta.name = "description";
-      meta.description = data?.description || "Test description";
-      meta.title = data?.title || "Test title";
-      meta.og_type = data?.og_type || "Test og_type";
-      meta.og_title = data?.og_title || "Test og_title";
-      meta.og_description = data?.og_description || "Test og_description";
+      meta.description =
+        data?.yoast_head_json?.description || "Test description";
+      meta.title = data?.yoast_head_json?.title || "Test title";
+      meta.og_type = data?.yoast_head_json?.og_type || "Test og_type";
+      meta.og_title = data?.yoast_head_json?.og_title || "Test og_title";
+      meta.og_description =
+        data?.yoast_head_json?.og_description || "Test og_description";
       document.head.appendChild(meta); // 👉 append to head tag
 
       // setMeta(data);
-      console.log("⭐️ data", data);
+      console.log("⭐️ data", data?.yoast_head_json);
     })();
   }, [pageId]);
 
