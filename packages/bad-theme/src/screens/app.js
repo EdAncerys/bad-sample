@@ -96,7 +96,6 @@ const App = ({ state, actions }) => {
     // --------------------------------------------------------------------------------
     // 📌  Yoast SEO meta data.
     // --------------------------------------------------------------------------------
-    // fetch data from wp based on id
     (async () => {
       try {
         const res = await fetch(
@@ -111,21 +110,6 @@ const App = ({ state, actions }) => {
       } catch (error) {
         console.log(error);
       }
-
-      // set meta data to head tag
-      // replace title tag with yoast title
-      // document.title = yoast?.title;
-      // replace description tag with yoast description
-
-      // meta.name = "description";
-      // meta.description =
-      //   data?.yoast_head_json?.description || "Test description";
-      // meta.title = data?.yoast_head_json?.title || "Test title";
-      // meta.og_type = data?.yoast_head_json?.og_type || "Test og_type";
-      // meta.og_title = data?.yoast_head_json?.og_title || "Test og_title";
-      // meta.og_description =
-      //   data?.yoast_head_json?.og_description || "Test og_description";
-      // document.head.appendChild(meta); // 👉 append to head tag
     })();
   }, [pageId]);
 
