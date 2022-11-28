@@ -21,7 +21,6 @@ import {
   setNesMediaIdFilterAction,
   getNewsData,
   getMediaCategories,
-  hasPermisionLevel,
   Parcer,
 } from "../../context";
 
@@ -30,7 +29,6 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
 
   const dispatch = useAppDispatch();
   const { newsMediaCategoryId, isActiveUser, dynamicsApps } = useAppState();
-  console.log("🐞 newsMediaCategoryId ", newsMediaCategoryId);
 
   if (!block) return <Loading />;
 
@@ -43,7 +41,6 @@ const NewsAndMedia = ({ state, actions, libraries, block }) => {
     category_filter,
     site_section,
   } = block;
-  // console.log("🐞 N&M", block); // debug
 
   const isLayoutOne = layout === "layout_one";
 
