@@ -204,6 +204,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         setFormData((prevFormData) => ({
           ...prevFormData,
           [`bad_currentpost`]: isActiveUser.jobtitle,
+          dev_editable_job: !!isActiveUser.jobtitle,
         }));
         // set job title to disabled status
         setJobEditable(false);
@@ -1189,7 +1190,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 className="form-control input"
                 placeholder="Current job title"
                 // 📌 disable if bad_currentpost is true
-                disabled={formData.bad_currentpost}
+                disabled={formData.dev_editable_job} // 📌 disable if bad_currentpost is in Dynamics
               />
               <div style={{ padding: "0.5em 0" }}>
                 If you would like to change your job title please use the form
