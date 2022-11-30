@@ -123,8 +123,8 @@
   display: none;
 }
 .gallery-carousel .carousel-control-prev {
-  left: -172px;
+  left: -2%;
 }
 .gallery-carousel .carousel-control-next {
-  right: -172px;
+  right: -2%;
 }
