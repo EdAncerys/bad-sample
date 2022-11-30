@@ -47,8 +47,9 @@ const EventLoopBlock = ({
   } = block;
 
   const [eventList, setEventList] = useState(null); // event data
+  const [filteredEvents, setFilteredEvents] = useState(null); // event data
   const [eventFilter, setFilter] = useState(null); // event data
-  const curentPageRef = useRef(1);
+  const currentPageRef = useRef(1);
   const postLimitRef = useRef(0);
 
   const layoutOne = layout === "layout_one";
@@ -65,12 +66,16 @@ const EventLoopBlock = ({
   // DATA get for EVENTS ----------------------------------------------------------------
   useEffect(async () => {
     // let data = state.source.events;
-    let events = await getEventsData({ state, page: curentPageRef.current });
+    let response = await getEventsData({
+      state,
+      page: currentPageRef.current,
+    });
+    let events = response;
     let grades = await getEventGrades({ state });
     if (!!post_limit) postLimitRef.current = Number(post_limit);
     if (!events) return;
 
-    curentPageRef.current++;
+    currentPageRef.current++;
 
     // ⬇️⬇ sort events by date
     events = handleSortFilter({ list: events });
@@ -93,12 +98,12 @@ const EventLoopBlock = ({
         let eventDate = event.acf.date_time;
         if (!eventDate) return false;
 
-        // let [month, date, year] = eventDate[0].date.split("/");
-        // let eventDateObj = new Date(year, month, date);
-        let eventDateObj = new Date(eventDate[0].date);
+        let eventStartDateObj = new Date(eventDate?.[0]?.date);
+        let eventCloseDateObj = new Date(eventDate?.[1]?.date);
         let today = new Date();
-        // is event date in the future
-        const isFuture = eventDateObj >= today;
+        // is event date in the future | is event close date in the future
+        const isFuture =
+          eventStartDateObj >= today || eventCloseDateObj >= today;
 
         return isFuture;
       });
@@ -118,7 +123,6 @@ const EventLoopBlock = ({
         let isIncluded = filterTitlesToLowerCase.includes(gradeTitle);
         if (isIncluded) gradeIds.push(grade.id);
       });
-      // console.log("🐞 gradeIds", gradeIds);
 
       // get events that match the grade ids
       // apply filters if grade_filter is set and grade_filter is not empty
@@ -132,15 +136,17 @@ const EventLoopBlock = ({
           return isIncluded;
         });
     }
+    response = events; // 👉 apply all logics before slice data to post limit
 
     if (postLimitRef.current !== 0 && events) {
       // ⬇️ if post_limit is set then show only post_limit posts
-      if (events.lenght <= postLimitRef.current) return null;
+      if (events.length <= postLimitRef.current) return null;
       // apply limit to eventList array length if post_limit is set & less than post_limit
       events = events.slice(0, postLimitRef.current);
     }
 
-    setEventList(events); // set event data
+    setEventList(response); // set event data
+    setFilteredEvents(events); // set event data
     setFilter(events); // set event filter data
 
     // ⬇️ set link to anchor for event
@@ -149,15 +155,12 @@ const EventLoopBlock = ({
         const anchor = document.getElementById(eventAnchor);
         if (anchor) anchor.scrollIntoView({ behavior: "smooth" });
       }, 500);
-      // console.log("🚀 anchor to event list", eventAnchor); // debug
 
       setEventAnchorAction({ dispatch, eventAnchor: null }); // reset
     }
   }, []);
 
   useEffect(async () => {
-    // ⬇️ handle serach filter change
-
     if (
       !searchFilter &&
       !gradesFilter &&
@@ -166,15 +169,15 @@ const EventLoopBlock = ({
       !yearFilter
     ) {
       // if no search filter applied then return all prefetched events
-      setFilter(eventList);
+      setFilter(filteredEvents);
       return;
     }
 
-    let filteredEvents = eventList;
+    let filtered = filteredEvents;
 
     if (searchFilter) {
       // if search filter applied then filter events
-      filteredEvents = eventList.filter((event) => {
+      filtered = filtered.filter((event) => {
         // filter events by search filter
         let search = searchFilter.toLowerCase();
 
@@ -196,7 +199,7 @@ const EventLoopBlock = ({
 
     if (gradesFilter) {
       // if grades filter applied then filter events
-      filteredEvents = filteredEvents.filter((event) => {
+      filtered = filtered.filter((event) => {
         // filter events by grades filter
         let grade = event.event_grade;
         if (!grade) return false;
@@ -205,10 +208,9 @@ const EventLoopBlock = ({
         return isInGrade;
       });
     }
-
     if (locationsFilter) {
       // if locations filter applied then filter events
-      filteredEvents = filteredEvents.filter((event) => {
+      filtered = filtered.filter((event) => {
         // filter events by locations filter
         let location = event.event_location;
         let isInLocation = location.includes(Number(locationsFilter));
@@ -216,10 +218,9 @@ const EventLoopBlock = ({
         return isInLocation;
       });
     }
-
     if (specialtyFilter) {
       // if specialty filter applied then filter events
-      filteredEvents = filteredEvents.filter((event) => {
+      filtered = filtered.filter((event) => {
         // filter events by specialty filter
         let specialty = event.event_specialty;
         let isInSpecialty = specialty.includes(Number(specialtyFilter));
@@ -232,32 +233,25 @@ const EventLoopBlock = ({
       let [fMonth, fDay, fYear] = yearFilter.split(" ");
 
       // if year filter applied then filter events
-      filteredEvents = filteredEvents.filter((event) => {
-        let isIncluded = false;
-        // filter events by year filter
-        let date = event.acf.date_time;
-        // map date to year and compare to year filter
-        if (date) {
-          date.map((eventDate) => {
-            // get year from date
-            let [eMonth, eDate, eYear] = eventDate.date.split("/");
-            // if month have 0 in front then remove it
-            if (eMonth[0] === "0") eMonth = eMonth.slice(1);
-            let isInYear = fMonth === eMonth && fYear === eYear;
+      filtered = filtered.filter((event) => {
+        // filter events by year & month filter (if month filter is applied)
+        let eventDate = event.acf.date_time;
+        if (!eventDate) return false;
 
-            if (isInYear) {
-              isIncluded = true;
-            }
-          });
+        let [month, date, year] = eventDate[0].date.split("/"); // get event date
+
+        // if event month & year match - return event
+        if (fMonth && fYear) {
+          let isInMonth = month === fMonth;
+          let isInYear = year === fYear;
+          if (isInMonth && isInYear) return event;
         }
-
-        return isIncluded;
       });
     }
 
     // if page is set to events_archive return only events that date is in the past
     if (events_archive) {
-      filteredEvents = filteredEvents.filter((event) => {
+      filtered = filtered.filter((event) => {
         let eventDate = event.acf.date_time;
         if (!eventDate) return false;
 
@@ -270,10 +264,10 @@ const EventLoopBlock = ({
     }
 
     // ⬇️⬇ sort events by date
-    filteredEvents = handleSortFilter({ list: filteredEvents });
+    filtered = handleSortFilter({ list: filtered });
 
     // 📌 set filtered data to state
-    setFilter(filteredEvents);
+    setFilter(filtered);
   }, [
     searchFilter,
     gradesFilter,
@@ -282,11 +276,7 @@ const EventLoopBlock = ({
     yearFilter,
   ]);
 
-  // HANDLERS --------------------------------------------------------------
-
   if (!eventFilter) return <Loading />;
-
-  // SERVERS ---------------------------------------------------------------
 
   // RETURN ----------------------------------------------------------------
   return (
