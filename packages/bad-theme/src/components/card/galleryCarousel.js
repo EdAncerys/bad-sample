@@ -54,7 +54,7 @@ const GalleryCarousel = ({
         <ServeIcon icon={RightIcon} right />
       </div>
 
-      <Carousel interval={null} className="gallery-carousel">
+      <Carousel interval={null} className="event-carousel">
         {gallery.map((block, key) => {
           const { subtype, url, title } = block;
 

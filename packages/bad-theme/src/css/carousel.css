@@ -118,13 +118,7 @@
 }
 
 /* gallery-carousel Carousel styling */
-.gallery-carousel .carousel-control-prev-icon,
-.gallery-carousel .carousel-control-next-icon {
+.event-carousel .carousel-control-prev-icon,
+.event-carousel .carousel-control-next-icon {
   display: none;
-}
-.gallery-carousel .carousel-control-prev {
-  left: -2%;
-}
-.gallery-carousel .carousel-control-next {
-  right: -2%;
 }
