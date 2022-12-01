@@ -19,8 +19,6 @@ import {
 
 const EventLoopBlock = ({
   state,
-  actions,
-  libraries,
   block,
   searchFilter,
   gradesFilter,
@@ -160,7 +158,9 @@ const EventLoopBlock = ({
     }
   }, []);
 
-  useEffect(async () => {
+  useEffect(() => {
+    if (!eventList) return; // await data to be set
+
     if (
       !searchFilter &&
       !gradesFilter &&
@@ -168,12 +168,11 @@ const EventLoopBlock = ({
       !specialtyFilter &&
       !yearFilter
     ) {
-      // if no search filter applied then return all prefetched events
-      setFilter(filteredEvents);
+      setFilter(eventList?.slice(0, postLimitRef.current)); // 👉 reset filters
       return;
     }
 
-    let filtered = filteredEvents;
+    let filtered = eventList; // 👉 initial state
 
     if (searchFilter) {
       // if search filter applied then filter events
@@ -230,7 +229,8 @@ const EventLoopBlock = ({
     }
 
     if (yearFilter) {
-      let [fMonth, fDay, fYear] = yearFilter.split(" ");
+      const fMonth = new Date(yearFilter).getMonth() + 1;
+      const fYear = new Date(yearFilter).getFullYear();
 
       // if year filter applied then filter events
       filtered = filtered.filter((event) => {
@@ -238,28 +238,18 @@ const EventLoopBlock = ({
         let eventDate = event.acf.date_time;
         if (!eventDate) return false;
 
-        let [month, date, year] = eventDate[0].date.split("/"); // get event date
+        const monthOp = +eventDate?.[0]?.date?.split("/")?.[0];
+        const yearOp = +eventDate?.[0]?.date?.split("/")?.[2];
+        const monthCl = +eventDate?.[1]?.date?.split("/")?.[0];
+        const yearCl = +eventDate?.[1]?.date?.split("/")?.[2];
 
-        // if event month & year match - return event
-        if (fMonth && fYear) {
-          let isInMonth = month === fMonth;
-          let isInYear = year === fYear;
-          if (isInMonth && isInYear) return event;
-        }
-      });
-    }
+        // --------------------------------------------------------------------------------
+        // 📌  if month filter is applied then filter by month & year
+        // --------------------------------------------------------------------------------
+        let isInMonth = monthOp === fMonth || monthCl === fYear;
+        let isInYear = yearOp === fYear || yearCl === fYear;
 
-    // if page is set to events_archive return only events that date is in the past
-    if (events_archive) {
-      filtered = filtered.filter((event) => {
-        let eventDate = event.acf.date_time;
-        if (!eventDate) return false;
-
-        let [month, date, year] = eventDate[0].date.split("/");
-        let eventDateObj = new Date(year, month, date);
-        let today = new Date();
-
-        return eventDateObj < today;
+        return isInMonth && isInYear;
       });
     }
 

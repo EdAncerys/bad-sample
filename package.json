@@ -13,7 +13,8 @@
   "scripts": {
     "dev": "frontity dev --port 18754",
     "build": "frontity build",
-    "serve": "frontity serve"
+    "serve": "frontity serve",
+    "reset": "rm -fr node_modules yarn.lock && yarn && yarn dev"
   },
   "prettier": {},
   "dependencies": {
