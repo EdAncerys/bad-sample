@@ -910,6 +910,7 @@ export const group_810170000 = [
   "Trust Grade Doctor - Career Grade level",
   "Trust Grade Doctor - Foundation Level",
   "Trust Grade Doctor - Specialty Registrar",
+  "Internal Medical Trainee",
 ];
 
 export const group_810170001 = [
