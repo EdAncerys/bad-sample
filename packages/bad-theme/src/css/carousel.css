@@ -33,32 +33,32 @@
 
 /* add media querys for home carousel controls on large screens */
 @media (min-width: 1568px) {
-  .carousel-control-next,
-  .carousel-control-prev {
+  .home-banner-carousel .carousel-control-next,
+  .home-banner-carousel .carousel-control-prev {
     min-width: 15% !important;
   }
 }
 
 @media (min-width: 1768px) {
-  .carousel-control-prev {
+  .home-banner-carousel .carousel-control-prev {
     left: 5%;
     translate: translateX(50%);
   }
-  .carousel-control-next {
+  .home-banner-carousel .carousel-control-next {
     right: 5%;
     translate: translateX(-50%);
   }
-  .carousel-control-next,
-  .carousel-control-prev {
+  .home-banner-carousel .carousel-control-next,
+  .home-banner-carousel .carousel-control-prev {
     min-width: 25% !important;
   }
 }
 
 @media (min-width: 2868px) {
-  .carousel-control-prev {
+  .home-banner-carousel .carousel-control-prev {
     left: 15%;
   }
-  .carousel-control-next {
+  .home-banner-carousel .carousel-control-next {
     right: 15%;
   }
 }
@@ -118,13 +118,7 @@
 }
 
 /* gallery-carousel Carousel styling */
-.gallery-carousel .carousel-control-prev-icon,
-.gallery-carousel .carousel-control-next-icon {
+.event-carousel .carousel-control-prev-icon,
+.event-carousel .carousel-control-next-icon {
   display: none;
-}
-.gallery-carousel .carousel-control-prev {
-  left: -172px;
-}
-.gallery-carousel .carousel-control-next {
-  right: -172px;
 }

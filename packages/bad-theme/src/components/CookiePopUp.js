@@ -8,7 +8,6 @@ import { setGoToAction } from "../context";
 
 const CookiePopUp = ({ state, actions }) => {
   const [policy, setPolicie] = useState({ cokie: "", show: false });
-  console.log("policy ", policy); // debug
 
   const handleConsent = async (type) => {
     handleSetCookie({

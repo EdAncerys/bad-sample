@@ -205,6 +205,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
         setFormData((prevFormData) => ({
           ...prevFormData,
           [`bad_currentpost`]: isActiveUser.jobtitle,
+          dev_editable_job: !!isActiveUser.jobtitle,
         }));
         // set job title to disabled status
         setJobEditable(false);
@@ -831,6 +832,20 @@ const SIGApplication = ({ state, actions, libraries }) => {
     );
   };
 
+  const ErorrMessage = ({ show }) => {
+    if (!show) return null;
+
+    return (
+      <div className="error-notification error-msg">
+        <span className="required">Mandatory field</span>
+      </div>
+    );
+  };
+
+  // --------------------------------------------------------------------------------
+  // 📌  Error placeholder
+  // --------------------------------------------------------------------------------
+
   // show loading indicator while no membershipData is fetched or if membershipData is fetched but is empty
   if (!membershipData)
     return (
@@ -898,7 +913,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                   );
                 })}
               </Form.Select>
-              <FormError id="bad_psychodermatologycategory" />
+              <ErorrMessage show={true} />
             </div>
           )}
 
@@ -1190,7 +1205,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
                 className="form-control input"
                 placeholder="Current job title"
                 // 📌 disable if bad_currentpost is true
-                disabled={formData.bad_currentpost}
+                disabled={formData.dev_editable_job} // 📌 disable if bad_currentpost is in Dynamics
               />
               <div style={{ padding: "0.5em 0" }}>
                 If you would like to change your job title please use the form

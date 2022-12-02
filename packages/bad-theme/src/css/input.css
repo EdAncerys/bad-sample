@@ -80,3 +80,13 @@ select {
   cursor: pointer;
 }
 /* customize select option styles */
+
+.relative {
+  position: relative;
+}
+
+.error-msg {
+  position: absolute;
+  top: 100%;
+  right: 0;
+}
