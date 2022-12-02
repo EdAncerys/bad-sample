@@ -7,8 +7,10 @@ const settings = {
   state: {
     frontity: {
       url: "https://skylarkcreative.co.uk/",
-      title: "British Association of Dermatologists (BAD)",
-      description: "British Association of Dermatologists (BAD) WebApp",
+      title:
+        "Skylark Creative project: British Association of Dermatologists (BAD)",
+      description:
+        "Skylark Creative project: British Association of Dermatologists (BAD) WebApp",
     },
     env: {
       ENVIRONMENT: process.env.ENVIRONMENT,
@@ -137,6 +139,7 @@ const settings = {
     },
     "@frontity/tiny-router",
     "@frontity/html2react",
+    "@frontity/head-tags", // 👈 package is designed to get automatically all the metadata
   ],
 };
 
