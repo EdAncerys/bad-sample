@@ -47,6 +47,20 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
     };
   }, []);
 
+  useEffect(() => {
+    // --------------------------------------------------------------------------------
+    // 📌  Hook to inject css to the layout
+    //  👉 fix async state updates use hook without dependencies to rerender after state update
+    // --------------------------------------------------------------------------------
+    const container = document.querySelector(".groupe-charity-content");
+
+    // ⚠️ add vertical padding to all p tags in the container
+    const pTags = container.querySelectorAll("p");
+    pTags.forEach((p) => {
+      p.style.padding = "0.5em 0";
+    });
+  });
+
   // HANDLERS --------------------------------------------------
   const handleApply = async ({ catType }) => {
     try {
@@ -78,7 +92,10 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
   // SERVERS ---------------------------------------------------
   const ServeContent = () => {
     return (
-      <div style={{ margin: !lg ? null : "0.5em 1em" }}>
+      <div
+        style={{ margin: !lg ? null : "0.5em 1em" }}
+        className="groupe-charity-content"
+      >
         <TitleBlock
           block={{ title: title.rendered }}
           margin={`0 0 ${marginVertical}px 0`}
