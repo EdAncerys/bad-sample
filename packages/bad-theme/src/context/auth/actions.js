@@ -56,7 +56,10 @@ export const loginAction = async ({ state }) => {
     // get current url path and store in cookieValue for redirects after login
     handleSetCookie({ name: "badLoginPath", value: urlPath });
 
+    // --------------------------------------------------------------------------------
     // 📌 redirect to B2C auth set window location to login page
+    // 📌 on local host need prefix with protocol & localhost
+    // --------------------------------------------------------------------------------
     window.location.href = url;
   } catch (error) {
     // console.log("loginAction error", error);

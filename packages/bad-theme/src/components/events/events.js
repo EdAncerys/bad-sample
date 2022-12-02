@@ -183,7 +183,7 @@ const Events = ({ state, block, disableMargin }) => {
 
     const ServeYearFilter = () => {
       // get current month
-      const currentMonth = new Date().getMonth();
+      const currentMonth = new Date().getMonth(); // 👉 current month number representation (1-12)
       // get array of next 12 months and a year based on current month
       const monthsFeature = [...Array(12).keys()].map((item, key) => {
         let month = currentMonth + key + 1;
