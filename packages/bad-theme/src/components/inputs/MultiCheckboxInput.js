@@ -3,7 +3,6 @@ import { connect } from "frontity";
 import { FORM_CONFIG, colors } from "../../config/form";
 import ErrorComponent from "./ErrorComponent";
 import Caption from "./Caption";
-import CloseIcon from "@mui/icons-material/Close";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 const MultiCheckboxInput = ({

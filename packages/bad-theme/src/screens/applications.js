@@ -198,7 +198,36 @@ const Applications = ({ state, actions }) => {
         setFetching(false);
       }
     })();
+
+    // --------------------------------------------------------------------------------
+    // 📌  Apply onClickEvenHandler to DOM elements
+    // --------------------------------------------------------------------------------
+    const body = document.querySelector("body");
+    body.addEventListener("click", onClickEvenHandler);
   }, [isActiveUser]);
+
+  const onClickEvenHandler = (e) => {
+    // --------------------------------------------------------------------------------
+    // 📌  Multi select dropdown cleaner
+    // 📌  onClick event listener. Close all formus multiselect fields if DOM element clicked
+    // --------------------------------------------------------------------------------
+    console.log("⭐️ list ", e.target.classList);
+
+    if (
+      e.target.classList.contains("applications-side-panel") ||
+      e.target.classList.contains("flex-col") ||
+      e.target.classList.contains("form-label") ||
+      e.target.classList.contains("input")
+    ) {
+      setForm((prev) => ({
+        ...prev,
+        ["dev_selected_" + "formus_specialiseddermatologyareasofpractice"]:
+          undefined,
+        ["dev_selected_" + "formus_mainspecialtyqualification"]: undefined,
+        ["dev_selected_" + "formus_clinicalspecialtysofpractice"]: undefined,
+      }));
+    }
+  };
 
   const handleSelectAddress = async ({ item }) => {
     // destructure item object & get country code & city name from link
@@ -605,6 +634,19 @@ const Applications = ({ state, actions }) => {
     if (name === "formus_specialiseddermatologyareasofpractice") {
       handler = {
         ...handler,
+        ["dev_selected_" + "formus_mainspecialtyqualification"]: undefined,
+        ["dev_selected_" + "formus_clinicalspecialtysofpractice"]: undefined,
+      };
+    }
+
+    // --------------------------------------------------------------------------------
+    // 📌  onClick listener. Close all formus multiselect fields if DOM element clicked
+    // --------------------------------------------------------------------------------
+    if (name === "close_formus_multiselect") {
+      handler = {
+        ...handler,
+        ["dev_selected_" + "formus_specialiseddermatologyareasofpractice"]:
+          undefined,
         ["dev_selected_" + "formus_mainspecialtyqualification"]: undefined,
         ["dev_selected_" + "formus_clinicalspecialtysofpractice"]: undefined,
       };
