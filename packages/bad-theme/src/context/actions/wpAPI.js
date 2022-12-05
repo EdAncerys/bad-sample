@@ -224,7 +224,7 @@ export const getVenuesData = async ({ state, page, postsPerPage }) => {
 export const getVideosData = async ({ state, page, postsPerPage }) => {
   let pageNo = page || 1;
   let perPageLimit = postsPerPage || state.theme.perPageLimit;
-  let fields = "id,title,content,link,event_specialty,event_grade,acf";
+  let fields = "id,title,content,link,event_specialty,event_grade,acf,date";
 
   let url = `${state.auth.WP_HOST}wp-json/wp/v2/videos?&per_page=${perPageLimit}&page=${pageNo}&_fields=${fields}&order=asc`;
 
