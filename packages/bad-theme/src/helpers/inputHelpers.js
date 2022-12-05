@@ -417,9 +417,9 @@ export const manualFilterHandler = ({ form, name, show }) => {
   // --------------------------------------------------------------------------------
 
   // --------------------------------------------------------------------------------
-  // 📌  for form step 2 & 3 return show. All input will be shown
+  // 📌  for form step 2 return show. All input will be shown
   // --------------------------------------------------------------------------------
-  if (form?.step === 2 || form?.step === 3) return show;
+  if (form?.step === 2) return show;
 
   let filterOptions = retiredTypeFilters;
   if (form?.bad_categorytype === "Retired No Journal") {
