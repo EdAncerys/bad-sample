@@ -296,14 +296,24 @@ const Video = ({ state, actions, libraries }) => {
             </div>
           );
 
-        if (isActiveUser && post.acf.private && videoStatus === "locked")
+        // --------------------------------------------------------------------------------
+        // ⚠️ Show Buy Button option if user & user is not BAD member
+        // --------------------------------------------------------------------------------
+        const isBADMember = isActiveUser?.bad_selfserviceaccess === "BAD";
+        if (
+          isActiveUser &&
+          post.acf.private &&
+          videoStatus === "locked" &&
+          !isBADMember
+        ) {
           return (
             <div className="blue-btn" onClick={handlePayment}>
               Buy for £{post.acf.price}
             </div>
           );
+        }
 
-        if (post.acf.private && videoStatus === "unlocked")
+        if (post.acf.private && videoStatus === "unlocked") {
           return (
             <div
               className="primary-title"
@@ -312,6 +322,7 @@ const Video = ({ state, actions, libraries }) => {
               You have access to this video
             </div>
           );
+        }
 
         return (
           <div
