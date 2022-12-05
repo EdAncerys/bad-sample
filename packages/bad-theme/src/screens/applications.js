@@ -150,7 +150,7 @@ const Applications = ({ state, actions }) => {
         });
 
         // --------------------------------------------------------------------------------
-        // 📌  Aplly cat selected to BAD applications only
+        // 📌  Apply cat selected to BAD applications only
         // --------------------------------------------------------------------------------
         let appCatType = application?.[0]?.bad_categorytype;
         if (appCatType && bad_organisedfor === "BAD") {

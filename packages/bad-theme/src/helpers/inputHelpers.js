@@ -8,6 +8,15 @@ import {
   group_810170005,
   group_810170006,
   group_810170007,
+  retiredTypeFilters,
+  retiredNoJournalFilters,
+  ordinarySASFilters,
+  associateFilters,
+  juniorFilters,
+  traineeFilters,
+  studentFilters,
+  ordinaryFilters,
+  associateOverseasFilters,
 } from "../config/form";
 // --------------------------------------------------------------------------------
 
@@ -358,6 +367,12 @@ export const inputShowHandler = ({ form, name }) => {
 
   // ...addition to logic here
 
+  // --------------------------------------------------------------------------------
+  // 📌 Manual input handlers
+  // 👇 comment out to disable manual input show/hide logic
+  // --------------------------------------------------------------------------------
+  show = manualFilterHandler({ form, name, show });
+
   return show;
 };
 
@@ -393,6 +408,52 @@ export const dataExtractor = ({ application }) => {
 
   console.log("🐞 blob", JSON.stringify(blob));
   console.log("🐞 virtual", JSON.stringify(virtual));
+};
+
+export const manualFilterHandler = ({ form, name, show }) => {
+  // --------------------------------------------------------------------------------
+  // 📌 Manual application input handlers for show/hide based on bad_categorytype selection
+  // 👉 apply actions manual name list based on app type
+  // --------------------------------------------------------------------------------
+
+  // --------------------------------------------------------------------------------
+  // 📌  for form step 2 & 3 return show. All input will be shown
+  // --------------------------------------------------------------------------------
+  if (form?.step === 2 || form?.step === 3) return show;
+
+  let filterOptions = retiredTypeFilters;
+  if (form?.bad_categorytype === "Retired No Journal") {
+    filterOptions = retiredNoJournalFilters;
+  }
+  if (form?.bad_categorytype === "Ordinary SAS") {
+    filterOptions = ordinarySASFilters;
+  }
+  if (form?.bad_categorytype === "Associate") {
+    filterOptions = associateFilters;
+  }
+  if (form?.bad_categorytype === "Junior") {
+    filterOptions = juniorFilters;
+  }
+  if (form?.bad_categorytype === "Trainee") {
+    filterOptions = traineeFilters;
+  }
+  if (form?.bad_categorytype === "Student") {
+    filterOptions = studentFilters;
+  }
+  if (form?.bad_categorytype === "Ordinary") {
+    filterOptions = ordinaryFilters;
+  }
+  if (form?.bad_categorytype === "Associate Overseas") {
+    filterOptions = associateOverseasFilters;
+  }
+
+  if (filterOptions?.includes(name)) {
+    show = true;
+  } else {
+    show = false;
+  }
+
+  return show;
 };
 
 export const wpInputFilterHandler = ({ form, name, badApp }) => {

@@ -120,6 +120,7 @@ import {
   getLeadershipData,
   getEventSpecialties,
   getGuidelinesData,
+  getCatalogueData,
 } from "./actions/wpAPI";
 import {
   getBJDFeedAction,
@@ -150,6 +151,7 @@ export {
   useAppDispatch,
   useAppState,
   muiQuery,
+  getCatalogueData,
   setGoToAction,
   setLinkWrapperAction,
   setLoginModalAction,
