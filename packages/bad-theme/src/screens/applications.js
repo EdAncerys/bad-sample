@@ -150,7 +150,7 @@ const Applications = ({ state, actions }) => {
         });
 
         // --------------------------------------------------------------------------------
-        // 📌  Aplly cat selected to BAD applications only
+        // 📌  Apply cat selected to BAD applications only
         // --------------------------------------------------------------------------------
         let appCatType = application?.[0]?.bad_categorytype;
         if (appCatType && bad_organisedfor === "BAD") {
@@ -762,6 +762,13 @@ const Applications = ({ state, actions }) => {
       </div>
     );
 
+  let sigAppName = form?.bad_categorytype;
+  if (sigAppName?.includes(":")) {
+    sigAppName = sigAppName.split(":")[1]; // 👉 if sig name includes : , split & select second part
+  }
+  // if no sig name replace with SIG
+  sigAppName = sigAppName ? sigAppName : "SIG";
+
   return (
     <div className="applications-container">
       {fetching && (
@@ -791,7 +798,7 @@ const Applications = ({ state, actions }) => {
                   className="primary-title application-panel-title"
                   style={{ borderBottom: "none" }}
                 >
-                  Category Selected: {application?.[0]?.bad_categorytype}
+                  Category Selected: {sigAppName}
                 </div>
                 <div className="required" style={{ paddingTop: `0.5em` }}>
                   Mandatory fields

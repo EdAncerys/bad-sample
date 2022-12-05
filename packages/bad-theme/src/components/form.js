@@ -83,11 +83,16 @@ const Form = ({
           // 📌  FORM_CONFIG - Configuration for form inputs & filtering
           // --------------------------------------------------------------------------------
           if (FORM_CONFIG?.[name]?.hidden) return null; // if hidden return null
-          if (!wpInputFilterHandler({ form, name, badApp })) return null; // if input is not in filter return null
+
+          // --------------------------------------------------------------------------------
+          // 📌  WP input validation based on client config
+          // 👇 uncomment bellows to apply filtering
+          // --------------------------------------------------------------------------------
+          // if (!wpInputFilterHandler({ form, name, badApp })) return null; // if input is not in filter return null
           if (!inputShowHandler({ form, name })) return null; // additional filter logic for inputs
 
           // --------------------------------------------------------------------------------
-          // 📌  Form BAD application screens additional screen config config
+          // 📌  Form BAD application screen input config. Apply all allowed input types below
           // --------------------------------------------------------------------------------
           if (stepTwo && BAD_STEP_TWO_FORM_CONFIG?.[name] === undefined) {
             return null; // don't render any fields on step 2 that are not in the config

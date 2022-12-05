@@ -60,7 +60,7 @@ export const fetchDataHandler = async ({
     // add options if provided
     ...(options || {}),
     // 🍪 add credentials to the request to incloode cookies in all fetch requests if disableCookies 🍪
-    Credentials: disableCookies ? "omit" : "include",
+    credentials: disableCookies ? "omit" : "include",
   };
 
   let isFormData = headerOptions["Content-Type"].includes(
