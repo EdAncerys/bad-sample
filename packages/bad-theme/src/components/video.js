@@ -255,7 +255,9 @@ const Video = ({ state, actions, libraries }) => {
               color: "white",
             }}
           >
-            {!videoStatus || (isMemberOnlyVideo && !isBADMember) ? (
+            {!videoStatus ||
+            (isMemberOnlyVideo && !isBADMember) ||
+            videoStatus === "locked" ? (
               <LockIcon sx={{ fontSize: 80 }} className="shadow" />
             ) : (
               <PlayCircleOutlineIcon
@@ -305,7 +307,7 @@ const Video = ({ state, actions, libraries }) => {
             </div>
           );
 
-        if (isActiveUser && isMemberOnlyVideo && !isBADMember) {
+        if (videoStatus === "locked" && !isBADMember) {
           // ⚠️ show btn if price is returned & valid
           if (!post.acf.price) return null;
 
