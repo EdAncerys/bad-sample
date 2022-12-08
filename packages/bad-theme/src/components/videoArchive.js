@@ -311,7 +311,7 @@ const VideoArchive = ({ state, actions }) => {
     );
   };
   const VideoArchivePost = ({ post }) => {
-    if (post.acf.members & !isActiveUser) return null;
+    if (post.acf.active_user & !isActiveUser) return null;
     // GET VIMEO COVER
 
     return (
@@ -334,6 +334,7 @@ const VideoArchive = ({ state, actions }) => {
     let videoList = await getVideosData({ state });
     const eventSpec = await getEventSpecialitys({ state });
     const eventGrades = await getEventGrades({ state });
+    console.log("vid ", videoList);
 
     // --------------------------------------------------------------------------------
     // 📌  Sort videos by date created
