@@ -305,6 +305,9 @@ const Video = ({ state, actions, libraries }) => {
           );
 
         if (isActiveUser && isMemberOnlyVideo && !isBADMember) {
+          // ⚠️ show btn if price is returned & valid
+          if (!post.acf.price) return null;
+
           return (
             <div className="blue-btn" onClick={handlePayment}>
               Buy for £{post.acf.price}
