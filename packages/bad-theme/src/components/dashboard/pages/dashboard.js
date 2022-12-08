@@ -363,6 +363,11 @@ const Dashboard = ({ state, actions, libraries }) => {
                   const isFrozen =
                     isActiveUser.core_membershipstatus !==
                     state.theme.frozenMembership;
+                  // --------------------------------------------------------------------------------
+                  // 📌  Check if core_endon application date is current year or greater
+                  // --------------------------------------------------------------------------------
+                  const currentApplication =
+                    new Date(core_endon).getFullYear() >= currentYear;
 
                   // dont show data if bad_organisedfor & core_name is not set
                   if (!bad_organisedfor || !core_name) return null;
@@ -389,12 +394,8 @@ const Dashboard = ({ state, actions, libraries }) => {
                         <ServeChangeApplicationAction
                           show={!core_endon.includes(currentYear) || !isFrozen}
                         />
-                        <ServeCurrentMemberships
-                          show={!core_endon.includes(currentYear)}
-                        />
-                        <ServeMembershipHistory
-                          show={core_endon.includes(currentYear)}
-                        />
+                        <ServeCurrentMemberships show={currentApplication} />
+                        <ServeMembershipHistory show={!currentApplication} />
                       </div>
                     </div>
                   );
