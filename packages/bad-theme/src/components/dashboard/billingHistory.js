@@ -43,8 +43,6 @@ const BillingHistory = ({ state, actions, libraries }) => {
         // --------------------------------------------------------------------------------
         const applicationDate = new Date(app.core_endon);
         return applicationDate.getFullYear() >= currentYear;
-
-        // !app.core_endon.includes(currentYear);
       });
 
       setAppHistory(apps);

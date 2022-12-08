@@ -386,9 +386,10 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
       const currentYear = new Date().getFullYear();
 
       // check if the application is current year or not
-      let isAppCurrentYear = false;
-      if (app.core_name) isAppCurrentYear = app.core_name.includes(currentYear);
-      if (isAppCurrentYear) return app; // 📌 show current year applications only
+      let isValidApp = false;
+      if (app.core_endon)
+        isValidApp = new Date(app.core_endon).getFullYear() >= currentYear;
+      if (isValidApp) return app; // 📌 show current year applications only
     });
 
     return (
