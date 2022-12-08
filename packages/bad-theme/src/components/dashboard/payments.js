@@ -384,11 +384,16 @@ const Payments = ({ state, actions, libraries, subscriptions, dashboard }) => {
     data = data.filter((app) => {
       // 📌 get yesr of application date and current year
       const currentYear = new Date().getFullYear();
+      const yearFromNow = currentYear.getFullYear() + 1;
 
       // check if the application is current year or not
       let isValidApp = false;
-      if (app.core_endon)
-        isValidApp = new Date(app.core_endon).getFullYear() >= currentYear;
+      // if (app.core_endon)
+      //   isValidApp = new Date(app.core_endon).getFullYear() >= currentYear;
+      if (app.core_name)
+        isValidApp =
+          app.core_name.includes(currentYear) ||
+          app.core_name.includes(yearFromNow);
       if (isValidApp) return app; // 📌 show current year applications only
     });
 
