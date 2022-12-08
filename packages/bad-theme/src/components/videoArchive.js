@@ -316,6 +316,13 @@ const VideoArchive = ({ state, actions }) => {
     // --------------------------------------------------------------------------------
     if (post.acf.active_user && !isActiveUser) return null;
 
+    // --------------------------------------------------------------------------------
+    // ⚠️ Show Buy Button option if user & user is not BAD member
+    // --------------------------------------------------------------------------------
+    const isBADMember = isActiveUser?.bad_selfserviceaccess === "BAD";
+    const isMemberOnlyVideo = post?.acf?.members;
+    if (isMemberOnlyVideo && !isBADMember) return null;
+
     return (
       <Card
         title={post.title.rendered}
