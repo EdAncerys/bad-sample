@@ -311,8 +311,10 @@ const VideoArchive = ({ state, actions }) => {
     );
   };
   const VideoArchivePost = ({ post }) => {
-    if (post.acf.active_user & !isActiveUser) return null;
-    // GET VIMEO COVER
+    // --------------------------------------------------------------------------------
+    // 📌  Show videos to active users only
+    // --------------------------------------------------------------------------------
+    if (post.acf.active_user && !isActiveUser) return null;
 
     return (
       <Card
