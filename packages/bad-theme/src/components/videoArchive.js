@@ -317,11 +317,11 @@ const VideoArchive = ({ state, actions }) => {
     if (post.acf.active_user && !isActiveUser) return null;
 
     // --------------------------------------------------------------------------------
-    // ⚠️ Show Buy Button option if user & user is not BAD member
+    // ⚠️ Show video to BAD members only
     // --------------------------------------------------------------------------------
-    const isBADMember = isActiveUser?.bad_selfserviceaccess === "BAD";
-    const isMemberOnlyVideo = post?.acf?.members;
-    if (isMemberOnlyVideo && !isBADMember) return null;
+    const isBADMember =
+      isActiveUser?.bad_selfserviceaccess === state.theme.serviceAccess;
+    if (post?.acf?.members && !isBADMember) return null;
 
     return (
       <Card

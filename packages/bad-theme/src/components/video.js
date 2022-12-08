@@ -47,7 +47,8 @@ const Video = ({ state, actions, libraries }) => {
   // --------------------------------------------------------------------------------
   // ⚠️ Show Buy Button option if user & user is not BAD member
   // --------------------------------------------------------------------------------
-  const isBADMember = isActiveUser?.bad_selfserviceaccess === "BAD";
+  const isBADMember =
+    isActiveUser?.bad_selfserviceaccess === state.theme.serviceAccess;
   const isMemberOnlyVideo = post?.acf?.members;
 
   // await to get window object & setWindow to true
