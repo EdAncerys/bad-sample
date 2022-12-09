@@ -37,6 +37,19 @@ const Video = ({ state, actions, libraries }) => {
 
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
+  console.log("⭐️ post ", post);
+  console.log("⭐️ data", data);
+
+  const { lg } = muiQuery();
+  const dispatch = useAppDispatch();
+  const { isActiveUser } = useAppState();
+
+  // --------------------------------------------------------------------------------
+  // ⚠️ Show Buy Button option if user & user is not BAD member
+  // --------------------------------------------------------------------------------
+  const isBADMember =
+    isActiveUser?.bad_selfserviceaccess === state.theme.serviceAccess;
+  const isMemberOnlyVideo = post?.acf?.members;
 
   // await to get window object & setWindow to true
   useEffect(() => {
@@ -66,10 +79,6 @@ const Video = ({ state, actions, libraries }) => {
       },
     });
   };
-  const { lg } = muiQuery();
-
-  const dispatch = useAppDispatch();
-  const { isActiveUser } = useAppState();
 
   useEffect(async () => {
     //Not the greatest idea to make useEffect async
@@ -246,7 +255,9 @@ const Video = ({ state, actions, libraries }) => {
               color: "white",
             }}
           >
-            {!videoStatus || videoStatus === "locked" ? (
+            {!videoStatus ||
+            (isMemberOnlyVideo && !isBADMember) ||
+            videoStatus === "locked" ? (
               <LockIcon sx={{ fontSize: 80 }} className="shadow" />
             ) : (
               <PlayCircleOutlineIcon
@@ -299,7 +310,10 @@ const Video = ({ state, actions, libraries }) => {
           );
         }
 
-        if (isActiveUser && post.acf.private && videoStatus === "locked") {
+        if (videoStatus === "locked" && !isBADMember) {
+          // ⚠️ show btn if price is returned & valid
+          if (!post.acf.price) return null;
+
           return (
             <div className="blue-btn" onClick={handlePayment}>
               Buy for £{post.acf.price}
