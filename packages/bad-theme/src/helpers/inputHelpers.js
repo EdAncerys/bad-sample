@@ -201,15 +201,16 @@ export const getBADMembershipSubscriptionData = async ({
 }) => {
   const year = new Date().getFullYear(); // get current year
   let dateType = category === "SIG" ? ":" + year : "::" + year; // date type for query with prefix of : or ::
-  if (type === "Full:DERMPATHPRO") type = "Full:DermpathPRO"; // 📌 overwrite type for DermpathPRO
 
   const path =
     state.auth.APP_HOST +
     `/catalogue/lookup/membershiptype?search=${category}:${type}${dateType}`;
+  console.log("⭐️ ", path);
 
   try {
     const response = await fetchHandler({ path });
     const { data } = await response?.json();
+    console.log("⭐️ ", data);
 
     return data;
   } catch (error) {

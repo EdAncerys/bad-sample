@@ -137,6 +137,7 @@ export const handleApplyForMembershipAction = async ({
     });
     if (!response) throw new Error("Failed to get membership data");
     membershipData = response?.[0];
+    console.log("⭐️ ", membershipData);
 
     // set application id for apps
     let applicationId = membershipData?.core_membershipsubscriptionplanid;

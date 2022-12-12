@@ -364,7 +364,7 @@ export const FORM_CONFIG = {
     Label: "Supporting Member 2",
     AttributeType: "String",
     MaxLength: 101,
-    Required: "ApplicationRequired",
+    Required: "None",
     order: -59,
     hidden: false,
     width: "100%",
