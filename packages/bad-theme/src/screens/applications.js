@@ -128,6 +128,7 @@ const Applications = ({ state, actions }) => {
           ?.toLowerCase()
           ?.replace(/\s/g, "");
         const bad_organisedfor = application?.[0]?.bad_organisedfor;
+        const _bad_sigid_value = application?.[0]?._bad_sigid_value;
 
         console.log("🐞 appBlob", bad_categorytype, bad_organisedfor);
 
@@ -135,18 +136,20 @@ const Applications = ({ state, actions }) => {
         // 📌 find all applications that match the user's category type selections
         // --------------------------------------------------------------------------------
         const types = memberships?.filter((app) => {
+          // --------------------------------------------------------------------------------
+          // 📌  BAD applications mapping to application list from WP
           // return all BAD applications type is application is not SIG
+          // --------------------------------------------------------------------------------
           if (application?.[0]?.bad_organisedfor === "BAD") {
             return app?.acf?.bad_or_sig === "bad";
           }
 
-          // get application & strip all white spaces and make lowercase and replace - with ''
-          const slug = app?.slug
-            ?.toLowerCase()
-            ?.replace(/\s/g, "")
-            ?.replace(/-/g, "");
+          // --------------------------------------------------------------------------------
+          // 📌  SIG applications mapping to application list from WP
+          // --------------------------------------------------------------------------------
+          const categoryType = app?.acf?.category_types;
 
-          return slug?.includes(bad_categorytype); // return memberships that matches or includes any words in applicationType
+          return categoryType?.includes(_bad_sigid_value); // return memberships that matches or includes any words in applicationType
         });
 
         // --------------------------------------------------------------------------------
