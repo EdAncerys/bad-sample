@@ -6,7 +6,6 @@ export const fetchDataHandler = async ({
   path,
   accept,
   body,
-  state,
   options,
   headers,
   disableCookies,
@@ -18,8 +17,6 @@ export const fetchDataHandler = async ({
   method = method || "GET";
   accept = accept || "application/json";
   if (isCORSHeaders) disableCookies = true; // 📌 disable sending cookies with requests if CORS header is set
-  let isCashControlHeaders =
-    method === "GET" && state.auth.ENVIRONMENT !== "DEV"; // 📌 disable cashing in development
 
   // 📌 TESTING
   let timeNow = new Date();
@@ -46,7 +43,6 @@ export const fetchDataHandler = async ({
     // add CORS headers
     // ...(isCORSHeaders ? corsHeaders : {}),
     // set cash control headers to 7 days if method is GET
-    // ...(isCashControlHeaders ? { "Cache-Control": "s-maxage=86400" } : {}),
     // add custom headers if provided
     ...(headers || {}),
   };
