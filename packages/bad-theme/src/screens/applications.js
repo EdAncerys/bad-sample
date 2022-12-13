@@ -710,11 +710,12 @@ const Applications = ({ state, actions }) => {
     if (form?.step === 4)
       MANUALLY_REQUIRED = [
         "bad_proposer1",
+        "bad_proposer2",
         // "bad_preferredmailingaddress",
         // "sky_cvurl",
-        "bad_memberdirectory",
-        "py3_constitutionagreement",
-        "bad_readpolicydocument",
+        // "bad_memberdirectory",
+        // "py3_constitutionagreement",
+        // "bad_readpolicydocument",
       ];
     const { isValid, updatedApplication, updatedForm } = formValidationHandler({
       form,

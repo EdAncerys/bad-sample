@@ -507,6 +507,57 @@ export const formValidationHandler = ({
     if (name === "core_membershipapplicationid") return; // if name is not defined | core_membership_id, skip
     let required = FORM_CONFIG?.[name]?.Required !== "None"; // check if field is required |  info?.Required !== 'None'
     if (!!MANUALLY_REQUIRED) required = MANUALLY_REQUIRED?.includes(name); // if MANUALLY_REQUIRED array provided check if value is name is in array
+    // --------------------------------------------------------------------------------
+    // 📌  Skip input validation for application if input values not specified in configuration
+    // --------------------------------------------------------------------------------
+    if (form?.bad_categorytype === "Student") {
+      // check if MANUALLY_REQUIRED array have any values equal ro studentFilters
+      if (!MANUALLY_REQUIRED?.some((item) => studentFilters.includes(item))) {
+        required = false;
+      }
+    }
+    if (form?.bad_categorytype === "Ordinary") {
+      // check if MANUALLY_REQUIRED array have any values equal ro ordinaryFilters
+      if (!MANUALLY_REQUIRED?.some((item) => ordinaryFilters.includes(item))) {
+        required = false;
+      }
+    }
+    if (form?.bad_categorytype === "Ordinary SAS") {
+      // check if MANUALLY_REQUIRED array have any values equal ro ordinarySASFilters
+      if (
+        !MANUALLY_REQUIRED?.some((item) => ordinarySASFilters.includes(item))
+      ) {
+        required = false;
+      }
+    }
+    if (form?.bad_categorytype === "Associate Overseas") {
+      // check if MANUALLY_REQUIRED array have any values equal ro associateOverseasFilters
+      if (
+        !MANUALLY_REQUIRED?.some((item) =>
+          associateOverseasFilters.includes(item)
+        )
+      ) {
+        required = false;
+      }
+    }
+    if (form?.bad_categorytype === "Associate") {
+      // check if MANUALLY_REQUIRED array have any values equal ro associateFilters
+      if (!MANUALLY_REQUIRED?.some((item) => associateFilters.includes(item))) {
+        required = false;
+      }
+    }
+    if (form?.bad_categorytype === "Junior") {
+      // check if MANUALLY_REQUIRED array have any values equal ro juniorFilters
+      if (!MANUALLY_REQUIRED?.some((item) => juniorFilters.includes(item))) {
+        required = false;
+      }
+    }
+    if (form?.bad_categorytype === "Trainee") {
+      // check if MANUALLY_REQUIRED array have any values equal ro traineeFilters
+      if (!MANUALLY_REQUIRED?.some((item) => traineeFilters.includes(item))) {
+        required = false;
+      }
+    }
 
     if (form?.[name] !== undefined) {
       value = form?.[name]; // ⚠️ set value to from value/user input

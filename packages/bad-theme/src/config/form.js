@@ -86,7 +86,7 @@ export const FORM_CONFIG = {
     Label: "Please confirm you have read the policy document",
     AttributeType: "",
     MaxLength: 100,
-    Required: "ApplicationRequired",
+    Required: "None",
     order: 102,
     hidden: false,
     width: "100%",
