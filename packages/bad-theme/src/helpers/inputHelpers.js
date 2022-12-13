@@ -329,6 +329,13 @@ export const submitUserApplication = async ({
 export const inputShowHandler = ({ form, name }) => {
   let show = true;
 
+  // --------------------------------------------------------------------------------
+  // ⚠️ MANUAL INPUT HANDLER & FILTER ⚠️
+  // 👇 comment out to disable manual input show/hide logic
+  // 👉 place first not to overwrite other logic below
+  // --------------------------------------------------------------------------------
+  show = manualFilterHandler({ form, name, show });
+
   if (form?.bad_organisedfor === "810170001") {
     // --------------------------------------------------------------------------------
     // ⚠️ if SIG application hide following input
@@ -366,13 +373,17 @@ export const inputShowHandler = ({ form, name }) => {
       show = false;
   }
 
-  // ...addition to logic here
+  // --------------------------------------------------------------------------------
+  // 📌  Hospital input show/hide logic
+  // --------------------------------------------------------------------------------
+  if (name === "sky_newhospitaltype" || name === "sky_newhospitalname") {
+    if (!form?.bad_newhospitaladded) show = false;
+  }
+  if (name === "py3_hospitalid") {
+    if (form?.bad_newhospitaladded) show = false;
+  }
 
-  // --------------------------------------------------------------------------------
-  // ⚠️ MANUAL INPUT HANDLER & FILTER ⚠️
-  // 👇 comment out to disable manual input show/hide logic
-  // --------------------------------------------------------------------------------
-  show = manualFilterHandler({ form, name, show });
+  // ...addition to logic here
 
   return show;
 };
@@ -472,14 +483,6 @@ export const wpInputFilterHandler = ({ form, name, badApp }) => {
   }
   // ⚠️ ignore all WP validations for BAD application
   // if (badApp) isValid = true;
-
-  // if sky_newhospitalname is undefined, hide bad_newhospitaladded input
-  if (name === "sky_newhospitaltype" || name === "sky_newhospitalname") {
-    if (!form?.bad_newhospitaladded) isValid = false;
-  }
-  if (name === "py3_hospitalid") {
-    if (form?.bad_newhospitaladded) isValid = false;
-  }
 
   // ⚠️ for SIG application if user have no application selected hide all inputs
   if (!badApp && !form?.dev_application_input_filter) isValid = false;
