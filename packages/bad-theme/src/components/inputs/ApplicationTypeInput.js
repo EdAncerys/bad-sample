@@ -54,6 +54,12 @@ const ApplicationTypeInput = ({ form, onChange }) => {
           // ⚠️ replace Associate Trainee with Trainee
           typeName = typeName.replace("Associate Trainee", "Trainee");
 
+          // --------------------------------------------------------------------------------
+          // ⚠️ don't show "Retired" applications in UI
+          // --------------------------------------------------------------------------------
+          if (typeName === "Retired" || typeName === "Retired No Journal")
+            return null;
+
           return (
             <option key={key} value={category_types}>
               {typeName}

@@ -369,7 +369,7 @@ export const inputShowHandler = ({ form, name }) => {
   // ...addition to logic here
 
   // --------------------------------------------------------------------------------
-  // 📌 Manual input handlers
+  // ⚠️ MANUAL INPUT HANDLER & FILTER ⚠️
   // 👇 comment out to disable manual input show/hide logic
   // --------------------------------------------------------------------------------
   show = manualFilterHandler({ form, name, show });
@@ -421,11 +421,8 @@ export const manualFilterHandler = ({ form, name, show }) => {
   // 📌  for form step 2 return show. All input will be shown
   // --------------------------------------------------------------------------------
   if (form?.step === 2) return show;
-
   let filterOptions = retiredTypeFilters;
-  if (form?.bad_categorytype === "Retired No Journal") {
-    filterOptions = retiredNoJournalFilters;
-  }
+
   if (form?.bad_categorytype === "Ordinary SAS") {
     filterOptions = ordinarySASFilters;
   }
