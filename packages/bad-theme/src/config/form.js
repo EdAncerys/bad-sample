@@ -112,7 +112,7 @@ export const FORM_CONFIG = {
     ],
     MaxLength: 100,
     Required: "ApplicationRequired",
-    order: 16,
+    order: -59,
     hidden: false,
     width: "100%",
     caption: "",
@@ -142,7 +142,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "ApplicationRequired",
-    order: 0,
+    order: -58,
     hidden: false,
     width: "100%",
     caption: "",
@@ -331,7 +331,7 @@ export const FORM_CONFIG = {
     caption: "",
   },
   bad_currentpost: {
-    Label: "Post / Job Title details",
+    Label: "Current Post/Job title field (If retired please enter retired)",
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
@@ -1084,10 +1084,12 @@ export const ordinarySASFilters = [
   // step #4 filters
   "formus_staffgroupcategory",
   "formus_jobrole",
+  // 🚨 HOSPITAL DATA
   "py3_hospitalid",
   "sky_newhospitaltype",
   "bad_newhospitaladded",
   "sky_newhospitalname",
+  // 🚨 HOSPITAL DATA
   "formus_professionalregistrationbody",
   "formus_professionalregistrationstatus",
   "formus_residencystatus",
@@ -1101,10 +1103,15 @@ export const ordinarySASFilters = [
   "formus_fixedtermtemporaryreasonforemploymentcont",
   "formus_rotapattern",
   "formus_typeofpractice",
-  // step #5 filters
+  // 👉 step #5 filters
+  "py3_gmcnumber",
+  "bad_currentpost",
   "bad_proposer1",
+  "bad_proposer2",
+  "py3_currentgrade",
   "bad_preferredmailingaddress",
   "sky_cvurl",
+  // 👉 checkboxes
   "bad_memberdirectory",
   "py3_constitutionagreement",
   "bad_readpolicydocument",
@@ -1113,10 +1120,12 @@ export const associateFilters = [
   // step #4 filters
   "formus_staffgroupcategory",
   "formus_jobrole",
+  // 🚨 HOSPITAL DATA
   "py3_hospitalid",
   "sky_newhospitaltype",
   "bad_newhospitaladded",
   "sky_newhospitalname",
+  // 🚨 HOSPITAL DATA
   "formus_professionalregistrationbody",
   "formus_professionalregistrationstatus",
   "formus_residencystatus",
@@ -1127,9 +1136,13 @@ export const associateFilters = [
   "formus_fixedtermtemporaryreasonforemploymentcont",
   "formus_rotapattern",
   "formus_typeofpractice",
-  // step #5 filters
-  "bad_proposer1",
+  // 👉 step #5 filters
+  "py3_gmcnumber",
+  "py3_ntnno",
+  "py3_currentgrade",
+  "bad_preferredmailingaddress",
   "sky_cvurl",
+  // 👉 checkboxes
   "bad_memberdirectory",
   "py3_constitutionagreement",
   "bad_readpolicydocument",
@@ -1138,10 +1151,12 @@ export const juniorFilters = [
   // step #4 filters
   "formus_staffgroupcategory",
   "formus_jobrole",
+  // 🚨 HOSPITAL DATA
   "py3_hospitalid",
   "sky_newhospitaltype",
   "bad_newhospitaladded",
   "sky_newhospitalname",
+  // 🚨 HOSPITAL DATA
   "formus_professionalregistrationbody",
   "formus_professionalregistrationstatus",
   "formus_residencystatus",
@@ -1152,20 +1167,28 @@ export const juniorFilters = [
   "formus_fixedtermtemporaryreasonforemploymentcont",
   "formus_rotapattern",
   "formus_typeofpractice",
-  // step #5 filters
+  // 👉 step #5 filters
+  "py3_gmcnumber",
+  "bad_currentpost",
+  "bad_preferredmailingaddress",
   "bad_proposer1",
   "bad_proposer2",
   "sky_cvurl",
+  // 👉 checkboxes
+  "bad_memberdirectory",
   "py3_constitutionagreement",
+  "bad_readpolicydocument",
 ];
 export const traineeFilters = [
   // step #4 filters
   "formus_staffgroupcategory",
   "formus_jobrole",
+  // 🚨 HOSPITAL DATA
   "py3_hospitalid",
   "sky_newhospitaltype",
   "bad_newhospitaladded",
   "sky_newhospitalname",
+  // 🚨 HOSPITAL DATA
   "formus_professionalregistrationbody",
   "formus_professionalregistrationstatus",
   "formus_residencystatus",
@@ -1176,36 +1199,54 @@ export const traineeFilters = [
   "formus_fixedtermtemporaryreasonforemploymentcont",
   "formus_rotapattern",
   "formus_typeofpractice",
-  "formus_reasonformovingccstdate",
+  "formus_reasonformovingccstdate", // Trainee only
   "formus_otherreasonformovingccstdate",
-  // step #5 filters
-  "bad_proposer1",
-  "bad_proposer2",
+  // 👉 step #5 filters
+  "py3_gmcnumber",
+  "py3_ntnno",
+  "py3_currentgrade",
+  "bad_preferredmailingaddress",
   "sky_cvurl",
+  // 👉 checkboxes
   "bad_memberdirectory",
   "py3_constitutionagreement",
+  "bad_readpolicydocument",
 ];
 export const studentFilters = [
   // step #4 filters
   "formus_staffgroupcategory",
   "formus_jobrole",
+  // 🚨 HOSPITAL DATA
+  "py3_hospitalid",
+  "sky_newhospitaltype",
+  "bad_newhospitaladded",
+  "sky_newhospitalname",
+  // 🚨 HOSPITAL DATA
   "formus_residencystatus",
   "formus_qualificationtype",
   "formus_otherqualificationtype",
-  // step #5 filters
+  // 👉 step #5 filters
+  "bad_currentpost",
+  "bad_expectedyearofqualification",
+  "py3_currentgrade",
+  "bad_preferredmailingaddress",
   "bad_proposer1",
-  "bad_proposer2",
   "sky_cvurl",
+  // 👉 checkboxes
+  "bad_memberdirectory",
   "py3_constitutionagreement",
+  "bad_readpolicydocument",
 ];
 export const ordinaryFilters = [
   // step #4 filters
   "formus_staffgroupcategory",
   "formus_jobrole",
+  // 🚨 HOSPITAL DATA
   "py3_hospitalid",
   "sky_newhospitaltype",
   "bad_newhospitaladded",
   "sky_newhospitalname",
+  // 🚨 HOSPITAL DATA
   "formus_professionalregistrationbody",
   "formus_professionalregistrationstatus",
   "formus_residencystatus",
@@ -1219,10 +1260,15 @@ export const ordinaryFilters = [
   "formus_fixedtermtemporaryreasonforemploymentcont",
   "formus_rotapattern",
   "formus_typeofpractice",
-  // step #5 filters
+  // 👉 step #5 filters
+  "py3_gmcnumber",
+  "bad_currentpost",
   "bad_proposer1",
+  "bad_proposer2",
+  "py3_currentgrade",
   "bad_preferredmailingaddress",
   "sky_cvurl",
+  // 👉 checkboxes
   "bad_memberdirectory",
   "py3_constitutionagreement",
   "bad_readpolicydocument",
@@ -1231,16 +1277,29 @@ export const associateOverseasFilters = [
   // step #4 filters
   "formus_staffgroupcategory",
   "formus_jobrole",
+  // 🚨 HOSPITAL DATA
   "py3_hospitalid",
   "sky_newhospitaltype",
   "bad_newhospitaladded",
   "sky_newhospitalname",
+  // 🚨 HOSPITAL DATA
   "formus_professionalregistrationbody",
   "formus_professionalregistrationstatus",
-  // step #5 filters
-  "bad_proposer1",
+  "formus_residencystatus",
+  "formus_qualificationtype",
+  "formus_otherqualificationtype",
+  "formus_clinicalspecialtysofpractice",
+  "formus_typeofcontract",
+  "formus_fixedtermtemporaryreasonforemploymentcont",
+  "formus_rotapattern",
+  "formus_typeofpractice",
+  // 👉 step #5 filters
+  "py3_gmcnumber",
+  "py3_ntnno",
+  "py3_currentgrade",
   "bad_preferredmailingaddress",
   "sky_cvurl",
+  // 👉 checkboxes
   "bad_memberdirectory",
   "py3_constitutionagreement",
   "bad_readpolicydocument",

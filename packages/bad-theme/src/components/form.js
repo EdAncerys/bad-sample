@@ -170,7 +170,7 @@ const Form = ({
           if (name === "py3_hospitalid") {
             // --------------------------------------------------------------------------------
             // 📌  Hospital lookup input with dropdown
-            // py3_hospitalid to fall back in id soredd in dynamics
+            // py3_hospitalid to fall back in id stored in dynamics
             // --------------------------------------------------------------------------------
             let disabled = false;
             if (value) disabled = true; // disable hospital input if user has hospital
