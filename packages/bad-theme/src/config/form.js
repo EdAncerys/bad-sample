@@ -62,7 +62,7 @@ export const FORM_CONFIG = {
   bad_memberdirectory: {
     Label: "Include my details in the BAD Members` Directory",
     MaxLength: 100,
-    Required: "ApplicationRequired",
+    Required: "None",
     order: 100,
     hidden: false,
     width: "100%",
@@ -202,7 +202,7 @@ export const FORM_CONFIG = {
     Label: "Constitution Agreement",
     AttributeType: "Boolean",
     MaxLength: 100,
-    Required: "ApplicationRequired",
+    Required: "None",
     order: 101,
     hidden: false,
     width: "100%",
@@ -841,8 +841,12 @@ export const BAD_STEP_FOUR_FORM_CONFIG = {
 };
 
 export const BAD_STEP_FIVE_FORM_CONFIG = {
+  py3_gmcnumber: {},
+  bad_currentpost: {},
   bad_proposer1: {},
   bad_proposer2: {},
+  py3_currentgrade: {},
+  py3_ntnno: {},
   bad_preferredmailingaddress: {},
   sky_cvurl: {},
   bad_memberdirectory: {},

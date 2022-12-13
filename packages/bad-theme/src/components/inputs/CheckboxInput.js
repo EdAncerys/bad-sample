@@ -19,6 +19,9 @@ const CheckboxInput = ({
   if (name === "bad_readpolicydocument" && form?.bad_categorytype) {
     let appName =
       form?.bad_categorytype.split(":")[1] || form?.bad_categorytype;
+    // ⚠️ overwrite all policies with BAD policy name
+    appName = "BAD`S";
+
     inputLabel =
       "Please confirm you have read the " + appName + " policy document";
   }
