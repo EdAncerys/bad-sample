@@ -224,11 +224,6 @@ export const jobRoleHandler = ({ name, Label, form }) => {
     return true;
   }
 
-  // ⚠️ dont show Phlebotomist option in job role dropdown
-  if (Label === "Phlebotomist") {
-    return false;
-  }
-
   if (
     form?.formus_staffgroupcategory === "810170000" &&
     group_810170000?.filter((item) => item === Label)?.length > 0 // 📌  if allowed job role matches selected job role
