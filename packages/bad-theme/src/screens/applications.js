@@ -181,10 +181,10 @@ const Applications = ({ state, actions }) => {
           dev_selected_application_types: types,
           dev_read_policy: readPolicy,
           sky_newhospitalname: hospitalName, // set hospital name
+          dev_has_hospital_id: hospitalId, // 📌 set hospital id to form to determine if user have hospital id set in dynamics
           sky_cvurl: documentUrl, // set documentUrl to form
           sky_profilepicture: profilePicture, // set profilePicture to form
           step: application?.[0]?.step || 0,
-          dev_has_hospital_id: hospitalId, // 📌 set hospital id to form to determine if user have hospital id set in dynamics
           ...formDefaults,
           formus_mainspecialtyqualification: undefined, // 📌  remove default value from form
           formus_clinicalspecialtysofpractice: undefined, // 📌  remove default value from form
