@@ -467,7 +467,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 </div>
               </div>
 
-              <div className="flex-form-row">
+              {/* <div className="flex-form-row">
                 <div className="form-row">
                   <label>Qualification Type</label>
                   <input
@@ -479,7 +479,8 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                     disabled
                   />
                 </div>
-              </div>
+                <div className="form-row" />
+              </div> */}
             </div>
           )}
         </div>
