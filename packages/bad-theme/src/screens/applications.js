@@ -709,8 +709,8 @@ const Applications = ({ state, actions }) => {
       ];
     if (form?.step === 4)
       MANUALLY_REQUIRED = [
-        "bad_proposer1",
-        "bad_proposer2",
+        // "bad_proposer1",
+        // "bad_proposer2",
         // "bad_preferredmailingaddress",
         // "sky_cvurl",
         // "bad_memberdirectory",
