@@ -32,9 +32,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   // --------------------------------------------------------------------------------
   // 📌  User application types
   // --------------------------------------------------------------------------------
-  const isBADMember =
-    formData?.dev_subs?.filter((app) => app?.bad_organisedfor?.includes("BAD"))
-      ?.length > 0;
+  const isBADMember =isActiveUser?.ActionPlaceholder
   const isStudentApp =
     formData?.dev_subs?.filter((app) => app?.core_name?.includes("Student"))
       ?.length > 0;
@@ -43,11 +41,15 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       ?.length > 0;
 
   console.log("⭐️ formData", formData);
+  console.log("⭐️ dev_subs", formData?.dev_subs);
+  console.log("⭐️ isBADMember", isBADMember);
+  console.log("⭐️ isStudentApp", isStudentApp);
+  console.log("⭐️ isOrdinaryApp", isOrdinaryApp);
 
   useEffect(() => {
     if (!isActiveUser) return null;
 
-    let form = {};
+    let subs = {};
 
     (async () => {
       try {
@@ -60,7 +62,8 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
           dispatch,
           contactid: isActiveUser?.contactid,
         });
-        form.dev_subs = appData?.subs; // 👉 add subs to form
+        console.log("⭐️ appData ⭐️", appData);
+        subs.dev_subs = appData?.subs?.data; // 👉 add subs to form
       } catch (error) {
         console.log("error", error);
       }
@@ -72,7 +75,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     setForm((prev) => ({
       ...prev,
       ...isActiveUser,
-      ...form,
+      ...subs,
     }));
   }, [isActiveUser]);
 
@@ -254,7 +257,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
               />
             </div>
             <div className="form-row">
-              <label>Job Title</label>
+              <label>Job Role</label>
               <input
                 name="formus_jobrole"
                 value={formData?.formus_jobrole || ""}
