@@ -88,7 +88,7 @@ const Form = ({
           // 📌  WP input validation based on client config
           // 👇 uncomment bellows to apply filtering
           // --------------------------------------------------------------------------------
-          // if (!wpInputFilterHandler({ form, name, badApp })) return null; // if input is not in filter return null
+          if (!wpInputFilterHandler({ form, name, badApp })) return null; // if input is not in filter return null
           if (!inputShowHandler({ form, name })) return null; // additional filter logic for inputs
 
           // --------------------------------------------------------------------------------
