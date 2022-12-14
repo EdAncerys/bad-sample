@@ -9,7 +9,7 @@ import {
 } from "../config/form";
 import {
   inputShowHandler,
-  wpInputFilterHandler,
+  sigAppWPFilterHandler,
   dataExtractor,
 } from "../helpers/inputHelpers";
 
@@ -88,8 +88,8 @@ const Form = ({
           // 📌  WP input validation based on client config
           // 👇 uncomment bellows to apply filtering
           // --------------------------------------------------------------------------------
-          if (!wpInputFilterHandler({ form, name, badApp })) return null; // if input is not in filter return null
-          if (!inputShowHandler({ form, name })) return null; // additional filter logic for inputs
+          if (!sigAppWPFilterHandler({ form, name, badApp })) return null; // if input is not in filter return null
+          if (!inputShowHandler({ form, name, badApp })) return null; // additional filter logic for inputs
 
           // --------------------------------------------------------------------------------
           // 📌  Form BAD application screen input config. Apply all allowed input types below

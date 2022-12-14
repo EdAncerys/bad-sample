@@ -321,15 +321,15 @@ export const submitUserApplication = async ({
   }
 };
 
-export const inputShowHandler = ({ form, name }) => {
+export const inputShowHandler = ({ form, name, badApp }) => {
   let show = true;
 
   // --------------------------------------------------------------------------------
-  // ⚠️ MANUAL INPUT HANDLER & FILTER ⚠️
+  // ⚠️ MANUAL INPUT HANDLER & FILTER for BAD apps only ⚠️
   // 👇 comment out to disable manual input show/hide logic
   // 👉 place first not to overwrite other logic below
   // --------------------------------------------------------------------------------
-  show = manualFilterHandler({ form, name, show });
+  if (badApp) show = manualFilterHandler({ form, name, show });
 
   if (form?.bad_organisedfor === "810170001") {
     // --------------------------------------------------------------------------------
@@ -460,29 +460,26 @@ export const manualFilterHandler = ({ form, name, show }) => {
   return show;
 };
 
-export const wpInputFilterHandler = ({ form, name, badApp }) => {
-  let isValid = true;
+export const sigAppWPFilterHandler = ({ form, name, badApp }) => {
   // --------------------------------------------------------------------------------
   // 📌  WP Application input filter
   // --------------------------------------------------------------------------------
-  const input_with_prefix = badApp ? "bad_" + name : "sig_" + name; // prefix for bad/sig
-  const wpSelected = form?.dev_application_input_filter?.[input_with_prefix]; // input allowed to show in UI
 
-  // 📌 check if wp config have input set to true
-  if (typeof wpSelected === "boolean" && !wpSelected) {
-    isValid = false;
-  }
-  // 📌 if wp config dont include input & filter exists then return false
-  if (typeof wpSelected === "undefined" && form?.dev_application_input_filter) {
-    isValid = false;
-  }
   // ⚠️ ignore all WP validations for BAD application
-  if (badApp) isValid = true;
+  if (badApp) return true;
 
-  // ⚠️ for SIG application if user have no application selected hide all inputs
-  if (!badApp && !form?.dev_application_input_filter) isValid = false;
+  const input_with_prefix = badApp ? "bad_" + name : "sig_" + name; // prefix for bad/sig 👉 badApp ? "bad_" + name : "sig_" + name
+  let wpFilters = form?.dev_application_input_filter; // wp config
+  if (Array.isArray(wpFilters)) wpFilters = wpFilters[0]; // ⚠️ if wpFilters is array provided the return first element
+  console.log("⭐️ value found 👉 ", wpFilters?.acf?.[input_with_prefix]);
+  console.log("⭐️ value found TEST 👉 ", wpFilters?.[input_with_prefix]);
 
-  return isValid;
+  // 📌 check if wpFilter object have input_with_prefix property & its boolean then return value
+  if (typeof wpFilters?.[input_with_prefix] === "boolean") {
+    return wpFilters?.[input_with_prefix];
+  } else {
+    return false; // ⚠️ don't show input in all other cases
+  }
 };
 
 export const formValidationHandler = ({
