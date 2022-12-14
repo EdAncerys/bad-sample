@@ -33,21 +33,20 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   // 📌  User application types
   // --------------------------------------------------------------------------------
   const isBADMember =
-    formData?.dev_subs?.filter((app) => app?.bad_organisedfor?.includes("BAD"))
-      ?.length > 0;
+    isActiveUser?.bad_selfserviceaccess === state.theme.serviceAccess;
   const isStudentApp =
-    formData?.dev_subs?.filter((app) => app?.core_name?.includes("Student"))
-      ?.length > 0;
+    formData?.dev_subs?.filter(
+      (app) =>
+        app?.core_name?.includes("Student") && app?.statecode === "Active"
+    )?.length > 0;
   const isOrdinaryApp =
-    formData?.dev_subs?.filter((app) => app?.core_name?.includes("Ordinary"))
-      ?.length > 0;
-
-  console.log("⭐️ formData", formData);
+    formData?.dev_subs?.filter(
+      (app) =>
+        app?.core_name?.includes("Ordinary") && app?.statecode === "Active"
+    )?.length > 0;
 
   useEffect(() => {
     if (!isActiveUser) return null;
-
-    let form = {};
 
     (async () => {
       try {
@@ -55,25 +54,26 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         // 📌  fetch promises all for all the data
         // --------------------------------------------------------------------------------
 
+        let dev_subs = [];
         const appData = await getApplicationStatus({
           state,
           dispatch,
           contactid: isActiveUser?.contactid,
         });
-        form.dev_subs = appData?.subs; // 👉 add subs to form
+        dev_subs = appData?.subs?.data || []; // 👉 add subs to form
+
+        // --------------------------------------------------------------------------------
+        // 📌  UPDATE FORM DATA
+        // --------------------------------------------------------------------------------
+        setForm((prev) => ({
+          ...prev,
+          ...isActiveUser,
+          dev_subs,
+        }));
       } catch (error) {
         console.log("error", error);
       }
     })();
-
-    // --------------------------------------------------------------------------------
-    // 📌  UPDATE FORM DATA
-    // --------------------------------------------------------------------------------
-    setForm((prev) => ({
-      ...prev,
-      ...isActiveUser,
-      ...form,
-    }));
   }, [isActiveUser]);
 
   // HELPERS ----------------------------------------------------------------
@@ -254,7 +254,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
               />
             </div>
             <div className="form-row">
-              <label>Job Title</label>
+              <label>Job Role</label>
               <input
                 name="formus_jobrole"
                 value={formData?.formus_jobrole || ""}
@@ -266,7 +266,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
             </div>
           </div>
 
-          {isBADMember && !isStudentApp && (
+          {isBADMember && (
             <div className="flex-form-col">
               <div className="flex-form-row">
                 <div className="form-row">
@@ -316,6 +316,37 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                     onChange={handleInputChange}
                     className="form-control input"
                     placeholder="Clinical Specialty(s) of practice"
+                    disabled
+                  />
+                </div>
+              </div>
+
+              <div className="flex-form-row">
+                <div className="form-row">
+                  <label>
+                    Fixed term/temporary reason for employment contract
+                  </label>
+                  <input
+                    name="formus_fixedtermtemporaryreasonforemploymentcont"
+                    value={
+                      formData?.formus_fixedtermtemporaryreasonforemploymentcont ||
+                      ""
+                    }
+                    onChange={handleInputChange}
+                    className="form-control input"
+                    placeholder="Fixed term/temporary reason for employment contract"
+                    disabled
+                  />
+                </div>
+
+                <div className="form-row">
+                  <label>Type of Practice</label>
+                  <input
+                    name="formus_typeofpractice"
+                    value={formData?.formus_typeofpractice || ""}
+                    onChange={handleInputChange}
+                    className="form-control input"
+                    placeholder="Type of Practice"
                     disabled
                   />
                 </div>
