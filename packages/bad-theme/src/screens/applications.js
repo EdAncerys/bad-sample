@@ -707,16 +707,16 @@ const Applications = ({ state, actions }) => {
           ? "formus_privatepracticeorganisation"
           : "", // if private practice, add private practice organisation to required fields
       ];
-    if (form?.step === 4)
-      MANUALLY_REQUIRED = [
-        "bad_proposer1",
-        "bad_proposer2",
-        // "bad_preferredmailingaddress",
-        // "sky_cvurl",
-        // "bad_memberdirectory",
-        // "py3_constitutionagreement",
-        // "bad_readpolicydocument",
-      ];
+    // if (form?.step === 4)
+    //   MANUALLY_REQUIRED = [
+    //     "bad_proposer1",
+    //     // "bad_proposer2",
+    //     // "bad_preferredmailingaddress",
+    //     // "sky_cvurl",
+    //     // "bad_memberdirectory",
+    //     // "py3_constitutionagreement",
+    //     // "bad_readpolicydocument",
+    //   ];
     const { isValid, updatedApplication, updatedForm } = formValidationHandler({
       form,
       application,
