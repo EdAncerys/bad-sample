@@ -266,7 +266,44 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
             </div>
           </div>
 
-          {isBADMember && (
+          {isBADMember && isStudentApp && (
+            <div className="flex-form-row">
+              <div className="form-row">
+                <label>Residency Status</label>
+                <PickListInput
+                  form={formData}
+                  name="_formus_residencystatus"
+                  value={formData?._formus_residencystatus || ""}
+                  onChange={handleInputChange}
+                  Choices={[
+                    {
+                      value: 810170000,
+                      Label: "Permanent",
+                    },
+                    {
+                      value: 810170001,
+                      Label: "Temporary",
+                    },
+                  ]}
+                  labelClass="form-label"
+                />
+              </div>
+
+              <div className="form-row">
+                <label>Qualification Type</label>
+                <input
+                  name="formus_qualificationtype"
+                  value={formData?.formus_qualificationtype || ""}
+                  onChange={handleInputChange}
+                  className="form-control input"
+                  placeholder="Qualification Type"
+                  disabled
+                />
+              </div>
+            </div>
+          )}
+
+          {isBADMember && !isStudentApp && (
             <div className="flex-form-col">
               <div className="flex-form-row">
                 <div className="form-row">
@@ -426,6 +463,20 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                       },
                     ]}
                     labelClass="form-label"
+                  />
+                </div>
+              </div>
+
+              <div className="flex-form-row">
+                <div className="form-row">
+                  <label>Qualification Type</label>
+                  <input
+                    name="formus_qualificationtype"
+                    value={formData?.formus_qualificationtype || ""}
+                    onChange={handleInputChange}
+                    className="form-control input"
+                    placeholder="Qualification Type"
+                    disabled
                   />
                 </div>
               </div>
