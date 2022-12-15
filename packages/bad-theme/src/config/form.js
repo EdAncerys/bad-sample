@@ -1045,7 +1045,7 @@ export const retiredTypeFilters = [
   "formus_fixedtermtemporaryreasonforemploymentcont",
   "formus_rotapattern",
   "formus_typeofpractice",
-  "formus_privatepracticeorganisation",
+  // "formus_privatepracticeorganisation", // TBC
   // step #5 filters
   "bad_proposer1",
   "bad_preferredmailingaddress",
@@ -1075,7 +1075,6 @@ export const retiredNoJournalFilters = [
   "formus_fixedtermtemporaryreasonforemploymentcont",
   "formus_rotapattern",
   "formus_typeofpractice",
-  "formus_privatepracticeorganisation",
   // step #5 filters
   "bad_proposer1",
   "bad_preferredmailingaddress",
@@ -1107,7 +1106,6 @@ export const ordinarySASFilters = [
   "formus_fixedtermtemporaryreasonforemploymentcont",
   "formus_rotapattern",
   "formus_typeofpractice",
-  "formus_privatepracticeorganisation",
   // 👉 step #5 filters
   "py3_gmcnumber",
   "bad_currentpost",
@@ -1141,7 +1139,6 @@ export const associateFilters = [
   "formus_fixedtermtemporaryreasonforemploymentcont",
   "formus_rotapattern",
   "formus_typeofpractice",
-  "formus_privatepracticeorganisation",
   // 👉 step #5 filters
   "py3_gmcnumber",
   "bad_currentpost",
@@ -1175,7 +1172,6 @@ export const juniorFilters = [
   "formus_fixedtermtemporaryreasonforemploymentcont",
   "formus_rotapattern",
   "formus_typeofpractice",
-  "formus_privatepracticeorganisation",
   // 👉 step #5 filters
   "py3_gmcnumber",
   "bad_currentpost",
@@ -1210,7 +1206,6 @@ export const traineeFilters = [
   "formus_typeofpractice",
   "formus_reasonformovingccstdate", // Trainee only
   "formus_otherreasonformovingccstdate",
-  "formus_privatepracticeorganisation",
   // 👉 step #5 filters
   "py3_gmcnumber",
   "py3_ntnno",
@@ -1272,7 +1267,6 @@ export const ordinaryFilters = [
   "formus_fixedtermtemporaryreasonforemploymentcont",
   "formus_rotapattern",
   "formus_typeofpractice",
-  "formus_privatepracticeorganisation",
   // 👉 step #5 filters
   "py3_gmcnumber",
   "bad_currentpost",
@@ -1306,7 +1300,6 @@ export const associateOverseasFilters = [
   "formus_fixedtermtemporaryreasonforemploymentcont",
   "formus_rotapattern",
   "formus_typeofpractice",
-  "formus_privatepracticeorganisation",
   // 👉 step #5 filters
   "py3_gmcnumber",
   "bad_currentpost",
