@@ -120,7 +120,11 @@ const Form = ({
           const Required = FORM_CONFIG?.[name]?.Required; // 👉 get required from config
           const Choices = info?.Choices || FORM_CONFIG?.[name]?.Choices || [];
           const Handler = FORM_CONFIG?.[name]?.Handler || null;
-          const Link = FORM_CONFIG?.[name]?.Link || null;
+          const Link =
+            form?.dev_selected_application_types?.[0]
+              ?.sig_readpolicydocument_url_email ||
+            FORM_CONFIG?.[name]?.Link ||
+            null;
 
           const labelClass =
             Required === "None" ? "form-label" : "form-label required";
