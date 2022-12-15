@@ -9,6 +9,7 @@ import DashboardEvents from "../components/dashboard/pages/dashboardEvents";
 import Directory from "../components/dashboard/pages/directory";
 import Membership from "../components/dashboard/pages/membership";
 import MyProfile from "../components/dashboard/pages/myAccount";
+import Workforce from "../components/dashboard/pages/workforce";
 import Billing from "../components/dashboard/pages/billing";
 import Preferences from "../components/dashboard/pages/settings";
 import DashboardNavigationMobile from "../components/dashboard/dashboardNavigationMobile";
@@ -216,6 +217,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
             <DashboardEvents />
             <Membership />
             <MyProfile />
+            <Workforce />
             <Billing />
             <Preferences />
           </BlockWrapper>

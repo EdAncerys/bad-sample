@@ -111,6 +111,15 @@ const DashboardNavigation = ({ state, actions, libraries }) => {
         <div
           className="dashboard-menu"
           style={{
+            boxShadow: handleUnderline("Workforce Details"),
+          }}
+          onClick={(e) => handleNavigate({ e })}
+        >
+          Workforce Details
+        </div>
+        <div
+          className="dashboard-menu"
+          style={{
             boxShadow: handleUnderline("Billing"),
           }}
           onClick={(e) => handleNavigate({ e })}

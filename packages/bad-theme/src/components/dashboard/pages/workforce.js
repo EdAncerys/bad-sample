@@ -1,21 +1,19 @@
 import { connect } from "frontity";
 
-import UpdateProfile from "../updateProfile";
-import UpdateAddress from "../updateAddress";
+import UpdateHospitalDetails from "../updateHospitalDetails";
 // CONTEXT ------------------------------------------------------------------
 import { useAppState, useAppDispatch } from "../../../context";
 
 const MyAccount = ({ state, actions, libraries }) => {
   const { dashboardPath } = useAppState();
 
-  if (dashboardPath !== "My Profile") return null;
+  if (dashboardPath !== "Workforce Details") return null;
 
   const marginHorizontal = state.theme.marginHorizontal;
 
   return (
     <div style={{ padding: `0 ${marginHorizontal}px` }}>
-      <UpdateProfile />
-      <UpdateAddress />
+      <UpdateHospitalDetails />
     </div>
   );
 };
