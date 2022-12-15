@@ -24,7 +24,7 @@ const MultiCheckboxInput = ({
 
   return (
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
-      <label className={labelClass}>{Label}</label>
+      {Label && <label className={labelClass}>{Label}</label>}
       <ErrorComponent name={name ?? ""} form={form} />
 
       <div
@@ -41,7 +41,7 @@ const MultiCheckboxInput = ({
               width: "99%",
             }}
           >
-            {userSelectionClean || Label}
+            {userSelectionClean || Label || "Select"}
             <div className="filter-icon" style={{ top: 0 }}>
               <KeyboardArrowDownIcon
                 style={{
