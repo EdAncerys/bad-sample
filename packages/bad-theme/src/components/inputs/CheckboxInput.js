@@ -35,6 +35,8 @@ const CheckboxInput = ({
 
   const onLinkHandler = () => {
     let url = state.auth.APP_URL + Link;
+    // ⚠️ if link includes http use link
+    if (Link?.includes("http")) url = Link;
     Handler?.();
     if (Link) window.open(url, "_blank"); // open privacy policy in new window
   };

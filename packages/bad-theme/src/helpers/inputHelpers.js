@@ -471,8 +471,6 @@ export const sigAppWPFilterHandler = ({ form, name, badApp }) => {
   const input_with_prefix = badApp ? "bad_" + name : "sig_" + name; // prefix for bad/sig 👉 badApp ? "bad_" + name : "sig_" + name
   let wpFilters = form?.dev_application_input_filter; // wp config
   if (Array.isArray(wpFilters)) wpFilters = wpFilters[0]; // ⚠️ if wpFilters is array provided the return first element
-  console.log("⭐️ value found 👉 ", wpFilters?.acf?.[input_with_prefix]);
-  console.log("⭐️ value found TEST 👉 ", wpFilters?.[input_with_prefix]);
 
   // 📌 check if wpFilter object have input_with_prefix property & its boolean then return value
   if (typeof wpFilters?.[input_with_prefix] === "boolean") {
