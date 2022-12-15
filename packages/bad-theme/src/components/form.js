@@ -121,7 +121,7 @@ const Form = ({
           const Choices = info?.Choices || FORM_CONFIG?.[name]?.Choices || [];
           const Handler = FORM_CONFIG?.[name]?.Handler || null;
           const Link =
-            form?.dev_selected_application_types?.[0]
+            form?.dev_selected_application_types?.[0]?.acf
               ?.sig_readpolicydocument_url_email ||
             FORM_CONFIG?.[name]?.Link ||
             null;
