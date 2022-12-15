@@ -17,6 +17,7 @@ import {
   updateDynamicsApplicationAction,
   submitUserApplication,
   formValidationHandler,
+  requiredFieldHandler,
 } from "../helpers/inputHelpers";
 import {
   useAppState,
@@ -560,7 +561,7 @@ const Applications = ({ state, actions }) => {
   const goBackHandler = () => {
     console.log("goBackHandler");
 
-    if (hasError || isSIG || (!isSIG && form.step === 0)) {
+    if (hasError || isSIG || (!isSIG && form?.step === 0)) {
       setGoToAction({ state, path: `/dashboard/`, actions }); // go to dashboard
       return;
     }
@@ -682,41 +683,9 @@ const Applications = ({ state, actions }) => {
         "py3_addresszippostalcode",
         "py3_addresscountry",
       ];
-    if (form?.step === 3)
-      MANUALLY_REQUIRED = [
-        "formus_staffgroupcategory",
-        "formus_jobrole",
-        "py3_hospitalid",
-        "formus_professionalregistrationbody",
-        "formus_professionalregistrationstatus",
-        // "formus_residencystatus", // 👉 not mandatory
-        // "formus_qualificationtype",  // 👉 not mandatory
-        form?.["formus_qualificationtype"] === "810170007"
-          ? "formus_mainspecialtyqualification"
-          : "", // 👈 multi picker
-        "formus_clinicalspecialtysofpractice", // 👈 multi picker
-        "formus_specialiseddermatologyareasofpractice", // 👈 multi picker
-        "formus_typeofcontract",
-        // "formus_fixedtermtemporaryreasonforemploymentcont",  // 👉 not mandatory
-        // "formus_typeofcontract",  // 👉 not mandatory
-        // "formus_rotapattern",  // 👉 not mandatory
-        // "formus_reasonformovingccstdate",  // 👉 not mandatory
-        form?.bad_newhospitaladded ? "sky_newhospitalname" : "", // if new hospital added, add new hospital name to required fields
-        form?.bad_newhospitaladded ? "sky_newhospitaltype" : "", // if new hospital added, add new hospital name to required fields
-        form?.["formus_typeofpractice"] !== "810170001"
-          ? "formus_privatepracticeorganisation"
-          : "", // if private practice, add private practice organisation to required fields
-      ];
-    if (form?.step === 4)
-      MANUALLY_REQUIRED = [
-        // "bad_proposer1",
-        // "bad_proposer2",
-        // "bad_preferredmailingaddress",
-        // "sky_cvurl",
-        // "bad_memberdirectory",
-        // "py3_constitutionagreement",
-        // "bad_readpolicydocument",
-      ];
+    if (form?.step === 3) MANUALLY_REQUIRED = requiredFieldHandler({ form });
+    if (form?.step === 4) MANUALLY_REQUIRED = requiredFieldHandler({ form });
+
     const { isValid, updatedApplication, updatedForm } = formValidationHandler({
       form,
       application,
